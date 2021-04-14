@@ -2,88 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EA435EF46
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AB835EF66
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 10:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349934AbhDNINT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 04:13:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34018 "EHLO mail.kernel.org"
+        id S1349841AbhDNISy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 04:18:54 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45470 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349935AbhDNIMb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:12:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF3776128E;
-        Wed, 14 Apr 2021 08:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618387929;
-        bh=qpvi9YgbSNvAK7mKvo9Ce2AsQoRwog9SLpIlnYd26ro=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Cn9jzUl1j1g5w/52kMhvjpy+gXwxrftO2H7TshFdp9JKTCFTZgKI2wIcki1tTF8T7
-         7lNnPaTXfEjpCn7CXUXYXsQp1PqC7+0mZOMAk+E1YqJCS1BtjorZ+wwP7x2SGdcmfi
-         cWtdLvApPh578SYlTbygHPvcQ98U+c/Wm2ggP4n2n0OFZQhH6ABPkatFDdHH/zIR69
-         xMxLez6nzbP0RWyIe6gbmRBHLLlrb5NtgLCiUJcHrAaa05JMqI6nxx+TZ7c63gOL8h
-         0X27EA9R0Dvxg71ByZX1cSqEQTf/PQpoLaz5Akp3UHpbHAbyrDSuaTbocKDFr+aOM3
-         yNa4faJ26lpxw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: Re: [PATCH v2] usb: dwc3: core: Add shutdown callback for dwc3
-In-Reply-To: <1618380209-20114-1-git-send-email-sanm@codeaurora.org>
-References: <1618380209-20114-1-git-send-email-sanm@codeaurora.org>
-Date:   Wed, 14 Apr 2021 11:12:02 +0300
-Message-ID: <877dl5p9nx.fsf@kernel.org>
+        id S1349801AbhDNISs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:18:48 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1618388305; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WKdvHeLWAO5YKRAuChbZscXAPu15P8ZFz4OlLRoY4do=;
+        b=eO8MTG1yC2aGK6kEo6cL9PkeMtgKuKqzYPMh+C+DaEZJ/AUYXuoAGnU4TsQIsqkSm/ySkE
+        eDn9hm6nlAEaTNbRjY+6IECtNrGh5EUp+ZHSeQi6Ci/FpuJeT9ku9ax+8sFEzU2Dln3asK
+        a1kMzqXh+4f/qrC679LZzW5dLqFrwOA=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id D8CC9AEC2;
+        Wed, 14 Apr 2021 08:18:24 +0000 (UTC)
+Message-ID: <cd40acd3374b8c5c637b7b09d5f15838e05a7f3f.camel@suse.com>
+Subject: Re: USB port resume can take 60 seconds in worst case scenario
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Pratham Pratap <prathampratap@codeaurora.org>,
+        linux-usb@vger.kernel.org
+Date:   Wed, 14 Apr 2021 10:18:24 +0200
+In-Reply-To: <075be7a2-eb78-f6b0-6051-a83bc70955db@codeaurora.org>
+References: <075be7a2-eb78-f6b0-6051-a83bc70955db@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Am Dienstag, den 13.04.2021, 00:29 +0530 schrieb Pratham Pratap:
+> Hi,
+> 
+> The current implementation of usb_port_resume 
+> (usb_reset_and_verify_device()) can take up-to 60 secs in worst-case 
+> scenario if the device (let's say the device went bad and is 
+> unresponsive to any setup packets) connected went into runtime suspend 
+> and resumed back. Is it fine to have a configurable upper bound? Since 
+> it can induce delay in the overall system resume if the host is waking 
+> up from PM suspend.
 
-Sandeep Maheswaram <sanm@codeaurora.org> writes:
+Well, in that case you have bad hardware. Generally if hardware
+does not behave like it should we ought to come up eventually,
+but a delay is acceptable.
+If however the device really takes almost the full timeout
+it is technically withing spec.
 
-> This patch adds a shutdown callback to USB DWC core driver to ensure that
-> it is properly shutdown in reboot/shutdown path. This is required
-> where SMMU address translation is enabled like on SC7180
-> SoC and few others. If the hardware is still accessing memory after
-> SMMU translation is disabled as part of SMMU shutdown callback in
-> system reboot or shutdown path, then IOVAs(I/O virtual address)
-> which it was using will go on the bus as the physical addresses which
-> might result in unknown crashes (NoC/interconnect errors).
->
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+We could say that we can configure that a device should get less
+retries in that specific case, but a pure time limit looks
+like not so good an idea to me.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+	Regards
+		Oliver
 
-=2D-=20
-balbi
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB2o9IRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYSfg/+P7+iJzxCwEPMx+ioEmfCiBsenhqHbTgt
-w/9Bt0Z3tnGnc7QQgZn4ohQf/hVLWTZyG7+PGgNwFVJJxJx9lqY3U5l+GGpGFuQw
-burUM7tYGDuoIwHQfbNT6kNP5Q6xh1gxXOBVXsf0+5vDOgqVIfYDGW49bcNGLczq
-g6YsO8cWepCistHlB2i55i40d+GgZgwRGKgpjXKHPMUNzIQlgPphfoIWvgJGqAoG
-wTe1IKjuM8cGVYJkDYEzAsU6fons25j22mt5Z8KeN/tfEmzkUdvE2q5P7UyTzXeL
-xM1Q8AfzYp4VNbsVU4+VCLS1HfTK5GJMEHHTFuxhKbEKB0vb3xJI36bvEFerf/is
-jNPJGD5vSpjaPUXCJwdcXkNSXjSNYVtEO/GqsaxzGBRs1BtHUybSjkMFRtmeZTEi
-LNUpk11eXQRymb+XPE0FuuwuxSQtsvkT9A0qOg+Z6yPJM9Kv9XNNT9WY8NAbI/9l
-8ty47gH6yz4UXHSU5pDT2XXM/8zdQB69AU15swi/1ot9ZTM5ohqJ2asH8oZ6LTfG
-y4hFNZ4y+vbrTuOTbKBe6i6MknrCasVWAGIrJoK3Yvr3Az5PKzR31aNOdbnqw+9Z
-zCi/rVxV+itbVzATX9mJx5k1anEoR3bKOcpG52Ah2W2+CuI8VY8FD4AMeb0lf7kp
-p2NO7FCOvOY=
-=hQbm
------END PGP SIGNATURE-----
---=-=-=--
