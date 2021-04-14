@@ -2,101 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFBF35F71B
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 17:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB6C35F743
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 17:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232267AbhDNO4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 10:56:32 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:48513 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231304AbhDNO4b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 10:56:31 -0400
-Received: (qmail 1494791 invoked by uid 1000); 14 Apr 2021 10:56:08 -0400
-Date:   Wed, 14 Apr 2021 10:56:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [RFC]extension of the anchor API
-Message-ID: <20210414145608.GB1493067@rowland.harvard.edu>
-References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
- <20210325150657.GC785961@rowland.harvard.edu>
- <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
- <20210325183856.GA799855@rowland.harvard.edu>
- <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
- <20210408150725.GC1296449@rowland.harvard.edu>
- <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
- <20210412150628.GA1420451@rowland.harvard.edu>
- <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
+        id S1345818AbhDNPKX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 11:10:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39392 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231174AbhDNPKW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Apr 2021 11:10:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AF1361132;
+        Wed, 14 Apr 2021 15:09:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1618413000;
+        bh=ZWvJN4HVnHD0g7ZiqQ+fUQ0ZaA8fRAMztyQFEK4IEkE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YP3AjKElNyLCXGOxF4lZ35QmWabWZH8iqTASwD2E9ov/mgqcYT2GjIGH47BNQath8
+         pV8ZO+/fDUKTunxNwlWjN7Hz+73+u9ZuQBl3Z53gtM0gzm9wV1hcmvLtuYvWs/K4QQ
+         ng878uyuBLgA61AdeGIJ1O4aBiA0U2smHVhW6zvE=
+Date:   Wed, 14 Apr 2021 17:09:57 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v4 2/3] usb: typec: tcpm: Allow slow charging loops to
+ comply to pSnkStby
+Message-ID: <YHcFxReUDYpbe+4s@kroah.com>
+References: <20210414142656.63749-1-badhri@google.com>
+ <20210414142656.63749-2-badhri@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210414142656.63749-2-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 10:12:01AM +0200, Oliver Neukum wrote:
-> Am Montag, den 12.04.2021, 11:06 -0400 schrieb Alan Stern:
-> > On Mon, Apr 12, 2021 at 11:58:16AM +0200, Oliver Neukum wrote:
+On Wed, Apr 14, 2021 at 07:26:55AM -0700, Badhri Jagan Sridharan wrote:
+> When a PD charger advertising Rp-3.0 is connected to a sink port, the
+> sink port current limit would 3A, during SNK_DISCOVERY, till power
+> negotiation starts. Once the negotiation starts the power limit needs
+> to drop down to pSnkStby(500mA @ 5V) and to negotiated current limit
+> once the explicit contract is in place. Not all charging loops can ramp
+> up to 3A and drop down to 500mA within tSnkStdby which is 15ms. The port
+> partner might hard reset if tSnkStdby is not met.
 > 
-> > > That presumes that the URBs will finish in order. I don't think such
-> > > an assumption can be made.
-> > 
-> > I don't understand -- I can't detect any such presumption.
+> To solve this problem, this patch introduces slow-charger-loop which
+> when set makes the port request PD_P_SNK_STDBY_MW upon entering
+> SNK_DISCOVERY(instead of 3A or the 1.5A during SNK_DISCOVERY) and the
+> actual currrent limit after RX of PD_CTRL_PSRDY for PD link or during
+> SNK_READY for non-pd link.
 > 
-> OK, this shows that I am bad at explaining.
-> > 
-> > As far as I can tell, the only reason for maintaining the URBs in any 
-> > particular order on the anchor list is so that usb_kill_anchored_urbs 
-> > and usb_poison_anchored_urbs can kill them in reverse order of 
-> > submission.  THat's why the current code moves completed URBs to the end 
-> > of the list.
-> 
-> No longer strictly true, as the API has a call to submit everything
-> on an anchor, but I think it boils down to the same thing.
-> 
-> > If you keep a pointer to the most recently submitted URB, killing them 
-> > easy enough to do.  Start with that URB, then go backward through the 
-> > list (wrapping to the end when you reach the beginning of the list).
-> 
-> Yes, but that supposes that the next on the list has not been
-> resubmitted _before_ the one after it.
-> 
-> If you do not keep the list ordered, but in the initial order,
-> we can have the situation that A (happens most recently submitted)
-> is followed by B and C, but C was submitted before B.
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> ---
+> Changes since V3:
+> * Added reviewed-by tag from Heikki
 
-I think the only reasonable alternative is to move an URB to the end of 
-the list when it is submitted, rather than when it completes.  Have you 
-considered doing it that way?
+No need to add reviewed-by tags, my tools pick that up already.
 
-The real problem with usb_submit_anchored_urbs is that the core can't 
-know in what order the caller wants the URBs to be submitted.  If the 
-URBs are all more or less identical (for example, all reading the same 
-amount of data from the same endpoint) then this doesn't matter.  But if 
-they aren't (for example, if they write different buffers or use 
-different endpoints) it does matter.
+Patches 1 and 2 now queued up.
 
-In the kerneldoc you can explain that if the anchor has not been used 
-since its URBs were added then the URBs will be submitted in the order 
-they were added to the anchor, but otherwise they will be submitted in 
-an unspecified order, which may not be suitable.
+thanks,
 
-> > The order in which the URBs complete doesn't matter, because trying to 
-> > unlink a completed URB won't cause any harm.
-> 
-> As long as it stays completed.
-
-Rather, as long as they complete in order of submission.
-
-> >   The only assumption here 
-> > is that URBs get submitted in the list's order (possibly circularly) -- 
-> > this should always be true.
-> 
-> I am afraid we cannot guarantee that. It might intuitively seem so,
-> but nothing guarantees that all URBs are going to the same endpoint.
-
-I hadn't thought of that.  Do anchors get used that way anywhere?
-
-Alan Stern
+greg k-h
