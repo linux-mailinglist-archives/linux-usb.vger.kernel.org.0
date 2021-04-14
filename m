@@ -2,93 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B44735EEFE
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 10:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D10D335EF44
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 10:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349847AbhDNIC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 04:02:28 -0400
-Received: from mga02.intel.com ([134.134.136.20]:23227 "EHLO mga02.intel.com"
+        id S1344890AbhDNINS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 04:13:18 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60552 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1349802AbhDNIC0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Apr 2021 04:02:26 -0400
-IronPort-SDR: myK2LQvL6bzKV5diamIQlQHnkcKwmW2OLWwMeCTp2TMOP6UxAD7yD9UrbCAQzj/eDK5WVuxhnB
- UIuz9zQriN/g==
-X-IronPort-AV: E=McAfee;i="6200,9189,9953"; a="181712120"
-X-IronPort-AV: E=Sophos;i="5.82,221,1613462400"; 
-   d="scan'208";a="181712120"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2021 01:02:03 -0700
-IronPort-SDR: nN1X+UEKOplLFKzfT759Vd3nykvmMnaZu7r3/pxh0eZk+y5mEBfkdcMwviSGdrx09SRT5f+zmT
- /ocFhmwQeIfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,221,1613462400"; 
-   d="scan'208";a="521907223"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 14 Apr 2021 01:02:00 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 14 Apr 2021 11:01:59 +0300
-Date:   Wed, 14 Apr 2021 11:01:59 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: silence a static checker warning
-Message-ID: <YHahdwkU9A4AVv5T@kuha.fi.intel.com>
-References: <YHadaACH8Mq/10F7@mwanda>
+        id S1349934AbhDNIMY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Apr 2021 04:12:24 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1618387922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cUArCRKfHMhF1D22qkoVMD3TlAZ59hfU9WptMICLfQw=;
+        b=YM6wKk3TVQ/0j1WcCARmPy798kPcRmovVpVxS1sU/Mc454yYEIZpIYGz2f6Usub5ubw+xs
+        XH6nsogadvAO10fKN4WUnY0HMd2++gJUDno4VcsdUS4fg109jzpSFyefS9FHQslU8BXOIS
+        49yv7WjhmJPSHebX80Ll1fRmabqtuko=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 3ADA3AFC8;
+        Wed, 14 Apr 2021 08:12:02 +0000 (UTC)
+Message-ID: <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
+Subject: Re: [RFC]extension of the anchor API
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Date:   Wed, 14 Apr 2021 10:12:01 +0200
+In-Reply-To: <20210412150628.GA1420451@rowland.harvard.edu>
+References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
+         <20210325150657.GC785961@rowland.harvard.edu>
+         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
+         <20210325183856.GA799855@rowland.harvard.edu>
+         <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
+         <20210408150725.GC1296449@rowland.harvard.edu>
+         <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
+         <20210412150628.GA1420451@rowland.harvard.edu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YHadaACH8Mq/10F7@mwanda>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 10:44:40AM +0300, Dan Carpenter wrote:
-> Smatch complains about a potential missing error code:
-> 
->     drivers/usb/typec/port-mapper.c:168 typec_link_port()
->     warn: missing error code 'ret'
-> 
-> This is a false positive and returning zero is intentional.  Let's
-> re-arrange the code to silence the warning and make the intent more
-> clear.
-> 
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Am Montag, den 12.04.2021, 11:06 -0400 schrieb Alan Stern:
+> On Mon, Apr 12, 2021 at 11:58:16AM +0200, Oliver Neukum wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/port-mapper.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> > That presumes that the URBs will finish in order. I don't think such
+> > an assumption can be made.
 > 
-> diff --git a/drivers/usb/typec/port-mapper.c b/drivers/usb/typec/port-mapper.c
-> index fae736eb0601..9b0991bdf391 100644
-> --- a/drivers/usb/typec/port-mapper.c
-> +++ b/drivers/usb/typec/port-mapper.c
-> @@ -157,15 +157,17 @@ int typec_link_port(struct device *port)
->  {
->  	struct device *connector;
->  	struct port_node *node;
-> -	int ret = 0;
-> +	int ret;
->  
->  	node = create_port_node(port);
->  	if (IS_ERR(node))
->  		return PTR_ERR(node);
->  
->  	connector = find_connector(node);
-> -	if (!connector)
-> +	if (!connector) {
-> +		ret = 0;
->  		goto remove_node;
-> +	}
->  
->  	ret = link_port(to_typec_port(connector), node);
->  	if (ret)
-> -- 
-> 2.30.2
+> I don't understand -- I can't detect any such presumption.
 
-thanks,
+OK, this shows that I am bad at explaining.
+> 
+> As far as I can tell, the only reason for maintaining the URBs in any 
+> particular order on the anchor list is so that usb_kill_anchored_urbs 
+> and usb_poison_anchored_urbs can kill them in reverse order of 
+> submission.  THat's why the current code moves completed URBs to the end 
+> of the list.
 
--- 
-heikki
+No longer strictly true, as the API has a call to submit everything
+on an anchor, but I think it boils down to the same thing.
+
+> If you keep a pointer to the most recently submitted URB, killing them 
+> easy enough to do.  Start with that URB, then go backward through the 
+> list (wrapping to the end when you reach the beginning of the list).
+
+Yes, but that supposes that the next on the list has not been
+resubmitted _before_ the one after it.
+
+If you do not keep the list ordered, but in the initial order,
+we can have the situation that A (happens most recently submitted)
+is followed by B and C, but C was submitted before B.
+
+
+> 
+> The order in which the URBs complete doesn't matter, because trying to 
+> unlink a completed URB won't cause any harm.
+
+As long as it stays completed.
+
+>   The only assumption here 
+> is that URBs get submitted in the list's order (possibly circularly) -- 
+> this should always be true.
+
+I am afraid we cannot guarantee that. It might intuitively seem so,
+but nothing guarantees that all URBs are going to the same endpoint.
+
+	Regards
+		Oliver
+
+
