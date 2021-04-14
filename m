@@ -2,71 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB6C35F743
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 17:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3F835F785
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 17:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345818AbhDNPKX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 11:10:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231174AbhDNPKW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Apr 2021 11:10:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AF1361132;
-        Wed, 14 Apr 2021 15:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1618413000;
-        bh=ZWvJN4HVnHD0g7ZiqQ+fUQ0ZaA8fRAMztyQFEK4IEkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YP3AjKElNyLCXGOxF4lZ35QmWabWZH8iqTASwD2E9ov/mgqcYT2GjIGH47BNQath8
-         pV8ZO+/fDUKTunxNwlWjN7Hz+73+u9ZuQBl3Z53gtM0gzm9wV1hcmvLtuYvWs/K4QQ
-         ng878uyuBLgA61AdeGIJ1O4aBiA0U2smHVhW6zvE=
-Date:   Wed, 14 Apr 2021 17:09:57 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v4 2/3] usb: typec: tcpm: Allow slow charging loops to
- comply to pSnkStby
-Message-ID: <YHcFxReUDYpbe+4s@kroah.com>
-References: <20210414142656.63749-1-badhri@google.com>
- <20210414142656.63749-2-badhri@google.com>
+        id S234318AbhDNPXc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 11:23:32 -0400
+Received: from mr07.mx01.tldhost.de ([62.108.44.247]:44892 "EHLO
+        mr07.mx01.tldhost.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232358AbhDNPXa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 11:23:30 -0400
+X-Greylist: delayed 420 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Apr 2021 11:23:30 EDT
+Received: from mx01.tldhost.de (localhost [127.0.0.1])
+        by mx01.tldhost.de (Postfix) with ESMTP id BB3BB121990
+        for <linux-usb@vger.kernel.org>; Wed, 14 Apr 2021 17:10:10 +0200 (CEST)
+Received: by mx01.tldhost.de (Postfix, from userid 1001)
+        id B06AE121997; Wed, 14 Apr 2021 17:10:10 +0200 (CEST)
+X-Spam-Status: No, score=-1.9 required=7.0 tests=BAYES_00,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.2
+Received: from server12.tldhost.de (server12.tldhost.de [84.19.26.112])
+        by mx01.tldhost.de (Postfix) with ESMTPS id EA188121809;
+        Wed, 14 Apr 2021 17:10:06 +0200 (CEST)
+Received: from [147.161.165.23] ([147.161.165.23]) by
+ webmail.kiener-muenchen.de (Horde Framework) with HTTPS; Wed, 14 Apr 2021
+ 15:10:07 +0000
+Date:   Wed, 14 Apr 2021 15:10:07 +0000
+Message-ID: <20210414151007.Horde.J64vHh1YCZnRSzK17hZ84sB@webmail.kiener-muenchen.de>
+From:   guido@kiener-muenchen.de
+To:     dpenkler@gmail.com
+Cc:     linux-usb@vger.kernel.org, lyl2019@mail.ustc.edu.cn,
+        guido.kiener@rohde-schwarz.com, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] usb: Add a lock when freeing data in usbtmc_disconnect
+In-Reply-To: <91ca594b3f434040a54485339c0e320f@rohde-schwarz.com>
+Content-Type: text/plain; charset=utf-8; format=flowed; DelSp=Yes
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210414142656.63749-2-badhri@google.com>
+X-PPP-Message-ID: <20210414151007.29308.41479@server12.tldhost.de>
+X-PPP-Vhost: kiener-muenchen.de
+X-POWERED-BY: TLDHost.de - AV:CLEAN SPAM:OK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 14, 2021 at 07:26:55AM -0700, Badhri Jagan Sridharan wrote:
-> When a PD charger advertising Rp-3.0 is connected to a sink port, the
-> sink port current limit would 3A, during SNK_DISCOVERY, till power
-> negotiation starts. Once the negotiation starts the power limit needs
-> to drop down to pSnkStby(500mA @ 5V) and to negotiated current limit
-> once the explicit contract is in place. Not all charging loops can ramp
-> up to 3A and drop down to 500mA within tSnkStdby which is 15ms. The port
-> partner might hard reset if tSnkStdby is not met.
-> 
-> To solve this problem, this patch introduces slow-charger-loop which
-> when set makes the port request PD_P_SNK_STDBY_MW upon entering
-> SNK_DISCOVERY(instead of 3A or the 1.5A during SNK_DISCOVERY) and the
-> actual currrent limit after RX of PD_CTRL_PSRDY for PD link or during
-> SNK_READY for non-pd link.
-> 
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> ---
-> Changes since V3:
-> * Added reviewed-by tag from Heikki
 
-No need to add reviewed-by tags, my tools pick that up already.
+Hi Dave,
 
-Patches 1 and 2 now queued up.
+I just found this patch, which does not seem to be a correct solution  
+to solve a race.
+Maybe there is really an issue with the refcounting of data->kref, but  
+currently I do
+not have time to check this in home office.
 
-thanks,
+At least I see a problem in usbtmc_probe()
 
-greg k-h
+After calling:
+    /* Protect interrupt in endpoint data until iin_urb is freed */
+    kref_get(&data->kref);
+the refcounter is incremented again and if usbtmc_probe() fails, the  
+counter is
+only decremented with a single kref_put(..).
+
+I don't know if this is the reason of Lv Yunglong's problem, but let  
+me know if
+you have time to track down this issue, and we will work on a correct  
+and tested
+patch.
+
+Regards,
+
+Guido
+
+
+> -----Original Message-----
+> From: Greg KH
+> Sent: Tuesday, March 23, 2021 10:44 AM
+> To: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+> Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [PATCH v2] usb: Add a lock when freeing data in  
+> usbtmc_disconnect
+>
+> On Tue, Mar 23, 2021 at 02:28:54AM -0700, Lv Yunlong wrote:
+>> In usbtmc_disconnect, data is got from intf with the initial reference.
+>> There is no refcount inc operation before usbmc_free_int(data). In
+>> usbmc_free_int(data), the data may be freed.
+>>
+>> But later in usbtmc_disconnect, there is another put function of data.
+>> It could cause errors in race.
+>>
+>> My patch adds a lock to protect kref from changing in race.
+>>
+>> Signed-off-by: Lv Yunlong <lyl2019@mail.ustc.edu.cn>
+>> ---
+>>  drivers/usb/class/usbtmc.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c
+>> index 74d5a9c5238a..44f1fcabbb1e 100644
+>> --- a/drivers/usb/class/usbtmc.c
+>> +++ b/drivers/usb/class/usbtmc.c
+>> @@ -2493,8 +2493,13 @@ static void usbtmc_disconnect(struct  
+>> usb_interface *intf)
+>>  		usb_scuttle_anchored_urbs(&file_data->in_anchor);
+>>  	}
+>>  	mutex_unlock(&data->io_mutex);
+>> +
+>> +	spinlock_t *dev_lock = &data->dev_lock;
+>> +
+>> +	spin_lock_irq(dev_lock);
+>>  	usbtmc_free_int(data);
+>>  	kref_put(&data->kref, usbtmc_delete);
+>> +	spin_unlock_irq(dev_lock);
+>>  }
+>>
+>>  static void usbtmc_draw_down(struct usbtmc_file_data *file_data)
+>> --
+>> 2.25.1
+>
+> You obviously did not even build this patch, let alone test it :(
+>
+> Please do not waste maintainer's time by not doing the proper steps  
+> when submitting patches.
+>
+> thanks,
+>
+> greg k-h
+
+
+
