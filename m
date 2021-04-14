@@ -2,146 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0075F35EC15
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 07:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A423135ECD9
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 08:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346863AbhDNFIS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 01:08:18 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:51221 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232516AbhDNFIR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 01:08:17 -0400
-Received: from mail-oi1-f197.google.com ([209.85.167.197])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <chris.chiu@canonical.com>)
-        id 1lWXkp-0002wq-Tl
-        for linux-usb@vger.kernel.org; Wed, 14 Apr 2021 05:07:56 +0000
-Received: by mail-oi1-f197.google.com with SMTP id l197-20020acad4ce0000b02901593d7ecdd7so5923734oig.19
-        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 22:07:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IkbQ5ckAQjtTBOWAZHajDnh8k2xtlifzyDlYnjCIWkY=;
-        b=g6AMnnx3/KtSauxEV6iTCo2na8WsNe1uZUjNCKHhuV6iAylFTAODDg2N8IIEc3ESlo
-         4ZMkOpgN2gO32N8uv/RQZ3JCgZc3+Qs1UCZDH65kz90F6CCoJA2aI3iAq+3EkNr5I8YI
-         6i4acElqG6MBSgnx1Rmr5ja8r08Z8UEuboqMM9/sn/ak1ujrGzudQUY5IMOMkkWQgABW
-         hczd2HdiDzGAP26b//0qi81yFhvMRCHcLrpacMLKUzcfYk4Q0zOdLXeuXBkhcVCnAr+b
-         UevzURfXl0AN3N/Wx3KiF8Bl76BdEFA//QQjiw6POZsF4u9A5T3Q2eetCG5OcMGU2iPZ
-         OllA==
-X-Gm-Message-State: AOAM532/UqemVnJ5tyBxIgSuilQMDMzKEFcOqscPu4iBpsvue57ZZt1w
-        ABsXOIClHmYk4qx7hYRHKCt18vwdRnPbcWr/YaDRkwF8ga4VTyo4gADgyyWhD+sRYD9eqC0Ic18
-        VNhhOGkrxf4R4KwBI6E27v+iiPo3Y/6bNpe7XVjC96hT/tVHLIkZxwQ==
-X-Received: by 2002:a05:6808:13d0:: with SMTP id d16mr1025913oiw.169.1618376874652;
-        Tue, 13 Apr 2021 22:07:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy6wvt/gb/Aacqb4Rj7+RURsaFJSPCAy+qlU+TKiNdbK+eKOWJ0P9h8uN0Df4oCFbbuBNPwmQcHr+fGu63Lq9g=
-X-Received: by 2002:a05:6808:13d0:: with SMTP id d16mr1025900oiw.169.1618376874326;
- Tue, 13 Apr 2021 22:07:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210412150006.53909-1-chris.chiu@canonical.com>
- <20210412151205.GB1420451@rowland.harvard.edu> <CABTNMG1fvbOMrP+FmH0X5Yh04gf6vvhqhXfRrmpJ=f-fPBx4xw@mail.gmail.com>
- <20210413144416.GB1454681@rowland.harvard.edu>
-In-Reply-To: <20210413144416.GB1454681@rowland.harvard.edu>
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Wed, 14 Apr 2021 13:07:43 +0800
-Message-ID: <CABTNMG21xp6TA8SGJhamfM9D6JGvQHwg8AMySSCh09-DnAZ5qQ@mail.gmail.com>
-Subject: Re: [PATCH] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek Hub
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
-        linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        id S1349178AbhDNGEg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 02:04:36 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:13775 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349122AbhDNGEX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 02:04:23 -0400
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 13 Apr 2021 23:04:02 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 13 Apr 2021 23:03:59 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 14 Apr 2021 11:33:33 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 71C2037A5; Wed, 14 Apr 2021 11:33:32 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: core: Add shutdown callback for dwc3
+Date:   Wed, 14 Apr 2021 11:33:29 +0530
+Message-Id: <1618380209-20114-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 10:44 PM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Tue, Apr 13, 2021 at 03:52:14PM +0800, Chris Chiu wrote:
-> > On Mon, Apr 12, 2021 at 11:12 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Mon, Apr 12, 2021 at 11:00:06PM +0800, chris.chiu@canonical.com wrote:
-> > > > The USB_PORT_FEAT_SUSPEND is not really necessary due to the
-> > > > "global suspend" in USB 2.0 spec. It's only for many hub devices
-> > > > which don't relay wakeup requests from the devices connected to
-> > > > downstream ports. For this realtek hub, there's no problem waking
-> > > > up the system from connected keyboard.
-> > >
-> > > What about runtime suspend?  That _does_ require USB_PORT_FEAT_SUSPEND.
-> >
-> > It's hard to reproduce the same thing with runtime PM. I also don't
-> > know the aggressive
-> > way to trigger runtime suspend. So I'm assuming the same thing will happen in
-> > runtime PM case because they both go the same usb_port_resume path. Could
-> > you please suggest a better way to verify this for runtime PM?
->
-> To put a USB device into runtime suspend, do this:
->
->         echo 0 >/sys/bus/usb/devices/.../bConfigurationValue
->         echo auto >/sys/bus/usb/devices/.../power/control
->
-> where ... is the pathname for the device you want to suspend.  (Note
-> that this will unbind the device from its driver, so make sure there's
-> no possibility of data loss before you do it.)
->
-> To resume the device, write "on" to the power/control file.  You can
-> verify the runtime-PM status by reading the files in the power/
-> subdirectory.
->
-Thanks for the instructions. I can hit the same timeout problem with
-runtime PM. The
-fail rate seems the same as normal PM. (around 1/4 ~ 1/7)
-root@:/sys/bus/usb/devices/3-4.3# echo auto > power/control
-root@:/sys/bus/usb/devices/3-4.3# echo on > power/control
-root@:/sys/bus/usb/devices/3-4.3# dmesg -c
-[ 2789.679807] usb 3-4: kworker/7:0 timed out on ep0out len=0/0
-[ 2789.679812] usb 3-4-port3: can't suspend, status -110
-[ 2789.680078] usb 3-4.3: Failed to suspend device, error -110
+This patch adds a shutdown callback to USB DWC core driver to ensure that
+it is properly shutdown in reboot/shutdown path. This is required
+where SMMU address translation is enabled like on SC7180
+SoC and few others. If the hardware is still accessing memory after
+SMMU translation is disabled as part of SMMU shutdown callback in
+system reboot or shutdown path, then IOVAs(I/O virtual address)
+which it was using will go on the bus as the physical addresses which
+might result in unknown crashes (NoC/interconnect errors).
 
+Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+---
+Changes in v2:
+        - As per Stephen's comment, calling dwc3_remove in dwc3_shutdown.
 
-> > > > This commit bypasses the USB_PORT_FEAT_SUSPEND for the quirky hub.
-> > > >
-> > > > Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> > > > ---
-> > >
-> > >
-> > > > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > > > index 7f71218cc1e5..8478d49bba77 100644
-> > > > --- a/drivers/usb/core/hub.c
-> > > > +++ b/drivers/usb/core/hub.c
-> > > > @@ -3329,8 +3329,11 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
-> > > >        * descendants is enabled for remote wakeup.
-> > > >        */
-> > > >       else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
-> > > > -             status = set_port_feature(hub->hdev, port1,
-> > > > -                             USB_PORT_FEAT_SUSPEND);
-> > > > +             if (udev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND)
-> > >
-> > > You should test hub->hdev->quirks, here, not udev->quirks.  The quirk
-> > > belongs to the Realtek hub, not to the device that's plugged into the
-> > > hub.
-> > >
-> >
-> > Thanks for pointing that out. I'll verify again and propose a V2 after
-> > it's done.
->
-> Another thing to consider: You shouldn't return 0 from usb_port_suspend
-> if the port wasn't actually suspended.  We don't want to kernel to have
-> a false idea of the hardware's current state.
->
-So we still need the "really_suspend=false". What if I replace it with
-the following?
-It's a little verbose but expressive enough. Any suggestions?
+ drivers/usb/dwc3/core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-+       else if (!(hub->hdev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND) &&
-+               (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0))
-+               status = set_port_feature(hub->hdev, port1,
-+                               USB_PORT_FEAT_SUSPEND);
-        else {
-                really_suspend = false;
-                status = 0;
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 05e2e54c..2022d90 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1658,6 +1658,11 @@ static int dwc3_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
++static void dwc3_shutdown(struct platform_device *pdev)
++{
++	dwc3_remove(pdev);
++}
++
+ #ifdef CONFIG_PM
+ static int dwc3_core_init_for_resume(struct dwc3 *dwc)
+ {
+@@ -1975,6 +1980,7 @@ MODULE_DEVICE_TABLE(acpi, dwc3_acpi_match);
+ static struct platform_driver dwc3_driver = {
+ 	.probe		= dwc3_probe,
+ 	.remove		= dwc3_remove,
++	.shutdown   = dwc3_shutdown,
+ 	.driver		= {
+ 		.name	= "dwc3",
+ 		.of_match_table	= of_match_ptr(of_dwc3_match),
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
 
-Chris
-
-> Alan Stern
