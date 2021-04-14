@@ -2,52 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FCA35ECDD
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 08:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F53E35ECF7
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 08:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349056AbhDNGGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 02:06:07 -0400
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:38529 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347522AbhDNGGE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 02:06:04 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R581e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0UVWALWV_1618380341;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UVWALWV_1618380341)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 14 Apr 2021 14:05:42 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH] usb: core: remove unused including <linux/version.h>
-Date:   Wed, 14 Apr 2021 14:05:40 +0800
-Message-Id: <1618380340-108958-1-git-send-email-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S1347641AbhDNGNF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 02:13:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35832 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345785AbhDNGNE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Apr 2021 02:13:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B92F760FD8;
+        Wed, 14 Apr 2021 06:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1618380764;
+        bh=SVl6fC2hA8BERhXd9uZqX6yd7oj73bDw+Hpi/Uh5zAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k3ppnHNKq94ztT+O8YtO63A2M4zoKZRLgexU4LqkKs1vhGFl9Em6cox1Lf4vYZ0FR
+         eC1adlXj7sILnqCfumw0evIYpnZVQf5in+2a2WeuxSQQuC589/2atUnDgVd4TToAXz
+         aBVMa5Oav75exIRRFGGx8nEshuscz90LspAB2jW4=
+Date:   Wed, 14 Apr 2021 08:12:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: core: remove unused including <linux/version.h>
+Message-ID: <YHaH2Tw05L661Vy3@kroah.com>
+References: <1618380340-108958-1-git-send-email-yang.lee@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1618380340-108958-1-git-send-email-yang.lee@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix the following versioncheck warning:
-./drivers/usb/core/hcd.c: 14 linux/version.h not needed.
+On Wed, Apr 14, 2021 at 02:05:40PM +0800, Yang Li wrote:
+> Fix the following versioncheck warning:
+> ./drivers/usb/core/hcd.c: 14 linux/version.h not needed.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/usb/core/hcd.c | 1 -
+>  1 file changed, 1 deletion(-)
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/usb/core/hcd.c | 1 -
- 1 file changed, 1 deletion(-)
+I am now adding any patch sent to me from the "Abaci Robot" to my local
+blacklist and they will be ignored as you have constantly kept ignoring
+my simple request to do basic build testing of your patches before
+sending them out.
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 3f03813..53bc93d 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -11,7 +11,6 @@
- 
- #include <linux/bcd.h>
- #include <linux/module.h>
--#include <linux/version.h>
- #include <linux/kernel.h>
- #include <linux/sched/task_stack.h>
- #include <linux/slab.h>
--- 
-1.8.3.1
+Because you have not done that, you are obviously trying to waste
+developer and reviewer's time with stuff like this, which is not
+acceptable at all.
+
+*plonk*
 
