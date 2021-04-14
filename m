@@ -2,132 +2,211 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4F335EAAA
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 04:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45AB735EAFB
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Apr 2021 04:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242311AbhDNCNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Apr 2021 22:13:40 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:55318 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239472AbhDNCNk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 22:13:40 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 968F840461;
-        Wed, 14 Apr 2021 02:13:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1618366399; bh=SUjyqObXbrjLgBIAdUyzQrmgYRcTEkLh4y7+TTm8rfY=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=O7i89Vfa3zMhdGaGw3Duutm0GlnESJ2sZiyQioaIr630XS4NHc0XOabW3Q0QH7YRQ
-         CL0Rhf9bTx0BHd3vxDVVtW2Xu5dhOaI3/gLGJEub8iuMyejMUod8vdwdALOqAnqHcy
-         CUMhnzqTJl4/Ng9pFD6Xn7jXv5fm1eVNWa11uKF3b8pCvQn7YIsusurbPnzdmJzMYq
-         bG+3NXl9eChgrhoaaxan3ywznUNjjaP7ak8Wt8EKiZPHYvvtqfdoUYeee8+V4piBE9
-         NeZjVsyvqIeKyMYWYq/oN9jxWQTFM611j3MN8MCAXsIWKKO1I/nzU7uHT0r6bWa9kX
-         WAL9qjMH/Fihw==
-Received: from lab-vbox (unknown [10.205.146.58])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 6E3DDA0096;
-        Wed, 14 Apr 2021 02:13:18 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Tue, 13 Apr 2021 19:13:18 -0700
-Date:   Tue, 13 Apr 2021 19:13:18 -0700
-Message-Id: <9e68527ff932b1646f92a7593d4092a903754666.1618366071.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <cover.1618366071.git.Thinh.Nguyen@synopsys.com>
-References: <cover.1618366071.git.Thinh.Nguyen@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH v2 2/2] usb: dwc3: gadget: Check for disabled LPM quirk
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S237926AbhDNCk2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Apr 2021 22:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230303AbhDNCk1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Apr 2021 22:40:27 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5FEC061574
+        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 19:40:05 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id p68so11709011ybg.20
+        for <linux-usb@vger.kernel.org>; Tue, 13 Apr 2021 19:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=MX/NkntXJWzqSbHL+aV+Jl++O2xa7g43YHytC3yMhqM=;
+        b=hU+Ftg44WzGLbNw9TGckDv0A5nO8D4arI+VuYuu0G0DjhdstbIXENebygpuOCU57nf
+         X5B+MroOF8CAVUC9FM15VKCtMeMlb4r5Xj5lSzKmmMcRCODwt1KY5KpmffGbOyX1lcrZ
+         EGw47VmXq9pXniqtyVjBdHa3Qm9nWP3S/BFhNk1On7YLaRUmSzuASDg2HupeGsdQZiy9
+         2uofRbhNl/hRhPMH9D38EWeT7/iHfT3LEQK4Vm6US1o779ek01qJlh36jw/2I7kijw6e
+         H1xtysUlT2iRf2Z4CRgX7oU0mPtNd7yH+d5sNldiZleYJqUwUEFXp3kES5ZPuG+ZXu3x
+         9asw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=MX/NkntXJWzqSbHL+aV+Jl++O2xa7g43YHytC3yMhqM=;
+        b=OKRJVAG8znPVkqBPlCHwwAPzQ22gmGYzjB86iE6qkJ6Q0VgRiU1osvoqauZAkzTpq4
+         gVlhbAOA9qdUA6URmbbyFViJK2jqKgLPI5hDH5wUTJ08g6dZJ1JDnK2P+raKEfDfSFXW
+         UxCjGd0Atr2C5U7rGRHnsrbJOse1uVg+kFrOtK4rGFZRDbeti5+etpE9TXzPz9jzOYlt
+         cPko/Mc4z8FQUvfrxOCsKkDZpWjSnZuqiXUo5eZo5OKs3E/xNZbEOBSwLVVC8NRprZkh
+         HyDk0jmZ9NM48o0vnZAAepy9d1nkgG+Gj3qRn3j8Dvb1diH88B+Mz9rm9Uai1Hu3CaHt
+         SzHQ==
+X-Gm-Message-State: AOAM533nJfiGC59UjRsUocNXfZfLhEx7y2v/jSgcLA/j8x/9Eaob1JBn
+        cqrwzZiTL8klmvk71U0NKfLyJWnHC4c=
+X-Google-Smtp-Source: ABdhPJybeWuf837iQ5P+78ZQV7WSJLjcaxf7CKx4tfyGhmyj6CBdkSqs34zpNtCvtCvka24Fd3NHpq+z9mA=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:91dd:58ac:7590:aa21])
+ (user=badhri job=sendgmr) by 2002:a25:2d44:: with SMTP id s4mr27929524ybe.284.1618368004957;
+ Tue, 13 Apr 2021 19:40:04 -0700 (PDT)
+Date:   Tue, 13 Apr 2021 19:39:58 -0700
+Message-Id: <20210414024000.4175263-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.295.g9ea45b61b8-goog
+Subject: [PATCH v3 1/3] usb: typec: tcpm: Honour pSnkStdby requirement during negotiation
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>
+        Rob Herring <robh+dt@kernel.org>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the device doesn't support LPM, make sure to disable the LPM
-capability and don't advertise to the host that it supports it.
+From PD Spec:
+The Sink Shall transition to Sink Standby before a positive or
+negative voltage transition of VBUS. During Sink Standby
+the Sink Shall reduce its power draw to pSnkStdby. This allows
+the Source to manage the voltage transition as well as
+supply sufficient operating current to the Sink to maintain PD
+operation during the transition. The Sink Shall
+complete this transition to Sink Standby within tSnkStdby
+after evaluating the Accept Message from the Source. The
+transition when returning to Sink operation from Sink Standby
+Shall be completed within tSnkNewPower. The
+pSnkStdby requirement Shall only apply if the Sink power draw
+is higher than this level.
 
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+The above requirement needs to be met to prevent hard resets
+from port partner.
+
+Without the patch: (5V/3A during SNK_DISCOVERY all the way through
+explicit contract)
+[   95.711984] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[   95.712007] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[   95.712017] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[   95.837190] VBUS on
+[   95.882075] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[   95.882082] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
+[   95.882086] polarity 1
+[   95.883151] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
+[   95.883441] enable vbus discharge ret:0
+[   95.883445] Requesting mux state 1, usb-role 2, orientation 2
+[   95.883776] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+[   95.883879] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
+[   96.038960] VBUS on
+[   96.383939] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
+[   96.383946] Setting voltage/current limit 5000 mV 3000 mA
+[   96.383961] vbus=0 charge:=1
+[   96.386044] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+[   96.386309] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
+[   96.394404] PD RX, header: 0x2161 [1]
+[   96.394408]  PDO 0: type 0, 5000 mV, 3000 mA [E]
+[   96.394410]  PDO 1: type 0, 9000 mV, 2000 mA []
+[   96.394412] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
+[   96.394416] Setting usb_comm capable false
+[   96.395083] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
+[   96.395089] Requesting PDO 1: 9000 mV, 2000 mA
+[   96.395093] PD TX, header: 0x1042
+[   96.397404] PD TX complete, status: 0
+[   96.397424] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
+[   96.400826] PD RX, header: 0x363 [1]
+[   96.400829] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
+[   96.400832] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
+[   96.577315] PD RX, header: 0x566 [1]
+[   96.577321] Setting voltage/current limit 9000 mV 2000 mA
+[   96.578363] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
+[   96.578370] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
+
+With the patch:
+[  168.398573] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[  168.398605] state change TOGGLING -> SNK_ATTACH_WAIT [rev3 NONE_AMS]
+[  168.398619] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev3 NONE_AMS]
+[  168.522348] VBUS on
+[  168.568676] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[  168.568684] state change SNK_DEBOUNCED -> SNK_ATTACHED [rev3 NONE_AMS]
+[  168.568688] polarity 1
+[  168.569867] set_auto_vbus_discharge_threshold mode:0 pps_active:n vbus:5000 ret:0
+[  168.570158] enable vbus discharge ret:0
+[  168.570161] Requesting mux state 1, usb-role 2, orientation 2
+[  168.570504] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+[  168.570634] pending state change SNK_STARTUP -> SNK_DISCOVERY @ 500 ms [rev3 NONE_AMS]
+[  169.070689] state change SNK_STARTUP -> SNK_DISCOVERY [delayed 500 ms]
+[  169.070695] Setting voltage/current limit 5000 mV 3000 mA
+[  169.070702] vbus=0 charge:=1
+[  169.072719] state change SNK_DISCOVERY -> SNK_WAIT_CAPABILITIES [rev3 NONE_AMS]
+[  169.073145] pending state change SNK_WAIT_CAPABILITIES -> HARD_RESET_SEND @ 450 ms [rev3 NONE_AMS]
+[  169.077162] PD RX, header: 0x2161 [1]
+[  169.077172]  PDO 0: type 0, 5000 mV, 3000 mA [E]
+[  169.077178]  PDO 1: type 0, 9000 mV, 2000 mA []
+[  169.077183] state change SNK_WAIT_CAPABILITIES -> SNK_NEGOTIATE_CAPABILITIES [rev2 POWER_NEGOTIATION]
+[  169.077191] Setting usb_comm capable false
+[  169.077753] cc=0 cc1=0 cc2=5 vbus=0 vconn=sink polarity=1
+[  169.077759] Requesting PDO 1: 9000 mV, 2000 mA
+[  169.077762] PD TX, header: 0x1042
+[  169.079990] PD TX complete, status: 0
+[  169.080013] pending state change SNK_NEGOTIATE_CAPABILITIES -> HARD_RESET_SEND @ 60 ms [rev2 POWER_NEGOTIATION]
+[  169.083183] VBUS on
+[  169.084195] PD RX, header: 0x363 [1]
+[  169.084200] state change SNK_NEGOTIATE_CAPABILITIES -> SNK_TRANSITION_SINK [rev2 POWER_NEGOTIATION]
+[  169.084206] Setting standby current 5000 mV @ 500 mA
+[  169.084209] Setting voltage/current limit 5000 mV 500 mA
+[  169.084220] pending state change SNK_TRANSITION_SINK -> HARD_RESET_SEND @ 500 ms [rev2 POWER_NEGOTIATION]
+[  169.260222] PD RX, header: 0x566 [1]
+[  169.260227] Setting voltage/current limit 9000 mV 2000 mA
+[  169.261315] set_auto_vbus_discharge_threshold mode:3 pps_active:n vbus:9000 ret:0
+[  169.261321] state change SNK_TRANSITION_SINK -> SNK_READY [rev2 POWER_NEGOTIATION]
+[  169.261570] AMS POWER_NEGOTIATION finished
+
+Fixes: f0690a25a140b ("staging: typec: USB Type-C Port Manager (tcpm)")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 ---
- Changes in v2:
- - Use a different DT property than usb2-lpm-disable (since it's host specific)
+Changes since V2:
+* Refactored code based on Heikki's suggestion
+* Added reviewed-by tag from Guenter
+---
+ drivers/usb/typec/tcpm/tcpm.c | 17 +++++++++++++++++
+ include/linux/usb/pd.h        |  2 ++
+ 2 files changed, 19 insertions(+)
 
- drivers/usb/dwc3/core.c   | 2 ++
- drivers/usb/dwc3/core.h   | 4 +++-
- drivers/usb/dwc3/gadget.c | 9 ++++++++-
- 3 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 05e2e54cbbdc..f3316caefbad 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1286,6 +1286,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 				"snps,usb3_lpm_capable");
- 	dwc->usb2_lpm_disable = device_property_read_bool(dev,
- 				"snps,usb2-lpm-disable");
-+	dwc->usb2_gadget_lpm_disable = device_property_read_bool(dev,
-+				"snps,usb2-gadget-lpm-disable");
- 	device_property_read_u8(dev, "snps,rx-thr-num-pkt-prd",
- 				&rx_thr_num_pkt_prd);
- 	device_property_read_u8(dev, "snps,rx-max-burst-prd",
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 6e9abfbccaa6..83086e71122d 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1035,7 +1035,8 @@ struct dwc3_scratchpad_array {
-  * @dis_start_transfer_quirk: set if start_transfer failure SW workaround is
-  *			not needed for DWC_usb31 version 1.70a-ea06 and below
-  * @usb3_lpm_capable: set if hadrware supports Link Power Management
-- * @usb2_lpm_disable: set to disable usb2 lpm
-+ * @usb2_lpm_disable: set to disable usb2 lpm for host
-+ * @usb2_gadget_lpm_disable: set to disable usb2 lpm for gadget
-  * @disable_scramble_quirk: set if we enable the disable scramble quirk
-  * @u2exit_lfps_quirk: set if we enable u2exit lfps quirk
-  * @u2ss_inp3_quirk: set if we enable P3 OK for U2/SS Inactive quirk
-@@ -1241,6 +1242,7 @@ struct dwc3 {
- 	unsigned		dis_start_transfer_quirk:1;
- 	unsigned		usb3_lpm_capable:1;
- 	unsigned		usb2_lpm_disable:1;
-+	unsigned		usb2_gadget_lpm_disable:1;
- 
- 	unsigned		disable_scramble_quirk:1;
- 	unsigned		u2exit_lfps_quirk:1;
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index e1b04c976da5..767661b740ab 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3484,6 +3484,7 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
- 	/* Enable USB2 LPM Capability */
- 
- 	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A) &&
-+	    !dwc->usb2_gadget_lpm_disable &&
- 	    (speed != DWC3_DSTS_SUPERSPEED) &&
- 	    (speed != DWC3_DSTS_SUPERSPEED_PLUS)) {
- 		reg = dwc3_readl(dwc->regs, DWC3_DCFG);
-@@ -3510,6 +3511,12 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
- 
- 		dwc3_gadget_dctl_write_safe(dwc, reg);
- 	} else {
-+		if (dwc->usb2_gadget_lpm_disable) {
-+			reg = dwc3_readl(dwc->regs, DWC3_DCFG);
-+			reg &= ~DWC3_DCFG_LPM_CAP;
-+			dwc3_writel(dwc->regs, DWC3_DCFG, reg);
-+		}
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 1c32bdf62852..aedc8bb9532a 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4131,6 +4131,23 @@ static void run_state_machine(struct tcpm_port *port)
+ 		}
+ 		break;
+ 	case SNK_TRANSITION_SINK:
++		/* From the USB PD spec:
++		 * "The Sink Shall transition to Sink Standby before a positive or
++		 * negative voltage transition of VBUS. During Sink Standby
++		 * the Sink Shall reduce its power draw to pSnkStdby."
++		 *
++		 * This is not applicable to PPS though as the port can continue
++		 * to draw negotiated power without switching to standby.
++		 */
++		if (port->supply_voltage != port->req_supply_voltage && !port->pps_data.active &&
++		    port->current_limit * port->supply_voltage / 1000 > PD_P_SNK_STDBY_MW) {
++			u32 stdby_ma = PD_P_SNK_STDBY_MW * 1000 / port->supply_voltage;
 +
- 		reg = dwc3_readl(dwc->regs, DWC3_DCTL);
- 		reg &= ~DWC3_DCTL_HIRD_THRES_MASK;
- 		dwc3_gadget_dctl_write_safe(dwc, reg);
-@@ -3958,7 +3965,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 	dwc->gadget->ssp_rate		= USB_SSP_GEN_UNKNOWN;
- 	dwc->gadget->sg_supported	= true;
- 	dwc->gadget->name		= "dwc3-gadget";
--	dwc->gadget->lpm_capable	= true;
-+	dwc->gadget->lpm_capable	= !dwc->usb2_gadget_lpm_disable;
++			tcpm_log(port, "Setting standby current %u mV @ %u mA",
++				 port->supply_voltage, stdby_ma);
++			tcpm_set_current_limit(port, stdby_ma, port->supply_voltage);
++		}
++		fallthrough;
+ 	case SNK_TRANSITION_SINK_VBUS:
+ 		tcpm_set_state(port, hard_reset_state(port),
+ 			       PD_T_PS_TRANSITION);
+diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+index 70d681918d01..bf00259493e0 100644
+--- a/include/linux/usb/pd.h
++++ b/include/linux/usb/pd.h
+@@ -493,4 +493,6 @@ static inline unsigned int rdo_max_power(u32 rdo)
+ #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
+ #define PD_N_HARD_RESET_COUNT	2
  
- 	/*
- 	 * FIXME We might be setting max_speed to <SUPER, however versions
++#define PD_P_SNK_STDBY_MW	2500	/* 2500 mW */
++
+ #endif /* __LINUX_USB_PD_H */
 -- 
-2.28.0
+2.31.1.295.g9ea45b61b8-goog
 
