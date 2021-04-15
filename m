@@ -2,81 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E61D3613CD
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 23:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22182361407
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 23:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234863AbhDOVA0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 17:00:26 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46049 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S235564AbhDOVAW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 17:00:22 -0400
-Received: (qmail 20064 invoked by uid 1000); 15 Apr 2021 16:59:57 -0400
-Date:   Thu, 15 Apr 2021 16:59:57 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+        id S235455AbhDOVTA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 17:19:00 -0400
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:35514 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234959AbhDOVS7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 17:18:59 -0400
+Received: by mail-ot1-f48.google.com with SMTP id a2-20020a0568300082b029028d8118b91fso5421378oto.2;
+        Thu, 15 Apr 2021 14:18:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=05+XHFlDq72xLlQj/rcNUyOU1OL09QWF1WagkfDO5lQ=;
+        b=W0SQ+aFRPZcGlsK3avux7czKe+MFC+HvRU1rPMM7zTc9/JJkLNkIMKvyhBbNzh3x04
+         FiVKDeT7x0s5heDgK8a2BH6M8JRxSJmyEniqDUkkMV848UBYi3aDEIdxOVfYZqiRUQbt
+         8ZtYlwGv/CATCYnM1u+BdqXLYGPXsNMg90f3bsaLWBZiZh1G3pxkqRRGPuZol13SlKY+
+         yZ48M+DXCJQWvu/PfVV+kuwrLXhGTHAB4t4DE8Nmu+/BHveD+DJ5WQiZEGNnHmhS9u8S
+         vy5HgzyZCHDKjKgVneqRVyrYYaUuq4Fszx+N5ZNXefaRUVDQXRqDtQOvhuS5DGEWBRBi
+         hlzg==
+X-Gm-Message-State: AOAM530WWQQD1T0XabhZoC6NhBUkAmBBTn9E1b/CoB37hDQ8CH1vRekN
+        Ist0C1UAkBMIPOWAsLtJ5g==
+X-Google-Smtp-Source: ABdhPJzAjRkeWJ51F7m8ni4s2MLxav61pivxcaMB9j4R8cz7P5ZvbFcyq+SA9qWBSf9ttAL2eqcxhw==
+X-Received: by 2002:a9d:5f0c:: with SMTP id f12mr967042oti.258.1618521515654;
+        Thu, 15 Apr 2021 14:18:35 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x2sm948505ote.47.2021.04.15.14.18.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Apr 2021 14:18:35 -0700 (PDT)
+Received: (nullmailer pid 1899390 invoked by uid 1000);
+        Thu, 15 Apr 2021 21:18:34 -0000
+Date:   Thu, 15 Apr 2021 16:18:34 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [syzbot] general protection fault in gadget_setup
-Message-ID: <20210415205957.GA19917@rowland.harvard.edu>
-References: <00000000000075c58405bfd6228c@google.com>
- <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
- <20210413161311.GC1454681@rowland.harvard.edu>
- <CACT4Y+YEw4iJPxY4b6LPXrU91TODfu09dG=53exvQkwjPBg23w@mail.gmail.com>
- <20210413165724.GD1454681@rowland.harvard.edu>
- <CACT4Y+aX-cMJxMYmWms3MG-4=Rb9eG_N+pOjorRHoV1MGQXtkA@mail.gmail.com>
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: dwc3: Add disabling LPM for
+ gadget
+Message-ID: <20210415211834.GA1899359@robh.at.kernel.org>
+References: <cover.1618366071.git.Thinh.Nguyen@synopsys.com>
+ <f31348ba744318c83b3a9ab1eab75c61122b15ae.1618366071.git.Thinh.Nguyen@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACT4Y+aX-cMJxMYmWms3MG-4=Rb9eG_N+pOjorRHoV1MGQXtkA@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <f31348ba744318c83b3a9ab1eab75c61122b15ae.1618366071.git.Thinh.Nguyen@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 13, 2021 at 07:11:11PM +0200, Dmitry Vyukov wrote:
-> On Tue, Apr 13, 2021 at 6:57 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> >
-> > On Tue, Apr 13, 2021 at 06:47:47PM +0200, Dmitry Vyukov wrote:
-> > > On Tue, Apr 13, 2021 at 6:13 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > > Hopefully this patch will make the race a lot more likely to occur.  Is
-> > > > there any way to tell syzkaller to test it, despite the fact that
-> > > > syzkaller doesn't think it has a reproducer for this issue?
-> > >
-> > > If there is no reproducer the only way syzbot can test it is if it's
-> > > in linux-next under CONFIG_DEBUG_AID_FOR_SYZBOT:
-> > > http://bit.do/syzbot#no-custom-patches
-> >
-> > There _is_ a theoretical reproducer: the test that provoked syzkaller's
-> > original bug report.  But syzkaller doesn't realize that it is (or may
-> > be) a reproducer.
-> >
-> > It ought to be possible to ask syzkaller to run a particular test that
-> > it has done before, with a patch applied -- and without having to add
-> > anything to linux-next.
+On Tue, 13 Apr 2021 19:13:11 -0700, Thinh Nguyen wrote:
+> Add a new DT option to disable LPM for gadget and update the description
+> for usb2-lpm-disable related to host for clarity.
 > 
-> Yes, this is possible:
-> http://bit.do/syzbot#syzkaller-reproducers
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  Changes in v2:
+>  - New patch
+> 
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
 
-That's not really what I had in mind.  I don't want to spend the time 
-and effort installing syskaller on my own system; I want to tell syzbot 
-to run a particular syzkaller program (the one that originally led to 
-this bug report) on a patched kernel.
-
-The syzbot instructions say that it can test bugs with reproducers.  The 
-problem here is that there doesn't seem to be any way to tell it to use 
-a particular syzkaller program as a reproducer.
-
-Alan Stern
-
-> The log of tests executed before the crash is available under the
-> "console output" link:
-> console output: https://syzkaller.appspot.com/x/log.txt?x=124adbf6d00000
-> And this log can be replayed using syz-execprog utility.
+Acked-by: Rob Herring <robh@kernel.org>
