@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E26F360250
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 08:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 206F8360257
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 08:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbhDOGZn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 02:25:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60788 "EHLO mail.kernel.org"
+        id S230424AbhDOG1K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 02:27:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32862 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229731AbhDOGZm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Apr 2021 02:25:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 945CE613EA;
-        Thu, 15 Apr 2021 06:25:18 +0000 (UTC)
+        id S230153AbhDOG1J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Apr 2021 02:27:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BE3E260231;
+        Thu, 15 Apr 2021 06:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618467919;
-        bh=9gbCNiJ92z/+9kYkiggvzRQxzeus7PbgRPq40BEqOoY=;
+        s=k20201202; t=1618468007;
+        bh=+ENAR6b4b0HhPBE+r0SPMfIaZNMhcuo0VJOvNcPqXcQ=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=XdfLDdmQi6axTBoWN8YZX/j0rzlIKOT6r35CB0JfRA1tOPaCO3EQyAi3tHBVB0Dgk
-         Ev8xcjd1Bx3CWNRzG4Do4PAbziQW9tah8boo33KSpJmVNAMajxELdOsypsuAarNIWU
-         fcDnqI9pkJGDvscRqb7VvTXdkWru4kiEZHcdaf6NUNS0i5vPt9AtunwNClFOIok5sx
-         zGq/s9MbK4qWwYHmFUBVelyn3PZfc/I2ZD/F4WrNWCgiKFJfALcq1b+GPxScKt/7Fz
-         D5cXZJNFvi3XVB9MHtAHsa4BwJ/gY5/NR6By10sxGcqjv4HXDuZzn1QQQenug8b04G
-         NLL0wf3thVt4Q==
+        b=Dwgm81l0ZnPOhmJKZP9BvVqixZJokLlkolbuCZrO3WX/hAzHmpPLueKrTG16tybOt
+         KKqfuz656EJ7SvVPzMmEKsMT74VhtXSyXjqajtnduiUzxS9D98yYldy1ypwVuelaE0
+         c84BUUv02ZQ1q26bSh6zRkgZ9wbh/oNjXHt57QzlQqyuHpFprelNDDNP9LsihX/g2G
+         nHJSDAp36J+Bjb3tg5GyaI+FwlwZXnK81tWTCH0O0NqALm0PFsP/tm60F1sNoZ9Gco
+         Dm3W7kPgPrlKjf2wJkStpwRIZzbGxuE8eUH91RuSE11CdXqJXKn+zROcQNe2+imCSL
+         pNk6TFpXegjRg==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Remove FS bInterval_m1 limitation
-In-Reply-To: <c2049798e1bce3ea38ae59dd17bbffb43e78370c.1618447155.git.Thinh.Nguyen@synopsys.com>
-References: <c2049798e1bce3ea38ae59dd17bbffb43e78370c.1618447155.git.Thinh.Nguyen@synopsys.com>
-Date:   Thu, 15 Apr 2021 09:25:13 +0300
-Message-ID: <87pmywnjxy.fsf@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: gadget: Avoid canceling current request for
+ queuing error
+In-Reply-To: <1618439388-20427-1-git-send-email-wcheng@codeaurora.org>
+References: <1618439388-20427-1-git-send-email-wcheng@codeaurora.org>
+Date:   Thu, 15 Apr 2021 09:26:40 +0300
+Message-ID: <87mtu0njvj.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -44,42 +44,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Wesley Cheng <wcheng@codeaurora.org> writes:
 
-Hi,
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> The programming guide incorrectly stated that the DCFG.bInterval_m1 must
-> be set to 0 when operating in fullspeed. There's no such limitation for
-> all IPs.
-
-do we have an updated Databook correcting this statement?
-
-> Cc: <stable@vger.kernel.org>
-> Fixes: a1679af85b2a ("usb: dwc3: gadget: Fix setting of DEPCFG.bInterval_=
-m1")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> If an error is received when issuing a start or update transfer
+> command, the error handler will stop all active requests (including
+> the current USB request), and call dwc3_gadget_giveback() to notify
+> function drivers of the requests which have been stopped.  Avoid
+> having to cancel the current request which is trying to be queued, as
+> the function driver will handle the EP queue error accordingly.
+> Simply unmap the request as it was done before, and allow previously
+> started transfers to be cleaned up.
+>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 > ---
->  drivers/usb/dwc3/gadget.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
+>  drivers/usb/dwc3/gadget.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
 > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 6227641f2d31..d87a29bd7d9b 100644
+> index e1b04c97..4200775 100644
 > --- a/drivers/usb/dwc3/gadget.c
 > +++ b/drivers/usb/dwc3/gadget.c
-> @@ -608,12 +608,13 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep=
- *dep, unsigned int action)
->  		u8 bInterval_m1;
+> @@ -1399,6 +1399,11 @@ static int __dwc3_gadget_kick_transfer(struct dwc3=
+_ep *dep)
+>  		if (ret =3D=3D -EAGAIN)
+>  			return ret;
 >=20=20
->  		/*
-> -		 * Valid range for DEPCFG.bInterval_m1 is from 0 to 13, and it
-> -		 * must be set to 0 when the controller operates in full-speed.
-> +		 * Valid range for DEPCFG.bInterval_m1 is from 0 to 13.
-> +		 *
-> +		 * NOTE: The programming guide incorrectly stated bInterval_m1
-> +		 * must be set to 0 when operating in fullspeed. Internally the
-> +		 * controller does not have this limitation.
+> +		/* Avoid canceling current request, as it has not been started */
+> +		if (req->trb)
+> +			memset(req->trb, 0, sizeof(struct dwc3_trb));
 
-might be a good idea to refer to the section in this comment ;-)
+we don't need a full memset. I think ensuring HWO bit is zero is enough.
 
 =2D-=20
 balbi
@@ -89,19 +83,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB33EkRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbslQ/+NGpas9VP0Mr7mZkkMeCIHmDexAP61hoR
-33n1/rPKnU8Mfk1NcKbNi4iEFwqgdtqjfnHt+GA3MJF1wgkqLoY54DubKoWVEzGW
-SWXHjfgj5pDp5i58AJHbEHfldNdR2BzuCrFwAhg9bMtwuOi5etQlJRtCjSBbcrsa
-RVtyWO9+6jQZkvN66YQrX4noenV/1T0ZmuMQTdlf959XbJFtj13IICqvEwdSEYU1
-3H88OGvmymGnqXqV4K+m5D+6XRmSIs8EkppVHYdsRVX4aN8qIa+w3rHJJSqmeF85
-b4zLjRQYvspismnnhw5Xw9m+iRHFqLG+FOAeU9LOffvnZJYJfBkrDWxzi5D1rG3P
-ApXh0QfdMLxH6VuyYcTjuQqQuammiXnZpFPJVByJ+STdUeMto7MZum2n1HXgNpph
-ihYiUZ/fvmhHksHdDm/bUBXGxIC8Skz2/QoLnX5JnGirZohPNl7wUv0QJEDeRHS7
-uopzqyH4cd0BSoo3bkN4jXstoflbiPz2Y04yoZJZb8RNYiScXf39UdpXCj+e1OLw
-NCxTNF/4BsbN0wLdn3/cM9/cK2nrNenkiN4xLLpVigqQI1jqaSuKlqjWeJY2IYw+
-A2KXqg3l38kWs/QPa8tqpll1twRsR8yNrMDi06eYtWXw7qij2YYBiao70T4D1Cni
-HgmVl+W4YSs=
-=62MQ
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB33KARHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbjrRAAgudUzvoaFOVpQwYbsfAE8oP1FM4o45Lw
+//mO35HrO44ArfFT5nMh7N/hsvLZFvRk5LP4R5sSEG9+Qqm7EdEfrkmVxVzCpPYV
+hhtBJBB2Lh1dpNtSafCUrDd9niDSXh/PtHo9KlN2NNCtecrW5NPmBRwcVElq7Lub
+Hx10/+9bXBz/539PseIm4mXmprGO9ZU6TEJu78kmWcpWBOsJJZNTiz8e1chAzPvb
+YS2k4XSm6mjKxIm9+PMVtV9psZG1D4tdDNAbNuITEfrxBSQnbi/h5zO/XWJZEBLQ
+PLblcB5PX4/mV+P/xQNUUSM1hQ9o7rZFsS5JYLpwqLNn2H6L1kHExc/Exebzq/Ju
+z6PoBLnY4/qBmL/7OjBfDYWMot4dznVpvvYVs6IP9KT6cMhU2pVQiW1pJ8K+pbrQ
+6dkkEkDvWXe+blIRpQPf2nGg1JeaisJ4xuMDs3qK/seiDbrZwL3XwRj1LPz3/xUu
+AdZY15RMifKh9mzDCrbIMUP5JglNmbktfYimnrVQjSPsR5DUuzGaauIaz7USafmF
+0ExythixDvJMgYWDK2vQehTsBUOvz7nlfRD5z/N3fxYIE+FmjX5sJoIEzIPsehF6
+U+9k9VH4yhtDaPpo+ysKEhF9ivB78QmicKn04bKSDzcRCQf8t4LLnKPPTnjEdWJu
+p6mcEvHzUCY=
+=jYQD
 -----END PGP SIGNATURE-----
 --=-=-=--
