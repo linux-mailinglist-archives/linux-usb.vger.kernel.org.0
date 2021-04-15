@@ -2,135 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6674436082F
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 13:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89DB6360883
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 13:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbhDOLXu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 07:23:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48162 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230202AbhDOLXt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Apr 2021 07:23:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1618485804; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qA/aGS5Izv8h7RrYKhh2H6WVWgB2jT16mRzPvW2sj98=;
-        b=b81DE0jNBJkhrxIZkNLzAsgZ2pMD+t8wc+tRP87f3PF7xO0j4mLIqGfSKd5y39n2WMVyFu
-        ouXZZLmOIUbXefqdteEkmUqSlaTQu0usecdEGCoqrtXSt55VVk+YFGXdo5ZsIJtaXW1LsV
-        2cEDIwIrwwDQAsdlda7+c7wkxcANZzQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 9789BABED;
-        Thu, 15 Apr 2021 11:23:24 +0000 (UTC)
-Message-ID: <72d092726448607af2fd453c48be5b0ba69e617a.camel@suse.com>
-Subject: Re: [RFC]extension of the anchor API
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org
-Date:   Thu, 15 Apr 2021 13:23:21 +0200
-In-Reply-To: <20210414145608.GB1493067@rowland.harvard.edu>
-References: <5b3c30d268ea2d13d303759ef3dfee8d72830084.camel@suse.com>
-         <20210325150657.GC785961@rowland.harvard.edu>
-         <5d3852dca69ff194017c806078e996c50ee621be.camel@suse.com>
-         <20210325183856.GA799855@rowland.harvard.edu>
-         <cc44e358406f48175fad9e956369d0f5a07efbe9.camel@suse.com>
-         <20210408150725.GC1296449@rowland.harvard.edu>
-         <8c11f03b08a0bdfd2761a74f5a7964067dc4b98b.camel@suse.com>
-         <20210412150628.GA1420451@rowland.harvard.edu>
-         <30abed362c4b2e6af33078505ac9985389ad39bb.camel@suse.com>
-         <20210414145608.GB1493067@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S232512AbhDOLtx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 07:49:53 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:45250 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231549AbhDOLtx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 07:49:53 -0400
+Received: from 36-227-2-251.dynamic-ip.hinet.net ([36.227.2.251] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <chris.chiu@canonical.com>)
+        id 1lX0Ux-0001PI-6O; Thu, 15 Apr 2021 11:49:27 +0000
+From:   chris.chiu@canonical.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        m.v.b@runbox.com, hadess@hadess.net
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Chiu <chris.chiu@canonical.com>
+Subject: [PATCH v3] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek Hub
+Date:   Thu, 15 Apr 2021 19:48:56 +0800
+Message-Id: <20210415114856.4555-1-chris.chiu@canonical.com>
+X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mittwoch, den 14.04.2021, 10:56 -0400 schrieb Alan Stern:
-> On Wed, Apr 14, 2021 at 10:12:01AM +0200, Oliver Neukum wrote:
-> > Am Montag, den 12.04.2021, 11:06 -0400 schrieb Alan Stern:
-> > > On Mon, Apr 12, 2021 at 11:58:16AM +0200, Oliver Neukum wrote:
-> > > > That presumes that the URBs will finish in order. I don't think such
-> > > > an assumption can be made.
-> > > 
-> > > I don't understand -- I can't detect any such presumption.
-> > 
-> > OK, this shows that I am bad at explaining.
-> > > As far as I can tell, the only reason for maintaining the URBs in any 
-> > > particular order on the anchor list is so that usb_kill_anchored_urbs 
-> > > and usb_poison_anchored_urbs can kill them in reverse order of 
-> > > submission.  THat's why the current code moves completed URBs to the end 
-> > > of the list.
-> > 
-> > No longer strictly true, as the API has a call to submit everything
-> > on an anchor, but I think it boils down to the same thing.
-> > 
-> > > If you keep a pointer to the most recently submitted URB, killing them 
-> > > easy enough to do.  Start with that URB, then go backward through the 
-> > > list (wrapping to the end when you reach the beginning of the list).
-> > 
-> > Yes, but that supposes that the next on the list has not been
-> > resubmitted _before_ the one after it.
-> > 
-> > If you do not keep the list ordered, but in the initial order,
-> > we can have the situation that A (happens most recently submitted)
-> > is followed by B and C, but C was submitted before B.
-> 
-> I think the only reasonable alternative is to move an URB to the end of 
-> the list when it is submitted, rather than when it completes.  Have you 
-> considered doing it that way?
+From: Chris Chiu <chris.chiu@canonical.com>
 
-No, that did not occur to me. Back to the drawing board.
-Still I have to put it somewhere when I anchor an URB. Head or tail?
+Realtek Hub (0bda:5487) in Dell Dock WD19 sometimes fails to work
+after the system resumes from suspend with remote wakeup enabled
+device connected:
+[ 1947.640907] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
+[ 1947.641208] usb 5-2.3-port5: cannot disable (err = -71)
+[ 1947.641401] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
+[ 1947.641450] usb 5-2.3-port4: cannot reset (err = -71)
 
-> The real problem with usb_submit_anchored_urbs is that the core can't 
-> know in what order the caller wants the URBs to be submitted.  If the 
+Information of this hub:
+T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 10 Spd=480  MxCh= 5
+D:  Ver= 2.10 Cls=09(hub  ) Sub=00 Prot=02 MxPS=64 #Cfgs=  1
+P:  Vendor=0bda ProdID=5487 Rev= 1.47
+S:  Manufacturer=Dell Inc.
+S:  Product=Dell dock
+C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=01 Driver=hub
+E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
+I:* If#= 0 Alt= 1 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=02 Driver=hub
+E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
 
-I think the reasonable assumption is that they need to be submitted
-in the order they were anchored.
+The failure results from the ETIMEDOUT by chance when turning on
+the suspend feature for the target port of the hub. The port
+will be unresponsive and placed in unknown state. The hub_activate
+invoked during resume will fail to get the port stautus with -EPROTO.
+Then all devices connected to the hub will never be found and probed.
 
-> In the kerneldoc you can explain that if the anchor has not been used 
-> since its URBs were added then the URBs will be submitted in the order 
-> they were added to the anchor, but otherwise they will be submitted in 
-> an unspecified order, which may not be suitable.
+The USB_PORT_FEAT_SUSPEND is not really necessary due to the
+"global suspend" in USB 2.0 spec. It's only for many hub devices
+which don't relay wakeup requests from the devices connected to
+downstream ports. For this realtek hub, there's no problem waking
+up the system from connected keyboard.
 
-Yes.
+This commit bypasses the USB_PORT_FEAT_SUSPEND for the quirky hub.
 
-> > > The order in which the URBs complete doesn't matter, because trying to 
-> > > unlink a completed URB won't cause any harm.
-> > 
-> > As long as it stays completed.
-> 
-> Rather, as long as they complete in order of submission.
-> 
-> > >   The only assumption here 
-> > > is that URBs get submitted in the list's order (possibly circularly) -- 
-> > > this should always be true.
-> > 
-> > I am afraid we cannot guarantee that. It might intuitively seem so,
-> > but nothing guarantees that all URBs are going to the same endpoint.
-> 
-> I hadn't thought of that.  Do anchors get used that way anywhere?
+Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+---
 
-I haven't found an example, but I thought it could not be ruled out.
-So you think that that case should be discouraged in documentation
-and henceforth ignored?
+Changelog:
+  v3:
+    - Do not mislead usbcore that the quirky hub is really suspended.
+      return -EIO for quirky hub instead of doing USB_PORT_FEAT_SUSPEND
+    - Revise the commit message
+  v2:
+    Since the 0bda:5413 is the hub device connects to upstream hub
+    0bda:5487, the upstream hub which fails the USB_PORT_FEAT_SUSPEND
+    is the target this patch really wants to quirk.
+    - Fix the quirk target from the connected hub device to the
+      upstream hub
+    - Correct the usb info of the target hub in the commit message
+    - Revise the description of the quirk
 
-So we do agree that we need the following:
+ Documentation/admin-guide/kernel-parameters.txt |  3 +++
+ drivers/usb/core/hub.c                          | 10 +++++++---
+ drivers/usb/core/quirks.c                       |  5 +++++
+ include/linux/usb/quirks.h                      |  3 +++
+ 4 files changed, 18 insertions(+), 3 deletions(-)
 
-a - submit in the order you
-anchored
-b - kill or poison in the reverse order
-c - unpoison does not really matter but better do it in the submit
-order?
-
-Does that mean that the list needs to be kept ordered by sequence
-of submission? I think so.
-
-	Regards
-		Oliver
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 04545725f187..1bb22a9ea5ba 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5682,6 +5682,9 @@
+ 					pause after every control message);
+ 				o = USB_QUIRK_HUB_SLOW_RESET (Hub needs extra
+ 					delay after resetting its port);
++				p = USB_QUIRK_NO_SET_FEAT_SUSPEND (Hub can't
++					handle set-port-feature-suspend request
++					correctly);
+ 			Example: quirks=0781:5580:bk,0a5c:5834:gij
+ 
+ 	usbhid.mousepoll=
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 7f71218cc1e5..a73e3931aecd 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -3328,9 +3328,13 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+ 	 * Therefore we will turn on the suspend feature if udev or any of its
+ 	 * descendants is enabled for remote wakeup.
+ 	 */
+-	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0)
+-		status = set_port_feature(hub->hdev, port1,
+-				USB_PORT_FEAT_SUSPEND);
++	else if (PMSG_IS_AUTO(msg) || usb_wakeup_enabled_descendants(udev) > 0) {
++		if (hub->hdev->quirks & USB_QUIRK_NO_SET_FEAT_SUSPEND)
++			status = -EIO;
++		else
++			status = set_port_feature(hub->hdev, port1,
++					USB_PORT_FEAT_SUSPEND);
++	}
+ 	else {
+ 		really_suspend = false;
+ 		status = 0;
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 76ac5d6555ae..9f373579bf9e 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -138,6 +138,9 @@ static int quirks_param_set(const char *value, const struct kernel_param *kp)
+ 			case 'o':
+ 				flags |= USB_QUIRK_HUB_SLOW_RESET;
+ 				break;
++			case 'p':
++				flags |= USB_QUIRK_NO_SET_FEAT_SUSPEND;
++				break;
+ 			/* Ignore unrecognized flag characters */
+ 			}
+ 		}
+@@ -406,6 +409,8 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 
+ 	/* Realtek hub in Dell WD19 (Type-C) */
+ 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
++	{ USB_DEVICE(0x0bda, 0x5487), .driver_info =
++			USB_QUIRK_NO_SET_FEAT_SUSPEND },
+ 
+ 	/* Generic RTL8153 based ethernet adapters */
+ 	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
+diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
+index 5e4c497f54d6..ac469d446c78 100644
+--- a/include/linux/usb/quirks.h
++++ b/include/linux/usb/quirks.h
+@@ -72,4 +72,7 @@
+ /* device has endpoints that should be ignored */
+ #define USB_QUIRK_ENDPOINT_IGNORE		BIT(15)
+ 
++/* Hub can't handle set-port-feature-suspend request correctly */
++#define USB_QUIRK_NO_SET_FEAT_SUSPEND		BIT(16)
++
+ #endif /* __LINUX_USB_QUIRKS_H */
+-- 
+2.20.1
 
