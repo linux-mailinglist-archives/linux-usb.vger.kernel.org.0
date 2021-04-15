@@ -2,88 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A04EC35FDCA
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 00:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD5FC35FEF5
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 02:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232681AbhDNWaR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Apr 2021 18:30:17 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:19474 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231207AbhDNWaR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Apr 2021 18:30:17 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1618439395; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=Ycvz7iaQnBHv11QQ3ZVNlWNQgHE9WgMCqAYSdxqayII=; b=N+6+lCFcgBfnexuv6LYXC18c5EYdW/SPYCwlMgNM0Ixk6ulnajcj78MQLaSBIhSY6kaKH45P
- nc0m6voQB3UfmLpmjmmF+CEzH+Wrjr3QsLTXJWuOUvs3e1unRU1RCizvvrAvpG2KdGLh4Muy
- +dqeKvp9dE/oJ/DXSGUAP2AhmwQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 60776ce287ce1fbb56ef3c11 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 14 Apr 2021 22:29:54
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C2C8BC433C6; Wed, 14 Apr 2021 22:29:53 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        id S231633AbhDOAlW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Apr 2021 20:41:22 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:43964 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230153AbhDOAlV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Apr 2021 20:41:21 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8DB80C433C6;
-        Wed, 14 Apr 2021 22:29:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8DB80C433C6
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Avoid canceling current request for queuing error
-Date:   Wed, 14 Apr 2021 15:29:48 -0700
-Message-Id: <1618439388-20427-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 2EFC3C0556;
+        Thu, 15 Apr 2021 00:40:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1618447259; bh=vJnt/fnpWVbLJ17ULdv6D4GvQviiXUyq1zVCyddYdPU=;
+        h=Date:From:Subject:To:Cc:From;
+        b=V/iHtLHOlnvXhGdYrr0Lk5lMHlQnHnuNEqXoVx7hCObWCqhowdrxhlAXBXI3we94u
+         OYtHC9vkpbcb/q000O+Ki8iuHnbGn5I495qdjpZHrUuguXOYmmzjtfh6g2HjE0eN6c
+         5eq+X2Y3FoclU7IT2fgcIBWRIi0MW1wmE0Tl99Ceh4lGF1bUR0VBQnr2wjm5cJT9CD
+         pigkZbCHoVxuJoS5Fc7KSlHMdeHjYN3kWFC2Zq+b3AbaXhVh1W0T5ZYWW5us59pWpq
+         rced/9xnRixZX3Y7VGgBdoagjnZJ1WV9szDSROzj9xj49YJYZi34XDBx250YMAiZw9
+         3olHVZiRucr/Q==
+Received: from lab-vbox (unknown [10.205.131.205])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 87DE9A0070;
+        Thu, 15 Apr 2021 00:40:53 +0000 (UTC)
+Received: by lab-vbox (sSMTP sendmail emulation); Wed, 14 Apr 2021 17:40:53 -0700
+Date:   Wed, 14 Apr 2021 17:40:53 -0700
+Message-Id: <c2049798e1bce3ea38ae59dd17bbffb43e78370c.1618447155.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: gadget: Remove FS bInterval_m1 limitation
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, <stable@vger.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If an error is received when issuing a start or update transfer
-command, the error handler will stop all active requests (including
-the current USB request), and call dwc3_gadget_giveback() to notify
-function drivers of the requests which have been stopped.  Avoid
-having to cancel the current request which is trying to be queued, as
-the function driver will handle the EP queue error accordingly.
-Simply unmap the request as it was done before, and allow previously
-started transfers to be cleaned up.
+The programming guide incorrectly stated that the DCFG.bInterval_m1 must
+be set to 0 when operating in fullspeed. There's no such limitation for
+all IPs.
 
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+Cc: <stable@vger.kernel.org>
+Fixes: a1679af85b2a ("usb: dwc3: gadget: Fix setting of DEPCFG.bInterval_m1")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
- drivers/usb/dwc3/gadget.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/usb/dwc3/gadget.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index e1b04c97..4200775 100644
+index 6227641f2d31..d87a29bd7d9b 100644
 --- a/drivers/usb/dwc3/gadget.c
 +++ b/drivers/usb/dwc3/gadget.c
-@@ -1399,6 +1399,11 @@ static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
- 		if (ret == -EAGAIN)
- 			return ret;
+@@ -608,12 +608,13 @@ static int dwc3_gadget_set_ep_config(struct dwc3_ep *dep, unsigned int action)
+ 		u8 bInterval_m1;
  
-+		/* Avoid canceling current request, as it has not been started */
-+		if (req->trb)
-+			memset(req->trb, 0, sizeof(struct dwc3_trb));
-+		dwc3_gadget_del_and_unmap_request(dep, req, ret);
-+
- 		dwc3_stop_active_transfer(dep, true, true);
+ 		/*
+-		 * Valid range for DEPCFG.bInterval_m1 is from 0 to 13, and it
+-		 * must be set to 0 when the controller operates in full-speed.
++		 * Valid range for DEPCFG.bInterval_m1 is from 0 to 13.
++		 *
++		 * NOTE: The programming guide incorrectly stated bInterval_m1
++		 * must be set to 0 when operating in fullspeed. Internally the
++		 * controller does not have this limitation.
+ 		 */
+ 		bInterval_m1 = min_t(u8, desc->bInterval - 1, 13);
+-		if (dwc->gadget->speed == USB_SPEED_FULL)
+-			bInterval_m1 = 0;
  
- 		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+ 		if (usb_endpoint_type(desc) == USB_ENDPOINT_XFER_INT &&
+ 		    dwc->gadget->speed == USB_SPEED_FULL)
+
+base-commit: 4b853c236c7b5161a2e444bd8b3c76fe5aa5ddcb
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.28.0
 
