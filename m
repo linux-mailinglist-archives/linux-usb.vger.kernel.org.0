@@ -2,136 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B0B8360940
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 14:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E60A360973
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 14:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232302AbhDOMZy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 08:25:54 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:16124 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbhDOMZy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 08:25:54 -0400
-Received: from DGGEMS407-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FLdlC5ynrzpY88;
-        Thu, 15 Apr 2021 20:22:31 +0800 (CST)
-Received: from huawei.com (10.67.165.24) by DGGEMS407-HUB.china.huawei.com
- (10.3.19.207) with Microsoft SMTP Server id 14.3.498.0; Thu, 15 Apr 2021
- 20:25:15 +0800
-From:   Longfang Liu <liulongfang@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <stern@rowland.harvard.edu>, <liudongdong3@huawei.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <liulongfang@huawei.com>, <kong.kongxinwei@hisilicon.com>,
-        <yisen.zhuang@huawei.com>
-Subject: [RFC PATCH] USB:XHCI:skip hub registration
-Date:   Thu, 15 Apr 2021 20:22:38 +0800
-Message-ID: <1618489358-42283-1-git-send-email-liulongfang@huawei.com>
-X-Mailer: git-send-email 2.8.1
+        id S232898AbhDOMcZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 08:32:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48070 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230056AbhDOMcY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Apr 2021 08:32:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6EE156044F;
+        Thu, 15 Apr 2021 12:32:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1618489921;
+        bh=RNLyWYivf1iCOu+XiSao9whpVt5jOI9e5kwCwe8J3pE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DALDjikH1xYjbgAE5ZFULhAmlzFpYm8GTppSG2ZGuDBqASeVmY7hS3mli9ZAIWm8m
+         KTQfZwqZMT6wy5u+5KTdnLbYoa9sjYrHsbyr0WZRtdR3DrYdAWaZh44IM0+Pk/lTrs
+         1Xgv6BAacZV5RpwD07Y4gE0xta0IKFoqx2ZJjFFA=
+Date:   Thu, 15 Apr 2021 14:31:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     chris.chiu@canonical.com
+Cc:     stern@rowland.harvard.edu, m.v.b@runbox.com, hadess@hadess.net,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's
+ Realtek Hub
+Message-ID: <YHgyP8tGNM1Wi5dJ@kroah.com>
+References: <20210415114856.4555-1-chris.chiu@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.165.24]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210415114856.4555-1-chris.chiu@canonical.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When the number of ports on the USB hub is 0, skip the registration
-operation of the USB hub.
+On Thu, Apr 15, 2021 at 07:48:56PM +0800, chris.chiu@canonical.com wrote:
+> From: Chris Chiu <chris.chiu@canonical.com>
+> 
+> Realtek Hub (0bda:5487) in Dell Dock WD19 sometimes fails to work
+> after the system resumes from suspend with remote wakeup enabled
+> device connected:
+> [ 1947.640907] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
+> [ 1947.641208] usb 5-2.3-port5: cannot disable (err = -71)
+> [ 1947.641401] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
+> [ 1947.641450] usb 5-2.3-port4: cannot reset (err = -71)
 
-The current Kunpeng930's XHCI hardware controller is defective. The number
-of ports on its USB3.0 bus controller is 0, and the number of ports on
-the USB2.0 bus controller is 1.
+How does other operating systems handle this?  The hardware seems like
+it does not follow the USB spec, how did it get "certified"?
 
-In order to solve this problem that the USB3.0 controller does not have
-a port which causes the registration of the hub to fail, this patch passes
-the defect information by adding flags in the quirks of xhci and usb_hcd,
-and finally skips the registration process of the hub directly according
-to the results of these flags when the hub is initialized.
+> Information of this hub:
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 10 Spd=480  MxCh= 5
+> D:  Ver= 2.10 Cls=09(hub  ) Sub=00 Prot=02 MxPS=64 #Cfgs=  1
+> P:  Vendor=0bda ProdID=5487 Rev= 1.47
+> S:  Manufacturer=Dell Inc.
+> S:  Product=Dell dock
+> C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
+> I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=01 Driver=hub
+> E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
+> I:* If#= 0 Alt= 1 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=02 Driver=hub
+> E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
+> 
+> The failure results from the ETIMEDOUT by chance when turning on
+> the suspend feature for the target port of the hub. The port
+> will be unresponsive and placed in unknown state. The hub_activate
+> invoked during resume will fail to get the port stautus with -EPROTO.
+> Then all devices connected to the hub will never be found and probed.
+> 
+> The USB_PORT_FEAT_SUSPEND is not really necessary due to the
+> "global suspend" in USB 2.0 spec. It's only for many hub devices
+> which don't relay wakeup requests from the devices connected to
+> downstream ports. For this realtek hub, there's no problem waking
+> up the system from connected keyboard.
+> 
+> This commit bypasses the USB_PORT_FEAT_SUSPEND for the quirky hub.
 
-Signed-off-by: Longfang Liu <liulongfang@huawei.com>
----
- drivers/usb/core/hub.c      | 6 ++++++
- drivers/usb/host/xhci-pci.c | 4 ++++
- drivers/usb/host/xhci.c     | 5 +++++
- drivers/usb/host/xhci.h     | 1 +
- include/linux/usb/hcd.h     | 1 +
- 5 files changed, 17 insertions(+)
+Can you make this only be allowed for hubs?  But why doesn't the nomal
+"this can not suspend properly" bit work for this?  We have that for
+other USB devices already.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index b1e14be..2d6869d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -1769,9 +1769,15 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
- 	struct usb_host_interface *desc;
- 	struct usb_device *hdev;
- 	struct usb_hub *hub;
-+	struct usb_hcd *hcd;
- 
- 	desc = intf->cur_altsetting;
- 	hdev = interface_to_usbdev(intf);
-+	hcd = bus_to_hcd(hdev->bus);
-+	if (hcd->usb3_no_port) {
-+		dev_warn(&intf->dev, "USB hub has no port\n");
-+		return -ENODEV;
-+	}
- 
- 	/*
- 	 * Set default autosuspend delay as 0 to speedup bus suspend,
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index ef513c2..63b89a4 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -281,6 +281,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (xhci->quirks & XHCI_RESET_ON_RESUME)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
- 				"QUIRK: Resetting on resume");
-+
-+	if (pdev->vendor == PCI_VENDOR_ID_HUAWEI &&
-+	    pdev->device == 0xa23c)
-+		xhci->quirks |= XHCI_USB3_NOPORT;
- }
- 
- #ifdef CONFIG_ACPI
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index bee5dec..e3e3573 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -5184,6 +5184,11 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
- 		/* xHCI private pointer was set in xhci_pci_probe for the second
- 		 * registered roothub.
- 		 */
-+		if (xhci->quirks & XHCI_USB3_NOPORT) {
-+			xhci_info(xhci, "xHCI host has no port\n");
-+			hcd->usb3_no_port = 1;
-+		}
-+
- 		return 0;
- 	}
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 2c6c4f8..d3c658f 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1874,6 +1874,7 @@ struct xhci_hcd {
- #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
- #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
- #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
-+#define XHCI_USB3_NOPORT	BIT_ULL(37)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 3dbb42c..7df23a0f 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -172,6 +172,7 @@ struct usb_hcd {
- 	unsigned		tpl_support:1; /* OTG & EH TPL support */
- 	unsigned		cant_recv_wakeups:1;
- 			/* wakeup requests from downstream aren't received */
-+	unsigned		usb3_no_port:1; /* xHCI main_hcd has no port */
- 
- 	unsigned int		irq;		/* irq allocated */
- 	void __iomem		*regs;		/* device memory/io */
--- 
-2.8.1
+thanks,
 
+greg k-h
