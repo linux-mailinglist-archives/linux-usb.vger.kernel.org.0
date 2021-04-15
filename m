@@ -2,133 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD6C3601CC
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 07:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2CD36024E
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Apr 2021 08:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbhDOFlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 01:41:51 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:56526 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230514AbhDOFls (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 01:41:48 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B22AD404B4;
-        Thu, 15 Apr 2021 05:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1618465285; bh=BgMXEPeZcvrvjTtaOG9YrbXgvDxf/VPFTMD4y7159Jg=;
-        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=V5Q46KXHpoQRWNxSZyi1su1Uz4ohJCCa1Oj6eBtdvJT2OB9QoBkcjjabiV8GmDlTo
-         3VElciqv64GdOtXLxmNHM0x6uDmQF+W3Zu9Rnbs5KFx1XwHAzjWlokChK4DHJx/KWW
-         D1yPv52NqeL56o5FqioRpDIL3g+RVqAKaubGLc3gEcuHxMSqrGFDg0PYwthyWR51lA
-         tilAZsVOXC4MjXQKFZVZ5pI28tJbY7WTFnFpeMlAqFNKXI3XPORESiIEr4ERWpaiSN
-         GB9ofIVFAePNM81yNx74DjNR9lfOv7Vcw9bfnaHj3q5UI6YmA7MoKIhg35118j7puA
-         lhI9ebLM1JP1w==
-Received: from razpc-HP (razpc-hp.internal.synopsys.com [10.116.126.207])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 5D412A005C;
-        Thu, 15 Apr 2021 05:41:22 +0000 (UTC)
-Received: by razpc-HP (sSMTP sendmail emulation); Thu, 15 Apr 2021 09:41:21 +0400
-Date:   Thu, 15 Apr 2021 09:41:21 +0400
-Message-Id: <016bc228ca270fae5cb2f41db23f22cd1ffccece.1618464534.git.Arthur.Petrosyan@synopsys.com>
-In-Reply-To: <cover.1618464534.git.Arthur.Petrosyan@synopsys.com>
-References: <cover.1618464534.git.Arthur.Petrosyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Subject: [PATCH 15/15] usb: dwc2: Get rid of useless error checks in suspend interrupt
-To:     Felipe Balbi <balbi@kernel.org>,
+        id S230312AbhDOGXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 02:23:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60630 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230153AbhDOGXd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Apr 2021 02:23:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 16C24613EA;
+        Thu, 15 Apr 2021 06:23:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618467790;
+        bh=bpB2yLiQrzGFsKM+eo/ypGx7SupGM7k+ia8NJDQZCtc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Q81HnOvcWh+TBSwe3AUKUAT71RaHUFFlorFeabOtgp58PT1uFd1N7TxdsURbj5geY
+         3pbTurDemr6XmtHMDrGLyeugjOXpuh7Mq2eZoHh5n8g/78cqrlWAWHdb0jNs7wAwSa
+         +SmDB+xtMrel0e+jiSniqvbl/2vYT0KOkDTTgNfJqCGxwa/ibZssuSjpGb6eVt0G06
+         UyZ4cEj2K7Av34IwouddhH5ivcpjJmm0OuxIFy4Gr81NsBsS0o3QQqeMXZpQ2v6/tW
+         YihdJy0UHaVcbWholJzwWYkVxVOsfJdEJ0cjcyV4av2VU9+la0dMhMfY0c9Gc45YpP
+         ASG8ixAqetRng==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     John Youn <John.Youn@synopsys.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Douglas Anderson <dianders@chromium.org>
+        linux-usb@vger.kernel.org, Roger Quadros <rogerq@ti.com>
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Ferry Toth <fntoth@gmail.com>, Yu Chen <chenyu56@huawei.com>
+Subject: Re: [PATCH] usb: dwc3: core: Do core softreset when switch mode
+In-Reply-To: <96c64e6a788552371081f37f544041b7ee046ef5.1618452732.git.Thinh.Nguyen@synopsys.com>
+References: <96c64e6a788552371081f37f544041b7ee046ef5.1618452732.git.Thinh.Nguyen@synopsys.com>
+Date:   Thu, 15 Apr 2021 09:23:02 +0300
+Message-ID: <87sg3snk1l.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Squashed from Douglas Anderson's suggested commit
-"usb: dwc2: Get rid of useless error checks for
-hibernation/partial power down"
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
- - After this commit there should never be any
-case where dwc2_enter_partial_power_down() and
-dwc2_enter_hibernation() are called when
-'params.power_down' is not correct.  Get rid of
-the pile of error checking.
 
-- As part of this cleanup some of the error messages
-not to have __func__ in them.  That's not needed
-for dev_err() calls since they already have the
-device name as part of the message.
+Hi,
 
-Signed-off-by: Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
- drivers/usb/dwc2/core.c      |  3 ---
- drivers/usb/dwc2/core_intr.c | 18 +++++++-----------
- 2 files changed, 7 insertions(+), 14 deletions(-)
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> From: Yu Chen <chenyu56@huawei.com>
+> From: John Stultz <john.stultz@linaro.org>
+>
+> According to the programming guide, to switch mode for DRD controller,
+> the driver needs to do the following.
+>
+> To switch from device to host:
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(host mode)
+> 3. Reset the host with USBCMD.HCRESET
+> 4. Then follow up with the initializing host registers sequence
+>
+> To switch from host to device:
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(device mode)
+> 3. Reset the device with DCTL.CSftRst
+> 4. Then follow up with the initializing registers sequence
+>
+> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
 
-diff --git a/drivers/usb/dwc2/core.c b/drivers/usb/dwc2/core.c
-index 576c262dba55..6f70ab9577b4 100644
---- a/drivers/usb/dwc2/core.c
-+++ b/drivers/usb/dwc2/core.c
-@@ -391,9 +391,6 @@ static bool dwc2_iddig_filter_enabled(struct dwc2_hsotg *hsotg)
-  */
- int dwc2_enter_hibernation(struct dwc2_hsotg *hsotg, int is_host)
- {
--	if (hsotg->params.power_down != DWC2_POWER_DOWN_PARAM_HIBERNATION)
--		return -ENOTSUPP;
--
- 	if (is_host)
- 		return dwc2_host_enter_hibernation(hsotg);
- 	else
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index 470458ac664b..a5ab03808da6 100644
---- a/drivers/usb/dwc2/core_intr.c
-+++ b/drivers/usb/dwc2/core_intr.c
-@@ -535,13 +535,10 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
- 			switch (hsotg->params.power_down) {
- 			case DWC2_POWER_DOWN_PARAM_PARTIAL:
- 				ret = dwc2_enter_partial_power_down(hsotg);
--				if (ret) {
--					if (ret != -ENOTSUPP)
--						dev_err(hsotg->dev,
--							"%s: enter partial_power_down failed\n",
--							__func__);
--					goto skip_power_saving;
--				}
-+				if (ret)
-+					dev_err(hsotg->dev,
-+						"enter partial_power_down failed\n");
-+
- 				udelay(100);
- 
- 				/* Ask phy to be suspended */
-@@ -550,10 +547,9 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
- 				break;
- 			case DWC2_POWER_DOWN_PARAM_HIBERNATION:
- 				ret = dwc2_enter_hibernation(hsotg, 0);
--				if (ret && ret != -ENOTSUPP)
-+				if (ret)
- 					dev_err(hsotg->dev,
--						"%s: enter hibernation failed\n",
--						__func__);
-+						"enter hibernation failed\n");
- 				break;
- 			case DWC2_POWER_DOWN_PARAM_NONE:
- 				/*
-@@ -562,7 +558,7 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
- 				 */
- 				dwc2_gadget_enter_clock_gating(hsotg);
- 			}
--skip_power_saving:
-+
- 			/*
- 			 * Change to L2 (suspend) state before releasing
- 			 * spinlock
--- 
-2.25.1
+we're not really missing, it was a deliberate choice :-) The only reason
+why we need the soft reset is because host and gadget registers map to
+the same physical space within dwc3 core. If we cache and restore the
+affected registers, we're good ;-)
 
+IMHO, that's a better compromise than doing a full soft reset.
+
+> @@ -40,6 +41,8 @@
+>=20=20
+>  #define DWC3_DEFAULT_AUTOSUSPEND_DELAY	5000 /* ms */
+>=20=20
+> +static DEFINE_MUTEX(mode_switch_lock);
+
+there are several platforms which more than one DWC3 instance. Sure this
+won't break on such systems?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB328YRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZ4+g//c5uwBk5kslonIgrE4VJKSsLwdqg7dbfP
+A1r3+I8tczg/2dC7UVizMlPPgccoHVyaw6ShQUdNIffaC+KS1ODZF1XXnSpY+L6e
+FNvYSOgtkw4mQXBuctsLGt2ZeIeso1JOlq7rSNOnBwBsSyffF17OX77ax+cqV1yc
+WqdV6vrL7Cy2SHIMoBIuo5pedqo1fJiQNWsFFFaMIu7bAnMF87ZMkvZBII/WjpjE
+qF3iQgAeTCUtRglAmNcobgwtl/2fE8LmVn0rSkBv+FZFlj65tk9cEeSUWqzL/F6R
+6nloNGCFUa/8DwQYvwNG1OBfObytvH2KQO1PvZLG1fThgRAQNri1YTqqCfj0T5vE
+JlrruYQv5m/G0+WxOguXQglaxfYtRiwp1IPgpst5D94iDyEswJKrnC4CNols7GbY
+q7obMXaUl+JNoiO+XaIZHRAMpB633aQi+QFanrKtLb9JJVZqzR/hSWbH2z5D8bQk
+D8gt4w30AfY5g3hvpw/zuBl8od8bz8fMWjE6A+eNUHU1rszF8T7nzdf+Eh/5eJ10
+Ivre+FYnDcrGKfVX8qll4f+wgq/fuqgUgJJeQwrBxtDKIiTcyNuVjCzZPjizd5Jf
+Jx/VsIHkzH/bf/wFt//3GUscbV5LiX/IaBFPROsd9k+DmiEkPXe4KG1x0nq6QE/E
+7EYeW1dGLHQ=
+=VhMh
+-----END PGP SIGNATURE-----
+--=-=-=--
