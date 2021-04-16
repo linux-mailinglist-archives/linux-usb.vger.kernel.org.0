@@ -2,144 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D801362A94
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 23:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80008362B31
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 00:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235944AbhDPVuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 17:50:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37928 "EHLO mail.kernel.org"
+        id S234204AbhDPWkh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 18:40:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235422AbhDPVun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Apr 2021 17:50:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 65231610E7;
-        Fri, 16 Apr 2021 21:50:18 +0000 (UTC)
+        id S229719AbhDPWkg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Apr 2021 18:40:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id D7149613C0;
+        Fri, 16 Apr 2021 22:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618609818;
-        bh=6L+fBTnmXvjsKWrq+HTLgNRFc6T2FEzJaeGZu54L3xw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jtw4MNhroJlPkFSgpIpEC6vw4e5o1aGJ0y+OTA0fN19gGfPlx1syvCHuxaHwoADS/
-         XgZZF01qddyct+5BxoHlsjaGtULVxij8upBpncr4aOPhbPRRXGAPyZAZz8+sOhdAx+
-         7LYk2zQlq+iKdsrBiuebvUVUtcRJxaIlTmIhjg9gvB1AM/BTRMbBG5JDbbjfDJjVFC
-         msZD+ez7/wJsNX7qMQzo9dihYLx5m6gJX1QawIhIuXk6QAq6V6U+Xj3QxyVi5kbvFr
-         gbwzUF8GrGf0Vz96T6/9WPL4pATCGjo0ezhfM/vN44mGrW+xtZfQG7KMkQsios1ckH
-         kZSLbPpriOUDQ==
-Date:   Fri, 16 Apr 2021 14:50:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
-        <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH net-next 4/6] r8152: support new chips
-Message-ID: <20210416145017.1946f013@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <1394712342-15778-354-Taiwan-albertk@realtek.com>
-References: <1394712342-15778-350-Taiwan-albertk@realtek.com>
-        <1394712342-15778-354-Taiwan-albertk@realtek.com>
+        s=k20201202; t=1618612810;
+        bh=8goVJQUxcpgGQOGWf+xhc8/A6PiUHeDnIzDJ3htwIdo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=VNHQPHHcuwAbEAwrJ1P1Va9xW6BJ/Hm4LqnAPYRv2ssV2zBJwzv3bTWmwzItkIiNj
+         FIvdgJqs9FkaaU58xGswqlJXAT6kXa/AwmRQzYOol224d44pofl+/NIcvcljs0c5jF
+         l+TEgDyaEfz63KhlJtILI1+PaOCjCxktUC14mUbzPdq42jvcElnJDVKSEI7EGnLMKP
+         r33M/hZcpCMdfBrHn//0IFPSKOTxuFGP/gUcJSy51LSJ6DezP0xpRA2NNZzOQtQcwt
+         PFzgOWzd0M4O5V2w6U+mm2hKIntgQQHLRPs+PtKggzJfRWqZs6mTOE9jrjRCaGn7zV
+         kjrIUOJPqY9hg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id CBCB260CD4;
+        Fri, 16 Apr 2021 22:40:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/6] r8152: support new chips
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161861281082.23739.2086228554864615182.git-patchwork-notify@kernel.org>
+Date:   Fri, 16 Apr 2021 22:40:10 +0000
+References: <1394712342-15778-350-Taiwan-albertk@realtek.com>
+In-Reply-To: <1394712342-15778-350-Taiwan-albertk@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 16 Apr 2021 16:04:35 +0800 Hayes Wang wrote:
-> Support RTL8153C, RTL8153D, RTL8156A, and RTL8156B. The RTL8156A
-> and RTL8156B are the 2.5G ethernet.
+Hello:
+
+This series was applied to netdev/net-next.git (refs/heads/master):
+
+On Fri, 16 Apr 2021 16:04:31 +0800 you wrote:
+> Support new RTL8153 and RTL8156 series.
 > 
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> Hayes Wang (6):
+>   r8152: set inter fram gap time depending on speed
+>   r8152: adjust rtl8152_check_firmware function
+>   r8152: add help function to change mtu
+>   r8152: support new chips
+>   r8152: support PHY firmware for RTL8156 series
+>   r8152: search the configuration of vendor mode
+> 
+> [...]
 
-> +	switch (tp->version) {
-> +	case RTL_VER_10:
-> +		data = ocp_reg_read(tp, 0xad40);
-> +		data &= ~0x3ff;
-> +		data |= BIT(7) | BIT(2);
-> +		ocp_reg_write(tp, 0xad40, data);
-> +
-> +		data = ocp_reg_read(tp, 0xad4e);
-> +		data |= BIT(4);
-> +		ocp_reg_write(tp, 0xad4e, data);
-> +		data = ocp_reg_read(tp, 0xad16);
-> +		data &= ~0x3ff;
-> +		data |= 0x6;
-> +		ocp_reg_write(tp, 0xad16, data);
-> +		data = ocp_reg_read(tp, 0xad32);
-> +		data &= ~0x3f;
-> +		data |= 6;
-> +		ocp_reg_write(tp, 0xad32, data);
-> +		data = ocp_reg_read(tp, 0xac08);
-> +		data &= ~(BIT(12) | BIT(8));
-> +		ocp_reg_write(tp, 0xac08, data);
-> +		data = ocp_reg_read(tp, 0xac8a);
-> +		data |= BIT(12) | BIT(13) | BIT(14);
-> +		data &= ~BIT(15);
-> +		ocp_reg_write(tp, 0xac8a, data);
-> +		data = ocp_reg_read(tp, 0xad18);
-> +		data |= BIT(10);
-> +		ocp_reg_write(tp, 0xad18, data);
-> +		data = ocp_reg_read(tp, 0xad1a);
-> +		data |= 0x3ff;
-> +		ocp_reg_write(tp, 0xad1a, data);
-> +		data = ocp_reg_read(tp, 0xad1c);
-> +		data |= 0x3ff;
-> +		ocp_reg_write(tp, 0xad1c, data);
-> +
-> +		data = sram_read(tp, 0x80ea);
-> +		data &= ~0xff00;
-> +		data |= 0xc400;
-> +		sram_write(tp, 0x80ea, data);
-> +		data = sram_read(tp, 0x80eb);
-> +		data &= ~0x0700;
-> +		data |= 0x0300;
-> +		sram_write(tp, 0x80eb, data);
-> +		data = sram_read(tp, 0x80f8);
-> +		data &= ~0xff00;
-> +		data |= 0x1c00;
-> +		sram_write(tp, 0x80f8, data);
-> +		data = sram_read(tp, 0x80f1);
-> +		data &= ~0xff00;
-> +		data |= 0x3000;
-> +		sram_write(tp, 0x80f1, data);
+Here is the summary with links:
+  - [net-next,1/6] r8152: set inter fram gap time depending on speed
+    https://git.kernel.org/netdev/net-next/c/5133bcc74815
+  - [net-next,2/6] r8152: adjust rtl8152_check_firmware function
+    https://git.kernel.org/netdev/net-next/c/a8a7be178e81
+  - [net-next,3/6] r8152: add help function to change mtu
+    https://git.kernel.org/netdev/net-next/c/67ce1a806f16
+  - [net-next,4/6] r8152: support new chips
+    https://git.kernel.org/netdev/net-next/c/195aae321c82
+  - [net-next,5/6] r8152: support PHY firmware for RTL8156 series
+    https://git.kernel.org/netdev/net-next/c/4a51b0e8a014
+  - [net-next,6/6] r8152: search the configuration of vendor mode
+    https://git.kernel.org/netdev/net-next/c/c2198943e33b
 
-> +	switch (tp->version) {
-> +	case RTL_VER_12:
-> +		ocp_reg_write(tp, 0xbf86, 0x9000);
-> +		data = ocp_reg_read(tp, 0xc402);
-> +		data |= BIT(10);
-> +		ocp_reg_write(tp, 0xc402, data);
-> +		data &= ~BIT(10);
-> +		ocp_reg_write(tp, 0xc402, data);
-> +		ocp_reg_write(tp, 0xbd86, 0x1010);
-> +		ocp_reg_write(tp, 0xbd88, 0x1010);
-> +		data = ocp_reg_read(tp, 0xbd4e);
-> +		data &= ~(BIT(10) | BIT(11));
-> +		data |= BIT(11);
-> +		ocp_reg_write(tp, 0xbd4e, data);
-> +		data = ocp_reg_read(tp, 0xbf46);
-> +		data &= ~0xf00;
-> +		data |= 0x700;
-> +		ocp_reg_write(tp, 0xbf46, data);
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +	data = r8153_phy_status(tp, 0);
-> +	switch (data) {
-> +	case PHY_STAT_EXT_INIT:
-> +		rtl8152_apply_firmware(tp, true);
-> +
-> +		data = ocp_reg_read(tp, 0xa466);
-> +		data &= ~BIT(0);
-> +		ocp_reg_write(tp, 0xa466, data);
-
-What are all these magic constants? :(
-
-> @@ -6878,7 +8942,11 @@ static int rtl8152_probe(struct usb_interface *intf,
->  	set_ethernet_addr(tp);
->  
->  	usb_set_intfdata(intf, tp);
-> -	netif_napi_add(netdev, &tp->napi, r8152_poll, RTL8152_NAPI_WEIGHT);
-> +
-> +	if (tp->support_2500full)
-> +		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);
-
-why 256? We have 100G+ drivers all using 64 what's special here?
-
-> +	else
-> +		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);
 
