@@ -2,104 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 828F9361728
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 03:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0C436174B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 04:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235087AbhDPBZJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 21:25:09 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:44852 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234961AbhDPBZI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 21:25:08 -0400
-Received: from mail-ot1-f71.google.com ([209.85.210.71])
-        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <chris.chiu@canonical.com>)
-        id 1lXDDu-0004Fh-Ey
-        for linux-usb@vger.kernel.org; Fri, 16 Apr 2021 01:24:42 +0000
-Received: by mail-ot1-f71.google.com with SMTP id l14-20020a05683004aeb029028919a6fae1so3871999otd.17
-        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 18:24:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/bulXpuI8tDY/fXBLLWUp4LPd3sUmoquDA0BYMthGL8=;
-        b=WuvRdB7u2cpleoCjSKBCPy2wCkZidCoLeJpsUVO9uMZXt4hbqax8EnQ3ljGJ7rklFX
-         sIoKvKLJgbxk9fMdv3VHwfOJ+XCHkb2jC9ZyxwGvEawu6ddd1PHNJYRXKryjSQyxx9+k
-         nORoVYR2F/unaIFrFLT8Xsg2jygDCYg2sQGk91OM9bcnWh1HKgoOGWbmNgVH0i979FiL
-         kPpy4TVvXIH2bsN+811Lz2Q4LOM+6qTJdyviePDKRDXJoEW35EzVMAgkG90Oo9R6NJj3
-         xEgFAjk1rgiYypGdJGLtEiTonqMpUwv6h4e85CNsuYjTibH0amNeILPk38WH2JNuIrnJ
-         IGWQ==
-X-Gm-Message-State: AOAM530ilIkw3YRHKfpv0rHK+rEcGrZo6fgN/AurYKx6LrVRze/UxsmT
-        9k+cGXvn/RrTZdx1xRY5U8qjHMRdsDj7CjdmxTlbXO5HOTtAshnH3oAuMjDmbaizYbiA0IHZnk6
-        mpt+QOUWMnkhCp8HpWqxOWf8zQ4bOoFVhyBriNCjkouJgvmcmYf6LBA==
-X-Received: by 2002:aca:3d86:: with SMTP id k128mr4686946oia.86.1618536281416;
-        Thu, 15 Apr 2021 18:24:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwUYMs3Voy4p3YzB2JUL6Tw+mcqQowmMYhCSZOCiwF1/JS0cUV9GKzuwm1ePj5j0g2W6M1ZSo0Rf9NKKCbhjdU=
-X-Received: by 2002:aca:3d86:: with SMTP id k128mr4686934oia.86.1618536281250;
- Thu, 15 Apr 2021 18:24:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210415114856.4555-1-chris.chiu@canonical.com>
- <YHgyP8tGNM1Wi5dJ@kroah.com> <CABTNMG0MuaSkWZhiTwtWjPTg5WZ-Vdt9Ju9-RzBke9JjCBJo8Q@mail.gmail.com>
- <20210415184637.GA15445@rowland.harvard.edu>
-In-Reply-To: <20210415184637.GA15445@rowland.harvard.edu>
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Fri, 16 Apr 2021 09:24:30 +0800
-Message-ID: <CABTNMG3aweq43eQcONif2_M4JF3ARmBgOKE18v7vzHvaJnjrtA@mail.gmail.com>
-Subject: Re: [PATCH v3] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek Hub
+        id S238002AbhDPCEI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 22:04:08 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:17362 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235043AbhDPCEE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 22:04:04 -0400
+Received: from DGGEMS403-HUB.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FLzwT1z70zkkWr;
+        Fri, 16 Apr 2021 10:01:45 +0800 (CST)
+Received: from [10.67.102.118] (10.67.102.118) by
+ DGGEMS403-HUB.china.huawei.com (10.3.19.203) with Microsoft SMTP Server id
+ 14.3.498.0; Fri, 16 Apr 2021 10:03:23 +0800
+Subject: Re: [RFC PATCH] USB:XHCI:skip hub registration
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, m.v.b@runbox.com,
-        hadess@hadess.net, linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
+        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
+        <yisen.zhuang@huawei.com>
+References: <1618489358-42283-1-git-send-email-liulongfang@huawei.com>
+ <20210415144323.GC1530055@rowland.harvard.edu>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <3dad6f4f-6386-427c-c36c-7d26b9a76fa4@huawei.com>
+Date:   Fri, 16 Apr 2021 10:03:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20210415144323.GC1530055@rowland.harvard.edu>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.118]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 2:46 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Fri, Apr 16, 2021 at 12:13:43AM +0800, Chris Chiu wrote:
-> > One thing worth mentioning here, I never hit the hub_ext_port_status -71
-> > problem if I resume by waking up from the keyboard connected to the hub.
->
-> I thought you said earlier that the port got into trouble while it was
-> suspending, not while it was resuming.  You wrote:
->
-> > [ 2789.679812] usb 3-4-port3: can't suspend, status -110
->
-> So if the problem occurs during suspend, how can it be possible to avoid
-> the problem by taking some particular action later while resuming?
->
-
-The ETIMEDOUT is still there, but the port can resume w/o problems and I
-don't really know what the hub did. I can only reset_resume the hub to bring it
-back if I'm not waking up from the connected keyboard.
-
-> > But the usbcore kernel log shows me wPortStatus: 0503 wPortChane: 0004
-> > of that port while resuming. In normal cases, they are 0507:0000.
->
-> The 0004 bit of wPortChange means that the suspend status has changed;
-> the port is no longer suspended because the device attached to that port
-> (your keyboard) issued a wakeup request.
->
-> >  I don't know how to SetPortFeature() with setting the status change bit only.
->
-> You can't.  Only the hub itself can set the wPortChange bits.
->
-> > Or maybe it's just some kind of timing issue of the
-> > idle/suspend/resume signaling.
->
-> Not timing.  It's because you woke the system up from the attached
-> keyboard.
->
+On 2021/4/15 22:43, Alan Stern wrote:
+> On Thu, Apr 15, 2021 at 08:22:38PM +0800, Longfang Liu wrote:
+>> When the number of ports on the USB hub is 0, skip the registration
+>> operation of the USB hub.
+>>
+>> The current Kunpeng930's XHCI hardware controller is defective. The number
+>> of ports on its USB3.0 bus controller is 0, and the number of ports on
+>> the USB2.0 bus controller is 1.
+>>
+>> In order to solve this problem that the USB3.0 controller does not have
+>> a port which causes the registration of the hub to fail, this patch passes
+>> the defect information by adding flags in the quirks of xhci and usb_hcd,
+>> and finally skips the registration process of the hub directly according
+>> to the results of these flags when the hub is initialized.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
+> 
+> The objections that Greg raised are all good ones.
+> 
+> But even aside from them, this patch doesn't actually do what the 
+> description says.  The patch doesn't remove the call to usb_add_hcd 
+> for the USB-3 bus.  If you simply skipped that call (and the 
+> corresponding call to usb_remove_hcd) when there are no 
+> ports on the root hub, none of the stuff in this patch would be needed.
+> 
 > Alan Stern
+> 
 
-Got it. I'm just confused by the USB 2.0 spec 11.24.2.7.2 that
-"Hubs may allow setting of the status change bits with a SetPortFeature()
- request for diagnostic purposes."
+"[RFC PATCH] USB:XHCI:Adjust the log level of hub"
+The current method is an improved method of the above patch.
+This patch just make it skip registering USB-3 root hub if that hub has no ports,
+after skipping registering, no port will not report error log,the goal of this
+patch is reached without error log output.
+Thanks.
+Longfang.
 
-So for this case, I think USB_QUIRK_RESET_RESUME would be a
-better option to at least bring back the port. Any suggestion about what
-kind of test I can do on this hub? Thanks
-
-Chris
+>> ---
+>>  drivers/usb/core/hub.c      | 6 ++++++
+>>  drivers/usb/host/xhci-pci.c | 4 ++++
+>>  drivers/usb/host/xhci.c     | 5 +++++
+>>  drivers/usb/host/xhci.h     | 1 +
+>>  include/linux/usb/hcd.h     | 1 +
+>>  5 files changed, 17 insertions(+)
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index b1e14be..2d6869d 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -1769,9 +1769,15 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
+>>  	struct usb_host_interface *desc;
+>>  	struct usb_device *hdev;
+>>  	struct usb_hub *hub;
+>> +	struct usb_hcd *hcd;
+>>  
+>>  	desc = intf->cur_altsetting;
+>>  	hdev = interface_to_usbdev(intf);
+>> +	hcd = bus_to_hcd(hdev->bus);
+>> +	if (hcd->usb3_no_port) {
+>> +		dev_warn(&intf->dev, "USB hub has no port\n");
+>> +		return -ENODEV;
+>> +	}
+>>  
+>>  	/*
+>>  	 * Set default autosuspend delay as 0 to speedup bus suspend,
+>> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+>> index ef513c2..63b89a4 100644
+>> --- a/drivers/usb/host/xhci-pci.c
+>> +++ b/drivers/usb/host/xhci-pci.c
+>> @@ -281,6 +281,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>>  	if (xhci->quirks & XHCI_RESET_ON_RESUME)
+>>  		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
+>>  				"QUIRK: Resetting on resume");
+>> +
+>> +	if (pdev->vendor == PCI_VENDOR_ID_HUAWEI &&
+>> +	    pdev->device == 0xa23c)
+>> +		xhci->quirks |= XHCI_USB3_NOPORT;
+>>  }
+>>  
+>>  #ifdef CONFIG_ACPI
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index bee5dec..e3e3573 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -5184,6 +5184,11 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
+>>  		/* xHCI private pointer was set in xhci_pci_probe for the second
+>>  		 * registered roothub.
+>>  		 */
+>> +		if (xhci->quirks & XHCI_USB3_NOPORT) {
+>> +			xhci_info(xhci, "xHCI host has no port\n");
+>> +			hcd->usb3_no_port = 1;
+>> +		}
+>> +
+>>  		return 0;
+>>  	}
+>>  
+>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>> index 2c6c4f8..d3c658f 100644
+>> --- a/drivers/usb/host/xhci.h
+>> +++ b/drivers/usb/host/xhci.h
+>> @@ -1874,6 +1874,7 @@ struct xhci_hcd {
+>>  #define XHCI_RESET_PLL_ON_DISCONNECT	BIT_ULL(34)
+>>  #define XHCI_SNPS_BROKEN_SUSPEND    BIT_ULL(35)
+>>  #define XHCI_RENESAS_FW_QUIRK	BIT_ULL(36)
+>> +#define XHCI_USB3_NOPORT	BIT_ULL(37)
+>>  
+>>  	unsigned int		num_active_eps;
+>>  	unsigned int		limit_active_eps;
+>> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
+>> index 3dbb42c..7df23a0f 100644
+>> --- a/include/linux/usb/hcd.h
+>> +++ b/include/linux/usb/hcd.h
+>> @@ -172,6 +172,7 @@ struct usb_hcd {
+>>  	unsigned		tpl_support:1; /* OTG & EH TPL support */
+>>  	unsigned		cant_recv_wakeups:1;
+>>  			/* wakeup requests from downstream aren't received */
+>> +	unsigned		usb3_no_port:1; /* xHCI main_hcd has no port */
+>>  
+>>  	unsigned int		irq;		/* irq allocated */
+>>  	void __iomem		*regs;		/* device memory/io */
+>> -- 
+>> 2.8.1
+>>
+> .
+> 
