@@ -2,186 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E5D362A0A
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 23:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D801362A94
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 23:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235908AbhDPVRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 17:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235807AbhDPVRg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 17:17:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C08C061574;
-        Fri, 16 Apr 2021 14:17:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id sd23so35411144ejb.12;
-        Fri, 16 Apr 2021 14:17:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=tgAlkeYe9S3kJtH/aeUf7aQuoGVLf0jhMMrqc8LYA4Q=;
-        b=sxzGAkxRPSQyxMsX2UTfYGPUq+kKJi0lBLyUF7efGyvUQGqsGGCllLU3dMYZ/Lnmo+
-         /nhZjuL7yyr9Y0s316LqCbZHrSnixWfW7y0hcFHpWXhsExR75niADVLjwv/UqN9fg7x4
-         sMhs7yTQSwuaLfPMZN9uJ+kPImdBfSBQ2Czf19QC1UM3uHvHYlHweQwvN5rVr+m1qEqt
-         A3FM3EFGlTFrrjsN9LsalmbIvGUq7ZEsgJRl898T942rsyf05AfU7TNmVo6gEOCNr67u
-         WObnRPGWtQWs0pt1HlRKdlgUBkTR2i6LB2mHnjdGbg64UGlEno1lb/0w9h5dNyplst5D
-         05fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=tgAlkeYe9S3kJtH/aeUf7aQuoGVLf0jhMMrqc8LYA4Q=;
-        b=LXuhehjfyBPUXhWiwfpcg5tUb7TCTDs1df9RiHyXuS7Fovli5lZgg0tKWUq342FKCj
-         a55sivZq4B9i91G7kYv/HX4u7UsEdMnwoLCrc1e5ZrkWcr1F4X7Kf/61R8FfsWyC5SWJ
-         63o4cr94y4XTCiBCP8VP2RopMo/YfBwDAcvl/CJxSAYeeLuDkqQ3+f2ktU7GVeh8En/U
-         OrRzcH3xImvuIop076IYwbTRwFNYc4cKEbRi3KL4uUZpXi/85KoXgleRHIa1oj9e92v7
-         cD+doDj+1Kekk1y8b2W3cZd0YMe/iovJoRVltuwr5+gsIvEBlJhRXTDw/KslpuMOMThf
-         OuCw==
-X-Gm-Message-State: AOAM5332oVE0+lfnvKeeUQCHZ2JWHm2NFYdKibeNQjN63SgI0Ru2tRgC
-        TFNYQowf2XaUXoFeTmtINuSIwZaX8lEhvg==
-X-Google-Smtp-Source: ABdhPJwhyINxQp1T8zAa9d65tJGcgJNCLjaBMMTJyB/rZMIm2zPhbQ0nLxWTtRYHMRXUu0q9MGeCyQ==
-X-Received: by 2002:a17:906:4746:: with SMTP id j6mr10413056ejs.39.1618607828964;
-        Fri, 16 Apr 2021 14:17:08 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:2df7:4096:cb95:c5e4? ([2001:981:6fec:1:2df7:4096:cb95:c5e4])
-        by smtp.gmail.com with ESMTPSA id hc43sm5169884ejc.97.2021.04.16.14.17.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Apr 2021 14:17:08 -0700 (PDT)
-Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>
-Cc:     John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Yu Chen <chenyu56@huawei.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
- <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
- <d053b843-2308-6b42-e7ff-3dc6e33e5c7d@synopsys.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <0882cfae-4708-a67a-f112-c1eb0c7e6f51@gmail.com>
-Date:   Fri, 16 Apr 2021 23:17:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S235944AbhDPVuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 17:50:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37928 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235422AbhDPVun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Apr 2021 17:50:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 65231610E7;
+        Fri, 16 Apr 2021 21:50:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618609818;
+        bh=6L+fBTnmXvjsKWrq+HTLgNRFc6T2FEzJaeGZu54L3xw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jtw4MNhroJlPkFSgpIpEC6vw4e5o1aGJ0y+OTA0fN19gGfPlx1syvCHuxaHwoADS/
+         XgZZF01qddyct+5BxoHlsjaGtULVxij8upBpncr4aOPhbPRRXGAPyZAZz8+sOhdAx+
+         7LYk2zQlq+iKdsrBiuebvUVUtcRJxaIlTmIhjg9gvB1AM/BTRMbBG5JDbbjfDJjVFC
+         msZD+ez7/wJsNX7qMQzo9dihYLx5m6gJX1QawIhIuXk6QAq6V6U+Xj3QxyVi5kbvFr
+         gbwzUF8GrGf0Vz96T6/9WPL4pATCGjo0ezhfM/vN44mGrW+xtZfQG7KMkQsios1ckH
+         kZSLbPpriOUDQ==
+Date:   Fri, 16 Apr 2021 14:50:17 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     <davem@davemloft.net>, <netdev@vger.kernel.org>,
+        <nic_swsd@realtek.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 4/6] r8152: support new chips
+Message-ID: <20210416145017.1946f013@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <1394712342-15778-354-Taiwan-albertk@realtek.com>
+References: <1394712342-15778-350-Taiwan-albertk@realtek.com>
+        <1394712342-15778-354-Taiwan-albertk@realtek.com>
 MIME-Version: 1.0
-In-Reply-To: <d053b843-2308-6b42-e7ff-3dc6e33e5c7d@synopsys.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Fri, 16 Apr 2021 16:04:35 +0800 Hayes Wang wrote:
+> Support RTL8153C, RTL8153D, RTL8156A, and RTL8156B. The RTL8156A
+> and RTL8156B are the 2.5G ethernet.
+> 
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 
-Op 16-04-2021 om 00:23 schreef Thinh Nguyen:
-> Thinh Nguyen wrote:
->> From: Yu Chen <chenyu56@huawei.com>
->> From: John Stultz <john.stultz@linaro.org>
->>
->> According to the programming guide, to switch mode for DRD controller,
->> the driver needs to do the following.
->>
->> To switch from device to host:
->> 1. Reset controller with GCTL.CoreSoftReset
->> 2. Set GCTL.PrtCapDir(host mode)
->> 3. Reset the host with USBCMD.HCRESET
->> 4. Then follow up with the initializing host registers sequence
->>
->> To switch from host to device:
->> 1. Reset controller with GCTL.CoreSoftReset
->> 2. Set GCTL.PrtCapDir(device mode)
->> 3. Reset the device with DCTL.CSftRst
->> 4. Then follow up with the initializing registers sequence
->>
->> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
->> switching from host to device. John Stult reported a lockup issue seen
->> with HiKey960 platform without these steps[1]. Similar issue is observed
->> with Ferry's testing platform[2].
->>
->> So, apply the required steps along with some fixes to Yu Chen's and John
->> Stultz's version. The main fixes to their versions are the missing wait
->> for clocks synchronization before clearing GCTL.CoreSoftReset and only
->> apply DCTL.CSftRst when switching from host to device.
->>
->> [1] https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/__;!!A4F2R9G_pg!PW9Jbs4wv4a_zKGgZHN0FYrIpfecPX0Ouq9V3d16Yz-9-GSHqZWsfBAF-WkeqLhzN4i3$
->> [2] https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/__;!!A4F2R9G_pg!PW9Jbs4wv4a_zKGgZHN0FYrIpfecPX0Ouq9V3d16Yz-9-GSHqZWsfBAF-WkeqGeZStt4$
->>
->> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
->> Cc: Ferry Toth <fntoth@gmail.com>
->> Cc: Wesley Cheng <wcheng@codeaurora.org>
->> Cc: <stable@vger.kernel.org>
->> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
->> Signed-off-by: Yu Chen <chenyu56@huawei.com>
->> Signed-off-by: John Stultz <john.stultz@linaro.org>
->> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> ---
->> Changes in v3:
->> - Check if the desired mode is OTG, then keep the old flow
->> - Remove condition for OTG support only since the device can still be
->>    configured DRD host/device mode only
->> - Remove redundant hw_mode check since __dwc3_set_mode() only applies when
->>    hw_mode is DRD
->> Changes in v2:
->> - Initialize mutex per device and not as global mutex.
->> - Add additional checks for DRD only mode
->>
->>   drivers/usb/dwc3/core.c | 27 +++++++++++++++++++++++++++
->>   drivers/usb/dwc3/core.h |  5 +++++
->>   2 files changed, 32 insertions(+)
->>
-> Hi John,
->
-> If possible, can you run a test with this version on your platform?
->
-> Thanks,
-> Thinh
->
-I tested this on edison-arduino with this patch on top of usb-next 
-(5.12-rc7 + "increase BESL baseline to 6" to prevent throttling").
+> +	switch (tp->version) {
+> +	case RTL_VER_10:
+> +		data = ocp_reg_read(tp, 0xad40);
+> +		data &= ~0x3ff;
+> +		data |= BIT(7) | BIT(2);
+> +		ocp_reg_write(tp, 0xad40, data);
+> +
+> +		data = ocp_reg_read(tp, 0xad4e);
+> +		data |= BIT(4);
+> +		ocp_reg_write(tp, 0xad4e, data);
+> +		data = ocp_reg_read(tp, 0xad16);
+> +		data &= ~0x3ff;
+> +		data |= 0x6;
+> +		ocp_reg_write(tp, 0xad16, data);
+> +		data = ocp_reg_read(tp, 0xad32);
+> +		data &= ~0x3f;
+> +		data |= 6;
+> +		ocp_reg_write(tp, 0xad32, data);
+> +		data = ocp_reg_read(tp, 0xac08);
+> +		data &= ~(BIT(12) | BIT(8));
+> +		ocp_reg_write(tp, 0xac08, data);
+> +		data = ocp_reg_read(tp, 0xac8a);
+> +		data |= BIT(12) | BIT(13) | BIT(14);
+> +		data &= ~BIT(15);
+> +		ocp_reg_write(tp, 0xac8a, data);
+> +		data = ocp_reg_read(tp, 0xad18);
+> +		data |= BIT(10);
+> +		ocp_reg_write(tp, 0xad18, data);
+> +		data = ocp_reg_read(tp, 0xad1a);
+> +		data |= 0x3ff;
+> +		ocp_reg_write(tp, 0xad1a, data);
+> +		data = ocp_reg_read(tp, 0xad1c);
+> +		data |= 0x3ff;
+> +		ocp_reg_write(tp, 0xad1c, data);
+> +
+> +		data = sram_read(tp, 0x80ea);
+> +		data &= ~0xff00;
+> +		data |= 0xc400;
+> +		sram_write(tp, 0x80ea, data);
+> +		data = sram_read(tp, 0x80eb);
+> +		data &= ~0x0700;
+> +		data |= 0x0300;
+> +		sram_write(tp, 0x80eb, data);
+> +		data = sram_read(tp, 0x80f8);
+> +		data &= ~0xff00;
+> +		data |= 0x1c00;
+> +		sram_write(tp, 0x80f8, data);
+> +		data = sram_read(tp, 0x80f1);
+> +		data &= ~0xff00;
+> +		data |= 0x3000;
+> +		sram_write(tp, 0x80f1, data);
 
-On this platform there is a physical switch to switch roles. With this 
-patch I find:
+> +	switch (tp->version) {
+> +	case RTL_VER_12:
+> +		ocp_reg_write(tp, 0xbf86, 0x9000);
+> +		data = ocp_reg_read(tp, 0xc402);
+> +		data |= BIT(10);
+> +		ocp_reg_write(tp, 0xc402, data);
+> +		data &= ~BIT(10);
+> +		ocp_reg_write(tp, 0xc402, data);
+> +		ocp_reg_write(tp, 0xbd86, 0x1010);
+> +		ocp_reg_write(tp, 0xbd88, 0x1010);
+> +		data = ocp_reg_read(tp, 0xbd4e);
+> +		data &= ~(BIT(10) | BIT(11));
+> +		data |= BIT(11);
+> +		ocp_reg_write(tp, 0xbd4e, data);
+> +		data = ocp_reg_read(tp, 0xbf46);
+> +		data &= ~0xf00;
+> +		data |= 0x700;
+> +		ocp_reg_write(tp, 0xbf46, data);
 
-- switch to host mode always works fine
+> +	data = r8153_phy_status(tp, 0);
+> +	switch (data) {
+> +	case PHY_STAT_EXT_INIT:
+> +		rtl8152_apply_firmware(tp, true);
+> +
+> +		data = ocp_reg_read(tp, 0xa466);
+> +		data &= ~BIT(0);
+> +		ocp_reg_write(tp, 0xa466, data);
 
-- switch to gadget mode I need to flip the switch 3x (gadget-host-gadget).
+What are all these magic constants? :(
 
-An error message appears on the gadget side "dwc3 dwc3.0.auto: timed out 
-waiting for SETUP phase" appears, but then the device connects to my PC, 
-no throttling.
+> @@ -6878,7 +8942,11 @@ static int rtl8152_probe(struct usb_interface *intf,
+>  	set_ethernet_addr(tp);
+>  
+>  	usb_set_intfdata(intf, tp);
+> -	netif_napi_add(netdev, &tp->napi, r8152_poll, RTL8152_NAPI_WEIGHT);
+> +
+> +	if (tp->support_2500full)
+> +		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);
 
-- alternatively I can switch to gadget 1x and then unplug/replug the cable.
+why 256? We have 100G+ drivers all using 64 what's special here?
 
-No error message and connects fine.
-
-- if I flip the switch only once, on the PC side I get:
-
-    kernel: usb 1-5: new high-speed USB device number 18 using xhci_hcd
-    kernel: usb 1-5: New USB device found, idVendor=1d6b,
-    idProduct=0104, bcdDevice= 1.00 kernel: usb 1-5: New USB device
-    strings: Mfr=1, Product=2, SerialNumber=3 kernel: usb 1-5: Product:
-    USBArmory Gadget kernel: usb 1-5: Manufacturer: USBArmory kernel:
-    usb 1-5: SerialNumber: 0123456789abcdef kernel: usb 1-5: can't set
-    config #1, error -110
-
-Then if I wait long enough on the gadget side I get:
-
-    root@yuna:~# ifconfig
-
-    usb0: flags=-28605<UP,BROADCAST,RUNNING,MULTICAST,DYNAMIC> mtu 1500
-    inet 169.254.119.239 netmask 255.255.0.0 broadcast 169.254.255.255
-    inet6 fe80::a8bb:ccff:fedd:eef1 prefixlen 64 scopeid 0x20<link>
-    ether aa:bb:cc:dd:ee:f1 txqueuelen 1000 (Ethernet) RX packets 490424
-    bytes 735146578 (701.0 MiB) RX errors 0 dropped 191 overruns 0 frame
-    0 TX packets 35279 bytes 2532746 (2.4 MiB) TX errors 0 dropped 0
-    overruns 0 carrier 0 collisions 0
-
-(correct would be: inet 10.42.0.221 netmask 255.255.255.0 broadcast 
-10.42.0.255)
-
-So much improved now, but it seems I am still missing something on plug.
+> +	else
+> +		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);
 
