@@ -2,111 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A457361CFC
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 12:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F38D361DA3
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 12:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241450AbhDPJLY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 05:11:24 -0400
-Received: from smtp.radex.nl ([178.250.146.7]:60672 "EHLO radex-web.radex.nl"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241192AbhDPJLX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Apr 2021 05:11:23 -0400
-Received: from [192.168.1.158] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
-        by radex-web.radex.nl (Postfix) with ESMTPS id D9EE0240A8;
-        Fri, 16 Apr 2021 11:10:55 +0200 (CEST)
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
-To:     John Stultz <john.stultz@linaro.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        stable <stable@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Yu Chen <chenyu56@huawei.com>
-References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
- <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
- <CALAqxLW9d-jWC4qyfWvTQAYT-V7W19tFY+v3pzCE_QHfNYeYTg@mail.gmail.com>
- <CALAqxLX0b=uZ4JQX1h5PLRUq+B05wWOt2=QSO_QoO8rdMWgp=w@mail.gmail.com>
-Message-ID: <b0b99566-a5d3-5c16-d9b1-0f743f3a6a55@gmail.com>
-Date:   Fri, 16 Apr 2021 11:10:55 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S235270AbhDPJnt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 05:43:49 -0400
+Received: from salscheider.org ([202.61.254.1]:47846 "EHLO
+        mail.salscheider.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235027AbhDPJns (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 05:43:48 -0400
+X-Greylist: delayed 330 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Apr 2021 05:43:48 EDT
+Received: from OleDesktop.lan (200116b822e918003e0dbbbf473b6aef.dip.versatel-1u1.de [IPv6:2001:16b8:22e9:1800:3e0d:bbbf:473b:6aef])
+        by mail.salscheider.org (Postfix) with ESMTPSA id 6510917DB4F;
+        Fri, 16 Apr 2021 11:37:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salscheider.org;
+        s=dkim; t=1618565873;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=3gPQJHhm5RZayIpjThnxivw+xJ8tO5oz8PHQ7Yt/qIA=;
+        b=fGWCOfER8B2dL5Dbh3pQICydtbhTqZVsEJkVuN9n1DfmrBs+z1mUHNWkeodqVZRBaRsYXN
+        vry2+EMJmbrAJu4PvykBpLhSBqHPpiyBvI4S4Hm2WVoO9arjHC2eEnTzwh8r2xCq/8/f99
+        f9LeGlanp9P8X567pSnUYYv1yg8bcXQ=
+From:   Ole Salscheider <ole@salscheider.org>
+To:     linux-usb@vger.kernel.org
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Ole Salscheider <ole@salscheider.org>
+Subject: [PATCH] [RFC] xhci: Add Link TRB sync quirk for ASM3142
+Date:   Fri, 16 Apr 2021 11:37:29 +0200
+Message-Id: <20210416093729.41865-1-ole@salscheider.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <CALAqxLX0b=uZ4JQX1h5PLRUq+B05wWOt2=QSO_QoO8rdMWgp=w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+This patch adds a quirk to the xhci driver so that link TRBs are only
+given to the host controller once it has processed all previous TRBs on
+this segment.
 
-Op 16-04-2021 om 05:28 schreef John Stultz:
-> On Thu, Apr 15, 2021 at 5:12 PM John Stultz<john.stultz@linaro.org>  wrote:
->> On Thu, Apr 15, 2021 at 3:20 PM Thinh Nguyen<Thinh.Nguyen@synopsys.com>  wrote:
->>> From: Yu Chen<chenyu56@huawei.com>
->>> From: John Stultz<john.stultz@linaro.org>
->>>
->>> According to the programming guide, to switch mode for DRD controller,
->>> the driver needs to do the following.
->>>
->>> To switch from device to host:
->>> 1. Reset controller with GCTL.CoreSoftReset
->>> 2. Set GCTL.PrtCapDir(host mode)
->>> 3. Reset the host with USBCMD.HCRESET
->>> 4. Then follow up with the initializing host registers sequence
->>>
->>> To switch from host to device:
->>> 1. Reset controller with GCTL.CoreSoftReset
->>> 2. Set GCTL.PrtCapDir(device mode)
->>> 3. Reset the device with DCTL.CSftRst
->>> 4. Then follow up with the initializing registers sequence
->>>
->>> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
->>> switching from host to device. John Stult reported a lockup issue seen
->>> with HiKey960 platform without these steps[1]. Similar issue is observed
->>> with Ferry's testing platform[2].
->>>
->>> So, apply the required steps along with some fixes to Yu Chen's and John
->>> Stultz's version. The main fixes to their versions are the missing wait
->>> for clocks synchronization before clearing GCTL.CoreSoftReset and only
->>> apply DCTL.CSftRst when switching from host to device.
->>>
->>> [1]https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/
->>> [2]https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/
->>>
->>> Cc: Andy Shevchenko<andy.shevchenko@gmail.com>
->>> Cc: Ferry Toth<fntoth@gmail.com>
->>> Cc: Wesley Cheng<wcheng@codeaurora.org>
->>> Cc:<stable@vger.kernel.org>
->>> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
->>> Signed-off-by: Yu Chen<chenyu56@huawei.com>
->>> Signed-off-by: John Stultz<john.stultz@linaro.org>
->>> Signed-off-by: Thinh Nguyen<Thinh.Nguyen@synopsys.com>
->>> ---
->>> Changes in v3:
->>> - Check if the desired mode is OTG, then keep the old flow
->>> - Remove condition for OTG support only since the device can still be
->>>    configured DRD host/device mode only
->>> - Remove redundant hw_mode check since __dwc3_set_mode() only applies when
->>>    hw_mode is DRD
->>> Changes in v2:
->>> - Initialize mutex per device and not as global mutex.
->>> - Add additional checks for DRD only mode
->>>
->> I've not been able to test all the different modes on HiKey960 yet,
->> but with this patch we avoid the !COREIDLE hangs that we see
->> frequently on bootup, so it looks pretty good to me.  I'll get back to
->> you tonight when I can put hands on the board to test the gadget to
->> host switching to make sure all is well (I really don't expect any
->> issues, but just want to be sure).
-> Ok, got a chance to test the mode switching and everything is looking good.
-I expect to be able to test this weekend on my platform.
-> Tested-by: John Stultz<john.stultz@linaro.org>
->
-> Thanks again for continuing to push this!
-> -john
+This quirk is necessary for me on an ASMedia ASM3142 host controller.
+Without it, I get the following errors when accessing a SuperSpeed UVC
+camera:
+
+Transfer event TRB DMA ptr not part of current TD ep_index XX comp_code XX
+
+You can find more details in my previous mail about the problem:
+https://lkml.org/lkml/2021/3/31/355
+
+This patch fixes my problem, but it is probably terribly wrong. I am not
+even sure if I can rely on handle_tx_event being called before each link
+TRB in the segment. Some feedback would be very welcome.
+---
+ drivers/usb/host/xhci-pci.c  |  4 +++-
+ drivers/usb/host/xhci-ring.c | 34 ++++++++++++++++++++++++++++++----
+ drivers/usb/host/xhci.h      |  1 +
+ 3 files changed, 34 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5bbccc9a0179..4b02ac34934e 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -284,8 +284,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 	    (pdev->device == PCI_DEVICE_ID_ASMEDIA_1142_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_ASMEDIA_2142_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_ASMEDIA_3242_XHCI))
++	     pdev->device == PCI_DEVICE_ID_ASMEDIA_3242_XHCI)) {
+ 		xhci->quirks |= XHCI_NO_64BIT_SUPPORT;
++		xhci->quirks |= XHCI_SYNC_ON_LINK_TRB;
++	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042A_XHCI)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index ce38076901e2..17f9484f1b0d 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -257,8 +257,13 @@ static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 			next->link.control |= cpu_to_le32(chain);
+ 		}
+ 		/* Give this link TRB to the hardware */
+-		wmb();
+-		next->link.control ^= cpu_to_le32(TRB_CYCLE);
++		if (!(xhci->quirks & XHCI_SYNC_ON_LINK_TRB) ||
++				(ring->type != TYPE_BULK &&
++				 ring->type != TYPE_STREAM &&
++				 ring->type != TYPE_COMMAND)) {
++			wmb();
++			next->link.control ^= cpu_to_le32(TRB_CYCLE);
++		}
+ 
+ 		/* Toggle the cycle bit after the last ring segment. */
+ 		if (link_trb_toggles_cycle(next))
+@@ -2530,6 +2535,8 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 	dma_addr_t ep_trb_dma;
+ 	struct xhci_segment *ep_seg;
+ 	union xhci_trb *ep_trb;
++	union xhci_trb *next_ep_trb;
++	int next_ep_trb_idx;
+ 	int status = -EINPROGRESS;
+ 	struct xhci_ep_ctx *ep_ctx;
+ 	struct list_head *tmp;
+@@ -2860,6 +2867,20 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+ 		else
+ 			process_bulk_intr_td(xhci, td, ep_trb, event, ep);
+ cleanup:
++		if (xhci->quirks & XHCI_SYNC_ON_LINK_TRB &&
++				(ep_ring->type == TYPE_BULK ||
++				 ep_ring->type == TYPE_STREAM ||
++				 ep_ring->type == TYPE_COMMAND)) {
++			next_ep_trb_idx = (ep_trb_dma - ep_seg->dma) /
++				sizeof(*ep_trb) + 1;
++			next_ep_trb = ep_trb = &ep_seg->trbs[next_ep_trb_idx];
++			if (next_ep_trb_idx < TRBS_PER_SEGMENT &&
++					trb_is_link(next_ep_trb)) {
++				wmb();
++				next_ep_trb->link.control ^= cpu_to_le32(TRB_CYCLE);
++			}
++		}
++
+ 		handling_skipped_tds = ep->skip &&
+ 			trb_comp_code != COMP_MISSED_SERVICE_ERROR &&
+ 			trb_comp_code != COMP_NO_PING_RESPONSE_ERROR;
+@@ -3192,8 +3213,13 @@ static int prepare_ring(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
+ 			ep_ring->enqueue->link.control |=
+ 				cpu_to_le32(TRB_CHAIN);
+ 
+-		wmb();
+-		ep_ring->enqueue->link.control ^= cpu_to_le32(TRB_CYCLE);
++		if (!(xhci->quirks & XHCI_SYNC_ON_LINK_TRB) ||
++				(ep_ring->type != TYPE_BULK &&
++				 ep_ring->type != TYPE_STREAM &&
++				 ep_ring->type != TYPE_COMMAND)) {
++			wmb();
++			ep_ring->enqueue->link.control ^= cpu_to_le32(TRB_CYCLE);
++		}
+ 
+ 		/* Toggle the cycle bit after the last ring segment. */
+ 		if (link_trb_toggles_cycle(ep_ring->enqueue))
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index ca822ad3b65b..fd98f86cde37 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1892,6 +1892,7 @@ struct xhci_hcd {
+ #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
+ #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
++#define XHCI_SYNC_ON_LINK_TRB	BIT_ULL(41)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
+-- 
+2.25.1
+
