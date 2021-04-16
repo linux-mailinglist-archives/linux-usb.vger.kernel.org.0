@@ -2,128 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 228C93616B4
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 02:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828F9361728
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 03:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236260AbhDPANI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 20:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234764AbhDPANH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 20:13:07 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40694C061574
-        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 17:12:42 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id o16so29128347ljp.3
-        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 17:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r8GkCrbv/zYPRVaSFtl6H/BFwmBvL0ol3pcK113pi4U=;
-        b=mRZhaeKKPrNjSKqWxKsNS+xCLa6R792rtfZKlDYqSBPGlgKe23wDw00iv1/lCtnxV3
-         wRYCXySwOTi3vSSq0Zezz8BS7d+zcEWzsLV44l6k+JKacFZRN4PTQumOn3zuo8UdL2MA
-         EBM9k31pTC/g7Y/7K0Af+ryb9nkE+yRosWPHUiDwQeHxrm9hG+HWe9MUrIGRRAtVKroB
-         0O53v1GmygPxqewZJozQQRg186jYq4V0O3XlM3Pn+H1gqivzLZa5bPm+iCyVqYkQ3GOh
-         Undn3Ug3hZ6eX3HmVt9gsJoQJjf8UDwNFC6I1E1z+rkYBHju+8Nf1mFUBI3dLhENvqej
-         K+6Q==
+        id S235087AbhDPBZJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 21:25:09 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:44852 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234961AbhDPBZI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 21:25:08 -0400
+Received: from mail-ot1-f71.google.com ([209.85.210.71])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <chris.chiu@canonical.com>)
+        id 1lXDDu-0004Fh-Ey
+        for linux-usb@vger.kernel.org; Fri, 16 Apr 2021 01:24:42 +0000
+Received: by mail-ot1-f71.google.com with SMTP id l14-20020a05683004aeb029028919a6fae1so3871999otd.17
+        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 18:24:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=r8GkCrbv/zYPRVaSFtl6H/BFwmBvL0ol3pcK113pi4U=;
-        b=kKt1qZnZUkzPRQVzG1l/5uO7NfJ0WB9tj83Ox7DRiQ8spADLolIX4p7DpwPkI6LqXX
-         uK7j+J5bxgs1Ub8gn08gKgyE8jn3myzj2Xojn0TfcnsS5fWHANKoId+LIsPTKIIEn0X3
-         6D1ntyWTawMOXGVtmSO7ZK0IHtMUGKyxd/zTjk793viUGo66HyK25HQDCPN46fhSFb7S
-         GYk6MSDprJYfsARHb8+EYLa3vmjepkm5Ek6iDTs4UHbOydba67DV5BKsk3xuLEn91z/V
-         AHfhOfp0WiSt9m6GrMLAd7tAA9wab7SCZRyLKSP3kf177IksGOcUMrufnSmR/zGoAk2I
-         Fy8A==
-X-Gm-Message-State: AOAM530sToE/FNz+cwN1I/+DpSgA9dFCt+Zjg+SreKaHEiXimIE23Evw
-        W6XK5B168eqXAroIec18FQhfMt4Rcm9CbGKlZOj7yQ==
-X-Google-Smtp-Source: ABdhPJxgTh1PQWkLqJ7g4FXETP5TGGKrGJedsy/dUmG0HnDn0PKcwTcV9ZUN1A2BuC92IvEPYlRwIcb0a0QMukiLM/c=
-X-Received: by 2002:a2e:9d88:: with SMTP id c8mr1005964ljj.257.1618531960777;
- Thu, 15 Apr 2021 17:12:40 -0700 (PDT)
+        bh=/bulXpuI8tDY/fXBLLWUp4LPd3sUmoquDA0BYMthGL8=;
+        b=WuvRdB7u2cpleoCjSKBCPy2wCkZidCoLeJpsUVO9uMZXt4hbqax8EnQ3ljGJ7rklFX
+         sIoKvKLJgbxk9fMdv3VHwfOJ+XCHkb2jC9ZyxwGvEawu6ddd1PHNJYRXKryjSQyxx9+k
+         nORoVYR2F/unaIFrFLT8Xsg2jygDCYg2sQGk91OM9bcnWh1HKgoOGWbmNgVH0i979FiL
+         kPpy4TVvXIH2bsN+811Lz2Q4LOM+6qTJdyviePDKRDXJoEW35EzVMAgkG90Oo9R6NJj3
+         xEgFAjk1rgiYypGdJGLtEiTonqMpUwv6h4e85CNsuYjTibH0amNeILPk38WH2JNuIrnJ
+         IGWQ==
+X-Gm-Message-State: AOAM530ilIkw3YRHKfpv0rHK+rEcGrZo6fgN/AurYKx6LrVRze/UxsmT
+        9k+cGXvn/RrTZdx1xRY5U8qjHMRdsDj7CjdmxTlbXO5HOTtAshnH3oAuMjDmbaizYbiA0IHZnk6
+        mpt+QOUWMnkhCp8HpWqxOWf8zQ4bOoFVhyBriNCjkouJgvmcmYf6LBA==
+X-Received: by 2002:aca:3d86:: with SMTP id k128mr4686946oia.86.1618536281416;
+        Thu, 15 Apr 2021 18:24:41 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwUYMs3Voy4p3YzB2JUL6Tw+mcqQowmMYhCSZOCiwF1/JS0cUV9GKzuwm1ePj5j0g2W6M1ZSo0Rf9NKKCbhjdU=
+X-Received: by 2002:aca:3d86:: with SMTP id k128mr4686934oia.86.1618536281250;
+ Thu, 15 Apr 2021 18:24:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
- <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
-In-Reply-To: <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 15 Apr 2021 17:12:28 -0700
-Message-ID: <CALAqxLW9d-jWC4qyfWvTQAYT-V7W19tFY+v3pzCE_QHfNYeYTg@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        stable <stable@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Ferry Toth <fntoth@gmail.com>, Yu Chen <chenyu56@huawei.com>
+References: <20210415114856.4555-1-chris.chiu@canonical.com>
+ <YHgyP8tGNM1Wi5dJ@kroah.com> <CABTNMG0MuaSkWZhiTwtWjPTg5WZ-Vdt9Ju9-RzBke9JjCBJo8Q@mail.gmail.com>
+ <20210415184637.GA15445@rowland.harvard.edu>
+In-Reply-To: <20210415184637.GA15445@rowland.harvard.edu>
+From:   Chris Chiu <chris.chiu@canonical.com>
+Date:   Fri, 16 Apr 2021 09:24:30 +0800
+Message-ID: <CABTNMG3aweq43eQcONif2_M4JF3ARmBgOKE18v7vzHvaJnjrtA@mail.gmail.com>
+Subject: Re: [PATCH v3] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek Hub
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, m.v.b@runbox.com,
+        hadess@hadess.net, linux-usb@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 15, 2021 at 3:20 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+On Fri, Apr 16, 2021 at 2:46 AM Alan Stern <stern@rowland.harvard.edu> wrote:
 >
-> From: Yu Chen <chenyu56@huawei.com>
-> From: John Stultz <john.stultz@linaro.org>
+> On Fri, Apr 16, 2021 at 12:13:43AM +0800, Chris Chiu wrote:
+> > One thing worth mentioning here, I never hit the hub_ext_port_status -71
+> > problem if I resume by waking up from the keyboard connected to the hub.
 >
-> According to the programming guide, to switch mode for DRD controller,
-> the driver needs to do the following.
+> I thought you said earlier that the port got into trouble while it was
+> suspending, not while it was resuming.  You wrote:
 >
-> To switch from device to host:
-> 1. Reset controller with GCTL.CoreSoftReset
-> 2. Set GCTL.PrtCapDir(host mode)
-> 3. Reset the host with USBCMD.HCRESET
-> 4. Then follow up with the initializing host registers sequence
+> > [ 2789.679812] usb 3-4-port3: can't suspend, status -110
 >
-> To switch from host to device:
-> 1. Reset controller with GCTL.CoreSoftReset
-> 2. Set GCTL.PrtCapDir(device mode)
-> 3. Reset the device with DCTL.CSftRst
-> 4. Then follow up with the initializing registers sequence
->
-> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
-> switching from host to device. John Stult reported a lockup issue seen
-> with HiKey960 platform without these steps[1]. Similar issue is observed
-> with Ferry's testing platform[2].
->
-> So, apply the required steps along with some fixes to Yu Chen's and John
-> Stultz's version. The main fixes to their versions are the missing wait
-> for clocks synchronization before clearing GCTL.CoreSoftReset and only
-> apply DCTL.CSftRst when switching from host to device.
->
-> [1] https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/
-> [2] https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/
->
-> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Cc: Ferry Toth <fntoth@gmail.com>
-> Cc: Wesley Cheng <wcheng@codeaurora.org>
-> Cc: <stable@vger.kernel.org>
-> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
-> Signed-off-by: Yu Chen <chenyu56@huawei.com>
-> Signed-off-by: John Stultz <john.stultz@linaro.org>
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
-> Changes in v3:
-> - Check if the desired mode is OTG, then keep the old flow
-> - Remove condition for OTG support only since the device can still be
->   configured DRD host/device mode only
-> - Remove redundant hw_mode check since __dwc3_set_mode() only applies when
->   hw_mode is DRD
-> Changes in v2:
-> - Initialize mutex per device and not as global mutex.
-> - Add additional checks for DRD only mode
+> So if the problem occurs during suspend, how can it be possible to avoid
+> the problem by taking some particular action later while resuming?
 >
 
-I've not been able to test all the different modes on HiKey960 yet,
-but with this patch we avoid the !COREIDLE hangs that we see
-frequently on bootup, so it looks pretty good to me.  I'll get back to
-you tonight when I can put hands on the board to test the gadget to
-host switching to make sure all is well (I really don't expect any
-issues, but just want to be sure).
+The ETIMEDOUT is still there, but the port can resume w/o problems and I
+don't really know what the hub did. I can only reset_resume the hub to bring it
+back if I'm not waking up from the connected keyboard.
 
-thanks
--john
+> > But the usbcore kernel log shows me wPortStatus: 0503 wPortChane: 0004
+> > of that port while resuming. In normal cases, they are 0507:0000.
+>
+> The 0004 bit of wPortChange means that the suspend status has changed;
+> the port is no longer suspended because the device attached to that port
+> (your keyboard) issued a wakeup request.
+>
+> >  I don't know how to SetPortFeature() with setting the status change bit only.
+>
+> You can't.  Only the hub itself can set the wPortChange bits.
+>
+> > Or maybe it's just some kind of timing issue of the
+> > idle/suspend/resume signaling.
+>
+> Not timing.  It's because you woke the system up from the attached
+> keyboard.
+>
+> Alan Stern
+
+Got it. I'm just confused by the USB 2.0 spec 11.24.2.7.2 that
+"Hubs may allow setting of the status change bits with a SetPortFeature()
+ request for diagnostic purposes."
+
+So for this case, I think USB_QUIRK_RESET_RESUME would be a
+better option to at least bring back the port. Any suggestion about what
+kind of test I can do on this hub? Thanks
+
+Chris
