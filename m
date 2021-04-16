@@ -2,120 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 200AB3617A4
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 04:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C32D9361839
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 05:28:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237367AbhDPCoI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Apr 2021 22:44:08 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:17363 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbhDPCoH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 22:44:07 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FM0ph74jJzlWp0;
-        Fri, 16 Apr 2021 10:41:48 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Fri, 16 Apr 2021 10:43:34 +0800
-Subject: Re: [RFC PATCH] USB:XHCI:skip hub registration
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <mathias.nyman@intel.com>, <stern@rowland.harvard.edu>,
-        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
-        <yisen.zhuang@huawei.com>
-References: <1618489358-42283-1-git-send-email-liulongfang@huawei.com>
- <YHgy0jqLE0WAxA+2@kroah.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <973a4759-4464-e59e-f84b-15672503e290@huawei.com>
-Date:   Fri, 16 Apr 2021 10:43:34 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S236871AbhDPD2s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Apr 2021 23:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234886AbhDPD2r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Apr 2021 23:28:47 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87826C061574
+        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 20:28:23 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id a36so18651035ljq.8
+        for <linux-usb@vger.kernel.org>; Thu, 15 Apr 2021 20:28:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SeY4DFweXMM7grZDjK/X3xn8cvUn+vH8/+lDJpoo9Fk=;
+        b=HhByXB8hEIe54l1AMKf1jZbdP6GjO3WbCfM0SXPOO13tEBppBXQ4BDAkd4lwefGEOf
+         jc1a/2dUVR6sgD8FK/jowMTFkedl7c2rvBqwVY2narvIz17RLPPW9XS35+NkwakVqitx
+         azF84omTDsC/UAhtKaq6zX8En01IyaA/roI2Knz2I3mwEllAPInXsfn3Xdevad4MR0G/
+         lvCeXQHDBAjMDYmrzfW0xIEvRV9hv43vojF/4mL2r+Dicp69iDQzusDXrm9RK0jzh9wA
+         /nl5rCYz6yzsZW8TqI0kRaD0anQDOJLXcW2PhEmVOFQ1vrN4X0vtMvHmDuxHjtagTWXd
+         4t1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SeY4DFweXMM7grZDjK/X3xn8cvUn+vH8/+lDJpoo9Fk=;
+        b=J1TfDxJhkwBezd+nu6ulkQIKM5+NPzSCPtKEMcHLZq1cwKRXwVaTyY43QvQzYILWwc
+         w3KqPp+FEXkuds3F2nQb2BAKqXeKJfVCrKvegJoj6nLLnt1MBt4QVWf6zmLkRjaNSWLN
+         /bLFh7L4bRORbTPNaOE7qOYOK4PM9e2OApUK6f3Fb6MXZ5BDzMA14BNLJGa787D6FPTp
+         dp+LKHyYC25HAJzsCls3iGKsgNkcCSBUbBhY/YWODANefjtDVYKG1lONyxn8GYhdtz3z
+         0y25+VJqJ47HvFJy51WbjUaxX8Nd5FVvkcJITFfpwDg16iirF0nLnIyXHaRZV3H7KS+c
+         ojUg==
+X-Gm-Message-State: AOAM532pnj9YF5GEaKTZR0roMkp4Tp5H0DuOWQzQ2oHopkWh6dQ1F4ae
+        zNL4AvUX7WeAlBSBbNHRcOdFdq71QZ8dS21jQfvtjQ==
+X-Google-Smtp-Source: ABdhPJx9IyovMrytd4ANdXeG/fpAf5mxvDv4hbubNwy4uHRWLzM/hAiHpOAbamZ+0EMnjuHXWEGYcDJn5k+aSZui9qw=
+X-Received: by 2002:a05:651c:1243:: with SMTP id h3mr1382264ljh.128.1618543701988;
+ Thu, 15 Apr 2021 20:28:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YHgy0jqLE0WAxA+2@kroah.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
+ <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+ <CALAqxLW9d-jWC4qyfWvTQAYT-V7W19tFY+v3pzCE_QHfNYeYTg@mail.gmail.com>
+In-Reply-To: <CALAqxLW9d-jWC4qyfWvTQAYT-V7W19tFY+v3pzCE_QHfNYeYTg@mail.gmail.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Thu, 15 Apr 2021 20:28:09 -0700
+Message-ID: <CALAqxLX0b=uZ4JQX1h5PLRUq+B05wWOt2=QSO_QoO8rdMWgp=w@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        John Youn <John.Youn@synopsys.com>,
+        stable <stable@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Ferry Toth <fntoth@gmail.com>, Yu Chen <chenyu56@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/4/15 20:34, Greg KH wrote:
-> On Thu, Apr 15, 2021 at 08:22:38PM +0800, Longfang Liu wrote:
->> When the number of ports on the USB hub is 0, skip the registration
->> operation of the USB hub.
-> 
-> That's crazy.  Why not fix the hardware?  How has this hub passed the
-> USB certification process?
-> 
->> The current Kunpeng930's XHCI hardware controller is defective. The number
->> of ports on its USB3.0 bus controller is 0, and the number of ports on
->> the USB2.0 bus controller is 1.
->>
->> In order to solve this problem that the USB3.0 controller does not have
->> a port which causes the registration of the hub to fail, this patch passes
->> the defect information by adding flags in the quirks of xhci and usb_hcd,
->> and finally skips the registration process of the hub directly according
->> to the results of these flags when the hub is initialized.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  drivers/usb/core/hub.c      | 6 ++++++
->>  drivers/usb/host/xhci-pci.c | 4 ++++
->>  drivers/usb/host/xhci.c     | 5 +++++
->>  drivers/usb/host/xhci.h     | 1 +
->>  include/linux/usb/hcd.h     | 1 +
->>  5 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index b1e14be..2d6869d 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -1769,9 +1769,15 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
->>  	struct usb_host_interface *desc;
->>  	struct usb_device *hdev;
->>  	struct usb_hub *hub;
->> +	struct usb_hcd *hcd;
->>  
->>  	desc = intf->cur_altsetting;
->>  	hdev = interface_to_usbdev(intf);
->> +	hcd = bus_to_hcd(hdev->bus);
->> +	if (hcd->usb3_no_port) {
->> +		dev_warn(&intf->dev, "USB hub has no port\n");
->> +		return -ENODEV;
->> +	}
->>  
->>  	/*
->>  	 * Set default autosuspend delay as 0 to speedup bus suspend,
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index ef513c2..63b89a4 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -281,6 +281,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->>  	if (xhci->quirks & XHCI_RESET_ON_RESUME)
->>  		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
->>  				"QUIRK: Resetting on resume");
->> +
->> +	if (pdev->vendor == PCI_VENDOR_ID_HUAWEI &&
->> +	    pdev->device == 0xa23c)
->> +		xhci->quirks |= XHCI_USB3_NOPORT;
-> 
-> Can't we just detect this normally that there are no ports for this
-> device?  Why is the device lying about how many ports it has such that
-> we have to "override" this?
-> 
+On Thu, Apr 15, 2021 at 5:12 PM John Stultz <john.stultz@linaro.org> wrote:
+>
+> On Thu, Apr 15, 2021 at 3:20 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> >
+> > From: Yu Chen <chenyu56@huawei.com>
+> > From: John Stultz <john.stultz@linaro.org>
+> >
+> > According to the programming guide, to switch mode for DRD controller,
+> > the driver needs to do the following.
+> >
+> > To switch from device to host:
+> > 1. Reset controller with GCTL.CoreSoftReset
+> > 2. Set GCTL.PrtCapDir(host mode)
+> > 3. Reset the host with USBCMD.HCRESET
+> > 4. Then follow up with the initializing host registers sequence
+> >
+> > To switch from host to device:
+> > 1. Reset controller with GCTL.CoreSoftReset
+> > 2. Set GCTL.PrtCapDir(device mode)
+> > 3. Reset the device with DCTL.CSftRst
+> > 4. Then follow up with the initializing registers sequence
+> >
+> > Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
+> > switching from host to device. John Stult reported a lockup issue seen
+> > with HiKey960 platform without these steps[1]. Similar issue is observed
+> > with Ferry's testing platform[2].
+> >
+> > So, apply the required steps along with some fixes to Yu Chen's and John
+> > Stultz's version. The main fixes to their versions are the missing wait
+> > for clocks synchronization before clearing GCTL.CoreSoftReset and only
+> > apply DCTL.CSftRst when switching from host to device.
+> >
+> > [1] https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/
+> > [2] https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/
+> >
+> > Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> > Cc: Ferry Toth <fntoth@gmail.com>
+> > Cc: Wesley Cheng <wcheng@codeaurora.org>
+> > Cc: <stable@vger.kernel.org>
+> > Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
+> > Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> > Signed-off-by: John Stultz <john.stultz@linaro.org>
+> > Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > ---
+> > Changes in v3:
+> > - Check if the desired mode is OTG, then keep the old flow
+> > - Remove condition for OTG support only since the device can still be
+> >   configured DRD host/device mode only
+> > - Remove redundant hw_mode check since __dwc3_set_mode() only applies when
+> >   hw_mode is DRD
+> > Changes in v2:
+> > - Initialize mutex per device and not as global mutex.
+> > - Add additional checks for DRD only mode
+> >
+>
+> I've not been able to test all the different modes on HiKey960 yet,
+> but with this patch we avoid the !COREIDLE hangs that we see
+> frequently on bootup, so it looks pretty good to me.  I'll get back to
+> you tonight when I can put hands on the board to test the gadget to
+> host switching to make sure all is well (I really don't expect any
+> issues, but just want to be sure).
 
-The hub driver will check the port number in prob(). If there is no port,
-the driver will report an error log. But we hope this defective device
-does not print error log.
+Ok, got a chance to test the mode switching and everything is looking good.
 
-> And again, why not fix this broken hardware?
-> 
-> thanks,
-> 
-> greg k-h
-> .
-> The current generation of hardware can no longer be modified,
-this problem will be solved in the next generation of hardware.
-Thanks,
-Longfang.
+Tested-by: John Stultz <john.stultz@linaro.org>
+
+Thanks again for continuing to push this!
+-john
