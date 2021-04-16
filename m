@@ -2,120 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F8836192A
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 07:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D657361969
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 07:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238686AbhDPFRA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 01:17:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37334 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234886AbhDPFQ7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Apr 2021 01:16:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A9A5B610FB;
-        Fri, 16 Apr 2021 05:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1618550195;
-        bh=BBtGGf3ANCNgEB8oOFtBzS4am3atW0oPfW8UZjM5cxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mNRg/Tl/ID0HMReqzdPW9xRBTtbebfW9yMyetgLpzRh7rgXzdmWifsGQ5r4vHcfxH
-         MX7X6eacpB2y8/qA/J4zzbFNtIuKwyJowLH97tBq62yjsWqV1oS8rszoOM/OzBojNI
-         ogUR1xvlHEzm0qPmjozIz8ylygQDTt9sZHboJAmo=
-Date:   Fri, 16 Apr 2021 07:16:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     liulongfang <liulongfang@huawei.com>
-Cc:     mathias.nyman@intel.com, stern@rowland.harvard.edu,
-        liudongdong3@huawei.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kong.kongxinwei@hisilicon.com,
-        yisen.zhuang@huawei.com
-Subject: Re: [RFC PATCH] USB:XHCI:skip hub registration
-Message-ID: <YHkdsMR7E2Dr7QTc@kroah.com>
-References: <1618489358-42283-1-git-send-email-liulongfang@huawei.com>
- <YHgy0jqLE0WAxA+2@kroah.com>
- <973a4759-4464-e59e-f84b-15672503e290@huawei.com>
+        id S234903AbhDPFlW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 01:41:22 -0400
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21345 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231598AbhDPFlV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 01:41:21 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1618551645; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ZeoBQETUSOqu2U6vnlj74+undnITnJ3L2EEsmkTHvybJBvBOYDv9tl2OjjC3CUMTR5R3VAANBCj5uPK6wvG2a1TnGwbiLBNg5k0QZroG2bSWDgNnS8m2am2LOG5DtC/ITcvSXfZqr9q+8xW/VP2Xi/D9q6PFWMgYqDbrdewimew=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1618551645; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=fvDfttZM4KjoqywY1vxhQFEBQkz4bYXvnPMQ5kjViCQ=; 
+        b=aMEtqKpqImS0tWAwX/bWxlMfna+3TnQVZ0ONci3vDQgbdgNWGtZlyluwMKwqDfh2vp+x2sbYaZOaKc8lbKVvP+tO29l+ZgMOzAfE8AEVW6XF9D6O9LuhmZ6jQIEznC8EPSX8aFW8kXlt5H3zpXel4gJigHK/8Xbq9tIibNKIqzE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com> header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1618551645;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To;
+        bh=fvDfttZM4KjoqywY1vxhQFEBQkz4bYXvnPMQ5kjViCQ=;
+        b=oQuifcfEErLjhdioPKJp+y2VEaaML8w6UtdEqFF798F23ZQjyIm7yj+PTq58fDy0
+        4mkrR++nEniubrt2wu1NX81s9sehhFXaGbas17pEzuKPXpQ2F6D+aktvSYlk35C9DOL
+        pC2NaureWa41qDjKm1LKEKSrcMJhp+/Q6xUDSVcA=
+Received: from anirudhrb.com (49.207.216.151 [49.207.216.151]) by mx.zohomail.com
+        with SMTPS id 1618551642390440.0500003984672; Thu, 15 Apr 2021 22:40:42 -0700 (PDT)
+Date:   Fri, 16 Apr 2021 11:10:35 +0530
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] general protection fault in gadget_setup
+Message-ID: <YHkjUwhlCYIxCUYt@anirudhrb.com>
+References: <00000000000075c58405bfd6228c@google.com>
+ <CACT4Y+bTjQz=RBXVNrVMQ9xPz5CzGNBE854fsb0ukS-2_wdi3Q@mail.gmail.com>
+ <20210413161311.GC1454681@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <973a4759-4464-e59e-f84b-15672503e290@huawei.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20210413161311.GC1454681@rowland.harvard.edu>
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 10:43:34AM +0800, liulongfang wrote:
-> On 2021/4/15 20:34, Greg KH wrote:
-> > On Thu, Apr 15, 2021 at 08:22:38PM +0800, Longfang Liu wrote:
-> >> When the number of ports on the USB hub is 0, skip the registration
-> >> operation of the USB hub.
-> > 
-> > That's crazy.  Why not fix the hardware?  How has this hub passed the
-> > USB certification process?
-> > 
-> >> The current Kunpeng930's XHCI hardware controller is defective. The number
-> >> of ports on its USB3.0 bus controller is 0, and the number of ports on
-> >> the USB2.0 bus controller is 1.
-> >>
-> >> In order to solve this problem that the USB3.0 controller does not have
-> >> a port which causes the registration of the hub to fail, this patch passes
-> >> the defect information by adding flags in the quirks of xhci and usb_hcd,
-> >> and finally skips the registration process of the hub directly according
-> >> to the results of these flags when the hub is initialized.
-> >>
-> >> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
-> >> ---
-> >>  drivers/usb/core/hub.c      | 6 ++++++
-> >>  drivers/usb/host/xhci-pci.c | 4 ++++
-> >>  drivers/usb/host/xhci.c     | 5 +++++
-> >>  drivers/usb/host/xhci.h     | 1 +
-> >>  include/linux/usb/hcd.h     | 1 +
-> >>  5 files changed, 17 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> >> index b1e14be..2d6869d 100644
-> >> --- a/drivers/usb/core/hub.c
-> >> +++ b/drivers/usb/core/hub.c
-> >> @@ -1769,9 +1769,15 @@ static int hub_probe(struct usb_interface *intf, const struct usb_device_id *id)
-> >>  	struct usb_host_interface *desc;
-> >>  	struct usb_device *hdev;
-> >>  	struct usb_hub *hub;
-> >> +	struct usb_hcd *hcd;
-> >>  
-> >>  	desc = intf->cur_altsetting;
-> >>  	hdev = interface_to_usbdev(intf);
-> >> +	hcd = bus_to_hcd(hdev->bus);
-> >> +	if (hcd->usb3_no_port) {
-> >> +		dev_warn(&intf->dev, "USB hub has no port\n");
-> >> +		return -ENODEV;
-> >> +	}
-> >>  
-> >>  	/*
-> >>  	 * Set default autosuspend delay as 0 to speedup bus suspend,
-> >> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> >> index ef513c2..63b89a4 100644
-> >> --- a/drivers/usb/host/xhci-pci.c
-> >> +++ b/drivers/usb/host/xhci-pci.c
-> >> @@ -281,6 +281,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
-> >>  	if (xhci->quirks & XHCI_RESET_ON_RESUME)
-> >>  		xhci_dbg_trace(xhci, trace_xhci_dbg_quirks,
-> >>  				"QUIRK: Resetting on resume");
-> >> +
-> >> +	if (pdev->vendor == PCI_VENDOR_ID_HUAWEI &&
-> >> +	    pdev->device == 0xa23c)
-> >> +		xhci->quirks |= XHCI_USB3_NOPORT;
-> > 
-> > Can't we just detect this normally that there are no ports for this
-> > device?  Why is the device lying about how many ports it has such that
-> > we have to "override" this?
-> > 
-> 
-> The hub driver will check the port number in prob(). If there is no port,
-> the driver will report an error log. But we hope this defective device
-> does not print error log.
+On Tue, Apr 13, 2021 at 12:13:11PM -0400, Alan Stern wrote:
+> On Tue, Apr 13, 2021 at 10:12:05AM +0200, Dmitry Vyukov wrote:
+> > On Tue, Apr 13, 2021 at 10:08 AM syzbot
+> > <syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    0f4498ce Merge tag 'for-5.12/dm-fixes-2' of git://git=
+=2Ekern..
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D124adbf6d=
+00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Ddaeff30c2=
+474a60f
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3Deb4674092e6=
+cc8d9e0bd
+> > > userspace arch: i386
+> > >
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the =
+commit:
+> > > Reported-by: syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com
+> >=20
+> > I suspect that the raw gadget_unbind() can be called while the timer
+> > is still active. gadget_unbind() sets gadget data to NULL.
+> > But I am not sure which unbind call this is:
+> > usb_gadget_remove_driver() or right in udc_bind_to_driver() due to a
+> > start error.
+>=20
+> This certainly looks like a race between gadget_unbind and gadget_setup=
+=20
+> in raw_gadget.
+>=20
+> In theory, this race shouldn't matter.  The gadget core is supposed to=20
+> guarantee that there won't be any more callbacks to the gadget driver=20
+> once the driver's unbind routine is called.  That guarantee is enforced=
+=20
+> in usb_gadget_remove_driver as follows:
+>=20
+> 	usb_gadget_disconnect(udc->gadget);
+> 	if (udc->gadget->irq)
+> 		synchronize_irq(udc->gadget->irq);
+> 	udc->driver->unbind(udc->gadget);
+> 	usb_gadget_udc_stop(udc);
+>=20
+> usb_gadget_disconnect turns off the pullup resistor, telling the host=20
+> that the gadget is no longer connected and preventing the transmission=20
+> of any more USB packets.  Any packets that have already been received=20
+> are sure to processed by the UDC driver's interrupt handler by the time=
+=20
+> synchronize_irq returns.
+>=20
+> But this doesn't work with dummy_hcd, because dummy_hcd doesn't use=20
+> interrupts; it uses a timer instead.  It does have code to emulate the=20
+> effect of synchronize_irq, but that code doesn't get invoked at the=20
+> right time -- it currently runs in usb_gadget_udc_stop, after the unbind=
+=20
+> callback instead of before.  Indeed, there's no way for=20
+> usb_gadget_remove_driver to invoke this code before the unbind=20
+> callback,.
+>=20
+> I thought the synchronize_irq emulation problem had been completely=20
+> solved, but evidently it hasn't.  It looks like the best solution is to=
+=20
+> add a call of the synchronize_irq emulation code in dummy_pullup.
+>=20
+> Maybe we can test this reasoning by putting a delay just before the call=
+=20
+> to dum->driver->setup.  That runs in the timer handler, so it's not a=20
+> good place to delay, but it may be okay just for testing purposes.
+>=20
+> Hopefully this patch will make the race a lot more likely to occur.  Is=
+=20
 
-Defective devices deserve to have errors sent to the error log,
-otherwise how will people know to tell the companies to fix them?
+Hi Alan,=20
 
-Again, this device can not pass USB certification, so there's not much
-we should do to work around that, right?
+Indeed, I was able to reproduce this bug easily on my machine with your
+delay patch applied and using this syzkaller program:
 
-thanks,
+syz_usb_connect$cdc_ncm(0x1, 0x6e, &(0x7f0000000040)=3D{{0x12, 0x1, 0x0, 0x=
+2, 0x0, 0x0, 0x8, 0x525, 0xa4a1, 0x40, 0x1, 0x2, 0x3, 0x1, [{{0x9, 0x2, 0x5=
+c, 0x2, 0x1, 0x0, 0x0, 0x0, {{0x9, 0x4, 0x0, 0x0, 0x1, 0x2, 0xd, 0x0, 0x0, =
+{{0x5}, {0x5}, {0xd}, {0x6}}, {{0x9, 0x5, 0x81, 0x3, 0x200}}}}}}]}}, &(0x7f=
+0000000480)=3D{0x0, 0x0, 0x0, 0x0, 0x3, [{0x0, 0x0}, {0x0, 0x0}, {0x0, 0x0}=
+]})
 
-greg k-h
+I also tested doing the synchronize_irq emulation in dummy_pullup and it
+fixed the issue. The patch is below.
+
+Thanks!
+
+	- Anirudh.
+
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/du=
+mmy_hcd.c
+index ce24d4f28f2a..931d4612d859 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -903,6 +903,12 @@ static int dummy_pullup(struct usb_gadget *_gadget, in=
+t value)
+ 	spin_lock_irqsave(&dum->lock, flags);
+ 	dum->pullup =3D (value !=3D 0);
+ 	set_link_state(dum_hcd);
++	/* emulate synchronize_irq(): wait for callbacks to finish */=1C
++	while (dum->callback_usage > 0) {
++		spin_unlock_irqrestore(&dum->lock, flags);
++		usleep_range(1000, 2000);
++		spin_lock_irqsave(&dum->lock, flags);
++	}
+ 	spin_unlock_irqrestore(&dum->lock, flags);
+=20
+ 	usb_hcd_poll_rh_status(dummy_hcd_to_hcd(dum_hcd));
+@@ -1005,13 +1011,6 @@ static int dummy_udc_stop(struct usb_gadget *g)
+ 	dum->ints_enabled =3D 0;
+ 	stop_activity(dum);
+=20
+-	/* emulate synchronize_irq(): wait for callbacks to finish */
+-	while (dum->callback_usage > 0) {
+-		spin_unlock_irq(&dum->lock);
+-		usleep_range(1000, 2000);
+-		spin_lock_irq(&dum->lock);
+-	}
+-
+ 	dum->driver =3D NULL;
+ 	spin_unlock_irq(&dum->lock);
+=20
+@@ -1900,6 +1899,7 @@ static void dummy_timer(struct timer_list *t)
+ 			if (value > 0) {
+ 				++dum->callback_usage;
+ 				spin_unlock(&dum->lock);
++				mdelay(5);
+ 				value =3D dum->driver->setup(&dum->gadget,
+ 						&setup);
+ 				spin_lock(&dum->lock);
