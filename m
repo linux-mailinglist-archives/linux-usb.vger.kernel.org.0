@@ -2,107 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B804C361DB8
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 12:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5643361E36
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 12:47:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242382AbhDPKDE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 06:03:04 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:11657 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242325AbhDPKDB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 06:03:01 -0400
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 16 Apr 2021 03:02:37 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 16 Apr 2021 03:02:35 -0700
-X-QCInternal: smtphost
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 16 Apr 2021 15:32:08 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id EAB8438A5; Fri, 16 Apr 2021 15:32:06 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S242144AbhDPKrz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 06:47:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35312 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242101AbhDPKry (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Apr 2021 06:47:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 33DE961103;
+        Fri, 16 Apr 2021 10:47:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618570050;
+        bh=od1tl7oKpVX/MGO4p0AhDkV0ESsHKL9wHzJMSSEZtLk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TItS6HfKYpavIh/cZNuV/Cf9SdibI9PL9tlvdaoCRdMFXMY9n4xZTu57TiOmJr89c
+         FhgQeGvmikXT/ycxdqfPCpNXgPAleEioIS9EdiWEWduMRjnqMaQKevA/oKnacAE3vX
+         3LqqzpFvQr31YeYNFerYEkId3nVMY8XfMng0I0K+blKFjelq1HStEHrBhceE3wWNAK
+         ppD/CuGxwdgsg4k+ltLTyZDpBoEAkvDYBOjk++xKxXJzA8Z2f8bKOIQcoErGNzZn82
+         79JquGXDOgnK0OXdclEmdw9AVUu5MwWv1vtT8gXnYDc89c8aXtZbdem1lhVgbBoYtG
+         Y5lVQEOAsvzwQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v6 5/5] usb: dwc3: qcom: Set genpd active wakeup flag for usb gdsc
-Date:   Fri, 16 Apr 2021 15:31:53 +0530
-Message-Id: <1618567313-25373-6-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1618567313-25373-1-git-send-email-sanm@codeaurora.org>
-References: <1618567313-25373-1-git-send-email-sanm@codeaurora.org>
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Ferry Toth <fntoth@gmail.com>, Yu Chen <chenyu56@huawei.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
+In-Reply-To: <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
+ <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+Date:   Fri, 16 Apr 2021 13:47:22 +0300
+Message-ID: <87zgxymrph.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set genpd active wakeup flag for usb gdsc if wakeup capable devices
-are connected so that wake up happens without reenumeration.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index b1e9061..b61dc0b 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,9 +17,11 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-+#include <linux/usb/hcd.h>
- 
- #include "core.h"
- 
-@@ -354,10 +356,19 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
- {
- 	u32 val;
- 	int i, ret;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct usb_hcd  *hcd;
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
- 
- 	if (qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci) {
-+		hcd = platform_get_drvdata(dwc->xhci);
-+		if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
-+			genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-+	}
-+
- 	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
- 	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 		dev_err(qcom->dev, "HS-PHY not in L2\n");
-@@ -382,9 +393,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
- 	int ret;
- 	int i;
- 
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (!qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci)
-+		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	if (device_may_wakeup(qcom->dev))
- 		dwc3_qcom_disable_interrupts(qcom);
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+Hi,
 
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+
+> From: Yu Chen <chenyu56@huawei.com>
+> From: John Stultz <john.stultz@linaro.org>
+>
+> According to the programming guide, to switch mode for DRD controller,
+> the driver needs to do the following.
+>
+> To switch from device to host:
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(host mode)
+> 3. Reset the host with USBCMD.HCRESET
+> 4. Then follow up with the initializing host registers sequence
+>
+> To switch from host to device:
+> 1. Reset controller with GCTL.CoreSoftReset
+> 2. Set GCTL.PrtCapDir(device mode)
+> 3. Reset the device with DCTL.CSftRst
+> 4. Then follow up with the initializing registers sequence
+>
+> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
+> switching from host to device. John Stult reported a lockup issue seen
+> with HiKey960 platform without these steps[1]. Similar issue is observed
+> with Ferry's testing platform[2].
+>
+> So, apply the required steps along with some fixes to Yu Chen's and John
+> Stultz's version. The main fixes to their versions are the missing wait
+> for clocks synchronization before clearing GCTL.CoreSoftReset and only
+> apply DCTL.CSftRst when switching from host to device.
+>
+> [1] https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@=
+linaro.org/
+> [2] https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f=
+1@gmail.com/
+>
+> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Cc: Ferry Toth <fntoth@gmail.com>
+> Cc: Wesley Cheng <wcheng@codeaurora.org>
+> Cc: <stable@vger.kernel.org>
+> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly=
+")
+> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+
+I still have concerns about the soft reset, but I won't block you guys
+from fixing Hikey's problem :-)
+
+The only thing I would like to confirm is that this has been verified
+with hundreds of swaps happening as quickly as possible. DWC3 should
+still be functional after several hundred swaps.
+
+Can someone confirm this is the case? (I'm assuming this can be
+scripted)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmB5azoRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQbTqBAAwJa0+SiYQL4Cbfy6TY99murao5mbPn/A
+bI+Ufn/HmXT/FrpwmVeFGb0xeKg+EjXsdyp1QGKKNMqHQ0vwCDxEDeIAazh/2+3f
+x1XeNTBwSAd6KgdUwqaIDQtUhHoZKP8TSRSL0zokZamYDkpUbv84A2w+fUQuDToP
+tTecb+i9iS0bs5NEgF9e/GvDBWHF2i087tn0BDcm9LCqd34yDGOaLfySBMhBuG3h
+N+q+xVo1zAALHwqGFxYvGqUzybMt2U9YEE3CaN8DHZPOQs/2UFdvlg6Hi/RdrOb+
+4bH1PzcjJIQ9lFF/0i8zJCVBK8LW5wElSN/g05wja2RyioqTnrEwvob/3yesjl5J
+TRR8VZZIPShgRZFtoWSTvLRL86bKJoXCaKVh41sXkbIPhyNzZTf2T06NjvERNwYY
+AK7y9M3cZm44IDytI8WPcWZx5io6aoEw8VqQbYor7GTecdE9vKteBVaxwlBVDIzZ
+K1GoPEJfy8oU8Akr5jS/p8la+di/wjHGplv/hTuOHXwkSz6WJzE5HQw0jzK5PDk6
+kUhfEKo/BokRWIIFbTqjxU5MUla4UcyFo3hfgFYBOGM0QGOlHSJgJW3wcxuXpKwO
++2X1a+0L/wY0pt2d4NbEYaezqGeFyY6nPRZJSDBUWchdxmeFQj1NXe4x5UYrMlb8
+w0/4kYvWosw=
+=33Vg
+-----END PGP SIGNATURE-----
+--=-=-=--
