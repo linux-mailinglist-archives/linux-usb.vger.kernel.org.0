@@ -2,134 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D467361F80
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 14:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1879F362015
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 14:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbhDPMIP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 08:08:15 -0400
-Received: from mga05.intel.com ([192.55.52.43]:49170 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232130AbhDPMIP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Apr 2021 08:08:15 -0400
-IronPort-SDR: Wb9sutoC3qQIicUOZnuaTKcCBipV7yKvZi3eOKIt0q0gnl4GsG+zIhBKwUhiVOzQDhiST9/22d
- O8R9fayurY+Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9955"; a="280348816"
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="280348816"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2021 05:07:50 -0700
-IronPort-SDR: At88vdDMJq4OkaPF0eHHr5ff5kA8Sx58hwfacQwc0MRkU4UJoePg2BisuQortmNZp9SmOzlszs
- L9xc8pD3faFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,226,1613462400"; 
-   d="scan'208";a="615942141"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 16 Apr 2021 05:07:49 -0700
-Subject: Re: [PATCH] [RFC] xhci: Add Link TRB sync quirk for ASM3142
-To:     Ole Salscheider <ole@salscheider.org>, linux-usb@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>
-References: <20210416093729.41865-1-ole@salscheider.org>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <9bf0060c-3427-a261-531c-c075054ae094@linux.intel.com>
-Date:   Fri, 16 Apr 2021 15:09:46 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <20210416093729.41865-1-ole@salscheider.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S242564AbhDPMrM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 08:47:12 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:42204 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240732AbhDPMrL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 08:47:11 -0400
+Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 86731C06B9;
+        Fri, 16 Apr 2021 12:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1618577207; bh=kWSqxBFfNzPqZXKFtbkyGNxYXWGWs6bIBI9fB3s0wjA=;
+        h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
+        b=l132or2Beis8jwFKsCEKPrMEhJQDunM36t1/hY57ypyRnfC3hx99V63b6SCrbq4v1
+         iRjy8FnBwhwb71A0q1jNJZuFSS6xlGmbhUm1LHxUkDkzEKaj3bnVItWs2YohKAQ+n2
+         x0ukwh0fdS8WuE1gsqw1ZWokfTF2n4ya77YvHP+nOi5dN1gDTlhd6BC/1EyptJwoAm
+         bfGRJCbj6FLeK/d0552SWz/Fk/8HfKev1lJAU7MSju+Ucwhij5hFNJadzT1IYkOqgM
+         jRhAYsU9Rlz+B3RBNbrQqqOprlLIHQz6qu3WOPlV3fyYoRk8FaGtkt4Fwgml9guyl2
+         MiqTcOhNKm0MQ==
+Received: from razpc-HP (razpc-hp.internal.synopsys.com [10.116.126.207])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 72FD8A005D;
+        Fri, 16 Apr 2021 12:46:42 +0000 (UTC)
+Received: by razpc-HP (sSMTP sendmail emulation); Fri, 16 Apr 2021 16:46:40 +0400
+Date:   Fri, 16 Apr 2021 16:46:40 +0400
+In-Reply-To: <cover.1618464534.git.Arthur.Petrosyan@synopsys.com>
+References: <cover.1618464534.git.Arthur.Petrosyan@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: [PATCH v2 00/15] usb: dwc2: Fix Hibernation issues.
+To:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Vardan Mikayelyan <Vardan.Mikayelyan@synopsys.com>,
+        Grigor Tovmasyan <Grigor.Tovmasyan@synopsys.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Douglas Anderson <dianders@chromium.org>
+Message-Id: <20210416124642.72FD8A005D@mailhost.synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ole
+This patch set fixes and improves hibernation mode for dwc2 core.
+It adds support for the following cases
+    1. Hibernation entering/exiting flow by system suspend/resume.
+    2. Exiting hibernation mode before removing driver and urb enqueue.
+    3. Exiting hibernation from gpwrdn rst detect.
 
-On 16.4.2021 12.37, Ole Salscheider wrote:
-> This patch adds a quirk to the xhci driver so that link TRBs are only
-> given to the host controller once it has processed all previous TRBs on
-> this segment.
-> 
-> This quirk is necessary for me on an ASMedia ASM3142 host controller.
-> Without it, I get the following errors when accessing a SuperSpeed UVC
-> camera:
-> 
-> Transfer event TRB DMA ptr not part of current TD ep_index XX comp_code XX
-> 
-> You can find more details in my previous mail about the problem:
-> https://lkml.org/lkml/2021/3/31/355
-> 
-> This patch fixes my problem, but it is probably terribly wrong. I am not
-> even sure if I can rely on handle_tx_event being called before each link
-> TRB in the segment. Some feedback would be very welcome.
+It updates the implementation of dwc2 entering and exiting
+hibernation mode when a port is suspended or resumed or reset asserted.
 
-I think we need to look at the cause more closely.
+It fixes hibernation issues between host and device mode when core
+enters to hibernation in host mode and mode change happens. Also, a fix
+is introduced for remote wakeup flow.
 
-We normally only get events for the last TRB of a TD, or for short transfers like in your case.
-So not every transfer TRB generates events.
+The patch set also improves implementation of entering to hibernation
+from dwc2_handle_usb_suspend_intr() handler.
 
-There are several things going on here that combined could cause this.
+Changes since V1:
+Updated bellow patches. Moved duplicated error checking *if* conditions
+from innermost to outside if.
+1. usb: dwc2: Add exit hibernation mode before removing drive
+2. usb: dwc2: Allow exit hibernation in urb enqueue
 
-Last transfer TRB of a segment has some alignment requirements which  might not be handled in the isoc case.
-The amount of untransferred data is large, (16388 bytes) so the TRB causing the short packet
-could be far from the last TRB we expect the event on.
-Due to new segment and link trb maybe the stored last_trb for this TD is just set wrong
+Fixed an uninitialized pointer variable which was reported by
+kernel test robot in "usb: dwc2: Add exit hibernation mode before
+removing drive" patch. After fixing added Reported-by tags for
+kernel test robot and Dan Carpenter.
 
-Anyway, more detailed traces together with dynamic debug show us more: 
+Also removed some text from cover letter because I think that is
+why vger.kernel.org was rejecting it.
 
-mount -t debugfs none /sys/kernel/debug
-echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
-echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
-echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
-< trigger the issue >
-Send output of dmesg
-Send content of /sys/kernel/debug/tracing/trace
 
-trace accumulates pretty fast so try to copy it as soon as the issue is seen.
+Artur Petrosyan (15):
+  usb: dwc2: Update exit hibernation when port reset is asserted
+  usb: dwc2: Reset DEVADDR after exiting gadget hibernation.
+  usb: dwc2: Fix host mode hibernation exit with remote wakeup flow.
+  usb: dwc2: Fix hibernation between host and device modes.
+  usb: dwc2: Allow exiting hibernation from gpwrdn rst detect
+  usb: dwc2: Clear fifo_map when resetting core.
+  usb: dwc2: Clear GINTSTS_RESTOREDONE bit after restore is generated.
+  usb: dwc2: Move enter hibernation to dwc2_port_suspend() function
+  usb: dwc2: Move exit hibernation to dwc2_port_resume() function
+  usb: dwc2: Allow exit hibernation in urb enqueue
+  usb: dwc2: Add hibernation entering flow by system suspend
+  usb: dwc2: Add hibernation exiting flow by system resume
+  usb: dwc2: Add exit hibernation mode before removing drive
+  usb: dwc2: Update dwc2_handle_usb_suspend_intr function.
+  usb: dwc2: Get rid of useless error checks in suspend interrupt
 
-Thanks
--Mathias
+ drivers/usb/dwc2/core.c      |  25 ++++-
+ drivers/usb/dwc2/core.h      |   3 +
+ drivers/usb/dwc2/core_intr.c | 205 +++++++++++++++++++----------------
+ drivers/usb/dwc2/gadget.c    |   4 +
+ drivers/usb/dwc2/hcd.c       |  92 +++++++++++++---
+ drivers/usb/dwc2/platform.c  |  15 +++
+ 6 files changed, 233 insertions(+), 111 deletions(-)
+
+
+base-commit: 4b853c236c7b5161a2e444bd8b3c76fe5aa5ddcb
+-- 
+2.25.1
 
