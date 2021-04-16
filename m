@@ -2,113 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0E8362794
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 20:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847F836283B
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Apr 2021 21:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244601AbhDPSTe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Apr 2021 14:19:34 -0400
-Received: from pop31.abv.bg ([194.153.145.221]:53764 "EHLO pop31.abv.bg"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236112AbhDPSTe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 16 Apr 2021 14:19:34 -0400
-X-Greylist: delayed 315 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Apr 2021 14:19:33 EDT
-Received: from smtp.abv.bg (localhost [127.0.0.1])
-        by pop31.abv.bg (Postfix) with ESMTP id 6B2ED1805913;
-        Fri, 16 Apr 2021 21:13:44 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abv.bg; s=smtp-out;
-        t=1618596824; bh=DFyGWRt2O/n2LfjlOnW/zpPJa0sAE+09jDo5uiYtOLU=;
-        h=From:Subject:Date:Cc:To:From;
-        b=B8qYhrcvPKG7LzA1pPv4Y3CDPe8q0m9e4trDm9TOJiqlB+HVEewZ3l5SxTQkARi/N
-         dDrSHRjDpFQ2ccCshXjbKo7ucc3146tpfhciL3mIDFBur8D9NA/JrE7MhIGmHPe8Ua
-         S2npeyDoFgSrOkHy1sDMiVTl0RnUE+oQ1IRbJGY4=
-X-HELO: [192.168.192.3]
-Authentication-Results: smtp.abv.bg; auth=pass (plain) smtp.auth=gvalkov@abv.bg
-Received: from 212-39-89-202.ip.btc-net.bg (HELO [192.168.192.3]) (212.39.89.202)
- by smtp.abv.bg (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-GCM-SHA384 encrypted); Fri, 16 Apr 2021 21:13:44 +0300
-From:   Georgi Valkov <gvalkov@abv.bg>
-Content-Type: text/plain;
-        charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.60.0.2.21\))
-Subject: usbnet: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-Message-Id: <833FE09E-2542-4F3F-87D6-DD03084C0FD5@abv.bg>
-Date:   Fri, 16 Apr 2021 21:13:40 +0300
-Cc:     oneukum@suse.com, matti.vuorela@bitfactor.fi
-To:     corsac@corsac.net, netdev@vger.kernel.org,
+        id S235868AbhDPTGX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Apr 2021 15:06:23 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:48621 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240078AbhDPTGW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Apr 2021 15:06:22 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1618599958; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=rLW2TDeU0Ndoi+Jgm2T0k+opB3RGan5znN4IbWOu1Yw=; b=jTloFo4T++CylfzIxdnVPPfSaTfF34jrq84HKPc4j9Nr44wC+9MxPdqB2bPgTPOsgaWEQbIL
+ wckM0/SMJnJLXK5lx3/9QPs0p2JNqSGu/6cIftFsSPZC7wDy6iqvU5F92r3skD7gzraFFKAY
+ jYZ3jEb4sGHOxyqFgH6YtEP7u8Y=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 6079e010215b831afbe5efc8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Apr 2021 19:05:52
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CE34CC43463; Fri, 16 Apr 2021 19:05:52 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.95.130] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B25FEC433CA;
+        Fri, 16 Apr 2021 19:05:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B25FEC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-X-Mailer: Apple Mail (2.3654.60.0.2.21)
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Ferry Toth <fntoth@gmail.com>, Yu Chen <chenyu56@huawei.com>
+References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
+ <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+ <87zgxymrph.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <63f0d8c2-1272-51a5-8f0b-8ae663ab5b94@codeaurora.org>
+Date:   Fri, 16 Apr 2021 12:05:48 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
+MIME-Version: 1.0
+In-Reply-To: <87zgxymrph.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Linux kernel team,
-
-Please accept the following important fix from me:
-https://github.com/httpstorm/linux-kernel/tree/ipheth-fix-RX-EOVERFLOW
-
-While commit f33d9e2b48a34e1558b67a473a1fc1d6e793f93c
-is required for iOS 14, only the TX buffers should be reduced
-to 1514 bytes. RX buffers should remain at 1516 bytes, because
-their size is reduced later by IPHETH_IP_ALIGN (2 bytes).
 
 
-=46rom dd109ded2b526636fff438d33433ab64ffd21583 Mon Sep 17 00:00:00 2001
-From: Georgi Valkov <gvalkov@abv.bg>
-Date: Fri, 16 Apr 2021 20:44:36 +0300
-Subject: [PATCH] usbnet: ipheth: fix EOVERFLOW in =
-ipheth_rcvbulk_callback
+On 4/16/2021 3:47 AM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> 
+>> From: Yu Chen <chenyu56@huawei.com>
+>> From: John Stultz <john.stultz@linaro.org>
+>>
+>> According to the programming guide, to switch mode for DRD controller,
+>> the driver needs to do the following.
+>>
+>> To switch from device to host:
+>> 1. Reset controller with GCTL.CoreSoftReset
+>> 2. Set GCTL.PrtCapDir(host mode)
+>> 3. Reset the host with USBCMD.HCRESET
+>> 4. Then follow up with the initializing host registers sequence
+>>
+>> To switch from host to device:
+>> 1. Reset controller with GCTL.CoreSoftReset
+>> 2. Set GCTL.PrtCapDir(device mode)
+>> 3. Reset the device with DCTL.CSftRst
+>> 4. Then follow up with the initializing registers sequence
+>>
+>> Currently we're missing step 1) to do GCTL.CoreSoftReset and step 3) of
+>> switching from host to device. John Stult reported a lockup issue seen
+>> with HiKey960 platform without these steps[1]. Similar issue is observed
+>> with Ferry's testing platform[2].
+>>
+>> So, apply the required steps along with some fixes to Yu Chen's and John
+>> Stultz's version. The main fixes to their versions are the missing wait
+>> for clocks synchronization before clearing GCTL.CoreSoftReset and only
+>> apply DCTL.CSftRst when switching from host to device.
+>>
+>> [1] https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/
+>> [2] https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/
+>>
+>> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+>> Cc: Ferry Toth <fntoth@gmail.com>
+>> Cc: Wesley Cheng <wcheng@codeaurora.org>
+>> Cc: <stable@vger.kernel.org>
+>> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
+>> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+>> Signed-off-by: John Stultz <john.stultz@linaro.org>
+>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> I still have concerns about the soft reset, but I won't block you guys
+> from fixing Hikey's problem :-)
+> 
+> The only thing I would like to confirm is that this has been verified
+> with hundreds of swaps happening as quickly as possible. DWC3 should
+> still be functional after several hundred swaps.
+> 
+> Can someone confirm this is the case? (I'm assuming this can be
+> scripted)
+> 
+Hi Thinh/Felipe,
 
-When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
-which reduces the usable size by 2 bytes. Otherwise we have 1512
-bytes usable instead of 1514, and if we receive more than 1512
-bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
-after which the driver malfunctiones and all communication stops.
+Thanks Thinh for this change.  Will verify this on our platform as well
+with a mode switch loop over the weekend.
 
-Fixes: ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
-
-Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
----
- drivers/net/usb/ipheth.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 207e59e74935..06d9f19ca142 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -121,7 +121,7 @@ static int ipheth_alloc_urbs(struct ipheth_device =
-*iphone)
- 	if (tx_buf =3D=3D NULL)
- 		goto free_rx_urb;
-=20
--	rx_buf =3D usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE,
-+	rx_buf =3D usb_alloc_coherent(iphone->udev, IPHETH_BUF_SIZE + =
-IPHETH_IP_ALIGN,
- 				    GFP_KERNEL, &rx_urb->transfer_dma);
- 	if (rx_buf =3D=3D NULL)
- 		goto free_tx_buf;
-@@ -146,7 +146,7 @@ static int ipheth_alloc_urbs(struct ipheth_device =
-*iphone)
-=20
- static void ipheth_free_urbs(struct ipheth_device *iphone)
- {
--	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->rx_buf,
-+	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE + =
-IPHETH_IP_ALIGN, iphone->rx_buf,
- 			  iphone->rx_urb->transfer_dma);
- 	usb_free_coherent(iphone->udev, IPHETH_BUF_SIZE, iphone->tx_buf,
- 			  iphone->tx_urb->transfer_dma);
-@@ -317,7 +317,7 @@ static int ipheth_rx_submit(struct ipheth_device =
-*dev, gfp_t mem_flags)
-=20
- 	usb_fill_bulk_urb(dev->rx_urb, udev,
- 			  usb_rcvbulkpipe(udev, dev->bulk_in),
--			  dev->rx_buf, IPHETH_BUF_SIZE,
-+			  dev->rx_buf, IPHETH_BUF_SIZE + =
-IPHETH_IP_ALIGN,
- 			  ipheth_rcvbulk_callback,
- 			  dev);
- 	dev->rx_urb->transfer_flags |=3D URB_NO_TRANSFER_DMA_MAP;
---=20
-2.31.1
-
-
+Thanks
+Wesley Cheng
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
