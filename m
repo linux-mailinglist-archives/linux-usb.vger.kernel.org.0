@@ -2,107 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6AA7362E28
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 08:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F20362E56
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 09:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235633AbhDQGtA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Apr 2021 02:49:00 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:17352 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbhDQGtA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 02:49:00 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.60])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FMkBD0tZSzBrJt;
-        Sat, 17 Apr 2021 14:46:12 +0800 (CST)
-Received: from [10.67.102.118] (10.67.102.118) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Sat, 17 Apr 2021 14:48:22 +0800
-Subject: Re: [RFC PATCH] USB:XHCI:skip hub registration
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     <gregkh@linuxfoundation.org>, <mathias.nyman@intel.com>,
-        <liudongdong3@huawei.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kong.kongxinwei@hisilicon.com>,
-        <yisen.zhuang@huawei.com>
-References: <1618489358-42283-1-git-send-email-liulongfang@huawei.com>
- <20210415144323.GC1530055@rowland.harvard.edu>
- <3dad6f4f-6386-427c-c36c-7d26b9a76fa4@huawei.com>
- <20210416152021.GA42403@rowland.harvard.edu>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <547e07d6-ae62-1225-7483-754bf57ed1d2@huawei.com>
-Date:   Sat, 17 Apr 2021 14:48:22 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S231307AbhDQHeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Apr 2021 03:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230367AbhDQHeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 03:34:24 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D050BC06175F
+        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 00:33:56 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id w7-20020a1cdf070000b0290125f388fb34so15167047wmg.0
+        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 00:33:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=t2PuuUA12ZEnJWsd6YLi9cc3wxXcwVJFuOyD1wnS6OM=;
+        b=pmhF+WTP+Ba12SgtIwGUtUkRednpbJOphYQF7Sc3f9YBSYoBHUSUVotD4mbokEndE6
+         li8B4mWs33//ONJRhSoLSEn03bM9/txoteu/On9gnrXpySKZiyBHHbLVt40g6mq2oSru
+         h/7BUYdb9a8IoNY+Z/LqK9v7PWly/8nuhEaPYSaL7Gut7Yq35nakD5KRhnVfiWVThSmN
+         qzKiYM8mCPC3J7/a+RWxgDRkXohuhesteGKMSGzTOELWksCfdrS13wyrKYixKrVw0xXx
+         ehY6CQNA/Wi9+YtOE2hSUlFDo0QpngnvKnJ+3KfdstZCXV3Ic9L7pMegNXOv3BiLLJ3I
+         V3iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=t2PuuUA12ZEnJWsd6YLi9cc3wxXcwVJFuOyD1wnS6OM=;
+        b=uXRiUq1TmY3mZmSXP7uhJ3X9AwDlq+ss0vgQRYCTjE2rQ31hCnvwqthr5wmdIYL6wR
+         Xjm8uSWswhwEaqeFj0mmYKMD5Z888wvoQbiJTGozQIhfrbm8i8BAHyEE3zjhCQKB7maF
+         V5siQMqjHtC1Z1fBNA7XlnRSruHVMm57FcQ3wjqCevPfrTTvErBYk5ilfT6wFEKo/kRv
+         et63tWhUdJpAKwDdGT8l8lbY+vJClIW9F0xNXJln4JjJIngk9lzk55cKE1pUazpNkxMw
+         b3fil28cNYlW99NQSTnHjkTX3iBbSYpxNshAiLn5I/FtUG0TmDURQAhGwymXMg5LeMwQ
+         8MDA==
+X-Gm-Message-State: AOAM533ryy1ToM0/FRfVG2TPsK1PCJ99myvcLm0/8MSeunun29mzvQE8
+        iv4dmdB5+z/362lKQTZQq+kxv3XrAh21wkCR/8Y=
+X-Google-Smtp-Source: ABdhPJybyNUoUHv8vuDBeL0RQqfI8LiwWMtSvRfQ+2MqNh6V90M9ea8k1kORNkaORqE9c91QMjZzlowQc9UFaETUx6c=
+X-Received: by 2002:a05:600c:4f94:: with SMTP id n20mr11543865wmq.18.1618644835458;
+ Sat, 17 Apr 2021 00:33:55 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210416152021.GA42403@rowland.harvard.edu>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.118]
-X-CFilter-Loop: Reflected
+Sender: aslamlaghari98765@gmail.com
+Received: by 2002:a7b:ca58:0:0:0:0:0 with HTTP; Sat, 17 Apr 2021 00:33:55
+ -0700 (PDT)
+From:   "Mr. Dabire Basole" <mrdabirebsole@gmail.com>
+Date:   Sat, 17 Apr 2021 00:33:55 -0700
+X-Google-Sender-Auth: jru4ARt7NeAKlTeDZfsxkWe9vz4
+Message-ID: <CAK8saBMVEvzsLB2F2jayVuEU4KaLOO0cHqA-5Hx4pj=w+cBFVw@mail.gmail.com>
+Subject: PERSONAL TREAT AS URGENT.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/4/16 23:20, Alan Stern wrote:
-> On Fri, Apr 16, 2021 at 10:03:21AM +0800, liulongfang wrote:
->> On 2021/4/15 22:43, Alan Stern wrote:
->>> On Thu, Apr 15, 2021 at 08:22:38PM +0800, Longfang Liu wrote:
->>>> When the number of ports on the USB hub is 0, skip the registration
->>>> operation of the USB hub.
->>>>
->>>> The current Kunpeng930's XHCI hardware controller is defective. The number
->>>> of ports on its USB3.0 bus controller is 0, and the number of ports on
->>>> the USB2.0 bus controller is 1.
->>>>
->>>> In order to solve this problem that the USB3.0 controller does not have
->>>> a port which causes the registration of the hub to fail, this patch passes
->>>> the defect information by adding flags in the quirks of xhci and usb_hcd,
->>>> and finally skips the registration process of the hub directly according
->>>> to the results of these flags when the hub is initialized.
->>>>
->>>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->>>
->>> The objections that Greg raised are all good ones.
->>>
->>> But even aside from them, this patch doesn't actually do what the 
->>> description says.  The patch doesn't remove the call to usb_add_hcd 
->>> for the USB-3 bus.  If you simply skipped that call (and the 
->>> corresponding call to usb_remove_hcd) when there are no 
->>> ports on the root hub, none of the stuff in this patch would be needed.
->>>
->>> Alan Stern
->>>
->>
->> "[RFC PATCH] USB:XHCI:Adjust the log level of hub"
-> 
-> I don't understand.  What patch is that?  Do you have a URL for it?
-> 
->> The current method is an improved method of the above patch.
->> This patch just make it skip registering USB-3 root hub if that hub has no ports,
-> 
-> No, that isn't what this patch does.
-> 
-> If the root hub wasn't registered, hub_probe wouldn't get called.  But 
-> with your patch, the system tries to register the root hub, and it does 
-> call hub_probe, and then that function fails with a warning message.
-> 
-> The way to _really_ akip registering the root hub is to change the 
-> xhci-hcd code.  Make it skip calling usb_add_hcd.
-> 
+Dear Friend,
 
-If you do not register in the root hub, this will return an error code,
-which will make all the XHCI drivers unregister, causing the USB2.0 controllers
-on the xhci to be unavailable.
-Thanks,
-Longfang.
+Greetings!
 
->> after skipping registering, no port will not report error log,the goal of this
->> patch is reached without error log output.
-> 
-> Why do you want to get rid of the error log output?  There really _is_ 
-> an error, because the USB-3 hardware on your controller is defective.  
-> Since the hardware is buggy, we _should_ print an error message in the 
-> kernel log.
-> 
-> Alan Stern
-> .
-> 
+How are you with your family today? I hope both of you are in good
+health decently, I know that this message might meet you in utmost
+surprise as we never know each other before. I am Mr. Dabire Basole a
+banker by profession, I need your urgent assist in transferring the
+sum of USD$18.6 ( Eighteen Million Six Hundred Thousand United State Dollars)
+into your account. It is 100% risk free and under this achievement you are
+entitled to receive 50% of the total cash and 50% will be for me.
+More details will be sent to you on confirmation of your interest.
+Please if you are real interest on my proposer, just providing me your
+following information details such as:
+
+(1)NAME..............
+(2)AGE:................
+(3)SEX:.....................
+(4)PHONE NUMBER:.................
+(5)OCCUPATION:................ .....
+(6)YOUR COUNTRY:.....................
+
+Yours sincerely,
+
+Mr.  Dabire Basole.
