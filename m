@@ -2,122 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8191A362F08
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 11:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580C6362F4D
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 12:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236053AbhDQJvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Apr 2021 05:51:43 -0400
-Received: from cable.insite.cz ([84.242.75.189]:50272 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231387AbhDQJvm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 17 Apr 2021 05:51:42 -0400
-X-Greylist: delayed 466 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Apr 2021 05:51:42 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 637E3A1A3D401;
-        Sat, 17 Apr 2021 11:43:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1618652606; bh=ZWpJY/HjT8t8Njrqdqjjue1gioq82r4lxM1RGXN8Flw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GmzKoCcPHrYNDbynyt2lTVBSVgD55CRFzHkFlMAT6Hc56zrnm2U8PQRffr+d87Y8a
-         wNjY1XK6vEgLY4LX1z50S3hqBV1UQAWArgYXTkwLB6LGkcz6k61LokNaiEOkoaHI/h
-         58i9AJkIZTbWSBAZ1MgHAFY4shui2Z9VRl5O757c=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IUa4vBq-Qe0l; Sat, 17 Apr 2021 11:43:20 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 18EEBA1A3D400;
-        Sat, 17 Apr 2021 11:43:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1618652600; bh=ZWpJY/HjT8t8Njrqdqjjue1gioq82r4lxM1RGXN8Flw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=S++3gDgjjyPJPBdDsWj6j8lMbUKMhOv3goECWHx8xklM4loqtb2WFD2Is0/xC9w2j
-         588nsHbMyPAqJs1sWkMms49qHmrtNVZeoYXgBvW7eyhl751wjsK+yD148oGICNui4m
-         o7FCkBcSE6pxAeHQ0NjaeIhyhcUuxa3Y1edY0rKo=
-Subject: Re: [PATCH 2/8] usb: gadget: f_uac2/u_audio: add feedback endpoint
- support
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     gschmottlach@gmail.com, linux-usb@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
- <1614603943-11668-3-git-send-email-ruslan.bilovol@gmail.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <be928b87-9ebe-43da-216d-40904b7ef8e0@ivitera.com>
-Date:   Sat, 17 Apr 2021 11:43:15 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S235947AbhDQKld (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Apr 2021 06:41:33 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:49953 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229972AbhDQKlc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 06:41:32 -0400
+Received: by mail-io1-f70.google.com with SMTP id o9-20020a5e8a490000b02903e6e5e5c905so6065422iom.16
+        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 03:41:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=ZMFTNQeCTle+JOxNQUUj2Qa6vRxCvq28DqbicLlCP58=;
+        b=cU5Ug66POllz2xYVmJgdGQRXzgA9I/swNsR/Yi2SQDOzCcLFT9GwASZ4RlPCjOZ0nJ
+         gRbQtkdEYu2kOsHjxWIUWuTYOtfjVv8A+l1aOVnlJRudmNElrM+Fno3N421e7SwkaJzT
+         McILZjB/5hn6XT2I3HDytjvIUJBwpo6hPp7Smp3bl2F0j6xWutEQe9nlFIXiS08SrLIV
+         xewqnlY94EOftvj5dqEIYixDfoDpChDeJus8XxFhGObU4zL4QVdy9p0Rh/9WLNxZyQfW
+         50fMFyEQX3KPF6SV0DfxMOlA884/DvYihaf03Fd7kbhRtzLYRwWcOfFyPEhUX/ZbWVUP
+         oIZQ==
+X-Gm-Message-State: AOAM533dpBRUUDR9sRdBkeNSwqSbgMZi7zFgY/7iHzWEwUEYVQYFp6+x
+        foKQSyToQuf5IEXeCmpeO5YJMYRSA4P7crWdAG8qswWjlZWp
+X-Google-Smtp-Source: ABdhPJxhZRVACpoCVgt19B30+9dhxa73OLcofAwjzl/FYerzWVhf6U6gXPuMEo77zDC2iyDSdn4lPzPcKlU8vbfYfw4tw8GiZzMa
 MIME-Version: 1.0
-In-Reply-To: <1614603943-11668-3-git-send-email-ruslan.bilovol@gmail.com>
-Content-Type: text/plain; charset=iso-8859-2
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6602:2bc7:: with SMTP id s7mr7317978iov.52.1618656066344;
+ Sat, 17 Apr 2021 03:41:06 -0700 (PDT)
+Date:   Sat, 17 Apr 2021 03:41:06 -0700
+In-Reply-To: <00000000000082554705ba5fe454@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d91f7905c028bbf4@google.com>
+Subject: Re: [syzbot] INFO: task hung in usb_remote_wakeup (2)
+From:   syzbot <syzbot+85439002c78b774488d8@syzkaller.appspotmail.com>
+To:     erosca@de.adit-jv.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        oneukum@suse.com, skhan@linuxfoundation.org,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
+        zakia@firesystem.co.nz
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne 01. 03. 21 v 14:05 Ruslan Bilovol napsal(a):
-> +static void u_audio_set_fback_frequency(enum usb_device_speed speed,
-> +					unsigned int freq, void *buf)
-> +{
-> +	u32 ff = 0;
-> +
-> +	if (speed == USB_SPEED_FULL) {
-> +		/*
-> +		 * Full-speed feedback endpoints report frequency
-> +		 * in samples/microframe
-> +		 * Format is encoded in Q10.10 left-justified in the 24 bits,
-> +		 * so that it has a Q10.14 format.
-> +		 */
-> +		ff = DIV_ROUND_UP((freq << 14), 1000);
-> +	} else {
-> +		/*
-> +		 * High-speed feedback endpoints report frequency
-> +		 * in samples/microframe.
-> +		 * Format is encoded in Q12.13 fitted into four bytes so that
-> +		 * the binary point is located between the second and the third
-> +		 * byte format (that is Q16.16)
-> +		 *
-> +		 * Prevent integer overflow by calculating in Q12.13 format and
-> +		 * then shifting to Q16.16
-> +		 */
-> +		ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
-> +	}
+syzbot suspects this issue was fixed by commit:
 
-Hi Ruslan,
+commit 363eaa3a450abb4e63bd6e3ad79d1f7a0f717814
+Author: Shuah Khan <skhan@linuxfoundation.org>
+Date:   Tue Mar 30 01:36:51 2021 +0000
 
-Thanks a lot for your patch. The HS calculation of Q16.16 feedback value
-overflows at some 524kHz, disallowing use of larger samplerates (e.g.
-768kHz or higher).
+    usbip: synchronize event handler with sysfs code paths
 
-I tested the formula used in alsa USB driver
-https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
-which uses only 10bit shift. The feedback control in UAC2 gadget now
-works up to 4M samplerate with 1Hz precision (tested on RPi4 with
-bInterval = 1, checked in stream0 proc file on linux host).
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16c89e91d00000
+start commit:   bec4c296 Merge tag 'ecryptfs-5.11-rc6-setxattr-fix' of git..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9408d1770a50819c
+dashboard link: https://syzkaller.appspot.com/bug?extid=85439002c78b774488d8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138d0264d00000
 
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
-usb_device_speed speed,
-                 * Prevent integer overflow by calculating in Q12.13
-format and
-                 * then shifting to Q16.16
-                 */
--               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
-+               //ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
-+               ff = ((freq << 10) + 62) / 125;
-        }
-        *(__le32 *)buf = cpu_to_le32(ff);
- }
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: usbip: synchronize event handler with sysfs code paths
 
-Best regards,
-
-Pavel.
-
-
-
-
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
