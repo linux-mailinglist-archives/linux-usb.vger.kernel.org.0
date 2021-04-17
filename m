@@ -2,83 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F20362E56
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 09:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8191A362F08
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 11:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbhDQHeZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Apr 2021 03:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbhDQHeY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 03:34:24 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D050BC06175F
-        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 00:33:56 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id w7-20020a1cdf070000b0290125f388fb34so15167047wmg.0
-        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 00:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=t2PuuUA12ZEnJWsd6YLi9cc3wxXcwVJFuOyD1wnS6OM=;
-        b=pmhF+WTP+Ba12SgtIwGUtUkRednpbJOphYQF7Sc3f9YBSYoBHUSUVotD4mbokEndE6
-         li8B4mWs33//ONJRhSoLSEn03bM9/txoteu/On9gnrXpySKZiyBHHbLVt40g6mq2oSru
-         h/7BUYdb9a8IoNY+Z/LqK9v7PWly/8nuhEaPYSaL7Gut7Yq35nakD5KRhnVfiWVThSmN
-         qzKiYM8mCPC3J7/a+RWxgDRkXohuhesteGKMSGzTOELWksCfdrS13wyrKYixKrVw0xXx
-         ehY6CQNA/Wi9+YtOE2hSUlFDo0QpngnvKnJ+3KfdstZCXV3Ic9L7pMegNXOv3BiLLJ3I
-         V3iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=t2PuuUA12ZEnJWsd6YLi9cc3wxXcwVJFuOyD1wnS6OM=;
-        b=uXRiUq1TmY3mZmSXP7uhJ3X9AwDlq+ss0vgQRYCTjE2rQ31hCnvwqthr5wmdIYL6wR
-         Xjm8uSWswhwEaqeFj0mmYKMD5Z888wvoQbiJTGozQIhfrbm8i8BAHyEE3zjhCQKB7maF
-         V5siQMqjHtC1Z1fBNA7XlnRSruHVMm57FcQ3wjqCevPfrTTvErBYk5ilfT6wFEKo/kRv
-         et63tWhUdJpAKwDdGT8l8lbY+vJClIW9F0xNXJln4JjJIngk9lzk55cKE1pUazpNkxMw
-         b3fil28cNYlW99NQSTnHjkTX3iBbSYpxNshAiLn5I/FtUG0TmDURQAhGwymXMg5LeMwQ
-         8MDA==
-X-Gm-Message-State: AOAM533ryy1ToM0/FRfVG2TPsK1PCJ99myvcLm0/8MSeunun29mzvQE8
-        iv4dmdB5+z/362lKQTZQq+kxv3XrAh21wkCR/8Y=
-X-Google-Smtp-Source: ABdhPJybyNUoUHv8vuDBeL0RQqfI8LiwWMtSvRfQ+2MqNh6V90M9ea8k1kORNkaORqE9c91QMjZzlowQc9UFaETUx6c=
-X-Received: by 2002:a05:600c:4f94:: with SMTP id n20mr11543865wmq.18.1618644835458;
- Sat, 17 Apr 2021 00:33:55 -0700 (PDT)
+        id S236053AbhDQJvn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Apr 2021 05:51:43 -0400
+Received: from cable.insite.cz ([84.242.75.189]:50272 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231387AbhDQJvm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 17 Apr 2021 05:51:42 -0400
+X-Greylist: delayed 466 seconds by postgrey-1.27 at vger.kernel.org; Sat, 17 Apr 2021 05:51:42 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 637E3A1A3D401;
+        Sat, 17 Apr 2021 11:43:26 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1618652606; bh=ZWpJY/HjT8t8Njrqdqjjue1gioq82r4lxM1RGXN8Flw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=GmzKoCcPHrYNDbynyt2lTVBSVgD55CRFzHkFlMAT6Hc56zrnm2U8PQRffr+d87Y8a
+         wNjY1XK6vEgLY4LX1z50S3hqBV1UQAWArgYXTkwLB6LGkcz6k61LokNaiEOkoaHI/h
+         58i9AJkIZTbWSBAZ1MgHAFY4shui2Z9VRl5O757c=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IUa4vBq-Qe0l; Sat, 17 Apr 2021 11:43:20 +0200 (CEST)
+Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 18EEBA1A3D400;
+        Sat, 17 Apr 2021 11:43:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1618652600; bh=ZWpJY/HjT8t8Njrqdqjjue1gioq82r4lxM1RGXN8Flw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=S++3gDgjjyPJPBdDsWj6j8lMbUKMhOv3goECWHx8xklM4loqtb2WFD2Is0/xC9w2j
+         588nsHbMyPAqJs1sWkMms49qHmrtNVZeoYXgBvW7eyhl751wjsK+yD148oGICNui4m
+         o7FCkBcSE6pxAeHQ0NjaeIhyhcUuxa3Y1edY0rKo=
+Subject: Re: [PATCH 2/8] usb: gadget: f_uac2/u_audio: add feedback endpoint
+ support
+To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     gschmottlach@gmail.com, linux-usb@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1614603943-11668-1-git-send-email-ruslan.bilovol@gmail.com>
+ <1614603943-11668-3-git-send-email-ruslan.bilovol@gmail.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <be928b87-9ebe-43da-216d-40904b7ef8e0@ivitera.com>
+Date:   Sat, 17 Apr 2021 11:43:15 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Sender: aslamlaghari98765@gmail.com
-Received: by 2002:a7b:ca58:0:0:0:0:0 with HTTP; Sat, 17 Apr 2021 00:33:55
- -0700 (PDT)
-From:   "Mr. Dabire Basole" <mrdabirebsole@gmail.com>
-Date:   Sat, 17 Apr 2021 00:33:55 -0700
-X-Google-Sender-Auth: jru4ARt7NeAKlTeDZfsxkWe9vz4
-Message-ID: <CAK8saBMVEvzsLB2F2jayVuEU4KaLOO0cHqA-5Hx4pj=w+cBFVw@mail.gmail.com>
-Subject: PERSONAL TREAT AS URGENT.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1614603943-11668-3-git-send-email-ruslan.bilovol@gmail.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Friend,
+Dne 01. 03. 21 v 14:05 Ruslan Bilovol napsal(a):
+> +static void u_audio_set_fback_frequency(enum usb_device_speed speed,
+> +					unsigned int freq, void *buf)
+> +{
+> +	u32 ff = 0;
+> +
+> +	if (speed == USB_SPEED_FULL) {
+> +		/*
+> +		 * Full-speed feedback endpoints report frequency
+> +		 * in samples/microframe
+> +		 * Format is encoded in Q10.10 left-justified in the 24 bits,
+> +		 * so that it has a Q10.14 format.
+> +		 */
+> +		ff = DIV_ROUND_UP((freq << 14), 1000);
+> +	} else {
+> +		/*
+> +		 * High-speed feedback endpoints report frequency
+> +		 * in samples/microframe.
+> +		 * Format is encoded in Q12.13 fitted into four bytes so that
+> +		 * the binary point is located between the second and the third
+> +		 * byte format (that is Q16.16)
+> +		 *
+> +		 * Prevent integer overflow by calculating in Q12.13 format and
+> +		 * then shifting to Q16.16
+> +		 */
+> +		ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
+> +	}
 
-Greetings!
+Hi Ruslan,
 
-How are you with your family today? I hope both of you are in good
-health decently, I know that this message might meet you in utmost
-surprise as we never know each other before. I am Mr. Dabire Basole a
-banker by profession, I need your urgent assist in transferring the
-sum of USD$18.6 ( Eighteen Million Six Hundred Thousand United State Dollars)
-into your account. It is 100% risk free and under this achievement you are
-entitled to receive 50% of the total cash and 50% will be for me.
-More details will be sent to you on confirmation of your interest.
-Please if you are real interest on my proposer, just providing me your
-following information details such as:
+Thanks a lot for your patch. The HS calculation of Q16.16 feedback value
+overflows at some 524kHz, disallowing use of larger samplerates (e.g.
+768kHz or higher).
 
-(1)NAME..............
-(2)AGE:................
-(3)SEX:.....................
-(4)PHONE NUMBER:.................
-(5)OCCUPATION:................ .....
-(6)YOUR COUNTRY:.....................
+I tested the formula used in alsa USB driver
+https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
+which uses only 10bit shift. The feedback control in UAC2 gadget now
+works up to 4M samplerate with 1Hz precision (tested on RPi4 with
+bInterval = 1, checked in stream0 proc file on linux host).
 
-Yours sincerely,
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
+usb_device_speed speed,
+                 * Prevent integer overflow by calculating in Q12.13
+format and
+                 * then shifting to Q16.16
+                 */
+-               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
++               //ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
++               ff = ((freq << 10) + 62) / 125;
+        }
+        *(__le32 *)buf = cpu_to_le32(ff);
+ }
 
-Mr.  Dabire Basole.
+
+Best regards,
+
+Pavel.
+
+
+
+
