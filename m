@@ -2,68 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580C6362F4D
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 12:41:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE00363018
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Apr 2021 15:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235947AbhDQKld (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Apr 2021 06:41:33 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:49953 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbhDQKlc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 06:41:32 -0400
-Received: by mail-io1-f70.google.com with SMTP id o9-20020a5e8a490000b02903e6e5e5c905so6065422iom.16
-        for <linux-usb@vger.kernel.org>; Sat, 17 Apr 2021 03:41:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=ZMFTNQeCTle+JOxNQUUj2Qa6vRxCvq28DqbicLlCP58=;
-        b=cU5Ug66POllz2xYVmJgdGQRXzgA9I/swNsR/Yi2SQDOzCcLFT9GwASZ4RlPCjOZ0nJ
-         gRbQtkdEYu2kOsHjxWIUWuTYOtfjVv8A+l1aOVnlJRudmNElrM+Fno3N421e7SwkaJzT
-         McILZjB/5hn6XT2I3HDytjvIUJBwpo6hPp7Smp3bl2F0j6xWutEQe9nlFIXiS08SrLIV
-         xewqnlY94EOftvj5dqEIYixDfoDpChDeJus8XxFhGObU4zL4QVdy9p0Rh/9WLNxZyQfW
-         50fMFyEQX3KPF6SV0DfxMOlA884/DvYihaf03Fd7kbhRtzLYRwWcOfFyPEhUX/ZbWVUP
-         oIZQ==
-X-Gm-Message-State: AOAM533dpBRUUDR9sRdBkeNSwqSbgMZi7zFgY/7iHzWEwUEYVQYFp6+x
-        foKQSyToQuf5IEXeCmpeO5YJMYRSA4P7crWdAG8qswWjlZWp
-X-Google-Smtp-Source: ABdhPJxhZRVACpoCVgt19B30+9dhxa73OLcofAwjzl/FYerzWVhf6U6gXPuMEo77zDC2iyDSdn4lPzPcKlU8vbfYfw4tw8GiZzMa
+        id S236382AbhDQM5T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Apr 2021 08:57:19 -0400
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21355 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232844AbhDQM5S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Apr 2021 08:57:18 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1618664186; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Kl0qdWuQUh1+VMZEeMoii34QJ1iZfcwS/JZB5vwLosGnVoccjp4ovzRyrZ0NOBQin4qOFjaoqHVYT6EATVRd7hXkhmsb7mhAI2kIseltB2xzefWNeZHow/znXRDP6zc6bThdMAt7H+RigHdTR12th1cnQmWMXNfXpHWg6kvV0uI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1618664186; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=EXUFXaF4UD5fFZKbQ/JuXCwDnxeLnAJK2W2+jajVsgc=; 
+        b=GPRitUZLWln5jalg36npSrbkfnvSWnEb+EwrWkvmcv+KigE9nZkp6mpvxtsCuzSfOgU9CUH3F2ZJFzZmPBXDnfcOJIYnfqUQTVcN5Almg/arQhxhClHGg9xZBmIkmE+hROzaVwtOWVamMOEFnYpp1t9h7A7GAK+HfW3gBSgTGus=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com> header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1618664186;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+        bh=EXUFXaF4UD5fFZKbQ/JuXCwDnxeLnAJK2W2+jajVsgc=;
+        b=aOyA621xttZ89/a4LfbPLfn/Wt5hqp44LDJe9to5tyg3i/UZ4HbPSmyEPB1DswRG
+        4VAqbMSi3Bv0GRDg5gtyLyKQV2w0h5vmGZJvJHcjtgWXzVxSjy7nIqjnX3zAH0XJcqQ
+        KfNKLDM9vDo5vfcA3puNWh+BQdVvMEgET5DYy114=
+Received: from localhost.localdomain (49.207.216.151 [49.207.216.151]) by mx.zohomail.com
+        with SMTPS id 1618664184976254.24926670003583; Sat, 17 Apr 2021 05:56:24 -0700 (PDT)
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        "Ahmed S. Darwish" <a.darwish@linutronix.de>,
+        Colin Ian King <colin.king@canonical.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: dummy_hcd: fix gpf in gadget_setup
+Date:   Sat, 17 Apr 2021 18:22:09 +0530
+Message-Id: <20210417125212.6274-1-mail@anirudhrb.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2bc7:: with SMTP id s7mr7317978iov.52.1618656066344;
- Sat, 17 Apr 2021 03:41:06 -0700 (PDT)
-Date:   Sat, 17 Apr 2021 03:41:06 -0700
-In-Reply-To: <00000000000082554705ba5fe454@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d91f7905c028bbf4@google.com>
-Subject: Re: [syzbot] INFO: task hung in usb_remote_wakeup (2)
-From:   syzbot <syzbot+85439002c78b774488d8@syzkaller.appspotmail.com>
-To:     erosca@de.adit-jv.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        oneukum@suse.com, skhan@linuxfoundation.org,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com,
-        zakia@firesystem.co.nz
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Fix a general protection fault reported by syzbot due to a race between
+gadget_setup() and gadget_unbind() in raw_gadget.
 
-commit 363eaa3a450abb4e63bd6e3ad79d1f7a0f717814
-Author: Shuah Khan <skhan@linuxfoundation.org>
-Date:   Tue Mar 30 01:36:51 2021 +0000
+The gadget core is supposed to guarantee that there won't be any more
+callbacks to the gadget driver once the driver's unbind routine is
+called. That guarantee is enforced in usb_gadget_remove_driver as
+follows:
 
-    usbip: synchronize event handler with sysfs code paths
+        usb_gadget_disconnect(udc->gadget);
+        if (udc->gadget->irq)
+                synchronize_irq(udc->gadget->irq);
+        udc->driver->unbind(udc->gadget);
+        usb_gadget_udc_stop(udc);
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16c89e91d00000
-start commit:   bec4c296 Merge tag 'ecryptfs-5.11-rc6-setxattr-fix' of git..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9408d1770a50819c
-dashboard link: https://syzkaller.appspot.com/bug?extid=85439002c78b774488d8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=138d0264d00000
+usb_gadget_disconnect turns off the pullup resistor, telling the host
+that the gadget is no longer connected and preventing the transmission
+of any more USB packets. Any packets that have already been received
+are sure to processed by the UDC driver's interrupt handler by the time
+synchronize_irq returns.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+But this doesn't work with dummy_hcd, because dummy_hcd doesn't use
+interrupts; it uses a timer instead.  It does have code to emulate the
+effect of synchronize_irq, but that code doesn't get invoked at the
+right time -- it currently runs in usb_gadget_udc_stop, after the unbind
+callback instead of before.  Indeed, there's no way for
+usb_gadget_remove_driver to invoke this code before the unbind
+callback.
 
-#syz fix: usbip: synchronize event handler with sysfs code paths
+To fix this, move the synchronize_irq() emulation code to dummy_pullup
+so that it runs before unbind. Also, add a comment explaining why it is
+necessary to have it there.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-by: syzbot+eb4674092e6cc8d9e0bd@syzkaller.appspotmail.com
+Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+---
+ drivers/usb/gadget/udc/dummy_hcd.c | 23 +++++++++++++++--------
+ 1 file changed, 15 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/dummy_hcd.c b/drivers/usb/gadget/udc/dummy_hcd.c
+index ce24d4f28f2a..d0dae6406612 100644
+--- a/drivers/usb/gadget/udc/dummy_hcd.c
++++ b/drivers/usb/gadget/udc/dummy_hcd.c
+@@ -903,6 +903,21 @@ static int dummy_pullup(struct usb_gadget *_gadget, int value)
+ 	spin_lock_irqsave(&dum->lock, flags);
+ 	dum->pullup = (value != 0);
+ 	set_link_state(dum_hcd);
++	if (value == 0) {
++		/*
++		 * emulate synchronize_irq(): wait for callbacks to finish
++		 * This seems to be the best to place to emulate the call
++		 * to synchronize_irq(). Doing it in dummy_udc_stop() would
++		 * be too late since it is called after the unbind callback.
++		 * Also, there is no way for core:usb_gadget_remove_driver()
++		 * to invoke this code before the unbind callback.
++		 */
++		while (dum->callback_usage > 0) {
++			spin_unlock_irqrestore(&dum->lock, flags);
++			usleep_range(1000, 2000);
++			spin_lock_irqsave(&dum->lock, flags);
++		}
++	}
+ 	spin_unlock_irqrestore(&dum->lock, flags);
+ 
+ 	usb_hcd_poll_rh_status(dummy_hcd_to_hcd(dum_hcd));
+@@ -1004,14 +1019,6 @@ static int dummy_udc_stop(struct usb_gadget *g)
+ 	spin_lock_irq(&dum->lock);
+ 	dum->ints_enabled = 0;
+ 	stop_activity(dum);
+-
+-	/* emulate synchronize_irq(): wait for callbacks to finish */
+-	while (dum->callback_usage > 0) {
+-		spin_unlock_irq(&dum->lock);
+-		usleep_range(1000, 2000);
+-		spin_lock_irq(&dum->lock);
+-	}
+-
+ 	dum->driver = NULL;
+ 	spin_unlock_irq(&dum->lock);
+ 
+-- 
+2.26.2
+
