@@ -2,386 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B19363C73
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 09:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2149D363C7A
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 09:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233438AbhDSH1t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 03:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbhDSH1q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 03:27:46 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B951C06174A
-        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 00:27:16 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 30so16420509qva.9
-        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 00:27:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=in1fl7JgVJs8RxW7lhPIOC62QhzWHD/OA2X7ksEE5pI=;
-        b=euF8xFOAWoOUq8w3Qqyvnq0eguiRdluflGzcVRZQJN2Kxpir3vA7zVyGYR6IU3elcN
-         mxs8z1E4pJwMQVNFwO3E1T1iHJOe2JrmHF0I84vPK/1rkf1bk0gJLpFTXr7KntFoi+eT
-         uwO0u1vMJ03sdyNIoby+QyDkIM0QrdsBheioM3aUSxgqTzniR5LqBIcaojnaaCdGvlP9
-         6txJDO5Q1feNsId4/koRZRtQ4ZRQI2kuoE4zDn4xU+hN1XxCpZD6r3doIx0/KizeHu/a
-         qU428eSqVYFExgFfmCAUtQUfN2fcrotZWrDVSO8P+PKC+cZyN2dUHPz7FcBaKgPxBepS
-         JDtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=in1fl7JgVJs8RxW7lhPIOC62QhzWHD/OA2X7ksEE5pI=;
-        b=NKf/qmO8A6WUh7k7X+o8ZU7PGPbAGZUgyqmIWvWGOTaU+3W/2d3byl1QZXdXM9uSLv
-         Nxsc3fF5btlVjr2CWvXXUnruS7Y2/wsMjo4DZC8t3N+2b4KvoC0E1oZ2+/gJrpPLZe8A
-         BWseXKRxXzRdGG7LOEAbLY/4L+Ve8effpQitfGcgW4nenVK25C7os2gJTTBthpvB7c3C
-         hSCuubhLjUF5OFH5Yas9VJuo9Nd4VpxJ7DFIekIIZt0erBvuuoPDIgNQ8jL8jZ3ZsXeb
-         dvYmoRPbXCBaFKGFLBwqhhNGNnbeHFia4Dhr7PhtqC8bTzDVpDznLyLlw/cKhFxE76p+
-         EpoQ==
-X-Gm-Message-State: AOAM532ofqXYl8vlTWXel2+qTkxvYd6hK8n7HZJ6Kvk9LNN0PZYnV0vt
-        Awp8BwkcWfS/gil7wM4kfw4nsCmbx0EQjeZn4Iwr+A==
-X-Google-Smtp-Source: ABdhPJy39cbUpyW+WeDpxKHTg1ukUnaGfmuJvhBWubRr1ulucgMzy4RSDj6rZJaHQzUwOmtdgCZzetc9M3YSOxEWeR4=
-X-Received: by 2002:ad4:4312:: with SMTP id c18mr19736122qvs.44.1618817235013;
- Mon, 19 Apr 2021 00:27:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000a9b79905c04e25a0@google.com>
-In-Reply-To: <000000000000a9b79905c04e25a0@google.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 19 Apr 2021 09:27:03 +0200
-Message-ID: <CACT4Y+aF64oNZD7Vd04bj+KfBU5GqVobCbRPp2-x_Z6dEr8d3A@mail.gmail.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in tx
-To:     syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        id S237688AbhDSHay (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 03:30:54 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:37292 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232530AbhDSHax (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 03:30:53 -0400
+Received: from mailhost.synopsys.com (badc-mailhost3.synopsys.com [10.192.0.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id C912D4023A;
+        Mon, 19 Apr 2021 07:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1618817424; bh=4TKWjBZJKyneG66a2CpVz0fU+L0JTNge2EBSZm4wbjg=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=cA+eXdpn2B5TGrnfahOQnF0GCiMJ0tSbFph8pm6208hHJYnI1hLdH8IfT+ZzRU621
+         /G7Nj37fyL64Ace2Pjg/qtKzgl9lmnIJ4ADwLoDM5/pRTAio5qFvnlw6Zgcs0WF2rW
+         HXLTMrRgH0t1gSQJ/E15o76IKG3vWxFoqpe8E4mFej8u5Hg3PazrXE/RobD9UGUetx
+         6xIHoIBact6jQnurQD3GnRm91dvGrPrL75bbdlHwiCc4Vub2HwyLYsqLaaodBB+oeW
+         vKXnXDEZTtgy4pt0PeOsur6qBRYt5tqdCGo9xXwBIq2UlCxZIUI5XCJsCwzB0lhXtM
+         m955NWYqogZEA==
+Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 7553DA00BA;
+        Mon, 19 Apr 2021 07:30:23 +0000 (UTC)
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2177.outbound.protection.outlook.com [104.47.59.177])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 0AC94800C0;
+        Mon, 19 Apr 2021 07:30:21 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="Oe9RtMvc";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jFScmx6lNbiq9AeE9dd4eUbGknDFt1yV40CB+VP2sIymNsI1rKhmOEptqjO2GKBDegbWxvuHomg435fokUmCT72YrgsiZwk7a2r7ZR+wXdhn0GohlnH2TNDErvbPYnY5p+6jAT94KFjKEhLKU3OqeOVReg0/j9q3xJ7rz7U1VG8J5zsyRYSWdhjXhD2CSPxxhXhh6yB+MxJHJkcrYjcxi8shrOFEout+LheDuSKpIsfb9sx7WHE8xa5Wc7tfIUOTTDpBYifWt0BJMTM+csYXbp5G4BnP2IFTJ8KFXLGoJ3rYwxq69PRmT1I0aMkJcfJUd4EJeEOB5IbiO/GPvMECnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4TKWjBZJKyneG66a2CpVz0fU+L0JTNge2EBSZm4wbjg=;
+ b=E0PMQnZ0Y0XGBQpxZ+f9G+3SsWV9JeeW+NDfQwUHgqjZne5t24Bfs+gCRCw6SG/EEl0FEIONTrw/TWj4w9vOqYRTsb3fFR63UnlBEMQQjn7R7llbRdroTxGR2B4krXmp55TnvTNv5RONV23H/YT4oYpPEbwkGVFrP0K62COQVB3a+a7AUEKcW8gTZwIrahH8clUzfiNJ+IJHBiM/UzHdBGPjgyqYPYa1tTHcPi+NoQJ+A9Z9bIuIuKMXvkQg0tTn4ka61BKtDu87oYdZMFd6Y++goPBRk3T0E0fL2JqaK5Uxcx6wTTCzhwoqJ30u08dzEV+1xZcACDbM309H6E1yYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4TKWjBZJKyneG66a2CpVz0fU+L0JTNge2EBSZm4wbjg=;
+ b=Oe9RtMvcG6aklr60VErDMJepgsTm45rIDKEmpf9DhHv5fVkG2oFxncF+KyTlYRKuoIUktOZQnmpzNzXNNTo4FbdIG27F416pRhXZmA2k/E2TqEaXHYRWOjvKJ2f3qC+rBuLMZjH82Ervmkk8lIxsFOcVEsSF4D+UrZ8XSLFCoG4=
+Received: from BYAPR12MB3462.namprd12.prod.outlook.com (2603:10b6:a03:ad::16)
+ by BY5PR12MB5000.namprd12.prod.outlook.com (2603:10b6:a03:1d7::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4042.16; Mon, 19 Apr
+ 2021 07:30:20 +0000
+Received: from BYAPR12MB3462.namprd12.prod.outlook.com
+ ([fe80::a025:1ced:b6f2:6c1]) by BYAPR12MB3462.namprd12.prod.outlook.com
+ ([fe80::a025:1ced:b6f2:6c1%4]) with mapi id 15.20.4020.027; Mon, 19 Apr 2021
+ 07:30:19 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        guido.kiener@rohde-schwarz.com, dpenkler@gmail.com,
-        lee.jones@linaro.org, USB list <linux-usb@vger.kernel.org>
-Cc:     bp@alien8.de, dwmw@amazon.co.uk, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     John Youn <John.Youn@synopsys.com>
+Subject: Re: [PATCH v2 01/15] usb: dwc2: Update exit hibernation when port
+ reset is asserted
+Thread-Topic: [PATCH v2 01/15] usb: dwc2: Update exit hibernation when port
+ reset is asserted
+Thread-Index: AQHXMr6VHlKlkiBWsUOxuynH77Fwaaq7djQA
+Date:   Mon, 19 Apr 2021 07:30:19 +0000
+Message-ID: <eae54d3f-3382-133a-ce49-dc23476e6b4d@synopsys.com>
+References: <cover.1618464534.git.Arthur.Petrosyan@synopsys.com>
+ <20210416124651.51C8DA005C@mailhost.synopsys.com>
+In-Reply-To: <20210416124651.51C8DA005C@mailhost.synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
+authentication-results: synopsys.com; dkim=none (message not signed)
+ header.d=none;synopsys.com; dmarc=none action=none header.from=synopsys.com;
+x-originating-ip: [37.252.80.199]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d0ee14b7-7677-4a45-12b3-08d90304fc73
+x-ms-traffictypediagnostic: BY5PR12MB5000:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BY5PR12MB5000E9166A13399B447C664AA7499@BY5PR12MB5000.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1388;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oPYqZ/WXTy/eVJRe7KAE4EFQDAxb82yJk6T6Tr6QG3R7PRgMmOeKBzSuz2x5WedS3/LP5mfrSVYXO6hYQbcPPtZRhovZLQgGPhC2BoPK11LyqgEUUFufpEor/Q0HzVXSYQwLMhfb270a4dpkl5khgrcfeFs+Su6KIuRhfzKTo2EE/AvPYtFAO8MuBN6usHBeFihJ7RcJogy37pZNmQrAnhO75KJjjdaADBlTXUWdOC7SYvA0PUdF+rrWwiBNpSH3rbfjcl0JHVzSHZOupuZ55pKTYP9j9kznmigRmRBFie+tTbQL4o5fNxW5CqOKAfTFt1IoP9CN6dSVouFeY8lFXV6AibwUEyB9PpQlo+nSYf4qlmBfiUVFiN3Ylaka6iOXeBJVY5HpmoZIA8/wZX43BRSQxm77fGwa+3cr4GUeKCP3syy40ziq/XLYw+t2IrgBGerV03mbpW/6vgFMqlXiMwflmj0RZWkyJNOaUMqbP48TpL5v+SAEx0dvJjZy2tALAgRYS7fo2SBa3ZFmJaKGh3rdMnf61Sv3aN9xk76/wYbYUzflXo35Fyk0V0M1HeukTkpBaMbSokaHk5cXq5WUDz6ULMXEUDT4E5OpcIvl28Wbt4ieWfqJPHBH8XRcsXRPXV1Ge00HF2NOYbBh+Nf/LCoVFuCF2v1u0T+iSWIdkwnXR6Z/g710Nun2MYOWCIrn
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3462.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(39860400002)(396003)(376002)(346002)(136003)(8936002)(31696002)(2616005)(83380400001)(86362001)(110136005)(122000001)(15650500001)(2906002)(31686004)(38100700002)(107886003)(6512007)(316002)(4326008)(186003)(26005)(8676002)(478600001)(71200400001)(66476007)(6486002)(76116006)(64756008)(66946007)(91956017)(66446008)(66556008)(36756003)(53546011)(6506007)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata: =?utf-8?B?UFdhczRaZ29oaHlRbjJMbTNZZDZ0c3Z1aXpXcDJiRHltMFgzZStuaG1pRkN3?=
+ =?utf-8?B?SlNTQUxJTEg4dmM5V1VCSWpMRmlISSsvVjl2dUJaVHdKUmRKdlMyb0Qyc3E1?=
+ =?utf-8?B?L3ViT2s4MWE0RmJ3OXBtYUJ0aVZuc2FWNGtlUGl0cTc3dFNLV2V2aVdYMVNv?=
+ =?utf-8?B?ODdNMERYUU52VzRwdjF6eVVDa0Z1TGpRY1BSMWo2MDJobk91YWhFakhKdVpn?=
+ =?utf-8?B?QzZTRWZGbVpxaG8zbXlhL1FPanQwRC92eEFxSDE1ZjVQdzR3dGxibWJ3aGJG?=
+ =?utf-8?B?eFcwc0Fpa1RIWitGb29QSTJUYW85YU50b0tCU1lQZjhoeDNTTHMyUGVBYjdF?=
+ =?utf-8?B?cnd2WlBPcS9HeDBWQmJDdWZQeVFTRHA4aVZWNHZQOGRuUzQ5QzhRd2ZPczZt?=
+ =?utf-8?B?cTZkQmlwUStXaTRqNGtjWUNBL2J1K0V4ckFsUkoxWWhmOUdVRzU3VFBTVDlw?=
+ =?utf-8?B?Nmc4ZVdWSTQvWm5mRmNyZnBnRytDQ1lSV3ZzcE5IM3JNVFBRZDgrMytpS1Nn?=
+ =?utf-8?B?NjhhUDU4L0ZIZTA1NURGcXk4YnVBMXdLQWdMK0NXWmZxTElYN2liNDVHOFRj?=
+ =?utf-8?B?enU4czlKRi9EWTRGTjl3ZGVzamI1ZTQvYk9uZWloTDR1YnN5c250VW9IUmJa?=
+ =?utf-8?B?UjdqMWpRYzE1SVJPeURLcUYzT2FJT290cHVYL25OdXBycVNYejRaM2E3ZmpT?=
+ =?utf-8?B?OUVEYkM0WUJ6eWoxakZWRGM3VGMzeUVuSS94ZDY4Um9NSk9GbmxpMXFvMFB6?=
+ =?utf-8?B?eTZpNDcrelJqUEFwY0tnQ21iUkFjaG1XYzA5R2FPK2UxQ3lxVEx4WlZsWG1C?=
+ =?utf-8?B?cERLZFltZnNJUjNhUXpLdTIxcDhyQkZEellvVFdFSW9YOVJjckdnbUI3U1h2?=
+ =?utf-8?B?VitLQ1lBR0NQb0hURUNoaFg1OUQ3eVVvZjhhSWVvMjdENlk3elM4RWVxV0Vx?=
+ =?utf-8?B?aEZXZFhrM3VKQ2hrVTR1bWdwKzU1LzR6V0x4am5sRzdGMDREQjFyZ1lPa01y?=
+ =?utf-8?B?RjZoaSs2Z2tKTnNFNkFOaTAvaUV0b1lNMnBtZTZYTDdXSjJ6U3dIUngycGkx?=
+ =?utf-8?B?aG8xQUlhUnlUaVBSQXdSNllYTzE1YXdoTzBWRExsOTdiK0FCdVZHU2c3ZWo0?=
+ =?utf-8?B?QjRtKzBIcFNnblU2K2pxOFlFWHdVVlhGSVFqU0ZHQnVod1V0VGN2cUo4RGZ5?=
+ =?utf-8?B?TkRCaFpPMXB6UXVXNTAwZkJOa1E0RXlZQ0xjTUJkUlljRHpJMnVheXNHK2Zp?=
+ =?utf-8?B?V0MrU3laVVQwMWJaK05KU1ZrcXBOZWVZQnhVbnU0VXVGVmRiRWp2ZHA1d0xo?=
+ =?utf-8?B?SHlHWXEvVE9MUkFWM3pBdG9panZRVERQUHltbkVhNVdIRzhjQzVwZklmMlpN?=
+ =?utf-8?B?QkplQlNuU0FLRGxRZFhLMEY2eEc3YnlORGplOUovMTVxdUlTdVRISFA0Vk5U?=
+ =?utf-8?B?VzlhRkVmMU5KUWtDa2NpUHFkM3cyazJubkFJd2JvSDhLL2ZlZVV5NGpUcEtS?=
+ =?utf-8?B?QStoTjJZNHRtTDF2Ui9zS3JDZFNuS1FnYzRPQWUvSVlnU0Y1N1pTZGpvWCtI?=
+ =?utf-8?B?dmN6SUxDcjZrSGI1bjl5VWlTVmlwLzU3R0pNRENaREU4WHNZY016UFJOWkI5?=
+ =?utf-8?B?bEhxdUtxdkxMeCtjT3VSR1VNMmZqbzBlaXBXTGU2b0NrN0c4TWExZE5PeFVj?=
+ =?utf-8?B?UG1RQzhjVWZRc0lpOUdyTXBBdEJKQTEzWnFEa2JzN1RNN0JIOFpQKzI0ZXVD?=
+ =?utf-8?Q?w195QF96/iRqsHqbBI=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8101EA31EBA2B644926ACA61E3325E6D@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3462.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0ee14b7-7677-4a45-12b3-08d90304fc73
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2021 07:30:19.8289
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KAFA+D7s7xdNrd6rrZ88S97PBqx4GhDfkpFKHX6jiyPdXaESWboO9CQs4Dkv6nIiVoBO+YsNXFEJVMaI4+egdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5000
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 19, 2021 at 9:19 AM syzbot
-<syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    50987bec Merge tag 'trace-v5.12-rc7' of git://git.kernel.o..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1065c5fcd00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=398c4d0fe6f66e68
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e2eae5639e7203360018
->
-> Unfortunately, I don't have any reproducer for this issue yet.
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com
->
-> usbtmc 5-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 5-1:0.0: unknown status received: -71
-
-The log shows an infinite stream of these before the stall, so I
-assume it's an infinite loop in usbtmc.
-+usbtmc maintainers
-
-[  370.171634][    C0] usbtmc 6-1:0.0: unknown status received: -71
-[  370.177799][    C1] usbtmc 3-1:0.0: unknown status received: -71
-[  370.183912][    C0] usbtmc 4-1:0.0: unknown status received: -71
-[  370.190076][    C1] usbtmc 5-1:0.0: unknown status received: -71
-[  370.196194][    C0] usbtmc 2-1:0.0: unknown status received: -71
-[  370.202387][    C1] usbtmc 3-1:0.0: unknown status received: -71
-[  370.208460][    C0] usbtmc 6-1:0.0: unknown status received: -71
-[  370.214615][    C1] usbtmc 5-1:0.0: unknown status received: -71
-[  370.220736][    C0] usbtmc 4-1:0.0: unknown status received: -71
-[  370.226902][    C1] usbtmc 3-1:0.0: unknown status received: -71
-[  370.233005][    C0] usbtmc 2-1:0.0: unknown status received: -71
-[  370.239168][    C1] usbtmc 5-1:0.0: unknown status received: -71
-[  370.245271][    C0] usbtmc 6-1:0.0: unknown status received: -71
-[  370.251426][    C1] usbtmc 3-1:0.0: unknown status received: -71
-[  370.257552][    C0] usbtmc 4-1:0.0: unknown status received: -71
-[  370.263715][    C1] usbtmc 5-1:0.0: unknown status received: -71
-[  370.269819][    C0] usbtmc 2-1:0.0: unknown status received: -71
-[  370.275974][    C1] usbtmc 3-1:0.0: unknown status received: -71
-[  370.282100][    C0] usbtmc 6-1:0.0: unknown status received: -71
-[  370.288262][    C1] usbtmc 5-1:0.0: unknown status received: -71
-[  370.294399][    C0] usbtmc 4-1:0.0: unknown status received: -71
-
-
-
-> rcu: INFO: rcu_preempt self-detected stall on CPU
-> rcu:    1-...!: (8580 ticks this GP) idle=72e/1/0x4000000000000000 softirq=20679/20679 fqs=0
->         (t=10500 jiffies g=27129 q=416)
-> rcu: rcu_preempt kthread starved for 10500 jiffies! g27129 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-> rcu:    Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-> rcu: RCU grace-period kthread stack dump:
-> task:rcu_preempt     state:R  running task     stack:29168 pid:   14 ppid:     2 flags:0x00004000
-> Call Trace:
->  context_switch kernel/sched/core.c:4322 [inline]
->  __schedule+0x911/0x21b0 kernel/sched/core.c:5073
->  schedule+0xcf/0x270 kernel/sched/core.c:5152
->  schedule_timeout+0x14a/0x250 kernel/time/timer.c:1892
->  rcu_gp_fqs_loop kernel/rcu/tree.c:2005 [inline]
->  rcu_gp_kthread+0xd07/0x2250 kernel/rcu/tree.c:2178
->  kthread+0x3b1/0x4a0 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> rcu: Stack dump where RCU GP kthread last ran:
-> Sending NMI from CPU 1 to CPUs 0:
-> NMI backtrace for cpu 0
-> CPU: 0 PID: 3232 Comm: aoe_tx0 Not tainted 5.12.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> RIP: 0010:native_apic_mem_write+0x8/0x10 arch/x86/include/asm/apic.h:110
-> Code: c7 40 d9 36 8f e8 c8 11 86 00 eb b0 66 0f 1f 44 00 00 be 01 00 00 00 e9 36 c7 2c 00 cc cc cc cc cc cc 89 ff 89 b7 00 c0 5f ff <c3> 0f 1f 80 00 00 00 00 48 b8 00 00 00 00 00 fc ff df 53 89 fb 48
-> RSP: 0018:ffffc90000007ea8 EFLAGS: 00000046
-> RAX: dffffc0000000000 RBX: ffffffff8b0a78c0 RCX: 0000000000000020
-> RDX: 1ffffffff1614f1a RSI: 000000000001c285 RDI: 0000000000000380
-> RBP: ffff8880b9c1f2c0 R08: 000000000000003f R09: 0000000000000000
-> R10: ffffffff8166ecf7 R11: 0000000000000000 R12: 000000000001c285
-> R13: 0000000000000020 R14: ffff8880b9c26340 R15: 0000006120792e26
-> FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fb9e6cdb380 CR3: 0000000018792000 CR4: 00000000001506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <IRQ>
->  apic_write arch/x86/include/asm/apic.h:393 [inline]
->  lapic_next_event+0x4d/0x80 arch/x86/kernel/apic/apic.c:472
->  clockevents_program_event+0x254/0x370 kernel/time/clockevents.c:334
->  tick_program_event+0xac/0x140 kernel/time/tick-oneshot.c:44
->  hrtimer_interrupt+0x414/0xa00 kernel/time/hrtimer.c:1676
->  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1089 [inline]
->  __sysvec_apic_timer_interrupt+0x146/0x540 arch/x86/kernel/apic/apic.c:1106
->  sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1100
->  </IRQ>
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:632
-> RIP: 0010:preempt_count arch/x86/include/asm/preempt.h:27 [inline]
-> RIP: 0010:check_kcov_mode kernel/kcov.c:163 [inline]
-> RIP: 0010:__sanitizer_cov_trace_pc+0x0/0x60 kernel/kcov.c:197
-> Code: f0 4d 89 03 e9 f2 fc ff ff b9 ff ff ff ff ba 08 00 00 00 4d 8b 03 48 0f bd ca 49 8b 45 00 48 63 c9 e9 64 ff ff ff 0f 1f 40 00 <65> 8b 05 39 fe 8d 7e 89 c1 48 8b 34 24 81 e1 00 01 00 00 65 48 8b
-> RSP: 0018:ffffc900030cf6f8 EFLAGS: 00000293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff88801aff1c40 RSI: ffffffff815c2e4f RDI: 0000000000000003
-> RBP: ffffc900030cf738 R08: 0000000000000000 R09: ffffffff8fa9a96f
-> R10: ffffffff815c2e45 R11: 0000000000000000 R12: 000000000000002d
-> R13: ffff8880113db880 R14: 0000000000000000 R15: 0000000000000200
->  console_trylock_spinning kernel/printk/printk.c:1818 [inline]
->  vprintk_emit+0x3a5/0x560 kernel/printk/printk.c:2097
->  dev_vprintk_emit+0x36e/0x3b2 drivers/base/core.c:4434
->  dev_printk_emit+0xba/0xf1 drivers/base/core.c:4445
->  __netdev_printk+0x1c6/0x27a net/core/dev.c:11292
->  netdev_warn+0xd7/0x109 net/core/dev.c:11345
->  ieee802154_subif_start_xmit.cold+0x17/0x27 net/mac802154/tx.c:125
->  __netdev_start_xmit include/linux/netdevice.h:4825 [inline]
->  netdev_start_xmit include/linux/netdevice.h:4839 [inline]
->  xmit_one net/core/dev.c:3605 [inline]
->  dev_hard_start_xmit+0x1eb/0x920 net/core/dev.c:3621
->  sch_direct_xmit+0x2e1/0xbd0 net/sched/sch_generic.c:313
->  qdisc_restart net/sched/sch_generic.c:376 [inline]
->  __qdisc_run+0x4ba/0x15f0 net/sched/sch_generic.c:384
->  qdisc_run include/net/pkt_sched.h:136 [inline]
->  qdisc_run include/net/pkt_sched.h:128 [inline]
->  __dev_xmit_skb net/core/dev.c:3807 [inline]
->  __dev_queue_xmit+0x14b9/0x2e00 net/core/dev.c:4162
->  tx+0x68/0xb0 drivers/block/aoe/aoenet.c:63
->  kthread+0x1e7/0x3a0 drivers/block/aoe/aoecmd.c:1230
->  kthread+0x3b1/0x4a0 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> NMI backtrace for cpu 1
-> CPU: 1 PID: 37 Comm: kworker/1:1 Not tainted 5.12.0-rc7-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: events nsim_dev_trap_report_work
-> Call Trace:
->  <IRQ>
->  __dump_stack lib/dump_stack.c:79 [inline]
->  dump_stack+0x141/0x1d7 lib/dump_stack.c:120
->  nmi_cpu_backtrace.cold+0x44/0xd7 lib/nmi_backtrace.c:105
->  nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
->  trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
->  rcu_dump_cpu_stacks+0x222/0x2a7 kernel/rcu/tree_stall.h:341
->  print_cpu_stall kernel/rcu/tree_stall.h:622 [inline]
->  check_cpu_stall kernel/rcu/tree_stall.h:697 [inline]
->  rcu_pending kernel/rcu/tree.c:3830 [inline]
->  rcu_sched_clock_irq.cold+0x4f7/0x11dd kernel/rcu/tree.c:2650
->  update_process_times+0x16d/0x200 kernel/time/timer.c:1796
->  tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:226
->  tick_sched_timer+0x1b0/0x2d0 kernel/time/tick-sched.c:1369
->  __run_hrtimer kernel/time/hrtimer.c:1537 [inline]
->  __hrtimer_run_queues+0x1c0/0xe40 kernel/time/hrtimer.c:1601
->  hrtimer_interrupt+0x330/0xa00 kernel/time/hrtimer.c:1663
->  local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1089 [inline]
->  __sysvec_apic_timer_interrupt+0x146/0x540 arch/x86/kernel/apic/apic.c:1106
->  sysvec_apic_timer_interrupt+0x40/0xc0 arch/x86/kernel/apic/apic.c:1100
->  asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:632
-> RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:161 [inline]
-> RIP: 0010:_raw_spin_unlock_irqrestore+0x38/0x70 kernel/locking/spinlock.c:191
-> Code: 74 24 10 e8 ba 19 54 f8 48 89 ef e8 f2 cf 54 f8 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> d3 9d 48 f8 65 8b 05 7c 68 fc 76 85 c0 74 0a 5b 5d c3 e8 40 59
-> RSP: 0018:ffffc90000dc0b28 EFLAGS: 00000206
-> RAX: 0000000000000002 RBX: 0000000000000200 RCX: 1ffffffff1f5f34a
-> RDX: 0000000000000000 RSI: 0000000000000103 RDI: 0000000000000001
-> RBP: ffff888144fa8000 R08: 0000000000000001 R09: ffffffff8fa9a99f
-> R10: 0000000000000001 R11: ffffc90013880000 R12: ffff888145047440
-> R13: ffff88801ee8e500 R14: dffffc0000000000 R15: ffff888011f69c00
->  spin_unlock_irqrestore include/linux/spinlock.h:409 [inline]
->  dummy_timer+0x12f1/0x32a0 drivers/usb/gadget/udc/dummy_hcd.c:1985
->  call_timer_fn+0x1a5/0x6b0 kernel/time/timer.c:1431
->  expire_timers kernel/time/timer.c:1476 [inline]
->  __run_timers.part.0+0x67c/0xa50 kernel/time/timer.c:1745
->  __run_timers kernel/time/timer.c:1726 [inline]
->  run_timer_softirq+0xb3/0x1d0 kernel/time/timer.c:1758
->  __do_softirq+0x29b/0x9f6 kernel/softirq.c:345
->  do_softirq.part.0+0xd9/0x130 kernel/softirq.c:248
->  </IRQ>
->  do_softirq kernel/softirq.c:240 [inline]
->  __local_bh_enable_ip+0x102/0x120 kernel/softirq.c:198
->  spin_unlock_bh include/linux/spinlock.h:399 [inline]
->  nsim_dev_trap_report drivers/net/netdevsim/dev.c:585 [inline]
->  nsim_dev_trap_report_work+0x867/0xbd0 drivers/net/netdevsim/dev.c:611
->  process_one_work+0x98d/0x1600 kernel/workqueue.c:2275
->  worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
->  kthread+0x3b1/0x4a0 kernel/kthread.c:292
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 5-1:0.0: unknown status received: -71
-> usbtmc 5-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 5-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 5-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 2-1:0.0: unknown status received: -71
-> usbtmc 4-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: unknown status received: -71
-> usbtmc 3-1:0.0: usb_submit_urb failed: -19
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: unknown status received: -71
-> usbtmc 6-1:0.0: usb_submit_urb failed: -19
->
->
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000a9b79905c04e25a0%40google.com.
+T24gNC8xNi8yMDIxIDQ6NDYgUE0sIEFydHVyIFBldHJvc3lhbiB3cm90ZToNCj4gTm8gbmVlZCB0
+byBjaGVjayBmb3IgIkRXQzJfUE9XRVJfRE9XTl9QQVJBTV9ISUJFUk5BVElPTiIgcGFyYW0NCj4g
+YXMgImhzb3RnLT5oaWJlcm5hdGVkIiBmbGFnIGlzIGFscmVhZHkgZW5vdWdoIGZvciBleGl0aW5n
+IGZyb20NCj4gaGliZXJuYXRpb24gbW9kZS4NCj4gDQo+IC0gUmVtb3ZlcyBjaGVja2luZyBvZiAi
+RFdDMl9QT1dFUl9ET1dOX1BBUkFNX0hJQkVSTkFUSU9OIiBwYXJhbS4NCj4gDQo+IC0gRm9yIGNv
+ZGUgcmVhZGFiaWxpdHkgSGliZXJuYXRpb24gZXhpdCBjb2RlIG1vdmVkIGFmdGVyDQo+IGRlYnVn
+IG1lc3NhZ2UgcHJpbnQuDQo+IA0KPiAtIEFkZGVkICJkd2MyX2V4aXRfaGliZXJuYXRpb24oKSIg
+ZnVuY3Rpb24gZXJyb3IgY2hlY2tpbmcuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBBcnR1ciBQZXRy
+b3N5YW4gPEFydGh1ci5QZXRyb3N5YW5Ac3lub3BzeXMuY29tPg0KDQpBY2tlZC1ieTogTWluYXMg
+SGFydXR5dW55YW4gPE1pbmFzLkhhcnV0eXVueWFuQHN5bm9wc3lzLmNvbT4NCg0KPiAtLS0NCj4g
+ICBDaGFuZ2VzIGluIHYyOg0KPiAgIC0gTm9uZQ0KPiANCj4gICBkcml2ZXJzL3VzYi9kd2MyL2hj
+ZC5jIHwgMTcgKysrKysrKysrKystLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgMTEgaW5zZXJ0
+aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9k
+d2MyL2hjZC5jIGIvZHJpdmVycy91c2IvZHdjMi9oY2QuYw0KPiBpbmRleCAwNGExYjUzZDY1YWYu
+LmNkYTNmOTMxMTk1ZCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy91c2IvZHdjMi9oY2QuYw0KPiAr
+KysgYi9kcml2ZXJzL3VzYi9kd2MyL2hjZC5jDQo+IEBAIC0zNjY4LDkgKzM2NjgsMTcgQEAgc3Rh
+dGljIGludCBkd2MyX2hjZF9odWJfY29udHJvbChzdHJ1Y3QgZHdjMl9oc290ZyAqaHNvdGcsIHUx
+NiB0eXBlcmVxLA0KPiAgIAkJCWJyZWFrOw0KPiAgIA0KPiAgIAkJY2FzZSBVU0JfUE9SVF9GRUFU
+X1JFU0VUOg0KPiAtCQkJaWYgKGhzb3RnLT5wYXJhbXMucG93ZXJfZG93biA9PSBEV0MyX1BPV0VS
+X0RPV05fUEFSQU1fSElCRVJOQVRJT04gJiYNCj4gLQkJCSAgICBoc290Zy0+aGliZXJuYXRlZCkN
+Cj4gLQkJCQlkd2MyX2V4aXRfaGliZXJuYXRpb24oaHNvdGcsIDAsIDEsIDEpOw0KPiArCQkJZGV2
+X2RiZyhoc290Zy0+ZGV2LA0KPiArCQkJCSJTZXRQb3J0RmVhdHVyZSAtIFVTQl9QT1JUX0ZFQVRf
+UkVTRVRcbiIpOw0KPiArDQo+ICsJCQlocHJ0MCA9IGR3YzJfcmVhZF9ocHJ0MChoc290Zyk7DQo+
+ICsNCj4gKwkJCWlmIChoc290Zy0+aGliZXJuYXRlZCkgew0KPiArCQkJCXJldHZhbCA9IGR3YzJf
+ZXhpdF9oaWJlcm5hdGlvbihoc290ZywgMCwgMSwgMSk7DQo+ICsJCQkJaWYgKHJldHZhbCkNCj4g
+KwkJCQkJZGV2X2Vycihoc290Zy0+ZGV2LA0KPiArCQkJCQkJImV4aXQgaGliZXJuYXRpb24gZmFp
+bGVkXG4iKTsNCj4gKwkJCX0NCj4gICANCj4gICAJCQlpZiAoaHNvdGctPmluX3BwZCkgew0KPiAg
+IAkJCQlyZXR2YWwgPSBkd2MyX2V4aXRfcGFydGlhbF9wb3dlcl9kb3duKGhzb3RnLCAxLA0KPiBA
+QCAtMzY4NCw5ICszNjkyLDYgQEAgc3RhdGljIGludCBkd2MyX2hjZF9odWJfY29udHJvbChzdHJ1
+Y3QgZHdjMl9oc290ZyAqaHNvdGcsIHUxNiB0eXBlcmVxLA0KPiAgIAkJCSAgICBEV0MyX1BPV0VS
+X0RPV05fUEFSQU1fTk9ORSAmJiBoc290Zy0+YnVzX3N1c3BlbmRlZCkNCj4gICAJCQkJZHdjMl9o
+b3N0X2V4aXRfY2xvY2tfZ2F0aW5nKGhzb3RnLCAwKTsNCj4gICANCj4gLQkJCWhwcnQwID0gZHdj
+Ml9yZWFkX2hwcnQwKGhzb3RnKTsNCj4gLQkJCWRldl9kYmcoaHNvdGctPmRldiwNCj4gLQkJCQki
+U2V0UG9ydEZlYXR1cmUgLSBVU0JfUE9SVF9GRUFUX1JFU0VUXG4iKTsNCj4gICAJCQlwY2djdGwg
+PSBkd2MyX3JlYWRsKGhzb3RnLCBQQ0dDVEwpOw0KPiAgIAkJCXBjZ2N0bCAmPSB+KFBDR0NUTF9F
+TkJMX1NMRUVQX0dBVElORyB8IFBDR0NUTF9TVE9QUENMSyk7DQo+ICAgCQkJZHdjMl93cml0ZWwo
+aHNvdGcsIHBjZ2N0bCwgUENHQ1RMKTsNCj4gDQoNCg==
