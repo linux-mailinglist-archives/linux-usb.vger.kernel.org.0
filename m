@@ -2,206 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C34B364CA1
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 22:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA16364CAB
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 22:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242557AbhDSU4U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 16:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240569AbhDSUz5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 16:55:57 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C118C06134F
-        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 13:53:16 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id y22-20020a17090a8b16b0290150ae1a6d2bso2317149pjn.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 13:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=oULCgofDCr3IKol4CZm7G0o//okmzQkN3R5Hp16/Ue8=;
-        b=PRfRzGaTIZDsL3wTTlVgGI06CnIMFMTv8pN0WiVKjO1yxjUxfUCOOv8RJT6vZ1ryCV
-         +cDK1gLSgpQBwbnd7pfF/YVkIrm4Qk2YjlM3UCErvIhQ52Je132mA+IK6yX0r6hu6QB6
-         ++3j6S0TdChypVnxHhj/REa9w98cc1mO6g0ss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=oULCgofDCr3IKol4CZm7G0o//okmzQkN3R5Hp16/Ue8=;
-        b=Kh4uiyafX78addJDI1Cud17YFMHSxoRSThu4QSvClxZcQLrlbpN/3lKd1LS/aZ1KGv
-         nIrfNw4Xivhq11zfvLD0ABqBNcYl+A7eP3DM/+uMyQsTELVy2OjyN0Q4+osVyFTPPk/Y
-         BrhwxMFHFvWW21JLca+V+ikxD+fk+cgugtpGU7/t3fhv/I8amz3YQuRbkCno4QGVDKB8
-         oNoydyuKIGWo1TQ9DUTg3z9ejCprsi0s7c0ya7QlIYMhX9Vnm6xJ4dj81HPgnjj4sDCY
-         W8ei7etDvspFIZmlV/KZlB5kC1qzUjocfc4xBdpO2My299Cyo0x354a4d6slVTfi4Bf0
-         DoHg==
-X-Gm-Message-State: AOAM532WbrMkP+7ggJlMyfu2rUxwRGketBzHm+7NAq4RxbBL9O53qae/
-        5osGL4QL1ALEoA5E6kgwVNEUOg==
-X-Google-Smtp-Source: ABdhPJxJrsfjt/GcLeN3qwtoq2slf1gMFTkTmr11hYO0bkxLzfjols+Aib2YcFe7rCTHsHx4JlOADw==
-X-Received: by 2002:a17:90a:7783:: with SMTP id v3mr1022551pjk.177.1618865595769;
-        Mon, 19 Apr 2021 13:53:15 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:7401:678f:e510:6700])
-        by smtp.gmail.com with UTF8SMTPSA id q6sm680577pfs.33.2021.04.19.13.53.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Apr 2021 13:53:15 -0700 (PDT)
-Date:   Mon, 19 Apr 2021 13:53:14 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v6 1/5] usb: dwc3: host: Add suspend_quirk for dwc3 host
-Message-ID: <YH3tuppS0Xjxobmj@google.com>
-References: <1618567313-25373-1-git-send-email-sanm@codeaurora.org>
- <1618567313-25373-2-git-send-email-sanm@codeaurora.org>
+        id S241725AbhDSU5E convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 19 Apr 2021 16:57:04 -0400
+Received: from mail02.rohde-schwarz.com ([80.246.32.97]:19505 "EHLO
+        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242914AbhDSU4z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 16:56:55 -0400
+Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
+ (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Mon, 19 Apr 2021
+ 22:56:21 +0200
+Subject: RE: Re: [syzbot] INFO: rcu detected stall in tx
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1618567313-25373-2-git-send-email-sanm@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+Received: from GMU419.rsint.net ([10.0.230.184])
+          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 935;
+          Mon, 19 Apr 2021 22:56:21 +0200 (CEST)
+Received: from GMU008.rsint.net (10.0.2.29) by GMU419.rsint.net (10.0.230.184)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2106.2; Mon, 19 Apr
+ 2021 22:56:20 +0200
+Received: from GMU006.rsint.net (10.0.2.28) by GMU008.rsint.net (10.0.2.29)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2106.2; Mon, 19
+ Apr 2021 22:56:19 +0200
+Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
+ GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
+ 15.01.2106.013; Mon, 19 Apr 2021 22:56:19 +0200
+From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Thread-Topic: Re: [syzbot] INFO: rcu detected stall in tx /cr/
+Thread-Index: Adc1XknZ7zhjMD1QSUmt+svgS3FT2Q==
+Date:   Mon, 19 Apr 2021 20:56:19 +0000
+Message-ID: <d1e8e0608903431e8199d9804fecca36@rohde-schwarz.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-rus_sensitivity: 20
+hvs-classificationid: da48e46a-4823-4cc6-82ac-f236c0a43172
+hvs-prefix: R_S
+x-originating-ip: [10.0.9.40]
+X-IQAV: YES
+X-GBS-PROC: +DJ8kKkYTDukuJ4lFI4ki04klpYsn7OPmvMIdnipf6hSecQOT+7QKWO8vH/9sEC7U5e9EOsmtJhF90qtJrBQEXHU40BFnKrxlP+KvZ+Ho1C9FzvvTPX5rxAYlB+dOIG6
+X-GBS-PROCJOB: HPGX6Ee7lplaR7o29OJF5HOEjxAtyKw3iamF7/sdi6z3MeNA3di9HyuyhcYbjutc
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 16, 2021 at 03:31:49PM +0530, Sandeep Maheswaram wrote:
+Hi all,
 
-> Subject: usb: dwc3: host: Add suspend_quirk for dwc3 host
+The error is in usbtmc_interrupt(struct urb *urb) since five years. The status code EPROTO is not handled correctly.
+It's not a showstopper, but we should fix it and check the status code according to usbtmc_read_bulk_cb() or
+usb_skeleton.c.
+@Dave: Do you have time? Otherwise I can do it.
+@Greg: Is it urgent?
+
+- Guido
+
+-----Original Message-----
+From: Dmitry 
+Sent: Monday, April 19, 2021 9:27 AM
+Subject: Re: [syzbot] INFO: rcu detected stall in tx
+
+On Mon, Apr 19, 2021 at 9:19 AM syzbot
+<syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com> wrote:
 >
-> Adding suspend quirk function for dwc3 host which will be called
-> during xhci suspend.
-> Setting hs_phy_mode, ss_phy_mode , phy_power_off flags and phy mode
-> during host suspend.
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    50987bec Merge tag 'trace-v5.12-rc7' of git://git.kernel.o..
+> git tree:       upstream
+> console output: 
+> https://syzkaller.appspot.com/x/log.txt?x=1065c5fcd00000
+> kernel config:  
+> https://syzkaller.appspot.com/x/.config?x=398c4d0fe6f66e68
+> dashboard link: 
+> https://syzkaller.appspot.com/bug?extid=e2eae5639e7203360018
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com
+>
+> usbtmc 5-1:0.0: unknown status received: -71 usbtmc 3-1:0.0: unknown 
+> status received: -71 usbtmc 5-1:0.0: unknown status received: -71
 
-This describes in other words what the code already tells us, but
-doesn't really explain why this change is needed.
+The log shows an infinite stream of these before the stall, so I assume it's an infinite loop in usbtmc.
++usbtmc maintainers
 
-An attempt to be a bit clearer:
+[  370.171634][    C0] usbtmc 6-1:0.0: unknown status received: -71
+[  370.177799][    C1] usbtmc 3-1:0.0: unknown status received: -71
+[  370.183912][    C0] usbtmc 4-1:0.0: unknown status received: -71
+[  370.190076][    C1] usbtmc 5-1:0.0: unknown status received: -71
+[  370.196194][    C0] usbtmc 2-1:0.0: unknown status received: -71
+[  370.202387][    C1] usbtmc 3-1:0.0: unknown status received: -71
+[  370.208460][    C0] usbtmc 6-1:0.0: unknown status received: -71
+[  370.214615][    C1] usbtmc 5-1:0.0: unknown status received: -71
+[  370.220736][    C0] usbtmc 4-1:0.0: unknown status received: -71
+[  370.226902][    C1] usbtmc 3-1:0.0: unknown status received: -71
+[  370.233005][    C0] usbtmc 2-1:0.0: unknown status received: -71
+[  370.239168][    C1] usbtmc 5-1:0.0: unknown status received: -71
+[  370.245271][    C0] usbtmc 6-1:0.0: unknown status received: -71
+[  370.251426][    C1] usbtmc 3-1:0.0: unknown status received: -71
+[  370.257552][    C0] usbtmc 4-1:0.0: unknown status received: -71
+[  370.263715][    C1] usbtmc 5-1:0.0: unknown status received: -71
+[  370.269819][    C0] usbtmc 2-1:0.0: unknown status received: -71
+[  370.275974][    C1] usbtmc 3-1:0.0: unknown status received: -71
+[  370.282100][    C0] usbtmc 6-1:0.0: unknown status received: -71
+[  370.288262][    C1] usbtmc 5-1:0.0: unknown status received: -71
+[  370.294399][    C0] usbtmc 4-1:0.0: unknown status received: -71
 
-  Subject: usb: dwc3: host: Set PHY mode during suspend
 
-  During suspend read the status of all port and make sure the PHYs
-  are in the correct mode (mka@: why is it necessary to call
-  phy_set_mode(), shouldn't the PHYs already be in the correct mode
-  if they are operational?). Keep track of the mode of the HS PHY to
-  be able to configure wakeup properly.
 
-  Also check during suspend if any wakeup capable devices are
-  connected to the controller (directly or through hubs), if there
-  are none set a flag to indicate that the PHY should be powered
-  down during suspend.
-
-Just a starting point, I'm sure it has room for improvement.
-
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  drivers/usb/dwc3/core.h |  3 +++
->  drivers/usb/dwc3/host.c | 59 +++++++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 62 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index 6e9abfb..f409dc1 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1111,6 +1111,9 @@ struct dwc3 {
->  
->  	bool			phys_ready;
->  
-> +	unsigned int            hs_phy_mode;
-> +	bool			phy_power_off;
-> +
->  	struct ulpi		*ulpi;
->  	bool			ulpi_ready;
->  
-> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-> index f29a264..527f04c 100644
-> --- a/drivers/usb/dwc3/host.c
-> +++ b/drivers/usb/dwc3/host.c
-> @@ -11,6 +11,14 @@
->  #include <linux/platform_device.h>
->  
->  #include "core.h"
-> +#include "../host/xhci.h"
-> +#include "../host/xhci-plat.h"
-> +
-> +static int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd);
-> +
-> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci = {
-> +	.suspend_quirk = xhci_dwc3_suspend_quirk,
-> +};
->  
->  static int dwc3_host_get_irq(struct dwc3 *dwc)
->  {
-> @@ -115,6 +123,13 @@ int dwc3_host_init(struct dwc3 *dwc)
->  		}
->  	}
->  
-> +	ret = platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
-> +			sizeof(struct xhci_plat_priv));
-> +	if (ret) {
-> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
-> +		goto err;
-> +	}
-> +
->  	ret = platform_device_add(xhci);
->  	if (ret) {
->  		dev_err(dwc->dev, "failed to register xHCI device\n");
-> @@ -127,6 +142,50 @@ int dwc3_host_init(struct dwc3 *dwc)
->  	return ret;
->  }
->  
-> +static void dwc3_set_phy_mode(struct usb_hcd *hcd)
-> +{
-> +
-> +	int i, num_ports;
-> +	u32 reg;
-> +	unsigned int ss_phy_mode = 0;
-> +	struct dwc3 *dwc = dev_get_drvdata(hcd->self.controller->parent);
-> +	struct xhci_hcd	*xhci_hcd = hcd_to_xhci(hcd);
-> +
-> +	dwc->hs_phy_mode = 0;
-> +
-> +	reg = readl(&xhci_hcd->cap_regs->hcs_params1);
-> +	num_ports = HCS_MAX_PORTS(reg);
-> +
-> +	for (i = 0; i < num_ports; i++) {
-> +		reg = readl(&xhci_hcd->op_regs->port_status_base + i * 0x04);
-> +		if (reg & PORT_PE) {
-> +			if (DEV_HIGHSPEED(reg) || DEV_FULLSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_HS;
-> +			else if (DEV_LOWSPEED(reg))
-> +				dwc->hs_phy_mode |= PHY_MODE_USB_HOST_LS;
-> +
-> +			if (DEV_SUPERSPEED(reg))
-> +				ss_phy_mode |= PHY_MODE_USB_HOST_SS;
-> +		}
-> +	}
-> +	phy_set_mode(dwc->usb2_generic_phy, dwc->hs_phy_mode);
-> +	phy_set_mode(dwc->usb3_generic_phy, ss_phy_mode);
-> +}
-> +
-> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd)
-> +{
-> +	struct dwc3 *dwc = dev_get_drvdata(hcd->self.controller->parent);
-> +
-> +	dwc3_set_phy_mode(hcd);
-> +
-> +	if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
-> +		dwc->phy_power_off = false;
-> +	else
-> +		dwc->phy_power_off = true;
-> +
-> +	return 0;
-> +}
-> +
->  void dwc3_host_exit(struct dwc3 *dwc)
->  {
->  	platform_device_unregister(dwc->xhci);
-> -- 
-> QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-> of Code Aurora Forum, hosted by The Linux Foundation
-> 
+Content provided within this e-mail including any attachments, is for the use of the intended recipients and may contain Rohde & Schwarz company restricted information. Any unauthorized use, disclosure, or distribution of this communication in whole or in part is strictly prohibited. If you are not the intended recipient, please notify the sender by reply email or by telephone and delete the communication in its entirety.
