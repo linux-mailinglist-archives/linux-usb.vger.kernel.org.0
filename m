@@ -2,137 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D42D1363D63
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 10:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB1BF363DDF
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 10:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237681AbhDSIU7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 04:20:59 -0400
-Received: from mail-vs1-f51.google.com ([209.85.217.51]:38652 "EHLO
-        mail-vs1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbhDSIU4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 04:20:56 -0400
-Received: by mail-vs1-f51.google.com with SMTP id s184so6761409vss.5;
-        Mon, 19 Apr 2021 01:20:25 -0700 (PDT)
+        id S238242AbhDSInx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 04:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238204AbhDSInw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 04:43:52 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73FCC06174A;
+        Mon, 19 Apr 2021 01:43:22 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id b17so23774139pgh.7;
+        Mon, 19 Apr 2021 01:43:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VRokIKYRVWLtZ0DRiWEqTU2hDyvkFHznP5LEDRwjPo4=;
+        b=IyPCYwLGPp7g7yNyOumEHNIto61N9Jukzc28weEtUHNrLBmA1LVgYAaUQJRLlpIYCo
+         C1TyeNrAQazTLS3W40mHwKkMOqG2g6qIe9Up2hIWhuNXk+Z2iaWiQNSS6GUfoBq2HfZx
+         /2fZJtM58wIVBZwG8enQUMV/0+cT2WzYKdGCRO6eNzwh4SVlBGR5ezV3mG3X/H8L3U2l
+         nEN9GoY9L+7DBXTs6sD2EVaNhqH5jQNQkU22N736PvAbFQZnj3vrbFW4cOneAaLid5aN
+         I2s7LBQAU5CrLDWFF4DgjjSOLguM/cpMV9uIEFgsnQl2lZakeBWxro6OXaGaEmsRJ4yb
+         3ivA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ltv54OOOgcKhPoH7oRaigoXMRi+Z2QqH7bQ4dTNkEvU=;
-        b=Ms0SsPF9J+tPj990DTLxJSvXO3Pmul5WCyeOMIDCVJ6fXcWAb6uJsC52eqzmbxUtMJ
-         Ul7GxKCbZ7tvkEEqDB5miyVfuIPIZ6Wf2fLEOnYrnyzAq9BFRVgE5tawuQnZZ1KvmiLL
-         EF/Qi81vkqZN75KRE3I2Ub033NMXNbhyaWlBPnaDUI/smGHJ8UPy9vAoTfFqPZVmpcjG
-         u+1xfNjeAWaCtnBNzLs677wnayVF3agzAGavKRFiZLiJM0DQwfElLwqOkGkNXKPR+lsq
-         TJLnDZHeX994hG8+Gw6qi4xtQrZg2dB0UisZo4zpBSW648ZZkTOPfDD7+avHhtZh59RH
-         iISg==
-X-Gm-Message-State: AOAM531bR0AI7GyosdsIXdtavR8bqUCmY3mDWUO7awITMHICVomqNNgB
-        TnOox77RR3JpNHchfmmIyY7YFvqX5Aujc9OIMxU=
-X-Google-Smtp-Source: ABdhPJw0QI7XOFx1TPnFrXWAlR/QW1v6zaWS/KnYbAtB/CEX2DsVVO2yNBv9r1VAA3kWmuOXuQwF2fQGH/J1go6B4oc=
-X-Received: by 2002:a67:f503:: with SMTP id u3mr12373252vsn.3.1618820424835;
- Mon, 19 Apr 2021 01:20:24 -0700 (PDT)
+        bh=VRokIKYRVWLtZ0DRiWEqTU2hDyvkFHznP5LEDRwjPo4=;
+        b=Hr2e2aBP1KlVBsTIXUKRgZ1jYdIkFfagJpyARwRYi7zmG/9KJK3/mc0kvbuwLNm6nK
+         a+2E4067kGvk1flUmFH62Yb12jFHPDm2QOSi9hTSA9yUNmIWrHI7JJ+JP/7K1lSM8pN4
+         ot9KUKvXXBSpGwzmqH9qGpE17aZ/LbXP7UgCvUQicHs6Rk2/JrjhTFCn8y+ntPfkiEj4
+         UpagbXOkPxmnOLGclg3W3fJRI6fVTH943WcmOEaziXCJ8Hwsx+v4rTwudZFMNVNUCD2d
+         nkHz9usX1G0fjktUJLc8w7WfeJGq48sHZF3zhIRoAkS3jxnzOWbiq8/Q7y5uhU8yeEgW
+         8EAA==
+X-Gm-Message-State: AOAM531KatZWDkJrHOKsJ8Z91eNQcvLZC+XdqaAvlRU5hZUsDKQFF3rN
+        uilGYProyqQtXMImnC+w6/d+wlEx343xiBxbymw=
+X-Google-Smtp-Source: ABdhPJzG1mIOpmmA1DIB1A2S9VsWNvmj0tHOyMuwJ/u4xBzTRH2wdyHJXHMgMhCKYfdaM+3DwcDfabgHA4jYQtbjuBo=
+X-Received: by 2002:a63:a847:: with SMTP id i7mr6877569pgp.203.1618821802240;
+ Mon, 19 Apr 2021 01:43:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210419042722.27554-1-alice.guo@oss.nxp.com> <20210419042722.27554-2-alice.guo@oss.nxp.com>
-In-Reply-To: <20210419042722.27554-2-alice.guo@oss.nxp.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 19 Apr 2021 10:20:13 +0200
-Message-ID: <CAMuHMdUbrPxtJ9DCP0_nFrReuuO4vFY2J79LrKY82D7bCOfzRw@mail.gmail.com>
-Subject: Re: [RFC v1 PATCH 1/3] drivers: soc: add support for soc_device_match
- returning -EPROBE_DEFER
-To:     "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        horia.geanta@nxp.com, aymen.sghaier@nxp.com,
-        herbert@gondor.apana.org.au, davem@davemloft.net, tony@atomide.com,
-        geert+renesas@glider.be, mturquette@baylibre.com, sboyd@kernel.org,
-        vkoul@kernel.org, peter.ujfalusi@gmail.com, a.hajda@samsung.com,
-        narmstrong@baylibre.com, robert.foss@linaro.org, airlied@linux.ie,
-        daniel@ffwll.ch, khilman@baylibre.com, tomba@kernel.org,
-        jyri.sarha@iki.fi, joro@8bytes.org, will@kernel.org,
-        mchehab@kernel.org, ulf.hansson@linaro.org,
-        adrian.hunter@intel.com, kishon@ti.com, kuba@kernel.org,
-        linus.walleij@linaro.org, Roy.Pledge@nxp.com, leoyang.li@nxp.com,
-        ssantosh@kernel.org, matthias.bgg@gmail.com, edubezval@gmail.com,
-        j-keerthy@ti.com, balbi@kernel.org, linux@prisktech.co.nz,
-        stern@rowland.harvard.edu, wim@linux-watchdog.org,
-        linux@roeck-us.net, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        dmaengine@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-media@vger.kernel.org,
-        linux-mmc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-staging@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
+References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
+ <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+ <d053b843-2308-6b42-e7ff-3dc6e33e5c7d@synopsys.com> <0882cfae-4708-a67a-f112-c1eb0c7e6f51@gmail.com>
+ <1c1d8e4a-c495-4d51-b125-c3909a3bdb44@synopsys.com> <db5849f7-ba31-8b18-ebb5-f27c4e36de28@gmail.com>
+ <09755742-c73b-f737-01c1-8ecd309de551@gmail.com> <4a1245e3-023c-ec69-2ead-dacf5560ff9f@synopsys.com>
+In-Reply-To: <4a1245e3-023c-ec69-2ead-dacf5560ff9f@synopsys.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 19 Apr 2021 11:43:05 +0300
+Message-ID: <CAHp75Vfs559OL1_iwtmdvnLTELUFLHXaJfmW4_oqoC3NpyMhLw@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Ferry Toth <fntoth@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Yu Chen <chenyu56@huawei.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Alice,
+On Mon, Apr 19, 2021 at 2:03 AM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> Ferry Toth wrote:
+> > Op 17-04-2021 om 16:22 schreef Ferry Toth:
+> >> Op 17-04-2021 om 04:27 schreef Thinh Nguyen:
+> >>> Ferry Toth wrote:
+> >>>> Op 16-04-2021 om 00:23 schreef Thinh Nguyen:
+> >>>>> Thinh Nguyen wrote:
 
-CC Arnd (soc_device_match() author)
-
-On Mon, Apr 19, 2021 at 6:28 AM Alice Guo (OSS) <alice.guo@oss.nxp.com> wrote:
-> From: Alice Guo <alice.guo@nxp.com>
+> > On the PC side this resulted to:
+> >
+> > apr 17 18:17:44 delfion kernel: usb 1-5: new high-speed USB device
+> > number 12 using xhci_hcd
+> > apr 17 18:17:44 delfion kernel: usb 1-5: New USB device found,
+> > idVendor=1d6b, idProduct=0104, bcdDevice= 1.00
+> > apr 17 18:17:44 delfion kernel: usb 1-5: New USB device strings: Mfr=1,
+> > Product=2, SerialNumber=3
+> > apr 17 18:17:44 delfion kernel: usb 1-5: Product: USBArmory Gadget
+> > apr 17 18:17:44 delfion kernel: usb 1-5: Manufacturer: USBArmory
+> > apr 17 18:17:44 delfion kernel: usb 1-5: SerialNumber: 0123456789abcdef
+> > apr 17 18:17:49 delfion kernel: usb 1-5: can't set config #1, error -110
+> >
+> > Thanks for all your help!
 >
-> In i.MX8M boards, the registration of SoC device is later than caam
-> driver which needs it. Caam driver needs soc_device_match to provide
-> -EPROBE_DEFER when no SoC device is registered and no
-> early_soc_dev_attr.
-
-I'm wondering if this is really a good idea: soc_device_match() is a
-last-resort low-level check, and IMHO should be made available early on,
-so there is no need for -EPROBE_DEFER.
-
+> Looks like it's LPM related again. To confirm, try this:
+> Disable LPM with this property "snps,usb2-gadget-lpm-disable"
+> (Note that it's not the same as "snps,dis_enblslpm_quirk")
 >
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
+> Make sure that your testing kernel has this patch [1]
+> 475e8be53d04 ("usb: dwc3: gadget: Check for disabled LPM quirk")
 
-Thanks for your patch!
+Thinh, Ferry, I'm a bit lost in this thread. Can you summarize what
+patches I have to apply on top of v5.12-rc8 to mitigate issues,
+mentioned in this thread?
 
-> --- a/drivers/base/soc.c
-> +++ b/drivers/base/soc.c
-> @@ -110,6 +110,7 @@ static void soc_release(struct device *dev)
->  }
->
->  static struct soc_device_attribute *early_soc_dev_attr;
-> +static bool soc_dev_attr_init_done = false;
+(Sounds to me there are like ~5 patches floating around)
 
-Do you need this variable?
+I'll try to find time to test on my side.
 
->
->  struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr)
->  {
-> @@ -157,6 +158,7 @@ struct soc_device *soc_device_register(struct soc_device_attribute *soc_dev_attr
->                 return ERR_PTR(ret);
->         }
->
-> +       soc_dev_attr_init_done = true;
->         return soc_dev;
->
->  out3:
-> @@ -246,6 +248,9 @@ const struct soc_device_attribute *soc_device_match(
->         if (!matches)
->                 return NULL;
->
-> +       if (!soc_dev_attr_init_done && !early_soc_dev_attr)
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=475e8be53d0496f9bc6159f4abb3ff5f9b90e8de
 
-if (!soc_bus_type.p && !early_soc_dev_attr)
-
-> +               return ERR_PTR(-EPROBE_DEFER);
-> +
->         while (!ret) {
->                 if (!(matches->machine || matches->family ||
->                       matches->revision || matches->soc_id))
-
-Gr{oetje,eeting}s,
-
-                        Geert
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+With Best Regards,
+Andy Shevchenko
