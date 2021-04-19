@@ -2,127 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C075C363FEC
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 12:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955C436416F
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Apr 2021 14:18:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbhDSKwj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 06:52:39 -0400
-Received: from salscheider.org ([202.61.254.1]:48494 "EHLO
-        mail.salscheider.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbhDSKwi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 06:52:38 -0400
-Received: from [IPv6:2001:16b8:22bc:5000:ba61:907e:22f9:37e7] (200116b822bc5000ba61907e22f937e7.dip.versatel-1u1.de [IPv6:2001:16b8:22bc:5000:ba61:907e:22f9:37e7])
-        by mail.salscheider.org (Postfix) with ESMTPSA id AC06718534B;
-        Mon, 19 Apr 2021 12:52:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salscheider.org;
-        s=dkim; t=1618829524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MadzgwzWX28hMVBn76mNzeA18HQRSOGpJPnImuoOM5Y=;
-        b=2YezCNZMzFckgmYuiBAFACEInYwim1mHqeWkAZggGmaS8Bzjg9JpZWmn0DIvHNpJFBt0+L
-        3LUEo96lfJfsBksiTKdAspsx4NjhNWOa2IWvMKfwnP45g50+JenuiFcZcacrYvhAmRPsZ3
-        /18k6Sp8Mw/ZCzkfhbKNnrC22Tfv6R8=
-Subject: Re: [PATCH] [RFC] xhci: Add Link TRB sync quirk for ASM3142
-From:   Ole Salscheider <ole@salscheider.org>
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        linux-usb@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>
-References: <20210416093729.41865-1-ole@salscheider.org>
- <9bf0060c-3427-a261-531c-c075054ae094@linux.intel.com>
- <5c92dd8c-c8b0-40b5-addb-2df360673462@salscheider.org>
-Message-ID: <a8b56a79-e092-a344-7508-8c22b6568898@salscheider.org>
-Date:   Mon, 19 Apr 2021 12:52:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        id S237718AbhDSMRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 08:17:41 -0400
+Received: from mout.kundenserver.de ([212.227.126.133]:49693 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239056AbhDSMRg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 08:17:36 -0400
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1McIYO-1m4VGN1dSm-00cdhN; Mon, 19 Apr 2021 14:17:03 +0200
+Received: by mail-wr1-f45.google.com with SMTP id a4so33804401wrr.2;
+        Mon, 19 Apr 2021 05:17:03 -0700 (PDT)
+X-Gm-Message-State: AOAM530v/yBC/2XYq7ELiJsOKT38utH8V09hnr+DbReIt0QSUowLKCu9
+        qzJPWUNHn5H0Tj77oevy9M0tidTBIegyWgN+ZY8=
+X-Google-Smtp-Source: ABdhPJw4F20QerTwfst1rAMwc6NWiXDSUWeUkZ8E4j2sezaYrIv6atAni45jIwUzsYws7AyLO9D3pu8QFGIGztgXd7o=
+X-Received: by 2002:a05:6000:1843:: with SMTP id c3mr14679907wri.361.1618834612186;
+ Mon, 19 Apr 2021 05:16:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5c92dd8c-c8b0-40b5-addb-2df360673462@salscheider.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210419042722.27554-1-alice.guo@oss.nxp.com> <20210419042722.27554-4-alice.guo@oss.nxp.com>
+ <YH0O907dfGY9jQRZ@atmark-techno.com> <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
+ <YH1OeFy+SepIYYG0@atmark-techno.com>
+In-Reply-To: <YH1OeFy+SepIYYG0@atmark-techno.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 19 Apr 2021 14:16:36 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+Message-ID: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use soc_device_match
+To:     Dominique MARTINET <dominique.martinet@atmark-techno.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=C4=83?= <horia.geanta@nxp.com>,
+        aymen.sghaier@nxp.com, Herbert Xu <herbert@gondor.apana.org.au>,
+        David Miller <davem@davemloft.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        peter.ujfalusi@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>, tomba@kernel.org,
+        jyri.sarha@iki.fi, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kishon <kishon@ti.com>, Jakub Kicinski <kuba@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Roy Pledge <Roy.Pledge@nxp.com>, Leo Li <leoyang.li@nxp.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>, Felipe Balbi <balbi@kernel.org>,
+        Tony Prisk <linux@prisktech.co.nz>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        linux-omap <linux-omap@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>, dmaengine@vger.kernel.org,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:ARM/Amlogic Meson SoC support" 
+        <linux-amlogic@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-staging@lists.linux.dev,
+        "moderated list:ARM/Mediatek SoC..." 
+        <linux-mediatek@lists.infradead.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:P71GUur0c8Et4KTdfK062CelxJMlxDzHdi6foeZVMrh68Tz4kVO
+ xXC4vz+qe3LvNC/lTgY8q6jr08cIcxgzzrqqwLuy4gBjPze3CRaFI6Tn0ivsylYkqTjCGCd
+ UznPeEk90qstnxb0iWNZx7FG5N+vrUigS/VNsT3W/kFEpTHiyw396kNMzzFJBTjXO+naZJ+
+ Cfu35e3pJq/mHwP5LQM/Q==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:Tj0dSv4OACg=:QLuHKXqc+6Lj41NGnufoGl
+ N+UnlZp25078q227oT0o/4kxbd0mQOAoQ/NCUKgnVsoYmGtmK6mEBskoottCNbYunStcV9NF4
+ wE8ToQWQ05B3nZv4Vjj9qNbaiSwQl2/EIEpHx8+6DQaiGM4h6uplPIOIDeaZjltt02tsjjmk7
+ kxpSU+zIeAbNwqmXYSk5Vm3CpYS1xMcDA6Eiv0+uZeBUE0kKjN4jwkU6+BKG/eaq+T9ufKwnD
+ crSJLI+V67wSaKUzbHccJ3EU1Sb6dMM2cPoEC3Av6tRhuAXiX84+lOxtkljO1IFE9iL1JBVn5
+ CjGxqnLONV0vManrkRS3zSk/dqMTqKx9iNczeHNAz+sKCK3kGK1HvvAI82zCriMShj36q2Yiu
+ latEFCHqqv6CzIpzD2Q+F98/Rh3nVZdyFAqvuM6r16X0t/3dzAs72dYw+jzCHok5qetil5Q2V
+ 5rdGScTR8+ZhGbwiKRQyQ6I2CQTnccKZ549zJci96NqNdfUe5jbzVwZOI0walCavZ7GVu0d2F
+ jvOU246bo6oNPkDzH9c2gJBnZtcrzAKb4pwtF9+3cOiLZPnCE0nY+1vjm75YQHDBCyxvLdR64
+ g4tTIuRlUg3P8XaXbJiPp80y/nkM8kt4yG+up76tnDKMDxMpP5a+pkpQ1YQ2I6y3uojN6bE8n
+ CFp8=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+On Mon, Apr 19, 2021 at 11:33 AM Dominique MARTINET
+<dominique.martinet@atmark-techno.com> wrote:
+> Geert Uytterhoeven wrote on Mon, Apr 19, 2021 at 11:03:24AM +0200:
+>
+> > soc_device_match() should only be used as a last resort, to identify
+> > systems that cannot be identified otherwise.  Typically this is used for
+> > quirks, which should only be enabled on a very specific subset of
+> > systems.  IMHO such systems should make sure soc_device_match()
+> > is available early, by registering their SoC device early.
+>
+> I definitely agree there, my suggestion to defer was only because I know
+> of no other way to influence the ordering of drivers loading reliably
+> and gave up on soc being init'd early.
 
-On 16.04.21 17:18, Ole Salscheider wrote:
-> Hi Mathias.
-> 
-> On 16.04.21 14:09, Mathias Nyman wrote:
->> Hi Ole
->>
->> On 16.4.2021 12.37, Ole Salscheider wrote:
->>> This patch adds a quirk to the xhci driver so that link TRBs are only
->>> given to the host controller once it has processed all previous TRBs on
->>> this segment.
->>>
->>> This quirk is necessary for me on an ASMedia ASM3142 host controller.
->>> Without it, I get the following errors when accessing a SuperSpeed UVC
->>> camera:
->>>
->>> Transfer event TRB DMA ptr not part of current TD ep_index XX 
-> comp_code XX
->>>
->>> You can find more details in my previous mail about the problem:
->>> https://lkml.org/lkml/2021/3/31/355
->>>
->>> This patch fixes my problem, but it is probably terribly wrong. I am not
->>> even sure if I can rely on handle_tx_event being called before each link
->>> TRB in the segment. Some feedback would be very welcome.
->>
->> I think we need to look at the cause more closely.
->>
->> We normally only get events for the last TRB of a TD, or for short 
-> transfers like in your case.
->> So not every transfer TRB generates events.
->>
->> There are several things going on here that combined could cause this.
->>
->> Last transfer TRB of a segment has some alignment requirements which 
-> might not be handled in the isoc case.
->> The amount of untransferred data is large, (16388 bytes) so the TRB 
-> causing the short packet
->> could be far from the last TRB we expect the event on.
->> Due to new segment and link trb maybe the stored last_trb for this TD 
-> is just set wrong
->>
->> Anyway, more detailed traces together with dynamic debug show us more:
->>
->> mount -t debugfs none /sys/kernel/debug
->> echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
->> echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
->> echo 81920 > /sys/kernel/debug/tracing/buffer_size_kb
->> echo 1 > /sys/kernel/debug/tracing/events/xhci-hcd/enable
->> < trigger the issue >
->> Send output of dmesg
->> Send content of /sys/kernel/debug/tracing/trace
->>
->> trace accumulates pretty fast so try to copy it as soon as the issue 
-> is seen.
-> 
-> I have uploaded the dmesg output to
-> https://stuff.salscheider.org/dmesg_out
-> and the trace to
-> https://stuff.salscheider.org/trace_out
-> 
-> With the trace enabled, I did not get the DMA errors. Maybe it slowed 
-> down the computer enough. But still the camera stream froze after ~3 
-> frames.
-> 
-> The log contains a recording with ffmpeg that gave a few frames (at 
-> second 83), then some where it hung completely. Then I re-plugged the 
-> camera and got a few more frames (at second 179) before it hung again.
-> 
-> I hope this is helpful. If you need a different log please tell me.
+In some cases, you can use the device_link infrastructure to deal
+with dependencies between devices. Not sure if this would help
+in your case, but have a look at device_link_add() etc in drivers/base/core.c
 
-I tried it a second time today and now I got the DMA error also when 
-tracing was active. You can find the dmesg and trace outputs here:
+> In this particular case the problem is that since 7d981405d0fd ("soc:
+> imx8m: change to use platform driver") the soc probe tries to use the
+> nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
+> So soc loading gets pushed back to the end of the list because it gets
+> defered and other drivers relying on soc_device_match get confused
+> because they wrongly think a device doesn't match a quirk when it
+> actually does.
+>
+> If there is a way to ensure the nvmem driver gets loaded before the soc,
+> that would also solve the problem nicely, and avoid the need to mess
+> with all the ~50 drivers which use it.
+>
+> Is there a way to control in what order drivers get loaded? Something in
+> the dtb perhaps?
 
-https://stuff.salscheider.org/dmesg_out2
-https://stuff.salscheider.org/trace_out2
+For built-in drivers, load order depends on the initcall level and
+link order (how things are lined listed in the Makefile hierarchy).
 
-Best regards,
+For loadable modules, this is up to user space in the end.
 
-Ole
+Which of the drivers in this scenario are loadable modules?
+
+        Arnd
