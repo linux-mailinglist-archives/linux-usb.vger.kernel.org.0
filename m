@@ -2,90 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC060364FB2
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 03:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8715C364FBE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 03:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbhDTBJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 21:09:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58614 "EHLO mail.kernel.org"
+        id S230382AbhDTBPv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 21:15:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60714 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229994AbhDTBJZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Apr 2021 21:09:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B234461363;
-        Tue, 20 Apr 2021 01:08:52 +0000 (UTC)
+        id S229994AbhDTBPu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Apr 2021 21:15:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B6ADB6127C;
+        Tue, 20 Apr 2021 01:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618880935;
-        bh=yOhwTEEdJ51D9ecoqLz/L5DtMsNDmzT+3Upf6xsRNeE=;
+        s=k20201202; t=1618881320;
+        bh=dMVy7r9kbwGa9NRpxTnJsulneVn6ZpTFbmTT2nBL6dE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B/Ne2h/fSACpMFCfIwqYN1hyJyZqXWEdgsSs+1KNrKm4sbkVsfhyAQCKScJusXruS
-         5Jv2/oeSSrP5D7ZgcLuzVQZTds4oOJpqTxlldTZqGxHH1g6xDTJpzKypYcR2Dm8obr
-         z4W2PtSYU97GdwocE87uThsWpJKqJE2JR6eP7mu2TnjUJqBt8J7lfrkJ3bm6R3TT4x
-         WfMGrRMFBOq2i6xMo24ANJ80+s4HMEuOL6q/PhWwVoCdCDnPdz/LOKHJaEwSXmJ6qN
-         gBypnW2sB+D+AMGqa1bwwvDDZAIwyBqxDjfUBagZ4WTG6zUusF9b57oAexuLS6rnCX
-         TKN26rQOd+slA==
-Date:   Tue, 20 Apr 2021 09:08:47 +0800
+        b=YmHJmRZhHoHa0lYeCv8ImdRwIMDmVTYyLv/k25x2801hM/RsHKvN5uJYH/IrMaOex
+         BussN01c8+/DUplPZA/DvoJ/UHo1fA+NHmo8Vb4MD9l91VA9Cmj4ZZnhjmdiizTLwE
+         QJ6UotXioAPvCVlpSFIHxnM/eP3MxKCzO5DHmQt51WZJguqHL9dFdlUWz/HIx+KHXA
+         KIp6EMNluDR10Mw0yxhxITbQgdf1KY2NNfyVi2oYIOZq1mywjVRImAy2MpGIOp+kcu
+         ayHg/6YNDcEvT2Vr8hiqEossVfPyEf0Jf+IihHHSFdYaO9mKxDdoOANBDIzadu/kym
+         197Zlfvld9NVA==
+Date:   Tue, 20 Apr 2021 09:15:14 +0800
 From:   Peter Chen <peter.chen@kernel.org>
 To:     Pawel Laszczak <pawell@cadence.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        ruslan.bilovol@gmail.com, jbrunet@baylibre.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kurahul@cadence.com
-Subject: Re: [PATCH 1/2] usb: gadget: f_uac2: Stop endpoint before enabling
- it.
-Message-ID: <20210420010846.GA6408@nchen>
-References: <20210419075053.28467-1-pawell@gli-login.cadence.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kurahul@cadence.com
+Subject: Re: [PATCH 2/2] usb: cdnsp: Fix lack of removing request from
+ pending list.
+Message-ID: <20210420011514.GA6443@nchen>
+References: <20210419075311.34430-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210419075053.28467-1-pawell@gli-login.cadence.com>
+In-Reply-To: <20210419075311.34430-1-pawell@gli-login.cadence.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-04-19 09:50:53, Pawel Laszczak wrote:
+On 21-04-19 09:53:11, Pawel Laszczak wrote:
 > From: Pawel Laszczak <pawell@cadence.com>
 > 
-> Patch adds disabling endpoint before enabling it during changing
-> alternate setting. Lack of this functionality causes that in some
-> cases uac2 queue the same request multiple time.
-> Such situation can occur when host send set interface with
-> alternate setting 1 twice.
+> Patch fixes lack of removing request from ep->pending_list on failure
+> of the stop endpoint command. Driver even after failing this command
+> must remove request from ep->pending_list.
+> Without this fix driver can stuck in cdnsp_gadget_ep_disable function
+> in loop:
+>         while (!list_empty(&pep->pending_list)) {
+>                 preq = next_request(&pep->pending_list);
+>                 cdnsp_ep_dequeue(pep, preq);
+>         }
 > 
 > Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
->  drivers/usb/gadget/function/f_uac2.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+>  drivers/usb/cdns3/cdnsp-gadget.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-> index 9cc5c512a5cd..7d20a9d8a1b4 100644
-> --- a/drivers/usb/gadget/function/f_uac2.c
-> +++ b/drivers/usb/gadget/function/f_uac2.c
-> @@ -890,17 +890,17 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
->  	if (intf == uac2->as_out_intf) {
->  		uac2->as_out_alt = alt;
+> diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+> index 6182c9bc65de..1ca8c1777a5c 100644
+> --- a/drivers/usb/cdns3/cdnsp-gadget.c
+> +++ b/drivers/usb/cdns3/cdnsp-gadget.c
+> @@ -424,17 +424,17 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+>  int cdnsp_ep_dequeue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+>  {
+>  	struct cdnsp_device *pdev = pep->pdev;
+> -	int ret;
+> +	int ret_stop = 0;
+> +	int ret_rem;
 >  
-> +		u_audio_stop_capture(&uac2->g_audio);
-> +
->  		if (alt)
->  			ret = u_audio_start_capture(&uac2->g_audio);
-> -		else
-> -			u_audio_stop_capture(&uac2->g_audio);
->  	} else if (intf == uac2->as_in_intf) {
->  		uac2->as_in_alt = alt;
+>  	trace_cdnsp_request_dequeue(preq);
 >  
-> +		u_audio_stop_playback(&uac2->g_audio);
+> -	if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_RUNNING) {
+> -		ret = cdnsp_cmd_stop_ep(pdev, pep);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	if (GET_EP_CTX_STATE(pep->out_ctx) == EP_STATE_RUNNING)
+> +		ret_stop = cdnsp_cmd_stop_ep(pdev, pep);
 > +
->  		if (alt)
->  			ret = u_audio_start_playback(&uac2->g_audio);
-> -		else
-> -			u_audio_stop_playback(&uac2->g_audio);
->  	} else {
->  		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
->  		return -EINVAL;
+> +	ret_rem =  cdnsp_remove_request(pdev, preq, pep);
 
-To avoid this, you may use prm->ep_enabled to judge if the endpoint has
-already enabled.
+One more blank space above, and add Fixed-by tag.
+
+>  
+> -	return cdnsp_remove_request(pdev, preq, pep);
+> +	return ret_rem ? ret_rem : ret_stop;
+>  }
+>  
+>  static void cdnsp_zero_in_ctx(struct cdnsp_device *pdev)
+> -- 
+> 2.25.1
+> 
 
 -- 
 
