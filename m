@@ -2,60 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2103659DA
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 15:20:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E69365A41
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 15:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232142AbhDTNV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Apr 2021 09:21:26 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42522 "EHLO mx2.suse.de"
+        id S231661AbhDTNg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 09:36:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231526AbhDTNVZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Apr 2021 09:21:25 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1618924853; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z8fMNZLHfPA+P03rcxAxW338OHehTmfQEPMao8EWaHI=;
-        b=Lo0i1zry8NtuYr4tk1e0EAqBbAnQj3ZnAM4p2GaaVFYe4vo46raLDvSOyJCzKmPTHHT5lI
-        iUabyFQvvFq73Z3+OgrzZqxHV6z950fRxoXqFHXOrzWbB/ONqW3ELpVWPesr2pbtA1UA5S
-        wfUCF+HZvPGVkWkp3EmQFCNfQsFNg+U=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 58E08B2F1;
-        Tue, 20 Apr 2021 13:20:53 +0000 (UTC)
-Message-ID: <f360af558c2fbea7bd02d4f2fee2215f3589fa7e.camel@suse.com>
-Subject: Re: rtl8152 / power management kernel hang
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Thiago Macieira <thiago.macieira@intel.com>,
-        netdev@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>
-Cc:     linux-usb@vger.kernel.org
-Date:   Tue, 20 Apr 2021 15:20:39 +0200
-In-Reply-To: <4365289.qXpdF7q2Ag@tjmaciei-mobl1>
-References: <7261663.lHksN3My1W@tjmaciei-mobl1>
-         <2853970.3CDyD5GulP@tjmaciei-mobl1>
-         <9fd3ff38935e4c9c1d631606adf241d63171cfde.camel@suse.com>
-         <4365289.qXpdF7q2Ag@tjmaciei-mobl1>
+        id S232084AbhDTNgZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Apr 2021 09:36:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0144361027
+        for <linux-usb@vger.kernel.org>; Tue, 20 Apr 2021 13:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618925754;
+        bh=M6RHOhtzV9Y4cAI9erSTLwlz9Bk0QBcPXzc1PyHvL0E=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kXoTtpexIpR58KMku8KitAUP8MDOebLiqm/NUvhwZYy7Idt/xVxC1Wcyz46g2Tivk
+         iwbROToRmh4tBqS+9L/QHiUjeVkSghsYyVDaTx6L/ROGWO5X+aIy38R7PiVzHD4C0S
+         b9HW2MSJ99JwEADYUHXOZ/WoF3AFlN1mlH3I07pb8kCmkJl4bVcEUk4j8jD9mP+81+
+         7NhgUzftUenW+iyjo/oiYpyTtr4wXiz1jF6e4wO9b1LK/XFcoxIDLQ+4+/VWSmHX/8
+         NLqpqNhLV1lKZi7eioUMg+fs6rrIoPHr1l8fEPiMbhZEMoGJ+87zVzsJxUuE6sbfVE
+         O3MgfaEnQLjGQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id EBAC0611AC; Tue, 20 Apr 2021 13:35:53 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212725] USB CDC ACM device stop working
+Date:   Tue, 20 Apr 2021 13:35:53 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stefan@agner.ch
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-212725-208809-HwOp6Ez4bf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212725-208809@https.bugzilla.kernel.org/>
+References: <bug-212725-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 19.04.2021, 08:53 -0700 schrieb Thiago Macieira:
-> On Monday, 19 April 2021 03:35:43 PDT Oliver Neukum wrote:
-> > One of them at least has a systemic issue with power management.
-> > Please check the upcoming kernel for whether it is your model.
-> 
-> Thanks, Oliver, will do.
-> 
-> For clarification, "upcoming" is 5.12 or 5.13? Tumbleweed is still on 5.11.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212725
 
-5.13
+--- Comment #4 from Stefan Agner (stefan@agner.ch) ---
+Thanks for the quick response!
 
-	HTH
-		Oliver
+Applied and built a 5.11.15 kernel with that patch. It indeed seems to fix =
+the
+issue!
 
+It did not apply cleanly on 5.11.15 or master, there is a `spin_lock_irq` in
+that area. I just moved the acm_unpoison_urbs after the suspend counter
+decrement, not sure if that is the correct fix though.
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
