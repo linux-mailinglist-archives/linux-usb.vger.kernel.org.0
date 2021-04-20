@@ -2,162 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DFAA364ECD
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 01:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A795364F58
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 02:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbhDSXnp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 19:43:45 -0400
-Received: from gw.atmark-techno.com ([13.115.124.170]:42718 "EHLO
-        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbhDSXnm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 19:43:42 -0400
-Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com [209.85.210.70])
-        by gw.atmark-techno.com (Postfix) with ESMTPS id E16DD8049D
-        for <linux-usb@vger.kernel.org>; Tue, 20 Apr 2021 08:43:08 +0900 (JST)
-Received: by mail-ot1-f70.google.com with SMTP id u19-20020a9d4d930000b02902876395d43dso10697052otk.21
-        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 16:43:08 -0700 (PDT)
+        id S232568AbhDTANI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 20:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229720AbhDTANI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Apr 2021 20:13:08 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59FCEC061763
+        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 17:12:36 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p16so14721391plf.12
+        for <linux-usb@vger.kernel.org>; Mon, 19 Apr 2021 17:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=rt8J787jpJUi8pS/4rygI7oi39vcDhX8pZHJCQEjJ2g=;
+        b=ETVqjHpaUwEnXm35E2Hbo0RWmN8d5hdAm5Lrd35VphxFcV3UEgEvQzE6CPlXstKI69
+         rCrBzMbjQeQ4cqhWUnYYJ/CZyj7Wz0j3H5lzsXAcTN6PSJhnQKvqBscUMYU3rzJGbGHC
+         VW9F38yHUjid7vtd8kqUX3i9Q/ArxYd2mcGVQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=YfTDNxUjME1kzwn4ONpBlmaWp5uEs0PGjlewRbiJ8O0=;
-        b=jMx7bpDXjegPWR9QD+DxFAOtTvo0Efb4bhuh6kUSMdGaSyB27D07ReHMfLFolfa11n
-         78bUnZP7tUNELp+VfS35h4RJAnJMv2oHl5x33ZufwZqBkMGse88NdYAb9fLPWUfCWg94
-         SYokbVAL6P7ZPQn/YRsKAOaLEICsfEX9tpPFyD6JKAesFP+BzYOX2zSzdUxFV6iMAqbZ
-         zHnehLV3TluxSaZ6WAUjspg+hDG7xNq4XS3t0ce8CvNMFLrNOsOaXl1DaO+lEDU2viG7
-         PDCLxrMKhsFsCR4khdyKmyGRml1PpRJzdamnoubzTvxMndlYxOcHn9iBAC+vCUM8j3IY
-         qpsw==
-X-Gm-Message-State: AOAM532HRt4oBUj0a1DVc3+5hMX4Mhyp5jKtS2S55TgBIKrtzBPYCESO
-        rtDZdx2iUwyDikTKRTX8ECShUgUfn7pcW1fOLzAYVwu+M/VEA7UjrU8QXCPW2mrSeucADnfV/Yb
-        1o0VX5U8tYc+xpB4K3VN3R8i+
-X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708204pjd.190.1618875776936;
-        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzRGNIqy2AO5m9iOwuC4N09BxordE8LmUXYTIIeyniOtbCQKfA0MKaQl391n1ZLV3YIJOra8w==
-X-Received: by 2002:a17:90a:1c1:: with SMTP id 1mr1708139pjd.190.1618875776711;
-        Mon, 19 Apr 2021 16:42:56 -0700 (PDT)
-Received: from pc-0115 (76.125.194.35.bc.googleusercontent.com. [35.194.125.76])
-        by smtp.gmail.com with ESMTPSA id r3sm8384971pgn.82.2021.04.19.16.42.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Apr 2021 16:42:55 -0700 (PDT)
-Received: from martinet by pc-0115 with local (Exim 4.94)
-        (envelope-from <martinet@pc-0115>)
-        id 1lYdXa-002mPj-58; Tue, 20 Apr 2021 08:42:54 +0900
-Date:   Tue, 20 Apr 2021 08:42:44 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Alice Guo (OSS)" <alice.guo@oss.nxp.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        Rafael Wysocki <rafael@kernel.org>,
-        Horia =?utf-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        aymen.sghaier@nxp.com, Herbert Xu <herbert@gondor.apana.org.au>,
-        David Miller <davem@davemloft.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        peter.ujfalusi@gmail.com, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>, tomba@kernel.org,
-        jyri.sarha@iki.fi, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kishon <kishon@ti.com>, Jakub Kicinski <kuba@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Roy Pledge <Roy.Pledge@nxp.com>, Leo Li <leoyang.li@nxp.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>, Felipe Balbi <balbi@kernel.org>,
-        Tony Prisk <linux@prisktech.co.nz>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        linux-omap <linux-omap@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>, dmaengine@vger.kernel.org,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        linux-phy@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-staging@lists.linux.dev,
-        "moderated list:ARM/Mediatek SoC..." 
-        <linux-mediatek@lists.infradead.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>
-Subject: Re: [RFC v1 PATCH 3/3] driver: update all the code that use
- soc_device_match
-Message-ID: <YH4VdPNO9cdzc5MD@atmark-techno.com>
-References: <20210419042722.27554-1-alice.guo@oss.nxp.com>
- <20210419042722.27554-4-alice.guo@oss.nxp.com>
- <YH0O907dfGY9jQRZ@atmark-techno.com>
- <CAMuHMdVY1SLZ0K30T2pimyrR6Mm=VoSTO=L-xxCy2Bj7_kostw@mail.gmail.com>
- <YH1OeFy+SepIYYG0@atmark-techno.com>
- <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+        bh=rt8J787jpJUi8pS/4rygI7oi39vcDhX8pZHJCQEjJ2g=;
+        b=eSBIdPNSWXHBxZFaWc9bvBDOieW+w3j+E/3+ckTv19MIVfwjsUD4OqDWvZWVqH0H0u
+         EmWrxD7kK6B8iCk8uMZaB/z2DPrxUAMHIplZIWJAN62Q/EZfWBF2dwCPHrIwQHMWvEO8
+         elBspSEtlBwVniyt4At5kiarVijzRziI7qjwcEn7ZXuBNWtoUkF+73L+9NDxuJDGoeIT
+         Hc2CseYypMIT9sBARDeG6XLSOVTTJeylmiXb79OJwtOY47VI0ELINPvvf9RSxdC6bG2H
+         gg9wmREseX614tHAfHxPIk1FTPvLGqPwKbp3oNZn+u5QHOVzZ20TM+70B5VY9RTKlhJ7
+         rvdQ==
+X-Gm-Message-State: AOAM531hKidUfAxE4q/pRDOACAjkAmpHzBht1a5BmI0ptlML5LkfZkdu
+        tso+BU/YLqThRGlWVCKwa3zs1w==
+X-Google-Smtp-Source: ABdhPJzMuxY7Hv1k6MgV5MC92Qz8dG4hDGs5Ol3MQIrCEr5wWn36KvvbFhashY380CnjJvQojUiXWQ==
+X-Received: by 2002:a17:90a:f3cf:: with SMTP id ha15mr1783461pjb.214.1618877555791;
+        Mon, 19 Apr 2021 17:12:35 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7401:678f:e510:6700])
+        by smtp.gmail.com with UTF8SMTPSA id w189sm12833295pfc.31.2021.04.19.17.12.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Apr 2021 17:12:35 -0700 (PDT)
+Date:   Mon, 19 Apr 2021 17:12:34 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v6 5/5] usb: dwc3: qcom: Set genpd active wakeup flag for
+ usb gdsc
+Message-ID: <YH4ccqivriNnXzqq@google.com>
+References: <1618567313-25373-1-git-send-email-sanm@codeaurora.org>
+ <1618567313-25373-6-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAK8P3a1Mu2F0irDDCL-50HiHth29iYFL5b7WHZ=UX6W7zzoxAg@mail.gmail.com>
+In-Reply-To: <1618567313-25373-6-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Arnd Bergmann wrote on Mon, Apr 19, 2021 at 02:16:36PM +0200:
-> In some cases, you can use the device_link infrastructure to deal
-> with dependencies between devices. Not sure if this would help
-> in your case, but have a look at device_link_add() etc in drivers/base/core.c
+On Fri, Apr 16, 2021 at 03:31:53PM +0530, Sandeep Maheswaram wrote:
 
-I'll need to actually try to convince myself but if creating the link
-forces driver registration then it should be workable.
+> Subject: usb: dwc3: qcom: Set genpd active wakeup flag for usb gdsc
+>
+> Set genpd active wakeup flag for usb gdsc if wakeup capable devices
+> are connected so that wake up happens without reenumeration.
 
-> > In this particular case the problem is that since 7d981405d0fd ("soc:
-> > imx8m: change to use platform driver") the soc probe tries to use the
-> > nvmem driver for ocotp fuses for imx8m devices, which isn't ready yet.
-> > So soc loading gets pushed back to the end of the list because it gets
-> > defered and other drivers relying on soc_device_match get confused
-> > because they wrongly think a device doesn't match a quirk when it
-> > actually does.
-> >
-> > If there is a way to ensure the nvmem driver gets loaded before the soc,
-> > that would also solve the problem nicely, and avoid the need to mess
-> > with all the ~50 drivers which use it.
-> >
-> > Is there a way to control in what order drivers get loaded? Something in
-> > the dtb perhaps?
-> 
-> For built-in drivers, load order depends on the initcall level and
-> link order (how things are lined listed in the Makefile hierarchy).
-> 
-> For loadable modules, this is up to user space in the end.
-> 
-> Which of the drivers in this scenario are loadable modules?
+Better describe things are a higher level, rather than getting into
+the details of how you achieve it. That's what the code is for.
 
-All the drivers involved in my case are built-in (nvmem, soc and final
-soc_device_match consumer e.g. caam_jr that crashes the kernel if soc is
-not identified properly).
+e.g.:
 
-I frankly don't like the idea of moving nvmem/ above soc/ in
-drivers/Makefile as a "solution" to this (especially as there is one
-that seems to care about what soc they run on...), so I'll have a look
-at links first, hopefully that will work out.
+Subject: usb: dwc3: qcom: Keep power domain on to support wakeup
 
-
-Thanks,
--- 
-Dominique
+If wakeup capable devices are connected to the controller (directly
+or through hubs) at suspend time keep the power domain on in order
+to support wakeup from these devices.
