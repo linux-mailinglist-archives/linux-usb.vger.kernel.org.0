@@ -2,59 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62FD13657AD
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 13:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2103659DA
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 15:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbhDTLi4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Apr 2021 07:38:56 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39043 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbhDTLiv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 07:38:51 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lYohu-0005Og-EL; Tue, 20 Apr 2021 11:38:18 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: storage: datafab: remove redundant assignment of variable result
-Date:   Tue, 20 Apr 2021 12:38:18 +0100
-Message-Id: <20210420113818.378478-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.30.2
+        id S232142AbhDTNV0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 09:21:26 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42522 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231526AbhDTNVZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Apr 2021 09:21:25 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1618924853; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z8fMNZLHfPA+P03rcxAxW338OHehTmfQEPMao8EWaHI=;
+        b=Lo0i1zry8NtuYr4tk1e0EAqBbAnQj3ZnAM4p2GaaVFYe4vo46raLDvSOyJCzKmPTHHT5lI
+        iUabyFQvvFq73Z3+OgrzZqxHV6z950fRxoXqFHXOrzWbB/ONqW3ELpVWPesr2pbtA1UA5S
+        wfUCF+HZvPGVkWkp3EmQFCNfQsFNg+U=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 58E08B2F1;
+        Tue, 20 Apr 2021 13:20:53 +0000 (UTC)
+Message-ID: <f360af558c2fbea7bd02d4f2fee2215f3589fa7e.camel@suse.com>
+Subject: Re: rtl8152 / power management kernel hang
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Thiago Macieira <thiago.macieira@intel.com>,
+        netdev@vger.kernel.org, Hayes Wang <hayeswang@realtek.com>
+Cc:     linux-usb@vger.kernel.org
+Date:   Tue, 20 Apr 2021 15:20:39 +0200
+In-Reply-To: <4365289.qXpdF7q2Ag@tjmaciei-mobl1>
+References: <7261663.lHksN3My1W@tjmaciei-mobl1>
+         <2853970.3CDyD5GulP@tjmaciei-mobl1>
+         <9fd3ff38935e4c9c1d631606adf241d63171cfde.camel@suse.com>
+         <4365289.qXpdF7q2Ag@tjmaciei-mobl1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+Am Montag, den 19.04.2021, 08:53 -0700 schrieb Thiago Macieira:
+> On Monday, 19 April 2021 03:35:43 PDT Oliver Neukum wrote:
+> > One of them at least has a systemic issue with power management.
+> > Please check the upcoming kernel for whether it is your model.
+> 
+> Thanks, Oliver, will do.
+> 
+> For clarification, "upcoming" is 5.12 or 5.13? Tumbleweed is still on 5.11.
 
-The variable result is being assigned with a value that is
-never read, the assignment is redundant and can be removed.
+5.13
 
-Addresses-Coverity: ("Unused value")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/usb/storage/datafab.c | 1 -
- 1 file changed, 1 deletion(-)
+	HTH
+		Oliver
 
-diff --git a/drivers/usb/storage/datafab.c b/drivers/usb/storage/datafab.c
-index 588818483f4b..bcc4a2fad863 100644
---- a/drivers/usb/storage/datafab.c
-+++ b/drivers/usb/storage/datafab.c
-@@ -294,7 +294,6 @@ static int datafab_write_data(struct us_data *us,
- 		if (reply[0] != 0x50 && reply[1] != 0) {
- 			usb_stor_dbg(us, "Gah! write return code: %02x %02x\n",
- 				     reply[0], reply[1]);
--			result = USB_STOR_TRANSPORT_ERROR;
- 			goto leave;
- 		}
- 
--- 
-2.30.2
 
