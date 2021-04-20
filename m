@@ -2,81 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4B6365EC8
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 19:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B0F365F6F
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 20:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbhDTRrk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Apr 2021 13:47:40 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:51754 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbhDTRrk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 13:47:40 -0400
-Received: from 111-240-142-99.dynamic-ip.hinet.net ([111.240.142.99] helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <chris.chiu@canonical.com>)
-        id 1lYuSo-00083M-3k; Tue, 20 Apr 2021 17:47:06 +0000
-From:   chris.chiu@canonical.com
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        m.v.b@runbox.com, hadess@hadess.net
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH] USB: Add reset-resume quirk for WD19's Realtek Hub
-Date:   Wed, 21 Apr 2021 01:46:51 +0800
-Message-Id: <20210420174651.6202-1-chris.chiu@canonical.com>
-X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
+        id S233694AbhDTSfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 14:35:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59126 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233587AbhDTSey (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Apr 2021 14:34:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3055361002;
+        Tue, 20 Apr 2021 18:34:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1618943662;
+        bh=em6cx2HBxMwbhr6KaCllMTUwubhy8v8uRwj/RBaSigs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=a+7/zfIUj3cUkwkz8a8LdV1bB3rMoS404I/qpQ6nWScZNcmnHWVJYDsgiyHbs/yAc
+         4T/oS7l7fNHWbir/e8V3oFJ0zBgVCkrsqKHBmgqjoa0B9DW1Kvv6u/UrfEWgUcfk2w
+         qSwmoatNxQkeOC+CDgHJgHYxmIBRpcjh3j8ZA60gMvQIvbO6B2DZgipb1n+33+00JG
+         VwcWkpdoNK6olKESeBIvP208KaIEyBOaBP7PrwHkRyJV60aforGAmeV3/rWfgRKgXG
+         nwb0wp0IPHW0fT1F9y4l2HLlbUqIAoGlzlokPDGTm2lLMy9RAJjTIzPMexHYdd7bqt
+         +5Gr54GLIMtsA==
+Date:   Tue, 20 Apr 2021 11:34:20 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH net-next 4/6] r8152: support new chips
+Message-ID: <20210420113420.79d7c65a@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <0de9842749db4718b8f45a0f2fff7967@realtek.com>
+References: <1394712342-15778-350-Taiwan-albertk@realtek.com>
+        <1394712342-15778-354-Taiwan-albertk@realtek.com>
+        <20210416145017.1946f013@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <0de9842749db4718b8f45a0f2fff7967@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Chris Chiu <chris.chiu@canonical.com>
+On Tue, 20 Apr 2021 07:00:39 +0000 Hayes Wang wrote:
+> > > @@ -6878,7 +8942,11 @@ static int rtl8152_probe(struct usb_interface *intf,  
+> > >  	set_ethernet_addr(tp);
+> > >
+> > >  	usb_set_intfdata(intf, tp);
+> > > -	netif_napi_add(netdev, &tp->napi, r8152_poll, RTL8152_NAPI_WEIGHT);
+> > > +
+> > > +	if (tp->support_2500full)
+> > > +		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);  
+> > 
+> > why 256? We have 100G+ drivers all using 64 what's special here?
+> >   
+> > > +	else
+> > > +		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);  
+> 
+> We test 2.5G Ethernet on some embedded platform.
+> And we find 64 is not large enough, and the performance
+> couldn't reach 2.5 G bits/s.
 
-Realtek Hub (0bda:5487) in Dell Dock WD19 sometimes fails to work
-after the system resumes from suspend with remote wakeup enabled
-device connected:
-[ 1947.640907] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
-[ 1947.641208] usb 5-2.3-port5: cannot disable (err = -71)
-[ 1947.641401] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
-[ 1947.641450] usb 5-2.3-port4: cannot reset (err = -71)
+Did you manage to identify what the cause is?
 
-Information of this hub:
-T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 10 Spd=480  MxCh= 5
-D:  Ver= 2.10 Cls=09(hub  ) Sub=00 Prot=02 MxPS=64 #Cfgs=  1
-P:  Vendor=0bda ProdID=5487 Rev= 1.47
-S:  Manufacturer=Dell Inc.
-S:  Product=Dell dock
-C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=01 Driver=hub
-E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
-I:* If#= 0 Alt= 1 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=02 Driver=hub
-E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
-
-The failure results from the ETIMEDOUT by chance when turning on
-the suspend feature for the specified port of the hub. The port
-seems to be in an unknown state so the hub_activate during resume
-fails the hub_port_status, then the hub will fail to work.
-
-The quirky hub needs the reset-resume quirk to function correctly.
-
-Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
----
- drivers/usb/core/quirks.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 76ac5d6555ae..4e2483e34250 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -406,6 +406,7 @@ static const struct usb_device_id usb_quirk_list[] = {
- 
- 	/* Realtek hub in Dell WD19 (Type-C) */
- 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-+	{ USB_DEVICE(0x0bda, 0x5487), .driver_info = USB_QUIRK_RESET_RESUME },
- 
- 	/* Generic RTL8153 based ethernet adapters */
- 	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
--- 
-2.20.1
+NAPI will keep calling your driver if the budget was exhausted, the
+only difference between 64 and 256 should be the setup cost of the
+driver's internal loop. And perhaps more frequent GRO flush - what's
+the CONFIG_HZ set to?
 
