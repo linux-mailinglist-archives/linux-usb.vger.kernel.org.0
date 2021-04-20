@@ -2,85 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8E0F364FA6
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 02:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC060364FB2
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 03:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbhDTAzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Apr 2021 20:55:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54024 "EHLO mail.kernel.org"
+        id S230498AbhDTBJZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Apr 2021 21:09:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58614 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229936AbhDTAzF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 19 Apr 2021 20:55:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4F2FB6135F;
-        Tue, 20 Apr 2021 00:54:33 +0000 (UTC)
+        id S229994AbhDTBJZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 19 Apr 2021 21:09:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B234461363;
+        Tue, 20 Apr 2021 01:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618880075;
-        bh=qTK3Fpvc67yWL/Kayfv/rqU7Z0F1EUK2wV7/8jEgAZU=;
+        s=k20201202; t=1618880935;
+        bh=yOhwTEEdJ51D9ecoqLz/L5DtMsNDmzT+3Upf6xsRNeE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xq2jKbGVk6uctWQjVax3OjBzu4mHMAGLMqyexDSDFi37dH9ZQHIfNf18VDL02fYGk
-         4iIXFRNTbAFmkME79UD3mrwl7WIzL9H3CIttpVTuN5BWd7I24+wKTJ13WwVpBM1GjL
-         SRLA2XD6/oEX54penqMetgjw1b7ucY+fQ/DSaM4mAt2T14l3p01r/xLGQTJ26DSYDo
-         gTdrLt18louCkjEW/7sfU9Hfqmhz0wNzdekIG3Foa6mpNBoOpARxB20i+qcCbZTJor
-         U0Hfbn9FHc9Zq+GZiIC4ImEbTR6E6A1MOtm4M/UyfTCU+1mV4QxzouCZFagoDmw01I
-         ptfKdINW0XDkg==
-Date:   Tue, 20 Apr 2021 08:54:29 +0800
+        b=B/Ne2h/fSACpMFCfIwqYN1hyJyZqXWEdgsSs+1KNrKm4sbkVsfhyAQCKScJusXruS
+         5Jv2/oeSSrP5D7ZgcLuzVQZTds4oOJpqTxlldTZqGxHH1g6xDTJpzKypYcR2Dm8obr
+         z4W2PtSYU97GdwocE87uThsWpJKqJE2JR6eP7mu2TnjUJqBt8J7lfrkJ3bm6R3TT4x
+         WfMGrRMFBOq2i6xMo24ANJ80+s4HMEuOL6q/PhWwVoCdCDnPdz/LOKHJaEwSXmJ6qN
+         gBypnW2sB+D+AMGqa1bwwvDDZAIwyBqxDjfUBagZ4WTG6zUusF9b57oAexuLS6rnCX
+         TKN26rQOd+slA==
+Date:   Tue, 20 Apr 2021 09:08:47 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
+To:     Pawel Laszczak <pawell@cadence.com>
 Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, jbrunet@baylibre.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Hemant Kumar <hemantk@codeaurora.org>
-Subject: Re: [PATCH] usb: gadget: Fix double free of device descriptor
- pointers
-Message-ID: <20210420005429.GA5069@nchen>
-References: <1618862240-5965-1-git-send-email-wcheng@codeaurora.org>
+        kurahul@cadence.com
+Subject: Re: [PATCH 1/2] usb: gadget: f_uac2: Stop endpoint before enabling
+ it.
+Message-ID: <20210420010846.GA6408@nchen>
+References: <20210419075053.28467-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1618862240-5965-1-git-send-email-wcheng@codeaurora.org>
+In-Reply-To: <20210419075053.28467-1-pawell@gli-login.cadence.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-04-19 12:57:20, Wesley Cheng wrote:
-> From: Hemant Kumar <hemantk@codeaurora.org>
+On 21-04-19 09:50:53, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> Upon driver unbind usb_free_all_descriptors() function frees all
-> speed descriptor pointers without setting them to NULL. In case
-> gadget speed changes (i.e from super speed plus to super speed)
-> after driver unbind only upto super speed descriptor pointers get
-> populated. Super speed plus desc still holds the stale (already
-> freed) pointer. Fix this issue by setting all descriptor pointers
-> to NULL after freeing them in usb_free_all_descriptors().
+> Patch adds disabling endpoint before enabling it during changing
+> alternate setting. Lack of this functionality causes that in some
+> cases uac2 queue the same request multiple time.
+> Such situation can occur when host send set interface with
+> alternate setting 1 twice.
 > 
-> Signed-off-by: Hemant Kumar <hemantk@codeaurora.org>
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
 > ---
->  drivers/usb/gadget/config.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/gadget/function/f_uac2.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/config.c b/drivers/usb/gadget/config.c
-> index 2d11535..8bb2577 100644
-> --- a/drivers/usb/gadget/config.c
-> +++ b/drivers/usb/gadget/config.c
-> @@ -194,9 +194,13 @@ EXPORT_SYMBOL_GPL(usb_assign_descriptors);
->  void usb_free_all_descriptors(struct usb_function *f)
->  {
->  	usb_free_descriptors(f->fs_descriptors);
-> +	f->fs_descriptors = NULL;
->  	usb_free_descriptors(f->hs_descriptors);
-> +	f->hs_descriptors = NULL;
->  	usb_free_descriptors(f->ss_descriptors);
-> +	f->ss_descriptors = NULL;
->  	usb_free_descriptors(f->ssp_descriptors);
-> +	f->ssp_descriptors = NULL;
->  }
->  EXPORT_SYMBOL_GPL(usb_free_all_descriptors);
+> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> index 9cc5c512a5cd..7d20a9d8a1b4 100644
+> --- a/drivers/usb/gadget/function/f_uac2.c
+> +++ b/drivers/usb/gadget/function/f_uac2.c
+> @@ -890,17 +890,17 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
+>  	if (intf == uac2->as_out_intf) {
+>  		uac2->as_out_alt = alt;
 >  
+> +		u_audio_stop_capture(&uac2->g_audio);
+> +
+>  		if (alt)
+>  			ret = u_audio_start_capture(&uac2->g_audio);
+> -		else
+> -			u_audio_stop_capture(&uac2->g_audio);
+>  	} else if (intf == uac2->as_in_intf) {
+>  		uac2->as_in_alt = alt;
+>  
+> +		u_audio_stop_playback(&uac2->g_audio);
+> +
+>  		if (alt)
+>  			ret = u_audio_start_playback(&uac2->g_audio);
+> -		else
+> -			u_audio_stop_playback(&uac2->g_audio);
+>  	} else {
+>  		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+>  		return -EINVAL;
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-
-You may add Fixed-by tag, and cc to stable tree.
+To avoid this, you may use prm->ep_enabled to judge if the endpoint has
+already enabled.
 
 -- 
 
