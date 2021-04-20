@@ -2,225 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0ADE3652B5
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 09:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C76365301
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 09:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhDTHBW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 20 Apr 2021 03:01:22 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:49460 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbhDTHBV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 03:01:21 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 13K70f862022777, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 13K70f862022777
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 20 Apr 2021 15:00:41 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 20 Apr 2021 15:00:40 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Tue, 20 Apr 2021 15:00:39 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
- RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
- 15.01.2106.013; Tue, 20 Apr 2021 15:00:39 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH net-next 4/6] r8152: support new chips
-Thread-Topic: [PATCH net-next 4/6] r8152: support new chips
-Thread-Index: AQHXMpdaTtc3dnJiRE+pHF9mj571x6q3Ka6AgAXMWPA=
-Date:   Tue, 20 Apr 2021 07:00:39 +0000
-Message-ID: <0de9842749db4718b8f45a0f2fff7967@realtek.com>
-References: <1394712342-15778-350-Taiwan-albertk@realtek.com>
-        <1394712342-15778-354-Taiwan-albertk@realtek.com>
- <20210416145017.1946f013@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20210416145017.1946f013@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/4/19_=3F=3F_11:43:00?=
-x-kse-attachment-filter-triggered-rules: Clean
-x-kse-attachment-filter-triggered-filters: Clean
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S230199AbhDTHPl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 03:15:41 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:60115 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229953AbhDTHPk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 03:15:40 -0400
+Received: from mail-oo1-f72.google.com ([209.85.161.72])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <chris.chiu@canonical.com>)
+        id 1lYkbE-0006Za-Sr
+        for linux-usb@vger.kernel.org; Tue, 20 Apr 2021 07:15:09 +0000
+Received: by mail-oo1-f72.google.com with SMTP id e18-20020a0568200612b02901ec8fefe582so2634398oow.22
+        for <linux-usb@vger.kernel.org>; Tue, 20 Apr 2021 00:15:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8Vm9HqK4VJCno1i00etpWVnJOPPZ+kUNXIeSp6fgK58=;
+        b=lPlXOWY0gCZNGQEvicERl8PvC6Y7LDEWXCT+RdfO/330z9pBD8Z76GgzK0BqOmCw6o
+         4qFJblCbayuMtqMpZ2k8w3OMGUihP7u0s8y9+rMqescEo9LYVpMEbBblhwf+ENIZI8x2
+         vdqhNlmya8b5gowoPBzNBvY7MqFPPep5sl9LI8x53c72oDT0CEm9v8jwq/knlyejS6II
+         jr1pUT22hiXk5MxMvvfyQGfDcvuFhu+naQlQXwPh/4L9OcfZUx3jI4vU3OC/N2685grr
+         Y3P8GhN44h5hcE9Tut5ZT17/9Sjpe6mIzl62LfgXXWa11A4Nt/Cx2shrGVuZcujFW57H
+         qgnA==
+X-Gm-Message-State: AOAM533h6nnYr43m3PXKVO/J5MgIgRLHh/WWF4tMNeyb+rTGfR4nBs8u
+        BeG9Ri3uWNtgYKv4uuzFcAUbBiPKB8Ip8w212hzeMrqj4Hls26LRP8MbjS1ZLaoxv7p0iWnyNaT
+        shQCpF9SyZsFlRtQzcnRClp6RQfelwdw1JZkV+Y27RIcZC+eNOQlzDg==
+X-Received: by 2002:aca:4a97:: with SMTP id x145mr2019003oia.177.1618902907785;
+        Tue, 20 Apr 2021 00:15:07 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwzEj3KUQVzC+qNXGRSob3MUa5ih59s+TNG7jqZK7XLXFlzb7PYwJ6db2WySV7+GM+Xt/LEV/vTQFvgD4k30pU=
+X-Received: by 2002:aca:4a97:: with SMTP id x145mr2018989oia.177.1618902907623;
+ Tue, 20 Apr 2021 00:15:07 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 04/20/2021 02:53:45
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163215 [Apr 19 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 442 442 b985cb57763b61d2a20abb585d5d4cc10c315b09
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/20/2021 02:57:00
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?us-ascii?Q?Clean,_bases:_2021/4/20_=3F=3F_04:46:00?=
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 04/20/2021 06:45:29
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163221 [Apr 20 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 442 442 b985cb57763b61d2a20abb585d5d4cc10c315b09
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/20/2021 06:47:00
+References: <20210415114856.4555-1-chris.chiu@canonical.com>
+ <YHgyP8tGNM1Wi5dJ@kroah.com> <CABTNMG0MuaSkWZhiTwtWjPTg5WZ-Vdt9Ju9-RzBke9JjCBJo8Q@mail.gmail.com>
+ <20210415184637.GA15445@rowland.harvard.edu> <CABTNMG3aweq43eQcONif2_M4JF3ARmBgOKE18v7vzHvaJnjrtA@mail.gmail.com>
+ <20210416153932.GD42403@rowland.harvard.edu> <CABTNMG25qPvVu7+EsvEgaUsU_v6jKkSKCaU5VR8CiX3oLQ4VFg@mail.gmail.com>
+ <20210419141921.GA133494@rowland.harvard.edu>
+In-Reply-To: <20210419141921.GA133494@rowland.harvard.edu>
+From:   Chris Chiu <chris.chiu@canonical.com>
+Date:   Tue, 20 Apr 2021 15:14:56 +0800
+Message-ID: <CABTNMG0hnfXH8yqd6Zbk3EiZtg4JUpJomn180NHUyAdgZjL7pA@mail.gmail.com>
+Subject: Re: [PATCH v3] USB: Don't set USB_PORT_FEAT_SUSPEND on WD19's Realtek Hub
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, m.v.b@runbox.com,
+        hadess@hadess.net, linux-usb@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org>
-> Sent: Saturday, April 17, 2021 5:50 AM
-> > +	switch (tp->version) {
-> > +	case RTL_VER_10:
-> > +		data = ocp_reg_read(tp, 0xad40);
-> > +		data &= ~0x3ff;
-> > +		data |= BIT(7) | BIT(2);
-> > +		ocp_reg_write(tp, 0xad40, data);
-> > +
-> > +		data = ocp_reg_read(tp, 0xad4e);
-> > +		data |= BIT(4);
-> > +		ocp_reg_write(tp, 0xad4e, data);
-> > +		data = ocp_reg_read(tp, 0xad16);
-> > +		data &= ~0x3ff;
-> > +		data |= 0x6;
-> > +		ocp_reg_write(tp, 0xad16, data);
-> > +		data = ocp_reg_read(tp, 0xad32);
-> > +		data &= ~0x3f;
-> > +		data |= 6;
-> > +		ocp_reg_write(tp, 0xad32, data);
-> > +		data = ocp_reg_read(tp, 0xac08);
-> > +		data &= ~(BIT(12) | BIT(8));
-> > +		ocp_reg_write(tp, 0xac08, data);
-> > +		data = ocp_reg_read(tp, 0xac8a);
-> > +		data |= BIT(12) | BIT(13) | BIT(14);
-> > +		data &= ~BIT(15);
-> > +		ocp_reg_write(tp, 0xac8a, data);
-> > +		data = ocp_reg_read(tp, 0xad18);
-> > +		data |= BIT(10);
-> > +		ocp_reg_write(tp, 0xad18, data);
-> > +		data = ocp_reg_read(tp, 0xad1a);
-> > +		data |= 0x3ff;
-> > +		ocp_reg_write(tp, 0xad1a, data);
-> > +		data = ocp_reg_read(tp, 0xad1c);
-> > +		data |= 0x3ff;
-> > +		ocp_reg_write(tp, 0xad1c, data);
-> > +
-> > +		data = sram_read(tp, 0x80ea);
-> > +		data &= ~0xff00;
-> > +		data |= 0xc400;
-> > +		sram_write(tp, 0x80ea, data);
-> > +		data = sram_read(tp, 0x80eb);
-> > +		data &= ~0x0700;
-> > +		data |= 0x0300;
-> > +		sram_write(tp, 0x80eb, data);
-> > +		data = sram_read(tp, 0x80f8);
-> > +		data &= ~0xff00;
-> > +		data |= 0x1c00;
-> > +		sram_write(tp, 0x80f8, data);
-> > +		data = sram_read(tp, 0x80f1);
-> > +		data &= ~0xff00;
-> > +		data |= 0x3000;
-> > +		sram_write(tp, 0x80f1, data);
+On Mon, Apr 19, 2021 at 10:19 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+>
+> On Mon, Apr 19, 2021 at 01:11:38AM -0400, Chris Chiu wrote:
+> > Sorry that I didn't make myself clear. I found that if I applied RESET_RESUME
+> > quirk on the problematic hub, the Set-Port-Feature(suspend) timeout error
+> > disappeared. SInce the timeout is not happening for each suspend by default,
+> > I suspect maybe reset-resume take everything back to clean state for the hub
+> > and the Set-Port-Feature(suspend) can be taken care of w/o problems.
+>
+> Okay, that's a good solution for system suspend.
+>
+> > I didn't like RESET_RESUME because runtime PM would not work on the quirked
+> > device.
+>
+> A more interesting question is whether it will work for devices plugged
+> into the hub.  Even though the hub won't be runtime suspended, the
+> things attached to it might be.
+>
+> >  But if the Set-Port-Feature(suspend) can't be handled and
+> > skipped, I can't
+> > expect the runtime PM to work for all devices connected to the hub either.
+> > Is that right? If what I proposed in the patch can not get better
+> > result than existing
+> > quirk, I think using the RESET_RESUME would be a better option. Any suggestions?
+>
+> Try the RESET_RESUME quirk and see how well it works with runtime
+> suspend.
+>
+> Alan Stern
 
-These are the parameters of PHY.
-Some are used for speed down about power saving.
-And some are used for performance.
+[  453.064346] usb 3-4: finish reset-resume
+[  453.192387] usb 3-4: reset high-speed USB device number 2 using xhci_hcd
+[  453.339916] usb 3-4: USB quirks for this device: 2
 
-> > +	switch (tp->version) {
-> > +	case RTL_VER_12:
-> > +		ocp_reg_write(tp, 0xbf86, 0x9000);
-> > +		data = ocp_reg_read(tp, 0xc402);
-> > +		data |= BIT(10);
-> > +		ocp_reg_write(tp, 0xc402, data);
-> > +		data &= ~BIT(10);
-> > +		ocp_reg_write(tp, 0xc402, data);
-> > +		ocp_reg_write(tp, 0xbd86, 0x1010);
-> > +		ocp_reg_write(tp, 0xbd88, 0x1010);
-> > +		data = ocp_reg_read(tp, 0xbd4e);
-> > +		data &= ~(BIT(10) | BIT(11));
-> > +		data |= BIT(11);
-> > +		ocp_reg_write(tp, 0xbd4e, data);
-> > +		data = ocp_reg_read(tp, 0xbf46);
-> > +		data &= ~0xf00;
-> > +		data |= 0x700;
-> > +		ocp_reg_write(tp, 0xbf46, data);
+Seems that even w/ the RESET_RESUME enabled, the connected device still
+can runtime suspend/resume. That's acceptable to me. I'll send the patch
+with the reset-resume quirk later.
 
-These are used to adjust the clock of GPHY.
-It influences the linking.
+[  626.081068] usb 3-4.3.1: usb auto-suspend, wakeup 0
+[  632.552071] usb 3-4.3.1: usb auto-resume
+[  632.617467] usb 3-4.3.1: Waited 0ms for CONNECT
+[  632.617471] usb 3-4.3.1: finish resume
 
-> > +	data = r8153_phy_status(tp, 0);
-> > +	switch (data) {
-> > +	case PHY_STAT_EXT_INIT:
-> > +		rtl8152_apply_firmware(tp, true);
-> > +
-> > +		data = ocp_reg_read(tp, 0xa466);
-> > +		data &= ~BIT(0);
-> > +		ocp_reg_write(tp, 0xa466, data);
-
-These let the PHY exit PHY_STAT_EXT_INIT state.
-
-> What are all these magic constants? :(
-
-I think it is difficult for me to make all magic values meaningful.
-The PHY setting is very complex. Only PHY engineers know
-what are the settings mean.
-
-> > @@ -6878,7 +8942,11 @@ static int rtl8152_probe(struct usb_interface
-> *intf,
-> >  	set_ethernet_addr(tp);
-> >
-> >  	usb_set_intfdata(intf, tp);
-> > -	netif_napi_add(netdev, &tp->napi, r8152_poll, RTL8152_NAPI_WEIGHT);
-> > +
-> > +	if (tp->support_2500full)
-> > +		netif_napi_add(netdev, &tp->napi, r8152_poll, 256);
-> 
-> why 256? We have 100G+ drivers all using 64 what's special here?
-> 
-> > +	else
-> > +		netif_napi_add(netdev, &tp->napi, r8152_poll, 64);
-
-We test 2.5G Ethernet on some embedded platform.
-And we find 64 is not large enough, and the performance
-couldn't reach 2.5 G bits/s.
-
-Best Regards,
-Hayes
-
+Chris
