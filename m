@@ -2,71 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690B53655D3
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 11:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C2136571C
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 13:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbhDTJ6o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Apr 2021 05:58:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44258 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230204AbhDTJ6o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Apr 2021 05:58:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id B88256109E
-        for <linux-usb@vger.kernel.org>; Tue, 20 Apr 2021 09:58:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1618912692;
-        bh=Ghda8TSw7EZuh9Prt54XGxoadg9VIX9t8VsoZempUWM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cqsJWfN4oAXWoevQpiv3vH14a02hdNd+8SOTVwaJLbBT1gTnqU9PW4jZ06XX0R3Z+
-         VVfL44+99AzfmngIGrA8u5cox/Hsp/1YPk390k07mo7wrPYW6JlPMEzNJO2haFb9wS
-         dFjL/MyN9kCFFlNOV1rDOngZD2bTzU1W3B1HndJdN/tDlg2hN8QLHYlkPjTqwwTmhR
-         4tIACPetSBYgnKYf4I6R/B3c7hX3TJQQL9caDt4lBnndTkrv+dWU+UCoJtLxfYX/1f
-         PX9csTNYM0H8cHgHDQZyj+J4/n1YG8pFP9Hzxh/TKH6OHEmLW5BZlmqCcjp/8LqzJC
-         OMDPs4AAKSxEg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id A821061185; Tue, 20 Apr 2021 09:58:12 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212725] USB CDC ACM device stop working
-Date:   Tue, 20 Apr 2021 09:58:12 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: oliver@neukum.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-212725-208809-euPfUppF9G@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212725-208809@https.bugzilla.kernel.org/>
-References: <bug-212725-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S231621AbhDTLGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 07:06:55 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:37849 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231309AbhDTLGz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 07:06:55 -0400
+Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <colin.king@canonical.com>)
+        id 1lYoD0-0003FG-EF; Tue, 20 Apr 2021 11:06:22 +0000
+From:   Colin King <colin.king@canonical.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: net2272: remove redundant initialization of status
+Date:   Tue, 20 Apr 2021 12:06:22 +0100
+Message-Id: <20210420110622.377339-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212725
+From: Colin Ian King <colin.king@canonical.com>
 
---- Comment #3 from Oliver Neukum (oliver@neukum.org) ---
-Created attachment 296439
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296439&action=3Dedit
-fix a poison/unpoison imbalance
+The variable status is being initialized with a value that is
+never read and it is being updated later with a new value.  The
+initialization is redundant and can be removed and move the
+declaration of status to the scope where it is used.
 
-Please test this patch
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/usb/gadget/udc/net2272.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/gadget/udc/net2272.c b/drivers/usb/gadget/udc/net2272.c
+index 23a735641c3d..89f479b78d80 100644
+--- a/drivers/usb/gadget/udc/net2272.c
++++ b/drivers/usb/gadget/udc/net2272.c
+@@ -539,7 +539,6 @@ net2272_read_fifo(struct net2272_ep *ep, struct net2272_request *req)
+ 	int count;
+ 	int tmp;
+ 	int cleanup = 0;
+-	int status = -1;
+ 
+ 	dev_vdbg(ep->dev->dev, "read_fifo %s actual %d len %d\n",
+ 		ep->ep.name, req->req.actual, req->req.length);
+@@ -591,6 +590,8 @@ net2272_read_fifo(struct net2272_ep *ep, struct net2272_request *req)
+ 			}
+ 
+ 			if (!list_empty(&ep->queue)) {
++				int status;
++
+ 				req = list_entry(ep->queue.next,
+ 					struct net2272_request, queue);
+ 				status = net2272_kick_dma(ep, req);
+-- 
+2.30.2
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
