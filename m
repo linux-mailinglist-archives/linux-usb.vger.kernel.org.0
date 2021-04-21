@@ -2,158 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D50366EDD
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 17:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F738367099
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 18:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243749AbhDUPMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Apr 2021 11:12:55 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:46069 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240463AbhDUPMx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Apr 2021 11:12:53 -0400
-Received: by mail-io1-f71.google.com with SMTP id y15-20020a5d9b0f0000b02903e840cb5f09so15330669ion.12
-        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 08:12:18 -0700 (PDT)
+        id S242112AbhDUQuB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Apr 2021 12:50:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237358AbhDUQty (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Apr 2021 12:49:54 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A1C06138A
+        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 09:49:19 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id f29so30417948pgm.8
+        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 09:49:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YofVd7h9TTAUtJm02RuQ1uMGb1tLcZYg66RQ0VMaxfY=;
+        b=xfSYFpqTi/9rUNUnLj17Pm+oOiO4ZNx/7pIFtcGrpx1QnLk2CLsr2a3NP6gQ5B3hBk
+         zun7saLACyQv1gE6VMIGwU8pg6i8est8ZfLgshxAA3A6zhqTMLWLzoaDQUZxL/rUpYrF
+         5htV8tVWrOky+0yt2IRuHgKM4vnuC63CtzUej9s8lW1VrSDKk5eVOUSScozPV9/hB9SO
+         OZSKOofjF/Ix4gfUiruryNlwEZ5xykppFmIeMpYA2vcBA3b6vJ2NHxAfADqc1aPRFOtv
+         DSvlruZgE4lTJ6y0ksqyJaNbHzfkDNPf0cU1hlMhz40tUMYLsQapIJfQy6hDZuCY5AJK
+         iviA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=R3uYg2uJLiGS0r/f+irqbv2XMxfvS8kMSZjyQAHZ0hE=;
-        b=kxowNoz9q5mO70X8DMxz0qVnBi61/e9EYabufk5BDi3hkvu/TB4/8E+qVyo/t9IptK
-         c1tkO4hhREyvXAwuo5fE9EgWPfHtIL8QgSLFvJTTI/cML9lqjol7zN1D3/fzb47xz0ST
-         3s0xcNZDrMdyDzfW/DP2/mNonIDbf72mqK8HjG/5+EukNmwA8bdar6QT8+7EEbWBFMFX
-         AjFLHIalNpi2/Y2EnsvhO/Uyc/yzWxpxiV44b1Ngcs5YMxq9l9GMuhTGla2eZ/zxlotF
-         h8WEqmgA84nTo090d7gBLHziJeDT6v/OdZzhBjsIxiPGKF7u8oCnf2TzKyuM1hL3RkGx
-         v9iw==
-X-Gm-Message-State: AOAM532jF8D6FsV5keo7tj+WT+On7ppzM6kqZLx/uUrU2lOe2pED2kh8
-        Cv2c17Glk5Q1K0rwu+gDN3zk0dhyMcrlVMlXlnFPWk6xZ6K5
-X-Google-Smtp-Source: ABdhPJwqS9K1zJy+X/XA3qerCkv6kgVyL/4Y/YHCpVzWPqdYg+2W+FEHZU+qV2nrUopa19x+Sd7iaZ+EFeY0tMAyBzrHYNouCMlH
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YofVd7h9TTAUtJm02RuQ1uMGb1tLcZYg66RQ0VMaxfY=;
+        b=J1+7ukMOcZfchj+qQmP363cDjW2T1LgEQXiP8T/E7CbkeFVL0+oCKUIyRSeuAPH9TD
+         OkTIjtGXh63AeNI71zHoDeYOGbbAB+jhVBCqHQsRwdmkxvycts5Et6vdzYJ0bQaX109y
+         lgzEUYyCjAO3vSAwaieZswlLtdsladF+SvXr9h9fSTUcAokkiOU9THivnz0afWiZR4MO
+         i3yYfiPxKDee/ic0Loz/0vMH6U9R7uHjaA52EL+74izgij2WpVGAU/RtFvbeQtkR8Q04
+         FrfhVkHO5reXUbZOO5+Gg0PTgA8zdfvvnbX5RtuPNIp++i2l1krcZn9cjVTmp7rWQDYX
+         x4+A==
+X-Gm-Message-State: AOAM532yOLDsCESGCIA0LQ8/UoeCc8KklwxMyUMCKa2l8Wxi/+8Njv/U
+        Cd5i5pR2Ux67kV1/jTd0onXbmj+CTLf55A==
+X-Google-Smtp-Source: ABdhPJwUTqChCRKwNoPq0hyrTxaRFa9tk2NiLG9lg/Q8Q6NrC1j6MZdQ3Zy7nf64HdqhrvCUbFV//g==
+X-Received: by 2002:a17:90a:db15:: with SMTP id g21mr11930635pjv.113.1619023758819;
+        Wed, 21 Apr 2021 09:49:18 -0700 (PDT)
+Received: from hermes.local (76-14-218-44.or.wavecable.com. [76.14.218.44])
+        by smtp.gmail.com with ESMTPSA id kk7sm2706279pjb.11.2021.04.21.09.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Apr 2021 09:49:18 -0700 (PDT)
+Date:   Wed, 21 Apr 2021 09:49:10 -0700
+From:   Stephen Hemminger <stephen@networkplumber.org>
+To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Fw: [Bug 212741] New: unregister_netdevice: waiting for enp0s20f0u1
+ to become free.
+Message-ID: <20210421094910.2ccf58b3@hermes.local>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aaa:: with SMTP id l10mr26736498ilv.29.1619017938422;
- Wed, 21 Apr 2021 08:12:18 -0700 (PDT)
-Date:   Wed, 21 Apr 2021 08:12:18 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ad5d605c07cfd2e@google.com>
-Subject: [syzbot] memory leak in usb_set_configuration (2)
-From:   syzbot <syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Looks like a USB driver network device ref count bug.
 
-syzbot found the following issue on:
+Begin forwarded message:
 
-HEAD commit:    9cdbf646 Merge tag 'io_uring-5.12-2021-04-16' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=136ce5a6d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fd35e661e44323ea
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1e69c888f0d3866ead4
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ecba29d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143cf955d00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com
-
-BUG: memory leak
-unreferenced object 0xffff8881120e1400 (size 1024):
-  comm "kworker/0:2", pid 3660, jiffies 4294952380 (age 24.950s)
-  hex dump (first 32 bytes):
-    c8 78 3c 12 81 88 ff ff c8 78 3c 12 81 88 ff ff  .x<......x<.....
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff82ba5d37>] kmalloc include/linux/slab.h:554 [inline]
-    [<ffffffff82ba5d37>] kzalloc include/linux/slab.h:684 [inline]
-    [<ffffffff82ba5d37>] usb_set_configuration+0x187/0xb90 drivers/usb/core/message.c:1992
-    [<ffffffff82bb69ec>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82ba874c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff825f67f9>] really_probe+0x159/0x4a0 drivers/base/dd.c:559
-    [<ffffffff825f6bc4>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
-    [<ffffffff825f72de>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:851
-    [<ffffffff825f3747>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<ffffffff825f6e72>] __device_attach+0x122/0x250 drivers/base/dd.c:919
-    [<ffffffff825f53e6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<ffffffff825f1935>] device_add+0x5d5/0xc40 drivers/base/core.c:3242
-    [<ffffffff841df2d9>] usb_new_device.cold+0x16a/0x582 drivers/usb/core/hub.c:2555
-    [<ffffffff82b9b24e>] hub_port_connect drivers/usb/core/hub.c:5223 [inline]
-    [<ffffffff82b9b24e>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
-    [<ffffffff82b9b24e>] port_event drivers/usb/core/hub.c:5509 [inline]
-    [<ffffffff82b9b24e>] hub_event+0x142e/0x20c0 drivers/usb/core/hub.c:5591
-    [<ffffffff81259619>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
-    [<ffffffff81259f09>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
-    [<ffffffff81261638>] kthread+0x178/0x1b0 kernel/kthread.c:292
-    [<ffffffff8100227f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-BUG: memory leak
-unreferenced object 0xffff888110a217a0 (size 32):
-  comm "kworker/0:2", pid 3660, jiffies 4294952380 (age 24.950s)
-  hex dump (first 32 bytes):
-    31 2d 31 3a 30 2e 32 34 31 00 00 00 00 00 00 00  1-1:0.241.......
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8223411c>] kvasprintf+0x6c/0xf0 lib/kasprintf.c:25
-    [<ffffffff822341f8>] kvasprintf_const+0x58/0x110 lib/kasprintf.c:49
-    [<ffffffff822f402b>] kobject_set_name_vargs+0x3b/0xe0 lib/kobject.c:289
-    [<ffffffff825ec413>] dev_set_name+0x63/0x90 drivers/base/core.c:3028
-    [<ffffffff82ba6269>] usb_set_configuration+0x6b9/0xb90 drivers/usb/core/message.c:2099
-    [<ffffffff82bb69ec>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82ba874c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff825f67f9>] really_probe+0x159/0x4a0 drivers/base/dd.c:559
-    [<ffffffff825f6bc4>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
-    [<ffffffff825f72de>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:851
-    [<ffffffff825f3747>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<ffffffff825f6e72>] __device_attach+0x122/0x250 drivers/base/dd.c:919
-    [<ffffffff825f53e6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<ffffffff825f1935>] device_add+0x5d5/0xc40 drivers/base/core.c:3242
-    [<ffffffff841df2d9>] usb_new_device.cold+0x16a/0x582 drivers/usb/core/hub.c:2555
-    [<ffffffff82b9b24e>] hub_port_connect drivers/usb/core/hub.c:5223 [inline]
-    [<ffffffff82b9b24e>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
-    [<ffffffff82b9b24e>] port_event drivers/usb/core/hub.c:5509 [inline]
-    [<ffffffff82b9b24e>] hub_event+0x142e/0x20c0 drivers/usb/core/hub.c:5591
-
-BUG: memory leak
-unreferenced object 0xffff88810c472800 (size 256):
-  comm "kworker/0:2", pid 3660, jiffies 4294952409 (age 24.660s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 08 28 47 0c 81 88 ff ff  .........(G.....
-    08 28 47 0c 81 88 ff ff b0 c4 5e 82 ff ff ff ff  .(G.......^.....
-  backtrace:
-    [<ffffffff825f1b71>] kmalloc include/linux/slab.h:554 [inline]
-    [<ffffffff825f1b71>] kzalloc include/linux/slab.h:684 [inline]
-    [<ffffffff825f1b71>] device_private_init drivers/base/core.c:3084 [inline]
-    [<ffffffff825f1b71>] device_add+0x811/0xc40 drivers/base/core.c:3134
-    [<ffffffff82ba6589>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
-    [<ffffffff82bb69ec>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82ba874c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff825f67f9>] really_probe+0x159/0x4a0 drivers/base/dd.c:559
-    [<ffffffff825f6bc4>] driver_probe_device+0x84/0x100 drivers/base/dd.c:745
-    [<ffffffff825f72de>] __device_attach_driver+0xee/0x110 drivers/base/dd.c:851
-    [<ffffffff825f3747>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
-    [<ffffffff825f6e72>] __device_attach+0x122/0x250 drivers/base/dd.c:919
-    [<ffffffff825f53e6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
-    [<ffffffff825f1935>] device_add+0x5d5/0xc40 drivers/base/core.c:3242
-    [<ffffffff841df2d9>] usb_new_device.cold+0x16a/0x582 drivers/usb/core/hub.c:2555
-    [<ffffffff82b9b24e>] hub_port_connect drivers/usb/core/hub.c:5223 [inline]
-    [<ffffffff82b9b24e>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
-    [<ffffffff82b9b24e>] port_event drivers/usb/core/hub.c:5509 [inline]
-    [<ffffffff82b9b24e>] hub_event+0x142e/0x20c0 drivers/usb/core/hub.c:5591
-    [<ffffffff81259619>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
-    [<ffffffff81259f09>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
-    [<ffffffff81261638>] kthread+0x178/0x1b0 kernel/kthread.c:292
-
-[  176.
+Date: Wed, 21 Apr 2021 08:39:38 +0000
+From: bugzilla-daemon@bugzilla.kernel.org
+To: stephen@networkplumber.org
+Subject: [Bug 212741] New: unregister_netdevice: waiting for enp0s20f0u1 to become free.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+https://bugzilla.kernel.org/show_bug.cgi?id=212741
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+            Bug ID: 212741
+           Summary: unregister_netdevice: waiting for enp0s20f0u1 to
+                    become free.
+           Product: Networking
+           Version: 2.5
+    Kernel Version: 5.11.14
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: Other
+          Assignee: stephen@networkplumber.org
+          Reporter: dexter+kernelbugzilla@beetjevreemd.nl
+        Regression: No
+
+This problem exists for years by now, I could work around it until now.
+Somewhere around kernel 4.9 ish this problem started to appear.
+
+I have an USB network adapter and whenever the connection is severed (because I
+touch the cable, USB reset, sleep, cosmic rays) the kernel starts logging below
+message every 10~ish seconds. The usagecount is always different, but increases
+with uptime. I can replicate this on all my laptops and workstations.
+
+My setup is quite straigtforward, just (networkmanager)DHCP and a wireguard
+VPN. Running Fedora 33 (but exists since like 26 or so).
+
+
+[  992.787930] unregister_netdevice: waiting for enp0s20f0u1 to become free.
+Usage count = 8113
+
+-- 
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.
