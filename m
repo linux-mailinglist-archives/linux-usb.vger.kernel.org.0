@@ -2,79 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7090366093
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Apr 2021 22:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA4A366386
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 04:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbhDTUEX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Apr 2021 16:04:23 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36519 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233682AbhDTUEW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 16:04:22 -0400
-Received: (qmail 186097 invoked by uid 1000); 20 Apr 2021 16:03:49 -0400
-Date:   Tue, 20 Apr 2021 16:03:49 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     chris.chiu@canonical.com
-Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: Add reset-resume quirk for WD19's Realtek Hub
-Message-ID: <20210420200349.GB185805@rowland.harvard.edu>
-References: <20210420174651.6202-1-chris.chiu@canonical.com>
+        id S234375AbhDUCIF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Apr 2021 22:08:05 -0400
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:60468 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233824AbhDUCIE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 20 Apr 2021 22:08:04 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04420;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UWFcIKt_1618970849;
+Received: from 30.13.161.100(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0UWFcIKt_1618970849)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 21 Apr 2021 10:07:30 +0800
+From:   =?UTF-8?B?56eN5ZiJ6bmP?= <jiapeng.chong@linux.alibaba.com>
+Subject: Re: [PATCH] usb: gadget: aspeed: Remove unnecessary version.h
+ includes
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <1617681598-28165-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+ <YGvxAmHIgnRMcyuq@kroah.com>
+Message-ID: <971ce789-9633-1799-6c55-50b79f2f179e@linux.alibaba.com>
+Date:   Wed, 21 Apr 2021 10:06:43 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210420174651.6202-1-chris.chiu@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YGvxAmHIgnRMcyuq@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 21, 2021 at 01:46:51AM +0800, chris.chiu@canonical.com wrote:
-> From: Chris Chiu <chris.chiu@canonical.com>
+On 2021/4/6 13:26, Greg KH wrote:
+> On Tue, Apr 06, 2021 at 11:59:58AM +0800, Jiapeng Chong wrote:
+>> "make versioncheck" shows:
+>>
+>> ./drivers/usb/gadget/udc/aspeed-vhub/hub.c: 33 linux/version.h not
+>> needed.
 > 
-> Realtek Hub (0bda:5487) in Dell Dock WD19 sometimes fails to work
-> after the system resumes from suspend with remote wakeup enabled
-> device connected:
-> [ 1947.640907] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
-> [ 1947.641208] usb 5-2.3-port5: cannot disable (err = -71)
-> [ 1947.641401] hub 5-2.3:1.0: hub_ext_port_status failed (err = -71)
-> [ 1947.641450] usb 5-2.3-port4: cannot reset (err = -71)
+> Then you need to fix the tool, and always test-build patches before you
+> send them out, as this is obviously wrong :(
 > 
-> Information of this hub:
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#= 10 Spd=480  MxCh= 5
-> D:  Ver= 2.10 Cls=09(hub  ) Sub=00 Prot=02 MxPS=64 #Cfgs=  1
-> P:  Vendor=0bda ProdID=5487 Rev= 1.47
-> S:  Manufacturer=Dell Inc.
-> S:  Product=Dell dock
-> C:* #Ifs= 1 Cfg#= 1 Atr=e0 MxPwr=  0mA
-> I:  If#= 0 Alt= 0 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=01 Driver=hub
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
-> I:* If#= 0 Alt= 1 #EPs= 1 Cls=09(hub  ) Sub=00 Prot=02 Driver=hub
-> E:  Ad=81(I) Atr=03(Int.) MxPS=   1 Ivl=256ms
-> 
-> The failure results from the ETIMEDOUT by chance when turning on
-> the suspend feature for the specified port of the hub. The port
-> seems to be in an unknown state so the hub_activate during resume
-> fails the hub_port_status, then the hub will fail to work.
-> 
-> The quirky hub needs the reset-resume quirk to function correctly.
-> 
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> ---
->  drivers/usb/core/quirks.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 76ac5d6555ae..4e2483e34250 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -406,6 +406,7 @@ static const struct usb_device_id usb_quirk_list[] = {
->  
->  	/* Realtek hub in Dell WD19 (Type-C) */
->  	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-> +	{ USB_DEVICE(0x0bda, 0x5487), .driver_info = USB_QUIRK_RESET_RESUME },
->  
->  	/* Generic RTL8153 based ethernet adapters */
->  	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
+Sorry for the noise. We'll do more test-build towards patches next time.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
