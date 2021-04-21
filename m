@@ -2,57 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F738367099
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 18:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E47E36719B
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 19:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242112AbhDUQuB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Apr 2021 12:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
+        id S244804AbhDURoA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Apr 2021 13:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbhDUQty (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Apr 2021 12:49:54 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A1C06138A
-        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 09:49:19 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id f29so30417948pgm.8
-        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 09:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YofVd7h9TTAUtJm02RuQ1uMGb1tLcZYg66RQ0VMaxfY=;
-        b=xfSYFpqTi/9rUNUnLj17Pm+oOiO4ZNx/7pIFtcGrpx1QnLk2CLsr2a3NP6gQ5B3hBk
-         zun7saLACyQv1gE6VMIGwU8pg6i8est8ZfLgshxAA3A6zhqTMLWLzoaDQUZxL/rUpYrF
-         5htV8tVWrOky+0yt2IRuHgKM4vnuC63CtzUej9s8lW1VrSDKk5eVOUSScozPV9/hB9SO
-         OZSKOofjF/Ix4gfUiruryNlwEZ5xykppFmIeMpYA2vcBA3b6vJ2NHxAfADqc1aPRFOtv
-         DSvlruZgE4lTJ6y0ksqyJaNbHzfkDNPf0cU1hlMhz40tUMYLsQapIJfQy6hDZuCY5AJK
-         iviA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YofVd7h9TTAUtJm02RuQ1uMGb1tLcZYg66RQ0VMaxfY=;
-        b=J1+7ukMOcZfchj+qQmP363cDjW2T1LgEQXiP8T/E7CbkeFVL0+oCKUIyRSeuAPH9TD
-         OkTIjtGXh63AeNI71zHoDeYOGbbAB+jhVBCqHQsRwdmkxvycts5Et6vdzYJ0bQaX109y
-         lgzEUYyCjAO3vSAwaieZswlLtdsladF+SvXr9h9fSTUcAokkiOU9THivnz0afWiZR4MO
-         i3yYfiPxKDee/ic0Loz/0vMH6U9R7uHjaA52EL+74izgij2WpVGAU/RtFvbeQtkR8Q04
-         FrfhVkHO5reXUbZOO5+Gg0PTgA8zdfvvnbX5RtuPNIp++i2l1krcZn9cjVTmp7rWQDYX
-         x4+A==
-X-Gm-Message-State: AOAM532yOLDsCESGCIA0LQ8/UoeCc8KklwxMyUMCKa2l8Wxi/+8Njv/U
-        Cd5i5pR2Ux67kV1/jTd0onXbmj+CTLf55A==
-X-Google-Smtp-Source: ABdhPJwUTqChCRKwNoPq0hyrTxaRFa9tk2NiLG9lg/Q8Q6NrC1j6MZdQ3Zy7nf64HdqhrvCUbFV//g==
-X-Received: by 2002:a17:90a:db15:: with SMTP id g21mr11930635pjv.113.1619023758819;
-        Wed, 21 Apr 2021 09:49:18 -0700 (PDT)
-Received: from hermes.local (76-14-218-44.or.wavecable.com. [76.14.218.44])
-        by smtp.gmail.com with ESMTPSA id kk7sm2706279pjb.11.2021.04.21.09.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Apr 2021 09:49:18 -0700 (PDT)
-Date:   Wed, 21 Apr 2021 09:49:10 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Fw: [Bug 212741] New: unregister_netdevice: waiting for enp0s20f0u1
- to become free.
-Message-ID: <20210421094910.2ccf58b3@hermes.local>
+        with ESMTP id S243224AbhDURn5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Apr 2021 13:43:57 -0400
+X-Greylist: delayed 349 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Apr 2021 10:43:24 PDT
+Received: from rin.romanrm.net (rin.romanrm.net [IPv6:2001:bc8:2dd2:1000::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78413C06174A
+        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 10:43:24 -0700 (PDT)
+Received: from natsu (natsu2.home.romanrm.net [IPv6:fd39::e99e:8f1b:cfc9:ccb8])
+        by rin.romanrm.net (Postfix) with SMTP id A26B64DC
+        for <linux-usb@vger.kernel.org>; Wed, 21 Apr 2021 17:37:32 +0000 (UTC)
+Date:   Wed, 21 Apr 2021 22:37:32 +0500
+From:   Roman Mamedov <rm@romanrm.net>
+To:     linux-usb@vger.kernel.org
+Subject: Not enough bandwidth for new device state -- with Etron USB3
+ controller only
+Message-ID: <20210421223732.27080321@natsu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
@@ -60,52 +31,82 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Looks like a USB driver network device ref count bug.
+Hello,
 
-Begin forwarded message:
+I have a mouse and keyboard plugged into a 4-port USB 2.0 hub, plugged into a
+10-meter extender (which seems to also appear as an USB 2.0 hub).
 
-Date: Wed, 21 Apr 2021 08:39:38 +0000
-From: bugzilla-daemon@bugzilla.kernel.org
-To: stephen@networkplumber.org
-Subject: [Bug 212741] New: unregister_netdevice: waiting for enp0s20f0u1 to become free.
+When this combination is plugged into "Etron Technology, Inc. EJ168 USB 3.0 Host
+Controller (rev 01)", it fails to work:
 
+[Wed Apr 21 21:48:03 2021] usb 2-2: new high-speed USB device number 2 using xhci_hcd
+[Wed Apr 21 21:48:03 2021] usb 2-2: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
+[Wed Apr 21 21:48:03 2021] usb 2-2: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[Wed Apr 21 21:48:03 2021] usb 2-2: Product: USB 2.0 Hub
+[Wed Apr 21 21:48:03 2021] hub 2-2:1.0: USB hub found
+[Wed Apr 21 21:48:03 2021] hub 2-2:1.0: 4 ports detected
+[Wed Apr 21 21:48:04 2021] usb 2-2.4: new high-speed USB device number 3 using xhci_hcd
+[Wed Apr 21 21:48:04 2021] usb 2-2.4: New USB device found, idVendor=05e3, idProduct=0606, bcdDevice= 7.02
+[Wed Apr 21 21:48:04 2021] usb 2-2.4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[Wed Apr 21 21:48:04 2021] usb 2-2.4: Product: USB2.0 Hub
+[Wed Apr 21 21:48:04 2021] hub 2-2.4:1.0: USB hub found
+[Wed Apr 21 21:48:04 2021] hub 2-2.4:1.0: 4 ports detected
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: new low-speed USB device number 4 using xhci_hcd
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: New USB device found, idVendor=046e, idProduct=52c5, bcdDevice= 1.23
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Product: USB Multimedia Keyboard
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Manufacturer: BTC
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Not enough bandwidth for new device state.
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.3: can't set config #1, error -28
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: new low-speed USB device number 5 using xhci_hcd
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: New USB device found, idVendor=0957, idProduct=0006, bcdDevice= 3.10
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Product: ADNS-3080 Mouse
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Manufacturer: Agilent Mouse
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Not enough bandwidth for new device state.
+[Wed Apr 21 21:48:04 2021] usb 2-2.4.4: can't set config #1, error -28
+[Wed Apr 21 21:48:11 2021] usb 2-2: USB disconnect, device number 2
+[Wed Apr 21 21:48:11 2021] usb 2-2.4: USB disconnect, device number 3
+[Wed Apr 21 21:48:11 2021] usb 2-2.4.3: USB disconnect, device number 4
+[Wed Apr 21 21:48:11 2021] usb 2-2.4.4: USB disconnect, device number 5
 
-https://bugzilla.kernel.org/show_bug.cgi?id=212741
+But works just fine when plugged into the onboard "Advanced Micro Devices,
+Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller":
 
-            Bug ID: 212741
-           Summary: unregister_netdevice: waiting for enp0s20f0u1 to
-                    become free.
-           Product: Networking
-           Version: 2.5
-    Kernel Version: 5.11.14
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: Other
-          Assignee: stephen@networkplumber.org
-          Reporter: dexter+kernelbugzilla@beetjevreemd.nl
-        Regression: No
+[Wed Apr 21 21:48:31 2021] usb 4-4: new high-speed USB device number 3 using ehci-pci
+[Wed Apr 21 21:48:31 2021] usb 4-4: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
+[Wed Apr 21 21:48:31 2021] usb 4-4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[Wed Apr 21 21:48:31 2021] usb 4-4: Product: USB 2.0 Hub
+[Wed Apr 21 21:48:31 2021] hub 4-4:1.0: USB hub found
+[Wed Apr 21 21:48:31 2021] hub 4-4:1.0: 4 ports detected
+[Wed Apr 21 21:48:32 2021] usb 4-4.4: new high-speed USB device number 4 using ehci-pci
+[Wed Apr 21 21:48:32 2021] usb 4-4.4: New USB device found, idVendor=05e3, idProduct=0606, bcdDevice= 7.02
+[Wed Apr 21 21:48:32 2021] usb 4-4.4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
+[Wed Apr 21 21:48:32 2021] usb 4-4.4: Product: USB2.0 Hub
+[Wed Apr 21 21:48:32 2021] hub 4-4.4:1.0: USB hub found
+[Wed Apr 21 21:48:32 2021] hub 4-4.4:1.0: 4 ports detected
+[Wed Apr 21 21:48:32 2021] usb 4-4.4.3: new low-speed USB device number 5 using ehci-pci
+[Wed Apr 21 21:48:32 2021] usb 4-4.4.3: New USB device found, idVendor=046e, idProduct=52c5, bcdDevice= 1.23
+[Wed Apr 21 21:48:32 2021] usb 4-4.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[Wed Apr 21 21:48:32 2021] usb 4-4.4.3: Product: USB Multimedia Keyboard
+[Wed Apr 21 21:48:32 2021] usb 4-4.4.3: Manufacturer: BTC
+[Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.0/0003:046E:52C5.0006/input/input33
+[Wed Apr 21 21:48:33 2021] hid-generic 0003:046E:52C5.0006: input,hidraw2: USB HID v1.10 Keyboard [BTC USB Multimedia Keyboard] on usb-0000:00:13.2-4.4.3/input0
+[Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard System Control as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.1/0003:046E:52C5.0007/input/input34
+[Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard Consumer Control as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.1/0003:046E:52C5.0007/input/input35
+[Wed Apr 21 21:48:33 2021] hid-generic 0003:046E:52C5.0007: input,hiddev0,hidraw3: USB HID v1.10 Device [BTC USB Multimedia Keyboard] on usb-0000:00:13.2-4.4.3/input1
+[Wed Apr 21 21:48:33 2021] usb 4-4.4.4: new low-speed USB device number 6 using ehci-pci
+[Wed Apr 21 21:48:33 2021] usb 4-4.4.4: New USB device found, idVendor=0957, idProduct=0006, bcdDevice= 3.10
+[Wed Apr 21 21:48:33 2021] usb 4-4.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[Wed Apr 21 21:48:33 2021] usb 4-4.4.4: Product: ADNS-3080 Mouse
+[Wed Apr 21 21:48:33 2021] usb 4-4.4.4: Manufacturer: Agilent Mouse
+[Wed Apr 21 21:48:33 2021] input: Agilent Mouse ADNS-3080 Mouse as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.4/4-4.4.4:1.0/0003:0957:0006.0008/input/input37
+[Wed Apr 21 21:48:33 2021] hid-generic 0003:0957:0006.0008: input,hidraw4: USB HID v1.10 Mouse [Agilent Mouse ADNS-3080 Mouse] on usb-0000:00:13.2-4.4.4/input0
 
-This problem exists for years by now, I could work around it until now.
-Somewhere around kernel 4.9 ish this problem started to appear.
+Any ideas? Is this a bug?
 
-I have an USB network adapter and whenever the connection is severed (because I
-touch the cable, USB reset, sleep, cosmic rays) the kernel starts logging below
-message every 10~ish seconds. The usagecount is always different, but increases
-with uptime. I can replicate this on all my laptops and workstations.
-
-My setup is quite straigtforward, just (networkmanager)DHCP and a wireguard
-VPN. Running Fedora 33 (but exists since like 26 or so).
-
-
-[  992.787930] unregister_netdevice: waiting for enp0s20f0u1 to become free.
-Usage count = 8113
+Thanks
 
 -- 
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.
+With respect,
+Roman
