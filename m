@@ -2,126 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73854366D54
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 15:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6AB366E82
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Apr 2021 16:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243050AbhDUN5P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Apr 2021 09:57:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33658 "EHLO mail.kernel.org"
+        id S243688AbhDUOwr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Apr 2021 10:52:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37882 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243038AbhDUN5C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Apr 2021 09:57:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EF0856144D;
-        Wed, 21 Apr 2021 13:56:26 +0000 (UTC)
+        id S240369AbhDUOwm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Apr 2021 10:52:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8881D613B6;
+        Wed, 21 Apr 2021 14:52:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619013388;
-        bh=JR07JyZ8UJK9Zsnb9BH+u/PKpxm352xvttxjWOx5aBs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l+r1yXyeUlRi9sVm1chURKaj1i2uwzcMbWJMnZhh71vhfeVccP7cdQsoHOf4r0Wsp
-         1njXtVY6aX03USXocTSFlbMaV2Z1HdF5Wd0OkdG5GtWL271SC4G+0Z+OJKN9BIAWRk
-         E3lSMn61pWwq1SL9zD3OH9nAAmuoUeN5LuwQMjxir8lEFLP+ZHhcWvh+8m8n0vdDtc
-         VlCnjbIQ5L/5nRuW0BMf9tv/c4wQgKKmYPoq6fGqwMnQidwpf9xoiRtV/dKnrK3ojL
-         zi/h0UsEIOD4iSEegQQapZn/N7J/2XEpbKiMDtVT/syUoOk/4dJIKRQEqVD8GiDK5O
-         nhbijk43v9Oyw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] usb: xhci: tegra: mark PM functions as __maybe_unused
-Date:   Wed, 21 Apr 2021 15:56:08 +0200
-Message-Id: <20210421135613.3560777-2-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210421135613.3560777-1-arnd@kernel.org>
-References: <20210421135613.3560777-1-arnd@kernel.org>
+        s=k20201202; t=1619016729;
+        bh=KV+Ho0UxpPWM/DJ7vXp8Ca8eQ9iHjx1m52Pvj4SRTTk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nHvRdsmx9g3QMyv663N5BwhMOXbVYkurwTlbFgvVKKB9UT2X4//bbT0RhohT21j74
+         MVHo3ZXyl+CkWhY7Mv+iQEljzUJmYGD3WHYiksDdPXswTJQ9F1ZlGYOeSU+StZ7Fk4
+         1SyyrulMrr9revyUAR0g/A/P6S6x2Wrjdaj0qoPkIQ2rbHATxsboa6aNNutMXKq3Cu
+         i592eaH5knlXyk+uRET3/amSRoUpLlO2sd2gBKxNRDeDxCTUTQs1f5yvQglmffePo8
+         wgHlMWhRPTwAhMtBQxoL1uINWC/9jI5FF1izA2NnudpoL4pbkRIMbaXgVOHw18wnrc
+         d32ps7+hnPNtQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lZED6-00036M-UM; Wed, 21 Apr 2021 16:52:13 +0200
+Date:   Wed, 21 Apr 2021 16:52:12 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Pho Tran <photranvan0712@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hung.Nguyen@silabs.com,
+        Tung.Pham@silabs.com, Pho Tran <pho.tran@silabs.com>
+Subject: Re: [PATCH v9] USB: serial: cp210x: Add support for GPIOs on CP2108
+Message-ID: <YIA8HD0S6C+x5ZC9@hovoldconsulting.com>
+References: <20210408103607.2077-1-photranvan0712@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210408103607.2077-1-photranvan0712@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Thu, Apr 08, 2021 at 05:36:07PM +0700, Pho Tran wrote:
+> From: Pho Tran <pho.tran@silabs.com>
+> 
+> Similar to other CP210x devices, GPIO interfaces (gpiochip) should be
+> supported for CP2108.
+ 
+> +/*
+> + * Quad Port Config definitions
+> + * Refer to https://www.silabs.com/documents/public/application-notes/an978-cp210x-usb-to-uart-api-specification.pdf
+> + * for more information.
+> + * CP210X_VENDOR_SPECIFIC, CP210X_GET_PORTCONFIG call reads these 0x49 bytes
+> + * on a CP2108 chip.
+> + * CP2108 Quad Port State structure(used in Quad Port Config structure)
+> + */
+> +struct cp210x_quad_port_state {
+> +	__le16 gpio_mode_PB0;
+> +	__le16 gpio_mode_PB1;
+> +	__le16 gpio_mode_PB2;
+> +	__le16 gpio_mode_PB3;
+> +	__le16 gpio_mode_PB4;
+> +
+> +
+> +	__le16 gpio_lowpower_PB0;
+> +	__le16 gpio_lowpower_PB1;
+> +	__le16 gpio_lowpower_PB2;
+> +	__le16 gpio_lowpower_PB3;
+> +	__le16 gpio_lowpower_PB4;
+> +
+> +	__le16 gpio_latch_PB0;
+> +	__le16 gpio_latch_PB1;
+> +	__le16 gpio_latch_PB2;
+> +	__le16 gpio_latch_PB3;
+> +	__le16 gpio_latch_PB4;
+> +};
+> +
+> +// Cp2108 Quad Port Config structure
+> +struct cp210x_quad_port_config {
+> +	struct cp210x_quad_port_state reset_state;
+> +	struct cp210x_quad_port_state suspend_state;
+> +	u8 ipdelay_IFC[4];
+> +	u8 enhancedfxn_IFC[4];
+> +	u8 enhancedfxn_device;
+> +	u8 extclkfreq[4];
+> +} __packed;
 
-The added #ifdefs in the PM rework were almost correct, but still
-cause warnings in some randconfig builds:
+One more thing; I noticed that the layout of the other port-config
+structures do not match the ones used by your library API, which is what
+the above pdf documents (e.g. they have additional padding).
 
-drivers/usb/host/xhci-tegra.c:2147:12: error: 'tegra_xusb_resume' defined but not used [-Werror=unused-function]
- 2147 | static int tegra_xusb_resume(struct device *dev)
-      |            ^~~~~~~~~~~~~~~~~
-drivers/usb/host/xhci-tegra.c:2105:12: error: 'tegra_xusb_suspend' defined but not used [-Werror=unused-function]
- 2105 | static int tegra_xusb_suspend(struct device *dev)
+Did you verify that the above layout is actually correct? And did you
+try changing the pin functions in EEPROM and make sure that your code
+handles it as expected?
 
-Replace the #ifdef checks with simpler __maybe_unused annotations to
-reliably shut up these warnings.
+Is there any corresponding document for the actual device protocol?
 
-Fixes: d64d362f1d8b ("usb: xhci: tegra: Enable ELPG for runtime/system PM")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/usb/host/xhci-tegra.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index ce97ff054c68..adead2377149 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -1787,7 +1787,6 @@ static int tegra_xusb_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
--#if IS_ENABLED(CONFIG_PM) || IS_ENABLED(CONFIG_PM_SLEEP)
- static bool xhci_hub_ports_suspended(struct xhci_hub *hub)
- {
- 	struct device *dev = hub->hcd->self.controller;
-@@ -2102,7 +2101,7 @@ static int tegra_xusb_exit_elpg(struct tegra_xusb *tegra, bool runtime)
- 	return err;
- }
- 
--static int tegra_xusb_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2144,7 +2143,7 @@ static int tegra_xusb_suspend(struct device *dev)
- 	return err;
- }
- 
--static int tegra_xusb_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2174,10 +2173,8 @@ static int tegra_xusb_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif
- 
--#ifdef CONFIG_PM
--static int tegra_xusb_runtime_suspend(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_suspend(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int ret;
-@@ -2190,7 +2187,7 @@ static int tegra_xusb_runtime_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int tegra_xusb_runtime_resume(struct device *dev)
-+static __maybe_unused int tegra_xusb_runtime_resume(struct device *dev)
- {
- 	struct tegra_xusb *tegra = dev_get_drvdata(dev);
- 	int err;
-@@ -2201,7 +2198,6 @@ static int tegra_xusb_runtime_resume(struct device *dev)
- 
- 	return err;
- }
--#endif
- 
- static const struct dev_pm_ops tegra_xusb_pm_ops = {
- 	SET_RUNTIME_PM_OPS(tegra_xusb_runtime_suspend,
--- 
-2.29.2
-
+Johan
