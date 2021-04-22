@@ -2,313 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6DC36869A
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 20:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4517F3687CB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 22:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236946AbhDVSfc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 14:35:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34698 "EHLO
+        id S236993AbhDVUSu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 16:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236058AbhDVSfc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 14:35:32 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88FA0C061756
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 11:34:57 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id c17so32342030pfn.6
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 11:34:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fIQGP5hbKxQ2AbrjuHVsEc+gLwD1Ifi6sPdpnHLAXEU=;
-        b=f8UNiwNy63Nq+gwYfc7TIo47CogfxT77XpfYfYqcuRTxf5Ttw5fmjTdRT/R+GjVmtn
-         bEm3Y+0dxjATq63vvrh2z8+1lfcFFPc8Xv6M5vssBo47Kb8VlXxRMgAFGuD2NTGowJ0f
-         Y/W8f495wGtkVKqTfrPo52qW4vMgG0ZcCdcKQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fIQGP5hbKxQ2AbrjuHVsEc+gLwD1Ifi6sPdpnHLAXEU=;
-        b=rcsxsdcALJEbOLetTpGFQKiyJYKSLYp2HE61yJR0tRQYSCmg4x5mfxdQClhoV38Lly
-         ZCcWLQVAzFMixwCGiXkwKQ+LQJ4ybZnlh536Ok4Qbjy6T8MG5hHWWeYjM/4y7m9+27ab
-         5c7/+2kjqxMk76GNW3Iek9oBX29knp4J6NTdT/BDUmeza83ORYKM982lPlC91Z/Yg7kZ
-         4FIFuh4iX3Xe8fxhgj4lgn5wdatkxnSWk2W4s9BiWpQ0jHLBg3jqJoOepBklsKViZwXP
-         bVDa9ctPIjq4wW6vI7+QDTw1jV4qlfvHbf0sfE8DZ8QmjlRvKMyMIvptcBu76zt90HGi
-         sQzQ==
-X-Gm-Message-State: AOAM530yKbomXw+84YX2KPyPEO3+OYQajbHzuWRyiIDTu+RSOxq5AZn+
-        c6jOLcLVxARHoey8Y+DBrmHuYQ==
-X-Google-Smtp-Source: ABdhPJxQXisVXNdHeC/K1YPSaxq3pq+fVgXtyyRPEWHARZ9IremNzgNVlEy4hhINfix50PAx5/0CRA==
-X-Received: by 2002:aa7:87d3:0:b029:259:ff63:3500 with SMTP id i19-20020aa787d30000b0290259ff633500mr85995pfo.35.1619116497024;
-        Thu, 22 Apr 2021 11:34:57 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:acff:4f9f:d039:23ff])
-        by smtp.gmail.com with UTF8SMTPSA id t19sm2884558pfg.38.2021.04.22.11.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Apr 2021 11:34:56 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 11:34:55 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v2] arm64: dts: qcom: sc7280: Add USB related nodes
-Message-ID: <YIHBzxN/9O9a98Xd@google.com>
-References: <1619112931-2144-1-git-send-email-sanm@codeaurora.org>
- <1619112931-2144-2-git-send-email-sanm@codeaurora.org>
+        with ESMTP id S236915AbhDVUSu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 16:18:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D07C06174A
+        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 13:18:14 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1lZfm9-00033z-BO; Thu, 22 Apr 2021 22:18:13 +0200
+Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mgr@pengutronix.de>)
+        id 1lZfm8-0000Id-1p; Thu, 22 Apr 2021 22:18:12 +0200
+Date:   Thu, 22 Apr 2021 22:18:12 +0200
+From:   Michael Grzeschik <mgr@pengutronix.de>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
+        kernel@pengutronix.de
+Subject: Re: [PATCH 2/2] dwc3: gadget: fix tracking of used sgs in request
+Message-ID: <20210422201812.GC6975@pengutronix.de>
+References: <20210421204837.4185-1-m.grzeschik@pengutronix.de>
+ <20210421204837.4185-3-m.grzeschik@pengutronix.de>
+ <87o8e6mvue.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="fUYQa+Pmc3FrFX/N"
 Content-Disposition: inline
-In-Reply-To: <1619112931-2144-2-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <87o8e6mvue.fsf@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 21:43:10 up 63 days, 23:07, 87 users,  load average: 0.05, 0.05,
+ 0.06
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mgr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 11:05:31PM +0530, Sandeep Maheswaram wrote:
-> Add nodes for DWC3 USB controller, QMP and HS USB PHYs.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
 
-What changes with respect to v1? Please always include a change log for
-versions > 1
+--fUYQa+Pmc3FrFX/N
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts |  40 +++++++++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi    | 150 ++++++++++++++++++++++++++++++++
->  2 files changed, 190 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> index 54d2cb3..f1998d8 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
+On Thu, Apr 22, 2021 at 01:56:09PM +0300, Felipe Balbi wrote:
+>
+>Hi,
+>
+>(subject format as well)
+>
+>Michael Grzeschik <m.grzeschik@pengutronix.de> writes:
+>> The variable pending_sgs was used to keep track of handled
+>> sgs in one request. But instead queued_sgs is being decremented
+>
+>no, it wasn't. If the total number of entries in the scatter list is 'x'
+>and we have transferred (completed) 'y' entries, then pending_sgs should
+>be (x - y).
+>
+>> on every handled sg. This patch fixes the usage of the variable
+>> to use queued_sgs instead as intended.
+>>
+>> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+>> ---
+>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 118b5bcc565d6..2d7d861b13b31 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2856,7 +2856,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dw=
+c3_ep *dep,
+>>  	struct dwc3_trb *trb =3D &dep->trb_pool[dep->trb_dequeue];
+>>  	struct scatterlist *sg =3D req->sg;
+>>  	struct scatterlist *s;
+>> -	unsigned int pending =3D req->num_pending_sgs;
+>> +	unsigned int pending =3D req->num_queued_sgs;
+>>  	unsigned int i;
+>>  	int ret =3D 0;
+>>
+>> @@ -2864,7 +2864,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dw=
+c3_ep *dep,
+>>  		trb =3D &dep->trb_pool[dep->trb_dequeue];
+>>
+>>  		req->sg =3D sg_next(s);
+>> -		req->num_pending_sgs--;
+>> +		req->num_queued_sgs--;
+>
+>no, this is wrong. queued shouldn't be modified as it comes straight
+>from the gadget driver. This is the number of entries in the request
+>that the gadget driver gave us. We don't want to modify it.
 
-I suggest to split this into two patches, one for the SoC and one for
-the board (IDP). That way it is evident from the subject what each
-patch does and reverts could be done individually if needed.
+Right, but pending_sgs than has two use cases. One to track the mapped
+sgs that got not queued. And one here to to track the "queued sgs" that
+got dequeued.
 
-> @@ -242,6 +242,46 @@
->  	status = "okay";
->  };
->  
-> +
+>>
+>>  		ret =3D dwc3_gadget_ep_reclaim_completed_trb(dep, req,
+>>  				trb, event, status, true);
+>> @@ -2887,7 +2887,7 @@ static int dwc3_gadget_ep_reclaim_trb_linear(struc=
+t dwc3_ep *dep,
+>>
+>>  static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
+>>  {
+>> -	return req->num_pending_sgs =3D=3D 0;
+>> +	return req->num_queued_sgs =3D=3D 0;
+>
+>nope, request is, indeed, completed when there no more pending entries
+>to be consumed.
+>
+>What sort of problem are you dealing with? Got any way of reproducing
+>it? Got some trace output showing the issue?
 
-don't add a second empty line
+I digged a little bit deeper to fully understand the issue here. What
+I found is that in dwc3_prepare_trbs will make two assumptions on
+num_pending_sgs.
 
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	dr_mode = "host";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> +
-> +&usb_1_qmpphy {
-> +	status = "okay";
-> +
-> +	vdda-phy-supply = <&vreg_l6b_1p2>;
-> +	vdda-pll-supply = <&vreg_l1b_0p8>;
-> +};
-> +
-> +&usb_2 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_2_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> +
->  /* PINCTRL - additions to nodes defined in sc7280.dtsi */
->  
->  &qup_uart5_default {
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 2cc4785..8323f53 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -805,6 +805,110 @@
->  			};
->  		};
->  
-> +		usb_1_hsphy: phy@88e3000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e3000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
-> +		};
-> +
-> +		usb_2_hsphy: phy@88e4000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e4000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
-> +		};
-> +
-> +		usb_1_qmpphy: phy-wrapper@88e9000 {
-> +			compatible = "qcom,sm8250-qmp-usb3-phy";
-> +			reg = <0 0x088e9000 0 0x200>,
-> +			      <0 0x088e8000 0 0x20>;
-> +			reg-names = "reg-base", "dp_com";
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			usb_1_ssphy: usb3-phy@88e9200 {
-> +				reg = <0 0x088e9200 0 0x200>,
-> +				      <0 0x088e9400 0 0x200>,
-> +				      <0 0x088e9c00 0 0x400>,
-> +				      <0 0x088e9600 0 0x200>,
-> +				      <0 0x088e9800 0 0x200>,
-> +				      <0 0x088e9a00 0 0x100>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <1>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
-> +		usb_2: usb@8cf8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x08cf8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_SLEEP_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface","mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <&pdc 13 IRQ_TYPE_EDGE_RISING>,
-> +				     <&pdc 12 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "hs_phy_irq",
-> +					  "dm_hs_phy_irq", "dp_hs_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_SEC_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_SEC_BCR>;
-> +
-> +			usb_2_dwc3: dwc3@8c00000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x08c00000 0 0xe000>;
-> +				interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0xa0 0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				phys = <&usb_2_hsphy>;
-> +				phy-names = "usb2-phy";
-> +				maximum-speed = "high-speed";
-> +			};
-> +		};
-> +
->  		system-cache-controller@9200000 {
->  			compatible = "qcom,sc7280-llcc";
->  			reg = <0 0x09200000 0 0xd0000>, <0 0x09600000 0 0x50000>;
-> @@ -812,6 +916,52 @@
->  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-> +		usb_1: usb@a6f8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x0a6f8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
-> +
+When the real purpose of the variable is to track the dequeued trbs.
+Than we have to fix the started list handling in the dwc3_prepare_trbs.
 
-nit: remove empty line (as for 'usb_2' above), 'clocks' and 'clock-names'
-belong together
+The comment in the function says:
 
-> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq", "ss_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_PRIM_BCR>;
-> +
-> +			usb_1_dwc3: dwc3@a600000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x0a600000 0 0xe000>;
-> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0xe0 0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +				maximum-speed = "super-speed";
-> +			};
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sc7280-pdc", "qcom,pdc";
->  			reg = <0 0x0b220000 0 0x30000>;
+         /*
+          * We can get in a situation where there's a request in the starte=
+d list
+          * but there weren't enough TRBs to fully kick it in the first time
+          * around, so it has been waiting for more TRBs to be freed up.
+          *
+          * In that case, we should check if we have a request with pending=
+_sgs
+          * in the started list and prepare TRBs for that request first,
+          * otherwise we will prepare TRBs completely out of order and that=
+ will
+          * break things.
+          */
+         list_for_each_entry(req, &dep->started_list, list) {
+		if (req->num_pending_sgs > 0) {
+		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This condition seems to be made on a wrong assumption, thinking the
+num_pending_sgs was decremented after dwc3_prepare_one_trb was called on pa=
+rts
+of that requests sgs but not all.
+
+But the completion path can not also depend on that variable to be decremen=
+ted
+after parts of that sgs get handled. Therefor I came up with this second pa=
+tch.
+
+What do you think, would be the right way to solve this?
+
+
+The second issue I see in dwc3_prepare_trbs is the bail out of iterations o=
+ver
+the pending and starting lists. Whenever one case of (req->num_pending_sgs =
+> 0)
+will be true after calling dwc3_prepare_trbs_sg, the function returns immed=
+iately.
+
+In my case, where my uvc_video now enqueues up to 64 requests, every single
+kick_transfer called from one ep_queue will ensure only one call of
+dwc3_prepare_trbs_sg on one entry of the pending list. This bottleneck makes
+the hardware refill to slow and the hardware will drain fast even though en=
+ough
+pending buffers are there.
+
+I suggest to remove those returns.
+
+Regards,
+Michael
+
+--=20
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+--fUYQa+Pmc3FrFX/N
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmCB2f8ACgkQC+njFXoe
+LGTz7w//Q/gEE5J7Afd197O09eqwNFUu2nSUmC2g7fBlyoTKa0aDJhTRNaN+O0I4
+tvbqAgjRJ5Xw6zxY/6nNOvAHaFaYHzAISZK3oTcUpnEOXjlF2gGL6Igo4wqlQc3S
+zFCxLP7ZX017itbZ+KapGNIjejkfDrg8FRcNXF7+75FjCjhdxg/wrZYwB8J2sYdR
+VG8qbgCp4SG2Lgi2Lgoil/ZPUJkM1Px6GERdjEKGtoNjaz849QDt+eDB82qNbbl6
+Rzw3jouMZUL/sEeCKkbGG7c7XXRzgcMT5nYLacNPyWrslDcZhJiw0gDYOu8+3nwG
+Vv7kgmSP0Ny395aY/OJQyDKkYoZgieNbp36ayJ9b+UNwgzBtnBXf9P6yiwSeb+hF
+5VBTiRnGDxpVAAGXYX1SA7p3QQbTb4SdFlofHJ1DHBLzHRvD42gtjEAGiWDJDk01
+GIFRJLIErxJ27xbLdgTlq3vQIEe8NVlZ9I/U2Y8WLYLttYR8MkDb2Pi3UK5kKJwC
+JTgN4UVCp4kbEi0DDwpew97KS3hqEHM739FzGvKJDJFRsV1YU/5t3PUff6Qo7odg
+SUoFp84ZFtypxxpAIzCokxgJ80C6/GpUXcpTGP45QdhEBi2/P4tcBPLbI/Kca3LA
+eRFXIpqwAbKoU3gOT0Y4uCwuy9cGjAiaAdpCccVHwqM+rp+aeOA=
+=6WwP
+-----END PGP SIGNATURE-----
+
+--fUYQa+Pmc3FrFX/N--
