@@ -2,62 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09983367CC5
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 10:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 396DA367CCB
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 10:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235075AbhDVIqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 04:46:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33238 "EHLO mail.kernel.org"
+        id S235542AbhDVIrT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 04:47:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33584 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230270AbhDVIqq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Apr 2021 04:46:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E98DD613DE;
-        Thu, 22 Apr 2021 08:46:09 +0000 (UTC)
+        id S235518AbhDVIrT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 04:47:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0E6576142F;
+        Thu, 22 Apr 2021 08:46:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619081170;
-        bh=4nheqwl05OYDRXeZyfMJy6aYK1NXONMSey8HL0+Zb9U=;
+        s=korg; t=1619081203;
+        bh=lPoVItRpfDtjsfnJbzqbFt6aiWyosdsGvIQl1vV8Qtc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PvJpDtJegEqOa0Gd7QypJCSiRy/z84tE2k+DG4b7G8Z84NqqMouJ1TDqP+F9aZdmG
-         /v/G2Z6WXt5hUeHrgeqf2JyrABxWl6I5tyZ3macKHTFj2QQ14OASQliwZezOgg1arb
-         s8eROn+lnAu0DHmvTih4kHCbLHHUBArZLkQzlUqo=
-Date:   Thu, 22 Apr 2021 10:46:07 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] usb: xhci-mtk: remove unnecessary assignments in
- periodic TT scheduler
-Message-ID: <YIE3z7qYNtk7G/VB@kroah.com>
-References: <20210330080617.3746932-1-ikjn@chromium.org>
- <20210330160508.1.I797d214790033d0402d19ff6b47a34aff60d3062@changeid>
- <1617179455.2752.1.camel@mhfsdcap03>
- <YGq2YfURFApdJLxb@kroah.com>
- <1617675492.22435.4.camel@mhfsdcap03>
+        b=1G+BZ6zaQbKqihJ4rsMoB1TwlMIJmEHBbyxxD++eilCJSA9VuFnf5e0oWdZ+waTwH
+         BZ+5caQKJWe/mohyzdsqoDLkVjbinxtSsv8hzY3Y0B8urMFDAYnimb02XLifEv4xjb
+         At91ja8+P83wCKLPs+tm0ab8eEhnITidKf8Og1sk=
+Date:   Thu, 22 Apr 2021 10:46:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Li Jun <jun.li@nxp.com>, peter.chen@kernel.org,
+        stern@rowland.harvard.edu, mathias.nyman@intel.com,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH 1/2] usb: host: move EH SINGLE_STEP_SET_FEATURE
+ implementation to core
+Message-ID: <YIE38ep8DwW6JMAC@kroah.com>
+References: <1618212134-20416-1-git-send-email-jun.li@nxp.com>
+ <20210412182215.GC17922@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1617675492.22435.4.camel@mhfsdcap03>
+In-Reply-To: <20210412182215.GC17922@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Apr 06, 2021 at 10:18:12AM +0800, Chunfeng Yun wrote:
-> On Mon, 2021-04-05 at 09:04 +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Mar 31, 2021 at 04:30:55PM +0800, Chunfeng Yun wrote:
-> > > cc Yaqii Wu <Yaqii.Wu@mediatek.com>
-> > > 
-> > > I'll test it , thanks
+On Mon, Apr 12, 2021 at 11:22:16AM -0700, Jack Pham wrote:
+> Hi Jun & Peter,
+> 
+> On Mon, Apr 12, 2021 at 03:22:13PM +0800, Li Jun wrote:
+> > From: Peter Chen <peter.chen@nxp.com>
 > > 
-> > Did you test this series and find any problems?  If not, I'll go queue
-> > these up...
-> Yes, found an issue on the start-split transaction, but not found the
-> root cause yet :(
+> > It is needed at USB Certification test for Embedded Host 2.0, and
+> > the detail is at CH6.4.1.1 of On-The-Go and Embedded Host Supplement
+> > to the USB Revision 2.0 Specification. Since other USB 2.0 capable
+> > host like XHCI also need it, so move it to HCD core.
+> > 
+> > Signed-off-by: Peter Chen <peter.chen@nxp.com>
+> > Signed-off-by: Jun Li <jun.li@nxp.com>
+> > ---
+> >  drivers/usb/core/hcd.c      | 134 ++++++++++++++++++++++++++++++++++
+> >  drivers/usb/host/ehci-hcd.c |   4 ++
+> >  drivers/usb/host/ehci-hub.c | 139 ------------------------------------
+> >  drivers/usb/host/ehci-q.c   |   2 +-
+> >  include/linux/usb/hcd.h     |  13 +++-
+> >  5 files changed, 151 insertions(+), 141 deletions(-)
+> > 
+> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > index 6119fb41d736..d7eb9f179ca6 100644
+> > --- a/drivers/usb/core/hcd.c
+> > +++ b/drivers/usb/core/hcd.c
+> > @@ -2110,6 +2110,140 @@ int usb_hcd_get_frame_number (struct usb_device *udev)
+> >  	return hcd->driver->get_frame_number (hcd);
+> >  }
+> >  
+> > +/*-------------------------------------------------------------------------*/
+> > +#ifdef CONFIG_USB_HCD_TEST_MODE
+> > +
+> > +static void usb_ehset_completion(struct urb *urb)
+> > +{
+> > +	struct completion  *done = urb->context;
+> > +
+> > +	complete(done);
+> > +}
+> > +/*
+> > + * Allocate and initialize a control URB. This request will be used by the
+> > + * EHSET SINGLE_STEP_SET_FEATURE test in which the DATA and STATUS stages
+> > + * of the GetDescriptor request are sent 15 seconds after the SETUP stage.
+> > + * Return NULL if failed.
+> > + */
+> > +static struct urb *request_single_step_set_feature_urb(
+> > +	struct usb_device	*udev,
+> > +	void			*dr,
+> > +	void			*buf,
+> > +	struct completion	*done)
+> > +{
+> > +	struct urb *urb;
+> > +	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+> > +	struct usb_host_endpoint *ep;
+> > +
+> > +	urb = usb_alloc_urb(0, GFP_KERNEL);
+> > +	if (!urb)
+> > +		return NULL;
+> > +
+> > +	urb->pipe = usb_rcvctrlpipe(udev, 0);
+> > +	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
+> > +				[usb_pipeendpoint(urb->pipe)];
+> > +	if (!ep) {
+> > +		usb_free_urb(urb);
+> > +		return NULL;
+> > +	}
+> > +
+> > +	urb->ep = ep;
+> > +	urb->dev = udev;
+> > +	urb->setup_packet = (void *)dr;
+> > +	urb->transfer_buffer = buf;
+> > +	urb->transfer_buffer_length = USB_DT_DEVICE_SIZE;
+> > +	urb->complete = usb_ehset_completion;
+> > +	urb->status = -EINPROGRESS;
+> > +	urb->actual_length = 0;
+> > +	urb->transfer_flags = URB_DIR_IN;
+> > +	usb_get_urb(urb);
+> > +	atomic_inc(&urb->use_count);
+> > +	atomic_inc(&urb->dev->urbnum);
+> > +	urb->setup_dma = dma_map_single(
+> > +			hcd->self.sysdev,
+> > +			urb->setup_packet,
+> > +			sizeof(struct usb_ctrlrequest),
+> > +			DMA_TO_DEVICE);
+> > +	urb->transfer_dma = dma_map_single(
+> > +			hcd->self.sysdev,
+> > +			urb->transfer_buffer,
+> > +			urb->transfer_buffer_length,
+> > +			DMA_FROM_DEVICE);
+> 
+> Maybe better to replace both of these dma_map_single() calls with
+> one call to usb_hcd_map_urb_for_dma(hcd, urb, GFP_KERNEL)? 
 
-So you are objecting to these being merged at this point in time?  Can
-you provide feedback to the author about what is wrong?
+In later patches, yes.  Not in this one that only moves code around.
 
 thanks,
 
