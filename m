@@ -2,91 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECEA367FB6
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 13:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D2A1367FA1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 13:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbhDVLmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 07:42:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236081AbhDVLmu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 07:42:50 -0400
-X-Greylist: delayed 402 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Apr 2021 04:42:16 PDT
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C5FC06174A
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 04:42:16 -0700 (PDT)
-Received: from webmail.kmu-office.ch (unknown [IPv6:2a02:418:6a02::a3])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id 0D6BC5C0541;
-        Thu, 22 Apr 2021 13:35:31 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1619091331;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ovme2ct9hvZuCBNPL3Wm+UfuebK/wFsMTOSjdM9dO6I=;
-        b=OP17xoooD27dyxu4FI9Xd8VEv2BWSPbwhv73xVnkO+Fu06IuPH/atU3VBU5Stf1FFzxO97
-        zXN+MB5YERp/ALIRjfb6pp4P1D9F2dx4JaNF9J6Sd87Fd3a75Ry+pEKDYcjfMi7rQplbMm
-        mwwR5MgCQpIv4HN4ezkWm0mMcaa+B24=
+        id S236001AbhDVLgh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 07:36:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46082 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235957AbhDVLgg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 07:36:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 26D7C60FF1
+        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 11:36:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619091362;
+        bh=QlxsYvuREW/voTZXCUtv6PGAYEd0KJIxOMsBgVs3w6U=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Kqx1zM6MYfzmVYnhxTzNSaAsCkFq1vefiraX5GVugOc3a1U9DvamkYoaJAdlEDHKY
+         MZZOw/++SXM+CzWXuSEqVwCMfneAroDhaYzu7FgVayqkM2ejruzC86Mg9eievG0/rA
+         gWAwSB9LmlfkLBHmopiC9cqeTALzRLaS4vWb/AHyvc55X4br60Z9iaNzfa+4XNRA/M
+         oc0Vagsgp2P/B9hkQYtRMXEpmlEJCyO/cp2/NbS8h94J8RNBKPlyuRQUESoETNkTIS
+         HBlxziHIjH0m3Hf7zQcAKJNpiU93mSmnQREndGG6JscsGD8VpK9ATIRi8+YYL5Dz+/
+         Gn9RQG8KaHD4A==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 233796113D; Thu, 22 Apr 2021 11:36:02 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212725] USB CDC ACM device stop working
+Date:   Thu, 22 Apr 2021 11:36:01 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stefan@agner.ch
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-212725-208809-jBcYORUOFC@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212725-208809@https.bugzilla.kernel.org/>
+References: <bug-212725-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Date:   Thu, 22 Apr 2021 13:35:30 +0200
-From:   Stefan Agner <stefan@agner.ch>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] CDC-ACM: fix poison/unpoison imbalance
-In-Reply-To: <20210421074513.4327-1-oneukum@suse.com>
-References: <20210421074513.4327-1-oneukum@suse.com>
-User-Agent: Roundcube Webmail/1.4.9
-Message-ID: <ffd33d14769dd51375c87d43fff9cc3d@agner.ch>
-X-Sender: stefan@agner.ch
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-04-21 09:45, Oliver Neukum wrote:
-> suspend() does its poisoning conditionally, resume() does it
-> unconditionally. On a device with combined interfaces this
-> will balance, on a device with two interfaces the counter will
-> go negative and resubmission will fail.
-> 
-> Both actions need to be done conditionally.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212725
 
-FWIW, this relates to the issue reported on the kernel bugzilla:
-https://bugzilla.kernel.org/show_bug.cgi?id=212725
+Stefan Agner (stefan@agner.ch) changed:
 
-Thanks for addressing this!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
-> 
-> Fixes: 6069e3e927c8f ("USB: cdc-acm: untangle a circular dependency
-> between callback and softint")
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
+--- Comment #5 from Stefan Agner (stefan@agner.ch) ---
+Addressed with:
+https://lore.kernel.org/linux-usb/20210421074513.4327-1-oneukum@suse.com/T/=
+#u
 
-Tested-by: Stefan Agner <stefan@agner.ch>
+--=20
+You may reply to this email to add a comment.
 
---
-Stefan
-
-> ---
->  drivers/usb/class/cdc-acm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-> index 3fda1ec961d7..f5886c512fec 100644
-> --- a/drivers/usb/class/cdc-acm.c
-> +++ b/drivers/usb/class/cdc-acm.c
-> @@ -1634,12 +1634,13 @@ static int acm_resume(struct usb_interface *intf)
->  	struct urb *urb;
->  	int rv = 0;
->  
-> -	acm_unpoison_urbs(acm);
->  	spin_lock_irq(&acm->write_lock);
->  
->  	if (--acm->susp_count)
->  		goto out;
->  
-> +	acm_unpoison_urbs(acm);
-> +
->  	if (tty_port_initialized(&acm->port)) {
->  		rv = usb_submit_urb(acm->ctrlurb, GFP_ATOMIC);
+You are receiving this mail because:
+You are watching the assignee of the bug.=
