@@ -2,122 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BB4367980
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 07:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670AD367BA1
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 09:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232949AbhDVFuO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 01:50:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53910 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229962AbhDVFuO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Apr 2021 01:50:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D3B036140F;
-        Thu, 22 Apr 2021 05:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619070580;
-        bh=E1WAA+xFrvMHQQSWNHFe3W3f+rcMAuCSq9fZVJbUWMw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wkAOfmLShZbTXi6JxDeROb1JxJ/oAmg+ApPEyXy84PDWGkYoG+T2e/5GxQaWu+qS3
-         rgt7iTzUMoeXxgOs/BNIDRtPEqJ4103n4MKHZDs4mhyUCWMp6EgPZm4PCOY72N/Rxd
-         Auz1bEy/WSrfPzDdgg/G3XjnqXW1x5Hh1YFgGAQA=
-Date:   Thu, 22 Apr 2021 07:49:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Roman Mamedov <rm@romanrm.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Not enough bandwidth for new device state -- with Etron USB3
- controller only
-Message-ID: <YIEOcvePnzGlQtoy@kroah.com>
-References: <20210421223732.27080321@natsu>
+        id S235131AbhDVH7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 03:59:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235004AbhDVH7a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 03:59:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9648DC06174A
+        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 00:58:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <jbe@pengutronix.de>)
+        id 1lZUEf-00062I-8O; Thu, 22 Apr 2021 09:58:53 +0200
+Received: from [2a0a:edc0:0:900:2e4d:54ff:fe67:bfa5] (helo=ginster)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <jbe@pengutronix.de>)
+        id 1lZUEe-0000K0-JG; Thu, 22 Apr 2021 09:58:52 +0200
+Received: from jbe by ginster with local (Exim 4.92)
+        (envelope-from <jbe@pengutronix.de>)
+        id 1lZUEe-0002RY-IT; Thu, 22 Apr 2021 09:58:52 +0200
+From:   Juergen Borleis <jbe@pengutronix.de>
+To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] USB: serial: ftdi_sio: add IDs for IDS GmbH Products
+Date:   Thu, 22 Apr 2021 09:58:52 +0200
+Message-Id: <20210422075852.9351-1-jbe@pengutronix.de>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210421223732.27080321@natsu>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: jbe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Apr 21, 2021 at 10:37:32PM +0500, Roman Mamedov wrote:
-> Hello,
-> 
-> I have a mouse and keyboard plugged into a 4-port USB 2.0 hub, plugged into a
-> 10-meter extender (which seems to also appear as an USB 2.0 hub).
-> 
-> When this combination is plugged into "Etron Technology, Inc. EJ168 USB 3.0 Host
-> Controller (rev 01)", it fails to work:
-> 
-> [Wed Apr 21 21:48:03 2021] usb 2-2: new high-speed USB device number 2 using xhci_hcd
-> [Wed Apr 21 21:48:03 2021] usb 2-2: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
-> [Wed Apr 21 21:48:03 2021] usb 2-2: New USB device strings: Mfr=0, Product=1, SerialNumber=0
-> [Wed Apr 21 21:48:03 2021] usb 2-2: Product: USB 2.0 Hub
-> [Wed Apr 21 21:48:03 2021] hub 2-2:1.0: USB hub found
-> [Wed Apr 21 21:48:03 2021] hub 2-2:1.0: 4 ports detected
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4: new high-speed USB device number 3 using xhci_hcd
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4: New USB device found, idVendor=05e3, idProduct=0606, bcdDevice= 7.02
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4: Product: USB2.0 Hub
-> [Wed Apr 21 21:48:04 2021] hub 2-2.4:1.0: USB hub found
-> [Wed Apr 21 21:48:04 2021] hub 2-2.4:1.0: 4 ports detected
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: new low-speed USB device number 4 using xhci_hcd
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: New USB device found, idVendor=046e, idProduct=52c5, bcdDevice= 1.23
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Product: USB Multimedia Keyboard
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Manufacturer: BTC
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: Not enough bandwidth for new device state.
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.3: can't set config #1, error -28
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: new low-speed USB device number 5 using xhci_hcd
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: New USB device found, idVendor=0957, idProduct=0006, bcdDevice= 3.10
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Product: ADNS-3080 Mouse
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Manufacturer: Agilent Mouse
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: Not enough bandwidth for new device state.
-> [Wed Apr 21 21:48:04 2021] usb 2-2.4.4: can't set config #1, error -28
-> [Wed Apr 21 21:48:11 2021] usb 2-2: USB disconnect, device number 2
-> [Wed Apr 21 21:48:11 2021] usb 2-2.4: USB disconnect, device number 3
-> [Wed Apr 21 21:48:11 2021] usb 2-2.4.3: USB disconnect, device number 4
-> [Wed Apr 21 21:48:11 2021] usb 2-2.4.4: USB disconnect, device number 5
-> 
-> But works just fine when plugged into the onboard "Advanced Micro Devices,
-> Inc. [AMD/ATI] SB7x0/SB8x0/SB9x0 USB EHCI Controller":
-> 
-> [Wed Apr 21 21:48:31 2021] usb 4-4: new high-speed USB device number 3 using ehci-pci
-> [Wed Apr 21 21:48:31 2021] usb 4-4: New USB device found, idVendor=1a40, idProduct=0101, bcdDevice= 1.11
-> [Wed Apr 21 21:48:31 2021] usb 4-4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
-> [Wed Apr 21 21:48:31 2021] usb 4-4: Product: USB 2.0 Hub
-> [Wed Apr 21 21:48:31 2021] hub 4-4:1.0: USB hub found
-> [Wed Apr 21 21:48:31 2021] hub 4-4:1.0: 4 ports detected
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4: new high-speed USB device number 4 using ehci-pci
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4: New USB device found, idVendor=05e3, idProduct=0606, bcdDevice= 7.02
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4: New USB device strings: Mfr=0, Product=1, SerialNumber=0
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4: Product: USB2.0 Hub
-> [Wed Apr 21 21:48:32 2021] hub 4-4.4:1.0: USB hub found
-> [Wed Apr 21 21:48:32 2021] hub 4-4.4:1.0: 4 ports detected
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4.3: new low-speed USB device number 5 using ehci-pci
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4.3: New USB device found, idVendor=046e, idProduct=52c5, bcdDevice= 1.23
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4.3: Product: USB Multimedia Keyboard
-> [Wed Apr 21 21:48:32 2021] usb 4-4.4.3: Manufacturer: BTC
-> [Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.0/0003:046E:52C5.0006/input/input33
-> [Wed Apr 21 21:48:33 2021] hid-generic 0003:046E:52C5.0006: input,hidraw2: USB HID v1.10 Keyboard [BTC USB Multimedia Keyboard] on usb-0000:00:13.2-4.4.3/input0
-> [Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard System Control as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.1/0003:046E:52C5.0007/input/input34
-> [Wed Apr 21 21:48:33 2021] input: BTC USB Multimedia Keyboard Consumer Control as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.3/4-4.4.3:1.1/0003:046E:52C5.0007/input/input35
-> [Wed Apr 21 21:48:33 2021] hid-generic 0003:046E:52C5.0007: input,hiddev0,hidraw3: USB HID v1.10 Device [BTC USB Multimedia Keyboard] on usb-0000:00:13.2-4.4.3/input1
-> [Wed Apr 21 21:48:33 2021] usb 4-4.4.4: new low-speed USB device number 6 using ehci-pci
-> [Wed Apr 21 21:48:33 2021] usb 4-4.4.4: New USB device found, idVendor=0957, idProduct=0006, bcdDevice= 3.10
-> [Wed Apr 21 21:48:33 2021] usb 4-4.4.4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-> [Wed Apr 21 21:48:33 2021] usb 4-4.4.4: Product: ADNS-3080 Mouse
-> [Wed Apr 21 21:48:33 2021] usb 4-4.4.4: Manufacturer: Agilent Mouse
-> [Wed Apr 21 21:48:33 2021] input: Agilent Mouse ADNS-3080 Mouse as /devices/pci0000:00/0000:00:13.2/usb4/4-4/4-4.4/4-4.4.4/4-4.4.4:1.0/0003:0957:0006.0008/input/input37
-> [Wed Apr 21 21:48:33 2021] hid-generic 0003:0957:0006.0008: input,hidraw4: USB HID v1.10 Mouse [Agilent Mouse ADNS-3080 Mouse] on usb-0000:00:13.2-4.4.4/input0
-> 
-> Any ideas? Is this a bug?
+From: Dominik Andreas Schorpp <dominik.a.schorpp@ids.de>
 
-Not a bug, this is how USB works.  Your first hub really does not have
-enough bandwidth for that device.  Well, we think it doesn't, the
-calculation for that is really really tricky and we error on the side of
-"let's not take the risk and just disable the device to be safe".
+Add the IDS GmbH Vendor ID and the Product IDs for SI31A (2xRS232)
+and CM31A (LoRaWAN Modem).
 
-Get a better hub :)
+Signed-off-by: Dominik Andreas Schorpp <dominik.a.schorpp@ids.de>
+Signed-off-by: Juergen Borleis <jbe@pengutronix.de>
+---
+ drivers/usb/serial/ftdi_sio.c     | 3 +++
+ drivers/usb/serial/ftdi_sio_ids.h | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
-thanks,
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index c867592..5a725ff 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1034,6 +1034,9 @@ static const struct usb_device_id id_table_combined[] = {
+ 	/* Sienna devices */
+ 	{ USB_DEVICE(FTDI_VID, FTDI_SIENNA_PID) },
+ 	{ USB_DEVICE(ECHELON_VID, ECHELON_U20_PID) },
++	/* IDS GmbH devices */
++	{ USB_DEVICE(IDS_VID, IDS_SI31A_PID) },
++	{ USB_DEVICE(IDS_VID, IDS_CM31A_PID) },
+ 	/* U-Blox devices */
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ZED_PID) },
+ 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ODIN_PID) },
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+index 3d47c6d..d854e04 100644
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -1567,6 +1567,13 @@
+ #define UNJO_VID			0x22B7
+ #define UNJO_ISODEBUG_V1_PID		0x150D
+ 
++/*
++ * IDS GmbH
++ */
++#define IDS_VID				0x2CAF
++#define IDS_SI31A_PID			0x13A2
++#define IDS_CM31A_PID			0x13A3
++
+ /*
+  * U-Blox products (http://www.u-blox.com).
+  */
+-- 
+2.20.1
 
-greg k-h
