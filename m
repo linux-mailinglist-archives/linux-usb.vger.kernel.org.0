@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBD63681C7
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 15:47:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D993681E6
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 15:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236757AbhDVNqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 09:46:55 -0400
-Received: from mx2.suse.de ([195.135.220.15]:46710 "EHLO mx2.suse.de"
+        id S236459AbhDVNwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 09:52:46 -0400
+Received: from mx2.suse.de ([195.135.220.15]:52090 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236344AbhDVNqy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Apr 2021 09:46:54 -0400
+        id S236414AbhDVNwq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 09:52:46 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1619099179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1619099530; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
         bh=a3+p/v1mYJ4PN76OUCLYHqFA3tM/FM2JuiMEpmgoXJI=;
-        b=LBHRcPKsI9K602Qk16eMFwii3RZ5/xzulDIywrgWfNqSh4PhcaRezGB7EmRCD9jnnfcLJo
-        6JUjn2d6VTQ9pg64pCRRy6UYPLet1eVTivRjH6S0t8IzKxKygGXKvqEC61pNH64IZ2sqdt
-        nALwwaUzXDVernZqj8pSgt4+K6W8NDw=
+        b=PMczsT0dLeInqcVKLuEjgff4UU81tawZt1FpjNAevPSaO+N5uMZGtlhfibhG+ebtdQuNv3
+        t3oLENETc7Vf5ZGotZ6XMeglonk9touQ0xgD2/KJCm85m+lMUqb62WuMe+bHo/OTTQpaoD
+        gh7/7U0hQ5l3af5toGcuzv1HSj1Nk2g=
 Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id DAA75B152;
-        Thu, 22 Apr 2021 13:46:18 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id AA2B9AF17;
+        Thu, 22 Apr 2021 13:52:10 +0000 (UTC)
 From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKHusb@linuxfoundation.org, linux-usb@vger.kernel.org
+To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>
 Subject: [PATCH] cdc-wdm: untangle a circular dependency between callback and softint
-Date:   Thu, 22 Apr 2021 15:45:55 +0200
-Message-Id: <20210422134555.6510-1-oneukum@suse.com>
+Date:   Thu, 22 Apr 2021 15:51:47 +0200
+Message-Id: <20210422135147.18034-1-oneukum@suse.com>
 X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
