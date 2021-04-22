@@ -2,92 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 670AD367BA1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 09:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09983367CC5
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 10:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235131AbhDVH7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 03:59:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235004AbhDVH7a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 03:59:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9648DC06174A
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 00:58:55 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1lZUEf-00062I-8O; Thu, 22 Apr 2021 09:58:53 +0200
-Received: from [2a0a:edc0:0:900:2e4d:54ff:fe67:bfa5] (helo=ginster)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1lZUEe-0000K0-JG; Thu, 22 Apr 2021 09:58:52 +0200
-Received: from jbe by ginster with local (Exim 4.92)
-        (envelope-from <jbe@pengutronix.de>)
-        id 1lZUEe-0002RY-IT; Thu, 22 Apr 2021 09:58:52 +0200
-From:   Juergen Borleis <jbe@pengutronix.de>
-To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: [PATCH] USB: serial: ftdi_sio: add IDs for IDS GmbH Products
-Date:   Thu, 22 Apr 2021 09:58:52 +0200
-Message-Id: <20210422075852.9351-1-jbe@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
+        id S235075AbhDVIqr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 04:46:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33238 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230270AbhDVIqq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 04:46:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E98DD613DE;
+        Thu, 22 Apr 2021 08:46:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1619081170;
+        bh=4nheqwl05OYDRXeZyfMJy6aYK1NXONMSey8HL0+Zb9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PvJpDtJegEqOa0Gd7QypJCSiRy/z84tE2k+DG4b7G8Z84NqqMouJ1TDqP+F9aZdmG
+         /v/G2Z6WXt5hUeHrgeqf2JyrABxWl6I5tyZ3macKHTFj2QQ14OASQliwZezOgg1arb
+         s8eROn+lnAu0DHmvTih4kHCbLHHUBArZLkQzlUqo=
+Date:   Thu, 22 Apr 2021 10:46:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>,
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 1/2] usb: xhci-mtk: remove unnecessary assignments in
+ periodic TT scheduler
+Message-ID: <YIE3z7qYNtk7G/VB@kroah.com>
+References: <20210330080617.3746932-1-ikjn@chromium.org>
+ <20210330160508.1.I797d214790033d0402d19ff6b47a34aff60d3062@changeid>
+ <1617179455.2752.1.camel@mhfsdcap03>
+ <YGq2YfURFApdJLxb@kroah.com>
+ <1617675492.22435.4.camel@mhfsdcap03>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: jbe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1617675492.22435.4.camel@mhfsdcap03>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Dominik Andreas Schorpp <dominik.a.schorpp@ids.de>
+On Tue, Apr 06, 2021 at 10:18:12AM +0800, Chunfeng Yun wrote:
+> On Mon, 2021-04-05 at 09:04 +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Mar 31, 2021 at 04:30:55PM +0800, Chunfeng Yun wrote:
+> > > cc Yaqii Wu <Yaqii.Wu@mediatek.com>
+> > > 
+> > > I'll test it , thanks
+> > 
+> > Did you test this series and find any problems?  If not, I'll go queue
+> > these up...
+> Yes, found an issue on the start-split transaction, but not found the
+> root cause yet :(
 
-Add the IDS GmbH Vendor ID and the Product IDs for SI31A (2xRS232)
-and CM31A (LoRaWAN Modem).
+So you are objecting to these being merged at this point in time?  Can
+you provide feedback to the author about what is wrong?
 
-Signed-off-by: Dominik Andreas Schorpp <dominik.a.schorpp@ids.de>
-Signed-off-by: Juergen Borleis <jbe@pengutronix.de>
----
- drivers/usb/serial/ftdi_sio.c     | 3 +++
- drivers/usb/serial/ftdi_sio_ids.h | 7 +++++++
- 2 files changed, 10 insertions(+)
+thanks,
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index c867592..5a725ff 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1034,6 +1034,9 @@ static const struct usb_device_id id_table_combined[] = {
- 	/* Sienna devices */
- 	{ USB_DEVICE(FTDI_VID, FTDI_SIENNA_PID) },
- 	{ USB_DEVICE(ECHELON_VID, ECHELON_U20_PID) },
-+	/* IDS GmbH devices */
-+	{ USB_DEVICE(IDS_VID, IDS_SI31A_PID) },
-+	{ USB_DEVICE(IDS_VID, IDS_CM31A_PID) },
- 	/* U-Blox devices */
- 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ZED_PID) },
- 	{ USB_DEVICE(UBLOX_VID, UBLOX_C099F9P_ODIN_PID) },
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 3d47c6d..d854e04 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1567,6 +1567,13 @@
- #define UNJO_VID			0x22B7
- #define UNJO_ISODEBUG_V1_PID		0x150D
- 
-+/*
-+ * IDS GmbH
-+ */
-+#define IDS_VID				0x2CAF
-+#define IDS_SI31A_PID			0x13A2
-+#define IDS_CM31A_PID			0x13A3
-+
- /*
-  * U-Blox products (http://www.u-blox.com).
-  */
--- 
-2.20.1
-
+greg k-h
