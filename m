@@ -2,94 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6049367F37
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 13:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD3CA367F45
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 13:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235830AbhDVLEd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 07:04:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33794 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230285AbhDVLEc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Apr 2021 07:04:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B7E08613C2;
-        Thu, 22 Apr 2021 11:03:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619089437;
-        bh=Ug67xf4sAZoT+t7tvOpFzhVkyHygukWWZi62Oc8MbT0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nfY6kRKN1KrWhcH2ovJGuoy/ZJaCuIsWkTeNN07v2QOwffeOZiRG+ys73/pdVNXd5
-         HF+GYBuFxjepf6x7sa0TbGe3l92oenCk9p3jUsikC0uiD5UwFr6g1L/qYAkED83yJG
-         FIk3vyRmtthc78sHx/Q4qoL5NCc5hYjmXY3tq68BEq5TzGlBiD8d3bIFL1/M0p6ZdO
-         Z0AVzBoWBlJknSmV2kE7elreh6Na7Pzzd6/0yKEDpDxFjEs1HqUgkyu4Sj7KzGktuS
-         74+8rFnUs5oc2p49CsRsMq0bztAyHoIuBu8/EdIDE2Usf1AIgQZsy6iBpezsg6eJFl
-         R/b1lgvzKk+xQ==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Jens Axboe <axboe@kernel.dk>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Zhang Qilong <zhangqilong3@huawei.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: prevent a ternary sign expansion bug
-In-Reply-To: <YIE7RrBPLWc3XtMg@mwanda>
-References: <YIE7RrBPLWc3XtMg@mwanda>
-Date:   Thu, 22 Apr 2021 14:03:49 +0300
-Message-ID: <87im4emvhm.fsf@kernel.org>
+        id S235863AbhDVLIv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 07:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230285AbhDVLIv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 07:08:51 -0400
+Received: from rin.romanrm.net (rin.romanrm.net [IPv6:2001:bc8:2dd2:1000::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAA1C06174A
+        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 04:08:16 -0700 (PDT)
+Received: from natsu (natsu2.home.romanrm.net [IPv6:fd39::e99e:8f1b:cfc9:ccb8])
+        by rin.romanrm.net (Postfix) with SMTP id 11A95713;
+        Thu, 22 Apr 2021 11:08:12 +0000 (UTC)
+Date:   Thu, 22 Apr 2021 16:08:13 +0500
+From:   Roman Mamedov <rm@romanrm.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Not enough bandwidth for new device state -- with Etron USB3
+ controller only
+Message-ID: <20210422160813.41e26426@natsu>
+In-Reply-To: <YIEOcvePnzGlQtoy@kroah.com>
+References: <20210421223732.27080321@natsu>
+        <YIEOcvePnzGlQtoy@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Dan Carpenter <dan.carpenter@oracle.com> writes:
+On Thu, 22 Apr 2021 07:49:38 +0200
+Greg KH <gregkh@linuxfoundation.org> wrote:
 
-> The problem is that "req->actual" is a u32, "req->status" is an int, and
-> iocb->ki_complete() takes a long.  We would expect that a negative error
-> code in "req->status" would translate to a negative long value.
->
-> But what actually happens is that because "req->actual" is a u32, the
-> error codes is type promoted to a high positive value and then remains
-> a positive value when it is cast to long.  (No sign expansion).
->
-> We can fix this by casting "req->status" to long.
->
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Not a bug, this is how USB works.  Your first hub really does not have
+> enough bandwidth for that device.  Well, we think it doesn't, the
+> calculation for that is really really tricky and we error on the side of
+> "let's not take the risk and just disable the device to be safe".
+> 
+> Get a better hub :)
 
-I'm just going to assume your type promotion rank is correct :-)
+But why the calculation is different when the hub is plugged into the onboard
+USB 2.0 controller -- and there it works?
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+I hope you don't take this as a bug report to make it stop working there as
+well. :)
 
-=2D-=20
-balbi
+If it's because the Etron controller is USB 3.0, and the higher speeds are
+somehow accounted for in the bandwidth calculation, that doesn't seem right,
+since both of the plugged in downstream hubs are 1.1/2.0-only.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmCBWBURHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQYx6w/+Py/HPvuGhdSzyKkaLoCoZfzX+h1RwGMy
-zjhH1vTq+5wFLGPtfF9n2dXKmeS/mT584Zdis1J7bZloUxPk8sPfkel581pfPdR+
-Ti7g5JgTY2h8Jizidq+435cKlSXLNnubJCP8dcXUkk6IVFsny2I2IhOFm4cwt79Y
-zWqwtByhMFOPCSMLO/01Psuemv9aQLV42Du8kR9HZgIMixEiEyiSCa5Ad6WpbL2T
-VkSK1STs6N0n9h46O/2iOlfPdAMTqOW8MvkANGtugRBqlmIAWoZGWEx/rXDxogvK
-XWIohCUhr+PvO16ztiNEAT9gsrBkVq/5bCStW2HI8wxBUI9E7q+kKHzrUNDiz20F
-CHax9DNJOFcuP/0OUCV/a+qFBAymc5R2ADLFS7xOKj6taXMA+rhiOrd4htQMhfof
-FG5QWK6XkiPYgD5UhoWd2FsP5M0/7KI34lNi1miCLXrIhov5oKhf5L3RoUO7fzFa
-BzSbh8xT5GwHRukMaJym/NwgEEyt1A5mXDx43Q2HXLepxg47+qJADkTHgwcJ8YQU
-JLpGH3kxfKVBR/w4PtTyaaLnZglbQBCaMnTZ919Was7RMZm+8zNd9RXl77LGpPAI
-9acykfYZz2ajg1J4o8VI3jdAXonZDmDxSEicoxcv4dPbqn1fuPMI2LeDmz4MjyEz
-17Obpk231OM=
-=TCW6
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+With respect,
+Roman
