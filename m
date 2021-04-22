@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C90F6368982
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 01:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E055F368983
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 01:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237141AbhDVXwO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 19:52:14 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:46238 "EHLO
+        id S239790AbhDVXwU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 19:52:20 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:46252 "EHLO
         smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231605AbhDVXwN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 19:52:13 -0400
-Received: from mailhost.synopsys.com (sv2-mailhost1.synopsys.com [10.205.2.133])
+        by vger.kernel.org with ESMTP id S231605AbhDVXwT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 19:52:19 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 09F0FC0551;
-        Thu, 22 Apr 2021 23:51:38 +0000 (UTC)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 704E9C0551;
+        Thu, 22 Apr 2021 23:51:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1619135498; bh=5pCWckvumA29Ypm9Ddue9yy1WxqOZGzda1GKqNPbW4A=;
+        t=1619135504; bh=V48qCrrN3qj7kK84zdt1V2DAh1FhPn1jRGyTO+hCCnw=;
         h=Date:In-Reply-To:References:From:Subject:To:Cc:From;
-        b=OskTcISrzXz6WEip85v6rk6ldR0ghpjFOaWIldW2LkvRn48q9t68Mc5FKFZNsv41h
-         NRUhX+OukGIerovQ/6hxHtUFvsw7Tuo8KM//6ZX0v9dAhmH/qJUJCVZGqAPWO6W3AX
-         3poRwTMHkLSnuaTlnGLke09hB7mBsUcj5LlvlDfZVa/A+r9JSa/CC2vSUlqCADxMLU
-         hbWYtMCpp9BlajxrMRvhndaAUS+8XfSpMyKNg8MJ31Vf2vSe1DioEzEZmNvfDq2Xor
-         iU9lTbkGRNiodFpMOXBgSZzg7Beho7s+mK7D49aSq6m33T6Ljo9Ff027ugTfYA/eR3
-         4uDJQwOEmCnMg==
+        b=g+A+tTfUhgrNyRlcFHJluijgbwY+fq/Q2rxKTGkD404YetpcLFQ+aItQAuOUHa6Cl
+         uVQa3lSnC4Dhuo1Ewf18r1WXBPo73xQuY352vEKpH8kVuWXY79GU0TXoi5PdVpC+w4
+         7+KaTMDreulVPldD5z4HvGS9SXYozRilV9ZrOOp4sdL/0sAY8oKDQXaNnF0yZc9096
+         kC+2LXCpch5Gqq0Xj+HtgZVXLI70wmBNP+dzO55QJ4L62rTldW7+hWZ5QnLi1tddsb
+         KaPn8LXixG1uEnV1JiKc9HP4l84gfPFRYNVgzBWpOqn9ueW+37eBYbPF6+iAzTSnv9
+         AQpui4U71OUYw==
 Received: from lab-vbox (unknown [10.205.129.47])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 89DEBA007C;
-        Thu, 22 Apr 2021 23:51:36 +0000 (UTC)
-Received: by lab-vbox (sSMTP sendmail emulation); Thu, 22 Apr 2021 16:51:36 -0700
-Date:   Thu, 22 Apr 2021 16:51:36 -0700
-Message-Id: <f76cc4a9c8c4ab325f5babe03c57b039166360b0.1619134559.git.Thinh.Nguyen@synopsys.com>
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 202CAA006F;
+        Thu, 22 Apr 2021 23:51:43 +0000 (UTC)
+Received: by lab-vbox (sSMTP sendmail emulation); Thu, 22 Apr 2021 16:51:43 -0700
+Date:   Thu, 22 Apr 2021 16:51:43 -0700
+Message-Id: <65c3070c666cd6b8beeee62d7f8e3e704ebf2d32.1619134559.git.Thinh.Nguyen@synopsys.com>
 In-Reply-To: <cover.1619134559.git.Thinh.Nguyen@synopsys.com>
 References: <cover.1619134559.git.Thinh.Nguyen@synopsys.com>
 X-SNPS-Relay: synopsys.com
 From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Subject: [PATCH 1/2] usb: dwc3: Capture new capability register GHWPARAMS9
+Subject: [PATCH 2/2] usb: dwc3: gadget: Handle DEV_TXF_FLUSH_BYPASS capability
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org
@@ -46,49 +46,53 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DWC_usb32 introduces a new HW capability register GHWPARAMS9. Capture
-this in the dwc->hwparams.hwparams9 field.
+DWC_usb32 IP introduces a new behavior when handling NoStream event for
+IN endpoints. If the controller is capable of DEV_TXF_FLUSH_BYPASS, then
+the driver does not need to force to restart stream for IN endpoints.
+The controller will generate ERDY and restart the stream periodically.
 
 Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
- drivers/usb/dwc3/core.c | 3 +++
- drivers/usb/dwc3/core.h | 2 ++
- 2 files changed, 5 insertions(+)
+ drivers/usb/dwc3/core.h   |  3 +++
+ drivers/usb/dwc3/gadget.c | 10 +++++++++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 2f118ad43571..b6e53d8212cd 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -570,6 +570,9 @@ static void dwc3_cache_hwparams(struct dwc3 *dwc)
- 	parms->hwparams6 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS6);
- 	parms->hwparams7 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS7);
- 	parms->hwparams8 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS8);
-+
-+	if (DWC3_IP_IS(DWC32))
-+		parms->hwparams9 = dwc3_readl(dwc->regs, DWC3_GHWPARAMS9);
- }
- 
- static int dwc3_core_ulpi_init(struct dwc3 *dwc)
 diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 7e3afa5378e8..b678200cc51e 100644
+index b678200cc51e..b1e875c58f20 100644
 --- a/drivers/usb/dwc3/core.h
 +++ b/drivers/usb/dwc3/core.h
-@@ -143,6 +143,7 @@
- #define DWC3_GHWPARAMS8		0xc600
- #define DWC3_GUCTL3		0xc60c
- #define DWC3_GFLADJ		0xc630
-+#define DWC3_GHWPARAMS9		0xc680
+@@ -379,6 +379,9 @@
+ #define DWC3_GHWPARAMS7_RAM1_DEPTH(n)	((n) & 0xffff)
+ #define DWC3_GHWPARAMS7_RAM2_DEPTH(n)	(((n) >> 16) & 0xffff)
  
- /* Device Registers */
- #define DWC3_DCFG		0xc700
-@@ -857,6 +858,7 @@ struct dwc3_hwparams {
- 	u32	hwparams6;
- 	u32	hwparams7;
- 	u32	hwparams8;
-+	u32	hwparams9;
- };
++/* Global HWPARAMS9 Register */
++#define DWC3_GHWPARAMS9_DEV_TXF_FLUSH_BYPASS	BIT(0)
++
+ /* Global Frame Length Adjustment Register */
+ #define DWC3_GFLADJ_30MHZ_SDBND_SEL		BIT(7)
+ #define DWC3_GFLADJ_30MHZ_MASK			0x3f
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 90f4f9e69b22..dd80e5ca8c78 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -730,8 +730,16 @@ static int __dwc3_gadget_ep_enable(struct dwc3_ep *dep, unsigned int action)
+ 			 * All stream eps will reinitiate stream on NoStream
+ 			 * rejection until we can determine that the host can
+ 			 * prime after the first transfer.
++			 *
++			 * However, if the controller is capable of
++			 * TXF_FLUSH_BYPASS, then IN direction endpoints will
++			 * automatically restart the stream without the driver
++			 * initiation.
+ 			 */
+-			dep->flags |= DWC3_EP_FORCE_RESTART_STREAM;
++			if (!dep->direction ||
++			    !(dwc->hwparams.hwparams9 &
++			      DWC3_GHWPARAMS9_DEV_TXF_FLUSH_BYPASS))
++				dep->flags |= DWC3_EP_FORCE_RESTART_STREAM;
+ 		}
+ 	}
  
- /* HWPARAMS0 */
 -- 
 2.28.0
 
