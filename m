@@ -2,63 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3BA3680C1
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 14:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EBD63681C7
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 15:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236206AbhDVMpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 08:45:40 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:39830 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236185AbhDVMpk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 08:45:40 -0400
-Received: by mail-il1-f200.google.com with SMTP id v3-20020a056e0213c3b029016165a33c15so18217810ilj.6
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 05:45:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=MBoWTyERxFkVDTqj1W2YjlvsjGkP+FMvMXQ4/+ef/wM=;
-        b=FUa1bTBrPxFWWjR0pfC2kzQSjdEcaa8Z6L1odRH1IDt7F0UdTsU7rwgTtpeXT4OO4x
-         UMaPUADroAKjkqWFBm6jCiL+1pMD5ugFtRUyQcnHZ5VpdgRATos8H/FvZAJaukNIAN2A
-         vK+wucCuDIHvJnX5Ozwj/1UL715SWjvr+eCPa1dJdCF5/VM3vtyRfILWYW/8PACcsYWN
-         9vHB9hM7YWDKa+wSlDbjQnDOETGy7Fzau57YK2N/hyYzPBtRI7IxKp0TF937/YrX0Wt9
-         Mo9FXymjg1v8S4a1wh/vUvh8jC+YPYy4i9BnPCIK3g7I9cdvUKhuOeHYZiQUN/i4jMR4
-         5Gpg==
-X-Gm-Message-State: AOAM530SKROX69aHmw7Bwc/pbtDoiUAW2kpsdJGSgyaBX/G4SX4QJmME
-        RppN4E+bHOMf1b1lQ5FnaEh9VgHzJqx1HELQo+PcGuJiTAq8
-X-Google-Smtp-Source: ABdhPJyuN0BKB5Ti+jqSeP7iOBlhpvVRArVK5O0qvZ4zHfzGvQ2tuERMiugAJexNtsJ8Ew+33+T6hNfxGhe9A8lMfvbDBd3edu3v
+        id S236757AbhDVNqz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 09:46:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:46710 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236344AbhDVNqy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 09:46:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1619099179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=a3+p/v1mYJ4PN76OUCLYHqFA3tM/FM2JuiMEpmgoXJI=;
+        b=LBHRcPKsI9K602Qk16eMFwii3RZ5/xzulDIywrgWfNqSh4PhcaRezGB7EmRCD9jnnfcLJo
+        6JUjn2d6VTQ9pg64pCRRy6UYPLet1eVTivRjH6S0t8IzKxKygGXKvqEC61pNH64IZ2sqdt
+        nALwwaUzXDVernZqj8pSgt4+K6W8NDw=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id DAA75B152;
+        Thu, 22 Apr 2021 13:46:18 +0000 (UTC)
+From:   Oliver Neukum <oneukum@suse.com>
+To:     gregKHusb@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc:     Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH] cdc-wdm: untangle a circular dependency between callback and softint
+Date:   Thu, 22 Apr 2021 15:45:55 +0200
+Message-Id: <20210422134555.6510-1-oneukum@suse.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1d0e:: with SMTP id i14mr2341220ila.230.1619095505244;
- Thu, 22 Apr 2021 05:45:05 -0700 (PDT)
-Date:   Thu, 22 Apr 2021 05:45:05 -0700
-In-Reply-To: <94aa3e7fcbb225da66961a21c940406ada2bbd0b.camel@suse.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000729ab405c08f0c16@google.com>
-Subject: Re: [syzbot] memory leak in usb_set_configuration (2)
-From:   syzbot <syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, oneukum@suse.com,
-        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+We have a cycle of callbacks scheduling works which submit
+URBs with thos callbacks. This needs to be blocked, stopped
+and unblocked to untangle the circle..
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Oliver Neukum <oneukum@suse.com>
+---
+ drivers/usb/class/cdc-wdm.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-Reported-and-tested-by: syzbot+d1e69c888f0d3866ead4@syzkaller.appspotmail.com
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 508b1c3f8b73..d1e4a7379beb 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -321,12 +321,23 @@ static void wdm_int_callback(struct urb *urb)
+ 
+ }
+ 
+-static void kill_urbs(struct wdm_device *desc)
++static void poison_urbs(struct wdm_device *desc)
+ {
+ 	/* the order here is essential */
+-	usb_kill_urb(desc->command);
+-	usb_kill_urb(desc->validity);
+-	usb_kill_urb(desc->response);
++	usb_poison_urb(desc->command);
++	usb_poison_urb(desc->validity);
++	usb_poison_urb(desc->response);
++}
++
++static void unpoison_urbs(struct wdm_device *desc)
++{
++	/*
++	 *  the order here is not essential
++	 *  it is symmetrical just to be nice
++	 */
++	usb_unpoison_urb(desc->response);
++	usb_unpoison_urb(desc->validity);
++	usb_unpoison_urb(desc->command);
+ }
+ 
+ static void free_urbs(struct wdm_device *desc)
+@@ -741,11 +752,12 @@ static int wdm_release(struct inode *inode, struct file *file)
+ 	if (!desc->count) {
+ 		if (!test_bit(WDM_DISCONNECTING, &desc->flags)) {
+ 			dev_dbg(&desc->intf->dev, "wdm_release: cleanup\n");
+-			kill_urbs(desc);
++			poison_urbs(desc);
+ 			spin_lock_irq(&desc->iuspin);
+ 			desc->resp_count = 0;
+ 			spin_unlock_irq(&desc->iuspin);
+ 			desc->manage_power(desc->intf, 0);
++			unpoison_urbs(desc);
+ 		} else {
+ 			/* must avoid dev_printk here as desc->intf is invalid */
+ 			pr_debug(KBUILD_MODNAME " %s: device gone - cleaning up\n", __func__);
+@@ -1037,9 +1049,9 @@ static void wdm_disconnect(struct usb_interface *intf)
+ 	wake_up_all(&desc->wait);
+ 	mutex_lock(&desc->rlock);
+ 	mutex_lock(&desc->wlock);
++	poison_urbs(desc);
+ 	cancel_work_sync(&desc->rxwork);
+ 	cancel_work_sync(&desc->service_outs_intr);
+-	kill_urbs(desc);
+ 	mutex_unlock(&desc->wlock);
+ 	mutex_unlock(&desc->rlock);
+ 
+@@ -1080,9 +1092,10 @@ static int wdm_suspend(struct usb_interface *intf, pm_message_t message)
+ 		set_bit(WDM_SUSPENDING, &desc->flags);
+ 		spin_unlock_irq(&desc->iuspin);
+ 		/* callback submits work - order is essential */
+-		kill_urbs(desc);
++		poison_urbs(desc);
+ 		cancel_work_sync(&desc->rxwork);
+ 		cancel_work_sync(&desc->service_outs_intr);
++		unpoison_urbs(desc);
+ 	}
+ 	if (!PMSG_IS_AUTO(message)) {
+ 		mutex_unlock(&desc->wlock);
+@@ -1140,7 +1153,7 @@ static int wdm_pre_reset(struct usb_interface *intf)
+ 	wake_up_all(&desc->wait);
+ 	mutex_lock(&desc->rlock);
+ 	mutex_lock(&desc->wlock);
+-	kill_urbs(desc);
++	poison_urbs(desc);
+ 	cancel_work_sync(&desc->rxwork);
+ 	cancel_work_sync(&desc->service_outs_intr);
+ 	return 0;
+@@ -1151,6 +1164,7 @@ static int wdm_post_reset(struct usb_interface *intf)
+ 	struct wdm_device *desc = wdm_find_device(intf);
+ 	int rv;
+ 
++	unpoison_urbs(desc);
+ 	clear_bit(WDM_OVERFLOW, &desc->flags);
+ 	clear_bit(WDM_RESETTING, &desc->flags);
+ 	rv = recover_from_urb_loss(desc);
+-- 
+2.26.2
 
-Tested on:
-
-commit:         9cdbf646 Merge tag 'io_uring-5.12-2021-04-16' of git://git..
-git tree:       https://github.com/google/kasan.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f23c86207baa4afe
-dashboard link: https://syzkaller.appspot.com/bug?extid=d1e69c888f0d3866ead4
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1699cf75d00000
-
-Note: testing is done by a robot and is best-effort only.
