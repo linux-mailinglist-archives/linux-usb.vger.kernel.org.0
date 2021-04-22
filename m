@@ -2,214 +2,624 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4517F3687CB
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 22:18:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64FAF368848
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 22:55:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236993AbhDVUSu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 16:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
+        id S239499AbhDVU4M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 16:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbhDVUSu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 16:18:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D07C06174A
-        for <linux-usb@vger.kernel.org>; Thu, 22 Apr 2021 13:18:14 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1lZfm9-00033z-BO; Thu, 22 Apr 2021 22:18:13 +0200
-Received: from mgr by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mgr@pengutronix.de>)
-        id 1lZfm8-0000Id-1p; Thu, 22 Apr 2021 22:18:12 +0200
-Date:   Thu, 22 Apr 2021 22:18:12 +0200
-From:   Michael Grzeschik <mgr@pengutronix.de>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Thinh.Nguyen@synopsys.com,
-        kernel@pengutronix.de
-Subject: Re: [PATCH 2/2] dwc3: gadget: fix tracking of used sgs in request
-Message-ID: <20210422201812.GC6975@pengutronix.de>
-References: <20210421204837.4185-1-m.grzeschik@pengutronix.de>
- <20210421204837.4185-3-m.grzeschik@pengutronix.de>
- <87o8e6mvue.fsf@kernel.org>
+        with ESMTP id S239495AbhDVU4M (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Apr 2021 16:56:12 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E24C06174A;
+        Thu, 22 Apr 2021 13:55:35 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id mh2so49255506ejb.8;
+        Thu, 22 Apr 2021 13:55:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=dEQlBQ+cKNmvrna+slH7W/hMGqqCGXx5n3UWJyZ8sYQ=;
+        b=aQPxJr4TxH5FQe6Tr21BLzR9VMqBUL40Krw4ITVx/BARvappmztuiXl95pYypsK97g
+         ZEqj7NA5ic/IhLv9TWSjs9y6FhQI5A0Gj+al5w2pVM/uBsseA94XL39aoxR/O9PnEFBg
+         0L3atuGzvBPvYzXjMYu1KBoP0+HbNesraRvpr5+ktKBieDD2gBuH/5A3Lyeg9PcMfKy6
+         VhrIGoT7tpki7yvNvzpezLVBcy8zgxace9IAzlOxKVpjpTG1YcpTg09XHEffHe9P+a8F
+         dUNcrCOS78wHEUaFsQM9foJCDzPNj0Mn2KuvUtMfCDKaSWj15v5yeOBbwe80aOjzOJZQ
+         SqCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=dEQlBQ+cKNmvrna+slH7W/hMGqqCGXx5n3UWJyZ8sYQ=;
+        b=Rkc3MVQciNUtNcfK7BbdYnM17a/Y11KCPRYE4nluJIVYNT5GjAfkAdil3xZEbuBv50
+         btLaN//ZZVFIv68qgauy4D0RXBoWPyYGNXJxEas23qTr5BgT89j/yft9bKDH6DVcR6al
+         tTiGK0g5BI5LbAiIf5taOIGZ0ODVWXl4eOp9wMIwiNYRGSvnk1VNUZ4Ry0S0ysibnkON
+         UShBM5o2iQg+Wlz6s49gmR6/Q7HogfgYj9JDkbf593sEyNIT7B+VQsFxk7hpE7AMnX2h
+         3d5kjHZQ/7Q0ELv8e7+E37eu2D6bFDtJvvgSLqMltAzfUA54B6iyPehuvs0Ka85L7KDK
+         pbvQ==
+X-Gm-Message-State: AOAM532o9Q9HEHY1I+EXhklMSpnx4Kq27J+I4KHrV7qMQHHH3ZQW8n1f
+        81ZHANGW8CK26F4KRRFZs8OcyM62LDeOBQ==
+X-Google-Smtp-Source: ABdhPJywLNvFriI5I8KqH4xnzheaDmAX8/OfwFjPocj1tGLFXjUnaWLI/u88nXnTerJNaoXFL5q1GA==
+X-Received: by 2002:a17:907:9894:: with SMTP id ja20mr596936ejc.428.1619124933816;
+        Thu, 22 Apr 2021 13:55:33 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:8cd0:2dad:989e:1456? ([2001:981:6fec:1:8cd0:2dad:989e:1456])
+        by smtp.gmail.com with ESMTPSA id cm21sm2925238edb.29.2021.04.22.13.55.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Apr 2021 13:55:33 -0700 (PDT)
+Subject: Re: [PATCH v3] usb: dwc3: core: Do core softreset when switch mode
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Yu Chen <chenyu56@huawei.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <2cb4e704b059a8cc91f37081c8ceb95c6492e416.1618503587.git.Thinh.Nguyen@synopsys.com>
+ <374440f8dcd4f06c02c2caf4b1efde86774e02d9.1618521663.git.Thinh.Nguyen@synopsys.com>
+ <d053b843-2308-6b42-e7ff-3dc6e33e5c7d@synopsys.com>
+ <0882cfae-4708-a67a-f112-c1eb0c7e6f51@gmail.com>
+ <1c1d8e4a-c495-4d51-b125-c3909a3bdb44@synopsys.com>
+ <db5849f7-ba31-8b18-ebb5-f27c4e36de28@gmail.com>
+ <09755742-c73b-f737-01c1-8ecd309de551@gmail.com>
+ <4a1245e3-023c-ec69-2ead-dacf5560ff9f@synopsys.com>
+ <109affec-2e0c-0882-4514-8cab72eec85b@gmail.com>
+ <fdaebefd-36c2-84e0-164f-c376483a0db3@synopsys.com>
+ <a485bdc8-35e9-d58b-1411-84463274bb6d@gmail.com>
+ <d9bca287-92fe-b2c8-511c-0ae89d2745c9@synopsys.com>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <c9ef4bca-9fad-bb66-5ea3-2bd07b5b4e3e@gmail.com>
+Date:   Thu, 22 Apr 2021 22:55:32 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fUYQa+Pmc3FrFX/N"
-Content-Disposition: inline
-In-Reply-To: <87o8e6mvue.fsf@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 21:43:10 up 63 days, 23:07, 87 users,  load average: 0.05, 0.05,
- 0.06
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: mgr@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <d9bca287-92fe-b2c8-511c-0ae89d2745c9@synopsys.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi
 
---fUYQa+Pmc3FrFX/N
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Apr 22, 2021 at 01:56:09PM +0300, Felipe Balbi wrote:
->
->Hi,
->
->(subject format as well)
->
->Michael Grzeschik <m.grzeschik@pengutronix.de> writes:
->> The variable pending_sgs was used to keep track of handled
->> sgs in one request. But instead queued_sgs is being decremented
->
->no, it wasn't. If the total number of entries in the scatter list is 'x'
->and we have transferred (completed) 'y' entries, then pending_sgs should
->be (x - y).
->
->> on every handled sg. This patch fixes the usage of the variable
->> to use queued_sgs instead as intended.
+Op 21-04-2021 om 21:01 schreef Thinh Nguyen:
+> Ferry Toth wrote:
+>> Hi
 >>
->> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
->> ---
->>  drivers/usb/dwc3/gadget.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
+>> Op 19-04-2021 om 23:23 schreef Thinh Nguyen:
+>>> Ferry Toth wrote:
+>>>> Hi
+>>>>
+>>>> Op 19-04-2021 om 01:03 schreef Thinh Nguyen:
+>>>>> Ferry Toth wrote:
+>>>>>> Hi
+>>>>>>
+>>>>>> Op 17-04-2021 om 16:22 schreef Ferry Toth:
+>>>>>>> Hi
+>>>>>>>
+>>>>>>> Op 17-04-2021 om 04:27 schreef Thinh Nguyen:
+>>>>>>>> Ferry Toth wrote:
+>>>>>>>>> Hi
+>>>>>>>>>
+>>>>>>>>> Op 16-04-2021 om 00:23 schreef Thinh Nguyen:
+>>>>>>>>>> Thinh Nguyen wrote:
+>>>>>>>>>>> From: Yu Chen <chenyu56@huawei.com>
+>>>>>>>>>>> From: John Stultz <john.stultz@linaro.org>
+>>>>>>>>>>>
+>>>>>>>>>>> According to the programming guide, to switch mode for DRD
+>>>>>>>>>>> controller,
+>>>>>>>>>>> the driver needs to do the following.
+>>>>>>>>>>>
+>>>>>>>>>>> To switch from device to host:
+>>>>>>>>>>> 1. Reset controller with GCTL.CoreSoftReset
+>>>>>>>>>>> 2. Set GCTL.PrtCapDir(host mode)
+>>>>>>>>>>> 3. Reset the host with USBCMD.HCRESET
+>>>>>>>>>>> 4. Then follow up with the initializing host registers sequence
+>>>>>>>>>>>
+>>>>>>>>>>> To switch from host to device:
+>>>>>>>>>>> 1. Reset controller with GCTL.CoreSoftReset
+>>>>>>>>>>> 2. Set GCTL.PrtCapDir(device mode)
+>>>>>>>>>>> 3. Reset the device with DCTL.CSftRst
+>>>>>>>>>>> 4. Then follow up with the initializing registers sequence
+>>>>>>>>>>>
+>>>>>>>>>>> Currently we're missing step 1) to do GCTL.CoreSoftReset and step
+>>>>>>>>>>> 3) of
+>>>>>>>>>>> switching from host to device. John Stult reported a lockup issue
+>>>>>>>>>>> seen
+>>>>>>>>>>> with HiKey960 platform without these steps[1]. Similar issue is
+>>>>>>>>>>> observed
+>>>>>>>>>>> with Ferry's testing platform[2].
+>>>>>>>>>>>
+>>>>>>>>>>> So, apply the required steps along with some fixes to Yu Chen's
+>>>>>>>>>>> and John
+>>>>>>>>>>> Stultz's version. The main fixes to their versions are the
+>>>>>>>>>>> missing
+>>>>>>>>>>> wait
+>>>>>>>>>>> for clocks synchronization before clearing GCTL.CoreSoftReset and
+>>>>>>>>>>> only
+>>>>>>>>>>> apply DCTL.CSftRst when switching from host to device.
+>>>>>>>>>>>
+>>>>>>>>>>> [1]
+>>>>>>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/20210108015115.27920-1-john.stultz@linaro.org/__;!!A4F2R9G_pg!PW9Jbs4wv4a_zKGgZHN0FYrIpfecPX0Ouq9V3d16Yz-9-GSHqZWsfBAF-WkeqLhzN4i3$
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> [2]
+>>>>>>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/0ba7a6ba-e6a7-9cd4-0695-64fc927e01f1@gmail.com/__;!!A4F2R9G_pg!PW9Jbs4wv4a_zKGgZHN0FYrIpfecPX0Ouq9V3d16Yz-9-GSHqZWsfBAF-WkeqGeZStt4$
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+>>>>>>>>>>> Cc: Ferry Toth <fntoth@gmail.com>
+>>>>>>>>>>> Cc: Wesley Cheng <wcheng@codeaurora.org>
+>>>>>>>>>>> Cc: <stable@vger.kernel.org>
+>>>>>>>>>>> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work
+>>>>>>>>>>> properly")
+>>>>>>>>>>> Signed-off-by: Yu Chen <chenyu56@huawei.com>
+>>>>>>>>>>> Signed-off-by: John Stultz <john.stultz@linaro.org>
+>>>>>>>>>>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+>>>>>>>>>>> ---
+>>>>>>>>>>> Changes in v3:
+>>>>>>>>>>> - Check if the desired mode is OTG, then keep the old flow
+>>>>>>>>>>> - Remove condition for OTG support only since the device can
+>>>>>>>>>>> still be
+>>>>>>>>>>>        configured DRD host/device mode only
+>>>>>>>>>>> - Remove redundant hw_mode check since __dwc3_set_mode() only
+>>>>>>>>>>> applies
+>>>>>>>>>>> when
+>>>>>>>>>>>        hw_mode is DRD
+>>>>>>>>>>> Changes in v2:
+>>>>>>>>>>> - Initialize mutex per device and not as global mutex.
+>>>>>>>>>>> - Add additional checks for DRD only mode
+>>>>>>>>>>>
+>>>>>>>>>>>       drivers/usb/dwc3/core.c | 27 +++++++++++++++++++++++++++
+>>>>>>>>>>>       drivers/usb/dwc3/core.h |  5 +++++
+>>>>>>>>>>>       2 files changed, 32 insertions(+)
+>>>>>>>>>>>
+>>>>>>>>>> Hi John,
+>>>>>>>>>>
+>>>>>>>>>> If possible, can you run a test with this version on your
+>>>>>>>>>> platform?
+>>>>>>>>>>
+>>>>>>>>>> Thanks,
+>>>>>>>>>> Thinh
+>>>>>>>>>>
+>>>>>>>>> I tested this on edison-arduino with this patch on top of usb-next
+>>>>>>>>> (5.12-rc7 + "increase BESL baseline to 6" to prevent throttling").
+>>>>>>>>>
+>>>>>>>>> On this platform there is a physical switch to switch roles. With
+>>>>>>>>> this
+>>>>>>>>> patch I find:
+>>>>>>>>>
+>>>>>>>>> - switch to host mode always works fine
+>>>>>>>>>
+>>>>>>>>> - switch to gadget mode I need to flip the switch 3x
+>>>>>>>>> (gadget-host-gadget).
+>>>>>>>>>
+>>>>>>>>> An error message appears on the gadget side "dwc3 dwc3.0.auto:
+>>>>>>>>> timed
+>>>>>>>>> out
+>>>>>>>>> waiting for SETUP phase" appears, but then the device connects
+>>>>>>>>> to my
+>>>>>>>>> PC,
+>>>>>>>>> no throttling.
+>>>>>>>>>
+>>>>>>>>> - alternatively I can switch to gadget 1x and then unplug/replug
+>>>>>>>>> the
+>>>>>>>>> cable.
+>>>>>>>>>
+>>>>>>>>> No error message and connects fine.
+>>>>>>>>>
+>>>>>>>>> - if I flip the switch only once, on the PC side I get:
+>>>>>>>>>
+>>>>>>>>>       kernel: usb 1-5: new high-speed USB device number 18
+>>>>>>>>> usingxhci_hcd
+>>>>>>>>>       kernel: usb 1-5: New USB device found, idVendor=1d6b,
+>>>>>>>>>       idProduct=0104, bcdDevice= 1.00 kernel: usb1-5: New USB device
+>>>>>>>>>       strings: Mfr=1, Product=2, SerialNumber=3kernel:usb 1-5:
+>>>>>>>>> Product:
+>>>>>>>>>       USBArmory Gadget kernel: usb 1-5: Manufacturer:USBArmory
+>>>>>>>>> kernel:
+>>>>>>>>>       usb 1-5: SerialNumber: 0123456789abcdef kernel:usb 1-5: can't
+>>>>>>>>> set
+>>>>>>>>>       config #1, error -110
+>>>>>>>> The device failed at set_configuration() request and timed out. It
+>>>>>>>> probably timed out from the status stage looking at the device err
+>>>>>>>> print.
+>>>>>>>>
+>>>>>>>>> Then if I wait long enough on the gadget side I get:
+>>>>>>>>>
+>>>>>>>>>       root@yuna:~# ifconfig
+>>>>>>>>>
+>>>>>>>>>       usb0: flags=-28605<UP,BROADCAST,RUNNING,MULTICAST,DYNAMIC> mtu
+>>>>>>>>> 1500
+>>>>>>>>>       inet 169.254.119.239 netmask 255.255.0.0 broadcast
+>>>>>>>>> 169.254.255.255
+>>>>>>>>>       inet6 fe80::a8bb:ccff:fedd:eef1 prefixlen 64 scopeid
+>>>>>>>>> 0x20<link>
+>>>>>>>>>       ether aa:bb:cc:dd:ee:f1 txqueuelen 1000 (Ethernet) RX packets
+>>>>>>>>> 490424
+>>>>>>>>>       bytes 735146578 (701.0 MiB) RX errors 0 dropped191 overruns 0
+>>>>>>>>> frame
+>>>>>>>>>       0 TX packets 35279 bytes 2532746 (2.4 MiB) TX errors 0
+>>>>>>>>> dropped 0
+>>>>>>>>>       overruns 0 carrier 0 collisions 0
+>>>>>>>>>
+>>>>>>>>> (correct would be: inet 10.42.0.221 netmask 255.255.255.0 broadcast
+>>>>>>>>> 10.42.0.255)
+>>>>>>>>>
+>>>>>>>>> So much improved now, but it seems I am still missing something on
+>>>>>>>>> plug.
+>>>>>>>>>
+>>>>>>>> That's great! We can look at it further. Can you capture the
+>>>>>>>> tracepoints
+>>>>>>>> of the issue. Also, can you try with mass_storage gadget to see
+>>>>>>>> if the
+>>>>>>>> result is the same?
+>>>>>>> I have already gser, eem, mass_storage and uac2 combo. When eem
+>>>>>>> fails,
+>>>>>>> the mass_storage and uac2 don't appear (on KDE you get all kind of
+>>>>>>> popups when they appear).
+>>>>>>>
+>>>>>>> So either all works, or all fails.
+>>>>>>>
+>>>>>>> I'll trace this later today.
+>>>>>> Trace capturing switch from host-> gadget  here
+>>>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/files/6329600/5.12-rc7*2Busb-next.zip__;JQ!!A4F2R9G_pg!Oa6XGH3IqY3wwG5KK4FwPuNA0m3q5bRj7N6vdP-y4sAY6mya-96J90NJ0tJnXLOiNwGT$
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>>> (Issue history:
+>>>>>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/issues/31__;!!A4F2R9G_pg!Oa6XGH3IqY3wwG5KK4FwPuNA0m3q5bRj7N6vdP-y4sAY6mya-96J90NJ0tJnXNc7KgAw$
+>>>>>>
+>>>>>>
+>>>>>> )
+>>>>>>
+>>>>>> On the PC side this resulted to:
+>>>>>>
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: new high-speed USB device
+>>>>>> number 12 using xhci_hcd
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: New USB device found,
+>>>>>> idVendor=1d6b, idProduct=0104, bcdDevice= 1.00
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: New USB device strings:
+>>>>>> Mfr=1,
+>>>>>> Product=2, SerialNumber=3
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: Product: USBArmory Gadget
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: Manufacturer: USBArmory
+>>>>>> apr 17 18:17:44 delfion kernel: usb 1-5: SerialNumber:
+>>>>>> 0123456789abcdef
+>>>>>> apr 17 18:17:49 delfion kernel: usb 1-5: can't set config #1, error
+>>>>>> -110
+>>>>>>
+>>>>>>
+>>>>>> Thanks for all your help!
+>>>>>>
+>>>>> Looks like it's LPM related again. To confirm, try this:
+>>>>> Disable LPM with this property "snps,usb2-gadget-lpm-disable"
+>>>>> (Note that it's not the same as "snps,dis_enblslpm_quirk")
+>>>> Yes, I confirm this helps.
+>>>>
+>>>> Note: on startup I was in host mode, with gadget cable plugged. The
+>>>> first switch to gadget didn't work, all subsequent switches did work, as
+>>>> well as unplug/plug the cable.
+>>>>
+>>>>> Make sure that your testing kernel has this patch [1]
+>>>>> 475e8be53d04 ("usb: dwc3: gadget: Check for disabled LPM quirk")
+>>>>>
+>>>>> [1]
+>>>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=475e8be53d0496f9bc6159f4abb3ff5f9b90e8de__;!!A4F2R9G_pg!Mvz1Am6Ka_pOBfD0TmsA3821I05Ti8stMgh5r4XzMwZ9dy1Wan-il-DB4h50DmbaU4Zw$
+>>>>>
+>>>>>
+>>>>>
+>>>>> The failure you saw was probably due the gadget function attempting
+>>>>> to start a delayed status stage of the SET_CONFIGURATION request.
+>>>>> By this time, the host already put the device in low power.
+>>>>>
+>>>>> The START_TRANSFER command needs to be executed while the device
+>>>>> is on "ON" state (or U0 if eSS). We shouldn't use dwc->link_state
+>>>>> to check for link state because we only enable link state change
+>>>>> interrupt for some controller versions.
+>>>>>
+>>>>> Once you confirms disabling LPM works, try this fix:
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>> index 6227641f2d31..06cdec79244e 100644
+>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>> @@ -309,10 +309,14 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep,
+>>>>> unsigned int cmd,
+>>>>>              if (DWC3_DEPCMD_CMD(cmd) == DWC3_DEPCMD_STARTTRANSFER) {
+>>>>>                    int             needs_wakeup;
+>>>>> +               u8              link_state;
+>>>>>     -               needs_wakeup = (dwc->link_state ==
+>>>>> DWC3_LINK_STATE_U1 ||
+>>>>> -                               dwc->link_state == DWC3_LINK_STATE_U2||
+>>>>> -                               dwc->link_state == DWC3_LINK_STATE_U3);
+>>>>> +               reg = dwc3_readl(dwc->regs, DWC3_DSTS);
+>>>>> +               link_state = DWC3_DSTS_USBLNKST(reg);
+>>>>> +
+>>>>> +               needs_wakeup = (link_state == DWC3_LINK_STATE_U1 ||
+>>>>> +                               link_state == DWC3_LINK_STATE_U2 ||
+>>>>> +                               link_state == DWC3_LINK_STATE_U3);
+>>>>>                      if (unlikely(needs_wakeup)) {
+>>>>>                           ret = __dwc3_gadget_wakeup(dwc);
+>>>>> @@ -1989,6 +1993,8 @@ static int __dwc3_gadget_wakeup(struct dwc3 *dwc)
+>>>>>            case DWC3_LINK_STATE_RESET:
+>>>>>            case DWC3_LINK_STATE_RX_DET:    /* in HS, means Early
+>>>>> Suspend */
+>>>>>            case DWC3_LINK_STATE_U3:        /* in HS, means SUSPEND */
+>>>>> +       case DWC3_LINK_STATE_U2:        /* in HS, means Sleep (L1) */
+>>>>> +       case DWC3_LINK_STATE_U1:
+>>>>>            case DWC3_LINK_STATE_RESUME:
+>>>>>                    break;
+>>>>>            default:
+>>>>>
+>>>> Same (good) result as with "snps,usb2-gadget-lpm-disable". Including
+>>>> first switch from host->gadget not working.
+>>>>
+>>> Great! Not sure why the first switch is not working, but it seems like
+>>> we were able to eliminate quite a few issues. If you have more dwc3
+>>> tracepoints, we can take a look further.
+>> I traced but the file is empty. I captured the registers as well. The
+>> zip file is here:
 >>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 118b5bcc565d6..2d7d861b13b31 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2856,7 +2856,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dw=
-c3_ep *dep,
->>  	struct dwc3_trb *trb =3D &dep->trb_pool[dep->trb_dequeue];
->>  	struct scatterlist *sg =3D req->sg;
->>  	struct scatterlist *s;
->> -	unsigned int pending =3D req->num_pending_sgs;
->> +	unsigned int pending =3D req->num_queued_sgs;
->>  	unsigned int i;
->>  	int ret =3D 0;
+>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/files/6346271/first-switch.zip__;!!A4F2R9G_pg!KAmPA0Vw1WUiSxdc5-BKNPyD0klvdr5ucZI3E_C2ojho2rNT9wzMs8HG4qCYSDx89HFE$
 >>
->> @@ -2864,7 +2864,7 @@ static int dwc3_gadget_ep_reclaim_trb_sg(struct dw=
-c3_ep *dep,
->>  		trb =3D &dep->trb_pool[dep->trb_dequeue];
+>> I found the gadget configuration script was not called, which normally
+>> gets called due to a udev rule:
 >>
->>  		req->sg =3D sg_next(s);
->> -		req->num_pending_sgs--;
->> +		req->num_queued_sgs--;
+>> ACTION=="add", KERNEL=="dwc3.0.auto", SUBSYSTEMS=="udc",
+>> ATTRS{state}=="not attached", RUN+="/usr/bin/conf-gadget.sh"
+>>
+>> So I retried and see  with ~# udevadm monitor:
+>>
+>> # flipping the switch from host->gadget
+>>
+>> KERNEL[51.824914] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/enp0s17u1u1/queues/rx-0
+>> (queues)
+>> KERNEL[51.825682] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/enp0s17u1u1/queues/tx-0
+>> (queues)
+>> KERNEL[51.826226] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/enp0s17u1u1
+>> (net)
+>> KERNEL[51.836041] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:003/usb-001:003:01
+>> (mdio_bus)
+>> KERNEL[51.836709] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:003/usb-001:003:01
+>> (mdio_bus)
+>> KERNEL[51.837342] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:003
+>> (mdio_bus)
+>> KERNEL[51.837763] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[51.838116] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[51.873712] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[51.874000] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[51.874207] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[51.874431] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[51.897175] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[51.897486] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>>
+>> # stopped capture tracepoints here, then switch back to host
+>>
+>> KERNEL[253.214406] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[253.263305] change
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[253.263687] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[253.328354] bind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[253.328734] bind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[253.699341] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[253.744911] change
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[253.745804] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[253.805307] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005
+>> (mdio_bus)
+>> KERNEL[253.812978] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005/usb-001:005:01
+>> (mdio_bus)
+>> KERNEL[253.814318] bind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005/usb-001:005:01
+>> (mdio_bus)
+>> KERNEL[253.815386] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0
+>> (net)
+>> KERNEL[253.815552] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0/queues/rx-0
+>> (queues)
+>> KERNEL[253.815778] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0/queues/tx-0
+>> (queues)
+>> KERNEL[253.825279] bind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[253.825667] bind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>>
+>> # switch to gadget again
+>>
+>> KERNEL[314.212144] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0/queues/rx-0
+>> (queues)
+>> KERNEL[314.212473] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0/queues/tx-0
+>> (queues)
+>> KERNEL[314.214691] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0/net/eth0
+>> (net)
+>>
+>> # extcon event didn't show the first time
+>>
+>> KERNEL[314.238385] change
+>> /devices/pci0000:00/0000:00:13.0/INTC100E:00/mrfld_bcove_pwrsrc/extcon/extcon0
+>> (extcon)
+>> KERNEL[314.238677] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005/usb-001:005:01
+>> (mdio_bus)
+>> KERNEL[314.238863] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005/usb-001:005:01
+>> (mdio_bus)
+>> KERNEL[314.239015] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/mdio_bus/usb-001:005
+>> (mdio_bus)
+>> KERNEL[314.239205] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[314.239429] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1/1-1.1:1.0
+>> (usb)
+>> KERNEL[314.239666] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb2/2-0:1.0 (usb)
+>>
+>> KERNEL[314.239933] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb2/2-0:1.0 (usb)
+>>
+>> KERNEL[314.262713] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb2 (usb)
+>> KERNEL[314.263030] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[314.263298] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb2 (usb)
+>> KERNEL[314.263569] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1.1
+>> (usb)
+>> KERNEL[314.263815] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[314.264042] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1/1-1:1.0
+>> (usb)
+>> KERNEL[314.264753] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usbmon/usbmon2
+>> (usbmon)
+>> KERNEL[314.265019] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[314.265289] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-1 (usb)
+>> KERNEL[314.288792] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-0:1.0 (usb)
+>>
+>> KERNEL[314.289057] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1/1-0:1.0 (usb)
+>>
+>> KERNEL[314.289327] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1 (usb)
+>> KERNEL[314.289661] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usb1 (usb)
+>> KERNEL[314.647375] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto/usbmon/usbmon1
+>> (usbmon)
+>> KERNEL[314.647816] unbind
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto (platform)
+>> KERNEL[314.648143] remove   /kernel/software_nodes/node1 (software_nodes)
+>> KERNEL[314.648672] remove
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/xhci-hcd.2.auto (platform)
+>>
+>> # here is the event we were waiting for
+>>
+>> KERNEL[314.649158] add
+>> /devices/pci0000:00/0000:00:11.0/dwc3.0.auto/udc/dwc3.0.auto (udc)
+>>
+>> # after this gadget devices appear normally
+>>
+>> Maybe this issue is due to extcon missing the event?
+>  From the info here, it doesn't look like the host platform device was
+> removed on the first switch. Also, as you pointed it out, the extcon
+> event was not shown on the first switch either. Without a notification
+> to switch mode, the dwc3 driver won't do anything. You need to check why
+> that's the case as I can't help much here.
 >
->no, this is wrong. queued shouldn't be modified as it comes straight
->from the gadget driver. This is the number of entries in the request
->that the gadget driver gave us. We don't want to modify it.
-
-Right, but pending_sgs than has two use cases. One to track the mapped
-sgs that got not queued. And one here to to track the "queued sgs" that
-got dequeued.
-
+>>>> After a 2 - 4 minutes the connection is dropped and reconnected.
+>>> Does this occur with LPM disabled also? We can review this issue further
+>>> with more dwc3 tracepoints.
+>> I captured connection dropping and reconnecting in this fairly long
+>> trace near the end of the file:
 >>
->>  		ret =3D dwc3_gadget_ep_reclaim_completed_trb(dep, req,
->>  				trb, event, status, true);
->> @@ -2887,7 +2887,7 @@ static int dwc3_gadget_ep_reclaim_trb_linear(struc=
-t dwc3_ep *dep,
+>> https://urldefense.com/v3/__https://github.com/andy-shev/linux/files/6346323/lost-connection.zip__;!!A4F2R9G_pg!KAmPA0Vw1WUiSxdc5-BKNPyD0klvdr5ucZI3E_C2ojho2rNT9wzMs8HG4qCYSIuUHRz4$
 >>
->>  static bool dwc3_gadget_ep_request_completed(struct dwc3_request *req)
->>  {
->> -	return req->num_pending_sgs =3D=3D 0;
->> +	return req->num_queued_sgs =3D=3D 0;
+> Nothing obvious stands out as a problem from the dwc3 driver or the
+> controller. I see a (port) reset after 30 seconds of inactivity, which
+> is a typical timeout and recovery mechanism in the upperlayer from host.
 >
->nope, request is, indeed, completed when there no more pending entries
->to be consumed.
+> * Is this a new issue or was it always there?
+> * Does turning off LPM help?
+
+I reverted my "usb: gadget: increase BESL baseline to 6" and picked 
+"usb: dwc3: pci: Enable dis_enblslpm_quirk for Intel Merrifield".
+
+So this is again the big hammer you suggested earlier to turn off LPM.
+
+
+After 15 min (at least 4x longer then normal to get a port reset) I have 
+still not seen a port reset.
+
+
+So for now I conclude, yes turning off LPM helps.
+
+
+> * Are the other gadget functions still work during the 30 seconds
+> inactivity?
 >
->What sort of problem are you dealing with? Got any way of reproducing
->it? Got some trace output showing the issue?
-
-I digged a little bit deeper to fully understand the issue here. What
-I found is that in dwc3_prepare_trbs will make two assumptions on
-num_pending_sgs.
-
-When the real purpose of the variable is to track the dequeued trbs.
-Than we have to fix the started list handling in the dwc3_prepare_trbs.
-
-The comment in the function says:
-
-         /*
-          * We can get in a situation where there's a request in the starte=
-d list
-          * but there weren't enough TRBs to fully kick it in the first time
-          * around, so it has been waiting for more TRBs to be freed up.
-          *
-          * In that case, we should check if we have a request with pending=
-_sgs
-          * in the started list and prepare TRBs for that request first,
-          * otherwise we will prepare TRBs completely out of order and that=
- will
-          * break things.
-          */
-         list_for_each_entry(req, &dep->started_list, list) {
-		if (req->num_pending_sgs > 0) {
-		^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-This condition seems to be made on a wrong assumption, thinking the
-num_pending_sgs was decremented after dwc3_prepare_one_trb was called on pa=
-rts
-of that requests sgs but not all.
-
-But the completion path can not also depend on that variable to be decremen=
-ted
-after parts of that sgs get handled. Therefor I came up with this second pa=
-tch.
-
-What do you think, would be the right way to solve this?
-
-
-The second issue I see in dwc3_prepare_trbs is the bail out of iterations o=
-ver
-the pending and starting lists. Whenever one case of (req->num_pending_sgs =
-> 0)
-will be true after calling dwc3_prepare_trbs_sg, the function returns immed=
-iately.
-
-In my case, where my uvc_video now enqueues up to 64 requests, every single
-kick_transfer called from one ep_queue will ensure only one call of
-dwc3_prepare_trbs_sg on one entry of the pending list. This bottleneck makes
-the hardware refill to slow and the hardware will drain fast even though en=
-ough
-pending buffers are there.
-
-I suggest to remove those returns.
-
-Regards,
-Michael
-
---=20
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---fUYQa+Pmc3FrFX/N
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEElXvEUs6VPX6mDPT8C+njFXoeLGQFAmCB2f8ACgkQC+njFXoe
-LGTz7w//Q/gEE5J7Afd197O09eqwNFUu2nSUmC2g7fBlyoTKa0aDJhTRNaN+O0I4
-tvbqAgjRJ5Xw6zxY/6nNOvAHaFaYHzAISZK3oTcUpnEOXjlF2gGL6Igo4wqlQc3S
-zFCxLP7ZX017itbZ+KapGNIjejkfDrg8FRcNXF7+75FjCjhdxg/wrZYwB8J2sYdR
-VG8qbgCp4SG2Lgi2Lgoil/ZPUJkM1Px6GERdjEKGtoNjaz849QDt+eDB82qNbbl6
-Rzw3jouMZUL/sEeCKkbGG7c7XXRzgcMT5nYLacNPyWrslDcZhJiw0gDYOu8+3nwG
-Vv7kgmSP0Ny395aY/OJQyDKkYoZgieNbp36ayJ9b+UNwgzBtnBXf9P6yiwSeb+hF
-5VBTiRnGDxpVAAGXYX1SA7p3QQbTb4SdFlofHJ1DHBLzHRvD42gtjEAGiWDJDk01
-GIFRJLIErxJ27xbLdgTlq3vQIEe8NVlZ9I/U2Y8WLYLttYR8MkDb2Pi3UK5kKJwC
-JTgN4UVCp4kbEi0DDwpew97KS3hqEHM739FzGvKJDJFRsV1YU/5t3PUff6Qo7odg
-SUoFp84ZFtypxxpAIzCokxgJ80C6/GpUXcpTGP45QdhEBi2/P4tcBPLbI/Kca3LA
-eRFXIpqwAbKoU3gOT0Y4uCwuy9cGjAiaAdpCccVHwqM+rp+aeOA=
-=6WwP
------END PGP SIGNATURE-----
-
---fUYQa+Pmc3FrFX/N--
+>
+>>>> On the gadget end journal shows:
+>>>>
+>>>> Apr 19 22:08:42 yuna systemd-networkd[507]: usb0: Lost carrier
+>>>> Apr 19 22:08:42 yuna systemd-journald[417]: Forwarding to syslog missed
+>>>> 1 messages.
+>>>> Apr 19 22:08:42 yuna systemd-timesyncd[469]: No network connectivity,
+>>>> watching for changes.
+>>>> Apr 19 22:08:42 yuna kernel: IPv6: ADDRCONF(NETDEV_CHANGE): usb0: link
+>>>> becomes ready
+>>>> Apr 19 22:08:42 yuna kernel[480]: [  624.382929] IPv6:
+>>>> ADDRCONF(NETDEV_CHANGE): usb0: link becomes ready
+>>>> Apr 19 22:08:42 yuna systemd-networkd[507]: usb0: Gained carrier
+>>>> Apr 19 22:08:44 yuna systemd-networkd[507]: usb0: Gained IPv6LL
+>>>> Apr 19 22:08:44 yuna systemd-timesyncd[469]: Network configuration
+>>>> changed, trying to establish connection.
+>>>> Apr 19 22:08:57 yuna systemd-timesyncd[469]: Initial synchronization to
+>>>> time server 216.239.35.8:123 (time3.google.com).
+>>>>
+>>>> So, drops and immediately reconnects.
+>>>>
+>>>   From the look at the log here, it seems to be a reset from host (and an
+>>> issue at the protocol level) unrelated to dwc3 driver or the controller.
+>>> Hopefully and maybe we can get more clues from dwc3 tracepoints.
+>>>
+> BR,
+> Thinh
