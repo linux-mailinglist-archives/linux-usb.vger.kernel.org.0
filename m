@@ -2,134 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D993681E6
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 15:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5B3368211
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Apr 2021 16:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbhDVNwq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Apr 2021 09:52:46 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52090 "EHLO mx2.suse.de"
+        id S236939AbhDVOCh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Apr 2021 10:02:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46234 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236414AbhDVNwq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 22 Apr 2021 09:52:46 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1619099530; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=a3+p/v1mYJ4PN76OUCLYHqFA3tM/FM2JuiMEpmgoXJI=;
-        b=PMczsT0dLeInqcVKLuEjgff4UU81tawZt1FpjNAevPSaO+N5uMZGtlhfibhG+ebtdQuNv3
-        t3oLENETc7Vf5ZGotZ6XMeglonk9touQ0xgD2/KJCm85m+lMUqb62WuMe+bHo/OTTQpaoD
-        gh7/7U0hQ5l3af5toGcuzv1HSj1Nk2g=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id AA2B9AF17;
-        Thu, 22 Apr 2021 13:52:10 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
+        id S236904AbhDVOCg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 22 Apr 2021 10:02:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E9F1608FE;
+        Thu, 22 Apr 2021 14:02:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619100121;
+        bh=uwamKFZXuV2UAWzgczHSeB2NS3jfT5Grt9vZszsyoRM=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=JonE4GMA/5tmk7j8wXNCR8INjQRc3E6HhyRkBajZf5m8eYyOUc3amDv8ab2a+fSEx
+         KyJnuxAZlnMiTBzyDULYGYLvy3WbfqOW9VQEE0AVVP2mYuNnBjpXFi64vbCpOmUp/y
+         YWmWH66UsGJX0M/1PuAaFn4dgPsceLd4ojwZbOvYBtwmgOb1uy+vuqOpEZUd2wCm54
+         zToNdo19ozOXlAFlw/7FePmH26F+LMJ3ozBzcqJxPTL1QkeLTqx620yihp6pQCPgQW
+         zsckw+alhErDuU2AfH4+9IU2tmNJI670BQ4eHyIQ9I1lfMzmZh5POqY497X62xK7y1
+         qCV4pT4muJiRQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Oliver Neukum <oneukum@suse.com>, gregKHusb@linuxfoundation.org,
+        linux-usb@vger.kernel.org
 Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCH] cdc-wdm: untangle a circular dependency between callback and softint
-Date:   Thu, 22 Apr 2021 15:51:47 +0200
-Message-Id: <20210422135147.18034-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
+Subject: Re: [PATCH] cdc-wdm: untangle a circular dependency between
+ callback and softint
+In-Reply-To: <20210422134555.6510-1-oneukum@suse.com>
+References: <20210422134555.6510-1-oneukum@suse.com>
+Date:   Thu, 22 Apr 2021 17:01:54 +0300
+Message-ID: <87a6pqmn8t.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We have a cycle of callbacks scheduling works which submit
-URBs with thos callbacks. This needs to be blocked, stopped
-and unblocked to untangle the circle..
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-wdm.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 508b1c3f8b73..d1e4a7379beb 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -321,12 +321,23 @@ static void wdm_int_callback(struct urb *urb)
- 
- }
- 
--static void kill_urbs(struct wdm_device *desc)
-+static void poison_urbs(struct wdm_device *desc)
- {
- 	/* the order here is essential */
--	usb_kill_urb(desc->command);
--	usb_kill_urb(desc->validity);
--	usb_kill_urb(desc->response);
-+	usb_poison_urb(desc->command);
-+	usb_poison_urb(desc->validity);
-+	usb_poison_urb(desc->response);
-+}
-+
-+static void unpoison_urbs(struct wdm_device *desc)
-+{
-+	/*
-+	 *  the order here is not essential
-+	 *  it is symmetrical just to be nice
-+	 */
-+	usb_unpoison_urb(desc->response);
-+	usb_unpoison_urb(desc->validity);
-+	usb_unpoison_urb(desc->command);
- }
- 
- static void free_urbs(struct wdm_device *desc)
-@@ -741,11 +752,12 @@ static int wdm_release(struct inode *inode, struct file *file)
- 	if (!desc->count) {
- 		if (!test_bit(WDM_DISCONNECTING, &desc->flags)) {
- 			dev_dbg(&desc->intf->dev, "wdm_release: cleanup\n");
--			kill_urbs(desc);
-+			poison_urbs(desc);
- 			spin_lock_irq(&desc->iuspin);
- 			desc->resp_count = 0;
- 			spin_unlock_irq(&desc->iuspin);
- 			desc->manage_power(desc->intf, 0);
-+			unpoison_urbs(desc);
- 		} else {
- 			/* must avoid dev_printk here as desc->intf is invalid */
- 			pr_debug(KBUILD_MODNAME " %s: device gone - cleaning up\n", __func__);
-@@ -1037,9 +1049,9 @@ static void wdm_disconnect(struct usb_interface *intf)
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
- 	mutex_lock(&desc->wlock);
-+	poison_urbs(desc);
- 	cancel_work_sync(&desc->rxwork);
- 	cancel_work_sync(&desc->service_outs_intr);
--	kill_urbs(desc);
- 	mutex_unlock(&desc->wlock);
- 	mutex_unlock(&desc->rlock);
- 
-@@ -1080,9 +1092,10 @@ static int wdm_suspend(struct usb_interface *intf, pm_message_t message)
- 		set_bit(WDM_SUSPENDING, &desc->flags);
- 		spin_unlock_irq(&desc->iuspin);
- 		/* callback submits work - order is essential */
--		kill_urbs(desc);
-+		poison_urbs(desc);
- 		cancel_work_sync(&desc->rxwork);
- 		cancel_work_sync(&desc->service_outs_intr);
-+		unpoison_urbs(desc);
- 	}
- 	if (!PMSG_IS_AUTO(message)) {
- 		mutex_unlock(&desc->wlock);
-@@ -1140,7 +1153,7 @@ static int wdm_pre_reset(struct usb_interface *intf)
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
- 	mutex_lock(&desc->wlock);
--	kill_urbs(desc);
-+	poison_urbs(desc);
- 	cancel_work_sync(&desc->rxwork);
- 	cancel_work_sync(&desc->service_outs_intr);
- 	return 0;
-@@ -1151,6 +1164,7 @@ static int wdm_post_reset(struct usb_interface *intf)
- 	struct wdm_device *desc = wdm_find_device(intf);
- 	int rv;
- 
-+	unpoison_urbs(desc);
- 	clear_bit(WDM_OVERFLOW, &desc->flags);
- 	clear_bit(WDM_RESETTING, &desc->flags);
- 	rv = recover_from_urb_loss(desc);
--- 
-2.26.2
+Hi Oliver,
 
+Oliver Neukum <oneukum@suse.com> writes:
+
+> We have a cycle of callbacks scheduling works which submit
+> URBs with thos callbacks. This needs to be blocked, stopped
+            ^^^^
+            those
+
+> and unblocked to untangle the circle..
+                                      ^^
+                                      .
+
+that's all, just minor nitpicking in the commit log :)
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmCBgdIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQa16xAAnK8umxklraJZVC8NeBZhrw1kIWbzvpIi
+AKzlyMmYSHyIew6JW3C/NgEfS5JSu7UQl8mFUX+kJSvDE2UTlhJYkLENShz5yIP7
+/avHpH7K+d2IzNJMIk/J85tPXFPyHyRVgbBOfMQFjljcoBQtAPO3UrD1BV674oUN
+hjAKv1L9Sh7I/sHlE/nwZVa7b6FyGHkQQgQgBJorTU0N+0EHZX1Hc5ux0X0xzAsD
+7tnHO0D8aO9uXd/DDlxlF36QsALLs28XJsHKYa7paSTC89TNWl1bpbB/FnuzBccR
+KSYGC9ntRwltrwoCJvySr2hYgyqFsqwjbh6t0m6W6DUARKPDCAW2C4f31tpTinPI
+BQq1EA9d5B/M62vFIsw8dXWbiPJHL39VXOg90ieyQMGDJSKw9rxOy4jJu/PUGmw4
+dtHIJi3r1oFJ7F/NWwIb1Qp7ffF8ri9SxajGTMEBPiyCVD7VcWggAMsi6uAC8EXZ
+Bvpn4o/CAMzS0uSJVWDlQq8FP5QzmcRGmXhFyUbDv89MGexdqVu3pwe8Mhepb7o/
+UmQ74xHSOBRdhL3Jk5MtDBzFnziz+PxahLMyqX11pZ63iMpJU3loFIUev7n1bEh1
+5HObv0AcHgE5N4xXbm9Vm33GtGUSndPkXHnqI+bOIDYpKaWMcClBalrQzmCoXehW
+EzTNftoyDV8=
+=88uw
+-----END PGP SIGNATURE-----
+--=-=-=--
