@@ -2,192 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D58FE368FA9
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 11:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB8D9369092
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 12:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241862AbhDWJqH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Apr 2021 05:46:07 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:47411 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241786AbhDWJqD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Apr 2021 05:46:03 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 13N9jI5M1012520, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 13N9jI5M1012520
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 23 Apr 2021 17:45:18 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 23 Apr 2021 17:45:17 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Fri, 23 Apr
- 2021 17:45:16 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net-next 2/2] r8152: redefine REALTEK_USB_DEVICE macro
-Date:   Fri, 23 Apr 2021 17:44:55 +0800
-Message-ID: <1394712342-15778-361-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <1394712342-15778-359-Taiwan-albertk@realtek.com>
-References: <1394712342-15778-359-Taiwan-albertk@realtek.com>
+        id S241954AbhDWKuC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Apr 2021 06:50:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51318 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229920AbhDWKuB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Apr 2021 06:50:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 67E7A6128D;
+        Fri, 23 Apr 2021 10:49:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619174964;
+        bh=E+vpFsp/R+WM1vqQtLJUe0CuSmKyJ83MOrvEkWsXm/s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LWKwa2Lbst7h1Rh6P/D4L4KwGqy+n0yU2tkqQmOb3aedOd6QDSqfd0/vZMbb92FGs
+         Ac1kWKeg6QAYVWiXVPDIEnrUbSWplqB/vWBQgQ10AuNCrmk4014YUFjy4iC7aI5/zM
+         Yy47pDitHAMPSEd3jkfc3lj01xVmGZPlPy4DbkC5rFVF5Jam9MvqLTjDQCKCgakFXY
+         Ip//gztp4y3NS8QNsplERlkP47QzKY6lZomYBy9mS3crWWN8dTa9rMdDVR0pzgjgwW
+         3eDArb4LS9xkkL8gJzK2ufj876t3GqrNhLfv90JKZgk+hIW5CcTfI9+DWqovqqPK8/
+         Lm5AW4Vcq5CHQ==
+Date:   Fri, 23 Apr 2021 18:49:14 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "ruslan.bilovol@gmail.com" <ruslan.bilovol@gmail.com>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rahul Kumar <kurahul@cadence.com>
+Subject: Re: [PATCH 1/2] usb: gadget: f_uac2: Stop endpoint before enabling
+ it.
+Message-ID: <20210423104914.GA6448@nchen>
+References: <20210419075053.28467-1-pawell@gli-login.cadence.com>
+ <20210420010846.GA6408@nchen>
+ <BYAPR07MB5381F9748155F73732090E87DD489@BYAPR07MB5381.namprd07.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS01.realtek.com.tw (172.21.6.94) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzQvMjMgpFekyCAwNjoxOTowMA==?=
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 04/23/2021 09:33:25
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163300 [Apr 23 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 443 443 d64ad0ad6f66abd85f8fb55fe5d831fdcc4c44a0
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, headers_charset}
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/23/2021 09:36:00
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 04/23/2021 09:29:24
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163300 [Apr 23 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 443 443 d64ad0ad6f66abd85f8fb55fe5d831fdcc4c44a0
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;realtek.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 04/23/2021 09:31:00
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR07MB5381F9748155F73732090E87DD489@BYAPR07MB5381.namprd07.prod.outlook.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Redefine REALTEK_USB_DEVICE macro with USB_DEVICE_INTERFACE_CLASS and
-USB_DEVICE_AND_INTERFACE_INFO to simply the code.
+On 21-04-20 03:56:25, Pawel Laszczak wrote:
+> >On 21-04-19 09:50:53, Pawel Laszczak wrote:
+> >> From: Pawel Laszczak <pawell@cadence.com>
+> >>
+> >> Patch adds disabling endpoint before enabling it during changing
+> >> alternate setting. Lack of this functionality causes that in some
+> >> cases uac2 queue the same request multiple time.
+> >> Such situation can occur when host send set interface with
+> >> alternate setting 1 twice.
+> >>
+> >> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> >> ---
+> >>  drivers/usb/gadget/function/f_uac2.c | 8 ++++----
+> >>  1 file changed, 4 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+> >> index 9cc5c512a5cd..7d20a9d8a1b4 100644
+> >> --- a/drivers/usb/gadget/function/f_uac2.c
+> >> +++ b/drivers/usb/gadget/function/f_uac2.c
+> >> @@ -890,17 +890,17 @@ afunc_set_alt(struct usb_function *fn, unsigned intf, unsigned alt)
+> >>  	if (intf == uac2->as_out_intf) {
+> >>  		uac2->as_out_alt = alt;
+> >>
+> >> +		u_audio_stop_capture(&uac2->g_audio);
+> >> +
+> >>  		if (alt)
+> >>  			ret = u_audio_start_capture(&uac2->g_audio);
+> >> -		else
+> >> -			u_audio_stop_capture(&uac2->g_audio);
+> >>  	} else if (intf == uac2->as_in_intf) {
+> >>  		uac2->as_in_alt = alt;
+> >>
+> >> +		u_audio_stop_playback(&uac2->g_audio);
+> >> +
+> >>  		if (alt)
+> >>  			ret = u_audio_start_playback(&uac2->g_audio);
+> >> -		else
+> >> -			u_audio_stop_playback(&uac2->g_audio);
+> >>  	} else {
+> >>  		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+> >>  		return -EINVAL;
+> >
+> >To avoid this, you may use prm->ep_enabled to judge if the endpoint has
+> >already enabled.
+> 
+> Such condition is as first instruction inside u_audio_stop_playback->free_ep  function,
+> so we don't need duplicate it here.
+> 
 
-Although checkpatch.pl shows the following error, it is more readable.
+Get your points, you may add more explanations both the code your change
+and the commit log.
 
-	ERROR: Macros with complex values should be enclosed in parentheses
-
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 62 ++++++++++++++++++-----------------------
- 1 file changed, 27 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 47198c125719..9986f8969d02 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -9579,49 +9579,41 @@ static void rtl8152_disconnect(struct usb_interface *intf)
- 	}
- }
- 
--#define REALTEK_USB_DEVICE(vend, prod)	\
--	.match_flags = USB_DEVICE_ID_MATCH_DEVICE | \
--		       USB_DEVICE_ID_MATCH_INT_CLASS, \
--	.idVendor = (vend), \
--	.idProduct = (prod), \
--	.bInterfaceClass = USB_CLASS_VENDOR_SPEC \
-+#define REALTEK_USB_DEVICE(vend, prod)	{ \
-+	USB_DEVICE_INTERFACE_CLASS(vend, prod, USB_CLASS_VENDOR_SPEC), \
- }, \
- { \
--	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO | \
--		       USB_DEVICE_ID_MATCH_DEVICE, \
--	.idVendor = (vend), \
--	.idProduct = (prod), \
--	.bInterfaceClass = USB_CLASS_COMM, \
--	.bInterfaceSubClass = USB_CDC_SUBCLASS_ETHERNET, \
--	.bInterfaceProtocol = USB_CDC_PROTO_NONE
-+	USB_DEVICE_AND_INTERFACE_INFO(vend, prod, USB_CLASS_COMM, \
-+			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE), \
-+}
- 
- /* table of devices that work with this driver */
- static const struct usb_device_id rtl8152_table[] = {
- 	/* Realtek */
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8050)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8053)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8152)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8155)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8156)},
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8050),
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8053),
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8152),
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8153),
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8155),
-+	REALTEK_USB_DEVICE(VENDOR_ID_REALTEK, 0x8156),
- 
- 	/* Microsoft */
--	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x721e)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff)},
--	{REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601)},
-+	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07ab),
-+	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x07c6),
-+	REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927),
-+	REALTEK_USB_DEVICE(VENDOR_ID_SAMSUNG, 0xa101),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x304f),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3062),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3069),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x3082),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7205),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x720c),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x7214),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0x721e),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LENOVO,  0xa387),
-+	REALTEK_USB_DEVICE(VENDOR_ID_LINKSYS, 0x0041),
-+	REALTEK_USB_DEVICE(VENDOR_ID_NVIDIA,  0x09ff),
-+	REALTEK_USB_DEVICE(VENDOR_ID_TPLINK,  0x0601),
- 	{}
- };
- 
 -- 
-2.26.3
+
+Thanks,
+Peter Chen
 
