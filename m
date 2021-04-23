@@ -2,77 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CDB7368C9B
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 07:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6C52368CED
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Apr 2021 08:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240429AbhDWFX4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Apr 2021 01:23:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57994 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240428AbhDWFXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Apr 2021 01:23:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 79047611AC;
-        Fri, 23 Apr 2021 05:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619155394;
-        bh=EHiyqkXyAYkMEFatPdUnpNaU4lxiIe2WnwL3Z9I4alw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PMstjOsfOLByJZmoC6x1NS1DsBXwMJMi3HnflLCvI+H8IVzbqI7OfCiWPcPdssFSU
-         TA+9mIQaI4WFNWELX4ceEGVbJrk17m4XxGhQRAJnKuSwAJ5p8lxueB9FlB4oJIyIFZ
-         TfRqz3mDSttFbH3RAfrmoNRKffCijtVJQJQBznDs=
-Date:   Fri, 23 Apr 2021 07:23:08 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
+        id S240393AbhDWGHl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Apr 2021 02:07:41 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:50274 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230131AbhDWGHj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Apr 2021 02:07:39 -0400
+X-UUID: 71cd7dbfa9b64ae2b60d6fe83610377d-20210423
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=qKNRpZ4EQ+9jotaNrjrSFEj6kXwJTJJ5QGpQogNsh2I=;
+        b=boRMQ6X63mW9Unsu6RN8B/XyaRt6w4sFEq9vPV7Ic8yLNFNB17F1AJ8Utc3Gr5/EgyWgfV4Srd6Ll1WREKbcI7gwZBEoBw8OClJ1yRrwSDCShLjGTyOqJyPRf7BttOkCYzfOWk5Pd2ohaMA3potJme7Vi946aEH8nVArxbRk6cY=;
+X-UUID: 71cd7dbfa9b64ae2b60d6fe83610377d-20210423
+Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1793768800; Fri, 23 Apr 2021 14:06:55 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N2.mediatek.inc
+ (172.27.4.87) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 23 Apr
+ 2021 14:06:49 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 23 Apr 2021 14:06:48 +0800
+Message-ID: <1619158008.4048.10.camel@mhfsdcap03>
 Subject: Re: [PATCH 1/2] usb: xhci-mtk: remove unnecessary assignments in
  periodic TT scheduler
-Message-ID: <YIJZvN8py7s+Zq6I@kroah.com>
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Ikjoon Jang <ikjn@chromium.org>, Yaqii Wu <Yaqii.Wu@mediatek.com>,
+        <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Fri, 23 Apr 2021 14:06:48 +0800
+In-Reply-To: <YIJZvN8py7s+Zq6I@kroah.com>
 References: <20210330080617.3746932-1-ikjn@chromium.org>
- <20210330160508.1.I797d214790033d0402d19ff6b47a34aff60d3062@changeid>
- <1617179455.2752.1.camel@mhfsdcap03>
- <YGq2YfURFApdJLxb@kroah.com>
- <1617675492.22435.4.camel@mhfsdcap03>
- <YIE3z7qYNtk7G/VB@kroah.com>
- <1619148391.4048.6.camel@mhfsdcap03>
+         <20210330160508.1.I797d214790033d0402d19ff6b47a34aff60d3062@changeid>
+         <1617179455.2752.1.camel@mhfsdcap03> <YGq2YfURFApdJLxb@kroah.com>
+         <1617675492.22435.4.camel@mhfsdcap03> <YIE3z7qYNtk7G/VB@kroah.com>
+         <1619148391.4048.6.camel@mhfsdcap03> <YIJZvN8py7s+Zq6I@kroah.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1619148391.4048.6.camel@mhfsdcap03>
+X-TM-SNTS-SMTP: 1B667E5A54943B80BF95B365D7D390CBCA4920A8D3A472FCE67460DA8E430A4E2000:8
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 23, 2021 at 11:26:31AM +0800, Chunfeng Yun wrote:
-> On Thu, 2021-04-22 at 10:46 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Apr 06, 2021 at 10:18:12AM +0800, Chunfeng Yun wrote:
-> > > On Mon, 2021-04-05 at 09:04 +0200, Greg Kroah-Hartman wrote:
-> > > > On Wed, Mar 31, 2021 at 04:30:55PM +0800, Chunfeng Yun wrote:
-> > > > > cc Yaqii Wu <Yaqii.Wu@mediatek.com>
-> > > > > 
-> > > > > I'll test it , thanks
-> > > > 
-> > > > Did you test this series and find any problems?  If not, I'll go queue
-> > > > these up...
-> > > Yes, found an issue on the start-split transaction, but not found the
-> > > root cause yet :(
-> > 
-> > So you are objecting to these being merged at this point in time? 
-> Yes
-> 
-> >  Can
-> > you provide feedback to the author about what is wrong?
-> Already provided feedback add discussed on issue tracker in private
+T24gRnJpLCAyMDIxLTA0LTIzIGF0IDA3OjIzICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
+dGU6DQo+IE9uIEZyaSwgQXByIDIzLCAyMDIxIGF0IDExOjI2OjMxQU0gKzA4MDAsIENodW5mZW5n
+IFl1biB3cm90ZToNCj4gPiBPbiBUaHUsIDIwMjEtMDQtMjIgYXQgMTA6NDYgKzAyMDAsIEdyZWcg
+S3JvYWgtSGFydG1hbiB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgQXByIDA2LCAyMDIxIGF0IDEwOjE4
+OjEyQU0gKzA4MDAsIENodW5mZW5nIFl1biB3cm90ZToNCj4gPiA+ID4gT24gTW9uLCAyMDIxLTA0
+LTA1IGF0IDA5OjA0ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3JvdGU6DQo+ID4gPiA+ID4g
+T24gV2VkLCBNYXIgMzEsIDIwMjEgYXQgMDQ6MzA6NTVQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
+b3RlOg0KPiA+ID4gPiA+ID4gY2MgWWFxaWkgV3UgPFlhcWlpLld1QG1lZGlhdGVrLmNvbT4NCj4g
+PiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gSSdsbCB0ZXN0IGl0ICwgdGhhbmtzDQo+ID4gPiA+ID4g
+DQo+ID4gPiA+ID4gRGlkIHlvdSB0ZXN0IHRoaXMgc2VyaWVzIGFuZCBmaW5kIGFueSBwcm9ibGVt
+cz8gIElmIG5vdCwgSSdsbCBnbyBxdWV1ZQ0KPiA+ID4gPiA+IHRoZXNlIHVwLi4uDQo+ID4gPiA+
+IFllcywgZm91bmQgYW4gaXNzdWUgb24gdGhlIHN0YXJ0LXNwbGl0IHRyYW5zYWN0aW9uLCBidXQg
+bm90IGZvdW5kIHRoZQ0KPiA+ID4gPiByb290IGNhdXNlIHlldCA6KA0KPiA+ID4gDQo+ID4gPiBT
+byB5b3UgYXJlIG9iamVjdGluZyB0byB0aGVzZSBiZWluZyBtZXJnZWQgYXQgdGhpcyBwb2ludCBp
+biB0aW1lPyANCj4gPiBZZXMNCj4gPiANCj4gPiA+ICBDYW4NCj4gPiA+IHlvdSBwcm92aWRlIGZl
+ZWRiYWNrIHRvIHRoZSBhdXRob3IgYWJvdXQgd2hhdCBpcyB3cm9uZz8NCj4gPiBBbHJlYWR5IHBy
+b3ZpZGVkIGZlZWRiYWNrIGFkZCBkaXNjdXNzZWQgb24gaXNzdWUgdHJhY2tlciBpbiBwcml2YXRl
+DQo+IA0KPiBUaGF0IGRvZXNuJ3QgaGVscCB1cyBtdWNoIGFzIHdlIGNhbid0IHNlZSB0aGF0IDoo
+DQo+IA0KPiBQbGVhc2UgYWx3YXlzIGtlZXAgdXMgaW5mb3JtZWQgYXMgdG8gd2hhdCBpcyBnb2lu
+ZyBvbiB3aXRoIHB1YmxpY2FsbHkNCj4gcG9zdGVkIGNoYW5nZXMsIG90aGVyd2lzZSB5b3UgY291
+bGQgZmluZCB0aGVtIGJlaW5nIHBpY2tlZCB1cCBhbmQgbWVyZ2VkDQo+IGludG8gdHJlZXMgd2l0
+aG91dCBhbiBvYmplY3Rpb24uDQpHb3QgaXQuDQpJJ2xsIHVwZGF0ZSBzdGF0dXMgd2hlbiBmaW5k
+IHRoZSByb290IGNhdXNlIG9mIFNTIHRyYW5zYWN0aW9uIGlzc3VlLA0KdGhhbmtzIGEgbG90Lg0K
+DQo+IA0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0KDQo=
 
-That doesn't help us much as we can't see that :(
-
-Please always keep us informed as to what is going on with publically
-posted changes, otherwise you could find them being picked up and merged
-into trees without an objection.
-
-thanks,
-
-greg k-h
