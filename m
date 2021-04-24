@@ -2,98 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9723D36A0E0
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 13:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599D936A0E7
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 13:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbhDXL0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 07:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S233840AbhDXLau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 07:30:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbhDXL0o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 07:26:44 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D30D5C061574;
-        Sat, 24 Apr 2021 04:26:05 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 4so21393644lfp.11;
-        Sat, 24 Apr 2021 04:26:05 -0700 (PDT)
+        with ESMTP id S233731AbhDXLas (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 07:30:48 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159CFC061574;
+        Sat, 24 Apr 2021 04:30:11 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id s14so19564657pjl.5;
+        Sat, 24 Apr 2021 04:30:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=T9zxnm+IVqSB2MPVJRAPGn4FvLTHvVMK9Ij5EjvIx1w=;
-        b=TeCdozCL0cRQJUqzjYM3CYgMEgnjl+/XLcAFDIaJWFlx5KDRzZdd+h6zbf3yxLl3wV
-         zCe56aZ8+i/cf1tIKt/qiWLAQ+Bmrm7QoNA5/FtbKz5wGLpr1BYe1bPysp+k2562Plpl
-         /HX6vDL8PzPTMC2/J9e56b9ewEo+/3wiTqpP+vNffpuvopBOqMPIhMUhMqJCT3xGpPDb
-         ebSB2rPpBFwSEW1JuU0m8TG4tj7/ZbfXsXqgwpzOcVbxjtY09eVBB3fMJHCGfBYP5gu5
-         0Ok9rSOEhrMCyvtnEZnJiMzkkGUzgsmbGssdkBx1/5i6ezoJjOFEo8lp/DBih6hxLJyk
-         4F9g==
+        h=from:to:cc:subject:date:message-id;
+        bh=d2cfy0czkhhODFr2sP3gFkniZsVBfz3kDKZyM0CWgIc=;
+        b=GBJaw17lHlQza7L9TpWhT771unQgnzqFEUqOM0DzKIJNeIJkF87BAxYV/wr1HqAfG6
+         BQ7AXTySOoOWUXlsl21ZFicj3coNuUUJ+iUsxRjqVM4nAYj2BYPQTA/l3qTzJqtyudWb
+         RxnQbdRC66Yi1OD1G6qXSkRI7RvyJ+9q7v80cDHlo+8Uo+j/cXcPuTpaHgYFa6sL6tPy
+         5nDNlnw8ETav5rM1Ywspct5cG4wWp9HPmTkXZSqY2fgRBHayXJWIO/KXBbhTu6CUbkxQ
+         1sqmchCtYLBmdD/1+BHdoW+zUWcufxHe2yiTqUx4K6SzUnck8cNGc1rWnKJI7SzWLhFC
+         hWTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=T9zxnm+IVqSB2MPVJRAPGn4FvLTHvVMK9Ij5EjvIx1w=;
-        b=TjfIgxIeWkAPbRqMbctIQYqrmYoXKJzIY8jXNvfpGZ9pmbuQ8a52hqZUAYhNLG6Pt6
-         BbzftCJAljpiGcP5v/eclx8/FrjDW/swSaD71jxtttMawgNHDfThsR+pG6ggFd8esG2y
-         oluWYttasfxulVjZ2TSRUQWD9YiiAKwnd3zoLlX3UtQm6W+OEVXWZN+TiGgaS3fsBTzg
-         ncsR4i0WJp/Tk+1MdpKOsEUqaP8ilxmwzv8QUtKke+TnEBFkXaqH6byjLZrRFoIvb/h0
-         TXyvEzZi4xYp3sKnYG7tZILxc0lst2OVp3KA4cz0HbqDBckCjM4jjJu038Od1uNYh/E/
-         7NhQ==
-X-Gm-Message-State: AOAM531vqy2RsluTMdDF3zd/TQLPLG4egvdnOxSTpDJ0N6Ewus9NKHMV
-        rH6fJHy2QW6Ezxb5KVBSW7DNuPBV6/ZBtXAHgFo=
-X-Google-Smtp-Source: ABdhPJxk4niYieWcsett0xplUe7Dzzi5BEsZ8FDCl0hmyn1sOOo18DjEmB/vSiQzkq68kf5Lh9jFaPbVqF6CP/T5ciQ=
-X-Received: by 2002:ac2:5fc3:: with SMTP id q3mr528032lfg.500.1619263564365;
- Sat, 24 Apr 2021 04:26:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210424104715.2793760-1-gregkh@linuxfoundation.org> <YIP8c3Bgfz9YfH6A@kroah.com>
-In-Reply-To: <YIP8c3Bgfz9YfH6A@kroah.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 24 Apr 2021 08:25:54 -0300
-Message-ID: <CAOMZO5ByYV=g_29vWNPXr6zi6=xQsFVDak2keUPPq01cKg-7_Q@mail.gmail.com>
-Subject: Re: [PATCH] USB: fix up movement of USB core kerneldoc location
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=d2cfy0czkhhODFr2sP3gFkniZsVBfz3kDKZyM0CWgIc=;
+        b=mVGnuEfHcrqpQJ2rYsFLCQ1vLKUSBHFl9MMaPcy6Fr2KgE7x+Acl+4nhw8tv5qyCuk
+         cw+9G0LRPAPYxUt6JaNeYGZEiqhaeiDeAMcXC0F8fpdd2lKPobH/OXKIXCJkHRHRCrh7
+         mXo4tKt9YlzvDgzrias3LxpnseZ6IBkfr1hYb77+6yZmd9JlDzfCXt05ZBfopx7LcyXQ
+         BN830MAG0+ClTut8r7BSSlCbrpj6w5ERiUdEdyTa1CMi4809z7n817MH9RKS5rLS63/5
+         W6J09zlgth1S2BqxG0t4LC2XbgpNsd1TBClHZoysKsBu140FMf2REJ3+aMl9f29A0aiK
+         9wuQ==
+X-Gm-Message-State: AOAM533H2BrOYL0V7dV2gy/Iv6s+P+RJ6scryRK5e4Jhwn9zSVOgxTWF
+        v/Ss6SI/G2eAs2TRPdIsjV4=
+X-Google-Smtp-Source: ABdhPJyK2Up1CCQsOX04j4tYo0lv7EWxXBuhepY9Twu0owftfdKWgxo74a8HT6X+IXqu+sLxYj6swg==
+X-Received: by 2002:a17:90b:2409:: with SMTP id nr9mr1028400pjb.198.1619263810567;
+        Sat, 24 Apr 2021 04:30:10 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.81.172])
+        by smtp.gmail.com with ESMTPSA id z1sm6990106pgz.94.2021.04.24.04.30.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 24 Apr 2021 04:30:09 -0700 (PDT)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Souptick Joarder <jrdr.linux@gmail.com>
+Subject: [PATCH] usb: cdns3: Corrected comment to align with kernel-doc comment
+Date:   Sat, 24 Apr 2021 17:00:01 +0530
+Message-Id: <1619263801-5319-1-git-send-email-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+Kernel test robot throws below warning ->
 
-On Sat, Apr 24, 2021 at 8:10 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+drivers/usb/cdns3/cdns3-gadget.c:487: warning: This comment starts with
+'/**', but isn't a kernel-doc comment. Refer
+Documentation/doc-guide/kernel-doc.rst
 
-> Wait, no, now I see the warning:
->         ./drivers/usb/common/common.c:1: warning: no structured comments found
-> instead.
->
-> Is that expected?  It doesn't feel right to me, what should we be doing
-> instead?
+This patch will silence the warning.
 
-I think we should do like this instead:
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+---
+ drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/driver-api/usb/usb.rst
-+++ b/Documentation/driver-api/usb/usb.rst
-@@ -114,9 +114,6 @@ chapter 9 of the USB specification. These data
-types are used throughout
- USB, and in APIs including this host side API, gadget APIs, usb character
- devices and debugfs interfaces.
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 9b1bd41..0280a38 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -483,7 +483,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
+ 	}
+ }
+ 
+-/**
++/*
+  * cdns3_wa2_descmiss_copy_data copy data from internal requests to
+  * request queued by class driver.
+  * @priv_ep: extended endpoint object
+-- 
+1.9.1
 
--.. kernel-doc:: include/linux/usb/ch9.h
--   :internal:
--
- .. _usb_header:
-
-Since ch9.h does not contain any structure/inline functions, it does
-not contain any comment, so it should be just removed from the
-kernel-doc section.
-
-A similar issue has been fixed here:
-https://patchwork.kernel.org/project/dri-devel/patch/20190920193558.89815-2-sean@poorly.run/
-
-Regards,
-
-Fabio Estevam
