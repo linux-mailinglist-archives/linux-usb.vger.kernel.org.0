@@ -2,86 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7CD36A1D9
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 17:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89E6D36A1DF
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 17:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236613AbhDXPyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 11:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbhDXPyE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 11:54:04 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D12C061574;
-        Sat, 24 Apr 2021 08:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=d2RmiEfndsgboRmxT8nIWdmur/ZNr8KeEQ/UVKy2IYM=; b=AGwh8Q85mGlgvm259/fkQgjJXK
-        CEjQ02A3ZYPB9etyplVwIwKEBt8L9brTwwIv1TDKB4GWY1ui5oYeeOZGTGRGA+kFDJPrJPJRQp/JE
-        VCxhOsVT45Z5bt4oqlPY0zOtQO5vxt8usRyZ0i1vK5cf8gPR1J5LHoQokSCRxZR7nMPhFqJubulbh
-        iCyODxjGmZRCvYeKiIa0DZdLCJ18KfYfPbOtIaDV8IxMsxA7eD406HhKZ+sPhVhnKhtpYsh/7C1Z2
-        tdmBFKTxljQmC6bICieoPVfVLeHvtl0coDxeZ7/6xnDp1/B6+s/snjGDgv6tnGLnbp6rFuTXGzl7L
-        lnA4VZ2w==;
-Received: from [2601:1c0:6280:3f0::df68]
-        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1laKaw-0044lr-S1; Sat, 24 Apr 2021 15:53:23 +0000
-Subject: Re: [PATCH] usb: cdns3: Corrected comment to align with kernel-doc
- comment
-To:     Souptick Joarder <jrdr.linux@gmail.com>, peter.chen@kernel.org,
-        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1619263801-5319-1-git-send-email-jrdr.linux@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6aeb87ba-4a45-909a-65e4-370cc193f8db@infradead.org>
-Date:   Sat, 24 Apr 2021 08:53:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S232051AbhDXP60 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 11:58:26 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42519 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230010AbhDXP60 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 11:58:26 -0400
+Received: (qmail 313794 invoked by uid 1000); 24 Apr 2021 11:57:47 -0400
+Date:   Sat, 24 Apr 2021 11:57:47 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felicitas Hetzelt <file@sect.tu-berlin.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Null ptr deref in core/hub.c
+Message-ID: <20210424155747.GC312740@rowland.harvard.edu>
+References: <b0ba1c36-6ebd-49a9-38da-aa42d98271c0@sect.tu-berlin.de>
 MIME-Version: 1.0
-In-Reply-To: <1619263801-5319-1-git-send-email-jrdr.linux@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0ba1c36-6ebd-49a9-38da-aa42d98271c0@sect.tu-berlin.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/24/21 4:30 AM, Souptick Joarder wrote:
-> Kernel test robot throws below warning ->
+On Sat, Apr 24, 2021 at 02:08:45PM +0200, Felicitas Hetzelt wrote:
+> Hello,
 > 
-> drivers/usb/cdns3/cdns3-gadget.c:487: warning: This comment starts with
-> '/**', but isn't a kernel-doc comment. Refer
-> Documentation/doc-guide/kernel-doc.rst
+> I triggered a few potential npds in core/hub.c. The bugs trigger
+> reliably. Unfortunately I don't have a reproducer, though i tried my
+> best to root-cause the bugs. I'm using my own emulated xhci host
+> controller device and a slightly exotic kernel environment based on
+> kernel version 5.10.0-rc6, so it might be that the bug is not
+> trigger-able under normal conditions.
 > 
-> This patch will silence the warning.
+> I was hoping you could maybe quickly determine whether this is a valid
+> issue.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-> ---
->  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 9b1bd41..0280a38 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -483,7 +483,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
->  	}
->  }
->  
-> -/**
-> +/*
->   * cdns3_wa2_descmiss_copy_data copy data from internal requests to
+> usb_hub_to_struct can return zero if hdev->actconfig->interface[0]->dev
+> is NULL.
 
-Please just insert a hyphen/dash between the function name and its description.
+I'm not sure what you mean here.  dev is a member of the structure that 
+hdev->actconfig->interface[0] points to; it isn't a pointer itself.  As 
+such, to say that it is NULL is meaningless.
 
->   * request queued by class driver.
->   * @priv_ep: extended endpoint object
+Are you saying that sometimes hdev->actconfig->interface[0] is NULL when 
+usb_hub_to_struct runs?  How can that be?  usb_hub_to_struct doesn't 
+even refer to that field unless hdev->maxchild is nonzero, and that 
+field doesn't get set unless the hub driver is bound to the interface -- 
+which doesn't happen if there is no interface.
+
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L124
 > 
+> https://elixir.bootlin.com/linux/v4.9/source/include/linux/usb.h#L194
+> 
+> This is the case when usb_probe_interface fails to probe the device
+> driver (called via usb_set_configuration -> device_add -> ...)
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/driver.c#L372
 
-thanks.
--- 
-~Randy
+That line sets the interface's driver data, not interface[0]->dev.  
+What's wrong with having the driver data be NULL?  That just means the 
+device isn't a hub.  In this situation hdev->maxchild will be 0.
 
+Also, you say you're using a modified version of the 5.10.0-rc6 kernel 
+(kind of strange to be doing development on an -rc kernel instead of a 
+normal release, but never mind).  So why are you posting links to the 
+4.9 kernel source?  There have been a lot of changes between 4.9 and 
+5.10.
+
+> Then e.g. on a new invocation of hub_port_connect, the function tries to
+> un-attach the previously attached devices (listed as port_dev->child)
+> and calls recursively_mark_NOTATTACHED (via usb_set_device_state(udev,
+> USB_STATE_NOTATTACHED), which in turn tries to get a pointer to the hub
+> via usb_hub_to_struct_hub, which is NULL which leads to the crash.
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L4742
+
+That's the call to usb_disconnect, which isn't really important to what 
+you're saying.  You seem to be complaining about a crash in 
+recursively_mark_NOTATTACHED.  Why didn't you insert a URL for that 
+function instead?
+
+> I feel like this should be caught in hub_port_connect (which would set
+
+You're not making yourself clear.  What should be caught in 
+hub_port_connect?
+
+Are you saying that sometimes we can have udev->maxchild > 0 in 
+recursively_mark_NOTATTACHED even though udev isn't bound to the hub 
+driver?  If that's not it, then what _are_ you saying?
+
+> port_dev->child = NULL, avoiding the later invocation of
+> recursively_mark_NOTATTACHED), but the return value of usb_new_device is
+> always valid (in fact usb_set_configuration can only return 0 once it
+> gets to the calling add_device and probe).
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L4891
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/message.c#L1931
+> 
+> To fix this one could check whether the interface is actually properly
+> setup instead of just checking status, or alternatively always check the
+> return value of usb_hub_to_struct_hub on later invocations.
+> 
+> I attached the kernel log, it is a bit messy though i marked the
+> relevant parts with 'XXNOTE'.
+
+TL;DR.  You should trim logs so that only the important parts get 
+posted.
+
+> Let me know if you need any further information.
+
+Please try to give a more explicit description of what's actually going 
+wrong.  If you need to refer to lines of code in your email, just copy 
+them into the message -- don't put a URL to somewhere else, forcing the 
+reader to do extra work and lose the mental thread of the discussion.
+
+Alan Stern
