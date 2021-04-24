@@ -2,77 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101A136A2FB
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 22:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F129636A367
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 00:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbhDXUdC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 16:33:02 -0400
-Received: from mx.exactcode.de ([144.76.154.42]:39310 "EHLO mx.exactcode.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232560AbhDXUdC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Apr 2021 16:33:02 -0400
-X-Greylist: delayed 1709 seconds by postgrey-1.27 at vger.kernel.org; Sat, 24 Apr 2021 16:33:02 EDT
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de; s=x;
-        h=Content-Transfer-Encoding:Content-Type:Mime-Version:From:Subject:Cc:To:Message-Id:Date; bh=RNAduPsH6Aq71WOCUC7VulmmgWj6SDBfA3/mxvU5URc=;
-        b=NO4ys8zWvp+0OHPGiwmxfGjVumIHCK3xvYoR3By3d8BmXYpf0SLaKOouUexVJwjgqZztZU6CCJ4HVA3btIj2XfYUbjP07C2AX/+gvomxr6ma8osLlunD+Qwj64MqZKeu3vszU5NV0BFGCDpRRK+1n5X8s7hg/jhhLc3kD1l+ZB4=;
-Received: from exactco.de ([90.187.5.221])
-        by mx.exactcode.de with esmtp (Exim 4.82)
-        (envelope-from <rene@exactcode.com>)
-        id 1laOVU-0008CW-8u; Sat, 24 Apr 2021 20:04:00 +0000
-Received: from [192.168.2.131] (helo=localhost)
-        by exactco.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.86_2)
-        (envelope-from <rene@exactcode.com>)
-        id 1laORl-000438-Pp; Sat, 24 Apr 2021 20:00:10 +0000
-Date:   Sat, 24 Apr 2021 22:03:16 +0200 (CEST)
-Message-Id: <20210424.220316.855336714119430355.rene@exactcode.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
-From:   Rene Rebe <rene@exactcode.com>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Score: -1.6 (-)
+        id S237147AbhDXWIn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 18:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57170 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231911AbhDXWIn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 18:08:43 -0400
+Received: from perceval.ideasonboard.com (unknown [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE75BC061574;
+        Sat, 24 Apr 2021 15:08:04 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id D393AE9;
+        Sun, 25 Apr 2021 00:07:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1619302068;
+        bh=BjhgVKeI9yTNn8YuXQucQOXP2zoxErBFMZNX8p4BcVw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dgCwT6PGpgwUDRAH3o8xjsKUmQ7KTiYh68Ib1KH5df6CZWixyPHqheTubBfnZ1MjL
+         sANFoL5wjuxIjWe/0xyI+y1wAHLReQRTmRnpi6rqZUZrtUSGX6Mc37XxcPJX4+X/TC
+         2BRnMw7T20JH18tnj2vWKt8G/8uoOGACDeSsQm7w=
+Date:   Sun, 25 Apr 2021 01:07:42 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [RFC PATCH] usb: gadget: Drop unnecessary NULL checks after
+ container_of
+Message-ID: <YISWrhfxH0hHLkfl@pendragon.ideasonboard.com>
+References: <20210423150626.138188-1-linux@roeck-us.net>
+ <87v98ckt2w.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87v98ckt2w.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi there,
+Hi Guenter,
 
-for some time I already wondered why my external USB Seagate Seven
-drive does not report any SMART status. Only recently did I take a
-look and it turns out ATA pass-through was explicitly disabed for all
-Seagate drives with 7fee72 "uas: Always apply US_FL_NO_ATA_1X quirk to
-Seagate devices" in 2017. Apparently some early ones where buggy, ...
+On Sat, Apr 24, 2021 at 11:03:19AM +0300, Felipe Balbi wrote:
+> Guenter Roeck <linux@roeck-us.net> writes:
+> > The parameters passed to allow_link and drop_link functions are never NULL.
+> > That means the result of container_of() on those parameters is also
+> > never NULL, even if the reference into the structure points to the first
+> > element of the structure. Remove the subsequent NULL checks.
+> >
+> > The changes in this patch were made automatically using the following
+> > Coccinelle script.
+> >
+> > @@
+> > type t;
+> > identifier v;
+> > statement s;
+> > @@
+> >
+> > <+...
+> > (
+> >   t v = container_of(...);
+> > |
+> >   v = container_of(...);
+> > )
+> >   ...
+> >   when != v
+> > - if (\( !v \| v == NULL \) ) s
+> > ...+>
+> >
+> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > ---
+> > After the recent discussion about a patch which tried to add a check
+> > against NULL after container_of(), I realized that there are a number
+> > of such checks in the kernel.
+> >
+> > Now the big question: Are patches like this acceptable, or do they count
+> > as noise ?
+> 
+> Not noise in my book :-)
+> 
+> Acked-by: Felipe Balbi <balbi@kernel.org>
 
-However, fast forward a couple of years and this is no longer true,
-this Segate Seven even is already from 2016, and apparently first
-available in 2015. I suggest removing this rather drastic global
-measure, and instead only add very old broken ones with individual
-quirks, should any of them still be alive ;-)
+Likewise,
 
-Signed-off-by: Ren=E9 Rebe <rene@exactcode.com>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
---- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36=
-:00.517423726 +0100
-+++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373=
-424544 +0100
-@@ -113,8 +113,4 @@
- 	}
- =
+And thank you for the patch.
 
--	/* All Seagate disk enclosures have broken ATA pass-through support *=
-/
--	if (le16_to_cpu(udev->descriptor.idVendor) =3D=3D 0x0bc2)
--		flags |=3D US_FL_NO_ATA_1X;
--
- 	usb_stor_adjust_quirks(udev, &flags);
- =
+-- 
+Regards,
 
-
--- =
-
-  Ren=E9 Rebe, ExactCODE GmbH, Lietzenburger Str. 42, DE-10789 Berlin
-  https://exactcode.com | https://t2sde.org | https://rene.rebe.de
+Laurent Pinchart
