@@ -2,111 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CE0336A124
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 14:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB0B36A131
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 14:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232867AbhDXMfQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 08:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232148AbhDXMfP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 08:35:15 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859C8C061574;
-        Sat, 24 Apr 2021 05:34:34 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id e7so42089352wrs.11;
-        Sat, 24 Apr 2021 05:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=gCfMH117/J+4Kg92DpRYmxtj74JPbXMtKKiZaH3pB+k=;
-        b=LVDzrlID9/D9QNzUP5h/JneLwFpS/A4gbRUWxDdITrsMayWltmDUqN8PSuXtLz0AkZ
-         8zuw2Ay1yztoloLcBs1GcqP7XmkBtW6gL4bP+kKzZlWvBoTcU8e2yFM9kMHpqDrVOGT9
-         tsUonCf318cgZrIDs6fzOkY5vxArmz9F7hap6aLD+aAsZqZo9Hk/27kg9/yQLQSUtbfr
-         YBXx9r1HGX/ftyAPC+qvJIqhawR93Av8ZzgX4x1pkVRDW0tWzbmelkrcSBk7anmQOyBO
-         FDigixDu8cmjF5PVYI+/pKf7ahQnJoOrTvNB+m5K8XqPFUJtylUJHiKNiay/jsqdyGDR
-         1vAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gCfMH117/J+4Kg92DpRYmxtj74JPbXMtKKiZaH3pB+k=;
-        b=QdconMV03wLXkFqJaxmf/YDatBWVff+rMZN7XoSNWYtv5YsRb1P0Som48M1ODn7toc
-         FR9fuml3ONnlFA+dKnD+kwIe9VF9hDwmfS8B73roaojN9TsMb6InBNZgcgwNv13cDuJq
-         e2TNAyDttJLWRtiOEgDHGgvKeQXRk5Bjq2gX/XQaT7+ScO1KdZN46itlukSBDjbaRXkz
-         cv46Y6gnOqRlQXVP7HcfdZB9Dc4f7vurKJofvcsrJdwb9O81Gbj1ZTMvlIXQtAp9jMj9
-         STgHmie501pr9DojmuK+0oei8krqDy3Z5lYeCXip1kzCCcmCmJzWH1UsePIDzW+rNvdr
-         oAeQ==
-X-Gm-Message-State: AOAM533xUdHu39ujqIfgz1FtlLQIc+AGFOs+faxTcTUEeQMiQkW/MIK+
-        KtCLl/YtlfNbQ5HM7BxVySO+izPnoJUX53axZJoi73JJEsI=
-X-Google-Smtp-Source: ABdhPJw/su0UDqxCwBvojDgQEMQZhdSp3H1EC/hAcJmteJMBCdLc+/apCe4qbmJ1ruxxnKsi4nDkTh07NrH5OUb49Og=
-X-Received: by 2002:a05:6512:1050:: with SMTP id c16mr6382783lfb.295.1619267352144;
- Sat, 24 Apr 2021 05:29:12 -0700 (PDT)
+        id S233128AbhDXMle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 08:41:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57968 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232148AbhDXMlb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Apr 2021 08:41:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C49C961481;
+        Sat, 24 Apr 2021 12:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1619268052;
+        bh=itSxnj6faGL+aa067xUr3c6Ye0dPueyUd13nyom0cCI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xXk5hxiN158/JBMiYRPM1R0+1f4vveyHMYEAt6Ca4pNkaW6XVOTLJs6y4eYztvUsc
+         UAOHPl7TanUkOR68FkVUvSAXYYpIR8LsjAiKnQ9s1II/1AUGY5DBrxITddV5qQqj+Z
+         8XEP4rAc7CIRJzbANG+N6YoftFb3K9JuDaI7Ocrc=
+Date:   Sat, 24 Apr 2021 14:40:49 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Felicitas Hetzelt <file@sect.tu-berlin.de>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Null ptr deref in core/hub.c
+Message-ID: <YIQR0ZgpKIm9a/4P@kroah.com>
+References: <b0ba1c36-6ebd-49a9-38da-aa42d98271c0@sect.tu-berlin.de>
 MIME-Version: 1.0
-References: <20210424104715.2793760-1-gregkh@linuxfoundation.org>
- <YIP8c3Bgfz9YfH6A@kroah.com> <CAOMZO5ByYV=g_29vWNPXr6zi6=xQsFVDak2keUPPq01cKg-7_Q@mail.gmail.com>
-In-Reply-To: <CAOMZO5ByYV=g_29vWNPXr6zi6=xQsFVDak2keUPPq01cKg-7_Q@mail.gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Sat, 24 Apr 2021 09:29:00 -0300
-Message-ID: <CAOMZO5Bgx1KLP9v0ycHCbeJxE9w9XK5=FJ_08LrjDyXov-O7wQ@mail.gmail.com>
-Subject: Re: [PATCH] USB: fix up movement of USB core kerneldoc location
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0ba1c36-6ebd-49a9-38da-aa42d98271c0@sect.tu-berlin.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 24, 2021 at 8:25 AM Fabio Estevam <festevam@gmail.com> wrote:
->
-> Hi Greg,
->
-> On Sat, Apr 24, 2021 at 8:10 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
->
-> > Wait, no, now I see the warning:
-> >         ./drivers/usb/common/common.c:1: warning: no structured comments found
-> > instead.
-> >
-> > Is that expected?  It doesn't feel right to me, what should we be doing
-> > instead?
->
-> I think we should do like this instead:
+On Sat, Apr 24, 2021 at 02:08:45PM +0200, Felicitas Hetzelt wrote:
+> Hello,
+> 
+> I triggered a few potential npds in core/hub.c. The bugs trigger
+> reliably. Unfortunately I don't have a reproducer, though i tried my
+> best to root-cause the bugs. I'm using my own emulated xhci host
+> controller device and a slightly exotic kernel environment based on
+> kernel version 5.10.0-rc6, so it might be that the bug is not
+> trigger-able under normal conditions.
+> 
+> I was hoping you could maybe quickly determine whether this is a valid
+> issue.
+> 
+> usb_hub_to_struct can return zero if hdev->actconfig->interface[0]->dev
+> is NULL.
 
-Actually I think the fix should be like this:
+How can that be possible in a real system?
 
-diff --git a/Documentation/driver-api/usb/usb.rst
-b/Documentation/driver-api/usb/usb.rst
-index 078e981e2b16..cbc76fb51aa9 100644
---- a/Documentation/driver-api/usb/usb.rst
-+++ b/Documentation/driver-api/usb/usb.rst
-@@ -109,15 +109,13 @@ well as to make sure they aren't relying on some
-HCD-specific behavior.
- USB-Standard Types
- ==================
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L124
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/include/linux/usb.h#L194
 
--In ``<linux/usb/ch9.h>`` you will find the USB data types defined in
--chapter 9 of the USB specification. These data types are used throughout
-+In ``drivers/usb/common/common.c`` you will find the USB data types defined
-+in chapter 9 of the USB specification. These data types are used throughout
- USB, and in APIs including this host side API, gadget APIs, usb character
- devices and debugfs interfaces.
+Note, 4.9 is VERY old :)
 
--.. kernel-doc:: include/linux/usb/ch9.h
--   :internal:
--
--.. _usb_header:
-+.. kernel-doc:: drivers/usb/common/common.c
-+   :export:
+> This is the case when usb_probe_interface fails to probe the device
+> driver (called via usb_set_configuration -> device_add -> ...)
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/driver.c#L372
 
- Host-Side Data Types and Macros
- ===============================
+And how can that happen in a real system?
 
-Does this look good?
+> Then e.g. on a new invocation of hub_port_connect, the function tries to
+> un-attach the previously attached devices (listed as port_dev->child)
+> and calls recursively_mark_NOTATTACHED (via usb_set_device_state(udev,
+> USB_STATE_NOTATTACHED), which in turn tries to get a pointer to the hub
+> via usb_hub_to_struct_hub, which is NULL which leads to the crash.
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L4742
+> 
+> I feel like this should be caught in hub_port_connect (which would set
+> port_dev->child = NULL, avoiding the later invocation of
+> recursively_mark_NOTATTACHED), but the return value of usb_new_device is
+> always valid (in fact usb_set_configuration can only return 0 once it
+> gets to the calling add_device and probe).
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/hub.c#L4891
+> 
+> https://elixir.bootlin.com/linux/v4.9/source/drivers/usb/core/message.c#L1931
+> 
+> To fix this one could check whether the interface is actually properly
+> setup instead of just checking status, or alternatively always check the
+> return value of usb_hub_to_struct_hub on later invocations.
 
-Thanks
+Patches are great to send, that's the best way to discuss issues that
+you find.
+
+thanks,
+
+greg k-h
