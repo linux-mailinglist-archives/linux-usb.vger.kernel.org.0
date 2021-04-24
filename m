@@ -2,221 +2,322 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BB1369D8A
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 01:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD773369DD2
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 02:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232438AbhDWXqh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Apr 2021 19:46:37 -0400
-Received: from mga07.intel.com ([134.134.136.100]:60730 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231740AbhDWXqg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Apr 2021 19:46:36 -0400
-IronPort-SDR: 9S+GtuSqVd7n5bm3Q0/pFXhpZKu2W6IQ907/QI9tG1tHa9Xb51OiQq1MJDFDDDDrywbJTpqUue
- e7Hkh5Ckc0RA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9963"; a="260100525"
-X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
-   d="scan'208";a="260100525"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2021 16:45:58 -0700
-IronPort-SDR: 2pn3TNEhrIu4F0XWuIS8Y9dJuiJpGwDisDKbFD/+1BljoqAM2aYaEJEWUryrxZfZAuPzWRBxYM
- SALvXLRA9M6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,246,1613462400"; 
-   d="scan'208";a="603671482"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 23 Apr 2021 16:45:57 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1la5Ui-0004tP-OH; Fri, 23 Apr 2021 23:45:56 +0000
-Date:   Sat, 24 Apr 2021 07:45:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- ddae7979cdd5ed417f2b3ebdc5742e2a600b5ad5
-Message-ID: <60835c13.CyHCJcoxrJ9wwA3G%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S236590AbhDXAaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Apr 2021 20:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232742AbhDXAaB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Apr 2021 20:30:01 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50921C061756
+        for <linux-usb@vger.kernel.org>; Fri, 23 Apr 2021 17:29:23 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id w8-20020a6556c80000b02902072432fdabso15209283pgs.21
+        for <linux-usb@vger.kernel.org>; Fri, 23 Apr 2021 17:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=IN+7hpfuilZwjXuucv+7rDMA58hZ+Pmp36t/KLM1cMw=;
+        b=g+1yWDroVwsnWvXxUagwJlOAeimwDRkQ63OncNnDLg+sFstxe5ZnEz7JvM5tMy2LrZ
+         b+PFOldLW3B8xzdZ/fsFTl90Wr4s2T+VM1XPtdAgMCf/pzyJNfYWMewADYTWKrvC3bz5
+         G+YrM8Lod0/La+MGwv7rRnCyLwG2nIKFIADcwfjEjMZESYkQGD/IQBgKkC7m0Ou9ICI6
+         3jUwzlNMb+Eq/8d4Etq3xFrKo4YUKzgbEgl2GphuEloomYeZGOWpgoJk8YRLzKcHgbB5
+         0Zvlnmh0VaOAg0fHBAT8pxTzPku11UBW85rGzlN4+OCF3wC4Kqc/mP17nP1EeYRwj6eK
+         w12w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=IN+7hpfuilZwjXuucv+7rDMA58hZ+Pmp36t/KLM1cMw=;
+        b=P4xZYKv6sDZGh7T3vB78OvSe8qt98SNDSJYlXbnDIeNmx+VjV+hFc00ntG4ZKr9kVX
+         ZCEj0MsXggLYqCdt2Ty1+wpDEQ/WIVPQ33lzht0pCe2XUQOX8DhC7KZdluLu0UFCd2hd
+         u/16Mhj7TFr6yPxBa3iDi1XhEnr/uT88QkCLS1n/mFdNRP4KJDQkbpOC2hErRm7yeZp0
+         kulW1q4GfxEd9iyOWfEfdSINR3WIbBK229gMuMAzQm2qcGgNDVt8I4iqkNBgJFB1lJK3
+         V3CYoDop0Me2YkBa6MxXlE3qBWsJ3lwRbtkB0NooWTWcAchwZs4RCQkImb/gLM2kxxUZ
+         a/LQ==
+X-Gm-Message-State: AOAM532DFyTaUMm/Z5mkWjfVn6sh4SL2ZZToBZh0OmxcAP/sGMjRUY0t
+        t5MNnzPnbNigaNHnsCQwDFtlFt/cFvm7
+X-Google-Smtp-Source: ABdhPJycZqWca6XT3XcA+7vy+xZvUsOwCq9bzaaj1UwM2i0BjgltOYKaHQB1q4nJ3AUaFhQeuLfqwWiRdo1w
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:5cef:2faf:44cf:b69b])
+ (user=rajatja job=sendgmr) by 2002:aa7:93aa:0:b029:25e:31ca:756f with SMTP id
+ x10-20020aa793aa0000b029025e31ca756fmr6527446pff.70.1619224162041; Fri, 23
+ Apr 2021 17:29:22 -0700 (PDT)
+Date:   Fri, 23 Apr 2021 17:29:17 -0700
+Message-Id: <20210424002918.1962649-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
+Subject: [PATCH 1/2] driver core: Move the "removable" attribute from USB to core
+From:   Rajat Jain <rajatja@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rajat Jain <rajatja@google.com>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        helgaas@kernel.org
+Cc:     rajatxjain@gmail.com, jsbarnes@google.com, dtor@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: ddae7979cdd5ed417f2b3ebdc5742e2a600b5ad5  usb: dwc3: gadget: Handle DEV_TXF_FLUSH_BYPASS capability
+Move the "removable" attribute from USB to core in order to allow
+it to be supported by other subsystem / buses. Individual buses
+that want to support this attribute can opt-in by setting the
+supports_removable flag, and then populating the removable property
+of the device while enumerating it.
 
-elapsed time: 724m
-
-configs tested: 159
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-i386                             allyesconfig
-riscv                            allyesconfig
-powerpc                    socrates_defconfig
-m68k                       m5208evb_defconfig
-powerpc                     tqm5200_defconfig
-sh                          sdk7780_defconfig
-s390                             alldefconfig
-sh                   rts7751r2dplus_defconfig
-arc                      axs103_smp_defconfig
-arm                            pleb_defconfig
-um                             i386_defconfig
-arm                        vexpress_defconfig
-mips                        bcm47xx_defconfig
-mips                        nlm_xlp_defconfig
-um                                allnoconfig
-sh                 kfr2r09-romimage_defconfig
-powerpc                 mpc8540_ads_defconfig
-mips                  maltasmvp_eva_defconfig
-arm64                            alldefconfig
-arm                            zeus_defconfig
-sh                      rts7751r2d1_defconfig
-xtensa                         virt_defconfig
-riscv                            alldefconfig
-arm                            dove_defconfig
-sh                           sh2007_defconfig
-sh                         ecovec24_defconfig
-arm                          lpd270_defconfig
-arm                         orion5x_defconfig
-powerpc                     tqm8541_defconfig
-um                               allmodconfig
-arc                        vdk_hs38_defconfig
-powerpc                    mvme5100_defconfig
-ia64                            zx1_defconfig
-mips                        maltaup_defconfig
-powerpc                         wii_defconfig
-mips                      loongson3_defconfig
-mips                   sb1250_swarm_defconfig
-mips                      fuloong2e_defconfig
-mips                      pic32mzda_defconfig
-sh                   sh7770_generic_defconfig
-arm                         s3c2410_defconfig
-sh                        sh7757lcr_defconfig
-mips                malta_kvm_guest_defconfig
-arm                       imx_v4_v5_defconfig
-sh                          r7780mp_defconfig
-mips                     decstation_defconfig
-powerpc                    sam440ep_defconfig
-sh                          rsk7203_defconfig
-mips                     loongson1b_defconfig
-m68k                       bvme6000_defconfig
-um                               alldefconfig
-sh                        dreamcast_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                             sh03_defconfig
-ia64                          tiger_defconfig
-mips                         mpc30x_defconfig
-powerpc                     tqm8548_defconfig
-arm                         lpc32xx_defconfig
-xtensa                          iss_defconfig
-arm                       spear13xx_defconfig
-powerpc                     ksi8560_defconfig
-arm                     eseries_pxa_defconfig
-powerpc                     tqm8555_defconfig
-sh                           se7619_defconfig
-mips                 decstation_r4k_defconfig
-h8300                       h8s-sim_defconfig
-arm                          moxart_defconfig
-arm                          exynos_defconfig
-mips                      maltasmvp_defconfig
-arm                  colibri_pxa300_defconfig
-mips                     cu1000-neo_defconfig
-mips                    maltaup_xpa_defconfig
-ia64                      gensparse_defconfig
-arm                            mps2_defconfig
-arm                        trizeps4_defconfig
-mips                           gcw0_defconfig
-sh                          polaris_defconfig
-um                           x86_64_defconfig
-ia64                        generic_defconfig
-csky                                defconfig
-sh                     sh7710voipgw_defconfig
-arm                            lart_defconfig
-powerpc                      cm5200_defconfig
-arm                       cns3420vb_defconfig
-arm                            xcep_defconfig
-h8300                    h8300h-sim_defconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                                defconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a002-20210423
-x86_64               randconfig-a004-20210423
-x86_64               randconfig-a001-20210423
-x86_64               randconfig-a005-20210423
-x86_64               randconfig-a006-20210423
-x86_64               randconfig-a003-20210423
-i386                 randconfig-a002-20210423
-i386                 randconfig-a001-20210423
-i386                 randconfig-a003-20210423
-i386                 randconfig-a005-20210423
-i386                 randconfig-a006-20210423
-i386                 randconfig-a004-20210423
-i386                 randconfig-a014-20210423
-i386                 randconfig-a012-20210423
-i386                 randconfig-a011-20210423
-i386                 randconfig-a013-20210423
-i386                 randconfig-a015-20210423
-i386                 randconfig-a016-20210423
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a015-20210423
-x86_64               randconfig-a016-20210423
-x86_64               randconfig-a011-20210423
-x86_64               randconfig-a014-20210423
-x86_64               randconfig-a012-20210423
-x86_64               randconfig-a013-20210423
-
+Signed-off-by: Rajat Jain <rajatja@google.com>
+Change-Id: I55a0ee5e13d87cd0c5d9cfc98403caba1989b518
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/base/core.c      | 28 ++++++++++++++++++++++++++++
+ drivers/usb/core/hub.c   |  8 ++++----
+ drivers/usb/core/sysfs.c | 24 ------------------------
+ drivers/usb/core/usb.c   |  1 +
+ include/linux/device.h   | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/usb.h      |  7 -------
+ 6 files changed, 69 insertions(+), 35 deletions(-)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index f29839382f81..b8ae4cc52805 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2327,6 +2327,25 @@ static ssize_t online_store(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(online);
+ 
++static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	const char *state;
++
++	switch (dev->removable) {
++	case DEVICE_REMOVABLE:
++		state = "removable";
++		break;
++	case DEVICE_FIXED:
++		state = "fixed";
++		break;
++	default:
++		state = "unknown";
++	}
++	return sprintf(buf, "%s\n", state);
++}
++static DEVICE_ATTR_RO(removable);
++
+ int device_add_groups(struct device *dev, const struct attribute_group **groups)
+ {
+ 	return sysfs_create_groups(&dev->kobj, groups);
+@@ -2504,8 +2523,16 @@ static int device_add_attrs(struct device *dev)
+ 			goto err_remove_dev_online;
+ 	}
+ 
++	if (type && type->supports_removable) {
++		error = device_create_file(dev, &dev_attr_removable);
++		if (error)
++			goto err_remove_dev_waiting_for_supplier;
++	}
++
+ 	return 0;
+ 
++ err_remove_dev_waiting_for_supplier:
++	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+ 	device_remove_file(dev, &dev_attr_online);
+  err_remove_dev_groups:
+@@ -2525,6 +2552,7 @@ static void device_remove_attrs(struct device *dev)
+ 	struct class *class = dev->class;
+ 	const struct device_type *type = dev->type;
+ 
++	device_remove_file(dev, &dev_attr_removable);
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+ 	device_remove_file(dev, &dev_attr_online);
+ 	device_remove_groups(dev, dev->groups);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 7f71218cc1e5..500e5648de04 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2442,11 +2442,11 @@ static void set_usb_port_removable(struct usb_device *udev)
+ 	 */
+ 	switch (hub->ports[udev->portnum - 1]->connect_type) {
+ 	case USB_PORT_CONNECT_TYPE_HOT_PLUG:
+-		udev->removable = USB_DEVICE_REMOVABLE;
++		dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+ 		return;
+ 	case USB_PORT_CONNECT_TYPE_HARD_WIRED:
+ 	case USB_PORT_NOT_USED:
+-		udev->removable = USB_DEVICE_FIXED;
++		dev_set_removable(&udev->dev, DEVICE_FIXED);
+ 		return;
+ 	default:
+ 		break;
+@@ -2471,9 +2471,9 @@ static void set_usb_port_removable(struct usb_device *udev)
+ 	}
+ 
+ 	if (removable)
+-		udev->removable = USB_DEVICE_REMOVABLE;
++		dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+ 	else
+-		udev->removable = USB_DEVICE_FIXED;
++		dev_set_removable(&udev->dev, DEVICE_FIXED);
+ 
+ }
+ 
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index d85699bee671..e8ff3afdf7af 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -298,29 +298,6 @@ static ssize_t urbnum_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(urbnum);
+ 
+-static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
+-			      char *buf)
+-{
+-	struct usb_device *udev;
+-	char *state;
+-
+-	udev = to_usb_device(dev);
+-
+-	switch (udev->removable) {
+-	case USB_DEVICE_REMOVABLE:
+-		state = "removable";
+-		break;
+-	case USB_DEVICE_FIXED:
+-		state = "fixed";
+-		break;
+-	default:
+-		state = "unknown";
+-	}
+-
+-	return sprintf(buf, "%s\n", state);
+-}
+-static DEVICE_ATTR_RO(removable);
+-
+ static ssize_t ltm_capable_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -825,7 +802,6 @@ static struct attribute *dev_attrs[] = {
+ 	&dev_attr_avoid_reset_quirk.attr,
+ 	&dev_attr_authorized.attr,
+ 	&dev_attr_remove.attr,
+-	&dev_attr_removable.attr,
+ 	&dev_attr_ltm_capable.attr,
+ #ifdef CONFIG_OF
+ 	&dev_attr_devspec.attr,
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index a566bb494e24..5a0f73a28196 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -523,6 +523,7 @@ struct device_type usb_device_type = {
+ #ifdef CONFIG_PM
+ 	.pm =		&usb_device_pm_ops,
+ #endif
++	.supports_removable = true,
+ };
+ 
+ 
+diff --git a/include/linux/device.h b/include/linux/device.h
+index ba660731bd25..d6442b811607 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -93,6 +93,12 @@ struct device_type {
+ 	void (*release)(struct device *dev);
+ 
+ 	const struct dev_pm_ops *pm;
++
++	/*
++	 * Determines whether the subsystem supports classifying the devices of
++	 * this type into removable vs fixed.
++	 */
++	bool supports_removable;
+ };
+ 
+ /* interface for exporting device attributes */
+@@ -350,6 +356,19 @@ enum dl_dev_state {
+ 	DL_DEV_UNBINDING,
+ };
+ 
++/**
++ * enum device_removable - Whether the device is removable. The criteria for a
++ * device to be classified as removable, is determined by its subsystem or bus.
++ * @DEVICE_REMOVABLE_UNKNOWN:  Device location is Unknown (default).
++ * @DEVICE_REMOVABLE: Device is removable by the user.
++ * @DEVICE_FIXED: Device is not removable by the user.
++ */
++enum device_removable {
++	DEVICE_REMOVABLE_UNKNOWN = 0,
++	DEVICE_REMOVABLE,
++	DEVICE_FIXED,
++};
++
+ /**
+  * struct dev_links_info - Device data related to device links.
+  * @suppliers: List of links to supplier devices.
+@@ -431,6 +450,9 @@ struct dev_links_info {
+  * 		device (i.e. the bus driver that discovered the device).
+  * @iommu_group: IOMMU group the device belongs to.
+  * @iommu:	Per device generic IOMMU runtime data
++ * @removable:  Whether the device can be removed from the system. This
++ *              should be set by the subsystem / bus driver that discovered
++ *              the device.
+  *
+  * @offline_disabled: If set, the device is permanently online.
+  * @offline:	Set after successful invocation of bus type's .offline().
+@@ -541,6 +563,8 @@ struct device {
+ 	struct iommu_group	*iommu_group;
+ 	struct dev_iommu	*iommu;
+ 
++	enum device_removable	removable;
++
+ 	bool			offline_disabled:1;
+ 	bool			offline:1;
+ 	bool			of_node_reused:1;
+@@ -778,6 +802,18 @@ static inline bool dev_has_sync_state(struct device *dev)
+ 	return false;
+ }
+ 
++static inline void dev_set_removable(struct device *dev,
++				     enum device_removable removable)
++{
++	dev->removable = removable;
++}
++
++static inline bool dev_is_removable(struct device *dev)
++{
++	return dev && dev->type && dev->type->supports_removable
++	    && dev->removable == DEVICE_REMOVABLE;
++}
++
+ /*
+  * High level routines for use by the bus drivers
+  */
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index d6a41841b93e..0bbb9e8b18c7 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -473,12 +473,6 @@ struct usb_dev_state;
+ 
+ struct usb_tt;
+ 
+-enum usb_device_removable {
+-	USB_DEVICE_REMOVABLE_UNKNOWN = 0,
+-	USB_DEVICE_REMOVABLE,
+-	USB_DEVICE_FIXED,
+-};
+-
+ enum usb_port_connect_type {
+ 	USB_PORT_CONNECT_TYPE_UNKNOWN = 0,
+ 	USB_PORT_CONNECT_TYPE_HOT_PLUG,
+@@ -701,7 +695,6 @@ struct usb_device {
+ #endif
+ 	struct wusb_dev *wusb_dev;
+ 	int slot_id;
+-	enum usb_device_removable removable;
+ 	struct usb2_lpm_parameters l1_params;
+ 	struct usb3_lpm_parameters u1_params;
+ 	struct usb3_lpm_parameters u2_params;
+-- 
+2.31.1.498.g6c1eba8ee3d-goog
+
