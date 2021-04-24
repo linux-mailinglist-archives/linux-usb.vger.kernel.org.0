@@ -2,107 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C48CA36A1D6
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 17:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7CD36A1D9
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 17:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233302AbhDXPt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 11:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S236613AbhDXPyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 11:54:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232434AbhDXPt2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 11:49:28 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A11C061574;
-        Sat, 24 Apr 2021 08:48:48 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id x11so52518141qkp.11;
-        Sat, 24 Apr 2021 08:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n6oaxNe0O7usSXuy78T0qiApMK5U0SOb3jy0M+P4mMI=;
-        b=Z4qQQMIllCxgjUIhUZ/QrwRPNFtsjKIx0akEwMt6jLxUNK7vkbRbUPE+IJGOWG/pLw
-         YSdC9JGu0bYLeqD5OqSJewP7iqjM/eCTyFftxA8eOt6aNeAWu1oNVLtjh/wqMZockeiA
-         w5GMjsegiuti/cEBJ7vMO9bHYAMaPgeYqZsaqsPwt0vgocyYVqWhh0+ImIbUgdf6cqGf
-         hsDps7cDWdFXBehgy6A/b/W+VR/QyjXxQ3cvBLOuVcvmPfl8QXOm9nJm5c2ice5U9kSQ
-         Le9W7e9UQSLrsfAzRN+kUSlHYDWwu3yK6d6ybB7KnMIJRhY1ZuNSvnU98avFa+saaK2N
-         W5aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=n6oaxNe0O7usSXuy78T0qiApMK5U0SOb3jy0M+P4mMI=;
-        b=r6TdnB8XcUePjzj5YbWjRxOc58LD1NGe/mxkL6t+blbSbNXgMU5sTOFUGjpWye7eym
-         +6BRJN3HQn3nJhn6v/AWrXzMvdSHpqoxOOl/uLYK7YCB9zb7tiiivcdz1R/JJmxJBJS9
-         7TD92j2YBC48Y+7cZgcJPGmsuZOCsVH2K5otte4Y2hAXtw0lm8VyaNr1zP2ZWwUsh13b
-         MjCB96Aau+9QrnR3LjlTP0AI3uL3zgmqnQqkvgvk29CqM/OZcX4ovnzrT8uTzrucNjez
-         ZuLcQEexpmFSemCTOLL0XIvaLJYmGHmIzMQUD8518Z3eg09921cOVIJJuNcM52VpzCut
-         bcnA==
-X-Gm-Message-State: AOAM533CnY4JQXG/AifKIVgC/0n8XZtmZnFhtiTy2IAyfc/tm/odHwnj
-        erOkHXI1BRQEwpo1aCaLnqUVvvp15J8=
-X-Google-Smtp-Source: ABdhPJxSMeJG3sHBuYsbAgp5K3h+HCtAaGRVHcaIu42lZc2VG2KtnqfFNUhgOC5Z6TXZm06w8utv/w==
-X-Received: by 2002:a37:64d:: with SMTP id 74mr9288672qkg.6.1619279327346;
-        Sat, 24 Apr 2021 08:48:47 -0700 (PDT)
-Received: from localhost.localdomain ([2804:431:d77f:e204:dc3c:c8fa:5d17:d49e])
-        by smtp.gmail.com with ESMTPSA id q67sm6702448qkb.89.2021.04.24.08.48.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 24 Apr 2021 08:48:46 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     chunfeng.yun@mediatek.com, sfr@canb.auug.org.au,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-next@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH] usb: Restore the reference to ch9.h
-Date:   Sat, 24 Apr 2021 12:48:23 -0300
-Message-Id: <20210424154823.2489144-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S236355AbhDXPyE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 11:54:04 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D12C061574;
+        Sat, 24 Apr 2021 08:53:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=d2RmiEfndsgboRmxT8nIWdmur/ZNr8KeEQ/UVKy2IYM=; b=AGwh8Q85mGlgvm259/fkQgjJXK
+        CEjQ02A3ZYPB9etyplVwIwKEBt8L9brTwwIv1TDKB4GWY1ui5oYeeOZGTGRGA+kFDJPrJPJRQp/JE
+        VCxhOsVT45Z5bt4oqlPY0zOtQO5vxt8usRyZ0i1vK5cf8gPR1J5LHoQokSCRxZR7nMPhFqJubulbh
+        iCyODxjGmZRCvYeKiIa0DZdLCJ18KfYfPbOtIaDV8IxMsxA7eD406HhKZ+sPhVhnKhtpYsh/7C1Z2
+        tdmBFKTxljQmC6bICieoPVfVLeHvtl0coDxeZ7/6xnDp1/B6+s/snjGDgv6tnGLnbp6rFuTXGzl7L
+        lnA4VZ2w==;
+Received: from [2601:1c0:6280:3f0::df68]
+        by desiato.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1laKaw-0044lr-S1; Sat, 24 Apr 2021 15:53:23 +0000
+Subject: Re: [PATCH] usb: cdns3: Corrected comment to align with kernel-doc
+ comment
+To:     Souptick Joarder <jrdr.linux@gmail.com>, peter.chen@kernel.org,
+        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
+        gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1619263801-5319-1-git-send-email-jrdr.linux@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6aeb87ba-4a45-909a-65e4-370cc193f8db@infradead.org>
+Date:   Sat, 24 Apr 2021 08:53:19 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <1619263801-5319-1-git-send-email-jrdr.linux@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Keep the textual reference to ch9.h as it was prior to commit
-caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location").
+On 4/24/21 4:30 AM, Souptick Joarder wrote:
+> Kernel test robot throws below warning ->
+> 
+> drivers/usb/cdns3/cdns3-gadget.c:487: warning: This comment starts with
+> '/**', but isn't a kernel-doc comment. Refer
+> Documentation/doc-guide/kernel-doc.rst
+> 
+> This patch will silence the warning.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+> ---
+>  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> index 9b1bd41..0280a38 100644
+> --- a/drivers/usb/cdns3/cdns3-gadget.c
+> +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> @@ -483,7 +483,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
+>  	}
+>  }
+>  
+> -/**
+> +/*
+>   * cdns3_wa2_descmiss_copy_data copy data from internal requests to
 
-As ch9.h does not have any comments anymore, just remove the kernel-doc
-entries entirely.
+Please just insert a hyphen/dash between the function name and its description.
 
-Fixes: caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location")
-Reported-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-This one applies against usb-next.
+>   * request queued by class driver.
+>   * @priv_ep: extended endpoint object
+> 
 
- Documentation/driver-api/usb/usb.rst | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
-
-diff --git a/Documentation/driver-api/usb/usb.rst b/Documentation/driver-api/usb/usb.rst
-index 543e70434da2..251cab7cacd7 100644
---- a/Documentation/driver-api/usb/usb.rst
-+++ b/Documentation/driver-api/usb/usb.rst
-@@ -109,16 +109,10 @@ well as to make sure they aren't relying on some HCD-specific behavior.
- USB-Standard Types
- ==================
- 
--In ``drivers/usb/common/common.c`` and ``drivers/usb/common/debug.c`` you
--will find the USB data types defined in chapter 9 of the USB specification.
--These data types are used throughout USB, and in APIs including this host
--side API, gadget APIs, usb character devices and debugfs interfaces.
--
--.. kernel-doc:: drivers/usb/common/common.c
--   :export:
--
--.. kernel-doc:: drivers/usb/common/debug.c
--   :export:
-+In ``<linux/usb/ch9.h>`` you will find the USB data types defined in
-+chapter 9 of the USB specification. These data types are used throughout
-+USB, and in APIs including this host side API, gadget APIs, usb character
-+devices and debugfs interfaces.
- 
- Host-Side Data Types and Macros
- ===============================
+thanks.
 -- 
-2.25.1
+~Randy
 
