@@ -2,130 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028DE36A1B2
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 16:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9887436A1BF
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 17:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233627AbhDXOz1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 10:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231892AbhDXOzZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 10:55:25 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B558C061574;
-        Sat, 24 Apr 2021 07:54:47 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id m13so52102091oiw.13;
-        Sat, 24 Apr 2021 07:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id;
-        bh=7Jv7S/tIrsm0fJNvZH7EY4pSQqJrTN9GdoDBxE/VwTk=;
-        b=IolVVn9BlI5HauMGHnjgoszZwPggzUvX6Wxqaa6cdtTawfCrOIFPCjVtVF9Bgkhaw2
-         4CbZZ0e57ofes9OjSm1S2Dscdu/JN2nLjqwNVqN+5kiEhhg+yGxn1GIMQEnrsG1m09aX
-         02i9l3rXelDnvARc44bXQTzzeZL17Ld784vaEoEDke+WNTWOi4OMeilNwbBU5gSexuEN
-         jD4zqxd8SDLfp2dx1n5DVSwSQy/C6eM9xm1duZk8C4BQlckJ4PMOcAmRVXX1/tLY4RJJ
-         +Ec/KJxPI+h+GfAznCmCn1mNK6Wf9Fo7wbOxfcmq1UajxHS5HqwxeBDE6N4ctmzMXGUv
-         +/Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id;
-        bh=7Jv7S/tIrsm0fJNvZH7EY4pSQqJrTN9GdoDBxE/VwTk=;
-        b=Efl+mY6iodu/GvCQR93pdqJ3AionY6rvswY893iDlbgW4zZdv8M5/pX9ZRu9RmRxHg
-         iwu/I6lHENzle4k10KPodXL0JDG0Wn+Jx7xAvIA6rTRxaBYWpIiLMPJXMbjqkJ3L1HG6
-         P+birbrUY34ERlCex7ty4ZIsQFLym1xaPwfeSDRHVdZ+aXW4RPz0HWIkE2ihILa4whYO
-         EWF2YFv6x9Px8cDUjCzh3p2IKcZrJmKPmm9aP4Mr3jYFjvVGvQ6JKIkNuBnAxp4bqGCV
-         Odp/j+iNm7gc4WlvLGVXaoIgZDkQuMTSxaR11XxmuqRYPRDfJsP6tRkC6z3Lz8R49RIZ
-         +KEw==
-X-Gm-Message-State: AOAM533ZeXuc+yHFb7JJQ47doy0aFBcvZDaUFwjWBuCn0Z2RZCpF9AEZ
-        9Akmws7zlC9AReKJBvFA4aJ21gtocCo=
-X-Google-Smtp-Source: ABdhPJy0TCNZhkwwYHdqT7N+DixhR6/Huoocr9mQ/nNpc2en1Twtwmbjx+RgOJm3DSgqBq4GHylBqQ==
-X-Received: by 2002:a05:6808:14c8:: with SMTP id f8mr7647480oiw.55.1619276086749;
-        Sat, 24 Apr 2021 07:54:46 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x2sm2237773ote.47.2021.04.24.07.54.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 24 Apr 2021 07:54:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] usb: gadget: Drop unnecessary NULL checks after container_of
-Date:   Sat, 24 Apr 2021 07:54:43 -0700
-Message-Id: <20210424145443.170413-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.17.1
+        id S231892AbhDXPMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 11:12:40 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35993 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232051AbhDXPMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 11:12:37 -0400
+Received: (qmail 313052 invoked by uid 1000); 24 Apr 2021 11:11:57 -0400
+Date:   Sat, 24 Apr 2021 11:11:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     gregkh@linuxfoundation.org, chunfeng.yun@mediatek.com,
+        sfr@canb.auug.org.au, linux-usb@vger.kernel.org,
+        linux-next@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH] usb: Fix up movement of USB core kerneldoc location
+Message-ID: <20210424151157.GA312740@rowland.harvard.edu>
+References: <20210424135103.2476670-1-festevam@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210424135103.2476670-1-festevam@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The parameters passed to allow_link and drop_link functions are never NULL.
-That means the result of container_of() on those parameters is also
-never NULL, even though the reference into the structure points to the
-first element of the structure. Remove the unnecessary NULL checks.
+On Sat, Apr 24, 2021 at 10:51:03AM -0300, Fabio Estevam wrote:
+> Commit 855b35ea96c4 ("usb: common: move function's kerneldoc next to its
+> definition") moved the USB common function documentation out of the
+> linux/usb/ch9.h header file into drivers/usb/common/common.c and
+> drivers/usb/common/debug.c, which causes the following 'make htmldocs'
+> build warning:
+> 
+> include/linux/usb/ch9.h:1: warning: no structured comments found
+> 
+> Fix that up by pointing the documentation at the correct location.
+> 
+> Fixes: 855b35ea96c4 ("usb: common: move function's kerneldoc next to its definition")
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+> Hi,
+> 
+> I compared the generated HTML and now the following functions are
+> also documented after this patch:
+> 
+> usb_decode_interval()
+> of_usb_get_dr_mode_by_phy()
+> of_usb_host_tpl_support()
+> of_usb_update_otg_caps()
+> usb_of_get_companion_dev()
+> 
+> They were not documented prior to 855b35ea96c4.
+> 
+> Please let me know if this is OK or not.
+> 
+>  Documentation/driver-api/usb/usb.rst | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/driver-api/usb/usb.rst b/Documentation/driver-api/usb/usb.rst
+> index 078e981e2b16..543e70434da2 100644
+> --- a/Documentation/driver-api/usb/usb.rst
+> +++ b/Documentation/driver-api/usb/usb.rst
+> @@ -109,15 +109,16 @@ well as to make sure they aren't relying on some HCD-specific behavior.
+>  USB-Standard Types
+>  ==================
+>  
+> -In ``<linux/usb/ch9.h>`` you will find the USB data types defined in
+> -chapter 9 of the USB specification. These data types are used throughout
+> -USB, and in APIs including this host side API, gadget APIs, usb character
+> -devices and debugfs interfaces.
+> +In ``drivers/usb/common/common.c`` and ``drivers/usb/common/debug.c`` you
+> +will find the USB data types defined in chapter 9 of the USB specification.
+> +These data types are used throughout USB, and in APIs including this host
+> +side API, gadget APIs, usb character devices and debugfs interfaces.
 
-This change was made automatically with the following Coccinelle script.
-A now obsolete 'out:' label was removed manually.
+This is quite wrong.
 
-@@
-type t;
-identifier v;
-statement s;
-@@
+The USB data types defined in chapter 9 of the USB specification can 
+actually be found in include/uapi/linux/usb/ch9.h.  What 
+drivers/usb/common/common.c contains is the definitions of the functions 
+declared in include/linux/usb/ch9.h, which is a different file (although 
+it does #include the file in include/uapi/linux/usb/).
 
-<+...
-(
-  t v = container_of(...);
-|
-  v = container_of(...);
-)
-  ...
-  when != v
-- if (\( !v \| v == NULL \) ) s
-...+>
+drivers/usb/common/debug.c, on the other hand, contains definitions of 
+various functions used for debugging output.  If those functions are 
+declared in a header file anywhere, I can't see it.
 
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
-v2: Dropped RFC, added Acked-by:, dropped now obsolete 'out:' label
+Alan Stern
 
- drivers/usb/gadget/function/uvc_configfs.c | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/uvc_configfs.c b/drivers/usb/gadget/function/uvc_configfs.c
-index 00fb58e50a15..7775f9902360 100644
---- a/drivers/usb/gadget/function/uvc_configfs.c
-+++ b/drivers/usb/gadget/function/uvc_configfs.c
-@@ -914,8 +914,6 @@ static int uvcg_streaming_header_allow_link(struct config_item *src,
- 
- 	target_fmt = container_of(to_config_group(target), struct uvcg_format,
- 				  group);
--	if (!target_fmt)
--		goto out;
- 
- 	uvcg_format_set_indices(to_config_group(target));
- 
-@@ -955,8 +953,6 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
- 	mutex_lock(&opts->lock);
- 	target_fmt = container_of(to_config_group(target), struct uvcg_format,
- 				  group);
--	if (!target_fmt)
--		goto out;
- 
- 	list_for_each_entry_safe(format_ptr, tmp, &src_hdr->formats, entry)
- 		if (format_ptr->fmt == target_fmt) {
-@@ -968,7 +964,6 @@ static void uvcg_streaming_header_drop_link(struct config_item *src,
- 
- 	--target_fmt->linked;
- 
--out:
- 	mutex_unlock(&opts->lock);
- 	mutex_unlock(su_mutex);
- }
--- 
-2.17.1
-
+> -.. kernel-doc:: include/linux/usb/ch9.h
+> -   :internal:
+> +.. kernel-doc:: drivers/usb/common/common.c
+> +   :export:
+>  
+> -.. _usb_header:
+> +.. kernel-doc:: drivers/usb/common/debug.c
+> +   :export:
+>  
+>  Host-Side Data Types and Macros
+>  ===============================
+> -- 
+> 2.25.1
+> 
