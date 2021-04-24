@@ -2,129 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30DD369EB5
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 06:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BC2369EFA
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Apr 2021 08:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbhDXERN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 00:17:13 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:11697 "EHLO m43-7.mailgun.net"
+        id S231528AbhDXGCO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 02:02:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40974 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230380AbhDXERL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Apr 2021 00:17:11 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619237793; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
- Subject: Sender; bh=1GO/BHrD+uoX9nHzeuPKjOTdCUh7DzWsv7hYDHfSgzs=; b=ZGMY0uBWJAVBWYRmKbUWBOgtQhlN2jf1JX/2d5i4iLQ5JPlLdPMyHAhru28y7V/PSCLnz9GA
- HDEvTX4BMyjwf0Q2GG2KRREktaJWGlECfDX9T7BvkLyqrWXXWqPR823ts0RZAsRnpTfRPL5f
- dVMDeHk4nw1MjpMUGZ5GJiz+AI4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 60839b9c2cc44d3aeaa71c7a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 24 Apr 2021 04:16:28
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9F92BC433F1; Sat, 24 Apr 2021 04:16:28 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.110.218] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 38F36C433F1;
-        Sat, 24 Apr 2021 04:16:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 38F36C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v2] usb: gadget: Fix double free of device descriptor
- pointers
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
-        peter.chen@kernel.org
+        id S229654AbhDXGCL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Apr 2021 02:02:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CA65361476;
+        Sat, 24 Apr 2021 06:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1619244093;
+        bh=6XGCDXGcaoQ+hVBK/IbHul30nrRd138xcaNBNc7ZO9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kzCUkt6gL4PZngkYY/CxCyfrXD08JEN5HSLIzrUpzRBkKDMU+iDBsZO096UcK+dzf
+         oqFtfec72JDtWmI+QMomzhFE2Wb62/snFzN5IGKo0xBKzF2cEGLEopTP1EgqopDZW2
+         HJBzlDoCyXzxlHKeOIj/rkiUfmhRYzVZONsAtQbk=
+Date:   Sat, 24 Apr 2021 08:01:28 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hemant Kumar <hemantk@codeaurora.org>, stable@vger.kernel.org
-References: <1619034452-17334-1-git-send-email-wcheng@codeaurora.org>
- <87lf9amvl5.fsf@kernel.org>
- <c5599433-3eb0-3918-d93b-6860f7951e92@codeaurora.org>
-Message-ID: <69253e54-771b-3b1c-1765-77bfb6288715@codeaurora.org>
-Date:   Fri, 23 Apr 2021 21:16:26 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [RFC PATCH] usb: gadget: Drop unnecessary NULL checks after
+ container_of
+Message-ID: <YIO0OB4rFZcc5/1A@kroah.com>
+References: <20210423150626.138188-1-linux@roeck-us.net>
 MIME-Version: 1.0
-In-Reply-To: <c5599433-3eb0-3918-d93b-6860f7951e92@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210423150626.138188-1-linux@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 4/23/2021 12:10 PM, Wesley Cheng wrote:
+On Fri, Apr 23, 2021 at 08:06:26AM -0700, Guenter Roeck wrote:
+> The parameters passed to allow_link and drop_link functions are never NULL.
+> That means the result of container_of() on those parameters is also
+> never NULL, even if the reference into the structure points to the first
+> element of the structure. Remove the subsequent NULL checks.
 > 
+> The changes in this patch were made automatically using the following
+> Coccinelle script.
 > 
-> On 4/22/2021 4:01 AM, Felipe Balbi wrote:
->>
->> Hi,
->>
->> Wesley Cheng <wcheng@codeaurora.org> writes:
->>
->>> From: Hemant Kumar <hemantk@codeaurora.org>
->>>
->>> Upon driver unbind usb_free_all_descriptors() function frees all
->>> speed descriptor pointers without setting them to NULL. In case
->>> gadget speed changes (i.e from super speed plus to super speed)
->>> after driver unbind only upto super speed descriptor pointers get
->>> populated. Super speed plus desc still holds the stale (already
->>> freed) pointer. Fix this issue by setting all descriptor pointers
->>> to NULL after freeing them in usb_free_all_descriptors().
->>
->> could you describe this a little better? How can one trigger this case?
->> Is the speed demotion happening after unbinding? It's not clear how to
->> cause this bug.
->>
-> Hi Felipe,
+> @@
+> type t;
+> identifier v;
+> statement s;
+> @@
 > 
-> Internally, we have a mechanism to switch the DWC3 core maximum speed
-> parameter dynamically for displayport use cases.  This issue happens
-> whenever we have a maximum speed change occur on the USB gadget, which
-> for DWC3 happens whenever we call gadget init.  When we switch in and
-> out of host mode, gadget init is being executed, leading to the change
-> in the USB gadget max speed parameter:
+> <+...
+> (
+>   t v = container_of(...);
+> |
+>   v = container_of(...);
+> )
+>   ...
+>   when != v
+> - if (\( !v \| v == NULL \) ) s
+> ...+>
 > 
-> dwc->gadget->max_speed		= dwc->maximum_speed;
+> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> ---
+> After the recent discussion about a patch which tried to add a check
+> against NULL after container_of(), I realized that there are a number
+> of such checks in the kernel.
 > 
-> I know that configFS gadget has the max_speed sysfs file, which is a
-> similar mechanism, but I haven't tried to see if we can reproduce the
-> same issue with it.  Let me see if we can reproduce this with that
-> configfs speed setting.
-> 
-> Thanks
-> Wesley Cheng
-> 
+> Now the big question: Are patches like this acceptable, or do they count
+> as noise ?
 
-Hi Felipe,
+Yes they are acceptable, and no, they are not noise.
 
-So I tried with doing it through the configFS max_speed, but it doesn't
-have the same effect, as the setting done in dwc3_gadget_init() will
-still be assigning the composite/UDC device's maximum speed to SSP/SS.
-This is what the usb_assign_descriptor() uses to determine whether or
-not to copy the SSP and SS descriptors.
+I will be glad to take this after -rc1 is out, thanks.
 
-So in summary, at least for a DWC3 based subsystem, the only way to
-reproduce it is if there is a way to dynamically switch the DWC3 core
-max speed parameter.
+thanks,
 
-Thanks
-Wesley Cheng
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+greg k-h
