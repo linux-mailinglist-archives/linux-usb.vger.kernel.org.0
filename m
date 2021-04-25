@@ -2,83 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02FE136A58A
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 09:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA9036A5AC
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 10:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbhDYHde (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 03:33:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33410 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229522AbhDYHde (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 25 Apr 2021 03:33:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E6D06613CB;
-        Sun, 25 Apr 2021 07:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619335970;
-        bh=q2CHrugKj8qckzDmDGFBjQkD2YQPBCwFgWho587C8hs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rktpxgsdDgDcblMUfn9jwZeZFRZTqtuqZqPYVp3HuKH7/Pf0GPbyeW57pOxwmLBYb
-         5vDKfFUVPaDaoJkji7hU1sHyV0QkCu04XQeNmRY2EK7gC2UJ4kbDSzF9m046dGtOY/
-         lhHw3bPq/FSFZcZEGms0uAh5QCcGoQ87zHxeTH9U=
-Date:   Sun, 25 Apr 2021 09:32:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?iso-8859-1?Q?Ren=E9?= Rebe <rene@exactcode.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
-Message-ID: <YIUbHKqs2gQPAu2T@kroah.com>
-References: <20210424.220316.855336714119430355.rene@exactcode.com>
- <20210425023133.GC324386@rowland.harvard.edu>
- <883AF188-7817-42E2-84E8-F1DD7A5F3C08@exactcode.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <883AF188-7817-42E2-84E8-F1DD7A5F3C08@exactcode.com>
+        id S229522AbhDYIQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 04:16:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46184 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229475AbhDYIQ4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 04:16:56 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B457C061574;
+        Sun, 25 Apr 2021 01:16:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id e8-20020a17090a7288b029014e51f5a6baso3442899pjg.2;
+        Sun, 25 Apr 2021 01:16:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=wnpkL3ueOA+zoMhko8uVKbNai7YgfMgiPqjt6r4gZac=;
+        b=r9Dd+O+wbK/P5tmd596jNPpN2wQePnAJpaj8OUvOejd7x/WqL0tZKv+dJ3PIuWasXs
+         rjiUe+5sVtnnpEdPV58g8qR0euZKocq8MQ1ZXhlFr+cMqY+T5cEW30wlR661t38cGIiM
+         nSWvRVIa3HODnKReMNU5mpOvOjxTw3b2mpNK90NjxZJ8ULWUQ5vo7tWm4wdZ5elXLPAD
+         561OGso6a3xuapNM82koZ8Xf9NbcQoPMi7PzuhEl3K0d/rW0vSCw3cN/dXmmBj460/M3
+         ESVukv+Jl3QPU4iIe+yQPMqF6HHmxl38x9Kfd5UL2M0dvxudWnv0Sr9VJ5Ju0jF8HUSl
+         IFFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=wnpkL3ueOA+zoMhko8uVKbNai7YgfMgiPqjt6r4gZac=;
+        b=gXASeVttPnaKg/R8lMMSwkmP7GzXcyoMtYCUoUY2qs0JHd0ZhPylHiqn0+a5zlyenY
+         LCN8dQwGNnjHR3Tn5AUMifmuRdmxdXZ6UdI2SBZtIS5ioiRpSPs5kpukFabQ2Lyg/URM
+         Qv7UbD+u/h6lfD/j2zGUUpJ2u8Q+jtg0/GhsiV0c0VhSF4yBNL8FOn8J8uR0Nh418W3u
+         s1rkRJOcWDBQo2d8qUPSqzRcaoeR+akBq/I5Aoni2xCfrkE78ApbH2jHMOKXq/8dN3gf
+         5Uje8xH4o0y31aykJ5xcgCnibQQID2mL0L1ytWF8aAs/pwgu4Y2pYhSbdHgOzqcR0Dpc
+         99IA==
+X-Gm-Message-State: AOAM531fqx+nrJVsUsMXalNf/PD2g65yknjR21Ol3xqWlz+w6ZIq/uN2
+        MWrb+PMWEKcF10IbUf4kiQk=
+X-Google-Smtp-Source: ABdhPJxYrg7gJC96ZRdTcEHuBp9yu2poWm4YcF6k7FJ/PnpVnt3ehs3/90tSwT1XgagYwaFeVJOwUA==
+X-Received: by 2002:a17:902:9008:b029:e6:f37a:2183 with SMTP id a8-20020a1709029008b02900e6f37a2183mr12487050plp.49.1619338573533;
+        Sun, 25 Apr 2021 01:16:13 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.83.82])
+        by smtp.gmail.com with ESMTPSA id k127sm8871993pfd.63.2021.04.25.01.16.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 25 Apr 2021 01:16:13 -0700 (PDT)
+From:   Souptick Joarder <jrdr.linux@gmail.com>
+To:     peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
+        a-govindraju@ti.com, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Souptick Joarder <jrdr.linux@gmail.com>
+Subject: [PATCH v2] usb: cdns3: Corrected comment to align with kernel-doc comment
+Date:   Sun, 25 Apr 2021 13:46:05 +0530
+Message-Id: <1619338565-4574-1-git-send-email-jrdr.linux@gmail.com>
+X-Mailer: git-send-email 1.9.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 25, 2021 at 09:20:59AM +0200, René Rebe wrote:
-> Hey,
-> 
-> > On 25. Apr 2021, at 04:31, Alan Stern <stern@rowland.harvard.edu> wrote:
-> >> Seagate devices" in 2017. Apparently some early ones where buggy, ...
-> >> 
-> >> However, fast forward a couple of years and this is no longer true,
-> >> this Segate Seven even is already from 2016, and apparently first
-> >> available in 2015. I suggest removing this rather drastic global
-> >> measure, and instead only add very old broken ones with individual
-> >> quirks, should any of them still be alive ;-)
-> >> 
-> >> Signed-off-by: René Rebe <rene@exactcode.com>
-> >> 
-> >> --- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36:00.517423726 +0100
-> >> +++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373424544 +0100
-> >> @@ -113,8 +113,4 @@
-> >> 	}
-> >> 
-> >> -	/* All Seagate disk enclosures have broken ATA pass-through support */
-> >> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
-> >> -		flags |= US_FL_NO_ATA_1X;
-> >> -
-> >> 	usb_stor_adjust_quirks(udev, &flags);
-> > 
-> > I don't want to do this unless you can suggest an approach that won't 
-> > suddenly break all those old buggy drives.  Just because they are now 
-> > five years old or more doesn't mean they are no longer in use.
-> 
-> Well, what do you propose then? A allow quirk for all new devices going forward?
-> Given that the user usually needs to actively run something like smartctl
-> manually on the drive I don’t see that this should cause too many issues.
-> I don’t have any non-supporting device - can we not just add them to the
-> quirk list when someone reports one?
+Minor update in comment.
 
-How about since you know your device works, you make the check detect
-your specific device and not apply the flag to it?  You should be able
-to do so based on the version of the device, right?
+Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
+---
+v2:
+	Updated change logs and address review comment.
 
-thanks,
+ drivers/usb/cdns3/cdns3-gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-greg k-h
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index 9b1bd41..21f026c 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -484,7 +484,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
+ }
+ 
+ /**
+- * cdns3_wa2_descmiss_copy_data copy data from internal requests to
++ * cdns3_wa2_descmiss_copy_data - copy data from internal requests to
+  * request queued by class driver.
+  * @priv_ep: extended endpoint object
+  * @request: request object
+-- 
+1.9.1
+
