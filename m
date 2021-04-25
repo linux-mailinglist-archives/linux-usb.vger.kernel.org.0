@@ -2,94 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A946B36A6C1
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 12:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EE7336A6C5
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 12:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbhDYKmf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 06:42:35 -0400
-Received: from mx.exactcode.de ([144.76.154.42]:43012 "EHLO mx.exactcode.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229707AbhDYKmf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 25 Apr 2021 06:42:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de; s=x;
-        h=Content-Transfer-Encoding:Content-Type:Mime-Version:References:In-Reply-To:From:Subject:Cc:To:Message-Id:Date; bh=ccIJxWMmgTcFnK0pzwZla89q+26nIBEcKC+H20b9nEg=;
-        b=EpuF7DMoUqm0/B8SOmcdeaykF7YMdjXRkieufJnmawDYWXbkJdpxbhjobZo62qZMnRcFcl9sRQ0j174APZza2p8SAABpB9F9FAmvVXRfLp1FLjPOHcui2ifZ2nssfmastv6EOrtfYtJX906TyIjh8fsRv29SipOCgNx9kzXYpN0=;
-Received: from exactco.de ([90.187.5.221])
-        by mx.exactcode.de with esmtp (Exim 4.82)
-        (envelope-from <rene@exactcode.com>)
-        id 1lacDB-0002oN-FU; Sun, 25 Apr 2021 10:42:01 +0000
-Received: from [192.168.2.131] (helo=localhost)
-        by exactco.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.86_2)
-        (envelope-from <rene@exactcode.com>)
-        id 1lac9V-0006C6-5Y; Sun, 25 Apr 2021 10:38:13 +0000
-Date:   Sun, 25 Apr 2021 12:41:19 +0200 (CEST)
-Message-Id: <20210425.124119.1949311822603950729.rene@exactcode.com>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, hdegoede@redhat.com,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+        id S229688AbhDYKn4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 06:43:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:58408 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229525AbhDYKnz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 06:43:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619347395;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FL5Hryf0zzSHIem2IriVEWypXdKGZbBwbUNqEJ27NhI=;
+        b=THjlVGIVW6HEQs8K0HNMh2WkKvLh+0b2ziJsiHS62qnJ96zVSx+riLldSQGHYsugi+vvlA
+        51fsmnoz8ZhMbqx3LNxokAomp0BrRo75IQDRbcrua6jz4wLGH5d2HMs51mxfX+rby0qn6a
+        KX2bXm7l240dKnG1Q4MIJUMuwmp5dxU=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-393-z5SQnX9GPyiLxs_BrOoFzA-1; Sun, 25 Apr 2021 06:43:14 -0400
+X-MC-Unique: z5SQnX9GPyiLxs_BrOoFzA-1
+Received: by mail-ed1-f71.google.com with SMTP id f1-20020a0564021941b02903850806bb32so15357741edz.9
+        for <linux-usb@vger.kernel.org>; Sun, 25 Apr 2021 03:43:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=FL5Hryf0zzSHIem2IriVEWypXdKGZbBwbUNqEJ27NhI=;
+        b=BiXjjfqoJ1Ar8bs9O79iERHod19KBzn8tpEFX64XVQEJT4z1pgDVPmIjgTzhethICX
+         M8Kro/Fv10BIjpJxLY2VDQ0tcEL6jP1/b7lybnRH4mU6dPjs7pb+06BRMTCZ09JKWyL/
+         GKjY8YMdJV4r38ZhKwwzF08bnHhQjJtwRiV+bCiBlWHnbEHBlqJzL9Hyj5wQU0FjSyxk
+         rtTFtlA6e+GX0IOGJaet0oPZ4BJgHmYjCWomqD4WoV73rFx3rENdSx5Wnyb9bGv+UDMu
+         vnbNXS3somvJ9ovaDKJKQu0cWsEmCPk/+g6S8D2QLPnuhs2lXM3+f19WVhenpp7tH8Li
+         khLg==
+X-Gm-Message-State: AOAM530uHNo/N+rn751Vt5Npk8PPInqelVAx8ns7NPBw+2p4/znL+6Wq
+        Q8Zon0Ofkp0DS84FgqZa8P1A3RLWJ8U1Ml/FHcdEQDWSsEZRVMyh/iOmj707Q5lqD2qkCGfbpom
+        g4IyAZ17lBgniyMx47gZD
+X-Received: by 2002:a17:907:3e06:: with SMTP id hp6mr12914033ejc.273.1619347392834;
+        Sun, 25 Apr 2021 03:43:12 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJy7ZXRVZ9R+2PTw+3++0tP6fhdMeYTc3H2A9swrwBo7D5dDsxhsxOZBkrcqgQs4AcWmpOSIYQ==
+X-Received: by 2002:a17:907:3e06:: with SMTP id hp6mr12914022ejc.273.1619347392622;
+        Sun, 25 Apr 2021 03:43:12 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id ca1sm11404375edb.76.2021.04.25.03.43.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Apr 2021 03:43:12 -0700 (PDT)
 Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
-From:   Rene Rebe <rene@exactcode.com>
-In-Reply-To: <YIUbHKqs2gQPAu2T@kroah.com>
-References: <20210425023133.GC324386@rowland.harvard.edu>
-        <883AF188-7817-42E2-84E8-F1DD7A5F3C08@exactcode.com>
-        <YIUbHKqs2gQPAu2T@kroah.com>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=utf-8
-Content-Transfer-Encoding: base64
-X-Spam-Score: -3.1 (---)
+To:     =?UTF-8?Q?Ren=c3=a9_Rebe?= <rene@exactcode.com>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+References: <20210424.220316.855336714119430355.rene@exactcode.com>
+ <20210425023133.GC324386@rowland.harvard.edu>
+ <883AF188-7817-42E2-84E8-F1DD7A5F3C08@exactcode.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <02f8f171-635a-4ad7-f937-78f935568de2@redhat.com>
+Date:   Sun, 25 Apr 2021 12:43:11 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <883AF188-7817-42E2-84E8-F1DD7A5F3C08@exactcode.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-R3JlZyBLSCB3cm90ZToNCg0KPiBPbiBTdW4sIEFwciAyNSwgMjAyMSBhdCAwOToyMDo1OUFNICsw
-MjAwLCBSZW7DqSBSZWJlIHdyb3RlOg0KPiA+IEhleSwNCj4gPiANCj4gPiA+IE9uIDI1LiBBcHIg
-MjAyMSwgYXQgMDQ6MzEsIEFsYW4gU3Rlcm4gPHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU+IHdy
-b3RlOg0KPiA+ID4+IFNlYWdhdGUgZGV2aWNlcyIgaW4gMjAxNy4gQXBwYXJlbnRseSBzb21lIGVh
-cmx5IG9uZXMgd2hlcmUgYnVnZ3ksIC4uLg0KPiA+ID4+IA0KPiA+ID4+IEhvd2V2ZXIsIGZhc3Qg
-Zm9yd2FyZCBhIGNvdXBsZSBvZiB5ZWFycyBhbmQgdGhpcyBpcyBubyBsb25nZXIgdHJ1ZSwNCj4g
-PiA+PiB0aGlzIFNlZ2F0ZSBTZXZlbiBldmVuIGlzIGFscmVhZHkgZnJvbSAyMDE2LCBhbmQgYXBw
-YXJlbnRseSBmaXJzdA0KPiA+ID4+IGF2YWlsYWJsZSBpbiAyMDE1LiBJIHN1Z2dlc3QgcmVtb3Zp
-bmcgdGhpcyByYXRoZXIgZHJhc3RpYyBnbG9iYWwNCj4gPiA+PiBtZWFzdXJlLCBhbmQgaW5zdGVh
-ZCBvbmx5IGFkZCB2ZXJ5IG9sZCBicm9rZW4gb25lcyB3aXRoIGluZGl2aWR1YWwNCj4gPiA+PiBx
-dWlya3MsIHNob3VsZCBhbnkgb2YgdGhlbSBzdGlsbCBiZSBhbGl2ZSA7LSkNCj4gPiA+PiANCj4g
-PiA+PiBTaWduZWQtb2ZmLWJ5OiBSZW7DqSBSZWJlIDxyZW5lQGV4YWN0Y29kZS5jb20+DQo+ID4g
-Pj4gDQo+ID4gPj4gLS0tIGxpbnV4LTUuMTEvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMtZGV0ZWN0
-LmguYmFja3VwCTIwMjEtMDMtMDUgMTE6MzY6MDAuNTE3NDIzNzI2ICswMTAwDQo+ID4gPj4gKysr
-IGxpbnV4LTUuMTEvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMtZGV0ZWN0LmgJMjAyMS0wMy0wNSAx
-MTozNjoxNi4zNzM0MjQ1NDQgKzAxMDANCj4gPiA+PiBAQCAtMTEzLDggKzExMyw0IEBADQo+ID4g
-Pj4gCX0NCj4gPiA+PiANCj4gPiA+PiAtCS8qIEFsbCBTZWFnYXRlIGRpc2sgZW5jbG9zdXJlcyBo
-YXZlIGJyb2tlbiBBVEEgcGFzcy10aHJvdWdoIHN1cHBvcnQgKi8NCj4gPiA+PiAtCWlmIChsZTE2
-X3RvX2NwdSh1ZGV2LT5kZXNjcmlwdG9yLmlkVmVuZG9yKSA9PSAweDBiYzIpDQo+ID4gPj4gLQkJ
-ZmxhZ3MgfD0gVVNfRkxfTk9fQVRBXzFYOw0KPiA+ID4+IC0NCj4gPiA+PiAJdXNiX3N0b3JfYWRq
-dXN0X3F1aXJrcyh1ZGV2LCAmZmxhZ3MpOw0KPiA+ID4gDQo+ID4gPiBJIGRvbid0IHdhbnQgdG8g
-ZG8gdGhpcyB1bmxlc3MgeW91IGNhbiBzdWdnZXN0IGFuIGFwcHJvYWNoIHRoYXQgd29uJ3QgDQo+
-ID4gPiBzdWRkZW5seSBicmVhayBhbGwgdGhvc2Ugb2xkIGJ1Z2d5IGRyaXZlcy4gIEp1c3QgYmVj
-YXVzZSB0aGV5IGFyZSBub3cgDQo+ID4gPiBmaXZlIHllYXJzIG9sZCBvciBtb3JlIGRvZXNuJ3Qg
-bWVhbiB0aGV5IGFyZSBubyBsb25nZXIgaW4gdXNlLg0KPiA+IA0KPiA+IFdlbGwsIHdoYXQgZG8g
-eW91IHByb3Bvc2UgdGhlbj8gQSBhbGxvdyBxdWlyayBmb3IgYWxsIG5ldyBkZXZpY2VzIGdvaW5n
-IGZvcndhcmQ/DQo+ID4gR2l2ZW4gdGhhdCB0aGUgdXNlciB1c3VhbGx5IG5lZWRzIHRvIGFjdGl2
-ZWx5IHJ1biBzb21ldGhpbmcgbGlrZSBzbWFydGN0bA0KPiA+IG1hbnVhbGx5IG9uIHRoZSBkcml2
-ZSBJIGRvbuKAmXQgc2VlIHRoYXQgdGhpcyBzaG91bGQgY2F1c2UgdG9vIG1hbnkgaXNzdWVzLg0K
-PiA+IEkgZG9u4oCZdCBoYXZlIGFueSBub24tc3VwcG9ydGluZyBkZXZpY2UgLSBjYW4gd2Ugbm90
-IGp1c3QgYWRkIHRoZW0gdG8gdGhlDQo+ID4gcXVpcmsgbGlzdCB3aGVuIHNvbWVvbmUgcmVwb3J0
-cyBvbmU/DQo+IA0KPiBIb3cgYWJvdXQgc2luY2UgeW91IGtub3cgeW91ciBkZXZpY2Ugd29ya3Ms
-IHlvdSBtYWtlIHRoZSBjaGVjayBkZXRlY3QNCj4geW91ciBzcGVjaWZpYyBkZXZpY2UgYW5kIG5v
-dCBhcHBseSB0aGUgZmxhZyB0byBpdD8gIFlvdSBzaG91bGQgYmUgYWJsZQ0KPiB0byBkbyBzbyBi
-YXNlZCBvbiB0aGUNCg0KU3VyZSwgd2hpbGUgdGhhdCBkb2VzIG5vdCByZWFsbHkgc29sdmUgdGhp
-cyBmb3IgYWxsIHRoZSBvdGhlciBuZXdlcg0KU2VhZ2F0ZSBkcml2ZXMgb3RoZXIgdXNlcnMgbWln
-aHQgaGF2ZSBhdCBob21lLCBoZXJlIGlzIGEgcGF0Y2gNCmNoZWNraW5nIGZvciB0aGlzIG9uZSBV
-U0IgcHJvZHVjdCBJRC4gSSBob3BlIHRoYXQgaXMgd2hhdCB5b3UgbWVhbnQ6DQoNClNpZ25lZC1v
-ZmYtYnk6IFJlbsOpIFJlYmUgPHJlbmVAZXhhY3Rjb2RlLmNvbT4NCg0KLS0tIGxpbnV4LTUuMTEv
-ZHJpdmVycy91c2Ivc3RvcmFnZS91YXMtZGV0ZWN0LmguYmFja3VwCTIwMjEtMDMtMDUgMTE6MzY6
-MDAuNTE3NDIzNzI2ICswMTAwDQorKysgbGludXgtNS4xMS9kcml2ZXJzL3VzYi9zdG9yYWdlL3Vh
-cy1kZXRlY3QuaAkyMDIxLTAzLTA1IDExOjM2OjE2LjM3MzQyNDU0NCArMDEwMA0KQEAgLTExMyw1
-ICsxMTMsNiBAQA0KIA0KIAkvKiBBbGwgU2VhZ2F0ZSBkaXNrIGVuY2xvc3VyZXMgaGF2ZSBicm9r
-ZW4gQVRBIHBhc3MtdGhyb3VnaCBzdXBwb3J0ICovDQotCWlmIChsZTE2X3RvX2NwdSh1ZGV2LT5k
-ZXNjcmlwdG9yLmlkVmVuZG9yKSA9PSAweDBiYzIpDQorCWlmICgobGUxNl90b19jcHUodWRldi0+
-ZGVzY3JpcHRvci5pZFZlbmRvcikgPT0gMHgwYmMyKSAmJg0KKwkgICAgKGxlMTZfdG9fY3B1KHVk
-ZXYtPmRlc2NyaXB0b3IuaWRQcm9kdWN0KSAhPSAweGFiMDMpKQ0KIAkJZmxhZ3MgfD0gVVNfRkxf
-Tk9fQVRBXzFYOw0KIA0KDQotLSANCiAgUmVuw6kgUmViZSwgRXhhY3RDT0RFIEdtYkgsIExpZXR6
-ZW5idXJnZXIgU3RyLiA0MiwgREUtMTA3ODkgQmVybGluDQogIGh0dHBzOi8vZXhhY3Rjb2RlLmNv
-bSB8IGh0dHBzOi8vdDJzZGUub3JnIHwgaHR0cHM6Ly9yZW5lLnJlYmUuZGUNCg==
+Hi,
+
+On 4/25/21 9:20 AM, René Rebe wrote:
+> Hey,
+> 
+>> On 25. Apr 2021, at 04:31, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>> Seagate devices" in 2017. Apparently some early ones where buggy, ...
+>>>
+>>> However, fast forward a couple of years and this is no longer true,
+>>> this Segate Seven even is already from 2016, and apparently first
+>>> available in 2015. I suggest removing this rather drastic global
+>>> measure, and instead only add very old broken ones with individual
+>>> quirks, should any of them still be alive ;-)
+>>>
+>>> Signed-off-by: René Rebe <rene@exactcode.com>
+>>>
+>>> --- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36:00.517423726 +0100
+>>> +++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373424544 +0100
+>>> @@ -113,8 +113,4 @@
+>>> 	}
+>>>
+>>> -	/* All Seagate disk enclosures have broken ATA pass-through support */
+>>> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
+>>> -		flags |= US_FL_NO_ATA_1X;
+>>> -
+>>> 	usb_stor_adjust_quirks(udev, &flags);
+>>
+>> I don't want to do this unless you can suggest an approach that won't 
+>> suddenly break all those old buggy drives.  Just because they are now 
+>> five years old or more doesn't mean they are no longer in use.
+> 
+> Well, what do you propose then? A allow quirk for all new devices going forward?
+> Given that the user usually needs to actively run something like smartctl
+> manually on the drive I don’t see that this should cause too many issues.
+
+At least Fedora ships with smartmontools with a systemd service monitoring the
+driver enabled by default; and I would not be surprised if other distros do
+the same.
+
+> I don’t have any non-supporting device - can we not just add them to the
+> quirk list when someone reports one?
+
+We have a no regressions rule in the kernel, this would cause regressions,
+so NACK. Also the code which you are removing replaced a long list of non-working
+Seagate devices, it is not just one or 2 models, we started out with model
+specific quirks and when the list grew too long we went for this option.
+
+Something else to keep in mind here is that:
+
+1. Every single user out there wants to have a working drive, and removing the
+quirk breaks that for older Seagate drive enclosures.
+
+2. Only some advanced users care about SMART monitoring.
+
+So what you are suggesting is breaking older Seagate drives for everyone to
+enable a feature which only few users actually care about.
+
+So as Greg said I believe that the best option would be to add a new
+US_FL_ATA_1X_OK flag, add a quirk for your drive(s) and make the code setting
+US_FL_NO_ATA_1X for all Seagate devices check that flag.
+
+Regards,
+
+Hans
+
