@@ -2,102 +2,221 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5233F36A8B9
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 20:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D435B36A8C7
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 20:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbhDYSB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 14:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbhDYSBZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 14:01:25 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1064EC061574;
-        Sun, 25 Apr 2021 11:00:45 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id z16so38605525pga.1;
-        Sun, 25 Apr 2021 11:00:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b3xnyyXl8Zdin1DIWvD41f6uZR/KPwcFkPpRMWNH32o=;
-        b=dTdGdV+RagTyq72wYBAVUTWK4TLHMS0gEtgZqYA91S8vO7eF3Z8irSUGX00VvrpONf
-         y016962iSNwN5d6ahPtlMy9MWGBxRG+pZSwGjQwkYkNMuP3kyCOFoe1SpgO22SLBr3Fn
-         A6j5GMp0XhoPLeq9fL28nwXjPt1Wj0Ii1fPQMZEf2bDQVWXSKjIOYU1zpif7ANsH8v9r
-         0zSOdRi8gCvtAER0NuKgM3S2SgTyLn9xFXl+9EMNxXKsxqbRk6HJgZXomkHcEhzXMZmw
-         sgsPwCtjM1q4UXjFfGONBBWy9mYZYFirSJT34mMwWeAhS+1GTJrlgUZRkkbH4x4kkkTg
-         2MfQ==
+        id S230494AbhDYSPP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 14:15:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50742 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230459AbhDYSPO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 14:15:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619374473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z8/L6oOgmB7SFi3H9zeiOkiTOEUbd6SIXfhj77SrmSE=;
+        b=hU+MllgwiuffCklKX+E2ZPdIIOjbpGT7k+SsRmZjfRbSqnMul0a9mY0Tt/XVHrTmKFMyen
+        OmvIn8GfPb9py2g8EhTlljMa2lDDMbn2pzmqbGXp0JwZ+6lBmrB51bIWqqZUwpbydsSv7v
+        7sPBDTIa8DK/SoOd+2XfAhdC5FTPZlI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-38-VU99Aar1PZ2dNCfTgSr2VQ-1; Sun, 25 Apr 2021 14:14:31 -0400
+X-MC-Unique: VU99Aar1PZ2dNCfTgSr2VQ-1
+Received: by mail-ed1-f69.google.com with SMTP id c13-20020a05640227cdb0290385526e5de5so11654761ede.21
+        for <linux-usb@vger.kernel.org>; Sun, 25 Apr 2021 11:14:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b3xnyyXl8Zdin1DIWvD41f6uZR/KPwcFkPpRMWNH32o=;
-        b=kuclnDOOrVujF0gHWm3gXuOKkHrYpQ+JvxwEt8FX29wo1Q5ZSC9eI+oloYDajhZ6Hw
-         TTzL1EtiZug8z+RPgpNZMviWF/+y8WI8yN7fnwSsBSXb/Xjzs2M70S86Bw1XX+Ocnmk7
-         l5MCSkyWVu9iIgRTd3RpxawmYxldr5WAkyoX/0OarrJ0qoVmdS+FhGf1PAy5XjF43TUy
-         3QZUwr25cE1FRePFiCTda977KRTSpYayyfnQ35fmUW35VuCqG+NpA8cG1hheBec0h+AP
-         3XM5/+me1BYSTpv1lAJc3TBGXfnhZE9SaqMppd56yw8XaX2Ml4iISwTAfbpoyVQ8Ltfk
-         gSQQ==
-X-Gm-Message-State: AOAM532HTK5EKHqrvqxbmcx/l3Dqb5NSBNW97hvp64vO0DAcVmpzDYSK
-        /tG0N5lR1xYzZhiDiNnhg/mVSjRlqGt4fZq1/9e85dI3rAj/FQ==
-X-Google-Smtp-Source: ABdhPJySCNXwFAtWJ0zYn0NeMXeGHPMJxUlAmbsYuTbk1486MVOrnPXqtKofoBvmNMzJEVSafPxcQ7tt7QAYqOIwVK0=
-X-Received: by 2002:a63:cd11:: with SMTP id i17mr13237609pgg.74.1619373644543;
- Sun, 25 Apr 2021 11:00:44 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Z8/L6oOgmB7SFi3H9zeiOkiTOEUbd6SIXfhj77SrmSE=;
+        b=bhPPEcI30pOsYl2DkIjLORVjMyHDOQewWJq9detr4wVwhssdyrcGQaEqgtHPVW6WWq
+         FP01ievFuKBmZS7B5XM70I7zvuK6XjLgSjzzbXGquiDWCqOP4GHr5jlrZYeRdD3aMAHT
+         UlBq5CdEHuGqBz/o56P3BGU3nqIIT8luqbuBrySqI8vOsTVFTMF1rox2lAkC2QRrzLOH
+         vTM1u8q81bT4P8UkwFg+Qqfzla7zTs0G/20LjWzdERUjnMvUCN59nEA8N0tRqrjKuTjt
+         r3SDRmtxdnuuhIcqQz/NDTsBG383LsLuAS9Sv9c2LU2BwOy3boSGuhfJRuaPEY+EpXFt
+         j33g==
+X-Gm-Message-State: AOAM532U2HtGiQmMUgvEtJgw7akO8Z+lxXpl28Ovri5pFzOjf1KxxF1Z
+        jUufRQmxShjR5Np3eeS/4j3Gm0mZj+kiZIt8CcFS1QnCFduqBvwBTF6EEJJOUQ6rXn0HGZ72OJw
+        JEHEBHHdl5BFfTWPX/+wj
+X-Received: by 2002:a17:906:2a1b:: with SMTP id j27mr14540979eje.370.1619374470315;
+        Sun, 25 Apr 2021 11:14:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyzyaR6YTh0IjYQ3aHT5umr3xcO3R33sMfVwuZOytymJyAR/0AasxSWTxvHE3dQiUFu/Jn5/w==
+X-Received: by 2002:a17:906:2a1b:: with SMTP id j27mr14540968eje.370.1619374470172;
+        Sun, 25 Apr 2021 11:14:30 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id q6sm9756591ejt.51.2021.04.25.11.14.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Apr 2021 11:14:29 -0700 (PDT)
+Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
+To:     Rene Rebe <rene@exactcode.com>, gregkh@linuxfoundation.org
+Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        usb-storage@lists.one-eyed-alien.net
+References: <YIVZ2l9qUfkcyPpG@kroah.com>
+ <20210425.141536.1295354861910527121.rene@exactcode.com>
+ <YIVgGdGbSpQ1norU@kroah.com>
+ <20210425.175005.2217483968766014768.rene@exactcode.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <191b41b5-36fc-689a-b045-4c7735cebacc@redhat.com>
+Date:   Sun, 25 Apr 2021 20:14:29 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210425150947.5862-1-ftoth@exalondelft.nl>
-In-Reply-To: <20210425150947.5862-1-ftoth@exalondelft.nl>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 25 Apr 2021 21:00:28 +0300
-Message-ID: <CAHp75VecaOXdXh5O5NBA9EtoMnPEE_0mmvcFiXVUgw6cT1s51Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] usb: dwc3: pci: Enable usb2-gadget-lpm-disable for
- Intel Merrifield
-To:     Ferry Toth <ftoth@exalondelft.nl>
-Cc:     USB <linux-usb@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210425.175005.2217483968766014768.rene@exactcode.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 25, 2021 at 6:26 PM Ferry Toth <ftoth@exalondelft.nl> wrote:
->
-> On Intel Merrifield LPM is causing host to reset port after a timeout.
+Hi,
 
-the host
+On 4/25/21 5:50 PM, Rene Rebe wrote:
+> Hey
+> 
+> From: Greg KH <gregkh@linuxfoundation.org>:
+> 
+>>>>> Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
+>>>>> Date: Sun, 25 Apr 2021 12:58:40 +0200
+>>>>>
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 4/25/21 12:47 PM, Hans de Goede wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 4/25/21 12:41 PM, Rene Rebe wrote:
+>>>>>>>> Greg KH wrote:
+>>>>>>>>
+>>>>>>>>> On Sun, Apr 25, 2021 at 09:20:59AM +0200, René Rebe wrote:
+>>>>>>>>>> Hey,
+>>>>>>>>>>
+>>>>>>>>>>> On 25. Apr 2021, at 04:31, Alan Stern <stern@rowland.harvard.edu> wrote:
+>>>>>>>>>>>> Seagate devices" in 2017. Apparently some early ones where buggy, ...
+>>>>>>>>>>>>
+>>>>>>>>>>>> However, fast forward a couple of years and this is no longer true,
+>>>>>>>>>>>> this Segate Seven even is already from 2016, and apparently first
+>>>>>>>>>>>> available in 2015. I suggest removing this rather drastic global
+>>>>>>>>>>>> measure, and instead only add very old broken ones with individual
+>>>>>>>>>>>> quirks, should any of them still be alive ;-)
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: René Rebe <rene@exactcode.com>
+>>>>>>>>>>>>
+>>>>>>>>>>>> --- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36:00.517423726 +0100
+>>>>>>>>>>>> +++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373424544 +0100
+>>>>>>>>>>>> @@ -113,8 +113,4 @@
+>>>>>>>>>>>> 	}
+>>>>>>>>>>>>
+>>>>>>>>>>>> -	/* All Seagate disk enclosures have broken ATA pass-through support */
+>>>>>>>>>>>> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
+>>>>>>>>>>>> -		flags |= US_FL_NO_ATA_1X;
+>>>>>>>>>>>> -
+>>>>>>>>>>>> 	usb_stor_adjust_quirks(udev, &flags);
+>>>>>>>>>>>
+>>>>>>>>>>> I don't want to do this unless you can suggest an approach that won't 
+>>>>>>>>>>> suddenly break all those old buggy drives.  Just because they are now 
+>>>>>>>>>>> five years old or more doesn't mean they are no longer in use.
+>>>>>>>>>>
+>>>>>>>>>> Well, what do you propose then? A allow quirk for all new devices going forward?
+>>>>>>>>>> Given that the user usually needs to actively run something like smartctl
+>>>>>>>>>> manually on the drive I don’t see that this should cause too many issues.
+>>>>>>>>>> I don’t have any non-supporting device - can we not just add them to the
+>>>>>>>>>> quirk list when someone reports one?
+>>>>>>>>>
+>>>>>>>>> How about since you know your device works, you make the check detect
+>>>>>>>>> your specific device and not apply the flag to it?  You should be able
+>>>>>>>>> to do so based on the
+>>>>>>>>
+>>>>>>>> Sure, while that does not really solve this for all the other newer
+>>>>>>>> Seagate drives other users might have at home, here is a patch
+>>>>>>>> checking for this one USB product ID. I hope that is what you meant:
+>>>>>>>>
+>>>>>>>> Signed-off-by: René Rebe <rene@exactcode.com>
+>>>>>>>>
+>>>>>>>> --- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36:00.517423726 +0100
+>>>>>>>> +++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373424544 +0100
+>>>>>>>> @@ -113,5 +113,6 @@
+>>>>>>>>  
+>>>>>>>>  	/* All Seagate disk enclosures have broken ATA pass-through support */
+>>>>>>>> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
+>>>>>>>> +	if ((le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2) &&
+>>>>>>>> +	    (le16_to_cpu(udev->descriptor.idProduct) != 0xab03))
+>>>>>>>>  		flags |= US_FL_NO_ATA_1X;
+>>>>>>>>  
+>>>>>>>>
+>>>>>>>
+>>>>>>> As I indicated in my other email which crossed with this one, please make this
+>>>>>>> more generic, add a new US_FL_ATA_1X_OK flag and make the above code check that +
+>>>>>>> add a new unusual_uas.h entry for your device setting the new flag.
+>>>>>>>
+>>>>>>> Note there is no need to add support for the new flag to usb_stor_adjust_quirks()
+>>>>>>> if a user overrides quirks for a device on the kernel commandline without specifying
+>>>>>>> the "t" flag then the US_FL_NO_ATA_1X flag will already get cleared.
+>>>>>>>
+>>>>>>> I deliberately put the:
+>>>>>>>
+>>>>>>>         if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
+>>>>>>>                 flags |= US_FL_NO_ATA_1X;
+>>>>>>>
+>>>>>>> code before the usb_stor_adjust_quirks() call to allow users to override this
+>>>>>>> from the kernel commandline.
+>>>>>>
+>>>>>> p.s.
+>>>>>>
+>>>>>> A "git log drivers/usb/storage/unusual_uas.h" quickly finds the commit which removed the
+>>>>>> quirks which the generic Seagate check replaces. At that time there were US_FL_NO_ATA_1X
+>>>>>> quirks for *9* different Seagate models present in unusual_uas.h and I assume someone
+>>>>>> reporting a 10th model is what made me go for the just disable this for all Seagate
+>>>>>> driver option.
+>>>>>>
+>>>>>> See commit 92335ad9e895 ("uas: Remove US_FL_NO_ATA_1X unusual device entries for Seagate devices")
+>>>>>>
+>>>>>> Also I did a quick websearch for the "Seagate Seven" and rather then the usual re-usable
+>>>>>> drive-enclosure with a standard 2.5" or 3.5" drive in there, this seems to be a custom
+>>>>>> model where the enclosure is actually integrated into the drive to make it smaller.
+>>>>>>
+>>>>>> So I would not be surprised if this is using another chipset then their usual enclosures,
+>>>>>> which would explain why it does have working ATA1x passthrough.
+>>>>>
+>>>>> I would expect that more modern devices to work. Vendors usually
+>>>>> linearly allocate their product ids for new devices, and we could
+>>>>> allow list product ids higher than this Seven to unbreak more modern
+>>>>> devices by default and limit the amount of device quirks needed?
+>>>>
+>>>> Vendors do not allocate device ids that way at all, as there is no
+>>>> requirement to do so.  I know of many vendors that seemingly use random
+>>>> values from their product id space, so there is no guarantee that this
+>>>> will work, sorry.
+>>>
+>>> I did not say it is a requirement, just that they usually do speaking
+>>> of just this Seagate case. What is wrong with using that to
+>>> potentially significantly cut down the quirk list?
+>>
+>> Because the down-side of this is if we guess wrong, we break things.
+>>
+>>>> What is wrong with just allowing specific devices that you have tested
+>>>> will work, to the list instead?  That's the safest way to handle this.
+>>>
+>>> The problem is that out of the box it does not work for users, and
+>>> normal users do not dive into the kernel code to find out and simply
+>>> think their devices sucks. Even I for years thought the drive sucks,
+> 
+> Ok, so I went there and wanted to quickly add the requested 1X_OK
+> unusual flag, buuuutt, apparently all 32-bits of the US_FLAG enum in
+> ./include/linux/usb_usual.h are already exhausted, ...
 
-> By disabling LPM entirely this is prevented.
+Ah yes, well that was bound to happen sooner or later.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> What should we do now? Make it 64-bit or other workaround suggestions?
+> Maybe reverting the original 9 blacklist removals after all?
 
-Thanks!
+This is not part of any userspace API, so we can safely bump it to
+a 64 bit type, say "u64", thanks.
 
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> Fixes: 066c09593454 ("usb: dwc3: pci: Enable extcon driver for Intel Merrifield")
-> ---
->  drivers/usb/dwc3/dwc3-pci.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-> index 4c5c6972124a..e5d7eed2e60c 100644
-> --- a/drivers/usb/dwc3/dwc3-pci.c
-> +++ b/drivers/usb/dwc3/dwc3-pci.c
-> @@ -122,6 +122,7 @@ static const struct property_entry dwc3_pci_mrfld_properties[] = {
->         PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
->         PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
->         PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
-> +       PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable"),
->         PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
->         {}
->  };
-> --
-> 2.27.0
->
+Regards,
 
+Hans
 
--- 
-With Best Regards,
-Andy Shevchenko
