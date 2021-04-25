@@ -2,119 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761FE36A7FD
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 17:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A5B36A80F
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 17:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbhDYPd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 11:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbhDYPd4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 11:33:56 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E33C061574;
-        Sun, 25 Apr 2021 08:33:16 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id 18so26490175qtz.6;
-        Sun, 25 Apr 2021 08:33:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5SEkh3V8UTdGxPqKtFX/PHinkzBiDrVR4wcPwD4guKs=;
-        b=iQUB4QYb1jG3h4d1HGWir0snJt7FsXzQnRogUZWB3emBqxFsWQWPbWpaKcVkPgHPkU
-         TETp0JUuFgP5N2SrBOsTH/Un8HF5El/8yvV4NwmN3fOJQxaVmM5LPrGC1b9iV6UeWobW
-         CZencODd7mSVQZFb7nGhW1XBMz641LQhVZMdh/tdUWiC3F6FWRQ/qXa+6/helUPf7weX
-         /zpimix2oftwOGvEbYEQV0I+Stq0BbhBAYDaTtDLj6n24fpXue0DQM/Z74HtUmiYAozO
-         Z/K6XArLvrPE2hes9waJosYPyelYslQPuCfUdkAz651ac6OqQ3YWhiriGaemHSEQ7pzQ
-         lScA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5SEkh3V8UTdGxPqKtFX/PHinkzBiDrVR4wcPwD4guKs=;
-        b=Ihida9ldPJ20KM8EvlW30gqadKia/224AUUbIWELzy/rqi5+j0zsjtWCpyqERzosbZ
-         8UqoPSN9kpNdZJLisBfF0LzwfS6uiUV/uoAmVhDj/EODXnKxAe5AqvaNeaHtJw+PY2Fn
-         /wJWB6iXYQlEcmqVCLLDj1SYzy+a2ZfnedMzfpRfutPLaVsmnadoRKBd6LoAW1J0n9AB
-         bE6CqDkfhsqc19w5896Ep6GN+U3NmpN1VzYNyoXvrln9fsd7WMGkIYjjp8SGuL+FGjdb
-         Sl2WQM+0NDz6z0ZBK8bgo1KU08saO072nQroDaOMMHvBToLb//Ivf81V/HBZiKyH5vI+
-         aBjA==
-X-Gm-Message-State: AOAM531CH4dAU9WqOil4ReBImIhgatay9Hkkb0VxfmhFjnylYrfoa9yy
-        NKITIh/Nb5/sZ/gZ9Psh6qU=
-X-Google-Smtp-Source: ABdhPJw5ROxgrXE7aY6qxw+o2OS+RuinWnrpIB837wn41/p+JB9cxYoemxwyN5AkAfQGK+mpT9wX/Q==
-X-Received: by 2002:ac8:7547:: with SMTP id b7mr13286662qtr.176.1619364795731;
-        Sun, 25 Apr 2021 08:33:15 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:482:919:dc3c:c8fa:5d17:d49e])
-        by smtp.gmail.com with ESMTPSA id a22sm8583740qth.41.2021.04.25.08.33.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Apr 2021 08:33:15 -0700 (PDT)
-From:   Fabio Estevam <festevam@gmail.com>
+        id S230459AbhDYPvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 11:51:22 -0400
+Received: from mx.exactcode.de ([144.76.154.42]:44320 "EHLO mx.exactcode.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230288AbhDYPvV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 25 Apr 2021 11:51:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=exactco.de; s=x;
+        h=Content-Transfer-Encoding:Content-Type:Mime-Version:References:In-Reply-To:From:Subject:Cc:To:Message-Id:Date; bh=cDx8RSgNsubkpsijf14o+cwAvRWx/YB1M5d31kh5Vok=;
+        b=wlrEa7tTOnoWs5jVEA8B4YLU838ZkasYKkwadkd2cDRGhrqAHbzISoDanJH0LAYrjiEB3heJ1DKpynGNzqAwWsOAg8u4ip85oHteo5lzCiLN8avJBLWOUBEbtWL4L0n+WfLlSkfCxNb3ItM7G0x0sLIp5P5+1pCv/rsJm34izWo=;
+Received: from exactco.de ([90.187.5.221])
+        by mx.exactcode.de with esmtp (Exim 4.82)
+        (envelope-from <rene@exactcode.com>)
+        id 1lah1z-0003q7-Cl; Sun, 25 Apr 2021 15:50:47 +0000
+Received: from [192.168.2.131] (helo=localhost)
+        by exactco.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.86_2)
+        (envelope-from <rene@exactcode.com>)
+        id 1lagyJ-0003tl-Mt; Sun, 25 Apr 2021 15:47:00 +0000
+Date:   Sun, 25 Apr 2021 17:50:05 +0200 (CEST)
+Message-Id: <20210425.175005.2217483968766014768.rene@exactcode.com>
 To:     gregkh@linuxfoundation.org
-Cc:     chunfeng.yun@mediatek.com, sfr@canb.auug.org.au,
-        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        linux-next@vger.kernel.org, corbet@lwn.net,
-        linux-doc@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v4] usb: Restore the reference to ch9.h
-Date:   Sun, 25 Apr 2021 12:32:53 -0300
-Message-Id: <20210425153253.2542816-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Cc:     hdegoede@redhat.com, stern@rowland.harvard.edu,
+        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
+From:   Rene Rebe <rene@exactcode.com>
+In-Reply-To: <YIVgGdGbSpQ1norU@kroah.com>
+References: <YIVZ2l9qUfkcyPpG@kroah.com>
+        <20210425.141536.1295354861910527121.rene@exactcode.com>
+        <YIVgGdGbSpQ1norU@kroah.com>
+X-Mailer: Mew version 6.8 on Emacs 27.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=utf-8
+Content-Transfer-Encoding: base64
+X-Spam-Score: -0.5 (/)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Keep the textual reference to ch9.h as it was prior to commit
-caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location").
-
-As linux/usb/ch9.h does not contain comments anymore, explain
-that drivers/usb/common/common.c includes such header and provides
-declarations of a few utilities routines for manipulating the data types
-from ch9.h. Also mention that drivers/usb/common/debug.c contains
-some functions for creating debug output.
-
-Fixes: caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location")
-Reported-by: Alan Stern <stern@rowland.harvard.edu>
-Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
-Changes since v3:
-- Use ``include/linux/usb/ch9.h`` for consistency (Alan)
-- Add Alan's Acked-by
-
- Documentation/driver-api/usb/usb.rst | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/driver-api/usb/usb.rst b/Documentation/driver-api/usb/usb.rst
-index 543e70434da2..820e867af45a 100644
---- a/Documentation/driver-api/usb/usb.rst
-+++ b/Documentation/driver-api/usb/usb.rst
-@@ -109,16 +109,19 @@ well as to make sure they aren't relying on some HCD-specific behavior.
- USB-Standard Types
- ==================
- 
--In ``drivers/usb/common/common.c`` and ``drivers/usb/common/debug.c`` you
--will find the USB data types defined in chapter 9 of the USB specification.
--These data types are used throughout USB, and in APIs including this host
--side API, gadget APIs, usb character devices and debugfs interfaces.
-+In ``include/uapi/linux/usb/ch9.h`` you will find the USB data types defined
-+in chapter 9 of the USB specification. These data types are used throughout
-+USB, and in APIs including this host side API, gadget APIs, usb character
-+devices and debugfs interfaces. That file is itself included by
-+``include/linux/usb/ch9.h``, which also contains declarations of a few
-+utility routines for manipulating these data types; the implementations
-+are in ``drivers/usb/common/common.c``.
- 
- .. kernel-doc:: drivers/usb/common/common.c
-    :export:
- 
--.. kernel-doc:: drivers/usb/common/debug.c
--   :export:
-+In addition, some functions useful for creating debugging output are
-+defined in ``drivers/usb/common/debug.c``.
- 
- Host-Side Data Types and Macros
- ===============================
--- 
-2.25.1
-
+SGV5DQoNCkZyb206IEdyZWcgS0ggPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjoNCg0KPiA+
+ID4gPiBTdWJqZWN0OiBSZTogW1BBVENIXSB1bmJyZWFrIGFsbCBtb2Rlcm4gU2VhZ2F0ZSBBVEEg
+cGFzcy10aHJvdWdoIGZvciBTTUFSVA0KPiA+ID4gPiBEYXRlOiBTdW4sIDI1IEFwciAyMDIxIDEy
+OjU4OjQwICswMjAwDQo+ID4gPiA+IA0KPiA+ID4gPiA+IEhpLA0KPiA+ID4gPiA+IA0KPiA+ID4g
+PiA+IE9uIDQvMjUvMjEgMTI6NDcgUE0sIEhhbnMgZGUgR29lZGUgd3JvdGU6DQo+ID4gPiA+ID4g
+PiBIaSwNCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gT24gNC8yNS8yMSAxMjo0MSBQTSwgUmVu
+ZSBSZWJlIHdyb3RlOg0KPiA+ID4gPiA+ID4+IEdyZWcgS0ggd3JvdGU6DQo+ID4gPiA+ID4gPj4N
+Cj4gPiA+ID4gPiA+Pj4gT24gU3VuLCBBcHIgMjUsIDIwMjEgYXQgMDk6MjA6NTlBTSArMDIwMCwg
+UmVuw6kgUmViZSB3cm90ZToNCj4gPiA+ID4gPiA+Pj4+IEhleSwNCj4gPiA+ID4gPiA+Pj4+DQo+
+ID4gPiA+ID4gPj4+Pj4gT24gMjUuIEFwciAyMDIxLCBhdCAwNDozMSwgQWxhbiBTdGVybiA8c3Rl
+cm5Acm93bGFuZC5oYXJ2YXJkLmVkdT4gd3JvdGU6DQo+ID4gPiA+ID4gPj4+Pj4+IFNlYWdhdGUg
+ZGV2aWNlcyIgaW4gMjAxNy4gQXBwYXJlbnRseSBzb21lIGVhcmx5IG9uZXMgd2hlcmUgYnVnZ3ks
+IC4uLg0KPiA+ID4gPiA+ID4+Pj4+Pg0KPiA+ID4gPiA+ID4+Pj4+PiBIb3dldmVyLCBmYXN0IGZv
+cndhcmQgYSBjb3VwbGUgb2YgeWVhcnMgYW5kIHRoaXMgaXMgbm8gbG9uZ2VyIHRydWUsDQo+ID4g
+PiA+ID4gPj4+Pj4+IHRoaXMgU2VnYXRlIFNldmVuIGV2ZW4gaXMgYWxyZWFkeSBmcm9tIDIwMTYs
+IGFuZCBhcHBhcmVudGx5IGZpcnN0DQo+ID4gPiA+ID4gPj4+Pj4+IGF2YWlsYWJsZSBpbiAyMDE1
+LiBJIHN1Z2dlc3QgcmVtb3ZpbmcgdGhpcyByYXRoZXIgZHJhc3RpYyBnbG9iYWwNCj4gPiA+ID4g
+PiA+Pj4+Pj4gbWVhc3VyZSwgYW5kIGluc3RlYWQgb25seSBhZGQgdmVyeSBvbGQgYnJva2VuIG9u
+ZXMgd2l0aCBpbmRpdmlkdWFsDQo+ID4gPiA+ID4gPj4+Pj4+IHF1aXJrcywgc2hvdWxkIGFueSBv
+ZiB0aGVtIHN0aWxsIGJlIGFsaXZlIDstKQ0KPiA+ID4gPiA+ID4+Pj4+Pg0KPiA+ID4gPiA+ID4+
+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBSZW7DqSBSZWJlIDxyZW5lQGV4YWN0Y29kZS5jb20+DQo+ID4g
+PiA+ID4gPj4+Pj4+DQo+ID4gPiA+ID4gPj4+Pj4+IC0tLSBsaW51eC01LjExL2RyaXZlcnMvdXNi
+L3N0b3JhZ2UvdWFzLWRldGVjdC5oLmJhY2t1cAkyMDIxLTAzLTA1IDExOjM2OjAwLjUxNzQyMzcy
+NiArMDEwMA0KPiA+ID4gPiA+ID4+Pj4+PiArKysgbGludXgtNS4xMS9kcml2ZXJzL3VzYi9zdG9y
+YWdlL3Vhcy1kZXRlY3QuaAkyMDIxLTAzLTA1IDExOjM2OjE2LjM3MzQyNDU0NCArMDEwMA0KPiA+
+ID4gPiA+ID4+Pj4+PiBAQCAtMTEzLDggKzExMyw0IEBADQo+ID4gPiA+ID4gPj4+Pj4+IAl9DQo+
+ID4gPiA+ID4gPj4+Pj4+DQo+ID4gPiA+ID4gPj4+Pj4+IC0JLyogQWxsIFNlYWdhdGUgZGlzayBl
+bmNsb3N1cmVzIGhhdmUgYnJva2VuIEFUQSBwYXNzLXRocm91Z2ggc3VwcG9ydCAqLw0KPiA+ID4g
+PiA+ID4+Pj4+PiAtCWlmIChsZTE2X3RvX2NwdSh1ZGV2LT5kZXNjcmlwdG9yLmlkVmVuZG9yKSA9
+PSAweDBiYzIpDQo+ID4gPiA+ID4gPj4+Pj4+IC0JCWZsYWdzIHw9IFVTX0ZMX05PX0FUQV8xWDsN
+Cj4gPiA+ID4gPiA+Pj4+Pj4gLQ0KPiA+ID4gPiA+ID4+Pj4+PiAJdXNiX3N0b3JfYWRqdXN0X3F1
+aXJrcyh1ZGV2LCAmZmxhZ3MpOw0KPiA+ID4gPiA+ID4+Pj4+DQo+ID4gPiA+ID4gPj4+Pj4gSSBk
+b24ndCB3YW50IHRvIGRvIHRoaXMgdW5sZXNzIHlvdSBjYW4gc3VnZ2VzdCBhbiBhcHByb2FjaCB0
+aGF0IHdvbid0IA0KPiA+ID4gPiA+ID4+Pj4+IHN1ZGRlbmx5IGJyZWFrIGFsbCB0aG9zZSBvbGQg
+YnVnZ3kgZHJpdmVzLiAgSnVzdCBiZWNhdXNlIHRoZXkgYXJlIG5vdyANCj4gPiA+ID4gPiA+Pj4+
+PiBmaXZlIHllYXJzIG9sZCBvciBtb3JlIGRvZXNuJ3QgbWVhbiB0aGV5IGFyZSBubyBsb25nZXIg
+aW4gdXNlLg0KPiA+ID4gPiA+ID4+Pj4NCj4gPiA+ID4gPiA+Pj4+IFdlbGwsIHdoYXQgZG8geW91
+IHByb3Bvc2UgdGhlbj8gQSBhbGxvdyBxdWlyayBmb3IgYWxsIG5ldyBkZXZpY2VzIGdvaW5nIGZv
+cndhcmQ/DQo+ID4gPiA+ID4gPj4+PiBHaXZlbiB0aGF0IHRoZSB1c2VyIHVzdWFsbHkgbmVlZHMg
+dG8gYWN0aXZlbHkgcnVuIHNvbWV0aGluZyBsaWtlIHNtYXJ0Y3RsDQo+ID4gPiA+ID4gPj4+PiBt
+YW51YWxseSBvbiB0aGUgZHJpdmUgSSBkb27igJl0IHNlZSB0aGF0IHRoaXMgc2hvdWxkIGNhdXNl
+IHRvbyBtYW55IGlzc3Vlcy4NCj4gPiA+ID4gPiA+Pj4+IEkgZG9u4oCZdCBoYXZlIGFueSBub24t
+c3VwcG9ydGluZyBkZXZpY2UgLSBjYW4gd2Ugbm90IGp1c3QgYWRkIHRoZW0gdG8gdGhlDQo+ID4g
+PiA+ID4gPj4+PiBxdWlyayBsaXN0IHdoZW4gc29tZW9uZSByZXBvcnRzIG9uZT8NCj4gPiA+ID4g
+PiA+Pj4NCj4gPiA+ID4gPiA+Pj4gSG93IGFib3V0IHNpbmNlIHlvdSBrbm93IHlvdXIgZGV2aWNl
+IHdvcmtzLCB5b3UgbWFrZSB0aGUgY2hlY2sgZGV0ZWN0DQo+ID4gPiA+ID4gPj4+IHlvdXIgc3Bl
+Y2lmaWMgZGV2aWNlIGFuZCBub3QgYXBwbHkgdGhlIGZsYWcgdG8gaXQ/ICBZb3Ugc2hvdWxkIGJl
+IGFibGUNCj4gPiA+ID4gPiA+Pj4gdG8gZG8gc28gYmFzZWQgb24gdGhlDQo+ID4gPiA+ID4gPj4N
+Cj4gPiA+ID4gPiA+PiBTdXJlLCB3aGlsZSB0aGF0IGRvZXMgbm90IHJlYWxseSBzb2x2ZSB0aGlz
+IGZvciBhbGwgdGhlIG90aGVyIG5ld2VyDQo+ID4gPiA+ID4gPj4gU2VhZ2F0ZSBkcml2ZXMgb3Ro
+ZXIgdXNlcnMgbWlnaHQgaGF2ZSBhdCBob21lLCBoZXJlIGlzIGEgcGF0Y2gNCj4gPiA+ID4gPiA+
+PiBjaGVja2luZyBmb3IgdGhpcyBvbmUgVVNCIHByb2R1Y3QgSUQuIEkgaG9wZSB0aGF0IGlzIHdo
+YXQgeW91IG1lYW50Og0KPiA+ID4gPiA+ID4+DQo+ID4gPiA+ID4gPj4gU2lnbmVkLW9mZi1ieTog
+UmVuw6kgUmViZSA8cmVuZUBleGFjdGNvZGUuY29tPg0KPiA+ID4gPiA+ID4+DQo+ID4gPiA+ID4g
+Pj4gLS0tIGxpbnV4LTUuMTEvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMtZGV0ZWN0LmguYmFja3Vw
+CTIwMjEtMDMtMDUgMTE6MzY6MDAuNTE3NDIzNzI2ICswMTAwDQo+ID4gPiA+ID4gPj4gKysrIGxp
+bnV4LTUuMTEvZHJpdmVycy91c2Ivc3RvcmFnZS91YXMtZGV0ZWN0LmgJMjAyMS0wMy0wNSAxMToz
+NjoxNi4zNzM0MjQ1NDQgKzAxMDANCj4gPiA+ID4gPiA+PiBAQCAtMTEzLDUgKzExMyw2IEBADQo+
+ID4gPiA+ID4gPj4gIA0KPiA+ID4gPiA+ID4+ICAJLyogQWxsIFNlYWdhdGUgZGlzayBlbmNsb3N1
+cmVzIGhhdmUgYnJva2VuIEFUQSBwYXNzLXRocm91Z2ggc3VwcG9ydCAqLw0KPiA+ID4gPiA+ID4+
+IC0JaWYgKGxlMTZfdG9fY3B1KHVkZXYtPmRlc2NyaXB0b3IuaWRWZW5kb3IpID09IDB4MGJjMikN
+Cj4gPiA+ID4gPiA+PiArCWlmICgobGUxNl90b19jcHUodWRldi0+ZGVzY3JpcHRvci5pZFZlbmRv
+cikgPT0gMHgwYmMyKSAmJg0KPiA+ID4gPiA+ID4+ICsJICAgIChsZTE2X3RvX2NwdSh1ZGV2LT5k
+ZXNjcmlwdG9yLmlkUHJvZHVjdCkgIT0gMHhhYjAzKSkNCj4gPiA+ID4gPiA+PiAgCQlmbGFncyB8
+PSBVU19GTF9OT19BVEFfMVg7DQo+ID4gPiA+ID4gPj4gIA0KPiA+ID4gPiA+ID4+DQo+ID4gPiA+
+ID4gPiANCj4gPiA+ID4gPiA+IEFzIEkgaW5kaWNhdGVkIGluIG15IG90aGVyIGVtYWlsIHdoaWNo
+IGNyb3NzZWQgd2l0aCB0aGlzIG9uZSwgcGxlYXNlIG1ha2UgdGhpcw0KPiA+ID4gPiA+ID4gbW9y
+ZSBnZW5lcmljLCBhZGQgYSBuZXcgVVNfRkxfQVRBXzFYX09LIGZsYWcgYW5kIG1ha2UgdGhlIGFi
+b3ZlIGNvZGUgY2hlY2sgdGhhdCArDQo+ID4gPiA+ID4gPiBhZGQgYSBuZXcgdW51c3VhbF91YXMu
+aCBlbnRyeSBmb3IgeW91ciBkZXZpY2Ugc2V0dGluZyB0aGUgbmV3IGZsYWcuDQo+ID4gPiA+ID4g
+PiANCj4gPiA+ID4gPiA+IE5vdGUgdGhlcmUgaXMgbm8gbmVlZCB0byBhZGQgc3VwcG9ydCBmb3Ig
+dGhlIG5ldyBmbGFnIHRvIHVzYl9zdG9yX2FkanVzdF9xdWlya3MoKQ0KPiA+ID4gPiA+ID4gaWYg
+YSB1c2VyIG92ZXJyaWRlcyBxdWlya3MgZm9yIGEgZGV2aWNlIG9uIHRoZSBrZXJuZWwgY29tbWFu
+ZGxpbmUgd2l0aG91dCBzcGVjaWZ5aW5nDQo+ID4gPiA+ID4gPiB0aGUgInQiIGZsYWcgdGhlbiB0
+aGUgVVNfRkxfTk9fQVRBXzFYIGZsYWcgd2lsbCBhbHJlYWR5IGdldCBjbGVhcmVkLg0KPiA+ID4g
+PiA+ID4gDQo+ID4gPiA+ID4gPiBJIGRlbGliZXJhdGVseSBwdXQgdGhlOg0KPiA+ID4gPiA+ID4g
+DQo+ID4gPiA+ID4gPiAgICAgICAgIGlmIChsZTE2X3RvX2NwdSh1ZGV2LT5kZXNjcmlwdG9yLmlk
+VmVuZG9yKSA9PSAweDBiYzIpDQo+ID4gPiA+ID4gPiAgICAgICAgICAgICAgICAgZmxhZ3MgfD0g
+VVNfRkxfTk9fQVRBXzFYOw0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiBjb2RlIGJlZm9yZSB0
+aGUgdXNiX3N0b3JfYWRqdXN0X3F1aXJrcygpIGNhbGwgdG8gYWxsb3cgdXNlcnMgdG8gb3ZlcnJp
+ZGUgdGhpcw0KPiA+ID4gPiA+ID4gZnJvbSB0aGUga2VybmVsIGNvbW1hbmRsaW5lLg0KPiA+ID4g
+PiA+IA0KPiA+ID4gPiA+IHAucy4NCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBBICJnaXQgbG9nIGRy
+aXZlcnMvdXNiL3N0b3JhZ2UvdW51c3VhbF91YXMuaCIgcXVpY2tseSBmaW5kcyB0aGUgY29tbWl0
+IHdoaWNoIHJlbW92ZWQgdGhlDQo+ID4gPiA+ID4gcXVpcmtzIHdoaWNoIHRoZSBnZW5lcmljIFNl
+YWdhdGUgY2hlY2sgcmVwbGFjZXMuIEF0IHRoYXQgdGltZSB0aGVyZSB3ZXJlIFVTX0ZMX05PX0FU
+QV8xWA0KPiA+ID4gPiA+IHF1aXJrcyBmb3IgKjkqIGRpZmZlcmVudCBTZWFnYXRlIG1vZGVscyBw
+cmVzZW50IGluIHVudXN1YWxfdWFzLmggYW5kIEkgYXNzdW1lIHNvbWVvbmUNCj4gPiA+ID4gPiBy
+ZXBvcnRpbmcgYSAxMHRoIG1vZGVsIGlzIHdoYXQgbWFkZSBtZSBnbyBmb3IgdGhlIGp1c3QgZGlz
+YWJsZSB0aGlzIGZvciBhbGwgU2VhZ2F0ZQ0KPiA+ID4gPiA+IGRyaXZlciBvcHRpb24uDQo+ID4g
+PiA+ID4gDQo+ID4gPiA+ID4gU2VlIGNvbW1pdCA5MjMzNWFkOWU4OTUgKCJ1YXM6IFJlbW92ZSBV
+U19GTF9OT19BVEFfMVggdW51c3VhbCBkZXZpY2UgZW50cmllcyBmb3IgU2VhZ2F0ZSBkZXZpY2Vz
+IikNCj4gPiA+ID4gPiANCj4gPiA+ID4gPiBBbHNvIEkgZGlkIGEgcXVpY2sgd2Vic2VhcmNoIGZv
+ciB0aGUgIlNlYWdhdGUgU2V2ZW4iIGFuZCByYXRoZXIgdGhlbiB0aGUgdXN1YWwgcmUtdXNhYmxl
+DQo+ID4gPiA+ID4gZHJpdmUtZW5jbG9zdXJlIHdpdGggYSBzdGFuZGFyZCAyLjUiIG9yIDMuNSIg
+ZHJpdmUgaW4gdGhlcmUsIHRoaXMgc2VlbXMgdG8gYmUgYSBjdXN0b20NCj4gPiA+ID4gPiBtb2Rl
+bCB3aGVyZSB0aGUgZW5jbG9zdXJlIGlzIGFjdHVhbGx5IGludGVncmF0ZWQgaW50byB0aGUgZHJp
+dmUgdG8gbWFrZSBpdCBzbWFsbGVyLg0KPiA+ID4gPiA+IA0KPiA+ID4gPiA+IFNvIEkgd291bGQg
+bm90IGJlIHN1cnByaXNlZCBpZiB0aGlzIGlzIHVzaW5nIGFub3RoZXIgY2hpcHNldCB0aGVuIHRo
+ZWlyIHVzdWFsIGVuY2xvc3VyZXMsDQo+ID4gPiA+ID4gd2hpY2ggd291bGQgZXhwbGFpbiB3aHkg
+aXQgZG9lcyBoYXZlIHdvcmtpbmcgQVRBMXggcGFzc3Rocm91Z2guDQo+ID4gPiA+IA0KPiA+ID4g
+PiBJIHdvdWxkIGV4cGVjdCB0aGF0IG1vcmUgbW9kZXJuIGRldmljZXMgdG8gd29yay4gVmVuZG9y
+cyB1c3VhbGx5DQo+ID4gPiA+IGxpbmVhcmx5IGFsbG9jYXRlIHRoZWlyIHByb2R1Y3QgaWRzIGZv
+ciBuZXcgZGV2aWNlcywgYW5kIHdlIGNvdWxkDQo+ID4gPiA+IGFsbG93IGxpc3QgcHJvZHVjdCBp
+ZHMgaGlnaGVyIHRoYW4gdGhpcyBTZXZlbiB0byB1bmJyZWFrIG1vcmUgbW9kZXJuDQo+ID4gPiA+
+IGRldmljZXMgYnkgZGVmYXVsdCBhbmQgbGltaXQgdGhlIGFtb3VudCBvZiBkZXZpY2UgcXVpcmtz
+IG5lZWRlZD8NCj4gPiA+IA0KPiA+ID4gVmVuZG9ycyBkbyBub3QgYWxsb2NhdGUgZGV2aWNlIGlk
+cyB0aGF0IHdheSBhdCBhbGwsIGFzIHRoZXJlIGlzIG5vDQo+ID4gPiByZXF1aXJlbWVudCB0byBk
+byBzby4gIEkga25vdyBvZiBtYW55IHZlbmRvcnMgdGhhdCBzZWVtaW5nbHkgdXNlIHJhbmRvbQ0K
+PiA+ID4gdmFsdWVzIGZyb20gdGhlaXIgcHJvZHVjdCBpZCBzcGFjZSwgc28gdGhlcmUgaXMgbm8g
+Z3VhcmFudGVlIHRoYXQgdGhpcw0KPiA+ID4gd2lsbCB3b3JrLCBzb3JyeS4NCj4gPiANCj4gPiBJ
+IGRpZCBub3Qgc2F5IGl0IGlzIGEgcmVxdWlyZW1lbnQsIGp1c3QgdGhhdCB0aGV5IHVzdWFsbHkg
+ZG8gc3BlYWtpbmcNCj4gPiBvZiBqdXN0IHRoaXMgU2VhZ2F0ZSBjYXNlLiBXaGF0IGlzIHdyb25n
+IHdpdGggdXNpbmcgdGhhdCB0bw0KPiA+IHBvdGVudGlhbGx5IHNpZ25pZmljYW50bHkgY3V0IGRv
+d24gdGhlIHF1aXJrIGxpc3Q/DQo+IA0KPiBCZWNhdXNlIHRoZSBkb3duLXNpZGUgb2YgdGhpcyBp
+cyBpZiB3ZSBndWVzcyB3cm9uZywgd2UgYnJlYWsgdGhpbmdzLg0KPiANCj4gPiA+IFdoYXQgaXMg
+d3Jvbmcgd2l0aCBqdXN0IGFsbG93aW5nIHNwZWNpZmljIGRldmljZXMgdGhhdCB5b3UgaGF2ZSB0
+ZXN0ZWQNCj4gPiA+IHdpbGwgd29yaywgdG8gdGhlIGxpc3QgaW5zdGVhZD8gIFRoYXQncyB0aGUg
+c2FmZXN0IHdheSB0byBoYW5kbGUgdGhpcy4NCj4gPiANCj4gPiBUaGUgcHJvYmxlbSBpcyB0aGF0
+IG91dCBvZiB0aGUgYm94IGl0IGRvZXMgbm90IHdvcmsgZm9yIHVzZXJzLCBhbmQNCj4gPiBub3Jt
+YWwgdXNlcnMgZG8gbm90IGRpdmUgaW50byB0aGUga2VybmVsIGNvZGUgdG8gZmluZCBvdXQgYW5k
+IHNpbXBseQ0KPiA+IHRoaW5rIHRoZWlyIGRldmljZXMgc3Vja3MuIEV2ZW4gSSBmb3IgeWVhcnMg
+dGhvdWdodCB0aGUgZHJpdmUgc3Vja3MsDQoNCk9rLCBzbyBJIHdlbnQgdGhlcmUgYW5kIHdhbnRl
+ZCB0byBxdWlja2x5IGFkZCB0aGUgcmVxdWVzdGVkIDFYX09LDQp1bnVzdWFsIGZsYWcsIGJ1dXV1
+dHQsIGFwcGFyZW50bHkgYWxsIDMyLWJpdHMgb2YgdGhlIFVTX0ZMQUcgZW51bSBpbg0KLi9pbmNs
+dWRlL2xpbnV4L3VzYl91c3VhbC5oIGFyZSBhbHJlYWR5IGV4aGF1c3RlZCwgLi4uDQoNCldoYXQg
+c2hvdWxkIHdlIGRvIG5vdz8gTWFrZSBpdCA2NC1iaXQgb3Igb3RoZXIgd29ya2Fyb3VuZCBzdWdn
+ZXN0aW9ucz8NCk1heWJlIHJldmVydGluZyB0aGUgb3JpZ2luYWwgOSBibGFja2xpc3QgcmVtb3Zh
+bHMgYWZ0ZXIgYWxsPw0KDQogICAgIFJlbsOpDQoNCi0tIA0KICBSZW7DqSBSZWJlLCBFeGFjdENP
+REUgR21iSCwgTGlldHplbmJ1cmdlciBTdHIuIDQyLCBERS0xMDc4OSBCZXJsaW4NCiAgaHR0cHM6
+Ly9leGFjdGNvZGUuY29tIHwgaHR0cHM6Ly90MnNkZS5vcmcgfCBodHRwczovL3JlbmUucmViZS5k
+ZQ0K
