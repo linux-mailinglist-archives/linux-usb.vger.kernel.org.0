@@ -2,83 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F8936A81A
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 17:53:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86E3A36A891
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 19:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbhDYPyc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 11:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59992 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbhDYPyb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 11:54:31 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E324EC061574;
-        Sun, 25 Apr 2021 08:53:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=k2uf/iHXemagBorxPTaq/+K+RiEPjAIJeeEurCwCXSs=; b=Fb59g13r9rvX0/W9RfgWxWdGus
-        W5jUjXYSVqYkdM61R0YnAinzmUO0almobzNADP6WQdYFtfEJDLkCeHbtRiiUwuNURCfuX2OjFytO4
-        DyySt7iXgRn/RPOJomWJNM7i3LYVsxz0ZVABtoCD0r3I7OqtGCsLtFFPsEYqf7oDEBDiWRC4Vdb2P
-        2QKnTba8ycEmLBLqWF0284w6JMDm64xkb3pi0GjvoCbA6VW8Uq/I2rnVdAnxetTW5lPhvRO3gl/rU
-        /SFAIYXgb/d8z9VKd2QMlgqUmbebkToIK8yqga0BZ3L9VC41RAaqAUbviclMVNxB+ClkKDTkEwQ+l
-        TdWQgFcA==;
-Received: from [2601:1c0:6280:3f0::df68]
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lah4l-004Rj5-Rv; Sun, 25 Apr 2021 15:53:42 +0000
-Subject: Re: [PATCH v2] usb: cdns3: Corrected comment to align with kernel-doc
- comment
-To:     Souptick Joarder <jrdr.linux@gmail.com>, peter.chen@kernel.org,
-        pawell@cadence.com, rogerq@kernel.org, a-govindraju@ti.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1619338565-4574-1-git-send-email-jrdr.linux@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <8cbc9ed6-4499-642c-3b49-53e80974f004@infradead.org>
-Date:   Sun, 25 Apr 2021 08:53:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        id S231167AbhDYRib (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 13:38:31 -0400
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21342 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230329AbhDYRia (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 13:38:30 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1619372265; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=fywXrVS5FDz6iU2UMI38X0Fikxn98aH2GUygN9jtSMHGaQcRFey+e8nCvWZRYNSfrcC0DgH3afaGzw/PdOTJXUCjWDPj9+UhJOnq2OMBgSpU7fpz8j2kdn6DAMoVFAaJsiVBaXKEWKMmv1XVJWiX8vci4rSqCQI5+OAZZdOAud0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1619372265; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=k/EGKXFAZVuJOd2JkD/RJjW4fi/tHKJRxr2RkqQG2Do=; 
+        b=UXRWi7MJ3YF0d33lLIIRegelrktSJhhi6qRGWm7+xK1UPeAQaKZS7mIgkiLBaW/PKi5gTFauYgeBHbSK7xaMX2Km7RFZpxBm3eiHsxame0qkyN87MyoLxGh9pQU2Dh6YaibJsUzM7VOikhFO8FT7cHW3uoKiPnejzYG+k7inKRo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com> header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1619372265;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Transfer-Encoding;
+        bh=k/EGKXFAZVuJOd2JkD/RJjW4fi/tHKJRxr2RkqQG2Do=;
+        b=MQeLg+DkcwiBucf3gKN4zHpugUU+ZfFm44TS+mQL0Ckm9C+2cPNv025i49WXlwxK
+        3L26ZXqb5K88mqgNN50g0ViwD+JvHD/ag1O3xll0MiVaVg7VqdpcPAURcz3ajZD2aqI
+        VovkqqKulT0PClkW/qRPhWaVTULat/J7gvlMG3Jw=
+Received: from localhost.localdomain (49.207.208.26 [49.207.208.26]) by mx.zohomail.com
+        with SMTPS id 1619372262325930.7778518171191; Sun, 25 Apr 2021 10:37:42 -0700 (PDT)
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     gregkh@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usbhid: fix info leak in hid_submit_ctrl
+Date:   Sun, 25 Apr 2021 23:03:53 +0530
+Message-Id: <20210425173353.10231-1-mail@anirudhrb.com>
+X-Mailer: git-send-email 2.26.2
 MIME-Version: 1.0
-In-Reply-To: <1619338565-4574-1-git-send-email-jrdr.linux@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4/25/21 1:16 AM, Souptick Joarder wrote:
-> Minor update in comment.
-> 
-> Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-> ---
-> v2:
-> 	Updated change logs and address review comment.
+In hid_submit_ctrl(), the way of calculating the report length doesn't
+take into account that report->size can be zero. When running the
+syzkaller reproducer, a report of size 0 causes hid_submit_ctrl) to
+calculate transfer_buffer_length as 16384. When this urb is passed to
+the usb core layer, KMSAN reports an info leak of 16384 bytes.
 
-LGTM. Thanks.
+To fix this, first modify hid_report_len() to account for the zero
+report size case by using DIV_ROUND_UP for the division. Then, call it
+from hid_submit_ctrl().
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com
+Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+---
+ drivers/hid/usbhid/hid-core.c | 2 +-
+ include/linux/hid.h           | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
->  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 9b1bd41..21f026c 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -484,7 +484,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
->  }
->  
->  /**
-> - * cdns3_wa2_descmiss_copy_data copy data from internal requests to
-> + * cdns3_wa2_descmiss_copy_data - copy data from internal requests to
->   * request queued by class driver.
->   * @priv_ep: extended endpoint object
->   * @request: request object
-> 
-
-
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index 86257ce6d619..4e9077363c96 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -374,7 +374,7 @@ static int hid_submit_ctrl(struct hid_device *hid)
+ 	raw_report = usbhid->ctrl[usbhid->ctrltail].raw_report;
+ 	dir = usbhid->ctrl[usbhid->ctrltail].dir;
+ 
+-	len = ((report->size - 1) >> 3) + 1 + (report->id > 0);
++	len = hid_report_len(report);
+ 	if (dir == USB_DIR_OUT) {
+ 		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
+ 		usbhid->urbctrl->transfer_buffer_length = len;
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 271021e20a3f..10e922cee4eb 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -1167,8 +1167,7 @@ static inline void hid_hw_wait(struct hid_device *hdev)
+  */
+ static inline u32 hid_report_len(struct hid_report *report)
+ {
+-	/* equivalent to DIV_ROUND_UP(report->size, 8) + !!(report->id > 0) */
+-	return ((report->size - 1) >> 3) + 1 + (report->id > 0);
++	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
+ }
+ 
+ int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
 -- 
-~Randy
+2.26.2
 
