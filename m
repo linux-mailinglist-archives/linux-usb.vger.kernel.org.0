@@ -2,74 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FB936A7F4
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 17:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761FE36A7FD
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 17:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbhDYP1A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 11:27:00 -0400
-Received: from mailfilter04-out40.webhostingserver.nl ([195.211.73.157]:63379
-        "EHLO mailfilter04-out40.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230194AbhDYP07 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 11:26:59 -0400
-X-Greylist: delayed 963 seconds by postgrey-1.27 at vger.kernel.org; Sun, 25 Apr 2021 11:26:58 EDT
+        id S230329AbhDYPd4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 11:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230194AbhDYPd4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Apr 2021 11:33:56 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E33C061574;
+        Sun, 25 Apr 2021 08:33:16 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id 18so26490175qtz.6;
+        Sun, 25 Apr 2021 08:33:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=4a48TYfBo5B9adFJqH22Pg3azQUJIkJpWK6/sSAJwaM=;
-        b=rdubIhu+dwTpKbXd5IlddbvsVX0dfqdhdLJi1IEceCfpkwMDxhehC1fWyySwKfvj3t2s976ENDVe9
-         jn3w9Qvs2FG42YJw+FiWk/Npf/nfEcBUL2XhV309mF4gPETHghsEMWqQO7RjUQfZb3kejsm4G0T/s6
-         o/IUhCIAqz7IVbQE2LmDAOgDNGyGfOKiAOCHkOWWvAqzo5wPmxQIWbi2OiMfYYicQ2COt8Ikw65FXi
-         efutlJ0zVlyWkjIfSidPl1DGOOxDtQNHwREKSAEEZWSKJulSsW16S2zqBKRE/E1xtqC5pxTbpJ1VH1
-         iiXznuzmwiv+8P5VTdn1nAUP//wQQTw==
-X-Halon-ID: 5601aa54-a5d8-11eb-9c68-001a4a4cb95f
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter04.webhostingserver.nl (Halon) with ESMTPSA
-        id 5601aa54-a5d8-11eb-9c68-001a4a4cb95f;
-        Sun, 25 Apr 2021 17:10:13 +0200 (CEST)
-Received: from [2001:981:6fec:1:1853:1ae5:69c6:8aab] (helo=delfion.fritz.box)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.94)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1lagOi-00Aq10-Nt; Sun, 25 Apr 2021 17:10:12 +0200
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Subject: [PATCH v1 1/1] usb: dwc3: pci: Enable usb2-gadget-lpm-disable for Intel Merrifield
-Date:   Sun, 25 Apr 2021 17:09:47 +0200
-Message-Id: <20210425150947.5862-1-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.27.0
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5SEkh3V8UTdGxPqKtFX/PHinkzBiDrVR4wcPwD4guKs=;
+        b=iQUB4QYb1jG3h4d1HGWir0snJt7FsXzQnRogUZWB3emBqxFsWQWPbWpaKcVkPgHPkU
+         TETp0JUuFgP5N2SrBOsTH/Un8HF5El/8yvV4NwmN3fOJQxaVmM5LPrGC1b9iV6UeWobW
+         CZencODd7mSVQZFb7nGhW1XBMz641LQhVZMdh/tdUWiC3F6FWRQ/qXa+6/helUPf7weX
+         /zpimix2oftwOGvEbYEQV0I+Stq0BbhBAYDaTtDLj6n24fpXue0DQM/Z74HtUmiYAozO
+         Z/K6XArLvrPE2hes9waJosYPyelYslQPuCfUdkAz651ac6OqQ3YWhiriGaemHSEQ7pzQ
+         lScA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5SEkh3V8UTdGxPqKtFX/PHinkzBiDrVR4wcPwD4guKs=;
+        b=Ihida9ldPJ20KM8EvlW30gqadKia/224AUUbIWELzy/rqi5+j0zsjtWCpyqERzosbZ
+         8UqoPSN9kpNdZJLisBfF0LzwfS6uiUV/uoAmVhDj/EODXnKxAe5AqvaNeaHtJw+PY2Fn
+         /wJWB6iXYQlEcmqVCLLDj1SYzy+a2ZfnedMzfpRfutPLaVsmnadoRKBd6LoAW1J0n9AB
+         bE6CqDkfhsqc19w5896Ep6GN+U3NmpN1VzYNyoXvrln9fsd7WMGkIYjjp8SGuL+FGjdb
+         Sl2WQM+0NDz6z0ZBK8bgo1KU08saO072nQroDaOMMHvBToLb//Ivf81V/HBZiKyH5vI+
+         aBjA==
+X-Gm-Message-State: AOAM531CH4dAU9WqOil4ReBImIhgatay9Hkkb0VxfmhFjnylYrfoa9yy
+        NKITIh/Nb5/sZ/gZ9Psh6qU=
+X-Google-Smtp-Source: ABdhPJw5ROxgrXE7aY6qxw+o2OS+RuinWnrpIB837wn41/p+JB9cxYoemxwyN5AkAfQGK+mpT9wX/Q==
+X-Received: by 2002:ac8:7547:: with SMTP id b7mr13286662qtr.176.1619364795731;
+        Sun, 25 Apr 2021 08:33:15 -0700 (PDT)
+Received: from localhost.localdomain ([2804:14c:482:919:dc3c:c8fa:5d17:d49e])
+        by smtp.gmail.com with ESMTPSA id a22sm8583740qth.41.2021.04.25.08.33.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 25 Apr 2021 08:33:15 -0700 (PDT)
+From:   Fabio Estevam <festevam@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     chunfeng.yun@mediatek.com, sfr@canb.auug.org.au,
+        stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-next@vger.kernel.org, corbet@lwn.net,
+        linux-doc@vger.kernel.org, Fabio Estevam <festevam@gmail.com>
+Subject: [PATCH v4] usb: Restore the reference to ch9.h
+Date:   Sun, 25 Apr 2021 12:32:53 -0300
+Message-Id: <20210425153253.2542816-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Intel Merrifield LPM is causing host to reset port after a timeout.
-By disabling LPM entirely this is prevented.
+Keep the textual reference to ch9.h as it was prior to commit
+caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location").
 
-Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-Fixes: 066c09593454 ("usb: dwc3: pci: Enable extcon driver for Intel Merrifield")
+As linux/usb/ch9.h does not contain comments anymore, explain
+that drivers/usb/common/common.c includes such header and provides
+declarations of a few utilities routines for manipulating the data types
+from ch9.h. Also mention that drivers/usb/common/debug.c contains
+some functions for creating debug output.
+
+Fixes: caa93d9bd2d7 ("usb: Fix up movement of USB core kerneldoc location")
+Reported-by: Alan Stern <stern@rowland.harvard.edu>
+Suggested-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 1 +
- 1 file changed, 1 insertion(+)
+Changes since v3:
+- Use ``include/linux/usb/ch9.h`` for consistency (Alan)
+- Add Alan's Acked-by
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 4c5c6972124a..e5d7eed2e60c 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -122,6 +122,7 @@ static const struct property_entry dwc3_pci_mrfld_properties[] = {
- 	PROPERTY_ENTRY_STRING("linux,extcon-name", "mrfld_bcove_pwrsrc"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u3_susphy_quirk"),
- 	PROPERTY_ENTRY_BOOL("snps,dis_u2_susphy_quirk"),
-+	PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable"),
- 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
- 	{}
- };
+ Documentation/driver-api/usb/usb.rst | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/Documentation/driver-api/usb/usb.rst b/Documentation/driver-api/usb/usb.rst
+index 543e70434da2..820e867af45a 100644
+--- a/Documentation/driver-api/usb/usb.rst
++++ b/Documentation/driver-api/usb/usb.rst
+@@ -109,16 +109,19 @@ well as to make sure they aren't relying on some HCD-specific behavior.
+ USB-Standard Types
+ ==================
+ 
+-In ``drivers/usb/common/common.c`` and ``drivers/usb/common/debug.c`` you
+-will find the USB data types defined in chapter 9 of the USB specification.
+-These data types are used throughout USB, and in APIs including this host
+-side API, gadget APIs, usb character devices and debugfs interfaces.
++In ``include/uapi/linux/usb/ch9.h`` you will find the USB data types defined
++in chapter 9 of the USB specification. These data types are used throughout
++USB, and in APIs including this host side API, gadget APIs, usb character
++devices and debugfs interfaces. That file is itself included by
++``include/linux/usb/ch9.h``, which also contains declarations of a few
++utility routines for manipulating these data types; the implementations
++are in ``drivers/usb/common/common.c``.
+ 
+ .. kernel-doc:: drivers/usb/common/common.c
+    :export:
+ 
+-.. kernel-doc:: drivers/usb/common/debug.c
+-   :export:
++In addition, some functions useful for creating debugging output are
++defined in ``drivers/usb/common/debug.c``.
+ 
+ Host-Side Data Types and Macros
+ ===============================
 -- 
-2.27.0
+2.25.1
 
