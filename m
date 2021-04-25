@@ -2,69 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B98636A42E
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 04:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6468136A42F
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Apr 2021 04:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229687AbhDYCcN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Apr 2021 22:32:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55709 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229514AbhDYCcN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Apr 2021 22:32:13 -0400
-Received: (qmail 324925 invoked by uid 1000); 24 Apr 2021 22:31:33 -0400
-Date:   Sat, 24 Apr 2021 22:31:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Rene Rebe <rene@exactcode.com>, Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
-Subject: Re: [PATCH] unbreak all modern Seagate ATA pass-through for SMART
-Message-ID: <20210425023133.GC324386@rowland.harvard.edu>
-References: <20210424.220316.855336714119430355.rene@exactcode.com>
+        id S229592AbhDYCeg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Apr 2021 22:34:36 -0400
+Received: from mga14.intel.com ([192.55.52.115]:59954 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229514AbhDYCef (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Apr 2021 22:34:35 -0400
+IronPort-SDR: SUHYQ2n2W3UhL0Q6f1nWkLEJGiQAe+qIJdxB65nSxNrUVc+9+80Ah4eVmEvqsp3Qmy3hKB+VkR
+ I18T4arsYBxA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9964"; a="195761823"
+X-IronPort-AV: E=Sophos;i="5.82,249,1613462400"; 
+   d="scan'208";a="195761823"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Apr 2021 19:33:56 -0700
+IronPort-SDR: SBiHQRa/q0+UxOniNVb3kuVlSDvJJyh7bwtQVXXaTmlSZ91m+qo7NyjqnZ2QGGCXrhJX0FeG3i
+ Ptk3pVpZSnHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,249,1613462400"; 
+   d="scan'208";a="446919964"
+Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Apr 2021 19:33:55 -0700
+Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1laUap-0005Kf-2t; Sun, 25 Apr 2021 02:33:55 +0000
+Date:   Sun, 25 Apr 2021 10:33:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ caa93d9bd2d7ca7ffe5a23df9f003b81721c8e1b
+Message-ID: <6084d4ff.DPDEisq5t9QtQdFb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210424.220316.855336714119430355.rene@exactcode.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Apr 24, 2021 at 10:03:16PM +0200, Rene Rebe wrote:
-> Hi there,
-> 
-> for some time I already wondered why my external USB Seagate Seven
-> drive does not report any SMART status. Only recently did I take a
-> look and it turns out ATA pass-through was explicitly disabed for all
-> Seagate drives with 7fee72 "uas: Always apply US_FL_NO_ATA_1X quirk to
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: caa93d9bd2d7ca7ffe5a23df9f003b81721c8e1b  usb: Fix up movement of USB core kerneldoc location
 
-The kernel now uses >= 12-digit SHA1 values.  7fee72 is ambiguous.
+elapsed time: 726m
 
-> Seagate devices" in 2017. Apparently some early ones where buggy, ...
-> 
-> However, fast forward a couple of years and this is no longer true,
-> this Segate Seven even is already from 2016, and apparently first
-> available in 2015. I suggest removing this rather drastic global
-> measure, and instead only add very old broken ones with individual
-> quirks, should any of them still be alive ;-)
-> 
-> Signed-off-by: René Rebe <rene@exactcode.com>
-> 
-> --- linux-5.11/drivers/usb/storage/uas-detect.h.backup	2021-03-05 11:36:00.517423726 +0100
-> +++ linux-5.11/drivers/usb/storage/uas-detect.h	2021-03-05 11:36:16.373424544 +0100
-> @@ -113,8 +113,4 @@
->  	}
->  
-> -	/* All Seagate disk enclosures have broken ATA pass-through support */
-> -	if (le16_to_cpu(udev->descriptor.idVendor) == 0x0bc2)
-> -		flags |= US_FL_NO_ATA_1X;
-> -
->  	usb_stor_adjust_quirks(udev, &flags);
+configs tested: 119
+configs skipped: 2
 
-I don't want to do this unless you can suggest an approach that won't 
-suddenly break all those old buggy drives.  Just because they are now 
-five years old or more doesn't mean they are no longer in use.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Alan Stern
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+mips                         tb0219_defconfig
+powerpc                      obs600_defconfig
+arm                       imx_v6_v7_defconfig
+x86_64                           alldefconfig
+arm                     am200epdkit_defconfig
+sh                           se7705_defconfig
+arm                       imx_v4_v5_defconfig
+um                           x86_64_defconfig
+riscv                             allnoconfig
+mips                       lemote2f_defconfig
+nios2                            alldefconfig
+arm                           h3600_defconfig
+mips                          rm200_defconfig
+mips                       capcella_defconfig
+powerpc                     skiroot_defconfig
+sh                           se7780_defconfig
+s390                          debug_defconfig
+sh                        edosk7760_defconfig
+mips                      bmips_stb_defconfig
+powerpc                      ppc64e_defconfig
+arm                        mvebu_v7_defconfig
+mips                            e55_defconfig
+arc                        vdk_hs38_defconfig
+sh                          kfr2r09_defconfig
+sh                               j2_defconfig
+powerpc                 mpc832x_mds_defconfig
+powerpc                         wii_defconfig
+mips                           ip28_defconfig
+arm                         hackkit_defconfig
+sh                             sh03_defconfig
+powerpc                   lite5200b_defconfig
+um                             i386_defconfig
+sh                            migor_defconfig
+arm                     eseries_pxa_defconfig
+arc                      axs103_smp_defconfig
+powerpc                     tqm8555_defconfig
+sh                           se7619_defconfig
+mips                 decstation_r4k_defconfig
+mips                  cavium_octeon_defconfig
+sh                                  defconfig
+powerpc                    adder875_defconfig
+h8300                            alldefconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+i386                 randconfig-a005-20210424
+i386                 randconfig-a002-20210424
+i386                 randconfig-a001-20210424
+i386                 randconfig-a006-20210424
+i386                 randconfig-a004-20210424
+i386                 randconfig-a003-20210424
+x86_64               randconfig-a015-20210424
+x86_64               randconfig-a016-20210424
+x86_64               randconfig-a011-20210424
+x86_64               randconfig-a014-20210424
+x86_64               randconfig-a013-20210424
+x86_64               randconfig-a012-20210424
+i386                 randconfig-a012-20210424
+i386                 randconfig-a014-20210424
+i386                 randconfig-a011-20210424
+i386                 randconfig-a013-20210424
+i386                 randconfig-a015-20210424
+i386                 randconfig-a016-20210424
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
-PS: As a matter of good form, you should have CC'ed the person whose 
-commit you are proposing to revert.
+clang tested configs:
+x86_64               randconfig-a004-20210424
+x86_64               randconfig-a002-20210424
+x86_64               randconfig-a001-20210424
+x86_64               randconfig-a006-20210424
+x86_64               randconfig-a005-20210424
+x86_64               randconfig-a003-20210424
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
