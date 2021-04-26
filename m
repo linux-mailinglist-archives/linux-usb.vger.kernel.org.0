@@ -2,84 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 513BA36B08F
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 11:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD2036B0B8
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 11:35:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbhDZJaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 05:30:06 -0400
-Received: from smtpfree-b.aruba.it ([62.149.128.215]:50353 "EHLO
-        mxcm02.ad.aruba.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232103AbhDZJaG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 05:30:06 -0400
-Received: from darkstar ([151.18.35.88])
-        by mxcm02.ad.aruba.it with bizsmtp
-        id xMVE240051u5oC701MVGbN; Mon, 26 Apr 2021 11:29:23 +0200
-X-SSL:  yes
-Date:   Mon, 26 Apr 2021 11:29:11 +0200
-From:   Leonardo Antoniazzi <leoanto@aruba.it>
-To:     linux-usb@vger.kernel.org
-Cc:     johan@kernel.org
-Subject: Re: [PATCH] net: hso: fix NULL-deref on disconnect regression
-Message-Id: <20210426112911.fb3593c3a9ecbabf98a13313@aruba.it>
-In-Reply-To: <20210426081149.10498-1-johan@kernel.org>
-References: <20210426081149.10498-1-johan@kernel.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aruba.it; s=a1;
-        t=1619429363; bh=Spo/zmyLIvJjdOAkp3Te/otU9+LGnkWiOcg4zVN4PV0=;
-        h=Date:From:To:Subject:Mime-Version:Content-Type;
-        b=NSO4lU9Vl76pbBLTtM53OMW1Pl4jcXSmmIHs54E42z7+VR20NwT/TeJWMb4Qo4oJR
-         5VLuEDTWKST/v1uUTlwkhnoqBC+XeVtYUdV2kaRhX63F4dbF5cjT2ctyv6lAHfteGe
-         Mm474zXexJHcwL1NjzabCm2HDSNut2MmuuO9Rv/PDSVothTFbNa5gE596P3J2jpZpU
-         zdzDqTr+Fve4Kx4UjQW58/bAoBRM8o1weT0DBkBKD3t3te3cHq/sc+lHS2lwU5yJ1D
-         b67mOsbF5uwpxMB1hckkVyH+m1PQW8pyhQAEPwbPCND17RQ5n179956k7eq+gM1/OL
-         Ja4zXIbrYNAzA==
+        id S232626AbhDZJgM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 05:36:12 -0400
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:51732 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232078AbhDZJgL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 05:36:11 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UWpMk66_1619429727;
+Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0UWpMk66_1619429727)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 26 Apr 2021 17:35:28 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     jikos@kernel.org
+Cc:     benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH] HID: hiddev: return -ENOMEM when kmalloc failed
+Date:   Mon, 26 Apr 2021 17:35:26 +0800
+Message-Id: <1619429726-54768-1-git-send-email-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 26 Apr 2021 10:11:49 +0200
-Johan Hovold <johan@kernel.org> wrote:
+The driver is using -1 instead of the -ENOMEM defined macro to
+specify that a buffer allocation failed. Using the correct error
+code is more intuitive.
 
-> Commit 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device
-> unregistration") fixed the racy minor allocation reported by syzbot, but
-> introduced an unconditional NULL-pointer dereference on every disconnect
-> instead.
-> 
-> Specifically, the serial device table must no longer be accessed after
-> the minor has been released by hso_serial_tty_unregister().
-> 
-> Fixes: 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device unregistration")
-> Cc: stable@vger.kernel.org
-> Cc: Anirudh Rayabharam <mail@anirudhrb.com>
-> Reported-by: Leonardo Antoniazzi <leoanto@aruba.it>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->  drivers/net/usb/hso.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-> index 9bc58e64b5b7..3ef4b2841402 100644
-> --- a/drivers/net/usb/hso.c
-> +++ b/drivers/net/usb/hso.c
-> @@ -3104,7 +3104,7 @@ static void hso_free_interface(struct usb_interface *interface)
->  			cancel_work_sync(&serial_table[i]->async_put_intf);
->  			cancel_work_sync(&serial_table[i]->async_get_intf);
->  			hso_serial_tty_unregister(serial);
-> -			kref_put(&serial_table[i]->ref, hso_serial_ref_free);
-> +			kref_put(&serial->parent->ref, hso_serial_ref_free);
->  		}
->  	}
->  
-> -- 
-> 2.26.3
-> 
+Smatch tool warning:
+drivers/hid/usbhid/hiddev.c:894 hiddev_connect() warn: returning -1
+instead of -ENOMEM is sloppy
 
-hello,
+No functional change, just more standardized.
 
-the patch fix the problem
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/hid/usbhid/hiddev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks
+diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+index 45e0b1c..88020f3 100644
+--- a/drivers/hid/usbhid/hiddev.c
++++ b/drivers/hid/usbhid/hiddev.c
+@@ -891,7 +891,7 @@ int hiddev_connect(struct hid_device *hid, unsigned int force)
+ 	}
+ 
+ 	if (!(hiddev = kzalloc(sizeof(struct hiddev), GFP_KERNEL)))
+-		return -1;
++		return -ENOMEM;
+ 
+ 	init_waitqueue_head(&hiddev->wait);
+ 	INIT_LIST_HEAD(&hiddev->list);
+-- 
+1.8.3.1
 
