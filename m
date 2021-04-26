@@ -2,67 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A724536AF63
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 10:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3061636AF88
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 10:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbhDZIAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 04:00:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51276 "EHLO mail.kernel.org"
+        id S232446AbhDZIMe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 04:12:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56896 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232458AbhDZIAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Apr 2021 04:00:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 23AD16105A;
-        Mon, 26 Apr 2021 07:59:42 +0000 (UTC)
+        id S232295AbhDZIMd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Apr 2021 04:12:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 807C261075;
+        Mon, 26 Apr 2021 08:11:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619423982;
-        bh=+2O4A36yPwK7BKEhZw/DxclUvVORbj/dAxbiPIB2zUg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=svtSjMEGip4pEdp2QNNz6mWuh9qgWOBHDFclADT6KvDQDEHkeV4SKz0JJWLVBOMOa
-         ZHYX/nKyHEXPdGyc5YhdVZfrm29y2CNt5Bg7MxuiPtvz9t8Uvd7ULU5pcvKWIgsWLk
-         +BRi981A/n432hG9geR0LSdfRphDamG6p84Sswqis93Mg3O77agZ26SBDH36m7ky0O
-         qfLFTHuSEEEq7KrUx8rr2QBEpqaWOhEoXkcdlbq6z5ABfoUEjckrqaV7DKD5zUT+CJ
-         CaX+pAXPJztxA00ox+Tv5EFeYqDgUBEptq5cV1bMNdbZO0QcEmL2LBkHq1c22+w2iI
-         oMdSPV7QtB3DQ==
+        s=k20201202; t=1619424712;
+        bh=b73sWLTfZ3rVYbqm01S+4HlwmIhgl+rHnAudGrlqVOc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=sAHUPcUaaz3BS2w4HEwuPa2mq1C0zMCXoo9bkDnrEZTqbpKptfGNnS7vKhyufmaJ2
+         js6mtRYDJX2dQ+m+zzk4Op8xuOtoxNHMvk9l6c+o5+g+SLcwATOJ1hRHZUw8rP8FZG
+         IsDIAYX5XWL+RAgz7btk5Ih+I3GgAN7SjBruykxN1w+zu9fpADrBahFGAKJP7tjqHE
+         /V3WQamjw18E4HKmjq1cDTRO1oonK17VP62y8LjfxcXS+Y2VU+i4D3Dcf/H8fmR2Lu
+         aEK3SXEl2NYQatlBP27uWbBGGaxSfydotdsRTpRkn3JDIhyeO/FYAz3nyF4nEURy1W
+         0LmuJjOl5Aq+w==
 Received: from johan by xi.lan with local (Exim 4.93.0.4)
         (envelope-from <johan@kernel.org>)
-        id 1law9n-0001e2-0i; Mon, 26 Apr 2021 09:59:52 +0200
-Date:   Mon, 26 Apr 2021 09:59:51 +0200
+        id 1lawLa-0002k5-5L; Mon, 26 Apr 2021 10:12:02 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Leonardo Antoniazzi <leoanto@aruba.it>,
-        Anirudh Rayabharam <mail@anirudhrb.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: hso driver kernel NULL pointer dereference
-Message-ID: <YIZy96hlzl6Z/Gwv@hovoldconsulting.com>
-References: <20210425233509.9ce29da49037e1a421000bdd@aruba.it>
- <YIZsnF7FqeQ+eDM0@kroah.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable@vger.kernel.org, Anirudh Rayabharam <mail@anirudhrb.com>,
+        Leonardo Antoniazzi <leoanto@aruba.it>
+Subject: [PATCH] net: hso: fix NULL-deref on disconnect regression
+Date:   Mon, 26 Apr 2021 10:11:49 +0200
+Message-Id: <20210426081149.10498-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YIZsnF7FqeQ+eDM0@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 09:32:44AM +0200, Greg Kroah-Hartman wrote:
-> On Sun, Apr 25, 2021 at 11:35:09PM +0200, Leonardo Antoniazzi wrote:
-> > Hello,
-> > removing my usb-modem (option icon 226) i get this oops (i attached the dmesg output):
-> > 
-> > BUG: kernel NULL pointer dereference, address: 0000000000000068
-> > 
-> > reverting this patch fix the problem on detaching the modem:
-> > 
-> > https://marc.info/?l=linux-usb&m=161781851805582&w=2
-> > 
-> > I'm not a developer, i hope the attached dmesg.txt will suffice
-> 
-> Ick, that's not good.
-> 
-> Anirudh, can you please look into this as it's caused by 8a12f8836145
-> ("net: hso: fix null-ptr-deref during tty device unregistration") which
-> is merged into 5.12.
+Commit 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device
+unregistration") fixed the racy minor allocation reported by syzbot, but
+introduced an unconditional NULL-pointer dereference on every disconnect
+instead.
 
-I found the bug. Patch coming.
+Specifically, the serial device table must no longer be accessed after
+the minor has been released by hso_serial_tty_unregister().
 
-Johan
+Fixes: 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device unregistration")
+Cc: stable@vger.kernel.org
+Cc: Anirudh Rayabharam <mail@anirudhrb.com>
+Reported-by: Leonardo Antoniazzi <leoanto@aruba.it>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/net/usb/hso.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index 9bc58e64b5b7..3ef4b2841402 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -3104,7 +3104,7 @@ static void hso_free_interface(struct usb_interface *interface)
+ 			cancel_work_sync(&serial_table[i]->async_put_intf);
+ 			cancel_work_sync(&serial_table[i]->async_get_intf);
+ 			hso_serial_tty_unregister(serial);
+-			kref_put(&serial_table[i]->ref, hso_serial_ref_free);
++			kref_put(&serial->parent->ref, hso_serial_ref_free);
+ 		}
+ 	}
+ 
+-- 
+2.26.3
+
