@@ -2,101 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1683536BACD
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 22:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A28A536BB01
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 23:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234319AbhDZUnN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 16:43:13 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:16033 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233842AbhDZUnM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 16:43:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619469750; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=vOHO8cz5mRXLMj1d0Yn2sPy4MHZ3C4usEDqWxFA7sTQ=; b=mRmgsqtY+gF5Crt390j1JObGTkWBEqE8HAF0BxB4l4FoXvISwDbVXOnXmODY3G6zCDpcHzmL
- xyVYUioHbdUYXIfAYdRWlsnoi7cH08LRCNRwsKHHsqTKoVTo03lhg/N4PsAVdp1Q6NySawHS
- LcTj2r7xHuUATpj44l1lFLZaAyM=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 608725a9215b831afbdfc055 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 26 Apr 2021 20:42:17
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id EDF50C43460; Mon, 26 Apr 2021 20:42:16 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        id S238560AbhDZVJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 17:09:52 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:37078 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238202AbhDZVJY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 17:09:24 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 00B1DC008D;
+        Mon, 26 Apr 2021 21:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1619471322; bh=U+KCMWvOYyfvNTcEHKxiR/AcmiwekWT202VPKh7xyaY=;
+        h=Date:From:Subject:To:Cc:From;
+        b=Ak+CpOeCZWLg0Ejb4jta8RxcsEJc+6dy7ovKXlTAPrmKb8sb8OvB19zS0dQ5/VHjz
+         7t1iiw8NiJ5FBcLM2fqoKapESCgVQ+5DbI+0u2yikB8PSEjIdwpwONU8DkKXj53Fp8
+         +mCcfYG14I/VMPwAS2Kjz25yaUMDyH9vIcGrr5K3uhNddRck4LJqTcCFhRyCftrONt
+         6Xt/JgQuOPMD+lNzGWbL5iA47N1Zn9WGKfRZNgFz9pF7gU0lsybrnOBQMvR342xnzR
+         vQ/EUycxsXEWCdhXlr9ZG8k9TGshGI7ossB4NvXHcLow8ey3u6uJ1z/laWzIJhp6Ez
+         37gFWAQoHqBDg==
+Received: from lab-vbox (unknown [10.205.139.7])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0CD81C433D3;
-        Mon, 26 Apr 2021 20:42:15 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0CD81C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Mon, 26 Apr 2021 13:42:13 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-Cc:     abhilash.k.v@intel.com, gregkh@linuxfoundation.org,
-        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Retrieve all the PDOs instead of just
- the first 4
-Message-ID: <20210426204213.GC20698@jackp-linux.qualcomm.com>
-References: <20210426192605.GB20698@jackp-linux.qualcomm.com>
- <1619468491-22053-1-git-send-email-subbaram@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1619468491-22053-1-git-send-email-subbaram@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        by mailhost.synopsys.com (Postfix) with ESMTPSA id 86069A0096;
+        Mon, 26 Apr 2021 21:08:40 +0000 (UTC)
+Received: by lab-vbox (sSMTP sendmail emulation); Mon, 26 Apr 2021 14:08:40 -0700
+Date:   Mon, 26 Apr 2021 14:08:40 -0700
+Message-Id: <f4c491f7614e623755fafe640b7e690e7c5634e2.1619471127.git.Thinh.Nguyen@synopsys.com>
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: [PATCH] usb: dwc3: core: Add missing GHWPARAMS9 doc
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 01:21:31PM -0700, Subbaraman Narayanamurthy wrote:
-> > If such a source is connected it's possible the UCSI FW could have
-> 
-> s/UCSI FW/PPM
+Add missing documentation for struct dwc3_hwparams new field hwparams9
+to avoid kernel doc build warning.
 
-Right, PPM is a more apt descriptor. Waiting to see if Heikki has any
-feedback first before sending a V2.
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 16710380d3aa ("usb: dwc3: Capture new capability register GHWPARAMS9")
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > We can resolve this by instead retrieving and storing up to the
-> > maximum of 7 PDOs in the con->src_pdos array. This would involve
-> > two calls to the GET_PDOS command.
-> > 
-> 
-> This issue (see the signature below) is found by enabling UBSAN and
-> connecting a charger adapter that can advertise 5 PDOs and RPDO selected
-> by PPM is 5.
-> 
-> [  151.545106][   T70] Unexpected kernel BRK exception at EL1
-> [  151.545112][   T70] Internal error: BRK handler: f2005512 [#1] PREEMPT SMP
-> ...
-> [  151.545499][   T70] pc : ucsi_psy_get_prop+0x208/0x20c
-> [  151.545507][   T70] lr : power_supply_show_property+0xc0/0x328
-> ...
-> [  151.545542][   T70] Call trace:
-> [  151.545544][   T70]  ucsi_psy_get_prop+0x208/0x20c
-> [  151.545546][   T70]  power_supply_uevent+0x1a4/0x2f0
-> [  151.545550][   T70]  dev_uevent+0x200/0x384
-> [  151.545555][   T70]  kobject_uevent_env+0x1d4/0x7e8
-> [  151.545557][   T70]  power_supply_changed_work+0x174/0x31c
-> [  151.545562][   T70]  process_one_work+0x244/0x6f0
-> [  151.545564][   T70]  worker_thread+0x3e0/0xa64
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index b1e875c58f20..3859d8cad3cb 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -850,6 +850,7 @@ struct dwc3_trb {
+  * @hwparams6: GHWPARAMS6
+  * @hwparams7: GHWPARAMS7
+  * @hwparams8: GHWPARAMS8
++ * @hwparams9: GHWPARAMS9
+  */
+ struct dwc3_hwparams {
+ 	u32	hwparams0;
 
-UBSAN FTW. Want me to copy this trace into the commit text as well?
-
-Jack
+base-commit: caa93d9bd2d7ca7ffe5a23df9f003b81721c8e1b
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.28.0
+
