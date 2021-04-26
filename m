@@ -2,35 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BF436B170
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 12:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC0D836B191
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 12:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232711AbhDZKSF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 06:18:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48756 "EHLO mail.kernel.org"
+        id S232278AbhDZKW7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 06:22:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232253AbhDZKSE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Apr 2021 06:18:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C53A061178;
-        Mon, 26 Apr 2021 10:17:22 +0000 (UTC)
+        id S232194AbhDZKW6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Apr 2021 06:22:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8FA83600D1;
+        Mon, 26 Apr 2021 10:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619432243;
-        bh=gaTlQBfvV3oXbSv8n9Nhok+l9myJ4piCfXAZAtac2hI=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=QdevEW2NMHtkNYEjuj/7W3JSMZrZ5F/TKRoakQp0I4XrxcmFuiXjXGLqojaP93qT1
-         pryi/1lbEA+FI64qThIIJyDYNNrorlVLwbQA8M2MxhwGE1aIjCwhrIXdy8lRJk8p7/
-         IYNHVuS/WnHu7lAUR1exllG8pyiINS1u7XmYkhb0esJww+KWcekFszTz7zK0pzaEN7
-         Cl9vC9z2GWe7/+6t8Wl8ZMJfpMI09F8pvaRNmSZsxoaxrds+58vZJ0lRuVUY7Augwp
-         LicBbE2olQ+9Csc3HbcXcxW7xj3cw7JMOkIjG9g9QuMbnN4wxHn7RzS8LtTGLFs6jw
-         2DfPFrSJo7W7Q==
+        s=k20201202; t=1619432537;
+        bh=rBbbIYv3ycK9Tft+BTq3ju7PRrbk29CcghxbDzt3xKo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=NaBxF14zlvsjXl7lO9tyTE2m7AB0vMzbWncUUFI5zcJ1bUJq7utrOYAqcGA/6lCEt
+         MsHSVtTQ7cBgMUyQpylToXtqBKrnfbQDX/J2G5MuALHUHXe6cr2QELRzGL3dClb0o7
+         +4pDhkrTb/bVyA43NwXq6wxRob7SC9a0fxK9+IgGBqc32drclBZsRlQ+EkxWNTkqAa
+         yzv2L1rJfsekB1ZjasfRo2MnqVPVfTzICwzZqEFlO76vDdz1mnw+VmLgLcMnFg+0Ky
+         wRMNMGbdHyTRqYZF2K5S2xHfxIDe5uk/shhe2m1COlY9hnRCN2UkMheISu5D4P3Xcl
+         o+lQoLHtHRm7w==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Pratham Pratap <prathampratap@codeaurora.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: ep0 request dequeue for function drivers
-In-Reply-To: <655514e3-90c1-e628-d5e6-efb298f49038@codeaurora.org>
-References: <655514e3-90c1-e628-d5e6-efb298f49038@codeaurora.org>
-Date:   Mon, 26 Apr 2021 13:17:17 +0300
-Message-ID: <87bla1l58y.fsf@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, ruslan.bilovol@gmail.com,
+        jbrunet@baylibre.com, linux-usb@vger.kernel.org,
+        kurahul@cadence.com, peter.chen@kernel.org,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: Re: [PATCH v2 1/2] usb: gadget: f_uac2: Stop endpoint before
+ enabling it.
+In-Reply-To: <20210426044815.5393-1-pawell@gli-login.cadence.com>
+References: <20210426044815.5393-1-pawell@gli-login.cadence.com>
+Date:   Mon, 26 Apr 2021 13:22:10 +0300
+Message-ID: <878s55l50t.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -45,51 +49,68 @@ Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-Pratham Pratap <prathampratap@codeaurora.org> writes:
-> Hi,
+Pawel Laszczak <pawell@cadence.com> writes:
+> From: Pawel Laszczak <pawell@cadence.com>
 >
-> Let's say a function driver queues a request on ep0 and before the=20
-> completion handler could run composition switch/physical disconnect=20
-> happens. This request will be in pending list since gadget_giveback is=20
-> not done but the composite driver will free the request from=20
-> composite_dev_cleanup. Now, once the next connect happens, another ep0=20
-> request is queued and while handling the completion of that request,=20
-> gadget driver might end up accessing the old/stale request leading to=20
-> list_poison since pending list is corrupted.
+> Patch adds disabling endpoint before enabling it during changing
+> alternate setting. Lack of this functionality causes that in some
+> cases uac2 queue the same request multiple time.
+> Such situation can occur when host send set interface with
+> alternate setting 1 twice.
 
-argh, I'm assuming you're using dwc3. It's always a good idea to Cc
-maintainers for the drivers or subsystems in question. You can rely on
-scripts/get_maintainer.pl to get an idea who you should Cc.
+Which host is doing that?
 
-Anyway, assuming dwc3.
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+>
+> ---
+> Changelog:
+> v2:
+> - moved disabling endpoint into u_audio_start_playback
+>
+>  drivers/usb/gadget/function/u_audio.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/f=
+unction/u_audio.c
+> index 265c4d805f81..c4bbc9decaba 100644
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -401,6 +401,10 @@ int u_audio_start_playback(struct g_audio *audio_dev)
+>=20=20
+>  	ep =3D audio_dev->in_ep;
+>  	prm =3D &uac->p_prm;
+> +
+> +	if (prm->ep_enabled)
+> +		u_audio_stop_capture(audio_dev);
 
-Have you tried to actually reproduce this? Did you collect tracepoints?
-Did you read dwc3's documentation, specially in regards to reporting
-bugs?
+this looks to be a bug in f_uac2.c::afunc_set_alt(), actually. Note how
+e.g. f_obex.c::obex_set_alt() is implemented:
 
-Try to consider what happens when the cable is yanked and you'll quickly
-realize what you suggest can't happen. How does USB know that cable is
-disconnected? What happens to dwc3 when the cable is disconnected? What
-does the driver do about it?
+> } else if (intf =3D=3D obex->data_id) {
+> 	if (alt > 1)
+> 		goto fail;
+>
+> 	if (obex->port.in->enabled) {
 
-If you really found a bug, please report it correctly, following the
-Reporting Bugs section of dwc3 documentation, Cc the relevant people and
-make sure to reproduce the problem with *mainline*; downstream kernel is
-not acceptable ;-)
+if interface is already enabled...
 
-Also, please be clear about the setup you're using. The only thing I can
-infer is that you're using dwc3 with one of the QC platforms and I can
-only infer that due to your email domain. Please be clear, how to
-reproduce? Which QC platform are you using? Which kernel version?
+> 		dev_dbg(&cdev->gadget->dev,
+> 			"reset obex ttyGS%d\n", obex->port_num);
+> 		gserial_disconnect(&obex->port);
 
-> To fix this, the function drivers might want to use setup_pending(mark=20
-> it to true) flag so that when composite_dev_cleanup is run the requests=20
-> are given back from usb_ep_dequeue; clear the setup pending flag in=20
-> function driver when completion handler is run successfully. I can see=20
-> this issue in almost all the function drivers.
+...disable it first...
 
-Nah, we don't need that. Please answer the questions above about
-handling for cable disconnect and you'll see this is unnecessary.
+> 	}
+>
+> 	if (!obex->port.in->desc || !obex->port.out->desc) {
+> 		dev_dbg(&cdev->gadget->dev,
+> 			"init obex ttyGS%d\n", obex->port_num);
+> 		if (config_ep_by_speed(cdev->gadget, f,
+> 				       obex->port.in) ||
+> 		    config_ep_by_speed(cdev->gadget, f,
+> 				       obex->port.out)) {
+
+...before configuring endpoints again
 
 =2D-=20
 balbi
@@ -99,19 +120,19 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmCGky0RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzL64meEamQbRQw//XXK4wmTxJuEiWWf4u7A02PQP24k7Jy5p
-sVjJkS8KelZZISH74rv8yhXfi1qgzo8U0FsLjkWpuiGfGqMvIdPYTZPvCIrkXmz1
-q6qKa86zsFttpFE0Z9i+uRhWPTZMVn3oq6UNZsV4rvSdnGjrJ169xWyE5GW5uHTh
-WhmdZVlWTxyEzRykE8RMLqXKObDFt9fJ7ftaaXhSmnuirS0WHlNg5LrTV0A9R0T4
-Y86VZkNrKsWqT9eDI+Wmq7Xzgj76O/zE/Mcwl7DUPRSNMH1ATuxO3HOTyejadF3U
-Xz94Ri0EiEJJJ6VZh3Q/fpWtPCgjRxJYKkZbc1xZj2I5ByhfhiQ+Cy1ken9A80Sx
-stnxAYyfDie6LWKAE2jihlMIQVNxe2vAAy+1FL07yfKvigal+aT+s6zPepVCNBvF
-fE5OXZ2qLx9wuzwNz/IoQgKXNORth0Tq/uRslwsEFjKKHhIzTuV+CTIwIo3DOJcr
-KDQVMCCz78Se/8NUJocsW7gu8ty6bR1lUfh79hZiSPnauLyQknZx9W3QPB3hpwYu
-yKrjOqmJXxJhRRH5Imds3VZ/zoxn8LUnbJ3jBWITQVSb6tU1MQErosk8u5qhehsL
-6jjXxqUpIMju0Hkl1+SCGcfrueJIKtjytMQ0oCc2sfxGAj9a6dJgM01iAV6xFweL
-zGV+ItQNJJ0=
-=BAry
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmCGlFIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQZbJRAAgMm2a6E3zghjtzlhIxotcViHEaXRaU5A
+EXRzblMDGOfnP/DZkkeIv7sPNtAoebc0934F2u69u1hpvJR4Ggt0Yjh4bEJAHTWd
+MoZWUtF+nNNTT4vculD6eLwuOqKhWAHwOLJ4WWLRZmq/RC+N6xRDzO2iwgh75ol7
+nKHj9+XI0eUPEPNH0uWviL/GLLOGdBysjpptrtcw9wQfhO+hZAE90cXKaWd7NQdt
+7O6rL1tAm0Wrlj1hiM1EO/aTTexW9Yj7LO5hTF/9/VavwiIjShatLHeO2W99U07G
+yvWZwGDmBHQgwfhFsw55j+9r9bYOxzNS9P6dqdLgzZjYQOzh9Kam1fh/scTjC2wg
+znNUqyK79aHSfCQp805btqgeh35T5WL+issvSBfQIanfw9CzwPKoM5cPyvWnR+RS
+uifJDj5MEnOME7j9HrbBJLRj+YrbNeRvxVrZ1tenSaEiLFxHlI99rXorv6gkDW49
+l2FcnPo1iP3e1fUrKW5hna64M0UZdRK9+19TX8PiuW20/ZYB5L7nU/ZA1At4KKOW
+IuJ+D3gvlHjfrvhoDbunsbRd5oIssDw6zp4SYj9wm5Z8j4mi8ilwcDtjn+8hxFb8
+N88yg9ekNDQo7P3LeMV/u095WRh3OUF54gO4ztr2dZENgkKzsxQFa52r2v8KKe1c
+6AR4cO79BBA=
+=w2m3
 -----END PGP SIGNATURE-----
 --=-=-=--
