@@ -2,136 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 669A536B082
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 11:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513BA36B08F
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 11:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbhDZJ1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 05:27:12 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44216 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232078AbhDZJ1L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Apr 2021 05:27:11 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1619429189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=IMgmacegrTXSxBn53p5Sap+drifLJBlin5DKTtP50Pc=;
-        b=VVulvSflJnyOP1FLF3K2Hd5dIKqOAstvg3ZUDDJ7VayqF/GwNAAxR60scMdbUzpTAv/NUO
-        0ob8ClFak8Heu2ZzxX3vAIK6K0p0XV8lwbZ3XXAZpOLJKlyizsjScfc4c3SBMLqUrB95zf
-        K7gGoHIShaZQqcA9NnkJtvk+7Wa9stQ=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id A9B6FB16E;
-        Mon, 26 Apr 2021 09:26:29 +0000 (UTC)
-From:   Oliver Neukum <oneukum@suse.com>
-To:     gregKH@linuxfoundation.org, linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>
-Subject: [PATCHv2] cdc-wdm: untangle a circular dependency between callback and softint
-Date:   Mon, 26 Apr 2021 11:26:22 +0200
-Message-Id: <20210426092622.20433-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S232161AbhDZJaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 05:30:06 -0400
+Received: from smtpfree-b.aruba.it ([62.149.128.215]:50353 "EHLO
+        mxcm02.ad.aruba.it" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S232103AbhDZJaG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 05:30:06 -0400
+Received: from darkstar ([151.18.35.88])
+        by mxcm02.ad.aruba.it with bizsmtp
+        id xMVE240051u5oC701MVGbN; Mon, 26 Apr 2021 11:29:23 +0200
+X-SSL:  yes
+Date:   Mon, 26 Apr 2021 11:29:11 +0200
+From:   Leonardo Antoniazzi <leoanto@aruba.it>
+To:     linux-usb@vger.kernel.org
+Cc:     johan@kernel.org
+Subject: Re: [PATCH] net: hso: fix NULL-deref on disconnect regression
+Message-Id: <20210426112911.fb3593c3a9ecbabf98a13313@aruba.it>
+In-Reply-To: <20210426081149.10498-1-johan@kernel.org>
+References: <20210426081149.10498-1-johan@kernel.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-unknown-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aruba.it; s=a1;
+        t=1619429363; bh=Spo/zmyLIvJjdOAkp3Te/otU9+LGnkWiOcg4zVN4PV0=;
+        h=Date:From:To:Subject:Mime-Version:Content-Type;
+        b=NSO4lU9Vl76pbBLTtM53OMW1Pl4jcXSmmIHs54E42z7+VR20NwT/TeJWMb4Qo4oJR
+         5VLuEDTWKST/v1uUTlwkhnoqBC+XeVtYUdV2kaRhX63F4dbF5cjT2ctyv6lAHfteGe
+         Mm474zXexJHcwL1NjzabCm2HDSNut2MmuuO9Rv/PDSVothTFbNa5gE596P3J2jpZpU
+         zdzDqTr+Fve4Kx4UjQW58/bAoBRM8o1weT0DBkBKD3t3te3cHq/sc+lHS2lwU5yJ1D
+         b67mOsbF5uwpxMB1hckkVyH+m1PQW8pyhQAEPwbPCND17RQ5n179956k7eq+gM1/OL
+         Ja4zXIbrYNAzA==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We have a cycle of callbacks scheduling works which submit
-URBs with those callbacks. This needs to be blocked, stopped
-and unblocked to untangle the circle.
+On Mon, 26 Apr 2021 10:11:49 +0200
+Johan Hovold <johan@kernel.org> wrote:
 
-V2: Fixed spelling mistakes in description
+> Commit 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device
+> unregistration") fixed the racy minor allocation reported by syzbot, but
+> introduced an unconditional NULL-pointer dereference on every disconnect
+> instead.
+> 
+> Specifically, the serial device table must no longer be accessed after
+> the minor has been released by hso_serial_tty_unregister().
+> 
+> Fixes: 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device unregistration")
+> Cc: stable@vger.kernel.org
+> Cc: Anirudh Rayabharam <mail@anirudhrb.com>
+> Reported-by: Leonardo Antoniazzi <leoanto@aruba.it>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/net/usb/hso.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+> index 9bc58e64b5b7..3ef4b2841402 100644
+> --- a/drivers/net/usb/hso.c
+> +++ b/drivers/net/usb/hso.c
+> @@ -3104,7 +3104,7 @@ static void hso_free_interface(struct usb_interface *interface)
+>  			cancel_work_sync(&serial_table[i]->async_put_intf);
+>  			cancel_work_sync(&serial_table[i]->async_get_intf);
+>  			hso_serial_tty_unregister(serial);
+> -			kref_put(&serial_table[i]->ref, hso_serial_ref_free);
+> +			kref_put(&serial->parent->ref, hso_serial_ref_free);
+>  		}
+>  	}
+>  
+> -- 
+> 2.26.3
+> 
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
----
- drivers/usb/class/cdc-wdm.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+hello,
 
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 508b1c3f8b73..d1e4a7379beb 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -321,12 +321,23 @@ static void wdm_int_callback(struct urb *urb)
- 
- }
- 
--static void kill_urbs(struct wdm_device *desc)
-+static void poison_urbs(struct wdm_device *desc)
- {
- 	/* the order here is essential */
--	usb_kill_urb(desc->command);
--	usb_kill_urb(desc->validity);
--	usb_kill_urb(desc->response);
-+	usb_poison_urb(desc->command);
-+	usb_poison_urb(desc->validity);
-+	usb_poison_urb(desc->response);
-+}
-+
-+static void unpoison_urbs(struct wdm_device *desc)
-+{
-+	/*
-+	 *  the order here is not essential
-+	 *  it is symmetrical just to be nice
-+	 */
-+	usb_unpoison_urb(desc->response);
-+	usb_unpoison_urb(desc->validity);
-+	usb_unpoison_urb(desc->command);
- }
- 
- static void free_urbs(struct wdm_device *desc)
-@@ -741,11 +752,12 @@ static int wdm_release(struct inode *inode, struct file *file)
- 	if (!desc->count) {
- 		if (!test_bit(WDM_DISCONNECTING, &desc->flags)) {
- 			dev_dbg(&desc->intf->dev, "wdm_release: cleanup\n");
--			kill_urbs(desc);
-+			poison_urbs(desc);
- 			spin_lock_irq(&desc->iuspin);
- 			desc->resp_count = 0;
- 			spin_unlock_irq(&desc->iuspin);
- 			desc->manage_power(desc->intf, 0);
-+			unpoison_urbs(desc);
- 		} else {
- 			/* must avoid dev_printk here as desc->intf is invalid */
- 			pr_debug(KBUILD_MODNAME " %s: device gone - cleaning up\n", __func__);
-@@ -1037,9 +1049,9 @@ static void wdm_disconnect(struct usb_interface *intf)
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
- 	mutex_lock(&desc->wlock);
-+	poison_urbs(desc);
- 	cancel_work_sync(&desc->rxwork);
- 	cancel_work_sync(&desc->service_outs_intr);
--	kill_urbs(desc);
- 	mutex_unlock(&desc->wlock);
- 	mutex_unlock(&desc->rlock);
- 
-@@ -1080,9 +1092,10 @@ static int wdm_suspend(struct usb_interface *intf, pm_message_t message)
- 		set_bit(WDM_SUSPENDING, &desc->flags);
- 		spin_unlock_irq(&desc->iuspin);
- 		/* callback submits work - order is essential */
--		kill_urbs(desc);
-+		poison_urbs(desc);
- 		cancel_work_sync(&desc->rxwork);
- 		cancel_work_sync(&desc->service_outs_intr);
-+		unpoison_urbs(desc);
- 	}
- 	if (!PMSG_IS_AUTO(message)) {
- 		mutex_unlock(&desc->wlock);
-@@ -1140,7 +1153,7 @@ static int wdm_pre_reset(struct usb_interface *intf)
- 	wake_up_all(&desc->wait);
- 	mutex_lock(&desc->rlock);
- 	mutex_lock(&desc->wlock);
--	kill_urbs(desc);
-+	poison_urbs(desc);
- 	cancel_work_sync(&desc->rxwork);
- 	cancel_work_sync(&desc->service_outs_intr);
- 	return 0;
-@@ -1151,6 +1164,7 @@ static int wdm_post_reset(struct usb_interface *intf)
- 	struct wdm_device *desc = wdm_find_device(intf);
- 	int rv;
- 
-+	unpoison_urbs(desc);
- 	clear_bit(WDM_OVERFLOW, &desc->flags);
- 	clear_bit(WDM_RESETTING, &desc->flags);
- 	rv = recover_from_urb_loss(desc);
--- 
-2.26.2
+the patch fix the problem
+
+thanks
 
