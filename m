@@ -2,58 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7DD136AF5D
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 10:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A724536AF63
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 10:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbhDZH6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 03:58:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49918 "EHLO mail.kernel.org"
+        id S232464AbhDZIAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 04:00:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51276 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233789AbhDZH5d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 26 Apr 2021 03:57:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 12662610A5;
-        Mon, 26 Apr 2021 07:56:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619423810;
-        bh=3LiMZGFepKvIzm/bqmRdPYR/t6k1/dDpozeArIOdCy4=;
+        id S232458AbhDZIAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Apr 2021 04:00:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 23AD16105A;
+        Mon, 26 Apr 2021 07:59:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619423982;
+        bh=+2O4A36yPwK7BKEhZw/DxclUvVORbj/dAxbiPIB2zUg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DoHR3O0Ib5grHn/719SjjpBBYdre7C8I9Na9pz6QbPhqgA98UBUQTWh/FvpiQWYug
-         POo088jDvOgNWke+qafHc2FQsUv19SI5n37cVFj6OAgHTu7Md6dCQJIUKRUwI+K1cz
-         Zvz9XXeyhBatMIHrDbkewLTR7ityNrw9O8XqcsfA=
-Date:   Mon, 26 Apr 2021 09:32:44 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Leonardo Antoniazzi <leoanto@aruba.it>,
-        Anirudh Rayabharam <mail@anirudhrb.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org
+        b=svtSjMEGip4pEdp2QNNz6mWuh9qgWOBHDFclADT6KvDQDEHkeV4SKz0JJWLVBOMOa
+         ZHYX/nKyHEXPdGyc5YhdVZfrm29y2CNt5Bg7MxuiPtvz9t8Uvd7ULU5pcvKWIgsWLk
+         +BRi981A/n432hG9geR0LSdfRphDamG6p84Sswqis93Mg3O77agZ26SBDH36m7ky0O
+         qfLFTHuSEEEq7KrUx8rr2QBEpqaWOhEoXkcdlbq6z5ABfoUEjckrqaV7DKD5zUT+CJ
+         CaX+pAXPJztxA00ox+Tv5EFeYqDgUBEptq5cV1bMNdbZO0QcEmL2LBkHq1c22+w2iI
+         oMdSPV7QtB3DQ==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1law9n-0001e2-0i; Mon, 26 Apr 2021 09:59:52 +0200
+Date:   Mon, 26 Apr 2021 09:59:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Leonardo Antoniazzi <leoanto@aruba.it>,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
 Subject: Re: hso driver kernel NULL pointer dereference
-Message-ID: <YIZsnF7FqeQ+eDM0@kroah.com>
+Message-ID: <YIZy96hlzl6Z/Gwv@hovoldconsulting.com>
 References: <20210425233509.9ce29da49037e1a421000bdd@aruba.it>
+ <YIZsnF7FqeQ+eDM0@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210425233509.9ce29da49037e1a421000bdd@aruba.it>
+In-Reply-To: <YIZsnF7FqeQ+eDM0@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Apr 25, 2021 at 11:35:09PM +0200, Leonardo Antoniazzi wrote:
-> Hello,
-> removing my usb-modem (option icon 226) i get this oops (i attached the dmesg output):
+On Mon, Apr 26, 2021 at 09:32:44AM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Apr 25, 2021 at 11:35:09PM +0200, Leonardo Antoniazzi wrote:
+> > Hello,
+> > removing my usb-modem (option icon 226) i get this oops (i attached the dmesg output):
+> > 
+> > BUG: kernel NULL pointer dereference, address: 0000000000000068
+> > 
+> > reverting this patch fix the problem on detaching the modem:
+> > 
+> > https://marc.info/?l=linux-usb&m=161781851805582&w=2
+> > 
+> > I'm not a developer, i hope the attached dmesg.txt will suffice
 > 
-> BUG: kernel NULL pointer dereference, address: 0000000000000068
+> Ick, that's not good.
 > 
-> reverting this patch fix the problem on detaching the modem:
-> 
-> https://marc.info/?l=linux-usb&m=161781851805582&w=2
-> 
-> I'm not a developer, i hope the attached dmesg.txt will suffice
+> Anirudh, can you please look into this as it's caused by 8a12f8836145
+> ("net: hso: fix null-ptr-deref during tty device unregistration") which
+> is merged into 5.12.
 
-Ick, that's not good.
+I found the bug. Patch coming.
 
-Anirudh, can you please look into this as it's caused by 8a12f8836145
-("net: hso: fix null-ptr-deref during tty device unregistration") which
-is merged into 5.12.
-
-thanks,
-
-greg k-h
+Johan
