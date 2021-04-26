@@ -2,67 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C42136AA45
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 03:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C15A36AA59
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 03:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbhDZBW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Apr 2021 21:22:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57476 "EHLO mail.kernel.org"
+        id S231624AbhDZBbB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Apr 2021 21:31:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60352 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231403AbhDZBWZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 25 Apr 2021 21:22:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EA0A961139;
-        Mon, 26 Apr 2021 01:21:42 +0000 (UTC)
+        id S231663AbhDZBa4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 25 Apr 2021 21:30:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 2104C6135F;
+        Mon, 26 Apr 2021 01:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619400104;
-        bh=jknGm2zHjukb35gDDsR8FM1t9ewdehkMYjtUN18Zsx0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eY4T5FrYK9qq250q6M9NkEZQpSJTPUJfnNsb8xMEB5dmAOqrFyfDifX8jj+r6900L
-         PLcyLVe1LizJYhDrDFFkYnplMNlFWcji4HYYIJ6Wi+bA3fg0dJhpdYQo2+J5KAyMB1
-         loWbfHJTghQNnFYJoRtVnSA/MxhpUONN3VUlwWx87iChnUbrrfsD/pXrATHWeDZrG0
-         bk4wJZqFc/9cUnzTnMjh74OYevXQVsuzpl57HjTYg2X27AvfouzFNS01/GvfDFFsZv
-         +nNt6hg3vUP/0ehakyi0X80GF1GRrPVaCoowGeBGjLGgJNTdOhmOOpXw4xwGvmpAHC
-         eBH5yim2CTQzA==
-Date:   Mon, 26 Apr 2021 09:21:39 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] dt-bindings: usb: dwc3-imx8mp: Use the correct name
- for child node "snps,dwc3"
-Message-ID: <20210426012138.GA27585@dragon>
-References: <20210329072714.2135-1-thunder.leizhen@huawei.com>
+        s=k20201202; t=1619400616;
+        bh=kMA1CM3cbnfdnimBc+GZhNWNAA6x7qfdv/cRcUAsDgQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=l9ajjJq9sqxBXQVJjzTliIC5A6qdIW5FbQhjkiRzIleheH+17zgiH9fjK4Pr5D1YS
+         X0FtXURBrfDJ/5AkZsN38O+u0RBxjDAYZvci/ihnvldAP7xbHUFraTWcEk0Wl5GOvH
+         aGk4DelAE37aQyeHqXbSgKK/wmmfyNCvXMZ/PGxVVFdZj9QCdcbO6IHVAdk2OwD6LZ
+         vaMS3rEIjXhMvNIv9/nq29qpLeuQlMoMvWMjtJFj12ZEbwMiA6EUV/D01OPip/lsWT
+         cyz+0UJiWPfYHMYKmtsmCEitdqYruasG5DmLBn7Plm721mmTe4yQ4QOQN7GscdfvVe
+         bX3Px8tExv1Zw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 18F686094F;
+        Mon, 26 Apr 2021 01:30:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210329072714.2135-1-thunder.leizhen@huawei.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] r8152: remove some bit operations
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <161940061609.7794.12561749260438717374.git-patchwork-notify@kernel.org>
+Date:   Mon, 26 Apr 2021 01:30:16 +0000
+References: <1394712342-15778-362-Taiwan-albertk@realtek.com>
+In-Reply-To: <1394712342-15778-362-Taiwan-albertk@realtek.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Mar 29, 2021 at 03:27:12PM +0800, Zhen Lei wrote:
-> File snps,dwc3.yaml describes the schema of Synopsys DesignWare USB3
-> Controller, it directly or indirectly contains "$ref: usb.yaml". So the
-> node name of "snps,dwc3" must start with "usb". Otherwise, the following
-> warning will be displayed:
-> 
-> Documentation/devicetree/bindings/usb/fsl,imx8mp-dwc3.example.dt.yaml: \
-> dwc3@38100000: $nodename:0: 'dwc3@38100000' does not match '^usb(@.*)?'
->         From schema: Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> 
-> 
-> Zhen Lei (2):
->   dt-bindings: usb: dwc3-imx8mp: Use the correct name for child node
->     "snps,dwc3"
->   arm64: dts: imx8mp: Use the correct name for child node "snps,dwc3"
+Hello:
 
-Applied both, thanks.
+This patch was applied to netdev/net-next.git (refs/heads/master):
+
+On Sat, 24 Apr 2021 14:09:03 +0800 you wrote:
+> Remove DELL_TB_RX_AGG_BUG and LENOVO_MACPASSTHRU flags of rtl8152_flags.
+> They are only set when initializing and wouldn't be change. It is enough
+> to record them with variables.
+> 
+> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> ---
+>  drivers/net/usb/r8152.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+
+Here is the summary with links:
+  - [net-next] r8152: remove some bit operations
+    https://git.kernel.org/netdev/net-next/c/9c68011bd7e4
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
