@@ -2,74 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E1936B282
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 13:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78CA36B2CA
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 14:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbhDZLuP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 07:50:15 -0400
-Received: from mail-oi1-f176.google.com ([209.85.167.176]:41724 "EHLO
-        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbhDZLuO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 07:50:14 -0400
-Received: by mail-oi1-f176.google.com with SMTP id r186so28369596oif.8;
-        Mon, 26 Apr 2021 04:49:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p9F86T9h7602Fl6+TzddeYKXK/1gVrIGGZyfmSG1Vys=;
-        b=rocBFH0Voxw05QkB5MZ2+Xky9VIDX1u1p9TtuynPMHE2/2VXxeN9fffb93vQSxk/NN
-         CMsvP+2qK7lTP31MUKaO0lOHd+s6o34fPWiaxBGPAdIjZiBRvv2QqJ1KG6DID62ZulIA
-         HXQiJpJLid5526vZAfJtQ2c4IsacT1REU9ckRT9rjvpikhQ39dg47kptk+hm8bFYdod2
-         IYeR3tJhcvbTrs0APOqZiDlTLWITu57N09lMCy7GmWhGc6HMIRxgNtivSH+voZO71OVr
-         MvWHQue18ZRs+cMqgn2PwiD8XAEsZn2tl//yyL9v8iC3J7F9o6wisNP1MLPGjiSX0Iga
-         g+QQ==
-X-Gm-Message-State: AOAM530Gv7/U3GhTpX8aj1lt6pt9APKu5T7rdXknRZ5zdV5x4dLih0Ai
-        oC7hwtDsO/aB20Tw8RiRz1Wa51EANIniLEz2pX7ePBuI
-X-Google-Smtp-Source: ABdhPJx5GrUxGsRFl+KIvzoja/xec5WPmkW+zWyrx4LIdDd5Tsqd14K9KRuF2gYlrInb4Z/rfiXAnltwTjkg+C9MtLQ=
-X-Received: by 2002:a54:4501:: with SMTP id l1mr13347861oil.157.1619437770174;
- Mon, 26 Apr 2021 04:49:30 -0700 (PDT)
+        id S233257AbhDZMOb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 08:14:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41792 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231550AbhDZMOa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Apr 2021 08:14:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 009BE61178;
+        Mon, 26 Apr 2021 12:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619439229;
+        bh=3jTHsaN6ohRdOgJEHP9SWTgo6GOAMiOIw+coUfFMB6Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EE4JGHF9yusSCOW1/++ZdJIBj33EDn3bHr1UzDxz5uuqO9S1me5qfJrBts4VmQtZb
+         hyPwP53XqKJDoD0mzg52RrBURcZH2OIjU0PhSRb6uK2hIHdc9v65NADPHOAG9GTNLe
+         PAR09iM1oriu09Ybk2+ZCb8iww8MbYWJitb+rzknZSN2yJquRUf3sd2Z4Ska19fkhb
+         RUYyAP5xRYFvPxtRy1nfqy+zQRALtqwCioJ4n/LtRcG6evtFpVkR9lYDFsb4OaMZRW
+         PgVGSoH7kjtegpV3xnQ9Aj5uTThlf3KINgPsmAoJTNi87leEeUIJSlQSYUd99MC5Ki
+         kJS8El89cWo0Q==
+Received: from johan by xi.lan with local (Exim 4.93.0.4)
+        (envelope-from <johan@kernel.org>)
+        id 1lb07i-0006G9-V9; Mon, 26 Apr 2021 14:13:59 +0200
+Date:   Mon, 26 Apr 2021 14:13:58 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: hiddev: return -ENOMEM when kmalloc failed
+Message-ID: <YIauhinYt+USHmaB@hovoldconsulting.com>
+References: <1619429726-54768-1-git-send-email-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-References: <20210424021631.1972022-1-rajatja@google.com> <20210424021631.1972022-2-rajatja@google.com>
- <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com>
-In-Reply-To: <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 26 Apr 2021 13:49:15 +0200
-Message-ID: <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Rajat Jain <rajatja@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1619429726-54768-1-git-send-email-yang.lee@linux.alibaba.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 11:17 AM Oliver Neukum <oneukum@suse.com> wrote:
+On Mon, Apr 26, 2021 at 05:35:26PM +0800, Yang Li wrote:
+> The driver is using -1 instead of the -ENOMEM defined macro to
+> specify that a buffer allocation failed. Using the correct error
+> code is more intuitive.
+> 
+> Smatch tool warning:
+> drivers/hid/usbhid/hiddev.c:894 hiddev_connect() warn: returning -1
+> instead of -ENOMEM is sloppy
+> 
+> No functional change, just more standardized.
 >
-> Am Freitag, den 23.04.2021, 19:16 -0700 schrieb Rajat Jain:
-> > Export the already available info, to the userspace via the
-> > device core, so that userspace can implement whatever policies it
-> > wants to, for external removable devices.
->
-> Hi,
->
-> is there a way to tell apart whether a device can undergo regular
-> surprise removal?
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> ---
+>  drivers/hid/usbhid/hiddev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/usbhid/hiddev.c b/drivers/hid/usbhid/hiddev.c
+> index 45e0b1c..88020f3 100644
+> --- a/drivers/hid/usbhid/hiddev.c
+> +++ b/drivers/hid/usbhid/hiddev.c
+> @@ -891,7 +891,7 @@ int hiddev_connect(struct hid_device *hid, unsigned int force)
+>  	}
+>  
+>  	if (!(hiddev = kzalloc(sizeof(struct hiddev), GFP_KERNEL)))
+> -		return -1;
+> +		return -ENOMEM;
 
-PCI devices located under a removable parent can undergo surprise
-removal.  The ones on a Thunderbolt chain too.
+Please try to understand the code that you're changing based on feedback
+from some tool.
 
-> Do we want that?
+All other error paths here return -1 and the return value of this
+function is only compared to zero.
 
-Do you mean surprise removal?  Yes, we do.
+How is changing only one of these paths an improvement in any way?
+
+>  
+>  	init_waitqueue_head(&hiddev->wait);
+>  	INIT_LIST_HEAD(&hiddev->list);
+
+Johan
