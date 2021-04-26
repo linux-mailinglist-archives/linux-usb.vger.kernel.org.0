@@ -2,83 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D6236B3B0
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 15:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0843136B471
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 16:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233483AbhDZNB7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 09:01:59 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:20173 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231862AbhDZNB6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 09:01:58 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-226-bKRoWGHJPtmB3JBEE_yQBQ-1; Mon, 26 Apr 2021 14:01:11 +0100
-X-MC-Unique: bKRoWGHJPtmB3JBEE_yQBQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Mon, 26 Apr 2021 14:01:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Mon, 26 Apr 2021 14:01:10 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-CC:     Rajat Jain <rajatja@google.com>,
+        id S233704AbhDZOC6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 10:02:58 -0400
+Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21366 "EHLO
+        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231862AbhDZOC6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 10:02:58 -0400
+ARC-Seal: i=1; a=rsa-sha256; t=1619445723; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=UGOk35mQQbE2f7UY1W3lZfCBuIr072oCYc/IG5TqfkW4dw/WQvrfLNfMswH5UZmK5QPRRjiDCrPEMkxLCnROWI10blqW9MtmCuqAQNyO/rsUxtJ3U2HtLK1iLy8vR71kLiXAu0tWY5p0wMtXkMHhXf1ZKiRh4atQSUcSXtsr1Fg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1619445723; h=Content-Type:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=rzsZ83jDBREjyjIqQHOvAx9cUe0wGukCjDAduzsjysY=; 
+        b=WDEDgpuwC8Dguh1O8y95T4TQB2sD6kAWDbd33kqEJR1XhVa7i7oyXtepLGXzCidFneOnrWJpKdH622LymDlGkAme/is5od+lY2yN31DTodjx4XFM/VIv3TNIsbZMiZDoylvp/gto88vF34QjVbcPcI7laOfC6IpNsOu23kEMwr0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=anirudhrb.com;
+        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
+        dmarc=pass header.from=<mail@anirudhrb.com> header.from=<mail@anirudhrb.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1619445723;
+        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To;
+        bh=rzsZ83jDBREjyjIqQHOvAx9cUe0wGukCjDAduzsjysY=;
+        b=jeK3yROBJkjiR2Ml4jEB8wPmQRugSoQqGg5/p6IZWle0F/gsF+1w1VuAcQwZSlIL
+        VE9syP7do0DOSWeBuA8hNUYIn0ZlLD1hznje6t68LulQYS810duCdKlpsArrXSmWSwQ
+        A1e/1rciwcvJA62tS8bHCcpJDbt0bgzxi+pRPTx0=
+Received: from anirudhrb.com (49.207.208.26 [49.207.208.26]) by mx.zohomail.com
+        with SMTPS id 1619445705390287.8470601189231; Mon, 26 Apr 2021 07:01:45 -0700 (PDT)
+Date:   Mon, 26 Apr 2021 19:31:38 +0530
+From:   Anirudh Rayabharam <mail@anirudhrb.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, "Bjorn Helgaas" <helgaas@kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Subject: RE: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
-Thread-Topic: [PATCH v2 2/2] pci: Support "removable" attribute for PCI
- devices
-Thread-Index: AQHXOpI8ukue0tNuwUC9JgKnmYtYG6rGwqQQ
-Date:   Mon, 26 Apr 2021 13:01:10 +0000
-Message-ID: <79b994f2476249498797e1784f735fd7@AcuMS.aculab.com>
-References: <20210424021631.1972022-1-rajatja@google.com>
- <20210424021631.1972022-2-rajatja@google.com>
- <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com>
- <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Leonardo Antoniazzi <leoanto@aruba.it>, mail@anirudhrb.com
+Subject: Re: [PATCH] net: hso: fix NULL-deref on disconnect regression
+Message-ID: <YIbHwqG6eukP9uQg@anirudhrb.com>
+References: <20210426081149.10498-1-johan@kernel.org>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210426081149.10498-1-johan@kernel.org>
+X-ZohoMailClient: External
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogUmFmYWVsIEouIFd5c29ja2kNCj4gU2VudDogMjYgQXByaWwgMjAyMSAxMjo0OQ0KPiAN
-Cj4gT24gTW9uLCBBcHIgMjYsIDIwMjEgYXQgMTE6MTcgQU0gT2xpdmVyIE5ldWt1bSA8b25ldWt1
-bUBzdXNlLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBBbSBGcmVpdGFnLCBkZW4gMjMuMDQuMjAyMSwg
-MTk6MTYgLTA3MDAgc2NocmllYiBSYWphdCBKYWluOg0KPiA+ID4gRXhwb3J0IHRoZSBhbHJlYWR5
-IGF2YWlsYWJsZSBpbmZvLCB0byB0aGUgdXNlcnNwYWNlIHZpYSB0aGUNCj4gPiA+IGRldmljZSBj
-b3JlLCBzbyB0aGF0IHVzZXJzcGFjZSBjYW4gaW1wbGVtZW50IHdoYXRldmVyIHBvbGljaWVzIGl0
-DQo+ID4gPiB3YW50cyB0bywgZm9yIGV4dGVybmFsIHJlbW92YWJsZSBkZXZpY2VzLg0KPiA+DQo+
-ID4gSGksDQo+ID4NCj4gPiBpcyB0aGVyZSBhIHdheSB0byB0ZWxsIGFwYXJ0IHdoZXRoZXIgYSBk
-ZXZpY2UgY2FuIHVuZGVyZ28gcmVndWxhcg0KPiA+IHN1cnByaXNlIHJlbW92YWw/DQo+IA0KPiBQ
-Q0kgZGV2aWNlcyBsb2NhdGVkIHVuZGVyIGEgcmVtb3ZhYmxlIHBhcmVudCBjYW4gdW5kZXJnbyBz
-dXJwcmlzZQ0KPiByZW1vdmFsLiAgVGhlIG9uZXMgb24gYSBUaHVuZGVyYm9sdCBjaGFpbiB0b28u
-DQo+IA0KPiA+IERvIHdlIHdhbnQgdGhhdD8NCj4gDQo+IERvIHlvdSBtZWFuIHN1cnByaXNlIHJl
-bW92YWw/ICBZZXMsIHdlIGRvLg0KDQpBbHdheXMgYmVlbiB0cnVlIC0gdGhpbmsgb2YgY2FyZGJ1
-cyAoUENJIHBjbWNpYSkgY2FyZHMgd2l0aA0KUENJIGJyaWRnZXMgdG8gZXh0ZXJuYWwgUENJIGV4
-cGFuc2lvbiBjaGFzc2lzIGNvbnRhaW5pbmcNCmFkZGl0aW9uYWwgUENJIHNsb3RzLg0KVGhlIGNh
-cmRidXMgY2FyZCBpcyBob3QgcmVtb3ZhYmxlLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBB
-ZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMs
-IE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On Mon, Apr 26, 2021 at 10:11:49AM +0200, Johan Hovold wrote:
+> Commit 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device
+> unregistration") fixed the racy minor allocation reported by syzbot, but
+> introduced an unconditional NULL-pointer dereference on every disconnect
+> instead.
+> 
+> Specifically, the serial device table must no longer be accessed after
+> the minor has been released by hso_serial_tty_unregister().
+> 
+> Fixes: 8a12f8836145 ("net: hso: fix null-ptr-deref during tty device unregistration")
+> Cc: stable@vger.kernel.org
+> Cc: Anirudh Rayabharam <mail@anirudhrb.com>
+> Reported-by: Leonardo Antoniazzi <leoanto@aruba.it>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/net/usb/hso.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+> index 9bc58e64b5b7..3ef4b2841402 100644
+> --- a/drivers/net/usb/hso.c
+> +++ b/drivers/net/usb/hso.c
+> @@ -3104,7 +3104,7 @@ static void hso_free_interface(struct usb_interface *interface)
+>  			cancel_work_sync(&serial_table[i]->async_put_intf);
+>  			cancel_work_sync(&serial_table[i]->async_get_intf);
+>  			hso_serial_tty_unregister(serial);
+> -			kref_put(&serial_table[i]->ref, hso_serial_ref_free);
+> +			kref_put(&serial->parent->ref, hso_serial_ref_free);
+>  		}
+>  	}
 
+Ah, my bad. Thanks Johan for the fix!
+
+Reviewed-by: Anirudh Rayabharam <mail@anirudhrb.com>
+
+	- Anirudh.
