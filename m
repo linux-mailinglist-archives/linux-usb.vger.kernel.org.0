@@ -2,46 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DBE736BA8E
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 22:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C043B36BAA4
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Apr 2021 22:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241748AbhDZUKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Apr 2021 16:10:08 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:35800 "EHLO
-        mail.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241724AbhDZUKH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 16:10:07 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
-        by mail.monkeyblade.net (Postfix) with ESMTPSA id C73E84F48ADC4;
-        Mon, 26 Apr 2021 13:09:23 -0700 (PDT)
-Date:   Mon, 26 Apr 2021 13:09:19 -0700 (PDT)
-Message-Id: <20210426.130919.1291678249925211750.davem@davemloft.net>
-To:     gregkh@linuxfoundation.org
-Cc:     johan@kernel.org, leoanto@aruba.it, linux-usb@vger.kernel.org,
-        kuba@kernel.org, mail@anirudhrb.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: hso: fix NULL-deref on disconnect regression
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <YIaM9B/UZ1qHAC9+@kroah.com>
-References: <20210426112911.fb3593c3a9ecbabf98a13313@aruba.it>
-        <YIaJcgmiJFERvbEF@hovoldconsulting.com>
-        <YIaM9B/UZ1qHAC9+@kroah.com>
-X-Mailer: Mew version 6.8 on Emacs 27.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.6.2 (mail.monkeyblade.net [0.0.0.0]); Mon, 26 Apr 2021 13:09:24 -0700 (PDT)
+        id S241791AbhDZUWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Apr 2021 16:22:43 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:16940 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241780AbhDZUWm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Apr 2021 16:22:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619468521; h=References: In-Reply-To: Message-Id: Date:
+ Subject: Cc: To: From: Sender;
+ bh=3LGFtiTRJjNMYbJ6EUUyU7V1Qj7k6TQXUxK2E6mPlFU=; b=khYho5+dLZTrclHR9cKzGkFt2/vbK60Y+WOiLv0zf/NEwavS6BjUR/7Gw32+n4KDy6sDVe7V
+ Mlwpf4iDEsHbuA6d7QiZPZf6ewLT70a+YVsMwPiG1NhxpZftIILHCh2zSbWCiTrzbO/DVo/+
+ xKVqZ+aIXwyNla8xq5fFGUs7zW0=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 608720d4f34440a9d4d63ffc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 26 Apr 2021 20:21:40
+ GMT
+Sender: subbaram=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E43BAC43217; Mon, 26 Apr 2021 20:21:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from subbaram-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: subbaram)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 06071C433D3;
+        Mon, 26 Apr 2021 20:21:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 06071C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=subbaram@codeaurora.org
+From:   Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+To:     jackp@codeaurora.org
+Cc:     abhilash.k.v@intel.com, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        stable@vger.kernel.org, subbaram@codeaurora.org
+Subject: Re: [PATCH] usb: typec: ucsi: Retrieve all the PDOs instead of just the first 4
+Date:   Mon, 26 Apr 2021 13:21:31 -0700
+Message-Id: <1619468491-22053-1-git-send-email-subbaram@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20210426192605.GB20698@jackp-linux.qualcomm.com>
+References: <20210426192605.GB20698@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Date: Mon, 26 Apr 2021 11:50:44 +0200
+> If such a source is connected it's possible the UCSI FW could have
 
-> netdev maintainers, mind if I take this fix through my tree to Linus
-> this week, or can you all get it to him before -rc1 through the
-> networking tree?
+s/UCSI FW/PPM
 
-I tossed this into net-next so Linus will see it later this week.
+> We can resolve this by instead retrieving and storing up to the
+> maximum of 7 PDOs in the con->src_pdos array. This would involve
+> two calls to the GET_PDOS command.
+> 
 
-Thanks.
+This issue (see the signature below) is found by enabling UBSAN and
+connecting a charger adapter that can advertise 5 PDOs and RPDO selected
+by PPM is 5.
+
+[  151.545106][   T70] Unexpected kernel BRK exception at EL1
+[  151.545112][   T70] Internal error: BRK handler: f2005512 [#1] PREEMPT SMP
+...
+[  151.545499][   T70] pc : ucsi_psy_get_prop+0x208/0x20c
+[  151.545507][   T70] lr : power_supply_show_property+0xc0/0x328
+...
+[  151.545542][   T70] Call trace:
+[  151.545544][   T70]  ucsi_psy_get_prop+0x208/0x20c
+[  151.545546][   T70]  power_supply_uevent+0x1a4/0x2f0
+[  151.545550][   T70]  dev_uevent+0x200/0x384
+[  151.545555][   T70]  kobject_uevent_env+0x1d4/0x7e8
+[  151.545557][   T70]  power_supply_changed_work+0x174/0x31c
+[  151.545562][   T70]  process_one_work+0x244/0x6f0
+[  151.545564][   T70]  worker_thread+0x3e0/0xa64
+
+> Fixes: 992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
+> Fixes: 4dbc6a4ef06d ("usb: typec: ucsi: save power data objects in PD mode")
