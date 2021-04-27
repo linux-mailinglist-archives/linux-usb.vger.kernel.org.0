@@ -2,150 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A24236C6B1
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Apr 2021 15:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E62136CBC2
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Apr 2021 21:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236008AbhD0NHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Apr 2021 09:07:14 -0400
-Received: from mga09.intel.com ([134.134.136.24]:16490 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235795AbhD0NHO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Apr 2021 09:07:14 -0400
-IronPort-SDR: VUHxa8mAROe/IsTc5dnCt84zfX3CiTFG7REsnml2CAfMgiacruIICsTNeelaqxVxnyvkcBH95j
- pVe6fedBL+vw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9966"; a="196615230"
-X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
-   d="scan'208";a="196615230"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 06:06:24 -0700
-IronPort-SDR: K7Np3LQlVoiWluaCTJ2FhoyRO9jf9C1CNb5JOOaVp44Xg9W3y+DRBiB/QbRchsDnrwzusNwyA8
- Bh1mQgIX/amQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
-   d="scan'208";a="618919372"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2021 06:06:22 -0700
-Subject: Re: [PATCH v2 3/7] usb: xhci: Check for blocked disconnection
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Cc:     John Youn <John.Youn@synopsys.com>
-References: <cover.1618014279.git.Thinh.Nguyen@synopsys.com>
- <07196754c6de290bb46cc235ce6e96c5df304150.1618014279.git.Thinh.Nguyen@synopsys.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <845ec8a0-43f2-a28e-5edc-d7a47ccabdf5@linux.intel.com>
-Date:   Tue, 27 Apr 2021 16:08:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S238666AbhD0Tif (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Apr 2021 15:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235661AbhD0Tie (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Apr 2021 15:38:34 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942B6C061574;
+        Tue, 27 Apr 2021 12:37:49 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id f2-20020a17090a4a82b02900c67bf8dc69so7725284pjh.1;
+        Tue, 27 Apr 2021 12:37:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=MKJIJ4UnZNAA5NLPoDiMpenC7DJEVyWZfyv+PILCaYE=;
+        b=IxDEPmTh9hCkoSDGfresNaHk/35pZeD4OqbPjzLIP5DK9SwNKkYEoHiyYdhLLf5dU2
+         NznW20H8LmirJM0yl5xTVWdjdq0ajq0tSlb5aAr+fl7wNRv6wJNVlQwl3lofdfwgfEhY
+         D9eFopWOCKar98FzCOs9xmEIyAN0Nv6mLcyLQNtbzBXqv8A58cclqdA6f7up94Au6mfV
+         005EztjqYL8L4lmJretwJ4odZ02U3hdBhGGOue6hnoZv8KIHJYimx1BgJ0iyCgRbkPjY
+         NLb8I04zjRF/PzjKjbCVz6k5tmCElDQFetis5UvoK3YAtPOdSlgFw5CTQYJbf/egKdVU
+         QanQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=MKJIJ4UnZNAA5NLPoDiMpenC7DJEVyWZfyv+PILCaYE=;
+        b=Rcvlrogdy12tvc3SOS9rsPbOijMqwLidPapTeXmrSMQtTvFi4aYCzQUy4P+AmXWRbg
+         76B/UNzZ+ApzD6JQFvRdTbb2OSF7l6DbTv5X+RO5DF6eqko5FgOWNq3KuxGqyCe50G8c
+         KWaIOQSQAHfk/KHx6r3UN9qGBxGGDVSPbLMjQvyzpK2EXcAcoH+fkU1dg8jc9/g+k0p0
+         oHd1tUyd/AMlm6X3FHHXrI4DahJTq8uZtUV9aoK528v3V7SeN5fwKxFpSu47jThKHUqz
+         AJSHDqrbsxJrtvj+iyhpeNt6K2TFC8nyGyZ4N1xNqkZojGuFeQ2EQwn2ht8Vs92VhEEm
+         Xjww==
+X-Gm-Message-State: AOAM533pGGnKxP2LjBfvsimuomI+B6uF7KmQ1wqmd8wN8t2DTwJ/eeUp
+        BAFuVdLAS0XGrjsGhv+Wsxg=
+X-Google-Smtp-Source: ABdhPJwVTXB/tsK8yfn1xpiO2FN3teVQL4LYWXkZk2HPL8eG2qtA+U6Z793DYZsWcU416PXlXjngUw==
+X-Received: by 2002:a17:902:da85:b029:eb:8794:7078 with SMTP id j5-20020a170902da85b02900eb87947078mr26273046plx.25.1619552269040;
+        Tue, 27 Apr 2021 12:37:49 -0700 (PDT)
+Received: from user ([2001:4490:4409:fe15:9fd0:fa2c:4efc:28b5])
+        by smtp.gmail.com with ESMTPSA id n18sm2961055pjo.19.2021.04.27.12.37.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Apr 2021 12:37:48 -0700 (PDT)
+Date:   Wed, 28 Apr 2021 01:07:40 +0530
+From:   SAURAV GIREPUNJE <saurav.girepunje@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     b-liu@ti.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, saurav.girepunje@hotmail.com
+Subject: Re: [PATCH] usb: musb: davinci: change the variable type
+Message-ID: <20210427193740.GB11046@user>
+References: <20210418183618.GA69452@user>
+ <YIE4hh5NOJMT7QqK@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <07196754c6de290bb46cc235ce6e96c5df304150.1618014279.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YIE4hh5NOJMT7QqK@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh
-
-Sorry about the delay. 
-
-On 10.4.2021 3.47, Thinh Nguyen wrote:
-> If there is a device with active enhanced super-speed (eSS) isoc IN
-> endpoint(s) behind one or more eSS hubs, DWC_usb31 (v1.90a and prior)
-> host controller will not detect the device disconnection until no more
-> isoc URB is submitted. If there's a device disconnection, internally
-> the wait for tHostTransactionTimeout (USB 3.2 spec 8.13) blocks the
-> other endpoints from being scheduled. So, it blocks the interrupt
-> endpoint of the eSS hub indicating the port change status.
+On Thu, Apr 22, 2021 at 10:49:10AM +0200, Greg KH wrote:
+> On Mon, Apr 19, 2021 at 12:06:18AM +0530, Saurav Girepunje wrote:
+> > vbus_state is define as bool but on davinci.c assigning a value
+> > '-1' to the bool variable.
 > 
-> This can be an issue for applications that continuously submitting isoc
-> URBs to the xHCI. To work around this, stop processing new URBs after 3
-> consecutive isoc transaction errors. If new isoc transfers are queued
-> after the device is disconnected, the host will respond with USB
-> transaction error. After 3 consecutive USB transaction errors, the
-> driver can wait a period of time (at least 2 * largest periodic interval
-> of the topology) without ringing isoc endpoint doorbell to detect the
-> port change status. If there is no disconnection detected, ring the
-> endpoint doorbell to resume isoc transfers.
-
-Is that enough? many Isoc URBs queue 16 - 32 Isoc TRBs per URB.
-And drivers like UVC queue several URBs in advance.
-
-If I remember correctly then a transaction errors won't stop Isoch endpoints,
-so waiting for 2 * Interval after 3 consecutive transaction errors might not
-be enough.
-
-How about stopping the endpoint after 3 consecutive transaction errors,
-and restating it a bit later? 
-
+> Does it also test that value?
 > 
-> This workaround tracks the max eSS periodic interval every time there's
-> an endpoint added or dropped, which happens when there's bandwidth
-> check. So, scan the topology and update the xhci->max_ess_interval
-> whenever there's a bandwidth check. Introduced a new flag
-> VDEV_DISCONN_CHECK_PENDING to prevent ringing the doorbell while waiting
-> for a disconnection status. After 2 * max_ess_interval time and no
-> disconnection detected, a delayed work will ring the doorbell to resume
-> the active isoc transfers.
+> If so, shouldn't that logic error be fixed instead of working around it
+> by changing the variable type?
+> 
+> This feels wrong...
+> 
+> thanks,
+> 
+> greg k-h
 
-Sounds very elaborate for a vendor specific disconnect workaround.
-Isn't there a simpler way?
+vbus_state is assign with the value of "-1" in davinci.c file.
+However it check value whether it is zero or a non-zero.
 
-Maybe stop all isoc in endpoints if one them has 3 consecutive transaction error,
-wait for 2x hub interrupt interval time, and then restart the endpoints if there is
-no disconnect?
+This value pass On gpio lib function.Which need this value to bool only.
 
-There is bigger concern with this series, it scatters a lot of vendor specific code 
-around the generic xhci driver. It's not very clear afterwards what code is part of the
-workaround and what is generic code.
+On below "glue->vbus_state" should be 1.
 
-We just got a lot of the Mediatek code moved to xhci-mtk*, maybe its time to add xhci-snps.c
-instead of using the generic platform driver with tons of workarounds and quirks.
-
-Thanks
--Mathias    
+	glue->vbus = devm_gpiod_get_optional(&pdev->dev, NULL, GPIOD_OUT_LOW);
+	if (IS_ERR(glue->vbus)) {
+                ret = PTR_ERR(glue->vbus);
+                goto err0;
+        } else {
+                glue->vbus_state = -1;
+                INIT_WORK(&glue->vbus_work, evm_deferred_drvvbus);
+        }
 
