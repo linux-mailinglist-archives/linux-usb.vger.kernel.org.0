@@ -2,105 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7A036C695
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Apr 2021 14:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A24236C6B1
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Apr 2021 15:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236343AbhD0NAf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Apr 2021 09:00:35 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.86.151]:53285 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236209AbhD0NAe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Apr 2021 09:00:34 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-127--hFiMNP-PnSmH-CCHA4ytg-1; Tue, 27 Apr 2021 13:59:47 +0100
-X-MC-Unique: -hFiMNP-PnSmH-CCHA4ytg-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Tue, 27 Apr 2021 13:59:46 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Tue, 27 Apr 2021 13:59:45 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Oliver Neukum' <oneukum@suse.com>,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>
-CC:     Rajat Jain <rajatja@google.com>,
+        id S236008AbhD0NHO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Apr 2021 09:07:14 -0400
+Received: from mga09.intel.com ([134.134.136.24]:16490 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235795AbhD0NHO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Apr 2021 09:07:14 -0400
+IronPort-SDR: VUHxa8mAROe/IsTc5dnCt84zfX3CiTFG7REsnml2CAfMgiacruIICsTNeelaqxVxnyvkcBH95j
+ pVe6fedBL+vw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9966"; a="196615230"
+X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
+   d="scan'208";a="196615230"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Apr 2021 06:06:24 -0700
+IronPort-SDR: K7Np3LQlVoiWluaCTJ2FhoyRO9jf9C1CNb5JOOaVp44Xg9W3y+DRBiB/QbRchsDnrwzusNwyA8
+ Bh1mQgIX/amQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,254,1613462400"; 
+   d="scan'208";a="618919372"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga005.fm.intel.com with ESMTP; 27 Apr 2021 06:06:22 -0700
+Subject: Re: [PATCH v2 3/7] usb: xhci: Check for blocked disconnection
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, "Bjorn Helgaas" <helgaas@kernel.org>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Subject: RE: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
-Thread-Topic: [PATCH v2 2/2] pci: Support "removable" attribute for PCI
- devices
-Thread-Index: AQHXOpI8ukue0tNuwUC9JgKnmYtYG6rGwqQQgAFxHQCAAB7esA==
-Date:   Tue, 27 Apr 2021 12:59:45 +0000
-Message-ID: <b5e031652f144ab6accbe553566676c9@AcuMS.aculab.com>
-References: <20210424021631.1972022-1-rajatja@google.com>
-         <20210424021631.1972022-2-rajatja@google.com>
-         <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com>
-         <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
-         <79b994f2476249498797e1784f735fd7@AcuMS.aculab.com>
- <21c6b5002c5ad36cd7fe0bb849f5eba12a614bca.camel@suse.com>
-In-Reply-To: <21c6b5002c5ad36cd7fe0bb849f5eba12a614bca.camel@suse.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Cc:     John Youn <John.Youn@synopsys.com>
+References: <cover.1618014279.git.Thinh.Nguyen@synopsys.com>
+ <07196754c6de290bb46cc235ce6e96c5df304150.1618014279.git.Thinh.Nguyen@synopsys.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <845ec8a0-43f2-a28e-5edc-d7a47ccabdf5@linux.intel.com>
+Date:   Tue, 27 Apr 2021 16:08:23 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <07196754c6de290bb46cc235ce6e96c5df304150.1618014279.git.Thinh.Nguyen@synopsys.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogT2xpdmVyIE5ldWt1bQ0KPiBTZW50OiAyNyBBcHJpbCAyMDIxIDEzOjAwDQo+IA0KPiBB
-bSBNb250YWcsIGRlbiAyNi4wNC4yMDIxLCAxMzowMSArMDAwMCBzY2hyaWViIERhdmlkIExhaWdo
-dDoNCj4gPiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraQ0KPiA+ID4gU2VudDogMjYgQXByaWwgMjAy
-MSAxMjo0OQ0KPiA+ID4NCj4gPiA+IE9uIE1vbiwgQXByIDI2LCAyMDIxIGF0IDExOjE3IEFNIE9s
-aXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+IHdyb3RlOg0KPiA+ID4gPiBBbSBGcmVpdGFn
-LCBkZW4gMjMuMDQuMjAyMSwgMTk6MTYgLTA3MDAgc2NocmllYiBSYWphdCBKYWluOg0KPiA+ID4g
-PiA+IEV4cG9ydCB0aGUgYWxyZWFkeSBhdmFpbGFibGUgaW5mbywgdG8gdGhlIHVzZXJzcGFjZSB2
-aWEgdGhlDQo+ID4gPiA+ID4gZGV2aWNlIGNvcmUsIHNvIHRoYXQgdXNlcnNwYWNlIGNhbiBpbXBs
-ZW1lbnQgd2hhdGV2ZXIgcG9saWNpZXMgaXQNCj4gPiA+ID4gPiB3YW50cyB0bywgZm9yIGV4dGVy
-bmFsIHJlbW92YWJsZSBkZXZpY2VzLg0KPiA+ID4gPg0KPiA+ID4gPiBIaSwNCj4gPiA+ID4NCj4g
-PiA+ID4gaXMgdGhlcmUgYSB3YXkgdG8gdGVsbCBhcGFydCB3aGV0aGVyIGEgZGV2aWNlIGNhbiB1
-bmRlcmdvIHJlZ3VsYXINCj4gPiA+ID4gc3VycHJpc2UgcmVtb3ZhbD8NCj4gPiA+DQo+ID4gPiBQ
-Q0kgZGV2aWNlcyBsb2NhdGVkIHVuZGVyIGEgcmVtb3ZhYmxlIHBhcmVudCBjYW4gdW5kZXJnbyBz
-dXJwcmlzZQ0KPiA+ID4gcmVtb3ZhbC4gIFRoZSBvbmVzIG9uIGEgVGh1bmRlcmJvbHQgY2hhaW4g
-dG9vLg0KPiA+ID4NCj4gPiA+ID4gRG8gd2Ugd2FudCB0aGF0Pw0KPiA+ID4NCj4gPiA+IERvIHlv
-dSBtZWFuIHN1cnByaXNlIHJlbW92YWw/ICBZZXMsIHdlIGRvLg0KPiA+DQo+ID4gQWx3YXlzIGJl
-ZW4gdHJ1ZSAtIHRoaW5rIG9mIGNhcmRidXMgKFBDSSBwY21jaWEpIGNhcmRzIHdpdGgNCj4gPiBQ
-Q0kgYnJpZGdlcyB0byBleHRlcm5hbCBQQ0kgZXhwYW5zaW9uIGNoYXNzaXMgY29udGFpbmluZw0K
-PiA+IGFkZGl0aW9uYWwgUENJIHNsb3RzLg0KPiA+IFRoZSBjYXJkYnVzIGNhcmQgaXMgaG90IHJl
-bW92YWJsZS4NCj4gDQo+IEhpLA0KPiANCj4gdGhhdCBpcyB0cnVlIGZvciB0aG9zZSBvcHRpb25z
-LCBidXQgbm90IGZvciB0aGUgc3R5bGUNCj4gb2YgUENJIGhvdHBsdWcgd2hpY2ggcmVxdWlyZXMg
-eW91IHRvIHB1c2ggYSBidXR0b24gYW5kIHdhaXQNCj4gZm9yIHRoZSBibGlua2luZyBsaWdodC4N
-Cg0KVHJ1ZSwgSSByZW1lbWJlciBzb21lIG9mIHRob3NlIFBDSSBob3RwbHVnIGNoYXNzaXMgZnJv
-bSAyNSB5ZWFycyBhZ28uDQpJU1RSIHdlIGRpZCBnZXQgdGhlIHJlbW92YWwgZXZlbnRzIHdvcmtp
-bmcgKFNWUjQvVW5peHdhcmUpIGJ1dCBJDQpkb24ndCByZW1lbWJlciB0aGUgcmVsZXZhbnQgY2hh
-c3NpcyBldmVyIGJlaW5nIHNvbGQuDQpJbiBzcGl0ZSBvZiB0aGUgbWFya2V0aW5nIGh5cGUgSSBz
-dXNwZWN0IGl0IHdhcyBvbmx5IGV2ZXIgcG9zc2libGUNCnRvIHJlbW92ZSBhIGNvbXBsZXRlbHkg
-d29ya2luZyBib2FyZCBhbmQgcmVwbGFjZSBpdCB3aXRoIGFuDQpleGFjdGx5IGVxdWl2YWxlbnQg
-b25lLg0KDQpJbiBhbnkgY2FzZSB0aG9zZSBjaGFzc2lzIGFyZSBub3QgJ3N1cnByaXNlIHJlbW92
-YWwnLg0KDQpNb3JlIG1vZGVybiBkcml2ZXJzIGFyZSBsZXNzIGxpa2VseSB0byBjcmFzaCAoYW5k
-IGJ1cm4/KSB3aGVuDQphIFBDSSByZWFkIHJldHVybnMgfjB1Lg0KQnV0IEkgc3VzcGVjdCBhbiBh
-d2Z1bCBsb3QgcmVhbGx5IGRvbid0IGhhbmRsZSBzdXJwcmlzZSByZW1vdmFsDQp2ZXJ5IHdlbGwg
-YXQgYWxsLg0KDQpIb3cgbWFueSBlbnN1cmUgdGhhdCBhIH4wdSByZXNwb25zZSBmcm9tIGV2ZXJ5
-IFBDSShlKSB3b250DQpjYXVzZSBzb21lIGtpbmQgb2YgZ3JpZWY/DQooV2UndmUgYmVlbiB0aGVy
-ZSBkdWUgdG8gYSBidWdneSBmcGdhIG5vdCByZXNwb25kaW5nIHRvIG5vbi1jb25maWcNCmN5Y2xl
-cy4pDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
-Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
-biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
+Hi Thinh
+
+Sorry about the delay. 
+
+On 10.4.2021 3.47, Thinh Nguyen wrote:
+> If there is a device with active enhanced super-speed (eSS) isoc IN
+> endpoint(s) behind one or more eSS hubs, DWC_usb31 (v1.90a and prior)
+> host controller will not detect the device disconnection until no more
+> isoc URB is submitted. If there's a device disconnection, internally
+> the wait for tHostTransactionTimeout (USB 3.2 spec 8.13) blocks the
+> other endpoints from being scheduled. So, it blocks the interrupt
+> endpoint of the eSS hub indicating the port change status.
+> 
+> This can be an issue for applications that continuously submitting isoc
+> URBs to the xHCI. To work around this, stop processing new URBs after 3
+> consecutive isoc transaction errors. If new isoc transfers are queued
+> after the device is disconnected, the host will respond with USB
+> transaction error. After 3 consecutive USB transaction errors, the
+> driver can wait a period of time (at least 2 * largest periodic interval
+> of the topology) without ringing isoc endpoint doorbell to detect the
+> port change status. If there is no disconnection detected, ring the
+> endpoint doorbell to resume isoc transfers.
+
+Is that enough? many Isoc URBs queue 16 - 32 Isoc TRBs per URB.
+And drivers like UVC queue several URBs in advance.
+
+If I remember correctly then a transaction errors won't stop Isoch endpoints,
+so waiting for 2 * Interval after 3 consecutive transaction errors might not
+be enough.
+
+How about stopping the endpoint after 3 consecutive transaction errors,
+and restating it a bit later? 
+
+> 
+> This workaround tracks the max eSS periodic interval every time there's
+> an endpoint added or dropped, which happens when there's bandwidth
+> check. So, scan the topology and update the xhci->max_ess_interval
+> whenever there's a bandwidth check. Introduced a new flag
+> VDEV_DISCONN_CHECK_PENDING to prevent ringing the doorbell while waiting
+> for a disconnection status. After 2 * max_ess_interval time and no
+> disconnection detected, a delayed work will ring the doorbell to resume
+> the active isoc transfers.
+
+Sounds very elaborate for a vendor specific disconnect workaround.
+Isn't there a simpler way?
+
+Maybe stop all isoc in endpoints if one them has 3 consecutive transaction error,
+wait for 2x hub interrupt interval time, and then restart the endpoints if there is
+no disconnect?
+
+There is bigger concern with this series, it scatters a lot of vendor specific code 
+around the generic xhci driver. It's not very clear afterwards what code is part of the
+workaround and what is generic code.
+
+We just got a lot of the Mediatek code moved to xhci-mtk*, maybe its time to add xhci-snps.c
+instead of using the generic platform driver with tons of workarounds and quirks.
+
+Thanks
+-Mathias    
 
