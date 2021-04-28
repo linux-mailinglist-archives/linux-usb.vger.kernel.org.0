@@ -2,90 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CF336D6E9
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 14:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9597736D72B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 14:21:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbhD1MCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 08:02:03 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:44618 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbhD1MCC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 08:02:02 -0400
-Received: from [IPv6:2a02:810a:880:f54:fc4d:ab2d:afcb:a61c] (unknown [IPv6:2a02:810a:880:f54:fc4d:ab2d:afcb:a61c])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id ACE881F41DBB;
-        Wed, 28 Apr 2021 13:01:15 +0100 (BST)
-Subject: Re: [PATCH v6 0/2] Add support for ANX7688
-To:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     megous@megous.com, linux-usb@vger.kernel.org, a.hajda@samsung.com,
-        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@siol.net, airlied@linux.ie,
-        daniel@ffwll.ch, chunkuang.hu@kernel.org, p.zabel@pengutronix.de,
-        enric.balletbo@collabora.com, drinkcat@chromium.org,
-        hsinyi@chromium.org, kernel@collabora.com, dafna3@gmail.com,
-        robh+dt@kernel.org
-References: <20210409161951.12365-1-dafna.hirschfeld@collabora.com>
-From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Message-ID: <503fc44c-10e4-d4f4-a746-3fe3e6066b80@collabora.com>
-Date:   Wed, 28 Apr 2021 14:01:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S234534AbhD1MW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 08:22:26 -0400
+Received: from mail-oi1-f171.google.com ([209.85.167.171]:39462 "EHLO
+        mail-oi1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234356AbhD1MWZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 08:22:25 -0400
+Received: by mail-oi1-f171.google.com with SMTP id i81so62846338oif.6;
+        Wed, 28 Apr 2021 05:21:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GRxkUo+PRbe+x5wLLv3keLeEPMkJ2hxH1SQXgu1ocjk=;
+        b=Tvfv2ymW+DV6C/paqY38g+8stelqtlDmdpxOFAMTLj9ElU6eUEzjceL6i82YjTlAfb
+         aloQ8n5YkyWdiyGTjJYsJJQc+zMbKT4vHoHp18Ro3EMT8fodkgQeSroGi3lua9adC9aC
+         FnfqCGazJWKqDKNIU/v+GH06YDdHvXGhLxuPbLeOcSHQi4ioUPQsQrbPK5X9xbBGGs0D
+         9PcS/al0gxmdXFSe1ARIRi7GFsg+dCpBgp/EnacobG33yU/1s81858BifPL/IO1Wgo70
+         267erXTpmEydZM3V4jgFbkBec7L4j6S4yXjpk2c1IcyeHI3Xt5aE9D8SJLAuBcci5OZg
+         0ahA==
+X-Gm-Message-State: AOAM530KlMoJP6byqnL98IN/B+50zvcWT+OjuDMlzKYP/1knvNv5BVFQ
+        nuDrqDAXr5r+6KPIaJdWYfjV9LFIzcV1OBqMo4I=
+X-Google-Smtp-Source: ABdhPJxOhMz6a0QlMskPlWjNHUPGrH1Vn78FLKH0qxpCwG0EW2c/SIcnZsKBhMYvQD1e2UvBb9Jr9em/bmGCLMLK8jk=
+X-Received: by 2002:aca:bc89:: with SMTP id m131mr20193642oif.71.1619612500595;
+ Wed, 28 Apr 2021 05:21:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210409161951.12365-1-dafna.hirschfeld@collabora.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210424021631.1972022-1-rajatja@google.com> <20210424021631.1972022-2-rajatja@google.com>
+ <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com> <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
+ <79b994f2476249498797e1784f735fd7@AcuMS.aculab.com> <21c6b5002c5ad36cd7fe0bb849f5eba12a614bca.camel@suse.com>
+ <b5e031652f144ab6accbe553566676c9@AcuMS.aculab.com> <0601e45130495b152bec04eee4a50e302db4cfd2.camel@suse.com>
+In-Reply-To: <0601e45130495b152bec04eee4a50e302db4cfd2.camel@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 28 Apr 2021 14:21:27 +0200
+Message-ID: <CAJZ5v0jEbjRSGPdfwvegawin5_N=m-UoP+Wa99EQ-QmkusiBCg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi, pinging here, can one of the kernel bridge maintainers review this patchset?
+On Wed, Apr 28, 2021 at 8:57 AM Oliver Neukum <oneukum@suse.com> wrote:
+>
+> Am Dienstag, den 27.04.2021, 12:59 +0000 schrieb David Laight:
+> > From: Oliver Neukum
+> > > Sent: 27 April 2021 13:00
+>
+> > > that is true for those options, but not for the style
+> > > of PCI hotplug which requires you to push a button and wait
+> > > for the blinking light.
+> >
+> > True, I remember some of those PCI hotplug chassis from 25 years ago.
+> > ISTR we did get the removal events working (SVR4/Unixware) but I
+> > don't remember the relevant chassis ever being sold.
+> > In spite of the marketing hype I suspect it was only ever possible
+> > to remove a completely working board and replace it with an
+> > exactly equivalent one.
+> >
+> > In any case those chassis are not 'surprise removal'.
+> >
+> > More modern drivers are less likely to crash (and burn?) when
+> > a PCI read returns ~0u.
+> > But I suspect an awful lot really don't handle surprise removal
+> > very well at all.
+>
+> So you are saying that these systems are so rare that it should be
+> handled  as special cases if at all?
 
-Thanks,
-Dafna
-
-On 09.04.21 18:19, Dafna Hirschfeld wrote:
-> ANX7688 is a typec port controller that also converts HDMI to DP.
-> ANX7688 is found on Acer Chromebook R13 (elm) and on Pine64 PinePhone.
-> 
-> On Acer Chromebook R13 (elm), the device is powered-up and controller by the
-> Embedded Controller. Therefore its operation is transparent
-> to the SoC. It is used in elm only as a display bridge driver.
-> The bridge driver only reads some values using i2c and use them to
-> implement the mode_fixup cb.
-> 
-> On v5 we added the full dt-binding of the generic Analogix anx7688 device.
-> The problem is that for elm, most of the fields are not needed since
-> the anx7688 sits behind the EC. After a discussion on v5 (see [1])
-> we decided to go back to the original approach and send the dt binding
-> as specific to the elm. So in this version we rename the device to cros_ec_anx7688
-> and use the compatible 'google,cros-ec-anx7688'.
-> 
-> [1] https://patchwork.kernel.org/project/dri-devel/patch/20210305124351.15079-3-dafna.hirschfeld@collabora.com/
-> 
-> Changes since v5:
-> * treat the device as a specific combination of an ANX7688 behind the EC and
-> call it 'cros-ec-anx7688'
-> 
-> Changes since v4:
-> In v4 of this set, the device was added as an 'mfd' device
-> and an additional 'bridge' device for the HDMI-DP conversion, see [2].
-> 
-> [2] https://lkml.org/lkml/2020/3/18/64
-> 
-> Dafna Hirschfeld (1):
->    dt-bindings: display: add google,cros-ec-anx7688.yaml
-> 
-> Enric Balletbo i Serra (1):
->    drm/bridge: Add ChromeOS EC ANX7688 bridge driver support
-> 
->   .../bridge/google,cros-ec-anx7688.yaml        |  82 ++++++++
->   drivers/gpu/drm/bridge/Kconfig                |  12 ++
->   drivers/gpu/drm/bridge/Makefile               |   1 +
->   drivers/gpu/drm/bridge/cros-ec-anx7688.c      | 191 ++++++++++++++++++
->   4 files changed, 286 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/display/bridge/google,cros-ec-anx7688.yaml
->   create mode 100644 drivers/gpu/drm/bridge/cros-ec-anx7688.c
-> 
+In principle, in the wake of Thunderbolt every PCI driver handling
+PCIe devices needs to be able to deal with a device that's gone away
+without notice, because in principle any PCIe device can be included
+into a Thunderbolt docking station which may go away as a whole
+without notice.
