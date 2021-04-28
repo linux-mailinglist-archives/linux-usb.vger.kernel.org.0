@@ -2,125 +2,149 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C91D36DC6A
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 17:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2978B36DF11
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 20:42:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240839AbhD1PvZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 11:51:25 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:32986 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240612AbhD1PvY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Apr 2021 11:51:24 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619625039; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=/n3GSgHvXkd6PDpARz6TsthDOpENmCbO8rb/sEiN/Io=; b=Zr2WJ/5d7OZwTyi9lywqf23sx5QxRlXHUFNlaXabWA4Z8I8oENApdWG5m0yTgHuQxgCUL/RQ
- c57wwP/dwo9fHCV2teaMTgFbf/4BDavVRkBiZNlbgBx+bf23DYakNX64iSWhRuJlCxRHhgBK
- eo9VI7Gjsqxqe+ElGpHSq9cM2t8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 6089844a2cc44d3aea6c75b4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 28 Apr 2021 15:50:34
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1A972C43460; Wed, 28 Apr 2021 15:50:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B5D86C4338A;
-        Wed, 28 Apr 2021 15:50:32 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B5D86C4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 28 Apr 2021 08:50:26 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
-        Baolin Wang <baolin.wang7@gmail.com>
-Subject: Re: [PATCH 2/2] usb: dwc3: gadget: Rename EOPF event macros to
- Suspend
-Message-ID: <20210428155026.GE20698@jackp-linux.qualcomm.com>
-References: <20210428090111.3370-1-jackp@codeaurora.org>
- <20210428090111.3370-2-jackp@codeaurora.org>
- <87eeeuk8jj.fsf@kernel.org>
+        id S243652AbhD1SmY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 14:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243654AbhD1SmY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 14:42:24 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CD8C0613ED
+        for <linux-usb@vger.kernel.org>; Wed, 28 Apr 2021 11:41:38 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id h20so33360591plr.4
+        for <linux-usb@vger.kernel.org>; Wed, 28 Apr 2021 11:41:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iWgNLmw8XtUSWX3nXJqs3Lo41Zd8P550K3mKVLVvnf8=;
+        b=Uk1O0BgpnTa9THucVlNuUG2BFbxA/bUsmYfV78MZ2gAji7wuv0Maln71M/8n3/Poie
+         l4ijDJL55PVr0jf3oaNpMKTJKe5FCpfeoNIm0iVaYOcusDLB7qEB0WnnMOpdaFxLXdA2
+         VfdZEDwS78h/+cG/79kcQ3YxoT/NBXH5dgKUU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iWgNLmw8XtUSWX3nXJqs3Lo41Zd8P550K3mKVLVvnf8=;
+        b=QGT7AsEENHD2pk83BW93aiwTCbLNgRkWE6ZoacBzFtZfJnGA93kDFnyJMtrRj9DFYu
+         ffxe8Ft98Vm6nkHmy/dyomg0Ks/ep7rO9AF597EYvCyARpQEF2sJlNefZ4YoKcxLWWto
+         ywWRdxutqjkya4VDXKaaFKznXikh7qMHFaLxxvOIcINRSJuOQKb/haALedcvXj7Xw0uk
+         2/b+eQFDLF2+DmVOP+tVLsDRxxPYsGNQI8U5mTNZY1MLkygQ1H5Umc0JZDkKnd1zotc4
+         UA1reLTa6q5WnnC3zWSXuxQb5n9P5qkmQofSsJZXcvZXzzo2m4NM+54esDdiyhv4uGY7
+         9VWQ==
+X-Gm-Message-State: AOAM533fYj/Raj419qbnMsXiP77VSOUU4Aqcsh+0ukkmNRSoIPHf2x5h
+        mUfVikoD1yY/cjAc/eJ02lMMWA==
+X-Google-Smtp-Source: ABdhPJxKLMnoyUm0OBOXU0x+Ab6uzmJ1QVJbOzIE8+arEaVWVHLVS81tPukqeKbL1icp7BMJa0z5sA==
+X-Received: by 2002:a17:902:aa98:b029:ec:a55f:f4bc with SMTP id d24-20020a170902aa98b02900eca55ff4bcmr31879072plr.82.1619635298324;
+        Wed, 28 Apr 2021 11:41:38 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:4c1a:a0a7:2b43:81b0])
+        by smtp.gmail.com with UTF8SMTPSA id c13sm5257874pjv.21.2021.04.28.11.41.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Apr 2021 11:41:37 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, devicetree@vger.kernel.org,
+        Peter Chen <peter.chen@nxp.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v8 0/5] USB: misc: Add onboard_usb_hub driver
+Date:   Wed, 28 Apr 2021 11:41:27 -0700
+Message-Id: <20210428184132.2184997-1-mka@chromium.org>
+X-Mailer: git-send-email 2.31.1.498.g6c1eba8ee3d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87eeeuk8jj.fsf@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+This series adds:
+- the onboard_usb_hub_driver
+- glue in the xhci-plat driver to create the onboard_usb_hub
+  platform device if needed
+- a device tree binding for the Realtek RTS5411 USB hub controller
+- device tree changes that add RTS5411 entries for the QCA SC7180
+  based boards trogdor and lazor
+- a couple of stubs for platform device functions to avoid
+  unresolved symbols with certain kernel configs
 
-On Wed, Apr 28, 2021 at 01:28:16PM +0300, Felipe Balbi wrote:
-> Jack Pham <jackp@codeaurora.org> writes:
-> > The device event corresponding to End of Periodic Frame is only
-> > found on older IP revisions (2.10a and prior, according to a
-> 
-> you're reading databook for dwc3.1, right? Remember the original support
-> for the driver was on dwc3. This was always called EOPF back then. We
-> should maintain the name.
+The main issue the driver addresses is that a USB hub needs to be
+powered before it can be discovered. For discrete onboard hubs (an
+example for such a hub is the Realtek RTS5411) this is often solved
+by supplying the hub with an 'always-on' regulator, which is kind
+of a hack. Some onboard hubs may require further initialization
+steps, like changing the state of a GPIO or enabling a clock, which
+requires even more hacks. This driver creates a platform device
+representing the hub which performs the necessary initialization.
+Currently it only supports switching on a single regulator, support
+for multiple regulators or other actions can be added as needed.
+Different initialization sequences can be supported based on the
+compatible string.
 
-I've looked through several revisions of the databook for both dwc3 and
-dwc3.1. From what I can tell EOPF was nixed starting in DWC3 (not 3.1)
-revision 2.20a. DWC3 revision 2.30a re-introduced event #6 for USB
-suspend. And judging from the IP revision list in core.h, DWC3 is now
-up to 3.30a (DWC3_REVISION_330A), so from number alone there are about
-as many revisions that have this bit as EOPF as there are that use it
-for SUSPEND. This carries over to DWC3.1 as well (not sure about DWC3.2)
-so in fact there are probably more revisions of IP that no longer use
-EOPF.
+Besides performing the initialization the driver can be configured
+to power the hub off during system suspend. This can help to extend
+battery life on battery powered devices which have no requirements
+to keep the hub powered during suspend. The driver can also be
+configured to leave the hub powered when a wakeup capable USB device
+is connected when suspending, and power it off otherwise.
 
-Hi Thinh, I'm wondering if you could please help corroborate the history
-of this bit, and confirm whether it is also used as Suspend entry in DWC
-3.2 IPs?
+(no changes since v7)
 
-But I don't want to make it seem that I'm using revision history as a
-gauge of how many real devices out there support EOPF vs Suspend. That
-figure we'll never truly know.
+Changes in v7:
+- updated DT binding
+- series rebased on qcom/arm64-for-5.13
 
-> > cursory SNPS databook search).  On revisions 2.30a and newer,
-> > including DWC3.1, the same event value and corresponding DEVTEN
-> > bit were repurposed to indicate that the link has gone into
-> > suspend state (U3 or L2/L1).
-> >
-> > EOPF events had never been enabled before in this driver, and
-> > going forward we expect current and future DWC3-based devices
-> > won't likely to be using such old DWC3 IP revisions either.
-> 
-> We still have original omap5 devices, running on revision 1.73a
-> around. They'll remain supported for the time being.
-> 
-> > Hence rather than keeping the deprecated EOPF macro names let's
-> > rename them to indicate their usage for suspend events.
-> 
-> what do we gain from this change? I mean, in practice, what changes?
-> nothing realy, so why should we apply this?
+Changes in v6:
+- updated summary
 
-I'm saying since this macro has never really been used to enable any
-kind of event handling specifically for "End Of Periodic Frame", that
-there is not much utility in keeping the name as EOPF. Instead as I
-explained in patch 1, the same bit/event is used on newer revisions for
-USB Suspend entry so assuming you accept that, then the purpose of this
-follow-on patch is simply to make the code more readable by renaming the
-macro to fit its usage.
+Changes in v5:
+- cover letter added
 
-Thanks,
-Jack
+Matthias Kaehlcke (5):
+  dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
+  USB: misc: Add onboard_usb_hub driver
+  of/platform: Add stubs for of_platform_device_create/destroy()
+  usb: host: xhci-plat: Create platform device for onboard hubs in
+    probe()
+  arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+
+ .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+ .../bindings/usb/realtek,rts5411.yaml         |  62 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  11 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  21 +-
+ drivers/usb/host/xhci-plat.c                  |  16 +
+ drivers/usb/misc/Kconfig                      |  17 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/onboard_usb_hub.c            | 415 ++++++++++++++++++
+ include/linux/of_platform.h                   |  22 +-
+ include/linux/usb/hcd.h                       |   2 +
+ include/linux/usb/onboard_hub.h               |  15 +
+ 14 files changed, 599 insertions(+), 36 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+ create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+ create mode 100644 include/linux/usb/onboard_hub.h
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.31.1.498.g6c1eba8ee3d-goog
+
