@@ -2,115 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F0536D885
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 15:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E3B36DBC2
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 17:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238887AbhD1NrJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 09:47:09 -0400
-Received: from mga02.intel.com ([134.134.136.20]:21935 "EHLO mga02.intel.com"
+        id S229961AbhD1Pfw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 11:35:52 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:35376 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229891AbhD1NrJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Apr 2021 09:47:09 -0400
-IronPort-SDR: BDjrOSoyuMbYxmDNWBSV0ddeQyFLAmy0N86eUVi0AjMmvfmXZsl4Hi2XP1lGKw4Z95dxWjVRnf
- dXoRjXJCKhlQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9968"; a="183883507"
-X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
-   d="scan'208";a="183883507"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2021 06:46:24 -0700
-IronPort-SDR: OhTvO45IUVBlney+IX1/LjERwzo/Io9sPAfSU2QH8dBXAKzAC/gB6k9K4rXe7n1LwCf3FAZRrY
- axHeUg3tXU6A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,258,1613462400"; 
-   d="scan'208";a="619315118"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 28 Apr 2021 06:46:22 -0700
-Subject: Re: [PATCH v2 6/7] usb: xhci: Workaround lost disconnect port status
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
-Cc:     John Youn <John.Youn@synopsys.com>
-References: <cover.1618014279.git.Thinh.Nguyen@synopsys.com>
- <a90cfd8e3008c3664a916a12dc3c0a79a520c0ab.1618014279.git.Thinh.Nguyen@synopsys.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <37b09a1a-d2f7-c152-0850-20215822ff1d@linux.intel.com>
-Date:   Wed, 28 Apr 2021 16:48:23 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S231169AbhD1Pfv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Apr 2021 11:35:51 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1619624106; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=xd3IFW98wHc8xfKOFAXgEamkEJ3OAz2rAjqRcBg4MF0=; b=o/aYUUmSJVvcS9Yt3Xy2Jre4p0QZTzauFcC/WiZUTDt6gJFG1ZT9j3+pzi886XrF7eNJssAI
+ jho5MeLawwSYIXf4F7oac6CqdIhSo0TZE7I3KC0NWSDFRfbQFr8uYBBEZBZyB6y58M+LpPRW
+ QunW4ZYi/QwLUxBON36gho6uwno=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 608980a6f34440a9d4aa6b83 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 28 Apr 2021 15:35:02
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 5EC5BC4338A; Wed, 28 Apr 2021 15:35:02 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 508A8C433F1;
+        Wed, 28 Apr 2021 15:35:01 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 508A8C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Wed, 28 Apr 2021 08:34:58 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
+        Baolin Wang <baolin.wang7@gmail.com>
+Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Enable suspend events
+Message-ID: <20210428153458.GD20698@jackp-linux.qualcomm.com>
+References: <20210428090111.3370-1-jackp@codeaurora.org>
+ <87h7jqk8xk.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <a90cfd8e3008c3664a916a12dc3c0a79a520c0ab.1618014279.git.Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h7jqk8xk.fsf@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.4.2021 3.47, Thinh Nguyen wrote:
-> If an eSS device with active periodic transfers is disconnected from the
-> DWC_usb31 (v1.90a and prior) host controller at root port, the host
-> controller may not detect a disconnection. By active transfers, it
-> means that the endpoint is not in flow control, and there are active
-> Transfer Descriptors available for the host to initiate transfers to the
-> endpoint. This issue can occur if the endpoint periodic interval is in
-> 2ms, 4ms, or 8ms.
+Hi Felipe,
+
+On Wed, Apr 28, 2021 at 01:19:51PM +0300, Felipe Balbi wrote:
+> Jack Pham <jackp@codeaurora.org> writes:
+> > commit 72704f876f50 ("dwc3: gadget: Implement the suspend entry event
+> > handler") introduced (nearly 5 years ago!) an interrupt handler for
+> > U3/L1-L2 suspend events.  The problem is that these events aren't
 > 
-> In addition, the host controller will not be able to detect a new device
-> connection while the disconnection is not processed. The controller will
-> set the link state of the affected port to eSS_INACTIVE.
+> look deeper. They *were* enabled. We've removed because, as it turns
+> out, they just add a TON of interrupts and don't give us much extra
+> information. The only reason why the state change interrupts are still
+> there is because of a known silicon bug in versions < 2.50a. That's all
+> documented in the driver itself.
+
+I did go through the commit history. Are you referring to your change
+799e9dc82968 ("usb: dwc3: gadget: conditionally disable Link State
+change events")?  If so then it sounds like you are talking about the
+link state change event, defined as event value 3 and enabled with
+DEVTEN bit 3.
+
+The "link state change event" is *not* the same as the one I'm referring
+to in this patch which is documented in newer revisions of the databook
+(both DWC3 and DWC3.1) as "USB Suspend Entry" (event 6). It's described
+as only getting generated when the link enters U3, L2 or L1 states.
+
+> For anything that works, we *don't* want link state change interrupts.
+
+Fully agree. I've seen the "link state change" interrupts in action and
+they are very noisy as they get generated for every single link event,
+particularly the USB 3.x LTSSM, including U0, U1, U2, Compliance,
+Polling, etc. in addition to the above U3, L2 & L1.
+
+But I am not proposing re-enabling that particular event type here.
+
+> > currently enabled in the DEVTEN register so the handler is never
+> > even invoked.  Fix this simply by enabling the corresponding bit
+> > in dwc3_gadget_enable_irq() using the same revision check as found
+> > in the handler.
 > 
-> To workaround this, have the xHCI driver polls for the eSS root port
-> status every 2 seconds. If eSS_INACTIVE state is detected, initiate a
-> fake connection change to stop all the active endpoints and start
-> polling for new connection change.
+> More importantly, *why* do you think you need these interrupts?
 
+Bus suspend and resume are useful conditions to be notified about--
+that's why we have the .suspend() & .resume() callbacks in struct
+usb_gadget_driver.  But currently the dwc3 gadget does not have any
+interrupt generated for suspend, and as of now the dwc3_gadget_suspend()
+does not get called, so it will never invoke the gadget driver's (let's
+say composite.c) .suspend() routine.
 
-If this only happens with active periodic transfers can we skip the polling
-and check port link state in the transfer error event handling?
+dwc3_gadget_suspend() is called from two places:
 
-Like in the previous case there the periodic device was behind a hub.
+  1. dwc3_gadget_linksts_change_interrupt() - which is the handler for
+     DWC3_DEVICE_EVENT_LINK_STATUS_CHANGE, the one I believe you are
+     referring to and is only enabled on revisions < 2.50a.
 
--Mathias
+  2. dwc3_gadget_suspend_interrupt() - which is the handler for the
+     DWC3_DEVICE_EVENT_EOPF (which I'm promptly renaming to
+     DWC3_DEVICE_EVENT_SUSPEND in patch 2/2)
+
+> > Fixes: 72704f876f50 ("dwc3: gadget: Implement the suspend entry event handler")
+> > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index dd80e5ca8c78..cab3a9184068 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -2323,6 +2323,10 @@ static void dwc3_gadget_enable_irq(struct dwc3 *dwc)
+> >  	if (DWC3_VER_IS_PRIOR(DWC3, 250A))
+> >  		reg |= DWC3_DEVTEN_ULSTCNGEN;
+> >  
+> > +	/* On 2.30a and above this bit enables U3/L2-L1 Suspend Events */
+> > +	if (!DWC3_VER_IS_PRIOR(DWC3, 230A))
+> > +		reg |= DWC3_DEVTEN_EOPFEN;
+> 
+> look at cpu usage for dwc3's interrupt before and after this
+> IRQ. Specially when connected to a host that fully supports LPM. IIRC,
+> recent xhci should trigger state changes fairly often.
+
+In our experience for U3 & L2 they are only as frequent as the host
+enters suspend, which is not that frequent unless the user is toggling
+system suspend/resume like crazy or has autosuspend enabled with a very
+short timeout.
+
+You are right that LPM L1 might happen more often when connected to a
+host that supports it. I'll try to collect some stats in that case to
+see what is a typical count for a given connection. It's worth noting
+that the dwc3_gadget_suspend_interrupt() handler specifically checks
+whether it is U3 (L2 if 2.0) before calling dwc3_gadget_suspend()
+otherwise it just stores the current link_state and exits.  So almost a
+no-op but not quite since it does incur the cost of an interrupt every
+time it happens.
+
+> Still, why do you think you need these events?
+
+Answered above. I'll add that specifically composite_suspend() also
+invokes each function driver's .suspend() callback which is needed in
+case functions have to stop any outstanding endpoint requests and
+restart them in the .resume() handler. And finally composite_suspend()
+also invokes the vbus_draw() callback which is needed to properly
+inform a power supply or charger to stop drawing current to comply with
+USB suspend power requirements.
+
+Thanks,
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
