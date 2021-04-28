@@ -2,105 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A9ADE36D120
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 06:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B72236D18B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 07:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbhD1EKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 00:10:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbhD1EKI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 00:10:08 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AE5C061574
-        for <linux-usb@vger.kernel.org>; Tue, 27 Apr 2021 21:09:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=6ic0jXt/yX64Xz1GybcdSwI99arhDWBT0mgQB/ERifE=; b=d6yqiXWSbfM3M7UMeci7N41BfJ
-        f/iekbB+bQ466PHTwvOYk3WKZDc6Pfz8vHt4gc3JRtN2JpLpmioi7bTgOKupLC/lO5Gx8X10TqlDu
-        cfMplOvAS6w41Kk+QjHzM9Uy56f/PXDxgcSH+B/wmIE4X/87P5tgwzxuVtiUsNTgUoFE08nunWcmh
-        j/9gR+1RMfBvA4NpCCM6IfCehd5Eo54AoCL1U91XbR39zSwT/syJD3Vl17rilgjR+5TysEzmyAlXI
-        D9xBh22fm+I1cgKwsvSD66Uj5+xGka/nT8ifqjD2X+4XYmDJN4OCd7dtHWjYG6IuuBROqcRNOwARg
-        pyAt4j9w==;
-Received: from [2601:1c0:6280:3f0::df68] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lbbVT-007odu-66; Wed, 28 Apr 2021 04:09:08 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>, Li Yang <leoyang.li@nxp.com>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [RFC PATCH] usb: gadget: fsl_qe_udc: fix implicit-fallthrough warnings
-Date:   Tue, 27 Apr 2021 21:08:55 -0700
-Message-Id: <20210428040855.25907-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.26.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S235302AbhD1FNR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 01:13:17 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:55043 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234377AbhD1FNP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 01:13:15 -0400
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 27 Apr 2021 22:12:31 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 27 Apr 2021 22:12:29 -0700
+X-QCInternal: smtphost
+Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 28 Apr 2021 10:41:59 +0530
+Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
+        id 961CF399E; Wed, 28 Apr 2021 10:41:58 +0530 (IST)
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: [PATCH v7 0/5] USB DWC3 host wake up support from system suspend
+Date:   Wed, 28 Apr 2021 10:41:51 +0530
+Message-Id: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quieten implicit-fallthrough warnings in fsl_qe_udc.c:
+Avoiding phy powerdown in host mode when wakeup capable devices are 
+connected, so that it can be wake up by devices.
+Set GENPD_FLAG_ACTIVE_WAKEUP flag to keep usb30_prim gdsc active
+when wakeup capable devices are connected to the host.
 
-../drivers/usb/gadget/udc/fsl_qe_udc.c: In function 'qe_ep_init':
-../drivers/usb/gadget/udc/fsl_qe_udc.c:542:37: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  542 |    if ((max == 128) || (max == 256) || (max == 512))
-../drivers/usb/gadget/udc/fsl_qe_udc.c:563:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  563 |     if (max <= 1024)
-../drivers/usb/gadget/udc/fsl_qe_udc.c:566:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  566 |     if (max <= 64)
-../drivers/usb/gadget/udc/fsl_qe_udc.c:580:8: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  580 |     if (max <= 1024)
-../drivers/usb/gadget/udc/fsl_qe_udc.c:596:5: warning: this statement may fall through [-Wimplicit-fallthrough=]
-  596 |     switch (max) {
 
-This basically just documents what is currently being done.
-If any of them need to do something else, just say so or
-even make the change.
+Changes in v7:
+Change in commit text and message in PATCH 1/5 and PATCH 5/5
+as per Matthias suggestion.
+Added curly braces for if and else if sections in PATCH 4/5.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Li Yang <leoyang.li@nxp.com>
-Cc: linuxppc-dev@lists.ozlabs.org
----
- drivers/usb/gadget/udc/fsl_qe_udc.c |    5 +++++
- 1 file changed, 5 insertions(+)
+Changes in v6:
+Addressed comments in host.c and core.c
+Separated the patches in dwc3-qcom.c to make it simple.
+Dropped wakeup-source change as it is not related to this series.
 
---- linux-next-20210427.orig/drivers/usb/gadget/udc/fsl_qe_udc.c
-+++ linux-next-20210427/drivers/usb/gadget/udc/fsl_qe_udc.c
-@@ -541,6 +541,7 @@ static int qe_ep_init(struct qe_udc *udc
- 			case USB_SPEED_HIGH:
- 			if ((max == 128) || (max == 256) || (max == 512))
- 				break;
-+			fallthrough;
- 			default:
- 				switch (max) {
- 				case 4:
-@@ -562,9 +563,11 @@ static int qe_ep_init(struct qe_udc *udc
- 			case USB_SPEED_HIGH:
- 				if (max <= 1024)
- 					break;
-+				fallthrough;
- 			case USB_SPEED_FULL:
- 				if (max <= 64)
- 					break;
-+				fallthrough;
- 			default:
- 				if (max <= 8)
- 					break;
-@@ -579,6 +582,7 @@ static int qe_ep_init(struct qe_udc *udc
- 			case USB_SPEED_HIGH:
- 				if (max <= 1024)
- 					break;
-+				fallthrough;
- 			case USB_SPEED_FULL:
- 				if (max <= 1023)
- 					break;
-@@ -605,6 +609,7 @@ static int qe_ep_init(struct qe_udc *udc
- 				default:
- 					goto en_done;
- 				}
-+				fallthrough;
- 			case USB_SPEED_LOW:
- 				switch (max) {
- 				case 1:
+Changes in v5:
+Added phy_power_off flag to check presence of wakeup capable devices.
+Dropped patch[v4,4/5] as it is present linux-next.
+Addressed comments in host.c and dwc3-qcom.c.
+
+Changes in v4:
+Addressed Matthias comments raised in v3.
+
+Changes in v3:
+Removed need_phy_for_wakeup flag and by default avoiding phy powerdown.
+Addressed Matthias comments and added entry for DEV_SUPERSPEED.
+Added suspend_quirk in dwc3 host and moved the dwc3_set_phy_speed_flags.
+Added wakeup-source dt entry and reading in dwc-qcom.c glue driver.
+
+Changes in v2:
+Dropped the patch in clock to set GENPD_FLAG_ACTIVE_WAKEUP flag and 
+setting in usb dwc3 driver.
+Separated the core patch and glue driver patch.
+Made need_phy_for_wakeup flag part of dwc structure and 
+hs_phy_flags as unsgined int.
+Adrressed the comment on device_init_wakeup call.
+Corrected offset for reading portsc register.
+Added pacth to support wakeup in xo shutdown case.
+
+Sandeep Maheswaram (5):
+  usb: dwc3: host: Set PHY mode during suspend
+  usb: dwc3: core: Host wake up support from system suspend
+  usb: dwc3: qcom: Add helper functions to enable,disable wake irqs
+  usb: dwc3: qcom: Configure wakeup interrupts during suspend
+  usb: dwc3: qcom: Keep power domain on to support wakeup
+
+ drivers/usb/dwc3/core.c      |  7 ++--
+ drivers/usb/dwc3/core.h      |  3 ++
+ drivers/usb/dwc3/dwc3-qcom.c | 85 ++++++++++++++++++++++++++++----------------
+ drivers/usb/dwc3/host.c      | 59 ++++++++++++++++++++++++++++++
+ 4 files changed, 122 insertions(+), 32 deletions(-)
+
+-- 
+QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
+of Code Aurora Forum, hosted by The Linux Foundation
+
