@@ -2,175 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7346036D4E0
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 11:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9630336D525
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 11:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238220AbhD1Jgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 05:36:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43518 "EHLO mail.kernel.org"
+        id S238705AbhD1J4O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 05:56:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54254 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230147AbhD1Jgp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Apr 2021 05:36:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C684E61428;
-        Wed, 28 Apr 2021 09:36:00 +0000 (UTC)
+        id S238285AbhD1J4O (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Apr 2021 05:56:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BA71B613E8;
+        Wed, 28 Apr 2021 09:55:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619602560;
-        bh=jKHfWNZUnTiHEDbmhLO7BahmUmrcCdo6zc8xId/K0nw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BKPIxjEVESzVXPgrZiZZeISygAew5oqfsSmFLqHs5PSpXroCiOJpLxyIa3qXiS9L8
-         mzkOXFfoxBJORC4rYdbRNxa/TfOnXdEdRqk51wltNoq8pNWslwQBJrVGpIq2EuWVq5
-         dXQCisRkhIoTT36VZjAIzBSp3QOMAmkrwiOkecXK7ROsUG8t1SPgSj936rtPV1lMXd
-         PtcTBDkOOaxmC7pNumxZXiB+DJBQOnuwke16/1u90mSp/QPNP8Yp2Vt8npOYyyw6kv
-         JsvRAxoNk2Z7FyJayNDoRHDQVSJYX+aaMtiAJNRnKNuMMYfe1fL8BQeo9FrAOr045Y
-         AmRB7xsXd4L/A==
-Received: from johan by xi.lan with local (Exim 4.93.0.4)
-        (envelope-from <johan@kernel.org>)
-        id 1lbgc9-0003pz-EV; Wed, 28 Apr 2021 11:36:14 +0200
-Date:   Wed, 28 Apr 2021 11:36:13 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Tung Pham <Tung.Pham@silabs.com>
-Cc:     Pho Tran <photranvan0712@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        Pho Tran <Pho.Tran@silabs.com>
-Subject: Re: [PATCH v9] USB: serial: cp210x: Add support for GPIOs on CP2108
-Message-ID: <YIksjb9IjOwSpPgw@hovoldconsulting.com>
-References: <20210408103607.2077-1-photranvan0712@gmail.com>
- <YIA8HD0S6C+x5ZC9@hovoldconsulting.com>
- <CO1PR11MB48829DEA0747C1B19278868E81429@CO1PR11MB4882.namprd11.prod.outlook.com>
+        s=k20201202; t=1619603729;
+        bh=FUOG1GFp3PXPiB7KKWuN2ElWCqU3XTWRLgEUNNEWjyY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mvY+hcxqgt9n+uxfqMKN/iqGvYSyaxuAY2H6cREnPpdMq8uMT2HSCYYfLZ9L07vOM
+         2Qbu9xQaCL0HYu5LfwCfcVnBJEsfbZNuJTkrOGpDp1gA6Q1PbkFmIePCwEwMYO0Q24
+         +A9mdkCUL4zxiHYhVY7eQhWG9K+Wpof6aXkLfXOQ/S4vCG/ol8QYqHkyBHC1lvpSJd
+         aQN/09/NRP9tblWM43EySG8yTcJ95pKqZ14T0W5s6KUNxiUoqPI+y0Y8eErAvbBVON
+         ug8WEbDzvCmgR6ruSmmHBPZeKFHuaUeAUjbLAzfX7f26bmtSzeVCNvVCGGIkWksQGS
+         P/aNzYEr4jnVg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: Re: [PATCH v7 1/5] usb: dwc3: host: Set PHY mode during suspend
+In-Reply-To: <1619586716-8687-2-git-send-email-sanm@codeaurora.org>
+References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+ <1619586716-8687-2-git-send-email-sanm@codeaurora.org>
+Date:   Wed, 28 Apr 2021 12:55:21 +0300
+Message-ID: <87tunqka2e.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB48829DEA0747C1B19278868E81429@CO1PR11MB4882.namprd11.prod.outlook.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Apr 26, 2021 at 09:49:37AM +0000, Tung Pham wrote:
-> Dear Johan Hovold.
-> Thanks for your review.
-> I read you comment and answer you as following:
-> 
-> On Thu, Apr 08, 2021 at 05:36:07PM +0700, Pho Tran wrote:
-> > From: Pho Tran <pho.tran@silabs.com>
-> >
-> > Similar to other CP210x devices, GPIO interfaces (gpiochip) should be 
-> > supported for CP2108.
-> 
-> > +/*
-> > + * Quad Port Config definitions
-> > + * Refer to 
-> > +https://www.silabs.com/documents/public/application-notes/an978-cp210
-> > +x-usb-to-uart-api-specification.pdf
-> > + * for more information.
-> > + * CP210X_VENDOR_SPECIFIC, CP210X_GET_PORTCONFIG call reads these 
-> > +0x49 bytes
-> > + * on a CP2108 chip.
-> > + * CP2108 Quad Port State structure(used in Quad Port Config 
-> > +structure)  */ struct cp210x_quad_port_state {
-> > +     __le16 gpio_mode_PB0;
-> > +     __le16 gpio_mode_PB1;
-> > +     __le16 gpio_mode_PB2;
-> > +     __le16 gpio_mode_PB3;
-> > +     __le16 gpio_mode_PB4;
-> > +
-> > +
-> > +     __le16 gpio_lowpower_PB0;
-> > +     __le16 gpio_lowpower_PB1;
-> > +     __le16 gpio_lowpower_PB2;
-> > +     __le16 gpio_lowpower_PB3;
-> > +     __le16 gpio_lowpower_PB4;
-> > +
-> > +     __le16 gpio_latch_PB0;
-> > +     __le16 gpio_latch_PB1;
-> > +     __le16 gpio_latch_PB2;
-> > +     __le16 gpio_latch_PB3;
-> > +     __le16 gpio_latch_PB4;
-> > +};
-> > +
-> > +// Cp2108 Quad Port Config structure
-> > +struct cp210x_quad_port_config {
-> > +     struct cp210x_quad_port_state reset_state;
-> > +     struct cp210x_quad_port_state suspend_state;
-> > +     u8 ipdelay_IFC[4];
-> > +     u8 enhancedfxn_IFC[4];
-> > +     u8 enhancedfxn_device;
-> > +     u8 extclkfreq[4];
-> > +} __packed;
-> 
-> One more thing; I noticed that the layout of the other port-config
-> structures do not match the ones used by your library API, which is
-> what the above pdf documents (e.g. they have additional padding).
-> 
-> Tung Pham: the layout is correct, the document add padding bit to
-> align data to 8 or 16 bit, we already use      __le16, so the data is
-> aligned to 16 bit.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Not sure I understand what you're saying here.
 
-My point was simply that the layout of the other structures as expected
-by the device doesn't match the layout described in you library API
-documentation.
+Hi,
 
-It doesn't appear to have anything to do with member alignment, it
-just looks like random unused bits in the structures. Take the
-single-port config, for example:
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+> During suspend read the status of all port and make sure the PHYs
+> are in the correct mode based on current speed.
+> Phy interrupt masks are set based on this mode. Keep track of the mode
+> of the HS PHY to be able to configure wakeup properly.
+>
+> Also check during suspend if any wakeup capable devices are
+> connected to the controller (directly or through hubs), if there
+> are none set a flag to indicate that the PHY should be powered
+> down during suspend.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/core.h |  3 +++
+>  drivers/usb/dwc3/host.c | 59 +++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  2 files changed, 62 insertions(+)
+>
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index b1e875c..cecd278 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1123,6 +1123,9 @@ struct dwc3 {
+>=20=20
+>  	bool			phys_ready;
+>=20=20
+> +	unsigned int            hs_phy_mode;
+> +	bool			phy_power_off;
+> +
+>  	struct ulpi		*ulpi;
+>  	bool			ulpi_ready;
+>=20=20
+> diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+> index f29a264..527f04c 100644
+> --- a/drivers/usb/dwc3/host.c
+> +++ b/drivers/usb/dwc3/host.c
+> @@ -11,6 +11,14 @@
+>  #include <linux/platform_device.h>
+>=20=20
+>  #include "core.h"
+> +#include "../host/xhci.h"
+> +#include "../host/xhci-plat.h"
+> +
+> +static int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd);
+> +
+> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci =3D {
+> +	.suspend_quirk =3D xhci_dwc3_suspend_quirk,
+> +};
 
-	struct cp210x_single_port_config {
-		__le16	gpio_mode;
-		u8	__pad0[2];
-		__le16	reset_state;
-		u8	__pad1[4];
-		__le16	suspend_state;
-		u8	device_cfg;
-	} __packed;
+we're passing data using device_properties, why do you want this here?
 
-You library API has this as:
+> @@ -115,6 +123,13 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  		}
+>  	}
+>=20=20
+> +	ret =3D platform_device_add_data(xhci, &xhci_plat_dwc3_xhci,
+> +			sizeof(struct xhci_plat_priv));
+> +	if (ret) {
+> +		dev_err(dwc->dev, "failed to add data to xHCI\n");
+> +		goto err;
+> +	}
+> +
+>  	ret =3D platform_device_add(xhci);
+>  	if (ret) {
+>  		dev_err(dwc->dev, "failed to register xHCI device\n");
+> @@ -127,6 +142,50 @@ int dwc3_host_init(struct dwc3 *dwc)
+>  	return ret;
+>  }
+>=20=20
+> +static void dwc3_set_phy_mode(struct usb_hcd *hcd)
+> +{
+> +
+> +	int i, num_ports;
+> +	u32 reg;
+> +	unsigned int ss_phy_mode =3D 0;
+> +	struct dwc3 *dwc =3D dev_get_drvdata(hcd->self.controller->parent);
+> +	struct xhci_hcd	*xhci_hcd =3D hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_mode =3D 0;
+> +
+> +	reg =3D readl(&xhci_hcd->cap_regs->hcs_params1);
+> +	num_ports =3D HCS_MAX_PORTS(reg);
 
-	typedef struct _PORT_CONFIG
-	{
-		uint16_t Mode;
-		uint16_t Reset_Latch;
-		uint16_t Suspend_Latch;
-		unsigned char EnhancedFxn;
-	} PORT_CONFIG, *PPORT_CONFIG;
+there's a big assumption here that xhci is still alive. Why isn't this
+quirk implemented in xhci-plat itself?
 
-which simply doesn't match up (and there's no implicit padding between
-members, only after EnhancedFxn).
+> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd)
 
-So my questions again are:
+who calls this?
 
- 1) Have you verified that the struct cp210x_quad_port_config above
-    actually matches what the device uses?
+=2D-=20
+balbi
 
- 2) Do you have any documentation of the structures as expected by the
-    device firmware (not your library)?
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Did you verify that the above layout is actually correct? And did you
-> try changing the pin functions in EEPROM and make sure that your code
-> handles it as expected?
-> 
-> Tung Pham: we have tested to toggle GPIO pin in normal case, we will
-> test the case that the gpio have alternative function in the future.
+-----BEGIN PGP SIGNATURE-----
 
-Great, this could be one way of verifying the above. Please do that and
-let me know the result.
-
-That part of the code has already been found broken twice during review
-so you really should have tested this before submitting.
-
-> Is there any corresponding document for the actual device protocol?
-> Tung Pham:
-> You can refer to 
-> https://www.silabs.com/documents/public/data-sheets/cp2108-datasheet.pdf
-> for understanding the functionality of cp2108.
-> And 
-> https://www.silabs.com/documents/public/application-notes/AN721.pdf
-> for use simplicity software to configure the GPIO pin alternative function of cp2108.
-
-Ok, but those do not document the layout of these structures either
-(e.g. cp210x_single_port_config with the __pad0 and __pad1 members).
-
-Johan
+iQJFBAEBCAAvFiEElLzh7wn96CXwjh2IzL64meEamQYFAmCJMQkRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzL64meEamQYufhAA29wjgeiUd9qTG8j+ZL50E+nZgAAEw2BW
+Wh2tEwNVLQ7rKEYK9iUP5EgKcoIjM9R4e8FRODWuAldoUDaZr5v+HxmJxe+SVbg8
+fhgROeZEJOqyWtB+swWTztMttG0waE873M/jtbj3BSUDpPcmxvxrcc92TiNbIl9l
+qWoy/uKLGXYbeXLfKNavA5mqRAr26bGO1hg4eDgxB0p2aq18q+TpOEly93WkJa1z
+ne0bTC2uVu2hoNJ0aVhNx8Hjxu1LknCf6cyjMruzYqGrC+7dJhf3przRE6Fe09Sp
+hKP3c2BqVU7aqrVs8YETsb25JTrL0sGtLg8pZigR+xsd9PraavPVHbdeDBLeIpLv
+brWLHGBKPgevNDW5vQ9rXXntHjLsEgj3OqDsqrqH7/ewUYZxf1j0cYLK33d5sOVE
+t1d4j8W4A+TP3cTJgUY5mHVfcRrS8Oqz0OZ5tnrKou5kRTAkLThJGOa4EYziyflq
+U4qVJXD4MGbrQf/oCjPxrWdRT/7XXdf30Ch1wNSgEs4uKietWiG4HWi61yMbvZI1
+Y+9Uw1ikDfWUry6kbSlhbwUkGnhQXZVBdinn35yMH3f2nWLOqO2+mLsdl/ZIvaLF
+H3PltgGtLHayIKcEML0V2sy2oILWOPy/eUWgC3NzUZOnl3RBjBl4xyPuxOQ3/R6o
+cREYJI/3hTM=
+=6bfD
+-----END PGP SIGNATURE-----
+--=-=-=--
