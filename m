@@ -2,108 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6231D36D190
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 07:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E500836D2A7
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Apr 2021 08:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235843AbhD1FNU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Apr 2021 01:13:20 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:34420 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234680AbhD1FNQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Apr 2021 01:13:16 -0400
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 27 Apr 2021 22:12:32 -0700
-X-QCInternal: smtphost
-Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 27 Apr 2021 22:12:31 -0700
-X-QCInternal: smtphost
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg01-blr.qualcomm.com with ESMTP; 28 Apr 2021 10:42:04 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id 0686139A6; Wed, 28 Apr 2021 10:42:02 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S230349AbhD1G5p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Apr 2021 02:57:45 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58864 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229643AbhD1G5o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Apr 2021 02:57:44 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1619593019; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+Tsc59MqetNg6ashY2X2omdPgZEqSVZURb8MsEroGqQ=;
+        b=ftjvMGNejqEHuMTmVZMGZhaGOvvbuv9KDapKN0EEL32JIcbP0tREQkmv6yhKetZdVQS5em
+        /istegquIOtIWaa/P0/6PKQWR7iwnaxApC1VxBE49eOgdKCw5aWG3NL2Sc/I9gJ0g9bz9R
+        PHOIsT3Fj8DezC2f/pHWpgbUwnarNKE=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 1A7F1AF38;
+        Wed, 28 Apr 2021 06:56:59 +0000 (UTC)
+Message-ID: <0601e45130495b152bec04eee4a50e302db4cfd2.camel@suse.com>
+Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI
+ devices
+From:   Oliver Neukum <oneukum@suse.com>
+To:     David Laight <David.Laight@ACULAB.COM>,
+        "'Rafael J. Wysocki'" <rafael@kernel.org>
+Cc:     Rajat Jain <rajatja@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v7 5/5] usb: dwc3: qcom: Keep power domain on to support wakeup
-Date:   Wed, 28 Apr 2021 10:41:56 +0530
-Message-Id: <1619586716-8687-6-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
-References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Date:   Wed, 28 Apr 2021 08:56:52 +0200
+In-Reply-To: <b5e031652f144ab6accbe553566676c9@AcuMS.aculab.com>
+References: <20210424021631.1972022-1-rajatja@google.com>
+         <20210424021631.1972022-2-rajatja@google.com>
+         <d53c72949d81db9f092a9aecb49bf56b47727738.camel@suse.com>
+         <CAJZ5v0iNrSFjhmTE8K-JrO07kJon3ikhatbg0Jg2hs+x-frDJg@mail.gmail.com>
+         <79b994f2476249498797e1784f735fd7@AcuMS.aculab.com>
+         <21c6b5002c5ad36cd7fe0bb849f5eba12a614bca.camel@suse.com>
+         <b5e031652f144ab6accbe553566676c9@AcuMS.aculab.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If wakeup capable devices are connected to the controller (directly
-or through hubs) at suspend time keep the power domain on in order
-to support wakeup from these devices.
+Am Dienstag, den 27.04.2021, 12:59 +0000 schrieb David Laight:
+> From: Oliver Neukum
+> > Sent: 27 April 2021 13:00
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+> > that is true for those options, but not for the style
+> > of PCI hotplug which requires you to push a button and wait
+> > for the blinking light.
+> 
+> True, I remember some of those PCI hotplug chassis from 25 years ago.
+> ISTR we did get the removal events working (SVR4/Unixware) but I
+> don't remember the relevant chassis ever being sold.
+> In spite of the marketing hype I suspect it was only ever possible
+> to remove a completely working board and replace it with an
+> exactly equivalent one.
+> 
+> In any case those chassis are not 'surprise removal'.
+> 
+> More modern drivers are less likely to crash (and burn?) when
+> a PCI read returns ~0u.
+> But I suspect an awful lot really don't handle surprise removal
+> very well at all.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 82125bc..1e220af 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,9 +17,11 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-+#include <linux/usb/hcd.h>
- 
- #include "core.h"
- 
-@@ -354,10 +356,19 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
- {
- 	u32 val;
- 	int i, ret;
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct usb_hcd  *hcd;
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
- 
- 	if (qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci) {
-+		hcd = platform_get_drvdata(dwc->xhci);
-+		if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
-+			genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-+	}
-+
- 	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
- 	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 		dev_err(qcom->dev, "HS-PHY not in L2\n");
-@@ -382,9 +393,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
- 	int ret;
- 	int i;
- 
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (!qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci)
-+		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	if (device_may_wakeup(qcom->dev))
- 		dwc3_qcom_disable_interrupts(qcom);
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+So you are saying that these systems are so rare that it should be
+handled  as special cases if at all?
+
+	Regards
+		Oliver
+
 
