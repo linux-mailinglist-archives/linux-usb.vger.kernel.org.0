@@ -2,114 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A317D36E703
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Apr 2021 10:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE76036E758
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Apr 2021 10:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239685AbhD2I2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Apr 2021 04:28:07 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:27323 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232734AbhD2I2G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Apr 2021 04:28:06 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619684841; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: To:
- Subject: Sender; bh=6qgqjuuhiEh5SLFu0O4kW2me1+CWdQXIP6tlMRmWZMo=; b=kuIo3PAksDEKRSGt97QueYXddubw6xRxC4Qrf4CX8UQLJlzvxvmUez0V5WyWnKQ5yaxL4UlE
- 7UoInEBu5s7ItxaZTjhj4w4oebIHFJq9o2T3BA181lOMMOIPMcT7aKdf+oMmev5dXw58/IPp
- 0hM7JMoHetey5yUCOvO8aF3x1PA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 608a6de4853c0a2c46db46d7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Apr 2021 08:27:16
- GMT
-Sender: prathampratap=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BE059C4338A; Thu, 29 Apr 2021 08:27:15 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [172.20.10.6] (unknown [106.207.45.44])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: prathampratap)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2953FC433F1;
-        Thu, 29 Apr 2021 08:27:13 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2953FC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=prathampratap@codeaurora.org
-Subject: Re: ep0 request dequeue for function drivers
-To:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org
-References: <655514e3-90c1-e628-d5e6-efb298f49038@codeaurora.org>
- <87bla1l58y.fsf@kernel.org>
-From:   Pratham Pratap <prathampratap@codeaurora.org>
-Message-ID: <fc80f058-d015-86f1-3857-b62720c89098@codeaurora.org>
-Date:   Thu, 29 Apr 2021 13:57:11 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S232455AbhD2IvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Apr 2021 04:51:00 -0400
+Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:61358 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230071AbhD2IvA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Apr 2021 04:51:00 -0400
+Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
+        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 13T8ccXW010746;
+        Thu, 29 Apr 2021 01:50:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=6ojQBabNu4bMYOA5wVyVeH1bZCK3PqN1N9hfT/L0rRM=;
+ b=qLvcCO6Rmu0FE5xad/56V+OQ9ZHJ3E6aseyXKnPZebkbu0gRdqB4nnNU59eDtzgc7Ycz
+ yOS+/O9quAVYgfjfYhv9AxZvT94QZj0Uq/LZ5StATZq4h7p8jUnlH/WP/dXtDyiTeSWc
+ ISGmt3zdAHAtuqPpxH19Z8MskhdwD/N6ykscyMS04L2ItPZ6GKfJHbAjJPZuqdYRLVGE
+ vGy9nj7J2hqpudCTnSHdxubulRnhRS3zRCZV1BPtGh4/PY9qnncVqyXq2J/KC4EdgJLI
+ Ee6B8dj3H8OABrazR18oVbNaP5QqFsetuen47pQpt98XHL7jNnD+p3OTIhjw5uZS9TPR Tw== 
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
+        by mx0a-0014ca01.pphosted.com with ESMTP id 3873emcbws-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 29 Apr 2021 01:50:06 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EZmitOAtbeZkMC0QLovvUow1g0AwWBmR4yoZQghHQXdnNtnenrmhZ7XAtnTneU4jVTMP+kYrk5XMjAHoXaSUqUKh1qwtl6urede/BPTXNEJaZgaeny3gwOcbnNq67Q20xOkfMcXGWOf/Tz4USiWcY7N+BBhzkBB5NSeh0QYu3KXwXpPJqXPXpOk3rTru+ERPQ2uzda1NAXkqaEfEUVlD4XSupyLOX1Y+dFzyJZ+v8l7C70jEZPxiK5XZh1zLZWl18M3WFx7zulSehJ01UHsRKMeurH0sn6Cb+3HGyJ2n752b7hii0d+5i76XKjpArrjq0lS64aDvkje56OpfsTa32g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ojQBabNu4bMYOA5wVyVeH1bZCK3PqN1N9hfT/L0rRM=;
+ b=VxIkQJSkABilrI42XXlTLW9my6FHo/WdcfmxNUB+/ZqREoERjbWwOPeDR6Y0S9xfcA1ckbEn8q6sTgG5lrvGGa+uqwrHKR748XGVJTuhI0PRIKtz6MetgPPU3riIfZnfekB8GEX2MXcexatkQaKFwivlXvS1LUD9ee95jeyrzfN0GmSgd1+/xgpAulR4HjHYzMRsgun2Z/3zzDsNb3230MXBaYEJlg0ZEKiqWigzPn67zM263rpj4yn+Pe2l2za+7JcS+h5HnPOz23o0/1NfdgP2PWafmy1yeeKFDiUX4LnB8mgM27BSQTj9Exb8NqF5vHOZ/h26GRTR9GFS3sLAjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 64.207.220.244) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=cadence.com; dmarc=pass (p=none sp=none pct=100) action=none
+ header.from=cadence.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ojQBabNu4bMYOA5wVyVeH1bZCK3PqN1N9hfT/L0rRM=;
+ b=mcDn+Yp8HLXsA9Usb6c6fKW+a9agj2LzkpkJZWcTHSbfPAg31+Gh/bAduneUEtDv7hfkovZOINAK74PwUofRDNaUtoBZ//03xOdfvyKw0KLqBoyCBU5pXJn8CF965UHG09TyU/2T/ZKWlDlYP+7jzkyFxswpBQGb72irpacsDvw=
+Received: from CO2PR07CA0052.namprd07.prod.outlook.com (2603:10b6:100::20) by
+ BN7PR07MB4657.namprd07.prod.outlook.com (2603:10b6:406:f1::15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4065.21; Thu, 29 Apr 2021 08:50:05 +0000
+Received: from MW2NAM12FT045.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:100:0:cafe::3a) by CO2PR07CA0052.outlook.office365.com
+ (2603:10b6:100::20) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.27 via Frontend
+ Transport; Thu, 29 Apr 2021 08:50:05 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 64.207.220.244)
+ smtp.mailfrom=cadence.com; linuxfoundation.org; dkim=none (message not
+ signed) header.d=none;linuxfoundation.org; dmarc=pass action=none
+ header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 64.207.220.244 as permitted sender) receiver=protection.outlook.com;
+ client-ip=64.207.220.244; helo=wcmailrelayl01.cadence.com;
+Received: from wcmailrelayl01.cadence.com (64.207.220.244) by
+ MW2NAM12FT045.mail.protection.outlook.com (10.13.181.12) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4087.16 via Frontend Transport; Thu, 29 Apr 2021 08:50:04 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by wcmailrelayl01.cadence.com (8.14.7/8.14.4) with ESMTP id 13T8o26r099131
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=OK);
+        Thu, 29 Apr 2021 01:50:03 -0700
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 29 Apr 2021 10:49:49 +0200
+Received: from gli-login.cadence.com (10.187.128.100) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Thu, 29 Apr 2021 10:49:49 +0200
+Received: from gli-login.cadence.com (localhost [127.0.0.1])
+        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 13T8nmqV013584;
+        Thu, 29 Apr 2021 10:49:48 +0200
+Received: (from pawell@localhost)
+        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 13T8nmNg013514;
+        Thu, 29 Apr 2021 10:49:48 +0200
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <dan.carpenter@oracle.com>,
+        <linux-usb@vger.kernel.org>, <kurahul@cadence.com>,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH] usb: cdnsp: Useless condition has been removed
+Date:   Thu, 29 Apr 2021 10:49:14 +0200
+Message-ID: <20210429084914.12003-1-pawell@gli-login.cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <87bla1l58y.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c925ae14-1849-4adc-ad6a-08d90aebc844
+X-MS-TrafficTypeDiagnostic: BN7PR07MB4657:
+X-Microsoft-Antispam-PRVS: <BN7PR07MB4657A79E89635963915CA0F9DD5F9@BN7PR07MB4657.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:62;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bjxwl/haorTM2F/huzf2wcTV0ElC+aaus+b0c/LhUOcr1CflZ7K1mJXU+4rFdKStYIJN8gCTzusOp5QaIcNDC1Xexpxa29Z7R+Pz8pyhhMnvZ9yEUqjAIVWqzcQHa3Zb0hTSWLQGaGc9HOL7L/7So5vC/e2vFwzS/XMIw2hER/4hb/7OsOlhMeUpy3v/1LtmSHoCPlopJOGQESccvdfNKNUu6taca6axE36i2gFFRf/hMVrgCU9+lu8L82Iy4mWoL8zNGHABgyvWSItqGy2BiY/UB5m8/N18wvnrKhCoFN67JhZzTfclI1XaKjzyRMvsjPVzAHTGQEUdXSbw2Em80aT6FUOp7b3rC4HMg0XwtxM6H5wgQvmgZY2IEQcqCa8bjjMO89+hwwNeptyE9Qzr7kYChgU0qZkNnZ3zgZMP/pvz7vQnn52f3TPWenlThUL6nHppse2+VIScqv9n6vlhajkb5UbkU7jrBDaaBpm7cZZE+yS4OUsrEM+Bi8g37W64BzXRsBOODA2HoJjqvSlJ+WIjJfU7YRUAFHMviipTn2iz4RY8H6+oI6OB2pz2l0NBhbQRyWKutZ2O/jdk/Vta+QI+ZyBFTw4hd5klt89/Qoq41BYLNj7BRneQnfvSXJ99ScaH4za0Fty6M23VKLf8kG/t7lecm3yXShrrFlKKI6uewYpSeFst7PXE32K/uU7/7dfQKc2ZgBb/+uvDdHR07g==
+X-Forefront-Antispam-Report: CIP:64.207.220.244;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:wcmailrelayl01.cadence.com;PTR:ErrorRetry;CAT:NONE;SFS:(4636009)(39860400002)(376002)(136003)(396003)(346002)(36092001)(36840700001)(46966006)(42186006)(107886003)(81166007)(336012)(6666004)(316002)(82310400003)(426003)(26005)(186003)(83380400001)(6916009)(4326008)(47076005)(36906005)(82740400003)(2906002)(8676002)(54906003)(5660300002)(478600001)(4744005)(1076003)(86362001)(70206006)(70586007)(36860700001)(8936002)(356005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Apr 2021 08:50:04.2662
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c925ae14-1849-4adc-ad6a-08d90aebc844
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[64.207.220.244];Helo=[wcmailrelayl01.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT045.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN7PR07MB4657
+X-Proofpoint-ORIG-GUID: D5OyCaUTsb6OlDgZ4I5PnepRZAU86aXq
+X-Proofpoint-GUID: D5OyCaUTsb6OlDgZ4I5PnepRZAU86aXq
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-04-29_05:2021-04-28,2021-04-29 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 mlxlogscore=712 spamscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1011 phishscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2104290062
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the explanation. Now it is clear why we don't need this in 
-upstream.
+From: Pawel Laszczak <pawell@cadence.com>
 
---Pratham
+Patch removes the warning "variable dereferenced before
+check 'pdev->dcbaa'" from cdnsp_mem_cleanup.
 
-On 4/26/2021 3:47 PM, Felipe Balbi wrote:
-> Hi,
->
-> Pratham Pratap <prathampratap@codeaurora.org> writes:
->> Hi,
->>
->> Let's say a function driver queues a request on ep0 and before the
->> completion handler could run composition switch/physical disconnect
->> happens. This request will be in pending list since gadget_giveback is
->> not done but the composite driver will free the request from
->> composite_dev_cleanup. Now, once the next connect happens, another ep0
->> request is queued and while handling the completion of that request,
->> gadget driver might end up accessing the old/stale request leading to
->> list_poison since pending list is corrupted.
-> argh, I'm assuming you're using dwc3. It's always a good idea to Cc
-> maintainers for the drivers or subsystems in question. You can rely on
-> scripts/get_maintainer.pl to get an idea who you should Cc.
->
-> Anyway, assuming dwc3.
->
-> Have you tried to actually reproduce this? Did you collect tracepoints?
-> Did you read dwc3's documentation, specially in regards to reporting
-> bugs?
->
-> Try to consider what happens when the cable is yanked and you'll quickly
-> realize what you suggest can't happen. How does USB know that cable is
-> disconnected? What happens to dwc3 when the cable is disconnected? What
-> does the driver do about it?
->
-> If you really found a bug, please report it correctly, following the
-> Reporting Bugs section of dwc3 documentation, Cc the relevant people and
-> make sure to reproduce the problem with *mainline*; downstream kernel is
-> not acceptable ;-)
->
-> Also, please be clear about the setup you're using. The only thing I can
-> infer is that you're using dwc3 with one of the QC platforms and I can
-> only infer that due to your email domain. Please be clear, how to
-> reproduce? Which QC platform are you using? Which kernel version?
->
->> To fix this, the function drivers might want to use setup_pending(mark
->> it to true) flag so that when composite_dev_cleanup is run the requests
->> are given back from usb_ep_dequeue; clear the setup pending flag in
->> function driver when completion handler is run successfully. I can see
->> this issue in almost all the function drivers.
-> Nah, we don't need that. Please answer the questions above about
-> handling for cable disconnect and you'll see this is unnecessary.
->
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+---
+ drivers/usb/cdns3/cdnsp-mem.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
+index 5d4c4bfe15b7..a47948a1623f 100644
+--- a/drivers/usb/cdns3/cdnsp-mem.c
++++ b/drivers/usb/cdns3/cdnsp-mem.c
+@@ -1082,9 +1082,8 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
+ 	dma_pool_destroy(pdev->device_pool);
+ 	pdev->device_pool = NULL;
+ 
+-	if (pdev->dcbaa)
+-		dma_free_coherent(dev, sizeof(*pdev->dcbaa),
+-				  pdev->dcbaa, pdev->dcbaa->dma);
++	dma_free_coherent(dev, sizeof(*pdev->dcbaa),
++			  pdev->dcbaa, pdev->dcbaa->dma);
+ 
+ 	pdev->dcbaa = NULL;
+ 
+-- 
+2.25.1
+
