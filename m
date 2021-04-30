@@ -2,89 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4973336F630
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 09:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFCF636F640
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 09:15:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbhD3HMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 03:12:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42002 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229590AbhD3HMh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 03:12:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9AF386142A;
-        Fri, 30 Apr 2021 07:11:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619766709;
-        bh=ABuAQsnLWjX6AbOqAZ4eaagtLZSJKXS74oQLZQ2wh8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qSvTfUJAR13wGEo/gWV1Ztr4hbmrLsKb1lPwHoZZYaAqW7RsXmHeInVELpHSipFRE
-         YI2hyFeXVYTJ6YuyOygrS3TGj5knXFhB/Ebed71XaffunDpEk+tG4i3Qy4CNXYlSdt
-         lk2KqtxtOD9IMcMYO8u5cXLzNiPBta0bZBNifDXOdVkbEht+Egx0UivUWA1BpC/152
-         F1ArKB/xCrVEpWkvZvfaZILNBeuyx65t9jUU2Tutk56vLnAS7WumCu9qr3O2YkTO6E
-         C+SIYKdQxqAoW/7ZQy66vhHqJJwYQb/vvwEOcQuJwDXTW02IYJPvpbSlc4Kg+hbyfO
-         udckjhSTbmm0Q==
-Date:   Fri, 30 Apr 2021 15:11:45 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Pawel Laszczak <pawell@cadence.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, kurahul@cadence.com
-Subject: Re: [PATCH] usb: cdnsp: Useless condition has been removed
-Message-ID: <20210430071145.GA4449@nchen>
-References: <20210429084914.12003-1-pawell@gli-login.cadence.com>
- <20210430034349.GB3842@nchen>
- <20210430045248.GG21598@kadam>
+        id S230085AbhD3HQb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 03:16:31 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:57383 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230055AbhD3HQb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 03:16:31 -0400
+X-UUID: d2409fb0d42f46219e4119bf439b1f23-20210430
+X-UUID: d2409fb0d42f46219e4119bf439b1f23-20210430
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1251188204; Fri, 30 Apr 2021 15:15:34 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 30 Apr 2021 15:15:33 +0800
+Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 30 Apr 2021 15:15:33 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Ikjoon Jang <ikjn@chromium.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH 1/3] usb: xhci-mtk: use bitfield instead of bool
+Date:   Fri, 30 Apr 2021 15:15:30 +0800
+Message-ID: <20210430071532.51794-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210430045248.GG21598@kadam>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-04-30 07:52:48, Dan Carpenter wrote:
-> On Fri, Apr 30, 2021 at 11:43:49AM +0800, Peter Chen wrote:
-> > On 21-04-29 10:49:14, Pawel Laszczak wrote:
-> > > From: Pawel Laszczak <pawell@cadence.com>
-> > > 
-> > > Patch removes the warning "variable dereferenced before
-> > > check 'pdev->dcbaa'" from cdnsp_mem_cleanup.
-> > 
-> > You may describe the real problem you fix, but not the warning
-> > message from some auto build system.
-> > 
-> 
-> I really feel people have become too lost in the weeds of what matters
-> and what does not.  For internships, people want picky feedback in case
-> they're forced to deal with the ultra drill sargent maintainers.  But
-> really the important thing in a commit message is if you can understand
-> the problem and the fix.  In this case everyone who is capable of
-> understanding the patch can understand the commit message.
-> 
-> Also if you're going to criticize someone's commit message then just
-> write it the way you want so they can copy and paste.  I had someone
-> yesterday say that my commit message where I deleted a NULL check and
-> related dead code was not clear enough that the behavior was
-> "intentional" and I took that to mean that they wanted me to say that
-> deleting the dead code did not change runtime behavior.  I'm still not
-> sure that's what they wanted me to add...  The point is no one can read
-> your mind, if you want a commit message to say something specific then
-> just say it instead of hinting around the bush and we have to send a v2
-> and v3 commit message.
-> 
-> regards,
-> dan carpenter
+Use bitfield instead of bool in struct
 
-Hi Dan,
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+ drivers/usb/host/xhci-mtk.c | 2 --
+ drivers/usb/host/xhci-mtk.h | 8 ++++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
 
-Thanks for your comments, it's the good suggestion. But everyone may have
-slight different criteria that what's really clear.
-
-For this patch, I don't understand the commits, the pdev->dcbaa is set as
-NULL after dma_free_coherent, why it has this warning.
-
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index b2058b3bc834..2548976bcf05 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -495,8 +495,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 			goto put_usb2_hcd;
+ 		}
+ 		mtk->has_ippc = true;
+-	} else {
+-		mtk->has_ippc = false;
+ 	}
+ 
+ 	device_init_wakeup(dev, true);
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index cd3a37bb73e6..94a59b3d178f 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -138,17 +138,17 @@ struct xhci_hcd_mtk {
+ 	struct mu3h_sch_bw_info *sch_array;
+ 	struct list_head bw_ep_chk_list;
+ 	struct mu3c_ippc_regs __iomem *ippc_regs;
+-	bool has_ippc;
+ 	int num_u2_ports;
+ 	int num_u3_ports;
+ 	int u3p_dis_msk;
+ 	struct regulator *vusb33;
+ 	struct regulator *vbus;
+ 	struct clk_bulk_data clks[BULK_CLKS_NUM];
+-	bool lpm_support;
+-	bool u2_lpm_disable;
++	unsigned int has_ippc:1;
++	unsigned int lpm_support:1;
++	unsigned int u2_lpm_disable:1;
+ 	/* usb remote wakeup */
+-	bool uwk_en;
++	unsigned int uwk_en:1;
+ 	struct regmap *uwk;
+ 	u32 uwk_reg_base;
+ 	u32 uwk_vers;
 -- 
-
-Thanks,
-Peter Chen
+2.18.0
 
