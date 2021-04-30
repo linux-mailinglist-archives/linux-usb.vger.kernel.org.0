@@ -2,275 +2,229 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0800336F892
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 12:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7591D36F94E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 13:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbhD3KkX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 06:40:23 -0400
-Received: from mx2.suse.de ([195.135.220.15]:41296 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229543AbhD3KkW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 06:40:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1619779173; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        id S229981AbhD3L3O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 07:29:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33745 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229875AbhD3L3N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 07:29:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1619782105;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WfpaOe4d0bMzy825G2nFjAwJXQmQpnXp8V7P/s3gFwY=;
-        b=WFSYTo1zXRLtAZetE91RzdY82mBnB+4GvPTYExSdMAlA/ka0VQOS9zlPx6qIf+jLIJZBc0
-        gDW+SU8PRiTAgDK8kMb5iDd+M1VYeQAt5qZ4YDbAinAgdmwjrK1RdHS0ftGCo07gPpZpfc
-        wEKgWxka2tP4wKnxUAC2px0BeqgXsfk=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id CDF21B20E;
-        Fri, 30 Apr 2021 10:39:33 +0000 (UTC)
-Message-ID: <bf02f5ecf84b7eaaa05768edd933a321f701e79f.camel@suse.com>
-Subject: Re: [RFC net-next 2/2] usb: class: cdc-wdm: WWAN framework
- integration
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Loic Poulain <loic.poulain@linaro.org>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org, kuba@kernel.org,
-        bjorn@mork.no
-Date:   Fri, 30 Apr 2021 12:39:29 +0200
-In-Reply-To: <1619777783-24116-2-git-send-email-loic.poulain@linaro.org>
-References: <1619777783-24116-1-git-send-email-loic.poulain@linaro.org>
-         <1619777783-24116-2-git-send-email-loic.poulain@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        bh=3JFK72s4WgeXjVN5drGeID+sVQaIvMBZBVHsbJFKuQM=;
+        b=JTME/c1A4egQCmTmCCHbZWEjaFkxZcQzFkKYLKCuMhIWEFiAsIHKzBiSNV1pTI4MmJx5C3
+        G9y4jrPWYLhzR8CblPEFI8952hTPZ1NXRn8uEJnnLeIDnW/lRvMKIdh5v1wtVcQIxMeGu2
+        GWGwhMukqIZU82NtbGSApNBOfSxkn6c=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-110-VJVIp7PYMeGQ61IQcWLE7Q-1; Fri, 30 Apr 2021 07:28:23 -0400
+X-MC-Unique: VJVIp7PYMeGQ61IQcWLE7Q-1
+Received: by mail-ej1-f71.google.com with SMTP id d16-20020a1709066410b0290373cd3ce7e6so14796977ejm.14
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 04:28:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=3JFK72s4WgeXjVN5drGeID+sVQaIvMBZBVHsbJFKuQM=;
+        b=QEofzos5VnF76nNhSkdqc3XValXDy5o+32WbakmYFgTozlzdEc41dlB2nmW20C27If
+         c45zlutJCppFpcAmGblnEmW6BxhM9ER/r13iNXfeFt5Tik79vahzrxytzS1tUkBKfIY7
+         XBZ/GyiPwDYI95dwQw9Lyp/lvhKz5nLDjAqQkG7+7gRJqA0YgY8I/NA9EhdmYKjiLob3
+         ByTuoQefAPDgL6fa5EZqTt1ncikKAwtbICSwiWu/X838KOW7NGz8BSt8dnIIjb4AQba5
+         vO+66Jr/ar3pft+wev3YHOLwceLeHtAVO88cJk8raQ4TCyabl73m6AlRdg7racX86vBI
+         Oalg==
+X-Gm-Message-State: AOAM533Mz/M+iAbF1/FeF86QECWwWmGeVT4kJYFkuVZNWgUSMRYsmbN6
+        JRUwuxwlm2QWT5ARtRvTAnj2qTol0zW0nM9foZhqlpbag7agLUCpaMdTtzBXi7AWgValbAhar4v
+        f5+EonmL/KbeC25z2aqSdGhSCQH4kS9uQwxx/F/ZY02u2mezWps4sy3Bz5FmIllt4+zbZGoV2
+X-Received: by 2002:a05:6402:17ca:: with SMTP id s10mr5400561edy.198.1619782101786;
+        Fri, 30 Apr 2021 04:28:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyfriSPaxv9UxvbfohsO7UTlieySCqCsfHiHvrzZKh1PX0V5hf98r7px+MwLMq3tT8LQ09Orw==
+X-Received: by 2002:a05:6402:17ca:: with SMTP id s10mr5400531edy.198.1619782101508;
+        Fri, 30 Apr 2021 04:28:21 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id k9sm1841855eje.102.2021.04.30.04.28.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Apr 2021 04:28:21 -0700 (PDT)
+Subject: Re: [PATCH 1/9] drm/connector: Make the drm_sysfs connector->kdev
+ device hold a reference to the connector
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20210428215257.500088-1-hdegoede@redhat.com>
+ <20210428215257.500088-2-hdegoede@redhat.com>
+ <YIqbLDIeGXNSjSTS@phenom.ffwll.local> <YIqehmw+kG53LF3t@kroah.com>
+ <YIqg59yageIUwiwy@phenom.ffwll.local>
+ <4e78d188-f257-ad33-e703-bcbc54a30c31@redhat.com>
+ <YIsEfAjFthAyHxUi@phenom.ffwll.local>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <43ee221e-7151-c0c2-cc52-37b191778221@redhat.com>
+Date:   Fri, 30 Apr 2021 13:28:20 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <YIsEfAjFthAyHxUi@phenom.ffwll.local>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Freitag, den 30.04.2021, 12:16 +0200 schrieb Loic Poulain:
+Hi,
 
-> It would then make sense to migrate cdc-wdm to this unified framework
-> and register the USB modem control endpoints as standard WWAN control
-> ports.
+On 4/29/21 9:09 PM, Daniel Vetter wrote:
+> On Thu, Apr 29, 2021 at 02:33:17PM +0200, Hans de Goede wrote:
+>> Hi,
+>>
+>> On 4/29/21 2:04 PM, Daniel Vetter wrote:
+>>> On Thu, Apr 29, 2021 at 01:54:46PM +0200, Greg Kroah-Hartman wrote:
+>>>> On Thu, Apr 29, 2021 at 01:40:28PM +0200, Daniel Vetter wrote:
+>>>>> On Wed, Apr 28, 2021 at 11:52:49PM +0200, Hans de Goede wrote:
+>>>>>> Userspace could hold open a reference to the connector->kdev device,
+>>>>>> through e.g. holding a sysfs-atrtribute open after
+>>>>>> drm_sysfs_connector_remove() has been called. In this case the connector
+>>>>>> could be free-ed while the connector->kdev device's drvdata is still
+>>>>>> pointing to it.
+>>>>>>
+>>>>>> Give drm_connector devices there own device type, which allows
+>>>>>> us to specify our own release function and make drm_sysfs_connector_add()
+>>>>>> take a reference on the connector object, and have the new release
+>>>>>> function put the reference when the device is released.
+>>>>>>
+>>>>>> Giving drm_connector devices there own device type, will also allow
+>>>>>> checking if a device is a drm_connector device with a
+>>>>>> "if (device->type == &drm_sysfs_device_connector)" check.
+>>>>>>
+>>>>>> Note that the setting of the name member of the device_type struct will
+>>>>>> cause udev events for drm_connector-s to now contain DEVTYPE=drm_connector
+>>>>>> as extra info. So this extends the uevent part of the userspace API.
+>>>>>>
+>>>>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>>>>>
+>>>>> Are you sure? I thought sysfs is supposed to flush out any pending
+>>>>> operations (they complete fast) and handle open fd internally?
+>>>>
+>>>> Yes, it "should" :)
+>>>
+>>> Thanks for confirming my vague memories :-)
+>>>
+>>> Hans, pls drop this one.
+>>
+>> Please see my earlier reply to your review of this patch, it is
+>> still needed but for a different reason:
+>>
+>> """
+>> We still need this change though to make sure that the 
+>> "drm/connector: Add drm_connector_find_by_fwnode() function"
+>> does not end up following a dangling drvdat pointer from one
+>> if the drm_connector kdev-s.
+>>
+>> The class_dev_iter_init() in drm_connector_find_by_fwnode() gets
+>> a reference on all devices and between getting that reference
+>> and it calling drm_connector_get() - drm_connector_unregister()
+>> may run and drop the possibly last reference to the
+>> drm_connector object, freeing it and leaving the kdev's
+>> drvdata as a dangling pointer.
+>> """
+>>
+>> This is actually why I added it initially, and while adding it
+>> I came up with this wrong theory of why it was necessary independently
+>> of the drm_connector_find_by_fwnode() addition, sorry about that.
+> 
+> Generally that's handled by a kref_get_unless_zero under the protection of
+> the lock which protects the weak reference. Which I think is the right
+> model here (at a glance at least) since this is a lookup function.
 
-This absolutely makes sense, but I have questions about the
-implementation. I am putting comments inline.
+I'm afraid that things are a bit more complicated here. The idea here
+is that we have a subsystem outside of the DRM subsystem which received
+a hotplug event for a drm-connector.  The only info which this subsystem
+has is a reference on the fwnode level (either through device-tree or
+to platform-code instantiating software-fwnode-s + links for this).
 
-	Regards
-		Oliver
+So in order to deliver the hotplug event to the connector we need
+to lookup the connector by fwnode.
 
- 
->  static struct usb_driver wdm_driver;
-> @@ -203,7 +206,23 @@ static void wdm_in_callback(struct urb *urb)
->  	if (desc->rerr == 0 && status != -EPIPE)
->  		desc->rerr = status;
->  
-> -	if (length + desc->length > desc->wMaxCommand) {
-> +	if (test_bit(WDM_WWAN_IN_USE, &desc->flags)) {
-> +		struct wwan_port *port = desc->wwanp;
-> +		struct sk_buff *skb;
-> +
-> +		/* Forward data to WWAN port */
-> +		skb = alloc_skb(length, GFP_ATOMIC);
+I've chosen to implement this by iterating over all drm_class
+devices with a dev_type of drm_connector using class_dev_iter_init()
+and friends. This makes sure that we either get a reference to
+the device, or that we skip the device if it is being deleted.
 
-You want to allocate an skb in the callback? Is that really necessary?
+But this just gives us a reference to the connector->kdev, not
+to the connector itself. A pointer to the connector itself is stored
+as drvdata inside the device, but without taking a reference as
+this patch does, there is no guarantee that that pointer does not
+point to possibly free-ed mem.
 
-> +		if (skb) {
-> +			memcpy(skb_put(skb, length), desc->inbuf, length);
-> +			wwan_port_rx(port, skb);
-> +		} else {
-> +			dev_err(&desc->intf->dev,
-> +				"Unable to alloc skb, response discarded\n");
-> +		}
-> +
-> +		/* inbuf has been copied, it is safe to check for outstanding data */
-> +		schedule_work(&desc->service_outs_intr);
-> +	} else if (length + desc->length > desc->wMaxCommand) {
->  		/* The buffer would overflow */
->  		set_bit(WDM_OVERFLOW, &desc->flags);
->  	} else {
-> @@ -699,6 +718,11 @@ static int wdm_open(struct inode *inode, struct file *file)
->  		goto out;
->  	file->private_data = desc;
->  
-> +	if (test_bit(WDM_WWAN_IN_USE, &desc->flags)) {
-> +		rv = -EBUSY;
-> +		goto out;
-> +	}
-> +
->  	rv = usb_autopm_get_interface(desc->intf);
->  	if (rv < 0) {
->  		dev_err(&desc->intf->dev, "Error autopm - %d\n", rv);
-> @@ -794,6 +818,146 @@ static struct usb_class_driver wdm_class = {
->  	.minor_base =	WDM_MINOR_BASE,
->  };
->  
-> +/* --- WWAN framework integration --- */
-> +#ifdef CONFIG_WWAN
-> +static int wdm_wwan_port_start(struct wwan_port *port)
-> +{
-> +	struct wdm_device *desc = wwan_port_get_drvdata(port);
-> +
-> +	/* The interface is both exposed via the WWAN framework and as a
-> +	 * legacy usbmisc chardev. If chardev is already open, just fail
-> +	 * to prevent concurrent usage. Otherwise, switch to WWAN mode.
-> +	 */
-> +	mutex_lock(&wdm_mutex);
-> +	if (desc->count) {
-> +		mutex_unlock(&wdm_mutex);
-> +		return -EBUSY;
-> +	}
-> +	set_bit(WDM_WWAN_IN_USE, &desc->flags);
-> +	mutex_unlock(&wdm_mutex);
-> +
-> +	desc->manage_power(desc->intf, 1);
-> +
-> +	/* Start getting events */
-> +	usb_submit_urb(desc->validity, GFP_KERNEL);
-> +
-> +	/* tx is allowed */
-> +	wwan_port_txon(port);
+We could set drvdata to 0 from drm_sysfs_connector_remove()
+Before calling device_unregister(connector->kdev) and then do
+something like this inside drm_connector_find_by_fwnode():
 
-Is the order here correct? This looks like you could get an
-event you cannot yet respond to. And you have no error handling.
-> +
-> +	return 0;
-> +}
-> +
-> +static void wdm_wwan_port_stop(struct wwan_port *port)
-> +{
-> +	struct wdm_device *desc = wwan_port_get_drvdata(port);
-> +
-> +	/* Stop all transfers and disable WWAN mode */
-> +	kill_urbs(desc);
-> +	desc->manage_power(desc->intf, 0);
-> +	clear_bit(WDM_READ, &desc->flags);
-> +	clear_bit(WDM_WWAN_IN_USE, &desc->flags);
-> +}
-> +
-> +static void wdm_wwan_port_tx_complete(struct urb *urb)
-> +{
-> +	struct sk_buff *skb = urb->context;
-> +	struct wwan_port *port = skb_shinfo(skb)->destructor_arg;
-> +
-> +	/* Allow new command transfer */
-> +	wwan_port_txon(port);
-> +	kfree_skb(skb);
-> +}
-> +
-> +static int wdm_wwan_port_tx(struct wwan_port *port, struct sk_buff *skb)
-> +{
-> +	struct wdm_device *desc = wwan_port_get_drvdata(port);
-> +	struct usb_interface *intf = desc->intf;
-> +	struct usb_ctrlrequest *req = desc->orq;
-> +	int rv;
-> +
-> +	rv = usb_autopm_get_interface(intf);
-> +	if (rv)
-> +		return rv;
-> +
-> +	usb_fill_control_urb(
-> +		desc->command,
-> +		interface_to_usbdev(intf),
-> +		usb_sndctrlpipe(interface_to_usbdev(intf), 0),
-> +		(unsigned char *)req,
-> +		skb->data,
-> +		skb->len,
-> +		wdm_wwan_port_tx_complete,
-> +		skb
-> +	);
-> +
-> +	req->bRequestType = (USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE);
-> +	req->bRequest = USB_CDC_SEND_ENCAPSULATED_COMMAND;
-> +	req->wValue = 0;
-> +	req->wIndex = desc->inum;
-> +	req->wLength = cpu_to_le16(skb->len);
-> +
-> +	skb_shinfo(skb)->destructor_arg = port;
-> +
-> +	rv = usb_submit_urb(desc->command, GFP_KERNEL);
-> +	if (!rv) /* One transfer at a time, stop TX until URB completion */
-> +		wwan_port_txoff(port);
-> +
-> +	usb_autopm_put_interface(intf);
+/*
+ * Lock the device to ensure we either see the drvdata == NULL
+ * set by drm_sysfs_connector_remove(); or we block the removal
+ * from continuing until we are done with the device.
+ */
+device_lock(dev);
+connector = dev_get_drvdata(dev);
+if (connector && connector->fwnode == fwnode) {
+	drm_connector_get(connector);
+	found = connector;
+}
+device_unlock(dev);
 
-No, that runtime PM is broken. You have a running transmission.
+With the device_lock() synchronizing against the device_lock()
+in device_unregister(connector->kdev). So that we either see
+drvdata == NULL if we race with unregistering; or we get
+a reference on the drm_connector obj before its ref-count can
+drop to 0.
 
-> +
-> +	return rv;
-> +}
-> +
-> +static struct wwan_port_ops wdm_wwan_port_ops = {
-> +	.start = wdm_wwan_port_start,
-> +	.stop = wdm_wwan_port_stop,
-> +	.tx = wdm_wwan_port_tx,
-> +};
-> +
-> +static void wdm_wwan_init(struct wdm_device *desc)
-> +{
-> +	struct usb_interface *intf = desc->intf;
-> +	struct wwan_port *port;
-> +
-> +	switch (desc->type) {
-> +	case USB_CDC_WDM_MBIM:
-> +		port = wwan_create_port(&intf->dev, WWAN_PORT_MBIM,
-> +					&wdm_wwan_port_ops, desc);
-> +		break;
-> +	case USB_CDC_WDM_QMI:
-> +		port = wwan_create_port(&intf->dev, WWAN_PORT_QMI,
-> +					&wdm_wwan_port_ops, desc);
-> +		break;
-> +	case USB_CDC_WDM_AT:
-> +		port = wwan_create_port(&intf->dev, WWAN_PORT_AT,
-> +					&wdm_wwan_port_ops, desc);
+There might be places though where we call code take the device_lock
+while holding a lock necessary for the drm_connector_get() , so
+this approach might lead to an AB BA deadlock. As such I think
+my original approach is better (also see below).
 
-Just use the common types. This is redundant.
+> Lookup tables holding full references tends to lead to all kinds of bad
+> side effects.
 
-> +		break;
-> +	default:
-> +		dev_info(&intf->dev, "Unknown control protocol\n");
-> +		return;
-> +	}
-> +
-> +	if (IS_ERR(port)) {
-> +		dev_err(&intf->dev, "%s: Unable to create WWAN port\n",
-> +			dev_name(intf->usb_dev));
-> +		return;
-> +	}
-> +
-> +	desc->wwanp = port;
-> +}
-> +
-> +static void wdm_wwan_deinit(struct wdm_device *desc)
-> +{
-> +	if (!desc->wwanp)
-> +		return;
-> +
-> +	wwan_remove_port(desc->wwanp);
-> +	desc->wwanp = NULL;
-> +}
-> +#else /* CONFIG_WWAN */
-> +static void wdm_wwan_init(struct wdm_device *desc) {}
-> +static void wdm_wwan_deinit(struct wdm_device *desc) {}
-> +#endif /* CONFIG_WWAN */
-> +
->  /* --- error handling --- */
->  static void wdm_rxwork(struct work_struct *work)
->  {
-> @@ -937,6 +1101,9 @@ static int wdm_create(struct usb_interface *intf, struct usb_endpoint_descriptor
->  		goto err;
->  	else
->  		dev_info(&intf->dev, "%s: USB WDM device\n", dev_name(intf->usb_dev));
-> +
-> +	wdm_wwan_init(desc);
-> +
->  out:
->  	return rv;
->  err:
-> @@ -1034,6 +1201,8 @@ static void wdm_disconnect(struct usb_interface *intf)
->  	desc = wdm_find_device(intf);
->  	mutex_lock(&wdm_mutex);
->  
-> +	wdm_wwan_deinit(desc);
-> +
->  	/* the spinlock makes sure no new urbs are generated in the callbacks */
->  	spin_lock_irqsave(&desc->iuspin, flags);
->  	set_bit(WDM_DISCONNECTING, &desc->flags);
+The proposed reference is not part of a lookup list, it is a
+reference from the kdev on the drm_connector object which gets
+dropped as soon as the kdev's refcount hits 0, which normally
+happens directly after drm_connector_unregister() has run.
 
+In many other places in the kernel problems like this are
+solved by embedding the device struct inside the containing
+data struct (so the drm_connector struct) and using the
+device_struct's refcounting for all refcounting and using
+the device struct's release callback as the release callback for
+the entire object.
+
+That is not doable here since the drm_object code has its own
+refcounting going on. What this patch is in essence doing is
+simulating having only 1 refcount, by making sure the
+main-object release callback does not get run until
+the drm_objects' refcount and the device's refcount have
+both reached 0 (by keeping the drm_object's refcount at
+a minimum of 1 as long as there are references to the
+device).
+
+Regards,
+
+Hans
 
