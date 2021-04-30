@@ -2,85 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 037443701A3
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 22:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E334C37024D
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 22:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233631AbhD3Tz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 15:55:56 -0400
-Received: from mail-oo1-f50.google.com ([209.85.161.50]:42915 "EHLO
-        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233516AbhD3Tzq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 15:55:46 -0400
-Received: by mail-oo1-f50.google.com with SMTP id w6-20020a4a9d060000b02901f9175244e7so3660951ooj.9;
-        Fri, 30 Apr 2021 12:54:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cv5DoellUyUHmc6wATJcRB+7+HkQncE3Z6E76KEyvN8=;
-        b=OKLBsliZWbAa/p9+opgOAjm2VOsc0orDCZiJYeFLD7eFQnLbA+EIt7kXBswIyYiC6H
-         nSWCaMMjdlTKFgTd6j3CZo+gW3bocFOl07Cjcba8RlhnUdsgR+N9scMuGpO6Hvg3LEyu
-         qHXlurv5lZ02ePpQzhRK5t1ZTSdDTpxVapzXfGifPDAwzdtPac5EhYq/SCIzG4kwFqq/
-         2Lr6qx5E8gxOKkP3wR5dkyhBcaKzsvPDK0XaOktndELEcHtgVvrh0j2GTyW2iZrx5Jw1
-         tMg9krIAKp29mEbXIEbu4onCIf7R2yegM8dXS8SZFzBfk7J7HjDCipZuGVtj+TqGylq6
-         2Kyw==
-X-Gm-Message-State: AOAM533geqTcwrHM21cQA3thw0k6yL91Hc9lTpsT3kzb4h3k9Ng15Cjz
-        G9TJBfnSckMhRApwAuFzHg==
-X-Google-Smtp-Source: ABdhPJwp29LqTJa5FxjUONJ6oRcx2BIKfyJhc9iEtfXkozN0dwyqryBhWO5NAroFzev6mJZ78sqr+Q==
-X-Received: by 2002:a4a:c316:: with SMTP id c22mr5925238ooq.65.1619812494200;
-        Fri, 30 Apr 2021 12:54:54 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id l8sm881193otk.36.2021.04.30.12.54.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 12:54:53 -0700 (PDT)
-Received: (nullmailer pid 3779726 invoked by uid 1000);
-        Fri, 30 Apr 2021 19:54:52 -0000
-Date:   Fri, 30 Apr 2021 14:54:52 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        devicetree@vger.kernel.org, Peter Chen <peter.chen@nxp.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH v8 3/5] of/platform: Add stubs for
- of_platform_device_create/destroy()
-Message-ID: <20210430195452.GA3779685@robh.at.kernel.org>
-References: <20210428184132.2184997-1-mka@chromium.org>
- <20210428114109.v8.3.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+        id S233445AbhD3Um0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 16:42:26 -0400
+Received: from cable.insite.cz ([84.242.75.189]:32957 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231656AbhD3UmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Apr 2021 16:42:25 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 26D1AA1A3D402;
+        Fri, 30 Apr 2021 22:41:33 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1619815293; bh=lgjoF+vS9fpmmlWw6tE4z+kTikfnV9lIbz7UbHrPjMA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=c+NvziW6iN1NlUQPNObmR24bU1dxXvIFD3Gquh5TVbW05Z4Qtje7Rwzr5ywI6n7Rt
+         zLVcT4nvfiuV7PMd6o5Y99/DYhPp4/dPQE2h4PIkWlDkKAIxXg5G+DxC1ZIXlTk1on
+         kFsCirt+/zoVwUiXQGu+TFPvid0Xa4E9QBhhKGCY=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kCiRXbUX3e_z; Fri, 30 Apr 2021 22:41:27 +0200 (CEST)
+Received: from [192.168.105.119] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 16EEFA1A3D401;
+        Fri, 30 Apr 2021 22:41:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1619815287; bh=lgjoF+vS9fpmmlWw6tE4z+kTikfnV9lIbz7UbHrPjMA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=huA9MyoqC7J8cWPQD1hpq6zbaZfH7DsgX9ReDoyZ6f72XZq70hsUNlOTIOvu78x7N
+         kWpKuvQUX6B+JjOqMsazQs2xdbY6PTYv6FVHz7OpbFJV6uDYWI3rbuPbqrlU/DbTcH
+         wTStXstKtYswYLbP3PPo0dYZenVgUIZzmx6W1DDo=
+Subject: Re: [RFC PATCH v2 1/3] usb: gadget: f_uac2/u_audio: add feedback
+ endpoint support
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
+References: <20210430142625.357152-1-jbrunet@baylibre.com>
+ <20210430142625.357152-2-jbrunet@baylibre.com>
+ <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
+ <1jim43hf6h.fsf@starbuckisacylon.baylibre.com>
+ <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <3b80267f-934a-7a95-9229-e18f93432a36@ivitera.com>
+Date:   Fri, 30 Apr 2021 22:41:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210428114109.v8.3.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+In-Reply-To: <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 28 Apr 2021 11:41:30 -0700, Matthias Kaehlcke wrote:
-> Code for platform_device_create() and of_platform_device_destroy() is
-> only generated if CONFIG_OF_ADDRESS=y. Add stubs to avoid unresolved
-> symbols when CONFIG_OF_ADDRESS is not set.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
-> Changes in v8:
-> - fixed C&P error in commit message
-> 
-> Changes in v7:
-> - none
-> 
-> Changes in v6:
-> - patch added to the series
-> 
->  include/linux/of_platform.h | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
-> 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Dne 30. 04. 21 v 19:11 Jerome Brunet napsal(a):
+> 
+> On Fri 30 Apr 2021 at 19:09, Jerome Brunet <jbrunet@baylibre.com> wrote:
+> 
+>> On Fri 30 Apr 2021 at 16:55, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>>
+>>> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
+>>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>>
+>>>> As per USB and UAC2 specs, asynchronous audio sink endpoint
+>>>> requires explicit synchronization mechanism (Isochronous
+>>>> Feedback Endpoint)
+>>>>
+>>>> Implement feedback companion endpoint for ISO OUT endpoint
+>>>>
+>>>> This patch adds all required infrastructure and USB requests
+>>>> handling for feedback endpoint. Syncrhonization itself is
+>>>> still dummy (feedback ep always reports 'nomimal frequency'
+>>>>   e.g. no adjustement is needed). This satisfies hosts that
+>>>> require feedback endpoint (like Win10) and poll it periodically
+>>>>
+>>>> Actual synchronization mechanism should be implemented
+>>>> separately
+>>>>
+>>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>>>
+>>> Hi,
+>>>
+>>> The HS calculation of Q16.16 feedback value
+>>> overflows at some 524kHz, disallowing use of larger samplerates (e.g.
+>>> 768kHz or higher).
+>>>
+>>> I tested the formula used in alsa USB driver
+>>> https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
+>>> which uses only 10bit shift. The feedback control in UAC2 gadget now
+>>> works up to 4M samplerate with 1Hz precision (tested on RPi4 with
+>>> bInterval = 1, checked in stream0 proc file on linux host).
+>>>
+>>> --- a/drivers/usb/gadget/function/u_audio.c
+>>> +++ b/drivers/usb/gadget/function/u_audio.c
+>>> @@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
+>>> usb_device_speed speed,
+>>>                   * Prevent integer overflow by calculating in Q12.13
+>>> format and
+>>>                   * then shifting to Q16.16
+>>>                   */
+>>> -               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
+>>> +               ff = ((freq << 10) + 62) / 125;
+>>
+>> Pavel, The code posted is a little different from snip here.
+>> While I understand the "<< 10" and "/ 125", the "+ 62" would welcome a
+>> comment.
+> 
+> OOhhh I got it now ... I think using ROUND_UP() is lot more readable
+> (and maintainable)
+> 
+>>
+>> Also in the final patch, the calculation is a bit different and moved to
+>> "long long" ... but I'm sure the same type of improvement could be done.
+>>
+>>>          }
+>>>          *(__le32 *)buf = cpu_to_le32(ff);
+>>>   }
+
+I copied the code from the very same calculation in the current-version 
+alsa usb host driver, as linked above. Hence I assumed it should have no 
+problems in the gadget code either. All I can confirm is that it works 
+in the gadget properly and does not overflow with ff up to 4M. The 
+gadget can easily run at megahertz samplerates, there are standard 
+USB-audio devices with 768kHz samplerates.
+
+Thanks a lot. Best regards,
+
+Pavel.
+
+
