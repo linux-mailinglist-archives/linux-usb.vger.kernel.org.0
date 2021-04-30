@@ -2,30 +2,30 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C32CF36F5B5
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 08:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD5536F5B6
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 08:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhD3GdQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 02:33:16 -0400
+        id S230335AbhD3GdT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 02:33:19 -0400
 Received: from mail-eopbgr70078.outbound.protection.outlook.com ([40.107.7.78]:58595
         "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229482AbhD3GdP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 02:33:15 -0400
+        id S229482AbhD3GdS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Apr 2021 02:33:18 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=B9+hjR593M8KkElbv2kOXH+kj9h65XzNdF2U3CwMPwhT91FPidofPsmTY7DISjA2cC4s7ZhCiPfc5BpeieDyE2GxRxKMWUdUcYw1s+oVQIleUrikvewokIwrO4ZbD4c/irTY+e0FE2CoTaOCyKVqePvM1euycDcxluLm0lWiXORDpn+cMUzwdN8qQn+ZCGHOY9wydVKu4qcmhHj4RXBZywILAGRoZh7qpYw9uMEaATAQU/UcAhz3nNf6CLcaNsuBSRtUPNlxHAdWrY4xYt64jgWkvK5ziCJzZpL8oAxsilFZ+HSxwdGac2CFgDjUEliAkW3LTkzk5QnjPKqyExBlHQ==
+ b=fNbxptyCntdvaagiBs2nttEHkhyOhsAsWJY/0YY7lCDhk8TYZQAgQtWIjpcoLR+Ze4ipz4Vh7tiPN+El61ZHPQ8aA6rcNFx1k1WVYGedVGx3rnf4RORJoKtGcLc4odpOMNVA+fggicc7jF8jmXKBRGOGPBhlBg/ikwY65uxZmOLeD74vcOKNLaLWHZt8MmIZlNWtiAzI/Mk0xqcRqb469XVXtT+bw/42iz/MTjKq3u4tZY3TFaU3qjYVG+cWZjUqa1dOVwvSed1x8C+rALooHtzWOaaqRvrhrBlncpAjisAjFRYV7++j+FUox2iq6h0HepkAo2cKt5ubLcrTp8aZMg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NvqkXWHGh+Mm+m9O8ozsaSgt1PAxTzoicHFJ7e1+6q8=;
- b=Beli624jENBov+m3i22XMXyi9pUdSh/dshwCLcQR+wBM5PawOgXiNdbydgGedNlksY6uRU/ryy9DVT1l/4mgIPxzsqtTU6LorGhgm1eSYpjnkyeoDyLI0fC+VUXmZQxx3PMsdDpy6sIFwmjK0WxytWFCMLfGOaB0rSNO/lqWwbOfsKdAZeRIAa93FXqGf0hussYLMTPy3yYiTuDodDrRleNBUTZNqOXcnZFjsQQIwsFrxqXMt3eCVHZMtbHOdosdOdWMw6IyQK9JjZyanU8SDwglrIvHNIt48g9EqmQrIzYGjuGp5FW90GEn01clf0uUWp2YWGyELvXHT66l5d+2Bg==
+ bh=oCxdmpLnUiEHNQ4m9si3rwc6Xu8mNUMOd9I52pwm998=;
+ b=CqxzYDZLsGdmpcXcYW6qnoJLR31Xki0agx3j2GBgduEKUEggkuQmD6P1logUJRa05FEluOlMt/HRU3UChsRKfftaZ78fv6yhnd9HsPMzWc2+utEHjeyYHPMttvBP3lvYC70u6n/1Cyy7TnH7xmup8QnGnbUUBnzRm/36VU1QoUUlHBWggo+BQYzxp20AhilfCcPU+8FvuTYQE65uQdnG0j6HEH3DqTLkoMEhjj62H7K5LPjRaWtpmOki7/5KezUPQyDNruwz5yOrGy3iZGkSdG7+PGjp4hS2xdPsY57sRyFToALxUv7pnQfXmplg49Mn5yxNSHMezAmzddiP0YvsYg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NvqkXWHGh+Mm+m9O8ozsaSgt1PAxTzoicHFJ7e1+6q8=;
- b=eHZj9b9OFt/75IweoOAjr/cYXirwKvDwJr+4D9FKgWBXO6sJT3r12VAPVHI6YazbbdVsYppEaMJi+UP2J6Tof17mXLk9S5YIvwHoAjPQ3aRSPv7xt+FjxObQhz0RabbsAdyg1AyudANEwdB9NEHlIin7hQkxcPSJ7MSJfzVtLlg=
+ bh=oCxdmpLnUiEHNQ4m9si3rwc6Xu8mNUMOd9I52pwm998=;
+ b=nqA4TlrLU9ctoGrVzY+kkgq/JG3OHWJNFAgoV/rNk49LaApvOOjv6ozz/6v/41Mv1sKR8QkgHx99TOzmJrvBOvr17IPgWwkpNerVYgk6IlBjYPFb5UUK42LWGUZy9YPDhtMCBGJk88/i+nkDGeyBbnlfxqiQyS0VnEteUAmPIhg=
 Authentication-Results: linuxfoundation.org; dkim=none (message not signed)
  header.d=none;linuxfoundation.org; dmarc=none action=none
  header.from=nxp.com;
@@ -33,20 +33,22 @@ Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
  by VE1PR04MB6749.eurprd04.prod.outlook.com (2603:10a6:803:129::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.21; Fri, 30 Apr
- 2021 06:32:23 +0000
+ 2021 06:32:26 +0000
 Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
  ([fe80::ddf7:8cd0:3132:7dbe]) by VI1PR04MB5935.eurprd04.prod.outlook.com
  ([fe80::ddf7:8cd0:3132:7dbe%7]) with mapi id 15.20.4065.032; Fri, 30 Apr 2021
- 06:32:23 +0000
+ 06:32:26 +0000
 From:   Li Jun <jun.li@nxp.com>
 To:     gregkh@linuxfoundation.org, stern@rowland.harvard.edu,
         mathias.nyman@intel.com
 Cc:     peter.chen@kernel.org, jun.li@nxp.com, jackp@codeaurora.org,
         linux-usb@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH v2 1/3] usb: host: move EH SINGLE_STEP_SET_FEATURE implementation to core
-Date:   Fri, 30 Apr 2021 14:16:31 +0800
-Message-Id: <1619763393-20029-1-git-send-email-jun.li@nxp.com>
+Subject: [PATCH v2 2/3] usb: host: xhci: add EH SINGLE_STEP_SET_FEATURE Test for USB2
+Date:   Fri, 30 Apr 2021 14:16:32 +0800
+Message-Id: <1619763393-20029-2-git-send-email-jun.li@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1619763393-20029-1-git-send-email-jun.li@nxp.com>
+References: <1619763393-20029-1-git-send-email-jun.li@nxp.com>
 Content-Type: text/plain
 X-Originating-IP: [119.31.174.66]
 X-ClientProxiedBy: HKAPR03CA0010.apcprd03.prod.outlook.com
@@ -54,50 +56,50 @@ X-ClientProxiedBy: HKAPR03CA0010.apcprd03.prod.outlook.com
  (2603:10a6:803:e9::17)
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by HKAPR03CA0010.apcprd03.prod.outlook.com (2603:1096:203:c8::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4108.10 via Frontend Transport; Fri, 30 Apr 2021 06:32:20 +0000
+Received: from localhost.localdomain (119.31.174.66) by HKAPR03CA0010.apcprd03.prod.outlook.com (2603:1096:203:c8::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4108.10 via Frontend Transport; Fri, 30 Apr 2021 06:32:23 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e62e25c9-bf1c-4ad4-96ad-08d90ba1b671
+X-MS-Office365-Filtering-Correlation-Id: 58b5242b-4410-46cb-bda7-08d90ba1b82e
 X-MS-TrafficTypeDiagnostic: VE1PR04MB6749:
 X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VE1PR04MB6749BFC5A3F5B0F97F9B1FE5895E9@VE1PR04MB6749.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:132;
+X-Microsoft-Antispam-PRVS: <VE1PR04MB6749C4406600284168DC24CF895E9@VE1PR04MB6749.eurprd04.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hqcm3R0J0cjBmzOCFkdVG941wcbg6MFIKpkxYi2ehlIA8LiQ9K37yuaV6LG76l0coUlqfFjzKBU2n1lqD3P5ZY3ZJ26Y8C2LeUyJpBtD4XybnLyIWIBtSLDb8MoUo2Pou+O/ZEyhKkq1Roxlb1ysQC5Kts5t099pjiuEo+KGho4L9n3JOtG2vYuWiKxUf8+kbDlsNT6D++NaW00X4OV+RA2kQHdGyRTtZG4yvS1B+fE87YZBu4K3P5BAPVV7UIZZE+XUScjf3AMdLlzVP4yPz9v8fi9oJI2fWRkxDHH6sv21XKs4iV9kHj6TIpcruUVkjUs3ezwE9PeAG4DbpxSSX99gYB/pJ5dUCzWRzfmGWJrFVkRE1/jGmuq23uoe420iYHvOvJAal5wfIpKNcqI9jNgye4s3r0Sc0VQFdUZ87C2SWi9k324s1TXarKs+g648dXyynb4HDiA1Pbi7VUtSuWhowiJbYxDB8Q2hjAh40n/GYuU3HoSkfgSnSC6N4zrSv83YjHJWl9SIANII6KjiY1e0Hw/7iudM/LDkAuCCncP8G4md55SlHKMN/Ld1dQYvZzJeyb5BdRKvUPJLcRh1orQec0UpJZ/APqi1vATTlSvOIjQl+Z3gDtbwKKgPCGQs+qyEvfhEVcrZh+frawUKKzhyECpdC9kFOGrcXJiu2i4tdCMAhR1uiKszf5owMKLm
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39850400004)(376002)(136003)(396003)(346002)(478600001)(8676002)(2616005)(66476007)(36756003)(5660300002)(6666004)(30864003)(86362001)(186003)(6486002)(8936002)(6512007)(2906002)(956004)(26005)(16526019)(52116002)(38350700002)(4326008)(83380400001)(66946007)(316002)(38100700002)(6506007)(66556008)(69590400013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ZF9MXGW2Zx/d/ZUs15Q8oe7lBSAbbA/HjAguFtj/kc1pM5PtFWYWfDTh9TO0?=
- =?us-ascii?Q?zRGCtkf7u5c9DvULgZ4ecrw+JB16DXfI3MrN5bBtHWEzDOzRXFyaSAvZJ1Yb?=
- =?us-ascii?Q?kwetjwt+frup6FTtuW1nNk5WZ8ZnEADWx2c0m4Xy5eaTMmGf8r2WVo6iopYw?=
- =?us-ascii?Q?Ksj2cGtz2DNBNWQ0+fB9IyZsiIlVoexOZwBPZt02y9qgRRBihgwCGEf24S69?=
- =?us-ascii?Q?K7hFcQ3ZlJPxMuviGnaGkOBBvqBs5+W0Sknqx8uMF5TLZP/iD/hOk7LeqRqR?=
- =?us-ascii?Q?2JbsLKsVAYLV+p0D3f1MahgrC3IOLjaPSl/HiL2fYfvWi8iEHwO2PNqRyvDH?=
- =?us-ascii?Q?pUrPO0Y+d2mwHAGK1wsHojZWDxdbAr21A2OCE/QV8lCc0AMNWlhEW5jzRd/c?=
- =?us-ascii?Q?9GnjH+IM4z3S6J10lSludr1Gotpq9CQ5gXv//WCssj/x0iV22fQDy+ZTUDti?=
- =?us-ascii?Q?RPxdCs83ZcKK3BVt3fy3KBixRH8lId4GbftmB1mxglNC/pLIw4SASRdhQjQj?=
- =?us-ascii?Q?0vK1c+eh7znOKBQs5O2WGv/M8yI1b11CVGZdwRRq56gdTTxE7svDTisbSMNg?=
- =?us-ascii?Q?lktr220PN02N0+S5F3fLAFf0EURs9Jml9GmlC7YGKqRXuwo3VfSFVDmh6iNn?=
- =?us-ascii?Q?9HaIh5ItJbGD5mxLiYyYg+6WF5oiPUkTkhEMYkT5ejtdMVlUIuJ8MjJiVsY0?=
- =?us-ascii?Q?0BkCasia4QSnqH5uq/rZjQgqjN9SIIeyX6jMLc+TedBnizu/McWmXmXkYFYP?=
- =?us-ascii?Q?KHdvGiQAORfsd01ajCsrFQ6knm8bHHIy3bZxwylTa7mFb7bR86VfADEVXW70?=
- =?us-ascii?Q?hz6EfiJkPXwORkDmOkvmto/0yvsrQD+SS9erh77S1blHscKNlLMq9H2bfTOt?=
- =?us-ascii?Q?kOGGloIUDOvD0qsSViOfO4yOrSmUeqJPOMRqqce3Hdht76TzYDSzHQpEJJaO?=
- =?us-ascii?Q?EzR2TYvMkDGGAxsoupT9ooyWshxhD41pHaUkW7lYopA25E63W4HnrkaVGINm?=
- =?us-ascii?Q?GEK7UW77q1UgCLIadr4n3GV9sjWmW1Kff0KLLfKj5L7Bblv8rl+/kV6VCP0V?=
- =?us-ascii?Q?DilRPohslHF0lcnEOidTrxrcT0BtCVnIxwKndS6Gnkx6pWccA+mo6bGvrYtE?=
- =?us-ascii?Q?UhXscPVpjbS+HTHcYDgI6+ab7ID+1dBOYJeHp25zYnMg8/Y9VPVuZzyaaVBq?=
- =?us-ascii?Q?+A4uL3BdyCUqdfh0lDFg3K3/s2rIWEolkEbIWd81GD2mtZ6NQ3VwC2+9lony?=
- =?us-ascii?Q?NSgFJVmskqq+iOqHTTm+4rEfxqwKbmOWTSYLzpxMw1xmLNG2opb6rbqkzrhJ?=
- =?us-ascii?Q?hL3P+k0KFUjl2qBbJN9vgJBH?=
+X-Microsoft-Antispam-Message-Info: yw3WJ+mYPhpUxN7cI79nceUJH/difEgNfsHSvmsCiDfou3jgApEFby/DZMVcuGdvZN9VKvpOt+MD5AzHfnHJsxPBaVSUMjRnT229fG/oWbIqzoQ4w+ft2dBc6b9PixukZQ06CwlIFYLbKoRaPXUevnw/ASQUiVw/MpmGaXEvY3bM12+5sKIMa5bjEyb/eeM+gA/AZNpOXJvWOn9skRoV9wAul99cRk/aMRslc2JuS2koIO1K2CAt6zEQmSmq2Fn/SGsea6YFjh2tVN+EPxdDAboemaPXxieZRn4a3GOV/f/iKE0IMpWdynUb8o7fSPBwiHZ1mJigPEpLXZYfr+DhZyy/GTHCYG+ygTHqW7HHnM4eEBGBY+ksUv0qkmINQcicelu+QvC2TzbxLpMpqHS17J6ERTnC+2Rm8/Vm5GrQ1CQiDuUr7J6Jar3ZmNJRXde3yeo2dzUckymEz8BGOHsgHKY6kb9O2DN39JUzidlcTEGCfHsAEoLHQVc3N6T85yOeEE/OlzPu7BB6mEJ6KpukYCSO8KWra5jfp3RukbN2MRQAiUozq7EfXYCDIHgX+qhArf5C0hzxWV0PVdX5lxrpy++S28LdUsx/DlQwGz1Qm8QTrOwrENguY+/fIWD6L4DXkIevlZswyJIzIr4pXF+O0n9IyLoYPcLoljwpDnSbkQxBi9YT1e7iZo9Uu7P+j9xf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(39850400004)(376002)(136003)(396003)(346002)(478600001)(8676002)(2616005)(66476007)(36756003)(5660300002)(6666004)(86362001)(186003)(6486002)(8936002)(6512007)(2906002)(956004)(26005)(16526019)(52116002)(38350700002)(4326008)(83380400001)(66946007)(316002)(38100700002)(6506007)(66556008)(69590400013);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?v7yUslptwCDZeZB0QFDNJpPGncFX1s41hS2Z6zhVFC7YngaMqoy6x9FquTbC?=
+ =?us-ascii?Q?FxONZNQX2El5hpITjQYRg/mzPa0MnUXwUh7sMI9afW5CS02HmUVPEEFEuQP4?=
+ =?us-ascii?Q?NEy+kKSywH0bk1H48pmxqDmhrNjM8S5xzR6HKVLO9f/+P2AtZS1Acj36DloZ?=
+ =?us-ascii?Q?U60ICUjTvxwQkum+a/x5jDUKuKlXSQSYdNeYtyE7y72iZsMfyVyMM/9Hce9V?=
+ =?us-ascii?Q?9tAEKSH6VjOaJ9TtPXT4xQBaqM9X1NKY0yBGA0HhJMGaCWRd64ewLrO+NIu8?=
+ =?us-ascii?Q?PmZYULBYed1FkFW8iu0mQk4TZHadrCPBqwkcIRSB0WU8yiwA2d+yV+ttmKK7?=
+ =?us-ascii?Q?ffo0uSylJwEdgC9Ymd7VwgwqfL0xKl4YckTXtt0LE6SRqeeCwWiPCtEJZEJt?=
+ =?us-ascii?Q?vQbo4p8y8rwlwT+GO3QFo3Lc7MOpAKzxSMmzA8E6euG27GAQ/XtEwF/hXpRY?=
+ =?us-ascii?Q?JjhUMHWUnnLGEvRC+Nrcm8K481YHB/9C0unwxYZe0OfL1rY978pX+EkArySo?=
+ =?us-ascii?Q?8f8lxFcWUc/4/7jIvHwCszkvm5UoudkUZ2XZH1XOXyGAucV98BCOZ/+I20pY?=
+ =?us-ascii?Q?1mAPAcXfNxHt8l7Xwrd4EPc0Yr9W0X3q4tBLlF+9DW2cfHVWR/pT0TMdLkNE?=
+ =?us-ascii?Q?NRwJ24igDkCM73XftTnx4d2HMmWH3wG2aJCoZ4VNrtXkhIeoqhHckf7lY5C6?=
+ =?us-ascii?Q?Q4+LVmZ62gETSPj2NmWBSzGsp48KDcdM9tIr2mK4u8efFA2rUECJGEZ04skF?=
+ =?us-ascii?Q?9+PzLZabkuMXP7ULbEPGxA17gIilrkISO/4c+gJCWVZgEFwnNJc5JkMHH7jf?=
+ =?us-ascii?Q?n5J1V8qSD4nZUmYIiVhLTguDEVHRTlFuMxGjLsRBvqcBLhRG2rCYAMUf3UyB?=
+ =?us-ascii?Q?dcwcbCQkNIko0t2CXXFMQ0rzbq377CbAHOvAP+iCpW9TxIfqls00kyxbyEc4?=
+ =?us-ascii?Q?RPJuNAprzYtTcA6kYgS5ieIvohQlKvDFq8flvkWEI0pjhy/Co8BevkEf+eRM?=
+ =?us-ascii?Q?bbKQreVewyeG0am+EWhUZPuHBT77G3iJIxIKDjBe3pAMcyauB27trU0Xap0h?=
+ =?us-ascii?Q?jBo12opHc0fxKFzuOG03VhjyOIew4Oo7AS4Ride/nRiqMXAGD5r6zpGfO0Ee?=
+ =?us-ascii?Q?63NErnod3xNGFW1jTTQvdVg0YK1qgwItC60zk+CvyOnY3wE/8nBv9xIC+Oq0?=
+ =?us-ascii?Q?3Gb6wEJpfsnqtyz5KvFPwfYw7ZB6jac8Fi+/HRE9tZlCP5DCVj4FlomuUEe2?=
+ =?us-ascii?Q?t8tWiwMPxyrw+BW1IPi/DqAJzHgQAK8eZcMKk9KbxjW8kefUw4XAGo/xjSav?=
+ =?us-ascii?Q?gZQy8qEYZ64m3znZbmTV1/KG?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e62e25c9-bf1c-4ad4-96ad-08d90ba1b671
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58b5242b-4410-46cb-bda7-08d90ba1b82e
 X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2021 06:32:23.0632
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Apr 2021 06:32:25.9056
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S3PcAqvQxqPw91D8Roz2ta81ls6paoVJTmaQhFwF8BeuIx+Kn/vjGNrlrhprby5h
+X-MS-Exchange-CrossTenant-UserPrincipalName: LdkBhGb6Puodwn9FI1D9p5aKNQ0D6lsvUuE6w8qjNkPdP5OJK44wfuiVHEh5gIyi
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB6749
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -105,10 +107,9 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Peter Chen <peter.chen@nxp.com>
 
-It is needed at USB Certification test for Embedded Host 2.0, and
-the detail is at CH6.4.1.1 of On-The-Go and Embedded Host Supplement
-to the USB Revision 2.0 Specification. Since other USB 2.0 capable
-host like XHCI also need it, so move it to HCD core.
+This function is similar with EHCI's, but implemented using XHCI.
+The USB2 host needs to send SETUP packet first, then wait 15
+seconds before DATA (IN) + STATUS stage.
 
 Signed-off-by: Peter Chen <peter.chen@nxp.com>
 Signed-off-by: Li Jun <jun.li@nxp.com>
@@ -116,367 +117,200 @@ Signed-off-by: Li Jun <jun.li@nxp.com>
 Change for v2:
 - No change.
 
- drivers/usb/core/hcd.c      | 134 ++++++++++++++++++++++++++++++++++
- drivers/usb/host/ehci-hcd.c |   4 ++
- drivers/usb/host/ehci-hub.c | 139 ------------------------------------
- drivers/usb/host/ehci-q.c   |   2 +-
- include/linux/usb/hcd.h     |  13 +++-
- 5 files changed, 151 insertions(+), 141 deletions(-)
+ drivers/usb/host/xhci-hub.c  |  10 +++
+ drivers/usb/host/xhci-ring.c | 123 +++++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci.c      |   1 +
+ drivers/usb/host/xhci.h      |  10 +++
+ 4 files changed, 144 insertions(+)
 
-diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-index 6119fb41d736..d7eb9f179ca6 100644
---- a/drivers/usb/core/hcd.c
-+++ b/drivers/usb/core/hcd.c
-@@ -2110,6 +2110,140 @@ int usb_hcd_get_frame_number (struct usb_device *udev)
- 	return hcd->driver->get_frame_number (hcd);
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index e9b18fc17617..c64ee95cc89b 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1511,6 +1511,16 @@ int xhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			/* 4.19.6 Port Test Modes (USB2 Test Mode) */
+ 			if (hcd->speed != HCD_USB2)
+ 				goto error;
++
++#ifdef CONFIG_USB_HCD_TEST_MODE
++			if (test_mode == EHSET_TEST_SINGLE_STEP_SET_FEATURE) {
++				spin_unlock_irqrestore(&xhci->lock, flags);
++				retval = ehset_single_step_set_feature(hcd,
++								wIndex + 1);
++				spin_lock_irqsave(&xhci->lock, flags);
++				break;
++			}
++#endif
+ 			if (test_mode > USB_TEST_FORCE_ENABLE ||
+ 			    test_mode < USB_TEST_J)
+ 				goto error;
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 05c38dd3ee36..87a9c1e3325a 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -3793,6 +3793,129 @@ int xhci_queue_ctrl_tx(struct xhci_hcd *xhci, gfp_t mem_flags,
+ 	return 0;
  }
  
-+/*-------------------------------------------------------------------------*/
 +#ifdef CONFIG_USB_HCD_TEST_MODE
-+
-+static void usb_ehset_completion(struct urb *urb)
-+{
-+	struct completion  *done = urb->context;
-+
-+	complete(done);
-+}
 +/*
-+ * Allocate and initialize a control URB. This request will be used by the
-+ * EHSET SINGLE_STEP_SET_FEATURE test in which the DATA and STATUS stages
-+ * of the GetDescriptor request are sent 15 seconds after the SETUP stage.
-+ * Return NULL if failed.
++ * This function prepare TRBs and submits them for the
++ * SINGLE_STEP_SET_FEATURE Test.
++ * This is done in two parts: first SETUP req for GetDesc is sent then
++ * 15 seconds later, the IN stage for GetDesc starts to req data from dev
++ *
++ * is_setup : argument decides which of the two stage needs to be
++ * performed; TRUE - SETUP and FALSE - IN+STATUS
++ * Returns 0 if success
 + */
-+static struct urb *request_single_step_set_feature_urb(
-+	struct usb_device	*udev,
-+	void			*dr,
-+	void			*buf,
-+	struct completion	*done)
++int xhci_submit_single_step_set_feature(struct usb_hcd *hcd,
++	struct urb *urb, int is_setup)
 +{
-+	struct urb *urb;
-+	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-+	struct usb_host_endpoint *ep;
++	int slot_id;
++	unsigned int ep_index;
++	struct xhci_ring *ep_ring;
++	int ret;
++	struct usb_ctrlrequest *setup;
++	struct xhci_generic_trb *start_trb;
++	int start_cycle;
++	u32 field, length_field, remainder;
++	struct urb_priv *urb_priv;
++	struct xhci_td *td;
++	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
 +
-+	urb = usb_alloc_urb(0, GFP_KERNEL);
-+	if (!urb)
-+		return NULL;
-+
-+	urb->pipe = usb_rcvctrlpipe(udev, 0);
-+	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
-+				[usb_pipeendpoint(urb->pipe)];
-+	if (!ep) {
-+		usb_free_urb(urb);
-+		return NULL;
-+	}
-+
-+	urb->ep = ep;
-+	urb->dev = udev;
-+	urb->setup_packet = (void *)dr;
-+	urb->transfer_buffer = buf;
-+	urb->transfer_buffer_length = USB_DT_DEVICE_SIZE;
-+	urb->complete = usb_ehset_completion;
-+	urb->status = -EINPROGRESS;
-+	urb->actual_length = 0;
-+	urb->transfer_flags = URB_DIR_IN;
-+	usb_get_urb(urb);
-+	atomic_inc(&urb->use_count);
-+	atomic_inc(&urb->dev->urbnum);
-+	urb->setup_dma = dma_map_single(
-+			hcd->self.sysdev,
-+			urb->setup_packet,
-+			sizeof(struct usb_ctrlrequest),
-+			DMA_TO_DEVICE);
-+	urb->transfer_dma = dma_map_single(
-+			hcd->self.sysdev,
-+			urb->transfer_buffer,
-+			urb->transfer_buffer_length,
-+			DMA_FROM_DEVICE);
-+	urb->context = done;
-+	return urb;
-+}
-+
-+int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
-+{
-+	int retval = -ENOMEM;
-+	struct usb_ctrlrequest *dr;
-+	struct urb *urb;
-+	struct usb_device *udev;
-+	struct usb_device_descriptor *buf;
-+	DECLARE_COMPLETION_ONSTACK(done);
-+
-+	/* Obtain udev of the rhub's child port */
-+	udev = usb_hub_find_child(hcd->self.root_hub, port);
-+	if (!udev) {
-+		dev_err(hcd->self.controller, "No device attached to the RootHub\n");
-+		return -ENODEV;
-+	}
-+	buf = kmalloc(USB_DT_DEVICE_SIZE, GFP_KERNEL);
-+	if (!buf)
++	/* urb_priv will be free after transcation has completed */
++	urb_priv = kzalloc(sizeof(struct urb_priv) +
++			sizeof(struct xhci_td), GFP_KERNEL);
++	if (!urb_priv)
 +		return -ENOMEM;
 +
-+	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL);
-+	if (!dr) {
-+		kfree(buf);
-+		return -ENOMEM;
++	td = &urb_priv->td[0];
++	urb_priv->num_tds = 1;
++	urb_priv->num_tds_done = 0;
++	urb->hcpriv = urb_priv;
++
++	ep_ring = xhci_urb_to_transfer_ring(xhci, urb);
++	if (!ep_ring) {
++		ret = -EINVAL;
++		goto free_priv;
 +	}
 +
-+	/* Fill Setup packet for GetDescriptor */
-+	dr->bRequestType = USB_DIR_IN;
-+	dr->bRequest = USB_REQ_GET_DESCRIPTOR;
-+	dr->wValue = cpu_to_le16(USB_DT_DEVICE << 8);
-+	dr->wIndex = 0;
-+	dr->wLength = cpu_to_le16(USB_DT_DEVICE_SIZE);
-+	urb = request_single_step_set_feature_urb(udev, dr, buf, &done);
-+	if (!urb)
-+		goto cleanup;
++	slot_id = urb->dev->slot_id;
++	ep_index = xhci_get_endpoint_index(&urb->ep->desc);
 +
-+	/* Submit just the SETUP stage */
-+	retval = hcd->driver->submit_single_step_set_feature(hcd, urb, 1);
-+	if (retval)
-+		goto out1;
-+	if (!wait_for_completion_timeout(&done, msecs_to_jiffies(2000))) {
-+		usb_kill_urb(urb);
-+		retval = -ETIMEDOUT;
-+		dev_err(hcd->self.controller,
-+			"%s SETUP stage timed out on ep0\n", __func__);
-+		goto out1;
-+	}
-+	msleep(15 * 1000);
++	setup = (struct usb_ctrlrequest *) urb->setup_packet;
++	if (is_setup) {
++		ret = prepare_transfer(xhci, xhci->devs[slot_id],
++				ep_index, urb->stream_id,
++				1, urb, 0, GFP_KERNEL);
++		if (ret < 0)
++			goto free_priv;
 +
-+	/* Complete remaining DATA and STATUS stages using the same URB */
-+	urb->status = -EINPROGRESS;
-+	usb_get_urb(urb);
-+	atomic_inc(&urb->use_count);
-+	atomic_inc(&urb->dev->urbnum);
-+	retval = hcd->driver->submit_single_step_set_feature(hcd, urb, 0);
-+	if (!retval && !wait_for_completion_timeout(&done,
-+						msecs_to_jiffies(2000))) {
-+		usb_kill_urb(urb);
-+		retval = -ETIMEDOUT;
-+		dev_err(hcd->self.controller,
-+			"%s IN stage timed out on ep0\n", __func__);
++		start_trb = &ep_ring->enqueue->generic;
++		start_cycle = ep_ring->cycle_state;
++		/* Save the DMA address of the last TRB in the TD */
++		td->last_trb = ep_ring->enqueue;
++		field = TRB_IOC | TRB_IDT | TRB_TYPE(TRB_SETUP) | start_cycle;
++		/* xHCI 1.0/1.1 6.4.1.2.1: Transfer Type field */
++		if ((xhci->hci_version >= 0x100) ||
++				(xhci->quirks & XHCI_MTK_HOST))
++			field |= TRB_TX_TYPE(TRB_DATA_IN);
++
++		queue_trb(xhci, ep_ring, false,
++			  setup->bRequestType | setup->bRequest << 8 |
++			  le16_to_cpu(setup->wValue) << 16,
++			  le16_to_cpu(setup->wIndex) |
++			  le16_to_cpu(setup->wLength) << 16,
++			  TRB_LEN(8) | TRB_INTR_TARGET(0),
++			  /* Immediate data in pointer */
++			  field);
++		giveback_first_trb(xhci, slot_id, ep_index, urb->stream_id,
++				start_cycle, start_trb);
++		return 0;
 +	}
-+out1:
-+	usb_free_urb(urb);
-+cleanup:
-+	kfree(dr);
-+	kfree(buf);
-+	return retval;
++
++	ret = prepare_transfer(xhci, xhci->devs[slot_id],
++			ep_index, urb->stream_id,
++			2, urb, 0, GFP_KERNEL);
++	if (ret < 0)
++		goto free_priv;
++
++	start_trb = &ep_ring->enqueue->generic;
++	start_cycle = ep_ring->cycle_state;
++	field = TRB_ISP | TRB_TYPE(TRB_DATA);
++
++	remainder = xhci_td_remainder(xhci, 0,
++				   urb->transfer_buffer_length,
++				   urb->transfer_buffer_length,
++				   urb, 1);
++
++	length_field = TRB_LEN(urb->transfer_buffer_length) |
++		TRB_TD_SIZE(remainder) |
++		TRB_INTR_TARGET(0);
++
++	if (urb->transfer_buffer_length > 0) {
++		field |= TRB_DIR_IN;
++		queue_trb(xhci, ep_ring, true,
++				lower_32_bits(urb->transfer_dma),
++				upper_32_bits(urb->transfer_dma),
++				length_field,
++				field | ep_ring->cycle_state);
++	}
++
++	td->last_trb = ep_ring->enqueue;
++	field = TRB_IOC | TRB_TYPE(TRB_STATUS) | ep_ring->cycle_state;
++	queue_trb(xhci, ep_ring, false,
++			0,
++			0,
++			TRB_INTR_TARGET(0),
++			field);
++
++	giveback_first_trb(xhci, slot_id, ep_index, 0,
++			start_cycle, start_trb);
++
++	return 0;
++free_priv:
++	xhci_urb_free_priv(urb_priv);
++	return ret;
 +}
-+EXPORT_SYMBOL_GPL(ehset_single_step_set_feature);
 +#endif /* CONFIG_USB_HCD_TEST_MODE */
 +
- /*-------------------------------------------------------------------------*/
- 
- #ifdef	CONFIG_PM
-diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
-index 94b5e64ae9a2..35eec0c0edcd 100644
---- a/drivers/usb/host/ehci-hcd.c
-+++ b/drivers/usb/host/ehci-hcd.c
-@@ -1238,6 +1238,10 @@ static const struct hc_driver ehci_hc_driver = {
- 	 * device support
- 	 */
- 	.free_dev =		ehci_remove_device,
-+#ifdef CONFIG_USB_HCD_TEST_MODE
-+	/* EH SINGLE_STEP_SET_FEATURE test support */
-+	.submit_single_step_set_feature	= ehci_submit_single_step_set_feature,
-+#endif
+ /*
+  * The transfer burst count field of the isochronous TRB defines the number of
+  * bursts that are required to move all packets in this TD.  Only SuperSpeed
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index ca9385d22f68..a27616775845 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -5426,6 +5426,7 @@ static const struct hc_driver xhci_hc_driver = {
+ 	.disable_usb3_lpm_timeout =	xhci_disable_usb3_lpm_timeout,
+ 	.find_raw_port_number =	xhci_find_raw_port_number,
+ 	.clear_tt_buffer_complete = xhci_clear_tt_buffer_complete,
++	.submit_single_step_set_feature	= xhci_submit_single_step_set_feature,
  };
  
- void ehci_init_driver(struct hc_driver *drv,
-diff --git a/drivers/usb/host/ehci-hub.c b/drivers/usb/host/ehci-hub.c
-index 159cc27b1a36..c4f6a2559a98 100644
---- a/drivers/usb/host/ehci-hub.c
-+++ b/drivers/usb/host/ehci-hub.c
-@@ -726,145 +726,6 @@ ehci_hub_descriptor (
- 	desc->wHubCharacteristics = cpu_to_le16(temp);
- }
+ void xhci_init_driver(struct hc_driver *drv,
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 2595a8f057c4..f93fc8f59af6 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -2165,6 +2165,16 @@ int xhci_find_raw_port_number(struct usb_hcd *hcd, int port1);
+ struct xhci_hub *xhci_get_rhub(struct usb_hcd *hcd);
  
--/*-------------------------------------------------------------------------*/
--#ifdef CONFIG_USB_HCD_TEST_MODE
--
--#define EHSET_TEST_SINGLE_STEP_SET_FEATURE 0x06
--
--static void usb_ehset_completion(struct urb *urb)
--{
--	struct completion  *done = urb->context;
--
--	complete(done);
--}
--static int submit_single_step_set_feature(
--	struct usb_hcd	*hcd,
--	struct urb	*urb,
--	int		is_setup
--);
--
--/*
-- * Allocate and initialize a control URB. This request will be used by the
-- * EHSET SINGLE_STEP_SET_FEATURE test in which the DATA and STATUS stages
-- * of the GetDescriptor request are sent 15 seconds after the SETUP stage.
-- * Return NULL if failed.
-- */
--static struct urb *request_single_step_set_feature_urb(
--	struct usb_device	*udev,
--	void			*dr,
--	void			*buf,
--	struct completion	*done
--) {
--	struct urb *urb;
--	struct usb_hcd *hcd = bus_to_hcd(udev->bus);
--	struct usb_host_endpoint *ep;
--
--	urb = usb_alloc_urb(0, GFP_KERNEL);
--	if (!urb)
--		return NULL;
--
--	urb->pipe = usb_rcvctrlpipe(udev, 0);
--	ep = (usb_pipein(urb->pipe) ? udev->ep_in : udev->ep_out)
--				[usb_pipeendpoint(urb->pipe)];
--	if (!ep) {
--		usb_free_urb(urb);
--		return NULL;
--	}
--
--	urb->ep = ep;
--	urb->dev = udev;
--	urb->setup_packet = (void *)dr;
--	urb->transfer_buffer = buf;
--	urb->transfer_buffer_length = USB_DT_DEVICE_SIZE;
--	urb->complete = usb_ehset_completion;
--	urb->status = -EINPROGRESS;
--	urb->actual_length = 0;
--	urb->transfer_flags = URB_DIR_IN;
--	usb_get_urb(urb);
--	atomic_inc(&urb->use_count);
--	atomic_inc(&urb->dev->urbnum);
--	urb->setup_dma = dma_map_single(
--			hcd->self.sysdev,
--			urb->setup_packet,
--			sizeof(struct usb_ctrlrequest),
--			DMA_TO_DEVICE);
--	urb->transfer_dma = dma_map_single(
--			hcd->self.sysdev,
--			urb->transfer_buffer,
--			urb->transfer_buffer_length,
--			DMA_FROM_DEVICE);
--	urb->context = done;
--	return urb;
--}
--
--static int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
--{
--	int retval = -ENOMEM;
--	struct usb_ctrlrequest *dr;
--	struct urb *urb;
--	struct usb_device *udev;
--	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
--	struct usb_device_descriptor *buf;
--	DECLARE_COMPLETION_ONSTACK(done);
--
--	/* Obtain udev of the rhub's child port */
--	udev = usb_hub_find_child(hcd->self.root_hub, port);
--	if (!udev) {
--		ehci_err(ehci, "No device attached to the RootHub\n");
--		return -ENODEV;
--	}
--	buf = kmalloc(USB_DT_DEVICE_SIZE, GFP_KERNEL);
--	if (!buf)
--		return -ENOMEM;
--
--	dr = kmalloc(sizeof(struct usb_ctrlrequest), GFP_KERNEL);
--	if (!dr) {
--		kfree(buf);
--		return -ENOMEM;
--	}
--
--	/* Fill Setup packet for GetDescriptor */
--	dr->bRequestType = USB_DIR_IN;
--	dr->bRequest = USB_REQ_GET_DESCRIPTOR;
--	dr->wValue = cpu_to_le16(USB_DT_DEVICE << 8);
--	dr->wIndex = 0;
--	dr->wLength = cpu_to_le16(USB_DT_DEVICE_SIZE);
--	urb = request_single_step_set_feature_urb(udev, dr, buf, &done);
--	if (!urb)
--		goto cleanup;
--
--	/* Submit just the SETUP stage */
--	retval = submit_single_step_set_feature(hcd, urb, 1);
--	if (retval)
--		goto out1;
--	if (!wait_for_completion_timeout(&done, msecs_to_jiffies(2000))) {
--		usb_kill_urb(urb);
--		retval = -ETIMEDOUT;
--		ehci_err(ehci, "%s SETUP stage timed out on ep0\n", __func__);
--		goto out1;
--	}
--	msleep(15 * 1000);
--
--	/* Complete remaining DATA and STATUS stages using the same URB */
--	urb->status = -EINPROGRESS;
--	usb_get_urb(urb);
--	atomic_inc(&urb->use_count);
--	atomic_inc(&urb->dev->urbnum);
--	retval = submit_single_step_set_feature(hcd, urb, 0);
--	if (!retval && !wait_for_completion_timeout(&done,
--						msecs_to_jiffies(2000))) {
--		usb_kill_urb(urb);
--		retval = -ETIMEDOUT;
--		ehci_err(ehci, "%s IN stage timed out on ep0\n", __func__);
--	}
--out1:
--	usb_free_urb(urb);
--cleanup:
--	kfree(dr);
--	kfree(buf);
--	return retval;
--}
--#endif /* CONFIG_USB_HCD_TEST_MODE */
- /*-------------------------------------------------------------------------*/
- 
- int ehci_hub_control(
-diff --git a/drivers/usb/host/ehci-q.c b/drivers/usb/host/ehci-q.c
-index a826715ae9bd..2cbf4f85bff3 100644
---- a/drivers/usb/host/ehci-q.c
-+++ b/drivers/usb/host/ehci-q.c
-@@ -1165,7 +1165,7 @@ submit_async (
-  * performed; TRUE - SETUP and FALSE - IN+STATUS
-  * Returns 0 if success
-  */
--static int submit_single_step_set_feature(
-+static int ehci_submit_single_step_set_feature(
- 	struct usb_hcd  *hcd,
- 	struct urb      *urb,
- 	int             is_setup
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 96281cd50ff6..22c5d1c0acf3 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -409,7 +409,10 @@ struct hc_driver {
- 	int	(*find_raw_port_number)(struct usb_hcd *, int);
- 	/* Call for power on/off the port if necessary */
- 	int	(*port_power)(struct usb_hcd *hcd, int portnum, bool enable);
--
-+	/* Call for SINGLE_STEP_SET_FEATURE Test for USB2 EH certification */
-+#define EHSET_TEST_SINGLE_STEP_SET_FEATURE 0x06
-+	int	(*submit_single_step_set_feature)(struct usb_hcd *,
-+			struct urb *, int);
- };
- 
- static inline int hcd_giveback_urb_in_bh(struct usb_hcd *hcd)
-@@ -474,6 +477,14 @@ int usb_hcd_setup_local_mem(struct usb_hcd *hcd, phys_addr_t phys_addr,
- 
- struct platform_device;
- extern void usb_hcd_platform_shutdown(struct platform_device *dev);
+ void xhci_hc_died(struct xhci_hcd *xhci);
 +#ifdef CONFIG_USB_HCD_TEST_MODE
-+extern int ehset_single_step_set_feature(struct usb_hcd *hcd, int port);
++int xhci_submit_single_step_set_feature(struct usb_hcd *hcd,
++	struct urb *urb, int is_setup);
 +#else
-+static inline int ehset_single_step_set_feature(struct usb_hcd *hcd, int port)
++static inline int xhci_submit_single_step_set_feature(struct usb_hcd *hcd,
++	struct urb *urb, int is_setup)
 +{
 +	return 0;
 +}
-+#endif /* CONFIG_USB_HCD_TEST_MODE */
++#endif
  
- #ifdef CONFIG_USB_PCI
- struct pci_dev;
+ #ifdef CONFIG_PM
+ int xhci_bus_suspend(struct usb_hcd *hcd);
 -- 
 2.25.1
 
