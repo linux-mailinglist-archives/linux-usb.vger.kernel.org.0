@@ -2,91 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 136F536FDB9
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 17:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B9336FF39
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 19:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbhD3PZu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 11:25:50 -0400
-Received: from mail-ot1-f47.google.com ([209.85.210.47]:44830 "EHLO
-        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbhD3PZt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 11:25:49 -0400
-Received: by mail-ot1-f47.google.com with SMTP id z25-20020a9d65d90000b02902a560806ca7so6022324oth.11;
-        Fri, 30 Apr 2021 08:25:00 -0700 (PDT)
+        id S230290AbhD3RKu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 13:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229750AbhD3RKu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 13:10:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31883C06174A
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 10:10:01 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id c22so19812834edn.7
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 10:10:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:in-reply-to:message-id
+         :date:mime-version;
+        bh=xFwRm5LKIFz8ThUwNqb4Pdxmq2A6s0g1F153TZviL3Y=;
+        b=K9sCswFgdbTZPyPFtFoUTGmuSF8lTc3BWtSN/yKiS88TeMkPWXJsQzSJlcVY5zkpDU
+         Pz6kpp1EDiUOjzJ9fBafv/Nb76AaaL7BkbfKef9ptomiiNuA0+XZHTZF1PHKFA41Pp4s
+         zpgs9OAI8h5qx6DzL5TuavOevxJY9vj0MdTf6G8Yg9OnxRa3UwUUBhm8hJFM0sSXq5E4
+         6h1cs1oyyCFjb5f1yMP5gkGNTBhwBRkDoJ6JtMcyUKNyeMS+HKA+PwD5VJJf3KS0+Oqi
+         lej5oNwXNzOZd8qdwcUwzRExN4FBFBBdMgfkcYUdLzKQ+yLb5hc12d2KeomzkW8QyEFF
+         PjhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=/7eEsvMEZJ47hg8IvqdZUreNggO3ds++/YXgQWY8CIw=;
-        b=niAvB/c9IgNCggQ/BnVzrOxIJsznXPRS5X62PR/alpd4NIQLJ/xrucfgHWK3LPqXwj
-         M5gRT15N0DhT5SR9b/nohPeq+uqAWDqQRj5trtqliS7tVnIM0ND5Z4+GScfzZ301v/ib
-         cgfyzZ0HM0jMHwHcEXMA/2Qqhr/9GTZjFovG2ssjFLUyx5F9vRkCStdR214iN7AfVntf
-         MC7cNwXPGFy/ghTx6xmFQySBhNs+wrB768PRJzAH+L8nW7l8DJSH25H3/ma2tO1sJMTw
-         YR9uw8x4i2Fd7OdbuVoa8awoUHW4Yp27wru9Bsf+fBfvWvVhhLb3PwjC6oi84DvD0EoM
-         RzMQ==
-X-Gm-Message-State: AOAM531u4bJDMSFOe52eebHrHHIyiu/C+dt4/dxOewsDnGRleTImh6mX
-        iMJy3QaL4C5E9ajBSAtYEw==
-X-Google-Smtp-Source: ABdhPJzgxL4fyp7PZwgduyI/n2iPxYyF0MKR4LhThPwz/lhf1+JZjnF5p7RzxxJWkyZbMwnq+hbgMg==
-X-Received: by 2002:a9d:615a:: with SMTP id c26mr4037878otk.54.1619796299799;
-        Fri, 30 Apr 2021 08:24:59 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id u185sm837557oie.12.2021.04.30.08.24.58
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject
+         :in-reply-to:message-id:date:mime-version;
+        bh=xFwRm5LKIFz8ThUwNqb4Pdxmq2A6s0g1F153TZviL3Y=;
+        b=gtZT/VLnOMmk/jPRcB1rJeSRvBLJenLVmYZU/8MrXwJY3cScwex/pyCr3sZX2auZ6D
+         jdQrQwsVk805kUH6/FL8FQP6M+0Xf6Hq/7Y0/xttZ5VC+fzT/OuG3Grg49D0rbrbzGE8
+         UbjL0Wezyf5MlFzzlE6OqJgxk9poBJVe5ItdGGRmwLDMij3K0J5DEWM2GFNq4j+VwtVn
+         m49yiaJowBEWyhhC7gRmQw6hDW8d1JghyGPD45zKfjIX/EQnhUhI4LwcqdOR/fw6GkQb
+         VRSlkicWV9zW763GfekuyFmNtpISUYZmwmugc7ZQBoTM2R+nTqRbjr6qet5lfWK9QN/9
+         5IwA==
+X-Gm-Message-State: AOAM5319L68oHgODhg2G/V/nAqRGvqp9wLxZ+qz+fpq+v3D6uicc9gPp
+        3z5sQHD+zxorczzDMdXK3KscsQ==
+X-Google-Smtp-Source: ABdhPJwAMZwX2qX2GPMf1uMoju5I1UiUCUSQbvBn0icsj4mzf+a5+5O7wK72yHyV6kaPwZOe8NL79A==
+X-Received: by 2002:a05:6402:c98:: with SMTP id cm24mr7345068edb.18.1619802599908;
+        Fri, 30 Apr 2021 10:09:59 -0700 (PDT)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id mf25sm2374930ejb.101.2021.04.30.10.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 08:24:59 -0700 (PDT)
-Received: (nullmailer pid 3353975 invoked by uid 1000);
-        Fri, 30 Apr 2021 15:24:53 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <mripard@kernel.org>, linux-usb@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
-        Felipe Balbi <balbi@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-In-Reply-To: <20210430031912.42252-2-samuel@sholland.org>
-References: <20210430031912.42252-1-samuel@sholland.org> <20210430031912.42252-2-samuel@sholland.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Document the Allwinner H6 DWC3 glue
-Date:   Fri, 30 Apr 2021 10:24:53 -0500
-Message-Id: <1619796293.743748.3353974.nullmailer@robh.at.kernel.org>
+        Fri, 30 Apr 2021 10:09:59 -0700 (PDT)
+References: <20210430142625.357152-1-jbrunet@baylibre.com>
+ <20210430142625.357152-2-jbrunet@baylibre.com>
+ <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
+User-agent: mu4e 1.4.15; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
+Subject: Re: [RFC PATCH v2 1/3] usb: gadget: f_uac2/u_audio: add feedback
+ endpoint support
+In-reply-to: <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
+Message-ID: <1jim43hf6h.fsf@starbuckisacylon.baylibre.com>
+Date:   Fri, 30 Apr 2021 19:09:58 +0200
+MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 29 Apr 2021 22:19:11 -0500, Samuel Holland wrote:
-> The RST_BUS_XHCI reset line in the H6 affects both the DWC3 core and the
-> USB3 PHY. This suggests the reset line controls the USB3 IP as a whole.
-> Represent this by attaching the reset line to a glue layer device.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-> ---
->  .../usb/allwinner,sun50i-h6-dwc3.yaml         | 75 +++++++++++++++++++
->  1 file changed, 75 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/usb/allwinner,sun50i-h6-dwc3.yaml
-> 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+On Fri 30 Apr 2021 at 16:55, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
 
-yamllint warnings/errors:
+> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
+>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>> 
+>> As per USB and UAC2 specs, asynchronous audio sink endpoint
+>> requires explicit synchronization mechanism (Isochronous
+>> Feedback Endpoint)
+>> 
+>> Implement feedback companion endpoint for ISO OUT endpoint
+>> 
+>> This patch adds all required infrastructure and USB requests
+>> handling for feedback endpoint. Syncrhonization itself is
+>> still dummy (feedback ep always reports 'nomimal frequency'
+>>  e.g. no adjustement is needed). This satisfies hosts that
+>> require feedback endpoint (like Win10) and poll it periodically
+>> 
+>> Actual synchronization mechanism should be implemented
+>> separately
+>> 
+>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>
+> Hi,
+>
+> The HS calculation of Q16.16 feedback value
+> overflows at some 524kHz, disallowing use of larger samplerates (e.g.
+> 768kHz or higher).
+>
+> I tested the formula used in alsa USB driver
+> https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
+> which uses only 10bit shift. The feedback control in UAC2 gadget now
+> works up to 4M samplerate with 1Hz precision (tested on RPi4 with
+> bInterval = 1, checked in stream0 proc file on linux host).
+>
+> --- a/drivers/usb/gadget/function/u_audio.c
+> +++ b/drivers/usb/gadget/function/u_audio.c
+> @@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
+> usb_device_speed speed,
+>                  * Prevent integer overflow by calculating in Q12.13
+> format and
+>                  * then shifting to Q16.16
+>                  */
+> -               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
+> +               ff = ((freq << 10) + 62) / 125;
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/usb/allwinner,sun50i-h6-dwc3.example.dts:23.27-50.11: Warning (unit_address_vs_reg): /example-0/usb@5200000: node has a unit name, but no reg or ranges property
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/allwinner,sun50i-h6-dwc3.example.dt.yaml: usb@5200000: usb@5200000:phy-names:0: 'usb2-phy' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/allwinner,sun50i-h6-dwc3.yaml
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/allwinner,sun50i-h6-dwc3.example.dt.yaml: usb@5200000: phy-names:0: 'usb2-phy' was expected
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+Pavel, The code posted is a little different from snip here.
+While I understand the "<< 10" and "/ 125", the "+ 62" would welcome a
+comment.
 
-See https://patchwork.ozlabs.org/patch/1471948
+Also in the final patch, the calculation is a bit different and moved to
+"long long" ... but I'm sure the same type of improvement could be done.
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+>         }
+>         *(__le32 *)buf = cpu_to_le32(ff);
+>  }
+>
+>
+> Best regards,
+>
+> Pavel.
 
