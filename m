@@ -2,81 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDEF36F73F
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 10:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4E536F7C4
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 11:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbhD3Iku (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 04:40:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44670 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229507AbhD3Iku (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 04:40:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 68AE76141C;
-        Fri, 30 Apr 2021 08:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619772002;
-        bh=xvM508RyfE95pZbKplnGyvckQhWLa/1HYLxrv0FgBXw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=M6eENqOma6xndVMWmzZGV2A8iGMu/eG4GnlZiP481w+9HNT5ZWOkJBjdZmfFmQWiu
-         kMlNgXAtU+ABrZn2dXaIeprn3s11p+vTYrzcotZK0SlwIChoQGC0TnLB19a0nz5vf4
-         AO3N9N/Ivd0fbH7qOLA4s8srNcrOXEc8iOPR+gGbTJPjFq0M2uhel2eY6NPXuvFBs7
-         yHc3jrt2roW77djxfMu/pD9jNnXS67zy3kSqChVRZdKwIYanyWiYcsov0c3jbfDvfj
-         lO2ttTP4PXsiArHx+NH9o5Drjw4vux1o3AVFs54Kv/AqRZE/gbH7Rr63X8SpGqBg2A
-         8XpZ000TQ2g4g==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>,
+        id S231502AbhD3JY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 05:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229689AbhD3JY5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 05:24:57 -0400
+X-Greylist: delayed 510 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 30 Apr 2021 02:24:07 PDT
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F4BFC06138B
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 02:24:07 -0700 (PDT)
+Received: from mail-internal.denx.de (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: noc@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B025D81EC4
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 11:15:34 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1619774134;
+        bh=7jNtsVgB4SG/t7bVzmOnoK100qiLWUCRQWcjzl5Jnro=;
+        h=From:To:Cc:Subject:Date:From;
+        b=xo2JJPHLw1ym59SE0Hm/CoHxl47d6h+8U9vwsEqVmxrMrQS47L5208fJBqUHWjInu
+         6bf6VJkeqTj4Oyy60GmT6wtN7v9wMUSwwULCxoWGlaS2A2bgGI9fApYMPbGJC1gg6J
+         YZL332+sU+kqaCz05e25yCLnYHIZHYQzICjulfKTfZCC9Eksa/jhFdcUApCEH8VWes
+         fX+7jrppaeSTVN0wdh7p9l/dIb+MD3cOxPc1H0UIgnSl8XkwBaulvHWOO/Cb0xHi3M
+         OoL13ApX4lC7HxIFpjWBklofEBn56aQnVNU8CBBRvx0eGLo6ANUNuZfXcTJt0c1Cnh
+         6bRrE+Zqsz7eQ==
+Received: from pollux.denx.de (pollux [192.168.1.1])
+        by mail-internal.denx.de (Postfix) with ESMTP id 93C91182B81;
+        Fri, 30 Apr 2021 11:15:16 +0200 (CEST)
+Received: by pollux.denx.de (Postfix, from userid 515)
+        id 58BCD1A8BAD; Fri, 30 Apr 2021 11:15:16 +0200 (CEST)
+From:   Heiko Schocher <hs@denx.de>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Heiko Schocher <hs@denx.de>, Fabio Estevam <festevam@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH 1/2] usb: dwc3: gadget: Enable suspend events
-In-Reply-To: <20210428090111.3370-1-jackp@codeaurora.org>
-References: <20210428090111.3370-1-jackp@codeaurora.org>
-Date:   Fri, 30 Apr 2021 11:39:53 +0300
-Message-ID: <87tunoi2sm.fsf@kernel.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Teresa Remmet <t.remmet@phytec.de>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: dwc3: imx8mp: detect dwc3 child nodes with name "usb*"
+Date:   Fri, 30 Apr 2021 11:15:12 +0200
+Message-Id: <20210430091512.1026996-1-hs@denx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.102.4 at phobos.denx.de
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+commit:
+d1689cd3c0f4: ("arm64: dts: imx8mp: Use the correct name for child node "snps, dwc3")
 
-Jack Pham <jackp@codeaurora.org> writes:
+renamed "dwc3@3*" nodes in imx8mp.dtsi to "usb@3*"
 
-> commit 72704f876f50 ("dwc3: gadget: Implement the suspend entry event
-> handler") introduced (nearly 5 years ago!) an interrupt handler for
-> U3/L1-L2 suspend events.  The problem is that these events aren't
-> currently enabled in the DEVTEN register so the handler is never
-> even invoked.  Fix this simply by enabling the corresponding bit
-> in dwc3_gadget_enable_irq() using the same revision check as found
-> in the handler.
->
-> Fixes: 72704f876f50 ("dwc3: gadget: Implement the suspend entry event han=
-dler")
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+glue layer dwc3-imx8mp.c searches for "dwc3" and so drop failure
+on boot:
+imx8mp-dwc3 32f10100.usb: failed to find dwc3 core child
+imx8mp-dwc3: probe of 32f10100.usb failed with error 1
+imx8mp-dwc3 32f10108.usb: failed to find dwc3 core child
+imx8mp-dwc3: probe of 32f10108.usb failed with error 1
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+now. Fix this (and allow old style too)
 
-=2D-=20
-balbi
+Tested on "PHYTEC phyBOARD-Pollux i.MX8MP" board.
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+fixes: d1689cd3c0f4: ("arm64: dts: imx8mp: Use the correct name for child node "snps, dwc3")
+Signed-off-by: Heiko Schocher <hs@denx.de>
+---
 
------BEGIN PGP SIGNATURE-----
+ drivers/usb/dwc3/dwc3-imx8mp.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCLwlkRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjytgf/cj4/OLG0/bU8IURgAio0/Dt/w7Ygaizx
-0PobXYQPMMcFt0xfC8Q8Zo5vznbxV+1eo7MlKXIC4yYmQtcSn9O8mPJTQeynuhrr
-aw/vz5AqsMNGt49UU9QylpFuco97rGpsTOOW0IkjqvmNKeMnMbQDNeAlspk6x8JK
-veMzNt5836j7/NnQcDfWHRR4o+uCPdLyrk9HjLE8pJwD885/J1R2jWXAVfzA5wyK
-xRRlOuXo7YPvRbFYNPlvxcwlRPMeS2+1CwlLaqfAKjCXqERAMbC9sDPBGfgp8uvG
-IY7iv2G0vATubAXyA/GK6ywjwiK97GgNtY7eDA8yUFlVzkoXwcA7Dw==
-=lXHC
------END PGP SIGNATURE-----
---=-=-=--
+diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
+index b13cfab89d532..eb85ddc50f7c7 100644
+--- a/drivers/usb/dwc3/dwc3-imx8mp.c
++++ b/drivers/usb/dwc3/dwc3-imx8mp.c
+@@ -165,7 +165,8 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+ 	if (err < 0)
+ 		goto disable_rpm;
+ 
+-	dwc3_np = of_get_child_by_name(node, "dwc3");
++	dwc3_np = of_get_child_by_name(node, "usb") ? :
++		  of_get_child_by_name(node, "dwc3");
+ 	if (!dwc3_np) {
+ 		dev_err(dev, "failed to find dwc3 core child\n");
+ 		goto disable_rpm;
+-- 
+2.30.2
+
