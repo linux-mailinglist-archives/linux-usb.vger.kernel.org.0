@@ -2,422 +2,319 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4617236FC54
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 16:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926C536FC77
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 16:31:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232760AbhD3O1Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 10:27:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S232732AbhD3Ob2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 10:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232744AbhD3O1Y (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 10:27:24 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83247C06138B
-        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 07:26:34 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id zg3so23952256ejb.8
-        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 07:26:34 -0700 (PDT)
+        with ESMTP id S230175AbhD3Ob1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Apr 2021 10:31:27 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF01C06174A
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 07:30:39 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id g7-20020a9d5f870000b02902a5831ad705so1370872oti.10
+        for <linux-usb@vger.kernel.org>; Fri, 30 Apr 2021 07:30:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=RyyrRt2ajEZ5GKudfRFcfpOEyyZsq4/5SeJfSMwSBuM=;
-        b=WjW3DQ4vZe2wFcirLbUcujLiRxl3Vi4wGAZlfbAqqY7QtQSpvEXnemSbqRpMczY1pj
-         iWWCGY0sD1sjgtKavfAcLJulv/KE8k0rK9NyjP+9HcpCJPbBlkxPdtWARxYQ8pdl6aYS
-         Rg9dJKYoiC+2BcDw9JimoXx6MvqGh2SiwssVibccvpTxLz6MsCcZYmKgC8vZfQROfJXw
-         3qIdVifK45eDXKWy6s/nDM22fbB5d/DEEZRzshp1coZqAr86tm7pQKL1XYEFhRBAHwSN
-         bw24oNbcrXntc6mIlLrdK478FmMLBgaLnt847qYL2qRVEX5i9NtNlajo2ld9avWaouZN
-         uT1w==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=trAT8TcE7p3ZrrSRRjP/Q3RuAn4aGdDSPB1cgjN0nFk=;
+        b=emTnw/EIK3P9aUftxM4rwPHi8NaUrhnbS9DKZyBhMEqvwMV1vDRLr3eDOqMZrSXxfP
+         xlH1ybhw2FcLSDVHLzJlUpXpJ+mo+wdfI+nZPnG0AIc4IyL2mTSddp1asU4F/kWgiNve
+         9sK2EF7ZNPQPApUtIyGPA464JBKcgh9txijMg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=RyyrRt2ajEZ5GKudfRFcfpOEyyZsq4/5SeJfSMwSBuM=;
-        b=MXhrs9gNaWH940Tdz+FSwyklPwPSHETJqpUG2XBEgyoLzJKkaEp9eMYd9es8IaLEIu
-         DTIMGQgdE6my2DWUcVYzNpcLaF0N6FJ3ogJjnnb/3XPAU5qBFl4A20vT0Ji/bYV+/R1N
-         8kL1iNqjzMI4OGEjReJ3JdxBC+5q/oZxk8HM7QFRKN2SqMioyVOrmLSjaW6X3g2amwQz
-         CDAaB0zplfNXCeVS1KSRAmI2a2QxaDlz6kTX9zx7oBgsY7mQfMudqSq6ZUZpbheuxDlW
-         Me5sRe/Hmuhd6hLAm546IXbpgKKNakQb04NkJpIux9jBeFnXM7VuFQ76wtOo63ROd0Gp
-         gVMA==
-X-Gm-Message-State: AOAM533rIZ0QDWJB/NWlwllAgy/wFal8EogZ8x1U6L0lQtRK1+hlL3E5
-        z5gMwMSPqDT9RsaIPD1bd2xggu/s7ObmOsF+
-X-Google-Smtp-Source: ABdhPJzuHcrdyHWCtyOQwAITcp4z/DmsaDWSnPvGEq08JJldOeEsaHQsRNm00T0EblWK412VeKz7HA==
-X-Received: by 2002:a17:906:1e0b:: with SMTP id g11mr4595564ejj.291.1619792793113;
-        Fri, 30 Apr 2021 07:26:33 -0700 (PDT)
-Received: from localhost.localdomain (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.googlemail.com with ESMTPSA id t22sm1009290edw.29.2021.04.30.07.26.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Apr 2021 07:26:32 -0700 (PDT)
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com,
-        Jerome Brunet <jbrunet@baylibre.com>
-Subject: [RFC PATCH v2 3/3] usb: gadget: u_audio: add real feedback implementation
-Date:   Fri, 30 Apr 2021 16:26:25 +0200
-Message-Id: <20210430142625.357152-4-jbrunet@baylibre.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210430142625.357152-1-jbrunet@baylibre.com>
-References: <20210430142625.357152-1-jbrunet@baylibre.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=trAT8TcE7p3ZrrSRRjP/Q3RuAn4aGdDSPB1cgjN0nFk=;
+        b=fS4LEYajvWzfCuxFSPCwWDmHWhf6NZaSSLoeXuYgX0KuG6o21gSQYpR+Vx4BwwFzg4
+         umEViR9XDtSJDi2QDUlBLgbUlSZc3GmUrLpnIkuy5vOzNm0Ag06g/tCO0ZygY7T1cVai
+         MldHCZAakDlgQtP2PY9d5aEaHERk+H3ltrQz8q2wOU/rfis19TvCDsnv7vZtjIu8fVCD
+         gua1tn1VEwq85Dmy6EWO9R7NBKRe5oDxmUCxs+8+bnV8DE9J2n2HJi6jNtMqMzZW01T+
+         jF4zq02k2J/JKy3Ihyv+eyoK7xQGv3cZxbr1oO+nMsO2vm1my0JUzGD9nlqZ5Jg36ABf
+         AK4A==
+X-Gm-Message-State: AOAM530AymygkwB/u38s1Do8ucAHwQGQF7hqpgpNrqNPteRT+OfYlhye
+        9Qsbbkho8/nBHP8aQNw01ZyVar7ZBkzPW1H9bXOCYg==
+X-Google-Smtp-Source: ABdhPJyn1Dl1UqcgtWJiDpgbP2cGV8443KK8rEnmOhw8fRTJi6XE7RXOpPD6EratTK9gGNkphUty8HuXmUeTzUzpJx0=
+X-Received: by 2002:a05:6830:1398:: with SMTP id d24mr3712169otq.281.1619793038721;
+ Fri, 30 Apr 2021 07:30:38 -0700 (PDT)
 MIME-Version: 1.0
-X-Patchwork-Bot: notify
-Content-Transfer-Encoding: 8bit
+References: <20210428215257.500088-1-hdegoede@redhat.com> <20210428215257.500088-2-hdegoede@redhat.com>
+ <YIqbLDIeGXNSjSTS@phenom.ffwll.local> <YIqehmw+kG53LF3t@kroah.com>
+ <YIqg59yageIUwiwy@phenom.ffwll.local> <4e78d188-f257-ad33-e703-bcbc54a30c31@redhat.com>
+ <YIsEfAjFthAyHxUi@phenom.ffwll.local> <43ee221e-7151-c0c2-cc52-37b191778221@redhat.com>
+ <CAKMK7uFf8n6QfRdSXeB6J+L7NPGbeEyJKhx1Vu7x8env=_7tkA@mail.gmail.com> <5a6fc5d6-a218-8566-6b19-b4ae7d763210@redhat.com>
+In-Reply-To: <5a6fc5d6-a218-8566-6b19-b4ae7d763210@redhat.com>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Fri, 30 Apr 2021 16:30:27 +0200
+Message-ID: <CAKMK7uGB=+ztEVLwkp_LZuG9Ka_o7oOZasEUGDV19Wj4p1Gfig@mail.gmail.com>
+Subject: Re: [PATCH 1/9] drm/connector: Make the drm_sysfs connector->kdev
+ device hold a reference to the connector
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+On Fri, Apr 30, 2021 at 3:32 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi,
+>
+> On 4/30/21 1:38 PM, Daniel Vetter wrote:
+> > On Fri, Apr 30, 2021 at 1:28 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> >>
+> >> Hi,
+> >>
+> >> On 4/29/21 9:09 PM, Daniel Vetter wrote:
+> >>> On Thu, Apr 29, 2021 at 02:33:17PM +0200, Hans de Goede wrote:
+> >>>> Hi,
+> >>>>
+> >>>> On 4/29/21 2:04 PM, Daniel Vetter wrote:
+> >>>>> On Thu, Apr 29, 2021 at 01:54:46PM +0200, Greg Kroah-Hartman wrote:
+> >>>>>> On Thu, Apr 29, 2021 at 01:40:28PM +0200, Daniel Vetter wrote:
+> >>>>>>> On Wed, Apr 28, 2021 at 11:52:49PM +0200, Hans de Goede wrote:
+> >>>>>>>> Userspace could hold open a reference to the connector->kdev device,
+> >>>>>>>> through e.g. holding a sysfs-atrtribute open after
+> >>>>>>>> drm_sysfs_connector_remove() has been called. In this case the connector
+> >>>>>>>> could be free-ed while the connector->kdev device's drvdata is still
+> >>>>>>>> pointing to it.
+> >>>>>>>>
+> >>>>>>>> Give drm_connector devices there own device type, which allows
+> >>>>>>>> us to specify our own release function and make drm_sysfs_connector_add()
+> >>>>>>>> take a reference on the connector object, and have the new release
+> >>>>>>>> function put the reference when the device is released.
+> >>>>>>>>
+> >>>>>>>> Giving drm_connector devices there own device type, will also allow
+> >>>>>>>> checking if a device is a drm_connector device with a
+> >>>>>>>> "if (device->type == &drm_sysfs_device_connector)" check.
+> >>>>>>>>
+> >>>>>>>> Note that the setting of the name member of the device_type struct will
+> >>>>>>>> cause udev events for drm_connector-s to now contain DEVTYPE=drm_connector
+> >>>>>>>> as extra info. So this extends the uevent part of the userspace API.
+> >>>>>>>>
+> >>>>>>>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> >>>>>>>
+> >>>>>>> Are you sure? I thought sysfs is supposed to flush out any pending
+> >>>>>>> operations (they complete fast) and handle open fd internally?
+> >>>>>>
+> >>>>>> Yes, it "should" :)
+> >>>>>
+> >>>>> Thanks for confirming my vague memories :-)
+> >>>>>
+> >>>>> Hans, pls drop this one.
+> >>>>
+> >>>> Please see my earlier reply to your review of this patch, it is
+> >>>> still needed but for a different reason:
+> >>>>
+> >>>> """
+> >>>> We still need this change though to make sure that the
+> >>>> "drm/connector: Add drm_connector_find_by_fwnode() function"
+> >>>> does not end up following a dangling drvdat pointer from one
+> >>>> if the drm_connector kdev-s.
+> >>>>
+> >>>> The class_dev_iter_init() in drm_connector_find_by_fwnode() gets
+> >>>> a reference on all devices and between getting that reference
+> >>>> and it calling drm_connector_get() - drm_connector_unregister()
+> >>>> may run and drop the possibly last reference to the
+> >>>> drm_connector object, freeing it and leaving the kdev's
+> >>>> drvdata as a dangling pointer.
+> >>>> """
+> >>>>
+> >>>> This is actually why I added it initially, and while adding it
+> >>>> I came up with this wrong theory of why it was necessary independently
+> >>>> of the drm_connector_find_by_fwnode() addition, sorry about that.
+> >>>
+> >>> Generally that's handled by a kref_get_unless_zero under the protection of
+> >>> the lock which protects the weak reference. Which I think is the right
+> >>> model here (at a glance at least) since this is a lookup function.
+> >>
+> >> I'm afraid that things are a bit more complicated here. The idea here
+> >> is that we have a subsystem outside of the DRM subsystem which received
+> >> a hotplug event for a drm-connector.  The only info which this subsystem
+> >> has is a reference on the fwnode level (either through device-tree or
+> >> to platform-code instantiating software-fwnode-s + links for this).
+> >>
+> >> So in order to deliver the hotplug event to the connector we need
+> >> to lookup the connector by fwnode.
+> >>
+> >> I've chosen to implement this by iterating over all drm_class
+> >> devices with a dev_type of drm_connector using class_dev_iter_init()
+> >> and friends. This makes sure that we either get a reference to
+> >> the device, or that we skip the device if it is being deleted.
+> >>
+> >> But this just gives us a reference to the connector->kdev, not
+> >> to the connector itself. A pointer to the connector itself is stored
+> >> as drvdata inside the device, but without taking a reference as
+> >> this patch does, there is no guarantee that that pointer does not
+> >> point to possibly free-ed mem.
+> >>
+> >> We could set drvdata to 0 from drm_sysfs_connector_remove()
+> >> Before calling device_unregister(connector->kdev) and then do
+> >> something like this inside drm_connector_find_by_fwnode():
+> >>
+> >> /*
+> >>  * Lock the device to ensure we either see the drvdata == NULL
+> >>  * set by drm_sysfs_connector_remove(); or we block the removal
+> >>  * from continuing until we are done with the device.
+> >>  */
+> >> device_lock(dev);
+> >> connector = dev_get_drvdata(dev);
+> >> if (connector && connector->fwnode == fwnode) {
+> >>         drm_connector_get(connector);
+> >>         found = connector;
+> >> }
+> >> device_unlock(dev);
+> >
+> > Yes this is what I mean. Except not a drm_connector_get, but a
+> > kref_get_unless_zero. The connector might already be on it's way out,
+> > but the drvdata not yet cleared.
+>
+> The function we race with is drm_sysfs_connector_remove() and either:
+>
+> 1. The lookup wins the race in which case drm_sysfs_connector_remove()
+>    can only complete after the drm_connector_get(); and the connector
+>    kref won't drop to 0 before drm_sysfs_connector_remove() completes; or
+> 2. drm_sysfs_connector_remove() wins the race in which case drvdata will
+>    be 0.
+>
+> So using kref_get_unless_zero here will not make a difference and
+> requires poking inside the drm_connector internals.
+>
+> Note I will probably go with your suggestion below, so whether or
+> not to use kref_get_unless_zero here is likely no longer relevant.
 
-This adds interface between userspace and feedback endpoint to report real
-feedback frequency to the Host.
+Ah I missed that nuance, it's what I get for not reading the patchset
+:-/ I was assuming that this is a lookup function which races rather
+freely. The way you explain it's wired up here it's clear that we
+remove the lookup entry as part of hotunplug, not as part of final
+drm_connector cleanup.
 
-Current implementation adds new userspace interface ALSA mixer control
-"Capture Pitch 1000000" (similar to aloop driver's "PCM Rate Shift 100000"
-mixer control)
+So in that special case the additional refcount due to the lookup
+entry isn't a problem, but it's still better to aim for something
+where we only deal with a single refcount for drm_connector.
 
-Value in PPM is chosen to have correction value agnostic of the actual HW
-rate, which the application is not necessarily dealing with, while still
-retaining a good enough precision to allow smooth clock correction on the
-playback side, if necessary.
+> >> With the device_lock() synchronizing against the device_lock()
+> >> in device_unregister(connector->kdev). So that we either see
+> >> drvdata == NULL if we race with unregistering; or we get
+> >> a reference on the drm_connector obj before its ref-count can
+> >> drop to 0.
+> >
+> > The trouble is that most connectors aren't full drivers on their kdev.
+> > So this isn't the right lock. We need another lock which protects the
+> > drvdata pointer appropriately for drm connectors.
+> >
+> >> There might be places though where we call code take the device_lock
+> >> while holding a lock necessary for the drm_connector_get() , so
+> >> this approach might lead to an AB BA deadlock. As such I think
+> >> my original approach is better (also see below).
+> >>
+> >>> Lookup tables holding full references tends to lead to all kinds of bad
+> >>> side effects.
+> >>
+> >> The proposed reference is not part of a lookup list, it is a
+> >> reference from the kdev on the drm_connector object which gets
+> >> dropped as soon as the kdev's refcount hits 0, which normally
+> >> happens directly after drm_connector_unregister() has run.
+> >
+> > Yeah but the way you use it is for lookup purposes. What we're
+> > implementing is the "get me the drm_connector for this fwnode"
+> > functionality, and that _is_ a lookup.
+>
+> Ack.
+>
+> > How its implemented is an
+> > internal detail really, and somehow using full references for lookup
+> > functionality isn't great.
+>
+> Ok, note that the caller of this only needs the reference for a
+> short while, what the caller does is:
+>
+>         connector = drm_connector_find_by_fwnode(dp->connector_fwnode);
+>         if (connector) {
+>                 drm_connector_oob_hotplug_event(connector, &data);
+>                 drm_connector_put(connector);
+>         }
+>
+> As a result of out discussion I have been thinking about enforcing this
+> short-lifetime of the reference by changing:
+>
+> void drm_connector_oob_hotplug_event(struct drm_connector *connector,
+>                                      struct drm_connector_oob_hotplug_event_data *data);
+>
+> to:
+>
+> void drm_connector_oob_hotplug_event(struct fwnode_handle connector_fwnode,
+>                                      struct drm_connector_oob_hotplug_event_data *data);
+>
+> And making that do the lookup (+ almost immediate put) internally, making
+> the connector-lookup a purely drm-subsys internal thing and enforcing code
+> outside of the drm-subsys not holding a long-time reference to the connector
+> this way.
+>
+> Please let me know if you prefer the variant where the connector lookup
+> details are hidden from the callers ?
 
-Similar to sound/usb/endpoint.c, a slow down is allowed up to 25%. This
-has no impact on the required bandwidth. Speedup correction has an impact
-on the bandwidth reserved for the isochronous endpoint. The default
-allowed speedup is 500ppm. This seems to be more than enough but, if
-necessary, this is configurable through a module parameter. The reserved
-bandwidth is rounded up to the next packet size.
+Yeah I think that's a very nice idea. The kref_get_unless_zero is for
+when the lookup entry is really decoupled from the lifetime of the
+object, and you want to be able to get a long term access. If we can
+outright hide the refcounting, even better.
 
-Usage of this new control is easy to implement in existing userspace tools
-like alsaloop from alsa-utils.
+Also this preps us for a world where v4l would also want to get these
+oob hotplug event, so that's a nice bonus. It's just the function name
+that would need to loose the drm_ prefix for that case maybe.
 
-Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
-Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
----
- .../ABI/testing/configfs-usb-gadget-uac2      |   1 +
- Documentation/usb/gadget-testing.rst          |   1 +
- drivers/usb/gadget/function/f_uac2.c          |   9 +-
- drivers/usb/gadget/function/u_audio.c         | 111 ++++++++++++++++--
- drivers/usb/gadget/function/u_audio.h         |   9 ++
- drivers/usb/gadget/function/u_uac2.h          |   2 +
- 6 files changed, 124 insertions(+), 9 deletions(-)
+> Then I can change this for for v2 of this patch/series.
+>
+> > I'm also not sure why we have to use the kdev stuff here. For other
+> > random objects we need to look up we're building that functionality on
+> > that object. It means you need to keep another list_head around for
+> > that lookup, but that's really not a big cost. E.g. drm_bridge/panel
+> > work like that.
+>
+> Using class_for_each_dev seemed like a good way to iterate over all
+> the connectors. But given the discussion this has caused, just adding
+> a new static list + mutex for this to drivers/gpu/drm/drm_connector.c
+> sounds like it might be a better approach indeed.
 
-diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-index e7e59d7fb12f..26fb8e9b4e61 100644
---- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
-+++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
-@@ -9,6 +9,7 @@ Description:
- 		c_srate    capture sampling rate
- 		c_ssize    capture sample size (bytes)
- 		c_sync     capture synchronization type (async/adaptive)
-+		fb_max     maximum extra bandwidth in async mode
- 		p_chmask   playback channel mask
- 		p_srate    playback sampling rate
- 		p_ssize    playback sample size (bytes)
-diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
-index f5a12667bd41..9d6276f82774 100644
---- a/Documentation/usb/gadget-testing.rst
-+++ b/Documentation/usb/gadget-testing.rst
-@@ -729,6 +729,7 @@ The uac2 function provides these attributes in its function directory:
- 	c_srate		capture sampling rate
- 	c_ssize		capture sample size (bytes)
- 	c_sync		capture synchronization type (async/adaptive)
-+	fb_max          maximum extra bandwidth in async mode
- 	p_chmask	playback channel mask
- 	p_srate		playback sampling rate
- 	p_ssize		playback sample size (bytes)
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 321e6c05ba93..ae29ff2b2b68 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -584,8 +584,11 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
- 		ssize = uac2_opts->c_ssize;
- 	}
- 
-+	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
-+		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
-+
- 	max_size_bw = num_channels(chmask) * ssize *
--		((srate / (factor / (1 << (ep_desc->bInterval - 1)))) + 1);
-+		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
- 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
- 						    max_size_ep));
- 
-@@ -957,6 +960,7 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 	agdev->params.c_srate = uac2_opts->c_srate;
- 	agdev->params.c_ssize = uac2_opts->c_ssize;
- 	agdev->params.req_number = uac2_opts->req_number;
-+	agdev->params.fb_max = uac2_opts->fb_max;
- 	ret = g_audio_setup(agdev, "UAC2 PCM", "UAC2_Gadget");
- 	if (ret)
- 		goto err_free_descs;
-@@ -1329,6 +1333,7 @@ UAC2_ATTRIBUTE(c_srate);
- UAC2_ATTRIBUTE_SYNC(c_sync);
- UAC2_ATTRIBUTE(c_ssize);
- UAC2_ATTRIBUTE(req_number);
-+UAC2_ATTRIBUTE(fb_max);
- 
- static struct configfs_attribute *f_uac2_attrs[] = {
- 	&f_uac2_opts_attr_p_chmask,
-@@ -1339,6 +1344,7 @@ static struct configfs_attribute *f_uac2_attrs[] = {
- 	&f_uac2_opts_attr_c_ssize,
- 	&f_uac2_opts_attr_c_sync,
- 	&f_uac2_opts_attr_req_number,
-+	&f_uac2_opts_attr_fb_max,
- 	NULL,
- };
- 
-@@ -1378,6 +1384,7 @@ static struct usb_function_instance *afunc_alloc_inst(void)
- 	opts->c_ssize = UAC2_DEF_CSSIZE;
- 	opts->c_sync = UAC2_DEF_CSYNC;
- 	opts->req_number = UAC2_DEF_REQ_NUM;
-+	opts->fb_max = UAC2_DEF_FB_MAX;
- 	return &opts->func_inst;
- }
- 
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index f637ebec80b0..b517beb17006 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -16,6 +16,7 @@
- #include <sound/core.h>
- #include <sound/pcm.h>
- #include <sound/pcm_params.h>
-+#include <sound/control.h>
- 
- #include "u_audio.h"
- 
-@@ -35,12 +36,12 @@ struct uac_rtd_params {
- 
- 	void *rbuf;
- 
-+	unsigned int pitch;	/* Stream pitch ratio to 1000000 */
- 	unsigned int max_psize;	/* MaxPacketSize of endpoint */
- 
- 	struct usb_request **reqs;
- 
- 	struct usb_request *req_fback; /* Feedback endpoint request */
--	unsigned int ffback; /* Real frequency reported by feedback endpoint */
- 	bool fb_ep_enabled; /* if the ep is enabled */
- };
- 
-@@ -75,7 +76,9 @@ static const struct snd_pcm_hardware uac_pcm_hardware = {
- };
- 
- static void u_audio_set_fback_frequency(enum usb_device_speed speed,
--					unsigned int freq, void *buf)
-+					unsigned long long freq,
-+					unsigned int pitch,
-+					void *buf)
- {
- 	u32 ff = 0;
- 
-@@ -86,7 +89,7 @@ static void u_audio_set_fback_frequency(enum usb_device_speed speed,
- 		 * Format is encoded in Q10.10 left-justified in the 24 bits,
- 		 * so that it has a Q10.14 format.
- 		 */
--		ff = DIV_ROUND_UP((freq << 14), 1000);
-+		freq <<= 14;
- 	} else {
- 		/*
- 		 * High-speed feedback endpoints report frequency
-@@ -95,8 +98,11 @@ static void u_audio_set_fback_frequency(enum usb_device_speed speed,
- 		 * the binary point is located between the second and the third
- 		 * byte fromat (that is Q16.16)
- 		 */
--		ff = DIV_ROUND_UP((freq << 13), 1000);
-+		freq <<= 13;
- 	}
-+
-+	ff = DIV_ROUND_CLOSEST_ULL((freq * pitch), (1000 * 1000000));
-+
- 	*(__le32 *)buf = cpu_to_le32(ff);
- }
- 
-@@ -209,8 +215,8 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
- 	struct uac_rtd_params *prm = req->context;
- 	struct snd_uac_chip *uac = prm->uac;
- 	struct g_audio *audio_dev = uac->audio_dev;
-+	struct uac_params *params = &audio_dev->params;
- 	int status = req->status;
--	unsigned long flags;
- 
- 	/* i/f shutting down */
- 	if (!prm->fb_ep_enabled || req->status == -ESHUTDOWN)
-@@ -225,7 +231,8 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
- 			__func__, status, req->actual, req->length);
- 
- 	u_audio_set_fback_frequency(audio_dev->gadget->speed,
--				    prm->ffback, req->buf);
-+				    params->c_srate, prm->pitch,
-+				    req->buf);
- 
- 	if (usb_ep_queue(ep, req, GFP_ATOMIC))
- 		dev_err(uac->card->dev, "%d Error!\n", __LINE__);
-@@ -480,9 +487,10 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 	 * Always start with original frequency since its deviation can't
- 	 * be meauserd at start of playback
- 	 */
--	prm->ffback = params->c_srate;
-+	prm->pitch = 1000000;
- 	u_audio_set_fback_frequency(audio_dev->gadget->speed,
--				    prm->ffback, req_fback->buf);
-+				    params->c_srate, prm->pitch,
-+				    req_fback->buf);
- 
- 	if (usb_ep_queue(ep_fback, req_fback, GFP_ATOMIC))
- 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
-@@ -578,12 +586,82 @@ void u_audio_stop_playback(struct g_audio *audio_dev)
- }
- EXPORT_SYMBOL_GPL(u_audio_stop_playback);
- 
-+static int u_audio_pitch_info(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_info *uinfo)
-+{
-+	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
-+	struct snd_uac_chip *uac = prm->uac;
-+	struct g_audio *audio_dev = uac->audio_dev;
-+	struct uac_params *params = &audio_dev->params;
-+	unsigned int pitch_min, pitch_max;
-+
-+	pitch_min = (1000 - FBACK_SLOW_MAX) * 1000;
-+	pitch_max = (1000 + params->fb_max) * 1000;
-+
-+	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
-+	uinfo->count = 1;
-+	uinfo->value.integer.min = pitch_min;
-+	uinfo->value.integer.max = pitch_max;
-+	uinfo->value.integer.step = 1;
-+	return 0;
-+}
-+
-+static int u_audio_pitch_get(struct snd_kcontrol *kcontrol,
-+				   struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
-+
-+	ucontrol->value.integer.value[0] = prm->pitch;
-+
-+	return 0;
-+}
-+
-+static int u_audio_pitch_put(struct snd_kcontrol *kcontrol,
-+				  struct snd_ctl_elem_value *ucontrol)
-+{
-+	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
-+	struct snd_uac_chip *uac = prm->uac;
-+	struct g_audio *audio_dev = uac->audio_dev;
-+	struct uac_params *params = &audio_dev->params;
-+	unsigned int val;
-+	unsigned int pitch_min, pitch_max;
-+	int change = 0;
-+
-+	pitch_min = (1000 - FBACK_SLOW_MAX) * 1000;
-+	pitch_max = (1000 + params->fb_max) * 1000;
-+
-+	val = ucontrol->value.integer.value[0];
-+
-+	if (val < pitch_min)
-+		val = pitch_min;
-+	if (val > pitch_max)
-+		val = pitch_max;
-+
-+	if (prm->pitch != val) {
-+		prm->pitch = val;
-+		change = 1;
-+	}
-+
-+	return change;
-+}
-+
-+static const struct snd_kcontrol_new u_audio_controls[]  = {
-+{
-+	.iface =        SNDRV_CTL_ELEM_IFACE_PCM,
-+	.name =         "Capture Pitch 1000000",
-+	.info =         u_audio_pitch_info,
-+	.get =          u_audio_pitch_get,
-+	.put =          u_audio_pitch_put,
-+},
-+};
-+
- int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 					const char *card_name)
- {
- 	struct snd_uac_chip *uac;
- 	struct snd_card *card;
- 	struct snd_pcm *pcm;
-+	struct snd_kcontrol *kctl;
- 	struct uac_params *params;
- 	int p_chmask, c_chmask;
- 	int err;
-@@ -671,6 +749,23 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
- 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &uac_pcm_ops);
- 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &uac_pcm_ops);
- 
-+	if (c_chmask && g_audio->in_ep_fback) {
-+		strscpy(card->mixername, card_name, sizeof(card->driver));
-+
-+		kctl = snd_ctl_new1(&u_audio_controls[0], &uac->c_prm);
-+		if (!kctl) {
-+			err = -ENOMEM;
-+			goto snd_fail;
-+		}
-+
-+		kctl->id.device = pcm->device;
-+		kctl->id.subdevice = 0;
-+
-+		err = snd_ctl_add(card, kctl);
-+		if (err < 0)
-+			goto snd_fail;
-+	}
-+
- 	strscpy(card->driver, card_name, sizeof(card->driver));
- 	strscpy(card->shortname, card_name, sizeof(card->shortname));
- 	sprintf(card->longname, "%s %i", card_name, card->dev->id);
-diff --git a/drivers/usb/gadget/function/u_audio.h b/drivers/usb/gadget/function/u_audio.h
-index 53e6baf55cbf..a218cdf771fe 100644
---- a/drivers/usb/gadget/function/u_audio.h
-+++ b/drivers/usb/gadget/function/u_audio.h
-@@ -11,6 +11,14 @@
- 
- #include <linux/usb/composite.h>
- 
-+/*
-+ * Same maximum frequency deviation on the slower side as in
-+ * sound/usb/endpoint.c. Value is expressed in per-mil deviation.
-+ * The maximum deviation on the faster side will be provided as
-+ * parameter, as it impacts the endpoint required bandwidth.
-+ */
-+#define FBACK_SLOW_MAX	250
-+
- struct uac_params {
- 	/* playback */
- 	int p_chmask;	/* channel mask */
-@@ -23,6 +31,7 @@ struct uac_params {
- 	int c_ssize;	/* sample size */
- 
- 	int req_number; /* number of preallocated requests */
-+	int fb_max;	/* upper frequency drift feedback limit per-mil */
- };
- 
- struct g_audio {
-diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
-index 13589c3c805c..179d3ef6a195 100644
---- a/drivers/usb/gadget/function/u_uac2.h
-+++ b/drivers/usb/gadget/function/u_uac2.h
-@@ -23,6 +23,7 @@
- #define UAC2_DEF_CSSIZE 2
- #define UAC2_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
- #define UAC2_DEF_REQ_NUM 2
-+#define UAC2_DEF_FB_MAX 5
- 
- struct f_uac2_opts {
- 	struct usb_function_instance	func_inst;
-@@ -34,6 +35,7 @@ struct f_uac2_opts {
- 	int				c_ssize;
- 	int				c_sync;
- 	int				req_number;
-+	int				fb_max;
- 	bool				bound;
- 
- 	struct mutex			lock;
+Yeah I think kobject lifetimes are complex enough already that if
+there is no need to tie ourselves to the driver model lifetime rules,
+our own notifier list with our own locking is better.
+
+Also before Greg rolls in: This imo only applies for notifiers like
+we're talking about here. When we want actual references to
+drivers/devices and all that, then it's better to deal with all the
+kobject model and use it correctly. Because a lot of thought has been
+put into handling all the corner cases there. E.g. drm_bridge is
+hitting a lot of the problems which the driver model has solutions
+for, similarly component.c is also a bit awkward.
+
+Anyway, we still need the refcount dance because calling the oob
+hotplug with the lock held could deadlock with hotunplug processing
+and removal of the drm_connector, which needs the same lock. So it's
+still tricky.
+
+> So shall I change thing over to this approach for v2 of this patch/series?
+
+Yeah I think we've explored all the options and found something that
+fits neatly now for v2.
+-Daniel
 -- 
-2.31.1
-
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
