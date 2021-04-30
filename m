@@ -2,86 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0102936F494
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 05:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C20C36F497
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 05:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbhD3DjV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Apr 2021 23:39:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51532 "EHLO mail.kernel.org"
+        id S229591AbhD3Dom (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Apr 2021 23:44:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51810 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229577AbhD3DjT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Apr 2021 23:39:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A38C6613AD;
-        Fri, 30 Apr 2021 03:38:29 +0000 (UTC)
+        id S229577AbhD3Dol (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Apr 2021 23:44:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B7DDB613B3;
+        Fri, 30 Apr 2021 03:43:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619753911;
-        bh=62xpBMMoN3AZUrRgY+gs+zkDlkkWnEMVFBR8/hvHmAk=;
+        s=k20201202; t=1619754234;
+        bh=Uwgal+RO9pvP/cAo8FmR3b0ptCw4A1MX347Fnc8A2Hg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TABji03Yc2Uz5RoeVSnlLiu5JYNByHXM+VxBtmA2AMCMABU2UkZL/cKctsGi2NC9V
-         xibHvTMiOp+FB+uHYjLEt47QgseDRkjrt+Clp+sN/si4Ugp/GCV3B4kEQmoQQ9zN4F
-         E/eQ+Q6BOetOlwciv9gJZLf9TLjCTfpRCyyTMddsL4qo3uB81jFsIXJlO2xGbrah4h
-         KW+OkYFtMfhqH+mXivpPoABPBd+y9+gLYHOo9WpN6LK6xSiZWPo1NwBuPDLhgRuZvt
-         xnpNgzxbt0HPRPCDC+GY73NUujxwwJQPl2vYdyOQNmrU4JiNcoX7vB383ZgxeS5+c5
-         au/jB5TAA9ljQ==
-Date:   Fri, 30 Apr 2021 11:38:26 +0800
+        b=iWHYUbk4SnSX8iCUOLwarP/XVOqC6td8w3DEao+7rrhwXE5w3MbRaaG/IeZrOPtLL
+         lPnQWiPeyTmEl9P1DxIktYL7MvzcY5vGzLGB0R2g1qCVP5ZSuI3BGcViCuEuhOuxpD
+         CYSWg8o84h5k00VBgAEOjFtiQWdba8drsP1Xa0Vbqdo7FHO8HHTX0E85Ys1njjKMW2
+         ByXChrntHsVTWhEtecPcYh6wSkdSbCPK7kRsdSUPA5AFTxLFIcLfkvxODf3RUEc0GO
+         kiq3fL2g9+QS4JCvLLgwKQEPtgAf/wiDLhGgPkMz3O5v6DQ3PEDVoD6kBDNloh5tXa
+         M0/I7LA4sNiow==
+Date:   Fri, 30 Apr 2021 11:43:49 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Souptick Joarder <jrdr.linux@gmail.com>, pawell@cadence.com,
-        rogerq@kernel.org, a-govindraju@ti.com, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: cdns3: Corrected comment to align with
- kernel-doc comment
-Message-ID: <20210430033826.GA3842@nchen>
-References: <1619338565-4574-1-git-send-email-jrdr.linux@gmail.com>
- <8cbc9ed6-4499-642c-3b49-53e80974f004@infradead.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     gregkh@linuxfoundation.org, dan.carpenter@oracle.com,
+        linux-usb@vger.kernel.org, kurahul@cadence.com
+Subject: Re: [PATCH] usb: cdnsp: Useless condition has been removed
+Message-ID: <20210430034349.GB3842@nchen>
+References: <20210429084914.12003-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8cbc9ed6-4499-642c-3b49-53e80974f004@infradead.org>
+In-Reply-To: <20210429084914.12003-1-pawell@gli-login.cadence.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-04-25 08:53:33, Randy Dunlap wrote:
-> On 4/25/21 1:16 AM, Souptick Joarder wrote:
-> > Minor update in comment.
-> > 
-> > Signed-off-by: Souptick Joarder <jrdr.linux@gmail.com>
-> > ---
-> > v2:
-> > 	Updated change logs and address review comment.
+On 21-04-29 10:49:14, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> LGTM. Thanks.
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org>
+> Patch removes the warning "variable dereferenced before
+> check 'pdev->dcbaa'" from cdnsp_mem_cleanup.
 
-Applied, thanks.
-
-Peter
+You may describe the real problem you fix, but not the warning
+message from some auto build system.
 
 > 
-> >  drivers/usb/cdns3/cdns3-gadget.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> > index 9b1bd41..21f026c 100644
-> > --- a/drivers/usb/cdns3/cdns3-gadget.c
-> > +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> > @@ -484,7 +484,7 @@ static void __cdns3_descmiss_copy_data(struct usb_request *request,
-> >  }
-> >  
-> >  /**
-> > - * cdns3_wa2_descmiss_copy_data copy data from internal requests to
-> > + * cdns3_wa2_descmiss_copy_data - copy data from internal requests to
-> >   * request queued by class driver.
-> >   * @priv_ep: extended endpoint object
-> >   * @request: request object
-> > 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdnsp-mem.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> 
+> diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
+> index 5d4c4bfe15b7..a47948a1623f 100644
+> --- a/drivers/usb/cdns3/cdnsp-mem.c
+> +++ b/drivers/usb/cdns3/cdnsp-mem.c
+> @@ -1082,9 +1082,8 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
+>  	dma_pool_destroy(pdev->device_pool);
+>  	pdev->device_pool = NULL;
+>  
+> -	if (pdev->dcbaa)
+> -		dma_free_coherent(dev, sizeof(*pdev->dcbaa),
+> -				  pdev->dcbaa, pdev->dcbaa->dma);
+> +	dma_free_coherent(dev, sizeof(*pdev->dcbaa),
+> +			  pdev->dcbaa, pdev->dcbaa->dma);
+>  
+>  	pdev->dcbaa = NULL;
+>  
 > -- 
-> ~Randy
+> 2.25.1
 > 
 
 -- 
