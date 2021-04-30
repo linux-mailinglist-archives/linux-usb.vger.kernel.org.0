@@ -2,72 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DACD636F667
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 09:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7DA36F70E
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 10:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbhD3HaH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 03:30:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45488 "EHLO mail.kernel.org"
+        id S229538AbhD3IZT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Apr 2021 04:25:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34202 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229628AbhD3HaG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 03:30:06 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0B005613B3;
-        Fri, 30 Apr 2021 07:29:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1619767757;
-        bh=UOwbjp9n6THAwLNXnYFCjvVARM6laoU+YRJMD42KQK4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gU4BEDg0/+ToTZ2RLKPtxpLCkg1nhxGnQ8RspU3df5YPn62XPsoMgFcKABoGFTnx7
-         YUIfcIP6MgesZP9FsgkR7YT08dqiAwb8Cv2LhNv2B1USKPFknp/7VsE5Sy+yKcDRVx
-         QJFIR5QVt7Lu3Aa5x8NalJDFND8ufOJeLUfFHgdk=
-Date:   Fri, 30 Apr 2021 09:29:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH 1/3] usb: xhci-mtk: use bitfield instead of bool
-Message-ID: <YIuxy9OtlNzq7zwM@kroah.com>
-References: <20210430071532.51794-1-chunfeng.yun@mediatek.com>
+        id S229529AbhD3IZS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Apr 2021 04:25:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7ED8C60FD9;
+        Fri, 30 Apr 2021 08:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1619771071;
+        bh=HJ1Of4qnD6Z5sVC3H58HwMM2soCmh4GEDRMgeiFB+eQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=WOuUDSTOlQ3CSPAW2F2ScltoZ1DFM9fGF8sVg+JMae2LUW4301BvBVVo+sbFTmry2
+         rgYkaRaHhmEwk6gUpmDdySFNcAEZxOpldw8L1xcrWd0TmZ459io72RY9C3bBo701VW
+         ZBp8pnWxMW06nrTK91YAQHu6iViZOnE1Yc+w4McnRK8LTCGsHguOWDgl3k2tClJjSq
+         LG6wA8tM5G1WYgXNIZP3hSGNQHGbhbsBZ7tae3gpn6loVTqPmSZcgWzgZ7XhKF+MwS
+         XoC8IEMq9YVql+iYoaIrpeWl+5LPup1yFUH8DG/Q8m5UKboE5NL7QvBTYg+r+UQiXb
+         x0IRNDftL7+yQ==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Li Jun <jun.li@nxp.com>, gregkh@linuxfoundation.org
+Cc:     shawnguo@kernel.org, linux-imx@nxp.com, thunder.leizhen@huawei.com,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: imx8mp: detect dwc3 core node via compatible
+ string
+In-Reply-To: <1619765836-20387-1-git-send-email-jun.li@nxp.com>
+References: <1619765836-20387-1-git-send-email-jun.li@nxp.com>
+Date:   Fri, 30 Apr 2021 11:24:18 +0300
+Message-ID: <8735v8ji31.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210430071532.51794-1-chunfeng.yun@mediatek.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Apr 30, 2021 at 03:15:30PM +0800, Chunfeng Yun wrote:
-> Use bitfield instead of bool in struct
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-That says what you did, but not why you did it.
+Li Jun <jun.li@nxp.com> writes:
 
-Why?
+> New schema of usb controller DT-node should be named with prefix
+> "^usb(@.*)?", dt changed the node name, but missed counter part
+> change in driver, fix it by switching to use compatible string as
+> the dwc3 core compatible string keeps "snps,dwc3" in all dt.
+>
+> Fixes: d1689cd3c0f4 ("arm64: dts: imx8mp: Use the correct name for child =
+node "snps, dwc3"")
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
->  drivers/usb/host/xhci-mtk.c | 2 --
->  drivers/usb/host/xhci-mtk.h | 8 ++++----
->  2 files changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index b2058b3bc834..2548976bcf05 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -495,8 +495,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->  			goto put_usb2_hcd;
->  		}
->  		mtk->has_ippc = true;
-> -	} else {
-> -		mtk->has_ippc = false;
 
-Why did you remove this chunk?  That is not described in the changelog
-at all.
+Nice fix :-) It may break down if we have two dwc3 nodes as child of a
+single parent, but I guess that's very unlikely anyway.
 
-thanks,
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-greg k-h
+That being said, why do need to keep a pointer to the child? I had a
+quick look at the driver and it doesn't seem like the pointer is
+necessary at all.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCLvrIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUimvwf8C2TV8VMD7mSy7hRqWnAJHxC9Ia0+jmT6
+haomy57r9IcUPPYZVJPOiHi3wOlTwFHnVPpeMRpTTytRGYL2dyliaZ7fgMQFABmq
+7DYxzZhFYZlr6tkTrgVgqJqicDFYLCeJr9877sNu5xZyYSeficvZyvBlJ3an0caN
+mEK8pk1upP5USFETXJYfrrwAH7ULQIeJovMzzptxQdJlWcxrlit0CtgJ0UHi5dEA
+WYZTl102kwVAktTh8M3vfbf68b7DnkV0FN6jnOMDQRjKMa3ZFb+zHDw/a4fA6nG6
+aNZ0VQ641w4UlPu2pqRdYne7HW1TxbW0xaqUREp8AfTDwWY+YqK0hg==
+=dSPQ
+-----END PGP SIGNATURE-----
+--=-=-=--
