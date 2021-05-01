@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E604A37069D
-	for <lists+linux-usb@lfdr.de>; Sat,  1 May 2021 11:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F5FD3706A8
+	for <lists+linux-usb@lfdr.de>; Sat,  1 May 2021 11:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbhEAJcM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 May 2021 05:32:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:15907 "EHLO
+        id S231244AbhEAJhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 May 2021 05:37:12 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:63181 "EHLO
         so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbhEAJcM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 May 2021 05:32:12 -0400
+        with ESMTP id S230298AbhEAJhM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 May 2021 05:37:12 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619861482; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=SR5NSXTOa/z+LdUfqPLSxuvJfzsNFIe+bGjvDPJ508U=; b=FotBASRKahQ74pNLaYJC7OAKAjRlFb03iWwJ9Bw/BEBtxerdq0je0QhIAkaGkw//GCU98kkG
- RcHeNiyVgV9AlK7+vSl76vOtBPZmCTo/uSQqFseSVWl5+AY3qpgIojLCV7x14oEirJTKtwt4
- C9hEI76ack/oJslPC6Llevb2q6Q=
+ s=smtp; t=1619861782; h=Content-Transfer-Encoding: MIME-Version:
+ References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=K7WcJixfg2sX8xlpiofsh0xGMeQo3W5RHhnin6WMjsM=; b=C3sVEDXgupOX8SSMFBAWQeEsAVp6TIFCiZ3ajK8cQPymyJJpnSNVA/VJGYmSl5ot2nOwElT0
+ cEh3QLC248yh3ZvKcGjRaT/4wLN/YE2+WcS7An3s2/53nH2x2YmJx3K3dK6e+Aw0UU8OctYn
+ i+O686bQcc3b/W2DsvOWfgI2S/U=
 X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 608d1fe1febcffa80ff13ea7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 01 May 2021 09:31:13
+ smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
+ 608d21052cc44d3aeaf44162 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 01 May 2021 09:36:05
  GMT
 Sender: jackp=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BEDF2C4323A; Sat,  1 May 2021 09:31:13 +0000 (UTC)
+        id 3BD1FC433D3; Sat,  1 May 2021 09:36:05 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
@@ -37,9 +37,9 @@ Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.2
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 62BFEC433F1;
-        Sat,  1 May 2021 09:31:12 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 62BFEC433F1
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E5482C433D3;
+        Sat,  1 May 2021 09:36:03 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E5482C433D3
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
 From:   Jack Pham <jackp@codeaurora.org>
@@ -52,10 +52,12 @@ Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         Elliot Berman <eberman@codeaurora.org>,
         Prasad Sodagudi <psodagud@codeaurora.org>,
         Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Free gadget structure only after freeing endpoints
-Date:   Sat,  1 May 2021 02:30:55 -0700
-Message-Id: <20210501093055.1468-1-jackp@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Free gadget structure only after freeing endpoints
+Date:   Sat,  1 May 2021 02:35:58 -0700
+Message-Id: <20210501093558.7375-1-jackp@codeaurora.org>
 X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20210501093055.1468-1-jackp@codeaurora.org>
+References: <20210501093055.1468-1-jackp@codeaurora.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -92,6 +94,9 @@ called before the gadget is finally freed with usb_put_gadget().
 Fixes: e81a7018d93a ("usb: dwc3: allocate gadget structure dynamically")
 Signed-off-by: Jack Pham <jackp@codeaurora.org>
 ---
+v2: Fix silly typo: usb_del_gadget_put -> usb_put_gadget (brain fart
+when manually recomposing the patch)
+
  drivers/usb/dwc3/gadget.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
@@ -106,7 +111,7 @@ index 6eab78f8a1a7..c7e5f5a07f3b 100644
 -	usb_del_gadget_udc(dwc->gadget);
 +	usb_del_gadget(dwc->gadget);
  	dwc3_gadget_free_endpoints(dwc);
-+	usb_del_gadget_put(dwc->gadget);
++	usb_put_gadget(dwc->gadget);
  	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
  			  dwc->bounce_addr);
  	kfree(dwc->setup_buf);
