@@ -2,119 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5FD3706A8
-	for <lists+linux-usb@lfdr.de>; Sat,  1 May 2021 11:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9813706F7
+	for <lists+linux-usb@lfdr.de>; Sat,  1 May 2021 12:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbhEAJhM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 1 May 2021 05:37:12 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:63181 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbhEAJhM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 May 2021 05:37:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1619861782; h=Content-Transfer-Encoding: MIME-Version:
- References: In-Reply-To: Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=K7WcJixfg2sX8xlpiofsh0xGMeQo3W5RHhnin6WMjsM=; b=C3sVEDXgupOX8SSMFBAWQeEsAVp6TIFCiZ3ajK8cQPymyJJpnSNVA/VJGYmSl5ot2nOwElT0
- cEh3QLC248yh3ZvKcGjRaT/4wLN/YE2+WcS7An3s2/53nH2x2YmJx3K3dK6e+Aw0UU8OctYn
- i+O686bQcc3b/W2DsvOWfgI2S/U=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 608d21052cc44d3aeaf44162 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 01 May 2021 09:36:05
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 3BD1FC433D3; Sat,  1 May 2021 09:36:05 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E5482C433D3;
-        Sat,  1 May 2021 09:36:03 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E5482C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Peter Chen <peter.chen@nxp.com>,
-        Sandeep Maheswaram <sanm@codeaurora.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Elliot Berman <eberman@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Free gadget structure only after freeing endpoints
-Date:   Sat,  1 May 2021 02:35:58 -0700
-Message-Id: <20210501093558.7375-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20210501093055.1468-1-jackp@codeaurora.org>
-References: <20210501093055.1468-1-jackp@codeaurora.org>
+        id S231918AbhEAKuo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 May 2021 06:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231833AbhEAKuo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 May 2021 06:50:44 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73214C06174A;
+        Sat,  1 May 2021 03:49:54 -0700 (PDT)
+Received: from miraculix.mork.no (fwa183.mork.no [192.168.9.183])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 141AnfBm018840
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Sat, 1 May 2021 12:49:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1619866182; bh=DF2tGaWWflmbYZU2D/1JVrwQhqqAwzVUc39vUNXXikI=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=NGq+8+ekaqVCmMXqVEXQE6nRhkNuBxqifmEkLQN+o1Nl1Q2I7T6H+byEDmGfXitsz
+         tYnaZjXDrMhqIX0324tOsozylEmoXQ6WX0NSyMbH7jNQyW//daVpsc3kSc7VnqNqn/
+         PVteZhQ/hJipMplyH5eXgOw4Pz9n7UjI4jy0tYC4=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94)
+        (envelope-from <bjorn@mork.no>)
+        id 1lcnBs-001Usu-P9; Sat, 01 May 2021 12:49:40 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Loic Poulain <loic.poulain@linaro.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, kuba@kernel.org
+Subject: Re: [RFC net-next 2/2] usb: class: cdc-wdm: WWAN framework integration
+Organization: m
+References: <1619777783-24116-1-git-send-email-loic.poulain@linaro.org>
+        <1619777783-24116-2-git-send-email-loic.poulain@linaro.org>
+        <bf02f5ecf84b7eaaa05768edd933a321f701e79f.camel@suse.com>
+Date:   Sat, 01 May 2021 12:49:40 +0200
+In-Reply-To: <bf02f5ecf84b7eaaa05768edd933a321f701e79f.camel@suse.com> (Oliver
+        Neukum's message of "Fri, 30 Apr 2021 12:39:29 +0200")
+Message-ID: <87a6pek9tn.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.102.4 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-As part of commit e81a7018d93a ("usb: dwc3: allocate gadget structure
-dynamically") the dwc3_gadget_release() was added which will free
-the dwc->gadget structure upon the device's removal when
-usb_del_gadget_udc() is called in dwc3_gadget_exit().
+Oliver Neukum <oneukum@suse.com> writes:
 
-However, simply freeing the gadget results a dangling pointer
-situation: the endpoints created in dwc3_gadget_init_endpoints()
-have their dep->endpoint.ep_list members chained off the list_head
-anchored at dwc->gadget->ep_list.  Thus when dwc->gadget is freed,
-the first dwc3_ep in the list now has a dangling prev pointer and
-likewise for the next pointer of the dwc3_ep at the tail of the list.
-The dwc3_gadget_free_endpoints() that follows will result in a
-use-after-free when it calls list_del().
+> This absolutely makes sense,
 
-This was caught by enabling KASAN and performing a driver unbind.
-The recent commit 568262bf5492 ("usb: dwc3: core: Add shutdown
-callback for dwc3") also exposes this as a panic during shutdown.
++1
 
-There are a few possibilities to fix this.  One could be to perform
-a list_del() of the gadget->ep_list itself which removes it from
-the rest of the dwc3_ep chain.
+Thanks for working on this.
 
-Another approach is what this patch does, by splitting up the
-usb_del_gadget_udc() call into its separate "del" and "put"
-components.  This allows dwc3_gadget_free_endpoints() to be
-called before the gadget is finally freed with usb_put_gadget().
 
-Fixes: e81a7018d93a ("usb: dwc3: allocate gadget structure dynamically")
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
----
-v2: Fix silly typo: usb_del_gadget_put -> usb_put_gadget (brain fart
-when manually recomposing the patch)
-
- drivers/usb/dwc3/gadget.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 6eab78f8a1a7..c7e5f5a07f3b 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4062,8 +4062,9 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 
- void dwc3_gadget_exit(struct dwc3 *dwc)
- {
--	usb_del_gadget_udc(dwc->gadget);
-+	usb_del_gadget(dwc->gadget);
- 	dwc3_gadget_free_endpoints(dwc);
-+	usb_put_gadget(dwc->gadget);
- 	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
- 			  dwc->bounce_addr);
- 	kfree(dwc->setup_buf);
--- 
-2.24.0
-
+Bj=C3=B8rn
