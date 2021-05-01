@@ -2,136 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E334C37024D
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Apr 2021 22:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D611F370679
+	for <lists+linux-usb@lfdr.de>; Sat,  1 May 2021 10:52:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233445AbhD3Um0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Apr 2021 16:42:26 -0400
-Received: from cable.insite.cz ([84.242.75.189]:32957 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231656AbhD3UmZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Apr 2021 16:42:25 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 26D1AA1A3D402;
-        Fri, 30 Apr 2021 22:41:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1619815293; bh=lgjoF+vS9fpmmlWw6tE4z+kTikfnV9lIbz7UbHrPjMA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=c+NvziW6iN1NlUQPNObmR24bU1dxXvIFD3Gquh5TVbW05Z4Qtje7Rwzr5ywI6n7Rt
-         zLVcT4nvfiuV7PMd6o5Y99/DYhPp4/dPQE2h4PIkWlDkKAIxXg5G+DxC1ZIXlTk1on
-         kFsCirt+/zoVwUiXQGu+TFPvid0Xa4E9QBhhKGCY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kCiRXbUX3e_z; Fri, 30 Apr 2021 22:41:27 +0200 (CEST)
-Received: from [192.168.105.119] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 16EEFA1A3D401;
-        Fri, 30 Apr 2021 22:41:27 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1619815287; bh=lgjoF+vS9fpmmlWw6tE4z+kTikfnV9lIbz7UbHrPjMA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=huA9MyoqC7J8cWPQD1hpq6zbaZfH7DsgX9ReDoyZ6f72XZq70hsUNlOTIOvu78x7N
-         kWpKuvQUX6B+JjOqMsazQs2xdbY6PTYv6FVHz7OpbFJV6uDYWI3rbuPbqrlU/DbTcH
-         wTStXstKtYswYLbP3PPo0dYZenVgUIZzmx6W1DDo=
-Subject: Re: [RFC PATCH v2 1/3] usb: gadget: f_uac2/u_audio: add feedback
- endpoint support
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
-Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
-References: <20210430142625.357152-1-jbrunet@baylibre.com>
- <20210430142625.357152-2-jbrunet@baylibre.com>
- <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
- <1jim43hf6h.fsf@starbuckisacylon.baylibre.com>
- <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <3b80267f-934a-7a95-9229-e18f93432a36@ivitera.com>
-Date:   Fri, 30 Apr 2021 22:41:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S231287AbhEAIsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 1 May 2021 04:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230117AbhEAIsD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 1 May 2021 04:48:03 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9E6C06174A;
+        Sat,  1 May 2021 01:47:14 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id k3-20020a17090ad083b0290155b934a295so2984005pju.2;
+        Sat, 01 May 2021 01:47:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=//OsLf8gU/9VWp4E/gtONldzoDSVWoyHb1O3vAf2hr4=;
+        b=kRHorvM/R3y9LiE2chDqQilUiSbOWfrP2vlHZwHptLk/jpM1OwRAqBHgwRh4KhjhyT
+         AH7PEtE3Hl12cJ9Oh11Z/6HIWQeb5vew+mroII6n2rxbnpkCqr/nOA3xmoUrNiWJNAEo
+         JM9ZkdKiIov8XrHlt7Wd5sM0m//M9zH9Qnq0Qo3Ftmeya64Uq52OdoCqOrGuAKcsxM10
+         gmXCKRAZmzSYrl7KqITCd7rRZJdHKHk12B3nT+W5aexNG5Gb1F4eD0N9sMAjJ0Ca/KKy
+         RvqyvlEgphlLOtu3S/VCyguWSUXI2JQ82aiQEVplLvUqR6ehp+485/1RwGjs/v5QA/zI
+         N0FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=//OsLf8gU/9VWp4E/gtONldzoDSVWoyHb1O3vAf2hr4=;
+        b=sEA3fWAln6mq+jARSfL2m7Jg+vYSpG8kbIIcvxA0szSsw6h2Cnia7gF5YzhgTcYt9B
+         A6BFxP+OWYRtMdZ4HV4AX3w65m++hdZCCNNft1g3YQV6DW7IZ6jRs4k394GFdfuLHFcq
+         cQfueqOLpc3jvdoTDG9zXAXAvWt+yoXh6G7DSYjNTMBLN9M7VklL51ekv2ZRgRcLOznh
+         EK0ej2kD/lZbsbwL2ZM5WCJe7jbnLw1BNcHnA6/qL02pNjGhhF4uUbz6GVw7H3snGVv8
+         076rpTTLYRYJbQKfsFU7HldvLGh4/1mcgqJhBozcpAEEZl1p2B7VqbSV5TCHiVqdBrOn
+         fBiA==
+X-Gm-Message-State: AOAM531V/ibRRCYVW7wZgNhFNwxtNY5DBZmaJQBf0pogs1rMdRgOsEL/
+        ZyWx75ZJU3tEO3///gNOBjg=
+X-Google-Smtp-Source: ABdhPJxiRuPq98W1BLwhur1yTAAe2cpv3YkMCzOfdhyDSVOGzCe2PF6bDuaBpcPCaM2RmHI1mCCCeA==
+X-Received: by 2002:a17:90a:5885:: with SMTP id j5mr9815184pji.102.1619858833696;
+        Sat, 01 May 2021 01:47:13 -0700 (PDT)
+Received: from user ([2001:4490:4409:1012:5ea7:af4f:f2d7:caab])
+        by smtp.gmail.com with ESMTPSA id 3sm3915093pff.132.2021.05.01.01.47.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 May 2021 01:47:13 -0700 (PDT)
+Date:   Sat, 1 May 2021 14:17:03 +0530
+From:   Saurav Girepunje <saurav.girepunje@gmail.com>
+To:     b-liu@ti.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     saurav.girepunje@hotmail.com
+Subject: [PATCH] usb: musb: Remove unused function argument
+Message-ID: <20210501084703.GA57167@user>
 MIME-Version: 1.0
-In-Reply-To: <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Remove unused function argument struct dma_controller *dma,
+struct urb *urb and u32 offset from musb_tx_dma_set_mode_mentor
 
-Dne 30. 04. 21 v 19:11 Jerome Brunet napsal(a):
-> 
-> On Fri 30 Apr 2021 at 19:09, Jerome Brunet <jbrunet@baylibre.com> wrote:
-> 
->> On Fri 30 Apr 2021 at 16:55, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->>
->>> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
->>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>>>
->>>> As per USB and UAC2 specs, asynchronous audio sink endpoint
->>>> requires explicit synchronization mechanism (Isochronous
->>>> Feedback Endpoint)
->>>>
->>>> Implement feedback companion endpoint for ISO OUT endpoint
->>>>
->>>> This patch adds all required infrastructure and USB requests
->>>> handling for feedback endpoint. Syncrhonization itself is
->>>> still dummy (feedback ep always reports 'nomimal frequency'
->>>>   e.g. no adjustement is needed). This satisfies hosts that
->>>> require feedback endpoint (like Win10) and poll it periodically
->>>>
->>>> Actual synchronization mechanism should be implemented
->>>> separately
->>>>
->>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
->>>
->>> Hi,
->>>
->>> The HS calculation of Q16.16 feedback value
->>> overflows at some 524kHz, disallowing use of larger samplerates (e.g.
->>> 768kHz or higher).
->>>
->>> I tested the formula used in alsa USB driver
->>> https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
->>> which uses only 10bit shift. The feedback control in UAC2 gadget now
->>> works up to 4M samplerate with 1Hz precision (tested on RPi4 with
->>> bInterval = 1, checked in stream0 proc file on linux host).
->>>
->>> --- a/drivers/usb/gadget/function/u_audio.c
->>> +++ b/drivers/usb/gadget/function/u_audio.c
->>> @@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
->>> usb_device_speed speed,
->>>                   * Prevent integer overflow by calculating in Q12.13
->>> format and
->>>                   * then shifting to Q16.16
->>>                   */
->>> -               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
->>> +               ff = ((freq << 10) + 62) / 125;
->>
->> Pavel, The code posted is a little different from snip here.
->> While I understand the "<< 10" and "/ 125", the "+ 62" would welcome a
->> comment.
-> 
-> OOhhh I got it now ... I think using ROUND_UP() is lot more readable
-> (and maintainable)
-> 
->>
->> Also in the final patch, the calculation is a bit different and moved to
->> "long long" ... but I'm sure the same type of improvement could be done.
->>
->>>          }
->>>          *(__le32 *)buf = cpu_to_le32(ff);
->>>   }
+Signed-off-by: Saurav Girepunje <saurav.girepunje@gmail.com>
+---
+ drivers/usb/musb/musb_host.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-I copied the code from the very same calculation in the current-version 
-alsa usb host driver, as linked above. Hence I assumed it should have no 
-problems in the gadget code either. All I can confirm is that it works 
-in the gadget properly and does not overflow with ff up to 4M. The 
-gadget can easily run at megahertz samplerates, there are standard 
-USB-audio devices with 768kHz samplerates.
+diff --git a/drivers/usb/musb/musb_host.c b/drivers/usb/musb/musb_host.c
+index 8b7d22a0c0fb..14d9b366e605 100644
+--- a/drivers/usb/musb/musb_host.c
++++ b/drivers/usb/musb/musb_host.c
+@@ -563,10 +563,9 @@ musb_rx_reinit(struct musb *musb, struct musb_qh *qh, u8 epnum)
+ 	ep->rx_reinit = 0;
+ }
 
-Thanks a lot. Best regards,
+-static void musb_tx_dma_set_mode_mentor(struct dma_controller *dma,
+-		struct musb_hw_ep *hw_ep, struct musb_qh *qh,
+-		struct urb *urb, u32 offset,
+-		u32 *length, u8 *mode)
++static void musb_tx_dma_set_mode_mentor(struct musb_hw_ep *hw_ep,
++					struct musb_qh *qh,
++					u32 *length, u8 *mode)
+ {
+ 	struct dma_channel	*channel = hw_ep->tx_channel;
+ 	void __iomem		*epio = hw_ep->regs;
+@@ -630,7 +629,7 @@ static bool musb_tx_dma_program(struct dma_controller *dma,
+ 	u8			mode;
 
-Pavel.
-
+ 	if (musb_dma_inventra(hw_ep->musb) || musb_dma_ux500(hw_ep->musb))
+-		musb_tx_dma_set_mode_mentor(dma, hw_ep, qh, urb, offset,
++		musb_tx_dma_set_mode_mentor(hw_ep, qh,
+ 					    &length, &mode);
+ 	else if (is_cppi_enabled(hw_ep->musb) || tusb_dma_omap(hw_ep->musb))
+ 		musb_tx_dma_set_mode_cppi_tusb(dma, hw_ep, qh, urb, offset,
+--
+2.25.1
 
