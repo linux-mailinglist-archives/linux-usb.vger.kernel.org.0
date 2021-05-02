@@ -2,39 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6786F370C7C
-	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67792370C9E
+	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbhEBOG1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 May 2021 10:06:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51726 "EHLO mail.kernel.org"
+        id S233336AbhEBOGv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 May 2021 10:06:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233167AbhEBOF5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 2 May 2021 10:05:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E8EB3613CB;
-        Sun,  2 May 2021 14:05:04 +0000 (UTC)
+        id S233319AbhEBOGO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 2 May 2021 10:06:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C967D613C4;
+        Sun,  2 May 2021 14:05:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619964305;
-        bh=Rxx7QQiEMwx5ectBXmoX2TNIsjxxoayW2YdY6kOtLZg=;
+        s=k20201202; t=1619964322;
+        bh=/sahYzojtlrTQWRIX61Qo06k9qjoOZfkW6tCFKytgg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WPiboLbv2AUvP7spaxYkgbL5yeeX6O79qyNi8+HWDXxDRoDlc5jTYY0ORQizWRh3B
-         MjzrpLZdpILe455cRB6wddc9EGoD1WgbsX8gCM0c3dVp3F7NcgbI73s1QsU+TGtRw1
-         3cLb+m8TTLZ5MttpN9Z2CfKzNSxTcmYx6vwJeoiCQ1hfuwxslrAbdk1H7gPj36G/y3
-         uDpLe9K7OcpQm13ygvxYk2Nyrq1z+gveLs3p7Z3ePf6JA24cDVd0pO8E6W4hA/CtZg
-         UVKkyUvLRQMgsxYyI1LaJ5WgvD29rENOoaz6Dya0w5DonS148qKvLpnSwPUxHfjAJH
-         irlsl9igaGWDQ==
+        b=icwxAm8bSY80RON+4DZB+9l2TdAdlF+H3wA8QIvhMVh+Y3lKrrggi6OCYDoAVM0m7
+         nz1u8z8AEIqZJ+MtAXCQxcF9SGBW/7MMOLvs4K6fb+iwVgd2GNJSCq/kdZXW8mHxKL
+         Y4ETbU5omLbWK+q7TQB5P6tEOcv7rMfb447M/kBQCbUnBHVeZHbLBQlg2IQsRuJVnk
+         kG1AOBet9RSj7v6KqysBsk/Ysuz/fw8OCDEVsUHF+Kj/ux2cHmuF8rMO3mlb0ypKml
+         fSfwhLvHuJeWF/4Ex8pUWH3JzjHRi/NxRXMt7L6T9ftDK/w366VTi9oSPkI09lo45k
+         2S8JKyHSjDUuA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bixuan Cui <cuibixuan@huawei.com>, Hulk Robot <hulkci@huawei.com>,
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 25/34] usb: core: hub: Fix PM reference leak in usb_port_resume()
-Date:   Sun,  2 May 2021 10:04:25 -0400
-Message-Id: <20210502140434.2719553-25-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 03/21] usb: gadget: uvc: add bInterval checking for HS mode
+Date:   Sun,  2 May 2021 10:04:59 -0400
+Message-Id: <20210502140517.2719912-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210502140434.2719553-1-sashal@kernel.org>
-References: <20210502140434.2719553-1-sashal@kernel.org>
+In-Reply-To: <20210502140517.2719912-1-sashal@kernel.org>
+References: <20210502140517.2719912-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -42,37 +45,47 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Bixuan Cui <cuibixuan@huawei.com>
+From: Pawel Laszczak <pawell@cadence.com>
 
-[ Upstream commit 025f97d188006eeee4417bb475a6878d1e0eed3f ]
+[ Upstream commit 26adde04acdff14a1f28d4a5dce46a8513a3038b ]
 
-pm_runtime_get_sync will increment pm usage counter even it failed.
-thus a pairing decrement is needed.
-Fix it by replacing it with pm_runtime_resume_and_get to keep usage
-counter balanced.
+Patch adds extra checking for bInterval passed by configfs.
+The 5.6.4 chapter of USB Specification (rev. 2.0) say:
+"A high-bandwidth endpoint must specify a period of 1x125 µs
+(i.e., a bInterval value of 1)."
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
-Link: https://lore.kernel.org/r/20210408130831.56239-1-cuibixuan@huawei.com
+The issue was observed during testing UVC class on CV.
+I treat this change as improvement because we can control
+bInterval by configfs.
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+Link: https://lore.kernel.org/r/20210308125338.4824-1-pawell@gli-login.cadence.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/hub.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_uvc.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4d3de33885ff..cd61860cada5 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3537,7 +3537,7 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 	u16		portchange, portstatus;
+diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
+index d8ce7868fe22..169e73ed128c 100644
+--- a/drivers/usb/gadget/function/f_uvc.c
++++ b/drivers/usb/gadget/function/f_uvc.c
+@@ -645,7 +645,12 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
  
- 	if (!test_and_set_bit(port1, hub->child_usage_bits)) {
--		status = pm_runtime_get_sync(&port_dev->dev);
-+		status = pm_runtime_resume_and_get(&port_dev->dev);
- 		if (status < 0) {
- 			dev_dbg(&udev->dev, "can't resume usb port, status %d\n",
- 					status);
+ 	uvc_hs_streaming_ep.wMaxPacketSize =
+ 		cpu_to_le16(max_packet_size | ((max_packet_mult - 1) << 11));
+-	uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
++
++	/* A high-bandwidth endpoint must specify a bInterval value of 1 */
++	if (max_packet_mult > 1)
++		uvc_hs_streaming_ep.bInterval = 1;
++	else
++		uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
+ 
+ 	uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(max_packet_size);
+ 	uvc_ss_streaming_ep.bInterval = opts->streaming_interval;
 -- 
 2.30.2
 
