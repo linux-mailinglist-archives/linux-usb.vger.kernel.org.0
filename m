@@ -2,36 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0839E370CAC
-	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9694370CD0
+	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbhEBOHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 May 2021 10:07:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51596 "EHLO mail.kernel.org"
+        id S232707AbhEBOHe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 May 2021 10:07:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233430AbhEBOGZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 2 May 2021 10:06:25 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 68DEA61476;
-        Sun,  2 May 2021 14:05:26 +0000 (UTC)
+        id S233165AbhEBOG1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 2 May 2021 10:06:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 96323613B0;
+        Sun,  2 May 2021 14:05:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619964327;
-        bh=rBY/7Bk1Sr8TdKUOYXS2eSOAZqHHk1x1bDMTDS6FW18=;
+        s=k20201202; t=1619964333;
+        bh=Jfp2iIYgHJRSaV2HyRvRnNTudasMjHvEd9wkE7q3ZyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pjvgmQvQq2YliPXChebgbuPJ3aGs8/HsFfJCLfAgsJnh/Xo0IlfSEZbaHMl2tPMA/
-         tbPSuuLD3KpPAhWjxTXZFCtv9uI0m/YjK5sQuKOgQAXy2pvl5UXgeYupnD35p3WnQn
-         Z+Px1ZUxasAVF09tLdwvIJGV4D7FA9gI8ZdBsIZmTCrnaP4blILRBGuuN9djqyS6Xd
-         VKJgj8cOQVvyrWnnL+hKxvAz8hMX0ObFuhmIqEjMRoWuFxOgn3maIi/wvtJlLdWDXg
-         ren0rDIDisLvDSzxeEDdmB0erYasPVJhYyLELuWnEkCtF+/RvWIwa2qQOE3NHTT4pM
-         wFNUIYCzcthng==
+        b=t7ESafim1Qbqapyl8xqbB+WwJ/0DxvLwicNtN7+KnlIe57VICQi8YWshLcbGVw93B
+         a/IoS08VXLtFrjap5rWWBGpoKKlrKPCuBvStKiUECiua6EEn9ttgMN192ePPuv20oT
+         c9kjxgmN9cWgvAFaNaIsBzPGBMxjey040Di3Bo7V34LXZNEvVTwbCp+vzOvl5CRDKg
+         aNx+HAAGmTJAM7kDp08rcsF/CsueES9oUkxpa+WfJrX9Lr8FuQwZK8Q6GeTE+tAuSf
+         nyrd2WCYCsHuUEXC5nmjZF4o8CMO1RjnRygc9OwVD8x6MAkdTXL6Yv/bBTYhw8Xn3i
+         7+CZgKBDktlWw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 07/21] usb: xhci: Fix port minor revision
-Date:   Sun,  2 May 2021 10:05:03 -0400
-Message-Id: <20210502140517.2719912-7-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 12/21] usb: xhci-mtk: support quirk to disable usb2 lpm
+Date:   Sun,  2 May 2021 10:05:08 -0400
+Message-Id: <20210502140517.2719912-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210502140517.2719912-1-sashal@kernel.org>
 References: <20210502140517.2719912-1-sashal@kernel.org>
@@ -43,49 +44,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 64364bc912c01b33bba6c22e3ccb849bfca96398 ]
+[ Upstream commit bee1f89aad2a51cd3339571bc8eadbb0dc88a683 ]
 
-Some hosts incorrectly use sub-minor version for minor version (i.e.
-0x02 instead of 0x20 for bcdUSB 0x320 and 0x01 for bcdUSB 0x310).
-Currently the xHCI driver works around this by just checking for minor
-revision > 0x01 for USB 3.1 everywhere. With the addition of USB 3.2,
-checking this gets a bit cumbersome. Since there is no USB release with
-bcdUSB 0x301 to 0x309, we can assume that sub-minor version 01 to 09 is
-incorrect. Let's try to fix this and use the minor revision that matches
-with the USB/xHCI spec to help with the version checking within the
-driver.
+The xHCI driver support usb2 HW LPM by default, here add support
+XHCI_HW_LPM_DISABLE quirk, then we can disable usb2 lpm when
+need it.
 
-Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Link: https://lore.kernel.org/r/ed330e95a19dc367819c5b4d78bf7a541c35aa0a.1615432770.git.Thinh.Nguyen@synopsys.com
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/1617181553-3503-4-git-send-email-chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci-mem.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/usb/host/xhci-mtk.c | 3 +++
+ drivers/usb/host/xhci-mtk.h | 1 +
+ 2 files changed, 4 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 9e87c282a743..2461be2a8748 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2134,6 +2134,15 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index 09d5a789fcd5..f4b2e766f195 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -395,6 +395,8 @@ static void xhci_mtk_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	xhci->quirks |= XHCI_SPURIOUS_SUCCESS;
+ 	if (mtk->lpm_support)
+ 		xhci->quirks |= XHCI_LPM_SUPPORT;
++	if (mtk->u2_lpm_disable)
++		xhci->quirks |= XHCI_HW_LPM_DISABLE;
  
- 	if (major_revision == 0x03) {
- 		rhub = &xhci->usb3_rhub;
-+		/*
-+		 * Some hosts incorrectly use sub-minor version for minor
-+		 * version (i.e. 0x02 instead of 0x20 for bcdUSB 0x320 and 0x01
-+		 * for bcdUSB 0x310). Since there is no USB release with sub
-+		 * minor version 0x301 to 0x309, we can assume that they are
-+		 * incorrect and fix it here.
-+		 */
-+		if (minor_revision > 0x00 && minor_revision < 0x10)
-+			minor_revision <<= 4;
- 	} else if (major_revision <= 0x02) {
- 		rhub = &xhci->usb2_rhub;
- 	} else {
+ 	/*
+ 	 * MTK xHCI 0.96: PSA is 1 by default even if doesn't support stream,
+@@ -467,6 +469,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	mtk->lpm_support = of_property_read_bool(node, "usb3-lpm-capable");
++	mtk->u2_lpm_disable = of_property_read_bool(node, "usb2-lpm-disable");
+ 	/* optional property, ignore the error if it does not exist */
+ 	of_property_read_u32(node, "mediatek,u3p-dis-msk",
+ 			     &mtk->u3p_dis_msk);
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index cc59d80b663b..1601ca9a388e 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -123,6 +123,7 @@ struct xhci_hcd_mtk {
+ 	struct phy **phys;
+ 	int num_phys;
+ 	bool lpm_support;
++	bool u2_lpm_disable;
+ 	/* usb remote wakeup */
+ 	bool uwk_en;
+ 	struct regmap *uwk;
 -- 
 2.30.2
 
