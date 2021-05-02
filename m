@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59955370C72
-	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F18370C79
+	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233401AbhEBOGW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 May 2021 10:06:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51056 "EHLO mail.kernel.org"
+        id S232943AbhEBOG0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 May 2021 10:06:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51698 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233090AbhEBOFv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 2 May 2021 10:05:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C34F7613CD;
-        Sun,  2 May 2021 14:04:58 +0000 (UTC)
+        id S233156AbhEBOF4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 2 May 2021 10:05:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B8B45613D4;
+        Sun,  2 May 2021 14:05:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619964299;
-        bh=1XPmX+ryxpQMokR0F3wtuA10t/1H/U+b/wBjD+5IiCI=;
+        s=k20201202; t=1619964304;
+        bh=jmHrcJkeLpaMF2gfUFLZ3/4K7LZ0sMd5TJntExn0exY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lZ09o4ZMTLE8RJLxXwbtVOqzwYFojZbauLKuqOKVYBqzqjKzc661YFHat37jR6Qrl
-         eXNnxFI/7V8bAuGDyuqV52KNx4lBj86EhhZxMq5nsiY5zPA4NdUy4ZiJGl3fokEQdN
-         Ix1qrd6bedSnD8KitIOql1Y03L6mcUQf7OOpx52k8WiD/BYkLbi1YZfGx3iIFNRL9F
-         XEDBBE9Txa2zrgeR9aaWNYG1N025SJ3Lg+1VOesrM6e7OgLkC06sn4CvQQr8yfMm6s
-         C1nt+UXgwGopQyNfST6jm/HQnjkcXY6tp5UP5Pu6ZM6quDAKRHHN53/ytVTUfNUCdE
-         RIISX2otI12Bw==
+        b=ZdzeZmPIBO+eLSw9U/UA2AjAZbPDEWUwPjJIiOA1R4bAMtHa1YPoPaYwBoJ97MEhL
+         q8jTUjqGf/q/471+rV5Ep7C2amv7JR+/aGcr1UfSKUyWLJc9Ow0cuYHBYJ4QqZckRo
+         N/sP5TQUW3syzu4elFaWOcRYJBJRg8VEXciZXH6U+H4EiL/wfxI6ryf5gIhyAr9+aD
+         e7nZBoDDj9o2Bj7lPCb/5oPxgYfzkAq8MObd8FRVp1zM2I5Btjs6zh3HnzR1Bk2n1v
+         mujCSpd9psHAgHTEjpN6T570jreeJdB12IOX1gxDeAD9HuWYBl/bY7QSRhtIs4Hw9F
+         swc9JMqjf8JTQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     Bixuan Cui <cuibixuan@huawei.com>, Hulk Robot <hulkci@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 20/34] xhci: fix potential array out of bounds with several interrupters
-Date:   Sun,  2 May 2021 10:04:20 -0400
-Message-Id: <20210502140434.2719553-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 24/34] usb: musb: fix PM reference leak in musb_irq_work()
+Date:   Sun,  2 May 2021 10:04:24 -0400
+Message-Id: <20210502140434.2719553-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210502140434.2719553-1-sashal@kernel.org>
 References: <20210502140434.2719553-1-sashal@kernel.org>
@@ -42,52 +42,37 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Bixuan Cui <cuibixuan@huawei.com>
 
-[ Upstream commit 286fd02fd54b6acab65809549cf5fb3f2a886696 ]
+[ Upstream commit 9535b99533904e9bc1607575aa8e9539a55435d7 ]
 
-The Max Interrupters supported by the controller is given in a 10bit
-wide bitfield, but the driver uses a fixed 128 size array to index these
-interrupters.
+pm_runtime_get_sync will increment pm usage counter even it failed.
+thus a pairing decrement is needed.
+Fix it by replacing it with pm_runtime_resume_and_get to keep usage
+counter balanced.
 
-Klockwork reports a possible array out of bounds case which in theory
-is possible. In practice this hasn't been hit as a common number of Max
-Interrupters for new controllers is 8, not even close to 128.
-
-This needs to be fixed anyway
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20210406070208.3406266-4-mathias.nyman@linux.intel.com
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
+Link: https://lore.kernel.org/r/20210408091836.55227-1-cuibixuan@huawei.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/usb/musb/musb_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 143e4002e561..de05ac9d3ae1 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -228,6 +228,7 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
- 	int err, i;
- 	u64 val;
-+	u32 intrs;
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 166f68f639c2..70ef603f7bb9 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -1932,7 +1932,7 @@ static void musb_irq_work(struct work_struct *data)
+ 	struct musb *musb = container_of(data, struct musb, irq_work.work);
+ 	int error;
  
- 	/*
- 	 * Some Renesas controllers get into a weird state if they are
-@@ -266,7 +267,10 @@ static void xhci_zero_64b_regs(struct xhci_hcd *xhci)
- 	if (upper_32_bits(val))
- 		xhci_write_64(xhci, 0, &xhci->op_regs->cmd_ring);
+-	error = pm_runtime_get_sync(musb->controller);
++	error = pm_runtime_resume_and_get(musb->controller);
+ 	if (error < 0) {
+ 		dev_err(musb->controller, "Could not enable: %i\n", error);
  
--	for (i = 0; i < HCS_MAX_INTRS(xhci->hcs_params1); i++) {
-+	intrs = min_t(u32, HCS_MAX_INTRS(xhci->hcs_params1),
-+		      ARRAY_SIZE(xhci->run_regs->ir_set));
-+
-+	for (i = 0; i < intrs; i++) {
- 		struct xhci_intr_reg __iomem *ir;
- 
- 		ir = &xhci->run_regs->ir_set[i];
 -- 
 2.30.2
 
