@@ -2,90 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D1C370D10
-	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 16:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F9E370D81
+	for <lists+linux-usb@lfdr.de>; Sun,  2 May 2021 17:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233644AbhEBOIb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 2 May 2021 10:08:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50872 "EHLO mail.kernel.org"
+        id S231941AbhEBO5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 2 May 2021 10:57:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46112 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233824AbhEBOH4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 2 May 2021 10:07:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6575F613CB;
-        Sun,  2 May 2021 14:06:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1619964386;
-        bh=TsBqVVyyjxdC9PHa8Ph95yHSL6/Vd2/seeImbmewB/c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UQ2Yl2lyhpNRna0WEHGIOjLjIsybCU578HNVg5N/2GjvZjT6Kl5HvkGmlNzZEPlM/
-         CwpBC1ZGIzJ+DcD8PPK4rqnLhF9872dQduoWk3EB1RqVPcsSzVghw0oc+TCOjWM3V3
-         TNK47r0leKMJ70E6d+3VKYhU3OpojB8sKsyV1NZ9sUbfPAysWzC72sanCjDUy95KZ1
-         nB0ygK1TTJx2MCeS0/9/aiZWZeGqC9NU8Hs3A625TdaVRxHJBxpka8pXBmdvLjqtUf
-         7wbqkhzOAvEEEvVt6+Ln7+1CkpnfrqrMP9C7mCQMS9jFXmmrGaA8RgpuaAqH4TMIJW
-         UyitAS6Fnl/HQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pawel Laszczak <pawell@cadence.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 02/10] usb: gadget: uvc: add bInterval checking for HS mode
-Date:   Sun,  2 May 2021 10:06:14 -0400
-Message-Id: <20210502140623.2720479-2-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210502140623.2720479-1-sashal@kernel.org>
-References: <20210502140623.2720479-1-sashal@kernel.org>
+        id S230110AbhEBO5G (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 2 May 2021 10:57:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D0EE600D1;
+        Sun,  2 May 2021 14:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1619967373;
+        bh=i+GNc/hZ8lPa7KbkQ305SjPnkwd3pho1sduIJrmnOa0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KvWQTvX2wAQGums8bmADZVRytG7IzM5wghvGfObjAlQGHi3MfsVciwpjpF2aLQK8b
+         8UbYxXVoef92KS4f9UuvVxj84esAAKlVm5Y43X+cT2Se9nYnM+b9p1BwykB0AcunJI
+         5ia6wiL24nweUVj0qxm6cLxSFm4QPc1hWtEQZgGk=
+Date:   Sun, 2 May 2021 16:56:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.12 16/79] usb: dwc3: gadget: Remove invalid
+ low-speed setting
+Message-ID: <YI69i5JE3NdIx4Sb@kroah.com>
+References: <20210502140316.2718705-1-sashal@kernel.org>
+ <20210502140316.2718705-16-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210502140316.2718705-16-sashal@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+On Sun, May 02, 2021 at 10:02:13AM -0400, Sasha Levin wrote:
+> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> [ Upstream commit 0c59f678fcfc6dd53ba493915794636a230bc4cc ]
+> 
+> None of the DWC_usb3x IPs (and all their versions) supports low-speed
+> setting in device mode. In the early days, our "Early Adopter Edition"
+> DWC_usb3 databook shows that the controller may be configured to operate
+> in low-speed, but it was revised on release. Let's remove this invalid
+> speed setting to avoid any confusion.
+> 
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Link: https://lore.kernel.org/r/258b1c7fbb966454f4c4c2c1367508998498fc30.1615509438.git.Thinh.Nguyen@synopsys.com
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  drivers/usb/dwc3/core.c   | 1 -
+>  drivers/usb/dwc3/core.h   | 2 --
+>  drivers/usb/dwc3/gadget.c | 8 --------
+>  3 files changed, 11 deletions(-)
 
-[ Upstream commit 26adde04acdff14a1f28d4a5dce46a8513a3038b ]
+This is a "cleanup only" and does not fix or solve anything, so it can
+be dropped from all of the kernels it has been "autoselected" for.
 
-Patch adds extra checking for bInterval passed by configfs.
-The 5.6.4 chapter of USB Specification (rev. 2.0) say:
-"A high-bandwidth endpoint must specify a period of 1x125 µs
-(i.e., a bInterval value of 1)."
+thanks,
 
-The issue was observed during testing UVC class on CV.
-I treat this change as improvement because we can control
-bInterval by configfs.
-
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-Link: https://lore.kernel.org/r/20210308125338.4824-1-pawell@gli-login.cadence.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/usb/gadget/function/f_uvc.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-index f8a1881609a2..89da34ef7b3f 100644
---- a/drivers/usb/gadget/function/f_uvc.c
-+++ b/drivers/usb/gadget/function/f_uvc.c
-@@ -625,7 +625,12 @@ uvc_function_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	uvc_hs_streaming_ep.wMaxPacketSize =
- 		cpu_to_le16(max_packet_size | ((max_packet_mult - 1) << 11));
--	uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
-+
-+	/* A high-bandwidth endpoint must specify a bInterval value of 1 */
-+	if (max_packet_mult > 1)
-+		uvc_hs_streaming_ep.bInterval = 1;
-+	else
-+		uvc_hs_streaming_ep.bInterval = opts->streaming_interval;
- 
- 	uvc_ss_streaming_ep.wMaxPacketSize = cpu_to_le16(max_packet_size);
- 	uvc_ss_streaming_ep.bInterval = opts->streaming_interval;
--- 
-2.30.2
-
+greg k-h
