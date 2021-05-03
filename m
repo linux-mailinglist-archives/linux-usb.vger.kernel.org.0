@@ -2,76 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C972371216
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 09:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37DE371238
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 10:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233009AbhECHju (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 03:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232953AbhECHjo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 03:39:44 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789AEC061756
-        for <linux-usb@vger.kernel.org>; Mon,  3 May 2021 00:38:37 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id h20so2355614plr.4
-        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 00:38:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IYFsPOhEkozhRMhOWjWI11yqPrz5tjAXd8GPZbpcT4M=;
-        b=XqxfYNYp/5H+2wt1W9YwZzLSm1v8EPSM0AF/OLqW8tYNoPa2nC1qTrcdw5io1BkLrP
-         nJ1QcJjJ9Hr1xbg0PLokqNUqbqIw5jUioZMJRH9vzkrp6e8g7BkLpNk0yPAm6lkja999
-         EoG52EM8Mjl1xUrcgAo1lCOWGh1E9IumHHYQPqyPmgKAXJ6NrLeb8XRxmdvtoyl2I2j1
-         QBWNTBpfWP0fuEklUdXJ6j7UqIGhBKkcWx6E9YITZ20/73KAYku7EJ+drOtDV+db2wgq
-         URszJ3yN0Yt3V12XVsGJX2fBkujF6uOhcUT3VmBpHSwKxCiFs2pFpuSZfu0hfygsN0rk
-         RB5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IYFsPOhEkozhRMhOWjWI11yqPrz5tjAXd8GPZbpcT4M=;
-        b=WK2lvgVRjui+az4Ml9Vh71VLj8xzXUJEAKjI+H42wP9KwqQwJVDO5IjV9dX895zFlH
-         iWHPCJrtxMsgWgBSej+yE8dAKLWe6gMkN/DojBq8BN3QYe5+FScyKlX6644AtYvQiPCT
-         wL5mLc0Q1oHc13qDxmuUJ5Z+RoZsDMyBLdjPscWfsESBa0FY5mZ0KyqspXnJCJXQ9VT4
-         5OCS50Ujc/DOiH5s3KgbtOOqg7+3YRO/i/vD12lG9ZL01ezEkIaVr/3K+y95dISc3BV7
-         RuDcEeSpTlxz6o0Ai7uTAq7OplcAQpmzo0/ATRHBcySvnXvsbHSREPwZptnLfkTFwsPf
-         k4vg==
-X-Gm-Message-State: AOAM531K4A6ZdYRSFAjxkOor5zJ3NFRIC8eOEJcnUDEvl1CmU/8wLojx
-        6+y2DmpXbGyT9ZcBwVdExFLvwa6efx1d3fXhXJwSPA==
-X-Google-Smtp-Source: ABdhPJyFYRXBJAZ5sIncasHAQHWFRQjul8zYGS09rVBKOVpFVSk8arNYcmBT7NZ+2TrxLzf2ZHb9Kls4ePKD0u2UMco=
-X-Received: by 2002:a17:90a:19d2:: with SMTP id 18mr3681020pjj.205.1620027516686;
- Mon, 03 May 2021 00:38:36 -0700 (PDT)
+        id S232986AbhECIBX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 04:01:23 -0400
+Received: from mga02.intel.com ([134.134.136.20]:58342 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229817AbhECIBW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 04:01:22 -0400
+IronPort-SDR: YZVN5P/b+Wzf/NlMy+kBz1GmpzWpkdew9Lq2TheZ2DEctudbi0QXkk8pNVg6dP1K/mooCGng9k
+ PDBMQGyr/PrQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9972"; a="184826537"
+X-IronPort-AV: E=Sophos;i="5.82,268,1613462400"; 
+   d="scan'208";a="184826537"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2021 01:00:28 -0700
+IronPort-SDR: 0BtbVBvW4cKwxyUMXLuMNzqQR8eNMkGREOUVxBr1myj9cvQZmdyv3RaoH6saWoxMkb2gW4mAbU
+ vEVYOaACypdg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,268,1613462400"; 
+   d="scan'208";a="530292089"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 03 May 2021 01:00:21 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 03 May 2021 11:00:20 +0300
+Date:   Mon, 3 May 2021 11:00:20 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Imre Deak <imre.deak@intel.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/9] drm/connector: Add support for out-of-band hotplug
+ notification
+Message-ID: <YI+tlE35i+6F/WUO@kuha.fi.intel.com>
+References: <20210428215257.500088-1-hdegoede@redhat.com>
+ <20210428215257.500088-5-hdegoede@redhat.com>
 MIME-Version: 1.0
-References: <1619777783-24116-1-git-send-email-loic.poulain@linaro.org>
- <1619777783-24116-2-git-send-email-loic.poulain@linaro.org>
- <bf02f5ecf84b7eaaa05768edd933a321f701e79f.camel@suse.com> <87a6pek9tn.fsf@miraculix.mork.no>
-In-Reply-To: <87a6pek9tn.fsf@miraculix.mork.no>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Mon, 3 May 2021 09:47:12 +0200
-Message-ID: <CAMZdPi89yOStvH8Z9ZwMkLzUB9QgBBzL1xxkUkSz3mwZ8+1nZA@mail.gmail.com>
-Subject: Re: [RFC net-next 2/2] usb: class: cdc-wdm: WWAN framework integration
-To:     =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Network Development <netdev@vger.kernel.org>,
-        USB <linux-usb@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210428215257.500088-5-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 1 May 2021 at 12:49, Bj=C3=B8rn Mork <bjorn@mork.no> wrote:
->
-> Oliver Neukum <oneukum@suse.com> writes:
->
-> > This absolutely makes sense,
->
-> +1
+Hi Hans,
 
-Ok, thanks, then I'll resubmit a proper patch set with comments
-addressed once the merge window is closed and net-next open.
+On Wed, Apr 28, 2021 at 11:52:52PM +0200, Hans de Goede wrote:
+> +/**
+> + * struct drm_connector_oob_hotplug_event_data: OOB hotplug event data
+> + *
+> + * Contains data about out-of-band hotplug events, signalled through
+> + * drm_connector_oob_hotplug_event().
+> + */
+> +struct drm_connector_oob_hotplug_event_data {
+> +	/**
+> +	 * @connected: New connected status for the connector.
+> +	 */
+> +	bool connected;
+> +	/**
+> +	 * @dp_lanes: Number of available displayport lanes, 0 if unknown.
+> +	 */
+> +	int dp_lanes;
+> +	/**
+> +	 * @orientation: Connector orientation.
+> +	 */
+> +	enum typec_orientation orientation;
+> +};
 
-Thanks,
-Loic
+I don't think the orientation is relevant. It will always be "normal"
+from DP PoW after muxing, no?
+
+I'm also not sure those deatils are enough in the long run. Based on
+what I've understood from our graphics team guys, for example knowing
+if multi-function is preferred may be important in some cases.
+
++Imre.
+
+All of that, and more, is already available in the Configuration VDO
+Status VDO that the we have negotiated with the DP partner. Both those
+VDOs are part of struct typec_displayport_data. I think we should
+simply supply that structure to the DRM code instead of picking those
+details out of it...
+
+>  /**
+>   * struct drm_tv_connector_state - TV connector related states
+>   * @subconnector: selected subconnector
+> @@ -1110,6 +1132,15 @@ struct drm_connector_funcs {
+>  	 */
+>  	void (*atomic_print_state)(struct drm_printer *p,
+>  				   const struct drm_connector_state *state);
+> +
+> +	/**
+> +	 * @oob_hotplug_event:
+> +	 *
+> +	 * This will get called when a hotplug-event for a drm-connector
+> +	 * has been received from a source outside the display driver / device.
+> +	 */
+> +	void (*oob_hotplug_event)(struct drm_connector *connector,
+> +				  struct drm_connector_oob_hotplug_event_data *data);
+
+So I would not try to generalise this like that. This callback should
+be USB Type-C DP altmode specific:
+
+	void (*oob_hotplug_event)(struct drm_connector *connector,
+                                  struct typec_displayport_data *data);
+
+Or like this if the orientation can really be reversed after muxing:
+
+	void (*oob_hotplug_event)(struct drm_connector *connector,
+				  struct typec_altmode *altmode,
+                                  struct typec_displayport_data *data);
+
+You can now check the orientation separately with
+typec_altmode_get_orientation() if necessary.
+
+
+thanks,
+
+-- 
+heikki
