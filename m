@@ -2,238 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE8C3720BC
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 21:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1013720F0
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 21:51:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbhECTpz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 15:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbhECTps (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 15:45:48 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272A6C061342
-        for <linux-usb@vger.kernel.org>; Mon,  3 May 2021 12:44:55 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id d10so4458596pgf.12
-        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 12:44:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hja9auOn75p4aK0ghbKzd1MlJ8IVXPiCDnX4JLLyZX4=;
-        b=K8fe1s5w14YtqIEkb9Taxd6ax59egSJrRTd9/4yVIHEQ0uRMIhHvwJKZZZBJP+7nP7
-         G26ZT7ilTBJRYZFNBDc6lua+0HrmG6Bgct/HlcHj5STU8UAn1oQYWr5D7OLzNXLuoMzr
-         EOTRazuqbXNZJaIU1XzZiPilKtArcyzp7tUj8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hja9auOn75p4aK0ghbKzd1MlJ8IVXPiCDnX4JLLyZX4=;
-        b=i9MOZeHTqQwco8nG2MSLN6eB9Y+T+XYZhhvHpB7t6emkGzMBqc7Avzzr9B6FwPskL4
-         48KsW6H1WO8wUYnklv3CTJ7MI0zoz0bpZRwzKqLdAbUzAbPn8kZ1r9RvsjjAnb8cMxqL
-         56HdL0vwyhbR/xbwYCLKpABNdJ2GrTqiQgGCIoaqMCHu3TW6/4pV8mz5Ti5Q6pl1Y1EU
-         xmm8ev2LRw87oZn80zsH24mpRnKI4mcKDhGM2Sk3+YfQjHZf2PkiU9p4XjRHTsXidX9u
-         FpypYjlpRlHdmWDaFCWUVRr/MPqhBExK5YXBsq6E2pReP0IFZE/QgFCxsSxP0E1KuYvy
-         shHQ==
-X-Gm-Message-State: AOAM531xr4y01SSGcW1DTolOEujqmzoXOOdZtoP03H/YJD8Ng5/jzZwm
-        V45yT41BPcNfz0XS1460W9NmBw==
-X-Google-Smtp-Source: ABdhPJy8GcUAyGSDv7zL2vGPqGDTyfS7Nu88oXV6pdwrq43s4xnukx4trHrQgyN5BYlXVQaD2W0/UQ==
-X-Received: by 2002:a65:6a08:: with SMTP id m8mr19838131pgu.146.1620071094758;
-        Mon, 03 May 2021 12:44:54 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:8584:3fd:2adf:a655])
-        by smtp.gmail.com with UTF8SMTPSA id r32sm382738pgm.49.2021.05.03.12.44.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 May 2021 12:44:54 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v9 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Mon,  3 May 2021 12:44:39 -0700
-Message-Id: <20210503124408.v9.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-In-Reply-To: <20210503194439.3289065-1-mka@chromium.org>
-References: <20210503194439.3289065-1-mka@chromium.org>
+        id S229670AbhECTwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 15:52:01 -0400
+Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:28597 "EHLO
+        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229656AbhECTwA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 15:52:00 -0400
+X-Greylist: delayed 357 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 May 2021 15:52:00 EDT
+ARC-Seal: i=1; a=rsa-sha256; t=1620071104; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=AO3e/iyBsU9q0grnkse0inZaEvE4YPB7LSSjvYnrcCmd/t3O1MPbygWselK7yg/iaD
+    PB7nMvXIXxUsjlb68J7/iCC+f6vS5WSfIL6FcTO9R1aPcQ+N4loJCE8CyOIBstQ1H8Mu
+    YF3NIJRw8HA2eIJAUbqtxyjUgiAw8ANfNOdl0FPKzykVlmPmsALxF/Vp/rzvJLXB48yC
+    868/WIPHiiASMTXGqmTS7cSlqWwvhcwg3SsJ3BU5rZmx024KflMmaDvUrRXohH9jf1YB
+    QGFuwoBiXTzrv2LA/61dhX2UBQ5dQNCJ0T/Z77Q/RDP+9gq++p4i1HCSDDE570iZB+wo
+    ErDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1620071104;
+    s=strato-dkim-0002; d=strato.com;
+    h=Date:Message-ID:Cc:To:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=02XrD1wBcNqKWTE8sgdDN73vkh/mTjzRVvyzGnaRemM=;
+    b=Jt1cPjjPP6uRZTBQSLYwKnwpWDzut0O1yHpv/ny1aQLRq7GGNH9OQrnd5xkK6oN/OW
+    AiaEFJuXDzEPvdyOBIsVSwh0dw1LY+UPyET6HG3BmoonuGOjeqc6bjX5mEz4XxQ+mXK/
+    v4vcIiqvS35usPtLV/eUESjfIORCVP/R57Xe3w/S22mUXfu70kQVGpm48E2PS+sydnFC
+    +m/dHW2k8nIIAmIG7jLw9M7SUbN6bsDPYZ17nqgYOs2UX4wEx1nqzo6g+YbN6JBamAiJ
+    DaBFARNniNx3K/bcyrPspwPmPE1SoZgRTdwcJpIWwI+p3oedMbsG6VIYJX1/slXxPhSt
+    JHvA==
+ARC-Authentication-Results: i=1; strato.com;
+    dkim=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1620071104;
+    s=strato-dkim-0002; d=woltersonline.net;
+    h=Date:Message-ID:Cc:To:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=02XrD1wBcNqKWTE8sgdDN73vkh/mTjzRVvyzGnaRemM=;
+    b=KAk4mhj8gqwjY6W5O9IVxdSfn7vLCqrANFvd8tLctXPIB6Bm9uxFJb8QKs0fdpI8dn
+    /sYZB6s2kgmzk7pjVYaMWfczCFezTecEXw/ablVpLisu9H4y5Az3RPBrA6pSJg+pVBBY
+    sIHPZOoEcaT681L4LSTT3HUebBzB1/bkHmojEx0eTJJbjIDgtfOT4NqU2jtb32CYbpEp
+    ASiEeYUo2zvO8jtcze/fDzzD6GEJKTJAr8suEOlRMD2vB0TkQoJpW7HkAHRtrMQNv7ac
+    neJmGRl0OFJc3Bw/UYz8lkW+5bvLU3MUKFbkbG9rZiTxEDzdlytDaI2t2YSb+FaGu/Vm
+    Gntg==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":PmMGcFK8W+iThef0QhYq5H6NV6kE4K87ZlTeLyeqymu1mQeG9z7rBMC2G76s35j7/KPYpAPwS/9Bm81huZu14CGGU5EdABpoMyiq+2e2RPUS/g=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPv6:2003:c9:8f3f:9c9f:5ff8:a7e2:3f7c:6f69]
+    by smtp.strato.de (RZmta 47.25.5 AUTH)
+    with ESMTPSA id w064ebx43Jj40WZ
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 3 May 2021 21:45:04 +0200 (CEST)
+From:   Robert Wolters <robert@woltersonline.net>
+Subject: CR for ftdi_sio.c, SCS P4 Dragon
+To:     johan@kernel.org
+Cc:     linux-usb@vger.kernel.org
+Message-ID: <b7ec696f-c5ca-30e6-0769-4c6e925e8367@woltersonline.net>
+Date:   Mon, 3 May 2021 21:45:04 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed;
+ boundary="------------E98C902A3C0B0221C3D860E0"
+Content-Language: en-GB
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' and 'boot-on' properties from the hub regulator, since
-the regulator is now managed by the onboard_usb_hub driver.
+This is a multi-part message in MIME format.
+--------------E98C902A3C0B0221C3D860E0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Dear Johan,
 
-Changes in v9:
-- none
+I'd like to submit a small change request for the ftdi_sio.c Kernel module.
 
-Changes in v8:
-- none
+Problem: setting a special Baud-rate for the SCS P4 Dragon series 
+(Pactor 4) of short-wave modems.
 
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
+Solution: as implemented in the patch file attached. This change has 
+been tested on several Debian-based machines, and works okay. Which is 
+not a surprise, as only the Baud-rate is set, using a specific divisor, 
+in a same manner as is already done for other devices currently 
+supported by ftdi_sio.
 
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
+I'm also submitting this change request on behalf of SCS GmbH & Co KG of 
+Hanau in Germany.
 
-Changes in v5:
-- patch added to the series
+Many thanks in advance. Looking forward to any feedback and/or comments.
 
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 +++++++----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 11 ++++------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 +++++++----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 21 ++++++++++++++++---
- 4 files changed, 38 insertions(+), 32 deletions(-)
+Regards,
+Robert Wolters (DM4RW)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 5c997cd90069..bae85f6b2bfa 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -23,17 +23,6 @@ &charger_thermal {
- 	status = "disabled";
+Südstrasse 4b
+82131 Stockdorf (nr Munich)
+Germany
+
+
+--------------E98C902A3C0B0221C3D860E0
+Content-Type: text/x-patch; charset=UTF-8;
+ name="ftdi_sio.c.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="ftdi_sio.c.patch"
+
+--- ftdi_sio.c  2021-04-21 13:01:00.000000000 +0200
++++ ftdi_sio_new.c      2021-04-26 18:53:00.819175707 +0200
+@@ -97,6 +97,7 @@
+ static int   ftdi_8u2232c_probe(struct usb_serial *serial);
+ static void  ftdi_USB_UIRT_setup(struct ftdi_private *priv);
+ static void  ftdi_HE_TIRA1_setup(struct ftdi_private *priv);
++static void  ftdi_SCS_DR7X00_setup(struct ftdi_private *priv);
+ 
+ static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
+        .probe  = ftdi_jtag_probe,
+@@ -122,6 +123,10 @@
+        .probe  = ftdi_8u2232c_probe,
  };
  
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -42,3 +31,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
++static const struct ftdi_sio_quirk ftdi_SCS_DR7X00_quirk = {
++       .port_probe = ftdi_SCS_DR7X00_setup,
 +};
 +
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index d9fbcc7bc5bd..45f014c3539d 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -23,13 +23,10 @@ &charger_thermal {
- 	status = "disabled";
- };
+ /*
+  * The 8U232AM has the same API as the sio except for:
+  * - it can support MUCH higher baudrates; up to:
+@@ -157,8 +162,12 @@
+        { USB_DEVICE(FTDI_VID, FTDI_EV3CON_PID) },
+        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_0_PID) },
+        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_1_PID) },
+-       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
+-       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },
++/*     { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
++       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },*/
++       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) ,
++               .driver_info = (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },
++       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) ,
++               .driver_info = (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },
+        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_4_PID) },
+        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_5_PID) },
+        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_6_PID) },
+@@ -2296,6 +2305,15 @@
+        priv->force_rtscts = 1;
+ }
  
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 2b522f9e0d8f..2f5263e3d1b9 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -42,17 +42,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -61,6 +50,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
++/* Setup for the SCS P4dragon DR-7X00 devices, which require hardwired
++ * baudrate of 829440 (38400 gets mapped to 829440) */
++static void ftdi_SCS_DR7X00_setup(struct ftdi_private *priv)
++{
++       priv->flags |= ASYNC_SPD_CUST;
++       priv->custom_divisor = 29;
++       priv->force_baud = 38400;
++}
 +
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 192e2e424fde..54f9da9af376 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -206,9 +206,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
--		regulator-boot-on;
--
- 		vin-supply = <&pp3300_a>;
- 	};
- 
-@@ -848,6 +845,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.31.1.527.g47e6f16901-goog
+ /*
+  * Module parameter to control latency timer for NDI FTDI-based USB devices.
+  * If this value is not set in /etc/modprobe.d/ its value will be set
 
+--------------E98C902A3C0B0221C3D860E0--
