@@ -2,106 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBED2371FFA
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 20:56:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7598637205C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 21:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbhECS5I (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 14:57:08 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:56149 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229497AbhECS5I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 14:57:08 -0400
-Received: (qmail 628860 invoked by uid 1000); 3 May 2021 14:56:14 -0400
-Date:   Mon, 3 May 2021 14:56:14 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Andrew Morton <akpm@linux-foundation.org>
+        id S229603AbhECTZY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 15:25:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46272 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhECTZX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 15:25:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 43D7A6115C;
+        Mon,  3 May 2021 19:24:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1620069869;
+        bh=OKudAjjnl8svSwq1luMmalScMJ7m6qMNbFwp6vBMip8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cd81NwdkpRHRTtCT75jMGyMD1Fa74ZxaMVdbcHmBYWmNY3U/LCgxE5B26f2x/rlud
+         firEqe/4nvLpncdLC2xkfFkrsjdIp05sL8p+8oXih/N/T57iB6G+aQMC7YYvEmT3hn
+         yiiqK1ZTGOgVl+DC4qkHHFejB/UYc/p7NqnUr7I8=
+Date:   Mon, 3 May 2021 12:24:28 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     syzbot <syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         syzkaller-bugs@googlegroups.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
 Subject: Re: [syzbot] WARNING in do_proc_bulk
-Message-ID: <20210503185614.GA628313@rowland.harvard.edu>
+Message-Id: <20210503122428.30ebfddbaf8f5184dc73e1a7@linux-foundation.org>
+In-Reply-To: <20210503185614.GA628313@rowland.harvard.edu>
 References: <000000000000b47bc805c15e4b11@google.com>
- <00000000000000186405c16a6156@google.com>
- <20210503105351.0966275d0d9e001ed794de2c@linux-foundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210503105351.0966275d0d9e001ed794de2c@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        <00000000000000186405c16a6156@google.com>
+        <20210503105351.0966275d0d9e001ed794de2c@linux-foundation.org>
+        <20210503185614.GA628313@rowland.harvard.edu>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 03, 2021 at 10:53:51AM -0700, Andrew Morton wrote:
-> (cc usb peeps)
-> 
-> On Mon, 03 May 2021 03:25:21 -0700 syzbot <syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com> wrote:
-> 
-> > syzbot has found a reproducer for the following issue on:
-> 
-> Thanks.
-> 
-> > HEAD commit:    d2b6f8a1 Merge tag 'xfs-5.13-merge-3' of git://git.kernel...
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=1746d3e1d00000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=65c207250bba4efe
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=882a85c0c8ec4a3e2281
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=107f7893d00000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ae7ca5d00000
+On Mon, 3 May 2021 14:56:14 -0400 Alan Stern <stern@rowland.harvard.edu> wrote:
+
 > > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com
+> > do_proc_bulk() is asking kmalloc for more than MAX_ORDER bytes, in
 > > 
-> > usb usb9: usbfs: process 8586 (syz-executor862) did not claim interface 0 before use
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 1 PID: 8586 at mm/page_alloc.c:4985 __alloc_pages_nodemask+0x5fd/0x730 mm/page_alloc.c:5020
-> > Modules linked in:
-> > CPU: 0 PID: 8586 Comm: syz-executor862 Not tainted 5.12.0-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > RIP: 0010:__alloc_pages_nodemask+0x5fd/0x730 mm/page_alloc.c:4985
-> > Code: 00 00 0c 00 0f 85 a7 00 00 00 8b 3c 24 4c 89 f2 44 89 e6 c6 44 24 70 00 48 89 6c 24 58 e8 9b d7 ff ff 49 89 c5 e9 e5 fc ff ff <0f> 0b e9 b0 fd ff ff 89 74 24 14 4c 89 4c 24 08 4c 89 74 24 18 e8
-> > RSP: 0018:ffffc90001f57a30 EFLAGS: 00010246
-> > RAX: 0000000000000000 RBX: 1ffff920003eaf4a RCX: 0000000000000000
-> > RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000040cc0
-> > RBP: 0000000000040cc0 R08: 0000000000000000 R09: 0000000000000000
-> > R10: ffffffff81b51b41 R11: 0000000000000000 R12: 000000000000000b
-> > R13: 000000000000000b R14: 0000000000000000 R15: 0000000000554e47
-> > FS:  0000000002293300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fd2526f7008 CR3: 000000001d80b000 CR4: 00000000001506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  alloc_pages_current+0x18c/0x2a0 mm/mempolicy.c:2277
-> >  alloc_pages include/linux/gfp.h:561 [inline]
-> >  kmalloc_order+0x34/0xf0 mm/slab_common.c:906
-> >  kmalloc_order_trace+0x14/0x130 mm/slab_common.c:922
-> >  kmalloc include/linux/slab.h:561 [inline]
-> >  do_proc_bulk+0x2d4/0x750 drivers/usb/core/devio.c:1221
-> >  proc_bulk drivers/usb/core/devio.c:1268 [inline]
-> >  usbdev_do_ioctl drivers/usb/core/devio.c:2542 [inline]
-> >  usbdev_ioctl+0x586/0x36c0 drivers/usb/core/devio.c:2708
-> >  vfs_ioctl fs/ioctl.c:51 [inline]
-> >  __do_sys_ioctl fs/ioctl.c:1069 [inline]
-> >  __se_sys_ioctl fs/ioctl.c:1055 [inline]
-> >  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:1055
-> >  do_syscall_64+0x3a/0xb0 arch/x86/entry/common.c:47
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> > 	tbuf = kmalloc(len1, GFP_KERNEL);
 > 
-> do_proc_bulk() is asking kmalloc for more than MAX_ORDER bytes, in
+> This doesn't seem to be a bug.  do_proc_bulk is simply trying to 
+> allocate a kernel buffer for data passed to/from userspace.  If a user 
+> wants too much space all at once, that's their problem.
 > 
-> 	tbuf = kmalloc(len1, GFP_KERNEL);
+> As far as I know, the kmalloc API doesn't require the caller to filter 
+> out requests for more the MAX_ORDER bytes.  Only to be prepared to 
+> handle failures -- which do_proc_bulk is all set for.
+> 
+> Am I wrong about this?  Should we add __GFP_NOWARN to the gfp flags?
 
-This doesn't seem to be a bug.  do_proc_bulk is simply trying to 
-allocate a kernel buffer for data passed to/from userspace.  If a user 
-wants too much space all at once, that's their problem.
-
-As far as I know, the kmalloc API doesn't require the caller to filter 
-out requests for more the MAX_ORDER bytes.  Only to be prepared to 
-handle failures -- which do_proc_bulk is all set for.
-
-Am I wrong about this?  Should we add __GFP_NOWARN to the gfp flags?
-
-Alan Stern
+Yes, if the oversized request is a can-happen and the resulting error is handled
+appropriately, __GFP_NOWARN is the way to go.
