@@ -2,161 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1013720F0
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 21:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4514E3722B7
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 23:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbhECTwB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 15:52:01 -0400
-Received: from mo4-p00-ob.smtp.rzone.de ([85.215.255.24]:28597 "EHLO
-        mo4-p00-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbhECTwA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 15:52:00 -0400
-X-Greylist: delayed 357 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 May 2021 15:52:00 EDT
-ARC-Seal: i=1; a=rsa-sha256; t=1620071104; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=AO3e/iyBsU9q0grnkse0inZaEvE4YPB7LSSjvYnrcCmd/t3O1MPbygWselK7yg/iaD
-    PB7nMvXIXxUsjlb68J7/iCC+f6vS5WSfIL6FcTO9R1aPcQ+N4loJCE8CyOIBstQ1H8Mu
-    YF3NIJRw8HA2eIJAUbqtxyjUgiAw8ANfNOdl0FPKzykVlmPmsALxF/Vp/rzvJLXB48yC
-    868/WIPHiiASMTXGqmTS7cSlqWwvhcwg3SsJ3BU5rZmx024KflMmaDvUrRXohH9jf1YB
-    QGFuwoBiXTzrv2LA/61dhX2UBQ5dQNCJ0T/Z77Q/RDP+9gq++p4i1HCSDDE570iZB+wo
-    ErDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1620071104;
-    s=strato-dkim-0002; d=strato.com;
-    h=Date:Message-ID:Cc:To:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=02XrD1wBcNqKWTE8sgdDN73vkh/mTjzRVvyzGnaRemM=;
-    b=Jt1cPjjPP6uRZTBQSLYwKnwpWDzut0O1yHpv/ny1aQLRq7GGNH9OQrnd5xkK6oN/OW
-    AiaEFJuXDzEPvdyOBIsVSwh0dw1LY+UPyET6HG3BmoonuGOjeqc6bjX5mEz4XxQ+mXK/
-    v4vcIiqvS35usPtLV/eUESjfIORCVP/R57Xe3w/S22mUXfu70kQVGpm48E2PS+sydnFC
-    +m/dHW2k8nIIAmIG7jLw9M7SUbN6bsDPYZ17nqgYOs2UX4wEx1nqzo6g+YbN6JBamAiJ
-    DaBFARNniNx3K/bcyrPspwPmPE1SoZgRTdwcJpIWwI+p3oedMbsG6VIYJX1/slXxPhSt
-    JHvA==
-ARC-Authentication-Results: i=1; strato.com;
-    dkim=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1620071104;
-    s=strato-dkim-0002; d=woltersonline.net;
-    h=Date:Message-ID:Cc:To:Subject:From:Cc:Date:From:Subject:Sender;
-    bh=02XrD1wBcNqKWTE8sgdDN73vkh/mTjzRVvyzGnaRemM=;
-    b=KAk4mhj8gqwjY6W5O9IVxdSfn7vLCqrANFvd8tLctXPIB6Bm9uxFJb8QKs0fdpI8dn
-    /sYZB6s2kgmzk7pjVYaMWfczCFezTecEXw/ablVpLisu9H4y5Az3RPBrA6pSJg+pVBBY
-    sIHPZOoEcaT681L4LSTT3HUebBzB1/bkHmojEx0eTJJbjIDgtfOT4NqU2jtb32CYbpEp
-    ASiEeYUo2zvO8jtcze/fDzzD6GEJKTJAr8suEOlRMD2vB0TkQoJpW7HkAHRtrMQNv7ac
-    neJmGRl0OFJc3Bw/UYz8lkW+5bvLU3MUKFbkbG9rZiTxEDzdlytDaI2t2YSb+FaGu/Vm
-    Gntg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":PmMGcFK8W+iThef0QhYq5H6NV6kE4K87ZlTeLyeqymu1mQeG9z7rBMC2G76s35j7/KPYpAPwS/9Bm81huZu14CGGU5EdABpoMyiq+2e2RPUS/g=="
-X-RZG-CLASS-ID: mo00
-Received: from [IPv6:2003:c9:8f3f:9c9f:5ff8:a7e2:3f7c:6f69]
-    by smtp.strato.de (RZmta 47.25.5 AUTH)
-    with ESMTPSA id w064ebx43Jj40WZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 3 May 2021 21:45:04 +0200 (CEST)
-From:   Robert Wolters <robert@woltersonline.net>
-Subject: CR for ftdi_sio.c, SCS P4 Dragon
-To:     johan@kernel.org
-Cc:     linux-usb@vger.kernel.org
-Message-ID: <b7ec696f-c5ca-30e6-0769-4c6e925e8367@woltersonline.net>
-Date:   Mon, 3 May 2021 21:45:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S229603AbhECV5K (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 17:57:10 -0400
+Received: from mail02.rohde-schwarz.com ([80.246.32.97]:11228 "EHLO
+        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhECV5J (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 17:57:09 -0400
+Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
+ (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Mon, 3 May 2021
+ 23:56:13 +0200
+Received: from GMU419.rsint.net ([10.0.230.184])
+          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 303;
+          Mon, 3 May 2021 23:56:13 +0200 (CEST)
+Received: from GMU003.rsint.net (10.0.2.61) by GMU419.rsint.net (10.0.230.184)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.4; Mon, 3 May 2021
+ 23:56:12 +0200
+Received: from GMU006.rsint.net (10.0.2.28) by GMU003.rsint.net (10.0.2.61)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.4; Mon, 3 May
+ 2021 23:56:06 +0200
+Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
+ GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
+ 15.01.2242.008; Mon, 3 May 2021 23:56:05 +0200
+From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+To:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: Re: [syzbot] INFO: rcu detected stall in tx
+Thread-Topic: Re: [syzbot] INFO: rcu detected stall in tx /ur/
+Thread-Index: AddAZvL8XVXa6H4GRuuKdM/NghtgBQ==
+Date:   Mon, 3 May 2021 21:56:05 +0000
+Message-ID: <a4f1b9d202c5445e8c714b3181b84830@rohde-schwarz.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-rus_sensitivity: 10
+hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
+hvs-prefix: R_S
+x-originating-ip: [10.0.9.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------E98C902A3C0B0221C3D860E0"
-Content-Language: en-GB
+X-IQAV: YES
+X-GBS-PROC: ijJGnd7ryUNXAjn+Z3XHJ8sewSqpduzPp+Itxx4Mshpzo3Vq62oWRJkC3PJVwUCqXdgMQawdv3fdeY0yXhOtXBkJmpO4nQ55Rahp7qu6hUinosUCSugSy3ZzUTz2Wvnu
+X-GBS-PROCJOB: CypXhZSot4PYE85CrKrN3at/G3nnChScUpl0D/x64XRJwhi3EBW10JaJb83FgISU
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------E98C902A3C0B0221C3D860E0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Dear Johan,
-
-I'd like to submit a small change request for the ftdi_sio.c Kernel module.
-
-Problem: setting a special Baud-rate for the SCS P4 Dragon series 
-(Pactor 4) of short-wave modems.
-
-Solution: as implemented in the patch file attached. This change has 
-been tested on several Debian-based machines, and works okay. Which is 
-not a surprise, as only the Baud-rate is set, using a specific divisor, 
-in a same manner as is already done for other devices currently 
-supported by ftdi_sio.
-
-I'm also submitting this change request on behalf of SCS GmbH & Co KG of 
-Hanau in Germany.
-
-Many thanks in advance. Looking forward to any feedback and/or comments.
-
-Regards,
-Robert Wolters (DM4RW)
-
-Südstrasse 4b
-82131 Stockdorf (nr Munich)
-Germany
-
-
---------------E98C902A3C0B0221C3D860E0
-Content-Type: text/x-patch; charset=UTF-8;
- name="ftdi_sio.c.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="ftdi_sio.c.patch"
-
---- ftdi_sio.c  2021-04-21 13:01:00.000000000 +0200
-+++ ftdi_sio_new.c      2021-04-26 18:53:00.819175707 +0200
-@@ -97,6 +97,7 @@
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
- static void  ftdi_USB_UIRT_setup(struct ftdi_private *priv);
- static void  ftdi_HE_TIRA1_setup(struct ftdi_private *priv);
-+static void  ftdi_SCS_DR7X00_setup(struct ftdi_private *priv);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
-        .probe  = ftdi_jtag_probe,
-@@ -122,6 +123,10 @@
-        .probe  = ftdi_8u2232c_probe,
- };
- 
-+static const struct ftdi_sio_quirk ftdi_SCS_DR7X00_quirk = {
-+       .port_probe = ftdi_SCS_DR7X00_setup,
-+};
-+
- /*
-  * The 8U232AM has the same API as the sio except for:
-  * - it can support MUCH higher baudrates; up to:
-@@ -157,8 +162,12 @@
-        { USB_DEVICE(FTDI_VID, FTDI_EV3CON_PID) },
-        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_0_PID) },
-        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_1_PID) },
--       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
--       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },
-+/*     { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) },
-+       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },*/
-+       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) ,
-+               .driver_info = (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },
-+       { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) ,
-+               .driver_info = (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },
-        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_4_PID) },
-        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_5_PID) },
-        { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_6_PID) },
-@@ -2296,6 +2305,15 @@
-        priv->force_rtscts = 1;
- }
- 
-+/* Setup for the SCS P4dragon DR-7X00 devices, which require hardwired
-+ * baudrate of 829440 (38400 gets mapped to 829440) */
-+static void ftdi_SCS_DR7X00_setup(struct ftdi_private *priv)
-+{
-+       priv->flags |= ASYNC_SPD_CUST;
-+       priv->custom_divisor = 29;
-+       priv->force_baud = 38400;
-+}
-+
- /*
-  * Module parameter to control latency timer for NDI FTDI-based USB devices.
-  * If this value is not set in /etc/modprobe.d/ its value will be set
-
---------------E98C902A3C0B0221C3D860E0--
+SGkgYWxsLA0KDQpEYXZlIGFuZCBJIGRpc2N1c3NlZCB0aGUgInNlbGYtZGV0ZWN0ZWQgc3RhbGwg
+b24gQ1BVIiBjYXVzZWQgYnkgdGhlIHVzYnRtYyBkcml2ZXIuDQoNCldoYXQgaGFwcGVuZWQ/DQpU
+aGUgY2FsbGJhY2sgaGFuZGxlciB1c2J0bWNfaW50ZXJydXB0KHN0cnVjdCB1cmIgKnVyYikgZm9y
+IHRoZSBJTlQgcGlwZSByZWNlaXZlcyBhbiBlcnJvbmVvdXMgdXJiIHdpdGggc3RhdHVzIC1FUFJP
+VE8gKC03MSkuDQpTZWUgaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5l
+bC9naXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZWUvZHJpdmVycy91c2IvY2xhc3MvdXNidG1jLmM/
+aD12NS4xMiNuMjM0MA0KLUVQUk9UTyBkb2VzIG5vdCBhYm9ydC9zaHV0ZG93biB0aGUgcGlwZSBh
+bmQgdGhlIHVyYiBpcyByZXN1Ym1pdHRlZCB0byByZWNlaXZlIHRoZSBuZXh0IHBhY2tldC4gSG93
+ZXZlciB0aGUgY2FsbGJhY2sgaGFuZGxlciB1c2J0bWNfaW50ZXJydXB0IGlzIGNhbGxlZCBhZ2Fp
+biB3aXRoIHRoZSBzYW1lIGVycm9uZW91cyBzdGF0dXMgLUVQUk9UTyBhbmQgdGhpcyBzZWVtcyB0
+byByZXN1bHQgaW4gYW4gZW5kbGVzcyBsb29wLg0KQWNjb3JkaW5nIHRvIGh0dHBzOi8vZ2l0Lmtl
+cm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4LmdpdC90cmVl
+L0RvY3VtZW50YXRpb24vZHJpdmVyLWFwaS91c2IvZXJyb3ItY29kZXMucnN0P2g9djUuMTIjbjE3
+Nw0KdGhlIGVycm9yIC1FUFJPVE8gaW5kaWNhdGVzIGEgaGFyZHdhcmUgcHJvYmxlbSBvciBhIGJh
+ZCBjYWJsZS4NCg0KTW9zdCB1c2IgZHJpdmVycyBkbyBub3QgcmVhY3QgaW4gYSBzcGVjaWZpYyB3
+YXkgb24gdGhpcyBoYXJkd2FyZSBwcm9ibGVtcyBhbmQgcmVzdWJtaXQgdGhlIHVyYi4gV2UgYXNz
+dW1lIHRoZXNlIGRyaXZlcnMgd2lsbCBydW4gaW50byB0aGUgc2FtZSBlbmRsZXNzIGxvb3AuIFNv
+bWUgb3RoZXIgZHJpdmVyIHNhbXBsZXMgYXJlOg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZWUvZHJpdmVycy91c2Iv
+Y2xhc3MvY2RjLWFjbS5jP2g9djUuMTIjbjM3OQ0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZWUvZHJpdmVycy9oaWQv
+dXNiaGlkL3VzYm1vdXNlLmM/aD12NS4xMiNuNjUNCg0KUG9zc2libGUgc29sdXRpb25zOg0KSGFy
+ZHdhcmUgZGVmZWN0cyBvciBiYWQgY2FibGVzIHNlZW1zIHRvIGJlIGEgY29tbW9uIHByb2JsZW0g
+Zm9yIG1vc3QgdXNiIGRyaXZlcnMgYW5kIEkgYXNzdW1lIHdlIGRvIG5vdCB3YW50IHRvIGZpeCB0
+aGlzIHByb2JsZW0gaW4gYWxsIGNsYXNzIHNwZWNpZmljIGRyaXZlcnMsIGJ1dCBpbiBsb3dlciBs
+ZXZlbCBob3N0IGRyaXZlcnMsIGUuZzoNCjEuIFVzaW5nIGEgY291bnRlciBhbmQgY2xvc2UgdGhl
+IHBpcGUgYWZ0ZXIgc29tZSBkZXRlY3RlZCBlcnJvcnMNCjIuIERlbGF5IHRoZSByZXN1Ym1pc3Np
+b24gb2YgdGhlIHVyYiB0byBhdm9pZCBoaWdoIGNwdSB1c2FnZQ0KMy4gRG8gbm90aGluZywgc2lu
+Y2UgaXQgaXMganVzdCBhIHJhcmUgcHJvYmxlbS4NCg0KV2UndmUgbmV2ZXIgc2VlbiB0aGlzIHBy
+b2JsZW0gaW4gb3VyIHByb2R1Y3RzIGFuZCB3ZSBkbyBub3QgZGFyZSB0byBjaGFuZ2UgYW55dGhp
+bmcuDQoNCi0gR3VpZG8NCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IERtaXRy
+eQ0KU2VudDogTW9uZGF5LCBBcHJpbCAxOSwgMjAyMSA5OjI3IEFNDQpTdWJqZWN0OiBSZTogW3N5
+emJvdF0gSU5GTzogcmN1IGRldGVjdGVkIHN0YWxsIGluIHR4DQoNCk9uIE1vbiwgQXByIDE5LCAy
+MDIxIGF0IDk6MTkgQU0gc3l6Ym90DQo8c3l6Ym90K2UyZWFlNTYzOWU3MjAzMzYwMDE4QHN5emth
+bGxlci5hcHBzcG90bWFpbC5jb20+IHdyb3RlOg0KPg0KPiBIZWxsbywNCj4NCj4gc3l6Ym90IGZv
+dW5kIHRoZSBmb2xsb3dpbmcgaXNzdWUgb246DQo+DQo+IEhFQUQgY29tbWl0OiAgICA1MDk4N2Jl
+YyBNZXJnZSB0YWcgJ3RyYWNlLXY1LjEyLXJjNycgb2YgZ2l0Oi8vZ2l0Lmtlcm5lbC5vLi4NCj4g
+Z2l0IHRyZWU6ICAgICAgIHVwc3RyZWFtDQo+IGNvbnNvbGUgb3V0cHV0OiANCj4gaHR0cHM6Ly9z
+eXprYWxsZXIuYXBwc3BvdC5jb20veC9sb2cudHh0P3g9MTA2NWM1ZmNkMDAwMDANCj4ga2VybmVs
+IGNvbmZpZzogIA0KPiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94Ly5jb25maWc/eD0z
+OThjNGQwZmU2ZjY2ZTY4DQo+IGRhc2hib2FyZCBsaW5rOiANCj4gaHR0cHM6Ly9zeXprYWxsZXIu
+YXBwc3BvdC5jb20vYnVnP2V4dGlkPWUyZWFlNTYzOWU3MjAzMzYwMDE4DQo+DQo+IFVuZm9ydHVu
+YXRlbHksIEkgZG9uJ3QgaGF2ZSBhbnkgcmVwcm9kdWNlciBmb3IgdGhpcyBpc3N1ZSB5ZXQuDQo+
+DQo+IElNUE9SVEFOVDogaWYgeW91IGZpeCB0aGUgaXNzdWUsIHBsZWFzZSBhZGQgdGhlIGZvbGxv
+d2luZyB0YWcgdG8gdGhlIGNvbW1pdDoNCj4gUmVwb3J0ZWQtYnk6IHN5emJvdCtlMmVhZTU2Mzll
+NzIwMzM2MDAxOEBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tDQo+DQo+IHVzYnRtYyA1LTE6MC4w
+OiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxIHVzYnRtYyAzLTE6MC4wOiB1bmtub3duIA0K
+PiBzdGF0dXMgcmVjZWl2ZWQ6IC03MSB1c2J0bWMgNS0xOjAuMDogdW5rbm93biBzdGF0dXMgcmVj
+ZWl2ZWQ6IC03MQ0KDQpUaGUgbG9nIHNob3dzIGFuIGluZmluaXRlIHN0cmVhbSBvZiB0aGVzZSBi
+ZWZvcmUgdGhlIHN0YWxsLCBzbyBJIGFzc3VtZSBpdCdzIGFuIGluZmluaXRlIGxvb3AgaW4gdXNi
+dG1jLg0KK3VzYnRtYyBtYWludGFpbmVycw0KDQpbICAzNzAuMTcxNjM0XVsgICAgQzBdIHVzYnRt
+YyA2LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMTc3Nzk5XVsg
+ICAgQzFdIHVzYnRtYyAzLTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAz
+NzAuMTgzOTEyXVsgICAgQzBdIHVzYnRtYyA0LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZl
+ZDogLTcxDQpbICAzNzAuMTkwMDc2XVsgICAgQzFdIHVzYnRtYyA1LTE6MC4wOiB1bmtub3duIHN0
+YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMTk2MTk0XVsgICAgQzBdIHVzYnRtYyAyLTE6MC4w
+OiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjAyMzg3XVsgICAgQzFdIHVz
+YnRtYyAzLTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjA4NDYw
+XVsgICAgQzBdIHVzYnRtYyA2LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpb
+ICAzNzAuMjE0NjE1XVsgICAgQzFdIHVzYnRtYyA1LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNl
+aXZlZDogLTcxDQpbICAzNzAuMjIwNzM2XVsgICAgQzBdIHVzYnRtYyA0LTE6MC4wOiB1bmtub3du
+IHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjI2OTAyXVsgICAgQzFdIHVzYnRtYyAzLTE6
+MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjMzMDA1XVsgICAgQzBd
+IHVzYnRtYyAyLTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjM5
+MTY4XVsgICAgQzFdIHVzYnRtYyA1LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcx
+DQpbICAzNzAuMjQ1MjcxXVsgICAgQzBdIHVzYnRtYyA2LTE6MC4wOiB1bmtub3duIHN0YXR1cyBy
+ZWNlaXZlZDogLTcxDQpbICAzNzAuMjUxNDI2XVsgICAgQzFdIHVzYnRtYyAzLTE6MC4wOiB1bmtu
+b3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjU3NTUyXVsgICAgQzBdIHVzYnRtYyA0
+LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjYzNzE1XVsgICAg
+QzFdIHVzYnRtYyA1LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAu
+MjY5ODE5XVsgICAgQzBdIHVzYnRtYyAyLTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDog
+LTcxDQpbICAzNzAuMjc1OTc0XVsgICAgQzFdIHVzYnRtYyAzLTE6MC4wOiB1bmtub3duIHN0YXR1
+cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjgyMTAwXVsgICAgQzBdIHVzYnRtYyA2LTE6MC4wOiB1
+bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjg4MjYyXVsgICAgQzFdIHVzYnRt
+YyA1LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbICAzNzAuMjk0Mzk5XVsg
+ICAgQzBdIHVzYnRtYyA0LTE6MC4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcx
