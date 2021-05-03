@@ -2,69 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFED37130D
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 11:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6225237141A
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 13:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbhECJfW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 05:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230358AbhECJfW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 05:35:22 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4FEC06174A
-        for <linux-usb@vger.kernel.org>; Mon,  3 May 2021 02:34:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p17so2712731pjz.3
-        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 02:34:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=K1HJFr1G47EnIvufOejlbMqabBIv/gZEmYvyOUo/fzc=;
-        b=eSKHP7OtwipwwPUqEW9Z1MTt/mAvdltwvb3f6R8dKyngi1WPK/fmuY+JMerphzXpNy
-         X7Ssc9H7i7UwfyYBJN4JOBEpAOzNS8frelylpErVO0QUZEGhC2yaVwTFt27+lt7W7jkH
-         6wvMMEOQPyCHs1QY7SlCWfhT7UiZgUu2lWBFHvZXdDPZzVp1LI7LN7kWfKTfJjWpPoUV
-         zb3kmb7uTYsGWGxTZThsAgGrrUxDQOdKwi+sUXinWARlb4UIVfw6YrFMBImjdiZl+QTh
-         u/KRcYAxrmlxyeXol7N6+AqCaWaJ1g6MA93iXHHXDmkW6htfGMaDMsvOvNIE1bnn5Wvl
-         6F0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=K1HJFr1G47EnIvufOejlbMqabBIv/gZEmYvyOUo/fzc=;
-        b=EKgJbD96SxcoQObU7cMp/CYxvh0Wnvx0pEtlv1VGHgE8Ro2i75Ncu/lgaawz860Pvz
-         tmg2UVDoKbQqi3QRfd9SKnSjCy/JxTqMaVDi+3BNcrUGtbwkuOnsJZZrQmIs8KuLUss4
-         xHsv0s8pAxyFDcwz14g2SRFnTzYRQZVdaiEP0fMlni+hU/K97lj0P7LnJt8Sphjnewmd
-         +tSlnpNeOjsnrq711iQ9oZW95dBHkW6x1udYAgWBgZPzziLSfZAdFy3jEEUeWHcPlKg6
-         iJ1e6ImrvnxZt8fsyo3T2uLDUVLIiRhkWx7erBPdrk8couAntUBCUTLasdRBuNiey6ep
-         o0uw==
-X-Gm-Message-State: AOAM531PgSnskbgsmCxyHTX1JxiJCOTZ2wnqantY0JtpGhYNxvp7lFbh
-        P9iYS4oXQrx5Xmraq6m0oIA5gfn4Dy1PV9R9fftHRiUyXRg=
-X-Google-Smtp-Source: ABdhPJzpN6vNWLlOSCT3pck+SzSi9FICBWVl0h5yD5/rmWmwQCQ80i0Pl7rSI0+YvVn3msGvdsp2IiAfh8JOgnDZfJY=
-X-Received: by 2002:a17:90b:514:: with SMTP id r20mr30123166pjz.193.1620034469230;
- Mon, 03 May 2021 02:34:29 -0700 (PDT)
+        id S232918AbhECLRj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 07:17:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41568 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229811AbhECLRi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 07:17:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CB99861175;
+        Mon,  3 May 2021 11:16:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620040605;
+        bh=WtRNI/HtHndJvNU0bk3gx7XrZy0SCWWxUix7KU0CCT8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=VluLM+nkItf/MvMrgc06+e9GiCmhGm1yY5A4bDJk+KJpieqqXDHPS7x14/Lsl/m5x
+         HwqiYafVMz44set+IL7xO2UN3cenLOZUk+Ie4ITzLuUoyrXFWEViEQGnabXicKR4hr
+         lbh7brIhUr5RAllXP2LQSotJZUe7e8lfGJlC1AAE20PkbZYCpr8aWOT5ecSo7pi6OA
+         pS1MJS2wcQS0QI83juKb7z6bFrWUlf58i1nGmQMhU4utChEqwPQyq1OFGW90hTwnfG
+         4or+OXFsAd7i+sa/qgJEnvjRhc8hldNGkJj4pxiSNTvTaAZdIfGs488qQrhhVHkbre
+         6fqnYk4Dn9dKg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v7 1/5] usb: dwc3: host: Set PHY mode during suspend
+In-Reply-To: <fd927828-a414-cd42-1e4a-b9e9b0744a3a@codeaurora.org>
+References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+ <1619586716-8687-2-git-send-email-sanm@codeaurora.org>
+ <87tunqka2e.fsf@kernel.org>
+ <fd927828-a414-cd42-1e4a-b9e9b0744a3a@codeaurora.org>
+Date:   Mon, 03 May 2021 14:16:34 +0300
+Message-ID: <87k0oghxt9.fsf@kernel.org>
 MIME-Version: 1.0
-From:   Sckipper1 <gsckipper@googlemail.com>
-Date:   Mon, 3 May 2021 12:34:19 -0700
-Message-ID: <CAONUbMc7OGC7i0bfhOED_fgCpBp5yMoAPVa+25Tf_hrE6hh69g@mail.gmail.com>
-Subject: Pi redirector with USBIP
-To:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
 Hi,
 
-I want to forward a device connected on a linux machine, over ip, to a
-Raspberry pi with an OTG port. So i can connect the raspberry as that
-usb to another machine.
-I have a raspberry pi 4B with usb-c OTG
-I want to forward all the USB communication (handshake, data, token,
-etc) to rpi otg port. I tried socat for that but not many results.
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>> @@ -11,6 +11,14 @@
+>>>   #include <linux/platform_device.h>
+>>>=20=20=20
+>>>   #include "core.h"
+>>> +#include "../host/xhci.h"
+>>> +#include "../host/xhci-plat.h"
+>>> +
+>>> +static int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd);
+>>> +
+>>> +static const struct xhci_plat_priv xhci_plat_dwc3_xhci =3D {
+>>> +	.suspend_quirk =3D xhci_dwc3_suspend_quirk,
+>>> +};
+>> we're passing data using device_properties, why do you want this here?
+> Similar implemenation was done in=20
+> drivers/usb/cdns3/host.c<https://git.kernel.org/pub/scm/linux/kernel/git/=
+next/linux-next.git/tree/drivers/usb/cdns3/host.c?h=3Dnext-20210503>=20
 
-I am thinking now to fork usbip and modify it to do this. I don't have
-that much experience so i wanted to ask you if something like that is
-possible.
-I am sorry if i bother you with my ideas but i thought to give it a try.
+then it seems we have two places to correct :-)
 
-Sorry in advice for such a bother,
-R. Daniel
+>>> @@ -127,6 +142,50 @@ int dwc3_host_init(struct dwc3 *dwc)
+>>>   	return ret;
+>>>   }
+>>>=20=20=20
+>>> +static void dwc3_set_phy_mode(struct usb_hcd *hcd)
+>>> +{
+>>> +
+>>> +	int i, num_ports;
+>>> +	u32 reg;
+>>> +	unsigned int ss_phy_mode =3D 0;
+>>> +	struct dwc3 *dwc =3D dev_get_drvdata(hcd->self.controller->parent);
+>>> +	struct xhci_hcd	*xhci_hcd =3D hcd_to_xhci(hcd);
+>>> +
+>>> +	dwc->hs_phy_mode =3D 0;
+>>> +
+>>> +	reg =3D readl(&xhci_hcd->cap_regs->hcs_params1);
+>>> +	num_ports =3D HCS_MAX_PORTS(reg);
+>> there's a big assumption here that xhci is still alive. Why isn't this
+>> quirk implemented in xhci-plat itself?
+>>
+>>> +int xhci_dwc3_suspend_quirk(struct usb_hcd *hcd)
+>> who calls this?
+> This will be called from=20
+> xhci_plat_suspend->xhci_priv_suspend_quirk->xhci_dwc3_suspend_quirk
+
+So xhci.ko calls a function from dwc3.ko? That sounds odd, doesn't it?
+It really looks like we're just finding ways to bypass the driver
+layering, rather than working with it.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCP25IRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUg8cQgAgcA1k7PlPRRhtSjXfbru+EOxg/E+uu1U
+NwLMJ9rbbmh/BvV0HU/z+5dKAYX9lo20ftf4iRUPqsduA0UpmCEw68SNOYH9IMQj
+JVAfYOYcelrGXtem7womqEBERSJylQLThCUyI4AFYqLXSjFjcf+VvtAGuDB38s0X
+9FY5k/KHDfDGlkJlFzfsrRfAMZugBEIOYLcsZOMQnUy/nZ2Q+DYillN0nMB0TZt1
+D7+3ZzHQm2JeeiCG2VGDFUubyo31Ax6qP5sWgquRZrVjzXxp8oYdrYUbun11H9FD
+Y12JFzQ2UzLO3m2ZX9eB9+7317WxtyL/kWDjTY8kkkD8KNe4GZ46EA==
+=FazS
+-----END PGP SIGNATURE-----
+--=-=-=--
