@@ -2,162 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6CD371642
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 15:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C5637167E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 16:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233325AbhECNxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 09:53:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42868 "EHLO mail.kernel.org"
+        id S234254AbhECOQ3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 10:16:29 -0400
+Received: from smaract.com ([82.165.73.54]:47775 "EHLO smaract.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233299AbhECNxP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 May 2021 09:53:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AC1F611CE;
-        Mon,  3 May 2021 13:52:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620049941;
-        bh=DgMq6YkE9V6fCCe6L8LNOMd24pkQIacJK3i3At8ZgVI=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=ZcRtoMI+8Ubr4+142aO09JNsaRJdLq69vTOlSOQtyGRjkiAY+z9NYuK/vIXs4ILJ2
-         QGB5TqKTELQOo4GWErtjtEww1MWSZvcEJ94MhQjKU+ozJvW4ow/A4URYy6c0AP7SRi
-         kqKuUDlA3mH9DddT0IvaOo5FQReJAMtucZdQrKq1KMJyDBpi8aGqrXkl0gk9mbKcfc
-         vaBv9uRueLtpwHqauiHJ37SWVrqfFa3G9OuyIlxMIwEuOssv7YRlycef3ICNvdh0vQ
-         4SuOFF6V2dNGwfR+yP0uhXdhqysLy2cAtKSPvl1hOK7/naTOuWRQ39WDcm0bRNmg5C
-         FxRC0s5Ru6j0A==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sebastian von Ohr <vonohr@smaract.com>,
+        id S234225AbhECOQ1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 10:16:27 -0400
+Received: from mx1.smaract.de (leasedline-static-091-249-161-134.ewe-ip-backbone.de [91.249.161.134])
+        by smaract.com (Postfix) with ESMTPSA id 5DA08A08C0;
+        Mon,  3 May 2021 14:15:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smaract.com;
+        s=default; t=1620051333;
+        bh=JZPZ6g1PSKUGp2/46kbrl7+rvS82zYvVrBXhZbp0GCs=; l=3455;
+        h=From:To:Subject;
+        b=SyKROVCrF7QuBoWnzDXdt8A3LLQM8y/sVy3v0UldJf/j2X13B2xTHniSEzGaDTx4+
+         kpyWSYExwOYn+FxoTTB5lHP7ZBM5PzHDxkJa3VxF/qVe++AOVR9AT9DpnTrSBZRWC/
+         1VbyMO2aB8zpTGti1Iz0uT4Xid4+0sm7HiVjduUc=
+Authentication-Results: smaract.com;
+        spf=pass (sender IP is 91.249.161.134) smtp.mailfrom=vonohr@smaract.com smtp.helo=mx1.smaract.de
+Received-SPF: pass (smaract.com: connection is authenticated)
+From:   Sebastian von Ohr <vonohr@smaract.com>
+To:     Felipe Balbi <balbi@kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>, balbi@kernel.org
-Subject: Re: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
-In-Reply-To: <c9b5559a05f5459d92e3c704772edb46@smaract.com>
+        Thinh Nguyen <thinhn@synopsys.com>
+Subject: RE: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
+Thread-Topic: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
+Thread-Index: AddAFrAj4smXgfxIQouaD3WoM/CLQ///+CEA///Z5yA=
+Date:   Mon, 3 May 2021 14:15:32 +0000
+Message-ID: <3d2305a43c1f4e3dad2e29286f42982d@smaract.com>
 References: <c9b5559a05f5459d92e3c704772edb46@smaract.com>
-Date:   Mon, 03 May 2021 16:52:12 +0300
-Message-ID: <87eeenj56b.fsf@kernel.org>
+ <87eeenj56b.fsf@kernel.org>
+In-Reply-To: <87eeenj56b.fsf@kernel.org>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-PPP-Message-ID: <162005133346.62724.12962940027138025662@smaract.com>
+X-PPP-Vhost: mario.smaract.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Thanks for your super-fast reply!
 
+> From: Felipe Balbi [mailto:balbi@kernel.org]
+> Sent: Monday, May 3, 2021 3:52 PM
+> It's like the host is trying to go down to lower LPM states every 100ms:
+>=20
+>      irq/13-dwc3-236     [000] d..1    71.363262: dwc3_event: event (0000=
+0401): WakeUp [U0]
+>      irq/13-dwc3-236     [000] d..1    71.363315: dwc3_event: event (0000=
+0401): WakeUp [U0]
+>      irq/13-dwc3-236     [000] d..1    71.363423: dwc3_event: event (0000=
+6084): ep1out: Transfer In Progress [0] (SIm)
 
-Hi,
+How do you arrive at 100ms? These wakeups are around 50 microseconds apart.
 
-(before anything, thanks for actually following the steps for bug
-reporting. Much, much appreciated)
+> > Is the USB 2.0 LPM extension even supposed to work with the dwc3 contro=
+ller? I
+>=20
+> yes, it should be supported :-)
 
-Sebastian von Ohr <vonohr@smaract.com> writes:
-
-> I'm running an Intel Apollo Lake SoM (Celeron N3350E) which I want to use=
- as=20
-> a USB gadget with the functionFS gadget driver. I have created two bulk=20
-> endpoints for sending and receiving data. The hardware and cabling is onl=
-y USB=20
-> 2.0 capable. In one test case the receive side of the SoM is slowed down=
+I've spent some time looking at the code and I don't understand how the dev=
+ice=20
+is supposed to wake up the host once it's able to receive new data again. T=
+he=20
+closest thing I could find is the __dwc3_gadget_wakeup function which is ca=
+lled=20
+by dwc3_send_gadget_ep_cmd. But I don't understand the condition there. The=
 =20
-> deliberately (200ms sleep between reads) while the host PC tries to send =
-as=20
-> fast as possible. This setup leads to send timeouts on every second=20
-> transmission on the host PC.
->
-> I believe this is an issue with the USB 2.0 LPM feature, more specificall=
-y=20
-> hardware LPM done by the host USB controller. I have tested different USB=
-=20
+wakeup is only executed for DWC3_DEPCMD_STARTTRANSFER, but I understand bul=
+k=20
+transfers are only started once the endpoint is configured and then only=20
+DWC3_DEPCMD_UPDATETRANSFER is used.
 
-It's like the host is trying to go down to lower LPM states every 100ms:
+> could you share a dump of your descriptors? It could be that the wake-up
+> latencies are incorrect which tricks the host into trying to go down to
+> lower LPM states too frequently.
 
-     irq/13-dwc3-236     [000] d..1    71.363262: dwc3_event: event (000004=
-01): WakeUp [U0]
-     irq/13-dwc3-236     [000] d..1    71.363315: dwc3_event: event (000004=
-01): WakeUp [U0]
-     irq/13-dwc3-236     [000] d..1    71.363423: dwc3_event: event (000060=
-84): ep1out: Transfer In Progress [0] (SIm)
+Bus 001 Device 003: ID 3386:0001 =20
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.10
+  bDeviceClass            0 (Defined at Interface level)
+  bDeviceSubClass         0=20
+  bDeviceProtocol         0=20
+  bMaxPacketSize0        64
+  idVendor           0x3386=20
+  idProduct          0x0001=20
+  bcdDevice            5.12
+  iManufacturer           1 SmarAct
+  iProduct                2 SmarAct Sensor
+  iSerial                 3 PSC-00000038
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength           32
+    bNumInterfaces          1
+    bConfigurationValue     1
+    iConfiguration          4 SmarAct Config 1
+    bmAttributes         0xc0
+      Self Powered
+    MaxPower                2mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0=20
+      bInterfaceProtocol      0=20
+      iInterface              5 SmarAct Sensor
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               1
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength           22
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000010e
+      Link Power Management (LPM) Supported
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000f
+      Device can operate at Low Speed (1Mbps)
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat          10 micro seconds
+    bU2DevExitLat         511 micro seconds
+Device Status:     0x0001
+  Self Powered
 
-> descriptors and the issue is gone when removing the USB_LPM_SUPPORT flag =
-from=20
-> the USB 2.0 extension descriptor (actually removing only USB_BESL_SUPPORT=
- seems=20
-> to suffice). Also the issue occurs only on some newer PCs and adding a hu=
-b=20
-
-it could be that LPM is disabled on older xHCI revisions. Mathias,
-anything you can add here?
-
-> (doesn't matter if 2.0 or 3.0 capable) makes the issue go away. I can=20
-> reproduce this issue with a Windows 10 (1909) host running an Intel B360=
-=20
-> chipset. I use libusb v1.0.24 with the WinUSB driver on the host side to =
-send=20
-> data on the bulk endpoint.
-
-could you share a dump of your descriptors? It could be that the wake-up
-latencies are incorrect which tricks the host into trying to go down to
-lower LPM states too frequently.
-
-> See the attached dwc3 trace and registers. It was created using the curre=
-nt=20
-> 5.12.1 kernel version. It shows multiple WakeUp [U0] events in short succ=
-ession=20
-> but never any event showing different link states than U0. The host is do=
-ing 8=20
-> transmissions of 16 bytes to the device, but the device only receives 4 o=
-f=20
-> these transmissions. The first transmissions always succeeds while the ne=
-xt one=20
-> will timeout on the host. I believe this is because the device is current=
-ly not=20
-> ready to receive new data. But instead of sending the data when the delay=
- on=20
-> the receive side is over the request never finishes and times out after 1=
-=20
-> second (or even longer when I increase the timeout value).
->
-> Is the USB 2.0 LPM extension even supposed to work with the dwc3 controll=
-er? I=20
-
-yes, it should be supported :-)
-
-> can work around this issue currently by downgrading the device to USB 2.0=
- only=20
-> (setting bcdUSB to 0x0200). But I believe USB 3.0 capable device must sup=
-port=20
-> LPM, so this issue might come up again when having USB 3.0 capable hardwa=
-re.
-
-correct, LPM is mandatory for USB3.0+. From the traces, we don't see any
-errors, though. Everything looks fine.
-
-Mathias, I have an old memory from my time at Intel when we discussed
-this very fact. I can't remember what was the conclusion, but is there
-anything the peripheral can do to tell the host to *not* enter U1/U2 so
-frequently? If my memory doesn't fail me, I don't think there is
-anything at all for the peripheral to do, right? Other than not
-supporting U1/U2, which means STALLing the relevat SetFeature
-requests. Do you know if that would still be a certifiable solution?
-
-cheers
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCQAAwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUieHwf6AhLS4caFLDoIt1+1Nu4c1bL9YnIA/vTn
-61KhbB9P8lfRtm+GeBY+XU198L8V75sckvAJzPNByWHLBhBPfXKA1ni1dd3rUbpO
-aIJQ0suuwNmU1OgTpuNbLzy6kqpnO3EKaNlRHN4AIlhfSFea5egU0fyaYKRzev4X
-bJuHYPf+Jrmkf1q9E7rMuW9VhjQh1ssnDagsfkyHqG0iMRPQv8FUSHGqO0wm9cbV
-kQIFwu59BtuQmjTeySSmTJkz+E1L/EncvxTcnzASJhTlGKHJaxU99D39rnyeygla
-Rum6ZZEKEDlF+91aPd3PkUk21j/nTQQeJFwMjTo+xjNHaPimHM+B8g==
-=Vy3x
------END PGP SIGNATURE-----
---=-=-=--
