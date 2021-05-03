@@ -2,103 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 719C33718EF
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 18:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C05F3719DB
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 18:37:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231239AbhECQKf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 12:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbhECQKb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 12:10:31 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E83C06138B;
-        Mon,  3 May 2021 09:09:37 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id m11so4475740pfc.11;
-        Mon, 03 May 2021 09:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WUYBn+OTNN4XwS0aZ2myRI9DCSukHpwMPNNUN+38vZA=;
-        b=GWFUGV0gR/b6H5JEnNxwqyOS4/i3m+9yZFMp8uPxS9vPrYl9at930xWWr4KxGqPm1b
-         H+hssjNnyXZljkxFe+BuBtQSO6WqjIE50KXdG4sX7rgEeSaRP7zn1dE56vYvOudxEmM1
-         Ry7oFhsn8jjd7+YVcf9fQiDjYIW+UQnSk7xU7WAhADjmDX5hPIeEFYrPPaoJlc0hV9Gl
-         xTGrF36XzUmZn12l2/IqpHzYsIXWirx9sRfanaap+N3F4Rit1vdSuxmfewZSMgDImNeI
-         EExroDMd9nYAi9bdH1hBYfDlp/+MIrad9u7YGJVg0D7pFctolUH4I2oWiXDgNAuzQSii
-         e5aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WUYBn+OTNN4XwS0aZ2myRI9DCSukHpwMPNNUN+38vZA=;
-        b=YJ4gleW/Oudz15EGtHqtKefSFZVjt1x3gg9DqYJHTCqZDC3AB1dhb3i2v/Ud+xz4bo
-         Zz8KksMAvTGNHXWKSJVCP6DaJTVNTI8HW4aNGjmycaICpyeM47k7pLXEQMpVluTGSArv
-         ljwiS+Gkfp4upx9xd/DOg50X93wn9pGdTAkl4P3Kx8HgI5hYit6dNgcQyfUCvzwpt3YQ
-         jUnUI+fFwo6r/7aBWxzkOE4pYIpif7qcUKhRXCS8fDwGniZGRsadcriRaINfbjCHPse1
-         1P8OOAxVOoKdW4ObVLxmp6EgfXp2hDla66TB77lbOJ1ih/vHeWWOK565NIUKMhs1kv3C
-         F7/g==
-X-Gm-Message-State: AOAM532nkrTig+yKzOQnLkm5yN1nWtuS3Dx2VToJfY6dxV8clfbRrpzW
-        RTFmLKEXKK17KUjxHNlpx535CXhndcjNpgmn
-X-Google-Smtp-Source: ABdhPJwwQ4SEfJncS3DjFky0jrtAzabFr/NwGRIk+x6cUIS0pKjHWg2e9HNk4xF83fmQn3htuPaNUg==
-X-Received: by 2002:aa7:8198:0:b029:274:8a92:51b5 with SMTP id g24-20020aa781980000b02902748a9251b5mr19595593pfi.5.1620058176881;
-        Mon, 03 May 2021 09:09:36 -0700 (PDT)
-Received: from localhost.localdomain (host-219-71-67-82.dynamic.kbtelecom.net. [219.71.67.82])
-        by smtp.gmail.com with ESMTPSA id i14sm41758pgk.77.2021.05.03.09.09.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 May 2021 09:09:36 -0700 (PDT)
-From:   Wei Ming Chen <jj251510319013@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        Wei Ming Chen <jj251510319013@gmail.com>
-Subject: [PATCH] usb: gadget: function: Fix inconsistent indent
-Date:   Tue,  4 May 2021 00:09:27 +0800
-Message-Id: <20210503160927.6482-1-jj251510319013@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        id S231852AbhECQiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 12:38:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37444 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231625AbhECQhI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 12:37:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 45AC861364;
+        Mon,  3 May 2021 16:35:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620059759;
+        bh=AZe2vZ5ADJJaJ4xV8wf/15PTru8F8h0rROcmQxBeQO8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dIT+QEJjZKjeV8FQIv7cYwTC7/PxqRTJkDLBJKZomQf/zlDXNr/YPrRja4AntuEHv
+         m/fySkYFwRm+aNFec/Egxl/NG8lh6OCEmXImelojxihhzVGX6Qoy3bYNHA1yV18j2X
+         qIxYqtXaVeUqPM5Y6gch2FSMaole+95ar2WG7Pr64POWeWed3Llj0IkEdRTDZc70eM
+         qCO5Ve9stgn80OONN9eCv7hoJMsWqeU5aqk/KWYQctRjzXnYhZ4U0Cw+xBwLs/uxYC
+         8dkHb/jKYHClrsZCQHDrjduz3e8AI3bDWM6rFzD9z3Ea02po9acMyikvlcgYkfc1Bl
+         YHZbTecVosjNw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 029/134] media: drivers/media/usb: fix memory leak in zr364xx_probe
+Date:   Mon,  3 May 2021 12:33:28 -0400
+Message-Id: <20210503163513.2851510-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
+References: <20210503163513.2851510-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove whitespace before variable
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+[ Upstream commit 9c39be40c0155c43343f53e3a439290c0fec5542 ]
+
+syzbot reported memory leak in zr364xx_probe()[1].
+The problem was in invalid error handling order.
+All error conditions rigth after v4l2_ctrl_handler_init()
+must call v4l2_ctrl_handler_free().
+
+Reported-by: syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/gadget/function/u_hid.h  | 4 ++--
- drivers/usb/gadget/function/u_midi.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/usb/zr364xx/zr364xx.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/function/u_hid.h
-index 84e6da302499..98d6af558c03 100644
---- a/drivers/usb/gadget/function/u_hid.h
-+++ b/drivers/usb/gadget/function/u_hid.h
-@@ -29,8 +29,8 @@ struct f_hid_opts {
- 	 * Protect the data form concurrent access by read/write
- 	 * and create symlink/remove symlink.
- 	 */
--	 struct mutex			lock;
--	 int				refcnt;
-+	struct mutex			lock;
-+	int				refcnt;
- };
+diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
+index d29b861367ea..1ef611e08323 100644
+--- a/drivers/media/usb/zr364xx/zr364xx.c
++++ b/drivers/media/usb/zr364xx/zr364xx.c
+@@ -1430,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (hdl->error) {
+ 		err = hdl->error;
+ 		dev_err(&udev->dev, "couldn't register control\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
+ 	/* save the init method used by this camera */
+ 	cam->method = id->driver_info;
+@@ -1503,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	if (!cam->read_endpoint) {
+ 		err = -ENOMEM;
+ 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	}
  
- int ghid_setup(struct usb_gadget *g, int count);
-diff --git a/drivers/usb/gadget/function/u_midi.h b/drivers/usb/gadget/function/u_midi.h
-index f6e14af7f566..2e400b495cb8 100644
---- a/drivers/usb/gadget/function/u_midi.h
-+++ b/drivers/usb/gadget/function/u_midi.h
-@@ -29,8 +29,8 @@ struct f_midi_opts {
- 	 * Protect the data form concurrent access by read/write
- 	 * and create symlink/remove symlink.
- 	 */
--	 struct mutex			lock;
--	 int				refcnt;
-+	struct mutex			lock;
-+	int				refcnt;
- };
+ 	/* v4l */
+@@ -1515,7 +1515,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	/* load zr364xx board specific */
+ 	err = zr364xx_board_init(cam);
+ 	if (err)
+-		goto unregister;
++		goto free_hdlr_and_unreg_dev;
+ 	err = v4l2_ctrl_handler_setup(hdl);
+ 	if (err)
+ 		goto board_uninit;
+@@ -1533,7 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
+ 	if (err) {
+ 		dev_err(&udev->dev, "video_register_device failed\n");
+-		goto free_handler;
++		goto board_uninit;
+ 	}
+ 	cam->v4l2_dev.release = zr364xx_release;
  
- #endif /* U_MIDI_H */
+@@ -1541,11 +1541,10 @@ static int zr364xx_probe(struct usb_interface *intf,
+ 		 video_device_node_name(&cam->vdev));
+ 	return 0;
+ 
+-free_handler:
+-	v4l2_ctrl_handler_free(hdl);
+ board_uninit:
+ 	zr364xx_board_uninit(cam);
+-unregister:
++free_hdlr_and_unreg_dev:
++	v4l2_ctrl_handler_free(hdl);
+ 	v4l2_device_unregister(&cam->v4l2_dev);
+ free_cam:
+ 	kfree(cam);
 -- 
-2.25.1
+2.30.2
 
