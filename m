@@ -2,121 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46669371AF9
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 18:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77828371E4C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 19:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbhECQnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 12:43:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232366AbhECQkl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 May 2021 12:40:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 35FA2613BA;
-        Mon,  3 May 2021 16:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059860;
-        bh=AZe2vZ5ADJJaJ4xV8wf/15PTru8F8h0rROcmQxBeQO8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E85J0BqqWcUHUfVOO20jVpmRJYuxWF9PsmZTC+X2JpGJTPAa18/G2KG4tsLamNpF7
-         0xcXOBNNcfjWzPDK5e7e3rmYoHqGrIzJ8lDEfkWX7OK2XxsFfyXC2GH1Oz2sQFmAJS
-         gkZx+1DQALv6W+kKNER+qncI1R+VkzAevu08FIIW+IQM5R15fkPg0TC+MZsM6rJw0+
-         asxs+SmS+E21KBAFbRSeoAMzmM2uwIVX/rXAG5ncsakjvp38eKHdqmwk0mn7GxvXRW
-         f7z++wUX6AvWEPPF7jVb5jiTrDZOsj24v3wRwt1mHshLNMAlCcdBYiQOf30FB+mT8w
-         6FBYVDjEZKskA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 026/115] media: drivers/media/usb: fix memory leak in zr364xx_probe
-Date:   Mon,  3 May 2021 12:35:30 -0400
-Message-Id: <20210503163700.2852194-26-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210503163700.2852194-1-sashal@kernel.org>
-References: <20210503163700.2852194-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+        id S231735AbhECRUQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 13:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231375AbhECRUN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 13:20:13 -0400
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE96C061761
+        for <linux-usb@vger.kernel.org>; Mon,  3 May 2021 10:19:20 -0700 (PDT)
+Received: by mail-oi1-x249.google.com with SMTP id c3-20020a0568081383b029010231e3ec8cso3473577oiw.22
+        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 10:19:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=kRTl6/sXAc8KmXy+W6gst+5/cWsH2BSF7FQfc4l1psA=;
+        b=m2KLbMxep4kkPHVGIQ5oukf6jcbNwITbQGZzOKSVEhd8hJc1DFOEcMkuFJA51Deqqf
+         UCRvOcRF2JE4hfsQoZDyHjyaQ1mnwTo5ujmYt0dgrDqXqi7n5ZPGw72mJJvH0RgANX4A
+         Cd0az3rN5tk3x1pVsZP/jx+CaIp3w/7ubw+Ly4Fmwi+0kapJ3tCLowLy7cDafhTzrD2K
+         UcDKvE0YmxMwRaoRuv10fuwGb4uzMUyq8WHHDTfqQ5nvYllr6BEkSI0otfFw+o2a+D+S
+         +hIASOWCkIon7/CgvIVk5dNUWzNKTFLFTMLKS3PN+SykECIiUuZb6aCw3b3xMqCB0AlF
+         +CvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=kRTl6/sXAc8KmXy+W6gst+5/cWsH2BSF7FQfc4l1psA=;
+        b=c1PL1cH1yD1jXTpPJ0M0LB93gLrA/d9UJLoYwPI3s0Z8Gsp9lz76fXDdHCau5huFVY
+         CVo6Yf21r8jUOw53WkpcE14ZcVWBNDnZxSSg1LVlrKe/ROWcYjlWsofPehkqqlia/Xlw
+         jVlmyZjr69Yqh+trtF+7Cf3+n8pMwpFbCNB2UrSbBfw177yE+9XNDofj72EAXldJ0V0+
+         XMhl1JAjoCdqDz1SakbOuvre7eeXAyyd+3yYe2XetSKR6C++AaXOBh8uTm44c9nDJR2P
+         mUUJfCBoCSLKvY76u76gZhB3aF1hYu2ynPlqBmvRf3rUoAF0njnGjOi4axrpMH/1D7Ew
+         TijQ==
+X-Gm-Message-State: AOAM5332ZvYV4TpU4V1yiQF2XIJmcveaTFODULXaWR2QEQ2uGlheNz8p
+        1XDBoP0Q+NYMOADnhIdCi/u1GHlUdE9f
+X-Google-Smtp-Source: ABdhPJzH0kwfJ8i7nTNUjn4IAvfrLK/3atJih6tzV9pw/3Yb4yFdo/q9o3upacsDzji3qn7xVu3I2XZNXGj4
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:7bdb:2b58:f6b1:a854])
+ (user=kyletso job=sendgmr) by 2002:a25:76ce:: with SMTP id
+ r197mr13677287ybc.23.1620062348857; Mon, 03 May 2021 10:19:08 -0700 (PDT)
+Date:   Tue,  4 May 2021 01:18:49 +0800
+Message-Id: <20210503171849.2605302-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+Subject: [PATCH] usb: typec: tcpm: Fix wrong handling in GET_SINK_CAP
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+After receiving Sink Capabilities Message in GET_SINK_CAP AMS, it is
+incorrect to call tcpm_pd_handle_state because the Message is expected
+and the current state is not Ready states. The result of this incorrect
+operation ends in Soft Reset which is definitely wrong. Simply
+forwarding to Ready States is enough to finish the AMS.
 
-[ Upstream commit 9c39be40c0155c43343f53e3a439290c0fec5542 ]
-
-syzbot reported memory leak in zr364xx_probe()[1].
-The problem was in invalid error handling order.
-All error conditions rigth after v4l2_ctrl_handler_init()
-must call v4l2_ctrl_handler_free().
-
-Reported-by: syzbot+efe9aefc31ae1e6f7675@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 8dea75e11380 ("usb: typec: tcpm: Protocol Error handling")
+Signed-off-by: Kyle Tso <kyletso@google.com>
 ---
- drivers/media/usb/zr364xx/zr364xx.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/zr364xx/zr364xx.c b/drivers/media/usb/zr364xx/zr364xx.c
-index d29b861367ea..1ef611e08323 100644
---- a/drivers/media/usb/zr364xx/zr364xx.c
-+++ b/drivers/media/usb/zr364xx/zr364xx.c
-@@ -1430,7 +1430,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (hdl->error) {
- 		err = hdl->error;
- 		dev_err(&udev->dev, "couldn't register control\n");
--		goto unregister;
-+		goto free_hdlr_and_unreg_dev;
- 	}
- 	/* save the init method used by this camera */
- 	cam->method = id->driver_info;
-@@ -1503,7 +1503,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	if (!cam->read_endpoint) {
- 		err = -ENOMEM;
- 		dev_err(&intf->dev, "Could not find bulk-in endpoint\n");
--		goto unregister;
-+		goto free_hdlr_and_unreg_dev;
- 	}
- 
- 	/* v4l */
-@@ -1515,7 +1515,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	/* load zr364xx board specific */
- 	err = zr364xx_board_init(cam);
- 	if (err)
--		goto unregister;
-+		goto free_hdlr_and_unreg_dev;
- 	err = v4l2_ctrl_handler_setup(hdl);
- 	if (err)
- 		goto board_uninit;
-@@ -1533,7 +1533,7 @@ static int zr364xx_probe(struct usb_interface *intf,
- 	err = video_register_device(&cam->vdev, VFL_TYPE_VIDEO, -1);
- 	if (err) {
- 		dev_err(&udev->dev, "video_register_device failed\n");
--		goto free_handler;
-+		goto board_uninit;
- 	}
- 	cam->v4l2_dev.release = zr364xx_release;
- 
-@@ -1541,11 +1541,10 @@ static int zr364xx_probe(struct usb_interface *intf,
- 		 video_device_node_name(&cam->vdev));
- 	return 0;
- 
--free_handler:
--	v4l2_ctrl_handler_free(hdl);
- board_uninit:
- 	zr364xx_board_uninit(cam);
--unregister:
-+free_hdlr_and_unreg_dev:
-+	v4l2_ctrl_handler_free(hdl);
- 	v4l2_device_unregister(&cam->v4l2_dev);
- free_cam:
- 	kfree(cam);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c4fdc00a3bc8..68e04e397e92 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2390,7 +2390,7 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
+ 		port->nr_sink_caps = cnt;
+ 		port->sink_cap_done = true;
+ 		if (port->ams == GET_SINK_CAPABILITIES)
+-			tcpm_pd_handle_state(port, ready_state(port), NONE_AMS, 0);
++			tcpm_set_state(port, ready_state(port), 0);
+ 		/* Unexpected Sink Capabilities */
+ 		else
+ 			tcpm_pd_handle_msg(port,
 -- 
-2.30.2
+2.31.1.527.g47e6f16901-goog
 
