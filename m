@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C05F3719DB
-	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 18:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46669371AF9
+	for <lists+linux-usb@lfdr.de>; Mon,  3 May 2021 18:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231852AbhECQiE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 12:38:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37444 "EHLO mail.kernel.org"
+        id S231760AbhECQnC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 12:43:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37500 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231625AbhECQhI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 3 May 2021 12:37:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 45AC861364;
-        Mon,  3 May 2021 16:35:58 +0000 (UTC)
+        id S232366AbhECQkl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 3 May 2021 12:40:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 35FA2613BA;
+        Mon,  3 May 2021 16:37:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620059759;
+        s=k20201202; t=1620059860;
         bh=AZe2vZ5ADJJaJ4xV8wf/15PTru8F8h0rROcmQxBeQO8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dIT+QEJjZKjeV8FQIv7cYwTC7/PxqRTJkDLBJKZomQf/zlDXNr/YPrRja4AntuEHv
-         m/fySkYFwRm+aNFec/Egxl/NG8lh6OCEmXImelojxihhzVGX6Qoy3bYNHA1yV18j2X
-         qIxYqtXaVeUqPM5Y6gch2FSMaole+95ar2WG7Pr64POWeWed3Llj0IkEdRTDZc70eM
-         qCO5Ve9stgn80OONN9eCv7hoJMsWqeU5aqk/KWYQctRjzXnYhZ4U0Cw+xBwLs/uxYC
-         8dkHb/jKYHClrsZCQHDrjduz3e8AI3bDWM6rFzD9z3Ea02po9acMyikvlcgYkfc1Bl
-         YHZbTecVosjNw==
+        b=E85J0BqqWcUHUfVOO20jVpmRJYuxWF9PsmZTC+X2JpGJTPAa18/G2KG4tsLamNpF7
+         0xcXOBNNcfjWzPDK5e7e3rmYoHqGrIzJ8lDEfkWX7OK2XxsFfyXC2GH1Oz2sQFmAJS
+         gkZx+1DQALv6W+kKNER+qncI1R+VkzAevu08FIIW+IQM5R15fkPg0TC+MZsM6rJw0+
+         asxs+SmS+E21KBAFbRSeoAMzmM2uwIVX/rXAG5ncsakjvp38eKHdqmwk0mn7GxvXRW
+         f7z++wUX6AvWEPPF7jVb5jiTrDZOsj24v3wRwt1mHshLNMAlCcdBYiQOf30FB+mT8w
+         6FBYVDjEZKskA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Pavel Skripkin <paskripkin@gmail.com>,
@@ -31,12 +31,12 @@ Cc:     Pavel Skripkin <paskripkin@gmail.com>,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         linux-media@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 029/134] media: drivers/media/usb: fix memory leak in zr364xx_probe
-Date:   Mon,  3 May 2021 12:33:28 -0400
-Message-Id: <20210503163513.2851510-29-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.11 026/115] media: drivers/media/usb: fix memory leak in zr364xx_probe
+Date:   Mon,  3 May 2021 12:35:30 -0400
+Message-Id: <20210503163700.2852194-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210503163513.2851510-1-sashal@kernel.org>
-References: <20210503163513.2851510-1-sashal@kernel.org>
+In-Reply-To: <20210503163700.2852194-1-sashal@kernel.org>
+References: <20210503163700.2852194-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
