@@ -2,88 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CCD372CCD
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 17:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F00372CDE
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 17:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbhEDPO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 11:14:28 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:40421 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230254AbhEDPO1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 11:14:27 -0400
-Received: (qmail 660129 invoked by uid 1000); 4 May 2021 11:13:31 -0400
-Date:   Tue, 4 May 2021 11:13:31 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        id S230411AbhEDPXn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 11:23:43 -0400
+Received: from mga18.intel.com ([134.134.136.126]:37200 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230254AbhEDPXn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 May 2021 11:23:43 -0400
+IronPort-SDR: sGHJIiCvWZ/8lJ2kCFG/9NIur7r9aJgG7J6drmqHiixOToIi4x6eU0kyoeWK1Osv8GJtmroFzS
+ pJxEG+zDIGZA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="185472393"
+X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
+   d="scan'208";a="185472393"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 08:22:47 -0700
+IronPort-SDR: c2tsf9ETkTY+3YKRnCCN6uOZvrJUlwLHly8GXAmCTUjnCwymTJN/h9YUz7Qnjtjs0kbBiRRYJ1
+ hN9w20VMjdOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
+   d="scan'208";a="531099326"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 04 May 2021 08:22:43 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 May 2021 18:22:42 +0300
+Date:   Tue, 4 May 2021 18:22:42 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "dpenkler@gmail.com" <dpenkler@gmail.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: Re: [syzbot] INFO: rcu detected stall in tx
-Message-ID: <20210504151331.GB657070@rowland.harvard.edu>
-References: <a4f1b9d202c5445e8c714b3181b84830@rohde-schwarz.com>
+        Guenter Roeck <linux@roeck-us.net>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/9] drm + usb-type-c: Add support for out-of-band
+ hotplug notification (v2)
+Message-ID: <YJFmwpdLQghdvkga@kuha.fi.intel.com>
+References: <20210503154647.142551-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a4f1b9d202c5445e8c714b3181b84830@rohde-schwarz.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210503154647.142551-1-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 03, 2021 at 09:56:05PM +0000, Guido Kiener wrote:
-> Hi all,
+On Mon, May 03, 2021 at 05:46:38PM +0200, Hans de Goede wrote:
+> Hi All,
 > 
-> Dave and I discussed the "self-detected stall on CPU" caused by the usbtmc driver.
+> Here is v2 of my work on making DP over Type-C work on devices where the
+> Type-C controller does not drive the HPD pin on the GPU, but instead
+> we need to forward HPD events from the Type-C controller to the DRM driver.
 > 
-> What happened?
-> The callback handler usbtmc_interrupt(struct urb *urb) for the INT pipe receives an erroneous urb with status -EPROTO (-71).
-> See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/class/usbtmc.c?h=v5.12#n2340
-> -EPROTO does not abort/shutdown the pipe and the urb is resubmitted to receive the next packet. However the callback handler usbtmc_interrupt is called again with the same erroneous status -EPROTO and this seems to result in an endless loop.
-> According to https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/driver-api/usb/error-codes.rst?h=v5.12#n177
-> the error -EPROTO indicates a hardware problem or a bad cable.
+> Changes in v2:
+> - Replace the bogus "drm/connector: Make the drm_sysfs connector->kdev
+>   device hold a reference to the connector" patch with:
+>   "drm/connector: Give connector sysfs devices there own device_type"
+>   the new patch is a dep for patch 2/9 see the patches
 > 
-> Most usb drivers do not react in a specific way on this hardware problems and resubmit the urb. We assume these drivers will run into the same endless loop. Some other driver samples are:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/class/cdc-acm.c?h=v5.12#n379
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/usbhid/usbmouse.c?h=v5.12#n65
+> - Stop using a class-dev-iter, instead at a global connector list
+>   to drm_connector.c and use that to find the connector by the fwnode,
+>   similar to how we already do this in drm_panel.c and drm_bridge.c
 > 
-> Possible solutions:
-> Hardware defects or bad cables seems to be a common problem for most usb drivers and I assume we do not want to fix this problem in all class specific drivers, but in lower level host drivers, e.g:
-> 1. Using a counter and close the pipe after some detected errors
-> 2. Delay the resubmission of the urb to avoid high cpu usage
-> 3. Do nothing, since it is just a rare problem.
+> - Make drm_connector_oob_hotplug_event() take a fwnode pointer as
+>   argument, rather then a drm_connector pointer and let it do the
+>   lookup itself. This allows making drm_connector_find_by_fwnode() a
+>   drm-internal function and avoids code outside the drm subsystem
+>   potentially holding on the a drm_connector reference for a longer
+>   period.
 > 
-> We've never seen this problem in our products and we do not dare to change anything.
+> This series not only touches drm subsys files but it also touches
+> drivers/usb/typec/altmodes/typec_displayport.c, that file usually
+> does not see a whole lot of changes. So I believe it would be best
+> to just merge the entire series through drm-misc, Assuming we can
+> get an ack from Greg for merging the typec_displayport.c changes
+> this way.
+> 
+> ### 
+> 
+> As already mentioned in the v1 cover-letter this series replaces
+> a previous attempt from quite some time ago. 
+> For anyone interested here are the old (2019!) patches for this:
+> 
+> https://patchwork.freedesktop.org/patch/288491/
+> https://patchwork.freedesktop.org/patch/288493/
+> https://patchwork.freedesktop.org/patch/288495/
+> 
+> Last time I posted this the biggest change requested was for more info to
+> be included in the event send to the DRM-subsystem, specifically sending
+> the following info was requested:
+> 
+> 1. Which DP connector on the GPU the event is for
+> 2. How many lanes are available
+> 3. Connector orientation
+> 
+> This series is basically an entirely new approach, which no longer
+> uses the notifier framework at all. Instead the Type-C code looksup
+> a connector based on a fwnode (this was suggested by Heikki Krogerus)
+> and then calls a new oob_hotplug_event drm_connector_func directly
+> on the connector, passing the requested info as argument.
+> 
+> Info such as the orientation and the number of dp-lanes is now passed
+> to the drm_connector_oob_hotplug_event() function as requested in the
+> review of the old code, but nothing is done with it for now.
+> Using this info falls well outside of my knowledge of the i915 driver
+> so this is left to a follow-up patch (I will be available to test
+> patches for this).
 
-Drivers are not consistent in the way they handle these errors, as you 
-have seen.  A few try to take active measures, such as retrys with 
-increasing timeouts.  Many drivers just ignore them, which is not a very 
-good idea.
+Thanks for taking care of these! It's really great that you spent the
+time to do this series. I'm already thinking about what we can add
+after these are in. I think support for re-configuration, so support
+for changing the pin-configuration in runtime is going to be needed
+soon after these. But first things first (sorry, I'm getting ahead of
+myself).
 
-The general feeling among kernel USB developers is that a -EPROTO, 
--EILSEQ, or -ETIME error should be regarded as fatal, much the same as 
-an unplug event.  The driver should avoid resubmitting URBs and just 
-wait to be unbound from the device.
 
-If you would like to audit drivers and fix them up to behave this way, 
-that would be great.
+thanks,
 
-(FYI, by far the most common causes of these errors are: The user has 
-unplugged the USB cable, or the device's firmware has crashed.  It is 
-quite rare for the cause to be intermittent, although not entirely 
-unheard of -- for example, someone once reported errors resulting from 
-EM or power-line interference caused by flickering fluorescent lights or 
-something of that sort.  It's pretty safe to ignore this possibility.)
-
-Alan Stern
+-- 
+heikki
