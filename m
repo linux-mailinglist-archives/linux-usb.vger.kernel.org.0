@@ -2,35 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E8F372C95
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 16:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9DF372CC1
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 17:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbhEDO5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 10:57:05 -0400
-Received: from mga03.intel.com ([134.134.136.65]:51552 "EHLO mga03.intel.com"
+        id S230356AbhEDPLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 11:11:30 -0400
+Received: from mga05.intel.com ([192.55.52.43]:63481 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230246AbhEDO5E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 May 2021 10:57:04 -0400
-IronPort-SDR: 5n6EG0JPyVT7Xy93HJo4OvO/M1DZmpqDiRiKet1UTV2yEjo7c33ryalW+zCC9RKyXwCs0EbrrK
- tfBQfik46M4Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="198052299"
+        id S230246AbhEDPL3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 May 2021 11:11:29 -0400
+IronPort-SDR: w+C2wbYXG4uo7rRgJJ4odU/vsI6eKbIbmicCH3qy2kvQ4iPynCXv9xFfVFkdrCvLLEkqMSPern
+ sn/S5uCEOM+w==
+X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="283410462"
 X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="198052299"
+   d="scan'208";a="283410462"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 07:56:09 -0700
-IronPort-SDR: a5y6u8eLfzoTlmH3RBbBzZbslDtwNu7smkGG46CpEjFPkGRJgDXIeOdVLYasTJF4VjNXIVCdqz
- Cr04KJebwGzw==
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 08:10:34 -0700
+IronPort-SDR: nLyJdrNp3CNGXSAwYbytKe0ckXjGML1xV1KD42EwKj701NzYv1e0EzfkSWgA11DN4YaWBR70DR
+ 6krTNmyrau8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="531088023"
+   d="scan'208";a="531093933"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 04 May 2021 07:56:04 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 May 2021 17:56:03 +0300
-Date:   Tue, 4 May 2021 17:56:03 +0300
+  by fmsmga001.fm.intel.com with SMTP; 04 May 2021 08:10:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 May 2021 18:10:29 +0300
+Date:   Tue, 4 May 2021 18:10:29 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
         Thomas Zimmermann <tzimmermann@suse.de>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -41,56 +40,67 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Guenter Roeck <linux@roeck-us.net>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 5/9] drm/i915: Associate ACPI connector nodes with
- connector entries
-Message-ID: <YJFgg0IQ6Csluoxu@kuha.fi.intel.com>
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/9] drm/connector: Add support for out-of-band hotplug
+ notification (v2)
+Message-ID: <YJFj5Vk7xOcj+ISZ@kuha.fi.intel.com>
 References: <20210503154647.142551-1-hdegoede@redhat.com>
- <20210503154647.142551-6-hdegoede@redhat.com>
- <CAHp75VcS5nvzBzjbSytqD6qsSURyzdEdmDi934y=5W2SCNyo9A@mail.gmail.com>
+ <20210503154647.142551-5-hdegoede@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VcS5nvzBzjbSytqD6qsSURyzdEdmDi934y=5W2SCNyo9A@mail.gmail.com>
+In-Reply-To: <20210503154647.142551-5-hdegoede@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy,
+> +/**
+> + * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
+> + * @connector: connector to report the event on
+> + * @data: data related to the event
+> + *
+> + * On some hardware a hotplug event notification may come from outside the display
+> + * driver / device. An example of this is some USB Type-C setups where the hardware
+> + * muxes the DisplayPort data and aux-lines but does not pass the altmode HPD
+> + * status bit to the GPU's DP HPD pin.
+> + *
+> + * This function can be used to report these out-of-band events after obtaining
+> + * a drm_connector reference through calling drm_connector_find_by_fwnode().
+> + */
+> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
+> +				     struct drm_connector_oob_hotplug_event_data *data)
+> +{
+> +	struct drm_connector *connector;
+> +
+> +	connector = drm_connector_find_by_fwnode(connector_fwnode);
+> +	if (IS_ERR(connector))
+> +		return;
+> +
+> +	if (connector->funcs->oob_hotplug_event)
+> +		connector->funcs->oob_hotplug_event(connector, data);
+> +
+> +	drm_connector_put(connector);
+> +}
+> +EXPORT_SYMBOL(drm_connector_oob_hotplug_event);
 
-> > +/* NOTE: The connector order must be final before this is called. */
-> > +void intel_acpi_assign_connector_fwnodes(struct drm_i915_private *i915)
-> > +{
-> > +       struct drm_connector_list_iter conn_iter;
-> > +       struct drm_device *drm_dev = &i915->drm;
-> > +       struct device *kdev = &drm_dev->pdev->dev;
-> > +       struct fwnode_handle *fwnode = NULL;
-> > +       struct drm_connector *connector;
-> > +       struct acpi_device *adev;
-> > +
-> > +       drm_connector_list_iter_begin(drm_dev, &conn_iter);
-> > +       drm_for_each_connector_iter(connector, &conn_iter) {
-> > +               /* Always getting the next, even when the last was not
-> > used. */
-> > +               fwnode = device_get_next_child_node(kdev, fwnode);
-> > +               if (!fwnode)
-> > +                       break;
-> 
-> Who is dropping reference counting on fwnode ?
-> 
-> I’m in the middle of a pile of fixes for fwnode refcounting when
-> for_each_child or get_next_child is used. So, please double check you drop
-> a reference.
+So it does looks like the "data" parameter is not needed at all:
 
-Sorry Andy. This patch is from time before the software nodes
-implementation of the get_next_child callback handled the ref counting
-properly.
+void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
+{
+	struct drm_connector *connector;
 
-Br,
+	connector = drm_connector_find_by_fwnode(connector_fwnode);
+	if (IS_ERR(connector))
+		return;
+
+	if (connector->funcs->oob_hotplug_event)
+		connector->funcs->oob_hotplug_event(connector);
+
+	drm_connector_put(connector);
+}
+
+thanks,
 
 -- 
 heikki
