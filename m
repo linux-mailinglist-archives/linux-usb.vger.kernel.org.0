@@ -2,105 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9DF372CC1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 17:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CCD372CCD
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 17:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbhEDPLa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 11:11:30 -0400
-Received: from mga05.intel.com ([192.55.52.43]:63481 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230246AbhEDPL3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 May 2021 11:11:29 -0400
-IronPort-SDR: w+C2wbYXG4uo7rRgJJ4odU/vsI6eKbIbmicCH3qy2kvQ4iPynCXv9xFfVFkdrCvLLEkqMSPern
- sn/S5uCEOM+w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="283410462"
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="283410462"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 08:10:34 -0700
-IronPort-SDR: nLyJdrNp3CNGXSAwYbytKe0ckXjGML1xV1KD42EwKj701NzYv1e0EzfkSWgA11DN4YaWBR70DR
- 6krTNmyrau8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
-   d="scan'208";a="531093933"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 04 May 2021 08:10:30 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 May 2021 18:10:29 +0300
-Date:   Tue, 4 May 2021 18:10:29 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        id S230477AbhEDPO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 11:14:28 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40421 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230254AbhEDPO1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 11:14:27 -0400
+Received: (qmail 660129 invoked by uid 1000); 4 May 2021 11:13:31 -0400
+Date:   Tue, 4 May 2021 11:13:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 4/9] drm/connector: Add support for out-of-band hotplug
- notification (v2)
-Message-ID: <YJFj5Vk7xOcj+ISZ@kuha.fi.intel.com>
-References: <20210503154647.142551-1-hdegoede@redhat.com>
- <20210503154647.142551-5-hdegoede@redhat.com>
+        "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: Re: [syzbot] INFO: rcu detected stall in tx
+Message-ID: <20210504151331.GB657070@rowland.harvard.edu>
+References: <a4f1b9d202c5445e8c714b3181b84830@rohde-schwarz.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210503154647.142551-5-hdegoede@redhat.com>
+In-Reply-To: <a4f1b9d202c5445e8c714b3181b84830@rohde-schwarz.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> +/**
-> + * drm_connector_oob_hotplug_event - Report out-of-band hotplug event to connector
-> + * @connector: connector to report the event on
-> + * @data: data related to the event
-> + *
-> + * On some hardware a hotplug event notification may come from outside the display
-> + * driver / device. An example of this is some USB Type-C setups where the hardware
-> + * muxes the DisplayPort data and aux-lines but does not pass the altmode HPD
-> + * status bit to the GPU's DP HPD pin.
-> + *
-> + * This function can be used to report these out-of-band events after obtaining
-> + * a drm_connector reference through calling drm_connector_find_by_fwnode().
-> + */
-> +void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> +				     struct drm_connector_oob_hotplug_event_data *data)
-> +{
-> +	struct drm_connector *connector;
-> +
-> +	connector = drm_connector_find_by_fwnode(connector_fwnode);
-> +	if (IS_ERR(connector))
-> +		return;
-> +
-> +	if (connector->funcs->oob_hotplug_event)
-> +		connector->funcs->oob_hotplug_event(connector, data);
-> +
-> +	drm_connector_put(connector);
-> +}
-> +EXPORT_SYMBOL(drm_connector_oob_hotplug_event);
+On Mon, May 03, 2021 at 09:56:05PM +0000, Guido Kiener wrote:
+> Hi all,
+> 
+> Dave and I discussed the "self-detected stall on CPU" caused by the usbtmc driver.
+> 
+> What happened?
+> The callback handler usbtmc_interrupt(struct urb *urb) for the INT pipe receives an erroneous urb with status -EPROTO (-71).
+> See https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/class/usbtmc.c?h=v5.12#n2340
+> -EPROTO does not abort/shutdown the pipe and the urb is resubmitted to receive the next packet. However the callback handler usbtmc_interrupt is called again with the same erroneous status -EPROTO and this seems to result in an endless loop.
+> According to https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/driver-api/usb/error-codes.rst?h=v5.12#n177
+> the error -EPROTO indicates a hardware problem or a bad cable.
+> 
+> Most usb drivers do not react in a specific way on this hardware problems and resubmit the urb. We assume these drivers will run into the same endless loop. Some other driver samples are:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/usb/class/cdc-acm.c?h=v5.12#n379
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/usbhid/usbmouse.c?h=v5.12#n65
+> 
+> Possible solutions:
+> Hardware defects or bad cables seems to be a common problem for most usb drivers and I assume we do not want to fix this problem in all class specific drivers, but in lower level host drivers, e.g:
+> 1. Using a counter and close the pipe after some detected errors
+> 2. Delay the resubmission of the urb to avoid high cpu usage
+> 3. Do nothing, since it is just a rare problem.
+> 
+> We've never seen this problem in our products and we do not dare to change anything.
 
-So it does looks like the "data" parameter is not needed at all:
+Drivers are not consistent in the way they handle these errors, as you 
+have seen.  A few try to take active measures, such as retrys with 
+increasing timeouts.  Many drivers just ignore them, which is not a very 
+good idea.
 
-void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode)
-{
-	struct drm_connector *connector;
+The general feeling among kernel USB developers is that a -EPROTO, 
+-EILSEQ, or -ETIME error should be regarded as fatal, much the same as 
+an unplug event.  The driver should avoid resubmitting URBs and just 
+wait to be unbound from the device.
 
-	connector = drm_connector_find_by_fwnode(connector_fwnode);
-	if (IS_ERR(connector))
-		return;
+If you would like to audit drivers and fix them up to behave this way, 
+that would be great.
 
-	if (connector->funcs->oob_hotplug_event)
-		connector->funcs->oob_hotplug_event(connector);
+(FYI, by far the most common causes of these errors are: The user has 
+unplugged the USB cable, or the device's firmware has crashed.  It is 
+quite rare for the cause to be intermittent, although not entirely 
+unheard of -- for example, someone once reported errors resulting from 
+EM or power-line interference caused by flickering fluorescent lights or 
+something of that sort.  It's pretty safe to ignore this possibility.)
 
-	drm_connector_put(connector);
-}
-
-thanks,
-
--- 
-heikki
+Alan Stern
