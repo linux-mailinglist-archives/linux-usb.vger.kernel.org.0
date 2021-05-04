@@ -2,82 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA773723EF
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 02:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B252372422
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 03:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbhEDAr4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 20:47:56 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:49677 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229582AbhEDArz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 20:47:55 -0400
-Received: (qmail 638919 invoked by uid 1000); 3 May 2021 20:47:00 -0400
-Date:   Mon, 3 May 2021 20:47:00 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [syzbot] WARNING in do_proc_bulk
-Message-ID: <20210504004700.GA638732@rowland.harvard.edu>
-References: <000000000000b47bc805c15e4b11@google.com>
- <00000000000000186405c16a6156@google.com>
- <20210503105351.0966275d0d9e001ed794de2c@linux-foundation.org>
- <20210503185614.GA628313@rowland.harvard.edu>
- <20210503122428.30ebfddbaf8f5184dc73e1a7@linux-foundation.org>
+        id S229628AbhEDBIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 21:08:06 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:54238 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhEDBIE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 21:08:04 -0400
+Received: by mail-io1-f71.google.com with SMTP id q11-20020a5d87cb0000b02903ef3c4c5374so4561598ios.20
+        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 18:07:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=mHxj7gfCzBhBwoGIna8lGYdS0gFkx9kneQlodxRr0+0=;
+        b=fGhNKqzGldfHd1HBZpciEHhKmq3HwI9ExWDcumUUy79fk74iji6B1HcLv0EckfkFnP
+         Vuc7C4g8ejz/lEcaCKd7mMiaNgynW0vhN0ARufs8wCk7b1OKh/elCX3Kbg9t3pTzv1me
+         Y0dcp/hfSfrLIRMHo7Edi5LCUMsP11aibVvhBdq6vtOrJxfxXsazKNgYv8QnmHLdVw7k
+         M+hT/mEaCvjM0OV9VZdoZMoGXh+vVa8s/HTm2D0poNF0XcD8hqYdKwj6zrpM9I3f7aCS
+         zYCuuH0+qYx883mV6xALZ8foP67hIVI/uIOd5kHvZmouNLGZAmNryOH+9LwR0cPxBa8d
+         ERug==
+X-Gm-Message-State: AOAM5305C/b8nteOD138HPviNOIIXy3KN951WAH1c1yLSz3rzhdLiy0j
+        tODNkAofRp1vQElUi9j6V2Wwfvb8Bpn6Z7xJ6IRoDq+RYuZW
+X-Google-Smtp-Source: ABdhPJzfFUa69m/bkEQ/VR6vmJYrlPxEo+icvWpLAw5Qk1Oil/psVx4WLV8FdY9+XE3PxhIk/5BItd+QMqb2EsRqSDtAKMJtGG4y
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210503122428.30ebfddbaf8f5184dc73e1a7@linux-foundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a05:6638:f11:: with SMTP id h17mr10040830jas.102.1620090428937;
+ Mon, 03 May 2021 18:07:08 -0700 (PDT)
+Date:   Mon, 03 May 2021 18:07:08 -0700
+In-Reply-To: <20210504004700.GA638732@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000855d9805c176b211@google.com>
+Subject: Re: [syzbot] WARNING in do_proc_bulk
+From:   syzbot <syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 03, 2021 at 12:24:28PM -0700, Andrew Morton wrote:
-> On Mon, 3 May 2021 14:56:14 -0400 Alan Stern <stern@rowland.harvard.edu> wrote:
-> 
-> > > 
-> > > do_proc_bulk() is asking kmalloc for more than MAX_ORDER bytes, in
-> > > 
-> > > 	tbuf = kmalloc(len1, GFP_KERNEL);
-> > 
-> > This doesn't seem to be a bug.  do_proc_bulk is simply trying to 
-> > allocate a kernel buffer for data passed to/from userspace.  If a user 
-> > wants too much space all at once, that's their problem.
-> > 
-> > As far as I know, the kmalloc API doesn't require the caller to filter 
-> > out requests for more the MAX_ORDER bytes.  Only to be prepared to 
-> > handle failures -- which do_proc_bulk is all set for.
-> > 
-> > Am I wrong about this?  Should we add __GFP_NOWARN to the gfp flags?
-> 
-> Yes, if the oversized request is a can-happen and the resulting error is handled
-> appropriately, __GFP_NOWARN is the way to go.
+Hello,
 
-Okay, let's see how this does.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Alan Stern
+Reported-and-tested-by: syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d2b6f8a1
+Tested on:
 
-Index: usb-devel/drivers/usb/core/devio.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/devio.c
-+++ usb-devel/drivers/usb/core/devio.c
-@@ -1218,7 +1218,12 @@ static int do_proc_bulk(struct usb_dev_s
- 	ret = usbfs_increase_memory_usage(len1 + sizeof(struct urb));
- 	if (ret)
- 		return ret;
--	tbuf = kmalloc(len1, GFP_KERNEL);
-+
-+	/*
-+	 * len1 can be almost arbitrarily large.  Don't WARN if it's
-+	 * too big, just fail the request.
-+	 */
-+	tbuf = kmalloc(len1, GFP_KERNEL | __GFP_NOWARN);
- 	if (!tbuf) {
- 		ret = -ENOMEM;
- 		goto done;
+commit:         d2b6f8a1 Merge tag 'xfs-5.13-merge-3' of git://git.kernel...
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+kernel config:  https://syzkaller.appspot.com/x/.config?x=751a9df13cd00e8a
+dashboard link: https://syzkaller.appspot.com/bug?extid=882a85c0c8ec4a3e2281
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1787af43d00000
+
+Note: testing is done by a robot and is best-effort only.
