@@ -2,86 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8A7372BBF
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 16:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 547BB372C8C
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 16:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbhEDONO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 10:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbhEDONN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 10:13:13 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D967C06174A
-        for <linux-usb@vger.kernel.org>; Tue,  4 May 2021 07:12:16 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id t8so8908536oij.0
-        for <linux-usb@vger.kernel.org>; Tue, 04 May 2021 07:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=ccoyneidUkosRGC3YAhWyTi9rz693Bn8UwHItAOV0vY=;
-        b=mmHsb0l98zf5XyE63MEIhpoIKKyzIEf0Q6g852OPeRv0YvsG7hpp0RyH5ewTUGUslO
-         ShjX78tZJTDMkrgRxsEEAUaiP9wht1QGD8QViV8wN5WmnBsp++9oJfdyu3D5gDtbcFjZ
-         YQDZfbWiQNKVSD7+5cv70Vd2SjOSRoabh5dwY/O07PvMABiZqAGHgDQ5z08XP6Gt78Zm
-         OEUOM7rCJA7i34eUJA6E+BS/hCwYDAlJQ+IzML0ItVooNNyuegclCEVKOKpnPDHlN/1H
-         R/kJpUgo7kII9uujWDd7vZWzBV1SLbP1nymVIHX0AgyOI09L//U3/uU70bV/h7tkawSP
-         X4RA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=ccoyneidUkosRGC3YAhWyTi9rz693Bn8UwHItAOV0vY=;
-        b=fGbZULuJaetYOmZ6tULang2pSKESA8jXYPz2at/CxmoRaGLhxFKuQ42iNQWGmgDF7b
-         v1bA48UFUlFrzHCF/26tFTVPOUjcot7tnvBw+iYeNdgCrLMJ3XmlJBkpsh5I0qbSaj+8
-         Q8UDdZlJVHEEsOdIR7Pbbs3wGe+RiDF/POFXIe3G+zqfNiU/gJk/djYb5fI1J5RLuiAr
-         iyBRPcN9S1aoagDGVXFYgQ54Ts7PkCXjLRtf5mwfIdTT8vAvxMRAGpKtzkr+tB8u7i+Q
-         im+r3zcdDPdtEynmaAXYEPNEgodJ40JUyKHiK0zzcMvJO8YbmnAjM8gzg52ju5rpTtxc
-         rteQ==
-X-Gm-Message-State: AOAM530cveoTaI3jic7C9yikDXDM7Af7uK2EQ8BubOZpHYGAfEs4MnPW
-        ZdG9ha2ZbQ+5paXeCd5ndy0T20dVH035ffwes18=
-X-Google-Smtp-Source: ABdhPJyGLTtOIZAkPdOs7wKOoceqFhkEj5iWDGTkpvPXY9E9lxfPoSkxkO/LWCYyzQ6N8PXuQ98tRwf7TengvAediEs=
-X-Received: by 2002:aca:a814:: with SMTP id r20mr17900750oie.104.1620137534933;
- Tue, 04 May 2021 07:12:14 -0700 (PDT)
+        id S231376AbhEDOxm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 10:53:42 -0400
+Received: from mga09.intel.com ([134.134.136.24]:11720 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231326AbhEDOxl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 4 May 2021 10:53:41 -0400
+IronPort-SDR: ga4yvMvjaUYwnYHVVrDYNeld+pAndwlAIKHBpLHC6wCZ48TOMT5DC06g3d6Ks5QrT6cCBJmF3/
+ BBeWZ2hH77fg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="198083717"
+X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
+   d="scan'208";a="198083717"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 May 2021 07:52:45 -0700
+IronPort-SDR: vU+uxj5bo8hDLN6NcpjGw6Pky+yuJ7aER+QDsY62qHxO4ixpBbwju6LlsRENQoKe/I1++IH5Mj
+ l8zTA6jmHa8w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,272,1613462400"; 
+   d="scan'208";a="531087248"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 04 May 2021 07:52:40 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 04 May 2021 17:52:40 +0300
+Date:   Tue, 4 May 2021 17:52:40 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Imre Deak <imre.deak@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 4/9] drm/connector: Add support for out-of-band hotplug
+ notification
+Message-ID: <YJFfuF3UGP0TZrVw@kuha.fi.intel.com>
+References: <20210428215257.500088-1-hdegoede@redhat.com>
+ <20210428215257.500088-5-hdegoede@redhat.com>
+ <YI+tlE35i+6F/WUO@kuha.fi.intel.com>
+ <00e380b2-0376-0ddb-9b0e-342779b7fc06@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:ac9:7487:0:0:0:0:0 with HTTP; Tue, 4 May 2021 07:12:13 -0700 (PDT)
-Reply-To: inforproject013@gmail.com
-From:   project infor <projectinfor04@gmail.com>
-Date:   Tue, 4 May 2021 14:12:13 +0000
-Message-ID: <CAMPKcZDQVtK8vWkF85_EPV0tg5XhfksmdKH0yGyiz_vRfcE+Nw@mail.gmail.com>
-Subject: ECOWAS COMPENSATION COMMISSION
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00e380b2-0376-0ddb-9b0e-342779b7fc06@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-(ECOWAS) ECONOMIC COMMUNITY OF COMPENSATION COMMISSION UNITED STATE OF
-AMERICA 2021.
+On Mon, May 03, 2021 at 04:35:29PM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 5/3/21 10:00 AM, Heikki Krogerus wrote:
+> > Hi Hans,
+> > 
+> > On Wed, Apr 28, 2021 at 11:52:52PM +0200, Hans de Goede wrote:
+> >> +/**
+> >> + * struct drm_connector_oob_hotplug_event_data: OOB hotplug event data
+> >> + *
+> >> + * Contains data about out-of-band hotplug events, signalled through
+> >> + * drm_connector_oob_hotplug_event().
+> >> + */
+> >> +struct drm_connector_oob_hotplug_event_data {
+> >> +	/**
+> >> +	 * @connected: New connected status for the connector.
+> >> +	 */
+> >> +	bool connected;
+> >> +	/**
+> >> +	 * @dp_lanes: Number of available displayport lanes, 0 if unknown.
+> >> +	 */
+> >> +	int dp_lanes;
+> >> +	/**
+> >> +	 * @orientation: Connector orientation.
+> >> +	 */
+> >> +	enum typec_orientation orientation;
+> >> +};
+> > 
+> > I don't think the orientation is relevant. It will always be "normal"
+> > from DP PoW after muxing, no?
+> 
+> That is what I thought to, but during the discussion of my previous attempt
+> at this one of the i915 devs mentioned that in some cases the muxes manage
+> to swap the lane order when the connector upside-down and at least the
+> Intel GPUs can correct for this on the GPU side, so they asked for this
+> info to be included.
+> 
+> > I'm also not sure those deatils are enough in the long run. Based on
+> > what I've understood from our graphics team guys, for example knowing
+> > if multi-function is preferred may be important in some cases.
+> 
+> The current data being passed is just intended as a starting point,
+> this is purely a kernel internal API so we can easily add more
+> data to the struct. As I mentioned in the cover-letter the current
+> oob_hotplug handler which the i915 patch adds to the i915 driver does
+> not actually do anything with the data.  ATM it is purely there to
+> demonstrate that the ability to pass relevant data is there now
+> (which was an issue with the previous attempt). I believe the current
+> code is fine as a PoC of "pass event data" once GPU drivers actually
+> start doing something with the data we can extend or outright replace
+> it without issues.
 
-THIS COMPENSATION PROGRAM WAS ORGANIZED TO COMPENSATE ALL THE VICTIMS
-THAT FALL ON INTERNET SYNDICATE, FLOOD VICTIMS OR ANY NATURAL
-DISASTER, ETC... BASE ON MEETING WITH BOARD EXECUTIVE AGREEMENT TO
-COMPENSATE EACH PERSON WITH THE TOTAL OF (USD$550,000.00)
+Ah, if there is nothing using that information yet, then just don't
+pass it at all for now. As you said, it's kernel internal API, we can
+change it later if needed.
 
-YOUR ACTIVE E-MAIL WAS IN THE LIST SUBMITTED BY OUR MONITORING TEAM
-OBSERVERS AND THIS IS WHY WE ARE CONTACTING YOU,ALL MODALITIES HAS
-BEEN PUT IN PLACE FOR THE ONWARD REMITTANCE TO YOU, WE HAVE DEPOSITED
-(USD$550,000.00) SINCE ON THE 11TH OF JANUARY 2021 WITH MONEYGRAM
-TRANSFER OFFICE AND HAS BEEN MANDATED TO TRANSFER IT TO YOU.
+> > All of that, and more, is already available in the Configuration VDO
+> > Status VDO that the we have negotiated with the DP partner. Both those
+> > VDOs are part of struct typec_displayport_data. I think we should
+> > simply supply that structure to the DRM code instead of picking those
+> > details out of it...
+> 
+> I'm not sure I like the idea of passing the raw VDO, but if the
+> DRM folks think that would be useful we can certainly add it.
 
-WE HAVE TRY MANY TIME TO CONTACT YOU BUT NO REPLY FROM YOU. KINDLY
-CONTACT MISS SYLVIE SCHOLASTIQUE OF MONEYGRAM PAYMENT OFFICE TO
-INITIATE YOUR PAYMENT WITHOUT DELAY. SEND HER YOUR COMPENSATION CODE
-TO TRACE YOUR FILE: ECO157-2020AFBF
+Why are you against passing all the data that we have? What is the
+benefit in picking only certain details out of an object that has a
+standard format, and constructing a customised object for those
+details instead?
 
-CONTACT THE MONEYGRAM TRANSFER OFFICE BELOW ON:
 
-NAME:MISS SYLVIE SCHOLASTIQUE
-EMAIL: westernntbfa@outlook.com
+thanks,
 
-YOU ARE WARNED TO KEEP YOUR COMPENSATION CODE NUMBER SECRET TO AVOID
-DOUBLE CLAIM.
-
-THANKS
-ECOWAS COMPENSATION COMMISSION
-UNITED STATE OF AMERICA
+-- 
+heikki
