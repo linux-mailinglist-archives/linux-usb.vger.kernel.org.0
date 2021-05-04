@@ -2,130 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D0EC373192
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 22:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E400A373288
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 00:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232462AbhEDUn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 16:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbhEDUnZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 16:43:25 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B65BC061763
-        for <linux-usb@vger.kernel.org>; Tue,  4 May 2021 13:42:28 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id 10so361179pfl.1
-        for <linux-usb@vger.kernel.org>; Tue, 04 May 2021 13:42:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=/TP/ojOa/Ek6gW+uOcPmzMHCY03xC5sD9r+Tt7fvvPk=;
-        b=FbCaQGqadb0WL3M5ebZa60H4dgsKFNigUohUSMJpShBJbcFoY+foepgohNE63oLsuc
-         e0jxmlcQgwqV71kH8tZegDwRcjNOn+yeotl3Wv0ioIOmEsp80YEDTmW/bqEvsG4N0G2F
-         ZGJkKSJH+mjgHSAw7hNWxzlUTJv0B5ulKxpkk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=/TP/ojOa/Ek6gW+uOcPmzMHCY03xC5sD9r+Tt7fvvPk=;
-        b=ug+FN20S4HORtMy3v2rLVAwQZ9yaIR1BVFr+lYQkF6ivqiAEAk66m6tu2Cqiafs59/
-         QLjiMoD6C2L9gMpp4AZk5qRibRTMDEqeSYTX+d+TvYZ5Qomoupu6xLTr22x06apOFBPr
-         rmfx4D1aBea601QBPXqegg6vgPc7Q1eG2s41Vz/EZPzL3sxAb1SkXn5GQWfQwi6zccHV
-         6nGvB8A0as6bDJqIsoJE5n4EkFI3H0AjuWWhCgtoC/cODNXq1i0DUJ/sl6jhPlbL3rx3
-         EU4xK2XcDHSNAZ+zuVxTW4a+bSJUJLbv8h4DKS97OrpuNenflB8AAJzuoCpLMwVkqskf
-         dmnA==
-X-Gm-Message-State: AOAM532RexvgYcpMKnP+hoy8o2vO6JzSGkBuZYTMddivpLTd2sEX40ZU
-        PBvJcBOKy9nkr3kNXHDGdefYig==
-X-Google-Smtp-Source: ABdhPJwZ8maovlt0GmGT150u/qayfs/nvy3E+9zb0XG5DoR8u7YIG1A6I3RCFzaNce9wpv5yV+66vQ==
-X-Received: by 2002:a17:90a:bd89:: with SMTP id z9mr30354112pjr.4.1620160947899;
-        Tue, 04 May 2021 13:42:27 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:4c2f:1f84:af45:6245])
-        by smtp.gmail.com with UTF8SMTPSA id g21sm14589874pjl.28.2021.05.04.13.42.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 May 2021 13:42:27 -0700 (PDT)
-Date:   Tue, 4 May 2021 13:42:26 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: sc7280: Add USB nodes for IDP
- board
-Message-ID: <YJGxsqGzNDbYO++O@google.com>
-References: <1620112135-1388-1-git-send-email-sanm@codeaurora.org>
- <1620112135-1388-3-git-send-email-sanm@codeaurora.org>
+        id S231441AbhEDWkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 18:40:51 -0400
+Received: from fgw21-7.mail.saunalahti.fi ([62.142.5.82]:57658 "EHLO
+        fgw21-7.mail.saunalahti.fi" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229705AbhEDWku (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 18:40:50 -0400
+X-Greylist: delayed 965 seconds by postgrey-1.27 at vger.kernel.org; Tue, 04 May 2021 18:40:46 EDT
+Received: from localhost (88-115-248-186.elisa-laajakaista.fi [88.115.248.186])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 62d009b2-ad27-11eb-9eb8-005056bdd08f;
+        Wed, 05 May 2021 01:23:44 +0300 (EEST)
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH v1 1/1] usb: typec: ucsi: Put fwnode in any case during ->probe()
+Date:   Wed,  5 May 2021 01:23:37 +0300
+Message-Id: <20210504222337.3151726-1-andy.shevchenko@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1620112135-1388-3-git-send-email-sanm@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 04, 2021 at 12:38:55PM +0530, Sandeep Maheswaram wrote:
-> Add USB nodes for sc7280 IDP board.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts | 39 +++++++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> index 54d2cb3..ff48d21 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> @@ -242,6 +242,45 @@
->  	status = "okay";
->  };
->  
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	dr_mode = "host";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> +
-> +&usb_1_qmpphy {
-> +	status = "okay";
-> +
-> +	vdda-phy-supply = <&vreg_l6b_1p2>;
-> +	vdda-pll-supply = <&vreg_l1b_0p8>;
-> +};
-> +
-> +&usb_2 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_2_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_2_hsphy {
-> +	status = "okay";
-> +
-> +	vdda-pll-supply = <&vreg_l10c_0p8>;
-> +	vdda33-supply = <&vreg_l2b_3p0>;
-> +	vdda18-supply = <&vreg_l1c_1p8>;
-> +};
-> +
->  /* PINCTRL - additions to nodes defined in sc7280.dtsi */
->  
->  &qup_uart5_default {
+device_for_each_child_node() bumps a reference counting of a returned variable.
+We have to balance it whenever we return to the caller.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Fixes: c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 282c3c825c13..0e1cec346e0f 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -999,6 +999,7 @@ static const struct typec_operations ucsi_ops = {
+ 	.pr_set = ucsi_pr_swap
+ };
+ 
++/* Caller must call fwnode_handle_put() after use */
+ static struct fwnode_handle *ucsi_find_fwnode(struct ucsi_connector *con)
+ {
+ 	struct fwnode_handle *fwnode;
+@@ -1033,7 +1034,7 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	command |= UCSI_CONNECTOR_NUMBER(con->num);
+ 	ret = ucsi_send_command(ucsi, command, &con->cap, sizeof(con->cap));
+ 	if (ret < 0)
+-		goto out;
++		goto out_unlock;
+ 
+ 	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DRP)
+ 		cap->data = TYPEC_PORT_DRD;
+@@ -1151,6 +1152,8 @@ static int ucsi_register_port(struct ucsi *ucsi, int index)
+ 	trace_ucsi_register_port(con->num, &con->status);
+ 
+ out:
++	fwnode_handle_put(cap->fwnode);
++out_unlock:
+ 	mutex_unlock(&con->lock);
+ 	return ret;
+ }
+-- 
+2.31.1
+
