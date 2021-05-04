@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE16372F42
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 19:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6D8373024
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbhEDRxp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 13:53:45 -0400
-Received: from gofer.mess.org ([88.97.38.141]:46979 "EHLO gofer.mess.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232126AbhEDRxn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 4 May 2021 13:53:43 -0400
-Received: by gofer.mess.org (Postfix, from userid 1000)
-        id 86E86C6505; Tue,  4 May 2021 18:52:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
-        t=1620150765; bh=+aEvwnnamLpbPMC0Zf6oc8EHS1sTKnBdL/3mFyrQNpU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=T7yxJeF4ju/Gr1UU2h7GHA8/0tm4nETXth6itkGRuRPhwnesFEJFaQABCxuukALwa
-         PS+Jb5J3RQ5HKAZ86JL0SeujgqukmOrbfg2vTJStVe9Nn9Xwvd2Uri5TusIRWA2ZsQ
-         3k4F2petv9Q+Ckpp9re6uYhiQAGxsGiHY/J0qHQ9AVu5gpPniOJhufmSH+HCrhh9CW
-         KqM6DdtHI9MC62UjQsdWaNZ0HIOHXLhleiEqQvUK7n/2QFK1m6I87iyasF9+D+IbtK
-         E5nnIFN3sul7FiUEL9RHFM98wJj9L8jCFFU1QI8ywvAmcDDAuy1LKClq+dML65hRI2
-         hNDpcCeVU22Tg==
-From:   Sean Young <sean@mess.org>
-To:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
+        id S231672AbhEDTBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 4 May 2021 15:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231274AbhEDTBS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 15:01:18 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30CAC061574;
+        Tue,  4 May 2021 12:00:21 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id w4so3819385ljw.9;
+        Tue, 04 May 2021 12:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=z3UaSIP+6pHt6XPbkKJ5mwpLRpOXZMGzxlv2KRAxxrE=;
+        b=me7Ahcc+ehybS1y7HX/8X9kTysUCgNA3nQuWu5CfAx5+qwSOonM7jNoxuGUaM02X1S
+         EqbZkcmqo8lyE1scP9V0rAuNmQaYY0VH71ApzR6WjxZ/DF4baMP4fPJCAUxECnyGstXA
+         c/Df1rLfjg6GIGpgvJ5JMKkwIlv/z4ifgAcSksdk95uo6TClM1CZEMSbuOEVuBF9X0sK
+         9gjcjRASSiRA9ZFItAy9rS+OGDZHEgm6LLqJRC0siW0j9uE5a/VrxjeMw69TTmn7APcF
+         v8ueYwn2gGRkxc4hkeJuqlcEgLyd1tq3gh/2l5iEetHR35tXTHvSFLZvVfIb7QB952a9
+         m6ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=z3UaSIP+6pHt6XPbkKJ5mwpLRpOXZMGzxlv2KRAxxrE=;
+        b=ERHG9pIfuf8UUA2HM4NQfiN9tEtn5wubGJuQ3KQej1NmzK+Mre5wXUZDZristR+N5X
+         UrTbGuUukVgcJ2nKlV7uY4m30R2yoOMXBuqBBN4sVmOIbrb6TRyxiHrDMiqrgr3H1RYX
+         5g0Ea7uc8JFKJir1k9fPY0D835kd24CWSQEgdxhshROUiGoD8fexZf7DJM/0uzrZaAWt
+         S/5KuwDJ+PyTi+dlTtBXPP3tqokBR6RIkBEjVPlqY3OMGDZyHb4K+/sy5NTU+FNx7DrI
+         Q/RhUl87VRfPt1iK11XlCetBva0zt58P+vNH/L83FnNPwtEP6zXdQNLzt8Tu9R6FqrFu
+         li9w==
+X-Gm-Message-State: AOAM533nlbmwXhnneQwnePtVMGFAVRsS+uysgccM/ClGTUj07SMLSFP3
+        nKRHf7tgvgQyZZVzb6724kjfNpwnhPI=
+X-Google-Smtp-Source: ABdhPJzMvkbPlViYc6C9hwjlgua6ImTE8/P6NK191PPkSs4aWBEe+cMLZ5c04/RgfjP4c7QN/PBb2w==
+X-Received: by 2002:a2e:a606:: with SMTP id v6mr19020894ljp.289.1620154820257;
+        Tue, 04 May 2021 12:00:20 -0700 (PDT)
+Received: from [192.168.1.102] ([178.176.77.191])
+        by smtp.gmail.com with ESMTPSA id j16sm333016lfe.152.2021.05.04.12.00.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 May 2021 12:00:19 -0700 (PDT)
+Subject: Re: [PATCH 3/3] USB: serial: blacklist USB-UIRT when driver is
+ selected
+To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jon Rhees <support@usbuirt.com>
-Subject: [PATCH 3/3] USB: serial: blacklist USB-UIRT when driver is selected
-Date:   Tue,  4 May 2021 18:52:45 +0100
-Message-Id: <6df6e3c02c7f736e99799fca757056608ccaf6c0.1620149665.git.sean@mess.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <cover.1620149665.git.sean@mess.org>
 References: <cover.1620149665.git.sean@mess.org>
+ <6df6e3c02c7f736e99799fca757056608ccaf6c0.1620149665.git.sean@mess.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <c8b4a545-a33f-6f7c-0c51-e6cca8fbb8d5@gmail.com>
+Date:   Tue, 4 May 2021 22:00:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <6df6e3c02c7f736e99799fca757056608ccaf6c0.1620149665.git.sean@mess.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The USB-UIRT device has its own driver, so blacklist the fdti driver
-from using it if the driver has been enabled.
+On 5/4/21 8:52 PM, Sean Young wrote:
 
-Signed-off-by: Sean Young <sean@mess.org>
----
- drivers/usb/serial/ftdi_sio.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+> The USB-UIRT device has its own driver, so blacklist the fdti driver
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 542073d2f0dd..2320bda57796 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -95,7 +95,9 @@ static int   ftdi_jtag_probe(struct usb_serial *serial);
- static int   ftdi_NDI_device_setup(struct usb_serial *serial);
- static int   ftdi_stmclite_probe(struct usb_serial *serial);
- static int   ftdi_8u2232c_probe(struct usb_serial *serial);
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- static void  ftdi_USB_UIRT_setup(struct ftdi_private *priv);
-+#endif
- static void  ftdi_HE_TIRA1_setup(struct ftdi_private *priv);
- 
- static const struct ftdi_sio_quirk ftdi_jtag_quirk = {
-@@ -106,9 +108,11 @@ static const struct ftdi_sio_quirk ftdi_NDI_device_quirk = {
- 	.probe	= ftdi_NDI_device_setup,
- };
- 
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- static const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
- 	.port_probe = ftdi_USB_UIRT_setup,
- };
-+#endif
- 
- static const struct ftdi_sio_quirk ftdi_HE_TIRA1_quirk = {
- 	.port_probe = ftdi_HE_TIRA1_setup,
-@@ -568,8 +572,10 @@ static const struct usb_device_id id_table_combined[] = {
- 	{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
- 	{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- 	{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
- 		.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
-+#endif
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_1) },
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_R2X0) },
- 	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_3) },
-@@ -2292,6 +2298,7 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
- 	return 0;
- }
- 
-+#if !IS_ENABLED(CONFIG_IR_UIRT)
- /* Setup for the USB-UIRT device, which requires hardwired
-  * baudrate (38400 gets mapped to 312500) */
- /* Called from usbserial:serial_probe */
-@@ -2301,6 +2308,7 @@ static void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
- 	priv->custom_divisor = 77;
- 	priv->force_baud = 38400;
- }
-+#endif
- 
- /* Setup for the HE-TIRA1 device, which requires hardwired
-  * baudrate (38400 gets mapped to 100000) and RTS-CTS enabled.  */
--- 
-2.31.1
+   It's ftdi, right?
 
+> from using it if the driver has been enabled.
+> 
+> Signed-off-by: Sean Young <sean@mess.org>
+[...]
+
+MBR, Sergei
