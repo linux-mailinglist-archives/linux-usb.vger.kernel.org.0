@@ -2,63 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B252372422
-	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 03:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F028F372438
+	for <lists+linux-usb@lfdr.de>; Tue,  4 May 2021 03:21:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbhEDBIG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 3 May 2021 21:08:06 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:54238 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbhEDBIE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 21:08:04 -0400
-Received: by mail-io1-f71.google.com with SMTP id q11-20020a5d87cb0000b02903ef3c4c5374so4561598ios.20
-        for <linux-usb@vger.kernel.org>; Mon, 03 May 2021 18:07:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=mHxj7gfCzBhBwoGIna8lGYdS0gFkx9kneQlodxRr0+0=;
-        b=fGhNKqzGldfHd1HBZpciEHhKmq3HwI9ExWDcumUUy79fk74iji6B1HcLv0EckfkFnP
-         Vuc7C4g8ejz/lEcaCKd7mMiaNgynW0vhN0ARufs8wCk7b1OKh/elCX3Kbg9t3pTzv1me
-         Y0dcp/hfSfrLIRMHo7Edi5LCUMsP11aibVvhBdq6vtOrJxfxXsazKNgYv8QnmHLdVw7k
-         M+hT/mEaCvjM0OV9VZdoZMoGXh+vVa8s/HTm2D0poNF0XcD8hqYdKwj6zrpM9I3f7aCS
-         zYCuuH0+qYx883mV6xALZ8foP67hIVI/uIOd5kHvZmouNLGZAmNryOH+9LwR0cPxBa8d
-         ERug==
-X-Gm-Message-State: AOAM5305C/b8nteOD138HPviNOIIXy3KN951WAH1c1yLSz3rzhdLiy0j
-        tODNkAofRp1vQElUi9j6V2Wwfvb8Bpn6Z7xJ6IRoDq+RYuZW
-X-Google-Smtp-Source: ABdhPJzfFUa69m/bkEQ/VR6vmJYrlPxEo+icvWpLAw5Qk1Oil/psVx4WLV8FdY9+XE3PxhIk/5BItd+QMqb2EsRqSDtAKMJtGG4y
-MIME-Version: 1.0
-X-Received: by 2002:a05:6638:f11:: with SMTP id h17mr10040830jas.102.1620090428937;
- Mon, 03 May 2021 18:07:08 -0700 (PDT)
-Date:   Mon, 03 May 2021 18:07:08 -0700
-In-Reply-To: <20210504004700.GA638732@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000855d9805c176b211@google.com>
-Subject: Re: [syzbot] WARNING in do_proc_bulk
-From:   syzbot <syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+        id S229645AbhEDBWh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 3 May 2021 21:22:37 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:58268 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229488AbhEDBWg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 3 May 2021 21:22:36 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620091302; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=aYFnbLK3UhrNMVkVfVwz9H5JgxqxEAJnwmD+LtSWESo=; b=eHvNbG9Y+ONMARAYP1wiCqM5hP43jNSnVn2RrxF8JI3vAsQnfxBj+7WffCXgmr/nDU6shP3e
+ NMR0jCqNO3YPfiZrVrGaF05QRh/e+TnHcX7vtXbXEwG0oJC1VG/rwP2Y0jVi8lmY2A7v/1RC
+ iM4l1Ex/o3d4aWU/rbJkWtbLHHc=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 6090a19e8807bcde1d570d1c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 04 May 2021 01:21:34
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1E53BC4338A; Tue,  4 May 2021 01:21:34 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C45F4C433D3;
+        Tue,  4 May 2021 01:21:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C45F4C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Avoid canceling current request for queuing error
+Date:   Mon,  3 May 2021 18:21:04 -0700
+Message-Id: <1620091264-418-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+If an error is received when issuing a start or update transfer
+command, the error handler will stop all active requests (including
+the current USB request), and call dwc3_gadget_giveback() to notify
+function drivers of the requests which have been stopped.  Avoid
+having to cancel the current request which is trying to be queued, as
+the function driver will handle the EP queue error accordingly.
+Simply unmap the request as it was done before, and allow previously
+started transfers to be cleaned up.
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+Changes in v2:
+ - Addressed feedback received by making sure the logic only applies to a req
+   which is being queued, decrementing the enqueue pointer, and only clearing
+   the HWO bit.
 
-Reported-and-tested-by: syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com
+ drivers/usb/dwc3/gadget.c | 75 +++++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 66 insertions(+), 9 deletions(-)
 
-Tested on:
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index dd80e5c..c8ddbe1 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -140,6 +140,29 @@ int dwc3_gadget_set_link_state(struct dwc3 *dwc, enum dwc3_link_state state)
+ }
+ 
+ /**
++ * dwc3_ep_dec_trb - decrement a trb index.
++ * @index: Pointer to the TRB index to increment.
++ *
++ * The index should never point to the link TRB. After decrementing,
++ * if index is zero, wrap around to the TRB before the link TRB.
++ */
++static void dwc3_ep_dec_trb(u8 *index)
++{
++	(*index)--;
++	if (*index < 0)
++		*index = DWC3_TRB_NUM - 1;
++}
++
++/**
++ * dwc3_ep_dec_enq - decrement endpoint's enqueue pointer
++ * @dep: The endpoint whose enqueue pointer we're decrementing
++ */
++static void dwc3_ep_dec_enq(struct dwc3_ep *dep)
++{
++	dwc3_ep_dec_trb(&dep->trb_enqueue);
++}
++
++/**
+  * dwc3_ep_inc_trb - increment a trb index.
+  * @index: Pointer to the TRB index to increment.
+  *
+@@ -1352,7 +1375,26 @@ static int dwc3_prepare_trbs(struct dwc3_ep *dep)
+ 
+ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep);
+ 
+-static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
++static void dwc3_gadget_ep_revert_trbs(struct dwc3_ep *dep, struct dwc3_request *req)
++{
++	int i;
++
++	if (!req->trb)
++		return;
++
++	for (i = 0; i < req->num_trbs; i++) {
++		struct dwc3_trb *trb;
++
++		trb = &dep->trb_pool[dep->trb_enqueue];
++		trb->ctrl &= ~DWC3_TRB_CTRL_HWO;
++		dwc3_ep_dec_enq(dep);
++	}
++
++	req->num_trbs = 0;
++}
++
++static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep,
++				       struct dwc3_request *queued_req)
+ {
+ 	struct dwc3_gadget_ep_cmd_params params;
+ 	struct dwc3_request		*req;
+@@ -1410,8 +1452,23 @@ static int __dwc3_gadget_kick_transfer(struct dwc3_ep *dep)
+ 
+ 		dwc3_stop_active_transfer(dep, true, true);
+ 
+-		list_for_each_entry_safe(req, tmp, &dep->started_list, list)
+-			dwc3_gadget_move_cancelled_request(req, DWC3_REQUEST_STATUS_DEQUEUED);
++		/*
++		 * In order to ensure the logic is applied to a request being
++		 * queued by dwc3_gadget_ep_queue(), it needs to explicitly
++		 * check that req is the same as queued_req (request being
++		 * queued).  If so, then just unmap and decrement the enqueue
++		 * pointer, as the usb_ep_queue() error handler in the function
++		 * driver will handle cleaning up the USB request.
++		 */
++		list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
++			if (req == queued_req) {
++				dwc3_gadget_ep_revert_trbs(dep, req);
++				dwc3_gadget_del_and_unmap_request(dep, req, ret);
++			} else {
++				dwc3_gadget_move_cancelled_request(req,
++								   DWC3_REQUEST_STATUS_DEQUEUED);
++			}
++		}
+ 
+ 		/* If ep isn't started, then there's no end transfer pending */
+ 		if (!(dep->flags & DWC3_EP_END_TRANSFER_PENDING))
+@@ -1546,7 +1603,7 @@ static int dwc3_gadget_start_isoc_quirk(struct dwc3_ep *dep)
+ 	dep->start_cmd_status = 0;
+ 	dep->combo_num = 0;
+ 
+-	return __dwc3_gadget_kick_transfer(dep);
++	return __dwc3_gadget_kick_transfer(dep, NULL);
+ }
+ 
+ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+@@ -1593,7 +1650,7 @@ static int __dwc3_gadget_start_isoc(struct dwc3_ep *dep)
+ 	for (i = 0; i < DWC3_ISOC_MAX_RETRIES; i++) {
+ 		dep->frame_number = DWC3_ALIGN_FRAME(dep, i + 1);
+ 
+-		ret = __dwc3_gadget_kick_transfer(dep);
++		ret = __dwc3_gadget_kick_transfer(dep, NULL);
+ 		if (ret != -EAGAIN)
+ 			break;
+ 	}
+@@ -1684,7 +1741,7 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+ 		}
+ 	}
+ 
+-	return __dwc3_gadget_kick_transfer(dep);
++	return __dwc3_gadget_kick_transfer(dep, req);
+ }
+ 
+ static int dwc3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+@@ -1893,7 +1950,7 @@ int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol)
+ 
+ 		if ((dep->flags & DWC3_EP_DELAY_START) &&
+ 		    !usb_endpoint_xfer_isoc(dep->endpoint.desc))
+-			__dwc3_gadget_kick_transfer(dep);
++			__dwc3_gadget_kick_transfer(dep, NULL);
+ 
+ 		dep->flags &= ~DWC3_EP_DELAY_START;
+ 	}
+@@ -2992,7 +3049,7 @@ static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+ 		(list_empty(&dep->pending_list) || status == -EXDEV))
+ 		dwc3_stop_active_transfer(dep, true, true);
+ 	else if (dwc3_gadget_ep_should_continue(dep))
+-		if (__dwc3_gadget_kick_transfer(dep) == 0)
++		if (__dwc3_gadget_kick_transfer(dep, NULL) == 0)
+ 			no_started_trb = false;
+ 
+ out:
+@@ -3106,7 +3163,7 @@ static void dwc3_gadget_endpoint_command_complete(struct dwc3_ep *dep,
+ 
+ 	if ((dep->flags & DWC3_EP_DELAY_START) &&
+ 	    !usb_endpoint_xfer_isoc(dep->endpoint.desc))
+-		__dwc3_gadget_kick_transfer(dep);
++		__dwc3_gadget_kick_transfer(dep, NULL);
+ 
+ 	dep->flags &= ~DWC3_EP_DELAY_START;
+ }
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-commit:         d2b6f8a1 Merge tag 'xfs-5.13-merge-3' of git://git.kernel...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=751a9df13cd00e8a
-dashboard link: https://syzkaller.appspot.com/bug?extid=882a85c0c8ec4a3e2281
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1787af43d00000
-
-Note: testing is done by a robot and is best-effort only.
