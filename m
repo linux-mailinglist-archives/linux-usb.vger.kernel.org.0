@@ -2,237 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 663223736D2
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 11:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4CA3736E2
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 11:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbhEEJNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 05:13:31 -0400
-Received: from mga04.intel.com ([192.55.52.120]:19248 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231936AbhEEJNa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 May 2021 05:13:30 -0400
-IronPort-SDR: s4P7TMxYmTZxNPR+SeYbanlZ0yz1UIclEZPIlsf062zEQnd0z53AJz5MS3UNhwRnV3hggJKDrL
- +qM7fyzE4VIQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9974"; a="196129227"
-X-IronPort-AV: E=Sophos;i="5.82,274,1613462400"; 
-   d="scan'208";a="196129227"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 May 2021 02:12:32 -0700
-IronPort-SDR: FHY1UjCWM1i+q6AwPNEfcZZEmNrfOJsoYEmWpeuFFmSsiYjWeNnKwhaY+1zJgKZK0pjDatF5Yb
- ifmEUPzuloZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,274,1613462400"; 
-   d="scan'208";a="531640829"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 05 May 2021 02:12:27 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 05 May 2021 12:12:26 +0300
-Date:   Wed, 5 May 2021 12:12:26 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated
- work
-Message-ID: <YJJhej9fpS5s8JTP@kuha.fi.intel.com>
-References: <20210504135622.3965148-1-kyletso@google.com>
+        id S231783AbhEEJS2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 05:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229696AbhEEJS2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 05:18:28 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D128AC061574;
+        Wed,  5 May 2021 02:17:30 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id e2so778158plh.8;
+        Wed, 05 May 2021 02:17:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=+hdlGV1cUN6NljB1f2reBcd8Q4DpmutRMc4/6Gf8iqI=;
+        b=P3sG7lnDmSPXT3uYXXvYoTUTIKUqeGvsiITgKApsDfTuVzIVm8UEBQD8XQlsDSaVJv
+         Dg9KdKkliWDCbFd65g7X8Ydef+UkFU6tmG1mWrWLcQeVc6S8m8w8cwJ+7FuMJZOFNgBl
+         fd4Jevni6iNb9Px7sdZeI0scw3ANCqwZherMQgYkzIboGvj0w4Zi8ulD3NZN3hX1utDu
+         gFNO2WIQF16Q/N9dqdI3v0QwnjyjGLqRH8o3nZrQziSrC55YHahuVYbwv4OllmEMHVGI
+         Ihkr8GyXoZqa3MXLnWsA1b0pg+liRKsaHpwyWpKUyelxPhpEEKqaHMe5A1mnsOAvrLlk
+         gy3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=+hdlGV1cUN6NljB1f2reBcd8Q4DpmutRMc4/6Gf8iqI=;
+        b=l5lDYAqi90pDRqEY2dx2IxBV4zSrbSXnvoybhmqx8zhwYYth2Oejb4G1G3bjiFQIBf
+         HneSWeQlOCHWmaDRi7vsDa5RVr9tAEDwrSxlWWNSo7kCvyj1x6IDAaRCowpqZmf/aQ4z
+         wlYPf+odnU91Ytp1INfp0UKM3A/kBQCilk9cL1W6C7NaXzvzwbfbweiqbijkv5jv2cS6
+         YfrjRR9LkTw/wjyK9oCqh1LlHrEWsPGMhifjnHaNqhaCxg7X2eNbPLLakQ9d2lELXFIz
+         LeqtAN3wNzRjiLOzsclf6eDWEsLgm0SJ21M31TGpnnIadeaTZCBnc3tza1jsvvsnbKNs
+         V9qg==
+X-Gm-Message-State: AOAM532QQrOD1E2c84FZb5ykcq61BviRWolPLmCj1/r7AEn9MuNEDLK2
+        Ljc4LcVMqpFH8y34v9dFc0qAGi+swxGmfTKxYlVLAlyHBmw=
+X-Google-Smtp-Source: ABdhPJxrjEyuzY1Uv6PT4uCbsCv1WEw2n5HqFzucR460BX9AZAaLE6eEDP9sSAIcg1VcepGwk/mWxNQ6/srQ85SDJXY=
+X-Received: by 2002:a17:902:264:b029:eb:3d3a:a09c with SMTP id
+ 91-20020a1709020264b02900eb3d3aa09cmr30516458plc.0.1620206250236; Wed, 05 May
+ 2021 02:17:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210504135622.3965148-1-kyletso@google.com>
+References: <20210503154647.142551-1-hdegoede@redhat.com> <20210503154647.142551-6-hdegoede@redhat.com>
+ <CAHp75VcS5nvzBzjbSytqD6qsSURyzdEdmDi934y=5W2SCNyo9A@mail.gmail.com> <ee230261-423d-0e2f-16b0-852d264afa2b@redhat.com>
+In-Reply-To: <ee230261-423d-0e2f-16b0-852d264afa2b@redhat.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 5 May 2021 12:17:14 +0300
+Message-ID: <CAHp75VcfkcaVAu2-8-5he7PN=W_tRHiHAgXYn04gRnLehDVsyQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] drm/i915: Associate ACPI connector nodes with
+ connector entries
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 04, 2021 at 09:56:22PM +0800, Kyle Tso wrote:
-> In current design, DISCOVER_IDENTITY is queued to VDM state machine
-> immediately in Ready states and never retries if it fails in the AMS.
-> Move the process to a delayed work so that when it fails for some
-> reasons (e.g. Sink Tx No Go), it can be retried by queueing the work
-> again. Also fix a problem that the vdm_state is not set to a proper
-> state if it is blocked by Collision Avoidance mechanism.
-> 
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+On Wed, May 5, 2021 at 12:07 PM Hans de Goede <hdegoede@redhat.com> wrote:
+> On 5/4/21 9:52 AM, Andy Shevchenko wrote:
+> > On Monday, May 3, 2021, Hans de Goede <hdegoede@redhat.com <mailto:hdeg=
+oede@redhat.com>> wrote:
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+...
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 85 ++++++++++++++++++++++++++++++-----
->  1 file changed, 75 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index c4fdc00a3bc8..07a449f0e8fa 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -259,6 +259,7 @@ enum frs_typec_current {
->  #define ALTMODE_DISCOVERY_MAX	(SVID_DISCOVERY_MAX * MODE_DISCOVERY_MAX)
->  
->  #define GET_SINK_CAP_RETRY_MS	100
-> +#define SEND_DISCOVER_RETRY_MS	100
->  
->  struct pd_mode_data {
->  	int svid_index;		/* current SVID index		*/
-> @@ -366,6 +367,8 @@ struct tcpm_port {
->  	struct kthread_work vdm_state_machine;
->  	struct hrtimer enable_frs_timer;
->  	struct kthread_work enable_frs;
-> +	struct hrtimer send_discover_timer;
-> +	struct kthread_work send_discover_work;
->  	bool state_machine_running;
->  	bool vdm_sm_running;
->  
-> @@ -1178,6 +1181,16 @@ static void mod_enable_frs_delayed_work(struct tcpm_port *port, unsigned int del
->  	}
->  }
->  
-> +static void mod_send_discover_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
-> +{
-> +	if (delay_ms) {
-> +		hrtimer_start(&port->send_discover_timer, ms_to_ktime(delay_ms), HRTIMER_MODE_REL);
-> +	} else {
-> +		hrtimer_cancel(&port->send_discover_timer);
-> +		kthread_queue_work(port->wq, &port->send_discover_work);
-> +	}
-> +}
-> +
->  static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
->  			   unsigned int delay_ms)
->  {
-> @@ -1855,6 +1868,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->  				res = tcpm_ams_start(port, DISCOVER_IDENTITY);
->  				if (res == 0)
->  					port->send_discover = false;
-> +				else if (res == -EAGAIN)
-> +					mod_send_discover_delayed_work(port,
-> +								       SEND_DISCOVER_RETRY_MS);
->  				break;
->  			case CMD_DISCOVER_SVID:
->  				res = tcpm_ams_start(port, DISCOVER_SVIDS);
-> @@ -1880,6 +1896,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->  			}
->  
->  			if (res < 0) {
-> +				port->vdm_state = VDM_STATE_ERR_BUSY;
->  				port->vdm_sm_running = false;
->  				return;
->  			}
-> @@ -3682,14 +3699,6 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
->  	return SNK_UNATTACHED;
->  }
->  
-> -static void tcpm_check_send_discover(struct tcpm_port *port)
-> -{
-> -	if ((port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20) &&
-> -	    port->send_discover && port->pd_capable)
-> -		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
-> -	port->send_discover = false;
-> -}
-> -
->  static void tcpm_swap_complete(struct tcpm_port *port, int result)
->  {
->  	if (port->swap_pending) {
-> @@ -3926,7 +3935,18 @@ static void run_state_machine(struct tcpm_port *port)
->  			break;
->  		}
->  
-> -		tcpm_check_send_discover(port);
-> +		/*
-> +		 * 6.4.4.3.1 Discover Identity
-> +		 * "The Discover Identity Command Shall only be sent to SOP when there is an
-> +		 * Explicit Contract."
-> +		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
-> +		 * port->explicit_contract to decide whether to send the command.
-> +		 */
-> +		if (port->explicit_contract)
-> +			mod_send_discover_delayed_work(port, 0);
-> +		else
-> +			port->send_discover = false;
-> +
->  		/*
->  		 * 6.3.5
->  		 * Sending ping messages is not necessary if
-> @@ -4194,7 +4214,18 @@ static void run_state_machine(struct tcpm_port *port)
->  			break;
->  		}
->  
-> -		tcpm_check_send_discover(port);
-> +		/*
-> +		 * 6.4.4.3.1 Discover Identity
-> +		 * "The Discover Identity Command Shall only be sent to SOP when there is an
-> +		 * Explicit Contract."
-> +		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
-> +		 * port->explicit_contract.
-> +		 */
-> +		if (port->explicit_contract)
-> +			mod_send_discover_delayed_work(port, 0);
-> +		else
-> +			port->send_discover = false;
-> +
->  		power_supply_changed(port->psy);
->  		break;
->  
-> @@ -5288,6 +5319,29 @@ static void tcpm_enable_frs_work(struct kthread_work *work)
->  	mutex_unlock(&port->lock);
->  }
->  
-> +static void tcpm_send_discover_work(struct kthread_work *work)
-> +{
-> +	struct tcpm_port *port = container_of(work, struct tcpm_port, send_discover_work);
-> +
-> +	mutex_lock(&port->lock);
-> +	/* No need to send DISCOVER_IDENTITY anymore */
-> +	if (!port->send_discover)
-> +		goto unlock;
-> +
-> +	/* Retry if the port is not idle */
-> +	if ((port->state != SRC_READY && port->state != SNK_READY) || port->vdm_sm_running) {
-> +		mod_send_discover_delayed_work(port, SEND_DISCOVER_RETRY_MS);
-> +		goto unlock;
-> +	}
-> +
-> +	/* Only send the Message if the port is host for PD rev2.0 */
-> +	if (port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20)
-> +		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
-> +
-> +unlock:
-> +	mutex_unlock(&port->lock);
-> +}
-> +
->  static int tcpm_dr_set(struct typec_port *p, enum typec_data_role data)
->  {
->  	struct tcpm_port *port = typec_get_drvdata(p);
-> @@ -6093,6 +6147,14 @@ static enum hrtimer_restart enable_frs_timer_handler(struct hrtimer *timer)
->  	return HRTIMER_NORESTART;
->  }
->  
-> +static enum hrtimer_restart send_discover_timer_handler(struct hrtimer *timer)
-> +{
-> +	struct tcpm_port *port = container_of(timer, struct tcpm_port, send_discover_timer);
-> +
-> +	kthread_queue_work(port->wq, &port->send_discover_work);
-> +	return HRTIMER_NORESTART;
-> +}
-> +
->  struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  {
->  	struct tcpm_port *port;
-> @@ -6123,12 +6185,15 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->  	kthread_init_work(&port->vdm_state_machine, vdm_state_machine_work);
->  	kthread_init_work(&port->event_work, tcpm_pd_event_handler);
->  	kthread_init_work(&port->enable_frs, tcpm_enable_frs_work);
-> +	kthread_init_work(&port->send_discover_work, tcpm_send_discover_work);
->  	hrtimer_init(&port->state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->  	port->state_machine_timer.function = state_machine_timer_handler;
->  	hrtimer_init(&port->vdm_state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->  	port->vdm_state_machine_timer.function = vdm_state_machine_timer_handler;
->  	hrtimer_init(&port->enable_frs_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
->  	port->enable_frs_timer.function = enable_frs_timer_handler;
-> +	hrtimer_init(&port->send_discover_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-> +	port->send_discover_timer.function = send_discover_timer_handler;
->  
->  	spin_lock_init(&port->pd_event_lock);
->  
-> -- 
-> 2.31.1.527.g47e6f16901-goog
+> >     +               fwnode =3D device_get_next_child_node(kdev, fwnode)=
+;
 
--- 
-heikki
+> > Who is dropping reference counting on fwnode ?
+>
+> We are dealing with ACPI fwnode-s here and those are not ref-counted, the=
+y
+> are embedded inside a struct acpi_device and their lifetime is tied to
+> that struct. They should probably still be ref-counted (with the count
+> never dropping to 0) so that the generic fwnode functions behave the same
+> anywhere but atm the ACPI nodes are not refcounted, see: acpi_get_next_su=
+bnode()
+> in drivers/acpi/property.c which is the get_next_child_node() implementat=
+ion
+> for ACPI fwnode-s.
+
+Yes, ACPI currently is exceptional, but fwnode API is not.
+If you may guarantee that this case won't ever be outside of ACPI and
+even though if ACPI won't ever gain a reference counting for fwnodes,
+we can leave it as is.
+
+> > I=E2=80=99m in the middle of a pile of fixes for fwnode refcounting whe=
+n for_each_child or get_next_child is used. So, please double check you dro=
+p a reference.
+>
+> The kdoc comments on device_get_next_child_node() / fwnode_get_next_child=
+_node()
+> do not mention anything about these functions returning a reference.
+
+It's possible. I dunno if it had to be done earlier. Sakari?
+
+> So I think we need to first make up our mind here how we want this all to
+> work and then fix the actual implementation and docs before fixing caller=
+s.
+
+We have already issues, so I prefer not to wait for a documentation
+update, because for old kernels it will still be an issue.
+
+In any case most of my fixes are against LED subsystem (drivers) and
+they are valid due to use in the OF environment.
+
+--=20
+With Best Regards,
+Andy Shevchenko
