@@ -2,172 +2,175 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1BFF3734D0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 07:59:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4403734E7
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 08:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhEEGAZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 02:00:25 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:52956 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229592AbhEEGAW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 02:00:22 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1455nUa7028461;
-        Tue, 4 May 2021 22:59:21 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
- b=dLpZVF8N531t6xFmgQac/v7nm0gz2ll2t+Duz8/shxeZuOb1pKVwIfF+j7wA3K8qucgV
- zNmKDDmUJD0jlrOF6wtNz44a48HpULLj4vkaE18xc6YIPPCWW2UXxhd1yblRE5QPSAXN
- S6Gbk//dPYkjx0lwH5Rh9A8h8tSaSfkNZZoIg3Eykdt7sZ+dZhcJx1nwBARoF2XTM5GA
- 7kJwuZ+DL0xN+ih1gUMzH5FK+s2HHbV7FyUuZnFExpDgr4n+R4Zx30voPKF7bRxOs3GK
- SDWgFlrMQFZVZJv8X9Lxo1Mksjk5fAKVxz+KzKCXV025T+CoBHMOYJgus2I8K+HqvjSQ JQ== 
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 38bec493jd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 May 2021 22:59:20 -0700
+        id S231553AbhEEGRY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 02:17:24 -0400
+Received: from mail-bn8nam12on2080.outbound.protection.outlook.com ([40.107.237.80]:34688
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231494AbhEEGRY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 May 2021 02:17:24 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=T223f9S2n3eukEfHgVzR7GUPIzAYoOZnHW4MfRfiWNjMwV6YUVV7cF9CgZR5RVqyRxOhkHG8Z2tlzoYXjyS5QZvOoYg8Mj3jWyNKdiGqHnpo6U01sLJGL6ZBGFfrIZdej8DdnUPi9dwxvyFBcEkbZKwHBt6gduhG9CLpX2oCHSVGhFWaMueMAJi2PcrKIo/ms9/sjoNz4Hel72466irK7H1wqKuzQvX6YlpYwNNCrmJotKd2cGig3agU3tlAdxesCcLC5EY7ZacIDyzOsufpbZu7klPIsd7qgTQ6AXLeiyuLRYiVtt2i26tli33vvRL/JnQUk2RU2/XwJpv/tQ6oSQ==
+ b=Qn+hQRb8hM6IqvM9jps3lKSjDJxrX+Ba99iu77RWoLmr7kX1qI+NW9F6WkCi1YFTmDMZzbFieqzGGK6V/vI5xjZlbmZf+07Zk236mkx6NyA21IVEVN0YH0SyujvulSIcvjX2djnbW0Cy+FSdb/kpwovkJQXgng6DEyHpo7gsCguD8NFeDsFfDz7Ksce2v3lTUFMQoyJf0Qb74KKyD194Hip3FoVo2zsKV81ZHM2WYf0S0ne1ZiFuvrlndl1/J+irubrJ8fIRLGgpR180Zep9tBI66I1DQZZZR+25a+0f3FSPNLq7KHNGfhJstE1GkOzkvEbosfQKBE52A71dLBbkdA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
- b=VrlwbSF+sCIa1rHIEjRRaFIaQNAXQijbN1KKtS3J7R78KR8vVPoLV39sK+oxDgEjNaFWEvGbX3P5Vdp/IrFr6IsPZwG5M9+vWoJwgmqfn8nAx9uiMpf8xAJXQwzferbl6+veWW+xJ4yveMBGeDzdDOFULyzGPEmNeshl9oxkTnAWbszKEx9WARz7vMmMvzRdWV2WXvQGBUwt9ZzC/+lCSM9W7w35o6AtpMJT30F8qJb+a++wchfghchW19KKpDqXlOzxcad6tfsPwN9uUksIz5Z/08hZC33gRdykav7bPqaSh8JvsBq3qlBbKRdCyshv8au2lzsiudxjKMOam1S8TQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 199.43.4.23) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=cadence.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
+ bh=TEW5ZD7DPxjw89twgwQ072RUOZdDXng/TUe3AaNb7h4=;
+ b=SHRTiLEN3Xn+TFLf7u+pUCP1dl6+9MJNAdoxL2gKGJElcWpJEiyEYOE+dhoRKTJ7B9O2bjBI3FqC0goYTeY7y7kSJFPdTl3WQ0qv+bqiQ0fmxlqVxaKQ3O1yI64a76dL3xNIYP+hYrRP4Wpm7skSn1EidfkIyOLwnedXloUdwsFAyzPF3QKJ6/DOjSJ2doKxQkixWf6c8Owa2H2tPKtpecdOMeXHYy4j6Ibo9PVrdrLqdqfs6qcYXfpV2fpciPpdc85QATgDImE7OBs7S1frrrw/DxD0HEhbGBhYDslBvx3SZkBilgRYv1RI45fe3iaogP/GaIqkJPYEZqb/+iWkYg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
- b=cbAfCtHITdRmFiCcPLP/44pwXkXeaAfQkWxyFMMjWPoGPbI+IhXyc3tTF5LG8qmLmVJDzkbJd4Ub5A8qXviCupyhsHa07v3DHNVwnhiTSElGI4AhOkuEIVX7aztBL8J6C4LpDBFYqM/qd7rK5rD3nftQ7HTueohmbGRLOX9izNs=
-Received: from BN6PR1201CA0006.namprd12.prod.outlook.com
- (2603:10b6:405:4c::16) by DM6PR07MB6491.namprd07.prod.outlook.com
- (2603:10b6:5:1c2::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.41; Wed, 5 May
- 2021 05:59:18 +0000
-Received: from BN8NAM12FT046.eop-nam12.prod.protection.outlook.com
- (2603:10b6:405:4c:cafe::e7) by BN6PR1201CA0006.outlook.office365.com
- (2603:10b6:405:4c::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.29 via Frontend
- Transport; Wed, 5 May 2021 05:59:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
- smtp.mailfrom=cadence.com; linuxfoundation.org; dkim=none (message not
- signed) header.d=none;linuxfoundation.org; dmarc=pass action=none
- header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
- client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
-Received: from rmmaillnx1.cadence.com (199.43.4.23) by
- BN8NAM12FT046.mail.protection.outlook.com (10.13.183.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4108.8 via Frontend Transport; Wed, 5 May 2021 05:59:18 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 1455xGkb020669
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 5 May 2021 01:59:17 -0400
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 5 May 2021 07:59:16 +0200
-Received: from gli-login.cadence.com (10.187.128.100) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 5 May 2021 07:59:16 +0200
-Received: from gli-login.cadence.com (localhost [127.0.0.1])
-        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 1455xFEB040939;
-        Wed, 5 May 2021 07:59:15 +0200
-Received: (from pawell@localhost)
-        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 1455xFcN040896;
-        Wed, 5 May 2021 07:59:15 +0200
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <gregkh@linuxfoundation.org>, <dan.carpenter@oracle.com>,
-        <linux-usb@vger.kernel.org>, <kurahul@cadence.com>,
-        Pawel Laszczak <pawell@cadence.com>
-Subject: [PATCH v2] usb: cdnsp: Useless condition has been removed
-Date:   Wed, 5 May 2021 07:58:54 +0200
-Message-ID: <20210505055854.40240-1-pawell@gli-login.cadence.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
+ bh=TEW5ZD7DPxjw89twgwQ072RUOZdDXng/TUe3AaNb7h4=;
+ b=Em6EhopHNc1wU7YNMS67QB7zLchD5Jjtd6/GUzWa2TeMVziph6v9KcgGhXqqBUqhowuMgFjiZCr7KZHLOU82X0U5PprKItTF6ic58n4tB7rXzvpSlQnPIJ7pDse4IgP7jGQur4RoMySIt6+2QQqVx1gzK23nueckxFeq+kPablI=
+Authentication-Results: intel.com; dkim=none (message not signed)
+ header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB2693.namprd12.prod.outlook.com (2603:10b6:a03:6a::33)
+ by BYAPR12MB3366.namprd12.prod.outlook.com (2603:10b6:a03:db::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4065.24; Wed, 5 May
+ 2021 06:16:26 +0000
+Received: from BYAPR12MB2693.namprd12.prod.outlook.com
+ ([fe80::c0c3:7247:a767:f5b6]) by BYAPR12MB2693.namprd12.prod.outlook.com
+ ([fe80::c0c3:7247:a767:f5b6%3]) with mapi id 15.20.4087.044; Wed, 5 May 2021
+ 06:16:26 +0000
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Prike Liang <Prike.Liang@amd.com>
+Subject: [PATCH v4] usb: pci-quirks: disable D3cold on xhci suspend for s2idle on AMD Renoire
+Date:   Wed,  5 May 2021 01:16:06 -0500
+Message-Id: <20210505061606.22716-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
+X-Originating-IP: [165.204.77.11]
+X-ClientProxiedBy: SA9PR13CA0170.namprd13.prod.outlook.com
+ (2603:10b6:806:28::25) To BYAPR12MB2693.namprd12.prod.outlook.com
+ (2603:10b6:a03:6a::33)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from AUS-LX-MLIMONCI.amd.com (165.204.77.11) by SA9PR13CA0170.namprd13.prod.outlook.com (2603:10b6:806:28::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.9 via Frontend Transport; Wed, 5 May 2021 06:16:25 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a83689fa-00b8-412b-8d0d-08d90f8aebaa
-X-MS-TrafficTypeDiagnostic: DM6PR07MB6491:
-X-Microsoft-Antispam-PRVS: <DM6PR07MB64911FEA8FB9F55DBD376498DD599@DM6PR07MB6491.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:308;
+X-MS-Office365-Filtering-Correlation-Id: 84210b7c-d725-4baa-e117-08d90f8d5044
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3366:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <BYAPR12MB3366244C80D5E442825CFDFDE2599@BYAPR12MB3366.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:923;
 X-MS-Exchange-SenderADCheck: 1
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: p/gFiRkH4v1jBhW6TVphpAWJn/Ym415vBKvC5K7vvw1LGv8pZ3v8jULWO5fJ+VK1L+p+Tv9xqQp0UgjZbylsSglrg0uWcnxSUQVoJv5ODbd9Fp6AEUZfvj7WurbT93tTo0zCnwYSFSHRT4mJb5HwkcSXcthvCHQ0dAihPz4m1dqBo94g85HxVYY2hEKXqgOQllFV0NtZEMGSndeEs0p74Lzuk9Be+CgLGMlRaHJdqwq++5I/yU2qdzugzy57s3io8yMJIhJ5FpNz9OYoC5wV9RPIPUo0BPpi6wpvA1Tv98EtpHOj0kQG0+TIv1gNgg6Wqea/Q6gan2TkD/abzZxul3ql2CzYbeQUZGk56d2HC+yf2wOSFdzlV58rRHa0q814panjTUMOOsfcKM+4eiwgP31ZWONvzFN/ouwh8u2R3nFDAo1QyPxarTDImG/5z9sDaKUdG9Ubu673cSYN5/BCWAvwr5EJyfL1X1GBPhzP/XPp5Q1yV76zzefqXE/qAnjuaTZN5Y/7m5ZvcFRef02ECrB9g7DPyV9Z7ueU1bvvj0X6K+29BXnBCKpX85srBzelNHoj2bMFFuLND2/aJYEaDV2s3G7bctdHFBiJgf+C8E2krBi1qGuqNAdE/AHq93iNgVmk3uK0wAXKNBARqTyyK893pBxzRWkyZmzHpEsE2mFYHjS6GuAnJQ9iNCIRFzUCgM89MvtsPwGA6oXmczO7/Q==
-X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(39860400002)(136003)(376002)(396003)(36092001)(36840700001)(46966006)(70586007)(356005)(82310400003)(70206006)(36860700001)(478600001)(426003)(54906003)(47076005)(1076003)(8936002)(6666004)(5660300002)(6916009)(81166007)(4326008)(82740400003)(36906005)(2906002)(336012)(316002)(42186006)(83380400001)(86362001)(186003)(107886003)(26005)(8676002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2021 05:59:18.3122
+X-Microsoft-Antispam-Message-Info: koANSHLNMmbenQyEcDT39dlYmqXWiQpgalhbwkGJgXS0jG21n6LGOXkG+Pc+oCavADyw1I+XQrUY8+C9i9nJ/XxHViXap1vF9Ohn70rUr4pMAS6j0eLgR19FG/LgufER4D7HlntD2TUvlqWbUr3+PZ04FphkweMqFbOaUQhk0Xfkiuz++WAncb04iVfpGTezn2b9YAttTzE+fWpyEC6ZJ4khGG+8KTIR+6EP87lkRLMkAJHOJ+a/HuC16KA150Fnn0fMTQYGXbtjjM/jiKo01WgBv9eNQMspy3gBqu3TnFHiIqczuAKL6SzNeg3xwuYkyFDeuJm6JoI5eMIMslMGZATpBWSta2WHJG3u07s957NH1HyCqamtLDjSiHPtiAhjXNSIUeOPFALhWdcBdtKNlatMxKUI+PSqM4zywmDP435PDOx/8mjAlFnJy7q50ckOARaHomRkXbcBmWSJfOm6za3glyrOgxuNF2kTyy5vxTycaTpVIxOlK2A4WaD+bq+pzIEuFjgL+sQZ1FvsmwI8VBhsLRp2b9lwxwdv+PmC3FQt5NmiQAw1Nwj/dm6bSjE8EDGnDzbzqo65i837VfV/36k1yv4f0VwBpp83DDeVaWWXfv0p2q/onOu+8QF9uD/spTMHrQvp//mXqDlvu0eE3U5xN1FT5xdglg43DUBkfRsLmsFYURW432n2OPz68HIqlQyx0vwEbBvO0mxD8SNt3uLJ9c7kDtPZpbJfYjQxOSsY2LbWqVLocRtzT07AVGaTj2N0lxOR7Spblo3cFzvkkA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2693.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(366004)(39860400002)(136003)(346002)(376002)(2906002)(38350700002)(66476007)(66556008)(7696005)(38100700002)(6666004)(4326008)(66946007)(478600001)(15650500001)(8676002)(86362001)(8936002)(6486002)(83380400001)(16526019)(110136005)(44832011)(54906003)(5660300002)(52116002)(36756003)(1076003)(186003)(966005)(26005)(2616005)(956004)(316002)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?imUuvKOMJ9jLvlXgpPZ9jRHqtlWrDRgchKUlxMIDcbbMb4zhdTZlpAlREknj?=
+ =?us-ascii?Q?phvvgoSXRFIHctBy4aasNk3dAU+7FoL/EoJFbawD2BsoiLWMcY89VD/rTv39?=
+ =?us-ascii?Q?j2Z6mdk4nW9c6/zbidvZ2JvRViahMJzWdaOBSLc992AiNjTvlQvSzazC5Fx1?=
+ =?us-ascii?Q?0H4KfSSY/epA2vFchhLI3W0LKpNgdyHlaVqRwGPmpIDXt6c6uCOB7dPeteH/?=
+ =?us-ascii?Q?n47jU9IWzpSV6qba/cY0O9pkF1Ti4w2+VAx9FqgupDJqiuKjA/9eOTS2TON7?=
+ =?us-ascii?Q?tdvH+lSb76Kkzlzx4XJe6qB1FjWHIVZ7ycLLqMwSEgZJfFtbIMgyLJ6SxdZi?=
+ =?us-ascii?Q?IRTiXzHyFtJquUBX6lK20OX/Ni410bsB9RZ0ocETx/+m15+duYpFJZyYtPKR?=
+ =?us-ascii?Q?J+qp0oZiTAj/QGHcjIiqZuAMJNFckja+Ijdc/nzjBFhS/2qb7wm838tT4gc5?=
+ =?us-ascii?Q?Ea2bxPhoYSrd0fJJBc1Y31JZAaj6MRSYeU8J7OX5+WfOAgSTokubM0mNV7rq?=
+ =?us-ascii?Q?KOZIBhejpuG/n7FLl+loSwK42xpeSu86q7NMfqvNaC1Ls0Qt9fmrPZ5qsTCM?=
+ =?us-ascii?Q?aj8zS5VqdWMra0IsBEmbYla7hRfzw+rNkR9eOER2NbGbpgNASD8DYrUj2VJ8?=
+ =?us-ascii?Q?jZxvQIJRfmZKptMjJEEp1ujpNyQzWJSjx0FIwby+XzPvYFmpW4hin4dU1abC?=
+ =?us-ascii?Q?gIt9jSHS2QkYqUVXJ+3aNFWn05N72Polvwlyy2AJ3+uVDkMUy2xFRVf4ny+u?=
+ =?us-ascii?Q?os2/RlOOhru8BUqCAyKB2GNdqb6oAH1JWuDkN9lBmlCy/sLqc7X3HvK7diXb?=
+ =?us-ascii?Q?iiDXY24cYfJeo27BX/27MV1baoUYPNlqY+jwQjbQD2bkUmVswzCMK/MZAK0N?=
+ =?us-ascii?Q?yWXr0giJQF8eArpN4g8qB3rBWfPDUqDfOFXFa2BvUn1L4k7ltMJ/aYFr2IBa?=
+ =?us-ascii?Q?GC2000UEaBH9DnbaHOqXm/WmDyLrgXGT0BjT+0VOf6LcfhYb1O3QjISwUFFK?=
+ =?us-ascii?Q?LfIcRZMop3R1gfquuBDQcmsZnB0VB/ATOXQ9DBrduKehf/MtncVhTmownK6z?=
+ =?us-ascii?Q?sGnwsTTnQhuHZ0FWLs0FEh9zgBEiaUSWc4JpVqcuzt8uXvLYagnb+0lzoEDQ?=
+ =?us-ascii?Q?9v0eGjpRppga9l3vXNLwpuDOuO+i90XPzv7LwyT/ZQTgBeXfuTKVP9Eb2S1K?=
+ =?us-ascii?Q?reBEg17xi9A8Dju0tG3selJOkgd5vhAVwC+yg+sBX9hVJIi0v/3bKsE2cO5L?=
+ =?us-ascii?Q?P6rzCYgGwXIFTLoZIINW/dHxlbR9r29j4+RfrITeIU9DlJdOzTfzYzjteTcp?=
+ =?us-ascii?Q?Bw270/mNpuOXEKmBFh1cb3R7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84210b7c-d725-4baa-e117-08d90f8d5044
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2693.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2021 06:16:26.2641
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a83689fa-00b8-412b-8d0d-08d90f8aebaa
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT046.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB6491
-X-Proofpoint-ORIG-GUID: XAbCzX_2eR5TU596SBvRy1CNTVXDtU7t
-X-Proofpoint-GUID: XAbCzX_2eR5TU596SBvRy1CNTVXDtU7t
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
- definitions=2021-05-05_02:2021-05-04,2021-05-05 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
- adultscore=0 suspectscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- bulkscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2104060000 definitions=main-2105050042
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tFqdbKfQu2Oyq6fT0uh/e6lGbhb0jS0dyzCeI/kQS3qw0nwp8g7wdkN3Ydg3t6lVdq911X4eJn3beGeJvqXSZQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3366
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+The XHCI controller is required to enter D3hot rather than D3cold for AMD
+s2idle on this hardware generation.
 
-This code generates a Smatch warning:
+Otherwise, the 'Controller Not Ready' (CNR) bit is not being cleared by host
+in resume and eventually this results in xhci resume failures during the
+s2idle wakeup.
 
-drivers/usb/cdns3/cdnsp-mem.c:1085 cdnsp_mem_cleanup()
-warn: variable dereferenced before check 'pdev->dcbaa' (see line 1067)
-
-The unchecked dereference happens inside the function when we call:
-
-cdnsp_free_priv_device(pdev);
-
-But fortunately, the "pdev->dcbaa" pointer can never be NULL so it
-does not lead to a runtime issue. We can just remove the NULL check
-which silences the warning and makes the code consistent.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
-
+Suggested-by: Prike Liang <Prike.Liang@amd.com>
+Link: https://lore.kernel.org/linux-usb/1612527609-7053-1-git-send-email-Prike.Liang@amd.com/
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-Changelog:
-v2:
-- updated commit message
+ drivers/usb/host/xhci-pci.c | 7 ++++++-
+ drivers/usb/host/xhci.h     | 1 +
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
- drivers/usb/cdns3/cdnsp-mem.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+v1 -> v2: drop the XHCI_COMP_MODE_QUIRK quirk and create a new one for handling
+XHCI D3cold.
 
-diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
-index 5d4c4bfe15b7..a47948a1623f 100644
---- a/drivers/usb/cdns3/cdnsp-mem.c
-+++ b/drivers/usb/cdns3/cdnsp-mem.c
-@@ -1082,9 +1082,8 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
- 	dma_pool_destroy(pdev->device_pool);
- 	pdev->device_pool = NULL;
+v2 -> v3: correct the quirk name typo XHCI_AMD_S2IDL_SUPPORT_QUIRK -> XHCI_AMD_S2IDLE_SUPPORT_QUIRK
+
+v3 -> v4: Fix commit message to clarify and reference HW
+          Rename quirk to describe problem, not hardware
+          Add definition for the hardware to source
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5bbccc9a0179..7930edf8ebd1 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -58,6 +58,7 @@
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
  
--	if (pdev->dcbaa)
--		dma_free_coherent(dev, sizeof(*pdev->dcbaa),
--				  pdev->dcbaa, pdev->dcbaa->dma);
-+	dma_free_coherent(dev, sizeof(*pdev->dcbaa),
-+			  pdev->dcbaa, pdev->dcbaa->dma);
++#define PCI_DEVICE_ID_AMD_RENOIRE_XHCI			0x1639
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
+@@ -179,6 +180,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		(pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_1)))
+ 		xhci->quirks |= XHCI_U2_DISABLE_WAKE;
  
- 	pdev->dcbaa = NULL;
++	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
++		pdev->device == PCI_DEVICE_ID_AMD_RENOIRE_XHCI)
++		xhci->quirks |= XHCI_BROKEN_D3COLD;
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
+ 		xhci->quirks |= XHCI_LPM_SUPPORT;
+ 		xhci->quirks |= XHCI_INTEL_HOST;
+@@ -535,7 +540,7 @@ static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
+ 	 * Systems with the TI redriver that loses port status change events
+ 	 * need to have the registers polled during D3, so avoid D3cold.
+ 	 */
+-	if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
++	if (xhci->quirks & (XHCI_COMP_MODE_QUIRK | XHCI_BROKEN_D3COLD))
+ 		pci_d3cold_disable(pdev);
  
+ 	if (xhci->quirks & XHCI_PME_STUCK_QUIRK)
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index ca822ad3b65b..4e171099d2cb 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1892,6 +1892,7 @@ struct xhci_hcd {
+ #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
+ #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
++#define XHCI_BROKEN_D3COLD	BIT_ULL(41)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
 -- 
 2.25.1
 
