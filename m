@@ -2,91 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBAFE373E61
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 17:20:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A64373EB7
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 17:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbhEEPVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 11:21:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:21891 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233206AbhEEPVM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 11:21:12 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-178-BQ8_e9FxPlmU9ZviEyU3mQ-1; Wed, 05 May 2021 16:20:12 +0100
-X-MC-Unique: BQ8_e9FxPlmU9ZviEyU3mQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.2; Wed, 5 May 2021 16:20:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.015; Wed, 5 May 2021 16:20:11 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     =?utf-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
+        id S233223AbhEEPkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 11:40:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46666 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229798AbhEEPkm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 May 2021 11:40:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 40D676112F;
+        Wed,  5 May 2021 15:39:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620229185;
+        bh=ZCUYdqlONn4tcSJ0vwB/AkHctWRyUIU/usgs8uDdJI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZBzu/yRe5fmHkCWO5xDGNCnfkxG0ujdJ+o2atVDtlbf+q58KRquJvZ33Qm9Zqngp6
+         0pqSTHCagEjHWc0zeZCvD1KgXYUMYjE6EA914b+7US0TZDu56qxvvejAfHio7Qsk9A
+         Dh6GvSpVggT72Ya5/ru261twvJ1LmS/s0LctfoTipw4XtDRUlbWwMW7aggZTGZBdmD
+         2uXv/l+YrCApSgM1hYQl91wz1xu7IKNrTbN45bS7WGTN2mOwpqPA1HL2FGbkxt5XcD
+         ae6AO2xNmS3w4guBZLEzxZgE0DJGz9BVRe0aiskCDZIz8+BboMWQ9oaOA5khS0zzJ6
+         RmoYfC1i+raCA==
+Received: by pali.im (Postfix)
+        id 8241D79D; Wed,  5 May 2021 17:39:42 +0200 (CEST)
+Date:   Wed, 5 May 2021 17:39:42 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     Lukas Wunner <lukas@wunner.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
-Subject: RE: xhci_pci & PCIe hotplug crash
-Thread-Topic: xhci_pci & PCIe hotplug crash
-Thread-Index: AQHXQa7y6ld2lnJxqUeg15sWnzByEKrU/keg
-Date:   Wed, 5 May 2021 15:20:11 +0000
-Message-ID: <ea58430d088742a1910475a680fb1de5@AcuMS.aculab.com>
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
+Subject: Re: xhci_pci & PCIe hotplug crash
+Message-ID: <20210505153942.mntbkmphw3ik3pdg@pali>
 References: <20210505120117.4wpmo6fhvzznf3wv@pali>
- <YJKK7SDIaeH1L/fC@kroah.com> <20210505123346.kxfpumww5i4qmhnk@pali>
- <20210505124402.GB29101@wunner.de> <20210505130240.lmryb26xffzkg4pl@pali>
-In-Reply-To: <20210505130240.lmryb26xffzkg4pl@pali>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+ <YJKK7SDIaeH1L/fC@kroah.com>
+ <20210505123346.kxfpumww5i4qmhnk@pali>
+ <20210505124402.GB29101@wunner.de>
+ <20210505130240.lmryb26xffzkg4pl@pali>
+ <ea58430d088742a1910475a680fb1de5@AcuMS.aculab.com>
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ea58430d088742a1910475a680fb1de5@AcuMS.aculab.com>
+User-Agent: NeoMutt/20180716
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-RnJvbTogUGFsaSBSb2jDoXINCj4gU2VudDogMDUgTWF5IDIwMjEgMTQ6MDMNCi4uLg0KPiBJIGFs
-cmVhZHkgZmlndXJlZCBvdXQgdGhhdCBDUFUgcmVjZWl2ZSBleHRlcm5hbCBhYm9ydCBhbHNvIHdo
-ZW4gdHJ5aW5nDQo+IHRvIGlzc3VlIGEgbmV3IFBJTyB0cmFuc2ZlciBmb3IgYWNjZXNzaW5nIFBD
-SSBjb25maWcgc3BhY2Ugd2hpbGUNCj4gcHJldmlvdXMgdHJhbnNmZXIgaGFzIG5vdCBmaW5pc2hl
-ZCB5ZXQuIEFuZCBhbHNvIHRoZXJlIGlzIG5vIHdheSAoYXQNCj4gbGVhc3QgaW4gZG9jdW1lbnRh
-dGlvbikgd2hpY2ggYWxsb3dzIHRvICJtYXNrIiB0aGlzIGV4dGVybmFsIGFib3J0LiBCdXQNCj4g
-dGhpcyBpc3N1ZSBjYW4gYmUgZml4ZWQgaW4gcGNpLWFhcmR2YXJrLmMgZHJpdmVyIHRvIGRpc2Fs
-bG93IGFjY2VzcyB0bw0KPiBjb25maWcgc3BhY2Ugd2hpbGUgcHJldmlvdXMgdHJhbnNmZXIgaXMg
-c3RpbGwgcnVubmluZyAoSSB3aWxsIHNlbmQgcGF0Y2gNCj4gZm9yIHRoaXMgb25lKS4NCg0KTXkg
-dGhlIHNvdW5kIG9mIHRoZSBhYm92ZSB5b3UgbmVlZCB0byBwdXQgYSBnbG9iYWwgc3BpbmxvY2sg
-YXJvdW5kDQphbGwgUENJZSBjb25maWcgc3BhY2UgYWNjZXNzZXMuDQoNCklzIHRoaXMgdGhlIGhv
-cnJpZCBoYXJkd2FyZSB0aGF0IGNhbid0IGRvIGEgJ25vcm1hbCcgUENJZSB0cmFuc2Zlcg0Kd2hp
-bGUgYSBjb25maWcgc3BhY2UgYWNjZXNzIGlzIGluIHByb2dyZXNzPw0KSWYgdGhhdCBpdCB0cnVl
-IHRoZW4geW91IGhhdmUgYmlnZ2VyIHByb2JsZW1zLg0KRXNwZWNpYWxseSBpZiBpdCBpcyBhbiBT
-TVAgc3lzdGVtLg0KDQo+IFNvIHNlZW1zIHRoYXQgUENJZSBjb250cm9sbGVyIEhXIHRyaWdnZXJz
-IHRoZXNlIGV4dGVybmFsIGFib3J0cyB3aGVuDQo+IGRldmljZSBvbiBQQ0llIGJ1cyBpcyBub3Qg
-YWNjZXNzaWJsZSBhbnltb3JlLg0KPiANCj4gSWYgdGhpcyBpc3N1ZSBpcyByZWFsbHkgY2F1c2Vk
-IGJ5IE1NSU8gYWNjZXNzIGZyb20geGhjaSBkcml2ZXIgd2hlbg0KPiBkZXZpY2UgaXMgbm90IGFj
-Y2Vzc2libGUgb24gdGhlIGJ1cyBhbnltb3JlLCBjYW4gd2UgZG8gc29tZXRoaW5nIHRvDQo+IHBy
-ZXZlbnQgdGhpcyBrZXJuZWwgY3Jhc2g/IFNvbWVob3cgbWFzayB0aGF0IGV4dGVybmFsIGFib3J0
-IGluIGtlcm5lbA0KPiBmb3IgYSB0aW1lIGR1cmluZyBNTUlPIGFjY2Vzcz8NCg0KSWYgaXQgaXMg
-YSBjeWNsZSBhYm9ydCB0aGVuIHRoZSBpbnRlcnJ1cHRlZCBhZGRyZXNzIGlzIHByb2JhYmx5DQp0
-aGF0IG9mIHRoZSBNTUlPIGluc3RydWN0aW9uLg0KU28geW91IG5lZWQgdG8gY2F0Y2ggdGhlIGFi
-b3J0LCBlbXVsYXRlIHRoZSBpbnN0cnVjdGlvbiBhbmQNCnRoZW4gcmV0dXJuIHRvIHRoZSBuZXh0
-IG9uZS4NCg0KVGhpcyBwcm9iYWJseSByZXF1aXJlcyBhbiBleGNlcHRpb24gdGFibGUgY29udGFp
-bmluZyB0aGUgYWRkcmVzcw0Kb2YgZXZlcnkgcmVhZGIvdy9sKCkgaW5zdHJ1Y3Rpb24uDQoNCklm
-IHlvdSBnZXQgYSBzaW1pbGFyIGVycm9yIG9uIHdyaXRlcyBpdCBpcyBsaWtlbHkgdG8gYmUgYSBm
-ZXcNCmluc3RydWN0aW9ucyBhZnRlciB0aGUgYWN0dWFsIHdyaXRlYi93L2woKSBpbnN0cnVjdGlv
-bi4NCldyaXRlIGFyZSBub3JtYWxseSAncG9zdGVkJyBhbmQgYXN5bmNocm9ub3VzLg0KDQpJZiB5
-b3UgYXJlIHJlYWxseSBsdWNreSB5b3UgY2FuIGdldCBlbm91Z2ggc3RhdGUgb3V0IG9mIHRoZQ0K
-YWJvcnQgaGFuZGxlciB0byBmaXh1cC9pZ25vcmUgdGhlIGN5Y2xlIHdpdGhvdXQgYW4NCmV4Y2Vw
-dGlvbiB0YWJsZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
-QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
-aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Wednesday 05 May 2021 15:20:11 David Laight wrote:
+> From: Pali Rohár
+> > Sent: 05 May 2021 14:03
+> ...
+> > I already figured out that CPU receive external abort also when trying
+> > to issue a new PIO transfer for accessing PCI config space while
+> > previous transfer has not finished yet. And also there is no way (at
+> > least in documentation) which allows to "mask" this external abort. But
+> > this issue can be fixed in pci-aardvark.c driver to disallow access to
+> > config space while previous transfer is still running (I will send patch
+> > for this one).
+> 
+> My the sound of the above you need to put a global spinlock around
+> all PCIe config space accesses.
 
+Kernel already uses raw_spin_lock_irqsave(), see pci_lock_config() macro
+in pci/access.c which implements this global lock for config space
+access.
+
+But issue is that pci-driver.c does not wait for finishing transfer and
+return from function which unlock this spin lock...
+
+Week ago I fixed this issue in U-Boot and similar fix would be needed
+also for kernel https://source.denx.de/u-boot/u-boot/-/commit/eccbd4ad8e4e
+
+But this issue is not related to my original report about XHCI & PCI.
+
+> Is this the horrid hardware that can't do a 'normal' PCIe transfer
+> while a config space access is in progress?
+
+Issue is different. You cannot do config space PIO transfer while
+another config space PIO transfer is in progress.
+
+> If that it true then you have bigger problems.
+> Especially if it is an SMP system.
+
+I really hope that memory read or write transfer can be initiated while
+config transfer is in progress. Marvell A3720 platform on which can be
+found this pci aardvark controller is 2 core CPU SoC.
+
+At least I have not seen any abort when PCIe link is up, card connected
+and previous config access transfer finished.
+
+> > So seems that PCIe controller HW triggers these external aborts when
+> > device on PCIe bus is not accessible anymore.
+> > 
+> > If this issue is really caused by MMIO access from xhci driver when
+> > device is not accessible on the bus anymore, can we do something to
+> > prevent this kernel crash? Somehow mask that external abort in kernel
+> > for a time during MMIO access?
+> 
+> If it is a cycle abort then the interrupted address is probably
+> that of the MMIO instruction.
+> So you need to catch the abort, emulate the instruction and
+> then return to the next one.
+
+Has kernel API & infrastructure for catching these aborts and executing
+own driver handler when abort happens?
+
+> This probably requires an exception table containing the address
+> of every readb/w/l() instruction.
+> 
+> If you get a similar error on writes it is likely to be a few
+> instructions after the actual writeb/w/l() instruction.
+> Write are normally 'posted' and asynchronous.
+> 
+> If you are really lucky you can get enough state out of the
+> abort handler to fixup/ignore the cycle without an
+> exception table.
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
