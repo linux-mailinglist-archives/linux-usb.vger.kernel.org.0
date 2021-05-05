@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1336374280
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 18:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2A3E374446
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 19:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbhEEQrB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 12:47:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40624 "EHLO mail.kernel.org"
+        id S236333AbhEEQ4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 12:56:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60418 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235297AbhEEQnq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 May 2021 12:43:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DB0BD6191D;
-        Wed,  5 May 2021 16:35:05 +0000 (UTC)
+        id S236710AbhEEQuc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 May 2021 12:50:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5795B6196E;
+        Wed,  5 May 2021 16:37:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620232506;
-        bh=7WpViuqZ6EgOhriC7BEQo/u8K3kpLSs86q0I2EDQRYg=;
+        s=k20201202; t=1620232654;
+        bh=ZKOYUMEs6clDsyPD7uJBUlTb4y69TTSqDeVdFnrADlk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ivHwb4oHSABKMoZ+4PtBBbFUlMMvBi0LSXqK8AGMXUNgr6/DLRauf6bh4yGD1Bque
-         QiiV7fm4WUdxIBrmTFyV9YgCID3B3MFhuhbaP0U/Hd+jeNrfHx9MRLEDaSRxDyrT9d
-         7YoORNWo7qBLGkstawtAt1ftnLcsSAQHde94blpGXBKQpTMBZ+54eLjagC9yBPqTO7
-         RPuMftZ5+5CVG+BMmmyBS6K6kypMtLdkCWOn7pQpPCYFRHy/OEsNHDmbpl0Tt05ozq
-         vDL8CWZexuos9Hkr0Q+wg1mIRgsy3Ihb5sW6c0kni3zLGKlzJUasBIblHhxiJkcjc5
-         XUxTsl7OX+Z+Q==
+        b=JAPIJr7NCBrL1URBrAX3WZS9PIlIWqHbf+oD3SgdeCydHNk1zmR1IybiSjsvwDjQu
+         QALbVbr1loPpRa5QKBuRpNh6huZEWrujrARktNIuFNq4pw/jxUD14avUH6D2Cx8wbX
+         MFo4r0C0QNesMGxpyf+pZSgGHn3q2fu42j88sgbWmJV+QRR1nBIQYkSpqKXVoV2cqT
+         r0bIrwWFJDT8xaGhFK/S7Vii3mxH6eyabV108KGhdq+Pbe5ZwB8qjy27VJ7UP+OFt5
+         4ZK1VrcvnQkzS0ExRabtO7V3IpdIHd1Wm9o7c1+7ajtLXfTC0hOUjSzsb8e2XhStZo
+         Xcx0+6c+uFmlw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Phillip Potter <phil@philpotter.co.uk>,
@@ -30,12 +30,12 @@ Cc:     Phillip Potter <phil@philpotter.co.uk>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.11 037/104] net: usb: ax88179_178a: initialize local variables before use
-Date:   Wed,  5 May 2021 12:33:06 -0400
-Message-Id: <20210505163413.3461611-37-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 31/85] net: usb: ax88179_178a: initialize local variables before use
+Date:   Wed,  5 May 2021 12:35:54 -0400
+Message-Id: <20210505163648.3462507-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210505163413.3461611-1-sashal@kernel.org>
-References: <20210505163413.3461611-1-sashal@kernel.org>
+In-Reply-To: <20210505163648.3462507-1-sashal@kernel.org>
+References: <20210505163648.3462507-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -62,7 +62,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/usb/ax88179_178a.c b/drivers/net/usb/ax88179_178a.c
-index d650b39b6e5d..c1316718304d 100644
+index 5541f3faedbc..b77b0a33d697 100644
 --- a/drivers/net/usb/ax88179_178a.c
 +++ b/drivers/net/usb/ax88179_178a.c
 @@ -296,12 +296,12 @@ static int ax88179_read_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
