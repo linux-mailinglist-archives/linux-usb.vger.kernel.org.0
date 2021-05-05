@@ -2,160 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F03D373B4F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 14:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22134373B7B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 14:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233429AbhEEMer (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 08:34:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44220 "EHLO mail.kernel.org"
+        id S233589AbhEEMjY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 08:39:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53256 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233420AbhEEMeq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 May 2021 08:34:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEB49610FB;
-        Wed,  5 May 2021 12:33:49 +0000 (UTC)
+        id S233372AbhEEMix (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 May 2021 08:38:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 02DCF608FE;
+        Wed,  5 May 2021 12:37:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620218030;
-        bh=cCwF3kjXeu9/OAGx9K6Ul4xnLXD3gXsFOVwrQwWioys=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=imVK2fy+GXicRxWqme4eKZXs4VaFMks9ckMmkv/CcIOINwxz5dnYYv6qqkTUwvn9f
-         RGG5fih61VqDVssHTtfhbA00KnaQqBs+37AUITL7uNxlfk0NE2otpjA4yVMGrlWhLs
-         8ct0+cGGGIwLE0fd5QlQDWrVHVL3BtURt5kFAQoeVuZw17ILTD4bM4Z+wN+JIVlHQW
-         TidH3gdISIB7UPDq8Xy8hNWeZYveC2UNvneq34vV/xXplUDLRdiEJk+i+tt908VVBw
-         sXeflAPT10Tcv+OK5KLJTswahPvP+sExmSDfN+ZsGEMD/QgTy09hxr443ik8fd2nDo
-         0Pbvx6Mr8tr6Q==
-Received: by pali.im (Postfix)
-        id 2898F79D; Wed,  5 May 2021 14:33:47 +0200 (CEST)
-Date:   Wed, 5 May 2021 14:33:46 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Subject: Re: xhci_pci & PCIe hotplug crash
-Message-ID: <20210505123346.kxfpumww5i4qmhnk@pali>
-References: <20210505120117.4wpmo6fhvzznf3wv@pali>
- <YJKK7SDIaeH1L/fC@kroah.com>
+        s=k20201202; t=1620218277;
+        bh=t70+ygCN/PMHoyJSmSY0p8NsH1xM9Zu7IlJzkWvjedI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YfpXh8Q7gkduFl4vLQBzspbwVdtvGAw6vUizlka8en4ZS1X4FvU8rsbq0QBng/Mta
+         NRAF8nb4lnAOn7+zHucn27WTrGF1Ii8VWKO+JWa2x/fcRaGZjGMUMw1GYstfUuFpRt
+         NpegUG+S8/3Ag7MPR6tOOidoAfKiQmMLEe/+O3BID1NBqjv/WmafglGz5Q2mjlynUl
+         ShPdtyUPdwtxAxkAr83znRIlhB+m16ea3Qq0g/hzSwfQv9aSbRPREpR+TRb0cbfFJO
+         UeqMiiKLH14lzYjl8hb+9tBVegw+8ggF6al5Jw9JkrAtLQGpM999zvhwU+VV4qpqkG
+         LDcvUmnV+Ctsw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sebastian von Ohr <vonohr@smaract.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Thinh Nguyen <thinhn@synopsys.com>
+Subject: RE: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
+In-Reply-To: <da6ebfb4f58a4249a095d250d9abe3ed@smaract.com>
+References: <c9b5559a05f5459d92e3c704772edb46@smaract.com>
+ <87eeenj56b.fsf@kernel.org> <3d2305a43c1f4e3dad2e29286f42982d@smaract.com>
+ <87bl9rhv15.fsf@kernel.org> <da6ebfb4f58a4249a095d250d9abe3ed@smaract.com>
+Date:   Wed, 05 May 2021 15:37:48 +0300
+Message-ID: <878s4ticf7.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YJKK7SDIaeH1L/fC@kroah.com>
-User-Agent: NeoMutt/20180716
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wednesday 05 May 2021 14:09:17 Greg KH wrote:
-> On Wed, May 05, 2021 at 02:01:17PM +0200, Pali Rohár wrote:
-> > Hello!
-> > 
-> > During debugging of pci-aardvark.c driver I got following synchronous
-> > external abort 96000210 which I can reproduce with VIA XHCI controller
-> > when PCIe hot plug support is enabled in kernel and PCIe Root Bridge
-> > triggers link down event via PCIe hot plug interrupt.
-> > 
-> > [   71.773033] pcieport 0000:00:00.0: pciehp: Slot(0): Link Down
-> > [   71.779120] xhci_hcd 0000:01:00.0: remove, state 4
-> > [   71.784113] usb usb5: USB disconnect, device number 1
-> > [   71.790398] xhci_hcd 0000:01:00.0: USB bus 5 deregistered
-> > [   72.511899] Internal error: synchronous external abort: 96000210 [#1] SMP
-> > [   72.518918] Modules linked in:
-> > [   72.522074] CPU: 1 PID: 988 Comm: irq/53-pciehp Not tainted 5.12.0-dirty #949
-> > [   72.536983] pstate: 60000085 (nZCv daIf -PAN -UAO -TCO BTYPE=--)
-> > [   72.543182] pc : xhci_irq+0x70/0x17b8
-> > [   72.546972] lr : xhci_irq+0x28/0x17b8
-> > [   72.550752] sp : ffffffc012b8bab0
-> > [   72.554167] x29: ffffffc012b8bab0 x28: 00000000000000a0 
-> > [   72.559652] x27: 0000000000000060 x26: ffffff8000af2250 
-> > [   72.565135] x25: ffffffc0100b0d48 x24: ffffffc0100b0be0 
-> > [   72.570620] x23: ffffff80003be028 x22: ffffff8000af229c 
-> > [   72.576104] x21: 0000000000000080 x20: ffffff8000af2000 
-> > [   72.581587] x19: ffffff8000af2000 x18: 0000000000000004 
-> > [   72.587071] x17: 0000000000000000 x16: 0000000000000000 
-> > [   72.592553] x15: ffffffc01154cc70 x14: ffffff8001751df8 
-> > [   72.598037] x13: 0000000000000000 x12: 0000000000000000 
-> > [   72.603519] x11: ffffff8001751da8 x10: ffffffc01154cc78 
-> > [   72.609001] x9 : ffffffc01087c238 x8 : 0000000000000000 
-> > [   72.614485] x7 : ffffffc01162c4e0 x6 : 0000000000000000 
-> > [   72.619967] x5 : fffffffe00085000 x4 : fffffffe00085000 
-> > [   72.625451] x3 : 0000000000000000 x2 : 0000000000000001 
-> > [   72.630933] x1 : ffffffc0118bd024 x0 : 0000000000000000 
-> > [   72.636415] Call trace:
-> > [   72.638936]  xhci_irq+0x70/0x17b8
-> > [   72.642360]  usb_hcd_irq+0x34/0x50
-> > [   72.645876]  usb_hcd_pci_remove+0x78/0x138
-> > [   72.650106]  xhci_pci_remove+0x6c/0xa8
-> > [   72.653978]  pci_device_remove+0x44/0x108
-> > [   72.658122]  device_release_driver_internal+0x110/0x1e0
-> > [   72.663521]  device_release_driver+0x1c/0x28
-> > [   72.667931]  pci_stop_bus_device+0x84/0xc0
-> > [   72.672162]  pci_stop_and_remove_bus_device+0x1c/0x30
-> > [   72.677373]  pciehp_unconfigure_device+0x98/0xf8
-> > [   72.682138]  pciehp_disable_slot+0x60/0x118
-> > [   72.686457]  pciehp_handle_presence_or_link_change+0xec/0x3b0
-> > [   72.692386]  pciehp_ist+0x170/0x1a0
-> > [   72.695984]  irq_thread_fn+0x30/0x90
-> > [   72.699674]  irq_thread+0x13c/0x200
-> > [   72.703271]  kthread+0x12c/0x130
-> > [   72.706603]  ret_from_fork+0x10/0x1c
-> > [   72.710299] Code: 35ffff83 35002741 f9400f41 91001021 (b9400021) 
-> > [   72.716586] ---[ end trace 20ce3e30ff292c93 ]---
-> > [   72.721453] genirq: exiting task "irq/53-pciehp" (988) is an active IRQ thread (irq 53)
-> > [   72.730068] sched: RT throttling activated
-> > 
-> > And after that kernel is in some semi-broken state. Some functionality
-> > works, but some other (like reboot) does not.
-> > 
-> > I can reproduce it also when I manually inject/fake this link down PCIe
-> > hot plug interrupt with setting corresponding bits in PCIe Root Status
-> > registers, so pciehp driver thinks that link down even occurred.
-> > 
-> > I suspect that issue is in usb_hcd_pci_remove() function which calls
-> > local_irq_disable()+usb_hcd_irq()+local_irq_enable() functions but do
-> > not take into care that whole usb_hcd_pci_remove() function may be
-> > called from interrupt context.
-> 
-> usb_hcd_pci_remove() should NOT be called from interrupt context.
-> 
-> What is causing that to happen?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-PCIe Hot Plug interrupt with PCI_EXP_SLTSTA_DLLSC status bit set.
 
-I can reproduce it by issuing PCIe Hot Reset to PCIe controller (via
-setpci from userspace) which resulted in link down event (which is
-obvious) and PCIe controller then triggered link down interrupt.
+Hi,
 
-> No PCI driver can handle that, especially USB ones.
-> 
-> > Can you look at this issue if it is really safe to call usb_hcd_irq()
-> > from interrupt context? Or rather if it is safe to call functions like
-> > pciehp_disable_slot() or device_release_driver() from interrupt context
-> > like it can be seen in call trace?
-> 
-> What is removing devices from an irq?
+Sebastian von Ohr <vonohr@smaract.com> writes:
+>> From: Felipe Balbi [mailto:balbi@kernel.org]
+>
+>> For U1/U2 it's mostly handled by the HW itself. The only thing we do is
+>> set the appropriate bits for the relevant SetFeature requests, see ep0.c.
+>
+> Is this also the case for USB 2.0 LPM? USB 3.0 U1/U2 transitions seem to =
+be=20
+> completely different from USB 2.0. The SetFeature functions in ep0.c only=
+=20
+> handle SuperSpeed and SuperSpeed-plus. My connection is only USB 2.0 high=
+-speed.
 
-It can be seen in above call trace. It is pciehp_disable_slot() followed
-by pciehp_unconfigure_device().
+should behave the same for USB2
 
-> That is wrong, pci hotplug never used to do that, what recently changed?
+>> >     bU1DevExitLat          10 micro seconds
+>>=20
+>> Hmm, this is the maximum allowed value
+>>=20
+>> >     bU2DevExitLat         511 micro seconds
+>>=20
+>> This is not. Can you try setting this to 0x7ff and see if the problem
+>> goes away? It could be that your platform needs more time to
+>> wakeup. Then you're going to have to characterize it to figure out how
+>> much this value should be.
+>
+> I've changed it to 0x7ff but no difference. Also isn't his field for USB =
+3.0 only?
 
-I really do not know what was changed recently. I hope that other people
-in linux-pci ML would know history details better.
+It should be part of one of the BOS descriptors that describes LPM, I
+don't recall which one in particular.
 
-I just spotted this crash during debugging PCIe controller driver
-pci-aardvark.c with trying to expose its link down events via "hot plug"
-interrupt and corresponding link layer state flags.
+> Meanwhile I've spent some more time looking at the driver code and enable=
+d the=20
+> link change interrupt. I've attached a new trace where we can actually se=
+e what=20
+> transitions happen:
+>
+>      irq/13-dwc3-236     [000] d..1   174.435986: dwc3_event: event (0000=
+6084): ep1out: Transfer In Progress [0] (SIm)
+>      irq/13-dwc3-236     [000] d..1   174.435988: dwc3_complete_trb: ep1o=
+ut: trb 000000005384b162 (E2:D2) buf 000000007348a000 size 4080 ctrl 000008=
+18 (hlcS:sC:normal)
+>      irq/13-dwc3-236     [000] d..1   174.435992: dwc3_gadget_giveback: e=
+p1out: req 00000000f8e0932d length 16/4096 zsI =3D=3D> 0
+>      irq/13-dwc3-236     [000] d..1   174.436497: dwc3_event: event (0005=
+0301): Link Change [RX.Detect]
+>      irq/13-dwc3-236     [000] d..1   174.436544: dwc3_event: event (0002=
+0301): Link Change [U2]
+>         usb_recv-812     [000] d..2   174.636131: dwc3_ep_queue: ep1out: =
+req 00000000f8e0932d length 0/4096 zsI =3D=3D> -115
+>         usb_recv-812     [000] d..2   174.636139: dwc3_prepare_trb: ep1ou=
+t: trb 0000000085f38bb7 (E3:D2) buf 000000007348b000 size 4096 ctrl 0000081=
+9 (HlcS:sC:normal)
+>         usb_recv-812     [000] d..2   174.636147: dwc3_gadget_ep_cmd: ep1=
+out: cmd 'Update Transfer' [20007] params 00000000 00000000 00000000 --> st=
+atus: Successful
+>      irq/13-dwc3-236     [000] d..1   175.438282: dwc3_event: event (0000=
+0401): WakeUp [U0]
+>      irq/13-dwc3-236     [000] d..1   175.438353: dwc3_event: event (0000=
+0401): WakeUp [U0]
+>      irq/13-dwc3-236     [000] d..1   175.438357: dwc3_event: event (0000=
+0301): Link Change [U0]
+>=20=20=20=20=20=20=20=20=20=20=20
+> We see that 500us after the last transaction the link state is changed to=
+=20
+> RX.Detect (in HS, means Early Suspend) and then shortly after to U2 (in H=
+S,=20
+> means SLEEP). I'm not sure what early suspend is supposed to be as I can'=
+t find=20
+> in the USB spec (dwc3 specific?). Then a new receive request is queued, b=
+ut the=20
 
-And because in whole call trace I see only generic PCIe and USB code
-path without any driver specific parts, I suspect that this is not PCIe
-controller-specific issue but rather something "wrong" in genetic PCIe
-(or USB) code. That is why I sent this email, so maybe somebody else
-find something suspicious here.
+yes, that's dwc3-specific
 
-But still there is a chance that issue can be also in pci-aardvark.c
-driver and somehow it masked its issue and propagated it into generic
-PCIe hot plug code path.
+> link state doesn't change even though the host has data to send. Data is =
+only=20
 
-> thanks,
-> 
-> greg k-h
+it could be we're missing a wakeup somewhere.
+
+> transferred way later after the host write times out and tries again.
+>
+> For a test I've changed some conditions in the driver so that=20
+> __dwc3_gadget_wakeup is also called on transfer updates and the link stat=
+e=20
+> change also happens when in U2. This change actually fixed my timeout iss=
+ue.=20
+> However, I'm not sure if this is actually the correct thing to do. I'm by=
+ far=20
+> no USB expert and I don't have access to the dwc3 databook.
+
+Right, AFAIR the databook was a bit unclear about this. It stated that
+it was required only for Start Transfer, but I always had the same
+doubt. No idea if the databook has been clarified since then.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCSkZwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjjAQf/bkdSNZEcAA+TzYvgnxcDN/N8CHYNW2Us
+X0pI9X9+YMNbsUAPhPseHjmZzoNNJBeft5YTWq9I9SMRmdqQVOsS/Jy+Ub9pSd8/
+/tyt8NdpN+GviygzlHHv5D+oIYMl6t5X+yglHAddQrvdnA13/2BcHHgfCJ9MqiWH
+KudxPHTacATxli1wtB4D1BfSPa9dSos16iXBWorPJq5wso8QinMRbg5uE+LZo2kG
+GJqhfNjC+tYfHDJF+bRYgUvYYjXDbZUaeZrBfy4rOA3CmMtEjN5vqgUVVDjweFrf
+r8ps7Hkg+gVn9iMfLPONmhjdDZ/85WM52cqi+ZHojmIn4AVJtw4Lnw==
+=LU2V
+-----END PGP SIGNATURE-----
+--=-=-=--
