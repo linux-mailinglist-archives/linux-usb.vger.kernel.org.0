@@ -2,148 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7197A373E59
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 17:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBAFE373E61
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 17:20:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232952AbhEEPUP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 11:20:15 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:48431 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232484AbhEEPUN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 11:20:13 -0400
-Received: (qmail 698740 invoked by uid 1000); 5 May 2021 11:19:15 -0400
-Date:   Wed, 5 May 2021 11:19:15 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        id S233494AbhEEPVN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 11:21:13 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:21891 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233206AbhEEPVM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 11:21:12 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-178-BQ8_e9FxPlmU9ZviEyU3mQ-1; Wed, 05 May 2021 16:20:12 +0100
+X-MC-Unique: BQ8_e9FxPlmU9ZviEyU3mQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.2; Wed, 5 May 2021 16:20:11 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.015; Wed, 5 May 2021 16:20:11 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     =?utf-8?B?J1BhbGkgUm9ow6FyJw==?= <pali@kernel.org>,
+        Lukas Wunner <lukas@wunner.de>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Avoid canceling current request
- for queuing error
-Message-ID: <20210505151915.GA696631@rowland.harvard.edu>
-References: <1620091264-418-1-git-send-email-wcheng@codeaurora.org>
- <5b46e4a1-93ef-2d17-048b-5b4ceba358ae@synopsys.com>
- <513e6c16-9586-c78e-881b-08e0a73c50a8@codeaurora.org>
- <8735v1ibj4.fsf@kernel.org>
+        =?utf-8?B?TWFyZWsgQmVow7pu?= <kabel@kernel.org>
+Subject: RE: xhci_pci & PCIe hotplug crash
+Thread-Topic: xhci_pci & PCIe hotplug crash
+Thread-Index: AQHXQa7y6ld2lnJxqUeg15sWnzByEKrU/keg
+Date:   Wed, 5 May 2021 15:20:11 +0000
+Message-ID: <ea58430d088742a1910475a680fb1de5@AcuMS.aculab.com>
+References: <20210505120117.4wpmo6fhvzznf3wv@pali>
+ <YJKK7SDIaeH1L/fC@kroah.com> <20210505123346.kxfpumww5i4qmhnk@pali>
+ <20210505124402.GB29101@wunner.de> <20210505130240.lmryb26xffzkg4pl@pali>
+In-Reply-To: <20210505130240.lmryb26xffzkg4pl@pali>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735v1ibj4.fsf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 05, 2021 at 03:57:03PM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Wesley Cheng <wcheng@codeaurora.org> writes:
-> > On 5/3/2021 7:20 PM, Thinh Nguyen wrote:
-> >> Hi,
-> >> 
-> >> Wesley Cheng wrote:
-> >>> If an error is received when issuing a start or update transfer
-> >>> command, the error handler will stop all active requests (including
-> >>> the current USB request), and call dwc3_gadget_giveback() to notify
-> >>> function drivers of the requests which have been stopped.  Avoid
-> >>> having to cancel the current request which is trying to be queued, as
-> >>> the function driver will handle the EP queue error accordingly.
-> >>> Simply unmap the request as it was done before, and allow previously
-> >>> started transfers to be cleaned up.
-> >>>
-> >
-> > Hi Thinh,
-> >
-> >> 
-> >> It looks like you're still letting dwc3 stopping and cancelling all the
-> >> active requests instead letting the function driver doing the dequeue.
-> >> 
-> >
-> > Yeah, main issue isn't due to the function driver doing dequeue, but
-> > having cleanup (ie USB request free) if there is an error during
-> > usb_ep_queue().
-> >
-> > The function driver in question at the moment is the f_fs driver in AIO
-> > mode.  When async IO is enabled in the FFS driver, every time it queues
-> > a packet, it will allocate a io_data struct beforehand.  If the
-> > usb_ep_queue() fails it will free this io_data memory.  Problem is that,
-> > since the DWC3 gadget calls the completion with -ECONNRESET, the FFS
-> > driver will also schedule a work item (within io_data struct) to handle
-> > the completion.  So you end up with a flow like below
-> >
-> > allocate io_data (ffs)
-> >  --> usb_ep_queue()
-> >    --> __dwc3_gadget_kick_transfer()
-> >    --> dwc3_send_gadget_ep_cmd(EINVAL)
-> >    --> dwc3_gadget_ep_cleanup_cancelled_requests()
-> >    --> dwc3_gadget_giveback(ECONNRESET)
-> > ffs completion callback
-> > queue work item within io_data
-> >  --> usb_ep_queue returns EINVAL
-> > ffs frees io_data
-> > ...
-> >
-> > work scheduled
-> >  --> NULL pointer/memory fault as io_data is freed
-
-Am I reading this correctly?  It looks like usb_ep_queue() returns a 
--EINVAL error, but then the completion callback gets invoked with a 
-status of -ECONNRESET.
-
-> I have some vague memory of discussing (something like) this with Alan
-> Stern long ago and the conclusion was that the gadget driver should
-> handle cases such as this. 
-
-Indeed, this predates the creation of the Gadget API; the same design 
-principle applies to the host-side API.  It's a very simple idea:
-
-	If an URB or usb_request submission succeeds, it is guaranteed
-	that the completion routine will be called when the transfer is
-	finished, cancelled, aborted, or whatever (note that this may 
-	happen before the submission call returns).
-
-	If an URB or usb_request submission fails, it is guaranteed that
-	the completion routine will not be called.
-
-So if dwc3 behaves as described above (usb_ep_queue() fails _and_ the 
-completion handler is called), this is a bug.
-
-Alan Stern
-
-> OTOH, we're returning failure during
-> usb_ep_queue() which tells me there's something with dwc3 (perhaps not
-> exclusively, but that's yet to be shown).
-> 
-> If I understood the whole thing correctly, we want everything except the
-> current request (the one that failed START or UPDATE transfer) to go
-> through giveback(). This really tells me that we're not handling error
-> case in kick_transfer and/or prepare_trbs() correctly.
-> 
-> I also don't want to pass another argument to kick_transfer because it
-> should be unnecessary: the current request should *always* be the last
-> one in the list. Therefore we should rely on something like
-> list_last_entry() followed by list_for_each_entry_safe_reverse() to
-> handle this without a special case.
-> 
-> ret = dwc3_send_gadget_ep_cmd();
-> if (ret < 0) {
-> 	current = list_last_entry();
-> 
-> 	unmap(current);
->         for_each_trb_in(current) {
->         	clear_HWO(trb);
->         }
-> 
-> 	list_for_entry_safe_reverse() {
->         	move_cancelled();
->         }
-> }
-> 
-> -- 
-> balbi
-
+RnJvbTogUGFsaSBSb2jDoXINCj4gU2VudDogMDUgTWF5IDIwMjEgMTQ6MDMNCi4uLg0KPiBJIGFs
+cmVhZHkgZmlndXJlZCBvdXQgdGhhdCBDUFUgcmVjZWl2ZSBleHRlcm5hbCBhYm9ydCBhbHNvIHdo
+ZW4gdHJ5aW5nDQo+IHRvIGlzc3VlIGEgbmV3IFBJTyB0cmFuc2ZlciBmb3IgYWNjZXNzaW5nIFBD
+SSBjb25maWcgc3BhY2Ugd2hpbGUNCj4gcHJldmlvdXMgdHJhbnNmZXIgaGFzIG5vdCBmaW5pc2hl
+ZCB5ZXQuIEFuZCBhbHNvIHRoZXJlIGlzIG5vIHdheSAoYXQNCj4gbGVhc3QgaW4gZG9jdW1lbnRh
+dGlvbikgd2hpY2ggYWxsb3dzIHRvICJtYXNrIiB0aGlzIGV4dGVybmFsIGFib3J0LiBCdXQNCj4g
+dGhpcyBpc3N1ZSBjYW4gYmUgZml4ZWQgaW4gcGNpLWFhcmR2YXJrLmMgZHJpdmVyIHRvIGRpc2Fs
+bG93IGFjY2VzcyB0bw0KPiBjb25maWcgc3BhY2Ugd2hpbGUgcHJldmlvdXMgdHJhbnNmZXIgaXMg
+c3RpbGwgcnVubmluZyAoSSB3aWxsIHNlbmQgcGF0Y2gNCj4gZm9yIHRoaXMgb25lKS4NCg0KTXkg
+dGhlIHNvdW5kIG9mIHRoZSBhYm92ZSB5b3UgbmVlZCB0byBwdXQgYSBnbG9iYWwgc3BpbmxvY2sg
+YXJvdW5kDQphbGwgUENJZSBjb25maWcgc3BhY2UgYWNjZXNzZXMuDQoNCklzIHRoaXMgdGhlIGhv
+cnJpZCBoYXJkd2FyZSB0aGF0IGNhbid0IGRvIGEgJ25vcm1hbCcgUENJZSB0cmFuc2Zlcg0Kd2hp
+bGUgYSBjb25maWcgc3BhY2UgYWNjZXNzIGlzIGluIHByb2dyZXNzPw0KSWYgdGhhdCBpdCB0cnVl
+IHRoZW4geW91IGhhdmUgYmlnZ2VyIHByb2JsZW1zLg0KRXNwZWNpYWxseSBpZiBpdCBpcyBhbiBT
+TVAgc3lzdGVtLg0KDQo+IFNvIHNlZW1zIHRoYXQgUENJZSBjb250cm9sbGVyIEhXIHRyaWdnZXJz
+IHRoZXNlIGV4dGVybmFsIGFib3J0cyB3aGVuDQo+IGRldmljZSBvbiBQQ0llIGJ1cyBpcyBub3Qg
+YWNjZXNzaWJsZSBhbnltb3JlLg0KPiANCj4gSWYgdGhpcyBpc3N1ZSBpcyByZWFsbHkgY2F1c2Vk
+IGJ5IE1NSU8gYWNjZXNzIGZyb20geGhjaSBkcml2ZXIgd2hlbg0KPiBkZXZpY2UgaXMgbm90IGFj
+Y2Vzc2libGUgb24gdGhlIGJ1cyBhbnltb3JlLCBjYW4gd2UgZG8gc29tZXRoaW5nIHRvDQo+IHBy
+ZXZlbnQgdGhpcyBrZXJuZWwgY3Jhc2g/IFNvbWVob3cgbWFzayB0aGF0IGV4dGVybmFsIGFib3J0
+IGluIGtlcm5lbA0KPiBmb3IgYSB0aW1lIGR1cmluZyBNTUlPIGFjY2Vzcz8NCg0KSWYgaXQgaXMg
+YSBjeWNsZSBhYm9ydCB0aGVuIHRoZSBpbnRlcnJ1cHRlZCBhZGRyZXNzIGlzIHByb2JhYmx5DQp0
+aGF0IG9mIHRoZSBNTUlPIGluc3RydWN0aW9uLg0KU28geW91IG5lZWQgdG8gY2F0Y2ggdGhlIGFi
+b3J0LCBlbXVsYXRlIHRoZSBpbnN0cnVjdGlvbiBhbmQNCnRoZW4gcmV0dXJuIHRvIHRoZSBuZXh0
+IG9uZS4NCg0KVGhpcyBwcm9iYWJseSByZXF1aXJlcyBhbiBleGNlcHRpb24gdGFibGUgY29udGFp
+bmluZyB0aGUgYWRkcmVzcw0Kb2YgZXZlcnkgcmVhZGIvdy9sKCkgaW5zdHJ1Y3Rpb24uDQoNCklm
+IHlvdSBnZXQgYSBzaW1pbGFyIGVycm9yIG9uIHdyaXRlcyBpdCBpcyBsaWtlbHkgdG8gYmUgYSBm
+ZXcNCmluc3RydWN0aW9ucyBhZnRlciB0aGUgYWN0dWFsIHdyaXRlYi93L2woKSBpbnN0cnVjdGlv
+bi4NCldyaXRlIGFyZSBub3JtYWxseSAncG9zdGVkJyBhbmQgYXN5bmNocm9ub3VzLg0KDQpJZiB5
+b3UgYXJlIHJlYWxseSBsdWNreSB5b3UgY2FuIGdldCBlbm91Z2ggc3RhdGUgb3V0IG9mIHRoZQ0K
+YWJvcnQgaGFuZGxlciB0byBmaXh1cC9pZ25vcmUgdGhlIGN5Y2xlIHdpdGhvdXQgYW4NCmV4Y2Vw
+dGlvbiB0YWJsZS4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
