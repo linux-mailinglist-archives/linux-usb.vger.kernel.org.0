@@ -2,75 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A5F373CB3
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 15:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D4B6373D87
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 16:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbhEENxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 09:53:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41890 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229559AbhEENxv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 5 May 2021 09:53:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2FB5D61182;
-        Wed,  5 May 2021 13:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620222774;
-        bh=Gj7r3JoBNNH/NvO1A6+1ai/VnVaPCAy9xJgwL9pQeKA=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=V/I1JznnMXeCxJxcF4ehf7pq9OyPqj5camxPcOBX8nf8ZzqUMACaIcAniixPy7fX3
-         Rg1+ohRLK0K4bEaeRPUUEP+Tx1OGF8gg0Ibynh2HeyhYLE/+YafXvfqWVvZwbats30
-         U9ppPPijlASZ70Ftqh/PShUkdKSvo1N+UiUJFbvM4fOTzLHj0z8UGE8WsHZh74at34
-         EZfkd2PW9/mBOii0GFBaBBGPeFLu/XNUB+ehNUjB6muur8s+JCEourzMoWzsjyUGyn
-         g6g7W4I2UlLfffwzXYdWpsB1EQmMPTA388gNcrdltbAb3huTUJszxvkS3/3DzXqooK
-         WS+E/6mBenLEw==
-Date:   Wed, 5 May 2021 15:52:50 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usbhid: fix info leak in hid_submit_ctrl
-In-Reply-To: <CAO-hwJJKyLT4iG4DEhXGREPLVU8UASB8_gOFULmQ7hx2dYG7uw@mail.gmail.com>
-Message-ID: <nycvar.YFH.7.76.2105051552350.28378@cbobk.fhfr.pm>
-References: <20210425173353.10231-1-mail@anirudhrb.com> <nycvar.YFH.7.76.2105051442120.28378@cbobk.fhfr.pm> <CAO-hwJJ4u5NZ-81Tq3PGu-F9r3iUSCiKp=JUsTfuVsyd-Sxsew@mail.gmail.com> <nycvar.YFH.7.76.2105051528090.28378@cbobk.fhfr.pm>
- <CAO-hwJJKyLT4iG4DEhXGREPLVU8UASB8_gOFULmQ7hx2dYG7uw@mail.gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S232667AbhEEOVb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 10:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232122AbhEEOVb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 10:21:31 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC2CC061574;
+        Wed,  5 May 2021 07:20:34 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id y32so1876322pga.11;
+        Wed, 05 May 2021 07:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=70Vtk3cTkEH+v9q1J6g0pF83dKihPS0No/AaCgqegvc=;
+        b=R44r3rtYIMKmWn0I1E4rk3/ogyHPR8YBCBYMkxtcftL/c35wTTZG+h3CF3lQomHiHS
+         XF/x2xdGYMY3LL+T5rppkyyFl7HcjY7G0GRB8+TQZUctXx2jty0UkcsdvaH1SOU3fvcx
+         ezsZEKXrPUoAXNCC12NaMg95vkwJL4yz9LsQHvIaI4PKgwyf1TX0jmLNGO9wPvYWEG7O
+         THrLiIIvXdivL2e98CWnzQi7LMI+c4WL4pNf9otRckw3pbMRlv/i4j7bFpI3qripoMpX
+         5vu5LRYwL504MszHxYmJnJ+MhyGMWccAx8yfOBvgPWP8Pb/wd3SxGLZjHsWn61kSWp+g
+         qUxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=70Vtk3cTkEH+v9q1J6g0pF83dKihPS0No/AaCgqegvc=;
+        b=sXS7OCxL8No8n/vSOVeGZ8xFCuC23ELZQVlI0avKrTR19r9JVfjztMuWt9IWbE1bOY
+         qWEQBns/zcqvgpGpheQpWMQbtjp56d4cmy6+P1mm+PjawHXVYrGVx4UKn57f3kKCA/ph
+         so+KZhcj5a8BJpQypbXY/87I90x2W7SfbagIR+t8V7zRnHq3mVhZU2ZklW7GCaZUm7Xo
+         /QHWUpGepID+As2KmwOo8V2GeK2Il7tQOEXtVYtKvZAgVPNuy1Bpdz+JbRc+UI7Kp4KM
+         qu7Cep3I4uzbtQARr4iOPurYXGiAvIO69gxEfWwSaMiCFvcrvKi27TgP6nG7N27X02eT
+         EIIg==
+X-Gm-Message-State: AOAM531aWez4uwMrcMTXe8tKzoRE19i9/zj4xPJU/+/U3e8/+MgksAyu
+        9lrCaug/D0vBULRNg6utgq8IHy6qJBITrpos7TY=
+X-Google-Smtp-Source: ABdhPJzDZot3Y38Q1FZ2t0aN4qB6SNpVdwfUALKFIucHoa4/XdIEJ9z4z7gJL0K9wbNX/yvum6732w==
+X-Received: by 2002:a63:796:: with SMTP id 144mr28563579pgh.246.1620224433949;
+        Wed, 05 May 2021 07:20:33 -0700 (PDT)
+Received: from localhost.localdomain (host-219-71-67-82.dynamic.kbtelecom.net. [219.71.67.82])
+        by smtp.gmail.com with ESMTPSA id s13sm15240598pfd.79.2021.05.05.07.20.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 May 2021 07:20:33 -0700 (PDT)
+From:   Wei Ming Chen <jj251510319013@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
+        Wei Ming Chen <jj251510319013@gmail.com>
+Subject: [PATCH] usb: phy: Use fallthrough pseudo-keyword
+Date:   Wed,  5 May 2021 22:19:36 +0800
+Message-Id: <20210505141936.4343-1-jj251510319013@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 5 May 2021, Benjamin Tissoires wrote:
+Replace /* FALLTHROUGH */ comment with pseudo-keyword macro fallthrough[1]
 
-> > > I don't have a reproducer like syzbot has for the exact bug here, as I
-> > > am relying on one real USB device to check if usbhid is not too broken.
-> > > However, the test suite should catch if there is an error implied by the
-> > > hid_report_len() change.
-> >
-> > Yes, that was exactly what I wanted to check, sorry for not being verbose
-> > enough :)
-> >
-> > > Anyway, I manually started the job and will report when it is done.
-> >
-> 
-> Heh, no problems.
-> 
-> "Job succeeded" \o/
-> 
-> Given that you are on a spree:
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highlight=fallthrough#implicit-switch-case-fall-through
 
-:-)
+Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+---
+ drivers/usb/phy/phy-isp1301-omap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-
-Applied to for-5.13/upstream-fixes. Thanks,
-
+diff --git a/drivers/usb/phy/phy-isp1301-omap.c b/drivers/usb/phy/phy-isp1301-omap.c
+index 02bb7ddd4bd6..f3e9b3b6ac3e 100644
+--- a/drivers/usb/phy/phy-isp1301-omap.c
++++ b/drivers/usb/phy/phy-isp1301-omap.c
+@@ -555,7 +555,7 @@ static void otg_update_isp(struct isp1301 *isp)
+ 	case OTG_STATE_A_PERIPHERAL:
+ 		if (otg_ctrl & OTG_PULLUP)
+ 			goto pullup;
+-		/* FALLTHROUGH */
++		fallthrough;
+ 	// case OTG_STATE_B_WAIT_ACON:
+ 	default:
+ pulldown:
 -- 
-Jiri Kosina
-SUSE Labs
+2.25.1
 
