@@ -2,98 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E246373C54
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 15:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A808373C66
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 15:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbhEEN0m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 09:26:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:26352 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233551AbhEEN0l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 09:26:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1620221145;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/bpFsXMdn5eaqmMBwGxqc2rlRW2ISNHWpOEm7J8RdOs=;
-        b=R9QuNh33pRaO/0CH2men87qLhv7y7rzpXyjRD4t02d3Lnkmie1iwwbFZCpubY8oiAwhgvi
-        YRUY6KRLwo9hjWgooPcDZr661OWZTO6teMfmF6n+no/5N8TalpCvRQywAk/FWlJArHn48y
-        vSixTjDu1iBcu0/rOYkHBrJvnz9dJt4=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-8-otHwB4ZwPMuOKS-Jc3EY8A-1; Wed, 05 May 2021 09:25:43 -0400
-X-MC-Unique: otHwB4ZwPMuOKS-Jc3EY8A-1
-Received: by mail-pg1-f199.google.com with SMTP id t2-20020a6344420000b02901fc26d75405so1282780pgk.20
-        for <linux-usb@vger.kernel.org>; Wed, 05 May 2021 06:25:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/bpFsXMdn5eaqmMBwGxqc2rlRW2ISNHWpOEm7J8RdOs=;
-        b=bti913uZJuaRo9L09rJSgsUQeoBcicgJNqsDY8GGDJi6aBDtiOuxrHZYKgt+TEcXtV
-         /lwiFC2dKTOokAed9CJ0w2d5LW/BNBfUETvQ6OGLZDGLruIkiYAnh2qSLsmGvLwTvx13
-         HWIM3JnBFNrcZ+IlUgJ96K+vl+L+b+rr5+5VOkk07V9KYSTPbmvzqMgVAOiKtPEQ5J5X
-         KFEnBCaYLySgB/37UiSE8ZOmN/eMlW00xfbkfoCHgPY5RnwjcSOC6VFnZ4NQmnmBY1dT
-         hsEtccqOjm+p6oEpRkHDubfJXJdkGIzONV+LJaxxDffs5xm0rYfq9fW+ZN+R5NtOBKHi
-         5dKQ==
-X-Gm-Message-State: AOAM533uPWXmyy3UBMnWvXAswD6/zFrlXkylcgWCrdMzCna+CHVEZiS8
-        Jy+LxMUtlUYOqBGaNxANx1c2u4/P2oYhjG1ZiUNNrkFqZjkvww9yJ0stn2egbXE8Vn0g/vvHjNd
-        EGYrgDEWQrGlUggpoqGs4ElXnJspQ2/7odmCx
-X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr34741903pjr.234.1620221141868;
-        Wed, 05 May 2021 06:25:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJynLc8AHCVwjV7sToQg82XsVT77jGKQjpRW3gOLa+Ib3v9yJLpRKhvj1Cf0JJj43ujAwhVuVWLzaINnDBAk/eU=
-X-Received: by 2002:a17:90a:bb0c:: with SMTP id u12mr34741885pjr.234.1620221141608;
- Wed, 05 May 2021 06:25:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210425173353.10231-1-mail@anirudhrb.com> <nycvar.YFH.7.76.2105051442120.28378@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2105051442120.28378@cbobk.fhfr.pm>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 5 May 2021 15:25:30 +0200
-Message-ID: <CAO-hwJJ4u5NZ-81Tq3PGu-F9r3iUSCiKp=JUsTfuVsyd-Sxsew@mail.gmail.com>
-Subject: Re: [PATCH] usbhid: fix info leak in hid_submit_ctrl
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
+        id S233601AbhEEN3c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 09:29:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232626AbhEEN3b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 5 May 2021 09:29:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BF8D6121F;
+        Wed,  5 May 2021 13:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620221315;
+        bh=XruXOpQ6wk1MGWHgkFB3iuhkA4jJMCmzu3vUC8XzJ4M=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=LAp8N+NdGcNdSz6GCpw2RKH5cAZom5NPGkWRfuDBgtGEGlKf9N9H1d532wxCkTvDZ
+         mPq0clfTA5bR9uj5VRq2Z519SjX6NWuzQ4cptJ/fcLc4F6IafnJLXuJA2u6iG4rvKo
+         2QKFew52Y64dXnyatpNLJurU5z82xYzZLkk1QIyeedNxBbv/W6VlrUUl3V4QMrC7D4
+         1dso7sHv+uZcOMtFN5thYm/vgA/PmfeTw+qpXBz05fUzVcPKK5qDhyzcxcPHtA2aEj
+         jmacfjleFZTswaq11csddjymUpht9AAxQIkajSbJ0NEhdGCZoV3Kar9CdyKmdI4ICf
+         lNvIGqRtPCG6A==
+Date:   Wed, 5 May 2021 15:28:31 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel-mentees@lists.linuxfoundation.org,
         syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com,
         Linux USB Mailing List <linux-usb@vger.kernel.org>,
         "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
         lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH] usbhid: fix info leak in hid_submit_ctrl
+In-Reply-To: <CAO-hwJJ4u5NZ-81Tq3PGu-F9r3iUSCiKp=JUsTfuVsyd-Sxsew@mail.gmail.com>
+Message-ID: <nycvar.YFH.7.76.2105051528090.28378@cbobk.fhfr.pm>
+References: <20210425173353.10231-1-mail@anirudhrb.com> <nycvar.YFH.7.76.2105051442120.28378@cbobk.fhfr.pm> <CAO-hwJJ4u5NZ-81Tq3PGu-F9r3iUSCiKp=JUsTfuVsyd-Sxsew@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 5, 2021 at 2:42 PM Jiri Kosina <jikos@kernel.org> wrote:
->
-> On Sun, 25 Apr 2021, Anirudh Rayabharam wrote:
->
-> > In hid_submit_ctrl(), the way of calculating the report length doesn't
-> > take into account that report->size can be zero. When running the
-> > syzkaller reproducer, a report of size 0 causes hid_submit_ctrl) to
-> > calculate transfer_buffer_length as 16384. When this urb is passed to
-> > the usb core layer, KMSAN reports an info leak of 16384 bytes.
-> >
-> > To fix this, first modify hid_report_len() to account for the zero
-> > report size case by using DIV_ROUND_UP for the division. Then, call it
-> > from hid_submit_ctrl().
-> >
-> > Reported-by: syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com
-> > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
->
-> Benjamin, could you please run this one through your regression testing
-> machinery before we send it upstream?
->
+On Wed, 5 May 2021, Benjamin Tissoires wrote:
 
-I don't have a reproducer like syzbot has for the exact bug here, as I
-am relying on one real USB device to check if usbhid is not too
-broken.
-However, the test suite should catch if there is an error implied by
-the hid_report_len() change.
+> I don't have a reproducer like syzbot has for the exact bug here, as I 
+> am relying on one real USB device to check if usbhid is not too broken. 
+> However, the test suite should catch if there is an error implied by the 
+> hid_report_len() change.
 
-Anyway, I manually started the job and will report when it is done.
+Yes, that was exactly what I wanted to check, sorry for not being verbose 
+enough :)
 
-Cheers,
-Benjamin
+> Anyway, I manually started the job and will report when it is done.
+
+Thanks,
+
+-- 
+Jiri Kosina
+SUSE Labs
 
