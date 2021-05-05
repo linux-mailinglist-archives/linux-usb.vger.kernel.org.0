@@ -2,258 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E173733F0
-	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 05:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BFF3734D0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 May 2021 07:59:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbhEEDi5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 4 May 2021 23:38:57 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:40708 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhEEDi5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 4 May 2021 23:38:57 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620185881; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=cSRfcgfDD8Hrrhs4HMc/sP34jNasBlTwZq8Y7QhRtl0=; b=lRuFtJdl1b6wUkz4U/3wNnWwQ79i2PyLImKXGnfkSTyAvYuUxjN9r9j7YTWx8p+h4B0v0h+p
- nxHQqSlRiGxC4JOWNKmy2JLv8JKYlcfYJ6caP6IFvb1QrZU4/C1OSWfA3VerKYPEQPMgOCla
- N3tFfugT51tUW+sqc+XwXT8AfxU=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 6092130b55b14811b49b76db (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 05 May 2021 03:37:47
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D7525C4338A; Wed,  5 May 2021 03:37:46 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.53.212] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 41CB5C433D3;
-        Wed,  5 May 2021 03:37:45 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 41CB5C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Avoid canceling current request for
- queuing error
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-References: <1620091264-418-1-git-send-email-wcheng@codeaurora.org>
- <5b46e4a1-93ef-2d17-048b-5b4ceba358ae@synopsys.com>
- <513e6c16-9586-c78e-881b-08e0a73c50a8@codeaurora.org>
- <e12fc396-76e6-9506-31c8-cfdee3fb7577@synopsys.com>
- <7ef627cf-3f8f-8a52-52c4-ac67ab48b87d@codeaurora.org>
- <5c06dc0a-4274-b6f0-3844-bd8afa1a59f9@synopsys.com>
- <be826457-bcd5-3dc3-0f71-faa3ac60ac63@codeaurora.org>
- <aca00596-11db-398f-e0c3-4a4d50efbed5@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <ba3c0b77-d076-d9d3-782a-450a6361d8b3@codeaurora.org>
-Date:   Tue, 4 May 2021 20:37:44 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S231219AbhEEGAZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 02:00:25 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:52956 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229592AbhEEGAW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 02:00:22 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1455nUa7028461;
+        Tue, 4 May 2021 22:59:21 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=proofpoint;
+ bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
+ b=dLpZVF8N531t6xFmgQac/v7nm0gz2ll2t+Duz8/shxeZuOb1pKVwIfF+j7wA3K8qucgV
+ zNmKDDmUJD0jlrOF6wtNz44a48HpULLj4vkaE18xc6YIPPCWW2UXxhd1yblRE5QPSAXN
+ S6Gbk//dPYkjx0lwH5Rh9A8h8tSaSfkNZZoIg3Eykdt7sZ+dZhcJx1nwBARoF2XTM5GA
+ 7kJwuZ+DL0xN+ih1gUMzH5FK+s2HHbV7FyUuZnFExpDgr4n+R4Zx30voPKF7bRxOs3GK
+ SDWgFlrMQFZVZJv8X9Lxo1Mksjk5fAKVxz+KzKCXV025T+CoBHMOYJgus2I8K+HqvjSQ JQ== 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 38bec493jd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 May 2021 22:59:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T223f9S2n3eukEfHgVzR7GUPIzAYoOZnHW4MfRfiWNjMwV6YUVV7cF9CgZR5RVqyRxOhkHG8Z2tlzoYXjyS5QZvOoYg8Mj3jWyNKdiGqHnpo6U01sLJGL6ZBGFfrIZdej8DdnUPi9dwxvyFBcEkbZKwHBt6gduhG9CLpX2oCHSVGhFWaMueMAJi2PcrKIo/ms9/sjoNz4Hel72466irK7H1wqKuzQvX6YlpYwNNCrmJotKd2cGig3agU3tlAdxesCcLC5EY7ZacIDyzOsufpbZu7klPIsd7qgTQ6AXLeiyuLRYiVtt2i26tli33vvRL/JnQUk2RU2/XwJpv/tQ6oSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
+ b=VrlwbSF+sCIa1rHIEjRRaFIaQNAXQijbN1KKtS3J7R78KR8vVPoLV39sK+oxDgEjNaFWEvGbX3P5Vdp/IrFr6IsPZwG5M9+vWoJwgmqfn8nAx9uiMpf8xAJXQwzferbl6+veWW+xJ4yveMBGeDzdDOFULyzGPEmNeshl9oxkTnAWbszKEx9WARz7vMmMvzRdWV2WXvQGBUwt9ZzC/+lCSM9W7w35o6AtpMJT30F8qJb+a++wchfghchW19KKpDqXlOzxcad6tfsPwN9uUksIz5Z/08hZC33gRdykav7bPqaSh8JvsBq3qlBbKRdCyshv8au2lzsiudxjKMOam1S8TQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 199.43.4.23) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=cadence.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=cadence.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uj9KpWmYhwsg1xOBz1n1RqtDRgGWzpi71GHLc9QFKgs=;
+ b=cbAfCtHITdRmFiCcPLP/44pwXkXeaAfQkWxyFMMjWPoGPbI+IhXyc3tTF5LG8qmLmVJDzkbJd4Ub5A8qXviCupyhsHa07v3DHNVwnhiTSElGI4AhOkuEIVX7aztBL8J6C4LpDBFYqM/qd7rK5rD3nftQ7HTueohmbGRLOX9izNs=
+Received: from BN6PR1201CA0006.namprd12.prod.outlook.com
+ (2603:10b6:405:4c::16) by DM6PR07MB6491.namprd07.prod.outlook.com
+ (2603:10b6:5:1c2::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.41; Wed, 5 May
+ 2021 05:59:18 +0000
+Received: from BN8NAM12FT046.eop-nam12.prod.protection.outlook.com
+ (2603:10b6:405:4c:cafe::e7) by BN6PR1201CA0006.outlook.office365.com
+ (2603:10b6:405:4c::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4087.29 via Frontend
+ Transport; Wed, 5 May 2021 05:59:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 199.43.4.23)
+ smtp.mailfrom=cadence.com; linuxfoundation.org; dkim=none (message not
+ signed) header.d=none;linuxfoundation.org; dmarc=pass action=none
+ header.from=cadence.com;
+Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
+ 199.43.4.23 as permitted sender) receiver=protection.outlook.com;
+ client-ip=199.43.4.23; helo=rmmaillnx1.cadence.com;
+Received: from rmmaillnx1.cadence.com (199.43.4.23) by
+ BN8NAM12FT046.mail.protection.outlook.com (10.13.183.148) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4108.8 via Frontend Transport; Wed, 5 May 2021 05:59:18 +0000
+Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
+        by rmmaillnx1.cadence.com (8.14.4/8.14.4) with ESMTP id 1455xGkb020669
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 May 2021 01:59:17 -0400
+X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
+Received: from maileu3.global.cadence.com (10.160.88.99) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 5 May 2021 07:59:16 +0200
+Received: from gli-login.cadence.com (10.187.128.100) by
+ maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2 via Frontend Transport; Wed, 5 May 2021 07:59:16 +0200
+Received: from gli-login.cadence.com (localhost [127.0.0.1])
+        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 1455xFEB040939;
+        Wed, 5 May 2021 07:59:15 +0200
+Received: (from pawell@localhost)
+        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 1455xFcN040896;
+        Wed, 5 May 2021 07:59:15 +0200
+From:   Pawel Laszczak <pawell@cadence.com>
+To:     <peter.chen@kernel.org>
+CC:     <gregkh@linuxfoundation.org>, <dan.carpenter@oracle.com>,
+        <linux-usb@vger.kernel.org>, <kurahul@cadence.com>,
+        Pawel Laszczak <pawell@cadence.com>
+Subject: [PATCH v2] usb: cdnsp: Useless condition has been removed
+Date:   Wed, 5 May 2021 07:58:54 +0200
+Message-ID: <20210505055854.40240-1-pawell@gli-login.cadence.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <aca00596-11db-398f-e0c3-4a4d50efbed5@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-OrganizationHeadersPreserved: maileu3.global.cadence.com
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a83689fa-00b8-412b-8d0d-08d90f8aebaa
+X-MS-TrafficTypeDiagnostic: DM6PR07MB6491:
+X-Microsoft-Antispam-PRVS: <DM6PR07MB64911FEA8FB9F55DBD376498DD599@DM6PR07MB6491.namprd07.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:308;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p/gFiRkH4v1jBhW6TVphpAWJn/Ym415vBKvC5K7vvw1LGv8pZ3v8jULWO5fJ+VK1L+p+Tv9xqQp0UgjZbylsSglrg0uWcnxSUQVoJv5ODbd9Fp6AEUZfvj7WurbT93tTo0zCnwYSFSHRT4mJb5HwkcSXcthvCHQ0dAihPz4m1dqBo94g85HxVYY2hEKXqgOQllFV0NtZEMGSndeEs0p74Lzuk9Be+CgLGMlRaHJdqwq++5I/yU2qdzugzy57s3io8yMJIhJ5FpNz9OYoC5wV9RPIPUo0BPpi6wpvA1Tv98EtpHOj0kQG0+TIv1gNgg6Wqea/Q6gan2TkD/abzZxul3ql2CzYbeQUZGk56d2HC+yf2wOSFdzlV58rRHa0q814panjTUMOOsfcKM+4eiwgP31ZWONvzFN/ouwh8u2R3nFDAo1QyPxarTDImG/5z9sDaKUdG9Ubu673cSYN5/BCWAvwr5EJyfL1X1GBPhzP/XPp5Q1yV76zzefqXE/qAnjuaTZN5Y/7m5ZvcFRef02ECrB9g7DPyV9Z7ueU1bvvj0X6K+29BXnBCKpX85srBzelNHoj2bMFFuLND2/aJYEaDV2s3G7bctdHFBiJgf+C8E2krBi1qGuqNAdE/AHq93iNgVmk3uK0wAXKNBARqTyyK893pBxzRWkyZmzHpEsE2mFYHjS6GuAnJQ9iNCIRFzUCgM89MvtsPwGA6oXmczO7/Q==
+X-Forefront-Antispam-Report: CIP:199.43.4.23;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:rmmaillnx1.cadence.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(346002)(39860400002)(136003)(376002)(396003)(36092001)(36840700001)(46966006)(70586007)(356005)(82310400003)(70206006)(36860700001)(478600001)(426003)(54906003)(47076005)(1076003)(8936002)(6666004)(5660300002)(6916009)(81166007)(4326008)(82740400003)(36906005)(2906002)(336012)(316002)(42186006)(83380400001)(86362001)(186003)(107886003)(26005)(8676002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 May 2021 05:59:18.3122
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a83689fa-00b8-412b-8d0d-08d90f8aebaa
+X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[199.43.4.23];Helo=[rmmaillnx1.cadence.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM12FT046.eop-nam12.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR07MB6491
+X-Proofpoint-ORIG-GUID: XAbCzX_2eR5TU596SBvRy1CNTVXDtU7t
+X-Proofpoint-GUID: XAbCzX_2eR5TU596SBvRy1CNTVXDtU7t
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-05-05_02:2021-05-04,2021-05-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 mlxscore=0
+ adultscore=0 suspectscore=0 phishscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015
+ lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2104060000 definitions=main-2105050042
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Pawel Laszczak <pawell@cadence.com>
 
+This code generates a Smatch warning:
 
-On 5/4/2021 6:50 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->>
->>
->> On 5/3/2021 10:22 PM, Thinh Nguyen wrote:
->>> Wesley Cheng wrote:
->>>>
->>>>
->>>> On 5/3/2021 8:12 PM, Thinh Nguyen wrote:
->>>>> Hi Wesley,
->>>>>
->>>>> Wesley Cheng wrote:
->>>>>>
->>>>>>
->>>>>> On 5/3/2021 7:20 PM, Thinh Nguyen wrote:
->>>>>>> Hi,
->>>>>>>
->>>>>>> Wesley Cheng wrote:
->>>>>>>> If an error is received when issuing a start or update transfer
->>>>>>>> command, the error handler will stop all active requests (including
->>>>>>>> the current USB request), and call dwc3_gadget_giveback() to notify
->>>>>>>> function drivers of the requests which have been stopped.  Avoid
->>>>>>>> having to cancel the current request which is trying to be queued, as
->>>>>>>> the function driver will handle the EP queue error accordingly.
->>>>>>>> Simply unmap the request as it was done before, and allow previously
->>>>>>>> started transfers to be cleaned up.
->>>>>>>>
->>>>>>
->>>>>> Hi Thinh,
->>>>>>
->>>>>>>
->>>>>>> It looks like you're still letting dwc3 stopping and cancelling all the
->>>>>>> active requests instead letting the function driver doing the dequeue.
->>>>>>>
->>>>>>
->>>>>> Yeah, main issue isn't due to the function driver doing dequeue, but
->>>>>> having cleanup (ie USB request free) if there is an error during
->>>>>> usb_ep_queue().
->>>>>>
->>>>>> The function driver in question at the moment is the f_fs driver in AIO
->>>>>> mode.  When async IO is enabled in the FFS driver, every time it queues
->>>>>> a packet, it will allocate a io_data struct beforehand.  If the
->>>>>> usb_ep_queue() fails it will free this io_data memory.  Problem is that,
->>>>>> since the DWC3 gadget calls the completion with -ECONNRESET, the FFS
->>>>>> driver will also schedule a work item (within io_data struct) to handle
->>>>>> the completion.  So you end up with a flow like below
->>>>>>
->>>>>> allocate io_data (ffs)
->>>>>>  --> usb_ep_queue()
->>>>>>    --> __dwc3_gadget_kick_transfer()
->>>>>>    --> dwc3_send_gadget_ep_cmd(EINVAL)
->>>>>>    --> dwc3_gadget_ep_cleanup_cancelled_requests()
->>>>>>    --> dwc3_gadget_giveback(ECONNRESET)
->>>>>> ffs completion callback
->>>>>> queue work item within io_data
->>>>>>  --> usb_ep_queue returns EINVAL
->>>>>> ffs frees io_data
->>>>>> ...
->>>>>>
->>>>>> work scheduled
->>>>>>  --> NULL pointer/memory fault as io_data is freed
->>>>
->>>> Hi Thinh,
->>>>
->>>>>
->>>>> sounds like a race issue.
->>>>>
->>>>
->>>> It'll always happen if usb_ep_queue() fails with an error. Sorry for not
->>>> clarifying, but the "..." represents executing in a different context
->>>> :). Anything above the "..." is in the same context.
->>>>>>
->>>>>>> BTW, what kinds of command and error do you see in your setup and for
->>>>>>> what type endpoint? I'm thinking of letting the function driver to
->>>>>>> dequeue the requests instead of letting dwc3 automatically
->>>>>>> ending/cancelling the queued requests. However, it's a bit tricky to do
->>>>>>> that if the error is -ETIMEDOUT since we're not sure if the controller
->>>>>>> had already cached the TRBs.
->>>>>>>
->>>>>>
->>>>>> Happens on bulk EPs so far, but I think it wouldn't matter as long as
->>>>>> its over the FFS interface. (and using async IO transfers)
->>>>>
->>>>> Do you know which command and error code? It's strange if
->>>>> UPDATE_TRANSFER command failed.
->>>>>
->>>>
->>>> Sorry for missing that part of the question.  It is a no xfer resource
->>>> error on a start transfer command.  So far this happens on low system
->>>> memory test cases, so there may be some sequences that were missed,
->>>> which led to this particular command error.
->>>>
->>>> Thanks
->>>> Wesley Cheng
->>
->> Hi Thinh,
->>
->>>
->>> No xfer resource usually means that the driver attempted to send
->>> START_TRANSFER without waiting for END_TRANSFER command to complete.
->>> This may be a dwc3 driver issue. Did you check this?
->>>
->>> Thanks,
->>> Thinh
->>>
->>>
->>
->> Yes, we know the reason why this happens, and its due to one of the
->> downstream changes we had that led to the scenario above.  Although,
->> that has been fixed, I still believe the error path is a potential
->> scenario we'd still want to address.
->>
->> I think the returning success always on dwc3_gadget_ep_queue(), and
->> allowing the error in the completion handler/giveback at the function
->> driver level to do the cleanup is a feasible solution.  Doesn't change
->> the flow of the DWC3 gadget, and so far all function drivers we've used
->> handle this in the correct manner.
->>
->> Thanks
->> Wesley Cheng
-> 
-> Right. I think for now we should do that (return success always except
-> for cases of disconnect or already in-flight etc). This helps keeping it
-> simple and avoid some pitfalls dealing with giving back the request.
-> Currently we return the error status to dwc3_gadget_ep_queue if we
-> failed to send a command that may not even related to the same request
-> being queued.
-> 
-> This way, I think it matches with how we handle it in the driver. We
-> always put the request in the pending list (queued) first and possibly
-> start/update the controller with new data.
-> 
-> Thanks,
-> Thinh
-> 
-> 
-Hi Thinh,
+drivers/usb/cdns3/cdnsp-mem.c:1085 cdnsp_mem_cleanup()
+warn: variable dereferenced before check 'pdev->dcbaa' (see line 1067)
 
-Agreed, thanks for the input and in depth discussion.  Will spin a new
-revision with the suggestion above.
+The unchecked dereference happens inside the function when we call:
 
-Thanks
-Wesley Cheng
->>
->>>>
->>>>>>
->>>>>>> This seems to add more complexity and I don't have a good solution to
->>>>>>> it. Since you're already cancelling all the active request anyway, what
->>>>>>> do you think of always letting dwc3_gadget_ep_queue() to go through with
->>>>>>> success, but report failure through request completion?
->>>>>>>
->>>>>>
->>>>>> We do have something similar as well downstream (returning success
->>>>>> always on dwc3_gadget_ep_queue()) and its been working for us also.
->>>>>> Problem is we don't test the ISOC path much, so this is the only type of
->>>>>> EP that might come into question...
->>>>>>
->>>>>
->>>>> It should be similiar with isoc. I can't think of a potential issue yet.
->>>>>
->>>>>> Coming up with a way to address the concerns you brought up was a bit
->>>>>> difficult as there were scenarios we needed to consider.  next_request()
->>>>>> doesn't always have to be the request being queued (even if ep queue
->>>>>> triggered it).  There was no easy way to determine if kick transfer was
->>>>>> due to ep queue, but even if there was, we'd need to remember the
->>>>>> previous point as well.
->>>>>>
->>>>>
->>>>> Yeah, there are a few pitfalls. I don't have a good solution to it if we
->>>>> want to return failure immediately and let the function driver handle
->>>>> the dequeue (if it wants to).
->>>>>
->>>>> Thanks,
->>>>> Thinh
->>>>>
->>>>
->>>
->>
-> 
+cdnsp_free_priv_device(pdev);
 
+But fortunately, the "pdev->dcbaa" pointer can never be NULL so it
+does not lead to a runtime issue. We can just remove the NULL check
+which silences the warning and makes the code consistent.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+
+---
+Changelog:
+v2:
+- updated commit message
+
+ drivers/usb/cdns3/cdnsp-mem.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdnsp-mem.c b/drivers/usb/cdns3/cdnsp-mem.c
+index 5d4c4bfe15b7..a47948a1623f 100644
+--- a/drivers/usb/cdns3/cdnsp-mem.c
++++ b/drivers/usb/cdns3/cdnsp-mem.c
+@@ -1082,9 +1082,8 @@ void cdnsp_mem_cleanup(struct cdnsp_device *pdev)
+ 	dma_pool_destroy(pdev->device_pool);
+ 	pdev->device_pool = NULL;
+ 
+-	if (pdev->dcbaa)
+-		dma_free_coherent(dev, sizeof(*pdev->dcbaa),
+-				  pdev->dcbaa, pdev->dcbaa->dma);
++	dma_free_coherent(dev, sizeof(*pdev->dcbaa),
++			  pdev->dcbaa, pdev->dcbaa->dma);
+ 
+ 	pdev->dcbaa = NULL;
+ 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
+
