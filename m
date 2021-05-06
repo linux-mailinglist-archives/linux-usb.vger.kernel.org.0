@@ -2,129 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1483758FA
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 19:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD0737599C
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 19:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236223AbhEFRLt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 13:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55664 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236219AbhEFRLt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 13:11:49 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B5CC061761
-        for <linux-usb@vger.kernel.org>; Thu,  6 May 2021 10:10:50 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id k15-20020a056902070fb02904f8633d41c4so1075364ybt.23
-        for <linux-usb@vger.kernel.org>; Thu, 06 May 2021 10:10:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=bJfhWmzCEqBf7RcCkH3EB8f08paJPyJ+O6NagWukv6U=;
-        b=V5yFPBFWU/ofw5k+uRKoMu4NIcr+A/WTzrYffNWRjnEwCsSrl3isnoecMrGuEavL9h
-         oR3iDGlWaeDDaU1TcxETQbIiK6GxkuoAvSpJZhg4m4M1Nl3NomfiDSb/fptNAHCvr3tz
-         q1mEOfMlWrpHnoYAbZ/TleegRZg71ZGv3OEJLJ9wZDkvoniw+5JEF6XCoV2OkHP+lMGo
-         ayd2Hq0VWh4vo7PubK+Ok21BMBXhuGYQSQkjsYOr1t++yzOR8Zn9aR7wKuRthPtfk9Uz
-         MPJT3naf+SFLWKhHXZ09gIC64tQ03gCqAR9z1B8ZYpWBve/fRe8xVldeCD9PUtr/y2q8
-         OH6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=bJfhWmzCEqBf7RcCkH3EB8f08paJPyJ+O6NagWukv6U=;
-        b=K4fEHxg0N1a6htz/qm2gbm/05JOeXJpFhbkupldLtMja+RcWSOMhcG8knui5V46YQ3
-         aD01FigCEHYAHKbWFWc6J/H7aabtlAm7+Fw6fsW9KbBxqNRIM53a2OaV0TiLNKYGiYJr
-         nK8khAQt8xrWPn+/U53rFbtPWOUsNXCFIF/mgGGSEp2ZZKaqt64jmvPszhxR81cntYpz
-         5O71+Uj6tzmoLOu7bLSQUBbor4pqqrqQQ9kUymaQGhBbsQUto6jM/OpMr53cnyjbfYS+
-         wgtNX6Onops2cLGt+YUTb8vjMqToqVJI7FiXG42677Zl9MVKFmXuo+EN9mxfofu2oz+Z
-         X1XQ==
-X-Gm-Message-State: AOAM533yq+5a194W/qxIsllagtzlj/XIAPsCGnrZGwQIX71cHrW4XcXr
-        9oHm41mXtiupnovLMNgy7Bf+gvm3VWXa
-X-Google-Smtp-Source: ABdhPJwqcl2r+9STr96Pm6e9fSrlA9NZNqIU8pZCFUDTOsJbg4lXVx3E85jZh5f9FxVQ89q55YK4WhKQn/Ns
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:9a5c:8de0:4c79:ba52])
- (user=kyletso job=sendgmr) by 2002:a25:99c1:: with SMTP id
- q1mr6973855ybo.517.1620321050053; Thu, 06 May 2021 10:10:50 -0700 (PDT)
-Date:   Fri,  7 May 2021 01:10:26 +0800
-In-Reply-To: <20210506171026.1736828-1-kyletso@google.com>
-Message-Id: <20210506171026.1736828-3-kyletso@google.com>
-Mime-Version: 1.0
-References: <20210506171026.1736828-1-kyletso@google.com>
-X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Fix wrong handling for Not_Supported
- in VDM AMS
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S236262AbhEFRp6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 13:45:58 -0400
+Received: from mail02.rohde-schwarz.com ([80.246.32.97]:29310 "EHLO
+        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236224AbhEFRp5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 13:45:57 -0400
+Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
+ (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Thu, 6 May 2021
+ 19:44:57 +0200
+Received: from GMU418.rsint.net ([10.0.230.144])
+          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 855;
+          Thu, 6 May 2021 19:44:57 +0200 (CEST)
+Received: from GMU003.rsint.net (10.0.2.61) by GMU418.rsint.net (10.0.230.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.4; Thu, 6 May 2021
+ 19:44:56 +0200
+Received: from GMU006.rsint.net (10.0.2.28) by GMU003.rsint.net (10.0.2.61)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.4; Thu, 6 May
+ 2021 19:44:55 +0200
+Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
+ GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
+ 15.01.2242.008; Thu, 6 May 2021 19:44:55 +0200
+From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx
+Thread-Topic: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx /ur/
+Thread-Index: AddCn1vLnT1ptH8pTMyqkmF/h3+ebg==
+Date:   Thu, 6 May 2021 17:44:55 +0000
+Message-ID: <be62c93e1e384f49865915b9bda1f12e@rohde-schwarz.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-rus_sensitivity: 10
+hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
+hvs-prefix: R_S
+x-originating-ip: [10.0.9.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-IQAV: YES
+X-GBS-PROC: ijJGnd7ryUNXAjn+Z3XHJ9HQeEa439o4WKV7Y1dJIJAjoOyTSXAGzK3Zo66c0eppkH3W5oTj8TxA196QoGtlRBjZ9be3PgBZrEa46NjcPpKm+KDOtLeLZcQI7hPaGAfA
+X-GBS-PROCJOB: aqr7T7RqA7eNWKJjW5jzc+1N2Z/nRA0uUVvTaaxWqT5CVGjAAq3DISDvpoEpIWMn
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Not_Supported Message is acceptable in VDM AMS. Redirect the VDM state
-machine to VDM_STATE_DONE when receiving Not_Supported and finish the
-VDM AMS.
-
-Also, after the loop in vdm_state_machine_work, add more conditions of
-VDM states to clear the vdm_sm_running flag because those are all
-stopping states when leaving the loop.
-
-In addition, finish the VDM AMS if the port partner responds BUSY.
-
-Fixes: 8dea75e11380 ("usb: typec: tcpm: Protocol Error handling")
-Fixes: 8d3a0578ad1a ("usb: typec: tcpm: Respond Wait if VDM state machine is running")
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 07a449f0e8fa..bf97db232f09 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1897,7 +1897,6 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 
- 			if (res < 0) {
- 				port->vdm_state = VDM_STATE_ERR_BUSY;
--				port->vdm_sm_running = false;
- 				return;
- 			}
- 		}
-@@ -1913,6 +1912,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 		port->vdo_data[0] = port->vdo_retry;
- 		port->vdo_count = 1;
- 		port->vdm_state = VDM_STATE_READY;
-+		tcpm_ams_finish(port);
- 		break;
- 	case VDM_STATE_BUSY:
- 		port->vdm_state = VDM_STATE_ERR_TMOUT;
-@@ -1978,7 +1978,7 @@ static void vdm_state_machine_work(struct kthread_work *work)
- 		 port->vdm_state != VDM_STATE_BUSY &&
- 		 port->vdm_state != VDM_STATE_SEND_MESSAGE);
- 
--	if (port->vdm_state == VDM_STATE_ERR_TMOUT)
-+	if (port->vdm_state < VDM_STATE_READY)
- 		port->vdm_sm_running = false;
- 
- 	mutex_unlock(&port->lock);
-@@ -2569,6 +2569,16 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			port->sink_cap_done = true;
- 			tcpm_set_state(port, ready_state(port), 0);
- 			break;
-+		case SRC_READY:
-+		case SNK_READY:
-+			if (port->vdm_state > VDM_STATE_READY) {
-+				port->vdm_state = VDM_STATE_DONE;
-+				if (tcpm_vdm_ams(port))
-+					tcpm_ams_finish(port);
-+				mod_vdm_delayed_work(port, 0);
-+				break;
-+			}
-+			fallthrough;
- 		default:
- 			tcpm_pd_handle_state(port,
- 					     port->pwr_role == TYPEC_SOURCE ?
--- 
-2.31.1.527.g47e6f16901-goog
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbGFuIFN0ZXJuDQo+IFNlbnQ6
+IFRodXJzZGF5LCBNYXkgNiwgMjAyMSAzOjQ5IFBNDQo+IFRvOiBLaWVuZXIgR3VpZG8gMTREUzEg
+PEd1aWRvLktpZW5lckByb2hkZS1zY2h3YXJ6LmNvbT4NCj4gDQo+IE9uIFdlZCwgTWF5IDA1LCAy
+MDIxIGF0IDEwOjIyOjI0UE0gKzAwMDAsIEd1aWRvIEtpZW5lciB3cm90ZToNCj4gPiA+IERyaXZl
+cnMgYXJlIG5vdCBjb25zaXN0ZW50IGluIHRoZSB3YXkgdGhleSBoYW5kbGUgdGhlc2UgZXJyb3Jz
+LCBhcw0KPiA+ID4geW91IGhhdmUgc2Vlbi4gIEEgZmV3IHRyeSB0byB0YWtlIGFjdGl2ZSBtZWFz
+dXJlcywgc3VjaCBhcyByZXRyeXMNCj4gPiA+IHdpdGggaW5jcmVhc2luZyB0aW1lb3V0cy4gIE1h
+bnkgZHJpdmVycyBqdXN0IGlnbm9yZSB0aGVtLCB3aGljaCBpcyBub3QgYSB2ZXJ5DQo+IGdvb2Qg
+aWRlYS4NCj4gPiA+DQo+ID4gPiBUaGUgZ2VuZXJhbCBmZWVsaW5nIGFtb25nIGtlcm5lbCBVU0Ig
+ZGV2ZWxvcGVycyBpcyB0aGF0IGEgLUVQUk9UTywNCj4gPiA+IC1FSUxTRVEsIG9yIC1FVElNRSBl
+cnJvciBzaG91bGQgYmUgcmVnYXJkZWQgYXMgZmF0YWwsIG11Y2ggdGhlIHNhbWUNCj4gPiA+IGFz
+IGFuIHVucGx1ZyBldmVudC4gIFRoZSBkcml2ZXIgc2hvdWxkIGF2b2lkIHJlc3VibWl0dGluZyBV
+UkJzIGFuZCBqdXN0IHdhaXQgdG8NCj4gYmUgdW5ib3VuZCBmcm9tIHRoZSBkZXZpY2UuDQo+ID4N
+Cj4gPiBUaGFua3MgZm9yIHlvdXIgYXNzZXNzbWVudC4gSSBhZ3JlZSB3aXRoIHRoZSBnZW5lcmFs
+IGZlZWxpbmcuIEkNCj4gPiBjb3VudGVkIGFib3V0IGh1bmRyZWQgc3BlY2lmaWMgdXNiIGRyaXZl
+cnMsIHNvIHdvdWxkbid0IGl0IGJlIGJldHRlciB0byBmaXggdGhlDQo+IHByb2JsZW0gaW4gc29t
+ZSBvZiB0aGUgaG9zdCBkcml2ZXJzIChlLmcuIHVyYi5jKT8NCj4gPiBXZSBjb3VsZCByZXR1cm4g
+YW4gZXJyb3Igd2hlbiBjYWxsaW5nIHVzYl9zdWJtaXRfdXJiKCkgb24gYW4gZXJyb25lb3VzIHBp
+cGUuDQo+ID4gSSBjYW5ub3QgZXN0aW1hdGUgdGhlIHNpZGUgZWZmZWN0cyBhbmQgd2UgbmVlZCB0
+byBjaGVjayBhbGwgZHJpdmVycw0KPiA+IGFnYWluIGhvdyB0aGV5IGRlYWwgd2l0aCB0aGUgZXJy
+b3Igc2l0dWF0aW9uLiBNYXliZSB0aGVyZSBhcmUgc29tZSBzcGVjaWFsIGRyaXZlcg0KPiB0aGF0
+IG5lZWQgYSBzcGVjaWFsaXplZCBlcnJvciBoYW5kbGluZy4NCj4gPiBJbiB0aGlzIGNhc2UgdGhl
+c2UgZHJpdmVycyBjb3VsZCByZXNldCB0aGUgKG5ldz8pIGVycm9yIGZsYWcgdG8gYWxsb3cNCj4g
+PiBjYWxsaW5nIHVzYl9zdWJtaXRfdXJiKCkgYWdhaW4gd2l0aG91dCBlcnJvci4gVGhpcyBjb3Vs
+ZCB3b3JrLCBpc24ndCBpdD8NCj4gDQo+IFRoYXQgaXMgZmVhc2libGUsIGFsdGhvdWdoIGl0IHdv
+dWxkIGJlIGFuIGF3a3dhcmQgYXBwcm9hY2guICBBcyB5b3Ugc2FpZCwgdGhlIHNpZGUNCj4gZWZm
+ZWN0cyBhcmVuJ3QgY2xlYXIuICBCdXQgaXQgbWlnaHQgd29yay4NCg0KT3RoZXJ3aXNlIEkgc2Vl
+IG9ubHkgdGhlIG90aGVyIGFwcHJvYWNoIHRvIGNoYW5nZSBodW5kcmVkIGRyaXZlcnMgYW5kIGFk
+ZCB0aGUNCmNhc2VzIEVQUk9UTywgRUlMU0VRIGFuZCBFVElNRSBpbiBlYWNoIGNhbGxiYWNrIGhh
+bmRsZXIuIFRoZSB1c2J0bWMgZHJpdmVyDQphbHJlYWR5IHJlc3BlY3RzIHRoZSBFSUxTRVEgYW5k
+IEVUSU1FLCBhbmQgb25seSBFUFJPVE8gaXMgbWlzc2luZy4NClRoZSByZXN0IHNob3VsZCBiZSBt
+b3JlIGEgbWFuYWdlbWVudCB0YXNrLg0KQlRXIGRvIHlvdSBhc3N1bWUgaXQgaXMgb25seSBhIHBy
+b2JsZW0gZm9yIElOVCBwaXBlcyBvciBpcyBpdCBhbHNvIGEgcHJvYmxlbQ0KZm9yIGlzb2Nocm9u
+b3VzIGFuZCBidWxrIHRyYW5zZmVycz8NCg0KPiA+ID4gSWYgeW91IHdvdWxkIGxpa2UgdG8gYXVk
+aXQgZHJpdmVycyBhbmQgZml4IHRoZW0gdXAgdG8gYmVoYXZlIHRoaXMNCj4gPiA+IHdheSwgdGhh
+dCB3b3VsZCBiZSBncmVhdC4NCj4gPg0KPiA+IEN1cnJlbnRseSBub3QuIEkgY2Fubm90IHB1bGwg
+dGhlIFVTQiBjYWJsZSBpbiBob21lIG9mZmljZSA6LSksIGJ1dCBJIHdpbGwga2VlcCBhbiBleWUN
+Cj4gb24gaXQuDQo+ID4gV2hlbiBJJ20gbW9yZSBpbnZvbHZlZCBpbiB0aGUgbmV4dCBVU0IgZHJp
+dmVyIGlzc3VlIHRoYW4gSSB3aWxsIHRlc3QNCj4gPiBiYWQgY2FibGVzIGFuZCBtYXliZSBnZXQg
+bW9yZSBpZGVhcyBob3cgd2UgY291bGQgdGVzdCBhbmQgZml4IHRoaXMgcmFyZSBlcnJvci4NCj4g
+DQo+IFdpbGwgeW91IGJlIGFibGUgdG8gdGVzdCBwYXRjaGVzPw0KDQpJIG9ubHkgY2FuIHRlc3Qg
+dGhlIFVTQlRNQyBmdW5jdGlvbiBpbiBzb21lIGRpZmZlcmVudCBQQ3MuIEkgZG8gbm90IGhhdmUg
+YXV0b21hdGVkDQpyZWdyZXNzaW9uIHRlc3RzIGZvciBVU0IgZHJpdmVycyBvciBMaW51eCBrZXJu
+ZWxzLg0KTWF5YmUgdGhlcmUgaXMgY29tcGFueSB3aG8gY291bGQgZG8gdGhhdC4NCg0KLUd1aWRv
+DQo=
