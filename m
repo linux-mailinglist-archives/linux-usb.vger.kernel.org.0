@@ -2,143 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0075E374B2B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 00:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 751BD374C7A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 02:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234113AbhEEWXe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 18:23:34 -0400
-Received: from mail02.rohde-schwarz.com ([80.246.32.97]:20116 "EHLO
-        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbhEEWXZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 18:23:25 -0400
-Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
- (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Thu, 6 May 2021
- 00:22:26 +0200
-Received: from GMU418.rsint.net ([10.0.230.144])
-          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 998;
-          Thu, 6 May 2021 00:22:25 +0200 (CEST)
-Received: from GMU008.rsint.net (10.0.2.29) by GMU418.rsint.net (10.0.230.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.4; Thu, 6 May 2021
- 00:22:25 +0200
-Received: from GMU006.rsint.net (10.0.2.28) by GMU008.rsint.net (10.0.2.29)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.4; Thu, 6 May
- 2021 00:22:25 +0200
-Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
- GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
- 15.01.2242.008; Thu, 6 May 2021 00:22:24 +0200
-From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "dpenkler@gmail.com" <dpenkler@gmail.com>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: Re: Re: [syzbot] INFO: rcu detected stall in tx
-Thread-Topic: Re: Re: [syzbot] INFO: rcu detected stall in tx /ur/
-Thread-Index: AddB/PS7Li0nZFy5SOyK+pazcdQJJA==
-Date:   Wed, 5 May 2021 22:22:24 +0000
-Message-ID: <58bda4726ca24d0e963a6787d4c86313@rohde-schwarz.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-rus_sensitivity: 10
-hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
-hvs-prefix: R_S
-x-originating-ip: [10.0.9.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-IQAV: YES
-X-GBS-PROC: 6KdluzGQerrboy4j1mmdnyGsLkZ0NLPDTIMMABczP9LL43ps3CfDqWURB50ckR7eAKLlWLn6jOlxqerk4sGkEzTfhciNznHsQs5z+MQNWMoX62dltylrf8igsNwu+qrG
-X-GBS-PROCJOB: as1p5eGTkF+9lQHM4naQUmJP410WfUY01feE+nsU/wQ1BDGSvTE1sYPC54FKh6x8
+        id S229784AbhEFApZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 5 May 2021 20:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229645AbhEFApY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 20:45:24 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F269C061761
+        for <linux-usb@vger.kernel.org>; Wed,  5 May 2021 17:44:27 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a7-20020a5b00070000b02904ed415d9d84so4282824ybp.0
+        for <linux-usb@vger.kernel.org>; Wed, 05 May 2021 17:44:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=FIYfWaI3YWf0DYz8YdznL9GRGAZ6Fujs7G6sHSJoW08=;
+        b=F81HM63dfakzEtPzPGJfAvVwabd9GULG3vw+sE1lsDWClbnnmHcUG6+0B/zSPxVJLZ
+         Lr9H9/0Nf1Oc+9FXEMGfgPGWxG2kUfHxnHdSYCQqUhiSluugfSdBdIvSogMCzWTEdlEX
+         MIcufUtVUNccgFzr1x5NgfDAyQKogQjwVv2Ug2+G/X94Fh+7iYFEq7dSXgohySMdxz4x
+         3pBsNZ885BulHmlf7UHqpHKrCe9bYVy6dFlLJHoyAaheg7nPN2n1ABkVtp1HCuGGjp1H
+         Npa7NT6c05Nye4sVNxeQ9IIWT+PGLMAh4EHXtbIPGLVkkIHUYQtEKbe0/QiaY7SGlIhX
+         cA7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=FIYfWaI3YWf0DYz8YdznL9GRGAZ6Fujs7G6sHSJoW08=;
+        b=mKHVSIp8ycKVLySmwQyBY0B+3T1lufji6cD51Zw9eKaxL7iZeaomCy+Ij/3OiNY4pF
+         3FA47zpEkBnwnEM/J7uM3LAj/1KGBniKNtoLGHch6bP07I3pCeFws8DoW2vOi3c6LcWH
+         bATCGg6TqDxF+voNQW8J6dOQtZxRoeyUdrDGV2M7sIkaYlbagYaD5mF2MKlQHMXjc3VQ
+         LSs8qq3LZ5vQ/+gENaLD3qdqawwKG17OIM+I843pMNdh6LFiheeHwRXTrMZ1wdJAL8TK
+         vp5z2k8DapIaIypz6SqAt5hfUuURgt5WGCBnBE2CffDY2Izs1kVhgFqqzhETd2jGhgv+
+         KW+A==
+X-Gm-Message-State: AOAM532QNZIR3qONwjVAtpFUK/+Lg5Z8oS0HZYU4BH/CetCOnnjZGQFj
+        SAemt/DhAg8//yWJAacJ14luIU040B5N3Q0=
+X-Google-Smtp-Source: ABdhPJywu5JWRxK+B9j2uRu1VgtWzYJwE2BP9lNYPJ54EuyBhnjLhVD53mw4Mxt1fpFfj3XMCqVb9fY4YZ7pxCE=
+X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:7dba:15b:e3fd:a2e5])
+ (user=saravanak job=sendgmr) by 2002:a5b:f02:: with SMTP id
+ x2mr2082887ybr.99.1620261866544; Wed, 05 May 2021 17:44:26 -0700 (PDT)
+Date:   Wed,  5 May 2021 17:44:22 -0700
+Message-Id: <20210506004423.345199-1-saravanak@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
+Subject: [PATCH v1] usb: typec: tcpm: Don't block probing of consumers of
+ "connector" nodes
+From:   Saravana Kannan <saravanak@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>,
+        Saravana Kannan <saravanak@google.com>
+Cc:     John Stultz <john.stultz@linaro.org>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbGFuIFN0ZXJuIDxzdGVybkBy
-b3dsYW5kLmhhcnZhcmQuZWR1Pg0KPiBTZW50OiBUdWVzZGF5LCBNYXkgNCwgMjAyMSA1OjE0IFBN
-DQo+IFRvOiBLaWVuZXIgR3VpZG8gMTREUzEgDQo+IFN1YmplY3Q6IFJlOiBSZTogW3N5emJvdF0g
-SU5GTzogcmN1IGRldGVjdGVkIHN0YWxsIGluIHR4DQo+IA0KPiBPbiBNb24sIE1heSAwMywgMjAy
-MSBhdCAwOTo1NjowNVBNICswMDAwLCBHdWlkbyBLaWVuZXIgd3JvdGU6DQo+ID4gSGkgYWxsLA0K
-PiA+DQo+ID4gRGF2ZSBhbmQgSSBkaXNjdXNzZWQgdGhlICJzZWxmLWRldGVjdGVkIHN0YWxsIG9u
-IENQVSIgY2F1c2VkIGJ5IHRoZSB1c2J0bWMNCj4gZHJpdmVyLg0KPiA+DQo+ID4gV2hhdCBoYXBw
-ZW5lZD8NCj4gPiBUaGUgY2FsbGJhY2sgaGFuZGxlciB1c2J0bWNfaW50ZXJydXB0KHN0cnVjdCB1
-cmIgKnVyYikgZm9yIHRoZSBJTlQgcGlwZSByZWNlaXZlcw0KPiBhbiBlcnJvbmVvdXMgdXJiIHdp
-dGggc3RhdHVzIC1FUFJPVE8gKC03MSkuDQo+ID4gU2VlDQo+ID4gaHR0cHM6Ly9naXQua2VybmVs
-Lm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0L3RyZQ0KPiA+
-IGUvZHJpdmVycy91c2IvY2xhc3MvdXNidG1jLmM/aD12NS4xMiNuMjM0MA0KPiA+IC1FUFJPVE8g
-ZG9lcyBub3QgYWJvcnQvc2h1dGRvd24gdGhlIHBpcGUgYW5kIHRoZSB1cmIgaXMgcmVzdWJtaXR0
-ZWQgdG8gcmVjZWl2ZQ0KPiB0aGUgbmV4dCBwYWNrZXQuIEhvd2V2ZXIgdGhlIGNhbGxiYWNrIGhh
-bmRsZXIgdXNidG1jX2ludGVycnVwdCBpcyBjYWxsZWQgYWdhaW4gd2l0aA0KPiB0aGUgc2FtZSBl
-cnJvbmVvdXMgc3RhdHVzIC1FUFJPVE8gYW5kIHRoaXMgc2VlbXMgdG8gcmVzdWx0IGluIGFuIGVu
-ZGxlc3MgbG9vcC4NCj4gPiBBY2NvcmRpbmcgdG8NCj4gPiBodHRwczovL2dpdC5rZXJuZWwub3Jn
-L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxkcy9saW51eC5naXQvdHJlDQo+ID4gZS9E
-b2N1bWVudGF0aW9uL2RyaXZlci1hcGkvdXNiL2Vycm9yLWNvZGVzLnJzdD9oPXY1LjEyI24xNzcN
-Cj4gPiB0aGUgZXJyb3IgLUVQUk9UTyBpbmRpY2F0ZXMgYSBoYXJkd2FyZSBwcm9ibGVtIG9yIGEg
-YmFkIGNhYmxlLg0KPiA+DQo+ID4gTW9zdCB1c2IgZHJpdmVycyBkbyBub3QgcmVhY3QgaW4gYSBz
-cGVjaWZpYyB3YXkgb24gdGhpcyBoYXJkd2FyZSBwcm9ibGVtcyBhbmQNCj4gcmVzdWJtaXQgdGhl
-IHVyYi4gV2UgYXNzdW1lIHRoZXNlIGRyaXZlcnMgd2lsbCBydW4gaW50byB0aGUgc2FtZSBlbmRs
-ZXNzIGxvb3AuDQo+IFNvbWUgb3RoZXIgZHJpdmVyIHNhbXBsZXMgYXJlOg0KPiA+IGh0dHBzOi8v
-Z2l0Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L3RvcnZhbGRzL2xpbnV4Lmdp
-dC90cmUNCj4gPiBlL2RyaXZlcnMvdXNiL2NsYXNzL2NkYy1hY20uYz9oPXY1LjEyI24zNzkNCj4g
-PiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90b3J2YWxk
-cy9saW51eC5naXQvdHJlDQo+ID4gZS9kcml2ZXJzL2hpZC91c2JoaWQvdXNibW91c2UuYz9oPXY1
-LjEyI242NQ0KPiA+DQo+ID4gUG9zc2libGUgc29sdXRpb25zOg0KPiA+IEhhcmR3YXJlIGRlZmVj
-dHMgb3IgYmFkIGNhYmxlcyBzZWVtcyB0byBiZSBhIGNvbW1vbiBwcm9ibGVtIGZvciBtb3N0IHVz
-Yg0KPiBkcml2ZXJzIGFuZCBJIGFzc3VtZSB3ZSBkbyBub3Qgd2FudCB0byBmaXggdGhpcyBwcm9i
-bGVtIGluIGFsbCBjbGFzcyBzcGVjaWZpYyBkcml2ZXJzLA0KPiBidXQgaW4gbG93ZXIgbGV2ZWwg
-aG9zdCBkcml2ZXJzLCBlLmc6DQo+ID4gMS4gVXNpbmcgYSBjb3VudGVyIGFuZCBjbG9zZSB0aGUg
-cGlwZSBhZnRlciBzb21lIGRldGVjdGVkIGVycm9ycyAyLg0KPiA+IERlbGF5IHRoZSByZXN1Ym1p
-c3Npb24gb2YgdGhlIHVyYiB0byBhdm9pZCBoaWdoIGNwdSB1c2FnZSAzLiBEbw0KPiA+IG5vdGhp
-bmcsIHNpbmNlIGl0IGlzIGp1c3QgYSByYXJlIHByb2JsZW0uDQo+ID4NCj4gPiBXZSd2ZSBuZXZl
-ciBzZWVuIHRoaXMgcHJvYmxlbSBpbiBvdXIgcHJvZHVjdHMgYW5kIHdlIGRvIG5vdCBkYXJlIHRv
-IGNoYW5nZQ0KPiBhbnl0aGluZy4NCj4gDQo+IERyaXZlcnMgYXJlIG5vdCBjb25zaXN0ZW50IGlu
-IHRoZSB3YXkgdGhleSBoYW5kbGUgdGhlc2UgZXJyb3JzLCBhcyB5b3UgaGF2ZSBzZWVuLiAgQQ0K
-PiBmZXcgdHJ5IHRvIHRha2UgYWN0aXZlIG1lYXN1cmVzLCBzdWNoIGFzIHJldHJ5cyB3aXRoIGlu
-Y3JlYXNpbmcgdGltZW91dHMuICBNYW55DQo+IGRyaXZlcnMganVzdCBpZ25vcmUgdGhlbSwgd2hp
-Y2ggaXMgbm90IGEgdmVyeSBnb29kIGlkZWEuDQo+IA0KPiBUaGUgZ2VuZXJhbCBmZWVsaW5nIGFt
-b25nIGtlcm5lbCBVU0IgZGV2ZWxvcGVycyBpcyB0aGF0IGEgLUVQUk9UTywgLUVJTFNFUSwgb3IN
-Cj4gLUVUSU1FIGVycm9yIHNob3VsZCBiZSByZWdhcmRlZCBhcyBmYXRhbCwgbXVjaCB0aGUgc2Ft
-ZSBhcyBhbiB1bnBsdWcgZXZlbnQuICBUaGUNCj4gZHJpdmVyIHNob3VsZCBhdm9pZCByZXN1Ym1p
-dHRpbmcgVVJCcyBhbmQganVzdCB3YWl0IHRvIGJlIHVuYm91bmQgZnJvbSB0aGUgZGV2aWNlLg0K
-DQpUaGFua3MgZm9yIHlvdXIgYXNzZXNzbWVudC4gSSBhZ3JlZSB3aXRoIHRoZSBnZW5lcmFsIGZl
-ZWxpbmcuIEkgY291bnRlZCBhYm91dCBodW5kcmVkDQpzcGVjaWZpYyB1c2IgZHJpdmVycywgc28g
-d291bGRuJ3QgaXQgYmUgYmV0dGVyIHRvIGZpeCB0aGUgcHJvYmxlbSBpbiBzb21lIG9mIHRoZSBo
-b3N0IGRyaXZlcnMgKGUuZy4gdXJiLmMpPw0KV2UgY291bGQgcmV0dXJuIGFuIGVycm9yIHdoZW4g
-Y2FsbGluZyB1c2Jfc3VibWl0X3VyYigpIG9uIGFuIGVycm9uZW91cyBwaXBlLg0KSSBjYW5ub3Qg
-ZXN0aW1hdGUgdGhlIHNpZGUgZWZmZWN0cyBhbmQgd2UgbmVlZCB0byBjaGVjayBhbGwgZHJpdmVy
-cyBhZ2FpbiBob3cgdGhleSBkZWFsIHdpdGggdGhlDQplcnJvciBzaXR1YXRpb24uIE1heWJlIHRo
-ZXJlIGFyZSBzb21lIHNwZWNpYWwgZHJpdmVyIHRoYXQgbmVlZCBhIHNwZWNpYWxpemVkIGVycm9y
-IGhhbmRsaW5nLg0KSW4gdGhpcyBjYXNlIHRoZXNlIGRyaXZlcnMgY291bGQgcmVzZXQgdGhlIChu
-ZXc/KSBlcnJvciBmbGFnIHRvIGFsbG93IGNhbGxpbmcgdXNiX3N1Ym1pdF91cmIoKQ0KYWdhaW4g
-d2l0aG91dCBlcnJvci4gVGhpcyBjb3VsZCB3b3JrLCBpc24ndCBpdD8NCg0KPiBJZiB5b3Ugd291
-bGQgbGlrZSB0byBhdWRpdCBkcml2ZXJzIGFuZCBmaXggdGhlbSB1cCB0byBiZWhhdmUgdGhpcyB3
-YXksIHRoYXQgd291bGQgYmUNCj4gZ3JlYXQuDQoNCkN1cnJlbnRseSBub3QuIEkgY2Fubm90IHB1
-bGwgdGhlIFVTQiBjYWJsZSBpbiBob21lIG9mZmljZSA6LSksIGJ1dCBJIHdpbGwga2VlcCBhbiBl
-eWUgb24gaXQuDQpXaGVuIEknbSBtb3JlIGludm9sdmVkIGluIHRoZSBuZXh0IFVTQiBkcml2ZXIg
-aXNzdWUgdGhhbiBJIHdpbGwgdGVzdCBiYWQgY2FibGVzIGFuZCANCm1heWJlIGdldCBtb3JlIGlk
-ZWFzIGhvdyB3ZSBjb3VsZCB0ZXN0IGFuZCBmaXggdGhpcyByYXJlIGVycm9yLg0KDQo+IChGWUks
-IGJ5IGZhciB0aGUgbW9zdCBjb21tb24gY2F1c2VzIG9mIHRoZXNlIGVycm9ycyBhcmU6IFRoZSB1
-c2VyIGhhcyB1bnBsdWdnZWQNCj4gdGhlIFVTQiBjYWJsZSwgb3IgdGhlIGRldmljZSdzIGZpcm13
-YXJlIGhhcyBjcmFzaGVkLiAgSXQgaXMgcXVpdGUgcmFyZSBmb3IgdGhlIGNhdXNlIHRvDQo+IGJl
-IGludGVybWl0dGVudCwgYWx0aG91Z2ggbm90IGVudGlyZWx5IHVuaGVhcmQgb2YgLS0gZm9yIGV4
-YW1wbGUsIHNvbWVvbmUgb25jZQ0KPiByZXBvcnRlZCBlcnJvcnMgcmVzdWx0aW5nIGZyb20gRU0g
-b3IgcG93ZXItbGluZSBpbnRlcmZlcmVuY2UgY2F1c2VkIGJ5IGZsaWNrZXJpbmcNCj4gZmx1b3Jl
-c2NlbnQgbGlnaHRzIG9yIHNvbWV0aGluZyBvZiB0aGF0IHNvcnQuICBJdCdzIHByZXR0eSBzYWZl
-IHRvIGlnbm9yZSB0aGlzIHBvc3NpYmlsaXR5LikNCg0KSSBmZWFyIEkgbWF5IG5vdCB1c2UgdGhl
-IDc1IGtXIFRWIHRyYW5zbWl0dGVyIHRvIGludGVyZmVyZSB0aGUgVVNCIGNhYmxlIDotKQ0KDQot
-R3VpZG8NCg==
+fw_devlink expects DT device nodes with "compatible" property to have
+struct devices created for them. Since the connector node might not be
+populated as a device, mark it as such so that fw_devlink knows not to
+wait on this fwnode being populated as a struct device.
+
+Without this patch, USB functionality can be broken on some boards.
+
+Fixes: f7514a663016 ("of: property: fw_devlink: Add support for remote-endpoint")
+Reported-by: John Stultz <john.stultz@linaro.org>
+Signed-off-by: Saravana Kannan <saravanak@google.com>
+---
+Greg,
+
+Probably better to take this in driver-core in case I need more fixes
+for fw_devlink on top of this. Those fixes are more likely to land in
+driver-core.
+
+Hi John,
+
+Can you please test this and give a Tested-by?
+
+-Saravana
+
+ drivers/base/core.c           | 3 ++-
+ drivers/usb/typec/tcpm/tcpm.c | 9 +++++++++
+ include/linux/fwnode.h        | 1 +
+ 3 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 4a8bf8cda52b..628e33939aca 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -150,7 +150,7 @@ void fwnode_links_purge(struct fwnode_handle *fwnode)
+ 	fwnode_links_purge_consumers(fwnode);
+ }
+ 
+-static void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
++void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+ {
+ 	struct fwnode_handle *child;
+ 
+@@ -164,6 +164,7 @@ static void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode)
+ 	fwnode_for_each_available_child_node(fwnode, child)
+ 		fw_devlink_purge_absent_suppliers(child);
+ }
++EXPORT_SYMBOL_GPL(fw_devlink_purge_absent_suppliers);
+ 
+ #ifdef CONFIG_SRCU
+ static DEFINE_MUTEX(device_links_lock);
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c4fdc00a3bc8..bffa342d4e38 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5754,6 +5754,15 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 	if (!fwnode)
+ 		return -EINVAL;
+ 
++	/*
++	 * This fwnode has a "compatible" property, but is never populated as a
++	 * struct device. Instead we simply parse it to read the properties.
++	 * This it breaks fw_devlink=on. To maintain backward compatibility
++	 * with existing DT files, we work around this by deleting any
++	 * fwnode_links to/from this fwnode.
++	 */
++	fw_devlink_purge_absent_suppliers(fwnode);
++
+ 	/* USB data support is optional */
+ 	ret = fwnode_property_read_string(fwnode, "data-role", &cap_str);
+ 	if (ret == 0) {
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index ed4e67a7ff1c..59828516ebaf 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -187,5 +187,6 @@ extern u32 fw_devlink_get_flags(void);
+ extern bool fw_devlink_is_strict(void);
+ int fwnode_link_add(struct fwnode_handle *con, struct fwnode_handle *sup);
+ void fwnode_links_purge(struct fwnode_handle *fwnode);
++void fw_devlink_purge_absent_suppliers(struct fwnode_handle *fwnode);
+ 
+ #endif
+-- 
+2.31.1.527.g47e6f16901-goog
+
