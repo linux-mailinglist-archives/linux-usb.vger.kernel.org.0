@@ -2,72 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 512DB374F58
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 08:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C670374F5D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 08:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231727AbhEFG3q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 02:29:46 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:44773 "EHLO
+        id S232139AbhEFGcU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 02:32:20 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:46580 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229622AbhEFG3q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 02:29:46 -0400
-X-UUID: 523b5180b66047afb6fbcd17914bae6c-20210506
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=8LYM9vWTj1GDWM/BgYXdn3ciSia7faNxzkY8cLpYr48=;
-        b=hZT2/mJR2uj36bgeB/0YHlodag14uCkweJRJw4vU/BXdgEWA7NB6EOS817eIr2PAj3/nFngf9qJi+PPbYUeGpgz7Xn03Qy/OBAf5o1w05hjTNUnvkM/IV03edm8SpaS8cjbpSI8wKXlb41nDYkXCK41LVRPEakx26IQjRVAATog=;
-X-UUID: 523b5180b66047afb6fbcd17914bae6c-20210506
-Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        with ESMTP id S229622AbhEFGcT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 02:32:19 -0400
+X-UUID: 0822898dcc654ef2968c1a1964e460d4-20210506
+X-UUID: 0822898dcc654ef2968c1a1964e460d4-20210506
+Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 565868641; Thu, 06 May 2021 14:28:45 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs06n2.mediatek.inc
- (172.21.101.130) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 6 May
- 2021 14:28:43 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 May 2021 14:28:40 +0800
-Message-ID: <1620282520.10796.2.camel@mhfsdcap03>
-Subject: Re: [PATCH 1/3] usb: xhci-mtk: use bitfield instead of bool
+        with ESMTP id 844788870; Thu, 06 May 2021 14:31:19 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 May 2021 14:31:17 +0800
+Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 6 May 2021 14:31:17 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Mathias Nyman <mathias.nyman@intel.com>,
+To:     Mathias Nyman <mathias.nyman@intel.com>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         <linux-usb@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Ikjoon Jang <ikjn@chromium.org>,
         Eddie Hung <eddie.hung@mediatek.com>
-Date:   Thu, 6 May 2021 14:28:40 +0800
-In-Reply-To: <YIuxy9OtlNzq7zwM@kroah.com>
-References: <20210430071532.51794-1-chunfeng.yun@mediatek.com>
-         <YIuxy9OtlNzq7zwM@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+Subject: [PATCH v2 1/3] usb: xhci-mtk: use bitfield instead of bool
+Date:   Thu, 6 May 2021 14:31:14 +0800
+Message-ID: <20210506063116.41757-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 288AA8889CB735784A0D9ABA8A6F83DE47BCAE8646196241C5A92F49A7D2FC5E2000:8
+Content-Type: text/plain
 X-MTK:  N
-Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gRnJpLCAyMDIxLTA0LTMwIGF0IDA5OjI5ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIEZyaSwgQXByIDMwLCAyMDIxIGF0IDAzOjE1OjMwUE0gKzA4MDAsIENodW5mZW5n
-IFl1biB3cm90ZToNCj4gPiBVc2UgYml0ZmllbGQgaW5zdGVhZCBvZiBib29sIGluIHN0cnVjdA0K
-PiANCj4gVGhhdCBzYXlzIHdoYXQgeW91IGRpZCwgYnV0IG5vdCB3aHkgeW91IGRpZCBpdC4NCj4g
-DQo+IFdoeT8NCkl0J3Mgc3VnZ2VzdGVkIGJ5ICJVc2luZyBib29sIiBpbiBjb2Rpbmctc3R5bGUu
-cnN0LCBJJ2xsIGFkZCBpdA0KPiANCj4gPiANCj4gPiBTaWduZWQtb2ZmLWJ5OiBDaHVuZmVuZyBZ
-dW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvdXNi
-L2hvc3QveGhjaS1tdGsuYyB8IDIgLS0NCj4gPiAgZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5o
-IHwgOCArKysrLS0tLQ0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNiBk
-ZWxldGlvbnMoLSkNCj4gPiANCj4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNp
-LW10ay5jIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+ID4gaW5kZXggYjIwNThiM2Jj
-ODM0Li4yNTQ4OTc2YmNmMDUgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNp
-LW10ay5jDQo+ID4gKysrIGIvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay5jDQo+ID4gQEAgLTQ5
-NSw4ICs0OTUsNiBAQCBzdGF0aWMgaW50IHhoY2lfbXRrX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9k
-ZXZpY2UgKnBkZXYpDQo+ID4gIAkJCWdvdG8gcHV0X3VzYjJfaGNkOw0KPiA+ICAJCX0NCj4gPiAg
-CQltdGstPmhhc19pcHBjID0gdHJ1ZTsNCj4gPiAtCX0gZWxzZSB7DQo+ID4gLQkJbXRrLT5oYXNf
-aXBwYyA9IGZhbHNlOw0KPiANCj4gV2h5IGRpZCB5b3UgcmVtb3ZlIHRoaXMgY2h1bms/ICBUaGF0
-IGlzIG5vdCBkZXNjcmliZWQgaW4gdGhlIGNoYW5nZWxvZw0KPiBhdCBhbGwuDQpXaWxsIGFkZCBp
-dCwgdGhhbmsgeW91DQoNCj4gDQo+IHRoYW5rcywNCj4gDQo+IGdyZWcgay1oDQoNCg==
+Use bitfield instead of bool in struct
+
+Refer to coding-style.rst 17) Using bool:
+"If a structure has many true/false values, consider consolidating
+them into a bitfield with 1 bit members, or using an appropriate
+fixed width type, such as u8."
+
+Due to @has_ippc's default vaule is 0, no need set it again if fail
+to get ippc base address
+
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: add more changelog suggested by Greg
+---
+ drivers/usb/host/xhci-mtk.c | 2 --
+ drivers/usb/host/xhci-mtk.h | 8 ++++----
+ 2 files changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+index b2058b3bc834..2548976bcf05 100644
+--- a/drivers/usb/host/xhci-mtk.c
++++ b/drivers/usb/host/xhci-mtk.c
+@@ -495,8 +495,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+ 			goto put_usb2_hcd;
+ 		}
+ 		mtk->has_ippc = true;
+-	} else {
+-		mtk->has_ippc = false;
+ 	}
+ 
+ 	device_init_wakeup(dev, true);
+diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+index cd3a37bb73e6..94a59b3d178f 100644
+--- a/drivers/usb/host/xhci-mtk.h
++++ b/drivers/usb/host/xhci-mtk.h
+@@ -138,17 +138,17 @@ struct xhci_hcd_mtk {
+ 	struct mu3h_sch_bw_info *sch_array;
+ 	struct list_head bw_ep_chk_list;
+ 	struct mu3c_ippc_regs __iomem *ippc_regs;
+-	bool has_ippc;
+ 	int num_u2_ports;
+ 	int num_u3_ports;
+ 	int u3p_dis_msk;
+ 	struct regulator *vusb33;
+ 	struct regulator *vbus;
+ 	struct clk_bulk_data clks[BULK_CLKS_NUM];
+-	bool lpm_support;
+-	bool u2_lpm_disable;
++	unsigned int has_ippc:1;
++	unsigned int lpm_support:1;
++	unsigned int u2_lpm_disable:1;
+ 	/* usb remote wakeup */
+-	bool uwk_en;
++	unsigned int uwk_en:1;
+ 	struct regmap *uwk;
+ 	u32 uwk_reg_base;
+ 	u32 uwk_vers;
+-- 
+2.18.0
 
