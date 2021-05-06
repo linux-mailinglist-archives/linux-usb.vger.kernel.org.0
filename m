@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C721375070
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 09:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A94B3750DD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 10:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233640AbhEFH5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 03:57:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33566 "EHLO mail.kernel.org"
+        id S233903AbhEFI2V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 04:28:21 -0400
+Received: from mx2.suse.de ([195.135.220.15]:54078 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233541AbhEFH5E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 May 2021 03:57:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6FF8760FEE;
-        Thu,  6 May 2021 07:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620287765;
-        bh=R9BRT3Tq1nxLEfQeGaFDWsGH668tMEQ1Jr1OyLPmCLk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vqpgyRtnSOGws15lCedEZV3Ve2a+Vlr96JAQw4nENyShrgPi2iNlQuciqXIYSR70o
-         T0XV0qNSeN+2b8HxdXZRV2siW3gFwHabijp6jHjWdoNMdAL95oTndfQ2AYlU3amOaf
-         uGxy5+wmqnIh+qH0Q0TUayiqFRnMNtyqweX2DcZY=
-Date:   Thu, 6 May 2021 09:56:03 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Robert Wolters <robert@woltersonline.net>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org
-Subject: Re: set custom baud-rate for SCS P4 Dragon
-Message-ID: <YJOhE/Es2FTkNMgw@kroah.com>
-References: <c964941a-a04a-7402-597c-d0bce15de5d7@woltersonline.net>
+        id S233932AbhEFI2U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 May 2021 04:28:20 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1620289642; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/xnaL6kFN9KsqEAuFbTd48q6CFtmJbVvbfDv2/3BiHg=;
+        b=J19dmvcOPmRfrtfGJ1yLEX8zra/Lflkcs6kYJLQcole4kWEu7GGgMGr6xTXEbZH81WWJJw
+        P/dYUZFsnA/V6g07IgHgiMatpI+3dSBsXl+i4t9fFDjgrGbyURxWo9DPJm1y0XEIBT5L/K
+        cqjInBrDELBjrtwCvpFM0qVpHM83tGo=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 22CEBAF32;
+        Thu,  6 May 2021 08:27:22 +0000 (UTC)
+Message-ID: <72f835c84c16b455222fece3bb3527f16ad965be.camel@suse.com>
+Subject: Re: [PATCH v2 2/3] media: rc: new driver for USB-UIRT device
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>
+Date:   Thu, 06 May 2021 10:27:21 +0200
+In-Reply-To: <497d6ecc0f020b35be1f1e06b33a955574f433ed.1620251141.git.sean@mess.org>
+References: <cover.1620251141.git.sean@mess.org>
+         <497d6ecc0f020b35be1f1e06b33a955574f433ed.1620251141.git.sean@mess.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c964941a-a04a-7402-597c-d0bce15de5d7@woltersonline.net>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 06, 2021 at 09:43:41AM +0200, Robert Wolters wrote:
-> |Why: FTDI USB serial speed issue with SCS P4 Dragon short-wave modems, a
-> custom baud-rate is required Solution: set special baud-rate by setting a
-> custom divisor on 38400B Signed-off-by: Robert Wolters
-> <robert@woltersonline.net> | ||--- ftdi_sio.c 2021-04-21 13:01:00.000000000
-> +0200| ||+++ ftdi_sio.c 2021-04-26 18:53:00.819175707 +0200| ||@@ -97,6
-> +97,7 @@| |||static int ftdi_8u2232c_probe(struct usb_serial *serial);|
-> ||static void ftdi_USB_UIRT_setup(struct ftdi_private *priv);||||static void
-> ftdi_HE_TIRA1_setup(struct ftdi_private *priv);| |+static void
-> ftdi_SCS_DR7X00_setup(struct ftdi_private *priv);| ||static const struct
-> ftdi_sio_quirk ftdi_jtag_quirk = {| |||.probe  = ftdi_jtag_probe,| |||@@
-> -122,6 +123,10 @@| |||.probe  = ftdi_8u2232c_probe,| |||}; ||||+static const
-> struct ftdi_sio_quirk ftdi_SCS_DR7X00_quirk = {| |||+ .port_probe =
-> ftdi_SCS_DR7X00_setup,| |||+};| |||+| |||/*| ||* The 8U232AM has the same
-> API as the sio except for:| |* - it can support MUCH higher baudrates; up
-> to:| |@@ -157,8 +162,12 @@| |{ USB_DEVICE(FTDI_VID, FTDI_EV3CON_PID) },| |{
-> USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_0_PID) },| |{ USB_DEVICE(FTDI_VID,
-> FTDI_SCS_DEVICE_1_PID) },| |- { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID)
-> },| |- { USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_3_PID) },| |+ {
-> USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_2_PID) ,| |+ .driver_info =
-> (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },| |+ { USB_DEVICE(FTDI_VID,
-> FTDI_SCS_DEVICE_3_PID) ,| |+ .driver_info =
-> (kernel_ulong_t)&ftdi_SCS_DR7X00_quirk },| |{ USB_DEVICE(FTDI_VID,
-> FTDI_SCS_DEVICE_4_PID) },| |{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_5_PID)
-> },| |{ USB_DEVICE(FTDI_VID, FTDI_SCS_DEVICE_6_PID) },| |@@ -2296,6 +2305,15
-> @@| |priv->force_rtscts = 1;| |}| |+/* Setup for the SCS P4dragon DR-7X00
-> devices, which require| |+ *hardwired baud-rate of 829440 (38400 gets mapped
-> to 829440) */| |+static void ftdi_SCS_DR7X00_setup(struct ftdi_private
-> *priv)| |+{| |+ priv->flags |= ASYNC_SPD_CUST;| |+ priv->custom_divisor =
-> 29;| |+ priv->force_baud = 38400;| |+}| |+| |||||/*| |* Module parameter to
-> control latency timer for NDI FTDI-based USB devices.| |* If this value is
-> not set in /etc/modprobe.d/ its value will be set|
-> 
+Am Mittwoch, den 05.05.2021, 22:57 +0100 schrieb Sean Young:
+> +static void uirt_disconnect(struct usb_interface *intf)
+> +{
+> +       struct uirt *ir = usb_get_intfdata(intf);
+> +
+> +       rc_unregister_device(ir->rc);
+> +       usb_set_intfdata(intf, NULL);
+> +       usb_kill_urb(ir->urb_out);
+> +       usb_free_urb(ir->urb_out);
+> +       usb_kill_urb(ir->urb_in);
+> +       usb_free_urb(ir->urb_in);
+> +       kfree(ir->in);
+> +       kfree(ir->out);
+> +       kfree(ir);
+> +}
 
-I think something went wrong with your email client :(
+Hi,
+
+almost. Going through this again, it looks like you have a race
+condition here.
+
+CPU A					CPU B
+
+usb_kill_urb(ir->urb_out);
+usb_free_urb(ir->urb_out);
+
+					uirt_in_callback()
+					uirt_response(struct uirt *uirt, u32 len)
+					err = usb_submit_urb(uirt->urb_out, GFP_ATOMIC);
+
+					BANG, you are using freeed memory
+
+	Regards
+		Oliver
 
 
