@@ -2,73 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9886337513A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 11:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DE737513E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 11:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234015AbhEFJGa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 05:06:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41980 "EHLO mail.kernel.org"
+        id S233982AbhEFJId (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 05:08:33 -0400
+Received: from gofer.mess.org ([88.97.38.141]:38089 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233765AbhEFJGa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 May 2021 05:06:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 55BCB611AD;
-        Thu,  6 May 2021 09:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620291932;
-        bh=RQtejeb/yHmg2LjOLazx2HnGHfv6Vmre/ryI1b/Expk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HgUaKDr1PcDAgF8LzQgM3dk0+SpZgzDhG2faG496/DEQKJR/uTzzDOaHUOL50qO/s
-         USvyVwDxJ5FOSSRuXJlx9KUhdmOLpikP/ir3OC3BSVamnKodTj0brdgB9vnyogvJKp
-         +O1k6bdacx7hGDSY5f6icFHkld5YKvJlJRCBFhMpBi/rV5FAuqPNks0Pg7kvof7cVW
-         9URRkHrdaSw8v6TrWkYA9FScPMBXo/5XWDtF6PyrP3gJ+IDoh22U+qwVM+AvAoDUdf
-         4pqW6HQSKtZWPFvhZzUnmCXx8N3K4+d5ox2kZcgRAklA1VqrUn+3SkcGMUjXYbtaVS
-         UOu64NkudfcZQ==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Wei Ming Chen <jj251510319013@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, Wei Ming Chen <jj251510319013@gmail.com>
-Subject: Re: [PATCH] usb: phy: Use fallthrough pseudo-keyword
-In-Reply-To: <20210505141936.4343-1-jj251510319013@gmail.com>
-References: <20210505141936.4343-1-jj251510319013@gmail.com>
-Date:   Thu, 06 May 2021 12:05:24 +0300
-Message-ID: <87lf8sgrl7.fsf@kernel.org>
+        id S233686AbhEFJIc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 May 2021 05:08:32 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 45ECCC63B7; Thu,  6 May 2021 10:07:33 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1620292053; bh=Qb5rONUj5xilaDL0pP/60GU6mHdZes+ifm2stwTpE3Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t6RAGCbKkeZ7OHrNUIqZR7Bums3PZi1YiZZZheRRBSNRsTrTDtECZ+n/CiRMqtstc
+         Ld8cFTdysFQoUIviltlVQwCmRQk4LmteZyrmDKL7M3xHHdsZ8zI7fUBYyTARsNerDf
+         0yvx7fp7CgOcoMhBRBH6EVdJCSCTUHVtrw0eU0NnOC6JKe35IyedJUjhlOuXVhey+S
+         n39ROk+tF7NCLuGB7z+3qbero2T8u++aO1XbFFPobYO3GWm3G+j4E6jcKNFiTlYwv1
+         PCzopODqMs+J4R8iVQ/3ATlSW6RAAq8JWQAKF5uDbdiKdjVsJveLBSMQ08SHKwoz9g
+         /7mV+Bk+xoiKw==
+Date:   Thu, 6 May 2021 10:07:33 +0100
+From:   Sean Young <sean@mess.org>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>
+Subject: Re: [PATCH v2 2/3] media: rc: new driver for USB-UIRT device
+Message-ID: <20210506090733.GA1483@gofer.mess.org>
+References: <cover.1620251141.git.sean@mess.org>
+ <497d6ecc0f020b35be1f1e06b33a955574f433ed.1620251141.git.sean@mess.org>
+ <72f835c84c16b455222fece3bb3527f16ad965be.camel@suse.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72f835c84c16b455222fece3bb3527f16ad965be.camel@suse.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hi Oliver,
 
-Wei Ming Chen <jj251510319013@gmail.com> writes:
+On Thu, May 06, 2021 at 10:27:21AM +0200, Oliver Neukum wrote:
+> Am Mittwoch, den 05.05.2021, 22:57 +0100 schrieb Sean Young:
+> > +static void uirt_disconnect(struct usb_interface *intf)
+> > +{
+> > +       struct uirt *ir = usb_get_intfdata(intf);
+> > +
+> > +       rc_unregister_device(ir->rc);
+> > +       usb_set_intfdata(intf, NULL);
+> > +       usb_kill_urb(ir->urb_out);
+> > +       usb_free_urb(ir->urb_out);
+> > +       usb_kill_urb(ir->urb_in);
+> > +       usb_free_urb(ir->urb_in);
+> > +       kfree(ir->in);
+> > +       kfree(ir->out);
+> > +       kfree(ir);
+> > +}
+> 
+> Hi,
+> 
+> almost. Going through this again, it looks like you have a race
+> condition here.
+> 
+> CPU A					CPU B
+> 
+> usb_kill_urb(ir->urb_out);
+> usb_free_urb(ir->urb_out);
+> 
+> 					uirt_in_callback()
+> 					uirt_response(struct uirt *uirt, u32 len)
+> 					err = usb_submit_urb(uirt->urb_out, GFP_ATOMIC);
+> 
+> 					BANG, you are using freeed memory
 
-> Replace /* FALLTHROUGH */ comment with pseudo-keyword macro fallthrough[1]
->
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html?highli=
-ght=3Dfallthrough#implicit-switch-case-fall-through
->
-> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+Nice catch, I had missed this. I'll send out a v3 with this fixed. 
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+This needs fixing, for sure. Having said that, once we are in the disconnect
+handler aren't all urbs/endpoints disabled in usb_disable_interface()? Does
+this mean the usb_kill_urb() are superfluous?
 
-=2D-=20
-balbi
+Thanks,
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCTsVQRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjddAf+JvgIlEB1k4Dpa+ecjbyO2Lobqo63zQ56
-tXcMESB39J4/k67yVpRiasdUpP0jGxQB0NgrcLUHEcfFObhyC7110v9hxgbUEMNy
-Lq3bE2lm+g+uGPEjT58GoHRnfC/Tlr215tFEA/8q9buW2fFMCOT3QCfygqWB8xLW
-1jjjukdxIvw7Xm32yIOFIf+AKTbtbTuMXwfYr+s+Psdajo4oSPLZNJJ4g4klfiq7
-7pFZYP41yqPgU1LK3ZsPUziIyZrpL5DJxOgpxJP3tYU07I/OkC5DukTtU3qw/hK3
-ilThBnfCZQhUBD2KpkTnPTy3oOlFGdSnzu/UQ6AUzT+VD49CjmWdWA==
-=B5lj
------END PGP SIGNATURE-----
---=-=-=--
+Sean
