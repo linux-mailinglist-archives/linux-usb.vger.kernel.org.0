@@ -2,84 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AD50374D39
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 04:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BB3374ECC
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 07:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhEFCCR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 5 May 2021 22:02:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51000 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbhEFCCO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 5 May 2021 22:02:14 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688AFC06174A
-        for <linux-usb@vger.kernel.org>; Wed,  5 May 2021 19:01:17 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id p12so5041864ljg.1
-        for <linux-usb@vger.kernel.org>; Wed, 05 May 2021 19:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bdTXCNCJehL6L2FUf8dVXHKc7By/gl2K5wPWDUG3aHQ=;
-        b=npobrFmjY3F/BH+4xzy01aYi8zEKzmvijsn8BvArbMYGIHjuVw12soYgAUuljvq437
-         ijinaGUa2nwrdIX6K0US0d8kCc8WaqMpFWp/SvGxO0J9t7zlL5aglEGTqJFF8zYq7+4C
-         JcPrxUw08b+nKEgEIV9SF0F5gBROZjIfYFmAqw3mpa0TEFSXrlgDhwoyRp/EXQE3bNZZ
-         IQlOv8v0JRXs3HODzvEykjvqSaxKbh/qsQs08y/s3Z28PjfG7bMZ3xvVcaAWfPgSCdOH
-         uGLi1Zc/gWf4hzXTB4v1LHXTDoZnvXVU+7i/OPaG+ZfwRuuhqyvB6e90+GZCD33QU+50
-         IMiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bdTXCNCJehL6L2FUf8dVXHKc7By/gl2K5wPWDUG3aHQ=;
-        b=HTmSe1EKBovgiZzbinG3V5hw3LbtYD5vy8MHjR/a6F/rZStJvxrhSsymkD5uqCiDn8
-         dhBq0ynTQq1hLEXmno/dzK1qZE1QGGh02v+340B4PasjSrBFuj44nDJB4pSIbbaBYFYz
-         vBvEdYwTmHhrSDBCWThA2FDCaqGRP4sDVyl3SjAG3/RJD1qxm/JFCYOPjxtsH8YpJ4zn
-         R3Dt0f6Q3T5n/JeyFtMSAkFEmqSX9rBmtR0IFpls8tLIKh7LM4uRuyuOR3pQCUWVcFKE
-         dI6RXDd5AwHBey0nIthgiAdE5fz3r51u25aQCt/LPXldDdg6lR+3gDTtsUDdd5rsEfNG
-         BU9A==
-X-Gm-Message-State: AOAM532RPTPM9kaE9/2CyYYvSq4YzmZuEf5sCYArmcgoWOKf+dMLUB7P
-        ppMYvvMMzdhiiWXivR+dscLwGXrWreJcNZ/w+zHJlw==
-X-Google-Smtp-Source: ABdhPJzuud5nGxGBZKvJcULbXiIs/DImEdzGgjgMpVJb4t+vKkxZ5/hCS6RKqUESMVNkt//sfbFh2OWHgfIJ5t7gADI=
-X-Received: by 2002:a2e:b4c3:: with SMTP id r3mr1283898ljm.232.1620266475764;
- Wed, 05 May 2021 19:01:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210506004423.345199-1-saravanak@google.com>
-In-Reply-To: <20210506004423.345199-1-saravanak@google.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Wed, 5 May 2021 19:01:04 -0700
-Message-ID: <CALAqxLU+Uf6OSDLG8OC_gHY9-VVHPgu0_bXxJcO8B4peFugtqw@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Don't block probing of consumers of
- "connector" nodes
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+        id S231488AbhEFFNk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 01:13:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58084 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229925AbhEFFNj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 May 2021 01:13:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id C189D611ED
+        for <linux-usb@vger.kernel.org>; Thu,  6 May 2021 05:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620277961;
+        bh=XuOJeaNJEZ1R8pgnqEIVNfLDlDacSFmDJSpVp6n4FqQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=XzoC6CbCPmbQqsRc/ioHWoWFOVpgpOGaQFM2EpHqN1KGhyjq4xxfQp6ydXP8JBsf0
+         B31eDEjMUzmwmkkQDb7R38wZaf7wd59beGJ41rD4CFSpVE5VwZjrtnaD1wQY70Q4fm
+         2dd1RDyB6QrGqfDLq6WlO1D3biswU1lPR9D5Mhe+mtimfgUtbR9xvDYcyPNUIhslqu
+         ZMHmDuX1LFGIxkN8ry/wSORJe9nGToAXsNgYaO7cfGtpN5f691KKxSCl31hZJa2k0Z
+         3nsdrt4r8q9phLVFrqC08rlXMdb3dP0z4qLYQYz4LB8Q45tzA7ZGn/NTzWwomX8QOn
+         9+/LVsqBoTm5A==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id ADC4F6129D; Thu,  6 May 2021 05:12:41 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
+ UA-101 (in USB 1.1 mode, not USB2) error -110
+Date:   Thu, 06 May 2021 05:12:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jaffa225man@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-212955-208809-kHR8EpK8C7@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
+References: <bug-212955-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 5, 2021 at 5:44 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> fw_devlink expects DT device nodes with "compatible" property to have
-> struct devices created for them. Since the connector node might not be
-> populated as a device, mark it as such so that fw_devlink knows not to
-> wait on this fwnode being populated as a struct device.
->
-> Without this patch, USB functionality can be broken on some boards.
->
-> Fixes: f7514a663016 ("of: property: fw_devlink: Add support for remote-endpoint")
-> Reported-by: John Stultz <john.stultz@linaro.org>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
 
-Tested-by: John Stultz <john.stultz@linaro.org>
+--- Comment #2 from Lucas Endres (jaffa225man@gmail.com) ---
+Created attachment 296661
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296661&action=3Dedit
+usbmon USB 3 port working
 
-Thanks so much for this fix! HiKey960 is back to booting properly!
--john
+Sorry, I didn't know how to eliminate other bus/device entries (since the
+non-working log would contain only seemingly nonsensical selections, if ":3=
+:"
+is grepped).
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
