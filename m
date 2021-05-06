@@ -2,77 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B59374F60
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 08:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40F2375022
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 09:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbhEFGcV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 02:32:21 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:46594 "EHLO
+        id S233433AbhEFH1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 03:27:22 -0400
+Received: from Mailgw01.mediatek.com ([1.203.163.78]:7728 "EHLO
         mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231528AbhEFGcU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 02:32:20 -0400
-X-UUID: e5516a889067465196d01f0e5e005fdb-20210506
-X-UUID: e5516a889067465196d01f0e5e005fdb-20210506
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
+        with ESMTP id S233240AbhEFH1W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 03:27:22 -0400
+X-UUID: 6027597d98074da1a90f4d09fb160645-20210506
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=PKCo5KDu2+MyV2fo3U49lafquNmsvewQjGTpnCl8jB4=;
+        b=h+fBzqdXTQ8UvXU0FAhjnlU3e2nT7nW05VgOD0TkkE69TfM+hn+SBjs+8w7I09JY1eTZ5dFjTCA31NJk+d5C2Zp6K57y9Srcsw3gQVCEiqXrJIHEXV7WUWQ5J47z2fAe4zibricOZ91A4iLI3KElfb8G3xSSSWFXVp7JusWAKvI=;
+X-UUID: 6027597d98074da1a90f4d09fb160645-20210506
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
         (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1703009739; Thu, 06 May 2021 14:31:19 +0800
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 895154488; Thu, 06 May 2021 15:26:20 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 6 May 2021 14:31:18 +0800
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 6 May 2021 15:26:19 +0800
 Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 May 2021 14:31:18 +0800
+ Transport; Thu, 6 May 2021 15:26:18 +0800
 From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Felipe Balbi <balbi@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Ikjoon Jang <ikjn@chromium.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH v2 3/3] usb: xhci-mtk: use first-fit for LS/FS
-Date:   Thu, 6 May 2021 14:31:16 +0800
-Message-ID: <20210506063116.41757-3-chunfeng.yun@mediatek.com>
+        Chunfeng Yun <chunfeng.yun@mediatek.com>
+Subject: [PATCH] usb: dwc3: remove repeated setting of current_dr_role
+Date:   Thu, 6 May 2021 15:26:08 +0800
+Message-ID: <20210506072608.32320-1-chunfeng.yun@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20210506063116.41757-1-chunfeng.yun@mediatek.com>
-References: <20210506063116.41757-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain
+X-TM-SNTS-SMTP: 2C439D80F58E40FD8183C9D9B57B59720705FA2E6781ABE2D1FEF57C1D3205B52000:8
 X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use first-fit instead of best-fit for LS/FS devices under TT,
-we found that best-fit will consume more bandwidth for some
-cases.
-
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: no changes
----
- drivers/usb/host/xhci-mtk-sch.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index 9fb75085e40f..c07411d9b16f 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -634,6 +634,11 @@ static int check_sch_bw(struct mu3h_sch_bw_info *sch_bw,
- 			min_bw = worst_bw;
- 			min_index = offset;
- 		}
-+
-+		/* use first-fit for LS/FS */
-+		if (sch_ep->sch_tt && min_index >= 0)
-+			break;
-+
- 		if (min_bw == 0)
- 			break;
- 	}
--- 
-2.18.0
+ZHdjM19zZXRfcHJ0Y2FwKCkgYWxyZWFkeSBzZXRzIGN1cnJlbnRfZHJfcm9sZSBhcw0KRFdDM19H
+Q1RMX1BSVENBUF9PVEcsIHNvIHJlbW92ZSB0aGUgcmVwZWF0ZWQgb25lLg0KDQpTaWduZWQtb2Zm
+LWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2
+ZXJzL3VzYi9kd2MzL2RyZC5jIHwgMSAtDQogMSBmaWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkN
+Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMvZHJkLmMgYi9kcml2ZXJzL3VzYi9kd2Mz
+L2RyZC5jDQppbmRleCBlMmI2OGJiNzcwZDEuLjhmY2JhYzEwNTEwYyAxMDA2NDQNCi0tLSBhL2Ry
+aXZlcnMvdXNiL2R3YzMvZHJkLmMNCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHJkLmMNCkBAIC01
+OTYsNyArNTk2LDYgQEAgaW50IGR3YzNfZHJkX2luaXQoc3RydWN0IGR3YzMgKmR3YykNCiAJCWR3
+YzNfZHJkX3VwZGF0ZShkd2MpOw0KIAl9IGVsc2Ugew0KIAkJZHdjM19zZXRfcHJ0Y2FwKGR3Yywg
+RFdDM19HQ1RMX1BSVENBUF9PVEcpOw0KLQkJZHdjLT5jdXJyZW50X2RyX3JvbGUgPSBEV0MzX0dD
+VExfUFJUQ0FQX09URzsNCiANCiAJCS8qIHVzZSBPVEcgYmxvY2sgdG8gZ2V0IElEIGV2ZW50ICov
+DQogCQlpcnEgPSBkd2MzX290Z19nZXRfaXJxKGR3Yyk7DQotLSANCjIuMTguMA0K
 
