@@ -2,61 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C40F2375022
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 711DC37503E
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 09:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233433AbhEFH1W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 03:27:22 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:7728 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233240AbhEFH1W (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 03:27:22 -0400
-X-UUID: 6027597d98074da1a90f4d09fb160645-20210506
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=PKCo5KDu2+MyV2fo3U49lafquNmsvewQjGTpnCl8jB4=;
-        b=h+fBzqdXTQ8UvXU0FAhjnlU3e2nT7nW05VgOD0TkkE69TfM+hn+SBjs+8w7I09JY1eTZ5dFjTCA31NJk+d5C2Zp6K57y9Srcsw3gQVCEiqXrJIHEXV7WUWQ5J47z2fAe4zibricOZ91A4iLI3KElfb8G3xSSSWFXVp7JusWAKvI=;
-X-UUID: 6027597d98074da1a90f4d09fb160645-20210506
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 895154488; Thu, 06 May 2021 15:26:20 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 6 May 2021 15:26:19 +0800
-Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 6 May 2021 15:26:18 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Felipe Balbi <balbi@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S233434AbhEFHiQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 03:38:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233281AbhEFHiP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 May 2021 03:38:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3B981611CB;
+        Thu,  6 May 2021 07:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1620286637;
+        bh=iXe3DLUvgiP5Cycf6dDSuZIym/h/K9iMDajCibIIC1o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qqYakRsyddaITLilOvv5y0/bv03pi4+7eoLXGgnKAPgFbtwYGecSdJgXFUwI1RFpS
+         4qdBvj+jbXeQe9ihX1Pt15i6iEy94ML7knOu59h2WzqtcVinvtZ/72LEraJmO15s5x
+         u/Zn54eu9N/CZMPgN7tz7p7TP1RtYPiIdKXmEc3M=
+Date:   Thu, 6 May 2021 09:37:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH] usb: dwc3: remove repeated setting of current_dr_role
-Date:   Thu, 6 May 2021 15:26:08 +0800
-Message-ID: <20210506072608.32320-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH v2 1/3] usb: xhci-mtk: use bitfield instead of bool
+Message-ID: <YJOcq+Pq5omZz3p1@kroah.com>
+References: <20210506063116.41757-1-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: 2C439D80F58E40FD8183C9D9B57B59720705FA2E6781ABE2D1FEF57C1D3205B52000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210506063116.41757-1-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-ZHdjM19zZXRfcHJ0Y2FwKCkgYWxyZWFkeSBzZXRzIGN1cnJlbnRfZHJfcm9sZSBhcw0KRFdDM19H
-Q1RMX1BSVENBUF9PVEcsIHNvIHJlbW92ZSB0aGUgcmVwZWF0ZWQgb25lLg0KDQpTaWduZWQtb2Zm
-LWJ5OiBDaHVuZmVuZyBZdW4gPGNodW5mZW5nLnl1bkBtZWRpYXRlay5jb20+DQotLS0NCiBkcml2
-ZXJzL3VzYi9kd2MzL2RyZC5jIHwgMSAtDQogMSBmaWxlIGNoYW5nZWQsIDEgZGVsZXRpb24oLSkN
-Cg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2R3YzMvZHJkLmMgYi9kcml2ZXJzL3VzYi9kd2Mz
-L2RyZC5jDQppbmRleCBlMmI2OGJiNzcwZDEuLjhmY2JhYzEwNTEwYyAxMDA2NDQNCi0tLSBhL2Ry
-aXZlcnMvdXNiL2R3YzMvZHJkLmMNCisrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHJkLmMNCkBAIC01
-OTYsNyArNTk2LDYgQEAgaW50IGR3YzNfZHJkX2luaXQoc3RydWN0IGR3YzMgKmR3YykNCiAJCWR3
-YzNfZHJkX3VwZGF0ZShkd2MpOw0KIAl9IGVsc2Ugew0KIAkJZHdjM19zZXRfcHJ0Y2FwKGR3Yywg
-RFdDM19HQ1RMX1BSVENBUF9PVEcpOw0KLQkJZHdjLT5jdXJyZW50X2RyX3JvbGUgPSBEV0MzX0dD
-VExfUFJUQ0FQX09URzsNCiANCiAJCS8qIHVzZSBPVEcgYmxvY2sgdG8gZ2V0IElEIGV2ZW50ICov
-DQogCQlpcnEgPSBkd2MzX290Z19nZXRfaXJxKGR3Yyk7DQotLSANCjIuMTguMA0K
+On Thu, May 06, 2021 at 02:31:14PM +0800, Chunfeng Yun wrote:
+> Use bitfield instead of bool in struct
+> 
+> Refer to coding-style.rst 17) Using bool:
+> "If a structure has many true/false values, consider consolidating
+> them into a bitfield with 1 bit members, or using an appropriate
+> fixed width type, such as u8."
+> 
+> Due to @has_ippc's default vaule is 0, no need set it again if fail
+> to get ippc base address
 
+Please split this change out into a separate patch, as it has nothing to
+do with the "change to bitfield" change.
+
+thanks,
+
+greg k-h
