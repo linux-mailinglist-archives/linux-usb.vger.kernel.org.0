@@ -2,122 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBE83755B2
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 16:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A2B3755FF
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 16:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234841AbhEFOdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 10:33:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60246 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234002AbhEFOdC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 6 May 2021 10:33:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 28A36610A0;
-        Thu,  6 May 2021 14:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620311524;
-        bh=X+d1W8aQWThuKSxnAvfRSZH6eIQqew9B4YS7eITyrkc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=jeAklUgj0SQYlTQsqPXXawHjxxcYd1a0VhAWAxKX/aLnO9rW8dDndFusF4qeXj+Vr
-         fSszJEXtP4lQM68jnhwvWEEELRXx8KWCu3dl0w0nzFr2ccH38k4lq5Mmy6G+0WBvl8
-         ixKwR+Q39G/ehFhGOV74xWZO699RQSEl4axwcP5mv56QIIXPZvW/3sIMiWyPHkA4ZO
-         xsYqIbxn4EKaSbBA0ryYC2b4+c73sWQjk8AMddWajAwKn2z6iRs8xZzKAlmTESTj4y
-         nb0712U5xqmkFdI9ajG0AYwvRUgVSUFjhYT0i66S8CmOgg1xJXcyUIbLjk0M5eNY5P
-         eLvL0m7YPQARg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jun Li <jun.li@nxp.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "thunder.leizhen@huawei.com" <thunder.leizhen@huawei.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH] usb: dwc3: imx8mp: detect dwc3 core node via compatible
- string
-In-Reply-To: <VI1PR04MB5935825AD977B4180894541589589@VI1PR04MB5935.eurprd04.prod.outlook.com>
-References: <1619765836-20387-1-git-send-email-jun.li@nxp.com>
- <8735v8ji31.fsf@kernel.org>
- <VI1PR04MB5935F1D26E1F281B7273993F895E9@VI1PR04MB5935.eurprd04.prod.outlook.com>
- <87r1ishz2t.fsf@kernel.org>
- <VI1PR04MB5935825AD977B4180894541589589@VI1PR04MB5935.eurprd04.prod.outlook.com>
-Date:   Thu, 06 May 2021 17:31:55 +0300
-Message-ID: <87h7jggch0.fsf@kernel.org>
+        id S234940AbhEFO6g (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 10:58:36 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:35326 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234759AbhEFO6f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 10:58:35 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 146EeG98026492;
+        Thu, 6 May 2021 14:57:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=9NwOQB/Et0NI01bmeVajBOtpbM8rx1n/lujh3iY+hRM=;
+ b=fv4XoKqKWNaAS9Y9EMRylr4jDDTeoM4l5UlVL59Vq6DGcLnWPzqR1GXRAgYLviaqQos2
+ k4l2luH0VmwzBZuVLXG9me1tZ3lx1xhDGYj+bL0KRSJmYsxz6SbD+snMS420whdp8COz
+ 63HOjlqWhqyI2UsPb6x4IaG52Qy4nqOkMT6Zyu++J1/QD8WK40rB2VhINuYfBvkv77jr
+ GowpMPkiYOtLbTH1gSmCpIiynwS2xhpNNxfMcFqxt2PvrrQL21AOmBuZs4YkfHOOf2Lx
+ LhOTfKRrmLvAnhGuLgjf7lmgMCDm0UJ0YgFoWHxDTD26D9CbC3dBTc8fk/6hOMb4YOBG TQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 38bemjn96p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 May 2021 14:57:32 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 146EfKWl093503;
+        Thu, 6 May 2021 14:57:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 38bebvf2et-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 May 2021 14:57:32 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 146EvVob184135;
+        Thu, 6 May 2021 14:57:31 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 38bebvf2e5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 06 May 2021 14:57:31 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 146EvTAt004550;
+        Thu, 6 May 2021 14:57:29 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 06 May 2021 14:57:28 +0000
+Date:   Thu, 6 May 2021 17:57:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mchehab@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in __vmalloc_node_range
+Message-ID: <20210506145722.GC1955@kadam>
+References: <000000000000fdc0be05c1a6d68f@google.com>
+ <20210506142210.GA37570@pc638.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210506142210.GA37570@pc638.lan>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-ORIG-GUID: 1r7J5qZnCUGUwhTbfY8KSqVZi0gwtJS7
+X-Proofpoint-GUID: 1r7J5qZnCUGUwhTbfY8KSqVZi0gwtJS7
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9976 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 adultscore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxlogscore=999 malwarescore=0 suspectscore=0 mlxscore=0 clxscore=1011
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104060000 definitions=main-2105060107
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, May 06, 2021 at 04:22:10PM +0200, Uladzislau Rezki wrote:
+> Seems like vmalloc() is called with zero size passed:
+> 
+> <snip>
+> void *__vmalloc_node_range(unsigned long size, unsigned long align,
+> 			unsigned long start, unsigned long end, gfp_t gfp_mask,
+> 			pgprot_t prot, unsigned long vm_flags, int node,
+> 			const void *caller)
+> {
+> 	struct vm_struct *area;
+> 	void *addr;
+> 	unsigned long real_size = size;
+> 	unsigned long real_align = align;
+> 	unsigned int shift = PAGE_SHIFT;
+> 
+> 2873	if (WARN_ON_ONCE(!size))
+> 		return NULL;
+> <snip>
+> 
+> from the dvb_dmx_init() driver:
+> 
+> <snip>
+> int dvb_dmx_init(struct dvb_demux *dvbdemux)
+> {
+> 	int i;
+> 	struct dmx_demux *dmx = &dvbdemux->dmx;
+> 
+> 	dvbdemux->cnt_storage = NULL;
+> 	dvbdemux->users = 0;
+> 1251	dvbdemux->filter = vmalloc(array_size(sizeof(struct dvb_demux_filter),
+> <snip>					      dvbdemux->filternum));
+
+Indeed.
+
+It is a mystery because array_size() should never return less than
+sizeof(struct dvb_demux_filter).  That's the whole point of the
+array_size() function is that it returns ULONG_MAX if there is an
+integer overflow.
+
+regards,
+dan carpenter
 
 
-Hi,
 
-Jun Li <jun.li@nxp.com> writes:
->> > 	val =3D readl(dwc3_imx->glue_base + USB_WAKEUP_CTRL);
->> >
->> > 	if ((dwc3->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_HOST) && dwc3->xhc=
-i)
->> > 		val |=3D USB_WAKEUP_EN | USB_WAKEUP_SS_CONN |
->> > 		       USB_WAKEUP_U3_EN | USB_WAKEUP_DPDM_EN;
->> > 	else if (dwc3->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_DEVICE)
->> > 		val |=3D USB_WAKEUP_EN | USB_WAKEUP_VBUS_EN |
->> > 		       USB_WAKEUP_VBUS_SRC_SESS_VAL;
->>=20
->> for this, you could register a listener to the extcon notifier and update
->> these bits accordingly. With that, you would already *know* that
->> dwc3 is probed.
->
-> With usb role switch class, there no extcon provider, so I think this way
-> can't work for me.
-
-perhaps role switch class could learn about notifiers ;-)
-
->> > static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx) {
->> > 	struct dwc3_imx8mp	*dwc3_imx =3D _dwc3_imx;
->> > 	struct dwc3		*dwc =3D platform_get_drvdata(dwc3_imx->dwc3);
->> >
->> > 	if (!dwc3_imx->pm_suspended)
->> > 		return IRQ_HANDLED;
->> >
->> > 	disable_irq_nosync(dwc3_imx->irq);
->> > 	dwc3_imx->wakeup_pending =3D true;
->> >
->> > 	if ((dwc->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_HOST) && dwc->xhci)
->> > 		pm_runtime_resume(&dwc->xhci->dev);
->> > 	else if (dwc->current_dr_role =3D=3D DWC3_GCTL_PRTCAP_DEVICE)
->> > 		pm_runtime_get(dwc->dev);
->> >
->> > 	return IRQ_HANDLED;
->> > }
->>=20
->> for this, maybe you need to teach dwc3 core about wakeup irqs instead. H=
-ave
->> a look dev_pm_set_dedicated_wake_irq().
->
-> Good suggestion, but if extcon notifier listener can't work for me,=20
-> my understanding is this *teach* in glue layer driver still need
-> access dwc3 core instance struct, right?
-
-for now, maybe. But it may be better to implement a notifier method in
-role switch class.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCT/dsRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUhTfgf+NIA9OJwFddmBnvxESTCpgwHB5VK25UYZ
-1ezDVmIEHXVcT7zNayVKpMwYymB2sKDJXnk/dENSmhqhIuEe1Of2yFEiim31wSJH
-qu4l900nPutcePiAGipE/6U5NRNEgz3pPn3z0F8pSEAICcXIi+skpL1ZhIN1xMAW
-3eIx7HQfTEHNG9iKmCGrLC3INMdW7SxjS6fthHwZVpi6X2pXCYUFnBeqj+OOlQqb
-RlsigJ8IO6Gw9/e8rnLpFJZYjM2vAAPtZRW1OAuIHAIbcvxfbN96V5tc2zsz1DSo
-RhGRCGcU5PppciP1yKtCVxBB5q6HMFbwYsA1UHvLvjZN2Mz7NF/8GQ==
-=yk02
------END PGP SIGNATURE-----
---=-=-=--
