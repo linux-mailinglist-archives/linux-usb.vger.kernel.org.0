@@ -2,51 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DED913758F6
-	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 19:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702583758F8
+	for <lists+linux-usb@lfdr.de>; Thu,  6 May 2021 19:10:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236124AbhEFRLi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 13:11:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S236194AbhEFRLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 13:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236042AbhEFRLh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 13:11:37 -0400
+        with ESMTP id S236195AbhEFRLo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 13:11:44 -0400
 Received: from mail-qt1-x84a.google.com (mail-qt1-x84a.google.com [IPv6:2607:f8b0:4864:20::84a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C00C061761
-        for <linux-usb@vger.kernel.org>; Thu,  6 May 2021 10:10:39 -0700 (PDT)
-Received: by mail-qt1-x84a.google.com with SMTP id j3-20020ac874c30000b02901bab5879d6aso4011797qtr.0
-        for <linux-usb@vger.kernel.org>; Thu, 06 May 2021 10:10:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18BE0C061574
+        for <linux-usb@vger.kernel.org>; Thu,  6 May 2021 10:10:45 -0700 (PDT)
+Received: by mail-qt1-x84a.google.com with SMTP id h2-20020a05622a1702b02901b9123889b0so3981673qtk.10
+        for <linux-usb@vger.kernel.org>; Thu, 06 May 2021 10:10:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=i5hbcI2b08ctJKsV+uyax41mbRV5yx+2PLw98oS0cyA=;
-        b=cYpbRdAInq0ahsOxhhQDHOVzl2EHq7QVAlu3VoOnoHoPM6dHTEedg7JrMLWcyLuzPm
-         zlccXnYyNnRJdTCctN9qIPMqNiLY6fAJ+nUlTZ0lebyuD/vF+pYur5RTcesMRk9OLfsM
-         /3IrgJOi6R99I3LwrJ78YHoLKGs6fdUDCNdsDW3a4VyrASvdCsTrz1wTxbFbL5tWB4Tm
-         INrtE2x+683XsreqXP5EE9uEaPq/d/8mxRHZqgX/AQrWb9UxCjYOmCw3Ez4JpoFbXKTj
-         RPUOEUX1mgCDthTtab3HNoMvl8x2eFfFt0s/ZWLVRl/vbPbfzRAqfK4MV6WH8DqGnYLm
-         +OtQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=XpDsGwYbXCDPEvPC1DLc7K0ub+hrsLcBuEbpE3/p4xM=;
+        b=L74xj4qFMvUVA+FMxRGUUPpykBMKCgKYL4VyQX9E6dDNy8gKbzIYKnm+lviUAC1jKb
+         VblW8bGYWJmKIudIHlBeindnRSk6RcCLDKxJJbddJqAe/iy6ZZSSM1rpsjvyCh7No6PE
+         WzDiH3Va7UrFDYN+bHt0aWshmeuzZdRVNiq7O/u18RHyRHAlelFaHPAtbXsAI2LffDVt
+         9wR/yaFeDkPjou43LNv69vIMuix4T+0iejk686GapLzuzjSOFJIEnSCdgqF1JCA5bffT
+         y5t/k1aGhq4nechvMkBXS8wZ7UjKudAFjVFUlJoVvX+vyr0WKB4m3uOEh8MOjyZPrheZ
+         nkiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=i5hbcI2b08ctJKsV+uyax41mbRV5yx+2PLw98oS0cyA=;
-        b=DpFv9qoRUzZgmyOjVd/DkR6SLUW8uEEcoSKuF9+zmSAoVv2l79TXEobfa/bT5M1toW
-         RKN16HUkcPDuKVXZH21SK/NUwwmFEl9UKfzgINyxP/PFoBlGu6Rm79fWavop0b42Btbo
-         LWYw3tVCNu506gNhQl8+hrqZ3eus0TypLFonn+OYEqX4cmD0MrLE+0ifI2wUjNhDT/6r
-         hnbFkigRJM+5ZfRnQn+LuzndhVu4sAeSyhnFt5mWMh8S05t3MAx2s+i4bohQiEGZ0dXM
-         un63OCcgcXuY0xOzMK5YWZin504kaob26BBvSPBaYHwQsrWhRfENEigSLbhh5uOx/oM7
-         T3sw==
-X-Gm-Message-State: AOAM531w8u5BY8R15B1XIpWzPdRcZlTMibA2JzhKxDxqURoyz3TMQR2j
-        42yVFBHorFPQfNiMF/eMaK6mZxbCKLjn
-X-Google-Smtp-Source: ABdhPJx1Qh9ZnnpOXcw0rDlmx7IiVVSYANT+aJil6BYGXaRj01+yFGWnYY3Ec6O2jMqPdCop9rpd19kEvrlY
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=XpDsGwYbXCDPEvPC1DLc7K0ub+hrsLcBuEbpE3/p4xM=;
+        b=GZJqVxsl3sy1/+eKTI7gcjfrL6Pf2FvdEi5oPGTff2j31CDiOfEnzeqQF/RlwruHGt
+         wvXZ6Y9WhUleceZUTpQBuIxTAKoHePAUa4aVvseL8Di69tAjlRGtedN9hJ2mIBdXjG7d
+         3p7iz18a/QUbe/JI2C/69ZtdKl98HQHAsORrmZpmcWwh3vrgPn/CddOa0M/LkUFHphyC
+         9t6Ipe7uO08eJqEiYsbXONu1TSdnnF2Q3JlCoWLGO5Tls9wfD3udyzdhrjc5WAeXxZYP
+         hDjv+EncBsZNkJ5sHXvHDY/+g2wGBJsdvNHMEZb4Lj51St65SsHdJU9vR8QvFlPkKd9G
+         SwFQ==
+X-Gm-Message-State: AOAM5329z+5JqXELHUQqhXMJAKDWpG8VpVcz10s+sm3/QNeuZ0YA4JeV
+        2MziMt6jqVIZAh2BWllVYxDx19ZrVMWm
+X-Google-Smtp-Source: ABdhPJzuPNe7LZiL0utaEBSqqyQ8pl+DELSM5XbbP03BrTb3VgaI1PPorU3qIGddQ0Pi7ItRDqB4Bhf9GCAg
 X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:9a5c:8de0:4c79:ba52])
- (user=kyletso job=sendgmr) by 2002:a0c:e6c5:: with SMTP id
- l5mr5829060qvn.2.1620321038643; Thu, 06 May 2021 10:10:38 -0700 (PDT)
-Date:   Fri,  7 May 2021 01:10:24 +0800
-Message-Id: <20210506171026.1736828-1-kyletso@google.com>
+ (user=kyletso job=sendgmr) by 2002:a05:6214:1a51:: with SMTP id
+ fi17mr5660111qvb.32.1620321044322; Thu, 06 May 2021 10:10:44 -0700 (PDT)
+Date:   Fri,  7 May 2021 01:10:25 +0800
+In-Reply-To: <20210506171026.1736828-1-kyletso@google.com>
+Message-Id: <20210506171026.1736828-2-kyletso@google.com>
 Mime-Version: 1.0
+References: <20210506171026.1736828-1-kyletso@google.com>
 X-Mailer: git-send-email 2.31.1.527.g47e6f16901-goog
-Subject: [PATCH v2 0/2] VDM management improvement and some bug fixes
+Subject: [PATCH v2 1/2] usb: typec: tcpm: Send DISCOVER_IDENTITY from
+ dedicated work
 From:   Kyle Tso <kyletso@google.com>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org
@@ -57,25 +62,190 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work
-- nothing changed since v1
-- Hi, Greg, do I need to add "Reviewed-by:" and "Acked-by:" ?
+In current design, DISCOVER_IDENTITY is queued to VDM state machine
+immediately in Ready states and never retries if it fails in the AMS.
+Move the process to a delayed work so that when it fails for some
+reasons (e.g. Sink Tx No Go), it can be retried by queueing the work
+again. Also fix a problem that the vdm_state is not set to a proper
+state if it is blocked by Collision Avoidance mechanism.
 
-usb: typec: tcpm: Fix wrong handling for Not_Supported in VDM AMS
-- I stacked these two patches because they are somewhat relevant.
-- This patch solved 3 bugs
-  1. Not_Supported should be acceptable in VDM AMS. Previous design will
-     send Soft_Reset after receiving Not_Supported
-  2. vdm_sm_running flag should be cleared in some VDM states
-  3. If port partner responds Busy, the VDM AMS should finish.
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 85 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 75 insertions(+), 10 deletions(-)
 
-Kyle Tso (2):
-  usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work
-  usb: typec: tcpm: Fix wrong handling for Not_Supported in VDM AMS
-
- drivers/usb/typec/tcpm/tcpm.c | 99 ++++++++++++++++++++++++++++++-----
- 1 file changed, 87 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c4fdc00a3bc8..07a449f0e8fa 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -259,6 +259,7 @@ enum frs_typec_current {
+ #define ALTMODE_DISCOVERY_MAX	(SVID_DISCOVERY_MAX * MODE_DISCOVERY_MAX)
+ 
+ #define GET_SINK_CAP_RETRY_MS	100
++#define SEND_DISCOVER_RETRY_MS	100
+ 
+ struct pd_mode_data {
+ 	int svid_index;		/* current SVID index		*/
+@@ -366,6 +367,8 @@ struct tcpm_port {
+ 	struct kthread_work vdm_state_machine;
+ 	struct hrtimer enable_frs_timer;
+ 	struct kthread_work enable_frs;
++	struct hrtimer send_discover_timer;
++	struct kthread_work send_discover_work;
+ 	bool state_machine_running;
+ 	bool vdm_sm_running;
+ 
+@@ -1178,6 +1181,16 @@ static void mod_enable_frs_delayed_work(struct tcpm_port *port, unsigned int del
+ 	}
+ }
+ 
++static void mod_send_discover_delayed_work(struct tcpm_port *port, unsigned int delay_ms)
++{
++	if (delay_ms) {
++		hrtimer_start(&port->send_discover_timer, ms_to_ktime(delay_ms), HRTIMER_MODE_REL);
++	} else {
++		hrtimer_cancel(&port->send_discover_timer);
++		kthread_queue_work(port->wq, &port->send_discover_work);
++	}
++}
++
+ static void tcpm_set_state(struct tcpm_port *port, enum tcpm_state state,
+ 			   unsigned int delay_ms)
+ {
+@@ -1855,6 +1868,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+ 				res = tcpm_ams_start(port, DISCOVER_IDENTITY);
+ 				if (res == 0)
+ 					port->send_discover = false;
++				else if (res == -EAGAIN)
++					mod_send_discover_delayed_work(port,
++								       SEND_DISCOVER_RETRY_MS);
+ 				break;
+ 			case CMD_DISCOVER_SVID:
+ 				res = tcpm_ams_start(port, DISCOVER_SVIDS);
+@@ -1880,6 +1896,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+ 			}
+ 
+ 			if (res < 0) {
++				port->vdm_state = VDM_STATE_ERR_BUSY;
+ 				port->vdm_sm_running = false;
+ 				return;
+ 			}
+@@ -3682,14 +3699,6 @@ static inline enum tcpm_state unattached_state(struct tcpm_port *port)
+ 	return SNK_UNATTACHED;
+ }
+ 
+-static void tcpm_check_send_discover(struct tcpm_port *port)
+-{
+-	if ((port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20) &&
+-	    port->send_discover && port->pd_capable)
+-		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
+-	port->send_discover = false;
+-}
+-
+ static void tcpm_swap_complete(struct tcpm_port *port, int result)
+ {
+ 	if (port->swap_pending) {
+@@ -3926,7 +3935,18 @@ static void run_state_machine(struct tcpm_port *port)
+ 			break;
+ 		}
+ 
+-		tcpm_check_send_discover(port);
++		/*
++		 * 6.4.4.3.1 Discover Identity
++		 * "The Discover Identity Command Shall only be sent to SOP when there is an
++		 * Explicit Contract."
++		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
++		 * port->explicit_contract to decide whether to send the command.
++		 */
++		if (port->explicit_contract)
++			mod_send_discover_delayed_work(port, 0);
++		else
++			port->send_discover = false;
++
+ 		/*
+ 		 * 6.3.5
+ 		 * Sending ping messages is not necessary if
+@@ -4194,7 +4214,18 @@ static void run_state_machine(struct tcpm_port *port)
+ 			break;
+ 		}
+ 
+-		tcpm_check_send_discover(port);
++		/*
++		 * 6.4.4.3.1 Discover Identity
++		 * "The Discover Identity Command Shall only be sent to SOP when there is an
++		 * Explicit Contract."
++		 * For now, this driver only supports SOP for DISCOVER_IDENTITY, thus using
++		 * port->explicit_contract.
++		 */
++		if (port->explicit_contract)
++			mod_send_discover_delayed_work(port, 0);
++		else
++			port->send_discover = false;
++
+ 		power_supply_changed(port->psy);
+ 		break;
+ 
+@@ -5288,6 +5319,29 @@ static void tcpm_enable_frs_work(struct kthread_work *work)
+ 	mutex_unlock(&port->lock);
+ }
+ 
++static void tcpm_send_discover_work(struct kthread_work *work)
++{
++	struct tcpm_port *port = container_of(work, struct tcpm_port, send_discover_work);
++
++	mutex_lock(&port->lock);
++	/* No need to send DISCOVER_IDENTITY anymore */
++	if (!port->send_discover)
++		goto unlock;
++
++	/* Retry if the port is not idle */
++	if ((port->state != SRC_READY && port->state != SNK_READY) || port->vdm_sm_running) {
++		mod_send_discover_delayed_work(port, SEND_DISCOVER_RETRY_MS);
++		goto unlock;
++	}
++
++	/* Only send the Message if the port is host for PD rev2.0 */
++	if (port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20)
++		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
++
++unlock:
++	mutex_unlock(&port->lock);
++}
++
+ static int tcpm_dr_set(struct typec_port *p, enum typec_data_role data)
+ {
+ 	struct tcpm_port *port = typec_get_drvdata(p);
+@@ -6093,6 +6147,14 @@ static enum hrtimer_restart enable_frs_timer_handler(struct hrtimer *timer)
+ 	return HRTIMER_NORESTART;
+ }
+ 
++static enum hrtimer_restart send_discover_timer_handler(struct hrtimer *timer)
++{
++	struct tcpm_port *port = container_of(timer, struct tcpm_port, send_discover_timer);
++
++	kthread_queue_work(port->wq, &port->send_discover_work);
++	return HRTIMER_NORESTART;
++}
++
+ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ {
+ 	struct tcpm_port *port;
+@@ -6123,12 +6185,15 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 	kthread_init_work(&port->vdm_state_machine, vdm_state_machine_work);
+ 	kthread_init_work(&port->event_work, tcpm_pd_event_handler);
+ 	kthread_init_work(&port->enable_frs, tcpm_enable_frs_work);
++	kthread_init_work(&port->send_discover_work, tcpm_send_discover_work);
+ 	hrtimer_init(&port->state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	port->state_machine_timer.function = state_machine_timer_handler;
+ 	hrtimer_init(&port->vdm_state_machine_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	port->vdm_state_machine_timer.function = vdm_state_machine_timer_handler;
+ 	hrtimer_init(&port->enable_frs_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
+ 	port->enable_frs_timer.function = enable_frs_timer_handler;
++	hrtimer_init(&port->send_discover_timer, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
++	port->send_discover_timer.function = send_discover_timer_handler;
+ 
+ 	spin_lock_init(&port->pd_event_lock);
+ 
 -- 
 2.31.1.527.g47e6f16901-goog
 
