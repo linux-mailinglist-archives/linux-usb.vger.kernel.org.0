@@ -2,132 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B33376030
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 08:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D131137606E
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 08:34:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbhEGGYR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 02:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233360AbhEGGYO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 02:24:14 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F82BC061574
-        for <linux-usb@vger.kernel.org>; Thu,  6 May 2021 23:23:14 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id v12-20020a25848c0000b02904f30b36aebfso9002984ybk.1
-        for <linux-usb@vger.kernel.org>; Thu, 06 May 2021 23:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=057HsphvG01JlzoVdz0KlQlwLZqc+KcyJXEoUPEQFTE=;
-        b=nvDWwzEJCBU+I9nYLyFo/kzudwIXUS2orHoCti1uMt7DSsYK/hBoT1KPIdNWCQUJ8A
-         wARLJT4E9KKBXEdLqLDsFa62siOdFVkMrBr/7j4Gd1yhxNiv/IQB45lTK7J3ZPZZT+W/
-         Qp6gaDp6UBH5K/AF4gFwcZxRutE2mUT0q0/ikdbrJqPq4GpxXMjf/fybxeH/lCIyuxRK
-         6PYliEgU0G7CobalK5XlzYvn6bwsqtHUCE6MIOh3/HlvbzAcJ1bpwqABPYX7bx9uUSWc
-         4HlgWmJpSdX82YjazbBp1Iz0tLtxiHIOaUKLG68Ya97kjiVlWHYHl7T3y5sAhCa+hEt9
-         afvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=057HsphvG01JlzoVdz0KlQlwLZqc+KcyJXEoUPEQFTE=;
-        b=ZYyKBLbpJq1pECdM/aXoKnNYqe6kCJTE+xH25mPphAq2MkVkUL2gJC1F3OJfM1aDyQ
-         TqvI2CoY6bF1EjpbBXbf5Zjaub5Ke1/5zMW2AhQ5bGf6X6gzKfb9z/Q0g5SQ41lFvqSi
-         Cuy9PIpduv20HJwDr+hEf/5Qp9qk9/OBG3HAKoMModBo59RMM4VHlu4Yrfv1docR6sH1
-         9tQ53Hm+QsoxI6aAQs6YcoIiF/4MnjqVhZGDTNeeLG9dIUKCex/AAZBfWeZlhzxmi54g
-         9oC6XD3H+LuwAIWaMqZoEgJ5lADdHkf1CnUfdKb7IUHjxKOVunt3kWZ5jCijSymfoLC/
-         BKPA==
-X-Gm-Message-State: AOAM532zJLQWIzmPVmoR7z3gWsAp5bJoW+tDvXTNpUZNjgr4zXO0O90i
-        YquXhvGqlY+64doKUsQItpE7mC991Jx7
-X-Google-Smtp-Source: ABdhPJxD3kUy1DBMlXwR59N2/HsFKNIHErwdUviHx3DuQUW+LOAK9E4P/3pRMtT+b8sl5Q1OFRSANl3Pqi7X
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:9a5c:8de0:4c79:ba52])
- (user=kyletso job=sendgmr) by 2002:a25:bb08:: with SMTP id
- z8mr11153246ybg.188.1620368593913; Thu, 06 May 2021 23:23:13 -0700 (PDT)
-Date:   Fri,  7 May 2021 14:23:00 +0800
-In-Reply-To: <20210507062300.1945009-1-kyletso@google.com>
-Message-Id: <20210507062300.1945009-3-kyletso@google.com>
-Mime-Version: 1.0
-References: <20210507062300.1945009-1-kyletso@google.com>
-X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
-Subject: [PATCH v3 2/2] usb: typec: tcpm: Fix wrong handling for Not_Supported
- in VDM AMS
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232236AbhEGGfx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 02:35:53 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:14810 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231461AbhEGGfv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 02:35:51 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620369292; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=r8Izzb0AxTyu35PXx43nBPtJjj5UDakJZVnGgFYktPY=; b=JHBFZjOkdS35xDqj+VpGNL/VtYWyu3yQNekKJFySWi45Vkb+6KAM/3HtVFzKw/eW+qv+7fkZ
+ 2RbOirp3VbYdAOtlEpjipx+kpxUYLVfzC4s7xphp8jLGW3fsuNnzaOGwui03X8H2CMdNS1kg
+ MMvXW1IoDlLWYcRSDlGqzgfPmFI=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 6094df8b03cfff345240e6bc (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 06:34:51
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id C4032C43143; Fri,  7 May 2021 06:34:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 03685C4338A;
+        Fri,  7 May 2021 06:34:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 03685C4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Return success always for kick transfer in ep queue
+Date:   Thu,  6 May 2021 23:34:47 -0700
+Message-Id: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Not_Supported Message is acceptable in VDM AMS. Redirect the VDM state
-machine to VDM_STATE_DONE when receiving Not_Supported and finish the
-VDM AMS.
+If an error is received when issuing a start or update transfer
+command, the error handler will stop all active requests (including
+the current USB request), and call dwc3_gadget_giveback() to notify
+function drivers of the requests which have been stopped.  Avoid
+returning an error for kick transfer during EP queue, to remove
+duplicate cleanup operations on the request being queued.
 
-Also, after the loop in vdm_state_machine_work, add more conditions of
-VDM states to clear the vdm_sm_running flag because those are all
-stopping states when leaving the loop.
-
-In addition, finish the VDM AMS if the port partner responds BUSY.
-
-Fixes: 8dea75e11380 ("usb: typec: tcpm: Protocol Error handling")
-Fixes: 8d3a0578ad1a ("usb: typec: tcpm: Respond Wait if VDM state machine is running")
-Signed-off-by: Kyle Tso <kyletso@google.com>
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 ---
-Changes since v2:
-- no changes
+Changes in v1:
+ - Renamed commit title due to new implementation
+ - Return success always for kick transfer during ep queue
 
- drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+Previous patchset:
+https://lore.kernel.org/linux-usb/875yzxibur.fsf@kernel.org/T/#t
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 07a449f0e8fa..bf97db232f09 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1897,7 +1897,6 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 
- 			if (res < 0) {
- 				port->vdm_state = VDM_STATE_ERR_BUSY;
--				port->vdm_sm_running = false;
- 				return;
- 			}
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index dd80e5c..a5b7fd9 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1684,7 +1684,9 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
  		}
-@@ -1913,6 +1912,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 		port->vdo_data[0] = port->vdo_retry;
- 		port->vdo_count = 1;
- 		port->vdm_state = VDM_STATE_READY;
-+		tcpm_ams_finish(port);
- 		break;
- 	case VDM_STATE_BUSY:
- 		port->vdm_state = VDM_STATE_ERR_TMOUT;
-@@ -1978,7 +1978,7 @@ static void vdm_state_machine_work(struct kthread_work *work)
- 		 port->vdm_state != VDM_STATE_BUSY &&
- 		 port->vdm_state != VDM_STATE_SEND_MESSAGE);
+ 	}
  
--	if (port->vdm_state == VDM_STATE_ERR_TMOUT)
-+	if (port->vdm_state < VDM_STATE_READY)
- 		port->vdm_sm_running = false;
+-	return __dwc3_gadget_kick_transfer(dep);
++	__dwc3_gadget_kick_transfer(dep);
++
++	return 0;
+ }
  
- 	mutex_unlock(&port->lock);
-@@ -2569,6 +2569,16 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			port->sink_cap_done = true;
- 			tcpm_set_state(port, ready_state(port), 0);
- 			break;
-+		case SRC_READY:
-+		case SNK_READY:
-+			if (port->vdm_state > VDM_STATE_READY) {
-+				port->vdm_state = VDM_STATE_DONE;
-+				if (tcpm_vdm_ams(port))
-+					tcpm_ams_finish(port);
-+				mod_vdm_delayed_work(port, 0);
-+				break;
-+			}
-+			fallthrough;
- 		default:
- 			tcpm_pd_handle_state(port,
- 					     port->pwr_role == TYPEC_SOURCE ?
+ static int dwc3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
 -- 
-2.31.1.527.g47e6f16901-goog
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
