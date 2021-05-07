@@ -2,47 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70175376001
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 08:02:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06DAE376008
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 08:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233905AbhEGGDP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 02:03:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33058 "EHLO mail.kernel.org"
+        id S234353AbhEGGGo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 02:06:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34780 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229637AbhEGGDO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 02:03:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 00DC6613EA;
-        Fri,  7 May 2021 06:02:13 +0000 (UTC)
+        id S229637AbhEGGGo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 02:06:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5FC0F613EB;
+        Fri,  7 May 2021 06:05:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620367334;
-        bh=G8F9QMTQfw1hgGVuHVsFRb8d7M/5b+15fyzXN/XgMig=;
+        s=korg; t=1620367544;
+        bh=p91nzRYoZhbJ+oxre5HPtdx2qCPPuLKa1IXQXFxDAe8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=i1POt83GszDJrezHG5Mi5ab1wRzQqGSHVlTqEDU9EfE0WvNnylEDeRRxvzBtPwVnM
-         vDy1X8yEbq9dMZbRouJwOJAOtg7dWEwZ61Y1+vJLHK1pSirC7p7RKZwOpTVw2MZ+Rd
-         M4hQU+GjbBtwyxLSmohiNSGOQAHGgELQ973DFoIU=
-Date:   Fri, 7 May 2021 08:02:11 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rui Miguel Silva <rui.silva@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        clang-built-linux@googlegroups.com, linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 7/9] drivers/usb/isp1760/isp1760-regs.h:286:21:
- warning: initializer overrides prior initialization of this subobject
-Message-ID: <YJTX4/vPcsQaoeyI@kroah.com>
-References: <202105062318.xxK3ju2U-lkp@intel.com>
- <CB6AA86KSN8C.2UEPEE2H5WFKY@arch-thunder>
+        b=wzyiSbDLFctgByR0V9qw9PhGsJ+oby/shB+OHeRX7X+m6uXpkDehpEvAmuu7Tebbn
+         ZP5I9o66BZ4Owbc+WbNVM4YH68AjOb5kQp9Wk/ap1qRa8BF7vOgUy/EZjaD7vLcby4
+         +eg17gLVIv7AgfOG+yryme1HY2SPrDckPm9MayRM=
+Date:   Fri, 7 May 2021 08:05:41 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] VDM management improvement and some bug fixes
+Message-ID: <YJTYtetjqXZZwdhm@kroah.com>
+References: <20210506171026.1736828-1-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CB6AA86KSN8C.2UEPEE2H5WFKY@arch-thunder>
+In-Reply-To: <20210506171026.1736828-1-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 06, 2021 at 04:56:01PM +0100, Rui Miguel Silva wrote:
-> Hi Greg,
-> I have this all fixed in my v2 branch. So, I think  it is better to
-> drop the first 3 from your branch, sorry about that.
+On Fri, May 07, 2021 at 01:10:24AM +0800, Kyle Tso wrote:
+> usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work
+> - nothing changed since v1
+> - Hi, Greg, do I need to add "Reviewed-by:" and "Acked-by:" ?
 
-Ok, will do now, thanks.
+If there were reviewed-by and acked-by for the original change, then
+yes, you should, otherwise my tools lost them with this new submission.
+
+Can you do a v3?
+
+thanks,
 
 greg k-h
