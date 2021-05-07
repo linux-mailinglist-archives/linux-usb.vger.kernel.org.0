@@ -2,79 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1494376538
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59398376561
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:42:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235472AbhEGMfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 08:35:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57024 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231179AbhEGMfK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 08:35:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 00A1D61104;
-        Fri,  7 May 2021 12:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620390850;
-        bh=JrcMI2f4Tj4TxExUPvmZWwxaXcGDSJeyC2cMxeJPAng=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=lqij/gsAQ1D9D+5gsUEB3jPJbw/lPF+A/2aUI4P3NhQAuYSTQeHo8TvnkX0aQMAGF
-         FrrIsHpJhsN4xZ32q4cSS0YAekrLyKTNvz5sSs+ofyPmx9q3ctX+zPBgY9opLIOVS0
-         dWKzMHe3SBA4d7CqAaI9Kw2TkgB6SB8kFkJ/VPBM/+fLwsJ/3GsNXg/Hh0H+H17OR9
-         SePjbONoJD6XdoijSqZ7DfwV/LkClFM//jD4DqpZz6/P1Xdp3ObZcuy2VyFEU6ciOv
-         pmFSDRFohLX4q+l94YrCUUmgRfc0sGxQGR1Q6UyvxGilF5PY32fcgOIV/iA4joyaQe
-         q6oBZSB5lSFfg==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: Return success always for kick
- transfer in ep queue
-In-Reply-To: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
-References: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
-Date:   Fri, 07 May 2021 15:34:01 +0300
-Message-ID: <87bl9mhgee.fsf@kernel.org>
+        id S237035AbhEGMn0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 08:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32848 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237030AbhEGMn0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 08:43:26 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF0AC061574;
+        Fri,  7 May 2021 05:42:26 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id f24so13375894ejc.6;
+        Fri, 07 May 2021 05:42:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0R0NE03VSFB7HX1ygMNh9PKJJ5aeG+pro1kBGtfO3Vg=;
+        b=oUUN0s6uGwRXDsVKCcnyFTES/GSwTC4RI5d2soZfOlbDxh4o1UqebSB958UxlKtfBv
+         X7M6V5ZaND0OcqD2fOiWfeT/mTuH1gQZeopG2969Eza2hNyS71r1DfYo+50wh70EM76V
+         El8g2whwGfp+HnV5LtisbwPzKGHHFqaVqF0H+7BBrIkt1gMBoMu8pwmurnwgp6dNidpS
+         Khu3R2EyW0+NXSZmp1S9eWSO/nqrG6yWcaprJsm+oaEU/NNA/tRrmLatcyt+V8eEpVYq
+         2FYLMHYoceVt+Sqmr1tbXxj6sNwOjIJa+8dR0H7DbxogebZNZj8cmFrgkJOMoNDVvaSR
+         pHHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0R0NE03VSFB7HX1ygMNh9PKJJ5aeG+pro1kBGtfO3Vg=;
+        b=YxvPslydoRdKiaHt5XM51WpasHMfuF8sY0ZuBQv5ama6VE5gwY2GFqDTfP1a4mAQCy
+         kOnMU5nqm6oCa0c+p+fz47TSY64qmLH0cpAPbQpykkSD59aE2Yi2OpTguGIeXLvUkW/9
+         +cEnaFcXyHxBPvC1e2Y86iqYdsD7pI4neVgqz93oGZHvoARKx8T+rOl2pmE/BpGepmg+
+         gVLLsygD4/094sVNPy0Re7w2WRbMcERSBHBAOXQUnIvZ2bWCB8YQPyNSPH/pBCcYK+nw
+         GOvyikXTbaiPqDc2roAfJCzxaG1EyOqfylgVuTy0fsmf7ZyLTtqEwn8i+KaUIwfRof7x
+         sv5A==
+X-Gm-Message-State: AOAM5304tyKsRXqMZT4ka1l/cvaQVKexjzmi5uXle2fIc62Q5QNapxIg
+        cMg3PeXr3zq2QPSwpLIWAlkG8ElhZdsXKxTZx6B7NV1p5NjxBy8l
+X-Google-Smtp-Source: ABdhPJxeHUUpsTyMp6KSLIely965QHdDUcWj5edfhK8VzZYU6CHJEP5ZjrJ3904hGpuZIganO/ao2vdkla5WC7/z644=
+X-Received: by 2002:a17:906:7fd2:: with SMTP id r18mr5965382ejs.78.1620391345382;
+ Fri, 07 May 2021 05:42:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+References: <000000000000fdc0be05c1a6d68f@google.com> <20210506142210.GA37570@pc638.lan>
+ <20210506145722.GC1955@kadam> <20210506180053.4770f495@gmail.com>
+ <20210507080435.GF1922@kadam> <20210507152954.5773592a@gmail.com>
+In-Reply-To: <20210507152954.5773592a@gmail.com>
+From:   Uladzislau Rezki <urezki@gmail.com>
+Date:   Fri, 7 May 2021 14:42:14 +0200
+Message-ID: <CA+KHdyWuf8iDvrmGfapVy3pRie4FOwdasbtRij39MmXr0Wpzuw@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in __vmalloc_node_range
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, mchehab@kernel.org,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Hello, Pavel.
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
+Also in the commit message i see a type.
 
-> If an error is received when issuing a start or update transfer
-> command, the error handler will stop all active requests (including
-> the current USB request), and call dwc3_gadget_giveback() to notify
-> function drivers of the requests which have been stopped.  Avoid
-> returning an error for kick transfer during EP queue, to remove
-> duplicate cleanup operations on the request being queued.
+<snip>
+syzbot reported WARNING in vmalloc. The problem
+was in sizo size passed to vmalloc.
+<snip>
+
+Should it be "...zero size passed to vmalloc"?
+
+--
+Vlad Rezki
+
+
+On Fri, May 7, 2021 at 2:29 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
 >
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> On Fri, 7 May 2021 11:04:36 +0300
+> Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> > On Thu, May 06, 2021 at 06:00:53PM +0300, Pavel Skripkin wrote:
+> > >
+> > > Hi!
+> > >
+> > > I've already sent the patch:
+> > > https://patchwork.linuxtv.org/project/linux-media/patch/20210506121211.8556-1-paskripkin@gmail.com/
+> > >
+> >
+> > Please, always add a Fixes tag.
+> >
+> > Fixes: 4d43e13f723e ("V4L/DVB (4643): Multi-input patch for DVB-USB
+> > device")
+> >
+> > regards,
+> > dan carpenter
+> >
+>
+> oh..., that's one thing I always forget about. Thanks for pointing it
+> out, I'll send v2 soon
+>
+>
+> With regards,
+> Pavel Skripkin
 
-do you want to add a Fixes here? :-)
 
-We should probably Cc stable too.
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCVM7kRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUhs2ggAiNJFgmRQXAKL9JddnhzWB4frz0QBAmFf
-RM4C0JMkiYr6X55/KsCsLIImJ+9nFDOWdMvbpzro7HsTfNnAjLd/QGoQ7zVKIxYF
-4o6RA4RFB0UEQU2xi5Urz8AJzKJjxv7gJxsIljWhlVo5NKB/x0TwIuZL7xf4eb4l
-/g1YqHVaOKNjV9lB91OFPHVX7O9Liuzlew1ODC5SOMHG6ehS9qVV+W3sOTYCRTDi
-kALb4gRDTiYBUepmbfFPoAEw0KtVdYsdjrDk2cSghD9nGvon6n/fCokUcCs0oSR3
-ASyinmSrGJ0aMUh6cLXtCVbpcs6gmO/DQunAL5sZspyB+3J/Fknv5Q==
-=6uLJ
------END PGP SIGNATURE-----
---=-=-=--
+-- 
+Uladzislau Rezki
