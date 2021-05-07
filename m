@@ -2,89 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A30376993
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E413769BC
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:55:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbhEGRl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 13:41:56 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:39781 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229492AbhEGRl4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 13:41:56 -0400
-Received: (qmail 784363 invoked by uid 1000); 7 May 2021 13:40:55 -0400
-Date:   Fri, 7 May 2021 13:40:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Li Jun <jun.li@nxp.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, peter.chen@kernel.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 3/3] usb: core: hcd: use map_urb_for_dma for single
- step set feature urb
-Message-ID: <20210507174055.GB784066@rowland.harvard.edu>
-References: <1620370682-10199-1-git-send-email-jun.li@nxp.com>
- <1620370682-10199-3-git-send-email-jun.li@nxp.com>
- <20210507154229.GA776548@rowland.harvard.edu>
- <20210507165240.GA29558@jackp-linux.qualcomm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210507165240.GA29558@jackp-linux.qualcomm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S229618AbhEGR4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 13:56:35 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:14633 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229585AbhEGR42 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 13:56:28 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620410128; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=QEiUnP3LOUi2nXe4DLoSZyC62ngztBL3XlxmT2ZBLW0=; b=vgcwF7DOFD0qfcyzoC22oHPtr/LVWxV1alSXts1TW9+NVAZrJwUShgP1xBbxDatjjbeU8a0f
+ KKv0GhdB3bQD2P/J/RJyo4tGRncgWgWdBdWQbRZ+pH/jUkOmHgDZWyj/d11EJx2zGHwdGU8y
+ DbqF577qyeZq3YLPe8RtOzJk9Ow=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 60957f0c74f773a664850dfa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 17:55:24
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 88B24C43145; Fri,  7 May 2021 17:55:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 76AFDC4338A;
+        Fri,  7 May 2021 17:55:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 76AFDC4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
+        Wesley Cheng <wcheng@codeaurora.org>, stable@vger.kernel.org
+Subject: [PATCH v2] usb: dwc3: gadget: Return success always for kick transfer in ep queue
+Date:   Fri,  7 May 2021 10:55:19 -0700
+Message-Id: <1620410119-24971-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 07, 2021 at 09:52:40AM -0700, Jack Pham wrote:
-> On Fri, May 07, 2021 at 11:42:29AM -0400, Alan Stern wrote:
-> > On Fri, May 07, 2021 at 02:58:02PM +0800, Li Jun wrote:
-> > > Use map_urb_for_dma() to improve the dma map code for single step
-> > > set feature request urb in test mode.
-> > > 
-> > > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > > ---
-> > > Change for v3:
-> > > - Correct the error handling if map_urb_for_dma() fails.
-> > > 
-> > > change for v2:
-> > > - Add this new patch to use map_urb_for_dma API to
-> > >   replace both of dma_map_single() calls, suggested by
-> > >   Jack Pham.
-> > > 
-> > >  drivers/usb/core/hcd.c | 15 +++++----------
-> > >  1 file changed, 5 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > > index d7eb9f179ca6..fa72697f4829 100644
-> > > --- a/drivers/usb/core/hcd.c
-> > > +++ b/drivers/usb/core/hcd.c
-> > > @@ -2159,16 +2159,11 @@ static struct urb *request_single_step_set_feature_urb(
-> > >  	usb_get_urb(urb);
-> > >  	atomic_inc(&urb->use_count);
-> > >  	atomic_inc(&urb->dev->urbnum);
-> > > -	urb->setup_dma = dma_map_single(
-> > > -			hcd->self.sysdev,
-> > > -			urb->setup_packet,
-> > > -			sizeof(struct usb_ctrlrequest),
-> > > -			DMA_TO_DEVICE);
-> > > -	urb->transfer_dma = dma_map_single(
-> > > -			hcd->self.sysdev,
-> > > -			urb->transfer_buffer,
-> > > -			urb->transfer_buffer_length,
-> > > -			DMA_FROM_DEVICE);
-> > > +	if (map_urb_for_dma(hcd, urb, GFP_KERNEL)) {
-> > > +		usb_put_urb(urb);
-> > 
-> > You need to call usb_free_urb() here.
-> 
-> Hi Alan,
-> 
-> Aren't usb_put_urb() and usb_free_urb() identical? The former appears
-> to just be a macro subsitution of the latter.
+If an error is received when issuing a start or update transfer
+command, the error handler will stop all active requests (including
+the current USB request), and call dwc3_gadget_giveback() to notify
+function drivers of the requests which have been stopped.  Avoid
+returning an error for kick transfer during EP queue, to remove
+duplicate cleanup operations on the request being queued.
 
-Yes, they are identical, although that's more or less an historical 
-accident.  usb_free_urb was written before the refcount API came along.
+Fixes: 8d99087c2db8 ("usb: dwc3: gadget: Properly handle failed kick_transfer")
+cc: stable@vger.kernel.org
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+Changes in v2:
+ - Added Fixes tag and Cc'ed stable
 
-The usb_put_urb() call here undoes the usb_get_urb() call at the top of 
-the patch.  You still need one more call to decrease the refcount to 0.
+Changes in v1:
+ - Renamed commit title due to new implementation
+ - Return success always for kick transfer during ep queue
 
-Alan Stern
+Previous patchset:
+https://lore.kernel.org/linux-usb/875yzxibur.fsf@kernel.org/T/#t
+
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index dd80e5c..a5b7fd9 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1684,7 +1684,9 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
+ 		}
+ 	}
+ 
+-	return __dwc3_gadget_kick_transfer(dep);
++	__dwc3_gadget_kick_transfer(dep);
++
++	return 0;
+ }
+ 
+ static int dwc3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
