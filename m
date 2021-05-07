@@ -2,79 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F3BC375EC8
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 04:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75559375ECA
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 04:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231582AbhEGCVl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 6 May 2021 22:21:41 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:26138 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229909AbhEGCVk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 6 May 2021 22:21:40 -0400
-X-UUID: 0a79a3a97875496b8c0d78c39d727961-20210507
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=vf2dHNq2QpYWmKlMM1biVyh+zvhtSl8VMnhZIpqXEOk=;
-        b=Tbh3ewNTW3pZTgTi18go2CqY4+0OW8VQ8tBHgTH3kJwDYIgU/GFC4a3lbu8xz97bEeOO/CYMp417NaPC4OhRAAGTf5SfTbqYRRSyAzqAzwmxZ7MJWwtjohHUhZbDHegZOUZcoHDDZWnF0DcXAYdPL5HKg87hPVE/Fbiz/2jlWFQ=;
-X-UUID: 0a79a3a97875496b8c0d78c39d727961-20210507
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 286317022; Fri, 07 May 2021 10:20:39 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS32N2.mediatek.inc
- (172.27.4.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Fri, 7 May
- 2021 10:20:31 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 7 May 2021 10:20:30 +0800
-Message-ID: <1620354030.10796.6.camel@mhfsdcap03>
-Subject: Re: [PATCH] usb: fotg210-hcd: Fix an error message
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC:     <gregkh@linuxfoundation.org>, <shubhankarvk@gmail.com>,
-        <lee.jones@linaro.org>, <gustavoars@kernel.org>,
-        <vulab@iscas.ac.cn>, <john453@faraday-tech.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-Date:   Fri, 7 May 2021 10:20:30 +0800
-In-Reply-To: <94531bcff98e46d4f9c20183a90b7f47f699126c.1620333419.git.christophe.jaillet@wanadoo.fr>
-References: <94531bcff98e46d4f9c20183a90b7f47f699126c.1620333419.git.christophe.jaillet@wanadoo.fr>
+        id S233483AbhEGCWH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 6 May 2021 22:22:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37534 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229909AbhEGCWG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 6 May 2021 22:22:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 701F36113D
+        for <linux-usb@vger.kernel.org>; Fri,  7 May 2021 02:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620354067;
+        bh=TWusb5WAg1MQen+BcQIy7kltmlhL4XuyNNbC4XlKzbA=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=BwnG3D4iJNmCXr4XYIH6UuAbOOYWmf63Ae23oolUBYc+bDJA3YtpFC2CkSjJ67pmD
+         NbxHf24vXtsPnkLL+IY76xr00WvJleb2V5dQBonRJ5QuyEemWbAyNKzC43jNyulre+
+         /QyLKtzI7OgEJEcOYrbE+HB0jqOVAk14Q0gaOXd3tO+/ZqB0du5YaKFmoaOaV4i5/D
+         UkoiMU785jTNMaL3ArS32d+2/L+g71XD7Xs/Z11rl06jKwqPhP17rP4KH9Gp5tzDQf
+         4P+8VjR+XaimdP+iA2EaFDwBhIgS1ppi3KadrVq5cLyZvr7Rln8fUrSurBBXp28+la
+         cX8Dp2hAkr0YA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 633EE6129D; Fri,  7 May 2021 02:21:07 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
+ UA-101 (in USB 1.1 mode, not USB2) error -110
+Date:   Fri, 07 May 2021 02:21:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jaffa225man@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-212955-208809-2YmDFlHpAd@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
+References: <bug-212955-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: BFA33764F29650E7F3F7B92C3AB705902216267BFAAC029DB2B872DB20E008D02000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTA1LTA2IGF0IDIyOjM5ICswMjAwLCBDaHJpc3RvcGhlIEpBSUxMRVQgd3Jv
-dGU6DQo+ICdyZXR2YWwnIGlzIGtub3duIHRvIGJlIC1FTk9ERVYgaGVyZS4NCj4gVGhpcyBpcyBh
-IGhhcmQtY29kZWQgZGVmYXVsdCBlcnJvciBjb2RlIHdoaWNoIGlzIG5vdCB1c2VmdWwgaW4gdGhl
-IGVycm9yDQo+IG1lc3NhZ2UuIE1vcmVvdmVyLCBhbm90aGVyIGVycm9yIG1lc3NhZ2UgaXMgcHJp
-bnRlZCBhdCB0aGUgZW5kIG9mIHRoZQ0KPiBlcnJvciBoYW5kbGluZyBwYXRoLiBUaGUgY29ycmVz
-cG9uZGluZyBlcnJvciBjb2RlICgtRU5PTUVNKSBpcyBtb3JlDQo+IGluZm9ybWF0aXZlLg0KPiAN
-Cj4gU28gcmVtb3ZlIHNpbXBsaWZ5IHRoZSBmaXJzdCBlcnJvciBtZXNzYWdlLg0KPiANCj4gV2hp
-bGUgYXQgaXQsIGFsc28gcmVtb3ZlIHRoZSB1c2VsZXNzIGluaXRpYWxpemF0aW9uIG9mICdyZXR2
-YWwnLg0KPiANCj4gRml4ZXM6IDdkNTAxOTVmNmM1MCAoInVzYjogaG9zdDogRmFyYWRheSBmb3Rn
-MjEwLWhjZCBkcml2ZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RvcGhlIEpBSUxMRVQgPGNo
-cmlzdG9waGUuamFpbGxldEB3YW5hZG9vLmZyPg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL2hvc3Qv
-Zm90ZzIxMC1oY2QuYyB8IDQgKystLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygr
-KSwgMiBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L2Zv
-dGcyMTAtaGNkLmMgYi9kcml2ZXJzL3VzYi9ob3N0L2ZvdGcyMTAtaGNkLmMNCj4gaW5kZXggNmNh
-YzY0MjUyMGZjLi45YzJlZGEwOTE4ZTEgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdXNiL2hvc3Qv
-Zm90ZzIxMC1oY2QuYw0KPiArKysgYi9kcml2ZXJzL3VzYi9ob3N0L2ZvdGcyMTAtaGNkLmMNCj4g
-QEAgLTU1NjgsNyArNTU2OCw3IEBAIHN0YXRpYyBpbnQgZm90ZzIxMF9oY2RfcHJvYmUoc3RydWN0
-IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4gIAlzdHJ1Y3QgdXNiX2hjZCAqaGNkOw0KPiAgCXN0
-cnVjdCByZXNvdXJjZSAqcmVzOw0KPiAgCWludCBpcnE7DQo+IC0JaW50IHJldHZhbCA9IC1FTk9E
-RVY7DQo+ICsJaW50IHJldHZhbDsNCj4gIAlzdHJ1Y3QgZm90ZzIxMF9oY2QgKmZvdGcyMTA7DQo+
-ICANCj4gIAlpZiAodXNiX2Rpc2FibGVkKCkpDQo+IEBAIC01NTg4LDcgKzU1ODgsNyBAQCBzdGF0
-aWMgaW50IGZvdGcyMTBfaGNkX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+
-ICAJaGNkID0gdXNiX2NyZWF0ZV9oY2QoJmZvdGcyMTBfZm90ZzIxMF9oY19kcml2ZXIsIGRldiwN
-Cj4gIAkJCWRldl9uYW1lKGRldikpOw0KPiAgCWlmICghaGNkKSB7DQo+IC0JCWRldl9lcnIoZGV2
-LCAiZmFpbGVkIHRvIGNyZWF0ZSBoY2Qgd2l0aCBlcnIgJWRcbiIsIHJldHZhbCk7DQo+ICsJCWRl
-dl9lcnIoZGV2LCAiZmFpbGVkIHRvIGNyZWF0ZSBoY2RcbiIpOw0KPiAgCQlyZXR2YWwgPSAtRU5P
-TUVNOw0KSG93IGFib3V0IG1vdmluZyB0aGlzIGxpbmUgYmVmb3JlIGRldl9lcnIoKT8gdGhlbiBj
-b3VsZCBrZWVwIGVycm9yIGxvZw0KdW5jaGFuZ2VkLg0KDQo+ICAJCWdvdG8gZmFpbF9jcmVhdGVf
-aGNkOw0KPiAgCX0NCg0K
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
 
+--- Comment #8 from Lucas Endres (jaffa225man@gmail.com) ---
+Created attachment 296683
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296683&action=3Dedit
+dmesg USB 2 port working on 5.9.0
+
+Here is the dmesg output from the same USB2 port, but working on the older
+5.9.0 kernel.
+
+Thanks for the tip about "--shallow-exclude=3D".  I used it so far to limit=
+ it to
+5.11 (since I think it had been working on it), like so:
+git clone --shallow-exclude=3Dv5.11
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+It was much smaller, being only 332.27 MiB in total.  Now I just have to re=
+ad
+up about how to use bisect.  Hopefully I'll be able to easily "make uninsta=
+ll"
+when all through testing, as I prefer using debian's package management, and
+don't want leftover pieces taking up space.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
