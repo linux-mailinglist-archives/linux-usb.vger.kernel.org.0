@@ -2,95 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D63376990
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:39:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A30376993
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233745AbhEGRkO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 13:40:14 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:30434 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbhEGRkN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 13:40:13 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620409153; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=clkC5swQRcI9z/5st3tJgs7VjrvjMlMixVkfgmUs6Q0=; b=vJGNaSMe9OL2utaxyclA11XxLuBDNFQUwog1gT6s/7pABjYV5uQnAmqzLDjb/wyovAvNKh2v
- 07xlN5b4bYBvHdYTMpjyqgxhfJCz/5g5lM959EISzX2zclGXidjeylUdMxplqJkHBJ/DcTQK
- UkRsBTCF+NKMIPrF46li2apZeAY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 60957b35febcffa80f4e3af4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 17:39:01
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 171A0C43143; Fri,  7 May 2021 17:39:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.11.176] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D1131C4338A;
-        Fri,  7 May 2021 17:38:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D1131C4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Return success always for kick
- transfer in ep queue
-To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org
-References: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
- <87bl9mhgee.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <bb9d37e3-dce4-7b71-4dcd-97e2916be7de@codeaurora.org>
-Date:   Fri, 7 May 2021 10:38:48 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S230366AbhEGRl4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 13:41:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39781 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229492AbhEGRl4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 13:41:56 -0400
+Received: (qmail 784363 invoked by uid 1000); 7 May 2021 13:40:55 -0400
+Date:   Fri, 7 May 2021 13:40:55 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Li Jun <jun.li@nxp.com>, gregkh@linuxfoundation.org,
+        mathias.nyman@intel.com, peter.chen@kernel.org,
+        linux-usb@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v3 3/3] usb: core: hcd: use map_urb_for_dma for single
+ step set feature urb
+Message-ID: <20210507174055.GB784066@rowland.harvard.edu>
+References: <1620370682-10199-1-git-send-email-jun.li@nxp.com>
+ <1620370682-10199-3-git-send-email-jun.li@nxp.com>
+ <20210507154229.GA776548@rowland.harvard.edu>
+ <20210507165240.GA29558@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-In-Reply-To: <87bl9mhgee.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210507165240.GA29558@jackp-linux.qualcomm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 5/7/2021 5:34 AM, Felipe Balbi wrote:
-> Wesley Cheng <wcheng@codeaurora.org> writes:
+On Fri, May 07, 2021 at 09:52:40AM -0700, Jack Pham wrote:
+> On Fri, May 07, 2021 at 11:42:29AM -0400, Alan Stern wrote:
+> > On Fri, May 07, 2021 at 02:58:02PM +0800, Li Jun wrote:
+> > > Use map_urb_for_dma() to improve the dma map code for single step
+> > > set feature request urb in test mode.
+> > > 
+> > > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > > ---
+> > > Change for v3:
+> > > - Correct the error handling if map_urb_for_dma() fails.
+> > > 
+> > > change for v2:
+> > > - Add this new patch to use map_urb_for_dma API to
+> > >   replace both of dma_map_single() calls, suggested by
+> > >   Jack Pham.
+> > > 
+> > >  drivers/usb/core/hcd.c | 15 +++++----------
+> > >  1 file changed, 5 insertions(+), 10 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> > > index d7eb9f179ca6..fa72697f4829 100644
+> > > --- a/drivers/usb/core/hcd.c
+> > > +++ b/drivers/usb/core/hcd.c
+> > > @@ -2159,16 +2159,11 @@ static struct urb *request_single_step_set_feature_urb(
+> > >  	usb_get_urb(urb);
+> > >  	atomic_inc(&urb->use_count);
+> > >  	atomic_inc(&urb->dev->urbnum);
+> > > -	urb->setup_dma = dma_map_single(
+> > > -			hcd->self.sysdev,
+> > > -			urb->setup_packet,
+> > > -			sizeof(struct usb_ctrlrequest),
+> > > -			DMA_TO_DEVICE);
+> > > -	urb->transfer_dma = dma_map_single(
+> > > -			hcd->self.sysdev,
+> > > -			urb->transfer_buffer,
+> > > -			urb->transfer_buffer_length,
+> > > -			DMA_FROM_DEVICE);
+> > > +	if (map_urb_for_dma(hcd, urb, GFP_KERNEL)) {
+> > > +		usb_put_urb(urb);
+> > 
+> > You need to call usb_free_urb() here.
 > 
->> If an error is received when issuing a start or update transfer
->> command, the error handler will stop all active requests (including
->> the current USB request), and call dwc3_gadget_giveback() to notify
->> function drivers of the requests which have been stopped.  Avoid
->> returning an error for kick transfer during EP queue, to remove
->> duplicate cleanup operations on the request being queued.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-
-Hi Felipe,
+> Hi Alan,
 > 
-> do you want to add a Fixes here? :-)
-> 
-Sure, will do!
+> Aren't usb_put_urb() and usb_free_urb() identical? The former appears
+> to just be a macro subsitution of the latter.
 
-> We should probably Cc stable too.
-> 
-Got it.
+Yes, they are identical, although that's more or less an historical 
+accident.  usb_free_urb was written before the refcount API came along.
 
-Thanks
-Wesley Cheng
+The usb_put_urb() call here undoes the usb_get_urb() call at the top of 
+the patch.  You still need one more call to decrease the refcount to 0.
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Alan Stern
