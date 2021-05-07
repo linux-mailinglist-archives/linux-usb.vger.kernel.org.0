@@ -2,96 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE5E376520
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1494376538
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236588AbhEGMbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 08:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbhEGMbA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 08:31:00 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBCAC061574;
-        Fri,  7 May 2021 05:29:59 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id b11-20020a7bc24b0000b0290148da0694ffso7074538wmj.2;
-        Fri, 07 May 2021 05:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=1t5cr263LZN2aTz3Al7pSQM5qBRuIroNjq3vIPHmzy4=;
-        b=Lo6uQ7JDFIVlslQKRS3aOJnfHCNdHfs+0WiECvpQ/qLb1QPV8hmm2HH6Y71Rjk2mZt
-         mXLABihur0oidXcXwI2LIKID5vvOjNtA80d/k05UHXIV/wjHHhfUQlu/dp4R8JfGrGwS
-         OWUR//5Dyfep2vZF2V5t407O+G3yzVV+mq8vD7/s08++8qNsqSidYuJ0JBMddbnmbQ77
-         xgrm2UYaT+cYp64E7HWr3vfxDPdlLW8ap0oPpqVQnc/zLjs1XzD0Trw8jj1M/kR72xQQ
-         +p6YK08NS+fraT0bEvFmCJaW/+3XYSnveeYGcpvPEPwvg9aYO/ld2z7mL1x4FcfdRb2t
-         lIOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=1t5cr263LZN2aTz3Al7pSQM5qBRuIroNjq3vIPHmzy4=;
-        b=bQRGVQNWQ+fVCO/jxEtdKrn13wZjwIEt1/e1HxEouTc9xoscRYINyy8ypXOe2k9PJ5
-         NgnMnGXdCkYdeVnOS88qFh5J+UsPTpQJo/k2UdL8M/otqfbvWW5CVo+zyBNYz5pE4b4c
-         E4SC0p1B7PahxfaFu5GhW4X6oGnwg6qWeus7fKtA/iSkSWqjd3fYNRZfvYyP+DFplnDa
-         JLZC9hjGNiNcZUvNulHewrVUx4n38h8dyBeHSaLjv2V7DNF0IhQVEddrGrM5d9Ahoayf
-         jhLgVyukpKgzJ2uk0+2Vt7soiR01unVEk/uZMYwEhC04gb9csr/1rXKMHc4kpETpflId
-         fAWQ==
-X-Gm-Message-State: AOAM531n7HkiTBthmmkEV7GyJER/i8B9uVU4SbsyMd0E+GOmrY8hFxBM
-        oylB1yM+zDZPlrqQn+oFiao=
-X-Google-Smtp-Source: ABdhPJwzla/fwihJbSMelTOqfKPOh4LnvMl0F1s0oOIMkXc8xz2ROg6oJ+XtfzbiXO7XF3kjk2WacA==
-X-Received: by 2002:a7b:c041:: with SMTP id u1mr9558018wmc.95.1620390598465;
-        Fri, 07 May 2021 05:29:58 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.226.84])
-        by smtp.gmail.com with ESMTPSA id u2sm8813393wmm.5.2021.05.07.05.29.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 May 2021 05:29:58 -0700 (PDT)
-Date:   Fri, 7 May 2021 15:29:54 +0300
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in __vmalloc_node_range
-Message-ID: <20210507152954.5773592a@gmail.com>
-In-Reply-To: <20210507080435.GF1922@kadam>
-References: <000000000000fdc0be05c1a6d68f@google.com>
-        <20210506142210.GA37570@pc638.lan>
-        <20210506145722.GC1955@kadam>
-        <20210506180053.4770f495@gmail.com>
-        <20210507080435.GF1922@kadam>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
+        id S235472AbhEGMfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 08:35:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57024 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231179AbhEGMfK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 08:35:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 00A1D61104;
+        Fri,  7 May 2021 12:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620390850;
+        bh=JrcMI2f4Tj4TxExUPvmZWwxaXcGDSJeyC2cMxeJPAng=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lqij/gsAQ1D9D+5gsUEB3jPJbw/lPF+A/2aUI4P3NhQAuYSTQeHo8TvnkX0aQMAGF
+         FrrIsHpJhsN4xZ32q4cSS0YAekrLyKTNvz5sSs+ofyPmx9q3ctX+zPBgY9opLIOVS0
+         dWKzMHe3SBA4d7CqAaI9Kw2TkgB6SB8kFkJ/VPBM/+fLwsJ/3GsNXg/Hh0H+H17OR9
+         SePjbONoJD6XdoijSqZ7DfwV/LkClFM//jD4DqpZz6/P1Xdp3ObZcuy2VyFEU6ciOv
+         pmFSDRFohLX4q+l94YrCUUmgRfc0sGxQGR1Q6UyvxGilF5PY32fcgOIV/iA4joyaQe
+         q6oBZSB5lSFfg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: gadget: Return success always for kick
+ transfer in ep queue
+In-Reply-To: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
+References: <1620369287-27492-1-git-send-email-wcheng@codeaurora.org>
+Date:   Fri, 07 May 2021 15:34:01 +0300
+Message-ID: <87bl9mhgee.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 7 May 2021 11:04:36 +0300
-Dan Carpenter <dan.carpenter@oracle.com> wrote:
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-> On Thu, May 06, 2021 at 06:00:53PM +0300, Pavel Skripkin wrote:
-> > 
-> > Hi!
-> > 
-> > I've already sent the patch:
-> > https://patchwork.linuxtv.org/project/linux-media/patch/20210506121211.8556-1-paskripkin@gmail.com/ 
-> > 
-> 
-> Please, always add a Fixes tag.
-> 
-> Fixes: 4d43e13f723e ("V4L/DVB (4643): Multi-input patch for DVB-USB
-> device")
-> 
-> regards,
-> dan carpenter
-> 
+Wesley Cheng <wcheng@codeaurora.org> writes:
 
-oh..., that's one thing I always forget about. Thanks for pointing it
-out, I'll send v2 soon 
+> If an error is received when issuing a start or update transfer
+> command, the error handler will stop all active requests (including
+> the current USB request), and call dwc3_gadget_giveback() to notify
+> function drivers of the requests which have been stopped.  Avoid
+> returning an error for kick transfer during EP queue, to remove
+> duplicate cleanup operations on the request being queued.
+>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 
+do you want to add a Fixes here? :-)
 
-With regards,
-Pavel Skripkin
+We should probably Cc stable too.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCVM7kRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUhs2ggAiNJFgmRQXAKL9JddnhzWB4frz0QBAmFf
+RM4C0JMkiYr6X55/KsCsLIImJ+9nFDOWdMvbpzro7HsTfNnAjLd/QGoQ7zVKIxYF
+4o6RA4RFB0UEQU2xi5Urz8AJzKJjxv7gJxsIljWhlVo5NKB/x0TwIuZL7xf4eb4l
+/g1YqHVaOKNjV9lB91OFPHVX7O9Liuzlew1ODC5SOMHG6ehS9qVV+W3sOTYCRTDi
+kALb4gRDTiYBUepmbfFPoAEw0KtVdYsdjrDk2cSghD9nGvon6n/fCokUcCs0oSR3
+ASyinmSrGJ0aMUh6cLXtCVbpcs6gmO/DQunAL5sZspyB+3J/Fknv5Q==
+=6uLJ
+-----END PGP SIGNATURE-----
+--=-=-=--
