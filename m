@@ -2,186 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E61376A11
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 20:34:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F0C376A1F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 20:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbhEGSf1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 14:35:27 -0400
-Received: from mga02.intel.com ([134.134.136.20]:32934 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229470AbhEGSf1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 14:35:27 -0400
-IronPort-SDR: /OCd1IjKGyUVqC9EoohYVe7uCaFhqCWyrgsvK2LakU35Ykns9Ed4MjM7667NL1K1JMuTJFmvyC
- XPRKqUlh/YWw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9977"; a="185918253"
-X-IronPort-AV: E=Sophos;i="5.82,281,1613462400"; 
-   d="scan'208";a="185918253"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2021 11:34:26 -0700
-IronPort-SDR: eYvah1ztarOwU+KC1CbePtEoSTrkHBIzmVSz7iU2L48/l6iv2MkWDWrDtrhRbcZtVABUcDSXpB
- sfauqOJN0ZwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,281,1613462400"; 
-   d="scan'208";a="620305535"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 May 2021 11:34:24 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lf5Iu-000BM0-30; Fri, 07 May 2021 18:34:24 +0000
-Date:   Sat, 08 May 2021 02:34:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 3ac077570a4229f4367f1ea001eba9791806a7ca
-Message-ID: <60958825.uZ8tgAwQS0BpoZkE%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S229636AbhEGSnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 14:43:20 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:32057 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229470AbhEGSnT (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 14:43:19 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1620412939; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=HQvRcgen55XyLhCmkgqh4NWsC/x1Aeob2B92iMmCx7M=; b=FA85Hahpdb//w2O/tKE1yOmqw0T6nRj5gVSJt5icBKOe9m9GVOIAvaKaFPlKtslkOJXcLcV3
+ fOo/b/Y2z5XPIDBmu26s/Jkhz24EVU8tgfH8YxTaJJJnn16b6IAxr2C05ujNIcyRDhi8+BcQ
+ Dwzpke9JrQyLEqAsocvdxkph544=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60958a018807bcde1dd48ea4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 18:42:09
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 33C89C43147; Fri,  7 May 2021 18:42:09 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0EE20C4338A;
+        Fri,  7 May 2021 18:42:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0EE20C4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Replace list_for_each_entry_safe() if using giveback
+Date:   Fri,  7 May 2021 11:42:03 -0700
+Message-Id: <1620412923-11990-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 3ac077570a4229f4367f1ea001eba9791806a7ca  usb: gadget: fsl_qe_udc: fix implicit-fallthrough warnings
+The list_for_each_entry_safe() macro saves the current item (n) and
+the item after (n+1), so that n can be safely removed without
+corrupting the list.  However, when traversing the list and removing
+items using gadget giveback, the DWC3 lock is briefly released,
+allowing other routines to execute.  There is a situation where while
+items are being removed from the cancelled_list using
+dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+routine is running in parallel (due to UDC unbind).  As the cleanup
+routine removes n, and the pullup disable removes n+1, once the
+cleanup retakes the DWC3 lock, it references a request who was already
+removed/handled.  With list debug enabled, this leads to a panic.
+Ensure all instances of the macro are replaced where gadget giveback
+is used.
 
-elapsed time: 729m
-
-configs tested: 124
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-ia64                             allmodconfig
-mips                          rb532_defconfig
-arm                             ezx_defconfig
-riscv             nommu_k210_sdcard_defconfig
-mips                      maltasmvp_defconfig
-powerpc                     mpc5200_defconfig
-m68k                          sun3x_defconfig
-powerpc                     tqm8555_defconfig
-mips                           gcw0_defconfig
-powerpc                 mpc8272_ads_defconfig
-powerpc                      mgcoge_defconfig
-mips                           mtx1_defconfig
-m68k                            mac_defconfig
-sh                      rts7751r2d1_defconfig
-arm                         hackkit_defconfig
-arm                        shmobile_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                           jazz_defconfig
-arm                         axm55xx_defconfig
-arm                        clps711x_defconfig
-mips                          malta_defconfig
-arm                         lubbock_defconfig
-powerpc                     tqm8560_defconfig
-sh                           se7722_defconfig
-arm                       mainstone_defconfig
-arm                         nhk8815_defconfig
-sh                          sdk7780_defconfig
-powerpc                     rainier_defconfig
-powerpc                      katmai_defconfig
-powerpc                        warp_defconfig
-microblaze                      mmu_defconfig
-riscv                    nommu_k210_defconfig
-sh                           se7751_defconfig
-arc                            hsdk_defconfig
-mips                        nlm_xlp_defconfig
-powerpc                 mpc8315_rdb_defconfig
-powerpc                    sam440ep_defconfig
-sh                 kfr2r09-romimage_defconfig
-mips                         cobalt_defconfig
-mips                           ip22_defconfig
-arm                              alldefconfig
-x86_64                            allnoconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a001-20210507
-x86_64               randconfig-a003-20210507
-x86_64               randconfig-a005-20210507
-x86_64               randconfig-a002-20210507
-x86_64               randconfig-a006-20210507
-x86_64               randconfig-a004-20210507
-i386                 randconfig-a003-20210507
-i386                 randconfig-a006-20210507
-i386                 randconfig-a001-20210507
-i386                 randconfig-a005-20210507
-i386                 randconfig-a004-20210507
-i386                 randconfig-a002-20210507
-i386                 randconfig-a015-20210507
-i386                 randconfig-a013-20210507
-i386                 randconfig-a016-20210507
-i386                 randconfig-a014-20210507
-i386                 randconfig-a012-20210507
-i386                 randconfig-a011-20210507
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                               allyesconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a014-20210507
-x86_64               randconfig-a015-20210507
-x86_64               randconfig-a012-20210507
-x86_64               randconfig-a013-20210507
-x86_64               randconfig-a011-20210507
-x86_64               randconfig-a016-20210507
-x86_64               randconfig-a001-20210506
-x86_64               randconfig-a003-20210506
-x86_64               randconfig-a005-20210506
-x86_64               randconfig-a002-20210506
-x86_64               randconfig-a006-20210506
-x86_64               randconfig-a004-20210506
-
+Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/dwc3/gadget.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index dd80e5c..efa939b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+ {
+ 	struct dwc3_request		*req;
+-	struct dwc3_request		*tmp;
+ 	struct dwc3			*dwc = dep->dwc;
+ 
+-	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
++	while (!list_empty(&dep->cancelled_list)) {
++		req = next_request(&dep->cancelled_list);
+ 		dwc3_gadget_ep_skip_trbs(dep, req);
+ 		switch (req->status) {
+ 		case DWC3_REQUEST_STATUS_DISCONNECTED:
+@@ -2935,11 +2935,11 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+ 		const struct dwc3_event_depevt *event, int status)
+ {
+ 	struct dwc3_request	*req;
+-	struct dwc3_request	*tmp;
+ 
+-	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
++	while (!list_empty(&dep->started_list)) {
+ 		int ret;
+ 
++		req = next_request(&dep->started_list);
+ 		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
+ 				req, status);
+ 		if (ret)
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
