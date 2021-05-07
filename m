@@ -2,74 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51BF437640D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 12:47:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE5E376520
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbhEGKsI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 06:48:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229789AbhEGKsH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 06:48:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 56A4160FF3;
-        Fri,  7 May 2021 10:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620384427;
-        bh=S0rvvScdZKxAg0+2tEM6w30RvKAINDq/z7sm3Q1UkI8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lpeJq149XjIYdUzimS63IIti4Zwixko3R7qBWQ8kpSnWLrAIcsvYizaP4A3NqdNfP
-         pd92+5mgnkmWYpZ7MoUQzF3Vcb5+REI0F3AgyUg5cL8Y8SnlAwN9ixt5QLDwIi3opY
-         qfN5rBa78ZgADQlLUnaECk2RzeF7fyD6tXCf/VAdPaXg/p0pTn1KcA8BM1rIaqRUNy
-         u4WfdaMFXCQMvb0pbnYwYWrD7LQQjZxpbfd+/GvPTvWhLs6A9sNYMYAf7O5ME/QoVQ
-         V2+IlJvrKwYLrkedOYFQB9+Q3nYa/A3+pvcN7DxcUWyhCJlm02GKq0CSocYK8XZBfJ
-         kfD67R8gWJLcw==
-Date:   Fri, 7 May 2021 06:47:06 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.12 16/79] usb: dwc3: gadget: Remove invalid
- low-speed setting
-Message-ID: <YJUaqq0ZMVn2989b@sashalap>
-References: <20210502140316.2718705-1-sashal@kernel.org>
- <20210502140316.2718705-16-sashal@kernel.org>
- <YI69i5JE3NdIx4Sb@kroah.com>
+        id S236588AbhEGMbA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 08:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233468AbhEGMbA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 08:31:00 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFBCAC061574;
+        Fri,  7 May 2021 05:29:59 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id b11-20020a7bc24b0000b0290148da0694ffso7074538wmj.2;
+        Fri, 07 May 2021 05:29:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=1t5cr263LZN2aTz3Al7pSQM5qBRuIroNjq3vIPHmzy4=;
+        b=Lo6uQ7JDFIVlslQKRS3aOJnfHCNdHfs+0WiECvpQ/qLb1QPV8hmm2HH6Y71Rjk2mZt
+         mXLABihur0oidXcXwI2LIKID5vvOjNtA80d/k05UHXIV/wjHHhfUQlu/dp4R8JfGrGwS
+         OWUR//5Dyfep2vZF2V5t407O+G3yzVV+mq8vD7/s08++8qNsqSidYuJ0JBMddbnmbQ77
+         xgrm2UYaT+cYp64E7HWr3vfxDPdlLW8ap0oPpqVQnc/zLjs1XzD0Trw8jj1M/kR72xQQ
+         +p6YK08NS+fraT0bEvFmCJaW/+3XYSnveeYGcpvPEPwvg9aYO/ld2z7mL1x4FcfdRb2t
+         lIOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=1t5cr263LZN2aTz3Al7pSQM5qBRuIroNjq3vIPHmzy4=;
+        b=bQRGVQNWQ+fVCO/jxEtdKrn13wZjwIEt1/e1HxEouTc9xoscRYINyy8ypXOe2k9PJ5
+         NgnMnGXdCkYdeVnOS88qFh5J+UsPTpQJo/k2UdL8M/otqfbvWW5CVo+zyBNYz5pE4b4c
+         E4SC0p1B7PahxfaFu5GhW4X6oGnwg6qWeus7fKtA/iSkSWqjd3fYNRZfvYyP+DFplnDa
+         JLZC9hjGNiNcZUvNulHewrVUx4n38h8dyBeHSaLjv2V7DNF0IhQVEddrGrM5d9Ahoayf
+         jhLgVyukpKgzJ2uk0+2Vt7soiR01unVEk/uZMYwEhC04gb9csr/1rXKMHc4kpETpflId
+         fAWQ==
+X-Gm-Message-State: AOAM531n7HkiTBthmmkEV7GyJER/i8B9uVU4SbsyMd0E+GOmrY8hFxBM
+        oylB1yM+zDZPlrqQn+oFiao=
+X-Google-Smtp-Source: ABdhPJwzla/fwihJbSMelTOqfKPOh4LnvMl0F1s0oOIMkXc8xz2ROg6oJ+XtfzbiXO7XF3kjk2WacA==
+X-Received: by 2002:a7b:c041:: with SMTP id u1mr9558018wmc.95.1620390598465;
+        Fri, 07 May 2021 05:29:58 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.226.84])
+        by smtp.gmail.com with ESMTPSA id u2sm8813393wmm.5.2021.05.07.05.29.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 May 2021 05:29:58 -0700 (PDT)
+Date:   Fri, 7 May 2021 15:29:54 +0300
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-usb@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in __vmalloc_node_range
+Message-ID: <20210507152954.5773592a@gmail.com>
+In-Reply-To: <20210507080435.GF1922@kadam>
+References: <000000000000fdc0be05c1a6d68f@google.com>
+        <20210506142210.GA37570@pc638.lan>
+        <20210506145722.GC1955@kadam>
+        <20210506180053.4770f495@gmail.com>
+        <20210507080435.GF1922@kadam>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YI69i5JE3NdIx4Sb@kroah.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 02, 2021 at 04:56:11PM +0200, Greg Kroah-Hartman wrote:
->On Sun, May 02, 2021 at 10:02:13AM -0400, Sasha Levin wrote:
->> From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>
->> [ Upstream commit 0c59f678fcfc6dd53ba493915794636a230bc4cc ]
->>
->> None of the DWC_usb3x IPs (and all their versions) supports low-speed
->> setting in device mode. In the early days, our "Early Adopter Edition"
->> DWC_usb3 databook shows that the controller may be configured to operate
->> in low-speed, but it was revised on release. Let's remove this invalid
->> speed setting to avoid any confusion.
->>
->> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->> Link: https://lore.kernel.org/r/258b1c7fbb966454f4c4c2c1367508998498fc30.1615509438.git.Thinh.Nguyen@synopsys.com
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/usb/dwc3/core.c   | 1 -
->>  drivers/usb/dwc3/core.h   | 2 --
->>  drivers/usb/dwc3/gadget.c | 8 --------
->>  3 files changed, 11 deletions(-)
->
->This is a "cleanup only" and does not fix or solve anything, so it can
->be dropped from all of the kernels it has been "autoselected" for.
+On Fri, 7 May 2021 11:04:36 +0300
+Dan Carpenter <dan.carpenter@oracle.com> wrote:
 
-Dropped, thanks!
+> On Thu, May 06, 2021 at 06:00:53PM +0300, Pavel Skripkin wrote:
+> > 
+> > Hi!
+> > 
+> > I've already sent the patch:
+> > https://patchwork.linuxtv.org/project/linux-media/patch/20210506121211.8556-1-paskripkin@gmail.com/ 
+> > 
+> 
+> Please, always add a Fixes tag.
+> 
+> Fixes: 4d43e13f723e ("V4L/DVB (4643): Multi-input patch for DVB-USB
+> device")
+> 
+> regards,
+> dan carpenter
+> 
 
--- 
-Thanks,
-Sasha
+oh..., that's one thing I always forget about. Thanks for pointing it
+out, I'll send v2 soon 
+
+
+With regards,
+Pavel Skripkin
