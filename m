@@ -2,130 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E1437656C
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 14:45:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A35376673
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 15:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236820AbhEGMqF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 08:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33444 "EHLO
+        id S237305AbhEGN4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 09:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233518AbhEGMqF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 08:46:05 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 873D2C061574;
-        Fri,  7 May 2021 05:45:04 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 82-20020a1c01550000b0290142562ff7c9so4824316wmb.3;
-        Fri, 07 May 2021 05:45:04 -0700 (PDT)
+        with ESMTP id S235973AbhEGN4d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 09:56:33 -0400
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813FAC061574;
+        Fri,  7 May 2021 06:55:33 -0700 (PDT)
+Received: by mail-ot1-x32b.google.com with SMTP id d3-20020a9d29030000b029027e8019067fso7934975otb.13;
+        Fri, 07 May 2021 06:55:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=G3ZPlqSS2SM+tCjnUEbVUkvvf8BLcEfy9KwkaPBN/zw=;
-        b=XkDyfZHTQRXeozSPOoHTGxUipgMTxiE7XjrtlFIZj+Da8csqJ8sF9my2PCSws1ddlQ
-         I9Sq2oaDIMFjbWkCO2am6G5leS4zYidy2ctbV+zAF6bDAxwu1x10vhHAs01vYiSRl8FC
-         pQEuF9823jYGB3OQD5415nWLhm2TED/NiO/qRFRM+Lne4Pu/yvdW0gCk/D++8ChlNjJc
-         ApoY1+MPaqN/rtDmjEHUQZsWievyIi7IVTYBE+3fNw/ZC9gRZrpMiAOuCYHv5CdMoCmk
-         ivlJvMRLx/qldIQNvrMRi1kfAYA4xqZCFt/InKpS48u5snR77blRceZKyiDjMO0Nf0jD
-         akDA==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=XT21upDZji9LhSYRJTIVSeDu/233THjF0dPxwam1G2g=;
+        b=eNfNVPwDfnWwpfz0CnPV0woX6+pUwKXKWCcsTE9SRT+mdVgpWxJhnIsHkyA8Gv/ujJ
+         1AwX5Ote0o2MBHmHYNNnbDyv3+HxB1qc41E/FepvYXaxtJ9NYhEBP4KTLLmE9tt14XgS
+         +zL3/2bmxLvIGkh/rVEozJh9326+3cLMOo6o3YeuXl3IJUt8UDnTp1/j3ZWo2r0+21g9
+         brqujEKMWqHmvU0kXbJ2yyVLpCBfbOTmaQaOhgGsufQD8jQIhKo4CaJPOOFSt3dHeHP1
+         oDXQcXnyrJKVMM4BlAL6NyOMeAq/pZPO+bZjMj3nVG3mk+NH5qlmhy8XGzfVuwykel3J
+         02Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=G3ZPlqSS2SM+tCjnUEbVUkvvf8BLcEfy9KwkaPBN/zw=;
-        b=R9gal0r67LznnoUEqQ4YMn1/zGHY3lSIDltr+ykneRP1VqC5cXl7KXlYTGWbRXS+kz
-         bqcwIq7PEOrrwV+s7k3PC8SADIuLkzmo34SS/uxQkSZ5TSEyuxHMz9QcoLRydmPD2MBB
-         +0AEnRM+EflbIh5+MyVayynpQKVappzbX4/vS8Qxp6xHus6HvF14KV4o6unSZnfY/6Mb
-         8XAvs8/O0EBLsWbjD4rzwXmc69MlMQwOWIBSrn51GRtgcwFG1Frq4Lbqq8RZRbGTKVoo
-         kwKPgDxMVP6OghkjOd7j1cJQ/tEW/sH6ROyX76ewSlEgw0aFz7i/VHjGsTI3GswYZR5Q
-         z5dg==
-X-Gm-Message-State: AOAM532j6OyA66JZHUMogJHIj7QISON/brxMigOVmEY+TZlVOg7FEgCy
-        ZUAbK0p4oCNmkXFeNQ4iCiQ=
-X-Google-Smtp-Source: ABdhPJxbiOAtUQYxF+fijkvU2JYqLmROYR4X50ZYAqGwUgz30p8cgyIKUQ8bvpoLdsa1Hxku0BbUMA==
-X-Received: by 2002:a05:600c:47d7:: with SMTP id l23mr20786260wmo.95.1620391503246;
-        Fri, 07 May 2021 05:45:03 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.226.84])
-        by smtp.gmail.com with ESMTPSA id r2sm8704380wrv.39.2021.05.07.05.45.02
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=XT21upDZji9LhSYRJTIVSeDu/233THjF0dPxwam1G2g=;
+        b=uNZuxxgBtXdKPhSCf5hBWYtUXu0FYRRgJQNqJfcb8C1i8Sl6rmOPsK/jKQ5FkX5jj2
+         LnmPeVesXKjp6DdmQK33Q7wEBHMdVGjTWX2tk3aRvzHqdL+qc1yfAl3UDevwYHW7Ykbk
+         XQln5gs1Bol+h7seoLPGd2ZJbED0s9Z2+pGOGOLwC73aIH5nma+WTPStj0UNGIniwwcd
+         m1fpTS/iVYCJ1wKL4Nxk26W+gfGG2X/PlI7VIqDQSu1NzoarY9RfjNvI0jXO4831BxjK
+         yYjLeVMjFAgOQFVbxaVJTCVxQd50JipFZcO4WTO1uWUjGHgM75xaBN0f8+7m0tYnSSRJ
+         NZtQ==
+X-Gm-Message-State: AOAM533PGfrhlCgUkrwKphQ3dSBK7yuLIvevPGflWfFKqNxooXYd4GtE
+        XU4KiMzBj8McGqEbgWLSLCY=
+X-Google-Smtp-Source: ABdhPJzM0C6biYW4Nsodlh0zfEkGWfCwGKlnubHG5AS4ZFoN0kjuaBGpe8CQ5WWuJ79Y4v8MGQyDwA==
+X-Received: by 2002:a9d:5a10:: with SMTP id v16mr8275144oth.187.1620395732816;
+        Fri, 07 May 2021 06:55:32 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 16sm1197586otu.79.2021.05.07.06.55.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 May 2021 05:45:03 -0700 (PDT)
-Date:   Fri, 7 May 2021 15:45:00 +0300
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, linux-media@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, mchehab@kernel.org,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] WARNING in __vmalloc_node_range
-Message-ID: <20210507154500.0951876a@gmail.com>
-In-Reply-To: <CA+KHdyWuf8iDvrmGfapVy3pRie4FOwdasbtRij39MmXr0Wpzuw@mail.gmail.com>
-References: <000000000000fdc0be05c1a6d68f@google.com>
-        <20210506142210.GA37570@pc638.lan>
-        <20210506145722.GC1955@kadam>
-        <20210506180053.4770f495@gmail.com>
-        <20210507080435.GF1922@kadam>
-        <20210507152954.5773592a@gmail.com>
-        <CA+KHdyWuf8iDvrmGfapVy3pRie4FOwdasbtRij39MmXr0Wpzuw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
+        Fri, 07 May 2021 06:55:32 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 7 May 2021 06:55:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] usb: typec: tcpm: Fix wrong handling for
+ Not_Supported in VDM AMS
+Message-ID: <20210507135530.GA1458134@roeck-us.net>
+References: <20210507062300.1945009-1-kyletso@google.com>
+ <20210507062300.1945009-3-kyletso@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210507062300.1945009-3-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 7 May 2021 14:42:14 +0200
-Uladzislau Rezki <urezki@gmail.com> wrote:
+On Fri, May 07, 2021 at 02:23:00PM +0800, Kyle Tso wrote:
+> Not_Supported Message is acceptable in VDM AMS. Redirect the VDM state
+> machine to VDM_STATE_DONE when receiving Not_Supported and finish the
+> VDM AMS.
+> 
+> Also, after the loop in vdm_state_machine_work, add more conditions of
+> VDM states to clear the vdm_sm_running flag because those are all
+> stopping states when leaving the loop.
+> 
+> In addition, finish the VDM AMS if the port partner responds BUSY.
+> 
+> Fixes: 8dea75e11380 ("usb: typec: tcpm: Protocol Error handling")
+> Fixes: 8d3a0578ad1a ("usb: typec: tcpm: Respond Wait if VDM state machine is running")
+> Signed-off-by: Kyle Tso <kyletso@google.com>
 
-> Hello, Pavel.
-> 
-> Also in the commit message i see a type.
-> 
-> <snip>
-> syzbot reported WARNING in vmalloc. The problem
-> was in sizo size passed to vmalloc.
-> <snip>
-> 
-> Should it be "...zero size passed to vmalloc"?
-> 
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Yes, it should. Thank you so much!
-
-> --
-> Vlad Rezki
+> ---
+> Changes since v2:
+> - no changes
 > 
+>  drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 > 
-> On Fri, May 7, 2021 at 2:29 PM Pavel Skripkin <paskripkin@gmail.com>
-> wrote:
-> >
-> > On Fri, 7 May 2021 11:04:36 +0300
-> > Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > > On Thu, May 06, 2021 at 06:00:53PM +0300, Pavel Skripkin wrote:
-> > > >
-> > > > Hi!
-> > > >
-> > > > I've already sent the patch:
-> > > > https://patchwork.linuxtv.org/project/linux-media/patch/20210506121211.8556-1-paskripkin@gmail.com/
-> > > >
-> > >
-> > > Please, always add a Fixes tag.
-> > >
-> > > Fixes: 4d43e13f723e ("V4L/DVB (4643): Multi-input patch for
-> > > DVB-USB device")
-> > >
-> > > regards,
-> > > dan carpenter
-> > >
-> >
-> > oh..., that's one thing I always forget about. Thanks for pointing
-> > it out, I'll send v2 soon
-> >
-> >
-> > With regards,
-> > Pavel Skripkin
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 07a449f0e8fa..bf97db232f09 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -1897,7 +1897,6 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+>  
+>  			if (res < 0) {
+>  				port->vdm_state = VDM_STATE_ERR_BUSY;
+> -				port->vdm_sm_running = false;
+>  				return;
+>  			}
+>  		}
+> @@ -1913,6 +1912,7 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+>  		port->vdo_data[0] = port->vdo_retry;
+>  		port->vdo_count = 1;
+>  		port->vdm_state = VDM_STATE_READY;
+> +		tcpm_ams_finish(port);
+>  		break;
+>  	case VDM_STATE_BUSY:
+>  		port->vdm_state = VDM_STATE_ERR_TMOUT;
+> @@ -1978,7 +1978,7 @@ static void vdm_state_machine_work(struct kthread_work *work)
+>  		 port->vdm_state != VDM_STATE_BUSY &&
+>  		 port->vdm_state != VDM_STATE_SEND_MESSAGE);
+>  
+> -	if (port->vdm_state == VDM_STATE_ERR_TMOUT)
+> +	if (port->vdm_state < VDM_STATE_READY)
+>  		port->vdm_sm_running = false;
+>  
+>  	mutex_unlock(&port->lock);
+> @@ -2569,6 +2569,16 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>  			port->sink_cap_done = true;
+>  			tcpm_set_state(port, ready_state(port), 0);
+>  			break;
+> +		case SRC_READY:
+> +		case SNK_READY:
+> +			if (port->vdm_state > VDM_STATE_READY) {
+> +				port->vdm_state = VDM_STATE_DONE;
+> +				if (tcpm_vdm_ams(port))
+> +					tcpm_ams_finish(port);
+> +				mod_vdm_delayed_work(port, 0);
+> +				break;
+> +			}
+> +			fallthrough;
+>  		default:
+>  			tcpm_pd_handle_state(port,
+>  					     port->pwr_role == TYPEC_SOURCE ?
+> -- 
+> 2.31.1.527.g47e6f16901-goog
 > 
-> 
-> 
-
-
-With regards,
-Pavel Skripkin
