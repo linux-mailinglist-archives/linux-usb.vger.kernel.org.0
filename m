@@ -2,98 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E413769BC
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:55:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E61376A11
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 20:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbhEGR4f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 13:56:35 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:14633 "EHLO m43-7.mailgun.net"
+        id S229558AbhEGSf1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 14:35:27 -0400
+Received: from mga02.intel.com ([134.134.136.20]:32934 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229585AbhEGR42 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 13:56:28 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620410128; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=QEiUnP3LOUi2nXe4DLoSZyC62ngztBL3XlxmT2ZBLW0=; b=vgcwF7DOFD0qfcyzoC22oHPtr/LVWxV1alSXts1TW9+NVAZrJwUShgP1xBbxDatjjbeU8a0f
- KKv0GhdB3bQD2P/J/RJyo4tGRncgWgWdBdWQbRZ+pH/jUkOmHgDZWyj/d11EJx2zGHwdGU8y
- DbqF577qyeZq3YLPe8RtOzJk9Ow=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 60957f0c74f773a664850dfa (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 17:55:24
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 88B24C43145; Fri,  7 May 2021 17:55:23 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 76AFDC4338A;
-        Fri,  7 May 2021 17:55:22 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 76AFDC4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thinh.Nguyen@synopsys.com, jackp@codeaurora.org,
-        Wesley Cheng <wcheng@codeaurora.org>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3: gadget: Return success always for kick transfer in ep queue
-Date:   Fri,  7 May 2021 10:55:19 -0700
-Message-Id: <1620410119-24971-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S229470AbhEGSf1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 14:35:27 -0400
+IronPort-SDR: /OCd1IjKGyUVqC9EoohYVe7uCaFhqCWyrgsvK2LakU35Ykns9Ed4MjM7667NL1K1JMuTJFmvyC
+ XPRKqUlh/YWw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9977"; a="185918253"
+X-IronPort-AV: E=Sophos;i="5.82,281,1613462400"; 
+   d="scan'208";a="185918253"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 May 2021 11:34:26 -0700
+IronPort-SDR: eYvah1ztarOwU+KC1CbePtEoSTrkHBIzmVSz7iU2L48/l6iv2MkWDWrDtrhRbcZtVABUcDSXpB
+ sfauqOJN0ZwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,281,1613462400"; 
+   d="scan'208";a="620305535"
+Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 07 May 2021 11:34:24 -0700
+Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lf5Iu-000BM0-30; Fri, 07 May 2021 18:34:24 +0000
+Date:   Sat, 08 May 2021 02:34:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 3ac077570a4229f4367f1ea001eba9791806a7ca
+Message-ID: <60958825.uZ8tgAwQS0BpoZkE%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If an error is received when issuing a start or update transfer
-command, the error handler will stop all active requests (including
-the current USB request), and call dwc3_gadget_giveback() to notify
-function drivers of the requests which have been stopped.  Avoid
-returning an error for kick transfer during EP queue, to remove
-duplicate cleanup operations on the request being queued.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 3ac077570a4229f4367f1ea001eba9791806a7ca  usb: gadget: fsl_qe_udc: fix implicit-fallthrough warnings
 
-Fixes: 8d99087c2db8 ("usb: dwc3: gadget: Properly handle failed kick_transfer")
-cc: stable@vger.kernel.org
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+elapsed time: 729m
+
+configs tested: 124
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+i386                             allyesconfig
+ia64                             allmodconfig
+mips                          rb532_defconfig
+arm                             ezx_defconfig
+riscv             nommu_k210_sdcard_defconfig
+mips                      maltasmvp_defconfig
+powerpc                     mpc5200_defconfig
+m68k                          sun3x_defconfig
+powerpc                     tqm8555_defconfig
+mips                           gcw0_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                      mgcoge_defconfig
+mips                           mtx1_defconfig
+m68k                            mac_defconfig
+sh                      rts7751r2d1_defconfig
+arm                         hackkit_defconfig
+arm                        shmobile_defconfig
+powerpc                 mpc832x_rdb_defconfig
+mips                           jazz_defconfig
+arm                         axm55xx_defconfig
+arm                        clps711x_defconfig
+mips                          malta_defconfig
+arm                         lubbock_defconfig
+powerpc                     tqm8560_defconfig
+sh                           se7722_defconfig
+arm                       mainstone_defconfig
+arm                         nhk8815_defconfig
+sh                          sdk7780_defconfig
+powerpc                     rainier_defconfig
+powerpc                      katmai_defconfig
+powerpc                        warp_defconfig
+microblaze                      mmu_defconfig
+riscv                    nommu_k210_defconfig
+sh                           se7751_defconfig
+arc                            hsdk_defconfig
+mips                        nlm_xlp_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                    sam440ep_defconfig
+sh                 kfr2r09-romimage_defconfig
+mips                         cobalt_defconfig
+mips                           ip22_defconfig
+arm                              alldefconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20210507
+x86_64               randconfig-a003-20210507
+x86_64               randconfig-a005-20210507
+x86_64               randconfig-a002-20210507
+x86_64               randconfig-a006-20210507
+x86_64               randconfig-a004-20210507
+i386                 randconfig-a003-20210507
+i386                 randconfig-a006-20210507
+i386                 randconfig-a001-20210507
+i386                 randconfig-a005-20210507
+i386                 randconfig-a004-20210507
+i386                 randconfig-a002-20210507
+i386                 randconfig-a015-20210507
+i386                 randconfig-a013-20210507
+i386                 randconfig-a016-20210507
+i386                 randconfig-a014-20210507
+i386                 randconfig-a012-20210507
+i386                 randconfig-a011-20210507
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a014-20210507
+x86_64               randconfig-a015-20210507
+x86_64               randconfig-a012-20210507
+x86_64               randconfig-a013-20210507
+x86_64               randconfig-a011-20210507
+x86_64               randconfig-a016-20210507
+x86_64               randconfig-a001-20210506
+x86_64               randconfig-a003-20210506
+x86_64               randconfig-a005-20210506
+x86_64               randconfig-a002-20210506
+x86_64               randconfig-a006-20210506
+x86_64               randconfig-a004-20210506
+
 ---
-Changes in v2:
- - Added Fixes tag and Cc'ed stable
-
-Changes in v1:
- - Renamed commit title due to new implementation
- - Return success always for kick transfer during ep queue
-
-Previous patchset:
-https://lore.kernel.org/linux-usb/875yzxibur.fsf@kernel.org/T/#t
-
- drivers/usb/dwc3/gadget.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index dd80e5c..a5b7fd9 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -1684,7 +1684,9 @@ static int __dwc3_gadget_ep_queue(struct dwc3_ep *dep, struct dwc3_request *req)
- 		}
- 	}
- 
--	return __dwc3_gadget_kick_transfer(dep);
-+	__dwc3_gadget_kick_transfer(dep);
-+
-+	return 0;
- }
- 
- static int dwc3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
