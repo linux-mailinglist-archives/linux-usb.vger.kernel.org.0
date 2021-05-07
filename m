@@ -2,125 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08A3376915
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 18:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B42376984
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 19:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238430AbhEGQyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 12:54:21 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:32166 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236947AbhEGQyV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 12:54:21 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1620406395; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=urugWwmYOkfQqcgvTQ3pT58z8ylFiPxb2DtWctwMUKA=; b=HBZyprNxj0pIHo16cZz7uySI9+XkOBBDYa85IuPxbv5jlk+MlZDeMrePg2i3m1oZ7rZOZ8IT
- ylnPIAzNXEgdMak9x9XzFFz6pRRS3BtMF1b5WdonPr3DHPw32y5v0Fd9KptTphaGI5AMeGS2
- 9CY/CZG6lvEy8T74h0z78v0//rQ=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 6095706074f773a6642ceb57 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 07 May 2021 16:52:48
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8F818C43148; Fri,  7 May 2021 16:52:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3B97CC43143;
-        Fri,  7 May 2021 16:52:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3B97CC43143
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Fri, 7 May 2021 09:52:40 -0700
-From:   Jack Pham <jackp@codeaurora.org>
+        id S232050AbhEGRbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 13:31:07 -0400
+Received: from alln-iport-8.cisco.com ([173.37.142.95]:12765 "EHLO
+        alln-iport-8.cisco.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230453AbhEGRbG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 13:31:06 -0400
+X-Greylist: delayed 425 seconds by postgrey-1.27 at vger.kernel.org; Fri, 07 May 2021 13:31:06 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=1096; q=dns/txt; s=iport;
+  t=1620408607; x=1621618207;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=KjImhc2JK0NRVqEqrRGVolZxLwQomaHya3mNXQjmMGo=;
+  b=bEGb8UQrOqxgWD8UmO5moRr9ninxjwQJtI4Ee1LJeIqMxHqO+8oTKDC9
+   VSv3UjtFisnuUwTXJ3PgF7iXkfeI4z9ZWysVAHOYpkQVdAF6mWQBNMCsO
+   lEPNiTpQExrH7f18L5qbDSYS9bdmWJ4LpBMvuIEg9knAnkMjPwYKK44QQ
+   s=;
+X-IronPort-AV: E=Sophos;i="5.82,281,1613433600"; 
+   d="scan'208";a="708116664"
+Received: from rcdn-core-9.cisco.com ([173.37.93.145])
+  by alln-iport-8.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 07 May 2021 17:23:01 +0000
+Received: from zorba.cisco.com ([10.24.22.254])
+        by rcdn-core-9.cisco.com (8.15.2/8.15.2) with ESMTP id 147HN07c022761;
+        Fri, 7 May 2021 17:23:00 GMT
+From:   Daniel Walker <danielwa@cisco.com>
 To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Li Jun <jun.li@nxp.com>, gregkh@linuxfoundation.org,
-        mathias.nyman@intel.com, peter.chen@kernel.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 3/3] usb: core: hcd: use map_urb_for_dma for single
- step set feature urb
-Message-ID: <20210507165240.GA29558@jackp-linux.qualcomm.com>
-References: <1620370682-10199-1-git-send-email-jun.li@nxp.com>
- <1620370682-10199-3-git-send-email-jun.li@nxp.com>
- <20210507154229.GA776548@rowland.harvard.edu>
+Cc:     HEMANT RAMDASI <hramdasi@cisco.com>,
+        Christian Engelmayer <christian.engelmayer@frequentis.com>,
+        Gopalakrishnan Santhanam <gsanthan@cisco.com>,
+        xe-linux-external@cisco.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fsl-usb: add need_oc_pp_cycle flag for 85xx also
+Date:   Fri,  7 May 2021 10:23:00 -0700
+Message-Id: <20210507172300.3075939-1-danielwa@cisco.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210507154229.GA776548@rowland.harvard.edu>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.24.22.254, [10.24.22.254]
+X-Outbound-Node: rcdn-core-9.cisco.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 07, 2021 at 11:42:29AM -0400, Alan Stern wrote:
-> On Fri, May 07, 2021 at 02:58:02PM +0800, Li Jun wrote:
-> > Use map_urb_for_dma() to improve the dma map code for single step
-> > set feature request urb in test mode.
-> > 
-> > Signed-off-by: Li Jun <jun.li@nxp.com>
-> > ---
-> > Change for v3:
-> > - Correct the error handling if map_urb_for_dma() fails.
-> > 
-> > change for v2:
-> > - Add this new patch to use map_urb_for_dma API to
-> >   replace both of dma_map_single() calls, suggested by
-> >   Jack Pham.
-> > 
-> >  drivers/usb/core/hcd.c | 15 +++++----------
-> >  1 file changed, 5 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> > index d7eb9f179ca6..fa72697f4829 100644
-> > --- a/drivers/usb/core/hcd.c
-> > +++ b/drivers/usb/core/hcd.c
-> > @@ -2159,16 +2159,11 @@ static struct urb *request_single_step_set_feature_urb(
-> >  	usb_get_urb(urb);
-> >  	atomic_inc(&urb->use_count);
-> >  	atomic_inc(&urb->dev->urbnum);
-> > -	urb->setup_dma = dma_map_single(
-> > -			hcd->self.sysdev,
-> > -			urb->setup_packet,
-> > -			sizeof(struct usb_ctrlrequest),
-> > -			DMA_TO_DEVICE);
-> > -	urb->transfer_dma = dma_map_single(
-> > -			hcd->self.sysdev,
-> > -			urb->transfer_buffer,
-> > -			urb->transfer_buffer_length,
-> > -			DMA_FROM_DEVICE);
-> > +	if (map_urb_for_dma(hcd, urb, GFP_KERNEL)) {
-> > +		usb_put_urb(urb);
-> 
-> You need to call usb_free_urb() here.
+From: Gopalakrishnan Santhanam <gsanthan@cisco.com>
 
-Hi Alan,
+Commit e6604a7fd71f9 ("EHCI: Quirk flag for port power handling on overcurrent.")
+activated the quirks handling (flag need_oc_pp_cycle) for Freescale 83xx
+based boards.
+Activate same for 85xx based boards as well.
 
-Aren't usb_put_urb() and usb_free_urb() identical? The former appears
-to just be a macro subsitution of the latter.
+Cc: xe-linux-external@cisco.com
+Signed-off-by: Gopalakrishnan Santhanam <gsanthan@cisco.com>
+Signed-off-by: Daniel Walker <danielwa@cisco.com>
+---
+ drivers/usb/host/ehci-fsl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Jack
-
-> > +		return NULL;
-> > +	}
-> > +
-> >  	urb->context = done;
-> >  	return urb;
-> >  }
-> > -- 
-> > 2.25.1
-> > 
-
+diff --git a/drivers/usb/host/ehci-fsl.c b/drivers/usb/host/ehci-fsl.c
+index 6f7bd6641694..c7d74c1a23f5 100644
+--- a/drivers/usb/host/ehci-fsl.c
++++ b/drivers/usb/host/ehci-fsl.c
+@@ -387,7 +387,7 @@ static int ehci_fsl_setup(struct usb_hcd *hcd)
+ 	/* EHCI registers start at offset 0x100 */
+ 	ehci->caps = hcd->regs + 0x100;
+ 
+-#ifdef CONFIG_PPC_83xx
++#if defined(CONFIG_PPC_83xx) || defined(CONFIG_PPC_85xx)
+ 	/*
+ 	 * Deal with MPC834X that need port power to be cycled after the power
+ 	 * fault condition is removed. Otherwise the state machine does not
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.25.1
+
