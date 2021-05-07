@@ -2,84 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F35376834
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 17:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C845F37685F
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 17:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbhEGPnb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 11:43:31 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58031 "HELO
+        id S236263AbhEGQAJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 12:00:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36461 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236443AbhEGPnb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 11:43:31 -0400
-Received: (qmail 779980 invoked by uid 1000); 7 May 2021 11:42:29 -0400
-Date:   Fri, 7 May 2021 11:42:29 -0400
+        with SMTP id S232974AbhEGQAI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 12:00:08 -0400
+Received: (qmail 780607 invoked by uid 1000); 7 May 2021 11:59:08 -0400
+Date:   Fri, 7 May 2021 11:59:08 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     gregkh@linuxfoundation.org, mathias.nyman@intel.com,
-        peter.chen@kernel.org, jackp@codeaurora.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v3 3/3] usb: core: hcd: use map_urb_for_dma for single
- step set feature urb
-Message-ID: <20210507154229.GA776548@rowland.harvard.edu>
-References: <1620370682-10199-1-git-send-email-jun.li@nxp.com>
- <1620370682-10199-3-git-send-email-jun.li@nxp.com>
+To:     chris.chiu@canonical.com
+Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] USB: reset-resume the device when PORT_SUSPEND is
+ set but timeout
+Message-ID: <20210507155908.GB776548@rowland.harvard.edu>
+References: <20210507093329.895-1-chris.chiu@canonical.com>
+ <20210507093329.895-2-chris.chiu@canonical.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620370682-10199-3-git-send-email-jun.li@nxp.com>
+In-Reply-To: <20210507093329.895-2-chris.chiu@canonical.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 07, 2021 at 02:58:02PM +0800, Li Jun wrote:
-> Use map_urb_for_dma() to improve the dma map code for single step
-> set feature request urb in test mode.
+On Fri, May 07, 2021 at 05:33:28PM +0800, chris.chiu@canonical.com wrote:
+> From: Chris Chiu <chris.chiu@canonical.com>
 > 
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+> On the Realtek hub of Dell Dock WD19, the port which has wakeup
+> enabled descendants will sometimes timeout when setting PORT_SUSPEND
+> feature. After checking the PORT_SUSPEND bit in wPortStatus, it is
+> already set. However, the hub will fail to activate because the
+> PORT_SUSPEND feature of that port is not cleared during resume. All
+> devices connecting via the port are lost after resume.
+> 
+> This commit force reset-resume the device connected to the timeout
+> but suspended port so that the hub will have chance to clear the
+> PORT_SUSPEND feature during resume.
+> 
+> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 > ---
-> Change for v3:
-> - Correct the error handling if map_urb_for_dma() fails.
+>  drivers/usb/core/hub.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 > 
-> change for v2:
-> - Add this new patch to use map_urb_for_dma API to
->   replace both of dma_map_single() calls, suggested by
->   Jack Pham.
-> 
->  drivers/usb/core/hcd.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index d7eb9f179ca6..fa72697f4829 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2159,16 +2159,11 @@ static struct urb *request_single_step_set_feature_urb(
->  	usb_get_urb(urb);
->  	atomic_inc(&urb->use_count);
->  	atomic_inc(&urb->dev->urbnum);
-> -	urb->setup_dma = dma_map_single(
-> -			hcd->self.sysdev,
-> -			urb->setup_packet,
-> -			sizeof(struct usb_ctrlrequest),
-> -			DMA_TO_DEVICE);
-> -	urb->transfer_dma = dma_map_single(
-> -			hcd->self.sysdev,
-> -			urb->transfer_buffer,
-> -			urb->transfer_buffer_length,
-> -			DMA_FROM_DEVICE);
-> +	if (map_urb_for_dma(hcd, urb, GFP_KERNEL)) {
-> +		usb_put_urb(urb);
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index b2bc4b7c4289..18603949a8de 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -3385,6 +3385,21 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
+>  		status = 0;
+>  	}
+>  	if (status) {
+> +		if (status == -ETIMEDOUT) {
+> +			u16 portstatus, portchange;
+> +
+> +			status = hub_port_status(hub, port1, &portstatus,
+> +					&portchange);
 
-You need to call usb_free_urb() here.
+Don't reuse status like this.  There will be a problem if this line sets 
+status to 0 but the port isn't actually suspended.  Use a different 
+variable instead.
 
 Alan Stern
 
-> +		return NULL;
-> +	}
 > +
->  	urb->context = done;
->  	return urb;
->  }
+> +			dev_dbg(&port_dev->dev,
+> +				"suspend timeout, status %04x\n", portstatus);
+> +
+> +			if (status == 0 && port_is_suspended(hub, portstatus)) {
+> +				udev->reset_resume = 1;
+> +				goto err_wakeup;
+> +			}
+> +		}
+> +
+>  		dev_dbg(&port_dev->dev, "can't suspend, status %d\n", status);
+>  
+>  		/* Try to enable USB3 LTM again */
 > -- 
-> 2.25.1
+> 2.20.1
 > 
