@@ -2,92 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 108743761A3
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 10:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156AF3761C6
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 10:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235238AbhEGIGK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 04:06:10 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:35836 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbhEGIFs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 04:05:48 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14784Dkj146615;
-        Fri, 7 May 2021 08:04:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=dWUlA5sa2i5VfwmmQWEutVTqdmx21jDBFgxaLD+HaLo=;
- b=X+u57bQmYKU2e+/Ox2+3IqqcNd1mK9DlixCcKTr4O6DEw71C5vGli0WjtjBM2M/iChyM
- xNelaD8ppJAb2OsSbgUO1WnIYeCbIcWwEUPO7scSDHNfdgGNC0qpwmoIqHrCLhU7gnVb
- B4/AhD9ncB6eLs+nlT+rK0F1B550anhemwlc4FucWwud8BgJ+wvgdBDp7rR6ygHXoCrh
- f4cq1F9wC+4JzXmMTPftB754gowIfkJZfvkvcY5WFvcZyGyDeG6xcdV+Os507d7ynnQf
- CB8tPqloQIKS4LXGlDLofxhMM5Y+GGuuq0qZXnm32lXwAW38T56HB4Turd4Hps/QnT/k 3A== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 38ctjv0nhr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 May 2021 08:04:46 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14780Utf086033;
-        Fri, 7 May 2021 08:04:46 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 38csrsm5uy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 May 2021 08:04:46 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14784j7h113387;
-        Fri, 7 May 2021 08:04:45 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 38csrsm5t1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 May 2021 08:04:45 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 14784iKk023593;
-        Fri, 7 May 2021 08:04:44 GMT
-Received: from kadam (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 07 May 2021 01:04:43 -0700
-Date:   Fri, 7 May 2021 11:04:36 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mchehab@kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in __vmalloc_node_range
-Message-ID: <20210507080435.GF1922@kadam>
-References: <000000000000fdc0be05c1a6d68f@google.com>
- <20210506142210.GA37570@pc638.lan>
- <20210506145722.GC1955@kadam>
- <20210506180053.4770f495@gmail.com>
+        id S236050AbhEGIUX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 04:20:23 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:41552 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236045AbhEGIUX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 04:20:23 -0400
+Received: by mail-il1-f200.google.com with SMTP id m4-20020a9287040000b0290166e96ff634so6582216ild.8
+        for <linux-usb@vger.kernel.org>; Fri, 07 May 2021 01:19:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=kx5RSPSfQAxCmD61R1YE9JbB4uCOZtM9hzCQAwktjKY=;
+        b=B50l4zsgVMO4b6R95yeCfU3qaLCCISycGC3DrIwV5y5NN0C6iwARaA+YkKpL5jMgsS
+         hv1TO/M1EG2av7znYYKLNS1mVjHFEznbspPkXVuKMx+xteMzebJCZektdYaju/weJtNN
+         x7xEoYyO0IlZGUN80PJlAg9MBPjcdcr6DVHeNGMU9eMjxQ/9JI16q8iFjyrYyIKZKJdv
+         Q9ItIgyJkgpkht3FqrzbJjjY+U9DYAayAEeykaI8GcdV6XR/TWZPGE6mEbi1VA1SEXYz
+         tF6CUHvA2nzzyKpEjREFS9TVpUC4rSNbx8+ufyLiOucUngHT2e8rU47r6Cuykbe8t8Nf
+         l9AA==
+X-Gm-Message-State: AOAM532MhBho+z+96EHzlrB7uFbqVBKw0yvqEybjWpLIJqY/sCUjAOJc
+        HKqqnEF51reDVGptSwVaZA9klLXAgUoG6wNT+3shlHV4TxQF
+X-Google-Smtp-Source: ABdhPJxXOr6kpGDTxVra/qaz94Rlhp7VfVUAYD5XZ7qblaV/42CPiO8zZE2PMJHe386/XZa8SNnsgwZXgANTc2/Oq6Zk3QlPYzO4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210506180053.4770f495@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-ORIG-GUID: GXfJxJzJ6NKIhaMbUZdgfQ7X0_g3TPzK
-X-Proofpoint-GUID: GXfJxJzJ6NKIhaMbUZdgfQ7X0_g3TPzK
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9976 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 impostorscore=0 mlxlogscore=989
- malwarescore=0 phishscore=0 mlxscore=0 clxscore=1011 priorityscore=1501
- bulkscore=0 suspectscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2104190000
- definitions=main-2105070058
+X-Received: by 2002:a05:6638:d7:: with SMTP id w23mr8064433jao.14.1620375563755;
+ Fri, 07 May 2021 01:19:23 -0700 (PDT)
+Date:   Fri, 07 May 2021 01:19:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e1652405c1b9154a@google.com>
+Subject: [syzbot] WARNING: ODEBUG bug in wdm_disconnect
+From:   syzbot <syzbot+7da71853830ac3289474@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, lee.jones@linaro.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        oneukum@suse.com, penguin-kernel@i-love.sakura.ne.jp,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 06, 2021 at 06:00:53PM +0300, Pavel Skripkin wrote:
-> 
-> Hi!
-> 
-> I've already sent the patch:
-> https://patchwork.linuxtv.org/project/linux-media/patch/20210506121211.8556-1-paskripkin@gmail.com/ 
-> 
+Hello,
 
-Please, always add a Fixes tag.
+syzbot found the following issue on:
 
-Fixes: 4d43e13f723e ("V4L/DVB (4643): Multi-input patch for DVB-USB device")
+HEAD commit:    8404c9fb Merge branch 'akpm' (patches from Andrew)
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=11fffd2dd00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a73b8d06863cd18d
+dashboard link: https://syzkaller.appspot.com/bug?extid=7da71853830ac3289474
 
-regards,
-dan carpenter
+Unfortunately, I don't have any reproducer for this issue yet.
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7da71853830ac3289474@syzkaller.appspotmail.com
+
+usb 6-1: USB disconnect, device number 39
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object type: work_struct hint: service_interrupt_work+0x0/0x110 arch/x86/include/asm/bitops.h:207
+WARNING: CPU: 0 PID: 9431 at lib/debugobjects.c:505 debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+Modules linked in:
+CPU: 0 PID: 9431 Comm: kworker/0:7 Not tainted 5.12.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:505
+Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 40 eb 1f 86 4c 89 ee 48 c7 c7 40 df 1f 86 e8 69 d1 89 03 <0f> 0b 83 05 b5 8e ce 06 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffc9001264f650 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff812a3e73 RDI: fffff520024c9ebc
+RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814b72cb R11: 0000000000000000 R12: ffffffff860687c0
+R13: ffffffff861fe580 R14: ffffffff811a2280 R15: dffffc0000000000
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f4be635d000 CR3: 0000000117b90000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ __debug_check_no_obj_freed lib/debugobjects.c:987 [inline]
+ debug_check_no_obj_freed+0x301/0x420 lib/debugobjects.c:1018
+ slab_free_hook mm/slub.c:1556 [inline]
+ slab_free_freelist_hook+0x13b/0x1b0 mm/slub.c:1606
+ slab_free mm/slub.c:3166 [inline]
+ kfree+0xdb/0x3b0 mm/slub.c:4225
+ wdm_disconnect+0x3bd/0x450 drivers/usb/class/cdc-wdm.c:1052
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1181
+ device_release_driver_internal drivers/base/dd.c:1212 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1235
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x502/0xd40 drivers/base/core.c:3507
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
+ usb_disconnect.cold+0x27d/0x791 drivers/usb/core/hub.c:2219
+ hub_port_connect drivers/usb/core/hub.c:5127 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5416 [inline]
+ port_event drivers/usb/core/hub.c:5562 [inline]
+ hub_event+0x1c9c/0x4320 drivers/usb/core/hub.c:5644
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
