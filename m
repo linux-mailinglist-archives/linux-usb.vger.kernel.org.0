@@ -2,52 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 448B037621D
-	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 10:34:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486213762E7
+	for <lists+linux-usb@lfdr.de>; Fri,  7 May 2021 11:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbhEGIee (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 04:34:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33458 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234870AbhEGIeb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 04:34:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D3816113E;
-        Fri,  7 May 2021 08:33:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620376411;
-        bh=PLCTXmiXTvM3LLyImsS6YcOvyRq3ZlDNL6qwvK21Ar8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TZmEi7eRdmru6CdI4pnvjn5NQmvHYddJmm5yzM7hjEkJWg3ikurDrQiDXhDzhrMFU
-         ZwWGcL4i5iNrfYfzPJGvBCEyoLz9umdX5a/lB9ZwrOW1Yq0nNzZLO1E5H4zEQgi+zV
-         TtZSh3uQzzNo+2ntqMogBOujGnclX6t9eZpbReJ0=
-Date:   Fri, 7 May 2021 10:33:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     He Zhe <zhe.he@windriver.com>
-Cc:     corbet@lwn.net, linux-usb@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: Concern about Documentation/usb/linux-cdc-acm.inf and
- Documentation/usb/linux.inf
-Message-ID: <YJT7V8DZn94F1vex@kroah.com>
-References: <9d7bb262-1d0d-0961-7211-157c99add96c@windriver.com>
+        id S236720AbhEGJep (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 05:34:45 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39427 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236701AbhEGJel (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 05:34:41 -0400
+Received: from 61-220-137-37.hinet-ip.hinet.net ([61.220.137.37] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <chris.chiu@canonical.com>)
+        id 1lewrb-0002Vw-2N; Fri, 07 May 2021 09:33:39 +0000
+From:   chris.chiu@canonical.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        m.v.b@runbox.com, hadess@hadess.net
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Chiu <chris.chiu@canonical.com>
+Subject: [PATCH 0/2] USB: propose a generic fix for PORT_SUSPEND set feature timeout
+Date:   Fri,  7 May 2021 17:33:27 +0800
+Message-Id: <20210507093329.895-1-chris.chiu@canonical.com>
+X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9d7bb262-1d0d-0961-7211-157c99add96c@windriver.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 07, 2021 at 04:25:48PM +0800, He Zhe wrote:
-> Hello maintainers,
-> 
-> MLPL is found in Documentation/usb/linux-cdc-acm.inf and Documentation/usb/linux.inf.
-> 
-> Does this conflict with GPLv2? Anything else we need to know when using these as opensource software?
+From: Chris Chiu <chris.chiu@canonical.com>
 
-As these are to be used on WINDOWS operating systems, please consult the
-owner of the copyright on those files (and operating system) (i.e.
-Microsoft), if you have questions/concerns about this.
+For the Realtek Hub which fails to resume the port which has wakeup
+enable descendants connected, trying to create a more generic and
+better option to have the runtime suspend/resume work instead of
+a reset-resume quirk.
 
-Good luck!
+Chris Chiu (2):
+  USB: reset-resume the device when PORT_SUSPEND is set but timeout
+  Revert "USB: Add reset-resume quirk for WD19's Realtek Hub"
 
-greg k-h
+ drivers/usb/core/hub.c    | 15 +++++++++++++++
+ drivers/usb/core/quirks.c |  1 -
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+-- 
+2.20.1
+
