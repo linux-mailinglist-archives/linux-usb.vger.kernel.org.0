@@ -2,85 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A64376F14
-	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 05:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8A9376F28
+	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 05:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbhEHDLV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 23:11:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38846 "EHLO mail.kernel.org"
+        id S230472AbhEHDq5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 23:46:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40048 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229775AbhEHDLV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 7 May 2021 23:11:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id A591161288
-        for <linux-usb@vger.kernel.org>; Sat,  8 May 2021 03:10:20 +0000 (UTC)
+        id S229947AbhEHDq5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 7 May 2021 23:46:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ADEAE610FA;
+        Sat,  8 May 2021 03:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620443420;
-        bh=xLggAbGi50yWmnMtzx7zaZz/IVMJ6L1YiHpJeZjIVYM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=arRNI13cz19OPm1AQdReSPyNTb9iK3H3guPrjKuFB5lovhvOCUrAsrjiOZzMYV8X8
-         O/b5FucIsn8bY7I4Gz2s9ILxZymXNwrZqNu2ZLFVB24IxTEH27V6Xh7ziGpoDxSCkK
-         nPHbHQjbC2qxF3X00uNL/X2cnS/96IcsYxVkLEzYtV3k8eFNBC9ShfU/ygAQ/WrAxU
-         9rfbwHW9ggy400jpXMFoNKZaWT29ydNpnsD31xH7jLudp7clcTcOtu5ms4CGj0BxaE
-         CRwCgLm1BtTNh1f4oQ2rSyIZ0UiNUwqR8vI+NbhdZmDRwghGGCGbxIRIuVXQ38rVbm
-         NBo9RN6JZkOXg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 923B260F56; Sat,  8 May 2021 03:10:20 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Sat, 08 May 2021 03:10:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jaffa225man@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-snyhZcsZ8r@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1620445556;
+        bh=jnpqzqHEpZpKJi1Q0SJGsMxqgY/ElQuf5wSOLpkHKTE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dBfogrTMo9jZD3sYFCpBXpY9wIORrgUJ0ZLPBSLFyvLTpD1pEmlkKn4xQuHLHYd5v
+         3AAom7rFeQUQazAvAEaU8DqeIO+JQwe/Ufmq2Fi4tgk86T6X5gEw9l+++1Q0Di5Wsi
+         y/v+rq8Y1g0ifQf/96CLHjf4stdEcQg6VUFyuwbxzir5VRhCmmlKaVpUPyluAHbJc7
+         E20fP+BtraPTpkuLIP/RSXIs1hoAGXXS39ZXvGSAhn3yBtvNzTWBdavCCF/LU369TR
+         /LcGA+umMJXXo0wCOXPb8dH6KcCMHT44WQ9EiKH3cM1nCEOdrBPlmKftwEFHGVEjbf
+         xxS5VxSy8k9uw==
+Date:   Sat, 8 May 2021 11:45:51 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Replace list_for_each_entry_safe() if
+ using giveback
+Message-ID: <20210508034551.GA2728@nchen>
+References: <1620412923-11990-1-git-send-email-wcheng@codeaurora.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1620412923-11990-1-git-send-email-wcheng@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+On 21-05-07 11:42:03, Wesley Cheng wrote:
+> The list_for_each_entry_safe() macro saves the current item (n) and
+> the item after (n+1), so that n can be safely removed without
+> corrupting the list.  However, when traversing the list and removing
+> items using gadget giveback, the DWC3 lock is briefly released,
 
---- Comment #10 from Lucas Endres (jaffa225man@gmail.com) ---
-Thanks for your thoughts!  I helped to test a change on snd-ua101 to fix its
-MIDI port not being created, but think it just blacklists the UA-101 from t=
-he
-snd-usb-audio driver, since it was conflicting.  Here's a link to that
-discussion: https://bugzilla.kernel.org/show_bug.cgi?id=3D212477
+I see dwc3_gadget_del_and_unmap_request remove the list, the lock is
+still held there. Am I something wrong?
 
-Also, there have been substantial quality Roland/EDIROL/BOSS detection quirk
-tweaks to snd-usb-audio (also with my championing and testing), but if I
-understand correctly, they shouldn't be affecting the UA-101, due to its us=
-e of
-only snd-ua101: https://bugzilla.kernel.org/show_bug.cgi?id=3D212519
+Peter
+       
+> allowing other routines to execute.  There is a situation where while
+> items are being removed from the cancelled_list using
+> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+> routine is running in parallel (due to UDC unbind).  As the cleanup
+> routine removes n, and the pullup disable removes n+1, once the
+> cleanup retakes the DWC3 lock, it references a request who was already
+> removed/handled.  With list debug enabled, this leads to a panic.
+> Ensure all instances of the macro are replaced where gadget giveback
+> is used.
+> 
+> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index dd80e5c..efa939b 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+>  {
+>  	struct dwc3_request		*req;
+> -	struct dwc3_request		*tmp;
+>  	struct dwc3			*dwc = dep->dwc;
+>  
+> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+> +	while (!list_empty(&dep->cancelled_list)) {
+> +		req = next_request(&dep->cancelled_list);
+>  		dwc3_gadget_ep_skip_trbs(dep, req);
+>  		switch (req->status) {
+>  		case DWC3_REQUEST_STATUS_DISCONNECTED:
+> @@ -2935,11 +2935,11 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+>  		const struct dwc3_event_depevt *event, int status)
+>  {
+>  	struct dwc3_request	*req;
+> -	struct dwc3_request	*tmp;
+>  
+> -	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
+> +	while (!list_empty(&dep->started_list)) {
+>  		int ret;
+>  
+> +		req = next_request(&dep->started_list);
+>  		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
+>  				req, status);
+>  		if (ret)
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
 
-Sorry I hadn't mentioned these before, but until now I thought they could h=
-ave
-nothing to do with this issue.
+-- 
 
-In the next few days I hope to have time to attempt bisection to get to the
-bottom of it all.
+Thanks,
+Peter Chen
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
