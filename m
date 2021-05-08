@@ -2,105 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2285A37715C
-	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 13:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 285C3377163
+	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 13:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230439AbhEHLP2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 May 2021 07:15:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60820 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230234AbhEHLP1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 8 May 2021 07:15:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C6A7B61019
-        for <linux-usb@vger.kernel.org>; Sat,  8 May 2021 11:14:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620472465;
-        bh=PL9uuREX8U0+TjJf4EQe/D/z3rPkQ9JQjfbomdsP3SY=;
-        h=From:To:Subject:Date:From;
-        b=ah7+MP7UnovgwVVSncicFus7tubuCXipqSu6BvnHnOw4mzW2w7/0HWwOmI9uNt0t3
-         mQlvtVranW8Qe1cXad3F8Qp9C4PyO8OZZlIiwx+0DcUpFx6P7iGDW0ziGN3bhQxdqt
-         TryRGLH3USBp/uyj/cMw6EjJV4cXF3bXtwXLmpr+3deEUFOHtjA/WUSlZponPRdr9E
-         LwkHU/WpV5gd58jY3y92YmugSuYyDNJuq9uNZdpRJc3BfwuEviXPSLcbHcW2Vav95p
-         XAg/OHqXzCdFtOr5ePHocdFnYEjBr/U3NDurLJoh9SfTXpwvsHf31NkzQMtmW98HHJ
-         kR+zUk5UW7wqg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id B33A561186; Sat,  8 May 2021 11:14:25 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212995] New: A possible divide by zero in qh_urb_transaction
-Date:   Sat, 08 May 2021 11:14:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yguoaz@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-212995-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S230373AbhEHLTE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 May 2021 07:19:04 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:60419 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230234AbhEHLTE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 8 May 2021 07:19:04 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 095835C00DC;
+        Sat,  8 May 2021 07:18:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Sat, 08 May 2021 07:18:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=PnPilUIeKY1bK1Cl+7p4wjy3qwF
+        596IUuFTHCuzIuKE=; b=UArHAlAG/XshTVfs5MWvf+P1ipyxQgCkvsOa4N1xNea
+        /8U09QpY2gKcVz+OWezMbUgj6x6b0Q2UECMYagtBrk6U5XguC2drMCVo8mxdR5fJ
+        x1VGMJkg5GjzkQbpjBDocmWOABAq3PQnfzclhkQTSZrRV9amU/HDeVsVLPDOnd12
+        JIUbMqQgjndUVgAvd1jhXXXf+StCRbT/0mWf0PnXjLV1ZRWm5bNLMXw9pDmkM8Nm
+        aawyTdlLLu304Dux7QqVCKt+J3IBTD5MF0+BLdQqiS6/x4m0hSdgmsxT75/1Yf+i
+        js1kSdAM6kMEb8lawD75q8qgaysj4wi6bDzkTMv5oSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=PnPilU
+        IeKY1bK1Cl+7p4wjy3qwF596IUuFTHCuzIuKE=; b=cNZEPzDrDLd2cGwe1vHHFQ
+        ycFHsWuDKgCEFNudDYfv/D+/f9LPQLEy0GKfNImjU9W/6VJTv67xpI4INJnl5WGE
+        zfK3bnwbo5rFkS3jBcDTQyOfImWTcEAzLaEcyZGYGwzHapUTKwvJmu4FKKYVhht2
+        oMwSFZYzif7lRIK2ZngBc6rpAYCCKmQmOIQSwS1Qh0cZNbH9fpsTpJiQqOoOH6y9
+        5CXDd1rd3Gk2bg8Pj9Vynj/szQeIY+lc+S1TNrJkoOa7Muiq1NlE2iO/6mvm1JeT
+        zT1rGoSRUlIgxH7MxL50FCKy7Qi//wgueqIkvHEpy6q9XN0Nm6bcgLrW2I0AVLsA
+        ==
+X-ME-Sender: <xms:anOWYPwXiiesgHksBjcNYHxDYcWx6ciK7hgadyNZe_DXICclGU5sdA>
+    <xme:anOWYHS6ntPUBNrqajaoQQI_yGHB7dOP-GW6HffFy7OWtMaGrpO-Rva450Q_aay9j
+    0hxPtN6SNXQgw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdeggedggeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvuffkfhggtggujgesthdtro
+    dttddtvdenucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheq
+    necuggftrfgrthhtvghrnhepvdehfeekhedtgfefudethfeiieeffefgudehjedvvddtte
+    evffeiudegveelveeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpghhithhhuhgs
+    rdgtohhmnecukfhppeekfedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:anOWYJXzaShkQIDUq6uUkL0H8qy4WLR1Mk_OeUT2TmCEkKXQLCOLeA>
+    <xmx:anOWYJgANG40ZAG6D5dcw49Dipf5j-1gjUn1SlPCqAwj4kCuP0kXLA>
+    <xmx:anOWYBCVED0LQhIOnfhds5FOrpGAAecS6M43hDw3DDFdmNx6EYY2rQ>
+    <xmx:a3OWYO6GYRoO88BYOmZoImIS1FDgtPbAJ0jbWbB5zKho159qNxKs9A>
+Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
+        by mail.messagingengine.com (Postfix) with ESMTPA;
+        Sat,  8 May 2021 07:18:02 -0400 (EDT)
+Date:   Sat, 8 May 2021 13:18:00 +0200
+From:   Greg KH <greg@kroah.com>
+To:     bugzilla-daemon@bugzilla.kernel.org
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [Bug 212995] New: A possible divide by zero in qh_urb_transaction
+Message-ID: <YJZzaGrRbGYLuWRj@kroah.com>
+References: <bug-212995-208809@https.bugzilla.kernel.org/>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bug-212995-208809@https.bugzilla.kernel.org/>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212995
+On Sat, May 08, 2021 at 11:14:25AM +0000, bugzilla-daemon@bugzilla.kernel.org wrote:
+> https://bugzilla.kernel.org/show_bug.cgi?id=212995
+> 
+>             Bug ID: 212995
+>            Summary: A possible divide by zero in qh_urb_transaction
+>            Product: Drivers
+>            Version: 2.5
+>     Kernel Version: 5.12.2
+>           Hardware: All
+>                 OS: Linux
+>               Tree: Mainline
+>             Status: NEW
+>           Severity: normal
+>           Priority: P1
+>          Component: USB
+>           Assignee: drivers_usb@kernel-bugs.kernel.org
+>           Reporter: yguoaz@gmail.com
+>         Regression: No
+> 
+> In the file drivers/usb/host/ehci-q.c, the function qh_urb_transaction has the
+> following code (link to the code location:
+> https://github.com/torvalds/linux/blob/dd860052c99b1e088352bdd4fb7aef46f8d2ef47/drivers/usb/host/ehci-q.c#L715):
+> 
+> maxpacket = usb_maxpacket(urb->dev, urb->pipe, !is_input);
+> ...
+> if (usb_pipeout(urb->pipe) && (urb->transfer_flags & URB_ZERO_PACKET)
+>                            && !(urb->transfer_buffer_length % maxpacket))
+> 
+> However, the function usb_maxpacket may retun 0, leading to a possible divide
+> zero problem in the remainder operation:
 
-            Bug ID: 212995
-           Summary: A possible divide by zero in qh_urb_transaction
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.12.2
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: yguoaz@gmail.com
-        Regression: No
+Please feel free to submit a patch to the developers, but first see how
+it could be possible for usb_maxpacket to ever return 0 for this.  Are
+you sure it's not already sanitized by the time it gets here?
 
-In the file drivers/usb/host/ehci-q.c, the function qh_urb_transaction has =
-the
-following code (link to the code location:
-https://github.com/torvalds/linux/blob/dd860052c99b1e088352bdd4fb7aef46f8d2=
-ef47/drivers/usb/host/ehci-q.c#L715):
+thanks,
 
-maxpacket =3D usb_maxpacket(urb->dev, urb->pipe, !is_input);
-...
-if (usb_pipeout(urb->pipe) && (urb->transfer_flags & URB_ZERO_PACKET)
-                           && !(urb->transfer_buffer_length % maxpacket))
-
-However, the function usb_maxpacket may retun 0, leading to a possible divi=
-de
-zero problem in the remainder operation:
-
-static inline __u16
-usb_maxpacket(struct usb_device *udev, int pipe, int is_out)
-{
-        struct usb_host_endpoint        *ep;
-        ...
-        if (!ep)
-                return 0;
-        ...
-}
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+greg k-h
