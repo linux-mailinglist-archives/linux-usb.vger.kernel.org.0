@@ -2,232 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 662A637747D
-	for <lists+linux-usb@lfdr.de>; Sun,  9 May 2021 01:01:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 015C1377488
+	for <lists+linux-usb@lfdr.de>; Sun,  9 May 2021 01:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbhEHXCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 8 May 2021 19:02:03 -0400
-Received: from mga07.intel.com ([134.134.136.100]:25515 "EHLO mga07.intel.com"
+        id S229609AbhEHXOu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 8 May 2021 19:14:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34678 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229549AbhEHXCC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 8 May 2021 19:02:02 -0400
-IronPort-SDR: A9BL7tCOP9bYrB3i1hnc2I9UeEORqQd2JbEOrnQFksNdSkDZBoEVet1F78lzqMMN4TxWwrPqYQ
- M3s7gMDxt/SQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9978"; a="262895252"
-X-IronPort-AV: E=Sophos;i="5.82,284,1613462400"; 
-   d="scan'208";a="262895252"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 May 2021 16:00:59 -0700
-IronPort-SDR: drnlapsDU5JlYQWU4DxWaktj972UGfhvrDZtxEWxF6DuPFN4/fvb0WC/133Zi0aFRnn2ySJGzX
- 5QSCjLPBPQdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,284,1613462400"; 
-   d="scan'208";a="432592583"
-Received: from lkp-server01.sh.intel.com (HELO a48ff7ddd223) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 08 May 2021 16:00:58 -0700
-Received: from kbuild by a48ff7ddd223 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lfVwP-000Bpo-Oq; Sat, 08 May 2021 23:00:57 +0000
-Date:   Sun, 09 May 2021 07:00:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 31a8503589c4c98231dd362706720f2da2010fac
-Message-ID: <60971817.65hj0yEoWIhH4Byq%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S229549AbhEHXOt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 8 May 2021 19:14:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 005386108B
+        for <linux-usb@vger.kernel.org>; Sat,  8 May 2021 23:13:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620515625;
+        bh=urYcgB5DELVOo7CZesrQp+Jraj5fniyH14iPULYmzy4=;
+        h=From:To:Subject:Date:From;
+        b=YTG9oOGTBp4pv6CWPBhuD+aNdJMgIgZkyhz5Q3pprsySJN7JTARLG8TjoF/U1or0j
+         OsfDQM7ymwCGS69QSzLXivyEgyJd1qtEhPtbUh+ZIrI5kwymSnbW+MhOKiPhcPCXzQ
+         wulTiS/49PpFx8W7dyBPiqkNrxv/dqYHD461rI+iJpqS4bmEYK4DyawEJHTFx61MFV
+         WfCT5BM5aRcsMTg6yQ9BgsEJEOnKpoMURDPo4pEKE+ul+3LxcAl4bem2L43Cw+ywOt
+         DrLjmZQK66csFm+vPmN/wgHsSFGz9JCNWIfu3Hf3JSf8j/g5M85Ofca5+JRcUrTcKo
+         FRLUnXRVFpO+w==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id E1D7661186; Sat,  8 May 2021 23:13:44 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212999] New: xpad map Xbox 360 controller incorrect
+Date:   Sat, 08 May 2021 23:13:44 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: anton17082003@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-212999-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 31a8503589c4c98231dd362706720f2da2010fac  usb: gadget: fsl_qe_udc: fix implicit-fallthrough warnings
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212999
 
-elapsed time: 721m
+            Bug ID: 212999
+           Summary: xpad map Xbox 360 controller incorrect
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.12.1
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: anton17082003@gmail.com
+        Regression: No
 
-configs tested: 170
-configs skipped: 2
+I have DEXP G-4 XI controller with XInput of Xbox 360 pad
+This pad has idVendor 0x045e and idProduct 0x028e
+But I don't receive any input events on /dev/input/js0 or /dev/input/event11
+until I found this python script
+https://gist.github.com/dnmodder/de2df973323b7c6acf45f40dc66e8db3 that fixe=
+s it
+and it really helped me with it. But I think it must be fixed in xpad driver
+without any third party scripts
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--=20
+You may reply to this email to add a comment.
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-x86_64                           allyesconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-i386                             allyesconfig
-arc                          axs101_defconfig
-arm                         at91_dt_defconfig
-arm                         vf610m4_defconfig
-powerpc                      acadia_defconfig
-mips                            e55_defconfig
-arm                              alldefconfig
-m68k                             alldefconfig
-powerpc                    adder875_defconfig
-xtensa                              defconfig
-sh                              ul2_defconfig
-m68k                       m5475evb_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                     taishan_defconfig
-arm                            hisi_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                      jornada720_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                            qcom_defconfig
-mips                        qi_lb60_defconfig
-sh                          rsk7203_defconfig
-mips                           ip27_defconfig
-mips                      pic32mzda_defconfig
-powerpc                 mpc832x_mds_defconfig
-arm                  colibri_pxa300_defconfig
-mips                        workpad_defconfig
-arm                         bcm2835_defconfig
-arm64                            alldefconfig
-mips                    maltaup_xpa_defconfig
-i386                             alldefconfig
-powerpc                 xes_mpc85xx_defconfig
-arm                           sama5_defconfig
-powerpc                     ep8248e_defconfig
-mips                         tb0226_defconfig
-sh                          lboxre2_defconfig
-powerpc                         ps3_defconfig
-m68k                          hp300_defconfig
-parisc                              defconfig
-powerpc                          g5_defconfig
-riscv                             allnoconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                     mpc5200_defconfig
-arm                        clps711x_defconfig
-xtensa                generic_kc705_defconfig
-sparc64                          alldefconfig
-powerpc                     mpc83xx_defconfig
-arm                          lpd270_defconfig
-arm                        mini2440_defconfig
-s390                                defconfig
-mips                      maltaaprp_defconfig
-sh                          landisk_defconfig
-mips                     loongson2k_defconfig
-powerpc                  storcenter_defconfig
-xtensa                  audio_kc705_defconfig
-mips                         tb0219_defconfig
-sh                        dreamcast_defconfig
-h8300                     edosk2674_defconfig
-m68k                         apollo_defconfig
-powerpc                mpc7448_hpc2_defconfig
-powerpc                      pmac32_defconfig
-arm                       imx_v6_v7_defconfig
-mips                     cu1000-neo_defconfig
-um                               allyesconfig
-arc                     nsimosci_hs_defconfig
-sh                           se7751_defconfig
-nios2                            allyesconfig
-powerpc                 mpc834x_mds_defconfig
-arm                        spear3xx_defconfig
-mips                     cu1830-neo_defconfig
-arm                         s3c6400_defconfig
-sh                             espt_defconfig
-mips                          rb532_defconfig
-arm                         nhk8815_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210508
-i386                 randconfig-a006-20210508
-i386                 randconfig-a001-20210508
-i386                 randconfig-a005-20210508
-i386                 randconfig-a004-20210508
-i386                 randconfig-a002-20210508
-i386                 randconfig-a003-20210509
-i386                 randconfig-a006-20210509
-i386                 randconfig-a001-20210509
-i386                 randconfig-a005-20210509
-i386                 randconfig-a004-20210509
-i386                 randconfig-a002-20210509
-x86_64               randconfig-a014-20210508
-x86_64               randconfig-a015-20210508
-x86_64               randconfig-a011-20210508
-x86_64               randconfig-a013-20210508
-x86_64               randconfig-a012-20210508
-x86_64               randconfig-a016-20210508
-i386                 randconfig-a013-20210508
-i386                 randconfig-a015-20210508
-i386                 randconfig-a014-20210508
-i386                 randconfig-a016-20210508
-i386                 randconfig-a011-20210508
-i386                 randconfig-a012-20210508
-i386                 randconfig-a013-20210509
-i386                 randconfig-a015-20210509
-i386                 randconfig-a014-20210509
-i386                 randconfig-a016-20210509
-i386                 randconfig-a011-20210509
-i386                 randconfig-a012-20210509
-x86_64               randconfig-a005-20210509
-x86_64               randconfig-a003-20210509
-x86_64               randconfig-a001-20210509
-x86_64               randconfig-a002-20210509
-x86_64               randconfig-a006-20210509
-x86_64               randconfig-a004-20210509
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-um                               allmodconfig
-um                                allnoconfig
-um                                  defconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a005-20210508
-x86_64               randconfig-a003-20210508
-x86_64               randconfig-a001-20210508
-x86_64               randconfig-a002-20210508
-x86_64               randconfig-a006-20210508
-x86_64               randconfig-a004-20210508
-x86_64               randconfig-a014-20210509
-x86_64               randconfig-a015-20210509
-x86_64               randconfig-a011-20210509
-x86_64               randconfig-a013-20210509
-x86_64               randconfig-a012-20210509
-x86_64               randconfig-a016-20210509
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+You are receiving this mail because:
+You are watching the assignee of the bug.=
