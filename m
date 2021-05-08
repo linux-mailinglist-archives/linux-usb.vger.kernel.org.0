@@ -2,36 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AA8376E3C
-	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 03:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1C4376EF5
+	for <lists+linux-usb@lfdr.de>; Sat,  8 May 2021 04:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbhEHBy2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 7 May 2021 21:54:28 -0400
-Received: from szxga06-in.huawei.com ([45.249.212.32]:18370 "EHLO
-        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhEHBy1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 21:54:27 -0400
-Received: from DGGEMS408-HUB.china.huawei.com (unknown [172.30.72.58])
-        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FcVfD5njdzlbxN;
-        Sat,  8 May 2021 09:51:16 +0800 (CST)
+        id S230372AbhEHCtD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 7 May 2021 22:49:03 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:17155 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229775AbhEHCtC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 7 May 2021 22:49:02 -0400
+Received: from DGGEMS406-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FcWqt19cGzncCN;
+        Sat,  8 May 2021 10:44:42 +0800 (CST)
 Received: from thunder-town.china.huawei.com (10.174.177.72) by
- DGGEMS408-HUB.china.huawei.com (10.3.19.208) with Microsoft SMTP Server id
- 14.3.498.0; Sat, 8 May 2021 09:53:19 +0800
+ DGGEMS406-HUB.china.huawei.com (10.3.19.206) with Microsoft SMTP Server id
+ 14.3.498.0; Sat, 8 May 2021 10:47:50 +0800
 From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "Li Jun" <jun.li@nxp.com>, linux-usb <linux-usb@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Anssi Hannula <anssi.hannula@gmail.com>,
+        Dmitry Torokhov <dtor@mail.ru>,
+        linux-usb <linux-usb@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
         linux-kernel <linux-kernel@vger.kernel.org>
 CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] usb: dwc3: imx8mp: fix error return code in dwc3_imx8mp_probe()
-Date:   Sat, 8 May 2021 09:53:10 +0800
-Message-ID: <20210508015310.1627-1-thunder.leizhen@huawei.com>
+Subject: [PATCH 1/1] HID: pidff: fix error return code in hid_pidff_init()
+Date:   Sat, 8 May 2021 10:47:37 +0800
+Message-ID: <20210508024737.1927-1-thunder.leizhen@huawei.com>
 X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
@@ -42,28 +39,28 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix to return a negative error code from the error handling case instead
-of 0, as done elsewhere in this function.
+Fix to return a negative error code from the error handling
+case instead of 0, as done elsewhere in this function.
 
-Fixes: 6dd2565989b4 ("usb: dwc3: add imx8mp dwc3 glue layer driver")
+Fixes: 224ee88fe395 ("Input: add force feedback driver for PID devices")
 Reported-by: Hulk Robot <hulkci@huawei.com>
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- drivers/usb/dwc3/dwc3-imx8mp.c | 1 +
+ drivers/hid/usbhid/hid-pidff.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
-index b13cfab89d53..97810ca17a2c 100644
---- a/drivers/usb/dwc3/dwc3-imx8mp.c
-+++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-@@ -167,6 +167,7 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
+diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
+index ea126c50acc3..3b4ee21cd811 100644
+--- a/drivers/hid/usbhid/hid-pidff.c
++++ b/drivers/hid/usbhid/hid-pidff.c
+@@ -1292,6 +1292,7 @@ int hid_pidff_init(struct hid_device *hid)
  
- 	dwc3_np = of_get_child_by_name(node, "dwc3");
- 	if (!dwc3_np) {
-+		err = -ENODEV;
- 		dev_err(dev, "failed to find dwc3 core child\n");
- 		goto disable_rpm;
- 	}
+ 	if (pidff->pool[PID_DEVICE_MANAGED_POOL].value &&
+ 	    pidff->pool[PID_DEVICE_MANAGED_POOL].value[0] == 0) {
++		error = -EPERM;
+ 		hid_notice(hid,
+ 			   "device does not support device managed pool\n");
+ 		goto fail;
 -- 
 2.25.1
 
