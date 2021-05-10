@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFAD637915A
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 16:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2469137915B
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 16:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239964AbhEJOwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 10:52:49 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:47593 "EHLO
+        id S239822AbhEJOwv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 10:52:51 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47600 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239389AbhEJOwB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 10:52:01 -0400
+        with ESMTP id S233675AbhEJOwF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 10:52:05 -0400
 Received: from 111-240-141-101.dynamic-ip.hinet.net ([111.240.141.101] helo=localhost.localdomain)
         by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.93)
         (envelope-from <chris.chiu@canonical.com>)
-        id 1lg7FG-0007Dv-Q3; Mon, 10 May 2021 14:50:55 +0000
+        id 1lg7FJ-0007Dv-SM; Mon, 10 May 2021 14:50:58 +0000
 From:   chris.chiu@canonical.com
 To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
         m.v.b@runbox.com, hadess@hadess.net
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Chris Chiu <chris.chiu@canonical.com>
-Subject: [PATCH v2 1/2] USB: reset-resume the device when PORT_SUSPEND is set but timeout
-Date:   Mon, 10 May 2021 22:50:29 +0800
-Message-Id: <20210510145030.1495-2-chris.chiu@canonical.com>
+Subject: [PATCH v2 2/2] Revert "USB: Add reset-resume quirk for WD19's Realtek Hub"
+Date:   Mon, 10 May 2021 22:50:30 +0800
+Message-Id: <20210510145030.1495-3-chris.chiu@canonical.com>
 X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
 In-Reply-To: <20210510145030.1495-1-chris.chiu@canonical.com>
 References: <20210510145030.1495-1-chris.chiu@canonical.com>
@@ -35,54 +35,27 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Chris Chiu <chris.chiu@canonical.com>
 
-On the Realtek high-speed Hub(0bda:5487), the port which has wakeup
-enabled_descendants will sometimes timeout when setting PORT_SUSPEND
-feature. After checking the PORT_SUSPEND bit in wPortStatus, it is
-already set. However, the hub will fail to activate because the
-PORT_SUSPEND feature of that port is not cleared during resume. All
-connected devices are lost after resume.
-
-This commit force reset-resume the device connected to the timeout
-but suspended port so that the hub will have chance to clear the
-PORT_SUSPEND feature during resume.
+This reverts commit ca91fd8c7643d93bfc18a6fec1a0d3972a46a18a. The
+problematic hub should be taken care for each setting PORT_SUSPEND
+feature timeout instead of reset-resume all the time.
 
 Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
 ---
+ drivers/usb/core/quirks.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Changelog:
-  v2:
-    - create a new variable to keep the result of hub_port_status
-      when suspend timeout.
-
- drivers/usb/core/hub.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index b2bc4b7c4289..3c823544e425 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3385,6 +3385,21 @@ int usb_port_suspend(struct usb_device *udev, pm_message_t msg)
- 		status = 0;
- 	}
- 	if (status) {
-+		if (status == -ETIMEDOUT) {
-+			u16 portstatus, portchange;
-+
-+			int ret = hub_port_status(hub, port1, &portstatus,
-+					&portchange);
-+
-+			dev_dbg(&port_dev->dev,
-+				"suspend timeout, status %04x\n", portstatus);
-+
-+			if (ret == 0 && port_is_suspended(hub, portstatus)) {
-+				udev->reset_resume = 1;
-+				goto err_wakeup;
-+			}
-+		}
-+
- 		dev_dbg(&port_dev->dev, "can't suspend, status %d\n", status);
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 21e7522655ac..6114cf83bb44 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -406,7 +406,6 @@ static const struct usb_device_id usb_quirk_list[] = {
  
- 		/* Try to enable USB3 LTM again */
+ 	/* Realtek hub in Dell WD19 (Type-C) */
+ 	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
+-	{ USB_DEVICE(0x0bda, 0x5487), .driver_info = USB_QUIRK_RESET_RESUME },
+ 
+ 	/* Generic RTL8153 based ethernet adapters */
+ 	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
 -- 
 2.20.1
 
