@@ -2,77 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B488137938A
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 18:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D47379452
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 18:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbhEJQRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 12:17:46 -0400
-Received: from mailfilter06-out40.webhostingserver.nl ([195.211.73.79]:57634
-        "EHLO mailfilter06-out40.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231440AbhEJQRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 12:17:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:content-type:in-reply-to:mime-version:date:
-         message-id:from:references:cc:to:subject:from;
-        bh=xQVqOe2YfwU7nf8E0VSAtMJ1Dn5xLDeGT6F0ClGgcEM=;
-        b=Tgretv5cPYHF/UGtI6y1LfWgp4MGq3J3k7E48Jf0vtCQ+KCoEJP9rLaYFKXjGCsHutpGcpqgSl++v
-         kdsxkSGK1Y42AVqW5g/54Ih4WK2tnPKNDyYuLQQuCgG35qpQV3oWGA7X/wmYLULYKNcn+JfGOaEwYG
-         iWWke6hN319SttTI66U765XfVoQ/gJkvFt8ECuS8RtbgtDYBXXd6QkTsH35BJOUA7hyUn8pzw4GW+t
-         jMwIrCtCHN8IEVXO0dS5/XfhAWk39dvD/5Iref6sDO8Whjz6uZal2OSqNriLQ8mRkM2l+UX7JANdzw
-         eYXV//YSVQq3P4sfWrii5L3/uWEMb7Q==
-X-Halon-ID: 14ddcd32-b1ab-11eb-894f-001a4a4cb958
-Received: from s188.webhostingserver.nl (s188.webhostingserver.nl [141.138.168.133])
-        by mailfilter06.webhostingserver.nl (Halon) with ESMTPSA
-        id 14ddcd32-b1ab-11eb-894f-001a4a4cb958;
-        Mon, 10 May 2021 18:16:31 +0200 (CEST)
-Received: from [2001:981:6fec:1:706e:68b:b43f:ea3]
-        by s188.webhostingserver.nl with esmtpa (Exim 4.94.2)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1lg8a7-00EG6P-2G; Mon, 10 May 2021 18:16:31 +0200
-Subject: Re: [PATCH v2 1/1] usb: dwc3: pci: Enable usb2-gadget-lpm-disable for
- Intel Merrifield
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-References: <20210425195452.94143-1-ftoth@exalondelft.nl>
- <YJkp2ZfhB717CmT7@kroah.com>
-From:   Ferry Toth <ftoth@exalondelft.nl>
-Message-ID: <bb96ef4c-9cdf-c2d9-ab45-cc718aa30ddc@exalondelft.nl>
-Date:   Mon, 10 May 2021 18:16:29 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231791AbhEJQoR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 12:44:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45194 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231873AbhEJQoM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 May 2021 12:44:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 00B0F610FA;
+        Mon, 10 May 2021 16:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620664987;
+        bh=JYMvyOgsEnj9NjThzg4gr3NS8sBEzVNQ3Nqb4shRHys=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=ZH8UlgyyeKkDqHvSYastONsdA/SEDR68NdPnlLk9CzM7+qK/rCoJTHPxq+8lXDey4
+         KtM9t50PDMQY327UmW+Cqi1LLnhiVu3NB+IylBAuYNIg7hhQT2hTaSGJKTbK5VFmzl
+         V0m5yzKBmi9Wpbbp8X3U0WlIPwhCT1fCZWE496Wr0uG0has5fe4QtiZuM0gFdczvmw
+         YPu50CtBIsMMWS2QngzWS3Hx9g2dxMfeS8EWVCekw/Kqutm7VxRcFJNazgr1yYyuDU
+         iPmETItLXGTWmxr4N2rqtcBWtXxJpZSl7qzIA9XoJWvxXRWLRVTGd5pSXXhp3yCdx5
+         RyyCZeA0+NiRg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+In-Reply-To: <20210510152426.GE863718@rowland.harvard.edu>
+References: <20210510152426.GE863718@rowland.harvard.edu>
+Date:   Mon, 10 May 2021 19:43:00 +0300
+Message-ID: <87zgx2fskr.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YJkp2ZfhB717CmT7@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-Op 10-05-2021 om 14:40 schreef Greg Kroah-Hartman:
-> On Sun, Apr 25, 2021 at 09:54:52PM +0200, Ferry Toth wrote:
->> On Intel Merrifield LPM is causing the host to reset port after a timeout.
->> By disabling LPM entirely this is prevented.
->>
->> Fixes: 066c09593454 ("usb: dwc3: pci: Enable extcon driver for Intel Merrifield")
->> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
->> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
->> ---
->>   drivers/usb/dwc3/dwc3-pci.c | 1 +
->>   1 file changed, 1 insertion(+)
-> What changed from v1?  Always put that below the --- line.
+Hi Alan,
+
+Alan Stern <stern@rowland.harvard.edu> writes:
+> I just noticed this potential race in the Gadget core, specifically, in=20
+> usb_gadget_remove_driver.  Here's the relevant code:
 >
-Yes, my bad, sorry.
+> 	usb_gadget_disconnect(udc->gadget);
+> 	if (udc->gadget->irq)
+> 		synchronize_irq(udc->gadget->irq);
+> 	udc->driver->unbind(udc->gadget);
+> 	usb_gadget_udc_stop(udc);
+>
+> usb_gadget_disconnect will turn off the D+ pull-up, telling the host (or=
+=20
+> upstream hub) that the gadget is no longer connected to the bus.  The=20
+> udc->driver->unbind call then tells the gadget driver that it will no=20
+> longer receive any callbacks from the UDC driver or the gadget core.
+>
+> Now suppose that at just this moment, the user unplugs the USB cable.=20=
+=20
+> The UDC driver will notice that the Vbus voltage has gone away and will=20
+> invoke the gadget driver's ->disconnect callback.  After all, it doesn't=
+=20
+> realize it should avoid making these callbacks until usb_gadget_udc_stop=
+=20
+> has run.
+>
+> As a result, the gadget driver's disconnect callback may be invoked=20
+> _after_ the driver has been unbound from the gadget.
 
-In the above text "is causing host" was change to "is causing the host".
+argh, nice catch!
 
-Thanks for adding into your usb-linus branch anyway.
+> How should we fix this potential problem?
 
+I think we can just move usb_gadget_udc_stop(). Looking at a few udcs,
+they're just either freeing or masking UDC's interrupts which should
+prevent the race you describe while also making sure that no further
+interrupts will trigger.
+
+Perhaps we could move udc_stop() before synchronize_irq(). Do you
+foresee any issues with that for net2272 or dummy?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCZYpQRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjiWgf+OhywWHaA8KkfQ1jTewfy2D33+LacdcuX
+RO0huYMX8s1v7AeHNndId0CVIITUJWYE4IU7t+WODYanNFUCtzMAgDds7dKD9vSV
+hGvdicPZN8a0NWY9VfpNKc7+5XylAHsU7agYozwYEAE9ih9MBxicC94HhFwwP8Ov
+A0qGx5YOcedFmn9bXR2W4sKJA0y0wZlE/nQ8AdbvjEHGBlCde6M+gZkPI0qsoYXk
+QsJU0GUMLn9LzhjMHmZ/k50yVz/007oWM+jxxZ4PiNUYp2Y9xrLIrTRTlkc6RDB0
+1sOLuh/HldhWR4YmVhQyWIS8iN3TTz1/JYGodL3GnRc71gXCFMf/wQ==
+=j1ER
+-----END PGP SIGNATURE-----
+--=-=-=--
