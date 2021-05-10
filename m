@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E86377D4F
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 09:40:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9A5377D84
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 09:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhEJHlv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 03:41:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50084 "EHLO mail.kernel.org"
+        id S230157AbhEJHyj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 03:54:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229852AbhEJHlv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 May 2021 03:41:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C81FF6128E;
-        Mon, 10 May 2021 07:40:46 +0000 (UTC)
+        id S229852AbhEJHyg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 May 2021 03:54:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C609F61432;
+        Mon, 10 May 2021 07:53:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620632446;
-        bh=a5WQLkTrgvDHxX8OYf0xab/F1Y2rE/TyolaT9zSqt0I=;
+        s=k20201202; t=1620633211;
+        bh=wV3FOLsGdsluxhFslcLsHxy+AdeTNM4HCjlqOyw8ROE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nou3l5FLu7HzXLCFWRz0LXc+epg3UYf6R16RSywaRy1XszV+FWHroPi8ApWuRiQXm
-         N4loDySvSF6l6/33+XzZgh4poDv8jeiHhte+/qp5q2JDojqO0R5dtoUFPBR6LjH2d+
-         Z0ucjQz5P/tZFPxwcIiriMYyAfSQ6WHnrey7/l32KCwGrd8hB8kgYDWJmp6DMN75Ul
-         i2tJBLb03r9JEmPtGU04UWoQGcTnL5TlBaewzfzkgMJt2SpwdYNrkgcBdgY8tr8TT0
-         1niZx5U508+g0bvQzFQxsGcENSz7kzocXmDx66winUv2IXzVdicPeijWqJwCwPxk8h
-         yeBtrjccimzCw==
+        b=ZgWERDec1CKd5z258dmNZiTSDmZUd7j+lrmyvoP6wGaPV2+gMFz9VyTlLYsumzKBj
+         8e8+MknFuChqV1W9r6u8YkG8oCEk/N5DvsItr20nsQiKDw/2+a9buQkEnRahpFus/V
+         o42L843gdqjYEAledknFgiP1cKSp1nHDGhVjy8Y9a0MfFTVRZVUh73Gqd4sc/2CiR1
+         9GwG5ugY9lXd3C7zmsu9SZWqGrxI6bZRwjYUqvNVbLuJwvEBgWUMkzmQM3DXfQ9dCO
+         xxLatJQWh3K1j4BC6IRuLPQoPixw0YyfYAMvCVXcn+2w5VoCFVbuieYGL764bp9/Nn
+         VZs+8GXe7kXWA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lg0X1-0000Dd-Oy; Mon, 10 May 2021 09:40:48 +0200
-Date:   Mon, 10 May 2021 09:40:47 +0200
+        id 1lg0jN-0000Hu-Vh; Mon, 10 May 2021 09:53:34 +0200
+Date:   Mon, 10 May 2021 09:53:33 +0200
 From:   Johan Hovold <johan@kernel.org>
 To:     Frank Zago <frank@zago.net>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -35,35 +35,144 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bartosz Golaszewski <bgolaszewski@baylibre.com>,
         Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
         gunar@schorcht.net
-Subject: Re: [PATCH v2 1/2] Revert "USB: serial: ch341: add new Product ID
- for CH341A"
-Message-ID: <YJjjfx49nCflzFbR@hovoldconsulting.com>
+Subject: Re: [PATCH v2 2/2] USB: misc: Add driver for the WCH CH341 in
+ I2C/GPIO mode
+Message-ID: <YJjmfce0WKoFx35z@hovoldconsulting.com>
 References: <20210423002852.3904-1-frank@zago.net>
+ <20210423002852.3904-2-frank@zago.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210423002852.3904-1-frank@zago.net>
+In-Reply-To: <20210423002852.3904-2-frank@zago.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Apr 22, 2021 at 07:28:51PM -0500, Frank Zago wrote:
+On Thu, Apr 22, 2021 at 07:28:52PM -0500, Frank Zago wrote:
 > From: frank zago <frank@zago.net>
 > 
-> The 0x5512 USB PID is for the I2C/GPIO/SPI interfaces. UART is still
-> present but only the TX and RX pins are available; DTS, DTR, ... are
-> used for other things. Remove the PID, and let a I2C driver bind to
-> it.
+> The CH341 is a multifunction chip, presenting 3 different USB PID. One
+> of these functions is for I2C/SPI/GPIO. This new driver manages I2C
+> and GPIO. A future update will manage the SPI part as well.
 > 
-> Existing CH341 boards usually have physical jumpers to switch between
-> the 3 modes.
+> The I2C interface can run at 4 different speeds. This driver currently
+> only offer 100MHz. Tested with a variety of I2C sensors, and the IIO
+> subsystem.
 > 
-> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
+> The GPIO interface offers 8 GPIOs. 6 are read/write, and 2 are
+> rea-only. However the SPI interface will use 6 of them, leaving 2
+> available GPIOs.
+> 
+> Signed-off-by: frank zago <frank@zago.net>
+> ---
+> 
+> Changes from v1:
+>   - Removed double Signed-off-by
+>   - Move Kconfig into the same directory as the driver
+> 
+>  MAINTAINERS                         |   6 +
+>  drivers/usb/misc/Kconfig            |   2 +
+>  drivers/usb/misc/Makefile           |   1 +
+>  drivers/usb/misc/ch341/Kconfig      |  17 ++
+>  drivers/usb/misc/ch341/Makefile     |   3 +
+>  drivers/usb/misc/ch341/ch341-core.c |  87 +++++++++
+>  drivers/usb/misc/ch341/ch341-gpio.c | 249 ++++++++++++++++++++++++++
+>  drivers/usb/misc/ch341/ch341-i2c.c  | 267 ++++++++++++++++++++++++++++
+>  drivers/usb/misc/ch341/ch341.h      |  50 ++++++
+>  9 files changed, 682 insertions(+)
 
-You can't just revert something which people clearly depend on and
-therefore added to the kernel in the first place.
+Not sure about sticking this in usb/misc. We already have an MFD driver
+(dln2) for something like this with i2c and spi iirc. The difference
+from regular MFDs here is that these modes are mutually exclusive.
 
-Can you reprogram the device with a newly allocated PID to be used for
-i2c-only instead?
- 
+If it was just an i2c driver with some pins to toggle, I'd say just add
+it to drivers/i2c but that would probably make it harder to reuse code
+for the SPI driver.
+
+I'm not really reviewing the rest of the driver, just pointing out a few
+more things that stood out below.
+
+> +static void ch341_usb_free_device(struct ch341_device *dev)
+> +{
+> +	ch341_gpio_remove(dev);
+> +	ch341_i2c_remove(dev);
+
+Have you verified that the i2c subsystem can handle a device being
+removed like this while in use. That wasn't the case a few years back.
+
+> +
+> +	usb_set_intfdata(dev->iface, NULL);
+> +	usb_put_dev(dev->usb_dev);
+> +
+> +	kfree(dev);
+> +}
+> +
+> +static int ch341_usb_probe(struct usb_interface *iface,
+> +			   const struct usb_device_id *usb_id)
+> +{
+> +	struct ch341_device *dev;
+> +	int error;
+> +
+> +	dev = kzalloc(sizeof(struct ch341_device), GFP_KERNEL);
+> +	if (!dev)
+> +		return -ENOMEM;
+> +
+> +	dev->usb_dev = usb_get_dev(interface_to_usbdev(iface));
+> +	dev->iface = iface;
+> +	mutex_init(&dev->usb_lock);
+> +	dev->ep_out = iface->cur_altsetting->endpoint[1].desc.bEndpointAddress;
+> +	dev->ep_in = iface->cur_altsetting->endpoint[0].desc.bEndpointAddress;
+
+NULL-deref in case a device lacks the expected endpoints.
+
+> +
+> +	usb_set_intfdata(iface, dev);
+> +
+> +	error = ch341_i2c_init(dev);
+> +	if (error) {
+> +		ch341_usb_free_device(dev);
+> +		return error;
+> +	}
+> +
+> +	error = ch341_gpio_init(dev);
+> +	if (error) {
+> +		ch341_usb_free_device(dev);
+> +		return error;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void ch341_usb_disconnect(struct usb_interface *usb_if)
+> +{
+> +	struct ch341_device *dev = usb_get_intfdata(usb_if);
+> +
+> +	ch341_usb_free_device(dev);
+> +}
+
+> +int ch341_gpio_init(struct ch341_device *dev)
+> +{
+> +	struct gpio_chip *gpio = &dev->gpio;
+> +	int result;
+> +
+> +	gpio->label = "ch341";
+> +	gpio->parent = &dev->usb_dev->dev;
+> +	gpio->owner = THIS_MODULE;
+> +	gpio->get_direction = ch341_gpio_get_direction;
+> +	gpio->direction_input = ch341_gpio_direction_input;
+> +	gpio->direction_output = ch341_gpio_direction_output;
+> +	gpio->get = ch341_gpio_get;
+> +	gpio->get_multiple = ch341_gpio_get_multiple;
+> +	gpio->set = ch341_gpio_set;
+> +	gpio->set_multiple = ch341_gpio_set_multiple;
+> +	gpio->dbg_show = ch341_gpio_dbg_show;
+> +	gpio->base = -1;
+> +	gpio->ngpio = CH341_GPIO_NUM_PINS;
+> +	gpio->names = gpio_names;
+
+Last time I checked (a few weeks ago) you could still not set names for
+hotpluggable devices of which there could be more than one or you'd get
+a warning when plugging a second device in. Not sure if Linus W fixed
+that yet.
+
 Johan
