@@ -2,143 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BCAE378EE2
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 15:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85BAC378EE8
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 15:52:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242428AbhEJNYn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 09:24:43 -0400
-Received: from mga01.intel.com ([192.55.52.88]:14867 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348919AbhEJMrp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 May 2021 08:47:45 -0400
-IronPort-SDR: ylM7ic+Nf4AEnFt5H5yQ50+eZaZ4+076RsGUra7dW55235pKxTsrxhHPY1mlAzIf7a+LZxlDX6
- WiaBQL41Zm3Q==
-X-IronPort-AV: E=McAfee;i="6200,9189,9979"; a="220130793"
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="220130793"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 05:45:39 -0700
-IronPort-SDR: Q7H0TpO7rQN6/tGa1ZcOFjHwC2dxzp0YN6jjFUN+tO/EOqv2ea7XccDolUSV45mV5TjufiGsJ1
- QBiNZaBT7Rig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="624268577"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 10 May 2021 05:45:37 -0700
-Subject: Re: Unhandled fault: imprecise external abort (0x1406) at 0x00000000
- - PC is at xhci_hub_control
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     peter.chen@kernel.org, jackp@codeaurora.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        mathias.nyman@intel.com, Li Jun <jun.li@nxp.com>
-References: <CA+G9fYtZZoX53PjJ0VV54beMN6COccES9agttNYSzW=FbC=NFg@mail.gmail.com>
- <CA+G9fYvrhB5-Zfh7Xudetsw+rC=LE3JatW6eh8K+mXQHdDKpHQ@mail.gmail.com>
- <CA+G9fYu7h+XBKvC=j7AFNr5tTmNUYWfDWoEEHHf34Gm2jcQoxg@mail.gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <9bafb8ef-88d9-a111-5402-bb40e3da08f8@linux.intel.com>
-Date:   Mon, 10 May 2021 15:47:42 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S242476AbhEJNYr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 09:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236863AbhEJNR0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 09:17:26 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3A6C06138C;
+        Mon, 10 May 2021 06:16:19 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 82-20020a1c01550000b0290142562ff7c9so8868251wmb.3;
+        Mon, 10 May 2021 06:16:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Sh4i9feljTPFrIfpR/IU/E8n0D3Fda88xyQfypmum7w=;
+        b=GfQpYA/u/ESXNzCwhJN35I1L0Sb2vRVeukRNG83W8xG2OMlDA6+i5W0OODo/+LWE9E
+         ivWW5//Dci3M+PXPgJnH/odM7KtTO7yjQKrEe7KAvh4E7fvrd/ZuLkJAZP62sWtsDMuB
+         AIqgCRqoTLZzj0iGC6/REa3QuGlmZjiRxifV0mZYrMLJSap8JjiujnvbMmFTzTlx+O95
+         x9XnwiLNDr5qqWcsdoyW+ETG1hWAlzA+FW12aKJEwh2j5DlnppfpjkE6ahf9DAyZ8V+v
+         c4HLN0tsaWZM2+zfMzrOFU3u/mXI98pyg6LlDYSgFBtDuHlk1DmX0lhge4HX1KOLhtwA
+         z+4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Sh4i9feljTPFrIfpR/IU/E8n0D3Fda88xyQfypmum7w=;
+        b=cYGoVbnuzC8qi/rSzJ+ExaPcPY6WDiRnoQYrUOJUW/LDLaupeK70YlIz31CC6DpEIO
+         YjQqqXw2K1KRvLE2EmkMqZgmSNaOqjLw3WgaQER7nKYN78smSnUQvql/Lq9C3BYIAbbS
+         A89hiMUo84LxHpIIH5PXWbH2rmZnREpJ+CAq/H0QPEPvY3481ifRRLSpOK8Cv3AHyzwB
+         Y9C4Y5kQCgYC6MsNt9LSL+mATP7JJWBNR9KZjed7REYhOTmkJTYOrQnd1aSrwgzazjvo
+         Ixtv6yd4OPdU4nF7WYCxOtY9Watsai28mxpDWeEFK5xhy198jgxuKAvRFJqigderRiYZ
+         zU/w==
+X-Gm-Message-State: AOAM5320WfRdSTq1VXESkXjcB7G2WrDl9rtLEDxZcnwiFr7WOtK+XUaU
+        ikYqT3CuD1N4pbhEXWdxDhI=
+X-Google-Smtp-Source: ABdhPJysoQ4YBpE1J87NsTC/Z24p8NQqGLKPSudpVCmtLwZFhM2Wy0R7/k0aKiXMKdpTI23nPdYVEw==
+X-Received: by 2002:a05:600c:47d7:: with SMTP id l23mr36980376wmo.95.1620652578722;
+        Mon, 10 May 2021 06:16:18 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159425-cmbg20-2-0-cust403.5-4.cable.virginm.net. [86.7.189.148])
+        by smtp.gmail.com with ESMTPSA id s1sm27945073wmj.8.2021.05.10.06.16.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 May 2021 06:16:17 -0700 (PDT)
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+ <2ae366fdff4bd5910a2270823e8da70521c859af.camel@infradead.org>
+ <20210510135518.305cc03d@coco.lan>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <df6b4567-030c-a480-c5a6-fe579830e8c0@gmail.com>
+Date:   Mon, 10 May 2021 14:16:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-In-Reply-To: <CA+G9fYu7h+XBKvC=j7AFNr5tTmNUYWfDWoEEHHf34Gm2jcQoxg@mail.gmail.com>
+In-Reply-To: <20210510135518.305cc03d@coco.lan>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.5.2021 14.05, Naresh Kamboju wrote:
-> On Mon, 10 May 2021 at 16:22, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>
->> On Mon, 10 May 2021 at 16:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->>>
->>> The kernel crash reported on arm architecture BeagleBoard-X15 device running
->>> Linux next 5.13.0-rc1-next-20210510 while booting the device.
->>>
->>> [    4.956085] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
->>> [    4.961639] xhci-hcd xhci-hcd.1.auto: new USB bus registered,
->>> assigned bus number 2
->>> [    4.969360] xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
->>> [    4.976165] usb usb2: We don't know the algorithms for LPM for this
->>> host, disabling LPM.
->>> [    4.985321] hub 2-0:1.0: USB hub found
->>> [    4.989196] hub 2-0:1.0: 1 port detected
->>> [    5.002197] Waiting for root device
->>> PARTUUID=6b10e805-12ad-b44e-88b8-3abf3d5f52ed...
->>> [    5.022918] 8<--- cut here ---
->>> [    5.026000] Unhandled fault: imprecise external abort (0x1406) at 0x00000000
->>> [    5.033root
->>> 081] pgd = ff6a1748
->>> [    5.035797] [00000000] *pgd=00000000
->>> [    5.039398] Internal error: : 1406 [#1] SMP ARM
->>> [    5.043975] Modules linked in:
->>> [    5.047027] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted
->>> 5.13.0-rc1-next-20210510 #1
->>> [    5.054809] Hardware name: Generic DRA74X (Flattened Device Tree)
->>> [    5.060943] Workqueue: pm pm_runtime_work
->>> [    5.065002] PC is at xhci_hub_control+0xd00/0x248c
->>> [    5.069824] LR is at arm_heavy_mb+0x44/0x48
->>
->> Since, this crash is not easily reproducible I could bisect it.
-> 
-> sorry, i mean i could *not*
-> 
-> Since, this crash is not easily reproducible I could not bisect it.
+On 10/05/2021 12:55, Mauro Carvalho Chehab wrote:
+> The main point on this series is to replace just the occurrences
+> where ASCII represents the symbol equally well
 
-Looks like USB SS roothub is trying to runtime suspend early during boot.
+> 	- U+2014 ('—'): EM DASH
+Em dash is not the same thing as hyphen-minus, and the latter does not
+ serve 'equally well'.  People use em dashes because — even in
+ monospace fonts — they make text easier to read and comprehend, when
+ used correctly.
+I accept that some of the other distinctions — like en dashes — are
+ needlessly pedantic (though I don't doubt there is someone out there
+ who will gladly defend them with the same fervour with which I argue
+ for the em dash) and I wouldn't take the trouble to use them myself;
+ but I think there is a reasonable assumption that when someone goes
+ to the effort of using a Unicode punctuation mark that is semantic
+ (rather than merely typographical), they probably had a reason for
+ doing so.
 
-Any chance you could look up the source line of xhci_hub_control+0xd00/0x248c in your kernel?
-gdb vmlinux
-li *(xhci_hub_control+0xd00)
+> 	- U+2018 ('‘'): LEFT SINGLE QUOTATION MARK
+> 	- U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
+> 	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
+> 	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
+(These are purely typographic, I have no problem with dumping them.)
 
-Thanks
--Mathias
+> 	- U+00d7 ('×'): MULTIPLICATION SIGN
+Presumably this is appearing in mathematical formulae, in which case
+ changing it to 'x' loses semantic information.
 
+> Using the above symbols will just trick tools like grep for no good
+> reason.
+NBSP, sure.  That one's probably an artefact of some document format
+ conversion somewhere along the line, anyway.
+But what kinds of things with × or — in are going to be grept for?
+
+If there are em dashes lying around that semantically _should_ be
+ hyphen-minus (one of your patches I've seen, for instance, fixes an
+ *en* dash moonlighting as the option character in an `ethtool`
+ command line), then sure, convert them.
+But any time someone is using a Unicode character to *express
+ semantics*, even if you happen to think the semantic distinction
+ involved is a pedantic or unimportant one, I think you need an
+ explicit grep case to justify ASCIIfying it.
+
+-ed
