@@ -2,135 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B56253797CC
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 21:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B92237990B
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 23:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbhEJTj4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 15:39:56 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44027 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231419AbhEJTjz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 15:39:55 -0400
-Received: (qmail 874828 invoked by uid 1000); 10 May 2021 15:38:49 -0400
-Date:   Mon, 10 May 2021 15:38:49 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Disconnect race in Gadget core
-Message-ID: <20210510193849.GB873147@rowland.harvard.edu>
-References: <20210510152426.GE863718@rowland.harvard.edu>
- <87zgx2fskr.fsf@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87zgx2fskr.fsf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S232755AbhEJVTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 17:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232629AbhEJVTJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 17:19:09 -0400
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D3C061574
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 14:18:03 -0700 (PDT)
+Received: by mail-qv1-xf4a.google.com with SMTP id l19-20020a0ce5130000b02901b6795e3304so13681231qvm.2
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 14:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=fOUt7jyxTxQWRxk0PzBiNaOdQXs8xFEX4FJ9XZ8V9KU=;
+        b=KXcO5M1/TzhY6MkN5ziAmFFZjOF3kdv5d97DKFANugusD9l2y6ZCsaCPKqDZXIOD83
+         83egjYQreuHUbCv4Co6WM6ymwAeHXslL6jlyThyqPEjVUoPr+Bb2LooXNJo+VyUKaz24
+         IC5sWgKgPWBg8PW5IP40onVJmbQbswXSo7+Ni7dvmg66525SvG6gKRQ8VyvrEeBW1HkA
+         snhJQKXXBxGTkPSX9x4WmUdklWWiUYNvM3cdeQj/TgbywQ2RFXECJRyTgTzn6NCRkB05
+         dJUmLX+Bf5YpXd56o7nCVX/7fw4sVkeA2cwkNs1+AWHG+8cyOKcl4xi4Lw51xYhAKYUf
+         yWzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
+         :content-transfer-encoding;
+        bh=fOUt7jyxTxQWRxk0PzBiNaOdQXs8xFEX4FJ9XZ8V9KU=;
+        b=s4JvR9bOzI/lKe66y1NKXSI60RJZGcWWyfS6lpgaLdAWmBqwCKWuRx6rK/qqIMqtRO
+         udLlsvhwbXk4OExfeT0kKbw1V3lTD/KPikl6/BQshILnYsb5/f8MdZ/R087HHZ9FuWj9
+         Y1FPwHwVDDPAq9i5y8jxuXbTUAMEZsVyCLrJcwS8P9JqrqOoJ9ppedIWQi5JIfL4AAyK
+         A30stUVDLu1i1Qn8j5WupERKD9D21dc67CZMF1YAc308gpHQbN6zBfOzgGm1JrFKieQx
+         +rFKdYx5tTKnQ/Xs4S8vOFUzE0tm31OmtXBifJDGa/Rsr46Jb7kMYaaAB/gbVsoekFdd
+         EF8Q==
+X-Gm-Message-State: AOAM533QDdsUeIPlnKhABhrF73eWK27TDzrVrLovdQhS0WsFB4Am1S6D
+        QSJbrvFh4zZqB/6LSwBrN+HitLLExCM=
+X-Google-Smtp-Source: ABdhPJznNuZy7AUuSXEZjpFtBSuWKM5IczrU2g8EH4/ODXPTH36XAVX1NVz6KRKdSxiSDSI9hA30iHg08DM=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:9a43:a71b:9ef5:f219])
+ (user=badhri job=sendgmr) by 2002:a0c:ef06:: with SMTP id t6mr25422265qvr.17.1620681482498;
+ Mon, 10 May 2021 14:18:02 -0700 (PDT)
+Date:   Mon, 10 May 2021 14:17:56 -0700
+Message-Id: <20210510211756.3346954-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
+Subject: [PATCH] usb: typec: tcpm: Fix SINK_DISCOVERY current limit for Rp-default
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 10, 2021 at 07:43:00PM +0300, Felipe Balbi wrote:
-> 
-> Hi Alan,
-> 
-> Alan Stern <stern@rowland.harvard.edu> writes:
-> > I just noticed this potential race in the Gadget core, specifically, in 
-> > usb_gadget_remove_driver.  Here's the relevant code:
-> >
-> > 	usb_gadget_disconnect(udc->gadget);
-> > 	if (udc->gadget->irq)
-> > 		synchronize_irq(udc->gadget->irq);
-> > 	udc->driver->unbind(udc->gadget);
-> > 	usb_gadget_udc_stop(udc);
-> >
-> > usb_gadget_disconnect will turn off the D+ pull-up, telling the host (or 
-> > upstream hub) that the gadget is no longer connected to the bus.  The 
-> > udc->driver->unbind call then tells the gadget driver that it will no 
-> > longer receive any callbacks from the UDC driver or the gadget core.
-> >
-> > Now suppose that at just this moment, the user unplugs the USB cable.  
-> > The UDC driver will notice that the Vbus voltage has gone away and will 
-> > invoke the gadget driver's ->disconnect callback.  After all, it doesn't 
-> > realize it should avoid making these callbacks until usb_gadget_udc_stop 
-> > has run.
-> >
-> > As a result, the gadget driver's disconnect callback may be invoked 
-> > _after_ the driver has been unbound from the gadget.
-> 
-> argh, nice catch!
-> 
-> > How should we fix this potential problem?
-> 
-> I think we can just move usb_gadget_udc_stop(). Looking at a few udcs,
-> they're just either freeing or masking UDC's interrupts which should
-> prevent the race you describe while also making sure that no further
-> interrupts will trigger.
-> 
-> Perhaps we could move udc_stop() before synchronize_irq(). Do you
-> foresee any issues with that for net2272 or dummy?
+This is a regression introduced by
+<1373fefc6243cc96b3565f0ffffadfac4ccfb977>
+"Allow slow charging loops to comply to pSnkStby".
 
-I don't think it will be that easy.  As you may remember, there have 
-been a number of commits over the years fiddling with the order of 
-operations during gadget driver unbinding (although I don't think any of 
-them moved udc_stop from its position at the end).  Still, it's a 
-delicate matter.
+When Source advertises Rp-default, tcpm would request 500mA when in
+SINK_DISCOVERY, Type-C spec advises the sink to follow BC1.2 current
+limits when Rp-default is advertised.
+[12750.503381] Requesting mux state 1, usb-role 2, orientation 1
+[12750.503837] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
+[12751.003891] state change SNK_STARTUP -> SNK_DISCOVERY
+[12751.003900] Setting voltage/current limit 5000 mV 500 mA
 
-The purpose of synchronize_irq is to wait until any currently running 
-IRQ handlers have finished.  Obviously this doesn't do any good unless 
-the software has arranged beforehand that no new interrupt requests will 
-be generated.  In this case, turning off the pull-up is currently not 
-sufficient.  But waiting until after udc_stop has returned isn't the 
-answer; it wouldn't prevent callbacks from being issued between the 
-unbind and the udc_stop.
+This patch restores the behavior where the tcpm would request 0mA when
+Rp-default is advertised by the source.
+[ =C2=A0 73.174252] Requesting mux state 1, usb-role 2, orientation 1
+[ =C2=A0 73.174749] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS=
+]
+[ =C2=A0 73.674800] state change SNK_STARTUP -> SNK_DISCOVERY
+[ =C2=A0 73.674808] Setting voltage/current limit 5000 mV 0 mA
 
-And I'm quite sure that calling udc_stop before unbind would be wrong.  
-The gadget driver would then get various errors (like requests 
-completing with -ESHUTDOWN status) it's not prepared to handle.
+During SNK_DISCOVERY, Cap the current limit to PD_P_SNK_STDBY_MW / 5 only
+for slow_charger_loop case.
 
-So what we need is a way to tell the UDC driver to stop issuing 
-callbacks.  The ones defined in struct usb_gadget_driver are:
+Fixes: 1373fefc6243 ("Allow slow charging loops to comply to pSnkStby")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-	bind and unbind,
-	bus suspend and bus resume,
-	setup,
-	bus reset,
-	disconnect.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c4fdc00a3bc8..a73299a08ef7 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4055,7 +4055,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 		if (port->vbus_present) {
+ 			u32 current_lim =3D tcpm_get_current_limit(port);
+=20
+-			if (port->slow_charger_loop || (current_lim > PD_P_SNK_STDBY_MW / 5))
++			if (port->slow_charger_loop && (current_lim > PD_P_SNK_STDBY_MW / 5))
+ 				current_lim =3D PD_P_SNK_STDBY_MW / 5;
+ 			tcpm_set_current_limit(port, current_lim, 5000);
+ 			tcpm_set_charge(port, true);
+--=20
+2.31.1.607.g51e8a6a459-goog
 
-Bind and unbind aren't relevant for this discussion because they are 
-synchronous, not invoked in response to interrupts.
-
-In theory there shouldn't be any bus-resume, setup, or bus-reset 
-interrupts once the pull-up is turned off, but it would be good to 
-protect against bad hardware which may produce them.
-
-Bus suspend is a real possibility.  It occurs when the UDC hasn't 
-received any packets for a few milliseconds, which certainly will be the 
-case when the pull-up is off.  UDC hardware and drivers may or may not 
-be smart enough to realize that under this circumstance, lack of packets 
-shouldn't be reported as a bus suspend.
-
-And of course, a cable disconnect can occur at any time -- nothing we 
-can do about that.
-
-Putting it all together, we need to tell the UDC driver, somewhere 
-between turning the pull-up off and doing the synchronize_irq, to stop 
-issuing disconnect (and possibly also setup and suspend) callbacks.  I 
-don't think we can use the pull-up call for this purpose; a gadget 
-driver may want for some reason to disconnect logically from the bus 
-while still knowing whether Vbus is present.  (You may disagree about 
-that, but otherwise what's the point of having a disconnect callback in 
-the first place?)
-
-Which means in the end that struct usb_gadget_ops needs either to have a 
-new callback for this purpose or to have an existing callback augmented 
-(for example, the ->pullup callback could get an additional argument 
-saying whether to continue issuing callbacks).  Or another possibility 
-is to make UDC drivers call a core routine to do disconnect callbacks 
-instead of issuing those callbacks themselves, and have the core filter 
-out callbacks that come at the wrong time.  Either way, every UDC driver 
-would need to be modified.
-
-What do you think?  Is this reasoning accurate, or have I missed 
-something?
-
-Alan Stern
