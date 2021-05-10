@@ -2,136 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 580873775C9
-	for <lists+linux-usb@lfdr.de>; Sun,  9 May 2021 09:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 082A8377992
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 02:55:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbhEIHcP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 May 2021 03:32:15 -0400
-Received: from salscheider.org ([202.61.254.1]:46028 "EHLO
-        mail.salscheider.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbhEIHcP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 May 2021 03:32:15 -0400
-Received: from [IPv6:2001:16b8:227b:b600:afd9:e4e9:1199:3646] (200116b8227bb600afd9e4e911993646.dip.versatel-1u1.de [IPv6:2001:16b8:227b:b600:afd9:e4e9:1199:3646])
-        by mail.salscheider.org (Postfix) with ESMTPSA id 98DDA468A6C;
-        Sun,  9 May 2021 09:31:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=salscheider.org;
-        s=dkim; t=1620545471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bs7DUTyzcswaCYvkDZdeFMQaz+/ltkKViMQHiqypPAQ=;
-        b=ceVqOqyV+75EwwLP1JAlZ4ci5I3C0aWgbFoWfsEqVDJVXHMFG82WuJAn4fwC/xhclCTBav
-        JIhBhmIXQpwfTfgxm5XewEDPpWaxr96hd+VNQ80GfaJ7sOdL26DnLWFAtkecPbIw6nO8VK
-        ZE6XMNzpoxM38S0P47xSs3z6M76Chw0=
-Subject: Re: [PATCH] [RFC] xhci: Add Link TRB sync quirk for ASM3142
-To:     Forest Crossman <cyrozap@gmail.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <20210416093729.41865-1-ole@salscheider.org>
- <9bf0060c-3427-a261-531c-c075054ae094@linux.intel.com>
- <5c92dd8c-c8b0-40b5-addb-2df360673462@salscheider.org>
- <a8b56a79-e092-a344-7508-8c22b6568898@salscheider.org>
- <e68b481e-a9a1-787e-b263-461bc9597b65@intel.com>
- <c9a18ec2-7fb1-f206-1d27-ce3fa52be762@salscheider.org>
- <9335fdde-4996-1fe5-42ac-fc70bb98d20c@linux.intel.com>
- <5ed67ab2-39de-c2d9-647a-df88dac3e6e5@salscheider.org>
- <41cd7996-f30e-8519-5aa3-264ddfc1473a@salscheider.org>
- <2c93e750-70e0-792f-1f10-e416751270b7@linux.intel.com>
- <CAO3ALPx9CBqggJGVpo_qowRPr5haR0wKMu27eN9GPXD3b_bW+Q@mail.gmail.com>
-From:   Ole Salscheider <ole@salscheider.org>
-Message-ID: <d7bb3888-a596-481e-829f-cf3276edb5f4@salscheider.org>
-Date:   Sun, 9 May 2021 09:31:09 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        id S230083AbhEJA4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 May 2021 20:56:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34226 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229941AbhEJA4U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 9 May 2021 20:56:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A080613CD;
+        Mon, 10 May 2021 00:55:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620608117;
+        bh=Cg+Qf/Kiv1aQGBq6X+ZOMeULI7z8X72fzmy/0si3naA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l/IHw+opG80m/7CfEYFPurQPCUNaBfzea3rCyTKgn4akLr+p1ruOw5IfvcLCjeTS5
+         9cdBPqaSSOn4krncqX2HyqVlX1gIlT61K4zqui6PhoWyeZUWZSOHfeq/7XKLm085lk
+         j4Viov0902f7uFLw/wu6Y7HgdnpX9ZEYf5Z6G3c1pwOHSKNdOXVobAXBQ9twRpxYN3
+         g4QlVd6jjlz2Baojm3xtnQl3PLHpYZVHXvyo0FFSxmzBghlH0AslLh7QPPMfKBR/rl
+         Xbd8ZmKZ5N5qnunQGQd6bqYSMGwLrrwJhEWBWBT7xBrwM1RBjUPrk9C/UI/fmxVS57
+         zmJ9I6USEgu8g==
+Date:   Mon, 10 May 2021 08:55:12 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Replace list_for_each_entry_safe() if
+ using giveback
+Message-ID: <20210510005512.GA7668@nchen>
+References: <1620412923-11990-1-git-send-email-wcheng@codeaurora.org>
+ <20210508034551.GA2728@nchen>
+ <cec4b493-ff09-4543-661e-68c0c4d44e0f@codeaurora.org>
 MIME-Version: 1.0
-In-Reply-To: <CAO3ALPx9CBqggJGVpo_qowRPr5haR0wKMu27eN9GPXD3b_bW+Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cec4b493-ff09-4543-661e-68c0c4d44e0f@codeaurora.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 09.05.21 02:01, Forest Crossman wrote:
-> On Thu, May 6, 2021 at 4:06 AM Mathias Nyman
-> <mathias.nyman@linux.intel.com> wrote:
->>
->> On 5.5.2021 10.56, Ole Salscheider wrote:
->>> Hi Mathias,
->>>
->>> ...
->>>
->>>>> How about a different approach?
->>>>> If the issue is only with transfers starting on the last TRB before the link TRB, we could turn that TRB to a no-op.
->>>>> Does something like the code below help?
->>>>>
->>>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
->>>>> index 6cdea0d00d19..0ffda8127640 100644
->>>>> --- a/drivers/usb/host/xhci-ring.c
->>>>> +++ b/drivers/usb/host/xhci-ring.c
->>>>> @@ -3181,6 +3181,12 @@ static int prepare_ring(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
->>>>>            }
->>>>>        }
->>>>> +    if (ep_ring != xhci->cmd_ring &&
->>>>> +        !trb_is_link(ep_ring->enqueue) &&
->>>>> +        trb_is_link(ep_ring->enqueue + 1))
->>>>> +        queue_trb(xhci, ep_ring, 0, 0, 0, 0,
->>>>> +              TRB_TYPE(TRB_TR_NOOP) | ep_ring->cycle_state);
->>>>> +
->>>>>        while (trb_is_link(ep_ring->enqueue)) {
->>>>>            /* If we're not dealing with 0.95 hardware or isoc rings
->>>>>             * on AMD 0.96 host, clear the chain bit.
->>>>
->>>> Your patch seems to work. I can record video with this and it seems stable so far.
->>>>
->>>> But there is still something off (as with my patch): If I stop the video recording and try to record again, the camera does not give me any frames. Maybe this is an unrelated issue but it works fine on the two other host controllers that I tested.
->>>>
->>>> If you are interested you can find a trace here:
->>>> https://stuff.salscheider.org/dmesg_second
->>>> https://stuff.salscheider.org/trace_second
->>>>
->>>> In this trace I recorded a few seconds of video with ffmpeg, killed it (at second 108) and restarted it (at second 116). Can you see anything suspicious in the trace?
->>>
->>> I guess this second issue is unrelated. The cameras have worked stable so far with your patch. It might be good to include this workaround in mainline. Will you take care of it or should I send something to the list?
->>>
->>
->> This is still not a very nice solution. We have no clue about the actual rootcause.
->>
->> I remember now there was a similar issue with an earlier ASMedia host some years ago.
->> This was fixed by modifying some internal flowcontol parameters of the host in:
->>
->> 9da5a1092b13 xhci: Bad Ethernet performance plugged in ASM1042A host
->>
->> Not sure if  Jiahau Chang (cc) works on this anymore, but maybe he knows who to contact.
->> Also adding Forest Crossman who has committed ASMediad fixes lately
->>
->> Any clue about the rootcause?
->> thread:
->> https://lore.kernel.org/linux-usb/20210416093729.41865-1-ole@salscheider.org
+On 21-05-08 01:15:49, Wesley Cheng wrote:
 > 
-> Unfortunately, I don't know what could be causing this. The only thing
-> I would suggest is to see if this problem happens (without the patch)
-> while the USB device is connected directly to a port on the ASMedia
-> host controller, with no other hubs or devices connected to that
-> controller. The only problem I've been seeing with my various ASMedia
-> cards is when I try to do a lot of bulk reads from multiple devices
-> simultaneously (e.g., when dd-ing from multiple hard drives to
-> /dev/null). In those cases, the controller eventually triggers an
-> IOMMU page access violation, which causes the kernel to reset the PCIe
-> endpoint. So if the camera works fine when it's the only device
-> connected to the host controller (without any patches applied), that
-> might indicate that this is the same issue. But that's mostly a wild
-> guess--I don't know enough of the USB or xHCI standards to really
-> understand what's going on.
-
-The problem occurs here also if only one camera and no other device are 
-connected to the ASMedia host controller.
-
-> Best of luck resolving this issue,
 > 
-> Forest
+> On 5/7/2021 8:45 PM, Peter Chen wrote:
+> > On 21-05-07 11:42:03, Wesley Cheng wrote:
+> >> The list_for_each_entry_safe() macro saves the current item (n) and
+> >> the item after (n+1), so that n can be safely removed without
+> >> corrupting the list.  However, when traversing the list and removing
+> >> items using gadget giveback, the DWC3 lock is briefly released,
 > 
+> Hi Peter,
+> 
+> Thanks for the review.
+> 
+> > 
+> > I see dwc3_gadget_del_and_unmap_request remove the list, the lock is
+> > still held there. Am I something wrong?
+> > 
+> 
+> The scenario the issue happens in is say the follow thread is running
+> the sequence below:
+> 
+> Thread#1:
+> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>     ->list_for_each_entry_safe()
+>     ->dwc3_gadget_giveback()
+>       ->dwc3_gadget_del_and_unmap_request()-n deleted cancelled_list
+>       ->spin_unlock
+> 
+> Thread#2:
+> dwc3_gadget_pullup()
+>   ->waiting for dwc3 spin_lock
+>   ->Thread#1 released lock
+>   ->dwc3_stop_active_transfers()
+>     ->dwc3_remove_requests()
+>       ->fetches n+1 item from cancelled_list (n removed by thread#1)
+>       ->dwc3_gadget_giveback()
+>         ->dwc3_gadget_del_and_unmap_request()-n+1 deleted cancelled_list
+>         ->spin_unlock
+> 
+> So now, if thread#1 takes the DWC3 lock again, it will continue to item
+> n+1, which was already removed by thread#2, leading to a double list
+> removal.  We saw this issue on our platform after enabling list debug.
+
+It is cleared now. Would you please update commit log a little by appending
+your call stack analysis?
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
+> 
+> Thanks
+> Wesley Cheng
+> 
+> > Peter
+> >        
+> >> allowing other routines to execute.  There is a situation where while
+> >> items are being removed from the cancelled_list using
+> >> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+> >> routine is running in parallel (due to UDC unbind).  As the cleanup
+> >> routine removes n, and the pullup disable removes n+1, once the
+> >> cleanup retakes the DWC3 lock, it references a request who was already
+> >> removed/handled.  With list debug enabled, this leads to a panic.
+> >> Ensure all instances of the macro are replaced where gadget giveback
+> >> is used.
+> >>
+> >> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+> >> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> >> ---
+> >>  drivers/usb/dwc3/gadget.c | 8 ++++----
+> >>  1 file changed, 4 insertions(+), 4 deletions(-)
+> >>
+> >> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> >> index dd80e5c..efa939b 100644
+> >> --- a/drivers/usb/dwc3/gadget.c
+> >> +++ b/drivers/usb/dwc3/gadget.c
+> >> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+> >>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+> >>  {
+> >>  	struct dwc3_request		*req;
+> >> -	struct dwc3_request		*tmp;
+> >>  	struct dwc3			*dwc = dep->dwc;
+> >>  
+> >> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+> >> +	while (!list_empty(&dep->cancelled_list)) {
+> >> +		req = next_request(&dep->cancelled_list);
+> >>  		dwc3_gadget_ep_skip_trbs(dep, req);
+> >>  		switch (req->status) {
+> >>  		case DWC3_REQUEST_STATUS_DISCONNECTED:
+> >> @@ -2935,11 +2935,11 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+> >>  		const struct dwc3_event_depevt *event, int status)
+> >>  {
+> >>  	struct dwc3_request	*req;
+> >> -	struct dwc3_request	*tmp;
+> >>  
+> >> -	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
+> >> +	while (!list_empty(&dep->started_list)) {
+> >>  		int ret;
+> >>  
+> >> +		req = next_request(&dep->started_list);
+> >>  		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
+> >>  				req, status);
+> >>  		if (ret)
+> >> -- 
+> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> >> a Linux Foundation Collaborative Project
+> >>
+> > 
+> 
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+
+-- 
+
+Thanks,
+Peter Chen
+
