@@ -2,98 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A663791F8
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 17:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20C9937929B
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 17:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241550AbhEJPGt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 11:06:49 -0400
-Received: from mga03.intel.com ([134.134.136.65]:18899 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235326AbhEJPFY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 May 2021 11:05:24 -0400
-IronPort-SDR: 3d5S3Swa/9p9Ugalhr8YwapLF6TJL2CYMzXfJm9s3KELeX4eI2GRlLMRMZUDR0Vs+43a0oG97Y
- u1ObvhnBRwSQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="199266347"
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="199266347"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 08:04:02 -0700
-IronPort-SDR: IOjie96ZhmgBakkWhU2dJA996iOyKlZJgdodqHtw3Qv0We3mF69WZ562+YavWqrvP7cHA1djcp
- KCtcD6gLXJ3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,287,1613462400"; 
-   d="scan'208";a="468259165"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 10 May 2021 08:03:56 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 88ECF1D2; Mon, 10 May 2021 18:04:16 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Petr Mladek <pmladek@suse.com>, JC Kuo <jckuo@nvidia.com>,
-        Joe Perches <joe@perches.com>,
-        Sumit Garg <sumit.garg@linaro.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: [PATCH v1 4/4] usb: host: xhci-tegra: Switch to use %ptTs
-Date:   Mon, 10 May 2021 18:04:13 +0300
-Message-Id: <20210510150413.59356-4-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210510150413.59356-1-andriy.shevchenko@linux.intel.com>
-References: <20210510150413.59356-1-andriy.shevchenko@linux.intel.com>
+        id S237191AbhEJP0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 11:26:18 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:39623 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S237702AbhEJPZj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 11:25:39 -0400
+Received: (qmail 866184 invoked by uid 1000); 10 May 2021 11:24:26 -0400
+Date:   Mon, 10 May 2021 11:24:26 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Disconnect race in Gadget core
+Message-ID: <20210510152426.GE863718@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use %ptTs instead of open coded variant to print contents
-of time64_t type in human readable form.
+Felipe:
 
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Jonathan Hunter <jonathanh@nvidia.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/host/xhci-tegra.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+I just noticed this potential race in the Gadget core, specifically, in 
+usb_gadget_remove_driver.  Here's the relevant code:
 
-diff --git a/drivers/usb/host/xhci-tegra.c b/drivers/usb/host/xhci-tegra.c
-index ce97ff054c68..937b78cba89b 100644
---- a/drivers/usb/host/xhci-tegra.c
-+++ b/drivers/usb/host/xhci-tegra.c
-@@ -890,7 +890,6 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
- 	struct xhci_op_regs __iomem *op;
- 	unsigned long timeout;
- 	time64_t timestamp;
--	struct tm time;
- 	u64 address;
- 	u32 value;
- 	int err;
-@@ -987,11 +986,8 @@ static int tegra_xusb_load_firmware(struct tegra_xusb *tegra)
- 	}
- 
- 	timestamp = le32_to_cpu(header->fwimg_created_time);
--	time64_to_tm(timestamp, 0, &time);
- 
--	dev_info(dev, "Firmware timestamp: %ld-%02d-%02d %02d:%02d:%02d UTC\n",
--		 time.tm_year + 1900, time.tm_mon + 1, time.tm_mday,
--		 time.tm_hour, time.tm_min, time.tm_sec);
-+	dev_info(dev, "Firmware timestamp: %ptTs UTC\n", &timestamp);
- 
- 	return 0;
- }
--- 
-2.30.2
+	usb_gadget_disconnect(udc->gadget);
+	if (udc->gadget->irq)
+		synchronize_irq(udc->gadget->irq);
+	udc->driver->unbind(udc->gadget);
+	usb_gadget_udc_stop(udc);
 
+usb_gadget_disconnect will turn off the D+ pull-up, telling the host (or 
+upstream hub) that the gadget is no longer connected to the bus.  The 
+udc->driver->unbind call then tells the gadget driver that it will no 
+longer receive any callbacks from the UDC driver or the gadget core.
+
+Now suppose that at just this moment, the user unplugs the USB cable.  
+The UDC driver will notice that the Vbus voltage has gone away and will 
+invoke the gadget driver's ->disconnect callback.  After all, it doesn't 
+realize it should avoid making these callbacks until usb_gadget_udc_stop 
+has run.
+
+As a result, the gadget driver's disconnect callback may be invoked 
+_after_ the driver has been unbound from the gadget.
+
+How should we fix this potential problem?
+
+Alan Stern
