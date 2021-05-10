@@ -2,164 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 082A8377992
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 02:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9151377A24
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 04:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbhEJA4V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 9 May 2021 20:56:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34226 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229941AbhEJA4U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 9 May 2021 20:56:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8A080613CD;
-        Mon, 10 May 2021 00:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620608117;
-        bh=Cg+Qf/Kiv1aQGBq6X+ZOMeULI7z8X72fzmy/0si3naA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l/IHw+opG80m/7CfEYFPurQPCUNaBfzea3rCyTKgn4akLr+p1ruOw5IfvcLCjeTS5
-         9cdBPqaSSOn4krncqX2HyqVlX1gIlT61K4zqui6PhoWyeZUWZSOHfeq/7XKLm085lk
-         j4Viov0902f7uFLw/wu6Y7HgdnpX9ZEYf5Z6G3c1pwOHSKNdOXVobAXBQ9twRpxYN3
-         g4QlVd6jjlz2Baojm3xtnQl3PLHpYZVHXvyo0FFSxmzBghlH0AslLh7QPPMfKBR/rl
-         Xbd8ZmKZ5N5qnunQGQd6bqYSMGwLrrwJhEWBWBT7xBrwM1RBjUPrk9C/UI/fmxVS57
-         zmJ9I6USEgu8g==
-Date:   Mon, 10 May 2021 08:55:12 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Replace list_for_each_entry_safe() if
- using giveback
-Message-ID: <20210510005512.GA7668@nchen>
-References: <1620412923-11990-1-git-send-email-wcheng@codeaurora.org>
- <20210508034551.GA2728@nchen>
- <cec4b493-ff09-4543-661e-68c0c4d44e0f@codeaurora.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cec4b493-ff09-4543-661e-68c0c4d44e0f@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S230114AbhEJCdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 9 May 2021 22:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229977AbhEJCdg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 9 May 2021 22:33:36 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9208DC061573;
+        Sun,  9 May 2021 19:32:31 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id b15so2208565plh.10;
+        Sun, 09 May 2021 19:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=3fuoFRHs9de/EFAgzJGEliLd6nu5MCTkTqOJM1BxOvo=;
+        b=n9vOt9/ZNuS6Ih8n5lfVTKokS0LAyYvKe7j03Mito2p65BoDqMIQAPAH2yLDsod3Y1
+         Ykh8haa4M2z28rjDeUfUgOEsX/wElhRkiEMLeI00NIQo0GqoU5BPQ0wme0z8LOIK+g30
+         nwVvd6eYY01jUa7WLVVU/tLq0H2j6RXz/4+abKvFUlsk0pTYww+VO4UfsFnHmScKydXw
+         74xVgMSIca8ibe0bICoz+/7kYxK7m0T2eNI7z2ursqdV/B4YSxW70/xX8z2AbLtlKI+M
+         3E+a8Lg0EmPxMjwTKTeSD10dS9F+/iosbXPrCROVpPXeFdi9t80hMbZQLcsTrjIej9UR
+         PqCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=3fuoFRHs9de/EFAgzJGEliLd6nu5MCTkTqOJM1BxOvo=;
+        b=X6EueqIQYAbms4Od6Us49iw9PHWJqML/VMaSI4zkg0uY3lJm6tQyhbs5bnwm5MIJaV
+         POejUtsRHXyIomgLHX0AqKOc98h1xkbLGPxUxxpxAc7IxoUKhyr5fBi2ST9MMJ5rKcwy
+         NW/bYx84B5SnOXGl6ZgkhrAfE782ceYofLDkCXh/CsrA+1VI7GY2nE9GXRT6wTQF/Y9s
+         zafADMNrOtA4+yEfABDvqdCrH9t7zi0NQT1PqoMy+p3XfjTuRcG9mP7+wVe2QDlRk9Fc
+         Q2kzX0lrwAJN72gmBw9/R4wKgEcnEJjqjHvWztCLLZESqddILycTVITk7mQljemYDK3U
+         RVVg==
+X-Gm-Message-State: AOAM530oaXCq0TiK8C9t9JbQiS1r8hGzBh3s9bF5Juxm3GUspOTLt8oa
+        otThuqookiOPgL3yhS13siU+dh95vCFCZNkyBCs=
+X-Google-Smtp-Source: ABdhPJwtRWeuuj7+FFxYhg8N7VHj21VLc9AI08l9FRy2O6b2bUlvPWUflhi5r1X7GKloQatYubSKVw==
+X-Received: by 2002:a17:90b:4b45:: with SMTP id mi5mr39619973pjb.197.1620613951049;
+        Sun, 09 May 2021 19:32:31 -0700 (PDT)
+Received: from LinuxTest-8928.adlinktech.com (210-59-165-169.HINET-IP.hinet.net. [210.59.165.169])
+        by smtp.googlemail.com with ESMTPSA id t10sm17921985pju.18.2021.05.09.19.32.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 09 May 2021 19:32:30 -0700 (PDT)
+From:   Zolton Jheng <s6668c2t@gmail.com>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zolton Jheng <s6668c2t@gmail.com>
+Subject: [PATCH] USB: serial: pl2303: add device id for ADLINK ND-6530 GC device
+Date:   Mon, 10 May 2021 10:32:00 +0800
+Message-Id: <1620613920-3968-1-git-send-email-s6668c2t@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-05-08 01:15:49, Wesley Cheng wrote:
-> 
-> 
-> On 5/7/2021 8:45 PM, Peter Chen wrote:
-> > On 21-05-07 11:42:03, Wesley Cheng wrote:
-> >> The list_for_each_entry_safe() macro saves the current item (n) and
-> >> the item after (n+1), so that n can be safely removed without
-> >> corrupting the list.  However, when traversing the list and removing
-> >> items using gadget giveback, the DWC3 lock is briefly released,
-> 
-> Hi Peter,
-> 
-> Thanks for the review.
-> 
-> > 
-> > I see dwc3_gadget_del_and_unmap_request remove the list, the lock is
-> > still held there. Am I something wrong?
-> > 
-> 
-> The scenario the issue happens in is say the follow thread is running
-> the sequence below:
-> 
-> Thread#1:
-> __dwc3_gadget_ep_set_halt() - CLEAR HALT
->   -> dwc3_gadget_ep_cleanup_cancelled_requests()
->     ->list_for_each_entry_safe()
->     ->dwc3_gadget_giveback()
->       ->dwc3_gadget_del_and_unmap_request()-n deleted cancelled_list
->       ->spin_unlock
-> 
-> Thread#2:
-> dwc3_gadget_pullup()
->   ->waiting for dwc3 spin_lock
->   ->Thread#1 released lock
->   ->dwc3_stop_active_transfers()
->     ->dwc3_remove_requests()
->       ->fetches n+1 item from cancelled_list (n removed by thread#1)
->       ->dwc3_gadget_giveback()
->         ->dwc3_gadget_del_and_unmap_request()-n+1 deleted cancelled_list
->         ->spin_unlock
-> 
-> So now, if thread#1 takes the DWC3 lock again, it will continue to item
-> n+1, which was already removed by thread#2, leading to a double list
-> removal.  We saw this issue on our platform after enabling list debug.
+This is adds the device id for the ADLINK ND-6530 which is a
+pl2303gc based device
 
-It is cleared now. Would you please update commit log a little by appending
-your call stack analysis?
+Signed-off-by: Zolton Jheng <s6668c2t@gmail.com>
+---
+ drivers/usb/serial/pl2303.c | 1 +
+ drivers/usb/serial/pl2303.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-
-Peter
-> 
-> Thanks
-> Wesley Cheng
-> 
-> > Peter
-> >        
-> >> allowing other routines to execute.  There is a situation where while
-> >> items are being removed from the cancelled_list using
-> >> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
-> >> routine is running in parallel (due to UDC unbind).  As the cleanup
-> >> routine removes n, and the pullup disable removes n+1, once the
-> >> cleanup retakes the DWC3 lock, it references a request who was already
-> >> removed/handled.  With list debug enabled, this leads to a panic.
-> >> Ensure all instances of the macro are replaced where gadget giveback
-> >> is used.
-> >>
-> >> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
-> >> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> >> ---
-> >>  drivers/usb/dwc3/gadget.c | 8 ++++----
-> >>  1 file changed, 4 insertions(+), 4 deletions(-)
-> >>
-> >> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> >> index dd80e5c..efa939b 100644
-> >> --- a/drivers/usb/dwc3/gadget.c
-> >> +++ b/drivers/usb/dwc3/gadget.c
-> >> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
-> >>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
-> >>  {
-> >>  	struct dwc3_request		*req;
-> >> -	struct dwc3_request		*tmp;
-> >>  	struct dwc3			*dwc = dep->dwc;
-> >>  
-> >> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
-> >> +	while (!list_empty(&dep->cancelled_list)) {
-> >> +		req = next_request(&dep->cancelled_list);
-> >>  		dwc3_gadget_ep_skip_trbs(dep, req);
-> >>  		switch (req->status) {
-> >>  		case DWC3_REQUEST_STATUS_DISCONNECTED:
-> >> @@ -2935,11 +2935,11 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
-> >>  		const struct dwc3_event_depevt *event, int status)
-> >>  {
-> >>  	struct dwc3_request	*req;
-> >> -	struct dwc3_request	*tmp;
-> >>  
-> >> -	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-> >> +	while (!list_empty(&dep->started_list)) {
-> >>  		int ret;
-> >>  
-> >> +		req = next_request(&dep->started_list);
-> >>  		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
-> >>  				req, status);
-> >>  		if (ret)
-> >> -- 
-> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> >> a Linux Foundation Collaborative Project
-> >>
-> > 
-> 
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index eed9acd..f2895c2 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -113,6 +113,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(SONY_VENDOR_ID, SONY_QN3USB_PRODUCT_ID) },
+ 	{ USB_DEVICE(SANWA_VENDOR_ID, SANWA_PRODUCT_ID) },
+ 	{ USB_DEVICE(ADLINK_VENDOR_ID, ADLINK_ND6530_PRODUCT_ID) },
++	{ USB_DEVICE(ADLINK_VENDOR_ID, ADLINK_ND6530GC_PRODUCT_ID) },
+ 	{ USB_DEVICE(SMART_VENDOR_ID, SMART_PRODUCT_ID) },
+ 	{ USB_DEVICE(AT_VENDOR_ID, AT_VTKIT3_PRODUCT_ID) },
+ 	{ }					/* Terminating entry */
+diff --git a/drivers/usb/serial/pl2303.h b/drivers/usb/serial/pl2303.h
+index 0f681dd..6097ee8 100644
+--- a/drivers/usb/serial/pl2303.h
++++ b/drivers/usb/serial/pl2303.h
+@@ -158,6 +158,7 @@
+ /* ADLINK ND-6530 RS232,RS485 and RS422 adapter */
+ #define ADLINK_VENDOR_ID		0x0b63
+ #define ADLINK_ND6530_PRODUCT_ID	0x6530
++#define ADLINK_ND6530GC_PRODUCT_ID	0x653a
+ 
+ /* SMART USB Serial Adapter */
+ #define SMART_VENDOR_ID	0x0b8c
 -- 
-
-Thanks,
-Peter Chen
+2.7.4
 
