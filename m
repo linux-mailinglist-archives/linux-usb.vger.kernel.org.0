@@ -2,68 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC273790D7
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 16:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 629BB379158
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 16:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236208AbhEJOcs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 10:32:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41438 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234282AbhEJOao (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 May 2021 10:30:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2670C611CE;
-        Mon, 10 May 2021 14:29:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620656979;
-        bh=jXtawgAEql2mdBiBp3QIE60fK6xUJp5RjRSJRC/3OBA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nyhB93OH82HR274R7A4zGYpmBR4q4i+Ug09CSUECeTXg9rr/vCjvC0uPqCNysJVPF
-         hYcOEwe72vFXinK1jPech1xPs32LtQ37xsmilcWUrnk3TJEP44ISP45/nLX+rBskVw
-         bT8N/MLaHea+xWf+SH62CylqyyvJwebAtW/GTTmI=
-Date:   Mon, 10 May 2021 16:29:37 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Android Kernel Team <kernel-team@android.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v1] usb: typec: tcpm: Don't block probing of consumers of
- "connector" nodes
-Message-ID: <YJlDURS+6DHgDwEx@kroah.com>
-References: <20210506004423.345199-1-saravanak@google.com>
- <CALAqxLU+Uf6OSDLG8OC_gHY9-VVHPgu0_bXxJcO8B4peFugtqw@mail.gmail.com>
+        id S239874AbhEJOwr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 10:52:47 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:47586 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237575AbhEJOv7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 10:51:59 -0400
+Received: from 111-240-141-101.dynamic-ip.hinet.net ([111.240.141.101] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <chris.chiu@canonical.com>)
+        id 1lg7FD-0007Dv-AU; Mon, 10 May 2021 14:50:52 +0000
+From:   chris.chiu@canonical.com
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        m.v.b@runbox.com, hadess@hadess.net
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Chiu <chris.chiu@canonical.com>
+Subject: [PATCH v2 0/2] USB: propose a generic fix for PORT_SUSPEND set feature timeout
+Date:   Mon, 10 May 2021 22:50:28 +0800
+Message-Id: <20210510145030.1495-1-chris.chiu@canonical.com>
+X-Mailer: git-send-email 2.21.1 (Apple Git-122.3)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALAqxLU+Uf6OSDLG8OC_gHY9-VVHPgu0_bXxJcO8B4peFugtqw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 05, 2021 at 07:01:04PM -0700, John Stultz wrote:
-> On Wed, May 5, 2021 at 5:44 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > fw_devlink expects DT device nodes with "compatible" property to have
-> > struct devices created for them. Since the connector node might not be
-> > populated as a device, mark it as such so that fw_devlink knows not to
-> > wait on this fwnode being populated as a struct device.
-> >
-> > Without this patch, USB functionality can be broken on some boards.
-> >
-> > Fixes: f7514a663016 ("of: property: fw_devlink: Add support for remote-endpoint")
-> > Reported-by: John Stultz <john.stultz@linaro.org>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> 
-> Tested-by: John Stultz <john.stultz@linaro.org>
-> 
-> Thanks so much for this fix! HiKey960 is back to booting properly!
-> -john
+From: Chris Chiu <chris.chiu@canonical.com>
 
-Now queued up, thanks.
+For the Realtek Hub which fails to resume the port which has wakeup
+enable descendants, trying to create a more generic and better option
+to have the runtime suspend/resume work instead of a reset-resume quirk.
 
-greg k-h
+Chris Chiu (2):
+  USB: reset-resume the device when PORT_SUSPEND is set but timeout
+  Revert "USB: Add reset-resume quirk for WD19's Realtek Hub"
+
+ drivers/usb/core/hub.c    | 15 +++++++++++++++
+ drivers/usb/core/quirks.c |  1 -
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+-- 
+2.20.1
+
