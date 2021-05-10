@@ -2,108 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B92237990B
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 23:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F7F37994F
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 23:39:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232755AbhEJVTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 17:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43066 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbhEJVTJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 17:19:09 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77D3C061574
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 14:18:03 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id l19-20020a0ce5130000b02901b6795e3304so13681231qvm.2
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 14:18:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=fOUt7jyxTxQWRxk0PzBiNaOdQXs8xFEX4FJ9XZ8V9KU=;
-        b=KXcO5M1/TzhY6MkN5ziAmFFZjOF3kdv5d97DKFANugusD9l2y6ZCsaCPKqDZXIOD83
-         83egjYQreuHUbCv4Co6WM6ymwAeHXslL6jlyThyqPEjVUoPr+Bb2LooXNJo+VyUKaz24
-         IC5sWgKgPWBg8PW5IP40onVJmbQbswXSo7+Ni7dvmg66525SvG6gKRQ8VyvrEeBW1HkA
-         snhJQKXXBxGTkPSX9x4WmUdklWWiUYNvM3cdeQj/TgbywQ2RFXECJRyTgTzn6NCRkB05
-         dJUmLX+Bf5YpXd56o7nCVX/7fw4sVkeA2cwkNs1+AWHG+8cyOKcl4xi4Lw51xYhAKYUf
-         yWzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc
-         :content-transfer-encoding;
-        bh=fOUt7jyxTxQWRxk0PzBiNaOdQXs8xFEX4FJ9XZ8V9KU=;
-        b=s4JvR9bOzI/lKe66y1NKXSI60RJZGcWWyfS6lpgaLdAWmBqwCKWuRx6rK/qqIMqtRO
-         udLlsvhwbXk4OExfeT0kKbw1V3lTD/KPikl6/BQshILnYsb5/f8MdZ/R087HHZ9FuWj9
-         Y1FPwHwVDDPAq9i5y8jxuXbTUAMEZsVyCLrJcwS8P9JqrqOoJ9ppedIWQi5JIfL4AAyK
-         A30stUVDLu1i1Qn8j5WupERKD9D21dc67CZMF1YAc308gpHQbN6zBfOzgGm1JrFKieQx
-         +rFKdYx5tTKnQ/Xs4S8vOFUzE0tm31OmtXBifJDGa/Rsr46Jb7kMYaaAB/gbVsoekFdd
-         EF8Q==
-X-Gm-Message-State: AOAM533QDdsUeIPlnKhABhrF73eWK27TDzrVrLovdQhS0WsFB4Am1S6D
-        QSJbrvFh4zZqB/6LSwBrN+HitLLExCM=
-X-Google-Smtp-Source: ABdhPJznNuZy7AUuSXEZjpFtBSuWKM5IczrU2g8EH4/ODXPTH36XAVX1NVz6KRKdSxiSDSI9hA30iHg08DM=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:9a43:a71b:9ef5:f219])
- (user=badhri job=sendgmr) by 2002:a0c:ef06:: with SMTP id t6mr25422265qvr.17.1620681482498;
- Mon, 10 May 2021 14:18:02 -0700 (PDT)
-Date:   Mon, 10 May 2021 14:17:56 -0700
-Message-Id: <20210510211756.3346954-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
-Subject: [PATCH] usb: typec: tcpm: Fix SINK_DISCOVERY current limit for Rp-default
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S232316AbhEJVkr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 17:40:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:62283 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232257AbhEJVkq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 May 2021 17:40:46 -0400
+IronPort-SDR: gaQtkISANa/6Iv3yR2hdlS9QmK7wzSEvtcsL0ArrVgnwWBNzQNTXIbftRWeezd34hO/YXXHpLJ
+ wa04VaF+wmpQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="199362953"
+X-IronPort-AV: E=Sophos;i="5.82,288,1613462400"; 
+   d="scan'208";a="199362953"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 14:39:41 -0700
+IronPort-SDR: olKun+Ku0IPBJ4XXHPFO7x2rsyv0XQgwW3c1Vu2WQE0AyTz1tad6XShc/MF7coIbhw0L2yJ31q
+ Lq1Po/NwvU4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,288,1613462400"; 
+   d="scan'208";a="536602113"
+Received: from lkp-server01.sh.intel.com (HELO f375d57c4ed4) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 May 2021 14:39:39 -0700
+Received: from kbuild by f375d57c4ed4 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lgDcp-0000Na-2q; Mon, 10 May 2021 21:39:39 +0000
+Date:   Tue, 11 May 2021 05:39:28 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ f91e5d097f120755060b6abe8249696b405666fd
+Message-ID: <6099a810.SFeqdQTg8WZVSnYI%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a regression introduced by
-<1373fefc6243cc96b3565f0ffffadfac4ccfb977>
-"Allow slow charging loops to comply to pSnkStby".
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: f91e5d097f120755060b6abe8249696b405666fd  usb: gadget: fsl_qe_udc: fix implicit-fallthrough warnings
 
-When Source advertises Rp-default, tcpm would request 500mA when in
-SINK_DISCOVERY, Type-C spec advises the sink to follow BC1.2 current
-limits when Rp-default is advertised.
-[12750.503381] Requesting mux state 1, usb-role 2, orientation 1
-[12750.503837] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS]
-[12751.003891] state change SNK_STARTUP -> SNK_DISCOVERY
-[12751.003900] Setting voltage/current limit 5000 mV 500 mA
+elapsed time: 721m
 
-This patch restores the behavior where the tcpm would request 0mA when
-Rp-default is advertised by the source.
-[ =C2=A0 73.174252] Requesting mux state 1, usb-role 2, orientation 1
-[ =C2=A0 73.174749] state change SNK_ATTACHED -> SNK_STARTUP [rev3 NONE_AMS=
-]
-[ =C2=A0 73.674800] state change SNK_STARTUP -> SNK_DISCOVERY
-[ =C2=A0 73.674808] Setting voltage/current limit 5000 mV 0 mA
+configs tested: 142
+configs skipped: 2
 
-During SNK_DISCOVERY, Cap the current limit to PD_P_SNK_STDBY_MW / 5 only
-for slow_charger_loop case.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Fixes: 1373fefc6243 ("Allow slow charging loops to comply to pSnkStby")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+x86_64                           allyesconfig
+riscv                            allmodconfig
+i386                             allyesconfig
+riscv                            allyesconfig
+arc                     haps_hs_smp_defconfig
+mips                      pic32mzda_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                        mvebu_v5_defconfig
+arm                         vf610m4_defconfig
+h8300                            alldefconfig
+m68k                        mvme16x_defconfig
+mips                           xway_defconfig
+powerpc                  storcenter_defconfig
+mips                           ip32_defconfig
+riscv                    nommu_k210_defconfig
+ia64                        generic_defconfig
+sh                   sh7770_generic_defconfig
+mips                       lemote2f_defconfig
+powerpc                  mpc885_ads_defconfig
+arm                         bcm2835_defconfig
+arc                    vdk_hs38_smp_defconfig
+powerpc                        fsp2_defconfig
+arm                         s3c2410_defconfig
+sh                          rsk7201_defconfig
+mips                     cu1830-neo_defconfig
+x86_64                           alldefconfig
+mips                        bcm47xx_defconfig
+mips                         tb0226_defconfig
+nios2                               defconfig
+powerpc                 xes_mpc85xx_defconfig
+mips                     decstation_defconfig
+mips                        omega2p_defconfig
+arm                         mv78xx0_defconfig
+ia64                             alldefconfig
+arc                        vdk_hs38_defconfig
+mips                          ath79_defconfig
+openrisc                    or1ksim_defconfig
+powerpc                    klondike_defconfig
+mips                          rm200_defconfig
+arm                           u8500_defconfig
+powerpc                mpc7448_hpc2_defconfig
+sh                              ul2_defconfig
+powerpc                      pmac32_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                          g5_defconfig
+arm                      footbridge_defconfig
+arm                       multi_v4t_defconfig
+sh                        sh7757lcr_defconfig
+mips                        nlm_xlp_defconfig
+arc                 nsimosci_hs_smp_defconfig
+csky                                defconfig
+mips                       rbtx49xx_defconfig
+sh                           se7724_defconfig
+sh                               allmodconfig
+mips                        maltaup_defconfig
+powerpc                        icon_defconfig
+arm                        multi_v7_defconfig
+arm                          pxa3xx_defconfig
+sh                               j2_defconfig
+powerpc                   currituck_defconfig
+mips                            gpr_defconfig
+arm                          ixp4xx_defconfig
+m68k                          hp300_defconfig
+powerpc                     pq2fads_defconfig
+arm                             ezx_defconfig
+xtensa                          iss_defconfig
+arm                        oxnas_v6_defconfig
+powerpc                   motionpro_defconfig
+nios2                            alldefconfig
+x86_64                              defconfig
+h8300                    h8300h-sim_defconfig
+mips                          ath25_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+alpha                               defconfig
+alpha                            allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a003-20210510
+x86_64               randconfig-a004-20210510
+x86_64               randconfig-a001-20210510
+x86_64               randconfig-a005-20210510
+x86_64               randconfig-a002-20210510
+x86_64               randconfig-a006-20210510
+i386                 randconfig-a003-20210510
+i386                 randconfig-a005-20210510
+i386                 randconfig-a004-20210510
+i386                 randconfig-a001-20210510
+i386                 randconfig-a002-20210510
+i386                 randconfig-a006-20210510
+i386                 randconfig-a016-20210510
+i386                 randconfig-a014-20210510
+i386                 randconfig-a011-20210510
+i386                 randconfig-a015-20210510
+i386                 randconfig-a012-20210510
+i386                 randconfig-a013-20210510
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+um                               allmodconfig
+um                                allnoconfig
+um                               allyesconfig
+um                                  defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-a015-20210510
+x86_64               randconfig-a016-20210510
+x86_64               randconfig-a014-20210510
+x86_64               randconfig-a012-20210510
+x86_64               randconfig-a011-20210510
+x86_64               randconfig-a013-20210510
+
 ---
- drivers/usb/typec/tcpm/tcpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index c4fdc00a3bc8..a73299a08ef7 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4055,7 +4055,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		if (port->vbus_present) {
- 			u32 current_lim =3D tcpm_get_current_limit(port);
-=20
--			if (port->slow_charger_loop || (current_lim > PD_P_SNK_STDBY_MW / 5))
-+			if (port->slow_charger_loop && (current_lim > PD_P_SNK_STDBY_MW / 5))
- 				current_lim =3D PD_P_SNK_STDBY_MW / 5;
- 			tcpm_set_current_limit(port, current_lim, 5000);
- 			tcpm_set_charge(port, true);
---=20
-2.31.1.607.g51e8a6a459-goog
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
