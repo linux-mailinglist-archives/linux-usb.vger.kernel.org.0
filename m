@@ -2,104 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D106B3789D3
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 13:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4413789D4
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 13:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236445AbhEJLcX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 07:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234996AbhEJLJ6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 07:09:58 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD1BC06175F
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 04:06:01 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id g14so18224684edy.6
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 04:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0F9bimE8+5EWA3eWwl/8LEBaz81yCMOXbgA6TyW/oLg=;
-        b=tzb8l/S32DpuUXobAviyA/LsyMVqU4VX5cd/39E/y5uE0Dw26QO40Sk7eR2uFraGQg
-         kOBeLx72xxyP8gyOSrN/20YTeoouE6jUWi6jWe4EBQBPzjrzAZ5uSXm5Mjq/z5AErXUH
-         QN2PrzMF+QrBTGvprRMfzIfF1GcrENyF6BmI0ujj8wi5EqR2jjl2oHrdXapdLzUDEZS1
-         aUk4PczcIlg8C2UJhZQnOVLHxWUKZ82D4DT8Ah5gOsaB4n/7iC2l+9D8+M9D0IdWaCAl
-         lY1Z9Jz3/4ghP2qXKST0qG0vliZevO7FXT9D6L8A6BruvUCfMnLiCIHCSuxhGZ0hdBY1
-         mBTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0F9bimE8+5EWA3eWwl/8LEBaz81yCMOXbgA6TyW/oLg=;
-        b=nzmEZPS4IrHyAzCoOu8oI5lQD4liiU3LYEaha0er7QlGZCtkbcjGvV8dphOU1lSRIz
-         dLYVH7VeY6z0gZ6jgIFk1wlga9pS22OTVRZ4UwVUpv6DtdNJcl69bC85tz75IBWcaCdk
-         6WH0C7Zulw68qo0kokhiWYjYVm53kr3H0xqvcUTJNCcdhqU27K4w/OVW6tUcBhW09gqn
-         ewUe9hBW0+TLoRQBI5ohgg64QtHlIBK/yH8dZL/VNrsu8TyVwxuBSipbCipfZZp06VIM
-         oS+5c1gJ2AHBM2zfmZP1GCzMr8tcPsKPkM9GwCrVLS3MNAxmbKCzvNqCpA3N0DCSM0cA
-         rX4g==
-X-Gm-Message-State: AOAM531Z6h1XtAwOxz8RGvsNHDDRyxYNQY1qwRkhrJsj3uKOkaWDcmcH
-        PDtHZG1NyTspSPm+tC6jK11SHX2LihhJzuHBFnXClaKSI5ITBZ1+
-X-Google-Smtp-Source: ABdhPJz4pzHKioBq47oVokcL8AdJFYCEpqNrQDVgKPBRT7TU9XuDIhRCrTg1zf5pdfHmEd4/boz8NFY6VRVmGEiIeq0=
-X-Received: by 2002:aa7:c15a:: with SMTP id r26mr29236413edp.78.1620644759525;
- Mon, 10 May 2021 04:05:59 -0700 (PDT)
+        id S236467AbhEJLcc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 07:32:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40598 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239112AbhEJLVG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 May 2021 07:21:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC8EA6101E;
+        Mon, 10 May 2021 11:19:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620645601;
+        bh=W7iAKST7BRDMlEttXNNjJ33EX76A4qp8I6GEgdSMv7U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gmDmb0dM5IcZQ9rSlubjtF+K7WR5CTuBYzK7hGG8NgJ6VoZl1xWTpOcwkH/5/0zA/
+         vlx1VxEGYzpDqoIrEOS4Gq4vleDywsH/Tbkz7KjwQOxa0gHoTz3ZfhQBobu6oYwUNn
+         Apktwvurhr0XmVvzqYbUbTW3FMnBkgNdhIrbGi6F2SzZTvdCwG1IcEdUG7Tg53VOjZ
+         rsHYuTEPmzH2qPOyCxJC2wx/q7V+K8nhKe4JHOwCkQGI9ADck3Kw17WLNRkmbFOBip
+         a9pcqsOJVVBc05NJGVPFoJfSO03eP8zjvIV4wRYaZYLrBIVfbDQLgQs1bXlcp7w7lK
+         9KVTRb7Ve04dg==
+Date:   Mon, 10 May 2021 13:19:50 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as
+ ASCII
+Message-ID: <20210510131950.063f0608@coco.lan>
+In-Reply-To: <c4479ced-f4d8-1a1e-ee54-9abc55344187@leemhuis.info>
+References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+        <c4479ced-f4d8-1a1e-ee54-9abc55344187@leemhuis.info>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <CA+G9fYtZZoX53PjJ0VV54beMN6COccES9agttNYSzW=FbC=NFg@mail.gmail.com>
- <CA+G9fYvrhB5-Zfh7Xudetsw+rC=LE3JatW6eh8K+mXQHdDKpHQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYvrhB5-Zfh7Xudetsw+rC=LE3JatW6eh8K+mXQHdDKpHQ@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 10 May 2021 16:35:48 +0530
-Message-ID: <CA+G9fYu7h+XBKvC=j7AFNr5tTmNUYWfDWoEEHHf34Gm2jcQoxg@mail.gmail.com>
-Subject: Re: Unhandled fault: imprecise external abort (0x1406) at 0x00000000
- - PC is at xhci_hub_control
-To:     linux-usb@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Cc:     peter.chen@kernel.org, jackp@codeaurora.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        mathias.nyman@intel.com, Li Jun <jun.li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 10 May 2021 at 16:22, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> On Mon, 10 May 2021 at 16:02, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+Em Mon, 10 May 2021 12:52:44 +0200
+Thorsten Leemhuis <linux@leemhuis.info> escreveu:
+
+> On 10.05.21 12:26, Mauro Carvalho Chehab wrote:
 > >
-> > The kernel crash reported on arm architecture BeagleBoard-X15 device running
-> > Linux next 5.13.0-rc1-next-20210510 while booting the device.
-> >
-> > [    4.956085] xhci-hcd xhci-hcd.1.auto: xHCI Host Controller
-> > [    4.961639] xhci-hcd xhci-hcd.1.auto: new USB bus registered,
-> > assigned bus number 2
-> > [    4.969360] xhci-hcd xhci-hcd.1.auto: Host supports USB 3.0 SuperSpeed
-> > [    4.976165] usb usb2: We don't know the algorithms for LPM for this
-> > host, disabling LPM.
-> > [    4.985321] hub 2-0:1.0: USB hub found
-> > [    4.989196] hub 2-0:1.0: 1 port detected
-> > [    5.002197] Waiting for root device
-> > PARTUUID=6b10e805-12ad-b44e-88b8-3abf3d5f52ed...
-> > [    5.022918] 8<--- cut here ---
-> > [    5.026000] Unhandled fault: imprecise external abort (0x1406) at 0x00000000
-> > [    5.033root
-> > 081] pgd = ff6a1748
-> > [    5.035797] [00000000] *pgd=00000000
-> > [    5.039398] Internal error: : 1406 [#1] SMP ARM
-> > [    5.043975] Modules linked in:
-> > [    5.047027] CPU: 0 PID: 22 Comm: kworker/0:1 Not tainted
-> > 5.13.0-rc1-next-20210510 #1
-> > [    5.054809] Hardware name: Generic DRA74X (Flattened Device Tree)
-> > [    5.060943] Workqueue: pm pm_runtime_work
-> > [    5.065002] PC is at xhci_hub_control+0xd00/0x248c
-> > [    5.069824] LR is at arm_heavy_mb+0x44/0x48
->
-> Since, this crash is not easily reproducible I could bisect it.
+> > As Linux developers are all around the globe, and not everybody has UTF=
+-8
+> > as their default charset, better to use UTF-8 only on cases where it is=
+ really
+> > needed.
+> > [=E2=80=A6]
+> > The remaining patches on series address such cases on *.rst files and=20
+> > inside the Documentation/ABI, using this perl map table in order to do =
+the
+> > charset conversion:
+> >=20
+> > my %char_map =3D (
+> > [=E2=80=A6]
+> > 	0x2013 =3D> '-',		# EN DASH
+> > 	0x2014 =3D> '-',		# EM DASH =20
 
-sorry, i mean i could *not*
 
-Since, this crash is not easily reproducible I could not bisect it.
+> I might be performing bike shedding here, but wouldn't it be better to
+> replace those two with "--", as explained in
+> https://en.wikipedia.org/wiki/Dash#Approximating_the_em_dash_with_two_or_=
+three_hyphens
+>=20
+> For EM DASH there seems to be even "---", but I'd say that is a bit too
+> much.
 
-- Naresh
+Yeah, we can do, instead:
+
+ 	0x2013 =3D> '--',		# EN DASH
+ 	0x2014 =3D> '---',	# EM DASH =20
+
+I was actually in doubt about those ;-)
+
+Btw, when producing HTML documentation,  Sphinx should convert:
+	-- into EN DASH
+and:
+	--- into EM DASH
+
+So, the resulting html will be identical.
+
+> Or do you fear the extra work as some lines then might break the
+> 80-character limit then?
+
+No, I suspect that the line size won't be an issue. Some care should
+taken when EN DASH and EM DASH are used inside tables.
+
+Thanks,
+Mauro
