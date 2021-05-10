@@ -2,73 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1948377DBB
-	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 10:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7238C377DC4
+	for <lists+linux-usb@lfdr.de>; Mon, 10 May 2021 10:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbhEJIMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 04:12:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43888 "EHLO mail.kernel.org"
+        id S230213AbhEJIQR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 04:16:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49134 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230045AbhEJIMe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 10 May 2021 04:12:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 29EAD613C9
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 08:11:30 +0000 (UTC)
+        id S230045AbhEJIQQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 10 May 2021 04:16:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 109096108B;
+        Mon, 10 May 2021 08:15:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620634290;
-        bh=aO0OKI2P9jWr/ig7P/2Ev7P6zGKcjC00vVVz/2n3kjc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ke7DLqVC9xgKr3+yIjz6VAd9DsOLpRJoPXKIl5KkMxRzMpCM40NLYBnixlRvT0Gls
-         pnzG92Yq55oQRdbWphEL/rpr6xhKz7pyR45FASOBhTVfCQwnkV4+D6eqD9m6ma8tfD
-         qCEzIfGOD0F2mub3aQ7YUY+3VaplFnSDOqwfzxBKuMuMW2HnLZQHXqIWyOEfqnlAmn
-         q+VToYQB0QEpg5otf3mvdcunIDutuAq/LMvX7HsQOjN84mS8uuH79rk0pTQ5NSY/SW
-         GzS4BIss2c/6YaPeUM4KfcdwLAkmiwHjKB93Yl5qyC9RJKevOehNCs8KdQOL9IGWWA
-         HRPUQYdRLrMTQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 169F561154; Mon, 10 May 2021 08:11:30 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213011] [uvcvideo] Unable to turn on Realtek Semiconductor
- Corp. Integrated Webcam HD IR emitters
-Date:   Mon, 10 May 2021 08:11:29 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: v4l-dvb
-X-Bugzilla-Component: webcam
-X-Bugzilla-Version: unspecified
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: beresbarnus03@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: component version product
-Message-ID: <bug-213011-208809-gbCvFtE4l8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213011-208809@https.bugzilla.kernel.org/>
-References: <bug-213011-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1620634512;
+        bh=L8elJ69iynnTYAvCMM9JNNeRWaANDd/PDWsBDi7Yvmk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SzTKdVWH4ueMeLmbk6HLGvq4cgQnoV+ogJbraw+6DfAJF+f576zJcD3Ro7TL1aQbM
+         fNP5ojNCQoY9E3InqGSW6fU+Rsso1c9V9zA2588YYsL7Emrck5xGAcK5S1O9Hd/z/6
+         UT9iMoyfKuY2+qDomVPN9RlvUUJOAG7l6YhfoMO159G6Sdk5ZwnwyMDrl/SejJIWPd
+         oYBO4A3DazPGE+lD+gQwGGNflfs3w7rbd1YwBZ2sPTHhCJt9+gZO5og4qBO+gsrQF6
+         SHHWmVL8sKfaDDV2BKoti4jL9miJRhBG6+R8+WYTEAjSWQyMVfeQU3v1CApHqsKvE6
+         SKseYv3iXTg8A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lg14M-0000Nu-S7; Mon, 10 May 2021 10:15:14 +0200
+Date:   Mon, 10 May 2021 10:15:14 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+References: <cover.1620304986.git.sean@mess.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1620304986.git.sean@mess.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213011
+On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
+> This is a new rc-core driver for the USB-UIRT which you can see here
+> http://www.usbuirt.com/
+> 
+> This device is supported in lirc, via the usb serial kernel driver. This
+> driver is both for rc-core, which means it can use kernel/BPF decoding
+> ec. Also this implement is superior because it can:
+>  - support learning mode
+>  - setting transmit carrier
+>  - larger transmits using streaming tx command
 
-beresbarnus03@gmail.com changed:
+This looks like something which should have been implemented as a
+line-discipline or serdev driver instead of reimplementing a minimal
+on-off ftdi driver and tying it closely to the RC subsystem.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-          Component|USB                         |webcam
-            Version|2.5                         |unspecified
-            Product|Drivers                     |v4l-dvb
+Why can't you just add support for the above features to whatever
+subsystem is managing this device today?
 
---=20
-You may reply to this email to add a comment.
+Serdev still doesn't support hotplugging unfortunately so that route may
+take a bit more work.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
