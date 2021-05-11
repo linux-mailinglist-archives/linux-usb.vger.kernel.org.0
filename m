@@ -2,236 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E40F237B17D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 00:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8DB37B1C6
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 00:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbhEKWQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 18:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        id S229996AbhEKWxg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 18:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbhEKWQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 18:16:56 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F059C06175F
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:15:49 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j10so30810345lfb.12
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:15:49 -0700 (PDT)
+        with ESMTP id S230011AbhEKWxe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 18:53:34 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB64C061574
+        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:52:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id gc22-20020a17090b3116b02901558435aec1so2229868pjb.4
+        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:52:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=geG8UxbiX+LmppPLWMLmqqexOU0/3p6/e8F1xtwYWJk=;
-        b=fkSzyWH1kw+2/ntTT5TfdkVaqMe5JnHeZCVK8V2HNnVxQFIwG5owh2kk0rHf0gWtvG
-         UiNL3/5Q5Yw39F4kp+BhdEPo/PubkI7eGh+JKIOnCp+mXNObsgq5jAG3ySihQIYqnoZn
-         Y+/UQXlxYHj0j2KVKSh/dqzP0IUuq1Gs5vfS9FUbIilRA2LCF3ZzoqdkktgbXNMFQxEX
-         Vpb0JK9qfJMndkjt9kmDFjufMoA4Mevvz2dTFzIi1wqRISqbWlQ/j5DT9covKlaBPwCl
-         KcWcfu/kt1JuBLZAzVAjVA6uDI5z1wK3ddYb/2EFrgrZU1DnhfN/mNrMdAwOyXQBaCo4
-         bvbA==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MoNMrqKHpNoIlrWmHHElwi2Zgk61Xn7OFK++3WUoOmc=;
+        b=IO3+l5+HYPtRVdCZtd678/nzTEnB8gsZcFj/BpOZJF3dDCfBW0m9s3KfpSOP0c4vsN
+         AKWL8yrs860HI/07jGm3jGQjxPOoF29ld0nhO0rA/LkBTpgJ5lGBGlquqeOpu32S2D1g
+         MF602Xh8wuECIHCyJIhcxkt++RNYUSCz4Kaf0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=geG8UxbiX+LmppPLWMLmqqexOU0/3p6/e8F1xtwYWJk=;
-        b=XaG6oj3XNluim5jyu41Z7cgg7bPDSI4ZtGQWVNuQwy09QXc4SjMcs+xPzGJbKEFM4J
-         Onx2uPSXd9B7NqLKj+u7P1zVix+7TUwqJ2t61amRrMGWJNc+7NW7ZBljuS/Lkon970eG
-         csrTOkuWkBmhELKBqg8Bt9YmL4w2+lcTmG60gHYmmGOApARd+ad7fkm0BBiIyEHxZL0S
-         ExNVe24NmC/B0jSluDm6zj2OXqgp5VrSFRo9jOCUaxnWrRTQzIeJSgPcSX4y21+bv5kM
-         /HdScToi0BnTd7rZ+KtWQUYocMNiE5Cz0zNCafJF0sn3dnMer5yv2K5nKLrdYtaCMF9X
-         du2w==
-X-Gm-Message-State: AOAM532k5m6Nqq5G3dG6i9KJuHM22zwiw/INtAFytisRdL9pjTbBgdDN
-        0mtJkCEszN2SBAIIdGAHfNgmvp3f6nAJPS4f30a92Q==
-X-Google-Smtp-Source: ABdhPJyUEA9JjBvHPnTF9Zoi1m8ozY+gTfTZLBNQ7IoGh5Zaj02FaxsZ4bB5/83dTn69LQBgVYEEN42g9qMZygBw+Eg=
-X-Received: by 2002:a19:4086:: with SMTP id n128mr9583920lfa.464.1620771347588;
- Tue, 11 May 2021 15:15:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210424021631.1972022-2-rajatja@google.com> <20210511213047.GA2417208@bjorn-Precision-5520>
-In-Reply-To: <20210511213047.GA2417208@bjorn-Precision-5520>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Tue, 11 May 2021 15:15:11 -0700
-Message-ID: <CACK8Z6GP415hmDUYU74LRrGYKCN4aAXGD-B=ctN8R7P3LnFUrw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MoNMrqKHpNoIlrWmHHElwi2Zgk61Xn7OFK++3WUoOmc=;
+        b=m/MNl/ipqzaTwi2TR3rbxyD8mA7hhYk0c1cVP0JJ7AWzocvTCY9Pwn+ACZ6TeLnZfi
+         rlfyRKryaC6Sc84YjjX1aZbCtI/WSE45MFK/R+WyExQw6N1TOO7efnn5Du5dvWKz+b0W
+         WfkUrwNeiihLtRdVS8V49fa/+mXEve4ch+tdVnh+Er9cJ9vbLRBEd1R4XsKaNcMW5Iy/
+         YcEfkyM51pFk/egVBR6JcBePggS0H5+xrrW5O40K2MJyXQFMQNQxrWUVn4ru1BINivoF
+         9Xx7KCxcIIyy9EYxNBrrZdH6sKJdC6C2qgpzC81MNP8+44yeVWdpCNYAub47ecI0RJyY
+         VxfQ==
+X-Gm-Message-State: AOAM533oUfNzj/0DWtMZJNMN4Ri/ox25R+w49CcCgKB/JxjJxwxi+BXc
+        uJuSwhSIULBAmNUvPDbojW/dNw==
+X-Google-Smtp-Source: ABdhPJyJkpvYFQl8dIjuffCEsX6wfwXKpmoPjao12wYgsRO0/c9PPHShcVturNVIs01FZwIuhkQ4vg==
+X-Received: by 2002:a17:90b:3b4b:: with SMTP id ot11mr34824045pjb.189.1620773547184;
+        Tue, 11 May 2021 15:52:27 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:f1d7:673a:456e:c653])
+        by smtp.gmail.com with UTF8SMTPSA id v22sm14303739pff.105.2021.05.11.15.52.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 May 2021 15:52:26 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Rajat Jain <rajatxjain@gmail.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        David Laight <David.Laight@aculab.com>
-Content-Type: text/plain; charset="UTF-8"
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Cc:     Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v10 0/5] USB: misc: Add onboard_usb_hub driver
+Date:   Tue, 11 May 2021 15:52:18 -0700
+Message-Id: <20210511225223.550762-1-mka@chromium.org>
+X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bjorn,
+This series adds:
+- the onboard_usb_hub_driver
+- glue in the xhci-plat driver to create the onboard_usb_hub
+  platform device if needed
+- a device tree binding for the Realtek RTS5411 USB hub controller
+- device tree changes that add RTS5411 entries for the QCA SC7180
+  based boards trogdor and lazor
+- a couple of stubs for platform device functions to avoid
+  unresolved symbols with certain kernel configs
 
-Thanks for the review. Please see inline.
+The main issue the driver addresses is that a USB hub needs to be
+powered before it can be discovered. For discrete onboard hubs (an
+example for such a hub is the Realtek RTS5411) this is often solved
+by supplying the hub with an 'always-on' regulator, which is kind
+of a hack. Some onboard hubs may require further initialization
+steps, like changing the state of a GPIO or enabling a clock, which
+requires even more hacks. This driver creates a platform device
+representing the hub which performs the necessary initialization.
+Currently it only supports switching on a single regulator, support
+for multiple regulators or other actions can be added as needed.
+Different initialization sequences can be supported based on the
+compatible string.
 
+Besides performing the initialization the driver can be configured
+to power the hub off during system suspend. This can help to extend
+battery life on battery powered devices which have no requirements
+to keep the hub powered during suspend. The driver can also be
+configured to leave the hub powered when a wakeup capable USB device
+is connected when suspending, and power it off otherwise.
 
+Changes in v10:
+- always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+- keep 'regulator-boot-on' property for pp3300_hub
 
-On Tue, May 11, 2021 at 2:30 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> [+cc Oliver, David]
->
-> Please update the subject line, e.g.,
->
->   PCI: Add sysfs "removable" attribute
+Changes in v9:
+- added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+  USB_PLATFORM_XHCI
 
-Will do.
+Changes in v7:
+- updated DT binding
+- series rebased on qcom/arm64-for-5.13
 
->
-> On Fri, Apr 23, 2021 at 07:16:31PM -0700, Rajat Jain wrote:
-> > Export the already available info, to the userspace via the
-> > device core, so that userspace can implement whatever policies it
-> > wants to, for external removable devices.
->
-> I know it's not strictly part of *this* patch, but I think we should
-> connect the dots a little here, something like this:
->
->   PCI: Add sysfs "removable" attribute
->
->   A PCI device is "external_facing" if it's a Root Port with the ACPI
->   "ExternalFacingPort" property or if it has the DT "external-facing"
->   property.  We consider everything downstream from such a device to
->   be removable.
->
->   Set pci_dev_type.supports_removable so the device core exposes the
->   "removable" file in sysfs, and tell the device core about removable
->   devices.
->
-> Wrap to fill 75 columns.
+Changes in v6:
+- updated summary
 
-Will do.
+Changes in v5:
+- cover letter added
 
->
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
->
-> This looks like a good start.  I think it would be useful to have a
-> more concrete example of how this information will be used.  I know
-> that use would be in userspace, so an example probably would not be a
-> kernel patch.  If you have user code published anywhere, that would
-> help.  Or even a patch to an existing daemon.  Or pointers to how
-> "removable" is used for USB devices.
+Matthias Kaehlcke (5):
+  dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
+  USB: misc: Add onboard_usb_hub driver
+  of/platform: Add stubs for of_platform_device_create/destroy()
+  usb: host: xhci-plat: Create platform device for onboard hubs in
+    probe()
+  arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
 
-Sure, I'll point to some existing user space code (which will be using
-a similar attribute we are carrying internally).
+ .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+ .../bindings/usb/realtek,rts5411.yaml         |  62 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  11 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+ drivers/usb/host/Kconfig                      |   1 +
+ drivers/usb/host/xhci-plat.c                  |  16 +
+ drivers/usb/misc/Kconfig                      |  17 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/onboard_usb_hub.c            | 415 ++++++++++++++++++
+ include/linux/of_platform.h                   |  22 +-
+ include/linux/usb/hcd.h                       |   2 +
+ include/linux/usb/onboard_hub.h               |  15 +
+ 15 files changed, 600 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+ create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+ create mode 100644 include/linux/usb/onboard_hub.h
 
->
-> > ---
-> > v2: Add documentation
-> >
-> >  Documentation/ABI/testing/sysfs-devices-removable |  3 ++-
-> >  drivers/pci/pci-sysfs.c                           |  1 +
-> >  drivers/pci/probe.c                               | 12 ++++++++++++
-> >  3 files changed, 15 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/ABI/testing/sysfs-devices-removable b/Documentation/ABI/testing/sysfs-devices-removable
-> > index e13dddd547b5..daac4f007619 100644
-> > --- a/Documentation/ABI/testing/sysfs-devices-removable
-> > +++ b/Documentation/ABI/testing/sysfs-devices-removable
-> > @@ -14,4 +14,5 @@ Description:
-> >
-> >               Currently this is only supported by USB (which infers the
-> >               information from a combination of hub descriptor bits and
-> > -             platform-specific data such as ACPI).
-> > +             platform-specific data such as ACPI) and PCI (which gets this
-> > +             from ACPI / device tree).
-> > diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> > index f8afd54ca3e1..9302f0076e73 100644
-> > --- a/drivers/pci/pci-sysfs.c
-> > +++ b/drivers/pci/pci-sysfs.c
-> > @@ -1582,4 +1582,5 @@ static const struct attribute_group *pci_dev_attr_groups[] = {
-> >
-> >  const struct device_type pci_dev_type = {
-> >       .groups = pci_dev_attr_groups,
-> > +     .supports_removable = true,
-> >  };
-> > diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> > index 953f15abc850..d1cceee62e1b 100644
-> > --- a/drivers/pci/probe.c
-> > +++ b/drivers/pci/probe.c
-> > @@ -1575,6 +1575,16 @@ static void set_pcie_untrusted(struct pci_dev *dev)
-> >               dev->untrusted = true;
-> >  }
-> >
-> > +static void set_pci_dev_removable(struct pci_dev *dev)
->
-> Maybe just "pci_set_removable()"?  These "set_pci*" functions look a
-> little weird.
+-- 
+2.31.1.607.g51e8a6a459-goog
 
-Will do.
-
->
-> > +{
-> > +     struct pci_dev *parent = pci_upstream_bridge(dev);
-> > +     if (parent &&
-> > +         (parent->external_facing || dev_is_removable(&parent->dev)))
-> > +             dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
-> > +     else
-> > +             dev_set_removable(&dev->dev, DEVICE_FIXED);
-> > +}
-> > +
-> >  /**
-> >   * pci_ext_cfg_is_aliased - Is ext config space just an alias of std config?
-> >   * @dev: PCI device
-> > @@ -1819,6 +1829,8 @@ int pci_setup_device(struct pci_dev *dev)
-> >       /* "Unknown power state" */
-> >       dev->current_state = PCI_UNKNOWN;
-> >
-> > +     set_pci_dev_removable(dev);
->
-> So this *only* sets the "removable" attribute based on the
-> ExternalFacingPort or external-facing properties.  I think Oliver and
-> David were hinting that maybe we should also set it for devices in
-> hotpluggable slots.  What do you think?
-
-I did think about it. So I have a mixed feeling about this. Primarily
-because I have seen the use of hotpluggable slots in situations where
-we wouldn't want to classify the device as removable:
-
-- Using link-state based hotplug as a way to work around unstable PCIe
-links. I have seen PCIe devices marked as hot-pluggable only to ensure
-that if the PCIe device falls off PCI bus due to some reason (e.g. due
-to SI issues or device firmware bugs), the kernel should be able to
-detect it if it does come back up (remember quick "Link-Down" /
-"Link-Up" events in succession?).
-
-- Internal hot-pluggable PCI devices. In my past life, I was working
-on a large system that would have hot-pluggable daughter cards, but
-those wouldn't be user removable. Also, it is conceivable to have
-hot-pluggable M.2 slots for PCIe devices such as NVMEs etc, but they
-may still not be removable by user. I don't think these should be
-treated as "removable". I was also looking at USB as an example where
-this originally came from, USB does ensure that only devices that are
-"user visible" devices are marked as "removable":
-
-54d3f8c63d69 ("usb: Set device removable state based on ACPI USB data")
-d35e70d50a06 ("usb: Use hub port data to determine whether a port is removable")
-
->
-> I wonder if this (and similar hooks like set_pcie_port_type(),
-> set_pcie_untrusted(), set_pcie_thunderbolt(), etc) should go *after*
-> the early fixups so we could use fixups to work around issues?
-
-I agree. We can do that if none of the early fixups actually use the
-fields set by these functions. I think it should be ok to move
-set_pcie_untrusted(), set_pcie_thunderbolt(), but I wonder if any
-early fixups already use the pcie_cap or any other fields set by
-set_pcie_port_type().
-
-Thanks,
-
-Rajat
-
->
-> >       /* Early fixups, before probing the BARs */
-> >       pci_fixup_device(pci_fixup_early, dev);
-> >
-> > --
-> > 2.31.1.498.g6c1eba8ee3d-goog
-> >
