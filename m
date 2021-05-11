@@ -2,101 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CEA379A35
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 00:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EB5379B0D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 02:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbhEJWhb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 18:37:31 -0400
-Received: from tartarus.angband.pl ([51.83.246.204]:34704 "EHLO
-        tartarus.angband.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbhEJWh2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 18:37:28 -0400
-X-Greylist: delayed 1784 seconds by postgrey-1.27 at vger.kernel.org; Mon, 10 May 2021 18:37:20 EDT
-Received: from kilobyte by tartarus.angband.pl with local (Exim 4.94.2)
-        (envelope-from <kilobyte@angband.pl>)
-        id 1lgDtp-00EKjz-Lm; Mon, 10 May 2021 23:57:13 +0200
-Date:   Mon, 10 May 2021 23:57:13 +0200
-From:   Adam Borowski <kilobyte@angband.pl>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-fpga@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 00/53] Get rid of UTF-8 chars that can be mapped as ASCII
-Message-ID: <YJmsOYzPIsQ04Zxb@angband.pl>
-References: <cover.1620641727.git.mchehab+huawei@kernel.org>
+        id S230005AbhEKAHI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 20:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229950AbhEKAHH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 20:07:07 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5824BC061760
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 17:06:01 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id x8so17220229qkl.2
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 17:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lUM6GCiWQ87fBmMe4R6b3VuwWCudO1qdVICMp3zaKIc=;
+        b=KFj5l6zhdrS0fLCWMGjmr/xO4BlTFtZoz3C0X6f4yXPAPd4QFYCKQ6VCRUB/RhrcYc
+         /aNljSGJlQqpYw9kb4Ei54tqu7LZbNffzPVR359jRbFKseto3PQlwou2i3Frh18gwxLZ
+         83EJdcrxGqEoNBrlRvGIOn9J8VC7CuWrNZTlo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lUM6GCiWQ87fBmMe4R6b3VuwWCudO1qdVICMp3zaKIc=;
+        b=ko7O8TaKa3zZzewhyGIRnXjFyawylJU9PqNM1ZELr3MjYT1NuEpDn3ffg+lt4xuVUg
+         6U5YyAoWM3OlRWdXYjKIDnDxNt3IpzD0Zx9snWE7Tfh1ogvvKdKSO91FpMRz2ZBQX4W0
+         EviN4xmseAm4Qp/Qtvzgp7h8QVtDdDm5MHOMSH16+fXUWnh/XWxfPZyn6ehpmaSHMH8t
+         W4JIwMWV41LnGeN955/e0bt4fE8+lDOrpniF03zAensview3iizVYdDSQokAWybGiS/p
+         JUt3DSSXtnygSlmS8pXh89J4L7T3RfMYs21dsYUgfpc3LQoXag7R+qxHLKHnGiAO0daP
+         3Ybg==
+X-Gm-Message-State: AOAM530j6kp8uwf2CwvwKoSC8AWD6PhYdTMr7FXF/trPt0ZKtwE19GwH
+        VjFF8KSA8WP7O8IFQnkiCqBtfol2UVVpgA==
+X-Google-Smtp-Source: ABdhPJyIB+Y8NTTG6w45yvHuEYsXlELGZQc+VYZVVQIts75ivUQGvnvdvezqr5cqUJ7eigtoi6u1bQ==
+X-Received: by 2002:a37:30c:: with SMTP id 12mr25288225qkd.355.1620691560417;
+        Mon, 10 May 2021 17:06:00 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id j9sm14872189qtl.15.2021.05.10.17.05.58
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 May 2021 17:05:59 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id h202so23966130ybg.11
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 17:05:58 -0700 (PDT)
+X-Received: by 2002:a5b:8cc:: with SMTP id w12mr37539122ybq.32.1620691558469;
+ Mon, 10 May 2021 17:05:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1620641727.git.mchehab+huawei@kernel.org>
-X-Junkbait: aaron@angband.pl, zzyx@angband.pl
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: kilobyte@angband.pl
-X-SA-Exim-Scanned: No (on tartarus.angband.pl); SAEximRunCond expanded to false
+References: <20210510150413.59356-1-andriy.shevchenko@linux.intel.com> <20210510150413.59356-2-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210510150413.59356-2-andriy.shevchenko@linux.intel.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 10 May 2021 17:05:46 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VpuyYBv2tj5AHLx7U7vfCpH1A6hfG_amscZ6OupRwEHg@mail.gmail.com>
+Message-ID: <CAD=FV=VpuyYBv2tj5AHLx7U7vfCpH1A6hfG_amscZ6OupRwEHg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/4] kdb: Switch to use %ptTs
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Petr Mladek <pmladek@suse.com>, JC Kuo <jckuo@nvidia.com>,
+        Joe Perches <joe@perches.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-tegra@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 10, 2021 at 12:26:12PM +0200, Mauro Carvalho Chehab wrote:
-> There are several UTF-8 characters at the Kernel's documentation.
-[...]
-> Other UTF-8 characters were added along the time, but they're easily
-> replaceable by ASCII chars.
-> 
-> As Linux developers are all around the globe, and not everybody has UTF-8
-> as their default charset
+Hi,
 
-I'm not aware of a distribution that still allows selecting a non-UTF-8
-charset in a normal flow in their installer.  And if they haven't purged
-support for ancient encodings, that support is thoroughly bitrotten.
-Thus, I disagree that this is a legitimate concern.
+On Mon, May 10, 2021 at 8:04 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Use %ptTs instead of open-coded variant to print contents
+> of time64_t type in human readable form.
+>
+> Cc: Jason Wessel <jason.wessel@windriver.com>
+> Cc: Daniel Thompson <daniel.thompson@linaro.org>
+> Cc: kgdb-bugreport@lists.sourceforge.net
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  kernel/debug/kdb/kdb_main.c | 9 +--------
+>  1 file changed, 1 insertion(+), 8 deletions(-)
 
-What _could_ be a legitimate reason is that someone is on a _terminal_
-that can't display a wide enough set of glyphs.  Such terminals are:
- • Linux console (because of vgacon limitations; patchsets to improve
-   other cons haven't been mainlined)
- • some Windows terminals (putty, old Windows console) that can't borrow
-   glyphs from other fonts like fontconfig can
+I kinda doubt anyone would really care if we just switched kdb to just
+the old "%ptT". Probably no machines are parsing this string.
 
-For the former, it's whatever your distribution ships in
-/usr/share/consolefonts/ or an equivalent, which is based on historic
-ISO-8859 and VT100 traditions.
+...but in any case, now that the nifty new format is there we might as
+well use it. Thus:
 
-For the latter, the near-guaranteed character set is WGL4.
-
-
-Thus, at least two of your choices seem to disagree with the above:
-[dropped]
-> 	0xd7   => 'x',		# MULTIPLICATION SIGN
-[retained]
-> 	- U+2b0d ('⬍'): UP DOWN BLACK ARROW
-
-× is present in ISO-8859, V100, WGL4; I've found no font in
-/usr/share/consolefonts/ on my Debian unstable box that lacks this
-character.
-
-⬍ is not found in any of the above.  You might want to at least
-convert it to ↕ which is at least present in WGL4, and thus likely
-to be supported in fonts heeding Windows/Mac/OpenType recommendations.
-That still won't make it work on VT.
-
-
-Meow!
--- 
-⢀⣴⠾⠻⢶⣦⠀ .--[ Makefile ]
-⣾⠁⢠⠒⠀⣿⡁ # beware of races
-⢿⡄⠘⠷⠚⠋⠀ all: pillage burn
-⠈⠳⣄⠀⠀⠀⠀ `----
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
