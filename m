@@ -2,88 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C236A37A476
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 12:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C507037A4A4
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 12:32:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231296AbhEKKXD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 06:23:03 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:53708 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231177AbhEKKXB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 06:23:01 -0400
-X-UUID: 47969499ed354987aa47aa5c2a350a36-20210511
-X-UUID: 47969499ed354987aa47aa5c2a350a36-20210511
-Received: from mtkmrs01.mediatek.inc [(172.21.131.159)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1309709353; Tue, 11 May 2021 18:21:54 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Tue, 11 May 2021 18:21:52 +0800
-Received: from mtkslt301.mediatek.inc (10.21.14.114) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 11 May 2021 18:21:52 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Bixuan Cui <cuibixuan@huawei.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Oliver Neukum <oneukum@suse.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tianping Fang <tianping.fang@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>
-Subject: [PATCH] usb: core: hub: fix race condition about TRSMRCY of resume
-Date:   Tue, 11 May 2021 18:15:22 +0800
-Message-ID: <20210511101522.34193-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        id S231289AbhEKKd1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 06:33:27 -0400
+Received: from gofer.mess.org ([88.97.38.141]:45825 "EHLO gofer.mess.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231272AbhEKKd1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 06:33:27 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 62A88C6387; Tue, 11 May 2021 11:32:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1620729139; bh=3qZe47ccXZi94QbD/AGEgaZol/0JCzTRr/e1v62Fbb4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FAc2mVIpLJOw0xAqKhsxrAh1zP0zAawVbasoE36G7Pb7AR5kK7PijluWH16trFxTb
+         IaD/SBCGTlfqIW+aZmh1+RJwLPFmxYiX7qWMxGWmPXVBYohVXVSnToOPhAlW3w/nql
+         rVTjxD7OYsnk35uPBLzx+qqiuluaKc2iJS8ITYMheUwRn4deDQHwOzP2ftvGOgWWpe
+         eKhtUaoIv7FSMiT1BqQm35H5eOZ+Fa4Nb6EJcj2M+WG4MyWTd8YPnDsD7E9GRk6fWp
+         2yefxvhmduFixjF5AWtFIyyNeheTi29fMEcC76NNT1pT2VOUx7djnskIAOA29ppxbM
+         ke0B4+gxaejXw==
+Date:   Tue, 11 May 2021 11:32:19 +0100
+From:   Sean Young <sean@mess.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <20210511103219.GA13769@gofer.mess.org>
+References: <cover.1620304986.git.sean@mess.org>
+ <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This may happen if the port becomes resume status exactly
-when usb_port_resume() gets port status, it still need provide
-a TRSMCRY time before access the device.
+On Mon, May 10, 2021 at 10:15:14AM +0200, Johan Hovold wrote:
+> On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
+> > This is a new rc-core driver for the USB-UIRT which you can see here
+> > http://www.usbuirt.com/
+> > 
+> > This device is supported in lirc, via the usb serial kernel driver. This
+> > driver is both for rc-core, which means it can use kernel/BPF decoding
+> > ec. Also this implement is superior because it can:
+> >  - support learning mode
+> >  - setting transmit carrier
+> >  - larger transmits using streaming tx command
+> 
+> This looks like something which should have been implemented as a
+> line-discipline or serdev driver instead of reimplementing a minimal
+> on-off ftdi driver and tying it closely to the RC subsystem.
 
-Reported-by: Tianping Fang <tianping.fang@mediatek.com>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/core/hub.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+The device is an infrared device, I'm not sure what it is lost by
+doing it this way. The "minimal on-off ftdi driver" is super trivial.
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index b2bc4b7c4289..fc7d6cdacf16 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -3642,9 +3642,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 		 * sequence.
- 		 */
- 		status = hub_port_status(hub, port1, &portstatus, &portchange);
--
--		/* TRSMRCY = 10 msec */
--		msleep(10);
- 	}
- 
-  SuspendCleared:
-@@ -3659,6 +3656,9 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
- 				usb_clear_port_feature(hub->hdev, port1,
- 						USB_PORT_FEAT_C_SUSPEND);
- 		}
-+
-+		/* TRSMRCY = 10 msec */
-+		msleep(10);
- 	}
- 
- 	if (udev->persist_enabled)
--- 
-2.18.0
+> Why can't you just add support for the above features to whatever
+> subsystem is managing this device today?
+> 
+> Serdev still doesn't support hotplugging unfortunately so that route may
+> take a bit more work.
 
+There seems to be at least three ways of attaching drivers to serial
+devices: serio, serdev, and line-discipline. All seem to have limitations,
+as you say none of them provide a way of hotplugging devices without
+user-space attaching them through an ioctl or so.
+
+If you want to go down this route, then ideally you'd want a quirk on
+fdti saying "attach usb-uirt serdev device to this pid/vid". Considering
+module dependencies, I don't know how that could work without again
+userspace getting involved.
+
+Getting userspace involved seem like a big song and dance because the
+device uses an fdti device, even though it's not a serial port because
+it's hardwired for infrared functions, no db9 connector in sight.
+
+
+Sean
