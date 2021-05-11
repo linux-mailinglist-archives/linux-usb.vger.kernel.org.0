@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 67FA2379CDF
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 04:20:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADFCD379CE0
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 04:20:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbhEKCVz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 10 May 2021 22:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S230491AbhEKCV5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 10 May 2021 22:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbhEKCVz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 22:21:55 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671DCC061574
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 19:20:49 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 82-20020a1c01550000b0290142562ff7c9so364396wmb.3
-        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 19:20:49 -0700 (PDT)
+        with ESMTP id S230417AbhEKCV4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 10 May 2021 22:21:56 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C94C061574
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 19:20:50 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o127so10200046wmo.4
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 19:20:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=W23ObM8Ma0ntVg53K0smv8vrlGJXPYTsjBh04HGSNjI=;
-        b=Igo3R3O6zXLwvmdUj81Jy4Hz2V8Rq11zX/01ZC/cwKdI47E8QFfMJReBr46pwXyrDB
-         Cwv+QDcpluJu01r3vIiblbAFSY3BP+zrgsOFEPz9dd8iq2TdASYesuXRuDCTypePABT5
-         RXWYT6F8vzAVHVk4dF+ZldPKd+b+bLDmAKOBmt4ZN0U8dV1bJ8Fpfau+D2aywvww0wyQ
-         0i8qzuo6fnE9/WQdwrmsyDx4RzGsJf0N7N0O6AaFzbSVWm0Qgq4uyOH0pmM84ussAFc+
-         vwb1koBn0IlRiDbABicESc+UbTaYNgqdkoT5ffBqyVgh89Wxm/6eApxC1YuqHwM1I4+U
-         Kk2A==
+        bh=xuTa9QW15qGiXDyJSX0tRXGvf5SWM0xvRVeBiOug06k=;
+        b=i7lYHSxCAp8Vl/OeAjeY7LMeHaw5mZ1WtiPCUcwzpdP5CHRWlMxWuDsrwVYqBb8iBd
+         tDQE8xCSRm/KR9WtgV80xhKkFShiX9K6pzqYKh1W/Wi3AmXuF1tR0bpkbOo0VbtZImmb
+         r0/veegBml8h6KGoswqpFS1aDgWSXakeiYnzLfQw2mX4f0MShHo1FQmza/JHBY1ejHhc
+         dqZXvvnSMKG0JkGM4DYJgRkRJXzp5kMqlD6CP+Q5rvzeasKpF3zi8VnxY6f1dlY2Oz4o
+         05xciL2MAq0jX1CXl515qh1bRJA8LOZC+1x2z7AAguUFiQ8aEf25toNj9HsOiRse6nKS
+         7BSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=W23ObM8Ma0ntVg53K0smv8vrlGJXPYTsjBh04HGSNjI=;
-        b=i7GxzK5JmyjpF0pDPWIURH+bkP5KjCmmDXjxSDhBybWbCNs8y6PUdSZDvS6DbMlcVL
-         5Vc3Cvg2qMsuo0CNwWhx9fjt3TXrgKkIBKAzgU5O3CfXQO1gb6q6V9+OW1Qro2OxGv+w
-         Y/NsalcKokewhTOoQxH86oScWeh4HWpe5l08YgksBcv7gTcJ4M9NEr0sTBv7ZFHTYwpN
-         2LSQk+wckpNVXXanf5EWgJNbTQ3EN1HooTGTlZpUgU6/pJkN9WzlgwQxjW1mWx7bLl3g
-         OS+kgmozkL7LyjfmMOA/6V4el9OLgx70MQvL+FwIO38jUC3OF+GLu3MFcI6KI/KfvY2n
-         c8Mg==
-X-Gm-Message-State: AOAM532tzIsWrVuG9scb9J7OlHtctGu1vc7s0AE9d3ZltnCRbQmbViIx
-        yixmKvkDOC/PqIqchLAPL39pVQ==
-X-Google-Smtp-Source: ABdhPJy2K/fSJdLgRjoR27W5ltQ7Mvmosdr/2KgGAvHzbVaG7AyjfudpZhU702fdvovczE/7HZK3Fg==
-X-Received: by 2002:a1c:e089:: with SMTP id x131mr28966676wmg.102.1620699648199;
-        Mon, 10 May 2021 19:20:48 -0700 (PDT)
+        bh=xuTa9QW15qGiXDyJSX0tRXGvf5SWM0xvRVeBiOug06k=;
+        b=UZY+v+ALJBbsvN86LrR6XNlp4zhadJUDgip+CGCfdfms6cZcUOT2vB3LhuK9vIrJ4k
+         Qc/OwEGNcruHf1uhrbcf+S1zCl0u9L+AyFCnEz/4KWRg/f6G5MxEqPc6GzJXTqiOi0ue
+         rnMQEIWP64z1v8SHYae6m/ltZsHGUMbrlRtj/pOQQyBTRvQ/+O+cCEOKlEe6+uEKzD2P
+         jxicl9pXzbkCj3jXra1TZtOLQLODofFpCO0SmgZMyQCGKEPXI6FKScc+kQMTOzA0NcWu
+         Lr4IoPA7a1J3Q3EJq0HES/DRjXBXNRmE2gDjqwPSnTjlxEO48Uvv8Ihnaj5/KZ2Mkpbk
+         66gA==
+X-Gm-Message-State: AOAM532l+NSghZQKE5g+fyn4KKHK5T4rwPRnc70sv1kiQVNnTQlMBy6j
+        DrhrvXORL8AbhpN5tmQGvzzE4Q==
+X-Google-Smtp-Source: ABdhPJw14UgfcrGDiiLvNNVTGMISbige7TlGV2DiH9OJZsi8ajDzT7akyZAfvav+u4BuhGW2YZ66dA==
+X-Received: by 2002:a05:600c:28d:: with SMTP id 13mr2372696wmk.183.1620699649350;
+        Mon, 10 May 2021 19:20:49 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t18sm11792981wmq.19.2021.05.10.19.20.46
+        by smtp.gmail.com with ESMTPSA id t18sm11792981wmq.19.2021.05.10.19.20.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 May 2021 19:20:46 -0700 (PDT)
+        Mon, 10 May 2021 19:20:48 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
         gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
 Cc:     bryan.odonoghue@linaro.org
-Subject: [PATCH 1/2] usb: typec: tcpm: Call init callback only when provided
-Date:   Tue, 11 May 2021 03:22:23 +0100
-Message-Id: <20210511022224.1309077-2-bryan.odonoghue@linaro.org>
+Subject: [PATCH 2/2] usb: typec: tcpm: Add a description for the init callback
+Date:   Tue, 11 May 2021 03:22:24 +0100
+Message-Id: <20210511022224.1309077-3-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210511022224.1309077-1-bryan.odonoghue@linaro.org>
 References: <20210511022224.1309077-1-bryan.odonoghue@linaro.org>
@@ -63,33 +63,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The tcpc_dev structure lists a number of callbacks as required when
-implementing a TCPM driver. tcpc_dev->init() is not listed as required.
+The init callback is the only callback in the tcpc_dev structure which
+doesn't have a description. The code treats the callback as optional but,
+we don't document that.
 
-Currently tcpc_dev->init() is called irrespective of whether or not the
-callback is set. Let's conditionally call init() as with other non-required
-callbacks such as get_current_limit() or set_current_limit().
+Let's add a description making clear the callback is optional.
 
-Fixes: f0690a25a140b ("staging: typec: USB Type-C Port Manager (tcpm)")
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/linux/usb/tcpm.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index c4fdc00a3bc8..355067e6d420 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5657,7 +5657,8 @@ static void tcpm_init(struct tcpm_port *port)
- {
- 	enum typec_cc_status cc1, cc2;
- 
--	port->tcpc->init(port->tcpc);
-+	if (port->tcpc->init)
-+		port->tcpc->init(port->tcpc);
- 
- 	tcpm_reset_port(port);
- 
+diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+index 42fcfbe10590..452a0bb9ec50 100644
+--- a/include/linux/usb/tcpm.h
++++ b/include/linux/usb/tcpm.h
+@@ -58,6 +58,8 @@ enum tcpm_transmit_type {
+ /**
+  * struct tcpc_dev - Port configuration and callback functions
+  * @fwnode:	Pointer to port fwnode
++ * @init:	Optional; Called by tcpm_port_register() and tcpm_tcpc_reset()
++ *		to set the TCPM driver into a known initial state.
+  * @get_vbus:	Called to read current VBUS state
+  * @get_current_limit:
+  *		Optional; called by the tcpm core when configured as a snk
 -- 
 2.30.1
 
