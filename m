@@ -2,124 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0871E37A9DB
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 16:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3B237AA05
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 16:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbhEKOvf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 10:51:35 -0400
-Received: from mail-io1-f71.google.com ([209.85.166.71]:37874 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbhEKOva (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 10:51:30 -0400
-Received: by mail-io1-f71.google.com with SMTP id e18-20020a5ed5120000b029041705a6ed5cso13180211iom.4
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 07:50:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=WK0rCpddaIotUh6/rcU63RftGn9uHXAHck5F5PO4UIw=;
-        b=NLEkuQMehtROX9+tcP/pr/NKQyCeBlOvKpluyBIrrhGdeU+xXes5k4PhyLkoSWSKF2
-         6ZqvQECJb3Yqv4bHwHE/OCp+gnOFDuksgVaPooXJblvkJiNZ/khlyWO2mCry7SSo+P8o
-         x+LVLXdZOrA2+MXZVocD58mT7+bfMw1L87lZlgj6qVyxsqTuCzr13iYAAy72LYI2sHh2
-         twI17LMchJpGgv3iegVLhx6qoaCVpO5PvgW38cFTvJo7ITW6U0SVkqtbhSwwCqKxUUTu
-         mK+lbcU3FaKZj5dk6yTUOmdzDfyy6M/kICTpWX6qW7A9CdCvNwjw442Q8pFTXijdxwBT
-         opoQ==
-X-Gm-Message-State: AOAM530N2KA+Tb8lI2zNX9rt/29dQpgCJqSFriVkkkAp+rjG8FosFIpk
-        c2YvcJUfyg72z/80qe4Zl4/PGpSEuZlW3HFcrtZ7cKHfCmTj
-X-Google-Smtp-Source: ABdhPJyCL0dFpyleG/qWV9b3J/9KXy6CKUPoLxGnpVYfWnwmYvKoUVhLaud8brcZUdWwZzsFhyxueGKja33l+ZN1tCNiT+bbv168
+        id S231925AbhEKO6N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 10:58:13 -0400
+Received: from mga03.intel.com ([134.134.136.65]:1059 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231604AbhEKO6M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 10:58:12 -0400
+IronPort-SDR: apC16J+4AF0c2a+ZLQMklF7Q9r6o/cV8k/aqDaynICZjdfFdrlf84osuzd9JE8yj5pOLszTKi9
+ f9tQLgSWqo2g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="199514448"
+X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
+   d="scan'208";a="199514448"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:57:05 -0700
+IronPort-SDR: 8PQcwvpWU6Dh0UpthJR9/VCiXxCuDjTvMOh/WTQFuV/wJApSX5qc5E38iTSMC3V6n/LRYT2qN2
+ dP3l2iQdzTCg==
+X-IronPort-AV: E=Sophos;i="5.82,291,1613462400"; 
+   d="scan'208";a="468941442"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2021 07:57:00 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lgToe-00BTUX-KM; Tue, 11 May 2021 17:56:56 +0300
+Date:   Tue, 11 May 2021 17:56:56 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     JC Kuo <jckuo@nvidia.com>, Joe Perches <joe@perches.com>,
+        Sumit Garg <sumit.garg@linaro.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-nilfs@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: Re: [PATCH v1 1/4] lib/vsprintf: Allow to override date and time
+ separator
+Message-ID: <YJqbONasNp9BXx9Q@smile.fi.intel.com>
+References: <20210510150413.59356-1-andriy.shevchenko@linux.intel.com>
+ <YJqRYNlAu0SfWpb5@alley>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1142:: with SMTP id o2mr14052018ill.9.1620744623524;
- Tue, 11 May 2021 07:50:23 -0700 (PDT)
-Date:   Tue, 11 May 2021 07:50:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008ea13f05c20f0390@google.com>
-Subject: [syzbot] WARNING in input_unregister_device
-From:   syzbot <syzbot+96f19ddb26662d2cd6f5@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, rafael@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJqRYNlAu0SfWpb5@alley>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+On Tue, May 11, 2021 at 04:14:56PM +0200, Petr Mladek wrote:
+> On Mon 2021-05-10 18:04:10, Andy Shevchenko wrote:
+> > ISO 8601 defines 'T' as a separator between date and time. Though,
+> > some ABIs use time and date with ' ' separator instead.
+> > 
+> > Add a flavour to the %pt specifier to override default separator.
 
-syzbot found the following issue on:
+...
 
-HEAD commit:    83a9d2a0 usb: isp1760: hcd: refactor mempool config and se..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=10275a63d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a73b8d06863cd18d
-dashboard link: https://syzkaller.appspot.com/bug?extid=96f19ddb26662d2cd6f5
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12126d2dd00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=109ea9b3d00000
+> >  	%pt[RT]			YYYY-mm-ddTHH:MM:SS
+> > +	%pt[RT]s		YYYY-mm-dd HH:MM:SS
+> >  	%pt[RT]d		YYYY-mm-dd
+> >  	%pt[RT]t		HH:MM:SS
+> > -	%pt[RT][dt][r]
+> > +	%pt[RT][dt][rs]
+> 
+> Sigh, we do not have clear rules what [xy] means. It might be:
+> 
+>       + always use one of them
+>       + optionally use one of them
+>       + always use any of them
+>       + optionally use any of them
+> 
+> %pt[RT][dt][rs] is a great mix:
+> 
+>       + R or T is required, the rest is optional
+>       + 'd' or 't' can be used but both together are not supported 
+>       + any variant of 'r' and 's' is supported including various ordering
+> 
+> Honestly, I do not know about any magic solution that might make it
+> easier to understand these monster modifiers.
+> 
+> Well, what about using the following at least in this case:
+> 
+> 	%pt[RT][dt][r][s]
+> 
+> It might help to understand that both 'r' and 's' can be used at the
+> same time.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+96f19ddb26662d2cd6f5@syzkaller.appspotmail.com
+This is the case, yes, thanks for catching it.
 
-usb 1-1: USB disconnect, device number 46
-------------[ cut here ]------------
-add_uevent_var: buffer size too small
-WARNING: CPU: 0 PID: 2210 at lib/kobject_uevent.c:671 add_uevent_var+0x311/0x380 lib/kobject_uevent.c:671
-Modules linked in:
-CPU: 0 PID: 2210 Comm: kworker/0:2 Not tainted 5.12.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:add_uevent_var+0x311/0x380 lib/kobject_uevent.c:671
-Code: 48 c7 c7 60 70 21 86 e8 54 ed 7e 03 0f 0b 41 bd f4 ff ff ff e9 55 ff ff ff e8 6b 4d 37 ff 48 c7 c7 00 71 21 86 e8 36 ed 7e 03 <0f> 0b 41 bd f4 ff ff ff e9 37 ff ff ff 4c 89 ee 48 c7 c7 40 1e d6
-RSP: 0018:ffffc90006c7f2d0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88811c1ca000 RCX: 0000000000000000
-RDX: ffff88810f073680 RSI: ffffffff812a3e73 RDI: fffff52000d8fe4c
-RBP: ffffc90006c7f3c0 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff814b72cb R11: 0000000000000000 R12: 1ffff92000d8fe5d
-R13: 00000000000007de R14: ffff88811c1ca218 R15: 00000000000007de
-FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000560185d39040 CR3: 000000011042d000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- kobject_uevent_env+0xdda/0x1650 lib/kobject_uevent.c:605
- device_del+0x7eb/0xd40 drivers/base/core.c:3517
- input_unregister_device+0xb4/0xf0 drivers/input/input.c:2379
- hidinput_disconnect+0x15e/0x3d0 drivers/hid/hid-input.c:2013
- hid_disconnect+0x13f/0x1a0 drivers/hid/hid-core.c:2029
- hid_hw_stop+0x12/0x70 drivers/hid/hid-core.c:2076
- ms_remove+0x12/0x90 drivers/hid/hid-microsoft.c:409
- hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2317
- __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1181
- device_release_driver_internal drivers/base/dd.c:1212 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1235
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x502/0xd40 drivers/base/core.c:3507
- hid_remove_device drivers/hid/hid-core.c:2488 [inline]
- hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2507
- usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1436
- usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
- __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1181
- device_release_driver_internal drivers/base/dd.c:1212 [inline]
- device_release_driver+0x26/0x40 drivers/base/dd.c:1235
- bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
- device_del+0x502/0xd40 drivers/base/core.c:3507
- usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
- usb_disconnect.cold+0x27d/0x791 drivers/usb/core/hub.c:2219
- hub_port_connect drivers/usb/core/hub.c:5127 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5416 [inline]
- port_event drivers/usb/core/hub.c:5562 [inline]
- hub_event+0x1c9c/0x4320 drivers/usb/core/hub.c:5644
- process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x38c/0x460 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> An attempt to distinguishing all the possibilities might be:
+> 
+> 	%pt{RT}[{dt}][r][s]
+> 
+> where [] means that it is optional and {} means one of them must be
+> chosen. But I am not sure if it really makes the life easier. Anyway,
+> this would be for another patch that updates the entire printk-formats.rst.
+
+No, this is not the case, the d and t can go in any combinations: none, d, t,
+dt, or td.
+
+> 
+> >  For printing date and time as represented by::
+> >  
+> > @@ -528,6 +529,9 @@ in human readable format.
+> >  By default year will be incremented by 1900 and month by 1.
+> >  Use %pt[RT]r (raw) to suppress this behaviour.
+> >  
+> > +The %pt[RT]s (space) will override ISO 8601 by using ' ' instead of 'T'
+> > +between date and time. It won't have any effect when date or time is omitted.
+
+...
+
+> > +	do {
+> > +		switch (fmt[count++]) {
+> > +		case 'r':
+> > +			raw = true;
+> > +			break;
+> > +		case 's':
+> > +			space = true;
+> > +			break;
+> > +		default:
+> > +			found = false;
+> > +			break;
+> > +		}
+> > +	} while (found);
+> >  
+> >  	if (have_d)
+> >  		buf = date_str(buf, end, tm, raw);
+> >  	if (have_d && have_t) {
+> >  		/* Respect ISO 8601 */
+> 
+> The comment is slightly misleding now. What about something like?
+> 
+> 		/* 'T' by ISO 8601. */
+> 
+> Or maybe call the variable: iso_8601, remove the comment, and
+> invert the logic:
+
+Okay, I will think how to improve, thanks!
+
+> 		bool iso_8601 = true;
+> 
+> 		case 's':
+> 			iso_8601 = false;
+> 			break;
+> 
+> 		*buf = iso_8601 ? 'T' : ' ';
+> 
+> >  		if (buf < end)
+> > -			*buf = 'T';
+> > +			*buf = space ? ' ' : 'T';
+> >  		buf++;
+> >  	}
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
