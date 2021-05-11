@@ -2,239 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 789A237B1D6
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 00:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61ECA37B20E
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 01:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbhEKWxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 18:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbhEKWxv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 18:53:51 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC70C06138D
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:52:38 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id c21so16812244pgg.3
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 15:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3dF8B31PNk7cPhkI1K+ifAM7LFjPxMuEN4CZDqsLjYs=;
-        b=hOncJ7KhKMk9l1BHT4qKfG3LEJOMXRnF3BEuGVJyKHbmLZuhbhoFvOiT2N3Zq0k/Cz
-         GTb6KrDlUHyCe99F/zw2L8+iV02SUphMf8pQzIZonTnlkk7JHOJG+CMhRbei9Af1iKK5
-         6VworG6f1jgx0QKBEta/hA0pIk13xe7gnjZlI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3dF8B31PNk7cPhkI1K+ifAM7LFjPxMuEN4CZDqsLjYs=;
-        b=WjmwDezgl8GoTcoK7xxl2wGonEorLwZlrwv73OPjL6yh7hyA7fQQ55W6hVTxGa3407
-         Nb2kQ3MXoDO5uBCkCTkuCvkzJwW+aNtNueAxexvqU8Hu6EjoGFnn29Ad+nPVpbYGdtZ8
-         NdD942IedpU2yAUNDfXzrCfW3QWxZIDEm4p77iRHxyF6oFZ37JnxeJFaHRY8xTD72t4/
-         Ib0MCQkcSURjljx3cn5/esd5SsTJ1CpVSLd0jtDpybXZ4mRxJHM6iHGbu9TD6ubU8ZiI
-         OixpYQdqyexjUY//6xorm9C9OWeMsBagBL/b9tmpAV5q4Z0swS72ruvRbP1LuoeFhG1t
-         p8gA==
-X-Gm-Message-State: AOAM530tjxg1IaGDCi+0Mcw7jvELFcCSlEoR9d9isZnKAyJYWdJlu/HV
-        M3Fxf1T3bO6in2vEfMPq5eX0Yw==
-X-Google-Smtp-Source: ABdhPJzdwIoaihmRoDL6WGsLK7mSThzKjWrMJy63C9nRpC6zIzCkoV7CM+EFBQzvJcnkSYPIyma69w==
-X-Received: by 2002:a63:c13:: with SMTP id b19mr33088389pgl.198.1620773558275;
-        Tue, 11 May 2021 15:52:38 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:f1d7:673a:456e:c653])
-        by smtp.gmail.com with UTF8SMTPSA id c15sm14510132pfo.176.2021.05.11.15.52.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 May 2021 15:52:37 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S229925AbhEKXDm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 19:03:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41650 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229637AbhEKXDm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 19:03:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3541561624;
+        Tue, 11 May 2021 23:02:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620774155;
+        bh=BIKyXFoa74TTi5KNBShiCcyApEkI7I0Isisr4tY8eTs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=V8pmrmEg/hRJTMOS1agePsx4onbtt4kay/0LeUCfitI3vveS/rfSEUxQY5WbM5v66
+         ZeYrz7JsSMd8vGt5vQzNl+pz/YFIbsr/kKCEU9e9rc+qqpp97VHlyZYoJI4IpYKL8b
+         9Gljda93u6s+oD6SKywj6dFoZiHMdvCVTCqtdP2x1W49wFCKKzbpTxefI4oa7eu16Z
+         /VM72FHdfRxDQipx82hG06AGmTAQLyBdCPyltNk5w7jx/oFBkIINcfev7Sk3L3ZGss
+         +Oq2rREBf5DOekyX+hVFe/3YT2T3tEEBkMB/KJdnmzrLOkBaXVYIy+1pH8ESOCiqul
+         OXE+R6F24jz7A==
+Date:   Tue, 11 May 2021 18:02:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v10 5/5] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Tue, 11 May 2021 15:52:23 -0700
-Message-Id: <20210511155152.v10.5.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
-In-Reply-To: <20210511225223.550762-1-mka@chromium.org>
-References: <20210511225223.550762-1-mka@chromium.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Rajat Jain <rajatxjain@gmail.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
+Message-ID: <20210511230228.GA2429744@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACK8Z6GP415hmDUYU74LRrGYKCN4aAXGD-B=ctN8R7P3LnFUrw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+On Tue, May 11, 2021 at 03:15:11PM -0700, Rajat Jain wrote:
+> On Tue, May 11, 2021 at 2:30 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Fri, Apr 23, 2021 at 07:16:31PM -0700, Rajat Jain wrote:
+> > ...
+> > This looks like a good start.  I think it would be useful to have a
+> > more concrete example of how this information will be used.  I know
+> > that use would be in userspace, so an example probably would not be a
+> > kernel patch.  If you have user code published anywhere, that would
+> > help.  Or even a patch to an existing daemon.  Or pointers to how
+> > "removable" is used for USB devices.
+> 
+> Sure, I'll point to some existing user space code (which will be using
+> a similar attribute we are carrying internally).
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Great, thanks!
 
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
+> > > +     set_pci_dev_removable(dev);
+> >
+> > So this *only* sets the "removable" attribute based on the
+> > ExternalFacingPort or external-facing properties.  I think Oliver and
+> > David were hinting that maybe we should also set it for devices in
+> > hotpluggable slots.  What do you think?
+> 
+> I did think about it. So I have a mixed feeling about this. Primarily
+> because I have seen the use of hotpluggable slots in situations where
+> we wouldn't want to classify the device as removable:
+> 
+> - Using link-state based hotplug as a way to work around unstable PCIe
+> links. I have seen PCIe devices marked as hot-pluggable only to ensure
+> that if the PCIe device falls off PCI bus due to some reason (e.g. due
+> to SI issues or device firmware bugs), the kernel should be able to
+> detect it if it does come back up (remember quick "Link-Down" /
+> "Link-Up" events in succession?).
+> 
+> - Internal hot-pluggable PCI devices. In my past life, I was working
+> on a large system that would have hot-pluggable daughter cards, but
+> those wouldn't be user removable. Also, it is conceivable to have
+> hot-pluggable M.2 slots for PCIe devices such as NVMEs etc, but they
+> may still not be removable by user. I don't think these should be
+> treated as "removable". I was also looking at USB as an example where
+> this originally came from, USB does ensure that only devices that are
+> "user visible" devices are marked as "removable":
+> 
+> 54d3f8c63d69 ("usb: Set device removable state based on ACPI USB data")
+> d35e70d50a06 ("usb: Use hub port data to determine whether a port is removable")
 
-Changes in v9:
-- none
+IIUC your main concern is consumer platforms where PCI devices would
+be hotplugged via a Thunderbolt or similar cable, and that port
+would be marked as an "ExternalFacingPort" so we'd mark them as
+"removable".
 
-Changes in v8:
-- none
+A device in a server hotplug slot would probably *not* be marked as
+"removable".  The same device in an external chassis connected via an
+iPass or similar cable *might* be "removable" depending on whether the
+firmware calls the iPass port an "ExternalFacingPort".
 
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
+Does the following capture some of what you're thinking?  Maybe some
+wordsmithed version of it would be useful in a comment and/or commit
+log?
 
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
+  We're mainly concerned with consumer platforms with accessible
+  Thunderbolt ports that are vulnerable to DMA attacks, and we expect
+  those ports to be identified as "ExternalFacingPort".
 
-Changes in v5:
-- patch added to the series
+  Devices in traditional hotplug slots are also "removable," but not
+  as vulnerable because these slots are less accessible to users.
 
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 11 ++++-------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
- 4 files changed, 38 insertions(+), 30 deletions(-)
+> > I wonder if this (and similar hooks like set_pcie_port_type(),
+> > set_pcie_untrusted(), set_pcie_thunderbolt(), etc) should go *after*
+> > the early fixups so we could use fixups to work around issues?
+> 
+> I agree. We can do that if none of the early fixups actually use the
+> fields set by these functions. I think it should be ok to move
+> set_pcie_untrusted(), set_pcie_thunderbolt(), but I wonder if any
+> early fixups already use the pcie_cap or any other fields set by
+> set_pcie_port_type().
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 5c997cd90069..bae85f6b2bfa 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -23,17 +23,6 @@ &charger_thermal {
- 	status = "disabled";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -42,3 +31,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index d9fbcc7bc5bd..45f014c3539d 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -23,13 +23,10 @@ &charger_thermal {
- 	status = "disabled";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 2b522f9e0d8f..2f5263e3d1b9 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -42,17 +42,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -61,6 +50,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 192e2e424fde..0d6a7447dc77 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -206,7 +206,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -848,6 +847,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.31.1.607.g51e8a6a459-goog
+I think you should move the one you're adding
+(set_pci_dev_removable()) and leave the others where they are for now.
 
+No need to expand the scope of your patch; I was just thinking they're
+all basically similar and should ideally be done at similar times.
+
+> > >       /* Early fixups, before probing the BARs */
+> > >       pci_fixup_device(pci_fixup_early, dev);
+> > >
+> > > --
+> > > 2.31.1.498.g6c1eba8ee3d-goog
+> > >
