@@ -2,162 +2,158 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9675F37B0C1
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 23:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2A337B0CD
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 23:30:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229736AbhEKV17 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 17:27:59 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41635 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229637AbhEKV16 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 17:27:58 -0400
-Received: (qmail 914128 invoked by uid 1000); 11 May 2021 17:26:51 -0400
-Date:   Tue, 11 May 2021 17:26:51 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Disconnect race in Gadget core
-Message-ID: <20210511212651.GA914027@rowland.harvard.edu>
-References: <20210510152426.GE863718@rowland.harvard.edu>
- <87zgx2fskr.fsf@kernel.org>
- <20210510193849.GB873147@rowland.harvard.edu>
- <87r1idfzms.fsf@kernel.org>
+        id S229948AbhEKVb4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 17:31:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44138 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229784AbhEKVbz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 17:31:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9E3B061919;
+        Tue, 11 May 2021 21:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620768649;
+        bh=ZqExC12JpkhpWz/CkibWvB0TO3ks/bAKORvyV1kk7HA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Pnd5g0Eo7h+9XqH3dSvC9FF40a74EIu55uNt/vkGYHiV8sT/hGqOwL3dpt3uZl+xM
+         nUOEwYUtR5BkuuEBSDosOrKrjA5iju9qfS9S7Dq6gYUwIf3uswbOnLjHzUH39fWgc2
+         xwQpOtoJ0uepO3kwsOF+v80jAfh5HPgupXGaULmGztv3Fv2oXfFX9xdl3dGWaSk5vB
+         6inU1PEivqnunT2e88QnXE5/x/qdziTLsBisTyJqCWnlZvh7MJwCUdO6WCNOqMDWJE
+         vqMJhhcVfmGF1U5MYJr/32/AmCQ9k+pAe+CZmEWzZC1ddKD09rM8Pmk+mz05NPNj4S
+         Mtz5Vb4wtnlfA==
+Date:   Tue, 11 May 2021 16:30:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-usb@vger.kernel.org, Rajat Jain <rajatxjain@gmail.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: Re: [PATCH v2 2/2] pci: Support "removable" attribute for PCI devices
+Message-ID: <20210511213047.GA2417208@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87r1idfzms.fsf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210424021631.1972022-2-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 11, 2021 at 11:22:51AM +0300, Felipe Balbi wrote:
-> Right, I'm arguing that, perhaps, ->udc_stop() is the one that should
-> have said semantics. For starters, 'stop' has a very clear meaning and,
-> considering my quick review of 3 or 4 UDC drivers, they are just masking
-> or releasing interrupts which would prevent ->suspend() and
-> ->disconnect() from being called. It could be, however, that if we
-> change the semantics of udc_stop to fit your description above,
-> ->udc_start() may have to change accordingly. Using dwc3 as an example,
-> here are the relevant implementations:
+[+cc Oliver, David]
+
+Please update the subject line, e.g.,
+
+  PCI: Add sysfs "removable" attribute
+
+On Fri, Apr 23, 2021 at 07:16:31PM -0700, Rajat Jain wrote:
+> Export the already available info, to the userspace via the
+> device core, so that userspace can implement whatever policies it
+> wants to, for external removable devices.
+
+I know it's not strictly part of *this* patch, but I think we should
+connect the dots a little here, something like this:
+
+  PCI: Add sysfs "removable" attribute
+
+  A PCI device is "external_facing" if it's a Root Port with the ACPI
+  "ExternalFacingPort" property or if it has the DT "external-facing"
+  property.  We consider everything downstream from such a device to
+  be removable.
+
+  Set pci_dev_type.supports_removable so the device core exposes the
+  "removable" file in sysfs, and tell the device core about removable
+  devices.
+
+Wrap to fill 75 columns.
+
+> Signed-off-by: Rajat Jain <rajatja@google.com>
+
+This looks like a good start.  I think it would be useful to have a
+more concrete example of how this information will be used.  I know
+that use would be in userspace, so an example probably would not be a
+kernel patch.  If you have user code published anywhere, that would
+help.  Or even a patch to an existing daemon.  Or pointers to how
+"removable" is used for USB devices.
+
+> ---
+> v2: Add documentation
 > 
-> > static int dwc3_gadget_start(struct usb_gadget *g,
-> > 		struct usb_gadget_driver *driver)
-> > {
-> > 	struct dwc3		*dwc = gadget_to_dwc(g);
-> > 	unsigned long		flags;
-> > 	int			ret;
-> > 	int			irq;
-> >
-> > 	irq = dwc->irq_gadget;
-> > 	ret = request_threaded_irq(irq, dwc3_interrupt, dwc3_thread_interrupt,
-> > 			IRQF_SHARED, "dwc3", dwc->ev_buf);
+>  Documentation/ABI/testing/sysfs-devices-removable |  3 ++-
+>  drivers/pci/pci-sysfs.c                           |  1 +
+>  drivers/pci/probe.c                               | 12 ++++++++++++
+>  3 files changed, 15 insertions(+), 1 deletion(-)
 > 
-> request interrupt line and enable it. Prepare the udc to call gadget ops.
+> diff --git a/Documentation/ABI/testing/sysfs-devices-removable b/Documentation/ABI/testing/sysfs-devices-removable
+> index e13dddd547b5..daac4f007619 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-removable
+> +++ b/Documentation/ABI/testing/sysfs-devices-removable
+> @@ -14,4 +14,5 @@ Description:
+>  
+>  		Currently this is only supported by USB (which infers the
+>  		information from a combination of hub descriptor bits and
+> -		platform-specific data such as ACPI).
+> +		platform-specific data such as ACPI) and PCI (which gets this
+> +		from ACPI / device tree).
+> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+> index f8afd54ca3e1..9302f0076e73 100644
+> --- a/drivers/pci/pci-sysfs.c
+> +++ b/drivers/pci/pci-sysfs.c
+> @@ -1582,4 +1582,5 @@ static const struct attribute_group *pci_dev_attr_groups[] = {
+>  
+>  const struct device_type pci_dev_type = {
+>  	.groups = pci_dev_attr_groups,
+> +	.supports_removable = true,
+>  };
+> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
+> index 953f15abc850..d1cceee62e1b 100644
+> --- a/drivers/pci/probe.c
+> +++ b/drivers/pci/probe.c
+> @@ -1575,6 +1575,16 @@ static void set_pcie_untrusted(struct pci_dev *dev)
+>  		dev->untrusted = true;
+>  }
+>  
+> +static void set_pci_dev_removable(struct pci_dev *dev)
+
+Maybe just "pci_set_removable()"?  These "set_pci*" functions look a
+little weird.
+
+> +{
+> +	struct pci_dev *parent = pci_upstream_bridge(dev);
+> +	if (parent &&
+> +	    (parent->external_facing || dev_is_removable(&parent->dev)))
+> +		dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
+> +	else
+> +		dev_set_removable(&dev->dev, DEVICE_FIXED);
+> +}
+> +
+>  /**
+>   * pci_ext_cfg_is_aliased - Is ext config space just an alias of std config?
+>   * @dev: PCI device
+> @@ -1819,6 +1829,8 @@ int pci_setup_device(struct pci_dev *dev)
+>  	/* "Unknown power state" */
+>  	dev->current_state = PCI_UNKNOWN;
+>  
+> +	set_pci_dev_removable(dev);
+
+So this *only* sets the "removable" attribute based on the
+ExternalFacingPort or external-facing properties.  I think Oliver and
+David were hinting that maybe we should also set it for devices in
+hotpluggable slots.  What do you think?
+
+I wonder if this (and similar hooks like set_pcie_port_type(),
+set_pcie_untrusted(), set_pcie_thunderbolt(), etc) should go *after*
+the early fixups so we could use fixups to work around issues?
+
+>  	/* Early fixups, before probing the BARs */
+>  	pci_fixup_device(pci_fixup_early, dev);
+>  
+> -- 
+> 2.31.1.498.g6c1eba8ee3d-goog
 > 
-> > 	if (ret) {
-> > 		dev_err(dwc->dev, "failed to request irq #%d --> %d\n",
-> > 				irq, ret);
-> > 		return ret;
-> > 	}
-> >
-> > 	spin_lock_irqsave(&dwc->lock, flags);
-> > 	dwc->gadget_driver	= driver;
-> 
-> internal pointer cached for convenience
-> 
-> > 	spin_unlock_irqrestore(&dwc->lock, flags);
-> >
-> > 	return 0;
-> > }
-> >
-> > static int dwc3_gadget_stop(struct usb_gadget *g)
-> > {
-> > 	struct dwc3		*dwc = gadget_to_dwc(g);
-> > 	unsigned long		flags;
-> >
-> > 	spin_lock_irqsave(&dwc->lock, flags);
-> > 	dwc->gadget_driver	= NULL;
-> > 	spin_unlock_irqrestore(&dwc->lock, flags);
-> >
-> > 	free_irq(dwc->irq_gadget, dwc->ev_buf);
-> 
-> drop the interrupt line. This makes the synchronize_irq() call
-> irrelevant in usb_gadget_remove_driver().
-
-I'm not so sure about this.  It seems like this whole thing arose when 
-the UDC core was created.  Before that, gadget drivers would register 
-and unregister themselves by calling routines in the UDC driver (because 
-there was no core to manage things overall).  Thus the UDC driver knew 
-everything that was going on and could arrange to do things in the right 
-order.
-
-But now the UDC driver doesn't know about unregistrations/unbinding 
-until too late.
-
-So in dwc3, for example: At what point do you abort all outstanding 
-requests with -ESHUTDOWN status?  We don't want to do this before 
-invoking the gadget driver's ->unbind callback.  Or do you rely on the 
-gadget driver to cancel the oustanding requests by itself?
-
-(In dummy-hcd, the udc_stop routine first calls stop_activity, which 
-nukes all outstanding requests, and afterward sets dum->driver to NULL.)
-
-The host-side API, which I admit may not be the greatest, does cancel 
-all outstanding URBs before calling the class driver's disconnect 
-routine -- unless the class driver sets the "soft_unbind" flag, in which 
-case we assume the driver will kill its own URBs properly.
-
-Suppose dwc3_gadget_stop was moved before the ->unbind callback.  Then 
-when the gadget driver cancelled its outstanding requests during unbind, 
-how could dwc3 do the completion callbacks with dwc->gadget_driver 
-already set to NULL?
-
-> I'm not against adding new udc methods to gadget ops, but it seems
-> fitting that udc_start/udc_stop would fit your description while some
-> new members could be given the task of priming the default control pipe
-> to receive the first SETUP packet.
-> 
-> What do you think?
-
-Starting things up when a new gadget driver binds doesn't seem to be so 
-much of a problem.  After all, the new driver isn't going to do anything 
-before the first SETUP packet arrives, since the gadget will be 
-unconfigured.  Unbinding and shutting down are the hard parts.
-
-I guess the ideal approach would be:
-
-	First, the UDC driver basically turns off the UDC hardware.
-	This means no more IRQs will be generated.  But pending requests
-	remain pending until they are explicitly cancelled.
-
-	Second, the gadget driver's unbind callback runs.  It should
-	cancel any outstanding requests and generally release resources.
-
-	Third, the UDC driver WARNs about any requests that still exist
-	and automatically releases them without doing any completion
-	callbacks.  It also forgets about the gadget driver (this can't
-	happen until after the gadget driver has cancelled its 
-	requests).
-
-Right now we are doing the first two steps in the opposite order.  That 
-would be okay, provided we could guarantee there are no more 
-asynchronous callbacks once unbind is called (sort of like what Peter 
-has done for configfs).  But it would be better to do the steps in the 
-order shown above.  This does correspond to calling udc_stop first, as 
-you suggest.
-
-But it also would mean splitting out the third step as something 
-separate from udc_stop.  Not to mention some potentially serious 
-updating of some UDC drivers.
-
-On the other hand, there is something to be said for leaving the UDC 
-operational until after the unbind callback.  If the gadget driver 
-happened to be installing a new alternate setting at that time, say in a 
-workqueue thread, calls to activate new endpoints wouldn't suddenly get 
-unexpected errors.
-
-As you can see, I haven't got a very firm picture of how all this should 
-work.
-
-Alan Stern
