@@ -2,83 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB5B37A16A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 10:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D45437A176
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 10:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhEKIMu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 04:12:50 -0400
-Received: from mx2.suse.de ([195.135.220.15]:59790 "EHLO mx2.suse.de"
+        id S230160AbhEKIPF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 04:15:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229935AbhEKIMt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 May 2021 04:12:49 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1620720703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TWVXvnrJGKcCzxRqtOT1Qny8f0lpOip9d8xcmIIBgT4=;
-        b=O1ndLASEpv7+JfgleJE6evX03cdjzjgRGWYcFD4mJUMMIymTXc7ckOE1wDE5pmyfMLHr6S
-        WvCeeDiSd1pQz5Kzrl/Dx12NWFghL6l1gGfcQ7uHCvkZokaJZKCyUjbgTv5gk4cPg5f/O9
-        gveSWuqqcPFdzoQkTwsr0YrL8oy1gDI=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 06E74ABF6;
-        Tue, 11 May 2021 08:11:43 +0000 (UTC)
-Message-ID: <795e587aa6f956f92064e57445d3d527ad87460b.camel@suse.com>
-Subject: Re: [PATCH] USB: cdc-wdm: Fix ODEBUG bug in wdm_disconnect
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        qiang.zhang@windriver.com, gregkh@linuxfoundation.org,
-        lee.jones@linaro.org
-Cc:     linux-usb@vger.kernel.org
-Date:   Tue, 11 May 2021 10:11:41 +0200
-In-Reply-To: <0e4131c7-0372-53cb-74a3-13d3a58ba25c@i-love.sakura.ne.jp>
-References: <20210511033140.29658-1-qiang.zhang@windriver.com>
-         <0e4131c7-0372-53cb-74a3-13d3a58ba25c@i-love.sakura.ne.jp>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S230271AbhEKIPE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 04:15:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B567D613C0;
+        Tue, 11 May 2021 08:13:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620720838;
+        bh=lagjRk7XHfYTuOSoD5kLTBMV/hIssg297p7SALdjRDI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=pWC1iZ5451KjPomnd1SQWabUPwucJQICG6j2DLvB0sQQWaVoZ6Es4bozSUKifd8yD
+         rP9B7xTEYRIPp6uIjY1nFpaV/ua6aCEKINJZiTrJcMlS3cPXNHFxYrvbLy+5x3cpUi
+         EzbOqD2I9hIaghWCoW5uPSFet3qllQoc4XrxrG1x0UCTGpBzgoN3FdUy27anRvtCiL
+         zdXEfWvFGuEo5Pd8DGnmtnxltHiTaUdVsObmdSoYiuChLxrQA3H6OOls0ywD/W8nZF
+         8FuOabmGqR+uwx25D9Sn5WADTfWSLSoG0m9UGi97UyecNWKPOWC683DM33R1ibFwOc
+         BsoFEZVB6/s4w==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace
+ list_for_each_entry_safe() if using giveback
+In-Reply-To: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+Date:   Tue, 11 May 2021 11:13:48 +0300
+Message-ID: <87tun9g01v.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Dienstag, den 11.05.2021, 14:48 +0900 schrieb Tetsuo Handa:
-> On 2021/05/11 12:31, qiang.zhang@windriver.com wrote:
-> > This warning is generated because when kfree wdm_device,
-> > it is found that there is still an active work in workqueue,
-> > This phenomenon may be due to the following reasons.
-> > when the devices disconnect, although the work was cancelled,
-> > but the schedule_work still may be called, therefore, before
-> > scheduling work, we need to detect the status of the device.
-> > 
-> > Reported-by: syzbot <
-> > syzbot+7da71853830ac3289474@syzkaller.appspotmail.com>
-> > Signed-off-by: Zqiang <qiang.zhang@windriver.com>
-> > ---
-> >  drivers/usb/class/cdc-wdm.c | 13 ++++++++-----
-> >  1 file changed, 8 insertions(+), 5 deletions(-)
-> > 
-> 
-> Oliver Neukum is aware of this problem, and is considering poisoning
-> approach than
-> checking WDM_SUSPENDING/WDM_RESETTING/WDM_DISCONNECTING approach. I
-> guess we could
-> replace three test_bit() tests into OR'ed-bits test (something like
-> test_bits()) ?
-> 
->   
-> https://lkml.kernel.org/r/2db36d52015b644cc1891fcffc87ef09c2b728b7.camel@suse.com
-> 
-> Oliver, how do we want to fix this problem?
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
 
 Hi,
 
-I was under the assumption that Greg had already merged the fix
-18abf874367456540846319574864e6ff32752e2
-Am I wrong?
+Wesley Cheng <wcheng@codeaurora.org> writes:
+> The list_for_each_entry_safe() macro saves the current item (n) and
+> the item after (n+1), so that n can be safely removed without
+> corrupting the list.  However, when traversing the list and removing
+> items using gadget giveback, the DWC3 lock is briefly released,
+> allowing other routines to execute.  There is a situation where, while
+> items are being removed from the cancelled_list using
+> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+> routine is running in parallel (due to UDC unbind).  As the cleanup
+> routine removes n, and the pullup disable removes n+1, once the
+> cleanup retakes the DWC3 lock, it references a request who was already
+> removed/handled.  With list debug enabled, this leads to a panic.
+> Ensure all instances of the macro are replaced where gadget giveback
+> is used.
+>
+> Example call stack:
+>
+> Thread#1:
+> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>     ->list_for_each_entry_safe()
+>     ->dwc3_gadget_giveback(n)
+>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+>       ->spin_unlock
+>       ->Thread#2 executes
+>       ...
+>     ->dwc3_gadget_giveback(n+1)
+>       ->Already removed!
+>
+> Thread#2:
+> dwc3_gadget_pullup()
+>   ->waiting for dwc3 spin_lock
+>   ...
+>   ->Thread#1 released lock
+>   ->dwc3_stop_active_transfers()
+>     ->dwc3_remove_requests()
+>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+>       ->dwc3_gadget_giveback()
+>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
+>         ->spin_unlock
+>
+> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+> ---
+> Changes in v2:
+>  - Updated commit message with context call stack of an example scenario
+>    seen on device.
+>
+>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index dd80e5c..efa939b 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_=
+ep *dep, struct dwc3_request *r
+>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *de=
+p)
+>  {
+>  	struct dwc3_request		*req;
+> -	struct dwc3_request		*tmp;
+>  	struct dwc3			*dwc =3D dep->dwc;
+>=20=20
+> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+> +	while (!list_empty(&dep->cancelled_list)) {
+> +		req =3D next_request(&dep->cancelled_list);
 
-	Regards
-		Oliver
+couldn't this be solved list_replace_init() instead? Then we can keep
+using the regular list_for_each_entry_safe() which has an added semantic
+meaning due to its name.
 
+=2D-=20
+balbi
 
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCaPLwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUg8+Af+Kaqjllefd0NFPCAIWF3wonEqqn79RqpM
+KNiONGML4FhR6hKy6f5kkcIFvMrRGCVg4E7EQ5d3qrcSAgWCF2Ee6IZvUTTp/XWV
+0HyOyID2MugKO0XEFHPunuT8i4XywCz8BLIaS7irJoz9oCYPXWcsY95wAPLPxa0C
+Zm2PtZ1x5ig7ggz8LkaVRrk7+WsbD8GTb/qnxcvtJ6jZMlrYY03h0GVMuBhUttLW
+gYedJOEr2Sfy+6guyIdkz77rqMX2FDuuLo7bHri3vQ0b7dmVYLnhgQpW3FuYkHBo
+OtI7BD2USop4ZYcW4l4vw4q6Cv8KRQGwYvQ4cnQlKNm0KrA0tHK0+Q==
+=Q9N8
+-----END PGP SIGNATURE-----
+--=-=-=--
