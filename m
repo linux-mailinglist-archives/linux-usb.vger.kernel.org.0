@@ -2,67 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A245A379F4B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 07:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E179B379FA6
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 08:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbhEKFt3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 01:49:29 -0400
-Received: from www262.sakura.ne.jp ([202.181.97.72]:50200 "EHLO
-        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbhEKFt2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 01:49:28 -0400
-Received: from fsav404.sakura.ne.jp (fsav404.sakura.ne.jp [133.242.250.103])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 14B5mAT7042393;
-        Tue, 11 May 2021 14:48:10 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav404.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav404.sakura.ne.jp);
- Tue, 11 May 2021 14:48:10 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav404.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 14B5m9wS042353
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 11 May 2021 14:48:10 +0900 (JST)
-        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
-Subject: Re: [PATCH] USB: cdc-wdm: Fix ODEBUG bug in wdm_disconnect
-To:     qiang.zhang@windriver.com, gregkh@linuxfoundation.org,
-        oneukum@suse.com, lee.jones@linaro.org
-Cc:     linux-usb@vger.kernel.org
-References: <20210511033140.29658-1-qiang.zhang@windriver.com>
-From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Message-ID: <0e4131c7-0372-53cb-74a3-13d3a58ba25c@i-love.sakura.ne.jp>
-Date:   Tue, 11 May 2021 14:48:06 +0900
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S230312AbhEKG1Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 02:27:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48132 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229957AbhEKG1U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 11 May 2021 02:27:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 59CC66128E;
+        Tue, 11 May 2021 06:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1620714374;
+        bh=UV4fbVgL52REpMq4SBHkMYtTskxfKhM6n65aZENFeQE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hrC+pPxY9XfYL1SCiO31Uaer3bPCA1aSWeXRv2rQcWmU9FnksNiyM3/qum2/hCQeR
+         gz/EzWvr9fKqDq0wOpQZFi7bdKcTGMcfXp2Lm5RlycrkxAW5/Y93qtsrG9rq3uH8du
+         anhnxGnoFVozousFuWEiScfvlXxpY8YMfIOFq2yw=
+Date:   Tue, 11 May 2021 08:26:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: xhci: Increase timeout for HC halt
+Message-ID: <YJojglZqVE3vaUxX@kroah.com>
+References: <20210511002933.1612871-1-luzmaximilian@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210511033140.29658-1-qiang.zhang@windriver.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210511002933.1612871-1-luzmaximilian@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/05/11 12:31, qiang.zhang@windriver.com wrote:
-> This warning is generated because when kfree wdm_device,
-> it is found that there is still an active work in workqueue,
-> This phenomenon may be due to the following reasons.
-> when the devices disconnect, although the work was cancelled,
-> but the schedule_work still may be called, therefore, before
-> scheduling work, we need to detect the status of the device.
+On Tue, May 11, 2021 at 02:29:33AM +0200, Maximilian Luz wrote:
+> On some devices (specifically the SC8180x based Surface Pro X with
+> QCOM04A6) HC halt / xhci_halt() times out during boot. Manually binding
+> the xhci-hcd driver at some point later does not exhibit this behavior.
+> To work around this, double XHCI_MAX_HALT_USEC, which also resolves this
+> issue.
 > 
-> Reported-by: syzbot <syzbot+7da71853830ac3289474@syzkaller.appspotmail.com>
-> Signed-off-by: Zqiang <qiang.zhang@windriver.com>
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 > ---
->  drivers/usb/class/cdc-wdm.c | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
+>  drivers/usb/host/xhci-ext-caps.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Oliver Neukum is aware of this problem, and is considering poisoning approach than
-checking WDM_SUSPENDING/WDM_RESETTING/WDM_DISCONNECTING approach. I guess we could
-replace three test_bit() tests into OR'ed-bits test (something like test_bits()) ?
+Should this go to stable kernels as well?
 
-  https://lkml.kernel.org/r/2db36d52015b644cc1891fcffc87ef09c2b728b7.camel@suse.com
+thanks,
 
-Oliver, how do we want to fix this problem?
+greg k-h
