@@ -2,178 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB9D37A02A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 08:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B893F37A034
+	for <lists+linux-usb@lfdr.de>; Tue, 11 May 2021 08:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230172AbhEKG6A (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 02:58:00 -0400
-Received: from mga14.intel.com ([192.55.52.115]:64374 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229931AbhEKG57 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 11 May 2021 02:57:59 -0400
-IronPort-SDR: 2hu1sqpPNtFsM5bbjkBnbYdhwWTZnHuJRV02S45uneOlYOBmY0rRzDK3C+2QlTWGs3v3EtZrZj
- xTp++AfWKJAA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9980"; a="199049358"
-X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="199049358"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2021 23:56:53 -0700
-IronPort-SDR: AXt6I+3BZTXV82Na/G8r1U/DmwHW+A/xtrteoQDsOcDEi74Fp05hRB+PswzxV/7z36q0dPhEXt
- CxeX9zQOciWw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,290,1613462400"; 
-   d="scan'208";a="536844677"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 10 May 2021 23:56:49 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 11 May 2021 09:56:48 +0300
-Date:   Tue, 11 May 2021 09:56:48 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 8/8] usb: typec: altmodes/displayport: Notify drm subsys
- of hotplug events
-Message-ID: <YJoqsMTJnOUdg1hk@kuha.fi.intel.com>
-References: <20210505162415.531876-1-hdegoede@redhat.com>
- <20210505162415.531876-9-hdegoede@redhat.com>
+        id S230369AbhEKG7M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 02:59:12 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:38562 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230168AbhEKG7L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 02:59:11 -0400
+Received: by mail-il1-f197.google.com with SMTP id f12-20020a056e0204ccb02901613aa15edfso15893371ils.5
+        for <linux-usb@vger.kernel.org>; Mon, 10 May 2021 23:58:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=WAlEVy0ZMfNVjKlh40M9CEJnUjL9y5ekxYFhQsRtRM8=;
+        b=Pz8ytk0sI82BjVl2tL1XY5ii0W0NnDSjF1POqULYNUxfXbUt92klTSmyR0TIMf9a5z
+         yGPKmzPqATfbjmSh63V8hCebEvJJmwmP1IQuGneHCDBbJjJNewgNj9U3oCWbt40uP+kk
+         3VAW/6neaI53CagvWCcEqHgvnoaBvwvYNT+BM5fGKf7OnD4c2orHbDBtyz44h90AOqj2
+         4XDYtfhwuajdFP2taMOml4sRluVdJipkxtKTG8eA96HP2Xtvv8MLYpx9QvqV/B+U5Omm
+         Wg+VpeJGxDiUDAmFp1LtUCAIQrnpvTplTcR2BRJah1ozJhStq/beyB9uv2bj8rd11E73
+         UQxQ==
+X-Gm-Message-State: AOAM531jU78Chm5PjByBmQLx521TzGxzZGD30moSIZXvcFEbc83F4fJX
+        lSoZ2QYsUJ581s5wrA8NdayxSgWSbt+L7ZgMpnVq4JwuPYRx
+X-Google-Smtp-Source: ABdhPJy1+7M05LR396Fy+WAxn+ZHCqn77sqp5GoH6r5WKwYW5bJvDqONdE4jmh/SCNdH5aovFYTBZFc/A80DtjSEiAYMyZW+NOLF
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210505162415.531876-9-hdegoede@redhat.com>
+X-Received: by 2002:a92:de49:: with SMTP id e9mr23983574ilr.132.1620716285105;
+ Mon, 10 May 2021 23:58:05 -0700 (PDT)
+Date:   Mon, 10 May 2021 23:58:05 -0700
+In-Reply-To: <000000000000b304d505bc3e5b3a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000749f0605c2086a95@google.com>
+Subject: Re: [syzbot] general protection fault in try_to_wake_up (2)
+From:   syzbot <syzbot+b4a81dc8727e513f364d@syzkaller.appspotmail.com>
+To:     alaaemadhossney.ae@gmail.com, asml.silence@gmail.com,
+        axboe@kernel.dk, christian@brauner.io, gregkh@linuxfoundation.org,
+        io-uring@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        shankarkoli@quadrogen.com, shuah@kernel.org,
+        skhan@linuxfoundation.org, syzkaller-bugs@googlegroups.com,
+        valentina.manea.m@gmail.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 05, 2021 at 06:24:15PM +0200, Hans de Goede wrote:
-> Use the new drm_connector_oob_hotplug_event() functions to let drm/kms
-> drivers know about DisplayPort over Type-C hotplug events.
-> 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+syzbot suspects this issue was fixed by commit:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+commit 363eaa3a450abb4e63bd6e3ad79d1f7a0f717814
+Author: Shuah Khan <skhan@linuxfoundation.org>
+Date:   Tue Mar 30 01:36:51 2021 +0000
 
-> ---
-> Changes in v3:
-> - Only call drm_connector_oob_hotplug_event() on hpd status bit change
-> - Adjust for drm_connector_oob_hotplug_event() no longer having a data
->   argument
-> 
-> Changes in v2:
-> - Add missing depends on DRM to TYPEC_DP_ALTMODE Kconfig entry
-> ---
->  drivers/usb/typec/altmodes/Kconfig       |  1 +
->  drivers/usb/typec/altmodes/displayport.c | 23 +++++++++++++++++++++++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
-> index 60d375e9c3c7..1a6b5e872b0d 100644
-> --- a/drivers/usb/typec/altmodes/Kconfig
-> +++ b/drivers/usb/typec/altmodes/Kconfig
-> @@ -4,6 +4,7 @@ menu "USB Type-C Alternate Mode drivers"
->  
->  config TYPEC_DP_ALTMODE
->  	tristate "DisplayPort Alternate Mode driver"
-> +	depends on DRM
->  	help
->  	  DisplayPort USB Type-C Alternate Mode allows DisplayPort
->  	  displays and adapters to be attached to the USB Type-C
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index aa669b9cf70e..c1d8c23baa39 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -11,8 +11,10 @@
->  #include <linux/delay.h>
->  #include <linux/mutex.h>
->  #include <linux/module.h>
-> +#include <linux/property.h>
->  #include <linux/usb/pd_vdo.h>
->  #include <linux/usb/typec_dp.h>
-> +#include <drm/drm_connector.h>
->  #include "displayport.h"
->  
->  #define DP_HEADER(_dp, ver, cmd)	(VDO((_dp)->alt->svid, 1, ver, cmd)	\
-> @@ -57,11 +59,13 @@ struct dp_altmode {
->  	struct typec_displayport_data data;
->  
->  	enum dp_state state;
-> +	bool hpd;
->  
->  	struct mutex lock; /* device lock */
->  	struct work_struct work;
->  	struct typec_altmode *alt;
->  	const struct typec_altmode *port;
-> +	struct fwnode_handle *connector_fwnode;
->  };
->  
->  static int dp_altmode_notify(struct dp_altmode *dp)
-> @@ -125,6 +129,7 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
->  static int dp_altmode_status_update(struct dp_altmode *dp)
->  {
->  	bool configured = !!DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
-> +	bool hpd = !!(dp->data.status & DP_STATUS_HPD_STATE);
->  	u8 con = DP_STATUS_CONNECTION(dp->data.status);
->  	int ret = 0;
->  
-> @@ -137,6 +142,11 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
->  		ret = dp_altmode_configure(dp, con);
->  		if (!ret)
->  			dp->state = DP_STATE_CONFIGURE;
-> +	} else {
-> +		if (dp->hpd != hpd) {
-> +			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> +			dp->hpd = hpd;
-> +		}
->  	}
->  
->  	return ret;
-> @@ -512,6 +522,7 @@ static const struct attribute_group dp_altmode_group = {
->  int dp_altmode_probe(struct typec_altmode *alt)
->  {
->  	const struct typec_altmode *port = typec_altmode_get_partner(alt);
-> +	struct fwnode_handle *fwnode;
->  	struct dp_altmode *dp;
->  	int ret;
->  
-> @@ -540,6 +551,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
->  	alt->desc = "DisplayPort";
->  	alt->ops = &dp_altmode_ops;
->  
-> +	fwnode = dev_fwnode(alt->dev.parent->parent); /* typec_port fwnode */
-> +	dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
-> +	if (IS_ERR(dp->connector_fwnode))
-> +		dp->connector_fwnode = NULL;
-> +
->  	typec_altmode_set_drvdata(alt, dp);
->  
->  	dp->state = DP_STATE_ENTER;
-> @@ -555,6 +571,13 @@ void dp_altmode_remove(struct typec_altmode *alt)
->  
->  	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
->  	cancel_work_sync(&dp->work);
-> +
-> +	if (dp->connector_fwnode) {
-> +		if (dp->hpd)
-> +			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-> +
-> +		fwnode_handle_put(dp->connector_fwnode);
-> +	}
->  }
->  EXPORT_SYMBOL_GPL(dp_altmode_remove);
->  
-> -- 
-> 2.31.1
+    usbip: synchronize event handler with sysfs code paths
 
--- 
-heikki
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=114c0579d00000
+start commit:   d4961772 Merge tag 'clk-fixes-for-linus' of git://git.kern..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9320464bf47598bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=b4a81dc8727e513f364d
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=126d1de9d00000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: usbip: synchronize event handler with sysfs code paths
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
