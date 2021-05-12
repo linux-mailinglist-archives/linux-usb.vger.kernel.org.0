@@ -2,80 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCAF37B343
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 03:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB7A37B364
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 03:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbhELBIp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 21:08:45 -0400
-Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51733 "EHLO
-        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhELBIp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 21:08:45 -0400
-X-Originating-IP: 68.203.5.165
-Received: from [192.168.1.186] (cpe-68-203-5-165.austin.res.rr.com [68.203.5.165])
-        (Authenticated sender: frank@zago.net)
-        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AD7A260003;
-        Wed, 12 May 2021 01:07:33 +0000 (UTC)
-Subject: Re: [PATCH v2 1/2] Revert "USB: serial: ch341: add new Product ID for
- CH341A"
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Jan-Niklas Burfeind <kernel@aiyionpri.me>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
-        gunar@schorcht.net
-References: <20210423002852.3904-1-frank@zago.net>
- <YJjjfx49nCflzFbR@hovoldconsulting.com>
-From:   Frank Zago <frank@zago.net>
-Message-ID: <8b3c348f-9e05-29f9-9197-8ddf1c8a9e8b@zago.net>
-Date:   Tue, 11 May 2021 20:07:31 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S229964AbhELBWO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 21:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55234 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229736AbhELBWN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 21:22:13 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FFFC061574;
+        Tue, 11 May 2021 18:21:06 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id a11so20066008ioo.0;
+        Tue, 11 May 2021 18:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc:content-transfer-encoding;
+        bh=xHB79h3azR5FeMjEmcCPhDImC0Y4yGYd2UePCCok+Yk=;
+        b=hs/+cVBOSW7PlZMHmRTOYtJtIVu2rlvGv3R47l+DA3AbIoaiucWINPHfjHAAyjym9u
+         BjGpDfu/6UyTVd4e1XzviXRMJVcb0nyCdoXsFMm+TEM6nbcqUM5kiwD7JVWUsx9MctsO
+         dDY3fLp/owMmpcsocQ77AdmL5cD4Ea83Eu8b3Mv7Qn29ponki2kJBTkCKvKG/Mc2AiYQ
+         Jw982PkGrYGyRK6vApFSPbsuDYkkuTolnOQ3Ie2hBjgXkGozPwZhnpj4Z2Duo/Ak4xpB
+         LwaqBvzybfjCup79ycD/p2J1kZrZUpuoH0V6jm7F4aflxMCQke49ech3V0OMnbg456Bc
+         BCQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=xHB79h3azR5FeMjEmcCPhDImC0Y4yGYd2UePCCok+Yk=;
+        b=s2YfHIqYpFaPDIpxSxtdQqb8ILVVEVXYKjdWP4AeutEQROpX830B22K4lxfpLZdO4O
+         4Ne0cWpmMF7nYcbh64lcl6mGSrVxwtmM1TfZaFCFB3VlTmrU0uV5qM1UTDF6r/Vkwmis
+         Vbd0AGr3TGrW+/FAlL6GDfWyKdRCD906prKQDpwQNr+tAwNL66Nfc/ck+CzuModj5bUe
+         esavTKg2x9hS3f1G7wLFwFP92m17u0oqdV+uQ1D9gIBZ813YVSEFJp0SPDYdxhJbOST3
+         0LCp+2X18P5WocFh9Acd2Gb1ZfaWBxwu8WraMAA6J4etb2GsjWmLkIft77bW8YB+SP6s
+         /EzQ==
+X-Gm-Message-State: AOAM533ThI/pYjHXnwTffYTI6/u3HEN2vz8v6oT+ulg/vybX9YHKGNuq
+        7W1t9RUbBBev5c5+nvM0Np3kx3vtGAzPGGSNcCw=
+X-Google-Smtp-Source: ABdhPJxlHtrpYE70KZn4ngNfhszJFq6xOhz4O+aQO+XlpdIGNgIvqx4Xqm3oplcbM9d5K88ia2JaumE452mFYHvZHLE=
+X-Received: by 2002:a02:970c:: with SMTP id x12mr2948729jai.21.1620782466199;
+ Tue, 11 May 2021 18:21:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YJjjfx49nCflzFbR@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210424021631.1972022-1-rajatja@google.com> <20210512010049.GA89346@rocinante.localdomain>
+In-Reply-To: <20210512010049.GA89346@rocinante.localdomain>
+Reply-To: rajatxjain@gmail.com
+From:   Rajat Jain <rajatxjain@gmail.com>
+Date:   Tue, 11 May 2021 18:20:55 -0700
+Message-ID: <CAA93t1ohAFM1U2xTvbd1J1dUCaZwh6GYNGib_AM0J7+qHwSf1A@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Move the "removable" attribute from
+ USB to core
+To:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Krzysztof,
 
-On 5/10/21 2:40 AM, Johan Hovold wrote:
-> On Thu, Apr 22, 2021 at 07:28:51PM -0500, Frank Zago wrote:
->> From: frank zago <frank@zago.net>
->> 
->> The 0x5512 USB PID is for the I2C/GPIO/SPI interfaces. UART is 
->> still present but only the TX and RX pins are available; DTS, DTR, 
->> ... are used for other things. Remove the PID, and let a I2C
->> driver bind to it.
->> 
->> Existing CH341 boards usually have physical jumpers to switch 
->> between the 3 modes.
->> 
->> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
-> 
-> You can't just revert something which people clearly depend on and 
-> therefore added to the kernel in the first place.
+Thanks a lot for your comments. Please see inline.
 
-That device in UART mode was already supported by the serial driver. The 
-original submitter just had to move a jumper on his board. There was no 
-need to patch the kernel.
+On Tue, May 11, 2021 at 6:00 PM Krzysztof Wilczy=C5=84ski <kw@linux.com> wr=
+ote:
+>
+> Hi Rajat,
+>
+> I have few questions below, but to add in advance, I might be confusing
+> the role that "type->supports_removable" and "dev->removable" plays
+> here, and if so then I apologise.
+>
+> [...]
+> > @@ -2504,8 +2523,16 @@ static int device_add_attrs(struct device *dev)
+> >                       goto err_remove_dev_online;
+> >       }
+> >
+> > +     if (type && type->supports_removable) {
+> > +             error =3D device_create_file(dev, &dev_attr_removable);
+> > +             if (error)
+> > +                     goto err_remove_dev_waiting_for_supplier;
+> > +     }
+> > +
+> >       return 0;
+>
+> Would a check for "dev->removable =3D=3D DEVICE_REMOVABLE" here be more
+> appropriate?
+>
+> Unless you wanted to add sysfs objects when the device hints that it has
+> a notion of being removable even though it might be set to "unknown" or
+> "fixed" (if that state is at all possible then), and in which case using
+> the dev_is_removable() helper would also not be an option since it does
+> a more complex check internally.
+>
+> Technically, you could always add this sysfs object (similarly to what
+> USB core did) as it would then show the correct state depending on
+> "dev->removable".
+>
+> Also, I suppose, it's not possible for a device to have
+> "supports_removable" set to true, but "removable" would be different
+> than "DEVICE_REMOVABLE", correct?
 
-That product ID also supports UART but in a limited way, as only the RX and TX
-pins are available. However it is the only one that supports i2c/spi/gpio, and
-that's why I have to revert the patch. 
+No, that is not true.
 
-If that's desired, the new driver could add support for that as well, but I don't
-think it's worth the effort.
+device_type->supports_removable=3D1 indicates that the bus / subsystem
+is capable of differentiating between removable and fixed devices.
+It's essentially describing a capability of the bus / subsystem. This
+flag needs to be true for a subsystem for any it's devices'
+dev->removable field to be considered meaningful.
 
-> 
-> Can you reprogram the device with a newly allocated PID to be used 
-> for i2c-only instead?
+OTOH, the dev->removable =3D> indicates the location of the device IF
+device_type->supports location is true. Yes, it can be fixed /
+removable / unknown (whatever the bus decides) if the
+device_type->supports_location is true.
 
-It is possible if the device has an SPI flash connected to it, but none of
-the cheap boards have that.
+One of my primary considerations was also that the existing UAPI for
+the USB's "removable" attribute shouldn't be changed. Currently, it
+exists for all USB devices, so I think the current code / check is OK.
 
-Frank.
+>
+> [...]
+> > +enum device_removable {
+> > +     DEVICE_REMOVABLE_UNKNOWN =3D 0,
+> > +     DEVICE_REMOVABLE,
+> > +     DEVICE_FIXED,
+> > +};
+>
+> I know this was moved from the USB core, but I personally find it
+> a little bit awkward to read, would something like that be acceptable?
+>
+> enum device_removable {
+>         DEVICE_STATE_UNKNOWN =3D 0,
+>         DEVICE_STATE_REMOVABLE,
+>         DEVICE_STATE_FIXED,
+> };
+>
+> The addition of state to the name follows the removable_show() function
+> where the local variable is called "state", and I think it makes sense
+> to call this as such.  What do you think?
+
+I think I made a mistake by using the "state" as the local variable
+there. I will change it to "location". I'm happy to change the enums
+above to DEVICE_LOCATION_REMOVABLE* etc if there is a wider consensus
+on this. IMHO, the current shorter one also looks OK.
+
+>
+> > +static inline bool dev_is_removable(struct device *dev)
+> > +{
+> > +     return dev && dev->type && dev->type->supports_removable
+> > +         && dev->removable =3D=3D DEVICE_REMOVABLE;
+> > +}
+>
+> Similarly to my question about - would a simple check to see if
+> "dev->removable" is set to "DEVICE_REMOVABLE" here be enough?
+
+No, as I mentioned above, the dev->removable field should be
+considered meaningful only if device_type->supports_location is true.
+So the check for supports_removable is needed here.
+
+Please feel free to send me more thoughts.
+
+Thanks & Best Regards,
+
+Rajat
+
+
+>
+> Krzysztof
