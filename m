@@ -2,70 +2,375 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 236E237EE4F
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 00:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EA837EF2D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 01:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346632AbhELV1t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 17:27:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52223 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S1381449AbhELTeY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 15:34:24 -0400
-Received: (qmail 944437 invoked by uid 1000); 12 May 2021 15:33:13 -0400
-Date:   Wed, 12 May 2021 15:33:13 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Disconnect race in Gadget core
-Message-ID: <20210512193313.GA943744@rowland.harvard.edu>
-References: <20210510152426.GE863718@rowland.harvard.edu>
- <87zgx2fskr.fsf@kernel.org>
- <20210510193849.GB873147@rowland.harvard.edu>
- <20210511025322.GA23868@nchen>
- <20210511191538.GC908414@rowland.harvard.edu>
- <20210512093748.GA17479@nchen>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210512093748.GA17479@nchen>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S236074AbhELW7d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 18:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45908 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347155AbhELVpc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 17:45:32 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F94C061343
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 14:35:02 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 78-20020a250b510000b02904f953c1fb64so4571367ybl.1
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 14:35:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=0M0wbVUu/mWC2gkH7zrIl7FErtbkZ0kL0d1N2HHWY3U=;
+        b=HqQKorO3bjeywrRlcMXKLmXqXW8rmCW0Y4rZ13S0J6AF9VPjDEMGsoOJj47lTuYaWP
+         GeG5unwltILpZSgEVGvDR0/INVzpCTrOc2j1ykn/hY9+0nIWoAXRdprqreUoNrAVt4GB
+         3q+QBdhGq7c6nCmlEO9JwdqTH42m3wxqOo6G6vrtPojxG4NWIdQqabjsvKwVApeNPYQk
+         Z9NnN4pghwxy7eZod20jLbDrOukN/rXc95zvPFp2xXNGb1rMsBql8f26ggc3/TKT68sB
+         DUCDzslJ27TxK33Wv000OOXX90+hrLQhrrAZ2TKFSaSO6Cgn+Wx2B9PCvBAa96NEn3pg
+         14tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=0M0wbVUu/mWC2gkH7zrIl7FErtbkZ0kL0d1N2HHWY3U=;
+        b=MM6NCnc/cBd2XaxZLVmdq65mRYYfQyw6spfgQyadJOQDWYyUG1kKCiO2d8Q8JGxQtL
+         MSFAfxlZ9ZIhL7iWAE3L39Svg/bsWQ0ROxlgH7ToYZ3Nl8lfjSMXBvpXiK1f75eSc5Z+
+         EYHD8bv8+8NrvXpn0vsPgMBeRurwEwP5+NBG9IebAq9wS7X6J/ADBRuUAIKUB/iFxgBf
+         hAUhT0aSd5PcYFlF5AOlP+QnRJPKmgcm5N+kuDi5PuXh0kJRQC+mBDsLJznQ3golnbcx
+         RmL2zc4o47ATCvgaa45rnoZoVKEvrr/UYzl59R34ohRYH5bPfF5EltVZEYOsl61Ybu2I
+         +BPQ==
+X-Gm-Message-State: AOAM531mJzctFdBn3KwQv2rlrkBvjU9wyIEB06PIl0p84s7f10nq5Y0p
+        PJNfu2+KCHIoh/qUp6HdaR41aD0+y9u0
+X-Google-Smtp-Source: ABdhPJyy9Vqvar/Zui5V+18Ebaa9FXw19m3u5rZgx8hDZIZjuVEaYlmvXZPErZPQhIsJTqJRHyK0/beFAzb9
+X-Received: from rajat2.mtv.corp.google.com ([2620:15c:202:201:45af:4b75:ef28:4f6d])
+ (user=rajatja job=sendgmr) by 2002:a25:5d0b:: with SMTP id
+ r11mr51123258ybb.380.1620855301810; Wed, 12 May 2021 14:35:01 -0700 (PDT)
+Date:   Wed, 12 May 2021 14:34:56 -0700
+Message-Id: <20210512213457.1310774-1-rajatja@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.607.g51e8a6a459-goog
+Subject: [PATCH v3 1/2] driver core: Move the "removable" attribute from USB
+ to core
+From:   Rajat Jain <rajatja@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rajat Jain <rajatja@google.com>, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
+        helgaas@kernel.org, Oliver Neukum <oneukum@suse.com>,
+        David Laight <David.Laight@aculab.com>,
+        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>
+Cc:     rajatxjain@gmail.com, jsbarnes@google.com, dtor@google.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 12, 2021 at 05:37:48PM +0800, Peter Chen wrote:
-> On 21-05-11 15:15:38, Alan Stern wrote:
-> > I suppose we could do something similar for the composite driver, for 
-> > gadgets that don't use configfs.
-> 
-> Originally, I intended to do at composite.c to cover all gadget drivers, but
-> I can't find a good way to use usb_composite_dev existing spinlock to do that.
+Move the "removable" attribute from USB to core in order to allow it to be
+supported by other subsystem / buses. Individual buses that want to support
+this attribute can opt-in by setting the supports_removable flag, and then
+populating the removable property of the device while enumerating it. The
+UAPI (location, symantics etc) for the attribute remains unchanged.
 
-It isn't necessary to use a spinlock.  RCU should work.
+Signed-off-by: Rajat Jain <rajatja@google.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+v3: - Minor commit log / comments updated.
+    - use sysfs_emit()
+    - Rename local variable name (state -> loc)
+    - change supports_removable flag from bool to bitfield.
+v2: Add documentation
 
-> Since most of users already used configfs, I chose to fix it at configfs directly.
-> If we want to fix it for legacy gadget drivers (drivers at drivers/usb/gadget/legacy/).
-> 
-> For .setup & .suspend, we could delay 10ms after usb_gadget_disconnect, ensure
-> hardware has triggered related interrupt, and we need to let all UDC drivers to
-> add udc->gadget->irq, in that case, the pending threaded interrupt will be handled
-> at synchronize_irq at usb_gadget_remove_driver.
-> For .disconnect, we could use cdev->config to judge if the first .disconnect
-> has run.
+ Documentation/ABI/testing/sysfs-bus-usb       | 11 -------
+ .../ABI/testing/sysfs-devices-removable       | 17 ++++++++++
+ drivers/base/core.c                           | 28 ++++++++++++++++
+ drivers/usb/core/hub.c                        |  8 ++---
+ drivers/usb/core/sysfs.c                      | 24 --------------
+ drivers/usb/core/usb.c                        |  1 +
+ include/linux/device.h                        | 32 +++++++++++++++++++
+ include/linux/usb.h                           |  7 ----
+ 8 files changed, 82 insertions(+), 46 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-removable
 
-I'm not very worried about setup.  There should never be any setup 
-events when the pull-up is off.  Disconnect, reset, and suspend are the 
-main problems.
+diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+index bf2c1968525f..73eb23bc1f34 100644
+--- a/Documentation/ABI/testing/sysfs-bus-usb
++++ b/Documentation/ABI/testing/sysfs-bus-usb
+@@ -154,17 +154,6 @@ Description:
+ 		files hold a string value (enable or disable) indicating whether
+ 		or not USB3 hardware LPM U1 or U2 is enabled for the device.
+ 
+-What:		/sys/bus/usb/devices/.../removable
+-Date:		February 2012
+-Contact:	Matthew Garrett <mjg@redhat.com>
+-Description:
+-		Some information about whether a given USB device is
+-		physically fixed to the platform can be inferred from a
+-		combination of hub descriptor bits and platform-specific data
+-		such as ACPI. This file will read either "removable" or
+-		"fixed" if the information is available, and "unknown"
+-		otherwise.
+-
+ What:		/sys/bus/usb/devices/.../ltm_capable
+ Date:		July 2012
+ Contact:	Sarah Sharp <sarah.a.sharp@linux.intel.com>
+diff --git a/Documentation/ABI/testing/sysfs-devices-removable b/Documentation/ABI/testing/sysfs-devices-removable
+new file mode 100644
+index 000000000000..9dabcad7cdcd
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-devices-removable
+@@ -0,0 +1,17 @@
++What:		/sys/devices/.../removable
++Date:		Apr 2021
++Contact:	Matthew Garrett <mjg@redhat.com>,
++		Rajat Jain <rajatja@google.com>
++Description:
++		Information about whether a given device is physically fixed to
++		the platform. This is determined by the device's subsystem in a
++		bus / platform-specific way. This attribute is only present for
++		buses that can support determining such information:
++
++		"removable": The device is external / removable from the system.
++		"fixed":     The device is internal / fixed to the system.
++		"unknown":   The information is unavailable.
++
++		Currently this is only supported by USB (which infers the
++		information from a combination of hub descriptor bits and
++		platform-specific data such as ACPI).
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index 4a8bf8cda52b..9e6bf9e71a7e 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -2404,6 +2404,25 @@ static ssize_t online_store(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RW(online);
+ 
++static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	const char *loc;
++
++	switch (dev->removable) {
++	case DEVICE_REMOVABLE:
++		loc = "removable";
++		break;
++	case DEVICE_FIXED:
++		loc = "fixed";
++		break;
++	default:
++		loc = "unknown";
++	}
++	return sysfs_emit(buf, "%s\n", loc);
++}
++static DEVICE_ATTR_RO(removable);
++
+ int device_add_groups(struct device *dev, const struct attribute_group **groups)
+ {
+ 	return sysfs_create_groups(&dev->kobj, groups);
+@@ -2581,8 +2600,16 @@ static int device_add_attrs(struct device *dev)
+ 			goto err_remove_dev_online;
+ 	}
+ 
++	if (type && type->supports_removable) {
++		error = device_create_file(dev, &dev_attr_removable);
++		if (error)
++			goto err_remove_dev_waiting_for_supplier;
++	}
++
+ 	return 0;
+ 
++ err_remove_dev_waiting_for_supplier:
++	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+  err_remove_dev_online:
+ 	device_remove_file(dev, &dev_attr_online);
+  err_remove_dev_groups:
+@@ -2602,6 +2629,7 @@ static void device_remove_attrs(struct device *dev)
+ 	struct class *class = dev->class;
+ 	const struct device_type *type = dev->type;
+ 
++	device_remove_file(dev, &dev_attr_removable);
+ 	device_remove_file(dev, &dev_attr_waiting_for_supplier);
+ 	device_remove_file(dev, &dev_attr_online);
+ 	device_remove_groups(dev, dev->groups);
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index b2bc4b7c4289..7a3c28b14ca1 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -2443,11 +2443,11 @@ static void set_usb_port_removable(struct usb_device *udev)
+ 	 */
+ 	switch (hub->ports[udev->portnum - 1]->connect_type) {
+ 	case USB_PORT_CONNECT_TYPE_HOT_PLUG:
+-		udev->removable = USB_DEVICE_REMOVABLE;
++		dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+ 		return;
+ 	case USB_PORT_CONNECT_TYPE_HARD_WIRED:
+ 	case USB_PORT_NOT_USED:
+-		udev->removable = USB_DEVICE_FIXED;
++		dev_set_removable(&udev->dev, DEVICE_FIXED);
+ 		return;
+ 	default:
+ 		break;
+@@ -2472,9 +2472,9 @@ static void set_usb_port_removable(struct usb_device *udev)
+ 	}
+ 
+ 	if (removable)
+-		udev->removable = USB_DEVICE_REMOVABLE;
++		dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+ 	else
+-		udev->removable = USB_DEVICE_FIXED;
++		dev_set_removable(&udev->dev, DEVICE_FIXED);
+ 
+ }
+ 
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index 5a168ba9fc51..fa2e49d432ff 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -301,29 +301,6 @@ static ssize_t urbnum_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(urbnum);
+ 
+-static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
+-			      char *buf)
+-{
+-	struct usb_device *udev;
+-	char *state;
+-
+-	udev = to_usb_device(dev);
+-
+-	switch (udev->removable) {
+-	case USB_DEVICE_REMOVABLE:
+-		state = "removable";
+-		break;
+-	case USB_DEVICE_FIXED:
+-		state = "fixed";
+-		break;
+-	default:
+-		state = "unknown";
+-	}
+-
+-	return sprintf(buf, "%s\n", state);
+-}
+-static DEVICE_ATTR_RO(removable);
+-
+ static ssize_t ltm_capable_show(struct device *dev,
+ 				struct device_attribute *attr, char *buf)
+ {
+@@ -828,7 +805,6 @@ static struct attribute *dev_attrs[] = {
+ 	&dev_attr_avoid_reset_quirk.attr,
+ 	&dev_attr_authorized.attr,
+ 	&dev_attr_remove.attr,
+-	&dev_attr_removable.attr,
+ 	&dev_attr_ltm_capable.attr,
+ #ifdef CONFIG_OF
+ 	&dev_attr_devspec.attr,
+diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+index 62368c4ed37a..ce18e84528cf 100644
+--- a/drivers/usb/core/usb.c
++++ b/drivers/usb/core/usb.c
+@@ -569,6 +569,7 @@ struct device_type usb_device_type = {
+ #ifdef CONFIG_PM
+ 	.pm =		&usb_device_pm_ops,
+ #endif
++	.supports_removable = true,
+ };
+ 
+ 
+diff --git a/include/linux/device.h b/include/linux/device.h
+index 38a2071cf776..7e87ab048307 100644
+--- a/include/linux/device.h
++++ b/include/linux/device.h
+@@ -93,6 +93,8 @@ struct device_type {
+ 	void (*release)(struct device *dev);
+ 
+ 	const struct dev_pm_ops *pm;
++
++	bool supports_removable:1; /* subsystem can classify removable/fixed */
+ };
+ 
+ /* interface for exporting device attributes */
+@@ -350,6 +352,19 @@ enum dl_dev_state {
+ 	DL_DEV_UNBINDING,
+ };
+ 
++/**
++ * enum device_removable - Whether the device is removable. The criteria for a
++ * device to be classified as removable is determined by its subsystem or bus.
++ * @DEVICE_REMOVABLE_UNKNOWN:  Device location is Unknown (default).
++ * @DEVICE_REMOVABLE: Device is removable by the user.
++ * @DEVICE_FIXED: Device is not removable by the user.
++ */
++enum device_removable {
++	DEVICE_REMOVABLE_UNKNOWN = 0,
++	DEVICE_REMOVABLE,
++	DEVICE_FIXED,
++};
++
+ /**
+  * struct dev_links_info - Device data related to device links.
+  * @suppliers: List of links to supplier devices.
+@@ -431,6 +446,9 @@ struct dev_links_info {
+  * 		device (i.e. the bus driver that discovered the device).
+  * @iommu_group: IOMMU group the device belongs to.
+  * @iommu:	Per device generic IOMMU runtime data
++ * @removable:  Whether the device can be removed from the system. This
++ *              should be set by the subsystem / bus driver that discovered
++ *              the device.
+  *
+  * @offline_disabled: If set, the device is permanently online.
+  * @offline:	Set after successful invocation of bus type's .offline().
+@@ -544,6 +562,8 @@ struct device {
+ 	struct iommu_group	*iommu_group;
+ 	struct dev_iommu	*iommu;
+ 
++	enum device_removable	removable;
++
+ 	bool			offline_disabled:1;
+ 	bool			offline:1;
+ 	bool			of_node_reused:1;
+@@ -782,6 +802,18 @@ static inline bool dev_has_sync_state(struct device *dev)
+ 	return false;
+ }
+ 
++static inline void dev_set_removable(struct device *dev,
++				     enum device_removable removable)
++{
++	dev->removable = removable;
++}
++
++static inline bool dev_is_removable(struct device *dev)
++{
++	return dev && dev->type && dev->type->supports_removable
++	    && dev->removable == DEVICE_REMOVABLE;
++}
++
+ /*
+  * High level routines for use by the bus drivers
+  */
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index eaae24217e8a..b9bd664f44a1 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -473,12 +473,6 @@ struct usb_dev_state;
+ 
+ struct usb_tt;
+ 
+-enum usb_device_removable {
+-	USB_DEVICE_REMOVABLE_UNKNOWN = 0,
+-	USB_DEVICE_REMOVABLE,
+-	USB_DEVICE_FIXED,
+-};
+-
+ enum usb_port_connect_type {
+ 	USB_PORT_CONNECT_TYPE_UNKNOWN = 0,
+ 	USB_PORT_CONNECT_TYPE_HOT_PLUG,
+@@ -703,7 +697,6 @@ struct usb_device {
+ #endif
+ 	struct wusb_dev *wusb_dev;
+ 	int slot_id;
+-	enum usb_device_removable removable;
+ 	struct usb2_lpm_parameters l1_params;
+ 	struct usb3_lpm_parameters u1_params;
+ 	struct usb3_lpm_parameters u2_params;
+-- 
+2.31.1.607.g51e8a6a459-goog
 
-> > But what about legacy gadgets?  Are 
-> > there any still around that don't use either configfs or the composite 
-> > framework?
-> 
-> I only find raw_gadget.c that doesn't use composite framework, and it doesn't implement
-> many usb_gadget_driver callbacks, eg, .disconnect and .suspend. For .setup, we could
-> use above solutions for legacy composite driver.
-
-Okay, that's good.
-
-Alan Stern
