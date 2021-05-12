@@ -2,102 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828237BA11
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 12:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB8937BA34
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 12:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbhELKKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 06:10:46 -0400
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:56748 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230202AbhELKKp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 06:10:45 -0400
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14CA7ZIr022860;
-        Wed, 12 May 2021 10:09:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2020-01-29;
- bh=QW1x4QxGK5nRMXaK0W/Lvx3BuTPEH87h+54H2o/57LE=;
- b=M76TBpu1D/h1rUFzNi1xQa+Ap0cIFlTzWco9rJy3zLyX1D3VSzgKiXkSqrzwikq64Kxo
- puRCgHRycZmx6AIb3B7Slqm7EOrd1JzCgtYfXMXFUaRHlUiTGIsMmNQDEDMH8DMKPcEk
- 7rp/zvmaXYDKfCurCOjXU2Jbq9dHaOeKxPMml/igstUOw8Cg4tCaETgWspoNfyfdaLgl
- OfS2UDYZqcyG+ocmybfbfLDJpPJ8fD8zmu5hIhxAaoNbdWCxII7wIwGdz1L717wcayd8
- d1Gfjz5/2ad/qiNiplqdzSAMVKoEdraOu+/JJloudHMX8Uf4yHYPuBRU4hkQ56xPrpgO jw== 
-Received: from oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 38eyurrq3h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 May 2021 10:09:19 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.podrdrct (8.16.0.36/8.16.0.36) with SMTP id 14CA8Mm9044499;
-        Wed, 12 May 2021 10:09:19 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by aserp3020.oracle.com with ESMTP id 38djfb4869-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 May 2021 10:09:19 +0000
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14CA8h5T047328;
-        Wed, 12 May 2021 10:09:18 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 38djfb485m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 May 2021 10:09:18 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 14CA9DA1016666;
-        Wed, 12 May 2021 10:09:13 GMT
-Received: from mwanda (/102.36.221.92)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 12 May 2021 10:09:13 +0000
-Date:   Wed, 12 May 2021 13:09:04 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Denis Joseph Barrow <D.Barow@option.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Oliver Neukum <oneukum@suse.com>,
+        id S230178AbhELKUK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 06:20:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42694 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230145AbhELKUI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 06:20:08 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D1E87613BE;
+        Wed, 12 May 2021 10:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620814740;
+        bh=u3IdEUw5iqENTS2r+X9v7WRZxxumpLboTCBqIFW0waI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Damw++OFpp6bVGcaBAW3iz00Q6HIVxmAp9ZH6LY2aKlfVMjMCM+LAI27hsxDqT0nP
+         npC1egUSqMZF+etbc/lDdSeMjSXXos5KFrRneyu7IE8NxHXV2JSt9rJ8R5cp3X8rY+
+         lDH76ljzAV5M5FhE68TkxU1G6ftSCXNGwVS5GWnVh41svjAs69IS8gYrKWXgyqMhC1
+         E3WdXFXmnbOVLkXn5ZuY1C882hMrC3+dX9SghEQ8COx365vxfLuA2IyllilGWm95WO
+         CLbY0rPJ98CBHlRfXunyK2uQooDPCKyenCzGEyAPW7wNu7COP/z7UwnAdi8JbM8hta
+         FlkvCgJhA0BEQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lglxH-0004Ob-6b; Wed, 12 May 2021 12:19:03 +0200
+Date:   Wed, 12 May 2021 12:19:03 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Denis Joseph Barrow <D.Barow@option.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
         Anirudh Rayabharam <mail@anirudhrb.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>,
         Rustam Kovhaev <rkovhaev@gmail.com>,
         Zheng Yongjun <zhengyongjun3@huawei.com>,
         Emil Renner Berthing <kernel@esmil.dk>,
         linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         kernel-janitors@vger.kernel.org
-Subject: [PATCH net] net: hso: check for allocation failure in
+Subject: Re: [PATCH net] net: hso: check for allocation failure in
  hso_create_bulk_serial_device()
-Message-ID: <YJupQPb+Y4vw3rDk@mwanda>
+Message-ID: <YJurlxqQ9L+zzIAS@hovoldconsulting.com>
+References: <YJupQPb+Y4vw3rDk@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-Proofpoint-GUID: 9dZJQH-_TDMe-8xqJ3D9TrxDWxV6AkZe
-X-Proofpoint-ORIG-GUID: 9dZJQH-_TDMe-8xqJ3D9TrxDWxV6AkZe
+In-Reply-To: <YJupQPb+Y4vw3rDk@mwanda>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add a couple checks for if these allocations fail.
+On Wed, May 12, 2021 at 01:09:04PM +0300, Dan Carpenter wrote:
+> Add a couple checks for if these allocations fail.
+> 
+> Fixes: 542f54823614 ("tty: Modem functions for the HSO driver")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  drivers/net/usb/hso.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+> index 3ef4b2841402..3b2a868d7a72 100644
+> --- a/drivers/net/usb/hso.c
+> +++ b/drivers/net/usb/hso.c
+> @@ -2618,9 +2618,13 @@ static struct hso_device *hso_create_bulk_serial_device(
+>  		num_urbs = 2;
+>  		serial->tiocmget = kzalloc(sizeof(struct hso_tiocmget),
+>  					   GFP_KERNEL);
+> +		if (!serial->tiocmget)
+> +			goto exit;
 
-Fixes: 542f54823614 ("tty: Modem functions for the HSO driver")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
----
- drivers/net/usb/hso.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Nice catch; the next assignment would go boom if this ever failed.
 
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index 3ef4b2841402..3b2a868d7a72 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -2618,9 +2618,13 @@ static struct hso_device *hso_create_bulk_serial_device(
- 		num_urbs = 2;
- 		serial->tiocmget = kzalloc(sizeof(struct hso_tiocmget),
- 					   GFP_KERNEL);
-+		if (!serial->tiocmget)
-+			goto exit;
- 		serial->tiocmget->serial_state_notification
- 			= kzalloc(sizeof(struct hso_serial_state_notification),
- 					   GFP_KERNEL);
-+		if (!serial->tiocmget->serial_state_notification)
-+			goto exit;
- 		/* it isn't going to break our heart if serial->tiocmget
- 		 *  allocation fails don't bother checking this.
- 		 */
--- 
-2.30.2
+This appears to have been introduced by 
 
+	af0de1303c4e ("usb: hso: obey DMA rules in tiocmget")
+
+>  		serial->tiocmget->serial_state_notification
+>  			= kzalloc(sizeof(struct hso_serial_state_notification),
+>  					   GFP_KERNEL);
+> +		if (!serial->tiocmget->serial_state_notification)
+> +			goto exit;
+>  		/* it isn't going to break our heart if serial->tiocmget
+>  		 *  allocation fails don't bother checking this.
+>  		 */
+
+You should remove this comment and drop the conditional on the following
+line as well now, though.
+
+Johan
