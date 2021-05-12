@@ -2,156 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F346437B4D8
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 06:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46EF37B5EC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 08:19:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbhELESd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 00:18:33 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43289 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbhELESd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 00:18:33 -0400
-Received: from mail-ot1-f70.google.com ([209.85.210.70])
-        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <chris.chiu@canonical.com>)
-        id 1lggJJ-0004xV-2P
-        for linux-usb@vger.kernel.org; Wed, 12 May 2021 04:17:25 +0000
-Received: by mail-ot1-f70.google.com with SMTP id w10-20020a056830144ab02902a5baf885d0so14286247otp.15
-        for <linux-usb@vger.kernel.org>; Tue, 11 May 2021 21:17:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZXfu/0x1x4lUEonZNC+J5qrR2427Up6CMBHzq1M51M4=;
-        b=f85+Gw7D4WpXc+7VtEIZH47+Qy48CJ11UdcaUmKoReASKft8kCW0sAZbUK+78x1sEW
-         P9A8Hn06hTxmMZbJtxwwqs/9m28Q5TCzkukeMnWSK74Kp5mZl8g7GGjYLEOQDHkCu2Un
-         t2j+CMhL5aSKBszvXNlenCtR3s3y3qIvO1PpZ/UMKzcbwWDoD0ehdWX/uyJR9S0Wl57c
-         cwiBPKWGM+xeYSpg9n8Nu5LXwMq2eafNT2FQes++7ROLvYim9CAH/JXXH2sAF3xX8ra/
-         0ANqj00pT2AdJpYhAToy/0nPcnHEnJKJPlHtp6rkevGt1563WxdhRKNIIA9CojKiPftq
-         qXog==
-X-Gm-Message-State: AOAM533VK3gsSytgh73REEA4GwVYQPtfm1hkzNnn7KXsXCnhmjr9hLFD
-        6NBk+Y5oIJqhx7MzH2XIvrHshOcaqhhyTiwSIFB6athAB8kKc08BNM23cOZzweREUXy67qInN5V
-        o1IYSoSkwZ4Wh7rdN+64evk59k03GjZSB4SAxsTJjtz7q594HI7Yc4Q==
-X-Received: by 2002:a9d:68d8:: with SMTP id i24mr28053276oto.347.1620793043842;
-        Tue, 11 May 2021 21:17:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxzlJA2VnGbYi/ug0mBJj3W7KOWF0uB/EGDVVZKzYprkD8Ui/PyvFtfazSGgXchQrjZUcApbCkEgr2rQqlE1lM=
-X-Received: by 2002:a9d:68d8:: with SMTP id i24mr28053258oto.347.1620793043603;
- Tue, 11 May 2021 21:17:23 -0700 (PDT)
+        id S230169AbhELGUa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 02:20:30 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:2452 "EHLO
+        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230182AbhELGU2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 02:20:28 -0400
+Received: from DGGEMS412-HUB.china.huawei.com (unknown [172.30.72.58])
+        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Fg4Lb4hS0zCqwn;
+        Wed, 12 May 2021 14:16:39 +0800 (CST)
+Received: from linux-lmwb.huawei.com (10.175.103.112) by
+ DGGEMS412-HUB.china.huawei.com (10.3.19.212) with Microsoft SMTP Server id
+ 14.3.498.0; Wed, 12 May 2021 14:19:09 +0800
+From:   Zou Wei <zou_wei@huawei.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Zou Wei <zou_wei@huawei.com>
+Subject: [PATCH -next] USB: EHCI: ehci-mv: add missing MODULE_DEVICE_TABLE
+Date:   Wed, 12 May 2021 14:36:09 +0800
+Message-ID: <1620801369-18642-1-git-send-email-zou_wei@huawei.com>
+X-Mailer: git-send-email 2.6.2
 MIME-Version: 1.0
-References: <20210510145030.1495-1-chris.chiu@canonical.com>
- <20210510145030.1495-2-chris.chiu@canonical.com> <20210510150203.GD863718@rowland.harvard.edu>
- <CABTNMG24BOS_+uGEYFLJrmEW10eTGjrOowwS7Zb_U+AvkZWTyQ@mail.gmail.com> <20210511163026.GA901897@rowland.harvard.edu>
-In-Reply-To: <20210511163026.GA901897@rowland.harvard.edu>
-From:   Chris Chiu <chris.chiu@canonical.com>
-Date:   Wed, 12 May 2021 12:17:12 +0800
-Message-ID: <CABTNMG2OiEFzMwMaUaVL9B6Om87e9qQMFBXRKej7G6zuvBXW=w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] USB: reset-resume the device when PORT_SUSPEND is
- set but timeout
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, m.v.b@runbox.com,
-        hadess@hadess.net, linux-usb@vger.kernel.org,
-        Linux Kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.175.103.112]
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 12, 2021 at 12:30 AM Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Tue, May 11, 2021 at 01:04:36PM +0800, Chris Chiu wrote:
-> > On Mon, May 10, 2021 at 11:02 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > >
-> > > On Mon, May 10, 2021 at 10:50:29PM +0800, chris.chiu@canonical.com wrote:
-> > > > From: Chris Chiu <chris.chiu@canonical.com>
-> > > >
-> > > > On the Realtek high-speed Hub(0bda:5487), the port which has wakeup
-> > > > enabled_descendants will sometimes timeout when setting PORT_SUSPEND
-> > > > feature. After checking the PORT_SUSPEND bit in wPortStatus, it is
-> > > > already set. However, the hub will fail to activate because the
-> > > > PORT_SUSPEND feature of that port is not cleared during resume. All
-> > > > connected devices are lost after resume.
-> > > >
-> > > > This commit force reset-resume the device connected to the timeout
-> > > > but suspended port so that the hub will have chance to clear the
-> > > > PORT_SUSPEND feature during resume.
-> > >
-> > > Are you certain that the reset-resume is needed?  What happens if you
-> > > leave out the line that sets udev->reset_resume?  The rest of the patch
-> > > will cause the kernel to realize that the port really is suspended, so
-> > > maybe the suspend feature will get cleared properly during resume.
-> > >
-> > > It's worthwhile to try the experiement and see what happens.
-> > >
-> > > Alan Stern
-> > >
-> >
-> > If I leave out the udev->reset_resume set, the resume will fail. Please refer
-> > to the following kernel log. The usb 1-1 is the hub which has wakeup enabled
-> > descendants.
-> >
-> > [   57.210472] usb 1-1: kworker/u32:7 timed out on ep0out len=0/0
-> > [   57.211022] usb 1-1-port3: suspend timeout, status 0507
-> > [   57.211130] hub 1-1:1.0: hub_suspend
-> > [   57.230500] usb 1-1: usb suspend, wakeup 0
-> >
-> > The timeout happens at 57.210472 and you can see the PORT_SUSPEND
-> > bit is actually set in the "status 0507". The following shows the resume log.
-> >
-> > [   58.046556] usb 1-1: usb resume
-> > [   58.114515] usb 1-1: Waited 0ms for CONNECT
-> > [   58.114524] usb 1-1: finish resume
-> > [   58.114928] hub 1-1:1.0: hub_resume
-> > [   58.116035] usb 1-1-port3: status 0507 change 0000
-> > [   58.116720] usb 1-1-port5: status 0503 change 0000
-> > [   58.116778] hub 1-1.3:1.0: hub_resume
-> > [   58.116908] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
-> > [   58.116952] usb 1-1.5: Waited 0ms for CONNECT
-> > [   58.116955] usb 1-1.5: finish resume
-> > [   58.117157] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
-> > [   58.117397] usb 1-1.3-port5: can't resume, status -71
-> > [   58.117782] hub 1-1.3:1.0: hub_ext_port_status failed (err = -71)
-> > [   58.118147] usb 1-1.3-port2: can't resume, status -71
-> > [   58.118149] usb 1-1.3.2: Waited 0ms for CONNECT
-> > [   58.118151] usb 1-1.3-port2: status 07eb.906e after resume, -19
-> > [   58.118153] usb 1-1.3.2: can't resume, status -19
-> > [   58.118154] usb 1-1.3-port2: logical disconnect
-> > [   58.118526] usb 1-1.3-port2: cannot disable (err = -71)
-> >
-> > As you see in the 58.116035, the hub_resume and activate is OK for the
-> > usb 1-1. The "usb 1-1.3: finish resume" is not in the log because it's not
-> > considered suspended and no chance to ClearPortFeature.
->
-> Wait -- why isn't it considered suspended?  We saw at 57.211022 that
-> 1-1-port3's Suspend feature really was set, and thanks to your patch,
-> the kernel should now believe that the port is suspended.
->
-But it's still in the `if (status)` branch so it will not get
-usb_set_device_state
-to USB_STATE_SUSPENDED, then usb_resume_both will not do the resume
-process for it.
+This patch adds missing MODULE_DEVICE_TABLE definition which generates
+correct modalias for automatic loading of this driver when it is built
+as an external module.
 
-My original thought is, we still take this as an abnormal status
-because we don't
-really know the reason for the timeout. Set reset_resume for the udev
-will make the
-kernel to reset_resume it. Or  I have to create a new `goto` name in
-the `else` branch
-to force it back to the successful suspended process. And should I
-clean the status to
-zero for pm_runtime_put_sync()? What's your suggestion?
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zou Wei <zou_wei@huawei.com>
+---
+ drivers/usb/host/ehci-mv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Chris
+diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
+index cffdc8d..beb478c 100644
+--- a/drivers/usb/host/ehci-mv.c
++++ b/drivers/usb/host/ehci-mv.c
+@@ -266,6 +266,7 @@ static const struct platform_device_id ehci_id_table[] = {
+ 	{"pxa-sph", 0},
+ 	{},
+ };
++MODULE_DEVICE_TABLE(platform, ehci_id_table);
+ 
+ static void mv_ehci_shutdown(struct platform_device *pdev)
+ {
+-- 
+2.6.2
 
-> >  Then it fails
-> > the subsequent hub 1-1.3 resume and active because the usb 1-1.3 happens
-> > to be a downstream hub. So this is why we need at least udev->reset_resume
-> > to give this kind of timeout port/device a chance to clear port feature and
-> > come back from an unknown state.
->
-> Don't worry about this part.  Naturally anything associated with the
-> 1-1.3 hub will fail after the resume of 1-1-port3 is messed up.  Fix the
-> first problem (failure to resume the port) and the second problem is
-> likely to go away.
->
-> Alan Stern
