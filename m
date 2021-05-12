@@ -2,73 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1453D37B769
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 10:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDC837B76D
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 10:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbhELIHl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 04:07:41 -0400
+        id S230176AbhELIHn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 04:07:43 -0400
 Received: from mga01.intel.com ([192.55.52.88]:32313 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230011AbhELIHk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 04:07:40 -0400
-IronPort-SDR: vRmLKXz+VNJPbdD/tes1xhK1ZZzRlur3oyvzrbHY5aMMmJlG2cK8Ac/DoHtJTCAFty3/2smxo7
- HCpCTiz27e3A==
-X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="220616870"
+        id S230019AbhELIHm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 04:07:42 -0400
+IronPort-SDR: jAOivGY+TfgqqmTCjCAmM4em6XiZEz9v4WjlipTxcNG63aQzhLj/rWI74jyjDiDYdjveLxHMbq
+ cnkvHtGEYIXg==
+X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="220616880"
 X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
-   d="scan'208";a="220616870"
+   d="scan'208";a="220616880"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 01:06:30 -0700
-IronPort-SDR: CCY/fB8FfYxavb1HhFlLVmxK9hRYV/Je7Om0RdPySzulrJHzK5vkc6gu5mL2RskHW/8rw1al5u
- 7392l5yl2jxA==
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 01:06:31 -0700
+IronPort-SDR: u88WJVahEWnzu8oTuF41IROw5IBEeszTtK3/QRks4QfuvIJwEAwrxip5yzsIpgmlUCy83W+098
+ diA59LXK/pMw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
-   d="scan'208";a="625208217"
+   d="scan'208";a="625208240"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga005.fm.intel.com with ESMTP; 12 May 2021 01:06:28 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2021 01:06:29 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
+Cc:     <linux-usb@vger.kernel.org>, Abhijeet Rao <abhijeet.rao@intel.com>,
+        stable@vger.kernel.org,
+        "Nikunj A . Dadhania" <nikunj.dadhania@intel.com>,
+        Azhar Shaikh <azhar.shaikh@intel.com>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 0/5] xhci fixes for usb-linus
-Date:   Wed, 12 May 2021 11:08:11 +0300
-Message-Id: <20210512080816.866037-1-mathias.nyman@linux.intel.com>
+Subject: [PATCH 1/5] xhci-pci: Allow host runtime PM as default for Intel Alder Lake xHCI
+Date:   Wed, 12 May 2021 11:08:12 +0300
+Message-Id: <20210512080816.866037-2-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210512080816.866037-1-mathias.nyman@linux.intel.com>
+References: <20210512080816.866037-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+From: Abhijeet Rao <abhijeet.rao@intel.com>
 
-A few small xHCI fixes for usb-linus 5.13-rc.
+In the same way as Intel Tiger Lake TCSS (Type-C Subsystem) the Alder Lake
+TCSS xHCI needs to be runtime suspended whenever possible to allow the
+TCSS hardware block to enter D3cold and thus save energy.
 
-Thanks
--Mathias
+Cc: stable@vger.kernel.org
+Signed-off-by: Abhijeet Rao <abhijeet.rao@intel.com>
+Signed-off-by: Nikunj A. Dadhania <nikunj.dadhania@intel.com>
+Signed-off-by: Azhar Shaikh <azhar.shaikh@intel.com>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-pci.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-
-Abhijeet Rao (1):
-  xhci-pci: Allow host runtime PM as default for Intel Alder Lake xHCI
-
-Christophe JAILLET (1):
-  xhci: Do not use GFP_KERNEL in (potentially) atomic context
-
-Mathias Nyman (1):
-  xhci: Fix giving back cancelled URBs even if halted endpoint can't
-    reset
-
-Maximilian Luz (1):
-  usb: xhci: Increase timeout for HC halt
-
-Sandeep Singh (1):
-  xhci: Add reset resume quirk for AMD xhci controller.
-
- drivers/usb/host/xhci-ext-caps.h |  5 +++--
- drivers/usb/host/xhci-pci.c      |  8 ++++++--
- drivers/usb/host/xhci-ring.c     | 16 +++++++++++-----
- drivers/usb/host/xhci.c          |  6 +++---
- 4 files changed, 23 insertions(+), 12 deletions(-)
-
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5bbccc9a0179..a858add8436c 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -57,6 +57,7 @@
+ #define PCI_DEVICE_ID_INTEL_CML_XHCI			0xa3af
+ #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
+ #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
++#define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
+ 
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
+ #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
+@@ -243,7 +244,8 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_ICE_LAKE_XHCI ||
+ 	     pdev->device == PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI ||
+-	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI))
++	     pdev->device == PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI ||
++	     pdev->device == PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI))
+ 		xhci->quirks |= XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ETRON &&
 -- 
 2.25.1
 
