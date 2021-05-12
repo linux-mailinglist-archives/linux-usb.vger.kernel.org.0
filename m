@@ -2,76 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B67E37B91F
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 11:28:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B711537B95B
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 11:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbhELJ3V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 05:29:21 -0400
-Received: from smaract.com ([82.165.73.54]:38152 "EHLO smaract.com"
+        id S230247AbhELJjF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 05:39:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229968AbhELJ3U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 05:29:20 -0400
-Received: from mx1.smaract.de (leasedline-static-091-249-161-134.ewe-ip-backbone.de [91.249.161.134])
-        by smaract.com (Postfix) with ESMTPSA id 5D83CA176F;
-        Wed, 12 May 2021 09:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=smaract.com;
-        s=default; t=1620811691;
-        bh=Bv6b9rWPP3U9Ix15ufpRZ2u5SPjemFgJV7rOVz8JEhM=; l=1013;
-        h=From:To:Subject;
-        b=hgPRXPhXAg867MjrJu8jyYOQAFeZjX0qURAJIJUklILxrAy7YCdnoHpiMJjO6f1Pl
-         HUziZhS8tZw9IZkE4YEDOq4fCwoqNAoaWDx4luGJe6/bGEw+9ZNeMlsQRQ8xOLe+6u
-         oPT1VUIlN+ETXh5/QgFp9aw1RXgVnyRX4u04u27I=
-Authentication-Results: smaract.com;
-        spf=pass (sender IP is 91.249.161.134) smtp.mailfrom=vonohr@smaract.com smtp.helo=mx1.smaract.de
-Received-SPF: pass (smaract.com: connection is authenticated)
-From:   Sebastian von Ohr <vonohr@smaract.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Thinh Nguyen <thinhn@synopsys.com>
-Subject: RE: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
-Thread-Topic: [BUG REPORT] usb: dwc3: Timeouts with USB 2.0 LPM active
-Thread-Index: AddAFrAj4smXgfxIQouaD3WoM/CLQ///+CEA///Z5yCAATySAP//rmbwgAJLAQD/9RYT8A==
-Date:   Wed, 12 May 2021 09:28:10 +0000
-Message-ID: <8ddf90943cd84c23966eb93fbc00722b@smaract.com>
-References: <c9b5559a05f5459d92e3c704772edb46@smaract.com>
- <87eeenj56b.fsf@kernel.org> <3d2305a43c1f4e3dad2e29286f42982d@smaract.com>
- <87bl9rhv15.fsf@kernel.org> <da6ebfb4f58a4249a095d250d9abe3ed@smaract.com>
- <878s4ticf7.fsf@kernel.org>
-In-Reply-To: <878s4ticf7.fsf@kernel.org>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S230019AbhELJjE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 05:39:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85CB56108D;
+        Wed, 12 May 2021 09:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620812276;
+        bh=nfC4E9UjdIapG7leuzOQijoeF2gM51r/ZfoKlupyDt0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ioHjKublKX0ZazJCMS9qcXNWUkY1cH4jvXthTCGspMXs8RCGsP0D+kN6BKQ9Cw5G+
+         2BNO7rZVDD527X+CAgK71z2MKG0P6XOrM6fqUyp/j6QSdS3Ci12RugEl3VMDjd7eWl
+         UBRnb7ZKlw0EjyUz4tOEEZODNUPZixHHOJdP81QNgF0GQa6bWgM4Q3uig/4nEHJrnm
+         yxOruUYh2KI+34LgQRl42Nq3rWWblW7pLCVdnzfGhcWOfNFNXAHxzCbs4sggpgwfUb
+         yaUCIJjIlE0WgGoWvRMri5fMyYoqMKJVABLJ65y+B1sZAKcMiuVxYRDwt7uUY4QGG8
+         qQjjzKQtYouYg==
+Date:   Wed, 12 May 2021 17:37:48 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+Message-ID: <20210512093748.GA17479@nchen>
+References: <20210510152426.GE863718@rowland.harvard.edu>
+ <87zgx2fskr.fsf@kernel.org>
+ <20210510193849.GB873147@rowland.harvard.edu>
+ <20210511025322.GA23868@nchen>
+ <20210511191538.GC908414@rowland.harvard.edu>
 MIME-Version: 1.0
-X-PPP-Message-ID: <162081169146.6589.6980628218005767771@smaract.com>
-X-PPP-Vhost: mario.smaract.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210511191538.GC908414@rowland.harvard.edu>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> From: Felipe Balbi [mailto:balbi@kernel.org]
-> > For a test I've changed some conditions in the driver so that
-> > __dwc3_gadget_wakeup is also called on transfer updates and the link st=
-ate
-> > change also happens when in U2. This change actually fixed my timeout i=
-ssue.
-> > However, I'm not sure if this is actually the correct thing to do. I'm =
-by far
-> > no USB expert and I don't have access to the dwc3 databook.
->=20
-> Right, AFAIR the databook was a bit unclear about this. It stated that
-> it was required only for Start Transfer, but I always had the same
-> doubt. No idea if the databook has been clarified since then.
+On 21-05-11 15:15:38, Alan Stern wrote:
+> On Tue, May 11, 2021 at 10:53:22AM +0800, Peter Chen wrote:
+> > Hi Alan,
+> > 
+> > I fixed a similar issue for configfs, see 1a1c851bbd70
+> > ("usb: gadget: configfs: fix concurrent issue between composite APIs")
+> 
+> Yes, I see.  That is indeed the very same problem.
+> 
+> > It doesn't prevent disconnect callback, the disconnect callback will check
+> > if unbind has called. The same for .setup and .suspend. Did you see
+> > issues using configfs or legacy gadget? For legacy gadget, just like you said
+> > it is the second disconnect callback is called during the removal process,
+> > the first is called at usb_gadget_disconnect. It is not easy to prevent disconnect
+> > occurring, we could add some logic at composite_disconnect, and let it quit if it is
+> > called the second time.
+> 
+> I haven't seen the race occur in operation.  It was only theoretical; I 
+> noticed it while thinking about one of the commits that was just merged 
+> into the -stable kernels.
+> 
+> > It is hard to avoid usb_gadget_driver callback until usb_gadget_udc_stop has called,
+> > no matter bad hardware or threaded interrupts, my former solution is avoid
+> > dereferenced pointer issue, most of callbacks handling are useless if the gadget has already
+> > unbind, the only meaningful callback is disconnect, and we have already called it
+> > at usb_gadget_disconnect
+> 
+> Agreed.
+> 
+> I suppose we could do something similar for the composite driver, for 
+> gadgets that don't use configfs.
 
-Maybe somebody with access to the databook can clarify this? Since dwc3 def=
-aults
-to USB 3.0 speed and LPM enabled this should affect most USB gadgets users =
-and=20
-I'd like to see this issue fixed. I'm still wondering why there have been n=
-o
-previous reports for this bug (that I know of). Surely I'm not the only one
-using a function FS usb gadget.
+Originally, I intended to do at composite.c to cover all gadget drivers, but
+I can't find a good way to use usb_composite_dev existing spinlock to do that.
+Since most of users already used configfs, I chose to fix it at configfs directly.
+If we want to fix it for legacy gadget drivers (drivers at drivers/usb/gadget/legacy/).
+
+For .setup & .suspend, we could delay 10ms after usb_gadget_disconnect, ensure
+hardware has triggered related interrupt, and we need to let all UDC drivers to
+add udc->gadget->irq, in that case, the pending threaded interrupt will be handled
+at synchronize_irq at usb_gadget_remove_driver.
+For .disconnect, we could use cdev->config to judge if the first .disconnect
+has run.
+
+> But what about legacy gadgets?  Are 
+> there any still around that don't use either configfs or the composite 
+> framework?
+
+I only find raw_gadget.c that doesn't use composite framework, and it doesn't implement
+many usb_gadget_driver callbacks, eg, .disconnect and .suspend. For .setup, we could
+use above solutions for legacy composite driver.
+
+-- 
+
+Thanks,
+Peter Chen
+
