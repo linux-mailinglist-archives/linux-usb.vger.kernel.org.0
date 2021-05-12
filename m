@@ -2,66 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB6A37BFAE
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 16:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B7837C074
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 16:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbhELORF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 10:17:05 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:41050 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231630AbhELOQh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 10:16:37 -0400
-Received: from cwcc.thunk.org (pool-72-74-133-215.bstnma.fios.verizon.net [72.74.133.215])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 14CEEiap031112
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 12 May 2021 10:14:45 -0400
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 448C815C39C2; Wed, 12 May 2021 10:14:44 -0400 (EDT)
-Date:   Wed, 12 May 2021 10:14:44 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
- symbols
-Message-ID: <YJvi1L2ss5Tfi+My@mit.edu>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        id S231236AbhELOnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 10:43:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33378 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230481AbhELOnL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 10:43:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0361D61370;
+        Wed, 12 May 2021 14:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620830522;
+        bh=zoXrWdrhFqdeF8H24gQ4Bk6xz73k5SBh9T03FYjRc1s=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=p832TjypP1xlNSEVzTk+jNOPrr5s9fJZjiSFLMhrQVuv+WQS9F0Z4xsoi+cX012mI
+         t2oWzEPDL0aQbmaB9ahLaqc7iGD8RG/y5LeshQdsgrQ8ceC+aYbWHrxOf2rlJkSFj1
+         fP/++HqWbd5Dy77R/tkzgN2X8uW0IC8uJnfuaZBowy9sF4sj17/p86hpI+joLumZRO
+         FMYAnuS5HdCwiqakkxEPTfTkEFcf5d3MPgIAgZeGyBpWpoeZdkH1+X0oSKcDcMMeW8
+         6aY+/b3Vwl9W3tf9SdGNI9LxOveJ8X8OKrKOh22uVyzqiB1yW7tKGjYGh1K5xWl42f
+         TQjvcr8UBbTMw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: pci: Fix DEFINE for Intel Elkhart Lake
+In-Reply-To: <20210512135901.28495-1-heikki.krogerus@linux.intel.com>
+References: <20210512135901.28495-1-heikki.krogerus@linux.intel.com>
+Date:   Wed, 12 May 2021 17:41:53 +0300
+Message-ID: <87zgx06mku.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 12, 2021 at 02:50:04PM +0200, Mauro Carvalho Chehab wrote:
-> v2:
-> - removed EM/EN DASH conversion from this patchset;
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Are you still thinking about doing the
+Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
 
-EN DASH --> "--"
-EM DASH --> "---"
+> From: Raymond Tan <raymond.tan@intel.com>
+>
+> There's no separate low power (LP) version of Elkhart Lake, thus
+> this patch updates the PCI Device ID DEFINE to indicate this.
+>
+> Signed-off-by: Raymond Tan <raymond.tan@intel.com>
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-conversion?  That's not going to change what the documentation will
-look like in the HTML and PDF output forms, and I think it would make
-life easier for people are reading and editing the Documentation/*
-files in text form.
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-				- Ted
+No functional changes whatsover, this can probably wait until the next
+merge window.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCb6TERHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjBPggAr8BMqgVoFynCvJ85rf9Q3uMP+H/dOvNy
+0Mg7q+5ugJx1drFmeittQ2amp/JdvqtR/wFlMXYfjoYITjIArIee/eIY0H0hLdb6
+qnbkLT7HXCTDgEWYGJ2Xp3EPPmHbXv/gZ4U+715cAOR1YzpswLkvpOUMkV9v8plJ
+xApY/hAtphN2DmhHN7FgNr546ZDxbZl0qnJyg0bZ0oFuUYUQuq1gkKBq37e6zf+4
+t7eepqTL2P7ZlJAoKjalmxrDsqFq3LHo2B1KUA46BW4RP2LgsEaUwRbaPKR6yZJd
+DSuRwaJDz7owfBxJwUvBMP75r4EUMJKOfQiHJiQEiN0clLopeF+SlQ==
+=c5mW
+-----END PGP SIGNATURE-----
+--=-=-=--
