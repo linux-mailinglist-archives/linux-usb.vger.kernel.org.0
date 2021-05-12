@@ -2,98 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7A137C59D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 17:41:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB2737C592
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 17:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234697AbhELPmA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 11:42:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49178 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235091AbhELPfS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 11:35:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 455F961C3E;
-        Wed, 12 May 2021 15:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620832672;
-        bh=zB2G4t5ozyJ72g68BGRplKf2lQRTS6CtRvJ7FVX3NWE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DBjrvZcbfODq6o/u3ovhcKp34o3mQ/2g2kqOKbw7rqi0UbJcuDmNkgLMMy0M05dFs
-         mwfV7fdqIvkaHvs5FkFIxP3pQ5mW2wuelKsM0Zg1XI928MZ1g6hDtwlC/lZ6mTYtDn
-         L0yXyxJPdKzjgMXD6Vs/vdQOXuvQV+DBBKSwRDhM/LlZ9x9/DV6Qnq7MjBym4Ue3He
-         LklNFflnfSaW1SCikrvqRJriPDliUiNhIaGm2pb/3nXItDzT/4/obeOPpO0NPN/v0m
-         Pwish5sD0axq4vDEIuCSUJZyKrnPcy3P6Nd30IKN+fHXybC5E+QSyK+xdLgaNeWw/l
-         +EUyGcBOd8VUw==
-Date:   Wed, 12 May 2021 17:17:41 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
- symbols
-Message-ID: <20210512171741.2870bcbc@coco.lan>
-In-Reply-To: <YJvi1L2ss5Tfi+My@mit.edu>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
-        <YJvi1L2ss5Tfi+My@mit.edu>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S232054AbhELPlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 11:41:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54255 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235011AbhELPfH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 11:35:07 -0400
+Received: (qmail 936598 invoked by uid 1000); 12 May 2021 11:33:58 -0400
+Date:   Wed, 12 May 2021 11:33:58 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+Message-ID: <20210512153358.GC934575@rowland.harvard.edu>
+References: <20210510152426.GE863718@rowland.harvard.edu>
+ <87zgx2fskr.fsf@kernel.org>
+ <20210510193849.GB873147@rowland.harvard.edu>
+ <87r1idfzms.fsf@kernel.org>
+ <20210511212651.GA914027@rowland.harvard.edu>
+ <87lf8kfnc6.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lf8kfnc6.fsf@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Wed, 12 May 2021 10:14:44 -0400
-"Theodore Ts'o" <tytso@mit.edu> escreveu:
+On Wed, May 12, 2021 at 10:00:41AM +0300, Felipe Balbi wrote:
+> 
+> > So in dwc3, for example: At what point do you abort all outstanding 
+> > requests with -ESHUTDOWN status?  We don't want to do this before 
+> 
+> we do this as part of dwc3_remove_requests(). So, it's done either when
+> the relevant endpoint is disabled or as part of
+> dwc3_stop_active_transfers() which in turn is called from a (bus) reset
+> interrupt or when disconnecting pullups.
 
-> On Wed, May 12, 2021 at 02:50:04PM +0200, Mauro Carvalho Chehab wrote:
-> > v2:
-> > - removed EM/EN DASH conversion from this patchset; =20
->=20
-> Are you still thinking about doing the
->=20
-> EN DASH --> "--"
-> EM DASH --> "---"
->=20
-> conversion? =20
+I wish these sorts of questions had been answered in the original design 
+of the gadget subsystem.  For example, does it even make sense for the 
+UDC driver to disable endpoints on its own initiative?  Oh well, too 
+late now...
 
-Yes, but I intend to submit it on a separate patch series, probably after
-having this one merged. Let's first cleanup the large part of the=20
-conversion-generated UTF-8 char noise ;-)
+> > invoking the gadget driver's ->unbind callback.  Or do you rely on the 
+> > gadget driver to cancel the oustanding requests by itself?
+> >
+> > (In dummy-hcd, the udc_stop routine first calls stop_activity, which 
+> > nukes all outstanding requests, and afterward sets dum->driver to NULL.)
+> 
+> I see.
+> 
+> > The host-side API, which I admit may not be the greatest, does cancel 
+> > all outstanding URBs before calling the class driver's disconnect 
+> > routine -- unless the class driver sets the "soft_unbind" flag, in which 
+> > case we assume the driver will kill its own URBs properly.
+> >
+> > Suppose dwc3_gadget_stop was moved before the ->unbind callback.  Then 
+> > when the gadget driver cancelled its outstanding requests during unbind, 
+> > how could dwc3 do the completion callbacks with dwc->gadget_driver 
+> > already set to NULL?
+> 
+> That's fair :-)
+> 
+> >> I'm not against adding new udc methods to gadget ops, but it seems
+> >> fitting that udc_start/udc_stop would fit your description while some
+> >> new members could be given the task of priming the default control pipe
+> >> to receive the first SETUP packet.
+> >> 
+> >> What do you think?
+> >
+> > Starting things up when a new gadget driver binds doesn't seem to be so 
+> > much of a problem.  After all, the new driver isn't going to do anything 
+> > before the first SETUP packet arrives, since the gadget will be 
+> 
+> it could be an impact in power consumption, albeit minimal
 
-> That's not going to change what the documentation will
-> look like in the HTML and PDF output forms, and I think it would make
-> life easier for people are reading and editing the Documentation/*
-> files in text form.
+All right.  But at least it isn't an issue of correctness.
 
-Agreed. I'm also considering to add a couple of cases of this char:
+> > unconfigured.  Unbinding and shutting down are the hard parts.
+> >
+> > I guess the ideal approach would be:
+> >
+> > 	First, the UDC driver basically turns off the UDC hardware.
+> > 	This means no more IRQs will be generated.  But pending requests
+> > 	remain pending until they are explicitly cancelled.
+> 
+> right, that, I argue, is the responsibility of ->udc_stop()
+> 
+> > 	Second, the gadget driver's unbind callback runs.  It should
+> > 	cancel any outstanding requests and generally release resources.
+> 
+> correct. But that means we would require the gadget driver to initiate
+> cancelling of outstanding requests
 
-	- U+2026 ('=E2=80=A6'): HORIZONTAL ELLIPSIS
+Or even better, disabling all endpoints.  That's a reasonable 
+requirement.  Function drivers are expected to do that anyway whenever 
+the composite core switches to a different configuration, aren't they?
 
-As Sphinx also replaces "..." into HORIZONTAL ELLIPSIS.
+In some ways, unbinding is similar to switching to configuration 0 (not 
+configured).
 
--
+> > 	Third, the UDC driver WARNs about any requests that still exist
+> > 	and automatically releases them without doing any completion
+> > 	callbacks.  It also forgets about the gadget driver (this can't
+> > 	happen until after the gadget driver has cancelled its 
+> > 	requests).
+> >
+> > Right now we are doing the first two steps in the opposite order.  That 
+> > would be okay, provided we could guarantee there are no more 
+> > asynchronous callbacks once unbind is called (sort of like what Peter 
+> > has done for configfs).  But it would be better to do the steps in the 
+> > order shown above.  This does correspond to calling udc_stop first, as 
+> > you suggest.
+> 
+> right
+> 
+> > But it also would mean splitting out the third step as something 
+> > separate from udc_stop.  Not to mention some potentially serious 
+> > updating of some UDC drivers.
+> 
+> yeah, it would take quite a bit of effort.
+> 
+> > On the other hand, there is something to be said for leaving the UDC 
+> > operational until after the unbind callback.  If the gadget driver 
+> > happened to be installing a new alternate setting at that time, say in a 
+> > workqueue thread, calls to activate new endpoints wouldn't suddenly get 
+> > unexpected errors.
+> 
+> Hmm, IIRC only the storage gadget defers work to another thread.
 
-Anyway, I'm opting to submitting those in separate because it seems
-that at least some maintainers added EM/EN DASH intentionally.
+Well, the composite core is built into almost every gadget, and doesn't 
+it handle Set-Configuration and Set-Interface requests in a separate 
+thread?  Or doesn't it expect function drivers to do so?
 
-So, it may generate case-per-case discussions.
+After all, the gadget first learns about config or altsetting changes 
+when it receives a Set-Configuration or Set-Interface request, which 
+happens in interrupt context.  But changing configs or altsettings 
+requires disabling/enabling endpoints, which needs a process context 
+(see the kerneldoc for usb_ep_enable and usb_ep_disable).
 
-Also, IMO, at least a couple of EN/EM DASH cases would be better served=20
-with a single hyphen.
+> What
+> you describe can also happen today depending on how far into the future
+> the kthread is scheduled, no? So, how does storage gadget behave with
+> that today?
 
-Thanks,
-Mauro
+I'm not clear on the details any more, but in essence the unbind routine 
+takes great care to wait until any queued worker threads have completed 
+or been successfully cancelled before it returns.
+
+Alan Stern
