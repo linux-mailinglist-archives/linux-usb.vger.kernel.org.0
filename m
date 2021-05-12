@@ -2,199 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A17637BD01
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 14:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF88E37BDC5
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 15:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhELMxB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 08:53:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52626 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231274AbhELMww (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 08:52:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F3C361425;
-        Wed, 12 May 2021 12:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620823902;
-        bh=2FDMIArPOpuk55O7C3w/LcLh1KAxn8zpOct9V1QDSls=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pT6D1Z015Ck6zlMR43tAeDWfUuFg2MzmLs3rq+RBbuzv6SmWjDOfXC4iha8tH9rwG
-         lCzokfbvmLfnvVgmtFR8oOVIMh2VqGCyWfGqIlMDs3B6xMPwLIRKtGWwDghO4mcy/Y
-         SQjC3RCgJN+ICVuFh1Aib799sXcLaZ9XaevUAtMgnC4YFiIG6WOcwUhstQqsE1M+el
-         lP25WHLX8q7JHsc4sOPF02Y5OXRjONLm9RL8SHZ2eSxwBWLXFDV5srP8EaghXzdGI6
-         24IXFMKNcGejHUtvNY3eSDot2ljGyd4fJ3rH8NL28I/dfeiK3BrhIs5pZxDLEaE/BG
-         CGKngjI9q1oBw==
-Received: by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1lgoKy-0018hZ-Ga; Wed, 12 May 2021 14:51:40 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
+        id S231987AbhELNOS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 09:14:18 -0400
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:55902 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231516AbhELNOR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 09:14:17 -0400
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 14CDCkoN020974;
+        Wed, 12 May 2021 13:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=QRs5gdlYriFU1v1EfQ+7iR08huQidQJKaI0/QDa1fOw=;
+ b=yIxXWRH14O29PT8kolnkt2yqtI0NDL5OiiveV45Fo27TGbw5iCNlMkDVVLbkq7F2TQL0
+ 8yAZkG/fH3Ypp+SOBad1YpbLKyvDpPZw4hl9ucjjn5vx7MBSQWLMF7IyrdZd0hwd4iRx
+ 2JPjtqqQWKAWAX3NCrhggcAn4/yvlBlvkk/rlvyaCgNPBLbyJsRqDedh1ZhhVukWIvGk
+ MLj8Q/HJZLdrDnP2XKu++Yku9kLvxC0nT1Ghu2EKqa/eWdvEcf3NKUORZ+nyV54ZL9vw
+ Dl6spRJ20AkbGUQhW2GQtWcqoCD41mjGonhzuta95d2QGypckv8p77Qcny3KkPQ15z0Q dw== 
+Received: from oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 38ex140sjm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 May 2021 13:12:46 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.podrdrct (8.16.0.36/8.16.0.36) with SMTP id 14CDCjXX031433;
+        Wed, 12 May 2021 13:12:45 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by aserp3020.oracle.com with ESMTP id 38djfbjx0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 May 2021 13:12:45 +0000
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14CDBNgx015043;
+        Wed, 12 May 2021 13:12:44 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 38djfbjwxf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 May 2021 13:12:44 +0000
+Received: from abhmp0012.oracle.com (abhmp0012.oracle.com [141.146.116.18])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 14CDCfWR026621;
+        Wed, 12 May 2021 13:12:41 GMT
+Received: from kadam (/102.36.221.92)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 12 May 2021 06:12:40 -0700
+Date:   Wed, 12 May 2021 16:12:32 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Denis Joseph Barrow <D.Barow@option.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH v2 12/40] docs: usb: Use ASCII subset instead of UTF-8 alternate symbols
-Date:   Wed, 12 May 2021 14:50:16 +0200
-Message-Id: <8fbbe15863ac0bfdeab799fd03333d13e25c11c3.1620823573.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
-References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH net] net: hso: check for allocation failure in
+ hso_create_bulk_serial_device()
+Message-ID: <20210512131232.GX1955@kadam>
+References: <YJupQPb+Y4vw3rDk@mwanda>
+ <YJurlxqQ9L+zzIAS@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJurlxqQ9L+zzIAS@hovoldconsulting.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-GUID: vQDJBerTT7xwK3dR9YNacmK_j22vue2w
+X-Proofpoint-ORIG-GUID: vQDJBerTT7xwK3dR9YNacmK_j22vue2w
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The conversion tools used during DocBook/LaTeX/Markdown->ReST conversion
-and some automatic rules which exists on certain text editors like
-LibreOffice turned ASCII characters into some UTF-8 alternatives that
-are better displayed on html and PDF.
+On Wed, May 12, 2021 at 12:19:03PM +0200, Johan Hovold wrote:
+> On Wed, May 12, 2021 at 01:09:04PM +0300, Dan Carpenter wrote:
+> > Add a couple checks for if these allocations fail.
+> > 
+> > Fixes: 542f54823614 ("tty: Modem functions for the HSO driver")
+> > Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > ---
+> >  drivers/net/usb/hso.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+> > index 3ef4b2841402..3b2a868d7a72 100644
+> > --- a/drivers/net/usb/hso.c
+> > +++ b/drivers/net/usb/hso.c
+> > @@ -2618,9 +2618,13 @@ static struct hso_device *hso_create_bulk_serial_device(
+> >  		num_urbs = 2;
+> >  		serial->tiocmget = kzalloc(sizeof(struct hso_tiocmget),
+> >  					   GFP_KERNEL);
+> > +		if (!serial->tiocmget)
+> > +			goto exit;
+> 
+> Nice catch; the next assignment would go boom if this ever failed.
+> 
+> This appears to have been introduced by 
+> 
+> 	af0de1303c4e ("usb: hso: obey DMA rules in tiocmget")
+> 
+> >  		serial->tiocmget->serial_state_notification
+> >  			= kzalloc(sizeof(struct hso_serial_state_notification),
+> >  					   GFP_KERNEL);
+> > +		if (!serial->tiocmget->serial_state_notification)
+> > +			goto exit;
+> >  		/* it isn't going to break our heart if serial->tiocmget
+> >  		 *  allocation fails don't bother checking this.
+> >  		 */
+> 
+> You should remove this comment and drop the conditional on the following
+> line as well now, though.
 
-While it is OK to use UTF-8 characters in Linux, it is better to
-use the ASCII subset instead of using an UTF-8 equivalent character
-as it makes life easier for tools like grep, and are easier to edit
-with the some commonly used text/source code editors.
+Ah, good catch.  I'll resend. Thanks!
 
-Also, Sphinx already do such conversion automatically outside literal blocks:
-   https://docutils.sourceforge.io/docs/user/smartquotes.html
-
-So, replace the occurences of the following UTF-8 characters:
-
-	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
-	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
-	- U+feff ('﻿'): ZERO WIDTH NO-BREAK SPACE
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- Documentation/usb/ehci.rst           |  2 +-
- Documentation/usb/gadget_printer.rst |  2 +-
- Documentation/usb/mass-storage.rst   | 36 ++++++++++++++--------------
- 3 files changed, 20 insertions(+), 20 deletions(-)
-
-diff --git a/Documentation/usb/ehci.rst b/Documentation/usb/ehci.rst
-index 31f650e7c1b4..76190501907a 100644
---- a/Documentation/usb/ehci.rst
-+++ b/Documentation/usb/ehci.rst
-@@ -1,4 +1,4 @@
--﻿===========
-+===========
- EHCI driver
- ===========
- 
-diff --git a/Documentation/usb/gadget_printer.rst b/Documentation/usb/gadget_printer.rst
-index 5e5516c69075..e611a6d91093 100644
---- a/Documentation/usb/gadget_printer.rst
-+++ b/Documentation/usb/gadget_printer.rst
-@@ -1,4 +1,4 @@
--﻿===============================
-+===============================
- Linux USB Printer Gadget Driver
- ===============================
- 
-diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
-index d181b47c3cb6..71dfd09b50a4 100644
---- a/Documentation/usb/mass-storage.rst
-+++ b/Documentation/usb/mass-storage.rst
-@@ -40,7 +40,7 @@ Module parameters
-     This parameter lists paths to files or block devices used for
-     backing storage for each logical unit.  There may be at most
-     FSG_MAX_LUNS (8) LUNs set.  If more files are specified, they will
--    be silently ignored.  See also “luns” parameter.
-+    be silently ignored.  See also "luns" parameter.
- 
-     *BEWARE* that if a file is used as a backing storage, it may not
-     be modified by any other process.  This is because the host
-@@ -56,18 +56,18 @@ Module parameters
-   - removable=b[,b...]
- 
-     This parameter specifies whether each logical unit should be
--    removable.  “b” here is either “y”, “Y” or “1” for true or “n”,
--    “N” or “0” for false.
-+    removable.  "b" here is either "y", "Y" or "1" for true or "n",
-+    "N" or "0" for false.
- 
-     If this option is set for a logical unit, gadget will accept an
--    “eject” SCSI request (Start/Stop Unit).  When it is sent, the
-+    "eject" SCSI request (Start/Stop Unit).  When it is sent, the
-     backing file will be closed to simulate ejection and the logical
-     unit will not be mountable by the host until a new backing file is
--    specified by userspace on the device (see “sysfs entries”
-+    specified by userspace on the device (see "sysfs entries"
-     section).
- 
-     If a logical unit is not removable (the default), a backing file
--    must be specified for it with the “file” parameter as the module
-+    must be specified for it with the "file" parameter as the module
-     is loaded.  The same applies if the module is built in, no
-     exceptions.
- 
-@@ -76,13 +76,13 @@ Module parameters
-     and because it seems like a saner default after all.  Thus to
-     maintain compatibility with older kernels, it's best to specify
-     the default values.  Also, if one relied on old default, explicit
--    “n” needs to be specified now.
-+    "n" needs to be specified now.
- 
--    Note that “removable” means the logical unit's media can be
-+    Note that "removable" means the logical unit's media can be
-     ejected or removed (as is true for a CD-ROM drive or a card
-     reader).  It does *not* mean that the entire gadget can be
-     unplugged from the host; the proper term for that is
--    “hot-unpluggable”.
-+    "hot-unpluggable".
- 
-   - cdrom=b[,b...]
- 
-@@ -107,7 +107,7 @@ Module parameters
-     This parameter specifies whether FUA flag should be ignored in SCSI
-     Write10 and Write12 commands sent to given logical units.
- 
--    MS Windows mounts removable storage in “Removal optimised mode” by
-+    MS Windows mounts removable storage in "Removal optimised mode" by
-     default.  All the writes to the media are synchronous, which is
-     achieved by setting the FUA (Force Unit Access) bit in SCSI
-     Write(10,12) commands.  This forces each write to wait until the
-@@ -127,11 +127,11 @@ Module parameters
-     capped.
- 
-     If this parameter is provided, and the number of files specified
--    in “file” argument is greater then the value of “luns”, all excess
-+    in "file" argument is greater then the value of "luns", all excess
-     files will be ignored.
- 
-     If this parameter is not present, the number of logical units will
--    be deduced from the number of files specified in the “file”
-+    be deduced from the number of files specified in the "file"
-     parameter.  If the file parameter is missing as well, one is
-     assumed.
- 
-@@ -217,18 +217,18 @@ Relation to file storage gadget
-   All users need to transition to the Mass Storage Gadget.  The two
-   gadgets behave mostly the same from the outside except:
- 
--  1. In FSG the “removable” and “cdrom” module parameters set the flag
-+  1. In FSG the "removable" and "cdrom" module parameters set the flag
-      for all logical units whereas in MSG they accept a list of y/n
-      values for each logical unit.  If one uses only a single logical
-      unit this does not matter, but if there are more, the y/n value
-      needs to be repeated for each logical unit.
- 
--  2. FSG's “serial”, “vendor”, “product” and “release” module
-+  2. FSG's "serial", "vendor", "product" and "release" module
-      parameters are handled in MSG by the composite layer's parameters
--     named respectively: “iSerialnumber”, “idVendor”, “idProduct” and
--     “bcdDevice”.
-+     named respectively: "iSerialnumber", "idVendor", "idProduct" and
-+     "bcdDevice".
- 
--  3. MSG does not support FSG's test mode, thus “transport”,
--     “protocol” and “buflen” FSG's module parameters are not
-+  3. MSG does not support FSG's test mode, thus "transport",
-+     "protocol" and "buflen" FSG's module parameters are not
-      supported.  MSG always uses SCSI protocol with bulk only
-      transport mode and 16 KiB buffers.
--- 
-2.30.2
+regards,
+dan carpenter
 
