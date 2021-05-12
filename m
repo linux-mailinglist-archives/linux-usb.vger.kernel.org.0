@@ -2,77 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B7837C074
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 16:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE5737C267
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 17:10:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbhELOnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 10:43:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33378 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230481AbhELOnL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 10:43:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0361D61370;
-        Wed, 12 May 2021 14:42:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620830522;
-        bh=zoXrWdrhFqdeF8H24gQ4Bk6xz73k5SBh9T03FYjRc1s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=p832TjypP1xlNSEVzTk+jNOPrr5s9fJZjiSFLMhrQVuv+WQS9F0Z4xsoi+cX012mI
-         t2oWzEPDL0aQbmaB9ahLaqc7iGD8RG/y5LeshQdsgrQ8ceC+aYbWHrxOf2rlJkSFj1
-         fP/++HqWbd5Dy77R/tkzgN2X8uW0IC8uJnfuaZBowy9sF4sj17/p86hpI+joLumZRO
-         FMYAnuS5HdCwiqakkxEPTfTkEFcf5d3MPgIAgZeGyBpWpoeZdkH1+X0oSKcDcMMeW8
-         6aY+/b3Vwl9W3tf9SdGNI9LxOveJ8X8OKrKOh22uVyzqiB1yW7tKGjYGh1K5xWl42f
-         TQjvcr8UBbTMw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: pci: Fix DEFINE for Intel Elkhart Lake
-In-Reply-To: <20210512135901.28495-1-heikki.krogerus@linux.intel.com>
-References: <20210512135901.28495-1-heikki.krogerus@linux.intel.com>
-Date:   Wed, 12 May 2021 17:41:53 +0300
-Message-ID: <87zgx06mku.fsf@kernel.org>
+        id S233719AbhELPKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 11:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233095AbhELPHR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 11:07:17 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD6EC061760;
+        Wed, 12 May 2021 08:00:02 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id c3so22455383oic.8;
+        Wed, 12 May 2021 08:00:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wAw2wQB4eQHn6TDwpGJK9D3eOJ6qhU0f1KoS9QvzkWM=;
+        b=loF0pyMBQRqwDEvT7rYJtv4geglNOLVoskIvxa2FNrVpO6yh141PcdytI9szrSfwey
+         NCPI0JXldCm1xdKJkvs+EMOqPOkxAKkkDLid9HXujR3z/uZXl+ytWem68OKayxMK44Wj
+         r49klWLflnYXQbGE9YTknEBgQ8tGmEnmG4nu8p+onCvSzORtAu9xuX0vGBEDR4XV+J6V
+         ycseUzZzYh4E4rFs59HMcd6G0Q4HVWH65WeFT1aN0bG4y1qoEFRwAhAE0H3EWmQxPLp7
+         ANgiAje+NgLqt74hFxWMNSSR2jkx8nmW99vIxAYuPad+vUSTuGfLfNNXC7HWyjj4n/W4
+         FV6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=wAw2wQB4eQHn6TDwpGJK9D3eOJ6qhU0f1KoS9QvzkWM=;
+        b=WvSY+ryLGkvvIbK8HOLmyfRN/zxhbPdxrC4jnQrworIo+GBhU9ZTUUA7M5qACanTtR
+         pnXpm7vMNlWs7suRxrZWY9tRBz9/VjKfyGIKHGWd/9pz4u1dYuMg20TYr2Kpe1gtI5yO
+         l+9JGV6RvehksdF34a0wogVdN8x+wqE6sdpdeueHzEZ+2Ot7wai1UofItcA/ESdEG/VS
+         RPtYluI7yy/mMvvPXBTk0TagdpJcgS4MzlxtPKGun4OXr+G4xTPZva0ChzdOMUi+huLc
+         EAQulQG1BhlY7ghwTY0ZfNbrnzUEHk3nQEl7EiGK+9vaL+0JJ+mptfpsF+KegZ+rr6OT
+         KauQ==
+X-Gm-Message-State: AOAM530jGx2Ru09D4/18oNGozW9oPR3JSI4Br7LCo8+R0UrhwIMNHCZc
+        h3E/kGuGdJvIhAFaLq/d95k46Llando=
+X-Google-Smtp-Source: ABdhPJz2ZIDSm8cD7EYMyfJiRk9PCaJLERgRQLj7veh6dDLN/mEn8xKYLB8FEo5gpWsqLM+ZGuN6Mw==
+X-Received: by 2002:aca:db41:: with SMTP id s62mr7719836oig.167.1620831601894;
+        Wed, 12 May 2021 08:00:01 -0700 (PDT)
+Received: from ceres ([2603:300b:7b5:c800:1cf6:4c9f:4e7:d116])
+        by smtp.gmail.com with ESMTPSA id j16sm1975523otn.55.2021.05.12.08.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 May 2021 08:00:01 -0700 (PDT)
+Date:   Wed, 12 May 2021 08:59:59 -0600
+From:   Connor Davis <connojdavis@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] usb: xhci: Notify xen when DbC is unsafe to use
+Message-ID: <20210512145959.h6boyhrh2bvgx5iz@ceres>
+References: <cover.1620776161.git.connojdavis@gmail.com>
+ <2af7e7b8d569e94ab9c48039040ca69a8d52c89d.1620776161.git.connojdavis@gmail.com>
+ <YJt9su1k67KEFh6K@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YJt9su1k67KEFh6K@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
-
-> From: Raymond Tan <raymond.tan@intel.com>
+On May 12, 21, Greg Kroah-Hartman wrote:
+> On Tue, May 11, 2021 at 06:18:21PM -0600, Connor Davis wrote:
+> > When running as a dom0 guest on Xen, check if the USB3 debug
+> > capability is enabled before xHCI reset, suspend, and resume. If it
+> > is, call xen_dbgp_reset_prep() to notify Xen that it is unsafe to touch
+> > MMIO registers until the next xen_dbgp_external_startup().
+> >
+> > This notification allows Xen to avoid undefined behavior resulting
+> > from MMIO access when the host controller's CNR bit is set or when
+> > the device transitions to D3hot.
+> >
+> > Signed-off-by: Connor Davis <connojdavis@gmail.com>
+> > ---
+> >  drivers/usb/host/xhci-dbgcap.h |  6 ++++
+> >  drivers/usb/host/xhci.c        | 57 ++++++++++++++++++++++++++++++++++
+> >  drivers/usb/host/xhci.h        |  1 +
+> >  3 files changed, 64 insertions(+)
+> >
+> > diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
+> > index c70b78d504eb..24784b82a840 100644
+> > --- a/drivers/usb/host/xhci-dbgcap.h
+> > +++ b/drivers/usb/host/xhci-dbgcap.h
+> > @@ -227,4 +227,10 @@ static inline int xhci_dbc_resume(struct xhci_hcd *xhci)
+> >  	return 0;
+> >  }
+> >  #endif /* CONFIG_USB_XHCI_DBGCAP */
+> > +
+> > +#ifdef CONFIG_XEN_DOM0
+> > +int xen_dbgp_reset_prep(struct usb_hcd *hcd);
+> > +int xen_dbgp_external_startup(struct usb_hcd *hcd);
+> > +#endif /* CONFIG_XEN_DOM0 */
+> > +
+> >  #endif /* __LINUX_XHCI_DBGCAP_H */
+> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> > index ca9385d22f68..afe44169183f 100644
+> > --- a/drivers/usb/host/xhci.c
+> > +++ b/drivers/usb/host/xhci.c
+> > @@ -37,6 +37,57 @@ static unsigned long long quirks;
+> >  module_param(quirks, ullong, S_IRUGO);
+> >  MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+> >
+> > +#ifdef CONFIG_XEN_DOM0
+> > +#include <xen/xen.h>
 >
-> There's no separate low power (LP) version of Elkhart Lake, thus
-> this patch updates the PCI Device ID DEFINE to indicate this.
+> <snip>
 >
-> Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Can't this #ifdef stuff go into a .h file?
+>
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+Yep, will clean that up in v2.
 
-No functional changes whatsover, this can probably wait until the next
-merge window.
+> thanks,
+>
+> greg k-h
 
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCb6TERHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjBPggAr8BMqgVoFynCvJ85rf9Q3uMP+H/dOvNy
-0Mg7q+5ugJx1drFmeittQ2amp/JdvqtR/wFlMXYfjoYITjIArIee/eIY0H0hLdb6
-qnbkLT7HXCTDgEWYGJ2Xp3EPPmHbXv/gZ4U+715cAOR1YzpswLkvpOUMkV9v8plJ
-xApY/hAtphN2DmhHN7FgNr546ZDxbZl0qnJyg0bZ0oFuUYUQuq1gkKBq37e6zf+4
-t7eepqTL2P7ZlJAoKjalmxrDsqFq3LHo2B1KUA46BW4RP2LgsEaUwRbaPKR6yZJd
-DSuRwaJDz7owfBxJwUvBMP75r4EUMJKOfQiHJiQEiN0clLopeF+SlQ==
-=c5mW
------END PGP SIGNATURE-----
---=-=-=--
+Thanks,
+Connor
