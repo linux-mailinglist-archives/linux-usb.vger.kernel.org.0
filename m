@@ -2,154 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AC837B874
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 10:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E71737B8CC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 11:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231279AbhELItF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 04:49:05 -0400
-Received: from cable.insite.cz ([84.242.75.189]:41027 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230432AbhELItD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 04:49:03 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id CC1C7A1A3D402;
-        Wed, 12 May 2021 10:47:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1620809272; bh=6h2npLciMxeN199iRQ0nPTwPm2GkCbRM/UYxrMX+j5A=;
-        h=To:From:Subject:Date:From;
-        b=jsQUN3QBLnha1keNL5QsMe49OyCsw5W/BINSgsy4OBGXpm4qRKRBE+92W1NAjbSD7
-         /quElhfciDDAc5WmqR6MzXSs3WQ/e18BtNGYmGmH76mb6XenTRmD3FEgQWrfLaM/DI
-         Tztk9/tuyyxX9HaEzP7Vm+WsR/Yn2aByY6FtqKhk=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id I6KtQR4bdsnL; Wed, 12 May 2021 10:47:47 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id EDADAA1A3D401;
-        Wed, 12 May 2021 10:47:46 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1620809267; bh=6h2npLciMxeN199iRQ0nPTwPm2GkCbRM/UYxrMX+j5A=;
-        h=To:From:Subject:Date:From;
-        b=C6FwwEzKuR1D+YrlW8WsAOsakE6SzzpV+hFJwjEjc60XSGBLaHmLG2iQR/Jeqoc4i
-         GYwCqG4GRjWXtKdFv/3Cs732+13bxdWdvlr35RDbGRQ7PmVZTGdxHzs2YqBv2mRfDA
-         CjbU+tdWrmDi018sbqKRjyk5HBqWjZnIwX7lqDC8=
-To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        Takashi Iwai <tiwai@suse.de>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Subject: usb: u_audio: Notifying gadget audio device about starting/stopping
- capture/playback on the host
-Message-ID: <da466290-249c-d3d9-7b81-bed6a964a361@ivitera.com>
-Date:   Wed, 12 May 2021 10:47:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S230328AbhELJGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 05:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230216AbhELJGo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 05:06:44 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71527C06174A
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 02:05:36 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id o26-20020a1c4d1a0000b0290146e1feccdaso913406wmh.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 02:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gO8AvgLl9HFwqndaKVktinmxN0+f5bMhA1/IrCpeuLw=;
+        b=gweUI3Z2x56LzGv1EiyZDz1pOcoKiLp+yk0pZUBekX7/Ph8skI6t9mdUQzIfKljBPG
+         5sO4UffjhQNkqVu8CRfqTF4FEjy4mHIY5xc6WhmmQRY1ETeKuuHalaG6ZBqcF2sm1Ck1
+         t2SBbIT7PGZU+f5A/OmV8E/neWXFbtrUM2dVYRtztS7R0oIJkcvkTpnu/nvKw9Z7jOlO
+         gJ3J3cxqfbEQlTpAOmH2awIRlmZ54Tb2cuWJ65kDZ3LrQ6J+cDjwxI4Ub13C+A+xvAEg
+         2WPYvASGem8WfgZb85o3MfckQyfXFgmHRh9sMtFMB9ge97z3aMSz6twlhXNVRS0Z8VZ+
+         PrqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gO8AvgLl9HFwqndaKVktinmxN0+f5bMhA1/IrCpeuLw=;
+        b=ZmO+38dW+5ckOn6zeCsBehIAnAcFHZ89r3k+1fmRNLaEt8VCcVU/LZjsskdPBRaEIA
+         EJyEZdpZZg/kUOL5VW5ZLoPUKp9W05QqIkkSgCrXGi578jYNUYzH26U43MdRUKXNGohK
+         3lo4/tHOTKUJYSkakE/afqFEmhFDrbTGmkSwvsdypgOr34NRNJ24W+nh1+SKOYyaGWH0
+         lRSaTAFFmwRmI2B4W+0B5ppJsUAkrGoG5PJ/PDhyuQ3F21/R98YMu5BEVLsfOE9AiVaX
+         wmoXavhLGoamKvPu41X76wuINxiDgjmyyuSiS14BGiIONh68zVEoE63CwK8tbcVCP4dZ
+         MMEg==
+X-Gm-Message-State: AOAM530DswAbcZD8fk0gz6GiFpl+PQQVVdZ3UAi1PtfRz610Stq/AI+T
+        srrC8YSa0K7x/pSAIrGdczvwhw==
+X-Google-Smtp-Source: ABdhPJzHQuhFKWa14c7exMsNKVRS7mqH1vtZ1y2BqjqBQQcMjuP0/1Lgcs+jSL1/QNer7tKSMcB5uw==
+X-Received: by 2002:a7b:c94b:: with SMTP id i11mr26255290wml.120.1620810335099;
+        Wed, 12 May 2021 02:05:35 -0700 (PDT)
+Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id v20sm26679451wmj.15.2021.05.12.02.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 May 2021 02:05:34 -0700 (PDT)
+From:   Rui Miguel Silva <rui.silva@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rui Miguel Silva <rui.silva@linaro.org>
+Subject: [PATCH v3 0/9] usb: isp1760: extend support for isp1763
+Date:   Wed, 12 May 2021 10:05:20 +0100
+Message-Id: <20210512090529.2283637-1-rui.silva@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The Arm MPS3 FPGA prototyping board [0] have an isp1763 [1] as USB
+controller.  There is already support for the isp1760 and isp1761 in
+tree, this series extend the support also for the isp1763.
 
-I am trying to notify the user-space code running on USB audio gadget
-that the USB host has started/stopped capture/playback.
+Move register access using regmap, remove some platform data and code,
+refactor the mempool, use dr_mode to align to existing bindings, then
+add the support for isp1763 host mode, add bindings files that did not
+existed and at the end add also support for peripheral mode for
+isp1763.
 
-For stopping action, I am enclosing a patch snippet. I used snd_pcm_stop
-code when alsa SPDIF receivers detect a change in the stream
-https://github.com/torvalds/linux/blob/master/sound/i2c/other/ak4117.c#L505
-When testing the code, aplay/arecord ends, sox just reports alsa device
-warning and does not stop. IMO that is the desired outcome - the
-snd_pcm_read/write methods returned errors when capture/playback on the
-host side stopped.
+@Laurent and @Sebastian, I add both of you in the bindings files as
+maintainers (it is a mandatory field)since you were the ones which
+contributed with the initial code and peripheral code, let me know if
+you are ok with it.  If yes I may send a follow up to add also entries
+in MAINTAINERS file that it is also missing.
 
-For starting the capture/playback on the host, perhaps some
-snd_ctl_notify on some dedicated alsa control could be used, notifying
-the user space application that it can open the gadget audio device?
+v2 [3] -> v3:
+kernel test bot:
+- add select REGMAP_MMIO
 
-The patch below does not compile on upstream kernel as it uses changes
-not included in upstream yet (explicit feedback EP, samplerate
-switching), but I am just discussing principles and options now.
+v1 [2] -> v2:
 
-Thank you very much for your opinion and recommendations.
+kernel test robot:
+- add two patches (1/9 and 3/9) to fix dozens of pre-existing sparse
+  warnings so that this series does not introduce new ones.
+  No sparse warning left.
+- fix duplication of regmap fields
 
-With regards,
+Laurent:
+- move initializers from .h to .c
+- change interrupt registers setup from field to one shot register
+  setting (did not change hcd hw mode init because I think it did not
+  make the difference and even avoid artifact around setting twice the
+  register)
 
-Pavel.
+Rob test bot:
+- fix suffix at compatible string to clean up warning in bindings
 
+Cheers,
+   Rui
 
+[0]: https://developer.arm.com/tools-and-software/development-boards/fpga-prototyping-boards/mps3
+[1]: https://media.digikey.com/pdf/Data%20Sheets/ST%20Ericsson%20PDFs/ISP1763A.pdf
+[2]: https://lore.kernel.org/linux-devicetree/20210504101910.18619-1-rui.silva@linaro.org/
+[3]: https://lore.kernel.org/linux-usb/20210511085101.2081399-1-rui.silva@linaro.org/
 
+Rui Miguel Silva (9):
+  usb: isp1760: fix strict typechecking
+  usb: isp1760: move to regmap for register access
+  usb: isp1760: use relaxed primitives
+  usb: isp1760: remove platform data struct and code
+  usb: isp1760: hcd: refactor mempool config and setup
+  usb: isp1760: use dr_mode binding
+  usb: isp1760: add support for isp1763
+  dt-bindings: usb: nxp,isp1760: add bindings
+  usb: isp1763: add peripheral mode
 
-diff --git a/drivers/usb/gadget/function/u_audio.c
-b/drivers/usb/gadget/function/u_audio.c
-index 45367d650c5a..c6cdb844fec1 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -565,6 +565,7 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 	struct uac_params *params = &audio_dev->params;
- 	int req_len, i;
+ .../devicetree/bindings/usb/nxp,isp1760.yaml  |   59 +
+ arch/arm/boot/dts/arm-realview-eb.dtsi        |    2 +-
+ arch/arm/boot/dts/arm-realview-pb1176.dts     |    2 +-
+ arch/arm/boot/dts/arm-realview-pb11mp.dts     |    2 +-
+ arch/arm/boot/dts/arm-realview-pbx.dtsi       |    2 +-
+ arch/arm/boot/dts/vexpress-v2m-rs1.dtsi       |    2 +-
+ arch/arm/boot/dts/vexpress-v2m.dtsi           |    2 +-
+ drivers/usb/isp1760/Kconfig                   |    5 +-
+ drivers/usb/isp1760/isp1760-core.c            |  513 ++++++++-
+ drivers/usb/isp1760/isp1760-core.h            |   44 +-
+ drivers/usb/isp1760/isp1760-hcd.c             | 1021 ++++++++++++-----
+ drivers/usb/isp1760/isp1760-hcd.h             |   57 +-
+ drivers/usb/isp1760/isp1760-if.c              |   41 +-
+ drivers/usb/isp1760/isp1760-regs.h            |  435 ++++---
+ drivers/usb/isp1760/isp1760-udc.c             |  250 ++--
+ drivers/usb/isp1760/isp1760-udc.h             |   13 +-
+ include/linux/usb/isp1760.h                   |   19 -
+ 17 files changed, 1759 insertions(+), 710 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+ delete mode 100644 include/linux/usb/isp1760.h
 
-+  dev_dbg(dev, "starting capture with rate %d\n", params->c_srate_active);
- 	ep = audio_dev->out_ep;
- 	prm = &uac->c_prm;
- 	config_ep_by_speed(gadget, &audio_dev->func, ep);
-@@ -635,6 +636,23 @@ EXPORT_SYMBOL_GPL(u_audio_start_capture);
- void u_audio_stop_capture(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
-+	unsigned long _flags;
-+	struct snd_pcm_substream *substream;
-+	struct uac_rtd_params *prm;
-+
-+  dev_dbg(uac->card->dev, "stopping capture\n");
-+  prm = &uac->c_prm;
-+  if (prm) {
-+    substream = prm->ss;
-+    if (substream) {
-+      dev_dbg(uac->card->dev, "stopping capture substream\n");
-+      snd_pcm_stream_lock_irqsave(substream, _flags);
-+      if (snd_pcm_running(substream)) {
-+        snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
-+      }
-+      snd_pcm_stream_unlock_irqrestore(substream, _flags);
-+    }
-+  }
+-- 
+2.31.1
 
- 	if (audio_dev->in_ep_fback)
- 		free_ep_fback(&uac->c_prm, audio_dev->in_ep_fback);
-@@ -655,7 +673,7 @@ int u_audio_start_playback(struct g_audio *audio_dev)
- 	const struct usb_endpoint_descriptor *ep_desc;
- 	int req_len, i;
-
--  dev_dbg(dev, "start playback with rate %d\n", params->p_srate_active);
-+  dev_dbg(dev, "starting playback with rate %d\n", params->p_srate_active);
- 	ep = audio_dev->in_ep;
- 	prm = &uac->p_prm;
- 	config_ep_by_speed(gadget, &audio_dev->func, ep);
-@@ -715,6 +733,23 @@ EXPORT_SYMBOL_GPL(u_audio_start_playback);
- void u_audio_stop_playback(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
-+  unsigned long _flags;
-+  struct snd_pcm_substream *substream;
-+  struct uac_rtd_params *prm;
-+
-+  dev_dbg(uac->card->dev, "stopping playback\n");
-+  prm = &uac->p_prm;
-+  if (prm) {
-+    substream = prm->ss;
-+    if (substream) {
-+      dev_dbg(uac->card->dev, "stopping playback substream\n");
-+      snd_pcm_stream_lock_irqsave(substream, _flags);
-+      if (snd_pcm_running(substream)) {
-+        snd_pcm_stop(substream, SNDRV_PCM_STATE_DRAINING);
-+      }
-+      snd_pcm_stream_unlock_irqrestore(substream, _flags);
-+    }
-+  }
-
- 	free_ep(&uac->p_prm, audio_dev->in_ep);
- }
