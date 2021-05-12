@@ -2,52 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2D337BD20
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 14:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A17637BD01
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 14:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbhELMxM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 08:53:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52778 "EHLO mail.kernel.org"
+        id S231559AbhELMxB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 08:53:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52626 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231388AbhELMw4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 08:52:56 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B11D61175;
+        id S231274AbhELMww (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 08:52:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5F3C361425;
         Wed, 12 May 2021 12:51:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1620823902;
-        bh=L+E/N8mtA2/+iSqhjhIyKk7M7RrC5qMfkQmRh4SXqOM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ucNSAhXYlF3Szz7W2irBTsvcIq33u1CrsW3ughaZJQqP+LrxpB0KjDChNaWylRCiA
-         8uidMvIFPObFZ6akJiKIQ1n/loNfn6hx8yVucw2xWZ73EfgNRibzOSlugYBt51kwpz
-         sdmRPA3LdwD45uYQTpj7XZoENUjgUxwJTlI1qlwGCNWZNWI+BkaJBNQJYsI68pIF0d
-         fXOa2Wzs1nudr171bvqR7b67LC1CF/NPtlR0c90fFeyu9TgllD9P44UMzmzYncl5FJ
-         KVeCETjMQ0hlqHZjf6TbTaK//D282G036gFoleiqqZjAOauHQnBlpoCUvLp2Ls+ug5
-         bNkKFQYHSRskA==
+        bh=2FDMIArPOpuk55O7C3w/LcLh1KAxn8zpOct9V1QDSls=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pT6D1Z015Ck6zlMR43tAeDWfUuFg2MzmLs3rq+RBbuzv6SmWjDOfXC4iha8tH9rwG
+         lCzokfbvmLfnvVgmtFR8oOVIMh2VqGCyWfGqIlMDs3B6xMPwLIRKtGWwDghO4mcy/Y
+         SQjC3RCgJN+ICVuFh1Aib799sXcLaZ9XaevUAtMgnC4YFiIG6WOcwUhstQqsE1M+el
+         lP25WHLX8q7JHsc4sOPF02Y5OXRjONLm9RL8SHZ2eSxwBWLXFDV5srP8EaghXzdGI6
+         24IXFMKNcGejHUtvNY3eSDot2ljGyd4fJ3rH8NL28I/dfeiK3BrhIs5pZxDLEaE/BG
+         CGKngjI9q1oBw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1lgoKy-0018go-1r; Wed, 12 May 2021 14:51:40 +0200
+        id 1lgoKy-0018hZ-Ga; Wed, 12 May 2021 14:51:40 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Mali DP Maintainers <malidp@foss.arm.com>,
-        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
-        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
-        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate symbols
-Date:   Wed, 12 May 2021 14:50:04 +0200
-Message-Id: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        "Jonathan Corbet" <corbet@lwn.net>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH v2 12/40] docs: usb: Use ASCII subset instead of UTF-8 alternate symbols
+Date:   Wed, 12 May 2021 14:50:16 +0200
+Message-Id: <8fbbe15863ac0bfdeab799fd03333d13e25c11c3.1620823573.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <cover.1620823573.git.mchehab+huawei@kernel.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,219 +47,154 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This series contain basically a cleanup from all those years of converting
-files to ReST.
+The conversion tools used during DocBook/LaTeX/Markdown->ReST conversion
+and some automatic rules which exists on certain text editors like
+LibreOffice turned ASCII characters into some UTF-8 alternatives that
+are better displayed on html and PDF.
 
-During the conversion period, several tools like LaTeX, pandoc, DocBook
-and some specially-written scripts were used in order to convert
-existing documents.
+While it is OK to use UTF-8 characters in Linux, it is better to
+use the ASCII subset instead of using an UTF-8 equivalent character
+as it makes life easier for tools like grep, and are easier to edit
+with the some commonly used text/source code editors.
 
-Such conversion tools - plus some text editor like LibreOffice  or similar  - have
-a set of rules that turns some typed ASCII characters into UTF-8 alternatives,
-for instance converting commas into curly commas and adding non-breakable
-spaces. All of those are meant to produce better results when the text is
-displayed in HTML or PDF formats.
+Also, Sphinx already do such conversion automatically outside literal blocks:
+   https://docutils.sourceforge.io/docs/user/smartquotes.html
 
-While it is perfectly fine to use UTF-8 characters in Linux, and specially at
-the documentation,  it is better to  stick to the ASCII subset  on such
-particular case,  due to a couple of reasons:
+So, replace the occurences of the following UTF-8 characters:
 
-1. it makes life easier for tools like grep;
-2. they easier to edit with the some commonly used text/source
-   code editors.
-    
-Also, Sphinx already do such conversion automatically outside 
-literal blocks, as described at:
+	- U+201c ('“'): LEFT DOUBLE QUOTATION MARK
+	- U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
+	- U+feff ('﻿'): ZERO WIDTH NO-BREAK SPACE
 
-       https://docutils.sourceforge.io/docs/user/smartquotes.html
-
-In this series, the following UTF-8 symbols are replaced:
-
-            - U+00a0 (' '): NO-BREAK SPACE
-            - U+00ad ('­'): SOFT HYPHEN
-            - U+00b4 ('´'): ACUTE ACCENT
-            - U+00d7 ('×'): MULTIPLICATION SIGN
-            - U+2010 ('‐'): HYPHEN
-            - U+2018 ('‘'): LEFT SINGLE QUOTATION MARK
-            - U+2019 ('’'): RIGHT SINGLE QUOTATION MARK
-            - U+201c ('“'): LEFT DOUBLE QUOTATION MARK
-            - U+201d ('”'): RIGHT DOUBLE QUOTATION MARK
-            - U+2212 ('−'): MINUS SIGN
-            - U+2217 ('∗'): ASTERISK OPERATOR
-            - U+feff ('﻿'): ZERO WIDTH NO-BREAK SPACE (BOM)
-
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
+ Documentation/usb/ehci.rst           |  2 +-
+ Documentation/usb/gadget_printer.rst |  2 +-
+ Documentation/usb/mass-storage.rst   | 36 ++++++++++++++--------------
+ 3 files changed, 20 insertions(+), 20 deletions(-)
 
-v2:
-- removed EM/EN DASH conversion from this patchset;
-- removed a few fixes, as those were addressed on a separate series.
+diff --git a/Documentation/usb/ehci.rst b/Documentation/usb/ehci.rst
+index 31f650e7c1b4..76190501907a 100644
+--- a/Documentation/usb/ehci.rst
++++ b/Documentation/usb/ehci.rst
+@@ -1,4 +1,4 @@
+-﻿===========
++===========
+ EHCI driver
+ ===========
  
-PS.:
-   The first version of this series was posted with a different name:
-
-	https://lore.kernel.org/lkml/cover.1620641727.git.mchehab+huawei@kernel.org/
-
-   I also changed the patch texts, in order to better describe the patches goals.
-
-Mauro Carvalho Chehab (40):
-  docs: hwmon: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: admin-guide: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: admin-guide: media: ipu3.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: admin-guide: perf: imx-ddr.rst: Use ASCII subset instead of
-    UTF-8 alternate symbols
-  docs: admin-guide: pm: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: trace: coresight: coresight-etm4x-reference.rst: Use ASCII
-    subset instead of UTF-8 alternate symbols
-  docs: driver-api: ioctl.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: driver-api: thermal: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: driver-api: media: drivers: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: driver-api: firmware: other_interfaces.rst: Use ASCII subset
-    instead of UTF-8 alternate symbols
-  docs: fault-injection: nvme-fault-injection.rst: Use ASCII subset
-    instead of UTF-8 alternate symbols
-  docs: usb: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: process: code-of-conduct.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: userspace-api: media: fdl-appendix.rst: Use ASCII subset instead
-    of UTF-8 alternate symbols
-  docs: userspace-api: media: v4l: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: userspace-api: media: dvb: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: vm: zswap.rst: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: filesystems: f2fs.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: filesystems: ext4: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: kernel-hacking: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: hid: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: security: tpm: tpm_event_log.rst: Use ASCII subset instead of
-    UTF-8 alternate symbols
-  docs: security: keys: trusted-encrypted.rst: Use ASCII subset instead
-    of UTF-8 alternate symbols
-  docs: networking: scaling.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: networking: devlink: devlink-dpipe.rst: Use ASCII subset instead
-    of UTF-8 alternate symbols
-  docs: networking: device_drivers: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: x86: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: scheduler: sched-deadline.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: power: powercap: powercap.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: ABI: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: PCI: acpi-info.rst: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: gpu: Use ASCII subset instead of UTF-8 alternate symbols
-  docs: sound: kernel-api: writing-an-alsa-driver.rst: Use ASCII subset
-    instead of UTF-8 alternate symbols
-  docs: arm64: arm-acpi.rst: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: infiniband: tag_matching.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: misc-devices: ibmvmc.rst: Use ASCII subset instead of UTF-8
-    alternate symbols
-  docs: firmware-guide: acpi: lpit.rst: Use ASCII subset instead of
-    UTF-8 alternate symbols
-  docs: firmware-guide: acpi: dsd: graph.rst: Use ASCII subset instead
-    of UTF-8 alternate symbols
-  docs: virt: kvm: api.rst: Use ASCII subset instead of UTF-8 alternate
-    symbols
-  docs: RCU: Use ASCII subset instead of UTF-8 alternate symbols
-
- ...sfs-class-chromeos-driver-cros-ec-lightbar |   2 +-
- .../ABI/testing/sysfs-devices-platform-ipmi   |   2 +-
- .../testing/sysfs-devices-platform-trackpoint |   2 +-
- Documentation/ABI/testing/sysfs-devices-soc   |   4 +-
- Documentation/PCI/acpi-info.rst               |  22 +-
- .../Data-Structures/Data-Structures.rst       |  52 ++--
- .../Expedited-Grace-Periods.rst               |  40 +--
- .../Tree-RCU-Memory-Ordering.rst              |  10 +-
- .../RCU/Design/Requirements/Requirements.rst  | 122 ++++-----
- Documentation/admin-guide/media/ipu3.rst      |   2 +-
- Documentation/admin-guide/perf/imx-ddr.rst    |   2 +-
- Documentation/admin-guide/pm/intel_idle.rst   |   4 +-
- Documentation/admin-guide/pm/intel_pstate.rst |   4 +-
- Documentation/admin-guide/ras.rst             |  86 +++---
- .../admin-guide/reporting-issues.rst          |   2 +-
- Documentation/arm64/arm-acpi.rst              |   8 +-
- .../driver-api/firmware/other_interfaces.rst  |   2 +-
- Documentation/driver-api/ioctl.rst            |   8 +-
- .../media/drivers/sh_mobile_ceu_camera.rst    |   8 +-
- .../driver-api/media/drivers/zoran.rst        |   2 +-
- .../driver-api/thermal/cpu-idle-cooling.rst   |  14 +-
- .../driver-api/thermal/intel_powerclamp.rst   |   6 +-
- .../thermal/x86_pkg_temperature_thermal.rst   |   2 +-
- .../fault-injection/nvme-fault-injection.rst  |   2 +-
- Documentation/filesystems/ext4/attributes.rst |  20 +-
- Documentation/filesystems/ext4/bigalloc.rst   |   6 +-
- Documentation/filesystems/ext4/blockgroup.rst |   8 +-
- Documentation/filesystems/ext4/blocks.rst     |   2 +-
- Documentation/filesystems/ext4/directory.rst  |  16 +-
- Documentation/filesystems/ext4/eainode.rst    |   2 +-
- Documentation/filesystems/ext4/inlinedata.rst |   6 +-
- Documentation/filesystems/ext4/inodes.rst     |   6 +-
- Documentation/filesystems/ext4/journal.rst    |   8 +-
- Documentation/filesystems/ext4/mmp.rst        |   2 +-
- .../filesystems/ext4/special_inodes.rst       |   4 +-
- Documentation/filesystems/ext4/super.rst      |  10 +-
- Documentation/filesystems/f2fs.rst            |   4 +-
- .../firmware-guide/acpi/dsd/graph.rst         |   2 +-
- Documentation/firmware-guide/acpi/lpit.rst    |   2 +-
- Documentation/gpu/i915.rst                    |   2 +-
- Documentation/gpu/komeda-kms.rst              |   2 +-
- Documentation/hid/hid-sensor.rst              |  70 ++---
- Documentation/hid/intel-ish-hid.rst           | 246 +++++++++---------
- Documentation/hwmon/ir36021.rst               |   2 +-
- Documentation/hwmon/ltc2992.rst               |   2 +-
- Documentation/hwmon/pm6764tr.rst              |   2 +-
- Documentation/infiniband/tag_matching.rst     |   4 +-
- Documentation/kernel-hacking/hacking.rst      |   2 +-
- Documentation/kernel-hacking/locking.rst      |   2 +-
- Documentation/misc-devices/ibmvmc.rst         |   8 +-
- .../device_drivers/ethernet/intel/i40e.rst    |   8 +-
- .../device_drivers/ethernet/intel/iavf.rst    |   4 +-
- .../device_drivers/ethernet/netronome/nfp.rst |  12 +-
- .../networking/devlink/devlink-dpipe.rst      |   2 +-
- Documentation/networking/scaling.rst          |  18 +-
- Documentation/power/powercap/powercap.rst     | 210 +++++++--------
- Documentation/process/code-of-conduct.rst     |   2 +-
- Documentation/scheduler/sched-deadline.rst    |   2 +-
- .../security/keys/trusted-encrypted.rst       |   4 +-
- Documentation/security/tpm/tpm_event_log.rst  |   2 +-
- .../kernel-api/writing-an-alsa-driver.rst     |  68 ++---
- .../coresight/coresight-etm4x-reference.rst   |  16 +-
- Documentation/usb/ehci.rst                    |   2 +-
- Documentation/usb/gadget_printer.rst          |   2 +-
- Documentation/usb/mass-storage.rst            |  36 +--
- .../media/dvb/audio-set-bypass-mode.rst       |   2 +-
- .../userspace-api/media/dvb/audio.rst         |   2 +-
- .../userspace-api/media/dvb/dmx-fopen.rst     |   2 +-
- .../userspace-api/media/dvb/dmx-fread.rst     |   2 +-
- .../media/dvb/dmx-set-filter.rst              |   2 +-
- .../userspace-api/media/dvb/intro.rst         |   6 +-
- .../userspace-api/media/dvb/video.rst         |   2 +-
- .../userspace-api/media/fdl-appendix.rst      |  64 ++---
- .../userspace-api/media/v4l/crop.rst          |  16 +-
- .../userspace-api/media/v4l/dev-decoder.rst   |   6 +-
- .../userspace-api/media/v4l/diff-v4l.rst      |   2 +-
- .../userspace-api/media/v4l/open.rst          |   2 +-
- .../media/v4l/vidioc-cropcap.rst              |   4 +-
- Documentation/virt/kvm/api.rst                |  28 +-
- Documentation/vm/zswap.rst                    |   4 +-
- Documentation/x86/resctrl.rst                 |   2 +-
- Documentation/x86/sgx.rst                     |   4 +-
- 82 files changed, 693 insertions(+), 693 deletions(-)
-
+diff --git a/Documentation/usb/gadget_printer.rst b/Documentation/usb/gadget_printer.rst
+index 5e5516c69075..e611a6d91093 100644
+--- a/Documentation/usb/gadget_printer.rst
++++ b/Documentation/usb/gadget_printer.rst
+@@ -1,4 +1,4 @@
+-﻿===============================
++===============================
+ Linux USB Printer Gadget Driver
+ ===============================
+ 
+diff --git a/Documentation/usb/mass-storage.rst b/Documentation/usb/mass-storage.rst
+index d181b47c3cb6..71dfd09b50a4 100644
+--- a/Documentation/usb/mass-storage.rst
++++ b/Documentation/usb/mass-storage.rst
+@@ -40,7 +40,7 @@ Module parameters
+     This parameter lists paths to files or block devices used for
+     backing storage for each logical unit.  There may be at most
+     FSG_MAX_LUNS (8) LUNs set.  If more files are specified, they will
+-    be silently ignored.  See also “luns” parameter.
++    be silently ignored.  See also "luns" parameter.
+ 
+     *BEWARE* that if a file is used as a backing storage, it may not
+     be modified by any other process.  This is because the host
+@@ -56,18 +56,18 @@ Module parameters
+   - removable=b[,b...]
+ 
+     This parameter specifies whether each logical unit should be
+-    removable.  “b” here is either “y”, “Y” or “1” for true or “n”,
+-    “N” or “0” for false.
++    removable.  "b" here is either "y", "Y" or "1" for true or "n",
++    "N" or "0" for false.
+ 
+     If this option is set for a logical unit, gadget will accept an
+-    “eject” SCSI request (Start/Stop Unit).  When it is sent, the
++    "eject" SCSI request (Start/Stop Unit).  When it is sent, the
+     backing file will be closed to simulate ejection and the logical
+     unit will not be mountable by the host until a new backing file is
+-    specified by userspace on the device (see “sysfs entries”
++    specified by userspace on the device (see "sysfs entries"
+     section).
+ 
+     If a logical unit is not removable (the default), a backing file
+-    must be specified for it with the “file” parameter as the module
++    must be specified for it with the "file" parameter as the module
+     is loaded.  The same applies if the module is built in, no
+     exceptions.
+ 
+@@ -76,13 +76,13 @@ Module parameters
+     and because it seems like a saner default after all.  Thus to
+     maintain compatibility with older kernels, it's best to specify
+     the default values.  Also, if one relied on old default, explicit
+-    “n” needs to be specified now.
++    "n" needs to be specified now.
+ 
+-    Note that “removable” means the logical unit's media can be
++    Note that "removable" means the logical unit's media can be
+     ejected or removed (as is true for a CD-ROM drive or a card
+     reader).  It does *not* mean that the entire gadget can be
+     unplugged from the host; the proper term for that is
+-    “hot-unpluggable”.
++    "hot-unpluggable".
+ 
+   - cdrom=b[,b...]
+ 
+@@ -107,7 +107,7 @@ Module parameters
+     This parameter specifies whether FUA flag should be ignored in SCSI
+     Write10 and Write12 commands sent to given logical units.
+ 
+-    MS Windows mounts removable storage in “Removal optimised mode” by
++    MS Windows mounts removable storage in "Removal optimised mode" by
+     default.  All the writes to the media are synchronous, which is
+     achieved by setting the FUA (Force Unit Access) bit in SCSI
+     Write(10,12) commands.  This forces each write to wait until the
+@@ -127,11 +127,11 @@ Module parameters
+     capped.
+ 
+     If this parameter is provided, and the number of files specified
+-    in “file” argument is greater then the value of “luns”, all excess
++    in "file" argument is greater then the value of "luns", all excess
+     files will be ignored.
+ 
+     If this parameter is not present, the number of logical units will
+-    be deduced from the number of files specified in the “file”
++    be deduced from the number of files specified in the "file"
+     parameter.  If the file parameter is missing as well, one is
+     assumed.
+ 
+@@ -217,18 +217,18 @@ Relation to file storage gadget
+   All users need to transition to the Mass Storage Gadget.  The two
+   gadgets behave mostly the same from the outside except:
+ 
+-  1. In FSG the “removable” and “cdrom” module parameters set the flag
++  1. In FSG the "removable" and "cdrom" module parameters set the flag
+      for all logical units whereas in MSG they accept a list of y/n
+      values for each logical unit.  If one uses only a single logical
+      unit this does not matter, but if there are more, the y/n value
+      needs to be repeated for each logical unit.
+ 
+-  2. FSG's “serial”, “vendor”, “product” and “release” module
++  2. FSG's "serial", "vendor", "product" and "release" module
+      parameters are handled in MSG by the composite layer's parameters
+-     named respectively: “iSerialnumber”, “idVendor”, “idProduct” and
+-     “bcdDevice”.
++     named respectively: "iSerialnumber", "idVendor", "idProduct" and
++     "bcdDevice".
+ 
+-  3. MSG does not support FSG's test mode, thus “transport”,
+-     “protocol” and “buflen” FSG's module parameters are not
++  3. MSG does not support FSG's test mode, thus "transport",
++     "protocol" and "buflen" FSG's module parameters are not
+      supported.  MSG always uses SCSI protocol with bulk only
+      transport mode and 16 KiB buffers.
 -- 
 2.30.2
-
 
