@@ -2,189 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0814E37B6C4
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 09:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1453D37B769
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 10:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbhELHV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 03:21:28 -0400
-Received: from mail.thorsis.com ([92.198.35.195]:60660 "EHLO mail.thorsis.com"
+        id S230070AbhELIHl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 04:07:41 -0400
+Received: from mga01.intel.com ([192.55.52.88]:32313 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230166AbhELHV1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 03:21:27 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.thorsis.com (Postfix) with ESMTP id 15FABF6A;
-        Wed, 12 May 2021 09:20:17 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
-Received: from mail.thorsis.com ([127.0.0.1])
-        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AYe52KTAIS14; Wed, 12 May 2021 09:20:17 +0200 (CEST)
-Received: by mail.thorsis.com (Postfix, from userid 109)
-        id E8D32119D; Wed, 12 May 2021 09:20:16 +0200 (CEST)
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.2
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: microchip.com]
-        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
-        * -0.0 NO_RECEIVED Informational: message has no Received headers
-Date:   Wed, 12 May 2021 09:19:54 +0200
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Al Cooper <alcooperx@gmail.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v10 0/5] USB: misc: Add onboard_usb_hub driver
-Message-ID: <YJuBmlPSaJlyVuzW@ada-deb-carambola.ifak-system.com>
-Mail-Followup-To: Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>, Al Cooper <alcooperx@gmail.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org
-References: <20210511225223.550762-1-mka@chromium.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210511225223.550762-1-mka@chromium.org>
+        id S230011AbhELIHk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 04:07:40 -0400
+IronPort-SDR: vRmLKXz+VNJPbdD/tes1xhK1ZZzRlur3oyvzrbHY5aMMmJlG2cK8Ac/DoHtJTCAFty3/2smxo7
+ HCpCTiz27e3A==
+X-IronPort-AV: E=McAfee;i="6200,9189,9981"; a="220616870"
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="220616870"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2021 01:06:30 -0700
+IronPort-SDR: CCY/fB8FfYxavb1HhFlLVmxK9hRYV/Je7Om0RdPySzulrJHzK5vkc6gu5mL2RskHW/8rw1al5u
+ 7392l5yl2jxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,293,1613462400"; 
+   d="scan'208";a="625208217"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2021 01:06:28 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/5] xhci fixes for usb-linus
+Date:   Wed, 12 May 2021 11:08:11 +0300
+Message-Id: <20210512080816.866037-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello Matthias,
+Hi Greg
 
-just a curious informal question, see below.
+A few small xHCI fixes for usb-linus 5.13-rc.
 
-Am Tue, May 11, 2021 at 03:52:18PM -0700 schrieb Matthias Kaehlcke:
-> This series adds:
-> - the onboard_usb_hub_driver
-> - glue in the xhci-plat driver to create the onboard_usb_hub
->   platform device if needed
-> - a device tree binding for the Realtek RTS5411 USB hub controller
-> - device tree changes that add RTS5411 entries for the QCA SC7180
->   based boards trogdor and lazor
-> - a couple of stubs for platform device functions to avoid
->   unresolved symbols with certain kernel configs
-> 
-> The main issue the driver addresses is that a USB hub needs to be
-> powered before it can be discovered. For discrete onboard hubs (an
-> example for such a hub is the Realtek RTS5411) this is often solved
-> by supplying the hub with an 'always-on' regulator, which is kind
-> of a hack. Some onboard hubs may require further initialization
-> steps, like changing the state of a GPIO or enabling a clock, which
-> requires even more hacks. This driver creates a platform device
-> representing the hub which performs the necessary initialization.
-> Currently it only supports switching on a single regulator, support
-> for multiple regulators or other actions can be added as needed.
-> Different initialization sequences can be supported based on the
-> compatible string.
+Thanks
+-Mathias
 
-This sounds like it would be useful for other hub controllers as well?
-For example, would the Microchip USB3503 (former SMSC,
-drivers/usb/misc/usb3503.c, [1]) fall into this category? That chip is
-used on the "Cubietech Cubietruck Plus" for example.
 
-> Besides performing the initialization the driver can be configured
-> to power the hub off during system suspend. This can help to extend
-> battery life on battery powered devices which have no requirements
-> to keep the hub powered during suspend. The driver can also be
-> configured to leave the hub powered when a wakeup capable USB device
-> is connected when suspending, and power it off otherwise.
+Abhijeet Rao (1):
+  xhci-pci: Allow host runtime PM as default for Intel Alder Lake xHCI
 
-Sounds interesting.
+Christophe JAILLET (1):
+  xhci: Do not use GFP_KERNEL in (potentially) atomic context
 
-Greets
-Alex
+Mathias Nyman (1):
+  xhci: Fix giving back cancelled URBs even if halted endpoint can't
+    reset
 
-[1] https://www.microchip.com/wwwproducts/en/USB3503
+Maximilian Luz (1):
+  usb: xhci: Increase timeout for HC halt
 
-> Changes in v10:
-> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
-> - keep 'regulator-boot-on' property for pp3300_hub
-> 
-> Changes in v9:
-> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
->   USB_PLATFORM_XHCI
-> 
-> Changes in v7:
-> - updated DT binding
-> - series rebased on qcom/arm64-for-5.13
-> 
-> Changes in v6:
-> - updated summary
-> 
-> Changes in v5:
-> - cover letter added
-> 
-> Matthias Kaehlcke (5):
->   dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
->   USB: misc: Add onboard_usb_hub driver
->   of/platform: Add stubs for of_platform_device_create/destroy()
->   usb: host: xhci-plat: Create platform device for onboard hubs in
->     probe()
->   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-> 
->  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
->  .../bindings/usb/realtek,rts5411.yaml         |  62 +++
->  MAINTAINERS                                   |   7 +
->  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
->  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  11 +-
->  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
->  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
->  drivers/usb/host/Kconfig                      |   1 +
->  drivers/usb/host/xhci-plat.c                  |  16 +
->  drivers/usb/misc/Kconfig                      |  17 +
->  drivers/usb/misc/Makefile                     |   1 +
->  drivers/usb/misc/onboard_usb_hub.c            | 415 ++++++++++++++++++
->  include/linux/of_platform.h                   |  22 +-
->  include/linux/usb/hcd.h                       |   2 +
->  include/linux/usb/onboard_hub.h               |  15 +
->  15 files changed, 600 insertions(+), 34 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
->  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
->  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
->  create mode 100644 include/linux/usb/onboard_hub.h
-> 
-> -- 
-> 2.31.1.607.g51e8a6a459-goog
-> 
+Sandeep Singh (1):
+  xhci: Add reset resume quirk for AMD xhci controller.
+
+ drivers/usb/host/xhci-ext-caps.h |  5 +++--
+ drivers/usb/host/xhci-pci.c      |  8 ++++++--
+ drivers/usb/host/xhci-ring.c     | 16 +++++++++++-----
+ drivers/usb/host/xhci.c          |  6 +++---
+ 4 files changed, 23 insertions(+), 12 deletions(-)
+
+-- 
+2.25.1
+
