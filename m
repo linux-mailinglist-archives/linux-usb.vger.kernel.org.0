@@ -2,89 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C889C37B688
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 09:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0814E37B6C4
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 09:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbhELHEY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 03:04:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39848 "EHLO mail.kernel.org"
+        id S230183AbhELHV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 03:21:28 -0400
+Received: from mail.thorsis.com ([92.198.35.195]:60660 "EHLO mail.thorsis.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229627AbhELHEY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 12 May 2021 03:04:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 456C161289;
-        Wed, 12 May 2021 07:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620802996;
-        bh=iUBD/U+nLN+h/hvAp8X9UtIAIcPumBbY0yRDv4Ky7FI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FIE1ZlhZWjvF0yx+OJ/kzFm0svM7pv9OhNyTWJ0XmSt3U89fhRj4UcSrJpPQphqfJ
-         KcEDfj5SfoIYnudPMJTlMYo6wyH3xWLxiE9lYv52LFwIfth3aUeg59qheZp5SkrHup
-         +sYDMRC1tPqmLgr7JIR96sjVcgG0fVhLFhK0GaZg=
-Date:   Wed, 12 May 2021 09:03:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Connor Davis <connojdavis@gmail.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: xhci: Notify xen when DbC is unsafe to use
-Message-ID: <YJt9su1k67KEFh6K@kroah.com>
-References: <cover.1620776161.git.connojdavis@gmail.com>
- <2af7e7b8d569e94ab9c48039040ca69a8d52c89d.1620776161.git.connojdavis@gmail.com>
-MIME-Version: 1.0
+        id S230166AbhELHV1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 12 May 2021 03:21:27 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by mail.thorsis.com (Postfix) with ESMTP id 15FABF6A;
+        Wed, 12 May 2021 09:20:17 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
+Received: from mail.thorsis.com ([127.0.0.1])
+        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id AYe52KTAIS14; Wed, 12 May 2021 09:20:17 +0200 (CEST)
+Received: by mail.thorsis.com (Postfix, from userid 109)
+        id E8D32119D; Wed, 12 May 2021 09:20:16 +0200 (CEST)
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
+        NO_RELAYS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.2
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
+        *      blocked.  See
+        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
+        *      for more information.
+        *      [URIs: microchip.com]
+        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
+        * -0.0 NO_RECEIVED Informational: message has no Received headers
+Date:   Wed, 12 May 2021 09:19:54 +0200
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v10 0/5] USB: misc: Add onboard_usb_hub driver
+Message-ID: <YJuBmlPSaJlyVuzW@ada-deb-carambola.ifak-system.com>
+Mail-Followup-To: Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>, linux-usb@vger.kernel.org,
+        Peter Chen <peter.chen@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>, Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Christian Lamparter <chunkeey@googlemail.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org
+References: <20210511225223.550762-1-mka@chromium.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2af7e7b8d569e94ab9c48039040ca69a8d52c89d.1620776161.git.connojdavis@gmail.com>
+In-Reply-To: <20210511225223.550762-1-mka@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 11, 2021 at 06:18:21PM -0600, Connor Davis wrote:
-> When running as a dom0 guest on Xen, check if the USB3 debug
-> capability is enabled before xHCI reset, suspend, and resume. If it
-> is, call xen_dbgp_reset_prep() to notify Xen that it is unsafe to touch
-> MMIO registers until the next xen_dbgp_external_startup().
-> 
-> This notification allows Xen to avoid undefined behavior resulting
-> from MMIO access when the host controller's CNR bit is set or when
-> the device transitions to D3hot.
-> 
-> Signed-off-by: Connor Davis <connojdavis@gmail.com>
-> ---
->  drivers/usb/host/xhci-dbgcap.h |  6 ++++
->  drivers/usb/host/xhci.c        | 57 ++++++++++++++++++++++++++++++++++
->  drivers/usb/host/xhci.h        |  1 +
->  3 files changed, 64 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-dbgcap.h b/drivers/usb/host/xhci-dbgcap.h
-> index c70b78d504eb..24784b82a840 100644
-> --- a/drivers/usb/host/xhci-dbgcap.h
-> +++ b/drivers/usb/host/xhci-dbgcap.h
-> @@ -227,4 +227,10 @@ static inline int xhci_dbc_resume(struct xhci_hcd *xhci)
->  	return 0;
->  }
->  #endif /* CONFIG_USB_XHCI_DBGCAP */
-> +
-> +#ifdef CONFIG_XEN_DOM0
-> +int xen_dbgp_reset_prep(struct usb_hcd *hcd);
-> +int xen_dbgp_external_startup(struct usb_hcd *hcd);
-> +#endif /* CONFIG_XEN_DOM0 */
-> +
->  #endif /* __LINUX_XHCI_DBGCAP_H */
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index ca9385d22f68..afe44169183f 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -37,6 +37,57 @@ static unsigned long long quirks;
->  module_param(quirks, ullong, S_IRUGO);
->  MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
-> 
-> +#ifdef CONFIG_XEN_DOM0
-> +#include <xen/xen.h>
+Hello Matthias,
 
-<snip>
+just a curious informal question, see below.
 
-Can't this #ifdef stuff go into a .h file?
+Am Tue, May 11, 2021 at 03:52:18PM -0700 schrieb Matthias Kaehlcke:
+> This series adds:
+> - the onboard_usb_hub_driver
+> - glue in the xhci-plat driver to create the onboard_usb_hub
+>   platform device if needed
+> - a device tree binding for the Realtek RTS5411 USB hub controller
+> - device tree changes that add RTS5411 entries for the QCA SC7180
+>   based boards trogdor and lazor
+> - a couple of stubs for platform device functions to avoid
+>   unresolved symbols with certain kernel configs
+> 
+> The main issue the driver addresses is that a USB hub needs to be
+> powered before it can be discovered. For discrete onboard hubs (an
+> example for such a hub is the Realtek RTS5411) this is often solved
+> by supplying the hub with an 'always-on' regulator, which is kind
+> of a hack. Some onboard hubs may require further initialization
+> steps, like changing the state of a GPIO or enabling a clock, which
+> requires even more hacks. This driver creates a platform device
+> representing the hub which performs the necessary initialization.
+> Currently it only supports switching on a single regulator, support
+> for multiple regulators or other actions can be added as needed.
+> Different initialization sequences can be supported based on the
+> compatible string.
 
-thanks,
+This sounds like it would be useful for other hub controllers as well?
+For example, would the Microchip USB3503 (former SMSC,
+drivers/usb/misc/usb3503.c, [1]) fall into this category? That chip is
+used on the "Cubietech Cubietruck Plus" for example.
 
-greg k-h
+> Besides performing the initialization the driver can be configured
+> to power the hub off during system suspend. This can help to extend
+> battery life on battery powered devices which have no requirements
+> to keep the hub powered during suspend. The driver can also be
+> configured to leave the hub powered when a wakeup capable USB device
+> is connected when suspending, and power it off otherwise.
+
+Sounds interesting.
+
+Greets
+Alex
+
+[1] https://www.microchip.com/wwwproducts/en/USB3503
+
+> Changes in v10:
+> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+> - keep 'regulator-boot-on' property for pp3300_hub
+> 
+> Changes in v9:
+> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+>   USB_PLATFORM_XHCI
+> 
+> Changes in v7:
+> - updated DT binding
+> - series rebased on qcom/arm64-for-5.13
+> 
+> Changes in v6:
+> - updated summary
+> 
+> Changes in v5:
+> - cover letter added
+> 
+> Matthias Kaehlcke (5):
+>   dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
+>   USB: misc: Add onboard_usb_hub driver
+>   of/platform: Add stubs for of_platform_device_create/destroy()
+>   usb: host: xhci-plat: Create platform device for onboard hubs in
+>     probe()
+>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+> 
+>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+>  .../bindings/usb/realtek,rts5411.yaml         |  62 +++
+>  MAINTAINERS                                   |   7 +
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  11 +-
+>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+>  drivers/usb/host/Kconfig                      |   1 +
+>  drivers/usb/host/xhci-plat.c                  |  16 +
+>  drivers/usb/misc/Kconfig                      |  17 +
+>  drivers/usb/misc/Makefile                     |   1 +
+>  drivers/usb/misc/onboard_usb_hub.c            | 415 ++++++++++++++++++
+>  include/linux/of_platform.h                   |  22 +-
+>  include/linux/usb/hcd.h                       |   2 +
+>  include/linux/usb/onboard_hub.h               |  15 +
+>  15 files changed, 600 insertions(+), 34 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+>  create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+>  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+>  create mode 100644 include/linux/usb/onboard_hub.h
+> 
+> -- 
+> 2.31.1.607.g51e8a6a459-goog
+> 
