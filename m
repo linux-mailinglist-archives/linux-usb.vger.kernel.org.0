@@ -2,142 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDF637EF37
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 01:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A0A37EF3B
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 01:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbhELXAB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 19:00:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46968 "EHLO
+        id S236666AbhELXAL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 19:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1390096AbhELVtZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 17:49:25 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E618DC061760
-        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 14:47:53 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id v191so19701436pfc.8
-        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 14:47:53 -0700 (PDT)
+        with ESMTP id S1349177AbhELWam (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 18:30:42 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41354C06138E
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 15:28:16 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id v6so31567784ljj.5
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 15:28:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=N1sUYuNRtWpe5/0gBwMIZwmUciYoDGABR1xIt9TC6eM=;
-        b=YBGOjbBK1Lv4SSzr9vR844bjr8N+oPqsqXVS9OppNQix8L7AGlck8c67Q0v7jQAPyH
-         DOR//BlEIdfW067JNJ+TpdoSm3UTAMOB8+NX4ZlPQOgUNxI73rhKhy5odLsOIYbfpmpe
-         gar7Q7vsFCcqYajv4wWlR+Mdk9RmkFd583Ty8=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zpuSVjKnd4Q/JUCBr5MA4TroaNsMxpRZib7L8EDA+Do=;
+        b=oEgvr7s+UdFc5aoOn13VA2zxM4ckiXTEvq4SxAi15WwW8XAawCwo2F81HFAUqmfQ93
+         Fyv5yrqModgAxJPHlwPJd5iTXR/oKCO2VBedmEZzz7ul7Ng4AlBauS7aRhvCzJS8XLSz
+         zJRmETN9JJW6EcmPLqxFJRE0+6NKjkMQ/pQ/bZF77oZs7/zG+baxLHGjoTX8wBPfYBtD
+         WSsgnlKfxaYV43ZV4uVv345w6yLHWVzMrNJU7+wxxeDub9R+Dv9bRm79EbrWc+Gvtxnk
+         QSjtOXgPw7Llf6aBD8rcpwurQ9oUgU0YnWlyYT5/JoDqycE4zwsTxDAIi6t4tL00yMIX
+         4BSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=N1sUYuNRtWpe5/0gBwMIZwmUciYoDGABR1xIt9TC6eM=;
-        b=lU4tW77t6noAsV9+2ZybADB4UNBBOidVD8ldXnvpknAHwuzLb0P4mlRe4tauKyXcZQ
-         2qMZKWLA0KBq/pudijvuGAeIM796h/kS6t/F3pGQN8IAu8IWb7F42nUHjl3ztDRAXpJz
-         EkqmAk4xRXFUFyphyJXObqlEejZvhPCUrDvSA/X7sDTjfj0N6WfK/81zVX1aAwV2EpC3
-         Q6+hvVpXt71j51C58uBXZ+vNUUhoDB1+KG/UbIO+YUzyagWPNlbY+icjUJtEUI/gY8f7
-         ILz7ZBYKMQg2ZQkng1zKHyKuxbQ2aJHUHSahbOEGt3xjPBvdoboXuhzw6pyhJ5gqVwjz
-         MIoQ==
-X-Gm-Message-State: AOAM5335v5gFLJsbPXRblP02TKRcxw2C+dF5qrTdcJJNz6wFhRWGEuC2
-        q3zsLO+LBi2FBiHh0bikX9js6g==
-X-Google-Smtp-Source: ABdhPJzyYEFFCFF3ZAAPgV0TudErY54r0ya7cQySaETLzoT/B5u7qP3W8ckLBKfcjrYik66Ir6w+9g==
-X-Received: by 2002:a05:6a00:14cb:b029:2be:1466:5a28 with SMTP id w11-20020a056a0014cbb02902be14665a28mr18204262pfu.55.1620856073353;
-        Wed, 12 May 2021 14:47:53 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:a89e:5bb2:e8e0:4428])
-        by smtp.gmail.com with UTF8SMTPSA id t26sm611645pfg.12.2021.05.12.14.47.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 May 2021 14:47:52 -0700 (PDT)
-Date:   Wed, 12 May 2021 14:47:50 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Sandeep Maheswaram <sanm@codeaurora.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v7 2/5] usb: dwc3: core: Host wake up support from system
- suspend
-Message-ID: <YJxNBm0WiMqjJ2Cg@google.com>
-References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
- <1619586716-8687-3-git-send-email-sanm@codeaurora.org>
- <87r1iuk9vs.fsf@kernel.org>
- <184ddea9-643f-91ea-6d1f-5bdd26373e53@codeaurora.org>
- <87h7jkhxmw.fsf@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zpuSVjKnd4Q/JUCBr5MA4TroaNsMxpRZib7L8EDA+Do=;
+        b=dehqrr7W9B/sAs3IHqJKmoJJ4XQn1Jyd9vCDHYC1K6huVbi2yV6qzOIqQBr070YRSB
+         V6wrMoI5KleAvpf7L6gpEB5V+6rgSzu+RN1ZiDZyHxJ0KQZU0X0TxONSAa2douUx2SWb
+         wu0G0cFJ9RKJlcSwEiW2d+BzdBSV+eQIj72LfrlxPT+NKCu29rI6QysUwaZli8ZMJETb
+         NFwch786CGQqWmKxA6aqaRCnyLeFwJdQqenqW80LKxN305Ei2pIHALy2P81VG6q6z8fH
+         ldXytv5tynN+duRu+3GZ/EeeE2YXy7ZJoHdzMFoSu5rQ9YAho5535zY37CAPQsgxkUgH
+         NmKA==
+X-Gm-Message-State: AOAM533Npdk1+Ty8xy2t8zqejl7zQqnjQs1y0CQX15LmF7GoxU8IBMcq
+        nXSDpcXKNODDzjP3zTM8OQNjx9vTED7vnIz1VHFusw==
+X-Google-Smtp-Source: ABdhPJz8pT0IMA22SKNig3Imu57ETWyjItTI6v9mz/D5pYMjfujrj/HOhm7ZYzUcA/DVXAEiT+g37AWxBXRJtHia+p0=
+X-Received: by 2002:a2e:9787:: with SMTP id y7mr30698250lji.65.1620858494395;
+ Wed, 12 May 2021 15:28:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87h7jkhxmw.fsf@kernel.org>
+References: <20210424021631.1972022-1-rajatja@google.com> <20210512010049.GA89346@rocinante.localdomain>
+ <CAA93t1ohAFM1U2xTvbd1J1dUCaZwh6GYNGib_AM0J7+qHwSf1A@mail.gmail.com>
+In-Reply-To: <CAA93t1ohAFM1U2xTvbd1J1dUCaZwh6GYNGib_AM0J7+qHwSf1A@mail.gmail.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Wed, 12 May 2021 15:27:38 -0700
+Message-ID: <CACK8Z6HuKqgYQZGJZGQGr5FC96naV+1yXZuwYTy5Ydb5=k40KA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] driver core: Move the "removable" attribute from
+ USB to core
+To:     Rajat Jain <rajatxjain@gmail.com>
+Cc:     =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 03, 2021 at 02:20:23PM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Sandeep Maheswaram <sanm@codeaurora.org> writes:
-> >> Sandeep Maheswaram <sanm@codeaurora.org> writes:
-> >>> Avoiding phy powerdown when wakeup capable devices are connected
-> >>> by checking phy_power_off flag.
-> >>> Phy should be on to wake up the device from suspend using wakeup capable
-> >>> devices such as keyboard and mouse.
-> >>>
-> >>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> >>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> >>> ---
-> >>>   drivers/usb/dwc3/core.c | 7 +++++--
-> >>>   1 file changed, 5 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>> index b6e53d8..bb414c3 100644
-> >>> --- a/drivers/usb/dwc3/core.c
-> >>> +++ b/drivers/usb/dwc3/core.c
-> >>> @@ -1738,7 +1738,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
-> >>>   		dwc3_core_exit(dwc);
-> >>>   		break;
-> >>>   	case DWC3_GCTL_PRTCAP_HOST:
-> >>> -		if (!PMSG_IS_AUTO(msg)) {
-> >>> +		if (!PMSG_IS_AUTO(msg) && dwc->phy_power_off) {
-> >> should be able to detect this generically, no? Shouldn't
-> >> device_may_wakeup() be valid here and give you the answer you want?
+Posted a v3 of this patch here:
+https://lore.kernel.org/patchwork/patch/1428133/
+
+On Tue, May 11, 2021 at 6:21 PM Rajat Jain <rajatxjain@gmail.com> wrote:
+>
+> Hi Krzysztof,
+>
+> Thanks a lot for your comments. Please see inline.
+>
+> On Tue, May 11, 2021 at 6:00 PM Krzysztof Wilczy=C5=84ski <kw@linux.com> =
+wrote:
 > >
-> > I think  device_may_wakeup() gives whether the controller is wake up 
-> > capable or not.
-> 
-> Yes, but it's a bit more than that. Looking at devices.rst we read:
-> 
-> If :c:func:`device_may_wakeup(dev)` returns ``true``, the device should be
-> prepared for generating hardware wakeup signals to trigger a system wakeup event
-> when the system is in the sleep state.  For example, :c:func:`enable_irq_wake()`
-> might identify GPIO signals hooked up to a switch or other external hardware,
-> and :c:func:`pci_enable_wake()` does something similar for the PCI PME signal.
-> 
-> So, if there is a condition where $this device has to, somehow, deal
-> with wakeup, it should be configured accordingly. This ->phy_power_off
-> flag is telling us the same thing.
-> 
-> > But we want to keep phy powered on only when some wakeup capable devices 
-> > (eg:keyboard ,mouse ) are connected to controller.
-> 
-> Understood, it could be that we're missing some method for propagating
-> that state (i.e. keyboard with PM support) up to the parent device, but
-> that's no excuse to bypass driver boundaries. Wouldn't you agree?
-
-I'm not sure if device_may_wakeup() is really the right tool for the
-job. This is the current implementation:
-
-static inline bool device_may_wakeup(struct device *dev)
-{
-	return dev->power.can_wakeup && !!dev->power.wakeup;
-}
-
-IIUC power.can_wakeup specifies whether the device is wakeup
-capable, primarily in physical terms and indicating that the
-driver is ready to handle wakeups, and power.wakeup represents
-the policy which can be changed by userspace.
-
-Supposing the hub is generally wakeup capable that flag
-shouldn't be changed. Neither should be the policy based on
-what is connected to the bus.
+> > Hi Rajat,
+> >
+> > I have few questions below, but to add in advance, I might be confusing
+> > the role that "type->supports_removable" and "dev->removable" plays
+> > here, and if so then I apologise.
+> >
+> > [...]
+> > > @@ -2504,8 +2523,16 @@ static int device_add_attrs(struct device *dev=
+)
+> > >                       goto err_remove_dev_online;
+> > >       }
+> > >
+> > > +     if (type && type->supports_removable) {
+> > > +             error =3D device_create_file(dev, &dev_attr_removable);
+> > > +             if (error)
+> > > +                     goto err_remove_dev_waiting_for_supplier;
+> > > +     }
+> > > +
+> > >       return 0;
+> >
+> > Would a check for "dev->removable =3D=3D DEVICE_REMOVABLE" here be more
+> > appropriate?
+> >
+> > Unless you wanted to add sysfs objects when the device hints that it ha=
+s
+> > a notion of being removable even though it might be set to "unknown" or
+> > "fixed" (if that state is at all possible then), and in which case usin=
+g
+> > the dev_is_removable() helper would also not be an option since it does
+> > a more complex check internally.
+> >
+> > Technically, you could always add this sysfs object (similarly to what
+> > USB core did) as it would then show the correct state depending on
+> > "dev->removable".
+> >
+> > Also, I suppose, it's not possible for a device to have
+> > "supports_removable" set to true, but "removable" would be different
+> > than "DEVICE_REMOVABLE", correct?
+>
+> No, that is not true.
+>
+> device_type->supports_removable=3D1 indicates that the bus / subsystem
+> is capable of differentiating between removable and fixed devices.
+> It's essentially describing a capability of the bus / subsystem. This
+> flag needs to be true for a subsystem for any it's devices'
+> dev->removable field to be considered meaningful.
+>
+> OTOH, the dev->removable =3D> indicates the location of the device IF
+> device_type->supports location is true. Yes, it can be fixed /
+> removable / unknown (whatever the bus decides) if the
+> device_type->supports_location is true.
+>
+> One of my primary considerations was also that the existing UAPI for
+> the USB's "removable" attribute shouldn't be changed. Currently, it
+> exists for all USB devices, so I think the current code / check is OK.
+>
+> >
+> > [...]
+> > > +enum device_removable {
+> > > +     DEVICE_REMOVABLE_UNKNOWN =3D 0,
+> > > +     DEVICE_REMOVABLE,
+> > > +     DEVICE_FIXED,
+> > > +};
+> >
+> > I know this was moved from the USB core, but I personally find it
+> > a little bit awkward to read, would something like that be acceptable?
+> >
+> > enum device_removable {
+> >         DEVICE_STATE_UNKNOWN =3D 0,
+> >         DEVICE_STATE_REMOVABLE,
+> >         DEVICE_STATE_FIXED,
+> > };
+> >
+> > The addition of state to the name follows the removable_show() function
+> > where the local variable is called "state", and I think it makes sense
+> > to call this as such.  What do you think?
+>
+> I think I made a mistake by using the "state" as the local variable
+> there. I will change it to "location". I'm happy to change the enums
+> above to DEVICE_LOCATION_REMOVABLE* etc if there is a wider consensus
+> on this. IMHO, the current shorter one also looks OK.
+>
+> >
+> > > +static inline bool dev_is_removable(struct device *dev)
+> > > +{
+> > > +     return dev && dev->type && dev->type->supports_removable
+> > > +         && dev->removable =3D=3D DEVICE_REMOVABLE;
+> > > +}
+> >
+> > Similarly to my question about - would a simple check to see if
+> > "dev->removable" is set to "DEVICE_REMOVABLE" here be enough?
+>
+> No, as I mentioned above, the dev->removable field should be
+> considered meaningful only if device_type->supports_location is true.
+> So the check for supports_removable is needed here.
+>
+> Please feel free to send me more thoughts.
+>
+> Thanks & Best Regards,
+>
+> Rajat
+>
+>
+> >
+> > Krzysztof
