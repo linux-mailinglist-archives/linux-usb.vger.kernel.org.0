@@ -2,122 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D440D37B33D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 03:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCAF37B343
+	for <lists+linux-usb@lfdr.de>; Wed, 12 May 2021 03:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhELBCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 11 May 2021 21:02:01 -0400
-Received: from mail-ej1-f47.google.com ([209.85.218.47]:38410 "EHLO
-        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbhELBCB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 21:02:01 -0400
-Received: by mail-ej1-f47.google.com with SMTP id b25so32416749eju.5;
-        Tue, 11 May 2021 18:00:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w5T9ZppkqLGlw3eNUaMbpVD5FujhFVJDEVceVQJsQxo=;
-        b=PghfrQL2RSuE6A4U5f/W4k/JlnG+1WedYj1I9fOrEtgvWz7ondhm1NlIq6UjD4eNbb
-         zERtaIROr9WiJ84esGCxXXX+rgnUomEp5TkPimaeNXX1hMArKlCcZIJytXcro9sd9DTY
-         cRsz6UySs3pzcKY6ikxoMwoKmV5v44NO7qb8wBzbzV0PvZ/0ZgwQr5Cv0FME9w0v0+Lj
-         n9+VF1TysyHPxcRLZB7crrW4csILbUxk/vPU/cIJR+CE+92xuFMCGTao7nt4IZhYxxzg
-         rqMo+coegGtL9dMTYIOx0Hx4m7P78lFzB68hAlvyl2tS8sKL85J9uACXRDcIcrS6zw+J
-         KDjA==
-X-Gm-Message-State: AOAM531iC86yoXue02/pFczawXTW991gWwRkyb4+vmbkyi0IO+CEqxE/
-        uxC+LYstV0aOIkWx2h/ulU4=
-X-Google-Smtp-Source: ABdhPJzdayMEz2R8eKVIC+R0Mz0wUdi04OZcpUFEPErnRFhfCLxIg6YElc3jCwfMQKuH79ADXhuVCw==
-X-Received: by 2002:a17:906:22c6:: with SMTP id q6mr34522665eja.275.1620781252296;
-        Tue, 11 May 2021 18:00:52 -0700 (PDT)
-Received: from rocinante.localdomain ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id u13sm15872171edq.55.2021.05.11.18.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 May 2021 18:00:51 -0700 (PDT)
-Date:   Wed, 12 May 2021 03:00:49 +0200
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Rajat Jain <rajatja@google.com>
+        id S229920AbhELBIp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 11 May 2021 21:08:45 -0400
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:51733 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229637AbhELBIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 11 May 2021 21:08:45 -0400
+X-Originating-IP: 68.203.5.165
+Received: from [192.168.1.186] (cpe-68-203-5-165.austin.res.rr.com [68.203.5.165])
+        (Authenticated sender: frank@zago.net)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id AD7A260003;
+        Wed, 12 May 2021 01:07:33 +0000 (UTC)
+Subject: Re: [PATCH v2 1/2] Revert "USB: serial: ch341: add new Product ID for
+ CH341A"
+To:     Johan Hovold <johan@kernel.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, helgaas@kernel.org,
-        rajatxjain@gmail.com, jsbarnes@google.com, dtor@google.com
-Subject: Re: [PATCH v2 1/2] driver core: Move the "removable" attribute from
- USB to core
-Message-ID: <20210512010049.GA89346@rocinante.localdomain>
-References: <20210424021631.1972022-1-rajatja@google.com>
+        linux-kernel@vger.kernel.org,
+        Jan-Niklas Burfeind <kernel@aiyionpri.me>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
+        gunar@schorcht.net
+References: <20210423002852.3904-1-frank@zago.net>
+ <YJjjfx49nCflzFbR@hovoldconsulting.com>
+From:   Frank Zago <frank@zago.net>
+Message-ID: <8b3c348f-9e05-29f9-9197-8ddf1c8a9e8b@zago.net>
+Date:   Tue, 11 May 2021 20:07:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
+In-Reply-To: <YJjjfx49nCflzFbR@hovoldconsulting.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210424021631.1972022-1-rajatja@google.com>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rajat,
+Hello,
 
-I have few questions below, but to add in advance, I might be confusing
-the role that "type->supports_removable" and "dev->removable" plays
-here, and if so then I apologise.
+On 5/10/21 2:40 AM, Johan Hovold wrote:
+> On Thu, Apr 22, 2021 at 07:28:51PM -0500, Frank Zago wrote:
+>> From: frank zago <frank@zago.net>
+>> 
+>> The 0x5512 USB PID is for the I2C/GPIO/SPI interfaces. UART is 
+>> still present but only the TX and RX pins are available; DTS, DTR, 
+>> ... are used for other things. Remove the PID, and let a I2C
+>> driver bind to it.
+>> 
+>> Existing CH341 boards usually have physical jumpers to switch 
+>> between the 3 modes.
+>> 
+>> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
+> 
+> You can't just revert something which people clearly depend on and 
+> therefore added to the kernel in the first place.
 
-[...]
-> @@ -2504,8 +2523,16 @@ static int device_add_attrs(struct device *dev)
->  			goto err_remove_dev_online;
->  	}
->  
-> +	if (type && type->supports_removable) {
-> +		error = device_create_file(dev, &dev_attr_removable);
-> +		if (error)
-> +			goto err_remove_dev_waiting_for_supplier;
-> +	}
-> +
->  	return 0;
+That device in UART mode was already supported by the serial driver. The 
+original submitter just had to move a jumper on his board. There was no 
+need to patch the kernel.
 
-Would a check for "dev->removable == DEVICE_REMOVABLE" here be more
-appropriate?
+That product ID also supports UART but in a limited way, as only the RX and TX
+pins are available. However it is the only one that supports i2c/spi/gpio, and
+that's why I have to revert the patch. 
 
-Unless you wanted to add sysfs objects when the device hints that it has
-a notion of being removable even though it might be set to "unknown" or
-"fixed" (if that state is at all possible then), and in which case using
-the dev_is_removable() helper would also not be an option since it does
-a more complex check internally.
+If that's desired, the new driver could add support for that as well, but I don't
+think it's worth the effort.
 
-Technically, you could always add this sysfs object (similarly to what
-USB core did) as it would then show the correct state depending on
-"dev->removable".
+> 
+> Can you reprogram the device with a newly allocated PID to be used 
+> for i2c-only instead?
 
-Also, I suppose, it's not possible for a device to have
-"supports_removable" set to true, but "removable" would be different
-than "DEVICE_REMOVABLE", correct?
+It is possible if the device has an SPI flash connected to it, but none of
+the cheap boards have that.
 
-[...]
-> +enum device_removable {
-> +	DEVICE_REMOVABLE_UNKNOWN = 0,
-> +	DEVICE_REMOVABLE,
-> +	DEVICE_FIXED,
-> +};
-
-I know this was moved from the USB core, but I personally find it
-a little bit awkward to read, would something like that be acceptable?
-
-enum device_removable {
-	DEVICE_STATE_UNKNOWN = 0,
-	DEVICE_STATE_REMOVABLE,
-	DEVICE_STATE_FIXED,
-};
-
-The addition of state to the name follows the removable_show() function
-where the local variable is called "state", and I think it makes sense
-to call this as such.  What do you think?
-
-> +static inline bool dev_is_removable(struct device *dev)
-> +{
-> +	return dev && dev->type && dev->type->supports_removable
-> +	    && dev->removable == DEVICE_REMOVABLE;
-> +}
-
-Similarly to my question about - would a simple check to see if
-"dev->removable" is set to "DEVICE_REMOVABLE" here be enough?
-
-Krzysztof
+Frank.
