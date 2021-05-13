@@ -2,174 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C628D37F443
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 10:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D7737F458
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 10:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232040AbhEMIjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 04:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
+        id S232137AbhEMIsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 04:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbhEMIjr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 04:39:47 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4554C06174A
-        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 01:38:37 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id x5so26126114wrv.13
-        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 01:38:37 -0700 (PDT)
+        with ESMTP id S231273AbhEMIsf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 04:48:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72348C061574
+        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 01:47:24 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a4so26166618wrr.2
+        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 01:47:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:to:cc
-         :subject:from:references:in-reply-to;
-        bh=YPyHABehcPKN0gbmBVN79yfxXtPiGFE8c/l3J3/fASM=;
-        b=bhwgaS7JCh4fHnxhGgDKBZdEul7kPMnJeM2/4+hsqBeTHtgNMlqmsPzFNgy8dsQFDf
-         kS4Sg9TYXtMFgR0sDg5sdbnztvNC0ofRJob/5iwOgtCB7Qs3msSA+ph99J3L7Cxs1Rg0
-         69a4urNcs7o6kEUVy2GuW868t6iBQjgEmJ1iDdDjASFRQVyUR5oDtWXrpMT0E5z0T4Ct
-         oJ7Drp+KxH6PoK7YxRENWlLzLR509dxFMwf/41hwzjo5vI88iVXGq2IOk64PXsHVuEVj
-         l5bR3KJlXokJJWPOaYXjF31JE5TDGBkO1WS4EkzJYnvMzWVEu4dZmA3Bqtdwt9uM0T1P
-         AmGQ==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NbR6LZpjn0p+CsgB/c8ssaB45onKxOlNS+I/Rj113jM=;
+        b=vuEY2ea7ftsfAAmaB3IqZ6IFzfC+9gw4IP6ojQM/KtwtS5EsmtfDtkBVWfTj/g8rya
+         JnoxiB2yfkb+6LxPjx4iYkEsMRpBvxE2tQxu9iX4ZA95uidzTR1mL+YiwG0I0rFdt3hn
+         BkWCK5ZbX8HEilHk6uWGXQlDkbg2tL2r6tWYcMJdrXKPuj+DU2oBG0r1rKNU6QxeXnXz
+         212LxI7gQmvHAMGjCXL/PYiq5bBY5UHYRBORfej7QtQIPvYzAa4BkCjyLk5FlTtq3elv
+         DjDzx+WyAmqB/+RVCsJo9P3NaEUdgiDN6ZwVqFUofC1jcAt6haCPRRM3joLoLvu8wVkc
+         bZPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:to:cc:subject:from:references:in-reply-to;
-        bh=YPyHABehcPKN0gbmBVN79yfxXtPiGFE8c/l3J3/fASM=;
-        b=BVYKtj3AMGxK8XXRL+JVjxVAX+c6km4oh08j10DMBSqMDXKaSQPhYhJ5wQV0Gl7Hwl
-         aLjTTTIB+iozUc5hvqD+1YQQqRKEGjZDbwgx+5Bt4LE5s2/RB14qXLMyr7p3uGmqVEKx
-         xUd+mtRNeK7Yl4t9y3o+a3B44Crl2IkF2bLQUa6PmKdM6XW3z84CG2akLoJj/U7bOE5s
-         sZS4YrNIms9I9ZKPPVcqMnEyoXSFt6PaGdbcl2Ktp21QoWCOExcbQVxasgrlG8OP1OxG
-         5nEUQCBVpn0O45b+9mWJdPi/CjRAJaKCkxNdEYajJqRhd/w1dxMBdOJoRHLZZ1cGXhRl
-         l/Fg==
-X-Gm-Message-State: AOAM531vu5vh0lBBMPYNOmTAxq9TrewA5RJE++kM/rD9B57tokXZcTJB
-        +FsSfUtppsX5CbW2t1Y1Otlqqw==
-X-Google-Smtp-Source: ABdhPJzDJYwmbvF06LrEStYKzwizktBy/fQeBfAcsB5As9gYXBp2Ycjf6GDCV+n/EjQalmb0Q8Bs0Q==
-X-Received: by 2002:adf:d1e1:: with SMTP id g1mr51033253wrd.401.1620895116329;
-        Thu, 13 May 2021 01:38:36 -0700 (PDT)
-Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id c15sm2138294wrr.3.2021.05.13.01.38.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NbR6LZpjn0p+CsgB/c8ssaB45onKxOlNS+I/Rj113jM=;
+        b=GNJ6o1KpfoGpvQN8mR0LCo7dwSggT88WEOz0zWxjTNLqZaC1UGTekQ6/hugmvGVmfx
+         lP6B5SV3IIwUG+3nQjL8+aI2YAN3O8bgp+VoHNPrKuy0ujtdtBJxxbQFKhvvi+urhwV3
+         1YAHaoKcV4t8hiQOuM2b82RNpTEXxH6ac5w4zFWkQqKFpMTg+gl+9L3BWhZzHat2wvq/
+         k18P4tvcluGap0dpaQCJE8BomZN+Ve2TdE8c72OZz41BNWDS8wDWIsIVcqbx4s11Af2D
+         lTo31r2JL7XAWIB7L+rfnENERPb5gz+umGyNxpeL88hAgi0B/nFaVMT4meZxfgomtEoO
+         7Cqw==
+X-Gm-Message-State: AOAM533LmhbmqDdDbMf4DcFqLWjhLUOVOhwdck+obmNh35l0+RULAf9g
+        kxJse+FevmPdqozPMkDhOxh4uw==
+X-Google-Smtp-Source: ABdhPJyn6F0ViLV18ovT7JVTe5p6KEB2umn0A4zCB0SV6Wv2ykZee0UMa4CSyK1ybijh6VF9i49Wbw==
+X-Received: by 2002:a5d:6749:: with SMTP id l9mr8385277wrw.208.1620895643250;
+        Thu, 13 May 2021 01:47:23 -0700 (PDT)
+Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id h15sm1730282wmq.4.2021.05.13.01.47.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 May 2021 01:38:36 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 13 May 2021 09:38:35 +0100
-Message-Id: <CBBZD46SA2KN.1FVB86QVGBRCU@arch-thunder>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Sebastian Siewior" <bigeasy@linutronix.de>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v2 8/9] dt-bindings: usb: nxp,isp1760: add bindings
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
-References: <20210511085101.2081399-1-rui.silva@linaro.org>
- <20210511085101.2081399-9-rui.silva@linaro.org>
- <20210511192213.GA2451465@robh.at.kernel.org>
-In-Reply-To: <20210511192213.GA2451465@robh.at.kernel.org>
+        Thu, 13 May 2021 01:47:22 -0700 (PDT)
+From:   Rui Miguel Silva <rui.silva@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Rui Miguel Silva <rui.silva@linaro.org>
+Subject: [PATCH v4 0/9] usb: isp1760: extend support for isp1763
+Date:   Thu, 13 May 2021 09:47:08 +0100
+Message-Id: <20210513084717.2487366-1-rui.silva@linaro.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rob,
-Thanks for the review.
+The Arm MPS3 FPGA prototyping board [0] have an isp1763 [1] as USB
+controller.  There is already support for the isp1760 and isp1761 in
+tree, this series extend the support also for the isp1763.
 
-On Tue May 11, 2021 at 8:22 PM WEST, Rob Herring wrote:
+Move register access using regmap, remove some platform data and code,
+refactor the mempool, use dr_mode to align to existing bindings, then
+add the support for isp1763 host mode, add bindings files that did not
+existed and at the end add also support for peripheral mode for
+isp1763.
 
-> On Tue, May 11, 2021 at 09:51:00AM +0100, Rui Miguel Silva wrote:
-> > The nxp,isp1760 driver is old in the tree, but did not had a bindings
-> > entry, since I am extend it to support isp1763 in the same family, use
-> > this to add a proper yaml bindings file.
-> >=20
-> > Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
-> > ---
-> >  .../devicetree/bindings/usb/nxp,isp1760.yaml  | 59 +++++++++++++++++++
-> >  1 file changed, 59 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/usb/nxp,isp1760.y=
-aml
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml b/D=
-ocumentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> > new file mode 100644
-> > index 000000000000..0d76529e9662
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> > @@ -0,0 +1,59 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/usb/nxp,isp1760.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: NXP ISP1760 family controller bindings
-> > +
-> > +maintainers:
-> > +  - Sebastian Siewior <bigeasy@linutronix.de>
-> > +  - Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > +
-> > +description: |
-> > +  NXP ISP1760 family, which includes ISP1760/1761/1763 devicetree cont=
-roller
-> > +  bindings
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - nxp,usb-isp1760
-> > +      - nxp,usb-isp1761
-> > +      - nxp,usb-isp1763
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
->
-> In the 1761 datasheet, looks like there's a separate host and device=20
-> irq.
+@Laurent and @Sebastian, I add both of you in the bindings files as
+maintainers (it is a mandatory field)since you were the ones which
+contributed with the initial code and peripheral code, let me know if
+you are ok with it.  If yes I may send a follow up to add also entries
+in MAINTAINERS file that it is also missing.
 
-Good catch, I miss that in the ISP1761 case.
+v3 [4] -> v4:
+Rob Herring (bindings):
+- add device controller interrupt
+- correct additionalProperties field
 
->
-> > +
-> > +  bus-width:
-> > +    description:
-> > +      Number of data lines.
-> > +    enum: [8, 16, 32]
-> > +    default: 32
-> > +
-> > +  dr_mode:
-> > +    enum:
-> > +      - host
-> > +      - peripheral
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
-> > +additionalProperties: true
->
-> Like what? 'true' is only correct for common collections of properties.
+v2 [3] -> v3:
+kernel test bot:
+- add select REGMAP_MMIO
 
-You are right, will fix in v4, thanks.
+v1 [2] -> v2:
 
-------
+kernel test robot:
+- add two patches (1/9 and 3/9) to fix dozens of pre-existing sparse
+  warnings so that this series does not introduce new ones.
+  No sparse warning left.
+- fix duplication of regmap fields
+
+Laurent:
+- move initializers from .h to .c
+- change interrupt registers setup from field to one shot register
+  setting (did not change hcd hw mode init because I think it did not
+  make the difference and even avoid artifact around setting twice the
+  register)
+
+Rob test bot:
+- fix suffix at compatible string to clean up warning in bindings
+
 Cheers,
-     Rui
->
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +    usb@40200000 {
-> > +        compatible =3D "nxp,usb-isp1763";
-> > +        reg =3D <0x40200000 0x100000>;
-> > +        interrupts-parent =3D <&gic>;
-> > +        interrupts =3D <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
-> > +        bus-width =3D <16>;
-> > +        dr_mode =3D "host";
-> > +    };
-> > +
-> > +...
-> > --=20
-> > 2.31.1
-> >=20
+   Rui
 
+[0]: https://developer.arm.com/tools-and-software/development-boards/fpga-prototyping-boards/mps3
+[1]: https://media.digikey.com/pdf/Data%20Sheets/ST%20Ericsson%20PDFs/ISP1763A.pdf
+[2]: https://lore.kernel.org/linux-devicetree/20210504101910.18619-1-rui.silva@linaro.org/
+[3]: https://lore.kernel.org/linux-usb/20210511085101.2081399-1-rui.silva@linaro.org/
+[4]: https://lore.kernel.org/linux-usb/20210512090529.2283637-1-rui.silva@linaro.org/
 
+Rui Miguel Silva (9):
+  usb: isp1760: fix strict typechecking
+  usb: isp1760: move to regmap for register access
+  usb: isp1760: use relaxed primitives
+  usb: isp1760: remove platform data struct and code
+  usb: isp1760: hcd: refactor mempool config and setup
+  usb: isp1760: use dr_mode binding
+  usb: isp1760: add support for isp1763
+  dt-bindings: usb: nxp,isp1760: add bindings
+  usb: isp1763: add peripheral mode
+
+ .../devicetree/bindings/usb/nxp,isp1760.yaml  |   69 ++
+ arch/arm/boot/dts/arm-realview-eb.dtsi        |    2 +-
+ arch/arm/boot/dts/arm-realview-pb1176.dts     |    2 +-
+ arch/arm/boot/dts/arm-realview-pb11mp.dts     |    2 +-
+ arch/arm/boot/dts/arm-realview-pbx.dtsi       |    2 +-
+ arch/arm/boot/dts/vexpress-v2m-rs1.dtsi       |    2 +-
+ arch/arm/boot/dts/vexpress-v2m.dtsi           |    2 +-
+ drivers/usb/isp1760/Kconfig                   |    5 +-
+ drivers/usb/isp1760/isp1760-core.c            |  513 ++++++++-
+ drivers/usb/isp1760/isp1760-core.h            |   44 +-
+ drivers/usb/isp1760/isp1760-hcd.c             | 1021 ++++++++++++-----
+ drivers/usb/isp1760/isp1760-hcd.h             |   57 +-
+ drivers/usb/isp1760/isp1760-if.c              |   41 +-
+ drivers/usb/isp1760/isp1760-regs.h            |  435 ++++---
+ drivers/usb/isp1760/isp1760-udc.c             |  250 ++--
+ drivers/usb/isp1760/isp1760-udc.h             |   13 +-
+ include/linux/usb/isp1760.h                   |   19 -
+ 17 files changed, 1769 insertions(+), 710 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+ delete mode 100644 include/linux/usb/isp1760.h
+
+-- 
+2.31.1
 
