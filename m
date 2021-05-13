@@ -2,72 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165D037FE2A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 21:33:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0790637FE89
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 22:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbhEMTeb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 15:34:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60216 "EHLO mail.kernel.org"
+        id S232403AbhEMUHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 16:07:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229854AbhEMTe3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 May 2021 15:34:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E0F161408;
-        Thu, 13 May 2021 19:33:16 +0000 (UTC)
+        id S232389AbhEMUHC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 May 2021 16:07:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B307161421;
+        Thu, 13 May 2021 20:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620934396;
-        bh=HmOeK1hNNFR134NlruI1h+LOfJJnvZEyFJJQ8JsA/Xo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KsljFerXmta0Fh9boGxGKLWZmdE4+ETQ7UZDgjS4wEKc0pZMsC97GZp3CZ/Hs1ORK
-         MfGk3j5ZPmblGxHu5IIbuCHc6+/SoXVNXHCTY4TRFp3kIVXBYNLqs5DjmojZ1ZNBf2
-         QIn+5B0Rc8ZxIA3/s05vwy/xtBnYzkK76rcOaW4fRxaSJrppTLQmtfE0h6MUZiedYH
-         0gJrsQkuTUnbWfdmSvE9ZslgehYQqmZKRwpLn+UVFmPMwHICaDPOrrs6gAzjzHPmii
-         v2iVD2mr6orGX3DLw7q38Vtc/j3NvMqOIrp5gyHBQR/URIdtlD3SHHnMfvCr5Nn/B7
-         t9ac13qzUntjg==
-Date:   Thu, 13 May 2021 14:33:53 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: s3c-hsudc: Use struct_size() in
- devm_kzalloc()
-Message-ID: <20210513193353.GA196565@embeddedor>
+        s=k20201202; t=1620936352;
+        bh=8T+J3wCXI/e4i0Nq0qkxzfPcgMyR9DsieXzCu8AyHN4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=S8aZH569dpHyPV1WO9KYLvi5aeA4T/Bi2TDTlr76AqbK7Lss5y8R7nzoaJvXSoh8v
+         AlAi/al1uKP6LoN6pTwS+Dbd6rny3YwO5cDVtK1DC74Fqv/ejJqOwgF/af3d4oE08o
+         QT5DjPJ4GXOAagBrMiKykL58ii3A2EuFPFGuP2FPjdcq83lgS/0Km5N2cUzZDp8x4B
+         Wj/GXNjZ41PLmuXelRojpihdaXt+o7+yWC2ioTg6vHAOdFxv15DcQ8SCFDXt4veoBE
+         1EbsXRaHuYonUI6rnefgLjRpu8TUsLMKo32FB/NTxKi1JdqUbijoRwEHgkljkpOZw5
+         5M9uuGP7jhqrg==
+Date:   Thu, 13 May 2021 15:05:50 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+        David Laight <David.Laight@aculab.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rajat Jain <rajatxjain@gmail.com>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH v3 2/2] PCI: Add sysfs "removable" attribute
+Message-ID: <20210513200550.GA2604592@bjorn-Precision-5520>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <CACK8Z6EPjcRwDB=r6RnsJRjHN4oJXTD0_8zbtUCA+awofY7=5Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Make use of the struct_size() helper instead of an open-coded version,
-in order to avoid any potential type mistakes or integer overflows
-that, in the worse scenario, could lead to heap overflows.
+On Thu, May 13, 2021 at 11:02:10AM -0700, Rajat Jain wrote:
+> On Wed, May 12, 2021 at 2:35 PM Rajat Jain <rajatja@google.com> wrote:
+> >
+> > A PCI device is "external_facing" if it's a Root Port with the ACPI
+> > "ExternalFacingPort" property or if it has the DT "external-facing"
+> > property.  We consider everything downstream from such a device to
+> > be removable by user.
+> >
+> > We're mainly concerned with consumer platforms with user accessible
+> > thunderbolt ports that are vulnerable to DMA attacks, and we expect those
+> > ports to be identified as "ExternalFacingPort". Devices in traditional
+> > hotplug slots can technically be removed, but the expectation is that
+> > unless the port is marked with "ExternalFacingPort", such devices are less
+> > accessible to user / may not be removed by end user, and thus not exposed
+> > as "removable" to userspace.
 
-This code was detected with the help of Coccinelle and, audited and
-fixed manually.
+s/thunderbolt/Thunderbolt/ since I think it's a trademark
+s/identified as/identified by firmware as/
 
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- drivers/usb/gadget/udc/s3c-hsudc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+> > Set pci_dev_type.supports_removable so the device core exposes the
+> > "removable" file in sysfs, and tell the device core about removable
+> > devices.
+> >
+> > This can be used by userspace to implment any policies it wants to,
+> > tailored specifically for user removable devices. Eg usage:
+> > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2591812
+> > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2795038
+> > (code uses such an attribute to remove external PCI devicces or disable
+> > features on them as needed by the policy desired)
 
-diff --git a/drivers/usb/gadget/udc/s3c-hsudc.c b/drivers/usb/gadget/udc/s3c-hsudc.c
-index 7bd5182ce3ef..89f1f8c9f02e 100644
---- a/drivers/usb/gadget/udc/s3c-hsudc.c
-+++ b/drivers/usb/gadget/udc/s3c-hsudc.c
-@@ -1220,9 +1220,8 @@ static int s3c_hsudc_probe(struct platform_device *pdev)
- 	struct s3c24xx_hsudc_platdata *pd = dev_get_platdata(&pdev->dev);
- 	int ret, i;
- 
--	hsudc = devm_kzalloc(&pdev->dev, sizeof(struct s3c_hsudc) +
--			sizeof(struct s3c_hsudc_ep) * pd->epnum,
--			GFP_KERNEL);
-+	hsudc = devm_kzalloc(&pdev->dev, struct_size(hsudc, ep, pd->epnum),
-+			     GFP_KERNEL);
- 	if (!hsudc)
- 		return -ENOMEM;
- 
--- 
-2.27.0
+s/implment/implement/
+s/devicces/devices/
 
+Or maybe something like:
+
+  This can be used to implement userspace policies tailored for
+  user-removable devices.
+
+Not sure exactly what "remove external PCI devices" means.  You're
+talking about the *code* doing something, so I don't think it means
+physically unplugging the device from the system.  Maybe preventing a
+driver from binding to it or something similar?
+
+I hesitate slightly to rely on URLs like googlesource.com in commit
+logs because we don't know how long they will remain valid.  But I
+guess there's no real alternative here, since this code probably
+hasn't been posted to any public mailing lists like the ones archived
+at https://lore.kernel.org/lists.html, right?
+
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+
+> > +static void pci_set_removable(struct pci_dev *dev)
+> > +{
+> > +       struct pci_dev *parent = pci_upstream_bridge(dev);
+> > +       if (parent &&
+> > +           (parent->external_facing || dev_is_removable(&parent->dev)))
+> > +               dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
+> > +       else
+> > +               dev_set_removable(&dev->dev, DEVICE_FIXED);
+> > +}
+> 
+> Copying comments from Krzysztof from another thread:
+> 
+> [Krzysztof] We were also wondering if we should only set DEVICE_REMOVABLE for
+> devices known to be behind an external-facing port, and let everything
+> else be set to "unknown" (or whatever the default would be).
+> 
+> [Rajat]: I think I'm fine with this proposal if Bjorn & PCI community
+> also sees this as a better idea. Essentially the question here is,
+> would it be better for the non-removable PCI devices to be shown as
+> "fixed" or "unknown"?
+
+I think I would rather see this as:
+
+  struct pci_dev *parent = pci_upstream_bridge(dev);
+
+  if (parent &&
+      (parent->external_facing || dev_is_removable(&parent->dev)))
+          dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
+
+In other words, assume only that everything below an "external-facing"
+device is removable.
+
+In the absence of an "external-facing" property, we don't know
+anything about the connection, and I'd rather use the default
+(probably "unknown") instead of assuming "fixed."
+
+I don't think we have anything that depends on "fixed," so I don't
+think there's value in setting it.
+
+(Note the blank line between local variables and the "if"; maybe
+that's what Greg hinted at?)
+
+Bjorn
