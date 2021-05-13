@@ -2,123 +2,248 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F9737F0D8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 03:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D77037F18E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 05:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239648AbhEMBMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 21:12:37 -0400
-Received: from mslow1.mail.gandi.net ([217.70.178.240]:34571 "EHLO
-        mslow1.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236407AbhEMBMa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 21:12:30 -0400
-Received: from relay9-d.mail.gandi.net (unknown [217.70.183.199])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 9814A100963;
-        Thu, 13 May 2021 01:01:08 +0000 (UTC)
-X-Originating-IP: 68.203.5.165
-Received: from [192.168.1.186] (cpe-68-203-5-165.austin.res.rr.com [68.203.5.165])
-        (Authenticated sender: frank@zago.net)
-        by relay9-d.mail.gandi.net (Postfix) with ESMTPSA id 8E8A2FF804;
-        Thu, 13 May 2021 01:00:43 +0000 (UTC)
-Subject: Re: [PATCH v2 1/2] Revert "USB: serial: ch341: add new Product ID for
- CH341A"
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Jan-Niklas Burfeind <kernel@aiyionpri.me>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-usb@vger.kernel.org,
-        gunar@schorcht.net
-References: <20210423002852.3904-1-frank@zago.net>
- <YJjjfx49nCflzFbR@hovoldconsulting.com>
- <8b3c348f-9e05-29f9-9197-8ddf1c8a9e8b@zago.net>
- <YJumDN4w4KS3Iuap@hovoldconsulting.com>
-From:   Frank Zago <frank@zago.net>
-Message-ID: <17a4178a-48b7-284c-1c3d-85c570bccf01@zago.net>
-Date:   Wed, 12 May 2021 20:00:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S230506AbhEMDPI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 23:15:08 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:56778 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230186AbhEMDPH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 23:15:07 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14D3DcaI6031757, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14D3DcaI6031757
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 13 May 2021 11:13:38 +0800
+Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 13 May 2021 11:13:38 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 13 May 2021 11:13:37 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
+ 15.01.2106.013; Thu, 13 May 2021 11:13:37 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+CC:     nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [syzbot] WARNING in rtl8152_probe
+Thread-Topic: [syzbot] WARNING in rtl8152_probe
+Thread-Index: AQHXRxMNo04dZcfiN0eNJrSRsQsh6qrguwNg
+Date:   Thu, 13 May 2021 03:13:36 +0000
+Message-ID: <7de0296584334229917504da50a0ac38@realtek.com>
+References: <0000000000009df1b605c21ecca8@google.com>
+In-Reply-To: <0000000000009df1b605c21ecca8@google.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMTIg5LiL5Y2IIDA4OjEwOjAw?=
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <YJumDN4w4KS3Iuap@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/13/2021 00:51:55
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163623 [May 13 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/13/2021 00:55:00
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/13/2021 02:54:49
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163623 [May 13 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;realtek.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/13/2021 02:57:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 5/12/21 4:55 AM, Johan Hovold wrote:
-> On Tue, May 11, 2021 at 08:07:31PM -0500, Frank Zago wrote:
->> Hello,
->> 
->> On 5/10/21 2:40 AM, Johan Hovold wrote:
->>> On Thu, Apr 22, 2021 at 07:28:51PM -0500, Frank Zago wrote:
->>>> From: frank zago <frank@zago.net>
->>>> 
->>>> The 0x5512 USB PID is for the I2C/GPIO/SPI interfaces. UART is
->>>>  still present but only the TX and RX pins are available; DTS,
->>>> DTR, ... are used for other things. Remove the PID, and let a
->>>> I2C driver bind to it.
->>>> 
->>>> Existing CH341 boards usually have physical jumpers to switch 
->>>> between the 3 modes.
->>>> 
->>>> This reverts commit 46ee4abb10a07bd8f8ce910ee6b4ae6a947d7f63.
->>> 
->>> You can't just revert something which people clearly depend on
->>> and therefore added to the kernel in the first place.
->> 
->> That device in UART mode was already supported by the serial
->> driver. The original submitter just had to move a jumper on his
->> board. There was no need to patch the kernel.
-> 
-> How do you know that the author used a dev board? And are you really 
-> sure that there are no devices out there which always operate in
-> this mode?
-
-The author of commit 46ee4abb10a07bd8 put a link to his device. I have 
-the same one (or a clone) and it works fine in serial mode without the patch.
-I have a different model that works the same way. A jumper selects the mode.
-
-I can't be sure that no one has ever built a board with that chip, selecting
-the wrong mode. But the chip is about 10 years old now; someone would have noticed.
-
-> 
->> That product ID also supports UART but in a limited way, as only
->> the RX and TX pins are available. However it is the only one that
->> supports i2c/spi/gpio, and that's why I have to revert the patch.
-> 
-> I understand why you did it. My point is that you cannot just claim
-> that PID and say that it's only to be used for I2C/SPI without even
-> trying to make a case for why that should be ok.
-
-That's the only PID that works for I2C/SPI/GPIO. Right now the serial driver is 
-claiming it. I don't know what else to say. If I can't revert that patch, my driver
-can't be used without blacklisting the serial driver.
-
-> 
->> If that's desired, the new driver could add support for that as
->> well, but I don't think it's worth the effort.
-> 
-> We obviously don't want a second serial driver for these devices.
-> 
->>> Can you reprogram the device with a newly allocated PID to be
->>> used for i2c-only instead?
->> 
->> It is possible if the device has an SPI flash connected to it, but
->> none of the cheap boards have that.
-> 
-> That's unfortunate. In principle, your approach is the right one,
-> that is, to use a dedicated PID do determine when to configure an
-> alternate mode. But since we already know that some people are using
-> the PID in question in serial mode, it's not that clear cut.
-> 
-> How do you intend to switch between i2c and spi mode?
-
-i2c, spi and gpio can all be used simultaneously. I have a working spi implementation,
-but I'm still testing it. Basically if a user wants to use spi, then 3 specific gpios
-will be reserved for MOSI/MISO/CLK (using gpiochip_request_own_desc), with possibly 
-one or more used for the chip select. 
-How a user books spi is up in the air right now. That might be done through a sysfs command.
-
-Frank.
-
+c3l6Ym90IDxzeXpib3QrOTVhZmQyMzY3M2Y1ZGQyOTVjNTdAc3l6a2FsbGVyLmFwcHNwb3RtYWls
+LmNvbT4NCj4gU2VudDogV2VkbmVzZGF5LCBNYXkgMTIsIDIwMjEgNTo0MCBQTQ0KWy4uLl0gDQo+
+IHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNDVlLCBpZFByb2R1Y3Q9
+MDkyNywgYmNkRGV2aWNlPTg5LjRmDQo+IHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIHN0cmluZ3M6
+IE1mcj0wLCBQcm9kdWN0PTQsIFNlcmlhbE51bWJlcj0wDQo+IHVzYiAxLTE6IFByb2R1Y3Q6IHN5
+eg0KPiB1c2IgMS0xOiBjb25maWcgMCBkZXNjcmlwdG9yPz8NCg0KVGhlIGJjZERldmljZSBpcyBz
+dHJhbmdlLiBDb3VsZCB5b3UgZHVtcCB5b3VyIFVTQiBkZXNjcmlwdG9yPw0KDQpNeSBsb2cgaXMg
+YXMgZm9sbG93aW5nLg0KDQpbcm9vdEBmYzMyIHI4MTUyX2luYm94XSMgZG1lc2cNClsgMjE3NC43
+MDM5NzRdIHVzYiAyLTg6IG5ldyBTdXBlclNwZWVkIEdlbiAxIFVTQiBkZXZpY2UgbnVtYmVyIDcg
+dXNpbmcgeGhjaV9oY2QNClsgMjE3NC43MTY1OTJdIHVzYiAyLTg6IE5ldyBVU0IgZGV2aWNlIGZv
+dW5kLCBpZFZlbmRvcj0wNDVlLCBpZFByb2R1Y3Q9MDkyNywgYmNkRGV2aWNlPTMxLjAwDQpbIDIx
+NzQuNzE2NjA0XSB1c2IgMi04OiBOZXcgVVNCIGRldmljZSBzdHJpbmdzOiBNZnI9MSwgUHJvZHVj
+dD0yLCBTZXJpYWxOdW1iZXI9Ng0KWyAyMTc0LjcxNjYwOV0gdXNiIDItODogUHJvZHVjdDogVVNC
+IDEwLzEwMC8xMDAwIExBTg0KWyAyMTc0LjcxNjYxM10gdXNiIDItODogTWFudWZhY3R1cmVyOiBS
+ZWFsdGVrDQpbIDIxNzQuNzE2NjE3XSB1c2IgMi04OiBTZXJpYWxOdW1iZXI6IDAwMTAwMTBBQQ0K
+WyAyMTc0LjgzNzI3N10gdXNiIDItODogcmVzZXQgU3VwZXJTcGVlZCBHZW4gMSBVU0IgZGV2aWNl
+IG51bWJlciA3IHVzaW5nIHhoY2lfaGNkDQpbIDIxNzQuODY5MDEzXSByODE1MiAyLTg6MS4wOiBs
+b2FkIHJ0bDgxNTNiLTIgdjEgMTAvMjMvMTkgc3VjY2Vzc2Z1bGx5DQpbIDIxNzQuODk3ODM2XSBy
+ODE1MiAyLTg6MS4wIGV0aDI6IHYxLjEyLjExDQpbcm9vdEBmYzMyIHI4MTUyX2luYm94XSMgZXRo
+dG9vbCAtaSBldGgyDQpkcml2ZXI6IHI4MTUyDQp2ZXJzaW9uOiB2MS4xMi4xMQ0KZmlybXdhcmUt
+dmVyc2lvbjogcnRsODE1M2ItMiB2MSAxMC8yMy8xOQ0KZXhwYW5zaW9uLXJvbS12ZXJzaW9uOiAN
+CmJ1cy1pbmZvOiB1c2ItMDAwMDowMDoxNC4wLTgNCnN1cHBvcnRzLXN0YXRpc3RpY3M6IHllcw0K
+c3VwcG9ydHMtdGVzdDogbm8NCnN1cHBvcnRzLWVlcHJvbS1hY2Nlc3M6IG5vDQpzdXBwb3J0cy1y
+ZWdpc3Rlci1kdW1wOiBubw0Kc3VwcG9ydHMtcHJpdi1mbGFnczogbm8NCltyb290QGZjMzIgcjgx
+NTJfaW5ib3hdIyBsc3VzYiAtdmQgMDQ1ZTowOTI3DQoNCkJ1cyAwMDIgRGV2aWNlIDAwNzogSUQg
+MDQ1ZTowOTI3IE1pY3Jvc29mdCBDb3JwLiBSVEw4MTUzQiBHaWdFIFtTdXJmYWNlIEV0aGVybmV0
+IEFkYXB0ZXJdDQpEZXZpY2UgRGVzY3JpcHRvcjoNCiAgYkxlbmd0aCAgICAgICAgICAgICAgICAx
+OA0KICBiRGVzY3JpcHRvclR5cGUgICAgICAgICAxDQogIGJjZFVTQiAgICAgICAgICAgICAgIDMu
+MDANCiAgYkRldmljZUNsYXNzICAgICAgICAgICAgMCANCiAgYkRldmljZVN1YkNsYXNzICAgICAg
+ICAgMCANCiAgYkRldmljZVByb3RvY29sICAgICAgICAgMCANCiAgYk1heFBhY2tldFNpemUwICAg
+ICAgICAgOQ0KICBpZFZlbmRvciAgICAgICAgICAgMHgwNDVlIE1pY3Jvc29mdCBDb3JwLg0KICBp
+ZFByb2R1Y3QgICAgICAgICAgMHgwOTI3IFJUTDgxNTNCIEdpZ0UgW1N1cmZhY2UgRXRoZXJuZXQg
+QWRhcHRlcl0NCiAgYmNkRGV2aWNlICAgICAgICAgICAzMS4wMA0KICBpTWFudWZhY3R1cmVyICAg
+ICAgICAgICAxIFJlYWx0ZWsNCiAgaVByb2R1Y3QgICAgICAgICAgICAgICAgMiBVU0IgMTAvMTAw
+LzEwMDAgTEFODQogIGlTZXJpYWwgICAgICAgICAgICAgICAgIDYgMDAxMDAxMEFBDQogIGJOdW1D
+b25maWd1cmF0aW9ucyAgICAgIDINCiAgQ29uZmlndXJhdGlvbiBEZXNjcmlwdG9yOg0KICAgIGJM
+ZW5ndGggICAgICAgICAgICAgICAgIDkNCiAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICAyDQog
+ICAgd1RvdGFsTGVuZ3RoICAgICAgIDB4MDAzOQ0KICAgIGJOdW1JbnRlcmZhY2VzICAgICAgICAg
+IDENCiAgICBiQ29uZmlndXJhdGlvblZhbHVlICAgICAxDQogICAgaUNvbmZpZ3VyYXRpb24gICAg
+ICAgICAgMCANCiAgICBibUF0dHJpYnV0ZXMgICAgICAgICAweGEwDQogICAgICAoQnVzIFBvd2Vy
+ZWQpDQogICAgICBSZW1vdGUgV2FrZXVwDQogICAgTWF4UG93ZXIgICAgICAgICAgICAgIDI4OG1B
+DQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAg
+ICA5DQogICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVt
+YmVyICAgICAgICAwDQogICAgICBiQWx0ZXJuYXRlU2V0dGluZyAgICAgICAwDQogICAgICBiTnVt
+RW5kcG9pbnRzICAgICAgICAgICAzDQogICAgICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgMjU1IFZl
+bmRvciBTcGVjaWZpYyBDbGFzcw0KICAgICAgYkludGVyZmFjZVN1YkNsYXNzICAgIDI1NSBWZW5k
+b3IgU3BlY2lmaWMgU3ViY2xhc3MNCiAgICAgIGJJbnRlcmZhY2VQcm90b2NvbCAgICAgIDAgDQog
+ICAgICBpSW50ZXJmYWNlICAgICAgICAgICAgICAwIA0KICAgICAgRW5kcG9pbnQgRGVzY3JpcHRv
+cjoNCiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNw0KICAgICAgICBiRGVzY3JpcHRv
+clR5cGUgICAgICAgICA1DQogICAgICAgIGJFbmRwb2ludEFkZHJlc3MgICAgIDB4ODEgIEVQIDEg
+SU4NCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMg0KICAgICAgICAgIFRyYW5zZmVy
+IFR5cGUgICAgICAgICAgICBCdWxrDQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAg
+IE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAgICAgICB3
+TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5dGVzDQogICAgICAgIGJJbnRlcnZh
+bCAgICAgICAgICAgICAgIDANCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAgICAgICAgMw0KICAg
+ICAgRW5kcG9pbnQgRGVzY3JpcHRvcjoNCiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAg
+Nw0KICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1DQogICAgICAgIGJFbmRwb2ludEFk
+ZHJlc3MgICAgIDB4MDIgIEVQIDIgT1VUDQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAg
+IDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5
+bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAg
+ICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBi
+eXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJz
+dCAgICAgICAgICAgICAgIDMNCiAgICAgIEVuZHBvaW50IERlc2NyaXB0b3I6DQogICAgICAgIGJM
+ZW5ndGggICAgICAgICAgICAgICAgIDcNCiAgICAgICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAg
+NQ0KICAgICAgICBiRW5kcG9pbnRBZGRyZXNzICAgICAweDgzICBFUCAzIElODQogICAgICAgIGJt
+QXR0cmlidXRlcyAgICAgICAgICAgIDMNCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAg
+ICAgSW50ZXJydXB0DQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAgIE5vbmUNCiAg
+ICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAgICAgICB3TWF4UGFja2V0
+U2l6ZSAgICAgMHgwMDAyICAxeCAyIGJ5dGVzDQogICAgICAgIGJJbnRlcnZhbCAgICAgICAgICAg
+ICAgIDgNCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAgICAgICAgMA0KICBDb25maWd1cmF0aW9u
+IERlc2NyaXB0b3I6DQogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgOQ0KICAgIGJEZXNjcmlw
+dG9yVHlwZSAgICAgICAgIDINCiAgICB3VG90YWxMZW5ndGggICAgICAgMHgwMDYyDQogICAgYk51
+bUludGVyZmFjZXMgICAgICAgICAgMg0KICAgIGJDb25maWd1cmF0aW9uVmFsdWUgICAgIDINCiAg
+ICBpQ29uZmlndXJhdGlvbiAgICAgICAgICAwIA0KICAgIGJtQXR0cmlidXRlcyAgICAgICAgIDB4
+YTANCiAgICAgIChCdXMgUG93ZXJlZCkNCiAgICAgIFJlbW90ZSBXYWtldXANCiAgICBNYXhQb3dl
+ciAgICAgICAgICAgICAgMjg4bUENCiAgICBJbnRlcmZhY2UgRGVzY3JpcHRvcjoNCiAgICAgIGJM
+ZW5ndGggICAgICAgICAgICAgICAgIDkNCiAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDQN
+CiAgICAgIGJJbnRlcmZhY2VOdW1iZXIgICAgICAgIDANCiAgICAgIGJBbHRlcm5hdGVTZXR0aW5n
+ICAgICAgIDANCiAgICAgIGJOdW1FbmRwb2ludHMgICAgICAgICAgIDENCiAgICAgIGJJbnRlcmZh
+Y2VDbGFzcyAgICAgICAgIDIgQ29tbXVuaWNhdGlvbnMNCiAgICAgIGJJbnRlcmZhY2VTdWJDbGFz
+cyAgICAgIDYgRXRoZXJuZXQgTmV0d29ya2luZw0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAg
+ICAgMCANCiAgICAgIGlJbnRlcmZhY2UgICAgICAgICAgICAgIDUgQ0RDIENvbW11bmljYXRpb25z
+IENvbnRyb2wNCiAgICAgIENEQyBIZWFkZXI6DQogICAgICAgIGJjZENEQyAgICAgICAgICAgICAg
+IDEuMTANCiAgICAgIENEQyBVbmlvbjoNCiAgICAgICAgYk1hc3RlckludGVyZmFjZSAgICAgICAg
+MA0KICAgICAgICBiU2xhdmVJbnRlcmZhY2UgICAgICAgICAxIA0KICAgICAgQ0RDIEV0aGVybmV0
+Og0KICAgICAgICBpTWFjQWRkcmVzcyAgICAgICAgICAgICAgICAgICAgICAzIDAwRTA0QzY2MDAx
+Ng0KICAgICAgICBibUV0aGVybmV0U3RhdGlzdGljcyAgICAweDAwMDAwMDAwDQogICAgICAgIHdN
+YXhTZWdtZW50U2l6ZSAgICAgICAgICAgICAgIDE1MTQNCiAgICAgICAgd051bWJlck1DRmlsdGVy
+cyAgICAgICAgICAgIDB4MDAwMA0KICAgICAgICBiTnVtYmVyUG93ZXJGaWx0ZXJzICAgICAgICAg
+ICAgICAwDQogICAgICBFbmRwb2ludCBEZXNjcmlwdG9yOg0KICAgICAgICBiTGVuZ3RoICAgICAg
+ICAgICAgICAgICA3DQogICAgICAgIGJEZXNjcmlwdG9yVHlwZSAgICAgICAgIDUNCiAgICAgICAg
+YkVuZHBvaW50QWRkcmVzcyAgICAgMHg4MyAgRVAgMyBJTg0KICAgICAgICBibUF0dHJpYnV0ZXMg
+ICAgICAgICAgICAzDQogICAgICAgICAgVHJhbnNmZXIgVHlwZSAgICAgICAgICAgIEludGVycnVw
+dA0KICAgICAgICAgIFN5bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNh
+Z2UgVHlwZSAgICAgICAgICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4
+MDAxMCAgMXggMTYgYnl0ZXMNCiAgICAgICAgYkludGVydmFsICAgICAgICAgICAgICAgOA0KICAg
+ICAgICBiTWF4QnVyc3QgICAgICAgICAgICAgICAwDQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6
+DQogICAgICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3JpcHRvclR5cGUg
+ICAgICAgICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAxDQogICAgICBiQWx0ZXJu
+YXRlU2V0dGluZyAgICAgICAwDQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAwDQogICAg
+ICBiSW50ZXJmYWNlQ2xhc3MgICAgICAgIDEwIENEQyBEYXRhDQogICAgICBiSW50ZXJmYWNlU3Vi
+Q2xhc3MgICAgICAwIA0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICAgMCANCiAgICAgIGlJ
+bnRlcmZhY2UgICAgICAgICAgICAgIDAgDQogICAgSW50ZXJmYWNlIERlc2NyaXB0b3I6DQogICAg
+ICBiTGVuZ3RoICAgICAgICAgICAgICAgICA5DQogICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAg
+ICA0DQogICAgICBiSW50ZXJmYWNlTnVtYmVyICAgICAgICAxDQogICAgICBiQWx0ZXJuYXRlU2V0
+dGluZyAgICAgICAxDQogICAgICBiTnVtRW5kcG9pbnRzICAgICAgICAgICAyDQogICAgICBiSW50
+ZXJmYWNlQ2xhc3MgICAgICAgIDEwIENEQyBEYXRhDQogICAgICBiSW50ZXJmYWNlU3ViQ2xhc3Mg
+ICAgICAwIA0KICAgICAgYkludGVyZmFjZVByb3RvY29sICAgICAgMCANCiAgICAgIGlJbnRlcmZh
+Y2UgICAgICAgICAgICAgIDQgRXRoZXJuZXQgRGF0YQ0KICAgICAgRW5kcG9pbnQgRGVzY3JpcHRv
+cjoNCiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAgNw0KICAgICAgICBiRGVzY3JpcHRv
+clR5cGUgICAgICAgICA1DQogICAgICAgIGJFbmRwb2ludEFkZHJlc3MgICAgIDB4ODEgIEVQIDEg
+SU4NCiAgICAgICAgYm1BdHRyaWJ1dGVzICAgICAgICAgICAgMg0KICAgICAgICAgIFRyYW5zZmVy
+IFR5cGUgICAgICAgICAgICBCdWxrDQogICAgICAgICAgU3luY2ggVHlwZSAgICAgICAgICAgICAg
+IE5vbmUNCiAgICAgICAgICBVc2FnZSBUeXBlICAgICAgICAgICAgICAgRGF0YQ0KICAgICAgICB3
+TWF4UGFja2V0U2l6ZSAgICAgMHgwNDAwICAxeCAxMDI0IGJ5dGVzDQogICAgICAgIGJJbnRlcnZh
+bCAgICAgICAgICAgICAgIDANCiAgICAgICAgYk1heEJ1cnN0ICAgICAgICAgICAgICAgMw0KICAg
+ICAgRW5kcG9pbnQgRGVzY3JpcHRvcjoNCiAgICAgICAgYkxlbmd0aCAgICAgICAgICAgICAgICAg
+Nw0KICAgICAgICBiRGVzY3JpcHRvclR5cGUgICAgICAgICA1DQogICAgICAgIGJFbmRwb2ludEFk
+ZHJlc3MgICAgIDB4MDIgIEVQIDIgT1VUDQogICAgICAgIGJtQXR0cmlidXRlcyAgICAgICAgICAg
+IDINCiAgICAgICAgICBUcmFuc2ZlciBUeXBlICAgICAgICAgICAgQnVsaw0KICAgICAgICAgIFN5
+bmNoIFR5cGUgICAgICAgICAgICAgICBOb25lDQogICAgICAgICAgVXNhZ2UgVHlwZSAgICAgICAg
+ICAgICAgIERhdGENCiAgICAgICAgd01heFBhY2tldFNpemUgICAgIDB4MDQwMCAgMXggMTAyNCBi
+eXRlcw0KICAgICAgICBiSW50ZXJ2YWwgICAgICAgICAgICAgICAwDQogICAgICAgIGJNYXhCdXJz
+dCAgICAgICAgICAgICAgIDMNCkJpbmFyeSBPYmplY3QgU3RvcmUgRGVzY3JpcHRvcjoNCiAgYkxl
+bmd0aCAgICAgICAgICAgICAgICAgNQ0KICBiRGVzY3JpcHRvclR5cGUgICAgICAgIDE1DQogIHdU
+b3RhbExlbmd0aCAgICAgICAweDAwMTYNCiAgYk51bURldmljZUNhcHMgICAgICAgICAgMg0KICBV
+U0IgMi4wIEV4dGVuc2lvbiBEZXZpY2UgQ2FwYWJpbGl0eToNCiAgICBiTGVuZ3RoICAgICAgICAg
+ICAgICAgICA3DQogICAgYkRlc2NyaXB0b3JUeXBlICAgICAgICAxNg0KICAgIGJEZXZDYXBhYmls
+aXR5VHlwZSAgICAgIDINCiAgICBibUF0dHJpYnV0ZXMgICAweDAwMDAwMDAyDQogICAgICBISVJE
+IExpbmsgUG93ZXIgTWFuYWdlbWVudCAoTFBNKSBTdXBwb3J0ZWQNCiAgU3VwZXJTcGVlZCBVU0Ig
+RGV2aWNlIENhcGFiaWxpdHk6DQogICAgYkxlbmd0aCAgICAgICAgICAgICAgICAxMA0KICAgIGJE
+ZXNjcmlwdG9yVHlwZSAgICAgICAgMTYNCiAgICBiRGV2Q2FwYWJpbGl0eVR5cGUgICAgICAzDQog
+ICAgYm1BdHRyaWJ1dGVzICAgICAgICAgMHgwMg0KICAgICAgTGF0ZW5jeSBUb2xlcmFuY2UgTWVz
+c2FnZXMgKExUTSkgU3VwcG9ydGVkDQogICAgd1NwZWVkc1N1cHBvcnRlZCAgIDB4MDAwZQ0KICAg
+ICAgRGV2aWNlIGNhbiBvcGVyYXRlIGF0IEZ1bGwgU3BlZWQgKDEyTWJwcykNCiAgICAgIERldmlj
+ZSBjYW4gb3BlcmF0ZSBhdCBIaWdoIFNwZWVkICg0ODBNYnBzKQ0KICAgICAgRGV2aWNlIGNhbiBv
+cGVyYXRlIGF0IFN1cGVyU3BlZWQgKDVHYnBzKQ0KICAgIGJGdW5jdGlvbmFsaXR5U3VwcG9ydCAg
+IDINCiAgICAgIExvd2VzdCBmdWxseS1mdW5jdGlvbmFsIGRldmljZSBzcGVlZCBpcyBIaWdoIFNw
+ZWVkICg0ODBNYnBzKQ0KICAgIGJVMURldkV4aXRMYXQgICAgICAgICAgMTAgbWljcm8gc2Vjb25k
+cw0KICAgIGJVMkRldkV4aXRMYXQgICAgICAgIDIwNDcgbWljcm8gc2Vjb25kcw0KY2FuJ3QgZ2V0
+IGRlYnVnIGRlc2NyaXB0b3I6IFJlc291cmNlIHRlbXBvcmFyaWx5IHVuYXZhaWxhYmxlDQpEZXZp
+Y2UgU3RhdHVzOiAgICAgMHgwMDEwDQogIChCdXMgUG93ZXJlZCkNCiAgTGF0ZW5jeSBUb2xlcmFu
+Y2UgTWVzc2FnaW5nIChMVE0pIEVuYWJsZWQNCltyb290QGZjMzIgcjgxNTJfaW5ib3hdIw0KDQpC
+ZXN0IFJlZ2FyZHMsDQpIYXllcw0KDQo=
