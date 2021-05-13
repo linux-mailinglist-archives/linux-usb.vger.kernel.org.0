@@ -2,180 +2,389 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0ECB37FF7A
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 22:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C0837FF99
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 23:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbhEMUws (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 16:52:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233005AbhEMUwr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 May 2021 16:52:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 059D661358;
-        Thu, 13 May 2021 20:51:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620939097;
-        bh=yjTfN3kihchh/45GfrBY13d752eyb1X/H7dX/dFp3FM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UNHFrJBGfm65WY+TcmMBA59ZXKRQbtB1y6pf7N3inYTU4NUQIRqAm1ehP96ueLWd9
-         JwMLzgu5/It0UGKsHwDJxEubF11HOVQ+ZPkE2cNGXXn9lNVg8oUx+HdhwYXK+nv+y5
-         5DGUgv10SM61Us+CsOBdIBdR4S7+0rxsxuw4ZMtyQ9uz3VRbpw8NumuTHoB167Yx3Y
-         hU0VHMLG15IfAqugLFk6acaTewjMHSfDaCPxyR3/wcekop3J23leVe8Mpl064VAcHI
-         yDJsmpydRssC0y/nDmseTuC1h0aVPjXpKuQFoHVWdYG4sOIqJ7oyeC0nNzyP+EQAfC
-         ObzrUogeYYMtQ==
-Date:   Thu, 13 May 2021 15:51:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        id S233274AbhEMVI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 17:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233265AbhEMVI0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 17:08:26 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7324BC061756
+        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 14:07:15 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id v6so35388984ljj.5
+        for <linux-usb@vger.kernel.org>; Thu, 13 May 2021 14:07:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=a8BO21yJZmaQNWOM3J2AcQgkY2GvpAZ3n0cx4ZT748Y=;
+        b=fdfkzz6PRKUFyqt4W5cOhm+F/87WSBh+fTcbiex8OhqUBivVzaVgR49LW+HALk4Fnd
+         28OHYr7hCJe5HCh35mCxpzCnsTz1udQGQppifouth+/otjvvSkbeEHZzLlVh2xU3tp6Q
+         MomAw2UWzAe47PVjRl+M3mP0luotydOEJkolDXVNdlvO9JYjLjbUyl16n8fI2gwe/bUH
+         3a6TEooxrh3s01h9kg2J9xfWO9FJNr1dBOh7GjS5PfPFgCM1mJ96JenFraZJ8dImR4wJ
+         aXeIH81s0rjq/rVJIachkpLU349SDmhCTzpjC12TR9qKpkFQ3WmCvjc2laQyse94GhF9
+         9AkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=a8BO21yJZmaQNWOM3J2AcQgkY2GvpAZ3n0cx4ZT748Y=;
+        b=G/dlyKAEMLiiANWt0fUsWROK/6nFcOaaHz44PvVqiF43bbCk4BnkExtE84Y4fODYdv
+         XlwLe7UlxAHYDM8PUdXNxajPQJVG18h9FhJyt9R7hxfEX14EUEwTQFVYOpLsued06dsi
+         2UkU78A0c65wDr9Yyl8GXP5d11lTbQ8fna2/FPEf1T7LnEmlu0aOyzNZkdyB0GZcz06K
+         sV9N9ltYwxz/YXTJiRCP3O28BObeFWWOt5wEi1DJsN6sNEzGc3IsBtOr0oXJHTaA2V7T
+         xaUbRc27+bpAc9XwQRbckbEjG5pb46uxZKs4HokOuc0CMXwDNUZsK73GGUPU8/KQMO5Y
+         p89A==
+X-Gm-Message-State: AOAM532NLcma2U/dpTpRNNMrm10uaEJuaJgKDhOoio1hCAUdFQgNV5By
+        49dvPvArXDFURXcxHOubtKIsu/Teq6PZ70naiDk4KA==
+X-Google-Smtp-Source: ABdhPJxVrts2tWDXoVWsVEhnoMOhaaVLxEnXQ5mvYfitldKoBU+mCt7hA/Ji8H+V85YOag6yBlHyVTtNS6pZSic0VIo=
+X-Received: by 2002:a2e:9787:: with SMTP id y7mr34611598lji.65.1620940033523;
+ Thu, 13 May 2021 14:07:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210512213457.1310774-1-rajatja@google.com> <YJ0v4G4UpeAvSEFT@kroah.com>
+In-Reply-To: <YJ0v4G4UpeAvSEFT@kroah.com>
+From:   Rajat Jain <rajatja@google.com>
+Date:   Thu, 13 May 2021 14:06:37 -0700
+Message-ID: <CACK8Z6HHGnA0TqHGOr-dRA3WfRtommSUE-ianWycLh4aOZNvRg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] driver core: Move the "removable" attribute from
+ USB to core
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
         Alan Stern <stern@rowland.harvard.edu>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-pci <linux-pci@vger.kernel.org>,
         "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
         David Laight <David.Laight@aculab.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
         Rajat Jain <rajatxjain@gmail.com>,
         Jesse Barnes <jsbarnes@google.com>,
         Dmitry Torokhov <dtor@google.com>
-Subject: Re: [PATCH v3 2/2] PCI: Add sysfs "removable" attribute
-Message-ID: <20210513205135.GA2611013@bjorn-Precision-5520>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACK8Z6HENcAR-rKnQUVWU4jmqYqzsg95kbYRv3o5Gk7C+eXa-g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 13, 2021 at 01:34:23PM -0700, Rajat Jain wrote:
-> On Thu, May 13, 2021 at 1:05 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > On Thu, May 13, 2021 at 11:02:10AM -0700, Rajat Jain wrote:
-> > > On Wed, May 12, 2021 at 2:35 PM Rajat Jain <rajatja@google.com> wrote:
-> > > >
-> > > > A PCI device is "external_facing" if it's a Root Port with the ACPI
-> > > > "ExternalFacingPort" property or if it has the DT "external-facing"
-> > > > property.  We consider everything downstream from such a device to
-> > > > be removable by user.
-> > > >
-> > > > We're mainly concerned with consumer platforms with user accessible
-> > > > thunderbolt ports that are vulnerable to DMA attacks, and we expect those
-> > > > ports to be identified as "ExternalFacingPort". Devices in traditional
-> > > > hotplug slots can technically be removed, but the expectation is that
-> > > > unless the port is marked with "ExternalFacingPort", such devices are less
-> > > > accessible to user / may not be removed by end user, and thus not exposed
-> > > > as "removable" to userspace.
-> >
-> > s/thunderbolt/Thunderbolt/ since I think it's a trademark
-> > s/identified as/identified by firmware as/
-> 
-> Ack, will do.
-> 
-> >
-> > > > Set pci_dev_type.supports_removable so the device core exposes the
-> > > > "removable" file in sysfs, and tell the device core about removable
-> > > > devices.
-> > > >
-> > > > This can be used by userspace to implment any policies it wants to,
-> > > > tailored specifically for user removable devices. Eg usage:
-> > > > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2591812
-> > > > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2795038
-> > > > (code uses such an attribute to remove external PCI devicces or disable
-> > > > features on them as needed by the policy desired)
-> >
-> > s/implment/implement/
-> > s/devicces/devices/
-> >
-> > Or maybe something like:
-> >
-> >   This can be used to implement userspace policies tailored for
-> >   user-removable devices.
-> 
-> Ack, will do.
-> 
-> >
-> > Not sure exactly what "remove external PCI devices" means.  You're
-> > talking about the *code* doing something, so I don't think it means
-> > physically unplugging the device from the system.  Maybe preventing a
-> > driver from binding to it or something similar?
-> 
-> echo 1 > /sys/bus/pci/devices/<device>/remove
-> 
-> >
-> > I hesitate slightly to rely on URLs like googlesource.com in commit
-> > logs because we don't know how long they will remain valid.  But I
-> > guess there's no real alternative here, since this code probably
-> > hasn't been posted to any public mailing lists like the ones archived
-> > at https://lore.kernel.org/lists.html, right?
-> 
-> Yes, chromium reviews (userspace code that shall use the new
-> attribute) happen over gerrit, and so the publicly available links
-> would be googlesource.com.
-> 
-> >
-> > > > Signed-off-by: Rajat Jain <rajatja@google.com>
-> >
-> > > > +static void pci_set_removable(struct pci_dev *dev)
-> > > > +{
-> > > > +       struct pci_dev *parent = pci_upstream_bridge(dev);
-> > > > +       if (parent &&
-> > > > +           (parent->external_facing || dev_is_removable(&parent->dev)))
-> > > > +               dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
-> > > > +       else
-> > > > +               dev_set_removable(&dev->dev, DEVICE_FIXED);
-> > > > +}
-> > >
-> > > Copying comments from Krzysztof from another thread:
-> > >
-> > > [Krzysztof] We were also wondering if we should only set DEVICE_REMOVABLE for
-> > > devices known to be behind an external-facing port, and let everything
-> > > else be set to "unknown" (or whatever the default would be).
-> > >
-> > > [Rajat]: I think I'm fine with this proposal if Bjorn & PCI community
-> > > also sees this as a better idea. Essentially the question here is,
-> > > would it be better for the non-removable PCI devices to be shown as
-> > > "fixed" or "unknown"?
-> >
-> > I think I would rather see this as:
-> >
-> >   struct pci_dev *parent = pci_upstream_bridge(dev);
-> >
-> >   if (parent &&
-> >       (parent->external_facing || dev_is_removable(&parent->dev)))
-> >           dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
-> >
-> > In other words, assume only that everything below an "external-facing"
-> > device is removable.
-> >
-> > In the absence of an "external-facing" property, we don't know
-> > anything about the connection, and I'd rather use the default
-> > (probably "unknown") instead of assuming "fixed."
-> 
-> Ack, will do.
-> 
-> One question: Under Greg's latest suggestion, the decision to show
-> this attribute does not have to be bus wide / device_type wide i.e.
-> subsystem can choose for this attribute to show up only under certain
-> devices. So if it is more preferable, I can have this attribute show
-> under ONLY PCI devices that attach below "external-facing" PCI devices
-> (and any other PCI devices will not have this attribute show up at
-> all). I guess this sounds better than having "unknown" show up on the
-> rest of the devices that are not removable?
+Hello,
 
-If you can make the file appear only for removable devices, that
-sounds even better.
-
-> > I don't think we have anything that depends on "fixed," so I don't
-> > think there's value in setting it.
+On Thu, May 13, 2021 at 6:55 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, May 12, 2021 at 02:34:56PM -0700, Rajat Jain wrote:
+> > Move the "removable" attribute from USB to core in order to allow it to be
+> > supported by other subsystem / buses. Individual buses that want to support
+> > this attribute can opt-in by setting the supports_removable flag, and then
+> > populating the removable property of the device while enumerating it. The
+> > UAPI (location, symantics etc) for the attribute remains unchanged.
 > >
-> > (Note the blank line between local variables and the "if"; maybe
-> > that's what Greg hinted at?)
-> 
-> Ack, will remove the blank line (didn't know that blank lines between
-> variables and code is not preferred).
+> > Signed-off-by: Rajat Jain <rajatja@google.com>
+> > Acked-by: Alan Stern <stern@rowland.harvard.edu>
+> > Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+> > ---
+> > v3: - Minor commit log / comments updated.
+> >     - use sysfs_emit()
+> >     - Rename local variable name (state -> loc)
+> >     - change supports_removable flag from bool to bitfield.
+> > v2: Add documentation
+> >
+> >  Documentation/ABI/testing/sysfs-bus-usb       | 11 -------
+> >  .../ABI/testing/sysfs-devices-removable       | 17 ++++++++++
+> >  drivers/base/core.c                           | 28 ++++++++++++++++
+> >  drivers/usb/core/hub.c                        |  8 ++---
+> >  drivers/usb/core/sysfs.c                      | 24 --------------
+> >  drivers/usb/core/usb.c                        |  1 +
+> >  include/linux/device.h                        | 32 +++++++++++++++++++
+> >  include/linux/usb.h                           |  7 ----
+> >  8 files changed, 82 insertions(+), 46 deletions(-)
+> >  create mode 100644 Documentation/ABI/testing/sysfs-devices-removable
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-bus-usb b/Documentation/ABI/testing/sysfs-bus-usb
+> > index bf2c1968525f..73eb23bc1f34 100644
+> > --- a/Documentation/ABI/testing/sysfs-bus-usb
+> > +++ b/Documentation/ABI/testing/sysfs-bus-usb
+> > @@ -154,17 +154,6 @@ Description:
+> >               files hold a string value (enable or disable) indicating whether
+> >               or not USB3 hardware LPM U1 or U2 is enabled for the device.
+> >
+> > -What:                /sys/bus/usb/devices/.../removable
+> > -Date:                February 2012
+> > -Contact:     Matthew Garrett <mjg@redhat.com>
+> > -Description:
+> > -             Some information about whether a given USB device is
+> > -             physically fixed to the platform can be inferred from a
+> > -             combination of hub descriptor bits and platform-specific data
+> > -             such as ACPI. This file will read either "removable" or
+> > -             "fixed" if the information is available, and "unknown"
+> > -             otherwise.
+> > -
+> >  What:                /sys/bus/usb/devices/.../ltm_capable
+> >  Date:                July 2012
+> >  Contact:     Sarah Sharp <sarah.a.sharp@linux.intel.com>
+> > diff --git a/Documentation/ABI/testing/sysfs-devices-removable b/Documentation/ABI/testing/sysfs-devices-removable
+> > new file mode 100644
+> > index 000000000000..9dabcad7cdcd
+> > --- /dev/null
+> > +++ b/Documentation/ABI/testing/sysfs-devices-removable
+> > @@ -0,0 +1,17 @@
+> > +What:                /sys/devices/.../removable
+>
+> This should be "/sys/bus/devices/.../removable" perhaps?  Or not?  Is
+> this moving in the existing USB cases?
 
-The blank line *is* preferred, but your patch didn't include one.
+Sorry, I forgot to respond to this comment earlier today.
 
-Bjorn
+There is no /sys/bus/devices/ so I guess you had really meant
+"/sys/bus/.../devices/.../removable". Given the latest suggestion on
+the patch, where each device shall be free to show / hide this
+attribute, I think the current  /sys/devices/.../removable looks
+correct. Please let me know if you'd still like to change this to
+something else, and I'd be happy to change.
+
+Thanks,
+
+Rajat
+
+
+>
+> > +Date:                Apr 2021
+> > +Contact:     Matthew Garrett <mjg@redhat.com>,
+>
+> This email address no longer works, so perhaps just use your own?
+>
+> > +             Rajat Jain <rajatja@google.com>
+> > +Description:
+> > +             Information about whether a given device is physically fixed to
+> > +             the platform. This is determined by the device's subsystem in a
+> > +             bus / platform-specific way. This attribute is only present for
+> > +             buses that can support determining such information:
+> > +
+> > +             "removable": The device is external / removable from the system.
+> > +             "fixed":     The device is internal / fixed to the system.
+> > +             "unknown":   The information is unavailable.
+> > +
+> > +             Currently this is only supported by USB (which infers the
+> > +             information from a combination of hub descriptor bits and
+> > +             platform-specific data such as ACPI).
+> > diff --git a/drivers/base/core.c b/drivers/base/core.c
+> > index 4a8bf8cda52b..9e6bf9e71a7e 100644
+> > --- a/drivers/base/core.c
+> > +++ b/drivers/base/core.c
+> > @@ -2404,6 +2404,25 @@ static ssize_t online_store(struct device *dev, struct device_attribute *attr,
+> >  }
+> >  static DEVICE_ATTR_RW(online);
+> >
+> > +static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
+> > +                           char *buf)
+> > +{
+> > +     const char *loc;
+> > +
+> > +     switch (dev->removable) {
+> > +     case DEVICE_REMOVABLE:
+> > +             loc = "removable";
+> > +             break;
+> > +     case DEVICE_FIXED:
+> > +             loc = "fixed";
+> > +             break;
+> > +     default:
+> > +             loc = "unknown";
+> > +     }
+> > +     return sysfs_emit(buf, "%s\n", loc);
+> > +}
+> > +static DEVICE_ATTR_RO(removable);
+> > +
+> >  int device_add_groups(struct device *dev, const struct attribute_group **groups)
+> >  {
+> >       return sysfs_create_groups(&dev->kobj, groups);
+> > @@ -2581,8 +2600,16 @@ static int device_add_attrs(struct device *dev)
+> >                       goto err_remove_dev_online;
+> >       }
+> >
+> > +     if (type && type->supports_removable) {
+> > +             error = device_create_file(dev, &dev_attr_removable);
+> > +             if (error)
+> > +                     goto err_remove_dev_waiting_for_supplier;
+> > +     }
+> > +
+> >       return 0;
+> >
+> > + err_remove_dev_waiting_for_supplier:
+> > +     device_remove_file(dev, &dev_attr_waiting_for_supplier);
+> >   err_remove_dev_online:
+> >       device_remove_file(dev, &dev_attr_online);
+> >   err_remove_dev_groups:
+> > @@ -2602,6 +2629,7 @@ static void device_remove_attrs(struct device *dev)
+> >       struct class *class = dev->class;
+> >       const struct device_type *type = dev->type;
+> >
+> > +     device_remove_file(dev, &dev_attr_removable);
+> >       device_remove_file(dev, &dev_attr_waiting_for_supplier);
+> >       device_remove_file(dev, &dev_attr_online);
+> >       device_remove_groups(dev, dev->groups);
+> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> > index b2bc4b7c4289..7a3c28b14ca1 100644
+> > --- a/drivers/usb/core/hub.c
+> > +++ b/drivers/usb/core/hub.c
+> > @@ -2443,11 +2443,11 @@ static void set_usb_port_removable(struct usb_device *udev)
+> >        */
+> >       switch (hub->ports[udev->portnum - 1]->connect_type) {
+> >       case USB_PORT_CONNECT_TYPE_HOT_PLUG:
+> > -             udev->removable = USB_DEVICE_REMOVABLE;
+> > +             dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+> >               return;
+> >       case USB_PORT_CONNECT_TYPE_HARD_WIRED:
+> >       case USB_PORT_NOT_USED:
+> > -             udev->removable = USB_DEVICE_FIXED;
+> > +             dev_set_removable(&udev->dev, DEVICE_FIXED);
+> >               return;
+> >       default:
+> >               break;
+> > @@ -2472,9 +2472,9 @@ static void set_usb_port_removable(struct usb_device *udev)
+> >       }
+> >
+> >       if (removable)
+> > -             udev->removable = USB_DEVICE_REMOVABLE;
+> > +             dev_set_removable(&udev->dev, DEVICE_REMOVABLE);
+> >       else
+> > -             udev->removable = USB_DEVICE_FIXED;
+> > +             dev_set_removable(&udev->dev, DEVICE_FIXED);
+> >
+> >  }
+> >
+> > diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+> > index 5a168ba9fc51..fa2e49d432ff 100644
+> > --- a/drivers/usb/core/sysfs.c
+> > +++ b/drivers/usb/core/sysfs.c
+> > @@ -301,29 +301,6 @@ static ssize_t urbnum_show(struct device *dev, struct device_attribute *attr,
+> >  }
+> >  static DEVICE_ATTR_RO(urbnum);
+> >
+> > -static ssize_t removable_show(struct device *dev, struct device_attribute *attr,
+> > -                           char *buf)
+> > -{
+> > -     struct usb_device *udev;
+> > -     char *state;
+> > -
+> > -     udev = to_usb_device(dev);
+> > -
+> > -     switch (udev->removable) {
+> > -     case USB_DEVICE_REMOVABLE:
+> > -             state = "removable";
+> > -             break;
+> > -     case USB_DEVICE_FIXED:
+> > -             state = "fixed";
+> > -             break;
+> > -     default:
+> > -             state = "unknown";
+> > -     }
+> > -
+> > -     return sprintf(buf, "%s\n", state);
+> > -}
+> > -static DEVICE_ATTR_RO(removable);
+> > -
+> >  static ssize_t ltm_capable_show(struct device *dev,
+> >                               struct device_attribute *attr, char *buf)
+> >  {
+> > @@ -828,7 +805,6 @@ static struct attribute *dev_attrs[] = {
+> >       &dev_attr_avoid_reset_quirk.attr,
+> >       &dev_attr_authorized.attr,
+> >       &dev_attr_remove.attr,
+> > -     &dev_attr_removable.attr,
+> >       &dev_attr_ltm_capable.attr,
+> >  #ifdef CONFIG_OF
+> >       &dev_attr_devspec.attr,
+> > diff --git a/drivers/usb/core/usb.c b/drivers/usb/core/usb.c
+> > index 62368c4ed37a..ce18e84528cf 100644
+> > --- a/drivers/usb/core/usb.c
+> > +++ b/drivers/usb/core/usb.c
+> > @@ -569,6 +569,7 @@ struct device_type usb_device_type = {
+> >  #ifdef CONFIG_PM
+> >       .pm =           &usb_device_pm_ops,
+> >  #endif
+> > +     .supports_removable = true,
+> >  };
+> >
+> >
+> > diff --git a/include/linux/device.h b/include/linux/device.h
+> > index 38a2071cf776..7e87ab048307 100644
+> > --- a/include/linux/device.h
+> > +++ b/include/linux/device.h
+> > @@ -93,6 +93,8 @@ struct device_type {
+> >       void (*release)(struct device *dev);
+> >
+> >       const struct dev_pm_ops *pm;
+> > +
+> > +     bool supports_removable:1; /* subsystem can classify removable/fixed */
+>
+> Why isn't this a bus type?  Shouldn't it go there and not in the device
+> type?
+>
+> >  };
+> >
+> >  /* interface for exporting device attributes */
+> > @@ -350,6 +352,19 @@ enum dl_dev_state {
+> >       DL_DEV_UNBINDING,
+> >  };
+> >
+> > +/**
+> > + * enum device_removable - Whether the device is removable. The criteria for a
+> > + * device to be classified as removable is determined by its subsystem or bus.
+> > + * @DEVICE_REMOVABLE_UNKNOWN:  Device location is Unknown (default).
+> > + * @DEVICE_REMOVABLE: Device is removable by the user.
+> > + * @DEVICE_FIXED: Device is not removable by the user.
+> > + */
+> > +enum device_removable {
+> > +     DEVICE_REMOVABLE_UNKNOWN = 0,
+> > +     DEVICE_REMOVABLE,
+> > +     DEVICE_FIXED,
+> > +};
+> > +
+> >  /**
+> >   * struct dev_links_info - Device data related to device links.
+> >   * @suppliers: List of links to supplier devices.
+> > @@ -431,6 +446,9 @@ struct dev_links_info {
+> >   *           device (i.e. the bus driver that discovered the device).
+> >   * @iommu_group: IOMMU group the device belongs to.
+> >   * @iommu:   Per device generic IOMMU runtime data
+> > + * @removable:  Whether the device can be removed from the system. This
+> > + *              should be set by the subsystem / bus driver that discovered
+> > + *              the device.
+> >   *
+> >   * @offline_disabled: If set, the device is permanently online.
+> >   * @offline: Set after successful invocation of bus type's .offline().
+> > @@ -544,6 +562,8 @@ struct device {
+> >       struct iommu_group      *iommu_group;
+> >       struct dev_iommu        *iommu;
+> >
+> > +     enum device_removable   removable;
+> > +
+> >       bool                    offline_disabled:1;
+> >       bool                    offline:1;
+> >       bool                    of_node_reused:1;
+> > @@ -782,6 +802,18 @@ static inline bool dev_has_sync_state(struct device *dev)
+> >       return false;
+> >  }
+> >
+> > +static inline void dev_set_removable(struct device *dev,
+> > +                                  enum device_removable removable)
+> > +{
+> > +     dev->removable = removable;
+> > +}
+> > +
+> > +static inline bool dev_is_removable(struct device *dev)
+> > +{
+> > +     return dev && dev->type && dev->type->supports_removable
+> > +         && dev->removable == DEVICE_REMOVABLE;
+>
+> Again, shouldn't this be a bus type, and not a device type?
+>
+> Where are you going to have devices of different types on a bus that do,
+> or do not, allow this attribute?
+>
+> thanks,
+>
+> greg k-h
