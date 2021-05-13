@@ -2,144 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0790637FE89
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 22:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F2E37FE91
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 22:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbhEMUHD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 16:07:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39456 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232389AbhEMUHC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 May 2021 16:07:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B307161421;
-        Thu, 13 May 2021 20:05:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620936352;
-        bh=8T+J3wCXI/e4i0Nq0qkxzfPcgMyR9DsieXzCu8AyHN4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=S8aZH569dpHyPV1WO9KYLvi5aeA4T/Bi2TDTlr76AqbK7Lss5y8R7nzoaJvXSoh8v
-         AlAi/al1uKP6LoN6pTwS+Dbd6rny3YwO5cDVtK1DC74Fqv/ejJqOwgF/af3d4oE08o
-         QT5DjPJ4GXOAagBrMiKykL58ii3A2EuFPFGuP2FPjdcq83lgS/0Km5N2cUzZDp8x4B
-         Wj/GXNjZ41PLmuXelRojpihdaXt+o7+yWC2ioTg6vHAOdFxv15DcQ8SCFDXt4veoBE
-         1EbsXRaHuYonUI6rnefgLjRpu8TUsLMKo32FB/NTxKi1JdqUbijoRwEHgkljkpOZw5
-         5M9uuGP7jhqrg==
-Date:   Thu, 13 May 2021 15:05:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
-        David Laight <David.Laight@aculab.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rajat Jain <rajatxjain@gmail.com>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Subject: Re: [PATCH v3 2/2] PCI: Add sysfs "removable" attribute
-Message-ID: <20210513200550.GA2604592@bjorn-Precision-5520>
+        id S232461AbhEMUK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 16:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232412AbhEMUKY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 16:10:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3DDC061574;
+        Thu, 13 May 2021 13:09:14 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id c3so40155220lfs.7;
+        Thu, 13 May 2021 13:09:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jxf9jaPVKrVN10b1Yr8Cdt+6V7OtY9FoC2+vz0B4zXI=;
+        b=cJLYDPYytrPRYiG9h/uzjB7fFy1ElNt9yk4YCZpwchSCrU6xsrfTH9+XbdEsTe+0Uq
+         ISAkn5iJzOMKzQJxSekK0/p2dVBLDaMOEOYh9did276nub/I7X14F8n9SvYl9gxMwGRv
+         8SePcpFfr/1lRdM9ObxcZVduXHkFwR+OR3j150/ZzZgxynUTMUpSofPqLNyIRNIeGcwm
+         pFY+gtSYkk3Q260bXnI122L1Y/+HYDIUOglzGyL36Pogw5xIrVmHbJmM+eecN1yrCMet
+         gPsFI3lmcKWO6DZV2EzfR2K9Cjbf+UZAoeXejiX5ExG4/aWSxQQqWslF8/en2cvKjUDB
+         LdSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Jxf9jaPVKrVN10b1Yr8Cdt+6V7OtY9FoC2+vz0B4zXI=;
+        b=VTt0gvst7MdtxFcg8nsymuK7ucpLySOwGBQnzdK4Au/+vqrN82B44uK2M8W47dE8UE
+         dx6IKkS2RKgb9fUogON4638hVyYqUMwovQ0XEWbmY0vqpdr0/S4c3YYG0LWp/nhJmknP
+         pbWrR2hV5wPwgK0VYIcL5q18hwfsJupU2zvWFKZq3VVbVoXDnpYOgNfXnLrUIWLI0a7P
+         Cwns3SRlp0jNRJYogk27u6g1NC0IbFPg2ivIqA+WdfRuYdfnLehNyEkWW515DNEDWzWo
+         RKaPhh//bHLrEgMa9C3eqwSCr+4RKLaQgRXqooAapsX6HY5V42rPNMLcNRxbtB/mmwaS
+         nlUg==
+X-Gm-Message-State: AOAM531mIQkx0X5wr7PxcXBieX4uQ7ytegg4tOSe1BdoWcqCXmOIqqh0
+        oFzFIvmWoXxwhjOtu+TKDlo=
+X-Google-Smtp-Source: ABdhPJxgk0QpMH3Qc/Nbvp/HLZfxypEYo+ZT/4nnEFjy3OA8GKGQkkI3eO0MuhdjwAoHQD7DITqK6g==
+X-Received: by 2002:a05:6512:25c:: with SMTP id b28mr7581024lfo.94.1620936552616;
+        Thu, 13 May 2021 13:09:12 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-228-193.NA.cust.bahnhof.se. [98.128.228.193])
+        by smtp.gmail.com with ESMTPSA id u12sm107054lfc.75.2021.05.13.13.09.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 May 2021 13:09:11 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] usb: gadget: tegra-xudc: Constify static structs
+Date:   Thu, 13 May 2021 22:09:08 +0200
+Message-Id: <20210513200908.448351-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACK8Z6EPjcRwDB=r6RnsJRjHN4oJXTD0_8zbtUCA+awofY7=5Q@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 13, 2021 at 11:02:10AM -0700, Rajat Jain wrote:
-> On Wed, May 12, 2021 at 2:35 PM Rajat Jain <rajatja@google.com> wrote:
-> >
-> > A PCI device is "external_facing" if it's a Root Port with the ACPI
-> > "ExternalFacingPort" property or if it has the DT "external-facing"
-> > property.  We consider everything downstream from such a device to
-> > be removable by user.
-> >
-> > We're mainly concerned with consumer platforms with user accessible
-> > thunderbolt ports that are vulnerable to DMA attacks, and we expect those
-> > ports to be identified as "ExternalFacingPort". Devices in traditional
-> > hotplug slots can technically be removed, but the expectation is that
-> > unless the port is marked with "ExternalFacingPort", such devices are less
-> > accessible to user / may not be removed by end user, and thus not exposed
-> > as "removable" to userspace.
+Constify a couple of ops-structs that are never modified, to let the
+compiler put them in read-only memory.
 
-s/thunderbolt/Thunderbolt/ since I think it's a trademark
-s/identified as/identified by firmware as/
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> > Set pci_dev_type.supports_removable so the device core exposes the
-> > "removable" file in sysfs, and tell the device core about removable
-> > devices.
-> >
-> > This can be used by userspace to implment any policies it wants to,
-> > tailored specifically for user removable devices. Eg usage:
-> > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2591812
-> > https://chromium-review.googlesource.com/c/chromiumos/platform2/+/2795038
-> > (code uses such an attribute to remove external PCI devicces or disable
-> > features on them as needed by the policy desired)
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index 2319c9737c2b..66b19db4c6e6 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -1907,7 +1907,7 @@ static void tegra_xudc_ep_free_request(struct usb_ep *usb_ep,
+ 	kfree(req);
+ }
+ 
+-static struct usb_ep_ops tegra_xudc_ep_ops = {
++static const struct usb_ep_ops tegra_xudc_ep_ops = {
+ 	.enable = tegra_xudc_ep_enable,
+ 	.disable = tegra_xudc_ep_disable,
+ 	.alloc_request = tegra_xudc_ep_alloc_request,
+@@ -1928,7 +1928,7 @@ static int tegra_xudc_ep0_disable(struct usb_ep *usb_ep)
+ 	return -EBUSY;
+ }
+ 
+-static struct usb_ep_ops tegra_xudc_ep0_ops = {
++static const struct usb_ep_ops tegra_xudc_ep0_ops = {
+ 	.enable = tegra_xudc_ep0_enable,
+ 	.disable = tegra_xudc_ep0_disable,
+ 	.alloc_request = tegra_xudc_ep_alloc_request,
+@@ -2168,7 +2168,7 @@ static int tegra_xudc_set_selfpowered(struct usb_gadget *gadget, int is_on)
+ 	return 0;
+ }
+ 
+-static struct usb_gadget_ops tegra_xudc_gadget_ops = {
++static const struct usb_gadget_ops tegra_xudc_gadget_ops = {
+ 	.get_frame = tegra_xudc_gadget_get_frame,
+ 	.wakeup = tegra_xudc_gadget_wakeup,
+ 	.pullup = tegra_xudc_gadget_pullup,
+-- 
+2.31.1
 
-s/implment/implement/
-s/devicces/devices/
-
-Or maybe something like:
-
-  This can be used to implement userspace policies tailored for
-  user-removable devices.
-
-Not sure exactly what "remove external PCI devices" means.  You're
-talking about the *code* doing something, so I don't think it means
-physically unplugging the device from the system.  Maybe preventing a
-driver from binding to it or something similar?
-
-I hesitate slightly to rely on URLs like googlesource.com in commit
-logs because we don't know how long they will remain valid.  But I
-guess there's no real alternative here, since this code probably
-hasn't been posted to any public mailing lists like the ones archived
-at https://lore.kernel.org/lists.html, right?
-
-> > Signed-off-by: Rajat Jain <rajatja@google.com>
-
-> > +static void pci_set_removable(struct pci_dev *dev)
-> > +{
-> > +       struct pci_dev *parent = pci_upstream_bridge(dev);
-> > +       if (parent &&
-> > +           (parent->external_facing || dev_is_removable(&parent->dev)))
-> > +               dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
-> > +       else
-> > +               dev_set_removable(&dev->dev, DEVICE_FIXED);
-> > +}
-> 
-> Copying comments from Krzysztof from another thread:
-> 
-> [Krzysztof] We were also wondering if we should only set DEVICE_REMOVABLE for
-> devices known to be behind an external-facing port, and let everything
-> else be set to "unknown" (or whatever the default would be).
-> 
-> [Rajat]: I think I'm fine with this proposal if Bjorn & PCI community
-> also sees this as a better idea. Essentially the question here is,
-> would it be better for the non-removable PCI devices to be shown as
-> "fixed" or "unknown"?
-
-I think I would rather see this as:
-
-  struct pci_dev *parent = pci_upstream_bridge(dev);
-
-  if (parent &&
-      (parent->external_facing || dev_is_removable(&parent->dev)))
-          dev_set_removable(&dev->dev, DEVICE_REMOVABLE);
-
-In other words, assume only that everything below an "external-facing"
-device is removable.
-
-In the absence of an "external-facing" property, we don't know
-anything about the connection, and I'd rather use the default
-(probably "unknown") instead of assuming "fixed."
-
-I don't think we have anything that depends on "fixed," so I don't
-think there's value in setting it.
-
-(Note the blank line between local variables and the "if"; maybe
-that's what Greg hinted at?)
-
-Bjorn
