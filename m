@@ -2,115 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEA3C37F020
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 01:54:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5609E37F06D
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 02:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235796AbhELXyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 12 May 2021 19:54:49 -0400
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:40542 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbhELXdk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 19:33:40 -0400
-Received: by mail-wm1-f42.google.com with SMTP id y124-20020a1c32820000b029010c93864955so508696wmy.5;
-        Wed, 12 May 2021 16:32:29 -0700 (PDT)
+        id S233578AbhEMAiJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 12 May 2021 20:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343695AbhEMAgF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 12 May 2021 20:36:05 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47DFC0613ED
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 17:23:11 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id i13so20186609pfu.2
+        for <linux-usb@vger.kernel.org>; Wed, 12 May 2021 17:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Luwh+TGoydzGL3JCJlpVZNGhUrtfqRBntVXhvPw5QHw=;
+        b=PfS3fnU78oKI5JB9cVtWpPNRgSQDF6jbdL6+Nmu5aJK1dg5mpNWrpAb1xnWeXRSTg2
+         t9CsTHKfuGnO8xJLDpEL/zaXCpNBi6kmhbCAnt8cCNNWH0bKpJd8/fYNSrfvNy1+FPrq
+         MAk26aE4uuUHS6aQPMzd2+LcrbuY95tiBExmM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=1H+d0FBxQyBmCizFzbRyEoxvV7pCSwkXkm1m5umLuY4=;
-        b=N8gDeDCeXiCLYx1kdeuLqy/l7jZ4CZq4uN00fnTbQ0fmjmSByuOA2dOKwQlwyT9KeD
-         SOYvvYqNrGHHagmL1qSEo/+fRquqVfm2xJW7qSLQi2mgSKQ2MuKVCGjlUR6lbXzgO5EL
-         FIl4PCL1dw48U5pYY911drh3VclTCZ1o/5r0et+NhjoH0J5VJG2wS2dpOQe+mPVPAJgr
-         oTQmOKoBcruDgfRdEvwJ7EBagbzKRv1fCKQVrOO+/GuCS2YofdjGDJFU/U8L8jQWwvks
-         LMF8xeHqswcfRPsA9JJTwYAvQGVcscZ7xr0/0j+6TSidUplvp4c5u1Gox94uBMsEQOiq
-         fW0w==
-X-Gm-Message-State: AOAM531SNwHaN1snxTLh37NjhHqlc206h837jWJ1rco+adFyTA7cUloa
-        VS5WYr+jCDNqsWXPn3NqwYGjVcuMuiwkd6vz
-X-Google-Smtp-Source: ABdhPJyrWHK5hpJkgZiC7V6D/0QFJqr9C2oF38e/hMrtNMBBAj4fwLxfq8HoFrOyuq300gy/4GFR6g==
-X-Received: by 2002:a05:600c:293:: with SMTP id 19mr41463394wmk.144.1620862348337;
-        Wed, 12 May 2021 16:32:28 -0700 (PDT)
-Received: from rocinante.localdomain ([95.155.85.46])
-        by smtp.gmail.com with ESMTPSA id e12sm1123249wrm.80.2021.05.12.16.32.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 May 2021 16:32:27 -0700 (PDT)
-Date:   Thu, 13 May 2021 01:32:25 +0200
-From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Rajat Jain <rajatxjain@gmail.com>,
+        bh=Luwh+TGoydzGL3JCJlpVZNGhUrtfqRBntVXhvPw5QHw=;
+        b=DV3CQyLH3womntnXJd40B1VSulrwUYpNzmDVldB//3kDDAGbDQ8tsrTW+aWF/Oy3zn
+         dXuBw39MpfHm4PxM6+c1qUCsNhbi1M10++QPCNPQtgxLrNQZoay/Ktfqp7Kyq6DjV3sK
+         3c/xJV4tFlb7lJdWmgVxRXlRQZc58wJk8kXtWzNpoGa4ACNYJ9mavBllNlje6rIdcfHL
+         mzJPH6fiLiIgmJPcTnkn2o0hNgdlCXsXtWOjp5vuQtXydRhYgQDe0uCNAKEC0zhw1XQ6
+         tlPGdp9IXcZalEXWB+A7zQ0UMiUKMC7KmOYdyO2ZKhnBgJ2Ih+LuKAwaLerL/Tr6JLTu
+         7OZg==
+X-Gm-Message-State: AOAM530mPrSRvesEre5x7rR54DWz+c4D4c/UcmmuB5fjjwuqU+iOOF++
+        ScoPTC/3Rv/HvCrYjQ3KHJGkCQ==
+X-Google-Smtp-Source: ABdhPJzvWhTvBADac93Bf79sSF/vT3WimwfcACeawZ8q5mYpd+q6meomOGgP9eN2ENBNBpktpzI5nw==
+X-Received: by 2002:a63:214b:: with SMTP id s11mr2566471pgm.423.1620865391277;
+        Wed, 12 May 2021 17:23:11 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:a89e:5bb2:e8e0:4428])
+        by smtp.gmail.com with UTF8SMTPSA id t133sm804825pgb.0.2021.05.12.17.23.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 May 2021 17:23:10 -0700 (PDT)
+Date:   Wed, 12 May 2021 17:23:09 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
-        <linux-usb@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Dmitry Torokhov <dtor@google.com>
-Subject: Re: [PATCH v2 1/2] driver core: Move the "removable" attribute from
- USB to core
-Message-ID: <20210512233225.GA137103@rocinante.localdomain>
-References: <20210424021631.1972022-1-rajatja@google.com>
- <20210512010049.GA89346@rocinante.localdomain>
- <CAA93t1ohAFM1U2xTvbd1J1dUCaZwh6GYNGib_AM0J7+qHwSf1A@mail.gmail.com>
- <CACK8Z6HuKqgYQZGJZGQGr5FC96naV+1yXZuwYTy5Ydb5=k40KA@mail.gmail.com>
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+Subject: Re: [PATCH v7 5/5] usb: dwc3: qcom: Keep power domain on to support
+ wakeup
+Message-ID: <YJxxbe9L3+VBEqno@google.com>
+References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+ <1619586716-8687-6-git-send-email-sanm@codeaurora.org>
+ <87lf92k9ms.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CACK8Z6HuKqgYQZGJZGQGr5FC96naV+1yXZuwYTy5Ydb5=k40KA@mail.gmail.com>
+In-Reply-To: <87lf92k9ms.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rajat,
+On Wed, Apr 28, 2021 at 01:04:43PM +0300, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+> > If wakeup capable devices are connected to the controller (directly
+> > or through hubs) at suspend time keep the power domain on in order
+> > to support wakeup from these devices.
+> >
+> > Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> > ---
+> >  drivers/usb/dwc3/dwc3-qcom.c | 17 +++++++++++++++++
+> >  1 file changed, 17 insertions(+)
+> >
+> > diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> > index 82125bc..1e220af 100644
+> > --- a/drivers/usb/dwc3/dwc3-qcom.c
+> > +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> > @@ -17,9 +17,11 @@
+> >  #include <linux/of_platform.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/phy/phy.h>
+> > +#include <linux/pm_domain.h>
+> >  #include <linux/usb/of.h>
+> >  #include <linux/reset.h>
+> >  #include <linux/iopoll.h>
+> > +#include <linux/usb/hcd.h>
+> >  
+> >  #include "core.h"
+> >  
+> > @@ -354,10 +356,19 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+> >  {
+> >  	u32 val;
+> >  	int i, ret;
+> > +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> > +	struct usb_hcd  *hcd;
+> > +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
+> >  
+> >  	if (qcom->is_suspended)
+> >  		return 0;
+> >  
+> > +	if (dwc->xhci) {
+> > +		hcd = platform_get_drvdata(dwc->xhci);
+> > +		if (usb_wakeup_enabled_descendants(hcd->self.root_hub))
+> > +			genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
+> > +	}
+> 
+> wow, you really need to find a way to do these things generically
+> instead of bypassing a bunch of layers and access stuff $this doesn't
+> directly own.
+>
+> I'm gonna say 'no' to this, sorry. It looks like xhci should, directly,
+> learn about much of this instead of hiding it 3-layers deep into the
+> dwc3 glue layer for your specific SoC.
 
-> Posted a v3 of this patch here:
-> https://lore.kernel.org/patchwork/patch/1428133/
+Maybe this could be addressed with a pair of wakeup quirks, one for suspend,
+another for resume. An optional genpd field could be added to struct
+xhci_plat_priv. The wakeup quirks would set/clear GENPD_FLAG_ACTIVE_WAKEUP
+of the genpd.
 
-I saw!  Thank you!
-
-I also found the original conversation around the main idea that's
-driving the work done here, as per:
-
-  https://lore.kernel.org/lkml/20200601232542.GA473883@bjorn-Precision-5520/
-
-This helped to fill-in some missing pieces, so to speak, I've bad.
-
-[...]
-> > > > @@ -2504,8 +2523,16 @@ static int device_add_attrs(struct device *dev)
-> > > >                       goto err_remove_dev_online;
-> > > >       }
-> > > >
-> > > > +     if (type && type->supports_removable) {
-> > > > +             error = device_create_file(dev, &dev_attr_removable);
-> > > > +             if (error)
-> > > > +                     goto err_remove_dev_waiting_for_supplier;
-> > > > +     }
-> > > > +
-> > > >       return 0;
-> > >
-> > One of my primary considerations was also that the existing UAPI for
-> > the USB's "removable" attribute shouldn't be changed. Currently, it
-> > exists for all USB devices, so I think the current code / check is OK.
-[...]
-
-We wouldn't change addition of this attribute to the USB devices - after
-the lift to the device core it still has to work as before, as you say.
-
-Just to clarify.   What I was wondering is whether we should add this new
-sysfs object so that every device now would get this attribute going
-forward, regardless of whether it would have the "type->supports_removable"
-set.
-
-We would then have a lot of devices with this attribute set to
-"unknown", and then were the is an actual support it would then be
-either "fixed" or "removable".
-
-Having said that, Bjorn pointed out to me that this might be
-not necessarily desirable.
-
-We were also wondering if we should only set DEVICE_REMOVABLE for
-devices known to be behind an external-facing port, and let everything
-else be set to "unknown" (or whatever the default would be).
-
-Krzysztof
+Does the above sound more palatable?
