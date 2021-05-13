@@ -2,75 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DBAA37F9D4
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 16:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E253437F9D9
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 16:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234572AbhEMOlf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 10:41:35 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60293 "HELO
+        id S234627AbhEMOmv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 10:42:51 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57413 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S234483AbhEMOl2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 10:41:28 -0400
-Received: (qmail 968858 invoked by uid 1000); 13 May 2021 10:40:18 -0400
-Date:   Thu, 13 May 2021 10:40:18 -0400
+        with SMTP id S234620AbhEMOmq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 10:42:46 -0400
+Received: (qmail 968921 invoked by uid 1000); 13 May 2021 10:41:36 -0400
+Date:   Thu, 13 May 2021 10:41:36 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     chris.chiu@canonical.com
-Cc:     gregkh@linuxfoundation.org, m.v.b@runbox.com, hadess@hadess.net,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] Revert "USB: Add reset-resume quirk for WD19's
- Realtek Hub"
-Message-ID: <20210513144018.GE967812@rowland.harvard.edu>
-References: <20210513041446.3082-1-chris.chiu@canonical.com>
- <20210513041446.3082-3-chris.chiu@canonical.com>
+To:     Chris Chiu <chris.chiu@canonical.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, m.v.b@runbox.com,
+        hadess@hadess.net, linux-usb@vger.kernel.org,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/2] USB: reset-resume the device when PORT_SUSPEND is
+ set but timeout
+Message-ID: <20210513144136.GF967812@rowland.harvard.edu>
+References: <20210510145030.1495-1-chris.chiu@canonical.com>
+ <20210510145030.1495-2-chris.chiu@canonical.com>
+ <20210510150203.GD863718@rowland.harvard.edu>
+ <CABTNMG24BOS_+uGEYFLJrmEW10eTGjrOowwS7Zb_U+AvkZWTyQ@mail.gmail.com>
+ <20210511163026.GA901897@rowland.harvard.edu>
+ <CABTNMG2OiEFzMwMaUaVL9B6Om87e9qQMFBXRKej7G6zuvBXW=w@mail.gmail.com>
+ <20210512150424.GA934575@rowland.harvard.edu>
+ <CABTNMG0Skqim9UOMqNuaO94iL+Ff6Eu47itmv0RFTwY4xYWhGQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210513041446.3082-3-chris.chiu@canonical.com>
+In-Reply-To: <CABTNMG0Skqim9UOMqNuaO94iL+Ff6Eu47itmv0RFTwY4xYWhGQ@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 13, 2021 at 12:14:46PM +0800, chris.chiu@canonical.com wrote:
-> From: Chris Chiu <chris.chiu@canonical.com>
+On Thu, May 13, 2021 at 12:21:52PM +0800, Chris Chiu wrote:
+> On Wed, May 12, 2021 at 11:04 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > For testing purposes, set status to 0 and jump to a new goto label in
+> > the "else" branch.  In other words, treat it as if the suspend really
+> > had worked and go back to the successful pathway.  Try this out and see
+> > if it fixes the problem.
+> >
+> > If it does then the reset-resume isn't needed.  If it doesn't, post your
+> > patch again, and mention in the patch description that testing shows the
+> > reset-resume really is necessary.
+> >
+> > Alan Stern
 > 
-> This reverts commit ca91fd8c7643d93bfc18a6fec1a0d3972a46a18a. The
+> Thanks for the suggestion. I revised the patch to create a new goto
+> label in the "else" branch and clear the status to zero if the port is
+> really suspended. It fixed the problem in my 100 time suspend/resume
+> test. I will send v3 patch w/ the modification.
 
-Use the proper format for referring to commits: just the first 12 hex 
-digits of the commit ID, followed by the commit's name in parentheses 
-and quotation marks.  See other patch submissions in the mailing list 
-archives for examples.
-
-> problematic hub should be taken care for each setting PORT_SUSPEND
-> feature timeout instead of reset-resume all the time.
-
-The last sentence is not grammatical.  It should say something more 
-like:
-
-	The previous patch in this series now handles problematic hubs
-	by checking the port status when a PORT_SUSPEND timeout occurs,
-	so we don't need to use reset-resume all the time.
+Great!  This is a much better solution.
 
 Alan Stern
-
-> 
-> Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
-> ---
->  drivers/usb/core/quirks.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-> index 21e7522655ac..6114cf83bb44 100644
-> --- a/drivers/usb/core/quirks.c
-> +++ b/drivers/usb/core/quirks.c
-> @@ -406,7 +406,6 @@ static const struct usb_device_id usb_quirk_list[] = {
->  
->  	/* Realtek hub in Dell WD19 (Type-C) */
->  	{ USB_DEVICE(0x0bda, 0x0487), .driver_info = USB_QUIRK_NO_LPM },
-> -	{ USB_DEVICE(0x0bda, 0x5487), .driver_info = USB_QUIRK_RESET_RESUME },
->  
->  	/* Generic RTL8153 based ethernet adapters */
->  	{ USB_DEVICE(0x0bda, 0x8153), .driver_info = USB_QUIRK_NO_LPM },
-> -- 
-> 2.20.1
-> 
