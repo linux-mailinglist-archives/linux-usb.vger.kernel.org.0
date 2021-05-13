@@ -2,58 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3EC37F957
-	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 16:03:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE00737F9A0
+	for <lists+linux-usb@lfdr.de>; Thu, 13 May 2021 16:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234347AbhEMOEl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 13 May 2021 10:04:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38500 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234380AbhEMOER (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 13 May 2021 10:04:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A79CA6127A;
-        Thu, 13 May 2021 14:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620914587;
-        bh=nDxUJTP3nD11n530MzLu+yrq9mhuvITYnY7YOEh3cMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kxLwBchVtkWe/bGBZbiryEXDs33/WtIcmlXaZZtLSj5Ue2gEkcSgSd942DRWqXhV1
-         tJ0wM6AoE04H9hHgFRNqw0JWT1rP9mpnbaJRtGzKBtS4y0PT1nNKy0RMk6gZeTtt4X
-         dxOiMo7M/0JWMH3XVXFz7I8F9WvDYCGZOW3e7J3w=
-Date:   Thu, 13 May 2021 16:03:05 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     stern@rowland.harvard.edu, mathias.nyman@intel.com,
-        peter.chen@kernel.org, jackp@codeaurora.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com
-Subject: Re: [PATCH v4 2/3] usb: host: xhci: add EH SINGLE_STEP_SET_FEATURE
- Test for USB2
-Message-ID: <YJ0xmT8papys4ho+@kroah.com>
-References: <1620452039-11694-1-git-send-email-jun.li@nxp.com>
- <1620452039-11694-2-git-send-email-jun.li@nxp.com>
+        id S234430AbhEMO1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 10:27:03 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46385 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230252AbhEMO1C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 10:27:02 -0400
+Received: (qmail 968340 invoked by uid 1000); 13 May 2021 10:25:52 -0400
+Date:   Thu, 13 May 2021 10:25:52 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: Re: [syzbot] WARNING in rtl8152_probe
+Message-ID: <20210513142552.GA967812@rowland.harvard.edu>
+References: <0000000000009df1b605c21ecca8@google.com>
+ <7de0296584334229917504da50a0ac38@realtek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1620452039-11694-2-git-send-email-jun.li@nxp.com>
+In-Reply-To: <7de0296584334229917504da50a0ac38@realtek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 08, 2021 at 01:33:58PM +0800, Li Jun wrote:
-> From: Peter Chen <peter.chen@nxp.com>
+On Thu, May 13, 2021 at 03:13:36AM +0000, Hayes Wang wrote:
+> syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
+> > Sent: Wednesday, May 12, 2021 5:40 PM
+> [...] 
+> > usb 1-1: New USB device found, idVendor=045e, idProduct=0927, bcdDevice=89.4f
+> > usb 1-1: New USB device strings: Mfr=0, Product=4, SerialNumber=0
+> > usb 1-1: Product: syz
+> > usb 1-1: config 0 descriptor??
 > 
-> This function is similar with EHCI's, but implemented using XHCI.
-> The USB2 host needs to send SETUP packet first, then wait 15
-> seconds before DATA (IN) + STATUS stage.
-> 
-> Signed-off-by: Peter Chen <peter.chen@nxp.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
-> No change since v1.
+> The bcdDevice is strange. Could you dump your USB descriptor?
 
-I've applied patches 1 and 3 here, and am waiting for Mathias to review
-this before accepting patch 2.
+Syzbot doesn't test real devices.  It tests emulations, and the emulated 
+devices usually behave very strangely and in very peculiar and 
+unexpected ways, so as to trigger bugs in the kernel.  That's why the 
+USB devices you see in syzbot logs usually have bizarre descriptors.
 
-thanks,
-
-greg k-h
+Alan Stern
