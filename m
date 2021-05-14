@@ -2,37 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D634F380421
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 09:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF27F380428
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 09:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232369AbhENH04 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 03:26:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55844 "EHLO mail.kernel.org"
+        id S233066AbhENH2E (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 03:28:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56170 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230326AbhENH0v (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 03:26:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8186610A7;
-        Fri, 14 May 2021 07:25:39 +0000 (UTC)
+        id S230326AbhENH2C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 03:28:02 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EB045610A7;
+        Fri, 14 May 2021 07:26:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620977140;
-        bh=TrAShEj1ptSA4c+OLQ9qKi11wcim5O2IeOtGTZ7UqA4=;
+        s=k20201202; t=1620977211;
+        bh=9jpMY2J8KOmOqqhBNxJH1weZb9RhnwZTWAA6rqCLgiE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=uJ25GfOjBNcagF/Wg/X/WQDfpOe5fr3IJGN+gpIQk0NXhNdvHnmJ8lQscsGLrq/4N
-         r82JE8ojB3XyOq1rnAbC+SPEBoOtWCdlSN16TZEOvZnlf+blDY0VoTuT7uAC5O4d8O
-         MEKHCyZPDMDxxJZp4gJgXUAgNFWE6G15OJ24yqubwYG1pBu259HsbASEjZKWaMyzqU
-         GewZkQsfLBcK5534CuppAHDzwBKCtm8kTe/yvCwJvpCvdeSX60orLxn7vbnlkb17uP
-         jd6A0z6laOBs8+YF+Z7dNCJqV0p2XL5b8ug0bXFzQKBLEkDtsJbc1TX1AnQ2MmZBmF
-         kySLx+puGMZ2w==
+        b=o0KY2kAd/TvmUGvwrzvBgY/i0Xy/nV8Iw03RwMa0RyeU2nJsME/QnW6d7uMLUyAlQ
+         n7R7go0A4jzNzUXDx9pUbGJ2QDFZ1WfHVu6CpVKAw6Cdt4fIUdvWNtig6r2GcFZST3
+         sIpD7UWEtr4dfbMBcYpOTnRFdAI6htmciOPwhedBpe8qRLcHA2GepK5YonZEdVKpdy
+         +DO+moNEjQsTjbx56WzeKHDGEbOUC59xUH29cyw+n0k1pYLyLC56ObmP3sNrpRezPR
+         F76NdMFHiL9UYwNEkR9AGwrlc1QqtyT+SSNfi6ogga81UVaLjoBsMeQTnOwleEAxz0
+         a5F+R/t2TffuA==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org
-Subject: Re: [PATCH -next] USB: gadget: udc: s3c2410_udc:
- s3c2410_udc_set_ep0_ss() can be static
-In-Reply-To: <20210513050544.625824-1-yangyingliang@huawei.com>
-References: <20210513050544.625824-1-yangyingliang@huawei.com>
-Date:   Fri, 14 May 2021 10:25:32 +0300
-Message-ID: <87h7j57p5f.fsf@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     John Youn <John.Youn@synopsys.com>, stable@vger.kernel.org,
+        Michael Grzeschik <m.grzeschik@pengutronix.de>
+Subject: Re: [PATCH] usb: dwc3: gadget: Properly track pending and queued SG
+In-Reply-To: <ba24591dbcaad8f244a3e88bd449bb7205a5aec3.1620874069.git.Thinh.Nguyen@synopsys.com>
+References: <ba24591dbcaad8f244a3e88bd449bb7205a5aec3.1620874069.git.Thinh.Nguyen@synopsys.com>
+Date:   Fri, 14 May 2021 10:26:42 +0300
+Message-ID: <87eee97p3h.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -44,11 +45,23 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Yang Yingliang <yangyingliang@huawei.com> writes:
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
 
-> s3c2410_udc_set_ep0_ss() only used within this file. It should be static.
+> The driver incorrectly uses req->num_pending_sgs to track both the
+> number of pending and queued SG entries. It only prepares the next
+> request if the previous is done, and it doesn't update num_pending_sgs
+> until there is TRB completion interrupt. This may starve the controller
+> of more TRBs until the num_pending_sgs is decremented.
 >
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Fix this by decrementing the num_pending_sgs after they are queued and
+> properly track both num_mapped_sgs and num_queued_sgs.
+>
+> Cc: <stable@vger.kernel.org>
+> Tested-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Reported-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> Fixes: c96e6725db9d ("usb: dwc3: gadget: Correct the logic for queuing sg=
+s")
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -60,13 +73,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCeJewRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUia/AgAtbkAL59Za5Y6RLpK83G1aoMlXhb6M4Oy
-Ewd+DcA2L5M6XsLNDJdpvuGEolidez96eZHZaj+ri2KT4N9CaVguyNkBHDqtNm9R
-hmhbI714PWIUhVoYhJ/lw/nJ1QbZsdKxh/OAdLy5qy12MhX1GX2lmR/JMcCHodTl
-EFCSMcnWOLRgXlcyLy5yUGT6zsGWsyLVytqRFsYG3qIfCOk1IGMdCNXd3AO++t4A
-KGaJfydulNH5cUnCnsR/RW8I7VITwXF6sRNg2jzHBlUeSKXp5kKyfByy6prrCdKZ
-iRSB+cUWjVGpVk5/zslEji+6pCXAlepMmuC1cwPYDD+CNbyAe6BCoQ==
-=jNop
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCeJjIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjfYggAhR1Qjovd+cWCh12AO8upsvOKrCAqr/wH
+14/noRG9JSq6tS85ATt8N94DqKoZbnr3Voqi+FU7Jeth6X8A9r7lAdOYnbnAs3dR
+ZqzGQl8JlBsWV2NLaAArOpr4OIpDhZpnQa3IJJP7rDxfKcFg0WOwS8Cc3up/Xrqn
+KQFSpdx9ioKVOc3g2qmVW5PqiMlL86xGs7oyPqjDUidrLvC94+omx0iDvYDwHImI
+BM61wWVaJVXmYmRPOSuyjKl0kfRKSkTXniN5Q5QVrlA459yecbXLMInlDKuyN8hk
+VmL8k1aBwvRh/BOLpxxPmY1UNrgZlVWhilQPXk1tI7P0CgvO1D2P4g==
+=NdgP
 -----END PGP SIGNATURE-----
 --=-=-=--
