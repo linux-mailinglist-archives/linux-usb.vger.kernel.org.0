@@ -2,127 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B02EA3804A7
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 09:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C49380511
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 10:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233253AbhENHvw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Fri, 14 May 2021 03:51:52 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:42162 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbhENHvv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 03:51:51 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14E7oLlaD025885, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14E7oLlaD025885
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 May 2021 15:50:21 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 14 May 2021 15:50:20 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 14 May 2021 15:50:19 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
- RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
- 15.01.2106.013; Fri, 14 May 2021 15:50:19 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Greg KH <greg@kroah.com>
-CC:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: RE: [syzbot] WARNING in rtl8152_probe
-Thread-Topic: [syzbot] WARNING in rtl8152_probe
-Thread-Index: AQHXRxMNo04dZcfiN0eNJrSRsQsh6qrguwNggAA4ewCAAVQHMP//vp6AgACQRgA=
-Date:   Fri, 14 May 2021 07:50:19 +0000
-Message-ID: <bddf302301f5420db0fa049c895c9b14@realtek.com>
-References: <0000000000009df1b605c21ecca8@google.com>
- <7de0296584334229917504da50a0ac38@realtek.com>
- <20210513142552.GA967812@rowland.harvard.edu>
- <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com> <YJ4dU3yCwd2wMq5f@kroah.com>
-In-Reply-To: <YJ4dU3yCwd2wMq5f@kroah.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/5/14_=3F=3F_06:00:00?=
-x-kse-attachment-filter-triggered-rules: Clean
-x-kse-attachment-filter-triggered-filters: Clean
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        id S233500AbhENIWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 04:22:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45708 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233416AbhENIWk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 04:22:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C728061408;
+        Fri, 14 May 2021 08:21:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620980488;
+        bh=gH2wh+Hc0GOhQOIRbo/h4JAX62sDUeKs2tmsR+5ILos=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e4qbUbfx0hxY+yj5rwe10X7fv77kQb6ZtXwJRT57564V2F/AP6l30KEqmfnQ8Z9/m
+         GbE6KTSFaLVgK/IALz8lgNCCJI09Wv6ypJxw7X8+NYsSH+qLTaA3rBVUJFbnXj6RkO
+         OLP+toeaBJ59mDypgIfhUX1EfHY2OFa2Ex63sriWaBCbSg8WSO+y0qdrgc5mMfEUKi
+         zoIKuKJCbIWchz7V1P1kNvQQPYr/hVEIXMXwl9v4IpEIdTp9mOKu3ZsGi5lbDjocf7
+         LN9AhGRwhMXdDuYb3SF+qI1QUoGfgKM56pIxwAOv5jsDOpM5r9sAA4fr4BFVLy6RmQ
+         IhAi7M7Jw2dRw==
+Date:   Fri, 14 May 2021 10:21:18 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     David Woodhouse <dwmw2@infradead.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+Message-ID: <20210514102118.1b71bec3@coco.lan>
+In-Reply-To: <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+        <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 07:29:27
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163650 [May 14 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: realtek.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/14/2021 07:31:00
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 07:33:30
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163650 [May 14 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: realtek.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/14/2021 07:36:00
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greg KH <greg@kroah.com>
-> Sent: Friday, May 14, 2021 2:49 PM
-[...]
-> Because people can create "bad" devices and plug them into a system
-> which causes the driver to load and then potentially crash the system or
-> do other bad things.
-> 
-> USB drivers now need to be able to handle "malicious" devices, it's been
-> that way for many years now.
+Em Wed, 12 May 2021 18:07:04 +0100
+David Woodhouse <dwmw2@infradead.org> escreveu:
 
-My question is that even I check whole the USB descriptor, the malicious
-devices could duplicate it easily to pass my checks. That is, I could add a
-lot of checks, but it still doesn't prevent malicious devices. Is this meaningful?
+> On Wed, 2021-05-12 at 14:50 +0200, Mauro Carvalho Chehab wrote:
+> > Such conversion tools - plus some text editor like LibreOffice  or simi=
+lar  - have
+> > a set of rules that turns some typed ASCII characters into UTF-8 altern=
+atives,
+> > for instance converting commas into curly commas and adding non-breakab=
+le
+> > spaces. All of those are meant to produce better results when the text =
+is
+> > displayed in HTML or PDF formats. =20
+>=20
+> And don't we render our documentation into HTML or PDF formats?=20
 
-Best Regards,
-Hayes
+Yes.
 
+> Are
+> some of those non-breaking spaces not actually *useful* for their
+> intended purpose?
+
+No.
+
+The thing is: non-breaking space can cause a lot of problems.
+
+We even had to disable Sphinx usage of non-breaking space for
+PDF outputs, as this was causing bad LaTeX/PDF outputs.
+
+See, commit: 3b4c963243b1 ("docs: conf.py: adjust the LaTeX document output=
+")
+
+The afore mentioned patch disables Sphinx default behavior of
+using NON-BREAKABLE SPACE on literal blocks and strings, using this
+special setting: "parsedliteralwraps=3Dtrue".
+
+When NON-BREAKABLE SPACE were used on PDF outputs, several parts of=20
+the media uAPI docs were violating the document margins by far,
+causing texts to be truncated.
+
+So, please **don't add NON-BREAKABLE SPACE**, unless you test
+(and keep testing it from time to time) if outputs on all
+formats are properly supporting it on different Sphinx versions.
+
+-
+
+Also, most of those came from conversion tools, together with other
+eccentricities, like the usage of U+FEFF (BOM) character at the
+start of some documents. The remaining ones seem to came from=20
+cut-and-paste.
+
+For instance,  bibliographic references (there are a couple of
+those on media) sometimes have NON-BREAKABLE SPACE. I'm pretty
+sure that those came from cut-and-pasting the document titles
+from their names at the original PDF documents or web pages that
+are referenced.
+
+> > While it is perfectly fine to use UTF-8 characters in Linux, and specia=
+lly at
+> > the documentation,  it is better to  stick to the ASCII subset  on such
+> > particular case,  due to a couple of reasons:
+> >=20
+> > 1. it makes life easier for tools like grep; =20
+>=20
+> Barely, as noted, because of things like line feeds.
+
+You can use grep with "-z" to seek for multi-line strings(*), Like:
+
+	$ grep -Pzl 'grace period started,\s*then' $(find Documentation/ -type f)
+	Documentation/RCU/Design/Data-Structures/Data-Structures.rst
+
+(*) Unfortunately, while "git grep" also has a "-z" flag, it
+    seems that this is (currently?) broken with regards of handling multili=
+nes:
+
+	$ git grep -Pzl 'grace period started,\s*then'
+	$
+
+> > 2. they easier to edit with the some commonly used text/source
+> >    code editors. =20
+>=20
+> That is nonsense. Any but the most broken and/or anachronistic
+> environments and editors will be just fine.
+
+Not really.
+
+I do use a lot of UTF-8 here, as I type texts in Portuguese, but I rely
+on the US-intl keyboard settings, that allow me to type as "'a" for =C3=A1.
+However, there's no shortcut for non-Latin UTF-codes, as far as I know.
+
+So, if would need to type a curly comma on the text editors I normally=20
+use for development (vim, nano, kate), I would need to cut-and-paste
+it from somewhere[1].
+
+[1] If I have a table with UTF-8 codes handy, I could type the UTF-8=20
+    number manually... However, it seems that this is currently broken=20
+    at least on Fedora 33 (with Mate Desktop and US intl keyboard with=20
+    dead keys).
+
+    Here, <CTRL><SHIFT>U is not working. No idea why. I haven't=20
+    test it for *years*, as I din't see any reason why I would
+    need to type UTF-8 characters by numbers until we started
+    this thread.
+=20
+In practice, on the very rare cases where I needed to write
+non-Latin utf-8 chars (maybe once in a year or so, Like when I
+would need to use a Greek letter or some weird symbol), there changes
+are high that I wouldn't remember its UTF-8 code.
+
+So, If I need to spend time to seek for an specific symbol, after
+finding it, I just cut-and-paste it.
+
+But even in the best case scenario where I know the UTF-8 and
+<CTRL><SHIFT>U works, if I wanted to use, for instance, a curly
+comma, the keystroke sequence would be:
+
+	<CTRL><SHIFT>U201csome string<CTRL><SHIFT>U201d
+
+That's a lot harder than typing and has a higher chances of
+mistakenly add a wrong symbol than just typing:
+
+	"some string"
+
+Knowing that both will produce *exactly* the same output, why
+should I bother doing it the hard way?
+
+-
+
+Now, I'm not arguing that you can't use whatever UTF-8 symbol you
+want on your docs. I'm just saying that, now that the conversion=20
+is over and a lot of documents ended getting some UTF-8 characters
+by accident, it is time for a cleanup.
+
+Thanks,
+Mauro
