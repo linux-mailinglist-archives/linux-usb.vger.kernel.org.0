@@ -2,106 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3ADE3807FF
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1260380826
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232354AbhENLEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 07:04:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        id S231897AbhENLJz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 07:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232283AbhENLEl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 07:04:41 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F9C06174A;
-        Fri, 14 May 2021 04:03:30 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b13-20020a17090a8c8db029015cd97baea9so1182724pjo.0;
-        Fri, 14 May 2021 04:03:30 -0700 (PDT)
+        with ESMTP id S229445AbhENLJu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 07:09:50 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39449C061574;
+        Fri, 14 May 2021 04:08:39 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id n17-20020a7bc5d10000b0290169edfadac9so1248684wmk.1;
+        Fri, 14 May 2021 04:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=EkzpwjVe0wwLmPgMR98lKn55b9EeNwElH9tA7Rxi05Y=;
-        b=u70A+1kTvyXiODs3/WPwB9FXkQMx0hYRgkC/yJEiwXTclojKioNs2FFBhXTWC0pf/v
-         1rpdhyD48hRsmSqRiXuFD5Z52t2Qj0SHp2QyjfhEjgjRylMbweT9zVnLmcVpN6WnxPo8
-         jIL4bECIQ0btOmDTtj31F6sGT7HkhP+SfkVMCuUXN56euH9+dOmmFZNgCP9sRbilCiur
-         DKrwnSdqgtWu+6CNvKEjw7qu8wesVAmaNHU+eg0CQueFMUif+Mi5e2/kmm8nHxHEZO7h
-         WirDxwjkKZ7Jfu1CrgQ0Q3N8r4sRJwQ9UV3srcDrduSzwcZmjVewLeZtKnIeQc5F8uae
-         WjjQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=DnsDrIqkWnYf7da8HpIWFBQQt2XImu+6ZyHWBvjrfcE=;
+        b=sDX/4vOZ59ic93Kj1k7EQHH5H75TwRxFQdfU97NsB2/Y+xVttZgCu6VcmdiZBbTXV4
+         Yd9dS94Y1asR2VIYZN7NEerfwgmtEUFK3NZSUIzeY6J/4AmyVofgnwxiuO5puvulkCHX
+         zAH+iCNJUU2yLFhQkplxklOlcyZUbrmQbTIThNq4BukYbZy9X610Bla24hpoPnMCKKtF
+         HaX7GWwtAjZyjiNuvWcCoIBPkXTf9xY5aCFfjMGcrbRCdRoMLY/c+VX1+t1XGHSYNqtQ
+         /vEAS8jymBn+QTD3oR/5dtU3nH62pPJpzKh6iPn38AjBb8Fr8EpkCArPsjTRrMSNZ8n3
+         9CtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=EkzpwjVe0wwLmPgMR98lKn55b9EeNwElH9tA7Rxi05Y=;
-        b=c+XjdV9H8NWkRrnmdlu8phahjQEO0swZnQ/NEY6Va8QJFjRYgojAo5Kc/S/qQrSXv/
-         0zFOKaPFUTGAu3pfjcMJM6vskUm0Y9LDNLsbl+1nXHdvaefIQgAJlxuGa2p1Ea45x+mB
-         aGh7ot0x1CIp12tJ9oQmyP6GxNZUWz5reiiMeNiqyYLfqAgOiI4Ebh430eG3DcRmEXmo
-         BQO3o7baPluA98Qa1qaBeWnf8naeOTG7jjPR1Qn5g2HLvlONUnqhbobR+pQrXVPkxuPg
-         2PmOE1wSi53PcLWRxKfXiutUXIR1rVdYDb1AjufusIhaRmY8hxW9VAUFKR3OrmlMeJgc
-         uY/w==
-X-Gm-Message-State: AOAM5303gPmjGs5LmPAllV7UrcxsBLlO7IbfYhUpXnAMncMozd2nsqIV
-        4wS6nwGCic8ZrL5uPkqiG10=
-X-Google-Smtp-Source: ABdhPJwN6s37m9kUw9Nby6kqqcqfoU5UH6stQNMFu6bHmr9GU2GtlitsMiwYzis0WSf2Oo/wz09OKQ==
-X-Received: by 2002:a17:902:7888:b029:ee:cea7:6ff0 with SMTP id q8-20020a1709027888b02900eecea76ff0mr45757205pll.16.1620990209883;
-        Fri, 14 May 2021 04:03:29 -0700 (PDT)
-Received: from localhost.localdomain ([45.135.186.114])
-        by smtp.gmail.com with ESMTPSA id ls6sm8686763pjb.57.2021.05.14.04.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 04:03:29 -0700 (PDT)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Subject: [PATCH] misc/uss720: fix memory leak in uss720_probe
-Date:   Fri, 14 May 2021 19:03:17 +0800
-Message-Id: <20210514110317.2041580-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=DnsDrIqkWnYf7da8HpIWFBQQt2XImu+6ZyHWBvjrfcE=;
+        b=TD856n5ZaQSeJHGEx9lBl3DYJwSrmzWVHV1McUmXOwhUBLbSBNiZ/6VlNVh199g9Ri
+         9ldmsRKsgTpW0jJKu8wKKq9vTGxH8oYk1RYzr0pjjLyUXEWToFutGV6NHvDxrr3dRNcd
+         xpI6drJa0q8KxQI7Q383NhY5taZvAWG0bu4SH+Vv8KsL8GmXv+26WjLv17OjGJIsC9KP
+         zFk3FPiWWaCXwZzHBuEalGXketW02Jwpz/pzIJrrM7hhmVXx0ONOcWgQH31a0goO2DN0
+         0t4ahJ7da1+KepMU+CFz4Dgi5zZsjD3BtWZd2x/DzFYx57euWgcPya3+ADCpQXiDX1a0
+         9KEw==
+X-Gm-Message-State: AOAM530kBEY1aeTl7/fqP01xjKBxsG+XUhMJjIAC3GW4JTFpOAA74x2o
+        06yceDCYnkP+PZ9QsYvx+4mADfV1+btBCg==
+X-Google-Smtp-Source: ABdhPJwViz0BDPUuVH349RqXP0p4zCVFhrVjXNorTYnm55dAjMiaqH0FajvtM+sJwCYcinjBh5k1qQ==
+X-Received: by 2002:a7b:c005:: with SMTP id c5mr21007074wmb.113.1620990517974;
+        Fri, 14 May 2021 04:08:37 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159425-cmbg20-2-0-cust403.5-4.cable.virginm.net. [86.7.189.148])
+        by smtp.gmail.com with ESMTPSA id b10sm7116349wrr.27.2021.05.14.04.08.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 May 2021 04:08:37 -0700 (PDT)
+Subject: Re: [PATCH v2 00/40] Use ASCII subset instead of UTF-8 alternate
+ symbols
+To:     David Woodhouse <dwmw2@infradead.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mali DP Maintainers <malidp@foss.arm.com>,
+        alsa-devel@alsa-project.org, coresight@lists.linaro.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-wired-lan@lists.osuosl.org, keyrings@vger.kernel.org,
+        kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-edac@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-sgx@vger.kernel.org, linux-usb@vger.kernel.org,
+        mjpeg-users@lists.sourceforge.net, netdev@vger.kernel.org,
+        rcu@vger.kernel.org
+References: <cover.1620823573.git.mchehab+huawei@kernel.org>
+ <d2fed242fbe200706b8d23a53512f0311d900297.camel@infradead.org>
+ <20210514102118.1b71bec3@coco.lan>
+ <61c286b7afd6c4acf71418feee4eecca2e6c80c8.camel@infradead.org>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <8b8bc929-2f07-049d-f24c-cb1f1d85bbaa@gmail.com>
+Date:   Fri, 14 May 2021 12:08:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
+In-Reply-To: <61c286b7afd6c4acf71418feee4eecca2e6c80c8.camel@infradead.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-uss720_probe forgets to decrease the refcount of usbdev in uss720_probe.
-Fix this by decreasing the refcount of usbdev by usb_put_dev.
+> On Fri, 2021-05-14 at 10:21 +0200, Mauro Carvalho Chehab wrote:
+>> I do use a lot of UTF-8 here, as I type texts in Portuguese, but I rely
+>> on the US-intl keyboard settings, that allow me to type as "'a" for á.
+>> However, there's no shortcut for non-Latin UTF-codes, as far as I know.
+>>
+>> So, if would need to type a curly comma on the text editors I normally 
+>> use for development (vim, nano, kate), I would need to cut-and-paste
+>> it from somewhere
 
-BUG: memory leak
-unreferenced object 0xffff888101113800 (size 2048):
-  comm "kworker/0:1", pid 7, jiffies 4294956777 (age 28.870s)
-  hex dump (first 32 bytes):
-    ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
-    00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
-  backtrace:
-    [<ffffffff82b8e822>] kmalloc include/linux/slab.h:554 [inline]
-    [<ffffffff82b8e822>] kzalloc include/linux/slab.h:684 [inline]
-    [<ffffffff82b8e822>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
-    [<ffffffff82b98441>] hub_port_connect drivers/usb/core/hub.c:5129 [inline]
-    [<ffffffff82b98441>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
-    [<ffffffff82b98441>] port_event drivers/usb/core/hub.c:5509 [inline]
-    [<ffffffff82b98441>] hub_event+0x1171/0x20c0 drivers/usb/core/hub.c:5591
-    [<ffffffff81259229>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
-    [<ffffffff81259b19>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
-    [<ffffffff81261228>] kthread+0x178/0x1b0 kernel/kthread.c:292
-    [<ffffffff8100227f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+For anyone who doesn't know about it: X has this wonderful thing called
+ the Compose key[1].  For instance, type ⎄--- to get —, or ⎄<" for “.
+Much more mnemonic than Unicode codepoints; and you can extend it with
+ user-defined sequences in your ~/.XCompose file.
+(I assume Wayland supports all this too, but don't know the details.)
 
-Reported-by: syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/usb/misc/uss720.c | 1 +
- 1 file changed, 1 insertion(+)
+On 14/05/2021 10:06, David Woodhouse wrote:
+> Again, if you want to make specific fixes like removing non-breaking
+> spaces and byte order marks, with specific reasons, then those make
+> sense. But it's got very little to do with UTF-8 and how easy it is to
+> type them. And the excuse you've put in the commit comment for your
+> patches is utterly bogus.
 
-diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index b5d661644263..748139d26263 100644
---- a/drivers/usb/misc/uss720.c
-+++ b/drivers/usb/misc/uss720.c
-@@ -736,6 +736,7 @@ static int uss720_probe(struct usb_interface *intf,
- 	parport_announce_port(pp);
- 
- 	usb_set_intfdata(intf, pp);
-+	usb_put_dev(usbdev);
- 	return 0;
- 
- probe_abort:
--- 
-2.25.1
++1
 
+-ed
+
+[1] https://en.wikipedia.org/wiki/Compose_key
