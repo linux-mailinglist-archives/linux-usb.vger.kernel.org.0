@@ -2,117 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC1338073C
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 12:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C452438073D
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 12:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbhENKdV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 06:33:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42908 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230375AbhENKdU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 06:33:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C3E3613B5;
-        Fri, 14 May 2021 10:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1620988329;
-        bh=lnBPNR8YzGpc23fB/WUkdgFbUwRLsBqZB65u8nAakRg=;
-        h=From:To:Subject:In-Reply-To:References:Date:From;
-        b=iMlui5xLUSDWhHwFQDOsXBqj5YC73nxOlBGHKTprOgHUbFr/YIy4+SfNysPErW4NK
-         o8yUVkbwZ5oz3FsjQ2b6pd/+h/bPRxonY/Trp7sm9dF/16c7fr8vVAM7Xl57VnZYIP
-         SAf0Mi8vxTMt+/4dIznyA96WMvneGoaa6IIpNk1nWnFmEsNG5OlBFfm4a0rYcKq5eg
-         iQaUbUw+xMMUnWxUOJXzvvcgFIwXcVpV8eTN3Qs9UjY6k1hLsytFbGnG78IQPYDOXC
-         3xJfZk4JtRvSrJtafjRidpNhhYpXzIe7x2meDz7O17Q/yM/Pm23AYlURgh7JkC/0LG
-         Qq2rDmPzKzP1Q==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     "Chow, Watson" <Watson.Chow@Avnet.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
- bandwidth on UVC gadget driver
-In-Reply-To: <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
-References: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
- <87r1i97pkk.fsf@kernel.org> <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
-Date:   Fri, 14 May 2021 13:31:52 +0300
-Message-ID: <878s4h7giv.fsf@kernel.org>
+        id S231673AbhENKd7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 14 May 2021 06:33:59 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:35111 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230018AbhENKd7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 06:33:59 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14EAWQLD0000693, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14EAWQLD0000693
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 14 May 2021 18:32:26 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 14 May 2021 18:32:25 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 14 May 2021 18:32:24 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
+ 15.01.2106.013; Fri, 14 May 2021 18:32:24 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Greg KH <greg@kroah.com>
+CC:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: RE: [syzbot] WARNING in rtl8152_probe
+Thread-Topic: [syzbot] WARNING in rtl8152_probe
+Thread-Index: AQHXRxMNo04dZcfiN0eNJrSRsQsh6qrguwNggAA4ewCAAVQHMP//vp6AgACQRgD//4sbgIAApcsA
+Date:   Fri, 14 May 2021 10:32:24 +0000
+Message-ID: <d7ea3cfd8bde4b8ba7ed6ea4c545c9dc@realtek.com>
+References: <0000000000009df1b605c21ecca8@google.com>
+ <7de0296584334229917504da50a0ac38@realtek.com>
+ <20210513142552.GA967812@rowland.harvard.edu>
+ <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com> <YJ4dU3yCwd2wMq5f@kroah.com>
+ <bddf302301f5420db0fa049c895c9b14@realtek.com> <YJ40S1eHnbg1dsYv@kroah.com>
+In-Reply-To: <YJ40S1eHnbg1dsYv@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/5/14_=3F=3F_06:04:00?=
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 10:22:47
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163662 [May 14 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: realtek.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/14/2021 10:10:00
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 10:12:41
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163661 [May 14 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/14/2021 10:15:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Greg KH <greg@kroah.com>
+> Sent: Friday, May 14, 2021 4:27 PM
+[...]
+> Checking the whole USB decriptor is fine, yes, they can duplicate that.
+> So that means you need to validate _ALL_ data coming from the device
+> that it is in an acceptable range of values that the driver can
+> correctly handle.
 
+I see.
 
-Hi,
+Best Regards,
+Hayes
 
-(please don't top-post :-)
-
-"Chow, Watson" <Watson.Chow@Avnet.com> writes:
-> Balbi,
->
-> Thanks for your quick reply.
->
-> Some questions
->
-> 1. You mentioned that the max bandwidth in isoc mode (USB3.0) should be=20
-> around 4Gbps.=20=20
->
-> I have the below calcuation on bandwidth:
-> In USB3.0, 1 micro frame would take 125us and can transfer max 45000 bytes
-> So, in 1 sec, we will have 8000 micro frames
->
-> Max bandwidth =3D 8000 x 4500 x 8 =3D 2.88Gbps
->
-> Is my understanding correct?
-
-probably, It's been a while since I've dug through the spec, to be frank
-
-> 2. To achieve the max throughput, I need to configure the uvc gadget driv=
-er=20
-> with below parameters. Am I right?
->
-> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D15=20
-> streaming_interval=3D1
-
-right, but there's an assumption here that the gadget will be able to
-feed data in a timely manner.
-
-> 3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It looks=
- not
-> easy in my side to upgrade the kernel version. It would affect those othe=
-r=20
-> device drivers I'm currently using. So, do you think there's any short cu=
-t=20
-> to fix this problem under my current kernel version - v5.4?
-
-In that case, you need to ask for support from whoever forces you to
-stay with such an old kernel. I believe that would be Xilinx.
-
-> 4. I read through the procedures to capture debug info by debugfs. Howeve=
-r,
-> in my test with "streaming_maxburst" set to 10 or above, my system would=
-=20
-> crash and I can't pick the log from that point. Any suggestion?
-
-have a look at ftrace_dump_on_oops.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCeUZgRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUi5DAf7BoMm1Jjaboxzn2+IxooqRKUjHV4jCXPn
-MJxqdGYPoBb6K6YQiXdakpknwHxfc8inieVKqo3ttXWPBOvsA5l+h6lgErH07ETs
-rUOCtKOagsg4YF/vu+b8148ZGokl2H3PQxs3Q3zjBGZ2dzTV8Pfdm5Svxbj8IMvw
-CLaTMzmdtWzk1gDdNFinNqaKz/IpeysaVRBe+u2zknH6EyB2Yu2JiSlK+5FCl+14
-nn3NCo3AKciAA/BvRCePsdZrtUMY8Etvsg4xFgKQ0nNAcdPIdK0SuR5IJoPeVDHe
-1T/RRYCxWaDXEA045mq8p4CjvE+ZreFvtmG0/INixTEYGqHblOyJ8A==
-=RkZt
------END PGP SIGNATURE-----
---=-=-=--
