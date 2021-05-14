@@ -2,106 +2,194 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B27B1380529
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 10:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C2A3805B9
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 10:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233538AbhENI2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 04:28:07 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:43457 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230459AbhENI2G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 04:28:06 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 556B9580E50;
-        Fri, 14 May 2021 04:26:55 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 14 May 2021 04:26:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=daR/M5MALqqc200eLyQkU6f/JMT
-        STdMzWTRNACNiQw4=; b=k4GcSF5jp6KuVfMXBuyqOgjNsDg8Ca9pvOJZQM/qJT0
-        Da6sqGhNt27t1UsZWpgLPURjiT3gDNTMwAxeSa7orl715t2qYJHdlde0L/znl+9m
-        GwdsyUBcxbnJavIhbtuW44HsF43RFFh99BTLYNTM4pzAFf6XgSl81O0Mv5UnJcBH
-        A2Or/96PbExkUd8MgusNZUdtNJdEizEpjsIcGfSLdx5bcNRYLiz2qUVBHF3Mn8EL
-        P6sg+Rl8EctdfENO+I+jDz9HKD+8cgedRWDA8BuwY8MI0xCIgW+EY77/ov+z1a3u
-        fwpcvnWniLW0FMgIz/Lqr4lgJPH2x6a6JR2aPkfamEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=daR/M5
-        MALqqc200eLyQkU6f/JMTSTdMzWTRNACNiQw4=; b=bo/Ua6DozGeIGmITh9k9Id
-        5Q1unfPHaWNc/hsY36psAXHgRUCp3HfLey3x+jM9gSQ1qKFxfpYBk8kP1nnp4+mF
-        fDL6BsboNbc4u/F2opK9yNGDUEeDorFIFO3tiHL25PnGobFB47Trl/U1AB3mCWAr
-        kr3rdwdoS3KXNI2+T9UUgZg/JihJffXzXSLeVE1zkePsm50YTLTWh9yoLRoipD4X
-        UqItxgT+Wp46cxMJHmqbmvcJioXVua7RGXCe6SWq3ImMh0iZ/2vTl5MHHyd0rCKW
-        bpZTDbNZKnRBDuHhzCZYRedAkhW84MSKyHPMwfBNjGDeQbp5YHTTSJ9qBRqpBbKQ
-        ==
-X-ME-Sender: <xms:TjSeYJtd9meb5NaHEKAtelePkAKapXwGgyR9D1Ng6Eo3yGbuPpyTvw>
-    <xme:TjSeYCc52ZjBZtKVSj281lFXyYO6pgy_vuMj3ielpigRaLKq4_6t8j4c05BUHkWvO
-    G156ayD1hrOkw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdehhedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
-    fedrkeeirdejgedrieegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-X-ME-Proxy: <xmx:TjSeYMy3Krfgm5GPO85Gn2BG4pNgXLIirSR7V4-DZwfFOzUVx3W5iQ>
-    <xmx:TjSeYAP2RPsjOP13qy4fbp23D8yXVIUqdlO1mdmYS7ye0GAEdMoPuA>
-    <xmx:TjSeYJ81a5JyFL_lVHp0CbL2Cqy-19dVo3MLc9LhuktNVs_a7pfLdw>
-    <xmx:TzSeYOjjGabp7Z_KJLtpHYFXTZe8M8YLifp_Rig0OcnNrmDG3WaRow>
-Received: from localhost (83-86-74-64.cable.dynamic.v4.ziggo.nl [83.86.74.64])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Fri, 14 May 2021 04:26:54 -0400 (EDT)
-Date:   Fri, 14 May 2021 10:26:51 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: Re: [syzbot] WARNING in rtl8152_probe
-Message-ID: <YJ40S1eHnbg1dsYv@kroah.com>
-References: <0000000000009df1b605c21ecca8@google.com>
- <7de0296584334229917504da50a0ac38@realtek.com>
- <20210513142552.GA967812@rowland.harvard.edu>
- <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com>
- <YJ4dU3yCwd2wMq5f@kroah.com>
- <bddf302301f5420db0fa049c895c9b14@realtek.com>
+        id S233789AbhENJAi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 05:00:38 -0400
+Received: from smtp2.avnet.com ([12.9.139.122]:7253 "EHLO smtp2.avnet.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229544AbhENJAh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 05:00:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Avnet.com;
+        s=20201119; t=1620982766;
+        bh=ZwAQmYK55lHygbqjPbrG03gizMdzic4LBtzoZLAacao=;
+        h=From:To:Subject:Date:References:In-Reply-To;
+        b=OMlGOvUpmEMj1L/TauNAsd30tuEvFfeWr4zzvY/CbIOTRO8uG29c7qYEv5m6J1yz/
+         Yc+dpPmCAd6CSZAINLUNFrTdSDzX6ZmK9DpTYjeUZ33809jVBGDwcXjHYULsjX3AbQ
+         ja5bIfI6hF91bTf7xzEDL3fJpmNfUbTRDyNol5glEVneN5VSSklhKTp+aAyhdtfo8m
+         4IZNX5Z52RGoYVT9ApndMNRAItJwmEwYQFGgWAKq6IjvvNItAeltyM/CXY7LWT/vGb
+         IDejUEZQkZuBi2vpFKKv8/OWZad1KckMN+OW5KNtKguHVo/To5J+suMdZD+S0YqN43
+         W8Vg8PS2DXYwg==
+Received: from CMX2401EX1603.AVNET.COM (Not Verified[172.16.125.20]) by smtp2.avnet.com with Trustwave SEG (v8,2,6,11305) (using TLS: TLSv1.2, AES256-GCM-SHA384)
+        id <B609e3bed0000>; Fri, 14 May 2021 01:59:25 -0700
+Received: from CMX2401EX1604.AVNET.COM (172.16.125.26) by
+ CMX2401EX1603.AVNET.COM (172.16.125.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2242.4; Fri, 14 May 2021 01:59:25 -0700
+Received: from CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83]) by
+ CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83%2]) with mapi id
+ 15.01.2242.008; Fri, 14 May 2021 01:59:25 -0700
+From:   "Chow, Watson" <Watson.Chow@Avnet.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+Thread-Topic: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+Thread-Index: AddIcAtgBDXAgCQbQXSu/5dHZ1drkQAW67SAAA5jNfA=
+Date:   Fri, 14 May 2021 08:59:25 +0000
+Message-ID: <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
+References: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
+ <87r1i97pkk.fsf@kernel.org>
+In-Reply-To: <87r1i97pkk.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.125.136]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bddf302301f5420db0fa049c895c9b14@realtek.com>
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=MMceZ/Rl c=1 sm=1 tr=0 a=BRTLx2zjy18DyBo5AQlLyQ==:117 a=xqWC_Br6kY4A:10 a=6yu5SQbkyS8A:10 a=kj9zAlcOel0A:10 a=5FLXtPjwQuUA:10 a=VwQbUJbxAAAA:8 a=npiypiU9AAAA:8 a=yMhMjlubAAAA:8 a=EG6sGpfcAAAA:20 a=54o8oKSQAAAA:8 a=8hghKbX9AAAA:20 a=6l7CXw3xYMryA4isbLAA:9 a=CjuIK1q_8ugA:10 a=AjGcO6oz07-iQ99wixmX:22 a=U5QfeDdlIO9jQLzCQbpp:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 14, 2021 at 07:50:19AM +0000, Hayes Wang wrote:
-> Greg KH <greg@kroah.com>
-> > Sent: Friday, May 14, 2021 2:49 PM
-> [...]
-> > Because people can create "bad" devices and plug them into a system
-> > which causes the driver to load and then potentially crash the system or
-> > do other bad things.
-> > 
-> > USB drivers now need to be able to handle "malicious" devices, it's been
-> > that way for many years now.
-> 
-> My question is that even I check whole the USB descriptor, the malicious
-> devices could duplicate it easily to pass my checks. That is, I could add a
-> lot of checks, but it still doesn't prevent malicious devices. Is this meaningful?
+Balbi,
 
-Checking the whole USB decriptor is fine, yes, they can duplicate that.
-So that means you need to validate _ALL_ data coming from the device
-that it is in an acceptable range of values that the driver can
-correctly handle.
+Thanks for your quick reply.
 
-thanks,
+Some questions
 
-greg k-h
+1. You mentioned that the max bandwidth in isoc mode (USB3.0) should be=20
+around 4Gbps. =20
+
+I have the below calcuation on bandwidth:
+In USB3.0, 1 micro frame would take 125us and can transfer max 45000 bytes
+So, in 1 sec, we will have 8000 micro frames
+
+Max bandwidth =3D 8000 x 4500 x 8 =3D 2.88Gbps
+
+Is my understanding correct?
+
+2. To achieve the max throughput, I need to configure the uvc gadget driver=
+=20
+with below parameters. Am I right?
+
+# modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D15=20
+streaming_interval=3D1
+
+
+3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It looks n=
+ot
+easy in my side to upgrade the kernel version. It would affect those other=
+=20
+device drivers I'm currently using. So, do you think there's any short cut=
+=20
+to fix this problem under my current kernel version - v5.4?
+
+
+4. I read through the procedures to capture debug info by debugfs. However,
+in my test with "streaming_maxburst" set to 10 or above, my system would=20
+crash and I can't pick the log from that point. Any suggestion?
+
+best regards,
+
+Watson
+
+
+-----Original Message-----
+From: Felipe Balbi <balbi@kernel.org>=20
+Sent: Friday, May 14, 2021 3:16 PM
+To: Chow, Watson <Watson.Chow@Avnet.com>; linux-usb@vger.kernel.org
+Subject: Re: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer ban=
+dwidth on UVC gadget driver
+
+
+Hi Watson,
+
+(please teach your mailer to break lines at 80 columns)
+
+"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+> Hi,
+>
+> I'm using the SoC (Xilinx MPSoC) with DWC3 USB controller. I need to=20
+> emulate my hardware to work like a USB camera and so make use of the=20
+> USB UVC gadget driver - g_webcam.
+
+which Kernel version are you running?
+
+> Refer to this link and the driver source code, I find 3 parameters to=20
+> configure the ISOC transfer bandwidth.
+>
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/trans
+> fer-data-to-isochronous-endpoints#isochronous-transfer-example
+>
+> They are:
+>
+> streaming_maxpacket : range [1 - 3072] streaming_maxburst : range [0 -=20
+> 15] streaming_interval : [1 - 16]
+>
+> So, I load the driver in this way
+>
+> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D9=20
+> streaming_interval=3D2
+>
+> Create my own app base on
+> https://github.com/wlhe/uvc-gadget
+>
+> Test result
+>
+> In my evaluation, I can set the combination of parameters up to this.=20
+> The streaming is ok.
+>
+> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D9=20
+> streaming_interval=3D2
+
+streaming_maxburst=3D15 should work here too.
+
+> This should be around 900Mbit/sec. Far less than 5Gbps bandwidth of
+> USB3.0
+
+IIRC Isoc endpoints can't take the full bus bandwidth, I don't remember the=
+ exact limit but I think it's 80% of full bandwidth. Still, that should be =
+around 4Gbit/sec
+
+> When I increase the parameter combination to:
+> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D10=20
+> streaming_interval=3D2
+>
+> I get the below error message and everything stop.
+>
+> [ 1089.751559] g_webcam gadget: uvc: VS request completed with status -18=
+.
+
+> 1. This error is somehow related to the underflow of the transfer=20
+> queue. Is my understanding correct?
+
+that means the controller lost an isoc interval. There is still discussion =
+going on regarding isoc intervals in dwc3. It turns out the HW doesn't make=
+ scheduling super easy for SW :-)
+
+> If so, how to solve?
+> 2.	My goal is to utilize the full bandwidth of USB3.0. How can I achive?
+>
+> [Some background information and my test setup]
+>
+> I started from the Xilinx TRD here.
+>
+> https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/541786361/Zynq+U
+> ltraScale+MPSoC+VCU+TRD+2020.1+-+Xilinx+Low+Latency+PS+DDR+NV12+HDMI+A
+> udio+Video+Capture+and+Display
+>
+> With kernel version v5.4:
+> https://github.com/Xilinx/linux-xlnx/tree/xlnx_rebase_v5.4_2020.2
+
+v5.4 is super old, please test with v5.12 or the latest v5.13-rc. Also, whe=
+n reporting dwc3 bugs, make sure to include regdump and trace events as des=
+cribed in dwc3 documentation
+
+--
+balbi
