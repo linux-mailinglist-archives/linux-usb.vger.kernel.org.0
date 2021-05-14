@@ -2,193 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D02380843
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:16:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3ADE3807FF
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbhENLRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 07:17:48 -0400
-Received: from mail-vi1eur05on2040.outbound.protection.outlook.com ([40.107.21.40]:60942
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229470AbhENLRs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 07:17:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tpb1ReCMHAtocBblr0BvYrNYdDRayJAOrKcDqGZJqUlp4rEySkWX+VPU6R4L+nlfBR1OiOIPH86tLywsl6kaiC9kM8n2jBrw8O+GD4lbQjyW8B5TXaBqUDU3BnURlMg2CgTQvxAy5AOqTLCmaTW4MYCPg0pL5Qwun2jkRKNQAn2cENeXJVoxPQLm5g26YK3JLQ75NKLzGg1c04owSLjIomOe1xHYvcVru9zL29gOIjKTzaD+zVqvRsr/TPdgvTBCzEiEvgsDhdohFtGNSbrBfKqPClcCNSxd36SozxwbS1QWo6Fxw3nCyNYC0kSop8Gvis7YbJM+Tj+XQtsuEOPkiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7xo5YWspGS94/PjkRQzgLl4P5SaODPMD9ViremTDdCQ=;
- b=A55CB0fVOaPAnMCmqZavIVKBByw4kO0n81feoHnRyApEqY+GovPylIpL4xrhu9JC23iI5XxkAwCTPDKCTteMXE7ZhB/vNVCZ/eKGPa6OuCs9v+Luc8ei+KEuaLuznQFWcMdbvTxJLc4UxjjEyotgDYFvaCjxfmAi3zLLaskpFj7NHJYy6875dZagud7qWtiVmZnqMiJc3OO0TjuJmYpxeq9WVvRVdjtrL+proEMaWQMf927dm6K+BEbfYEkSIkK0sSsHYWpoG/6LYT+Ygr71js1UZs0o1ngm2GKLMlQXbFk2CDHGFnG78g9SXUxaYyVsgmkpRPuvyH+L1ohgPdkd8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7xo5YWspGS94/PjkRQzgLl4P5SaODPMD9ViremTDdCQ=;
- b=s4PhBHRPyIPGowf10q/Yde9/duOnxZtr9lsApx+vimqsBDYWRD7lmrBdv+vTKmEUa9oEbCe8MR2cOP4Df75D52QdS+wqimTsYT+X/4+MYeCtOqcsaqmffQ8tfGqbS8o3pZqkFB6d+OzwmbJE592GWsb853Fis1E4g/e3/Fuei2E=
-Authentication-Results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
- by VI1PR04MB4272.eurprd04.prod.outlook.com (2603:10a6:803:4c::33) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.28; Fri, 14 May
- 2021 11:16:35 +0000
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::ddf7:8cd0:3132:7dbe]) by VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::ddf7:8cd0:3132:7dbe%7]) with mapi id 15.20.4129.025; Fri, 14 May 2021
- 11:16:35 +0000
-From:   Li Jun <jun.li@nxp.com>
-To:     peter.chen@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-imx@nxp.com, faqiang.zhu@nxp.com
-Subject: [PATCH] usb: chipidea: udc: assign interrupt number to USB gadget structure
-Date:   Fri, 14 May 2021 18:59:44 +0800
-Message-Id: <1620989984-7653-1-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR02CA0066.apcprd02.prod.outlook.com
- (2603:1096:4:54::30) To VI1PR04MB5935.eurprd04.prod.outlook.com
- (2603:10a6:803:e9::17)
+        id S232354AbhENLEm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 07:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232283AbhENLEl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 07:04:41 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653F9C06174A;
+        Fri, 14 May 2021 04:03:30 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id b13-20020a17090a8c8db029015cd97baea9so1182724pjo.0;
+        Fri, 14 May 2021 04:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EkzpwjVe0wwLmPgMR98lKn55b9EeNwElH9tA7Rxi05Y=;
+        b=u70A+1kTvyXiODs3/WPwB9FXkQMx0hYRgkC/yJEiwXTclojKioNs2FFBhXTWC0pf/v
+         1rpdhyD48hRsmSqRiXuFD5Z52t2Qj0SHp2QyjfhEjgjRylMbweT9zVnLmcVpN6WnxPo8
+         jIL4bECIQ0btOmDTtj31F6sGT7HkhP+SfkVMCuUXN56euH9+dOmmFZNgCP9sRbilCiur
+         DKrwnSdqgtWu+6CNvKEjw7qu8wesVAmaNHU+eg0CQueFMUif+Mi5e2/kmm8nHxHEZO7h
+         WirDxwjkKZ7Jfu1CrgQ0Q3N8r4sRJwQ9UV3srcDrduSzwcZmjVewLeZtKnIeQc5F8uae
+         WjjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=EkzpwjVe0wwLmPgMR98lKn55b9EeNwElH9tA7Rxi05Y=;
+        b=c+XjdV9H8NWkRrnmdlu8phahjQEO0swZnQ/NEY6Va8QJFjRYgojAo5Kc/S/qQrSXv/
+         0zFOKaPFUTGAu3pfjcMJM6vskUm0Y9LDNLsbl+1nXHdvaefIQgAJlxuGa2p1Ea45x+mB
+         aGh7ot0x1CIp12tJ9oQmyP6GxNZUWz5reiiMeNiqyYLfqAgOiI4Ebh430eG3DcRmEXmo
+         BQO3o7baPluA98Qa1qaBeWnf8naeOTG7jjPR1Qn5g2HLvlONUnqhbobR+pQrXVPkxuPg
+         2PmOE1wSi53PcLWRxKfXiutUXIR1rVdYDb1AjufusIhaRmY8hxW9VAUFKR3OrmlMeJgc
+         uY/w==
+X-Gm-Message-State: AOAM5303gPmjGs5LmPAllV7UrcxsBLlO7IbfYhUpXnAMncMozd2nsqIV
+        4wS6nwGCic8ZrL5uPkqiG10=
+X-Google-Smtp-Source: ABdhPJwN6s37m9kUw9Nby6kqqcqfoU5UH6stQNMFu6bHmr9GU2GtlitsMiwYzis0WSf2Oo/wz09OKQ==
+X-Received: by 2002:a17:902:7888:b029:ee:cea7:6ff0 with SMTP id q8-20020a1709027888b02900eecea76ff0mr45757205pll.16.1620990209883;
+        Fri, 14 May 2021 04:03:29 -0700 (PDT)
+Received: from localhost.localdomain ([45.135.186.114])
+        by smtp.gmail.com with ESMTPSA id ls6sm8686763pjb.57.2021.05.14.04.03.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 May 2021 04:03:29 -0700 (PDT)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
+Subject: [PATCH] misc/uss720: fix memory leak in uss720_probe
+Date:   Fri, 14 May 2021 19:03:17 +0800
+Message-Id: <20210514110317.2041580-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR02CA0066.apcprd02.prod.outlook.com (2603:1096:4:54::30) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4108.25 via Frontend Transport; Fri, 14 May 2021 11:16:33 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 6c6ff662-bc8e-4454-44c0-08d916c9bbff
-X-MS-TrafficTypeDiagnostic: VI1PR04MB4272:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <VI1PR04MB4272D39EB2FD2A4AF9B8280F89509@VI1PR04MB4272.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:250;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IJfXQhHprDZfze5aUN2gn5GdiSRnzni9rPvyPRyxrTYuge+AzZtKl8ZuZtqQEkjL4eInHZdyi3Akwz9RJWxyL8+rQ6Omj3zH8vVcsksdJQTIwL4bbX+XAj6CuhurclCZ97qMSyRbGmJqCG7ZrdizX9k7A0qayfkT2KiVa+z4FkE443JjPZgX0Gh3VnrCwpY14Fr8QBXd37jrDyhoWp28hHBNQHVXPyiXUY9K0X57RLWl6lpTfNAOu1m3pfJ+gOnRq2Y4nGSnFsHkFFeF4hmJ75hvPxQBuBTQ9XdaB/3rxa/z/MTUFOp4X4VweUTL18qFDVZfQ82gsBIZ3m0nEOPQZe43IkHQgME9hxEi4Zwb0PfPcNFPw6wNAQSVvzlPzLeQGoLj+qbWmSu7bLW6pr6rJMpVxw+bv/zYodyTXumwfrPhFovhzd3esSpf2hJhivZZ74LpzH2TdJOmhsqKZ1aicrkhqyVX0+gW1QTbCrOW5/jDMutr9IfSzP7i2OatJ4g8l7YQiPzeoBCxzNvl1YM+NprxzcP6uzE6EcKk2Z53Y+iFAlR9u4s9fPIhjEFwrYDQYg8d6a2X/lqtdXJ7GvyZ6nMUXX770Dm8d7v3G64ZhPgOfwxMi+oG1r1XyVTuPeNImoNU0VT9yK6IczMmP0XO0tgVB4xDer+RzBs09ni9KHlx63/irqoS3AOFmIcfaurH
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39850400004)(346002)(396003)(366004)(376002)(136003)(6666004)(6486002)(66946007)(66556008)(45080400002)(16526019)(66476007)(8936002)(52116002)(2906002)(186003)(5660300002)(6512007)(26005)(6916009)(316002)(478600001)(8676002)(2616005)(956004)(6506007)(86362001)(83380400001)(38100700002)(4326008)(38350700002)(36756003)(69590400013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?Ie2/dK2kXrQVyr0iifnqmxKXjwY8UVSTWQqJEu+Jir2QojFL0ZKXV8NLiUqd?=
- =?us-ascii?Q?3AkW6qjl6jv+5a9JCPGYx3YavdxgcFFwhf7bBT1/vTfziNN3aRn7wcKrIA8B?=
- =?us-ascii?Q?Wa+zjRAHpUQb6jThyx2O74cvPc/rlcCc/6vivz/PxuvdgdgZ5z4xq/iJg2TY?=
- =?us-ascii?Q?EykwdsEF+3lypym7E6vGCepXlSC7Qils+Zxe/fvA4RccLcDwtq+ULTx6LxgP?=
- =?us-ascii?Q?AN1B+XN10C5WNAeusXHPj4ZLNYzqDVL3pWSE8x2atoGDJt4hAI8fNdi+6Rz+?=
- =?us-ascii?Q?McyLKeLy07BHErxlBrNtl8Dc1BtjiIWhSJlKlW8/h2YurFiJkxOzB4/zEIkV?=
- =?us-ascii?Q?JexKrJ3H7QfkKarlUzhu6urr7EzchAOWNRPMR6txDBtcNaMd0ZhNlY9lvZYQ?=
- =?us-ascii?Q?M7USo2MwY4GKNZ/L0N58N6b1YgEsfm1CE3yWWJlknWtdnhXxkoG2atXCDFor?=
- =?us-ascii?Q?P6Y1pSOPb7g32m4BLtlVGv3+nU+tC+6bJTdh4hr5+GNcUHSCFY5jczxWYRot?=
- =?us-ascii?Q?HKBA3pqk3X+Xht4UMIE8hYWSFf5aRzaP6S3wAfc13yeKK9byt5rzZaJCdBQP?=
- =?us-ascii?Q?4NkBSrCNhRuWwrvbekDf9lG1WK8sUy3qFMKuSutdo9WxzKY3d38p1G8VPYPd?=
- =?us-ascii?Q?GP9Z3kyM21oMHnu6JI6e9SqiFibALmCjpm8SkOO+Zz5eYUFhdEIeUQ0SVuV3?=
- =?us-ascii?Q?PVkQ5tgjEIJtN9VDRpXNxzcp7gztYfcQP+3IIsrQUdNQ11IYbISg2sv9sBHB?=
- =?us-ascii?Q?+vwgZCYcPSoPcZBHxmegvtMIpiLEb49WWtpin0mNu5QnmjB6LUogulK7mIN6?=
- =?us-ascii?Q?wK/qg1Qbg3onsC460fQd+sWXixuvTCTPRVr/CE/cbIzD9UJkD62I2okxy7VI?=
- =?us-ascii?Q?Yswbr4g4q/6YfwqDjwQQqTonSLJA9In2Cx07I4pgfYsXx4oHk6zCrgehZOpj?=
- =?us-ascii?Q?Jm6nfgU/DkcyPeDGywE5K+/jVbBSFAid4IzssRG4Y0NnwmlZTKVoHcGpKO5c?=
- =?us-ascii?Q?QGvpDPWm65+TpTo2E5jAb2n8yXFtngpp6FZWFf+L2v3aTYsfAkkfw8Ne0wvr?=
- =?us-ascii?Q?CaKNFaIpizT/PJVNGqq6PsKWlnvAHy7WwWDAvGEM7ZqLWz02/1NVLhA4q+7e?=
- =?us-ascii?Q?G9JHmHfrQBSwIn3PqPFtvOeeqInxG39jfLs5sSpRK3siVAZXuMj0xc8sJ6xT?=
- =?us-ascii?Q?eYk7c+P4S1Wy/r9lJfRJ2lMLLbvjtHTvSFduWOBjM1FRkhJdcBiXJ/2xVQlZ?=
- =?us-ascii?Q?BFzitAjs1ZG1fYRYydHHPKI846n6JwULN3J/yr+K9JtqIJuqO20Z//GFDLS3?=
- =?us-ascii?Q?7Z32kbDtQPaiT7m1KYjtjbQv?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6c6ff662-bc8e-4454-44c0-08d916c9bbff
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2021 11:16:35.0450
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gOyRGX/zDR53eD5I2Bzws9h9xPTMhjy0jTos/Mgq8Nz6ZwBtLd2+XC9CaNiJn0Bw
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4272
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Chipidea also need sync interrupt before unbind the udc while
-gadget remove driver, otherwise setup irq handling may happen
-while unbind, see below dump generated from android function
-switch stress test:
+uss720_probe forgets to decrease the refcount of usbdev in uss720_probe.
+Fix this by decreasing the refcount of usbdev by usb_put_dev.
 
-[ 4703.503056] android_work: sent uevent USB_STATE=CONNECTED
-[ 4703.514642] android_work: sent uevent USB_STATE=DISCONNECTED
-[ 4703.651339] android_work: sent uevent USB_STATE=CONNECTED
-[ 4703.661806] init: Control message: Processed ctl.stop for 'adbd' from pid: 561 (system_server)
-[ 4703.673469] init: processing action (init.svc.adbd=stopped) from (/system/etc/init/hw/init.usb.configfs.rc:14)
-[ 4703.676451] Unable to handle kernel read from unreadable memory at virtual address 0000000000000090
-[ 4703.676454] Mem abort info:
-[ 4703.676458]   ESR = 0x96000004
-[ 4703.676461]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 4703.676464]   SET = 0, FnV = 0
-[ 4703.676466]   EA = 0, S1PTW = 0
-[ 4703.676468] Data abort info:
-[ 4703.676471]   ISV = 0, ISS = 0x00000004
-[ 4703.676473]   CM = 0, WnR = 0
-[ 4703.676478] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004a867000
-[ 4703.676481] [0000000000000090] pgd=0000000000000000, p4d=0000000000000000
-[ 4703.676503] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[ 4703.758297] Modules linked in: synaptics_dsx_i2c moal(O) mlan(O)
-[ 4703.764327] CPU: 0 PID: 235 Comm: lmkd Tainted: G        W  O      5.10.9-00001-g3f5fd8487c38-dirty #63
-[ 4703.773720] Hardware name: NXP i.MX8MNano EVK board (DT)
-[ 4703.779033] pstate: 60400085 (nZCv daIf +PAN -UAO -TCO BTYPE=--)
-[ 4703.785046] pc : _raw_write_unlock_bh+0xc0/0x2c8
-[ 4703.789667] lr : android_setup+0x4c/0x168
-[ 4703.793676] sp : ffff80001256bd80
-[ 4703.796989] x29: ffff80001256bd80 x28: 00000000000000a8
-[ 4703.802304] x27: ffff800012470000 x26: ffff80006d923000
-[ 4703.807616] x25: ffff800012471000 x24: ffff00000b091140
-[ 4703.812929] x23: ffff0000077dbd38 x22: ffff0000077da490
-[ 4703.818242] x21: ffff80001256be30 x20: 0000000000000000
-[ 4703.823554] x19: 0000000000000080 x18: ffff800012561048
-[ 4703.828867] x17: 0000000000000000 x16: 0000000000000039
-[ 4703.834180] x15: ffff8000106ad258 x14: ffff80001194c277
-[ 4703.839493] x13: 0000000000003934 x12: 0000000000000000
-[ 4703.844805] x11: 0000000000000000 x10: 0000000000000001
-[ 4703.850117] x9 : 0000000000000000 x8 : 0000000000000090
-[ 4703.855429] x7 : 6f72646e61203a70 x6 : ffff8000124f2450
-[ 4703.860742] x5 : ffffffffffffffff x4 : 0000000000000009
-[ 4703.866054] x3 : ffff8000108a290c x2 : ffff00007fb3a9c8
-[ 4703.871367] x1 : 0000000000000000 x0 : 0000000000000090
-[ 4703.876681] Call trace:
-[ 4703.879129]  _raw_write_unlock_bh+0xc0/0x2c8
-[ 4703.883397]  android_setup+0x4c/0x168
-[ 4703.887059]  udc_irq+0x824/0xa9c
-[ 4703.890287]  ci_irq+0x124/0x148
-[ 4703.893429]  __handle_irq_event_percpu+0x84/0x268
-[ 4703.898131]  handle_irq_event+0x64/0x14c
-[ 4703.902054]  handle_fasteoi_irq+0x110/0x210
-[ 4703.906236]  __handle_domain_irq+0x8c/0xd4
-[ 4703.910332]  gic_handle_irq+0x6c/0x124
-[ 4703.914081]  el1_irq+0xdc/0x1c0
-[ 4703.917221]  _raw_spin_unlock_irq+0x20/0x54
-[ 4703.921405]  finish_task_switch+0x84/0x224
-[ 4703.925502]  __schedule+0x4a4/0x734
-[ 4703.928990]  schedule+0xa0/0xe8
-[ 4703.932132]  do_notify_resume+0x150/0x184
-[ 4703.936140]  work_pending+0xc/0x40c
-[ 4703.939633] Code: d5384613 521b0a69 d5184609 f9800111 (885ffd01)
-[ 4703.945732] ---[ end trace ba5c1875ae49d53c ]---
-[ 4703.950350] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-[ 4703.957223] SMP: stopping secondary CPUs
-[ 4703.961151] Kernel Offset: disabled
-[ 4703.964638] CPU features: 0x0240002,2000200c
-[ 4703.968905] Memory Limit: none
-[ 4703.971963] Rebooting in 5 seconds..
+BUG: memory leak
+unreferenced object 0xffff888101113800 (size 2048):
+  comm "kworker/0:1", pid 7, jiffies 4294956777 (age 28.870s)
+  hex dump (first 32 bytes):
+    ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
+    00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
+  backtrace:
+    [<ffffffff82b8e822>] kmalloc include/linux/slab.h:554 [inline]
+    [<ffffffff82b8e822>] kzalloc include/linux/slab.h:684 [inline]
+    [<ffffffff82b8e822>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
+    [<ffffffff82b98441>] hub_port_connect drivers/usb/core/hub.c:5129 [inline]
+    [<ffffffff82b98441>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
+    [<ffffffff82b98441>] port_event drivers/usb/core/hub.c:5509 [inline]
+    [<ffffffff82b98441>] hub_event+0x1171/0x20c0 drivers/usb/core/hub.c:5591
+    [<ffffffff81259229>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
+    [<ffffffff81259b19>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
+    [<ffffffff81261228>] kthread+0x178/0x1b0 kernel/kthread.c:292
+    [<ffffffff8100227f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-Tested-by: faqiang.zhu <faqiang.zhu@nxp.com>
-Signed-off-by: Li Jun <jun.li@nxp.com>
+Reported-by: syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
- drivers/usb/chipidea/udc.c | 1 +
+ drivers/usb/misc/uss720.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index c16d900cdaee..393f216b9161 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -2061,6 +2061,7 @@ static int udc_start(struct ci_hdrc *ci)
- 	ci->gadget.name         = ci->platdata->name;
- 	ci->gadget.otg_caps	= otg_caps;
- 	ci->gadget.sg_supported = 1;
-+	ci->gadget.irq		= ci->irq;
+diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
+index b5d661644263..748139d26263 100644
+--- a/drivers/usb/misc/uss720.c
++++ b/drivers/usb/misc/uss720.c
+@@ -736,6 +736,7 @@ static int uss720_probe(struct usb_interface *intf,
+ 	parport_announce_port(pp);
  
- 	if (ci->platdata->flags & CI_HDRC_REQUIRES_ALIGNED_DMA)
- 		ci->gadget.quirk_avoids_skb_reserve = 1;
+ 	usb_set_intfdata(intf, pp);
++	usb_put_dev(usbdev);
+ 	return 0;
+ 
+ probe_abort:
 -- 
 2.25.1
 
