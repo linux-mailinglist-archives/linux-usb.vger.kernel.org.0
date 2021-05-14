@@ -2,110 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34F3E3809CE
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 14:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C1EA3809E1
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 14:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233735AbhENMpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 08:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57164 "EHLO
+        id S232159AbhENMw2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 08:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233576AbhENMpT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 08:45:19 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F4FC061574;
-        Fri, 14 May 2021 05:44:08 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id t2-20020a17090ae502b029015b0fbfbc50so1597619pjy.3;
-        Fri, 14 May 2021 05:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8wnTZS8xGnunoEqDK+VmTiQ9SGnjytTdHVp5eoUWD8=;
-        b=eU9QK+9k/OBz5Ry2xpy6zbkUV9zrjTU44sTuHzUBci0XQGVsvCGR6pdtHeBZeOqXDm
-         gt3WHEo3muwu4iE7pjHaC0/rCX2D8RoZQjoVOJKuUdtQ3I2aflBFo1kH3B5Vszrgx/M/
-         V63+UFoJIXZ4wqN66Y9QuPTVlhqqkaZ84sMZnU6d3khs71f/2BgMxzV07IC5O/xsnbHB
-         siBxFBrnyenPHT8W3rD1u9RAwt6R5oNbfHRZyntFCsfL4LGkS/Se4FwzC12Hxtsq8ABU
-         5W1s2bFJu6rFdYSVjQN+02YX4UvAkJ2e6MpKItiwqPZQ97jvzZqr8lE0yosptydTwL3X
-         YSsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=V8wnTZS8xGnunoEqDK+VmTiQ9SGnjytTdHVp5eoUWD8=;
-        b=Eng5RxBx8vL0fIb3wKAQLGEevsYyvAZqldLhsI+dJbq9vW3kTKGxdPW1qO9E075Ijy
-         DyyYOZejbELphg8BWBDfBXitlof6pQd8JvyqPHYPyXDJjYU9PDBV1N7Mm2NXW8e5n6cN
-         YJgRwMU3lPLWCYvEc0akzejTTd7tPO5QFTezlAlMFBAibcvYb235JIaQ35GhJTFrblkM
-         lWBel7+TaTdla6vEe75iVgWB1Bq4Q/GfUAQzNhKyyx5Y27EYO4ETV0W4K9cjNonUoy9s
-         3H2pPX03tlaxFtooPa4v5w/Q8vkVnBX21iKxitnF4C8HdDWH+FgCm/Nq10YvcqNxYtOQ
-         oR0A==
-X-Gm-Message-State: AOAM530sOaO5g24s2fSRj5jeArtywOdd2Ex95diSbHfseooJkieEQry9
-        XMeUX+cv4gHTfhNgxdZhojE=
-X-Google-Smtp-Source: ABdhPJw8FZkDOL5iw/ap10207hoazLUg8ROSyEzmxmJoLGyHdP+ZhTkvl7N/R5luv7fO5ilWbNBFMA==
-X-Received: by 2002:a17:902:8ec9:b029:ef:5a88:e7cf with SMTP id x9-20020a1709028ec9b02900ef5a88e7cfmr19258310plo.48.1620996247777;
-        Fri, 14 May 2021 05:44:07 -0700 (PDT)
-Received: from localhost.localdomain ([45.135.186.114])
-        by smtp.gmail.com with ESMTPSA id i197sm4131784pgc.13.2021.05.14.05.44.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 05:44:07 -0700 (PDT)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Subject: [PATCH v3] misc/uss720: fix memory leak in uss720_probe
-Date:   Fri, 14 May 2021 20:43:48 +0800
-Message-Id: <20210514124348.6587-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231265AbhENMw1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 08:52:27 -0400
+X-Greylist: delayed 8675 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 May 2021 05:51:16 PDT
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:150:448b::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18225C061574;
+        Fri, 14 May 2021 05:51:16 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.manjaro.org (Postfix) with ESMTP id 83FE022253A;
+        Fri, 14 May 2021 14:51:14 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at manjaro.org
+Received: from mail.manjaro.org ([127.0.0.1])
+        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dat1wKKJdGXb; Fri, 14 May 2021 14:51:10 +0200 (CEST)
+To:     Johan Jonker <jbx6244@gmail.com>,
+        Tobias Schramm <t.schramm@manjaro.org>,
+        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210514102734.2091238-1-t.schramm@manjaro.org>
+ <20210514102734.2091238-5-t.schramm@manjaro.org>
+ <01388394-603e-6a43-2044-ae1e93eb0ff3@gmail.com>
+From:   Tobias Schramm <t.schramm@manjaro.org>
+Subject: Re: [PATCH 4/4] arm64: dts: rockchip: add USB support to RK3308 dts
+Message-ID: <e0545fee-70db-ce38-1bd4-6520dc585bad@manjaro.org>
+Date:   Fri, 14 May 2021 14:52:47 +0200
 MIME-Version: 1.0
+In-Reply-To: <01388394-603e-6a43-2044-ae1e93eb0ff3@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-uss720_probe forgets to decrease the refcount of usbdev in uss720_probe.
-Fix this by decreasing the refcount of usbdev by usb_put_dev.
+ > Hi Johan,
 
-BUG: memory leak
-unreferenced object 0xffff888101113800 (size 2048):
-  comm "kworker/0:1", pid 7, jiffies 4294956777 (age 28.870s)
-  hex dump (first 32 bytes):
-    ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
-    00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
-  backtrace:
-    [<ffffffff82b8e822>] kmalloc include/linux/slab.h:554 [inline]
-    [<ffffffff82b8e822>] kzalloc include/linux/slab.h:684 [inline]
-    [<ffffffff82b8e822>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
-    [<ffffffff82b98441>] hub_port_connect drivers/usb/core/hub.c:5129 [inline]
-    [<ffffffff82b98441>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
-    [<ffffffff82b98441>] port_event drivers/usb/core/hub.c:5509 [inline]
-    [<ffffffff82b98441>] hub_event+0x1171/0x20c0 drivers/usb/core/hub.c:5591
-    [<ffffffff81259229>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
-    [<ffffffff81259b19>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
-    [<ffffffff81261228>] kthread+0x178/0x1b0 kernel/kthread.c:292
-    [<ffffffff8100227f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-Reported-by: syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Fixes: 0f36163d3abe ("usb: fix uss720 schedule with interrupts off")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
-v1->v2: add the Fixes tag
-v2->v3: add changes for different versions of the patch
-
- drivers/usb/misc/uss720.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-index b5d661644263..748139d26263 100644
---- a/drivers/usb/misc/uss720.c
-+++ b/drivers/usb/misc/uss720.c
-@@ -736,6 +736,7 @@ static int uss720_probe(struct usb_interface *intf,
- 	parport_announce_port(pp);
- 
- 	usb_set_intfdata(intf, pp);
-+	usb_put_dev(usbdev);
- 	return 0;
- 
- probe_abort:
--- 
-2.25.1
-
+Am 14.05.21 um 14:09 schrieb Johan Jonker:
+> Hi Tobias,
+> 
+> Just sent a patch for grf.yaml and rockchip-usb-phy.yaml conversion myself.
+> 
+Ah wonderful, thanks! I was not quite happy with touching the old .txt 
+documentation anyway. I'll adjust my next version to depend on your 
+patches then.
+> Added { .compatible = "rockchip,rk3308-usb2phy", .data =
+> &rk3308_phy_cfgs }, to phy-rockchip-inno-usb2.c
+> 
+> Added is "rockchip,rk3308-usb-phy" to rockchip-usb-phy.txt
+> 
+> compatible = "rockchip,rk3308-usb2phy"; is used in this patch.
+> 
+> Maybe try phy-rockchip-inno-usb2.yaml?
+> 
+Right. Somehow ended up in the wrong file there. Will fix it in the next 
+version.
+> "rockchip,rk3308-usb2phy-grf", "syscon", "simple-mfd" document missing.
+> 
+> Could someone recheck the reg memory size?
+> Is this still correct then?
+> 
+> ===
+> compatible = "rockchip,rk3308-grf", "syscon", "simple-mfd";
+> reg = <0x0 0xff000000 0x0 0x10000>;
+> 
+> Do we still need "0x0 0x10000" here?
+The technical reference manual specifies it as 64k in size. However, 
+since the dts has separate nodes for the other grfs it should probably 
+be "0x0 0x8000" at max. Technical reference manual indicates there is 
+nothing beyond 0x0803 in the main grf.
+> ===
+> compatible = "rockchip,rk3308-usb2phy-grf", "syscon", "simple-mfd";
+> reg = <0x0 0xff008000 0x0 0x4000>;
+> ===
+> compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
+> reg = <0x0 0xff00b000 0x0 0x1000>;
+> ===
+> compatible = "rockchip,rk3308-core-grf", "syscon", "simple-mfd";
+> reg = <0x0 0xff00c000 0x0 0x1000>;
+> ===
+> 
+> Johan
+> 
+> On 5/14/21 12:27 PM, Tobias Schramm wrote:
+>> The Rockchip RK3308 features an integrated USB 2.0 phy, an USB OTG
+>> controller and OHCI/EHCI interfaces.
+>> This patch adds all of those to the RK3308 dtsi and thereby enables USB
+>> support on the RK3308.
+>>
+>> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+>> ---
+>>   arch/arm64/boot/dts/rockchip/rk3308.dtsi | 75 ++++++++++++++++++++++++
+>>   1 file changed, 75 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
+>> index 0c5fa9801e6f..80fd802d6c15 100644
+>> --- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
+>> +++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
+>> @@ -177,6 +177,43 @@ reboot-mode {
+>>   		};
+>>   	};
+>>   
+>> +	usb2phy_grf: syscon@ff008000 {
+>> +		compatible = "rockchip,rk3308-usb2phy-grf", "syscon",
+>> +			     "simple-mfd";
+>> +		reg = <0x0 0xff008000 0x0 0x4000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +
+>> +		u2phy: usb2-phy@100 {
+> 
+>> +			compatible = "rockchip,rk3308-usb2phy";
+>> +			reg = <0x100 0x10>;
+>> +			clocks = <&cru SCLK_USBPHY_REF>;
+>> +			clock-names = "phyclk";
+>> +			clock-output-names = "usb480m_phy";
+>> +			#clock-cells = <0>;
+>> +			assigned-clocks = <&cru USB480M>;
+>> +			assigned-clock-parents = <&u2phy>;
+>> +			status = "disabled";
+>> +
+> 
+> Looks like
+> 
+>> +			u2phy_otg: otg-port {
+>> +				#phy-cells = <0>;
+>> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
+>> +					     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
+>> +					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+>> +				interrupt-names = "otg-bvalid", "otg-id",
+>> +						  "linestate";
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			u2phy_host: host-port {
+>> +				#phy-cells = <0>;
+>> +				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
+>> +				interrupt-names = "linestate";
+>> +				status = "disabled";
+>> +			};
+>> +		};
+>> +	};
+>> +
+>>   	detect_grf: syscon@ff00b000 {
+>>   		compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
+>>   		reg = <0x0 0xff00b000 0x0 0x1000>;
+>> @@ -579,6 +616,44 @@ spdif_tx: spdif-tx@ff3a0000 {
+>>   		status = "disabled";
+>>   	};
+>>   
+>> +	usb20_otg: usb@ff400000 {
+>> +		compatible = "rockchip,rk3308-usb", "rockchip,rk3066-usb",
+>> +			     "snps,dwc2";
+>> +		reg = <0x0 0xff400000 0x0 0x40000>;
+>> +		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+>> +		clocks = <&cru HCLK_OTG>;
+>> +		clock-names = "otg";
+>> +		dr_mode = "otg";
+>> +		g-np-tx-fifo-size = <16>;
+>> +		g-rx-fifo-size = <280>;
+>> +		g-tx-fifo-size = <256 128 128 64 32 16>;
+>> +		phys = <&u2phy_otg>;
+>> +		phy-names = "usb2-phy";
+>> +		status = "disabled";
+>> +	};
+>> +
+>> +	usb_host_ehci: usb@ff440000 {
+>> +		compatible = "generic-ehci";
+>> +		reg = <0x0 0xff440000 0x0 0x10000>;
+>> +		interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
+>> +		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
+>> +		clock-names = "usbhost", "arbiter", "utmi";
+>> +		phys = <&u2phy_host>;
+>> +		phy-names = "usb";
+>> +		status = "disabled";
+>> +	};
+>> +
+>> +	usb_host_ohci: usb@ff450000 {
+>> +		compatible = "generic-ohci";
+>> +		reg = <0x0 0xff450000 0x0 0x10000>;
+>> +		interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>> +		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
+>> +		clock-names = "usbhost", "arbiter", "utmi";
+>> +		phys = <&u2phy_host>;
+>> +		phy-names = "usb";
+>> +		status = "disabled";
+>> +	};
+>> +
+>>   	sdmmc: mmc@ff480000 {
+>>   		compatible = "rockchip,rk3308-dw-mshc", "rockchip,rk3288-dw-mshc";
+>>   		reg = <0x0 0xff480000 0x0 0x4000>;
+>>
