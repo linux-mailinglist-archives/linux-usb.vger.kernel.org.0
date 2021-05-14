@@ -2,144 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2370038079E
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 12:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC1338073C
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 12:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbhENKqS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 06:46:18 -0400
-Received: from mail.manjaro.org ([176.9.38.148]:38894 "EHLO mail.manjaro.org"
+        id S229973AbhENKdV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 06:33:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231132AbhENKqR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 06:46:17 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id 0377B22259B;
-        Fri, 14 May 2021 12:26:45 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ppF3dsjAFkFR; Fri, 14 May 2021 12:26:40 +0200 (CEST)
-From:   Tobias Schramm <t.schramm@manjaro.org>
-To:     linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tobias Schramm <t.schramm@manjaro.org>
-Subject: [PATCH 4/4] arm64: dts: rockchip: add USB support to RK3308 dts
-Date:   Fri, 14 May 2021 12:27:34 +0200
-Message-Id: <20210514102734.2091238-5-t.schramm@manjaro.org>
-In-Reply-To: <20210514102734.2091238-1-t.schramm@manjaro.org>
-References: <20210514102734.2091238-1-t.schramm@manjaro.org>
+        id S230375AbhENKdU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 06:33:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2C3E3613B5;
+        Fri, 14 May 2021 10:32:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620988329;
+        bh=lnBPNR8YzGpc23fB/WUkdgFbUwRLsBqZB65u8nAakRg=;
+        h=From:To:Subject:In-Reply-To:References:Date:From;
+        b=iMlui5xLUSDWhHwFQDOsXBqj5YC73nxOlBGHKTprOgHUbFr/YIy4+SfNysPErW4NK
+         o8yUVkbwZ5oz3FsjQ2b6pd/+h/bPRxonY/Trp7sm9dF/16c7fr8vVAM7Xl57VnZYIP
+         SAf0Mi8vxTMt+/4dIznyA96WMvneGoaa6IIpNk1nWnFmEsNG5OlBFfm4a0rYcKq5eg
+         iQaUbUw+xMMUnWxUOJXzvvcgFIwXcVpV8eTN3Qs9UjY6k1hLsytFbGnG78IQPYDOXC
+         3xJfZk4JtRvSrJtafjRidpNhhYpXzIe7x2meDz7O17Q/yM/Pm23AYlURgh7JkC/0LG
+         Qq2rDmPzKzP1Q==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     "Chow, Watson" <Watson.Chow@Avnet.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+In-Reply-To: <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
+References: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
+ <87r1i97pkk.fsf@kernel.org> <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
+Date:   Fri, 14 May 2021 13:31:52 +0300
+Message-ID: <878s4h7giv.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Rockchip RK3308 features an integrated USB 2.0 phy, an USB OTG
-controller and OHCI/EHCI interfaces.
-This patch adds all of those to the RK3308 dtsi and thereby enables USB
-support on the RK3308.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
----
- arch/arm64/boot/dts/rockchip/rk3308.dtsi | 75 ++++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-index 0c5fa9801e6f..80fd802d6c15 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-@@ -177,6 +177,43 @@ reboot-mode {
- 		};
- 	};
- 
-+	usb2phy_grf: syscon@ff008000 {
-+		compatible = "rockchip,rk3308-usb2phy-grf", "syscon",
-+			     "simple-mfd";
-+		reg = <0x0 0xff008000 0x0 0x4000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		u2phy: usb2-phy@100 {
-+			compatible = "rockchip,rk3308-usb2phy";
-+			reg = <0x100 0x10>;
-+			clocks = <&cru SCLK_USBPHY_REF>;
-+			clock-names = "phyclk";
-+			clock-output-names = "usb480m_phy";
-+			#clock-cells = <0>;
-+			assigned-clocks = <&cru USB480M>;
-+			assigned-clock-parents = <&u2phy>;
-+			status = "disabled";
-+
-+			u2phy_otg: otg-port {
-+				#phy-cells = <0>;
-+				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "otg-bvalid", "otg-id",
-+						  "linestate";
-+				status = "disabled";
-+			};
-+
-+			u2phy_host: host-port {
-+				#phy-cells = <0>;
-+				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "linestate";
-+				status = "disabled";
-+			};
-+		};
-+	};
-+
- 	detect_grf: syscon@ff00b000 {
- 		compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
- 		reg = <0x0 0xff00b000 0x0 0x1000>;
-@@ -579,6 +616,44 @@ spdif_tx: spdif-tx@ff3a0000 {
- 		status = "disabled";
- 	};
- 
-+	usb20_otg: usb@ff400000 {
-+		compatible = "rockchip,rk3308-usb", "rockchip,rk3066-usb",
-+			     "snps,dwc2";
-+		reg = <0x0 0xff400000 0x0 0x40000>;
-+		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_OTG>;
-+		clock-names = "otg";
-+		dr_mode = "otg";
-+		g-np-tx-fifo-size = <16>;
-+		g-rx-fifo-size = <280>;
-+		g-tx-fifo-size = <256 128 128 64 32 16>;
-+		phys = <&u2phy_otg>;
-+		phy-names = "usb2-phy";
-+		status = "disabled";
-+	};
-+
-+	usb_host_ehci: usb@ff440000 {
-+		compatible = "generic-ehci";
-+		reg = <0x0 0xff440000 0x0 0x10000>;
-+		interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
-+		clock-names = "usbhost", "arbiter", "utmi";
-+		phys = <&u2phy_host>;
-+		phy-names = "usb";
-+		status = "disabled";
-+	};
-+
-+	usb_host_ohci: usb@ff450000 {
-+		compatible = "generic-ohci";
-+		reg = <0x0 0xff450000 0x0 0x10000>;
-+		interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
-+		clock-names = "usbhost", "arbiter", "utmi";
-+		phys = <&u2phy_host>;
-+		phy-names = "usb";
-+		status = "disabled";
-+	};
-+
- 	sdmmc: mmc@ff480000 {
- 		compatible = "rockchip,rk3308-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x0 0xff480000 0x0 0x4000>;
--- 
-2.31.1
+Hi,
 
+(please don't top-post :-)
+
+"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+> Balbi,
+>
+> Thanks for your quick reply.
+>
+> Some questions
+>
+> 1. You mentioned that the max bandwidth in isoc mode (USB3.0) should be=20
+> around 4Gbps.=20=20
+>
+> I have the below calcuation on bandwidth:
+> In USB3.0, 1 micro frame would take 125us and can transfer max 45000 bytes
+> So, in 1 sec, we will have 8000 micro frames
+>
+> Max bandwidth =3D 8000 x 4500 x 8 =3D 2.88Gbps
+>
+> Is my understanding correct?
+
+probably, It's been a while since I've dug through the spec, to be frank
+
+> 2. To achieve the max throughput, I need to configure the uvc gadget driv=
+er=20
+> with below parameters. Am I right?
+>
+> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D15=20
+> streaming_interval=3D1
+
+right, but there's an assumption here that the gadget will be able to
+feed data in a timely manner.
+
+> 3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It looks=
+ not
+> easy in my side to upgrade the kernel version. It would affect those othe=
+r=20
+> device drivers I'm currently using. So, do you think there's any short cu=
+t=20
+> to fix this problem under my current kernel version - v5.4?
+
+In that case, you need to ask for support from whoever forces you to
+stay with such an old kernel. I believe that would be Xilinx.
+
+> 4. I read through the procedures to capture debug info by debugfs. Howeve=
+r,
+> in my test with "streaming_maxburst" set to 10 or above, my system would=
+=20
+> crash and I can't pick the log from that point. Any suggestion?
+
+have a look at ftrace_dump_on_oops.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCeUZgRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUi5DAf7BoMm1Jjaboxzn2+IxooqRKUjHV4jCXPn
+MJxqdGYPoBb6K6YQiXdakpknwHxfc8inieVKqo3ttXWPBOvsA5l+h6lgErH07ETs
+rUOCtKOagsg4YF/vu+b8148ZGokl2H3PQxs3Q3zjBGZ2dzTV8Pfdm5Svxbj8IMvw
+CLaTMzmdtWzk1gDdNFinNqaKz/IpeysaVRBe+u2zknH6EyB2Yu2JiSlK+5FCl+14
+nn3NCo3AKciAA/BvRCePsdZrtUMY8Etvsg4xFgKQ0nNAcdPIdK0SuR5IJoPeVDHe
+1T/RRYCxWaDXEA045mq8p4CjvE+ZreFvtmG0/INixTEYGqHblOyJ8A==
+=RkZt
+-----END PGP SIGNATURE-----
+--=-=-=--
