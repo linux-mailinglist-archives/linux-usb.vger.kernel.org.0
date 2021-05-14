@@ -2,123 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 68605380239
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 04:58:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B6938026B
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 05:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbhENC7f convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Thu, 13 May 2021 22:59:35 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:42633 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbhENC7e (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 13 May 2021 22:59:34 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14E2w1Ki9004918, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14E2w1Ki9004918
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 14 May 2021 10:58:01 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+        id S231390AbhENDVa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 13 May 2021 23:21:30 -0400
+Received: from smtp3.avnet.com ([12.9.139.123]:3364 "EHLO smtp3.avnet.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229984AbhENDV2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 13 May 2021 23:21:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Avnet.com;
+        s=20201119; t=1620962415;
+        bh=xSNu0r0c9ib4ckmqQSWoMv32o4b6E+3eCjr9N9hcauc=;
+        h=From:To:Subject:Date;
+        b=SRG76xn42V3nPCxBSnA+xWDCUZYiopZ1GKziljC+hWhFU467MW1K9adM2UPBLOcao
+         7ry/b/UuUEStHYFWQ+PbIg/wFEUkQk8aqT8xsMkgxwAH6+qQrXUtaLaHWA8dK34auT
+         eCk/FCUhCUa/qhZr//m3MY5sqAgXKBHjusVV/BwosITvohbU73yRxb5MYUKO/TxLmA
+         y7cnbI03zWbJ+YUyr2/iKvIvXU4emSVuov9gCH1J+lIpQLGnFIk1i/PeDWoxOiZQAz
+         dPdd25U5uIu4ya5FGZoZ0LpSe9dzi4pLigNZD0d6ClBM+Qz0v2NfcM1ZjXAP1lHY+W
+         CKx1eReIsX0Ug==
+Received: from CMX2401EX1604.AVNET.COM (Not Verified[172.16.125.26]) by smtp3.avnet.com with Trustwave SEG (v8,2,6,11305) (using TLS: TLSv1.2, AES256-GCM-SHA384)
+        id <B609dec6f0001>; Thu, 13 May 2021 20:20:15 -0700
+Received: from CMX2401EX1604.AVNET.COM (172.16.125.26) by
+ CMX2401EX1604.AVNET.COM (172.16.125.26) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 14 May 2021 10:58:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 14 May 2021 10:58:00 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
- RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
- 15.01.2106.013; Fri, 14 May 2021 10:58:00 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Subject: RE: [syzbot] WARNING in rtl8152_probe
-Thread-Topic: [syzbot] WARNING in rtl8152_probe
-Thread-Index: AQHXRxMNo04dZcfiN0eNJrSRsQsh6qrguwNggAA4ewCAAVQHMA==
-Date:   Fri, 14 May 2021 02:58:00 +0000
-Message-ID: <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com>
-References: <0000000000009df1b605c21ecca8@google.com>
- <7de0296584334229917504da50a0ac38@realtek.com>
- <20210513142552.GA967812@rowland.harvard.edu>
-In-Reply-To: <20210513142552.GA967812@rowland.harvard.edu>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
+ 15.1.2242.4; Thu, 13 May 2021 20:20:15 -0700
+Received: from CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83]) by
+ CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83%2]) with mapi id
+ 15.01.2242.008; Thu, 13 May 2021 20:20:15 -0700
+From:   "Chow, Watson" <Watson.Chow@Avnet.com>
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer bandwidth
+ on UVC gadget driver
+Thread-Topic: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+Thread-Index: AddIcAtgBDXAgCQbQXSu/5dHZ1drkQ==
+Date:   Fri, 14 May 2021 03:20:14 +0000
+Message-ID: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.177.203]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/5/13_=3F=3F_08:28:00?=
-x-kse-attachment-filter-triggered-rules: Clean
-x-kse-attachment-filter-triggered-filters: Clean
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+x-originating-ip: [172.16.125.136]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 02:35:20
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163648 [May 13 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/14/2021 02:38:00
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/14/2021 02:45:24
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 163648 [May 13 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 445 445 d5f7ae5578b0f01c45f955a2a751ac25953290c9
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/14/2021 02:48:00
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=QMUWuTDL c=1 sm=1 tr=0 a=lcmS3RsgbsgHW2lJplWpEQ==:117 a=xqWC_Br6kY4A:10 a=6yu5SQbkyS8A:10 a=8nJEP1OIZ-IA:10 a=5FLXtPjwQuUA:10 a=yMhMjlubAAAA:8 a=EG6sGpfcAAAA:20 a=54o8oKSQAAAA:8 a=8hghKbX9AAAA:20 a=hoQjWNIC-BGPQJjTSukA:9 a=wPNLvfGTeEIA:10
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Alan Stern <stern@rowland.harvard.edu>
-> Sent: Thursday, May 13, 2021 10:26 PM
-[...]
-> Syzbot doesn't test real devices.  It tests emulations, and the emulated
-> devices usually behave very strangely and in very peculiar and
-> unexpected ways, so as to trigger bugs in the kernel.  That's why the
-> USB devices you see in syzbot logs usually have bizarre descriptors.
+Hi,
 
-Do you mean I have to debug for a device which doesn't exist?
-I don't understand why I must consider a fake device
-which provide unexpected USB descriptor deliberately?
+I'm using the SoC (Xilinx MPSoC) with DWC3 USB controller. I need to emulat=
+e my hardware to work like a USB camera and so make use of the USB UVC gadg=
+et driver - g_webcam.
 
-Best Regards,
-Hayes
+[My problem]
+
+Refer to this link and the driver source code, I find 3 parameters to confi=
+gure the ISOC transfer bandwidth.
+https://docs.microsoft.com/en-us/windows-hardware/drivers/usbcon/transfer-d=
+ata-to-isochronous-endpoints#isochronous-transfer-example
+
+They are:
+
+streaming_maxpacket : range [1 - 3072]=20
+streaming_maxburst : range [0 - 15]
+streaming_interval : [1 - 16]
+
+So, I load the driver in this way
+# modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D9 strea=
+ming_interval=3D2
+
+Create my own app base on
+https://github.com/wlhe/uvc-gadget
+
+Test result
+In my evaluation, I can set the combination of parameters up to this. The s=
+treaming is ok.
+# modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D9 strea=
+ming_interval=3D2
+
+This should be around 900Mbit/sec. Far less than 5Gbps bandwidth of USB3.0
+
+
+When I increase the parameter combination to:
+# modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D10 stre=
+aming_interval=3D2
+
+I get the below error message and everything stop.
+
+[ 1089.751559] g_webcam gadget: uvc: VS request completed with status -18.
+
+1.	This error is somehow related to the underflow of the transfer queue. Is=
+ my understanding correct?=20
+If so, how to solve?
+2.	My goal is to utilize the full bandwidth of USB3.0. How can I achive?
+
+
+[Some background information and my test setup]
+
+I started from the Xilinx TRD here.
+https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/541786361/Zynq+UltraS=
+cale+MPSoC+VCU+TRD+2020.1+-+Xilinx+Low+Latency+PS+DDR+NV12+HDMI+Audio+Video=
++Capture+and+Display
+
+With kernel version v5.4:
+https://github.com/Xilinx/linux-xlnx/tree/xlnx_rebase_v5.4_2020.2
+
+
+Enabled the UVC gadget and made my own test code to evaluate the transfer t=
+hroughput on the USB3.0 port.
+
+Test platform:
+.	Xilinx ZCU106 evaluation board connected to PC through USB3.0 cable
+.	Xilinx ZCU106 evaluation board would emulate a webcam through USB UVC gad=
+get
+
+My test app:
+.	Capture 3840x2160@60 video and scale to 1920x1080@60
+.	Queue the frames to UVC gadget driver
+Host PC side:
+.	X86 PC with Ubuntu 18.04LTS OS
+.	Use ffplay to capture and display frame from ZCU106
+# ffplay /dev/video2 -video_size 1920x1080 -framerate 30
+
+
+
+Best regards,
+
+Watson Chow
+Design Manager
+Avnet Technology Hong Kong Limited
+=A0
+
 
