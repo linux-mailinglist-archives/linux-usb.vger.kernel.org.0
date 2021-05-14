@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E281D380991
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 14:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E7A3809A4
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 14:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbhENMdc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 08:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54498 "EHLO
+        id S233576AbhENMf7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 08:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233184AbhENMdb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 08:33:31 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D14C061574;
-        Fri, 14 May 2021 05:32:19 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id b13-20020a17090a8c8db029015cd97baea9so1282255pjo.0;
-        Fri, 14 May 2021 05:32:19 -0700 (PDT)
+        with ESMTP id S232968AbhENMf6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 08:35:58 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9628BC061574;
+        Fri, 14 May 2021 05:34:47 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id v11-20020a17090a6b0bb029015cba7c6bdeso1559409pjj.0;
+        Fri, 14 May 2021 05:34:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=ErfaclmgSuY2taH4Itt0ooytROATSvud8f5aTV69WAo=;
-        b=AE8IgbEoqds1qWkqppD3M7OpxY161mIGNY13sgGhyiRq9OV/ulCons6vizDU5abkZl
-         QgmSYl0W6ARIJV6+SZqf+FliUxbeXXZ8PzPMqwgtA3P3FSItY3Z/qs6x0uLOtA+PKY5K
-         aiYFpRPdNibCNoTBbS3ABFVtERd/39rFvCwy/zyrZ1irneM8AhfesVx/zPs2YpYTZ0pp
-         /+VEzfL7mqtNCykkJCxou+Lw7UQ8/VUA0SNqtnpWUT5qoJozPYzArVtf3jN0Ks+RYY6T
-         ugTbHRVsTYCBMMoceF2an+3rjDBAVbvU/TfoC3XcH+Zt6EY4g07OCcN4P05PTqJgDO8S
-         7lsg==
+        b=bQpuUyoXJmCT/ZpqkIKVIrWwNWw141T+6IdbtfRNKRe0MgFf1EOsATSf4F2pHTHI/D
+         Rqa8NUBOjhX5eAQ35KJuZRBqAcoV+8V9ZYA8k1RToFABGz9kqq0WXR742CdHSVBuvTtU
+         fTooGdHoNlmzyB1uTV5KQWMsNIJNy/07Td/K+Ybb2TsujaWlg9A4AzfYVuS7dFc6whc5
+         j6xqp9DIVLhBkjsiNAbsAoEVfHv9uvnoBE29Plcqux1vh8M4kFPG6+p00iRu+KK3XioB
+         iSD8OHZPJOrOMYvnEGR1pr/JpTv/V5ZyNM/l99Tg70vcirUbYT79WcIZ5sIOBam9+y5H
+         xs4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
         bh=ErfaclmgSuY2taH4Itt0ooytROATSvud8f5aTV69WAo=;
-        b=m/P0YBoxNCYj5fmC2fUkEheRylqcnGR7/yZZ3R6fuob9F1wdg4KnKedppLCIDxs0w3
-         alf9/7IXzYxJGPDY3XDa4YVQIL9O3e0sqdTF2CfFHkGc+ZxDFxr3r3ACyi8Deb6kY6VR
-         SvacVy/xgJKw32MEooWEWtSkQ8PIk+r9+n8xHxgx24AVjCYCwFEoaFz+2vRe4Y0fDwN9
-         P8vii8P0GER5Bq+i+l/uUB6WZayXuvk7CKIBQnviP5iQfURogeg6XFmqiRQj6HriwxmV
-         B9FxkpdMZ4AfK9oUb8fJB0NaA5qo0V75ELWZzmWiW74AJ8tlkWZuwkxQKSwM3NJFmBh5
-         6iZQ==
-X-Gm-Message-State: AOAM531waWk3TMUC3eu4N0GXjvwlXYOHqfhhjQY53zmMr8DPP1h28E9S
-        39ZjAGR0dUOKppkoAK/ohYpM6mclQCwcuZ0kjP3n4Q==
-X-Google-Smtp-Source: ABdhPJzK+P1R4mISmjZlHZsoNN2G9ntOEmwmyNM6uUuYkflaeCeff3aXTD8ZafGBC7TvXLp4926Wkg==
-X-Received: by 2002:a17:90a:8b12:: with SMTP id y18mr49906560pjn.153.1620995538446;
-        Fri, 14 May 2021 05:32:18 -0700 (PDT)
+        b=kjNscKqFAA+XuCPxj6kRI/S2W+BOrFsY2Rq163J6kP40B3UYZEC6BTnh4DrBdsOOMj
+         quBbaO/HMeft1QEaF75brU2xzRBm2Pf0eoK87cGg2NNzaiEebEGgkzVvDgrGYWZ3p94p
+         MrIHXoY2aRjjhZ9LBhks7+eeChJ5mg+75yhuSZBExZd5C5gL3WYryj/eG+lP4I5vP4aW
+         5QntjAbGdlFOrEZQ+bymLc900hzygLnr0Ow8Ms86r12thiYSKGj02kZhAlJX3YzSSndf
+         Dz2DySskjG4XD1gl6KhlGeReIWMHYwIGF1S+bv0JKd5aHxwohGs7Gc6T2QUgCIK7Sv6k
+         tt5A==
+X-Gm-Message-State: AOAM533KPXgKIHPl3Je0zWwyoanx66gd7bW9L0IITO2+M7jJA0sHie7E
+        400z4kKG9rLvvt1hkd4FaDQwK2avyjxfK5Gzfg4teg==
+X-Google-Smtp-Source: ABdhPJyqqn+qBYLXGh+Gk9tSU5NT2C+mk4vCK0k7r7g7Pyp2gdvaAHueG38jfDUK6CL/bEoG9o6DUA==
+X-Received: by 2002:a17:902:a5ca:b029:ef:ac0a:f00f with SMTP id t10-20020a170902a5cab02900efac0af00fmr4995222plq.22.1620995687121;
+        Fri, 14 May 2021 05:34:47 -0700 (PDT)
 Received: from localhost.localdomain ([45.135.186.114])
-        by smtp.gmail.com with ESMTPSA id ms2sm4719485pjb.8.2021.05.14.05.32.13
+        by smtp.gmail.com with ESMTPSA id g8sm4071337pfo.85.2021.05.14.05.34.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 May 2021 05:32:17 -0700 (PDT)
+        Fri, 14 May 2021 05:34:46 -0700 (PDT)
 From:   Dongliang Mu <mudongliangabcd@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         Dongliang Mu <mudongliangabcd@gmail.com>,
         syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Subject: [PATCH] misc/uss720: fix memory leak in uss720_probe
-Date:   Fri, 14 May 2021 20:31:56 +0800
-Message-Id: <20210514123156.6193-1-mudongliangabcd@gmail.com>
+Subject: [PATCH v2] misc/uss720: fix memory leak in uss720_probe
+Date:   Fri, 14 May 2021 20:34:25 +0800
+Message-Id: <20210514123425.6345-1-mudongliangabcd@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
