@@ -2,146 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFE7380C69
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 16:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C778380D31
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 17:33:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234647AbhENPAy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 11:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234617AbhENPAv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 11:00:51 -0400
-Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:150:448b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67951C061760;
-        Fri, 14 May 2021 07:59:38 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id E9ECB222579;
-        Fri, 14 May 2021 16:59:36 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id LKbtEON92Hkg; Fri, 14 May 2021 16:59:34 +0200 (CEST)
-From:   Tobias Schramm <t.schramm@manjaro.org>
-To:     linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Johan Jonker <jbx6244@gmail.com>, Rob Herring <robh+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Tobias Schramm <t.schramm@manjaro.org>
-Subject: [PATCH v2 5/5] arm64: dts: rockchip: add USB support to RK3308 dts
-Date:   Fri, 14 May 2021 17:00:44 +0200
-Message-Id: <20210514150044.2099298-6-t.schramm@manjaro.org>
-In-Reply-To: <20210514150044.2099298-1-t.schramm@manjaro.org>
-References: <20210514150044.2099298-1-t.schramm@manjaro.org>
+        id S234844AbhENPeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 11:34:19 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57987 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234863AbhENPeG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 11:34:06 -0400
+Received: (qmail 1009388 invoked by uid 1000); 14 May 2021 11:32:53 -0400
+Date:   Fri, 14 May 2021 11:32:53 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     Greg KH <greg@kroah.com>,
+        syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: Re: [syzbot] WARNING in rtl8152_probe
+Message-ID: <20210514153253.GA1007561@rowland.harvard.edu>
+References: <0000000000009df1b605c21ecca8@google.com>
+ <7de0296584334229917504da50a0ac38@realtek.com>
+ <20210513142552.GA967812@rowland.harvard.edu>
+ <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com>
+ <YJ4dU3yCwd2wMq5f@kroah.com>
+ <bddf302301f5420db0fa049c895c9b14@realtek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bddf302301f5420db0fa049c895c9b14@realtek.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Rockchip RK3308 features an integrated USB 2.0 phy, an USB OTG
-controller and OHCI/EHCI interfaces.
-This patch adds all of those to the RK3308 dtsi and thereby enables USB
-support on the RK3308.
+On Fri, May 14, 2021 at 07:50:19AM +0000, Hayes Wang wrote:
+> Greg KH <greg@kroah.com>
+> > Sent: Friday, May 14, 2021 2:49 PM
+> [...]
+> > Because people can create "bad" devices and plug them into a system
+> > which causes the driver to load and then potentially crash the system or
+> > do other bad things.
+> > 
+> > USB drivers now need to be able to handle "malicious" devices, it's been
+> > that way for many years now.
+> 
+> My question is that even I check whole the USB descriptor, the malicious
+> devices could duplicate it easily to pass my checks. That is, I could add a
+> lot of checks, but it still doesn't prevent malicious devices. Is this meaningful?
 
-Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
----
- arch/arm64/boot/dts/rockchip/rk3308.dtsi | 73 ++++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+The real motivation here, which nobody has mentioned explicitly yet, is 
+that the driver needs to be careful enough that it won't crash no matter 
+what bizarre, malfunctioning, or malicious device is attached.
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-index 0c5fa9801e6f..4f55477d70f1 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
-@@ -177,6 +177,43 @@ reboot-mode {
- 		};
- 	};
- 
-+	usb2phy_grf: syscon@ff008000 {
-+		compatible = "rockchip,rk3308-usb2phy-grf", "syscon",
-+			     "simple-mfd";
-+		reg = <0x0 0xff008000 0x0 0x4000>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+
-+		u2phy: usb2-phy@100 {
-+			compatible = "rockchip,rk3308-usb2phy";
-+			reg = <0x100 0x10>;
-+			clocks = <&cru SCLK_USBPHY_REF>;
-+			clock-names = "phyclk";
-+			clock-output-names = "usb480m_phy";
-+			#clock-cells = <0>;
-+			assigned-clocks = <&cru USB480M>;
-+			assigned-clock-parents = <&u2phy>;
-+			status = "disabled";
-+
-+			u2phy_otg: otg-port {
-+				#phy-cells = <0>;
-+				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "otg-bvalid", "otg-id",
-+						  "linestate";
-+				status = "disabled";
-+			};
-+
-+			u2phy_host: host-port {
-+				#phy-cells = <0>;
-+				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
-+				interrupt-names = "linestate";
-+				status = "disabled";
-+			};
-+		};
-+	};
-+
- 	detect_grf: syscon@ff00b000 {
- 		compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
- 		reg = <0x0 0xff00b000 0x0 0x1000>;
-@@ -579,6 +616,42 @@ spdif_tx: spdif-tx@ff3a0000 {
- 		status = "disabled";
- 	};
- 
-+	usb20_otg: usb@ff400000 {
-+		compatible = "rockchip,rk3308-usb", "rockchip,rk3066-usb",
-+			     "snps,dwc2";
-+		reg = <0x0 0xff400000 0x0 0x40000>;
-+		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_OTG>;
-+		clock-names = "otg";
-+		dr_mode = "otg";
-+		g-np-tx-fifo-size = <16>;
-+		g-rx-fifo-size = <280>;
-+		g-tx-fifo-size = <256 128 128 64 32 16>;
-+		phys = <&u2phy_otg>;
-+		phy-names = "usb2-phy";
-+		status = "disabled";
-+	};
-+
-+	usb_host_ehci: usb@ff440000 {
-+		compatible = "generic-ehci";
-+		reg = <0x0 0xff440000 0x0 0x10000>;
-+		interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
-+		phys = <&u2phy_host>;
-+		phy-names = "usb";
-+		status = "disabled";
-+	};
-+
-+	usb_host_ohci: usb@ff450000 {
-+		compatible = "generic-ohci";
-+		reg = <0x0 0xff450000 0x0 0x10000>;
-+		interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-+		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
-+		phys = <&u2phy_host>;
-+		phy-names = "usb";
-+		status = "disabled";
-+	};
-+
- 	sdmmc: mmc@ff480000 {
- 		compatible = "rockchip,rk3308-dw-mshc", "rockchip,rk3288-dw-mshc";
- 		reg = <0x0 0xff480000 0x0 0x4000>;
--- 
-2.31.1
+Even if a device isn't malicious, if it is buggy, broken, or 
+malfunctioning in some way then it can present input that a normal 
+device would never generate.  If the driver isn't prepared to handle 
+this unusual input, it may crash.  That is specifically what we want to 
+avoid.
 
+So if a peculiar emulated device created by syzbot is capable of 
+crashing the driver, then somewhere there is a bug which needs to be 
+fixed.  It's true that fixing all these bugs might not protect against a 
+malicious device which deliberately behaves in an apparently reasonable 
+manner.  But it does reduce the attack surface.
+
+Alan Stern
