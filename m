@@ -2,204 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C1EA3809E1
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 14:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96067380B0E
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 16:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232159AbhENMw2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 08:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
+        id S234095AbhENOHh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 10:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbhENMw1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 08:52:27 -0400
-X-Greylist: delayed 8675 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 14 May 2021 05:51:16 PDT
-Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:150:448b::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18225C061574;
-        Fri, 14 May 2021 05:51:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.manjaro.org (Postfix) with ESMTP id 83FE022253A;
-        Fri, 14 May 2021 14:51:14 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at manjaro.org
-Received: from mail.manjaro.org ([127.0.0.1])
-        by localhost (manjaro.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dat1wKKJdGXb; Fri, 14 May 2021 14:51:10 +0200 (CEST)
-To:     Johan Jonker <jbx6244@gmail.com>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-usb@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20210514102734.2091238-1-t.schramm@manjaro.org>
- <20210514102734.2091238-5-t.schramm@manjaro.org>
- <01388394-603e-6a43-2044-ae1e93eb0ff3@gmail.com>
-From:   Tobias Schramm <t.schramm@manjaro.org>
-Subject: Re: [PATCH 4/4] arm64: dts: rockchip: add USB support to RK3308 dts
-Message-ID: <e0545fee-70db-ce38-1bd4-6520dc585bad@manjaro.org>
-Date:   Fri, 14 May 2021 14:52:47 +0200
+        with ESMTP id S231741AbhENOHf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 10:07:35 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4398BC061574;
+        Fri, 14 May 2021 07:06:24 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id c16so6984335ilo.1;
+        Fri, 14 May 2021 07:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=p778h4mDEFACoY3jLIwbbMe6YCGbmf3vLibN4Bx2pk4=;
+        b=nC8L4dQI89t4hzo3h+eXBqlhwLeHOghclMnHjZf+MAel5fuBM81cHhC1O25S5hW/il
+         y96X3yCwwkPOdCOdVOy2asoa6gkK69mX1zff9NAlBLl6K+ClrrnSIn1pVwCH6EoKLNMJ
+         kMe5RzAkqe7zgOFW/n9XniT6aIBB+GbQDxNcqMhouZEzOJyZo7/0X44tVsriScZCPh3D
+         eZXSjREmV6hTeRWC6KuC+K3z85BfiZDhfLKc5qkOCbPNf65/8M4wf4Bcl1r7d+8VypAA
+         0B6vBnLdxAC1qVfWxaecdHwSerGPqiAm9NE0QV+Oj6VJuXDBQL3C90Bk3+BJ5otjkZgr
+         6r1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=p778h4mDEFACoY3jLIwbbMe6YCGbmf3vLibN4Bx2pk4=;
+        b=mXTgBdUZU2pp9He8hkMndlwVT+MBZSIh+AoxCD6zq6iV1qLb9keD249Kh80HCb71Gs
+         USKCJgLPYRak1Vxp+7je2dIJkxJWnzibpzppyMMe8QSi2U63X8flRnuC2/R21t3nrYI3
+         1NVaj4LShnio8uVwi6FLYyMhn4HtZ5XzUkCVxinl4b78XpnxM3LCSBC2fdp/dy9LM7m5
+         xoHFB09BQF0+RWzE3Pem3DzoUU+OQ/F1B5TwD9Zlilh/nzOJFGhPzr5a3UdbX0jubmky
+         DC3h9pcyR5uGto430GQ0YbkjvDikYOb74ip0kc5FRApL+5zkkymA0ia2XnoIJYw8ervU
+         8ywQ==
+X-Gm-Message-State: AOAM532w8G2XRvWt382tcWL+eZBejWRpCp7qSqsXXXBHT5LgePoykGZe
+        9lTuMaV2iTvDH2BPMnhGMHUAO14HXYOw1A==
+X-Google-Smtp-Source: ABdhPJzjePt6YwBAYgds4Vy4ai2dQpEtXYwz25hrD40aPq72dVFwZx8fW0JmXwVyeb7KNXlrQUn6AQ==
+X-Received: by 2002:a92:ce90:: with SMTP id r16mr41615408ilo.220.1621001183633;
+        Fri, 14 May 2021 07:06:23 -0700 (PDT)
+Received: from [192.168.99.80] (142-79-211-230.starry-inc.net. [142.79.211.230])
+        by smtp.gmail.com with ESMTPSA id q18sm3094808ile.33.2021.05.14.07.06.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 May 2021 07:06:23 -0700 (PDT)
+Subject: Re: [PATCH v2 2/4] xen: Export dbgp functions when CONFIG_XEN_DOM0 is
+ enabled
+To:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <d160cee9b61c0ec41c2cd5ff9b4e107011d39d8c.1620952511.git.connojdavis@gmail.com>
+ <291659390aff63df7c071367ad4932bf41e11aef.1620952511.git.connojdavis@gmail.com>
+From:   Connor Davis <connojdavis@gmail.com>
+Message-ID: <236c31fe-2373-be23-bed4-48012a6a9765@gmail.com>
+Date:   Fri, 14 May 2021 08:06:36 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <01388394-603e-6a43-2044-ae1e93eb0ff3@gmail.com>
+In-Reply-To: <291659390aff63df7c071367ad4932bf41e11aef.1620952511.git.connojdavis@gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- > Hi Johan,
+Adding Greg and linux-usb
 
-Am 14.05.21 um 14:09 schrieb Johan Jonker:
-> Hi Tobias,
-> 
-> Just sent a patch for grf.yaml and rockchip-usb-phy.yaml conversion myself.
-> 
-Ah wonderful, thanks! I was not quite happy with touching the old .txt 
-documentation anyway. I'll adjust my next version to depend on your 
-patches then.
-> Added { .compatible = "rockchip,rk3308-usb2phy", .data =
-> &rk3308_phy_cfgs }, to phy-rockchip-inno-usb2.c
-> 
-> Added is "rockchip,rk3308-usb-phy" to rockchip-usb-phy.txt
-> 
-> compatible = "rockchip,rk3308-usb2phy"; is used in this patch.
-> 
-> Maybe try phy-rockchip-inno-usb2.yaml?
-> 
-Right. Somehow ended up in the wrong file there. Will fix it in the next 
-version.
-> "rockchip,rk3308-usb2phy-grf", "syscon", "simple-mfd" document missing.
-> 
-> Could someone recheck the reg memory size?
-> Is this still correct then?
-> 
-> ===
-> compatible = "rockchip,rk3308-grf", "syscon", "simple-mfd";
-> reg = <0x0 0xff000000 0x0 0x10000>;
-> 
-> Do we still need "0x0 0x10000" here?
-The technical reference manual specifies it as 64k in size. However, 
-since the dts has separate nodes for the other grfs it should probably 
-be "0x0 0x8000" at max. Technical reference manual indicates there is 
-nothing beyond 0x0803 in the main grf.
-> ===
-> compatible = "rockchip,rk3308-usb2phy-grf", "syscon", "simple-mfd";
-> reg = <0x0 0xff008000 0x0 0x4000>;
-> ===
-> compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
-> reg = <0x0 0xff00b000 0x0 0x1000>;
-> ===
-> compatible = "rockchip,rk3308-core-grf", "syscon", "simple-mfd";
-> reg = <0x0 0xff00c000 0x0 0x1000>;
-> ===
-> 
-> Johan
-> 
-> On 5/14/21 12:27 PM, Tobias Schramm wrote:
->> The Rockchip RK3308 features an integrated USB 2.0 phy, an USB OTG
->> controller and OHCI/EHCI interfaces.
->> This patch adds all of those to the RK3308 dtsi and thereby enables USB
->> support on the RK3308.
->>
->> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
->> ---
->>   arch/arm64/boot/dts/rockchip/rk3308.dtsi | 75 ++++++++++++++++++++++++
->>   1 file changed, 75 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/rockchip/rk3308.dtsi b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
->> index 0c5fa9801e6f..80fd802d6c15 100644
->> --- a/arch/arm64/boot/dts/rockchip/rk3308.dtsi
->> +++ b/arch/arm64/boot/dts/rockchip/rk3308.dtsi
->> @@ -177,6 +177,43 @@ reboot-mode {
->>   		};
->>   	};
->>   
->> +	usb2phy_grf: syscon@ff008000 {
->> +		compatible = "rockchip,rk3308-usb2phy-grf", "syscon",
->> +			     "simple-mfd";
->> +		reg = <0x0 0xff008000 0x0 0x4000>;
->> +		#address-cells = <1>;
->> +		#size-cells = <1>;
->> +
->> +		u2phy: usb2-phy@100 {
-> 
->> +			compatible = "rockchip,rk3308-usb2phy";
->> +			reg = <0x100 0x10>;
->> +			clocks = <&cru SCLK_USBPHY_REF>;
->> +			clock-names = "phyclk";
->> +			clock-output-names = "usb480m_phy";
->> +			#clock-cells = <0>;
->> +			assigned-clocks = <&cru USB480M>;
->> +			assigned-clock-parents = <&u2phy>;
->> +			status = "disabled";
->> +
-> 
-> Looks like
-> 
->> +			u2phy_otg: otg-port {
->> +				#phy-cells = <0>;
->> +				interrupts = <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
->> +					     <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>,
->> +					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
->> +				interrupt-names = "otg-bvalid", "otg-id",
->> +						  "linestate";
->> +				status = "disabled";
->> +			};
->> +
->> +			u2phy_host: host-port {
->> +				#phy-cells = <0>;
->> +				interrupts = <GIC_SPI 74 IRQ_TYPE_LEVEL_HIGH>;
->> +				interrupt-names = "linestate";
->> +				status = "disabled";
->> +			};
->> +		};
->> +	};
->> +
->>   	detect_grf: syscon@ff00b000 {
->>   		compatible = "rockchip,rk3308-detect-grf", "syscon", "simple-mfd";
->>   		reg = <0x0 0xff00b000 0x0 0x1000>;
->> @@ -579,6 +616,44 @@ spdif_tx: spdif-tx@ff3a0000 {
->>   		status = "disabled";
->>   	};
->>   
->> +	usb20_otg: usb@ff400000 {
->> +		compatible = "rockchip,rk3308-usb", "rockchip,rk3066-usb",
->> +			     "snps,dwc2";
->> +		reg = <0x0 0xff400000 0x0 0x40000>;
->> +		interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
->> +		clocks = <&cru HCLK_OTG>;
->> +		clock-names = "otg";
->> +		dr_mode = "otg";
->> +		g-np-tx-fifo-size = <16>;
->> +		g-rx-fifo-size = <280>;
->> +		g-tx-fifo-size = <256 128 128 64 32 16>;
->> +		phys = <&u2phy_otg>;
->> +		phy-names = "usb2-phy";
->> +		status = "disabled";
->> +	};
->> +
->> +	usb_host_ehci: usb@ff440000 {
->> +		compatible = "generic-ehci";
->> +		reg = <0x0 0xff440000 0x0 0x10000>;
->> +		interrupts = <GIC_SPI 71 IRQ_TYPE_LEVEL_HIGH>;
->> +		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
->> +		clock-names = "usbhost", "arbiter", "utmi";
->> +		phys = <&u2phy_host>;
->> +		phy-names = "usb";
->> +		status = "disabled";
->> +	};
->> +
->> +	usb_host_ohci: usb@ff450000 {
->> +		compatible = "generic-ohci";
->> +		reg = <0x0 0xff450000 0x0 0x10000>;
->> +		interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
->> +		clocks = <&cru HCLK_HOST>, <&cru HCLK_HOST_ARB>, <&u2phy>;
->> +		clock-names = "usbhost", "arbiter", "utmi";
->> +		phys = <&u2phy_host>;
->> +		phy-names = "usb";
->> +		status = "disabled";
->> +	};
->> +
->>   	sdmmc: mmc@ff480000 {
->>   		compatible = "rockchip,rk3308-dw-mshc", "rockchip,rk3288-dw-mshc";
->>   		reg = <0x0 0xff480000 0x0 0x4000>;
->>
+On 5/13/21 6:56 PM, Connor Davis wrote:
+> Export xen_dbgp_reset_prep and xen_dbgp_external_startup
+> when CONFIG_XEN_DOM0 is defined. This allows use of these symbols
+> even if CONFIG_EARLY_PRINK_DBGP is defined.
+>
+> Signed-off-by: Connor Davis <connojdavis@gmail.com>
+> Acked-by: Juergen Gross <jgross@suse.com>
+> ---
+>   drivers/xen/dbgp.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/xen/dbgp.c b/drivers/xen/dbgp.c
+> index cfb5de31d860..fef32dd1a5dc 100644
+> --- a/drivers/xen/dbgp.c
+> +++ b/drivers/xen/dbgp.c
+> @@ -44,7 +44,7 @@ int xen_dbgp_external_startup(struct usb_hcd *hcd)
+>   	return xen_dbgp_op(hcd, PHYSDEVOP_DBGP_RESET_DONE);
+>   }
+>   
+> -#ifndef CONFIG_EARLY_PRINTK_DBGP
+> +#if defined(CONFIG_XEN_DOM0) || !defined(CONFIG_EARLY_PRINTK_DBGP)
+>   #include <linux/export.h>
+>   EXPORT_SYMBOL_GPL(xen_dbgp_reset_prep);
+>   EXPORT_SYMBOL_GPL(xen_dbgp_external_startup);
