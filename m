@@ -2,93 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB14380E83
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 18:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354893810FD
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 21:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232849AbhENQ7s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 12:59:48 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:46919 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230488AbhENQ7n (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 14 May 2021 12:59:43 -0400
-Received: (qmail 1012336 invoked by uid 1000); 14 May 2021 12:58:30 -0400
-Date:   Fri, 14 May 2021 12:58:30 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Disconnect race in Gadget core
-Message-ID: <20210514165830.GA1010288@rowland.harvard.edu>
-References: <20210510152426.GE863718@rowland.harvard.edu>
- <87zgx2fskr.fsf@kernel.org>
- <20210510193849.GB873147@rowland.harvard.edu>
- <87r1idfzms.fsf@kernel.org>
- <20210511212651.GA914027@rowland.harvard.edu>
- <87lf8kfnc6.fsf@kernel.org>
- <20210512153358.GC934575@rowland.harvard.edu>
- <87bl9d7oo0.fsf@kernel.org>
+        id S231485AbhENTjw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 15:39:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54558 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229981AbhENTjw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 15:39:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99B06613D3;
+        Fri, 14 May 2021 19:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621021119;
+        bh=fuYo85BNBgn72d2joQno1yx5YvBZPSJbiqSuQwDGkbo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ACF0+c9v4hCk2SgoUwoLzSwrQSegfqp+Y/0FlJldSVrHzGFKO4DEVxwdXVWPnUMJY
+         2wjtNHq7+3b1BPj18mCPrsX9FXTkYlKvq3FbTIFAUwsC3lC6duQvWPHEQud0bqpZdJ
+         /5nHiasWDfb0E1ULYuS99dp3KMvlyzv/LEJYbRdyX5X1hKG/Ws6Sech3Mi2neLMYpP
+         2VynBEFAgDk9SVQa9tXG3CEMnPeZ5tplxjgH9j6OQbzsaeuDlUO44yJ6anHabXJw7G
+         m4sHn/LQLZxYyUCuAqWLtN+aiMLf4fi8YmCs4hQNlNUTZeHt/4MVhcd8BKlXLY1rIi
+         fCoaPMXgK8iIA==
+Date:   Fri, 14 May 2021 12:38:38 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        Michal Svec <msvec@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH RFC] r8152: Ensure that napi_schedule() is handled
+Message-ID: <20210514123838.10d78c35@kicinski-fedora-PC1C0HJN>
+In-Reply-To: <877dk162mo.ffs@nanos.tec.linutronix.de>
+References: <877dk162mo.ffs@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bl9d7oo0.fsf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 14, 2021 at 10:35:59AM +0300, Felipe Balbi wrote:
-> Alan Stern <stern@rowland.harvard.edu> writes:
-> > On Wed, May 12, 2021 at 10:00:41AM +0300, Felipe Balbi wrote:
-> >> Hmm, IIRC only the storage gadget defers work to another thread.
-> >
-> > Well, the composite core is built into almost every gadget, and doesn't 
-> > it handle Set-Configuration and Set-Interface requests in a separate 
-> > thread?  Or doesn't it expect function drivers to do so?
+On Fri, 14 May 2021 12:17:19 +0200 Thomas Gleixner wrote:
+> The driver invokes napi_schedule() in several places from task
+> context. napi_schedule() raises the NET_RX softirq bit and relies on the
+> calling context to ensure that the softirq is handled. That's usually on
+> return from interrupt or on the outermost local_bh_enable().
 > 
-> composite.c doesn't defer anything to a separate thread by itself. The
-> gadget driver, if it finds it necessary, should handle it
-> internally. Most gadget drivers handle all of this in interrupt context.
+> But that's not the case here which causes the soft interrupt handling to be
+> delayed to the next interrupt or local_bh_enable(). If the task in which
+> context this is invoked is the last runnable task on a CPU and the CPU goes
+> idle before an interrupt arrives or a local_bh_disable/enable() pair
+> handles the pending soft interrupt then the NOHZ idle code emits the
+> following warning.
 > 
-> > After all, the gadget first learns about config or altsetting changes 
-> > when it receives a Set-Configuration or Set-Interface request, which 
-> > happens in interrupt context.  But changing configs or altsettings 
-> > requires disabling/enabling endpoints, which needs a process context 
-> > (see the kerneldoc for usb_ep_enable and usb_ep_disable).
+>   NOHZ tick-stop error: Non-RCU local softirq work is pending, handler #08!!!
 > 
-> Ouch, I don't think any driver is guaranteeing that other than the
-> storage gadget.
+> Prevent this by wrapping the napi_schedule() invocation from task context
+> into a local_bh_disable/enable() pair.
 
-A quick search shows that USB_GADGET_DELAYED_STATUS is used in f_fs.c, 
-f_tcm.c, and f_uvc.c in addition to f_mass_storage.c.  So the situation 
-isn't as bad as you thought, although it should be better.
+I should have read through my inbox before replying :)
 
-Anyway, getting back to the main point...
-
-To minimize disruption, suppose we add a new callback to usb_gadget_ops:
-
-	void	(*udc_async_callbacks)(struct usb_gadget *, int enable);
-
-The UDC core can call this at the appropriate times, if it is not NULL.  
-It allows the core to tell a UDC driver whether or not to issue 
-callbacks for setup, disconnect, reset, suspend, and resume.  It doesn't 
-affect request completion callbacks.
-
-So for removing a driver, the proper sequence will be:
-
-	usb_gadget_disconnect()
-	if (gadget->ops->udc_async_callbacks)
-		gadget->ops->udc_async_callbacks(gadget, 0);
-	synchronize_irq()
-	udc->driver->unbind()
-	usb_gadget_udc_stop()
-
-Or maybe the last two steps should be reversed.  In udc_bind_to_driver, 
-the opposite sequence is:
-
-	bind
-	udc_start
-	enable async callbacks
-	connect (turn on pull-up)
-
-How does this sound?
-
-Alan Stern
+I'd go for switching to raise_softirq_irqoff() in ____napi_schedule()...
+why not?
