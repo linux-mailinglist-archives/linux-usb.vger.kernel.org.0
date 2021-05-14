@@ -2,83 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BAF7380838
-	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1199D380845
+	for <lists+linux-usb@lfdr.de>; Fri, 14 May 2021 13:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231600AbhENLPp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 07:15:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54622 "EHLO mail.kernel.org"
+        id S229470AbhENLR7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 14 May 2021 07:17:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55034 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229470AbhENLPo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 07:15:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AE68E613D3;
-        Fri, 14 May 2021 11:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1620990873;
-        bh=aA79gpOGARxGV/IlCQvQu3pUm+YWNXEoAabdY5rOILU=;
+        id S231968AbhENLR6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 14 May 2021 07:17:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E5FF61355;
+        Fri, 14 May 2021 11:16:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1620991007;
+        bh=3VWC1aueGlgxQBGe1RN+FHzYDJiVGhWhswGxph1UwXE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bJNP4OG7k3OQNxTHLFdksfPXYfZ8CBJKmyB/ZiNtZh56P3aMMTbJKYbdJ6ePwF6o8
-         gsZxNGJjQbby7mrq5aBq5JCnkb+OTDl4CGeK8yrndP8APhcCxP6nd8opaiyObhgKAs
-         GYmWn47RNoFOUhnMDujPMBhpV8NXg5ZYvRmuFE4w=
-Date:   Fri, 14 May 2021 13:14:30 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-Subject: Re: [PATCH] misc/uss720: fix memory leak in uss720_probe
-Message-ID: <YJ5bllCkul/X+iNk@kroah.com>
-References: <20210514110317.2041580-1-mudongliangabcd@gmail.com>
+        b=gNm1RNo+SemzqMkn/iCCFeKdU0GmfJrkAxKLJjilakXhkdVlFlz8epGU9h9pBUIEn
+         b0VRi882FNPPRdd0gQ2WqVmnLThK9DQPsGw9azMFGX49docfZbw9SKXi7Osod3jfFn
+         7IuBljQQ6U70h/WqrYg2gWez5hgBElmg/G0qm+ViOErpcj0ki+PnkHI9XOmHykh7LA
+         wvhSmF6rw9nCaOYD2GGvWNsfywZNSgdhDv3Q+og35cEKeUMMFj35mhj33ow8yr/Ghc
+         QA8EwPCPkHsDJDv5e/O8D8s2T8M6amVqfy8QROrHFylx1DPow/8o0v96+XEThmKp9e
+         G12/V8WeobImA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lhVoF-0000qJ-Qb; Fri, 14 May 2021 13:16:47 +0200
+Date:   Fri, 14 May 2021 13:16:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
+References: <cover.1620304986.git.sean@mess.org>
+ <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+ <20210511103219.GA13769@gofer.mess.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210514110317.2041580-1-mudongliangabcd@gmail.com>
+In-Reply-To: <20210511103219.GA13769@gofer.mess.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 14, 2021 at 07:03:17PM +0800, Dongliang Mu wrote:
-> uss720_probe forgets to decrease the refcount of usbdev in uss720_probe.
-> Fix this by decreasing the refcount of usbdev by usb_put_dev.
+On Tue, May 11, 2021 at 11:32:19AM +0100, Sean Young wrote:
+> On Mon, May 10, 2021 at 10:15:14AM +0200, Johan Hovold wrote:
+> > On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
+> > > This is a new rc-core driver for the USB-UIRT which you can see here
+> > > http://www.usbuirt.com/
+> > > 
+> > > This device is supported in lirc, via the usb serial kernel driver. This
+> > > driver is both for rc-core, which means it can use kernel/BPF decoding
+> > > ec. Also this implement is superior because it can:
+> > >  - support learning mode
+> > >  - setting transmit carrier
+> > >  - larger transmits using streaming tx command
+> > 
+> > This looks like something which should have been implemented as a
+> > line-discipline or serdev driver instead of reimplementing a minimal
+> > on-off ftdi driver and tying it closely to the RC subsystem.
 > 
-> BUG: memory leak
-> unreferenced object 0xffff888101113800 (size 2048):
->   comm "kworker/0:1", pid 7, jiffies 4294956777 (age 28.870s)
->   hex dump (first 32 bytes):
->     ff ff ff ff 31 00 00 00 00 00 00 00 00 00 00 00  ....1...........
->     00 00 00 00 00 00 00 00 00 00 00 00 03 00 00 00  ................
->   backtrace:
->     [<ffffffff82b8e822>] kmalloc include/linux/slab.h:554 [inline]
->     [<ffffffff82b8e822>] kzalloc include/linux/slab.h:684 [inline]
->     [<ffffffff82b8e822>] usb_alloc_dev+0x32/0x450 drivers/usb/core/usb.c:582
->     [<ffffffff82b98441>] hub_port_connect drivers/usb/core/hub.c:5129 [inline]
->     [<ffffffff82b98441>] hub_port_connect_change drivers/usb/core/hub.c:5363 [inline]
->     [<ffffffff82b98441>] port_event drivers/usb/core/hub.c:5509 [inline]
->     [<ffffffff82b98441>] hub_event+0x1171/0x20c0 drivers/usb/core/hub.c:5591
->     [<ffffffff81259229>] process_one_work+0x2c9/0x600 kernel/workqueue.c:2275
->     [<ffffffff81259b19>] worker_thread+0x59/0x5d0 kernel/workqueue.c:2421
->     [<ffffffff81261228>] kthread+0x178/0x1b0 kernel/kthread.c:292
->     [<ffffffff8100227f>] ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-> 
-> Reported-by: syzbot+636c58f40a86b4a879e7@syzkaller.appspotmail.com
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> ---
->  drivers/usb/misc/uss720.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/misc/uss720.c b/drivers/usb/misc/uss720.c
-> index b5d661644263..748139d26263 100644
-> --- a/drivers/usb/misc/uss720.c
-> +++ b/drivers/usb/misc/uss720.c
-> @@ -736,6 +736,7 @@ static int uss720_probe(struct usb_interface *intf,
->  	parport_announce_port(pp);
->  
->  	usb_set_intfdata(intf, pp);
-> +	usb_put_dev(usbdev);
->  	return 0;
->  
->  probe_abort:
-> -- 
-> 2.25.1
-> 
+> The device is an infrared device, I'm not sure what it is lost by
+> doing it this way. The "minimal on-off ftdi driver" is super trivial.
 
-Nice catch!
+It's still code duplication (and I meant to say "one-off" above").
+
+What is preventing you from supporting the above functionality through
+lirc?
+
+> > Why can't you just add support for the above features to whatever
+> > subsystem is managing this device today?
+> > 
+> > Serdev still doesn't support hotplugging unfortunately so that route may
+> > take a bit more work.
+> 
+> There seems to be at least three ways of attaching drivers to serial
+> devices: serio, serdev, and line-discipline. All seem to have limitations,
+> as you say none of them provide a way of hotplugging devices without
+> user-space attaching them through an ioctl or so.
+
+serio is also a line-discipline driver, which unlike serdev needs to be
+set up by user space.
+
+And the problem with serdev is that it does not (yet) support
+hotplugging (specifically hangups) so it can't be enabled for USB serial
+just yet.
+
+> If you want to go down this route, then ideally you'd want a quirk on
+> fdti saying "attach usb-uirt serdev device to this pid/vid". Considering
+> module dependencies, I don't know how that could work without again
+> userspace getting involved.
+
+We'd just reuse or add another matching mechanism for USB devices. This
+can be handled without user-space interaction just fine as long as you
+have a dedicated device id as you do here.
+
+> Getting userspace involved seem like a big song and dance because the
+> device uses an fdti device, even though it's not a serial port because
+> it's hardwired for infrared functions, no db9 connector in sight.
+
+Far from every USB serial device have a db9 connector (e.g. modems,
+barcode scanners, development board consoles, etc.) and you still have a
+UART in your device.
+
+In principle reimplementing a one-off ftdi driver is wrong but since
+parts of the infrastructure needed to avoid this is still missing it may
+be acceptable, especially if you can't get this to work with lirc.
+
+Johan
