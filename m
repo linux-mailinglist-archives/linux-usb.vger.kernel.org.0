@@ -2,67 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 093FC3819BE
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 18:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0856E381A3B
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 19:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233221AbhEOQIo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 12:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233070AbhEOQIm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 12:08:42 -0400
-Received: from mail-il1-x142.google.com (mail-il1-x142.google.com [IPv6:2607:f8b0:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB17C06174A
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 09:07:29 -0700 (PDT)
-Received: by mail-il1-x142.google.com with SMTP id h6so2363546ila.7
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 09:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=CHCYvK808xYBHsuBNQGeVizodp59iMGVB6wqLFL/gAE=;
-        b=tO+n7ryLUF17+nlissspCwOIyBjFNILXLLX8jDamVRTMsItmOABBwV4STGLabruYt9
-         jUGvi/9d1WfcnaWMa0QL6XdwzOHFklW6lLCGRjJ4XrTjGxhxcCYAwSn9rjkRMhYwrUc0
-         /zRKs2G0sHFWlTjJrhQTMFhffFtQ5l7FrcELXfzbYSmKnDYvhrVYZNk6R+qwNQhvPb0g
-         qps5E++sjI62xlh9LcXvTREGHKnnN58Iil/EvxEZvG4HuKAxM+jfQgMLS1JNlsGE5BNz
-         i0S8E/o5JR219WDjN0seS+fOTWYu89BsaodFpHOdoZ88LJYJw41/EtdEV79aTSCl79Mv
-         8yqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=CHCYvK808xYBHsuBNQGeVizodp59iMGVB6wqLFL/gAE=;
-        b=soLxrR/nV3hXty5zAdFeUoiM5AZGs6byPoxkzNG7ZX7ipshlG5bPRH5P0mxjHDE+o0
-         qF16Ig+hzcDUfa0FhbGnuqERxx1KTVEj6LoZYSCs41N3nrzjAU1Bu1ZjawJ8/XtKSyrg
-         95p+YTFePVgZKqSejLwqKjXstAxzIMZE7YhTSuzepr42ofGpLgv9NxkjfnmzTFYQasrt
-         Q/7balR1fpcZksAiOSIeGwg1Enx9ujBEirUr5oINSmmBwvyB9HfhY+/EkubrH96QXuQT
-         OnYEDl+2nAM5f1rd3BlS0cGybnSVjFh1rkyV2hhXIVtiz3zx09DV1lk7qTs62Mk7JH/J
-         ieDg==
-X-Gm-Message-State: AOAM533W3X3lxqZi5pmBWhlLn9JkwzVHrkNorbTweKOZh0UZnnO6iiE+
-        PgV8VwBJw1e992QLR3wZRSnKIigua2eysMy6Hig=
-X-Google-Smtp-Source: ABdhPJz4wi9eqISqtsjHQv6uiMBhcxcoUvBnxuE7v6O11Kx4Lg2kUNqlGEt0IlsNchiEydfR7dxh+VKG/pTpT79POMQ=
-X-Received: by 2002:a05:6e02:190a:: with SMTP id w10mr44768416ilu.1.1621094848781;
- Sat, 15 May 2021 09:07:28 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6602:2187:0:0:0:0 with HTTP; Sat, 15 May 2021 09:07:28
- -0700 (PDT)
-Reply-To: mrs.chantalmuammar2021@email.com
-From:   "Mrs. bill Chantal" <asewrfgvbh@gmail.com>
-Date:   Sat, 15 May 2021 16:07:28 +0000
-Message-ID: <CADh56PUrL7jtfs2rSGWrmhs2n_UZQ-tyFdduUHLAOcT2GjDS9w@mail.gmail.com>
-Subject: Hello Dear,
-To:     undisclosed-recipients:;
+        id S233030AbhEORpv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 13:45:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40430 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231480AbhEORpu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 15 May 2021 13:45:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1A39B610A0
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 17:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621100677;
+        bh=E1y9T3bdIO5oXZub1qYMmSFffLwBufGLkVlmntDL/Q4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=kCNPJFYcU8PshuIjlwmIwCEiK+sMlzsiEEyar0BG2ha1AN48wOs8bKkuKzPldQuBl
+         Ziu7zXEYBDdJWezrvbShBvrWiauz15Y6hq18Vug9WnkOyQq4suQLT5wAA4BzPUwVyf
+         8NC+GgJFjTVX93F1uFPEm9xcBxpqc/Prttnjjcd56U1f7nLqlsVerICG/Cd8lfwOAd
+         PGS9LH5cfvNnJzJJry9B6wJx8J9hhUdPIRpdigZ0CTJz5jj2x0gVSn1I1iTGxY4CFv
+         UUqr6vShPeHdvvL7o3kEsrvtsnq7xoSxrzs7oVDaQFQR0mHG1ABvFZDeZ0XdTc0dom
+         4kd3Klq7zEsqQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 07053610A4; Sat, 15 May 2021 17:44:37 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Sat, 15 May 2021 17:44:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: peter.ganzhorn@googlemail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-213081-208809-QSki9nqueU@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Dear Friend
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-You have been compensated with the sum of 4.4 million dollars in this
-bunited nation the payment will be Issue into atm visa card and send
-to you from the Santander bank we need your address passport and your
-whatsapp number.
-thanks
+--- Comment #2 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
+Created attachment 296781
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296781&action=3Dedit
+usbmon trace 5.12 bus 6
 
-Mrs. bill Chantal
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
