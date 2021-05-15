@@ -2,88 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E39381705
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 10:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD631381721
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 11:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbhEOIwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 04:52:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37780 "EHLO mail.kernel.org"
+        id S234579AbhEOJXm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 05:23:42 -0400
+Received: from gofer.mess.org ([88.97.38.141]:52233 "EHLO gofer.mess.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229819AbhEOIwt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 15 May 2021 04:52:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 098B761090;
-        Sat, 15 May 2021 08:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621068696;
-        bh=m3lBRiOspltdvm2XIQhoLSyKo9zzgLjpz5rqo97Zg8Q=;
+        id S230448AbhEOJXl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 15 May 2021 05:23:41 -0400
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 06689C641E; Sat, 15 May 2021 10:22:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1621070547; bh=eaVK0UPMHnlljMwNTYy/QtgLnXiQVW5cgFw4TKsZcCQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W+PVqT4O+Wzbsg7XtUwRdEUv2SD8Jq4u8EiZrfEFQTiqGFRCodsxMzbZ0m5R//jFN
-         3+4HpOFkSVbhVfD6pOaKI6fmzuu3aUzYf7G2tjbytB8QzsOe0Fgt3ygZ0al6vbKyOG
-         5klzyoGLf4Cj2Lnb1kOyUFZcA2ZBBfmRwnf9QdSQ=
-Date:   Sat, 15 May 2021 10:51:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH] usb: xhci: Remove useless variable
-Message-ID: <YJ+LlTUFgr1YFg9f@kroah.com>
-References: <20210515084647.179580-1-chengzhihao1@huawei.com>
+        b=D9rKn/5e9nKC2Uhk+K9FS5bLIQi8yx5ge7mRYb3eD21UZtO/vPa6Pm6WBYlivnQh4
+         EjF+RW80aUP2q8qA26tS41WlV7HnESJbsJsWLTATuB+JNmsiq8mVGzhpqx+Ze1hg8d
+         o2sr/SEX/78VpaoquMlivwVR0KJ9Rq17wYRhc2aH4Fp/CIqTd4qT+CEBWFNk2n+zMa
+         lURRkd5sgFtLfJZm9sPQ2nqX5y5vep5lVRf9dMc/faEEXwSWCbxdtIVEoXrI6ehmCz
+         aHgYX2XxSXTEy5kGgSQt6MTSXDqVyd+81ozLJIWQ7yrmIgSvbu6gdotSq+v66IJVTy
+         dLUQBwgQLl7sg==
+Date:   Sat, 15 May 2021 10:22:26 +0100
+From:   Sean Young <sean@mess.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <20210515092226.GA31801@gofer.mess.org>
+References: <cover.1620304986.git.sean@mess.org>
+ <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+ <20210511103219.GA13769@gofer.mess.org>
+ <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210515084647.179580-1-chengzhihao1@huawei.com>
+In-Reply-To: <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 15, 2021 at 04:46:47PM +0800, Zhihao Cheng wrote:
-> Fix the following gcc warning:
+On Fri, May 14, 2021 at 01:16:47PM +0200, Johan Hovold wrote:
+> On Tue, May 11, 2021 at 11:32:19AM +0100, Sean Young wrote:
+> > On Mon, May 10, 2021 at 10:15:14AM +0200, Johan Hovold wrote:
+> > > On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
+> > > > This is a new rc-core driver for the USB-UIRT which you can see here
+> > > > http://www.usbuirt.com/
+> > > > 
+> > > > This device is supported in lirc, via the usb serial kernel driver. This
+> > > > driver is both for rc-core, which means it can use kernel/BPF decoding
+> > > > ec. Also this implement is superior because it can:
+> > > >  - support learning mode
+> > > >  - setting transmit carrier
+> > > >  - larger transmits using streaming tx command
+> > > 
+> > > This looks like something which should have been implemented as a
+> > > line-discipline or serdev driver instead of reimplementing a minimal
+> > > on-off ftdi driver and tying it closely to the RC subsystem.
+> > 
+> > The device is an infrared device, I'm not sure what it is lost by
+> > doing it this way. The "minimal on-off ftdi driver" is super trivial.
 > 
-> drivers/usb/host/xhci.c:1349:15: warning: variable ‘len’ set but not
-> used [-Wunused-but-set-variable ]
+> It's still code duplication (and I meant to say "one-off" above").
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-> ---
->  drivers/usb/host/xhci.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index ca9385d22f68..b38a14ef2e15 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
->  
->  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
->  {
-> -	unsigned int len;
->  	unsigned int buf_len;
->  	enum dma_data_direction dir;
->  
-> @@ -1362,10 +1361,10 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
->  				 dir);
->  
->  	if (usb_urb_dir_in(urb))
-> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-> -					   urb->transfer_buffer,
-> -					   buf_len,
-> -					   0);
-> +		sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-> +				     urb->transfer_buffer,
-> +				     buf_len,
-> +				     0);
->  
->  	urb->transfer_flags &= ~URB_DMA_MAP_SINGLE;
->  	kfree(urb->transfer_buffer);
-> -- 
-> 2.25.4
-> 
+> What is preventing you from supporting the above functionality through
+> lirc?
 
-Isn't this the same thing that I have asked "please fix this by checking
-the return value!" in the past?
+I guess you mean the userspace lirc daemon, as opposed to the /dev/lirc
+chardev. If you use the lirc daemon, you don't use rc-core which comes with
+IR decoding using BPF IR decoding or in-kernel decoders, automatic setup of
+rc keymaps via udev. None of the modern ir-ctl/ir-keytable tooling will
+work, including the IRP encoder/BPF compiler I'm working on (very slowly).
 
-Please do so.
+The other nice thing is that IR TX feeds data from an urb interrupt handler,
+so you don't need to rely userspace being scheduled quickly enough to feed
+more data before the device runs out.
 
-greg k-h
+> 
+> > > Why can't you just add support for the above features to whatever
+> > > subsystem is managing this device today?
+> > > 
+> > > Serdev still doesn't support hotplugging unfortunately so that route may
+> > > take a bit more work.
+> > 
+> > There seems to be at least three ways of attaching drivers to serial
+> > devices: serio, serdev, and line-discipline. All seem to have limitations,
+> > as you say none of them provide a way of hotplugging devices without
+> > user-space attaching them through an ioctl or so.
+> 
+> serio is also a line-discipline driver, which unlike serdev needs to be
+> set up by user space.
+
+serio is unusable for this case. serio does not allow more than one byte
+to be written nor does it have callbacks for CTS readiness.
+
+> And the problem with serdev is that it does not (yet) support
+> hotplugging (specifically hangups) so it can't be enabled for USB serial
+> just yet.
+> 
+> > If you want to go down this route, then ideally you'd want a quirk on
+> > fdti saying "attach usb-uirt serdev device to this pid/vid". Considering
+> > module dependencies, I don't know how that could work without again
+> > userspace getting involved.
+> 
+> We'd just reuse or add another matching mechanism for USB devices. This
+> can be handled without user-space interaction just fine as long as you
+> have a dedicated device id as you do here.
+
+Right, ok. I don't quite follow what you have in mind. If at all possible
+keep me in the loop for any patches for this, I'm happy to test/re-write
+this driver and the drivers/media/rc/ir_toy.c driver on top of any such
+patches.
+
+There are a bunch old serial usb device IR devices and even older non-usb
+serial devices that would be nice to have supported, if anyone is still
+using them.
+
+> > Getting userspace involved seem like a big song and dance because the
+> > device uses an fdti device, even though it's not a serial port because
+> > it's hardwired for infrared functions, no db9 connector in sight.
+> 
+> Far from every USB serial device have a db9 connector (e.g. modems,
+> barcode scanners, development board consoles, etc.) and you still have a
+> UART in your device.
+> 
+> In principle reimplementing a one-off ftdi driver is wrong but since
+> parts of the infrastructure needed to avoid this is still missing it may
+> be acceptable, especially if you can't get this to work with lirc.
+
+Thanks -- that's a good compromise.
+
+
+Sean
+
