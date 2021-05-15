@@ -2,97 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D923818ED
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 15:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A14381958
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 16:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbhEONL2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 09:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S231742AbhEOO0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 10:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbhEONL2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 09:11:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D68C061573;
-        Sat, 15 May 2021 06:10:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fAzgbMupEdZq7k4jnscABWVAr393MLUY7L0uJlUvVmw=; b=YcA0XrBrPKFJIu86gydG4WM/84
-        a1SfDCPKJbbPzY6Chb2Ew+AgSuXbrRYgzToN5WedvKFcQZWG3u0sVCxBVViDzvSBmiP6ZUN1fDExI
-        iDwCKIolW7fE4A+/R+nkbUxB7TC0lOmaDgTTioaXE6U/oYyKcsMVwDg9BErhTcziuA3F0virDxxJq
-        qPh0gOrchq4D6z9KlKrtWHtC+uQyLqefvHTUsRt6Bky025Q5N0e0W/gBXYif7NXQWJw2YFfnvhUVV
-        dJh6JHN4FXElaREn+W+X3upjMDbk6+q7iyqvOhtlJcWv+U/XDKn4G655DjoTmZtIS12jVK+YCqiTn
-        Xriad/ZA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
-        id 1lhu2q-00BF4C-IO; Sat, 15 May 2021 13:09:31 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B526E986476; Sat, 15 May 2021 15:09:26 +0200 (CEST)
-Date:   Sat, 15 May 2021 15:09:26 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, Michal Svec <msvec@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH RFC] r8152: Ensure that napi_schedule() is handled
-Message-ID: <20210515130926.GC21560@worktop.programming.kicks-ass.net>
-References: <877dk162mo.ffs@nanos.tec.linutronix.de>
- <20210514123838.10d78c35@kicinski-fedora-PC1C0HJN>
- <87sg2p2hbl.ffs@nanos.tec.linutronix.de>
- <20210514134655.73d972cb@kicinski-fedora-PC1C0HJN>
- <87fsyp2f8s.ffs@nanos.tec.linutronix.de>
- <20210514144130.7287af8e@kicinski-fedora-PC1C0HJN>
- <871ra83nop.ffs@nanos.tec.linutronix.de>
+        with ESMTP id S231658AbhEOO0f (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 10:26:35 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928E6C061573
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 07:25:20 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so3073451pjp.4
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 07:25:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zrpI9aqNSIZj2FkRvlmMmVIOsrsnr2kfjUz3pcuWzlU=;
+        b=JYnTd5c3ZM93TbQWaZwvEpyPvzsAdVwVMbgsOiRECwuYaeSBwZ5kVf58GwxIJF+sBY
+         +RcvkaMmNWYnFdL4QbJqIGGpsFdX89oAgsAjxiP0rSlzAzc0cshpdPGHKzXfERFQAuuB
+         7D9uR+zfErSR816vAiRsXxHlzfZxYdh3nbGMXy4YfPVLPYTbq/v2Qv2r3/XIv4l5XmcV
+         1DRwgRlNI86F7NgsrzBkiH7WRf7WmhUahp3xSfGNCxWnmpMMtRCPMg0MmFKMeLhVikLV
+         lDAOvMHovFI3V98eq4mu+745LwGSvoqueiTb3jGy8iSTaqaNZJ1XKbogDZ+OIBxAHoa4
+         ADSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zrpI9aqNSIZj2FkRvlmMmVIOsrsnr2kfjUz3pcuWzlU=;
+        b=r1+GdH+HLMNPeA7B/j+Cx2paUGAglkQ2NuIlhdKhBpU+YL6EbzBHuBLzYSFFTB3N8A
+         SyjEVpysAek0MwGcV1CCdOeEfSFzWX0cB2jpilBCIcexsUSW2SGXX+P34CYtIJx2UXg5
+         0OgBbswkn4tL6yuHU1NpebaV3FXOVz91v/ER6lOt3HowJnu7dbFxoDZKx6fFxbtndKjG
+         1/Y0aoN2HWxoFSxfkqoOjoq5LXOVD7jsfHFJPtfqaMdDHsTXELhYnIN9EX1E2426hMg4
+         NujBzVpkAOcn++XToi4OJSpdupKe63sMnjwDs7A3UINf24Fy2u4JETOhauMWClMQAqnN
+         9wgw==
+X-Gm-Message-State: AOAM533TfzlBQkLvXq3OrktYTPsN63ShBT4yaG9BA2O7L2+/wVnzyg/w
+        rjeLOUaTNpN9SwlVzh8DAgs=
+X-Google-Smtp-Source: ABdhPJy0bA3exrRwW+1qXt3iwnUfjwqPHE40jFD67cMHRoR8+MqAJwjTMwCPksoL5rmAf5/44S9OpQ==
+X-Received: by 2002:a17:90a:66c3:: with SMTP id z3mr17499268pjl.196.1621088720140;
+        Sat, 15 May 2021 07:25:20 -0700 (PDT)
+Received: from nuc.. ([202.133.196.154])
+        by smtp.gmail.com with ESMTPSA id h9sm571602pja.42.2021.05.15.07.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 May 2021 07:25:19 -0700 (PDT)
+From:   Du Cheng <ducheng2@gmail.com>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
+        skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
+        Du Cheng <ducheng2@gmail.com>,
+        syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
+Subject: [PATCH] net:usb:r8152: remove WARN_ON_ONCE() in rtl_vendor_mode()
+Date:   Sat, 15 May 2021 22:25:13 +0800
+Message-Id: <20210515142513.183623-1-ducheng2@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871ra83nop.ffs@nanos.tec.linutronix.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 15, 2021 at 01:23:02AM +0200, Thomas Gleixner wrote:
-> We can make that work but sure I'm not going to argue when you decide to
-> just go for raise_softirq_irqsoff().
-> 
-> I just hacked that check up which is actually useful beyond NAPI. It's
-> straight forward except for that flush_smp_call_function_from_idle()
-> oddball, which immeditately triggered that assert because block mq uses
-> __raise_softirq_irqsoff() in a smp function call...
-> 
-> See below. Peter might have opinions though :)
+If from the userland, a dummy_udc (a virtual USB device for
+debugging/device emulation) is configured to have a VENDOR_ID/PRODUCT_ID
+combination that is supported by rtl8152 driver, and kernel tries to
+match this dummy device with rtl8152 driver by probing, the
+rtl8152_probe() function will cause WARN_ON_ONCE() in rtl_vendor_mode().
+This causes kernel panic if panic_on_warn is set.
 
-Yeah, lovely stuff :-)
+More specifically, this WARN_ON_ONCE() is triggered when the rtl8152
+driver detects (and trys to switch on) the vendor specific USB
+configuration, which is an expected behavior for supported USB devices.
+Rtl8152 should also anticipate dummy_udc which can have arbitrary
+configurations and interfaces.
 
+Remove this WARN_ON_ONCE() so that rtl8152 is able to handle (or
+gracefully refuse) an unsupported USB device during probing.
 
-> +#define lockdep_assert_softirq_raise_ok()				\
-> +do {									\
-> +	WARN_ON_ONCE(__lockdep_enabled &&				\
-> +		     !current->softirq_raise_safe &&			\
-> +		     !(softirq_count() | hardirq_count()));		\
-> +} while (0)
+Bug reported by syzbot:
+https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
 
-> --- a/kernel/smp.c
-> +++ b/kernel/smp.c
-> @@ -691,7 +691,9 @@ void flush_smp_call_function_from_idle(v
->  	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
->  		      smp_processor_id(), CFD_SEQ_IDLE);
->  	local_irq_save(flags);
-> +	lockdep_set_softirq_raise_safe();
->  	flush_smp_call_function_queue(true);
-> +	lockdep_clear_softirq_raise_safe();
->  	if (local_softirq_pending())
->  		do_softirq();
+VENDOR_ID/PRODUCT_ID in question:
+REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927)
 
-I think it might make more sense to raise hardirq_count() in/for
-flush_smp_call_function_queue() callers that aren't already from hardirq
-context. That's this site and smpcfd_dying_cpu().
+Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
+Signed-off-by: Du Cheng <ducheng2@gmail.com>
+---
+This patch passed syzbot test.
 
-Then we can do away with this new special case.
+ drivers/net/usb/r8152.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 136ea06540ff..247ac4b1b34c 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -8135,8 +8135,6 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
+ 		}
+ 	}
+ 
+-	WARN_ON_ONCE(i == num_configs);
+-
+ 	return false;
+ }
+ 
+-- 
+2.30.2
+
