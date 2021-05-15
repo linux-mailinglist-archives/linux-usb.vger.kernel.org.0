@@ -2,51 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9441A381612
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 07:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D65381615
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 07:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233952AbhEOF1c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 01:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        id S234127AbhEOF1h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 01:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbhEOF1a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 01:27:30 -0400
+        with ESMTP id S234011AbhEOF1d (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 01:27:33 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF1C06175F
-        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:18 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id z13-20020a25ad8d0000b02904f9f8375b61so1866813ybi.20
-        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F623C061756
+        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:20 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id o6-20020a5b06460000b02905004326697dso1840957ybq.22
+        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=sNHIuQYVsWA/7a4mAAkQImBcT2qMojEQX5dVrrYWLcM=;
-        b=oMGbgtK3hrH/5fPQWLdrW3KsbCwX3axogu6RA7twsgK5yjdE+4mL5hNjbVbEKnkBjT
-         mPcgm4zODQ18yFDxmT5Vp3ZE1vdkEetuj1Y+D3itJtG8QwZ5Rufa1kuztrtCRWv57gxz
-         C7TfWeSmBTZy9f9weM0S3xUSONdocKJUBwY3tp63YWWAjKipKzovYikfyX3rvzfkCUbs
-         GZJh8jStGvIKLqDvCncenDCQfVskSZqvR0kxghS6cWM2++iD+gc633rap5yBDFpuBZJF
-         q5QsTI1zSkl5lcoSbhjlAnYGuP4N7yQH5e6/glIh7kt3N11KIjeinMgWFvJ4Fj+ysMhc
-         lpZQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=bTPswpk0akuXBvppl1rK6ylc4XjQRVDSR+CWbyIJ8R0=;
+        b=k+1nYC7AfjyDzebPwV02klldD0WK5NuHGwOTI92ajmoY/H50D79Db2MK+AlgUzUOEt
+         3rn7OmDjsroF2l3HFNgux/FbE8E0UtqoSeHspI7gcDQnNP/piazGgjZ9yArBzV7/SZiH
+         TwYkCP/dGppXuWsUc4z9UOz3jpORFGJWMwIrFP+jDB+wATZt09m8KTXav67fxmJMtGDO
+         SSRrd1gERDlg+2PqVC/KMAE51vKdvQzmGpwgMWJsfr8S33FzCq70Z8GKp5yEOeHzK3TY
+         qDXAT/z9u1AG50S/xkm+MdBCbhHjVpov8PvXyBeVd9lGObwBCDmCEZhlL72+uv/nnLXt
+         /pmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=sNHIuQYVsWA/7a4mAAkQImBcT2qMojEQX5dVrrYWLcM=;
-        b=RlzP1Xw31wKN15/wauA6TPY9Xo5fh2xZXyN7YRpK3fsnbSeemAGag9UJUaA4jQbtlz
-         NFhI7US8M6Urr1KH7s6Q+Jtw1bHs8sJ3yxgfGpl4iSAe7EjH5nnewHuqrB6AItrTm/0Y
-         ydf+E+K8WjJBMEn4TbppWSZo7XdzoNn/e5MpoYT0Z3zZO6IjB84AAkhktXvf+iaxx1NZ
-         LvJPHJQstFpfBKHOkSPxCkTRM1hoVxqP8a8BU3whjxn4q+TJ7DV1bDj6JXu7r0r3arlI
-         2Wo+SfOkAwmrFT8iD539QRINrRe3Vn2ctZ+P4s14vULtpiJ2Kv1BxbS+1Jmo5dPoMT4F
-         kQ7A==
-X-Gm-Message-State: AOAM533g7Fwg23gBF8WjwDfnEiI4nbZxtYQST/OR5+gkA0NDAXZii4ok
-        vHgvBbRo02yrmSZ6jqQ7DFmdpIgCv/k=
-X-Google-Smtp-Source: ABdhPJwk0WyQnMdHJuZpEfbU+WKgE802VKw+8Tif87zivPDmE0aWIgkLjkHBEvy6pZ5/rwWz3eMx86YyjYA=
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=bTPswpk0akuXBvppl1rK6ylc4XjQRVDSR+CWbyIJ8R0=;
+        b=tzrCqiI5XyylC+LS2jb6lrPLhL+X+cA8/cV64UTP++SuVWV0pyuVRKzQ/RByA4loKh
+         cJCawJVjbtAaAZmxU9C7urPKhsQWcFLCEJNjGJWpTdTNguNP+NO8ujwv7kFdJbFumeOx
+         F8YyS+wWH5qkJ+Bwfsu+l0l1pZjX3PSRiM3XAkCRn14wEB4H3PlgBVCOlln+lgW3a0GU
+         j84ZL6cU/OHZrrBgGgQ5mrpu6BXMNAmoCrQ4Ndf3zDPSNBDvjJLnhmMnFkryf+uEY3sM
+         uDvhRaPJecQ2Gl4GgaiE3fk6MkNlRNr7+e9SVQxcjpw58AZP56SJLvUM+Y2K48RNUvW5
+         SlZQ==
+X-Gm-Message-State: AOAM531JmwhFQfMeGKzlsZYPkyH9xTX2RT+5I7H/t/6aX1e82Jyeor0j
+        Gj02pogNvosU4mvWdwKroG/zm40Cp/I=
+X-Google-Smtp-Source: ABdhPJwBjPn+Vci5sBFcE4dI3IBlEGpIkiIcuAqrB1B8Zzk/N00HSiugvk3U8iXRPbkl7WSkqFuUUXCdSDk=
 X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:6bd1:251e:e226:7071])
- (user=badhri job=sendgmr) by 2002:a25:9942:: with SMTP id n2mr70156951ybo.230.1621056377552;
- Fri, 14 May 2021 22:26:17 -0700 (PDT)
-Date:   Fri, 14 May 2021 22:26:10 -0700
-Message-Id: <20210515052613.3261340-1-badhri@google.com>
+ (user=badhri job=sendgmr) by 2002:a5b:b46:: with SMTP id b6mr1211609ybr.66.1621056379879;
+ Fri, 14 May 2021 22:26:19 -0700 (PDT)
+Date:   Fri, 14 May 2021 22:26:11 -0700
+In-Reply-To: <20210515052613.3261340-1-badhri@google.com>
+Message-Id: <20210515052613.3261340-2-badhri@google.com>
 Mime-Version: 1.0
+References: <20210515052613.3261340-1-badhri@google.com>
 X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v1 1/4] usb: typec: tcpm: Fix up PR_SWAP when vsafe0v is signalled
+Subject: [PATCH v1 2/4] usb: typec: tcpm: Refactor logic to enable/disable
+ auto vbus dicharge
 From:   Badhri Jagan Sridharan <badhri@google.com>
 To:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -59,30 +64,87 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During PR_SWAP, When TCPM is in PR_SWAP_SNK_SRC_SINK_OFF, vbus is
-expected to reach VSAFE0V when source turns of vbus. Do not move
-to SNK_UNATTACHED state when this happens.
+The logic to enable vbus auto discharge on disconnect is used in
+more than one place. Since this is repetitive code, moving this into
+its own method.
 
-Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
+Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
 Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/typec/tcpm/tcpm.c | 39 ++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 21 deletions(-)
 
 diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index c4fdc00a3bc8..b93c4c8d7b15 100644
+index b93c4c8d7b15..b475d9b9d38d 100644
 --- a/drivers/usb/typec/tcpm/tcpm.c
 +++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -5114,6 +5114,9 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
- 				tcpm_set_state(port, SNK_UNATTACHED, 0);
- 		}
- 		break;
-+	case PR_SWAP_SNK_SRC_SINK_OFF:
-+		/* Do nothing, vsafe0v is expected during transition */
-+		break;
- 	default:
- 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
- 			tcpm_set_state(port, SNK_UNATTACHED, 0);
+@@ -771,6 +771,21 @@ static void tcpm_set_cc(struct tcpm_port *port, enum typec_cc_status cc)
+ 	port->tcpc->set_cc(port->tcpc, cc);
+ }
+ 
++static int tcpm_enable_auto_vbus_discharge(struct tcpm_port *port, bool enable)
++{
++	int ret = 0;
++
++	if (port->tcpc->enable_auto_vbus_discharge) {
++		ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, enable);
++		tcpm_log_force(port, "%s vbus discharge ret:%d", enable ? "enable" : "disable",
++			       ret);
++		if (!ret)
++			port->auto_vbus_discharge_enabled = enable;
++	}
++
++	return ret;
++}
++
+ /*
+  * Determine RP value to set based on maximum current supported
+  * by a port if configured as source.
+@@ -3445,12 +3460,7 @@ static int tcpm_src_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (port->tcpc->enable_auto_vbus_discharge) {
+-		ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, true);
+-		tcpm_log_force(port, "enable vbus discharge ret:%d", ret);
+-		if (!ret)
+-			port->auto_vbus_discharge_enabled = true;
+-	}
++	tcpm_enable_auto_vbus_discharge(port, true);
+ 
+ 	ret = tcpm_set_roles(port, true, TYPEC_SOURCE, tcpm_data_role_for_source(port));
+ 	if (ret < 0)
+@@ -3527,14 +3537,7 @@ static void tcpm_set_partner_usb_comm_capable(struct tcpm_port *port, bool capab
+ 
+ static void tcpm_reset_port(struct tcpm_port *port)
+ {
+-	int ret;
+-
+-	if (port->tcpc->enable_auto_vbus_discharge) {
+-		ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, false);
+-		tcpm_log_force(port, "Disable vbus discharge ret:%d", ret);
+-		if (!ret)
+-			port->auto_vbus_discharge_enabled = false;
+-	}
++	tcpm_enable_auto_vbus_discharge(port, false);
+ 	port->in_ams = false;
+ 	port->ams = NONE_AMS;
+ 	port->vdm_sm_running = false;
+@@ -3602,13 +3605,7 @@ static int tcpm_snk_attach(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	if (port->tcpc->enable_auto_vbus_discharge) {
+-		tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, VSAFE5V);
+-		ret = port->tcpc->enable_auto_vbus_discharge(port->tcpc, true);
+-		tcpm_log_force(port, "enable vbus discharge ret:%d", ret);
+-		if (!ret)
+-			port->auto_vbus_discharge_enabled = true;
+-	}
++	tcpm_enable_auto_vbus_discharge(port, true);
+ 
+ 	ret = tcpm_set_roles(port, true, TYPEC_SINK, tcpm_data_role_for_sink(port));
+ 	if (ret < 0)
 -- 
 2.31.1.751.gd2f1c929bd-goog
 
