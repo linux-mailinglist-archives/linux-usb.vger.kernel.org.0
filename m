@@ -2,92 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2DE381A4B
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 19:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B8B381AA1
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 21:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbhEORwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 13:52:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41848 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231480AbhEORw3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 15 May 2021 13:52:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 42D20613AF
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 17:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621101076;
-        bh=LvKLfdkFYHm/p7paKkpUQ6hicxmi9r1GByK+javvArY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=a5Kvp2CC0yj2MuG2gD+YEf3TNddc8RydJ9mOijzv8ub1M9pV+sMrnLcZ5XRoV6hBj
-         7oUJU4W0X7EUwBmvRmk6PVm952iGJzQxspBocezW9RKbV3kshQQZRMi71V/xT9TMEX
-         dTGRpLf9XdAADp+PE9gM86g96fDj7+MDt0Nx8lpN/BgwjBhhGnf6Jk1UhSPcwIYkWP
-         zTXxKadQOykMTjKbgB6s4lyTlrn44sR23fhYOzhwexgC+Fuf533ldVOUL927tdwAc+
-         MfU7VAtBL9UVyN6OzyK0Nz/DcRkNnNZLU6+t7LC3YdK5sD2WBP4oL3qTW7o+b5dC1B
-         gtNsmBQlWEsSA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 36B94610A4; Sat, 15 May 2021 17:51:16 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Sat, 15 May 2021 17:51:15 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: peter.ganzhorn@googlemail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213081-208809-Jr3nptjZB0@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S234554AbhEOTHT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 15:07:19 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44106 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231558AbhEOTHR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 15:07:17 -0400
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1621105562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zALTCEjPn7sztZNd85u8yKI0LRF8p9B5oT1vb4kC4jA=;
+        b=Mf3g6XafW+5Mdu/oDormRTpHArjnxMIoM7A6M91I9DWkStkG2Hmp1L1R8efGMsDOIQMdnj
+        ifFak5poU+DhdItzq5Lr5K7xEc48UZWCgHEwv4T9ry/8dunwKSyIwmT39mRAbEB7UC5hx5
+        mamsVyq8MQV6H1kvK6RWduRcumvlL+7ob1Mpq2+xh0l+dvyj0TGn/ZJ/NNnhptQl+vi+7q
+        KRTEkC8zwNVoKBHncLNaFBZao6/AG+FlE/YkjcdGiZOJ1Pfe3XyjcEf5radzuTVqMoDQKN
+        mmhlH2TYyyF+AfTMwftGf4o/GiC6qW+Diwfn3epK91oo6gskej72U+5IJXK9LA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1621105562;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zALTCEjPn7sztZNd85u8yKI0LRF8p9B5oT1vb4kC4jA=;
+        b=YHxvqS/DXfYP5E3WLEomds0pQNYkCPQqE33PLYC/wRV1n2dn+6vvamXw1bTneAg5b3VZYm
+        2BNQg/fPrMcnUTAQ==
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, Michal Svec <msvec@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH RFC] r8152: Ensure that napi_schedule() is handled
+In-Reply-To: <20210515130926.GC21560@worktop.programming.kicks-ass.net>
+References: <877dk162mo.ffs@nanos.tec.linutronix.de> <20210514123838.10d78c35@kicinski-fedora-PC1C0HJN> <87sg2p2hbl.ffs@nanos.tec.linutronix.de> <20210514134655.73d972cb@kicinski-fedora-PC1C0HJN> <87fsyp2f8s.ffs@nanos.tec.linutronix.de> <20210514144130.7287af8e@kicinski-fedora-PC1C0HJN> <871ra83nop.ffs@nanos.tec.linutronix.de> <20210515130926.GC21560@worktop.programming.kicks-ass.net>
+Date:   Sat, 15 May 2021 21:06:01 +0200
+Message-ID: <87k0nz24x2.ffs@nanos.tec.linutronix.de>
 MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+On Sat, May 15 2021 at 15:09, Peter Zijlstra wrote:
+> On Sat, May 15, 2021 at 01:23:02AM +0200, Thomas Gleixner wrote:
+>> --- a/kernel/smp.c
+>> +++ b/kernel/smp.c
+>> @@ -691,7 +691,9 @@ void flush_smp_call_function_from_idle(v
+>>  	cfd_seq_store(this_cpu_ptr(&cfd_seq_local)->idle, CFD_SEQ_NOCPU,
+>>  		      smp_processor_id(), CFD_SEQ_IDLE);
+>>  	local_irq_save(flags);
+>> +	lockdep_set_softirq_raise_safe();
+>>  	flush_smp_call_function_queue(true);
+>> +	lockdep_clear_softirq_raise_safe();
+>>  	if (local_softirq_pending())
+>>  		do_softirq();
+>
+> I think it might make more sense to raise hardirq_count() in/for
+> flush_smp_call_function_queue() callers that aren't already from hardirq
+> context. That's this site and smpcfd_dying_cpu().
+>
+> Then we can do away with this new special case.
 
---- Comment #5 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
-Created attachment 296787
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296787&action=3Dedit
-usbmon trace 5.11 bus 5
+Right.
 
-Here you are.
-I also recorded a trace of bus 5 since it seems a Genesys hub shows up ther=
-e as
-well as soon as I connect my display (but I have only one physical USB cabl=
-e).
+Though I just checked smpcfd_dying_cpu(). That ones does not run
+softirqs after flushing the function queue and it can't do that because
+that's in the CPU dying phase with interrupts disabled where the CPU is
+already half torn down.
 
-What I did with both kernels was:
-1. Boot the system with the SD card removed from the reader and the USB cab=
-le
-of my display unplugged
-2. Start the trace via
-cat /sys/kernel/debug/usb/usbmon/6u > usbmon-5.11-bus6.log &
-cat /sys/kernel/debug/usb/usbmon/5u > usbmon-5.11-bus5.log
-3. Plugged in my displays USB cable
-4. After waiting a moment, inserted the SD card into the card reader slot
-5. Executed cfdisk /dev/sdb
-6. Waited a few seconds and stopped the cat processes
+Especially as softirq processing enables interrupts, which might cause
+even more havoc.
 
-Please let me know if I can assist you with additional information.
-Thanks a lot for responding so quickly to my bug report and taking care of
-this, I appreciate it!
+Anyway how is it safe to run arbitrary functions there after the CPU
+removed itself from the online mask? That's daft to put it mildly.
 
---=20
-You may reply to this email to add a comment.
+Thanks,
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+        tglx
+
+
+
+
