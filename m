@@ -2,110 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A14381958
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 16:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596FB381991
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 17:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbhEOO0f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 10:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbhEOO0f (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 10:26:35 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928E6C061573
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 07:25:20 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o17-20020a17090a9f91b029015cef5b3c50so3073451pjp.4
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 07:25:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zrpI9aqNSIZj2FkRvlmMmVIOsrsnr2kfjUz3pcuWzlU=;
-        b=JYnTd5c3ZM93TbQWaZwvEpyPvzsAdVwVMbgsOiRECwuYaeSBwZ5kVf58GwxIJF+sBY
-         +RcvkaMmNWYnFdL4QbJqIGGpsFdX89oAgsAjxiP0rSlzAzc0cshpdPGHKzXfERFQAuuB
-         7D9uR+zfErSR816vAiRsXxHlzfZxYdh3nbGMXy4YfPVLPYTbq/v2Qv2r3/XIv4l5XmcV
-         1DRwgRlNI86F7NgsrzBkiH7WRf7WmhUahp3xSfGNCxWnmpMMtRCPMg0MmFKMeLhVikLV
-         lDAOvMHovFI3V98eq4mu+745LwGSvoqueiTb3jGy8iSTaqaNZJ1XKbogDZ+OIBxAHoa4
-         ADSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zrpI9aqNSIZj2FkRvlmMmVIOsrsnr2kfjUz3pcuWzlU=;
-        b=r1+GdH+HLMNPeA7B/j+Cx2paUGAglkQ2NuIlhdKhBpU+YL6EbzBHuBLzYSFFTB3N8A
-         SyjEVpysAek0MwGcV1CCdOeEfSFzWX0cB2jpilBCIcexsUSW2SGXX+P34CYtIJx2UXg5
-         0OgBbswkn4tL6yuHU1NpebaV3FXOVz91v/ER6lOt3HowJnu7dbFxoDZKx6fFxbtndKjG
-         1/Y0aoN2HWxoFSxfkqoOjoq5LXOVD7jsfHFJPtfqaMdDHsTXELhYnIN9EX1E2426hMg4
-         NujBzVpkAOcn++XToi4OJSpdupKe63sMnjwDs7A3UINf24Fy2u4JETOhauMWClMQAqnN
-         9wgw==
-X-Gm-Message-State: AOAM533TfzlBQkLvXq3OrktYTPsN63ShBT4yaG9BA2O7L2+/wVnzyg/w
-        rjeLOUaTNpN9SwlVzh8DAgs=
-X-Google-Smtp-Source: ABdhPJy0bA3exrRwW+1qXt3iwnUfjwqPHE40jFD67cMHRoR8+MqAJwjTMwCPksoL5rmAf5/44S9OpQ==
-X-Received: by 2002:a17:90a:66c3:: with SMTP id z3mr17499268pjl.196.1621088720140;
-        Sat, 15 May 2021 07:25:20 -0700 (PDT)
-Received: from nuc.. ([202.133.196.154])
-        by smtp.gmail.com with ESMTPSA id h9sm571602pja.42.2021.05.15.07.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 May 2021 07:25:19 -0700 (PDT)
-From:   Du Cheng <ducheng2@gmail.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     "David S. Miller" <davem@davemloft.net>, linux-usb@vger.kernel.org,
-        skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
-        Du Cheng <ducheng2@gmail.com>,
-        syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-Subject: [PATCH] net:usb:r8152: remove WARN_ON_ONCE() in rtl_vendor_mode()
-Date:   Sat, 15 May 2021 22:25:13 +0800
-Message-Id: <20210515142513.183623-1-ducheng2@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S232650AbhEOPcb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 11:32:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:33047 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232479AbhEOPc1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 11:32:27 -0400
+Received: (qmail 1037316 invoked by uid 1000); 15 May 2021 11:31:13 -0400
+Date:   Sat, 15 May 2021 11:31:13 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+Message-ID: <20210515153113.GB1036273@rowland.harvard.edu>
+References: <20210510152426.GE863718@rowland.harvard.edu>
+ <87zgx2fskr.fsf@kernel.org>
+ <20210510193849.GB873147@rowland.harvard.edu>
+ <87r1idfzms.fsf@kernel.org>
+ <20210511212651.GA914027@rowland.harvard.edu>
+ <87lf8kfnc6.fsf@kernel.org>
+ <20210512153358.GC934575@rowland.harvard.edu>
+ <87bl9d7oo0.fsf@kernel.org>
+ <20210514165830.GA1010288@rowland.harvard.edu>
+ <875yzk7b2y.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <875yzk7b2y.fsf@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If from the userland, a dummy_udc (a virtual USB device for
-debugging/device emulation) is configured to have a VENDOR_ID/PRODUCT_ID
-combination that is supported by rtl8152 driver, and kernel tries to
-match this dummy device with rtl8152 driver by probing, the
-rtl8152_probe() function will cause WARN_ON_ONCE() in rtl_vendor_mode().
-This causes kernel panic if panic_on_warn is set.
+On Sat, May 15, 2021 at 09:41:41AM +0300, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Alan Stern <stern@rowland.harvard.edu> writes:
+> > On Fri, May 14, 2021 at 10:35:59AM +0300, Felipe Balbi wrote:
+> >> Alan Stern <stern@rowland.harvard.edu> writes:
+> >> > On Wed, May 12, 2021 at 10:00:41AM +0300, Felipe Balbi wrote:
+> >> >> Hmm, IIRC only the storage gadget defers work to another thread.
+> >> >
+> >> > Well, the composite core is built into almost every gadget, and doesn't 
+> >> > it handle Set-Configuration and Set-Interface requests in a separate 
+> >> > thread?  Or doesn't it expect function drivers to do so?
+> >> 
+> >> composite.c doesn't defer anything to a separate thread by itself. The
+> >> gadget driver, if it finds it necessary, should handle it
+> >> internally. Most gadget drivers handle all of this in interrupt context.
+> >> 
+> >> > After all, the gadget first learns about config or altsetting changes 
+> >> > when it receives a Set-Configuration or Set-Interface request, which 
+> >> > happens in interrupt context.  But changing configs or altsettings 
+> >> > requires disabling/enabling endpoints, which needs a process context 
+> >> > (see the kerneldoc for usb_ep_enable and usb_ep_disable).
+> >> 
+> >> Ouch, I don't think any driver is guaranteeing that other than the
+> >> storage gadget.
+> >
+> > A quick search shows that USB_GADGET_DELAYED_STATUS is used in f_fs.c, 
+> > f_tcm.c, and f_uvc.c in addition to f_mass_storage.c.  So the situation 
+> > isn't as bad as you thought, although it should be better.
+> 
+> right, that's not what the documentation means, though. We're still
+> enabling/disabling endpoints in interrupt context, just delaying the
+> status stage until a later time.
+> 
+> It looks like delaying status like this is enough for the current UDC
+> drivers so, perhaps, we should make delayed_status mandatory and update
+> the documentation accordingly.
 
-More specifically, this WARN_ON_ONCE() is triggered when the rtl8152
-driver detects (and trys to switch on) the vendor specific USB
-configuration, which is an expected behavior for supported USB devices.
-Rtl8152 should also anticipate dummy_udc which can have arbitrary
-configurations and interfaces.
+If it's okay to call those functions in interrupt context then the 
+kerneldoc definitely should be updated.  However, I don't see why you 
+would want to make DELAYED_STATUS mandatory.  If all the necessary work 
+can be done in the set_alt handler, why not return the status 
+immediately?
 
-Remove this WARN_ON_ONCE() so that rtl8152 is able to handle (or
-gracefully refuse) an unsupported USB device during probing.
+BTW, does it seem odd to you that these function drivers defer some of 
+the set_alt activities into a work thread but do the ep_enable/disable 
+parts right away, in interrupt context?  I should think the drivers 
+would want to minimize the amount of processing that happens 
+in_interrupt.
 
-Bug reported by syzbot:
-https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
+> > Anyway, getting back to the main point...
+> >
+> > To minimize disruption, suppose we add a new callback to usb_gadget_ops:
+> >
+> > 	void	(*udc_async_callbacks)(struct usb_gadget *, int enable);
+> >
+> > The UDC core can call this at the appropriate times, if it is not NULL.  
+> > It allows the core to tell a UDC driver whether or not to issue 
+> > callbacks for setup, disconnect, reset, suspend, and resume.  It doesn't 
+> > affect request completion callbacks.
+> >
+> > So for removing a driver, the proper sequence will be:
+> >
+> > 	usb_gadget_disconnect()
+> > 	if (gadget->ops->udc_async_callbacks)
+> > 		gadget->ops->udc_async_callbacks(gadget, 0);
+> > 	synchronize_irq()
+> > 	udc->driver->unbind()
+> > 	usb_gadget_udc_stop()
+> >
+> > Or maybe the last two steps should be reversed.  In udc_bind_to_driver, 
 
-VENDOR_ID/PRODUCT_ID in question:
-REALTEK_USB_DEVICE(VENDOR_ID_MICROSOFT, 0x0927)
+After some more thought, I decided the last two steps are in the right 
+order now.  When udc_stop runs, it causes the UDC driver to forget about 
+the gadget driver, so there wouldn't be any way to issue the completion 
+callbacks when the unbind handler cancels the outstanding requests and 
+disables the endpoints.
 
-Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-Signed-off-by: Du Cheng <ducheng2@gmail.com>
----
-This patch passed syzbot test.
+> > the opposite sequence is:
+> >
+> > 	bind
+> > 	udc_start
 
- drivers/net/usb/r8152.c | 2 --
- 1 file changed, 2 deletions(-)
+Then by analogy, these two steps should be reversed.  But it doesn't 
+really matter, because the gadget driver won't try to enable endpoints 
+or do anything else until the host has enumerated the gadget.  (And if 
+there are any gadget devices which don't allow software to control the 
+pull-up separately, then they clearly will want bind to precede 
+udc_start.)
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 136ea06540ff..247ac4b1b34c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8135,8 +8135,6 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
- 		}
- 	}
- 
--	WARN_ON_ONCE(i == num_configs);
--
- 	return false;
- }
- 
--- 
-2.30.2
+> > 	enable async callbacks
+> > 	connect (turn on pull-up)
+> >
+> > How does this sound?
+> 
+> Sounds reasonable and, probably, minimizes the amount of code that needs
+> to be changed. This will also enable us to fix each UDC in isolation.
 
+Right.  Okay, I'll work on a patch series.
+
+Alan Stern
