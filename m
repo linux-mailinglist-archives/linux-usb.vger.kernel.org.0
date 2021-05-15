@@ -2,102 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC1A381448
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 01:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9441A381612
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 07:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbhENXhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 14 May 2021 19:37:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230316AbhENXhi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 14 May 2021 19:37:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1DC3B61350;
-        Fri, 14 May 2021 23:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621035386;
-        bh=Go/6KJ1kVVTERD5P3YSzXrLX9Sd49Yljjv6pAwBuSOM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=P7zHogRt3aZgGkSgK9LRssmr73C0H8VPL8C/xRIEq7+F0mQFjjNWGcP7vKsEH7GV1
-         rBZjQ5ldYBEX6Ir4+EfJtJhHaTwlbuiR0IBnNc1NfwgUOwlks0WxM5nd6eXTgxb27i
-         dsZciWebRAp9Y8BmNXln5CkZj1JuiMRpwN2/SW2NY+CzrkjSoWrgK6xBxQqn9GIMfI
-         3psFWWbiVW6d0/xiOTOpzBDSx8zWzsnlF43HLFyINYFLd7K3vx2MhMmOlCCLfIbrRl
-         oUVYycjyHxFgZCcvizBej6mC06ytlRClirdCpcc+Q8AMtdbkvMbHXPIpT7nY6xU9o5
-         r627jDYAvnCeA==
-Date:   Fri, 14 May 2021 16:36:25 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        Michal Svec <msvec@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH RFC] r8152: Ensure that napi_schedule() is handled
-Message-ID: <20210514163625.404f1f04@kicinski-fedora-PC1C0HJN>
-In-Reply-To: <871ra83nop.ffs@nanos.tec.linutronix.de>
-References: <877dk162mo.ffs@nanos.tec.linutronix.de>
-        <20210514123838.10d78c35@kicinski-fedora-PC1C0HJN>
-        <87sg2p2hbl.ffs@nanos.tec.linutronix.de>
-        <20210514134655.73d972cb@kicinski-fedora-PC1C0HJN>
-        <87fsyp2f8s.ffs@nanos.tec.linutronix.de>
-        <20210514144130.7287af8e@kicinski-fedora-PC1C0HJN>
-        <871ra83nop.ffs@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S233952AbhEOF1c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 01:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233005AbhEOF1a (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 01:27:30 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FFF1C06175F
+        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:18 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id z13-20020a25ad8d0000b02904f9f8375b61so1866813ybi.20
+        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=sNHIuQYVsWA/7a4mAAkQImBcT2qMojEQX5dVrrYWLcM=;
+        b=oMGbgtK3hrH/5fPQWLdrW3KsbCwX3axogu6RA7twsgK5yjdE+4mL5hNjbVbEKnkBjT
+         mPcgm4zODQ18yFDxmT5Vp3ZE1vdkEetuj1Y+D3itJtG8QwZ5Rufa1kuztrtCRWv57gxz
+         C7TfWeSmBTZy9f9weM0S3xUSONdocKJUBwY3tp63YWWAjKipKzovYikfyX3rvzfkCUbs
+         GZJh8jStGvIKLqDvCncenDCQfVskSZqvR0kxghS6cWM2++iD+gc633rap5yBDFpuBZJF
+         q5QsTI1zSkl5lcoSbhjlAnYGuP4N7yQH5e6/glIh7kt3N11KIjeinMgWFvJ4Fj+ysMhc
+         lpZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=sNHIuQYVsWA/7a4mAAkQImBcT2qMojEQX5dVrrYWLcM=;
+        b=RlzP1Xw31wKN15/wauA6TPY9Xo5fh2xZXyN7YRpK3fsnbSeemAGag9UJUaA4jQbtlz
+         NFhI7US8M6Urr1KH7s6Q+Jtw1bHs8sJ3yxgfGpl4iSAe7EjH5nnewHuqrB6AItrTm/0Y
+         ydf+E+K8WjJBMEn4TbppWSZo7XdzoNn/e5MpoYT0Z3zZO6IjB84AAkhktXvf+iaxx1NZ
+         LvJPHJQstFpfBKHOkSPxCkTRM1hoVxqP8a8BU3whjxn4q+TJ7DV1bDj6JXu7r0r3arlI
+         2Wo+SfOkAwmrFT8iD539QRINrRe3Vn2ctZ+P4s14vULtpiJ2Kv1BxbS+1Jmo5dPoMT4F
+         kQ7A==
+X-Gm-Message-State: AOAM533g7Fwg23gBF8WjwDfnEiI4nbZxtYQST/OR5+gkA0NDAXZii4ok
+        vHgvBbRo02yrmSZ6jqQ7DFmdpIgCv/k=
+X-Google-Smtp-Source: ABdhPJwk0WyQnMdHJuZpEfbU+WKgE802VKw+8Tif87zivPDmE0aWIgkLjkHBEvy6pZ5/rwWz3eMx86YyjYA=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:6bd1:251e:e226:7071])
+ (user=badhri job=sendgmr) by 2002:a25:9942:: with SMTP id n2mr70156951ybo.230.1621056377552;
+ Fri, 14 May 2021 22:26:17 -0700 (PDT)
+Date:   Fri, 14 May 2021 22:26:10 -0700
+Message-Id: <20210515052613.3261340-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
+Subject: [PATCH v1 1/4] usb: typec: tcpm: Fix up PR_SWAP when vsafe0v is signalled
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 15 May 2021 01:23:02 +0200 Thomas Gleixner wrote:
-> On Fri, May 14 2021 at 14:41, Jakub Kicinski wrote:
-> >> This is not related to force_irqthreads at all. This very driver invokes
-> >> it from plain thread context.  
-> >
-> > I see, but a driver calling __napi_schedule_irqoff() from its IRQ
-> > handler _would_ be an issue, right? Or do irq threads trigger softirq
-> > processing on exit?  
-> 
-> Yes, they do. See irq_forced_thread_fn(). It has a local_bh_disable() /
-> local_bh_ enable() pair around the invocation to ensure that.
+During PR_SWAP, When TCPM is in PR_SWAP_SNK_SRC_SINK_OFF, vbus is
+expected to reach VSAFE0V when source turns of vbus. Do not move
+to SNK_UNATTACHED state when this happens.
 
-Ah, excellent!
+Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> >> You could have napi_schedule_intask() or something like that which would
-> >> do the local_bh_disable()/enable() dance around the invocation of
-> >> napi_schedule(). That would also document it clearly in the drivers. A
-> >> quick grep shows a bunch of instances which could be replaced:
-> >> 
-> >> drivers/net/ethernet/broadcom/bnx2x/bnx2x_main.c-5704-		local_bh_disable();
-> >> drivers/net/ethernet/mellanox/mlx4/en_netdev.c-1830-		local_bh_disable();
-> >> drivers/net/usb/r8152.c-1552-	local_bh_disable();
-> >> drivers/net/virtio_net.c-1355-	local_bh_disable();
-> >> drivers/net/wireless/intel/iwlwifi/pcie/rx.c-1650-	local_bh_disable();
-> >> drivers/net/wireless/intel/iwlwifi/pcie/rx.c-2015-		local_bh_disable();
-> >> drivers/net/wireless/intel/iwlwifi/pcie/rx.c-2225-		local_bh_disable();
-> >> drivers/net/wireless/intel/iwlwifi/pcie/rx.c-2235-		local_bh_disable();
-> >> drivers/s390/net/qeth_core_main.c-3515-	local_bh_disable();  
-> >
-> > Very well aware, I've just sent a patch for mlx5 last week :)
-> >
-> > My initial reaction was the same as yours - we should add lockdep
-> > check, and napi_schedule_intask(). But then I started wondering
-> > if it's all for nothing on rt or with force_irqthreads, and therefore
-> > we should just eat the extra check.  
-> 
-> We can make that work but sure I'm not going to argue when you decide to
-> just go for raise_softirq_irqsoff().
-> 
-> I just hacked that check up which is actually useful beyond NAPI. It's
-> straight forward except for that flush_smp_call_function_from_idle()
-> oddball, which immeditately triggered that assert because block mq uses
-> __raise_softirq_irqsoff() in a smp function call...
-> 
-> See below. Peter might have opinions though :)
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index c4fdc00a3bc8..b93c4c8d7b15 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5114,6 +5114,9 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+ 				tcpm_set_state(port, SNK_UNATTACHED, 0);
+ 		}
+ 		break;
++	case PR_SWAP_SNK_SRC_SINK_OFF:
++		/* Do nothing, vsafe0v is expected during transition */
++		break;
+ 	default:
+ 		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
+ 			tcpm_set_state(port, SNK_UNATTACHED, 0);
+-- 
+2.31.1.751.gd2f1c929bd-goog
 
-Looks good to me, since my thinking that RT complicates things here was
-wrong I'm perfectly happy with the lockdep + napi_schedule_intask().
