@@ -2,122 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57189381616
-	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 07:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0CCF381661
+	for <lists+linux-usb@lfdr.de>; Sat, 15 May 2021 08:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232993AbhEOF1m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 01:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234143AbhEOF1i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 01:27:38 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F70C061760
-        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:25 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id i199-20020a253bd00000b0290508926e53e1so110591yba.18
-        for <linux-usb@vger.kernel.org>; Fri, 14 May 2021 22:26:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=9DF04rOCeHkRBnGvVrvy5486e1pnEBJx9358rosv750=;
-        b=U1qTy4ublZpoVBevSo9WkGfX5ri6UbgL8LYDs4apASEjNn77OhCF3EM2Or3A8t5pJh
-         Y3/m3AdHvbXxt1rhLzU2wP68PZ5yH/K+3dbqArMZwixNQ2ARlSnKy1GEG1A3wM+e9ke3
-         qKo4N6szR+2xuGsVRC2zs5pDiGYIf8OvosdHrAswPD4+YEWhNU6eJUGtoUscq4nxsSbd
-         SsTZjFUVQ6vp4jP2pxWWbpMAhGl3r6b9f/6c7Y6A0f4Bk713qff03eSe9R64QAgPfPWJ
-         zqsLMlk1qCZAUZ2KnnRF8Aw5B/SS17zpSMjbNj5R4mSWuhIAVaQFQy8D2q3+EfnQSR29
-         qbdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=9DF04rOCeHkRBnGvVrvy5486e1pnEBJx9358rosv750=;
-        b=e0QuwwC9qCUMpPH3I5B7cnpSqfxCFiNu8gbZuD/r5EHvl9RYCXA3w1nx0AEHxRkjnl
-         89z9U94rZ+CMFembPNgVwfWTVYAtli6ny/ykjorYlG2WJhb73twuMmUw9ig2Siy5DKGB
-         6F/DUkBhIlrR9XbyzTXBs4/ZlQhfpq6Wen9MBIPBGA4MTQTICZNnWDjtoCwv0Qhd7gtC
-         nqtnJ/TiQkMvWSI8qNYCOVABJ3Ft7ICd/Q5derWF+262tRyWRez/Wbg+hARqroLIkkaz
-         G4KA/kvvR2/8x6vBQKn6ERCoTZK5DemL2SCS+pOjZQ2L25aPksfqByu9zsSanFVxmU3Y
-         APJw==
-X-Gm-Message-State: AOAM533kuS0Kd5Haj2rN0+twmAJg/0mV6U/N0qkWKINKu4lVWe0zoFv8
-        9NeazurKXKPH8drOxDUSIxJFu/uhRio=
-X-Google-Smtp-Source: ABdhPJz6iwDbt1K67xL/c2DC1KuisaHDuoZlC2HrbvEtdEY001TLs8SorvVYZV1H0BIU2eEo1t9Gpa3+BHo=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:6bd1:251e:e226:7071])
- (user=badhri job=sendgmr) by 2002:a25:414f:: with SMTP id o76mr66454577yba.383.1621056384861;
- Fri, 14 May 2021 22:26:24 -0700 (PDT)
-Date:   Fri, 14 May 2021 22:26:13 -0700
-In-Reply-To: <20210515052613.3261340-1-badhri@google.com>
-Message-Id: <20210515052613.3261340-4-badhri@google.com>
-Mime-Version: 1.0
-References: <20210515052613.3261340-1-badhri@google.com>
-X-Mailer: git-send-email 2.31.1.751.gd2f1c929bd-goog
-Subject: [PATCH v1 4/4] usb: typec: tcpci: Implement callback for apply_rc
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232227AbhEOGnS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 02:43:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42316 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231481AbhEOGnR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 15 May 2021 02:43:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE4B761404;
+        Sat, 15 May 2021 06:42:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621060924;
+        bh=rhFX5p5c2kAAor/ze0c6mQc3KeWbux38C8YdjVnfuQs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gI3F9izeVA5nDnezVHdkgBUzOxJBOqI5RpQCZVM+CLzv6BMwMYWnxK+/KTdwkxpmc
+         KyWxLj/4A4pRdOxBumz8imFs3EzIXKynm9cDO1xUtxnJoKRdJZVKSm16Lsnjz08k0k
+         6eCIq/d8fWFiPmDXdzSYxDse5gIgb8aSiiTtZ4cPkbmRztCVex/DhkS2oh58doVI6A
+         rnU4FhBUwR+X4wXf3a05T5J54w1eB+26VnqoxHU/m7qwiG7CVg4NZgymUgTQdJwLB5
+         GQsOWu26yZoZ4yZ14gVkwp5a6GkmG8Q0oXwddU51jHYpe2cmUb+6YhsbVEyJwOanr1
+         2NCrSFWvm1iEA==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+In-Reply-To: <20210514165830.GA1010288@rowland.harvard.edu>
+References: <20210510152426.GE863718@rowland.harvard.edu>
+ <87zgx2fskr.fsf@kernel.org> <20210510193849.GB873147@rowland.harvard.edu>
+ <87r1idfzms.fsf@kernel.org> <20210511212651.GA914027@rowland.harvard.edu>
+ <87lf8kfnc6.fsf@kernel.org> <20210512153358.GC934575@rowland.harvard.edu>
+ <87bl9d7oo0.fsf@kernel.org> <20210514165830.GA1010288@rowland.harvard.edu>
+Date:   Sat, 15 May 2021 09:41:41 +0300
+Message-ID: <875yzk7b2y.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-APPLY RC is defined as ROLE_CONTROL.CC1 != ROLE_CONTROL.CC2 and
-POWER_CONTROL.AutodischargeDisconnect is 0. When ROLE_CONTROL.CC1 ==
-ROLE_CONTROL.CC2, set the other CC to OPEN.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpci.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 25b480752266..34b5095cc84f 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -115,6 +115,32 @@ static int tcpci_set_cc(struct tcpc_dev *tcpc, enum typec_cc_status cc)
- 	return 0;
- }
- 
-+int tcpci_apply_rc(struct tcpc_dev *tcpc, enum typec_cc_status cc, enum typec_cc_polarity polarity)
-+{
-+	struct tcpci *tcpci = tcpc_to_tcpci(tcpc);
-+	unsigned int reg;
-+	int ret;
-+
-+	ret = regmap_read(tcpci->regmap, TCPC_ROLE_CTRL, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * APPLY_RC state is when ROLE_CONTROL.CC1 != ROLE_CONTROL.CC2 and vbus autodischarge on
-+	 * disconnect is disabled. Bail out when ROLE_CONTROL.CC1 != ROLE_CONTROL.CC2.
-+	 */
-+	if (((reg & (TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT)) >>
-+	     TCPC_ROLE_CTRL_CC2_SHIFT) !=
-+	    ((reg & (TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT)) >>
-+	     TCPC_ROLE_CTRL_CC1_SHIFT))
-+		return 0;
-+
-+	return regmap_update_bits(tcpci->regmap, TCPC_ROLE_CTRL, polarity == TYPEC_POLARITY_CC1 ?
-+				  TCPC_ROLE_CTRL_CC2_MASK << TCPC_ROLE_CTRL_CC2_SHIFT :
-+				  TCPC_ROLE_CTRL_CC1_MASK << TCPC_ROLE_CTRL_CC1_SHIFT,
-+				  TCPC_ROLE_CTRL_CC_OPEN);
-+}
-+
- static int tcpci_start_toggling(struct tcpc_dev *tcpc,
- 				enum typec_port_type port_type,
- 				enum typec_cc_status cc)
-@@ -728,6 +754,7 @@ struct tcpci *tcpci_register_port(struct device *dev, struct tcpci_data *data)
- 	tcpci->tcpc.get_vbus = tcpci_get_vbus;
- 	tcpci->tcpc.set_vbus = tcpci_set_vbus;
- 	tcpci->tcpc.set_cc = tcpci_set_cc;
-+	tcpci->tcpc.apply_rc = tcpci_apply_rc;
- 	tcpci->tcpc.get_cc = tcpci_get_cc;
- 	tcpci->tcpc.set_polarity = tcpci_set_polarity;
- 	tcpci->tcpc.set_vconn = tcpci_set_vconn;
--- 
-2.31.1.751.gd2f1c929bd-goog
+Hi,
 
+Alan Stern <stern@rowland.harvard.edu> writes:
+> On Fri, May 14, 2021 at 10:35:59AM +0300, Felipe Balbi wrote:
+>> Alan Stern <stern@rowland.harvard.edu> writes:
+>> > On Wed, May 12, 2021 at 10:00:41AM +0300, Felipe Balbi wrote:
+>> >> Hmm, IIRC only the storage gadget defers work to another thread.
+>> >
+>> > Well, the composite core is built into almost every gadget, and doesn'=
+t=20
+>> > it handle Set-Configuration and Set-Interface requests in a separate=20
+>> > thread?  Or doesn't it expect function drivers to do so?
+>>=20
+>> composite.c doesn't defer anything to a separate thread by itself. The
+>> gadget driver, if it finds it necessary, should handle it
+>> internally. Most gadget drivers handle all of this in interrupt context.
+>>=20
+>> > After all, the gadget first learns about config or altsetting changes=
+=20
+>> > when it receives a Set-Configuration or Set-Interface request, which=20
+>> > happens in interrupt context.  But changing configs or altsettings=20
+>> > requires disabling/enabling endpoints, which needs a process context=20
+>> > (see the kerneldoc for usb_ep_enable and usb_ep_disable).
+>>=20
+>> Ouch, I don't think any driver is guaranteeing that other than the
+>> storage gadget.
+>
+> A quick search shows that USB_GADGET_DELAYED_STATUS is used in f_fs.c,=20
+> f_tcm.c, and f_uvc.c in addition to f_mass_storage.c.  So the situation=20
+> isn't as bad as you thought, although it should be better.
+
+right, that's not what the documentation means, though. We're still
+enabling/disabling endpoints in interrupt context, just delaying the
+status stage until a later time.
+
+It looks like delaying status like this is enough for the current UDC
+drivers so, perhaps, we should make delayed_status mandatory and update
+the documentation accordingly.
+
+> Anyway, getting back to the main point...
+>
+> To minimize disruption, suppose we add a new callback to usb_gadget_ops:
+>
+> 	void	(*udc_async_callbacks)(struct usb_gadget *, int enable);
+>
+> The UDC core can call this at the appropriate times, if it is not NULL.=
+=20=20
+> It allows the core to tell a UDC driver whether or not to issue=20
+> callbacks for setup, disconnect, reset, suspend, and resume.  It doesn't=
+=20
+> affect request completion callbacks.
+>
+> So for removing a driver, the proper sequence will be:
+>
+> 	usb_gadget_disconnect()
+> 	if (gadget->ops->udc_async_callbacks)
+> 		gadget->ops->udc_async_callbacks(gadget, 0);
+> 	synchronize_irq()
+> 	udc->driver->unbind()
+> 	usb_gadget_udc_stop()
+>
+> Or maybe the last two steps should be reversed.  In udc_bind_to_driver,=20
+> the opposite sequence is:
+>
+> 	bind
+> 	udc_start
+> 	enable async callbacks
+> 	connect (turn on pull-up)
+>
+> How does this sound?
+
+Sounds reasonable and, probably, minimizes the amount of code that needs
+to be changed. This will also enable us to fix each UDC in isolation.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCfbSURHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUgUHwf/cnJj7zrV+MXZNOfc/+v77AZaUA9YEQJj
+DmWzud/9R94dGM3gkQq3tK1JCi5v7Kd20Q95ExffZIof4bB+IVZqTXzM2INsGcwq
+1DsfjyxWMbEki3RrLu99RQVDSj4rVLLrAIwKE3uZcn9Lb7bmhf950oS3n16gXMQl
+Mg/SDOQ0T5sOi/fnAfkny7ZRzUIgoVVgtMO+odCrQ1Z/Wqhu9wdVSQSAKRg3Q5oy
+b8+XORQbLGouZEBzmDlJvrkmNZ/SvRE1LA6dohrlswlAszMdsGhjXJMjOkqjH1xe
+IBO9bDE8G2O7Uczztd0OAe3PPYji/6Jw60+C3YTukGBFnK9L+WHX0Q==
+=vgD/
+-----END PGP SIGNATURE-----
+--=-=-=--
