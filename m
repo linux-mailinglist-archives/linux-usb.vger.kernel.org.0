@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75992381C51
-	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 05:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6177A381C5E
+	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 06:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbhEPDuF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 23:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34190 "EHLO
+        id S230147AbhEPEL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 May 2021 00:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232432AbhEPDuF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 23:50:05 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401C9C06174A
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 20:48:51 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id g15-20020a9d128f0000b02902a7d7a7bb6eso2755783otg.9
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 20:48:51 -0700 (PDT)
+        with ESMTP id S229643AbhEPEL0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 16 May 2021 00:11:26 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6166C061573
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 21:10:11 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id i23-20020a9d68d70000b02902dc19ed4c15so2844562oto.0
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 21:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OhSuvbBg5gouj0NE7hl4DXAk820cn3WTuep5FOuXDwc=;
-        b=lkZxtWoEjjiosjTeDSf4x3x9LrI+RVU2xKtvHK+igcsoDCFKplXu+Ri92PWCej7FD2
-         vLkJ3Uv0hjZGbAoShkD+zgDIbMM6Ylu9prE3RoStAEcHY94pzxo8+qgV0GMyXPgeW604
-         jz//XMdatYIawZv5H1x90QQVFViruQBPcb82xLFVd71KzOQX8muETHUqmBCarZqOmBzK
-         MSBkgRdS6mcMk++RwG0CgzKdWPWw9KEhAtlyjZOLEupuYNmLdR973mDPvY0sMucfnl5D
-         Q9LoSqhw+tNqATp1edBIBhxAO4WGxWWLXbSubAuTKT2eZmbg6+Sz8OfzJYJvI6hhFHw6
-         EBEA==
+        bh=p+n8knY1AhNlxa/4+sSt2iV2/z4kOsoddvvQNZinhOI=;
+        b=dIQD4Jg5OvVLbM85iRn9Wdb6zWoSJHOTRqfAMo16awQaPc84wIm5fJKmUMkeXyoWPC
+         u1ZSvTuvXkR2KGo7JUt1vlxp4GAI8jhmfhVlzBYKDzujdi8XYqvs7GUPL7rHAWGLboDX
+         WWOSm2IcE3WwKNS9Kg8qBCPxrUqu4uWTFfXApERU8Ba9Z6BN9Q6WsxMTPnxZw4RYq7X2
+         SBju5rpw82tNnKdPGS9EGUmi59yjTTvv+8xxpfHlXYs7uM3bwp148OobiJGIVGSsU2od
+         1uHzsfJRsMU1kUit2KRvozOCC9aq29AeWAbEaB5NLP7/m+jcDWF7JQ1Zch4ora2UHdLk
+         XSdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=OhSuvbBg5gouj0NE7hl4DXAk820cn3WTuep5FOuXDwc=;
-        b=ecdllGfDeKD5Aud4J34unwDtiBJwsamYllWr/6pQS35yJY2oxOeDNqj7EY2c3hTYdo
-         SWze5ZF4leLeJkkbG2LJwHGriFmnddffxBw7r8Hed5/Nur4EwGISfj+pcsxXcNz0jlcv
-         k3dqxnYtPNf/RW8Pfipz6LGVbeybgTCNfMYxg5w/g5RRZm5CaAD2HAGs6Tz5wyilgMsF
-         uZf7qDLmBB85hLr6DC+N9imWae/hAFv8mLh8+Y+dCURrAznXHvKUSK8UJly4txCF15yC
-         imkIL/nCFQgTyYEn3Soq4T3Qd3C8At654jrIMkSTKX//IvUZUDboDz+ixmC3nggf1Dmr
-         U3+w==
-X-Gm-Message-State: AOAM533uQ8oVll2KaIHhEL+b55Q0+28YoGUTOmcE5yYdSZUcxJFtm03Q
-        imcANYUcwGMRBJRgxqdF4IDkFlBcqeRE/Q==
-X-Google-Smtp-Source: ABdhPJyvorLo/0yrCwQe4/dEA9gklJA0g2j0oBuvydQy1cGORFcBO748zV7AJg6c7yxn8J2BIank/w==
-X-Received: by 2002:a9d:6255:: with SMTP id i21mr42041532otk.284.1621136930641;
-        Sat, 15 May 2021 20:48:50 -0700 (PDT)
+        bh=p+n8knY1AhNlxa/4+sSt2iV2/z4kOsoddvvQNZinhOI=;
+        b=KzHIRToB5pWixFnnjylC4Dx092JmSRci/xMCXEalvWMGMwV2YGhMq6IKvIAylwQNnk
+         9Pks9FE5JPgFK7SxVdYhxaLGJSAqa+wEuqTZzbd7Bv92hf5x0VPgXjHipDGtA//H/QwQ
+         RvVeHzKHKVcWba6kFzzRGDqwheXsoB2FCwPZnqpf2D8KYSSqmyoWsOLx8qEnd86HybaU
+         1gdx0FxZDlbZWwyP/QEnG6ZSf+s6VASrhDmwSmdEAqHf6aMlWgoINPHUKzkv6KqsUNiC
+         TZvXmTkYFVFYhIXVIbAGD/oUNp41PFsD5lkWV5LxmY6kwkzf91CHprqc0+hSla2i7lCE
+         UOFA==
+X-Gm-Message-State: AOAM5337l2as0/BqO3nvYXAcrMnkwlNY4A3vpbVIrJiJDOkrnxbJ9KDA
+        vnewzN5TMfx06R1oHL2IxZ9kgQ==
+X-Google-Smtp-Source: ABdhPJymZi3sghq5YuyzycKcrFI71wfKLE9hWfVerC6WpNoOizAM1mbVDM9d5CoJ63ya1C6+ZQvGPg==
+X-Received: by 2002:a9d:491:: with SMTP id 17mr45588270otm.184.1621138210984;
+        Sat, 15 May 2021 21:10:10 -0700 (PDT)
 Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id u15sm613702ote.81.2021.05.15.20.48.49
+        by smtp.gmail.com with ESMTPSA id r19sm2358369ooj.5.2021.05.15.21.10.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 May 2021 20:48:50 -0700 (PDT)
+        Sat, 15 May 2021 21:10:10 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
+        Benjamin Berg <bberg@redhat.com>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: typec: mux: Fix copy-paste of the container_of
-Date:   Sat, 15 May 2021 20:48:33 -0700
-Message-Id: <20210516034833.621530-1-bjorn.andersson@linaro.org>
+Subject: [PATCH] usb: typec: ucsi: Clear pending after acking connector change
+Date:   Sat, 15 May 2021 21:09:53 -0700
+Message-Id: <20210516040953.622409-1-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,48 +62,39 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Some of the boilerplate code was copy pasted from the typec_switch and
-retained the use of the switch's container_of macros. The two structs
-are identical in this regard, so this change doesn't cause a functional
-change today, but could possibly cause future issues.
+It's possible that the interrupt handler for the UCSI driver signals a
+connector changes after the handler clears the PENDING bit, but before
+it has sent the acknowledge request. The result is that the handler is
+invoked yet again, to ack the same connector change.
 
-Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
+At least some versions of the Qualcomm UCSI firmware will not handle the
+second - "spurious" - acknowledgment gracefully. So make sure to not
+clear the pending flag until the change is acknowledged.
+
+Any connector changes coming in after the acknowledgment, that would
+have the pending flag incorrectly cleared, would afaict be covered by
+the subsequent connector status check.
+
+Fixes: 217504a05532 ("usb: typec: ucsi: Work around PPM losing change information")
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- drivers/usb/typec/mux.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/typec/ucsi/ucsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 8514bec7e1b8..e4467c4c3742 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -45,7 +45,7 @@ static void *typec_switch_match(struct fwnode_handle *fwnode, const char *id,
- 	dev = class_find_device(&typec_mux_class, NULL, fwnode,
- 				switch_fwnode_match);
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index 282c3c825c13..f451ce0132a9 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -694,8 +694,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+ 	ucsi_send_command(con->ucsi, command, NULL, 0);
  
--	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-+	return dev ? to_typec_mux(dev) : ERR_PTR(-EPROBE_DEFER);
- }
- 
- /**
-@@ -87,7 +87,7 @@ EXPORT_SYMBOL_GPL(typec_switch_put);
- 
- static void typec_switch_release(struct device *dev)
- {
--	kfree(to_typec_switch(dev));
-+	kfree(to_typec_mux(dev));
- }
- 
- static const struct device_type typec_switch_dev_type = {
-@@ -239,7 +239,7 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
- 	dev = class_find_device(&typec_mux_class, NULL, fwnode,
- 				mux_fwnode_match);
- 
--	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
-+	return dev ? to_typec_mux(dev) : ERR_PTR(-EPROBE_DEFER);
- }
- 
- /**
+ 	/* 3. ACK connector change */
+-	clear_bit(EVENT_PENDING, &ucsi->flags);
+ 	ret = ucsi_acknowledge_connector_change(ucsi);
++	clear_bit(EVENT_PENDING, &ucsi->flags);
+ 	if (ret) {
+ 		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+ 		goto out_unlock;
 -- 
 2.29.2
 
