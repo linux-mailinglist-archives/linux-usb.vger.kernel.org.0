@@ -2,87 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41765381C0D
-	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 04:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA91381C48
+	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 05:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbhEPCS1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 22:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        id S232289AbhEPDtD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 23:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbhEPCSZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 22:18:25 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDADC06174A
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 19:17:10 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id k19so2533081qta.2
-        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 19:17:10 -0700 (PDT)
+        with ESMTP id S232158AbhEPDtD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 23:49:03 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E837C061573
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 20:47:48 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id 69-20020a9d0a4b0000b02902ed42f141e1so2788421otg.2
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 20:47:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=+Ty0PWWKNFcSCSpMAU3miWWjfwY9Yvb0opOWjI/pk78=;
-        b=YiKHn0K2q/iSVLItplxDE0gpgvgXOocJUK86LygsSngCcrAE4zaXKV0xHTMQ/SwRQg
-         u+O33cmCh6B/UZBfELUKAIDQJ371AhPUnrO87lMAg4MEr+uQFJKuuRwhIE31FXEsMMcp
-         KVr9Yzrt++pS32o6K/JBwVn8U+l03yRo4E9578IOwZfpQPGj8+aih1aoB/NqgnnaMXNj
-         qcLwh8xXcRC6TtqIak+yx3/WVkOTsbupbp1K2ReWUwk54E89ojg0b+TXnEEhOaCMppL0
-         QWgE16CupG4S/ziujSfeq5rwseEhub3sVFcuF9eg2eYpFDjZuLdDSorDkOrMOjz+yd+o
-         BjfA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NdBNcSQ1fL9YYvu0gmDFkHR89r/K55hXfYPZOrq9QCs=;
+        b=qfgZxKKQXKOKsW/GDWCLAyrQduY+tQL7sbUY1svUl02N2kFG/M31drqyoWvlFPfPKC
+         I/7I0e/wtJOHt5xAIAmCFF0A2eXsqKUdSn6dFo0uH2+pkJOWFPMIlBfZDt/JmDFSHXl3
+         wTSg6B4U82paFC2hJx5xJQA4kBX5bNS8aVHoNK+0nxQwR1uXXm9S5PDR6apMWY+eslyx
+         CLi34rT0b6vfiGmKT36j5EaN0kNU3oljL6VQBtHt4or3HbBx8D4aCSmBlcqNkw81oDCF
+         n/qdQnIMoW2pe1b/lYYnSEZzRdYTHCqhQo8uap1jsuvIgycYz35xHZiXqhcTbHDUK1MW
+         8V4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=+Ty0PWWKNFcSCSpMAU3miWWjfwY9Yvb0opOWjI/pk78=;
-        b=X9d+qsQwvIUWuPdVR5EGwl7r1FPaBmNYr/TU4HMH3/tJgfS9DKcHoAz6fFyiuMhzDJ
-         BiKSIHIZ/aGr/JzI0yxGs4HROFb9RZ7KrSjZT6D7pDXKLzvxT72+qTyZc7D7VmpVhfsr
-         L4kfamZKTTN7vTxVLn4/h5g7249SzXBbFBnhUBfD7z7k2yhbAvI38y+F/fyb00T2A/M0
-         /UfIry0jIClra9waNOEtBJD+6y1Z/m0xwWQmcF7pp0SfW9X0EEgxLGx7ZYjWqQYJ7Osz
-         w5U94bvEeGQpdluHnS8UK8nP/N2xFJttDnTev7mb1V4b0L56GBefW9y33PSECNB/vFkv
-         uG6A==
-X-Gm-Message-State: AOAM531iAR/UpxP2wouRbBTzGGN60fpjEmpb0B8qOROuz2IMZ82/L9ya
-        oiiGGgkFSwH4wGH2L4ADDtZshmISbbypLQ==
-X-Google-Smtp-Source: ABdhPJw+LnoEg1B21hM7zEN7Hx0xrxgc7l6mgYMli04WIEMLm3seAGY5SygS9WHj3FRLLZVfMT96lQ==
-X-Received: by 2002:ac8:570f:: with SMTP id 15mr50161394qtw.309.1621131429406;
-        Sat, 15 May 2021 19:17:09 -0700 (PDT)
-Received: from hyperion (rrcs-162-155-247-51.central.biz.rr.com. [162.155.247.51])
-        by smtp.gmail.com with ESMTPSA id 44sm7695614qtb.45.2021.05.15.19.17.08
-        for <linux-usb@vger.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NdBNcSQ1fL9YYvu0gmDFkHR89r/K55hXfYPZOrq9QCs=;
+        b=mEnakF9bNGWHqz1fKuiemVCTbkGKE+rTTmUCsSiubD4H5QuKJeu6fjppKeEEMhXA5E
+         7V1W26i9vBoE28K/B0ZptFqKpzZZnns9R7aq8DGM/LC+85ENnKSE88CzgMaFX8NqOejn
+         0nIAW/wRCA7LIOtsJqebYE1b5cYaMVwRLHgnkJL1/ywTDLJ9ildI12/fHSiWBS+9CQ4o
+         g5jn6OyclV048GK+3rGaVgXu0qUskntgHL1/kaVjS+w6+k5+TYSs8EN3gE8sZ9HUqHC9
+         VLJIL2wgOVGATeT93SePOOinMt8Ilf7DkFrwXQCD6WEaqw7Upx/DFBxWb27JRHL79nmD
+         B/Hw==
+X-Gm-Message-State: AOAM530OC7YuBZh6xYM814s4m16MGAH+Ut7dtPP3tntpfk1qNg7qTT7v
+        QCTcSZ4h2fy6hN1ZwrBrL7447g==
+X-Google-Smtp-Source: ABdhPJwClncgW5BfBUpGmjfKmFl8ypszchTFc4WYEjbc9jL5pnTXnKM0AvulKto/XB0ScttVnwEu7A==
+X-Received: by 2002:a05:6830:44f:: with SMTP id d15mr7395709otc.369.1621136867718;
+        Sat, 15 May 2021 20:47:47 -0700 (PDT)
+Received: from localhost.localdomain (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id q1sm2403157otc.21.2021.05.15.20.47.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 May 2021 19:17:08 -0700 (PDT)
-Date:   Sat, 15 May 2021 22:17:07 -0400
-From:   Dominik Winecki <dominikwinecki@gmail.com>
-To:     linux-usb@vger.kernel.org
-Subject: xHCI over-current causing pm loop
-Message-ID: <YKCAoxmr+7bVo63X@hyperion>
+        Sat, 15 May 2021 20:47:47 -0700 (PDT)
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jun Li <jun.li@nxp.com>, Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: typec: mux: Fix matching with typec_altmode_desc
+Date:   Sat, 15 May 2021 20:47:30 -0700
+Message-Id: <20210516034730.621461-1-bjorn.andersson@linaro.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+In typec_mux_match() "nval" is assigned the number of elements in the
+"svid" fwnode property, then the variable is used to store the success
+of the read and finally attempts to loop between 0 and "success" - i.e.
+not at all - and the code returns indicating that no match was found.
 
-I've got an issue on my laptop (Dell XPS 9570 with an i7-7700HQ) that
-I'm trying to fix. Multiple usb ports are reporting over-current, despite
-nothing being plugged in:
+Fix this by using a separate variable to track the success of the read,
+to allow the loop to get a change to find a match.
 
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 002: ID 138a:0091 Validity Sensors, Inc. VFS7552 Touch Fingerprint Sensor
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Fixes: 96a6d031ca99 ("usb: typec: mux: Find the muxes by also matching against the device node")
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+---
+ drivers/usb/typec/mux.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-Two kworkers running runtime pm are trying to suspend the usb 2 & 3 root hubs.
-The xHCI driver will not suspend a hub with over-current triggered
-(since e9fb08d617bf) so it fails, resumes the hub, and pm tries again.
-This is taking two CPU cores, but it stops if a device of the same usb
-version is plugged in, or if I set the power control policy to on.
-Also, this is blocking system suspend, but that's expected behavior.
+diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+index 9da22ae3006c..8514bec7e1b8 100644
+--- a/drivers/usb/typec/mux.c
++++ b/drivers/usb/typec/mux.c
+@@ -191,6 +191,7 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+ 	bool match;
+ 	int nval;
+ 	u16 *val;
++	int ret;
+ 	int i;
+ 
+ 	/*
+@@ -218,10 +219,10 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+ 	if (!val)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	nval = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
+-	if (nval < 0) {
++	ret = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
++	if (ret < 0) {
+ 		kfree(val);
+-		return ERR_PTR(nval);
++		return ERR_PTR(ret);
+ 	}
+ 
+ 	for (i = 0; i < nval; i++) {
+-- 
+2.29.2
 
-Reverting the e9fb08d617bf check fixes both issues for me, but that may cause
-system halts in other systems. Making it a non-retriable suspend failure
-stops the kworkers but then it will never suspend after an OC event.
-
-Does it make sense to fix this in the USB driver? Or is this a PM issue?
-I'd rather fix my over-current issue, but taking two cpus whenever xHCI has
-a no-device over-current reading seems like a bug.
-
-Thanks,
-Dominik
