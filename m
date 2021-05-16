@@ -2,113 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C386A381BF0
-	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 03:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41765381C0D
+	for <lists+linux-usb@lfdr.de>; Sun, 16 May 2021 04:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbhEPBVm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 15 May 2021 21:21:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34446 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231608AbhEPBVm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 15 May 2021 21:21:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 450216117A
-        for <linux-usb@vger.kernel.org>; Sun, 16 May 2021 01:20:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621128028;
-        bh=+IXPs0RBIldAsdbidTzmnYIo/1tnnioj0r7k1KIwYao=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Ul+PHF+GwltY5TqPhFz1uGA1BPdI453jYM0DTsrtRuOZWOK5dT5FvziHYv3rsmNiB
-         +DO/cS+ccmABs1V0akiK1SMO1FrJ8ubLG1bDQnjZnTgHpLYbRWu9S+zOLGcRnu9wYR
-         1V5T+WigjAeIP8lMdzR7TZqWY9iA/dTlnm4I7Xj7d/IA3mU/168N8jrcNqX6V+AAum
-         CrANBDlMlw9Tw2Uoffcb9MIRJO6sMbu0T7ARvjN0gRsAu7pVdbXKnagvtgmJ2glpV1
-         9SIlzik2jqPcV36bIFpbyveWYBhObAUiHVHR4nePUoucCckTAGZcD0nmCk1RATsY/F
-         oz2jBwfKeINYg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 34FDD610A4; Sun, 16 May 2021 01:20:28 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
+        id S231264AbhEPCS1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 15 May 2021 22:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42662 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230260AbhEPCSZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 15 May 2021 22:18:25 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBDADC06174A
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 19:17:10 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id k19so2533081qta.2
+        for <linux-usb@vger.kernel.org>; Sat, 15 May 2021 19:17:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition;
+        bh=+Ty0PWWKNFcSCSpMAU3miWWjfwY9Yvb0opOWjI/pk78=;
+        b=YiKHn0K2q/iSVLItplxDE0gpgvgXOocJUK86LygsSngCcrAE4zaXKV0xHTMQ/SwRQg
+         u+O33cmCh6B/UZBfELUKAIDQJ371AhPUnrO87lMAg4MEr+uQFJKuuRwhIE31FXEsMMcp
+         KVr9Yzrt++pS32o6K/JBwVn8U+l03yRo4E9578IOwZfpQPGj8+aih1aoB/NqgnnaMXNj
+         qcLwh8xXcRC6TtqIak+yx3/WVkOTsbupbp1K2ReWUwk54E89ojg0b+TXnEEhOaCMppL0
+         QWgE16CupG4S/ziujSfeq5rwseEhub3sVFcuF9eg2eYpFDjZuLdDSorDkOrMOjz+yd+o
+         BjfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition;
+        bh=+Ty0PWWKNFcSCSpMAU3miWWjfwY9Yvb0opOWjI/pk78=;
+        b=X9d+qsQwvIUWuPdVR5EGwl7r1FPaBmNYr/TU4HMH3/tJgfS9DKcHoAz6fFyiuMhzDJ
+         BiKSIHIZ/aGr/JzI0yxGs4HROFb9RZ7KrSjZT6D7pDXKLzvxT72+qTyZc7D7VmpVhfsr
+         L4kfamZKTTN7vTxVLn4/h5g7249SzXBbFBnhUBfD7z7k2yhbAvI38y+F/fyb00T2A/M0
+         /UfIry0jIClra9waNOEtBJD+6y1Z/m0xwWQmcF7pp0SfW9X0EEgxLGx7ZYjWqQYJ7Osz
+         w5U94bvEeGQpdluHnS8UK8nP/N2xFJttDnTev7mb1V4b0L56GBefW9y33PSECNB/vFkv
+         uG6A==
+X-Gm-Message-State: AOAM531iAR/UpxP2wouRbBTzGGN60fpjEmpb0B8qOROuz2IMZ82/L9ya
+        oiiGGgkFSwH4wGH2L4ADDtZshmISbbypLQ==
+X-Google-Smtp-Source: ABdhPJw+LnoEg1B21hM7zEN7Hx0xrxgc7l6mgYMli04WIEMLm3seAGY5SygS9WHj3FRLLZVfMT96lQ==
+X-Received: by 2002:ac8:570f:: with SMTP id 15mr50161394qtw.309.1621131429406;
+        Sat, 15 May 2021 19:17:09 -0700 (PDT)
+Received: from hyperion (rrcs-162-155-247-51.central.biz.rr.com. [162.155.247.51])
+        by smtp.gmail.com with ESMTPSA id 44sm7695614qtb.45.2021.05.15.19.17.08
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 May 2021 19:17:08 -0700 (PDT)
+Date:   Sat, 15 May 2021 22:17:07 -0400
+From:   Dominik Winecki <dominikwinecki@gmail.com>
 To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Sun, 16 May 2021 01:20:27 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213081-208809-xfXyX2J5ey@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Subject: xHCI over-current causing pm loop
+Message-ID: <YKCAoxmr+7bVo63X@hyperion>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+Hello,
 
---- Comment #6 from Alan Stern (stern@rowland.harvard.edu) ---
-Here's where the difference shows up.  In the 5.11 log:
+I've got an issue on my laptop (Dell XPS 9570 with an i7-7700HQ) that
+I'm trying to fix. Multiple usb ports are reporting over-current, despite
+nothing being plugged in:
 
-ffff8881259c3540 48224904 S Bo:6:004:2 -115 31 =3D 55534243 03000000 600000=
-00
-80000603 00000060 00000000 00000000 000000
-ffff8881259c3540 48224939 C Bo:6:004:2 0 31 >
-ffff888102854900 48224942 S Bi:6:004:1 -115 96 <
-ffff888102854900 48225040 C Bi:6:004:1 -121 18 =3D 70000200 0000000a 000000=
-00
-3a000000 0000
-ffff8881259c3540 48225042 S Bi:6:004:1 -115 13 <
-ffff8881259c3540 48225112 C Bi:6:004:1 -32 0
-ffff8881259c3540 48225115 S Co:6:004:0 s 02 01 0000 0081 0000 0
-ffff8881259c3540 48225522 C Co:6:004:0 0 0
-ffff8881259c3540 48225525 S Bi:6:004:1 -115 13 <
-ffff8881259c3540 48225598 C Bi:6:004:1 0 13 =3D 55534253 03000000 4e000000 =
-00
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 002: ID 138a:0091 Validity Sensors, Inc. VFS7552 Touch Fingerprint Sensor
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-In the 5.12 log:
+Two kworkers running runtime pm are trying to suspend the usb 2 & 3 root hubs.
+The xHCI driver will not suspend a hub with over-current triggered
+(since e9fb08d617bf) so it fails, resumes the hub, and pm tries again.
+This is taking two CPU cores, but it stops if a device of the same usb
+version is plugged in, or if I set the power control policy to on.
+Also, this is blocking system suspend, but that's expected behavior.
 
-ffff88812366e6c0 273105524 S Bo:6:010:2 -115 31 =3D 55534243 03000000 60000=
-000
-80000603 00000060 00000000 00000000 000000
-ffff88812366e6c0 273105551 C Bo:6:010:2 0 31 >
-ffff88815e5c5c00 273105558 S Bi:6:010:1 -115 96 <
-ffff88815e5c5c00 273105676 C Bi:6:010:1 -121 18 =3D 70000200 0000000a 00000=
-000
-3a000000 0000
-ffff88812366e6c0 273105682 S Bi:6:010:1 -115 13 <
-ffff88812366e6c0 273105860 C Bi:6:010:1 0 0
-ffff88812366e6c0 273105864 S Bi:6:010:1 -115 13 <
-ffff88812366e6c0 303293804 C Bi:6:010:1 -104 0
+Reverting the e9fb08d617bf check fixes both issues for me, but that may cause
+system halts in other systems. Making it a non-retriable suspend failure
+stops the kworkers but then it will never suspend after an OC event.
 
-In both of these, the computer asks for a 96-bytes of sense data and the de=
-vice
-responds with only 18 bytes.  Then when the computer asks for a status code,
-the device is supposed to respond with a STALL (code -32 in the trace).  Th=
-is
-does happen (in the sixth line) under 5.11, but under 5.12 the STALL isn't
-reported.  Things get worse from there.
+Does it make sense to fix this in the USB driver? Or is this a PM issue?
+I'd rather fix my over-current issue, but taking two cpus whenever xHCI has
+a no-device over-current reading seems like a bug.
 
-This appears to be a bug in the xhci-hcd driver.  I can't tell you how to d=
-ebug
-that driver; your best approach is probably to use bisection to find the co=
-mmit
-between 5.11 and 5.12 responsible for introducing the bug.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks,
+Dominik
