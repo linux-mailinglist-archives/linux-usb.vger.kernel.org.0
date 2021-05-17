@@ -2,96 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0680383D05
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 21:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6202B383D10
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 21:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbhEQTQk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 15:16:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55582 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231161AbhEQTQj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 15:16:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0CEA4611BD
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 19:15:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621278923;
-        bh=mOBazTXSfwJsJCtVNJrHmHOa9exC2vPkcC3DoKgjM/c=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=NPYuG4bjpxZRcj5ilBVVEkLZRKFEM3vawF0Z8RFSVDLqSI//658a1pmuID53b6lOy
-         AZDlrJJpoSGr5s+tKg/QBEL9ZRczVt/yKMSrEM1QqhPxyqyla2oxNF8zQC0UHaee1n
-         SQ2AnatZAc3DCzmpsEuuMoBPUXkTWRa6CQZ5tZrnJaAee2F8BvAU9rkrie7llbeJSB
-         70B3YxSOdOEeA+fuUnPgRB9aOV/5qE9r9h8IM1cpTYhJGd6LXeBm9XuptaIHfTUVZk
-         zk9s0/F5XYsXPAyQHARh74GmTjkkBhpZO9IWWtd4UAliFOETJUpI4sojHhTxDuSgio
-         jWncs2K05y2+A==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 0085F61176; Mon, 17 May 2021 19:15:22 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Mon, 17 May 2021 19:15:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: peter.ganzhorn@googlemail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213081-208809-6l9irijhdy@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S232295AbhEQTSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 15:18:25 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:52192 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232153AbhEQTSY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 15:18:24 -0400
+Received: by mail-io1-f69.google.com with SMTP id h7-20020a5d9e070000b029041a1f6bccc8so4151600ioh.18
+        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 12:17:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=+kErfEtNYwu/Ybclt9+KOG1egC5Rd9gjqzB3omTYpbk=;
+        b=IOZF6+j98L7FbeBOJMZ7LtIgAjYF+0RgsWHvpYffJ1kHtcyQiWi4IVyU66ZzUe/GOx
+         nCZ/tsV/gifpxlwu/1WZBYRGszTEp1c7U6vCDkM1V1pJ1relXyfSqWiTn5vdnsj/Lmh6
+         la6Sk+GbuQe4nD8EMcd8fO4CYA43Ekw28bt8uurlRouokrg0qzN6z/Y8cPWVA7n7H+BF
+         F+qiZGRsp9+rUmuqTWBww+h4arzobKy6CdcszxkDaRckSJs7JEezyHkeQj0UIysTvIJz
+         vmh7xFdkvt2TY3E5t71LdK9ubnQCd6VCxXGJeG/BxDHZuSvEgSWWowk9cq1BiG9PmxjI
+         77+w==
+X-Gm-Message-State: AOAM53040h2B1y3DukN7hoC4IyW8MBUOicw9HlCPfS/pLza+P1mxi3D6
+        mw6EDxSqS6dCe7Ls0mK9Ws7d9Nr8/gcvqze2ER6/vMUROs6b
+X-Google-Smtp-Source: ABdhPJz7zkN9b8IfVdrGey2sJgHjnLLqDvLusS/BcEN5YJqN6eyAnKsNyHkgRQQVj44NE68p1mcX55PJfr0Eo4uuuFJEhaxq9slE
 MIME-Version: 1.0
+X-Received: by 2002:a92:dd04:: with SMTP id n4mr994688ilm.165.1621279026606;
+ Mon, 17 May 2021 12:17:06 -0700 (PDT)
+Date:   Mon, 17 May 2021 12:17:06 -0700
+In-Reply-To: <20210517215904.7d915011@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007676b005c28b70f6@google.com>
+Subject: Re: [syzbot] memory leak in zr364xx_start_readpipe
+From:   syzbot <syzbot+af4fa391ef18efdd5f69@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, mchehab@kernel.org,
+        paskripkin@gmail.com, royale@zerezo.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+Hello,
 
---- Comment #9 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
-Created attachment 296815
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296815&action=3Dedit
-git bisect log
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Well bisecting went quicker than I expected, but I don't think I can come up
-with a solution for this myself.
-git bisect found commit 674f8438c12125d6b4fe51d44b9316bb02b286b5 xhci: split
-handling halted endpoints into two steps as the culprit, but the last two
-builds before finding this final commit already refused to boot correctly.
-I guess this one is part of a bigger patch series which the bisect process =
-cut
-in half at some point.
-The description of the commit mentions:
+Reported-and-tested-by: syzbot+af4fa391ef18efdd5f69@syzkaller.appspotmail.com
 
-    Note: This removes the RESET_EP_QUIRK handling which was added in
-    commit ac9d8fe7c6a8 ("USB: xhci: Add quirk for Fresco Logic xHCI
-hardware.")
+Tested on:
 
-    This quirk was added in 2009 for prototype xHCI hardware meant for
-    evaluation purposes only, and should not reach consumers.
+commit:         0723f73e media: zr364xx: fix memory leak in zr364xx_start_..
+git tree:       https://linux.googlesource.com/linux/kernel/git/torvalds/linux refs/changes/96/11196/1
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cb9a486f2f311b2e
+dashboard link: https://syzkaller.appspot.com/bug?extid=af4fa391ef18efdd5f69
+compiler:       
 
-Which made me raise an eyebrow. After reading this I am not sure if I may h=
-ave
-some misbehaving/broken-by-design hardware here.
-
-I'll take the liberty of adding Mathias Nyman who authored the commit I fou=
-nd
-to be involved in this issue to the CC list.
-Hopefully he can shed some light on this.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Note: testing is done by a robot and is best-effort only.
