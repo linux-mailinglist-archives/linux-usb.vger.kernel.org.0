@@ -2,217 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F2A338288E
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 11:40:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61439382899
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 11:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236114AbhEQJlq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 05:41:46 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:2950 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236101AbhEQJlq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 05:41:46 -0400
-Received: from dggems702-chm.china.huawei.com (unknown [172.30.72.58])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4FkDZH421GzCsvB;
-        Mon, 17 May 2021 17:37:43 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggems702-chm.china.huawei.com (10.3.19.179) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 17 May 2021 17:40:28 +0800
-Received: from thunder-town.china.huawei.com (10.174.177.72) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Mon, 17 May 2021 17:40:27 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] usb: fix spelling mistakes in header files
-Date:   Mon, 17 May 2021 17:40:20 +0800
-Message-ID: <20210517094020.7310-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        id S236149AbhEQJne (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 05:43:34 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:48933 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236128AbhEQJnd (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 05:43:33 -0400
+Received: by mail-il1-f197.google.com with SMTP id h4-20020a926c040000b0290192f4fa4c3bso5834410ilc.15
+        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 02:42:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mq/JV9mVZjAk0mH8ng+q0dW3P9Vxyd3kxyOwfR9eQr0=;
+        b=ivMKcxtr9AfeoRUj5SH8/IBxsQ343qyNJZ6HKcxYroYTv9yV021gtwAAb1/ivbXJuE
+         XpWWTlv1vm819B9f7hSYJ3uFwglkE+GVeBwTJhQqV+TXQ2pKROoLwu663N02K+gey/Rx
+         OHPoUrqa9Pqy2ZEVfkaQ0tcze4jqRhUzO8ck1p7gYEAI4/AgO0PIMRJAvAbv6rUN409O
+         OFiR/GGC6cLxonXY/PwFy+lykA5AA6WW7kgTbxzWPnbo/qI/NQmSb20SF42zO6obOkLB
+         oM/16W+P2+zI/etXIbOF6mipJE0dEcH1c7jnN8evSTr3ZNAamaq7kx3iiCj1HD7vYyMq
+         vsLA==
+X-Gm-Message-State: AOAM530XtdmWkuHo3687iSfsdxDDBTjaf614MmI3K2YGdvM3yA1UpORu
+        M9WPiupVrxSd+n0AUq9O7MoV4mK6+9Mg8JM2obu1O3B5SkYC
+X-Google-Smtp-Source: ABdhPJzrjHprlvUHNR9oKqZ4tIczWX+GUbba8Bh9j8ie8tqa8paxlsC9yAH2ehLAWedeURheOLDw3pL6FJ7crJvz1/Q+JO02K8lJ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+X-Received: by 2002:a05:6e02:1809:: with SMTP id a9mr52247566ilv.184.1621244536789;
+ Mon, 17 May 2021 02:42:16 -0700 (PDT)
+Date:   Mon, 17 May 2021 02:42:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b5a0af05c28368b4@google.com>
+Subject: [syzbot] general protection fault in magicmouse_remove
+From:   syzbot <syzbot+ee6f6e2e68886ca256a8@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rydberg@bitmath.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fix some spelling mistakes in comments:
-trasfer ==> transfer
-consumtion ==> consumption
-endoint ==> endpoint
-sharable ==> shareable
-contraints ==> constraints
-Auxilary ==> Auxiliary
-correspondig ==> corresponding
-interupt ==> interrupt
-inifinite ==> infinite
-assignement ==> assignment
+Hello,
 
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+syzbot found the following issue on:
+
+HEAD commit:    d665ea6e Merge tag 'for-linus-5.13-rc1' of git://git.kerne..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=11afac45d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f635d6ce17da8a68
+dashboard link: https://syzkaller.appspot.com/bug?extid=ee6f6e2e68886ca256a8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d48069d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12023fa9d00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ee6f6e2e68886ca256a8@syzkaller.appspotmail.com
+
+usb 1-1: New USB device found, idVendor=05ac, idProduct=0265, bcdDevice= 0.40
+usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+usb 1-1: config 0 descriptor??
+usb 1-1: USB disconnect, device number 2
+general protection fault, probably for non-canonical address 0xdffffc000000002b: 0000 [#1] SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000158-0x000000000000015f]
+CPU: 0 PID: 7 Comm: kworker/0:1 Not tainted 5.12.0-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:timer_is_static_object+0x20/0x90 kernel/time/timer.c:625
+Code: 84 00 00 00 00 00 0f 1f 40 00 41 54 53 48 89 fb e8 d5 86 10 00 48 8d 7b 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 4f 45 31 e4 48 83 7b 08 00 74 0c e8 ab 86 10 00 44
+RSP: 0018:ffffc9000007f330 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002b RSI: ffffffff8130663b RDI: 0000000000000158
+RBP: 0000000000000002 R08: 0000000000000000 R09: ffffffff8a5c35ab
+R10: fffffbfff14b86b5 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffffff86090c00 R14: 0000000000000150 R15: 1ffff9200000fe6b
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004ba438 CR3: 00000001097bb000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ debug_object_assert_init lib/debugobjects.c:886 [inline]
+ debug_object_assert_init+0x1df/0x2e0 lib/debugobjects.c:861
+ debug_timer_assert_init kernel/time/timer.c:737 [inline]
+ debug_assert_init kernel/time/timer.c:782 [inline]
+ del_timer+0x6d/0x110 kernel/time/timer.c:1202
+ try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1252
+ __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3098
+ magicmouse_remove+0x3a/0x50 drivers/hid/hid-magicmouse.c:782
+ hid_device_remove+0xed/0x240 drivers/hid/hid-core.c:2317
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1181
+ device_release_driver_internal drivers/base/dd.c:1212 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1235
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x502/0xd40 drivers/base/core.c:3507
+ hid_remove_device drivers/hid/hid-core.c:2488 [inline]
+ hid_destroy_device+0xe1/0x150 drivers/hid/hid-core.c:2507
+ usbhid_disconnect+0x9f/0xe0 drivers/hid/usbhid/hid-core.c:1436
+ usb_unbind_interface+0x1d8/0x8d0 drivers/usb/core/driver.c:458
+ __device_release_driver+0x3bd/0x6f0 drivers/base/dd.c:1181
+ device_release_driver_internal drivers/base/dd.c:1212 [inline]
+ device_release_driver+0x26/0x40 drivers/base/dd.c:1235
+ bus_remove_device+0x2eb/0x5a0 drivers/base/bus.c:533
+ device_del+0x502/0xd40 drivers/base/core.c:3507
+ usb_disable_device+0x35b/0x7b0 drivers/usb/core/message.c:1413
+ usb_disconnect.cold+0x27d/0x791 drivers/usb/core/hub.c:2219
+ hub_port_connect drivers/usb/core/hub.c:5127 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5416 [inline]
+ port_event drivers/usb/core/hub.c:5562 [inline]
+ hub_event+0x1c9c/0x4320 drivers/usb/core/hub.c:5644
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+Modules linked in:
+---[ end trace 3f2c8ec737b57211 ]---
+RIP: 0010:timer_is_static_object+0x20/0x90 kernel/time/timer.c:625
+Code: 84 00 00 00 00 00 0f 1f 40 00 41 54 53 48 89 fb e8 d5 86 10 00 48 8d 7b 08 48 b8 00 00 00 00 00 fc ff df 48 89 fa 48 c1 ea 03 <80> 3c 02 00 75 4f 45 31 e4 48 83 7b 08 00 74 0c e8 ab 86 10 00 44
+RSP: 0018:ffffc9000007f330 EFLAGS: 00010006
+RAX: dffffc0000000000 RBX: 0000000000000150 RCX: 0000000000000000
+RDX: 000000000000002b RSI: ffffffff8130663b RDI: 0000000000000158
+RBP: 0000000000000002 R08: 0000000000000000 R09: ffffffff8a5c35ab
+R10: fffffbfff14b86b5 R11: 0000000000000000 R12: dffffc0000000000
+R13: ffffffff86090c00 R14: 0000000000000150 R15: 1ffff9200000fe6b
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00000000004ba438 CR3: 00000001097bb000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
 ---
- include/linux/usb.h           | 2 +-
- include/linux/usb/composite.h | 2 +-
- include/linux/usb/gadget.h    | 2 +-
- include/linux/usb/hcd.h       | 4 ++--
- include/linux/usb/otg-fsm.h   | 6 +++---
- include/linux/usb/otg.h       | 2 +-
- include/linux/usb/quirks.h    | 2 +-
- include/linux/usb/serial.h    | 2 +-
- include/linux/usb/typec_dp.h  | 2 +-
- 9 files changed, 12 insertions(+), 12 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/include/linux/usb.h b/include/linux/usb.h
-index eaae24217e8a..4db6b824af5c 100644
---- a/include/linux/usb.h
-+++ b/include/linux/usb.h
-@@ -1485,7 +1485,7 @@ typedef void (*usb_complete_t)(struct urb *);
-  *
-  * Note that transfer_buffer must still be set if the controller
-  * does not support DMA (as indicated by hcd_uses_dma()) and when talking
-- * to root hub. If you have to trasfer between highmem zone and the device
-+ * to root hub. If you have to transfer between highmem zone and the device
-  * on such controller, create a bounce buffer or bail out with an error.
-  * If transfer_buffer cannot be set (is in highmem) and the controller is DMA
-  * capable, assign NULL to it, so that usbmon knows not to use the value.
-diff --git a/include/linux/usb/composite.h b/include/linux/usb/composite.h
-index c71150f2c639..9d2762279286 100644
---- a/include/linux/usb/composite.h
-+++ b/include/linux/usb/composite.h
-@@ -271,7 +271,7 @@ int config_ep_by_speed(struct usb_gadget *g, struct usb_function *f,
-  * @bConfigurationValue: Copied into configuration descriptor.
-  * @iConfiguration: Copied into configuration descriptor.
-  * @bmAttributes: Copied into configuration descriptor.
-- * @MaxPower: Power consumtion in mA. Used to compute bMaxPower in the
-+ * @MaxPower: Power consumption in mA. Used to compute bMaxPower in the
-  *	configuration descriptor after considering the bus speed.
-  * @cdev: assigned by @usb_add_config() before calling @bind(); this is
-  *	the device associated with this configuration.
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index ee04ef214ce8..8811eb96e5cc 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -197,7 +197,7 @@ struct usb_ep_caps {
-  * @name:identifier for the endpoint, such as "ep-a" or "ep9in-bulk"
-  * @ops: Function pointers used to access hardware-specific operations.
-  * @ep_list:the gadget's ep_list holds all of its endpoints
-- * @caps:The structure describing types and directions supported by endoint.
-+ * @caps:The structure describing types and directions supported by endpoint.
-  * @enabled: The current endpoint enabled/disabled state.
-  * @claimed: True if this endpoint is claimed by a function.
-  * @maxpacket:The maximum packet size used on this endpoint.  The initial
-diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-index 96281cd50ff6..e07a51597778 100644
---- a/include/linux/usb/hcd.h
-+++ b/include/linux/usb/hcd.h
-@@ -59,7 +59,7 @@
-  * USB Host Controller Driver (usb_hcd) framework
-  *
-  * Since "struct usb_bus" is so thin, you can't share much code in it.
-- * This framework is a layer over that, and should be more sharable.
-+ * This framework is a layer over that, and should be more shareable.
-  */
- 
- /*-------------------------------------------------------------------------*/
-@@ -299,7 +299,7 @@ struct hc_driver {
- 	 * (optional) these hooks allow an HCD to override the default DMA
- 	 * mapping and unmapping routines.  In general, they shouldn't be
- 	 * necessary unless the host controller has special DMA requirements,
--	 * such as alignment contraints.  If these are not specified, the
-+	 * such as alignment constraints.  If these are not specified, the
- 	 * general usb_hcd_(un)?map_urb_for_dma functions will be used instead
- 	 * (and it may be a good idea to call these functions in your HCD
- 	 * implementation)
-diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
-index e78eb577d0fa..3aee78dda16d 100644
---- a/include/linux/usb/otg-fsm.h
-+++ b/include/linux/usb/otg-fsm.h
-@@ -98,7 +98,7 @@ enum otg_fsm_timer {
-  * @b_bus_req:	TRUE during the time that the Application running on the
-  *		B-device wants to use the bus
-  *
-- *	Auxilary inputs (OTG v1.3 only. Obsolete now.)
-+ *	Auxiliary inputs (OTG v1.3 only. Obsolete now.)
-  * @a_sess_vld:	TRUE if the A-device detects that VBUS is above VA_SESS_VLD
-  * @b_bus_suspend: TRUE when the A-device detects that the B-device has put
-  *		the bus into suspend
-@@ -153,7 +153,7 @@ struct otg_fsm {
- 	int a_bus_req;
- 	int b_bus_req;
- 
--	/* Auxilary inputs */
-+	/* Auxiliary inputs */
- 	int a_sess_vld;
- 	int b_bus_resume;
- 	int b_bus_suspend;
-@@ -177,7 +177,7 @@ struct otg_fsm {
- 	int a_bus_req_inf;
- 	int a_clr_err_inf;
- 	int b_bus_req_inf;
--	/* Auxilary informative variables */
-+	/* Auxiliary informative variables */
- 	int a_suspend_req_inf;
- 
- 	/* Timeout indicator for timers */
-diff --git a/include/linux/usb/otg.h b/include/linux/usb/otg.h
-index 69f1b6328532..7ceeecbb9e02 100644
---- a/include/linux/usb/otg.h
-+++ b/include/linux/usb/otg.h
-@@ -125,7 +125,7 @@ enum usb_dr_mode {
-  * @dev: Pointer to the given device
-  *
-  * The function gets phy interface string from property 'dr_mode',
-- * and returns the correspondig enum usb_dr_mode
-+ * and returns the corresponding enum usb_dr_mode
-  */
- extern enum usb_dr_mode usb_get_dr_mode(struct device *dev);
- 
-diff --git a/include/linux/usb/quirks.h b/include/linux/usb/quirks.h
-index 5e4c497f54d6..eeb7c2157c72 100644
---- a/include/linux/usb/quirks.h
-+++ b/include/linux/usb/quirks.h
-@@ -32,7 +32,7 @@
- #define USB_QUIRK_DELAY_INIT			BIT(6)
- 
- /*
-- * For high speed and super speed interupt endpoints, the USB 2.0 and
-+ * For high speed and super speed interrupt endpoints, the USB 2.0 and
-  * USB 3.0 spec require the interval in microframes
-  * (1 microframe = 125 microseconds) to be calculated as
-  * interval = 2 ^ (bInterval-1).
-diff --git a/include/linux/usb/serial.h b/include/linux/usb/serial.h
-index 8c63fa9bfc74..b81eb604e092 100644
---- a/include/linux/usb/serial.h
-+++ b/include/linux/usb/serial.h
-@@ -395,7 +395,7 @@ static inline void usb_serial_debug_data(struct device *dev,
- }
- 
- /*
-- * Macro for reporting errors in write path to avoid inifinite loop
-+ * Macro for reporting errors in write path to avoid infinite loop
-  * when port is used as a console.
-  */
- #define dev_err_console(usport, fmt, ...)				\
-diff --git a/include/linux/usb/typec_dp.h b/include/linux/usb/typec_dp.h
-index fc4c7edb2e8a..cfb916cccd31 100644
---- a/include/linux/usb/typec_dp.h
-+++ b/include/linux/usb/typec_dp.h
-@@ -97,7 +97,7 @@ enum {
- #define DP_CONF_PIN_ASSIGNEMENT_SHIFT	8
- #define DP_CONF_PIN_ASSIGNEMENT_MASK	GENMASK(15, 8)
- 
--/* Helper for setting/getting the pin assignement value to the configuration */
-+/* Helper for setting/getting the pin assignment value to the configuration */
- #define DP_CONF_SET_PIN_ASSIGN(_a_)	((_a_) << 8)
- #define DP_CONF_GET_PIN_ASSIGN(_conf_)	(((_conf_) & GENMASK(15, 8)) >> 8)
- 
--- 
-2.25.1
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
