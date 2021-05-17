@@ -2,138 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F070D38263A
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 10:07:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D833382649
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 10:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235337AbhEQIIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 04:08:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45790 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233675AbhEQIIo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 04:08:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 894B96117A;
-        Mon, 17 May 2021 08:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621238848;
-        bh=S1xEZIZ5CsbZYKrV5iPkhrgOe6N7EuOvzRyWvsqEDo0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kC1hJRDu/KEZWeBj0mZJuNH+4yuoAPz96307kF96JP11oUMJmNGf/NhWgQ1b2zR+K
-         +L3ckOmdMbPW9Y4lMxsl8uGoPdSu1KVu+Tkr2yjdHLlEGcqyuqdP4L1ubI/k8zJ31Y
-         rc7hRpdLzTKSXvaEnn644KZ+kx0R6VJjOHH2dNsDfSqRYcRDFjw6Vl9fUpJcfUNJ+s
-         7rPqr5/TEA0OZZNFNz1NwtPK71zYT+7NV7xA2sUXHbYZGCnMUJ/7sfqeMUV39oS1Ay
-         AcUCP05HNZmFQkxsj1IvESxtFd/emMY0cowTjeNXbjiJxyzo9BeNN0UBgIkSntGGEs
-         LPGPNtsjoPmwQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1liYHd-0003Mx-Ds; Mon, 17 May 2021 10:07:26 +0200
-Date:   Mon, 17 May 2021 10:07:25 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Anirudh Rayabharam <mail@anirudhrb.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rustam Kovhaev <rkovhaev@gmail.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH v2 net] net: hso: check for allocation failure in
- hso_create_bulk_serial_device()
-Message-ID: <YKIkPS/RNh32i042@hovoldconsulting.com>
-References: <YJurlxqQ9L+zzIAS@hovoldconsulting.com>
- <YJ6IMH7jI9QFdGIX@mwanda>
+        id S232924AbhEQIKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 04:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235219AbhEQIIv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 04:08:51 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811FC061573
+        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 01:07:31 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id lj11-20020a17090b344bb029015bc3073608so3241835pjb.3
+        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 01:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=IxSnEISy5CLiRWLMh9aMS41D9EJyxiVUgXZ2d/P9mcU=;
+        b=dkuiiUybh/Rfx7FaBlcmk/PPmcU1X+titGUcEXSQmIjMfD2r1xhLb0ZksrSB/2tnjs
+         UREfuDT0xQYnUs/T/59lkKQNRSRteLSm3wUaacPovX3B3X7YSHkMBxTP79CPrWBr++/s
+         iZR5cMNm9Io7Gqgnt6X/8L4KN0EqVWlV3iE4fSsapE/EjqrAYkD/PeXbUlb3B1INxgEQ
+         VjCREZCxH62Lu5IC2dkLgVBsJA1oLjKo1iwMicUfVBKPQzJ9N+otYph8TBWaG3x45ons
+         foARZR3/NGxdRUEsSDyNpi22MxkhCcpsRXws+dr5MbpUDrbAZlG+zlyTGrEEwOijVBWp
+         kZ5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=IxSnEISy5CLiRWLMh9aMS41D9EJyxiVUgXZ2d/P9mcU=;
+        b=hM0QOTIbY08p/BwyMHapBKbWi/AzJKK+DjxTvbnArAyIVg6VeF5LhOLzgByTVCk+Rl
+         OgjGhroGrPmCBI2GS9GjGMS4PFwsr/3gbhMvyEzS5RUfZ8j42IM89uwAETHS6EIh+fep
+         sfX9ozNYeoPci5TsU8xUabrADpq1+FUmz+tOKpd1PV7vFRM3MrsHQNIfAeR4J7q0zsGT
+         UvrgBFlxDTJGRM/caMjzBB6tg+I2TOUixJNdgPRFFsigq6x75B6rGN9AAUY/3g8ka1Zl
+         oPJsUBsj2cYBsVkuQIZBiqbQ/aoQsJbECRlAytw/EoBbXpBabkgsZcV2PFt0FDp/7Sem
+         hYzw==
+X-Gm-Message-State: AOAM533rydtHgGpXcKQSQPJQCcrSj5lgGzB7cfUCiG7Kqiii+VWvk44I
+        5dnGyC9L/F6zlTSll+RDJMsA9ntyRQtayg==
+X-Google-Smtp-Source: ABdhPJyZGkeZVTp01R9o4izTcZxCGgI1IUWWApwc6IalGLtbETOZHR/qrbT/K1Rc3EUTqH1rdViprw==
+X-Received: by 2002:a17:902:7e02:b029:f1:62ce:6674 with SMTP id b2-20020a1709027e02b02900f162ce6674mr3582110plm.39.1621238851016;
+        Mon, 17 May 2021 01:07:31 -0700 (PDT)
+Received: from Journey.localdomain ([223.226.180.251])
+        by smtp.gmail.com with ESMTPSA id w123sm9142702pfb.109.2021.05.17.01.07.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 May 2021 01:07:30 -0700 (PDT)
+Date:   Mon, 17 May 2021 13:37:27 +0530
+From:   Hritik Vijay <hritikxx8@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Order in which kernel decides binding device driver
+Message-ID: <YKIkPuj+fCod6f5B@Journey.localdomain>
+References: <YKA0hphGFeqM+BZG@Journey.localdomain>
+ <20210516010154.GA1046393@rowland.harvard.edu>
+ <YKCovrGBB4QQAl52@Journey.localdomain>
+ <20210516144118.GB1060053@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YJ6IMH7jI9QFdGIX@mwanda>
+In-Reply-To: <20210516144118.GB1060053@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 14, 2021 at 05:24:48PM +0300, Dan Carpenter wrote:
-> In current kernels, small allocations never actually fail so this
-> patch shouldn't affect runtime.
+On Sun, May 16, 2021 at 10:41:18AM -0400, Alan Stern wrote:
+> Please use Reply-To-All so that your responses show up on the mailing 
+> list.
 > 
-> Originally this error handling code written with the idea that if
-> the "serial->tiocmget" allocation failed, then we would continue
-> operating instead of bailing out early.  But in later years we added
-> an unchecked dereference on the next line.
+> On Sun, May 16, 2021 at 10:38:14AM +0530, Hritik Vijay wrote:
+> > On Sat, May 15, 2021 at 09:01:54PM -0400, Alan Stern wrote:
+> > > I believe this happens in the order that the drivers are registered.  
+> > > For drivers in modules, this will be the order in which the modules are 
+> > > loaded.
+> > Can you please reference the code snippet with this ? If it happens in
 > 
-> 	serial->tiocmget->serial_state_notification = kzalloc();
->         ^^^^^^^^^^^^^^^^^^
+> There is no such snippet.  This is an emergent effect; it happens 
+> because __device_attach in drivers/base/dd.c calls bus_for_each_drv to 
+> try to match drivers with a new device, bus_for_each_drv in bus.c uses 
+> next_driver to iterate through the list of drivers on a bus, next_driver 
+> uses klist_next to follow the klist of driver knodes, and bus_add_driver 
+> calls klist_add_tail to add a new driver knode to the end of the klist 
+> of drivers for a bus.
 > 
-> Since these allocations are never going fail in real life, this is
-> mostly a philosophical debate, but I think bailing out early is the
-> correct behavior that the user would want.  And generally it's safer to
-> bail as soon an error happens.
+> > the order in which the modules are loaded then I suppose its the
+> > responsibility of the hot-plugging daemon (udev here) to take care of
+> > the load order.
 > 
-> Fixes: af0de1303c4e ("usb: hso: obey DMA rules in tiocmget")
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
-> v2: Do more extensive clean up.  As Johan pointed out the comments and
-> later NULL checks can be removed.
+> No; load order is nobody's responsibility.  Making sure the system works 
+> correctly is the responsibility of the programmers who wrote the device 
+> drivers (is that you in this case?).  Drivers are supposed to work as 
+> desired no matter what order they get probed in.
 > 
->  drivers/net/usb/hso.c | 37 ++++++++++++++++++-------------------
->  1 file changed, 18 insertions(+), 19 deletions(-)
+> > > driver will be able to manage a particular device.  For cases where 
+> > > there are two drivers capable of handling the same device, people 
+> > > usually have some sort of priority scheme to decide.  For example, many 
+> > > USB mass-storage devices can be handled by either the usb-storage or the 
+> > > uas driver, but uas has higher priority.
+> > > 
+> > > Alan Stern
+> > I'm curious about the case where no particular priority is defined.
 > 
-> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-> index 3ef4b2841402..260f850d69eb 100644
-> --- a/drivers/net/usb/hso.c
-> +++ b/drivers/net/usb/hso.c
-> @@ -2618,29 +2618,28 @@ static struct hso_device *hso_create_bulk_serial_device(
->  		num_urbs = 2;
->  		serial->tiocmget = kzalloc(sizeof(struct hso_tiocmget),
->  					   GFP_KERNEL);
-> +		if (!serial->tiocmget)
-> +			goto exit;
->  		serial->tiocmget->serial_state_notification
->  			= kzalloc(sizeof(struct hso_serial_state_notification),
->  					   GFP_KERNEL);
-> -		/* it isn't going to break our heart if serial->tiocmget
-> -		 *  allocation fails don't bother checking this.
-> -		 */
-> -		if (serial->tiocmget && serial->tiocmget->serial_state_notification) {
-> -			tiocmget = serial->tiocmget;
-> -			tiocmget->endp = hso_get_ep(interface,
-> -						    USB_ENDPOINT_XFER_INT,
-> -						    USB_DIR_IN);
-> -			if (!tiocmget->endp) {
-> -				dev_err(&interface->dev, "Failed to find INT IN ep\n");
-> -				goto exit;
-> -			}
-> -
-> -			tiocmget->urb = usb_alloc_urb(0, GFP_KERNEL);
-> -			if (tiocmget->urb) {
-> -				mutex_init(&tiocmget->mutex);
-> -				init_waitqueue_head(&tiocmget->waitq);
-> -			} else
-> -				hso_free_tiomget(serial);
-> +		if (!serial->tiocmget->serial_state_notification)
-> +			goto exit;
-> +		tiocmget = serial->tiocmget;
-> +		tiocmget->endp = hso_get_ep(interface,
-> +					    USB_ENDPOINT_XFER_INT,
-> +					    USB_DIR_IN);
-> +		if (!tiocmget->endp) {
-> +			dev_err(&interface->dev, "Failed to find INT IN ep\n");
-> +			goto exit;
->  		}
-> +
-> +		tiocmget->urb = usb_alloc_urb(0, GFP_KERNEL);
-> +		if (tiocmget->urb) {
-> +			mutex_init(&tiocmget->mutex);
-> +			init_waitqueue_head(&tiocmget->waitq);
-> +		} else
-> +			hso_free_tiomget(serial);
+> In that case there is no definite requirement.  Either driver may be 
+> probed first and consequently may end up binding to the device; the 
+> result is more or less random.  It may even differ from one boot to the 
+> next.
+> 
+> > Hrtk
+> 
+> Alan Stern
 
-This should probably be changed to bail out on allocation errors as well
-now but that can be done as a follow-up. Either way:
+Thank you so much for the detailed reply. Having looked at dd.c and
+bus.c, it now makes much more sense to me.
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
-
->  	}
->  	else
->  		num_urbs = 1;
-
-Johan
+Hrtk
