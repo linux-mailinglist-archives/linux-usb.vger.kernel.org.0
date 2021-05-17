@@ -2,60 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F41382D7C
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 15:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B83382DD3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 15:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237395AbhEQNeJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 09:34:09 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36389 "HELO
+        id S237505AbhEQNsg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 09:48:36 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41695 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236025AbhEQNeF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 09:34:05 -0400
-Received: (qmail 1084954 invoked by uid 1000); 17 May 2021 09:32:47 -0400
-Date:   Mon, 17 May 2021 09:32:47 -0400
+        with SMTP id S237498AbhEQNsf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 09:48:35 -0400
+Received: (qmail 1085329 invoked by uid 1000); 17 May 2021 09:47:18 -0400
+Date:   Mon, 17 May 2021 09:47:18 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Qiang Ma <maqianga@uniontech.com>, jikos@kernel.org,
-        benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: usbhid: enable remote wakeup for mouse
-Message-ID: <20210517133247.GB1083813@rowland.harvard.edu>
-References: <20210517060145.32359-1-maqianga@uniontech.com>
- <1327a9251c74587670970baa0f662cd61006f576.camel@suse.com>
+Cc:     Hayes Wang <hayeswang@realtek.com>,
+        syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        nic_swsd <nic_swsd@realtek.com>
+Subject: Re: [syzbot] WARNING in rtl8152_probe
+Message-ID: <20210517134718.GC1083813@rowland.harvard.edu>
+References: <0000000000009df1b605c21ecca8@google.com>
+ <7de0296584334229917504da50a0ac38@realtek.com>
+ <20210513142552.GA967812@rowland.harvard.edu>
+ <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com>
+ <YJ4dU3yCwd2wMq5f@kroah.com>
+ <bddf302301f5420db0fa049c895c9b14@realtek.com>
+ <20210514153253.GA1007561@rowland.harvard.edu>
+ <547984d34f58406aa2e37861d7e8a44d@realtek.com>
+ <93a10a341eccd8b680cdcc422947e4a1b83099db.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1327a9251c74587670970baa0f662cd61006f576.camel@suse.com>
+In-Reply-To: <93a10a341eccd8b680cdcc422947e4a1b83099db.camel@suse.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 17, 2021 at 10:31:45AM +0200, Oliver Neukum wrote:
-> Am Montag, den 17.05.2021, 14:01 +0800 schrieb Qiang Ma:
-> > This patch enables remote wakeup by default for USB mouse
-> > devices.  Mouse in general are supposed to be wakeup devices, but
-
-I disagree with that statement.  Who decided that mice are supposed to 
-be wakeup devices?
-
-> > the correct place to enable it depends on the device's bus; no single
-> > approach will work for all mouse devices.  In particular, this
-> > covers only USB mouse (and then only those supporting the boot
-> > protocol).
+On Mon, May 17, 2021 at 12:00:19PM +0200, Oliver Neukum wrote:
+> Am Montag, den 17.05.2021, 01:01 +0000 schrieb Hayes Wang:
+> > Alan Stern <stern@rowland.harvard.edu>
+> > > Sent: Friday, May 14, 2021 11:33 PM
+> 
+> > > So if a peculiar emulated device created by syzbot is capable of
+> > > crashing the driver, then somewhere there is a bug which needs to
+> > > be
+> > > fixed.  It's true that fixing all these bugs might not protect
+> > > against a
+> > > malicious device which deliberately behaves in an apparently
+> > > reasonable
+> > > manner.  But it does reduce the attack surface.
 > > 
+> > Thanks for your response.
+> > I will add some checks.
 > 
 > Hi,
 > 
-> have you tested this? In my experience the issue with mice
-> is that they wake up only when you press a mouse button, not when you
-> move the mouse. Do we make a promise we cannot keep here?
+> the problem in this particular case is in
+> static bool rtl_vendor_mode(struct usb_interface *intf)
+> which accepts any config number. It needs to bail out
+> if you find config #0 to be what the descriptors say,
+> treating that as an unrecoverable error.
 
-Even worse, if a mouse is enabled for wakeup then the system may get 
-woken up at the wrong time.  The example people often use is a laptop 
-with a USB mouse thrown into a backpack while it is asleep.  Something 
-else inside the backpack may accidentally press against a mouse button, 
-causing the system to wake up even though the user wants it to remain 
-asleep.
+No, the problem is that the routine calls WARN_ON_ONCE when it doesn't 
+find an appropriate configuration.  WARN_ON_ONCE means there is a bug or 
+problem in the kernel.  That's not the issue here; the issue is that the 
+device doesn't have the expected descriptors.
+
+The line should be dev_warn(), not WARN_ON_ONCE.
 
 Alan Stern
