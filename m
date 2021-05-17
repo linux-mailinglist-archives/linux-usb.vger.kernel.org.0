@@ -2,116 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D833382649
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 10:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3548038264F
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 10:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbhEQIKA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 04:10:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235219AbhEQIIv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 04:08:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8811FC061573
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 01:07:31 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id lj11-20020a17090b344bb029015bc3073608so3241835pjb.3
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 01:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IxSnEISy5CLiRWLMh9aMS41D9EJyxiVUgXZ2d/P9mcU=;
-        b=dkuiiUybh/Rfx7FaBlcmk/PPmcU1X+titGUcEXSQmIjMfD2r1xhLb0ZksrSB/2tnjs
-         UREfuDT0xQYnUs/T/59lkKQNRSRteLSm3wUaacPovX3B3X7YSHkMBxTP79CPrWBr++/s
-         iZR5cMNm9Io7Gqgnt6X/8L4KN0EqVWlV3iE4fSsapE/EjqrAYkD/PeXbUlb3B1INxgEQ
-         VjCREZCxH62Lu5IC2dkLgVBsJA1oLjKo1iwMicUfVBKPQzJ9N+otYph8TBWaG3x45ons
-         foARZR3/NGxdRUEsSDyNpi22MxkhCcpsRXws+dr5MbpUDrbAZlG+zlyTGrEEwOijVBWp
-         kZ5g==
+        id S233552AbhEQIL5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 04:11:57 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:60055 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229736AbhEQIL5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 04:11:57 -0400
+Received: from mail-lf1-f71.google.com ([209.85.167.71])
+        by youngberry.canonical.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.93)
+        (envelope-from <juerg.haefliger@canonical.com>)
+        id 1liYI7-0002ib-Mb
+        for linux-usb@vger.kernel.org; Mon, 17 May 2021 08:07:55 +0000
+Received: by mail-lf1-f71.google.com with SMTP id n30-20020a19ef1e0000b02901cd64492f85so735121lfh.23
+        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 01:07:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IxSnEISy5CLiRWLMh9aMS41D9EJyxiVUgXZ2d/P9mcU=;
-        b=hM0QOTIbY08p/BwyMHapBKbWi/AzJKK+DjxTvbnArAyIVg6VeF5LhOLzgByTVCk+Rl
-         OgjGhroGrPmCBI2GS9GjGMS4PFwsr/3gbhMvyEzS5RUfZ8j42IM89uwAETHS6EIh+fep
-         sfX9ozNYeoPci5TsU8xUabrADpq1+FUmz+tOKpd1PV7vFRM3MrsHQNIfAeR4J7q0zsGT
-         UvrgBFlxDTJGRM/caMjzBB6tg+I2TOUixJNdgPRFFsigq6x75B6rGN9AAUY/3g8ka1Zl
-         oPJsUBsj2cYBsVkuQIZBiqbQ/aoQsJbECRlAytw/EoBbXpBabkgsZcV2PFt0FDp/7Sem
-         hYzw==
-X-Gm-Message-State: AOAM533rydtHgGpXcKQSQPJQCcrSj5lgGzB7cfUCiG7Kqiii+VWvk44I
-        5dnGyC9L/F6zlTSll+RDJMsA9ntyRQtayg==
-X-Google-Smtp-Source: ABdhPJyZGkeZVTp01R9o4izTcZxCGgI1IUWWApwc6IalGLtbETOZHR/qrbT/K1Rc3EUTqH1rdViprw==
-X-Received: by 2002:a17:902:7e02:b029:f1:62ce:6674 with SMTP id b2-20020a1709027e02b02900f162ce6674mr3582110plm.39.1621238851016;
-        Mon, 17 May 2021 01:07:31 -0700 (PDT)
-Received: from Journey.localdomain ([223.226.180.251])
-        by smtp.gmail.com with ESMTPSA id w123sm9142702pfb.109.2021.05.17.01.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 01:07:30 -0700 (PDT)
-Date:   Mon, 17 May 2021 13:37:27 +0530
-From:   Hritik Vijay <hritikxx8@gmail.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Order in which kernel decides binding device driver
-Message-ID: <YKIkPuj+fCod6f5B@Journey.localdomain>
-References: <YKA0hphGFeqM+BZG@Journey.localdomain>
- <20210516010154.GA1046393@rowland.harvard.edu>
- <YKCovrGBB4QQAl52@Journey.localdomain>
- <20210516144118.GB1060053@rowland.harvard.edu>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2nfOfJbiW4LP47Os6SKNJii3XzVzNGlTqIy0yN4oc5s=;
+        b=aV0005fonnQY5GUBwnS4qD2Ch630yIgqfdQfunbQ+c6gIlIoA+6SjHJEtiS/aPmxSS
+         tUEuKFlUQ2oOBg50X/yjyw6u+owICSjcND6thxGHVtjAK2KteLicqz9P2kWVhzeDPxlH
+         rdLtIW4RbdaJsbM3OruKrWSHQ8SpkGSn/FPQMtHawsF835U2lHy0ypYSeIj77L8ReLaG
+         ZQXJHhL1VGRxbBe5Ob1Jc+4CgtOhUl2NO2+Q2oopoblEs8Ce+0L15knYaXlq7Ers42Wa
+         AoxRzGVF8HFFC7k8VJLSuEhwIRI5UqBDWpqmBskCxOBgSQuw8z+EY9szfwy7r10W8d1F
+         n6OQ==
+X-Gm-Message-State: AOAM533gKicHr1a0EzH0hdhuEoCrrjwV7Ys4DQckorWCbymyUF3Fh9dx
+        O3bUD8svLWhw07XyMoG9Jdb3NzPIiWiBvIVoOI+qQByvASXmmegJjYekAifN++MnUC7GdE8x4fc
+        7KEAuHDSNCd9+QBZpSZGXNznEGf2AqImEGJGTuyACnUs9PlH5FydmQQ==
+X-Received: by 2002:a05:6512:22c5:: with SMTP id g5mr7249791lfu.540.1621238874888;
+        Mon, 17 May 2021 01:07:54 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxLtpww2uPvpXvqqFSrHjVtl5+PaUMtX5la3CRUKSXX9w5roG0JSHKvA7LN99mpG0HgsEAdcu8ZL6lhlLJqIdM=
+X-Received: by 2002:a05:6512:22c5:: with SMTP id g5mr7249760lfu.540.1621238874702;
+ Mon, 17 May 2021 01:07:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210516144118.GB1060053@rowland.harvard.edu>
+References: <20210516132209.59229-1-juergh@canonical.com> <YKIDJIfuufBrTQ4f@kroah.com>
+In-Reply-To: <YKIDJIfuufBrTQ4f@kroah.com>
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+Date:   Mon, 17 May 2021 10:07:43 +0200
+Message-ID: <CAB2i3ZgszsUVDuK2fkUXtD72tPSgrycnDawM4VAuGGPJiA9+cA@mail.gmail.com>
+Subject: Re: [PATCH] treewide: Remove leading spaces in Kconfig files
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     aaro.koskinen@iki.fi, tony@atomide.com, linux@prisktech.co.nz,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        jingoohan1@gmail.com, mst@redhat.com, jasowang@redhat.com,
+        zbr@ioremap.net, pablo@netfilter.org, kadlec@netfilter.org,
+        fw@strlen.de, horms@verge.net.au, ja@ssi.bg,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev <netdev@vger.kernel.org>, linux-scsi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Juerg Haefliger <juergh@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 16, 2021 at 10:41:18AM -0400, Alan Stern wrote:
-> Please use Reply-To-All so that your responses show up on the mailing 
-> list.
-> 
-> On Sun, May 16, 2021 at 10:38:14AM +0530, Hritik Vijay wrote:
-> > On Sat, May 15, 2021 at 09:01:54PM -0400, Alan Stern wrote:
-> > > I believe this happens in the order that the drivers are registered.  
-> > > For drivers in modules, this will be the order in which the modules are 
-> > > loaded.
-> > Can you please reference the code snippet with this ? If it happens in
-> 
-> There is no such snippet.  This is an emergent effect; it happens 
-> because __device_attach in drivers/base/dd.c calls bus_for_each_drv to 
-> try to match drivers with a new device, bus_for_each_drv in bus.c uses 
-> next_driver to iterate through the list of drivers on a bus, next_driver 
-> uses klist_next to follow the klist of driver knodes, and bus_add_driver 
-> calls klist_add_tail to add a new driver knode to the end of the klist 
-> of drivers for a bus.
-> 
-> > the order in which the modules are loaded then I suppose its the
-> > responsibility of the hot-plugging daemon (udev here) to take care of
-> > the load order.
-> 
-> No; load order is nobody's responsibility.  Making sure the system works 
-> correctly is the responsibility of the programmers who wrote the device 
-> drivers (is that you in this case?).  Drivers are supposed to work as 
-> desired no matter what order they get probed in.
-> 
-> > > driver will be able to manage a particular device.  For cases where 
-> > > there are two drivers capable of handling the same device, people 
-> > > usually have some sort of priority scheme to decide.  For example, many 
-> > > USB mass-storage devices can be handled by either the usb-storage or the 
-> > > uas driver, but uas has higher priority.
-> > > 
-> > > Alan Stern
-> > I'm curious about the case where no particular priority is defined.
-> 
-> In that case there is no definite requirement.  Either driver may be 
-> probed first and consequently may end up binding to the device; the 
-> result is more or less random.  It may even differ from one boot to the 
-> next.
-> 
-> > Hrtk
-> 
-> Alan Stern
+On Mon, May 17, 2021 at 7:46 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Sun, May 16, 2021 at 03:22:09PM +0200, Juerg Haefliger wrote:
+> > There are a few occurences of leading spaces before tabs in a couple of
+> > Kconfig files. Remove them by running the following command:
+> >
+> >   $ find . -name 'Kconfig*' | xargs sed -r -i 's/^[ ]+\t/\t/'
+> >
+> > Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+> > ---
+> >  arch/arm/mach-omap1/Kconfig     | 12 ++++++------
+> >  arch/arm/mach-vt8500/Kconfig    |  6 +++---
+> >  arch/arm/mm/Kconfig             | 10 +++++-----
+> >  drivers/char/hw_random/Kconfig  |  8 ++++----
+> >  drivers/net/usb/Kconfig         | 10 +++++-----
+> >  drivers/net/wan/Kconfig         |  4 ++--
+> >  drivers/scsi/Kconfig            |  2 +-
+> >  drivers/uio/Kconfig             |  2 +-
+> >  drivers/video/backlight/Kconfig | 10 +++++-----
+> >  drivers/virtio/Kconfig          |  2 +-
+> >  drivers/w1/masters/Kconfig      |  6 +++---
+> >  fs/proc/Kconfig                 |  4 ++--
+> >  init/Kconfig                    |  2 +-
+> >  net/netfilter/Kconfig           |  2 +-
+> >  net/netfilter/ipvs/Kconfig      |  2 +-
+> >  15 files changed, 41 insertions(+), 41 deletions(-)
+>
+> Please break this up into one patch per subsystem and resend to the
+> proper maintainers that way.
 
-Thank you so much for the detailed reply. Having looked at dd.c and
-bus.c, it now makes much more sense to me.
+Hmm... How is my patch different from other treewide Kconfig cleanup
+patches like:
+a7f7f6248d97 ("treewide: replace '---help---' in Kconfig files with 'help'")
+8636a1f9677d ("treewide: surround Kconfig file paths with double quotes")
+83fc61a563cb ("treewide: Fix typos in Kconfig")
+769a12a9c760 ("treewide: Kconfig: fix wording / spelling")
+f54619f28fb6 ("treewide: Fix typos in Kconfig")
 
-Hrtk
+...Juerg
+
+
+> thanks,
+>
+> greg k-h
