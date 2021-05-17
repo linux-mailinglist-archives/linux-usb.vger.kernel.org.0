@@ -2,81 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B970382289
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 03:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8A463822A3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 04:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232632AbhEQBbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 16 May 2021 21:31:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38174 "EHLO mail.kernel.org"
+        id S230075AbhEQCBc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 16 May 2021 22:01:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39498 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229479AbhEQBbe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 16 May 2021 21:31:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9F1ED611BE;
-        Mon, 17 May 2021 01:30:15 +0000 (UTC)
+        id S229486AbhEQCBb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 16 May 2021 22:01:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A3F436109F;
+        Mon, 17 May 2021 02:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621215019;
-        bh=gHAmi2NHDTka4+Zc5zDL0ZgHOqdFezotAMp/Y6iLG0Y=;
+        s=k20201202; t=1621216815;
+        bh=EnX+8Y6JrEMaUk8LyKbgbeZOzWeWSa6yVUdqKeblB2o=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D/fUFDAfNTgNx1wTUlZP9+Y/0Z/URWZUnXquRQ6GF6lM3L8jYjImPX34oza8xz082
-         lrdy5Aim1fxYC86l4EDM/y3pnkZ1VnwzBHbPlbtFMBYvWl/xMD5mE/0T9qvK6CAUBs
-         S8TilG0rhiPul1TCQUKO9iPD9m87N7PhTH94J6uCNK4mTYrggTajKM6V4Bf6cGIa4T
-         U5ixj4lKUC8y0XZmWqqLvhj6jDxDXk++kfXEjFt+LCWCA1tjgov20LtZSvFOtj+9Wt
-         WHKZ5O9/G4eMoVYj1Ru3ILkwY3UoC+N5xnuEd+NRnou/7NXOsufF6xM3tMi5P8rzKk
-         d2A7dewgCWZhw==
-Date:   Mon, 17 May 2021 09:30:11 +0800
+        b=kX0V0QdDWn5/qx818FV/bZG89wPSVtcE4WxkYJZ0vY1lhMqgt/sUFeJGpGecToWDz
+         y4f77TMHGNrsjhbSarIF2wKZf9+ICaOBFNAlzSh5c+0UnP5uqWeW5rWoITVkCzGN85
+         cH5U9MFwYeSJSWTHUHEuc/BYvNWugBGlAStefOLvfp2LIWCs80xen+WEr0TZaho+1M
+         sZp9lrjUDNvJk9dNo9T2NsR/8BaM92DOh0TSeaL4m6BkfW8wcEnTnxLtI2A7cYPVkv
+         CKRuOFuSfDwb8klSheNRZzQ0r3/mVVncHmNSU8xTcu7fuasvekfTwOIpNK9fkYz8g5
+         9dML1drlO7rJQ==
+Date:   Mon, 17 May 2021 10:00:10 +0800
 From:   Peter Chen <peter.chen@kernel.org>
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 1/4] usb: typec: tcpm: Fix up PR_SWAP when vsafe0v is
- signalled
-Message-ID: <20210517013011.GA27963@nchen>
-References: <20210515052613.3261340-1-badhri@google.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: Disconnect race in Gadget core
+Message-ID: <20210517020010.GA28030@nchen>
+References: <87r1idfzms.fsf@kernel.org>
+ <20210511212651.GA914027@rowland.harvard.edu>
+ <87lf8kfnc6.fsf@kernel.org>
+ <20210512153358.GC934575@rowland.harvard.edu>
+ <87bl9d7oo0.fsf@kernel.org>
+ <20210514165830.GA1010288@rowland.harvard.edu>
+ <875yzk7b2y.fsf@kernel.org>
+ <20210515153113.GB1036273@rowland.harvard.edu>
+ <8735un6mjl.fsf@kernel.org>
+ <20210516145151.GC1060053@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210515052613.3261340-1-badhri@google.com>
+In-Reply-To: <20210516145151.GC1060053@rowland.harvard.edu>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-05-14 22:26:10, Badhri Jagan Sridharan wrote:
-> During PR_SWAP, When TCPM is in PR_SWAP_SNK_SRC_SINK_OFF, vbus is
-> expected to reach VSAFE0V when source turns of vbus. Do not move
-
-%s/of/off
-
-Peter
-
-> to SNK_UNATTACHED state when this happens.
+On 21-05-16 10:51:51, Alan Stern wrote:
+> On Sun, May 16, 2021 at 12:43:58PM +0300, Felipe Balbi wrote:
+> > 
+> > Hi,
+> > 
+> > Alan Stern <stern@rowland.harvard.edu> writes:
+> > >
+> > > If it's okay to call those functions in interrupt context then the 
+> > > kerneldoc definitely should be updated.  However, I don't see why you 
+> > > would want to make DELAYED_STATUS mandatory.  If all the necessary work 
+> > > can be done in the set_alt handler, why not return the status 
+> > > immediately?
+> > 
+> > because we avoid a special case. Instead of having magic return value to
+> > mean "Don't do anything until I enqueue a request" we can just make that
+> > an assumption, i.e. gadget driver *must* enqueue requests for data and
+> > status stages.
 > 
-> Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
-> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index c4fdc00a3bc8..b93c4c8d7b15 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5114,6 +5114,9 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
->  				tcpm_set_state(port, SNK_UNATTACHED, 0);
->  		}
->  		break;
-> +	case PR_SWAP_SNK_SRC_SINK_OFF:
-> +		/* Do nothing, vsafe0v is expected during transition */
-> +		break;
->  	default:
->  		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
->  			tcpm_set_state(port, SNK_UNATTACHED, 0);
-> -- 
-> 2.31.1.751.gd2f1c929bd-goog
-> 
+> Okay.  But that would require auditing every gadget/function driver to 
+> ensure that they _do_ enqueue status stage requests
+
+CDNS3 UDC doesn't enqueue status stage by SW, instead, SW tells HW to do
+it by setting registers.
 
 -- 
 
