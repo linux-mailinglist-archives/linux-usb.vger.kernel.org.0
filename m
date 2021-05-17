@@ -2,87 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5796138365D
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 17:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780993836A3
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 17:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244540AbhEQPbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 11:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S243589AbhEQPfF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 11:35:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245486AbhEQP3o (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 11:29:44 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC307C00F604
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 07:32:01 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id m124so4751272pgm.13
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 07:32:01 -0700 (PDT)
+        with ESMTP id S244134AbhEQPc1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 11:32:27 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A5C06137D;
+        Mon, 17 May 2021 07:32:49 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id 5so3204144qvk.0;
+        Mon, 17 May 2021 07:32:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=g1vvev5MnaUyyZ9I99x/LQiVbTb0fYWKAfRRrq+9vSA=;
-        b=n7R9YrLNRX9SBZ4p0/uR/mlceSCdYeEVvzL9TdX8aAa551/bmPGtFFJwis3ddoVm4c
-         zuXQ3shpOwDXIN/1ebPhbzzBlaoWVFJ+j8L8gLSlUPlM9Brdgo1bsrnF/QMbwIdi/Vu6
-         hVRRhhaNN7io5Tk3JOHxPrPn4ZUodeIS9S73jEFSZ34SH4q00GZzmjgmR3prdWJRGUYD
-         449W1p+5qDnAVP/PdC6wiFoVZNGQmX1IpVNhN7vt2DWnIuBFpYqYYLBC9/G2uic4HZyM
-         oB3gO9wQYAr1YOSiGQdK3beVyLi316OJ11ZKHC0dOHRXYS4aUuNwytHGLQRZHv5Z5ral
-         tBLw==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=THOJoa9goNNyDVOh5QQdcefIk4gsILRnxGGzLYO5As0=;
+        b=Zs0nZPfdCFHS+jiRnL+KUKTc1A3XyZH58TySt1g06gNB+Z8z+RQMXwETfnsv2Zf7MY
+         3kru/VHbJogwd4dgUQ4N2IG+bi5jwr+BlNm9hFwCR7dt5G+1Lcw2zlkIhClDJOsmmlCU
+         7wEAzOWBaeu7sgDkNspAV70oTaMYDdVF85TgWzDBAci2Yurn+zRsVdEFWZlpITk1wMfk
+         NpD8s17hlMPbTlx7stJeX4xCtxk5nCwq1YpGvt0Mck2UKAlvlQWktqnG1MjY2EgARQbR
+         Ls+/4PPI1aaI6un/2+xMpUgspbkF1aZaGiq0+4d8QBxZhbP8Wcb3KMIk/kdRm/wISDtU
+         pxDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=g1vvev5MnaUyyZ9I99x/LQiVbTb0fYWKAfRRrq+9vSA=;
-        b=QuO7gwBhPWVgWoQ8uullozFn4L6JD7lQEmMwF2Iiugz0gUZcOyYjOwfdVGC+KEf5/f
-         h5p1R2rexmGYjkA+hhQWGnRgwP7daWhVmDxxLMobIBD3z3OyVA2GkmYeASUtRCesEqqP
-         UcwTyJc85pBH+nM3kS6/hXfsZucWvs2C4+LcAiIaB5YiZEwVX3sGYzu+z52qpeuhCmUr
-         6q/7sNRsB1EJOo/HKkmzU+iiEPCCaJcTb/FLaKybb1sQC/N90Wr2c2lFLqLLbpLvc2ZP
-         P6tI/4sr8GlKqLlmwdz+ucOzMvwPEQRJn9y/HLTCezcy4KZ5pfiIoMZrnvG99S2iRg+f
-         UoYg==
-X-Gm-Message-State: AOAM53022CRQKKDBcBvxlvdCvF0S9VZ/qMbUI65eiWsKmq6sVi3HzM+9
-        ptY/Kw9+O65P8aXpxaKBGotzseA5mJA9vQ==
-X-Google-Smtp-Source: ABdhPJwi2uhRgEkDq6UB+od46BADb5MjjNlGrkSuJBnqpU+dqjWKbCVWlUi4Eu3lMZgo6fW7wJOWXw==
-X-Received: by 2002:a63:4f4a:: with SMTP id p10mr60890049pgl.432.1621261921200;
-        Mon, 17 May 2021 07:32:01 -0700 (PDT)
-Received: from [192.168.0.111] ([113.172.200.89])
-        by smtp.gmail.com with ESMTPSA id j21sm16090612pjl.27.2021.05.17.07.31.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 May 2021 07:32:00 -0700 (PDT)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-From:   Bui Quang Minh <minhquangbui99@gmail.com>
-Subject: [BUG REPORT] usb: usb-skeleton: Race condition between skel_open and
- skel_disconnect
-Message-ID: <2f3f0176-244c-d76b-3d7d-15b332c87041@gmail.com>
-Date:   Mon, 17 May 2021 21:31:57 +0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=THOJoa9goNNyDVOh5QQdcefIk4gsILRnxGGzLYO5As0=;
+        b=ndWwQplz1Ik+EF8F+UFYvlGVi+b/fADRsqCzNdSgmvRV39DjBZwqfZPQyTZf8E97hL
+         UqrrLYT9i0iuf6cUv6Cw7t4opNXibHaqB0Ogoxkl+3ZyCjRxMOd5V87WNHeHqK0XPpYm
+         C3UAYw5OPFRxD/bU8FPVtAysXvEJhguN1nU2zPcCV0h0x/D54PjvpYt9GRKIrRs9hsiE
+         YTf2taVhtbYkHY2uaGxCE36JztgQhbX6VBRGCFUf4TY0pXXycq+p+H63AKMeu98VI+WO
+         naGaP7vbuuqf27oOa/K1F3p2NttmS2wYSuSyw6ghuAW4ge2WQ4es76yq0cu9N2DTsNij
+         yMNA==
+X-Gm-Message-State: AOAM530s3HSsNHWHiSfzNRLQcpCxWS89cvlmC+x2MWi3DNPfJWeiN9iY
+        PDhVvAP6BohK7N/0W/s6QBw=
+X-Google-Smtp-Source: ABdhPJytu85FbMC7Pk4Simc+JUTdrO+Fyj4LkQ2v0YbWXKANmhpN7uT81xvH+P54zhFwBZA9nuJDlQ==
+X-Received: by 2002:a05:6214:a43:: with SMTP id ee3mr170152qvb.61.1621261968638;
+        Mon, 17 May 2021 07:32:48 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 25sm500001qtd.51.2021.05.17.07.32.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 May 2021 07:32:48 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 17 May 2021 07:32:46 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] usb: typec: tcpm: Fix up PR_SWAP when vsafe0v is
+ signalled
+Message-ID: <20210517143246.GA3434992@roeck-us.net>
+References: <20210515052613.3261340-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210515052613.3261340-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Fri, May 14, 2021 at 10:26:10PM -0700, Badhri Jagan Sridharan wrote:
+> During PR_SWAP, When TCPM is in PR_SWAP_SNK_SRC_SINK_OFF, vbus is
+> expected to reach VSAFE0V when source turns of vbus. Do not move
 
-I spotted this bug through code review and I don't know how to make a 
-Proof of Concept for this bug so maybe I'm wrong.
+s/of/off/ as already reported
 
-Between skel_open() and skel_disconnect(), this scenario can happen
+> to SNK_UNATTACHED state when this happens.
+> 
+> Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
 
-skel_open()			skel_disconnect()
-dev = usb_get_intfdata(interface);
-				usb_set_intfdata(interface, NULL);
-				kref_put(&dev->kref, skel_delete);
-kref_get(&dev->kref);
+Otherwise
 
-In case dev's refcount is 1 before these events, kref_put() in 
-skel_disconnect() will call the skel_delete to free dev. As a result, a 
-UAF will happen when we try to access dev->kref in skel_open(). I can 
-see this pattern in other USB drivers as well such as usblcd.c, yurex.c, ...
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-Please correct me if I am wrong.
-
-Thank you,
-Quang Minh.
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index c4fdc00a3bc8..b93c4c8d7b15 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5114,6 +5114,9 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+>  				tcpm_set_state(port, SNK_UNATTACHED, 0);
+>  		}
+>  		break;
+> +	case PR_SWAP_SNK_SRC_SINK_OFF:
+> +		/* Do nothing, vsafe0v is expected during transition */
+> +		break;
+>  	default:
+>  		if (port->pwr_role == TYPEC_SINK && port->auto_vbus_discharge_enabled)
+>  			tcpm_set_state(port, SNK_UNATTACHED, 0);
+> -- 
+> 2.31.1.751.gd2f1c929bd-goog
+> 
