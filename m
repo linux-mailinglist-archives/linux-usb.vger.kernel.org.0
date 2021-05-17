@@ -2,92 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7982386BB8
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 22:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE623386BD4
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 23:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244524AbhEQUyF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 16:54:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33680 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244517AbhEQUyE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 16:54:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621284767;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=76uFxF6tDNi0nKdQA2asyMgYE2LMBW+B8Yl0fD6nlcE=;
-        b=YIi1XVKG1iAc5fjnNHDqc8vMbNdFhVK9p29W4iQZ9Kra5KSReYoiJ00dGl/uFI6SqY4rxP
-        HYx3zOgjHZz8gdtg2C+Krta6aryHdvgA9wBufPvt65pfpKdJrzS0clDHnt5h4TiKrjZD60
-        yGm6Xd68Sq2rzecLTDNsNudfEw1mWjY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-472-VEaSClB7O6mUCtUGkvuYmw-1; Mon, 17 May 2021 16:52:36 -0400
-X-MC-Unique: VEaSClB7O6mUCtUGkvuYmw-1
-Received: by mail-qv1-f71.google.com with SMTP id f17-20020a0cf3d10000b02901eda24e6b92so5739190qvm.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 May 2021 13:52:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=76uFxF6tDNi0nKdQA2asyMgYE2LMBW+B8Yl0fD6nlcE=;
-        b=Yos1M8k0ybxU+axEdKJpop+K8HTYSwmruBgF/Q9SC2ovEyoscjoknKoTTjRoTP3cYS
-         OdXByRhkSkQrKvqp73eIGoMrl8XRwae8w0+L/YAVgNfG9iEmP/wyF9QoW6KWd4N31Rh0
-         UYTNok9mMW+fnftRk345Z5y0UI5Qz2u7sqrv85A83fMawbj9JT2MY/fXuXJyII4pfn/v
-         3NX/9qWnYShgU0uP9OlWEkApOvMl0dq23t9ddXv2NeyrynHnasyBYivnGbzeDou9ZibG
-         UBi9V2ivtOxTpWqKt1PR95/UUIXOkwq5Krhv8x1ni9RrvG8jEdR7xweKV1YByw7HT8aQ
-         OrMg==
-X-Gm-Message-State: AOAM530oslOq7Wu6tTIYyIZHKxZHDqVBZZ0/JoNxa8j/o3j5uLptSo0u
-        uYqXk1pAzKY7XFi2P9Y+r90QyO53A0e63RXFKPECJec5E37BEwSjaIjq2W6h1e8jtBhULzNloZA
-        3qNGLDfjVcS2LNjTP/qZy
-X-Received: by 2002:a05:6214:6f1:: with SMTP id bk17mr1774861qvb.37.1621284755704;
-        Mon, 17 May 2021 13:52:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxS9/fVzT+mCCgEItgc7xkN4bp5oRWkMsPDBBsnWCAFRzegq9r1DPFcBWA1wUkCG1o1cJ77sA==
-X-Received: by 2002:a05:6214:6f1:: with SMTP id bk17mr1774849qvb.37.1621284755564;
-        Mon, 17 May 2021 13:52:35 -0700 (PDT)
-Received: from localhost.localdomain.com (075-142-250-213.res.spectrum.com. [75.142.250.213])
-        by smtp.gmail.com with ESMTPSA id t11sm11341683qkm.123.2021.05.17.13.52.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 May 2021 13:52:35 -0700 (PDT)
-From:   trix@redhat.com
-To:     gregkh@linuxfoundation.org, masahiroy@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] USB: select WWAN_CORE for USB_WDM
-Date:   Mon, 17 May 2021 13:52:31 -0700
-Message-Id: <20210517205231.1850314-1-trix@redhat.com>
-X-Mailer: git-send-email 2.26.3
+        id S244588AbhEQVB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 17:01:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48084 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233271AbhEQVB0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 17:01:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id E9AE46124C;
+        Mon, 17 May 2021 21:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621285210;
+        bh=IUIMTh5PmCOGu2WUTJ5DT1tr2IfldLFFqWohzm4vPNI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=S9qSXeLpiFhhjzlTWLNjJ/td/3qPI2f18QP46RXLYCCm/X9zZDZjxF0m7J/M3FQTD
+         +HtVroRQOkhm/DjRjtgEQwQKSAseugYrMOIJcYpmQdjJJInZWi4KyhyzRJw5H0mJwU
+         6bRO03YrHnwjX0uvzOOyhASL5Bm8Wu09V7PEab7MuEkhz0yxXCgPmYBoAEzTnkv71d
+         Qdgkdg6VveJrybl9QYIGnlcUk757hdDXedkmPA8S77lkyx1iXYJOrhx37Ttat4MBiG
+         A5AkvyjKp+5UQzu2MWRukBSs5b60911dBjsc36CQ1nnTKuIHGzpP+Mz3O7p7dx+v4w
+         l2cFldxgISmyQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DF2B460A35;
+        Mon, 17 May 2021 21:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net] net: hso: check for allocation failure in
+ hso_create_bulk_serial_device()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162128520990.2358.2101615152759777465.git-patchwork-notify@kernel.org>
+Date:   Mon, 17 May 2021 21:00:09 +0000
+References: <YJ6IMH7jI9QFdGIX@mwanda>
+In-Reply-To: <YJ6IMH7jI9QFdGIX@mwanda>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     davem@davemloft.net, johan@kernel.org, kuba@kernel.org,
+        oneukum@suse.com, mail@anirudhrb.com, zhengyongjun3@huawei.com,
+        geert@linux-m68k.org, kernel@esmil.dk, rkovhaev@gmail.com,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tom Rix <trix@redhat.com>
+Hello:
 
-Link is failing with
-cdc-wdm.c: undefined reference to `wwan_port_get_drvdata'
+This patch was applied to netdev/net.git (refs/heads/master):
 
-Add a select of WWAN_CORE to USB_WDM configury similar to
-what is done for drivers/net/mhi_wwan_ctrl.c
+On Fri, 14 May 2021 17:24:48 +0300 you wrote:
+> In current kernels, small allocations never actually fail so this
+> patch shouldn't affect runtime.
+> 
+> Originally this error handling code written with the idea that if
+> the "serial->tiocmget" allocation failed, then we would continue
+> operating instead of bailing out early.  But in later years we added
+> an unchecked dereference on the next line.
+> 
+> [...]
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/usb/class/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+Here is the summary with links:
+  - [v2,net] net: hso: check for allocation failure in hso_create_bulk_serial_device()
+    https://git.kernel.org/netdev/net/c/31db0dbd7244
 
-diff --git a/drivers/usb/class/Kconfig b/drivers/usb/class/Kconfig
-index d3f5162bd67ef..e5714fddf1642 100644
---- a/drivers/usb/class/Kconfig
-+++ b/drivers/usb/class/Kconfig
-@@ -30,6 +30,7 @@ config USB_PRINTER
- 
- config USB_WDM
- 	tristate "USB Wireless Device Management support"
-+	select WWAN_CORE
- 	help
- 	  This driver supports the WMC Device Management functionality
- 	  of cell phones compliant to the CDC WMC specification. You can use
--- 
-2.26.3
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
