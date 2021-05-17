@@ -2,83 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB65382935
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 12:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5143B382959
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 12:06:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236270AbhEQKCA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 06:02:00 -0400
-Received: from mx2.suse.de ([195.135.220.15]:34142 "EHLO mx2.suse.de"
+        id S236264AbhEQKHK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 06:07:10 -0400
+Received: from mga02.intel.com ([134.134.136.20]:41123 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236218AbhEQKBi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 06:01:38 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1621245621; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oXKFGvhWgRDh4a44rCYHMonlDFHgBOcrx0uWlKqddC8=;
-        b=TSN1Ocz8jSQnzuNpSXb1BfOYvmg8iF3nGI4HpTkyIWrxbVbPcya/qg3MYSkerhCKbCdF65
-        Ak8Ma1iBdMQiqoeduugC2K5LPtR5kh9325gBFup6/JmjUOZ41cb8GsXdOpmABUgvvkBZOM
-        183XNUwuo7apmZziC6HuGQIlZVhW3PM=
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 60A96AE4D;
-        Mon, 17 May 2021 10:00:21 +0000 (UTC)
-Message-ID: <93a10a341eccd8b680cdcc422947e4a1b83099db.camel@suse.com>
-Subject: Re: [syzbot] WARNING in rtl8152_probe
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Hayes Wang <hayeswang@realtek.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        nic_swsd <nic_swsd@realtek.com>
-Date:   Mon, 17 May 2021 12:00:19 +0200
-In-Reply-To: <547984d34f58406aa2e37861d7e8a44d@realtek.com>
-References: <0000000000009df1b605c21ecca8@google.com>
-         <7de0296584334229917504da50a0ac38@realtek.com>
-         <20210513142552.GA967812@rowland.harvard.edu>
-         <bde8fc1229ec41e99ec77f112cc5ee01@realtek.com> <YJ4dU3yCwd2wMq5f@kroah.com>
-         <bddf302301f5420db0fa049c895c9b14@realtek.com>
-         <20210514153253.GA1007561@rowland.harvard.edu>
-         <547984d34f58406aa2e37861d7e8a44d@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S236246AbhEQKFN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 06:05:13 -0400
+IronPort-SDR: g7c7I544wzJUeinwcoEhXBdffFgs6djehp3XZhUX0J4z/q1NHq5OZKUIdOHcRlSaFbzHL+FE1+
+ J7LEtmI8qQZA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="187553910"
+X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
+   d="scan'208";a="187553910"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 03:03:12 -0700
+IronPort-SDR: kZNTTthMfvbbPPIVssJaJx+qwAK2hlN8SoTd0BTCz0R9wEVD0W1AcI6p2yq+b318rPp/4G9MbR
+ bDfmv187Yz+A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
+   d="scan'208";a="540359445"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 May 2021 03:03:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 May 2021 13:03:09 +0300
+Date:   Mon, 17 May 2021 13:03:09 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Benjamin Berg <bberg@redhat.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Clear pending after acking connector
+ change
+Message-ID: <YKI/XT8qpZDjDuqs@kuha.fi.intel.com>
+References: <20210516040953.622409-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210516040953.622409-1-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 17.05.2021, 01:01 +0000 schrieb Hayes Wang:
-> Alan Stern <stern@rowland.harvard.edu>
-> > Sent: Friday, May 14, 2021 11:33 PM
-
-> > So if a peculiar emulated device created by syzbot is capable of
-> > crashing the driver, then somewhere there is a bug which needs to
-> > be
-> > fixed.  It's true that fixing all these bugs might not protect
-> > against a
-> > malicious device which deliberately behaves in an apparently
-> > reasonable
-> > manner.  But it does reduce the attack surface.
+On Sat, May 15, 2021 at 09:09:53PM -0700, Bjorn Andersson wrote:
+> It's possible that the interrupt handler for the UCSI driver signals a
+> connector changes after the handler clears the PENDING bit, but before
+> it has sent the acknowledge request. The result is that the handler is
+> invoked yet again, to ack the same connector change.
 > 
-> Thanks for your response.
-> I will add some checks.
+> At least some versions of the Qualcomm UCSI firmware will not handle the
+> second - "spurious" - acknowledgment gracefully. So make sure to not
+> clear the pending flag until the change is acknowledged.
+> 
+> Any connector changes coming in after the acknowledgment, that would
+> have the pending flag incorrectly cleared, would afaict be covered by
+> the subsequent connector status check.
+> 
+> Fixes: 217504a05532 ("usb: typec: ucsi: Work around PPM losing change information")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
-Hi,
+I'm OK with this if Bejamin does not see any problems with it. I'll
+wait for his comments before giving my reviewed-by tag.
 
-the problem in this particular case is in
-static bool rtl_vendor_mode(struct usb_interface *intf)
-which accepts any config number. It needs to bail out
-if you find config #0 to be what the descriptors say,
-treating that as an unrecoverable error.
+That workaround (commit 217504a05532) is unfortunately too fragile.
+I'm going to now separate the processing of the connector state from
+the event handler (interrupt handler). That way we should be fairly
+sure we don't loose any of the connector states even if an event is
+generated while we are still in the middle of processing the previous
+one(s), and at the same time be sure that we also don't confuse the
+firmware.
 
-	Regards
-		Oliver
+So the event handler shall after that only read the connector status,
+schedule the unique job where it's processed and ACK the event.
+Nothing else.
 
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 282c3c825c13..f451ce0132a9 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -694,8 +694,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  	ucsi_send_command(con->ucsi, command, NULL, 0);
+>  
+>  	/* 3. ACK connector change */
+> -	clear_bit(EVENT_PENDING, &ucsi->flags);
+>  	ret = ucsi_acknowledge_connector_change(ucsi);
+> +	clear_bit(EVENT_PENDING, &ucsi->flags);
+>  	if (ret) {
+>  		dev_err(ucsi->dev, "%s: ACK failed (%d)", __func__, ret);
+>  		goto out_unlock;
+> -- 
+> 2.29.2
 
+thanks,
+
+-- 
+heikki
