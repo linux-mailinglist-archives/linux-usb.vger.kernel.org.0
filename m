@@ -2,64 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0CF382E3E
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 16:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 992A6382F81
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 16:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237760AbhEQOFG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 10:05:06 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:41749 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S234578AbhEQOE4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 17 May 2021 10:04:56 -0400
-Received: (qmail 1086015 invoked by uid 1000); 17 May 2021 10:03:39 -0400
-Date:   Mon, 17 May 2021 10:03:39 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Dominik Winecki <dominikwinecki@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: xHCI over-current causing pm loop
-Message-ID: <20210517140339.GD1083813@rowland.harvard.edu>
-References: <YKCAoxmr+7bVo63X@hyperion>
+        id S236776AbhEQORK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 10:17:10 -0400
+Received: from mx2.suse.de ([195.135.220.15]:57360 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235543AbhEQOPN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 10:15:13 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1621260836; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lwE+T0c+xlHjc49FEylrM2BvekW9eKLArf9QaPrjeEw=;
+        b=MWgi0KHh0Jd9DgsygqlTrv7WF3mMH+tR979KiKRtH17JWUc0vjATnRHwRxkz7WqJdOap+b
+        gDoh6thuXBQePPtv7wwg2NWmEnhuBeBhzRWG89YqvaBML/HVasdng0lVHp1Ff7jBJ4yMWg
+        mOhDSclmEAjvafp9vOBWrPvrvpMt/nY=
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 4BF45B231;
+        Mon, 17 May 2021 14:13:56 +0000 (UTC)
+Subject: Re: [PATCH v2 1/4] usb: early: Avoid using DbC if already enabled
+To:     Connor Davis <connojdavis@gmail.com>
+Cc:     Jann Horn <jannh@google.com>, Lee Jones <lee.jones@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <cover.1620950220.git.connojdavis@gmail.com>
+ <d160cee9b61c0ec41c2cd5ff9b4e107011d39d8c.1620952511.git.connojdavis@gmail.com>
+ <8ccce25a-e3ca-cb30-f6a3-f9243a85a49b@suse.com>
+ <16400ee4-4406-8b26-10c0-a423b2b1fed0@gmail.com>
+From:   Jan Beulich <jbeulich@suse.com>
+Message-ID: <ddb58cbd-0a72-f680-80f4-ce09b13a2cee@suse.com>
+Date:   Mon, 17 May 2021 16:13:55 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKCAoxmr+7bVo63X@hyperion>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <16400ee4-4406-8b26-10c0-a423b2b1fed0@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 15, 2021 at 10:17:07PM -0400, Dominik Winecki wrote:
-> Hello,
+On 17.05.2021 15:48, Connor Davis wrote:
 > 
-> I've got an issue on my laptop (Dell XPS 9570 with an i7-7700HQ) that
-> I'm trying to fix. Multiple usb ports are reporting over-current, despite
-> nothing being plugged in:
+> On 5/17/21 3:32 AM, Jan Beulich wrote:
+>> On 14.05.2021 02:56, Connor Davis wrote:
+>>> Check if the debug capability is enabled in early_xdbc_parse_parameter,
+>>> and if it is, return with an error. This avoids collisions with whatever
+>>> enabled the DbC prior to linux starting.
+>> Doesn't this go too far and prevent use even if firmware (perhaps
+>> mistakenly) left it enabled?
 > 
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 001 Device 002: ID 138a:0091 Validity Sensors, Inc. VFS7552 Touch Fingerprint Sensor
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+> Yes, but how is one supposed to distinguish the broken firmware and 
+> non-broken
 > 
-> Two kworkers running runtime pm are trying to suspend the usb 2 & 3 root hubs.
-> The xHCI driver will not suspend a hub with over-current triggered
-> (since e9fb08d617bf) so it fails, resumes the hub, and pm tries again.
-> This is taking two CPU cores, but it stops if a device of the same usb
-> version is plugged in, or if I set the power control policy to on.
-> Also, this is blocking system suspend, but that's expected behavior.
-> 
-> Reverting the e9fb08d617bf check fixes both issues for me, but that may cause
-> system halts in other systems. Making it a non-retriable suspend failure
-> stops the kworkers but then it will never suspend after an OC event.
-> 
-> Does it make sense to fix this in the USB driver? Or is this a PM issue?
-> I'd rather fix my over-current issue, but taking two cpus whenever xHCI has
-> a no-device over-current reading seems like a bug.
+> firmware cases?
 
-As you mentioned, the real bug is in your hardware.  Why does it report 
-an over-current condition when nothing is plugged into the port?
+Well, a first step might be to only check if running virtualized.
+And then if your running virtualized, there might be a way to
+inquire the hypervisor?
 
-The only reasonable way I can think of to fix this would be to add a 
-quirk telling the xhci-hcd driver that your hardware does not report 
-over-current conditions reliably, so the reports should be ignored.
-
-Alan Stern
+Jan
