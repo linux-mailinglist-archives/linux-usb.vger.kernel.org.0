@@ -2,68 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE623386BD4
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 23:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8DB386D8C
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 01:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244588AbhEQVB2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 17:01:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48084 "EHLO mail.kernel.org"
+        id S1344393AbhEQXL3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 19:11:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51926 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233271AbhEQVB0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 17:01:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E9AE46124C;
-        Mon, 17 May 2021 21:00:09 +0000 (UTC)
+        id S234781AbhEQXL2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 19:11:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 304786134F;
+        Mon, 17 May 2021 23:10:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621285210;
-        bh=IUIMTh5PmCOGu2WUTJ5DT1tr2IfldLFFqWohzm4vPNI=;
+        s=k20201202; t=1621293011;
+        bh=pjVRmKcVC5FxOfzwEvVF7PLUWBlV5avZZyMLBBUvc0E=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=S9qSXeLpiFhhjzlTWLNjJ/td/3qPI2f18QP46RXLYCCm/X9zZDZjxF0m7J/M3FQTD
-         +HtVroRQOkhm/DjRjtgEQwQKSAseugYrMOIJcYpmQdjJJInZWi4KyhyzRJw5H0mJwU
-         6bRO03YrHnwjX0uvzOOyhASL5Bm8Wu09V7PEab7MuEkhz0yxXCgPmYBoAEzTnkv71d
-         Qdgkdg6VveJrybl9QYIGnlcUk757hdDXedkmPA8S77lkyx1iXYJOrhx37Ttat4MBiG
-         A5AkvyjKp+5UQzu2MWRukBSs5b60911dBjsc36CQ1nnTKuIHGzpP+Mz3O7p7dx+v4w
-         l2cFldxgISmyQ==
+        b=Fk2WflXYvh9ROLHtG7G2fZX4BzV+kR16Mtqs7BBG/VjqhMVuYITQcPdLo+FgcBU3O
+         HyDk5aXy6zO2lnMah7757xQmkefPrMs2lMuXW88++XQb5LP0H2j8zAh9TEd4nTjvzB
+         76KCxVsVnre1x7JuLgc4aRDFZ0x0Vil8Gq6eHxNOMWJIrpgg2COuld6wS2TKBRXAs6
+         Th2NrCNhuUbhO6jCAdirYJgI2vKhUkyQXzhYLsNWvJyRqlChrVxSjxUNGW7Ro5qL6x
+         KnT0dhS86pAaAoDXPYG5G0H3gBCJtSM57Y7xa1la8D5v1jKY567ixdfm8Hm2OY1n/s
+         GI//hPAMMRTVw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DF2B460A35;
-        Mon, 17 May 2021 21:00:09 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1C60260A4D;
+        Mon, 17 May 2021 23:10:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 net] net: hso: check for allocation failure in
- hso_create_bulk_serial_device()
+Subject: Re: [PATCH] drivers/net: Remove leading spaces in Kconfig
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162128520990.2358.2101615152759777465.git-patchwork-notify@kernel.org>
-Date:   Mon, 17 May 2021 21:00:09 +0000
-References: <YJ6IMH7jI9QFdGIX@mwanda>
-In-Reply-To: <YJ6IMH7jI9QFdGIX@mwanda>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     davem@davemloft.net, johan@kernel.org, kuba@kernel.org,
-        oneukum@suse.com, mail@anirudhrb.com, zhengyongjun3@huawei.com,
-        geert@linux-m68k.org, kernel@esmil.dk, rkovhaev@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
+Message-Id: <162129301111.23530.6123072030162121527.git-patchwork-notify@kernel.org>
+Date:   Mon, 17 May 2021 23:10:11 +0000
+References: <20210517095833.81681-1-juergh@canonical.com>
+In-Reply-To: <20210517095833.81681-1-juergh@canonical.com>
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        juergh@canonical.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (refs/heads/master):
+This patch was applied to netdev/net-next.git (refs/heads/master):
 
-On Fri, 14 May 2021 17:24:48 +0300 you wrote:
-> In current kernels, small allocations never actually fail so this
-> patch shouldn't affect runtime.
+On Mon, 17 May 2021 11:58:33 +0200 you wrote:
+> Remove leading spaces before tabs in Kconfig file(s) by running the
+> following command:
 > 
-> Originally this error handling code written with the idea that if
-> the "serial->tiocmget" allocation failed, then we would continue
-> operating instead of bailing out early.  But in later years we added
-> an unchecked dereference on the next line.
+>   $ find drivers/net -name 'Kconfig*' | xargs sed -r -i 's/^[ ]+\t/\t/'
+> 
+> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,net] net: hso: check for allocation failure in hso_create_bulk_serial_device()
-    https://git.kernel.org/netdev/net/c/31db0dbd7244
+  - drivers/net: Remove leading spaces in Kconfig
+    https://git.kernel.org/netdev/net-next/c/06b38e233ce4
 
 You are awesome, thank you!
 --
