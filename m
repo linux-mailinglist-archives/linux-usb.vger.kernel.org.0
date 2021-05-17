@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A74382CE4
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 15:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB8C382CE7
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 15:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbhEQNKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 09:10:52 -0400
+        id S237258AbhEQNKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 09:10:53 -0400
 Received: from mga02.intel.com ([134.134.136.20]:52611 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237247AbhEQNKv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 09:10:51 -0400
-IronPort-SDR: hZnovEpcOqhGPgfvEdQbsmghStV7tVolHKy1V1cdD5ZDee2H/GT1s5pgSwCrZkWDHkjLyE+EXx
- QPf7/M/ssoMw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="187582856"
+        id S235153AbhEQNKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 09:10:52 -0400
+IronPort-SDR: V/1NBMTxnVlBlsUTAvEEjP2colt3vTgYKUIhbCFsiEfpYCwIHFHc6mZBhIAq1ufvut1Ar/pi/3
+ BjYAIXKTGbUA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="187582858"
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="187582856"
+   d="scan'208";a="187582858"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
   by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 06:06:54 -0700
-IronPort-SDR: yR1+fiffJuzmecz8Cf5hrQFvUicsiTI55ZHkbVi+r6IVLr8kEmdmUN2OZUV+OKWW9W8JXstuzG
- vHp/o2sx6Wjw==
+IronPort-SDR: T99TydOySQKbk/JGHhFZEl7vtcKzt0u6HrXBFyYuv+/CVmB2UsSdZYkL5BgoCq9dXrZUvzZBXE
+ bFV07ZBCwNGg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,307,1613462400"; 
-   d="scan'208";a="629982073"
+   d="scan'208";a="629982074"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmsmga005.fm.intel.com with ESMTP; 17 May 2021 06:06:51 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 2CB4E348; Mon, 17 May 2021 16:07:13 +0300 (EEST)
+        id 36AA2662; Mon, 17 May 2021 16:07:13 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -35,9 +35,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         Lukas Wunner <lukas@wunner.de>,
         Jonathan Corbet <corbet@lwn.net>,
         Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 1/3] Documentation / thunderbolt: Clean up entries
-Date:   Mon, 17 May 2021 16:07:11 +0300
-Message-Id: <20210517130713.30005-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/3] thunderbolt: Add wake from DisplayPort
+Date:   Mon, 17 May 2021 16:07:12 +0300
+Message-Id: <20210517130713.30005-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210517130713.30005-1-mika.westerberg@linux.intel.com>
 References: <20210517130713.30005-1-mika.westerberg@linux.intel.com>
@@ -47,125 +47,121 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Align the "What" entries along with the rest and move
-nvm_authenticate_on_disconnect to correct place.
+Latest USB4 spec added a new wake bit for DisplayPort so add this to the
+driver when runtime suspending. This way wake up the domain when a new
+monitor is plugged in to any of the device routers.
+
+Also do the same for pre-USB4 devices through the link controller
+registers as documented in chapter 13 of the USB4 spec.
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- .../ABI/testing/sysfs-bus-thunderbolt         | 44 +++++++++----------
- 1 file changed, 22 insertions(+), 22 deletions(-)
+ drivers/thunderbolt/lc.c      | 6 ++++--
+ drivers/thunderbolt/switch.c  | 3 ++-
+ drivers/thunderbolt/tb.h      | 1 +
+ drivers/thunderbolt/tb_regs.h | 3 +++
+ drivers/thunderbolt/usb4.c    | 6 ++++--
+ 5 files changed, 14 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-index c41c68f64693..05afeee05538 100644
---- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
-+++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
-@@ -1,4 +1,4 @@
--What: /sys/bus/thunderbolt/devices/.../domainX/boot_acl
-+What:		/sys/bus/thunderbolt/devices/.../domainX/boot_acl
- Date:		Jun 2018
- KernelVersion:	4.17
- Contact:	thunderbolt-software@lists.01.org
-@@ -21,7 +21,7 @@ Description:	Holds a comma separated list of device unique_ids that
- 		If a device is authorized automatically during boot its
- 		boot attribute is set to 1.
+diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
+index bc671730a11f..c178f0d7beab 100644
+--- a/drivers/thunderbolt/lc.c
++++ b/drivers/thunderbolt/lc.c
+@@ -208,8 +208,8 @@ static int tb_lc_set_wake_one(struct tb_switch *sw, unsigned int offset,
+ 	if (ret)
+ 		return ret;
  
--What: /sys/bus/thunderbolt/devices/.../domainX/deauthorization
-+What:		/sys/bus/thunderbolt/devices/.../domainX/deauthorization
- Date:		May 2021
- KernelVersion:	5.12
- Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
-@@ -30,7 +30,7 @@ Description:	This attribute tells whether the system supports
- 		de-authorize PCIe tunnel by writing 0 to authorized
- 		attribute under each device.
+-	ctrl &= ~(TB_LC_SX_CTRL_WOC | TB_LC_SX_CTRL_WOD | TB_LC_SX_CTRL_WOP |
+-		  TB_LC_SX_CTRL_WOU4);
++	ctrl &= ~(TB_LC_SX_CTRL_WOC | TB_LC_SX_CTRL_WOD | TB_LC_SX_CTRL_WODPC |
++		  TB_LC_SX_CTRL_WODPD | TB_LC_SX_CTRL_WOP | TB_LC_SX_CTRL_WOU4);
  
--What: /sys/bus/thunderbolt/devices/.../domainX/iommu_dma_protection
-+What:		/sys/bus/thunderbolt/devices/.../domainX/iommu_dma_protection
- Date:		Mar 2019
- KernelVersion:	4.21
- Contact:	thunderbolt-software@lists.01.org
-@@ -39,7 +39,7 @@ Description:	This attribute tells whether the system uses IOMMU
- 		it is not (DMA protection is solely based on Thunderbolt
- 		security levels).
+ 	if (flags & TB_WAKE_ON_CONNECT)
+ 		ctrl |= TB_LC_SX_CTRL_WOC | TB_LC_SX_CTRL_WOD;
+@@ -217,6 +217,8 @@ static int tb_lc_set_wake_one(struct tb_switch *sw, unsigned int offset,
+ 		ctrl |= TB_LC_SX_CTRL_WOU4;
+ 	if (flags & TB_WAKE_ON_PCIE)
+ 		ctrl |= TB_LC_SX_CTRL_WOP;
++	if (flags & TB_WAKE_ON_DP)
++		ctrl |= TB_LC_SX_CTRL_WODPC | TB_LC_SX_CTRL_WODPD;
  
--What: /sys/bus/thunderbolt/devices/.../domainX/security
-+What:		/sys/bus/thunderbolt/devices/.../domainX/security
- Date:		Sep 2017
- KernelVersion:	4.13
- Contact:	thunderbolt-software@lists.01.org
-@@ -61,7 +61,7 @@ Description:	This attribute holds current Thunderbolt security level
- 			 the BIOS.
- 		=======  ==================================================
+ 	return tb_sw_write(sw, &ctrl, TB_CFG_SWITCH, offset + TB_LC_SX_CTRL, 1);
+ }
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index e73cd296db7e..4d4bc50a3c44 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -2844,7 +2844,8 @@ void tb_switch_suspend(struct tb_switch *sw, bool runtime)
+ 	if (runtime) {
+ 		/* Trigger wake when something is plugged in/out */
+ 		flags |= TB_WAKE_ON_CONNECT | TB_WAKE_ON_DISCONNECT;
+-		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
++		flags |= TB_WAKE_ON_USB4;
++		flags |= TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE | TB_WAKE_ON_DP;
+ 	} else if (device_may_wakeup(&sw->dev)) {
+ 		flags |= TB_WAKE_ON_USB4 | TB_WAKE_ON_USB3 | TB_WAKE_ON_PCIE;
+ 	}
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index d9d1adc4cfd3..60a987c748ca 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -347,6 +347,7 @@ struct tb_path {
+ #define TB_WAKE_ON_USB4		BIT(2)
+ #define TB_WAKE_ON_USB3		BIT(3)
+ #define TB_WAKE_ON_PCIE		BIT(4)
++#define TB_WAKE_ON_DP		BIT(5)
  
--What: /sys/bus/thunderbolt/devices/.../authorized
-+What:		/sys/bus/thunderbolt/devices/.../authorized
- Date:		Sep 2017
- KernelVersion:	4.13
- Contact:	thunderbolt-software@lists.01.org
-@@ -95,14 +95,14 @@ Description:	This attribute is used to authorize Thunderbolt devices
- 		    EKEYREJECTED if the challenge response did not match.
- 		==  ========================================================
+ /**
+  * struct tb_cm_ops - Connection manager specific operations vector
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 626751e06292..113d7903b183 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -195,6 +195,7 @@ struct tb_regs_switch_header {
+ #define ROUTER_CS_5_SLP				BIT(0)
+ #define ROUTER_CS_5_WOP				BIT(1)
+ #define ROUTER_CS_5_WOU				BIT(2)
++#define ROUTER_CS_5_WOD				BIT(3)
+ #define ROUTER_CS_5_C3S				BIT(23)
+ #define ROUTER_CS_5_PTO				BIT(24)
+ #define ROUTER_CS_5_UTO				BIT(25)
+@@ -458,6 +459,8 @@ struct tb_regs_hop {
+ #define TB_LC_SX_CTRL			0x96
+ #define TB_LC_SX_CTRL_WOC		BIT(1)
+ #define TB_LC_SX_CTRL_WOD		BIT(2)
++#define TB_LC_SX_CTRL_WODPC		BIT(3)
++#define TB_LC_SX_CTRL_WODPD		BIT(4)
+ #define TB_LC_SX_CTRL_WOU4		BIT(5)
+ #define TB_LC_SX_CTRL_WOP		BIT(6)
+ #define TB_LC_SX_CTRL_L1C		BIT(16)
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index c0a14bfa36d4..7e8b5ca3114c 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -413,7 +413,7 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 	}
  
--What: /sys/bus/thunderbolt/devices/.../boot
-+What:		/sys/bus/thunderbolt/devices/.../boot
- Date:		Jun 2018
- KernelVersion:	4.17
- Contact:	thunderbolt-software@lists.01.org
- Description:	This attribute contains 1 if Thunderbolt device was already
- 		authorized on boot and 0 otherwise.
+ 	/*
+-	 * Enable wakes from PCIe and USB 3.x on this router. Only
++	 * Enable wakes from PCIe, USB 3.x and DP on this router. Only
+ 	 * needed for device routers.
+ 	 */
+ 	if (route) {
+@@ -421,11 +421,13 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 		if (ret)
+ 			return ret;
  
--What: /sys/bus/thunderbolt/devices/.../generation
-+What:		/sys/bus/thunderbolt/devices/.../generation
- Date:		Jan 2020
- KernelVersion:	5.5
- Contact:	Christian Kellner <christian@kellner.me>
-@@ -110,7 +110,7 @@ Description:	This attribute contains the generation of the Thunderbolt
- 		controller associated with the device. It will contain 4
- 		for USB4.
+-		val &= ~(ROUTER_CS_5_WOP | ROUTER_CS_5_WOU);
++		val &= ~(ROUTER_CS_5_WOP | ROUTER_CS_5_WOU | ROUTER_CS_5_WOD);
+ 		if (flags & TB_WAKE_ON_USB3)
+ 			val |= ROUTER_CS_5_WOU;
+ 		if (flags & TB_WAKE_ON_PCIE)
+ 			val |= ROUTER_CS_5_WOP;
++		if (flags & TB_WAKE_ON_DP)
++			val |= ROUTER_CS_5_WOD;
  
--What: /sys/bus/thunderbolt/devices/.../key
-+What:		/sys/bus/thunderbolt/devices/.../key
- Date:		Sep 2017
- KernelVersion:	4.13
- Contact:	thunderbolt-software@lists.01.org
-@@ -226,6 +226,20 @@ Description:	When new NVM image is written to the non-active NVM
- 		based mailbox before the device is power cycled. Writing
- 		0 here clears the status.
- 
-+What:		/sys/bus/thunderbolt/devices/.../nvm_authenticate_on_disconnect
-+Date:		Oct 2020
-+KernelVersion:	v5.9
-+Contact:	Mario Limonciello <mario.limonciello@dell.com>
-+Description:	For supported devices, automatically authenticate the new Thunderbolt
-+		image when the device is disconnected from the host system.
-+
-+		This file will accept writing values "1" or "2"
-+
-+		- Writing "1" will flush the image to the storage
-+		  area and prepare the device for authentication on disconnect.
-+		- Writing "2" will run some basic validation on the image
-+		  and flush it to the storage area.
-+
- What:		/sys/bus/thunderbolt/devices/<xdomain>.<service>/key
- Date:		Jan 2018
- KernelVersion:	4.15
-@@ -308,17 +322,3 @@ Date:		Oct 2020
- KernelVersion:	v5.9
- Contact:	Mika Westerberg <mika.westerberg@linux.intel.com>
- Description:	Retimer vendor identifier read from the hardware.
--
--What:		/sys/bus/thunderbolt/devices/.../nvm_authenticate_on_disconnect
--Date:		Oct 2020
--KernelVersion:	v5.9
--Contact:	Mario Limonciello <mario.limonciello@dell.com>
--Description:	For supported devices, automatically authenticate the new Thunderbolt
--		image when the device is disconnected from the host system.
--
--		This file will accept writing values "1" or "2"
--
--		- Writing "1" will flush the image to the storage
--		  area and prepare the device for authentication on disconnect.
--		- Writing "2" will run some basic validation on the image
--		  and flush it to the storage area.
+ 		ret = tb_sw_write(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
+ 		if (ret)
 -- 
 2.30.2
 
