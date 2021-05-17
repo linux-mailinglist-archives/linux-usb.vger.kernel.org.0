@@ -2,97 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A63B3823BC
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 07:36:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201D43823CB
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 07:46:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234353AbhEQFhU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 01:37:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52890 "EHLO mail.kernel.org"
+        id S234570AbhEQFsH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 01:48:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54670 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234141AbhEQFhU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 01:37:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1E4446101B;
-        Mon, 17 May 2021 05:36:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621229764;
-        bh=EhlwCY8laf0qlXIJggTe0ebtKsshy0+Fxw1vLcMrw6Q=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=p6BcAM3n1xSDLTfuQydG2ADN4fT2AByeKsLVCN7EJKRQg2bNtANUKjAJg91Yw246R
-         kthV4kuNnMWbF6ILp80KOSKDwfqF0sZI68YzpjNN1ka62Mv12F35QT0Dk+99SFrEjQ
-         DzlU4fl9tBQqx5vOKI/KTsfpg9N7qNloTrkrrNJFgqmopLQsxTgtfC3miEQ9wpuvDB
-         ytg+OMe58M03KxP/mjQYeSySeENL0jxlQfqh9ZfdQEvwQH0YIt82R0iYuiTLXXkj1W
-         pwV2Ewdvqz0sUjEqY4IPacj/tIhKsKdCwpqStoh0L1Wvsqy0CIXWTJ72Cfl8AY6elH
-         LTX9yfLsfu75g==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: Disconnect race in Gadget core
-In-Reply-To: <20210516145151.GC1060053@rowland.harvard.edu>
-References: <20210510193849.GB873147@rowland.harvard.edu>
- <87r1idfzms.fsf@kernel.org> <20210511212651.GA914027@rowland.harvard.edu>
- <87lf8kfnc6.fsf@kernel.org> <20210512153358.GC934575@rowland.harvard.edu>
- <87bl9d7oo0.fsf@kernel.org> <20210514165830.GA1010288@rowland.harvard.edu>
- <875yzk7b2y.fsf@kernel.org> <20210515153113.GB1036273@rowland.harvard.edu>
- <8735un6mjl.fsf@kernel.org> <20210516145151.GC1060053@rowland.harvard.edu>
-Date:   Mon, 17 May 2021 08:35:50 +0300
-Message-ID: <87tun16hxl.fsf@kernel.org>
+        id S234462AbhEQFry (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 01:47:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21CCF6108D;
+        Mon, 17 May 2021 05:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621230378;
+        bh=UssYIYbkL3qu2UXuoT41PmlhMhpzovvV5hj4VqQqw6c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vna6C9/eXr0rr9wnsxamGgP6HY53+rapHkKqAnJK3sSoY631+u0j3cZ/Xjleivf8U
+         lDAxln7hHa19MzfzYmHSkNzIK1K5pI/K/AyFyyommMzJ/FNr5UiqNJi1b78GTzBNCc
+         OvydG874aqfpppXC7D0nP3i8lBieHyXygMg/IfKE=
+Date:   Mon, 17 May 2021 07:46:12 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     aaro.koskinen@iki.fi, tony@atomide.com, linux@prisktech.co.nz,
+        davem@davemloft.net, kuba@kernel.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, mst@redhat.com,
+        jasowang@redhat.com, zbr@ioremap.net, pablo@netfilter.org,
+        kadlec@netfilter.org, fw@strlen.de, horms@verge.net.au, ja@ssi.bg,
+        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-crypto@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juergh@canonical.com>
+Subject: Re: [PATCH] treewide: Remove leading spaces in Kconfig files
+Message-ID: <YKIDJIfuufBrTQ4f@kroah.com>
+References: <20210516132209.59229-1-juergh@canonical.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210516132209.59229-1-juergh@canonical.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Sun, May 16, 2021 at 03:22:09PM +0200, Juerg Haefliger wrote:
+> There are a few occurences of leading spaces before tabs in a couple of
+> Kconfig files. Remove them by running the following command:
+> 
+>   $ find . -name 'Kconfig*' | xargs sed -r -i 's/^[ ]+\t/\t/'
+> 
+> Signed-off-by: Juerg Haefliger <juergh@canonical.com>
+> ---
+>  arch/arm/mach-omap1/Kconfig     | 12 ++++++------
+>  arch/arm/mach-vt8500/Kconfig    |  6 +++---
+>  arch/arm/mm/Kconfig             | 10 +++++-----
+>  drivers/char/hw_random/Kconfig  |  8 ++++----
+>  drivers/net/usb/Kconfig         | 10 +++++-----
+>  drivers/net/wan/Kconfig         |  4 ++--
+>  drivers/scsi/Kconfig            |  2 +-
+>  drivers/uio/Kconfig             |  2 +-
+>  drivers/video/backlight/Kconfig | 10 +++++-----
+>  drivers/virtio/Kconfig          |  2 +-
+>  drivers/w1/masters/Kconfig      |  6 +++---
+>  fs/proc/Kconfig                 |  4 ++--
+>  init/Kconfig                    |  2 +-
+>  net/netfilter/Kconfig           |  2 +-
+>  net/netfilter/ipvs/Kconfig      |  2 +-
+>  15 files changed, 41 insertions(+), 41 deletions(-)
 
+Please break this up into one patch per subsystem and resend to the
+proper maintainers that way.
 
-Hi,
+thanks,
 
-Alan Stern <stern@rowland.harvard.edu> writes:
-> On Sun, May 16, 2021 at 12:43:58PM +0300, Felipe Balbi wrote:
->>=20
->> Hi,
->>=20
->> Alan Stern <stern@rowland.harvard.edu> writes:
->> >
->> > If it's okay to call those functions in interrupt context then the=20
->> > kerneldoc definitely should be updated.  However, I don't see why you=
-=20
->> > would want to make DELAYED_STATUS mandatory.  If all the necessary wor=
-k=20
->> > can be done in the set_alt handler, why not return the status=20
->> > immediately?
->>=20
->> because we avoid a special case. Instead of having magic return value to
->> mean "Don't do anything until I enqueue a request" we can just make that
->> an assumption, i.e. gadget driver *must* enqueue requests for data and
->> status stages.
->
-> Okay.  But that would require auditing every gadget/function driver to=20
-> ensure that they _do_ enqueue status stage requests, and auditing every=20
-> UDC driver to ensure they don't send unsolicited status responses to=20
-> control requests with data stages.  Until this happens, we're forced to=20
-> use the DELAYED_STATUS magic value.
-
-sure, that's work for the future :-)
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmCiALYRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUi6MQf/VyxqsXLA5UgTsx9loPr4SDJGuxIYanGM
-A3/rhRaIgnNDXfhSITbJRCJYTAva4b6XZuw/LCa0zbZA2UISUtaorgxUmDCWgMcK
-Hyvh02CSsdHE+imA0jkW67CzcObvG1q5IyLno/gUiatc92mZhNAwt7oj6HWGX1ti
-S5u4MZRHINJDSBYLtDwcnpg12GW8kuGUqa3UTPHhXwcTOP/hO4L+wgNxFxu3Ll4+
-IS5mG1qgFXe5BvhcK2ke7/3RSCm4RfJvePa8IyjBJlNwrPvGWl66qSMBXp0yopIi
-ZC9CVgcHUoze83M8Tq6aAoSZTt48qUTH/JHMCJJoIbgE1loBUPMaTQ==
-=DBgO
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
