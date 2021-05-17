@@ -2,94 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E78AC3827B1
-	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 11:02:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100B03827D7
+	for <lists+linux-usb@lfdr.de>; Mon, 17 May 2021 11:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235577AbhEQJDk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 17 May 2021 05:03:40 -0400
-Received: from mga01.intel.com ([192.55.52.88]:35715 "EHLO mga01.intel.com"
+        id S235816AbhEQJKy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 17 May 2021 05:10:54 -0400
+Received: from mga12.intel.com ([192.55.52.136]:10148 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230087AbhEQJDk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 17 May 2021 05:03:40 -0400
-IronPort-SDR: iKMG091Zdj+qP5n5OcLy9lWS3gng87LX6rDyOUPpFYMq7yOobi31oZNmdDP5eBMrb7+K+YmcuD
- VbtFjikgjtrQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="221454012"
+        id S235871AbhEQJKu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 17 May 2021 05:10:50 -0400
+IronPort-SDR: 7XHAj6HXySiMR87XJ+xZ2Ir3iLDZGmT6GqoInAK7wDFibjPKIwpvku9Tui/1ROz0DNGX2Z8R2A
+ IQZ25gm/mgcw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9986"; a="180018720"
 X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
-   d="scan'208";a="221454012"
+   d="scan'208";a="180018720"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 02:02:23 -0700
-IronPort-SDR: tccyjVpD8nkjvIVGmGjgKxuz5Kgtr5A9tJeZ+PC8yPQti4ptgQhdAmGyJnUwzEd+r/K6TxRYha
- +Gb9aJ6B0P6A==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2021 02:09:33 -0700
+IronPort-SDR: X3esaw6tjhu+pmd2IeB1Gwmzz5yfQDZ6hy2jBv1v38rnCDHKHSlB3N47hnCpqzj6OiAT2F7auf
+ CrrEz9Snr+uQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,306,1613462400"; 
-   d="scan'208";a="540323965"
+   d="scan'208";a="540326831"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 May 2021 02:02:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 May 2021 12:02:07 +0300
-Date:   Mon, 17 May 2021 12:02:07 +0300
+  by fmsmga001.fm.intel.com with SMTP; 17 May 2021 02:09:30 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 17 May 2021 12:09:30 +0300
+Date:   Mon, 17 May 2021 12:09:30 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jun Li <jun.li@nxp.com>, Hans de Goede <hdegoede@redhat.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: mux: Fix matching with typec_altmode_desc
-Message-ID: <YKIxDz/vqXzS5EtO@kuha.fi.intel.com>
-References: <20210516034730.621461-1-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH] usb: typec: mux: Fix copy-paste of the container_of
+Message-ID: <YKIyylBF9gxXSg/3@kuha.fi.intel.com>
+References: <20210516034833.621530-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210516034730.621461-1-bjorn.andersson@linaro.org>
+In-Reply-To: <20210516034833.621530-1-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 15, 2021 at 08:47:30PM -0700, Bjorn Andersson wrote:
-> In typec_mux_match() "nval" is assigned the number of elements in the
-> "svid" fwnode property, then the variable is used to store the success
-> of the read and finally attempts to loop between 0 and "success" - i.e.
-> not at all - and the code returns indicating that no match was found.
+Hi,
+
+On Sat, May 15, 2021 at 08:48:33PM -0700, Bjorn Andersson wrote:
+> Some of the boilerplate code was copy pasted from the typec_switch and
+> retained the use of the switch's container_of macros. The two structs
+> are identical in this regard, so this change doesn't cause a functional
+> change today, but could possibly cause future issues.
 > 
-> Fix this by using a separate variable to track the success of the read,
-> to allow the loop to get a change to find a match.
-> 
-> Fixes: 96a6d031ca99 ("usb: typec: mux: Find the muxes by also matching against the device node")
+> Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
 > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/mux.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  drivers/usb/typec/mux.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index 9da22ae3006c..8514bec7e1b8 100644
+> index 8514bec7e1b8..e4467c4c3742 100644
 > --- a/drivers/usb/typec/mux.c
 > +++ b/drivers/usb/typec/mux.c
-> @@ -191,6 +191,7 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
->  	bool match;
->  	int nval;
->  	u16 *val;
-> +	int ret;
->  	int i;
+> @@ -45,7 +45,7 @@ static void *typec_switch_match(struct fwnode_handle *fwnode, const char *id,
+>  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
+>  				switch_fwnode_match);
 >  
->  	/*
-> @@ -218,10 +219,10 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
->  	if (!val)
->  		return ERR_PTR(-ENOMEM);
+> -	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> +	return dev ? to_typec_mux(dev) : ERR_PTR(-EPROBE_DEFER);
+
+That does not look correct to me?
+
+>  }
 >  
-> -	nval = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
-> -	if (nval < 0) {
-> +	ret = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
-> +	if (ret < 0) {
->  		kfree(val);
-> -		return ERR_PTR(nval);
-> +		return ERR_PTR(ret);
->  	}
+>  /**
+> @@ -87,7 +87,7 @@ EXPORT_SYMBOL_GPL(typec_switch_put);
 >  
->  	for (i = 0; i < nval; i++) {
-> -- 
-> 2.29.2
+>  static void typec_switch_release(struct device *dev)
+>  {
+> -	kfree(to_typec_switch(dev));
+> +	kfree(to_typec_mux(dev));
+
+Ditto.
+
+>  }
+>  
+>  static const struct device_type typec_switch_dev_type = {
+> @@ -239,7 +239,7 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+>  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
+>  				mux_fwnode_match);
+>  
+> -	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> +	return dev ? to_typec_mux(dev) : ERR_PTR(-EPROBE_DEFER);
+
+That looks correct.
+
+Either I'm missing something, or only the last change is needed.
 
 thanks,
 
