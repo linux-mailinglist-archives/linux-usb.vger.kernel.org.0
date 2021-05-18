@@ -2,57 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98D23872CE
-	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 09:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFD6387379
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 09:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346915AbhERHF6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 May 2021 03:05:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42616 "EHLO mail.kernel.org"
+        id S1347239AbhERHqT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 May 2021 03:46:19 -0400
+Received: from muru.com ([72.249.23.125]:57058 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346910AbhERHF5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 May 2021 03:05:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9421C611BD;
-        Tue, 18 May 2021 07:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621321479;
-        bh=/85N896sPWs3Fav4FWV2ONkGxpYFdYbrWJDrsPbsIjg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rLGLHFuEcdOy7w2Wd/XB2zT2wwLC6szRWxMCr1x60/ToT3QpkRhACcC0Yv9dm6MGL
-         o1qwTsWCAg1172YBPdyP0MrXBN9kJAoSm9sK99VE0iwCgnASLBx0+CYrU5QHPfHACi
-         6vvR02vQzKYgWzKymTB7r1MJ+z5bCajBTvA4RJ1Jk6K/VjKKuz74Db47bMwlu0lDPi
-         w/7hEu4OrF/1vED/jphC5PMrUYgMqfMrNk/v7deWTTpESICqmOBUHujDyoj4FOZced
-         Op70sw7sTyf76i6lEO3/hvobT8xciu8MNM3+YaEr1BYztwfaXR2RKBheyE/5vN1koZ
-         xzImpyi2HszDQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1litmP-0005jB-Lj; Tue, 18 May 2021 09:04:37 +0200
-Date:   Tue, 18 May 2021 09:04:37 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Tung Pham <Tung.Pham@silabs.com>
-Cc:     Pho Tran <photranvan0712@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        Pho Tran <Pho.Tran@silabs.com>
-Subject: Re: [PATCH v12] USB: serial: cp210x: Add support for GPIOs on CP2108
-Message-ID: <YKNnBckiw4fLIuQL@hovoldconsulting.com>
-References: <CO1PR11MB488255D1B04D3B90886A59BE812C9@CO1PR11MB4882.namprd11.prod.outlook.com>
+        id S1347243AbhERHqP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 May 2021 03:46:15 -0400
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id E811580F5;
+        Tue, 18 May 2021 07:44:55 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-omap@vger.kernel.org
+Subject: [PATCH] usb: musb: Add missing PM suspend and resume functions for 2430 glue
+Date:   Tue, 18 May 2021 10:44:49 +0300
+Message-Id: <20210518074449.17070-1-tony@atomide.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB488255D1B04D3B90886A59BE812C9@CO1PR11MB4882.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 18, 2021 at 03:18:06AM +0000, Tung Pham wrote:
-> Dear Johan Hovold.
-> Do you agree and approve with this path?.
+Looks like we are missing suspend and resume functions for pm_ops that
+are needed to idle the hardware for system suspend for 2430 glue layer.
 
-I'm still waiting for you to confirm that you have tested the patch with
-different pin configurations in eeprom. The first few iterations clearly
-weren't tested and I don't want to waste more time reviewing it before
-it's tested as I believe I mentioned in my last mail.
+We can rely on the driver internal PM runtime state, and call driver
+functions to idle the hardware on suspend if needed. There is no need
+to add a dependency to PM runtime for system suspend here.
 
-Johan
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+ drivers/usb/musb/omap2430.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -33,6 +33,8 @@ struct omap2430_glue {
+ 	enum musb_vbus_id_status status;
+ 	struct work_struct	omap_musb_mailbox_work;
+ 	struct device		*control_otghs;
++	unsigned int		is_runtime_suspended:1;
++	unsigned int		needs_resume:1;
+ };
+ #define glue_to_musb(g)		platform_get_drvdata(g->musb)
+ 
+@@ -459,6 +461,8 @@ static int omap2430_runtime_suspend(struct device *dev)
+ 	phy_power_off(musb->phy);
+ 	phy_exit(musb->phy);
+ 
++	glue->is_runtime_suspended = 1;
++
+ 	return 0;
+ }
+ 
+@@ -480,12 +484,40 @@ static int omap2430_runtime_resume(struct device *dev)
+ 	/* Wait for musb to get oriented. Otherwise we can get babble */
+ 	usleep_range(200000, 250000);
+ 
++	glue->is_runtime_suspended = 0;
++
+ 	return 0;
+ }
+ 
++static int omap2430_suspend(struct device *dev)
++{
++	struct omap2430_glue *glue = dev_get_drvdata(dev);
++
++	if (glue->is_runtime_suspended)
++		return 0;
++
++	glue->needs_resume = 1;
++
++	return omap2430_runtime_suspend(dev);
++}
++
++static int omap2430_resume(struct device *dev)
++{
++	struct omap2430_glue *glue = dev_get_drvdata(dev);
++
++	if (!glue->needs_resume)
++		return 0;
++
++	glue->needs_resume = 0;
++
++	return omap2430_runtime_resume(dev);
++}
++
+ static const struct dev_pm_ops omap2430_pm_ops = {
+ 	.runtime_suspend = omap2430_runtime_suspend,
+ 	.runtime_resume = omap2430_runtime_resume,
++	.suspend = omap2430_suspend,
++	.resume = omap2430_resume,
+ };
+ 
+ #define DEV_PM_OPS	(&omap2430_pm_ops)
+-- 
+2.31.1
