@@ -2,88 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7733387D45
-	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 18:21:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC7F387D7A
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 18:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350576AbhERQW2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 May 2021 12:22:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52888 "EHLO mail.kernel.org"
+        id S238127AbhERQbL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 May 2021 12:31:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33378 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350575AbhERQW1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 May 2021 12:22:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ECFD8610E9;
-        Tue, 18 May 2021 16:21:07 +0000 (UTC)
+        id S237994AbhERQbK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 May 2021 12:31:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F0D1611CE;
+        Tue, 18 May 2021 16:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621354868;
-        bh=Ve5BAOPq6gdoyOzuNdwO8JQHHDggrl0EVR/Yp3mUIZk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Q+cb9gjLvLbTWGV2Hj1aCpdKZpDLc1m4KoxOM54xQ9TkN/CPo7tqN7v0PItOcvXA7
-         XA2QxVRYMk86gEgWu2OeADMnw459P7Y1Xb6cU5U03hM76ah9FCCJsKJM+PKrPZpzKr
-         nOU6nVkfvrciU5hPhOQBskrz/qLjPhNg8ZYCFl00=
+        s=korg; t=1621355391;
+        bh=HgIexHVI5E7UHVlQmPmXKGPxQKBdX3ZBlFB+5kn7wNc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ePOrVMjfvWpWxkih64syk7t7noNFpoDVbAC/8hifCdNaJOQs3CRHZxTZCwGNOhcse
+         SVXaIJxhWf8HvCFHndyLCir8MmvCBw3KI1fy++jvj+XAq43k+dEX/5LK8HPIFNVoXn
+         uiPXw06EK+dHdMNcyzvzw1IUdjUigwArY/z1I4oc=
+Date:   Tue, 18 May 2021 18:29:49 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To:     Daniel Mack <daniel@zonque.org>
+Cc:     linux-usb@vger.kernel.org,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
         Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH] USB: gadget: s3c2410_udc: remove dentry storage for debugfs file
-Date:   Tue, 18 May 2021 18:21:05 +0200
-Message-Id: <20210518162105.3698090-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.31.1
+Subject: Re: [PATCH] USB: gadget: pxa25x_udc: remove dentry storage for
+ debugfs file
+Message-ID: <YKPrfb8qQBAn5vYz@kroah.com>
+References: <20210518162054.3697992-1-gregkh@linuxfoundation.org>
+ <00cc26c8-313c-9573-7138-754d86f4ca81@zonque.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00cc26c8-313c-9573-7138-754d86f4ca81@zonque.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to store the dentry pointer for a debugfs file that we
-only use to remove it when the device goes away.  debugfs can do the
-lookup for us instead, saving us some trouble, and making things smaller
-overall.
+On Tue, May 18, 2021 at 06:23:33PM +0200, Daniel Mack wrote:
+> On 5/18/21 6:20 PM, Greg Kroah-Hartman wrote:
+> > There is no need to store the dentry pointer for a debugfs file that we
+> > only use to remove it when the device goes away.  debugfs can do the
+> > lookup for us instead, saving us some trouble, and making things smaller
+> > overall.
+> > 
+> > Cc: Daniel Mack <daniel@zonque.org>
+> 
+> Acked-by: Daniel Mack <daniel@zonque.org>
+> 
+> 
+> Greg, can you take this via your tree?
 
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/usb/gadget/udc/s3c2410_udc.c | 7 +++----
- drivers/usb/gadget/udc/s3c2410_udc.h | 1 -
- 2 files changed, 3 insertions(+), 5 deletions(-)
+Yes I can :)
 
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.c b/drivers/usb/gadget/udc/s3c2410_udc.c
-index b154b62abefa..5e453ebb2643 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.c
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.c
-@@ -1843,9 +1843,8 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
- 	if (retval)
- 		goto err_add_udc;
- 
--	udc->regs_info = debugfs_create_file("registers", S_IRUGO,
--					     s3c2410_udc_debugfs_root, udc,
--					     &s3c2410_udc_debugfs_fops);
-+	debugfs_create_file("registers", S_IRUGO, s3c2410_udc_debugfs_root, udc,
-+			    &s3c2410_udc_debugfs_fops);
- 
- 	dev_dbg(dev, "probe ok\n");
- 
-@@ -1889,7 +1888,7 @@ static int s3c2410_udc_remove(struct platform_device *pdev)
- 		return -EBUSY;
- 
- 	usb_del_gadget_udc(&udc->gadget);
--	debugfs_remove(udc->regs_info);
-+	debugfs_remove(debugfs_lookup("registers", s3c2410_udc_debugfs_root));
- 
- 	if (udc_info && !udc_info->udc_command &&
- 		gpio_is_valid(udc_info->pullup_pin))
-diff --git a/drivers/usb/gadget/udc/s3c2410_udc.h b/drivers/usb/gadget/udc/s3c2410_udc.h
-index 68bdf3e5aac2..135a5bff3c74 100644
---- a/drivers/usb/gadget/udc/s3c2410_udc.h
-+++ b/drivers/usb/gadget/udc/s3c2410_udc.h
-@@ -89,7 +89,6 @@ struct s3c2410_udc {
- 	unsigned			req_config : 1;
- 	unsigned			req_pending : 1;
- 	u8				vbus;
--	struct dentry			*regs_info;
- 	int				irq;
- };
- #define to_s3c2410(g)	(container_of((g), struct s3c2410_udc, gadget))
--- 
-2.31.1
+thanks for the review,
 
+greg k-h
