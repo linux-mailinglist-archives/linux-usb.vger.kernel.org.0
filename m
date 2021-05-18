@@ -2,69 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EF4388183
-	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 22:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4876F38820D
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 23:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352210AbhERUla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 May 2021 16:41:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60764 "EHLO mail.kernel.org"
+        id S236799AbhERVVR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 May 2021 17:21:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45210 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236628AbhERUl2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 May 2021 16:41:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1162161261;
-        Tue, 18 May 2021 20:40:10 +0000 (UTC)
+        id S236604AbhERVVR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 May 2021 17:21:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 973B361209
+        for <linux-usb@vger.kernel.org>; Tue, 18 May 2021 21:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621370410;
-        bh=TAseJ99yhJLoRZux9Of22DJAGVAA3Id44LXh2zVEBUE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kNELgdyjYKjDh8vea1nUFEO+o3KRIObUgDFjvi3lN4LvByTIpQ25VXIwIcj4ZIY5r
-         LX/h4Mw5IKVg5PW7mnkZdrI8WKRJOC4aXj0RXdrjEXG5Rx0ZqZdlQAUSTkMuGKQra0
-         ka6Npmq+dpv1Fj+GzzMS5OrAinIXeIeuOGmhLzZ7n+ymVitbbFvEzh/nIwVHljHxC3
-         u+MArNOMF/c5C9gkDRBex6A0v93KLhJ8RuJSN+8XK08wHI0goRBxWNfareDmb50ZpO
-         LQ3EPCNp1WBZ4/lGmjQxZ8JYXT0MGoSVLL3VryzkJzg42VtMeqiF+Uh78CbbjVV9+B
-         GlUvThGPNs71Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 05614608FB;
-        Tue, 18 May 2021 20:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1621372798;
+        bh=EiLMZboPgt1R4krql7DK/HkWMSz+L65U/NiGkQbJZmY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=DgT/0bup2Iyk14wxc2pETRgQZDQRxz7S/bTnn1h2xpGMVzyccODoz0frrBMqUr2k5
+         8hnDzp5sevNuxNzYiw2330spL4e8AWUrXJms142j9zbYS+7U8EB9LdBjLxf0IEQzl9
+         YLFN+WQtz6YLeLlzJXyDP7sSyhEsBD6ovL0Xdxsd85sV/JSO9MLk6Cx4ECoRJN6l4E
+         u68UArVQF4BEtZS7nSZmGJ/4EEqaP1Ad5KzFJ5aADoxqk9YNJmWPLO0x66u3xpouWn
+         mVWjQ2AvhNDOl5or3THAJBgMhQ6E6g9bIlRLewggJ+F7y6i/OfB4eg0EFBA9QAytf4
+         5a9jBdA5ubIeg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 945F66124A; Tue, 18 May 2021 21:19:58 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Tue, 18 May 2021 21:19:58 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: peter.ganzhorn@googlemail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213081-208809-KhX5sry2Tn@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: lan78xx: advertise tx software timestamping support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162137041001.8268.646207318665132345.git-patchwork-notify@kernel.org>
-Date:   Tue, 18 May 2021 20:40:10 +0000
-References: <20210511161300.3zsn4ufutgwzvst2@ipetronik.com>
-In-Reply-To: <20210511161300.3zsn4ufutgwzvst2@ipetronik.com>
-To:     Markus Bloechl <markus.bloechl@ipetronik.com>
-Cc:     woojung.huh@microchip.com, kuba@kernel.org, davem@davemloft.net,
-        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        markus@blochl.de
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-This patch was applied to netdev/net.git (refs/heads/master):
+--- Comment #15 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
+Thanks again for the support so far Alan, I appreciate it!
+I'm looking forward to hear from Mathias.
+Peter
 
-On Tue, 18 May 2021 11:54:11 +0200 you wrote:
-> lan78xx already calls skb_tx_timestamp() in its lan78xx_start_xmit().
-> Override .get_ts_info to also advertise this capability
-> (SOF_TIMESTAMPING_TX_SOFTWARE) via ethtool.
-> 
-> Signed-off-by: Markus Blöchl <markus.bloechl@ipetronik.com>
-> ---
-> 
-> [...]
+--=20
+You may reply to this email to add a comment.
 
-Here is the summary with links:
-  - [net] net: lan78xx: advertise tx software timestamping support
-    https://git.kernel.org/netdev/net/c/33e6b1674f33
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
