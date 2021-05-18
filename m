@@ -2,32 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E74387D43
-	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 18:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4C2387D44
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 18:21:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350572AbhERQWJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 May 2021 12:22:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52350 "EHLO mail.kernel.org"
+        id S1350578AbhERQWQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 May 2021 12:22:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350581AbhERQWC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 May 2021 12:22:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 566996100C;
-        Tue, 18 May 2021 16:20:43 +0000 (UTC)
+        id S1350575AbhERQWP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 18 May 2021 12:22:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EDE9A6100C;
+        Tue, 18 May 2021 16:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621354843;
-        bh=xR5miwTWOxrzpHAPCfD5zPEEV6zL8yul7Kbm37taVWw=;
+        s=korg; t=1621354857;
+        bh=XIGEtCBAVOsvBYyHLVCSkQNG9QA4H4fhRpx7NN92vcQ=;
         h=From:To:Cc:Subject:Date:From;
-        b=UHJR7kuddEE5HQtA7uDSXscClkLMhSy7s5tVmhdPFV3UQsa9EyVjCOT0BGjzsBvMK
-         hUFbLECdU4mZJXjGwx7ErPt4HdNktWWkSjdUhqTMAIQDu/sRh1W9JhArsnZkm5plkK
-         PF7BPkx7IZ7ODZjnrJnPGp/cHKQ9BBsvfC5BXoJM=
+        b=MfkqktOaMxm8q3NhWLZCU9bMtGcJQnRNJdXIHurVtvHKnIq7KTsqZjh6+66KFsh+/
+         REamdmREXExRGcHtOKz/a27XJ+eGs8NQTIvHoUQvsmX3sbT0OmmXyL7lh0tGAxfuLR
+         fv3hJ/Uu8dtFP5P+PbG1+u/oLLQyyweAhVRxHI70=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-usb@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Vladimir Zapolskiy <vz@mleia.com>
-Subject: [PATCH] USB: gadget: lpc32xx_udc: remove debugfs dentry variable
-Date:   Tue, 18 May 2021 18:20:35 +0200
-Message-Id: <20210518162035.3697860-1-gregkh@linuxfoundation.org>
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] USB: gadget: pxa25x_udc: remove dentry storage for debugfs file
+Date:   Tue, 18 May 2021 18:20:54 +0200
+Message-Id: <20210518162054.3697992-1-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -35,50 +37,54 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There is no need to store the dentry for a fixed filename that we have
-the string for.  So just have debugfs look it up when we need it to
-remove the file, no need to store it anywhere locally.
+There is no need to store the dentry pointer for a debugfs file that we
+only use to remove it when the device goes away.  debugfs can do the
+lookup for us instead, saving us some trouble, and making things smaller
+overall.
 
-Note, this driver is broken in that debugfs will not work for more than
-one instance of the device it supports.  But given that this patch does
-not change that, and no one has ever seemed to notice, it must not be an
-issue...
-
+Cc: Daniel Mack <daniel@zonque.org>
+Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
+Cc: Robert Jarzmik <robert.jarzmik@free.fr>
 Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Vladimir Zapolskiy <vz@mleia.com>
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/gadget/udc/lpc32xx_udc.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/gadget/udc/pxa25x_udc.c | 4 ++--
+ drivers/usb/gadget/udc/pxa25x_udc.h | 4 ----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/lpc32xx_udc.c b/drivers/usb/gadget/udc/lpc32xx_udc.c
-index 3f1c62adce4b..a25d01c89564 100644
---- a/drivers/usb/gadget/udc/lpc32xx_udc.c
-+++ b/drivers/usb/gadget/udc/lpc32xx_udc.c
-@@ -127,7 +127,6 @@ struct lpc32xx_udc {
- 	struct usb_gadget_driver *driver;
- 	struct platform_device	*pdev;
- 	struct device		*dev;
--	struct dentry		*pde;
- 	spinlock_t		lock;
- 	struct i2c_client	*isp1301_i2c_client;
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+index 10324a7334fe..69ef1e669d0c 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.c
++++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+@@ -1338,10 +1338,10 @@ DEFINE_SHOW_ATTRIBUTE(udc_debug);
  
-@@ -528,12 +527,12 @@ DEFINE_SHOW_ATTRIBUTE(udc);
+ #define create_debug_files(dev) \
+ 	do { \
+-		dev->debugfs_udc = debugfs_create_file(dev->gadget.name, \
++		debugfs_create_file(dev->gadget.name, \
+ 			S_IRUGO, NULL, dev, &udc_debug_fops); \
+ 	} while (0)
+-#define remove_debug_files(dev) debugfs_remove(dev->debugfs_udc)
++#define remove_debug_files(dev) debugfs_remove(debugfs_lookup(dev->gadget.name, NULL))
  
- static void create_debug_file(struct lpc32xx_udc *udc)
- {
--	udc->pde = debugfs_create_file(debug_filename, 0, NULL, udc, &udc_fops);
-+	debugfs_create_file(debug_filename, 0, NULL, udc, &udc_fops);
- }
+ #else	/* !CONFIG_USB_GADGET_DEBUG_FILES */
  
- static void remove_debug_file(struct lpc32xx_udc *udc)
- {
--	debugfs_remove(udc->pde);
-+	debugfs_remove(debugfs_lookup(debug_filename, NULL));
- }
- 
- #else
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.h b/drivers/usb/gadget/udc/pxa25x_udc.h
+index ccc6b921f067..aa4b68fd9fc0 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.h
++++ b/drivers/usb/gadget/udc/pxa25x_udc.h
+@@ -116,10 +116,6 @@ struct pxa25x_udc {
+ 	struct usb_phy				*transceiver;
+ 	u64					dma_mask;
+ 	struct pxa25x_ep			ep [PXA_UDC_NUM_ENDPOINTS];
+-
+-#ifdef CONFIG_USB_GADGET_DEBUG_FS
+-	struct dentry				*debugfs_udc;
+-#endif
+ 	void __iomem				*regs;
+ };
+ #define to_pxa25x(g)	(container_of((g), struct pxa25x_udc, gadget))
 -- 
 2.31.1
 
