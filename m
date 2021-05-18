@@ -2,69 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB3B3880BE
-	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 21:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A53938813A
+	for <lists+linux-usb@lfdr.de>; Tue, 18 May 2021 22:18:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351952AbhERTtv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 18 May 2021 15:49:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46608 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240654AbhERTtv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 18 May 2021 15:49:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id EC2A461285
-        for <linux-usb@vger.kernel.org>; Tue, 18 May 2021 19:48:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621367313;
-        bh=MpzkHjOinyqqR/gRxmTAYCV1Js1Edxi/06einUkGf1g=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=iTLPPqq9rIhgE7Q/riTKNyQrYkZ7bbNnmIV9WTLaiAhGe7Wcb9BX2CgRShDB8+6XS
-         nPtC+2wUiRLphuCPmvfuen+dFCGN4I6AMQnqfk8PDqyY2nTvQ03cgtZAY/Iepjp19c
-         2Miyg53io4Gk2k/2QTeir2DFe/DeQDvMMJsEH+hsAe/mYXWNpYW/YXvlGXzXVgK4up
-         p9QXOz5TzllALClvhkADlgmbEhWXrf3x7tgCSBgK7YUa048FvcyCcmBMRSkcsNblzq
-         S1/chdpocmZ4VrRh16KYivSaCre7EXRDmZaT6YXSsC90LmywE7j4Nfuof157n1ywEw
-         GJafnK3mnML+g==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id DDEE76124A; Tue, 18 May 2021 19:48:32 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Tue, 18 May 2021 19:48:32 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213081-208809-jRN5gdCSFp@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S235795AbhERUTy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 18 May 2021 16:19:54 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57007 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230248AbhERUTy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 18 May 2021 16:19:54 -0400
+Received: (qmail 1142007 invoked by uid 1000); 18 May 2021 16:18:35 -0400
+Date:   Tue, 18 May 2021 16:18:35 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <greg@kroah.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH] USB: usbfs: Don't WARN about excessively large memory
+ allocations
+Message-ID: <20210518201835.GA1140918@rowland.harvard.edu>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+Syzbot found that the kernel generates a WARNing if the user tries to
+submit a bulk transfer through usbfs with a buffer that is way too
+large.  This isn't a bug in the kernel; it's merely an invalid request
+from the user and the usbfs code does handle it correctly.
 
---- Comment #14 from Alan Stern (stern@rowland.harvard.edu) ---
-Okay, good.  This is now something for Mathias to look into.  He'll have to
-take over the analysis from this point.
+In theory the same thing can happen with async transfers, or with the
+packet descriptor table for isochronous transfers.
 
---=20
-You may reply to this email to add a comment.
+To prevent the MM subsystem from complaining about these bad
+allocation requests, add the __GFP_NOWARN flag to the kmalloc calls
+for these buffers.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Reported-and-tested-by: syzbot+882a85c0c8ec4a3e2281@syzkaller.appspotmail.com
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: <stable@vger.kernel.org>
+
+---
+
+
+[as1955]
+
+
+ drivers/usb/core/devio.c |   11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+Index: usb-devel/drivers/usb/core/devio.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/devio.c
++++ usb-devel/drivers/usb/core/devio.c
+@@ -1218,7 +1218,12 @@ static int do_proc_bulk(struct usb_dev_s
+ 	ret = usbfs_increase_memory_usage(len1 + sizeof(struct urb));
+ 	if (ret)
+ 		return ret;
+-	tbuf = kmalloc(len1, GFP_KERNEL);
++
++	/*
++	 * len1 can be almost arbitrarily large.  Don't WARN if it's
++	 * too big, just fail the request.
++	 */
++	tbuf = kmalloc(len1, GFP_KERNEL | __GFP_NOWARN);
+ 	if (!tbuf) {
+ 		ret = -ENOMEM;
+ 		goto done;
+@@ -1696,7 +1701,7 @@ static int proc_do_submiturb(struct usb_
+ 	if (num_sgs) {
+ 		as->urb->sg = kmalloc_array(num_sgs,
+ 					    sizeof(struct scatterlist),
+-					    GFP_KERNEL);
++					    GFP_KERNEL | __GFP_NOWARN);
+ 		if (!as->urb->sg) {
+ 			ret = -ENOMEM;
+ 			goto error;
+@@ -1731,7 +1736,7 @@ static int proc_do_submiturb(struct usb_
+ 					(uurb_start - as->usbm->vm_start);
+ 		} else {
+ 			as->urb->transfer_buffer = kmalloc(uurb->buffer_length,
+-					GFP_KERNEL);
++					GFP_KERNEL | __GFP_NOWARN);
+ 			if (!as->urb->transfer_buffer) {
+ 				ret = -ENOMEM;
+ 				goto error;
