@@ -2,110 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51C95388EF8
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 15:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3548A388F3F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 15:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353626AbhESNYh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 09:24:37 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:52874 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353607AbhESNYg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 09:24:36 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14JDElrk071678;
-        Wed, 19 May 2021 13:23:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=dbAsbTNAyldJwWwMuFtj3r4hxMZRTSguPdcI1GwuH40=;
- b=QdZz0Hl5nSa/Uidj0tHMSBFSy6gyXsI92GrC9zwpbEnjjedIXACf6npMcVuM007gTY1F
- 8mFIVNha5mrJu/Da14dcFv3orE/bqo45GEBm107ZSDvd1GtaWIvJ6qegcA7w4dBBBjDf
- cuIzhjlQIFNq/rnkzOpGuaSpG3Jq6sf5Homqmw1mM6cZKMW/cZ+gR/QQulk9PipE+50I
- datebS1R4cej8aicCtqS3EpgH0ivUC5fLjSV8MCG1txFk2ZAJmImiAIJMq93QTVAVmVh
- 3M6oBzrGZ8dODFowUUYiVpydDGxRsWvWRBwT+FBob4kTD2pXMggZVzEDvCuMc6PGva3n hQ== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 38j68mhgt7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 May 2021 13:23:14 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 14JDGO5S088832;
-        Wed, 19 May 2021 13:23:13 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by userp3030.oracle.com with ESMTP id 38megkfkf7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 May 2021 13:23:13 +0000
-Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 14JDI4mH092986;
-        Wed, 19 May 2021 13:23:13 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 38megkfket-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 May 2021 13:23:13 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 14JDNBf4026975;
-        Wed, 19 May 2021 13:23:12 GMT
-Received: from kadam (/41.212.42.34)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 19 May 2021 06:23:11 -0700
-Date:   Wed, 19 May 2021 16:23:04 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: hso: bail out on interrupt URB allocation
- failure
-Message-ID: <20210519132304.GD32682@kadam>
-References: <20210519124717.31144-1-johan@kernel.org>
+        id S241972AbhESNis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 09:38:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29408 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S240097AbhESNis (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 09:38:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1621431448;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bU4pryl0+5U5KV31mW2OweQfTQ6FVvGmzl3RdTyAV38=;
+        b=i6MN8MVz7R3ysk03fjntuyFdWK6IDkzQsFPm/QA5LX0jFnbPJjebsR519XOZDJlMY0q/Xq
+        UsqqA9hckm9eMb/aKWZBZWutXRvyvV1koM0ohkYtY2Moh0SAenTHzB7kxEK7BqJ6NcRwaU
+        5VWDK+tS8rwwQV3+wJzpOOWFPVrF2hA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-187-dSw4mKstMnOf0AWomQeu7w-1; Wed, 19 May 2021 09:37:25 -0400
+X-MC-Unique: dSw4mKstMnOf0AWomQeu7w-1
+Received: by mail-ed1-f70.google.com with SMTP id w1-20020aa7da410000b029038d323eeee3so5658308eds.8
+        for <linux-usb@vger.kernel.org>; Wed, 19 May 2021 06:37:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=bU4pryl0+5U5KV31mW2OweQfTQ6FVvGmzl3RdTyAV38=;
+        b=qSxLKBfDRCtnTOEXQvozncBbLnqM16C27JaZuEmteNKcp1cynWml8zKVhmvSyiJYT6
+         F0nvcngAz7vj3WIqYYm+cZVoNFb3hd81+UyoAtVHohbIZiLsrosuZtpyv4Jx5nw7SR1W
+         T0HE8pGXvkAvssKs71QoDV5aerQ7XNov/c7/yCb3b2n6dclqdnXuykuJeQeiD3msd+KJ
+         JuluzNoEfEWUhP/oyunWg5F5WMdfGv80OW1BZAGlsF9U3pmXTl8sS9IAkafkML/dZDyv
+         tqlIW2v1d1V1SDR/ozvWMR/I9cXiWky8QQAzILOBtUDKcDFgMn0yjEQhQ1Rsg2yGSdlq
+         2Jww==
+X-Gm-Message-State: AOAM530HJFbq2gP9lnUL1MEwSKPZvRa6iwTSbWucmFDEGpqTpSsh8oxG
+        WPoEsDk+5XTEhxsDvfl/lkvsOaAuEp5HTPF4m56k/8WXMkpPjW6T8fJwQsreRkBYZygsLZQG+Xo
+        ree3G6M6CNBjbhRAapCKKs+m7OA6wH50OeLkfOjgzw5ZXy7PW9DU7zcYik7UMfkM5Fw7alhbg
+X-Received: by 2002:a05:6402:3098:: with SMTP id de24mr14306481edb.339.1621431444335;
+        Wed, 19 May 2021 06:37:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxtmP5ppUfGnIYTS3emu23ErVRxU0Y2zdN/m68QRjcWJURyvbcDG+r+AD2UiWx7vPUAM3F1gg==
+X-Received: by 2002:a05:6402:3098:: with SMTP id de24mr14306432edb.339.1621431444058;
+        Wed, 19 May 2021 06:37:24 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id a7sm4664820edr.15.2021.05.19.06.37.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 May 2021 06:37:23 -0700 (PDT)
+Subject: Re: [PATCH 9/9] platform/x86/intel_cht_int33fe: Correct "displayport"
+ fwnode reference
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org,
+        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20210503154647.142551-1-hdegoede@redhat.com>
+ <20210503154647.142551-10-hdegoede@redhat.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <2d02c9ba-1385-41cf-6150-ca8ed5e835ba@redhat.com>
+Date:   Wed, 19 May 2021 15:37:23 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210519124717.31144-1-johan@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-ORIG-GUID: uETD26MYV9CbyQCB8OZIdC9rxmvomalP
-X-Proofpoint-GUID: uETD26MYV9CbyQCB8OZIdC9rxmvomalP
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=9988 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=999
- priorityscore=1501 impostorscore=0 suspectscore=0 clxscore=1015
- adultscore=0 bulkscore=0 phishscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2105190082
+In-Reply-To: <20210503154647.142551-10-hdegoede@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 19, 2021 at 02:47:17PM +0200, Johan Hovold wrote:
-> Commit 31db0dbd7244 ("net: hso: check for allocation failure in
-> hso_create_bulk_serial_device()") recently started returning an error
-> when the driver fails to allocate resources for the interrupt endpoint
-> and tiocmget functionality.
+Hi,
+
+On 5/3/21 5:46 PM, Hans de Goede wrote:
+> The Type-C connector on these devices is connected to DP-2 not DP-1,
+> so the reference must be to the DD04 child-node of the GPU, rather
+> then the DD02 child-node.
 > 
-> For consistency let's bail out from probe also if the URB allocation
-> fails.
-> 
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+Since this is pretty much independent from the rest of the series,
+I'll take this upstream through the pdx86 tree.
+
+I've added this to my review-hans branch now, and it will get added
+to for-next from there.
+
+Regards,
+
+Hans
+
+
+
 > ---
->  drivers/net/usb/hso.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
+>  drivers/platform/x86/intel_cht_int33fe_typec.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-> index 260f850d69eb..b48b2a25210c 100644
-> --- a/drivers/net/usb/hso.c
-> +++ b/drivers/net/usb/hso.c
-> @@ -2635,14 +2635,14 @@ static struct hso_device *hso_create_bulk_serial_device(
->  		}
+> diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
+> index b61bad9cc8d2..d59544167430 100644
+> --- a/drivers/platform/x86/intel_cht_int33fe_typec.c
+> +++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
+> @@ -168,8 +168,8 @@ static int cht_int33fe_setup_dp(struct cht_int33fe_data *data)
+>  		return -ENODEV;
+>  	}
 >  
->  		tiocmget->urb = usb_alloc_urb(0, GFP_KERNEL);
-> -		if (tiocmget->urb) {
-> -			mutex_init(&tiocmget->mutex);
-> -			init_waitqueue_head(&tiocmget->waitq);
-> -		} else
-> -			hso_free_tiomget(serial);
+> -	/* Then the DP child device node */
+> -	data->dp = device_get_named_child_node(&pdev->dev, "DD02");
+> +	/* Then the DP-2 child device node */
+> +	data->dp = device_get_named_child_node(&pdev->dev, "DD04");
+>  	pci_dev_put(pdev);
+>  	if (!data->dp)
+>  		return -ENODEV;
+> 
 
-Thanks!  The original code works, but it's so suspicious looking because
-you would think hso_free_tiomget() lead to a use after free later.
-
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-
-regards,
-dan carpenter
