@@ -2,70 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3003894A7
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 19:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1855E3894B1
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 19:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbhESRc4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 13:32:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355626AbhESRch (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 13:32:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 13AA8611BF
-        for <linux-usb@vger.kernel.org>; Wed, 19 May 2021 17:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621445477;
-        bh=DJIpbxoWJ5TwneqxJhekP8fFHZX50dAglqEUhPv/SB4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=EYysbmHxMCE9Vcjge5bEDCIs8hzRUHUxxpEWPMSpzuXiunu5K12GTT8QfA8tuDvFu
-         2h+P5VuSvI02gSaaoTQp2GULe9A7X2t1N0Hy71s7IFMz+Ulxn04Omgcu9+h6w9h3KY
-         hF5kH33oJ/1vzEBvD4lhrsexGfwWqpgRTiUrema4+ZNJ2pwNc8O9oe+PUoaA4o1QA9
-         sQwka36bYsNsMQL9n1Y443RecFnETYqJVxxiQHTsZNrDVjIGQeifZ4MKtCkXkUdTJQ
-         Xm0LJd6OEwQxokocKyizOuUE78b2GO/kDkPrbxJeNd3RNXeGLjjqFUiWec9L/T9aVo
-         A6k2Nee8HgChw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 03170611F2; Wed, 19 May 2021 17:31:17 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Wed, 19 May 2021 17:31:16 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: peter.ganzhorn@googlemail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213081-208809-nXJE1XQ93d@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229890AbhESRhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 13:37:06 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60449 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229550AbhESRhF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 13:37:05 -0400
+Received: (qmail 1174008 invoked by uid 1000); 19 May 2021 13:35:45 -0400
+Date:   Wed, 19 May 2021 13:35:45 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+Cc:     dave penkler <dpenkler@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: Re: Re: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx
+Message-ID: <20210519173545.GA1173157@rowland.harvard.edu>
+References: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+On Wed, May 19, 2021 at 04:14:20PM +0000, Guido Kiener wrote:
+> > On Wed, May 19, 2021 at 10:48:29AM +0200, dave penkler wrote:
+> > > On Sat, 8 May 2021 at 16:29, Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > >
+> > > > On Sat, May 08, 2021 at 10:14:41AM +0200, dave penkler wrote:
+> > > > > When the host driver detects a protocol error while processing an
+> > > > > URB it completes the URB with EPROTO status and marks the endpoint
+> > > > > as halted.
+> > > >
+> > > > Not true.  It does not mark the endpoint as halted, not unless it
+> > > > receives a STALL handshake from the device.  A STALL is not a
+> > > > protocol error.
+> > > >
+> > > > > When the class driver resubmits the URB and the if the host driver
+> > > > > finds the endpoint still marked as halted it should return EPIPE
+> > > > > status on the resubmitted URB
+> > > >
+> > > > Irrelevant.
+> > > Not at all. The point is that when an application is talking to an
+> > > instrument over the usbtmc driver, the underlying host controller and
+> > > its driver will detect and silence a babbling endpoint.
+> > 
+> > No, they won't.  That is, they will detect a babble error and return an error status, but
+> > they won't silence the endpoint.  What makes you think they will?
+> 
+> Maybe there is a misunderstanding. I guess that Dave wanted to propose:
+> "EPROTO is a link level issue and needs to be handled by the host driver.
+> When the host driver detects a protocol error while processing an
+> URB it SHOULD complete the URB with EPROTO status
 
---- Comment #17 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
-Created attachment 296873
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296873&action=3Dedit
-usb bus 5 trace 5.12+patch
+The host controller drivers _do_ complete URBs with -EPROTO (or similar) 
+status when a link-level error occurs...
 
---=20
-You may reply to this email to add a comment.
+> and SHOULD mark the endpoint
+> as halted."
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+but they don't mark the endpoint as halted.  Even if they did, it 
+wouldn't fix anything because the kernel allows URBs to be submitted to 
+halted endpoints.  In fact, it doesn't even keep track of which 
+endpoints are or are not halted.
+
+> Is this a realistic fix for all host drivers?
+
+No, it isn't.
+
+An endpoint shouldn't be marked as halted unless it really is halted.  
+Otherwise a driver might be tempted to clear the Halt feature, and 
+some devices do not like to receive a Clear-Halt request for an endpoint 
+that isn't halted.
+
+What we could do is what you suggested earlier: Note the fact that the 
+endpoint is in some sort of fault condition and disallow further 
+communication with the endpoint until the fault condition has been 
+cleared.  (It isn't entirely obvious exactly what actions should clear 
+such a fault...  I guess resetting or re-enabling the endpoint, or 
+resetting the entire device.)
+
+Alan Stern
