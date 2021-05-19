@@ -2,170 +2,160 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B2863889B2
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 10:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAF43889DE
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 10:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343599AbhESIuI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 04:50:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47964 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238703AbhESIuF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 04:50:05 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39D6C06175F;
-        Wed, 19 May 2021 01:48:46 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id o14-20020a4a384e0000b029020ec48a2358so753219oof.13;
-        Wed, 19 May 2021 01:48:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FfSUR09C1mHiwJhD3QNYQuarzezJOYlVWsneR6uo6gQ=;
-        b=Jm4Dv6mZdZvRgrowObSeo84niFMzgAfsuB6DzP7V9cHEu7sf9U4BfAsPlqP7hN49aX
-         s+SbN2pfJfyCOLpyIrztipE8q0YpsExXUKldMsaFEfT4zTzmyy199n1fqVJdr/4jvR6s
-         0DqaxSkXRlVbQuIyBuo4c8mMed9fj1V82yIBRoytp61gcALRZBxk3cy67UkFSJ9hzMKd
-         sixgfX5xDIHR9a2Hif2imyyavZmpKlzPOvgKYEloRYJ5BujyF5ZzxmPA6DEw69COZQDX
-         5kQp5Bn29IrbvHEl6RUsUC12TvJ/VEARJ3gLIn/76/CY4mIjtR/zre84vTH/EDN+6nO1
-         2fmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FfSUR09C1mHiwJhD3QNYQuarzezJOYlVWsneR6uo6gQ=;
-        b=QXEOOVak/K2lSI46Rw7rcSxZnPAOsXcpMxz00dUBCYmybGmb/BBQueTCyShjXqbCGk
-         FbaZYP2bp5U/nBXKUwVf6Jl84LjYLfLHbhHIEXm+9a4Qn9Q/MhPWlMN4pxGvL3VeIqdZ
-         M3E1IUx/6/C1RkUSeASK4XxMEQLiZPs6j/r5BWUFuzDN0eDTqOqpWzMAk7c/W4w3ujaf
-         EPEcSF9QU/ewYm2yipFNzVXf53hM/ydsWldou9kXqb8fAg2RBOqjZduGybB+W+q5whab
-         if/i/LDbEbWQZzCM9zNMo2kjjCgdseW0eFgti8jvPpCdoG5/YDAhSWROv4cJ9WGZSg6K
-         L/5Q==
-X-Gm-Message-State: AOAM530EimlUBn21McX8jF8nHgI7rGwOWdohGV8zzeoqjyvFBKlcezTW
-        WD6Wy4wTEToBqLUEJQBOPtP974HHBLkG0IPd2e4=
-X-Google-Smtp-Source: ABdhPJwbehFOzUdzhgvmwhFQguT5fPIJrpKC2NkbqdUm90wAvdYbvDbdEZnp7TCipMhI4QTRIGq/ZMvk8tsPQ7vzTHU=
-X-Received: by 2002:a4a:8311:: with SMTP id f17mr8075257oog.83.1621414126064;
- Wed, 19 May 2021 01:48:46 -0700 (PDT)
+        id S1343974AbhESIyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 04:54:07 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:52561 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344054AbhESIyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 04:54:02 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1621414363; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=NZyAntkG5h7vLjy6bsXrV6/J4Qb+kuYpdE+eTcZ/D9k=; b=SnzMT5yfkVqcaNHkmAUks6T19jBkckDAXsjIWYVl6lR+YbFpfgZ6F2PYlsEScyr4AX59m1ou
+ Pz0nMnuLMaGM4ILcnifEEkirg8jzN3F+y7cQyT5g0YvvfY/ryia2/zlC4xejrP/oly4Ev25R
+ teuVMkWvo1585o4Z2xW3Nk26HG0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 60a4d1da1449805ea28b2d1e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 May 2021 08:52:42
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 4BB9AC433F1; Wed, 19 May 2021 08:52:42 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.96.176] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 91B64C433D3;
+        Wed, 19 May 2021 08:52:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 91B64C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace list_for_each_entry_safe()
+ if using giveback
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+ <87tun9g01v.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
+Date:   Wed, 19 May 2021 01:52:39 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <6cffd7eebba54ed8acd043d51d212ec1@rohde-schwarz.com>
- <CAL=kjP0xOQ32xLytyVm9=d+9rnKzV2dW2VJQ6c8MAwTK7rg2Kw@mail.gmail.com> <20210508142947.GB810516@rowland.harvard.edu>
-In-Reply-To: <20210508142947.GB810516@rowland.harvard.edu>
-From:   dave penkler <dpenkler@gmail.com>
-Date:   Wed, 19 May 2021 10:48:29 +0200
-Message-ID: <CAL=kjP1WegRkxuYuKSmvA6rZ1BrC5wE5KvLe0JjjE+wN4up8Xg@mail.gmail.com>
-Subject: Re: Re: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87tun9g01v.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 8 May 2021 at 16:29, Alan Stern <stern@rowland.harvard.edu> wrote:
->
-> On Sat, May 08, 2021 at 10:14:41AM +0200, dave penkler wrote:
-> > On Thu, 6 May 2021 at 22:31, Guido Kiener
-> > <Guido.Kiener@rohde-schwarz.com> wrote:
-> > >
-> > > > -----Original Message-----
-> > > > From: Alan Stern
-> > > > Sent: Thursday, May 6, 2021 8:32 PM
-> > > > To: Kiener Guido 14DS1
-> > > >
-> > > > On Thu, May 06, 2021 at 05:44:55PM +0000, Guido Kiener wrote:
-> > > > > > -----Original Message-----
-> > > > > > From: Alan Stern
-> > > > > > Sent: Thursday, May 6, 2021 3:49 PM
-> > > > > > To: Kiener Guido 14DS1 <Guido.Kiener@rohde-schwarz.com>
-> > > > > > >
-> > > > > > > Thanks for your assessment. I agree with the general feeling. I
-> > > > > > > counted about hundred specific usb drivers, so wouldn't it be
-> > > > > > > better to fix the
-> > > > > > problem in some of the host drivers (e.g. urb.c)?
-> > > > > > > We could return an error when calling usb_submit_urb() on an erroneous
-> > > > pipe.
-> > > > > > > I cannot estimate the side effects and we need to check all
-> > > > > > > drivers again how they deal with the error situation. Maybe there
-> > > > > > > are some special driver
-> > > > > > that need a specialized error handling.
-> > > > > > > In this case these drivers could reset the (new?) error flag to
-> > > > > > > allow calling usb_submit_urb() again without error. This could work, isn't it?
-> > > > > >
-> > > > > > That is feasible, although it would be an awkward approach.  As you
-> > > > > > said, the side effects aren't clear.  But it might work.
-> > > > >
-> > > > > Otherwise I see only the other approach to change hundred drivers and
-> > > > > add the cases EPROTO, EILSEQ and ETIME in each callback handler. The
-> > > > > usbtmc driver already respects the EILSEQ and ETIME, and only EPROTO is
-> > > > missing.
-> > > > > The rest should be more a management task.
-> > > > > BTW do you assume it is only a problem for INT pipes or is it also a
-> > > > > problem for isochronous and bulk transfers?
-> > > >
-> > > > All of them.  Control too.
-> > > >
-> > > > > > Will you be able to test patches?
-> > > > >
-> > > > > I only can test the USBTMC function in some different PCs. I do not
-> > > > > have automated regression tests for USB drivers or Linux kernels.
-> > > > > Maybe there is company who could do that.
-> > > >
-> > > > Well then, if I do find time to write a patch, I'll ask you to try it out with the usbtmc
-> > > > driver.
-> > >
-> > > You mean that you will do a patch in urb.c or a host driver? Or just add a line in usbtmc.c?
-> > > Anyhow there is no hurry. On May 20 I will send you a mail if I'm able to
-> > > provoke one of these hardware errors EPROTO, EILSQ, or ETIME. Otherwise
-> > > it doesn't make sense to test it.
-> > >
-> > > -Guido
-> >
-> > EPROTO is a link level issue and needs to be handled by the host driver.
->
-> Are you referring to the host controller driver, or to the class device
-> driver running on the host?  The host controller driver is responsible
-> for creating the -EPROTO error code in the first place.  The class
-> device driver is responsible for taking an appropriate action in
-> response.
-host controller driver
->
-> > When the host driver detects a protocol error while processing an URB
-> > it completes the URB with EPROTO status and marks the endpoint as
-> > halted.
->
-> Not true.  It does not mark the endpoint as halted, not unless it
-> receives a STALL handshake from the device.  A STALL is not a protocol
-> error.
->
-> > When the class driver resubmits the URB and the if the host driver
-> > finds the endpoint still marked as halted it should return EPIPE
-> > status on the resubmitted URB
->
-> Irrelevant.
-Not at all. The point is that when an application is talking to an
-instrument over the usbtmc driver, the underlying host controller and
-its driver will detect and silence a babbling endpoint.
-Hence no EPROTO loop will ensue in this case and therefore no changes
-are needed in usbtmc.
->
-> > When the class driver and usbtmc in particular receives an URB with
-> > EPIPE status it cleans up and does not resubmit.
-> > Can someone from syzbot land please confirm whether usbtmc running on
-> > the xhci host driver causes an RCU stall to be detected ?
->
-> That is not an easy thing to test, and syzbot is not capable of testing
-> it.  You would need a USB device which could deliberately be set to
-> create a protocol error; I don't know of any devices like that.
->
-> Alan Stern
+
+
+On 5/11/2021 1:13 AM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>> The list_for_each_entry_safe() macro saves the current item (n) and
+>> the item after (n+1), so that n can be safely removed without
+>> corrupting the list.  However, when traversing the list and removing
+>> items using gadget giveback, the DWC3 lock is briefly released,
+>> allowing other routines to execute.  There is a situation where, while
+>> items are being removed from the cancelled_list using
+>> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+>> routine is running in parallel (due to UDC unbind).  As the cleanup
+>> routine removes n, and the pullup disable removes n+1, once the
+>> cleanup retakes the DWC3 lock, it references a request who was already
+>> removed/handled.  With list debug enabled, this leads to a panic.
+>> Ensure all instances of the macro are replaced where gadget giveback
+>> is used.
+>>
+>> Example call stack:
+>>
+>> Thread#1:
+>> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>>     ->list_for_each_entry_safe()
+>>     ->dwc3_gadget_giveback(n)
+>>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+>>       ->spin_unlock
+>>       ->Thread#2 executes
+>>       ...
+>>     ->dwc3_gadget_giveback(n+1)
+>>       ->Already removed!
+>>
+>> Thread#2:
+>> dwc3_gadget_pullup()
+>>   ->waiting for dwc3 spin_lock
+>>   ...
+>>   ->Thread#1 released lock
+>>   ->dwc3_stop_active_transfers()
+>>     ->dwc3_remove_requests()
+>>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+>>       ->dwc3_gadget_giveback()
+>>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
+>>         ->spin_unlock
+>>
+>> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+>> ---
+>> Changes in v2:
+>>  - Updated commit message with context call stack of an example scenario
+>>    seen on device.
+>>
+>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index dd80e5c..efa939b 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+>>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+>>  {
+>>  	struct dwc3_request		*req;
+>> -	struct dwc3_request		*tmp;
+>>  	struct dwc3			*dwc = dep->dwc;
+>>  
+>> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+>> +	while (!list_empty(&dep->cancelled_list)) {
+>> +		req = next_request(&dep->cancelled_list);
+> 
+> couldn't this be solved list_replace_init() instead? Then we can keep
+> using the regular list_for_each_entry_safe() which has an added semantic
+> meaning due to its name.
+> 
+
+Hi Felipe,
+
+Sorry for the late response.  So I tried with a list_replace_init() to
+within the list_for_each_entry_safe() loop to update tmp w/ the
+cancelled_list list head, but the issue was still observed.  This is
+because we can't replace the reference the loop already has stored in
+tmp, which is simply updated as the current item on the next iteration.
+
+I believe this is what you were trying to achieve?
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
