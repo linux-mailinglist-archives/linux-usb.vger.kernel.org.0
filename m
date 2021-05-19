@@ -2,85 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60383388E5B
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 14:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CD1388EB3
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 15:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353464AbhESMtF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 08:49:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56450 "EHLO mail.kernel.org"
+        id S1353552AbhESNNi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 09:13:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35038 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233234AbhESMtE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 08:49:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DEBB611BF;
-        Wed, 19 May 2021 12:47:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621428465;
-        bh=jDsQgzBa0hZeYn+cxkntyVgDH6tU89hxn6VnTQMi/K4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=el/e4kZrAT+ReFKyC317+KgeCxfTuX8FcyB/eXtOSaU0sTX4UD26flNq08/sydEAp
-         UJamwLkmHee2bCcOyWTapJC9UQwdqfzTE8vJ1rwdPqSPphNFEUXfk6bjElmlI/Bh4+
-         6DKpFb82eK9C/KqtR1JCliefSjEYkp/Kg3mm6yssES7h4nx6JiGCz81ka7v4HF3vrG
-         EnW+Bm+ALmmLF1d1O23p1sdT0I4hNEUEM4jpOjtWUayYaAQ+V78xPn9p+D+zT98UIu
-         pWCjwryL1xhp7OwhpNX+dynvIGA2RO3CYOxDhJvtNbsCZdJQqs6A0o1MbtRxHGnGU5
-         b8SYrQxulgR6w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ljLc0-000879-30; Wed, 19 May 2021 14:47:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
-Subject: [PATCH net] net: hso: bail out on interrupt URB allocation failure
-Date:   Wed, 19 May 2021 14:47:17 +0200
-Message-Id: <20210519124717.31144-1-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
+        id S1346578AbhESNNf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 09:13:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 89E3A61355;
+        Wed, 19 May 2021 13:12:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621429936;
+        bh=0MV3p9GwMXsSm60yeeeyPlPknmCq/WU5oNFHBuWy9s4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c8Y8Lp1PWIwQPA/JbKyiQdAw1qraj7sfYgMkY/hiKnPH7+72wZBFrsIga+Cap2xJb
+         skBEV5dv6FogtptQoiPW1GLWTqM5b9ph16rOT5Wy1zgYkZO8d2Hf5vShHqONSyDVMq
+         Ld10hEmso4nlusgTDAGWeK1w2iiJ8WC0HQW4WUa8=
+Date:   Wed, 19 May 2021 15:12:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH 1/1] usb: xhci: remove unused variable 'len' in
+ xhci_unmap_temp_buf()
+Message-ID: <YKUOra3I+c+xeO+s@kroah.com>
+References: <20210519123304.7885-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210519123304.7885-1-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 31db0dbd7244 ("net: hso: check for allocation failure in
-hso_create_bulk_serial_device()") recently started returning an error
-when the driver fails to allocate resources for the interrupt endpoint
-and tiocmget functionality.
+On Wed, May 19, 2021 at 08:33:04PM +0800, Zhen Lei wrote:
+> GCC reports the following warning with W=1:
+> 
+> drivers/usb/host/xhci.c:1349:15: warning:
+>  variable 'len' set but not used [-Wunused-but-set-variable]
+>  1349 |  unsigned int len;
+>       |               ^~~
+> 
+> This variable is not used, remove it to fix the warning.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  drivers/usb/host/xhci.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 27283654ca08..a75ed4a00997 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+>  
+>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>  {
+> -	unsigned int len;
+>  	unsigned int buf_len;
+>  	enum dma_data_direction dir;
+>  
+> @@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>  				 dir);
+>  
+>  	if (usb_urb_dir_in(urb))
+> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> +		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>  					   urb->transfer_buffer,
+>  					   buf_len,
+>  					   0);
+> -- 
+> 2.25.1
+> 
+> 
 
-For consistency let's bail out from probe also if the URB allocation
-fails.
+Wow, no.  I keep telling you that this is not ok.  Why keep sending
+this?
 
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/net/usb/hso.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index 260f850d69eb..b48b2a25210c 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -2635,14 +2635,14 @@ static struct hso_device *hso_create_bulk_serial_device(
- 		}
- 
- 		tiocmget->urb = usb_alloc_urb(0, GFP_KERNEL);
--		if (tiocmget->urb) {
--			mutex_init(&tiocmget->mutex);
--			init_waitqueue_head(&tiocmget->waitq);
--		} else
--			hso_free_tiomget(serial);
--	}
--	else
-+		if (!tiocmget->urb)
-+			goto exit;
-+
-+		mutex_init(&tiocmget->mutex);
-+		init_waitqueue_head(&tiocmget->waitq);
-+	} else {
- 		num_urbs = 1;
-+	}
- 
- 	if (hso_serial_common_create(serial, num_urbs, BULK_URB_RX_SIZE,
- 				     BULK_URB_TX_SIZE))
--- 
-2.26.3
-
+greg k-h
