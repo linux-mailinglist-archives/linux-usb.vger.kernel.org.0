@@ -2,205 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 246EC3892CC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 17:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3356538936A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 18:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354836AbhESPld (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 11:41:33 -0400
-Received: from mga11.intel.com ([192.55.52.93]:42760 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242076AbhESPlc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 11:41:32 -0400
-IronPort-SDR: HOekXzJLbMXUw/cUBNER1ZAveAK9A+JiAGTW5HjlDNGKcYfExtnqplqI/A9/EoMLGu4YuijbzR
- LAlj/LzCeX1g==
-X-IronPort-AV: E=McAfee;i="6200,9189,9989"; a="197914733"
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="197914733"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 08:40:12 -0700
-IronPort-SDR: hdHUBcmAZyGroYrFUpCWMQzeJrrtmtt09zuAHumPfuwzCLzOFzrCCojKx3swDRCELjcgz12Rdu
- 04a0oB3Tf2Ag==
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="411782499"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 08:40:07 -0700
-Received: by lahna (sSMTP sendmail emulation); Wed, 19 May 2021 18:40:05 +0300
-Date:   Wed, 19 May 2021 18:40:05 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org,
-        Casey G Bowman <casey.g.bowman@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Christian Kellner <ckellner@redhat.com>,
+        id S1344976AbhESQP5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 12:15:57 -0400
+Received: from mail02.rohde-schwarz.com ([80.246.32.97]:4883 "EHLO
+        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240333AbhESQP4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 12:15:56 -0400
+Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
+ (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Wed, 19 May 2021
+ 18:14:23 +0200
+Received: from GMU418.rsint.net ([10.0.230.144])
+          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 192;
+          Wed, 19 May 2021 18:14:22 +0200 (CEST)
+Received: from GMU001.rsint.net (10.0.2.59) by GMU418.rsint.net (10.0.230.144)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.4; Wed, 19 May
+ 2021 18:14:22 +0200
+Received: from GMU006.rsint.net (10.0.2.28) by GMU001.rsint.net (10.0.2.59)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.4; Wed, 19
+ May 2021 18:14:20 +0200
+Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
+ GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
+ 15.01.2242.010; Wed, 19 May 2021 18:14:20 +0200
+From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        dave penkler <dpenkler@gmail.com>
+CC:     Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH 2/9] thunderbolt: Add USB4 port devices
-Message-ID: <20210519154005.GV291593@lahna.fi.intel.com>
-References: <20210519141259.84839-1-mika.westerberg@linux.intel.com>
- <20210519141259.84839-3-mika.westerberg@linux.intel.com>
- <YKUrZ0b4UObhtV9k@kuha.fi.intel.com>
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: RE: Re: Re: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx
+Thread-Topic: Re: Re: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx /ur/
+Thread-Index: AddMydQnpf+UY0qAQvO+sGdBieUd+Q==
+Date:   Wed, 19 May 2021 16:14:20 +0000
+Message-ID: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-rus_sensitivity: 10
+hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
+hvs-prefix: R_S
+x-originating-ip: [10.0.9.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKUrZ0b4UObhtV9k@kuha.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-IQAV: YES
+X-GBS-PROC: KF5gH9ulGnv8abbfqGb4GPdB7csXqGJIJgSlDrbLuYoTJfkM0p+NxXaFwTtnAzYxAlc1TIVIPQm7qPURuUExXf+/J1VB5RzfMdXcQRGd2JnaGfc/E7m8OsoVMaIY0Z+m
+X-GBS-PROCJOB: SBChRPJW6y3U+esSqSfPEbGTio5ezKPGjfXBfNkxmX7jpBbHiaQfG4Xm73Ut51dc
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
-
-On Wed, May 19, 2021 at 06:14:47PM +0300, Heikki Krogerus wrote:
-> On Wed, May 19, 2021 at 05:12:52PM +0300, Mika Westerberg wrote:
-> > Create devices for each USB4 port. This is needed when we add retimer
-> > access when there is no device connected but may be useful for other
-> > purposes too following what USB subsystem does. This exports a single
-> > attribute "link" that shows the type of the USB4 link (or "none" if
-> > there is no cable connected).
-> 
-> <snip>
-> 
-> > +/*
-> > + * USB4 port device
-> > + *
-> > + * Copyright (C) 2021, Intel Corporation
-> > + * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > + */
-> > +
-> > +#include <linux/acpi.h>
-> > +#include <linux/pm_runtime.h>
-> > +
-> > +#include "tb.h"
-> > +
-> > +static ssize_t link_show(struct device *dev, struct device_attribute *attr,
-> > +			 char *buf)
-> > +{
-> > +	struct usb4_port *usb4 = tb_to_usb4_port_device(dev);
-> > +	struct tb_port *port = usb4->port;
-> > +	struct tb *tb = port->sw->tb;
-> > +	const char *link;
-> > +
-> > +	if (mutex_lock_interruptible(&tb->lock))
-> > +		return -ERESTARTSYS;
-> > +
-> > +	if (tb_is_upstream_port(port))
-> > +		link = port->sw->link_usb4 ? "usb4" : "tbt";
-> > +	else if (tb_port_has_remote(port))
-> > +		link = port->remote->sw->link_usb4 ? "usb4" : "tbt";
-> > +	else
-> > +		link = "none";
-> > +
-> > +	mutex_unlock(&tb->lock);
-> > +
-> > +	return sysfs_emit(buf, "%s\n", link);
-> > +}
-> > +static DEVICE_ATTR_RO(link);
-> > +
-> > +static struct attribute *common_attrs[] = {
-> > +	&dev_attr_link.attr,
-> > +	NULL
-> > +};
-> > +
-> > +static const struct attribute_group common_group = {
-> > +	.attrs = common_attrs,
-> > +};
-> > +
-> > +static const struct attribute_group *usb4_port_device_groups[] = {
-> > +	&common_group,
-> > +	NULL
-> > +};
-> > +
-> > +static void usb4_port_device_release(struct device *dev)
-> > +{
-> > +	struct usb4_port *usb4 = container_of(dev, struct usb4_port, dev);
-> > +
-> > +	kfree(usb4);
-> > +}
-> > +
-> > +struct device_type usb4_port_device_type = {
-> > +	.name = "usb4_port",
-> > +	.groups = usb4_port_device_groups,
-> > +	.release = usb4_port_device_release,
-> > +};
-> 
-> I noticed that in the next patch you add acpi_bus_type for these
-> ports, but is that really necessary? Why not just:
-> 
-> int usb4_port_fwnode_match(struct tb_port *port, struct fwnode_handle *fwnode)
-> {
->         if (is_acpi_device_node(fwnode))
->                 return acpi_device_adr(to_acpi_device_node(fwnode)) == port->port;
-> 
->         return 0;
-> }
-
-I have to say I might be missing some new additions to fwnode front but
-the acpi_bus_type is used to match the ACPI nodes to usb4_ports and also
-to routers. I see that this one may work for the former but not sure
-about the latter.
-
-I guess we could do similar for routers too in switch.c.
-
-However, I would like to keep ACPI specific code in acpi.c if possible
-but if this is the preferred way then no problem doing what you say :)
-
-> > +/**
-> > + * usb4_port_device_add() - Add USB4 port device
-> > + * @port: Lane 0 adapter port to add the USB4 port
-> > + *
-> > + * Creates and registers a USB4 port device for @port. Returns the new
-> > + * USB4 port device pointer or ERR_PTR() in case of error.
-> > + */
-> > +struct usb4_port *usb4_port_device_add(struct tb_port *port)
-> > +{
-> 
->         struct fwnode_handle *child;
-> 
-> > +	struct usb4_port *usb4;
-> > +	int ret;
-> > +
-> > +	usb4 = kzalloc(sizeof(*usb4), GFP_KERNEL);
-> > +	if (!usb4)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	usb4->port = port;
-> > +	usb4->dev.type = &usb4_port_device_type;
-> > +	usb4->dev.parent = &port->sw->dev;
-> > +	dev_set_name(&usb4->dev, "usb4_port%d", port->port);
-> 
-> and then here something like this (feel free to improve this part):
-> 
->         device_for_each_child_node(&port->sw->dev, child) {
->                 if (usb4_port_fwnode_match(port, child)) {
->                         usb4->dev.fwnode = child;
->                         break;
->                 }
->         }
-> 
-> Or maybe I'm missing something?
-> 
-> > +	ret = device_register(&usb4->dev);
-> > +	if (ret) {
-> > +		put_device(&usb4->dev);
-> > +		return ERR_PTR(ret);
-> > +	}
-> > +
-> > +	pm_runtime_no_callbacks(&usb4->dev);
-> > +	pm_runtime_set_active(&usb4->dev);
-> > +	pm_runtime_enable(&usb4->dev);
-> > +	pm_runtime_set_autosuspend_delay(&usb4->dev, TB_AUTOSUSPEND_DELAY);
-> > +	pm_runtime_mark_last_busy(&usb4->dev);
-> > +	pm_runtime_use_autosuspend(&usb4->dev);
-> > +
-> > +	return usb4;
-> > +}
-> 
-> thanks,
-> 
-> -- 
-> heikki
+PiBPbiBXZWQsIE1heSAxOSwgMjAyMSBhdCAxMDo0ODoyOUFNICswMjAwLCBkYXZlIHBlbmtsZXIg
+d3JvdGU6DQo+ID4gT24gU2F0LCA4IE1heSAyMDIxIGF0IDE2OjI5LCBBbGFuIFN0ZXJuIDxzdGVy
+bkByb3dsYW5kLmhhcnZhcmQuZWR1PiB3cm90ZToNCj4gPiA+DQo+ID4gPiBPbiBTYXQsIE1heSAw
+OCwgMjAyMSBhdCAxMDoxNDo0MUFNICswMjAwLCBkYXZlIHBlbmtsZXIgd3JvdGU6DQo+ID4gPiA+
+IFdoZW4gdGhlIGhvc3QgZHJpdmVyIGRldGVjdHMgYSBwcm90b2NvbCBlcnJvciB3aGlsZSBwcm9j
+ZXNzaW5nIGFuDQo+ID4gPiA+IFVSQiBpdCBjb21wbGV0ZXMgdGhlIFVSQiB3aXRoIEVQUk9UTyBz
+dGF0dXMgYW5kIG1hcmtzIHRoZSBlbmRwb2ludA0KPiA+ID4gPiBhcyBoYWx0ZWQuDQo+ID4gPg0K
+PiA+ID4gTm90IHRydWUuICBJdCBkb2VzIG5vdCBtYXJrIHRoZSBlbmRwb2ludCBhcyBoYWx0ZWQs
+IG5vdCB1bmxlc3MgaXQNCj4gPiA+IHJlY2VpdmVzIGEgU1RBTEwgaGFuZHNoYWtlIGZyb20gdGhl
+IGRldmljZS4gIEEgU1RBTEwgaXMgbm90IGENCj4gPiA+IHByb3RvY29sIGVycm9yLg0KPiA+ID4N
+Cj4gPiA+ID4gV2hlbiB0aGUgY2xhc3MgZHJpdmVyIHJlc3VibWl0cyB0aGUgVVJCIGFuZCB0aGUg
+aWYgdGhlIGhvc3QgZHJpdmVyDQo+ID4gPiA+IGZpbmRzIHRoZSBlbmRwb2ludCBzdGlsbCBtYXJr
+ZWQgYXMgaGFsdGVkIGl0IHNob3VsZCByZXR1cm4gRVBJUEUNCj4gPiA+ID4gc3RhdHVzIG9uIHRo
+ZSByZXN1Ym1pdHRlZCBVUkINCj4gPiA+DQo+ID4gPiBJcnJlbGV2YW50Lg0KPiA+IE5vdCBhdCBh
+bGwuIFRoZSBwb2ludCBpcyB0aGF0IHdoZW4gYW4gYXBwbGljYXRpb24gaXMgdGFsa2luZyB0byBh
+bg0KPiA+IGluc3RydW1lbnQgb3ZlciB0aGUgdXNidG1jIGRyaXZlciwgdGhlIHVuZGVybHlpbmcg
+aG9zdCBjb250cm9sbGVyIGFuZA0KPiA+IGl0cyBkcml2ZXIgd2lsbCBkZXRlY3QgYW5kIHNpbGVu
+Y2UgYSBiYWJibGluZyBlbmRwb2ludC4NCj4gDQo+IE5vLCB0aGV5IHdvbid0LiAgVGhhdCBpcywg
+dGhleSB3aWxsIGRldGVjdCBhIGJhYmJsZSBlcnJvciBhbmQgcmV0dXJuIGFuIGVycm9yIHN0YXR1
+cywgYnV0DQo+IHRoZXkgd29uJ3Qgc2lsZW5jZSB0aGUgZW5kcG9pbnQuICBXaGF0IG1ha2VzIHlv
+dSB0aGluayB0aGV5IHdpbGw/DQoNCk1heWJlIHRoZXJlIGlzIGEgbWlzdW5kZXJzdGFuZGluZy4g
+SSBndWVzcyB0aGF0IERhdmUgd2FudGVkIHRvIHByb3Bvc2U6DQoiRVBST1RPIGlzIGEgbGluayBs
+ZXZlbCBpc3N1ZSBhbmQgbmVlZHMgdG8gYmUgaGFuZGxlZCBieSB0aGUgaG9zdCBkcml2ZXIuDQpX
+aGVuIHRoZSBob3N0IGRyaXZlciBkZXRlY3RzIGEgcHJvdG9jb2wgZXJyb3Igd2hpbGUgcHJvY2Vz
+c2luZyBhbg0KVVJCIGl0IFNIT1VMRCBjb21wbGV0ZSB0aGUgVVJCIHdpdGggRVBST1RPIHN0YXR1
+cyBhbmQgU0hPVUxEIG1hcmsgdGhlIGVuZHBvaW50DQphcyBoYWx0ZWQuIg0KSXMgdGhpcyBhIHJl
+YWxpc3RpYyBmaXggZm9yIGFsbCBob3N0IGRyaXZlcnM/DQoNCi1HdWlkbw0K
