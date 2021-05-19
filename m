@@ -2,160 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAF43889DE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 10:52:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFFFE3889EF
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 10:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343974AbhESIyH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 04:54:07 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:52561 "EHLO m43-7.mailgun.net"
+        id S239206AbhESI4d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 04:56:33 -0400
+Received: from mga14.intel.com ([192.55.52.115]:36698 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344054AbhESIyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 04:54:02 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1621414363; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=NZyAntkG5h7vLjy6bsXrV6/J4Qb+kuYpdE+eTcZ/D9k=; b=SnzMT5yfkVqcaNHkmAUks6T19jBkckDAXsjIWYVl6lR+YbFpfgZ6F2PYlsEScyr4AX59m1ou
- Pz0nMnuLMaGM4ILcnifEEkirg8jzN3F+y7cQyT5g0YvvfY/ryia2/zlC4xejrP/oly4Ev25R
- teuVMkWvo1585o4Z2xW3Nk26HG0=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 60a4d1da1449805ea28b2d1e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 19 May 2021 08:52:42
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4BB9AC433F1; Wed, 19 May 2021 08:52:42 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.96.176] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 91B64C433D3;
-        Wed, 19 May 2021 08:52:40 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 91B64C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace list_for_each_entry_safe()
- if using giveback
-To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
-        peter.chen@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org
-References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
- <87tun9g01v.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
-Date:   Wed, 19 May 2021 01:52:39 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S1343679AbhESI43 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 04:56:29 -0400
+IronPort-SDR: vK5WTufI+iNy5WFWtxRpid1AjcN6j4EoLJY6XOWu1S/N2QS+f/V6moHHhiyB0attKFYzV+yh+D
+ AbNkgb16LPog==
+X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="200621690"
+X-IronPort-AV: E=Sophos;i="5.82,312,1613462400"; 
+   d="scan'208";a="200621690"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 01:55:10 -0700
+IronPort-SDR: kToaMcwcqCE3xxLHQCvC1Z8F+SFsUdEP5XPo122DyWBTJl8efChBC9pxZDKmM6dSvfjZ5t+zaK
+ fDYtoP9rc4Ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,312,1613462400"; 
+   d="scan'208";a="433411092"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga007.jf.intel.com with ESMTP; 19 May 2021 01:55:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id DB31A12F; Wed, 19 May 2021 11:55:29 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] usb: typec: wcove: Fx wrong kernel doc format
+Date:   Wed, 19 May 2021 11:55:27 +0300
+Message-Id: <20210519085527.48657-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <87tun9g01v.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The top comment in the file wrongly uses kernel doc format:
 
+.../typec/tcpm/wcove.c:17: warning: expecting prototype for typec_wcove.c - WhiskeyCove PMIC USB Type(). Prototype was for WCOVE_CHGRIRQ0() instead
 
-On 5/11/2021 1:13 AM, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Wesley Cheng <wcheng@codeaurora.org> writes:
->> The list_for_each_entry_safe() macro saves the current item (n) and
->> the item after (n+1), so that n can be safely removed without
->> corrupting the list.  However, when traversing the list and removing
->> items using gadget giveback, the DWC3 lock is briefly released,
->> allowing other routines to execute.  There is a situation where, while
->> items are being removed from the cancelled_list using
->> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
->> routine is running in parallel (due to UDC unbind).  As the cleanup
->> routine removes n, and the pullup disable removes n+1, once the
->> cleanup retakes the DWC3 lock, it references a request who was already
->> removed/handled.  With list debug enabled, this leads to a panic.
->> Ensure all instances of the macro are replaced where gadget giveback
->> is used.
->>
->> Example call stack:
->>
->> Thread#1:
->> __dwc3_gadget_ep_set_halt() - CLEAR HALT
->>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
->>     ->list_for_each_entry_safe()
->>     ->dwc3_gadget_giveback(n)
->>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
->>       ->spin_unlock
->>       ->Thread#2 executes
->>       ...
->>     ->dwc3_gadget_giveback(n+1)
->>       ->Already removed!
->>
->> Thread#2:
->> dwc3_gadget_pullup()
->>   ->waiting for dwc3 spin_lock
->>   ...
->>   ->Thread#1 released lock
->>   ->dwc3_stop_active_transfers()
->>     ->dwc3_remove_requests()
->>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
->>       ->dwc3_gadget_giveback()
->>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
->>         ->spin_unlock
->>
->> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> Reviewed-by: Peter Chen <peter.chen@kernel.org>
->> ---
->> Changes in v2:
->>  - Updated commit message with context call stack of an example scenario
->>    seen on device.
->>
->>  drivers/usb/dwc3/gadget.c | 8 ++++----
->>  1 file changed, 4 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index dd80e5c..efa939b 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
->>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
->>  {
->>  	struct dwc3_request		*req;
->> -	struct dwc3_request		*tmp;
->>  	struct dwc3			*dwc = dep->dwc;
->>  
->> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
->> +	while (!list_empty(&dep->cancelled_list)) {
->> +		req = next_request(&dep->cancelled_list);
-> 
-> couldn't this be solved list_replace_init() instead? Then we can keep
-> using the regular list_for_each_entry_safe() which has an added semantic
-> meaning due to its name.
-> 
+Fix this by converting it to plain comment.
 
-Hi Felipe,
+Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/usb/typec/tcpm/wcove.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Sorry for the late response.  So I tried with a list_replace_init() to
-within the list_for_each_entry_safe() loop to update tmp w/ the
-cancelled_list list head, but the issue was still observed.  This is
-because we can't replace the reference the loop already has stored in
-tmp, which is simply updated as the current item on the next iteration.
-
-I believe this is what you were trying to achieve?
-
-Thanks
-Wesley Cheng
-
+diff --git a/drivers/usb/typec/tcpm/wcove.c b/drivers/usb/typec/tcpm/wcove.c
+index 5d125339687a..20917d85d6f4 100644
+--- a/drivers/usb/typec/tcpm/wcove.c
++++ b/drivers/usb/typec/tcpm/wcove.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/**
++/*
+  * typec_wcove.c - WhiskeyCove PMIC USB Type-C PHY driver
+  *
+  * Copyright (C) 2017 Intel Corporation
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.30.2
+
