@@ -2,126 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3548A388F3F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 15:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 410A8388F4E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 15:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241972AbhESNis (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 09:38:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:29408 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240097AbhESNis (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 09:38:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1621431448;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bU4pryl0+5U5KV31mW2OweQfTQ6FVvGmzl3RdTyAV38=;
-        b=i6MN8MVz7R3ysk03fjntuyFdWK6IDkzQsFPm/QA5LX0jFnbPJjebsR519XOZDJlMY0q/Xq
-        UsqqA9hckm9eMb/aKWZBZWutXRvyvV1koM0ohkYtY2Moh0SAenTHzB7kxEK7BqJ6NcRwaU
-        5VWDK+tS8rwwQV3+wJzpOOWFPVrF2hA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-187-dSw4mKstMnOf0AWomQeu7w-1; Wed, 19 May 2021 09:37:25 -0400
-X-MC-Unique: dSw4mKstMnOf0AWomQeu7w-1
-Received: by mail-ed1-f70.google.com with SMTP id w1-20020aa7da410000b029038d323eeee3so5658308eds.8
-        for <linux-usb@vger.kernel.org>; Wed, 19 May 2021 06:37:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=bU4pryl0+5U5KV31mW2OweQfTQ6FVvGmzl3RdTyAV38=;
-        b=qSxLKBfDRCtnTOEXQvozncBbLnqM16C27JaZuEmteNKcp1cynWml8zKVhmvSyiJYT6
-         F0nvcngAz7vj3WIqYYm+cZVoNFb3hd81+UyoAtVHohbIZiLsrosuZtpyv4Jx5nw7SR1W
-         T0HE8pGXvkAvssKs71QoDV5aerQ7XNov/c7/yCb3b2n6dclqdnXuykuJeQeiD3msd+KJ
-         JuluzNoEfEWUhP/oyunWg5F5WMdfGv80OW1BZAGlsF9U3pmXTl8sS9IAkafkML/dZDyv
-         tqlIW2v1d1V1SDR/ozvWMR/I9cXiWky8QQAzILOBtUDKcDFgMn0yjEQhQ1Rsg2yGSdlq
-         2Jww==
-X-Gm-Message-State: AOAM530HJFbq2gP9lnUL1MEwSKPZvRa6iwTSbWucmFDEGpqTpSsh8oxG
-        WPoEsDk+5XTEhxsDvfl/lkvsOaAuEp5HTPF4m56k/8WXMkpPjW6T8fJwQsreRkBYZygsLZQG+Xo
-        ree3G6M6CNBjbhRAapCKKs+m7OA6wH50OeLkfOjgzw5ZXy7PW9DU7zcYik7UMfkM5Fw7alhbg
-X-Received: by 2002:a05:6402:3098:: with SMTP id de24mr14306481edb.339.1621431444335;
-        Wed, 19 May 2021 06:37:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtmP5ppUfGnIYTS3emu23ErVRxU0Y2zdN/m68QRjcWJURyvbcDG+r+AD2UiWx7vPUAM3F1gg==
-X-Received: by 2002:a05:6402:3098:: with SMTP id de24mr14306432edb.339.1621431444058;
-        Wed, 19 May 2021 06:37:24 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id a7sm4664820edr.15.2021.05.19.06.37.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 May 2021 06:37:23 -0700 (PDT)
-Subject: Re: [PATCH 9/9] platform/x86/intel_cht_int33fe: Correct "displayport"
- fwnode reference
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20210503154647.142551-1-hdegoede@redhat.com>
- <20210503154647.142551-10-hdegoede@redhat.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <2d02c9ba-1385-41cf-6150-ca8ed5e835ba@redhat.com>
-Date:   Wed, 19 May 2021 15:37:23 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S1346584AbhESNla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 09:41:30 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:3600 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232021AbhESNl3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 09:41:29 -0400
+Received: from dggems704-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FlYpQ48VYzmXZj;
+        Wed, 19 May 2021 21:37:50 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggems704-chm.china.huawei.com (10.3.19.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 19 May 2021 21:40:06 +0800
+Received: from [127.0.0.1] (10.174.177.72) by dggpemm500006.china.huawei.com
+ (7.185.36.236) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 19 May
+ 2021 21:40:06 +0800
+Subject: Re: [PATCH 1/1] usb: xhci: remove unused variable 'len' in
+ xhci_unmap_temp_buf()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb <linux-usb@vger.kernel.org>
+References: <20210519123304.7885-1-thunder.leizhen@huawei.com>
+ <YKUOra3I+c+xeO+s@kroah.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <c7d39376-d18a-73db-dc33-03925e606ca3@huawei.com>
+Date:   Wed, 19 May 2021 21:40:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20210503154647.142551-10-hdegoede@redhat.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <YKUOra3I+c+xeO+s@kroah.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.72]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
 
-On 5/3/21 5:46 PM, Hans de Goede wrote:
-> The Type-C connector on these devices is connected to DP-2 not DP-1,
-> so the reference must be to the DD04 child-node of the GPU, rather
-> then the DD02 child-node.
+
+On 2021/5/19 21:12, Greg Kroah-Hartman wrote:
+> On Wed, May 19, 2021 at 08:33:04PM +0800, Zhen Lei wrote:
+>> GCC reports the following warning with W=1:
+>>
+>> drivers/usb/host/xhci.c:1349:15: warning:
+>>  variable 'len' set but not used [-Wunused-but-set-variable]
+>>  1349 |  unsigned int len;
+>>       |               ^~~
+>>
+>> This variable is not used, remove it to fix the warning.
+>>
+>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>> ---
+>>  drivers/usb/host/xhci.c | 3 +--
+>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 27283654ca08..a75ed4a00997 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+>>  
+>>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>>  {
+>> -	unsigned int len;
+>>  	unsigned int buf_len;
+>>  	enum dma_data_direction dir;
+>>  
+>> @@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>>  				 dir);
+>>  
+>>  	if (usb_urb_dir_in(urb))
+>> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>> +		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>>  					   urb->transfer_buffer,
+>>  					   buf_len,
+>>  					   0);
+>> -- 
+>> 2.25.1
+>>
+>>
 > 
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> Wow, no.  I keep telling you that this is not ok.  Why keep sending
+> this?
 
-Since this is pretty much independent from the rest of the series,
-I'll take this upstream through the pdx86 tree.
+Sorry, I forgot to google it, someone already posted it.
 
-I've added this to my review-hans branch now, and it will get added
-to for-next from there.
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/platform/x86/intel_cht_int33fe_typec.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/intel_cht_int33fe_typec.c b/drivers/platform/x86/intel_cht_int33fe_typec.c
-> index b61bad9cc8d2..d59544167430 100644
-> --- a/drivers/platform/x86/intel_cht_int33fe_typec.c
-> +++ b/drivers/platform/x86/intel_cht_int33fe_typec.c
-> @@ -168,8 +168,8 @@ static int cht_int33fe_setup_dp(struct cht_int33fe_data *data)
->  		return -ENODEV;
->  	}
->  
-> -	/* Then the DP child device node */
-> -	data->dp = device_get_named_child_node(&pdev->dev, "DD02");
-> +	/* Then the DP-2 child device node */
-> +	data->dp = device_get_named_child_node(&pdev->dev, "DD04");
->  	pci_dev_put(pdev);
->  	if (!data->dp)
->  		return -ENODEV;
+> greg k-h
+> 
+> .
 > 
 
