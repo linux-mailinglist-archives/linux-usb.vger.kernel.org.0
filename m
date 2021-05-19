@@ -2,106 +2,191 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E99D389215
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 16:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A3A8389259
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 17:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354935AbhESO6C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 10:58:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49942 "EHLO mail.kernel.org"
+        id S1354161AbhESPQO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 11:16:14 -0400
+Received: from mga07.intel.com ([134.134.136.100]:9233 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347646AbhESO6C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 10:58:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E9F94610A8;
-        Wed, 19 May 2021 14:56:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621436202;
-        bh=jzfdsFACYB1jXMFuw3OU+MoiYpESakhRDHm2KhGQpgk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QQKY2yl6NXZDQCGVkReASRYXs+4z2cE1grbEstvCw7PgvvYbap/bwg3R57auIKud2
-         XdWEauAFPrejBMcGwsoBD9j2tlcYjj83pJrqtqTX9jpZJ6UOTQVnUt0dnvQ0cipCcy
-         yjH31uX9bNG7wzK+S8jojZLor0+mcMZo0ahze6eY=
-Date:   Wed, 19 May 2021 16:56:40 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 1/1] usb: xhci: remove unused variable 'len' in
- xhci_unmap_temp_buf()
-Message-ID: <YKUnKKRqEPzh8h6C@kroah.com>
-References: <20210519123304.7885-1-thunder.leizhen@huawei.com>
- <YKUOra3I+c+xeO+s@kroah.com>
- <c7d39376-d18a-73db-dc33-03925e606ca3@huawei.com>
- <d5755fc6-3c1d-f780-5105-d39771c73427@huawei.com>
+        id S231823AbhESPQN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 11:16:13 -0400
+IronPort-SDR: kkIlW0bV0396rn6ANvfyA8bVoVVHi62e60m2YiCNsFy1OCKEINPHS34bhH8wuszw9ok7V9782K
+ xR/ydeJfzW/g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9989"; a="264915694"
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="264915694"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 08:14:52 -0700
+IronPort-SDR: 5AMFMnRYfhCdHT3AOE0rxIaGzSu17wCrw5oS+0VCZY8282OzA+jXlwmxgb3xYpv66GIY0SZd+F
+ mTKmtLWb7TPQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
+   d="scan'208";a="542675574"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 19 May 2021 08:14:48 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 19 May 2021 18:14:47 +0300
+Date:   Wed, 19 May 2021 18:14:47 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi@vger.kernel.org,
+        Casey G Bowman <casey.g.bowman@intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 2/9] thunderbolt: Add USB4 port devices
+Message-ID: <YKUrZ0b4UObhtV9k@kuha.fi.intel.com>
+References: <20210519141259.84839-1-mika.westerberg@linux.intel.com>
+ <20210519141259.84839-3-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d5755fc6-3c1d-f780-5105-d39771c73427@huawei.com>
+In-Reply-To: <20210519141259.84839-3-mika.westerberg@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 19, 2021 at 10:37:07PM +0800, Leizhen (ThunderTown) wrote:
-> 
-> 
-> On 2021/5/19 21:40, Leizhen (ThunderTown) wrote:
-> > 
-> > 
-> > On 2021/5/19 21:12, Greg Kroah-Hartman wrote:
-> >> On Wed, May 19, 2021 at 08:33:04PM +0800, Zhen Lei wrote:
-> >>> GCC reports the following warning with W=1:
-> >>>
-> >>> drivers/usb/host/xhci.c:1349:15: warning:
-> >>>  variable 'len' set but not used [-Wunused-but-set-variable]
-> >>>  1349 |  unsigned int len;
-> >>>       |               ^~~
-> >>>
-> >>> This variable is not used, remove it to fix the warning.
-> >>>
-> >>> Reported-by: Hulk Robot <hulkci@huawei.com>
-> >>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> >>> ---
-> >>>  drivers/usb/host/xhci.c | 3 +--
-> >>>  1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> >>> index 27283654ca08..a75ed4a00997 100644
-> >>> --- a/drivers/usb/host/xhci.c
-> >>> +++ b/drivers/usb/host/xhci.c
-> >>> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
-> >>>  
-> >>>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
-> >>>  {
-> >>> -	unsigned int len;
-> >>>  	unsigned int buf_len;
-> >>>  	enum dma_data_direction dir;
-> >>>  
-> >>> @@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
-> >>>  				 dir);
-> >>>  
-> >>>  	if (usb_urb_dir_in(urb))
-> >>> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-> >>> +		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-> >>>  					   urb->transfer_buffer,
-> >>>  					   buf_len,
-> >>>  					   0);
-> >>> -- 
-> >>> 2.25.1
-> >>>
-> >>>
-> >>
-> >> Wow, no.  I keep telling you that this is not ok.  Why keep sending
-> >> this?
-> > 
-> > Sorry, I forgot to google it, someone already posted it.
-> 
-> Hi, Greg Kroah-Hartman:
->   I've read your two exchange emails from https://patchwork.kernel.org/project/linux-usb/patch/20210306120644.74406-1-zhangkun4jr@163.com/#24019765
->   How about just give a warning when the copy is not complete? This W=1 warning will probably be detected by someone else.
+On Wed, May 19, 2021 at 05:12:52PM +0300, Mika Westerberg wrote:
+> Create devices for each USB4 port. This is needed when we add retimer
+> access when there is no device connected but may be useful for other
+> purposes too following what USB subsystem does. This exports a single
+> attribute "link" that shows the type of the USB4 link (or "none" if
+> there is no cable connected).
 
-Handle the error properly.  Just spitting a message to a user where they
-can't do anything about it does not seems like the correct solution to
-me, would you want the kernel to do that?
+<snip>
+
+> +/*
+> + * USB4 port device
+> + *
+> + * Copyright (C) 2021, Intel Corporation
+> + * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/pm_runtime.h>
+> +
+> +#include "tb.h"
+> +
+> +static ssize_t link_show(struct device *dev, struct device_attribute *attr,
+> +			 char *buf)
+> +{
+> +	struct usb4_port *usb4 = tb_to_usb4_port_device(dev);
+> +	struct tb_port *port = usb4->port;
+> +	struct tb *tb = port->sw->tb;
+> +	const char *link;
+> +
+> +	if (mutex_lock_interruptible(&tb->lock))
+> +		return -ERESTARTSYS;
+> +
+> +	if (tb_is_upstream_port(port))
+> +		link = port->sw->link_usb4 ? "usb4" : "tbt";
+> +	else if (tb_port_has_remote(port))
+> +		link = port->remote->sw->link_usb4 ? "usb4" : "tbt";
+> +	else
+> +		link = "none";
+> +
+> +	mutex_unlock(&tb->lock);
+> +
+> +	return sysfs_emit(buf, "%s\n", link);
+> +}
+> +static DEVICE_ATTR_RO(link);
+> +
+> +static struct attribute *common_attrs[] = {
+> +	&dev_attr_link.attr,
+> +	NULL
+> +};
+> +
+> +static const struct attribute_group common_group = {
+> +	.attrs = common_attrs,
+> +};
+> +
+> +static const struct attribute_group *usb4_port_device_groups[] = {
+> +	&common_group,
+> +	NULL
+> +};
+> +
+> +static void usb4_port_device_release(struct device *dev)
+> +{
+> +	struct usb4_port *usb4 = container_of(dev, struct usb4_port, dev);
+> +
+> +	kfree(usb4);
+> +}
+> +
+> +struct device_type usb4_port_device_type = {
+> +	.name = "usb4_port",
+> +	.groups = usb4_port_device_groups,
+> +	.release = usb4_port_device_release,
+> +};
+
+I noticed that in the next patch you add acpi_bus_type for these
+ports, but is that really necessary? Why not just:
+
+int usb4_port_fwnode_match(struct tb_port *port, struct fwnode_handle *fwnode)
+{
+        if (is_acpi_device_node(fwnode))
+                return acpi_device_adr(to_acpi_device_node(fwnode)) == port->port;
+
+        return 0;
+}
+
+> +/**
+> + * usb4_port_device_add() - Add USB4 port device
+> + * @port: Lane 0 adapter port to add the USB4 port
+> + *
+> + * Creates and registers a USB4 port device for @port. Returns the new
+> + * USB4 port device pointer or ERR_PTR() in case of error.
+> + */
+> +struct usb4_port *usb4_port_device_add(struct tb_port *port)
+> +{
+
+        struct fwnode_handle *child;
+
+> +	struct usb4_port *usb4;
+> +	int ret;
+> +
+> +	usb4 = kzalloc(sizeof(*usb4), GFP_KERNEL);
+> +	if (!usb4)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	usb4->port = port;
+> +	usb4->dev.type = &usb4_port_device_type;
+> +	usb4->dev.parent = &port->sw->dev;
+> +	dev_set_name(&usb4->dev, "usb4_port%d", port->port);
+
+and then here something like this (feel free to improve this part):
+
+        device_for_each_child_node(&port->sw->dev, child) {
+                if (usb4_port_fwnode_match(port, child)) {
+                        usb4->dev.fwnode = child;
+                        break;
+                }
+        }
+
+Or maybe I'm missing something?
+
+> +	ret = device_register(&usb4->dev);
+> +	if (ret) {
+> +		put_device(&usb4->dev);
+> +		return ERR_PTR(ret);
+> +	}
+> +
+> +	pm_runtime_no_callbacks(&usb4->dev);
+> +	pm_runtime_set_active(&usb4->dev);
+> +	pm_runtime_enable(&usb4->dev);
+> +	pm_runtime_set_autosuspend_delay(&usb4->dev, TB_AUTOSUSPEND_DELAY);
+> +	pm_runtime_mark_last_busy(&usb4->dev);
+> +	pm_runtime_use_autosuspend(&usb4->dev);
+> +
+> +	return usb4;
+> +}
 
 thanks,
 
-greg k-h
+-- 
+heikki
