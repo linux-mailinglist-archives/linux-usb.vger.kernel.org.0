@@ -2,127 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4C8388AB3
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 11:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E48B388B45
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 12:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345630AbhESJen (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 05:34:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51612 "EHLO mail.kernel.org"
+        id S1345760AbhESKDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 06:03:54 -0400
+Received: from mga05.intel.com ([192.55.52.43]:20757 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345530AbhESJek (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 05:34:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9441F613BA;
-        Wed, 19 May 2021 09:33:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621416801;
-        bh=w0kH4aEv0kclW6uE2UePjrSnaKIliZMimvw9Tin9myo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fGTXN3gCzzjxlfX1yt4cyWNue2oBy5pZLJun6le07y1rPqG6cONuuzrK6nugDZi+3
-         /jQ1ToWbqFkeWDTzPCUH0LHE/u+ucDqitBJ0yNVeio2xbwMAT36w8oOI0L9Vk8ERjI
-         3K8gcx9EdWMDPqLiu6RAjtiwop/jbh3763iIf7b61ivgs0rrcVMhYCu5VvQI08X4rq
-         kGAASzwQI5FG94YsDZQ/idAaqRBuT9N+2O4dfGpvwan8IBlEDCW2J5Ce2PqNOEieCU
-         pdBJJB8W/jU2u788+MpKthddSMOd6KQLRyC5eqG5tkBlGUex61uVjRTuq/P5hC9DOh
-         rjIg5XDNV+0BQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ljIZt-0002pX-3M; Wed, 19 May 2021 11:33:21 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH 3/3] USB: gadget: drop irq-flags initialisations
-Date:   Wed, 19 May 2021 11:33:03 +0200
-Message-Id: <20210519093303.10789-4-johan@kernel.org>
-X-Mailer: git-send-email 2.26.3
-In-Reply-To: <20210519093303.10789-1-johan@kernel.org>
-References: <20210519093303.10789-1-johan@kernel.org>
+        id S1345656AbhESKDx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 06:03:53 -0400
+IronPort-SDR: EcEhhBdAIycZqszdXY11av68P44Nvp+LDdkaBG1UPh5Q4YyvAANnvMQDIbEGhX5NUMWX6lE1tV
+ DpiWAoN9zyoA==
+X-IronPort-AV: E=McAfee;i="6200,9189,9988"; a="286469051"
+X-IronPort-AV: E=Sophos;i="5.82,312,1613462400"; 
+   d="scan'208";a="286469051"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2021 03:02:05 -0700
+IronPort-SDR: IGMfFdNYII17tU+yMvKunDBi+jWnFs1QssOljd6UdCudBWXlmTvpz/0ImTQDnkMK4sRJjeRM9j
+ Ava2F/I3r+jA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,312,1613462400"; 
+   d="scan'208";a="466908517"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 19 May 2021 03:02:03 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 45CB3BA; Wed, 19 May 2021 13:02:24 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Subject: [PATCH v1 1/1] usb: typec: wcove: Use LE to CPU conversion when accessing msg->header
+Date:   Wed, 19 May 2021 13:02:12 +0300
+Message-Id: <20210519100212.54630-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There's no need to initialise irq-flags variables before saving the
-interrupt state.
+Sparse is not happy about strict type handling:
+  .../typec/tcpm/tcpm.c:2720:27: warning: restricted __le16 degrades to integer
+  .../typec/tcpm/tcpm.c:2814:32: warning: restricted __le16 degrades to integer
 
-Drop the redundant initialisations from drivers that got this wrong.
+Fix this by converting LE to CPU before use.
 
-Cc: Li Yang <leoyang.li@nxp.com>
-Cc: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Johan Hovold <johan@kernel.org>
+Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+Fixes: 64f7c494a3c0 ("typec: tcpm: Add support for sink PPS related messages")
+Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/gadget/udc/fsl_udc_core.c | 8 ++++----
- drivers/usb/gadget/udc/mv_u3d_core.c  | 2 +-
- drivers/usb/gadget/udc/mv_udc_core.c  | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
-index ad6ff9c4188e..2b357b3f64c0 100644
---- a/drivers/usb/gadget/udc/fsl_udc_core.c
-+++ b/drivers/usb/gadget/udc/fsl_udc_core.c
-@@ -547,7 +547,7 @@ static int fsl_ep_enable(struct usb_ep *_ep,
- 	unsigned short max = 0;
- 	unsigned char mult = 0, zlt;
- 	int retval = -EINVAL;
--	unsigned long flags = 0;
-+	unsigned long flags;
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 64133e586c64..8fdfd7f65ad7 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2717,7 +2717,7 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
+ 	enum pd_ext_msg_type type = pd_header_type_le(msg->header);
+ 	unsigned int data_size = pd_ext_header_data_size_le(msg->ext_msg.header);
  
- 	ep = container_of(_ep, struct fsl_ep, ep);
- 
-@@ -631,7 +631,7 @@ static int fsl_ep_disable(struct usb_ep *_ep)
- {
- 	struct fsl_udc *udc = NULL;
- 	struct fsl_ep *ep = NULL;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	u32 epctrl;
- 	int ep_num;
- 
-@@ -1001,7 +1001,7 @@ out:	epctrl = fsl_readl(&dr_regs->endptctrl[ep_num]);
- static int fsl_ep_set_halt(struct usb_ep *_ep, int value)
- {
- 	struct fsl_ep *ep = NULL;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	int status = -EOPNOTSUPP;	/* operation not supported */
- 	unsigned char ep_dir = 0, ep_num = 0;
- 	struct fsl_udc *udc = NULL;
-@@ -1938,7 +1938,7 @@ static int fsl_udc_start(struct usb_gadget *g,
- 		struct usb_gadget_driver *driver)
- {
- 	int retval = 0;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 
- 	/* lock is needed but whether should use this lock or another */
- 	spin_lock_irqsave(&udc_controller->lock, flags);
-diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
-index 5486f5a70868..ce3d7a3eb7e3 100644
---- a/drivers/usb/gadget/udc/mv_u3d_core.c
-+++ b/drivers/usb/gadget/udc/mv_u3d_core.c
-@@ -941,7 +941,7 @@ mv_u3d_ep_set_stall(struct mv_u3d *u3d, u8 ep_num, u8 direction, int stall)
- static int mv_u3d_ep_set_halt_wedge(struct usb_ep *_ep, int halt, int wedge)
- {
- 	struct mv_u3d_ep *ep;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	int status = 0;
- 	struct mv_u3d *u3d;
- 
-diff --git a/drivers/usb/gadget/udc/mv_udc_core.c b/drivers/usb/gadget/udc/mv_udc_core.c
-index 0fb4ef464321..7f24ce400b59 100644
---- a/drivers/usb/gadget/udc/mv_udc_core.c
-+++ b/drivers/usb/gadget/udc/mv_udc_core.c
-@@ -888,7 +888,7 @@ static int ep_is_stall(struct mv_udc *udc, u8 ep_num, u8 direction)
- static int mv_ep_set_halt_wedge(struct usb_ep *_ep, int halt, int wedge)
- {
- 	struct mv_ep *ep;
--	unsigned long flags = 0;
-+	unsigned long flags;
- 	int status = 0;
- 	struct mv_udc *udc;
- 
+-	if (!(msg->ext_msg.header & PD_EXT_HDR_CHUNKED)) {
++	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
+ 		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
+ 		tcpm_log(port, "Unchunked extended messages unsupported");
+ 		return;
+@@ -2811,7 +2811,7 @@ static void tcpm_pd_rx_handler(struct kthread_work *work)
+ 				 "Data role mismatch, initiating error recovery");
+ 			tcpm_set_state(port, ERROR_RECOVERY, 0);
+ 		} else {
+-			if (msg->header & PD_HEADER_EXT_HDR)
++			if (le16_to_cpu(msg->header) & PD_HEADER_EXT_HDR)
+ 				tcpm_pd_ext_msg_request(port, msg);
+ 			else if (cnt)
+ 				tcpm_pd_data_request(port, msg);
 -- 
-2.26.3
+2.30.2
 
