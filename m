@@ -2,77 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F00A388DA2
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 14:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2A2388E20
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 14:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239850AbhESMOZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 08:14:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44352 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238273AbhESMOY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 19 May 2021 08:14:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3D10D6124C
-        for <linux-usb@vger.kernel.org>; Wed, 19 May 2021 12:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621426385;
-        bh=pOzRX7htID1LlIEr7wzF0jh40DBVQ/b6y6mRu0qTY7k=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=tyPpt+Fo0RiHp2xflRicheyFtgH8srMLRk9T/Y4Eiu6+gvTWYdcqSzB9QRzspxzMU
-         yvIcaQGoKt5/lAQt/pytFMr1BndN5euX3B+DBcdwOfwv7NXVVb2zZZD1QkEexX4tsV
-         cyJMjLg7EKkvVll5Yg4m8VXUWkhkeWX/hrHnEnOld/ECc6m5/oj6CVGn8jMLhfgohT
-         IS91rBbwJOEx8XB9ut+bIB5WEKkOn4ZflM6pkaeO1Lz4KBbzrf0AQ1dFtRgR9IcdD4
-         ViyxZ5DPsCxiTueLmrkOfqHHyRVYvEvSuTyK0MRiyXLtf9zIkcxrdKIc5AsydYkbw0
-         JJkS3ULVl19Xw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 2B8BC611F2; Wed, 19 May 2021 12:13:05 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Wed, 19 May 2021 12:13:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mathias.nyman@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213081-208809-nKTYSGQmLm@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S239164AbhESMeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 08:34:37 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:4751 "EHLO
+        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230423AbhESMeh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 08:34:37 -0400
+Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.59])
+        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FlXHs00V0zpfdx;
+        Wed, 19 May 2021 20:29:44 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 19 May 2021 20:33:14 +0800
+Received: from thunder-town.china.huawei.com (10.174.177.72) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 19 May 2021 20:33:14 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb <linux-usb@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>
+Subject: [PATCH 1/1] usb: xhci: remove unused variable 'len' in xhci_unmap_temp_buf()
+Date:   Wed, 19 May 2021 20:33:04 +0800
+Message-ID: <20210519123304.7885-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.177.72]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+GCC reports the following warning with W=1:
 
---- Comment #16 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
-Created attachment 296865
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296865&action=3Dedit
-Patch fixing accidental clearing of URB status in xhci
+drivers/usb/host/xhci.c:1349:15: warning:
+ variable 'len' set but not used [-Wunused-but-set-variable]
+ 1349 |  unsigned int len;
+      |               ^~~
 
-Thanks for narrowing it down this far.
+This variable is not used, remove it to fix the warning.
 
-As Alan pointed out xhci is clearing the -EPIPE status of the a URB in some
-STALL cases.
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+---
+ drivers/usb/host/xhci.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Attached a patch that should resove this. Does it help?
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 27283654ca08..a75ed4a00997 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+ 
+ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+ {
+-	unsigned int len;
+ 	unsigned int buf_len;
+ 	enum dma_data_direction dir;
+ 
+@@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+ 				 dir);
+ 
+ 	if (usb_urb_dir_in(urb))
+-		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
++		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+ 					   urb->transfer_buffer,
+ 					   buf_len,
+ 					   0);
+-- 
+2.25.1
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
