@@ -2,101 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1855E3894B1
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 19:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 578213894BA
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 19:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbhESRhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 13:37:06 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60449 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229550AbhESRhF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 13:37:05 -0400
-Received: (qmail 1174008 invoked by uid 1000); 19 May 2021 13:35:45 -0400
-Date:   Wed, 19 May 2021 13:35:45 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-Cc:     dave penkler <dpenkler@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: Re: Re: Re: Re: Re: Re: [syzbot] INFO: rcu detected stall in tx
-Message-ID: <20210519173545.GA1173157@rowland.harvard.edu>
-References: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
+        id S229906AbhESRkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 13:40:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229539AbhESRkQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 13:40:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4DE8E6135A
+        for <linux-usb@vger.kernel.org>; Wed, 19 May 2021 17:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621445936;
+        bh=0G5CeThxw0mFPhGRLPioPF5NJOplIeNjOGHYXTqHcfo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Xz+Vi27mwKEOXDdzf4xa+Hoi7hPtiuiHmpcKxMW0jw0Wa7TOOd1TGO+R0orpgw1Hc
+         VoUyVf3GyrDjsDTPTj0UU0bMMQd1TJbr4vHarw8R9Ydr+FyThM0uk2C7b8DV7qcTc5
+         QFj/dwIXoI57/7oT6L3f9D+Bv3fguhqAv6QxlMUiPa7ersIHIj3IF/DSQ/IP9cks7i
+         pWyhSQ+CxZkF8LRgS052VWJIPv0/MD7rhZTmugNXersdwExJrA7LtiBis5UhbYm2qv
+         zzIoo3c7WJc27MtQLUEuuGN9WO9pF/hx/CsyprvtbjRdFBi8x61giXxzwRphZq6sVb
+         bstmbBZI638ww==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 3EE3661260; Wed, 19 May 2021 17:38:56 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Wed, 19 May 2021 17:38:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: peter.ganzhorn@googlemail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-213081-208809-4FmX9frnMH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 19, 2021 at 04:14:20PM +0000, Guido Kiener wrote:
-> > On Wed, May 19, 2021 at 10:48:29AM +0200, dave penkler wrote:
-> > > On Sat, 8 May 2021 at 16:29, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > >
-> > > > On Sat, May 08, 2021 at 10:14:41AM +0200, dave penkler wrote:
-> > > > > When the host driver detects a protocol error while processing an
-> > > > > URB it completes the URB with EPROTO status and marks the endpoint
-> > > > > as halted.
-> > > >
-> > > > Not true.  It does not mark the endpoint as halted, not unless it
-> > > > receives a STALL handshake from the device.  A STALL is not a
-> > > > protocol error.
-> > > >
-> > > > > When the class driver resubmits the URB and the if the host driver
-> > > > > finds the endpoint still marked as halted it should return EPIPE
-> > > > > status on the resubmitted URB
-> > > >
-> > > > Irrelevant.
-> > > Not at all. The point is that when an application is talking to an
-> > > instrument over the usbtmc driver, the underlying host controller and
-> > > its driver will detect and silence a babbling endpoint.
-> > 
-> > No, they won't.  That is, they will detect a babble error and return an error status, but
-> > they won't silence the endpoint.  What makes you think they will?
-> 
-> Maybe there is a misunderstanding. I guess that Dave wanted to propose:
-> "EPROTO is a link level issue and needs to be handled by the host driver.
-> When the host driver detects a protocol error while processing an
-> URB it SHOULD complete the URB with EPROTO status
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-The host controller drivers _do_ complete URBs with -EPROTO (or similar) 
-status when a link-level error occurs...
+--- Comment #18 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
+Created attachment 296875
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296875&action=3Dedit
+usb bus 6 trace 5.12+patch
 
-> and SHOULD mark the endpoint
-> as halted."
+Hi Mathias, thanks for your patch.
 
-but they don't mark the endpoint as halted.  Even if they did, it 
-wouldn't fix anything because the kernel allows URBs to be submitted to 
-halted endpoints.  In fact, it doesn't even keep track of which 
-endpoints are or are not halted.
+I applied the patch to v5.12.4 and it applied just fine, but the card reade=
+r is
+still not working.
+So sadly I have to report that the issue is not fixed with it, but I spotte=
+d a
+few differences with it.
+I recorded new traces and it seems the trace log for bus 6 is a lot smaller
+than it was without the patch, but the symptoms are very much the same.
+After plugging in the display / card reader, it seems to be detected fine
+according to dmesg until
 
-> Is this a realistic fix for all host drivers?
+[   66.338408] usb 6-2.3.1: new SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[   66.366869] usb 6-2.3.1: New USB device found, idVendor=3D05e3,
+idProduct=3D0749, bcdDevice=3D15.31
+[   66.366879] usb 6-2.3.1: New USB device strings: Mfr=3D3, Product=3D4,
+SerialNumber=3D5
+[   66.366883] usb 6-2.3.1: Product: USB3.0 Card Reader
+[   66.366886] usb 6-2.3.1: Manufacturer: Generic
+[   66.366889] usb 6-2.3.1: SerialNumber: 000000001531
+[   66.373185] usb-storage 6-2.3.1:1.0: USB Mass Storage device detected
+[   66.373392] scsi host6: usb-storage 6-2.3.1:1.0
+[   67.390948] scsi 6:0:0:0: Direct-Access     Generic  STORAGE DEVICE   15=
+31
+PQ: 0 ANSI: 6
+[   67.391389] sd 6:0:0:0: Attached scsi generic sg2 type 0
 
-No, it isn't.
+Inserting the card once did not change anything in dmesg, so I ejected and
+re-inserted it. The second time I also got
 
-An endpoint shouldn't be marked as halted unless it really is halted.  
-Otherwise a driver might be tempted to clear the Halt feature, and 
-some devices do not like to receive a Clear-Halt request for an endpoint 
-that isn't halted.
+[   98.068827] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[   98.096880] sd 6:0:0:0: [sdb] Attached SCSI removable disk
 
-What we could do is what you suggested earlier: Note the fact that the 
-endpoint is in some sort of fault condition and disallow further 
-communication with the endpoint until the fault condition has been 
-cleared.  (It isn't entirely obvious exactly what actions should clear 
-such a fault...  I guess resetting or re-enabling the endpoint, or 
-resetting the entire device.)
+But still no partitions (which are present) detected and cfdisk fails just =
+like
+before.
+What seems different now is I am seeing a lot less errors in dmesg, but
+repeated
 
-Alan Stern
+[  128.789141] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  159.509221] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  190.239273] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  220.959354] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  251.679495] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  282.389627] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  313.109866] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  343.830026] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  374.550193] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  405.270368] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+[  436.000490] usb 6-2.3.1: reset SuperSpeed Gen 1 USB device number 4 using
+xhci_hcd
+
+If you need more information or have anything else I can test, just let me
+know.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
