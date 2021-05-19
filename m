@@ -2,83 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2A2388E20
-	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 14:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60383388E5B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 May 2021 14:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239164AbhESMeh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 08:34:37 -0400
-Received: from szxga04-in.huawei.com ([45.249.212.190]:4751 "EHLO
-        szxga04-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbhESMeh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 08:34:37 -0400
-Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.59])
-        by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4FlXHs00V0zpfdx;
-        Wed, 19 May 2021 20:29:44 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 19 May 2021 20:33:14 +0800
-Received: from thunder-town.china.huawei.com (10.174.177.72) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 19 May 2021 20:33:14 +0800
-From:   Zhen Lei <thunder.leizhen@huawei.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>
-CC:     Zhen Lei <thunder.leizhen@huawei.com>
-Subject: [PATCH 1/1] usb: xhci: remove unused variable 'len' in xhci_unmap_temp_buf()
-Date:   Wed, 19 May 2021 20:33:04 +0800
-Message-ID: <20210519123304.7885-1-thunder.leizhen@huawei.com>
-X-Mailer: git-send-email 2.26.0.windows.1
+        id S1353464AbhESMtF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 08:49:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56450 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233234AbhESMtE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 19 May 2021 08:49:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DEBB611BF;
+        Wed, 19 May 2021 12:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621428465;
+        bh=jDsQgzBa0hZeYn+cxkntyVgDH6tU89hxn6VnTQMi/K4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=el/e4kZrAT+ReFKyC317+KgeCxfTuX8FcyB/eXtOSaU0sTX4UD26flNq08/sydEAp
+         UJamwLkmHee2bCcOyWTapJC9UQwdqfzTE8vJ1rwdPqSPphNFEUXfk6bjElmlI/Bh4+
+         6DKpFb82eK9C/KqtR1JCliefSjEYkp/Kg3mm6yssES7h4nx6JiGCz81ka7v4HF3vrG
+         EnW+Bm+ALmmLF1d1O23p1sdT0I4hNEUEM4jpOjtWUayYaAQ+V78xPn9p+D+zT98UIu
+         pWCjwryL1xhp7OwhpNX+dynvIGA2RO3CYOxDhJvtNbsCZdJQqs6A0o1MbtRxHGnGU5
+         b8SYrQxulgR6w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ljLc0-000879-30; Wed, 19 May 2021 14:47:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>
+Subject: [PATCH net] net: hso: bail out on interrupt URB allocation failure
+Date:   Wed, 19 May 2021 14:47:17 +0200
+Message-Id: <20210519124717.31144-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.174.177.72]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-GCC reports the following warning with W=1:
+Commit 31db0dbd7244 ("net: hso: check for allocation failure in
+hso_create_bulk_serial_device()") recently started returning an error
+when the driver fails to allocate resources for the interrupt endpoint
+and tiocmget functionality.
 
-drivers/usb/host/xhci.c:1349:15: warning:
- variable 'len' set but not used [-Wunused-but-set-variable]
- 1349 |  unsigned int len;
-      |               ^~~
+For consistency let's bail out from probe also if the URB allocation
+fails.
 
-This variable is not used, remove it to fix the warning.
-
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
 ---
- drivers/usb/host/xhci.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/usb/hso.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 27283654ca08..a75ed4a00997 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index 260f850d69eb..b48b2a25210c 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -2635,14 +2635,14 @@ static struct hso_device *hso_create_bulk_serial_device(
+ 		}
  
- static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
- {
--	unsigned int len;
- 	unsigned int buf_len;
- 	enum dma_data_direction dir;
+ 		tiocmget->urb = usb_alloc_urb(0, GFP_KERNEL);
+-		if (tiocmget->urb) {
+-			mutex_init(&tiocmget->mutex);
+-			init_waitqueue_head(&tiocmget->waitq);
+-		} else
+-			hso_free_tiomget(serial);
+-	}
+-	else
++		if (!tiocmget->urb)
++			goto exit;
++
++		mutex_init(&tiocmget->mutex);
++		init_waitqueue_head(&tiocmget->waitq);
++	} else {
+ 		num_urbs = 1;
++	}
  
-@@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
- 				 dir);
- 
- 	if (usb_urb_dir_in(urb))
--		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
-+		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
- 					   urb->transfer_buffer,
- 					   buf_len,
- 					   0);
+ 	if (hso_serial_common_create(serial, num_urbs, BULK_URB_RX_SIZE,
+ 				     BULK_URB_TX_SIZE))
 -- 
-2.25.1
-
+2.26.3
 
