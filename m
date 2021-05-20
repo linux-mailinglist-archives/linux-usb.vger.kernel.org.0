@@ -2,155 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2368638B04D
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 15:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558FE38B186
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 16:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231733AbhETNsD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 09:48:03 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:3448 "EHLO
-        szxga07-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237283AbhETNsB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 09:48:01 -0400
-Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.59])
-        by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4Fm9tn542KzBttQ;
-        Thu, 20 May 2021 21:43:45 +0800 (CST)
-Received: from dggema769-chm.china.huawei.com (10.1.198.211) by
- dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Thu, 20 May 2021 21:46:33 +0800
-Received: from localhost (10.174.179.215) by dggema769-chm.china.huawei.com
- (10.1.198.211) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Thu, 20
- May 2021 21:46:32 +0800
-From:   YueHaibing <yuehaibing@huawei.com>
-To:     <oliver@neukum.org>, <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, YueHaibing <yuehaibing@huawei.com>
-Subject: [PATCH net-next] net: cdc_ncm: use DEVICE_ATTR_RW macro
-Date:   Thu, 20 May 2021 21:46:19 +0800
-Message-ID: <20210520134619.36356-1-yuehaibing@huawei.com>
-X-Mailer: git-send-email 2.10.2.windows.1
+        id S241302AbhETOSQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 10:18:16 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54613 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S243699AbhETOR5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 10:17:57 -0400
+Received: (qmail 1203474 invoked by uid 1000); 20 May 2021 10:16:33 -0400
+Date:   Thu, 20 May 2021 10:16:33 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
+Cc:     hminas@synopsys.com,
+        "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
+        <linux-usb@vger.kernel.org>
+Subject: Re: Odroid C4: dwc2_hsotg_start_req: ep1 is stalled
+Message-ID: <20210520141633.GB1203032@rowland.harvard.edu>
+References: <CAJs94EbV6+C81NggHtnJGZ8aoeW12POhv4zi0RTawuDcf+ybFA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggema769-chm.china.huawei.com (10.1.198.211)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJs94EbV6+C81NggHtnJGZ8aoeW12POhv4zi0RTawuDcf+ybFA@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use DEVICE_ATTR_RW helper instead of plain DEVICE_ATTR,
-which makes the code a bit shorter and easier to read.
+On Thu, May 20, 2021 at 03:35:26PM +0300, Matwey V. Kornilov wrote:
+> Hi,
+> 
+> I am running upstream Linux 5.12.3 on an Odroid C4 board and see lots
+> of the following lines in dmesg while using the gadget mass storage
+> driver. I suppose that this can indicate some issue in the dwc2
+> driver.
+> 
+> [  189.752586] dwc2 ff400000.usb: bound driver g_mass_storage
+> [  190.118994] dwc2 ff400000.usb: new device is high-speed
+> [  190.199074] dwc2 ff400000.usb: new device is high-speed
+> [  190.267855] dwc2 ff400000.usb: new address 4
+> [  191.310603] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
+> [  191.310737] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
+> [  191.311015] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 0)
+> [  191.312257] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
+> [  191.312373] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
+> [  191.312762] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 0)
+> [  191.336959] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
+> [  191.447759] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
+> [  191.447823] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
+> [  191.448098] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 0)
+> [  191.448550] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
+> [  191.567748] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
+> 00000000ce48180a ep1in, 1)
 
-Signed-off-by: YueHaibing <yuehaibing@huawei.com>
----
- drivers/net/usb/cdc_ncm.c | 36 ++++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+Those look like they ought to be debugging messages.  They don't seem to 
+indicate any problem.
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index b04055fd1b79..783d6139fdfa 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -192,7 +192,8 @@ static u32 cdc_ncm_check_tx_max(struct usbnet *dev, u32 new_tx)
- 	return val;
- }
- 
--static ssize_t cdc_ncm_show_min_tx_pkt(struct device *d, struct device_attribute *attr, char *buf)
-+static ssize_t min_tx_pkt_show(struct device *d,
-+			       struct device_attribute *attr, char *buf)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -200,7 +201,8 @@ static ssize_t cdc_ncm_show_min_tx_pkt(struct device *d, struct device_attribute
- 	return sprintf(buf, "%u\n", ctx->min_tx_pkt);
- }
- 
--static ssize_t cdc_ncm_show_rx_max(struct device *d, struct device_attribute *attr, char *buf)
-+static ssize_t rx_max_show(struct device *d,
-+			   struct device_attribute *attr, char *buf)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -208,7 +210,8 @@ static ssize_t cdc_ncm_show_rx_max(struct device *d, struct device_attribute *at
- 	return sprintf(buf, "%u\n", ctx->rx_max);
- }
- 
--static ssize_t cdc_ncm_show_tx_max(struct device *d, struct device_attribute *attr, char *buf)
-+static ssize_t tx_max_show(struct device *d,
-+			   struct device_attribute *attr, char *buf)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -216,7 +219,8 @@ static ssize_t cdc_ncm_show_tx_max(struct device *d, struct device_attribute *at
- 	return sprintf(buf, "%u\n", ctx->tx_max);
- }
- 
--static ssize_t cdc_ncm_show_tx_timer_usecs(struct device *d, struct device_attribute *attr, char *buf)
-+static ssize_t tx_timer_usecs_show(struct device *d,
-+				   struct device_attribute *attr, char *buf)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -224,7 +228,9 @@ static ssize_t cdc_ncm_show_tx_timer_usecs(struct device *d, struct device_attri
- 	return sprintf(buf, "%u\n", ctx->timer_interval / (u32)NSEC_PER_USEC);
- }
- 
--static ssize_t cdc_ncm_store_min_tx_pkt(struct device *d,  struct device_attribute *attr, const char *buf, size_t len)
-+static ssize_t min_tx_pkt_store(struct device *d,
-+				struct device_attribute *attr,
-+				const char *buf, size_t len)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -238,7 +244,9 @@ static ssize_t cdc_ncm_store_min_tx_pkt(struct device *d,  struct device_attribu
- 	return len;
- }
- 
--static ssize_t cdc_ncm_store_rx_max(struct device *d,  struct device_attribute *attr, const char *buf, size_t len)
-+static ssize_t rx_max_store(struct device *d,
-+			    struct device_attribute *attr,
-+			    const char *buf, size_t len)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -251,7 +259,9 @@ static ssize_t cdc_ncm_store_rx_max(struct device *d,  struct device_attribute *
- 	return len;
- }
- 
--static ssize_t cdc_ncm_store_tx_max(struct device *d,  struct device_attribute *attr, const char *buf, size_t len)
-+static ssize_t tx_max_store(struct device *d,
-+			    struct device_attribute *attr,
-+			    const char *buf, size_t len)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -264,7 +274,9 @@ static ssize_t cdc_ncm_store_tx_max(struct device *d,  struct device_attribute *
- 	return len;
- }
- 
--static ssize_t cdc_ncm_store_tx_timer_usecs(struct device *d,  struct device_attribute *attr, const char *buf, size_t len)
-+static ssize_t tx_timer_usecs_store(struct device *d,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t len)
- {
- 	struct usbnet *dev = netdev_priv(to_net_dev(d));
- 	struct cdc_ncm_ctx *ctx = (struct cdc_ncm_ctx *)dev->data[0];
-@@ -285,10 +297,10 @@ static ssize_t cdc_ncm_store_tx_timer_usecs(struct device *d,  struct device_att
- 	return len;
- }
- 
--static DEVICE_ATTR(min_tx_pkt, 0644, cdc_ncm_show_min_tx_pkt, cdc_ncm_store_min_tx_pkt);
--static DEVICE_ATTR(rx_max, 0644, cdc_ncm_show_rx_max, cdc_ncm_store_rx_max);
--static DEVICE_ATTR(tx_max, 0644, cdc_ncm_show_tx_max, cdc_ncm_store_tx_max);
--static DEVICE_ATTR(tx_timer_usecs, 0644, cdc_ncm_show_tx_timer_usecs, cdc_ncm_store_tx_timer_usecs);
-+static DEVICE_ATTR_RW(min_tx_pkt);
-+static DEVICE_ATTR_RW(rx_max);
-+static DEVICE_ATTR_RW(tx_max);
-+static DEVICE_ATTR_RW(tx_timer_usecs);
- 
- static ssize_t ndp_to_end_show(struct device *d, struct device_attribute *attr, char *buf)
- {
--- 
-2.17.1
-
+Alan Stern
