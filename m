@@ -2,106 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1409738B63C
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 20:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF4C38B80B
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 22:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235691AbhETSnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 14:43:20 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42591 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232681AbhETSnT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 14:43:19 -0400
-Received: (qmail 1214096 invoked by uid 1000); 20 May 2021 14:41:56 -0400
-Date:   Thu, 20 May 2021 14:41:56 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "Geoffrey D. Bennett" <g@b4.vu>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: ehci-pci: Scarlett Gen 2 mixer driver init failure
-Message-ID: <20210520184156.GA1213713@rowland.harvard.edu>
-References: <20210518202823.GA89630@m.b4.vu>
- <20210519145246.GC1165692@rowland.harvard.edu>
- <20210520180819.GA95348@m.b4.vu>
+        id S234520AbhETUFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 16:05:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55260 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232256AbhETUFn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 May 2021 16:05:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 50ABB6128A
+        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 20:04:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621541061;
+        bh=LzObFDFRIyprs1bNhbXAWUF2FvWeiEHrk4OD1m023LU=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=fmX4AWa6wlW2ytSAAVKBKM8gOPa7BzLKm6yOSOJIFLYBYFhvycNinpi1W5yWV1LF/
+         8WvM8JkwyWjJfSQXS4WYpMHPenzxjLwrGfHIF8aSGRO2XtCiQ/YA+ZzSWCIIX9EHPU
+         6oFXPHVkeUxb0k+YCsl2DWQEVSUzHJon6DdqOl/QesR6G4K2yK2yyOL3HbfuKD3zrv
+         Hv/vAClz/xza+hyVInA4leBQ66MeiqWoFnwxDn5EP2JzJHKQ2R3FZhsyRUjAv4wuaT
+         OYaWTV2SQPlFBx20rWSYhfb7Xs+OhT+EWPqy78iRRJmvp5DVld02Z6cG4km2opN7vf
+         htXI+l1Sg5p0g==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 419566129B; Thu, 20 May 2021 20:04:21 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Thu, 20 May 2021 20:04:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213081-208809-rUnvMXJO9X@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210520180819.GA95348@m.b4.vu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 21, 2021 at 03:38:19AM +0930, Geoffrey D. Bennett wrote:
-> Hi Alan,
-> 
-> Thank you so much for your help! With your hint...
-> 
-> On Wed, May 19, 2021 at 10:52:46AM -0400, Alan Stern wrote:
-> [...]
-> > The actual packets sent by ehci-hcd are exactly the same, regardless of
-> > whether they were submitted by a kernel driver or by userspace.  (In
-> > fact, userspace submits URBs by way of usbfs, which is itself a kernel
-> > driver.)
-> 
-> ...I started comparing how usbfs submitted the packet in
-> do_proc_control() vs. how I was submitting the packet.
-> 
-> It turns out that in the name usb_sndctrlpipe(), "snd" is *not*
-> shorthand for "sound", but is in fact "send". So...
-> 
-> diff --git a/sound/usb/mixer_scarlett_gen2.c b/sound/usb/mixer_scarlett_gen2.c
-> index 560c2ade829d..dcff3e3a49f3 100644
-> --- a/sound/usb/mixer_scarlett_gen2.c
-> +++ b/sound/usb/mixer_scarlett_gen2.c
-> @@ -635,7 +635,7 @@ static int scarlett2_usb(
->         /* send a second message to get the response */
-> 
->         err = snd_usb_ctl_msg(mixer->chip->dev,
-> -                       usb_sndctrlpipe(mixer->chip->dev, 0),
-> +                       usb_rcvctrlpipe(mixer->chip->dev, 0),
->                         SCARLETT2_USB_VENDOR_SPECIFIC_CMD_RESP,
->                         USB_RECIP_INTERFACE | USB_TYPE_CLASS | USB_DIR_IN,
->                         0,
-> 
-> ...works for me now. I will prepare and submit a patch to alsa-devel.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-Glad I could help.
+--- Comment #25 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Thanks, the trace gives a pretty good picture of what is going on.
 
-> [...]
-> > Have you looked at a complete usbmon record of _all_ the packets sent,
-> > starting from the time when the Focusrite Scarlett mixer is plugged in?
-> > It could be that some difference in the sequence of packets leading up
-> > to the one in question is what triggers the error.
-> 
-> That's what I actually thought the problem was for such a long time
-> until I could do a test setup that produced a clean diff of all the
-> packets from plug-in between working and not working which is what led
-> me here.
-> 
-> I'm not sure if there's anything that could reasonably be added to
-> make this sort of error easier to spot, such as warn if the pipe
-> direction doesn't match the requesttype direction? Or have the ehci
-> driver fix it up like the xhci driver appears to do?
+Before 5.12 the xhci driver handled halted endpoints (TRB completed with ST=
+ALL)
+by immediately queuing both a reset endpoint command to clear the host side=
+ of
+the halted endpoint, and a "set TR dequeue" command to move past the Stalled
+TRB.
 
-Adding a check for the directions seems like a good idea.  I'll do it.
+In 5.12 the Reset endpoint command is queued first, and "set TR Dequeue"
+command is queued when the reset endpoint command completes, if needed.
+Traces show that hardware already moved past the stalled TRB when reset
+endpoint completed, so driver won't issue a "Set TR Dequeu" command at all.
+I think this command is anyway needed as it will also flush the TRB cache of
+xHC controller.
 
-> A small aside; I did notice that usb_sndctrlpipe(dev, 0) is evaluated
-> twice in do_proc_control(), vs. usb_rcvctrlpipe(dev, 0) which is not;
-> you might like to make this change:
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index 533236366a03..4a8ec136460c 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -1162,7 +1162,7 @@ static int do_proc_control(struct usb_dev_state *ps,
->  			tbuf, ctrl->wLength);
->  
->  		usb_unlock_device(dev);
-> -		i = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), ctrl->bRequest,
-> +		i = usb_control_msg(dev, pipe, ctrl->bRequest,
->  				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
->  				    tbuf, ctrl->wLength, tmo);
->  		usb_lock_device(dev);
+From traces:
 
-If you'd like to submit a real patch for this, I'll be happy to accept it.
+Stall on TRB at fffcb040:
+56.024868: xhci_handle_event: EVENT: TRB 00000000fffcb040 status 'Stall Err=
+or'
+len 13 slot 5 ep 3 type 'Transfer Event' flags e:C
 
-Alan Stern
+Queue reset endpoint command:
+56.024873: xhci_queue_trb: CMD: Reset Endpoint Command: ctx 0000000000000000
+slot 5 ep 3 flags t:C
+
+When the reset endpoint command completes we see hardware dequeue is at
+fffcb050:
+56.024970: xhci_handle_command: CMD: Reset Endpoint Command: ctx
+0000000000000000 slot 5 ep 3 flags t:C
+56.024971: xhci_handle_cmd_reset_ep: State stopped mult 1 max P. Streams 0
+interval 125 us max ESIT payload 0 CErr 3 Type Bulk IN burst 4 maxp 1024 deq
+00000000fffcb051 avg trb len 0
+
+No set TR Deq to move to fffcb050 is queued.
+
+I'll start working on a patch that forces a "Set TR dequeue" command after a
+stall
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
