@@ -2,71 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C4C038A049
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 10:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE2F38A07D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 10:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231381AbhETI4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 04:56:16 -0400
-Received: from mga07.intel.com ([134.134.136.100]:22975 "EHLO mga07.intel.com"
+        id S231537AbhETJAg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 05:00:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46582 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231246AbhETI4P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 20 May 2021 04:56:15 -0400
-IronPort-SDR: pb3ASRXqscRN0Sn73vm7nuNPbovXM8J2rsp+6kScglhD8cnTWLYRvYLQjJUqKL1R3ZAPTb+JLZ
- pLUywZm6Cq+w==
-X-IronPort-AV: E=McAfee;i="6200,9189,9989"; a="265092314"
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="265092314"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 01:54:54 -0700
-IronPort-SDR: C3c0j6i492wQOQzynTAes/JrUVJWGhyp49wdGk6bzs0VzX0SrcALJbLu/RCZ0Tf3guamyeWs3q
- zFDSxQGoGQTA==
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208";a="440366268"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2021 01:54:51 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 20 May 2021 11:54:48 +0300
-Date:   Thu, 20 May 2021 11:54:48 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        id S231538AbhETJAf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 May 2021 05:00:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 08B6661261;
+        Thu, 20 May 2021 08:59:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621501154;
+        bh=U8Jt/5l9BQ/i5KXdhQ9sblIOPEL/EfnvLscCxujqLi0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XoEsUbaF6f7KzQrmHHWhIAxSKhG3J/4b/nYvpz53F+FbBCF5QJiiUaIN5Ik137VUK
+         LQvMGt+V2fg75ifpY3bxSwNSqv/1navyfBu63Eqwt4MgdtkRPoFXHdpV9hLSzsaxKN
+         +z37e22iVyPYCpnVrD5/+pJXFdv7Eyd2Q4/8jzXs=
+Date:   Thu, 20 May 2021 10:59:12 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
         Andreas Noever <andreas.noever@gmail.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Lukas Wunner <lukas@wunner.de>
-Subject: Re: [PATCH 2/4] thunderbolt: usb4: Fix NVM read buffer bounds and
- offset issue
-Message-ID: <20210520085448.GG291593@lahna.fi.intel.com>
-References: <20210517115907.52503-1-mika.westerberg@linux.intel.com>
- <20210517115907.52503-3-mika.westerberg@linux.intel.com>
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-acpi@vger.kernel.org,
+        Casey G Bowman <casey.g.bowman@intel.com>,
+        Rajmohan Mani <rajmohan.mani@intel.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH 0/9] thunderbolt: Offline on-board retimer NVM upgrade
+ support
+Message-ID: <YKYk4LqriOskFCP4@kroah.com>
+References: <20210519141259.84839-1-mika.westerberg@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210517115907.52503-3-mika.westerberg@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20210519141259.84839-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 17, 2021 at 02:59:05PM +0300, Mika Westerberg wrote:
-> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+On Wed, May 19, 2021 at 05:12:50PM +0300, Mika Westerberg wrote:
+> Hi all,
 > 
-> Up to 64 bytes of data can be read from NVM in one go.
-> Read address must be dword aligned. Data is read into a local buffer.
+> USB4 retimers are only accessible when the USB4 is up. However, sometimes
+> it may be useful to be able to upgrade on-board retimers even if the link
+> is not up. For instance if the user simply does not have any USB4 devices.
 > 
-> If caller asks to read data starting at an unaligned address then full
-> dword is anyway read from NVM into a local buffer. Data is then copied
-> from the local buffer starting at the unaligned offset to the caller
-> buffer.
+> Making retimers accessible in "offline" mode requires some help from the
+> platform firmware (ACPI in our case) to turn on power to the retimers and
+> cycle them through different modes to get the sideband link up. This may
+> also involve other firmwares such as Embedded Controller (as it is the case
+> with recent Chromebooks).
 > 
-> In cases where asked data length + unaligned offset is over 64 bytes
-> we need to make sure we don't read past the 64 bytes in the local
-> buffer when copying to caller buffer, and make sure that we don't
-> skip copying unaligned offset bytes from local buffer anymore after
-> the first round of 64 byte NVM data read.
+> This series adds support for "offline" retimer NVM upgrade so that it first
+> exposes each USB4 port to the userspace. If the platform firmware provides
+> a special _DSM-method (Device Specific Method) under the USB4 port ACPI
+> description, we expose two attributes under the port that the userspace can
+> use to put the port to offline mode and rescan for the retimers. Otherwise
+> the NVM upgrade works the same way than with the online mode. We also add
+> documentation to the admin-guide how this can be done.
 > 
-> Fixes: b04079837b20 ("thunderbolt: Add initial support for USB4")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> In addition to this, at least Intel USB4 devices (and retimers) allow
+> running NVM authenticate (upgrade) separately from write so we make it
+> possible for the userspace to run the write and authenticate in two steps.
+> This allows userspace to trigger the authentication at later time, like
+> when the user logs out.
+> 
+> Mika Westerberg (4):
+>   thunderbolt: Log the link as TBT instead of TBT3
+>   thunderbolt: Add USB4 port devices
+>   thunderbolt: Allow router NVM authenticate separately
+>   thunderbolt: Check for NVM authentication status after the operation started
+> 
+> Rajmohan Mani (5):
+>   thunderbolt: Add support for ACPI _DSM to power on/off retimers
+>   thunderbolt: Add additional USB4 port operations for retimer access
+>   thunderbolt: Add support for retimer NVM upgrade when there is no link
+>   thunderbolt: Move nvm_write_ops to tb.h
+>   thunderbolt: Add WRITE_ONLY and AUTHENTICATE_ONLY NVM operations for retimers
 
-Applied to thunderbolt.git/fixes.
+Looks good:
+
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
