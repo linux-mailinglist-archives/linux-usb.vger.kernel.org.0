@@ -2,71 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52F2389B23
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 04:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A467389B7D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 04:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhETCGo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 19 May 2021 22:06:44 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58873 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229952AbhETCGn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 22:06:43 -0400
-Received: (qmail 1187236 invoked by uid 1000); 19 May 2021 22:05:21 -0400
-Date:   Wed, 19 May 2021 22:05:21 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        devicetree@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Al Cooper <alcooperx@gmail.com>,
-        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: [PATCH v10 2/5] USB: misc: Add onboard_usb_hub driver
-Message-ID: <20210520020521.GB1186755@rowland.harvard.edu>
-References: <20210511225223.550762-1-mka@chromium.org>
- <20210511155152.v10.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <YKPz7a68duMyXU5x@google.com>
- <20210518194511.GA1137841@rowland.harvard.edu>
- <YKQ0XxhIWaN37HMr@google.com>
- <20210519144356.GB1165692@rowland.harvard.edu>
- <YKWaJdrpj1ixx9+v@google.com>
+        id S229534AbhETCqM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 19 May 2021 22:46:12 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:3038 "EHLO
+        szxga05-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhETCqM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 19 May 2021 22:46:12 -0400
+Received: from dggems703-chm.china.huawei.com (unknown [172.30.72.58])
+        by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4FlvBQ55XNzQp9P;
+        Thu, 20 May 2021 10:41:18 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggems703-chm.china.huawei.com (10.3.19.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Thu, 20 May 2021 10:44:49 +0800
+Received: from [127.0.0.1] (10.174.177.72) by dggpemm500006.china.huawei.com
+ (7.185.36.236) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Thu, 20 May
+ 2021 10:44:49 +0800
+Subject: Re: [PATCH 1/1] usb: xhci: remove unused variable 'len' in
+ xhci_unmap_temp_buf()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb <linux-usb@vger.kernel.org>
+References: <20210519123304.7885-1-thunder.leizhen@huawei.com>
+ <YKUOra3I+c+xeO+s@kroah.com>
+ <c7d39376-d18a-73db-dc33-03925e606ca3@huawei.com>
+ <d5755fc6-3c1d-f780-5105-d39771c73427@huawei.com>
+ <YKUnKKRqEPzh8h6C@kroah.com>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <521ca004-f02e-45c2-0373-d8a77b42c741@huawei.com>
+Date:   Thu, 20 May 2021 10:44:48 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKWaJdrpj1ixx9+v@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YKUnKKRqEPzh8h6C@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.72]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, May 19, 2021 at 04:07:17PM -0700, Matthias Kaehlcke wrote:
-> On Wed, May 19, 2021 at 10:43:56AM -0400, Alan Stern wrote:
-> > On Tue, May 18, 2021 at 02:40:47PM -0700, Matthias Kaehlcke wrote:
-> > > 
-> > > Could you also have a look at "[4/5] usb: host: xhci-plat:
-> > > Create platform device for onboard hubs in probe()"
-> > > (https://lore.kernel.org/patchwork/patch/1425453/)? It's a
-> > > relatively short patch that creates the platform device for
-> > > the driver from xhci-plat as you suggested in the v4
-> > > discussion.
-> > 
-> > I'm not the maintainer for xhci-related drivers.
-> > 
-> > However, there is at least one thing about this patch which looks 
-> > suspicious: Adding the onboard_hub_dev pointer to struct usb_hcd instead 
-> > of to struct xhci_plat_priv, where it would make a lot more sense.
+
+
+On 2021/5/19 22:56, Greg Kroah-Hartman wrote:
+> On Wed, May 19, 2021 at 10:37:07PM +0800, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2021/5/19 21:40, Leizhen (ThunderTown) wrote:
+>>>
+>>>
+>>> On 2021/5/19 21:12, Greg Kroah-Hartman wrote:
+>>>> On Wed, May 19, 2021 at 08:33:04PM +0800, Zhen Lei wrote:
+>>>>> GCC reports the following warning with W=1:
+>>>>>
+>>>>> drivers/usb/host/xhci.c:1349:15: warning:
+>>>>>  variable 'len' set but not used [-Wunused-but-set-variable]
+>>>>>  1349 |  unsigned int len;
+>>>>>       |               ^~~
+>>>>>
+>>>>> This variable is not used, remove it to fix the warning.
+>>>>>
+>>>>> Reported-by: Hulk Robot <hulkci@huawei.com>
+>>>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>>>> ---
+>>>>>  drivers/usb/host/xhci.c | 3 +--
+>>>>>  1 file changed, 1 insertion(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>>>> index 27283654ca08..a75ed4a00997 100644
+>>>>> --- a/drivers/usb/host/xhci.c
+>>>>> +++ b/drivers/usb/host/xhci.c
+>>>>> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+>>>>>  
+>>>>>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>>>>>  {
+>>>>> -	unsigned int len;
+>>>>>  	unsigned int buf_len;
+>>>>>  	enum dma_data_direction dir;
+>>>>>  
+>>>>> @@ -1362,7 +1361,7 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>>>>>  				 dir);
+>>>>>  
+>>>>>  	if (usb_urb_dir_in(urb))
+>>>>> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>>>>> +		(void)sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>>>>>  					   urb->transfer_buffer,
+>>>>>  					   buf_len,
+>>>>>  					   0);
+>>>>> -- 
+>>>>> 2.25.1
+>>>>>
+>>>>>
+>>>>
+>>>> Wow, no.  I keep telling you that this is not ok.  Why keep sending
+>>>> this?
+>>>
+>>> Sorry, I forgot to google it, someone already posted it.
+>>
+>> Hi, Greg Kroah-Hartman:
+>>   I've read your two exchange emails from https://patchwork.kernel.org/project/linux-usb/patch/20210306120644.74406-1-zhangkun4jr@163.com/#24019765
+>>   How about just give a warning when the copy is not complete? This W=1 warning will probably be detected by someone else.
 > 
-> I can move it to struct usb_hcd if that's preferred
+> Handle the error properly.  Just spitting a message to a user where they
+> can't do anything about it does not seems like the correct solution to
+> me, would you want the kernel to do that?
 
-Thinko: The patch already has it in struct usb_hcd.  I suggested moving 
-it to struct xhci_plat_priv.
+The sg_pcopy_from_buffer() can only be copied incomplete when the sg pages is not enough.
+The urb->sg should be ready before this function is called. So if the copy is incomplete,
+the xhci driver is faulty, not the user. It is impossible to implement fault tolerance at
+xhci_unmap_temp_buf(), to give a warning is the only thing we can do. And "len != buf_len"
+should be unlikely. I executed "git grep -wn sg_pcopy_from_buffer", no fault tolerance was
+found.
 
-Alan Stern
+> 
+> thanks,
+> 
+> greg k-h
+> 
+> .
+> 
+
