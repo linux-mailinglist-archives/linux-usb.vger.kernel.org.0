@@ -2,107 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D30738B8B8
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 23:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DDC38B8D3
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 23:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbhETVG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 17:06:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33175 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229708AbhETVG2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 17:06:28 -0400
-Received: (qmail 1218970 invoked by uid 1000); 20 May 2021 17:05:06 -0400
-Date:   Thu, 20 May 2021 17:05:06 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Guido Kiener <Guido.Kiener@rohde-schwarz.com>,
-        dave penkler <dpenkler@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>
-Subject: Recovering from transaction errors [was: Re: [syzbot] INFO: rcu
- detected stall in tx]
-Message-ID: <20210520210506.GA1218545@rowland.harvard.edu>
-References: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
- <20210519173545.GA1173157@rowland.harvard.edu>
- <12088413-2f7d-a1e5-5e8a-25876d85d18a@synopsys.com>
- <20210520020117.GA1186755@rowland.harvard.edu>
- <74b2133b-2f77-c86f-4c8b-1189332617d3@synopsys.com>
+        id S230035AbhETVPk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 17:15:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230031AbhETVPj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 17:15:39 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332D6C061761
+        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 14:14:18 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id kr9so1755370pjb.5
+        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 14:14:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JDuRhdD0c+I8x9p2xseG7EsWF35hPeDyR9fNC7DqgL0=;
+        b=ChvS/XCpiCjagokqDdvJr+aJoJuu4cFnMUg2lcjpmf6uYamCI71lziN+fHQ7mbexEj
+         itAg6b8BvXH4iwtz3uFLDaAGfP8hb4NFtgZCiC9azDp+lk5A5wrSjjbJaErvsVZdJzeQ
+         fWUwfNUsxb0z3kUN5Zud/t8V1s546c+98Bu+g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JDuRhdD0c+I8x9p2xseG7EsWF35hPeDyR9fNC7DqgL0=;
+        b=IZuxAwpvjOWzNYbnKDDA5Cxz/GNMW+V8yMezlyxk2eBA15JniQXKmgS+JOQGFW9hP+
+         Nipo0TjgguhlJ2pquZmw+suepl5nDWw20U48RKce8kEeiBME1q0b7S02mfxf+mNiV2TZ
+         ncMRl9J4KykI10KGXvToV7nk+ZxSbJRcVOLbEVnlUg32vT50egnvQguGe/myvj8HWsZA
+         3etZLATXSFjqmwFD5OIDICo3ORWnBK33nJoehKDPpY2wNgddT2rtn/ltHDtsJH+Fonad
+         4Hc+Zjz0R+FRTLDj6GXgukqFQlqtmXFPVP+M/PtaMYFnWgR2Ql7BrtjtX5RJgOb0e8SV
+         aLjA==
+X-Gm-Message-State: AOAM530+1Ges23PLdMfP+pyTzcTeU2/NObqHdDYZ6wSgaG9R1m7Fmevm
+        CBg8LxLbYN2Yl6MqG2vR6Xkzbg==
+X-Google-Smtp-Source: ABdhPJxRARguFLWFtqDDIo6kBbex1/oE8L/Z6VvTahbOh853k3DU7m91wAjdpyBTkBpmnu3t2dcjog==
+X-Received: by 2002:a17:90b:1955:: with SMTP id nk21mr7314169pjb.208.1621545257677;
+        Thu, 20 May 2021 14:14:17 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7ac6:cb3b:191b:54f3])
+        by smtp.gmail.com with UTF8SMTPSA id c19sm2125745pfo.150.2021.05.20.14.14.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 May 2021 14:14:17 -0700 (PDT)
+Date:   Thu, 20 May 2021 14:14:15 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        devicetree@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+        linux-kernel@vger.kernel.org, Stephen Boyd <swboyd@chromium.org>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH v10 2/5] USB: misc: Add onboard_usb_hub driver
+Message-ID: <YKbRJylHrDiuSRGH@google.com>
+References: <20210511225223.550762-1-mka@chromium.org>
+ <20210511155152.v10.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <YKPz7a68duMyXU5x@google.com>
+ <20210518194511.GA1137841@rowland.harvard.edu>
+ <YKQ0XxhIWaN37HMr@google.com>
+ <20210519144356.GB1165692@rowland.harvard.edu>
+ <YKWaJdrpj1ixx9+v@google.com>
+ <20210520020521.GB1186755@rowland.harvard.edu>
+ <YKZnA2bifn346bPa@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <74b2133b-2f77-c86f-4c8b-1189332617d3@synopsys.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YKZnA2bifn346bPa@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 20, 2021 at 08:30:01PM +0000, Thinh Nguyen wrote:
-> Hm... looks like we have a couple of issues in the uas storage class
-> driver and the xhci driver.
-> 
-> We may need to fix that in the uas storage driver because it doesn't
-> seem to handle it. (check uas_data_cmplt() in uas.c).
-
-Hmmm.  I see that if there is an error, the driver assumes no data was 
-transferred.  It shouldn't make that assumption; it should always use 
-urb->actual_length.
-
-It also doesn't indicate to the SCSI layer when a command gets an error 
-and it doesn't try to do any recovery.  Of course, the SCSI error 
-handler may initiate some recovery actions.
-
-> As for the xhci driver, there maybe a case where the stream URB never
-> gets to complete because the transaction err_count is not properly
-> updated. The err_count for transaction error is stored in ep_ring, but
-> the xhci driver may not be able to lookup the correct ep_ring based on
-> TRB address for streams. There are cases for streams where the event
-> TRBs have their TRB pointer field cleared to '0' (xhci spec section
-> 4.12.2). If the xhci driver doesn't see ep_ring for transaction error,
-> it automatically does a soft-retry. This is seen from one of our
-> testings that the driver was repeatedly doing soft-retry until the class
-> driver timed out.
-> 
-> Hi Mathias, maybe you have some comment on this? Thanks.
-> 
+On Thu, May 20, 2021 at 06:41:23AM -0700, Matthias Kaehlcke wrote:
+> On Wed, May 19, 2021 at 10:05:21PM -0400, Alan Stern wrote:
+> > On Wed, May 19, 2021 at 04:07:17PM -0700, Matthias Kaehlcke wrote:
+> > > On Wed, May 19, 2021 at 10:43:56AM -0400, Alan Stern wrote:
+> > > > On Tue, May 18, 2021 at 02:40:47PM -0700, Matthias Kaehlcke wrote:
+> > > > > 
+> > > > > Could you also have a look at "[4/5] usb: host: xhci-plat:
+> > > > > Create platform device for onboard hubs in probe()"
+> > > > > (https://lore.kernel.org/patchwork/patch/1425453/)? It's a
+> > > > > relatively short patch that creates the platform device for
+> > > > > the driver from xhci-plat as you suggested in the v4
+> > > > > discussion.
+> > > > 
+> > > > I'm not the maintainer for xhci-related drivers.
+> > > > 
+> > > > However, there is at least one thing about this patch which looks 
+> > > > suspicious: Adding the onboard_hub_dev pointer to struct usb_hcd instead 
+> > > > of to struct xhci_plat_priv, where it would make a lot more sense.
+> > > 
+> > > I can move it to struct usb_hcd if that's preferred
 > > 
-> > The fact is that only a small percentage of -EPROTO errors are 
-> > recoverable.  Some of them can be handled by a port reset, which can be 
-> > pretty awkward to perform but does occasionally work.  A lot of them 
-> > occur because the USB cable has been unplugged; obviously there's no way 
-> > to recover from that.  With only a few exceptions, the best and simplest 
-> > approach is not to try to recover at all.
+> > Thinko: The patch already has it in struct usb_hcd.  I suggested moving 
+> > it to struct xhci_plat_priv.
 > 
-> If the cable is unplugged, then we should get a connection change event
-> and the driver can handle it properly.
+> Ah, didn't actively recall to which struct I added it to, it has been a
+> while since I wrote that patch ;-)
 
-Yes -- unless the driver is in such a tight retry loop that the rest of 
-the system never gets a chance to process the connection change event.  
-I've seen bug reports where that happened.
+> Agreed that struct xhci_plat_priv is a better place.
 
-> Yes, it's probably simplest to do a port reset and let the transfer be
-> incomplete/corrupted. However, I think we should give
-> ClearFeature(ep_halt) some more thoughts as I think it can be a recovery
-> mechanism for storage class driver, even though that it may not be
-> foolproof.
+Or not, xhci_plat_priv is optional, which doesn't make it a good candidate
+for holding a field that could be used by any xHCI controller.
 
-When you say storage class driver, which one are you talking about,
-usb-storage or uas?  usb-storage already has a pretty robust recovery 
-mechanism.
-
-> > For the case in question (the syzbot bug report that started this 
-> > thread), the class driver doesn't try to perform any recovery.  It just 
-> > resubmits the URB, getting into a tight retry loop which consumes too 
-> > much CPU time.  Simply giving up would be preferable.
-> > 
-> > Alan Stern
-> > 
-> 
-> I see. By giving up, you mean doing port reset right? Otherwise it needs
-> some other mechanism to synchronize with the device side.
-
-No, I mean the driver should just stop communicating with the device.  
-That's an appropriate action for lots of drivers.  If the user wants to 
-re-synchronize with the device, he can unplug the USB cable and plug it 
-back in again.
-
-Alan Stern
+Should I move the field to struct xhci_hcd instead?
