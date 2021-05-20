@@ -2,92 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9D938AF87
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 15:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E6738B000
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 15:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240443AbhETNEZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 09:04:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242444AbhETNES (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 09:04:18 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF74C04C05C
-        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 05:36:07 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id o21so16393817iow.13
-        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 05:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=34ELGrTKuiRLxs9YZgxq8FjdR4bSeQq2ABY8yaAo3p8=;
-        b=NdVCwdCk0OShLDJDQ+Z9tTynVhjzNFmImm1ltGb9gmE+rdaexcQKtSFVce9f1aVUC+
-         S7xKsJfxMWlD0b82R8DuZRMej52+Y39hSHHnejZuTYEZedn217b4ltxI6D1SiSiV1nei
-         iA6WlQT7zUg1Po6+RdxStUVWXJKgajigvFUbHirvxhKAzh2uwnhbb2uSN/qH0RtjbtUa
-         uDGuk5SiCg2U7um9IYuP4IbRJgm3OTiyF+ruX2hWBlkRkCU3lSRo5WXZUdNhEP95eFmJ
-         u+1FNjs1LAxsuzhtogFs4mLc6X1AsoNFOPSMFeMfOBNlGIIYKX+Ofm517T7Sp2SMRLbo
-         wT3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=34ELGrTKuiRLxs9YZgxq8FjdR4bSeQq2ABY8yaAo3p8=;
-        b=KQrgpTaQqgx7GAZZUEfc7V4DPLE8GGSG8Vx1FQ9j26ApxlywK+dequ5/GItydnb17h
-         mQv3+/Sa11JkqH6uYuvyo+hSkwLgVOMy+TL8Jzn2eyr9VO4Q4ZW7XzUQp+VCkMNrK+2H
-         P9MR/uqAmirY/AItODsx7jSujkKiUUkUSan1fQAU2IDpjSo9JOU/uJBwi8GPqhu8u7E2
-         DzCwMcvm6Wx6dBDwd+FSyE+LYkljjM3kOUxKPeIjBRiVOocgpGDX5oGSx7n7kdzVpKDl
-         wtveqoWDMzJreKCrvMi580HPs+cMLGL1loR19MS7ek+YZDrCNJ1JtmjSTAFMCy0TlzwP
-         CyHQ==
-X-Gm-Message-State: AOAM530QplWLm4/v9EkblskCwqI4kPl0Fcltp9QbjzHqOX5bSIr4lHW1
-        fNwzwuIzlu7rq3duyHcmDKBE6NJI1rh4x0hPCTVdtE97hAhXAXeJ
-X-Google-Smtp-Source: ABdhPJxl3X0bi/unmU3kMQOO8DVToqfi+dk4i7NwjkVtKc9iaE62f3uL3UNXEXexuxFDjD9BtRWzaLy4t6Ulz33WvoQ=
-X-Received: by 2002:a02:a10f:: with SMTP id f15mr6024629jag.124.1621514166894;
- Thu, 20 May 2021 05:36:06 -0700 (PDT)
+        id S235147AbhETNc5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 09:32:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50510 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234765AbhETNc4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 May 2021 09:32:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B4866108B;
+        Thu, 20 May 2021 13:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621517495;
+        bh=a3dwOLxH06q4Z9S2NwACojtAv/LxYoVTrGUj6pjNmt4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cD2IUEPvUG4saun4D0Z6epBdYTaevNYr91+SQKfe9kRjX3hKvd0rRCi+CR3hDWP0c
+         mNYN71C4CAG3WUjGikwt3jm419j6uAk937JkuNq41VcsCi2YYM9Ev1qYUL7Tal4Yws
+         R+3ecf9ZC41FQU2+XZsjhC6sov1tyZo7vg38tNeatHZbifNkbCJhh11OKX8ky31qGl
+         K3urQW+nJZ/aHXzUj/TkIvkv8Na/QK19fZvKUMM6ADOU1NU5R2+65EQSg9TaUe994z
+         gxrkpV/2OoRg7M+TrcThcmTYXHvLqGsaS/JPHv2AUjpcXN9pk4y3tl1f8oHdAOAEbH
+         o5IaBUuTb9GiA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ljily-00035w-PO; Thu, 20 May 2021 15:31:35 +0200
+Date:   Thu, 20 May 2021 15:31:34 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <YKZktqzkddh3amqX@hovoldconsulting.com>
+References: <cover.1620304986.git.sean@mess.org>
+ <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+ <20210511103219.GA13769@gofer.mess.org>
+ <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
+ <20210515092226.GA31801@gofer.mess.org>
+ <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
+ <20210517103522.GA4644@gofer.mess.org>
 MIME-Version: 1.0
-From:   "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-Date:   Thu, 20 May 2021 15:35:26 +0300
-Message-ID: <CAJs94EbV6+C81NggHtnJGZ8aoeW12POhv4zi0RTawuDcf+ybFA@mail.gmail.com>
-Subject: Odroid C4: dwc2_hsotg_start_req: ep1 is stalled
-To:     hminas@synopsys.com
-Cc:     "open list:MUSB MULTIPOINT HIGH SPEED DUAL-ROLE CONTROLLER" 
-        <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210517103522.GA4644@gofer.mess.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+On Mon, May 17, 2021 at 11:35:22AM +0100, Sean Young wrote:
+> On Mon, May 17, 2021 at 11:30:39AM +0200, Johan Hovold wrote:
+> > On Sat, May 15, 2021 at 10:22:26AM +0100, Sean Young wrote:
+> > > On Fri, May 14, 2021 at 01:16:47PM +0200, Johan Hovold wrote:
+> > > > On Tue, May 11, 2021 at 11:32:19AM +0100, Sean Young wrote:
+> > > > > On Mon, May 10, 2021 at 10:15:14AM +0200, Johan Hovold wrote:
+> > > > > > On Thu, May 06, 2021 at 01:44:52PM +0100, Sean Young wrote:
+> > > > > > > This is a new rc-core driver for the USB-UIRT which you can see here
+> > > > > > > http://www.usbuirt.com/
+> > > > > > > 
+> > > > > > > This device is supported in lirc, via the usb serial kernel driver. This
+> > > > > > > driver is both for rc-core, which means it can use kernel/BPF decoding
+> > > > > > > ec. Also this implement is superior because it can:
+> > > > > > >  - support learning mode
+> > > > > > >  - setting transmit carrier
+> > > > > > >  - larger transmits using streaming tx command
+> > > > > > 
+> > > > > > This looks like something which should have been implemented as a
+> > > > > > line-discipline or serdev driver instead of reimplementing a minimal
+> > > > > > on-off ftdi driver and tying it closely to the RC subsystem.
+> > > > > 
+> > > > > The device is an infrared device, I'm not sure what it is lost by
+> > > > > doing it this way. The "minimal on-off ftdi driver" is super trivial.
+> > > > 
+> > > > It's still code duplication (and I meant to say "one-off" above").
+> > > > 
+> > > > What is preventing you from supporting the above functionality through
+> > > > lirc?
+> > > 
+> > > I guess you mean the userspace lirc daemon, as opposed to the /dev/lirc
+> > > chardev. If you use the lirc daemon, you don't use rc-core which comes with
+> > > IR decoding using BPF IR decoding or in-kernel decoders, automatic setup of
+> > > rc keymaps via udev. None of the modern ir-ctl/ir-keytable tooling will
+> > > work, including the IRP encoder/BPF compiler I'm working on (very slowly).
+> > 
+> > Ok, but apart from BPF that sound like other stuff and not the three
+> > items you list above? Is there anything preventing those items from
+> > being implemented in user space?
+> 
+> Well, after IR is decoded, you want to send decoded scancodes/key codes
+> to any input device, so your remote works just like any input device.
 
-I am running upstream Linux 5.12.3 on an Odroid C4 board and see lots
-of the following lines in dmesg while using the gadget mass storage
-driver. I suppose that this can indicate some issue in the dwc2
-driver.
+Isn't that already handled by lircd using uinput?
+ 
+> > Obviously a user-space implementation (e.g. accessing the device through
+> > /dev/ttyUSB0) is not going to be able to use in-kernel RC functionality.
+> > For that you'd need to use either a line-discipline or serdev driver,
+> > that is, a kernel driver, but not everything has to live in the kernel.
+> 
+> No, of course not. A lot of kernel functionality could live in user space,
+> for sure. But it doesn't.
+> 
+> Even if the input problem can be resolved, the lirc daemon is pretty outdated.
+> All the existing functionality in-kernel would have to be re-written for
+> userspace, and it would be total duplication of code, which you do not like.
+> You end up with a userspace implementation and a kernel space implementation.
+> 
+> There are many other IR devices that can be controlled through libusb in
+> userspace, which could work entirely in userspace. Same for i2c IR
+> devices, those could work entirely from userspace too. I don't know what
+> the state is of pci userspace drivers, but there certainly have been patches
+> for that; the line is not so clear.
+> 
+> I do think that the monolithic approach to kernels necessarily invokes
+> discussions like these, and there are no perfect answers. 
 
-[  189.752586] dwc2 ff400000.usb: bound driver g_mass_storage
-[  190.118994] dwc2 ff400000.usb: new device is high-speed
-[  190.199074] dwc2 ff400000.usb: new device is high-speed
-[  190.267855] dwc2 ff400000.usb: new address 4
-[  191.310603] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
-[  191.310737] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
-[  191.311015] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 0)
-[  191.312257] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
-[  191.312373] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
-[  191.312762] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 0)
-[  191.336959] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
-[  191.447759] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
-[  191.447823] dwc2 ff400000.usb: dwc2_hsotg_start_req: ep1 is stalled
-[  191.448098] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 0)
-[  191.448550] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
-[  191.567748] dwc2 ff400000.usb: dwc2_hsotg_ep_sethalt(ep
-00000000ce48180a ep1in, 1)
+I hear you, but we still need to have those discussions from time to
+time to make sure our architecture is sane. One of the problems today
+with the kernel development process appears to be that too few questions
+are asked. If it builds, ship it...
 
+In this case the device in question can already be handled in user space
+by lirqd (at least to some degree) and we have infrastructure for
+writing in-kernel serial client drivers (i.e. ldisc/serdev). While
+neither option may support everything we need today, adding further
+one-off serial-device + client combo drivers is still a step in the
+wrong direction.
 
--- 
-With best regards,
-Matwey V. Kornilov
+But I think I've got that point across by now.
+
+> > > The other nice thing is that IR TX feeds data from an urb interrupt handler,
+> > > so you don't need to rely userspace being scheduled quickly enough to feed
+> > > more data before the device runs out.
+> > 
+> > The tty layer and tty drivers provide write buffering so that need not
+> > be an issue.
+>  
+> Ok. I don't know what the size of the write buffer is or what the maximum
+> TX size is; the IR device supports infinite streaming.
+
+Our tty drivers typically have at least a 4k buffer for transmission.
+Surely that should be enough for a remote control but perhaps there are
+other more demanding applications?
+
+> > Thanks for that pointer. Judging from a quick look, the new driver
+> > appears to based on this one. By abstracting the serial interface bits
+> > in a generic RC serdev/ldisc driver you may be able reuse more code,
+> > even if I'm not in a position to judge how much of the IR protocol bits
+> > that can be shared.
+> 
+> Yes, I agree. Once hotplugging is in place. If you have patches for that,
+> please CC me and I can see if will work for IR drivers.
+
+Let's hope someone steps up to fund that work then.
+
+> > > There are a bunch old serial usb device IR devices and even older non-usb
+> > > serial devices that would be nice to have supported, if anyone is still
+> > > using them.
+> > 
+> > I noticed that drivers/media/rc/serial_ir.c also appears to use a
+> > similar approach of implementing a minimal one-off serial (8250?) driver
+> > and tying it closely to RC core. This one might also benefit from using
+> > the standard serial drivers for the transport and having an RC layer on
+> > top.
+> > 
+> > Currently it appears to use module-parameters for configuration instead
+> > of devicetree or some to-be-implemented interface for instantiating
+> > serdev devices from user space.
+> 
+> serial_ir.c (called lirc_serial in the past) is a bit special. It uses
+> an IR sensor connected directly to DCD and an output led connected to DTR,
+> (depending on the configuration used). I don't think this can be done with
+> a standard serial port driver. If it is possible, I'd like to know.
+> 
+> It's a bit of an insane way of doing things, but it's super cheap to build.
+
+Heh, ok. Perhaps we'll just have to live with this one then.
+
+Johan
