@@ -2,112 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B87E738B3C0
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 17:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA70838B5C4
+	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 20:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232708AbhETPxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 11:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231995AbhETPxk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 11:53:40 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B2F8C061574
-        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 08:52:17 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id a7so625413plh.3
-        for <linux-usb@vger.kernel.org>; Thu, 20 May 2021 08:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=et4Y9oDwBfZPSJIkobIdERmduN5tDbataYzAvTYU2PY=;
-        b=BCVv0pd4nAmeI+5bWyUVRJaJy3FgrY85SkTMeC+lgVcLhgFZ4tRLQSouhqM3mnWImU
-         NEAQtBm4Cw4snbFI7JjhZFDxcpirRizhSD3v9IIY25LyEQHlMcfkuls3kPkXXwkadHQO
-         6z1fx/gwt/D+qn/Mvty0czYMycp8CoRSY0XmR8oPK3AglkaWF6Y7IypNYiHYINHnwlYs
-         /U4kf/AKZz0hV9FBUKSoqQyBQIQeekQwdKN4LMC5G3xyriUu+/cKFHDODGbNr1Z8Zirm
-         zu8FtrwoBH7YkmXf7rs/aT4HoWCac/qjmYmQMScdsEYzL939MZy+1eD+svEEYzFJbI9p
-         dEMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=et4Y9oDwBfZPSJIkobIdERmduN5tDbataYzAvTYU2PY=;
-        b=EA72odBdNKHcAyXrGGhnCOGLtUPeGMHlJJrGvbl7W2M0MrcRkuISvlPLgAO7b11fcm
-         i+i8M+LDMd7FPhjFvTlMYBfiKls+r8Z6CqZFfl19/81PjiaI6A5rYkeaSntP/DJZm+Ly
-         QJWpsvJt8KScdaS13yjUnpmqy68trBSwLsfgeWXAlA3ZwMuMAseaXrmWi8MsySYAXgXg
-         i6TWRVI8C8aSsIU/yxQHLV8ACJHKAI3Yly8tDWjnQsGg4U45pEwMTh25VKuJDdpJVS5u
-         L035tjgpPya2sWfVLAj2YjxKrfZypyhblZZJIhXGQZEta9HyZ41ify9wJN3l5mgmagQa
-         mU5Q==
-X-Gm-Message-State: AOAM531Yzg6PDFyCfIcjpBtWzqo1efIs4l/4j7EGmziBBLflI3M2YuUD
-        /tfdcJT+rzUnze6M5TD6PLHuGGT3J202LN+d8bQJUQ==
-X-Google-Smtp-Source: ABdhPJzlGXK4gw/ppubxQvbs1HN3MmWw2v/sExbp6XD0V3xabqGLH61Kzs0STh1qpcBaqJm5STnIQX6xaFNwgt8TWjY=
-X-Received: by 2002:a17:902:a405:b029:f4:6975:14a8 with SMTP id
- p5-20020a170902a405b02900f4697514a8mr6557945plq.49.1621525936907; Thu, 20 May
- 2021 08:52:16 -0700 (PDT)
+        id S232438AbhETSJn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 14:09:43 -0400
+Received: from m.b4.vu ([203.16.231.148]:50516 "EHLO m.b4.vu"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231648AbhETSJm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 May 2021 14:09:42 -0400
+Received: by m.b4.vu (Postfix, from userid 1000)
+        id 28913604B6D7; Fri, 21 May 2021 03:38:19 +0930 (ACST)
+Date:   Fri, 21 May 2021 03:38:19 +0930
+From:   "Geoffrey D. Bennett" <g@b4.vu>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: ehci-pci: Scarlett Gen 2 mixer driver init failure
+Message-ID: <20210520180819.GA95348@m.b4.vu>
+References: <20210518202823.GA89630@m.b4.vu>
+ <20210519145246.GC1165692@rowland.harvard.edu>
 MIME-Version: 1.0
-References: <20210520134210.1667580-1-weiyongjun1@huawei.com>
-In-Reply-To: <20210520134210.1667580-1-weiyongjun1@huawei.com>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Thu, 20 May 2021 18:00:38 +0200
-Message-ID: <CAMZdPi_GBhF7Dk0vxUu3YoPTEs=BXAEzTE+rtFN2hRbfXke=rQ@mail.gmail.com>
-Subject: Re: [PATCH -next] usb: cdc-wdm: fix build error when CONFIG_WWAN_CORE
- is not set
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        USB <linux-usb@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210519145246.GC1165692@rowland.harvard.edu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Wei,
+Hi Alan,
 
-On Thu, 20 May 2021 at 15:32, Wei Yongjun <weiyongjun1@huawei.com> wrote:
->
-> Fix build error when CONFIG_WWAN_CORE is not set:
->
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_disconnect':
-> cdc-wdm.c:(.text+0xb2a): undefined reference to `wwan_remove_port'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_in_callback':
-> cdc-wdm.c:(.text+0xf23): undefined reference to `wwan_port_rx'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_stop':
-> cdc-wdm.c:(.text+0x127d): undefined reference to `wwan_port_get_drvdata'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx':
-> cdc-wdm.c:(.text+0x12d9): undefined reference to `wwan_port_get_drvdata'
-> x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x13c1): undefined reference to `wwan_port_txoff'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_start':
-> cdc-wdm.c:(.text+0x13e0): undefined reference to `wwan_port_get_drvdata'
-> x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x1431): undefined reference to `wwan_port_txon'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx_complete':
-> cdc-wdm.c:(.text+0x14a4): undefined reference to `wwan_port_txon'
-> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_create.cold':
-> cdc-wdm.c:(.text.unlikely+0x209): undefined reference to `wwan_create_port'
->
-> Fixes: cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
-> ---
->  drivers/usb/class/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/class/Kconfig b/drivers/usb/class/Kconfig
-> index d3f5162bd67e..7e502c046031 100644
-> --- a/drivers/usb/class/Kconfig
-> +++ b/drivers/usb/class/Kconfig
-> @@ -30,6 +30,7 @@ config USB_PRINTER
->
->  config USB_WDM
->         tristate "USB Wireless Device Management support"
-> +       depends on WWAN_CORE
->         help
->           This driver supports the WMC Device Management functionality
->           of cell phones compliant to the CDC WMC specification. You can use
+Thank you so much for your help! With your hint...
 
-Thanks for fixing this. Some *optional* code in cdc-wdm.c is flagged
-with CONFIG_WWAN instead of CONFIG_WWAN_CORE. would it be possible to
-change that flags in the code instead of adding a dependency?
+On Wed, May 19, 2021 at 10:52:46AM -0400, Alan Stern wrote:
+[...]
+> The actual packets sent by ehci-hcd are exactly the same, regardless of
+> whether they were submitted by a kernel driver or by userspace.  (In
+> fact, userspace submits URBs by way of usbfs, which is itself a kernel
+> driver.)
+
+...I started comparing how usbfs submitted the packet in
+do_proc_control() vs. how I was submitting the packet.
+
+It turns out that in the name usb_sndctrlpipe(), "snd" is *not*
+shorthand for "sound", but is in fact "send". So...
+
+diff --git a/sound/usb/mixer_scarlett_gen2.c b/sound/usb/mixer_scarlett_gen2.c
+index 560c2ade829d..dcff3e3a49f3 100644
+--- a/sound/usb/mixer_scarlett_gen2.c
++++ b/sound/usb/mixer_scarlett_gen2.c
+@@ -635,7 +635,7 @@ static int scarlett2_usb(
+        /* send a second message to get the response */
+
+        err = snd_usb_ctl_msg(mixer->chip->dev,
+-                       usb_sndctrlpipe(mixer->chip->dev, 0),
++                       usb_rcvctrlpipe(mixer->chip->dev, 0),
+                        SCARLETT2_USB_VENDOR_SPECIFIC_CMD_RESP,
+                        USB_RECIP_INTERFACE | USB_TYPE_CLASS | USB_DIR_IN,
+                        0,
+
+...works for me now. I will prepare and submit a patch to alsa-devel.
+
+[...]
+> Have you looked at a complete usbmon record of _all_ the packets sent,
+> starting from the time when the Focusrite Scarlett mixer is plugged in?
+> It could be that some difference in the sequence of packets leading up
+> to the one in question is what triggers the error.
+
+That's what I actually thought the problem was for such a long time
+until I could do a test setup that produced a clean diff of all the
+packets from plug-in between working and not working which is what led
+me here.
+
+I'm not sure if there's anything that could reasonably be added to
+make this sort of error easier to spot, such as warn if the pipe
+direction doesn't match the requesttype direction? Or have the ehci
+driver fix it up like the xhci driver appears to do?
+
+A small aside; I did notice that usb_sndctrlpipe(dev, 0) is evaluated
+twice in do_proc_control(), vs. usb_rcvctrlpipe(dev, 0) which is not;
+you might like to make this change:
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 533236366a03..4a8ec136460c 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1162,7 +1162,7 @@ static int do_proc_control(struct usb_dev_state *ps,
+ 			tbuf, ctrl->wLength);
+ 
+ 		usb_unlock_device(dev);
+-		i = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), ctrl->bRequest,
++		i = usb_control_msg(dev, pipe, ctrl->bRequest,
+ 				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
+ 				    tbuf, ctrl->wLength, tmo);
+ 		usb_lock_device(dev);
+
+Thanks again!
 
 Regards,
-Loic
+Geoffrey.
