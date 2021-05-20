@@ -2,159 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 080CD38B8F0
-	for <lists+linux-usb@lfdr.de>; Thu, 20 May 2021 23:26:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0118838B9DF
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 01:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbhETV1a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 17:27:30 -0400
-Received: from mail02.rohde-schwarz.com ([80.246.32.97]:50927 "EHLO
-        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhETV1a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 17:27:30 -0400
-Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
- (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.5; Thu, 20 May 2021
- 23:26:02 +0200
-Received: from GMU419.rsint.net ([10.0.230.184])
-          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 1006;
-          Thu, 20 May 2021 23:26:02 +0200 (CEST)
-Received: from GMU003.rsint.net (10.0.2.61) by GMU419.rsint.net (10.0.230.184)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.10; Thu, 20 May
- 2021 23:26:02 +0200
-Received: from GMU006.rsint.net (10.0.2.28) by GMU003.rsint.net (10.0.2.61)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.4; Thu, 20
- May 2021 23:25:53 +0200
-Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
- GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
- 15.01.2242.010; Thu, 20 May 2021 23:25:53 +0200
-From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     "dpenkler@gmail.com" <dpenkler@gmail.com>,
-        USB list <linux-usb@vger.kernel.org>,
-        Guido Kiener <guido@kiener-muenchen.de>,
-        "Thinh.Nguyen@synopsys.com" <Thinh.Nguyen@synopsys.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>
-Subject: Re: [syzbot] INFO: rcu detected stall in tx
-Thread-Topic: [syzbot] INFO: rcu detected stall in tx /ur/
-Thread-Index: AddNvoQbMx4Ux7nhSjSMga38auW5dQ==
-Date:   Thu, 20 May 2021 21:25:53 +0000
-Message-ID: <35b615b7c7344767b6fd37f7d420787e@rohde-schwarz.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-rus_sensitivity: 10
-hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
-hvs-prefix: R_S
-x-originating-ip: [10.0.9.40]
+        id S232603AbhETXBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 19:01:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49842 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232251AbhETXBd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 20 May 2021 19:01:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 1BA69613B0;
+        Thu, 20 May 2021 23:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621551611;
+        bh=ozt4sB+JiVGg7DqJwb8bcbFBgyLr/F9kdV8B8ptc4f4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=riEvOljNOAwKQIr3Y/h41N6xlBf/M8HJldkq72wpD3YQP8yy5GJBPKR4rpI8SA3dJ
+         8YU1go1H8kq3TVnvjlXyB3Gde8VwpALamz9zNWY1qCJFkpfDI1S5KXELIWkARk7mea
+         TwxI3nDIyVKoNhp1r3yPzJ2jw/3hzmf8cy/Rm7PVLo1y44QOrCCSwaK1XhJQAVaGwF
+         k1SSkaLtdRP/GbFVRFbetnTX7HsrxUZ9ScwU+5scRR/bm64QGdPBR4GlwqxCTJ2I8X
+         ElvESUjF8rdBYbkVPrj04xh6zQhopLFyCygl06cNk9Cw8iME/dVOjUJJ3b4m4Ubfq0
+         p9oshUYf2Xi0w==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 127A9609F6;
+        Thu, 20 May 2021 23:00:11 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-IQAV: YES
-X-GBS-PROC: ijJGnd7ryUNXAjn+Z3XHJzLV8jqzB3OnLYc8kPMFvQ8NIQ+ZGJMai/glKhw1w16smDw3GvSDXUO+6ksA8HGRaalNr/gROR+3dDGBw5/8LipNw2qAc1PU2HNuhM/Tc7Fa
-X-GBS-PROCJOB: kjT3YcehSet/zRdDVzdiNYKi6KVGVxGRvkGdfy5YA1r/vsIIw5g/xzue5jnEnJ1+
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] net: usb: hso: use DEVICE_ATTR_RO macro
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162155161107.31527.485096899823907681.git-patchwork-notify@kernel.org>
+Date:   Thu, 20 May 2021 23:00:11 +0000
+References: <20210520134116.36872-1-yuehaibing@huawei.com>
+In-Reply-To: <20210520134116.36872-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-U29ycnkgZm9yIHRoZSBtZXNzaW5nICJSRTogUmU6IC4uLi4iLiBPbmUgc2hvdWxkIGJlIGVub3Vn
-aC4NCk5leHQgbWFpbHMgSSdsbCBzZW5kIGZyb20gbXkgcHJpdmF0ZSBhY2NvdW50IGFnYWluLCBz
-aW5jZSBJIGNhbid0IGNoYW5nZSB0aGUgY29tcGFueSBydWxlcy4NClRoaXMgdGhyZWFkIGNvbnRp
-bnVlcyBmcm9tIG15IGxhc3QgbWFpbC4NCkFsYW4sIHBsZWFzZSBzZWUgYmVsb3cgYW5kIGFkZCBv
-dGhlciByZWNpcGllbnQgaWYgcmVxdWlyZWQuDQoNCj4gPiA+IE90aGVyd2lzZSBJIHNlZSBvbmx5
-IHRoZSBvdGhlciBhcHByb2FjaCB0byBjaGFuZ2UgaHVuZHJlZCBkcml2ZXJzDQo+ID4gPiBhbmQg
-YWRkIHRoZSBjYXNlcyBFUFJPVE8sIEVJTFNFUSBhbmQgRVRJTUUgaW4gZWFjaCBjYWxsYmFjayBo
-YW5kbGVyLg0KPiA+ID4gVGhlIHVzYnRtYyBkcml2ZXIgYWxyZWFkeSByZXNwZWN0cyB0aGUgRUlM
-U0VRIGFuZCBFVElNRSwgYW5kIG9ubHkNCj4gPiA+IEVQUk9UTyBpcyBtaXNzaW5nLg0KPiA+ID4g
-VGhlIHJlc3Qgc2hvdWxkIGJlIG1vcmUgYSBtYW5hZ2VtZW50IHRhc2suDQo+ID4gPiBCVFcgZG8g
-eW91IGFzc3VtZSBpdCBpcyBvbmx5IGEgcHJvYmxlbSBmb3IgSU5UIHBpcGVzIG9yIGlzIGl0IGFs
-c28gYQ0KPiA+ID4gcHJvYmxlbSBmb3IgaXNvY2hyb25vdXMgYW5kIGJ1bGsgdHJhbnNmZXJzPw0K
-PiA+DQo+ID4gQWxsIG9mIHRoZW0uICBDb250cm9sIHRvby4NCj4gPg0KPiA+ID4gPiBXaWxsIHlv
-dSBiZSBhYmxlIHRvIHRlc3QgcGF0Y2hlcz8NCj4gPiA+DQo+ID4gPiBJIG9ubHkgY2FuIHRlc3Qg
-dGhlIFVTQlRNQyBmdW5jdGlvbiBpbiBzb21lIGRpZmZlcmVudCBQQ3MuIEkgZG8gbm90DQo+ID4g
-PiBoYXZlIGF1dG9tYXRlZCByZWdyZXNzaW9uIHRlc3RzIGZvciBVU0IgZHJpdmVycyBvciBMaW51
-eCBrZXJuZWxzLg0KPiA+ID4gTWF5YmUgdGhlcmUgaXMgY29tcGFueSB3aG8gY291bGQgZG8gdGhh
-dC4NCj4gPg0KPiA+IFdlbGwgdGhlbiwgaWYgSSBkbyBmaW5kIHRpbWUgdG8gd3JpdGUgYSBwYXRj
-aCwgSSdsbCBhc2sgeW91IHRvIHRyeSBpdA0KPiA+IG91dCB3aXRoIHRoZSB1c2J0bWMgZHJpdmVy
-Lg0KPiANCj4gWW91IG1lYW4gdGhhdCB5b3Ugd2lsbCBkbyBhIHBhdGNoIGluIHVyYi5jIG9yIGEg
-aG9zdCBkcml2ZXI/IE9yIGp1c3QgYWRkIGEgbGluZSBpbg0KPiB1c2J0bWMuYz8NCj4gQW55aG93
-IHRoZXJlIGlzIG5vIGh1cnJ5LiBPbiBNYXkgMjAgSSB3aWxsIHNlbmQgeW91IGEgbWFpbCBpZiBJ
-J20gYWJsZSB0byBwcm92b2tlIG9uZQ0KPiBvZiB0aGVzZSBoYXJkd2FyZSBlcnJvcnMgRVBST1RP
-LCBFSUxTUSwgb3IgRVRJTUUuIE90aGVyd2lzZSBpdCBkb2Vzbid0IG1ha2UNCj4gc2Vuc2UgdG8g
-dGVzdCBpdC4NCj4gDQo+IC1HdWlkbw0KDQpJJ3ZlIHRlc3RlZCB0byBwdWxsIHRoZSBjYWJsZSBh
-bmQgSSBjYW4gZWFzeSBwcm9kdWNlIHRoZSAtRVBST1RPICgtNzEpIGVycm9yIGluIHRoZSB1c2J0
-bWMuYyBkcml2ZXIuDQpUaGUgZXJyb3IgYWxzbyBoYXBwZW5zIHdoZW4gSSBoYXZlIG5vIHRyYWZm
-aWMgYW5kIGp1c3Qgc3dpdGNoIG9mZiB0aGUgVVNCVE1DIGRldmljZSAod2hpY2ggSSBjYW4gZG8g
-ZnJvbSBob21lIG9mZmljZSkuDQpXaGVuIHRoZXJlIGlzIHRyYWZmaWMsIHRoZSBJTi9PVVQgcGlw
-ZSB3aWxsIGFsc28gc2hvdyBzb21lIC1FUFJPVE8gZXJyb3JzIGZyb20gdGhlIGZseWluZyB1cmJz
-Lg0KDQpPbiBteSB0ZXN0IFBDIHRoZSBhbW91bnQgb2YgZXJyb3IgbWVzc2FnZXMgdmFyeSBmcm9t
-IDEgdG8gY2EuIDEwIGVycm9yIG1lc3NhZ2UgaXNzdWVkIGJ5IHRoZSBJTlQgcGlwZSAoc2VlIGJl
-bG93KS4NCk5ldmVydGhlbGVzcyBJIGRvIG5vdCBzZWUgdGhlIGVuZGxlc3MgbG9vcCwgc2luY2Ug
-dGhlIFVTQiBkaXNjb25uZWN0IHN0b3BzIHRoZSBsb29wLg0KKFRlc3RlZCB3aXRoIFVTQiAyLjAs
-IG9sZGVyIGtlcm5lbCA0LjE1LCBidXQgbGF0ZXN0IG1vZGlmaWVkIHVzYnRtYy5jIGRyaXZlciB1
-c2luZyBlaGNpLXBjaSkNClNvIEkgY2FuIHRlc3QgZml4ZXMgKG9mIGNvdXJzZSB3aXRoIGxhdGVz
-dCBrZXJuZWwpIGFuZCBhbHNvIHNldHVwIGEgbWFjaGluZSB3aXRoIFVTQiAzLjAuDQoNCjEuIEV4
-YW1wbGUNClsxNjE2NTI3LjAxNzg2M10gdXNidG1jIDEtMS40OjEuMDogdXNidG1jX3dyaXRlX2J1
-bGtfY2IgLSBub256ZXJvIHdyaXRlIGJ1bGsgc3RhdHVzIHJlY2VpdmVkOiAtNzENClsxNjE2NTI3
-LjAzMjQ4OV0gdXNidG1jIDEtMS40OjEuMDogdW5rbm93biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0K
-WzE2MTY1MjcuMDUzOTk4XSB1c2J0bWMgMS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZl
-ZDogLTcxDQpbMTYxNjUyNy4wNzYxNDVdIHVzYnRtYyAxLTEuNDoxLjA6IHVua25vd24gc3RhdHVz
-IHJlY2VpdmVkOiAtNzENClsxNjE2NTI3LjA5ODE0M10gdXNidG1jIDEtMS40OjEuMDogdW5rbm93
-biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0KWzE2MTY1MjcuMTIwMjQ0XSB1c2J0bWMgMS0xLjQ6MS4w
-OiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYxNjUyNy4xNDIyNDRdIHVzYnRtYyAx
-LTEuNDoxLjA6IHVua25vd24gc3RhdHVzIHJlY2VpdmVkOiAtNzENClsxNjE2NTI3LjE2NDQ0MF0g
-dXNidG1jIDEtMS40OjEuMDogdW5rbm93biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0KWzE2MTY1Mjcu
-MTg2NTE3XSB1c2J0bWMgMS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpb
-MTYxNjUyNy4yMDgxNzVdIHVzYnRtYyAxLTEuNDoxLjA6IHVua25vd24gc3RhdHVzIHJlY2VpdmVk
-OiAtNzENClsxNjE2NTI3LjIzMDI3Ml0gdXNidG1jIDEtMS40OjEuMDogdW5rbm93biBzdGF0dXMg
-cmVjZWl2ZWQ6IC03MQ0KWzE2MTY1MjcuMjQxOTgyXSB1c2IgMS0xLjQ6IFVTQiBkaXNjb25uZWN0
-LCBkZXZpY2UgbnVtYmVyIDMNCg0KMi4gRXhhbXBsZQ0KWzE2MjI0NTQuMjk5MTMxXSB1c2J0bWMg
-MS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYyMjQ1NC4zMDU4MTVd
-IHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY193cml0ZV9idWxrX2NiIC0gbm9uemVybyB3cml0ZSBi
-dWxrIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYyMjQ1NC4zMDk5MjFdIHVzYnRtYyAxLTEuNDox
-LjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2
-ZWQ6IC03MQ0KWzE2MjI0NTQuMzE5MTIxXSB1c2J0bWMgMS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1
-cyByZWNlaXZlZDogLTcxDQpbMTYyMjQ1NC4zNDExOTldIHVzYnRtYyAxLTEuNDoxLjA6IHVua25v
-d24gc3RhdHVzIHJlY2VpdmVkOiAtNzENClsxNjIyNDU0LjM2MzMzNl0gdXNidG1jIDEtMS40OjEu
-MDogdW5rbm93biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0KWzE2MjI0NTQuMzg1NDY2XSB1c2J0bWMg
-MS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYyMjQ1NC40MDc1NzZd
-IHVzYnRtYyAxLTEuNDoxLjA6IHVua25vd24gc3RhdHVzIHJlY2VpdmVkOiAtNzENClsxNjIyNDU0
-LjQyMjg3MF0gdXNiIDEtMS40OiBVU0IgZGlzY29ubmVjdCwgZGV2aWNlIG51bWJlciA3DQoNCjMu
-IEV4YW1wbGUNClsxNjIzNDI5LjcxMzc4NF0gdXNidG1jIDEtMS40OjEuMDogdXNidG1jX3JlYWRf
-YnVsa19jYiAtIG5vbnplcm8gcmVhZCBidWxrIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYyMzQy
-OS43MTQwMzddIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJv
-IHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTQyNzldIHVzYnRtYyAx
-LTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMg
-cmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTQ1MjhdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19y
-ZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYy
-MzQyOS43MTQ3NzhdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256
-ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTUwMjldIHVzYnRt
-YyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0
-dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTUyNzhdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRt
-Y19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpb
-MTYyMzQyOS43MTU1MjhdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBu
-b256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTU3NzddIHVz
-YnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBz
-dGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTYwMjhdIHVzYnRtYyAxLTEuNDoxLjA6IHVz
-YnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0y
-DQpbMTYyMzQyOS43MTYyNzddIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2Ig
-LSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTg5MTZd
-IHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVs
-ayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MTkxNjhdIHVzYnRtYyAxLTEuNDoxLjA6
-IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6
-IC0yDQpbMTYyMzQyOS43MjI0MDRdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtf
-Y2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MjU2
-NjZdIHVzYnRtYyAxLTEuNDoxLjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQg
-YnVsayBzdGF0dXMgcmVjZWl2ZWQ6IC0yDQpbMTYyMzQyOS43MjU5MThdIHVzYnRtYyAxLTEuNDox
-LjA6IHVzYnRtY19yZWFkX2J1bGtfY2IgLSBub256ZXJvIHJlYWQgYnVsayBzdGF0dXMgcmVjZWl2
-ZWQ6IC0yDQpbMTYyMzQyOS43Mjc4MzddIHVzYnRtYyAxLTEuNDoxLjA6IHVua25vd24gc3RhdHVz
-IHJlY2VpdmVkOiAtNzENClsxNjIzNDI5Ljc0OTk0OV0gdXNidG1jIDEtMS40OjEuMDogdW5rbm93
-biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0KWzE2MjM0MjkuNzcyMDk0XSB1c2J0bWMgMS0xLjQ6MS4w
-OiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpbMTYyMzQyOS43OTQxODRdIHVzYnRtYyAx
-LTEuNDoxLjA6IHVua25vd24gc3RhdHVzIHJlY2VpdmVkOiAtNzENClsxNjIzNDI5LjgxNjI5N10g
-dXNidG1jIDEtMS40OjEuMDogdW5rbm93biBzdGF0dXMgcmVjZWl2ZWQ6IC03MQ0KWzE2MjM0Mjku
-ODM4NDc5XSB1c2J0bWMgMS0xLjQ6MS4wOiB1bmtub3duIHN0YXR1cyByZWNlaXZlZDogLTcxDQpb
-MTYyMzQyOS44Mzg3OTVdIHVzYiAxLTEuNDogVVNCIGRpc2Nvbm5lY3QsIGRldmljZSBudW1iZXIg
-OA0KDQo=
+Hello:
+
+This patch was applied to netdev/net-next.git (refs/heads/master):
+
+On Thu, 20 May 2021 21:41:16 +0800 you wrote:
+> Use DEVICE_ATTR_RO helper instead of plain DEVICE_ATTR,
+> which makes the code a bit shorter and easier to read.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/net/usb/hso.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+
+Here is the summary with links:
+  - [net-next] net: usb: hso: use DEVICE_ATTR_RO macro
+    https://git.kernel.org/netdev/net-next/c/7567d603b3f1
+
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
