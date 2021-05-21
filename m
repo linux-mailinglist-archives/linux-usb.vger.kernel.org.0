@@ -2,83 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D41D38C5DC
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 13:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B35A38C5EC
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 13:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232761AbhEULmo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 07:42:44 -0400
-Received: from mga04.intel.com ([192.55.52.120]:42215 "EHLO mga04.intel.com"
+        id S231584AbhEULqc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 07:46:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36764 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229639AbhEULmn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 07:42:43 -0400
-IronPort-SDR: Q+tdHRNAiEbF6un6utvy8+tBFbOCznJZmPhhlWFxQCpnzNkXrJnyzp/XGbzzAuz9ZppVcvkKvt
- 4j9DOh8NYdsA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="199522139"
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="199522139"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 04:41:08 -0700
-IronPort-SDR: YIK2n34v8umkm+IAPpDeACOESV7W80LamTXMNDhNBVyAxH8Z1juHU5Snnwo+BCpD7gVo7QOa8D
- jojbaFIOwKRg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="544043738"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 21 May 2021 04:41:03 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 21 May 2021 14:41:03 +0300
-Date:   Fri, 21 May 2021 14:41:03 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/8] drm + usb-type-c: Add support for out-of-band
- hotplug notification (v3)
-Message-ID: <YKecT6x9hOoBkyf2@kuha.fi.intel.com>
-References: <20210505162415.531876-1-hdegoede@redhat.com>
- <YJosrajgV9zem5lr@kuha.fi.intel.com>
+        id S231504AbhEULqb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 07:46:31 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D9502613DE;
+        Fri, 21 May 2021 11:45:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621597508;
+        bh=Vquz8nX6WAKpCduf7aK+OIrxyMRDaMKBl0Yx6b5Z/BA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XkHmmzrYPa3SAIFnFgnutMTZDjI78Vyz/tZEQoqBlfWyZBGUPD7H0VFA9G/Al4mwb
+         /jhMhVNkUJVRnAqUPJlJt617FjA0o4xpuazduhDlbFOxh2sePNBZIPb3PcZjcGcZIk
+         5HrZ1Ij0EbbWiLC/YuatyoMpw/LUHP3x6JPDErIk=
+Date:   Fri, 21 May 2021 13:45:06 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Vladimir Zapolskiy <vz@mleia.com>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH] USB: gadget: lpc32xx_udc: remove debugfs dentry variable
+Message-ID: <YKedQtgkBB+Bm0xT@kroah.com>
+References: <20210518162035.3697860-1-gregkh@linuxfoundation.org>
+ <4353dd50-1b41-65f8-815a-ae3fbafb387b@mleia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YJosrajgV9zem5lr@kuha.fi.intel.com>
+In-Reply-To: <4353dd50-1b41-65f8-815a-ae3fbafb387b@mleia.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 11, 2021 at 10:05:26AM +0300, Heikki Krogerus wrote:
-> On Wed, May 05, 2021 at 06:24:07PM +0200, Hans de Goede wrote:
-> > Hi All,
+On Wed, May 19, 2021 at 02:09:17PM +0300, Vladimir Zapolskiy wrote:
+> On 5/18/21 7:20 PM, Greg Kroah-Hartman wrote:
+> > There is no need to store the dentry for a fixed filename that we have
+> > the string for.  So just have debugfs look it up when we need it to
+> > remove the file, no need to store it anywhere locally.
 > > 
-> > Here is v3 of my patchset making DP over Type-C work on devices where the
-> > Type-C controller does not drive the HPD pin on the GPU, but instead
-> > we need to forward HPD events from the Type-C controller to the DRM driver.
+> > Note, this driver is broken in that debugfs will not work for more than
+> > one instance of the device it supports.  But given that this patch does
+> > not change that, and no one has ever seemed to notice, it must not be an
+> > issue...
 > 
-> These look good to me. I can also test these next week if needed. I'll
-> give my Tested-by tag after that if these haven't been taken by
-> anybody by that.
+> Yep, there is only one SoC with this device, and it has only one instance
+> of this UDC. Bad excuse, I know it.
 
-It's almost weird to see console output from the Type-C connector on
-my good old GPD printed to an actual display :-)
+Not a big deal :)
 
-At least in my tests, the DP alt mode driver now calls
-drm_connector_oob_hotplug_event() only when it should. This is pretty cool!
-FWIW:
+> > Cc: Felipe Balbi <balbi@kernel.org>
+> > Cc: Vladimir Zapolskiy <vz@mleia.com>
+> > Cc: linux-usb@vger.kernel.org
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> 
+> Acked-by: Vladimir Zapolskiy <vz@mleia.com>
 
-Tested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thanks for the review!
 
-
-thanks,
-
--- 
-heikki
+greg k-h
