@@ -2,169 +2,201 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 322CB38C230
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 10:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF96638C2A8
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 11:08:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231883AbhEUIpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 04:45:40 -0400
-Received: from mail-eopbgr10068.outbound.protection.outlook.com ([40.107.1.68]:55483
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230103AbhEUIpj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 04:45:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AidU8XGaNKH9/VbFO9tNoONb7/fVoN6T9i2yWowyJf1JEKM6jgishqnvpdX1+RfZmc9HdtLjOmakIPUbDtoDkJF6QtbzSfgwBsjB0WhCHcJv4Jug5StlgtZ+/3swZBtUttLlSuLBcjOX7IW/yyL5o4jAgLvcQ91bTue7p4FtwEQV3O8fdYmEsAQmTakwDlcqyduHf7g/ALbFYxcRCTk52MVVFaOkU0/CjqtFf+aAhveU0iGe3e2WL62zvmXQlq6fWxRV7Y2XikGF0xFEbKFt2MutlFA7jr0RTayD4pzP/hZXfot8jLvKW+STXtB0oIf22cu8NbFXXcxBtDV9D376rA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=broGwxNwXnfpleURL8fgRw3s61cKBryW71vRh9Oyg78=;
- b=Q6XoaQqHgzy/41azvVS41z0qQEVJILqdFlZoKFcDJP6rLKfpCzn8gOYqhGnTrOKlQfAmoZdHK0U6/2K/2/4O2qJVubZ9UGqsYp3Fl+eK+6t3ds5tNfIawOcVRtq3QuTLicC42Usjsiy5L3Ffwkjy6WvgjKnt9SsyJbtMkn9tcPuwaXfpnV24R40cWwHLeD4JB2n7pM2t+4A6aqpps4aARL09kw9C/bNghoT4FofZsPUJEsXeZJCWSiSnd8eXLrouCkGWg+3meMrDDm2w2DZt3aZ8TqgyBl5RAwP9umLNcGR/yj5mww6xIgFOfwilo6D6JzZj61XDl3eIl8qHSHtc2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
- dkim=pass header.d=diasemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=dialogsemiconductor.onmicrosoft.com;
- s=selector1-dialogsemiconductor-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=broGwxNwXnfpleURL8fgRw3s61cKBryW71vRh9Oyg78=;
- b=rTbzn8e/PeqeUjx2xBpHTMlWSe1tTb7iep0+lfBo8Yar0XOsOu8L2lzDEiVy2xjFWaeKycE4e8PpYNv+X70s6ptbp1OSqxUsHrNqE2XCdSYGGP/bt20phaOSdCqSBOKBKvNpad6Hs/qBjMXvOPWDj7/ikxAQZdJhaYwUdpYRrgk=
-Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ac::5)
- by PAXPR10MB4750.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:dc::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.26; Fri, 21 May
- 2021 08:44:12 +0000
-Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::c8ee:3efc:16a5:3d84]) by PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::c8ee:3efc:16a5:3d84%3]) with mapi id 15.20.4129.035; Fri, 21 May 2021
- 08:44:12 +0000
-From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Guenter Roeck <linux@roeck-us.net>,
-        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-Subject: RE: [PATCH v2 1/1] usb: typec: tcpm: Use LE to CPU conversion when
- accessing msg->header
-Thread-Topic: [PATCH v2 1/1] usb: typec: tcpm: Use LE to CPU conversion when
- accessing msg->header
-Thread-Index: AQHXTJZF+W3sWXeUpUmHF3giSUjCIKrtoXiQ
-Date:   Fri, 21 May 2021 08:44:12 +0000
-Message-ID: <PR3PR10MB4142574B559A4452C99FB85A80299@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
-References: <20210519100358.64018-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20210519100358.64018-1-andriy.shevchenko@linux.intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=none action=none
- header.from=diasemi.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [147.161.166.124]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: e9914d47-2fc5-4561-df7e-08d91c349bcc
-x-ms-traffictypediagnostic: PAXPR10MB4750:
-x-ms-exchange-sharedmailbox-routingagent-processed: True
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <PAXPR10MB475071D5A95CFA3FBB3B8A26A7299@PAXPR10MB4750.EURPRD10.PROD.OUTLOOK.COM>
-x-ms-oob-tlc-oobclassifiers: OLM:4714;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: hQaDvFuMDeWaHbgBVI32fQvJFEEh85q9EjoYt1r3THW4lf1+Pbb12yiZZAlSrfEXVeHW3imOB/a9vo71HjENMc5gDfVJyrMU1M9tIVPrl3Jdqaf6I1HePNZp6zVTyb4QG13+QmGeh1VVd/rHZItGyK2jE6e7yC4vkyEKlJMmM/qe4WOXR2MTxs8UPtTe691lhuJ2xYxnZVSUdsoy6Z5mWAnDuQlcQjVpCFXwBhRYA5zWkWXcZBJ477jX4YGNjF+PTOtjLgoEI4RYsPPlwnqOOEz5RADIkd3j+BNoeiwo5bJDL5otHw+pBKQSGSN8D1vao6uXDRk2XtdG7d7uFwUb9tDTyrTLmZCNYW2gYZ3oKDGx8CVFB2KOv+l5tEzxYo3CLaqyiE24wKPa/Gmpk8UTLWjvdl+wH3TJN4kAX8QblvKGRdP8HWKklhrhxQYw1VAjw5fg1plXBWYB64SYs0vkI8+oGJ9+NwLyhDjQJJJMB+g2846bNK2P2+EX1L8JBTC+DiczRbcoJ3cMvvl6cVxMpdHrYF1N9NmVOjkoFrA4Fa28aswYrEZhRCLJVMuhyIRJ1mGDu2UjzvWYg+hZcwD6whFGykWYW+sRyRPXeuqeaXY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(366004)(376002)(39860400002)(52536014)(316002)(33656002)(122000001)(66556008)(5660300002)(71200400001)(86362001)(107886003)(64756008)(66476007)(66946007)(66446008)(38100700002)(83380400001)(9686003)(76116006)(7696005)(26005)(55016002)(110136005)(8676002)(478600001)(186003)(4326008)(6506007)(54906003)(2906002)(8936002)(53546011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?P2x4BgobSBn/Mew+MC2P/TwFTuVEbVvuRGL2PXPbRN+GPJugogamycvW297i?=
- =?us-ascii?Q?HKIT09skKeQsJSMwQ9yQP5F4SSl0JfdKvzLYITjpoSgSjOLTpISORROB5++C?=
- =?us-ascii?Q?pJ8JZUHniz4bIiSIvehuzyHK5cGf89fSWVlI7PkxYd2SFTAYYHZ1Gsv9OEzx?=
- =?us-ascii?Q?b6uGMmmAFDtKjd3rDAs6yzoRsSmI3vNmofk3NsbT1N/YyL36cXheGZsHLffT?=
- =?us-ascii?Q?FCnIbphXTDLZRNr6TgQ+4wAIgQPkLePd3kX7wOw1zUvNSU3rQFt5w3ro0U+5?=
- =?us-ascii?Q?OUP0SneVRRVxlLmsIt+y5DZQy71o+e0BVC0WbkpHMZWA+d4qT5+lx8NDHUyn?=
- =?us-ascii?Q?JUeSpAtGDeV/3wKzjDvq5/vSPSPW/gc69m52K4MVBbK5Br2dNOnXuKPBb7YX?=
- =?us-ascii?Q?KVqgXBextBdXoqBojkbQ6aZ02FEAGblXPykBb2KI8zowNxKYtwJUZZ1dKx7U?=
- =?us-ascii?Q?Pz6/dW26YHYamm9A4KpBAA5o7mLRT6DAtr2LIR3mHxFG/fkmMfwmp3oGGu7r?=
- =?us-ascii?Q?isVsjV5QgTTxipm7UgUDaADJxLrQSZ1ps4NHeEjxvYl0u1fGTbTb3HvK0WyP?=
- =?us-ascii?Q?hVKx+EdbOBBL+KYamurhjcVcwhWPhIed2BtGsYM+H6HRS5D4Ny8Z9BBjEzFU?=
- =?us-ascii?Q?ZPAgB6D1GE0nF1sxc4QV9ylMiR/t/iHaun3JBId+Kas8mpwB8FmSYgWL2+rZ?=
- =?us-ascii?Q?0PW8mRznm3ncH0qSYPs6wbDpgONgCI06snorNVP/maFGTj9Z0J7dBC5XdJsE?=
- =?us-ascii?Q?2qzTgQOSQSCrEHmVZiX2NgP/oY+3vsDFj7ALYvpKvcAcWhvA80JQ+5UYoshz?=
- =?us-ascii?Q?zsbxE3z6/PQBRAaZ0l96Ta4OzWViAw0Xs1HLCd3tLxTyoY7rCXF/ZIpaVFHe?=
- =?us-ascii?Q?cCLxXhAM2Zl457dBlPEQQDGonPsbwqWXybpi+kwxNx4ea04sPkunLD7Nc6n2?=
- =?us-ascii?Q?6OLf83gwWcrgXGi6H6oCoZqVKCScJgdL3U1POLjEUfYqSjYXESvw8dAiSb/c?=
- =?us-ascii?Q?fB9KIsMRXPS1KZ7OfSmlAjrGGeBrFveHOdEX7jjJonzjY1livaIKNPheDXt3?=
- =?us-ascii?Q?Azcteow7vFMR6+7OPL+rFFS3vChY5tGy9rXr9+syygBZt++Uhe/Z4ZukAv9q?=
- =?us-ascii?Q?bNrF/pkpdnvshyWIiZJ8ctq/XpvSt0s1IZZK1Zf2+j/n4ILbPPNSYPPC9qXh?=
- =?us-ascii?Q?oK6x2zvtA1lTel4KHlk57Y98yhFuptsTAHu0zYy6VVdIIFCFooag7Zbq7/Lu?=
- =?us-ascii?Q?zksjI+CEKdK7aJWZcpOrpNy10ja4pqnq1GtuMgRpgB5sLIndrUpmiPKzU47b?=
- =?us-ascii?Q?lEtsPirsJ39Zco3j11bDB5i3?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S235439AbhEUJJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 05:09:51 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:50320 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235567AbhEUJJu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 05:09:50 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14L98DFE0010562, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14L98DFE0010562
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 21 May 2021 17:08:13 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Fri, 21 May 2021 17:08:12 +0800
+Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Fri, 21 May
+ 2021 17:08:01 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>,
+        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
+Subject: [PATCH net] r8152: check the informaton of the device
+Date:   Fri, 21 May 2021 17:07:34 +0800
+Message-ID: <1394712342-15778-363-Taiwan-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
 MIME-Version: 1.0
-X-OriginatorOrg: diasemi.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9914d47-2fc5-4561-df7e-08d91c349bcc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2021 08:44:12.6452
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Eum4G4n8FRs6QqzhxM6bNuLwzlCOxVenV80ig3QrgoZ9B8Zb8ftQrl6W3kysa8FcuVgDBbbS7So1t4Nvrg0q1WQiJtPjQYcsJECFpg/Iz1w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB4750
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/21/2021 08:46:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMjEgpFekyCAwMzo1MDowMA==?=
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMjEgpFekyCAwNzozMTowMA==?=
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/21/2021 08:44:16
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 10
+X-KSE-AntiSpam-Info: Lua profiles 163823 [May 21 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 446 446 0309aa129ce7cd9d810f87a68320917ac2eba541
+X-KSE-AntiSpam-Info: {Headers: Prob_stat_susp_url_only, url2}
+X-KSE-AntiSpam-Info: {Tracking_one_url, url3}
+X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: realtek.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;syzkaller.appspot.com:7.1.1
+X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, headers_charset}
+X-KSE-AntiSpam-Info: Rate: 10
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/21/2021 08:46:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19 May 2021 11:04, Andy Shevchenko wrote:
+Verify some fields of the USB descriptor to make sure the driver
+could be used by the device.
 
-> Sparse is not happy about strict type handling:
->   .../typec/tcpm/tcpm.c:2720:27: warning: restricted __le16 degrades to i=
-nteger
->   .../typec/tcpm/tcpm.c:2814:32: warning: restricted __le16 degrades to i=
-nteger
->=20
-> Fix this by converting LE to CPU before use.
->=20
-> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
-> Fixes: 64f7c494a3c0 ("typec: tcpm: Add support for sink PPS related messa=
-ges")
-> Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+BugLink: https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
+Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
+Fixes: c2198943e33b ("r8152: search the configuration of vendor mode")
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+---
+ drivers/net/usb/r8152.c | 71 +++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 69 insertions(+), 2 deletions(-)
 
-Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
-
-> ---
-> v2: fixed subject prefix
->  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
-c
-> index 64133e586c64..8fdfd7f65ad7 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -2717,7 +2717,7 @@ static void tcpm_pd_ext_msg_request(struct
-> tcpm_port *port,
->  	enum pd_ext_msg_type type =3D pd_header_type_le(msg->header);
->  	unsigned int data_size =3D pd_ext_header_data_size_le(msg-
-> >ext_msg.header);
->=20
-> -	if (!(msg->ext_msg.header & PD_EXT_HDR_CHUNKED)) {
-> +	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
->  		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP,
-> NONE_AMS);
->  		tcpm_log(port, "Unchunked extended messages unsupported");
->  		return;
-> @@ -2811,7 +2811,7 @@ static void tcpm_pd_rx_handler(struct kthread_work
-> *work)
->  				 "Data role mismatch, initiating error recovery");
->  			tcpm_set_state(port, ERROR_RECOVERY, 0);
->  		} else {
-> -			if (msg->header & PD_HEADER_EXT_HDR)
-> +			if (le16_to_cpu(msg->header) & PD_HEADER_EXT_HDR)
->  				tcpm_pd_ext_msg_request(port, msg);
->  			else if (cnt)
->  				tcpm_pd_data_request(port, msg);
-> --
-> 2.30.2
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 136ea06540ff..f348350f5da1 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -8107,6 +8107,69 @@ static void r8156b_init(struct r8152 *tp)
+ 	tp->coalesce = 15000;	/* 15 us */
+ }
+ 
++static bool rtl_check_vendor_ok(struct usb_interface *intf)
++{
++	struct usb_host_interface *alt = intf->cur_altsetting;
++	struct usb_host_endpoint *in = NULL, *out = NULL, *intr = NULL;
++	unsigned int ep;
++
++	if (alt->desc.bNumEndpoints < 3) {
++		dev_err(&intf->dev, "Unexpected bNumEndpoints %d\n", alt->desc.bNumEndpoints);
++		return false;
++	}
++
++	for (ep = 0; ep < alt->desc.bNumEndpoints; ep++) {
++		struct usb_host_endpoint *e;
++
++		e = alt->endpoint + ep;
++
++		/* ignore endpoints which cannot transfer data */
++		if (!usb_endpoint_maxp(&e->desc))
++			continue;
++
++		switch (e->desc.bmAttributes) {
++		case USB_ENDPOINT_XFER_INT:
++			if (!usb_endpoint_dir_in(&e->desc))
++				continue;
++			if (!intr)
++				intr = e;
++			break;
++		case USB_ENDPOINT_XFER_BULK:
++			if (usb_endpoint_dir_in(&e->desc)) {
++				if (!in)
++					in = e;
++			} else if (!out) {
++				out = e;
++			}
++			break;
++		default:
++			continue;
++		}
++	}
++
++	if (!in || !out || !intr) {
++		dev_err(&intf->dev, "Miss Endpoints\n");
++		return false;
++	}
++
++	if ((in->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 1) {
++		dev_err(&intf->dev, "Invalid Rx Endpoints\n");
++		return false;
++	}
++
++	if ((out->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 2) {
++		dev_err(&intf->dev, "Invalid Tx Endpoints\n");
++		return false;
++	}
++
++	if ((intr->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 3) {
++		dev_err(&intf->dev, "Invalid interrupt Endpoints\n");
++		return false;
++	}
++
++	return true;
++}
++
+ static bool rtl_vendor_mode(struct usb_interface *intf)
+ {
+ 	struct usb_host_interface *alt = intf->cur_altsetting;
+@@ -8115,12 +8178,15 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
+ 	int i, num_configs;
+ 
+ 	if (alt->desc.bInterfaceClass == USB_CLASS_VENDOR_SPEC)
+-		return true;
++		return rtl_check_vendor_ok(intf);
+ 
+ 	/* The vendor mode is not always config #1, so to find it out. */
+ 	udev = interface_to_usbdev(intf);
+ 	c = udev->config;
+ 	num_configs = udev->descriptor.bNumConfigurations;
++	if (num_configs < 2)
++		return false;
++
+ 	for (i = 0; i < num_configs; (i++, c++)) {
+ 		struct usb_interface_descriptor	*desc = NULL;
+ 
+@@ -8135,7 +8201,8 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
+ 		}
+ 	}
+ 
+-	WARN_ON_ONCE(i == num_configs);
++	if (i == num_configs)
++		dev_err(&intf->dev, "Unexpected Device\n");
+ 
+ 	return false;
+ }
+-- 
+2.26.3
 
