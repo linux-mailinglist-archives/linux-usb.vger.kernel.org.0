@@ -2,15 +2,16 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 263E638C43E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 11:59:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C3B38C534
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 12:46:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbhEUKBN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 06:01:13 -0400
-Received: from m12-15.163.com ([220.181.12.15]:40767 "EHLO m12-15.163.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233290AbhEUKAN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 06:00:13 -0400
+        id S232254AbhEUKrr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 06:47:47 -0400
+Received: from proxy25215.mail.163.com ([103.129.252.15]:50479 "EHLO
+        proxy25215.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230480AbhEUKrq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 06:47:46 -0400
+X-Greylist: delayed 912 seconds by postgrey-1.27 at vger.kernel.org; Fri, 21 May 2021 06:47:45 EDT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
         s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dYX1o
         +aSL622HsiL7bI048V16tlR+t072uYzyHtC3AM=; b=IUsU5aBklxAKyk7FM87zn
