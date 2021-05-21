@@ -2,283 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C90438C20A
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 10:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 322CB38C230
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 10:44:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbhEUIjR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 04:39:17 -0400
-Received: from mga02.intel.com ([134.134.136.20]:62594 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232778AbhEUIjR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 04:39:17 -0400
-IronPort-SDR: 9Lc72ltXXW2q36slIVOMRw03XHD6TmWDu61vfm3/XtCvl0ERB6I+fWJ6gJk4/6B1rnP9DJTZ/d
- KJSH7KZLI2Dw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="188564604"
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208,223";a="188564604"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 01:37:53 -0700
-IronPort-SDR: qgMJYNKVtOaHCK1dtgiG/0afWug4IsKXp1ouCpLf+HfRkApptGX9RJBpRFUZifRbOIC3oZwuMy
- 5HbLYPtN6pIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,313,1613462400"; 
-   d="scan'208,223";a="543967207"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 21 May 2021 01:37:50 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 21 May 2021 11:37:47 +0300
-Date:   Fri, 21 May 2021 11:37:47 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     robh+dt@kernel.org, shawnguo@kernel.org,
-        gregkh@linuxfoundation.org, linux@roeck-us.net,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch support via
- mux controller
-Message-ID: <YKdxW8SFntFYcyv+@kuha.fi.intel.com>
-References: <1621408490-23811-1-git-send-email-jun.li@nxp.com>
- <1621408490-23811-4-git-send-email-jun.li@nxp.com>
- <YKZXHG7BSSZssiBg@kuha.fi.intel.com>
+        id S231883AbhEUIpk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 04:45:40 -0400
+Received: from mail-eopbgr10068.outbound.protection.outlook.com ([40.107.1.68]:55483
+        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230103AbhEUIpj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 04:45:39 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AidU8XGaNKH9/VbFO9tNoONb7/fVoN6T9i2yWowyJf1JEKM6jgishqnvpdX1+RfZmc9HdtLjOmakIPUbDtoDkJF6QtbzSfgwBsjB0WhCHcJv4Jug5StlgtZ+/3swZBtUttLlSuLBcjOX7IW/yyL5o4jAgLvcQ91bTue7p4FtwEQV3O8fdYmEsAQmTakwDlcqyduHf7g/ALbFYxcRCTk52MVVFaOkU0/CjqtFf+aAhveU0iGe3e2WL62zvmXQlq6fWxRV7Y2XikGF0xFEbKFt2MutlFA7jr0RTayD4pzP/hZXfot8jLvKW+STXtB0oIf22cu8NbFXXcxBtDV9D376rA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=broGwxNwXnfpleURL8fgRw3s61cKBryW71vRh9Oyg78=;
+ b=Q6XoaQqHgzy/41azvVS41z0qQEVJILqdFlZoKFcDJP6rLKfpCzn8gOYqhGnTrOKlQfAmoZdHK0U6/2K/2/4O2qJVubZ9UGqsYp3Fl+eK+6t3ds5tNfIawOcVRtq3QuTLicC42Usjsiy5L3Ffwkjy6WvgjKnt9SsyJbtMkn9tcPuwaXfpnV24R40cWwHLeD4JB2n7pM2t+4A6aqpps4aARL09kw9C/bNghoT4FofZsPUJEsXeZJCWSiSnd8eXLrouCkGWg+3meMrDDm2w2DZt3aZ8TqgyBl5RAwP9umLNcGR/yj5mww6xIgFOfwilo6D6JzZj61XDl3eIl8qHSHtc2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=broGwxNwXnfpleURL8fgRw3s61cKBryW71vRh9Oyg78=;
+ b=rTbzn8e/PeqeUjx2xBpHTMlWSe1tTb7iep0+lfBo8Yar0XOsOu8L2lzDEiVy2xjFWaeKycE4e8PpYNv+X70s6ptbp1OSqxUsHrNqE2XCdSYGGP/bt20phaOSdCqSBOKBKvNpad6Hs/qBjMXvOPWDj7/ikxAQZdJhaYwUdpYRrgk=
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:ac::5)
+ by PAXPR10MB4750.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:dc::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.26; Fri, 21 May
+ 2021 08:44:12 +0000
+Received: from PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c8ee:3efc:16a5:3d84]) by PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::c8ee:3efc:16a5:3d84%3]) with mapi id 15.20.4129.035; Fri, 21 May 2021
+ 08:44:12 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Guenter Roeck <linux@roeck-us.net>,
+        Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+Subject: RE: [PATCH v2 1/1] usb: typec: tcpm: Use LE to CPU conversion when
+ accessing msg->header
+Thread-Topic: [PATCH v2 1/1] usb: typec: tcpm: Use LE to CPU conversion when
+ accessing msg->header
+Thread-Index: AQHXTJZF+W3sWXeUpUmHF3giSUjCIKrtoXiQ
+Date:   Fri, 21 May 2021 08:44:12 +0000
+Message-ID: <PR3PR10MB4142574B559A4452C99FB85A80299@PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM>
+References: <20210519100358.64018-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20210519100358.64018-1-andriy.shevchenko@linux.intel.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none
+ header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [147.161.166.124]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e9914d47-2fc5-4561-df7e-08d91c349bcc
+x-ms-traffictypediagnostic: PAXPR10MB4750:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <PAXPR10MB475071D5A95CFA3FBB3B8A26A7299@PAXPR10MB4750.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:4714;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hQaDvFuMDeWaHbgBVI32fQvJFEEh85q9EjoYt1r3THW4lf1+Pbb12yiZZAlSrfEXVeHW3imOB/a9vo71HjENMc5gDfVJyrMU1M9tIVPrl3Jdqaf6I1HePNZp6zVTyb4QG13+QmGeh1VVd/rHZItGyK2jE6e7yC4vkyEKlJMmM/qe4WOXR2MTxs8UPtTe691lhuJ2xYxnZVSUdsoy6Z5mWAnDuQlcQjVpCFXwBhRYA5zWkWXcZBJ477jX4YGNjF+PTOtjLgoEI4RYsPPlwnqOOEz5RADIkd3j+BNoeiwo5bJDL5otHw+pBKQSGSN8D1vao6uXDRk2XtdG7d7uFwUb9tDTyrTLmZCNYW2gYZ3oKDGx8CVFB2KOv+l5tEzxYo3CLaqyiE24wKPa/Gmpk8UTLWjvdl+wH3TJN4kAX8QblvKGRdP8HWKklhrhxQYw1VAjw5fg1plXBWYB64SYs0vkI8+oGJ9+NwLyhDjQJJJMB+g2846bNK2P2+EX1L8JBTC+DiczRbcoJ3cMvvl6cVxMpdHrYF1N9NmVOjkoFrA4Fa28aswYrEZhRCLJVMuhyIRJ1mGDu2UjzvWYg+hZcwD6whFGykWYW+sRyRPXeuqeaXY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(396003)(346002)(136003)(366004)(376002)(39860400002)(52536014)(316002)(33656002)(122000001)(66556008)(5660300002)(71200400001)(86362001)(107886003)(64756008)(66476007)(66946007)(66446008)(38100700002)(83380400001)(9686003)(76116006)(7696005)(26005)(55016002)(110136005)(8676002)(478600001)(186003)(4326008)(6506007)(54906003)(2906002)(8936002)(53546011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?P2x4BgobSBn/Mew+MC2P/TwFTuVEbVvuRGL2PXPbRN+GPJugogamycvW297i?=
+ =?us-ascii?Q?HKIT09skKeQsJSMwQ9yQP5F4SSl0JfdKvzLYITjpoSgSjOLTpISORROB5++C?=
+ =?us-ascii?Q?pJ8JZUHniz4bIiSIvehuzyHK5cGf89fSWVlI7PkxYd2SFTAYYHZ1Gsv9OEzx?=
+ =?us-ascii?Q?b6uGMmmAFDtKjd3rDAs6yzoRsSmI3vNmofk3NsbT1N/YyL36cXheGZsHLffT?=
+ =?us-ascii?Q?FCnIbphXTDLZRNr6TgQ+4wAIgQPkLePd3kX7wOw1zUvNSU3rQFt5w3ro0U+5?=
+ =?us-ascii?Q?OUP0SneVRRVxlLmsIt+y5DZQy71o+e0BVC0WbkpHMZWA+d4qT5+lx8NDHUyn?=
+ =?us-ascii?Q?JUeSpAtGDeV/3wKzjDvq5/vSPSPW/gc69m52K4MVBbK5Br2dNOnXuKPBb7YX?=
+ =?us-ascii?Q?KVqgXBextBdXoqBojkbQ6aZ02FEAGblXPykBb2KI8zowNxKYtwJUZZ1dKx7U?=
+ =?us-ascii?Q?Pz6/dW26YHYamm9A4KpBAA5o7mLRT6DAtr2LIR3mHxFG/fkmMfwmp3oGGu7r?=
+ =?us-ascii?Q?isVsjV5QgTTxipm7UgUDaADJxLrQSZ1ps4NHeEjxvYl0u1fGTbTb3HvK0WyP?=
+ =?us-ascii?Q?hVKx+EdbOBBL+KYamurhjcVcwhWPhIed2BtGsYM+H6HRS5D4Ny8Z9BBjEzFU?=
+ =?us-ascii?Q?ZPAgB6D1GE0nF1sxc4QV9ylMiR/t/iHaun3JBId+Kas8mpwB8FmSYgWL2+rZ?=
+ =?us-ascii?Q?0PW8mRznm3ncH0qSYPs6wbDpgONgCI06snorNVP/maFGTj9Z0J7dBC5XdJsE?=
+ =?us-ascii?Q?2qzTgQOSQSCrEHmVZiX2NgP/oY+3vsDFj7ALYvpKvcAcWhvA80JQ+5UYoshz?=
+ =?us-ascii?Q?zsbxE3z6/PQBRAaZ0l96Ta4OzWViAw0Xs1HLCd3tLxTyoY7rCXF/ZIpaVFHe?=
+ =?us-ascii?Q?cCLxXhAM2Zl457dBlPEQQDGonPsbwqWXybpi+kwxNx4ea04sPkunLD7Nc6n2?=
+ =?us-ascii?Q?6OLf83gwWcrgXGi6H6oCoZqVKCScJgdL3U1POLjEUfYqSjYXESvw8dAiSb/c?=
+ =?us-ascii?Q?fB9KIsMRXPS1KZ7OfSmlAjrGGeBrFveHOdEX7jjJonzjY1livaIKNPheDXt3?=
+ =?us-ascii?Q?Azcteow7vFMR6+7OPL+rFFS3vChY5tGy9rXr9+syygBZt++Uhe/Z4ZukAv9q?=
+ =?us-ascii?Q?bNrF/pkpdnvshyWIiZJ8ctq/XpvSt0s1IZZK1Zf2+j/n4ILbPPNSYPPC9qXh?=
+ =?us-ascii?Q?oK6x2zvtA1lTel4KHlk57Y98yhFuptsTAHu0zYy6VVdIIFCFooag7Zbq7/Lu?=
+ =?us-ascii?Q?zksjI+CEKdK7aJWZcpOrpNy10ja4pqnq1GtuMgRpgB5sLIndrUpmiPKzU47b?=
+ =?us-ascii?Q?lEtsPirsJ39Zco3j11bDB5i3?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="uREGkeqe8ZkjR5cd"
-Content-Disposition: inline
-In-Reply-To: <YKZXHG7BSSZssiBg@kuha.fi.intel.com>
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PR3PR10MB4142.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9914d47-2fc5-4561-df7e-08d91c349bcc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2021 08:44:12.6452
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Eum4G4n8FRs6QqzhxM6bNuLwzlCOxVenV80ig3QrgoZ9B8Zb8ftQrl6W3kysa8FcuVgDBbbS7So1t4Nvrg0q1WQiJtPjQYcsJECFpg/Iz1w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB4750
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 19 May 2021 11:04, Andy Shevchenko wrote:
 
---uREGkeqe8ZkjR5cd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> Sparse is not happy about strict type handling:
+>   .../typec/tcpm/tcpm.c:2720:27: warning: restricted __le16 degrades to i=
+nteger
+>   .../typec/tcpm/tcpm.c:2814:32: warning: restricted __le16 degrades to i=
+nteger
+>=20
+> Fix this by converting LE to CPU before use.
+>=20
+> Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+> Fixes: 64f7c494a3c0 ("typec: tcpm: Add support for sink PPS related messa=
+ges")
+> Cc: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hi,
+Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
 
-On Thu, May 20, 2021 at 03:33:36PM +0300, Heikki Krogerus wrote:
-> Why not just do that inside fwnode_typec_switch_get() and handle the
-> whole thing in drivers/usb/typec/mux.c (or in its own file if you
-> prefer)?
-> 
-> You'll just need to register a "wrapper" Type-C switch object for the
-> OF mux controller, but that should not be a problem. That way you
-> don't need to export any new functions, touch this file or anything
-> else.
+> ---
+> v2: fixed subject prefix
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.=
+c
+> index 64133e586c64..8fdfd7f65ad7 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2717,7 +2717,7 @@ static void tcpm_pd_ext_msg_request(struct
+> tcpm_port *port,
+>  	enum pd_ext_msg_type type =3D pd_header_type_le(msg->header);
+>  	unsigned int data_size =3D pd_ext_header_data_size_le(msg-
+> >ext_msg.header);
+>=20
+> -	if (!(msg->ext_msg.header & PD_EXT_HDR_CHUNKED)) {
+> +	if (!(le16_to_cpu(msg->ext_msg.header) & PD_EXT_HDR_CHUNKED)) {
+>  		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP,
+> NONE_AMS);
+>  		tcpm_log(port, "Unchunked extended messages unsupported");
+>  		return;
+> @@ -2811,7 +2811,7 @@ static void tcpm_pd_rx_handler(struct kthread_work
+> *work)
+>  				 "Data role mismatch, initiating error recovery");
+>  			tcpm_set_state(port, ERROR_RECOVERY, 0);
+>  		} else {
+> -			if (msg->header & PD_HEADER_EXT_HDR)
+> +			if (le16_to_cpu(msg->header) & PD_HEADER_EXT_HDR)
+>  				tcpm_pd_ext_msg_request(port, msg);
+>  			else if (cnt)
+>  				tcpm_pd_data_request(port, msg);
+> --
+> 2.30.2
 
-I wrote a bit of code just to see how that would look. I'm attaching
-you the hack I made. I guess something like that would not be too bad.
-A wrapper is probable always a bit clumsy, but I'm not sure that in
-this case it's a huge problem. Of course if there are any better
-ideas, let's here them :-)
-
-
-thanks,
-
--- 
-heikki
-
---uREGkeqe8ZkjR5cd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: attachment;
-	filename="0001-usb-typec-mux-Add-wrapper-for-OF-mux-controllers-tha.patch"
-
-From bdd63f82788fe95e056ed85ece939e41cfb862ad Mon Sep 17 00:00:00 2001
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Date: Fri, 21 May 2021 10:42:23 +0300
-Subject: [PATCH] usb: typec: mux: Add wrapper for OF mux controllers that
- handle orientation
-
-Interim. Experiment only.
-
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
----
- drivers/usb/typec/Makefile |  1 +
- drivers/usb/typec/mux.c    | 13 +++--
- drivers/usb/typec/mux.h    | 15 ++++++
- drivers/usb/typec/of_mux.c | 97 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 122 insertions(+), 4 deletions(-)
- create mode 100644 drivers/usb/typec/of_mux.c
-
-diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-index a0adb8947a301..d85231b2fe10b 100644
---- a/drivers/usb/typec/Makefile
-+++ b/drivers/usb/typec/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- obj-$(CONFIG_TYPEC)		+= typec.o
- typec-y				:= class.o mux.o bus.o port-mapper.o
-+typec-$(MULTIPLEXER)		+= of_mux.o
- obj-$(CONFIG_TYPEC)		+= altmodes/
- obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
- obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
-diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-index 9da22ae3006c9..282622276d97b 100644
---- a/drivers/usb/typec/mux.c
-+++ b/drivers/usb/typec/mux.c
-@@ -63,6 +63,9 @@ struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
- 
- 	sw = fwnode_connection_find_match(fwnode, "orientation-switch", NULL,
- 					  typec_switch_match);
-+	if (!sw)
-+		sw = of_switch_register(fwnode);
-+
- 	if (!IS_ERR_OR_NULL(sw))
- 		WARN_ON(!try_module_get(sw->dev.parent->driver->owner));
- 
-@@ -78,10 +81,12 @@ EXPORT_SYMBOL_GPL(fwnode_typec_switch_get);
-  */
- void typec_switch_put(struct typec_switch *sw)
- {
--	if (!IS_ERR_OR_NULL(sw)) {
--		module_put(sw->dev.parent->driver->owner);
--		put_device(&sw->dev);
--	}
-+	if (IS_ERR_OR_NULL(sw))
-+		return;
-+
-+	module_put(sw->dev.parent->driver->owner);
-+	of_switch_unregister(sw);
-+	put_device(&sw->dev);
- }
- EXPORT_SYMBOL_GPL(typec_switch_put);
- 
-diff --git a/drivers/usb/typec/mux.h b/drivers/usb/typec/mux.h
-index 4fd9426ee44f6..c99caab766313 100644
---- a/drivers/usb/typec/mux.h
-+++ b/drivers/usb/typec/mux.h
-@@ -5,8 +5,11 @@
- 
- #include <linux/usb/typec_mux.h>
- 
-+struct of_switch;
-+
- struct typec_switch {
- 	struct device dev;
-+	struct of_switch *osw;
- 	typec_switch_set_fn_t set;
- };
- 
-@@ -18,4 +21,16 @@ struct typec_mux {
- #define to_typec_switch(_dev_) container_of(_dev_, struct typec_switch, dev)
- #define to_typec_mux(_dev_) container_of(_dev_, struct typec_mux, dev)
- 
-+#ifdef CONFIG_MULTIPLEXER
-+struct typec_switch *of_switch_register(struct fwnode_handle *fwnode);
-+void of_switch_unregister(struct typec_switch *sw);
-+#else
-+static inline struct typec_switch *of_switch_register(struct fwnode_handle *fwnode)
-+{
-+	return NULL;
-+}
-+
-+static inline void of_switch_unregister(struct typec_switch *sw) { }
-+#endif /* MULTIPLEXER */
-+
- #endif /* __USB_TYPEC_MUX__ */
-diff --git a/drivers/usb/typec/of_mux.c b/drivers/usb/typec/of_mux.c
-new file mode 100644
-index 0000000000000..48686a92331d7
---- /dev/null
-+++ b/drivers/usb/typec/of_mux.c
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Wrapper for mux controllers handling orientation
-+ *
-+ * Copyright (C) 2021 Intel Corporation
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/slab.h>
-+#include <linux/of.h>
-+#include <linux/mux/consumer.h>
-+#include <linux/usb/typec_mux.h>
-+
-+#include "mux.h"
-+
-+struct of_switch {
-+	struct mux_control *mc;
-+	unsigned int state[3];
-+};
-+
-+static int of_switch_set(struct typec_switch *sw, enum typec_orientation orientation)
-+{
-+	int ret;
-+
-+	/* Checking has the switch been unregistered - just not released yet */
-+	if (!sw->osw)
-+		return -ENODEV;
-+
-+	ret = mux_control_deselect(sw->osw->mc);
-+	if (ret)
-+		return ret;
-+
-+	return mux_control_select(sw->osw->mc, sw->osw->state[orientation]);
-+}
-+
-+struct typec_switch *of_switch_register(struct fwnode_handle *fwnode)
-+{
-+	struct typec_switch_desc desc;
-+	struct typec_switch *sw;
-+	struct mux_control *mc;
-+	unsigned int state[3];
-+	struct of_switch *osw;
-+	int ret;
-+
-+	if (!fwnode_property_present(fwnode, "mux-control-names"))
-+		return NULL;
-+
-+	ret = fwnode_property_read_u32_array(fwnode, "mux-control-switch-states",
-+					     state, 3);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	desc.fwnode = fwnode;
-+	desc.set = of_switch_set;
-+	desc.name = fwnode_get_name(fwnode);
-+	desc.drvdata = NULL;
-+
-+	sw = typec_switch_register(NULL, &desc);
-+	if (IS_ERR(sw))
-+		return sw;
-+
-+	sw->dev.of_node = to_of_node(fwnode);
-+
-+	mc = mux_control_get(&sw->dev, "typec-orientation-switch");
-+	if (IS_ERR_OR_NULL(mc)) {
-+		typec_switch_unregister(sw);
-+		if (IS_ERR(mc))
-+			return ERR_CAST(mc);
-+		return ERR_PTR(-ENODEV);
-+	}
-+
-+	osw = kzalloc(sizeof(osw), GFP_KERNEL);
-+	if (!osw) {
-+		typec_switch_unregister(sw);
-+		mux_control_put(mc);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	memcpy(osw->state, state, sizeof(unsigned int) * 3);
-+	osw->mc = mc;
-+	sw->osw = osw;
-+
-+	return sw;
-+}
-+
-+void of_switch_unregister(struct typec_switch *sw)
-+{
-+	struct of_switch *osw = sw->osw;
-+
-+	if (!osw)
-+		return;
-+
-+	sw->osw = NULL;
-+	typec_switch_unregister(sw);
-+	mux_control_put(osw->mc);
-+	kfree(osw);
-+}
--- 
-2.30.2
-
-
---uREGkeqe8ZkjR5cd--
