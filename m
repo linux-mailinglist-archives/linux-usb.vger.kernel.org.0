@@ -2,201 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF96638C2A8
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 11:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292BC38C2FD
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 11:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235439AbhEUJJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 05:09:51 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:50320 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235567AbhEUJJu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 05:09:50 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14L98DFE0010562, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14L98DFE0010562
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Fri, 21 May 2021 17:08:13 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Fri, 21 May 2021 17:08:12 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Fri, 21 May
- 2021 17:08:01 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>,
-        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
-Subject: [PATCH net] r8152: check the informaton of the device
-Date:   Fri, 21 May 2021 17:07:34 +0800
-Message-ID: <1394712342-15778-363-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
+        id S236009AbhEUJYe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 05:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233166AbhEUJYb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 05:24:31 -0400
+Received: from mail-qv1-xf43.google.com (mail-qv1-xf43.google.com [IPv6:2607:f8b0:4864:20::f43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F01C061574
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 02:23:07 -0700 (PDT)
+Received: by mail-qv1-xf43.google.com with SMTP id z1so10043264qvo.4
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 02:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=KLsl+69Yo9dBbmAa+9VMX+devwVRU50OLtBsdtVCcag=;
+        b=fe01z0JtmAM7RZ+mzZnCz6XeiPU9tknuHABYrUmFlgaF2k8vl3PgbeluOGkxybrSvq
+         6AFCPcZDw7dUBMfVQZNmwzsQ6/bR5SKRyAj+15j03Cbm0BEhKCbxW2N8oYuvp7FVXuda
+         cfpaDGa0T+E45x3V7O8x2N/6SVd7qlzJ2jCG/bq3a5xpsK9mQ3bTCO++5aQP5/JIfMQx
+         rEYPYXxApt05RUyMMsWI6qrCt0lsvDVtW7SEjrJRh5E9JvxIhek2P+4k7e670mzNTebm
+         /XkjF3W1Z4bu3hXMBukpN5bO/mtassd2cbcnWy8BMiYGgWpdMQCCYqthT9dSvAMBPX4L
+         AS7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=KLsl+69Yo9dBbmAa+9VMX+devwVRU50OLtBsdtVCcag=;
+        b=RhV1/g2Gqcwvsp3ki4Pu664+Jt6yXa2dPRPw4I9KyaHPmEazYETALtGP3SKoAAjVCt
+         YIuN/lwIS+UTPz2YLGDZB+sRv5zQ6JrLOP8hub6/1tb560rDc9Sf07lYngMtZohf6BGs
+         r99ZybThxJ1CtYk2XjFSC7NuqsCZgaLMusRSkobZx1NuDdF+iXHCes+5zOroWBcAyI06
+         ni9Hj/9ey8+Uv9rMdufHAJQ1bZt5xOtXQZI3/ZcZiyEeAms69ShEqavZ0MWz5qDcZaMF
+         RGcIZ32lj78VHA6ccIgaJWptolZsSbsNvM8R2sMG3cd9MpcHcbEpmWWqRdxxYdZ9ybi1
+         BbtA==
+X-Gm-Message-State: AOAM5316sTGGcXpr1sOQkPZUZJhxWhMZxckBbQF2mNfIwWySU64BRQTK
+        3/IYpIVJHWIgmmLI8Vw8LAlQIkNcDYRMleoni+g=
+X-Google-Smtp-Source: ABdhPJzXvSY0w6uOGTI9kt/3LmoDB/7/qW4MHNgns+q/dgnPbMNGW2qFPUvucmOday1rzEhWEKxpOqH0W764tyVCauM=
+X-Received: by 2002:a0c:8e01:: with SMTP id v1mr10981098qvb.35.1621588986937;
+ Fri, 21 May 2021 02:23:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/21/2021 08:46:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMjEgpFekyCAwMzo1MDowMA==?=
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMjEgpFekyCAwNzozMTowMA==?=
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/21/2021 08:44:16
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 10
-X-KSE-AntiSpam-Info: Lua profiles 163823 [May 21 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 446 446 0309aa129ce7cd9d810f87a68320917ac2eba541
-X-KSE-AntiSpam-Info: {Headers: Prob_stat_susp_url_only, url2}
-X-KSE-AntiSpam-Info: {Tracking_one_url, url3}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: realtek.com:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;syzkaller.appspot.com:7.1.1
-X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, headers_charset}
-X-KSE-AntiSpam-Info: Rate: 10
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/21/2021 08:46:00
+Received: by 2002:a05:6214:1c42:0:0:0:0 with HTTP; Fri, 21 May 2021 02:23:06
+ -0700 (PDT)
+Reply-To: ubagroups03@gmail.com
+From:   Postal service <winkjohn100@gmail.com>
+Date:   Fri, 21 May 2021 02:23:06 -0700
+Message-ID: <CAPuF7QkPH2G2HXV1MX4mvLjuKRG6qNSut0R5mwpsp0v+bnN0uA@mail.gmail.com>
+Subject: HELLO
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Verify some fields of the USB descriptor to make sure the driver
-could be used by the device.
+Do you know that you can be making $4000 or more every single week
+legitimately online while working from home without much stress, if
+you're ready to start making potential sum kindly join the whatsapp
+group link below to know how it works .
 
-BugLink: https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
-Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-Fixes: c2198943e33b ("r8152: search the configuration of vendor mode")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 71 +++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 69 insertions(+), 2 deletions(-)
+https://chat.whatsapp.com/LPzWxSbTFCVGDqI3R3VhGP
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 136ea06540ff..f348350f5da1 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8107,6 +8107,69 @@ static void r8156b_init(struct r8152 *tp)
- 	tp->coalesce = 15000;	/* 15 us */
- }
- 
-+static bool rtl_check_vendor_ok(struct usb_interface *intf)
-+{
-+	struct usb_host_interface *alt = intf->cur_altsetting;
-+	struct usb_host_endpoint *in = NULL, *out = NULL, *intr = NULL;
-+	unsigned int ep;
-+
-+	if (alt->desc.bNumEndpoints < 3) {
-+		dev_err(&intf->dev, "Unexpected bNumEndpoints %d\n", alt->desc.bNumEndpoints);
-+		return false;
-+	}
-+
-+	for (ep = 0; ep < alt->desc.bNumEndpoints; ep++) {
-+		struct usb_host_endpoint *e;
-+
-+		e = alt->endpoint + ep;
-+
-+		/* ignore endpoints which cannot transfer data */
-+		if (!usb_endpoint_maxp(&e->desc))
-+			continue;
-+
-+		switch (e->desc.bmAttributes) {
-+		case USB_ENDPOINT_XFER_INT:
-+			if (!usb_endpoint_dir_in(&e->desc))
-+				continue;
-+			if (!intr)
-+				intr = e;
-+			break;
-+		case USB_ENDPOINT_XFER_BULK:
-+			if (usb_endpoint_dir_in(&e->desc)) {
-+				if (!in)
-+					in = e;
-+			} else if (!out) {
-+				out = e;
-+			}
-+			break;
-+		default:
-+			continue;
-+		}
-+	}
-+
-+	if (!in || !out || !intr) {
-+		dev_err(&intf->dev, "Miss Endpoints\n");
-+		return false;
-+	}
-+
-+	if ((in->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 1) {
-+		dev_err(&intf->dev, "Invalid Rx Endpoints\n");
-+		return false;
-+	}
-+
-+	if ((out->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 2) {
-+		dev_err(&intf->dev, "Invalid Tx Endpoints\n");
-+		return false;
-+	}
-+
-+	if ((intr->desc.bEndpointAddress & USB_ENDPOINT_NUMBER_MASK) != 3) {
-+		dev_err(&intf->dev, "Invalid interrupt Endpoints\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- static bool rtl_vendor_mode(struct usb_interface *intf)
- {
- 	struct usb_host_interface *alt = intf->cur_altsetting;
-@@ -8115,12 +8178,15 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
- 	int i, num_configs;
- 
- 	if (alt->desc.bInterfaceClass == USB_CLASS_VENDOR_SPEC)
--		return true;
-+		return rtl_check_vendor_ok(intf);
- 
- 	/* The vendor mode is not always config #1, so to find it out. */
- 	udev = interface_to_usbdev(intf);
- 	c = udev->config;
- 	num_configs = udev->descriptor.bNumConfigurations;
-+	if (num_configs < 2)
-+		return false;
-+
- 	for (i = 0; i < num_configs; (i++, c++)) {
- 		struct usb_interface_descriptor	*desc = NULL;
- 
-@@ -8135,7 +8201,8 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
- 		}
- 	}
- 
--	WARN_ON_ONCE(i == num_configs);
-+	if (i == num_configs)
-+		dev_err(&intf->dev, "Unexpected Device\n");
- 
- 	return false;
- }
 -- 
-2.26.3
-
+ATLAS COIN
