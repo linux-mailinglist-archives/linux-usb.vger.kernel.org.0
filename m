@@ -2,92 +2,222 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6CA38C766
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 15:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF4938C76C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 15:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233317AbhEUND3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 09:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbhEUNDW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 09:03:22 -0400
-Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312CAC0613CE
-        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 06:01:58 -0700 (PDT)
-Received: by mail-qv1-xf4a.google.com with SMTP id b24-20020a0cb3d80000b02901e78b82d74aso16736131qvf.20
-        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 06:01:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=hjK4qHjpBKdfkmlPVsP8X40hmtzrrpX8nHB5WsA0A04=;
-        b=XKQA7O5anoKZTBb5fhFPVJNHly1HSjklTYpjQrzLk2nElaNookpsYbWxC3wF+0fkEZ
-         S6yOr8tNtpwVK4cwEkyw/nt3auSDfi35oF9whSuCeeyKvhSJRsmBK6bvug+MGmQRRfD3
-         j9Rk75MwFM6p0CuGcaHBxs7Lm3b8CFZDK1xS15P07bRB/2nGPznqWZBOqbdvoNBINr+R
-         hJjHQi5BIxvutEwpr1NIJZeYX5wSEf7y4R5ACZTXHRYMXt+p0JakMdvM7JQDpRNaF4VM
-         /h3DBtN8D23VaP0CrYyRVSUj/kV8yv0py5FrgTYeUk0ncWPuK9C6V6X/y6ypZH71U7RM
-         2rog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hjK4qHjpBKdfkmlPVsP8X40hmtzrrpX8nHB5WsA0A04=;
-        b=oe3slawhMmZrUgjupskH4ebOICWYtpztFfkuVrZq1VNDfyFOo3bymCuktnEwpJo+JF
-         AOcmN/N25iuRb2L7oV/+lxmbxE6gX7eiD+BNuZBn1RPvB1rgYAFLLV82NKCsWdeQ+Eph
-         wT0zf3K/g8t3IKMrRfV3KeDIRR3qwsQ0HLwFEeTeHGirsFA27E/DAr0LH9uq916WrnqL
-         pyTG8tDmA2sfoHqXWfmwonsZcwkEQIBfYxIZmgawncBX6hwOCJBvsRigKBh7j14YGJhA
-         vez/qvUd5F/x0oyBS1reIwfsfU1+KceOu582iK04TFfYTs4sAHP6LokOGx7UhKK+9JUC
-         zWig==
-X-Gm-Message-State: AOAM532ImkfcJJlYKZ7wZGFgQl1VRcqAhZDDFM37VuCrRbYFtbGPlV2z
-        XTdHqgvWy5sQaryP/r4drg0HuhWtJs1r
-X-Google-Smtp-Source: ABdhPJyTiKqGw1Th8nl1MJyY14wZpSQyYGtOGYphjIfhkiIKDQjCZGKKlqiAdOL67/52seMuerF2U2AJLNkZ
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:905b:c174:8f59:4851])
- (user=kyletso job=sendgmr) by 2002:a05:6214:dc8:: with SMTP id
- 8mr8616260qvt.58.1621602117277; Fri, 21 May 2021 06:01:57 -0700 (PDT)
-Date:   Fri, 21 May 2021 21:01:21 +0800
-In-Reply-To: <20210521130121.1470334-1-kyletso@google.com>
-Message-Id: <20210521130121.1470334-3-kyletso@google.com>
-Mime-Version: 1.0
-References: <20210521130121.1470334-1-kyletso@google.com>
-X-Mailer: git-send-email 2.31.1.818.g46aad6cb9e-goog
-Subject: [PATCH 2/2] usb: typec: tcpm: Respond Not_Supported if no snk_vdo
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S230342AbhEUNEi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 09:04:38 -0400
+Received: from mail-am6eur05on2066.outbound.protection.outlook.com ([40.107.22.66]:25033
+        "EHLO EUR05-AM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233708AbhEUNDu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 09:03:50 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XK2M13bZgkFnFdlIeBz+xV/ehs7c03mz/3wfDQU69YMQaBth5forIcLyC/t8OHHa4KsJpEqU7yPCcAkZYGczKmyUXVdmV5tC2iJJl+hw0lJ4ShFTde8DfvnsmyVTPWida55r34n+aR/e71Bq0svOd6pxv9crAl+N55yqLVfXxBgSaFHi2VZX/QYwYSx/go4dS3ssckBgkAN7Q7t0xPwA8Q8BNkjKtWxxQamRiS7WG+3WWNwXsxhudjf3MEGpBU+wwbqAot1cllG5cDCAaCaBP9haKRD29Utw5tWd8CXWjc7FJb3COWp45qWiE07rtMSp7BbqISPocGD6lNG1JBAUpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=crPwT9AfNgPxybWy1KBCHm7duApsb6N6dZH1S2mOknE=;
+ b=LZR/cdaaGDCE4IOs+V08dkDgR5Oaf+7h/ejcUQ+lnP16iBJ9rWojqJrnDuRCSxlXI+a2TjwM1oxEmMJVP7+1ClmWtDum2QHN7fF/ZJ4RBLD9hCjjVqlkdKHxpLmhuGuHFwBZBpX9iy9mVG4D74BIeyAuw1bcd2MRroGsXJIIfk/6ApCxOVVdeh8t2B6QxBbS0A5MbMzKFSKrm9tAaWFIXCNgyuegLGGbL8dlznx5oj/nOsVvluFtAaOOZ1SfXNFHF2sHp2w91tZgsCJuIyiI7PRl7oGkI4gNA8a+WXXzXFKUmXrWJY22xzD5WS33zoeV4P8GObhdRH/CyAVCkF7v0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=crPwT9AfNgPxybWy1KBCHm7duApsb6N6dZH1S2mOknE=;
+ b=HadqiCuWBwjG5RDaYYV3BUIdeCRu6fP3lWvMiMfqHUr0/itT38nlPJx3JXRUK1rH6WiZfdRVxU+/zhnaIxkE+yfzOvnsjLNlRSOB8L+pq8KWx+ybPFGVnuqe7DVWCQdHoTjm//Jv8G+LZyfIKAj5F8oVgEvbkx6cpD2dmOEqAzg=
+Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
+ by VI1PR04MB5790.eurprd04.prod.outlook.com (2603:10a6:803:e7::32) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4129.30; Fri, 21 May
+ 2021 13:02:23 +0000
+Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
+ ([fe80::453c:f24d:af8e:f194]) by VI1PR04MB5935.eurprd04.prod.outlook.com
+ ([fe80::453c:f24d:af8e:f194%7]) with mapi id 15.20.4150.025; Fri, 21 May 2021
+ 13:02:23 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH 3/4] usb: typec: add typec orientation switch support via
+ mux controller
+Thread-Topic: [PATCH 3/4] usb: typec: add typec orientation switch support via
+ mux controller
+Thread-Index: AQHXTIEKNobfiQu7YEKZBxd9HIlDqqrsT64AgAGYWFA=
+Date:   Fri, 21 May 2021 13:02:23 +0000
+Message-ID: <VI1PR04MB5935E0011B57A2AD018A065489299@VI1PR04MB5935.eurprd04.prod.outlook.com>
+References: <1621408490-23811-1-git-send-email-jun.li@nxp.com>
+ <1621408490-23811-4-git-send-email-jun.li@nxp.com>
+ <YKZXHG7BSSZssiBg@kuha.fi.intel.com>
+In-Reply-To: <YKZXHG7BSSZssiBg@kuha.fi.intel.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6b7184a3-c468-4d98-1a17-08d91c58ad0e
+x-ms-traffictypediagnostic: VI1PR04MB5790:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB5790BCC56489828C04829F8389299@VI1PR04MB5790.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: rjPrf1yQbLA1v4vZ1e4k1usme8xn9+o2XKG834+l83XyISJOOc/KAA+yYg8+nwkUiilps+1JpjWpUMWvljC0sx/xvib82+aJj0ZIxzY9LfZQZ3l202mR8lbDeeWE42xgZOTi4KfuCSNipmBgUrYF/8AknC21TOOjgATWkFVBCq/aILTgQ39HYnLhsTtqhbFvwCJxcxSsF+ceDDX/U0mA+xe8Cv7neFISuWdkD0o3exW6HeZGbqa0KK9GC4Vci/J+NLosV/Os1lonmLB92p4g3zxo83wAq5JX+lR6KnITHYclGPFLaYqYD8+YnV09aNtMUaacyy6AcVq76eYdURixHCq6xvOP2/H6jNe2zaQtfwGkjGm6R4vKpddnkk2JNn0cvhxCsf+CEcl3Cq6NjijiRkUtkS9L0F68wSX0SDuhsJYHCKNnzeVTtLO6N9ndcFqg/fndAYIqpMOdinmNZJ4MhDGf/Mbkc7K8OkzA918LZuOnfwrC2fvJen1osteSVVfduCFoL4avXKaDd2H3+51jWWe0Jbq8FSi/vlmskBPrrWZVTijF4ZPPuf/exs4ShoJd8qB4/RBROYnBP7oY4L+aam2TeKtuqVgECFqRGlGO2n8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(396003)(376002)(366004)(136003)(346002)(66476007)(83380400001)(54906003)(6916009)(76116006)(66946007)(2906002)(8676002)(316002)(8936002)(66556008)(64756008)(66446008)(5660300002)(26005)(55016002)(33656002)(6506007)(4326008)(86362001)(38100700002)(7696005)(122000001)(53546011)(52536014)(186003)(71200400001)(9686003)(478600001)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata: =?us-ascii?Q?dVBuwpV82vjpD1JpL5XJM+nnz3R2Lkt9gtCgsTyU2ji3npZK00iE5ksTkYdS?=
+ =?us-ascii?Q?USP7BMJitCufhgRmQguJxnZ5O8tLIqrkdrE49QP/c9oTZlCZBh++UXmZvy37?=
+ =?us-ascii?Q?vWtFKDwEgE9DotZwiycu032eO5xkr3g8zOJgUIQyvU6fpl4eaeQFVkWaES9J?=
+ =?us-ascii?Q?g51MP1qTcvPEdc2Q77B+YweOTIdwZ07DcVVe9dQpyMg/VlzfbdCI0MWS1NMM?=
+ =?us-ascii?Q?jkfCAyl/DILLN+5xjpTtPCP9uc8W5bmy1HYSMJNXXK7tSkDQuWUuuO72Uikn?=
+ =?us-ascii?Q?BDTJcK5v7Lqu43ejZSTawivvBIiQiPhJdoilGpN5e2ATFPADZ55OGeOCvs9h?=
+ =?us-ascii?Q?UyjoQ28i7iVIo5ZCDpjHOxbMypCihL/An0zqBTVy/2t9SFXlAnFaZXBTYDlj?=
+ =?us-ascii?Q?5/7vJIA11jmCLTHLcpuk8bY+zLFwhASmn5j4wHbj4GitD+Bt08WNTr9VjhFq?=
+ =?us-ascii?Q?jTzvapE5yZEdNpjkkgA+Rj6xy5JibE9KWjPllJrCmUwkzwrBU+MQwPNV1bu4?=
+ =?us-ascii?Q?aUG6pzU9S91vmFzB7Uz3IGHRYD1t4Sa0WPcnAedSXAeCDeIBG5uAaxmDQ8Sy?=
+ =?us-ascii?Q?WQ18rn5clcxuxeIocPRgUtRzUWZDx7qKB+A9R2HUlr45wqjkrQLaECDrSh+S?=
+ =?us-ascii?Q?cljSm4UH73bkNi45ODyhTVrtNZvkuEUHGntfkMoi9T6Ed0sChpwikHZIYY0n?=
+ =?us-ascii?Q?zxmJy+E7S0w5IxlhvnOuhZ53gQEkniIBkyl1OxZCWIQlCrBfG9E1sct1420g?=
+ =?us-ascii?Q?BLNpcEZLcEho1Z8YEdiqXLH65y8IHoFR1wYutisAw0m+JU5S/nDQq5mkAGd+?=
+ =?us-ascii?Q?CnyTDHssYvivpEY/wYdSVzdaAu7pVNBiq1Vv/U2Go+c/HxZVZQLX0JkpxhMC?=
+ =?us-ascii?Q?9mcyG6v7w2PgPBwQYBX7pP4EVsA/2+9fYya+5aE8IZlsWp3LAeSN/zM2RWI0?=
+ =?us-ascii?Q?hBJD27fAR0zZLzdEwqJThtvwbfLQvjtzZYTyLC+2SnlotcVtS43+vzmQi7x3?=
+ =?us-ascii?Q?AOfYonEvSYbnUFWBzPgHgznBHYvqLNqJP4ewrdxB/cxyld4MxwnNedNC/wSH?=
+ =?us-ascii?Q?FtA5964ub+1lhmL4T3paCZvApHN2FHx7tQRH5s0YHoZKPwY78HHcZRsgkxsg?=
+ =?us-ascii?Q?Z5T9R6ZAv6bx2nisVhciSSfeWpWGxSwVAmyocU8j0AorVR4J4UlEmnQlxp+1?=
+ =?us-ascii?Q?0Vrk1dVDvTcPcMPU+usf4ndgQXH1mTSXF0YS7YFh0gzEA5pU2SQf81D6PkGb?=
+ =?us-ascii?Q?iQqExk1ZZJi+0m8kjMaJZSzSZ5ox/4tmnn//h300t/7f9tCMNnMQibdDVTFn?=
+ =?us-ascii?Q?zNRMTAZYDRy5lHf4Lo/Wu8dq?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b7184a3-c468-4d98-1a17-08d91c58ad0e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 May 2021 13:02:23.3979
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fsh+F+tIZS7u/4sHBjP+FfrDNt/AupgV6Cu68sELK9Ve/J7l/zJ6TcTZL9m7loYQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5790
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If snk_vdo is not populated from fwnode, it implies the port does not
-support responding to SVDM commands. Not_Supported Message shall be sent
-if the contract is in PD3. And for PD2, the port shall ignore the
-commands.
 
-Fixes: 193a68011fdc ("staging: typec: tcpm: Respond to Discover Identity commands")
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index deb8a9d01f73..d32caa875d9a 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2430,7 +2430,10 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
- 					   NONE_AMS);
- 		break;
- 	case PD_DATA_VENDOR_DEF:
--		tcpm_handle_vdm_request(port, msg->payload, cnt);
-+		if (tcpm_vdm_ams(port) || port->nr_snk_vdo)
-+			tcpm_handle_vdm_request(port, msg->payload, cnt);
-+		else if (port->negotiated_rev > PD_REV20)
-+			tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
- 		break;
- 	case PD_DATA_BIST:
- 		port->bist_request = le32_to_cpu(msg->payload[0]);
--- 
-2.31.1.818.g46aad6cb9e-goog
+> -----Original Message-----
+> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Sent: Thursday, May 20, 2021 8:34 PM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: robh+dt@kernel.org; shawnguo@kernel.org; gregkh@linuxfoundation.org;
+> linux@roeck-us.net; linux-usb@vger.kernel.org; dl-linux-imx
+> <linux-imx@nxp.com>; devicetree@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org
+> Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch support
+> via mux controller
+>=20
+> On Wed, May 19, 2021 at 03:14:49PM +0800, Li Jun wrote:
+> > Some dedicated mux block can use existing mux controller as a mux
+> > provider, typec port as a consumer to select channel for orientation
+> > switch, this can be an alternate way to current typec_switch
+> > interface.
+> >
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > ---
+> >  drivers/usb/typec/class.c     | 26 +++++++++++++++++++++++++-
+> >  drivers/usb/typec/class.h     |  2 ++
+> >  drivers/usb/typec/mux.c       | 34 ++++++++++++++++++++++++++++++++++
+> >  include/linux/usb/typec_mux.h |  4 ++++
+> >  4 files changed, 65 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index a29bf2c32233..1bb0275e6204 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -1601,6 +1601,7 @@ static void typec_release(struct device *dev)
+> >  	ida_simple_remove(&typec_index_ida, port->id);
+> >  	ida_destroy(&port->mode_ids);
+> >  	typec_switch_put(port->sw);
+> > +	typec_mux_control_switch_put(port->mux_control_switch);
+> >  	typec_mux_put(port->mux);
+> >  	kfree(port->cap);
+> >  	kfree(port);
+> > @@ -1816,6 +1817,13 @@ int typec_set_orientation(struct typec_port *por=
+t,
+> >  	if (ret)
+> >  		return ret;
+> >
+> > +	if (!port->sw) {
+> > +		ret =3D typec_mux_control_switch_set(port->mux_control_switch,
+> > +				port->mux_control_switch_states[orientation]);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> >  	port->orientation =3D orientation;
+> >  	sysfs_notify(&port->dev.kobj, NULL, "orientation");
+> >  	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE); @@ -1991,7 +1999,7 @@
+> > struct typec_port *typec_register_port(struct device *parent,
+> >  				       const struct typec_capability *cap)  {
+> >  	struct typec_port *port;
+> > -	int ret;
+> > +	int ret =3D 0;
+> >  	int id;
+> >
+> >  	port =3D kzalloc(sizeof(*port), GFP_KERNEL); @@ -2068,6 +2076,22 @@
+> > struct typec_port *typec_register_port(struct device *parent,
+> >  		return ERR_PTR(ret);
+> >  	}
+> >
+> > +	if (!port->sw) {
+> > +		/* Try to get typec switch via general mux controller */
+> > +		port->mux_control_switch =3D
+> typec_mux_control_switch_get(&port->dev);
+> > +		if (IS_ERR(port->mux_control_switch))
+> > +			ret =3D PTR_ERR(port->mux_control_switch);
+> > +		else if (port->mux_control_switch)
+> > +			ret =3D device_property_read_u32_array(&port->dev,
+> > +					"mux-control-switch-states",
+> > +					port->mux_control_switch_states,
+> > +					3);
+> > +		if (ret) {
+> > +			put_device(&port->dev);
+> > +			return ERR_PTR(ret);
+> > +		}
+> > +	}
+>=20
+> Why not just do that inside fwnode_typec_switch_get() and handle the whol=
+e
+> thing in drivers/usb/typec/mux.c (or in its own file if you prefer)?
+>=20
+> You'll just need to register a "wrapper" Type-C switch object for the OF
+> mux controller, but that should not be a problem. That way you don't need
+> to export any new functions, touch this file or anything else.
+>=20
 
+Okay, so stick to current typec_switch is preferred, actually I hesitated
+on this, I know that approach will have a unified interface, but with
+the cost of creating it only for wrap.
+
+My v2 will go with the direction you suggested.
+
+Thanks
+Li Jun
+
+>=20
+> thanks,
+>=20
+> --
+> heikki
