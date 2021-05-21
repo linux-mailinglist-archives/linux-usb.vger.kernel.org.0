@@ -2,73 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD09A38BBC2
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 03:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6621E38BC30
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 04:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237440AbhEUBlz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 20 May 2021 21:41:55 -0400
-Received: from mail-ot1-f50.google.com ([209.85.210.50]:36677 "EHLO
-        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237319AbhEUBly (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 21:41:54 -0400
-Received: by mail-ot1-f50.google.com with SMTP id n32-20020a9d1ea30000b02902a53d6ad4bdso16649393otn.3;
-        Thu, 20 May 2021 18:40:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0BIMIr+vPahmBauXRfzt2P0Ds58ZfqNsm2Ee2f6z5uE=;
-        b=L12BMOwLqKhAvBPNRjosE9SifHaNwafJ8p14eH9EqQ+vjXa5V22N61TCyDcEP6a0Wb
-         INGB+gZcGwGXQhzG2Go+W9SOly7AQ/fhKrUiiKyBOaKt/JmtmDZqWPjSg2/F9GuXqOc0
-         QZTvK/Sbuwbl3LGxw3UCdcCfcnHrE57pP44Iup+it6RtcqJJ0mw5avtZ9phclgt+7HPK
-         o0VEE5B1DIX6kc2dbru2fimwbduGpeAP4Zo9WjMAgqK0SClaPGRtw0ZsStcnTj7dyq3s
-         Pqw1+mHvmZ35Wz2788uvVeY84d7iQzjSXhnLWJbLRy4cI+ZUJiN+rFKHb5l5e/bQacmb
-         CJgA==
-X-Gm-Message-State: AOAM531E/xN49OEQd3gybQsXx/FuQy1yDYL8aXT8if85XL9bp0PZDdds
-        tOQiHopKAE3Cor+OBk+Ujg==
-X-Google-Smtp-Source: ABdhPJxNlR4PrBb+IozGsfyNMDszEoRAZvLptKfs818Bvw2pDWjPOw0VdaTzTKxTP2dLdHeFJSTf6w==
-X-Received: by 2002:a05:6830:10c9:: with SMTP id z9mr6253358oto.275.1621561230643;
-        Thu, 20 May 2021 18:40:30 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id v19sm1015441otk.22.2021.05.20.18.40.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 May 2021 18:40:30 -0700 (PDT)
-Received: (nullmailer pid 2462099 invoked by uid 1000);
-        Fri, 21 May 2021 01:40:28 -0000
-Date:   Thu, 20 May 2021 20:40:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     devicetree@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org,
+        id S238166AbhEUCCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 20 May 2021 22:02:23 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:3636 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235233AbhEUCCW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 20 May 2021 22:02:22 -0400
+Received: from dggems706-chm.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4FmVBn14qDzmWhn;
+        Fri, 21 May 2021 09:58:41 +0800 (CST)
+Received: from dggeml759-chm.china.huawei.com (10.1.199.138) by
+ dggems706-chm.china.huawei.com (10.3.19.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Fri, 21 May 2021 10:00:58 +0800
+Received: from localhost.localdomain (10.175.102.38) by
+ dggeml759-chm.china.huawei.com (10.1.199.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Fri, 21 May 2021 10:00:57 +0800
+From:   Wei Yongjun <weiyongjun1@huawei.com>
+To:     <weiyongjun1@huawei.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-sunxi@googlegroups.com, linux-usb@vger.kernel.org,
-        Icenowy Zheng <icenowy@aosc.io>, linux-sunxi@lists.linux.dev,
-        Ondrej Jirman <megous@megous.com>
-Subject: Re: [PATCH v6 09/17] dt-bindings: usb: sunxi-musb: Add H616
- compatible string
-Message-ID: <20210521014028.GA2462070@robh.at.kernel.org>
-References: <20210519104152.21119-1-andre.przywara@arm.com>
- <20210519104152.21119-10-andre.przywara@arm.com>
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Oliver Neukum <oneukum@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>
+CC:     <linux-usb@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next v2] usb: cdc-wdm: fix build error when CONFIG_WWAN_CORE is not set
+Date:   Fri, 21 May 2021 02:10:10 +0000
+Message-ID: <20210521021010.2490930-1-weiyongjun1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210519104152.21119-10-andre.przywara@arm.com>
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.102.38]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggeml759-chm.china.huawei.com (10.1.199.138)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 19 May 2021 11:41:44 +0100, Andre Przywara wrote:
-> The H616 MUSB peripheral is compatible to the H3 one (8 endpoints).
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> Acked-by: Maxime Ripard <mripard@kernel.org>
-> ---
->  .../devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml      | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+Gcc report build error as following when CONFIG_WWAN_CORE is not set:
 
-Acked-by: Rob Herring <robh@kernel.org>
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_disconnect':
+cdc-wdm.c:(.text+0xb2a): undefined reference to `wwan_remove_port'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_in_callback':
+cdc-wdm.c:(.text+0xf23): undefined reference to `wwan_port_rx'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_stop':
+cdc-wdm.c:(.text+0x127d): undefined reference to `wwan_port_get_drvdata'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx':
+cdc-wdm.c:(.text+0x12d9): undefined reference to `wwan_port_get_drvdata'
+x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x13c1): undefined reference to `wwan_port_txoff'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_start':
+cdc-wdm.c:(.text+0x13e0): undefined reference to `wwan_port_get_drvdata'
+x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x1431): undefined reference to `wwan_port_txon'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx_complete':
+cdc-wdm.c:(.text+0x14a4): undefined reference to `wwan_port_txon'
+x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_create.cold':
+cdc-wdm.c:(.text.unlikely+0x209): undefined reference to `wwan_create_port'
+
+Using CONFIG_WWAN_CORE instead of CONFIG_WWAN to avoid build error.
+
+Fixes: cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+---
+ drivers/usb/class/cdc-wdm.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 8e5490ac13a2..db135a7fd857 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -824,7 +824,7 @@ static struct usb_class_driver wdm_class = {
+ };
+ 
+ /* --- WWAN framework integration --- */
+-#ifdef CONFIG_WWAN
++#ifdef CONFIG_WWAN_CORE
+ static int wdm_wwan_port_start(struct wwan_port *port)
+ {
+ 	struct wdm_device *desc = wwan_port_get_drvdata(port);
+@@ -963,11 +963,11 @@ static void wdm_wwan_rx(struct wdm_device *desc, int length)
+ 	/* inbuf has been copied, it is safe to check for outstanding data */
+ 	schedule_work(&desc->service_outs_intr);
+ }
+-#else /* CONFIG_WWAN */
++#else /* CONFIG_WWAN_CORE */
+ static void wdm_wwan_init(struct wdm_device *desc) {}
+ static void wdm_wwan_deinit(struct wdm_device *desc) {}
+ static void wdm_wwan_rx(struct wdm_device *desc, int length) {}
+-#endif /* CONFIG_WWAN */
++#endif /* CONFIG_WWAN_CORE */
+ 
+ /* --- error handling --- */
+ static void wdm_rxwork(struct work_struct *work)
+
