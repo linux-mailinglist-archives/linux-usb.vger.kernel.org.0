@@ -2,55 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C383F38CC68
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 19:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA7338CCE7
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 20:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231628AbhEURmB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 13:42:01 -0400
-Received: from m.b4.vu ([203.16.231.148]:50810 "EHLO m.b4.vu"
+        id S238512AbhEUSHk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 14:07:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233682AbhEURlw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 13:41:52 -0400
-Received: by m.b4.vu (Postfix, from userid 1000)
-        id A27DB612FB2E; Sat, 22 May 2021 03:10:27 +0930 (ACST)
-Date:   Sat, 22 May 2021 03:10:27 +0930
-From:   "Geoffrey D. Bennett" <g@b4.vu>
-To:     USB mailing list <linux-usb@vger.kernel.org>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: [PATCH v2] USB: usbfs: remove double evaluation of usb_sndctrlpipe()
-Message-ID: <20210521174027.GA116484@m.b4.vu>
+        id S238505AbhEUSHj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 14:07:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 15A51613CB;
+        Fri, 21 May 2021 18:06:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621620375;
+        bh=PGlP4iraJhEmtFARuI90AqejPX1/fQS9paNMLEY2w+Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iz450FZH/5bpTdyYLCWpyUOLw72CFhgN2ndPP3/YgWcYOR8Jkfl95UxlVx/K+Av6g
+         f5ijoFD/NawtnO+gJA2BAiHN2iZROdpHLjIyjMrHUXwB+/hR6E53cP3Qk/wowOSo+B
+         a4bUrLbrIfYkcP4jIqjDPr38Ofe7e4S+HAie+dPE=
+Date:   Fri, 21 May 2021 20:06:13 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 3/3] Revert "usb: common: usb-conn-gpio: Make VBUS
+ supply optional"
+Message-ID: <YKf2ldQhJCVbR3N8@kroah.com>
+References: <1621406386-18838-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1621406386-18838-3-git-send-email-chunfeng.yun@mediatek.com>
+ <YKezl0nlWFQhLyf/@orome.fritz.box>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YKezl0nlWFQhLyf/@orome.fritz.box>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb_sndctrlpipe() is evaluated in do_proc_control(), saved in a
-variable, then evaluated again. Use the saved variable instead, to
-match the use of usb_rcvctrlpipe().
+On Fri, May 21, 2021 at 03:20:23PM +0200, Thierry Reding wrote:
+> On Wed, May 19, 2021 at 02:39:46PM +0800, Chunfeng Yun wrote:
+> > Vbus is already an optional supply, if the vbus-supply is not
+> > provided in DTS, will use a dummy regulator,
+> 
+> That statement is not entirely correct. The dummy regulator is
+> substituted only if the supply is in fact not optional. The idea behind
+> that is to allow DTS files that don't specify all required regulators to
+> get away with it, based on the assumption that the supply is one of
+> those always-on supplies that are often not described in DTS.
+> 
+> > the warning log is as below:
+> > "supply vbus not found, using dummy regulator"
+> 
+> And the reason why we get that warning is to point out that the DTS has
+> a bug and that it should be fixed (by adding a proper regulator to take
+> the place of the dummy).
+> 
+> > This reverts commit 4ddf1ac79e5f082451cd549283d2eb7559ab6ca9.
+> 
+> But if you read the description of that commit, the purpose of that
+> patch was in fact to make the supply completely optional in the case
+> where we already have the VBUS supply specified for the USB port that
+> the connector is parented to.
+> 
+> So in that case the DTS doesn't have the bug because the VBUS supply is
+> already specified for the USB port and therefore it doesn't have to be
+> specified in the USB connector again. In fact, specifying it twice can
+> lead to a situation where the USB port may not be able to switch the
+> VBUS supply on or off because the setting might conflict with that of
+> the USB connector.
+> 
+> So unless there's a real reason why this is needed, I don't think this
+> should be applied.
 
-Signed-off-by: Geoffrey D. Bennett <g@b4.vu>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
- drivers/usb/core/devio.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I've dropped this from my tree now, thanks.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 533236366a03..4a8ec136460c 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -1162,7 +1162,7 @@ static int do_proc_control(struct usb_dev_state *ps,
- 			tbuf, ctrl->wLength);
- 
- 		usb_unlock_device(dev);
--		i = usb_control_msg(dev, usb_sndctrlpipe(dev, 0), ctrl->bRequest,
-+		i = usb_control_msg(dev, pipe, ctrl->bRequest,
- 				    ctrl->bRequestType, ctrl->wValue, ctrl->wIndex,
- 				    tbuf, ctrl->wLength, tmo);
- 		usb_lock_device(dev);
--- 
-2.31.1
-
+greg k-h
