@@ -2,106 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9D3938BD38
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 06:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB3438C04D
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 09:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239011AbhEUEZd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 00:25:33 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:52575 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232988AbhEUEZd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 00:25:33 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1621571050; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=U5lBnv0BhH6sVkqljkunOjMLccN8yb0A8j9YRbLa+zc=; b=AY8CBijqDlUUckdhfUOQS+4HhH5hmEyQCBxjxfMtgvKiOE3W07cYz/3P+pBucHAa2Tih9pcz
- /tocPIafzMDH1TC4oqMIPiFrCgGr4y8HAz2k0sq54KZLHvbPuzP3FfksCTC5WGU9vzUH0wYb
- mW3hapwymKyWaL5LTStuiA119Xc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 60a735e25f788b52a50cca63 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 21 May 2021 04:24:02
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4FB99C43460; Fri, 21 May 2021 04:24:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 37C34C433F1;
-        Fri, 21 May 2021 04:24:01 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 37C34C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Disable gadget IRQ during pullup disable
-Date:   Thu, 20 May 2021 21:23:57 -0700
-Message-Id: <1621571037-1424-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S235092AbhEUHFH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 03:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235102AbhEUHFG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 03:05:06 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D23BC06138A
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 00:03:43 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id f22so5882165pfn.0
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 00:03:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BgoU4gWy3KGlpK9GTZqZycmpGH6hSrcC1WquVcdc0/g=;
+        b=Tbr0Z77DX53X74PGu6M5oDYZmQNv7oI0FM8QFbvKljaTxMC61b7wiaLDw+4S87OgFw
+         K+MGfv8yN4dNE5zU6383+WBiVAShxLc+eQSqY0WOkvUlUHaZaT2SQ1vA05fGfmQAlyui
+         4i3Gs0aaBOdcXScly/X30u2WQhI4Hj23HO+hEA6fE7dQzbbpJNuZ6XMdggJRrPlxu+yX
+         u5n9Whq3PZwkYNc7O/jbqXb95VcrSsQIum17D/zFeCKTkzZuaBX2aODisBiZXaPFRDX1
+         CAG4FUZIGjeUpfMaT7uO7juC2O6DZKlyGKDi2HNdxq0q1j9WezNg23wLVVMP5GX15aht
+         Ps7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BgoU4gWy3KGlpK9GTZqZycmpGH6hSrcC1WquVcdc0/g=;
+        b=ZIQsIfPuraNZDaeL1TOa/v4V0PQYSv5C/v6RBM8r4FALKeEvypcbG15pgZbZ3yy6GT
+         0wX0cjoz7n5L8Lv0Doeb3ngggUOFa7/TkZsXg53vEyY1eDMPJ62kp/QW49vz3D+r5d7V
+         kDdEH9iWZYNjADulofJ/mldY40/qHHbyrE6YAfFIiOTtpAPH2uXBcFH3Z8AMRD0JFvY1
+         0q+XJIXFspqNyKDHaqHpblMKBMDUQCMRrsQTevjLvXJ06HveZZfXmyl06xrslI7jKwJE
+         paoiiigxpqN+oAyehf/LaPB+zCgPpXAF5mUd3zbSdKoT7NPnllSaQzhV6XKWUV4sZstG
+         ixWg==
+X-Gm-Message-State: AOAM5305DpnF9QnsN9uH+tYE6NBur2azcXcBVXgkaCI05x2R0xnFpPRX
+        2GDS1f9wybsBMd//K5g5vkk4EhGceerNY4eSKSZ5JQ==
+X-Google-Smtp-Source: ABdhPJzA2Sqms2pZRgYOGL+He+nR+nYYjM4ta4ep1vXoFS/NQoTj4cfPyY2tCZFR7x4QLwNjdiyutaW0t+q0CRplQ60=
+X-Received: by 2002:a63:1906:: with SMTP id z6mr8214983pgl.173.1621580622886;
+ Fri, 21 May 2021 00:03:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210521021010.2490930-1-weiyongjun1@huawei.com>
+In-Reply-To: <20210521021010.2490930-1-weiyongjun1@huawei.com>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Fri, 21 May 2021 09:12:04 +0200
+Message-ID: <CAMZdPi_rF_iRtJMZoViAmkZTwOtVzHXux1QbeD558rOc7EpfVw@mail.gmail.com>
+Subject: Re: [PATCH -next v2] usb: cdc-wdm: fix build error when
+ CONFIG_WWAN_CORE is not set
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Oliver Neukum <oneukum@suse.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        USB <linux-usb@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+        Hulk Robot <hulkci@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Current sequence utilizes dwc3_gadget_disable_irq() alongside
-synchronize_irq() to ensure that no further DWC3 events are generated.
-However, the dwc3_gadget_disable_irq() API only disables device
-specific events.  Endpoint events can still be generated.  Briefly
-disable the interrupt line, so that the cleanup code can run to
-prevent device and endpoint events. (i.e. __dwc3_gadget_stop() and
-dwc3_stop_active_transfers() respectively)
+On Fri, 21 May 2021 at 04:01, Wei Yongjun <weiyongjun1@huawei.com> wrote:
+>
+> Gcc report build error as following when CONFIG_WWAN_CORE is not set:
+>
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_disconnect':
+> cdc-wdm.c:(.text+0xb2a): undefined reference to `wwan_remove_port'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_in_callback':
+> cdc-wdm.c:(.text+0xf23): undefined reference to `wwan_port_rx'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_stop':
+> cdc-wdm.c:(.text+0x127d): undefined reference to `wwan_port_get_drvdata'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx':
+> cdc-wdm.c:(.text+0x12d9): undefined reference to `wwan_port_get_drvdata'
+> x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x13c1): undefined reference to `wwan_port_txoff'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_start':
+> cdc-wdm.c:(.text+0x13e0): undefined reference to `wwan_port_get_drvdata'
+> x86_64-linux-gnu-ld: cdc-wdm.c:(.text+0x1431): undefined reference to `wwan_port_txon'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_wwan_port_tx_complete':
+> cdc-wdm.c:(.text+0x14a4): undefined reference to `wwan_port_txon'
+> x86_64-linux-gnu-ld: drivers/usb/class/cdc-wdm.o: in function `wdm_create.cold':
+> cdc-wdm.c:(.text.unlikely+0x209): undefined reference to `wwan_create_port'
+>
+> Using CONFIG_WWAN_CORE instead of CONFIG_WWAN to avoid build error.
+>
+> Fixes: cac6fb015f71 ("usb: class: cdc-wdm: WWAN framework integration")
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
 
-Without doing so, it can lead to both the interrupt handler and the
-pullup disable routine both writing to the GEVNTCOUNT register, which
-will cause an incorrect count being read from future interrupts.
-
-Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the controller")
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/gadget.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 49ca5da..89aa9ac 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2260,13 +2260,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	}
- 
- 	/*
--	 * Synchronize any pending event handling before executing the controller
--	 * halt routine.
-+	 * Synchronize and disable any further event handling while controller
-+	 * is being enabled/disabled.
- 	 */
--	if (!is_on) {
--		dwc3_gadget_disable_irq(dwc);
--		synchronize_irq(dwc->irq_gadget);
--	}
-+	disable_irq(dwc->irq_gadget);
- 
- 	spin_lock_irqsave(&dwc->lock, flags);
- 
-@@ -2304,6 +2301,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 
- 	ret = dwc3_gadget_run_stop(dwc, is_on, false);
- 	spin_unlock_irqrestore(&dwc->lock, flags);
-+	enable_irq(dwc->irq_gadget);
-+
- 	pm_runtime_put(dwc->dev);
- 
- 	return ret;
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
