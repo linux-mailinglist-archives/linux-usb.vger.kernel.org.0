@@ -2,82 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B731838CEA8
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 22:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347F438CF28
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 22:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbhEUULm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 16:11:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49388 "EHLO mail.kernel.org"
+        id S229503AbhEUUkv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 16:40:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54814 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229547AbhEUULl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 16:11:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AAC936101B;
-        Fri, 21 May 2021 20:10:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621627818;
-        bh=XA1ABq8YonEMJwPvBO1DQSpN/DaawZg01skDnn4XKy0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nk8p/uRVoQkyXFgDNR3qCjnQE3Bc3RDtc44yobAR7eEX26P3DvPkcprq7rX6f9sSz
-         9dmXDru2OE3+EFy8xhMU8Q4q6SPqn+CpFGE7RuBE9tjbDg53+shoN/sNU7g/n5T7j/
-         tpUiBSQV6ZZwXOerVMQULr9rIlbBmwl685ScmC90=
-Date:   Fri, 21 May 2021 22:10:15 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-usb@vger.kernel.org, helgaas@kernel.org,
-        Oliver Neukum <oneukum@suse.com>,
-        David Laight <David.Laight@aculab.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        rajatxjain@gmail.com, jsbarnes@google.com, dtor@google.com
-Subject: Re: [PATCH v4 1/2] driver core: Move the "removable" attribute from
- USB to core
-Message-ID: <YKgTp00l1pRI4DTd@kroah.com>
-References: <20210513232701.411773-1-rajatja@google.com>
+        id S229457AbhEUUku (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 16:40:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 47DE8613D0
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 20:39:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621629566;
+        bh=ZrggV4/Lcw49YRpujWS9LTl4j1J7Urcbhvr7Nk2Hwcg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Jz7PCUjGb/kxpZmu76o3Mg3BK+Ct3qTvUjulpTOB5C7gWlb96Ir3RF0CXy12wtwI1
+         bD593kDVTcomi/fjBTBb0dgSrQZG3spwgNPVTwK4jOeUKqrmT1EF27j4utlRFVIgSe
+         cLV+rcQGS7UHQVfuZp1BKdJR6DdEhFAJzV/aWCEJUejVQAqycXMPehieTfga7Xp7h9
+         +XR8kGXLn7oE3y29USD+LTl6Ahg01zJE1Gt/oRFw2tUJocrPOkqSWiY/7qS57pWapo
+         N5XxbW2Uby7rXdlcony0D32aiw9EVFSSlKf0RDv6+jkNh9AX1J87o5j8Pgjdk6Dcvu
+         5nFcuGOmqfQ2A==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 38A5F612A4; Fri, 21 May 2021 20:39:26 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Fri, 21 May 2021 20:39:25 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: peter.ganzhorn@googlemail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213081-208809-cmfXStMtka@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210513232701.411773-1-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 13, 2021 at 04:27:00PM -0700, Rajat Jain wrote:
-> Move the "removable" attribute from USB to core in order to allow it to be
-> supported by other subsystem / buses. Individual buses that want to support
-> this attribute can populate the removable property of the device while
-> enumerating it with the 3 possible values -
->  - "unknown"
->  - "fixed"
->  - "removable"
-> Leaving the field unchanged (i.e. "not supported") would mean that the
-> attribute would not show up in sysfs for that device. The UAPI (location,
-> symantics etc) for the attribute remains unchanged.
-> 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> ---
-> v4: - instead of devicce_type->supports_removable, add 1 more value in
->       device_removable_enum
->     - documentation update.
->     - Remove "Acked-by" and "Reviewed-by" tags from previous versions.
-> v3: - Minor commit log / comments updated.
->     - use sysfs_emit()
->     - Rename local variable name (state -> loc)
->     - change supports_removable flag from bool to bitfield.
-> v2: Add documentation
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-This looks good to me, I have no further objection to it at all, nice
-cleanups.
+--- Comment #30 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
+You are welcome, Mathias.
+Of course you can add my name in the tags.
 
-I can take this in my driver-core tree, so that other busses can use it
-(and can create a tag to pull from if needed), or I can also take the
-PCI patch (patch 2/2 here), if Bjorn gives his reviewed-by: for it.
+Just out of curiosity:
+Do you have an explanation why this bug seems to only affect some devices?
+As I mentioned before, another card reader I own worked just perfectly and I
+got the impression from your description in comment #25 that this issue may
+theoretically affect just about any device which apparently is not the case.
+Why would the hardware move past the stalled TRB with one device and not wi=
+th
+another?
+My knowledge about the details of USB / xHCI is pretty vague, but I'd still
+like to grasp what you just fixed.
 
-Are there other busses besides PCI that you want to enable this soon
-(i.e. before 5.14-rc1)?
+--=20
+You may reply to this email to add a comment.
 
-thanks,
-
-greg k-h
+You are receiving this mail because:
+You are watching the assignee of the bug.=
