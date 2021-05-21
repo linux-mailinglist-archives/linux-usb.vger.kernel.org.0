@@ -2,92 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA2F38C98B
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 16:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0DE38CB55
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 18:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234561AbhEUOxx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 10:53:53 -0400
-Received: from mga05.intel.com ([192.55.52.43]:21068 "EHLO mga05.intel.com"
+        id S237638AbhEUQ4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 12:56:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232057AbhEUOxw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 10:53:52 -0400
-IronPort-SDR: FOXPFyPNAjcE2CXF9SL27yKug9UBnajkIzwziwBxa5rX8J58Gd2VU4cSkEyhn6IAlgZxzjWOz7
- 1bFz2KBTKhxw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9990"; a="287040184"
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="287040184"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2021 07:52:29 -0700
-IronPort-SDR: ZefJEzXEiUWQHBcRR4lw36LzYwpJ7zEPfbnpxytcSmXb8mmM7rR7WzKi2uxoFfyjrWoZzT1S/S
- H00O/akNSkAA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="440957277"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga008.jf.intel.com with ESMTP; 21 May 2021 07:52:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 20DD023A; Fri, 21 May 2021 17:52:47 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH v1 1/1] usb: phy: isp1301: Deduplicate of_find_i2c_device_by_node()
-Date:   Fri, 21 May 2021 17:52:43 +0300
-Message-Id: <20210521145243.87911-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        id S236297AbhEUQz7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 21 May 2021 12:55:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8D3E461073
+        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 16:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621616076;
+        bh=98KPaW2HkbJLhHd3or9bg7Do1zrbsL/8VRMkguRZt0o=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=dyQrcWUTYid7Cylp/pKXRN6K/p+UqpFBnhtEuXMerW7BnGNDraaiV9bNF5P3vAkOs
+         j/9UaIqPwnllfkbwfxevS2O/uJMu6Dv9l2VrAa9XVAgnu+oaJ+Egj5WGqOfZD8DLD+
+         8+X9u/OKlnBSsNsEhn+Y+2J2guvHztS5/SPTOLMiSp1zSiIxQBrNi4THproA4OCJvS
+         iln6Z33uw2lqcaTrCpMnek3Sbc9D1YqxG2PXjvFFzCjsIIGrxPHaoca414bLwD7qNY
+         JyOGApRC/MYGyVSncoG8KNUBRZtcnGVDVjWWST10pzYKc/ia2MdtbLhrFw3WWcISxm
+         32StSVOy+kvRg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 7D3636129C; Fri, 21 May 2021 16:54:36 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
+ working on 5.12
+Date:   Fri, 21 May 2021 16:54:36 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: peter.ganzhorn@googlemail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-213081-208809-xO21fmzTIp@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
+References: <bug-213081-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver is using open-coded variant of of_find_i2c_device_by_node().
-Replace it by the actual call to the above mentioned API.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/usb/phy/phy-isp1301.c | 25 +++++++++----------------
- 1 file changed, 9 insertions(+), 16 deletions(-)
+--- Comment #27 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
+Created attachment 296915
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296915&action=3Dedit
+dmesg 5.12.5 + both patches
 
-diff --git a/drivers/usb/phy/phy-isp1301.c b/drivers/usb/phy/phy-isp1301.c
-index 6cf6fbd39237..ad3d57f1c273 100644
---- a/drivers/usb/phy/phy-isp1301.c
-+++ b/drivers/usb/phy/phy-isp1301.c
-@@ -142,24 +142,17 @@ static struct i2c_driver isp1301_driver = {
- 
- module_i2c_driver(isp1301_driver);
- 
--static int match(struct device *dev, const void *data)
--{
--	const struct device_node *node = (const struct device_node *)data;
--	return (dev->of_node == node) &&
--		(dev->driver == &isp1301_driver.driver);
--}
--
- struct i2c_client *isp1301_get_client(struct device_node *node)
- {
--	if (node) { /* reference of ISP1301 I2C node via DT */
--		struct device *dev = bus_find_device(&i2c_bus_type, NULL,
--						     node, match);
--		if (!dev)
--			return NULL;
--		return to_i2c_client(dev);
--	} else { /* non-DT: only one ISP1301 chip supported */
--		return isp1301_i2c_client;
--	}
-+	struct i2c_client *client;
-+
-+	/* reference of ISP1301 I2C node via DT */
-+	client = of_find_i2c_device_by_node(node);
-+	if (client)
-+		return client;
-+
-+	/* non-DT: only one ISP1301 chip supported */
-+	return isp1301_i2c_client;
- }
- EXPORT_SYMBOL_GPL(isp1301_get_client);
- 
--- 
-2.30.2
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
