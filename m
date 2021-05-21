@@ -2,70 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0DE38CB55
-	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 18:54:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D5138CB63
+	for <lists+linux-usb@lfdr.de>; Fri, 21 May 2021 18:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237638AbhEUQ4B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 12:56:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41888 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236297AbhEUQz7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 21 May 2021 12:55:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 8D3E461073
-        for <linux-usb@vger.kernel.org>; Fri, 21 May 2021 16:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621616076;
-        bh=98KPaW2HkbJLhHd3or9bg7Do1zrbsL/8VRMkguRZt0o=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=dyQrcWUTYid7Cylp/pKXRN6K/p+UqpFBnhtEuXMerW7BnGNDraaiV9bNF5P3vAkOs
-         j/9UaIqPwnllfkbwfxevS2O/uJMu6Dv9l2VrAa9XVAgnu+oaJ+Egj5WGqOfZD8DLD+
-         8+X9u/OKlnBSsNsEhn+Y+2J2guvHztS5/SPTOLMiSp1zSiIxQBrNi4THproA4OCJvS
-         iln6Z33uw2lqcaTrCpMnek3Sbc9D1YqxG2PXjvFFzCjsIIGrxPHaoca414bLwD7qNY
-         JyOGApRC/MYGyVSncoG8KNUBRZtcnGVDVjWWST10pzYKc/ia2MdtbLhrFw3WWcISxm
-         32StSVOy+kvRg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 7D3636129C; Fri, 21 May 2021 16:54:36 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Fri, 21 May 2021 16:54:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: peter.ganzhorn@googlemail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-213081-208809-xO21fmzTIp@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S237676AbhEUQ5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 12:57:17 -0400
+Received: from smtp02.smtpout.orange.fr ([80.12.242.124]:36853 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236274AbhEUQ5R (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 12:57:17 -0400
+Received: from localhost.localdomain ([86.243.172.93])
+        by mwinf5d49 with ME
+        id 7Uvr2500B21Fzsu03UvrPg; Fri, 21 May 2021 18:55:52 +0200
+X-ME-Helo: localhost.localdomain
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 21 May 2021 18:55:52 +0200
+X-ME-IP: 86.243.172.93
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        narmstrong@baylibre.com, khilman@baylibre.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH] usb: dwc3: meson-g12a: Disable the regulator in the error handling path of the probe
+Date:   Fri, 21 May 2021 18:55:50 +0200
+Message-Id: <79df054046224bbb0716a8c5c2082650290eec86.1621616013.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+If an error occurs after a successful 'regulator_enable()' call,
+'regulator_disable()' must be called.
 
---- Comment #27 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
-Created attachment 296915
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D296915&action=3Dedit
-dmesg 5.12.5 + both patches
+Fix the error handling path of the probe accordingly.
 
---=20
-You may reply to this email to add a comment.
+The remove function doesn't need to be fixed, because the
+'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+which is called via 'pm_runtime_set_suspended()' in the remove function.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Please review carefully.
+
+I'm not that sure about:
+   The remove function doesn't need to be fixed, because the
+   'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+   which is called via 'pm_runtime_set_suspended()' in the remove function.
+
+This is more a guess than anything else!
+---
+ drivers/usb/dwc3/dwc3-meson-g12a.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-meson-g12a.c b/drivers/usb/dwc3/dwc3-meson-g12a.c
+index bdf1f98dfad8..804957525130 100644
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -772,13 +772,13 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 
+ 	ret = priv->drvdata->usb_init(priv);
+ 	if (ret)
+-		goto err_disable_clks;
++		goto err_disable_regulator;
+ 
+ 	/* Init PHYs */
+ 	for (i = 0 ; i < PHY_COUNT ; ++i) {
+ 		ret = phy_init(priv->phys[i]);
+ 		if (ret)
+-			goto err_disable_clks;
++			goto err_disable_regulator;
+ 	}
+ 
+ 	/* Set PHY Power */
+@@ -816,6 +816,10 @@ static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+ 	for (i = 0 ; i < PHY_COUNT ; ++i)
+ 		phy_exit(priv->phys[i]);
+ 
++err_disable_regulator:
++	if (priv->vbus)
++		regulator_disable(priv->vbus);
++
+ err_disable_clks:
+ 	clk_bulk_disable_unprepare(priv->drvdata->num_clks,
+ 				   priv->drvdata->clks);
+-- 
+2.30.2
+
