@@ -2,71 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E338D2F6
-	for <lists+linux-usb@lfdr.de>; Sat, 22 May 2021 04:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1103138D33B
+	for <lists+linux-usb@lfdr.de>; Sat, 22 May 2021 05:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbhEVCRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 22:17:48 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59481 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230473AbhEVCRs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 22:17:48 -0400
-Received: (qmail 1260972 invoked by uid 1000); 21 May 2021 22:16:23 -0400
-Date:   Fri, 21 May 2021 22:16:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg KH <greg@kroah.com>
-Cc:     Johan Hovold <johan@kernel.org>, "Geoffrey D. Bennett" <g@b4.vu>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: [PATCH v2] USB: core: WARN if pipe direction != setup packet
- direction
-Message-ID: <20210522021623.GB1260282@rowland.harvard.edu>
-References: <20210520202056.GB1216852@rowland.harvard.edu>
- <YKdpThmE1xenUjhI@hovoldconsulting.com>
- <YKey+pWP8iKkCV1Q@hovoldconsulting.com>
+        id S231315AbhEVDPT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Fri, 21 May 2021 23:15:19 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:51139 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231166AbhEVDPS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 23:15:18 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14M3DfGT2011316, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14M3DfGT2011316
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Sat, 22 May 2021 11:13:41 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Sat, 22 May 2021 11:13:40 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Sat, 22 May 2021 11:13:40 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
+ 15.01.2106.013; Sat, 22 May 2021 11:13:40 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com" 
+        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
+Subject: RE: [PATCH net] r8152: check the informaton of the device
+Thread-Topic: [PATCH net] r8152: check the informaton of the device
+Thread-Index: AQHXTiDTUevScj9u/kW7OuVFBi+KHqrtKP8AgAGqvnA=
+Date:   Sat, 22 May 2021 03:13:39 +0000
+Message-ID: <73dec4e9ba05452c90af9e174cacf7f8@realtek.com>
+References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
+ <YKeAonwHduV8I+NW@kroah.com>
+In-Reply-To: <YKeAonwHduV8I+NW@kroah.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/5/21_=3F=3F_10:46:00?=
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKey+pWP8iKkCV1Q@hovoldconsulting.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/22/2021 03:00:35
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163845 [May 22 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 446 446 0309aa129ce7cd9d810f87a68320917ac2eba541
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/22/2021 03:02:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When a control URB is submitted, the direction indicated by URB's pipe
-member is supposed to match the direction indicated by the setup
-packet's bRequestType member.  A mismatch could lead to trouble,
-depending on which field the host controller drivers use for
-determining the actual direction.
+Greg KH <gregkh@linuxfoundation.org>
+> Sent: Friday, May 21, 2021 5:43 PM
+[...]
+> We have a USB core function that does all of the above for you, why not
+> use that instead?
+> 
+> Look at usb_find_common_endpoints() and
+> usb_find_common_endpoints_reverse() and at the very least
+> usb_find_bulk_in_endpoint() and related functions.  Please don't
+> open-code this type of logic, it's easy to get things wrong.
 
-This shouldn't ever happen; it would represent a careless bug in a
-kernel driver somewhere.  This patch adds a dev_WARN_ONCE to let
-people know about the potential problem.
+Fine. Thanks.
 
-Suggested-by: "Geoffrey D. Bennett" <g@b4.vu>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Best Regards,
+Hayes
 
----
-
-v2: Use dev_WARN_ONCE instead of dev_WARN
-
-
-[as1960b]
-
-
- drivers/usb/core/urb.c |    3 +++
- 1 file changed, 3 insertions(+)
-
-Index: usb-devel/drivers/usb/core/urb.c
-===================================================================
---- usb-devel.orig/drivers/usb/core/urb.c
-+++ usb-devel/drivers/usb/core/urb.c
-@@ -407,6 +407,9 @@ int usb_submit_urb(struct urb *urb, gfp_
- 			return -ENOEXEC;
- 		is_out = !(setup->bRequestType & USB_DIR_IN) ||
- 				!setup->wLength;
-+		dev_WARN_ONCE(&dev->dev, (usb_pipeout(urb->pipe) != is_out),
-+				"BOGUS control dir, pipe %x doesn't match bRequestType %x\n",
-+				urb->pipe, setup->bRequestType);
- 	} else {
- 		is_out = usb_endpoint_dir_out(&ep->desc);
- 	}
