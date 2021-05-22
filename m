@@ -2,92 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC60B38D2F4
-	for <lists+linux-usb@lfdr.de>; Sat, 22 May 2021 04:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71E338D2F6
+	for <lists+linux-usb@lfdr.de>; Sat, 22 May 2021 04:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbhEVCPV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 21 May 2021 22:15:21 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:54653 "HELO
+        id S230477AbhEVCRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 21 May 2021 22:17:48 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:59481 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230371AbhEVCPV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 22:15:21 -0400
-Received: (qmail 1260923 invoked by uid 1000); 21 May 2021 22:13:56 -0400
-Date:   Fri, 21 May 2021 22:13:56 -0400
+        with SMTP id S230473AbhEVCRs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 21 May 2021 22:17:48 -0400
+Received: (qmail 1260972 invoked by uid 1000); 21 May 2021 22:16:23 -0400
+Date:   Fri, 21 May 2021 22:16:23 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     guido@kiener-muenchen.de
-Cc:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>, dpenkler@gmail.com,
-        USB list <linux-usb@vger.kernel.org>,
-        Thinh.Nguyen@synopsys.com, mathias.nyman@intel.com
-Subject: Re: [syzbot] INFO: rcu detected stall in tx
-Message-ID: <20210522021356.GA1260282@rowland.harvard.edu>
-References: <35b615b7c7344767b6fd37f7d420787e@rohde-schwarz.com>
- <20210521012420.GC1224757@rowland.harvard.edu>
- <20210521221706.Horde.sFtE6C4lkS5sJzKfWl41tv7@webmail.kiener-muenchen.de>
+To:     Greg KH <greg@kroah.com>
+Cc:     Johan Hovold <johan@kernel.org>, "Geoffrey D. Bennett" <g@b4.vu>,
+        USB mailing list <linux-usb@vger.kernel.org>
+Subject: [PATCH v2] USB: core: WARN if pipe direction != setup packet
+ direction
+Message-ID: <20210522021623.GB1260282@rowland.harvard.edu>
+References: <20210520202056.GB1216852@rowland.harvard.edu>
+ <YKdpThmE1xenUjhI@hovoldconsulting.com>
+ <YKey+pWP8iKkCV1Q@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210521221706.Horde.sFtE6C4lkS5sJzKfWl41tv7@webmail.kiener-muenchen.de>
+In-Reply-To: <YKey+pWP8iKkCV1Q@hovoldconsulting.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 21, 2021 at 10:17:06PM +0000, guido@kiener-muenchen.de wrote:
-> I looked at the original console output again:
-> https://syzkaller.appspot.com/x/log.txt?x=1065c5fcd00000
-> I'm not very familiar yet in reading rcu files, but I would say:
-> 1. I assume there are 2 CPUs running (C0,C1).
-> 2. There are 5 USBTMC devices running concurrenlty which seems to be
-> disconnected together at once.
-> You will find all disconnect messages "usb x-1: USB disconnect, device
-> number y" at the end within 5 seconds (418.4-423.7 sec).
-> 3. Each USBTMC device issues every 20 msec the typical INT pipe message
-> "X-1:0.0: unknown status received: -71" when the connection is disconnected.
-> All USBTMC device messages are alternating. Round robin works.
-> 
-> Does someone have an idea for the following questions:
-> 1. Why does it take about 96 seconds from the beginning of the first INT
-> pipe message (322.1) until the first disconnect message (418.4)?
+When a control URB is submitted, the direction indicated by URB's pipe
+member is supposed to match the direction indicated by the setup
+packet's bRequestType member.  A mismatch could lead to trouble,
+depending on which field the host controller drivers use for
+determining the actual direction.
 
-Because the system is so busy handling all those -71 errors that it 
-doesn't have time to process the disconnect events until 96 seconds have 
-passed by.
+This shouldn't ever happen; it would represent a careless bug in a
+kernel driver somewhere.  This patch adds a dev_WARN_ONCE to let
+people know about the potential problem.
 
-> 2. What is blocking the "disconnect" event for such a long time?
+Suggested-by: "Geoffrey D. Bennett" <g@b4.vu>
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
 
-The usbtmc driver immediately resubmits the URB that failed with a -71 
-error code.  The resubmitted URB fails a few milliseconds later with the 
-same error, and so on.  This all happens at interrupt priority.  With 
-five instances of this going on concurrently there's no time for the 
-system to do much of anything else.
+---
 
-For another example of a bug reported by syzbot having exactly the form 
-and the same explanation, see commit 32a0721c6620 ("USB: yurex: Don't 
-retry on unexpected errors") and the accompanying syzbot 
-dashboard and console output 
-(https://syzkaller.appspot.com/bug?extid=b24d736f18a1541ad550, 
-https://syzkaller.appspot.com/x/log.txt?x=1146550d600000).  The 
-solution was to prevent the yurex driver from resubmitting the URB if it 
-failed with code -EPROTO.  No doubt a similar fix would work for usbtmc.
+v2: Use dev_WARN_ONCE instead of dev_WARN
 
-> 3. Is it possible to provoke this behavior when I disconnect the cable in
-> slow motion?
 
-It doesn't matter how quickly or slowly you unplug the cable.  
-Disconnection is an "edge" event; it happens all at once.
+[as1960b]
 
-> 4. Is the self-detected stall just caused by another driver and the USBTMC
-> driver is innocent, but only chatty?
 
-No.  It is caused by the usbtmc driver.
+ drivers/usb/core/urb.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-> Next Thursday I can check recommendations again.
-
-There's another very important difference that you didn't notice.  In 
-your test, you are certainly using a different USB host controller 
-driver from what syzbot uses.  You're probably using xhci-hcd, whereas 
-syzbot uses dummy-hcd.  Those two drivers handle USB communications in 
-completely different ways; it's entirely possible that one of them could 
-get stuck in this error loop while the other one would not.
-
-Alan Stern
+Index: usb-devel/drivers/usb/core/urb.c
+===================================================================
+--- usb-devel.orig/drivers/usb/core/urb.c
++++ usb-devel/drivers/usb/core/urb.c
+@@ -407,6 +407,9 @@ int usb_submit_urb(struct urb *urb, gfp_
+ 			return -ENOEXEC;
+ 		is_out = !(setup->bRequestType & USB_DIR_IN) ||
+ 				!setup->wLength;
++		dev_WARN_ONCE(&dev->dev, (usb_pipeout(urb->pipe) != is_out),
++				"BOGUS control dir, pipe %x doesn't match bRequestType %x\n",
++				urb->pipe, setup->bRequestType);
+ 	} else {
+ 		is_out = usb_endpoint_dir_out(&ep->desc);
+ 	}
