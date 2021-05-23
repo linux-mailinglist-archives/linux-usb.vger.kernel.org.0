@@ -2,109 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3004438DB8F
-	for <lists+linux-usb@lfdr.de>; Sun, 23 May 2021 17:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D8F38DBCA
+	for <lists+linux-usb@lfdr.de>; Sun, 23 May 2021 18:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231856AbhEWPMD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 May 2021 11:12:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S231861AbhEWQF1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 May 2021 12:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbhEWPMD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 May 2021 11:12:03 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B93C061574
-        for <linux-usb@vger.kernel.org>; Sun, 23 May 2021 08:10:36 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id i9so36888895lfe.13
-        for <linux-usb@vger.kernel.org>; Sun, 23 May 2021 08:10:36 -0700 (PDT)
+        with ESMTP id S231800AbhEWQF0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 May 2021 12:05:26 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B6C061574;
+        Sun, 23 May 2021 09:03:58 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id y7so11516374eda.2;
+        Sun, 23 May 2021 09:03:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=EWynCE8OhOIjHLWaP/8Crqc+nG4j3x+gGuXqGtO8EIA=;
-        b=kcnSbiwNC7eQ7Ubykir7Vi2c57nJZwfxMv7QHOIQksQm8fR7pAM63qeWe0ca4Pg/C4
-         s6+9IB/m21LS2K1Omokw9ieDH3meuI06zcmWI9zsFkNIp7ZlMgcM1KkFl44lZ3j7tz4a
-         sIAdtsYrbD453u8Ufpq0xtM9thbhkPgwyX2XcE8LmJ1yyQ5ZW4JjVPb+aPRuUrwn0qn9
-         5vDhWNOaf2G39nNpK9raehahYXxGoEEO0AY4zYKkSoKTOzw+mbl6QiHkT9CmbH4m9vwk
-         BhW0ND/2RI4QH640ge+bqS0kp2ymkiO9h3KieKZCVzmuE/r5RwvR1BWXPvWIfr9qI5uG
-         auVg==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gJkD6i4SEo6SHdZ7GGHPrHMiskGVfh8CdW3Nufpvn2I=;
+        b=CnI3Abzt5Xv9BhXQL8KS9PW5422NN27D1tSFTpWB4Knv/ZRbOmrQ1ShJYV9KlqeGHS
+         z7Fe4E7REfieJoL5gru+JIA1CUtP5Bhrn8Zp54hRj4apLyiRkK26gDNXlL/C4Im/NCpi
+         BNqOYkHoIJCH8en6v7t4x2mrcOGf8k+MSGL6fTt3478Dou+Zeuhynm0cDXoc0hG8pzPJ
+         Tb8FGtTw2RTOBQGnSkSFnS49eAApdPQYIv7HKTS4/xHBnSD+PMKBCm2mmOl+6fSAT7GA
+         ovFDq21Va8xrotyiZVPDxWiGC1wLh3V7uPvJxHRXlGrD0g+kfn69UrKiFhnQ5xAoqAKI
+         guCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=EWynCE8OhOIjHLWaP/8Crqc+nG4j3x+gGuXqGtO8EIA=;
-        b=RzHpRHrThRicPAVdCqOUoIJlxGMTPcTSbYiw/Pv4gGDFU7+bbUcRPCb1OAES/iIZ2c
-         UKA3BaPhKJrBovEbWXC2Z6uAF3KYvXNjskPGx0L3vTmjSoVXE1NAgnUnQskqImfhA7kD
-         Op8yV8SCpbX8ezvzG9DX5eO+yuE4MV8tO5rVmQ3/IgxguhfOrHpNUAoadEl11c01Rg7A
-         hHnOBMXiCFcP9cvu9FB+74fEPDFknC3zs6WXKIM35sU9d6PQcRIq9AsXTlX1GGdP5a73
-         qDKqY73/noksQtU24dx12csGZugVPbDpGZ9fZQXfvfKon+9vmhMtDkO59pAhkhpoTTTp
-         Id1w==
-X-Gm-Message-State: AOAM532vs2RorZGMJEc1ijfsb+IDpUgShzOSS6sRkFBetPF4hJ5d9kNo
-        yngzvUMQ/pSqddHdPaBEl7SVd7Qgd2Euz3Yz
-X-Google-Smtp-Source: ABdhPJz2p8EslvUrHjCMyWi0/1iSL31GajHQAc+SPmkfK9ElfwXUIferoVg0Kkm5QmOrCmTIkHfPHA==
-X-Received: by 2002:a05:6512:1c5:: with SMTP id f5mr4751820lfp.10.1621782634119;
-        Sun, 23 May 2021 08:10:34 -0700 (PDT)
-Received: from [192.168.1.64] ([93.185.29.233])
-        by smtp.gmail.com with ESMTPSA id t202sm1181491lff.199.2021.05.23.08.10.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 23 May 2021 08:10:33 -0700 (PDT)
-To:     mathias.nyman@intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-From:   Alexandr Ivanov <alexandr.sky@gmail.com>
-Subject: [PATCH] xhci: Remove unnecessary condition from
- xhci_check_tt_bw_table
-Message-ID: <a7ca3671-aaee-2b4e-ed90-208ba82baef8@gmail.com>
-Date:   Sun, 23 May 2021 18:10:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gJkD6i4SEo6SHdZ7GGHPrHMiskGVfh8CdW3Nufpvn2I=;
+        b=A7jifdV87PDyktMdQ0u4Eyf3496V+UtGUucKRgDHCGbJSVj55uHWZQWGYAt1ezB4g9
+         w9/vOUFQOUuzNnEwasuM7B4g893Xg9fbgBU8DTZwG/Vw5bGV6/2JNMTMO3bht3EazepQ
+         OYc4yJDDV/VNn2NkJhiUA9j9avG/vOc0LkqHtItTiHlKwSGbdqI53iP4MCOq7xyLHMTN
+         kco7hwa4Lz7UqrfabaKaxiCHuiSQUqI0d78tKkvIgZRRdmc3PgHjtPAjeURZB9kVpkuC
+         IqlNdBRpY4bD3USn0eF11JxIAuKTpn9HPBLxx8W7xNowizeJL8BRoxT21lq/EaoIPr+W
+         YOSQ==
+X-Gm-Message-State: AOAM533wROP7SL8EbUmzJw1B3N8b7AdDp4YodvstOyd2PLQpPQg1q7Of
+        GUMVjyG7tYvf0ei86gunr2EZmsOhao88CkeXurU=
+X-Google-Smtp-Source: ABdhPJxFDpHabe9W6/7esigrOS2kY4rmQITdh3xVTXAkjKPgodavQcSx3o8iM0vUCzjfrFm/ao20QTXEe9xq6Na96dM=
+X-Received: by 2002:a50:9346:: with SMTP id n6mr21297997eda.365.1621785837181;
+ Sun, 23 May 2021 09:03:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <79df054046224bbb0716a8c5c2082650290eec86.1621616013.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <79df054046224bbb0716a8c5c2082650290eec86.1621616013.git.christophe.jaillet@wanadoo.fr>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sun, 23 May 2021 18:03:46 +0200
+Message-ID: <CAFBinCCBo4fYoO=2NiWTEixPuJo2Q=J1o1+yfi4Oc32SLi=GAw@mail.gmail.com>
+Subject: Re: [PATCH] usb: dwc3: meson-g12a: Disable the regulator in the error
+ handling path of the probe
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Neil Armstrong <narmstrong@baylibre.com>, khilman@baylibre.com,
+        jbrunet@baylibre.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove condition (old_active_eps == 0) from xhci_check_tt_bw_table
-because the previous check of old_active_eps returns
-from the function if old_active_eps is not zero.
+Hi Christophe,
 
-Move the previous condition to the function beginning.
+On Fri, May 21, 2021 at 6:55 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If an error occurs after a successful 'regulator_enable()' call,
+> 'regulator_disable()' must be called.
+>
+> Fix the error handling path of the probe accordingly.
+>
+> The remove function doesn't need to be fixed, because the
+> 'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+> which is called via 'pm_runtime_set_suspended()' in the remove function.
+>
+> Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+for me this makes sense so:
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Signed-off-by: Alexandr Ivanov <alexandr.sky@gmail.com>
----
-  drivers/usb/host/xhci.c | 10 ++++++----
-  1 file changed, 6 insertions(+), 4 deletions(-)
+> ---
+> Please review carefully.
+>
+> I'm not that sure about:
+>    The remove function doesn't need to be fixed, because the
+>    'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+>    which is called via 'pm_runtime_set_suspended()' in the remove function.
+>
+> This is more a guess than anything else!
+I am not 100% sure about the suspend code-path, so I am hoping that
+someone else (for example Neil) can also review your patch
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 27283654ca08..14aae87d6c8f 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -2329,16 +2329,18 @@ static int xhci_check_tt_bw_table(struct 
-xhci_hcd *xhci,
-      struct xhci_interval_bw_table *bw_table;
-      struct xhci_tt_bw_info *tt_info;
 
--    /* Find the bandwidth table for the root port this TT is attached 
-to. */
--    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
--    tt_info = virt_dev->tt_info;
-      /* If this TT already had active endpoints, the bandwidth for this TT
-       * has already been added.  Removing all periodic endpoints (and thus
-       * making the TT enactive) will only decrease the bandwidth used.
-       */
-      if (old_active_eps)
-          return 0;
--    if (old_active_eps == 0 && tt_info->active_eps != 0) {
-+
-+    /* Find the bandwidth table for the root port this TT is attached 
-to. */
-+    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
-+    tt_info = virt_dev->tt_info;
-+
-+    if (tt_info->active_eps != 0) {
-          if (bw_table->bw_used + TT_HS_OVERHEAD > HS_BW_LIMIT)
-              return -ENOMEM;
-          return 0;
--- 
-2.31.1
-
+Best regards,
+Martin
