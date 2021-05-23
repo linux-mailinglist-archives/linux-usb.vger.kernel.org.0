@@ -2,295 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F6B38D835
-	for <lists+linux-usb@lfdr.de>; Sun, 23 May 2021 04:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB58938D94A
+	for <lists+linux-usb@lfdr.de>; Sun, 23 May 2021 08:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbhEWCEn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 22 May 2021 22:04:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbhEWCEm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 22 May 2021 22:04:42 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05651C06138A
-        for <linux-usb@vger.kernel.org>; Sat, 22 May 2021 19:03:16 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id i67so23799256qkc.4
-        for <linux-usb@vger.kernel.org>; Sat, 22 May 2021 19:03:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JjnZ0zgQnYl6m6VonMK5rveRNEm88gewG9BMTvlY4rc=;
-        b=UmaA1luOdT4X1XAgd15hg3PNAfMIIrLsF0VfAhH20AjQVHSdQcCnMC1vdYN3t5MJWe
-         qTUyNeBQBkGpGBslHutT/fLmzGi6iiQ1iq01tx4MwESclm0oBntAU2SJIPtHJsU81LBE
-         S9QObIlM2ud0S9v8q9lUNXfGz33MAnLSCZZCM+4udTzJI1fkCR8Bc5a2PukirI1Xt3MY
-         RjfMuTuyDgAyMssdh8yCOo/aenkfFit4hYUCjiMrbA6QITyTjZkQXwKKS8kS+Ere8NDI
-         vjgn5DbcTYAZa7k9B/C22Ihgguj+G6V4Ybicr/q64vFreYCT8mw73QPUKEqt2Cj2xUsq
-         RzyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JjnZ0zgQnYl6m6VonMK5rveRNEm88gewG9BMTvlY4rc=;
-        b=VjrO5klM1KbKLDNlbRFV6VCx0xtHL0tuR51OwJChuZryz+CO7Fw4I67L1fpnGPZ/w0
-         0VcqnzaxysUoZnerY7NQfUGqHhafR1mtWhlpSId4NgHbjWVx1e6jenmNOuMf2eolViis
-         gZ/wbRbJGSaje/qKslxY7wu0AoV8p0vmB9jBfTLLvqyiU55kjQ7yyFIOa5rZ3rsa/Ahj
-         nsyLw2JNSOmwAzEcWgOFh982HBstGH3brgGmTQ07eu6Cm5yVyFk7kOScXmsOjkJ8Uvju
-         7DFXZreguqCFopsEdHh2Ioqjr3/urgvzwWWQCYVNvlM0uRczTTs6OHO+3FdZ2rI/TwdP
-         wR6w==
-X-Gm-Message-State: AOAM532xPu05A0hgSakK1sdd7i2j87r24W0WQ7zXNrHPtuIPRNNpzqzt
-        1aj3eFiegAGXd4deOLxnEyDYnarJkLpqO9frPM2PLQ==
-X-Google-Smtp-Source: ABdhPJzIZlplEk5BnR+2417JjoqZgLRQD+Dtbb3xCtYBZGimpk0zMKjiMGOgMPRNKt7Rwddjfa1MZ2ZlHkT4AkR5F3g=
-X-Received: by 2002:a05:620a:22f2:: with SMTP id p18mr21711713qki.410.1621735394659;
- Sat, 22 May 2021 19:03:14 -0700 (PDT)
+        id S231584AbhEWGfG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 23 May 2021 02:35:06 -0400
+Received: from szxga06-in.huawei.com ([45.249.212.32]:3657 "EHLO
+        szxga06-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231555AbhEWGfG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 May 2021 02:35:06 -0400
+Received: from dggems701-chm.china.huawei.com (unknown [172.30.72.60])
+        by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Fnr8R04hvzmWf6;
+        Sun, 23 May 2021 14:31:19 +0800 (CST)
+Received: from dggema769-chm.china.huawei.com (10.1.198.211) by
+ dggems701-chm.china.huawei.com (10.3.19.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Sun, 23 May 2021 14:33:37 +0800
+Received: from [10.174.179.215] (10.174.179.215) by
+ dggema769-chm.china.huawei.com (10.1.198.211) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Sun, 23 May 2021 14:33:37 +0800
+Subject: Re: [PATCH -next] USB: gadget: f_fs: Use ERR_CAST instead of
+ ERR_PTR(PTR_ERR(...))
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20210519023032.19812-1-yuehaibing@huawei.com>
+ <YKeeHDy/VAhuoG6B@kroah.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <91b40f9e-9de2-0d16-7eb1-50e5a91fb077@huawei.com>
+Date:   Sun, 23 May 2021 14:33:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-References: <20210521130121.1470334-2-kyletso@google.com> <202105230455.faAHm2qT-lkp@intel.com>
-In-Reply-To: <202105230455.faAHm2qT-lkp@intel.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Sun, 23 May 2021 10:02:58 +0800
-Message-ID: <CAGZ6i=2SDOWMHVOt0B6bn5=sxKgPR2cvgEX4uXXxJxN67GtLEg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usb: typec: tcpm: Properly interrupt VDM AMS
-To:     kernel test robot <lkp@intel.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>, kbuild-all@lists.01.org,
-        clang-built-linux@googlegroups.com,
-        Badhri Jagan Sridharan <badhri@google.com>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YKeeHDy/VAhuoG6B@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggema769-chm.china.huawei.com (10.1.198.211)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 23, 2021 at 4:23 AM kernel test robot <lkp@intel.com> wrote:
->
-> Hi Kyle,
->
-> Thank you for the patch! Perhaps something to improve:
->
-> [auto build test WARNING on usb/usb-testing]
-> [also build test WARNING on v5.13-rc2 next-20210521]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
->
-> url:    https://github.com/0day-ci/linux/commits/Kyle-Tso/Fix-some-VDM-AMS-handling/20210522-205431
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> config: x86_64-randconfig-a006-20210523 (attached as .config)
-> compiler: clang version 13.0.0 (https://github.com/llvm/llvm-project e84a9b9bb3051c35dea993cdad7b3d2575638f85)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install x86_64 cross compiling tool for clang build
->         # apt-get install binutils-x86-64-linux-gnu
->         # https://github.com/0day-ci/linux/commit/6e05980ae46e87d0a409e1e653658ae6fd7b3a32
->         git remote add linux-review https://github.com/0day-ci/linux
->         git fetch --no-tags linux-review Kyle-Tso/Fix-some-VDM-AMS-handling/20210522-205431
->         git checkout 6e05980ae46e87d0a409e1e653658ae6fd7b3a32
->         # save the attached .config to linux build tree
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=x86_64
->
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
->
-> All warnings (new ones prefixed by >>):
->
-> >> drivers/usb/typec/tcpm/tcpm.c:2326:19: warning: equality comparison result unused [-Wunused-comparison]
->                    port->vdm_state == VDM_STATE_ERR_BUSY;
->                    ~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
->    drivers/usb/typec/tcpm/tcpm.c:2326:19: note: use '=' to turn this equality comparison into an assignment
->                    port->vdm_state == VDM_STATE_ERR_BUSY;
->                                    ^~
->                                    =
->    1 warning generated.
->
->
 
-Fixed in v2
-https://lore.kernel.org/linux-usb/20210523015855.1785484-1-kyletso@google.com/
 
-thanks,
-Kyle
+On 2021/5/21 19:48, Greg KH wrote:
+> On Wed, May 19, 2021 at 10:30:32AM +0800, YueHaibing wrote:
+>> A coccicheck run provided information like the following.
+>>
+>> ./drivers/usb/gadget/function/f_fs.c:3832:9-16:
+>>  WARNING: ERR_CAST can be used with data
+>>
+>> Use ERR_CAST to fix this.
+>>
+>> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+>> ---
+>>  drivers/usb/gadget/function/f_fs.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index bf109191659a..61110ff52f49 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -3829,7 +3829,7 @@ static char *ffs_prepare_buffer(const char __user *buf, size_t len)
+>>  
+>>  	data = memdup_user(buf, len);
+>>  	if (IS_ERR(data))
+>> -		return ERR_PTR(PTR_ERR(data));
+>> +		return ERR_CAST(data);
+> 
+> This should just be:
+> 		return PTR_ERR(data);
+> right?
 
-> vim +2326 drivers/usb/typec/tcpm/tcpm.c
->
->   2313
->   2314  static void tcpm_pd_data_request(struct tcpm_port *port,
->   2315                                   const struct pd_message *msg)
->   2316  {
->   2317          enum pd_data_msg_type type = pd_header_type_le(msg->header);
->   2318          unsigned int cnt = pd_header_cnt_le(msg->header);
->   2319          unsigned int rev = pd_header_rev_le(msg->header);
->   2320          unsigned int i;
->   2321          enum frs_typec_current partner_frs_current;
->   2322          bool frs_enable;
->   2323          int ret;
->   2324
->   2325          if (tcpm_vdm_ams(port) && type != PD_DATA_VENDOR_DEF) {
-> > 2326                  port->vdm_state == VDM_STATE_ERR_BUSY;
->   2327                  tcpm_ams_finish(port);
->   2328                  mod_vdm_delayed_work(port, 0);
->   2329          }
->   2330
->   2331          switch (type) {
->   2332          case PD_DATA_SOURCE_CAP:
->   2333                  for (i = 0; i < cnt; i++)
->   2334                          port->source_caps[i] = le32_to_cpu(msg->payload[i]);
->   2335
->   2336                  port->nr_source_caps = cnt;
->   2337
->   2338                  tcpm_log_source_caps(port);
->   2339
->   2340                  tcpm_validate_caps(port, port->source_caps,
->   2341                                     port->nr_source_caps);
->   2342
->   2343                  /*
->   2344                   * Adjust revision in subsequent message headers, as required,
->   2345                   * to comply with 6.2.1.1.5 of the USB PD 3.0 spec. We don't
->   2346                   * support Rev 1.0 so just do nothing in that scenario.
->   2347                   */
->   2348                  if (rev == PD_REV10) {
->   2349                          if (port->ams == GET_SOURCE_CAPABILITIES)
->   2350                                  tcpm_ams_finish(port);
->   2351                          break;
->   2352                  }
->   2353
->   2354                  if (rev < PD_MAX_REV)
->   2355                          port->negotiated_rev = rev;
->   2356
->   2357                  if (port->pwr_role == TYPEC_SOURCE) {
->   2358                          if (port->ams == GET_SOURCE_CAPABILITIES)
->   2359                                  tcpm_pd_handle_state(port, SRC_READY, NONE_AMS, 0);
->   2360                          /* Unexpected Source Capabilities */
->   2361                          else
->   2362                                  tcpm_pd_handle_msg(port,
->   2363                                                     port->negotiated_rev < PD_REV30 ?
->   2364                                                     PD_MSG_CTRL_REJECT :
->   2365                                                     PD_MSG_CTRL_NOT_SUPP,
->   2366                                                     NONE_AMS);
->   2367                  } else if (port->state == SNK_WAIT_CAPABILITIES) {
->   2368                  /*
->   2369                   * This message may be received even if VBUS is not
->   2370                   * present. This is quite unexpected; see USB PD
->   2371                   * specification, sections 8.3.3.6.3.1 and 8.3.3.6.3.2.
->   2372                   * However, at the same time, we must be ready to
->   2373                   * receive this message and respond to it 15ms after
->   2374                   * receiving PS_RDY during power swap operations, no matter
->   2375                   * if VBUS is available or not (USB PD specification,
->   2376                   * section 6.5.9.2).
->   2377                   * So we need to accept the message either way,
->   2378                   * but be prepared to keep waiting for VBUS after it was
->   2379                   * handled.
->   2380                   */
->   2381                          port->ams = POWER_NEGOTIATION;
->   2382                          port->in_ams = true;
->   2383                          tcpm_set_state(port, SNK_NEGOTIATE_CAPABILITIES, 0);
->   2384                  } else {
->   2385                          if (port->ams == GET_SOURCE_CAPABILITIES)
->   2386                                  tcpm_ams_finish(port);
->   2387                          tcpm_pd_handle_state(port, SNK_NEGOTIATE_CAPABILITIES,
->   2388                                               POWER_NEGOTIATION, 0);
->   2389                  }
->   2390                  break;
->   2391          case PD_DATA_REQUEST:
->   2392                  /*
->   2393                   * Adjust revision in subsequent message headers, as required,
->   2394                   * to comply with 6.2.1.1.5 of the USB PD 3.0 spec. We don't
->   2395                   * support Rev 1.0 so just reject in that scenario.
->   2396                   */
->   2397                  if (rev == PD_REV10) {
->   2398                          tcpm_pd_handle_msg(port,
->   2399                                             port->negotiated_rev < PD_REV30 ?
->   2400                                             PD_MSG_CTRL_REJECT :
->   2401                                             PD_MSG_CTRL_NOT_SUPP,
->   2402                                             NONE_AMS);
->   2403                          break;
->   2404                  }
->   2405
->   2406                  if (rev < PD_MAX_REV)
->   2407                          port->negotiated_rev = rev;
->   2408
->   2409                  if (port->pwr_role != TYPEC_SOURCE || cnt != 1) {
->   2410                          tcpm_pd_handle_msg(port,
->   2411                                             port->negotiated_rev < PD_REV30 ?
->   2412                                             PD_MSG_CTRL_REJECT :
->   2413                                             PD_MSG_CTRL_NOT_SUPP,
->   2414                                             NONE_AMS);
->   2415                          break;
->   2416                  }
->   2417
->   2418                  port->sink_request = le32_to_cpu(msg->payload[0]);
->   2419
->   2420                  if (port->vdm_sm_running && port->explicit_contract) {
->   2421                          tcpm_pd_handle_msg(port, PD_MSG_CTRL_WAIT, port->ams);
->   2422                          break;
->   2423                  }
->   2424
->   2425                  if (port->state == SRC_SEND_CAPABILITIES)
->   2426                          tcpm_set_state(port, SRC_NEGOTIATE_CAPABILITIES, 0);
->   2427                  else
->   2428                          tcpm_pd_handle_state(port, SRC_NEGOTIATE_CAPABILITIES,
->   2429                                               POWER_NEGOTIATION, 0);
->   2430                  break;
->   2431          case PD_DATA_SINK_CAP:
->   2432                  /* We don't do anything with this at the moment... */
->   2433                  for (i = 0; i < cnt; i++)
->   2434                          port->sink_caps[i] = le32_to_cpu(msg->payload[i]);
->   2435
->   2436                  partner_frs_current = (port->sink_caps[0] & PDO_FIXED_FRS_CURR_MASK) >>
->   2437                          PDO_FIXED_FRS_CURR_SHIFT;
->   2438                  frs_enable = partner_frs_current && (partner_frs_current <=
->   2439                                                       port->new_source_frs_current);
->   2440                  tcpm_log(port,
->   2441                           "Port partner FRS capable partner_frs_current:%u port_frs_current:%u enable:%c",
->   2442                           partner_frs_current, port->new_source_frs_current, frs_enable ? 'y' : 'n');
->   2443                  if (frs_enable) {
->   2444                          ret  = port->tcpc->enable_frs(port->tcpc, true);
->   2445                          tcpm_log(port, "Enable FRS %s, ret:%d\n", ret ? "fail" : "success", ret);
->   2446                  }
->   2447
->   2448                  port->nr_sink_caps = cnt;
->   2449                  port->sink_cap_done = true;
->   2450                  if (port->ams == GET_SINK_CAPABILITIES)
->   2451                          tcpm_set_state(port, ready_state(port), 0);
->   2452                  /* Unexpected Sink Capabilities */
->   2453                  else
->   2454                          tcpm_pd_handle_msg(port,
->   2455                                             port->negotiated_rev < PD_REV30 ?
->   2456                                             PD_MSG_CTRL_REJECT :
->   2457                                             PD_MSG_CTRL_NOT_SUPP,
->   2458                                             NONE_AMS);
->   2459                  break;
->   2460          case PD_DATA_VENDOR_DEF:
->   2461                  tcpm_handle_vdm_request(port, msg->payload, cnt);
->   2462                  break;
->   2463          case PD_DATA_BIST:
->   2464                  port->bist_request = le32_to_cpu(msg->payload[0]);
->   2465                  tcpm_pd_handle_state(port, BIST_RX, BIST, 0);
->   2466                  break;
->   2467          case PD_DATA_ALERT:
->   2468                  tcpm_handle_alert(port, msg->payload, cnt);
->   2469                  break;
->   2470          case PD_DATA_BATT_STATUS:
->   2471          case PD_DATA_GET_COUNTRY_INFO:
->   2472                  /* Currently unsupported */
->   2473                  tcpm_pd_handle_msg(port, port->negotiated_rev < PD_REV30 ?
->   2474                                     PD_MSG_CTRL_REJECT :
->   2475                                     PD_MSG_CTRL_NOT_SUPP,
->   2476                                     NONE_AMS);
->   2477                  break;
->   2478          default:
->   2479                  tcpm_pd_handle_msg(port, port->negotiated_rev < PD_REV30 ?
->   2480                                     PD_MSG_CTRL_REJECT :
->   2481                                     PD_MSG_CTRL_NOT_SUPP,
->   2482                                     NONE_AMS);
->   2483                  tcpm_log(port, "Unrecognized data message type %#x", type);
->   2484                  break;
->   2485          }
->   2486  }
->   2487
->
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ffs_prepare_buffer() should return an ERR_PTR() encoded error code on failure,
+
+maybe there just do:
+
+		return data;
+
+> 
+> No need for 2 casts to happen here.
+> 
+> thanks,
+> 
+> greg k-h
+> .
+> 
