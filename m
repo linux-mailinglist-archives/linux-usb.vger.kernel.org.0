@@ -2,121 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1871138E747
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 15:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E567138E7A6
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 15:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232802AbhEXNUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 09:20:54 -0400
-Received: from mail-il1-f199.google.com ([209.85.166.199]:42528 "EHLO
-        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232648AbhEXNUv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 09:20:51 -0400
-Received: by mail-il1-f199.google.com with SMTP id d17-20020a9236110000b02901cf25fcfdcdso2124044ila.9
-        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 06:19:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=xlJyul8EX30BPfx0IrWN2X0dWiT6NoPE1yBME7Ku8yY=;
-        b=oRHVefT4MUuQTRKQ8CmdsAYBhjLaYC8qLbD2c/xTajPA186dlXoDeT1+o4DVBry6Au
-         PCT0Q3DseYX3umJHJ//MLCilu9mLcQryjAadVG/NX07WM8UZABps+L0J7DsmZLUmg7Q7
-         fAtAnFxWYBXl56jgSHkFjKWeTfdIouwqX4GAtPd56CMR+82pLu0nnEYK2w64+Dzg150s
-         2J1m3i5DGv2ZQcmIKjfbMRRlRPfzKAjEaDvDZKl0SoAOc1HuDWr6o2ZzKroU20G/kvOz
-         y91B10IO+WQkK7ZAnJu38TL7N0F5L09w8SbPFTU9GfZkHnuSsrQsD2MV+7pFFi8fF81q
-         SfUA==
-X-Gm-Message-State: AOAM531aadTW7fFJUK6Bsr+lExh2QYYXY9gtpxv2CTWWJrnJCL6SUvBo
-        vcErEVr58QM4rnjkc6SCwDJfHhqGPANVcrVdVKZAZhEwxQ3l
-X-Google-Smtp-Source: ABdhPJzWg5EheSUX48l72MPSH9pGe+SyqFLJi+CvgWH+f8EzYpTz/N9nLnSDP/N6AY7rcG4uM2y87svB8dHUB9euCm+kwxK4BWSE
+        id S232869AbhEXNbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 09:31:37 -0400
+Received: from mga05.intel.com ([192.55.52.43]:31667 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233009AbhEXNbd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 09:31:33 -0400
+IronPort-SDR: EI1yhbau+CVku4vscMZuAhdtTAi4znCQEo2vZTPamtCCbUIPHx7S6h7PPQmAWlGQ7O9foeK129
+ bjXis179Ixpw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="287501521"
+X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
+   d="scan'208";a="287501521"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 06:29:37 -0700
+IronPort-SDR: V14XzI/08TylZL9go/8CMKU++vgfMI9NSXNjQgVZQ4hTnkrYBJmUa0hnoIXetlW+aBL5PXvrfz
+ Af/2q2h7Op/w==
+X-IronPort-AV: E=Sophos;i="5.82,325,1613462400"; 
+   d="scan'208";a="470572708"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 06:29:35 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 24 May 2021 16:29:32 +0300
+Date:   Mon, 24 May 2021 16:29:32 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-usb@vger.kernel.org
+Subject: [GIT PULL] Thunderbolt/USB4 fixes for v5.13-rc4
+Message-ID: <20210524132932.GF291593@lahna.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:cd08:: with SMTP id d8mr16023343iog.86.1621862363043;
- Mon, 24 May 2021 06:19:23 -0700 (PDT)
-Date:   Mon, 24 May 2021 06:19:23 -0700
-In-Reply-To: <000000000000f96caf05c30fd10f@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000061f5105c3134231@google.com>
-Subject: Re: [syzbot] WARNING in rtl28xxu_ctrl_msg/usb_submit_urb
-From:   syzbot <syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com>
-To:     crope@iki.fi, gregkh@linuxfoundation.org, hverkuil@xs4all.nl,
-        johan@kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, mchehab@kernel.org,
-        stable@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hi Greg,
 
-HEAD commit:    5cc59c41 USB: core: WARN if pipe direction != setup packet..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=17aa9217d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
-dashboard link: https://syzkaller.appspot.com/bug?extid=faf11bbadc5a372564da
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e839d1d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1242ce8dd00000
+The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+  Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
 
-usb 1-1: New USB device found, idVendor=0413, idProduct=6a03, bcdDevice=39.7e
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
-WARNING: CPU: 1 PID: 32 at drivers/usb/core/urb.c:410 usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-Modules linked in:
-CPU: 1 PID: 32 Comm: kworker/1:1 Not tainted 5.13.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-Code: 84 4c 01 00 00 e8 a6 14 b3 fd 4c 89 f7 e8 4e a7 1b ff 45 89 e8 44 89 e1 48 89 ea 48 89 c6 48 c7 c7 c0 09 63 86 e8 18 f1 fb 01 <0f> 0b 49 8d 4f 5c 48 b8 00 00 00 00 00 fc ff df 48 89 ca 48 89 4c
-RSP: 0018:ffffc900001a6d50 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff88811ab8a058 RCX: 0000000000000000
-RDX: ffff888107fc0000 RSI: ffffffff812a6013 RDI: fffff52000034d9c
-RBP: ffff88810e79f7a8 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff814b996b R11: 0000000000000000 R12: 0000000080000280
-R13: 00000000000000c0 R14: ffff88811ab8a0a8 R15: ffff8881097a2500
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055d9ffcec928 CR3: 00000001103c2000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- rtl28xxu_ctrl_msg+0x4b7/0x700 drivers/media/usb/dvb-usb-v2/rtl28xxu.c:43
- rtl28xxu_identify_state+0xb6/0x320 drivers/media/usb/dvb-usb-v2/rtl28xxu.c:624
- dvb_usbv2_probe+0x55b/0x7d0 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:947
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- really_probe+0x291/0xf60 drivers/base/dd.c:576
- driver_probe_device+0x298/0x410 drivers/base/dd.c:763
- __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4b0 drivers/base/dd.c:938
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbe0/0x2100 drivers/base/core.c:3320
- usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2164
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- really_probe+0x291/0xf60 drivers/base/dd.c:576
- driver_probe_device+0x298/0x410 drivers/base/dd.c:763
- __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4b0 drivers/base/dd.c:938
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbe0/0x2100 drivers/base/core.c:3320
- usb_new_device.cold+0x721/0x1058 drivers/usb/core/hub.c:2556
- hub_port_connect drivers/usb/core/hub.c:5297 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5437 [inline]
- port_event drivers/usb/core/hub.c:5583 [inline]
- hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5665
- process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x38c/0x460 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+are available in the Git repository at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v5.13-rc4
+
+for you to fetch changes up to 22c7a18ed5f007faccb7527bc890463763214081:
+
+  thunderbolt: usb4: Fix NVM read buffer bounds and offset issue (2021-05-20 11:52:58 +0300)
+
+----------------------------------------------------------------
+thunderbolt: Fixes for v5.13-rc4
+
+This includes two fixes from Mathias to handle NVM read side properly in
+certain situations.
+
+Both have been in linux-next with no reported issues.
+
+----------------------------------------------------------------
+Mathias Nyman (2):
+      thunderbolt: dma_port: Fix NVM read buffer bounds and offset issue
+      thunderbolt: usb4: Fix NVM read buffer bounds and offset issue
+
+ drivers/thunderbolt/dma_port.c | 11 ++++++-----
+ drivers/thunderbolt/usb4.c     |  9 +++++----
+ 2 files changed, 11 insertions(+), 9 deletions(-)
