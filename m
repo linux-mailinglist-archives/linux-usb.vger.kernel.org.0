@@ -2,123 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D9138E5F9
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 13:59:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E12B38E62A
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 14:05:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232655AbhEXMBU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 08:01:20 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:34919 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232494AbhEXMBT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 08:01:19 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5584A582671;
-        Mon, 24 May 2021 07:59:49 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 24 May 2021 07:59:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=EMJnP4Q9UxIeWBo2UuuYOcg1Pqv
-        TS5azhJpoiLIqHIQ=; b=OUKRRQHx1ILDG0ggPhIpmjzgmg/JTKwM9OXvLkW/J4A
-        gYwwfeI1/LKKRvmJpIWVJvNvfNHPnAYHkqGkri1VF+o4kxP7xFiE8n/V0gUMQFU1
-        5kEqBz3KoWwTujEqAqOC44vZn1dmxYCyjJljuFFZXrre4zaazOmdneGSZu3n6mEr
-        l7fiMNho9ITq/FQkB7YntIpiN8Ak9M7DosdOYxfj/2weh7sd2CDAfZYSQ1iAzOQH
-        gsITZH28+VN48Pd7zWUGu4hQSbvIWjvykBNx8EbSLoG4m5sKfe1Vj1GBOKkHEMj4
-        by2YGhtxgjdYXevSOiLgD/9PcbLciAK2Evtgyg6gvNg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=EMJnP4
-        Q9UxIeWBo2UuuYOcg1PqvTS5azhJpoiLIqHIQ=; b=QW+daKaxTYMrEqLcgIuLQ1
-        x/nJ3FgX44l3zujYpurXNEFfzMTJ3x8/2w8EFid7W+50f/P8Hp04qE1etNhnSO91
-        I/sImRTaiWE0vVPzJIoOE+2A2b4rOIxTT4onsP5e8H2WIovRdpDa5+k3/r9tEzdv
-        sYHprr8VPpbSKpsk5QSxwSldyCSRk4YZs9FpEW1r6SgfegzW27mvpF+OMLS9Dnv4
-        xVMUIQWCbzmvR+ZUCI4v9lhKWzEP5PRT/RbapQP2701WF234YOZ3stIa3pZhvH7f
-        186TyDxWHv6gIegVIUI8ZS4gESf+crLFl/foLJYgo2AEC/yirqZObOYol5F7YHBg
-        ==
-X-ME-Sender: <xms:NJWrYEQA7mP-vi29nF9adGZyG8ESh5GAS3Y9YEvMlvrFATtJr2xBOw>
-    <xme:NJWrYBxROd8hQYpUmdUsN1VaX8afieB3oI1KNY4_xLQevR3kVc2u-u-nqZyvLuD6R
-    vM5HwcDdEU9WaHa__c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrvdejledggeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
-    gedunecukfhppeeltddrkeelrdeikedrjeeinecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:NJWrYB0Jd49ywHiY7McNzEEzSD5Yh075Ga63Nuus_jaZvwOb5SWFwg>
-    <xmx:NJWrYIBbftkams1hnJ2B7FypRiGlw6NdXmbWtWiwmq5VSTR6zK1RGg>
-    <xmx:NJWrYNi5Rbf25wmuVdEB0SV5I03fgSUv4iE_oSMUZfJpi0Te9Rik-Q>
-    <xmx:NZWrYGYIyWgKOrA69diLMoaGO9GHOd7LEZnyxu-eAoKdynFFuRq8sw>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA;
-        Mon, 24 May 2021 07:59:47 -0400 (EDT)
-Date:   Mon, 24 May 2021 13:59:46 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megous@megous.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 12/17] phy: sun4i-usb: Introduce port2 SIDDQ quirk
-Message-ID: <20210524115946.jwsasjbr3biyixhz@gilmour>
-References: <20210519104152.21119-1-andre.przywara@arm.com>
- <20210519104152.21119-13-andre.przywara@arm.com>
+        id S232795AbhEXMG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 08:06:29 -0400
+Received: from cable.insite.cz ([84.242.75.189]:54689 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232735AbhEXMG0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 08:06:26 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 8E90FA1A3D403;
+        Mon, 24 May 2021 14:04:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1621857896; bh=dC/PaK883uN3vnCr/XMUuaTTfpLCqKahY1flvzw9w4s=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=SbV++uOctZf03LNFoOFl1fhJ4nqB6Q9X6O3TWcLRNm1n3rzEMmRAr/fncHe9/IN41
+         U7f1WpPc8BSNbAkdndgrTmgSSfds8iI0gK25/knzNZ3dhGoMd+rhapDMm1bwRJdrbg
+         YftutKPGUnVc/2P5dNDBd/Mb40jLiDxcO6KtXGas=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2W8QPlSEzanq; Mon, 24 May 2021 14:04:51 +0200 (CEST)
+Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id C08E1A1A3D402;
+        Mon, 24 May 2021 14:04:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1621857890; bh=dC/PaK883uN3vnCr/XMUuaTTfpLCqKahY1flvzw9w4s=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=WlUrW0AoCHFbEnJQOktRHOd2LUnXGvfOsj2TbClg5cppPeAqpBpQsWchbY+CmJJ+M
+         A/r+Q0zF6Og4MwIZPQhKlidzNvpI7eWltp/u/mKVRIuQoxT2cXFQZmhuccQRUwaP2j
+         +nL6S/LkE2JgEfbDKquUlKknxTjMpXSZn7K7xkKQ=
+Subject: Re: [RFC PATCH v2 1/3] usb: gadget: f_uac2/u_audio: add feedback
+ endpoint support
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
+Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
+References: <20210430142625.357152-1-jbrunet@baylibre.com>
+ <20210430142625.357152-2-jbrunet@baylibre.com>
+ <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
+ <1jim43hf6h.fsf@starbuckisacylon.baylibre.com>
+ <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <5e170334-e374-4841-92d5-b2f787694b52@ivitera.com>
+Date:   Mon, 24 May 2021 14:04:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yeqfewi7xhvh3dbi"
-Content-Disposition: inline
-In-Reply-To: <20210519104152.21119-13-andre.przywara@arm.com>
+In-Reply-To: <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
---yeqfewi7xhvh3dbi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Dne 30. 04. 21 v 19:11 Jerome Brunet napsal(a):
+> 
+> On Fri 30 Apr 2021 at 19:09, Jerome Brunet <jbrunet@baylibre.com> wrote:
+> 
+>> On Fri 30 Apr 2021 at 16:55, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+>>
+>>> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
+>>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>>
+>>>> As per USB and UAC2 specs, asynchronous audio sink endpoint
+>>>> requires explicit synchronization mechanism (Isochronous
+>>>> Feedback Endpoint)
+>>>>
+>>>> Implement feedback companion endpoint for ISO OUT endpoint
+>>>>
+>>>> This patch adds all required infrastructure and USB requests
+>>>> handling for feedback endpoint. Syncrhonization itself is
+>>>> still dummy (feedback ep always reports 'nomimal frequency'
+>>>>  e.g. no adjustement is needed). This satisfies hosts that
+>>>> require feedback endpoint (like Win10) and poll it periodically
+>>>>
+>>>> Actual synchronization mechanism should be implemented
+>>>> separately
+>>>>
+>>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>>>
+>>> Hi,
+>>>
+>>> The HS calculation of Q16.16 feedback value
+>>> overflows at some 524kHz, disallowing use of larger samplerates (e.g.
+>>> 768kHz or higher).
+>>>
+>>> I tested the formula used in alsa USB driver
+>>> https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
+>>> which uses only 10bit shift. The feedback control in UAC2 gadget now
+>>> works up to 4M samplerate with 1Hz precision (tested on RPi4 with
+>>> bInterval = 1, checked in stream0 proc file on linux host).
+>>>
+>>> --- a/drivers/usb/gadget/function/u_audio.c
+>>> +++ b/drivers/usb/gadget/function/u_audio.c
+>>> @@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
+>>> usb_device_speed speed,
+>>>                  * Prevent integer overflow by calculating in Q12.13
+>>> format and
+>>>                  * then shifting to Q16.16
+>>>                  */
+>>> -               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
+>>> +               ff = ((freq << 10) + 62) / 125;
+>>
+>> Pavel, The code posted is a little different from snip here.
+>> While I understand the "<< 10" and "/ 125", the "+ 62" would welcome a
+>> comment.
+> 
+> OOhhh I got it now ... I think using ROUND_UP() is lot more readable
+> (and maintainable) 
+> 
+>>
+>> Also in the final patch, the calculation is a bit different and moved to
+>> "long long" ... but I'm sure the same type of improvement could be done.
 
-Hi
+Jerome, I see (sorry for the misunderstanding) that you have modified
+original Ruslan's patch and the freq variable being shifted by 13 is
+long long. Your code is definitely better, thanks.
 
-On Wed, May 19, 2021 at 11:41:47AM +0100, Andre Przywara wrote:
-> At least the Allwinner H616 SoC requires a weird quirk to make most
-> USB PHYs work: Only port2 works out of the box, but all other ports
-> need some help from this port2 to work correctly: The CLK_BUS_PHY2 and
-> RST_USB_PHY2 clock and reset need to be enabled, and the SIDDQ bit in
-> the PMU PHY control register needs to be cleared. For this register to
-> be accessible, CLK_BUS_ECHI2 needs to be ungated. Don't ask ....
->=20
-> Instead of disguising this as some generic feature, do exactly that
-> in our PHY init:
-> If the quirk bit is set, and we initialise a PHY other than PHY2, ungate
-> this one special clock, and clear the SIDDQ bit. We can pull in the
-> other required clocks via the DT.
->=20
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-
-What is this SIDDQ bit doing exactly?
-
-I guess we could also expose this using a power-domain if it's relevant?
-
-Maxime
-
---yeqfewi7xhvh3dbi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYKuVMgAKCRDj7w1vZxhR
-xSHfAP0dBPqEfgZL7NPChXsRxHByzSmhCZQ+zMbfpCQVADqDNgD7BWogJtW3+sff
-zXhIKZ/oXdr2tJxXsO8tzCyO/ECdKwE=
-=5PHW
------END PGP SIGNATURE-----
-
---yeqfewi7xhvh3dbi--
+Pavel.
