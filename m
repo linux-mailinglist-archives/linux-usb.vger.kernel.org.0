@@ -2,44 +2,44 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F7F38F436
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 22:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CEE38F4E8
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 23:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233270AbhEXUVj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 16:21:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47750 "EHLO mail.kernel.org"
+        id S233942AbhEXVbk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 17:31:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42568 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233073AbhEXUVi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 16:21:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 07ECA6140B;
-        Mon, 24 May 2021 20:20:10 +0000 (UTC)
+        id S233859AbhEXVbi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 17:31:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 40F4F61411;
+        Mon, 24 May 2021 21:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621887610;
-        bh=cIwn6YUq4dP0J1MFHjACwwFulsSLzXbskBKBG/NuD/Q=;
+        s=k20201202; t=1621891810;
+        bh=ndaxLsaJgNKt8FeEudg8lqLUhJnV8xc2IzazzOki4b0=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=WK3LePyLFqRtlTXpJ4bBIyHRhcW4p93/l81KV08eQ0qnBmGSY+c2eJceMf5jo3KQz
-         k/OaURyU4f+N+U7R2WTYWgSB87o7qdbSAAx3oU3JPDC8QL2ADNwQtdiBFDbskLfDOv
-         r/AFmmpiUHcBs58Im2FrzB5Ghxn3xbdlYPDrAzSrvDFypp1nyQGnrd/K3jMAfK5ReR
-         3zRRuGmzcmBxAffepfu5ygpFRiYMf/i1X2+5RFFav0ljiJUuIdBVyQsmDsTUZJNKML
-         qCKvopZUSoUbMqkTqfWIHSUYMlzAXFt+8toEkJIU5c0SuavLUoNhhv0phhK4Swb4/r
-         KNmPaLa6ggr3Q==
+        b=aFrF3h0EDfFGD5jg9j0PQiswdkf/AWoAA+4szwOO9kGvsItmMQT3phpKmxraMeYrJ
+         1bkz+pQNY51CcfUWH/1yTmPVRsIuGEjgUFDwQ/VsOxpF+xERmSf6p4+VAhSBGUlc4m
+         W746JJnmYCn+7m/PXi1eLUGrWIeNB8QKhxMnvoR65BlvaVGJDl/yVFVu7W4JrooU7k
+         A1irx7+/OC0SNJKMywvVqJfwFpGfHJKBqFi2knMQCSTiDZKX87T6n3/CmR8YhMf919
+         mC90GgOlODnAoh5gv/qlJWGc0uQLE2nO2BhBJSnu8HaRdAMSK0AW8vmieZjO847G9w
+         Fapai3jUUpSdg==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id EAAF260A56;
-        Mon, 24 May 2021 20:20:09 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3614B60BCF;
+        Mon, 24 May 2021 21:30:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v3] r8152: check the informaton of the device
+Subject: Re: [PATCH] net: usb: fix memory leak in smsc75xx_bind
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162188760995.19394.10849632943787697818.git-patchwork-notify@kernel.org>
-Date:   Mon, 24 May 2021 20:20:09 +0000
-References: <1394712342-15778-365-Taiwan-albertk@realtek.com>
-In-Reply-To: <1394712342-15778-365-Taiwan-albertk@realtek.com>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
+Message-Id: <162189181021.16512.10408929378825905994.git-patchwork-notify@kernel.org>
+Date:   Mon, 24 May 2021 21:30:10 +0000
+References: <20210524200208.31621-1-paskripkin@gmail.com>
+In-Reply-To: <20210524200208.31621-1-paskripkin@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     steve.glendinning@shawell.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@kernel.vger.org,
+        syzbot+b558506ba8165425fee2@syzkaller.appspotmail.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -48,23 +48,22 @@ Hello:
 
 This patch was applied to netdev/net.git (refs/heads/master):
 
-On Mon, 24 May 2021 14:49:42 +0800 you wrote:
-> Verify some fields of the USB descriptor to make sure the driver
-> could be used by the device.
+On Mon, 24 May 2021 23:02:08 +0300 you wrote:
+> Syzbot reported memory leak in smsc75xx_bind().
+> The problem was is non-freed memory in case of
+> errors after memory allocation.
 > 
-> Besides, remove the check of endpoint number in rtl8152_probe().
-> usb_find_common_endpoints() includes it.
-> 
-> BugLink: https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
-> Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-> Fixes: c2198943e33b ("r8152: search the configuration of vendor mode")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
+> backtrace:
+>   [<ffffffff84245b62>] kmalloc include/linux/slab.h:556 [inline]
+>   [<ffffffff84245b62>] kzalloc include/linux/slab.h:686 [inline]
+>   [<ffffffff84245b62>] smsc75xx_bind+0x7a/0x334 drivers/net/usb/smsc75xx.c:1460
+>   [<ffffffff82b5b2e6>] usbnet_probe+0x3b6/0xc30 drivers/net/usb/usbnet.c:1728
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,v3] r8152: check the informaton of the device
-    https://git.kernel.org/netdev/net/c/1a44fb38cc65
+  - net: usb: fix memory leak in smsc75xx_bind
+    https://git.kernel.org/netdev/net/c/46a8b29c6306
 
 You are awesome, thank you!
 --
