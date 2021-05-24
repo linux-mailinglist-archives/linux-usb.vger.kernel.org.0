@@ -2,70 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6620338DE32
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 01:52:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E63238DEF7
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 03:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbhEWXx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 23 May 2021 19:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbhEWXxZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 May 2021 19:53:25 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5853BC06138A
-        for <linux-usb@vger.kernel.org>; Sun, 23 May 2021 16:51:58 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id f9so6865238vsp.6
-        for <linux-usb@vger.kernel.org>; Sun, 23 May 2021 16:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=20Wtr3oASSCkEGvRWQ4M3W/hKpTaaiuZBUjQLpV82yQ=;
-        b=hHF7FUL1iQNagqEMP3GttTpT9bgkIh6r9M3kTEqJsfPT4Kg/mbGxW5OpfNo7xNr14e
-         fLqP3soOG4rL6U6J6xGbObidBv41oKdtSsK3J1ybhyPVqvMgjH4f4FDJxPVWYGFabWLA
-         UGyw7pH8IZNIWnrvZuKosaHxfBn++7rS8K624RFOleHQ4CHTndpcAXWtQeVjGzNOVQHe
-         +XuUD5Ywispa2tA/3xUF4xE09DQUFXpKfgXyl7Psxhh41fgRxFXKDHezEmU+o5TWZRJX
-         ByLAF51joMlspOpIzR1z9MeoxC+f/OB52kLjAwbjbTt8xQEmONjKKx8G0SiDfD3cxAdi
-         vdvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=20Wtr3oASSCkEGvRWQ4M3W/hKpTaaiuZBUjQLpV82yQ=;
-        b=ERhV1GMkMWV9NFkbIeFRWL4Nt3lF4/W4af+QzcV9BmpikKrIqKWzl/8L2YdK1fDq/s
-         guMzAfUmsK3f82TgiVAEVlGyDNc/p+aJK7I/o+5fKGGCZGHiIam+EB4ryD51ON6/ETm8
-         3vJcV1zgICqNIEsWEN1BwdkNb+zZ9ZthpTF28beIaSzQRqKUX8luweXw8Dy+xU0BEiRY
-         jyrQIzWwd4HJbMPuRwEvBHAvxglWA5CWASF64q0uTJDGH3afviH7Kiu1Qn6eIjN9fhvb
-         qTxybbFVUOm0eR2nDFHvF4QvCBvSjuTjFcCf4u1z5l3Swf3N0PsClw2EfDLBvu75JUPD
-         nUwg==
-X-Gm-Message-State: AOAM531VA5O98SXRPHvJnN4NNH6SfvYVguVNvstQGLgssHVzw6Myfk8E
-        O3efENbij861HtNbx8V/99ekfMPkFFJYuHJmem4=
-X-Google-Smtp-Source: ABdhPJzU/Q2mHCPugO6DGGYF247NQN3gx9P5Ksp9DN6JNYSOLgnf3zyG5UjkRzx0wZIx8XsQ4etHxDa/qtRiv67VxuI=
-X-Received: by 2002:a67:f791:: with SMTP id j17mr17158681vso.7.1621813917291;
- Sun, 23 May 2021 16:51:57 -0700 (PDT)
+        id S232098AbhEXBvR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 23 May 2021 21:51:17 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:51627 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231744AbhEXBvQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 23 May 2021 21:51:16 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14O1nZ9X1019586, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14O1nZ9X1019586
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Mon, 24 May 2021 09:49:35 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 24 May 2021 09:49:34 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS04.realtek.com.tw (172.21.6.97) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Mon, 24 May 2021 09:49:34 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74]) by
+ RTEXMBS04.realtek.com.tw ([fe80::1d8:ba7d:61ca:bd74%5]) with mapi id
+ 15.01.2106.013; Mon, 24 May 2021 09:49:34 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Johan Hovold <johan@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+CC:     "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com" 
+        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
+Subject: RE: [PATCH net v2] r8152: check the informaton of the device
+Thread-Topic: [PATCH net v2] r8152: check the informaton of the device
+Thread-Index: AQHXTsrXYjDdPDZZaEG920DohLECearula0AgAAJhwCAAz0LwA==
+Date:   Mon, 24 May 2021 01:49:33 +0000
+Message-ID: <d27f9a1848a546b99e2ab84cb15be06f@realtek.com>
+References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
+ <1394712342-15778-364-Taiwan-albertk@realtek.com>
+ <YKizqoNIVFo+weI9@kroah.com> <YKi7qEWobOLRyoU8@hovoldconsulting.com>
+In-Reply-To: <YKi7qEWobOLRyoU8@hovoldconsulting.com>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS04.realtek.com.tw, 9
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2021/5/23_=3F=3F_11:44:00?=
+x-kse-attachment-filter-triggered-rules: Clean
+x-kse-attachment-filter-triggered-filters: Clean
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Reply-To: billchantal10@gmail.com
-Sender: jamesgeary42@gmail.com
-Received: by 2002:a67:c113:0:0:0:0:0 with HTTP; Sun, 23 May 2021 16:51:56
- -0700 (PDT)
-From:   "Mrs.Bill Chantal" <billchantal10@gmail.com>
-Date:   Sun, 23 May 2021 16:51:56 -0700
-X-Google-Sender-Auth: _euHhcBq0ZKfX6gR-HR8A8yqYJU
-Message-ID: <CAFM+sTFQoHqCSYNDe01K5AWdYvCJ-=hdhR0kvSJ9qazdyrNqzw@mail.gmail.com>
-Subject: Dear Friend
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/24/2021 01:26:01
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 163865 [May 23 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 446 446 0309aa129ce7cd9d810f87a68320917ac2eba541
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;realtek.com:7.1.1
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 05/24/2021 01:28:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- You have been compensated with the sum of $ 8.5 million dollars in
-the United Nations, the payment will be issued on the ATM visa card
-and will be sent to you from the Santander bank. we need your address
-and your WhatsApp.
+Johan Hovold <johan@kernel.org>
+> Sent: Saturday, May 22, 2021 4:07 PM
+[...]
+> > > +	if (usb_endpoint_num(in) != 1) {
+> > > +		dev_err(&intf->dev, "Invalid Rx Endpoint\n");
+> >
+> > "Invalid number of Rx endpoints"
+> 
+> Here it is the endpoint number (address) that is being checked so
+> "number of" would be wrong.
+> 
+> That said, perhaps none of these checks are even needed a bit depending
+> on how the driver is implemented. That is, if it hardcodes the endpoint
+> addresses or uses the result from usb_find_common_endpoints() above
+> (which I realise now that it does not so these checks are probably still
+> needed).
 
+The purpose of the checks is to find out the fake devices. That is, even
+the device supports in, out, and interrupt endpoints, it is treated as
+fake or malicious device, if the addresses of these endpoints are wrong.
+Therefore, I would keep the checks.
 
-  this is my email address (billchantal10@gmail.com) contact me
+Best Regards,
+Hayes
 
-Thanks
-
-Mrs.bill chantal
