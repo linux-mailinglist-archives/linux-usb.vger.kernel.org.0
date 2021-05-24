@@ -2,163 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 425ED38E214
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 10:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CF338E2C1
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 10:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbhEXICJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 04:02:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43064 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232099AbhEXICJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 04:02:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF857610CB;
-        Mon, 24 May 2021 08:00:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621843241;
-        bh=52KsqdGcL2hpzhP2uHKfCo1RQ1DyXlefkr5za28RcXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iSMgCeWjzCBZekKyZtae/NbX1FqQ/8UPzOYjm637Q+XzaVuhRTv88G3EY53YgbO8s
-         C0xD0bf7P4D+9gYjWCEO1i6HqMa5zsPKLMgfCeDSBi2ukzdnvcTK00005TxYOJnJQI
-         BZk/wD4A6imNccxqY1t3L7ZPXS+XtZK7fey//UqdM3QOT+HLnBiMTsQqA05fuz7Nou
-         m5Yl+uiXogxq1Tv7D356HfHBs23TFccj9Spub+SovWY/KFCju5A12QvqHfeWr03GGN
-         KEHMJkZjgjly1fN1AgFw4U6EOhpvcyF0UMxyUOx4dHq8f5PB44ACBPbLwNMStK+jYw
-         OYu2Bv7lFQZIQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ll5Vu-00043B-GA; Mon, 24 May 2021 10:00:39 +0200
-Date:   Mon, 24 May 2021 10:00:38 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        nic_swsd@realtek.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-Subject: Re: [PATCH net v3] r8152: check the informaton of the device
-Message-ID: <YKtdJnvZTxE1yqEK@hovoldconsulting.com>
-References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
- <1394712342-15778-365-Taiwan-albertk@realtek.com>
+        id S232440AbhEXIxv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 04:53:51 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:46649 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232318AbhEXIxv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 04:53:51 -0400
+Received: by mail-il1-f198.google.com with SMTP id s3-20020a92c5c30000b02901bc737e231eso22627498ilt.13
+        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 01:52:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Rzp9fGJjSJC7K5y9I9mQJfK8PLYGfna2g33NB2NJj8k=;
+        b=o13aak3kDRGFT0FC7/eLw0K5ZJi8Sv2oZEVW1uxpu2Q5FTmef+qoxwyeHUjAXY294T
+         20OM+t0CQMn4JqvjQ/AVPP2uNzOLO21BalJJbRmeRdi4+zP1eZ1/BTGbndijTyGGG2ht
+         Ic7dSxHOu17vP7MN7jZ5K9Vk4ZTODP1fccz6D1YQElE5+AsfQCy4wd/GDSCF5GC8zKzl
+         srSbuZrFxnRUVO3EBiMtXeYA/CCC7/bl/ViVmekXj5UVr3AYUVhjYaqUmf1Ied/Or6xF
+         TA92gx5ErFfGC9SxHBOSi4/kCxm7WghtyBN2SyTo8G/9UlyIZ4e4urL9F/3K+OdXzjco
+         FJDQ==
+X-Gm-Message-State: AOAM530tbOEd+z2jSlYSuputtLl3FEB3CAwgaSA+q22KhQvZEgVN8k+C
+        U2MOVDRpkR3YSadEYFsYWgtVv5R/pX0c3h7VcSYCx2gNSo5x
+X-Google-Smtp-Source: ABdhPJwowSwZnKUl6XfvLPDdhMGS/Q8ohqrJPCjE1vR3p7oHyiCvKfKxxtQd5Y4FX03XBPLmte5AVZ2N0uZDuKM+AIiv0R1JR3lx
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1394712342-15778-365-Taiwan-albertk@realtek.com>
+X-Received: by 2002:a05:6e02:c3:: with SMTP id r3mr13200082ilq.280.1621846343449;
+ Mon, 24 May 2021 01:52:23 -0700 (PDT)
+Date:   Mon, 24 May 2021 01:52:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002e839a05c30f870b@google.com>
+Subject: [syzbot] WARNING in osif_probe/usb_submit_urb
+From:   syzbot <syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 24, 2021 at 02:49:42PM +0800, Hayes Wang wrote:
-> Verify some fields of the USB descriptor to make sure the driver
-> could be used by the device.
-> 
-> Besides, remove the check of endpoint number in rtl8152_probe().
-> usb_find_common_endpoints() includes it.
-> 
-> BugLink: https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
-> Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-> Fixes: c2198943e33b ("r8152: search the configuration of vendor mode")
-> Signed-off-by: Hayes Wang <hayeswang@realtek.com>
-> ---
-> v3:
-> Remove the check of endpoint number in rtl_check_vendor_ok().
-> 
-> Adjust the error message and ccommit message.
-> 
-> v2:
-> Use usb_find_common_endpoints() and usb_endpoint_num() to replace original
-> code.
-> 
-> remove the check of endpoint number in rtl8152_probe(). It has been done
-> in rtl_check_vendor_ok().
-> 
->  drivers/net/usb/r8152.c | 42 ++++++++++++++++++++++++++++++++++++-----
->  1 file changed, 37 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 136ea06540ff..f6abb2fbf972 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -8107,6 +8107,37 @@ static void r8156b_init(struct r8152 *tp)
->  	tp->coalesce = 15000;	/* 15 us */
->  }
->  
-> +static bool rtl_check_vendor_ok(struct usb_interface *intf)
-> +{
-> +	struct usb_host_interface *alt = intf->cur_altsetting;
-> +	struct usb_endpoint_descriptor *in, *out, *intr;
-> +
-> +	if (usb_find_common_endpoints(alt, &in, &out, &intr, NULL) < 0) {
-> +		dev_err(&intf->dev, "Expected endpoints are not found\n");
-> +		return false;
-> +	}
-> +
-> +	/* Check Rx endpoint address */
-> +	if (usb_endpoint_num(in) != 1) {
-> +		dev_err(&intf->dev, "Invalid Rx endpoint address\n");
-> +		return false;
-> +	}
-> +
-> +	/* Check Tx endpoint address */
-> +	if (usb_endpoint_num(out) != 2) {
-> +		dev_err(&intf->dev, "Invalid Tx endpoint address\n");
-> +		return false;
-> +	}
-> +
-> +	/* Check interrupt endpoint address */
-> +	if (usb_endpoint_num(intr) != 3) {
-> +		dev_err(&intf->dev, "Invalid interrupt endpoint address\n");
-> +		return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  static bool rtl_vendor_mode(struct usb_interface *intf)
->  {
->  	struct usb_host_interface *alt = intf->cur_altsetting;
-> @@ -8115,12 +8146,15 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
->  	int i, num_configs;
->  
->  	if (alt->desc.bInterfaceClass == USB_CLASS_VENDOR_SPEC)
-> -		return true;
-> +		return rtl_check_vendor_ok(intf);
->  
->  	/* The vendor mode is not always config #1, so to find it out. */
->  	udev = interface_to_usbdev(intf);
->  	c = udev->config;
->  	num_configs = udev->descriptor.bNumConfigurations;
-> +	if (num_configs < 2)
-> +		return false;
-> +
+Hello,
 
-Nit: This check looks unnecessary also as the driver can handle a single
-configuration just fine, and by removing it you'd be logging "Unexpected
-Device\n" below also in the single config case.
+syzbot found the following issue on:
 
->  	for (i = 0; i < num_configs; (i++, c++)) {
->  		struct usb_interface_descriptor	*desc = NULL;
->  
-> @@ -8135,7 +8169,8 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
->  		}
->  	}
->  
-> -	WARN_ON_ONCE(i == num_configs);
-> +	if (i == num_configs)
-> +		dev_err(&intf->dev, "Unexpected Device\n");
->  
->  	return false;
->  }
-> @@ -9381,9 +9416,6 @@ static int rtl8152_probe(struct usb_interface *intf,
->  	if (!rtl_vendor_mode(intf))
->  		return -ENODEV;
->  
-> -	if (intf->cur_altsetting->desc.bNumEndpoints < 3)
-> -		return -ENODEV;
-> -
->  	usb_reset_device(udev);
->  	netdev = alloc_etherdev(sizeof(struct r8152));
->  	if (!netdev) {
+HEAD commit:    5cc59c41 USB: core: WARN if pipe direction != setup packet..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1072de73d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d7dadd15b8819d73f41
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1576dc03d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11730bd7d00000
 
-Other than that, looks good to me now.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+usb 1-1: New USB device found, idVendor=1964, idProduct=0001, bcdDevice=52.6b
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c1
+WARNING: CPU: 1 PID: 55 at drivers/usb/core/urb.c:410 usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 1 PID: 55 Comm: kworker/1:2 Not tainted 5.13.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
+Code: 84 4c 01 00 00 e8 a6 14 b3 fd 4c 89 f7 e8 4e a7 1b ff 45 89 e8 44 89 e1 48 89 ea 48 89 c6 48 c7 c7 c0 09 63 86 e8 18 f1 fb 01 <0f> 0b 49 8d 4f 5c 48 b8 00 00 00 00 00 fc ff df 48 89 ca 48 89 4c
+RSP: 0018:ffffc90000276f60 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88811a940058 RCX: 0000000000000000
+RDX: ffff8881079d8000 RSI: ffffffff812a6013 RDI: fffff5200004edde
+RBP: ffff88810e157758 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814b996b R11: 0000000000000000 R12: 0000000080000280
+R13: 00000000000000c1 R14: ffff88811a9400a8 R15: ffff88810779ba00
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005647593b8160 CR3: 0000000007825000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ osif_usb_read drivers/i2c/busses/i2c-robotfuzz-osif.c:41 [inline]
+ osif_probe+0x288/0x500 drivers/i2c/busses/i2c-robotfuzz-osif.c:156
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ really_probe+0x291/0xf60 drivers/base/dd.c:576
+ driver_probe_device+0x298/0x410 drivers/base/dd.c:763
+ __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4b0 drivers/base/dd.c:938
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbe0/0x2100 drivers/base/core.c:3320
+ usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2164
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ really_probe+0x291/0xf60 drivers/base/dd.c:576
+ driver_probe_device+0x298/0x410 drivers/base/dd.c:763
+ __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4b0 drivers/base/dd.c:938
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbe0/0x2100 drivers/base/core.c:3320
+ usb_new_device.cold+0x721/0x1058 drivers/usb/core/hub.c:2556
+ hub_port_connect drivers/usb/core/hub.c:5297 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5437 [inline]
+ port_event drivers/usb/core/hub.c:5583 [inline]
+ hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5665
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-Johan
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
