@@ -2,96 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F38A38E323
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 11:18:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91C8838E330
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 11:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232387AbhEXJUK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 05:20:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59530 "EHLO mail.kernel.org"
+        id S232433AbhEXJWY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 05:22:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60310 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232313AbhEXJUH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 05:20:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 35D4E60FE7;
-        Mon, 24 May 2021 09:18:40 +0000 (UTC)
+        id S232396AbhEXJWX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 05:22:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 764E1610A5;
+        Mon, 24 May 2021 09:20:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621847920;
-        bh=QZZuYuabuZoguMnXlE2ZIV5i/TTO4S7OstS7Ab/34r8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fOuoVaiFhdHm0tq88Jfv4P3/qcT3/fRY9FrNvZDM+TklKGZAhIFa1aOCWPBvlQAv5
-         vX1k88IAU+p1vxD88TAOey9zYMPXD9qyaWHiFJ5YZheKSGVTdqQGbobrkldpBg9Htx
-         6LNfotsQTAxkTtNT7jf592LWmDOpisM6O9xqjyLeHTkkm0Jk1xbwLEzFAzfJttnH7b
-         hgszqczCgjfrGS7nRnhyBIX/3LRy2tievA1+tVtw/xWjkVt0zkBnU4QrLOJkRGIL/S
-         OKAnstXrLSVLyXimY0B2tLVpDt4s820emUh+wxZuS/gt9+BjtVFiV6WIvkCMCXoI/F
-         I3FlPh55dlATQ==
+        s=k20201202; t=1621848055;
+        bh=C0KBuOweP0oMeWO7jZ/E760szJDDgstvTnUGvt0yHWA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Ya/vuiRdNbMFglqcGaSGWwrGgMJZeNO6vpJ65Gb+JpreHSSUHyOqwcZLqlmhh0oim
+         TKIRJEJYIYzys7GksHNtNAtGIkk10BRx95UEEVUSUflDP3M/9na4i2w7V3KN0v/ccs
+         nfDRcZgGCtWlh2CnVLioJpYEcMs6Zm6Ouk3LMcGOddtcw+Ggxj0U4Wnt6X2/nmEsXx
+         d+OLb3geOo/SRTInTGBwgR9InvIbW5Sc2tz/U61+3X35Ty0a8Y2WLEbCsnI6NIaAle
+         nWdBv7A50Vj56/k+ew+HAKB/ZRgPEFPokDLMgOiXs8bYpsDmBhyrn9wJc/0fdwAaP3
+         1CgASWK1SXSnA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1ll6jN-00018O-Rb; Mon, 24 May 2021 11:18:37 +0200
-Date:   Mon, 24 May 2021 11:18:37 +0200
+        id 1ll6lZ-0001AO-6Q; Mon, 24 May 2021 11:20:53 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     syzbot <syzbot+19acce48d8344df49b3a@syzkaller.appspotmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in qt2_attach/usb_submit_urb
-Message-ID: <YKtvbeGYrceXVFAT@hovoldconsulting.com>
-References: <000000000000d449f105c30fce00@google.com>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Johan Hovold <johan@kernel.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] Input: usbtouchscreen - fix control-request directions
+Date:   Mon, 24 May 2021 11:20:48 +0200
+Message-Id: <20210524092048.4443-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000d449f105c30fce00@google.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 24, 2021 at 02:12:25AM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    5cc59c41 USB: core: WARN if pipe direction != setup packet..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=12dabf53d00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=19acce48d8344df49b3a
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1198ed07d00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1772f1ddd00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+19acce48d8344df49b3a@syzkaller.appspotmail.com
-> 
-> usb 1-1: string descriptor 0 read error: -22
-> usb 1-1: New USB device found, idVendor=061d, idProduct=c170, bcdDevice=11.41
-> usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-> quatech2 1-1:31.224: Quatech 2nd gen USB to Serial Driver converter detected
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType 40
-> WARNING: CPU: 1 PID: 2635 at drivers/usb/core/urb.c:410 usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-> Modules linked in:
-> CPU: 1 PID: 2635 Comm: kworker/1:2 Not tainted 5.13.0-rc2-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-> Code: 84 4c 01 00 00 e8 a6 14 b3 fd 4c 89 f7 e8 4e a7 1b ff 45 89 e8 44 89 e1 48 89 ea 48 89 c6 48 c7 c7 c0 09 63 86 e8 18 f1 fb 01 <0f> 0b 49 8d 4f 5c 48 b8 00 00 00 00 00 fc ff df 48 89 ca 48 89 4c
-> RSP: 0018:ffffc900001b6e08 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: ffff888116d8c058 RCX: 0000000000000000
-> RDX: ffff888114e61b40 RSI: ffffffff812a6013 RDI: fffff52000036db3
-> RBP: ffff888109d7e690 R08: 0000000000000001 R09: 0000000000000000
-> R10: ffffffff814b996b R11: 0000000000000000 R12: 0000000080000280
-> R13: 0000000000000040 R14: ffff888116d8c0a8 R15: ffff8881097ac900
-> FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000055777d5bd160 CR3: 00000001045ec000 CR4: 00000000001506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
->  usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
->  usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
->  qt2_attach+0x82/0x550 drivers/usb/serial/quatech2.c:642
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
 
-I had already found this one but not yet posted the v2. Should be fixed
-here:
+Fix the four control requests which erroneously used usb_rcvctrlpipe().
 
-	https://lore.kernel.org/r/20210524091705.4282-1-johan@kernel.org
+Fixes: 1d3e20236d7a ("[PATCH] USB: usbtouchscreen: unified USB touchscreen driver")
+Fixes: 24ced062a296 ("usbtouchscreen: add support for DMC TSC-10/25 devices")
+Fixes: 9e3b25837a20 ("Input: usbtouchscreen - add support for e2i touchscreen controller")
+Cc: stable@vger.kernel.org      # 2.6.17
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
 
-Johan
+Changes in v2
+ - include also the request in e2i_init which did not use USB_DIR_OUT
+
+ drivers/input/touchscreen/usbtouchscreen.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/input/touchscreen/usbtouchscreen.c b/drivers/input/touchscreen/usbtouchscreen.c
+index c847453a03c2..43c521f50c85 100644
+--- a/drivers/input/touchscreen/usbtouchscreen.c
++++ b/drivers/input/touchscreen/usbtouchscreen.c
+@@ -251,7 +251,7 @@ static int e2i_init(struct usbtouch_usb *usbtouch)
+ 	int ret;
+ 	struct usb_device *udev = interface_to_usbdev(usbtouch->interface);
+ 
+-	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
++	ret = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+ 	                      0x01, 0x02, 0x0000, 0x0081,
+ 	                      NULL, 0, USB_CTRL_SET_TIMEOUT);
+ 
+@@ -531,7 +531,7 @@ static int mtouch_init(struct usbtouch_usb *usbtouch)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
++	ret = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+ 	                      MTOUCHUSB_RESET,
+ 	                      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 	                      1, 0, NULL, 0, USB_CTRL_SET_TIMEOUT);
+@@ -543,7 +543,7 @@ static int mtouch_init(struct usbtouch_usb *usbtouch)
+ 	msleep(150);
+ 
+ 	for (i = 0; i < 3; i++) {
+-		ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
++		ret = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+ 				      MTOUCHUSB_ASYNC_REPORT,
+ 				      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 				      1, 1, NULL, 0, USB_CTRL_SET_TIMEOUT);
+@@ -722,7 +722,7 @@ static int dmc_tsc10_init(struct usbtouch_usb *usbtouch)
+ 	}
+ 
+ 	/* start sending data */
+-	ret = usb_control_msg(dev, usb_rcvctrlpipe (dev, 0),
++	ret = usb_control_msg(dev, usb_sndctrlpipe(dev, 0),
+ 	                      TSC10_CMD_DATA1,
+ 	                      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+ 	                      0, 0, NULL, 0, USB_CTRL_SET_TIMEOUT);
+-- 
+2.26.3
+
