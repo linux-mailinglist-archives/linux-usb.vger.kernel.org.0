@@ -2,109 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 88AA338E151
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 09:04:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 810EA38E1E4
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 09:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232295AbhEXHGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 03:06:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34032 "EHLO mail.kernel.org"
+        id S232311AbhEXHqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 03:46:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40106 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232279AbhEXHGF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 03:06:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E0A686109E;
-        Mon, 24 May 2021 07:04:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1621839873;
-        bh=flpTUM3KCbXVN1mvpd23lkWFKiwOOCx5MvX+UdQqIZk=;
+        id S232254AbhEXHqB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 03:46:01 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17C1D610A5;
+        Mon, 24 May 2021 07:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621842274;
+        bh=z1C+QyseZ45GbVWwYhu5yBGWudxghE44niAVgptWqf4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M8v6BOQ0WBnodIXvYr8soB716XWbeRQZeLPRgviMvv8ap5JkqwFn5MfyzeZE9N+q6
-         nZunRvaga0OjpNQflmPUsipqCqezJf9JMFixSBDHFozyY2UYAFQ6HSUgcmM+0cJDrc
-         0JSBcw/XRrjKNd9zkkfRt6KJIxCRkHP77VlItvBU=
-Date:   Mon, 24 May 2021 09:04:32 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Alexandr Ivanov <alexandr.sky@gmail.com>
-Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] xhci: Remove unnecessary condition from
- xhci_check_tt_bw_table
-Message-ID: <YKtQAG9J9kvs0Az2@kroah.com>
-References: <a7ca3671-aaee-2b4e-ed90-208ba82baef8@gmail.com>
+        b=EEptFrgYnoVewuNRXXBInrpG2Hc9P5zKBh/cdyYLgkVvJR06iivgB9otwT4wdXJ4h
+         3wytJWF7qQ9m/llsbpZrM18cufHG5c2Uh8NdzhxLeBbMZheDqnCmH4paXgNPQVD+K6
+         YcIwsq29No2qXT+5Bn6CJ+SSkFjZ6Wn9WwHt1jKWKmfN5Bu5GgUl/NizneqYe3QIw3
+         fo5krE+3IcmyhQu8XX5cjpKxgAaK9kaJm9DbdSezfsOkpaGnoItrJBeCX2hQ0eDudI
+         fGWJK6GycievUMv7eW2ieyAweY6JloW0Myje8hAVVDOOwQv5usivK+lU3MACMFBxrT
+         /v6SzM7+xn68w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ll5GI-0003yK-2U; Mon, 24 May 2021 09:44:31 +0200
+Date:   Mon, 24 May 2021 09:44:30 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Hayes Wang <hayeswang@realtek.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        nic_swsd <nic_swsd@realtek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com" 
+        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
+Subject: Re: [PATCH net v2] r8152: check the informaton of the device
+Message-ID: <YKtZXsmkNaMJgNYe@hovoldconsulting.com>
+References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
+ <1394712342-15778-364-Taiwan-albertk@realtek.com>
+ <YKizqoNIVFo+weI9@kroah.com>
+ <YKi7qEWobOLRyoU8@hovoldconsulting.com>
+ <d27f9a1848a546b99e2ab84cb15be06f@realtek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a7ca3671-aaee-2b4e-ed90-208ba82baef8@gmail.com>
+In-Reply-To: <d27f9a1848a546b99e2ab84cb15be06f@realtek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 23, 2021 at 06:10:31PM +0300, Alexandr Ivanov wrote:
-> Remove condition (old_active_eps == 0) from xhci_check_tt_bw_table
-> because the previous check of old_active_eps returns
-> from the function if old_active_eps is not zero.
+On Mon, May 24, 2021 at 01:49:33AM +0000, Hayes Wang wrote:
+> Johan Hovold <johan@kernel.org>
+> > Sent: Saturday, May 22, 2021 4:07 PM
+> [...]
+> > > > +	if (usb_endpoint_num(in) != 1) {
+> > > > +		dev_err(&intf->dev, "Invalid Rx Endpoint\n");
+> > >
+> > > "Invalid number of Rx endpoints"
+> > 
+> > Here it is the endpoint number (address) that is being checked so
+> > "number of" would be wrong.
+> > 
+> > That said, perhaps none of these checks are even needed a bit depending
+> > on how the driver is implemented. That is, if it hardcodes the endpoint
+> > addresses or uses the result from usb_find_common_endpoints() above
+> > (which I realise now that it does not so these checks are probably still
+> > needed).
 > 
-> Move the previous condition to the function beginning.
-> 
-> Signed-off-by: Alexandr Ivanov <alexandr.sky@gmail.com>
-> ---
->  drivers/usb/host/xhci.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 27283654ca08..14aae87d6c8f 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -2329,16 +2329,18 @@ static int xhci_check_tt_bw_table(struct xhci_hcd
-> *xhci,
->      struct xhci_interval_bw_table *bw_table;
->      struct xhci_tt_bw_info *tt_info;
-> 
-> -    /* Find the bandwidth table for the root port this TT is attached to.
-> */
-> -    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
-> -    tt_info = virt_dev->tt_info;
->      /* If this TT already had active endpoints, the bandwidth for this TT
->       * has already been added.  Removing all periodic endpoints (and thus
->       * making the TT enactive) will only decrease the bandwidth used.
->       */
->      if (old_active_eps)
->          return 0;
-> -    if (old_active_eps == 0 && tt_info->active_eps != 0) {
-> +
-> +    /* Find the bandwidth table for the root port this TT is attached to.
-> */
-> +    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
-> +    tt_info = virt_dev->tt_info;
-> +
-> +    if (tt_info->active_eps != 0) {
->          if (bw_table->bw_used + TT_HS_OVERHEAD > HS_BW_LIMIT)
->              return -ENOMEM;
->          return 0;
-> -- 
-> 2.31.1
-> 
+> The purpose of the checks is to find out the fake devices. That is, even
+> the device supports in, out, and interrupt endpoints, it is treated as
+> fake or malicious device, if the addresses of these endpoints are wrong.
+> Therefore, I would keep the checks.
 
-Hi,
+Strictly, you need to check for bad input which could cause your driver
+to crash or malfunction. Generally you don't need to verify endpoint
+addresses unless the driver is hardcoding those. But since that is
+precisely what this particular driver is doing, these checks indeed need
+to stay.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Johan
