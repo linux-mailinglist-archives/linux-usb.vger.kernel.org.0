@@ -2,42 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A9138E306
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1AF38E307
 	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 11:12:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbhEXJN4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 05:13:56 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:45622 "EHLO
+        id S232527AbhEXJN5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 05:13:57 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:42838 "EHLO
         mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232489AbhEXJNx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 05:13:53 -0400
-Received: by mail-il1-f198.google.com with SMTP id s18-20020a92cbd20000b02901bb78581beaso28757124ilq.12
-        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 02:12:25 -0700 (PDT)
+        with ESMTP id S232494AbhEXJNy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 05:13:54 -0400
+Received: by mail-il1-f198.google.com with SMTP id d17-20020a9236110000b02901cf25fcfdcdso1432452ila.9
+        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 02:12:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=lPTCN71kdTIP46F6qC7kgnVsu4PiqwngJoDLS7GOZM8=;
-        b=oL4OTTqLFthlhr0rfMI+gi/n0TpBi/+ojoc/IcLFITeHwNchdSOAupZWWIQzK3zJdH
-         Butp8vNEYt34nWjXGbEltTlfZLcvUhIWgFh1i2IrNd2SPDjBWm/sqA4vk+PoOXLZ9nhH
-         NF1hyzsU30e5W/bj0Trr/i4VwqgClBHgyHLa4qwNr+hAYNYawMRu0LXl5dBfs27DiRHq
-         LarjHwiufiNXwuRG+SQjmEOyrJ9pAWdTYZ0Vgix7In0pE5NMoi6oJdCIL1X4sZ1jJebK
-         UAo9XEgUnO7C0AziYqjfaUupYnxMLZFfeK4fazis4W/3W+WdF0fQiw6oaxTaft0Nf0bn
-         NuIw==
-X-Gm-Message-State: AOAM531FyGdkmhJwPvy4nLJ+gGBMzAqZmBW6Ayeg8fwcS8FBYJJEhdSh
-        XaQwYpfLprE3j0/LDYJ2RJ0sG5y5RsY43QAPjLqwIJEXVlQh
-X-Google-Smtp-Source: ABdhPJxXA9rlOF7Iw4mK5Cu19Fqo5LIl1fpRu4AfedQ26sye0ecPxdUvkkGdWbFu4RSWP+p06ZSqPOw7kBxQvs1afXY5njh87+0r
+        bh=GdTdHL+KOqNvXgIJuSUdMeBeXmXHAEdVzZubUmSeKOY=;
+        b=X7GCJJr8sbY6rh7E/ARB1/ot8SLaRZqAnwL1gUPivccvapNDjXtZC2IOJ38/BfCd+S
+         9vTtJir6aybHS+BP1IhQRlId658YqZV9VNmaGVJ05+D3MjPMhK+hc4ARK4wP1qBVeY0o
+         5PsV84ypwomBG8mkbUiriC8MDKJlQjYNUqlIm1Y21DQV79tMlvxOUulcGdcDbGyENtEG
+         oQlQzkQ6GO7bJUFEDURnJTthtqndGgZvSa4fo/lJDQpz6sOzYzbyjIgt5+RMDSrkuWVH
+         4dj+8B4cCYPokjzJOfwzhnLy/d990pTC4bz2l/D0SNe/EdtQXD/9mSq1bFgCuZroHMga
+         uZsA==
+X-Gm-Message-State: AOAM530eMFICc6zDtED5zVqxHutGXt6a9UQ+feYVUYj8qwPnZPjCi3kN
+        QDKpFfnG8nXnShapYC7zZv8l0RT3biAWkTkVSu1RiYEiVF9U
+X-Google-Smtp-Source: ABdhPJzQ2nFNgotgVNBJm+iY42p8Zc/RBLk1WYDt33iJ8AYr/RQzL7GZl4Co4ETMgFwaTexg0CkQ6eDHIRkvUAuHgPYpdXZldHUh
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:54:: with SMTP id z20mr13602837ioz.48.1621847545496;
- Mon, 24 May 2021 02:12:25 -0700 (PDT)
-Date:   Mon, 24 May 2021 02:12:25 -0700
+X-Received: by 2002:a05:6e02:1d15:: with SMTP id i21mr15549466ila.2.1621847546108;
+ Mon, 24 May 2021 02:12:26 -0700 (PDT)
+Date:   Mon, 24 May 2021 02:12:26 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d449f105c30fce00@google.com>
-Subject: [syzbot] WARNING in qt2_attach/usb_submit_urb
-From:   syzbot <syzbot+19acce48d8344df49b3a@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, syzkaller-bugs@googlegroups.com
+Message-ID: <000000000000dda06805c30fce63@google.com>
+Subject: [syzbot] memory leak in smsc75xx_bind
+From:   syzbot <syzbot+b558506ba8165425fee2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        steve.glendinning@shawell.net, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
@@ -47,74 +47,94 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    5cc59c41 USB: core: WARN if pipe direction != setup packet..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12dabf53d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
-dashboard link: https://syzkaller.appspot.com/bug?extid=19acce48d8344df49b3a
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1198ed07d00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1772f1ddd00000
+HEAD commit:    6ebb6814 Merge tag 'perf-urgent-2021-05-23' of git://git.k..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1334afc7d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ae7b129a135ab06b
+dashboard link: https://syzkaller.appspot.com/bug?extid=b558506ba8165425fee2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ca4a35d00000
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+19acce48d8344df49b3a@syzkaller.appspotmail.com
+Reported-by: syzbot+b558506ba8165425fee2@syzkaller.appspotmail.com
 
-usb 1-1: string descriptor 0 read error: -22
-usb 1-1: New USB device found, idVendor=061d, idProduct=c170, bcdDevice=11.41
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-quatech2 1-1:31.224: Quatech 2nd gen USB to Serial Driver converter detected
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType 40
-WARNING: CPU: 1 PID: 2635 at drivers/usb/core/urb.c:410 usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-Modules linked in:
-CPU: 1 PID: 2635 Comm: kworker/1:2 Not tainted 5.13.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
-Code: 84 4c 01 00 00 e8 a6 14 b3 fd 4c 89 f7 e8 4e a7 1b ff 45 89 e8 44 89 e1 48 89 ea 48 89 c6 48 c7 c7 c0 09 63 86 e8 18 f1 fb 01 <0f> 0b 49 8d 4f 5c 48 b8 00 00 00 00 00 fc ff df 48 89 ca 48 89 4c
-RSP: 0018:ffffc900001b6e08 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: ffff888116d8c058 RCX: 0000000000000000
-RDX: ffff888114e61b40 RSI: ffffffff812a6013 RDI: fffff52000036db3
-RBP: ffff888109d7e690 R08: 0000000000000001 R09: 0000000000000000
-R10: ffffffff814b996b R11: 0000000000000000 R12: 0000000080000280
-R13: 0000000000000040 R14: ffff888116d8c0a8 R15: ffff8881097ac900
-FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055777d5bd160 CR3: 00000001045ec000 CR4: 00000000001506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
- usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
- usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
- qt2_attach+0x82/0x550 drivers/usb/serial/quatech2.c:642
- usb_serial_probe.cold+0x1229/0x292b drivers/usb/serial/usb-serial.c:1122
- usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
- really_probe+0x291/0xf60 drivers/base/dd.c:576
- driver_probe_device+0x298/0x410 drivers/base/dd.c:763
- __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4b0 drivers/base/dd.c:938
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbe0/0x2100 drivers/base/core.c:3320
- usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2164
- usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
- usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
- really_probe+0x291/0xf60 drivers/base/dd.c:576
- driver_probe_device+0x298/0x410 drivers/base/dd.c:763
- __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
- bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
- __device_attach+0x228/0x4b0 drivers/base/dd.c:938
- bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
- device_add+0xbe0/0x2100 drivers/base/core.c:3320
- usb_new_device.cold+0x721/0x1058 drivers/usb/core/hub.c:2556
- hub_port_connect drivers/usb/core/hub.c:5297 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5437 [inline]
- port_event drivers/usb/core/hub.c:5583 [inline]
- hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5665
- process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
- worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
- kthread+0x38c/0x460 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+BUG: memory leak
+unreferenced object 0xffff888118ddde40 (size 192):
+  comm "kworker/1:2", pid 1931, jiffies 4295045866 (age 18.790s)
+  hex dump (first 32 bytes):
+    40 39 e7 18 81 88 ff ff 00 00 00 00 00 00 00 00  @9..............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff84245b62>] kmalloc include/linux/slab.h:556 [inline]
+    [<ffffffff84245b62>] kzalloc include/linux/slab.h:686 [inline]
+    [<ffffffff84245b62>] smsc75xx_bind+0x7a/0x334 drivers/net/usb/smsc75xx.c:1460
+    [<ffffffff82b5b2e6>] usbnet_probe+0x3b6/0xc30 drivers/net/usb/usbnet.c:1728
+    [<ffffffff82be65e7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+    [<ffffffff82621047>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+    [<ffffffff82624832>] __device_attach+0x122/0x260 drivers/base/dd.c:938
+    [<ffffffff82622ce6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+    [<ffffffff8261f105>] device_add+0x5d5/0xd70 drivers/base/core.c:3320
+    [<ffffffff82be3b89>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
+    [<ffffffff82bf3f0c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82be5d4c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+
+BUG: memory leak
+unreferenced object 0xffff888113abcf00 (size 192):
+  comm "kworker/1:1", pid 8586, jiffies 4295046670 (age 10.750s)
+  hex dump (first 32 bytes):
+    40 69 0c 13 81 88 ff ff 00 00 00 00 00 00 00 00  @i..............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff84245b62>] kmalloc include/linux/slab.h:556 [inline]
+    [<ffffffff84245b62>] kzalloc include/linux/slab.h:686 [inline]
+    [<ffffffff84245b62>] smsc75xx_bind+0x7a/0x334 drivers/net/usb/smsc75xx.c:1460
+    [<ffffffff82b5b2e6>] usbnet_probe+0x3b6/0xc30 drivers/net/usb/usbnet.c:1728
+    [<ffffffff82be65e7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+    [<ffffffff82621047>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+    [<ffffffff82624832>] __device_attach+0x122/0x260 drivers/base/dd.c:938
+    [<ffffffff82622ce6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+    [<ffffffff8261f105>] device_add+0x5d5/0xd70 drivers/base/core.c:3320
+    [<ffffffff82be3b89>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
+    [<ffffffff82bf3f0c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82be5d4c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+
+BUG: memory leak
+unreferenced object 0xffff888118ee1900 (size 192):
+  comm "kworker/0:0", pid 8419, jiffies 4295046919 (age 8.260s)
+  hex dump (first 32 bytes):
+    40 49 0a 19 81 88 ff ff 00 00 00 00 00 00 00 00  @I..............
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff84245b62>] kmalloc include/linux/slab.h:556 [inline]
+    [<ffffffff84245b62>] kzalloc include/linux/slab.h:686 [inline]
+    [<ffffffff84245b62>] smsc75xx_bind+0x7a/0x334 drivers/net/usb/smsc75xx.c:1460
+    [<ffffffff82b5b2e6>] usbnet_probe+0x3b6/0xc30 drivers/net/usb/usbnet.c:1728
+    [<ffffffff82be65e7>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+    [<ffffffff82621047>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:431
+    [<ffffffff82624832>] __device_attach+0x122/0x260 drivers/base/dd.c:938
+    [<ffffffff82622ce6>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:491
+    [<ffffffff8261f105>] device_add+0x5d5/0xd70 drivers/base/core.c:3320
+    [<ffffffff82be3b89>] usb_set_configuration+0x9d9/0xb90 drivers/usb/core/message.c:2164
+    [<ffffffff82bf3f0c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
+    [<ffffffff82be5d4c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
+    [<ffffffff82624159>] really_probe+0x159/0x500 drivers/base/dd.c:576
+    [<ffffffff8262458b>] driver_probe_device+0x8b/0x100 drivers/base/dd.c:763
+    [<ffffffff82624cb6>] __device_attach_driver+0xf6/0x120 drivers/base/dd.c:870
+
 
 
 ---
