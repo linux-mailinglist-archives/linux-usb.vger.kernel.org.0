@@ -2,104 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F69738F33F
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 20:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9DC38F355
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 20:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233045AbhEXSvu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 14:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbhEXSvu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 14:51:50 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6CDC061574
-        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 11:50:21 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id ep16-20020a17090ae650b029015d00f578a8so11697626pjb.2
-        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 11:50:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fQgHvnfIC6ECXr/JZNhUc4xHmYDETUNJEbI4WCNlKJ4=;
-        b=AQxrTgiRwV25d4OHYDxMnBkKHtkIzePoDNyvsSm2daB6J1FXuECrte7Rn0vl13l//X
-         87/84APa6vR0EPGBJ91bQ8LKfLi5SL+FRYWuyAPo+RukbKfCbd94+NKFhmKsZh86FSfs
-         sn2sz31Q6nZvHEHXE+IotQbx/Rs6KiUiAXyNl3QpQYJ1/Y8EHr4TJe1POqFkNKN1s/P6
-         pbjkxTjPrv5SEUhQMPxgPpZ03q20CyvdcflhcHKkhsXC/aVFdSZf3rygaCuy5LG1l++X
-         7+wq2AFYGBONNMfenzNmLfyZv0yYBk2KZYDhRiwfqPdNqal40OAxZoEiTJ7mTG968RSn
-         S++w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fQgHvnfIC6ECXr/JZNhUc4xHmYDETUNJEbI4WCNlKJ4=;
-        b=PvbHH8pGADKiE8e8GrGdvYd3wyeWzP303kV7iNbb7bCYsWxcUJb55AKCeqvRfkOu+D
-         wZMH5u0bmuG6iv7w6ohoFItB+JBrelcGVuVxUoWtrasAD2rlMSzG0ZP49yJeRTE8gHIx
-         dYErSjDK6oZHcX/15WyWdlEbeSVZvMWMAE4TxeTzH7gpakInES2INg7b0HJQiIUGSCy7
-         HvVuXbL4hrRdBL4BLcRIWiSCI2QM9KcW+5ldFVCAbdKVNjX6L+LHDilSQscY1VNJ2fDZ
-         uV05yfwZMxD841DZqY1+apItR6HoDofvcjfBy9KE2Ls0CGtAZN1XpVntuP03YXgekLOV
-         +4Vg==
-X-Gm-Message-State: AOAM533TeaZLMhIiIA0lcp5lilSnrkJOy0dAnNvfN6n4Po/eMzHNEljP
-        j2tSX+hMfufJpeCvdJFuAHg=
-X-Google-Smtp-Source: ABdhPJzxeSsOQjRMhPQr78up8q9/1X745LDof09uXAN1RSz+SdOqU3+447W/de+5a96IodwbelF/Ng==
-X-Received: by 2002:a17:902:b70f:b029:f4:5445:cd9f with SMTP id d15-20020a170902b70fb02900f45445cd9fmr27115533pls.32.1621882220529;
-        Mon, 24 May 2021 11:50:20 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:870d:a395:9098:674])
-        by smtp.gmail.com with ESMTPSA id o24sm12043940pgl.55.2021.05.24.11.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 May 2021 11:50:19 -0700 (PDT)
-Date:   Mon, 24 May 2021 11:50:17 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bui Quang Minh <minhquangbui99@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [BUG REPORT] usb: usb-skeleton: Race condition between skel_open
- and skel_disconnect
-Message-ID: <YKv1aYqdGWopI2fp@google.com>
-References: <2f3f0176-244c-d76b-3d7d-15b332c87041@gmail.com>
+        id S233064AbhEXS4u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 14:56:50 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:48427 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232746AbhEXS4t (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 14:56:49 -0400
+Received: (qmail 1333070 invoked by uid 1000); 24 May 2021 14:55:20 -0400
+Date:   Mon, 24 May 2021 14:55:20 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Guido Kiener <Guido.Kiener@rohde-schwarz.com>,
+        dave penkler <dpenkler@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        syzbot <syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dwmw@amazon.co.uk" <dwmw@amazon.co.uk>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>
+Subject: Re: [syzbot] INFO: rcu detected stall in tx
+Message-ID: <20210524185520.GA1332625@rowland.harvard.edu>
+References: <d673611ca53f42a3a629eb051cabc6eb@rohde-schwarz.com>
+ <20210519173545.GA1173157@rowland.harvard.edu>
+ <12088413-2f7d-a1e5-5e8a-25876d85d18a@synopsys.com>
+ <20210520020117.GA1186755@rowland.harvard.edu>
+ <74b2133b-2f77-c86f-4c8b-1189332617d3@synopsys.com>
+ <37c41d87-6e30-1557-7991-0b7bca615be1@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2f3f0176-244c-d76b-3d7d-15b332c87041@gmail.com>
+In-Reply-To: <37c41d87-6e30-1557-7991-0b7bca615be1@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On Mon, May 17, 2021 at 09:31:57PM +0700, Bui Quang Minh wrote:
-> Hi,
+On Mon, May 24, 2021 at 06:18:59PM +0300, Mathias Nyman wrote:
+> On 20.5.2021 23.30, Thinh Nguyen wrote:
+> > As for the xhci driver, there maybe a case where the stream URB never
+> > gets to complete because the transaction err_count is not properly
+> > updated. The err_count for transaction error is stored in ep_ring, but
+> > the xhci driver may not be able to lookup the correct ep_ring based on
+> > TRB address for streams. There are cases for streams where the event
+> > TRBs have their TRB pointer field cleared to '0' (xhci spec section
+> > 4.12.2). If the xhci driver doesn't see ep_ring for transaction error,
+> > it automatically does a soft-retry. This is seen from one of our
+> > testings that the driver was repeatedly doing soft-retry until the class
+> > driver timed out.
+> > 
+> > Hi Mathias, maybe you have some comment on this? Thanks.
 > 
-> I spotted this bug through code review and I don't know how to make a Proof
-> of Concept for this bug so maybe I'm wrong.
+> This is true, if TRB pointer is 0 then there is no retry limit for soft retry.
+> We should add one and prevent a loop. after e few soft resets we can end with a
+> hard reset to clear the host side endpoint halt.
 > 
-> Between skel_open() and skel_disconnect(), this scenario can happen
-> 
-> skel_open()			skel_disconnect()
-> dev = usb_get_intfdata(interface);
-> 				usb_set_intfdata(interface, NULL);
-> 				kref_put(&dev->kref, skel_delete);
-> kref_get(&dev->kref);
-> 
-> In case dev's refcount is 1 before these events, kref_put() in
-> skel_disconnect() will call the skel_delete to free dev. As a result, a UAF
-> will happen when we try to access dev->kref in skel_open(). I can see this
-> pattern in other USB drivers as well such as usblcd.c, yurex.c, ...
-> 
-> Please correct me if I am wrong.
+> We don't know the URB that was being tansferred during the error, and can't 
+> give it back with a proper error code.
+> In that sense we still end up waiting for a timeout and someone to cancel
+> the urb.
 
-I think it is mostly OK. As far as I can see the minor_rwsem in
-drivers/usb/core/file.c makes sure that usb_open()/skel_open() either
-complete if they happen before call to usb_deregister_dev() in
-skel_disconnect() or usb_open() errors out and not call into skel_open()
-if usb_deregister_dev() already completed. So there is no issue with
-bumping refcount while the structure is being deleted.
+That's not good.  There may not be a timeout; drivers expect transfers 
+to complete with a failure, not to be retried indefinitely.
 
-This only leaves usb_get_intfdata() returning NULL because we set it to
-NULL too early in skel_disconnect(). I'd recommend moving
-"usb_set_intfdata(interface, NULL)" to happen after call to
-usb_deregister_dev() in skel_disconnect().
+However, if you do know which endpoint/stream the error is connected to, 
+you should be able to get the URB.  It will be the first one queued for 
+that endpoint/stream.
 
-Thanks.
-
--- 
-Dmitry
+Alan Stern
