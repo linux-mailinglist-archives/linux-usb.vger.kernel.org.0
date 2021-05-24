@@ -2,193 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8218438E130
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 08:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AA338E151
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 09:04:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbhEXGv5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 02:51:57 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:51987 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbhEXGvz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 02:51:55 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 14O6oAsU5016710, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 14O6oAsU5016710
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Mon, 24 May 2021 14:50:10 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Mon, 24 May 2021 14:50:09 +0800
-Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Mon, 24 May
- 2021 14:50:01 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>,
-        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
-Subject: [PATCH net v3] r8152: check the informaton of the device
-Date:   Mon, 24 May 2021 14:49:42 +0800
-Message-ID: <1394712342-15778-365-Taiwan-albertk@realtek.com>
-X-Mailer: Microsoft Office Outlook 11
-In-Reply-To: <1394712342-15778-363-Taiwan-albertk@realtek.com>
-References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
+        id S232295AbhEXHGH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 03:06:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232279AbhEXHGF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 03:06:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E0A686109E;
+        Mon, 24 May 2021 07:04:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621839873;
+        bh=flpTUM3KCbXVN1mvpd23lkWFKiwOOCx5MvX+UdQqIZk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M8v6BOQ0WBnodIXvYr8soB716XWbeRQZeLPRgviMvv8ap5JkqwFn5MfyzeZE9N+q6
+         nZunRvaga0OjpNQflmPUsipqCqezJf9JMFixSBDHFozyY2UYAFQ6HSUgcmM+0cJDrc
+         0JSBcw/XRrjKNd9zkkfRt6KJIxCRkHP77VlItvBU=
+Date:   Mon, 24 May 2021 09:04:32 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Alexandr Ivanov <alexandr.sky@gmail.com>
+Cc:     mathias.nyman@intel.com, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] xhci: Remove unnecessary condition from
+ xhci_check_tt_bw_table
+Message-ID: <YKtQAG9J9kvs0Az2@kroah.com>
+References: <a7ca3671-aaee-2b4e-ed90-208ba82baef8@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/24/2021 06:30:00
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzUvMjQgpFekyCAwNjowMDowMA==?=
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 05/24/2021 06:36:18
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 10
-X-KSE-AntiSpam-Info: Lua profiles 163865 [May 23 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 446 446 0309aa129ce7cd9d810f87a68320917ac2eba541
-X-KSE-AntiSpam-Info: {Headers: Prob_stat_susp_url_only, url2}
-X-KSE-AntiSpam-Info: {Tracking_one_url, url3}
-X-KSE-AntiSpam-Info: {Tracking_uf_ne_domains}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1;syzkaller.appspot.com:7.1.1
-X-KSE-AntiSpam-Info: Rate: 10
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 05/24/2021 06:40:00
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a7ca3671-aaee-2b4e-ed90-208ba82baef8@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Verify some fields of the USB descriptor to make sure the driver
-could be used by the device.
+On Sun, May 23, 2021 at 06:10:31PM +0300, Alexandr Ivanov wrote:
+> Remove condition (old_active_eps == 0) from xhci_check_tt_bw_table
+> because the previous check of old_active_eps returns
+> from the function if old_active_eps is not zero.
+> 
+> Move the previous condition to the function beginning.
+> 
+> Signed-off-by: Alexandr Ivanov <alexandr.sky@gmail.com>
+> ---
+>  drivers/usb/host/xhci.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 27283654ca08..14aae87d6c8f 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -2329,16 +2329,18 @@ static int xhci_check_tt_bw_table(struct xhci_hcd
+> *xhci,
+>      struct xhci_interval_bw_table *bw_table;
+>      struct xhci_tt_bw_info *tt_info;
+> 
+> -    /* Find the bandwidth table for the root port this TT is attached to.
+> */
+> -    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
+> -    tt_info = virt_dev->tt_info;
+>      /* If this TT already had active endpoints, the bandwidth for this TT
+>       * has already been added.  Removing all periodic endpoints (and thus
+>       * making the TT enactive) will only decrease the bandwidth used.
+>       */
+>      if (old_active_eps)
+>          return 0;
+> -    if (old_active_eps == 0 && tt_info->active_eps != 0) {
+> +
+> +    /* Find the bandwidth table for the root port this TT is attached to.
+> */
+> +    bw_table = &xhci->rh_bw[virt_dev->real_port - 1].bw_table;
+> +    tt_info = virt_dev->tt_info;
+> +
+> +    if (tt_info->active_eps != 0) {
+>          if (bw_table->bw_used + TT_HS_OVERHEAD > HS_BW_LIMIT)
+>              return -ENOMEM;
+>          return 0;
+> -- 
+> 2.31.1
+> 
 
-Besides, remove the check of endpoint number in rtl8152_probe().
-usb_find_common_endpoints() includes it.
+Hi,
 
-BugLink: https://syzkaller.appspot.com/bug?id=912c9c373656996801b4de61f1e3cb326fe940aa
-Reported-by: syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com
-Fixes: c2198943e33b ("r8152: search the configuration of vendor mode")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
-v3:
-Remove the check of endpoint number in rtl_check_vendor_ok().
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Adjust the error message and ccommit message.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-v2:
-Use usb_find_common_endpoints() and usb_endpoint_num() to replace original
-code.
+- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
+  and can not be applied.  Please read the file,
+  Documentation/email-clients.txt in order to fix this.
 
-remove the check of endpoint number in rtl8152_probe(). It has been done
-in rtl_check_vendor_ok().
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
- drivers/net/usb/r8152.c | 42 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 37 insertions(+), 5 deletions(-)
+thanks,
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 136ea06540ff..f6abb2fbf972 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8107,6 +8107,37 @@ static void r8156b_init(struct r8152 *tp)
- 	tp->coalesce = 15000;	/* 15 us */
- }
- 
-+static bool rtl_check_vendor_ok(struct usb_interface *intf)
-+{
-+	struct usb_host_interface *alt = intf->cur_altsetting;
-+	struct usb_endpoint_descriptor *in, *out, *intr;
-+
-+	if (usb_find_common_endpoints(alt, &in, &out, &intr, NULL) < 0) {
-+		dev_err(&intf->dev, "Expected endpoints are not found\n");
-+		return false;
-+	}
-+
-+	/* Check Rx endpoint address */
-+	if (usb_endpoint_num(in) != 1) {
-+		dev_err(&intf->dev, "Invalid Rx endpoint address\n");
-+		return false;
-+	}
-+
-+	/* Check Tx endpoint address */
-+	if (usb_endpoint_num(out) != 2) {
-+		dev_err(&intf->dev, "Invalid Tx endpoint address\n");
-+		return false;
-+	}
-+
-+	/* Check interrupt endpoint address */
-+	if (usb_endpoint_num(intr) != 3) {
-+		dev_err(&intf->dev, "Invalid interrupt endpoint address\n");
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- static bool rtl_vendor_mode(struct usb_interface *intf)
- {
- 	struct usb_host_interface *alt = intf->cur_altsetting;
-@@ -8115,12 +8146,15 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
- 	int i, num_configs;
- 
- 	if (alt->desc.bInterfaceClass == USB_CLASS_VENDOR_SPEC)
--		return true;
-+		return rtl_check_vendor_ok(intf);
- 
- 	/* The vendor mode is not always config #1, so to find it out. */
- 	udev = interface_to_usbdev(intf);
- 	c = udev->config;
- 	num_configs = udev->descriptor.bNumConfigurations;
-+	if (num_configs < 2)
-+		return false;
-+
- 	for (i = 0; i < num_configs; (i++, c++)) {
- 		struct usb_interface_descriptor	*desc = NULL;
- 
-@@ -8135,7 +8169,8 @@ static bool rtl_vendor_mode(struct usb_interface *intf)
- 		}
- 	}
- 
--	WARN_ON_ONCE(i == num_configs);
-+	if (i == num_configs)
-+		dev_err(&intf->dev, "Unexpected Device\n");
- 
- 	return false;
- }
-@@ -9381,9 +9416,6 @@ static int rtl8152_probe(struct usb_interface *intf,
- 	if (!rtl_vendor_mode(intf))
- 		return -ENODEV;
- 
--	if (intf->cur_altsetting->desc.bNumEndpoints < 3)
--		return -ENODEV;
--
- 	usb_reset_device(udev);
- 	netdev = alloc_etherdev(sizeof(struct r8152));
- 	if (!netdev) {
--- 
-2.26.3
-
+greg k-h's patch email bot
