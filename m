@@ -2,78 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8A738E315
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 11:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C5C38E321
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 11:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbhEXJPN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 05:15:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58170 "EHLO mail.kernel.org"
+        id S232464AbhEXJS5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 05:18:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232397AbhEXJPM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 05:15:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2EBD360FE7;
-        Mon, 24 May 2021 09:13:45 +0000 (UTC)
+        id S232313AbhEXJSu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 05:18:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EE68E60FE7;
+        Mon, 24 May 2021 09:17:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621847625;
-        bh=gLEwh/xrg3/6bm6NA/iMItM0ghz5DNK9xGjeSvn1l0Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jCz4XGleLi33u/pN2fdy9FOgw4762PwQyV1uy5ts71SHEhBV1PUiHX+bpNL9zTC5K
-         t1ToJwrok0w9FpaUUrMvvGDrylo8UFldtX/pCgyuGdyKPqKgggkhFEjwvJaNmwsnZH
-         3PuHcHE81+RKO4ni7JN8Kds2sn1+InbaXKvDtu1NobJbxrnl7kMC9Q76lsny6P9azX
-         K14gCvIPArji73xKw6WwhaaInAMADD84Tr0OkMbr152Lj1UifsQIk0dw5y66juwHZB
-         V/xJJ4F0LycpbFJyn1YblUy+pq4lRx4fEPgwCglX0vVtCo8MQ5mc3buar0mBN175JN
-         X/6a2q/+v+zSg==
+        s=k20201202; t=1621847843;
+        bh=AEdXl0yOkNxGu8Z2KHUxXg9KFkc7Dxr7RFwj4gYtUlo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Sp1WXFOR6b2e8ozm+ZjRWCt+tT0Tyn/Xndq0hIidaLdXs2thwnvN2wHomhmagrGaE
+         Z4rUv5wYr22iom2/sz7Rbc+YCu6R+ThjXFNNgS725N/0GXvN3LLe2mBCq+vSiCgjjA
+         PbKbTRNOorC1iZo1rStTOJaFP/IyIztp/xKja0hlW7M/AwOkNFF2pOn7C3F2oHilUe
+         blO0P8gLOY+eF4fKxF/rVByCoUafYV/fUGvbSHgtA3bJei6H5r3bfWZhsW9x0289ry
+         H/P9M/zkcqdv8VRbeWJp01REK+TfNykS60xQMW+lTQFhwk4+xocu7dxa+lefv4aUVL
+         1DtVV+B0KXfVg==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1ll6ec-00014d-R3; Mon, 24 May 2021 11:13:42 +0200
-Date:   Mon, 24 May 2021 11:13:42 +0200
+        id 1ll6i8-000182-4i; Mon, 24 May 2021 11:17:20 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Hayes Wang <hayeswang@realtek.com>
-Cc:     "kuba@kernel.org" <kuba@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        nic_swsd <nic_swsd@realtek.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com" 
-        <syzbot+95afd23673f5dd295c57@syzkaller.appspotmail.com>
-Subject: Re: [PATCH net v3] r8152: check the informaton of the device
-Message-ID: <YKtuRmp6mC34kf2k@hovoldconsulting.com>
-References: <1394712342-15778-363-Taiwan-albertk@realtek.com>
- <1394712342-15778-365-Taiwan-albertk@realtek.com>
- <YKtdJnvZTxE1yqEK@hovoldconsulting.com>
- <1e7e1d4039724eb4bcdd5884a748d880@realtek.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: [PATCH v2] USB: serial: quatech2: fix control-request directions
+Date:   Mon, 24 May 2021 11:17:05 +0200
+Message-Id: <20210524091705.4282-1-johan@kernel.org>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e7e1d4039724eb4bcdd5884a748d880@realtek.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 24, 2021 at 08:54:50AM +0000, Hayes Wang wrote:
-> Johan Hovold <johan@kernel.org>
-> > Sent: Monday, May 24, 2021 4:01 PM
-> [...]
-> > >  	/* The vendor mode is not always config #1, so to find it out. */
-> > >  	udev = interface_to_usbdev(intf);
-> > >  	c = udev->config;
-> > >  	num_configs = udev->descriptor.bNumConfigurations;
-> > > +	if (num_configs < 2)
-> > > +		return false;
-> > > +
-> > 
-> > Nit: This check looks unnecessary also as the driver can handle a single
-> > configuration just fine, and by removing it you'd be logging "Unexpected
-> > Device\n" below also in the single config case.
-> 
-> I just want to distinguish the devices.
-> It is acceptable if the device contains only one configuration.
-> A mistake occurs if the device has more configurations and
-> there is no expected one.
-> I would remove it if you think it is better.
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
 
-I'm fine with keeping the check too (e.g. as an optimisation of sort),
-it's just a bit inconsistent to not log an error in that one error path.
+Fix the three requests which erroneously used usb_rcvctrlpipe().
 
-Johan
+Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
+Cc: stable@vger.kernel.org      # 3.5
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+
+Changes in v2
+ - fix also the request in attach
+
+ drivers/usb/serial/quatech2.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index 3b5f2032ecdb..b0bb889f002c 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -416,7 +416,7 @@ static void qt2_close(struct usb_serial_port *port)
+ 
+ 	/* flush the port transmit buffer */
+ 	i = usb_control_msg(serial->dev,
+-			    usb_rcvctrlpipe(serial->dev, 0),
++			    usb_sndctrlpipe(serial->dev, 0),
+ 			    QT2_FLUSH_DEVICE, 0x40, 1,
+ 			    port_priv->device_port, NULL, 0, QT2_USB_TIMEOUT);
+ 
+@@ -426,7 +426,7 @@ static void qt2_close(struct usb_serial_port *port)
+ 
+ 	/* flush the port receive buffer */
+ 	i = usb_control_msg(serial->dev,
+-			    usb_rcvctrlpipe(serial->dev, 0),
++			    usb_sndctrlpipe(serial->dev, 0),
+ 			    QT2_FLUSH_DEVICE, 0x40, 0,
+ 			    port_priv->device_port, NULL, 0, QT2_USB_TIMEOUT);
+ 
+@@ -639,7 +639,7 @@ static int qt2_attach(struct usb_serial *serial)
+ 	int status;
+ 
+ 	/* power on unit */
+-	status = usb_control_msg(serial->dev, usb_rcvctrlpipe(serial->dev, 0),
++	status = usb_control_msg(serial->dev, usb_sndctrlpipe(serial->dev, 0),
+ 				 0xc2, 0x40, 0x8000, 0, NULL, 0,
+ 				 QT2_USB_TIMEOUT);
+ 	if (status < 0) {
+-- 
+2.26.3
+
