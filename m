@@ -2,108 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F5438E6F6
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 14:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1871138E747
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 15:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232512AbhEXMxV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 08:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232389AbhEXMxU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 08:53:20 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6CC061574;
-        Mon, 24 May 2021 05:51:51 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id j10so14261334edw.8;
-        Mon, 24 May 2021 05:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=dD9JUS/9clmQAwtTw0oy+Y0L6eGW7GOSlCzKvAfOcqI=;
-        b=uXZObOQAWLi+UqUELweUTgzr0xS+D+JIv93PqQnNec9m1DWvK3ICqM51zXr3H1LNYr
-         niW8fRxeIc6J8YtGGWrvJBOLrerpqW314Klei3EwcaLDhhac5I5dcMSMok8WaKoH2AuX
-         LGVvbwYGNZEn2k/XNFTXFa6YWl2fdccjLZ9dLzgsUWMhoLktKRLUdGC0J5w+3U2SqgPv
-         +BQhqksplDDFCbLkURCCWhxg5XeZez34ewqV9eMPcoh9HFkEr+tQ89VS2EPTjJA+PwvF
-         hrDIBl/uE8oybSgvxlaOLY8vpWrfyxawVPh3gTz+4SfBcQoQ4nEVnOgrr0OvFjFgYyLH
-         onjg==
+        id S232802AbhEXNUy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 09:20:54 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:42528 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232648AbhEXNUv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 24 May 2021 09:20:51 -0400
+Received: by mail-il1-f199.google.com with SMTP id d17-20020a9236110000b02901cf25fcfdcdso2124044ila.9
+        for <linux-usb@vger.kernel.org>; Mon, 24 May 2021 06:19:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=dD9JUS/9clmQAwtTw0oy+Y0L6eGW7GOSlCzKvAfOcqI=;
-        b=DWu3ZouAEljQMElL851rp7fbdWOZ4ltKLV1bNojK1XIOqqlg83Rt9Oth7mhq03YJ0e
-         Q1DubIN/TmWkI/rZQom1vKtuCxefBB4EGJWVCENf7vs7d0AbT165nXP1StMoSUGyZLVN
-         s7trQJRwLEZ7PUCXUJE+w7C46muEVmVgu8IM5RWvOhGLEKE/dk3X2yM0ndiDe1mnMPDG
-         pjvGbJ7XlCum5ncRFylxZNo9xu2lzDqs3efx6mUQyNNleb3FcnhEORjlbrWI4FyXn8gd
-         QUX+uYHuMOl2KZmmPCG4vpP6dAa4IQ0SdhqxvMEKOVvgAB5rScCYpdfHlEeA8y/JTWIo
-         X0og==
-X-Gm-Message-State: AOAM5307XPLKFJdU8S2zFwQpiyhR3SG4zy/WpBSDJ9bhUMSRQEiNT3uD
-        lQTSHCLcmh65nTBkK+yXQXk=
-X-Google-Smtp-Source: ABdhPJyMEkKmMiyUQ3uf21R2RgYMv75IOOJQ9W04QhJLUu7XPaq6mnxSqiA+tfBvgJn1FPWNjpSyNg==
-X-Received: by 2002:a05:6402:35c4:: with SMTP id z4mr25067694edc.362.1621860709805;
-        Mon, 24 May 2021 05:51:49 -0700 (PDT)
-Received: from jernej-laptop.localnet (cpe-86-58-17-133.cable.triera.net. [86.58.17.133])
-        by smtp.gmail.com with ESMTPSA id u1sm9282891edv.91.2021.05.24.05.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 May 2021 05:51:49 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <maxime@cerno.tech>
-Cc:     Chen-Yu Tsai <wens@csie.org>, Rob Herring <robh@kernel.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        Ondrej Jirman <megous@megous.com>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 12/17] phy: sun4i-usb: Introduce port2 SIDDQ quirk
-Date:   Mon, 24 May 2021 14:51:47 +0200
-Message-ID: <2348352.12aM7klthN@jernej-laptop>
-In-Reply-To: <20210524115946.jwsasjbr3biyixhz@gilmour>
-References: <20210519104152.21119-1-andre.przywara@arm.com> <20210519104152.21119-13-andre.przywara@arm.com> <20210524115946.jwsasjbr3biyixhz@gilmour>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=xlJyul8EX30BPfx0IrWN2X0dWiT6NoPE1yBME7Ku8yY=;
+        b=oRHVefT4MUuQTRKQ8CmdsAYBhjLaYC8qLbD2c/xTajPA186dlXoDeT1+o4DVBry6Au
+         PCT0Q3DseYX3umJHJ//MLCilu9mLcQryjAadVG/NX07WM8UZABps+L0J7DsmZLUmg7Q7
+         fAtAnFxWYBXl56jgSHkFjKWeTfdIouwqX4GAtPd56CMR+82pLu0nnEYK2w64+Dzg150s
+         2J1m3i5DGv2ZQcmIKjfbMRRlRPfzKAjEaDvDZKl0SoAOc1HuDWr6o2ZzKroU20G/kvOz
+         y91B10IO+WQkK7ZAnJu38TL7N0F5L09w8SbPFTU9GfZkHnuSsrQsD2MV+7pFFi8fF81q
+         SfUA==
+X-Gm-Message-State: AOAM531aadTW7fFJUK6Bsr+lExh2QYYXY9gtpxv2CTWWJrnJCL6SUvBo
+        vcErEVr58QM4rnjkc6SCwDJfHhqGPANVcrVdVKZAZhEwxQ3l
+X-Google-Smtp-Source: ABdhPJzWg5EheSUX48l72MPSH9pGe+SyqFLJi+CvgWH+f8EzYpTz/N9nLnSDP/N6AY7rcG4uM2y87svB8dHUB9euCm+kwxK4BWSE
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-Received: by 2002:a6b:cd08:: with SMTP id d8mr16023343iog.86.1621862363043;
+ Mon, 24 May 2021 06:19:23 -0700 (PDT)
+Date:   Mon, 24 May 2021 06:19:23 -0700
+In-Reply-To: <000000000000f96caf05c30fd10f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000061f5105c3134231@google.com>
+Subject: Re: [syzbot] WARNING in rtl28xxu_ctrl_msg/usb_submit_urb
+From:   syzbot <syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com>
+To:     crope@iki.fi, gregkh@linuxfoundation.org, hverkuil@xs4all.nl,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, mchehab@kernel.org,
+        stable@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dne ponedeljek, 24. maj 2021 ob 13:59:46 CEST je Maxime Ripard napisal(a):
-> Hi
-> 
-> On Wed, May 19, 2021 at 11:41:47AM +0100, Andre Przywara wrote:
-> > At least the Allwinner H616 SoC requires a weird quirk to make most
-> > USB PHYs work: Only port2 works out of the box, but all other ports
-> > need some help from this port2 to work correctly: The CLK_BUS_PHY2 and
-> > RST_USB_PHY2 clock and reset need to be enabled, and the SIDDQ bit in
-> > the PMU PHY control register needs to be cleared. For this register to
-> > be accessible, CLK_BUS_ECHI2 needs to be ungated. Don't ask ....
-> > 
-> > Instead of disguising this as some generic feature, do exactly that
-> > in our PHY init:
-> > If the quirk bit is set, and we initialise a PHY other than PHY2, ungate
-> > this one special clock, and clear the SIDDQ bit. We can pull in the
-> > other required clocks via the DT.
-> > 
-> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> 
-> What is this SIDDQ bit doing exactly?
+syzbot has found a reproducer for the following issue on:
 
-If this is similar to Rockchip USB PHY, then this bit takes care for powering 
-up/down analog parts of USB PHY:
-https://elixir.bootlin.com/linux/latest/source/drivers/phy/rockchip/phy-rockchip-usb.c#L83
+HEAD commit:    5cc59c41 USB: core: WARN if pipe direction != setup packet..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=17aa9217d00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
+dashboard link: https://syzkaller.appspot.com/bug?extid=faf11bbadc5a372564da
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17e839d1d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1242ce8dd00000
 
-Best regards,
-Jernej
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
 
-> 
-> I guess we could also expose this using a power-domain if it's relevant?
-> 
-> Maxime
-
-
-
+usb 1-1: New USB device found, idVendor=0413, idProduct=6a03, bcdDevice=39.7e
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType c0
+WARNING: CPU: 1 PID: 32 at drivers/usb/core/urb.c:410 usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 1 PID: 32 Comm: kworker/1:1 Not tainted 5.13.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0x14aa/0x1830 drivers/usb/core/urb.c:410
+Code: 84 4c 01 00 00 e8 a6 14 b3 fd 4c 89 f7 e8 4e a7 1b ff 45 89 e8 44 89 e1 48 89 ea 48 89 c6 48 c7 c7 c0 09 63 86 e8 18 f1 fb 01 <0f> 0b 49 8d 4f 5c 48 b8 00 00 00 00 00 fc ff df 48 89 ca 48 89 4c
+RSP: 0018:ffffc900001a6d50 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff88811ab8a058 RCX: 0000000000000000
+RDX: ffff888107fc0000 RSI: ffffffff812a6013 RDI: fffff52000034d9c
+RBP: ffff88810e79f7a8 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814b996b R11: 0000000000000000 R12: 0000000080000280
+R13: 00000000000000c0 R14: ffff88811ab8a0a8 R15: ffff8881097a2500
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d9ffcec928 CR3: 00000001103c2000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ rtl28xxu_ctrl_msg+0x4b7/0x700 drivers/media/usb/dvb-usb-v2/rtl28xxu.c:43
+ rtl28xxu_identify_state+0xb6/0x320 drivers/media/usb/dvb-usb-v2/rtl28xxu.c:624
+ dvb_usbv2_probe+0x55b/0x7d0 drivers/media/usb/dvb-usb-v2/dvb_usb_core.c:947
+ usb_probe_interface+0x315/0x7f0 drivers/usb/core/driver.c:396
+ really_probe+0x291/0xf60 drivers/base/dd.c:576
+ driver_probe_device+0x298/0x410 drivers/base/dd.c:763
+ __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4b0 drivers/base/dd.c:938
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbe0/0x2100 drivers/base/core.c:3320
+ usb_set_configuration+0x113f/0x1910 drivers/usb/core/message.c:2164
+ usb_generic_driver_probe+0xba/0x100 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd9/0x2c0 drivers/usb/core/driver.c:293
+ really_probe+0x291/0xf60 drivers/base/dd.c:576
+ driver_probe_device+0x298/0x410 drivers/base/dd.c:763
+ __device_attach_driver+0x203/0x2c0 drivers/base/dd.c:870
+ bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:431
+ __device_attach+0x228/0x4b0 drivers/base/dd.c:938
+ bus_probe_device+0x1e4/0x290 drivers/base/bus.c:491
+ device_add+0xbe0/0x2100 drivers/base/core.c:3320
+ usb_new_device.cold+0x721/0x1058 drivers/usb/core/hub.c:2556
+ hub_port_connect drivers/usb/core/hub.c:5297 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5437 [inline]
+ port_event drivers/usb/core/hub.c:5583 [inline]
+ hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5665
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
