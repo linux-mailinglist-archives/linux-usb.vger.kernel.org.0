@@ -2,54 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E12B38E62A
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 14:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1518738E69B
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 14:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbhEXMG3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 08:06:29 -0400
-Received: from cable.insite.cz ([84.242.75.189]:54689 "EHLO cable.insite.cz"
+        id S232491AbhEXMbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 08:31:20 -0400
+Received: from cable.insite.cz ([84.242.75.189]:36803 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232735AbhEXMG0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 08:06:26 -0400
+        id S232456AbhEXMbT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 08:31:19 -0400
 Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 8E90FA1A3D403;
-        Mon, 24 May 2021 14:04:56 +0200 (CEST)
+        by cable.insite.cz (Postfix) with ESMTP id C0D4CA1A3D403;
+        Mon, 24 May 2021 14:29:50 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1621857896; bh=dC/PaK883uN3vnCr/XMUuaTTfpLCqKahY1flvzw9w4s=;
+        t=1621859390; bh=0fJAvvG/WNc+/YJ+l909Hl88XTe8WhfOhvUfATwxMmA=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SbV++uOctZf03LNFoOFl1fhJ4nqB6Q9X6O3TWcLRNm1n3rzEMmRAr/fncHe9/IN41
-         U7f1WpPc8BSNbAkdndgrTmgSSfds8iI0gK25/knzNZ3dhGoMd+rhapDMm1bwRJdrbg
-         YftutKPGUnVc/2P5dNDBd/Mb40jLiDxcO6KtXGas=
+        b=nDPSMi95bKgi6xLP6cNXA1/SfZona9GTQmtg+XKrTL/kucy265hJ4bdyT5A3mR0yE
+         4om0644bWdCCDi4WHIVJXUPAfe/Yor8DACzo9BjmB7ufwlwJadr2ewDnJYthx+wM2/
+         LAaskNvdTsIGJ6oOmXVoyoX/4p3du4Ey3Zfge+Xk=
 Received: from cable.insite.cz ([84.242.75.189])
         by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 2W8QPlSEzanq; Mon, 24 May 2021 14:04:51 +0200 (CEST)
+        with ESMTP id Om5v28HGx2GN; Mon, 24 May 2021 14:29:44 +0200 (CEST)
 Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
         (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id C08E1A1A3D402;
-        Mon, 24 May 2021 14:04:50 +0200 (CEST)
+        by cable.insite.cz (Postfix) with ESMTPSA id 00E40A1A3D402;
+        Mon, 24 May 2021 14:29:43 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1621857890; bh=dC/PaK883uN3vnCr/XMUuaTTfpLCqKahY1flvzw9w4s=;
+        t=1621859384; bh=0fJAvvG/WNc+/YJ+l909Hl88XTe8WhfOhvUfATwxMmA=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WlUrW0AoCHFbEnJQOktRHOd2LUnXGvfOsj2TbClg5cppPeAqpBpQsWchbY+CmJJ+M
-         A/r+Q0zF6Og4MwIZPQhKlidzNvpI7eWltp/u/mKVRIuQoxT2cXFQZmhuccQRUwaP2j
-         +nL6S/LkE2JgEfbDKquUlKknxTjMpXSZn7K7xkKQ=
-Subject: Re: [RFC PATCH v2 1/3] usb: gadget: f_uac2/u_audio: add feedback
- endpoint support
+        b=VLSguT7WAUu3nXUDS3ECuexR+/NG5GG7BiqV0mzy1pCuY/adVincb91UI7zRGD9ts
+         QqSKVclwEH1QaT4R+vyY38+COX9Z89Z6HeBPOPMZcbzjagN8Hc45XXX7ZfunCz9StB
+         cZ3CLU8EL0AMEOz4qgQA8CpLDXz/kApKAu5V18Og=
+Subject: Re: [RFC PATCH v2 3/3] usb: gadget: u_audio: .... PCM Rate Shift for
+ playback too?
 To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org,
+        Takashi Iwai <tiwai@suse.de>
 Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
 References: <20210430142625.357152-1-jbrunet@baylibre.com>
- <20210430142625.357152-2-jbrunet@baylibre.com>
- <4f213e44-e939-6d33-a333-a2573bd1e48c@ivitera.com>
- <1jim43hf6h.fsf@starbuckisacylon.baylibre.com>
- <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+ <20210430142625.357152-4-jbrunet@baylibre.com>
 From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <5e170334-e374-4841-92d5-b2f787694b52@ivitera.com>
-Date:   Mon, 24 May 2021 14:04:50 +0200
+Message-ID: <266cc181-04ed-3204-148a-c658ac35a09f@ivitera.com>
+Date:   Mon, 24 May 2021 14:29:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <1jfsz7hf45.fsf@starbuckisacylon.baylibre.com>
+In-Reply-To: <20210430142625.357152-4-jbrunet@baylibre.com>
 Content-Type: text/plain; charset=iso-8859-2
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -58,69 +56,68 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Dne 30. 04. 21 v 19:11 Jerome Brunet napsal(a):
-> 
-> On Fri 30 Apr 2021 at 19:09, Jerome Brunet <jbrunet@baylibre.com> wrote:
-> 
->> On Fri 30 Apr 2021 at 16:55, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->>
->>> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
->>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>>>
->>>> As per USB and UAC2 specs, asynchronous audio sink endpoint
->>>> requires explicit synchronization mechanism (Isochronous
->>>> Feedback Endpoint)
->>>>
->>>> Implement feedback companion endpoint for ISO OUT endpoint
->>>>
->>>> This patch adds all required infrastructure and USB requests
->>>> handling for feedback endpoint. Syncrhonization itself is
->>>> still dummy (feedback ep always reports 'nomimal frequency'
->>>>  e.g. no adjustement is needed). This satisfies hosts that
->>>> require feedback endpoint (like Win10) and poll it periodically
->>>>
->>>> Actual synchronization mechanism should be implemented
->>>> separately
->>>>
->>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
->>>
->>> Hi,
->>>
->>> The HS calculation of Q16.16 feedback value
->>> overflows at some 524kHz, disallowing use of larger samplerates (e.g.
->>> 768kHz or higher).
->>>
->>> I tested the formula used in alsa USB driver
->>> https://github.com/torvalds/linux/blob/d99676af540c2dc829999928fb81c58c80a1dce4/sound/usb/endpoint.c#L80
->>> which uses only 10bit shift. The feedback control in UAC2 gadget now
->>> works up to 4M samplerate with 1Hz precision (tested on RPi4 with
->>> bInterval = 1, checked in stream0 proc file on linux host).
->>>
->>> --- a/drivers/usb/gadget/function/u_audio.c
->>> +++ b/drivers/usb/gadget/function/u_audio.c
->>> @@ -118,7 +119,8 @@ static void u_audio_set_fback_frequency(enum
->>> usb_device_speed speed,
->>>                  * Prevent integer overflow by calculating in Q12.13
->>> format and
->>>                  * then shifting to Q16.16
->>>                  */
->>> -               ff = DIV_ROUND_UP((freq << 13), (8*1000)) << 3;
->>> +               ff = ((freq << 10) + 62) / 125;
->>
->> Pavel, The code posted is a little different from snip here.
->> While I understand the "<< 10" and "/ 125", the "+ 62" would welcome a
->> comment.
-> 
-> OOhhh I got it now ... I think using ROUND_UP() is lot more readable
-> (and maintainable) 
-> 
->>
->> Also in the final patch, the calculation is a bit different and moved to
->> "long long" ... but I'm sure the same type of improvement could be done.
 
-Jerome, I see (sorry for the misunderstanding) that you have modified
-original Ruslan's patch and the freq variable being shifted by 13 is
-long long. Your code is definitely better, thanks.
+Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
+> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> 
+> This adds interface between userspace and feedback endpoint to report real
+> feedback frequency to the Host.
+> 
+> Current implementation adds new userspace interface ALSA mixer control
+> "Capture Pitch 1000000" (similar to aloop driver's "PCM Rate Shift 100000"
+> mixer control)
+> 
+> Value in PPM is chosen to have correction value agnostic of the actual HW
+> rate, which the application is not necessarily dealing with, while still
+> retaining a good enough precision to allow smooth clock correction on the
+> playback side, if necessary.
+> 
+> Similar to sound/usb/endpoint.c, a slow down is allowed up to 25%. This
+> has no impact on the required bandwidth. Speedup correction has an impact
+> on the bandwidth reserved for the isochronous endpoint. The default
+> allowed speedup is 500ppm. This seems to be more than enough but, if
+> necessary, this is configurable through a module parameter. The reserved
+> bandwidth is rounded up to the next packet size.
+> 
+> Usage of this new control is easy to implement in existing userspace tools
+> like alsaloop from alsa-utils.
+> 
+> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+
+
+Hi, the existing patches solve the Host -> Gadget -> capturing
+application direction, controlling the host playback rate. The other
+direction (playback app -> gadget -> capturing host) is still paced by
+the host USB controller. Packet size is pre-calculated in
+u_audio_start_playback  as rate/p_interval
+https://github.com/pavhofman/linux-rpi/blob/rpi-5.10.y/drivers/usb/gadget/function/u_audio.c#L441
+and this fixed value is used for copying the audio data in
+u_audio_iso_complete
+https://github.com/pavhofman/linux-rpi/blob/rpi-5.10.y/drivers/usb/gadget/function/u_audio.c#L124
+.
+
+That means if the gadget has a physical duplex audio device with single
+clock and runs a duplex operation, the path gadget-> host  will not run
+synchronously with the physical audio device (the host -> gadget has
+already the feedback control implemented).
+
+How about "duplicating" the existing ALSA mixer control
+"Capture Pitch 1000000" to "Playback Pitch 1000000" and using
+pitch-adjusted p_srate in the above-linked calculations? That should
+make the playback side run at the playback pitch requested by gadget
+userspace, IIUC.
+
+For the duplex operation with single clock, the capture pitch value
+determined by the userspace chain (alsaloop, CamillaDSP, etc.) would be
+used for setting both the capture and playback pitch controls, making
+both directions run synchronously.
+
+I can prepare patches based on Jerome's patchset should you find this
+solution acceptable.
+
+Thanks a lot,
 
 Pavel.
+
+
