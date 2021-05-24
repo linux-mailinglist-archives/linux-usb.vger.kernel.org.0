@@ -2,140 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7857638E3EF
-	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 12:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C772438E3F1
+	for <lists+linux-usb@lfdr.de>; Mon, 24 May 2021 12:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232549AbhEXKXv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 24 May 2021 06:23:51 -0400
-Received: from mga06.intel.com ([134.134.136.31]:52856 "EHLO mga06.intel.com"
+        id S232553AbhEXKYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 24 May 2021 06:24:09 -0400
+Received: from mga02.intel.com ([134.134.136.20]:53371 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232565AbhEXKXu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 24 May 2021 06:23:50 -0400
-IronPort-SDR: FdbMPI4LNB1w0Rk5hiaH925i9NvwDa+oAxne7ugxWvFNz08PxzMm8aMsav+QHhfT60Tu6O6tQ9
- D97YLRMX+5NA==
-X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="263112925"
+        id S232426AbhEXKYJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 24 May 2021 06:24:09 -0400
+IronPort-SDR: PZRI2nmDo1DBBRit1hxJzneIkdP12uJlTshRZoO+cRBpnO3cEYeOQXD9SbdAgpOOHc++jA+4Q5
+ eq+7i8eGFx/g==
+X-IronPort-AV: E=McAfee;i="6200,9189,9993"; a="189024787"
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="263112925"
+   d="scan'208";a="189024787"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 03:22:13 -0700
-IronPort-SDR: UlhpAMbijW2JrWMObLIMddhYaWQm+XHYxBxXIJcaNYrsae/t8iRgQ8LUybN2UpPU9G97/1m9Or
- TLgGRobuVRqA==
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 May 2021 03:22:41 -0700
+IronPort-SDR: PAlFE+eBV1czTpL3dYCMs0cg8ir77MGPpUfgo3YTNGmc7n1C7bKJ3hoTe4Xj2mnN0wT0RrKo1N
+ DT9PYQ0NGp4g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,319,1613462400"; 
-   d="scan'208";a="545868696"
+   d="scan'208";a="545868829"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 24 May 2021 03:22:10 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 May 2021 13:22:10 +0300
-Date:   Mon, 24 May 2021 13:22:10 +0300
+  by fmsmga001.fm.intel.com with SMTP; 24 May 2021 03:22:38 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 24 May 2021 13:22:37 +0300
+Date:   Mon, 24 May 2021 13:22:37 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Kyle Tso <kyletso@google.com>
 Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         lkp@intel.com
-Subject: Re: [PATCH v2 1/2] usb: typec: tcpm: Properly interrupt VDM AMS
-Message-ID: <YKt+UsvpDcNHXZfx@kuha.fi.intel.com>
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Respond Not_Supported if no
+ snk_vdo
+Message-ID: <YKt+bbgOVi/3RCpQ@kuha.fi.intel.com>
 References: <20210523015855.1785484-1-kyletso@google.com>
- <20210523015855.1785484-2-kyletso@google.com>
+ <20210523015855.1785484-3-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210523015855.1785484-2-kyletso@google.com>
+In-Reply-To: <20210523015855.1785484-3-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 23, 2021 at 09:58:54AM +0800, Kyle Tso wrote:
-> When a VDM AMS is interrupted by Messages other than VDM, the AMS needs
-> to be finished properly. Also start a VDM AMS if receiving SVDM Commands
-> from the port partner to complement the functionality of tcpm_vdm_ams().
+On Sun, May 23, 2021 at 09:58:55AM +0800, Kyle Tso wrote:
+> If snk_vdo is not populated from fwnode, it implies the port does not
+> support responding to SVDM commands. Not_Supported Message shall be sent
+> if the contract is in PD3. And for PD2, the port shall ignore the
+> commands.
 > 
-> Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
+> Fixes: 193a68011fdc ("staging: typec: tcpm: Respond to Discover Identity commands")
 > Signed-off-by: Kyle Tso <kyletso@google.com>
 > Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 30 ++++++++++++++++++++++++++++++
->  1 file changed, 30 insertions(+)
+>  drivers/usb/typec/tcpm/tcpm.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 3feaf5d6419e..7db6ae3e9c0b 100644
+> index 7db6ae3e9c0b..a56bc71f4eb5 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1578,6 +1578,8 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			if (PD_VDO_SVDM_VER(p[0]) < svdm_version)
->  				typec_partner_set_svdm_version(port->partner,
->  							       PD_VDO_SVDM_VER(p[0]));
-> +
-> +			tcpm_ams_start(port, DISCOVER_IDENTITY);
->  			/* 6.4.4.3.1: Only respond as UFP (device) */
->  			if (port->data_role == TYPEC_DEVICE &&
->  			    port->nr_snk_vdo) {
-> @@ -1596,14 +1598,19 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			}
->  			break;
->  		case CMD_DISCOVER_SVID:
-> +			tcpm_ams_start(port, DISCOVER_SVIDS);
->  			break;
->  		case CMD_DISCOVER_MODES:
-> +			tcpm_ams_start(port, DISCOVER_MODES);
->  			break;
->  		case CMD_ENTER_MODE:
-> +			tcpm_ams_start(port, DFP_TO_UFP_ENTER_MODE);
->  			break;
->  		case CMD_EXIT_MODE:
-> +			tcpm_ams_start(port, DFP_TO_UFP_EXIT_MODE);
->  			break;
->  		case CMD_ATTENTION:
-> +			tcpm_ams_start(port, ATTENTION);
->  			/* Attention command does not have response */
->  			*adev_action = ADEV_ATTENTION;
->  			return 0;
-> @@ -2315,6 +2322,12 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
->  	bool frs_enable;
->  	int ret;
->  
-> +	if (tcpm_vdm_ams(port) && type != PD_DATA_VENDOR_DEF) {
-> +		port->vdm_state = VDM_STATE_ERR_BUSY;
-> +		tcpm_ams_finish(port);
-> +		mod_vdm_delayed_work(port, 0);
-> +	}
-> +
->  	switch (type) {
->  	case PD_DATA_SOURCE_CAP:
->  		for (i = 0; i < cnt; i++)
-> @@ -2487,6 +2500,16 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
->  	enum pd_ctrl_msg_type type = pd_header_type_le(msg->header);
->  	enum tcpm_state next_state;
->  
-> +	/*
-> +	 * Stop VDM state machine if interrupted by other Messages while NOT_SUPP is allowed in
-> +	 * VDM AMS if waiting for VDM responses and will be handled later.
-> +	 */
-> +	if (tcpm_vdm_ams(port) && type != PD_CTRL_NOT_SUPP && type != PD_CTRL_GOOD_CRC) {
-> +		port->vdm_state = VDM_STATE_ERR_BUSY;
-> +		tcpm_ams_finish(port);
-> +		mod_vdm_delayed_work(port, 0);
-> +	}
-> +
->  	switch (type) {
->  	case PD_CTRL_GOOD_CRC:
->  	case PD_CTRL_PING:
-> @@ -2745,6 +2768,13 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
->  	enum pd_ext_msg_type type = pd_header_type_le(msg->header);
->  	unsigned int data_size = pd_ext_header_data_size_le(msg->ext_msg.header);
->  
-> +	/* stopping VDM state machine if interrupted by other Messages */
-> +	if (tcpm_vdm_ams(port)) {
-> +		port->vdm_state = VDM_STATE_ERR_BUSY;
-> +		tcpm_ams_finish(port);
-> +		mod_vdm_delayed_work(port, 0);
-> +	}
-> +
->  	if (!(msg->ext_msg.header & PD_EXT_HDR_CHUNKED)) {
->  		tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
->  		tcpm_log(port, "Unchunked extended messages unsupported");
+> @@ -2458,7 +2458,10 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
+>  					   NONE_AMS);
+>  		break;
+>  	case PD_DATA_VENDOR_DEF:
+> -		tcpm_handle_vdm_request(port, msg->payload, cnt);
+> +		if (tcpm_vdm_ams(port) || port->nr_snk_vdo)
+> +			tcpm_handle_vdm_request(port, msg->payload, cnt);
+> +		else if (port->negotiated_rev > PD_REV20)
+> +			tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
+>  		break;
+>  	case PD_DATA_BIST:
+>  		port->bist_request = le32_to_cpu(msg->payload[0]);
 > -- 
 > 2.31.1.818.g46aad6cb9e-goog
 
