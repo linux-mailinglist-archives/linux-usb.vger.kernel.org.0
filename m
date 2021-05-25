@@ -2,91 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 904FD38FC4E
-	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 10:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3138338FD37
+	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 10:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbhEYIMh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 04:12:37 -0400
-Received: from mga12.intel.com ([192.55.52.136]:32100 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232013AbhEYIKb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 May 2021 04:10:31 -0400
-IronPort-SDR: nI3rIPl8FHWSzH/Qa+Yin1ZxIPJvmRW4PyZuac6e87eQUayhxY2+Ca+fhQIud/aY0DkFghFfrV
- 2Gb5EK0svDpQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="181767647"
-X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
-   d="scan'208";a="181767647"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 00:38:57 -0700
-IronPort-SDR: w/+bxz1WPKfdBIpomh7O8zz32YMTtLiJVSQ+3Roqf0P3688ler2NvTd2Gsi0UjX5GI5A/KyE9K
- jHbb3c2FysyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
-   d="scan'208";a="546464456"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 00:38:56 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Peter Ganzhorn <peter.ganzhorn@googlemail.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 2/2] xhci: Fix 5.12 regression of missing xHC cache clearing command after a Stall
-Date:   Tue, 25 May 2021 10:41:00 +0300
-Message-Id: <20210525074100.1154090-3-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
-References: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
+        id S232208AbhEYIyr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 May 2021 04:54:47 -0400
+Received: from mailgw02.mediatek.com ([1.203.163.81]:17662 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230415AbhEYIyq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 May 2021 04:54:46 -0400
+X-UUID: 96d7248d572949e88ed084d68da836ce-20210525
+X-UUID: 96d7248d572949e88ed084d68da836ce-20210525
+Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1221224435; Tue, 25 May 2021 16:53:12 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ MTKMBS31N2.mediatek.inc (172.27.4.87) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 25 May 2021 16:53:09 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 25 May 2021 16:53:08 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/2] usb: roles: add helper usb_role_string()
+Date:   Tue, 25 May 2021 16:53:05 +0800
+Message-ID: <1621932786-9335-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-SNTS-SMTP: 9D3C1B779BF25D9D23F9965EFEF3D524173D86C78AC011EFF27669269D1E0E2E2000:8
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If endpoints halts due to a stall then the dequeue pointer read from
-hardware may already be set ahead of the stalled TRB.
-After commit 674f8438c121 ("xhci: split handling halted endpoints into two
-steps") in 5.12 xhci driver won't issue a Set TR Dequeue if hardware
-dequeue pointer is already in the right place.
+Introduces usb_role_string() function, which returns a
+human-readable name of provided usb role, it's useful to
+make the log readable.
 
-Turns out the "Set TR Dequeue pointer" command is anyway needed as it in
-addition to moving the dequeue pointer also clears endpoint state and
-cache.
-
-Reported-by: Peter Ganzhorn <peter.ganzhorn@googlemail.com>
-Tested-by: Peter Ganzhorn <peter.ganzhorn@googlemail.com>
-Fixes: 674f8438c121 ("xhci: split handling halted endpoints into two steps")
-Cc: <stable@vger.kernel.org> # 5.12
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/host/xhci-ring.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/usb/roles/class.c | 9 +++++++++
+ include/linux/usb/role.h  | 6 ++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 256d336354a0..6acd2329e08d 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -933,14 +933,18 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 			continue;
- 		}
- 		/*
--		 * If ring stopped on the TD we need to cancel, then we have to
-+		 * If a ring stopped on the TD we need to cancel then we have to
- 		 * move the xHC endpoint ring dequeue pointer past this TD.
-+		 * Rings halted due to STALL may show hw_deq is past the stalled
-+		 * TD, but still require a set TR Deq command to flush xHC cache.
- 		 */
- 		hw_deq = xhci_get_hw_deq(xhci, ep->vdev, ep->ep_index,
- 					 td->urb->stream_id);
- 		hw_deq &= ~0xf;
+diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+index 33b637d0d8d9..dfaed7eee94f 100644
+--- a/drivers/usb/roles/class.c
++++ b/drivers/usb/roles/class.c
+@@ -214,6 +214,15 @@ static const char * const usb_roles[] = {
+ 	[USB_ROLE_DEVICE]	= "device",
+ };
  
--		if (trb_in_td(xhci, td->start_seg, td->first_trb,
-+		if (td->cancel_status == TD_HALTED) {
-+			cached_td = td;
-+		} else if (trb_in_td(xhci, td->start_seg, td->first_trb,
- 			      td->last_trb, hw_deq, false)) {
- 			switch (td->cancel_status) {
- 			case TD_CLEARED: /* TD is already no-op */
++const char *usb_role_string(enum usb_role role)
++{
++	if (role < 0 || role >= ARRAY_SIZE(usb_roles))
++		return "unknown";
++
++	return usb_roles[role];
++}
++EXPORT_SYMBOL_GPL(usb_role_string);
++
+ static ssize_t
+ role_show(struct device *dev, struct device_attribute *attr, char *buf)
+ {
+diff --git a/include/linux/usb/role.h b/include/linux/usb/role.h
+index 0164fed31b06..031f148ab373 100644
+--- a/include/linux/usb/role.h
++++ b/include/linux/usb/role.h
+@@ -65,6 +65,7 @@ void usb_role_switch_unregister(struct usb_role_switch *sw);
+ 
+ void usb_role_switch_set_drvdata(struct usb_role_switch *sw, void *data);
+ void *usb_role_switch_get_drvdata(struct usb_role_switch *sw);
++const char *usb_role_string(enum usb_role role);
+ #else
+ static inline int usb_role_switch_set_role(struct usb_role_switch *sw,
+ 		enum usb_role role)
+@@ -109,6 +110,11 @@ static inline void *usb_role_switch_get_drvdata(struct usb_role_switch *sw)
+ 	return NULL;
+ }
+ 
++static inline const char *usb_role_string(enum usb_role role)
++{
++	return "unknown";
++}
++
+ #endif
+ 
+ #endif /* __LINUX_USB_ROLE_H */
 -- 
-2.25.1
+2.18.0
 
