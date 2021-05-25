@@ -2,75 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 589A338F9F9
-	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 07:36:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E5238FB57
+	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 09:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbhEYFh1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 01:37:27 -0400
-Received: from lb2-smtp-cloud7.xs4all.net ([194.109.24.28]:60813 "EHLO
-        lb2-smtp-cloud7.xs4all.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230218AbhEYFh1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 May 2021 01:37:27 -0400
-Received: from cust-57f2be97 ([IPv6:fc0c:c196:c6c4:fdf1:aa47:ab6:e251:d2a8])
-        by smtp-cloud7.xs4all.net with ESMTPSA
-        id lPjMlomNbMajplPjOlRj72; Tue, 25 May 2021 07:35:57 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xs4all.nl; s=s2;
-        t=1621920957; bh=UFJ+h/zoNp6NTMwOK6Bm97RcwDXj9NHL9cxFuKzpOXI=;
-        h=Subject:To:From:Message-ID:Date:MIME-Version:Content-Type:From:
-         Subject;
-        b=KgH5UuBlPKL7pImIqK3imT+5fsRfMUqr7dNtPwh4W/XOmI7l82RWfGluwlFRNrEDU
-         2YDMx7RTYs1EbqJ7T9+7S1Rub4pzJT2ZOWnMaETJF61HMzfDY8kM2vUjdc2Q9hgsNM
-         0k6/VfvtA7eZHyYUzpYrvUmoSMYIfGK4HZTW6hHCYXhnsu/cJ4NeXhJ9FNNBLIQQaB
-         vYtFH/7BatQH1tTg3Zgt8aSpqulG73YT2NuFYvbW04zoEmJBXyfKzmmwzxKqEaGVrv
-         ggzDbpNRlbQxIaoK+WFso1F7SUCYDdCqc6tMEdD2TSfydmSGrIey1saNBwK+hD9OVz
-         Ob8vxe5hL8sHg==
-Subject: Re: 5.11.17: xhci_hcd 0000:0a:00.3: WARN Event TRB for slot 3 ep 12
- with no TDs queued?
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        USB list <linux-usb@vger.kernel.org>
-References: <18f75805-2538-476f-38bb-d3c6e1c2bf5e@xs4all.nl>
- <6a4c37df-8403-4026-6ff2-189ce1e87264@linux.intel.com>
-From:   Udo van den Heuvel <udovdh@xs4all.nl>
-Organization: hierzo
-Message-ID: <758067a5-66e2-c979-ebf0-95c738283355@xs4all.nl>
-Date:   Tue, 25 May 2021 07:35:52 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S231389AbhEYHDT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 May 2021 03:03:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54290 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231319AbhEYHDR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 May 2021 03:03:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 30F4F61019;
+        Tue, 25 May 2021 07:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1621926108;
+        bh=PO1ijCuYZAqxglfvUIFTRxhCFsTAS+p/J6Dr85+93w4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=c7WU6/WCt3TVby20Rg6iYIjPTHySOfVwdRWAJEv4ktDz20QzMsQrCJl3ThzpOYyLo
+         F8pBVyZLRLKAH7NoD6zjSxA3Pmu1532fSTqOx1HKJVeb8bpUhXi8rPpVbGKZTbxYCt
+         T9ifFJ81Vz9HDaKeovy7IFhAAZzrt7GZ/s5wWgAvciL3tp29YdmIzUxiVZubgPkyUT
+         6+ZWx5WkxlQGPMK01m6IXeMBYEkMI+iVrfmUXdNBb9KzxAoTcbO30irjOM+AdN8o1L
+         VgCf9I92zgBmf4S/90xpawDS9XCfLj4gDtUEOhHqhu9gDaFa0jdLsGzKEm+CJiNAre
+         kH01QAgSFveuA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1llR4S-0004Ca-6o; Tue, 25 May 2021 09:01:44 +0200
+Date:   Tue, 25 May 2021 09:01:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alexandre GRIVEAUX <agriveaux@deutnet.info>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND 1/2] USB: serial: omninet: Adding Zyxel Omni 56K
+ Plus
+Message-ID: <YKyg2EYDn2BEnvYU@hovoldconsulting.com>
+References: <20210523163522.1690-1-agriveaux@deutnet.info>
 MIME-Version: 1.0
-In-Reply-To: <6a4c37df-8403-4026-6ff2-189ce1e87264@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4xfPHLYzlHIePjbamEOQawCP3Kuv4YMW/RHcb+FOHu407KrvGi5M2Hx9/91JJGcsz+EtzfdIap2SWbrrFgo10A6nayfj+qsYryWkHH994scRdNsXf0+L46
- AqmYjzDKi6yGzj7V5dyWMsnj4y9lE9E9kjojKHqSyh0w0wcdtzwWALlxFx/ljqKWSrDOcQQLwMHcwXkGcmxyZRwfVsJYqLaBw2C9cavqxYBpdeXx7ZO7t82m
- d6vhKZejXxVFPWF+6zHeow==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210523163522.1690-1-agriveaux@deutnet.info>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 03-05-2021 10:57, Mathias Nyman wrote:
->> When 5.11.17 gives me a load of:
->>
->> xhci_hcd 0000:0a:00.3: WARN Event TRB for slot 3 ep 12 with no TDs queued
->>
->> What happened?
+On Sun, May 23, 2021 at 06:35:21PM +0200, Alexandre GRIVEAUX wrote:
+> Adding Zyxel Omni 56K Plus modem, this modem include:
+
+Nit: In the future, try to use imperative mood in your commit messages
+(i.e. use "add" rather than "adding").
+
+Also, why is there a RESEND prefix in the subject? This is the first
+time I see this patch.
+
+> USB chip:
+> NetChip
+> NET2888
 > 
-> Either your host is sending spurious events, or more likely this TD (transfer descriptor)
-> was already handled and given back by driver due some event mid TD.
-> Host still has this TD cached and generates events for last entry of TD after xhci driver gave it back.
-
-It happened again without me really using USB. (i.e.: no plugging in/out 
-of USB items)
-Does that tell you anything?
-The PC has USB keyboard/mouse, but also a connection to the USB hub in 
-the monitor.
-
->> What can I do (to help) fix it?
+> Main chip:
+> 901041A
+> F721501APGF
 > 
-> First try 5.12 (just came out) It has some xhci driver changes in this area.
+> Another modem using the same chips is the Zyxel Omni 56K DUO/NEO,
+> could be added with the right USB ID.
+> 
+> Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
+> ---
+>  drivers/usb/serial/omninet.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/omninet.c b/drivers/usb/serial/omninet.c
+> index 83c62f920c50..8be91f5a4dd7 100644
+> --- a/drivers/usb/serial/omninet.c
+> +++ b/drivers/usb/serial/omninet.c
+> @@ -26,6 +26,7 @@
+>  
+>  #define ZYXEL_VENDOR_ID		0x0586
+>  #define ZYXEL_OMNINET_ID	0x1000
+> +#define ZYXEL_OMNI_56K_PLUS_ID	0x1500
+>  /* This one seems to be a re-branded ZyXEL device */
+>  #define BT_IGNITIONPRO_ID	0x2000
+>  
+> @@ -41,6 +42,7 @@ static void omninet_port_remove(struct usb_serial_port *port);
+>  static const struct usb_device_id id_table[] = {
+>  	{ USB_DEVICE(ZYXEL_VENDOR_ID, ZYXEL_OMNINET_ID) },
+>  	{ USB_DEVICE(ZYXEL_VENDOR_ID, BT_IGNITIONPRO_ID) },
+> +	{ USB_DEVICE(ZYXEL_VENDOR_ID, ZYXEL_OMNI_56K_PLUS_ID) },
+>  	{ }						/* Terminating entry */
+>  };
+>  MODULE_DEVICE_TABLE(usb, id_table);
 
-5.12.6 here...
+Now applied with a slightly modified commit message. Thanks.
 
-I'll look into generating a trace.
-
-Udo
+Johan
