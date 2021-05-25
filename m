@@ -2,91 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5A838FB5B
-	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 09:03:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4343738FC3F
+	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 10:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbhEYHFA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 03:05:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54626 "EHLO mail.kernel.org"
+        id S232281AbhEYIKc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 May 2021 04:10:32 -0400
+Received: from mga12.intel.com ([192.55.52.136]:31557 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231319AbhEYHE7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 May 2021 03:04:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4355D611C9;
-        Tue, 25 May 2021 07:03:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1621926210;
-        bh=LHxAXrQM3bs4mMPMgzLbnfYyqzVG9guiJIh9pDIPMGU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qnDS0E8KEpCRsaoGC/T2YzIoUYdhoTr03vmSn81KzVC6ve2JFSguA1U+1fRwMnjJY
-         iRxWMHQMAqw7MQAWI2+XGVEkIhdzsFcSm8y4gAXSjQEvDr5/H1T2As3eMin6pFWF/5
-         wgdwJaBeSUCSlN4S32TRH+MiKTTZ6tPS7/LnF9RmlT92OQw4cLpi7nWkv6DNZsJ5MU
-         aq7KqnX5U+Qwxx0dEZ2+6WLRHN7KHCOpG+Q/gm79nOH8fb5b9QIHfTLhNgNhPFrxVx
-         ucAn5CUmxrpvR+eClSDZ+gVh+Gtl3ZflAvWLUEVMxb0wAuwNZ4ExDKJuqVvHZjSHI9
-         AgRDK8Ww82Tmg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1llR66-0000Gc-E2; Tue, 25 May 2021 09:03:26 +0200
-Date:   Tue, 25 May 2021 09:03:26 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alexandre GRIVEAUX <agriveaux@deutnet.info>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND 2/2] USB: serial: omninet: Renaming driver to
- Zyxel omni.net
-Message-ID: <YKyhPtVUwdGdXAoq@hovoldconsulting.com>
-References: <20210523163522.1690-1-agriveaux@deutnet.info>
- <20210523163522.1690-2-agriveaux@deutnet.info>
+        id S232049AbhEYIJ3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 May 2021 04:09:29 -0400
+IronPort-SDR: 5I+rW76qT0jecNI1r+jmg0zBn/xplL62kBZfB6v2skpPeynXW6NbSPyCvVg88Q7gHZrQBolMLt
+ lbHDtiXoCQVw==
+X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="181767643"
+X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
+   d="scan'208";a="181767643"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 00:38:54 -0700
+IronPort-SDR: C5pSrs8E5yUEZPEIwPvGInwfjwLdbwXRmaJfjy6XElwVok7cKVehJnTdPEFb+F2vt1BHIITJaV
+ e6eMR5mmMmsQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
+   d="scan'208";a="546464435"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 00:38:53 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/2] xhci fixes for usb-linus
+Date:   Tue, 25 May 2021 10:40:58 +0300
+Message-Id: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210523163522.1690-2-agriveaux@deutnet.info>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, May 23, 2021 at 06:35:22PM +0200, Alexandre GRIVEAUX wrote:
-> With the inclusion of Omni 56K Plus, this driver seem to be more common
-> among the family of Zyxel omni modem.
+Hi Greg
 
-I amended the commit message to make it more clear that you're updating
-the driver and module descriptions and not really renaming the driver.
+two patches for usb-linus and 5.12 stable
+xhci changes in 5.12 caused a regression in stall handling.
+Due to this some usb card readers failed to work with 5.12
 
-> Signed-off-by: Alexandre GRIVEAUX <agriveaux@deutnet.info>
-> ---
->  drivers/usb/serial/omninet.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/serial/omninet.c b/drivers/usb/serial/omninet.c
-> index 8be91f5a4dd7..79c0dab46ae8 100644
-> --- a/drivers/usb/serial/omninet.c
-> +++ b/drivers/usb/serial/omninet.c
-> @@ -1,6 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
-> - * USB ZyXEL omni.net LCD PLUS driver
-> + * USB ZyXEL omni.net driver
->   *
->   * Copyright (C) 2013,2017 Johan Hovold <johan@kernel.org>
->   *
-> @@ -22,7 +22,7 @@
->  #include <linux/usb/serial.h>
->  
->  #define DRIVER_AUTHOR "Alessandro Zummo"
-> -#define DRIVER_DESC "USB ZyXEL omni.net LCD PLUS Driver"
-> +#define DRIVER_DESC "USB ZyXEL omni.net Driver"
->  
->  #define ZYXEL_VENDOR_ID		0x0586
->  #define ZYXEL_OMNINET_ID	0x1000
-> @@ -52,7 +52,7 @@ static struct usb_serial_driver zyxel_omninet_device = {
->  		.owner =	THIS_MODULE,
->  		.name =		"omninet",
->  	},
-> -	.description =		"ZyXEL - omni.net lcd plus usb",
-> +	.description =		"ZyXEL - omni.net usb",
->  	.id_table =		id_table,
->  	.num_bulk_out =		2,
->  	.calc_num_ports =	omninet_calc_num_ports,
+These two patches fix that regression.
 
-Now applied.
+Thanks
+-Mathias
 
-Johan
+Mathias Nyman (2):
+  xhci: fix giving back URB with incorrect status regression in 5.12
+  xhci: Fix 5.12 regression of missing xHC cache clearing command after
+    a Stall
+
+ drivers/usb/host/xhci-ring.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+
