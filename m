@@ -2,62 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4343738FC3F
-	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 10:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018C938FC47
+	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 10:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbhEYIKc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 04:10:32 -0400
-Received: from mga12.intel.com ([192.55.52.136]:31557 "EHLO mga12.intel.com"
+        id S232068AbhEYIK5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 May 2021 04:10:57 -0400
+Received: from mga12.intel.com ([192.55.52.136]:31759 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232049AbhEYIJ3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 25 May 2021 04:09:29 -0400
-IronPort-SDR: 5I+rW76qT0jecNI1r+jmg0zBn/xplL62kBZfB6v2skpPeynXW6NbSPyCvVg88Q7gHZrQBolMLt
- lbHDtiXoCQVw==
-X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="181767643"
+        id S232079AbhEYIJe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 May 2021 04:09:34 -0400
+IronPort-SDR: IoDfQ+6EsChNy23OO+CCSFnFNccJpJXdePk7/V5ldvr2/bKLHMbURYinsC1rCep8xO50gIadPn
+ MjY5x2J0efnQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,9994"; a="181767645"
 X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
-   d="scan'208";a="181767643"
+   d="scan'208";a="181767645"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 00:38:54 -0700
-IronPort-SDR: C5pSrs8E5yUEZPEIwPvGInwfjwLdbwXRmaJfjy6XElwVok7cKVehJnTdPEFb+F2vt1BHIITJaV
- e6eMR5mmMmsQ==
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 May 2021 00:38:56 -0700
+IronPort-SDR: +GtxmqZd4aKvHYndGGGVhQW8fJdQ1/uPZwb8C5RZQLHExwu8Ekh7AD3/b2dNJLENQYzwbxnwIw
+ Dg6vGmLV7viQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.82,327,1613462400"; 
-   d="scan'208";a="546464435"
+   d="scan'208";a="546464445"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 00:38:53 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 25 May 2021 00:38:54 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 0/2] xhci fixes for usb-linus
-Date:   Tue, 25 May 2021 10:40:58 +0300
-Message-Id: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Peter Ganzhorn <peter.ganzhorn@googlemail.com>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] xhci: fix giving back URB with incorrect status regression in 5.12
+Date:   Tue, 25 May 2021 10:40:59 +0300
+Message-Id: <20210525074100.1154090-2-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
+References: <20210525074100.1154090-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg
+5.12 kernel changes how xhci handles cancelled URBs and halted
+endpoints. Among these changes cancelled and stalled URBs are no longer
+given back before they are cleared from xHC hardware cache.
 
-two patches for usb-linus and 5.12 stable
-xhci changes in 5.12 caused a regression in stall handling.
-Due to this some usb card readers failed to work with 5.12
+These changes unfortunately cleared the -EPIPE status of a stalled
+transfer in one case before giving bak the URB, causing a USB card reader
+to fail from working.
 
-These two patches fix that regression.
+Reported-by: Peter Ganzhorn <peter.ganzhorn@googlemail.com>
+Tested-by: Peter Ganzhorn <peter.ganzhorn@googlemail.com>
+Fixes: 674f8438c121 ("xhci: split handling halted endpoints into two steps")
+Cc: <stable@vger.kernel.org> # 5.12
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-ring.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Thanks
--Mathias
-
-Mathias Nyman (2):
-  xhci: fix giving back URB with incorrect status regression in 5.12
-  xhci: Fix 5.12 regression of missing xHC cache clearing command after
-    a Stall
-
- drivers/usb/host/xhci-ring.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index a8e4189277da..256d336354a0 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -828,14 +828,10 @@ static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
+ 	list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list,
+ 				 cancelled_td_list) {
+ 
+-		/*
+-		 * Doesn't matter what we pass for status, since the core will
+-		 * just overwrite it (because the URB has been unlinked).
+-		 */
+ 		ring = xhci_urb_to_transfer_ring(ep->xhci, td->urb);
+ 
+ 		if (td->cancel_status == TD_CLEARED)
+-			xhci_td_cleanup(ep->xhci, td, ring, 0);
++			xhci_td_cleanup(ep->xhci, td, ring, td->status);
+ 
+ 		if (ep->xhci->xhc_state & XHCI_STATE_DYING)
+ 			return;
 -- 
 2.25.1
 
