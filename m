@@ -2,109 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186013904C6
-	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 17:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 550AC390738
+	for <lists+linux-usb@lfdr.de>; Tue, 25 May 2021 19:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbhEYPNj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 11:13:39 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44909 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229894AbhEYPNj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 May 2021 11:13:39 -0400
-Received: (qmail 1365282 invoked by uid 1000); 25 May 2021 11:12:08 -0400
-Date:   Tue, 25 May 2021 11:12:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg KH <greg@kroah.com>, "Geoffrey D. Bennett" <g@b4.vu>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH v2] USB: core: WARN if pipe direction != setup packet
- direction
-Message-ID: <20210525151208.GA1363494@rowland.harvard.edu>
-References: <20210520202056.GB1216852@rowland.harvard.edu>
- <YKdpThmE1xenUjhI@hovoldconsulting.com>
- <YKey+pWP8iKkCV1Q@hovoldconsulting.com>
- <20210522021623.GB1260282@rowland.harvard.edu>
- <YKuQgPd+JFNnNcfd@hovoldconsulting.com>
- <20210524144736.GB1320815@rowland.harvard.edu>
- <YKzwMVxgaVycl+Yi@hovoldconsulting.com>
+        id S233478AbhEYRPx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 25 May 2021 13:15:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54208 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233068AbhEYRPw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 25 May 2021 13:15:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3DD4F6141D;
+        Tue, 25 May 2021 17:14:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1621962862;
+        bh=fDkfNMlC9wQ7QHYeWu3hJTuwGFbSKKYtHYUyCFPqNVc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=XvWewFeNjURqwMK/ax1RVSuYVzgdl8RH7IaMAm/FKpxDSpDCztb5eznOVedwuGFdh
+         rLiO6SzGdN3I9ENd/tfFDJEU6xoL0E6Z9pSi/EFukHj0AVNzNqmr9HUqTsWShfxpXw
+         0hTACj8BE3eKAciD5JW3qfE1JSlDxh1frGrTgBv0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Peter Chen <peter.chen@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] USB: chipidea: remove dentry storage for debugfs file
+Date:   Tue, 25 May 2021 19:14:19 +0200
+Message-Id: <20210525171419.758146-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKzwMVxgaVycl+Yi@hovoldconsulting.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 25, 2021 at 02:40:17PM +0200, Johan Hovold wrote:
-> On Mon, May 24, 2021 at 10:47:36AM -0400, Alan Stern wrote:
-> > Do you think the check should be weakened for this case (i.e., ignore 
-> > the direction bit in bRequestType when wLength is 0)?  So far it seems 
-> > that the number of places getting this wrong isn't prohibitively large.
-> 
-> In a sense the request-type direction bit is already ignored when
-> wLength is zero. The question is if we should ignore the direction bit
-> of the pipe argument, or rather allow it to be IN, when wLength is
-> zero.
-> 
-> With the above check now merged, the following transfer triggers the
-> warning:
-> 
-> 	usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-> 			0, USB_DIR_IN | USB_TYPE_VENDOR,
-> 			0x0020, CMD_I2C_DA_RD,
-> 			NULL, 0, 1000);
-> 
-> This request was used by a media driver to determine if a certain i2c
-> register was accessible by attempting to read it without really caring
-> about its value.
-> 
-> I changed the above to actually read the value, but this is an example
-> where allowing usb_rcvctrlpipe() might otherwise make sense was it not
-> for the possibility that some HCD could get confused.
-> 
-> Changing the above to use usb_sndctrlpipe() while either keeping
-> USB_DIR_IN or dropping USB_DIR_IN (for an I2C read request) does not
-> seem right. The latter could potentially even confuse some firmware even
-> if the direction bit is supposed to be ignored.
-> 
-> So far this is the only example I've found where changing to
-> usb_sndctrlpipe() and USB_DIR_OUT isn't obviously correct, but on the
-> other hand just reading the register in question is straight-forward
-> enough and does not require any exceptions in usb_submit_urb().
+There is no need to store the dentry pointer for a debugfs file that we
+only use to remove it when the device goes away.  debugfs can do the
+lookup for us instead, saving us some trouble, and making things smaller
+overall.
 
-Okay, yes.  This seems like a sufficiently unusual edge case that we 
-don't need to add special code to cater for it.
+Cc: Peter Chen <peter.chen@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/chipidea/ci.h    |  2 --
+ drivers/usb/chipidea/debug.c | 34 ++++++++++++++--------------------
+ 2 files changed, 14 insertions(+), 22 deletions(-)
 
-In fact, the direction bit in the pipe for a control transfer is never 
-exposed to the USB device.  All the device sees is bRequestType and the 
-data/status packet tokens (IN or OUT), which are dictated by the USB 
-protocol.  So the fact that we insist on usb_sndctrlpipe for what will 
-ultimately become an I2C read request is unimportant.
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index 0697eb980e5f..99440baa6458 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -195,7 +195,6 @@ struct hw_bank {
+  * @phy: pointer to PHY, if any
+  * @usb_phy: pointer to USB PHY, if any and if using the USB PHY framework
+  * @hcd: pointer to usb_hcd for ehci host driver
+- * @debugfs: root dentry for this controller in debugfs
+  * @id_event: indicates there is an id event, and handled at ci_otg_work
+  * @b_sess_valid_event: indicates there is a vbus event, and handled
+  * at ci_otg_work
+@@ -249,7 +248,6 @@ struct ci_hdrc {
+ 	/* old usb_phy interface */
+ 	struct usb_phy			*usb_phy;
+ 	struct usb_hcd			*hcd;
+-	struct dentry			*debugfs;
+ 	bool				id_event;
+ 	bool				b_sess_valid_event;
+ 	bool				imx28_write_fix;
+diff --git a/drivers/usb/chipidea/debug.c b/drivers/usb/chipidea/debug.c
+index da5d18cf6840..faf6b078b6c4 100644
+--- a/drivers/usb/chipidea/debug.c
++++ b/drivers/usb/chipidea/debug.c
+@@ -342,26 +342,20 @@ DEFINE_SHOW_ATTRIBUTE(ci_registers);
+  */
+ void dbg_create_files(struct ci_hdrc *ci)
+ {
+-	ci->debugfs = debugfs_create_dir(dev_name(ci->dev), usb_debug_root);
+-
+-	debugfs_create_file("device", S_IRUGO, ci->debugfs, ci,
+-			    &ci_device_fops);
+-	debugfs_create_file("port_test", S_IRUGO | S_IWUSR, ci->debugfs, ci,
+-			    &ci_port_test_fops);
+-	debugfs_create_file("qheads", S_IRUGO, ci->debugfs, ci,
+-			    &ci_qheads_fops);
+-	debugfs_create_file("requests", S_IRUGO, ci->debugfs, ci,
+-			    &ci_requests_fops);
+-
+-	if (ci_otg_is_fsm_mode(ci)) {
+-		debugfs_create_file("otg", S_IRUGO, ci->debugfs, ci,
+-				    &ci_otg_fops);
+-	}
++	struct dentry *dir;
++
++	dir = debugfs_create_dir(dev_name(ci->dev), usb_debug_root);
++
++	debugfs_create_file("device", S_IRUGO, dir, ci, &ci_device_fops);
++	debugfs_create_file("port_test", S_IRUGO | S_IWUSR, dir, ci, &ci_port_test_fops);
++	debugfs_create_file("qheads", S_IRUGO, dir, ci, &ci_qheads_fops);
++	debugfs_create_file("requests", S_IRUGO, dir, ci, &ci_requests_fops);
++
++	if (ci_otg_is_fsm_mode(ci))
++		debugfs_create_file("otg", S_IRUGO, dir, ci, &ci_otg_fops);
+ 
+-	debugfs_create_file("role", S_IRUGO | S_IWUSR, ci->debugfs, ci,
+-			    &ci_role_fops);
+-	debugfs_create_file("registers", S_IRUGO, ci->debugfs, ci,
+-			    &ci_registers_fops);
++	debugfs_create_file("role", S_IRUGO | S_IWUSR, dir, ci, &ci_role_fops);
++	debugfs_create_file("registers", S_IRUGO, dir, ci, &ci_registers_fops);
+ }
+ 
+ /**
+@@ -370,5 +364,5 @@ void dbg_create_files(struct ci_hdrc *ci)
+  */
+ void dbg_remove_files(struct ci_hdrc *ci)
+ {
+-	debugfs_remove_recursive(ci->debugfs);
++	debugfs_remove(debugfs_lookup(dev_name(ci->dev), usb_debug_root));
+ }
+-- 
+2.31.1
 
-> We could perhaps even go the other way and strengthen the check to warn
-> if USB_DIR_IN is set when wLength is zero...
-
-Given that the spec says the direction bit is ignored when wLength is 
-zero, I think we shouldn't do this.
-
-> > PS: Another check we could add is to make sure that the 
-> > transfer_buffer_length value agrees with wLength.  Should I add such a 
-> > check?
-> 
-> That sounds sensible as some of the HCDs only appears to check
-> transfer_buffer_length when handling the data stage and a mismatch could
-> amount to undefined behaviour (OUT) or perhaps even buffer overruns
-> (IN).
-> 
-> Judging from a quick check we don't seem to have any such cases
-> currently so this could be implemented as a submission failure rather
-> than another warning.
-
-All right; I'll make the submission fail with a -EBADR (invalid request 
-descriptor) error; that seems like a good choice of an obscure and 
-otherwise unused value to match this case.  But I'll put in a debugging 
-message, so that anyone who wants to know if this is occurring will have 
-a way to find out.
-
-Alan Stern
