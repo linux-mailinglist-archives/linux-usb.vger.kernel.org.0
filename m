@@ -2,60 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B7EA391859
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 15:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF7B339185C
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 15:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbhEZNCo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 May 2021 09:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
+        id S235037AbhEZNCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 09:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234915AbhEZNCe (ORCPT
+        with ESMTP id S234922AbhEZNCe (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 09:02:34 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580EAC061348
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BDCC06134A
         for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 06:01:00 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id p7so1021401wru.10
+Received: by mail-wm1-x336.google.com with SMTP id o127so663966wmo.4
         for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 06:01:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qOQPZ7P2+d7bQl1bhkEaXoufFGWie1gF+nljkJu9wC0=;
-        b=sKCa9Z5UGvS37C92I4u+KIUCl0wzXAzjIP7bBogERl5FuUyOPPKclkJJw06G1h822n
-         Qmfo5qvZZPCgUB5+vngf8BRnUzXFdWmoekhArA15G2QU7E0Gny0aj1kTcgvkrB22tCsb
-         6LCpj/Epfo+c1p3HHg7gpXf/W3FTVaYwyMomjJyZKeyODiTncWS/i3PGUR/qCXtnLFdo
-         tx6btx+Ul9mYh2MxVuI+7AewtWlwl1XrrL2P/z/HiDtodvogUfsdFhf8zC2FrfdgiJ4s
-         ERiGPcmn8FSG3YdQfVAVfbLXUDW/XupGyx26HrxD6pf1oWhAsIoOoz2+6bERIeaWrV1s
-         uZ7w==
+        bh=W+OavcC8Mf6L2+I1rnG6cw4PADOCCv9K+yYp1HsQIMQ=;
+        b=mNqpAYvfoEj+tCFNvR7ME0eJRqTVE7OfqAT8QRdOBudemLP5G/52MP4JFZZCzKPaLG
+         RefcZvvsZuHrGpGwKh68LNcy+Mj6HZJnmwZ9ZgcCNKiMgE5I/2DpyDX31AfcfyOb+aPv
+         iXZdJBAuR2ds+A4Mje61JH6uIkPJChRnuCSoldrSSo8SuBuvQvt0AZkaueITAIcIfM/K
+         BSbMPBqbZ5uoDSnvuQmTZOH6HyzUlEgn+d2LLS9vLAllECgYC9q04FOTiSE4GktTeprJ
+         wL9XloRLy3LdSApxrZ7JE/PycHfUz5CWAz9lgraXvOIMO3pjz30QfQ/f2Pag2d8CCCOW
+         83mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qOQPZ7P2+d7bQl1bhkEaXoufFGWie1gF+nljkJu9wC0=;
-        b=fgahQAgaIakA06oggGu+lEYZJS5XsotIVQh2BZwnJCsBWuqCtpMyEeBhwfIvt2S3md
-         2YOXp/KfseqQXvAvbMyiiNnLJBodKbnPb+auS5YwhUD68V5ETpbvKtzkq5eh7l6v6nrv
-         Xh5CYknS0Q7m+IxKiKiLGJ3nWz4n+HchJHaTuiHkYxUu/APZf+mnx5fy2hkk5eUWSTKu
-         gLORXQ/DUsj5FxfIyj/lhNhMYrjz7Zn4LnTFhEIfCX47eBWyj0LnZo4HjTxqGXr0MYLx
-         wZYPBsx0me4tEH6j5truc9pobjQGukJcX6huYLlYyxiA/ZCC+b3qKTitBCVaIS8jObUF
-         64sw==
-X-Gm-Message-State: AOAM533d0c5FHB8ssAtfumtezF3oLa3St+IHSV/ghQyf5Run5rMtxpow
-        b2zaW0TOQpu43Wm7QL/kIF6pZw==
-X-Google-Smtp-Source: ABdhPJxU9uTEqIWW9yn8i9bsD/tIXZXZwWSIhy2p/Ss0S2v8A+QUQiF+aS1Ux0gOmb1wMwf5cEidAA==
-X-Received: by 2002:adf:ea8e:: with SMTP id s14mr14015140wrm.135.1622034058258;
-        Wed, 26 May 2021 06:00:58 -0700 (PDT)
+        bh=W+OavcC8Mf6L2+I1rnG6cw4PADOCCv9K+yYp1HsQIMQ=;
+        b=oNi6dCRup4pu4FkjpvSLChiqdomsayatKc52eyv7qWydj0ZjNACOmqHNfVw/9jbnTs
+         NreEopkAFytVzouuCOhpmfIPB1hjK5u7ldzKqR7LNkBnP7GlTUwaEbjcy8/AaKixyTJO
+         yuvV9h2VtOvYFnRFi8PisNumEUJ4Gt1wn3jprzVALbp8945Lxe+LWmmDchV0YIxC/KVx
+         wBjJNrriXcVOkZayNtt+Kr40c4Soc7J3pkPDWAZflPjUwj7YFoRkJUmPnpbnA+0WcZ1g
+         FvfQ/uC+pt32T5Ye86hpICG6xDl2WDXYrBNBFumGElHHXVTAaUAKqB0mQPg9VhvuV/DO
+         PP2w==
+X-Gm-Message-State: AOAM5339omOwETttssP5vdt6mzFOkdalYuI5dwdpRrq8SDacG+YoGK4W
+        ubW6AKmGw4qFs3R3RbHILEYO9w==
+X-Google-Smtp-Source: ABdhPJz4pZHD91XhLrHvwY+5lCn0MS2Yz8Pz4Px0N5N/OHjdWt+SVabsbU49zGUe4FGof5HaBpcnNw==
+X-Received: by 2002:a05:600c:4f0f:: with SMTP id l15mr3304651wmq.143.1622034059177;
+        Wed, 26 May 2021 06:00:59 -0700 (PDT)
 Received: from dell.default ([91.110.221.223])
-        by smtp.gmail.com with ESMTPSA id y14sm6430036wmj.37.2021.05.26.06.00.57
+        by smtp.gmail.com with ESMTPSA id y14sm6430036wmj.37.2021.05.26.06.00.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 06:00:57 -0700 (PDT)
+        Wed, 26 May 2021 06:00:58 -0700 (PDT)
 From:   Lee Jones <lee.jones@linaro.org>
 To:     lee.jones@linaro.org
 Cc:     linux-kernel@vger.kernel.org,
         Minas Harutyunyan <hminas@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: [PATCH 11/24] usb: dwc2: hcd_queue: Fix typeo in function name 'dwc2_hs_pmap_unschedule()'
-Date:   Wed, 26 May 2021 14:00:24 +0100
-Message-Id: <20210526130037.856068-12-lee.jones@linaro.org>
+Subject: [PATCH 12/24] usb: dwc2: pci: Fix possible copy/paste issue
+Date:   Wed, 26 May 2021 14:00:25 +0100
+Message-Id: <20210526130037.856068-13-lee.jones@linaro.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20210526130037.856068-1-lee.jones@linaro.org>
 References: <20210526130037.856068-1-lee.jones@linaro.org>
@@ -67,29 +67,29 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 Fixes the following W=1 kernel build warning(s):
 
- drivers/usb/dwc2/hcd_queue.c:686: warning: expecting prototype for dwc2_ls_pmap_unschedule(). Prototype was for dwc2_hs_pmap_unschedule() instead
+ drivers/usb/dwc2/pci.c:73: warning: expecting prototype for dwc2_pci_probe(). Prototype was for dwc2_pci_remove() instead
 
 Cc: Minas Harutyunyan <hminas@synopsys.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org
 Signed-off-by: Lee Jones <lee.jones@linaro.org>
 ---
- drivers/usb/dwc2/hcd_queue.c | 2 +-
+ drivers/usb/dwc2/pci.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc2/hcd_queue.c b/drivers/usb/dwc2/hcd_queue.c
-index 621a4846bd05a..89a788326c562 100644
---- a/drivers/usb/dwc2/hcd_queue.c
-+++ b/drivers/usb/dwc2/hcd_queue.c
-@@ -675,7 +675,7 @@ static int dwc2_hs_pmap_schedule(struct dwc2_hsotg *hsotg, struct dwc2_qh *qh,
- }
+diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
+index 0000151e3ca96..a93559b4ecdbc 100644
+--- a/drivers/usb/dwc2/pci.c
++++ b/drivers/usb/dwc2/pci.c
+@@ -64,7 +64,7 @@ struct dwc2_pci_glue {
+ };
  
  /**
-- * dwc2_ls_pmap_unschedule() - Undo work done by dwc2_hs_pmap_schedule()
-+ * dwc2_hs_pmap_unschedule() - Undo work done by dwc2_hs_pmap_schedule()
+- * dwc2_pci_probe() - Provides the cleanup entry points for the DWC_otg PCI
++ * dwc2_pci_remove() - Provides the cleanup entry points for the DWC_otg PCI
+  * driver
   *
-  * @hsotg:       The HCD state structure for the DWC OTG controller.
-  * @qh:          QH for the periodic transfer.
+  * @pci: The programming view of DWC_otg PCI
 -- 
 2.31.1
 
