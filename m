@@ -2,71 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEF23919FD
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C423391A16
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbhEZOXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 May 2021 10:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
+        id S234658AbhEZO0a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 10:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234591AbhEZOW7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 10:22:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36B0C061574;
-        Wed, 26 May 2021 07:21:25 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id b26so2805202lfq.4;
-        Wed, 26 May 2021 07:21:25 -0700 (PDT)
+        with ESMTP id S233313AbhEZO02 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 10:26:28 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC06EC061574;
+        Wed, 26 May 2021 07:24:55 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id e17so2253552lfb.2;
+        Wed, 26 May 2021 07:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=PlH6e0RLANPN4C0rhH8q8pjH5iIcPQTNlpL2Syq/QQk=;
-        b=A0v2QFrC80dq4lVWyNcodXJSoqneMe/xOXe2cjcAXmUhe8FbPVCg7t4m4YQ/xjQgWl
-         5YQ17KGwsxBw82MXESua6U9fJ+uvyH/kWlAeoioYzb3LPyXI6xP+D4Yf+30sSM2AHF0I
-         VwwOq1a1P91/jdl3TNSKtYEmUR+MCPyMIbL3M1HWFmqsghYTqHwdlTllMyYZmi6PR50t
-         TiM8QECWS9wKmMdhRe4D4kowDI9KGzsYM9IxKejVFWGAJFm8BXFv6AmSDZ4x/yOxia3Z
-         K05uOjXi1pB2NfEmVMc6EBuych+fFT6s0T5ulaVSLFmWHYzY1EmDQz3XcJR+Izn63Cwz
-         wepQ==
+        bh=z4WMqlCaqWbEIAHnN6egjilVNRZEESDoadmQbpaoajE=;
+        b=K/9SpcovoelFFzr0TPY28fCSQVmbxh38g7BBwjgWZ39vv+foIla4SnDJZCm9JGkccv
+         5H2fjPYjD98P4za3oilxJpI0WXvWsDYZ5+xyCJ4Ogj6W9MhntxeR4lCO9i2hA+FPa/eH
+         vsd6hH331vPY95swod1+7s/wLiN6nxGvf7nabdym1pN8zA98PHwVeWVHjT1aHXttoyeX
+         GuBlxTgM3eFDT54GJoqf9gjsb6MwE1sTTsqPuSDLvcOBORuPgZqv+zsdphHV1kB3NAZt
+         17xJRpuwpRWJ4GS7oIuOErOsAmMtv+bGQlmv1K5c/fraxanV8snpgUQA0z2U675R4Gqb
+         gQ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=PlH6e0RLANPN4C0rhH8q8pjH5iIcPQTNlpL2Syq/QQk=;
-        b=Vj1rFqLXMWu2HbgJYVfOM643vzfL3Stv4q3PKNpAxY2KBgZQvvGqLLGHbPuplF4dEt
-         rFkQ+SOMow+XBu5p6ydM2bomxFClEe5cYUPfVOil5zr9IRjjexdr5J4uu7NURSJYRydw
-         v6mX6+Ei3hoIXxv9tva0nGVM+3HMQC7iU7KvE3Y4gOoMsv6tVhuTN1T/SJi06DN2z0Qq
-         aK25krrnufXD+ZOoDJR9BDy1IZLF6eLVEt+AylBS564f2zA5Otl8A9nYR6SxzMX4ByD3
-         W7U9SFqjoQbL6YDDbJOnl1db6rK931+hQcUzx1aMKm6aRbnYo0CJBc5ckYKCxGDIUDl+
-         2DHg==
-X-Gm-Message-State: AOAM531IzgTpTt0oSmxttE+mhIvx88RPUA/tADsqlcHl0rGWrk2G5gld
-        JplBSeGnUKcuReDhzrtG/bUolPbJexY=
-X-Google-Smtp-Source: ABdhPJyGi6Fw5pyBtrTkTkfySEiTcCIMwo1NMnuZBwEr/w0OsnLGXvu+90DsEPgprwBNaOgf+3nnYA==
-X-Received: by 2002:a05:6512:b17:: with SMTP id w23mr2241433lfu.133.1622038883841;
-        Wed, 26 May 2021 07:21:23 -0700 (PDT)
+        bh=z4WMqlCaqWbEIAHnN6egjilVNRZEESDoadmQbpaoajE=;
+        b=VeaWoPxlvqy83B9BH/uJjoccS7efH5CV2So58mo2B+FBlD8xQ8K9i4vvs5GXLL6AO2
+         7OCNrpBxWO8UawzgCbF9cEfGT2Eb0rrW9x/TF05rdRf2ifWEaPiXsT6CoatvcWiqaAM3
+         sapdJC2DQPzlElswQFjBOHWmSlFcwnyIIrvXwy+f/jmR+tt0YWE9SWOdPcUZvynE4Gfy
+         XO4XWXjkWA0VuEGyhm7OWRMGIKiuaEVCc8q+xtqO73qVXkRaT7QIEprRuoTjLWEOa6cM
+         vgdS0BuEgMkLUlELkIP82DuodJ9kXe8VmL6qtOUncM3Bffy3y9eDf4H9qLipbotzzVOq
+         M4Yw==
+X-Gm-Message-State: AOAM533o/AS2yuGqhKM1Ul3dzqHBZNLibW/H26YRkRQa25jZuYhoV04K
+        hqk68FzMRFdBpNZ7q9XzYSybZYgeCw8=
+X-Google-Smtp-Source: ABdhPJy1ol4BQtSOWjEpDvXMlDyrq+30W4jrVXfn1pVuparf3IB6gSCwGx7J5CgG9eg2OiX3c+QRXA==
+X-Received: by 2002:a05:6512:1318:: with SMTP id x24mr2226384lfu.53.1622039093758;
+        Wed, 26 May 2021 07:24:53 -0700 (PDT)
 Received: from [192.168.1.102] ([178.176.73.49])
-        by smtp.gmail.com with ESMTPSA id d15sm2040840lfa.137.2021.05.26.07.21.23
+        by smtp.gmail.com with ESMTPSA id r17sm2433434ljp.40.2021.05.26.07.24.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 May 2021 07:21:23 -0700 (PDT)
-Subject: Re: [PATCH 21/24] usb: host: xhci: Move array of structs from the
- stack onto the heap
+        Wed, 26 May 2021 07:24:53 -0700 (PDT)
+Subject: Re: [PATCH 13/24] usb: chipidea: core: Fix incorrectly documented
+ function 'ci_usb_phy_exit()'
 To:     Lee Jones <lee.jones@linaro.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
+Cc:     linux-kernel@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        David Lopo <dlopo@chipidea.mips.com>, linux-usb@vger.kernel.org
 References: <20210526130037.856068-1-lee.jones@linaro.org>
- <20210526130037.856068-22-lee.jones@linaro.org>
+ <20210526130037.856068-14-lee.jones@linaro.org>
 From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Message-ID: <8551978f-27b0-767e-f92b-e96ab3064b33@gmail.com>
-Date:   Wed, 26 May 2021 17:21:22 +0300
+Message-ID: <16614428-45c7-06af-547a-dba9c493de67@gmail.com>
+Date:   Wed, 26 May 2021 17:24:52 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
-In-Reply-To: <20210526130037.856068-22-lee.jones@linaro.org>
+In-Reply-To: <20210526130037.856068-14-lee.jones@linaro.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -75,30 +76,34 @@ On 5/26/21 4:00 PM, Lee Jones wrote:
 
 > Fixes the following W=1 kernel build warning(s):
 > 
->  drivers/usb/host/xhci.c: In function ‘xhci_reserve_bandwidth’:
->  drivers/usb/host/xhci.c:2859:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>  drivers/usb/chipidea/core.c:343: warning: expecting prototype for _ci_usb_phy_exit(). Prototype was for ci_usb_phy_exit() instead
 > 
-> Cc: Mathias Nyman <mathias.nyman@intel.com>
+> Cc: Peter Chen <peter.chen@kernel.org>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Liam Girdwood <lgirdwood@gmail.com>
+> Cc: Mark Brown <broonie@kernel.org>
+> Cc: David Lopo <dlopo@chipidea.mips.com>
 > Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/usb/host/xhci.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+>  drivers/usb/chipidea/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index ac2a7d4288883..40ce4b4eb12ad 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-[...]
-> @@ -2788,6 +2788,10 @@ static int xhci_reserve_bandwidth(struct xhci_hcd *xhci,
->  		return -ENOMEM;
->  	}
+> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+> index 3f6c21406dbd2..2b18f5088ae4a 100644
+> --- a/drivers/usb/chipidea/core.c
+> +++ b/drivers/usb/chipidea/core.c
+> @@ -335,7 +335,7 @@ static int _ci_usb_phy_init(struct ci_hdrc *ci)
+>  }
 >  
-> +	ep_bw_info = kzalloc(sizeof(*ep_bw_info) * 31, GFP_KERNEL);
+>  /**
+> - * _ci_usb_phy_exit: deinitialize phy taking in account both phy and usb_phy
+> + * ci_usb_phy_exit: deinitialize phy taking in account both phy and usb_phy
 
-   Why not kcalloc()?
+   I thought - shoiuld've been used as a separator. Is : good here as well?
 
-[...]
+>   * interfaces
+>   * @ci: the controller
+>   */
 
 MBR, Sergei
