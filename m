@@ -2,121 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05F0B391993
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEF23919FD
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234504AbhEZOMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 May 2021 10:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
+        id S234642AbhEZOXA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 10:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbhEZOMj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 10:12:39 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE805C061756
-        for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 07:11:07 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id f75-20020a1c1f4e0000b0290171001e7329so599396wmf.1
-        for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 07:11:07 -0700 (PDT)
+        with ESMTP id S234591AbhEZOW7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 10:22:59 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C36B0C061574;
+        Wed, 26 May 2021 07:21:25 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id b26so2805202lfq.4;
+        Wed, 26 May 2021 07:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:to:cc
-         :subject:from:references:in-reply-to;
-        bh=+2FNtzevJ4qM2Fi7yCUYyh+8owZT/RfCjcCcFFpDxCo=;
-        b=kJnBFRGy2Qk3liIbBYF+s4ylrkulEO33hYBKTvb2+e4YoqH8YWyBoMWfRh3tguebht
-         jFQkqz/4c1yOV/44EWaOsk7utHt2h9fQIvKS6Rao6FQSSE8rLt1oDbpYG4Tb7t9nfa/n
-         g0xIFC9m4dlqqWM0cJWoEUUu/yw/ZSuXD0m+BWhlLRckqceZLH8IdKX7wIPhsjCsL9qa
-         VsXUpH1h14vtH7rS3I6pYnuXRdMbPB8HijoWbMP2xDGY6n3SxaAyIZCs+bqZZ3mZpvXz
-         SZu877Ha0DvTirbSdJq6s7qcwicub/ZqgEoxHdbnXAO/rEChYCO971tyBlTWTgGm3V5k
-         uFKw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PlH6e0RLANPN4C0rhH8q8pjH5iIcPQTNlpL2Syq/QQk=;
+        b=A0v2QFrC80dq4lVWyNcodXJSoqneMe/xOXe2cjcAXmUhe8FbPVCg7t4m4YQ/xjQgWl
+         5YQ17KGwsxBw82MXESua6U9fJ+uvyH/kWlAeoioYzb3LPyXI6xP+D4Yf+30sSM2AHF0I
+         VwwOq1a1P91/jdl3TNSKtYEmUR+MCPyMIbL3M1HWFmqsghYTqHwdlTllMyYZmi6PR50t
+         TiM8QECWS9wKmMdhRe4D4kowDI9KGzsYM9IxKejVFWGAJFm8BXFv6AmSDZ4x/yOxia3Z
+         K05uOjXi1pB2NfEmVMc6EBuych+fFT6s0T5ulaVSLFmWHYzY1EmDQz3XcJR+Izn63Cwz
+         wepQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:to:cc:subject:from:references:in-reply-to;
-        bh=+2FNtzevJ4qM2Fi7yCUYyh+8owZT/RfCjcCcFFpDxCo=;
-        b=e6CYbGhQihxovRRpOK+S/gKjzwI8nROIy/UA46CPygfaq86tIZT26ERH9iIB1eu6OQ
-         W6Pwgxgebf9mkBAjY211BqmcOxbHnRuUR+4ykaCcsqNMgE2EFroSvh5kGsQjDcmoncRk
-         CM/D4Eo/oyMSdjwe74dIsuG6ftGUMr8dud46rfrhjCAlkZXFUZFsSqaDs0tu4x+y3L4k
-         xfEvyX+8sopGbXss2L7HVhbgKqV6J4km3JPowZrVidL+gaSTEsBA/X1gjCnRoPqYT/pY
-         yIgRfBb2xJAWwpIkUM0NNLDcC/dSC41125p0kYaFCJLuEEdT+vvUELM7Nj0Iw7vHBqw4
-         /QCw==
-X-Gm-Message-State: AOAM532hmkQPiEr8ZBJYsMjCtjEEmWcBjgtdF1tC1+TYklpUwtTtqv9t
-        1sUSSKrEvhlrYNkYDkcZEhYT5Q==
-X-Google-Smtp-Source: ABdhPJze0yp8Mpe8hzE4v/dQoiiVLfHunD7AbUa47ZMHimdS0UwcSwiH28GiE4Hv+1aBbcBbc4sdUw==
-X-Received: by 2002:a05:600c:3544:: with SMTP id i4mr3733209wmq.112.1622038266468;
-        Wed, 26 May 2021 07:11:06 -0700 (PDT)
-Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id k11sm6737212wmj.1.2021.05.26.07.11.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 07:11:05 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 26 May 2021 15:11:04 +0100
-Message-Id: <CBN8KRXT6GKH.3TIZOGGT3RG0W@arch-thunder>
-To:     "Lee Jones" <lee.jones@linaro.org>
-Cc:     <linux-kernel@vger.kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>,
-        <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 06/24] usb: isp1760: isp1760-udc: Provide missing
- description for 'udc' param
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PlH6e0RLANPN4C0rhH8q8pjH5iIcPQTNlpL2Syq/QQk=;
+        b=Vj1rFqLXMWu2HbgJYVfOM643vzfL3Stv4q3PKNpAxY2KBgZQvvGqLLGHbPuplF4dEt
+         rFkQ+SOMow+XBu5p6ydM2bomxFClEe5cYUPfVOil5zr9IRjjexdr5J4uu7NURSJYRydw
+         v6mX6+Ei3hoIXxv9tva0nGVM+3HMQC7iU7KvE3Y4gOoMsv6tVhuTN1T/SJi06DN2z0Qq
+         aK25krrnufXD+ZOoDJR9BDy1IZLF6eLVEt+AylBS564f2zA5Otl8A9nYR6SxzMX4ByD3
+         W7U9SFqjoQbL6YDDbJOnl1db6rK931+hQcUzx1aMKm6aRbnYo0CJBc5ckYKCxGDIUDl+
+         2DHg==
+X-Gm-Message-State: AOAM531IzgTpTt0oSmxttE+mhIvx88RPUA/tADsqlcHl0rGWrk2G5gld
+        JplBSeGnUKcuReDhzrtG/bUolPbJexY=
+X-Google-Smtp-Source: ABdhPJyGi6Fw5pyBtrTkTkfySEiTcCIMwo1NMnuZBwEr/w0OsnLGXvu+90DsEPgprwBNaOgf+3nnYA==
+X-Received: by 2002:a05:6512:b17:: with SMTP id w23mr2241433lfu.133.1622038883841;
+        Wed, 26 May 2021 07:21:23 -0700 (PDT)
+Received: from [192.168.1.102] ([178.176.73.49])
+        by smtp.gmail.com with ESMTPSA id d15sm2040840lfa.137.2021.05.26.07.21.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 May 2021 07:21:23 -0700 (PDT)
+Subject: Re: [PATCH 21/24] usb: host: xhci: Move array of structs from the
+ stack onto the heap
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
 References: <20210526130037.856068-1-lee.jones@linaro.org>
- <20210526130037.856068-7-lee.jones@linaro.org>
-In-Reply-To: <20210526130037.856068-7-lee.jones@linaro.org>
+ <20210526130037.856068-22-lee.jones@linaro.org>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <8551978f-27b0-767e-f92b-e96ab3064b33@gmail.com>
+Date:   Wed, 26 May 2021 17:21:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
+MIME-Version: 1.0
+In-Reply-To: <20210526130037.856068-22-lee.jones@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Lee,
-On Wed May 26, 2021 at 2:00 PM WEST, Lee Jones wrote:
+On 5/26/21 4:00 PM, Lee Jones wrote:
 
-> Fixes the following W=3D1 kernel build warning(s):
->
->  drivers/usb/isp1760/isp1760-udc.c:150: warning: Function parameter or me=
-mber 'udc' not described in 'isp1760_udc_select_ep'
->
+> Fixes the following W=1 kernel build warning(s):
+> 
+>  drivers/usb/host/xhci.c: In function ‘xhci_reserve_bandwidth’:
+>  drivers/usb/host/xhci.c:2859:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+> 
+> Cc: Mathias Nyman <mathias.nyman@intel.com>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Rui Miguel Silva <rui.silva@linaro.org>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 > Cc: linux-usb@vger.kernel.org
 > Signed-off-by: Lee Jones <lee.jones@linaro.org>
 > ---
->  drivers/usb/isp1760/isp1760-udc.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/isp1760/isp1760-udc.c b/drivers/usb/isp1760/isp1=
-760-udc.c
-> index 3e05e36054357..a78da59d6417b 100644
-> --- a/drivers/usb/isp1760/isp1760-udc.c
-> +++ b/drivers/usb/isp1760/isp1760-udc.c
-> @@ -137,6 +137,7 @@ static void __isp1760_udc_select_ep(struct isp1760_ud=
-c *udc,
->  /**
->   * isp1760_udc_select_ep - Select an endpoint for register access
->   * @ep: The endpoint
-> + * @udc: Reference to the device controller
+>  drivers/usb/host/xhci.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index ac2a7d4288883..40ce4b4eb12ad 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+[...]
+> @@ -2788,6 +2788,10 @@ static int xhci_reserve_bandwidth(struct xhci_hcd *xhci,
+>  		return -ENOMEM;
+>  	}
+>  
+> +	ep_bw_info = kzalloc(sizeof(*ep_bw_info) * 31, GFP_KERNEL);
 
-I had this in my latest patch set, but got lost, thanks for fixing
-this.
+   Why not kcalloc()?
 
-I'd like to ask you to swap the order to match the order in which
-the args appear in the function declaration.
+[...]
 
-With this changed you can add my:
-Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
-
-------
-Cheers,
-     Rui
-
-
->   *
->   * The ISP1761 endpoint registers are banked. This function selects the =
-target
->   * endpoint for banked register access. The selection remains valid unti=
-l the
-> --=20
-> 2.31.1
-
-
-
+MBR, Sergei
