@@ -2,110 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE84391A94
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8BB7391AF8
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 16:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235015AbhEZOq2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 May 2021 10:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36578 "EHLO
+        id S235209AbhEZPBJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 11:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbhEZOq1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 10:46:27 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80D0C061574
-        for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 07:44:54 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id t206so899303wmf.0
-        for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 07:44:54 -0700 (PDT)
+        with ESMTP id S235131AbhEZPBJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 11:01:09 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAE0C06175F;
+        Wed, 26 May 2021 07:59:36 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id e17so2430073lfb.2;
+        Wed, 26 May 2021 07:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=CW0B9Jgp/MsN7PVAeGLodFQbYGud7akQoc9NCQOfV68=;
-        b=uR8wVSVPV3aXKNIHs3wNstNCg3GxmXFVrBBsfemAOriTAkWfkQs/JEJ61WHK/xpnpi
-         MtDaoNWSjYa9pX0VO7QtXm5ypGQYs1eIbVBsGBADjbGV/J0v9qwKib91/Xoea4+wEqhy
-         wC8rDROczq8GlwDveYPsv5lDYXfTK3kituSMvubAeGfkvHipXfBvrmAXCYBR3lttMHgv
-         R98zQYvhpCLiCO6JvwGVa2+w2L8OVw8uoWFVFoQ26D2RCBCPHgeRsv911MJdwhQ89OWW
-         weAPlNk6mg/SLX7E5xQSESLWi9u4uZcBwIRIUf88mg3wWyRRPT041sLpCDJbH741Q52b
-         TlVg==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZY7DhgR7U8XkxVmzEn49jSM7lk9MFuhyv4pYW51zRhA=;
+        b=aDK/E9dacgoOIeG1hvE5q1kzKOilz3uUHWG1utNNC59UNB2DScz7Jl1wfbFrAjlOpP
+         5/or25q+F47pu+epN3TFvCn6hYqOW1WAZd9vnA1rARQRXe0ZiGIrJd0K2zv0SBdjLfla
+         vn4kZkZ0VhZZhBjwsFwbnO9UvjH8A0QXVt3qEwAjY/MXuGVjG77YO/LjS6myeXp1vHll
+         Rw1+Iy/umXi9uJo6MgRebxKP+bSN2Ni6n5XCMLlZFAwhEIwiNpr6l3xRhJMEJOiWajm6
+         zi/Grv1BwpHY37rc2pL5Hy2hEP8tldpObFFLM6rs1nC58R1SgAE0drtT5X9tYj3RbISC
+         qlyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=CW0B9Jgp/MsN7PVAeGLodFQbYGud7akQoc9NCQOfV68=;
-        b=WZbx7R7Mv/EsBJUd1YdFEMeHfm9J5S6/TeVYLMd5Y5eqXnbTBgCuZVHQPMn6oUn32a
-         HGr+28XTyck4KlqFiHwjX25Ai1DR9rVgNiyLO6mMOV73/dPwBPBaPC6UAy2WFJZM8IiL
-         5evIZCcOj5zbj6J5AZsUfQINPwRC94pqz2yQb5pzhURL+g0O1HxOypDzPEW/cVKkXfqj
-         pU91yWAZEoeJm+Owk8wNsSQQc9nMp3fxsvOHlxBKBzA+gBtyiYRA6WBBbZISFos4xdVd
-         8a/GTV6609qs/vyO/91d0aU0DObeI81sb1oGdgXtqkKDVOhVDeRsq7AH7XVoxWug7epr
-         mkAg==
-X-Gm-Message-State: AOAM533SHAvIbRhbSMX9iTF7Joe5/ZPGrvj0RXTg1T6Gu6dKcBLqYbFV
-        yysf6hlzC84dLHZF77ii+ESneg==
-X-Google-Smtp-Source: ABdhPJwHiIlAHiAjmfazgtvsg7NFO5OEXxGpPjuqVeW3RVAwlsWCkW4EpUmlap0WFnXDUpQgxctibg==
-X-Received: by 2002:a1c:7c03:: with SMTP id x3mr29232477wmc.122.1622040293392;
-        Wed, 26 May 2021 07:44:53 -0700 (PDT)
-Received: from dell ([91.110.221.223])
-        by smtp.gmail.com with ESMTPSA id t14sm6299415wmq.16.2021.05.26.07.44.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 May 2021 07:44:52 -0700 (PDT)
-Date:   Wed, 26 May 2021 15:44:51 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Sergei Shtylyov <sergei.shtylyov@gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZY7DhgR7U8XkxVmzEn49jSM7lk9MFuhyv4pYW51zRhA=;
+        b=EY7pp71oinudjVogwJLndiSordZ6rFWAx9zxOTy2qoIE1H1KTPffS41oCnQsJDRTM5
+         +kr9SHuxcLhbLU4iVWm/ju32CbeZTr67sJ4y78X86JfqUGSSqRfxh2PM8W4zyDw3xsvA
+         rej1nZHn7gtit/KCy9qSroDsViWH/UxMBjiIQy8A7XCtF5K5vnhAt9S0L7+8mrpcCoNr
+         P8WBP+bQu+FibocLPnIpAciNj80iZsoqPS4nCLPrJBfRZvJQipwYYWlgpleCvV1RUYXd
+         X9Nv2KzCQLX6VmHzmt9W3UJnlYMkHSfgv0pgBeNMHur6Re9ivSLMFxAJecUqRzr55Ksg
+         LV3w==
+X-Gm-Message-State: AOAM533826n/NDzTsvEaclea4zRTrDAb4MphMyoAyVmJ+dFMC9NpL4+R
+        LVZwtEtUmu9tTjA8qjEulCBsry1iknM=
+X-Google-Smtp-Source: ABdhPJyAbq4DU0NxKcpVU0EnUa9g+n2S873i3+6ey+jt2Wo/SXyGU4f9OPP/6k2M3VhVLlYRw+w5uw==
+X-Received: by 2002:a05:6512:1392:: with SMTP id p18mr723015lfa.294.1622041175071;
+        Wed, 26 May 2021 07:59:35 -0700 (PDT)
+Received: from [192.168.1.102] ([178.176.73.49])
+        by smtp.gmail.com with ESMTPSA id p6sm2057655lfr.163.2021.05.26.07.59.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 May 2021 07:59:34 -0700 (PDT)
+Subject: Re: [PATCH 21/24] usb: host: xhci: Move array of structs from the
+ stack onto the heap
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     linux-kernel@vger.kernel.org,
         Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 21/24] usb: host: xhci: Move array of structs from the
- stack onto the heap
-Message-ID: <20210526144451.GB543307@dell>
 References: <20210526130037.856068-1-lee.jones@linaro.org>
  <20210526130037.856068-22-lee.jones@linaro.org>
  <8551978f-27b0-767e-f92b-e96ab3064b33@gmail.com>
+ <20210526144451.GB543307@dell>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <ad5d3a04-c065-675e-c53f-5d48b6367c89@gmail.com>
+Date:   Wed, 26 May 2021 17:59:33 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20210526144451.GB543307@dell>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8551978f-27b0-767e-f92b-e96ab3064b33@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 26 May 2021, Sergei Shtylyov wrote:
+On 5/26/21 5:44 PM, Lee Jones wrote:
 
-> On 5/26/21 4:00 PM, Lee Jones wrote:
+[...]
+>>> Fixes the following W=1 kernel build warning(s):
+>>>
+>>>  drivers/usb/host/xhci.c: In function ‘xhci_reserve_bandwidth’:
+>>>  drivers/usb/host/xhci.c:2859:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
+>>>
+>>> Cc: Mathias Nyman <mathias.nyman@intel.com>
+>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>> Cc: linux-usb@vger.kernel.org
+>>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+>>> ---
+>>>  drivers/usb/host/xhci.c | 8 +++++++-
+>>>  1 file changed, 7 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index ac2a7d4288883..40ce4b4eb12ad 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>> [...]
+>>> @@ -2788,6 +2788,10 @@ static int xhci_reserve_bandwidth(struct xhci_hcd *xhci,
+>>>  		return -ENOMEM;
+>>>  	}
+>>>  
+>>> +	ep_bw_info = kzalloc(sizeof(*ep_bw_info) * 31, GFP_KERNEL);
+>>
+>>    Why not kcalloc()?
 > 
-> > Fixes the following W=1 kernel build warning(s):
-> > 
-> >  drivers/usb/host/xhci.c: In function ‘xhci_reserve_bandwidth’:
-> >  drivers/usb/host/xhci.c:2859:1: warning: the frame size of 1032 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> > 
-> > Cc: Mathias Nyman <mathias.nyman@intel.com>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: linux-usb@vger.kernel.org
-> > Signed-off-by: Lee Jones <lee.jones@linaro.org>
-> > ---
-> >  drivers/usb/host/xhci.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index ac2a7d4288883..40ce4b4eb12ad 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> [...]
-> > @@ -2788,6 +2788,10 @@ static int xhci_reserve_bandwidth(struct xhci_hcd *xhci,
-> >  		return -ENOMEM;
-> >  	}
-> >  
-> > +	ep_bw_info = kzalloc(sizeof(*ep_bw_info) * 31, GFP_KERNEL);
+> No particular reason.  Muscle memory I guess.
 > 
->    Why not kcalloc()?
+> Happy either way.
 
-No particular reason.  Muscle memory I guess.
+    kcalloc( is designed for allocatiung arrays and clearing them, like calloc(),
+so let's stick wuth it...
 
-Happy either way.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+MBR, Sergei
