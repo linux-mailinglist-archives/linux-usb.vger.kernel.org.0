@@ -2,166 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93D4939137C
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 11:16:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38FA3391452
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 12:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233240AbhEZJRz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 26 May 2021 05:17:55 -0400
-Received: from mga18.intel.com ([134.134.136.126]:30552 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232849AbhEZJRy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 26 May 2021 05:17:54 -0400
-IronPort-SDR: JTPGwePUYCuM8b9JKx19Oy5/e1clnksTGygJWwtIRW4YieU3qZq4Fb+x6S7aAJeDvXFWMLkW5W
- if3WSEedvdAQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,9995"; a="189797478"
-X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="scan'208";a="189797478"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 May 2021 02:16:22 -0700
-IronPort-SDR: 3J+E7tBnP4OBjc7FWcipnOuxO37Vig80c4ophYKB+ut7Cr1qDwmfYNSz3cldGAsV0b3Op0giZQ
- nApovqSsvFlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.82,331,1613462400"; 
-   d="scan'208";a="547126937"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 26 May 2021 02:16:19 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 26 May 2021 12:16:18 +0300
-Date:   Wed, 26 May 2021 12:16:18 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jun Li <jun.li@nxp.com>
-Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch support via
- mux controller
-Message-ID: <YK4R4q1cZqQDS1qy@kuha.fi.intel.com>
-References: <1621408490-23811-1-git-send-email-jun.li@nxp.com>
- <1621408490-23811-4-git-send-email-jun.li@nxp.com>
- <YKZXHG7BSSZssiBg@kuha.fi.intel.com>
- <YKdxW8SFntFYcyv+@kuha.fi.intel.com>
- <VI1PR04MB593521FEBF947882E6A394D489259@VI1PR04MB5935.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB593521FEBF947882E6A394D489259@VI1PR04MB5935.eurprd04.prod.outlook.com>
+        id S233731AbhEZKFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 06:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233486AbhEZKFl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 06:05:41 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F621C061574;
+        Wed, 26 May 2021 03:04:09 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id z12so1548582ejw.0;
+        Wed, 26 May 2021 03:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=sWYmaexz2luPiKMpfqCnX/580CB+tPzQNwZHR9+Ogyo=;
+        b=PdbB8DY4k/TIB0lwvZoPwsZXAbtN4XwPmx/v+USX1E4Py+DgVAoRf3xcaHcCSHhMau
+         gVSPGH6YtDAq1LT0ABO6dQJs2thvCFX6x7Xm9+Zkf/K++a+F1x/Gw7Y1l2wZUbTthyxK
+         lD1sHhE34BOG0246w/blcwwyxIZozag17Zv4GLDcErrVvegYhMyOzeUILIdcrMq3QCGk
+         qg1GEwqfxwoo2gmQlZZ028J6+/mNLlW4deEZJlAJPBaWuKAdCZL1yAVSId2w0Ksjv8/i
+         mOreASb17a9p/61MTP0NnrIiZR4BPIxnXagYSYMIsSn3/SCwBt06W31evnrfbDh8OeUK
+         6+dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=sWYmaexz2luPiKMpfqCnX/580CB+tPzQNwZHR9+Ogyo=;
+        b=FaAUVT94YM9gyIJl8BRCxpt8MRKsEdKFT3anGE2h/Ok9Zm09pmuEs49/qVT+TdwaTk
+         nBaI/1wZTKdCH7yOkhmSGt7RTr4Fq+defXiRjLR5oHyT0+Mydb6V2AJ5vpR/EqqdH5Lu
+         WkL49NgPp4LokxCfqv4AtAd4Tt+9BFODdnx5JuMh9yAY7WWaFwH0YG3Jz2Ou29wE051v
+         Q9hrajADnSe7ZHQDXKSRc3Y0UDsSiq1EqQfG6HnWtsveF/okb2DaRMYsxQIR+pjA5REy
+         UCuFuFSJuVmZS+TWiuhpSdAOwQnW4keW6kyQrVlqq9L4C+wxJos8YrjGnAxMtpKP/lr2
+         2zBQ==
+X-Gm-Message-State: AOAM533g/u8m6sAhGraiMQPkWkw3Kcc+B39zIq7hhTrsgl/iHYYfJMJc
+        hODmkO9aucFpshAawCD+CRg=
+X-Google-Smtp-Source: ABdhPJxLi+0tXUMC7tUvF08xl7sU5rZjegiy72puaZhglc4nYXlKG0C85+WdkIGxq8dkBNx7sHn36g==
+X-Received: by 2002:a17:906:22c6:: with SMTP id q6mr32950705eja.275.1622023448116;
+        Wed, 26 May 2021 03:04:08 -0700 (PDT)
+Received: from ruhe.localdomain (89-139-227-208.bb.netvision.net.il. [89.139.227.208])
+        by smtp.gmail.com with ESMTPSA id x9sm10611599eje.64.2021.05.26.03.04.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 May 2021 03:04:07 -0700 (PDT)
+From:   eli.billauer@gmail.com
+To:     gregkh@linuxfoundation.org, arnd@arndb.de
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Eli Billauer <eli.billauer@gmail.com>
+Subject: [PATCH v5 0/2] Submission of XillyUSB driver
+Date:   Wed, 26 May 2021 13:03:09 +0300
+Message-Id: <20210526100311.56327-1-eli.billauer@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 25, 2021 at 11:46:18AM +0000, Jun Li wrote:
-> Hi Heikki,
-> 
-> > -----Original Message-----
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Friday, May 21, 2021 4:38 PM
-> > To: Jun Li <jun.li@nxp.com>
-> > Cc: robh+dt@kernel.org; shawnguo@kernel.org; gregkh@linuxfoundation.org;
-> > linux@roeck-us.net; linux-usb@vger.kernel.org; dl-linux-imx
-> > <linux-imx@nxp.com>; devicetree@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org
-> > Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch support
-> > via mux controller
-> > 
-> > Hi,
-> > 
-> > On Thu, May 20, 2021 at 03:33:36PM +0300, Heikki Krogerus wrote:
-> > > Why not just do that inside fwnode_typec_switch_get() and handle the
-> > > whole thing in drivers/usb/typec/mux.c (or in its own file if you
-> > > prefer)?
-> > >
-> > > You'll just need to register a "wrapper" Type-C switch object for the
-> > > OF mux controller, but that should not be a problem. That way you
-> > > don't need to export any new functions, touch this file or anything
-> > > else.
-> > 
-> > I wrote a bit of code just to see how that would look. I'm attaching you
-> > the hack I made. I guess something like that would not be too bad.
-> > A wrapper is probable always a bit clumsy, but I'm not sure that in this
-> > case it's a huge problem. Of course if there are any better ideas, let's
-> > here them :-)
-> 
-> Thanks for your patch, I am pasting the patch as below.
-> 
-> seems we need consider more than that.
-> 
-> diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> index a0adb8947a301..d85231b2fe10b 100644
-> --- a/drivers/usb/typec/Makefile
-> +++ b/drivers/usb/typec/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-$(CONFIG_TYPEC)		+= typec.o
->  typec-y				:= class.o mux.o bus.o port-mapper.o
-> +typec-$(MULTIPLEXER)		+= of_mux.o
->  obj-$(CONFIG_TYPEC)		+= altmodes/
->  obj-$(CONFIG_TYPEC_TCPM)	+= tcpm/
->  obj-$(CONFIG_TYPEC_UCSI)	+= ucsi/
-> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> index 9da22ae3006c9..282622276d97b 100644
-> --- a/drivers/usb/typec/mux.c
-> +++ b/drivers/usb/typec/mux.c
-> @@ -63,6 +63,9 @@ struct typec_switch *fwnode_typec_switch_get(struct fwnode_handle *fwnode)
->  
->  	sw = fwnode_connection_find_match(fwnode, "orientation-switch", NULL,
->  					  typec_switch_match);
-> +	if (!sw)
-> +		sw = of_switch_register(fwnode);
-> +
-> 
-> How to support multiple typec_switch_get() for of_mux case?
-> the second call to fwnode_typec_switch_get() will get the switch
-> via fwnode_connection_find_match()? This means we still need
-> a property "orientation-switch" for mux controller node, this
-> seems not the expected way for a mux consumer, even with this
-> property, we will get a EPROBE_DEFER for the first call.
-> 
-> If we use mux_control_get() for multiple caller/consumer, then
-> we need some other device as input.
->   
-> typec_switch object looks to me is a provider, if we create
-> and maintain it in consumer side, I have not come out a better
-> way:-).
+From: Eli Billauer <eli.billauer@gmail.com>
 
-Sorry, but can we rewind a bit: Why can't you just register the
-orientation switch from your mux driver and be done with it? You
-should then be able to use OF graph, and no special bindings should
-be needed, no?
+This is a resubmission of the XillyUSB driver, which is the USB
+variant of the existing Xillybus driver.
 
-If you want to reuse a mux-controller driver, then you do need to
-modify it (but only a little), and what ever mux-controller specific
-bindings there are, you will not use those when the mux supplies the
-orientation switching function, instead you'll use the OF graph for
-that. But surely that is not a problem?
+Because these driver share some API related functions, this submission
+consists of two patches:
 
-The mux-controller framework expects the "consumers" of the muxes to
-understand the final function that the mux is used for. The Type-C
-"mux" framework (I should not even talk about muxes with those) works
-the other way around. The driver for the component that supplies the
-orientation switch function must understand that it is handling that
-function, and there is a good reason for doing it that way with the
-USB Type-C switches. The orientation switch for example quite simply
-is _not_ always a mux. In fact, it's seems to be rarely a mux these
-days. With USB4 for example the orientation is handled almost always
-by the first on-board retimer.
+(1) A patch moving away Xillybus' class related functions to a
+    separate module file.
+(2) A patch adding the new XillyUSB driver, based upon this new
+    separate module.
 
-There are actually also some technical reasons why Hans failed to get
-the mux-controller thing to work, which is the original reason why we
-introduced the dedicated framework for the Type-C "muxes" (I really
-should stop talking about muxes), but I don't remember what was the
-reason.
+Thanks,
+   Eli
 
-In any case, to summarise: the orientation switch is a function. A mux
-is a device that can supply that function, and if it does, then the
-driver for it really needs to register the dedicated orientation
-switch.
+Eli Billauer (2):
+  char: xillybus: Move class-related functions to new xillybus_class.c
+  char: xillybus: Add driver for XillyUSB (Xillybus variant for USB)
 
-thanks,
+ drivers/char/xillybus/Kconfig          |   22 +-
+ drivers/char/xillybus/Makefile         |    2 +
+ drivers/char/xillybus/xillybus.h       |   10 +-
+ drivers/char/xillybus/xillybus_class.c |  263 +++
+ drivers/char/xillybus/xillybus_class.h |   30 +
+ drivers/char/xillybus/xillybus_core.c  |  181 +-
+ drivers/char/xillybus/xillyusb.c       | 2260 ++++++++++++++++++++++++
+ 7 files changed, 2599 insertions(+), 169 deletions(-)
+ create mode 100644 drivers/char/xillybus/xillybus_class.c
+ create mode 100644 drivers/char/xillybus/xillybus_class.h
+ create mode 100644 drivers/char/xillybus/xillyusb.c
 
 -- 
-heikki
+2.17.1
+
