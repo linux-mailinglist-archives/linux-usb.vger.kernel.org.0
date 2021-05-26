@@ -2,99 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3C9390DF7
-	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 03:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1731A390F81
+	for <lists+linux-usb@lfdr.de>; Wed, 26 May 2021 06:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbhEZBq3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 25 May 2021 21:46:29 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:20674 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230306AbhEZBq3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 25 May 2021 21:46:29 -0400
-X-UUID: 403647ee35cf48008ed38b7218b6d2af-20210526
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=NmtG8PtbQGS64/5D4XTWx2C/g8jAAgXP164fQIUW45A=;
-        b=Q9E5cXo9aXD6XSawc5MLK/h9cgswAyrIzSrBuUsr4SankYVwMq1p+7WuVU1GvZm00DyvwIEF1i6ugCuAzbftnG6yZKK4fpWiLM2e/i4V0Qw/OXTWriT9AGaSthd04nOCEAc7r/H731G93Uy5y/ObPWQKCrtAO4j4j8aE/BQBe5Q=;
-X-UUID: 403647ee35cf48008ed38b7218b6d2af-20210526
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 775569361; Wed, 26 May 2021 09:44:56 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 26 May
- 2021 09:44:48 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 26 May 2021 09:44:48 +0800
-Message-ID: <1621993487.26501.19.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 3/3] Revert "usb: common: usb-conn-gpio: Make VBUS
- supply optional"
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Thierry Reding <treding@nvidia.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Lee Jones <lee.jones@linaro.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 26 May 2021 09:44:47 +0800
-In-Reply-To: <YKzhPnMU3PXx+tXK@orome.fritz.box>
-References: <1621406386-18838-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1621406386-18838-3-git-send-email-chunfeng.yun@mediatek.com>
-         <YKezl0nlWFQhLyf/@orome.fritz.box> <1621835511.26501.14.camel@mhfsdcap03>
-         <YKzhPnMU3PXx+tXK@orome.fritz.box>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S230505AbhEZEb2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 26 May 2021 00:31:28 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:39855 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229552AbhEZEb1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 26 May 2021 00:31:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1622003397; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=XpW6sOG7Ucv6llKqpIHNUwNVxPAdIkYhq01saEjDcpU=; b=fOWcbqhAU7C8y20/pmSYtrYXhIkkg4vDAJDxrPbM102/psSKZoLYV0lFn+IzyGoZUWBxZjrD
+ LFG6SaE5lgE9xEcKsAanmgXArg+E7I0a/BXmvNkMFHY4sW8IGIo+VrlQ2CBF/lpOhkVcwlbs
+ KBH1EyNgSpaCmEelsY1ZjNQ+f6w=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 60adceb32bff04e53bc24c07 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 26 May 2021 04:29:39
+ GMT
+Sender: sanm=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CF312C433F1; Wed, 26 May 2021 04:29:39 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [192.168.0.104] (unknown [49.206.34.253])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A5FC7C433D3;
+        Wed, 26 May 2021 04:29:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A5FC7C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=sanm@codeaurora.org
+Subject: Re: [PATCH v7 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Manu Gautam <mgautam@codeaurora.org>
+References: <1619586716-8687-1-git-send-email-sanm@codeaurora.org>
+ <1619586716-8687-3-git-send-email-sanm@codeaurora.org>
+ <87r1iuk9vs.fsf@kernel.org>
+ <184ddea9-643f-91ea-6d1f-5bdd26373e53@codeaurora.org>
+ <87h7jkhxmw.fsf@kernel.org> <YJxNBm0WiMqjJ2Cg@google.com>
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+Message-ID: <4e3951dc-f3e7-0815-7d73-d836240de3e9@codeaurora.org>
+Date:   Wed, 26 May 2021 09:59:33 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: DBEF9475E366CD9EE010AAD1B760E5197873115102002DEC0FB5709042E1CFEF2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <YJxNBm0WiMqjJ2Cg@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA1LTI1IGF0IDEzOjM2ICswMjAwLCBUaGllcnJ5IFJlZGluZyB3cm90ZToN
-Cj4gT24gTW9uLCBNYXkgMjQsIDIwMjEgYXQgMDE6NTE6NTFQTSArMDgwMCwgQ2h1bmZlbmcgWXVu
-IHdyb3RlOg0KPiA+IE9uIEZyaSwgMjAyMS0wNS0yMSBhdCAxNToyMCArMDIwMCwgVGhpZXJyeSBS
-ZWRpbmcgd3JvdGU6DQo+ID4gPiBPbiBXZWQsIE1heSAxOSwgMjAyMSBhdCAwMjozOTo0NlBNICsw
-ODAwLCBDaHVuZmVuZyBZdW4gd3JvdGU6DQo+ID4gPiA+IFZidXMgaXMgYWxyZWFkeSBhbiBvcHRp
-b25hbCBzdXBwbHksIGlmIHRoZSB2YnVzLXN1cHBseSBpcyBub3QNCj4gPiA+ID4gcHJvdmlkZWQg
-aW4gRFRTLCB3aWxsIHVzZSBhIGR1bW15IHJlZ3VsYXRvciwNCj4gPiA+IA0KPiA+ID4gVGhhdCBz
-dGF0ZW1lbnQgaXMgbm90IGVudGlyZWx5IGNvcnJlY3QuIFRoZSBkdW1teSByZWd1bGF0b3IgaXMN
-Cj4gPiA+IHN1YnN0aXR1dGVkIG9ubHkgaWYgdGhlIHN1cHBseSBpcyBpbiBmYWN0IG5vdCBvcHRp
-b25hbC4gVGhlIGlkZWEgYmVoaW5kDQo+ID4gPiB0aGF0IGlzIHRvIGFsbG93IERUUyBmaWxlcyB0
-aGF0IGRvbid0IHNwZWNpZnkgYWxsIHJlcXVpcmVkIHJlZ3VsYXRvcnMgdG8NCj4gPiA+IGdldCBh
-d2F5IHdpdGggaXQsIGJhc2VkIG9uIHRoZSBhc3N1bXB0aW9uIHRoYXQgdGhlIHN1cHBseSBpcyBv
-bmUgb2YNCj4gPiA+IHRob3NlIGFsd2F5cy1vbiBzdXBwbGllcyB0aGF0IGFyZSBvZnRlbiBub3Qg
-ZGVzY3JpYmVkIGluIERUUy4NCj4gPiBZZXMsIHlvdSBhcmUgcmlnaHQuDQo+ID4gQnV0IGZyb20g
-dGhlIHBvaW50IG9mIHJlc3VsdCwgaXQgaW5kZWVkIGNhbiBoZWxwIHRvIGhhbmRsZSB0aGUgYWJz
-ZW50DQo+ID4gcmVndWxhdG9yLg0KPiA+ID4gDQo+ID4gPiA+IHRoZSB3YXJuaW5nIGxvZyBpcyBh
-cyBiZWxvdzoNCj4gPiA+ID4gInN1cHBseSB2YnVzIG5vdCBmb3VuZCwgdXNpbmcgZHVtbXkgcmVn
-dWxhdG9yIg0KPiA+ID4gDQo+ID4gPiBBbmQgdGhlIHJlYXNvbiB3aHkgd2UgZ2V0IHRoYXQgd2Fy
-bmluZyBpcyB0byBwb2ludCBvdXQgdGhhdCB0aGUgRFRTIGhhcw0KPiA+ID4gYSBidWcgYW5kIHRo
-YXQgaXQgc2hvdWxkIGJlIGZpeGVkIChieSBhZGRpbmcgYSBwcm9wZXIgcmVndWxhdG9yIHRvIHRh
-a2UNCj4gPiA+IHRoZSBwbGFjZSBvZiB0aGUgZHVtbXkpLg0KPiA+ID4gDQo+ID4gPiA+IFRoaXMg
-cmV2ZXJ0cyBjb21taXQgNGRkZjFhYzc5ZTVmMDgyNDUxY2Q1NDkyODNkMmViNzU1OWFiNmNhOS4N
-Cj4gPiA+IA0KPiA+ID4gQnV0IGlmIHlvdSByZWFkIHRoZSBkZXNjcmlwdGlvbiBvZiB0aGF0IGNv
-bW1pdCwgdGhlIHB1cnBvc2Ugb2YgdGhhdA0KPiA+ID4gcGF0Y2ggd2FzIGluIGZhY3QgdG8gbWFr
-ZSB0aGUgc3VwcGx5IGNvbXBsZXRlbHkgb3B0aW9uYWwgaW4gdGhlIGNhc2UNCj4gPiA+IHdoZXJl
-IHdlIGFscmVhZHkgaGF2ZSB0aGUgVkJVUyBzdXBwbHkgc3BlY2lmaWVkIGZvciB0aGUgVVNCIHBv
-cnQgdGhhdA0KPiA+ID4gdGhlIGNvbm5lY3RvciBpcyBwYXJlbnRlZCB0by4NCj4gPiBDb3VsZCB5
-b3UgcGxlYXNlIGdpdmUgYW4gZXhhbXBsZSB5b3UgbWVudGlvbmVkPw0KPiANCj4gWW91IGNhbiBm
-aW5kIGV4YW1wbGVzIG9mIHRoaXMgaW4gdGhlc2U6DQo+IA0KPiAJYXJjaC9hcm02NC9ib290L2R0
-cy9udmlkaWEvdGVncmEyMTAtcDI1OTcuZHRzaQ0KPiAJYXJjaC9hcm02NC9ib290L2R0cy9udmlk
-aWEvdGVncmEyMTAtcDM0NTAtMDAwMC5kdHMNCj4gCWFyY2gvYXJtNjQvYm9vdC9kdHMvbnZpZGlh
-L3RlZ3JhMTg2LXAyNzcxLTAwMDAuZHRzDQo+IA0KPiA+IEl0IHNlZW1zIHByZWZlciB0byBwcm92
-aWRlIHZidXMgc3VwcGx5IGluIGNvbm5lY3RvciBpbnN0ZWFkIG9mIHBvcnQNCj4gPiBhY2NvcmRp
-bmcgdG8gZHQtYmluZGluZw0KPiANCj4gTXkgcmVjb2xsZWN0aW9uIGlzIHRoYXQgdGhlIGFib3Zl
-IChvciBhdCBsZWFzdCBzb21lIG9mIHRoZW0pIHByZWRhdGUgVVNCDQo+IGNvbm5lY3RvcnMuDQo+
-IA0KPiBJdCdzIHBvc3NpYmxlIHRoYXQgd2UgY291bGQgY29udmVydCB0aGUgYWJvdmUgdG8gaGF2
-ZSB0aGUgVkJVUyBzdXBwbHkNCj4gbGlzdGVkIGluIHRoZSBjb25uZWN0b3IgaW5zdGVhZCBvZiB0
-aGUgcG9ydC4gSG93ZXZlciwgc2luY2Ugd2UgaGF2ZSB0bw0KPiBwcmVzZXJ2ZSBiYWNrd2FyZHMg
-Y29tcGF0aWJpbGl0eSB3aXRoIG9sZGVyIGRldmljZSB0cmVlcywgd2UgY2FuJ3QNCj4gcmV2ZXJ0
-IHRoZSBjb21taXQgYW55d2F5Lg0KR290IGl0LCB0aGFua3MgYSBsb3QNCg0KPiANCj4gVGhpZXJy
-eQ0KDQo=
+Hi Felipe,
 
+On 5/13/2021 3:17 AM, Matthias Kaehlcke wrote:
+> On Mon, May 03, 2021 at 02:20:23PM +0300, Felipe Balbi wrote:
+>> Hi,
+>>
+>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>> Sandeep Maheswaram <sanm@codeaurora.org> writes:
+>>>>> Avoiding phy powerdown when wakeup capable devices are connected
+>>>>> by checking phy_power_off flag.
+>>>>> Phy should be on to wake up the device from suspend using wakeup capable
+>>>>> devices such as keyboard and mouse.
+>>>>>
+>>>>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>>>>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>>>>> ---
+>>>>>    drivers/usb/dwc3/core.c | 7 +++++--
+>>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>>>>> index b6e53d8..bb414c3 100644
+>>>>> --- a/drivers/usb/dwc3/core.c
+>>>>> +++ b/drivers/usb/dwc3/core.c
+>>>>> @@ -1738,7 +1738,7 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>>>>>    		dwc3_core_exit(dwc);
+>>>>>    		break;
+>>>>>    	case DWC3_GCTL_PRTCAP_HOST:
+>>>>> -		if (!PMSG_IS_AUTO(msg)) {
+>>>>> +		if (!PMSG_IS_AUTO(msg) && dwc->phy_power_off) {
+>>>> should be able to detect this generically, no? Shouldn't
+>>>> device_may_wakeup() be valid here and give you the answer you want?
+>>> I think  device_may_wakeup() gives whether the controller is wake up
+>>> capable or not.
+>> Yes, but it's a bit more than that. Looking at devices.rst we read:
+>>
+>> If :c:func:`device_may_wakeup(dev)` returns ``true``, the device should be
+>> prepared for generating hardware wakeup signals to trigger a system wakeup event
+>> when the system is in the sleep state.  For example, :c:func:`enable_irq_wake()`
+>> might identify GPIO signals hooked up to a switch or other external hardware,
+>> and :c:func:`pci_enable_wake()` does something similar for the PCI PME signal.
+>>
+>> So, if there is a condition where $this device has to, somehow, deal
+>> with wakeup, it should be configured accordingly. This ->phy_power_off
+>> flag is telling us the same thing.
+>>
+>>> But we want to keep phy powered on only when some wakeup capable devices
+>>> (eg:keyboard ,mouse ) are connected to controller.
+>> Understood, it could be that we're missing some method for propagating
+>> that state (i.e. keyboard with PM support) up to the parent device, but
+>> that's no excuse to bypass driver boundaries. Wouldn't you agree?
+> I'm not sure if device_may_wakeup() is really the right tool for the
+> job. This is the current implementation:
+>
+> static inline bool device_may_wakeup(struct device *dev)
+> {
+> 	return dev->power.can_wakeup && !!dev->power.wakeup;
+> }
+>
+> IIUC power.can_wakeup specifies whether the device is wakeup
+> capable, primarily in physical terms and indicating that the
+> driver is ready to handle wakeups, and power.wakeup represents
+> the policy which can be changed by userspace.
+>
+> Supposing the hub is generally wakeup capable that flag
+> shouldn't be changed. Neither should be the policy based on
+> what is connected to the bus.
+Please suggest us how to proceed further with this patch.
