@@ -2,135 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DD139361F
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 21:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3476839361B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 21:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234984AbhE0TRf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 15:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57358 "EHLO
+        id S233822AbhE0TQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 15:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233462AbhE0TRf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 May 2021 15:17:35 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA584C061760
-        for <linux-usb@vger.kernel.org>; Thu, 27 May 2021 12:16:01 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id f8so1104598pjh.0
-        for <linux-usb@vger.kernel.org>; Thu, 27 May 2021 12:16:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IuQ1mln99XVQ8KIRtcNK5ux06may7zUsz31usRyDstI=;
-        b=UoNBo0lQTQse69/jwXlT+DbMDtMQCcT+3OsBws4KmUILMvbunExHrM9Do93IDjeGM8
-         MVbyTxu1iJWLa4iJfSk5+9vgUjmPuhmEDQ0XBYhl20CGPyYP342nspr2iohGgKc0xKOi
-         BvLgo8z/XWlA3PhpTNP+oZBYI8eD2oqSsMVGy+MhT5ZiivgRJ+LiHpY2W5d4pWtXVCZs
-         fFtFtry8HlZ+925fk5RpgifDl/lbbIEpnpg+YTdtCoh2Lc6Laq8UaCi/MSN4l4dZ5wtg
-         WmeXMWO5DpWvrABR2X/B0le55LFvP3Jli+4GSwhTtE6px+AXpHOJirTUYEt1mq847VJz
-         JBpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IuQ1mln99XVQ8KIRtcNK5ux06may7zUsz31usRyDstI=;
-        b=sWO88XCjXorpdbguk+/GO987Glu/hp598VDCCL3i0f9pOEqfRrwSfsunEjsrNISu4n
-         LGVZv9PrCrP358gL4+EIc5HkFmVKBjOjMfxz3mSeEzzSZ3gqKzDwJljAMVghdfdMuOSb
-         D85zChIKM/0s0Q/ryvWjD+7AotECea/DY7ON4NeCRyiNhcHk3I6F45MQG+pu1w/EYkDi
-         t/vPZnOQ7kmuiHwZVY6YEqHs2jcS/nAbVL7ne89QbWIb85daNfQqI2SflGyR8IjaheEq
-         clhajHENcGM3LS1uHnzTWhgUaxNFO5h+IOqhd/VjlavJSVqA+M2D2eBY1W3r36RnG1OH
-         dHTA==
-X-Gm-Message-State: AOAM531OJ6i+HExtolRVP74SW4kbM83doGZUVKkLNz20wT1XwvD99WVX
-        VCkAYDZFjVLaWKL0zUbNZIkkodG8KIeXHhtYoOcTvw==
-X-Google-Smtp-Source: ABdhPJzDdcfqpqWi9YV5hdZCXknQc8mE8YRCO78A45hJlA4AvBz/MH4WTk9A4QFjxroikr8TWDSIT9+toInzUpvAFzc=
-X-Received: by 2002:a17:90b:1b04:: with SMTP id nu4mr5555248pjb.18.1622142961333;
- Thu, 27 May 2021 12:16:01 -0700 (PDT)
+        with ESMTP id S229881AbhE0TQm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 May 2021 15:16:42 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB30C061574;
+        Thu, 27 May 2021 12:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=MHosepZjuNsP8DuB67duFDw5qs/I1WA/YNwlH4XuuEA=; b=GtRoFHa9mTELSr7Wr7JUpNOl0D
+        SCNy96BLWyCnk7gUacs2w0nBIB6KNiYQivtRSIc7wiQQG84LvMRtlbnf+sDCeguaan0JjUg7fG1xB
+        +dsR3UbXOAWxUg6mBT/P0if7EzJUcpYdJLjfDQMJ0X4/s/TUbsvy08K7Hx6ajWk2g94A=;
+Received: from p200300ccff1430001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff14:3000:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1lmLTC-0003d0-By; Thu, 27 May 2021 21:15:02 +0200
+Date:   Thu, 27 May 2021 21:15:01 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <20210527211501.70d176b4@aktux>
+In-Reply-To: <20210518150615.53464-1-tony@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20210527175703.0f0b63c7@canb.auug.org.au> <a7a618ae-936e-67a7-975f-8692db0ada87@infradead.org>
-In-Reply-To: <a7a618ae-936e-67a7-975f-8692db0ada87@infradead.org>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Thu, 27 May 2021 21:14:28 +0200
-Message-ID: <CAMZdPi-xZefr50yAiQbARXm4Dedb=Y+tJQCxxYERow9hbUR4Sg@mail.gmail.com>
-Subject: Re: linux-next: Tree for May 27 (drivers/usb/class/cdc-wdm.o)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Randy;
+Hi,
 
+On Tue, 18 May 2021 18:06:15 +0300
+Tony Lindgren <tony@atomide.com> wrote:
 
-On Thu, 27 May 2021 at 17:10, Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 5/27/21 12:57 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20210526:
-> >
-> > The kvm-fixes tree gained another build failure so I used the version from
-> > next-20210524.
-> >
-> > The hid tree (I think) gained a build failure that I left broken.
-> >
-> > The amdgpu tree gained a build failure for which I reverted a commit.
-> >
-> > The scsi-mkp tree gained a build failuer so I used the version from
-> > next-20210526.
-> >
-> > Non-merge commits (relative to Linus' tree): 5002
-> >  4946 files changed, 230454 insertions(+), 77632 deletions(-)
-> >
-> > ----------------------------------------------------------------------------
-> >
-> > I have created today's linux-next tree at
-> > git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> > (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-> > are tracking the linux-next tree using git, you should not use "git pull"
-> > to do so as that will try to merge the new linux-next release with the
-> > old one.  You should use "git fetch" and checkout or reset to the new
-> > master.
-> >
-> > You can see which trees have been included by looking in the Next/Trees
-> > file in the source.  There are also quilt-import.log and merge.log
-> > files in the Next directory.  Between each merge, the tree was built
-> > with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-> > multi_v7_defconfig for arm and a native build of tools/perf. After
-> > the final fixups (if any), I do an x86_64 modules_install followed by
-> > builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-> > ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-> > and sparc64 defconfig and htmldocs. And finally, a simple boot test
-> > of the powerpc pseries_le_defconfig kernel in qemu (with and without
-> > kvm enabled).
-> >
-> > Below is a summary of the state of the merge.
-> >
-> > I am currently merging 331 trees (counting Linus' and 89 trees of bug
-> > fix patches pending for the current merge release).
-> >
-> > Stats about the size of the tree over time can be seen at
-> > http://neuling.org/linux-next-size.html .
-> >
-> > Status of my local build tests will be at
-> > http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-> > advice about cross compilers/configs that work, we are always open to add
-> > more builds.
-> >
-> > Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-> > Gortmaker for triage and bug fixes.
-> >
->
-> on i386:
->
-> ld: drivers/usb/class/cdc-wdm.o: in function `wdm_disconnect':
-> cdc-wdm.c:(.text+0x7c5): undefined reference to `wwan_remove_port'
-> ld: drivers/usb/class/cdc-wdm.o: in function `wdm_in_callback':
-> cdc-wdm.c:(.text+0xb8d): undefined reference to `wwan_port_rx'
+> On start-up, we can get a spurious session request interrupt with nothing
+> connected. After that the devctl session bit will silently clear, but the
+> musb hardware is never idled until a cable is plugged in, or the glue
+> layer module is reloaded.
+> 
+> Let's just check the session bit again in 3 seconds in peripheral mode
+> to catch the issue.
+> 
+Tested this together with the other musb patch you sent on gta04.
+This has some interesting side effects.
 
-This is normally fixed by:
-https://patchwork.kernel.org/project/linux-usb/patch/20210521021010.2490930-1-weiyongjun1@huawei.com/
+Test done:
+- loading kernel+ramdisk via usb-dfu
+- disconnecting usb cable
+- loading omap_hdq (to see battery status)
+- idling serial ports
+- checking battery current 1.
+- loading omap2430, phy-twl4030-usb, g_ether
+- checking battery current 2 (again with idled serial ports).
+- rtcwake -s 20 -m mem
+- checking current during suspend (3)
+
+Without your patches: current 2 is current 1 + approx 15 mA, current 3
+is near current 1.
+With your patches: current 2 is near current 1, current 3 is approx
+15mA higher.
+
+Another strange thing I have hit (I have not done this test before, no
+idea yet if it is related, but it is also about musb):
+Connecting a usb cable while serial ports are idle (not in system
+supend), console serial port does not wake up by input, it reacts again
+if I unplug usb. If I give usb0 an IP address, I can ping it. No
+intensive debugging done there yet. Just stumbled across it.
 
 Regards,
-loic
+Andreas
