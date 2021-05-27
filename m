@@ -2,108 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A408392B56
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 12:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28911392B8B
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 12:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbhE0KDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 06:03:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46310 "EHLO mail.kernel.org"
+        id S236103AbhE0KQH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 06:16:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48944 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236068AbhE0KDg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 May 2021 06:03:36 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6573261248;
-        Thu, 27 May 2021 10:02:02 +0000 (UTC)
+        id S236023AbhE0KQG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 May 2021 06:16:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E16BC613AF;
+        Thu, 27 May 2021 10:14:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622109723;
-        bh=dFD8ud/4DwoZRZKPqGaOszuuLnJUDxlCzgH3slyHjBo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e74Z8OXps2QibaOu9PZ/b9VNpip5dsFf7SE0/YWdycwZEIStl08VMt8njkQhpZR+B
-         P86W0faR6FGXysDIPjDOOoHOu0B/fLJ5A+143tsuWHMQcUTiinK3wU8o7DipAkr+kz
-         +2u4KHVtvpHWKtHUt5+FFPzqYBA/XXony6E710l4=
-Date:   Thu, 27 May 2021 12:01:59 +0200
+        s=korg; t=1622110473;
+        bh=aSbVtg3JAL80z7JEB0y4ZLdk3NfLm7kCW19/b4elr74=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nU/mVeJwy/EVdWWvRYzzQQIqSv3iZdIm4DPjL6PM4GJhyb+9tnouPcqyvr4UtVfnJ
+         VDsOrqjh3G7J6ikoBpcsmDh1Trv2U6giAf7L71ivVJv6K+KkkNQ750GSIHq7aG6tMo
+         cm3uCHIHtSVEv2B3V/5MSO/Tl59N3hsgQl6CsOQE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 2/3] usb: common: add helper to get
- role-switch-default-mode
-Message-ID: <YK9uFwkb5+Y6Babz@kroah.com>
-References: <1621933165-9661-1-git-send-email-chunfeng.yun@mediatek.com>
- <1621933165-9661-2-git-send-email-chunfeng.yun@mediatek.com>
- <YK9KG5c96VmdHfF3@kroah.com>
- <1622108619.5918.3.camel@mhfsdcap03>
+To:     linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: [PATCH] USB: gr_udc: remove dentry storage for debugfs file
+Date:   Thu, 27 May 2021 12:14:26 +0200
+Message-Id: <20210527101426.3283214-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1622108619.5918.3.camel@mhfsdcap03>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1807; h=from:subject; bh=aSbVtg3JAL80z7JEB0y4ZLdk3NfLm7kCW19/b4elr74=; b=owGbwMvMwCRo6H6F97bub03G02pJDAnrC5kcS6VO5594++ZDO+OTarclXwrjJAWX7X3p9iFtwsyy eW8tO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiV/IYFvQ94XPWZvbeFv17UXl491 6Fk1ysPAwLJp7sr/tvLvBhnVCY2i+JS2ZHy5TkAQ==
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 27, 2021 at 05:43:39PM +0800, Chunfeng Yun wrote:
-> On Thu, 2021-05-27 at 09:28 +0200, Greg Kroah-Hartman wrote:
-> > On Tue, May 25, 2021 at 04:59:24PM +0800, Chunfeng Yun wrote:
-> > > Add helper to get "role-switch-default-mode", and convert it
-> > > to the corresponding enum usb_dr_mode
-> > > 
-> > > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > > ---
-> > >  drivers/usb/common/common.c | 20 ++++++++++++++++++++
-> > >  include/linux/usb/otg.h     |  1 +
-> > >  2 files changed, 21 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> > > index fff318597337..78a625a4e526 100644
-> > > --- a/drivers/usb/common/common.c
-> > > +++ b/drivers/usb/common/common.c
-> > > @@ -207,6 +207,26 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
-> > >  
-> > > +/**
-> > > + * usb_get_role_switch_default_mode - Get default mode for given device
-> > > + * @dev: Pointer to the given device
-> > > + *
-> > > + * The function gets string from property 'role-switch-default-mode',
-> > > + * and returns the corresponding enum usb_dr_mode.
-> > > + */
-> > > +enum usb_dr_mode usb_get_role_switch_default_mode(struct device *dev)
-> > > +{
-> > > +	const char *str;
-> > > +	int ret;
-> > > +
-> > > +	ret = device_property_read_string(dev, "role-switch-default-mode", &str);
-> > > +	if (ret < 0)
-> > > +		return USB_DR_MODE_UNKNOWN;
-> > > +
-> > > +	return usb_get_dr_mode_from_string(str);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(usb_get_role_switch_default_mode);
-> > > +
-> > >  /**
-> > >   * usb_decode_interval - Decode bInterval into the time expressed in 1us unit
-> > >   * @epd: The descriptor of the endpoint
-> > > diff --git a/include/linux/usb/otg.h b/include/linux/usb/otg.h
-> > > index a86ee6aad51b..bde313c97fb6 100644
-> > > --- a/include/linux/usb/otg.h
-> > > +++ b/include/linux/usb/otg.h
-> > > @@ -121,5 +121,6 @@ enum usb_dr_mode {
-> > >  };
-> > >  
-> > >  extern enum usb_dr_mode usb_get_dr_mode(struct device *dev);
-> > > +extern enum usb_dr_mode usb_get_role_switch_default_mode(struct device *dev);
-> > 
-> > What other code outside of the dwc3 driver will ever need to call this?
-> I prepare a series of pathes for mtu3, and will support
-> "role-switch-default-mode" property
+There is no need to store the dentry pointer for a debugfs file that we
+only use to remove it when the device goes away.  debugfs can do the
+lookup for us instead, saving us some trouble, and making things smaller
+overall.
 
-Ok, how about we wait until at least 2 drivers need it before accepting
-this change.
+Cc: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/gadget/udc/gr_udc.c | 7 ++++---
+ drivers/usb/gadget/udc/gr_udc.h | 2 --
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/gadget/udc/gr_udc.c b/drivers/usb/gadget/udc/gr_udc.c
+index f8f3aa52383b..4b35739d3695 100644
+--- a/drivers/usb/gadget/udc/gr_udc.c
++++ b/drivers/usb/gadget/udc/gr_udc.c
+@@ -207,14 +207,15 @@ DEFINE_SHOW_ATTRIBUTE(gr_dfs);
+ static void gr_dfs_create(struct gr_udc *dev)
+ {
+ 	const char *name = "gr_udc_state";
++	struct dentry *root;
+ 
+-	dev->dfs_root = debugfs_create_dir(dev_name(dev->dev), usb_debug_root);
+-	debugfs_create_file(name, 0444, dev->dfs_root, dev, &gr_dfs_fops);
++	root = debugfs_create_dir(dev_name(dev->dev), usb_debug_root);
++	debugfs_create_file(name, 0444, root, dev, &gr_dfs_fops);
+ }
+ 
+ static void gr_dfs_delete(struct gr_udc *dev)
+ {
+-	debugfs_remove_recursive(dev->dfs_root);
++	debugfs_remove(debugfs_lookup(dev_name(dev->dev), usb_debug_root));
+ }
+ 
+ #else /* !CONFIG_USB_GADGET_DEBUG_FS */
+diff --git a/drivers/usb/gadget/udc/gr_udc.h b/drivers/usb/gadget/udc/gr_udc.h
+index ac5b3f65adb5..70134239179e 100644
+--- a/drivers/usb/gadget/udc/gr_udc.h
++++ b/drivers/usb/gadget/udc/gr_udc.h
+@@ -215,8 +215,6 @@ struct gr_udc {
+ 	struct list_head ep_list;
+ 
+ 	spinlock_t lock; /* General lock, a.k.a. "dev->lock" in comments */
+-
+-	struct dentry *dfs_root;
+ };
+ 
+ #define to_gr_udc(gadget)	(container_of((gadget), struct gr_udc, gadget))
+-- 
+2.31.1
 
-greg k-h
