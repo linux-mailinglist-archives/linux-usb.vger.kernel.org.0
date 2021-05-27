@@ -2,93 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BF5392AFB
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 11:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 836CE392B21
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 11:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235733AbhE0Jp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 05:45:29 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:4646 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S235675AbhE0Jp3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 May 2021 05:45:29 -0400
-X-UUID: 232c1ff5b927472e82519f19ecc6fa2a-20210527
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=UG82Zx0u8Lp+Mb9aUfFVOp7l7pjVcgLf+byTViN+wmc=;
-        b=oN3ywjZGK0TB4wa5gno7fljOMEQZzvm6dFf7qLxihlyyYSnLAO9zhsbW8y9HQAJDMYTmHqJ+wJDvniNWVo5g8RmnC4IoiYJpyICvMJq0TaAtxwv44D7XNybWAm0/B+iKLrW6AwW8OxIYv/H+IJUmfDmMR0cTAvUTL+upJFd96u8=;
-X-UUID: 232c1ff5b927472e82519f19ecc6fa2a-20210527
-Received: from mtkcas35.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 838898830; Thu, 27 May 2021 17:43:51 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N2.mediatek.inc
- (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 27 May
- 2021 17:43:39 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 27 May 2021 17:43:39 +0800
-Message-ID: <1622108619.5918.3.camel@mhfsdcap03>
-Subject: Re: [PATCH 2/3] usb: common: add helper to get
- role-switch-default-mode
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 27 May 2021 17:43:39 +0800
-In-Reply-To: <YK9KG5c96VmdHfF3@kroah.com>
-References: <1621933165-9661-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1621933165-9661-2-git-send-email-chunfeng.yun@mediatek.com>
-         <YK9KG5c96VmdHfF3@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S235913AbhE0Jvp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 05:51:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42400 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235809AbhE0Jvo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 May 2021 05:51:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1CF87613F0;
+        Thu, 27 May 2021 09:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1622109010;
+        bh=cmBGcT0eRQCBifI792Q3HjHvjS5nOyNVd0fvq4gyHIc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VXLkNE34YcBekZ+KiAEGlrxt8hnaZJWlF1hJj67aTiFuVJbWsub9+XFUcD84c9K2W
+         UekIIAdHGPa9ToZWZ/gJguTBuoXKysZMnOT16ChOMEJXfiK05oL8F7O0stHUxldTiZ
+         2I+z2JsMRh8dhs8Uoa26Tx8L7iWQsIPirpXphd+8=
+Date:   Thu, 27 May 2021 11:50:07 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 17/24] usb: host: xhci: Remove unused variable 'len'
+Message-ID: <YK9rT+8oMJWxxhye@kroah.com>
+References: <20210526130037.856068-1-lee.jones@linaro.org>
+ <20210526130037.856068-18-lee.jones@linaro.org>
+ <YK9Ju9/kdaRv1jcT@kroah.com>
+ <20210527081609.GF543307@dell>
+ <5958f870-1834-3132-a729-2b26a84349ea@linux.intel.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: E3B543BEFB4730A1515935146F529F28626AA0ABC9D3B9CAB6FCA92BBBE1221B2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5958f870-1834-3132-a729-2b26a84349ea@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVGh1LCAyMDIxLTA1LTI3IGF0IDA5OjI4ICswMjAwLCBHcmVnIEtyb2FoLUhhcnRtYW4gd3Jv
-dGU6DQo+IE9uIFR1ZSwgTWF5IDI1LCAyMDIxIGF0IDA0OjU5OjI0UE0gKzA4MDAsIENodW5mZW5n
-IFl1biB3cm90ZToNCj4gPiBBZGQgaGVscGVyIHRvIGdldCAicm9sZS1zd2l0Y2gtZGVmYXVsdC1t
-b2RlIiwgYW5kIGNvbnZlcnQgaXQNCj4gPiB0byB0aGUgY29ycmVzcG9uZGluZyBlbnVtIHVzYl9k
-cl9tb2RlDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1bmZlbmcgWXVuIDxjaHVuZmVuZy55
-dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL3VzYi9jb21tb24vY29tbW9u
-LmMgfCAyMCArKysrKysrKysrKysrKysrKysrKw0KPiA+ICBpbmNsdWRlL2xpbnV4L3VzYi9vdGcu
-aCAgICAgfCAgMSArDQo+ID4gIDIgZmlsZXMgY2hhbmdlZCwgMjEgaW5zZXJ0aW9ucygrKQ0KPiA+
-IA0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9jb21tb24vY29tbW9uLmMgYi9kcml2ZXJz
-L3VzYi9jb21tb24vY29tbW9uLmMNCj4gPiBpbmRleCBmZmYzMTg1OTczMzcuLjc4YTYyNWE0ZTUy
-NiAxMDA2NDQNCj4gPiAtLS0gYS9kcml2ZXJzL3VzYi9jb21tb24vY29tbW9uLmMNCj4gPiArKysg
-Yi9kcml2ZXJzL3VzYi9jb21tb24vY29tbW9uLmMNCj4gPiBAQCAtMjA3LDYgKzIwNywyNiBAQCBl
-bnVtIHVzYl9kcl9tb2RlIHVzYl9nZXRfZHJfbW9kZShzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+ID4g
-IH0NCj4gPiAgRVhQT1JUX1NZTUJPTF9HUEwodXNiX2dldF9kcl9tb2RlKTsNCj4gPiAgDQo+ID4g
-Ky8qKg0KPiA+ICsgKiB1c2JfZ2V0X3JvbGVfc3dpdGNoX2RlZmF1bHRfbW9kZSAtIEdldCBkZWZh
-dWx0IG1vZGUgZm9yIGdpdmVuIGRldmljZQ0KPiA+ICsgKiBAZGV2OiBQb2ludGVyIHRvIHRoZSBn
-aXZlbiBkZXZpY2UNCj4gPiArICoNCj4gPiArICogVGhlIGZ1bmN0aW9uIGdldHMgc3RyaW5nIGZy
-b20gcHJvcGVydHkgJ3JvbGUtc3dpdGNoLWRlZmF1bHQtbW9kZScsDQo+ID4gKyAqIGFuZCByZXR1
-cm5zIHRoZSBjb3JyZXNwb25kaW5nIGVudW0gdXNiX2RyX21vZGUuDQo+ID4gKyAqLw0KPiA+ICtl
-bnVtIHVzYl9kcl9tb2RlIHVzYl9nZXRfcm9sZV9zd2l0Y2hfZGVmYXVsdF9tb2RlKHN0cnVjdCBk
-ZXZpY2UgKmRldikNCj4gPiArew0KPiA+ICsJY29uc3QgY2hhciAqc3RyOw0KPiA+ICsJaW50IHJl
-dDsNCj4gPiArDQo+ID4gKwlyZXQgPSBkZXZpY2VfcHJvcGVydHlfcmVhZF9zdHJpbmcoZGV2LCAi
-cm9sZS1zd2l0Y2gtZGVmYXVsdC1tb2RlIiwgJnN0cik7DQo+ID4gKwlpZiAocmV0IDwgMCkNCj4g
-PiArCQlyZXR1cm4gVVNCX0RSX01PREVfVU5LTk9XTjsNCj4gPiArDQo+ID4gKwlyZXR1cm4gdXNi
-X2dldF9kcl9tb2RlX2Zyb21fc3RyaW5nKHN0cik7DQo+ID4gK30NCj4gPiArRVhQT1JUX1NZTUJP
-TF9HUEwodXNiX2dldF9yb2xlX3N3aXRjaF9kZWZhdWx0X21vZGUpOw0KPiA+ICsNCj4gPiAgLyoq
-DQo+ID4gICAqIHVzYl9kZWNvZGVfaW50ZXJ2YWwgLSBEZWNvZGUgYkludGVydmFsIGludG8gdGhl
-IHRpbWUgZXhwcmVzc2VkIGluIDF1cyB1bml0DQo+ID4gICAqIEBlcGQ6IFRoZSBkZXNjcmlwdG9y
-IG9mIHRoZSBlbmRwb2ludA0KPiA+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3VzYi9vdGcu
-aCBiL2luY2x1ZGUvbGludXgvdXNiL290Zy5oDQo+ID4gaW5kZXggYTg2ZWU2YWFkNTFiLi5iZGUz
-MTNjOTdmYjYgMTAwNjQ0DQo+ID4gLS0tIGEvaW5jbHVkZS9saW51eC91c2Ivb3RnLmgNCj4gPiAr
-KysgYi9pbmNsdWRlL2xpbnV4L3VzYi9vdGcuaA0KPiA+IEBAIC0xMjEsNSArMTIxLDYgQEAgZW51
-bSB1c2JfZHJfbW9kZSB7DQo+ID4gIH07DQo+ID4gIA0KPiA+ICBleHRlcm4gZW51bSB1c2JfZHJf
-bW9kZSB1c2JfZ2V0X2RyX21vZGUoc3RydWN0IGRldmljZSAqZGV2KTsNCj4gPiArZXh0ZXJuIGVu
-dW0gdXNiX2RyX21vZGUgdXNiX2dldF9yb2xlX3N3aXRjaF9kZWZhdWx0X21vZGUoc3RydWN0IGRl
-dmljZSAqZGV2KTsNCj4gDQo+IFdoYXQgb3RoZXIgY29kZSBvdXRzaWRlIG9mIHRoZSBkd2MzIGRy
-aXZlciB3aWxsIGV2ZXIgbmVlZCB0byBjYWxsIHRoaXM/DQpJIHByZXBhcmUgYSBzZXJpZXMgb2Yg
-cGF0aGVzIGZvciBtdHUzLCBhbmQgd2lsbCBzdXBwb3J0DQoicm9sZS1zd2l0Y2gtZGVmYXVsdC1t
-b2RlIiBwcm9wZXJ0eQ0KDQo+IA0KPiB0aGFua3MsDQo+IA0KPiBncmVnIGstaA0KDQo=
+On Thu, May 27, 2021 at 12:23:24PM +0300, Mathias Nyman wrote:
+> On 27.5.2021 11.16, Lee Jones wrote:
+> > On Thu, 27 May 2021, Greg Kroah-Hartman wrote:
+> > 
+> >> On Wed, May 26, 2021 at 02:00:30PM +0100, Lee Jones wrote:
+> >>> Fixes the following W=1 kernel build warning(s):
+> >>>
+> >>>  drivers/usb/host/xhci.c: In function ‘xhci_unmap_temp_buf’:
+> >>>  drivers/usb/host/xhci.c:1349:15: warning: variable ‘len’ set but not used [-Wunused-but-set-variable]
+> >>>
+> >>> Cc: Mathias Nyman <mathias.nyman@intel.com>
+> >>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >>> Cc: linux-usb@vger.kernel.org
+> >>> Signed-off-by: Lee Jones <lee.jones@linaro.org>
+> >>> ---
+> >>>  drivers/usb/host/xhci.c | 9 ++++-----
+> >>>  1 file changed, 4 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> >>> index 27283654ca080..ac2a7d4288883 100644
+> >>> --- a/drivers/usb/host/xhci.c
+> >>> +++ b/drivers/usb/host/xhci.c
+> >>> @@ -1346,7 +1346,6 @@ static bool xhci_urb_temp_buffer_required(struct usb_hcd *hcd,
+> >>>  
+> >>>  static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+> >>>  {
+> >>> -	unsigned int len;
+> >>>  	unsigned int buf_len;
+> >>>  	enum dma_data_direction dir;
+> >>>  
+> >>> @@ -1362,10 +1361,10 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+> >>>  				 dir);
+> >>>  
+> >>>  	if (usb_urb_dir_in(urb))
+> >>> -		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> >>> -					   urb->transfer_buffer,
+> >>> -					   buf_len,
+> >>> -					   0);
+> >>> +		sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+> >>> +				     urb->transfer_buffer,
+> >>> +				     buf_len,
+> >>> +				     0);
+> >>
+> >> Sorry, but no, I keep rejecting this over and over, it needs to handle
+> >> the error handling properly and not paper over it like this :(
+> > 
+> > Will fix.
+> > 
+> >> All the bots keep tripping up on it, you are not alone.
+> > 
+> 
+> This is getting a lot of attention. Something like this should fix it:
+> 
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index 27283654ca08..306ab81421fd 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -1361,12 +1361,16 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
+>  				 urb->transfer_buffer_length,
+>  				 dir);
+>  
+> -	if (usb_urb_dir_in(urb))
+> +	if (usb_urb_dir_in(urb)) {
+>  		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
+>  					   urb->transfer_buffer,
+>  					   buf_len,
+>  					   0);
+> -
+> +		if (len != buf_len) {
+> +			xhci_dbg(xhci, "Copy from tmp buf to urb sg list failed\n");
+> +			urb->actual_length = len;
+> +		}
+> +	}
+>  	urb->transfer_flags &= ~URB_DMA_MAP_SINGLE;
+>  	kfree(urb->transfer_buffer);
+>  	urb->transfer_buffer = NULL;
+>  
+> urb->actual_length is now properly set.
+> The debug level message will help me find the cause if we ever need
+> to debug oddly behaving devices.
+> 
+> Note this is a very rarly taken codepath for quirky xHC harware that
+> can't handle a specific sequence of buffer lengths queued.
+> 
+> I can write a proper commit message and push this forward
 
+That looks good, I kept waiting for one of the people who kept trying to
+report "build warning fixes" to do it right, but I'll gladly take it
+from you as well :)
+
+thanks,
+
+greg k-h
