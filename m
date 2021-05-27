@@ -2,177 +2,254 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C6A3932C7
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 17:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A3F393323
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 18:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236883AbhE0Prb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 11:47:31 -0400
-Received: from mail-co1nam11on2063.outbound.protection.outlook.com ([40.107.220.63]:30944
-        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S236975AbhE0PrY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 May 2021 11:47:24 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bLIDcw0Veq4nvk7GZ+YEh3v4GGPE1c6dh8xpe3aRTjTlO1DT7RFDUxoW25BGN5RsvEhqJ9F9t02cHa6JDGHfstLRSSAIaIb3vUQWptUayMqm2Aw+bMkni/ctcAwDp0aClPOhAt3+n5mIVu6EU9xUg3QSjyDwwNPk4JeflTxQYvqNsOayo7frpwN19LIht5jTCGlDyyExSaJSUFc4sGeeK5b/xEUoDnrujI6drIbjDVy0h5TLgZfGNKNoXKxMKZIWty5/madzLVkKyucSqa985mYkTLS816zVSmAy16jagN2lN19LwCgtbVJnfriS3F0vzYV+DC9NhAH2MBItDJ5qaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Sg35WxRLRhG56CMR7XWiv4iwwx8oBI5fsr9j/H9ayg=;
- b=mSt6szJ+rUCf0sjeX8eVFqWkycVA/Uwcw4M1tQngMO1Hk3liTQkzpwxgv5J4t3+fnBp3JMAhSax13KHERlaCmfD6E0lhfSoJwUfXWaXnEH+VmcUtrSKoPpnwb5BVzv6o1KWPbcg0uiC20JWtUz+D7LgydjOtwcX5qqDKbw6wbbk1hZfWq3jtf5o+aZGob8CgZvEhqj217DpoB7Xld9VqXXn7zh0YUILI+XmgosMw9pe9uEAjmdu05j7sRSadDEjuXbPmOUk40GP73qaSBWDQxwBLcakYQ4oZkCylUp2fPkhpC9f3ySI94j02Y6MnemdJtVAC2YKEPMVG1wdx1djWbg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/Sg35WxRLRhG56CMR7XWiv4iwwx8oBI5fsr9j/H9ayg=;
- b=YB/m3tWFvdnBYPIs0aG5JsDq/msF8JsGZcT6NDSn7rl1/d65aSpXgP7neCVOg3vCC9nQo1I5/E30m+cdwZHE71F/ekMphNDtPLgfeqTUrUB99KUrxEYiNve6GaPhuCWd17uQCfp9gTpI5qPiEFucyzqHPveHLImKb3xcL/jar4w=
-Authentication-Results: intel.com; dkim=none (message not signed)
- header.d=none;intel.com; dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB2693.namprd12.prod.outlook.com (2603:10b6:a03:6a::33)
- by BY5PR12MB4872.namprd12.prod.outlook.com (2603:10b6:a03:1c4::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.22; Thu, 27 May
- 2021 15:45:47 +0000
-Received: from BYAPR12MB2693.namprd12.prod.outlook.com
- ([fe80::c0c3:7247:a767:f5b6]) by BYAPR12MB2693.namprd12.prod.outlook.com
- ([fe80::c0c3:7247:a767:f5b6%3]) with mapi id 15.20.4150.026; Thu, 27 May 2021
- 15:45:47 +0000
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Prike Liang <Prike.Liang@amd.com>
-Subject: [PATCH v5] usb: pci-quirks: disable D3cold on xhci suspend for s2idle on AMD Renoir
-Date:   Thu, 27 May 2021 10:45:34 -0500
-Message-Id: <20210527154534.8900-1-mario.limonciello@amd.com>
+        id S234661AbhE0QHB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 12:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234504AbhE0QHA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 May 2021 12:07:00 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39160C061574;
+        Thu, 27 May 2021 09:05:27 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id h20-20020a17090aa894b029015db8f3969eso701994pjq.3;
+        Thu, 27 May 2021 09:05:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j8ig93088yhOLRiXVoppbEZV7zLLcbW2urVcFHDp3X0=;
+        b=P95zcJo8WOpilBEUz/zyjNlhtvNSaeumaVf1hbh7J1vOqPWwUagTV3YVDkKwIB5ofI
+         ymwtKv+gko7EtUaRlmJ9VcO46ujYf51m3t9UEu/3B0F1RaifQ9J/hWzPQyMgjAg73aYR
+         te2u+vw5b94Ah7kY2d5TZ+GDbncLasE1qqq4oQ8yWVtnZu71uD4agpz6Vt0HBf290DQU
+         f7ftowJB02oPG6gzNG84ofUHdX3OV/JrZ2Ku5MA6Lf0XDGSBwQXJ+cIda1fAal7EYqS7
+         +8cS/cuXajf9YEiERyWDHKjP3YbIk3TtI3JAwLCzdV/IbLBRsCOdEnOMX+GITasRvUS+
+         oOnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=j8ig93088yhOLRiXVoppbEZV7zLLcbW2urVcFHDp3X0=;
+        b=AbyMntvYovnan05G11YzijBqgJZ5TEGGmhsXHgiXBYXoFtvt/YuVSFq+f3qY1jI8BM
+         pytfb+ZuZUDGSezs0A6ZEamTchcd9X5czQVde3b1YsYX6GA79qQcHckt/znaCi6GPkFF
+         StJpfkYmIVW+CBo0XDq/qYoUFGJrGJxeOM8UjunaLxzuPnxIGdFvLGmQn0wrOJzDLG1r
+         vVdEsu7clZrSnSf5PpQeEWujS5QmuZBz5trL9iYEG3M+DW9zq4Vd6vZ5kK8ukz2u/1iy
+         oabwXYbvLjr/4O+lTl4xVH/pDh8agXsu2wP4V+5FYXkPv3ojnOnGS8c9o4TxodFgVYVx
+         fiEA==
+X-Gm-Message-State: AOAM53165E9DqiJ0uB9bx5zoQms6bdY3hZnHpb6Yn63kK1GimubrHGan
+        pqpml7jTk0cOh/lfGx2mKpg=
+X-Google-Smtp-Source: ABdhPJwFxGoZHs+Q0LTsDQGR+cu4wAVW1Ar5mLf+lCSYOejkweHVA/FtEUSuTL/Y1Ifj8jfYtB0GmQ==
+X-Received: by 2002:a17:90a:9704:: with SMTP id x4mr10045791pjo.202.1622131526473;
+        Thu, 27 May 2021 09:05:26 -0700 (PDT)
+Received: from localhost.localdomain ([27.97.130.197])
+        by smtp.gmail.com with ESMTPSA id b124sm2294252pfa.27.2021.05.27.09.05.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 May 2021 09:05:25 -0700 (PDT)
+From:   Piyush Thange <pthange19@gmail.com>
+To:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Piyush Thange <pthange19@gmail.com>
+Subject: [PATCH] drivers: thunderbolt: Fixed Coding Style issues
+Date:   Thu, 27 May 2021 21:34:56 +0530
+Message-Id: <20210527160456.28592-1-pthange19@gmail.com>
 X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [165.204.77.11]
-X-ClientProxiedBy: SN4PR0501CA0110.namprd05.prod.outlook.com
- (2603:10b6:803:42::27) To BYAPR12MB2693.namprd12.prod.outlook.com
- (2603:10b6:a03:6a::33)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from AUS-LX-MLIMONCI.amd.com (165.204.77.11) by SN4PR0501CA0110.namprd05.prod.outlook.com (2603:10b6:803:42::27) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.9 via Frontend Transport; Thu, 27 May 2021 15:45:46 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1f0925f6-9b71-46cf-be84-08d921267eb9
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4872:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4872439FF93ADE6F3D77B1A4E2239@BY5PR12MB4872.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:923;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /2TFC8ZRoQyzqf6iGfp93PABNN0knYQ4MvivGrDyqI/5z8ZLuaYvOfQ6jm9Jhay9vurs4sGZfvCqHAehs9kPZENXhUZVGOjleYtkrZepftTrajpjw8mPAB7t9iTdi9CnrT1LDcECeSKiSw2iPCxaueue5CYWtabNLkJRTJ+0gS2MsaLG7TH8Qs47QvAD+DEVKsFLKE4bnsA2TlOLlGHzSoxQmQ0sqaKg7Xnbv/DMDPPoBZLf3/kCUyMX3XMiu4uNETwxvvtbTrFE/bJbL9c6cUSOOn6nICjkjqGHkdn8ExTqljg9IdFsxM2nexoxWJKjb8Xo+GHLwYozO8G6XXE4laQEcZCte6EGEWOfoxZ8sRfGnR5pssCghhClGRXN39Iu7v24WQq5WTd7Xqt1q3lP7h1/ie3VXGBHzYg591jfeImBuqYeh2+JvYkf1D+lyD3aVUMs8lcDpfdCgy3NfVwkHXT0J93b2KJ56vbi0/iLYatOUI8WCuSdTgCuusAzkhBWI4vTkXiKAS34/XxBs77jU//CQ6ag3yVxI2CooSQ2CNEeUjxYZepjDZf63qsuLVMU8Jqie9df9uhiWIy8W0lIRzs6jsiL541w9b0dJycCNBF+CNexSICvGYsWp+9ZS3gGZD32B3hpgOsVmBiFEKVEJsMYAFufdXU+LfsNQd22YbiFabdaoveNkdg8CV1pNcJFTJw0KhrqfV1ViIPfH7/Z1quLtZzqCDPIND6778Ih7LCNAICbA8cmVftBahQcZ354ghxaWfF5dZ7QZ9fxNvNSaPIMrKaROOgXdYqa9a3zQ5rZ/WMsdxz7laSi27zOwyzd
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB2693.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(396003)(39860400002)(366004)(376002)(86362001)(44832011)(966005)(8936002)(38350700002)(83380400001)(478600001)(36756003)(38100700002)(6486002)(2906002)(4326008)(2616005)(186003)(16526019)(956004)(1076003)(316002)(54906003)(6666004)(66476007)(66556008)(66946007)(15650500001)(5660300002)(7696005)(52116002)(8676002)(26005)(110136005)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?ti27d/0B+1+BotRiflxdBHSeV1hbJHLbJhq+5hYXBqv/p/3bRfn8sUwqc8px?=
- =?us-ascii?Q?hj8PFEq5/hFk8eiM7QG1V+lZghm+rczctkdd8pD7sLgogrFKYuprIFAJwisC?=
- =?us-ascii?Q?io7ra4niX2cXtkp2fUj9hCnWvrRQqu9ZSWShVesfiLDaARD/yQi2h7O/4BWd?=
- =?us-ascii?Q?/F9Wj5SzDX05xGXJpsghZEH7oX3+mNgkcra+yRujemdB1rxxKwRrW//SSFfk?=
- =?us-ascii?Q?NKyBv3vbTO8tyxRi73QXgHxBBFWVTM2T0gSJ/XXNMa6uJLQt4rl0q20Va35v?=
- =?us-ascii?Q?aHcjqrlp37JQkw5c1nxpt/2uQmfoYiwvU492jfgeCs3k28X/z5SByLrQT7rX?=
- =?us-ascii?Q?/QtuwtwyUstcqLB6oAOOxSLN+SGFQ+ckJdIxFRSMH3Fyp66J2zqIzdPVYhM2?=
- =?us-ascii?Q?wULmaNrhWBE7p+l3n4dL0sJ9ALP+MZKn+sZkjSpW+arCM6+GtwFhoJVh25vM?=
- =?us-ascii?Q?8iUTU4rxwqEghHLlQ+qlnRLmMLC+ksFpvxjGU6ePNs6uu4dLcuAWS6s0Dnsr?=
- =?us-ascii?Q?LOnFckUPYXT22ZEnSzrUrqD4CPx7vBzOR29y+wuQ4CGH5HsAjJbZEoysABIi?=
- =?us-ascii?Q?19/vK+kW69Ea0Txqh6YWuFHEBIsQfAW3tdjZKtr05KyFXnOY7cUn3fiwT1Fe?=
- =?us-ascii?Q?thNafenozv1mAVepLWkOrVEPTcvwjEHqP0jRLuicXuCFS1hsu4sbB/T6TBfP?=
- =?us-ascii?Q?8bN6UMyeR1Yk5GO55xl2pKPGKzVx+nZcf7+B+YzLmCLfN6P3A7dY+3PLo4U7?=
- =?us-ascii?Q?dVO6pjs+KPeSEUDa8P5OXs8MCFHC9xOpXJTq3Fy7gFEy379veYek3qIpSVP1?=
- =?us-ascii?Q?Qya2W7QZzqPlvb4hZvU9wLgUheMNEhhWj+gWhcfYwKFCSMwAhArA8y0ynlQR?=
- =?us-ascii?Q?I9E5b7WnXHFlWFvQ12Jf+QZvivHe9FPD8H+J2iILdkEniFJsX8W1b3j3pSmj?=
- =?us-ascii?Q?Gxe9SmWPxSmgtq5SbBbSoLSIkc9YpFDznMcxwgDxjoF3P9t6eQmDboy0Bs/j?=
- =?us-ascii?Q?AQaihStP1XGE54kTvQsFnPAjhK8X4w2euiNaHJoNIuYaYo0sJNTnobEqDLiF?=
- =?us-ascii?Q?Ymu+/lpYibWmxvGST5yssx6zacSWDP/GZCh/ESyxJs/Q+7yysdGRTYlvmMSP?=
- =?us-ascii?Q?Dkt0qCcbXOZZ7cO08Dtr3PszJRX1B7J9SiiVBMvcjrXF89ls1tJCTEBQ5VcZ?=
- =?us-ascii?Q?zNmvytjj8hLhFZOlxi7d+i/taugas0uDQnAA0aYzKl0c9MX7/1o31WWXyOlz?=
- =?us-ascii?Q?HLZzKuTTMUyMt5BkD+1RiTGarjIA2M4Y9BKGQ9VkpQ/SljIM0T20nmWG2iSJ?=
- =?us-ascii?Q?kAbn0scY1pILssSot/wg9+xK?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f0925f6-9b71-46cf-be84-08d921267eb9
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB2693.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 May 2021 15:45:47.0490
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5pvIL7EtQqc/wLZFf6rDszpy4GbDttWTG9cQ+fe+Elm6Tx12gL27nD8SLZuGW01aiXhuzZjg5Y6/bpOOP9RiKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4872
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The XHCI controller is required to enter D3hot rather than D3cold for AMD
-s2idle on this hardware generation.
+Fixed coding style issues generated by checkpatch.pl with --strict option.
 
-Otherwise, the 'Controller Not Ready' (CNR) bit is not being cleared by
-host in resume and eventually this results in xhci resume failures during
-the s2idle wakeup.
-
-Suggested-by: Prike Liang <Prike.Liang@amd.com>
-Link: https://lore.kernel.org/linux-usb/1612527609-7053-1-git-send-email-Prike.Liang@amd.com/
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Piyush Thange <pthange19@gmail.com>
 ---
- drivers/usb/host/xhci-pci.c | 7 ++++++-
- drivers/usb/host/xhci.h     | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ drivers/thunderbolt/switch.c | 43 ++++++++++++++++++++++--------------
+ 1 file changed, 27 insertions(+), 16 deletions(-)
 
-v1 -> v2: drop the XHCI_COMP_MODE_QUIRK quirk and create a new one for handling
-XHCI D3cold.
-
-v2 -> v3: correct the quirk name typo XHCI_AMD_S2IDL_SUPPORT_QUIRK -> XHCI_AMD_S2IDLE_SUPPORT_QUIRK
-
-v3 -> v4: Fix commit message to clarify and reference HW
-          Rename quirk to describe problem, not hardware
-          Add definition for the hardware to source
-v4 -> v5: Correct a typographical error
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 7bc18cf8042c..18c2bbddf080 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -59,6 +59,7 @@
- #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
- #define PCI_DEVICE_ID_INTEL_ALDER_LAKE_XHCI		0x461e
- 
-+#define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
-@@ -182,6 +183,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		(pdev->device == PCI_DEVICE_ID_AMD_PROMONTORYA_1)))
- 		xhci->quirks |= XHCI_U2_DISABLE_WAKE;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-+		pdev->device == PCI_DEVICE_ID_AMD_RENOIR_XHCI)
-+		xhci->quirks |= XHCI_BROKEN_D3COLD;
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index e73cd296db7e..921d25590560 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -148,8 +148,9 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+ 		if (sw->generation < 3) {
+ 			/* Write CSS headers first */
+ 			ret = dma_port_flash_write(sw->dma_port,
+-				DMA_PORT_CSS_ADDRESS, buf + NVM_CSS,
+-				DMA_PORT_CSS_MAX_SIZE);
++						   DMA_PORT_CSS_ADDRESS,
++						   buf + NVM_CSS,
++						   DMA_PORT_CSS_MAX_SIZE);
+ 			if (ret)
+ 				return ret;
+ 		}
+@@ -463,7 +464,7 @@ static const char *tb_port_type(struct tb_regs_port_header *port)
+ {
+ 	switch (port->type >> 16) {
+ 	case 0:
+-		switch ((u8) port->type) {
++		switch ((u8)port->type) {
+ 		case 0:
+ 			return "Inactive";
+ 		case 1:
+@@ -513,6 +514,7 @@ int tb_port_state(struct tb_port *port)
+ {
+ 	struct tb_cap_phy phy;
+ 	int res;
 +
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
- 		xhci->quirks |= XHCI_LPM_SUPPORT;
- 		xhci->quirks |= XHCI_INTEL_HOST;
-@@ -539,7 +544,7 @@ static int xhci_pci_suspend(struct usb_hcd *hcd, bool do_wakeup)
- 	 * Systems with the TI redriver that loses port status change events
- 	 * need to have the registers polled during D3, so avoid D3cold.
- 	 */
--	if (xhci->quirks & XHCI_COMP_MODE_QUIRK)
-+	if (xhci->quirks & (XHCI_COMP_MODE_QUIRK | XHCI_BROKEN_D3COLD))
- 		pci_d3cold_disable(pdev);
+ 	if (port->cap_phy == 0) {
+ 		tb_port_WARN(port, "does not have a PHY\n");
+ 		return -EINVAL;
+@@ -542,6 +544,7 @@ int tb_wait_for_port(struct tb_port *port, bool wait_if_unplugged)
+ {
+ 	int retries = 10;
+ 	int state;
++
+ 	if (!port->cap_phy) {
+ 		tb_port_WARN(port, "does not have PHY\n");
+ 		return -EINVAL;
+@@ -636,6 +639,7 @@ int tb_port_add_nfc_credits(struct tb_port *port, int credits)
+ int tb_port_clear_counter(struct tb_port *port, int counter)
+ {
+ 	u32 zero[3] = { 0, 0, 0 };
++
+ 	tb_port_dbg(port, "clearing counter %d\n", counter);
+ 	return tb_port_write(port, zero, TB_CFG_COUNTERS, 3 * counter, 3);
+ }
+@@ -748,7 +752,6 @@ static int tb_init_port(struct tb_port *port)
  
- 	if (xhci->quirks & XHCI_PME_STUCK_QUIRK)
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 2595a8f057c4..e417f5ce13d1 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1892,6 +1892,7 @@ struct xhci_hcd {
- #define XHCI_DISABLE_SPARSE	BIT_ULL(38)
- #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
- #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
-+#define XHCI_BROKEN_D3COLD	BIT_ULL(41)
+ 	INIT_LIST_HEAD(&port->list);
+ 	return 0;
+-
+ }
  
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
+ static int tb_port_alloc_hopid(struct tb_port *port, bool in, int min_hopid,
+@@ -830,6 +833,7 @@ static inline bool tb_switch_is_reachable(const struct tb_switch *parent,
+ 					  const struct tb_switch *sw)
+ {
+ 	u64 mask = (1ULL << parent->config.depth * 8) - 1;
++
+ 	return (tb_route(parent) & mask) == (tb_route(sw) & mask);
+ }
+ 
+@@ -1132,6 +1136,7 @@ bool tb_pci_port_is_enabled(struct tb_port *port)
+ int tb_pci_port_enable(struct tb_port *port, bool enable)
+ {
+ 	u32 word = enable ? ADP_PCIE_CS_0_PE : 0x0;
++
+ 	if (!port->cap_adap)
+ 		return -ENXIO;
+ 	return tb_port_write(port, &word, TB_CFG_PORT,
+@@ -1241,7 +1246,7 @@ int tb_dp_port_enable(struct tb_port *port, bool enable)
+ 	int ret;
+ 
+ 	ret = tb_port_read(port, data, TB_CFG_PORT,
+-			  port->cap_adap + ADP_DP_CS_0, ARRAY_SIZE(data));
++			   port->cap_adap + ADP_DP_CS_0, ARRAY_SIZE(data));
+ 	if (ret)
+ 		return ret;
+ 
+@@ -1282,9 +1287,9 @@ static void tb_dump_switch(const struct tb *tb, const struct tb_switch *sw)
+ 	tb_dbg(tb, "  Max Port Number: %d\n", regs->max_port_number);
+ 	tb_dbg(tb, "  Config:\n");
+ 	tb_dbg(tb,
+-		"   Upstream Port Number: %d Depth: %d Route String: %#llx Enabled: %d, PlugEventsDelay: %dms\n",
++	       "   Upstream Port Number: %d Depth: %d Route String: %#llx Enabled: %d, PlugEventsDelay: %dms\n",
+ 	       regs->upstream_port_number, regs->depth,
+-	       (((u64) regs->route_hi) << 32) | regs->route_lo,
++	       (((u64)regs->route_hi) << 32) | regs->route_lo,
+ 	       regs->enabled, regs->plug_events_delay);
+ 	tb_dbg(tb, "   unknown1: %#x unknown4: %#x\n",
+ 	       regs->__unknown1, regs->__unknown4);
+@@ -1305,7 +1310,7 @@ int tb_switch_reset(struct tb_switch *sw)
+ 
+ 	tb_sw_dbg(sw, "resetting switch\n");
+ 
+-	res.err = tb_sw_write(sw, ((u32 *) &sw->config) + 2,
++	res.err = tb_sw_write(sw, ((u32 *)&sw->config) + 2,
+ 			      TB_CFG_SWITCH, 2, 2);
+ 	if (res.err)
+ 		return res.err;
+@@ -1331,7 +1336,7 @@ static int tb_plug_events_active(struct tb_switch *sw, bool active)
+ 		return 0;
+ 
+ 	sw->config.plug_events_delay = 0xff;
+-	res = tb_sw_write(sw, ((u32 *) &sw->config) + 4, TB_CFG_SWITCH, 4, 1);
++	res = tb_sw_write(sw, ((u32 *)&sw->config) + 4, TB_CFG_SWITCH, 4, 1);
+ 	if (res)
+ 		return res;
+ 
+@@ -1579,7 +1584,7 @@ static DEVICE_ATTR(rx_lanes, 0444, lanes_show, NULL);
+ static DEVICE_ATTR(tx_lanes, 0444, lanes_show, NULL);
+ 
+ static ssize_t nvm_authenticate_show(struct device *dev,
+-	struct device_attribute *attr, char *buf)
++				     struct device_attribute *attr, char *buf)
+ {
+ 	struct tb_switch *sw = tb_to_switch(dev);
+ 	u32 status;
+@@ -1646,9 +1651,12 @@ static ssize_t nvm_authenticate_sysfs(struct device *dev, const char *buf,
+ }
+ 
+ static ssize_t nvm_authenticate_store(struct device *dev,
+-	struct device_attribute *attr, const char *buf, size_t count)
++				      struct device_attribute *attr,
++				      const char *buf,
++				      size_t count)
+ {
+ 	int ret = nvm_authenticate_sysfs(dev, buf, false);
++
+ 	if (ret)
+ 		return ret;
+ 	return count;
+@@ -1656,13 +1664,16 @@ static ssize_t nvm_authenticate_store(struct device *dev,
+ static DEVICE_ATTR_RW(nvm_authenticate);
+ 
+ static ssize_t nvm_authenticate_on_disconnect_show(struct device *dev,
+-	struct device_attribute *attr, char *buf)
++						   struct device_attribute *attr,
++						   char *buf)
+ {
+ 	return nvm_authenticate_show(dev, attr, buf);
+ }
+ 
+ static ssize_t nvm_authenticate_on_disconnect_store(struct device *dev,
+-	struct device_attribute *attr, const char *buf, size_t count)
++						    struct device_attribute *attr,
++						    const char *buf,
++						    size_t count)
+ {
+ 	int ret;
+ 
+@@ -1859,7 +1870,7 @@ static int tb_switch_uevent(struct device *dev, struct kobj_uevent_env *env)
+ 		/* Device is hub if it has any downstream ports */
+ 		tb_switch_for_each_port(sw, port) {
+ 			if (!port->disabled && !tb_is_upstream_port(port) &&
+-			     tb_port_is_null(port)) {
++			    tb_port_is_null(port)) {
+ 				hub = true;
+ 				break;
+ 			}
+@@ -2032,7 +2043,7 @@ struct tb_switch *tb_switch_alloc(struct tb *tb, struct device *parent,
+ 
+ 	/* initialize ports */
+ 	sw->ports = kcalloc(sw->config.max_port_number + 1, sizeof(*sw->ports),
+-				GFP_KERNEL);
++			    GFP_KERNEL);
+ 	if (!sw->ports) {
+ 		ret = -ENOMEM;
+ 		goto err_free_sw_ports;
+@@ -2754,7 +2765,7 @@ int tb_switch_resume(struct tb_switch *sw)
+ 		}
+ 		if (sw->uid != uid) {
+ 			tb_sw_info(sw,
+-				"changed while suspended (uid %#llx -> %#llx)\n",
++				   "changed while suspended (uid %#llx -> %#llx)\n",
+ 				sw->uid, uid);
+ 			return -ENODEV;
+ 		}
 -- 
 2.25.1
 
