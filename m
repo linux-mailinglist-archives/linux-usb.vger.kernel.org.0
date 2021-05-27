@@ -2,25 +2,25 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0E8392885
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 09:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2844B392888
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 09:29:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbhE0HaD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 03:30:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38268 "EHLO mail.kernel.org"
+        id S234660AbhE0Han (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 03:30:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38428 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229753AbhE0HaD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 27 May 2021 03:30:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 44EC861059;
-        Thu, 27 May 2021 07:28:29 +0000 (UTC)
+        id S229753AbhE0Haj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 May 2021 03:30:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD59561028;
+        Thu, 27 May 2021 07:29:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622100509;
-        bh=JaIyM9JOIaX8kTZxhm82AXcUEBSrdnzdxBrRGPKHC7w=;
+        s=korg; t=1622100547;
+        bh=EtJ2JUcfUOkFr5UadD1b4YEvQnUE0JPMElirSd0F8Ww=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kJJNGPzH150LOjO+txWMxQkpdLCxNFWP44M2DDeOl1Ya/ZpWgEBCANlKDUe6pkcu9
-         xr+gdroiMLX5ZWnPW7R24hgjWifhNm66keG2pHYqj0I8ITY2ES+agxLaZEnu7CwvEa
-         Sztf9iqOlxqzfxX8SlSQmiOLa63PQID4fJD6/h70=
-Date:   Thu, 27 May 2021 09:28:27 +0200
+        b=KQTgmshGXUdT3I5R7qgkBf69No4YVt46S5yk/6UG5HRI+erSHYl8uq8gwvjG7foOK
+         vOd7DuXvdcd7NmTFD+Tsgov87AE+xJhnrQVgT+HulWJV/YH27HQX6G/DbHamD3fgB8
+         Hz0YSRBxc8GohxvSgi6Lo+azuYvCl/5Mktjq8QZw=
+Date:   Thu, 27 May 2021 09:29:04 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
@@ -29,71 +29,30 @@ Cc:     Felipe Balbi <balbi@kernel.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 2/3] usb: common: add helper to get
- role-switch-default-mode
-Message-ID: <YK9KG5c96VmdHfF3@kroah.com>
+Subject: Re: [PATCH 1/3] usb: common: move usb_get_dr_mode() kerneldoc next
+ to its definition
+Message-ID: <YK9KQBKRIqZsPcyQ@kroah.com>
 References: <1621933165-9661-1-git-send-email-chunfeng.yun@mediatek.com>
- <1621933165-9661-2-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1621933165-9661-2-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1621933165-9661-1-git-send-email-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, May 25, 2021 at 04:59:24PM +0800, Chunfeng Yun wrote:
-> Add helper to get "role-switch-default-mode", and convert it
-> to the corresponding enum usb_dr_mode
+On Tue, May 25, 2021 at 04:59:23PM +0800, Chunfeng Yun wrote:
+> Following a general rule, add the kerneldoc for a function next
+> to it's definition, but not next to its declaration in a header
+> file, meanwhile fix typo 'correspondig'
 > 
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/usb/common/common.c | 20 ++++++++++++++++++++
->  include/linux/usb/otg.h     |  1 +
->  2 files changed, 21 insertions(+)
-> 
-> diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
-> index fff318597337..78a625a4e526 100644
-> --- a/drivers/usb/common/common.c
-> +++ b/drivers/usb/common/common.c
-> @@ -207,6 +207,26 @@ enum usb_dr_mode usb_get_dr_mode(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(usb_get_dr_mode);
->  
-> +/**
-> + * usb_get_role_switch_default_mode - Get default mode for given device
-> + * @dev: Pointer to the given device
-> + *
-> + * The function gets string from property 'role-switch-default-mode',
-> + * and returns the corresponding enum usb_dr_mode.
-> + */
-> +enum usb_dr_mode usb_get_role_switch_default_mode(struct device *dev)
-> +{
-> +	const char *str;
-> +	int ret;
-> +
-> +	ret = device_property_read_string(dev, "role-switch-default-mode", &str);
-> +	if (ret < 0)
-> +		return USB_DR_MODE_UNKNOWN;
-> +
-> +	return usb_get_dr_mode_from_string(str);
-> +}
-> +EXPORT_SYMBOL_GPL(usb_get_role_switch_default_mode);
-> +
->  /**
->   * usb_decode_interval - Decode bInterval into the time expressed in 1us unit
->   * @epd: The descriptor of the endpoint
-> diff --git a/include/linux/usb/otg.h b/include/linux/usb/otg.h
-> index a86ee6aad51b..bde313c97fb6 100644
-> --- a/include/linux/usb/otg.h
-> +++ b/include/linux/usb/otg.h
-> @@ -121,5 +121,6 @@ enum usb_dr_mode {
->  };
->  
->  extern enum usb_dr_mode usb_get_dr_mode(struct device *dev);
-> +extern enum usb_dr_mode usb_get_role_switch_default_mode(struct device *dev);
+>  drivers/usb/common/common.c | 7 +++++++
+>  include/linux/usb/otg.h     | 7 -------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-What other code outside of the dwc3 driver will ever need to call this?
+Does not apply to my usb-next branch :(
 
 thanks,
 
