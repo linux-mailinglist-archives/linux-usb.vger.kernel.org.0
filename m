@@ -2,97 +2,198 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4C01392700
-	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 07:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F1F539280A
+	for <lists+linux-usb@lfdr.de>; Thu, 27 May 2021 08:52:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234374AbhE0Ft6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 27 May 2021 01:49:58 -0400
-Received: from mail-ed1-f43.google.com ([209.85.208.43]:45981 "EHLO
-        mail-ed1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232773AbhE0Ft5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 27 May 2021 01:49:57 -0400
-Received: by mail-ed1-f43.google.com with SMTP id a25so4261513edr.12
-        for <linux-usb@vger.kernel.org>; Wed, 26 May 2021 22:48:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=FSENTNS69xYs4su25wiolKPcGiosvKeWN8mFD7bl+RE=;
-        b=h7pJ0F3uE2CG50yg8siy7SWRLJhl/XnMhYqDPs5dtenhRzpmQVtq5uYuCUo/JjhBLj
-         XaagrJY9nPlLml4s1qtMuXr4vFjjQZAyTGF1ctETgBhZXvLCVqldahgbhf20DikIpqHs
-         ZBZqS4VI4WL78Ny4Zl3RtsWWA6z5F/hVwyMNlkGDEwRBWPcHJoEwoJgAdWaVLYo/jglY
-         JowvTlgOhC7AOuTkggCrdmCWH/yeRemAtz/hV6QOPBHBANRzmOMVgg5nbElgbEWg/q3i
-         5QY8H4kgschrAS+iqSAe439kr55/0Xrz2a04J7Q8UGsl5oISis6anGeYhquw1qUdWujq
-         blYg==
-X-Gm-Message-State: AOAM532p1hUQc5XGNsbpcuGIz6KytxYoE+eFuNi97cI3MyHA0n4un34Q
-        EU0fB7V/oU0Qjg5IAwCtigM=
-X-Google-Smtp-Source: ABdhPJw8Yl6lJ0ioyNzA2VWD7Fg0bURZiL5yIg0ZpLdiaJuwtCqSAkqdFGHDQsjSElCO/ek9ArkLwg==
-X-Received: by 2002:aa7:d3c8:: with SMTP id o8mr2164579edr.181.1622094503440;
-        Wed, 26 May 2021 22:48:23 -0700 (PDT)
-Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id j7sm448509ejk.51.2021.05.26.22.48.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 May 2021 22:48:22 -0700 (PDT)
-Subject: Re: [PATCH v4] usb: pci-quirks: disable D3cold on xhci suspend for
- s2idle on AMD Renoire
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        Prike Liang <Prike.Liang@amd.com>
-References: <20210505061606.22716-1-mario.limonciello@amd.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-Message-ID: <b10ad290-0569-99f1-efa7-7fc0bef59b5f@kernel.org>
-Date:   Thu, 27 May 2021 07:48:22 +0200
+        id S229822AbhE0GyU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 27 May 2021 02:54:20 -0400
+Received: from cable.insite.cz ([84.242.75.189]:50819 "EHLO cable.insite.cz"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229635AbhE0GyT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 27 May 2021 02:54:19 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id 8447DA1A3D403;
+        Thu, 27 May 2021 08:52:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1622098365; bh=hpjU0k/YACnBGMcvPUhmOGzj1jejAC0yCyhPWSDL050=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=fNnQDPgLB89Q4iPThjFOjvt6ANSm6O6QKwrBJjXb3zSE+5JIIKingSRAo3a3F92Yk
+         DrlIHlbDBHeCon2zH1bQpbafvvoHfoivz9DSqVOdhl85MXK49UC52uhguKmUsysS3x
+         CNmn/DqDKMfh6r2q+f3nBFGbah5j0ZKhn4v5z3N8=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id G3Ug7cN7Jcla; Thu, 27 May 2021 08:52:45 +0200 (CEST)
+Received: from [192.168.100.21] (unknown [192.168.100.21])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 57FEBA1A3D402;
+        Thu, 27 May 2021 08:52:45 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1622098365; bh=hpjU0k/YACnBGMcvPUhmOGzj1jejAC0yCyhPWSDL050=;
+        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
+        b=fNnQDPgLB89Q4iPThjFOjvt6ANSm6O6QKwrBJjXb3zSE+5JIIKingSRAo3a3F92Yk
+         DrlIHlbDBHeCon2zH1bQpbafvvoHfoivz9DSqVOdhl85MXK49UC52uhguKmUsysS3x
+         CNmn/DqDKMfh6r2q+f3nBFGbah5j0ZKhn4v5z3N8=
+Subject: Re: [RFC PATCH v2 3/3] usb: gadget: u_audio: .... PCM Rate Shift for
+ playback too?
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>, balbi@kernel.org,
+        Takashi Iwai <tiwai@suse.de>
+Cc:     linux-usb@vger.kernel.org, gschmottlach@gmail.com
+References: <20210430142625.357152-1-jbrunet@baylibre.com>
+ <20210430142625.357152-4-jbrunet@baylibre.com>
+ <266cc181-04ed-3204-148a-c658ac35a09f@ivitera.com>
+ <1jk0nob0nc.fsf@starbuckisacylon.baylibre.com>
+ <45f5fa13-ae85-1bcf-f3f4-fb89e68b6daf@ivitera.com>
+Message-ID: <fc692c18-27b5-8414-a9ae-52b6a5367bfc@ivitera.com>
+Date:   Thu, 27 May 2021 08:52:44 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20210505061606.22716-1-mario.limonciello@amd.com>
+In-Reply-To: <45f5fa13-ae85-1bcf-f3f4-fb89e68b6daf@ivitera.com>
 Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Language: cs-CZ
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 05. 05. 21, 8:16, Mario Limonciello wrote:
-> The XHCI controller is required to enter D3hot rather than D3cold for AMD
-> s2idle on this hardware generation.
-> 
-> Otherwise, the 'Controller Not Ready' (CNR) bit is not being cleared by host
-> in resume and eventually this results in xhci resume failures during the
-> s2idle wakeup.
-> 
-> Suggested-by: Prike Liang <Prike.Liang@amd.com>
-> Link: https://lore.kernel.org/linux-usb/1612527609-7053-1-git-send-email-Prike.Liang@amd.com/
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   drivers/usb/host/xhci-pci.c | 7 ++++++-
->   drivers/usb/host/xhci.h     | 1 +
->   2 files changed, 7 insertions(+), 1 deletion(-)
-> 
-> v1 -> v2: drop the XHCI_COMP_MODE_QUIRK quirk and create a new one for handling
-> XHCI D3cold.
-> 
-> v2 -> v3: correct the quirk name typo XHCI_AMD_S2IDL_SUPPORT_QUIRK -> XHCI_AMD_S2IDLE_SUPPORT_QUIRK
-> 
-> v3 -> v4: Fix commit message to clarify and reference HW
->            Rename quirk to describe problem, not hardware
->            Add definition for the hardware to source
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 5bbccc9a0179..7930edf8ebd1 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -58,6 +58,7 @@
->   #define PCI_DEVICE_ID_INTEL_TIGER_LAKE_XHCI		0x9a13
->   #define PCI_DEVICE_ID_INTEL_MAPLE_RIDGE_XHCI		0x1138
->   
-> +#define PCI_DEVICE_ID_AMD_RENOIRE_XHCI			0x1639
 
-Isn't it RENOIR as the painter?
+Dne 24. 05. 21 v 18:09 Pavel Hofman napsal(a):
+> 
+> Dne 24. 05. 21 v 17:40 Jerome Brunet napsal(a):
+>>
+>> On Mon 24 May 2021 at 14:29, Pavel Hofman <pavel.hofman@ivitera.com> 
+>> wrote:
+>>
+>>> Dne 30. 04. 21 v 16:26 Jerome Brunet napsal(a):
+>>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>>
+>>>> This adds interface between userspace and feedback endpoint to 
+>>>> report real
+>>>> feedback frequency to the Host.
+>>>>
+>>>> Current implementation adds new userspace interface ALSA mixer control
+>>>> "Capture Pitch 1000000" (similar to aloop driver's "PCM Rate Shift 
+>>>> 100000"
+>>>> mixer control)
+>>>>
+>>>> Value in PPM is chosen to have correction value agnostic of the 
+>>>> actual HW
+>>>> rate, which the application is not necessarily dealing with, while 
+>>>> still
+>>>> retaining a good enough precision to allow smooth clock correction 
+>>>> on the
+>>>> playback side, if necessary.
+>>>>
+>>>> Similar to sound/usb/endpoint.c, a slow down is allowed up to 25%. This
+>>>> has no impact on the required bandwidth. Speedup correction has an 
+>>>> impact
+>>>> on the bandwidth reserved for the isochronous endpoint. The default
+>>>> allowed speedup is 500ppm. This seems to be more than enough but, if
+>>>> necessary, this is configurable through a module parameter. The 
+>>>> reserved
+>>>> bandwidth is rounded up to the next packet size.
+>>>>
+>>>> Usage of this new control is easy to implement in existing userspace 
+>>>> tools
+>>>> like alsaloop from alsa-utils.
+>>>>
+>>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>>>
+>>>
+>>> Hi, the existing patches solve the Host -> Gadget -> capturing
+>>> application direction, controlling the host playback rate. The other
+>>> direction (playback app -> gadget -> capturing host) is still paced by
+>>> the host USB controller. Packet size is pre-calculated in
+>>> u_audio_start_playback  as rate/p_interval
+>>> https://github.com/pavhofman/linux-rpi/blob/rpi-5.10.y/drivers/usb/gadget/function/u_audio.c#L441 
+>>>
+>>> and this fixed value is used for copying the audio data in
+>>> u_audio_iso_complete
+>>> https://github.com/pavhofman/linux-rpi/blob/rpi-5.10.y/drivers/usb/gadget/function/u_audio.c#L124 
+>>>
+>>> .
+>>>
+>>> That means if the gadget has a physical duplex audio device with single
+>>> clock and runs a duplex operation, the path gadget-> host  will not run
+>>> synchronously with the physical audio device (the host -> gadget has
+>>> already the feedback control implemented).
+>>>
+>>> How about "duplicating" the existing ALSA mixer control
+>>> "Capture Pitch 1000000" to "Playback Pitch 1000000" and using
+>>> pitch-adjusted p_srate in the above-linked calculations? That should
+>>> make the playback side run at the playback pitch requested by gadget
+>>> userspace, IIUC.
+>>>
+>>> For the duplex operation with single clock, the capture pitch value
+>>> determined by the userspace chain (alsaloop, CamillaDSP, etc.) would be
+>>> used for setting both the capture and playback pitch controls, making
+>>> both directions run synchronously.
+>>>
+>>> I can prepare patches based on Jerome's patchset should you find this
+>>> solution acceptable.
+>>
+>> Well I have experimented with pitch on the playback path.
+>> It does work but I'm not sure if it actually makes sense which is why I
+>> have not not included it in RFC
+>>
+>> If you need the playback and capture to run synchronously, you'd be
+>> better off with implicit feedback (In which the host will provide the
+>> same number of samples it received from the device)
+>>
+>> With explicit feedback, we are (supposed) to tell the host to speed up
+>> or slow down to match the device clock. This means the device run
+>> asynchronously, and the host does the adaptation (if necessary). In such
+>> case, I'm not sure adding pitch control on the playback path is a good
+>> idea.
+>>
+>> Having pitch control on the playback side allows to forward the audio
+>> captured by the physical interface of the device (like I2S) to USB
+>> without performing any resampling between the two (when USB and I2S are
+>> not in sync). It's nice and convenient ... but I wonder if this is a
+>> feature or a hack ;)
+>>
+> 
+> Jerome, thanks a lot for your reply. The current implementation of the 
+> EP IN audio direction is timed by the USB host controller. Let's 
+> consider 48Khz samplerate and bInterval=1 fullspeed (8k packets per 
+> second). Every IN packet will always carry 6 audio frames. No matter how 
+> fast the real master clock (i.e. e.g. I2S of the gadget) runs. Until an 
+> xrun occurs, unfortunately. Even if the gadget configuration used 
+> implicit feedback, the incoming stream would still provide no 
+> synchronization information from the I2S hardware clock as the data 
+> stream is clocked by the USB host which controls the timing on the USB 
+> bus (and thus the moment of iso completion). Plus the stock usb-audio 
+> driver in Windows 10 does not support implicit feedback, according to 
+> https://docs.microsoft.com/en-us/windows-hardware/drivers/audio/usb-2-0-audio-drivers#audio-streaming 
+> .
+> 
+> 
+> The problem is the fixed "slicing" of the samples into the packets which 
+> cannot be controlled. The same situation was on the host side before the 
+> feedback EP was introduced. Here the one preparing the slices (the 
+> "transmitter") is the gadget now. And the slicing pace must be 
+> controllable just like the slicing pace on the host is via the feedback EP.
+> 
+> Because the gadget supports different playback and capture rates (which 
+> I find nice), I suggest a separate control element (Playback Pitch, 
+> Capture Pitch).
+> 
+> Of course the motivation is to avoid adaptive resampling in the gadget 
+> in the direction I2S -> gadget interface -> USB host. But the very same 
+> motivation lead to implementation of the async feedback EP in the 
+> opposite direction. IMO it is not a hack, but an indispensable feature 
+> making the gadget usable for duplex operation with hardware (i.e. the 
+> real master) clock at the backend (all the other "clocks" are just 
+> software-generated slices/blocks of audio frames).
+> 
+> With regards,
+> 
+> Pavel.
 
-regards,
--- 
-js
-suse labs
+Jerome, please do you still have your playback-side patches available or 
+should I prepare them? Thanks a lot,
+
+Pavel.
