@@ -2,85 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB58393CE5
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 08:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE4F6393CF2
+	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 08:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235437AbhE1GIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 02:08:47 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:39212 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235005AbhE1GIq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 02:08:46 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 14S679lp096905;
-        Fri, 28 May 2021 01:07:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1622182029;
-        bh=kyZaTJEWBAv9aLbik71RRT6wKh9m84nND20SVfCSfuM=;
-        h=From:To:CC:Subject:Date;
-        b=YTL0SWFVZB63cfhz4Xz6EDO3otWUrjUkHodEz9Kfx1n63rIn5rJaA6P8gkcGfvNtE
-         a36L/yj7oRWQ5mMYMfQrL2XetiOzflj/aUpKLcr4GtU/uu+9aQmiUGquJ1DQT45pCy
-         nnjx00CRBKgNagI0PN/wHo1Yi4Ng5UdHXsGa1pNA=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 14S679Zq045357
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 28 May 2021 01:07:09 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 28
- May 2021 01:07:09 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Fri, 28 May 2021 01:07:09 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 14S66xsI111934;
-        Fri, 28 May 2021 01:07:00 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Lokesh Vutla <lokeshvutla@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] doc: dt-binding: cdns,usb3: Add interrupt-names property under required
-Date:   Fri, 28 May 2021 11:36:57 +0530
-Message-ID: <20210528060657.29100-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+        id S235256AbhE1GMo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 02:12:44 -0400
+Received: from mailgw01.mediatek.com ([210.61.82.183]:43767 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233893AbhE1GMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 02:12:43 -0400
+X-UUID: d37cf73de93f4bcfb5d617056efdabac-20210528
+X-UUID: d37cf73de93f4bcfb5d617056efdabac-20210528
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 885169257; Fri, 28 May 2021 14:11:05 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 28 May 2021 14:11:04 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 28 May 2021 14:11:01 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH 1/5] usb: mtu3: remove mtu3_ep0_setup() declaration in mtu3.h
+Date:   Fri, 28 May 2021 14:10:56 +0800
+Message-ID: <1622182260-23767-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
 Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-To:     unlisted-recipients:; (no To-header on input)
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In the driver the interrupts are fetched by name. Therefore, add
-interrupt names in the list of required properties
+It's defined and only used in the same file, so remove its declaration
+in mtu3.h, and make it static
 
-Fixes: 68989fe1c39d ("dt-bindings: usb: Convert cdns-usb3.txt to YAML schema")
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/mtu3/mtu3.h      | 1 -
+ drivers/usb/mtu3/mtu3_core.c | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-index a407e1143cf4..f791635897dc 100644
---- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-@@ -75,6 +75,7 @@ required:
-   - reg
-   - reg-names
-   - interrupts
-+  - interrupt-names
+diff --git a/drivers/usb/mtu3/mtu3.h b/drivers/usb/mtu3/mtu3.h
+index aef0a0bba25a..a8a7ee11f7b7 100644
+--- a/drivers/usb/mtu3/mtu3.h
++++ b/drivers/usb/mtu3/mtu3.h
+@@ -422,7 +422,6 @@ int mtu3_config_ep(struct mtu3 *mtu, struct mtu3_ep *mep,
+ 		int interval, int burst, int mult);
+ void mtu3_deconfig_ep(struct mtu3 *mtu, struct mtu3_ep *mep);
+ void mtu3_ep_stall_set(struct mtu3_ep *mep, bool set);
+-void mtu3_ep0_setup(struct mtu3 *mtu);
+ void mtu3_start(struct mtu3 *mtu);
+ void mtu3_stop(struct mtu3 *mtu);
+ void mtu3_dev_on_off(struct mtu3 *mtu, int is_on);
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index b3b459937566..2ef528f39ba3 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -536,7 +536,7 @@ static void get_ep_fifo_config(struct mtu3 *mtu)
+ 		rx_fifo->base, rx_fifo->limit);
+ }
  
- additionalProperties: false
- 
+-void mtu3_ep0_setup(struct mtu3 *mtu)
++static void mtu3_ep0_setup(struct mtu3 *mtu)
+ {
+ 	u32 maxpacket = mtu->g.ep0->maxpacket;
+ 	u32 csr;
 -- 
-2.17.1
+2.18.0
 
