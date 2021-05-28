@@ -2,102 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 320C739480D
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 22:46:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7AB394815
+	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 22:54:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbhE1UsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 16:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S229539AbhE1U4J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 16:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbhE1UsO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 16:48:14 -0400
-X-Greylist: delayed 417 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 May 2021 13:46:39 PDT
-Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F9CC061574
-        for <linux-usb@vger.kernel.org>; Fri, 28 May 2021 13:46:39 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2a02:169:3df5::4db])
-        by mail.kmu-office.ch (Postfix) with ESMTPSA id 578FD5C4C67;
-        Fri, 28 May 2021 22:39:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
-        t=1622234379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:
-         content-transfer-encoding:content-transfer-encoding:in-reply-to:
-         references; bh=KhCy/yoLV9qevSGKOXy0Z5r2TlIVvAc3NqHXzFrQ7Ps=;
-        b=CNOXm1NA77BtO6n2KyYUBijKIQTJ4VFNuMseNUN4mJsflN/0DQC2lVwjOYanp94HTZAvMT
-        vjuQjDscLy0F8DOVWnCaZaJrIRexdl8ypsBSaolPEvBvtXmsT5ZnpqP2Bei+MbrAFVGuCM
-        kukFFX4iEaGNHkmmctuK5QAdgyHo+zE=
-From:   Stefan Agner <stefan@agner.ch>
-To:     johan@kernel.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefan@agner.ch
-Subject: [PATCH] USB: serial: cp210x: Fix alternate function for CP2102N QFN20
-Date:   Fri, 28 May 2021 22:39:31 +0200
-Message-Id: <51830b2b24118eb0f77c5c9ac64ffb2f519dbb1d.1622218300.git.stefan@agner.ch>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229482AbhE1U4I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 16:56:08 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC30C061574;
+        Fri, 28 May 2021 13:54:33 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id e15so2204730plh.1;
+        Fri, 28 May 2021 13:54:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KNDQDSaQDqhu/I3Lsua3rDkqU5ss+4y1pi3/AYZD5nM=;
+        b=kzojuoafDvBuc8jVKb7iEbNT4hTj0WtQcWi6IHn6+mZSI9vVDYW4DPaIgxZdwgxHUY
+         MspNuxhiuFW3vdBkyklLOuqJqIX1RDL1oNFTHyYGYFi/e7xR3Z3IKbRiM2Gk1B/dd9/R
+         5d6exAcyvxZeiy0U31tuONOcv7LeE8mb7/PVsvMYeYmZFTemtXx4TU4xgnqRlFXwVkdF
+         j3+3hfLPyCy3vNv0o4k19l+mb9yiiv0Q1oh1Lv17OeJ1UnQfkX3XBN4h3Q+PZQbe27jf
+         g1ZnCFsk3FPS8bBGvmvvEZdQu83oQ4JuB2xup7K7gzrNAPQ8Sda7V1x3f0DsCIsI+q17
+         mPzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KNDQDSaQDqhu/I3Lsua3rDkqU5ss+4y1pi3/AYZD5nM=;
+        b=M8U00maaIEpfWYKiWjGORHZnvXs1ENc7smaLM60+vm1jrawYbrFSCE8z9waMn/5jWl
+         dEqDK/zkrCf9HGPGqu8o+pDJuMbwv+G0C8w2tlJVCJEHnTrDPGXaaPdOZ+EVNfJPN9wG
+         wO0VvWtc1Ac2o/n8h1YZ6Tf0W/FUMFyh2UDjvuBYlOH025SZltOAWy2hxrLEaHRurquT
+         SP27J0mBhmZpwLG81Oa/VVniR0S73aSPC99OjPs/htO2iiGVYkvFGTrQDRui2WcfK4An
+         bOZbhm4YVTxpizNjji0Eol/gZHB5YQ5ADBtviS3tVOs+V6wBmu9nYjwn5r2gQ/dxkzdl
+         0YQg==
+X-Gm-Message-State: AOAM5307arnAKjpKmH2xO5BiVjH9B9RB9fZzGpbX/mHqpymtHBTIs09b
+        ZsMwMBhbe8ZC/rQASXFu8oKyltQTdSkoiQ==
+X-Google-Smtp-Source: ABdhPJw/BNYemzoSNkVPloZgSztLrC4nUdQAMIp/7cCNHAXaWGzpukk1hV11gNbCEMLF42Z+FcB/MA==
+X-Received: by 2002:a17:90a:fa14:: with SMTP id cm20mr6548429pjb.90.1622235273112;
+        Fri, 28 May 2021 13:54:33 -0700 (PDT)
+Received: from hyeyoo ([183.99.11.150])
+        by smtp.gmail.com with ESMTPSA id s3sm5504581pgs.62.2021.05.28.13.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 May 2021 13:54:32 -0700 (PDT)
+Date:   Sat, 29 May 2021 05:54:27 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: usbmouse: Avoid GFP_ATOMIC when GFP_KERNEL is
+ possible
+Message-ID: <20210528205427.GB5911@hyeyoo>
+References: <20210524145743.GA92203@hyeyoo>
+ <20210527164517.GA143281@hyeyoo>
+ <YK/Or91JIpbpwWjL@kroah.com>
+ <20210527170536.GA143409@hyeyoo>
+ <YK/SvAoog4TKygoY@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YK/SvAoog4TKygoY@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The QFN20 part has a different GPIO/port function assignment. The
-configuration struct bit field ordered as TX/RX/RS485/WAKEUP/CLK
-which exactly matches GPIO0-3 for QFN24/28. However, QFN20 has a
-different GPIO to primary function assignment.
+On Thu, May 27, 2021 at 07:11:24PM +0200, Greg KH wrote:
+> On Fri, May 28, 2021 at 02:05:36AM +0900, Hyeonggon Yoo wrote:
+> > On Thu, May 27, 2021 at 06:54:07PM +0200, Greg KH wrote:
+> > > It has been only 4 days.  For a non-bugfix and for something that is
+> > > only a "cleanup" change, give it at least 2 weeks please.
+> > > 
+> > > Relax, there is no rush for stuff like this.
+> > 
+> > Hello Greg!
+> > 
+> > Okay You are right. I'll relax...
+> > 
+> > I think I need to be familiar with the process :)
+> 
+> Please go read Documentation/process/ for all of that while you wait :)
 
-Special case QFN20 to follow to properly detect which GPIOs are
-available.
+I'm reading it and Thanks for letting me know it.
+it helps a lot... I should read it many times.
 
-Signed-off-by: Stefan Agner <stefan@agner.ch>
----
-Tested on a custom PCB with a CP2102N QFP20 device. I noticed the bug after
-configuring GPIO.2/3 to be TX/RX LED.
+and the patch seems already applied to linux-next :)
 
---
-Stefan
-
- drivers/usb/serial/cp210x.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index ee595d1bea0a..c9f8ebd34122 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -537,6 +537,12 @@ struct cp210x_single_port_config {
- #define CP210X_2NCONFIG_GPIO_RSTLATCH_IDX	587
- #define CP210X_2NCONFIG_GPIO_CONTROL_IDX	600
- 
-+/* CP2102N QFN20 port configuration values */
-+#define CP2102N_QFN20_GPIO2_TXLED_MODE		BIT(2)
-+#define CP2102N_QFN20_GPIO3_RXLED_MODE		BIT(3)
-+#define CP2102N_QFN20_GPIO1_RS485_MODE		BIT(4)
-+#define CP2102N_QFN20_GPIO0_CLK_MODE		BIT(6)
-+
- /* CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x2 bytes. */
- struct cp210x_gpio_write {
- 	u8	mask;
-@@ -1733,7 +1739,19 @@ static int cp2102n_gpioconf_init(struct usb_serial *serial)
- 	priv->gpio_pushpull = (gpio_pushpull >> 3) & 0x0f;
- 
- 	/* 0 indicates GPIO mode, 1 is alternate function */
--	priv->gpio_altfunc = (gpio_ctrl >> 2) & 0x0f;
-+	if (priv->partnum == CP210X_PARTNUM_CP2102N_QFN20) {
-+		/* QFN20 is special... */
-+		if (gpio_ctrl & CP2102N_QFN20_GPIO0_CLK_MODE)   /* GPIO 0 */
-+			priv->gpio_altfunc |= BIT(0);
-+		if (gpio_ctrl & CP2102N_QFN20_GPIO1_RS485_MODE) /* GPIO 1 */
-+			priv->gpio_altfunc |= BIT(1);
-+		if (gpio_ctrl & CP2102N_QFN20_GPIO2_TXLED_MODE) /* GPIO 2 */
-+			priv->gpio_altfunc |= BIT(2);
-+		if (gpio_ctrl & CP2102N_QFN20_GPIO3_RXLED_MODE) /* GPIO 3 */
-+			priv->gpio_altfunc |= BIT(3);
-+	} else {
-+		priv->gpio_altfunc = (gpio_ctrl >> 2) & 0x0f;
-+	}
- 
- 	if (priv->partnum == CP210X_PARTNUM_CP2102N_QFN28) {
- 		/*
--- 
-2.31.1
-
+Thanks,
+Hyeonggon
