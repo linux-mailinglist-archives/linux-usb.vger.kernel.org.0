@@ -2,161 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0156E393C82
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 06:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F03A393CCB
+	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 07:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbhE1E5W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 00:57:22 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:15509 "EHLO m43-7.mailgun.net"
+        id S235154AbhE1F7f (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 01:59:35 -0400
+Received: from muru.com ([72.249.23.125]:33120 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232481AbhE1E5W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 May 2021 00:57:22 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622177748; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=QjyA6rEH+Y4lxZCRKVeB1fd2Js19Cr+UydtbIw/v8Gg=;
- b=uIxVTD3zM9RK7rRYoC0U4W0cyr3yZufhqyl53L0awsl8YcyW5h8uCgTsfjeGngWJct5ejUsV
- L/j47DBrMhpT4gZKhXCc7LrBHumTFiX/GnZ76sckwpnB/JWYKgkI8uD9/VC3/e9StOpXzYZ2
- VFyP5lQuc0gXBlymXdWHkeFxCyQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 60b077bee27c0cc77f6ae160 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 28 May 2021 04:55:26
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 82827C4338A; Fri, 28 May 2021 04:55:25 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 96EEEC433D3;
-        Fri, 28 May 2021 04:55:24 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 27 May 2021 21:55:24 -0700
-From:   jackp@codeaurora.org
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S234811AbhE1F7e (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 May 2021 01:59:34 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id B363C80A8;
+        Fri, 28 May 2021 05:58:05 +0000 (UTC)
+Date:   Fri, 28 May 2021 08:57:56 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Bail from dwc3_gadget_exit() if
- dwc->gadget is NULL
-In-Reply-To: <20210528041210.GA20937@nchen>
-References: <20210525042922.15591-1-jackp@codeaurora.org>
- <20210528041210.GA20937@nchen>
-Message-ID: <788e5aead5b2e85b31296b15acb4a564@codeaurora.org>
-X-Sender: jackp@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <YLCGZEan87yp9Eeq@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+ <20210527211501.70d176b4@aktux>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210527211501.70d176b4@aktux>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-05-27 21:12, Peter Chen wrote:
-> On 21-05-24 21:29:22, Jack Pham wrote:
->> There exists a possible scenario in which dwc3_gadget_init() can fail:
->> during during host -> peripheral mode switch in dwc3_set_mode(), and
->> a pending gadget driver fails to bind.  Then, if the DRD undergoes
->> another mode switch from peripheral->host the resulting
->> dwc3_gadget_exit() will attempt to reference an invalid and dangling
->> dwc->gadget pointer as well as call dma_free_coherent() on unmapped
->> DMA pointers.
->> 
->> The exact scenario can be reproduced as follows:
->>  - Start DWC3 in peripheral mode
->>  - Configure ConfigFS gadget with FunctionFS instance (or use g_ffs)
->>  - Run FunctionFS userspace application (open EPs, write descriptors, 
->> etc)
->>  - Bind gadget driver to DWC3's UDC
->>  - Switch DWC3 to host mode
->>    => dwc3_gadget_exit() is called. usb_del_gadget() will put the
->> 	ConfigFS driver instance on the gadget_driver_pending_list
->>  - Stop FunctionFS application (closes the ep files)
->>  - Switch DWC3 to peripheral mode
->>    => dwc3_gadget_init() fails as usb_add_gadget() calls
->> 	check_pending_gadget_drivers() and attempts to rebind the UDC
->> 	to the ConfigFS gadget but fails with -19 (-ENODEV) because the
->> 	FFS instance is not in FFS_READY state.
+Hi,
+
+* Andreas Kemnade <andreas@kemnade.info> [210527 19:15]:
+> Hi,
 > 
-> There is no such state at enum ffs_state, you mean flag desc_ready is 
-> not
-> true, right?
-
-Ah sorry! I meant FFS_ACTIVE, but you are also correct, it would be 
-equivalent to
-ffs_dev::desc_ready. Shall I amend this commit description?
-
->>  - Switch DWC3 back to host mode
->>    => dwc3_gadget_exit() is called again, but this time dwc->gadget
->> 	is invalid.
->> 
->> Although it can be argued that userspace should take responsibility
->> for ensuring that the FunctionFS application be ready prior to
->> allowing the composite driver bind to the UDC, failure to do so
->> should not result in a panic from the kernel driver.
->> 
->> Fix this by setting dwc->gadget to NULL in the failure path of
->> dwc3_gadget_init() and add a check to dwc3_gadget_exit() to bail out
->> unless the gadget pointer is valid.
->> 
->> Fixes: e81a7018d93a ("usb: dwc3: allocate gadget structure 
->> dynamically")
->> Cc: <stable@vger.kernel.org>
->> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> On Tue, 18 May 2021 18:06:15 +0300
+> Tony Lindgren <tony@atomide.com> wrote:
 > 
-> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+> > On start-up, we can get a spurious session request interrupt with nothing
+> > connected. After that the devctl session bit will silently clear, but the
+> > musb hardware is never idled until a cable is plugged in, or the glue
+> > layer module is reloaded.
+> > 
+> > Let's just check the session bit again in 3 seconds in peripheral mode
+> > to catch the issue.
+> > 
+> Tested this together with the other musb patch you sent on gta04.
+> This has some interesting side effects.
+> 
+> Test done:
+> - loading kernel+ramdisk via usb-dfu
+> - disconnecting usb cable
+> - loading omap_hdq (to see battery status)
+> - idling serial ports
+> - checking battery current 1.
+> - loading omap2430, phy-twl4030-usb, g_ether
+> - checking battery current 2 (again with idled serial ports).
+> - rtcwake -s 20 -m mem
+> - checking current during suspend (3)
+> 
+> Without your patches: current 2 is current 1 + approx 15 mA, current 3
+> is near current 1.
+> With your patches: current 2 is near current 1, current 3 is approx
+> 15mA higher.
 
-Thank you Peter!
+Interesting, so power consumption is now better for runtime with cable
+disconnected, and after booting, but now somehow is now worse for
+suspended state. I'll try to reproduce.
 
->> ---
->> Hi Felipe,
->> 
->> Although I marked the 'Fixes' tag above to e81a7018d93a, the problem
->> theoretically exists prior to Peter's change. But I'm not sure how
->> best to fix on versions prior to this change since dwc->gadget used
->> to be an embedded struct so we can't do a simple NULL check as below.
->> Suggestions on alternative approaches welcome if we want to proceed
->> with backporting to older (pre-5.9) stable releases.
->> 
->> Thanks,
->> Jack
->> 
->>  drivers/usb/dwc3/gadget.c | 4 ++++
->>  1 file changed, 4 insertions(+)
->> 
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 612825a39f82..65d9b7227752 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -4046,6 +4046,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
->>  	dwc3_gadget_free_endpoints(dwc);
->>  err4:
->>  	usb_put_gadget(dwc->gadget);
->> +	dwc->gadget = NULL;
->>  err3:
->>  	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
->>  			dwc->bounce_addr);
->> @@ -4065,6 +4066,9 @@ int dwc3_gadget_init(struct dwc3 *dwc)
->> 
->>  void dwc3_gadget_exit(struct dwc3 *dwc)
->>  {
->> +	if (!dwc->gadget)
->> +		return;
->> +
->>  	usb_del_gadget(dwc->gadget);
->>  	dwc3_gadget_free_endpoints(dwc);
->>  	usb_put_gadget(dwc->gadget);
->> --
->> 2.24.0
->> 
+> Another strange thing I have hit (I have not done this test before, no
+> idea yet if it is related, but it is also about musb):
+> Connecting a usb cable while serial ports are idle (not in system
+> supend), console serial port does not wake up by input, it reacts again
+> if I unplug usb. If I give usb0 an IP address, I can ping it. No
+> intensive debugging done there yet. Just stumbled across it.
+
+Hmm so if you have a usb cable connected and gta04 is a b-device, and
+there is vbus, musb should not currently idle at all.
+
+Maybe your uart3 wakeirq is not using the uart3_rx.uart3_rx
+pad but uses some alternative pad and the wakeirq is not working?
+
+Or the twl4030 usb phy is somehow interfering with the uart3 pins
+when usb is in use. Worth checking the schematics again for the
+uart3 rx pin used? Sorry I don't remember if omap3 has multiple
+alternative pins for uart3, but I think it does.
+
+Regards,
+
+Tony
+
