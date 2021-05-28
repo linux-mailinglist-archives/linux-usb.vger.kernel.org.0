@@ -2,95 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C942B393FA7
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 11:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21529393FD1
+	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 11:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbhE1JPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 05:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234610AbhE1JPs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 05:15:48 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8514DC061574
-        for <linux-usb@vger.kernel.org>; Fri, 28 May 2021 02:14:13 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id z137-20020a1c7e8f0000b02901774f2a7dc4so6422585wmc.0
-        for <linux-usb@vger.kernel.org>; Fri, 28 May 2021 02:14:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=raspberrypi.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IDOJscwMhR8iji5F8vTyzpyDdL2c4rVCTLrFY76zsdo=;
-        b=G45Fe2j5tJR8IhOVQgq6lJYIwNxx25/ft+H4yJZepoBdCbBfsWMNA6Xb3dDeSlaewI
-         jDhuGHmx3uQe+iZE9P4NTkLaovkoy6gbp3atL6Yrxo7eR7szR9CUbUf1q9pDGnMPjL3z
-         JpFYffLOMQof1UBuJk/bqgDvPiHf5u3bJH+1nRylaN7it/5uY4oAUBS6dn4IFGdZaLh5
-         s+X0gS5M2zzIuapSd7xXbJBjp89nfWH5Uz+0z/fC7QM6iJ2XBmEn8j7L8SwZF4sU85b0
-         vI1o/Kns6XsxIVtfOAlIx+wKkVojoaFarlI/9S6AOXmBQSJ6juun6AxCV+nDJ+23mlg4
-         dZEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IDOJscwMhR8iji5F8vTyzpyDdL2c4rVCTLrFY76zsdo=;
-        b=m7DgGbzrwiUTWTDAyRO3IvRVmlzue8lNyyk8dlCBtJYw8UaHV3Sqo3ChC5P+5CIJ4o
-         J1SwX5rtjcW/sRxbiqB0mx4BEN3K+oO6Up2/b5yjsXODD9DE1iWrILLXmUVCbajQlUhY
-         ITayVev2aZdTiiSbdCbWIjSnNHUhaPdFrZe++VJCKY1phItDqcakadLEu/ksWEHf3sXa
-         oav1HFKbHyCI4hRjsWM4+qRMGQTL25uXLPsr06e+0VYe8HxkuthBg+hPyW98SjRXxNeS
-         zgOQVc/bn3i86tTmgNgng1pg9aE9hiqVHK6cuZzfEMeT7ruHCXKlw2k0iaPozROoiANW
-         NwZg==
-X-Gm-Message-State: AOAM53150Bxm7VGsz1vWevjaGDMKxj/z7iCIKOxJqKa4lWTW1H+9ru5V
-        edEXMhKL8qv6ziEjDZ06dWPzlw==
-X-Google-Smtp-Source: ABdhPJzziqNFHtrXPxF5dFvbCO1aXhH4+4X10jIWfi7UZwcGkDpHML/Jgu+b0Msy878Bm3TsP7vDpA==
-X-Received: by 2002:a1c:f717:: with SMTP id v23mr12329684wmh.32.1622193252133;
-        Fri, 28 May 2021 02:14:12 -0700 (PDT)
-Received: from buildbot.pitowers.org ([2a00:1098:3142:14:ae1f:6bff:fedd:de54])
-        by smtp.gmail.com with ESMTPSA id h13sm6329061wml.26.2021.05.28.02.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 02:14:11 -0700 (PDT)
-From:   Phil Elwell <phil@raspberrypi.com>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S235493AbhE1JY7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 05:24:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230205AbhE1JY6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 May 2021 05:24:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F0F26127A;
+        Fri, 28 May 2021 09:23:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1622193803;
+        bh=vB6X+2/xMuG/B0/YcLafyqw4LlVbhOdEaGfPoutYQZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M7+n1Ye2ZH0PZ6f5VyvDZqifDNELyuozh/OPXt4V5UEzR5KHqofgQTUKRHxiXqc/f
+         8S2sMVzc5BonAudTRmtRba09SjmnZVm6O83GpMx6r6eOZrFWUJndlOk9OU4XOimw7W
+         57MnEHLxUlletIISKwUaCY4l4MlwKj6n4ua3l+HE=
+Date:   Fri, 28 May 2021 11:23:20 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Phil Elwell <phil@raspberrypi.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
         Sasha Levin <sashal@kernel.org>,
         Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Phil Elwell <phil@raspberrypi.com>
-Subject: [PATCH v2] usb: dwc2: Fix build in periphal-only mode
-Date:   Fri, 28 May 2021 10:13:50 +0100
-Message-Id: <20210528091349.2602410-1-phil@raspberrypi.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH v2] usb: dwc2: Fix build in periphal-only mode
+Message-ID: <YLC2iPPEOCJuElIR@kroah.com>
+References: <20210528091349.2602410-1-phil@raspberrypi.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210528091349.2602410-1-phil@raspberrypi.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The bus_suspended member of struct dwc2_hsotg is only present in builds
-that support host-mode.
+On Fri, May 28, 2021 at 10:13:50AM +0100, Phil Elwell wrote:
+> The bus_suspended member of struct dwc2_hsotg is only present in builds
+> that support host-mode.
+> 
+> Fixes: 24d209dba5a3 ("usb: dwc2: Fix hibernation between host and device modes.")
+> Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+> ---
+>  drivers/usb/dwc2/core_intr.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> v2: Correct commit hash used in the Fixes line.
+> 
+> diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+> index a5ab03808da6..03d0c034cf57 100644
+> --- a/drivers/usb/dwc2/core_intr.c
+> +++ b/drivers/usb/dwc2/core_intr.c
+> @@ -725,7 +725,11 @@ static inline void dwc_handle_gpwrdn_disc_det(struct dwc2_hsotg *hsotg,
+>  	dwc2_writel(hsotg, gpwrdn_tmp, GPWRDN);
+>  
+>  	hsotg->hibernated = 0;
+> +
+> +#if IS_ENABLED(CONFIG_USB_DWC2_HOST) ||	\
+> +	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
+>  	hsotg->bus_suspended = 0;
+> +#endif
+>  
+>  	if (gpwrdn & GPWRDN_IDSTS) {
+>  		hsotg->op_state = OTG_STATE_B_PERIPHERAL;
+> -- 
+> 2.25.1
+> 
 
-Fixes: 24d209dba5a3 ("usb: dwc2: Fix hibernation between host and device modes.")
-Signed-off-by: Phil Elwell <phil@raspberrypi.com>
----
- drivers/usb/dwc2/core_intr.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I do not understand, the field in the structure is present for all, why
+is this crazy #if needed here?
 
-v2: Correct commit hash used in the Fixes line.
+I see that the commit you reference here did add the new line to set
+bus_suspended, which seemed to be the point here.  Why will the #if
+values matter here?
 
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index a5ab03808da6..03d0c034cf57 100644
---- a/drivers/usb/dwc2/core_intr.c
-+++ b/drivers/usb/dwc2/core_intr.c
-@@ -725,7 +725,11 @@ static inline void dwc_handle_gpwrdn_disc_det(struct dwc2_hsotg *hsotg,
- 	dwc2_writel(hsotg, gpwrdn_tmp, GPWRDN);
- 
- 	hsotg->hibernated = 0;
-+
-+#if IS_ENABLED(CONFIG_USB_DWC2_HOST) ||	\
-+	IS_ENABLED(CONFIG_USB_DWC2_DUAL_ROLE)
- 	hsotg->bus_suspended = 0;
-+#endif
- 
- 	if (gpwrdn & GPWRDN_IDSTS) {
- 		hsotg->op_state = OTG_STATE_B_PERIPHERAL;
--- 
-2.25.1
+thanks,
 
+greg k-h
