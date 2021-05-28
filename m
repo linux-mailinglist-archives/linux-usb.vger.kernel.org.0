@@ -2,131 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0983945A1
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 18:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 320C739480D
+	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 22:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236612AbhE1QGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 12:06:55 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:35394 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236166AbhE1QGx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 28 May 2021 12:06:53 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622217918; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=Cf/VjNCTchFVUo8Gy9ne+Oe9WRq9NkIZsHxvuJhoelg=; b=AHCG6lVhq5W6wJiD3Lszdueb/lGu8z/G1WtRlf93HH8ZPmIA6bENFMoVFRU5WcgJjMg0XYUz
- f1BrRD3y6d0UZbkUq/ZnbtwkX11p1Jqa5CNFvtJoxFzmZEh4Ox8UhLW+HwMA96mE1PuslhFR
- 0OBM7crAJoVYyZ/nWdRehNDWqlQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 60b114b3cad205471db7a934 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 28 May 2021 16:05:07
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 63D12C4323A; Fri, 28 May 2021 16:05:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E57EEC433F1;
-        Fri, 28 May 2021 16:05:04 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E57EEC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, linux-usb@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>, stable@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>
-Subject: [PATCH v2] usb: dwc3: gadget: Bail from dwc3_gadget_exit() if dwc->gadget is NULL
-Date:   Fri, 28 May 2021 09:04:05 -0700
-Message-Id: <20210528160405.17550-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
+        id S229539AbhE1UsP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 16:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229522AbhE1UsO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 16:48:14 -0400
+X-Greylist: delayed 417 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 28 May 2021 13:46:39 PDT
+Received: from mail.kmu-office.ch (mail.kmu-office.ch [IPv6:2a02:418:6a02::a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F9CC061574
+        for <linux-usb@vger.kernel.org>; Fri, 28 May 2021 13:46:39 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2a02:169:3df5::4db])
+        by mail.kmu-office.ch (Postfix) with ESMTPSA id 578FD5C4C67;
+        Fri, 28 May 2021 22:39:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=agner.ch; s=dkim;
+        t=1622234379;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:
+         content-transfer-encoding:content-transfer-encoding:in-reply-to:
+         references; bh=KhCy/yoLV9qevSGKOXy0Z5r2TlIVvAc3NqHXzFrQ7Ps=;
+        b=CNOXm1NA77BtO6n2KyYUBijKIQTJ4VFNuMseNUN4mJsflN/0DQC2lVwjOYanp94HTZAvMT
+        vjuQjDscLy0F8DOVWnCaZaJrIRexdl8ypsBSaolPEvBvtXmsT5ZnpqP2Bei+MbrAFVGuCM
+        kukFFX4iEaGNHkmmctuK5QAdgyHo+zE=
+From:   Stefan Agner <stefan@agner.ch>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan@agner.ch
+Subject: [PATCH] USB: serial: cp210x: Fix alternate function for CP2102N QFN20
+Date:   Fri, 28 May 2021 22:39:31 +0200
+Message-Id: <51830b2b24118eb0f77c5c9ac64ffb2f519dbb1d.1622218300.git.stefan@agner.ch>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There exists a possible scenario in which dwc3_gadget_init() can fail:
-during during host -> peripheral mode switch in dwc3_set_mode(), and
-a pending gadget driver fails to bind.  Then, if the DRD undergoes
-another mode switch from peripheral->host the resulting
-dwc3_gadget_exit() will attempt to reference an invalid and dangling
-dwc->gadget pointer as well as call dma_free_coherent() on unmapped
-DMA pointers.
+The QFN20 part has a different GPIO/port function assignment. The
+configuration struct bit field ordered as TX/RX/RS485/WAKEUP/CLK
+which exactly matches GPIO0-3 for QFN24/28. However, QFN20 has a
+different GPIO to primary function assignment.
 
-The exact scenario can be reproduced as follows:
- - Start DWC3 in peripheral mode
- - Configure ConfigFS gadget with FunctionFS instance (or use g_ffs)
- - Run FunctionFS userspace application (open EPs, write descriptors, etc)
- - Bind gadget driver to DWC3's UDC
- - Switch DWC3 to host mode
-   => dwc3_gadget_exit() is called. usb_del_gadget() will put the
-	ConfigFS driver instance on the gadget_driver_pending_list
- - Stop FunctionFS application (closes the ep files)
- - Switch DWC3 to peripheral mode
-   => dwc3_gadget_init() fails as usb_add_gadget() calls
-	check_pending_gadget_drivers() and attempts to rebind the UDC
-	to the ConfigFS gadget but fails with -19 (-ENODEV) because the
-	FFS instance is not in FFS_ACTIVE state (userspace has not
-	re-opened and written the descriptors yet, i.e. desc_ready!=0).
- - Switch DWC3 back to host mode
-   => dwc3_gadget_exit() is called again, but this time dwc->gadget
-	is invalid.
+Special case QFN20 to follow to properly detect which GPIOs are
+available.
 
-Although it can be argued that userspace should take responsibility
-for ensuring that the FunctionFS application be ready prior to
-allowing the composite driver bind to the UDC, failure to do so
-should not result in a panic from the kernel driver.
-
-Fix this by setting dwc->gadget to NULL in the failure path of
-dwc3_gadget_init() and add a check to dwc3_gadget_exit() to bail out
-unless the gadget pointer is valid.
-
-Fixes: e81a7018d93a ("usb: dwc3: allocate gadget structure dynamically")
-Cc: <stable@vger.kernel.org>
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
+Signed-off-by: Stefan Agner <stefan@agner.ch>
 ---
-v2: Fixed commit message to refer to FFS_ACTIVE state; added
-    Peter's Reviewed-by tag.
+Tested on a custom PCB with a CP2102N QFP20 device. I noticed the bug after
+configuring GPIO.2/3 to be TX/RX LED.
 
- drivers/usb/dwc3/gadget.c | 4 ++++
- 1 file changed, 4 insertions(+)
+--
+Stefan
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 612825a39f82..65d9b7227752 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4046,6 +4046,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
- 	dwc3_gadget_free_endpoints(dwc);
- err4:
- 	usb_put_gadget(dwc->gadget);
-+	dwc->gadget = NULL;
- err3:
- 	dma_free_coherent(dwc->sysdev, DWC3_BOUNCE_SIZE, dwc->bounce,
- 			dwc->bounce_addr);
-@@ -4065,6 +4066,9 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+ drivers/usb/serial/cp210x.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index ee595d1bea0a..c9f8ebd34122 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -537,6 +537,12 @@ struct cp210x_single_port_config {
+ #define CP210X_2NCONFIG_GPIO_RSTLATCH_IDX	587
+ #define CP210X_2NCONFIG_GPIO_CONTROL_IDX	600
  
- void dwc3_gadget_exit(struct dwc3 *dwc)
- {
-+	if (!dwc->gadget)
-+		return;
++/* CP2102N QFN20 port configuration values */
++#define CP2102N_QFN20_GPIO2_TXLED_MODE		BIT(2)
++#define CP2102N_QFN20_GPIO3_RXLED_MODE		BIT(3)
++#define CP2102N_QFN20_GPIO1_RS485_MODE		BIT(4)
++#define CP2102N_QFN20_GPIO0_CLK_MODE		BIT(6)
 +
- 	usb_del_gadget(dwc->gadget);
- 	dwc3_gadget_free_endpoints(dwc);
- 	usb_put_gadget(dwc->gadget);
+ /* CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x2 bytes. */
+ struct cp210x_gpio_write {
+ 	u8	mask;
+@@ -1733,7 +1739,19 @@ static int cp2102n_gpioconf_init(struct usb_serial *serial)
+ 	priv->gpio_pushpull = (gpio_pushpull >> 3) & 0x0f;
+ 
+ 	/* 0 indicates GPIO mode, 1 is alternate function */
+-	priv->gpio_altfunc = (gpio_ctrl >> 2) & 0x0f;
++	if (priv->partnum == CP210X_PARTNUM_CP2102N_QFN20) {
++		/* QFN20 is special... */
++		if (gpio_ctrl & CP2102N_QFN20_GPIO0_CLK_MODE)   /* GPIO 0 */
++			priv->gpio_altfunc |= BIT(0);
++		if (gpio_ctrl & CP2102N_QFN20_GPIO1_RS485_MODE) /* GPIO 1 */
++			priv->gpio_altfunc |= BIT(1);
++		if (gpio_ctrl & CP2102N_QFN20_GPIO2_TXLED_MODE) /* GPIO 2 */
++			priv->gpio_altfunc |= BIT(2);
++		if (gpio_ctrl & CP2102N_QFN20_GPIO3_RXLED_MODE) /* GPIO 3 */
++			priv->gpio_altfunc |= BIT(3);
++	} else {
++		priv->gpio_altfunc = (gpio_ctrl >> 2) & 0x0f;
++	}
+ 
+ 	if (priv->partnum == CP210X_PARTNUM_CP2102N_QFN28) {
+ 		/*
 -- 
-2.24.0
+2.31.1
 
