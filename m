@@ -2,74 +2,150 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BDB6394C47
-	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 14:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F569394C7A
+	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 16:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbhE2Mzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 May 2021 08:55:46 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:2540 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbhE2Mzp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 May 2021 08:55:45 -0400
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FshJG1Rk5zYrdp;
-        Sat, 29 May 2021 20:51:26 +0800 (CST)
-Received: from dggema769-chm.china.huawei.com (10.1.198.211) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Sat, 29 May 2021 20:54:07 +0800
-Received: from [10.174.179.215] (10.174.179.215) by
- dggema769-chm.china.huawei.com (10.1.198.211) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Sat, 29 May 2021 20:54:07 +0800
-Subject: Re: [PATCH -next] USB: gadget: f_fs: Remove unneed cast in
- ffs_prepare_buffer()
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210529120408.23456-1-yuehaibing@huawei.com>
- <YLIveGTHK5RjxtS+@kroah.com>
-From:   YueHaibing <yuehaibing@huawei.com>
-Message-ID: <91983b80-1818-536d-5ea3-5a38c1cb5443@huawei.com>
-Date:   Sat, 29 May 2021 20:54:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.0
+        id S229778AbhE2O2F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 May 2021 10:28:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229686AbhE2O2E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 29 May 2021 10:28:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F3B1F6120A;
+        Sat, 29 May 2021 14:26:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1622298387;
+        bh=FKf2xX/cJGbi4a7aLLpJcoRFwj8OpQFuybWTutvx3c4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rj+FbVqS5i/RROH3CPb5oJFs0R1gutwdDn3vK3Er2Tu3gv/Va87jQbImnsa6Gy/Ab
+         jxEurKG6aHJYylEbgRN/e9qhJFM+nDMsoK/vXVzPi0AwUze7bUa56vrz0hlZYEHejV
+         Jl/VH0EPFDhSFlypvh+O20ou2CBMhZFqIXulMCJ0=
+Date:   Sat, 29 May 2021 16:26:25 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB/Thunderbolt driver fixes for 5.13-rc4
+Message-ID: <YLJPEdFdHVjetmM5@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <YLIveGTHK5RjxtS+@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.215]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggema769-chm.china.huawei.com (10.1.198.211)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021/5/29 20:11, Greg KH wrote:
-> On Sat, May 29, 2021 at 08:04:08PM +0800, YueHaibing wrote:
->> A coccicheck run provided information like the following.
->>
->> ./drivers/usb/gadget/function/f_fs.c:3832:9-16:
->>  WARNING: ERR_CAST can be used with data
->>
->> ffs_prepare_buffer() should return an ERR_PTR() encoded error
->> code on failure.
-> 
-> It does return such a pointer today, so this statement does not make
-> much sense :(
+The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
 
-Yes, it does. This is just to remove explicit casts.
+  Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
 
-> 
-> And is this a v2 patch?  What changed from the previous version?
+are available in the Git repository at:
 
-Sorry, I forget to add version info.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.13-rc4
 
-> 
-> thanks,
-> 
-> greg k-h
-> .
-> 
+for you to fetch changes up to a7f2e9272aff1ccfe0fc801dab1d5a7a1c6b7ed2:
+
+  xhci: Fix 5.12 regression of missing xHC cache clearing command after a Stall (2021-05-25 10:21:47 +0200)
+
+----------------------------------------------------------------
+USB / Thunderbolt fixes for 5.13-rc4
+
+Here are a number of tiny USB and Thunderbolt driver fixes for 5.13-rc4.
+
+They consist of:
+	- thunderbolt fixes for	some NVM bound issues
+	- xhci fixes for reported problems
+	- control-request fixups
+	- documentation build warning fixes
+	- new usb-serial driver device ids
+	- typec bugfixes for reported issues
+	- usbfs warning fixups (could be triggered from userspace)
+	- other tiny fixes for reported problems.
+
+All of these have been in linux-next with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: usbfs: Don't WARN about excessively large memory allocations
+
+Andy Shevchenko (1):
+      usb: typec: tcpm: Use LE to CPU conversion when accessing msg->header
+
+Bjorn Andersson (2):
+      usb: typec: mux: Fix matching with typec_altmode_desc
+      usb: typec: ucsi: Clear pending after acking connector change
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit LE910-S1 compositions 0x7010, 0x7011
+
+Dinghao Liu (1):
+      usb: cdns3: Fix runtime PM imbalance on error
+
+Dominik Andreas Schorpp (1):
+      USB: serial: ftdi_sio: add IDs for IDS GmbH Products
+
+Dongliang Mu (1):
+      misc/uss720: fix memory leak in uss720_probe
+
+Fabio Estevam (1):
+      usb: Restore the usb_header label
+
+Greg Kroah-Hartman (3):
+      Merge tag 'usb-serial-5.13-rc3' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+      Merge tag 'usb-v5.13-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
+      Merge tag 'thunderbolt-for-v5.13-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Johan Hovold (1):
+      USB: trancevibrator: fix control-request direction
+
+Kyle Tso (2):
+      usb: typec: tcpm: Properly interrupt VDM AMS
+      usb: typec: tcpm: Respond Not_Supported if no snk_vdo
+
+Li Jun (1):
+      usb: chipidea: udc: assign interrupt number to USB gadget structure
+
+Mathias Nyman (4):
+      thunderbolt: dma_port: Fix NVM read buffer bounds and offset issue
+      thunderbolt: usb4: Fix NVM read buffer bounds and offset issue
+      xhci: fix giving back URB with incorrect status regression in 5.12
+      xhci: Fix 5.12 regression of missing xHC cache clearing command after a Stall
+
+Pawel Laszczak (1):
+      usb: cdnsp: Fix lack of removing request from pending list.
+
+Sean MacLennan (1):
+      USB: serial: ti_usb_3410_5052: add startech.com device id
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Properly track pending and queued SG
+
+Yoshihiro Shimoda (1):
+      usb: gadget: udc: renesas_usb3: Fix a race in usb3_start_pipen()
+
+Zolton Jheng (1):
+      USB: serial: pl2303: add device id for ADLINK ND-6530 GC
+
+ Documentation/driver-api/usb/usb.rst  |  2 ++
+ drivers/thunderbolt/dma_port.c        | 11 +++++-----
+ drivers/thunderbolt/usb4.c            |  9 ++++----
+ drivers/usb/cdns3/cdns3-gadget.c      |  4 +++-
+ drivers/usb/cdns3/cdnsp-gadget.c      | 14 ++++++-------
+ drivers/usb/chipidea/udc.c            |  1 +
+ drivers/usb/core/devio.c              | 11 +++++++---
+ drivers/usb/dwc3/gadget.c             | 13 ++++++------
+ drivers/usb/gadget/udc/renesas_usb3.c |  5 +++--
+ drivers/usb/host/xhci-ring.c          | 14 ++++++-------
+ drivers/usb/misc/trancevibrator.c     |  4 ++--
+ drivers/usb/misc/uss720.c             |  1 +
+ drivers/usb/serial/ftdi_sio.c         |  3 +++
+ drivers/usb/serial/ftdi_sio_ids.h     |  7 +++++++
+ drivers/usb/serial/option.c           |  4 ++++
+ drivers/usb/serial/pl2303.c           |  1 +
+ drivers/usb/serial/pl2303.h           |  1 +
+ drivers/usb/serial/ti_usb_3410_5052.c |  3 +++
+ drivers/usb/typec/mux.c               |  7 ++++---
+ drivers/usb/typec/tcpm/tcpm.c         | 39 ++++++++++++++++++++++++++++++++---
+ drivers/usb/typec/ucsi/ucsi.c         |  2 +-
+ 21 files changed, 112 insertions(+), 44 deletions(-)
