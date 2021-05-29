@@ -2,112 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6D6394DDA
-	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 21:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C716E394DF1
+	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 21:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbhE2T0Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 May 2021 15:26:24 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:62249 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229795AbhE2T0W (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 29 May 2021 15:26:22 -0400
+        id S229792AbhE2Tbf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 May 2021 15:31:35 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:11937 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229718AbhE2Tbe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 May 2021 15:31:34 -0400
 DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1622316286; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=YMDXTcEcKFyLHXnnDZTwwkxpT9FLywcjBpEH0RdgkCY=; b=JdOj/ipA04pGPJ01McwhoXG7dK3AGs4JD3rVqH0ckmraTy9cZi9HKBnYJUMceM3reVaeBrVq
- 4Z/4f3gti1dnTQ1siXlL1Ks3AH00/3loRzhLvx0WFyMl1dQcWBR7bxNxhDD4W4jBnNE4IgZq
- OKWIVSQZl8KLjJt9girqh0O0zpE=
-X-Mailgun-Sending-Ip: 69.72.43.7
+ s=smtp; t=1622316598; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=fQyUE58iaAi8NnHI1V7764COjMIGNrGcn481ccfwdz0=; b=ZYkNdeBGPCHFpKwmIZtiPAVTeM0eO2EfL3fMHpzHBSpwLgyDiv2ZTGU6m/Z55922VQM7h1vE
+ PhlJ+6KtdvWwbURBRt7wBaJ9GE7oMB3opxQC2tod1stWnHRdn/Ah/87iA289c5vIxI28a2cA
+ 0x5WI1Himx/O+JbbN8KGrt2X/wk=
+X-Mailgun-Sending-Ip: 198.61.254.9
 X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
 Received: from smtp.codeaurora.org
  (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60b294ebe27c0cc77f208b3e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 29 May 2021 19:24:27
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60b29629f726fa4188b6e0a5 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 29 May 2021 19:29:45
  GMT
 Sender: jackp=codeaurora.org@mg.codeaurora.org
 Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id F2BF8C4338A; Sat, 29 May 2021 19:24:26 +0000 (UTC)
+        id B6EE1C4338A; Sat, 29 May 2021 19:29:44 +0000 (UTC)
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
         aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
 X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
         URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
 Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id A3833C433F1;
-        Sat, 29 May 2021 19:24:25 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org A3833C433F1
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7EE3DC433D3;
+        Sat, 29 May 2021 19:29:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7EE3DC433D3
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
 Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Sat, 29 May 2021 12:24:21 -0700
 From:   Jack Pham <jackp@codeaurora.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, agross@kernel.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v8 5/5] arm64: boot: dts: qcom: sm8150: Enable dynamic TX
- FIFO resize logic
-Message-ID: <20210529192420.GA11263@jackp-linux.qualcomm.com>
-References: <1621410238-31395-1-git-send-email-wcheng@codeaurora.org>
- <1621410238-31395-6-git-send-email-wcheng@codeaurora.org>
- <YLJ000lIVhZM5WEV@builder.lan>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH] usb: dwc3: debugfs: Add and remove endpoint dirs dynamically
+Date:   Sat, 29 May 2021 12:29:32 -0700
+Message-Id: <20210529192932.22912-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YLJ000lIVhZM5WEV@builder.lan>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Bjorn,
+The DWC3 DebugFS directory and files are currently created once
+during probe.  This includes creation of subdirectories for each
+of the gadget's endpoints.  This works fine for peripheral-only
+controllers, as dwc3_core_init_mode() calls dwc3_gadget_init()
+just prior to calling dwc3_debugfs_init().
 
-On Sat, May 29, 2021 at 12:07:31PM -0500, Bjorn Andersson wrote:
-> On Wed 19 May 02:43 CDT 2021, Wesley Cheng wrote:
-> 
-> > Enable the flexible TX FIFO resize logic on SM8150.  Using a larger TX FIFO
-> > SZ can help account for situations when system latency is greater than the
-> > USB bus transmission latency.
-> > 
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> > Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> 
-> Based on my previous request of always adding this for the Qualcomm
-> platforms that supports it, which is implemented in patch 4, I don't see
-> a need for this patch.
-> 
-> Am I missing something?
+However, for dual-role controllers, dwc3_core_init_mode() will
+instead call dwc3_drd_init() which is problematic in a few ways.
+First, the initial state must be determined, then dwc3_set_mode()
+will have to schedule drd_work and by then dwc3_debugfs_init()
+could have already been invoked.  Even if the initial mode is
+peripheral, dwc3_gadget_init() happens after the DebugFS files
+are created, and worse so if the initial state is host and the
+controller switches to peripheral much later.  And secondly,
+even if the gadget endpoints' debug entries were successfully
+created, if the controller exits peripheral mode, its dwc3_eps
+are freed so the debug files would now hold stale references.
 
-Looks like Wesley had quickly sent a V9 of the series right after V8,
-and the DTSI change is dropped.
+So it is best if the DebugFS endpoint entries are created and
+removed dynamically at the same time the underlying dwc3_eps are.
+Do this by calling dwc3_debugfs_create_endpoint_dir() as each
+endpoint is created, and conversely remove the DebugFS entry when
+the endpoint is freed.
 
-https://lore.kernel.org/linux-usb/1621410561-32762-1-git-send-email-wcheng@codeaurora.org/T/#t
+Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/dwc3/debug.h   |  3 +++
+ drivers/usb/dwc3/debugfs.c | 21 ++-------------------
+ drivers/usb/dwc3/gadget.c  |  3 +++
+ 3 files changed, 8 insertions(+), 19 deletions(-)
 
-Thanks,
-Jack
-
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > index 51235a9..8f532cb 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
-> > @@ -2275,6 +2275,7 @@
-> >  				iommus = <&apps_smmu 0x140 0>;
-> >  				snps,dis_u2_susphy_quirk;
-> >  				snps,dis_enblslpm_quirk;
-> > +				tx-fifo-resize;
-> >  				phys = <&usb_1_hsphy>, <&usb_1_ssphy>;
-> >  				phy-names = "usb2-phy", "usb3-phy";
-> >  			};
-
+diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
+index d0ac89c5b317..d223c54115f4 100644
+--- a/drivers/usb/dwc3/debug.h
++++ b/drivers/usb/dwc3/debug.h
+@@ -413,9 +413,12 @@ static inline const char *dwc3_gadget_generic_cmd_status_string(int status)
+ 
+ 
+ #ifdef CONFIG_DEBUG_FS
++extern void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep);
+ extern void dwc3_debugfs_init(struct dwc3 *d);
+ extern void dwc3_debugfs_exit(struct dwc3 *d);
+ #else
++static inline void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
++{  }
+ static inline void dwc3_debugfs_init(struct dwc3 *d)
+ {  }
+ static inline void dwc3_debugfs_exit(struct dwc3 *d)
+diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
+index 7146ee2ac057..5dbbe53269d3 100644
+--- a/drivers/usb/dwc3/debugfs.c
++++ b/drivers/usb/dwc3/debugfs.c
+@@ -886,30 +886,14 @@ static void dwc3_debugfs_create_endpoint_files(struct dwc3_ep *dep,
+ 	}
+ }
+ 
+-static void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep,
+-		struct dentry *parent)
++void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
+ {
+ 	struct dentry		*dir;
+ 
+-	dir = debugfs_create_dir(dep->name, parent);
++	dir = debugfs_create_dir(dep->name, dep->dwc->root);
+ 	dwc3_debugfs_create_endpoint_files(dep, dir);
+ }
+ 
+-static void dwc3_debugfs_create_endpoint_dirs(struct dwc3 *dwc,
+-		struct dentry *parent)
+-{
+-	int			i;
+-
+-	for (i = 0; i < dwc->num_eps; i++) {
+-		struct dwc3_ep	*dep = dwc->eps[i];
+-
+-		if (!dep)
+-			continue;
+-
+-		dwc3_debugfs_create_endpoint_dir(dep, parent);
+-	}
+-}
+-
+ void dwc3_debugfs_init(struct dwc3 *dwc)
+ {
+ 	struct dentry		*root;
+@@ -940,7 +924,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
+ 				&dwc3_testmode_fops);
+ 		debugfs_create_file("link_state", 0644, root, dwc,
+ 				    &dwc3_link_state_fops);
+-		dwc3_debugfs_create_endpoint_dirs(dwc, root);
+ 	}
+ }
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 65d9b7227752..dbba31d415d7 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2754,6 +2754,8 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
+ 	INIT_LIST_HEAD(&dep->started_list);
+ 	INIT_LIST_HEAD(&dep->cancelled_list);
+ 
++	dwc3_debugfs_create_endpoint_dir(dep);
++
+ 	return 0;
+ }
+ 
+@@ -2797,6 +2799,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
+ 			list_del(&dep->endpoint.ep_list);
+ 		}
+ 
++		debugfs_remove_recursive(debugfs_lookup(dep->name, dwc->root));
+ 		kfree(dep);
+ 	}
+ }
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.24.0
+
