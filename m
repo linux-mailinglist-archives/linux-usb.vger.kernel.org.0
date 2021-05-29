@@ -2,94 +2,208 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7AB394815
-	for <lists+linux-usb@lfdr.de>; Fri, 28 May 2021 22:54:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070E33949A2
+	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 02:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbhE1U4J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 28 May 2021 16:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbhE1U4I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 28 May 2021 16:56:08 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC30C061574;
-        Fri, 28 May 2021 13:54:33 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id e15so2204730plh.1;
-        Fri, 28 May 2021 13:54:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KNDQDSaQDqhu/I3Lsua3rDkqU5ss+4y1pi3/AYZD5nM=;
-        b=kzojuoafDvBuc8jVKb7iEbNT4hTj0WtQcWi6IHn6+mZSI9vVDYW4DPaIgxZdwgxHUY
-         MspNuxhiuFW3vdBkyklLOuqJqIX1RDL1oNFTHyYGYFi/e7xR3Z3IKbRiM2Gk1B/dd9/R
-         5d6exAcyvxZeiy0U31tuONOcv7LeE8mb7/PVsvMYeYmZFTemtXx4TU4xgnqRlFXwVkdF
-         j3+3hfLPyCy3vNv0o4k19l+mb9yiiv0Q1oh1Lv17OeJ1UnQfkX3XBN4h3Q+PZQbe27jf
-         g1ZnCFsk3FPS8bBGvmvvEZdQu83oQ4JuB2xup7K7gzrNAPQ8Sda7V1x3f0DsCIsI+q17
-         mPzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KNDQDSaQDqhu/I3Lsua3rDkqU5ss+4y1pi3/AYZD5nM=;
-        b=M8U00maaIEpfWYKiWjGORHZnvXs1ENc7smaLM60+vm1jrawYbrFSCE8z9waMn/5jWl
-         dEqDK/zkrCf9HGPGqu8o+pDJuMbwv+G0C8w2tlJVCJEHnTrDPGXaaPdOZ+EVNfJPN9wG
-         wO0VvWtc1Ac2o/n8h1YZ6Tf0W/FUMFyh2UDjvuBYlOH025SZltOAWy2hxrLEaHRurquT
-         SP27J0mBhmZpwLG81Oa/VVniR0S73aSPC99OjPs/htO2iiGVYkvFGTrQDRui2WcfK4An
-         bOZbhm4YVTxpizNjji0Eol/gZHB5YQ5ADBtviS3tVOs+V6wBmu9nYjwn5r2gQ/dxkzdl
-         0YQg==
-X-Gm-Message-State: AOAM5307arnAKjpKmH2xO5BiVjH9B9RB9fZzGpbX/mHqpymtHBTIs09b
-        ZsMwMBhbe8ZC/rQASXFu8oKyltQTdSkoiQ==
-X-Google-Smtp-Source: ABdhPJw/BNYemzoSNkVPloZgSztLrC4nUdQAMIp/7cCNHAXaWGzpukk1hV11gNbCEMLF42Z+FcB/MA==
-X-Received: by 2002:a17:90a:fa14:: with SMTP id cm20mr6548429pjb.90.1622235273112;
-        Fri, 28 May 2021 13:54:33 -0700 (PDT)
-Received: from hyeyoo ([183.99.11.150])
-        by smtp.gmail.com with ESMTPSA id s3sm5504581pgs.62.2021.05.28.13.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 May 2021 13:54:32 -0700 (PDT)
-Date:   Sat, 29 May 2021 05:54:27 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: usbmouse: Avoid GFP_ATOMIC when GFP_KERNEL is
- possible
-Message-ID: <20210528205427.GB5911@hyeyoo>
-References: <20210524145743.GA92203@hyeyoo>
- <20210527164517.GA143281@hyeyoo>
- <YK/Or91JIpbpwWjL@kroah.com>
- <20210527170536.GA143409@hyeyoo>
- <YK/SvAoog4TKygoY@kroah.com>
+        id S229713AbhE2Alr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 28 May 2021 20:41:47 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:12844 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229541AbhE2Alr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 28 May 2021 20:41:47 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1622248811; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=QM6qgqrE3mDqgSSOgbJTDeIClx4AEk3FZTtQjZABXeE=; b=vkV7vvRbrBZDjl3LnK+VU+MsnpOvhunQwNXFL2oD/q5GnZZQYDKyQXClpps1/izcsyyPR8XM
+ bSEY/QqwpdXtF8Uh5Yca+tWtiGWdwOB0rEGZ3xvNY3vVxkUHe6iWDCLRMIdv1rtuxm29WzzW
+ xNYVLRHSL1cxbUUcmEh5jRoa2Xo=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60b18d6bea2aacd7298ee505 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 29 May 2021 00:40:11
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id DCEEBC4323A; Sat, 29 May 2021 00:40:10 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.54.185] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0CA51C433F1;
+        Sat, 29 May 2021 00:40:08 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0CA51C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v8 0/5] Re-introduce TX FIFO resize for larger EP bursting
+To:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com
+References: <1621410238-31395-1-git-send-email-wcheng@codeaurora.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <56005440-7b3c-1dd7-c0f9-d3d0d0703878@codeaurora.org>
+Date:   Fri, 28 May 2021 17:40:07 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YK/SvAoog4TKygoY@kroah.com>
+In-Reply-To: <1621410238-31395-1-git-send-email-wcheng@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 27, 2021 at 07:11:24PM +0200, Greg KH wrote:
-> On Fri, May 28, 2021 at 02:05:36AM +0900, Hyeonggon Yoo wrote:
-> > On Thu, May 27, 2021 at 06:54:07PM +0200, Greg KH wrote:
-> > > It has been only 4 days.  For a non-bugfix and for something that is
-> > > only a "cleanup" change, give it at least 2 weeks please.
-> > > 
-> > > Relax, there is no rush for stuff like this.
-> > 
-> > Hello Greg!
-> > 
-> > Okay You are right. I'll relax...
-> > 
-> > I think I need to be familiar with the process :)
+Hi Felipe,
+
+Sorry for the ping, but was just wondering if you had any feedback on
+the latest txfifo resize patch series?  I think I addressed the concerns
+you had about making sure we had enough FIFO size for a composition
+before allowing the configuration to bind with the check_config() API.
+It would ensure at least enough room for 1 max packet size for each EP
+in a configuration before allowing the bind to complete.
+
+That way we'd avoid being enumerated w/ the host, and having
+non-functioning endpoints.  We've been testing these changes internally,
+and they are providing a pretty significant boost to our USB throughput
+numbers.
+
+Thanks
+Wesley Cheng
+
+On 5/19/2021 12:43 AM, Wesley Cheng wrote:
+> Changes in V8:
+>  - Rebased to usb-testing
+>  - Using devm_kzalloc for adding txfifo property in dwc3-qcom
+>  - Removed DWC3 QCOM ACPI property for enabling the txfifo resize
 > 
-> Please go read Documentation/process/ for all of that while you wait :)
+> Changes in V7:
+>  - Added a new property tx-fifo-max-num for limiting how much fifo space the
+>    resizing logic can allocate for endpoints with large burst values.  This
+>    can differ across platforms, and tie in closely with overall system latency.
+>  - Added recommended checks for DWC32.
+>  - Added changes to set the tx-fifo-resize property from dwc3-qcom by default
+>    instead of modifying the current DTSI files.
+>  - Added comments on all APIs/variables introduced.
+>  - Updated the DWC3 YAML to include a better description of the tx-fifo-resize
+>    property and added an entry for tx-fifo-max-num.
+> 
+> Changes in V6:
+>  - Rebased patches to usb-testing.
+>  - Renamed to PATCH series instead of RFC.
+>  - Checking for fs_descriptors instead of ss_descriptors for determining the
+>    endpoint count for a particular configuration.
+>  - Re-ordered patch series to fix patch dependencies.
+> 
+> Changes in V5:
+>  - Added check_config() logic, which is used to communicate the number of EPs
+>    used in a particular configuration.  Based on this, the DWC3 gadget driver
+>    has the ability to know the maximum number of eps utilized in all configs.
+>    This helps reduce unnecessary allocation to unused eps, and will catch fifo
+>    allocation issues at bind() time.
+>  - Fixed variable declaration to single line per variable, and reverse xmas.
+>  - Created a helper for fifo clearing, which is used by ep0.c
+> 
+> Changes in V4:
+>  - Removed struct dwc3* as an argument for dwc3_gadget_resize_tx_fifos()
+>  - Removed WARN_ON(1) in case we run out of fifo space
+>  
+> Changes in V3:
+>  - Removed "Reviewed-by" tags
+>  - Renamed series back to RFC
+>  - Modified logic to ensure that fifo_size is reset if we pass the minimum
+>    threshold.  Tested with binding multiple FDs requesting 6 FIFOs.
+> 
+> Changes in V2:
+>  - Modified TXFIFO resizing logic to ensure that each EP is reserved a
+>    FIFO.
+>  - Removed dev_dbg() prints and fixed typos from patches
+>  - Added some more description on the dt-bindings commit message
+> 
+> Currently, there is no functionality to allow for resizing the TXFIFOs, and
+> relying on the HW default setting for the TXFIFO depth.  In most cases, the
+> HW default is probably sufficient, but for USB compositions that contain
+> multiple functions that require EP bursting, the default settings
+> might not be enough.  Also to note, the current SW will assign an EP to a
+> function driver w/o checking to see if the TXFIFO size for that particular
+> EP is large enough. (this is a problem if there are multiple HW defined
+> values for the TXFIFO size)
+> 
+> It is mentioned in the SNPS databook that a minimum of TX FIFO depth = 3
+> is required for an EP that supports bursting.  Otherwise, there may be
+> frequent occurences of bursts ending.  For high bandwidth functions,
+> such as data tethering (protocols that support data aggregation), mass
+> storage, and media transfer protocol (over FFS), the bMaxBurst value can be
+> large, and a bigger TXFIFO depth may prove to be beneficial in terms of USB
+> throughput. (which can be associated to system access latency, etc...)  It
+> allows for a more consistent burst of traffic, w/o any interruptions, as
+> data is readily available in the FIFO.
+> 
+> With testing done using the mass storage function driver, the results show
+> that with a larger TXFIFO depth, the bandwidth increased significantly.
+> 
+> Test Parameters:
+>  - Platform: Qualcomm SM8150
+>  - bMaxBurst = 6
+>  - USB req size = 256kB
+>  - Num of USB reqs = 16
+>  - USB Speed = Super-Speed
+>  - Function Driver: Mass Storage (w/ ramdisk)
+>  - Test Application: CrystalDiskMark
+> 
+> Results:
+> 
+> TXFIFO Depth = 3 max packets
+> 
+> Test Case | Data Size | AVG tput (in MB/s)
+> -------------------------------------------
+> Sequential|1 GB x     | 
+> Read      |9 loops    | 193.60
+> 	  |           | 195.86
+>           |           | 184.77
+>           |           | 193.60
+> -------------------------------------------
+> 
+> TXFIFO Depth = 6 max packets
+> 
+> Test Case | Data Size | AVG tput (in MB/s)
+> -------------------------------------------
+> Sequential|1 GB x     | 
+> Read      |9 loops    | 287.35
+> 	  |           | 304.94
+>           |           | 289.64
+>           |           | 293.61
+> -------------------------------------------
+> 
+> Wesley Cheng (5):
+>   usb: gadget: udc: core: Introduce check_config to verify USB
+>     configuration
+>   usb: gadget: configfs: Check USB configuration before adding
+>   usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
+>   usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default
+>   arm64: boot: dts: qcom: sm8150: Enable dynamic TX FIFO resize logic
+> 
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi |   1 +
+>  drivers/usb/dwc3/core.c              |   9 ++
+>  drivers/usb/dwc3/core.h              |  15 +++
+>  drivers/usb/dwc3/dwc3-qcom.c         |   9 ++
+>  drivers/usb/dwc3/ep0.c               |   2 +
+>  drivers/usb/dwc3/gadget.c            | 212 +++++++++++++++++++++++++++++++++++
+>  drivers/usb/gadget/configfs.c        |  22 ++++
+>  drivers/usb/gadget/udc/core.c        |  25 +++++
+>  include/linux/usb/gadget.h           |   5 +
+>  9 files changed, 300 insertions(+)
+> 
 
-I'm reading it and Thanks for letting me know it.
-it helps a lot... I should read it many times.
-
-and the patch seems already applied to linux-next :)
-
-Thanks,
-Hyeonggon
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
