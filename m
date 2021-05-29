@@ -2,55 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F2E394C20
-	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 14:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDB6394C47
+	for <lists+linux-usb@lfdr.de>; Sat, 29 May 2021 14:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbhE2MNj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 29 May 2021 08:13:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36254 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229602AbhE2MNR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 29 May 2021 08:13:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 511056113B;
-        Sat, 29 May 2021 12:11:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622290300;
-        bh=a04XgNt8VBVT/mEJkohX1vjTZHsrsgHJ0yvL7oX6ALY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pfKUNmS3NWjQGuAoYFqtn6xQ0BHGkWc5/xNQ/uyzO1/AURAmoa1QUJ6RhWiCpHcwY
-         6wPXMqcool5TBVCwARpLXfMJnTjg50ViCoZC7bkUz15L5FqEcvTdAzeGaP+E+8bNXF
-         4jhBGJO04YPr6Lcj+ZvoSMPi3NLn9gOk4/Ad46+I=
-Date:   Sat, 29 May 2021 14:11:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        id S229734AbhE2Mzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 29 May 2021 08:55:46 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:2540 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229719AbhE2Mzp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 29 May 2021 08:55:45 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FshJG1Rk5zYrdp;
+        Sat, 29 May 2021 20:51:26 +0800 (CST)
+Received: from dggema769-chm.china.huawei.com (10.1.198.211) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2176.2; Sat, 29 May 2021 20:54:07 +0800
+Received: from [10.174.179.215] (10.174.179.215) by
+ dggema769-chm.china.huawei.com (10.1.198.211) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2176.2; Sat, 29 May 2021 20:54:07 +0800
 Subject: Re: [PATCH -next] USB: gadget: f_fs: Remove unneed cast in
  ffs_prepare_buffer()
-Message-ID: <YLIveGTHK5RjxtS+@kroah.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 References: <20210529120408.23456-1-yuehaibing@huawei.com>
+ <YLIveGTHK5RjxtS+@kroah.com>
+From:   YueHaibing <yuehaibing@huawei.com>
+Message-ID: <91983b80-1818-536d-5ea3-5a38c1cb5443@huawei.com>
+Date:   Sat, 29 May 2021 20:54:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210529120408.23456-1-yuehaibing@huawei.com>
+In-Reply-To: <YLIveGTHK5RjxtS+@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggema769-chm.china.huawei.com (10.1.198.211)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 29, 2021 at 08:04:08PM +0800, YueHaibing wrote:
-> A coccicheck run provided information like the following.
+On 2021/5/29 20:11, Greg KH wrote:
+> On Sat, May 29, 2021 at 08:04:08PM +0800, YueHaibing wrote:
+>> A coccicheck run provided information like the following.
+>>
+>> ./drivers/usb/gadget/function/f_fs.c:3832:9-16:
+>>  WARNING: ERR_CAST can be used with data
+>>
+>> ffs_prepare_buffer() should return an ERR_PTR() encoded error
+>> code on failure.
 > 
-> ./drivers/usb/gadget/function/f_fs.c:3832:9-16:
->  WARNING: ERR_CAST can be used with data
+> It does return such a pointer today, so this statement does not make
+> much sense :(
+
+Yes, it does. This is just to remove explicit casts.
+
 > 
-> ffs_prepare_buffer() should return an ERR_PTR() encoded error
-> code on failure.
+> And is this a v2 patch?  What changed from the previous version?
 
-It does return such a pointer today, so this statement does not make
-much sense :(
+Sorry, I forget to add version info.
 
-And is this a v2 patch?  What changed from the previous version?
-
-thanks,
-
-greg k-h
+> 
+> thanks,
+> 
+> greg k-h
+> .
+> 
