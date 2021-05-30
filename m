@@ -2,127 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D617E395066
-	for <lists+linux-usb@lfdr.de>; Sun, 30 May 2021 12:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B595A3950E7
+	for <lists+linux-usb@lfdr.de>; Sun, 30 May 2021 14:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbhE3KUb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 30 May 2021 06:20:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51812 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229500AbhE3KUb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 30 May 2021 06:20:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 422D660FDA;
-        Sun, 30 May 2021 10:18:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622369933;
-        bh=aIarsM2xwBn41MLV8NKbGK+QMKL4HkxHO8aTX6fDg2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lHBinzB6WD/pvQwdbEQ7q/ZCJHjptJKNQ3P3JipQR25sMwOxYKeZSjizEClK1QimU
-         JzPPjpkOSDSF30CmOF72KtaYwurgN3YPNETjyY0dKwAXTA/RlgnkPQh3cO8KXpSrOW
-         sZS06RX8mz4MzHmFrrIj9+viaCwPIR9o3SWRjn/tScR4t6O1fPZgnLi8us6W6K0kCk
-         YhQh0RNUkz2BQKgeDcT+UlFmtQfGUFmgdaSyJbxs97UqWhQWqHU1S4J8FyI5WiUcIt
-         +2RutTkJ+0RAGW3c3OfyUzzme0V/mb2za3pnpMY0W5G2Qtddvoa54d3TteZOxeZwdE
-         EZpt26oMCbJxg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lnIWs-0004uZ-Hk; Sun, 30 May 2021 12:18:47 +0200
-Date:   Sun, 30 May 2021 12:18:46 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Eero <fin4478@hotmail.com>,
-        USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: USB: core: WARN if pipe direction != setup packet direction
-Message-ID: <YLNmhtSnmEN0+a+x@hovoldconsulting.com>
-References: <HE1PR0602MB32762856D2728450104CE1C6A1219@HE1PR0602MB3276.eurprd06.prod.outlook.com>
- <20210529192136.GA1507406@rowland.harvard.edu>
- <HE1PR0602MB3276072A2816DCBD1EB7DEB4A1219@HE1PR0602MB3276.eurprd06.prod.outlook.com>
- <20210529195831.GD1507406@rowland.harvard.edu>
+        id S229617AbhE3MZ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 30 May 2021 08:25:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229500AbhE3MZ2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 30 May 2021 08:25:28 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19564C061574
+        for <linux-usb@vger.kernel.org>; Sun, 30 May 2021 05:23:49 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id t17so1563233ljk.7
+        for <linux-usb@vger.kernel.org>; Sun, 30 May 2021 05:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=pyvbG2ODT3sq3herWKKGlPIFMp/+oUFeqgY25LWyaTg=;
+        b=fRY9aUQmW7QnprpdunW1z1/u9/IXiD4C3Ie8omXUtdjwG38PwxYGkyEEzVcdIgF8m9
+         P2PQSnSwhMpuSDWCSKOJ1bT62Pm6snlqE3W5Wi3fWcfpB5TfoqtaQvWj+XfGjRGUqLN0
+         loQm2a5vWOOwz91g9IiuIw6/qmfoHAz05mK/wvhKZHXL5FsrJ0AiRKNpfP4pU+Ev1jMV
+         rsFIq4tfgilgfwF17nUo/rZHEXB7X5gNE4AkSw1bXoDRrvs53AIXiEvkbBlLiwGhMFQH
+         xz3LKh+gtQMVyZaWES8A6fo1AFvi+ir88OBsWLvIXg9Qqxycsn3GNtezaz/0/ieE2iVd
+         lizA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=pyvbG2ODT3sq3herWKKGlPIFMp/+oUFeqgY25LWyaTg=;
+        b=T/JQqs/M2wYfBqxRUEGAdqIFr/+ubWLu6MoLCJ53+GHvEvpWgsjjLZ8iOnRQmKJfpe
+         7LuR7E7jknWITsNKrb+/4G+aFr4CyAtajSFoX9veJXEszLpF50FxSz7Z8400TTlgv1hV
+         FhN7avJ0SlKxOdp6hUViDgSfKdswg/cQyOgGQPS5Du1hebZD2EcLIk5Qybjz3jdWkbaw
+         riqNhKD9L5UN30sxqdfzg+DsA9LlweaGe1PV//yrBLh2p5aov6wGJ/q6jkJuEZFM+RVi
+         BaYJbwk6OPorvesgKp0PFMX9eUGaav8FAMuCy67ZILPknbFyiluuKgVwW+oRvTvLM8FQ
+         M00Q==
+X-Gm-Message-State: AOAM530t+vcSOn3Ykoq2o1q7WnMmWeFE2HZ9MvKucxQ2djXGZHXoUx4V
+        QSQiOb/YuEeJcWtvG/Eq3tzWPmii2tykmsk6xuAli9WgQ0sib1on
+X-Google-Smtp-Source: ABdhPJzUlleVW95toY0vdlejDNHQrfsbzodSrZMIUhQUW6/zO1WLzJaLaJzqGaYPXfPAu/TSeWkGeHGQlxK/WRhvSBY=
+X-Received: by 2002:a05:651c:b07:: with SMTP id b7mr13160412ljr.218.1622377427292;
+ Sun, 30 May 2021 05:23:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210529195831.GD1507406@rowland.harvard.edu>
+From:   Eero Lehtinen <debiangamer2@gmail.com>
+Date:   Sun, 30 May 2021 15:23:36 +0300
+Message-ID: <CAHS3B0EzL7zeKGjm=kvEq7VgDc-7hZNgOm-z5zPgFwVg0uQe-Q@mail.gmail.com>
+Subject: Re: [PATCH] media: rtl28xxu: add type-detection instrumentation
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, May 29, 2021 at 03:58:31PM -0400, Alan Stern wrote:
-> Please don't top-post.  And for the third time, please CC your emails 
-> to the mailing list.  If you don't, I will stop replying.
-> 
-> On Sat, May 29, 2021 at 10:41:51PM +0300, Eero wrote:
-> > Hi,
-> > 
-> > The dvb-t stick works when I did that. Thank you.
-> > 
-> > BR, Eero
-> > 
-> > On Sat, 29 May 2021 15:21:36 -0400
-> > > 
-> > > Does the same problem occur if you don't apply Johan's rtl28xxu patch 
-> > > and you revert commit 5cc59c418fde from 5.13.rc3-next?
-> > > 
-> > > Alan Stern
-> 
-> Johan, it appears that your patch making an empty I2C read actually 
-> transfer one byte somehow causes a problem for this dvb-t stick.
-> 
-> Below is a copy of the original problem report.  Any ideas?
+Hi,
 
-I'd start with verifying that the type is still detected correctly so
-that the driver uses the right implementation (i.e. for rtl2831u instead
-of rtl2832u or vice versa).
+I tested Johans latest patch and my dvb-t stick can find the channel
+list but not to tune to them. It uses the mxl5005s driver again with
+repeating mxl5005s I2C write failed messages:
 
-If that isn't the problem, it could be the 1-byte read request itself
-that throws the firmware off and causes later accesses to fail even if
-that seems a bit far-fetched.
-
-> The patch removed the warning, but the usb dvb-t stick does not work
-> because of looping messages in dmesg:
-> [  418.485387] mxl5005s I2C write failed
-> [  418.658410] mxl5005s I2C write failed
- 
-Eero, could you try the below patch on top of linux-next (i.e. without
-the zero-length request patch) and send us the logs?
-
-Johan
-
-
-From eda5deca4cbdebe21718bb13f76b8eed0673f9be Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Mon, 24 May 2021 10:55:19 +0200
-Subject: [PATCH] media: rtl28xxu: add type-detection instrumentation
-
----
- drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-index 97ed17a141bb..21e565603108 100644
---- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-+++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-@@ -612,8 +612,10 @@ static int rtl28xxu_read_config(struct dvb_usb_device *d)
- static int rtl28xxu_identify_state(struct dvb_usb_device *d, const char **name)
- {
- 	struct rtl28xxu_dev *dev = d_to_priv(d);
-+	u8 buf[1];
- 	int ret;
- 	struct rtl28xxu_req req_demod_i2c = {0x0020, CMD_I2C_DA_RD, 0, NULL};
-+	struct rtl28xxu_req req_demod_i2c2 = {0x0020, CMD_I2C_DA_RD, 1, buf};
- 
- 	dev_dbg(&d->intf->dev, "\n");
- 
-@@ -622,6 +624,11 @@ static int rtl28xxu_identify_state(struct dvb_usb_device *d, const char **name)
- 	 * by old RTL2831U.
- 	 */
- 	ret = rtl28xxu_ctrl_msg(d, &req_demod_i2c);
-+	dev_info(&d->intf->dev, "%s - ret1 = %d\n", __func__, ret);
-+
-+	ret = rtl28xxu_ctrl_msg(d, &req_demod_i2c2);
-+	dev_info(&d->intf->dev, "%s - ret2 = %d\n", __func__, ret);
-+
- 	if (ret == -EPIPE) {
- 		dev->chip_id = CHIP_ID_RTL2831U;
- 	} else if (ret == 0) {
--- 
-2.31.1
-
+[   23.276076] mxl5005s I2C reset failed
+[   23.296082] mxl5005s I2C write failed
+[   23.316041] mxl5005s I2C write failed
+[   23.336061] mxl5005s I2C write failed
+[   23.336100] usb 1-1: Frontend requested software zigzag, but didn't
+set the frequency step size
+[   23.356096] mxl5005s I2C reset failed
+[   23.376226] mxl5005s I2C write failed
+[   23.396084] mxl5005s I2C write failed
+[   23.416082] mxl5005s I2C write failed
