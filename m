@@ -2,132 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276E7395696
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 09:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B523956AC
+	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 10:09:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhEaH6s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 03:58:48 -0400
-Received: from mga07.intel.com ([134.134.136.100]:64334 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230111AbhEaH6r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 May 2021 03:58:47 -0400
-IronPort-SDR: a5LD5ubITp7p4LtE3lOTLZRSsMEjE/+DzugwBE1F8BSXJaqpajfhEHr3iw2qldfAMSpiUDqKQG
- EQE0NQq0kyzw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10000"; a="267196576"
-X-IronPort-AV: E=Sophos;i="5.83,236,1616482800"; 
-   d="scan'208";a="267196576"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2021 00:57:08 -0700
-IronPort-SDR: cLG1VNzg3xp4ryUjlpwp18LDHqzSiBB0etHTetMcyfK5J9zBal7zB2/FW/4gdUGV+wUPw2eanZ
- zOBYP5xkxFgQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,236,1616482800"; 
-   d="scan'208";a="549336363"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 31 May 2021 00:57:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 May 2021 10:57:04 +0300
-Date:   Mon, 31 May 2021 10:57:04 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jun Li <jun.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: typec: mux: Remove requirement for the
- "orientation-switch" device property
-Message-ID: <YLSW0IoHdnzRSzUW@kuha.fi.intel.com>
+        id S230320AbhEaILH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 04:11:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:56040 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230143AbhEaILD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 May 2021 04:11:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1622448564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=vxnQuYD3EHtlcKesWh+gtipSrlYX4BLUcn/92eSQqRY=;
+        b=HhMCWT5B7uk4mldUfIXHwhbDJkUm0zNhHTt69FfU5IqregW1Ie9FsHlI+9o966687TneaR
+        XfVVnhXoWDEl2j0rkr5KopFQfB5LGKMhR63XX+yIbmjTXuDHJ0O42hGyGZMF0MNn3TQkOx
+        +/HBwXMxhDDMMMW6jRji2zcqOM0uAWU=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-455-R0YcpoOuOGS0vhwc3ltuUg-1; Mon, 31 May 2021 04:09:22 -0400
+X-MC-Unique: R0YcpoOuOGS0vhwc3ltuUg-1
+Received: by mail-ej1-f70.google.com with SMTP id gv42-20020a1709072beab02903eab8e33118so1121867ejc.19
+        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 01:09:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=vxnQuYD3EHtlcKesWh+gtipSrlYX4BLUcn/92eSQqRY=;
+        b=mp4boCT8w2OdQgUmJnUZ+JQyl7tb3MoH35bIcFyF30hzRNox0LqRDv8x9q7D3ojVxp
+         Nbzs7DrGSgmtzMN0zGgZ9hS3Z1hAtA9jpD17O8e0oBhoBIqFrHMWticLyuL31Ho4YYFs
+         esz9yGEC5XVfMEOi4JPwrzFQ4NW8aOa+tvLbfKzFeRA7kEtwKyFfclO1GnPNBAwlRDDB
+         go4jIv4XEOYy3a5F+kiKTE2xfvW8pcGr3Lw38TbaX/CKlYQMnFij4SzHWqkEHxUvOSUN
+         +ZUbSl7jJp0YNdL43qWLKUmA5AlbXPhBskKmLzjiBmZd7ETYqx1c2gDFjk39r22N7UtA
+         Sdlw==
+X-Gm-Message-State: AOAM530i8JgHG3pgs2c9i4DEsANJ461JWCaRfB10QRu5a0ALsOBI9Z15
+        6YTfXfczBADavqcNm3SpfXL+JNx5oluwHGq5tBHJ2Rb32+TwGgXKQtL0Fe2dYqnbGIbyu6+1aQd
+        qeZ67T5Dc/9updrMuPLe9
+X-Received: by 2002:aa7:d844:: with SMTP id f4mr23366159eds.203.1622448561260;
+        Mon, 31 May 2021 01:09:21 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzjJw09/l45t71IeTqqLiV2n+cL2pRrJ3J2UK89TAz+Gy6PjoTkuAcGHVk2mGaGGwXUjVK0lw==
+X-Received: by 2002:aa7:d844:: with SMTP id f4mr23366147eds.203.1622448561025;
+        Mon, 31 May 2021 01:09:21 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id t14sm6512751edv.27.2021.05.31.01.09.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 May 2021 01:09:20 -0700 (PDT)
+Subject: Re: [PATCH 1/2] usb: typec: mux: Use device type instead of device
+ name for matching
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Li Jun <jun.li@nxp.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20210526153548.61276-1-heikki.krogerus@linux.intel.com>
- <20210526153548.61276-3-heikki.krogerus@linux.intel.com>
- <VI1PR04MB59350F5BC9129F9E0B21773889229@VI1PR04MB5935.eurprd04.prod.outlook.com>
- <YLSPLxfyavO+AkLY@kuha.fi.intel.com>
+ <20210526153548.61276-2-heikki.krogerus@linux.intel.com>
+ <YLSQkynoJO2+hYGW@kuha.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <48e89766-42d0-ce04-53bf-2195a7479296@redhat.com>
+Date:   Mon, 31 May 2021 10:09:19 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YLSPLxfyavO+AkLY@kuha.fi.intel.com>
+In-Reply-To: <YLSQkynoJO2+hYGW@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 31, 2021 at 10:24:35AM +0300, Heikki Krogerus wrote:
-> On Fri, May 28, 2021 at 07:26:43AM +0000, Jun Li wrote:
-> > Hi,
-> > > -----Original Message-----
-> > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Sent: Wednesday, May 26, 2021 11:36 PM
-> > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Hans de Goede
-> > > <hdegoede@redhat.com>; Jun Li <jun.li@nxp.com>
-> > > Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> > > Subject: [PATCH 2/2] usb: typec: mux: Remove requirement for the
-> > > "orientation-switch" device property
-> > > 
-> > > The additional boolean device property "orientation-switch"
-> > > is not needed when the connection is described with device graph, so removing
-> > > the check and the requirement for it.
-> > > 
-> > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > ---
-> > >  drivers/usb/typec/mux.c | 3 ---
-> > >  1 file changed, 3 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c index
-> > > e40a555724fb6..603f3e698cc0b 100644
-> > > --- a/drivers/usb/typec/mux.c
-> > > +++ b/drivers/usb/typec/mux.c
-> > > @@ -30,9 +30,6 @@ static void *typec_switch_match(struct fwnode_handle
-> > > *fwnode, const char *id,  {
-> > >  	struct device *dev;
-> > > 
-> > > -	if (id && !fwnode_property_present(fwnode, id))
-> > > -		return NULL;
-> > > -
-> > 
-> > May this change the result of fwnode_connection_find_match()
-> > if there are multiple remote-endpoint node?
-> > 
-> > After the 2 patches change, typec_switch_match() will never
-> > return NULL, so
-> > 
-> >   17 static void *
-> >   18 fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> >   19                           void *data, devcon_match_fn_t match)
-> >   20 {               
-> >   21         struct fwnode_handle *node;
-> >   22         struct fwnode_handle *ep;
-> >   23         void *ret;
-> >   24                         
-> >   25         fwnode_graph_for_each_endpoint(fwnode, ep) {
-> >   26                 node = fwnode_graph_get_remote_port_parent(ep);
-> >   27                 if (!fwnode_device_is_available(node))
-> >   28                         continue;
-> >   29 
-> >   30                 ret = match(node, con_id, data);// ret can't be NULL;
-> >   31                 fwnode_handle_put(node); 
-> >   32                 if (ret) {
-> > 							 /*
-> > 							  * So loop will go to here and stop
-> > 							  * checking next ep, even this ep
-> > 							  * actually is not for typec_switch
-> > 							  */
-> >   33                         fwnode_handle_put(ep);
-> >   34                         return ret;
-> >   35                 }
-> >   36         }
-> >   37         return NULL;
-> >   38 }
-> > 
-> > fwnode_graph_devcon_match() Will return ERR_PTR(-EPROBE_DEFER)
-> > even this ep's remote parent already probed but it's not for
-> > typec_switch.
+Hi,
+
+On 5/31/21 9:30 AM, Heikki Krogerus wrote:
+> On Wed, May 26, 2021 at 06:35:47PM +0300, Heikki Krogerus wrote:
+>> Both the USB Type-C switch and mux have already a device
+>> type defined for them. We can use those types instead of the
+>> device name to differentiate the two.
 > 
-> You are correct. With device graph I guess we really always need the
-> extra device property after all.
+> This should still be OK, right?
+
+I believe so and a dev_type check also seems more robust then
+a name-suffix check.
+
+Regards,
+
+Hans
+
+
 > 
-> So let's forget about this one.
+>> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> ---
+>>  drivers/usb/typec/mux.c | 26 ++++++++++----------------
+>>  drivers/usb/typec/mux.h |  6 ++++++
+>>  2 files changed, 16 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+>> index 8514bec7e1b89..e40a555724fb6 100644
+>> --- a/drivers/usb/typec/mux.c
+>> +++ b/drivers/usb/typec/mux.c
+>> @@ -17,21 +17,12 @@
+>>  #include "class.h"
+>>  #include "mux.h"
+>>  
+>> -static bool dev_name_ends_with(struct device *dev, const char *suffix)
+>> -{
+>> -	const char *name = dev_name(dev);
+>> -	const int name_len = strlen(name);
+>> -	const int suffix_len = strlen(suffix);
+>> -
+>> -	if (suffix_len > name_len)
+>> -		return false;
+>> -
+>> -	return strcmp(name + (name_len - suffix_len), suffix) == 0;
+>> -}
+>> -
+>>  static int switch_fwnode_match(struct device *dev, const void *fwnode)
+>>  {
+>> -	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-switch");
+>> +	if (!is_typec_switch(dev))
+>> +		return 0;
+>> +
+>> +	return dev_fwnode(dev) == fwnode;
+>>  }
+>>  
+>>  static void *typec_switch_match(struct fwnode_handle *fwnode, const char *id,
+>> @@ -90,7 +81,7 @@ static void typec_switch_release(struct device *dev)
+>>  	kfree(to_typec_switch(dev));
+>>  }
+>>  
+>> -static const struct device_type typec_switch_dev_type = {
+>> +const struct device_type typec_switch_dev_type = {
+>>  	.name = "orientation_switch",
+>>  	.release = typec_switch_release,
+>>  };
+>> @@ -180,7 +171,10 @@ EXPORT_SYMBOL_GPL(typec_switch_get_drvdata);
+>>  
+>>  static int mux_fwnode_match(struct device *dev, const void *fwnode)
+>>  {
+>> -	return dev_fwnode(dev) == fwnode && dev_name_ends_with(dev, "-mux");
+>> +	if (!is_typec_mux(dev))
+>> +		return 0;
+>> +
+>> +	return dev_fwnode(dev) == fwnode;
+>>  }
+>>  
+>>  static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+>> @@ -295,7 +289,7 @@ static void typec_mux_release(struct device *dev)
+>>  	kfree(to_typec_mux(dev));
+>>  }
+>>  
+>> -static const struct device_type typec_mux_dev_type = {
+>> +const struct device_type typec_mux_dev_type = {
+>>  	.name = "mode_switch",
+>>  	.release = typec_mux_release,
+>>  };
+>> diff --git a/drivers/usb/typec/mux.h b/drivers/usb/typec/mux.h
+>> index 4fd9426ee44f6..b1d6e837cb747 100644
+>> --- a/drivers/usb/typec/mux.h
+>> +++ b/drivers/usb/typec/mux.h
+>> @@ -18,4 +18,10 @@ struct typec_mux {
+>>  #define to_typec_switch(_dev_) container_of(_dev_, struct typec_switch, dev)
+>>  #define to_typec_mux(_dev_) container_of(_dev_, struct typec_mux, dev)
+>>  
+>> +extern const struct device_type typec_switch_dev_type;
+>> +extern const struct device_type typec_mux_dev_type;
+>> +
+>> +#define is_typec_switch(dev) ((dev)->type == &typec_switch_dev_type)
+>> +#define is_typec_mux(dev) ((dev)->type == &typec_mux_dev_type)
+>> +
+>>  #endif /* __USB_TYPEC_MUX__ */
+>> -- 
+>> 2.30.2
+> 
 
-Oh no. This patch just landed into Greg's usb-next. I'll prepare the
-revert. I'm sorry about this.
-
-thanks,
-
--- 
-heikki
