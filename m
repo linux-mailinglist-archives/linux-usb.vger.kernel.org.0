@@ -2,291 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EF83959F8
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 13:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13725395A7A
+	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 14:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbhEaMAb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 08:00:31 -0400
-Received: from mail-vi1eur05on2081.outbound.protection.outlook.com ([40.107.21.81]:38332
-        "EHLO EUR05-VI1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231289AbhEaMAa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 May 2021 08:00:30 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A1PqCc4jFf3q/n1hRoS1l30tcPPS4blccVg1stJ1JpONx/5KQzsOHyhZMPU+XGE/Jr5Q0XrAvbo2BByn+y7dgmtIj39Rttn/T6pCVBa3bWNQQLdDY/kuBM/TWUGXTh3MxB6EixYP8X2s5h4lh8qYZ8L9Q+MC/UJBPINH1VPO85x2BrHiiuKyH5+AqSabwOXAtg82GdY3bsthkXGT69AB5C0BYhfNoc/j0QjDCyN/RtoyCjHpJP/Uyqz4c6UCeL9GiauzfT/vgW9PemKEzqipFHZf8CZ3U3tJqbH3znDh8+wnD/wSaDTqByxk+dHZ5bRSqxMJEKaNQh0ebGID3PEWnA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9zWu/QKMwxPBQ1OloS7nwz8MwAncrCVXGWggIOnosP8=;
- b=cIw+SoAOVvKlfu4iC1+3jMg21ynQBwdORbr3sA/9pChjgpTxLSR3DggS5Wr6nDGg1XGBahwWN/sCChT+59a3C+2lXbGCceLBkiMeGje+zEux4N98RguCPwKM34kINlvD1dVxBPGL1JkFwTJv1rUSxx4rt3j4/vMvlT/ZKKzhkzLw1bdQ95/NFQZwvXprH0imaMQT6rjJGrp5cSA3TFAVQdkQXjgb9DeCdqa+272b0mVQUZqVuE2o0C/mQGBUbW9vwM4zTQvrM4gYhAd6654/2gzOwlAtMgxUCDRUGZfAJOAMgbNlr4ReIMqHaFb1Gj1rW+lMV6yHFZM/iH6E8SRW/Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9zWu/QKMwxPBQ1OloS7nwz8MwAncrCVXGWggIOnosP8=;
- b=V3P2cPVJLDjdRRx7Fcolzb+/G8gSCf+LsNxb8NFoJp0nS4mB/AiJckLk8hn13Hk0gdz5/PkGHMYj5+2T1DovHbkMTpuh0ZArM8wJwzyeP/sf9H7Bfan7LEqMKjNrdpasrS1UatSz/KT+U4qYA9OpmF+1nC0KxFS8NtXuTSpEQa4=
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
- by VI1PR04MB6783.eurprd04.prod.outlook.com (2603:10a6:803:130::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.21; Mon, 31 May
- 2021 11:58:49 +0000
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::453c:f24d:af8e:f194]) by VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::453c:f24d:af8e:f194%7]) with mapi id 15.20.4173.030; Mon, 31 May 2021
- 11:58:48 +0000
-From:   Jun Li <jun.li@nxp.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "peda@axentia.se" <peda@axentia.se>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: RE: [PATCH 3/4] usb: typec: add typec orientation switch support via
- mux controller
-Thread-Topic: [PATCH 3/4] usb: typec: add typec orientation switch support via
- mux controller
-Thread-Index: AQHXTIEKNobfiQu7YEKZBxd9HIlDqqrsT64AgAFQdoCAA4FacIAEZREAgAALynA=
-Date:   Mon, 31 May 2021 11:58:48 +0000
-Message-ID: <VI1PR04MB5935CF87B5DB6BC62BD69B10893F9@VI1PR04MB5935.eurprd04.prod.outlook.com>
-References: <1621408490-23811-1-git-send-email-jun.li@nxp.com>
- <1621408490-23811-4-git-send-email-jun.li@nxp.com>
- <YKZXHG7BSSZssiBg@kuha.fi.intel.com> <YKdxW8SFntFYcyv+@kuha.fi.intel.com>
- <VI1PR04MB593521FEBF947882E6A394D489259@VI1PR04MB5935.eurprd04.prod.outlook.com>
- <YK4R4q1cZqQDS1qy@kuha.fi.intel.com>
-In-Reply-To: <YK4R4q1cZqQDS1qy@kuha.fi.intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=none action=none header.from=nxp.com;
-x-originating-ip: [119.31.174.71]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: ca827f4f-b7f5-4f3e-811c-08d9242b7376
-x-ms-traffictypediagnostic: VI1PR04MB6783:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB678351D42179295FDE21207F893F9@VI1PR04MB6783.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: u4dJvtxbjVtcq4IvENcTdqfdZhpkp7yFWI0+O8aqhNQKWCImea5kyACviqRgy1bEjN0LYHkFfetWeuGq6w4cOIVCA+V+ygSHE5UZgla6MfyGahHx+iGhWNhNIVBzRe/jzL+aAEdyPviGGqGejWE1QkQMKZr8dApXPIRFkaT/2dqSKUE0dBF/CE/1ZoudL9+aLA2Kbl4fwXm+R+dgWbKKbzP5kbnV2LG34M2n7iis32OjvNZs7XBhpUdH+7LhsebKGxfIK7Z92eRl26DBSkoeLkWpSoPzKrf+9Qgd967vfeBFxR6LBP0tUsvJFIcTPEfR4kBJwi+PR8pX6ovP1HFSd9kqDT+tQgKA9Uyj3KsvvG9rfes7mexZb7Q4ooJdtOP4B3H+UCs6dFMJxaE/t6uV+w713TPLfph+G7QJbkrTXsJ50ul9OsD3zoztmsUBnRO5/OepiygZ3bB2OyZXJQD0WUznmD2EvF4/bOq/+g/YHLJt3hQK+0eQ1nYEWK3El2ur2sxq7nFVKOlCht9t3FkGTAYNsyMADllBd7vcY/vqKVli+1XiKuXZpuzTMJP+UGWX61F9CuMyj/rKSLvYfDIRGBl9VKXVHGs8De9F5C2vBNg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(366004)(346002)(376002)(396003)(39850400004)(53546011)(54906003)(7416002)(8936002)(76116006)(478600001)(64756008)(66476007)(66446008)(66556008)(2906002)(86362001)(8676002)(6506007)(71200400001)(316002)(122000001)(66946007)(4326008)(5660300002)(55016002)(26005)(44832011)(9686003)(6916009)(83380400001)(33656002)(186003)(7696005)(38100700002)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?RmsR6Ph3XrwOACA7Djm2TwIGCHAw7+QBd6TQG4wqs3PGRRg9rhpuFckd/MJz?=
- =?us-ascii?Q?LUtep8lJyTBEUYQ6ulBOavmbLQPDTuNh5vairZyJqwpC0s6QAhVKRTIkvYYh?=
- =?us-ascii?Q?Ul98nV8eDQGrzNGZmiSNyDr2+nhs/xMzkRHuSHYVQVl1wpcG5Z0i/dnJaxZg?=
- =?us-ascii?Q?a7LWASlC+xHsB7P54b1vgZ6ZWB3wOZveSggxLYvmDmunZ/l7cajAGOvF0oEe?=
- =?us-ascii?Q?nzTOTZdP9eWTCMpUd5ctLZbnEVcRBB1hGACPDNYldMCNtO7s2aukuqAZgrC4?=
- =?us-ascii?Q?Ft+sH3lkxLezjRW7/tva4FW+PCAdJBEpcO00fIa23xh9rDbcAOGpUMt6XwlH?=
- =?us-ascii?Q?Rv03DnJo0DCssOmbA/FBO0Q+ryskYR2QH/xpe90aHEdltpi/NK56AokCgHH6?=
- =?us-ascii?Q?BeTySXvGCCD1Exb9X59vVGqczirSq77r/MJENjEk9AsxvCL5pwXSrFtdc3QK?=
- =?us-ascii?Q?xDS+5WGRg+e+7E6t5eRRf0RRwrA6y7rPW8E43pSnphmdCufYtmZsuCoi6yVx?=
- =?us-ascii?Q?iiPoriiW5DXYhwn4eM1Nwi6AHsAydu5/TKyzHTj4vSPJUJzY5lP0KYtqPn0S?=
- =?us-ascii?Q?NZ97gyvXS2gYNVHLrN4+rXUZ3D3HW/pBJP/NzrZ+mm7zYfuPK9HGrzCBrP6N?=
- =?us-ascii?Q?GjpEpZmWSjvBfCxfGqow0lh6TXsq8Bzm20LfQKUqvkUQf6ntpCet6LMeaCok?=
- =?us-ascii?Q?XKeKEeD3cMw7YnCBRdfWHBoPNyzjJjPauVMkUOkAcaK4rghyKadUWbzfZEBF?=
- =?us-ascii?Q?KOdj/BqK7t/KWTyiROj1R1qNUtUWR0qTg/0gOuF0ZHoEFy6GWSBDBfT4eg2y?=
- =?us-ascii?Q?onSum2/cJkpPCmoI4Beritkia6IIIAem0niHe/9x/2dwxrQaJT6w8eFI692m?=
- =?us-ascii?Q?jfsRx5EZWShf7aWdAz5saOCWDWwWD14tIetaylWFc81C/brjLDLYtsN2S9lE?=
- =?us-ascii?Q?SkgRET5twc2LC6ZbQNNnkMaJIfdjI6vrWQQqfbZZljTAUvUgbhBhyYYLYSe4?=
- =?us-ascii?Q?I+g7fpxl0+vkwBw6Edtsi/sMQcykMmKKwz40LZK8nCKotlkhpFr0wL+WwQnj?=
- =?us-ascii?Q?cBV0SuxKhNkVB5do0wdKJyaZLsjBrzKnc8m+CMZbp1yY2D80vFZrb+aArHlE?=
- =?us-ascii?Q?5AoxFfaG5JOyexpOFwyE0yyUJ/5ubSM9CIbWNzMEkubCSjYPIHjaMInXIHw/?=
- =?us-ascii?Q?dA9sI7ZTSTI6WH06Klb7Wrl1LSF3iusun0DV9bo2plvKvWZmRJb1LxJ+lEwB?=
- =?us-ascii?Q?IFUKkwi5U0pIS8YmaClfM4raaUQNoFjgrfXgJEbw7wSRdbnYMI6R/bEwy4LK?=
- =?us-ascii?Q?6T9Zdz50AtCdHa5OfpvQ/tyd?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S231409AbhEaM0T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 08:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231330AbhEaM0S (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 May 2021 08:26:18 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE856C061574
+        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 05:24:36 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id o8so14830556ljp.0
+        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 05:24:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z5fvqFTRPpxVQWhJsuDY6GA7XdfgvLDTB5Muui5R4sc=;
+        b=eJF242mB5AndVCjHvS4JQARLqxgPTVICpNtWtO3MkAAAmdPG/hIf4lu05E0U/ft2rq
+         MIOJ1R6vczTze4QPg8uCiBNRx1JEI8t/QXAgt9ClX60p2C0ZBaepaF/U2C+0Ku3ZpNLQ
+         YW9RzyrQJAA1O6Ifzf0h2LhFCbfA87+kjHm3PSYFBBe72CADKd1TbeFHQKYdpSAijHgI
+         3c2R51SGS8fw3kA7SmlqZlyLKXv0f3Hk6lCUKy6fQ3sThRtYJhgowxJ7sQ14jmVqxzCu
+         GyS6j5JUBTR+va03GTNCbqWpAZ435zrx1Bi3UJq0E6xbpNoChk7qYX5leF/7vNLxBJTY
+         a7+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z5fvqFTRPpxVQWhJsuDY6GA7XdfgvLDTB5Muui5R4sc=;
+        b=PW+p9xmacN/eNDHFIy4V6dZEGGGAEIeoMDyqfP5Z48iYUnmaIY+JuElmdR78bjG5uP
+         3QY7cu1NP3bRcX3cjqyUGKfOqT40pO3qUiRKWTb0l9C/eE+X9kbQqbNKjb8wmuquCREb
+         mFs9XkYuORPrh6mtJvgelmryEnmCaiiTr/+GzC+0TC9JyhNpzF54Qc82ktxjruW35Y36
+         TomwuxXRDnO5Rj5IogMwSM6iQ4STaft1QN+wtfRfxVHrju3hGzYKE+2iUeDcTi/fjWEw
+         T/JkunAZCP9d1RjqOHuBhwXH9Qb1xDuGWQNfdHvn/4BjONL0AufzxggkZ+29Z6irxE2R
+         EiNg==
+X-Gm-Message-State: AOAM533PftTMGm1yaqS/E1T99CwVKCSG6E44pJZS0Xz5NUjOlX3zxuyX
+        zItIhJ/910Qk5uCkB8o3E475dA==
+X-Google-Smtp-Source: ABdhPJxvuP3tuckLOMaFd3GAkQqVd4RwPfkJEHCV+jwrGsyMnq8liEbfbGlpm7G1XhVXfQetvQiUXA==
+X-Received: by 2002:a2e:94e:: with SMTP id 75mr9475872ljj.258.1622463875148;
+        Mon, 31 May 2021 05:24:35 -0700 (PDT)
+Received: from gilgamesh.lab.semihalf.net ([83.142.187.85])
+        by smtp.gmail.com with ESMTPSA id d20sm1328345lfm.175.2021.05.31.05.24.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 05:24:34 -0700 (PDT)
+From:   Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        grzegorz.jaszczyk@linaro.org
+Subject: [PATCH] usb: phy: introduce usb_phy device type with its own uevent handler
+Date:   Mon, 31 May 2021 14:22:22 +0200
+Message-Id: <20210531122222.453628-1-grzegorz.jaszczyk@linaro.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca827f4f-b7f5-4f3e-811c-08d9242b7376
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 May 2021 11:58:48.7266
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y1VC5qJad7ZCz7xG2RbQzOeXVxUu+yWaImZI6deZyYPMB/RG00y37vGfYyUkrVnM
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6783
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The USB charger type and status was already propagated to userspace
+through kobject_uevent_env during charger notify work. Nevertheless the
+uevent could be lost e.g. because it could be fired at an early kernel
+boot stage, way before udev daemon or any other user-space app was able
+to catch it. Registering uevent hook for introduced usb_phy_dev_type
+will allow to query sysfs 'uevent' file to restore that information at
+any time.
 
+Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+---
+ drivers/usb/phy/phy.c | 55 ++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 47 insertions(+), 8 deletions(-)
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Wednesday, May 26, 2021 5:16 PM
-> To: Jun Li <jun.li@nxp.com>
-> Cc: robh+dt@kernel.org; shawnguo@kernel.org; gregkh@linuxfoundation.org;
-> linux@roeck-us.net; linux-usb@vger.kernel.org; dl-linux-imx
-> <linux-imx@nxp.com>; devicetree@vger.kernel.org;
-> linux-arm-kernel@lists.infradead.org
-> Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch support
-> via mux controller
->=20
-> On Tue, May 25, 2021 at 11:46:18AM +0000, Jun Li wrote:
-> > Hi Heikki,
-> >
-> > > -----Original Message-----
-> > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Sent: Friday, May 21, 2021 4:38 PM
-> > > To: Jun Li <jun.li@nxp.com>
-> > > Cc: robh+dt@kernel.org; shawnguo@kernel.org;
-> > > gregkh@linuxfoundation.org; linux@roeck-us.net;
-> > > linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>;
-> > > devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org
-> > > Subject: Re: [PATCH 3/4] usb: typec: add typec orientation switch
-> > > support via mux controller
-> > >
-> > > Hi,
-> > >
-> > > On Thu, May 20, 2021 at 03:33:36PM +0300, Heikki Krogerus wrote:
-> > > > Why not just do that inside fwnode_typec_switch_get() and handle
-> > > > the whole thing in drivers/usb/typec/mux.c (or in its own file if
-> > > > you prefer)?
-> > > >
-> > > > You'll just need to register a "wrapper" Type-C switch object for
-> > > > the OF mux controller, but that should not be a problem. That way
-> > > > you don't need to export any new functions, touch this file or
-> > > > anything else.
-> > >
-> > > I wrote a bit of code just to see how that would look. I'm attaching
-> > > you the hack I made. I guess something like that would not be too bad=
-.
-> > > A wrapper is probable always a bit clumsy, but I'm not sure that in
-> > > this case it's a huge problem. Of course if there are any better
-> > > ideas, let's here them :-)
-> >
-> > Thanks for your patch, I am pasting the patch as below.
-> >
-> > seems we need consider more than that.
-> >
-> > diff --git a/drivers/usb/typec/Makefile b/drivers/usb/typec/Makefile
-> > index a0adb8947a301..d85231b2fe10b 100644
-> > --- a/drivers/usb/typec/Makefile
-> > +++ b/drivers/usb/typec/Makefile
-> > @@ -1,6 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  obj-$(CONFIG_TYPEC)		+=3D typec.o
-> >  typec-y				:=3D class.o mux.o bus.o port-mapper.o
-> > +typec-$(MULTIPLEXER)		+=3D of_mux.o
-> >  obj-$(CONFIG_TYPEC)		+=3D altmodes/
-> >  obj-$(CONFIG_TYPEC_TCPM)	+=3D tcpm/
-> >  obj-$(CONFIG_TYPEC_UCSI)	+=3D ucsi/
-> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c index
-> > 9da22ae3006c9..282622276d97b 100644
-> > --- a/drivers/usb/typec/mux.c
-> > +++ b/drivers/usb/typec/mux.c
-> > @@ -63,6 +63,9 @@ struct typec_switch *fwnode_typec_switch_get(struct
-> > fwnode_handle *fwnode)
-> >
-> >  	sw =3D fwnode_connection_find_match(fwnode, "orientation-switch", NUL=
-L,
-> >  					  typec_switch_match);
-> > +	if (!sw)
-> > +		sw =3D of_switch_register(fwnode);
-> > +
-> >
-> > How to support multiple typec_switch_get() for of_mux case?
-> > the second call to fwnode_typec_switch_get() will get the switch via
-> > fwnode_connection_find_match()? This means we still need a property
-> > "orientation-switch" for mux controller node, this seems not the
-> > expected way for a mux consumer, even with this property, we will get
-> > a EPROBE_DEFER for the first call.
-> >
-> > If we use mux_control_get() for multiple caller/consumer, then we need
-> > some other device as input.
-> >
-> > typec_switch object looks to me is a provider, if we create and
-> > maintain it in consumer side, I have not come out a better way:-).
->=20
-> Sorry, but can we rewind a bit: Why can't you just register the orientati=
-on
-> switch from your mux driver and be done with it? You should then be able
-> to use OF graph, and no special bindings should be needed, no?
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index b47285f023cf..83ed5089475a 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -42,6 +42,12 @@ static const char *const usb_chger_type[] = {
+ 	[ACA_TYPE]			= "USB_CHARGER_ACA_TYPE",
+ };
+ 
++static const char *const usb_chger_state[] = {
++	[USB_CHARGER_DEFAULT]	= "USB_CHARGER_DEFAULT",
++	[USB_CHARGER_PRESENT]	= "USB_CHARGER_PRESENT",
++	[USB_CHARGER_ABSENT]	= "USB_CHARGER_ABSENT",
++};
++
+ static struct usb_phy *__usb_find_phy(struct list_head *list,
+ 	enum usb_phy_type type)
+ {
+@@ -74,6 +80,18 @@ static struct usb_phy *__of_usb_find_phy(struct device_node *node)
+ 	return ERR_PTR(-EPROBE_DEFER);
+ }
+ 
++static struct usb_phy *__device_to_usb_phy(struct device *dev)
++{
++	struct usb_phy *usb_phy;
++
++	list_for_each_entry(usb_phy, &phy_list, head) {
++		if (usb_phy->dev == dev)
++			break;
++	}
++
++	return usb_phy;
++}
++
+ static void usb_phy_set_default_current(struct usb_phy *usb_phy)
+ {
+ 	usb_phy->chg_cur.sdp_min = DEFAULT_SDP_CUR_MIN;
+@@ -105,9 +123,6 @@ static void usb_phy_set_default_current(struct usb_phy *usb_phy)
+ static void usb_phy_notify_charger_work(struct work_struct *work)
+ {
+ 	struct usb_phy *usb_phy = container_of(work, struct usb_phy, chg_work);
+-	char uchger_state[50] = { 0 };
+-	char uchger_type[50] = { 0 };
+-	char *envp[] = { uchger_state, uchger_type, NULL };
+ 	unsigned int min, max;
+ 
+ 	switch (usb_phy->chg_state) {
+@@ -115,15 +130,11 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+ 		usb_phy_get_charger_current(usb_phy, &min, &max);
+ 
+ 		atomic_notifier_call_chain(&usb_phy->notifier, max, usb_phy);
+-		snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+-			 "USB_CHARGER_STATE=%s", "USB_CHARGER_PRESENT");
+ 		break;
+ 	case USB_CHARGER_ABSENT:
+ 		usb_phy_set_default_current(usb_phy);
+ 
+ 		atomic_notifier_call_chain(&usb_phy->notifier, 0, usb_phy);
+-		snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+-			 "USB_CHARGER_STATE=%s", "USB_CHARGER_ABSENT");
+ 		break;
+ 	default:
+ 		dev_warn(usb_phy->dev, "Unknown USB charger state: %d\n",
+@@ -131,9 +142,30 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+ 		return;
+ 	}
+ 
++	kobject_uevent(&usb_phy->dev->kobj, KOBJ_CHANGE);
++}
++
++static int usb_phy_uevent(struct device *dev, struct kobj_uevent_env *env)
++{
++	struct usb_phy *usb_phy;
++	char uchger_state[50] = { 0 };
++	char uchger_type[50] = { 0 };
++
++	usb_phy = __device_to_usb_phy(dev);
++
++	snprintf(uchger_state, ARRAY_SIZE(uchger_state),
++		 "USB_CHARGER_STATE=%s", usb_chger_state[usb_phy->chg_state]);
++
+ 	snprintf(uchger_type, ARRAY_SIZE(uchger_type),
+ 		 "USB_CHARGER_TYPE=%s", usb_chger_type[usb_phy->chg_type]);
+-	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
++
++	if (add_uevent_var(env, uchger_state))
++		return -ENOMEM;
++
++	if (add_uevent_var(env, uchger_type))
++		return -ENOMEM;
++
++	return 0;
+ }
+ 
+ static void __usb_phy_get_charger_type(struct usb_phy *usb_phy)
+@@ -661,6 +693,11 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
+ }
+ EXPORT_SYMBOL_GPL(usb_add_phy);
+ 
++static struct device_type usb_phy_dev_type = {
++	.name = "usb_phy",
++	.uevent = usb_phy_uevent,
++};
++
+ /**
+  * usb_add_phy_dev - declare the USB PHY
+  * @x: the USB phy to be used; or NULL
+@@ -684,6 +721,8 @@ int usb_add_phy_dev(struct usb_phy *x)
+ 	if (ret)
+ 		return ret;
+ 
++	x->dev->type = &usb_phy_dev_type;
++
+ 	ATOMIC_INIT_NOTIFIER_HEAD(&x->notifier);
+ 
+ 	spin_lock_irqsave(&phy_lock, flags);
+-- 
+2.29.0
 
-So we still need a special property for OF graph per discussion on another
-thread(use device type other than device name for match), and this has
-to be a mux controller core binding for possible different mux chips
-(GPIO/MMIO...), register a typec switch if this property exist, but this
-is the user specific thing from mux controller point view, I feed this
-is again against DT binding's expectation.
-
->=20
-> If you want to reuse a mux-controller driver, then you do need to modify
-> it (but only a little), and what ever mux-controller specific bindings th=
-ere
-> are, you will not use those when the mux supplies the orientation switchi=
-ng
-> function, instead you'll use the OF graph for that. But surely that is no=
-t
-> a problem?
->=20
-> The mux-controller framework expects the "consumers" of the muxes to
-> understand the final function that the mux is used for. The Type-C "mux"
-> framework (I should not even talk about muxes with those) works the other
-> way around.=20
-
-Fully agree.
-
-> The driver for the component that supplies the orientation switch
-> function must understand that it is handling that function, and there is
-> a good reason for doing it that way with the USB Type-C switches.=20
-
-I understand yes if the switch is only part function of the driver.
- =20
-> The
-> orientation switch for example quite simply is _not_ always a mux. In fac=
-t,
-> it's seems to be rarely a mux these days. With USB4 for example the orien=
-tation
-> is handled almost always by the first on-board retimer.
-
-If the mux is only part function of a new driver, use the tyepc
-"mux" framework and create new binding for the new driver is fine.
-
-But if the typec switch control need a dedicated driver to handle,
-on DT platforms, now mux-controller is the only proposed way to go
-from binding point view. I am not sure if my case is a normal HW
-design, but I guess I should not the only user of this kind of
-situation.
-
->=20
-> There are actually also some technical reasons why Hans failed to get the
-> mux-controller thing to work, which is the original reason why we introdu=
-ced
-> the dedicated framework for the Type-C "muxes" (I really should stop talk=
-ing
-> about muxes), but I don't remember what was the reason.
-
-I checked the patches Hans did, that was mainly to address non-DT
-platform, I don't see a clear reason why it can't fit DT platform,
-maybe I missed something.
-
-+Hans, It would be great if you can comment on this, thanks.
-
->=20
-> In any case, to summarise: the orientation switch is a function. A mux is
-> a device that can supply that function, and if it does, then the driver f=
-or
-> it really needs to register the dedicated orientation switch.
-
-Understand your point, if register the dedicated orientation switch is a mu=
-st,
-I feel using general mux control can't make much sense.
-
-Thanks
-Li Jun=20
->=20
-> thanks,
->=20
-> --
-> heikki
