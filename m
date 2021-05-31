@@ -2,157 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D44B43956F1
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 10:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F45395740
+	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 10:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbhEaI2J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 04:28:09 -0400
-Received: from mga11.intel.com ([192.55.52.93]:58531 "EHLO mga11.intel.com"
+        id S230104AbhEaIo3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 04:44:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43204 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230070AbhEaI2J (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 May 2021 04:28:09 -0400
-IronPort-SDR: rmqRdEM9BC1IxzhuKkW0TH/+v5NG5gMEYWOBshg0KyotFGd1N3r3NfLrOrjh5PY5kN9Inpv7OH
- INBaI0tUNOyQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10000"; a="200302011"
-X-IronPort-AV: E=Sophos;i="5.83,236,1616482800"; 
-   d="scan'208";a="200302011"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 May 2021 01:26:17 -0700
-IronPort-SDR: i8lA8981c5xok7E0UrTynadAi15BHb5g4AwL092wwf0sl+ddEBGgDE+Y/NAIWdnv25boJFccmF
- FqZqTjtBZjAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,236,1616482800"; 
-   d="scan'208";a="549343754"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 31 May 2021 01:26:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 31 May 2021 11:26:14 +0300
-Date:   Mon, 31 May 2021 11:26:14 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jun Li <jun.li@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] usb: typec: mux: Remove requirement for the
- "orientation-switch" device property
-Message-ID: <YLSdptmScGo5TJ1D@kuha.fi.intel.com>
-References: <20210526153548.61276-1-heikki.krogerus@linux.intel.com>
- <20210526153548.61276-3-heikki.krogerus@linux.intel.com>
- <VI1PR04MB59350F5BC9129F9E0B21773889229@VI1PR04MB5935.eurprd04.prod.outlook.com>
- <YLSPLxfyavO+AkLY@kuha.fi.intel.com>
- <YLSW0IoHdnzRSzUW@kuha.fi.intel.com>
+        id S229640AbhEaIo1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 May 2021 04:44:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9267B60FEE;
+        Mon, 31 May 2021 08:42:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622450568;
+        bh=aBNUhNdRlRR32zbDG0uyjoDBCNgjqOpBBU7J5dLJqVo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M9COz+HraVuW9W/s+vLordV+pOXuy1copEW9sLujatC793MsKvJfyc/RLEWSVl2tu
+         fT9wHGyIJTTbTgTmV+J6DNz4MortjwKfTkB5yJbDGxqnPV4v9lAdapv2ofQMJVGbIx
+         d4YXtq6s49jgI0watgrXiqOqPrni4tUgmLBA1fsnIGJeM1HxX2sAOuwhDz5ZRDOj+b
+         G1iMMSha8WTUFeC6gnNlZ5aBAxiAtt6vGzQMxrr60n1UKe42qM9ygqE2eCWoNqg35K
+         0AJXoAyaA5q01e3H05y2Hgn0bz0QLtMORzjJqY2LJ06iW2M1eLSVQWzdb1de7foGye
+         Drbu9o5M8E+oQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lndVS-0001xY-Tf; Mon, 31 May 2021 10:42:43 +0200
+Date:   Mon, 31 May 2021 10:42:42 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Eero Lehtinen <debiangamer2@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Antti Palosaari <crope@iki.fi>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] media: rtl28xxu: add type-detection instrumentation
+Message-ID: <YLShgrnPV35aXz84@hovoldconsulting.com>
+References: <CAHS3B0EzL7zeKGjm=kvEq7VgDc-7hZNgOm-z5zPgFwVg0uQe-Q@mail.gmail.com>
+ <YLOZLvWESErIePs3@hovoldconsulting.com>
+ <CAHS3B0E7tqHvF2-jsJZfPWYc6f9HLDDsvepDbqy1rboXOHFegQ@mail.gmail.com>
+ <YLPTJ3HIos630Btb@hovoldconsulting.com>
+ <CAHS3B0EMkXEnaQv61_-6Gh5zd6e4UT_6yOvwhaB_h=6Ta2OdaQ@mail.gmail.com>
+ <YLSGTkKNm5+o+PW1@hovoldconsulting.com>
+ <CAHS3B0Ez+eKSgrCEnW2ccpBCHc_gJ_Cs3abS_DAYXRAAjNYeTA@mail.gmail.com>
+ <YLSVsrhMZ2oOL1vM@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YLSW0IoHdnzRSzUW@kuha.fi.intel.com>
+In-Reply-To: <YLSVsrhMZ2oOL1vM@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 31, 2021 at 10:57:04AM +0300, Heikki Krogerus wrote:
-> On Mon, May 31, 2021 at 10:24:35AM +0300, Heikki Krogerus wrote:
-> > On Fri, May 28, 2021 at 07:26:43AM +0000, Jun Li wrote:
-> > > Hi,
-> > > > -----Original Message-----
-> > > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Sent: Wednesday, May 26, 2021 11:36 PM
-> > > > To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>; Hans de Goede
-> > > > <hdegoede@redhat.com>; Jun Li <jun.li@nxp.com>
-> > > > Cc: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-> > > > Subject: [PATCH 2/2] usb: typec: mux: Remove requirement for the
-> > > > "orientation-switch" device property
-> > > > 
-> > > > The additional boolean device property "orientation-switch"
-> > > > is not needed when the connection is described with device graph, so removing
-> > > > the check and the requirement for it.
-> > > > 
-> > > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > ---
-> > > >  drivers/usb/typec/mux.c | 3 ---
-> > > >  1 file changed, 3 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c index
-> > > > e40a555724fb6..603f3e698cc0b 100644
-> > > > --- a/drivers/usb/typec/mux.c
-> > > > +++ b/drivers/usb/typec/mux.c
-> > > > @@ -30,9 +30,6 @@ static void *typec_switch_match(struct fwnode_handle
-> > > > *fwnode, const char *id,  {
-> > > >  	struct device *dev;
-> > > > 
-> > > > -	if (id && !fwnode_property_present(fwnode, id))
-> > > > -		return NULL;
-> > > > -
-> > > 
-> > > May this change the result of fwnode_connection_find_match()
-> > > if there are multiple remote-endpoint node?
-> > > 
-> > > After the 2 patches change, typec_switch_match() will never
-> > > return NULL, so
-> > > 
-> > >   17 static void *
-> > >   18 fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-> > >   19                           void *data, devcon_match_fn_t match)
-> > >   20 {               
-> > >   21         struct fwnode_handle *node;
-> > >   22         struct fwnode_handle *ep;
-> > >   23         void *ret;
-> > >   24                         
-> > >   25         fwnode_graph_for_each_endpoint(fwnode, ep) {
-> > >   26                 node = fwnode_graph_get_remote_port_parent(ep);
-> > >   27                 if (!fwnode_device_is_available(node))
-> > >   28                         continue;
-> > >   29 
-> > >   30                 ret = match(node, con_id, data);// ret can't be NULL;
-> > >   31                 fwnode_handle_put(node); 
-> > >   32                 if (ret) {
-> > > 							 /*
-> > > 							  * So loop will go to here and stop
-> > > 							  * checking next ep, even this ep
-> > > 							  * actually is not for typec_switch
-> > > 							  */
-> > >   33                         fwnode_handle_put(ep);
-> > >   34                         return ret;
-> > >   35                 }
-> > >   36         }
-> > >   37         return NULL;
-> > >   38 }
-> > > 
-> > > fwnode_graph_devcon_match() Will return ERR_PTR(-EPROBE_DEFER)
-> > > even this ep's remote parent already probed but it's not for
-> > > typec_switch.
+On Mon, May 31, 2021 at 09:52:18AM +0200, Johan Hovold wrote:
+
+> On Mon, May 31, 2021 at 09:58:09AM +0300, Eero Lehtinen wrote:
+> > Hi,
 > > 
-> > You are correct. With device graph I guess we really always need the
-> > extra device property after all.
+> > I found dev_info messages from /var/log/messages.
 > > 
-> > So let's forget about this one.
+> > May 30 18:41:19 optipc kernel: [    3.143433] dvb_usb_rtl28xxu
+> > 1-1:1.0: rtl28xxu_identify_state - ret1 = 0
+> > May 30 18:41:19 optipc kernel: [    3.147688] dvb_usb_rtl28xxu
+> > 1-1:1.0: rtl28xxu_identify_state - ret2 = -32
 > 
-> Oh no. This patch just landed into Greg's usb-next. I'll prepare the
-> revert. I'm sorry about this.
+> Ok, thanks. So this explains how things go wrong.
+> 
+> 	ret = rtl28xxu_ctrl_msg(d, &req_demod_i2c);
+> 	if (ret == -EPIPE) {
+> 		dev->chip_id = CHIP_ID_RTL2831U;
+> 	} else if (ret == 0) {
+> 		dev->chip_id = CHIP_ID_RTL2832U;
+> 
+> The chip used to be identified as RTL2832U but after my change it is
+> now detected as RTL2831U and the driver uses a separate implementation
+> with different hardcoded defaults.
+> 
+> Commit d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip
+> type") added this code and claimed that the i2c register in question
+> would only be found on newer RTL2832U models. Yet, actually reading the
+> register returns an error in your setup.
+> 
+> So, something is fishy here. Has anyone verified that the chip-type
+> detection works as expected for older RTL2831U?
 
-Actually, if we always need that extra (boolean) device property to
-identify the device class when OF graph is used, shouldn't we just do
-that always in fwnode_graph_devcon_match()?
+Ok, the driver just wants to know if the i2c-read vendor request exists,
+and actually reading the register will not work since the register may
+not even exist (e.g. depending on the demodulator).
 
-diff --git a/drivers/base/property.c b/drivers/base/property.c
-index 1421e9548857b..238da64375bb1 100644
---- a/drivers/base/property.c
-+++ b/drivers/base/property.c
-@@ -1263,6 +1263,13 @@ fwnode_graph_devcon_match(struct fwnode_handle *fwnode, const char *con_id,
-                if (!fwnode_device_is_available(node))
-                        continue;
- 
-+               /*
-+                * With device graph @con_id is expected to be the name of the
-+                * "device class" of the fwnode.
-+                */
-+               if (con_id && !fwnode_property_present(node, con_id))
-+                       continue;
+So it seems we need to keep this zero-length read request and only
+update the pipe argument to suppress the new WARN() in
+usb_submit_urb().
+
+Eero, could you try applying the below on top of -next and confirm that
+it suppresses the warning without messing up the type detection?
+
+Johan
+
+
+From 2cec8fa000152bcb997dd7aeeb0917ebf744a7bd Mon Sep 17 00:00:00 2001
+From: Johan Hovold <johan@kernel.org>
+Date: Mon, 24 May 2021 10:55:19 +0200
+Subject: [PATCH v2] media: rtl28xxu: fix zero-length control request
+
+The direction of the pipe argument must match the request-type direction
+bit or control requests may fail depending on the host-controller-driver
+implementation.
+
+Control transfers without a data stage are treated as OUT requests by
+the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+will now trigger a warning.
+
+The driver uses a zero-length i2c-read request for type detection so
+update the control-request code to use usb_sndctrlpipe() in this case.
+
+Note that actually trying to read the i2c register in question does not
+work as the register might not exist (e.g. depending on the demodulator)
+as reported by Eero Lehtinen <debiangamer2@gmail.com>.
+
+Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+Reported-by: Eero Lehtinen <debiangamer2@gmail.com>
+Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
+Cc: stable@vger.kernel.org      # 4.0
+Cc: Antti Palosaari <crope@iki.fi>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+index 97ed17a141bb..a6124472cb06 100644
+--- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
++++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+@@ -37,7 +37,16 @@ static int rtl28xxu_ctrl_msg(struct dvb_usb_device *d, struct rtl28xxu_req *req)
+ 	} else {
+ 		/* read */
+ 		requesttype = (USB_TYPE_VENDOR | USB_DIR_IN);
+-		pipe = usb_rcvctrlpipe(d->udev, 0);
 +
-                ret = match(node, con_id, data);
-                fwnode_handle_put(node);
-                if (ret) {
-
-thanks,
-
++		/*
++		 * Zero-length transfers must use usb_sndctrlpipe() and
++		 * rtl28xxu_identify_state() uses a zero-length i2c read
++		 * command to determine the chip type.
++		 */
++		if (req->size)
++			pipe = usb_rcvctrlpipe(d->udev, 0);
++		else
++			pipe = usb_sndctrlpipe(d->udev, 0);
+ 	}
+ 
+ 	ret = usb_control_msg(d->udev, pipe, 0, requesttype, req->value,
 -- 
-heikki
+2.31.1
+
