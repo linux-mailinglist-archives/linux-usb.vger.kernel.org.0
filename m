@@ -2,183 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D1395682
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 09:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E67D39568C
+	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 09:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbhEaHyJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 03:54:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41178 "EHLO mail.kernel.org"
+        id S230300AbhEaH5Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 03:57:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41684 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230070AbhEaHyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 31 May 2021 03:54:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9324960FE9;
-        Mon, 31 May 2021 07:52:23 +0000 (UTC)
+        id S230070AbhEaH5X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 May 2021 03:57:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E41160FE3;
+        Mon, 31 May 2021 07:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622447543;
-        bh=fH80kPj0iM2EHPhSMf0xWQBaHgWjh9dkRazVWW0JDLM=;
+        s=k20201202; t=1622447744;
+        bh=0ZC9aSJd/5NSxSjCmt2ElwwzNfea3SyLmaaN0sdtbaw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uoLEcB72haNTscTbYiIQCZNrMfBXFZORpwcGbz+KHxnkSb855Knr3QhgnZpwqK0iC
-         y3uE+fO8ziQe5aah9m/Mgk/kbQHxcuoZywmF44tGfDNZGerjLL+UYI86ZcwSZusdDw
-         UurPA36c1qUdtB3WC2/iDemVQt8DbUCceVs4B57eaITiJ6b/YeyXZLGGtzaYT0Uu0L
-         wZeUGQU+tuOY7xNDWRstoiZqXofwi4pEPoQi4k77fKadfnh++KpTvIdGVXzdXuilwA
-         n1UraJq/3+Cbwu7hOUn2LlD9WIdRTxoDlUIFlD+K1DXHB4Eg7BIa8CNRraAX9klnTN
-         fpZLdLngDjOvg==
+        b=SwrTWBapC8LTkHRLOHLM6zvqWwT8hwbcssM6KpafgaqeeMvFTGdq8w7QFBsOohxvl
+         PRPPzrv/5+L3hm1sq6Jtz+FCvkhRjUEIDFuP+q5pUaJQEiARWG+up/v781ppvEWXkj
+         IXoD5XiL6b7pTb91xw/YBzRgyUcrul4evF1PXnWOt7nth+gygVFdvpqZ8xQOiBZ/Nm
+         E23+JYxdVIEMzd6mRDmN7QUz7UFcFSiFNXmVG02uRaa7ASekd4wR9Yvnd52AnvyQnu
+         QswJjaPNHj4fWdc0xa0q6CeLoeetimeojfqdUeD+91DtEZgkmMwGNOPSLdQgRXx0Ly
+         yAEg2ISzfSrRA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lncig-0000ZQ-M8; Mon, 31 May 2021 09:52:18 +0200
-Date:   Mon, 31 May 2021 09:52:18 +0200
+        id 1lnclv-0000aq-AX; Mon, 31 May 2021 09:55:39 +0200
+Date:   Mon, 31 May 2021 09:55:39 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Eero Lehtinen <debiangamer2@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Antti Palosaari <crope@iki.fi>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: rtl28xxu: add type-detection instrumentation
-Message-ID: <YLSVsrhMZ2oOL1vM@hovoldconsulting.com>
-References: <CAHS3B0EzL7zeKGjm=kvEq7VgDc-7hZNgOm-z5zPgFwVg0uQe-Q@mail.gmail.com>
- <YLOZLvWESErIePs3@hovoldconsulting.com>
- <CAHS3B0E7tqHvF2-jsJZfPWYc6f9HLDDsvepDbqy1rboXOHFegQ@mail.gmail.com>
- <YLPTJ3HIos630Btb@hovoldconsulting.com>
- <CAHS3B0EMkXEnaQv61_-6Gh5zd6e4UT_6yOvwhaB_h=6Ta2OdaQ@mail.gmail.com>
- <YLSGTkKNm5+o+PW1@hovoldconsulting.com>
- <CAHS3B0Ez+eKSgrCEnW2ccpBCHc_gJ_Cs3abS_DAYXRAAjNYeTA@mail.gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil@xs4all.nl>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com,
+        stable@vger.kernel.org, Antti Palosaari <crope@iki.fi>
+Subject: Re: [PATCH 3/3] media: rtl28xxu: fix zero-length control request
+Message-ID: <YLSWeyy1skooTmqD@hovoldconsulting.com>
+References: <20210524110920.24599-1-johan@kernel.org>
+ <20210524110920.24599-4-johan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHS3B0Ez+eKSgrCEnW2ccpBCHc_gJ_Cs3abS_DAYXRAAjNYeTA@mail.gmail.com>
+In-Reply-To: <20210524110920.24599-4-johan@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ Resending with linux-usb on CC...]
-
-[ Adding back linux-usb and Alan on CC.
-
-  Also adding Antti, Hans and Mauro.
-
-  Eero, please make sure to keep everyone on CC. ]
-
-Quick summary:
-
-A recent attempt to suppress a new warning in USB core:
-
-	https://lore.kernel.org/r/20210524110920.24599-4-johan@kernel.org
-	
-caused the chip type detection to fail in Eero's system, and we're
-trying to determine how best to handle this.
-
-Hans, could you hold off applying the above until this has been
-resolved?
-
-On Mon, May 31, 2021 at 09:58:09AM +0300, Eero Lehtinen wrote:
-> Hi,
+On Mon, May 24, 2021 at 01:09:20PM +0200, Johan Hovold wrote:
+> The direction of the pipe argument must match the request-type direction
+> bit or control requests may fail depending on the host-controller-driver
+> implementation.
 > 
-> I found dev_info messages from /var/log/messages.
+> Control transfers without a data stage are treated as OUT requests by
+> the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+> will now trigger a warning.
 > 
-> May 30 18:41:19 optipc kernel: [    3.143433] dvb_usb_rtl28xxu
-> 1-1:1.0: rtl28xxu_identify_state - ret1 = 0
-> May 30 18:41:19 optipc kernel: [    3.147688] dvb_usb_rtl28xxu
-> 1-1:1.0: rtl28xxu_identify_state - ret2 = -32
-
-Ok, thanks. So this explains how things go wrong.
-
-	ret = rtl28xxu_ctrl_msg(d, &req_demod_i2c);
-	if (ret == -EPIPE) {
-		dev->chip_id = CHIP_ID_RTL2831U;
-	} else if (ret == 0) {
-		dev->chip_id = CHIP_ID_RTL2832U;
-
-The chip used to be identified as RTL2832U but after my change it is
-now detected as RTL2831U and the driver uses a separate implementation
-with different hardcoded defaults.
-
-Commit d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip
-type") added this code and claimed that the i2c register in question
-would only be found on newer RTL2832U models. Yet, actually reading the
-register returns an error in your setup.
-
-So, something is fishy here. Has anyone verified that the chip-type
-detection works as expected for older RTL2831U?
-
-> Gmail allows only top posting.
-
-Even with the web interface you can expand the quoted text and reply
-inline.
-
-> Hi,
+> Fix the zero-length i2c-read request used for type detection by
+> attempting to read a single byte instead.
 > 
-> Yes, a working kernel uses the CXD2837ER driver. It is recognized as
-> follows at boot. You must switch to CXD2837ER at boot time so that
-> applications pick it:
-> #!/bin/bash
-> if [ ! -e /dev/dvb/adapter0/frontend99 ] then
-> mv /dev/dvb/adapter0/frontend0 /dev/dvb/adapter0/frontend99
-> mv /dev/dvb/adapter0/frontend1 /dev/dvb/adapter0/frontend0
-> fi
+> Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+> Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
+> Cc: stable@vger.kernel.org      # 4.0
+> Cc: Antti Palosaari <crope@iki.fi>
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>  drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> [    3.426235] dvbdev: DVB: registering new adapter (Astrometa DVB-T2)
-> [    3.431121] i2c i2c-10: Added multiplexed i2c bus 11
-> [    3.431125] rtl2832 10-0010: Realtek RTL2832 successfully attached
-> [    3.432648] i2c i2c-10: cxd2841er_attach(): I2C adapter
-> 000000000397a340 SLVX addr 6e SLVT addr 6c
-> [    3.441178] i2c i2c-10: cxd2841er_attach(): attaching CXD2837ER
-> DVB-C/T/T2 frontend
-> [    3.441180] i2c i2c-10: cxd2841er_attach(): chip ID 0xb1 OK.
-> [    3.441182] usb 1-1: DVB: registering adapter 0 frontend 0 (Realtek
-> RTL2832 (DVB-T))...
-> [    3.441218] usb 1-1: DVB: registering adapter 0 frontend 1 (Sony
-> CXD2837ER DVB-T/T2/C demodulator)...
-> [    3.443994] r820t 11-003a: creating new instance
-> [    3.457197] r820t 11-003a: Rafael Micro r820t successfully identified
-> [    3.457210] r820t 11-003a: attaching existing instance
-> [    3.512185] r820t 11-003a: Rafael Micro r820t successfully identified
-> [    3.526915] rtl2832_sdr rtl2832_sdr.1.auto: Registered as swradio0
-> [    3.526917] rtl2832_sdr rtl2832_sdr.1.auto: Realtek RTL2832 SDR attached
-> [    3.526918] rtl2832_sdr rtl2832_sdr.1.auto: SDR API is still
-> slightly experimental and functionality changes may follow
-> [    3.542192] Registered IR keymap rc-astrometa-t2hybrid
-> [    3.542205] rc rc0: Astrometa DVB-T2 as
-> /devices/pci0000:00/0000:00:01.3/0000:02:00.0/usb1/1-1/rc/rc0
-> [    3.542226] input: Astrometa DVB-T2 as
-> /devices/pci0000:00/0000:00:01.3/0000:02:00.0/usb1/1-1/rc/rc0/input21
-> [    3.542271] usb 1-1: dvb_usb_v2: schedule remote query interval to 200 msecs
-> [    3.562187] usb 1-1: dvb_usb_v2: 'Astrometa DVB-T2' successfully
-> initialized and connected
-> [    3.562230] usbcore: registered new interface driver dvb_usb_rtl28xxu
+> diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+> index 97ed17a141bb..2c04ed8af0e4 100644
+> --- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+> +++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+> @@ -612,8 +612,9 @@ static int rtl28xxu_read_config(struct dvb_usb_device *d)
+>  static int rtl28xxu_identify_state(struct dvb_usb_device *d, const char **name)
+>  {
+>  	struct rtl28xxu_dev *dev = d_to_priv(d);
+> +	u8 buf[1];
+>  	int ret;
+> -	struct rtl28xxu_req req_demod_i2c = {0x0020, CMD_I2C_DA_RD, 0, NULL};
+> +	struct rtl28xxu_req req_demod_i2c = {0x0020, CMD_I2C_DA_RD, 1, buf};
+>  
+>  	dev_dbg(&d->intf->dev, "\n");
 
+As reported here
 
-> On Mon, May 31, 2021 at 9:46 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > [ Again, please don't top post. See
-> > http://en.wikipedia.org/wiki/Top_post ]
-> >
-> > On Sun, May 30, 2021 at 09:58:26PM +0300, Eero Lehtinen wrote:
-> > > Hi,
-> > >
-> > > I used dev_dbg instead of dev_info and got:
-> > > drivers/media/usb/dvb-usb-v2/rtl28xxu.c:648
-> > > [dvb_usb_rtl28xxu]rtl28xxu_identify_state =_ "failed=%d\012"
-> > > drivers/media/usb/dvb-usb-v2/rtl28xxu.c:640
-> > > [dvb_usb_rtl28xxu]rtl28xxu_identify_state =_ "chip_id=%u\012"
-> > > drivers/media/usb/dvb-usb-v2/rtl28xxu.c:630
-> > > [dvb_usb_rtl28xxu]rtl28xxu_identify_state =_ "%s - ret2 = %d\012"
-> > > drivers/media/usb/dvb-usb-v2/rtl28xxu.c:627
-> > > [dvb_usb_rtl28xxu]rtl28xxu_identify_state =_ "%s - ret1 = %d\012"
-> > > drivers/media/usb/dvb-usb-v2/rtl28xxu.c:620
-> > > [dvb_usb_rtl28xxu]rtl28xxu_identify_state =_ "\012"
-> > >
-> > > dev_info does not show up with dmesg or dynamic debug.
-> >
-> > Odd. Just use dev_err() since that shows up in your logs.
-> >
-> > > Should the kernel use the CXD2837ER driver and not the mxl5005s driver
-> > > like it does with this patch.
-> >
-> > Yes, something like that could be the problem here. Did it use CXD2837ER
-> > before the patch?
-> >
-> > I still need to see the return values for those transfer to determine
-> > how best to address this so could you try again with dev_err()?
+	https://lore.kernel.org/r/YLSVsrhMZ2oOL1vM@hovoldconsulting.com
+
+this patch is causing the chip type to no longer be detected correctly,
+so please drop this one for now until this has been resolved.
 
 Johan
