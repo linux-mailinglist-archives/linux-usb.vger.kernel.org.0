@@ -2,179 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1331139673E
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 19:37:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E1F0396763
+	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 19:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232842AbhEaRit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 13:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56694 "EHLO
+        id S232274AbhEaRti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 13:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232704AbhEaRif (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 May 2021 13:38:35 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F37C053A3D
-        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 09:49:39 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id s7-20020a6352470000b029021b9013c124so7437767pgl.19
-        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 09:49:39 -0700 (PDT)
+        with ESMTP id S232412AbhEaRtX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 May 2021 13:49:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0740C061257
+        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 10:28:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so1219816pjz.3
+        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 10:28:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=DSMo94ePvCP7FwF99U0atNGClZu5aO1FYBWZFjCuV1c=;
-        b=AzeORoHfGE78HCM8FNlvMVGZJ5BsGJhOgq92lqSmJdvBwbinFxJPhCnziGuDVD8SoF
-         B9r1oolc5PU46Q8A60KXMoX473Kyb1BDne67EKNwDPO4NkLCJodR4uGyw9LI3IbdWU2d
-         VUu9aryb+Lh67dOGLC/IOPFyPHu47Ldj+aa1t8UJpNboLQtVfUSWalvY+Lh/2cb+j1ns
-         HkKem8RMVBupHiQqHcR60LPr8jrx/zGwXy9kKz9ZMowCRNwCbgYSc9+Nn3vXHmTWeWqJ
-         R7ZkaQeDmfFWN0uWZgBGIzCMVXV4kCIsj5wV6MVeh4i/fqCBngyE2LZghp67g0XJDh4n
-         WJyg==
+        d=beagleboard-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ultZWLSJXHjD/NDoDi7dRR5xSSmHzfIKA0oXYNi9NUE=;
+        b=zokO7hme+4avv5q6TaA4Luwpm6oKkm7dtD0IdrdHEG+5VOxtO7H4SINbiPiNmfqrn3
+         YVrhPwG4obBtb9OT3JfaA3DyTu93m5UDC3BfzVETWZDH5oK2HmKxtkEoEXbzAQFFsF1x
+         ODEXS5HVGdUVACAeTZ/qmObhT1+fCRnQHwKnHj18Ovb7lvtKYSBVkIhrP1saxOIUlC7J
+         OUBQdpkWAD0ltZa4Er0iTvzs4pTuozbVVHJshVGhxz8BGBOtdAxi3iA5M+Mhihqtb/Fu
+         FVPpIEu2Fu1msS7CBUJfkHO+1HCglRnZI7R0XI2F5w+5fx3Zu+Ez4Pos1f+dtsxEdGfc
+         2UYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=DSMo94ePvCP7FwF99U0atNGClZu5aO1FYBWZFjCuV1c=;
-        b=IAISWawJzzPya+FGEApf3Zm6SVkmFGU6tgdkrnHIHMBpb2TOIDwEg5R3kZesv9HM9h
-         j1/ypIlIIQHeo2x4Qu6ImzSi0AbPktf+VtgvpXCcEDVoIu7vUezSJZiRO1Si9uqfUILb
-         SNd+mNQxZcEn8jvMzK0+9gvJ4uoXR0dUvn598f7khK5+oZOs804IkkTEn5lZhxR3YKjF
-         b+QKJOVFGx/84v0pMnrtJ7LjFLDZcO5AZEj9Qer2eM1Cb43pvTuStyArdeh7gYNwuYuG
-         tl6rG0G2cxfENPGBeVe08RxrFTddX/jt7PwbUps+PfoIy5dJLnY7u6QjNXxIL8PTj8dy
-         4T9w==
-X-Gm-Message-State: AOAM533lRy+oIpDluDxl+mCIWh8vZss2EcQPjKQHRRSfq2vcXQqzR1hU
-        n/LV3GeAMtj6WrZW9MOHt4hs/CAaaH40
-X-Google-Smtp-Source: ABdhPJwuoO2NE86olYY0c8XXdZoW/gUTl4qp0gl+KWGXcV/CrWpYGGJQVJgxTj2LtUnrvlIb5qSQV8KVo2U+
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:c9e8:9a17:9774:bcd3])
- (user=kyletso job=sendgmr) by 2002:a62:7d4e:0:b029:2e9:ac1c:2769 with SMTP id
- y75-20020a627d4e0000b02902e9ac1c2769mr11682848pfc.57.1622479778806; Mon, 31
- May 2021 09:49:38 -0700 (PDT)
-Date:   Tue,  1 Jun 2021 00:49:28 +0800
-Message-Id: <20210531164928.2368606-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.rc0.204.g9fa02ecfa5-goog
-Subject: [PATCH] usb: typec: tcpm: Properly handle Alert and Status Messages
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, Adam.Thomson.Opensource@diasemi.com
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ultZWLSJXHjD/NDoDi7dRR5xSSmHzfIKA0oXYNi9NUE=;
+        b=kBiYoz03R7GYb0U8pa1sebOFVcopX8Q6J7rqMbRLUnlC+f1RO8/IjfgT1qtWHeI44F
+         d3AYms6cmeeBqiCwhuqc4S7LonbmgqOyPzeiPVcsZ7j52XRJEbu4q1bPQ1ZB4cxdKX+K
+         KV3Ax3w7OrOmDHnPM+XzAqJT8sp8XSCca1Gu6gbvYnZyxyjedRbhHD0Ro2SdqyNBlyQ0
+         TbGFDS0WVmUnhXCObZ4OZ/4lHp0tb0X0Dt6c8q44a48GikhOmI8RB6PAKx/zaeV67fJK
+         T0fnk8jZezneotCvufeJ73isho7kHzL5bmgFw8fhNabTAFYqisiu4EHwq/i5LWuo1ouj
+         IE6w==
+X-Gm-Message-State: AOAM531H1zwJvJjnpuOKakk/lHBRPrJ2wbIIncRc3KDbR12r21sCI/q/
+        9r9fMjnpGDnf8SF8E7UM+hHXAg==
+X-Google-Smtp-Source: ABdhPJx5m1UTqxTXcCJiV4/XDgn7iAKF8n00hou0oP4urgg3LcoNupGXr4tTVIPst6zP3b+rs9k+EA==
+X-Received: by 2002:a17:90a:b28d:: with SMTP id c13mr202477pjr.80.1622482135140;
+        Mon, 31 May 2021 10:28:55 -0700 (PDT)
+Received: from x1 ([2601:1c0:4701:ae70:a449:bb:b7e3:9c7c])
+        by smtp.gmail.com with ESMTPSA id g2sm3896526pfv.106.2021.05.31.10.28.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 May 2021 10:28:54 -0700 (PDT)
+Date:   Mon, 31 May 2021 10:28:52 -0700
+From:   Drew Fustini <drew@beagleboard.org>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tony Lindgren <tony@atomide.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alexandre.belloni@bootlin.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
+Message-ID: <20210531172852.GA706339@x1>
+References: <20210528140446.278076-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210528140446.278076-1-thomas.petazzoni@bootlin.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When receiving Alert Message, if it is not unexpected but is
-unsupported for some reason, the port should return Not_Supported
-Message response.
+On Fri, May 28, 2021 at 04:04:46PM +0200, Thomas Petazzoni wrote:
+> In commit 92af4fc6ec33 ("usb: musb: Fix suspend with devices
+> connected for a64"), the logic to support the
+> MUSB_QUIRK_B_DISCONNECT_99 quirk was modified to only conditionally
+> schedule the musb->irq_work delayed work.
+> 
+> This commit badly breaks ECM Gadget on AM335X. Indeed, with this
+> commit, one can observe massive packet loss:
+> 
+> $ ping 192.168.0.100
+> ...
+> 15 packets transmitted, 3 received, 80% packet loss, time 14316ms
+> 
+> Reverting this commit brings back a properly functioning ECM
+> Gadget. An analysis of the commit seems to indicate that a mistake was
+> made: the previous code was not falling through into the
+> MUSB_QUIRK_B_INVALID_VBUS_91, but now it is, unless the condition is
+> taken.
+> 
+> Changing the logic to be as it was before the problematic commit *and*
+> only conditionally scheduling musb->irq_work resolves the regression:
+> 
+> $ ping 192.168.0.100
+> ...
+> 64 packets transmitted, 64 received, 0% packet loss, time 64475ms
+> 
+> Fixes: 92af4fc6ec33 ("usb: musb: Fix suspend with devices connected for a64")
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/usb/musb/musb_core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+> index 8f09a387b773..4c8f0112481f 100644
+> --- a/drivers/usb/musb/musb_core.c
+> +++ b/drivers/usb/musb/musb_core.c
+> @@ -2009,9 +2009,8 @@ static void musb_pm_runtime_check_session(struct musb *musb)
+>  			schedule_delayed_work(&musb->irq_work,
+>  					      msecs_to_jiffies(1000));
+>  			musb->quirk_retries--;
+> -			break;
+>  		}
+> -		fallthrough;
+> +		break;
+>  	case MUSB_QUIRK_B_INVALID_VBUS_91:
+>  		if (musb->quirk_retries && !musb->flush_irq_work) {
+>  			musb_dbg(musb,
+> -- 
+> 2.31.1
 
-Also, according to PD3.0 Spec 6.5.2.1.4 Event Flags Field, the
-OTP/OVP/OCP flags in the Event Flags field in Status Message no longer
-require Get_PPS_Status Message to clear them. Thus remove it when
-receiving Status Message with those flags being set.
+Tested-by: Drew Fustini <drew@beagleboard.org>
 
-In addition, add the missing AMS operations for Status Message.
+This patches fixes the problem on the BeagleBone Black (AM3358) where
+the USB gadget interfaces would frequently reset. For example:
 
-Fixes: 64f7c494a3c0 ("typec: tcpm: Add support for sink PPS related messages")
-Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c  | 52 ++++++++++++++++++----------------
- include/linux/usb/pd_ext_sdb.h |  4 ---
- 2 files changed, 27 insertions(+), 29 deletions(-)
+  configfs-gadget gadget: init rndis
+  configfs-gadget gadget: RNDIS RX/TX early activation ...
+  usb0: qlen 10
+  configfs-gadget gadget: rndis_open
+  rndis_set_param_medium: 0 4259840
+  usb0: eth_start
+  rndis_set_param_dev:
+  configfs-gadget gadget: set_config: interface 2 (Mass Storage Function) requested delayed status
+  configfs-gadget gadget: delayed_status count 1
+  configfs-gadget gadget: reset ncm control 3
+  configfs-gadget gadget: init ncm ctrl 3
+  configfs-gadget gadget: notify speed 425984000
+  configfs-gadget gadget: reset acm ttyGS0
+  configfs-gadget gadget: activate acm ttyGS0
+  configfs-gadget gadget: acm ttyGS0 serial state 0000
+  configfs-gadget gadget: usb_composite_setup_continue
+  configfs-gadget gadget: usb_composite_setup_continue: Completing delayed status
+  configfs-gadget gadget: rndis req21.00 v0000 i0000 l24
+  rndis_msg_parser: RNDIS_MSG_INIT
+  configfs-gadget gadget: rndis reqa1.01 v0000 i0000 l1025
+  configfs-gadget gadget: rndis req21.00 v0000 i0000 l32
+  gen_ndis_query_resp: RNDIS_OID_GEN_PHYSICAL_MEDIUM
+  configfs-gadget gadget: rndis reqa1.01 v0000 i0000 l1025
+  configfs-gadget gadget: rndis req21.00 v0000 i0000 l76
+  gen_ndis_query_resp: RNDIS_OID_802_3_PERMANENT_ADDRESS
+  configfs-gadget gadget: rndis reqa1.01 v0000 i0000 l1025
+  configfs-gadget gadget: rndis req21.00 v0000 i0000 l32
+  gen_ndis_set_resp: RNDIS_OID_GEN_CURRENT_PACKET_FILTER 0000002d
+  configfs-gadget gadget: rndis reqa1.01 v0000 i0000 l1025
+  configfs-gadget gadget: init ncm
+  configfs-gadget gadget: activate ncm
+  usb1: qlen 10
+  configfs-gadget gadget: ncm_open
+  usb1: eth_start
+  configfs-gadget gadget: reset ncm
+  usb1: gether_disconnect
+  configfs-gadget gadget: ncm reqa1.80 v0000 i0003 l28
+  configfs-gadget gadget: non-CRC mode selected
+  configfs-gadget gadget: ncm req21.8a v0000 i0003 l0
+  configfs-gadget gadget: NCM16 selected
+  configfs-gadget gadget: ncm req21.84 v0000 i0003 l0
+  configfs-gadget gadget: init ncm
+  configfs-gadget gadget: activate ncm
+  usb1: qlen 10
+  configfs-gadget gadget: ncm_open
+  usb1: eth_start
+  configfs-gadget gadget: acm ttyGS0 req21.20 v0000 i0005 l7
+  configfs-gadget gadget: notify speed 425984000
+  configfs-gadget gadget: notify connect true
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 0db685d5d9c0..3101753b3182 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2211,20 +2211,25 @@ static void tcpm_handle_alert(struct tcpm_port *port, const __le32 *payload,
- 
- 	if (!type) {
- 		tcpm_log(port, "Alert message received with no type");
-+		tcpm_queue_message(port, PD_MSG_CTRL_NOT_SUPP);
- 		return;
- 	}
- 
- 	/* Just handling non-battery alerts for now */
- 	if (!(type & USB_PD_ADO_TYPE_BATT_STATUS_CHANGE)) {
--		switch (port->state) {
--		case SRC_READY:
--		case SNK_READY:
-+		if (port->pwr_role == TYPEC_SOURCE) {
-+			port->upcoming_state = GET_STATUS_SEND;
-+			tcpm_ams_start(port, GETTING_SOURCE_SINK_STATUS);
-+		} else {
-+			/*
-+			 * Do not check SinkTxOk here in case the Source doesn't set its Rp to
-+			 * SinkTxOk in time.
-+			 */
-+			port->ams = GETTING_SOURCE_SINK_STATUS;
- 			tcpm_set_state(port, GET_STATUS_SEND, 0);
--			break;
--		default:
--			tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
--			break;
- 		}
-+	} else {
-+		tcpm_queue_message(port, PD_MSG_CTRL_NOT_SUPP);
- 	}
- }
- 
-@@ -2468,7 +2473,12 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
- 		tcpm_pd_handle_state(port, BIST_RX, BIST, 0);
- 		break;
- 	case PD_DATA_ALERT:
--		tcpm_handle_alert(port, msg->payload, cnt);
-+		if (port->state != SRC_READY && port->state != SNK_READY)
-+			tcpm_pd_handle_state(port, port->pwr_role == TYPEC_SOURCE ?
-+					     SRC_SOFT_RESET_WAIT_SNK_TX : SNK_SOFT_RESET,
-+					     NONE_AMS, 0);
-+		else
-+			tcpm_handle_alert(port, msg->payload, cnt);
- 		break;
- 	case PD_DATA_BATT_STATUS:
- 	case PD_DATA_GET_COUNTRY_INFO:
-@@ -2792,24 +2802,16 @@ static void tcpm_pd_ext_msg_request(struct tcpm_port *port,
- 
- 	switch (type) {
- 	case PD_EXT_STATUS:
--		/*
--		 * If PPS related events raised then get PPS status to clear
--		 * (see USB PD 3.0 Spec, 6.5.2.4)
--		 */
--		if (msg->ext_msg.data[USB_PD_EXT_SDB_EVENT_FLAGS] &
--		    USB_PD_EXT_SDB_PPS_EVENTS)
--			tcpm_pd_handle_state(port, GET_PPS_STATUS_SEND,
--					     GETTING_SOURCE_SINK_STATUS, 0);
--
--		else
--			tcpm_pd_handle_state(port, ready_state(port), NONE_AMS, 0);
--		break;
- 	case PD_EXT_PPS_STATUS:
--		/*
--		 * For now the PPS status message is used to clear events
--		 * and nothing more.
--		 */
--		tcpm_pd_handle_state(port, ready_state(port), NONE_AMS, 0);
-+		if (port->ams == GETTING_SOURCE_SINK_STATUS) {
-+			tcpm_ams_finish(port);
-+			tcpm_set_state(port, ready_state(port), 0);
-+		} else {
-+			/* unexpected Status or PPS_Status Message */
-+			tcpm_pd_handle_state(port, port->pwr_role == TYPEC_SOURCE ?
-+					     SRC_SOFT_RESET_WAIT_SNK_TX : SNK_SOFT_RESET,
-+					     NONE_AMS, 0);
-+		}
- 		break;
- 	case PD_EXT_SOURCE_CAP_EXT:
- 	case PD_EXT_GET_BATT_CAP:
-diff --git a/include/linux/usb/pd_ext_sdb.h b/include/linux/usb/pd_ext_sdb.h
-index 0eb83ce19597..b517ebc8f0ff 100644
---- a/include/linux/usb/pd_ext_sdb.h
-+++ b/include/linux/usb/pd_ext_sdb.h
-@@ -24,8 +24,4 @@ enum usb_pd_ext_sdb_fields {
- #define USB_PD_EXT_SDB_EVENT_OVP		BIT(3)
- #define USB_PD_EXT_SDB_EVENT_CF_CV_MODE		BIT(4)
- 
--#define USB_PD_EXT_SDB_PPS_EVENTS	(USB_PD_EXT_SDB_EVENT_OCP |	\
--					 USB_PD_EXT_SDB_EVENT_OTP |	\
--					 USB_PD_EXT_SDB_EVENT_OVP)
--
- #endif /* __LINUX_USB_PD_EXT_SDB_H */
--- 
-2.32.0.rc0.204.g9fa02ecfa5-goog
+I have posted dmesg log without the patch [1] where this happens often
+and the dmesg log with the patch [2] where it does happen at all.
+
+Thank you for fixing this!
+Drew
+
+[1] https://gist.github.com/pdp7/bd61e5f78545de182605992254d3eeee
+[2] https://gist.github.com/pdp7/95b0f34fa1d423d4764984b400c562cf
 
