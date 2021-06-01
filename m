@@ -2,114 +2,184 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A95613968B5
-	for <lists+linux-usb@lfdr.de>; Mon, 31 May 2021 22:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349E4396BF4
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 05:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231995AbhEaUYl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 31 May 2021 16:24:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbhEaUYZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 31 May 2021 16:24:25 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBB70C061760
-        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 13:22:39 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id lx17-20020a17090b4b11b029015f3b32b8dbso202704pjb.0
-        for <linux-usb@vger.kernel.org>; Mon, 31 May 2021 13:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LitQBbJQWqQUrB9JZGLzDtkeFx5Okxog/En0Tti53gE=;
-        b=Hzj2Y7IVZnBJu0eA1i1vDXHtJ0eeNRHS53gKZ0MoVUGWlbXchGp15RYSRH+XGceC/b
-         xozVReTjKTF2fUYdwKQ4TeJwMzgWV4pYQ2LE9H09+sgkhpbGIT/e8RYMJHUbNtkzEyJE
-         b5fQ1pw770fgVJIwLbFLwCoNVyh+YKjlNT64E6RDkFyn3ZwShqVMpvlokOXOP0JqYHyf
-         2DtpX28+HUdYURadwkDLZoMFXuGrBPnN6IyHvAKeBRllz07euSQOEADuKvUUd+K7wopS
-         PQsZ8hZbpRzU3DNEsYiyLBL+m4M1THKJsDM9Ou7iRDi429SBcZpvVXIX1y5eKgS+ZQbx
-         VMrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LitQBbJQWqQUrB9JZGLzDtkeFx5Okxog/En0Tti53gE=;
-        b=Cs5Umcv7P8oP01TDCSSY3bnYALm8XbDI4KgadL5/qxb9d0sR+Q97dWYMJvv6wddAe3
-         hQ9FgwE4QXNhbe9Ah/7M2nQg7OWUd/KiG0RmZNRNsEXgd2EOE2iQRQpIQcoKRElkjy32
-         7nnRjZrVdhj+DmeTwHiGBvl8TRXu3kYk497BQ0a3t3HF3t+3ZqTxBz+p7GEAkJjVxI4l
-         wDCden8NMKmoIEB1ZesVKfCbddDdpsGbDoSjulc8ovQJYegXlVqF41NqzYs3t3YoUnmu
-         5ZBlm6pFtoThI7v9PzQBmPgrsHkxpVJZDMukI8UcAroLaOg9G7YXg8XKF2jL2d2P9lEn
-         wt5A==
-X-Gm-Message-State: AOAM530yqSai1VXL90dSJjbWDlPsL1hYdjthLq6iXoEpt4tgTntg7JCL
-        jgZIYzUNgoD5VI8AcRSnenlIYJ7rppbe28FgDbc=
-X-Google-Smtp-Source: ABdhPJxvCo5LBNs7zG9x74tAF6CtFFBc4y6ZLt40m8GubSM/TIWAElF4lYwwxtK5ZLqihTdF+dW894fBdXymOjRVAi4=
-X-Received: by 2002:a17:90a:af8b:: with SMTP id w11mr21086142pjq.228.1622492559223;
- Mon, 31 May 2021 13:22:39 -0700 (PDT)
+        id S232635AbhFADwf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 31 May 2021 23:52:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232515AbhFADwd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 31 May 2021 23:52:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7157A601FF;
+        Tue,  1 Jun 2021 03:50:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622519452;
+        bh=i4cBT7a4126JA9vRrZR4rG3Ja1DCgyAcSgiF2RkUQIU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C1EGD2DLmyxVT9kwenq5yLiCNDkFIElFNlZLGjtCtMIEb9fIjhQMmrdKEO8+LCH8q
+         Nb/PJquc7yC0LQh6IrnjCHDUV5ghi6JLJd+PuHXnHXzoqLn33e+61wybgFCXgk15Vl
+         pXhKaxGVb760lnlnTJBgNqlN0tLePe9U0VaeFUB3+PdLBE1wLM4ZxwgcLEQ0I+BGMC
+         alI/qoU7x2oucE9FiuORLUDsYAoDxXZbRbh+eLb+wcmQp410Dj2GHvVbjzT7DTq++d
+         zj8aJpWPknk8QCt0QVTdRidyrZ6gKq2AoDGWVj0Ff/3dPc5YU4aCCzNGDTsGR43hPS
+         cEy1irijbhxGQ==
+Date:   Tue, 1 Jun 2021 11:50:48 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: phy: introduce usb_phy device type with its own
+ uevent handler
+Message-ID: <20210601035048.GA8818@nchen>
+References: <20210531122222.453628-1-grzegorz.jaszczyk@linaro.org>
 MIME-Version: 1.0
-References: <CAHp75Vc1BHSOfzUg2a1EEV_hNQK_MNNnVKA4wG_tWAWgTmnE9w@mail.gmail.com>
- <YLT3lHWFimB3GiHy@kroah.com> <CAHp75Vdjrj6=8thopwD7OPb-gxyVZx895Vd66mLSA4-BggdcWg@mail.gmail.com>
-In-Reply-To: <CAHp75Vdjrj6=8thopwD7OPb-gxyVZx895Vd66mLSA4-BggdcWg@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 31 May 2021 23:22:23 +0300
-Message-ID: <CAHp75Vc93a67fVqApGZ9qWy9d0yfasrO3S9-Ns7GqdSZSROuEQ@mail.gmail.com>
-Subject: Re: v5.13-rc3 --> v5.13-rc4 DWC3 breakage
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB <linux-usb@vger.kernel.org>, Ferry Toth <fntoth@gmail.com>,
-        Wesley Cheng <wcheng@codeaurora.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210531122222.453628-1-grzegorz.jaszczyk@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 31, 2021 at 6:45 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, May 31, 2021 at 5:49 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, May 31, 2021 at 05:33:02PM +0300, Andy Shevchenko wrote:
-> > > Hi!
-> > >
-> > > The only patch that made v5.13-rc4 effectively broke USB on Intel Merrifield.
-> > >
-> > > My reproducer:
-> > >  1. Boot with switch in gadget mode
-> > >  2. Enable USB ethernet
-> > >  3. Switch to host
-> > >  4. wait a bit for device enumeration, etc
-> > >  5. Switch back
-> > >  6. No gadget mode, kernel RCU stall detected (USB become unusable, so
-> > > does the system)
-> > >
-> > > [  115.792620] rcu: INFO: rcu_sched self-detected stall on CPU
-> > > [  115.798410] rcu:     0-....: (24089 ticks this GP)
-> > > idle=886/1/0x4000000000000000 softirq=3796/3797 fqs=5240
-> > > [  115.808333]  (t=21000 jiffies g=6505 q=12158)
-> > > [  115.812847] NMI backtrace for cpu 0
-> > > [  115.816472] CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 5.13.0-rc4+ #213
-> > > ...
-> > >
-> > > [  115.977913]  add_dma_entry+0xd4/0x1d0
-> > > [  115.981760]  dma_map_page_attrs+0xd8/0x220
-> > > [  115.986063]  usb_hcd_map_urb_for_dma+0x3b6/0x4f0
-> > > [  115.990895]  usb_hcd_submit_urb+0x98/0xbf0
-> > > [  115.995263]  dln2_rx+0x1ae/0x280 [dln2]
-> > > ...
-> > >
-> > > 100% Reproducibility, revert of the 25dda9fc56bd ("usb: dwc3: gadget:
-> > > Properly track pending and queued SG") fixes the issue.
-> > >
-> > > Please, fix it properly or revert. Thanks!
-> >
-> > Care to send the revert?
->
-> Sure, But I want to give Thinh a chance to react to this, maybe it
-> would be a better idea.
-> Let's say if nothing happens I will send it on Wednesday.
+On 21-05-31 14:22:22, Grzegorz Jaszczyk wrote:
+> The USB charger type and status was already propagated to userspace
+> through kobject_uevent_env during charger notify work. Nevertheless the
+> uevent could be lost e.g. because it could be fired at an early kernel
+> boot stage, way before udev daemon or any other user-space app was able
+> to catch it. Registering uevent hook for introduced usb_phy_dev_type
+> will allow to query sysfs 'uevent' file to restore that information at
+> any time.
+> 
+> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
 
-Please, hold on, I have to perform additional testing (something odd
-is going on on my side).
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
+> ---
+>  drivers/usb/phy/phy.c | 55 ++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 47 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+> index b47285f023cf..83ed5089475a 100644
+> --- a/drivers/usb/phy/phy.c
+> +++ b/drivers/usb/phy/phy.c
+> @@ -42,6 +42,12 @@ static const char *const usb_chger_type[] = {
+>  	[ACA_TYPE]			= "USB_CHARGER_ACA_TYPE",
+>  };
+>  
+> +static const char *const usb_chger_state[] = {
+> +	[USB_CHARGER_DEFAULT]	= "USB_CHARGER_DEFAULT",
+> +	[USB_CHARGER_PRESENT]	= "USB_CHARGER_PRESENT",
+> +	[USB_CHARGER_ABSENT]	= "USB_CHARGER_ABSENT",
+> +};
+> +
+>  static struct usb_phy *__usb_find_phy(struct list_head *list,
+>  	enum usb_phy_type type)
+>  {
+> @@ -74,6 +80,18 @@ static struct usb_phy *__of_usb_find_phy(struct device_node *node)
+>  	return ERR_PTR(-EPROBE_DEFER);
+>  }
+>  
+> +static struct usb_phy *__device_to_usb_phy(struct device *dev)
+> +{
+> +	struct usb_phy *usb_phy;
+> +
+> +	list_for_each_entry(usb_phy, &phy_list, head) {
+> +		if (usb_phy->dev == dev)
+> +			break;
+> +	}
+> +
+> +	return usb_phy;
+> +}
+> +
+>  static void usb_phy_set_default_current(struct usb_phy *usb_phy)
+>  {
+>  	usb_phy->chg_cur.sdp_min = DEFAULT_SDP_CUR_MIN;
+> @@ -105,9 +123,6 @@ static void usb_phy_set_default_current(struct usb_phy *usb_phy)
+>  static void usb_phy_notify_charger_work(struct work_struct *work)
+>  {
+>  	struct usb_phy *usb_phy = container_of(work, struct usb_phy, chg_work);
+> -	char uchger_state[50] = { 0 };
+> -	char uchger_type[50] = { 0 };
+> -	char *envp[] = { uchger_state, uchger_type, NULL };
+>  	unsigned int min, max;
+>  
+>  	switch (usb_phy->chg_state) {
+> @@ -115,15 +130,11 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+>  		usb_phy_get_charger_current(usb_phy, &min, &max);
+>  
+>  		atomic_notifier_call_chain(&usb_phy->notifier, max, usb_phy);
+> -		snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+> -			 "USB_CHARGER_STATE=%s", "USB_CHARGER_PRESENT");
+>  		break;
+>  	case USB_CHARGER_ABSENT:
+>  		usb_phy_set_default_current(usb_phy);
+>  
+>  		atomic_notifier_call_chain(&usb_phy->notifier, 0, usb_phy);
+> -		snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+> -			 "USB_CHARGER_STATE=%s", "USB_CHARGER_ABSENT");
+>  		break;
+>  	default:
+>  		dev_warn(usb_phy->dev, "Unknown USB charger state: %d\n",
+> @@ -131,9 +142,30 @@ static void usb_phy_notify_charger_work(struct work_struct *work)
+>  		return;
+>  	}
+>  
+> +	kobject_uevent(&usb_phy->dev->kobj, KOBJ_CHANGE);
+> +}
+> +
+> +static int usb_phy_uevent(struct device *dev, struct kobj_uevent_env *env)
+> +{
+> +	struct usb_phy *usb_phy;
+> +	char uchger_state[50] = { 0 };
+> +	char uchger_type[50] = { 0 };
+> +
+> +	usb_phy = __device_to_usb_phy(dev);
+> +
+> +	snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+> +		 "USB_CHARGER_STATE=%s", usb_chger_state[usb_phy->chg_state]);
+> +
+>  	snprintf(uchger_type, ARRAY_SIZE(uchger_type),
+>  		 "USB_CHARGER_TYPE=%s", usb_chger_type[usb_phy->chg_type]);
+> -	kobject_uevent_env(&usb_phy->dev->kobj, KOBJ_CHANGE, envp);
+> +
+> +	if (add_uevent_var(env, uchger_state))
+> +		return -ENOMEM;
+> +
+> +	if (add_uevent_var(env, uchger_type))
+> +		return -ENOMEM;
+> +
+> +	return 0;
+>  }
+>  
+>  static void __usb_phy_get_charger_type(struct usb_phy *usb_phy)
+> @@ -661,6 +693,11 @@ int usb_add_phy(struct usb_phy *x, enum usb_phy_type type)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_add_phy);
+>  
+> +static struct device_type usb_phy_dev_type = {
+> +	.name = "usb_phy",
+> +	.uevent = usb_phy_uevent,
+> +};
+> +
+>  /**
+>   * usb_add_phy_dev - declare the USB PHY
+>   * @x: the USB phy to be used; or NULL
+> @@ -684,6 +721,8 @@ int usb_add_phy_dev(struct usb_phy *x)
+>  	if (ret)
+>  		return ret;
+>  
+> +	x->dev->type = &usb_phy_dev_type;
+> +
+>  	ATOMIC_INIT_NOTIFIER_HEAD(&x->notifier);
+>  
+>  	spin_lock_irqsave(&phy_lock, flags);
+> -- 
+> 2.29.0
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
+
+Thanks,
+Peter Chen
+
