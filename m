@@ -2,137 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF1639716A
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 12:28:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C0F3971F7
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 13:01:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbhFAK37 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Jun 2021 06:29:59 -0400
-Received: from mga14.intel.com ([192.55.52.115]:5229 "EHLO mga14.intel.com"
+        id S231918AbhFALDc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Jun 2021 07:03:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:47404 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230170AbhFAK37 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Jun 2021 06:29:59 -0400
-IronPort-SDR: pOBGN6DY+hrJA2TJ/zbP0p3E7ukRmZobDDuvVW7psREhjMEfE5iaxOE5ZbbX9GXutd+TklRttL
- VzeK0uwET9Fw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10001"; a="203323852"
-X-IronPort-AV: E=Sophos;i="5.83,239,1616482800"; 
-   d="scan'208";a="203323852"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2021 03:28:18 -0700
-IronPort-SDR: NZFYa7VIGEKb1cX9HkEYjG8/nSLk7j4oVQNUJI53p0+ROejWRqEuyXXKfn5i+tqNok47ypFzCH
- jd69rXqL3/ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,239,1616482800"; 
-   d="scan'208";a="549688474"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 01 Jun 2021 03:28:16 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 01 Jun 2021 13:28:15 +0300
-Date:   Tue, 1 Jun 2021 13:28:15 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     USB <linux-usb@vger.kernel.org>
-Subject: Re: DWC3 (PCI) software node double free on shutdown
-Message-ID: <YLYLv+ozHCHhkfUM@kuha.fi.intel.com>
-References: <CAHp75Vd-5U5zgtDfM5C3Jsx51HVYB+rNcHYC2XP=G7dOd=cdTg@mail.gmail.com>
+        id S230282AbhFALDb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Jun 2021 07:03:31 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C0C5101E;
+        Tue,  1 Jun 2021 04:01:50 -0700 (PDT)
+Received: from [192.168.0.110] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 51ECB3F73D;
+        Tue,  1 Jun 2021 04:01:49 -0700 (PDT)
+To:     balbi@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        sanm@codeaurora.org
+From:   Alexandru Elisei <alexandru.elisei@arm.com>
+Subject: [BUG] usb: dwc3: Kernel NULL pointer dereference in dwc3_remove()
+Message-ID: <c3c75895-313a-5be7-6421-b32bac741a88@arm.com>
+Date:   Tue, 1 Jun 2021 12:02:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHp75Vd-5U5zgtDfM5C3Jsx51HVYB+rNcHYC2XP=G7dOd=cdTg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 01, 2021 at 12:50:18PM +0300, Andy Shevchenko wrote:
-> >From time to time I see this on shutdown.
-> I suspect this happens due to the device core trying to remove
-> software nodes when it should not.
+I've been seeing the following panic when shutting down my rockpro64:
 
-Yes, this is caused by the device_remove_properties() call in
-device_del(). We can't remove that quite yet unfortunately.
+[   21.459064] xhci-hcd xhci-hcd.0.auto: USB bus 5 deregistered
+[   21.683077] Unable to handle kernel NULL pointer dereference at virtual address
+00000000000000a0
+[   21.683858] Mem abort info:
+[   21.684104]   ESR = 0x96000004
+[   21.684375]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   21.684841]   SET = 0, FnV = 0
+[   21.685111]   EA = 0, S1PTW = 0
+[   21.685389] Data abort info:
+[   21.685644]   ISV = 0, ISS = 0x00000004
+[   21.686024]   CM = 0, WnR = 0
+[   21.686288] user pgtable: 4k pages, 48-bit VAs, pgdp=000000000757a000
+[   21.686853] [00000000000000a0] pgd=0000000000000000, p4d=0000000000000000
+[   21.687452] Internal error: Oops: 96000004EEMPT SMP
+[   21.687941] Modules linked in:
+[   21.688214] CPU: 4 PID: 1 Comm: shutdown Not tainted
+5.12.0-rc7-00262-g568262bf5492 #33
+[   21.688915] Hardware name: Pine64 RockPro64 v2.0 (DT)
+[   21.689357] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+[   21.689884] pc : down_read_interruptible+0xec/0x200
+[   21.690321] lr : simple_recursive_removal+0x48/0x280
+[   21.690761] sp : ffff800011f4b940
+[   21.691053] x29: ffff800011f4b940 x28: ffff000000809b40
+[   21.691522] x27: ffff000000809b98 x26: ffff8000114f5170
+[   21.691990] x25: 00000000000000a0 x24: ffff800011e84030
+[   21.692459] x23: 0000000000000080 x22: 0000000000000000
+[   21.692927] x21: ffff800011ecaa5c x20: ffff800011ecaa60
+[   21.693395] x19: ffff000000809b40 x18: ffffffffffffffff
+[   21.693863] x17: 0000000000000000 x16: 0000000000000000
+[   21.694331] x15: ffff800091f4ba6d x14: 0000000000000004
+[   21.694799] x13: 0000000000000000 x12: 0000000000000020
+[   21.695267] x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f
+[   21.695735] x9 : 6f6c746364716e62 x8 : 7f7f7f7f7f7f7f7f
+[   21.696203] x7 : fefefeff6364626d x6 : 0000000000001bd8
+[   21.696671] x5 : 0000000000000000 x4 : 0000000000000000
+[   21.697138] x3 : 00000000000000a0 x2 : 0000000000000001
+[   21.697606] x1 : 0000000000000000 x0 : 00000000000000a0
+[   21.698075] Call trace:
+[   21.698291]  down_read_interruptible+0xec/0x200
+[   21.698690]  debugfs_remove+0x60/0x84
+[   21.699016]  dwc3_debugfs_exit+0x1c/0x6c
+[   21.699363]  dwc3_remove+0x34/0x1a0
+[   21.699672]  platform_remove+0x28/0x60
+[   21.700005]  __device_release_driver+0x188/0x230
+[   21.700414]  device_release_driver+0x2c/0x44
+[   21.700791]  bus_remove_device+0x124/0x130
+[   21.701154]  device_del+0x168/0x420
+[   21.701462]  platform_device_del.part.0+0x1c/0x90
+[   21.701877]  platform_device_unregister+0x28/0x44
+[   21.702291]  of_platform_device_destroy+0xe8/0x100
+[   21.702716]  device_for_each_child_reverse+0x64/0xb4
+[   21.703153]  of_platform_depopulate+0x40/0x84
+[   21.703538]  __dwc3_of_simple_teardown+0x20/0xd4
+[   21.703945]  dwc3_of_simple_shutdown+0x14/0x20
+[   21.704337]  platform_shutdown+0x28/0x40
+[   21.704683]  device_shutdown+0x158/0x330
+[   21.705029]  kernel_power_off+0x38/0x7c
+[   21.705372]  __do_sys_reboot+0x16c/0x2a0
+[   21.705719]  __arm64_sys_reboot+0x28/0x34
+[   21.706074]  el0_svc_common.constprop.0+0x60/0x120
+[   21.706499]  do_el0_svc+0x28/0x94
+[   21.706794]  el0_svc+0x2c/0x54
+[   21.707067]  el0_sync_handler+0xa4/0x130
+[   21.707414]  el0_sync+0x170/0x180
+[   21.707711] Code: c8047c62 35ffff84 17fffe5f f9800071 (c85ffc60)
+[   21.708250] ---[ end trace 5ae08147542eb468 ]---
+[   21.708667] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+[   21.709456] Kernel Offset: disabled
+[   21.709762] CPU features: 0x00240022,2100600c
+[   21.710146] Memory Limit: 2048 MB
+[   21.710443] ---[ end Kernel panic - not syncing: Attempted to kill init!
+exitcode=0x0000000b ]---
 
-Can you test if this fixes the problem:
+I've been able to bisect the panic and the offending commit is 568262bf5492 ("usb:
+dwc3: core: Add shutdown callback for dwc3"). I can provide more diagnostic
+information if needed and I can help test the fix.
 
-diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
-index ce5e6f6711f79..f96630bd7a169 100644
---- a/drivers/usb/common/ulpi.c
-+++ b/drivers/usb/common/ulpi.c
-@@ -298,6 +298,7 @@ EXPORT_SYMBOL_GPL(ulpi_register_interface);
-  */
- void ulpi_unregister_interface(struct ulpi *ulpi)
- {
-+       ACPI_COMPANION_SET(&ulpi->dev, NULL);
-        of_node_put(ulpi->dev.of_node);
-        device_unregister(&ulpi->dev);
- }
+Thanks,
 
+Alex 
 
-> 
-> [  238.266524] ------------[ cut here ]------------
-> [  238.271357] kernfs: can not remove 'dwc3.0.auto.ulpi', no directory
-> [  238.277919] WARNING: CPU: 1 PID: 257 at fs/kernfs/dir.c:1508
-> kernfs_remove_by_name_ns+0x74/0x80
-> [  238.286970] Modules linked in: usb_f_eem u_ether libcomposite
-> spi_dln2 i2c_dln2 gpio_dln2 dln2 brcmfmac brcmut
-> il mmc_block pwm_lpss_pci pwm_lpss spi_pxa2xx_platform
-> snd_sof_pci_intel_tng snd_sof_pci snd_sof_acpi_intel_byt s
-> nd_sof_intel_ipc snd_sof_acpi snd_sof snd_sof_xtensa_dsp
-> extcon_intel_mrfld spi_pxa2xx_pci intel_mrfld_adc sdhci_
-> pci cqhci sdhci intel_mrfld_pwrbtn mmc_core intel_soc_pmic_mrfld
-> hci_uart btbcm btintel
-> [  238.325715] CPU: 1 PID: 257 Comm: init Not tainted 5.13.0-rc4+ #215
-> [  238.332254] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
-> BIOS 542 2015.01.21:18.19.48
-> [  238.341363] RIP: 0010:kernfs_remove_by_name_ns+0x74/0x80
-> [  238.346922] Code: 69 a3 00 31 c0 5d 41 5c 41 5d c3 48 c7 c7 80 91
-> b8 b2 e8 0f 69 a3 00 b8 fe ff ff ff eb e7 48
-> c7 c7 f8 d5 7e b2 e8 3b f4 9c 00 <0f> 0b b8 fe ff ff ff eb d2 0f 1f 00
-> 0f 1f 44 00 00 41 57 41 56 41
-> [  238.366284] RSP: 0000:ffffb2be40293cf8 EFLAGS: 00010282
-> [  238.371752] RAX: 0000000000000000 RBX: ffff8ca40ad78440 RCX: 00000000ffffdfff
-> [  238.379164] RDX: 00000000ffffdfff RSI: 00000000ffffffea RDI: 0000000000000000
-> [  238.386628] RBP: ffff8ca40ad76018 R08: ffffffffb2b517a8 R09: 0000000000009ffb
-> [  238.394061] R10: 00000000ffffe000 R11: 3fffffffffffffff R12: ffff8ca402cecb80
-> [  238.401480] R13: ffff8ca40ad78400 R14: 0000000000000000 R15: 0000000000000000
-> [  238.408894] FS:  0000000000000000(0000) GS:ffff8ca43e300000(0063)
-> knlGS:00000000f7f9a690
-> [  238.417296] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-> [  238.423284] CR2: 0000000056a400dc CR3: 0000000002f36000 CR4: 00000000001006e0
-> [  238.430698] Call Trace:
-> [  238.433316]  software_node_notify+0x7d/0x110
-> [  238.437828]  device_platform_notify+0x2c/0x70
-> [  238.442422]  device_del+0x1a9/0x3e0
-> [  238.446140]  device_unregister+0x16/0x60
-> [  238.450279]  dwc3_ulpi_exit+0x1a/0x30
-> [  238.454155]  dwc3_remove+0x6a/0x140
-> [  238.457920]  device_shutdown+0x15d/0x1c0
-> [  238.462070]  __do_sys_reboot.cold+0x2f/0x5b
-> [  238.466495]  ? __free_one_page+0xc6/0x330
-> [  238.470749]  ? __lock_acquire.constprop.0+0x27d/0x550
-> [  238.476067]  ? find_held_lock+0x2b/0x80
-> [  238.480124]  ? switch_fpu_return+0x48/0xf0
-> [  238.484464]  do_int80_syscall_32+0x4e/0x90
-> [  238.488785]  entry_INT80_compat+0x85/0x8a
-> [  238.493008] RIP: 0023:0xf7f17d74
-> [  238.496422] Code: 08 89 d8 5b 5e c3 53 b8 ad de e1 fe 8b 54 24 08
-> b9 69 19 12 28 e8 50 d5 ff ff 81 c3 10 af 06
-> 00 53 89 c3 b8 58 00 00 00 cd 80 <5b> 3d 00 f0 ff ff 76 0e 8b 93 b4 02
-> 00 00 f7 d8 65 89 02 83 c8 ff
-> [  238.515809] RSP: 002b:00000000ff92fa64 EFLAGS: 00000286 ORIG_RAX:
-> 0000000000000058
-> [  238.523763] RAX: ffffffffffffffda RBX: 00000000fee1dead RCX: 0000000028121969
-> [  238.531228] RDX: 0000000001234567 RSI: 000000000000000f RDI: 00000000566701a0
-> [  238.538642] RBP: 00000000566701a0 R08: 0000000000000000 R09: 0000000000000000
-> [  238.546055] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> [  238.553464] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> [  238.560952] ---[ end trace 1339144ac23765f6 ]---
-> [  238.566393] ------------[ cut here ]------------
-> [  238.571290] refcount_t: underflow; use-after-free.
-> [  238.576360] WARNING: CPU: 0 PID: 257 at lib/refcount.c:28
-> refcount_warn_saturate+0xa6/0xf0
-> ...
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-
--- 
-heikki
