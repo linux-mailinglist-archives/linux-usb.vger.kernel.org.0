@@ -2,101 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5B9396E65
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 09:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA7A396F60
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 10:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233165AbhFAIAJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Jun 2021 04:00:09 -0400
-Received: from mga04.intel.com ([192.55.52.120]:11244 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232963AbhFAIAI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Jun 2021 04:00:08 -0400
-IronPort-SDR: Z+fpa4qBCtMZR5/FxgpQZBG/N6y0Qc64q9jRPOCsUYmtMe5Rs+L+Tp3LCkCAcmKo1WL39qKrNb
- eBhcUIvWFp/g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10001"; a="201629379"
-X-IronPort-AV: E=Sophos;i="5.83,239,1616482800"; 
-   d="scan'208";a="201629379"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2021 00:58:28 -0700
-IronPort-SDR: ULSEG9kC9dGUEoiQ+Vvz42bjmWXY2AyZxHL2C4kDFOmxwlIi1ZfrX4qfInX+Hug3qpvl+3IwtF
- vH1P6hQUdaYQ==
-X-IronPort-AV: E=Sophos;i="5.83,239,1616482800"; 
-   d="scan'208";a="632785120"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jun 2021 00:58:24 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 01 Jun 2021 10:56:11 +0300
-Date:   Tue, 1 Jun 2021 10:56:11 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        linux-acpi@vger.kernel.org,
-        Casey G Bowman <casey.g.bowman@intel.com>,
-        Rajmohan Mani <rajmohan.mani@intel.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH 0/9] thunderbolt: Offline on-board retimer NVM upgrade
- support
-Message-ID: <YLXoG2luz3ywKDZw@lahna.fi.intel.com>
-References: <20210519141259.84839-1-mika.westerberg@linux.intel.com>
- <YKYk4LqriOskFCP4@kroah.com>
+        id S233599AbhFAIti (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Jun 2021 04:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60974 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233699AbhFAItc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Jun 2021 04:49:32 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F53C061763
+        for <linux-usb@vger.kernel.org>; Tue,  1 Jun 2021 01:47:51 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id c5so2198491wrq.9
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jun 2021 01:47:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=322dbtM46O3QcTbghSB7BeJYNbqpaIfGRgomGDZ93iE=;
+        b=zH0nyqnHcnGVmdTu3YEei5B5TuCrVSjv8yvMBbEalGkFR9tLH/LZP64768STt5ZyEy
+         alL2aGOrrCgn7j9jDB44WS3AlW46a7JY3VRBxQBQnN9AhUqAZfZ37HZNLygt4a9pHaJl
+         ZWMv0eoBWY5M7Zj1/uYTb2ixvr6IuGnbHs37wnikhRwNeJrcp9C/gaZEDS6eiWspZB78
+         tLbPWi92pLFxpM1rBmsLdIl9dQjycXqIEucDR+eeKJtZpPUwfciXOE5SQSQvLNyAOc+u
+         GTCqgIsq31lHP/Y8M/J+rDxluTNF5HgsTCs/mjqZZtC41wwqFxlGjqc849Iw7fhljdTy
+         bfBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=322dbtM46O3QcTbghSB7BeJYNbqpaIfGRgomGDZ93iE=;
+        b=fv42iDEQt2xisF1iKZ1nXO/0nuqDNoqg2oXr2/28qXoaR5N/qxsPpIZu6yd+cupYP4
+         i50aEWzj6R4j1C2+5PGJV4eZYwmEpLwRRxXTff0aEnY6ptNA0MeV9PyGb9Z1foDxmqkD
+         Sqm6fhGNJtrwpTCqvwYlTJ6rlruQTZ+Puzzh+I3/lJ/NrENyzH06s9Ubx6p/QwUUpTCl
+         GX5doJr5Kxgljjdne6bFahJCUJPTgekOe2BzcGiDTzqdoTp6HxCbXoFuc1Zf56fUWJuV
+         Labal2Hmknjx+100kG0BLSUUvdT17FgbONkx2hdyC1uCS8TDax3Qk1f55FJkhVdzZDsE
+         0r5A==
+X-Gm-Message-State: AOAM5305Pv5/rfq8q+R1fSZkvcHZud/E+uOTHUlQ3D6gOSaOJoYi2s8t
+        7OS0EMxJYwngzAm+cy2/ItQov4fJOqKfBw5h
+X-Google-Smtp-Source: ABdhPJwHfm4W7Jg6jHlyp2IqpSdMFmvjQnAuGssRjqPaBcl0npzMlEISc9JhfpSSb8BQzxgFoo0xMw==
+X-Received: by 2002:a5d:6e04:: with SMTP id h4mr26184792wrz.256.1622537269671;
+        Tue, 01 Jun 2021 01:47:49 -0700 (PDT)
+Received: from ?IPv6:2a01:e0a:90c:e290:a3a:d001:6a80:207a? ([2a01:e0a:90c:e290:a3a:d001:6a80:207a])
+        by smtp.gmail.com with ESMTPSA id t1sm2438670wrx.28.2021.06.01.01.47.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Jun 2021 01:47:49 -0700 (PDT)
+Subject: Re: [PATCH] usb: dwc3: meson-g12a: Disable the regulator in the error
+ handling path of the probe
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, khilman@baylibre.com,
+        jbrunet@baylibre.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <79df054046224bbb0716a8c5c2082650290eec86.1621616013.git.christophe.jaillet@wanadoo.fr>
+ <CAFBinCCBo4fYoO=2NiWTEixPuJo2Q=J1o1+yfi4Oc32SLi=GAw@mail.gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <455790a9-250d-ff00-6304-fd933409b1fb@baylibre.com>
+Date:   Tue, 1 Jun 2021 10:47:47 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YKYk4LqriOskFCP4@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <CAFBinCCBo4fYoO=2NiWTEixPuJo2Q=J1o1+yfi4Oc32SLi=GAw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, May 20, 2021 at 10:59:12AM +0200, Greg Kroah-Hartman wrote:
-> On Wed, May 19, 2021 at 05:12:50PM +0300, Mika Westerberg wrote:
-> > Hi all,
-> > 
-> > USB4 retimers are only accessible when the USB4 is up. However, sometimes
-> > it may be useful to be able to upgrade on-board retimers even if the link
-> > is not up. For instance if the user simply does not have any USB4 devices.
-> > 
-> > Making retimers accessible in "offline" mode requires some help from the
-> > platform firmware (ACPI in our case) to turn on power to the retimers and
-> > cycle them through different modes to get the sideband link up. This may
-> > also involve other firmwares such as Embedded Controller (as it is the case
-> > with recent Chromebooks).
-> > 
-> > This series adds support for "offline" retimer NVM upgrade so that it first
-> > exposes each USB4 port to the userspace. If the platform firmware provides
-> > a special _DSM-method (Device Specific Method) under the USB4 port ACPI
-> > description, we expose two attributes under the port that the userspace can
-> > use to put the port to offline mode and rescan for the retimers. Otherwise
-> > the NVM upgrade works the same way than with the online mode. We also add
-> > documentation to the admin-guide how this can be done.
-> > 
-> > In addition to this, at least Intel USB4 devices (and retimers) allow
-> > running NVM authenticate (upgrade) separately from write so we make it
-> > possible for the userspace to run the write and authenticate in two steps.
-> > This allows userspace to trigger the authentication at later time, like
-> > when the user logs out.
-> > 
-> > Mika Westerberg (4):
-> >   thunderbolt: Log the link as TBT instead of TBT3
-> >   thunderbolt: Add USB4 port devices
-> >   thunderbolt: Allow router NVM authenticate separately
-> >   thunderbolt: Check for NVM authentication status after the operation started
-> > 
-> > Rajmohan Mani (5):
-> >   thunderbolt: Add support for ACPI _DSM to power on/off retimers
-> >   thunderbolt: Add additional USB4 port operations for retimer access
-> >   thunderbolt: Add support for retimer NVM upgrade when there is no link
-> >   thunderbolt: Move nvm_write_ops to tb.h
-> >   thunderbolt: Add WRITE_ONLY and AUTHENTICATE_ONLY NVM operations for retimers
+On 23/05/2021 18:03, Martin Blumenstingl wrote:
+> Hi Christophe,
 > 
-> Looks good:
+> On Fri, May 21, 2021 at 6:55 PM Christophe JAILLET
+> <christophe.jaillet@wanadoo.fr> wrote:
+>>
+>> If an error occurs after a successful 'regulator_enable()' call,
+>> 'regulator_disable()' must be called.
+>>
+>> Fix the error handling path of the probe accordingly.
+>>
+>> The remove function doesn't need to be fixed, because the
+>> 'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+>> which is called via 'pm_runtime_set_suspended()' in the remove function.
+>>
+>> Fixes: c99993376f72 ("usb: dwc3: Add Amlogic G12A DWC3 glue")
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> for me this makes sense so:
+> Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+
+Acked-by: Neil Armstrong <narmstrong@baylibre.com>
+
 > 
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> ---
+>> Please review carefully.
+>>
+>> I'm not that sure about:
+>>    The remove function doesn't need to be fixed, because the
+>>    'regulator_disable()' call is already hidden in 'dwc3_meson_g12a_suspend()'
+>>    which is called via 'pm_runtime_set_suspended()' in the remove function.
+>>
+>> This is more a guess than anything else!
+> I am not 100% sure about the suspend code-path, so I am hoping that
+> someone else (for example Neil) can also review your patch
 
-Thanks!
+Not 100% sure aswell, but the probe function is wrong anyway and must be fixed by this patch, so LGTM.
 
-All applied to thunderbolt.git/next.
+Neil
+
+> 
+> 
+> Best regards,
+> Martin
+> 
+
