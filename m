@@ -2,172 +2,185 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 130CB396DBF
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 09:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CD4396E35
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 09:50:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232953AbhFAHJe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Jun 2021 03:09:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37222 "EHLO mail.kernel.org"
+        id S233098AbhFAHvu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Jun 2021 03:51:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60732 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229984AbhFAHJd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Jun 2021 03:09:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AEDD561370;
-        Tue,  1 Jun 2021 07:07:48 +0000 (UTC)
+        id S232963AbhFAHvu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 1 Jun 2021 03:51:50 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 39E556124B;
+        Tue,  1 Jun 2021 07:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622531271;
-        bh=t5CErQFKIxLArECeGbKfnM+wlUe1Eh9z8IPQln0v4z8=;
+        s=k20201202; t=1622533809;
+        bh=uMwpfeoAsGx1wfEnEmBUJZON7Ze4FXkDpcfa3Dsl+7E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LHILbW72dlxEz4B5ftaQsoZuqkDVc0QCxM8TwVgM1EVoGZwC9qJLhwrsZ6jGH2gPD
-         LLYI7T4arFF4xTkaW8j/Y+Q+Sr/51C9NC7AmqfivaSe1dkYkjueVw5DOp08Tc2h930
-         TKR5NSTKKh7BGlywToWoe4YfrjMUtRZW2zJHD//WF9t5QrvGyZ37bVtXP33WFsGOBC
-         mb63eCqpDXuhKc/r20MPbNiOgelonTrma7721UONwmoG/smqZlHOy53c8OPx276RYX
-         XcgytUAAvKdqciZB+wX7eO53tnyvyVI/mpXvCnTXWwulfD+c8+1yh/Tn6qs/KzzSqH
-         HIlwIxW0b3akQ==
-Date:   Tue, 1 Jun 2021 15:07:44 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Roger Quadros <rogerq@kernel.org>, linux-usb@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: debugfs: Add and remove endpoint dirs
- dynamically
-Message-ID: <20210601070744.GA9087@nchen>
-References: <20210529192932.22912-1-jackp@codeaurora.org>
+        b=Gx8KcOq96q6TuBbmeVNEYEFy4N8Kn7w55+DB6eu6fKfCDkuCS7Q/b2urJ+noLsXe0
+         1xXKsXRA/jZChUwsF397uwfbAeWfpO0xZWvVy8th4LTpvlpaQWQ/Am9/0Vf58lMRJR
+         hJQ5HxZGvT/cz2N/lSYewcE2jdesBHIX15N3oabpte6pLY6Fma1EmJQrQWkoosMzlX
+         3zbOUVwWAEZQ/FmWf/QD17hQG2k+yH8WZQ+YbLF2WNCCQGAjKVvOujGQ8ghW82Ru06
+         JLYsCAT36JwrgKpbvbUuaoHMrYvbR7grhIsLMcChV+pBhn0lNF9a3cTCWxW29CwVog
+         BMQbNWj4KsGoA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lnzA6-00007o-5u; Tue, 01 Jun 2021 09:50:06 +0200
+Date:   Tue, 1 Jun 2021 09:50:06 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21
+ (with bisection)
+Message-ID: <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
+References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210529192932.22912-1-jackp@codeaurora.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-05-29 12:29:32, Jack Pham wrote:
-> The DWC3 DebugFS directory and files are currently created once
-> during probe.  This includes creation of subdirectories for each
-> of the gadget's endpoints.  This works fine for peripheral-only
-> controllers, as dwc3_core_init_mode() calls dwc3_gadget_init()
-> just prior to calling dwc3_debugfs_init().
+On Mon, May 31, 2021 at 12:38:19PM -0500, Alex Villacís Lasso wrote:
+> (Sorry if this is a double-post. Previous message appears to have 
+> dissapeared or been rejected in transit. )
 > 
-> However, for dual-role controllers, dwc3_core_init_mode() will
-> instead call dwc3_drd_init() which is problematic in a few ways.
-> First, the initial state must be determined, then dwc3_set_mode()
-> will have to schedule drd_work and by then dwc3_debugfs_init()
-> could have already been invoked.  Even if the initial mode is
-> peripheral, dwc3_gadget_init() happens after the DebugFS files
-> are created, and worse so if the initial state is host and the
-> controller switches to peripheral much later.  And secondly,
-> even if the gadget endpoints' debug entries were successfully
-> created, if the controller exits peripheral mode, its dwc3_eps
-> are freed so the debug files would now hold stale references.
+> This is a report of the bug report at 
+> https://bugzilla.redhat.com/show_bug.cgi?id=1965527. I was asked to post 
+> the bisection results by Hans de Goede. Here is the bug information for 
+> reference:
 > 
-> So it is best if the DebugFS endpoint entries are created and
-> removed dynamically at the same time the underlying dwc3_eps are.
-> Do this by calling dwc3_debugfs_create_endpoint_dir() as each
-> endpoint is created, and conversely remove the DebugFS entry when
-> the endpoint is freed.
+> 1. Please describe the problem:
 > 
-> Fixes: 41ce1456e1db ("usb: dwc3: core: make dwc3_set_mode() work properly")
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
-> ---
->  drivers/usb/dwc3/debug.h   |  3 +++
->  drivers/usb/dwc3/debugfs.c | 21 ++-------------------
->  drivers/usb/dwc3/gadget.c  |  3 +++
->  3 files changed, 8 insertions(+), 19 deletions(-)
+> For my development work, I use several ESP32 boards from Espressif. On
+> Fedora, these modules are plugged as USB serial devices, managed via
+> the cp210x module, and show under /dev/ttyUSB0 .
 > 
-> diff --git a/drivers/usb/dwc3/debug.h b/drivers/usb/dwc3/debug.h
-> index d0ac89c5b317..d223c54115f4 100644
-> --- a/drivers/usb/dwc3/debug.h
-> +++ b/drivers/usb/dwc3/debug.h
-> @@ -413,9 +413,12 @@ static inline const char *dwc3_gadget_generic_cmd_status_string(int status)
->  
->  
->  #ifdef CONFIG_DEBUG_FS
-> +extern void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep);
->  extern void dwc3_debugfs_init(struct dwc3 *d);
->  extern void dwc3_debugfs_exit(struct dwc3 *d);
->  #else
-> +static inline void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
-> +{  }
->  static inline void dwc3_debugfs_init(struct dwc3 *d)
->  {  }
->  static inline void dwc3_debugfs_exit(struct dwc3 *d)
-> diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-> index 7146ee2ac057..5dbbe53269d3 100644
-> --- a/drivers/usb/dwc3/debugfs.c
-> +++ b/drivers/usb/dwc3/debugfs.c
-> @@ -886,30 +886,14 @@ static void dwc3_debugfs_create_endpoint_files(struct dwc3_ep *dep,
->  	}
->  }
->  
-> -static void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep,
-> -		struct dentry *parent)
-> +void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
->  {
->  	struct dentry		*dir;
->  
-> -	dir = debugfs_create_dir(dep->name, parent);
-> +	dir = debugfs_create_dir(dep->name, dep->dwc->root);
->  	dwc3_debugfs_create_endpoint_files(dep, dir);
->  }
->  
-> -static void dwc3_debugfs_create_endpoint_dirs(struct dwc3 *dwc,
-> -		struct dentry *parent)
-> -{
-> -	int			i;
-> -
-> -	for (i = 0; i < dwc->num_eps; i++) {
-> -		struct dwc3_ep	*dep = dwc->eps[i];
-> -
-> -		if (!dep)
-> -			continue;
-> -
-> -		dwc3_debugfs_create_endpoint_dir(dep, parent);
-> -	}
-> -}
-> -
->  void dwc3_debugfs_init(struct dwc3 *dwc)
->  {
->  	struct dentry		*root;
-> @@ -940,7 +924,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
->  				&dwc3_testmode_fops);
->  		debugfs_create_file("link_state", 0644, root, dwc,
->  				    &dwc3_link_state_fops);
-> -		dwc3_debugfs_create_endpoint_dirs(dwc, root);
->  	}
->  }
->  
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 65d9b7227752..dbba31d415d7 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -2754,6 +2754,8 @@ static int dwc3_gadget_init_endpoint(struct dwc3 *dwc, u8 epnum)
->  	INIT_LIST_HEAD(&dep->started_list);
->  	INIT_LIST_HEAD(&dep->cancelled_list);
->  
-> +	dwc3_debugfs_create_endpoint_dir(dep);
-> +
->  	return 0;
->  }
->  
-> @@ -2797,6 +2799,7 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
->  			list_del(&dep->endpoint.ep_list);
->  		}
->  
-> +		debugfs_remove_recursive(debugfs_lookup(dep->name, dwc->root));
-
-There is one more debugfs_remove_recursive at dwc3_debugfs_exit, need to delete?
-
->  		kfree(dep);
->  	}
->  }
-> -- 
-> 2.24.0
+> On Fedora 34, up until kernel-5.11.21-300.fc34.x86_64, this setup
+> worked correctly.
 > 
+> Under recently-released kernels kernel-5.12.5-300.fc34.x86_64 and
+> kernel-5.12.6-300.fc34.x86_64, this setup is now broken. When I plug
+> the board, the module loads as usual and shows up under /dev/ttyUSB0.
+> However, *any* attempt to read or write to the port fails. For
+> example, using miniterm.py from python3-pyserial-3.4-10.fc34.noarch:
+> 
+> Traceback (most recent call last):
+>    File "/usr/bin/miniterm.py", line 976, in <module>
+>      main()
+>    File "/usr/bin/miniterm.py", line 932, in main
+>      serial_instance.open()
+>    File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line 288, in open
+>      self._update_rts_state()
+>    File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line 627, in _update_rts_state
+>      fcntl.ioctl(self.fd, TIOCMBIS, TIOCM_RTS_str)
+> BrokenPipeError: [Errno 32] Broken pipe
+> 
+> At the same time, the following appears in the system logs:
+> 
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: new full-speed USB device number 6 using xhci_hcd
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: New USB device found, idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: Product: CP2102N USB to UART Bridge Controller
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: Manufacturer: Silicon Labs
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: SerialNumber: 18c0ecf00d0aea119fe0ae442473482f
+> may 27 16:04:55 karlalex-asus mtp-probe[3272]: checking bus 1, device 6: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-10"
+> may 27 16:04:55 karlalex-asus mtp-probe[3272]: bus: 1, device: 6 was not an MTP device
+> may 27 16:04:55 karlalex-asus kernel: usbcore: registered new interface driver cp210x
+> may 27 16:04:55 karlalex-asus kernel: usbserial: USB Serial support registered for cp210x
+> may 27 16:04:55 karlalex-asus kernel: cp210x 1-10:1.0: cp210x converter detected
+> may 27 16:04:55 karlalex-asus kernel: usb 1-10: cp210x converter now attached to ttyUSB0
+> may 27 16:04:55 karlalex-asus mtp-probe[3287]: checking bus 1, device 6: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-10"
+> may 27 16:04:55 karlalex-asus mtp-probe[3287]: bus: 1, device: 6 was not an MTP device
+> may 27 16:04:56 karlalex-asus kernel: cp210x ttyUSB0: failed set request 0x7 status: -32
+> may 27 16:04:56 karlalex-asus kernel: cp210x ttyUSB0: failed set request 0x7 status: -32
+> may 27 16:04:56 karlalex-asus python3[3292]: detected unhandled Python exception in '/usr/bin/miniterm.py'
+> may 27 16:04:56 karlalex-asus kernel: cp210x ttyUSB0: failed set request 0x7 status: -32
+> may 27 16:04:56 karlalex-asus abrt-server[3293]: Deleting problem directory Python3-2021-05-27-16:04:56-3292 (dup of Python3-2021-05-27-14:26:21-17653)
+> may 27 16:04:56 karlalex-asus abrt-notification[3312]: [🡕] Process 17653 (miniterm.py) of user 1000 encountered an uncaught BrokenPipeError exception
+> 
+> The messages with "failed set request..." are abnormal.
+> 
+> Worked around by downgrading the kernel to any 5.11.x version. Tested
+> with kernel-5.11.21-300.fc34.x86_64 and kernel-5.11.12-300.fc34.x86_64
 
--- 
+> Module cp210x from kernel 5.11 works without errors with ESP32 when
+> compiled under 5.12.x after applying commit
+> c5d1448fa353242635fa3e1fed6ab4558e0e7d9a (USB: serial: make remove
+> callback return void) on top of it. This allows bisection without
+> rebooting.
+> 
+> 
+> Bisection points me to this:
+> 
+> f61309d9c96a308465bec9d2e5206da265b075a0 is the first bad commit
+> commit f61309d9c96a308465bec9d2e5206da265b075a0
+> Author: Johan Hovold <johan@kernel.org  <mailto:johan@kernel.org>>
+> Date:   Mon Jan 18 12:13:27 2021 +0100
+> 
+>      USB: serial: cp210x: set IXOFF thresholds
+>      
+>      At least CP2102 requires the XON/XOFF limits to be initialised in order
+>      for software input flow control (IXOFF) to work. Specifically, XOFF is
+>      never sent if the XOFF limit is left at its default value of zero.
+>      
+>      Set the limits so that input is throttled when the FIFO free level drops
+>      below 128 bytes and restarted when the FIFO fill level drops below 128
+>      bytes.
+>      
+>      Note that the threshold values have been chosen so that they can be used
+>      also with CP2105 which has the smallest FIFO of the currently supported
+>      device types (288 byte for the SCI port). If needed the limits can be
+>      made device specific later.
+>      
+>      Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org  <mailto:gregkh@linuxfoundation.org>>
+>      Signed-off-by: Johan Hovold <johan@kernel.org  <mailto:johan@kernel.org>>
 
-Thanks,
-Peter Chen
+> If I manually revert commit f61309d9c96a308465bec9d2e5206da265b075a0
+> from cp210x.c from 5.12.7, it works correctly. Further proof that this
+> commit introduced the bug.
 
+Thanks for the detailed report.
+
+I got another report of this issue off-list a few days ago, but I
+haven't got any replies to my follow-up questions from that reporter
+yet.
+
+I can't seem to reproduce the issue here and the other reporter only
+saw this for some CP2102N which seems to suggest that there's some
+interaction with the device configuration at play here too.
+
+The symptoms appear to be consistent with the device still having
+hardware flow control enabled while the driver thinks it is disabled.
+The IXON/IXOFF limits are set in the same request and this might explain
+why things get out of sync, for example, if 128/128 limits are rejected
+by your device in its current configuration. But that's still to be
+determined.
+
+First, can you enable dynamic debugging in the driver through debugfs:
+
+        echo module cp210x +p > /sys/kernel/debug/dynamic_debug/control
+
+or when loading the module:
+
+        modprobe cp210x dyndbg==p
+
+and send me the logs from when connecting the device and running you
+terminal program.
+
+After the terminal program fails, try just to issue a
+
+	cat /dev/ttyUSB0
+
+press control-C and then include the logs for that too.
+
+For completeness, also include the output of
+
+	stty -F /dev/ttyUSB0 -a
+
+after re-connecting the device and before and after running the terminal
+program.
+
+Johan
