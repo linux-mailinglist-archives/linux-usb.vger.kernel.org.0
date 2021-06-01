@@ -2,242 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7665C3978EC
-	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 19:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F47E39791F
+	for <lists+linux-usb@lfdr.de>; Tue,  1 Jun 2021 19:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233301AbhFARUN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 1 Jun 2021 13:20:13 -0400
-Received: from mail.palosanto.com ([181.39.87.190]:35509 "EHLO palosanto.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231918AbhFARUN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 1 Jun 2021 13:20:13 -0400
-Received: from localhost (mail.palosanto.com [127.0.0.1])
-        by palosanto.com (Postfix) with ESMTP id D483213C2426;
-        Tue,  1 Jun 2021 12:18:27 -0500 (-05)
-X-Virus-Scanned: Debian amavisd-new at mail.palosanto.com
-Received: from palosanto.com ([127.0.0.1])
-        by localhost (mail.palosanto.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YTZmCDzkv_st; Tue,  1 Jun 2021 12:18:25 -0500 (-05)
-Received: from [192.168.0.105] (unknown [191.99.3.5])
-        by palosanto.com (Postfix) with ESMTPSA id 65D5F13C2383;
-        Tue,  1 Jun 2021 12:18:25 -0500 (-05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=palosanto.com;
-        s=mail; t=1622567905;
-        bh=W7AuroPgPSNBlpKoeWs9ktvur8SnL+qcNR+ZMP2I8UQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=p1BQ19/yexf6Juuq2cPj8JzAuhREhjMvSmmnuvWiFQnO/g7Z2xBhHRdLtHo5SnCQZ
-         wSKScm16JmMyb5EU6g9M04IFtz4AwS1FwLQ7L0KrsMMY4W9T8MmQq8CpcIJ5WKTv+C
-         zMNKThjA/to6rilpJv5i3CicaKBWHfJARIOa15Ts=
-Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21 (with
- bisection)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
- <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
- <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
- <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
-From:   =?UTF-8?Q?Alex_Villac=c3=ads_Lasso?= <a_villacis@palosanto.com>
-Message-ID: <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
-Date:   Tue, 1 Jun 2021 12:18:27 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S234294AbhFARdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 1 Jun 2021 13:33:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231918AbhFARdH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 1 Jun 2021 13:33:07 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A19C061574
+        for <linux-usb@vger.kernel.org>; Tue,  1 Jun 2021 10:31:24 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id m8-20020a17090a4148b029015fc5d36343so109625pjg.1
+        for <linux-usb@vger.kernel.org>; Tue, 01 Jun 2021 10:31:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+rNu5BKrHXq6GeHu34TfeZR/b6RKpdGImwlc7G9LKeo=;
+        b=BIdkmYsVV1cscyNRi1gcIiC4h25liSDFvRvSC4cuJOpUFcaiHjZbnx3z15HJp+N+lO
+         Syx2+U6Yv4iif34UBHgYIGi+k909qUmSC5UkIISsg5GhxEoP25orLDIuewsqEOHEMQmV
+         5e7f5QObmOXm5KkQPgU7VCYBWpyNfnoEHx1G2N+ER8cSynAZOL0x0Z5ofwgwsnDXeDBA
+         5tQ2wkgGSn9sb18eisTB0GT/r4IPwMHYVUgmXnitGoVgspYCVY66ayhO4SAEeZj49KEH
+         Q42+PRnilRVOg7wqXZ+RjaZ6JkagEa1ZPN2cvjojz34G0iij4nUOGnnqNnnjbYC6SuDd
+         V6Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+rNu5BKrHXq6GeHu34TfeZR/b6RKpdGImwlc7G9LKeo=;
+        b=FOcB8IiIqli7zgGsIJD5NdIpfhf1DIea57LWTxQZpcAwGQoQI+MPq0IxgZIq8QWw74
+         7gJF+4t72/kq2PUM+Gl1Budc2cGRMVlRciE67XkhWfCCijDVK5ZOm8rLIxakzEyaXPtA
+         FgIGjB3yYHthAu/5Q6X5jyydlVq/kRnbV06gYvbE1VfhOx2aOicBvcTcuaVjU7l4Cda5
+         GViPn+ZyIx9dJ0qnjY5xPIb/8wu7Nj2iENvHgfWmuOGAc439c7Jb7kta4EHfiUwUtdKK
+         kQbo3sS1lVfoSXhYqAOkknGlvkjK6f3YLa+fj+/Dl75HJJNSW7/ukLPwW+3y03Rj5C+U
+         U3RQ==
+X-Gm-Message-State: AOAM531bA5e+l8cSdvE6RaM37LryepZ/yQWMoU3pGGRiwDwGf2kdTC60
+        7ImitpSzpU7J2VEiUwoz+2Sq3PA/zsiGi/EsI2UR3gtTPTc=
+X-Google-Smtp-Source: ABdhPJyT1aI/DexJbQgotcJmPdSKX0WdtuTUgP1PWG8vyBZ7uNLvVR7F+A6sBJna/9EJF7m/ghFHBSlYFjcnCSgZiDo=
+X-Received: by 2002:a17:90a:80c5:: with SMTP id k5mr962075pjw.129.1622568683754;
+ Tue, 01 Jun 2021 10:31:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <CAHp75Vc1BHSOfzUg2a1EEV_hNQK_MNNnVKA4wG_tWAWgTmnE9w@mail.gmail.com>
+ <YLT3lHWFimB3GiHy@kroah.com> <CAHp75Vdjrj6=8thopwD7OPb-gxyVZx895Vd66mLSA4-BggdcWg@mail.gmail.com>
+ <CAHp75Vc93a67fVqApGZ9qWy9d0yfasrO3S9-Ns7GqdSZSROuEQ@mail.gmail.com>
+In-Reply-To: <CAHp75Vc93a67fVqApGZ9qWy9d0yfasrO3S9-Ns7GqdSZSROuEQ@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 1 Jun 2021 20:31:07 +0300
+Message-ID: <CAHp75VfJidDcBROMH6iQucZ5WkEgQ6mmbcL3qow1uHnwh2xDeg@mail.gmail.com>
+Subject: Re: v5.13-rc3 --> v5.13-rc4 DWC3 breakage
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        USB <linux-usb@vger.kernel.org>, Ferry Toth <fntoth@gmail.com>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-El 1/6/21 a las 10:40, Johan Hovold escribió:
-> On Tue, Jun 01, 2021 at 09:51:56AM -0500, Alex Villacís Lasso wrote:
+On Mon, May 31, 2021 at 11:22 PM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Mon, May 31, 2021 at 6:45 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+> >
+> > On Mon, May 31, 2021 at 5:49 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Mon, May 31, 2021 at 05:33:02PM +0300, Andy Shevchenko wrote:
+> > > > Hi!
+> > > >
+> > > > The only patch that made v5.13-rc4 effectively broke USB on Intel Merrifield.
+> > > >
+> > > > My reproducer:
+> > > >  1. Boot with switch in gadget mode
+> > > >  2. Enable USB ethernet
+> > > >  3. Switch to host
+> > > >  4. wait a bit for device enumeration, etc
+> > > >  5. Switch back
+> > > >  6. No gadget mode, kernel RCU stall detected (USB become unusable, so
+> > > > does the system)
+> > > >
+> > > > [  115.792620] rcu: INFO: rcu_sched self-detected stall on CPU
+> > > > [  115.798410] rcu:     0-....: (24089 ticks this GP)
+> > > > idle=886/1/0x4000000000000000 softirq=3796/3797 fqs=5240
+> > > > [  115.808333]  (t=21000 jiffies g=6505 q=12158)
+> > > > [  115.812847] NMI backtrace for cpu 0
+> > > > [  115.816472] CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 5.13.0-rc4+ #213
+> > > > ...
+> > > >
+> > > > [  115.977913]  add_dma_entry+0xd4/0x1d0
+> > > > [  115.981760]  dma_map_page_attrs+0xd8/0x220
+> > > > [  115.986063]  usb_hcd_map_urb_for_dma+0x3b6/0x4f0
+> > > > [  115.990895]  usb_hcd_submit_urb+0x98/0xbf0
+> > > > [  115.995263]  dln2_rx+0x1ae/0x280 [dln2]
+> > > > ...
+> > > >
+> > > > 100% Reproducibility, revert of the 25dda9fc56bd ("usb: dwc3: gadget:
+> > > > Properly track pending and queued SG") fixes the issue.
+> > > >
+> > > > Please, fix it properly or revert. Thanks!
+> > >
+> > > Care to send the revert?
+> >
+> > Sure, But I want to give Thinh a chance to react to this, maybe it
+> > would be a better idea.
+> > Let's say if nothing happens I will send it on Wednesday.
 >
->> Here is the full result of the test I performed. First I installed the
->> distro kernel update, kernel-5.12.8-300.fc34.x86_64, then rebooted.
->> Anything with a date is the journalctl output. Everything else is
->> console input and output. I have pasted the relevant journalctl messages
->> immediately after the command or action that triggered them.
->> $ miniterm.py /dev/ttyUSB0 115200
->> Traceback (most recent call last):
->>     File "/usr/bin/miniterm.py", line 976, in <module>
->>       main()
->>     File "/usr/bin/miniterm.py", line 932, in main
->>       serial_instance.open()
->>     File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line
->> 288, in open
->>       self._update_rts_state()
->>     File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line
->> 627, in _update_rts_state
->>       fcntl.ioctl(self.fd, TIOCMBIS, TIOCM_RTS_str)
->> BrokenPipeError: [Errno 32] Broken pipe
->>
->> jun 01 09:23:43 karlalex-asus systemd[1665]: Started VTE child process
->> 3306 launched by gnome-terminal-server process 2856.
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_change_speed - setting baud rate to 9600
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0303
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_change_speed - setting baud rate to 115384
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x01, flow = 0x40
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0101
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0202
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
->> jun 01 09:23:55 karlalex-asus python3[3362]: detected unhandled Python
->> exception in '/usr/bin/miniterm.py'
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0300
->> jun 01 09:23:55 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
-> Thanks a lot for this.
->
-> Could you try applying the below patch, and with debugging enabled
->
-> 	1. plug the device in
-> 	2. start the terminal program
->
-> and then send me the logs?
->
-> This should show the current device settings which appear to have flow
-> control enabled (which the driver fails to disable).
->
->> I note that the mere act of running stty -a on the device also triggers
->> the error.
-> Yeah, you'll see this error on every open/close when the driver tries to
-> assert/deassert RTS.
->
-> Johan
->
->
->  From 736c4c099591317d55a20da627db3b148d8d71ca Mon Sep 17 00:00:00 2001
-> From: Johan Hovold <johan@kernel.org>
-> Date: Tue, 1 Jun 2021 17:29:01 +0200
-> Subject: [PATCH] USB: cp210x: add flow-control debugging
->
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
->   drivers/usb/serial/cp210x.c | 6 ++++++
->   1 file changed, 6 insertions(+)
->
-> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> index ee595d1bea0a..92382798b574 100644
-> --- a/drivers/usb/serial/cp210x.c
-> +++ b/drivers/usb/serial/cp210x.c
-> @@ -1159,6 +1159,12 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
->   	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
->   	flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
->   
-> +	dev_dbg(&port->dev, "%s - ctrl = 0x%02x, flow = 0x%02x\n", __func__,
-> +			ctl_hs, flow_repl);
-> +	dev_dbg(&port->dev, "%s - xon_limit = %u, xoff_limit = %u\n", __func__,
-> +			le32_to_cpu(flow_ctl.ulXonLimit),
-> +			le32_to_cpu(flow_ctl.ulXoffLimit));
-> +
->   	ctl_hs &= ~CP210X_SERIAL_DSR_HANDSHAKE;
->   	ctl_hs &= ~CP210X_SERIAL_DCD_HANDSHAKE;
->   	ctl_hs &= ~CP210X_SERIAL_DSR_SENSITIVITY;
+> Please, hold on, I have to perform additional testing (something odd
+> is going on on my side).
 
-As before:
+It appears that the reported patch has nothing to do with the issue.
+It "luckily" helped, but under more tests I managed to dive as deep as
+v5.11 and got the same issue. I will continue investigating and will
+inform / send patch / etc when I find more robust reproducer. Anyway
+it's not the reported patch for sure, sorry for the noise.
 
-# echo module cp210x +p > /sys/kernel/debug/dynamic_debug/control
-# insmod ./cp210x.ko dyndbg==p
+(It seems I'm looking in a wrong corner< I have some ideas, but it
+requires time to check)
 
-jun 01 12:09:51 karlalex-asus kernel: usbcore: registered new interface 
-driver cp210x
-jun 01 12:09:51 karlalex-asus kernel: usbserial: USB Serial support 
-registered for cp210x
-
-
-<device plugged in>
-
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: new full-speed USB device 
-number 7 using xhci_hcd
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: New USB device found, 
-idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: New USB device strings: 
-Mfr=1, Product=2, SerialNumber=3
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: Product: CP2102N USB to 
-UART Bridge Controller
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: Manufacturer: Silicon Labs
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: SerialNumber: 
-283405bafee6e81182024fe64b629a73
-jun 01 12:11:38 karlalex-asus kernel: cp210x 1-9:1.0: cp210x converter 
-detected
-jun 01 12:11:38 karlalex-asus kernel: usb 1-9: cp210x converter now 
-attached to ttyUSB0
-jun 01 12:11:38 karlalex-asus mtp-probe[11596]: checking bus 1, device 
-7: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 01 12:11:38 karlalex-asus mtp-probe[11596]: bus: 1, device: 7 was 
-not an MTP device
-jun 01 12:11:38 karlalex-asus mtp-probe[11613]: checking bus 1, device 
-7: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 01 12:11:38 karlalex-asus mtp-probe[11613]: bus: 1, device: 7 was 
-not an MTP device
-jun 01 12:11:40 karlalex-asus ModemManager[726]: <info> [base-manager] 
-couldn't check support for device 
-'/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9': not supported by any 
-plugin
-
-
-$ miniterm.py /dev/ttyUSB0 115200
-Traceback (most recent call last):
-   File "/usr/bin/miniterm.py", line 976, in <module>
-     main()
-   File "/usr/bin/miniterm.py", line 932, in main
-     serial_instance.open()
-   File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line 
-288, in open
-     self._update_rts_state()
-   File "/usr/lib/python3.9/site-packages/serial/serialposix.py", line 
-627, in _update_rts_state
-     fcntl.ioctl(self.fd, TIOCMBIS, TIOCM_RTS_str)
-BrokenPipeError: [Errno 32] Broken pipe
-
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - ctrl = 0x00, flow = 0x00
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - xon_limit = 0, xoff_limit = 0
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0303
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 115384
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - ctrl = 0x01, flow = 0x40
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0101
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0202
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 01 12:12:13 karlalex-asus python3[11633]: detected unhandled Python 
-exception in '/usr/bin/miniterm.py'
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0300
-jun 01 12:12:13 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 01 12:12:13 karlalex-asus abrt-server[11634]: Deleting problem 
-directory Python3-2021-06-01-12:12:13-11633 (dup of 
-Python3-2021-05-27-14:26:21-17653)
-jun 01 12:12:13 karlalex-asus abrt-notification[11653]: [🡕] Process 
-17653 (miniterm.py) of user 1000 encountered an uncaught BrokenPipeError 
-exception
-
+-- 
+With Best Regards,
+Andy Shevchenko
