@@ -2,126 +2,172 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A833B398615
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 12:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3475539877F
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 12:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbhFBKQj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 06:16:39 -0400
-Received: from mail-eopbgr150081.outbound.protection.outlook.com ([40.107.15.81]:64891
-        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229826AbhFBKQj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Jun 2021 06:16:39 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GFX7A38BhG8c7WhRrKC7aNtJKYHdL3xz7HZYi2xsgE5cRqxOcPz2Q+s6Tg424eVQj1pg/MEILbN0WTs4o3+RNPPq1tPMbjdOmffBFAgFKJWKfGr9+pHKxD6YfjlkiUz6laAtaNfh5xB/80AZT3Q/Y/J4W5gfgjAswt3euacPWmwLiWn7dAblJt66DAs5pNpz+BXDgKElAU6vuEAHn/Jl3MRzBEypg0qTHUMQQR6T07ym4F1S/EJdw8Q13UUfRVSlefKjhW3X71E0CWM2cb3/2d7enjQCXaKvpt0NghHD/OAVRli0Os1DOlQ0O6oBYg7WL0A63j06Eth5iuzdsQ4sCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k3LSXCMvAZlQR7OjqD9URwwrMbb97mdFrdpmBACeN4w=;
- b=kwXyr4j++OwIi3/ZMogWArtdBtnPtyU7SVSbvWvtW+QrXAojB9p+4MelvwqipG4Q765b/Vd9VwwfsfLJxGk0OJxNG6FIIZgBATLfoGUf3F9riIa8zWxagavNS2JKssHJYb7mSvN83dZQbSH2yuFRsrXMoU8QWePfIZnkrKeVgFVab9oLcJDNAFgHvaH+HkCo/c1cIHkdHT8A4RFVA454T9Dc2ywRPtqcvl19qiEzflfZEVkAXI5dffNUu/0dYJJr05jMIkUwKIUQBKL09a2ymk3rY7TQdbgytR7Fa1dZljbfDDMf6StCw6qTE3l0pdjRs/EosdGpPT9/MNZSiRUoJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k3LSXCMvAZlQR7OjqD9URwwrMbb97mdFrdpmBACeN4w=;
- b=dA5o8kYzfEuc/qU2PFVH/KVw1UhTDZtOlRVsPmbUH8QqubKa8gyHXLpKPOWeBkrlcUqFneoAuOr6qOj6MJHrr9FWOxECzn9p0G70i+O2wqPxXCOPE1R44lxMbccLMGOUv2aC0GwiGPiiS5NNsGbddRPZ1gOH/9xLq//f67tKiLk=
-Authentication-Results: roeck-us.net; dkim=none (message not signed)
- header.d=none;roeck-us.net; dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
- by VE1PR04MB7357.eurprd04.prod.outlook.com (2603:10a6:800:1ae::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4173.21; Wed, 2 Jun
- 2021 10:14:55 +0000
-Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::453c:f24d:af8e:f194]) by VI1PR04MB5935.eurprd04.prod.outlook.com
- ([fe80::453c:f24d:af8e:f194%7]) with mapi id 15.20.4195.020; Wed, 2 Jun 2021
- 10:14:55 +0000
-From:   Li Jun <jun.li@nxp.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: [PATCH 3/3] usb: typec: tcpm: cancel send discover hrtimer when unregister tcpm port
-Date:   Wed,  2 Jun 2021 17:57:09 +0800
-Message-Id: <1622627829-11070-3-git-send-email-jun.li@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1622627829-11070-1-git-send-email-jun.li@nxp.com>
+        id S230230AbhFBLB1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 07:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230443AbhFBLBN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 07:01:13 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B125AC0613ED
+        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 03:59:27 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id x15so2198164oic.13
+        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 03:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n1/HGUsMWK+5b95hU94acKCVw7QYzF0L7PEe50Yla7w=;
+        b=dpAU/Cj0jYKW9ks7rS+KtyGM8D76l7XBXTvC1V+ExvxNu6XVM3/I6LH0LfxHADfGbD
+         VM9AaI364E7f3xZqrpR/9FZXnVTVUQ+hV32Xpn0BD1+eE1nbPpP8zu18r+wxDSZfbteY
+         nCgSJrDYlYudwz6R6nMtIcUIPb5b7SL2dJEmrXWwB++gFmc0O5kbnihhtAye5VPGvpq7
+         IzZnMsGITyI05xJt2S9MVzJ06xbe8DRBwZ2nK2KoifA8wcWvpIfGa6J84CzyXcbK67cg
+         qlr7Qm6rDzNhdvvqeRTIQytKH95HcpLL8DJDYT+VnhdBE/fOJMw6Bkj0djueoqaqX5V8
+         qaMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=n1/HGUsMWK+5b95hU94acKCVw7QYzF0L7PEe50Yla7w=;
+        b=JxcPVWJ7TO0AcIQSxW92KASsr+xd+OOF9ym8n2E3eRyVfz+wjkV6/kIogi9UZ548GF
+         VbMvXX1gzFhi3/gVs7OyffRaY5SlelHmeJKrevf9VenoDIXQRjcUUZGx05sDvES8Zzyu
+         6VG4tZKp7mgqDxDcIbzMvSxQghRUP+WgR9JI1XKVwPrwQzTNxZjBIax6QrSpxpPvRl8E
+         nUuKkAxnol8BjnaTBeToRq7uTPQVtdqaM58+7vIXM0vnJjymqNChddxrfextEPH1+8S3
+         XjWnsKwdotPjfx5PZ1YD18SW1Jlb6ZhnPV7sW8FJQ5GsZ79Pd0ZI2FmIqOMUxA3NiZ0B
+         xtMg==
+X-Gm-Message-State: AOAM532y6Y06xUaych8dFe7Fa3XAWlgw/mYX6GQOBvImhTyQ6aaDBv3+
+        TWTowvWnhDHBmHGNVSCYjQg=
+X-Google-Smtp-Source: ABdhPJxsvhPgHp5BUZMUJ3RE8zj7l8KJcwqMWqxuFzW+6SugedHCYv3Zu4L/ywdzdUzNOF8LhXvSCw==
+X-Received: by 2002:aca:ab50:: with SMTP id u77mr21131110oie.153.1622631567096;
+        Wed, 02 Jun 2021 03:59:27 -0700 (PDT)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v22sm4009326oic.37.2021.06.02.03.59.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 03:59:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Jun 2021 03:59:25 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] usb: typec: tcpm: cancel vdm and state machine
+ hrtimer when unregister tcpm port
+Message-ID: <20210602105925.GG1865238@roeck-us.net>
 References: <1622627829-11070-1-git-send-email-jun.li@nxp.com>
-Content-Type: text/plain
-X-Originating-IP: [119.31.174.66]
-X-ClientProxiedBy: SG2PR06CA0156.apcprd06.prod.outlook.com
- (2603:1096:1:1f::34) To VI1PR04MB5935.eurprd04.prod.outlook.com
- (2603:10a6:803:e9::17)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (119.31.174.66) by SG2PR06CA0156.apcprd06.prod.outlook.com (2603:1096:1:1f::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.20.4173.20 via Frontend Transport; Wed, 2 Jun 2021 10:14:53 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e1f59307-9539-4f96-ade4-08d925af448b
-X-MS-TrafficTypeDiagnostic: VE1PR04MB7357:
-X-Microsoft-Antispam-PRVS: <VE1PR04MB7357C9DD900C35DF9C77095A893D9@VE1PR04MB7357.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:758;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Eb2TfasbB8mAZcRp1Kvjgyn/qz6DicyE2gEjr5mbX5Z7oDejC6YdlBVsSqjy0CL+A+yfiFfNYGsEmE1tkRmDv3s8ynY1ux8UCM2KtWKxiYgkUZ7g9EmzaDkY9JiCpLrOK78NSoFhXYsHYTpkKHPqjO8Rt//FZiY8vYdRIIOYWruEYa8VXVGhD62yWy2AT+DMR8qrJGqPlo21kcNwzkSEdEoITzA90BgxlOq8nob/LW0uXKdcbN0RYWEog4IfnZiRIr5f9LJcxo9JFC2v/IibaBAX2IYvQpqHu+zR1JKVrLuqYts2bbkJJTgRVqXkbhjMGVJvs+eQI7alAzRL2lhm/3lu7uNdppFSdPFBTvnN7NHUjS6eldVaLLjzW96U/SH4+I64Yc05hqeo6Ox5IcCZYm+TnZGJV2u2jM27Q+psWawVE753ORCVc71fR19l7+rDtXY7RZhMdVhsIl1/gUJx32673N9KAC4Q8xI5I/vqmBhjcHnf6Q9YuSL7n6PrewZWW6fm5EMqfLqURHBjEdiachE0HrwA4uMVIiKFmfxqlBi2oBG6gFoNO29VdTvvf2fGzdbnPWE64ksc8XM9fFroTXivmSEwvAxxLq+PjI44ndyyKUpn9kKJI9fhwPccGt6PRLqBFr/uRs86c3PZNAyDve/eFRmjP59SP8RTxyYX7NHbIvLbYCKoNZ1z6Mz2KP5x
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(396003)(136003)(39860400002)(376002)(366004)(6512007)(6666004)(316002)(956004)(5660300002)(2616005)(8676002)(16526019)(66946007)(6486002)(6506007)(38100700002)(26005)(86362001)(2906002)(66476007)(186003)(478600001)(8936002)(52116002)(38350700002)(36756003)(4744005)(4326008)(66556008)(69590400013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData: =?us-ascii?Q?obNbCZ1g3iWl2CFXVqSaT51Y42y12HuoQSnaTwfUz1/0afpvz3ZAwsXzcSVd?=
- =?us-ascii?Q?AFuM2mO7t9ZJzm/7GcRqjkYOPoUWe0XCYEEUyXPhbR33EfPv2vT7CGFYtq/L?=
- =?us-ascii?Q?eeG92zObMK/OT9wUGrVKL0r0SvV9e9rwOL6n5y+18j59XOqfBfTeK2+Zp/yE?=
- =?us-ascii?Q?4RZLkXlsRyxCu0u4zMhZ7c1Nj67IbBfvQnLedBU5yDmFM9bXlPsJLIwBO6K/?=
- =?us-ascii?Q?cDpqHpgIojufRS88TPzOYtgc+6gTGa6QYOWt2z/hQWG1SWQUfDwxZ82ahmxF?=
- =?us-ascii?Q?H2n7c4M6raFga9aFqfQvmw2+NGRPuT+D1WNn6MMeYGPExEo2DS0Z+7MVlPIn?=
- =?us-ascii?Q?Cy+W3uIEN+SeQS+ukZKt2Y+ENg0dLCYdSfSngcQnLQcjHt1lCngnj85NGFaC?=
- =?us-ascii?Q?2XTpPS++Z78TtYDSwTFa7voYstIpsA4+ohl1jL4BbN6ri19w15Nv5pDxq4um?=
- =?us-ascii?Q?W07mz5NA3DZ+rWR50Rg904KQvy/WwPOGgGpqEtiRmKVntZjjYC3oJniGlwTt?=
- =?us-ascii?Q?QEP0slnAkNc7IU8TC4i9dOb+VBkfZEgyzy2kKLHl6W+8dKSb2qd3ieJ/uSrX?=
- =?us-ascii?Q?xxB69ynQKCnVSGCH3wlbF6I8ntYdFFMOvUH62kWu+5Gkxf0EPEqxUBW3wzIC?=
- =?us-ascii?Q?g2YPiHQoLT4F1vr1e6u8vfeXovFkwH8ANQz3xiMqqp1ng2FkIdpgDE3bn1S3?=
- =?us-ascii?Q?fjIHBO0ui/BYWJRywWXJq1phAaZfkSH7Vcea49ETnO5F+nITgOuG+KLktD7I?=
- =?us-ascii?Q?8X4WNJbPVn0joFr4HjUWcT+Dpf8dbKaRMia0yaWTR33MgzSWWUIyX/9RY6eJ?=
- =?us-ascii?Q?mq/wVQv6Yo/BHZWEJV1wtmXGGgzXC/IpMSRCyXnIEunoacIg2/2HZA5WFrjp?=
- =?us-ascii?Q?tl14vhVp72aPUKeqXys08BeH7Bqpc14pQzQiNG3DPrFYlWKEKWIgyoRadVbn?=
- =?us-ascii?Q?5x6gMBnZcs79+6XfWl/R9H86ZyXrFclLEx3ql1kCLET0gFSxnysznYapKJko?=
- =?us-ascii?Q?q/r5+fhGsAQ5vjkDA4nPwKKQXz7Su1CnP1A8nSkvsxFSXLzuc3soKU3GTp6Z?=
- =?us-ascii?Q?Xb5r8gLRohvxifP3zQ/lQHpeFU+A3OerCeEwTabfg9T6io8QDlWjgjkU27z3?=
- =?us-ascii?Q?WF38Db+m6NyObuMXZQwnnqegqoshxvs8gd9vWGWJZlyVP4EfRWktcS3mI63n?=
- =?us-ascii?Q?tj8TFEElGRWUZhvynk6AfIhQMEaeJIHC32VjD6bdOzIZw7d1zafAUtddrB0a?=
- =?us-ascii?Q?88scKMgghBuRoerbrSBweGBdk31Z+2h+5rJk7Pba4vGtezA0gvMaE0lj33j7?=
- =?us-ascii?Q?qYj/zw1fWmMjkekZh1sVgaY4?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1f59307-9539-4f96-ade4-08d925af448b
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jun 2021 10:14:55.2093
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ez8WPPbN4+5tWKAqnat7gnCITT8l32aqmfspJqfPZlQhDBs+2NTIv/xPFw1S3BcO
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7357
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1622627829-11070-1-git-send-email-jun.li@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Like the state_machine_timer, we should also cancel possible pending
-send discover identity hrtimer when unregister tcpm port.
+On Wed, Jun 02, 2021 at 05:57:07PM +0800, Li Jun wrote:
+> A pending hrtimer may expire after the kthread_worker of tcpm port
+> is destroyed, see below kernel dump when do module unload, fix it
+> by cancel the 2 hrtimers.
+> 
+> [  111.517018] Unable to handle kernel paging request at virtual address ffff8000118cb880
+> [  111.518786] blk_update_request: I/O error, dev sda, sector 60061185 op 0x0:(READ) flags 0x0 phys_seg 1 prio class 0
+> [  111.526594] Mem abort info:
+> [  111.526597]   ESR = 0x96000047
+> [  111.526600]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [  111.526604]   SET = 0, FnV = 0
+> [  111.526607]   EA = 0, S1PTW = 0
+> [  111.526610] Data abort info:
+> [  111.526612]   ISV = 0, ISS = 0x00000047
+> [  111.526615]   CM = 0, WnR = 1
+> [  111.526619] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041d75000
+> [  111.526623] [ffff8000118cb880] pgd=10000001bffff003, p4d=10000001bffff003, pud=10000001bfffe003, pmd=10000001bfffa003, pte=0000000000000000
+> [  111.526642] Internal error: Oops: 96000047 [#1] PREEMPT SMP
+> [  111.526647] Modules linked in: dwc3_imx8mp dwc3 phy_fsl_imx8mq_usb [last unloaded: tcpci]
+> [  111.526663] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.13.0-rc4-00927-gebbe9dbd802c-dirty #36
+> [  111.526670] Hardware name: NXP i.MX8MPlus EVK board (DT)
+> [  111.526674] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO BTYPE=--)
+> [  111.526681] pc : queued_spin_lock_slowpath+0x1a0/0x390
+> [  111.526695] lr : _raw_spin_lock_irqsave+0x88/0xb4
+> [  111.526703] sp : ffff800010003e20
+> [  111.526706] x29: ffff800010003e20 x28: ffff00017f380180
+> [  111.537156] buffer_io_error: 6 callbacks suppressed
+> [  111.537162] Buffer I/O error on dev sda1, logical block 60040704, async page read
+> [  111.539932]  x27: ffff00017f3801c0
+> [  111.539938] x26: ffff800010ba2490 x25: 0000000000000000 x24: 0000000000000001
+> [  111.543025] blk_update_request: I/O error, dev sda, sector 60061186 op 0x0:(READ) flags 0x0 phys_seg 7 prio class 0
+> [  111.548304]
+> [  111.548306] x23: 00000000000000c0 x22: ffff0000c2a9f184 x21: ffff00017f380180
+> [  111.551374] Buffer I/O error on dev sda1, logical block 60040705, async page read
+> [  111.554499]
+> [  111.554503] x20: ffff0000c5f14210 x19: 00000000000000c0 x18: 0000000000000000
+> [  111.557391] Buffer I/O error on dev sda1, logical block 60040706, async page read
+> [  111.561218]
+> [  111.561222] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> [  111.564205] Buffer I/O error on dev sda1, logical block 60040707, async page read
+> [  111.570887] x14: 00000000000000f5 x13: 0000000000000001 x12: 0000000000000040
+> [  111.570902] x11: ffff0000c05ac6d8
+> [  111.583420] Buffer I/O error on dev sda1, logical block 60040708, async page read
+> [  111.588978]  x10: 0000000000000000 x9 : 0000000000040000
+> [  111.588988] x8 : 0000000000000000
+> [  111.597173] Buffer I/O error on dev sda1, logical block 60040709, async page read
+> [  111.605766]  x7 : ffff00017f384880 x6 : ffff8000118cb880
+> [  111.605777] x5 : ffff00017f384880
+> [  111.611094] Buffer I/O error on dev sda1, logical block 60040710, async page read
+> [  111.617086]  x4 : 0000000000000000 x3 : ffff0000c2a9f184
+> [  111.617096] x2 : ffff8000118cb880
+> [  111.622242] Buffer I/O error on dev sda1, logical block 60040711, async page read
+> [  111.626927]  x1 : ffff8000118cb880 x0 : ffff00017f384888
+> [  111.626938] Call trace:
+> [  111.626942]  queued_spin_lock_slowpath+0x1a0/0x390
+> [  111.795809]  kthread_queue_work+0x30/0xc0
+> [  111.799828]  state_machine_timer_handler+0x20/0x30
+> [  111.804624]  __hrtimer_run_queues+0x140/0x1e0
+> [  111.808990]  hrtimer_interrupt+0xec/0x2c0
+> [  111.813004]  arch_timer_handler_phys+0x38/0x50
+> [  111.817456]  handle_percpu_devid_irq+0x88/0x150
+> [  111.821991]  __handle_domain_irq+0x80/0xe0
+> [  111.826093]  gic_handle_irq+0xc0/0x140
+> [  111.829848]  el1_irq+0xbc/0x154
+> [  111.832991]  arch_cpu_idle+0x1c/0x2c
+> [  111.836572]  default_idle_call+0x24/0x6c
+> [  111.840497]  do_idle+0x238/0x2ac
+> [  111.843729]  cpu_startup_entry+0x2c/0x70
+> [  111.847657]  rest_init+0xdc/0xec
+> [  111.850890]  arch_call_rest_init+0x14/0x20
+> [  111.854988]  start_kernel+0x508/0x540
+> [  111.858659] Code: 910020e0 8b0200c2 f861d884 aa0203e1 (f8246827)
+> [  111.864760] ---[ end trace 308b9a4a3dcb73ac ]---
+> [  111.869381] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+> [  111.876258] SMP: stopping secondary CPUs
+> [  111.880185] Kernel Offset: disabled
+> [  111.883673] CPU features: 0x00001001,20000846
+> [  111.888031] Memory Limit: none
+> [  111.891090] ---[ end Kernel panic - not syncing: Oops: Fatal exception in interrupt ]---
+> 
+> Fixes: 3ed8e1c2ac99 ("usb: typec: tcpm: Migrate workqueue to RT priority for processing events")
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
-Signed-off-by: Li Jun <jun.li@nxp.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index c7460df2119d..2899c9de6d20 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -6328,6 +6328,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
- {
- 	int i;
- 
-+	hrtimer_cancel(&port->send_discover_timer);
- 	hrtimer_cancel(&port->enable_frs_timer);
- 	hrtimer_cancel(&port->vdm_state_machine_timer);
- 	hrtimer_cancel(&port->state_machine_timer);
--- 
-2.25.1
-
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 0db685d5d9c0..f47685e7923d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -6328,6 +6328,9 @@ void tcpm_unregister_port(struct tcpm_port *port)
+>  {
+>  	int i;
+>  
+> +	hrtimer_cancel(&port->vdm_state_machine_timer);
+> +	hrtimer_cancel(&port->state_machine_timer);
+> +
+>  	tcpm_reset_port(port);
+>  	for (i = 0; i < ARRAY_SIZE(port->port_altmode); i++)
+>  		typec_unregister_altmode(port->port_altmode[i]);
+> -- 
+> 2.25.1
+> 
