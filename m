@@ -2,73 +2,139 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E92A3993FE
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 21:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C2F39940B
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 21:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbhFBTzx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 15:55:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44516 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229726AbhFBTzw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Jun 2021 15:55:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7F221610E5
-        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 19:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622663649;
-        bh=OJwmY625R9Z7qnHnZtNhCYcLjrfY2Vr7O9X1cxLI02E=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=KaJUSbcl3+0RV6iKmSn0KPfoHgwIGH7iJj7RSc4t3fE9DwB43yXTkrRUQalycXe3F
-         O8G9/6mGfuJxhACP49JyVS6crJw9y9fHoje0Q52GL27VkA4jHTOw0VcyUA4xSUsmho
-         AkL3NLTaG5EE76MPp9dtxr9e/EpNpSaSE99GlHurF6NcP9ZQ1A83XiThhANtnjGHAT
-         IyftMPJKZCRAhQBEGEx11La9TlN/IgTD2fIpw8jOmsSjxbpJnuBoIIHQ5+m29HIEss
-         k3XWM4NdPXXtzUxW+DLkZH6pKHlfKTQlkeiCVaM8qQBOENyWxAZ6oU8MqNZY4CiCdG
-         QkDpyGmaEApzg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 689E161167; Wed,  2 Jun 2021 19:54:09 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Wed, 02 Jun 2021 19:54:09 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-sNsBIKY4x3@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229807AbhFBT5D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 15:57:03 -0400
+Received: from smtp-out2.suse.de ([195.135.220.29]:50408 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229558AbhFBT5C (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 15:57:02 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EFB4D1FD3C;
+        Wed,  2 Jun 2021 19:55:15 +0000 (UTC)
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id CF189118DD;
+        Wed,  2 Jun 2021 19:55:03 +0000 (UTC)
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id 3FtyJhfit2AuEAAALh3uQQ
+        (envelope-from <dave@stgolabs.net>); Wed, 02 Jun 2021 19:55:03 +0000
+Date:   Wed, 2 Jun 2021 12:54:58 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 5/6] sched,timer: Use __set_current_state()
+Message-ID: <20210602195458.uj3rsci4suz4mufj@offworld>
+Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
+        dm-devel@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        cgroups@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+References: <20210602131225.336600299@infradead.org>
+ <20210602133040.524487671@infradead.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20210602133040.524487671@infradead.org>
+User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+On Wed, 02 Jun 2021, Peter Zijlstra wrote:
 
---- Comment #16 from Alan Stern (stern@rowland.harvard.edu) ---
-You do not have to go through that time-consuming procedure (checking out a=
-nd
-reverting) for every commit in the bisection process.  Those instructions I
-gave you were just for verifying that the final commit found by the bisecti=
-on
-was indeed the one causing the problem.
+-ENOCHANGELONG
 
---=20
-You may reply to this email to add a comment.
+But yeah, I thought we had gotten rid of all these.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+>
+>Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Reviewed-by: Davidlohr Bueso <dbueso@suse.de>
