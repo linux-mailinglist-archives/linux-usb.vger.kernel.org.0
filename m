@@ -2,96 +2,157 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9CF7399519
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 23:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB85139963D
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 01:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbhFBVFc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 17:05:32 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:47038 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbhFBVFa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 17:05:30 -0400
-Received: by mail-oi1-f175.google.com with SMTP id x15so4008751oic.13;
-        Wed, 02 Jun 2021 14:03:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dLnYTEbSZ20S1sAYbhXfu4nsy5YD5/Va1Hrjfwf4SZI=;
-        b=iQlgGwkEZYwVNGxgOPja8tdFFSMsqOsI/VRJwkIAgciQH/Y4TVb6/ddCDn821BSXJ3
-         ZXCqoUkWno+xtBtwBauoyIePzmrb4ML4kkMDTa1pIMA11opS4Edstl847AcRpkiwDUPE
-         gWYmvOqTeWzwrEGNOX2+uARfVbYrcOtMJlemCKY+L3OqTLF0U1kp5cqE4DaXQ38kmedY
-         JVu94JVwZy64SUIR3WUgFuLeqq0oHTaln73Lum7jUZWhvReRwJcsRUPGw3gxCBqTgyfK
-         VrAHDqwbrBZTe3hTfEWA6INw7aPFP0qrm/Bm/DKmGK9hwOISM7DFRlcYVdI2xCmb2cSl
-         TX3Q==
-X-Gm-Message-State: AOAM530JBkcGFE6Uio0eQwH6hS2OGdav9ImtpbejV5VrlbnSBRfK+0dS
-        v8xmqknMBuxVO9AVsgJPsQ==
-X-Google-Smtp-Source: ABdhPJwzqC2XJXHhkwYt4RptxqcSdFcN/kP0H0MQF9MHuOZBc6phW4g8h6Op9s6Ub7E54um+kyvYNA==
-X-Received: by 2002:a05:6808:a97:: with SMTP id q23mr7233255oij.39.1622667812829;
-        Wed, 02 Jun 2021 14:03:32 -0700 (PDT)
-Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
-        by smtp.gmail.com with ESMTPSA id q63sm234944oic.15.2021.06.02.14.03.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 14:03:32 -0700 (PDT)
-Received: (nullmailer pid 4037543 invoked by uid 1000);
-        Wed, 02 Jun 2021 21:03:30 -0000
-Date:   Wed, 2 Jun 2021 16:03:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     dmaengine@vger.kernel.org,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-remoteproc@vger.kernel.org,
+        id S229925AbhFBXRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 19:17:46 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:38376 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229828AbhFBXRp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 19:17:45 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 466A4219DB;
+        Wed,  2 Jun 2021 23:16:00 +0000 (UTC)
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id 4AECA118DD;
+        Wed,  2 Jun 2021 23:15:48 +0000 (UTC)
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id VMCuCCQRuGAfYQAALh3uQQ
+        (envelope-from <dave@stgolabs.net>); Wed, 02 Jun 2021 23:15:48 +0000
+Date:   Wed, 2 Jun 2021 16:15:42 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
         "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Ohad Ben-Cohen <ohad@wizery.com>,
-        linux-usb@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Nishanth Menon <nm@ti.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-can@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sekhar Nori <nsekhar@ti.com>, Jakub Kicinski <kuba@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-mmc@vger.kernel.org, Roger Quadros <rogerq@ti.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: Re: [PATCH 03/12] dt-bindings: soc: ti: update sci-pm-domain.yaml
- references
-Message-ID: <20210602210330.GA4037450@robh.at.kernel.org>
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <c03020ff281054c3bd2527c510659e05fec6f181.1622648507.git.mchehab+huawei@kernel.org>
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+Subject: Re: [PATCH 2/6] sched: Introduce task_is_running()
+Message-ID: <20210602231542.ejrjbilfggq4whg7@offworld>
+Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
+        dm-devel@redhat.com, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-block@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        cgroups@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+References: <20210602131225.336600299@infradead.org>
+ <20210602133040.334970485@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <c03020ff281054c3bd2527c510659e05fec6f181.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20210602133040.334970485@infradead.org>
+User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 02 Jun 2021 17:43:09 +0200, Mauro Carvalho Chehab wrote:
-> Changeset fda55c7256fe ("dt-bindings: soc: ti: Convert ti,sci-pm-domain to json schema")
-> renamed: Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-> to: Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml.
-> 
-> Update the cross-references accordingly.
-> 
-> Fixes: fda55c7256fe ("dt-bindings: soc: ti: Convert ti,sci-pm-domain to json schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-> ---
->  Documentation/devicetree/bindings/dma/ti-edma.txt             | 4 ++--
->  Documentation/devicetree/bindings/i2c/i2c-davinci.txt         | 2 +-
->  Documentation/devicetree/bindings/mmc/ti-omap-hsmmc.txt       | 2 +-
->  Documentation/devicetree/bindings/net/can/c_can.txt           | 2 +-
->  .../devicetree/bindings/remoteproc/ti,keystone-rproc.txt      | 2 +-
->  Documentation/devicetree/bindings/usb/ti,j721e-usb.yaml       | 2 +-
->  Documentation/devicetree/bindings/usb/ti,keystone-dwc3.yaml   | 2 +-
->  MAINTAINERS                                                   | 2 +-
->  8 files changed, 9 insertions(+), 9 deletions(-)
-> 
+On Wed, 02 Jun 2021, Peter Zijlstra wrote:
 
-Applied, thanks!
+>Replace a bunch of 'p->state == TASK_RUNNING' with a new helper:
+>task_is_running(p).
+>
+>Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Acked-by: Davidlohr Bueso
+
+But afaict ....
+
+>---
+> arch/x86/kernel/process.c |    4 ++--
+> block/blk-mq.c            |    2 +-
+> include/linux/sched.h     |    2 ++
+> kernel/locking/lockdep.c  |    2 +-
+> kernel/rcu/tree_plugin.h  |    2 +-
+> kernel/sched/core.c       |    6 +++---
+> kernel/sched/stats.h      |    2 +-
+> kernel/signal.c           |    2 +-
+> kernel/softirq.c          |    3 +--
+> mm/compaction.c           |    2 +-
+> 10 files changed, 14 insertions(+), 13 deletions(-)
+
+there are also (on top of the already mentioned arch/):
+
+kernel/kcsan/report.c:  const bool is_running = current->state == TASK_RUNNING;
+kernel/locking/lockdep.c:       if (p->state == TASK_RUNNING && p != current)
