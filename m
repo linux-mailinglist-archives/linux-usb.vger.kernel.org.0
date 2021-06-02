@@ -2,154 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F6C3993BB
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 21:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F163993F3
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 21:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229803AbhFBTqE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 15:46:04 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:56082 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbhFBTqC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 15:46:02 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 11B1A219C9;
-        Wed,  2 Jun 2021 19:44:17 +0000 (UTC)
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id E98D2118DD;
-        Wed,  2 Jun 2021 19:44:04 +0000 (UTC)
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id 2jzcLITft2B5CwAALh3uQQ
-        (envelope-from <dave@stgolabs.net>); Wed, 02 Jun 2021 19:44:04 +0000
-Date:   Wed, 2 Jun 2021 12:43:59 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 1/6] sched: Unbreak wakeups
-Message-ID: <20210602194359.pxujd4rx4lxv2ldm@offworld>
-Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-        dm-devel@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        cgroups@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-References: <20210602131225.336600299@infradead.org>
- <20210602133040.271625424@infradead.org>
+        id S229558AbhFBTx0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 15:53:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44166 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229724AbhFBTxZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Jun 2021 15:53:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id DEBA361182
+        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 19:51:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622663501;
+        bh=GH2H3bXDPNowCMiWNTZ5Sd9elPKsnWbacqs22L/+l/o=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=lww+rDMT/Bv8YyARk9mOi2GkWq3gFBQOOC5PZMk4IxmDHsoM4FFUUF0GNqgvPxBCr
+         uAfzaC5bQgztQVvG6GuJ663KNz36MD10X8M7U8vstouoacEHWj40jRkLajdBuwPgDI
+         41GnpJ54a0cHJsxPLcdgJ/aiG/JYeIHY/F1NmCBhdwlyTvFKu68Vu5SYCgzoMFMCiK
+         5RKS1n9i5VhQt082doqfT5B5Mzf/rLyNtSaErD/2hxmeNoVu6gSkT5mYVP8romL/9q
+         uCQvMrh87pn9n10RD4S6UTIDWZvuIM2Aza0kpRlU+W4oocSvWXXu11jsf8XSiA6FvU
+         +nmpsh85fmTXg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id CD94961167; Wed,  2 Jun 2021 19:51:41 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
+ UA-101 (in USB 1.1 mode, not USB2) error -110
+Date:   Wed, 02 Jun 2021 19:51:41 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: jaffa225man@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-212955-208809-GLxOOV5Fzk@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
+References: <bug-212955-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210602133040.271625424@infradead.org>
-User-Agent: NeoMutt/20201120
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 02 Jun 2021, Peter Zijlstra wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
 
->Remove broken task->state references and let wake_up_process() DTRT.
->
->The anti-pattern in these patches breaks the ordering of ->state vs
->COND as described in the comment near set_current_state() and can lead
->to missed wakeups:
->
->	(OoO load, observes RUNNING)<-.
->	for (;;) {                    |
->	  t->state = UNINTERRUPTIBLE; |
->	  smp_mb();          ,-----> ,' (OoO load, observed !COND)
->                             |       |
->	                     |       |	COND = 1;
->			     |	     `- if (t->state != RUNNING)
->                             |		  wake_up_process(t); // not done
->	  if (COND) ---------'
->	    break;
->	  schedule(); // forever waiting
->	}
->	t->state = TASK_RUNNING;
->
->Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+--- Comment #15 from Lucas Endres (jaffa225man@gmail.com) ---
+(In reply to Lucas Endres from comment #14)
+> Reverting each commit previously tested (logged) and
+> retesting sounds even more time consuming, but if you don't mind waiting =
+and
+> think it's necessary, I will continue this endeavor, and eventually get b=
+ack
+> to you.
 
-Reviewed-by: Davidlohr Bueso <dbueso@suse.de>
+Tonight, before I attempt anything that major, I'll build the commit just
+before 51e6f07cb12e to see if it's working (although it probably already was
+tested during one of the aforesaid bisect iterations).
+
+Hopefully, that will be enough to prove that the glitch-causing commit was
+51e6f07cb12e, or prove to me that you're right and I'll have to spend many =
+more
+days at this.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
