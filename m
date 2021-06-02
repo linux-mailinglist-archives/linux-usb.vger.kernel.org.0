@@ -2,88 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8571A39804B
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 06:25:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135153980B9
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 07:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbhFBE13 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 00:27:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35628 "EHLO mail.kernel.org"
+        id S230074AbhFBFnl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 01:43:41 -0400
+Received: from muru.com ([72.249.23.125]:35192 "EHLO muru.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbhFBE13 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Jun 2021 00:27:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 2D5DB6108C
-        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 04:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622607947;
-        bh=EeUSZ5YMyW7KVeAVG9XiJP90/W8L1H+hnOEINRRtJlM=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=exhQt52dq5qnXblpNp+uDoc5phPTnQPCQu3xMQmZcjKSRhXXoWpyv8pOdMjaH6DIm
-         3MOZWMWkNIVUosiQ24LzjIJFluBUojfevOT+wM78XCHysTQqfZV2dNBHA1m4sTYBz/
-         MGcM4doYanRqBEtq9n4mJVHty2N3NJeE4zyHs6iyYNucFu66Cy6aD4XgJk5f7PNBFG
-         AQnQfTZag61wae7K2cDL/c8erzBfOMWJtMLQ0TSXxcfbZQRJno7bH1nDQe7/rVftdr
-         FBCKl5QuygvO4JKCvo1PgqIIaLdq/Y+u1USpvQtoh81/dRxrmWBBMFgEuHGXFFEdmb
-         S0AEX0fGNKzKA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 1A4AD61155; Wed,  2 Jun 2021 04:25:47 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Wed, 02 Jun 2021 04:25:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jaffa225man@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-mrRVLwVyXw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S230054AbhFBFnk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Jun 2021 01:43:40 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 4FF84811B;
+        Wed,  2 Jun 2021 05:42:04 +0000 (UTC)
+Date:   Wed, 2 Jun 2021 08:41:54 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <YLcaIqqjtmizjRLL@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+ <20210527211501.70d176b4@aktux>
+ <YLCGZEan87yp9Eeq@atomide.com>
+ <20210528113715.40ff1ff9@aktux>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210528113715.40ff1ff9@aktux>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+* Andreas Kemnade <andreas@kemnade.info> [210528 09:37]:
+> rmmod omap2430 seems to bring back suspend current current to low
+> currents. 
 
---- Comment #12 from Lucas Endres (jaffa225man@gmail.com) ---
-(In reply to Alan Stern from comment #9)
-> Interesting.  I don't see any particular differences as far as the USB co=
-re
-> is concerned, but there are major differences in the way the device gets
-> used.  You can even see it in the dmesg output:
->=20
-> [  963.375444] usb 4-1.5: 0:1: add audio endpoint 0x2
-> [  963.376273] usb 4-1.5: 1:1: add audio endpoint 0x81
->=20
-> Those lines are present in 5.9 but not in 5.12, and they occur before the
-> problem happens.  These messages may not be directly relevant to the prob=
-lem
-> at hand, but they do point to changes in the audio drivers.  Those changes
-> may expose a bug somewhere else.
->=20
-> Judging from these results, I will guess that your bisection tests will
-> pinpoint a commit that affects the snd-ua101 audio driver.
+I wonder if the recent musb fix patch helps with this?
 
-I'm not on a RISC processor, by the way, just a run-of-the-mill intel i5-24=
-00.
-So, yes, to me this seems to be a wider commit that may affect much more.
+[PATCH] usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
+https://lore.kernel.org/lkml/20210528140446.278076-1-thomas.petazzoni@bootlin.com/
 
---=20
-You may reply to this email to add a comment.
+Regards,
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Tony
