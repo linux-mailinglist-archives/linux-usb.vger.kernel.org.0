@@ -2,126 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE0139899F
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 14:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A17398AAB
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 15:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbhFBMfj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 08:35:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59774 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229610AbhFBMfh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Jun 2021 08:35:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89D1A613B8;
-        Wed,  2 Jun 2021 12:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622637234;
-        bh=+yRoVITm0HvDDx24fNDJ/xcU6z/dOrokBkWlIMtk8Yo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GCOb4w+MGvqQzcnvlIw5biGr29twNrCJdvlXUU0xIWNhHCw9NTyVHH4yU4/AzT7J+
-         fb0Yoc9My8oqgAI2MbVeJrCDnM4lhNyThLNQtAw8vRYBYhH0PNaQRkhW4Ic5MNw+xr
-         01KqTfxaYZOCwQP74OwUmE1rITt2MeMFPgBi80AbdPpcMtYuxdBkwe33sthJaimTCT
-         D1i9734/3DSSCSxOg/5ps99cypyyep7jEfeEsHCTMEUzYhae/qVTEI9oL7AoJ4zvvU
-         ZdEHr6/0y1phhGazSH9Dx/xHtv02hbV9gN5s7x3R3ZDhJqmBrL5BQxcUsBYOY8F0fV
-         Pt+GGnbAUTvrQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1loQ4G-0000FS-8P; Wed, 02 Jun 2021 14:33:52 +0200
-Date:   Wed, 2 Jun 2021 14:33:52 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Antti Palosaari <crope@iki.fi>
-Cc:     Eero Lehtinen <debiangamer2@gmail.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] media: rtl28xxu: add type-detection instrumentation
-Message-ID: <YLd6sFfTe2Exp0Ej@hovoldconsulting.com>
-References: <CAHS3B0E7tqHvF2-jsJZfPWYc6f9HLDDsvepDbqy1rboXOHFegQ@mail.gmail.com>
- <YLPTJ3HIos630Btb@hovoldconsulting.com>
- <CAHS3B0EMkXEnaQv61_-6Gh5zd6e4UT_6yOvwhaB_h=6Ta2OdaQ@mail.gmail.com>
- <YLSGTkKNm5+o+PW1@hovoldconsulting.com>
- <CAHS3B0Ez+eKSgrCEnW2ccpBCHc_gJ_Cs3abS_DAYXRAAjNYeTA@mail.gmail.com>
- <YLSVsrhMZ2oOL1vM@hovoldconsulting.com>
- <YLShgrnPV35aXz84@hovoldconsulting.com>
- <CAHS3B0H8zeDgbP6k+9TMeG07di6dO7FxH-WowN9NJ=8Gt+ZZeg@mail.gmail.com>
- <YLSovrmj3AgwUUGm@hovoldconsulting.com>
- <660772b3-0597-02db-ed94-c6a9be04e8e8@iki.fi>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <660772b3-0597-02db-ed94-c6a9be04e8e8@iki.fi>
+        id S230256AbhFBNdW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 09:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230114AbhFBNdG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 09:33:06 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D10CC061761;
+        Wed,  2 Jun 2021 06:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=+0GJIyUeezLFp/ym4/vP+fC11EDSc+9M3QstIcNFnoM=; b=HwUP711Hi7fk/GRlHwhhfYuQB5
+        K5vYCOeQPuOhkpRqo74FjxBE7Qmwx8Wj6GWtoLKoGosJHAwdRgo9jNLQy1TmIkJWwpfsGoVcLemhp
+        yE/DBMFhvtilIfo4dv1JJaSo/mfYt/uX/LfisWcd+3wnlJLAvfkdTdiO1+HtsYKFPZ/tV6bjzqFeK
+        4bo4vY52aoMqPrC7we688zYhvu7+dOw4A1kcJpeVTuCoCOtBGxbR88VN+otXu+yI9l3xV+f66r/TA
+        vzFWO4ght7JIQB07yN0JwJ0Lzx83FvV5EUgJ9xU0ODmz2KYDDLO3n44qTW1zqH17jqyBTMXum4Ngk
+        tEM+eMIg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94 #2 (Red Hat Linux))
+        id 1loQxe-00B8nb-51; Wed, 02 Jun 2021 13:31:08 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B184A300299;
+        Wed,  2 Jun 2021 15:31:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 90C662C08A5B8; Wed,  2 Jun 2021 15:31:04 +0200 (CEST)
+Message-ID: <20210602131225.336600299@infradead.org>
+User-Agent: quilt/0.66
+Date:   Wed, 02 Jun 2021 15:12:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
+        kgdb-bugreport@lists.sourceforge.net,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
+Subject: [PATCH 0/6] sched: Cleanup task_struct::state
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 02:01:02PM +0300, Antti Palosaari wrote:
-> On 5/31/21 12:13 PM, Johan Hovold wrote:
-> > On Mon, May 31, 2021 at 12:08:20PM +0300, Eero Lehtinen wrote:
-> >> On Mon, May 31, 2021 at 11:42 AM Johan Hovold <johan@kernel.org> wrote:
+Hi!
 
-> >>>  From 2cec8fa000152bcb997dd7aeeb0917ebf744a7bd Mon Sep 17 00:00:00 2001
-> >>> From: Johan Hovold <johan@kernel.org>
-> >>> Date: Mon, 24 May 2021 10:55:19 +0200
-> >>> Subject: [PATCH v2] media: rtl28xxu: fix zero-length control request
-> >>>
-> >>> The direction of the pipe argument must match the request-type direction
-> >>> bit or control requests may fail depending on the host-controller-driver
-> >>> implementation.
-> >>>
-> >>> Control transfers without a data stage are treated as OUT requests by
-> >>> the USB stack and should be using usb_sndctrlpipe(). Failing to do so
-> >>> will now trigger a warning.
-> >>>
-> >>> The driver uses a zero-length i2c-read request for type detection so
-> >>> update the control-request code to use usb_sndctrlpipe() in this case.
-> >>>
-> >>> Note that actually trying to read the i2c register in question does not
-> >>> work as the register might not exist (e.g. depending on the demodulator)
-> >>> as reported by Eero Lehtinen <debiangamer2@gmail.com>.
-> >>>
-> >>> Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
-> >>> Reported-by: Eero Lehtinen <debiangamer2@gmail.com>
-> >>> Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
-> >>> Cc: stable@vger.kernel.org      # 4.0
-> >>> Cc: Antti Palosaari <crope@iki.fi>
-> >>> Signed-off-by: Johan Hovold <johan@kernel.org>
-> >>> ---
-> >>>   drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
-> >>>   1 file changed, 10 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-> >>> index 97ed17a141bb..a6124472cb06 100644
-> >>> --- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-> >>> +++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
-> >>> @@ -37,7 +37,16 @@ static int rtl28xxu_ctrl_msg(struct dvb_usb_device *d, struct rtl28xxu_req *req)
-> >>>          } else {
-> >>>                  /* read */
-> >>>                  requesttype = (USB_TYPE_VENDOR | USB_DIR_IN);
-> >>> -               pipe = usb_rcvctrlpipe(d->udev, 0);
-> >>> +
-> >>> +               /*
-> >>> +                * Zero-length transfers must use usb_sndctrlpipe() and
-> >>> +                * rtl28xxu_identify_state() uses a zero-length i2c read
-> >>> +                * command to determine the chip type.
-> >>> +                */
-> >>> +               if (req->size)
-> >>> +                       pipe = usb_rcvctrlpipe(d->udev, 0);
-> >>> +               else
-> >>> +                       pipe = usb_sndctrlpipe(d->udev, 0);
-> >>>          }
-> >>>
-> >>>          ret = usb_control_msg(d->udev, pipe, 0, requesttype, req->value,
-> >>> --
-> >>> 2.31.1
-> > 
-> >> I confirm that it suppresses the warning without messing up the type
-> >> detection.
-> > 
-> > Thanks for confirming. Is it ok if I add also a tested-by tag for you to
-> > the commit message when I send this to the media people?
-> 
-> I can also confirm it works for both rtl2831u and rtl2832u.
+The task_struct::state variable is a bit odd in a number of ways:
 
-Thanks for testing, Antti.
+ - it's declared 'volatile' (against current practises);
+ - it's 'unsigned long' which is a weird size;
+ - it's type is inconsistent when used for function arguments.
 
-Johan
+These patches clean that up by making it consistently 'unsigned int', and
+replace (almost) all accesses with READ_ONCE()/WRITE_ONCE(). In order to not
+miss any, the variable is renamed, ensuring a missed conversion results in a
+compile error.
+
+The first few patches fix a number of pre-existing errors and introduce a few
+helpers to make the final conversion less painful.
+
+
