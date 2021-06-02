@@ -2,140 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEDFB39924C
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 20:15:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 333183992ED
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 20:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbhFBSRK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 14:17:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51784 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229467AbhFBSRK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 2 Jun 2021 14:17:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 05B94606A5
-        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 18:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622657727;
-        bh=Xz9ej9/0Q5AiUfvgYs/dVhcXsSoxIeo++HBiM9Xs2YQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=XAeS44p+Us03ofb+CcupLkgBFuFSLwN8NMtQ2UHmbAB5vB6taNl2I6X4fUcPjsz9N
-         fSaUhdGkcGQWbiFTtMJLIM3ufxA/8UDcXQ38IYx7zqnVJMQm0sphY+IUaN2maYgt17
-         STD6g3kODidlTSreQly1tKmOAEtkGQPgqAr9K1ck7cXnGL4HUm9MpArQxi5PZtPg6w
-         py+s2ZBtzXCc3H8MHiOaWIlMVInTu2kcaXQW9WhqFcFFK4/pjTnqjQZHCvumQFxXXf
-         j6o7iKwwgRK22khbcrhzT0hjNOD2BdPoL0y/RNIfeUb+MtmwIv+az21eqI4OCGqk6B
-         SvrlX99k91SaA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id E7B7361167; Wed,  2 Jun 2021 18:15:26 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Wed, 02 Jun 2021 18:15:26 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jaffa225man@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-eCpCjBUvSI@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229607AbhFBS5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 14:57:42 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:46920 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbhFBS5l (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 14:57:41 -0400
+Received: by mail-oi1-f195.google.com with SMTP id x15so3625885oic.13
+        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 11:55:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=kb9iBF5WWKB/YEdgM4ltRqng2+O22QxTCZGasao4eVw=;
+        b=KBsW7k3iUSJeGHuo5Ix5TdKJVp7inQ0ZFodVX7EvdqHAe91AXLrA1D1BwNufuzv+zG
+         vnvTjy57NQoTtfe2jcoHtZDSSVis9octB0j5x1urPM17MjyEN1mlm19Kp7FjZz1vGmoh
+         OGQpQiqE0GrihpMEuZIZ8TU2bc9344jxjNkxA3QyKNt/4SW/zB4Ar7+LDtvjjd9qEK/6
+         1wlO8727bjknqMJbFtx024bYSc0f/0KV7WZu2DqD13GBF4rmzlyp2G7kLm4IHsXc2oL4
+         kmMtNhVt9omhIHJRgzvbkQdFDLaHJ87utm3c3NwIdtO/RgJyhgpqWIT7NCd+2KZkjhms
+         wxcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=kb9iBF5WWKB/YEdgM4ltRqng2+O22QxTCZGasao4eVw=;
+        b=p35g9hI7yWhAyhCVfylDnXDNqj2lXHPFitsDsOYaOOHFyhozeV8UGRsGzNhPyPgnA8
+         Vd8OGZSzHclLQF/vihmF9SGgfLtJVdDF1UJgC1wfLkjQI8emZ+blCaJe5hGpGy1rfuPp
+         J1PViRrdOq+HvUM+K+fSr5J8ub2Wd+KIbReBxlqIUpwHD1hCcEL+C26wnn4GZpoUFd4n
+         33VNluwZxggbKzmkKvT8XzmmC/aZ5b9hJOJIuNkV+5zhVnsiuH40I8sN7ckJlaQpeLKG
+         GKFxfU+sLXNkawQRTdR7TxtryTNH29IAVIV3q8DpoFMooSMbPjsrdnJuqP1O7Z8weYfB
+         VXTQ==
+X-Gm-Message-State: AOAM532OSLNR0xTzRHtCbdwPaz5UvmRfC7mZiuadqlQHY8GQN6+hbqUR
+        sDzVvKUzQ4SCpkqEJ0wCrqHAf5xMFgo/ocG+elk=
+X-Google-Smtp-Source: ABdhPJw2q/WlhQky+ZJU8HAB+dTFtZk9b8Ig82CJOgSBlKewL5McXd9s8KkZpabF94R0Qse0REPmHPcWhXE7Uv/kpxQ=
+X-Received: by 2002:aca:33d4:: with SMTP id z203mr4750759oiz.51.1622660083192;
+ Wed, 02 Jun 2021 11:54:43 -0700 (PDT)
 MIME-Version: 1.0
+Received: by 2002:a8a:d4f:0:b029:204:17a5:f322 with HTTP; Wed, 2 Jun 2021
+ 11:54:42 -0700 (PDT)
+Reply-To: johnzengo45@gmail.com
+From:   John Zengo <zengojohn32@gmail.com>
+Date:   Wed, 2 Jun 2021 11:54:42 -0700
+Message-ID: <CAGPrLQEZkU6G8DTXQVCG2bygQzq2hE6ZGjcNrmtD+n8sgFbpAw@mail.gmail.com>
+Subject: Compliment of the season
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+-- 
+Compliment of the season
 
---- Comment #14 from Lucas Endres (jaffa225man@gmail.com) ---
-(In reply to Alan Stern from comment #13)
-> THat commit you found, 51e6f07cb12e, cannot be the real culprit.  Merge
-> commits don't change any code (as a general rule).  Something must have g=
-one
-> wrong with the bisection procedure.
->=20
-> The way to test the result of a bisection is: First, check out the commit
-> that the bisection identified, build it and boot that kernel, and verify
-> that the problem occurs.  Second, check out the commit's parent (or revert
-> the commit), build and boot the resulting kernel, and verify that the
-> problem does not occur.
->=20
-> One thing you could do is get a list of commits affecting the snd-ua101
-> driver and try checking out and testing various ones, to find the first
-> commit which exhibits the problem.
+Greetings from Mr John Zengo
+i have something to discuss with you and it is very important and urgent.
+please feel free to reach me on my e-mail Address( johnzengo45@gmail.com)
+for further clarifications
 
-I probably was doing it wrong, then, but thought I was being quite thorough=
-.=20
-Here's the procedure I'd been following (probably from
-https://git-scm.com/docs/git-bisect):
+yours sincerely
 
-0. cd /usr/src/linux-next
-
-0.1 On the first run, I ran these: "git bisect start", "git bisect bad", "g=
-it
-bisect good $OriginalKnownGoodVersion" (I think the original known good was
-v5.12.0 or the first commit to 5.12.0)
-
-1. Copy my .config file to the source directory, in case it changes with bi=
-sect
-
-2. make -j4 menuconfig, and then just exit and save, just to save .config w=
-ith
-any automatic changes needed for this source
-
-3. Remove space hogs and any prior configuration: rm -r
-/usr/src/linux-next/debian/ /boot/vmlinuz-5.12* /boot/initrd-5.12*
-/usr/src/linux-image-5.12*
-
-4. make -j4 deb-pkg
-
-5. Install the kernel just built, and update grub accordingly: dpkg -i
-../linux-image-5.12*_*.deb
-
-6. Power off the computer
-
-7. Power on and boot the new kernel
-
-8. Test the bug (if its designation changes to "hw:USB1" I expect it'll be
-working, but still test it): arecord -D hw:UA101 -f S24_3LE -r 48000 -c 2
-./ua101.wav
-
-9. If it records without the error: cd /usr/src/linux-next ; git bisect goo=
-d,
-Or with the error: cd /usr/sr/src/linux-next; git bisect bad
-
-10. Repeat 1-10 until I got the output I gave you above.
-
-I was under the assumption that running "git bisect {good,bad}" was enough =
-to
-checkout the next version that needed to be tested, and it seems that it mu=
-st
-have been. This is because I had quite a few that didn't work, then one that
-did and another that didn't, eventually ending with the remaining few all
-working.
-
-If I, indeed, needed to be running checkout (as, say step 0.5),
-/usr/src/linux-next/.git/refs/bisect contains a logged list of the first bad
-and some good commits.  Reverting each commit previously tested (logged) and
-retesting sounds even more time consuming, but if you don't mind waiting and
-think it's necessary, I will continue this endeavor, and eventually get bac=
-k to
-you.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+John Zengo
