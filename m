@@ -2,84 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3559398F84
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 18:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC9E398FB7
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 18:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbhFBQFb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 12:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbhFBQFa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 12:05:30 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FEDC061574
-        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 09:03:47 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id z26so2549765pfj.5
-        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 09:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8lcG++fvJz38aA7Gh3cCknC2dof37Dqpe9qRNYbf/fM=;
-        b=vh5BJRnL5t8CNtKM5y9D7W8s48c6327Bv6pQbsDgct3j52gwwBTwIQmmg5S82i6fgK
-         46NHHQBXPWnu3dWt+jbU5ZzYczdaX2XI1yMXOXlYez/hnDrYSGX47QSUnop6ML9OztAb
-         Rkcpsyq322IRJSzFRb2CbN1NOGPGONn8m4TgdXdqiTzG/odymbA0utxGaKH4okAYblDW
-         ISIke4GKslrDhBzmMqTrQWwmd2+L8Ekvryc5hc1hevJfaUQQvVG0Tc4PI9O/+kau1K3j
-         zofhH6RbVvjn8HYweM9KamIoA/OO1wWGPc6qqoystSncotfVGXtyyVJdY680q8jgu5hH
-         4haA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8lcG++fvJz38aA7Gh3cCknC2dof37Dqpe9qRNYbf/fM=;
-        b=qPxt7N9lWUQ1KYKvPhUnToLOqE/NHhAqMxHG4/E855yvwPwUOabqmBIqcAp0sznRw9
-         yHjkR8oW7JWmXzjgfzaX8wAWiev7eoQ9Rb0iUVaMm4hltxoYg/KXwxavnmNztrD89r7K
-         Cx9vabfhjPAxxGos8R5GP+PbnXwhRpNuf1zNrh9Qq+Ykqh7Rb4LJqqlEDLLPQHug30cl
-         VGGM0zhThJMYPlLjEYrCLuy6pIKzevRPnMBZF9Ga59Yf+MtMc9ErfRjU0Ylf8ZfKWcpS
-         MTdDeEbS0jX3iJ1iKQ8639sZwETxvaEaKtgxXRkUTr6nuWKocI0uE05nLUCWDneOaX0z
-         uNGA==
-X-Gm-Message-State: AOAM532tvNEYJMuCTl8XtIxn8MxKq5uISPKk5uFRhS/nZmqHK7HBrySE
-        pzsYPIw7jL7RH5lpkuEm1gMPxydq3FLhbtu7+4B6YWDWCns=
-X-Google-Smtp-Source: ABdhPJxpWes6TAvw4qpryvvl8C/RGyrokV4x8FEIKm5foUhMD0hAdxevk2T4RF5L+ZSZ83Cp75UUznNuTQre7DP06QI=
-X-Received: by 2002:a63:79c3:: with SMTP id u186mr34792428pgc.203.1622649826704;
- Wed, 02 Jun 2021 09:03:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHp75Vd-5U5zgtDfM5C3Jsx51HVYB+rNcHYC2XP=G7dOd=cdTg@mail.gmail.com>
- <YLYLv+ozHCHhkfUM@kuha.fi.intel.com> <CAHp75VeHwNh1fxjXLObO+KJG+5eY5jRxT7r7g4BmxPSbyq4Hmw@mail.gmail.com>
-In-Reply-To: <CAHp75VeHwNh1fxjXLObO+KJG+5eY5jRxT7r7g4BmxPSbyq4Hmw@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 2 Jun 2021 19:03:30 +0300
-Message-ID: <CAHp75Vdftvnv3yNx2OWLW2quSHRHrwknWjPC0zSPkx=roa6m_Q@mail.gmail.com>
-Subject: Re: DWC3 (PCI) software node double free on shutdown
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     USB <linux-usb@vger.kernel.org>
+        id S229608AbhFBQRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 12:17:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229541AbhFBQRg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 2 Jun 2021 12:17:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8C7316192E
+        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 16:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622650553;
+        bh=0UtQSYID/XxUjagECfN9de/1wmUvdcW8a0LgF4T/LtI=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=W+8/+Y/X6hN5xgeWy602FHLBD5PlBSpGZ591EobQSWwpXlkFS9SbhNVo/scJGlOCW
+         56YZB1EnvIqFh2kOzObtbOumYZS6ZRWIlj8zE2Fv5/DTFk5FJPwCD1fVFf5FxQ5OFo
+         ixT6SsjctFKpi6VrlhJuUih/Dk8iosRKcPcy/x+KdaOW4fq2eWxB8PYi799HaMQsXM
+         5UVmi+ZT4O5DL7Um3ZSSwEy67iJmc6RzgqRimWSsLtueEqN8xGadKlSYnSJtvXvrRk
+         1IguPjnDA9WFR3ovys/SFBf0TDK0FU0C2fedICCyViNlg6lRh55O8x5NnZTDTfI363
+         OTmMEPmPW60qQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 7CC6061167; Wed,  2 Jun 2021 16:15:53 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
+ UA-101 (in USB 1.1 mode, not USB2) error -110
+Date:   Wed, 02 Jun 2021 16:15:53 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-212955-208809-ND37ExSOL5@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
+References: <bug-212955-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 1, 2021 at 5:57 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Tue, Jun 1, 2021 at 1:28 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Tue, Jun 01, 2021 at 12:50:18PM +0300, Andy Shevchenko wrote:
-> > > >From time to time I see this on shutdown.
-> > > I suspect this happens due to the device core trying to remove
-> > > software nodes when it should not.
-> >
-> > Yes, this is caused by the device_remove_properties() call in
-> > device_del(). We can't remove that quite yet unfortunately.
-> >
-> > Can you test if this fixes the problem:
->
-> Thanks, I have pushed it to my repo and will monitor the behaviour for
-> a few days or so.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
 
-Unfortunately it does not prevent the issue from happening. Till now I
-have got it already twice (for dozen or so reboots).
+--- Comment #13 from Alan Stern (stern@rowland.harvard.edu) ---
+THat commit you found, 51e6f07cb12e, cannot be the real culprit.  Merge com=
+mits
+don't change any code (as a general rule).  Something must have gone wrong =
+with
+the bisection procedure.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The way to test the result of a bisection is: First, check out the commit t=
+hat
+the bisection identified, build it and boot that kernel, and verify that the
+problem occurs.  Second, check out the commit's parent (or revert the commi=
+t),
+build and boot the resulting kernel, and verify that the problem does not
+occur.
+
+One thing you could do is get a list of commits affecting the snd-ua101 dri=
+ver
+and try checking out and testing various ones, to find the first commit whi=
+ch
+exhibits the problem.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
