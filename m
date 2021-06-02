@@ -2,157 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB85139963D
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 01:16:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85E5399662
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 01:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbhFBXRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 19:17:46 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:38376 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbhFBXRp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 19:17:45 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 466A4219DB;
-        Wed,  2 Jun 2021 23:16:00 +0000 (UTC)
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 4AECA118DD;
-        Wed,  2 Jun 2021 23:15:48 +0000 (UTC)
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id VMCuCCQRuGAfYQAALh3uQQ
-        (envelope-from <dave@stgolabs.net>); Wed, 02 Jun 2021 23:15:48 +0000
-Date:   Wed, 2 Jun 2021 16:15:42 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, cgroups@vger.kernel.org,
-        kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-Subject: Re: [PATCH 2/6] sched: Introduce task_is_running()
-Message-ID: <20210602231542.ejrjbilfggq4whg7@offworld>
-Mail-Followup-To: Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jens Axboe <axboe@kernel.dk>,
-        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-        dm-devel@redhat.com, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Pavel Machek <pavel@ucw.cz>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        cgroups@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        rcu@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org
-References: <20210602131225.336600299@infradead.org>
- <20210602133040.334970485@infradead.org>
+        id S229921AbhFBXcT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 19:32:19 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:34775 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229896AbhFBXcP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 19:32:15 -0400
+Received: by mail-il1-f198.google.com with SMTP id n18-20020a92d9d20000b02901d7b2ca03e6so2750119ilq.1
+        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 16:30:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=GV/AIilugT/5Wz21/OeFjAxmdYQUrgH8hNHBx1xl4tE=;
+        b=KpFTo5vfzL4nc+t2fJEX+fh/Qg3/yZmlLZOShgAh0aqye+HSZvFoXLikcMdA2wuuHE
+         F+lgHkE6O2SOyEYtjZC8QVMAQu2q20Yz4TIzKtkE5mfk7uFtQXMfHS/w8Ny/AjN7nRP3
+         GDYS6jU1Nd2G1/KyYOgublf3h7x3oeRXeSLOkT4/Ncvq+xWOHtDCO1y9jmxDKexuptqW
+         tusbnsa2VQja60NL4LDB7Lqaugw6p8NLU0FcV04IIXsDCHA7S974iwHZcJf/g6JCR351
+         GDG+/hxFuW4GfKczC2CUzwyglSQBloY8rI0oqjZx+7J1lPdBFfkxE96mSmToWTW6iiEe
+         hW7w==
+X-Gm-Message-State: AOAM5334yEiYf0ysdHjop9linq/P4ySg1WMw+AYJxh13HtvRF2YdCvCM
+        Z7G699seCeA8Yj3WWZf/0XV6isO1FB/eVCGBBx6ARXjQ9rWN
+X-Google-Smtp-Source: ABdhPJxqU+rOJRL6YlsRpunbQ/cpyxY5eqC1jGAZ0e+/gdIi4VMGzYIxusIiE9R5EWCIzde2SfZ+eetA9w3q/AoUmZm8qL1vvVPe
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20210602133040.334970485@infradead.org>
-User-Agent: NeoMutt/20201120
+X-Received: by 2002:a92:9411:: with SMTP id c17mr29886165ili.264.1622676618984;
+ Wed, 02 Jun 2021 16:30:18 -0700 (PDT)
+Date:   Wed, 02 Jun 2021 16:30:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000075c23d05c3d0d730@google.com>
+Subject: [syzbot] WARNING in usb_new_device/usb_submit_urb
+From:   syzbot <syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 02 Jun 2021, Peter Zijlstra wrote:
+Hello,
 
->Replace a bunch of 'p->state == TASK_RUNNING' with a new helper:
->task_is_running(p).
->
->Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+syzbot found the following issue on:
 
-Acked-by: Davidlohr Bueso
+HEAD commit:    7652dd2c USB: core: Check buffer length matches wLength fo..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=1712b99dd00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1206ee92dd3d988d
+dashboard link: https://syzkaller.appspot.com/bug?extid=7dbcd9ff34dc4ed45240
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16b82e13d00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16ac418dd00000
 
-But afaict ....
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com
 
->---
-> arch/x86/kernel/process.c |    4 ++--
-> block/blk-mq.c            |    2 +-
-> include/linux/sched.h     |    2 ++
-> kernel/locking/lockdep.c  |    2 +-
-> kernel/rcu/tree_plugin.h  |    2 +-
-> kernel/sched/core.c       |    6 +++---
-> kernel/sched/stats.h      |    2 +-
-> kernel/signal.c           |    2 +-
-> kernel/softirq.c          |    3 +--
-> mm/compaction.c           |    2 +-
-> 10 files changed, 14 insertions(+), 13 deletions(-)
+usb 1-1: config 0 interface 186 altsetting 4 has a duplicate endpoint with address 0x8, skipping
+usb 1-1: config 0 interface 166 has no altsetting 0
+usb 1-1: config 0 interface 186 has no altsetting 0
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType 80
+WARNING: CPU: 1 PID: 2632 at drivers/usb/core/urb.c:410 usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 1 PID: 2632 Comm: kworker/1:2 Not tainted 5.13.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+Code: 7c 24 40 e8 c5 1f b3 fd 48 8b 7c 24 40 e8 6b a6 1b ff 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 80 0a 63 86 e8 15 ec fb 01 <0f> 0b e9 a5 ee ff ff e8 97 1f b3 fd 0f b6 1d db a7 34 05 31 ff 41
+RSP: 0018:ffffc90000207680 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff8881182df058 RCX: 0000000000000000
+RDX: ffff888114871b40 RSI: ffffffff812a6033 RDI: fffff52000040ec2
+RBP: ffff88810cfffc80 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814b998b R11: 0000000000000000 R12: ffff88810cfff6b8
+R13: 0000000000000080 R14: 0000000080000280 R15: ffff88810e736f00
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f13a00114f0 CR3: 0000000108807000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+ usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+ usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+ usb_get_string+0xa6/0x190 drivers/usb/core/message.c:837
+ usb_string_sub+0x35e/0x3d0 drivers/usb/core/message.c:883
+ usb_get_langid drivers/usb/core/message.c:913 [inline]
+ usb_string+0x1cc/0x540 drivers/usb/core/message.c:977
+ usb_cache_string+0x82/0x120 drivers/usb/core/message.c:1023
+ usb_enumerate_device drivers/usb/core/hub.c:2399 [inline]
+ usb_new_device+0x15b/0x7d0 drivers/usb/core/hub.c:2527
+ hub_port_connect drivers/usb/core/hub.c:5298 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5438 [inline]
+ port_event drivers/usb/core/hub.c:5584 [inline]
+ hub_event+0x2357/0x4330 drivers/usb/core/hub.c:5666
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2275
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2421
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-there are also (on top of the already mentioned arch/):
 
-kernel/kcsan/report.c:  const bool is_running = current->state == TASK_RUNNING;
-kernel/locking/lockdep.c:       if (p->state == TASK_RUNNING && p != current)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
