@@ -2,95 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E01398782
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 13:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49A3398783
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 13:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbhFBLB4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 07:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S230454AbhFBLCx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 07:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbhFBLBz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 07:01:55 -0400
-Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE3AC061574
-        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 04:00:09 -0700 (PDT)
-Received: by mail-oo1-xc2b.google.com with SMTP id o5-20020a4a2c050000b0290245d6c7b555so444764ooo.11
-        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 04:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4iv9A1h3PK60MWJoqpicapRrY1GvyL7D/2sytv0f/5o=;
-        b=sEBdi3PzVgCvOSt5hhQe1c2mhISMyyvbs2MtNRYzbXIADcouu08Upa1pEZCVVXjGDu
-         8d0EUPuXsyX6POjPT/qsVcgmeen0Y/6PmoT15aJHlW18CKGIx/70wwwRMZDmMIVv7Ke6
-         AWaBdpHLFd3IZbXPAHyW6XM/TiSVxIdA4+yZkszj7F5ElnDFkm1iqFevfOXGIHiv8G1M
-         viL+gQHi/tH5Yz0RILR3ij4XU4lq+h/hh+AZt0/lXDpTqrkbgefPOseMd//5nrkTLaVo
-         oOmHnQK8bHqxGnjaYd/g2CvLN+OTa4hhKqpjsr5jxkfAuQ0RHKsQL0wa4SDRAnCdZPGV
-         6cxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=4iv9A1h3PK60MWJoqpicapRrY1GvyL7D/2sytv0f/5o=;
-        b=CT5Owddc/4/NaRiRfFqsYlBDY5dG21mLOE7BiRpyRV3utNVyNu9KTuzs5wHWOfmqoM
-         UodPU6p6k2a4ll+QNxjj/a1SOLkii5wI2CWpOVG8iAXbWjr+pl+nELfTc2S4tEMBX7k8
-         6KC5E9b8PZfCRol44yr61/PIpdCwdaSl3/uHQzPll8zoUZ6gwLryojERrcDnWeRscACG
-         kWVI7Wbu0avpUSVbKK61l8FOO1GLDCDOPa917fEbsBPw7kPnTWQzKwHbaDbGW67uhPmT
-         StojQeeI0a4U0dvoowzKV66TfWlQlJbeVSn3TwtRb+GZPBKZNATVIAXhnu1ac6GplnkC
-         JNEg==
-X-Gm-Message-State: AOAM530nIO5pmdEO9Uz0wckXvutUPQsmkdZ8hiwCjV/YiO8QgS9NLr/j
-        HFoMIwIFehpAycr1F9U4bFDqg7WncyY=
-X-Google-Smtp-Source: ABdhPJzIPJKAx/T5BYjcs+5qYJsNyz9lDynbkmUeEyDwBA4NT49q+r3q15GxV+RD6vus62i/WYuGIQ==
-X-Received: by 2002:a4a:b2ca:: with SMTP id l10mr22402498ooo.30.1622631609244;
-        Wed, 02 Jun 2021 04:00:09 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r19sm3960639ooj.5.2021.06.02.04.00.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Jun 2021 04:00:08 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Jun 2021 04:00:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        with ESMTP id S229695AbhFBLCx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 07:02:53 -0400
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4839DC061574
+        for <linux-usb@vger.kernel.org>; Wed,  2 Jun 2021 04:01:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+         s=20161220; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:
+        MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=qkBMq7r6cdGdUkenYOhDUQMNl1GXwAihh8HwClI++KI=; b=V8M72943ejmHEUFXz7FGo1GBnE
+        /fdFzOaZaXkDZeDVgjOlOQuooHKlDI6ui1U1ec7aEKgFBkA5dW4wkAEoHiwDnOwrOkDyJo91bRxJR
+        MHpwyHQUQEqzbFmVeMzLRetQRlbFl7GjNOgOusNFMaOIXH2PcWH1KpnE+8B+B6v04TeE9JuH6Qe/U
+        kH6wG74wtS9R2gkdifpfuey3E6UihYQ2zRgmcdekrdOuUM0XnjiNkriTl+sPrFVQXjV7DQALEP2bX
+        JAdc9eluTeWDnv+SzRhiusfc/QkYJtAby+GC8NoCQNAkG1V41IbYz6mYueRXJqxC7qh5INSFEes1i
+        dtP07wIQ==;
+Received: from 87-100-214-56.bb.dnainternet.fi ([87.100.214.56] helo=localhost.localdomain)
+        by mail.kapsi.fi with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <crope@iki.fi>)
+        id 1loOcU-0005OX-A0; Wed, 02 Jun 2021 14:01:06 +0300
+Subject: Re: [PATCH] media: rtl28xxu: add type-detection instrumentation
+To:     Johan Hovold <johan@kernel.org>,
+        Eero Lehtinen <debiangamer2@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
         linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: typec: tcpm: cancel send discover hrtimer when
- unregister tcpm port
-Message-ID: <20210602110007.GI1865238@roeck-us.net>
-References: <1622627829-11070-1-git-send-email-jun.li@nxp.com>
- <1622627829-11070-3-git-send-email-jun.li@nxp.com>
+References: <CAHS3B0EzL7zeKGjm=kvEq7VgDc-7hZNgOm-z5zPgFwVg0uQe-Q@mail.gmail.com>
+ <YLOZLvWESErIePs3@hovoldconsulting.com>
+ <CAHS3B0E7tqHvF2-jsJZfPWYc6f9HLDDsvepDbqy1rboXOHFegQ@mail.gmail.com>
+ <YLPTJ3HIos630Btb@hovoldconsulting.com>
+ <CAHS3B0EMkXEnaQv61_-6Gh5zd6e4UT_6yOvwhaB_h=6Ta2OdaQ@mail.gmail.com>
+ <YLSGTkKNm5+o+PW1@hovoldconsulting.com>
+ <CAHS3B0Ez+eKSgrCEnW2ccpBCHc_gJ_Cs3abS_DAYXRAAjNYeTA@mail.gmail.com>
+ <YLSVsrhMZ2oOL1vM@hovoldconsulting.com>
+ <YLShgrnPV35aXz84@hovoldconsulting.com>
+ <CAHS3B0H8zeDgbP6k+9TMeG07di6dO7FxH-WowN9NJ=8Gt+ZZeg@mail.gmail.com>
+ <YLSovrmj3AgwUUGm@hovoldconsulting.com>
+From:   Antti Palosaari <crope@iki.fi>
+Message-ID: <660772b3-0597-02db-ed94-c6a9be04e8e8@iki.fi>
+Date:   Wed, 2 Jun 2021 14:01:02 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1622627829-11070-3-git-send-email-jun.li@nxp.com>
+In-Reply-To: <YLSovrmj3AgwUUGm@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 87.100.214.56
+X-SA-Exim-Mail-From: crope@iki.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 05:57:09PM +0800, Li Jun wrote:
-> Like the state_machine_timer, we should also cancel possible pending
-> send discover identity hrtimer when unregister tcpm port.
-> 
-> Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
-> Signed-off-by: Li Jun <jun.li@nxp.com>
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
+On 5/31/21 12:13 PM, Johan Hovold wrote:
+> On Mon, May 31, 2021 at 12:08:20PM +0300, Eero Lehtinen wrote:
+>> On Mon, May 31, 2021 at 11:42 AM Johan Hovold <johan@kernel.org> wrote:
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index c7460df2119d..2899c9de6d20 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6328,6 +6328,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
->  {
->  	int i;
->  
-> +	hrtimer_cancel(&port->send_discover_timer);
->  	hrtimer_cancel(&port->enable_frs_timer);
->  	hrtimer_cancel(&port->vdm_state_machine_timer);
->  	hrtimer_cancel(&port->state_machine_timer);
-> -- 
-> 2.25.1
+>>> Ok, the driver just wants to know if the i2c-read vendor request exists,
+>>> and actually reading the register will not work since the register may
+>>> not even exist (e.g. depending on the demodulator).
+>>>
+>>> So it seems we need to keep this zero-length read request and only
+>>> update the pipe argument to suppress the new WARN() in
+>>> usb_submit_urb().
+>>>
+>>> Eero, could you try applying the below on top of -next and confirm that
+>>> it suppresses the warning without messing up the type detection?
 > 
+>>>  From 2cec8fa000152bcb997dd7aeeb0917ebf744a7bd Mon Sep 17 00:00:00 2001
+>>> From: Johan Hovold <johan@kernel.org>
+>>> Date: Mon, 24 May 2021 10:55:19 +0200
+>>> Subject: [PATCH v2] media: rtl28xxu: fix zero-length control request
+>>>
+>>> The direction of the pipe argument must match the request-type direction
+>>> bit or control requests may fail depending on the host-controller-driver
+>>> implementation.
+>>>
+>>> Control transfers without a data stage are treated as OUT requests by
+>>> the USB stack and should be using usb_sndctrlpipe(). Failing to do so
+>>> will now trigger a warning.
+>>>
+>>> The driver uses a zero-length i2c-read request for type detection so
+>>> update the control-request code to use usb_sndctrlpipe() in this case.
+>>>
+>>> Note that actually trying to read the i2c register in question does not
+>>> work as the register might not exist (e.g. depending on the demodulator)
+>>> as reported by Eero Lehtinen <debiangamer2@gmail.com>.
+>>>
+>>> Reported-by: syzbot+faf11bbadc5a372564da@syzkaller.appspotmail.com
+>>> Reported-by: Eero Lehtinen <debiangamer2@gmail.com>
+>>> Fixes: d0f232e823af ("[media] rtl28xxu: add heuristic to detect chip type")
+>>> Cc: stable@vger.kernel.org      # 4.0
+>>> Cc: Antti Palosaari <crope@iki.fi>
+>>> Signed-off-by: Johan Hovold <johan@kernel.org>
+>>> ---
+>>>   drivers/media/usb/dvb-usb-v2/rtl28xxu.c | 11 ++++++++++-
+>>>   1 file changed, 10 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+>>> index 97ed17a141bb..a6124472cb06 100644
+>>> --- a/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+>>> +++ b/drivers/media/usb/dvb-usb-v2/rtl28xxu.c
+>>> @@ -37,7 +37,16 @@ static int rtl28xxu_ctrl_msg(struct dvb_usb_device *d, struct rtl28xxu_req *req)
+>>>          } else {
+>>>                  /* read */
+>>>                  requesttype = (USB_TYPE_VENDOR | USB_DIR_IN);
+>>> -               pipe = usb_rcvctrlpipe(d->udev, 0);
+>>> +
+>>> +               /*
+>>> +                * Zero-length transfers must use usb_sndctrlpipe() and
+>>> +                * rtl28xxu_identify_state() uses a zero-length i2c read
+>>> +                * command to determine the chip type.
+>>> +                */
+>>> +               if (req->size)
+>>> +                       pipe = usb_rcvctrlpipe(d->udev, 0);
+>>> +               else
+>>> +                       pipe = usb_sndctrlpipe(d->udev, 0);
+>>>          }
+>>>
+>>>          ret = usb_control_msg(d->udev, pipe, 0, requesttype, req->value,
+>>> --
+>>> 2.31.1
+> 
+>> I confirm that it suppresses the warning without messing up the type
+>> detection.
+> 
+> Thanks for confirming. Is it ok if I add also a tested-by tag for you to
+> the commit message when I send this to the media people?
+
+
+I can also confirm it works for both rtl2831u and rtl2832u.
+
+regards
+Antti
+
