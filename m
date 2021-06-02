@@ -2,65 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 333183992ED
-	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 20:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 280E53993A7
+	for <lists+linux-usb@lfdr.de>; Wed,  2 Jun 2021 21:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbhFBS5m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 2 Jun 2021 14:57:42 -0400
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:46920 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbhFBS5l (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 14:57:41 -0400
-Received: by mail-oi1-f195.google.com with SMTP id x15so3625885oic.13
-        for <linux-usb@vger.kernel.org>; Wed, 02 Jun 2021 11:55:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kb9iBF5WWKB/YEdgM4ltRqng2+O22QxTCZGasao4eVw=;
-        b=KBsW7k3iUSJeGHuo5Ix5TdKJVp7inQ0ZFodVX7EvdqHAe91AXLrA1D1BwNufuzv+zG
-         vnvTjy57NQoTtfe2jcoHtZDSSVis9octB0j5x1urPM17MjyEN1mlm19Kp7FjZz1vGmoh
-         OGQpQiqE0GrihpMEuZIZ8TU2bc9344jxjNkxA3QyKNt/4SW/zB4Ar7+LDtvjjd9qEK/6
-         1wlO8727bjknqMJbFtx024bYSc0f/0KV7WZu2DqD13GBF4rmzlyp2G7kLm4IHsXc2oL4
-         kmMtNhVt9omhIHJRgzvbkQdFDLaHJ87utm3c3NwIdtO/RgJyhgpqWIT7NCd+2KZkjhms
-         wxcw==
+        id S229845AbhFBTiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 2 Jun 2021 15:38:25 -0400
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:35367 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229833AbhFBTiY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 2 Jun 2021 15:38:24 -0400
+Received: by mail-oi1-f178.google.com with SMTP id v22so3811425oic.2;
+        Wed, 02 Jun 2021 12:36:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kb9iBF5WWKB/YEdgM4ltRqng2+O22QxTCZGasao4eVw=;
-        b=p35g9hI7yWhAyhCVfylDnXDNqj2lXHPFitsDsOYaOOHFyhozeV8UGRsGzNhPyPgnA8
-         Vd8OGZSzHclLQF/vihmF9SGgfLtJVdDF1UJgC1wfLkjQI8emZ+blCaJe5hGpGy1rfuPp
-         J1PViRrdOq+HvUM+K+fSr5J8ub2Wd+KIbReBxlqIUpwHD1hCcEL+C26wnn4GZpoUFd4n
-         33VNluwZxggbKzmkKvT8XzmmC/aZ5b9hJOJIuNkV+5zhVnsiuH40I8sN7ckJlaQpeLKG
-         GKFxfU+sLXNkawQRTdR7TxtryTNH29IAVIV3q8DpoFMooSMbPjsrdnJuqP1O7Z8weYfB
-         VXTQ==
-X-Gm-Message-State: AOAM532OSLNR0xTzRHtCbdwPaz5UvmRfC7mZiuadqlQHY8GQN6+hbqUR
-        sDzVvKUzQ4SCpkqEJ0wCrqHAf5xMFgo/ocG+elk=
-X-Google-Smtp-Source: ABdhPJw2q/WlhQky+ZJU8HAB+dTFtZk9b8Ig82CJOgSBlKewL5McXd9s8KkZpabF94R0Qse0REPmHPcWhXE7Uv/kpxQ=
-X-Received: by 2002:aca:33d4:: with SMTP id z203mr4750759oiz.51.1622660083192;
- Wed, 02 Jun 2021 11:54:43 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YYSx52f4ZDE8Bx1jem0M8DJEVHzH9GCK3SePAGeVDLk=;
+        b=aCE/UFUxBVXEBCJKA9hznqDB5iXf/tuZdRH19LW7+VHtALO8CR6T4REcWkX6CACfk3
+         AxOJaeSmSbGM0+5luXulev4xrcbgJZ5elOgFY430UbuLNuOxQKx4AUlE1STKtLEY1LCK
+         umeGXRS0RQyceaPWiGSf7Yct9vmNxTb0c304Pcj4fgDQ/zqSlMAmLtKx06FT7WXofQFE
+         QUEyCci6pDQHOdnMAsWljl3pJLIj3qWtn5iNLy2eQPsF31PTcpGvCBzYP+PBfY/x785s
+         xBS5QS9qsSkUWUgJvpV8GhlKBEx5mpJS3x1h09/3WZaVsdvieZWbtOWHU5+/+pt/zATU
+         niXA==
+X-Gm-Message-State: AOAM532zg6WpO2/pzQgxuSXWeE6H7CEJazvuCBMKw7ZmMPmVSd2rkkxE
+        mu+6Cn3eY2TkYNdzkcWCLw==
+X-Google-Smtp-Source: ABdhPJwaesupVLKHtFpoCvPdYuv99AGaU/mQgNQjg0yrJd/8nqZv438WAuo6ReQODxrjn9yuciKHUg==
+X-Received: by 2002:a05:6808:341:: with SMTP id j1mr1744943oie.43.1622662601135;
+        Wed, 02 Jun 2021 12:36:41 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id x9sm176105oto.79.2021.06.02.12.36.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jun 2021 12:36:40 -0700 (PDT)
+Received: (nullmailer pid 3847385 invoked by uid 1000);
+        Wed, 02 Jun 2021 19:36:39 -0000
+Date:   Wed, 2 Jun 2021 14:36:39 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Kyle Tso <kyletso@google.com>
+Cc:     heikki.krogerus@linux.intel.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        badhri@google.com, gregkh@linuxfoundation.org, linux@roeck-us.net,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v3 2/4] dt-bindings: connector: Add PD rev 2.0 VDO
+ definition
+Message-ID: <20210602193639.GA3847324@robh.at.kernel.org>
+References: <20210601123151.3441914-1-kyletso@google.com>
+ <20210601123151.3441914-3-kyletso@google.com>
 MIME-Version: 1.0
-Received: by 2002:a8a:d4f:0:b029:204:17a5:f322 with HTTP; Wed, 2 Jun 2021
- 11:54:42 -0700 (PDT)
-Reply-To: johnzengo45@gmail.com
-From:   John Zengo <zengojohn32@gmail.com>
-Date:   Wed, 2 Jun 2021 11:54:42 -0700
-Message-ID: <CAGPrLQEZkU6G8DTXQVCG2bygQzq2hE6ZGjcNrmtD+n8sgFbpAw@mail.gmail.com>
-Subject: Compliment of the season
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210601123151.3441914-3-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
--- 
-Compliment of the season
+On Tue, 01 Jun 2021 20:31:49 +0800, Kyle Tso wrote:
+> Add the VDO definition for USB PD rev 2.0 in the bindings and define a
+> new property snk-vdos-v1 containing legacy VDOs as the responses to the
+> port partner which only supports PD rev 2.0.
+> 
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+> changes since v2:
+> - no change
+> 
+>  .../bindings/connector/usb-connector.yaml     | 15 ++++
+>  include/dt-bindings/usb/pd.h                  | 69 ++++++++++++++++++-
+>  2 files changed, 81 insertions(+), 3 deletions(-)
+> 
 
-Greetings from Mr John Zengo
-i have something to discuss with you and it is very important and urgent.
-please feel free to reach me on my e-mail Address( johnzengo45@gmail.com)
-for further clarifications
-
-yours sincerely
-
-John Zengo
+Reviewed-by: Rob Herring <robh@kernel.org>
