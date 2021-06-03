@@ -2,42 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2047139A367
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4F239A37F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbhFCOhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 10:37:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42132 "EHLO mail.kernel.org"
+        id S230517AbhFCOla (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 10:41:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42906 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231539AbhFCOhi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 10:37:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C035613F1;
-        Thu,  3 Jun 2021 14:35:51 +0000 (UTC)
+        id S230365AbhFCOla (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 10:41:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A4FE3613F1;
+        Thu,  3 Jun 2021 14:39:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622730953;
-        bh=pPTuoKWX4d7acsLmcXrA1+Gnm3Uox3TQwafM4ulr3Kc=;
+        s=k20201202; t=1622731185;
+        bh=FLRCeH+wA6+8dvbAZtVroAMqgWmWoiAWdHt6fFzmlBs=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=e9VHqGAnGRelCzpKXym98XkeVsTq/Wsf54M0iBoVdJ3DFy+gOyNOeiIUvQ++zgyvq
-         VpLR33KVJWeIbAzS2Jof5fGYNIyrFeQstCQOqhJEtkSzh8aP1XUBuap8jcEHcCzLPW
-         xgakhwoQYrUNj1N1cEVYsmvO1E8mBEieV5ZN3IjczHc/RW2V0f+ISZC0g7G8K5IY+v
-         58OZsMJY+xSxQETCdgKq2tZtdWc9AJWmQpR6+rL/sGvMEmUQe649MQxKX0oOEZA13U
-         R7SQxxILd/xg0WRfhxNPCLBQoFgZ9r17UTDbjzm1t/4g87bzyJFShzUtxPixY1sbqH
-         CD6kryvGJoICg==
+        b=kE+fs/yiEDKTbGno3M38uJNadf5a8gvLdIc0NUhQkULTj4ubDrXEXTX/CUzkl2bN7
+         ubZ//XIvlPBFinp5uda13VxJI4UDeyDDsjboVtyqJsqCWZUBPaTOu4HoVKYRQHCcOR
+         1BYTbvWBvkdS8LdZ8hTZjU5EmCmmzxQe1n5R/sGZ0GteqqWvZw1xCVktktZj+IS5kx
+         FMo3L3mhXA2Vq+YYQXaEYHC0Ez0QR6EBo9CfhyW7ml5McBiZX4w/zI3ZKg0XPAZbT4
+         OA71Z3sinxd6PI0WyneL7b1VfUMPXzGujt3AhL2t9p4+BsCsGog60YEEflX0pu9GKe
+         qPOqmOI/D++mQ==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        sanm@codeaurora.org
-Subject: Re: [BUG] usb: dwc3: Kernel NULL pointer dereference in dwc3_remove()
-In-Reply-To: <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
-References: <c3c75895-313a-5be7-6421-b32bac741a88@arm.com>
- <87r1hjcvf6.fsf@kernel.org> <70be179c-d36b-de6f-6efc-2888055b1312@arm.com>
- <YLi/u9J5f+nQO4Cm@kroah.com>
- <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
-Date:   Thu, 03 Jun 2021 17:35:45 +0300
-Message-ID: <877djbc8xq.fsf@kernel.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "Krogerus, Heikki" <heikki.krogerus@linux.intel.com>
+Cc:     USB <linux-usb@vger.kernel.org>
+Subject: Re: DWC3 (PCI) software node double free on shutdown
+In-Reply-To: <CAHp75Vd-5U5zgtDfM5C3Jsx51HVYB+rNcHYC2XP=G7dOd=cdTg@mail.gmail.com>
+References: <CAHp75Vd-5U5zgtDfM5C3Jsx51HVYB+rNcHYC2XP=G7dOd=cdTg@mail.gmail.com>
+Date:   Thu, 03 Jun 2021 17:39:37 +0300
+Message-ID: <874kefc8ra.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -46,135 +40,111 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-DQpIaSwNCg0KQWxleGFuZHJ1IEVsaXNlaSA8YWxleGFuZHJ1LmVsaXNlaUBhcm0uY29tPiB3cml0
-ZXM6DQo+IE9uIDYvMy8yMSAxMjo0MCBQTSwgR3JlZyBLcm9haC1IYXJ0bWFuIHdyb3RlOg0KPj4g
-T24gVGh1LCBKdW4gMDMsIDIwMjEgYXQgMTE6NDE6NDVBTSArMDEwMCwgQWxleGFuZHJ1IEVsaXNl
-aSB3cm90ZToNCj4+PiBIZWxsbyBGZWxpcGUsDQo+Pj4NCj4+PiBUaGFuayB5b3UgZm9yIGhhdmlu
-ZyBhIGxvb2shDQo+Pj4NCj4+PiBPbiA2LzMvMjEgNzozMCBBTSwgRmVsaXBlIEJhbGJpIHdyb3Rl
-Og0KPj4+PiBIaSwNCj4+Pj4NCj4+Pj4gQWxleGFuZHJ1IEVsaXNlaSA8YWxleGFuZHJ1LmVsaXNl
-aUBhcm0uY29tPiB3cml0ZXM6DQo+Pj4+PiBJJ3ZlIGJlZW4gc2VlaW5nIHRoZSBmb2xsb3dpbmcg
-cGFuaWMgd2hlbiBzaHV0dGluZyBkb3duIG15IHJvY2twcm82NDoNCj4+Pj4+DQo+Pj4+PiBbw6/C
-v8K9w6/Cv8K9IDIxLjQ1OTA2NF0geGhjaS1oY2QgeGhjaS1oY2QuMC5hdXRvOiBVU0IgYnVzIDUg
-ZGVyZWdpc3RlcmVkDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4MzA3N10gVW5hYmxlIHRvIGhh
-bmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IHZpcnR1YWwgYWRkcmVzcw0K
-Pj4+Pj4gMDAwMDAwMDAwMDAwMDBhMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODM4NThdIE1l
-bSBhYm9ydCBpbmZvOg0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODQxMDRdw6/Cv8K9w6/Cv8K9
-IEVTUiA9IDB4OTYwMDAwMDQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg0Mzc1XcOvwr/CvcOv
-wr/CvSBFQyA9IDB4MjU6IERBQlQgKGN1cnJlbnQgRUwpLCBJTCA9IDMyIGJpdHMNCj4+Pj4+IFvD
-r8K/wr3Dr8K/wr0gMjEuNjg0ODQxXcOvwr/CvcOvwr/CvSBTRVQgPSAwLCBGblYgPSAwDQo+Pj4+
-PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4NTExMV3Dr8K/wr3Dr8K/wr0gRUEgPSAwLCBTMVBUVyA9IDAN
-Cj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg1Mzg5XSBEYXRhIGFib3J0IGluZm86DQo+Pj4+PiBb
-w6/Cv8K9w6/Cv8K9IDIxLjY4NTY0NF3Dr8K/wr3Dr8K/wr0gSVNWID0gMCwgSVNTID0gMHgwMDAw
-MDAwNA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODYwMjRdw6/Cv8K9w6/Cv8K9IENNID0gMCwg
-V25SID0gMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODYyODhdIHVzZXIgcGd0YWJsZTogNGsg
-cGFnZXMsIDQ4LWJpdCBWQXMsIHBnZHA9MDAwMDAwMDAwNzU3YTAwMA0KPj4+Pj4gW8Ovwr/CvcOv
-wr/CvSAyMS42ODY4NTNdIFswMDAwMDAwMDAwMDAwMGEwXSBwZ2Q9MDAwMDAwMDAwMDAwMDAwMCwg
-cDRkPTAwMDAwMDAwMDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg3NDUyXSBJbnRl
-cm5hbCBlcnJvcjogT29wczogOTYwMDAwMDRFRU1QVCBTTVANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0g
-MjEuNjg3OTQxXSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg4
-MjE0XSBDUFU6IDQgUElEOiAxIENvbW06IHNodXRkb3duIE5vdCB0YWludGVkDQo+Pj4+PiA1LjEy
-LjAtcmM3LTAwMjYyLWc1NjgyNjJiZjU0OTIgIzMzDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4
-ODkxNV0gSGFyZHdhcmUgbmFtZTogUGluZTY0IFJvY2tQcm82NCB2Mi4wIChEVCkNCj4+Pj4+IFvD
-r8K/wr3Dr8K/wr0gMjEuNjg5MzU3XSBwc3RhdGU6IDYwMDAwMDA1IChuWkN2IGRhaWYgLVBBTiAt
-VUFPIC1UQ08gQlRZUEU9LS0pDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4OTg4NF0gcGMgOiBk
-b3duX3JlYWRfaW50ZXJydXB0aWJsZSsweGVjLzB4MjAwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
-LjY5MDMyMV0gbHIgOiBzaW1wbGVfcmVjdXJzaXZlX3JlbW92YWwrMHg0OC8weDI4MA0KPj4+Pj4g
-W8Ovwr/CvcOvwr/CvSAyMS42OTA3NjFdIHNwIDogZmZmZjgwMDAxMWY0Yjk0MA0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTEwNTNdIHgyOTogZmZmZjgwMDAxMWY0Yjk0MCB4Mjg6IGZmZmYwMDAw
-MDA4MDliNDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjkxNTIyXSB4Mjc6IGZmZmYwMDAwMDA4
-MDliOTggeDI2OiBmZmZmODAwMDExNGY1MTcwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5MTk5
-MF0geDI1OiAwMDAwMDAwMDAwMDAwMGEwIHgyNDogZmZmZjgwMDAxMWU4NDAzMA0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTI0NTldIHgyMzogMDAwMDAwMDAwMDAwMDA4MCB4MjI6IDAwMDAwMDAw
-MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjkyOTI3XSB4MjE6IGZmZmY4MDAwMTFl
-Y2FhNWMgeDIwOiBmZmZmODAwMDExZWNhYTYwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5MzM5
-NV0geDE5OiBmZmZmMDAwMDAwODA5YjQwIHgxODogZmZmZmZmZmZmZmZmZmZmZg0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTM4NjNdIHgxNzogMDAwMDAwMDAwMDAwMDAwMCB4MTY6IDAwMDAwMDAw
-MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk0MzMxXSB4MTU6IGZmZmY4MDAwOTFm
-NGJhNmQgeDE0OiAwMDAwMDAwMDAwMDAwMDA0DQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NDc5
-OV0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDAyMA0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTUyNjddIHgxMTogMDEwMTAxMDEwMTAxMDEwMSB4MTA6IDdmN2Y3Zjdm
-N2Y3ZjdmN2YNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk1NzM1XSB4OSA6IDZmNmM3NDYzNjQ3
-MTZlNjIgeDggOiA3ZjdmN2Y3ZjdmN2Y3ZjdmDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NjIw
-M10geDcgOiBmZWZlZmVmZjYzNjQ2MjZkIHg2IDogMDAwMDAwMDAwMDAwMWJkOA0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTY2NzFdIHg1IDogMDAwMDAwMDAwMDAwMDAwMCB4NCA6IDAwMDAwMDAw
-MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk3MTM4XSB4MyA6IDAwMDAwMDAwMDAw
-MDAwYTAgeDIgOiAwMDAwMDAwMDAwMDAwMDAxDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NzYw
-Nl0geDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgwIDogMDAwMDAwMDAwMDAwMDBhMA0KPj4+Pj4gW8Ov
-wr/CvcOvwr/CvSAyMS42OTgwNzVdIENhbGwgdHJhY2U6DQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
-LjY5ODI5MV3Dr8K/wr0gZG93bl9yZWFkX2ludGVycnVwdGlibGUrMHhlYy8weDIwMA0KPj4+Pj4g
-W8Ovwr/CvcOvwr/CvSAyMS42OTg2OTBdw6/Cv8K9IGRlYnVnZnNfcmVtb3ZlKzB4NjAvMHg4NA0K
-Pj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42OTkwMTZdw6/Cv8K9IGR3YzNfZGVidWdmc19leGl0KzB4
-MWMvMHg2Yw0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42OTkzNjNdw6/Cv8K9IGR3YzNfcmVtb3Zl
-KzB4MzQvMHgxYTANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk5NjcyXcOvwr/CvSBwbGF0Zm9y
-bV9yZW1vdmUrMHgyOC8weDYwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMDAwNV3Dr8K/wr0g
-X19kZXZpY2VfcmVsZWFzZV9kcml2ZXIrMHgxODgvMHgyMzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0g
-MjEuNzAwNDE0XcOvwr/CvSBkZXZpY2VfcmVsZWFzZV9kcml2ZXIrMHgyYy8weDQ0DQo+Pj4+PiBb
-w6/Cv8K9w6/Cv8K9IDIxLjcwMDc5MV3Dr8K/wr0gYnVzX3JlbW92ZV9kZXZpY2UrMHgxMjQvMHgx
-MzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzAxMTU0XcOvwr/CvSBkZXZpY2VfZGVsKzB4MTY4
-LzB4NDIwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMTQ2Ml3Dr8K/wr0gcGxhdGZvcm1fZGV2
-aWNlX2RlbC5wYXJ0LjArMHgxYy8weDkwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMTg3N13D
-r8K/wr0gcGxhdGZvcm1fZGV2aWNlX3VucmVnaXN0ZXIrMHgyOC8weDQ0DQo+Pj4+PiBbw6/Cv8K9
-w6/Cv8K9IDIxLjcwMjI5MV3Dr8K/wr0gb2ZfcGxhdGZvcm1fZGV2aWNlX2Rlc3Ryb3krMHhlOC8w
-eDEwMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDI3MTZdw6/Cv8K9IGRldmljZV9mb3JfZWFj
-aF9jaGlsZF9yZXZlcnNlKzB4NjQvMHhiNA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDMxNTNd
-w6/Cv8K9IG9mX3BsYXRmb3JtX2RlcG9wdWxhdGUrMHg0MC8weDg0DQo+Pj4+PiBbw6/Cv8K9w6/C
-v8K9IDIxLjcwMzUzOF3Dr8K/wr0gX19kd2MzX29mX3NpbXBsZV90ZWFyZG93bisweDIwLzB4ZDQN
-Cj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzAzOTQ1XcOvwr/CvSBkd2MzX29mX3NpbXBsZV9zaHV0
-ZG93bisweDE0LzB4MjANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA0MzM3XcOvwr/CvSBwbGF0
-Zm9ybV9zaHV0ZG93bisweDI4LzB4NDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA0NjgzXcOv
-wr/CvSBkZXZpY2Vfc2h1dGRvd24rMHgxNTgvMHgzMzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEu
-NzA1MDI5XcOvwr/CvSBrZXJuZWxfcG93ZXJfb2ZmKzB4MzgvMHg3Yw0KPj4+Pj4gW8Ovwr/CvcOv
-wr/CvSAyMS43MDUzNzJdw6/Cv8K9IF9fZG9fc3lzX3JlYm9vdCsweDE2Yy8weDJhMA0KPj4+Pj4g
-W8Ovwr/CvcOvwr/CvSAyMS43MDU3MTldw6/Cv8K9IF9fYXJtNjRfc3lzX3JlYm9vdCsweDI4LzB4
-MzQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA2MDc0XcOvwr/CvSBlbDBfc3ZjX2NvbW1vbi5j
-b25zdHByb3AuMCsweDYwLzB4MTIwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwNjQ5OV3Dr8K/
-wr0gZG9fZWwwX3N2YysweDI4LzB4OTQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA2Nzk0XcOv
-wr/CvSBlbDBfc3ZjKzB4MmMvMHg1NA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDcwNjddw6/C
-v8K9IGVsMF9zeW5jX2hhbmRsZXIrMHhhNC8weDEzMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43
-MDc0MTRdw6/Cv8K9IGVsMF9zeW5jKzB4MTcwLzB4MTgwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
-LjcwNzcxMV0gQ29kZTogYzgwNDdjNjIgMzVmZmZmODQgMTdmZmZlNWYgZjk4MDAwNzEgKGM4NWZm
-YzYwKQ0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDgyNTBdIC0tLVsgZW5kIHRyYWNlIDVhZTA4
-MTQ3NTQyZWI0NjggXS0tLQ0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDg2NjddIEtlcm5lbCBw
-YW5pYyAtIG5vdCBzeW5jaW5nOiBBdHRlbXB0ZWQgdG8ga2lsbCBpbml0ISBleGl0Y29kZT0weDAw
-MDAwMDBiDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwOTQ1Nl0gS2VybmVsIE9mZnNldDogZGlz
-YWJsZWQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA5NzYyXSBDUFUgZmVhdHVyZXM6IDB4MDAy
-NDAwMjIsMjEwMDYwMGMNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzEwMTQ2XSBNZW1vcnkgTGlt
-aXQ6IDIwNDggTUINCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzEwNDQzXSAtLS1bIGVuZCBLZXJu
-ZWwgcGFuaWMgLSBub3Qgc3luY2luZzogQXR0ZW1wdGVkIHRvIGtpbGwgaW5pdCENCj4+Pj4+IGV4
-aXRjb2RlPTB4MDAwMDAwMGIgXS0tLQ0KPj4+Pj4NCj4+Pj4+IEkndmUgYmVlbiBhYmxlIHRvIGJp
-c2VjdCB0aGUgcGFuaWMgYW5kIHRoZSBvZmZlbmRpbmcgY29tbWl0IGlzIDU2ODI2MmJmNTQ5MiAo
-InVzYjoNCj4+Pj4+IGR3YzM6IGNvcmU6IEFkZCBzaHV0ZG93biBjYWxsYmFjayBmb3IgZHdjMyIp
-LiBJIGNhbiBwcm92aWRlIG1vcmUgZGlhZ25vc3RpYw0KPj4+Pj4gaW5mb3JtYXRpb24gaWYgbmVl
-ZGVkIGFuZCBJIGNhbiBoZWxwIHRlc3QgdGhlIGZpeC4NCj4+Pj4gaWYgeW91IHNpbXBseSByZXZl
-cnQgdGhhdCBjb21taXQgaW4gSEVBRCwgZG9lcyB0aGUgcHJvYmxlbSByZWFsbHkgZ28NCj4+Pj4g
-YXdheT8NCj4+PiBLZXJuZWwgYnVpbHQgZnJvbSBjb21taXQgMzI0YzkyZTVlMGVlLCB3aGljaCBp
-cyB0aGUga2VybmVsIHRpcCB0b2RheSwgdGhlIHBhbmljIGlzDQo+Pj4gdGhlcmUuIFJldmVydGlu
-ZyB0aGUgb2ZmZW5kaW5nIGNvbW1pdCwgNTY4MjYyYmY1NDkyLCBtYWtlcyB0aGUgcGFuaWMgZGlz
-YXBwZWFyLg0KPj4gV2FudCB0byBzZW5kIGEgcmV2ZXJ0IHNvIEkgY2FuIHRha2UgaXQgbm93Pw0K
-Pg0KPiBJIGNhbiBzZW5kIGEgcmV2ZXJ0LCBidXQgRmVsaXBlIHdhcyBhc2tpbmcgU2FuZGVlcCAo
-dGhlIGNvbW1pdCBhdXRob3IpIGZvciBhIGZpeCwNCj4gc28gSSdsbCBsZWF2ZSBpdCB1cCB0byBG
-ZWxpcGUgdG8gZGVjaWRlIGhvdyB0byBwcm9jZWVkLg0KDQpJJ20gb2theSB3aXRoIGEgcmV2ZXJ0
-LiBGZWVsIGZyZWUgdG8gYWRkIG15IEFja2VkLWJ5OiBGZWxpcGUgQmFsYmkNCjxiYWxiaUBrZXJu
-ZWwub3JnPiBvciBpdC4NCg0KU2FuZGVlcCwgcGxlYXNlIHNlbmQgYSBuZXcgdmVyc2lvbiB0aGF0
-IGRvZXNuJ3QgZW5jb3VudGVyIHRoZSBzYW1lDQppc3N1ZS4gTWFrZSBzdXJlIHRvIHRlc3QgYnkg
-cmVsb2FkaW5nIHRoZSBkcml2ZXIgaW4gYSB0aWdodCBsb29wIGZvcg0Kc2V2ZXJhbCBpdGVyYXRp
-b25zLg0KDQotLSANCmJhbGJpDQo=
+
+Hi,
+
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+> From time to time I see this on shutdown.
+> I suspect this happens due to the device core trying to remove
+> software nodes when it should not.
+>
+>
+> [  238.266524] ------------[ cut here ]------------
+> [  238.271357] kernfs: can not remove 'dwc3.0.auto.ulpi', no directory
+> [  238.277919] WARNING: CPU: 1 PID: 257 at fs/kernfs/dir.c:1508
+> kernfs_remove_by_name_ns+0x74/0x80
+> [  238.286970] Modules linked in: usb_f_eem u_ether libcomposite
+> spi_dln2 i2c_dln2 gpio_dln2 dln2 brcmfmac brcmut
+> il mmc_block pwm_lpss_pci pwm_lpss spi_pxa2xx_platform
+> snd_sof_pci_intel_tng snd_sof_pci snd_sof_acpi_intel_byt s
+> nd_sof_intel_ipc snd_sof_acpi snd_sof snd_sof_xtensa_dsp
+> extcon_intel_mrfld spi_pxa2xx_pci intel_mrfld_adc sdhci_
+> pci cqhci sdhci intel_mrfld_pwrbtn mmc_core intel_soc_pmic_mrfld
+> hci_uart btbcm btintel
+> [  238.325715] CPU: 1 PID: 257 Comm: init Not tainted 5.13.0-rc4+ #215
+> [  238.332254] Hardware name: Intel Corporation Merrifield/BODEGA BAY,
+> BIOS 542 2015.01.21:18.19.48
+> [  238.341363] RIP: 0010:kernfs_remove_by_name_ns+0x74/0x80
+> [  238.346922] Code: 69 a3 00 31 c0 5d 41 5c 41 5d c3 48 c7 c7 80 91
+> b8 b2 e8 0f 69 a3 00 b8 fe ff ff ff eb e7 48
+> c7 c7 f8 d5 7e b2 e8 3b f4 9c 00 <0f> 0b b8 fe ff ff ff eb d2 0f 1f 00
+> 0f 1f 44 00 00 41 57 41 56 41
+> [  238.366284] RSP: 0000:ffffb2be40293cf8 EFLAGS: 00010282
+> [  238.371752] RAX: 0000000000000000 RBX: ffff8ca40ad78440 RCX: 00000000f=
+fffdfff
+> [  238.379164] RDX: 00000000ffffdfff RSI: 00000000ffffffea RDI: 000000000=
+0000000
+> [  238.386628] RBP: ffff8ca40ad76018 R08: ffffffffb2b517a8 R09: 000000000=
+0009ffb
+> [  238.394061] R10: 00000000ffffe000 R11: 3fffffffffffffff R12: ffff8ca40=
+2cecb80
+> [  238.401480] R13: ffff8ca40ad78400 R14: 0000000000000000 R15: 000000000=
+0000000
+> [  238.408894] FS:  0000000000000000(0000) GS:ffff8ca43e300000(0063)
+> knlGS:00000000f7f9a690
+> [  238.417296] CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
+> [  238.423284] CR2: 0000000056a400dc CR3: 0000000002f36000 CR4: 000000000=
+01006e0
+> [  238.430698] Call Trace:
+> [  238.433316]  software_node_notify+0x7d/0x110
+> [  238.437828]  device_platform_notify+0x2c/0x70
+> [  238.442422]  device_del+0x1a9/0x3e0
+> [  238.446140]  device_unregister+0x16/0x60
+> [  238.450279]  dwc3_ulpi_exit+0x1a/0x30
+> [  238.454155]  dwc3_remove+0x6a/0x140
+> [  238.457920]  device_shutdown+0x15d/0x1c0
+> [  238.462070]  __do_sys_reboot.cold+0x2f/0x5b
+> [  238.466495]  ? __free_one_page+0xc6/0x330
+> [  238.470749]  ? __lock_acquire.constprop.0+0x27d/0x550
+> [  238.476067]  ? find_held_lock+0x2b/0x80
+> [  238.480124]  ? switch_fpu_return+0x48/0xf0
+> [  238.484464]  do_int80_syscall_32+0x4e/0x90
+> [  238.488785]  entry_INT80_compat+0x85/0x8a
+> [  238.493008] RIP: 0023:0xf7f17d74
+> [  238.496422] Code: 08 89 d8 5b 5e c3 53 b8 ad de e1 fe 8b 54 24 08
+> b9 69 19 12 28 e8 50 d5 ff ff 81 c3 10 af 06
+> 00 53 89 c3 b8 58 00 00 00 cd 80 <5b> 3d 00 f0 ff ff 76 0e 8b 93 b4 02
+> 00 00 f7 d8 65 89 02 83 c8 ff
+> [  238.515809] RSP: 002b:00000000ff92fa64 EFLAGS: 00000286 ORIG_RAX:
+> 0000000000000058
+> [  238.523763] RAX: ffffffffffffffda RBX: 00000000fee1dead RCX: 000000002=
+8121969
+> [  238.531228] RDX: 0000000001234567 RSI: 000000000000000f RDI: 000000005=
+66701a0
+> [  238.538642] RBP: 00000000566701a0 R08: 0000000000000000 R09: 000000000=
+0000000
+> [  238.546055] R10: 0000000000000000 R11: 0000000000000000 R12: 000000000=
+0000000
+> [  238.553464] R13: 0000000000000000 R14: 0000000000000000 R15: 000000000=
+0000000
+> [  238.560952] ---[ end trace 1339144ac23765f6 ]---
+> [  238.566393] ------------[ cut here ]------------
+> [  238.571290] refcount_t: underflow; use-after-free.
+> [  238.576360] WARNING: CPU: 0 PID: 257 at lib/refcount.c:28
+> refcount_warn_saturate+0xa6/0xf0
+> ...
+
+try removing dwc3_shutdown(). There's a known bug there and a revert of
+the offending comming shortly.
+
+=2D-=20
+balbi
 
 --=-=-=
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46MERHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjYmQf+KFPnwL3j3fKDQ4Agu3Yc1wFDyMP4fkEt
-Gw13bagAVALtsDOHR5f37rIsMMcUTwQlW0mAm2qJCltdP3+ljH2gU77C0Riioc1M
-h040X4XggNihXEBbhQT8UdqDHQ/H06NqWm6yzgGS/1rhdj9R61O74ACTXmMbc4qD
-JrK8U1+iz1mvrs/O40Ni4jQR6BmDTBujqFA8YR7uDrQTyTP3MVxyMOF/ByLLxLNM
-MNMh2y3N2iOtrcLgnSeUbQZk+opHa5cSmTNJDoFpOilsbKZCK6V/YJPCyXFpvFt0
-TZWLWOEoc59nhsmjr54qJwwXGKRwsAgxkcvzZi5s0ePg1DI7KgKTqg==
-=H6RB
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46akRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUhkzwf/TF2rbakb/76xrPpCjtMQF2+Kn/95li8y
+O93p4Xc7uVvoly9HBM7mnKFMzZy898VgOLdYDLkNodrNYm+UUInOWeEbiAfKk9Kh
+yWWvkIavG2jOKRp2hu24sG4JSZK+idzUMmF2BSjftFkmIGHuMsT608NkTBq/gYyi
+9T+IUd63exn5ilR9plEzf6M+k/NNW7hGK8URezGTXXE5kRczzFerSk8ihjCu63Pb
+fUXLGxiRaBBBiJp+WxQGTSCIXsHAzL9+VmGFSqlFrJMGNiRyCIL5A/6fKbjPjZBm
+SZ+UeHw42lgiBQ7HU8bNJpqnb8KA/BpU3KX4HtgAJWCX+YgEsFnmYA==
+=E2Et
 -----END PGP SIGNATURE-----
 --=-=-=--
