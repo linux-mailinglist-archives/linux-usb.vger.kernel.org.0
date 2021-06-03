@@ -2,129 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C65339AB8D
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 22:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DE839ACB0
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 23:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbhFCUKh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 16:10:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39578 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229656AbhFCUKf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 16:10:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E68B0611C9;
-        Thu,  3 Jun 2021 20:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622750930;
-        bh=ohus4AnUUJOspGI/25odIC8ssfkU7zAoWzsK33rRY5c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fy7QLqvlvNvV19XtoYpomwc7SWdbn2/6Af6JfFQKmOnXkyzsT3KXef7oAcH6kPNo0
-         GLwyKOBjpJ1Jb/6Ce/Jw/t1ViRXdPeurRK0ej+vZnjZrrkI/yhXlvOyI7M5y/skN4s
-         4kgLGyIALAMWRz3YGnCqJ4rjNkQch2CKA3OyyHabrPyrvmSkAP/BC7PhHvypbvZc3i
-         RfhMjmxRshaYL8K19qpFBeM32chXXhP3+Asgowcs3N/8n+UG0vjZl+Kkx4M2hH80ER
-         c2hMo/d/VQ81ju9K9rwJiuQv/tsKrDF+IeHhwGFd2uKHzn5MTwgt97WTroKvNOtn+U
-         Ncnha5C7tJUEA==
-Date:   Thu, 3 Jun 2021 22:08:47 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S230172AbhFCVX5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 17:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230131AbhFCVX5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Jun 2021 17:23:57 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0312C06174A;
+        Thu,  3 Jun 2021 14:22:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=3gdCFfcVS5DAeQU/Z/UPm4XYOW2hVv0rGemy44jz4pc=; b=B9JkKz+Hj+ISNmQf5VinUDokfJ
+        vKg7GhnYxne6upo5NC+GHks8Fbw27J77f97mYjNKZ/lQe49cqekj6Y/QBtvSbbRCltWYdCFxFcyLA
+        EuMLK/7Bn6xRZnWtVsKv3D/De1KDSFK+DUyxXsVuUw2hDdsgCvZaH1nj/kk0PXXMGbNo=;
+Received: from p200300ccff12d3001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff12:d300:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1loumy-0007AX-Fv; Thu, 03 Jun 2021 23:22:05 +0200
+Date:   Thu, 3 Jun 2021 23:22:03 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Roger Quadros <rogerq@ti.com>, Sekhar Nori <nsekhar@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 03/12] dt-bindings: soc: ti: update sci-pm-domain.yaml
- references
-Message-ID: <YLk2z0eEjX/kGpYb@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Ohad Ben-Cohen <ohad@wizery.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Roger Quadros <rogerq@ti.com>,
-        Sekhar Nori <nsekhar@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Vinod Koul <vkoul@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>, devicetree@vger.kernel.org,
-        dmaengine@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-can@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <cover.1622648507.git.mchehab+huawei@kernel.org>
- <c03020ff281054c3bd2527c510659e05fec6f181.1622648507.git.mchehab+huawei@kernel.org>
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <20210603232203.51f6293b@aktux>
+In-Reply-To: <YLcaIqqjtmizjRLL@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+        <20210527211501.70d176b4@aktux>
+        <YLCGZEan87yp9Eeq@atomide.com>
+        <20210528113715.40ff1ff9@aktux>
+        <YLcaIqqjtmizjRLL@atomide.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eSf5OGSJ/yHsEMv1"
-Content-Disposition: inline
-In-Reply-To: <c03020ff281054c3bd2527c510659e05fec6f181.1622648507.git.mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Tony,
 
---eSf5OGSJ/yHsEMv1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wed, 2 Jun 2021 08:41:54 +0300
+Tony Lindgren <tony@atomide.com> wrote:
 
-On Wed, Jun 02, 2021 at 05:43:09PM +0200, Mauro Carvalho Chehab wrote:
-> Changeset fda55c7256fe ("dt-bindings: soc: ti: Convert ti,sci-pm-domain t=
-o json schema")
-> renamed: Documentation/devicetree/bindings/soc/ti/sci-pm-domain.txt
-> to: Documentation/devicetree/bindings/soc/ti/sci-pm-domain.yaml.
->=20
-> Update the cross-references accordingly.
->=20
-> Fixes: fda55c7256fe ("dt-bindings: soc: ti: Convert ti,sci-pm-domain to j=
-son schema")
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> * Andreas Kemnade <andreas@kemnade.info> [210528 09:37]:
+> > rmmod omap2430 seems to bring back suspend current current to low
+> > currents.   
+> 
+> I wonder if the recent musb fix patch helps with this?
+> 
+> [PATCH] usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
+> https://lore.kernel.org/lkml/20210528140446.278076-1-thomas.petazzoni@bootlin.com/
+> 
+it does not help.
+I did some more experiments and found out that
+echo on >/sys/bus/platform/devices/480ab000.usb_otg_hs/power/control
+sleep 3
+before doing an rtcwake -m mem helps
+2 seconds are not long enough.
+All with usb disconnected.
 
-Acked-by: Wolfram Sang <wsa@kernel.org> # for I2C
+some debug printks inserted into omap2430.c (doing it without the echo
+on thing) [  355.643768] PM: suspend entry (deep)
+[  355.643920] Filesystems sync: 0.000 seconds
+[  355.644683] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[  355.646392] OOM killer disabled.
+[  355.646423] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[  355.648010] printk: Suspending console(s) (use no_console_suspend to debug)
+[  355.649291] musb-hdrc musb-hdrc.1.auto: omap2430 runtime_resume
+[  355.966522] musb-omap2430 480ab000.usb_otg_hs: omap2430 suspend
+[  355.966552] musb-hdrc musb-hdrc.1.auto: omap2430 runtime_suspend
+[  355.975250] musb-hdrc musb-hdrc.1.auto: omap2430 runtime_suspend
+[  355.977294] Disabling non-boot CPUs ...
+[  355.977325] Successfully put all powerdomains to target state
+[  355.979034] musb-hdrc musb-hdrc.1.auto: omap2430 runtime_resume
+[  356.244628] musb-omap2430 480ab000.usb_otg_hs: omap2430 resume
+[  356.244659] musb-hdrc musb-hdrc.1.auto: omap2430 runtime_resume
+[  356.486145] musb-hdrc musb-hdrc.1.auto: VBUS b_idle, devctl 80
+[  356.486175] musb-hdrc musb-hdrc.1.auto: VBUS Disconnect
+[  356.486175] musb-hdrc musb-hdrc.1.auto: musb_set_peripheral: already in peripheral mode: 80
 
+There are two suspends in a row, I tried to fix it but it seems not to
+be the cause for trouble. 
 
---eSf5OGSJ/yHsEMv1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmC5Ns8ACgkQFA3kzBSg
-KbYFTRAAqF9TWZ+pTISLuMKGVBuNthxVoeuiLigsWW/9vfC9QmT42WbmWQLx2hLk
-hUIQK4Yk55RT94/cD1spz/yq0xYCXbk5J0VK0kVRt7+AcswPQG07pmbdwTpOjby8
-Um5IjYunC0vYKPDfdcAW/k7ZO4SREKVCVZUBVzo5lB+eSTlUdkPdxCGS+JtLoszv
-dzik1TD9wCS2DfdC0Mur4qvX2mdfZ+EIsh4UToC0FNN/JlowD/yUrKP9YdZco6Tt
-rHMyx1u1FxLcdhSjwMxEAS613dDaKAQMjhUQYX0n41ycMBNXqnHtbhcIRNh/9pd5
-hXumHx8IyZo/BBKUBEUjBWISpr9P9VJGbuToeDZQudumri3k8nLmGgntfrrnRSup
-gmCcuPGibZbLmw6R5POgYHujlJWpW7uVPXUTJkyX1MY91o4826M6XwweA3GCcmQZ
-CYy4XfE9EgEGYCCEPPhYw6Pbk4aJ+b2gfTeimssIBO9Ep4RtHEVr4qLR5w5QBkZM
-fLVzxA/NJFc+9b4CxkWwte+j9q3Re+JgqtPJrLa21gRMdyg/ReuA6fSAyt6ktNBy
-pM+ZxgyAcuL76EoF0qLH78ssshHX7ZRRDLWtpuE+n97YPQA0niwFkPPLwfEeVOYG
-oyATxaZ1YV6BwyJYLgeYhu0TuMT/poG+nvaDeyed23Sze4Tgunk=
-=k4Kj
------END PGP SIGNATURE-----
-
---eSf5OGSJ/yHsEMv1--
+Regards,
+Andreas
