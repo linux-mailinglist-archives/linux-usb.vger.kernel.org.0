@@ -2,39 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5548E39A343
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3535639A34F
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:34:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbhFCOfH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 10:35:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41136 "EHLO mail.kernel.org"
+        id S231558AbhFCOfr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 10:35:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41416 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230138AbhFCOfH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 10:35:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC354613F1;
-        Thu,  3 Jun 2021 14:33:20 +0000 (UTC)
+        id S230446AbhFCOfq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 10:35:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EF69613D6;
+        Thu,  3 Jun 2021 14:34:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622730802;
-        bh=EjEoDnvgK2MJvh26amyQpg9t7v4gmriBNUumXz3zNBo=;
+        s=k20201202; t=1622730842;
+        bh=ePguWSm6IUi7J34haJRKbL48baqv/od3GKakWa5lKjo=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=VXMa5slI73rX3bHFoFxb33pQ940v/wxgHB1dbJTZjL/n7JIO04MbkV8pdAOhf3Xlz
-         8JcqwwUQn7duaHLT9JBq36/tlQol4KqAZZHDPzIQI5wkmNgWUqoXCeyF9nz3Pvm2sy
-         WQJlK1RQNhZfYlty9az9GhitwhjQdIuL6iMJxtZ8/AAjnvjRo73S1KvRTH+QcyJgkD
-         +rxzey5NdfD5nXpnB2sI/2/5XpP1UiNVnmx739FymrzIl8Z0kko2HfSorlRepz54TS
-         SqxmwLOpULCEIGP38cJvwIvwqlcIO/0IsJuBbIfWDvp0ip3h96WQBgfjTi+YRyxImO
-         OBOq6kIy3x/zA==
+        b=Pg6QMJVd+uqWPoQ5YTL67bi/qfHAdh47SYlgExCc7uwCMxNx9BxkcVbJNW4lFTAkh
+         hKZU11Frz4QU2/94opn3MUTlz/5iTNcgjHSgqo6JKWHJTnlp9CijdvOLj+NzlFv+QB
+         DgbS656upfoLPxf46E7n9v7NXphrCrfJ4pUd4+WJ9JNtyo28uJZJ/VKlHcFUFoonMC
+         6xzhKTRtVN2bbTvKLIqrKysQKUU1ZbheQISm3u6RN5K0wXoGhCt2xGYxfsMjsySceO
+         GZ1yfS3/9DQV1Upqn64Bg88SrwL7p1u0FfH3JMFaY0bM+GAbGcWmD7mWGBRCjfFUB5
+         8ZSCFEVgk/P6Q==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Aditya Srivastava <yashsri421@gmail.com>
-Cc:     yashsri421@gmail.com, lukas.bulwahn@gmail.com,
-        rdunlap@infradead.org, gregkh@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: gadget: udc: fix kernel-doc syntax in file headers
-In-Reply-To: <20210522115227.9977-1-yashsri421@gmail.com>
-References: <20210522115227.9977-1-yashsri421@gmail.com>
-Date:   Thu, 03 Jun 2021 17:33:13 +0300
-Message-ID: <87czt3c91y.fsf@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v1 1/1] usb: phy: isp1301: Deduplicate
+ of_find_i2c_device_by_node()
+In-Reply-To: <20210521145243.87911-1-andriy.shevchenko@linux.intel.com>
+References: <20210521145243.87911-1-andriy.shevchenko@linux.intel.com>
+Date:   Thu, 03 Jun 2021 17:33:54 +0300
+Message-ID: <87a6o7c90t.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -46,25 +45,12 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Aditya Srivastava <yashsri421@gmail.com> writes:
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
 
-> The opening comment mark '/**' is used for highlighting the beginning of
-> kernel-doc comments.
-> The header for drivers/usb/gadget/udc/trace files follows this syntax, but
-> the content inside does not comply with kernel-doc.
+> The driver is using open-coded variant of of_find_i2c_device_by_node().
+> Replace it by the actual call to the above mentioned API.
 >
-> This line was probably not meant for kernel-doc parsing, but is parsed
-> due to the presence of kernel-doc like comment syntax(i.e, '/**'), which
-> causes unexpected warning from kernel-doc.
-> For e.g., running scripts/kernel-doc -none drivers/usb/gadget/udc/trace.h
-> emits:
-> warning: expecting prototype for udc.c(). Prototype was for TRACE_SYSTEM(=
-) instead
->
-> Provide a simple fix by replacing this occurrence with general comment
-> format, i.e. '/*', to prevent kernel-doc from parsing it.
->
-> Signed-off-by: Aditya Srivastava <yashsri421@gmail.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -76,13 +62,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46CkRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUifDwgAtnFMd2i8Hm17HXt+UzjKTpBWvV88ADMj
-uimkyjbm0+77YJUzI+viw9vludqI6MrQF1/IuPgTZ29XV8ddjv5OdGytFkuwJy4J
-CvzgSFYcwLbIfN5XqqPxbnJfBW1+XpADGwcgcwUeyC86I7TaJu/8j/wl6ioE8NYd
-h/kmY5UEZslh+0I0m/wRmis8Lhf1xJM4zr7uUGdNhgqSOq2b4cXeZGObxJww1/Rp
-Ij0f6oVi6QtjPSaMr+pmqXrffP2Gk2WpFoNunEIbeEBiyifAaTRaAxf2ya9mC7Do
-OvliCxol/kn35vvnXRON2o5NP0rtcsF0VCkMgLKPaJ/bqVtMADbiIg==
-=8Y62
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46FIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjI6Af/dcHPqnojZ4vC7RuGGLl4Y12R5LYRqnO4
+71jGMI14lASrV3cp4DK2D4QkiKVxXj7VlIX2XHqoHDel5EXH4gvEG0m9k/Gjh/9K
+hvYf0H4+VhvgQFpBQPHIOklQwMsow9stfH2GDwknZ+sfVMJcm/f3xqcRTZ0ZVeWO
+2rVFcTJsezQsrN3z95mWp00YTaNHgebpiFLcyavF0JNEqtsq3gBehMCamXgTl7wk
+qnD2W1v85dM3WF+8LbLOnPowGmtEQ+ZNh34z2Wa4i/+55bCZQWB3wsnMB/9vWrU4
+s2ZL9hv4JVCIQdi9nRclc0KaAlGm/xoUbb2WU5Huz9Rk5Chxt10QIA==
+=LFRq
 -----END PGP SIGNATURE-----
 --=-=-=--
