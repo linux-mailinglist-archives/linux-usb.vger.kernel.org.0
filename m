@@ -2,40 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9453139A33A
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D409239A33B
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbhFCOdJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 10:33:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40832 "EHLO mail.kernel.org"
+        id S230396AbhFCOdj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 10:33:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40980 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230396AbhFCOdJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 10:33:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F4058613BA;
-        Thu,  3 Jun 2021 14:31:22 +0000 (UTC)
+        id S230138AbhFCOdj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 10:33:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 85F27613D6;
+        Thu,  3 Jun 2021 14:31:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622730684;
-        bh=DCOKtNXPhzHasta/XrPshyBninkqdve785rmEVRFr48=;
+        s=k20201202; t=1622730714;
+        bh=UBGXyk7ndE1fjGtd1mk2Nb/rz7PShvOAUKYBA1ioxAk=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FtSTe5q2TMuvDRtV3qcJZdSSSbN5JYoMhzcH+aU8B8x0IYZ1K4X6vX/PT1wGh6pzR
-         M5JFylLQxZtxjTzXoqO9YZECMjyvlVOnug/V3eAFzYyGFZ3+t0djBodkKH1a87tLBa
-         HaUk/1cDwbaVsUGi0fDP0TDhm3kXch+fesjIc1GtDTkGQ0wbjIRhmaR+wuUwvS06No
-         u9/gjNYiO9wL4rp+2jrTIAsCXJb9aKUmUBbCPZ8nGQLfiMq8YdN8BQrQkzvIJcyzRg
-         ICzlKlt4Y1Rq5d2G4dNe9EqNE/Z8/ykXVlBVeDqF7ie828IudJj7VOsSN9F0N9FR5x
-         FOSiMPJuWYj8Q==
+        b=O85rqZ7VNFYMK64oa4F4keq3dXEYTMJS/DERypZpETQ2uI1E9BFlhS16jkYjZCLnx
+         fN2zaYVHeHuMYSyTnE06SaqF218lpnmWxzF0rAqUvIOw069ZyZA6TlgY7RI2vXUwWA
+         SXK0jtDCF20CkN8k5Yk/6sAt8m49TksQLVz2N00NrwL9EbQwTgg9ifPWPZ+3A3MJg9
+         p8ixzKvwrz0iP00/7RRDDnfGsw3XmvG9daBObc37km2N4IcHjjnOoTDU1AVJNnEKdj
+         Ivi9w6dnT9CRPSYsxCapH9QIQXOHBtPSLc3bjlOLPNDtaJsDN//hJYZxjBpQwx2z4G
+         xMRLdNXe6NAAg==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>
-Subject: Re: [PATCH] USB: gadget: pxa27x_udc: remove dentry storage for
+        Kevin Cernekee <cernekee@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bcm-kernel-feedback-list@broadcom.com
+Subject: Re: [PATCH] USB: gadget: bcm63xx_udc: remove dentry storage for
  debugfs file
-In-Reply-To: <20210525171636.758758-1-gregkh@linuxfoundation.org>
-References: <20210525171636.758758-1-gregkh@linuxfoundation.org>
-Date:   Thu, 03 Jun 2021 17:31:15 +0300
-Message-ID: <87im2vc958.fsf@kernel.org>
+In-Reply-To: <20210525171508.758365-1-gregkh@linuxfoundation.org>
+References: <20210525171508.758365-1-gregkh@linuxfoundation.org>
+Date:   Thu, 03 Jun 2021 17:31:43 +0300
+Message-ID: <87fsxzc94g.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -54,10 +53,9 @@ Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 > lookup for us instead, saving us some trouble, and making things smaller
 > overall.
 >
-> Cc: Daniel Mack <daniel@zonque.org>
-> Cc: Haojian Zhuang <haojian.zhuang@gmail.com>
-> Cc: Robert Jarzmik <robert.jarzmik@free.fr>
+> Cc: Kevin Cernekee <cernekee@gmail.com>
 > Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: bcm-kernel-feedback-list@broadcom.com
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
@@ -70,13 +68,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC457MRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjrFggApMC8N7gsBp28Ylucsbc13VhSMzLm6Vbf
-2iKTE1lotxw9ytgWmh9buBOwIQ75Kg0KIayn+KZc34WHaCdj8Z1xm5mYthF+WGJ2
-PXXHXVeTnGGuXZ1UWiJOgzyQSo9hFIIKHrCLGNj9E/BeJqII1UoCDoaTLt91k3kZ
-JRM4DCCVN5j/QyF+Y+7LyVWPPy/2rFXA7vH9niuB4iQgSoTzrSXEsCvykuM1Ues9
-DWkzoUyo2nRa2i+Yr/Hnpfx5gY5qbq/PS523CvUG7D8Mvy/nl5YOJdSyDK5bCzjH
-TD9ZUeyW6x4rE8xihO7xN+LVOausbvoW4r6VEkLC2TRaGNTrGCSPoA==
-=aCSN
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC4588RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUgpGgf8DbcQpPZ1fLAvCTQqsZBSFThA6ZNbkq+f
+nw70XCpLWu3MTKaxTGTP8zG397Yaiv+RiVTx+t7xfvqSY3HJyJ/WKruLerXI/k5d
+wEXxsQo4rjFQiS5zgRGkLBWL5Kwi9IGnb7/NNRDuNp1Z/iRUi3YGhHqRLxnqgdkC
+B6S2gcL7J/pUvhZj5vV1LEf4YsZ9PPAyQscpKvZngVeEbRE9QdfN0bck48wC+Eix
+HQhMh/Ie0vIbrmWuMBBORQwYdf7mSkyW87DN1C3D6k/TTZgSrv8V2BZSFFQKYx/8
+kzhixzolRQLf29EbIx30JOiumvjSQsjuaQo/D0rhglnZQ10kbnZEUg==
+=ot3V
 -----END PGP SIGNATURE-----
 --=-=-=--
