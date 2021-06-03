@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9117F39A786
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 19:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5475E39A791
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 19:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbhFCRLh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 13:11:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41578 "EHLO mail.kernel.org"
+        id S232601AbhFCRLn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 13:11:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43188 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232006AbhFCRKf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 13:10:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A5A4761419;
-        Thu,  3 Jun 2021 17:08:47 +0000 (UTC)
+        id S232377AbhFCRLJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 13:11:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1934D613F5;
+        Thu,  3 Jun 2021 17:09:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622740128;
-        bh=wwXUwKHbLDpF5UpiiabWtpShGyTWaPFaME3eCV6rXWY=;
+        s=k20201202; t=1622740164;
+        bh=s3T6XzQrXmGtouIWXobmm95hU9ShL+Xes/nlsb2ufZA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V9B+8QrFhE2+HrLrZkV0txmJAHKccmGvO8j6PRB8MC+5EFWkhRZU4ZiYXJapsW1JM
-         A2w0xbACtX3CdifQW2fsV87Z6guklsZR0nJe07KMy+1PCQ1diimmpkNIPOioVABB1Q
-         YXpSTri4OH1ZcSX2b5lOnaOPgRwZdUvoMI9gMXjeMzeKIJ+Yc0ofiODjrAcKyJLyxB
-         jJcrYoaTsEvTDU5QFizSOg8xxb171p5WNX7iDnz1iaUMFPpl4aNu2c8KHo71bu/k5J
-         SlyyFiOm+o086nwbCJsytOLAt8/iMAWtoW5XdyBuZMsE24Ju4qxOGj7tWdINS+MpA1
-         TtYiPzvwsHm9g==
+        b=hhkYCe3w6E2P2SqTWgGVs3UHT168SlqKuwgPmb0cuv4/gRqnRJAlJ+pisFpVmpMMp
+         TNLmVynorZ0oH269KlULl41l/YhtlNJyzKBhXxQ+ohS7bsVUKWHYysYcDzJOfJ7ici
+         H/T0zTqyqu8FCmzbvxHMHfTrAdZb7Qf8IX8hiIG0GxxanflAniDwgf83K1e5iXZwH4
+         aBgpOVcjWkUXsV/i6sevgWjOhb6jqF4fGE2n+N3R8oIwajlrQVQJ+UmBAIhVFgi+q7
+         3zd9v+l0YjnCqNn5tCZ+7sr+4NnxRq3fL22rE5ghBGA7xTf9khuzHzhUdKxlTQcWt0
+         EAXe5oKBPzmaQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Li Jun <jun.li@nxp.com>, "faqiang . zhu" <faqiang.zhu@nxp.com>,
-        Peter Chen <peter.chen@kernel.org>,
+Cc:     Dinghao Liu <dinghao.liu@zju.edu.cn>,
+        Peter Chen <peter.chen@nxp.com>,
+        Felipe Balbi <balbi@kernel.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 15/39] usb: chipidea: udc: assign interrupt number to USB gadget structure
-Date:   Thu,  3 Jun 2021 13:08:05 -0400
-Message-Id: <20210603170829.3168708-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 04/31] usb: cdns3: Fix runtime PM imbalance on error
+Date:   Thu,  3 Jun 2021 13:08:52 -0400
+Message-Id: <20210603170919.3169112-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210603170829.3168708-1-sashal@kernel.org>
-References: <20210603170829.3168708-1-sashal@kernel.org>
+In-Reply-To: <20210603170919.3169112-1-sashal@kernel.org>
+References: <20210603170919.3169112-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,101 +43,38 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+From: Dinghao Liu <dinghao.liu@zju.edu.cn>
 
-[ Upstream commit 9e3927f6373da54cb17e17f4bd700907e1123d2f ]
+[ Upstream commit e5b913496099527abe46e175e5e2c844367bded0 ]
 
-Chipidea also need sync interrupt before unbind the udc while
-gadget remove driver, otherwise setup irq handling may happen
-while unbind, see below dump generated from android function
-switch stress test:
+pm_runtime_get_sync() increments the runtime PM usage counter even
+when it returns an error code. Thus a pairing decrement is needed on
+the error handling path to keep the counter balanced.
 
-[ 4703.503056] android_work: sent uevent USB_STATE=CONNECTED
-[ 4703.514642] android_work: sent uevent USB_STATE=DISCONNECTED
-[ 4703.651339] android_work: sent uevent USB_STATE=CONNECTED
-[ 4703.661806] init: Control message: Processed ctl.stop for 'adbd' from pid: 561 (system_server)
-[ 4703.673469] init: processing action (init.svc.adbd=stopped) from (/system/etc/init/hw/init.usb.configfs.rc:14)
-[ 4703.676451] Unable to handle kernel read from unreadable memory at virtual address 0000000000000090
-[ 4703.676454] Mem abort info:
-[ 4703.676458]   ESR = 0x96000004
-[ 4703.676461]   EC = 0x25: DABT (current EL), IL = 32 bits
-[ 4703.676464]   SET = 0, FnV = 0
-[ 4703.676466]   EA = 0, S1PTW = 0
-[ 4703.676468] Data abort info:
-[ 4703.676471]   ISV = 0, ISS = 0x00000004
-[ 4703.676473]   CM = 0, WnR = 0
-[ 4703.676478] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004a867000
-[ 4703.676481] [0000000000000090] pgd=0000000000000000, p4d=0000000000000000
-[ 4703.676503] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[ 4703.758297] Modules linked in: synaptics_dsx_i2c moal(O) mlan(O)
-[ 4703.764327] CPU: 0 PID: 235 Comm: lmkd Tainted: G        W  O      5.10.9-00001-g3f5fd8487c38-dirty #63
-[ 4703.773720] Hardware name: NXP i.MX8MNano EVK board (DT)
-[ 4703.779033] pstate: 60400085 (nZCv daIf +PAN -UAO -TCO BTYPE=--)
-[ 4703.785046] pc : _raw_write_unlock_bh+0xc0/0x2c8
-[ 4703.789667] lr : android_setup+0x4c/0x168
-[ 4703.793676] sp : ffff80001256bd80
-[ 4703.796989] x29: ffff80001256bd80 x28: 00000000000000a8
-[ 4703.802304] x27: ffff800012470000 x26: ffff80006d923000
-[ 4703.807616] x25: ffff800012471000 x24: ffff00000b091140
-[ 4703.812929] x23: ffff0000077dbd38 x22: ffff0000077da490
-[ 4703.818242] x21: ffff80001256be30 x20: 0000000000000000
-[ 4703.823554] x19: 0000000000000080 x18: ffff800012561048
-[ 4703.828867] x17: 0000000000000000 x16: 0000000000000039
-[ 4703.834180] x15: ffff8000106ad258 x14: ffff80001194c277
-[ 4703.839493] x13: 0000000000003934 x12: 0000000000000000
-[ 4703.844805] x11: 0000000000000000 x10: 0000000000000001
-[ 4703.850117] x9 : 0000000000000000 x8 : 0000000000000090
-[ 4703.855429] x7 : 6f72646e61203a70 x6 : ffff8000124f2450
-[ 4703.860742] x5 : ffffffffffffffff x4 : 0000000000000009
-[ 4703.866054] x3 : ffff8000108a290c x2 : ffff00007fb3a9c8
-[ 4703.871367] x1 : 0000000000000000 x0 : 0000000000000090
-[ 4703.876681] Call trace:
-[ 4703.879129]  _raw_write_unlock_bh+0xc0/0x2c8
-[ 4703.883397]  android_setup+0x4c/0x168
-[ 4703.887059]  udc_irq+0x824/0xa9c
-[ 4703.890287]  ci_irq+0x124/0x148
-[ 4703.893429]  __handle_irq_event_percpu+0x84/0x268
-[ 4703.898131]  handle_irq_event+0x64/0x14c
-[ 4703.902054]  handle_fasteoi_irq+0x110/0x210
-[ 4703.906236]  __handle_domain_irq+0x8c/0xd4
-[ 4703.910332]  gic_handle_irq+0x6c/0x124
-[ 4703.914081]  el1_irq+0xdc/0x1c0
-[ 4703.917221]  _raw_spin_unlock_irq+0x20/0x54
-[ 4703.921405]  finish_task_switch+0x84/0x224
-[ 4703.925502]  __schedule+0x4a4/0x734
-[ 4703.928990]  schedule+0xa0/0xe8
-[ 4703.932132]  do_notify_resume+0x150/0x184
-[ 4703.936140]  work_pending+0xc/0x40c
-[ 4703.939633] Code: d5384613 521b0a69 d5184609 f9800111 (885ffd01)
-[ 4703.945732] ---[ end trace ba5c1875ae49d53c ]---
-[ 4703.950350] Kernel panic - not syncing: Oops: Fatal exception in interrupt
-[ 4703.957223] SMP: stopping secondary CPUs
-[ 4703.961151] Kernel Offset: disabled
-[ 4703.964638] CPU features: 0x0240002,2000200c
-[ 4703.968905] Memory Limit: none
-[ 4703.971963] Rebooting in 5 seconds..
-
-Tested-by: faqiang.zhu <faqiang.zhu@nxp.com>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Link: https://lore.kernel.org/r/1620989984-7653-1-git-send-email-jun.li@nxp.com
-Signed-off-by: Peter Chen <peter.chen@kernel.org>
+Reviewed-by: Peter Chen <peter.chen@nxp.com>
+Signed-off-by: Dinghao Liu <dinghao.liu@zju.edu.cn>
+Signed-off-by: Felipe Balbi <balbi@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/chipidea/udc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/cdns3/gadget.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 60ea932afe2b..5f35cdd2cf1d 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -2055,6 +2055,7 @@ static int udc_start(struct ci_hdrc *ci)
- 	ci->gadget.name         = ci->platdata->name;
- 	ci->gadget.otg_caps	= otg_caps;
- 	ci->gadget.sg_supported = 1;
-+	ci->gadget.irq		= ci->irq;
+diff --git a/drivers/usb/cdns3/gadget.c b/drivers/usb/cdns3/gadget.c
+index c0c39cf30387..f32f00c49571 100644
+--- a/drivers/usb/cdns3/gadget.c
++++ b/drivers/usb/cdns3/gadget.c
+@@ -2706,8 +2706,10 @@ static int __cdns3_gadget_init(struct cdns3 *cdns)
+ 	pm_runtime_get_sync(cdns->dev);
  
- 	if (ci->platdata->flags & CI_HDRC_REQUIRES_ALIGNED_DMA)
- 		ci->gadget.quirk_avoids_skb_reserve = 1;
+ 	ret = cdns3_gadget_start(cdns);
+-	if (ret)
++	if (ret) {
++		pm_runtime_put_sync(cdns->dev);
+ 		return ret;
++	}
+ 
+ 	/*
+ 	 * Because interrupt line can be shared with other components in
 -- 
 2.30.2
 
