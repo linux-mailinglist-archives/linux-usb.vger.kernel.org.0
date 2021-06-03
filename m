@@ -2,82 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EAB39A9EC
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 20:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B5639AB50
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 22:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbhFCSX1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 14:23:27 -0400
-Received: from mail-ej1-f52.google.com ([209.85.218.52]:35555 "EHLO
-        mail-ej1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbhFCSX0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Jun 2021 14:23:26 -0400
-Received: by mail-ej1-f52.google.com with SMTP id h24so10665177ejy.2;
-        Thu, 03 Jun 2021 11:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ADVoquzaV0LEIwvO5Q6pqef0DTPmXc23DXJhuut77RA=;
-        b=D3lf5UiTa9SvEkPsI7imOnzwWcIjbYO0/a3Jg5VFaj5MCXTyhcZE8yWE3TahpqWTaL
-         BtMiAQBRWV/HT2ZqmwV7DKqnRaAV5z89xM8bYnRlgXqiu7qHGs7hCIHq+dNPV2h0ycmg
-         4Wtv2CqkZFuFOjJVuZCM30nlPpJpaaG7Loc+TycbjPboJkkVo4Tl3JcPO5kdIZRw8BBA
-         RVoQ6Nyh55iZXVVaADPdjkCwz09FJZwxSlbZ1AzWI6JdaymZWSKH7GVAdiJwluQthYRw
-         jRDjtjPiCB59t1wPaKFngQ9RNCNxLtF09VgWweFwVT+wnBpFOTI0+kiodG4m0gqCsg3b
-         P7IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ADVoquzaV0LEIwvO5Q6pqef0DTPmXc23DXJhuut77RA=;
-        b=MnVo3j+3Du0/JtHDFP0PJMlrpxi1hGMX5fA6yyDR6dOmJ/tGNrf6YCQ/MZPmgck5CN
-         HQbhPQvdqw/0o0SChUAgGTZGtrrN0jzQbNZSA98veOWertYCZ5u5ANRqZ057C5JFtG9h
-         h3plSLPM6GSPauDY+TVuDOSwIx0jQmMWOLNqXBGKPj+AZXeBvmtkaxxRfVAlNSeLvoCS
-         Pq/TsOxS5Fk0feBC3Geqz7nbEhcyGoEYz5BeOhdw1q6fXDfWbCMiM5VTa/b1bCFgnSc0
-         Klho4RnSkWHjTcI9swWd9/4GUM24joRBdH+zpECu259dXN608yocIHVjOfjPOxuJ04n/
-         3DhA==
-X-Gm-Message-State: AOAM532Ho9iCyljpu/lHGnieNk/qUBvynG72QIP+k/Q1IY0/iRjTY117
-        +g1+nfJH+YGwmNr2WDI+Vj80i4nhYhRCz+BdtitOiS6kt7A=
-X-Google-Smtp-Source: ABdhPJw2MzrYlh8vu+LAt1q2tmMgENbP3bjmsOtbZJwHu9NzmzZmm5ZNkJTKCubMB3ZXF/AlchDhFRYZtvDSHiIspiI=
-X-Received: by 2002:a17:907:2d8d:: with SMTP id gt13mr633877ejc.162.1622744440824;
- Thu, 03 Jun 2021 11:20:40 -0700 (PDT)
+        id S230124AbhFCUC2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 16:02:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37486 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230078AbhFCUC1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 16:02:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E5E226140A;
+        Thu,  3 Jun 2021 20:00:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622750441;
+        bh=bL91cu6ogtTyGxRPIZri6Ql+FCiu+SF6QSQHbM1zYpU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Tr2eRL2ruuI3sDRg5RflhkOkyV9mFTujf1VRSwWuWzGKIhZvbVCaAxYpgxsOn967z
+         NSAD7IYMIoOO8cgexRa8htj5TMa5JoT3Wkv0szF26PJNQMzsXvJWAGYrsny6UgxWOB
+         0DSG8won1tshR1VxRhArAz/SO25OQjYrnL5dyQS242aahuCLuEtgIYx6YTOuGDajz0
+         VHL9LXHRxKII0rPps4b8g2l1RYIZFPwbgL/Xx11gmnvOpzM53mf3Uy04x4VbkhOV+Z
+         glYdnkCOfixzeKFSHUpB7CAwyKWxHMoZF81Ql2bUy103FcIKpKZNrY/s3wN0K43mHs
+         i4TDGELShuacg==
+Received: by mail-ej1-f51.google.com with SMTP id a11so10323612ejf.3;
+        Thu, 03 Jun 2021 13:00:41 -0700 (PDT)
+X-Gm-Message-State: AOAM532vyxjdQayA5RHN/BZ3eSM5VLUqqhLnZp8Z0LjUv6v41+SWwB5I
+        gzz1Ys23MifmIGCwdrRsLZQ4Ow6jF77dUPl5Hg==
+X-Google-Smtp-Source: ABdhPJw+IpYqfuukI2sJnNmANmuAWrENFVxO3xUzzlu0fu/6+LhA82SGF/btdHtPoNYDNnkITP5uV0NhDBINu7IILPI=
+X-Received: by 2002:a17:906:1d0a:: with SMTP id n10mr868094ejh.341.1622750440433;
+ Thu, 03 Jun 2021 13:00:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210601084830.260196-1-narmstrong@baylibre.com>
-In-Reply-To: <20210601084830.260196-1-narmstrong@baylibre.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 3 Jun 2021 20:20:30 +0200
-Message-ID: <CAFBinCDeo=Mc=hjSuan_zE=SsZnz=vdjOwBY178PTnNcJBJK0g@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3-meson-g12a: fix usb2 PHY glue init when phy0 is disabled
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cover.1622648507.git.mchehab+huawei@kernel.org>
+In-Reply-To: <cover.1622648507.git.mchehab+huawei@kernel.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 3 Jun 2021 15:00:29 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Message-ID: <CAL_JsqKLwfgj1khYFxTykjaYPjbNRd=Ajr-bfEnNYY0cu0Z18A@mail.gmail.com>
+Subject: Re: [PATCH 00/12] Fix broken docs references at next-20210602
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Keerthy <j-keerthy@ti.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Mark Brown <broonie@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Peter Rosin <peda@axentia.se>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-can@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 1, 2021 at 10:49 AM Neil Armstrong <narmstrong@baylibre.com> wrote:
+On Wed, Jun 2, 2021 at 10:43 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
 >
-> When only PHY1 is used (for example on Odroid-HC4), the regmap init code
-> uses the usb2 ports when doesn't initialize the PHY1 regmap entry.
+> There are some broken references at today's linux-next with regards
+> to files inside Documentation/.
 >
-> This fixes:
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000020
-> ...
-> pc : regmap_update_bits_base+0x40/0xa0
-> lr : dwc3_meson_g12a_usb2_init_phy+0x4c/0xf8
-> ...
-> Call trace:
-> regmap_update_bits_base+0x40/0xa0
-> dwc3_meson_g12a_usb2_init_phy+0x4c/0xf8
-> dwc3_meson_g12a_usb2_init+0x7c/0xc8
-> dwc3_meson_g12a_usb_init+0x28/0x48
-> dwc3_meson_g12a_probe+0x298/0x540
-> platform_probe+0x70/0xe0
-> really_probe+0xf0/0x4d8
-> driver_probe_device+0xfc/0x168
-> ...
->
-> Fixes: 013af227f58a97 ("usb: dwc3: meson-g12a: handle the phy and glue registers separately")
-> Signed-off-by: Neil Armstrong <narmstrong@baylibre.com>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Address them.
+
+I've finally added this to my automated checks, so now anyone that
+breaks this on binding schema patches should get notified (with the
+exception of patches not Cc'ed to the DT list).
+
+Rob
