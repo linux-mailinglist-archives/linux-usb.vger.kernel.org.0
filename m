@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA88399A8C
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 08:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F22399A90
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 08:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbhFCGVH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 02:21:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42310 "EHLO mail.kernel.org"
+        id S229707AbhFCGX6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 02:23:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44700 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229667AbhFCGVH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 02:21:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BFFCE6100A;
-        Thu,  3 Jun 2021 06:19:21 +0000 (UTC)
+        id S229635AbhFCGX6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 02:23:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 34DCA610CB;
+        Thu,  3 Jun 2021 06:22:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622701163;
-        bh=epzZlkMg9+AF90DX6Ya+DaGXInmYp9+trcjFwb56wg8=;
+        s=k20201202; t=1622701334;
+        bh=7Yo+XPCnHCNrluC6WJ7gXv6X2E0WIGde6sR5bmXupbE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=J1CjHf9OCdcl/H9dkWKaYxwVkl18/L+2WA0Hk7nCvJ/ZymLp0gqfDl9t3g3UJaxop
-         zU3m5B6O0Oo8QVsAlyvg4M4/f5U58hn/o7hxVa4jN45AzfMXxXaJAlJ/VmH0ODoe8Z
-         JW3fBTopGWOpQ892PyAFI8CJCgjcVa1CTdmQRb5nSpP9ME8SYDQkK03ZXWUJ+qG34K
-         Zc6JTjWbKHXqlmLAJFVD2wBMDHm9fFVw24SSn1AxiJhvSoFzHCj1KaQ6XY6v8gthHP
-         YpGBR+r3gs2aPwYTEg3PLWNX3Wd02c4m19PIWBjBQ2l7D+u9sqYnq7rJFai6zMgPCo
-         5ZmT1wV0qMOwQ==
+        b=u/3dn2xK63jegxkyw/+exuROa/TA60SGr72TDfe6qgmxtvhLkzqAGBAyUEbGTgBvl
+         qdEBCH6CdBA6ja43fQZtNIVzUpunHmK6hqUOZ1N9v0Wa3zl9wFtb/G9yorTugD+Yru
+         PkKmcWSvHouSnOD3vv1LpBLRxRIJBuyP3T02TAPj1hjtu1axGGTXAMWwwJUuaLr9kJ
+         Xv0+3/o/L/TP/gw8v8STt+FGHdaRSQ2yVKe5yfD8b160w20yyQV+IDiq2Eeo64kbyo
+         bW88je0h35utwOS7fKbimu78MHHl4Wabid3pPHLs714TTXTE10ynquxe4WVqJp0E6L
+         0PZOK4n8HZuoQ==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Subject: Re: [PATCH 3/3] USB: gadget: drop irq-flags initialisations
-In-Reply-To: <20210519093303.10789-4-johan@kernel.org>
-References: <20210519093303.10789-1-johan@kernel.org>
- <20210519093303.10789-4-johan@kernel.org>
-Date:   Thu, 03 Jun 2021 09:19:09 +0300
-Message-ID: <87zgw7cvxe.fsf@kernel.org>
+To:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Jon Hunter <jonathanh@nvidia.com>
+Subject: Re: [PATCH 1/2] usb: gadget: tegra-xudc: Don't print error on probe
+ deferral
+In-Reply-To: <20210519163553.212682-1-jonathanh@nvidia.com>
+References: <20210519163553.212682-1-jonathanh@nvidia.com>
+Date:   Thu, 03 Jun 2021 09:22:06 +0300
+Message-ID: <87wnrbcvsh.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -45,16 +46,17 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
-Johan Hovold <johan@kernel.org> writes:
+Jon Hunter <jonathanh@nvidia.com> writes:
 
-> There's no need to initialise irq-flags variables before saving the
-> interrupt state.
+> The Tegra XUDC driver prints the following error when deferring probe
+> if the USB PHY is not found ...
 >
-> Drop the redundant initialisations from drivers that got this wrong.
+>  ERR KERN tegra-xudc 3550000.usb: failed to get usbphy-0: -517
 >
-> Cc: Li Yang <leoyang.li@nxp.com>
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
+> Deferring probe can be normal and so update to driver to avoid printing
+> this error if probe is being deferred.
+>
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -66,13 +68,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC4dF0RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUhBEwgAuPyUcqpIpRhPjoUAY0L+AywXlN7zDqLO
-xsm5hGpKTtt7juaQ95Sj4UpxgBuksFlB1VZ0i3Dsy0x3EiKexCMCx500o26rLm2u
-f2L58wRkCH+o3NUU+zHKzeAmRDEgxz/mrOlQkc1GTjbyAFTDIjCsq7OttRl4lGM9
-vIAUjV8GBAGa/yvgtyFFLCe9m5Jq6a+odod9RWYd++H/aX+XNlNQWfWlehVY0ISR
-/u1UXy1JcoIV1WejxifqspM1ktibDcspOjiylzQu/XMiUVEzjZjQba0L3uvVuOlB
-FylO1vLrjCpvc2aTZo3NJjG6CBnsz5WabLES2Nei3Q59YXAPO7hiUQ==
-=hdG9
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC4dQ4RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUhlgggAmOPCyo++9COGDOkUvGUYvPTk6eVfLOGF
+PSagvfzdPzTN1qBJzy7j7ypR9r8iKm3GS/ZGRb/TfC0DLgRQAiYtQDjkrY7WUhSi
+lwWWv6nODKy5/z/8L3VGeD3+UEqsMk31z2vLKBLE34LFDZOhZcnPbPegLhbdaEsW
+/SWQC2Ss9dcaybluvvaQOglUzcscDKSFMkTSCgjEV8lZWxXwjjqoa45IEY31gW/y
+M7MvmwO3+35p/dmv0bXG1OFhC5LEmdXcH5Y/eVi0tu5aC8x1R6HyWjfgJGUzH083
+UwCOdupfxlogUMHVjZ/Ycy9lalrmUFRW1RjHOa+Ea/acnQl/R6N4Kw==
+=ZuZt
 -----END PGP SIGNATURE-----
 --=-=-=--
