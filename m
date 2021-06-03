@@ -2,38 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3535639A34F
-	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2047139A367
+	for <lists+linux-usb@lfdr.de>; Thu,  3 Jun 2021 16:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231558AbhFCOfr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 10:35:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41416 "EHLO mail.kernel.org"
+        id S231760AbhFCOhj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 10:37:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230446AbhFCOfq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 3 Jun 2021 10:35:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1EF69613D6;
-        Thu,  3 Jun 2021 14:34:00 +0000 (UTC)
+        id S231539AbhFCOhi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 10:37:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C035613F1;
+        Thu,  3 Jun 2021 14:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622730842;
-        bh=ePguWSm6IUi7J34haJRKbL48baqv/od3GKakWa5lKjo=;
+        s=k20201202; t=1622730953;
+        bh=pPTuoKWX4d7acsLmcXrA1+Gnm3Uox3TQwafM4ulr3Kc=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Pg6QMJVd+uqWPoQ5YTL67bi/qfHAdh47SYlgExCc7uwCMxNx9BxkcVbJNW4lFTAkh
-         hKZU11Frz4QU2/94opn3MUTlz/5iTNcgjHSgqo6JKWHJTnlp9CijdvOLj+NzlFv+QB
-         DgbS656upfoLPxf46E7n9v7NXphrCrfJ4pUd4+WJ9JNtyo28uJZJ/VKlHcFUFoonMC
-         6xzhKTRtVN2bbTvKLIqrKysQKUU1ZbheQISm3u6RN5K0wXoGhCt2xGYxfsMjsySceO
-         GZ1yfS3/9DQV1Upqn64Bg88SrwL7p1u0FfH3JMFaY0bM+GAbGcWmD7mWGBRCjfFUB5
-         8ZSCFEVgk/P6Q==
+        b=e9VHqGAnGRelCzpKXym98XkeVsTq/Wsf54M0iBoVdJ3DFy+gOyNOeiIUvQ++zgyvq
+         VpLR33KVJWeIbAzS2Jof5fGYNIyrFeQstCQOqhJEtkSzh8aP1XUBuap8jcEHcCzLPW
+         xgakhwoQYrUNj1N1cEVYsmvO1E8mBEieV5ZN3IjczHc/RW2V0f+ISZC0g7G8K5IY+v
+         58OZsMJY+xSxQETCdgKq2tZtdWc9AJWmQpR6+rL/sGvMEmUQe649MQxKX0oOEZA13U
+         R7SQxxILd/xg0WRfhxNPCLBQoFgZ9r17UTDbjzm1t/4g87bzyJFShzUtxPixY1sbqH
+         CD6kryvGJoICg==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 1/1] usb: phy: isp1301: Deduplicate
- of_find_i2c_device_by_node()
-In-Reply-To: <20210521145243.87911-1-andriy.shevchenko@linux.intel.com>
-References: <20210521145243.87911-1-andriy.shevchenko@linux.intel.com>
-Date:   Thu, 03 Jun 2021 17:33:54 +0300
-Message-ID: <87a6o7c90t.fsf@kernel.org>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        sanm@codeaurora.org
+Subject: Re: [BUG] usb: dwc3: Kernel NULL pointer dereference in dwc3_remove()
+In-Reply-To: <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
+References: <c3c75895-313a-5be7-6421-b32bac741a88@arm.com>
+ <87r1hjcvf6.fsf@kernel.org> <70be179c-d36b-de6f-6efc-2888055b1312@arm.com>
+ <YLi/u9J5f+nQO4Cm@kroah.com>
+ <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
+Date:   Thu, 03 Jun 2021 17:35:45 +0300
+Message-ID: <877djbc8xq.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -42,33 +46,135 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> writes:
-
-> The driver is using open-coded variant of of_find_i2c_device_by_node().
-> Replace it by the actual call to the above mentioned API.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
+DQpIaSwNCg0KQWxleGFuZHJ1IEVsaXNlaSA8YWxleGFuZHJ1LmVsaXNlaUBhcm0uY29tPiB3cml0
+ZXM6DQo+IE9uIDYvMy8yMSAxMjo0MCBQTSwgR3JlZyBLcm9haC1IYXJ0bWFuIHdyb3RlOg0KPj4g
+T24gVGh1LCBKdW4gMDMsIDIwMjEgYXQgMTE6NDE6NDVBTSArMDEwMCwgQWxleGFuZHJ1IEVsaXNl
+aSB3cm90ZToNCj4+PiBIZWxsbyBGZWxpcGUsDQo+Pj4NCj4+PiBUaGFuayB5b3UgZm9yIGhhdmlu
+ZyBhIGxvb2shDQo+Pj4NCj4+PiBPbiA2LzMvMjEgNzozMCBBTSwgRmVsaXBlIEJhbGJpIHdyb3Rl
+Og0KPj4+PiBIaSwNCj4+Pj4NCj4+Pj4gQWxleGFuZHJ1IEVsaXNlaSA8YWxleGFuZHJ1LmVsaXNl
+aUBhcm0uY29tPiB3cml0ZXM6DQo+Pj4+PiBJJ3ZlIGJlZW4gc2VlaW5nIHRoZSBmb2xsb3dpbmcg
+cGFuaWMgd2hlbiBzaHV0dGluZyBkb3duIG15IHJvY2twcm82NDoNCj4+Pj4+DQo+Pj4+PiBbw6/C
+v8K9w6/Cv8K9IDIxLjQ1OTA2NF0geGhjaS1oY2QgeGhjaS1oY2QuMC5hdXRvOiBVU0IgYnVzIDUg
+ZGVyZWdpc3RlcmVkDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4MzA3N10gVW5hYmxlIHRvIGhh
+bmRsZSBrZXJuZWwgTlVMTCBwb2ludGVyIGRlcmVmZXJlbmNlIGF0IHZpcnR1YWwgYWRkcmVzcw0K
+Pj4+Pj4gMDAwMDAwMDAwMDAwMDBhMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODM4NThdIE1l
+bSBhYm9ydCBpbmZvOg0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODQxMDRdw6/Cv8K9w6/Cv8K9
+IEVTUiA9IDB4OTYwMDAwMDQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg0Mzc1XcOvwr/CvcOv
+wr/CvSBFQyA9IDB4MjU6IERBQlQgKGN1cnJlbnQgRUwpLCBJTCA9IDMyIGJpdHMNCj4+Pj4+IFvD
+r8K/wr3Dr8K/wr0gMjEuNjg0ODQxXcOvwr/CvcOvwr/CvSBTRVQgPSAwLCBGblYgPSAwDQo+Pj4+
+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4NTExMV3Dr8K/wr3Dr8K/wr0gRUEgPSAwLCBTMVBUVyA9IDAN
+Cj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg1Mzg5XSBEYXRhIGFib3J0IGluZm86DQo+Pj4+PiBb
+w6/Cv8K9w6/Cv8K9IDIxLjY4NTY0NF3Dr8K/wr3Dr8K/wr0gSVNWID0gMCwgSVNTID0gMHgwMDAw
+MDAwNA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODYwMjRdw6/Cv8K9w6/Cv8K9IENNID0gMCwg
+V25SID0gMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42ODYyODhdIHVzZXIgcGd0YWJsZTogNGsg
+cGFnZXMsIDQ4LWJpdCBWQXMsIHBnZHA9MDAwMDAwMDAwNzU3YTAwMA0KPj4+Pj4gW8Ovwr/CvcOv
+wr/CvSAyMS42ODY4NTNdIFswMDAwMDAwMDAwMDAwMGEwXSBwZ2Q9MDAwMDAwMDAwMDAwMDAwMCwg
+cDRkPTAwMDAwMDAwMDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg3NDUyXSBJbnRl
+cm5hbCBlcnJvcjogT29wczogOTYwMDAwMDRFRU1QVCBTTVANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0g
+MjEuNjg3OTQxXSBNb2R1bGVzIGxpbmtlZCBpbjoNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjg4
+MjE0XSBDUFU6IDQgUElEOiAxIENvbW06IHNodXRkb3duIE5vdCB0YWludGVkDQo+Pj4+PiA1LjEy
+LjAtcmM3LTAwMjYyLWc1NjgyNjJiZjU0OTIgIzMzDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4
+ODkxNV0gSGFyZHdhcmUgbmFtZTogUGluZTY0IFJvY2tQcm82NCB2Mi4wIChEVCkNCj4+Pj4+IFvD
+r8K/wr3Dr8K/wr0gMjEuNjg5MzU3XSBwc3RhdGU6IDYwMDAwMDA1IChuWkN2IGRhaWYgLVBBTiAt
+VUFPIC1UQ08gQlRZUEU9LS0pDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY4OTg4NF0gcGMgOiBk
+b3duX3JlYWRfaW50ZXJydXB0aWJsZSsweGVjLzB4MjAwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
+LjY5MDMyMV0gbHIgOiBzaW1wbGVfcmVjdXJzaXZlX3JlbW92YWwrMHg0OC8weDI4MA0KPj4+Pj4g
+W8Ovwr/CvcOvwr/CvSAyMS42OTA3NjFdIHNwIDogZmZmZjgwMDAxMWY0Yjk0MA0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTEwNTNdIHgyOTogZmZmZjgwMDAxMWY0Yjk0MCB4Mjg6IGZmZmYwMDAw
+MDA4MDliNDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjkxNTIyXSB4Mjc6IGZmZmYwMDAwMDA4
+MDliOTggeDI2OiBmZmZmODAwMDExNGY1MTcwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5MTk5
+MF0geDI1OiAwMDAwMDAwMDAwMDAwMGEwIHgyNDogZmZmZjgwMDAxMWU4NDAzMA0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTI0NTldIHgyMzogMDAwMDAwMDAwMDAwMDA4MCB4MjI6IDAwMDAwMDAw
+MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjkyOTI3XSB4MjE6IGZmZmY4MDAwMTFl
+Y2FhNWMgeDIwOiBmZmZmODAwMDExZWNhYTYwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5MzM5
+NV0geDE5OiBmZmZmMDAwMDAwODA5YjQwIHgxODogZmZmZmZmZmZmZmZmZmZmZg0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTM4NjNdIHgxNzogMDAwMDAwMDAwMDAwMDAwMCB4MTY6IDAwMDAwMDAw
+MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk0MzMxXSB4MTU6IGZmZmY4MDAwOTFm
+NGJhNmQgeDE0OiAwMDAwMDAwMDAwMDAwMDA0DQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NDc5
+OV0geDEzOiAwMDAwMDAwMDAwMDAwMDAwIHgxMjogMDAwMDAwMDAwMDAwMDAyMA0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTUyNjddIHgxMTogMDEwMTAxMDEwMTAxMDEwMSB4MTA6IDdmN2Y3Zjdm
+N2Y3ZjdmN2YNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk1NzM1XSB4OSA6IDZmNmM3NDYzNjQ3
+MTZlNjIgeDggOiA3ZjdmN2Y3ZjdmN2Y3ZjdmDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NjIw
+M10geDcgOiBmZWZlZmVmZjYzNjQ2MjZkIHg2IDogMDAwMDAwMDAwMDAwMWJkOA0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTY2NzFdIHg1IDogMDAwMDAwMDAwMDAwMDAwMCB4NCA6IDAwMDAwMDAw
+MDAwMDAwMDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk3MTM4XSB4MyA6IDAwMDAwMDAwMDAw
+MDAwYTAgeDIgOiAwMDAwMDAwMDAwMDAwMDAxDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjY5NzYw
+Nl0geDEgOiAwMDAwMDAwMDAwMDAwMDAwIHgwIDogMDAwMDAwMDAwMDAwMDBhMA0KPj4+Pj4gW8Ov
+wr/CvcOvwr/CvSAyMS42OTgwNzVdIENhbGwgdHJhY2U6DQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
+LjY5ODI5MV3Dr8K/wr0gZG93bl9yZWFkX2ludGVycnVwdGlibGUrMHhlYy8weDIwMA0KPj4+Pj4g
+W8Ovwr/CvcOvwr/CvSAyMS42OTg2OTBdw6/Cv8K9IGRlYnVnZnNfcmVtb3ZlKzB4NjAvMHg4NA0K
+Pj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42OTkwMTZdw6/Cv8K9IGR3YzNfZGVidWdmc19leGl0KzB4
+MWMvMHg2Yw0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS42OTkzNjNdw6/Cv8K9IGR3YzNfcmVtb3Zl
+KzB4MzQvMHgxYTANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNjk5NjcyXcOvwr/CvSBwbGF0Zm9y
+bV9yZW1vdmUrMHgyOC8weDYwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMDAwNV3Dr8K/wr0g
+X19kZXZpY2VfcmVsZWFzZV9kcml2ZXIrMHgxODgvMHgyMzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0g
+MjEuNzAwNDE0XcOvwr/CvSBkZXZpY2VfcmVsZWFzZV9kcml2ZXIrMHgyYy8weDQ0DQo+Pj4+PiBb
+w6/Cv8K9w6/Cv8K9IDIxLjcwMDc5MV3Dr8K/wr0gYnVzX3JlbW92ZV9kZXZpY2UrMHgxMjQvMHgx
+MzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzAxMTU0XcOvwr/CvSBkZXZpY2VfZGVsKzB4MTY4
+LzB4NDIwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMTQ2Ml3Dr8K/wr0gcGxhdGZvcm1fZGV2
+aWNlX2RlbC5wYXJ0LjArMHgxYy8weDkwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwMTg3N13D
+r8K/wr0gcGxhdGZvcm1fZGV2aWNlX3VucmVnaXN0ZXIrMHgyOC8weDQ0DQo+Pj4+PiBbw6/Cv8K9
+w6/Cv8K9IDIxLjcwMjI5MV3Dr8K/wr0gb2ZfcGxhdGZvcm1fZGV2aWNlX2Rlc3Ryb3krMHhlOC8w
+eDEwMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDI3MTZdw6/Cv8K9IGRldmljZV9mb3JfZWFj
+aF9jaGlsZF9yZXZlcnNlKzB4NjQvMHhiNA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDMxNTNd
+w6/Cv8K9IG9mX3BsYXRmb3JtX2RlcG9wdWxhdGUrMHg0MC8weDg0DQo+Pj4+PiBbw6/Cv8K9w6/C
+v8K9IDIxLjcwMzUzOF3Dr8K/wr0gX19kd2MzX29mX3NpbXBsZV90ZWFyZG93bisweDIwLzB4ZDQN
+Cj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzAzOTQ1XcOvwr/CvSBkd2MzX29mX3NpbXBsZV9zaHV0
+ZG93bisweDE0LzB4MjANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA0MzM3XcOvwr/CvSBwbGF0
+Zm9ybV9zaHV0ZG93bisweDI4LzB4NDANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA0NjgzXcOv
+wr/CvSBkZXZpY2Vfc2h1dGRvd24rMHgxNTgvMHgzMzANCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEu
+NzA1MDI5XcOvwr/CvSBrZXJuZWxfcG93ZXJfb2ZmKzB4MzgvMHg3Yw0KPj4+Pj4gW8Ovwr/CvcOv
+wr/CvSAyMS43MDUzNzJdw6/Cv8K9IF9fZG9fc3lzX3JlYm9vdCsweDE2Yy8weDJhMA0KPj4+Pj4g
+W8Ovwr/CvcOvwr/CvSAyMS43MDU3MTldw6/Cv8K9IF9fYXJtNjRfc3lzX3JlYm9vdCsweDI4LzB4
+MzQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA2MDc0XcOvwr/CvSBlbDBfc3ZjX2NvbW1vbi5j
+b25zdHByb3AuMCsweDYwLzB4MTIwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwNjQ5OV3Dr8K/
+wr0gZG9fZWwwX3N2YysweDI4LzB4OTQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA2Nzk0XcOv
+wr/CvSBlbDBfc3ZjKzB4MmMvMHg1NA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDcwNjddw6/C
+v8K9IGVsMF9zeW5jX2hhbmRsZXIrMHhhNC8weDEzMA0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43
+MDc0MTRdw6/Cv8K9IGVsMF9zeW5jKzB4MTcwLzB4MTgwDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIx
+LjcwNzcxMV0gQ29kZTogYzgwNDdjNjIgMzVmZmZmODQgMTdmZmZlNWYgZjk4MDAwNzEgKGM4NWZm
+YzYwKQ0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDgyNTBdIC0tLVsgZW5kIHRyYWNlIDVhZTA4
+MTQ3NTQyZWI0NjggXS0tLQ0KPj4+Pj4gW8Ovwr/CvcOvwr/CvSAyMS43MDg2NjddIEtlcm5lbCBw
+YW5pYyAtIG5vdCBzeW5jaW5nOiBBdHRlbXB0ZWQgdG8ga2lsbCBpbml0ISBleGl0Y29kZT0weDAw
+MDAwMDBiDQo+Pj4+PiBbw6/Cv8K9w6/Cv8K9IDIxLjcwOTQ1Nl0gS2VybmVsIE9mZnNldDogZGlz
+YWJsZWQNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzA5NzYyXSBDUFUgZmVhdHVyZXM6IDB4MDAy
+NDAwMjIsMjEwMDYwMGMNCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzEwMTQ2XSBNZW1vcnkgTGlt
+aXQ6IDIwNDggTUINCj4+Pj4+IFvDr8K/wr3Dr8K/wr0gMjEuNzEwNDQzXSAtLS1bIGVuZCBLZXJu
+ZWwgcGFuaWMgLSBub3Qgc3luY2luZzogQXR0ZW1wdGVkIHRvIGtpbGwgaW5pdCENCj4+Pj4+IGV4
+aXRjb2RlPTB4MDAwMDAwMGIgXS0tLQ0KPj4+Pj4NCj4+Pj4+IEkndmUgYmVlbiBhYmxlIHRvIGJp
+c2VjdCB0aGUgcGFuaWMgYW5kIHRoZSBvZmZlbmRpbmcgY29tbWl0IGlzIDU2ODI2MmJmNTQ5MiAo
+InVzYjoNCj4+Pj4+IGR3YzM6IGNvcmU6IEFkZCBzaHV0ZG93biBjYWxsYmFjayBmb3IgZHdjMyIp
+LiBJIGNhbiBwcm92aWRlIG1vcmUgZGlhZ25vc3RpYw0KPj4+Pj4gaW5mb3JtYXRpb24gaWYgbmVl
+ZGVkIGFuZCBJIGNhbiBoZWxwIHRlc3QgdGhlIGZpeC4NCj4+Pj4gaWYgeW91IHNpbXBseSByZXZl
+cnQgdGhhdCBjb21taXQgaW4gSEVBRCwgZG9lcyB0aGUgcHJvYmxlbSByZWFsbHkgZ28NCj4+Pj4g
+YXdheT8NCj4+PiBLZXJuZWwgYnVpbHQgZnJvbSBjb21taXQgMzI0YzkyZTVlMGVlLCB3aGljaCBp
+cyB0aGUga2VybmVsIHRpcCB0b2RheSwgdGhlIHBhbmljIGlzDQo+Pj4gdGhlcmUuIFJldmVydGlu
+ZyB0aGUgb2ZmZW5kaW5nIGNvbW1pdCwgNTY4MjYyYmY1NDkyLCBtYWtlcyB0aGUgcGFuaWMgZGlz
+YXBwZWFyLg0KPj4gV2FudCB0byBzZW5kIGEgcmV2ZXJ0IHNvIEkgY2FuIHRha2UgaXQgbm93Pw0K
+Pg0KPiBJIGNhbiBzZW5kIGEgcmV2ZXJ0LCBidXQgRmVsaXBlIHdhcyBhc2tpbmcgU2FuZGVlcCAo
+dGhlIGNvbW1pdCBhdXRob3IpIGZvciBhIGZpeCwNCj4gc28gSSdsbCBsZWF2ZSBpdCB1cCB0byBG
+ZWxpcGUgdG8gZGVjaWRlIGhvdyB0byBwcm9jZWVkLg0KDQpJJ20gb2theSB3aXRoIGEgcmV2ZXJ0
+LiBGZWVsIGZyZWUgdG8gYWRkIG15IEFja2VkLWJ5OiBGZWxpcGUgQmFsYmkNCjxiYWxiaUBrZXJu
+ZWwub3JnPiBvciBpdC4NCg0KU2FuZGVlcCwgcGxlYXNlIHNlbmQgYSBuZXcgdmVyc2lvbiB0aGF0
+IGRvZXNuJ3QgZW5jb3VudGVyIHRoZSBzYW1lDQppc3N1ZS4gTWFrZSBzdXJlIHRvIHRlc3QgYnkg
+cmVsb2FkaW5nIHRoZSBkcml2ZXIgaW4gYSB0aWdodCBsb29wIGZvcg0Kc2V2ZXJhbCBpdGVyYXRp
+b25zLg0KDQotLSANCmJhbGJpDQo=
 
 --=-=-=
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46FIRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjI6Af/dcHPqnojZ4vC7RuGGLl4Y12R5LYRqnO4
-71jGMI14lASrV3cp4DK2D4QkiKVxXj7VlIX2XHqoHDel5EXH4gvEG0m9k/Gjh/9K
-hvYf0H4+VhvgQFpBQPHIOklQwMsow9stfH2GDwknZ+sfVMJcm/f3xqcRTZ0ZVeWO
-2rVFcTJsezQsrN3z95mWp00YTaNHgebpiFLcyavF0JNEqtsq3gBehMCamXgTl7wk
-qnD2W1v85dM3WF+8LbLOnPowGmtEQ+ZNh34z2Wa4i/+55bCZQWB3wsnMB/9vWrU4
-s2ZL9hv4JVCIQdi9nRclc0KaAlGm/xoUbb2WU5Huz9Rk5Chxt10QIA==
-=LFRq
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC46MERHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjYmQf+KFPnwL3j3fKDQ4Agu3Yc1wFDyMP4fkEt
+Gw13bagAVALtsDOHR5f37rIsMMcUTwQlW0mAm2qJCltdP3+ljH2gU77C0Riioc1M
+h040X4XggNihXEBbhQT8UdqDHQ/H06NqWm6yzgGS/1rhdj9R61O74ACTXmMbc4qD
+JrK8U1+iz1mvrs/O40Ni4jQR6BmDTBujqFA8YR7uDrQTyTP3MVxyMOF/ByLLxLNM
+MNMh2y3N2iOtrcLgnSeUbQZk+opHa5cSmTNJDoFpOilsbKZCK6V/YJPCyXFpvFt0
+TZWLWOEoc59nhsmjr54qJwwXGKRwsAgxkcvzZi5s0ePg1DI7KgKTqg==
+=H6RB
 -----END PGP SIGNATURE-----
 --=-=-=--
