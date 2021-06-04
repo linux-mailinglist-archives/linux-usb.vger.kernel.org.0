@@ -2,62 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6318A39BAC6
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 16:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B39439BACE
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 16:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbhFDORS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 10:17:18 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:44229 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230234AbhFDORS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 10:17:18 -0400
-Received: (qmail 1678687 invoked by uid 1000); 4 Jun 2021 10:15:31 -0400
-Date:   Fri, 4 Jun 2021 10:15:31 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 2/4] USB: UDC: Implement udc_async_callbacks in dummy-hcd
-Message-ID: <20210604141531.GA1676809@rowland.harvard.edu>
-References: <20210520202152.GD1216852@rowland.harvard.edu>
- <87v96ub3y0.fsf@kernel.org>
+        id S230436AbhFDOUM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 10:20:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40892 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230122AbhFDOUM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Jun 2021 10:20:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BAEC8611C1;
+        Fri,  4 Jun 2021 14:18:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622816306;
+        bh=IIapIA1KWkd10LMiSluOWzb9ezVWcMq76P0df/51EJI=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=C83Lt6aPoYYFS1mWk1VGn/wrc+OfTmgIEPAqnh2qfT2oVa2PrUcahpcwjJ8uPLysj
+         ASoPcp1raYr4Uwhgn+thxgAcYlqbM8ayc8wKFeG40snPKaEwYVde37SV+nHGgogSH5
+         vEHfSwCPV6uvHyUh99yuEjEzLyGs6kOofoc5IAfZLsHX5RybR1jlYaw8i7Rv9snLlx
+         t+MH1Ko4LrQgW907BwAO8sVDuJPWaRF8YMfxHBNnu9mfeYWbn+HpWuWSir+Laep29x
+         3m9u2xL6PkZovdLxbXeSnBOxziyHwX9XUti6sBNRkiPin1K3JTbSp5lrgxbmqNvBu8
+         fq1gb4ZEEt5Bg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Wesley Cheng <wcheng@codeaurora.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
+In-Reply-To: <YLoUiO8tpRpmvcyU@kroah.com>
+References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
+ <YLoUiO8tpRpmvcyU@kroah.com>
+Date:   Fri, 04 Jun 2021 17:18:16 +0300
+Message-ID: <87k0n9btnb.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87v96ub3y0.fsf@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 08:21:11AM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Alan Stern <stern@rowland.harvard.edu> writes:
-> > @@ -990,7 +1000,6 @@ static int dummy_udc_start(struct usb_ga
-> >  	spin_lock_irq(&dum->lock);
-> >  	dum->devstatus = 0;
-> >  	dum->driver = driver;
-> > -	dum->ints_enabled = 1;
-> 
-> should the matching write of 0 be removed from dummy_udc_stop()?
-
-No, it's okay to leave that one.  In practice it won't make any 
-difference because now the core will always turn off async callbacks 
-before doing udc_stop.  It's there for the sake of thoroughness, and it 
-lets the reader know that emulated interrupts are supposed to be turned 
-off whenever the UDC stops running (just like a driver for a real UDC).
-
-Whereas this line here in dummy_udc_start would be actively wrong if it 
-were to remain.
-
-Alan Stern
-
-> Other than that:
-> 
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-> 
-> -- 
-> balbi
+--=-=-=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
 
+Hi,
+
+Greg KH <gregkh@linuxfoundation.org> writes:
+> On Wed, May 19, 2021 at 12:49:16AM -0700, Wesley Cheng wrote:
+>> Changes in V9:
+>>  - Fixed incorrect patch in series.  Removed changes in DTSI, as dwc3-qc=
+om will
+>>    add the property by default from the kernel.
+>
+> This patch series has one build failure and one warning added:
+>
+> drivers/usb/dwc3/gadget.c: In function =E2=80=98dwc3_gadget_calc_tx_fifo_=
+size=E2=80=99:
+> drivers/usb/dwc3/gadget.c:653:45: warning: passing argument 1 of =E2=80=
+=98dwc3_mdwidth=E2=80=99 makes pointer from integer without a cast [-Wint-c=
+onversion]
+>   653 |         mdwidth =3D dwc3_mdwidth(dwc->hwparams.hwparams0);
+>       |                                ~~~~~~~~~~~~~^~~~~~~~~~
+>       |                                             |
+>       |                                             u32 {aka unsigned int}
+> In file included from drivers/usb/dwc3/debug.h:14,
+>                  from drivers/usb/dwc3/gadget.c:25:
+> drivers/usb/dwc3/core.h:1493:45: note: expected =E2=80=98struct dwc3 *=E2=
+=80=99 but argument is of type =E2=80=98u32=E2=80=99 {aka =E2=80=98unsigned=
+ int=E2=80=99}
+>  1493 | static inline u32 dwc3_mdwidth(struct dwc3 *dwc)
+>       |                                ~~~~~~~~~~~~~^~~
+>
+>
+> drivers/usb/dwc3/dwc3-qcom.c: In function =E2=80=98dwc3_qcom_of_register_=
+core=E2=80=99:
+> drivers/usb/dwc3/dwc3-qcom.c:660:23: error: implicit declaration of funct=
+ion =E2=80=98of_add_property=E2=80=99; did you mean =E2=80=98of_get_propert=
+y=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+>   660 |                 ret =3D of_add_property(dwc3_np, prop);
+>       |                       ^~~~~~~~~~~~~~~
+>       |                       of_get_property
+>
+>
+> How did you test these?
+
+to be honest, I don't think these should go in (apart from the build
+failure) because it's likely to break instantiations of the core with
+differing FIFO sizes. Some instantiations even have some endpoints with
+dedicated functionality that requires the default FIFO size configured
+during coreConsultant instantiation. I know of at OMAP5 and some Intel
+implementations which have dedicated endpoints for processor tracing.
+
+With OMAP5, these endpoints are configured at the top of the available
+endpoints, which means that if a gadget driver gets loaded and takes
+over most of the FIFO space because of this resizing, processor tracing
+will have a hard time running. That being said, processor tracing isn't
+supported in upstream at this moment.
+
+I still think this may cause other places to break down. The promise the
+databook makes is that increasing the FIFO size over 2x wMaxPacketSize
+should bring little to no benefit, if we're not maintaining that, I
+wonder if the problem is with some of the BUSCFG registers instead,
+where we configure interconnect bursting and the like.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC6NigRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUhNqQf/UCW+L+1PHl0Ok7a8lYNNq1k7hu8Du6Ag
+qMT+Szz1a4oERmjWyUJr7xNc1dnv78QlCb9SuDx+c6guInJTCEEV0NjwEZbjlv+q
+YQzg6S0kSz2Yrm6u0SylqAwGRyi3VmEmjX9aKUjxJCgblY+bGXHLrfXxFz67UGcv
+c1jQGYVfP2iMMHrWthNfqFnDYA7btpGw/e1wQVn4l3JkldIzkCdtJqPzTpNoVjB4
+Ze89LWaFodsy6PbMFsay3bpHQq9cjzeA7o/kSOuY4bIiLwgao2+Ob0PW3JSdl7oH
+CVkXk3faTTz6QgBnO8sb77xHv282SqIbeaKdTPwtbyGUaqU/R3lWPg==
+=KUe1
+-----END PGP SIGNATURE-----
+--=-=-=--
