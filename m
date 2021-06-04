@@ -2,126 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFEA39B4C4
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 10:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02B2A39B4F5
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 10:35:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbhFDIYW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 04:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
+        id S230139AbhFDIh3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 04:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbhFDIYW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 04:24:22 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FC2C06174A
-        for <linux-usb@vger.kernel.org>; Fri,  4 Jun 2021 01:22:24 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id l2so8415187wrw.6
-        for <linux-usb@vger.kernel.org>; Fri, 04 Jun 2021 01:22:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=/SF7msZ6RZkO8FLmmvLTe36Mf4HzOKhqGaAVIdE3wOk=;
-        b=PqHG/04wvWGhz4v745toSclNdYIcRJdEj8Gsg4OePpMsur6qz6W96zlfAtgVBtOd0v
-         zJMM9MExH+ShqZLsYJDNjuhD7tCeHARYScYywghSmeAlCWMzIEqkrYNaq5ZdWu+t6WjD
-         kSi2MBh2ttbJDqK+mtPtW3Vxn+Soyh2pdS+anxbiOGmQDsWmEblInyRh0pi2sJUbp7kQ
-         wCkzoJs0V8S0gAcYOTtHAjG6prg/xG2/OWn0hauZGo8VquWrozH71Fn0neJ3WPC44hoN
-         B1jXNdUsUNlyeA1Zb6Ww88xca6InwWefQmLuLzoJGnCF//vxlkU+beROOrpEEXOcatHu
-         m0lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=/SF7msZ6RZkO8FLmmvLTe36Mf4HzOKhqGaAVIdE3wOk=;
-        b=USssnQjML7M5fgLE2gpe0aJVD261gG1/8ZgUzGbMzvigBp3SdiAj/3KKQPAGrNHLf3
-         +MFUfkR1hpRqBQkmzehAPxhUfbXtOF5PRnb3/m88lAGYwXl5+BID0QZidoJWvekkqjdQ
-         BSfEljo/o678P7CNNTmrFkjp1Jf8Mo3lhEKOqwNFAaFWYMfpIY4klmWJ834TAA6VxcW/
-         dVfwJ+FXD5zR0GSEptoQ3OxuiF56WOCcq/NAC0sBkzZ3aWUQPDtO6er9f31PcjsAdmvH
-         c2/0l4mf1iftEfWykC609RhJABKxH2+WXK9KH2Rex/oeUZPAzM8fVWpOmcYrQQC1NAQb
-         AlCQ==
-X-Gm-Message-State: AOAM531YalQ28tNH4f6TXfvD5Lbf4hQhxgTllmy6aPvoaUcDqTlEis6X
-        BF0fARlpRUQRrWmw84IXaEjyTg==
-X-Google-Smtp-Source: ABdhPJwj4w/NdZJEvVw2NG8tY4Pi2OeTw0UqTE6BV/Bc5tVUbnogr8hRm1Mctc++rcEUBXqL04vrbQ==
-X-Received: by 2002:a05:6000:110b:: with SMTP id z11mr2519579wrw.278.1622794942603;
-        Fri, 04 Jun 2021 01:22:22 -0700 (PDT)
-Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id b22sm1674294wmj.22.2021.06.04.01.22.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 01:22:22 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 04 Jun 2021 09:22:21 +0100
-Message-Id: <CBUOSO6T5NP7.FJOIWX8PSVP8@arch-thunder>
-Cc:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] usb: isp1760: Fix meaningless check in
- isp1763_run()
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
-To:     "tongtiangen" <tongtiangen@huawei.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-References: <20210601100311.70200-1-tongtiangen@huawei.com>
- <YLjAweuyJXzDn9pe@kroah.com>
- <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
-In-Reply-To: <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
+        with ESMTP id S230050AbhFDIh3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 04:37:29 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E96C06174A;
+        Fri,  4 Jun 2021 01:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=4KRWdzBUoXU83AL5+05hHIl3Wbb3m65hCfikxyOgHhY=; b=jRtLji5kG9B+1pZi6tT3t5/M9y
+        gR8wRRJ6qIQ8GQE1i3NHneeQa67pnSlWsOBl7TWJXZsR+TtMn/BG+BMLoLdY+rpN/jRvZcHsJgcO3
+        AkwmOzP6PG8wEGg46/jWdSEwTpidmd6ykb7Z2EgWRK5GSeJ0w5Ur4b1I8T8SIWWAN4DU=;
+Received: from p200300ccff0b2a001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0b:2a00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1lp5Ik-0005Fd-Ez; Fri, 04 Jun 2021 10:35:38 +0200
+Date:   Fri, 4 Jun 2021 10:35:33 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Bin Liu <b-liu@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <20210604103533.6392beeb@aktux>
+In-Reply-To: <YLCGZEan87yp9Eeq@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+        <20210527211501.70d176b4@aktux>
+        <YLCGZEan87yp9Eeq@atomide.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tiangen,
-On Fri Jun 4, 2021 at 3:09 AM WEST, tongtiangen wrote:
-> On 2021/6/3 19:45, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 01, 2021 at 06:03:11PM +0800, Tong Tiangen wrote:
-> >> There's a meaningless check in isp1763_run. According to the
-> >> similar implement in isp1760_run, the proper check should remove
-> >> retval =3D 0;
-> >>
-> >> Fixes: 60d789f3bfbb ("usb: isp1760: add support for isp1763")
-> >> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
-> >> ---
-> >>   drivers/usb/isp1760/isp1760-hcd.c | 1 -
-> >>   1 file changed, 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/i=
-sp1760-hcd.c
-> >> index 016a54ea76f4..27168b4a4ef2 100644
-> >> --- a/drivers/usb/isp1760/isp1760-hcd.c
-> >> +++ b/drivers/usb/isp1760/isp1760-hcd.c
-> >> @@ -1648,7 +1648,6 @@ static int isp1763_run(struct usb_hcd *hcd)
-> >>   	down_write(&ehci_cf_port_reset_rwsem);
-> >>   	retval =3D isp1760_hcd_set_and_wait(hcd, FLAG_CF, 250 * 1000);
-> >>   	up_write(&ehci_cf_port_reset_rwsem);
-> >> -	retval =3D 0;
-> >>   	if (retval)
-> >>   		return retval;
-> >>  =20
-> >> --=20
-> >> 2.18.0.huawei.25
-> >>
-> > Did you test this change to verify that the driver still works properly=
-?
-> > You are now checking something that never was checked before...
+On Fri, 28 May 2021 08:57:56 +0300
+Tony Lindgren <tony@atomide.com> wrote:
 
-Thanks Greg for asking the right question here :)
+> Hi,
+> 
+> * Andreas Kemnade <andreas@kemnade.info> [210527 19:15]:
+> > Hi,
+> > 
+> > On Tue, 18 May 2021 18:06:15 +0300
+> > Tony Lindgren <tony@atomide.com> wrote:
+> >   
+> > > On start-up, we can get a spurious session request interrupt with nothing
+> > > connected. After that the devctl session bit will silently clear, but the
+> > > musb hardware is never idled until a cable is plugged in, or the glue
+> > > layer module is reloaded.
+> > > 
+> > > Let's just check the session bit again in 3 seconds in peripheral mode
+> > > to catch the issue.
+> > >   
+> > Tested this together with the other musb patch you sent on gta04.
+> > This has some interesting side effects.
+> > 
+> > Test done:
+> > - loading kernel+ramdisk via usb-dfu
+> > - disconnecting usb cable
+> > - loading omap_hdq (to see battery status)
+> > - idling serial ports
+> > - checking battery current 1.
+> > - loading omap2430, phy-twl4030-usb, g_ether
+> > - checking battery current 2 (again with idled serial ports).
+> > - rtcwake -s 20 -m mem
+> > - checking current during suspend (3)
+> > 
+> > Without your patches: current 2 is current 1 + approx 15 mA, current 3
+> > is near current 1.
+> > With your patches: current 2 is near current 1, current 3 is approx
+> > 15mA higher.  
+> 
+> Interesting, so power consumption is now better for runtime with cable
+> disconnected, and after booting, but now somehow is now worse for
+> suspended state. I'll try to reproduce.
+> 
+I inserted some more dev-dbg
+[   60.241790] PM: suspend entry (deep)
+[   60.245513] Filesystems sync: 0.000 seconds
+[   60.251312] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[   60.260040] OOM killer disabled.
+[   60.263275] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[   60.272338] printk: Suspending console(s) (use no_console_suspend to debug)
+[   60.281311] musb-omap2430 480ab000.usb_otg_hs: omap2430 runtime_resume
+-> this is triggered by what?
 
-> >
-> > thanks,
-> >
-> > greg k-h
-> > .
-> Sorry,  this fix was not send to Rui.
+[   60.281341] twl4030_usb 48070000.i2c:twl@48:twl4030-usb: twl4030_usb_runtime_resume
+-> and here something stays on...
 
-Yeah, I did not get the original, no. I will need to add entries in
-MAINTAINERS for this driver to be easier for others.
+[   60.346374] twl4030_usb 48070000.i2c:twl@48:twl4030-usb: twl4030_phy_power_on
+[   60.796630] musb-hdrc musb-hdrc.0.auto: musb_suspend begin
+[   60.796722] musb-hdrc musb-hdrc.0.auto: musb_suspend end
+[   60.796752] musb-omap2430 480ab000.usb_otg_hs: omap2430 suspend
+[   60.796783] musb-omap2430 480ab000.usb_otg_hs: omap2430 runtime_suspend
+[   60.796783] twl4030_usb 48070000.i2c:twl@48:twl4030-usb: twl4030_phy_power_off
+[   60.796813] twl4030_usb 48070000.i2c:twl@48:twl4030-usb: twl4030_usb_suspend
+[   60.806549] Disabling non-boot CPUs ...
+[   60.806579] Successfully put all powerdomains to target state
 
->  From the point of view of code logic, there should be a problem here.
+forcing omap2430 runtime on before suspend:
+[  160.467742] musb-omap2430 480ab000.usb_otg_hs: omap2430 runtime_resume
+[  165.001495] PM: suspend entry (deep)
+[  165.005218] Filesystems sync: 0.000 seconds
+[  165.010284] Freezing user space processes ... (elapsed 0.001 seconds) done.
+[  165.018981] OOM killer disabled.
+[  165.022247] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+[  165.031311] printk: Suspending console(s) (use no_console_suspend to debug)
+[  165.040496] musb-hdrc musb-hdrc.0.auto: musb_suspend begin
+[  165.040618] musb-hdrc musb-hdrc.0.auto: musb_suspend end
+[  165.040618] musb-omap2430 480ab000.usb_otg_hs: omap2430 suspend
+[  165.040649] musb-omap2430 480ab000.usb_otg_hs: omap2430 runtime_suspend
+[  165.040679] twl4030_usb 48070000.i2c:twl@48:twl4030-usb: twl4030_usb_suspend
+[  165.050506] Disabling non-boot CPUs ...
+[  165.050537] Successfully put all powerdomains to target state
 
-It looks like. Only if we fail to setup the Configure Flag,
-something that it's not really expected to fail.
-
->  I don't have the actual hardware to verify whether it works
->  properly. Rui may know if the patch affects the original workflow.
-
-Thanks for the patch and I will test this and get back to you.
-
-------
-Cheers,
-     Rui
+Regards,
+Andreas
