@@ -2,180 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91C9C39C0CE
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 21:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4FF39C1B2
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 22:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbhFDTvC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 15:51:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28532 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230383AbhFDTvC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 15:51:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1622836155;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f4jIl7S9wDq/SPEA83mol1nOQbqHjQRoUaDkzD/cpq0=;
-        b=AVO7WyzdXMd7YbwLddnPoVa0k0CHeEm0i2iOC3iG7S+Dt4A+b75qBmvy1dztjcMZWIvwF0
-        Jv+KxWtlexN1t8II7yJCIyMgWje3HuMNxwx9CgUAGDuwdxfyIzZTK/gibe+t9DbOROyOET
-        K3o1DJXIx/qrSlHuDT/7O2dDiO33yUw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-388-BagUPIcXNRyYlLQhICu8pg-1; Fri, 04 Jun 2021 15:49:14 -0400
-X-MC-Unique: BagUPIcXNRyYlLQhICu8pg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6C9D2180FD67;
-        Fri,  4 Jun 2021 19:49:12 +0000 (UTC)
-Received: from x1.localdomain (ovpn-112-54.ams2.redhat.com [10.36.112.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9527E189CE;
-        Fri,  4 Jun 2021 19:49:09 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
+        id S231214AbhFDU45 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 16:56:57 -0400
+Received: from mail-oo1-f44.google.com ([209.85.161.44]:38722 "EHLO
+        mail-oo1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229906AbhFDU44 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 16:56:56 -0400
+Received: by mail-oo1-f44.google.com with SMTP id o66-20020a4a44450000b029020d44dea886so2551035ooa.5;
+        Fri, 04 Jun 2021 13:55:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z4eBPRewUmZbrRr0u/ml79wEbFbzXyZBVVGIi7p60to=;
+        b=NV0fzji+JRSbMc9cdwGZIhFAh1NF3NQbdAuwWsK4NiQT83EPNJeUEGz+Ssy9NE66Oi
+         pssfRCRPYbwdB81yqIGCkj1CDPAv4NbWm9+SY6cPnVE0jd4h0jKJAIR3niRSeW9Ewjow
+         W89thiyh5dS0FNKfXTAy4BCFJT+PXTQrqfQhBy7o/dCMhTlQ1mctIK4Bj48AvpJgnb8h
+         Jt/qWVmJT/5+zVQu8Dyv5eDPPVjHwKtVH89ZChei9HVeHlrQU55ZvCK1pIBtw2mEMlzL
+         cIt07C0yS1vGoORP+ZwmHhl1U1xi8s2vg8jaJUJJogrFodG2gG4suLJTu/C28otPrSpV
+         pePA==
+X-Gm-Message-State: AOAM532QL38efElXF3/WcLXUmNRhofs89r/9BJ8NFq9nfWLXAs9w+UKg
+        E1BDjCCffo7m2ZxDyvOARg==
+X-Google-Smtp-Source: ABdhPJyDQ+0FKy+gM3GzZgZvov9BF3UaiCP8vEVNUljLo4vmGEUfYskWYbC+ZDC4FBBihY8Kg7h5Pg==
+X-Received: by 2002:a05:6820:100a:: with SMTP id v10mr5032044oor.55.1622840109774;
+        Fri, 04 Jun 2021 13:55:09 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id z25sm706005oic.30.2021.06.04.13.55.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Jun 2021 13:55:09 -0700 (PDT)
+Received: (nullmailer pid 3899660 invoked by uid 1000);
+        Fri, 04 Jun 2021 20:55:07 -0000
+Date:   Fri, 4 Jun 2021 15:55:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        devicetree@vger.kernel.org,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-usb@vger.kernel.org, Roger Quadros <rogerq@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [PATCH 8/8] usb: typec: altmodes/displayport: Notify drm subsys of hotplug events
-Date:   Fri,  4 Jun 2021 21:48:40 +0200
-Message-Id: <20210604194840.14655-9-hdegoede@redhat.com>
-In-Reply-To: <20210604194840.14655-1-hdegoede@redhat.com>
-References: <20210604194840.14655-1-hdegoede@redhat.com>
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH] dt-bindings: usb: cdns,usb3: Fix interrupts order
+Message-ID: <20210604205507.GA3899579@robh.at.kernel.org>
+References: <20210527193952.1705127-1-geert@linux-m68k.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210527193952.1705127-1-geert@linux-m68k.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use the new drm_connector_oob_hotplug_event() functions to let drm/kms
-drivers know about DisplayPort over Type-C hotplug events.
+On Thu, 27 May 2021 21:39:52 +0200, Geert Uytterhoeven wrote:
+> Correct the order of the descriptions for the "interrupts" property to
+> match the order of the "interrupt-names" property.
+> 
+> Fixes: 68989fe1c39d9b32 ("dt-bindings: usb: Convert cdns-usb3.txt to YAML schema")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Tested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
-Changes in v3:
-- Only call drm_connector_oob_hotplug_event() on hpd status bit change
-- Adjust for drm_connector_oob_hotplug_event() no longer having a data
-  argument
-
-Changes in v2:
-- Add missing depends on DRM to TYPEC_DP_ALTMODE Kconfig entry
----
- drivers/usb/typec/altmodes/Kconfig       |  1 +
- drivers/usb/typec/altmodes/displayport.c | 23 +++++++++++++++++++++++
- 2 files changed, 24 insertions(+)
-
-diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmodes/Kconfig
-index 60d375e9c3c7..1a6b5e872b0d 100644
---- a/drivers/usb/typec/altmodes/Kconfig
-+++ b/drivers/usb/typec/altmodes/Kconfig
-@@ -4,6 +4,7 @@ menu "USB Type-C Alternate Mode drivers"
- 
- config TYPEC_DP_ALTMODE
- 	tristate "DisplayPort Alternate Mode driver"
-+	depends on DRM
- 	help
- 	  DisplayPort USB Type-C Alternate Mode allows DisplayPort
- 	  displays and adapters to be attached to the USB Type-C
-diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-index aa669b9cf70e..c1d8c23baa39 100644
---- a/drivers/usb/typec/altmodes/displayport.c
-+++ b/drivers/usb/typec/altmodes/displayport.c
-@@ -11,8 +11,10 @@
- #include <linux/delay.h>
- #include <linux/mutex.h>
- #include <linux/module.h>
-+#include <linux/property.h>
- #include <linux/usb/pd_vdo.h>
- #include <linux/usb/typec_dp.h>
-+#include <drm/drm_connector.h>
- #include "displayport.h"
- 
- #define DP_HEADER(_dp, ver, cmd)	(VDO((_dp)->alt->svid, 1, ver, cmd)	\
-@@ -57,11 +59,13 @@ struct dp_altmode {
- 	struct typec_displayport_data data;
- 
- 	enum dp_state state;
-+	bool hpd;
- 
- 	struct mutex lock; /* device lock */
- 	struct work_struct work;
- 	struct typec_altmode *alt;
- 	const struct typec_altmode *port;
-+	struct fwnode_handle *connector_fwnode;
- };
- 
- static int dp_altmode_notify(struct dp_altmode *dp)
-@@ -125,6 +129,7 @@ static int dp_altmode_configure(struct dp_altmode *dp, u8 con)
- static int dp_altmode_status_update(struct dp_altmode *dp)
- {
- 	bool configured = !!DP_CONF_GET_PIN_ASSIGN(dp->data.conf);
-+	bool hpd = !!(dp->data.status & DP_STATUS_HPD_STATE);
- 	u8 con = DP_STATUS_CONNECTION(dp->data.status);
- 	int ret = 0;
- 
-@@ -137,6 +142,11 @@ static int dp_altmode_status_update(struct dp_altmode *dp)
- 		ret = dp_altmode_configure(dp, con);
- 		if (!ret)
- 			dp->state = DP_STATE_CONFIGURE;
-+	} else {
-+		if (dp->hpd != hpd) {
-+			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-+			dp->hpd = hpd;
-+		}
- 	}
- 
- 	return ret;
-@@ -512,6 +522,7 @@ static const struct attribute_group dp_altmode_group = {
- int dp_altmode_probe(struct typec_altmode *alt)
- {
- 	const struct typec_altmode *port = typec_altmode_get_partner(alt);
-+	struct fwnode_handle *fwnode;
- 	struct dp_altmode *dp;
- 	int ret;
- 
-@@ -540,6 +551,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
- 	alt->desc = "DisplayPort";
- 	alt->ops = &dp_altmode_ops;
- 
-+	fwnode = dev_fwnode(alt->dev.parent->parent); /* typec_port fwnode */
-+	dp->connector_fwnode = fwnode_find_reference(fwnode, "displayport", 0);
-+	if (IS_ERR(dp->connector_fwnode))
-+		dp->connector_fwnode = NULL;
-+
- 	typec_altmode_set_drvdata(alt, dp);
- 
- 	dp->state = DP_STATE_ENTER;
-@@ -555,6 +571,13 @@ void dp_altmode_remove(struct typec_altmode *alt)
- 
- 	sysfs_remove_group(&alt->dev.kobj, &dp_altmode_group);
- 	cancel_work_sync(&dp->work);
-+
-+	if (dp->connector_fwnode) {
-+		if (dp->hpd)
-+			drm_connector_oob_hotplug_event(dp->connector_fwnode);
-+
-+		fwnode_handle_put(dp->connector_fwnode);
-+	}
- }
- EXPORT_SYMBOL_GPL(dp_altmode_remove);
- 
--- 
-2.31.1
-
+Applied, thanks!
