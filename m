@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB0F39C3E7
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 01:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAE539C3FD
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 01:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbhFDXdI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 19:33:08 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:46418 "EHLO vps0.lunn.ch"
+        id S229930AbhFDXnI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 19:43:08 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:46442 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229853AbhFDXdI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Jun 2021 19:33:08 -0400
+        id S229847AbhFDXnI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Jun 2021 19:43:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
         Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
         Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YJbFM+mniWomHAgPF3WLlUJ8IqG1KjGc3LuxmDM/h84=; b=pUELUT9KUfEAa9dQ14tQhXy427
-        mCtysKeJt67EDv5jVWEiZnB99rm7Q4gjTf7RqaOk1vWudkEH8dcigAp3jLoH6O/p4SitfY+tNHRoo
-        vNS+xvTbziTLGo7H2CJBcI74HeJapOOk/nwfWewzVp03iMuhdBzzdro1QMYETsSFyz1A=;
+        bh=teq76F1L+vznO9dqAxiuiuGN4JsSwry7FJ5qogca0Mc=; b=lYBFk45noY7CbcsbIsOxD1/iPw
+        elbOkYUn/juRIzIbjNoRQ9MrvIVpfoemozWdO3SLgVGGVxLpM6jdZsA576iMy/+yiCx/NW7zKm8wx
+        enMcB3LfbmwCjIFxTmuY/j8zqrZAnOHEs5gQP7AIRQhR5ySfJSFKOaW6m0hoX2XSs1Ao=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
         (envelope-from <andrew@lunn.ch>)
-        id 1lpJHW-007sOj-UT; Sat, 05 Jun 2021 01:31:14 +0200
-Date:   Sat, 5 Jun 2021 01:31:14 +0200
+        id 1lpJRD-007sRw-D7; Sat, 05 Jun 2021 01:41:15 +0200
+Date:   Sat, 5 Jun 2021 01:41:15 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Oleksij Rempel <o.rempel@pengutronix.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
@@ -31,36 +31,41 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 5/7] net: usb: asix: add error handling for
- asix_mdio_* functions
-Message-ID: <YLq3wuAMvljqEJbn@lunn.ch>
+Subject: Re: [PATCH net-next v1 7/7] usbnet: run unbind() before
+ unregister_netdev()
+Message-ID: <YLq6G9luZrXW5vry@lunn.ch>
 References: <20210604134244.2467-1-o.rempel@pengutronix.de>
- <20210604134244.2467-6-o.rempel@pengutronix.de>
+ <20210604134244.2467-8-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210604134244.2467-6-o.rempel@pengutronix.de>
+In-Reply-To: <20210604134244.2467-8-o.rempel@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> -void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
-> +static int __asix_mdio_write(struct net_device *netdev, int phy_id, int loc,
-> +			     int val)
->  {
->  	struct usbnet *dev = netdev_priv(netdev);
->  	__le16 res = cpu_to_le16(val);
-> @@ -517,13 +522,24 @@ void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
->  	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
->  	if (ret == -ENODEV) {
->  		mutex_unlock(&dev->phy_mutex);
-> -		return;
-> +		return ret;
+On Fri, Jun 04, 2021 at 03:42:44PM +0200, Oleksij Rempel wrote:
+> unbind() is the proper place to disconnect PHY, but it will fail if
+> netdev is already unregistered.
 
-Now that you have added an out: it might be better to use a goto?
+O.K, this partially answers the question i was about to ask for the
+previous patch.
 
-Otherwise
+void phy_start(struct phy_device *phydev)
+{
+	mutex_lock(&phydev->lock);
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+	if (phydev->state != PHY_READY && phydev->state != PHY_HALTED) {
+		WARN(1, "called from state %s\n",
+		     phy_state_to_str(phydev->state));
+		goto out;
+	}
 
-    Andrew
+By skipping phy_error(), phydev->state is not set to PHY_HALTED. So if
+you try to start the phy again, without disconnecting it, it looks
+like there could be a problem.
+
+But with this patch, i assume the PHY will always be disconnected and
+later reconnected when the device is replugged.
+
+      Andrew
