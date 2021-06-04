@@ -2,138 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FCC739BB7E
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 17:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFB7939BC20
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 17:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbhFDPOm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 11:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhFDPOm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 11:14:42 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956E3C061766
-        for <linux-usb@vger.kernel.org>; Fri,  4 Jun 2021 08:12:55 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m18so9682617wrv.2
-        for <linux-usb@vger.kernel.org>; Fri, 04 Jun 2021 08:12:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=MDeGfSOld04qEQUDmCqC+elxeKhTaZfQS1sxhyZdy0Y=;
-        b=d5MDz4Zcs9bzXxzzD6J6cD5EERCnWZkQiBtJR5sSos112Wxg0vjLR/3rJhzlGG3Yax
-         XEjP2GMX2gXwgxvVbWkfdSD3cmrnencbp5mtxnYQpq+8c7yyG7Hpx3UWr0RKFdjGTXe/
-         FnlW4x86W1l/I5Eb7Hmx74h9Gr/fs+zhuDxwkV4rQlWdko8pt+d6l5gtzogqaNv8txZ6
-         /9HRqo7iImdMUDw+2K6y+hsM6smVmOOqEQaVkwKJpgEj57jJgLD+PzjRGJoiT+IYfVxr
-         zu+avRfVJKF8JATHMUwXQzDCTMtorPLPrXjo8hBpOsUhggsjgNskOPyQyt0YIGw3LZeV
-         /gdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=MDeGfSOld04qEQUDmCqC+elxeKhTaZfQS1sxhyZdy0Y=;
-        b=nKxTJ4TTS5tnkmJI8QkvZm+B9UYLq2bQ4/ruN7PFktorLlwoHh6bevyHyG8uHgf+t0
-         ML2JKn1GvTouUJzYNmluqK/C4Nw6ZTsei7nfxFigPi1CxPcAb+sd5FjHdwBDTyxI0Kka
-         +5MTnng+0fKHuKzGJso+XP9uz7Y0Zs0KTBOj5TheUjjWPbG4FgDZGLxRqZ43Ea3Lw5hs
-         UTSOl2XP120Qqhk/vhQTUUD9rBbOGQp4fdADmWhYpt7XVj1TVh/hloWdZ+2mEqufxzt/
-         gGv5FjwsiRVi3v5SQYt0Hq/Pf3UfMtSSRzDqgPkNVmyFVl60AwmAxfnAAtoQp1k1c1Zt
-         3xiQ==
-X-Gm-Message-State: AOAM531Hr1n3jTYOTX9VhqTu2I/xxR93KfrR30BGx5dFx9JyASC1lIN9
-        ZOY7k2CACwjGxMQeNIDbvxxE9A==
-X-Google-Smtp-Source: ABdhPJxOOBkqtmSGRq5uBC35IeEVOExCMPn+wThxkwQOhppV58DDG+bt3IdDk6y9AOOuq35kRbLKrQ==
-X-Received: by 2002:a5d:504d:: with SMTP id h13mr4420402wrt.133.1622819574228;
-        Fri, 04 Jun 2021 08:12:54 -0700 (PDT)
-Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id z19sm8247865wmf.31.2021.06.04.08.12.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 08:12:53 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 04 Jun 2021 16:12:52 +0100
-Message-Id: <CBUXIZOCOIXC.3V1ERV326ST89@arch-thunder>
-Cc:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -next] usb: isp1760: Fix meaningless check in
- isp1763_run()
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
-To:     "tongtiangen" <tongtiangen@huawei.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-References: <20210601100311.70200-1-tongtiangen@huawei.com>
- <YLjAweuyJXzDn9pe@kroah.com>
- <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
-In-Reply-To: <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
+        id S230034AbhFDPnw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 11:43:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38734 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229864AbhFDPnv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Jun 2021 11:43:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 33663613D8;
+        Fri,  4 Jun 2021 15:42:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1622821325;
+        bh=AIJXE2B3YlISAZlGFNaZeM3VqVQHqhxH/p7d5kS42mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L2/wb1Oo8aXi3frXjSz8tRO67d8WkE9zB4DuaIgy9jB09qqDDoUuPHouAw6B/CQzU
+         WjcVyiNFbDD1kgK9/eP9SijrEbb3qKxxMYRskmVv/g0wRxybV1W+Aj2BfpUhkBw1VB
+         3MAl38Ic4j22OhQ6opvnBpn1SQI/aqTybWspq01vhMr2x75P0jbqDtV0B7OAT+EVxc
+         yRWd0Sc/zYaVL9j4Pke7GvA/1w48xEgV18EK8UlKeR3CtUoW/H/VNP8cZN9CnGIuUv
+         mYFjQN5MbA5Wo87YvQV7G4beFsseyZQdDaBHKYjqWrvludyN/BQFg4x1yDFxK3ekv8
+         mjK0JBWsi5DaQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lpBxV-0005qr-24; Fri, 04 Jun 2021 17:42:05 +0200
+Date:   Fri, 4 Jun 2021 17:42:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>
+Cc:     linux-usb@vger.kernel.org, David Frey <dpfrey@gmail.com>,
+        Pho Tran <pho.tran@silabs.com>,
+        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
+Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21
+ (with bisection)
+Message-ID: <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
+References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
+ <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
+ <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
+ <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
+ <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
+ <YLeapcNbvExeGKuE@hovoldconsulting.com>
+ <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-Managed to test this and looks good. Everything is working as
-expected.
+[ +CC: the Silabs team and David who reported the same issue ]
 
-On Fri Jun 4, 2021 at 3:09 AM WEST, tongtiangen wrote:
-> On 2021/6/3 19:45, Greg Kroah-Hartman wrote:
-> > On Tue, Jun 01, 2021 at 06:03:11PM +0800, Tong Tiangen wrote:
-> >> There's a meaningless check in isp1763_run. According to the
-> >> similar implement in isp1760_run, the proper check should remove
-> >> retval =3D 0;
+Quick summary: Some CP2102N devices cannot use SET_MHS when ulXonLimit
+and ulXoffLimit are set to 128/128 even when auto-RTS is disabled.
+Leaving the default limits at 0/0 seems to work.
 
-however I think a more descriptive changelog instead of comparing to
-similar function would be better, maybe something around:
+Tung, Hung and Pho, do you have some idea of what might be going on
+here?
 
-"Remove attribution to retval before check, which make it completely
-meaningless, and does't check what it was supposed: the return
-value of the timed function to set up configuration flag."
+The full thread is here:
 
-> >>
-> >> Fixes: 60d789f3bfbb ("usb: isp1760: add support for isp1763")
-> >> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
+	https://lore.kernel.org/r/465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com	
+On Wed, Jun 02, 2021 at 10:54:14AM -0500, Alex Villacís Lasso wrote:
+> El 2/6/21 a las 09:50, Johan Hovold escribió:
 
-With changelog changed you can add:
-Tested-by: Rui Miguel Silva <rui.silva@linaro.org>
-Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
-
-------
-Cheers,
-     Rui
-
-> >> ---
-> >>   drivers/usb/isp1760/isp1760-hcd.c | 1 -
-> >>   1 file changed, 1 deletion(-)
-> >>
-> >> diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/i=
-sp1760-hcd.c
-> >> index 016a54ea76f4..27168b4a4ef2 100644
-> >> --- a/drivers/usb/isp1760/isp1760-hcd.c
-> >> +++ b/drivers/usb/isp1760/isp1760-hcd.c
-> >> @@ -1648,7 +1648,6 @@ static int isp1763_run(struct usb_hcd *hcd)
-> >>   	down_write(&ehci_cf_port_reset_rwsem);
-> >>   	retval =3D isp1760_hcd_set_and_wait(hcd, FLAG_CF, 250 * 1000);
-> >>   	up_write(&ehci_cf_port_reset_rwsem);
-> >> -	retval =3D 0;
-> >>   	if (retval)
-> >>   		return retval;
-> >>  =20
-> >> --=20
-> >> 2.18.0.huawei.25
-> >>
-> > Did you test this change to verify that the driver still works properly=
-?
-> > You are now checking something that never was checked before...
+> > This may be a little far-fetched but can you send me the logs (debugging
+> > again enabled) from when:
 > >
-> > thanks,
+> > 	1. plugging the device in
+> > 	2. stty -F /dev/ttyUSB0 ixon ixoff
+> > 	3. stty -F /dev/ttyUSB0 crtscts -ixon -ixoff
+> > 	4. cat /dev/ttyUSB0	# + CTRL-C
 > >
-> > greg k-h
-> > .
-> Sorry,  this fix was not send to Rui.
->  From the point of view of code logic, there should be a problem here. I=
-=20
-> don't have the actual hardware to verify whether it works properly. Rui=
-=20
-> may know if the patch affects the original workflow.
->
-> thanks
-> .
+> > No need to run the terminal program.
 > >
+> > If you could also apply the below debugging patch (on top of the
+> > previous one) which will dump some device settings during probe before
+> > doing the above that would be great.
+> >
+> > Hopefully this will gives some more clues but otherwise I'll probably
+> > just leave the default IXOFF limits for CP2102N to fix the regression.
 
+> >  From 65b53f408b5d6b6408420ed9d1c827f80401796e Mon Sep 17 00:00:00 2001
+> > From: Johan Hovold <johan@kernel.org>
+> > Date: Wed, 2 Jun 2021 16:23:21 +0200
+> > Subject: [PATCH] USB: serial: cp210x: dump communication properties
 
+> Tests with *both* patches applied:
 
+Thanks again for running the new tests.
+
+> <device plugged in>
+
+> jun 02 10:44:29 karlalex-asus kernel: usb 1-9: New USB device found, 
+> idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
+
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: wLength = 66
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulMaxTxQueue = 640
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulMaxRxQueue = 640
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulProvSubType = 1
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulProvCapabilities 
+> = 0x13f
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulSettableParams = 
+> 0x7f
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentTx-Queue 
+> = 640
+> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentRx-Queue 
+> = 640
+
+This all matches the CP2102N I've got here and which can set RTS just
+fine also with the IXOFF limits set (unlike your device).
+
+Unless there's some other configuration setting causing it would seem
+your device firmware is just buggy (and bcdDevice was not updated when
+it was fixed, which seems unlikely).
+
+> $ stty -F /dev/ttyUSB0 ixon ixoff
+> 
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_change_speed - setting baud rate to 9600
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x00, flow = 0x00
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - xon_limit = 0, xoff_limit = 0
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - control = 0x0303
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
+> 0x7 status: -32
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x01, flow = 0x43
+
+Here IXOFF is enabled.
+
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - control = 0x0300
+> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
+> 0x7 status: -32
+
+And setting the IXOFF limits only when software flow control is enabled
+would not work either.
+ 
+> $ stty -F /dev/ttyUSB0 crtscts -ixon -ixoff
+> 
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_change_speed - setting baud rate to 9600
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x01, flow = 0x43
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x00, flow = 0x03
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - control = 0x0303
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
+> 0x7 status: -32
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x00, flow = 0x03
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - ctrl = 0x09, flow = 0x80
+
+Here hardware flow control is enabled.
+
+> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - ctrl = 0x08, flow = 0x00
+
+And then RTS can still be changed using the SET_FLOW command.
+
+I just ran a quick test here and and leaving the ixoff_limit at zero
+essentially breaks software flow control since XOFF will be sent when
+there are only 7 characters in the receive buffer.
+
+Since software flow control support was only recently added, we may have
+to accept that for CP2102N to fix the regression, but I'd really like to
+understand why your devices behave the way they do first and see if
+there's some other way to work around this.
+
+Hopefully Silabs can provide some insight.
+
+Also, could you try setting those limits to some other values and see if
+the SET_MHS (request 0x7) errors go away?
+
+Setting both to 513 is supposed to give us 192/64 according to the
+datasheet which would be good enough, for example. Seems to work as
+documented here (at least for XOFF).
+
+Johan
