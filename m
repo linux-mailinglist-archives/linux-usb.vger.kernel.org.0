@@ -2,35 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A38739B1E3
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 07:19:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6AEB39B1E6
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 07:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbhFDFUq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 01:20:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38126 "EHLO mail.kernel.org"
+        id S229849AbhFDFXF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 01:23:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38334 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229752AbhFDFUp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Jun 2021 01:20:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8F88C6140C;
-        Fri,  4 Jun 2021 05:18:59 +0000 (UTC)
+        id S229826AbhFDFXE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Jun 2021 01:23:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 554FF613D2;
+        Fri,  4 Jun 2021 05:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622783940;
-        bh=ONqzTmF2TKNKpTt2q+hFIF9FuwLq2RcU7s8ak7La8Jo=;
+        s=k20201202; t=1622784079;
+        bh=12fi7DQynrTvCazz/NECZ1ivpizOZu+uNHoDQ/10QOs=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Ywe3k4GGhh+jrD6XrYE7TENci9+SCBcL53Ja9ynyLxj8odUWd0PjyFg/PDoVFEQJX
-         Pu3vjk3XVnCiGBl/nvy2QtwYFaIEgWgHcV3TJUy8R8fazTvzK8i7ANJb8QYkLQLHDQ
-         EHurzq67+4ejlKF2PHNZRBAy0upy+1UnNouWuSGdwlC6qplGVeT9P1VZAfqvyzAYzc
-         S2xhwmBcQmncrGJ5KwzWZeajDhmloI292jvK7CkKTZACuhYVMmL194pqfujJessaL7
-         LQzIu1EXYRBfh6BP5SLKhVE1I2HOTlEgOeShUoLYJmgrBr0hOLK2APMvoe5JUOyA9Y
-         H/LfsBKdP1GgA==
+        b=EGM2cMG1dEKmun1UUVAl9JrUwytJ4i2r/+ks5pyO1DyfV5EOBTf4a5RQlOYTdSeIh
+         JkWy9oon6MzXLaRo9FBv8nxJ6o8NFmPXu5bCpdL3lntIj33tENTbwNnT0LCumsuiT4
+         /udPqxpjcpoIXJ6Dprpj426TbdNZcsBxjWf12vs3zNs3dmOmx4rIqdKTHyez3ksUO+
+         7vUnxl5sTv3SOz7fXQ2E/XZEnjaa7ep/VIYkfFTvlvTNsMXZM9FlIK8PHKYOuWXKCd
+         MopRQLQMEZpZYaZcrWVmHSK1Rn5ODuz45cqWTKAgt+PIoHfeKvaF0fLwcBRE3tZsGP
+         R1yxEi/lZWfvw==
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Alan Stern <stern@rowland.harvard.edu>
 Cc:     USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH 1/4] USB: UDC core: Add udc_async_callbacks gadget op
-In-Reply-To: <20210520202144.GC1216852@rowland.harvard.edu>
-References: <20210520202144.GC1216852@rowland.harvard.edu>
-Date:   Fri, 04 Jun 2021 08:18:53 +0300
-Message-ID: <87y2bqb41u.fsf@kernel.org>
+Subject: Re: [PATCH 2/4] USB: UDC: Implement udc_async_callbacks in dummy-hcd
+In-Reply-To: <20210520202152.GD1216852@rowland.harvard.edu>
+References: <20210520202152.GD1216852@rowland.harvard.edu>
+Date:   Fri, 04 Jun 2021 08:21:11 +0300
+Message-ID: <87v96ub3y0.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -43,29 +43,18 @@ Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
 
-Alan Stern <stern@rowland.harvard.edu> writes:
-> The Gadget API has a theoretical race when a gadget driver is unbound.
-> Although the pull-up is turned off before the driver's ->unbind
-> callback runs, if the USB cable were to be unplugged at just the wrong
-> moment there would be nothing to prevent the UDC driver from invoking
-> the ->disconnect callback after the unbind has finished.  In theory,
-> other asynchronous callbacks could also happen during the time before
-> the UDC driver's udc_stop routine is called, and the gadget driver
-> would not be prepared to handle any of them.
->
-> We need a way to tell UDC drivers to stop issuing asynchronous (that is,
-> ->suspend, ->resume, ->disconnect, ->reset, or ->setup) callbacks at
-> some point after the pull-up has been turned off and before the
-> ->unbind callback runs.  This patch adds a new ->udc_async_callbacks
-> callback to the usb_gadget_ops structure for precisely this purpose,
-> and it adds the corresponding support to the UDC core.
->
-> Later patches in this series add support for udc_async_callbacks to
-> several UDC drivers.
->
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Hi,
 
-Thank you for working on this, Alan.
+Alan Stern <stern@rowland.harvard.edu> writes:
+> @@ -990,7 +1000,6 @@ static int dummy_udc_start(struct usb_ga
+>  	spin_lock_irq(&dum->lock);
+>  	dum->devstatus =3D 0;
+>  	dum->driver =3D driver;
+> -	dum->ints_enabled =3D 1;
+
+should the matching write of 0 be removed from dummy_udc_stop()?
+
+Other than that:
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
@@ -77,13 +66,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC5t70RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUj91Af/cisNEgAuKdLLaZah3VNIB3B//gFq2Euf
-J6sGWPznwgS0Of/qxI9Fd/UW9EP5+qhbxzDabUnpe1JqtjhoIli67G7d5h2v21Pu
-q0s01DAf6moeW3LBGEAo9cj89aZYZkLbYzbSZpYcGdbXqC7dGdCZroAVHrQgPjxu
-Jyzu3kiULaAOEM0j1nPtlD5eesxYiYzZ3il3vqf4mPe5DMojs4Og9ADRkw5YhPAF
-Y27s6i86d5bVGW/OoPJYReH0WN838lf26UkIckGGYqFJdXLw4uX/YM+lGQ4Fsv9H
-ANOYlXnpg1qzmkeQJBAj89gPrbrE3Dov/u8pLunVjBbZoymtZcofxg==
-=glgX
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmC5uEcRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUj5yggApGSHOhCAoqSJBsTz9RYOa/nuOv0XJCCS
+RwCeHig9BFyBapSq7DvH/07OLZuoscQ7EPWaeaAEatPVYpIgfQZlaUTEv0H/3ED0
+nw2GLRjcgMDVaAE58yrdgSWonpaJyaF0VG8O7rtMMm8Y1lQAk9duEmKprYPTxpzX
+X58UCbgRfBiyORZgRXlHWFcSdNqGpGML9CUsfz7fAbpzdQqlAgraHW+1iFm1bT4C
+jHf2zzxzZLLd33D3Arx87tTlHuMsr/ZMdW6GNtWQK5Vx9I2GZ7wTyVEoP+5EaPFJ
+pXH+4KFm5CNj4UHNRvJE5BnEYQh3gxDvgnfL6AhkqCWtqXBJpQjVmQ==
+=pO6n
 -----END PGP SIGNATURE-----
 --=-=-=--
