@@ -2,563 +2,750 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8422039BF8A
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 20:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A9839C048
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 21:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbhFDS1P (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 14:27:15 -0400
-Received: from mail.palosanto.com ([181.39.87.190]:36998 "EHLO palosanto.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229791AbhFDS1P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Jun 2021 14:27:15 -0400
-Received: from localhost (mail.palosanto.com [127.0.0.1])
-        by palosanto.com (Postfix) with ESMTP id 38C9A13C2A54;
-        Fri,  4 Jun 2021 13:25:25 -0500 (-05)
-X-Virus-Scanned: Debian amavisd-new at mail.palosanto.com
-Received: from palosanto.com ([127.0.0.1])
-        by localhost (mail.palosanto.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id qUPWR2zyEQXg; Fri,  4 Jun 2021 13:25:18 -0500 (-05)
-Received: from [192.168.0.105] (unknown [191.99.2.15])
-        by palosanto.com (Postfix) with ESMTPSA id F140113C25D3;
-        Fri,  4 Jun 2021 13:25:17 -0500 (-05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=palosanto.com;
-        s=mail; t=1622831118;
-        bh=GlMTHBuvFeaQuDZKMYYT+Zs4Ixqkz1PXc1p9Hou3lJU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ca3PbOyAR4Dod1np0GCLIH1NAV3mkPT8l6vshTDl80P4IIoMxJbY+g9L6V8hRz0Or
-         lpTMfkcopl/bxnL0HRD6GHRTXhQVnJmEWdLnMRrArdkE1k7mW+c1bxvs31HZR1jgWs
-         DgPFG6unv9Az6eGE8AUNYuzoRzc2T18TlKdltI6s=
-Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21 (with
- bisection)
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, David Frey <dpfrey@gmail.com>,
-        Pho Tran <pho.tran@silabs.com>,
-        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
-References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
- <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
- <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
- <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
- <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
- <YLeapcNbvExeGKuE@hovoldconsulting.com>
- <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
- <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
-From:   =?UTF-8?Q?Alex_Villac=c3=ads_Lasso?= <a_villacis@palosanto.com>
-Message-ID: <a3a37639-0cba-fb3e-96bf-b4c2dae544a7@palosanto.com>
-Date:   Fri, 4 Jun 2021 13:25:19 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S229972AbhFDTSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 15:18:07 -0400
+Received: from smtprelay0043.hostedemail.com ([216.40.44.43]:55252 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229501AbhFDTSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 15:18:05 -0400
+X-Greylist: delayed 374 seconds by postgrey-1.27 at vger.kernel.org; Fri, 04 Jun 2021 15:18:04 EDT
+Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
+        by smtpgrave04.hostedemail.com (Postfix) with ESMTP id 1A834181A862F;
+        Fri,  4 Jun 2021 19:10:08 +0000 (UTC)
+Received: from omf09.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay06.hostedemail.com (Postfix) with ESMTP id 158D4181A6F19;
+        Fri,  4 Jun 2021 19:10:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 80A7B1E04D9;
+        Fri,  4 Jun 2021 19:09:50 +0000 (UTC)
+Message-ID: <2b8fb4eb25724b6e72526a963ce5093d3cc5120d.camel@perches.com>
+Subject: [PATCH] treewide: Add missing semicolons to __assign_str uses
+From:   Joe Perches <joe@perches.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Qiang Yu <yuq825@gmail.com>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sunil Goutham <sgoutham@marvell.com>,
+        Linu Cherian <lcherian@marvell.com>,
+        Geetha sowjanya <gakula@marvell.com>,
+        Jerin Jacob <jerinj@marvell.com>,
+        hariprasad <hkelam@marvell.com>,
+        Subbaraya Sundeep <sbhatta@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, lima@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Date:   Fri, 04 Jun 2021 12:09:48 -0700
+In-Reply-To: <20210604122128.0d348960@oasis.local.home>
+References: <cover.1621024265.git.bristot@redhat.com>
+         <2c59beee3b36b15592bfbb9f26dee7f8b55fd814.1621024265.git.bristot@redhat.com>
+         <20210603172902.41648183@gandalf.local.home>
+         <1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com>
+         <20210604122128.0d348960@oasis.local.home>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.38.1-1 
 MIME-Version: 1.0
-In-Reply-To: <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
-Content-Type: multipart/mixed;
- boundary="------------F4B29F672E3E62CCBEC42566"
-Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.40
+X-Stat-Signature: gq9kfcy66b6ukqw79kah4kgtd93zrsxc
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 80A7B1E04D9
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+nN+iOwQL+6aJp7zfNv8g4h28sP2gU9NQ=
+X-HE-Tag: 1622833790-435690
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------F4B29F672E3E62CCBEC42566
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+The __assign_str macro has an unusual ending semicolon but the vast
+majority of uses of the macro already have semicolon termination.
 
-El 4/6/21 a las 10:42, Johan Hovold escribió:
-> [ +CC: the Silabs team and David who reported the same issue ]
->
-> Quick summary: Some CP2102N devices cannot use SET_MHS when ulXonLimit
-> and ulXoffLimit are set to 128/128 even when auto-RTS is disabled.
-> Leaving the default limits at 0/0 seems to work.
->
-> Tung, Hung and Pho, do you have some idea of what might be going on
-> here?
->
-> The full thread is here:
->
-> 	https://lore.kernel.org/r/465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com	
-> On Wed, Jun 02, 2021 at 10:54:14AM -0500, Alex Villacís Lasso wrote:
->> El 2/6/21 a las 09:50, Johan Hovold escribió:
->>> This may be a little far-fetched but can you send me the logs (debugging
->>> again enabled) from when:
->>>
->>> 	1. plugging the device in
->>> 	2. stty -F /dev/ttyUSB0 ixon ixoff
->>> 	3. stty -F /dev/ttyUSB0 crtscts -ixon -ixoff
->>> 	4. cat /dev/ttyUSB0	# + CTRL-C
->>>
->>> No need to run the terminal program.
->>>
->>> If you could also apply the below debugging patch (on top of the
->>> previous one) which will dump some device settings during probe before
->>> doing the above that would be great.
->>>
->>> Hopefully this will gives some more clues but otherwise I'll probably
->>> just leave the default IXOFF limits for CP2102N to fix the regression.
->>>   From 65b53f408b5d6b6408420ed9d1c827f80401796e Mon Sep 17 00:00:00 2001
->>> From: Johan Hovold <johan@kernel.org>
->>> Date: Wed, 2 Jun 2021 16:23:21 +0200
->>> Subject: [PATCH] USB: serial: cp210x: dump communication properties
->> Tests with *both* patches applied:
-> Thanks again for running the new tests.
->
->> <device plugged in>
->> jun 02 10:44:29 karlalex-asus kernel: usb 1-9: New USB device found,
->> idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: wLength = 66
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulMaxTxQueue = 640
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulMaxRxQueue = 640
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulProvSubType = 1
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulProvCapabilities
->> = 0x13f
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulSettableParams =
->> 0x7f
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentTx-Queue
->> = 640
->> jun 02 10:44:29 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentRx-Queue
->> = 640
-> This all matches the CP2102N I've got here and which can set RTS just
-> fine also with the IXOFF limits set (unlike your device).
->
-> Unless there's some other configuration setting causing it would seem
-> your device firmware is just buggy (and bcdDevice was not updated when
-> it was fixed, which seems unlikely).
->
->> $ stty -F /dev/ttyUSB0 ixon ixoff
->>
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_change_speed - setting baud rate to 9600
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x00
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - xon_limit = 0, xoff_limit = 0
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0303
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x01
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x01, flow = 0x43
-> Here IXOFF is enabled.
->
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0300
->> jun 02 10:45:40 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
-> And setting the IXOFF limits only when software flow control is enabled
-> would not work either.
->   
->> $ stty -F /dev/ttyUSB0 crtscts -ixon -ixoff
->>
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_change_speed - setting baud rate to 9600
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x01, flow = 0x43
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x03
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - control = 0x0303
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0: failed set request
->> 0x7 status: -32
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x00, flow = 0x03
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - xon_limit = 128, xoff_limit = 128
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_set_flow_control - ctrl = 0x09, flow = 0x80
-> Here hardware flow control is enabled.
->
->> jun 02 10:46:41 karlalex-asus kernel: cp210x ttyUSB0:
->> cp210x_tiocmset_port - ctrl = 0x08, flow = 0x00
-> And then RTS can still be changed using the SET_FLOW command.
->
-> I just ran a quick test here and and leaving the ixoff_limit at zero
-> essentially breaks software flow control since XOFF will be sent when
-> there are only 7 characters in the receive buffer.
->
-> Since software flow control support was only recently added, we may have
-> to accept that for CP2102N to fix the regression, but I'd really like to
-> understand why your devices behave the way they do first and see if
-> there's some other way to work around this.
->
-> Hopefully Silabs can provide some insight.
->
-> Also, could you try setting those limits to some other values and see if
-> the SET_MHS (request 0x7) errors go away?
->
-> Setting both to 513 is supposed to give us 192/64 according to the
-> datasheet which would be good enough, for example. Seems to work as
-> documented here (at least for XOFF).
->
-> Johan
+$ git grep -P '\b__assign_str\b' | wc -l
+551
+$ git grep -P '\b__assign_str\b.*;' | wc -l
+480
 
+Add semicolons to the __assign_str() uses without semicolon termination
+and all the other uses without semicolon termination via additional defines
+that are equivalent to __assign_str() with the eventual goal of removing
+the semicolon from the __assign_str() macro definition.
 
-I am starting to suspect that the root cause is that the 0x07 command 
-(CP210X_SET_MHS macro in the code) is invalid to send, if the device has 
-been previously programmed with nonzero ulXonLimit/ulXoffLimit. When the 
-patch programs both limits back to 0, the command succeeds.
+Link: https://lore.kernel.org/lkml/1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com/
 
-I am attaching the patch I used, which is the combination of both debug 
-patches, plus this change:
+Signed-off-by: Joe Perches <joe@perches.com>
+---
 
-@@ -1195,11 +1201,14 @@
-         else
-                 flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
+Compiled x84-64 allyesconfig
 
--       flow_ctl.ulXonLimit = cpu_to_le32(128);
--       flow_ctl.ulXoffLimit = cpu_to_le32(128);
-+       flow_ctl.ulXonLimit = (I_IXON(tty)) ? cpu_to_le32(128) : 
-cpu_to_le32(0);
-+       flow_ctl.ulXoffLimit = (I_IXOFF(tty)) ? cpu_to_le32(128) : 
-cpu_to_le32(0);
+On Fri, 2021-06-04 at 12:21 -0400, Steven Rostedt wrote:
+> I have no problem taking a clean up patch that adds semicolons to all
+> use cases of "__assign_str()" and ever remove the one from where it is
+> defined. As long as it doesn't break any builds, I'm fine with that.
 
-With this patch, the miniterm.py program sort of keeps running and shows 
-output. Not a perfect patch by any means, since some failures still happen:
+Removing the semicolon from the macro definition is left for another patch.
 
-# echo module cp210x +p > /sys/kernel/debug/dynamic_debug/control ; 
-insmod ./cp210x.ko dyndbg==p
+ drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h          | 14 ++++----
+ drivers/gpu/drm/lima/lima_trace.h                  |  2 +-
+ drivers/infiniband/hw/hfi1/trace_misc.h            |  4 +--
+ drivers/infiniband/hw/hfi1/trace_rc.h              |  4 +--
+ drivers/infiniband/hw/hfi1/trace_tid.h             |  6 ++--
+ drivers/infiniband/hw/hfi1/trace_tx.h              |  8 ++---
+ drivers/infiniband/sw/rdmavt/trace_cq.h            |  4 +--
+ drivers/infiniband/sw/rdmavt/trace_mr.h            |  2 +-
+ drivers/infiniband/sw/rdmavt/trace_qp.h            |  4 +--
+ drivers/infiniband/sw/rdmavt/trace_rc.h            |  2 +-
+ drivers/infiniband/sw/rdmavt/trace_tx.h            |  4 +--
+ drivers/misc/mei/mei-trace.h                       |  6 ++--
+ .../net/ethernet/marvell/octeontx2/af/rvu_trace.h  | 12 +++----
+ drivers/net/fjes/fjes_trace.h                      |  4 +--
+ drivers/usb/cdns3/cdnsp-trace.h                    |  2 +-
+ fs/nfs/nfs4trace.h                                 |  6 ++--
+ fs/nfs/nfstrace.h                                  |  4 +--
+ include/trace/events/btrfs.h                       |  2 +-
+ include/trace/events/dma_fence.h                   |  4 +--
+ include/trace/events/rpcgss.h                      |  4 +--
+ include/trace/events/sunrpc.h                      | 40 +++++++++++-----------
+ net/mac80211/trace.h                               |  2 +-
+ 22 files changed, 70 insertions(+), 70 deletions(-)
 
-jun 04 13:03:52 karlalex-asus kernel: usbcore: registered new interface 
-driver cp210x
-jun 04 13:03:52 karlalex-asus kernel: usbserial: USB Serial support 
-registered for cp210x
-
-<device plugged in>
-
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: new full-speed USB device 
-number 8 using xhci_hcd
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: New USB device found, 
-idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: New USB device strings: 
-Mfr=1, Product=2, SerialNumber=3
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: Product: CP2102N USB to 
-UART Bridge Controller
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: Manufacturer: Silicon Labs
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: SerialNumber: 
-283405bafee6e81182024fe64b629a73
-jun 04 13:04:44 karlalex-asus kernel: cp210x 1-9:1.0: cp210x converter 
-detected
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: wLength = 66
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulMaxTxQueue = 640
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulMaxRxQueue = 640
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulProvSubType = 1
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulProvCapabilities 
-= 0x13f
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulSettableParams = 
-0x7f
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentTx-Queue 
-= 640
-jun 04 13:04:44 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentRx-Queue 
-= 640
-jun 04 13:04:44 karlalex-asus kernel: usb 1-9: cp210x converter now 
-attached to ttyUSB0
-jun 04 13:04:44 karlalex-asus mtp-probe[22237]: checking bus 1, device 
-8: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 04 13:04:44 karlalex-asus mtp-probe[22237]: bus: 1, device: 8 was 
-not an MTP device
-jun 04 13:04:44 karlalex-asus mtp-probe[22254]: checking bus 1, device 
-8: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 04 13:04:44 karlalex-asus mtp-probe[22254]: bus: 1, device: 8 was 
-not an MTP device
-jun 04 13:04:47 karlalex-asus ModemManager[724]: <info> [base-manager] 
-couldn't check support for device 
-'/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9': not supported by any 
-plugin
-
-
-$ miniterm.py /dev/ttyUSB0 115200
-<program waits for input>
-
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x00
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 0, xoff_limit = 0
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x00, flow = 0x01
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 0
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0303
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 115384
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x01
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 0
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x01, flow = 0x40
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 0, xoff_limit = 0
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0101
-jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0202
-
-
-<miniterm.py terminated via Ctrl-]>
-
-jun 04 13:07:09 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0300
-
---------------------------------------
-
-# echo module cp210x +p > /sys/kernel/debug/dynamic_debug/control ; 
-insmod ./cp210x.ko dyndbg==p
-
-jun 04 13:08:33 karlalex-asus kernel: usbcore: registered new interface 
-driver cp210x
-jun 04 13:08:33 karlalex-asus kernel: usbserial: USB Serial support 
-registered for cp210x
-
-<device plugged in>
-
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: new full-speed USB device 
-number 9 using xhci_hcd
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: New USB device found, 
-idVendor=10c4, idProduct=ea60, bcdDevice= 1.00
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: New USB device strings: 
-Mfr=1, Product=2, SerialNumber=3
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: Product: CP2102N USB to 
-UART Bridge Controller
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: Manufacturer: Silicon Labs
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: SerialNumber: 
-283405bafee6e81182024fe64b629a73
-jun 04 13:09:30 karlalex-asus kernel: cp210x 1-9:1.0: cp210x converter 
-detected
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: wLength = 66
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulMaxTxQueue = 640
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulMaxRxQueue = 640
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulProvSubType = 1
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulProvCapabilities 
-= 0x13f
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulSettableParams = 
-0x7f
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentTx-Queue 
-= 640
-jun 04 13:09:30 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentRx-Queue 
-= 640
-jun 04 13:09:30 karlalex-asus kernel: usb 1-9: cp210x converter now 
-attached to ttyUSB0
-jun 04 13:09:30 karlalex-asus mtp-probe[22662]: checking bus 1, device 
-9: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 04 13:09:30 karlalex-asus mtp-probe[22662]: bus: 1, device: 9 was 
-not an MTP device
-jun 04 13:09:30 karlalex-asus mtp-probe[22679]: checking bus 1, device 
-9: "/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9"
-jun 04 13:09:30 karlalex-asus mtp-probe[22679]: bus: 1, device: 9 was 
-not an MTP device
-jun 04 13:09:32 karlalex-asus ModemManager[724]: <info> [base-manager] 
-couldn't check support for device 
-'/sys/devices/pci0000:00/0000:00:14.0/usb1/1-9': not supported by any 
-plugin
-
-
-$ stty -F /dev/ttyUSB0 -a
-speed 9600 baud; rows 0; columns 0; line = 0;
-intr = ^C; quit = ^\; erase = ^?; kill = ^U; eof = ^D; eol = <undef>; 
-eol2 = <undef>; swtch = <undef>; start = ^Q; stop = ^S; susp = ^Z; rprnt 
-= ^R; werase = ^W; lnext = ^V; discard = ^O; min = 1; time = 0;
--parenb -parodd -cmspar cs8 hupcl -cstopb cread clocal -crtscts
--ignbrk -brkint -ignpar -parmrk -inpck -istrip -inlcr -igncr icrnl ixon 
--ixoff -iuclc -ixany -imaxbel -iutf8
-opost -olcuc -ocrnl onlcr -onocr -onlret -ofill -ofdel nl0 cr0 tab0 bs0 
-vt0 ff0
-isig icanon iexten echo echoe echok -echonl -noflsh -xcase -tostop 
--echoprt echoctl echoke -flusho -extproc
-
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x00
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 0, xoff_limit = 0
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x00, flow = 0x01
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 0
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0303
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0300
-jun 04 13:10:47 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-
-
-$ stty -F /dev/ttyUSB0 ixon ixoff
-
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x01
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 0
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x00, flow = 0x01
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 0
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0303
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x01
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 0
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x01, flow = 0x43
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 128
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0300
-jun 04 13:12:31 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-
-
-$ stty -F /dev/ttyUSB0 crtscts -ixon -ixoff
-
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x01, flow = 0x43
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 128
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x00, flow = 0x03
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 128
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - control = 0x0303
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
-0x7 status: -32
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x03
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 128
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x09, flow = 0x80
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 0, xoff_limit = 0
-jun 04 13:14:49 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - ctrl = 0x08, flow = 0x00
-
-$ cat /dev/ttyUSB0
-<waits for input>
-
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_change_speed - setting baud rate to 9600
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: ctrl = 0x08, flow = 0x00
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - BEFORE: xon_limit = 0, xoff_limit = 0
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: ctrl = 0x08, flow = 0x00
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_set_flow_control - AFTER: xon_limit = 0, xoff_limit = 0
-jun 04 13:17:21 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - ctrl = 0x09, flow = 0x80
-
-
-<Ctrl-C pressed>
-jun 04 13:17:57 karlalex-asus kernel: cp210x ttyUSB0: 
-cp210x_tiocmset_port - ctrl = 0x08, flow = 0x00
-
-
---------------F4B29F672E3E62CCBEC42566
-Content-Type: text/x-patch; charset=UTF-8;
- name="t1.patch"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="t1.patch"
-
---- cp210x.c.orig-5.12.8	2021-06-01 12:04:24.807117676 -0500
-+++ cp210x.c	2021-06-04 13:03:14.300539440 -0500
-@@ -1159,6 +1159,12 @@
- 	ctl_hs = le32_to_cpu(flow_ctl.ulControlHandshake);
- 	flow_repl = le32_to_cpu(flow_ctl.ulFlowReplace);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
+index 0527772fe1b80..d855cb53c7e09 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
+@@ -176,10 +176,10 @@ TRACE_EVENT(amdgpu_cs_ioctl,
  
-+	dev_dbg(&port->dev, "%s - BEFORE: ctrl = 0x%02x, flow = 0x%02x\n", __func__,
-+			ctl_hs, flow_repl);
-+	dev_dbg(&port->dev, "%s - BEFORE: xon_limit = %u, xoff_limit = %u\n", __func__,
-+			le32_to_cpu(flow_ctl.ulXonLimit),
-+			le32_to_cpu(flow_ctl.ulXoffLimit));
-+
- 	ctl_hs &= ~CP210X_SERIAL_DSR_HANDSHAKE;
- 	ctl_hs &= ~CP210X_SERIAL_DCD_HANDSHAKE;
- 	ctl_hs &= ~CP210X_SERIAL_DSR_SENSITIVITY;
-@@ -1195,11 +1201,14 @@
- 	else
- 		flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
+ 	    TP_fast_assign(
+ 			   __entry->sched_job_id = job->base.id;
+-			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
++			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job));
+ 			   __entry->context = job->base.s_fence->finished.context;
+ 			   __entry->seqno = job->base.s_fence->finished.seqno;
+-			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name)
++			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name);
+ 			   __entry->num_ibs = job->num_ibs;
+ 			   ),
+ 	    TP_printk("sched_job=%llu, timeline=%s, context=%u, seqno=%u, ring_name=%s, num_ibs=%u",
+@@ -201,10 +201,10 @@ TRACE_EVENT(amdgpu_sched_run_job,
  
--	flow_ctl.ulXonLimit = cpu_to_le32(128);
--	flow_ctl.ulXoffLimit = cpu_to_le32(128);
-+	flow_ctl.ulXonLimit = (I_IXON(tty)) ? cpu_to_le32(128) : cpu_to_le32(0);
-+	flow_ctl.ulXoffLimit = (I_IXOFF(tty)) ? cpu_to_le32(128) : cpu_to_le32(0);
+ 	    TP_fast_assign(
+ 			   __entry->sched_job_id = job->base.id;
+-			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
++			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job));
+ 			   __entry->context = job->base.s_fence->finished.context;
+ 			   __entry->seqno = job->base.s_fence->finished.seqno;
+-			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name)
++			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name);
+ 			   __entry->num_ibs = job->num_ibs;
+ 			   ),
+ 	    TP_printk("sched_job=%llu, timeline=%s, context=%u, seqno=%u, ring_name=%s, num_ibs=%u",
+@@ -229,7 +229,7 @@ TRACE_EVENT(amdgpu_vm_grab_id,
  
--	dev_dbg(&port->dev, "%s - ctrl = 0x%02x, flow = 0x%02x\n", __func__,
-+	dev_dbg(&port->dev, "%s - AFTER: ctrl = 0x%02x, flow = 0x%02x\n", __func__,
- 			ctl_hs, flow_repl);
-+	dev_dbg(&port->dev, "%s - AFTER: xon_limit = %u, xoff_limit = %u\n", __func__,
-+			le32_to_cpu(flow_ctl.ulXonLimit),
-+			le32_to_cpu(flow_ctl.ulXoffLimit));
+ 	    TP_fast_assign(
+ 			   __entry->pasid = vm->pasid;
+-			   __assign_str(ring, ring->name)
++			   __assign_str(ring, ring->name);
+ 			   __entry->vmid = job->vmid;
+ 			   __entry->vm_hub = ring->funcs->vmhub,
+ 			   __entry->pd_addr = job->vm_pd_addr;
+@@ -424,7 +424,7 @@ TRACE_EVENT(amdgpu_vm_flush,
+ 			     ),
  
- 	flow_ctl.ulControlHandshake = cpu_to_le32(ctl_hs);
- 	flow_ctl.ulFlowReplace = cpu_to_le32(flow_repl);
-@@ -1829,6 +1838,37 @@
+ 	    TP_fast_assign(
+-			   __assign_str(ring, ring->name)
++			   __assign_str(ring, ring->name);
+ 			   __entry->vmid = vmid;
+ 			   __entry->vm_hub = ring->funcs->vmhub;
+ 			   __entry->pd_addr = pd_addr;
+@@ -525,7 +525,7 @@ TRACE_EVENT(amdgpu_ib_pipe_sync,
+ 			     ),
  
- #endif
+ 	    TP_fast_assign(
+-			   __assign_str(ring, sched_job->base.sched->name)
++			   __assign_str(ring, sched_job->base.sched->name);
+ 			   __entry->id = sched_job->base.id;
+ 			   __entry->fence = fence;
+ 			   __entry->ctx = fence->context;
+diff --git a/drivers/gpu/drm/lima/lima_trace.h b/drivers/gpu/drm/lima/lima_trace.h
+index 3a430e93d384c..494b9790b1daf 100644
+--- a/drivers/gpu/drm/lima/lima_trace.h
++++ b/drivers/gpu/drm/lima/lima_trace.h
+@@ -24,7 +24,7 @@ DECLARE_EVENT_CLASS(lima_task,
+ 		__entry->task_id = task->base.id;
+ 		__entry->context = task->base.s_fence->finished.context;
+ 		__entry->seqno = task->base.s_fence->finished.seqno;
+-		__assign_str(pipe, task->base.sched->name)
++		__assign_str(pipe, task->base.sched->name);
+ 		),
  
-+static void cp210x_dump_props(struct usb_serial_port *port)
-+{
-+	struct usb_device *udev = port->serial->dev;
-+	void *buf;
-+	int ret;
-+
-+	buf = kzalloc(256, GFP_KERNEL);
-+	if (!buf)
-+		return;
-+
-+	ret = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
-+			CP210X_GET_PROPS, REQTYPE_INTERFACE_TO_HOST, 0,
-+			cp210x_interface_num(port->serial), buf, 256,
-+			USB_CTRL_GET_TIMEOUT);
-+	if (ret < 52) {
-+		dev_err(&port->dev, "failed to get props: %d\n", ret);
-+		goto out;
-+	}
-+
-+	dev_dbg(&port->dev, "wLength = %u\n", le16_to_cpup(buf));
-+	dev_dbg(&port->dev, "ulMaxTxQueue = %u\n", le32_to_cpup(buf + 12));
-+	dev_dbg(&port->dev, "ulMaxRxQueue = %u\n", le32_to_cpup(buf + 16));
-+	dev_dbg(&port->dev, "ulProvSubType = %u\n", le32_to_cpup(buf + 24));
-+	dev_dbg(&port->dev, "ulProvCapabilities = 0x%02x\n", le32_to_cpup(buf + 28));
-+	dev_dbg(&port->dev, "ulSettableParams = 0x%02x\n", le32_to_cpup(buf + 32));
-+	dev_dbg(&port->dev, "ulCurrentTx-Queue = %u\n", le32_to_cpup(buf + 44));
-+	dev_dbg(&port->dev, "ulCurrentRx-Queue = %u\n", le32_to_cpup(buf + 48));
-+out:
-+	kfree(buf);
-+}
-+
- static int cp210x_port_probe(struct usb_serial_port *port)
- {
- 	struct usb_serial *serial = port->serial;
-@@ -1843,6 +1883,8 @@
+ 	TP_printk("task=%llu, context=%u seqno=%u pipe=%s",
+diff --git a/drivers/infiniband/hw/hfi1/trace_misc.h b/drivers/infiniband/hw/hfi1/trace_misc.h
+index 8db2253523ffe..93338988b9220 100644
+--- a/drivers/infiniband/hw/hfi1/trace_misc.h
++++ b/drivers/infiniband/hw/hfi1/trace_misc.h
+@@ -63,7 +63,7 @@ TRACE_EVENT(hfi1_interrupt,
+ 			     __array(char, buf, 64)
+ 			     __field(int, src)
+ 			     ),
+-	    TP_fast_assign(DD_DEV_ASSIGN(dd)
++	    TP_fast_assign(DD_DEV_ASSIGN(dd);
+ 			   is_entry->is_name(__entry->buf, 64,
+ 					     src - is_entry->start);
+ 			   __entry->src = src;
+@@ -100,7 +100,7 @@ TRACE_EVENT(hfi1_fault_opcode,
+ 			     __field(u32, qpn)
+ 			     __field(u8, opcode)
+ 			     ),
+-	    TP_fast_assign(DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++	    TP_fast_assign(DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 			   __entry->qpn = qp->ibqp.qp_num;
+ 			   __entry->opcode = opcode;
+ 			   ),
+diff --git a/drivers/infiniband/hw/hfi1/trace_rc.h b/drivers/infiniband/hw/hfi1/trace_rc.h
+index 1ebca37862e06..5f49e1eeb2116 100644
+--- a/drivers/infiniband/hw/hfi1/trace_rc.h
++++ b/drivers/infiniband/hw/hfi1/trace_rc.h
+@@ -70,7 +70,7 @@ DECLARE_EVENT_CLASS(hfi1_rc_template,
+ 			__field(u32, r_psn)
+ 			),
+ 		    TP_fast_assign(
+-			DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++			DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 			__entry->qpn = qp->ibqp.qp_num;
+ 			__entry->s_flags = qp->s_flags;
+ 			__entry->psn = psn;
+@@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(/* rc_ack */
+ 		__field(u32, lpsn)
+ 	),
+ 	TP_fast_assign(/* assign */
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->aeth = aeth;
+ 		__entry->psn = psn;
+diff --git a/drivers/infiniband/hw/hfi1/trace_tid.h b/drivers/infiniband/hw/hfi1/trace_tid.h
+index 985ffa9cc958f..d129b81959599 100644
+--- a/drivers/infiniband/hw/hfi1/trace_tid.h
++++ b/drivers/infiniband/hw/hfi1/trace_tid.h
+@@ -886,7 +886,7 @@ DECLARE_EVENT_CLASS(/* sender_info */
+ 		__field(u8, s_retry)
+ 	),
+ 	TP_fast_assign(/* assign */
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->state = qp->state;
+ 		__entry->s_cur = qp->s_cur;
+@@ -1285,7 +1285,7 @@ DECLARE_EVENT_CLASS(/* rc_rcv_err */
+ 		__field(int, diff)
+ 	),
+ 	TP_fast_assign(/* assign */
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->s_flags = qp->s_flags;
+ 		__entry->state = qp->state;
+@@ -1574,7 +1574,7 @@ DECLARE_EVENT_CLASS(/* tid_ack */
+ 		__field(u32, resync_psn)
+ 	),
+ 	TP_fast_assign(/* assign */
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->aeth = aeth;
+ 		__entry->psn = psn;
+diff --git a/drivers/infiniband/hw/hfi1/trace_tx.h b/drivers/infiniband/hw/hfi1/trace_tx.h
+index d44fc54858b90..f1922a7619fe8 100644
+--- a/drivers/infiniband/hw/hfi1/trace_tx.h
++++ b/drivers/infiniband/hw/hfi1/trace_tx.h
+@@ -120,7 +120,7 @@ DECLARE_EVENT_CLASS(hfi1_qpsleepwakeup_template,
+ 		    __field(unsigned long, iow_flags)
+ 		    ),
+ 		    TP_fast_assign(
+-		    DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		    DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		    __entry->flags = flags;
+ 		    __entry->qpn = qp->ibqp.qp_num;
+ 		    __entry->s_flags = qp->s_flags;
+@@ -868,7 +868,7 @@ TRACE_EVENT(
+ 		__field(int, send_flags)
+ 	),
+ 	TP_fast_assign(
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->wqe = wqe;
+ 		__entry->wr_id = wqe->wr.wr_id;
+ 		__entry->qpn = qp->ibqp.qp_num;
+@@ -904,7 +904,7 @@ DECLARE_EVENT_CLASS(
+ 		__field(bool, flag)
+ 	),
+ 	TP_fast_assign(
+-		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
++		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->flag = flag;
+ 	),
+@@ -952,7 +952,7 @@ DECLARE_EVENT_CLASS(/* AIP  */
+ 		__field(u8, stopped)
+ 	),
+ 	TP_fast_assign(/* assign */
+-		DD_DEV_ASSIGN(txq->priv->dd)
++		DD_DEV_ASSIGN(txq->priv->dd);
+ 		__entry->txq = txq;
+ 		__entry->sde = txq->sde;
+ 		__entry->head = txq->tx_ring.head;
+diff --git a/drivers/infiniband/sw/rdmavt/trace_cq.h b/drivers/infiniband/sw/rdmavt/trace_cq.h
+index e3c416c6f900f..91bc192cee5e4 100644
+--- a/drivers/infiniband/sw/rdmavt/trace_cq.h
++++ b/drivers/infiniband/sw/rdmavt/trace_cq.h
+@@ -85,7 +85,7 @@ DECLARE_EVENT_CLASS(rvt_cq_template,
+ 				     __field(int, comp_vector_cpu)
+ 				     __field(u32, flags)
+ 				     ),
+-		    TP_fast_assign(RDI_DEV_ASSIGN(cq->rdi)
++		    TP_fast_assign(RDI_DEV_ASSIGN(cq->rdi);
+ 				   __entry->ip = cq->ip;
+ 				   __entry->cqe = attr->cqe;
+ 				   __entry->comp_vector = attr->comp_vector;
+@@ -123,7 +123,7 @@ DECLARE_EVENT_CLASS(
+ 		__field(u32, imm)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(cq->rdi)
++		RDI_DEV_ASSIGN(cq->rdi);
+ 		__entry->wr_id = wc->wr_id;
+ 		__entry->status = wc->status;
+ 		__entry->opcode = wc->opcode;
+diff --git a/drivers/infiniband/sw/rdmavt/trace_mr.h b/drivers/infiniband/sw/rdmavt/trace_mr.h
+index 95b8a0e3b8bdb..c5b675ca4fa08 100644
+--- a/drivers/infiniband/sw/rdmavt/trace_mr.h
++++ b/drivers/infiniband/sw/rdmavt/trace_mr.h
+@@ -195,7 +195,7 @@ TRACE_EVENT(
+ 		__field(uint, sg_offset)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(ib_to_rvt(to_imr(ibmr)->mr.pd->device))
++		RDI_DEV_ASSIGN(ib_to_rvt(to_imr(ibmr)->mr.pd->device));
+ 		__entry->ibmr_iova = ibmr->iova;
+ 		__entry->iova = to_imr(ibmr)->mr.iova;
+ 		__entry->user_base = to_imr(ibmr)->mr.user_base;
+diff --git a/drivers/infiniband/sw/rdmavt/trace_qp.h b/drivers/infiniband/sw/rdmavt/trace_qp.h
+index c32d21cc615e4..800cec8bb3c76 100644
+--- a/drivers/infiniband/sw/rdmavt/trace_qp.h
++++ b/drivers/infiniband/sw/rdmavt/trace_qp.h
+@@ -65,7 +65,7 @@ DECLARE_EVENT_CLASS(rvt_qphash_template,
+ 		__field(u32, bucket)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
++		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->bucket = bucket;
+ 	),
+@@ -97,7 +97,7 @@ DECLARE_EVENT_CLASS(
+ 		__field(u32, to)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
++		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
+ 		__entry->qpn = qp->ibqp.qp_num;
+ 		__entry->hrtimer = &qp->s_rnr_timer;
+ 		__entry->s_flags = qp->s_flags;
+diff --git a/drivers/infiniband/sw/rdmavt/trace_rc.h b/drivers/infiniband/sw/rdmavt/trace_rc.h
+index c47357af20998..9de52e1380251 100644
+--- a/drivers/infiniband/sw/rdmavt/trace_rc.h
++++ b/drivers/infiniband/sw/rdmavt/trace_rc.h
+@@ -71,7 +71,7 @@ DECLARE_EVENT_CLASS(rvt_rc_template,
+ 			__field(u32, r_psn)
+ 			),
+ 		    TP_fast_assign(
+-			RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
++			RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
+ 			__entry->qpn = qp->ibqp.qp_num;
+ 			__entry->s_flags = qp->s_flags;
+ 			__entry->psn = psn;
+diff --git a/drivers/infiniband/sw/rdmavt/trace_tx.h b/drivers/infiniband/sw/rdmavt/trace_tx.h
+index d963ca755828f..cb96be0f8f194 100644
+--- a/drivers/infiniband/sw/rdmavt/trace_tx.h
++++ b/drivers/infiniband/sw/rdmavt/trace_tx.h
+@@ -111,7 +111,7 @@ TRACE_EVENT(
+ 		__field(int, wr_num_sge)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
++		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
+ 		__entry->wqe = wqe;
+ 		__entry->wr_id = wqe->wr.wr_id;
+ 		__entry->qpn = qp->ibqp.qp_num;
+@@ -170,7 +170,7 @@ TRACE_EVENT(
+ 		__field(int, send_flags)
+ 	),
+ 	TP_fast_assign(
+-		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
++		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
+ 		__entry->wqe = wqe;
+ 		__entry->wr_id = wqe->wr.wr_id;
+ 		__entry->qpn = qp->ibqp.qp_num;
+diff --git a/drivers/misc/mei/mei-trace.h b/drivers/misc/mei/mei-trace.h
+index df758033dc937..fe46ff2b9d69f 100644
+--- a/drivers/misc/mei/mei-trace.h
++++ b/drivers/misc/mei/mei-trace.h
+@@ -26,7 +26,7 @@ TRACE_EVENT(mei_reg_read,
+ 		__field(u32, val)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(dev, dev_name(dev))
++		__assign_str(dev, dev_name(dev));
+ 		__entry->reg  = reg;
+ 		__entry->offs = offs;
+ 		__entry->val = val;
+@@ -45,7 +45,7 @@ TRACE_EVENT(mei_reg_write,
+ 		__field(u32, val)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(dev, dev_name(dev))
++		__assign_str(dev, dev_name(dev));
+ 		__entry->reg = reg;
+ 		__entry->offs = offs;
+ 		__entry->val = val;
+@@ -64,7 +64,7 @@ TRACE_EVENT(mei_pci_cfg_read,
+ 		__field(u32, val)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(dev, dev_name(dev))
++		__assign_str(dev, dev_name(dev));
+ 		__entry->reg  = reg;
+ 		__entry->offs = offs;
+ 		__entry->val = val;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
+index e6609068e81be..64aa7d350df16 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
++++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
+@@ -21,7 +21,7 @@ TRACE_EVENT(otx2_msg_alloc,
+ 			     __field(u16, id)
+ 			     __field(u64, size)
+ 	    ),
+-	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
++	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
+ 			   __entry->id = id;
+ 			   __entry->size = size;
+ 	    ),
+@@ -36,7 +36,7 @@ TRACE_EVENT(otx2_msg_send,
+ 			     __field(u16, num_msgs)
+ 			     __field(u64, msg_size)
+ 	    ),
+-	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
++	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
+ 			   __entry->num_msgs = num_msgs;
+ 			   __entry->msg_size = msg_size;
+ 	    ),
+@@ -52,7 +52,7 @@ TRACE_EVENT(otx2_msg_check,
+ 			     __field(u16, rspid)
+ 			     __field(int, rc)
+ 	    ),
+-	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
++	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
+ 			   __entry->reqid = reqid;
+ 			   __entry->rspid = rspid;
+ 			   __entry->rc = rc;
+@@ -69,8 +69,8 @@ TRACE_EVENT(otx2_msg_interrupt,
+ 			     __string(str, msg)
+ 			     __field(u64, intr)
+ 	    ),
+-	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
+-			   __assign_str(str, msg)
++	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
++			   __assign_str(str, msg);
+ 			   __entry->intr = intr;
+ 	    ),
+ 	    TP_printk("[%s] mbox interrupt %s (0x%llx)\n", __get_str(dev),
+@@ -84,7 +84,7 @@ TRACE_EVENT(otx2_msg_process,
+ 			     __field(u16, id)
+ 			     __field(int, err)
+ 	    ),
+-	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
++	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
+ 			   __entry->id = id;
+ 			   __entry->err = err;
+ 	    ),
+diff --git a/drivers/net/fjes/fjes_trace.h b/drivers/net/fjes/fjes_trace.h
+index 9237b69d8e217..6437ddbd7842e 100644
+--- a/drivers/net/fjes/fjes_trace.h
++++ b/drivers/net/fjes/fjes_trace.h
+@@ -232,7 +232,7 @@ TRACE_EVENT(fjes_hw_start_debug_err,
+ 		 __string(err, err)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(err, err)
++		__assign_str(err, err);
+ 	),
+ 	TP_printk("%s", __get_str(err))
+ );
+@@ -258,7 +258,7 @@ TRACE_EVENT(fjes_hw_stop_debug_err,
+ 		 __string(err, err)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(err, err)
++		__assign_str(err, err);
+ 	),
+ 	TP_printk("%s", __get_str(err))
+ );
+diff --git a/drivers/usb/cdns3/cdnsp-trace.h b/drivers/usb/cdns3/cdnsp-trace.h
+index 5aa88ca012de1..6a2571c6aa9ed 100644
+--- a/drivers/usb/cdns3/cdnsp-trace.h
++++ b/drivers/usb/cdns3/cdnsp-trace.h
+@@ -138,7 +138,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_simple,
+ 		__string(text, msg)
+ 	),
+ 	TP_fast_assign(
+-		__assign_str(text, msg)
++		__assign_str(text, msg);
+ 	),
+ 	TP_printk("%s", __get_str(text))
+ );
+diff --git a/fs/nfs/nfs4trace.h b/fs/nfs/nfs4trace.h
+index 2ef75caad6dab..7a2567aa2b86d 100644
+--- a/fs/nfs/nfs4trace.h
++++ b/fs/nfs/nfs4trace.h
+@@ -625,7 +625,7 @@ TRACE_EVENT(nfs4_state_mgr,
  
- 	usb_set_serial_port_data(port, port_priv);
+ 		TP_fast_assign(
+ 			__entry->state = clp->cl_state;
+-			__assign_str(hostname, clp->cl_hostname)
++			__assign_str(hostname, clp->cl_hostname);
+ 		),
  
-+	cp210x_dump_props(port);
-+
- 	return 0;
- }
+ 		TP_printk(
+@@ -1637,7 +1637,7 @@ DECLARE_EVENT_CLASS(nfs4_inode_callback_event,
+ 				__entry->fileid = 0;
+ 				__entry->dev = 0;
+ 			}
+-			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown")
++			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown");
+ 		),
+ 
+ 		TP_printk(
+@@ -1694,7 +1694,7 @@ DECLARE_EVENT_CLASS(nfs4_inode_stateid_callback_event,
+ 				__entry->fileid = 0;
+ 				__entry->dev = 0;
+ 			}
+-			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown")
++			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown");
+ 			__entry->stateid_seq =
+ 				be32_to_cpu(stateid->seqid);
+ 			__entry->stateid_hash =
+diff --git a/fs/nfs/nfstrace.h b/fs/nfs/nfstrace.h
+index eb1ef3462e842..dd0df132772a2 100644
+--- a/fs/nfs/nfstrace.h
++++ b/fs/nfs/nfstrace.h
+@@ -1431,8 +1431,8 @@ DECLARE_EVENT_CLASS(nfs_xdr_event,
+ 			__entry->version = task->tk_client->cl_vers;
+ 			__entry->error = error;
+ 			__assign_str(program,
+-				     task->tk_client->cl_program->name)
+-			__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
++				     task->tk_client->cl_program->name);
++			__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+ 		),
+ 
+ 		TP_printk(
+diff --git a/include/trace/events/btrfs.h b/include/trace/events/btrfs.h
+index 76e0be7e14d05..8cf61e42900e8 100644
+--- a/include/trace/events/btrfs.h
++++ b/include/trace/events/btrfs.h
+@@ -1093,7 +1093,7 @@ TRACE_EVENT(btrfs_trigger_flush,
+ 		__entry->flags	= flags;
+ 		__entry->bytes	= bytes;
+ 		__entry->flush	= flush;
+-		__assign_str(reason, reason)
++		__assign_str(reason, reason);
+ 	),
+ 
+ 	TP_printk_btrfs("%s: flush=%d(%s) flags=%llu(%s) bytes=%llu",
+diff --git a/include/trace/events/dma_fence.h b/include/trace/events/dma_fence.h
+index 64e92d56c6a8f..3963e79ca7b42 100644
+--- a/include/trace/events/dma_fence.h
++++ b/include/trace/events/dma_fence.h
+@@ -23,8 +23,8 @@ DECLARE_EVENT_CLASS(dma_fence,
+ 	),
+ 
+ 	TP_fast_assign(
+-		__assign_str(driver, fence->ops->get_driver_name(fence))
+-		__assign_str(timeline, fence->ops->get_timeline_name(fence))
++		__assign_str(driver, fence->ops->get_driver_name(fence));
++		__assign_str(timeline, fence->ops->get_timeline_name(fence));
+ 		__entry->context = fence->context;
+ 		__entry->seqno = fence->seqno;
+ 	),
+diff --git a/include/trace/events/rpcgss.h b/include/trace/events/rpcgss.h
+index ffdbe6f85da8b..b2a2672e66322 100644
+--- a/include/trace/events/rpcgss.h
++++ b/include/trace/events/rpcgss.h
+@@ -152,7 +152,7 @@ DECLARE_EVENT_CLASS(rpcgss_ctx_class,
+ 	TP_fast_assign(
+ 		__entry->cred = gc;
+ 		__entry->service = gc->gc_service;
+-		__assign_str(principal, gc->gc_principal)
++		__assign_str(principal, gc->gc_principal);
+ 	),
+ 
+ 	TP_printk("cred=%p service=%s principal='%s'",
+@@ -535,7 +535,7 @@ TRACE_EVENT(rpcgss_upcall_msg,
+ 	),
+ 
+ 	TP_fast_assign(
+-		__assign_str(msg, buf)
++		__assign_str(msg, buf);
+ 	),
+ 
+ 	TP_printk("msg='%s'", __get_str(msg))
+diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
+index d02e01a27b690..861f199896c6a 100644
+--- a/include/trace/events/sunrpc.h
++++ b/include/trace/events/sunrpc.h
+@@ -154,8 +154,8 @@ TRACE_EVENT(rpc_clnt_new,
+ 		__entry->client_id = clnt->cl_clid;
+ 		__assign_str(addr, xprt->address_strings[RPC_DISPLAY_ADDR]);
+ 		__assign_str(port, xprt->address_strings[RPC_DISPLAY_PORT]);
+-		__assign_str(program, program)
+-		__assign_str(server, server)
++		__assign_str(program, program);
++		__assign_str(server, server);
+ 	),
+ 
+ 	TP_printk("client=%u peer=[%s]:%s program=%s server=%s",
+@@ -180,8 +180,8 @@ TRACE_EVENT(rpc_clnt_new_err,
+ 
+ 	TP_fast_assign(
+ 		__entry->error = error;
+-		__assign_str(program, program)
+-		__assign_str(server, server)
++		__assign_str(program, program);
++		__assign_str(server, server);
+ 	),
+ 
+ 	TP_printk("program=%s server=%s error=%d",
+@@ -284,8 +284,8 @@ TRACE_EVENT(rpc_request,
+ 		__entry->client_id = task->tk_client->cl_clid;
+ 		__entry->version = task->tk_client->cl_vers;
+ 		__entry->async = RPC_IS_ASYNC(task);
+-		__assign_str(progname, task->tk_client->cl_program->name)
+-		__assign_str(procname, rpc_proc_name(task))
++		__assign_str(progname, task->tk_client->cl_program->name);
++		__assign_str(procname, rpc_proc_name(task));
+ 	),
+ 
+ 	TP_printk("task:%u@%u %sv%d %s (%ssync)",
+@@ -494,10 +494,10 @@ DECLARE_EVENT_CLASS(rpc_reply_event,
+ 		__entry->task_id = task->tk_pid;
+ 		__entry->client_id = task->tk_client->cl_clid;
+ 		__entry->xid = be32_to_cpu(task->tk_rqstp->rq_xid);
+-		__assign_str(progname, task->tk_client->cl_program->name)
++		__assign_str(progname, task->tk_client->cl_program->name);
+ 		__entry->version = task->tk_client->cl_vers;
+-		__assign_str(procname, rpc_proc_name(task))
+-		__assign_str(servername, task->tk_xprt->servername)
++		__assign_str(procname, rpc_proc_name(task));
++		__assign_str(servername, task->tk_xprt->servername);
+ 	),
+ 
+ 	TP_printk("task:%u@%d server=%s xid=0x%08x %sv%d %s",
+@@ -622,8 +622,8 @@ TRACE_EVENT(rpc_stats_latency,
+ 		__entry->task_id = task->tk_pid;
+ 		__entry->xid = be32_to_cpu(task->tk_rqstp->rq_xid);
+ 		__entry->version = task->tk_client->cl_vers;
+-		__assign_str(progname, task->tk_client->cl_program->name)
+-		__assign_str(procname, rpc_proc_name(task))
++		__assign_str(progname, task->tk_client->cl_program->name);
++		__assign_str(procname, rpc_proc_name(task));
+ 		__entry->backlog = ktime_to_us(backlog);
+ 		__entry->rtt = ktime_to_us(rtt);
+ 		__entry->execute = ktime_to_us(execute);
+@@ -669,15 +669,15 @@ TRACE_EVENT(rpc_xdr_overflow,
+ 			__entry->task_id = task->tk_pid;
+ 			__entry->client_id = task->tk_client->cl_clid;
+ 			__assign_str(progname,
+-				     task->tk_client->cl_program->name)
++				     task->tk_client->cl_program->name);
+ 			__entry->version = task->tk_client->cl_vers;
+-			__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
++			__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+ 		} else {
+ 			__entry->task_id = 0;
+ 			__entry->client_id = 0;
+-			__assign_str(progname, "unknown")
++			__assign_str(progname, "unknown");
+ 			__entry->version = 0;
+-			__assign_str(procedure, "unknown")
++			__assign_str(procedure, "unknown");
+ 		}
+ 		__entry->requested = requested;
+ 		__entry->end = xdr->end;
+@@ -735,9 +735,9 @@ TRACE_EVENT(rpc_xdr_alignment,
+ 		__entry->task_id = task->tk_pid;
+ 		__entry->client_id = task->tk_client->cl_clid;
+ 		__assign_str(progname,
+-			     task->tk_client->cl_program->name)
++			     task->tk_client->cl_program->name);
+ 		__entry->version = task->tk_client->cl_vers;
+-		__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
++		__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+ 
+ 		__entry->offset = offset;
+ 		__entry->copied = copied;
+@@ -1107,9 +1107,9 @@ TRACE_EVENT(xprt_retransmit,
+ 		__entry->xid = be32_to_cpu(rqst->rq_xid);
+ 		__entry->ntrans = rqst->rq_ntrans;
+ 		__assign_str(progname,
+-			     task->tk_client->cl_program->name)
++			     task->tk_client->cl_program->name);
+ 		__entry->version = task->tk_client->cl_vers;
+-		__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
++		__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
+ 	),
+ 
+ 	TP_printk(
+@@ -1842,7 +1842,7 @@ TRACE_EVENT(svc_xprt_accept,
+ 
+ 	TP_fast_assign(
+ 		__assign_str(addr, xprt->xpt_remotebuf);
+-		__assign_str(protocol, xprt->xpt_class->xcl_name)
++		__assign_str(protocol, xprt->xpt_class->xcl_name);
+ 		__assign_str(service, service);
+ 	),
+ 
+diff --git a/net/mac80211/trace.h b/net/mac80211/trace.h
+index 8fcc390564029..3fc1e4c5344c0 100644
+--- a/net/mac80211/trace.h
++++ b/net/mac80211/trace.h
+@@ -33,7 +33,7 @@
+ 			__string(vif_name, sdata->name)
+ #define VIF_ASSIGN	__entry->vif_type = sdata->vif.type; __entry->sdata = sdata;	\
+ 			__entry->p2p = sdata->vif.p2p;					\
+-			__assign_str(vif_name, sdata->name)
++			__assign_str(vif_name, sdata->name);
+ #define VIF_PR_FMT	" vif:%s(%d%s)"
+ #define VIF_PR_ARG	__get_str(vif_name), __entry->vif_type, __entry->p2p ? "/p2p" : ""
  
 
---------------F4B29F672E3E62CCBEC42566--
