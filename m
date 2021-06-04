@@ -2,60 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C767339B759
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 12:50:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB05C39B75C
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 12:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbhFDKwI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 06:52:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44220 "EHLO mail.kernel.org"
+        id S229981AbhFDKx4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 06:53:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44858 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229667AbhFDKwI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 4 Jun 2021 06:52:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B3C11611CC;
-        Fri,  4 Jun 2021 10:50:21 +0000 (UTC)
+        id S229667AbhFDKx4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 4 Jun 2021 06:53:56 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AEA36613E3;
+        Fri,  4 Jun 2021 10:51:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1622803822;
-        bh=wBxHzdapbMAHKhiwDxATu1SofAyQ2eadxLMvhIlVc3I=;
+        s=korg; t=1622803915;
+        bh=0d+UUqbmNdLme8nla//gz8iDiQEoo6OEepwJpBEDgUA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g/q3Nbxnv7+BEYvEEnt4Uf9sbhvN20Ytzd9wQ/IJNfWciL+5d3E1aapNWz1FLvcCd
-         rV6f87XNBpvYnae1tRzNee57LxKmzt6p8HWoXAm8UILk8iQC/h2Q0rWyVU7eTpVZ0H
-         F1FtSIQwt46/E10IHiykciSPwL9Y90GfyTi1SW+Y=
-Date:   Fri, 4 Jun 2021 12:50:19 +0200
+        b=04CGaypJS0xpzj74PwLlg3snMu731wW6/5wTh9XT648S71Nbd+gcGqL1AxOkyzSW9
+         aLz39DYc4y8Q+1nTYsvYRx+y48etFnaRv55uJrC16FzAWrOyKWkXZi7LX7ruX/89Kp
+         gBRjEXX5IDhjjQrfF7KTU2NA4/lWDR7ZG5t5S+uc=
+Date:   Fri, 4 Jun 2021 12:51:52 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linyu Yuan <linyyuan@codeaurora.org>
-Cc:     linux-usb@vger.kernel.org, Linyu Yuan <linyyuan@codeaurora.com>
-Subject: Re: [PATCH] usb: gadget: eem: fix wrong eem header operation
-Message-ID: <YLoFayeoyqElpVSU@kroah.com>
-References: <20210603150947.4627-1-linyyuan@codeaurora.org>
+To:     Li Jun <jun.li@nxp.com>
+Cc:     peter.chen@kernel.org, linux-usb@vger.kernel.org,
+        linux-imx@nxp.com, faqiang.zhu@nxp.com
+Subject: Re: [PATCH] usb: chipidea: udc: assign interrupt number to USB
+ gadget structure
+Message-ID: <YLoFyCyRofg/Jz9r@kroah.com>
+References: <1620989984-7653-1-git-send-email-jun.li@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210603150947.4627-1-linyyuan@codeaurora.org>
+In-Reply-To: <1620989984-7653-1-git-send-email-jun.li@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 03, 2021 at 11:09:47PM +0800, Linyu Yuan wrote:
-> From: Linyu Yuan <linyyuan@codeaurora.com>
+On Fri, May 14, 2021 at 06:59:44PM +0800, Li Jun wrote:
+> Chipidea also need sync interrupt before unbind the udc while
+> gadget remove driver, otherwise setup irq handling may happen
+> while unbind, see below dump generated from android function
+> switch stress test:
 > 
-> when skb_clone() or skb_copy_expand() fail,
-
-How can these calls fail?  If they do, what is the overall system
-health?
-
-> it should pull skb with lengh indicated by header,
-> or not it will read network data and check it as header.
+> [ 4703.503056] android_work: sent uevent USB_STATE=CONNECTED
+> [ 4703.514642] android_work: sent uevent USB_STATE=DISCONNECTED
+> [ 4703.651339] android_work: sent uevent USB_STATE=CONNECTED
+> [ 4703.661806] init: Control message: Processed ctl.stop for 'adbd' from pid: 561 (system_server)
+> [ 4703.673469] init: processing action (init.svc.adbd=stopped) from (/system/etc/init/hw/init.usb.configfs.rc:14)
+> [ 4703.676451] Unable to handle kernel read from unreadable memory at virtual address 0000000000000090
+> [ 4703.676454] Mem abort info:
+> [ 4703.676458]   ESR = 0x96000004
+> [ 4703.676461]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 4703.676464]   SET = 0, FnV = 0
+> [ 4703.676466]   EA = 0, S1PTW = 0
+> [ 4703.676468] Data abort info:
+> [ 4703.676471]   ISV = 0, ISS = 0x00000004
+> [ 4703.676473]   CM = 0, WnR = 0
+> [ 4703.676478] user pgtable: 4k pages, 48-bit VAs, pgdp=000000004a867000
+> [ 4703.676481] [0000000000000090] pgd=0000000000000000, p4d=0000000000000000
+> [ 4703.676503] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [ 4703.758297] Modules linked in: synaptics_dsx_i2c moal(O) mlan(O)
+> [ 4703.764327] CPU: 0 PID: 235 Comm: lmkd Tainted: G        W  O      5.10.9-00001-g3f5fd8487c38-dirty #63
+> [ 4703.773720] Hardware name: NXP i.MX8MNano EVK board (DT)
+> [ 4703.779033] pstate: 60400085 (nZCv daIf +PAN -UAO -TCO BTYPE=--)
+> [ 4703.785046] pc : _raw_write_unlock_bh+0xc0/0x2c8
+> [ 4703.789667] lr : android_setup+0x4c/0x168
+> [ 4703.793676] sp : ffff80001256bd80
+> [ 4703.796989] x29: ffff80001256bd80 x28: 00000000000000a8
+> [ 4703.802304] x27: ffff800012470000 x26: ffff80006d923000
+> [ 4703.807616] x25: ffff800012471000 x24: ffff00000b091140
+> [ 4703.812929] x23: ffff0000077dbd38 x22: ffff0000077da490
+> [ 4703.818242] x21: ffff80001256be30 x20: 0000000000000000
+> [ 4703.823554] x19: 0000000000000080 x18: ffff800012561048
+> [ 4703.828867] x17: 0000000000000000 x16: 0000000000000039
+> [ 4703.834180] x15: ffff8000106ad258 x14: ffff80001194c277
+> [ 4703.839493] x13: 0000000000003934 x12: 0000000000000000
+> [ 4703.844805] x11: 0000000000000000 x10: 0000000000000001
+> [ 4703.850117] x9 : 0000000000000000 x8 : 0000000000000090
+> [ 4703.855429] x7 : 6f72646e61203a70 x6 : ffff8000124f2450
+> [ 4703.860742] x5 : ffffffffffffffff x4 : 0000000000000009
+> [ 4703.866054] x3 : ffff8000108a290c x2 : ffff00007fb3a9c8
+> [ 4703.871367] x1 : 0000000000000000 x0 : 0000000000000090
+> [ 4703.876681] Call trace:
+> [ 4703.879129]  _raw_write_unlock_bh+0xc0/0x2c8
+> [ 4703.883397]  android_setup+0x4c/0x168
+> [ 4703.887059]  udc_irq+0x824/0xa9c
+> [ 4703.890287]  ci_irq+0x124/0x148
+> [ 4703.893429]  __handle_irq_event_percpu+0x84/0x268
+> [ 4703.898131]  handle_irq_event+0x64/0x14c
+> [ 4703.902054]  handle_fasteoi_irq+0x110/0x210
+> [ 4703.906236]  __handle_domain_irq+0x8c/0xd4
+> [ 4703.910332]  gic_handle_irq+0x6c/0x124
+> [ 4703.914081]  el1_irq+0xdc/0x1c0
+> [ 4703.917221]  _raw_spin_unlock_irq+0x20/0x54
+> [ 4703.921405]  finish_task_switch+0x84/0x224
+> [ 4703.925502]  __schedule+0x4a4/0x734
+> [ 4703.928990]  schedule+0xa0/0xe8
+> [ 4703.932132]  do_notify_resume+0x150/0x184
+> [ 4703.936140]  work_pending+0xc/0x40c
+> [ 4703.939633] Code: d5384613 521b0a69 d5184609 f9800111 (885ffd01)
+> [ 4703.945732] ---[ end trace ba5c1875ae49d53c ]---
+> [ 4703.950350] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+> [ 4703.957223] SMP: stopping secondary CPUs
+> [ 4703.961151] Kernel Offset: disabled
+> [ 4703.964638] CPU features: 0x0240002,2000200c
+> [ 4703.968905] Memory Limit: none
+> [ 4703.971963] Rebooting in 5 seconds..
 > 
-> Signed-off-by: Linyu Yuan <linyyuan@codeaurora.com>
+> Tested-by: faqiang.zhu <faqiang.zhu@nxp.com>
+> Signed-off-by: Li Jun <jun.li@nxp.com>
 > ---
->  drivers/usb/gadget/function/f_eem.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/usb/chipidea/udc.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+> index c16d900cdaee..393f216b9161 100644
+> --- a/drivers/usb/chipidea/udc.c
+> +++ b/drivers/usb/chipidea/udc.c
+> @@ -2061,6 +2061,7 @@ static int udc_start(struct ci_hdrc *ci)
+>  	ci->gadget.name         = ci->platdata->name;
+>  	ci->gadget.otg_caps	= otg_caps;
+>  	ci->gadget.sg_supported = 1;
+> +	ci->gadget.irq		= ci->irq;
+>  
+>  	if (ci->platdata->flags & CI_HDRC_REQUIRES_ALIGNED_DMA)
+>  		ci->gadget.quirk_avoids_skb_reserve = 1;
+> -- 
+> 2.25.1
+> 
 
-What commit does this fix?  Should it go to stable kernels?  If so, how
-far back?
-
-And any reason you didn't use scripts/get_maintainer.pl for who to send
-your patch to?
+What commit does this fix?  Should it go to stable kernels, and if so,
+how far back?
 
 thanks,
 
