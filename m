@@ -2,92 +2,283 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 876EC39B033
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 04:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E3439B09A
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 04:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbhFDCL2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 3 Jun 2021 22:11:28 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:4299 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbhFDCL1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 3 Jun 2021 22:11:27 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Fx5gW1Bstz1BH0P;
-        Fri,  4 Jun 2021 10:04:55 +0800 (CST)
-Received: from dggpemm000001.china.huawei.com (7.185.36.245) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+        id S229704AbhFDCzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 3 Jun 2021 22:55:06 -0400
+Received: from smtp2.avnet.com ([12.9.139.122]:7240 "EHLO smtp2.avnet.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229576AbhFDCzG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 3 Jun 2021 22:55:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Avnet.com;
+        s=20201119; t=1622775200;
+        bh=wW/G5bDXRto/12EonndkpExkdEAg4xXxovPlmOCOOWo=;
+        h=From:To:Subject:Date:References:In-Reply-To;
+        b=Zph27ek6iYMZLKQlPJEmQtrdEXkfbYVmtxxMsvsL/P7jZomf8BmGsAy7JfLwJ26jv
+         YF5k80mpHCDh+Nu2S5WEkANegyjiIdGMoFi1XA9S3es4N3tubImiQM/oLal7GjCpc1
+         XOPd6PcumM7iR4izyOVMw8Wfn+63foQqPsZkyZ5x1dlpbe3dfhraxcXmI0Jz0tNQm9
+         nPAOjKLY5EGV/k3xjdK1nQTuBo157e176woC7YBRise0AF/Lj2/C6rAbTQ8tSR+Mls
+         KeGsH8f7x5rlcAmbZoYbr/T85kUhGmPuOHVaYznz6nLeqql0YJ5jNaPpfp1T8sADLd
+         eI90FSnPzMNmQ==
+Received: from CMX2401EX1603.AVNET.COM (Not Verified[172.16.125.20]) by smtp2.avnet.com with Trustwave SEG (v8,2,6,11305) (using TLS: TLSv1.2, AES256-GCM-SHA384)
+        id <B60b995a00000>; Thu, 03 Jun 2021 19:53:20 -0700
+Received: from CMX2401EX1604.AVNET.COM (172.16.125.26) by
+ CMX2401EX1603.AVNET.COM (172.16.125.20) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 10:09:40 +0800
-Received: from [10.174.178.95] (10.174.178.95) by
- dggpemm000001.china.huawei.com (7.185.36.245) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Fri, 4 Jun 2021 10:09:39 +0800
-Subject: Re: [PATCH -next] usb: isp1760: Fix meaningless check in
- isp1763_run()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <rui.silva@linaro.org>
-References: <20210601100311.70200-1-tongtiangen@huawei.com>
- <YLjAweuyJXzDn9pe@kroah.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-From:   tongtiangen <tongtiangen@huawei.com>
-Message-ID: <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
-Date:   Fri, 4 Jun 2021 10:09:39 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+ 15.1.2242.10; Thu, 3 Jun 2021 19:53:19 -0700
+Received: from CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83]) by
+ CMX2401EX1604.AVNET.COM ([fe80::3838:ad6:3b52:4f83%2]) with mapi id
+ 15.01.2242.010; Thu, 3 Jun 2021 19:53:19 -0700
+From:   "Chow, Watson" <Watson.Chow@Avnet.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+Thread-Topic: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
+ bandwidth on UVC gadget driver
+Thread-Index: AddIcAtgBDXAgCQbQXSu/5dHZ1drkQAW67SAAA5jNfD//8N/AP/8MtWAgAgwaoD/5FguwA==
+Date:   Fri, 4 Jun 2021 02:53:19 +0000
+Message-ID: <c64f050b25d445ec8342ac25f7a563a4@Avnet.com>
+References: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
+ <87r1i97pkk.fsf@kernel.org> <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
+ <878s4h7giv.fsf@kernel.org> <9e8d9a55a0e64ab092ceb464db5f0119@Avnet.com>
+ <87zgwu53jc.fsf@kernel.org>
+In-Reply-To: <87zgwu53jc.fsf@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.125.136]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-In-Reply-To: <YLjAweuyJXzDn9pe@kroah.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.95]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm000001.china.huawei.com (7.185.36.245)
-X-CFilter-Loop: Reflected
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=LIwYv6e9 c=1 sm=1 tr=0 a=BRTLx2zjy18DyBo5AQlLyQ==:117 a=xqWC_Br6kY4A:10 a=6yu5SQbkyS8A:10 a=kj9zAlcOel0A:10 a=r6YtysWOX24A:10 a=npiypiU9AAAA:8 a=VwQbUJbxAAAA:8 a=kEhazIR3kBDXvws1YbIA:9 a=CjuIK1q_8ugA:10 a=U5QfeDdlIO9jQLzCQbpp:22 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Balbi,
 
-
-On 2021/6/3 19:45, Greg Kroah-Hartman wrote:
-> On Tue, Jun 01, 2021 at 06:03:11PM +0800, Tong Tiangen wrote:
->> There's a meaningless check in isp1763_run. According to the
->> similar implement in isp1760_run, the proper check should remove
->> retval = 0;
->>
->> Fixes: 60d789f3bfbb ("usb: isp1760: add support for isp1763")
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>   drivers/usb/isp1760/isp1760-hcd.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/isp1760-hcd.c
->> index 016a54ea76f4..27168b4a4ef2 100644
->> --- a/drivers/usb/isp1760/isp1760-hcd.c
->> +++ b/drivers/usb/isp1760/isp1760-hcd.c
->> @@ -1648,7 +1648,6 @@ static int isp1763_run(struct usb_hcd *hcd)
->>   	down_write(&ehci_cf_port_reset_rwsem);
->>   	retval = isp1760_hcd_set_and_wait(hcd, FLAG_CF, 250 * 1000);
->>   	up_write(&ehci_cf_port_reset_rwsem);
->> -	retval = 0;
->>   	if (retval)
->>   		return retval;
->>   
->> -- 
->> 2.18.0.huawei.25
->>
-> Did you test this change to verify that the driver still works properly?
-> You are now checking something that never was checked before...
+>Hi,
 >
-> thanks,
+>"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+>> Hi,
+>>
+>>>Hi,
+>>>
+>>>(please don't top-post :-)
+>> I have tried my best to meet the format requirement
 >
-> greg k-h
-> .
-Sorry,  this fix was not send to Rui.
- From the point of view of code logic, there should be a problem here. I 
-don't have the actual hardware to verify whether it works properly. Rui 
-may know if the patch affects the original workflow.
-
-thanks
-.
+>Thanks
+>
+>>>"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+>>>> Balbi,
+>>>>
+>>>> Thanks for your quick reply.
+>>>>
+>>>> Some questions
+>>>>
+>>>> 1. You mentioned that the max bandwidth in isoc mode (USB3.0) should b=
+e=20
+>>>> around 4Gbps. =20
+>>>>
+>>>> I have the below calcuation on bandwidth:
+>>>> In USB3.0, 1 micro frame would take 125us and can transfer max 45000 b=
+ytes
+>>>> So, in 1 sec, we will have 8000 micro frames
+>>>>
+>>>> Max bandwidth =3D 8000 x 4500 x 8 =3D 2.88Gbps
+>>>>
+>>>> Is my understanding correct?
+>>>
+>>>probably, It's been a while since I've dug through the spec, to be frank
+>>>
+>>>> 2. To achieve the max throughput, I need to configure the uvc gadget d=
+river=20
+>>>> with below parameters. Am I right?
+>>>>
+>>>> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D15=
+=20
+>>>> streaming_interval=3D1
+>>>
+>>>right, but there's an assumption here that the gadget will be able to
+>>>feed data in a timely manner.
+>>
+>> How does the DWC3 driver or the gadget driver handle the case with inter=
+mittent
+>> drop of the input video streaming?
+>>
+>> Any recover mechanism?
+>
+>yeah, the missed ISOC is reported to the gadget driver and that has to
+>queue new requests.
+>
+>>>> 3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It lo=
+oks not
+>>>> easy in my side to upgrade the kernel version. It would affect those o=
+ther=20
+>>>> device drivers I'm currently using. So, do you think there's any short=
+ cut=20
+>>>> to fix this problem under my current kernel version - v5.4?
+>>>
+>>>In that case, you need to ask for support from whoever forces you to
+>>>stay with such an old kernel. I believe that would be Xilinx.
+>>
+>> I have a thought to back port those changes around the dwc3 and gadget d=
+river
+>> from the latest kernel version to my kernel (v5.4). Do you think this is=
+=20
+>> feasible?
+>
+>should be, but it's likely quite a bit of work:
+>
+>$ git rev-list --count v5.4..linus/master -- drivers/usb/dwc3/
+>257
 >
 
+Upgraded the kernel version to 5.9, I can set the g_webcam module pararmete=
+rs
+as follow (for max bandwidth):
+
+streaming_maxpacket=3D3072
+streaming_maxburst=3D15
+streaming_interval=3D1
+
+Data transfer with above setting is working now - tested with dummy data
+generator in the uvc-gadget app.
+
+This concludes that kernel 5.4 is too old for DWC3 and UVC gadget driver
+in high bandwidth usage
+
+
+>>>> 4. I read through the procedures to capture debug info by debugfs. How=
+ever,
+>>>> in my test with "streaming_maxburst" set to 10 or above, my system wou=
+ld=20
+>>>> crash and I can't pick the log from that point. Any suggestion?
+>>>
+>>>have a look at ftrace_dump_on_oops.
+>>
+>> I will explore how to enable this
+>>
+>>>
+>>
+>> Btw, do you know which SoC platform can run the UVC gadget in max throug=
+hput.
+>> Raspberry Pi/TI Beaglebone/i.MX ???
+>
+>Raspberry Pi uses dwc2
+>Beaglebone uses musb
+>i.MX, I think some of them use dwc3 at least.
+>
+
+Watson
+
+-----Original Message-----
+From: Felipe Balbi <balbi@kernel.org>=20
+Sent: Monday, May 17, 2021 1:32 PM
+To: Chow, Watson <Watson.Chow@Avnet.com>; linux-usb@vger.kernel.org
+Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer ban=
+dwidth on UVC gadget driver
+
+
+Hi,
+
+"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+> Hi,
+>
+>>Hi,
+>>
+>>(please don't top-post :-)
+> I have tried my best to meet the format requirement
+
+Thanks
+
+>>"Chow, Watson" <Watson.Chow@Avnet.com> writes:
+>>> Balbi,
+>>>
+>>> Thanks for your quick reply.
+>>>
+>>> Some questions
+>>>
+>>> 1. You mentioned that the max bandwidth in isoc mode (USB3.0) should be=
+=20
+>>> around 4Gbps. =20
+>>>
+>>> I have the below calcuation on bandwidth:
+>>> In USB3.0, 1 micro frame would take 125us and can transfer max 45000 by=
+tes
+>>> So, in 1 sec, we will have 8000 micro frames
+>>>
+>>> Max bandwidth =3D 8000 x 4500 x 8 =3D 2.88Gbps
+>>>
+>>> Is my understanding correct?
+>>
+>>probably, It's been a while since I've dug through the spec, to be frank
+>>
+>>> 2. To achieve the max throughput, I need to configure the uvc gadget dr=
+iver=20
+>>> with below parameters. Am I right?
+>>>
+>>> # modprobe g_webcam streaming_maxpacket=3D3072 streaming_maxburst=3D15=
+=20
+>>> streaming_interval=3D1
+>>
+>>right, but there's an assumption here that the gadget will be able to
+>>feed data in a timely manner.
+>
+> How does the DWC3 driver or the gadget driver handle the case with interm=
+ittent
+> drop of the input video streaming?
+>
+> Any recover mechanism?
+
+yeah, the missed ISOC is reported to the gadget driver and that has to
+queue new requests.
+
+>>> 3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It loo=
+ks not
+>>> easy in my side to upgrade the kernel version. It would affect those ot=
+her=20
+>>> device drivers I'm currently using. So, do you think there's any short =
+cut=20
+>>> to fix this problem under my current kernel version - v5.4?
+>>
+>>In that case, you need to ask for support from whoever forces you to
+>>stay with such an old kernel. I believe that would be Xilinx.
+>
+> I have a thought to back port those changes around the dwc3 and gadget dr=
+iver
+> from the latest kernel version to my kernel (v5.4). Do you think this is=
+=20
+> feasible?
+
+should be, but it's likely quite a bit of work:
+
+$ git rev-list --count v5.4..linus/master -- drivers/usb/dwc3/
+257
+
+>>> 4. I read through the procedures to capture debug info by debugfs. Howe=
+ver,
+>>> in my test with "streaming_maxburst" set to 10 or above, my system woul=
+d=20
+>>> crash and I can't pick the log from that point. Any suggestion?
+>>
+>>have a look at ftrace_dump_on_oops.
+>
+> I will explore how to enable this
+>
+>>
+>
+> Btw, do you know which SoC platform can run the UVC gadget in max through=
+put.
+> Raspberry Pi/TI Beaglebone/i.MX ???
+
+Raspberry Pi uses dwc2
+Beaglebone uses musb
+i.MX, I think some of them use dwc3 at least.
+
+--=20
+balbi
