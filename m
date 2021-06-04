@@ -2,103 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 370A839BB6F
-	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 17:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FCC739BB7E
+	for <lists+linux-usb@lfdr.de>; Fri,  4 Jun 2021 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbhFDPJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 4 Jun 2021 11:09:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S229822AbhFDPOm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 4 Jun 2021 11:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbhFDPJn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 11:09:43 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C1DC061766
-        for <linux-usb@vger.kernel.org>; Fri,  4 Jun 2021 08:07:44 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id v4so7227916qtp.1
-        for <linux-usb@vger.kernel.org>; Fri, 04 Jun 2021 08:07:44 -0700 (PDT)
+        with ESMTP id S229675AbhFDPOm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 4 Jun 2021 11:14:42 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 956E3C061766
+        for <linux-usb@vger.kernel.org>; Fri,  4 Jun 2021 08:12:55 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id m18so9682617wrv.2
+        for <linux-usb@vger.kernel.org>; Fri, 04 Jun 2021 08:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=M0MIug4uhteRxdWOVPqNkw3ATKplY4lCx/S7+si7RU8=;
-        b=BUuszxg2VmWIb45n6Sy0XgAeOFUXiR0DYTIMBbaScwIRDkBvAWr4DKous4ZMXHVXPx
-         TptzCxF1bLWSoXYfYniTJIL02O3mXFnXHjdpReyAEyciHoPP1/A6qXSM/T+a5famQ3fO
-         3sc91jlHbreVV+YSD9Wf2ezEGR+nuTrHTj/xs=
+        d=linaro.org; s=google;
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=MDeGfSOld04qEQUDmCqC+elxeKhTaZfQS1sxhyZdy0Y=;
+        b=d5MDz4Zcs9bzXxzzD6J6cD5EERCnWZkQiBtJR5sSos112Wxg0vjLR/3rJhzlGG3Yax
+         XEjP2GMX2gXwgxvVbWkfdSD3cmrnencbp5mtxnYQpq+8c7yyG7Hpx3UWr0RKFdjGTXe/
+         FnlW4x86W1l/I5Eb7Hmx74h9Gr/fs+zhuDxwkV4rQlWdko8pt+d6l5gtzogqaNv8txZ6
+         /9HRqo7iImdMUDw+2K6y+hsM6smVmOOqEQaVkwKJpgEj57jJgLD+PzjRGJoiT+IYfVxr
+         zu+avRfVJKF8JATHMUwXQzDCTMtorPLPrXjo8hBpOsUhggsjgNskOPyQyt0YIGw3LZeV
+         /gdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=M0MIug4uhteRxdWOVPqNkw3ATKplY4lCx/S7+si7RU8=;
-        b=Uf5xEtjSqbK9EyKr8JBv6Al3iktaq9cdFnyzqeFlaIIF2v0OQPr4B2f+YnymteRz1Z
-         v/itdAeQEcFMN4S/JWENIPXpk6Q2CUz2dAhEjD00/ttvrDaye44N9xgzTN1UQxlxXrPy
-         rDOL8za2PvTcwkFCNhJ5my2XaSHDb8es2Mg/rSk7lYMhJgr4SwnehO35XtUOfxUWXL8s
-         ClaqFvE34w+fxH4oQevo11IzYtqno8pRZZet7eYpWVdpPMp2ADxnhLvC2qFZTdArvYC7
-         xTXc8svRO9+/PBIFnkzFlTtuM2C6fwut7S+P4wir94n81YkC634bUGDTHCKppfPHwLOr
-         6ngg==
-X-Gm-Message-State: AOAM531UZF8BvJQrqoANIueXAf1PIuVc+2DkPlm64zSg8ZSeRYA1/vWx
-        HUZMCUj4movk4FfyNe60L9zwwQ==
-X-Google-Smtp-Source: ABdhPJxodCC4r10tdeEEZ++ru5B61RlYUeDhkHbCXsCZl5Ytxumdywew7iZczhxzr0149uigp2MlpQ==
-X-Received: by 2002:ac8:46d1:: with SMTP id h17mr3793418qto.135.1622819263846;
-        Fri, 04 Jun 2021 08:07:43 -0700 (PDT)
-Received: from nitro.local ([89.36.78.230])
-        by smtp.gmail.com with ESMTPSA id a191sm4165998qkg.61.2021.06.04.08.07.43
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=MDeGfSOld04qEQUDmCqC+elxeKhTaZfQS1sxhyZdy0Y=;
+        b=nKxTJ4TTS5tnkmJI8QkvZm+B9UYLq2bQ4/ruN7PFktorLlwoHh6bevyHyG8uHgf+t0
+         ML2JKn1GvTouUJzYNmluqK/C4Nw6ZTsei7nfxFigPi1CxPcAb+sd5FjHdwBDTyxI0Kka
+         +5MTnng+0fKHuKzGJso+XP9uz7Y0Zs0KTBOj5TheUjjWPbG4FgDZGLxRqZ43Ea3Lw5hs
+         UTSOl2XP120Qqhk/vhQTUUD9rBbOGQp4fdADmWhYpt7XVj1TVh/hloWdZ+2mEqufxzt/
+         gGv5FjwsiRVi3v5SQYt0Hq/Pf3UfMtSSRzDqgPkNVmyFVl60AwmAxfnAAtoQp1k1c1Zt
+         3xiQ==
+X-Gm-Message-State: AOAM531Hr1n3jTYOTX9VhqTu2I/xxR93KfrR30BGx5dFx9JyASC1lIN9
+        ZOY7k2CACwjGxMQeNIDbvxxE9A==
+X-Google-Smtp-Source: ABdhPJxOOBkqtmSGRq5uBC35IeEVOExCMPn+wThxkwQOhppV58DDG+bt3IdDk6y9AOOuq35kRbLKrQ==
+X-Received: by 2002:a5d:504d:: with SMTP id h13mr4420402wrt.133.1622819574228;
+        Fri, 04 Jun 2021 08:12:54 -0700 (PDT)
+Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id z19sm8247865wmf.31.2021.06.04.08.12.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Jun 2021 08:07:43 -0700 (PDT)
-Date:   Fri, 4 Jun 2021 11:07:42 -0400
-From:   Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Neil Armstrong <narmstrong@baylibre.com>, balbi@kernel.org,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3-meson-g12a: fix usb2 PHY glue init when phy0
- is disabled
-Message-ID: <20210604150742.bssvnhm4gv72uw4h@nitro.local>
-References: <20210601084830.260196-1-narmstrong@baylibre.com>
- <YLoHSJIOSRTyF0r1@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YLoHSJIOSRTyF0r1@kroah.com>
+        Fri, 04 Jun 2021 08:12:53 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 04 Jun 2021 16:12:52 +0100
+Message-Id: <CBUXIZOCOIXC.3V1ERV326ST89@arch-thunder>
+Cc:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] usb: isp1760: Fix meaningless check in
+ isp1763_run()
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+To:     "tongtiangen" <tongtiangen@huawei.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+References: <20210601100311.70200-1-tongtiangen@huawei.com>
+ <YLjAweuyJXzDn9pe@kroah.com>
+ <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
+In-Reply-To: <bb426fd3-ec56-ec95-0c6a-092627d547b6@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 12:58:16PM +0200, Greg KH wrote:
-> Meta comment, you signed this, and it worked!
+Hi,
+Managed to test this and looks good. Everything is working as
+expected.
 
-NOICE. \o/
+On Fri Jun 4, 2021 at 3:09 AM WEST, tongtiangen wrote:
+> On 2021/6/3 19:45, Greg Kroah-Hartman wrote:
+> > On Tue, Jun 01, 2021 at 06:03:11PM +0800, Tong Tiangen wrote:
+> >> There's a meaningless check in isp1763_run. According to the
+> >> similar implement in isp1760_run, the proper check should remove
+> >> retval =3D 0;
 
-> Looking up https://lore.kernel.org/r/20210601084830.260196-1-narmstrong%40baylibre.com
-> Grabbing thread from lore.kernel.org/linux-amlogic/20210601084830.260196-1-narmstrong%40baylibre.com/t.mbox.gz
-> Analyzing 2 messages in the thread
-> Checking attestation on all messages, may take a moment...
-> ---
->   ✓ [PATCH] usb: dwc3-meson-g12a: fix usb2 PHY glue init when phy0 is disabled
->     + Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com> (✓ DKIM/lists.infradead.org)
->   ---
->   ✓ Signed: openpgp/narmstrong@baylibre.com
->   ✗ BADSIG: DKIM/baylibre-com.20150623.gappssmtp.com
->   ✓ Signed: DKIM/lists.infradead.org (From: narmstrong@baylibre.com)
-> ---
-> Total patches: 1
-> ---
->  Link: https://lore.kernel.org/r/20210601084830.260196-1-narmstrong@baylibre.com
->  Base: not found
-> Applying: usb: dwc3-meson-g12a: fix usb2 PHY glue init when phy0 is disabled
-> 
-> 
-> Odd that DKIM didn't work for baylibre-com, but hey, I'll take a real
-> signature over DKIM anyday!
+however I think a more descriptive changelog instead of comparing to
+similar function would be better, maybe something around:
 
-That lookup happened to grab the thread from linux-amlogic, which is
-mailman2-managed and is known to break DKIM. I'll try to fix our configuration
-so that known-DKIM-friendly sources are given priority. This way, when a thread
-exists on multiple lists, you'll get the one more likely to pass DKIM checks.
+"Remove attribution to retval before check, which make it completely
+meaningless, and does't check what it was supposed: the return
+value of the timed function to set up configuration flag."
 
-> thanks for doing this.
+> >>
+> >> Fixes: 60d789f3bfbb ("usb: isp1760: add support for isp1763")
+> >> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
 
-Yes, thanks! Hopefully, more people will start doing this.
+With changelog changed you can add:
+Tested-by: Rui Miguel Silva <rui.silva@linaro.org>
+Reviewed-by: Rui Miguel Silva <rui.silva@linaro.org>
 
--K
+------
+Cheers,
+     Rui
+
+> >> ---
+> >>   drivers/usb/isp1760/isp1760-hcd.c | 1 -
+> >>   1 file changed, 1 deletion(-)
+> >>
+> >> diff --git a/drivers/usb/isp1760/isp1760-hcd.c b/drivers/usb/isp1760/i=
+sp1760-hcd.c
+> >> index 016a54ea76f4..27168b4a4ef2 100644
+> >> --- a/drivers/usb/isp1760/isp1760-hcd.c
+> >> +++ b/drivers/usb/isp1760/isp1760-hcd.c
+> >> @@ -1648,7 +1648,6 @@ static int isp1763_run(struct usb_hcd *hcd)
+> >>   	down_write(&ehci_cf_port_reset_rwsem);
+> >>   	retval =3D isp1760_hcd_set_and_wait(hcd, FLAG_CF, 250 * 1000);
+> >>   	up_write(&ehci_cf_port_reset_rwsem);
+> >> -	retval =3D 0;
+> >>   	if (retval)
+> >>   		return retval;
+> >>  =20
+> >> --=20
+> >> 2.18.0.huawei.25
+> >>
+> > Did you test this change to verify that the driver still works properly=
+?
+> > You are now checking something that never was checked before...
+> >
+> > thanks,
+> >
+> > greg k-h
+> > .
+> Sorry,  this fix was not send to Rui.
+>  From the point of view of code logic, there should be a problem here. I=
+=20
+> don't have the actual hardware to verify whether it works properly. Rui=
+=20
+> may know if the patch affects the original workflow.
+>
+> thanks
+> .
+> >
+
+
+
