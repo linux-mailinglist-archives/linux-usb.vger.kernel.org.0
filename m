@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C054A39C75E
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 12:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DAC39C764
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 12:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbhFEKOz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Jun 2021 06:14:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41918 "EHLO mail.kernel.org"
+        id S229929AbhFEK0Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Jun 2021 06:26:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230039AbhFEKOz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Jun 2021 06:14:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5B039613AA;
-        Sat,  5 Jun 2021 10:13:07 +0000 (UTC)
+        id S229902AbhFEK0Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 5 Jun 2021 06:26:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B35EE61248;
+        Sat,  5 Jun 2021 10:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622887987;
-        bh=8z47Pp9+dRZ076Jp5j9tlV8xX4ov7vI0WlrJ4pH5Rbo=;
+        s=k20201202; t=1622888677;
+        bh=zm4lDbdPha8P2ZkCDTwd/Hqs72o9iIEMlIWhfzd2K40=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Upq8qQXseZ3ouMtHMzSGQ+U26aV4dRXMswR5vXes1ijweqwO30MBizYnQN0GR1LoI
-         cbEJzWYjkfhn7ZTL0q8dOwtlbKvVLA55/mdvj3zkxAj5HJnS8mpORFMZW5hsSG23bW
-         pEDBzGhbBuIW5wDwGTFGiKDp1X1F5H73jXj80kbfThCcvM/b4rapyrnfrSrQg5aeKW
-         1zIf8xzy6WiYBAe6CNi8njgF43RMKlLzmGHHnqJnmUGi6VyOjCNd9LjhvxlT9arIhI
-         rMHhyTyyx4Lknr3X69xj3nvfABWBIMs9rZ6GWqF4dSBLDkePK2CrjDGnbJMbpCappL
-         LmKEp9YecUlHQ==
+        b=iwWuJOqC85SXnA5ZhYS3JSXirXJ1JJPYHQIlg835s3NWq++SqZSFhh47thdhp0X3L
+         MaQOm43Q7DOlKwzP4ZL5R+o30kg7lBAsHWpm3apdvg3UXE9UPH2xp/XeiVnKAPmNJj
+         MXttohmzKSQx6QQMDQxt+tZu7p/TcY70lyCM6bhDXskF5WmYol5hcGk7/STKVvvKFO
+         b94Mbp/QksHFo7FTBf3zbJAyDBOZjuDYXxjqFgMjdE36JuOOjL1ZSMCPB6oAnbBs1R
+         8/L49KNroET8OAQhuA0LgfnqH4eMOpIITs7VBOurplw2zVbSUqot5oS3NJxhmrvA7V
+         a3kWFxA7ty5og==
 Received: from johan by xi with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lpTId-0006L4-SB; Sat, 05 Jun 2021 12:13:03 +0200
-Date:   Sat, 5 Jun 2021 12:13:03 +0200
+        id 1lpTTm-0006PE-95; Sat, 05 Jun 2021 12:24:34 +0200
+Date:   Sat, 5 Jun 2021 12:24:34 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     David Frey <dpfrey@gmail.com>
-Cc:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>,
-        linux-usb@vger.kernel.org, Pho Tran <pho.tran@silabs.com>,
+To:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>
+Cc:     linux-usb@vger.kernel.org, David Frey <dpfrey@gmail.com>,
+        Pho Tran <pho.tran@silabs.com>,
         Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
 Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21
  (with bisection)
-Message-ID: <YLtOL5aZUnntfqWB@hovoldconsulting.com>
+Message-ID: <YLtQ4pV0JBSOfLRw@hovoldconsulting.com>
 References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
  <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
  <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
@@ -43,56 +43,111 @@ References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
  <YLeapcNbvExeGKuE@hovoldconsulting.com>
  <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
  <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
- <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
+ <a3a37639-0cba-fb3e-96bf-b4c2dae544a7@palosanto.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a3a37639-0cba-fb3e-96bf-b4c2dae544a7@palosanto.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 04:16:26PM -0700, David Frey wrote:
-> I'm not sure if this matters, but I have been told that the failing
-> boards have CP2102N chips with"A01" firmware.  I tried to install
-> SIlicon Labs Simplicity Studio on Windows because I read that it would
-> be able to identify the firmware version of the device, but I couldn't
-> actually figure out how to find the information. If someone can tell
-> me a way to get the firmware version, I can check to see if it's
-> different between the device that does exhibit this failure and the
-> one that doesn't.
+On Fri, Jun 04, 2021 at 01:25:19PM -0500, Alex Villacís Lasso wrote:
+> El 4/6/21 a las 10:42, Johan Hovold escribió:
 
-That is definitely worth pursuing. The A01 is apparently EOLed and
-there's a later A02 and possibly even A03:
-
-	https://www.silabs.com/community/interface/knowledge-base.entry.html/2020/03/31/how_to_determinecp2102nrevisiona01vsa02-DCJI
-
-That page refers to that vendor tool "Simplicity Studio" as well as a
-Windows library described by
-
-	https://www.silabs.com/documents/public/application-notes/AN978-cp210x-usb-to-uart-api-specification.pdf
-
-that can be used to read out the firmware version on CP2102N and CP2108
-(three bytes). We just need to figure out which vendor request the
-library (and tool) uses and we could key off of this in the driver if
-this turns out to be related to the firmware revision.
-
-If anyone's got a Windows installation it may be possible to dump the
-USB traffic using Wireshark to determine the request. Unless Silabs can
-chime in here of course.
-
-I found an errata for A01 on here, but no mention if this particular
-bug:
-
-	https://www.silabs.com/documents/public/pcns/190315471-CP2102N-Product-Revision-with-Datasheet-and-Errata-Update.pdf
-
-> On Fri, Jun 4, 2021 at 8:42 AM Johan Hovold <johan@kernel.org> wrote:
-
-> > This all matches the CP2102N I've got here and which can set RTS just
-> > fine also with the IXOFF limits set (unlike your device).
+> > I just ran a quick test here and and leaving the ixoff_limit at zero
+> > essentially breaks software flow control since XOFF will be sent when
+> > there are only 7 characters in the receive buffer.
 > >
-> > Unless there's some other configuration setting causing it would seem
-> > your device firmware is just buggy (and bcdDevice was not updated when
-> > it was fixed, which seems unlikely).
+> > Since software flow control support was only recently added, we may have
+> > to accept that for CP2102N to fix the regression, but I'd really like to
+> > understand why your devices behave the way they do first and see if
+> > there's some other way to work around this.
+> >
+> > Hopefully Silabs can provide some insight.
+> >
+> > Also, could you try setting those limits to some other values and see if
+> > the SET_MHS (request 0x7) errors go away?
+> >
+> > Setting both to 513 is supposed to give us 192/64 according to the
+> > datasheet which would be good enough, for example. Seems to work as
+> > documented here (at least for XOFF).
+
+> I am starting to suspect that the root cause is that the 0x07 command 
+> (CP210X_SET_MHS macro in the code) is invalid to send, if the device has 
+> been previously programmed with nonzero ulXonLimit/ulXoffLimit. When the 
+> patch programs both limits back to 0, the command succeeds.
+
+Right, that's what the bisection and logs seem to suggest.
+
+> I am attaching the patch I used, which is the combination of both debug 
+> patches, plus this change:
+> 
+> @@ -1195,11 +1201,14 @@
+>          else
+>                  flow_repl &= ~CP210X_SERIAL_AUTO_TRANSMIT;
+> 
+> -       flow_ctl.ulXonLimit = cpu_to_le32(128);
+> -       flow_ctl.ulXoffLimit = cpu_to_le32(128);
+> +       flow_ctl.ulXonLimit = (I_IXON(tty)) ? cpu_to_le32(128) : 
+> cpu_to_le32(0);
+> +       flow_ctl.ulXoffLimit = (I_IXOFF(tty)) ? cpu_to_le32(128) : 
+> cpu_to_le32(0);
+
+These are both only needed when IXOFF (input flow control) is used (IXON
+is for output flow control and does not use these limits).
+
+And the fact that they cause a mostly unrelated error when set still
+indicates a firmware bug. That doesn't mean it may be possible to work
+around it somehow of course.
+
+> With this patch, the miniterm.py program sort of keeps running and shows 
+> output. Not a perfect patch by any means, since some failures still happen:
+
+> $ miniterm.py /dev/ttyUSB0 115200
+> <program waits for input>
+> 
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_change_speed - setting baud rate to 9600
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x00
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - BEFORE: xon_limit = 0, xoff_limit = 0
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - AFTER: ctrl = 0x00, flow = 0x01
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - AFTER: xon_limit = 128, xoff_limit = 0
+
+Another data point: just setting the XON limit is enough to trigger the
+bug.
+
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - control = 0x0303
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: failed set request 
+> 0x7 status: -32
+
+As here SET_MHS fails.
+
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_change_speed - setting baud rate to 115384
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - BEFORE: ctrl = 0x00, flow = 0x01
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - BEFORE: xon_limit = 128, xoff_limit = 0
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - AFTER: ctrl = 0x01, flow = 0x40
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_set_flow_control - AFTER: xon_limit = 0, xoff_limit = 0
+> jun 04 13:05:12 karlalex-asus kernel: cp210x ttyUSB0: 
+> cp210x_tiocmset_port - control = 0x0101
+
+And when XON is reset, settings RTS again works.
+
+For completeness you could try setting only the XOFF limit and see if
+that alone is sufficient to trigger the issue.
+
+But please also try hardcoding both limits to 513 as I mentioned
+above and see if that makes any difference.
 
 Johan
