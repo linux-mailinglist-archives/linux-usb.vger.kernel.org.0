@@ -2,80 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F6839C69C
-	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 09:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7856639C6B4
+	for <lists+linux-usb@lfdr.de>; Sat,  5 Jun 2021 10:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbhFEHbS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 5 Jun 2021 03:31:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44250 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229892AbhFEHbS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 5 Jun 2021 03:31:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 9F5F8613E7
-        for <linux-usb@vger.kernel.org>; Sat,  5 Jun 2021 07:29:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1622878170;
-        bh=iYZclxkpDu/VucLguJxXqKLPjWDSIDBx/M0bhUaV+L8=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=WT/jEX4wv8b0m92xbu06faT6kYHL6K0JIqImmq94l/hpqd/VEoGFWJtQQ14Uonbdk
-         valkYR6NgJsIsHJMRKUlbombpeMHpO7vlER9LlBHb6M1pDETxRag/ozKf8zZbS47tz
-         PWkRL7+yYoNNvMqXWcJ1fGHqCkjGrrbVyh1ibnWS6hhVNVDdqkWOUOP+8aEdDY0WJ+
-         M+6CGL38mp85kViVQkeVeJS9ocaSsl2B9hMDRI/nP1jh0PL075TcKIPvJdcw3wwXTZ
-         mF4j/eAsa44wcy4LOsxcONi5VoulSkU1vzkdt29Jkk5FGnuF0HLAiPkvAV85/0SECv
-         /7m9WBEoWS7Vw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 8FEA361287; Sat,  5 Jun 2021 07:29:30 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213081] usb-storage / uas Genesys Logic Card Reader no longer
- working on 5.12
-Date:   Sat, 05 Jun 2021 07:29:30 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: peter.ganzhorn@googlemail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-213081-208809-lL3mmGjRB2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213081-208809@https.bugzilla.kernel.org/>
-References: <bug-213081-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229972AbhFEIGq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 5 Jun 2021 04:06:46 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:4482 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229864AbhFEIGq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 5 Jun 2021 04:06:46 -0400
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4FxsYF3XqKzYnBg;
+        Sat,  5 Jun 2021 16:02:09 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Sat, 5 Jun 2021 16:04:56 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Sat, 5 Jun 2021
+ 16:04:55 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+CC:     <alcooperx@gmail.com>, <gregkh@linuxfoundation.org>
+Subject: [PATCH -next] usb: misc: brcmstb-usb-pinmap: check return value after calling platform_get_resource()
+Date:   Sat, 5 Jun 2021 16:09:14 +0800
+Message-ID: <20210605080914.2057758-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213081
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Peter Ganzhorn (peter.ganzhorn@googlemail.com) changed:
+Fixes: 517c4c44b323 ("usb: Add driver to allow any GPIO to be used for 7211 USB signals")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/usb/misc/brcmstb-usb-pinmap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
+diff --git a/drivers/usb/misc/brcmstb-usb-pinmap.c b/drivers/usb/misc/brcmstb-usb-pinmap.c
+index b3cfe8666ea7..336653091e3b 100644
+--- a/drivers/usb/misc/brcmstb-usb-pinmap.c
++++ b/drivers/usb/misc/brcmstb-usb-pinmap.c
+@@ -263,6 +263,8 @@ static int __init brcmstb_usb_pinmap_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 
+ 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!r)
++		return -EINVAL;
+ 
+ 	pdata = devm_kzalloc(&pdev->dev,
+ 			     sizeof(*pdata) +
+-- 
+2.25.1
 
---- Comment #32 from Peter Ganzhorn (peter.ganzhorn@googlemail.com) ---
-Everything has been working well with the patches for me so far and I just =
-saw
-Linux 5.12.9 has the patches included.
-I'll just mark this as resolved.
-
-Thanks again for the great support!
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
