@@ -2,97 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0AC39CF04
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 14:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30EC39CFDA
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 17:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbhFFMcL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 08:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbhFFMcJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 08:32:09 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213E6C061766;
-        Sun,  6 Jun 2021 05:30:20 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id z3so15091768oib.5;
-        Sun, 06 Jun 2021 05:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ENd7sSyq/iEYvgSgyS1HxAHWvKgBszoennu7z1+uEUw=;
-        b=kF4HUvN2KAuEhbH3GAYIzOvQB69iaHttxskOZ9HfBu713RIjsxLLPNNeMDZBg/3VR/
-         1V6V59CcL1+YoL9DowoU+CyWEKdkv2fQQq4YC4qpoI/vqsK5G/3THnpfmgbIhxU+WYFa
-         5JAd5ZF+pYvslR7P8LqdHnyunrqcAbpHESVhG53P4CUg1k/NRk3xA8uIZRjPPlvXKxHb
-         pGgHykbEAnkdHrRJahH4UmHpkD4her0sLydk96rJIfAsdKVTOGa/F6MrV+dSfbJKOJhB
-         0KKeCyLDzjk9THL3OQFztUdWBnzI0kXKvLWWrTate/Lha/UXygdY5UTABigCm/Rgksqh
-         Uu7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ENd7sSyq/iEYvgSgyS1HxAHWvKgBszoennu7z1+uEUw=;
-        b=gGn+TcavHIC+zEAM+AO0ONdgG3/ZAwMvtFvZlgyXAAXqcPOmPiG6aXrmN5Qur0Zqu/
-         TVG6va1ADaYitAI7R3plKGUO7BHzJHkgv+4MXg7Y+DmKqz4t2VvYfHTMknN2jdNN2fVO
-         cE7adfvHFo3NiQZT432PT6a0d7ObfZwNGBcUGKyEbvuCcs2aAvt9i2ePbKiUa/JS8FoA
-         ZtclHiWoGmuBNh93T4U4RI34oWtvc8RgWXRt937QimqtJzjHu18OvmvbOPLI0DXoDNi1
-         Q/+ejAHuvG+VJSsmDyO1Imd/vpjhFh+V3l6ijb68HoU9rjPndRzdOS1Tkx8kCe0casnQ
-         X5Cg==
-X-Gm-Message-State: AOAM5305mU46lGfVNxLK2ddTVhVZYWfqH3lSVheQ2kqNLlFilOA/K4iO
-        9Z44jNi4kyogLBlil7m6Puk=
-X-Google-Smtp-Source: ABdhPJy0Ir9WMGmRcOtr9Iq76BMnLEqnU7Q9G2u/ZnUDgts99XM6ILMKSigKhWEXPXtaBGay2xMt6A==
-X-Received: by 2002:aca:efc1:: with SMTP id n184mr16525909oih.23.1622982619340;
-        Sun, 06 Jun 2021 05:30:19 -0700 (PDT)
-Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w200sm1621336oie.10.2021.06.06.05.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Jun 2021 05:30:18 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 6 Jun 2021 05:30:17 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: Do not finish VDM AMS for retrying
- Responses
-Message-ID: <20210606123017.GA2886010@roeck-us.net>
-References: <20210606081452.764032-1-kyletso@google.com>
+        id S230149AbhFFPrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Jun 2021 11:47:18 -0400
+Received: from mout.kundenserver.de ([212.227.126.134]:52121 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230108AbhFFPrR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 11:47:17 -0400
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MIKs0-1lbb5m22Lc-00EO1n; Sun, 06 Jun 2021 17:45:26 +0200
+Received: by mail-wr1-f54.google.com with SMTP id c9so5846230wrt.5;
+        Sun, 06 Jun 2021 08:45:26 -0700 (PDT)
+X-Gm-Message-State: AOAM531WyvQj5cyLjRk1g2cIgxqev43RKJqJfFT0A6Ju2PU/S9c+gIGJ
+        Khp8RIc1zVKXy4a6RpUIVK4gjsrkh4Ds54WvFuY=
+X-Google-Smtp-Source: ABdhPJxtH8sg72nbDMc2xvlPEkjVgPkkeVaBoEaft/QXwhgaWWLA0oGbW/f7EgR9AF8QpW+XOKQuoewXDnnIPfZJ7ak=
+X-Received: by 2002:a5d:5084:: with SMTP id a4mr13544368wrt.286.1622994326220;
+ Sun, 06 Jun 2021 08:45:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210606081452.764032-1-kyletso@google.com>
+References: <20210606103656.71079-1-sven@svenpeter.dev>
+In-Reply-To: <20210606103656.71079-1-sven@svenpeter.dev>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Sun, 6 Jun 2021 17:43:39 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
+Message-ID: <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: dwc3: support 64 bit DMA in platform driver
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:gFrwvFMRjzWLG74QxE6g7S/QvbeOVNsRRetFPZM2/nMmrCeDbz2
+ HJQP+YSBK2fqxCAEWdxttO9U9pCFsDfe4oxVH0GsiD2O0jGhSHsFRuextKzPgA5ZE44NxEE
+ Ec+dzQpYYdwVdXpNXlCT6MKOn80yhjGr0yTU9LrJX5RW0ZB2a432ugCFkJElxQv/Zat1TTY
+ ukzBHWFWzhmb4tb9ZJnyw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:KgQcoNB7rK0=:Fzl8i+NOf5PrBrN4JjgKrj
+ XqXftn0tuqj5ttxWD7u0O37Z+0C3lB7WiAY0dzXlYEmglIJkvwgGJvHHQ1+Dmw2arHq+d/rtT
+ P9WKVXHjKfDuqMK3R0UyoR4Wcz7hrXKCQ/yRo1U+opdfFM/VIAQ2p/VPtsz5i+gTyefW09Umu
+ LfLF8maKbOQSD6mqDzgH43GF/5qTZ/VDt4G3ZLnlTBwbbWjSMfgWQY3k4yb0cKxTzSIlpjuOi
+ mUIi6AsYpmgRWqzCSV/aU7piHZaou31VYp8H/K23s3jtk1IHlwq0oy5VZxlGuKheHbhnPs7xx
+ 9FStf1piCZ96T6jWIeFfxb2cR0ezwPWl9YwVPoz5N7z3F3KxbytUfbTcYXvPJDL9Te6xpCR/e
+ GuEj82iW0qoCnh7xmzmS/oTCWoKarzI8PUtKAWWka4xqClodTDGVK0/1enxpCtYUt9XMWq0Ag
+ GeNWWm2u4CJaHS3by/fsRAwRW0RBCv6psr/DYNXkPrGgHDDysVdb4cG8kZlulm9YsoqkSvz01
+ b7M3NQwyfBkNyzNXfWHoAE=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 06, 2021 at 04:14:52PM +0800, Kyle Tso wrote:
-> If the VDM responses couldn't be sent successfully, it doesn't need to
-> finish the AMS until the retry count reaches the limit.
-> 
-> Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
-> Signed-off-by: Kyle Tso <kyletso@google.com>
+On Sun, Jun 6, 2021 at 12:36 PM Sven Peter <sven@svenpeter.dev> wrote:
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index b6e53d8212cd..4930541a8984 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1545,6 +1545,21 @@ static int dwc3_probe(struct platform_device *pdev)
+>
+>         dwc3_get_properties(dwc);
+>
+> +       /* Try to set 64-bit DMA first */
+> +       if (!dwc->sysdev->dma_mask)
+> +               /* Platform did not initialize dma_mask */
+> +               ret = dma_coerce_mask_and_coherent(dwc->sysdev,
+> +                                                  DMA_BIT_MASK(64));
+> +       else
+> +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> +
+> +       /* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
+> +       if (ret) {
+> +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(32));
+> +               if (ret)
+> +                       return ret;
+> +       }
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Please drop the dma_coerce_mask_and_coherent() code path as well: if
+the device is marked as non-DMA capable in the platform, it's better have
+it not be usable at all than to assume a particular bus property that may
+or may not be present on that bus.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 0db685d5d9c0..08fabe1fc31d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1965,6 +1965,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
->  			tcpm_log(port, "VDM Tx error, retry");
->  			port->vdm_retries++;
->  			port->vdm_state = VDM_STATE_READY;
-> +			if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMDT(vdo_hdr) == CMDT_INIT)
-> +				tcpm_ams_finish(port);
-> +		} else {
->  			tcpm_ams_finish(port);
->  		}
->  		break;
-> -- 
-> 2.32.0.rc1.229.g3e70b5a671-goog
-> 
+The 32-bit mask is the default on all buses you might see a dwc3 controller
+on, so you can drop that as well, and just leave the
+dma_set_mask_and_coherent().
+
+        Arnd
