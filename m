@@ -2,247 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7118039CCA2
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 06:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC6139CD8E
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 08:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229465AbhFFECK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 00:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbhFFECK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 00:02:10 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB114C061787
-        for <linux-usb@vger.kernel.org>; Sat,  5 Jun 2021 20:59:52 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so8900512oth.9
-        for <linux-usb@vger.kernel.org>; Sat, 05 Jun 2021 20:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=yLxayT1GLLyu9ED1r5TJCfhThypNGEnhnrNs7AhNr1U=;
-        b=YTPV8chRmjHPmt45awZrN+94Pea7iSJ3gVMg9xlsitK2q6HVSNhjhLDvEr2IAJ050O
-         4eTho0fPITkWyHQHKlYaXRc217cHv0ymVOBsUG4BVq4EXZS5vQNJalbSBPtsFugRvFlp
-         EO5I2O0tVF71j6kfNSMUAg4r2KSAszmwCkIux++TtsWZXvvOEvsA7/Q59k2muqckpFv3
-         /6LMvUg8NR9TO183d7F2iZRaG7qSCKzlzfzKne+kwtwMtdhW3IozCUF07/DAFe0T1pXt
-         6wf5TFGAiDPqV/wldQnXOwu5q4uzMZQyCki6yidMWB10hm6QII8TzExSF9dWDNnfW9/a
-         Nwlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yLxayT1GLLyu9ED1r5TJCfhThypNGEnhnrNs7AhNr1U=;
-        b=aVIlg0ddPfLs4ccYU0Pqg4mAw/gEwuKh+06EvBmU9kU2obSIw5u6seS2brbnupn4zu
-         rUSPF0ENwU4WICF6jhOaN02WpW2GVcLFCElbQFUcJz266RlWM3j6gtgqpeyDih3yb+Te
-         LLBqzoT6r6Zjqk68kZypnEgf9MOr4gL8kdLSGbtKUfUH5mkEwJDpHA2x5sFgPFCQ0Npv
-         G9lm0OPa0yhEEJ2cS0bLAjUjnKLPZYcPsiXv6mVR6aFqD6RoQ29XRyt558KOz9Lh6+xq
-         U5eHa1bkoEmw4W9oug1zgzI7imW8usmrzB1lP2hYBheBMhfaB5NhfBSsNhLEItcMQQsC
-         HoRg==
-X-Gm-Message-State: AOAM530iV+KjxfpbCLHweZw4SBXRv8UGs5hI9aAk1LeLJzrjxlhn2AIa
-        6FvbQHMSAympekR0Z0vigEBNDw==
-X-Google-Smtp-Source: ABdhPJzOdcgIfV4AIGzCd7W1R7yczfXr3RIvERCKcJqHIpZLLmtnPmnpmW+CRwsawWf+mhYSg5LfQg==
-X-Received: by 2002:a9d:7a94:: with SMTP id l20mr8961073otn.46.1622951992044;
-        Sat, 05 Jun 2021 20:59:52 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id d12sm1077984otf.65.2021.06.05.20.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Jun 2021 20:59:51 -0700 (PDT)
-Date:   Sat, 5 Jun 2021 22:59:49 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        id S229630AbhFFGDC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Jun 2021 02:03:02 -0400
+Received: from muru.com ([72.249.23.125]:36974 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229508AbhFFGDB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 6 Jun 2021 02:03:01 -0400
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 5D2C080E5;
+        Sun,  6 Jun 2021 06:01:19 +0000 (UTC)
+Date:   Sun, 6 Jun 2021 09:01:08 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     Bin Liu <b-liu@ti.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Manu Gautam <mgautam@codeaurora.org>
-Subject: Re: [PATCH v4 1/2] arm64: dts: qcom: sc7280: Add USB related nodes
-Message-ID: <YLxINYgey58jRWnq@builder.lan>
-References: <1622804618-18480-1-git-send-email-sanm@codeaurora.org>
- <1622804618-18480-2-git-send-email-sanm@codeaurora.org>
+        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
+        letux-kernel@openphoenux.org
+Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
+ session request
+Message-ID: <YLxkpNdKei2Dc9qV@atomide.com>
+References: <20210518150615.53464-1-tony@atomide.com>
+ <20210527211501.70d176b4@aktux>
+ <YLCGZEan87yp9Eeq@atomide.com>
+ <20210604103533.6392beeb@aktux>
+ <YLn06uuntThMlaTQ@atomide.com>
+ <20210604185943.3efa2a19@aktux>
+ <YLsJFqYQQ9e233QQ@atomide.com>
+ <20210605162046.7362a05e@aktux>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1622804618-18480-2-git-send-email-sanm@codeaurora.org>
+In-Reply-To: <20210605162046.7362a05e@aktux>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri 04 Jun 06:03 CDT 2021, Sandeep Maheswaram wrote:
-
-> Add nodes for DWC3 USB controller, QMP and HS USB PHYs in sc7280 SOC.
+* Andreas Kemnade <andreas@kemnade.info> [210605 14:21]:
+> On Sat, 5 Jun 2021 08:18:14 +0300
+> Tony Lindgren <tony@atomide.com> wrote:
 > 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> changed usb3-phy to lanes in qmp phy node as it was causing probe failure.
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 149 +++++++++++++++++++++++++++++++++++
->  1 file changed, 149 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 0b6f119..d70d5fb 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -973,6 +973,110 @@
->  			};
->  		};
->  
-> +		usb_1_hsphy: phy@88e3000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e3000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
-> +		};
-> +
-> +		usb_2_hsphy: phy@88e4000 {
-> +			compatible = "qcom,sc7280-usb-hs-phy",
-> +				     "qcom,usb-snps-hs-7nm-phy";
-> +			reg = <0 0x088e4000 0 0x400>;
-> +			status = "disabled";
-> +			#phy-cells = <0>;
-> +
-> +			clocks = <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_SEC_BCR>;
-> +		};
-> +
-> +		usb_1_qmpphy: phy-wrapper@88e9000 {
-> +			compatible = "qcom,sm8250-qmp-usb3-phy";
+> > * Andreas Kemnade <andreas@kemnade.info> [210604 17:00]:
+> > > On Fri, 4 Jun 2021 12:39:54 +0300
+> > > Tony Lindgren <tony@atomide.com> wrote:  
+> > > > Does the following patch fix things for you or does something else break again? :)
+> > > >   
+> > > sigh,..
+> > > ok, it breaks something. gadget (at least ecm) only works if
+> > > musb/phy stuff is loaded, ecm configured via configfs
+> > > rmmod omap2430
+> > > modprube 2430
+> > > 
+> > > until the next usb disconnect
+> > > and another rmmod/modprobe is required.  
+> > 
+> > Hmm I don't follow, do you mean there's now another issue after a
+> > system suspend? Or is this issue not related to system suspend and
+> > resume?
+> > 
+> independently of suspend.
 
-No, your sc7280 doesn't have a sm8250 UBS PHY.
+OK
 
-> +			reg = <0 0x088e9000 0 0x200>,
-> +			      <0 0x088e8000 0 0x20>;
-> +			reg-names = "reg-base", "dp_com";
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>;
-> +			clock-names = "aux", "ref_clk_src", "com_aux";
-> +
-> +			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
-> +			reset-names = "phy", "common";
-> +
-> +			usb_1_ssphy: lanes@88e9200 {
-> +				reg = <0 0x088e9200 0 0x200>,
-> +				      <0 0x088e9400 0 0x200>,
-> +				      <0 0x088e9c00 0 0x400>,
-> +				      <0 0x088e9600 0 0x200>,
-> +				      <0 0x088e9800 0 0x200>,
-> +				      <0 0x088e9a00 0 0x100>;
-> +				#phy-cells = <0>;
-> +				#clock-cells = <1>;
-> +				clocks = <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +				clock-names = "pipe0";
-> +				clock-output-names = "usb3_phy_pipe_clk_src";
-> +			};
-> +		};
-> +
-> +		usb_2: usb@8cf8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x08cf8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_SEC_SLEEP_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface","mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_SEC_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <&pdc 13 IRQ_TYPE_EDGE_RISING>,
-> +				     <&pdc 12 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "hs_phy_irq",
-> +					  "dm_hs_phy_irq", "dp_hs_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_SEC_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_SEC_BCR>;
-> +
-> +			usb_2_dwc3: dwc3@8c00000 {
+> > > The following musb patches were applied additional to that one you
+> > > added to this mail on top of 5.13-rc4.
+> > > 
+> > > usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
+> > > usb: musb: Add missing PM suspend and resume functions for 2430 glue
+> > > usb: musb: Check devctl status again for a spurious session request  
+> > 
+> > Does one of the above cause some additional usb gadget issue?
+> > 
+> I do not see any additional gadget issue just with them. It just starts
+> with the small patch you proposed to fix suspend power consumption in
+> this thread.
 
-This should be usb@.
-
-> +				compatible = "snps,dwc3";
-> +				reg = <0 0x08c00000 0 0xe000>;
-> +				interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
-> +				iommus = <&apps_smmu 0xa0 0x0>;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				phys = <&usb_2_hsphy>;
-> +				phy-names = "usb2-phy";
-> +				maximum-speed = "high-speed";
-> +			};
-> +		};
-> +
->  		system-cache-controller@9200000 {
->  			compatible = "qcom,sc7280-llcc";
->  			reg = <0 0x09200000 0 0xd0000>, <0 0x09600000 0 0x50000>;
-> @@ -980,6 +1084,51 @@
->  			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
->  		};
->  
-> +		usb_1: usb@a6f8800 {
-> +			compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
-> +			reg = <0 0x0a6f8800 0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +			dma-ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
-> +			clock-names = "cfg_noc", "core", "iface", "mock_utmi",
-> +				      "sleep";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq", "ss_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-> +
-> +			resets = <&gcc GCC_USB30_PRIM_BCR>;
-> +
-> +			usb_1_dwc3: dwc3@a600000 {
-
-Ditto.
+Oh OK, so some more mystery hardware debugging still left to do then.
 
 Regards,
-Bjorn
+
+Tony
