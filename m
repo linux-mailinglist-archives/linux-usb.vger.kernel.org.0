@@ -2,85 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC6139CD8E
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 08:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5AE39CDFE
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 10:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229630AbhFFGDC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 02:03:02 -0400
-Received: from muru.com ([72.249.23.125]:36974 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229508AbhFFGDB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 6 Jun 2021 02:03:01 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 5D2C080E5;
-        Sun,  6 Jun 2021 06:01:19 +0000 (UTC)
-Date:   Sun, 6 Jun 2021 09:01:08 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     Bin Liu <b-liu@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-omap@vger.kernel.org,
-        letux-kernel@openphoenux.org
-Subject: Re: [PATCH] usb: musb: Check devctl status again for a spurious
- session request
-Message-ID: <YLxkpNdKei2Dc9qV@atomide.com>
-References: <20210518150615.53464-1-tony@atomide.com>
- <20210527211501.70d176b4@aktux>
- <YLCGZEan87yp9Eeq@atomide.com>
- <20210604103533.6392beeb@aktux>
- <YLn06uuntThMlaTQ@atomide.com>
- <20210604185943.3efa2a19@aktux>
- <YLsJFqYQQ9e233QQ@atomide.com>
- <20210605162046.7362a05e@aktux>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210605162046.7362a05e@aktux>
+        id S230091AbhFFIQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Jun 2021 04:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229465AbhFFIQt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 04:16:49 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881CFC061766
+        for <linux-usb@vger.kernel.org>; Sun,  6 Jun 2021 01:15:00 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id f18-20020a0cbed20000b029021ef79a8921so8187246qvj.17
+        for <linux-usb@vger.kernel.org>; Sun, 06 Jun 2021 01:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=VOkk9SHKODEiIaCjHRVGDFttv1xB96FlGn6EoEewOHo=;
+        b=iDi+D4O/64oMalj7NDWxWFAJhNOxmwvywuHRupaZeJVE44Cwq1VIfhbgZbehE8iYQM
+         EYid8RlUhLT0xc4twZV6rknQ+Jqky6Egc6Iymtaal5SUi5QaLGCxfGcQe8FhofhJuVwV
+         Z/jZisMQwazLdgX/a9pIHpF8g4pHhBu7M8oc5jH497nDTitfifFNNShHolzp2bfnhflN
+         r/BTKt+iS6TXUDY/t1sUuqtwlX8+tbR2I+KzrqoKKKvOuwFUnY7ZIqE+vj6ugVlcP7ZT
+         oZizGgYnT7j82zX/sjqpmsrl6/za8OJCMJfGxlhDhi/sbGSVQqngUrNhPo38kvTtAhIm
+         aHdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=VOkk9SHKODEiIaCjHRVGDFttv1xB96FlGn6EoEewOHo=;
+        b=AUl3yWWWY8FetpTU2i2Z29ui8sUDc4+0HapWft4s6cGjgMnoiAbZdtf8O0aRZjKBYl
+         UVEf4UyfVDLI5dJ73IkI9T7Ehja0ZOw5JZN/XpR99bKGQtzaCFHra0YrTKfbd2hm/w67
+         KLMoChrotqMivwve4h9GbkuYm74OxY6NJdR7yPgbsI8ivLbI7KRhwNwtlbpcukv97847
+         IpA7wMaHR7j6taEpQN2QNCIGtVSkWGAXlTNXs9TN/2tg4kMkvWm1jnmF4W04hyEEtuYQ
+         zoNjEH5pGl8UCIShJ3ZNrv6BUejQIrl3TDtVmiR0aeyIbRABkeiHDxE5vlYjUyJqq3Cv
+         9Gyg==
+X-Gm-Message-State: AOAM5323Ife/t2EmOfzO7oHtIkSoA0OklaYzoKBXikV2T4cSlSDNDrYP
+        AQtUvKbkQHCD+/xc2Q0SvGooGmZgQzaI
+X-Google-Smtp-Source: ABdhPJy4We1ZBM0a34557fIrttfTWocguftYAyyopbi5pamCZqd3FxN+7xSZFyPhZCzYm5jp40HNHnl8/HpK
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:5235:5c99:43:ac3])
+ (user=kyletso job=sendgmr) by 2002:a0c:e942:: with SMTP id
+ n2mr12441036qvo.5.1622967299273; Sun, 06 Jun 2021 01:14:59 -0700 (PDT)
+Date:   Sun,  6 Jun 2021 16:14:52 +0800
+Message-Id: <20210606081452.764032-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+Subject: [PATCH] usb: typec: tcpm: Do not finish VDM AMS for retrying Responses
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-* Andreas Kemnade <andreas@kemnade.info> [210605 14:21]:
-> On Sat, 5 Jun 2021 08:18:14 +0300
-> Tony Lindgren <tony@atomide.com> wrote:
-> 
-> > * Andreas Kemnade <andreas@kemnade.info> [210604 17:00]:
-> > > On Fri, 4 Jun 2021 12:39:54 +0300
-> > > Tony Lindgren <tony@atomide.com> wrote:  
-> > > > Does the following patch fix things for you or does something else break again? :)
-> > > >   
-> > > sigh,..
-> > > ok, it breaks something. gadget (at least ecm) only works if
-> > > musb/phy stuff is loaded, ecm configured via configfs
-> > > rmmod omap2430
-> > > modprube 2430
-> > > 
-> > > until the next usb disconnect
-> > > and another rmmod/modprobe is required.  
-> > 
-> > Hmm I don't follow, do you mean there's now another issue after a
-> > system suspend? Or is this issue not related to system suspend and
-> > resume?
-> > 
-> independently of suspend.
+If the VDM responses couldn't be sent successfully, it doesn't need to
+finish the AMS until the retry count reaches the limit.
 
-OK
+Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> > > The following musb patches were applied additional to that one you
-> > > added to this mail on top of 5.13-rc4.
-> > > 
-> > > usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
-> > > usb: musb: Add missing PM suspend and resume functions for 2430 glue
-> > > usb: musb: Check devctl status again for a spurious session request  
-> > 
-> > Does one of the above cause some additional usb gadget issue?
-> > 
-> I do not see any additional gadget issue just with them. It just starts
-> with the small patch you proposed to fix suspend power consumption in
-> this thread.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 0db685d5d9c0..08fabe1fc31d 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -1965,6 +1965,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+ 			tcpm_log(port, "VDM Tx error, retry");
+ 			port->vdm_retries++;
+ 			port->vdm_state = VDM_STATE_READY;
++			if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMDT(vdo_hdr) == CMDT_INIT)
++				tcpm_ams_finish(port);
++		} else {
+ 			tcpm_ams_finish(port);
+ 		}
+ 		break;
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
 
-Oh OK, so some more mystery hardware debugging still left to do then.
-
-Regards,
-
-Tony
