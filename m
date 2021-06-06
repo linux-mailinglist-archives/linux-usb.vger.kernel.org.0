@@ -2,88 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E30EC39CFDA
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 17:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE7539D0E4
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 21:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbhFFPrS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 11:47:18 -0400
-Received: from mout.kundenserver.de ([212.227.126.134]:52121 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbhFFPrR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 11:47:17 -0400
-Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MIKs0-1lbb5m22Lc-00EO1n; Sun, 06 Jun 2021 17:45:26 +0200
-Received: by mail-wr1-f54.google.com with SMTP id c9so5846230wrt.5;
-        Sun, 06 Jun 2021 08:45:26 -0700 (PDT)
-X-Gm-Message-State: AOAM531WyvQj5cyLjRk1g2cIgxqev43RKJqJfFT0A6Ju2PU/S9c+gIGJ
-        Khp8RIc1zVKXy4a6RpUIVK4gjsrkh4Ds54WvFuY=
-X-Google-Smtp-Source: ABdhPJxtH8sg72nbDMc2xvlPEkjVgPkkeVaBoEaft/QXwhgaWWLA0oGbW/f7EgR9AF8QpW+XOKQuoewXDnnIPfZJ7ak=
-X-Received: by 2002:a5d:5084:: with SMTP id a4mr13544368wrt.286.1622994326220;
- Sun, 06 Jun 2021 08:45:26 -0700 (PDT)
-MIME-Version: 1.0
+        id S230139AbhFFTQQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Jun 2021 15:16:16 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:57925 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231409AbhFFTPc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 15:15:32 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 16EFA13CA;
+        Sun,  6 Jun 2021 15:13:39 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute3.internal (MEProxy); Sun, 06 Jun 2021 15:13:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm1; bh=MvwFPayhTcEWvcEKv5TmWDsTvmr0
+        uW8J60CdljadmjU=; b=npM9QM3gszq8Ill6wwP/SEkE4LhInrBY4dFbI9BhX0dD
+        kKD2bcY8I5mJpeCkwo3fhY+88TRsYuJLy8Xf27Qe/d+0z6yQIwqcOgbmI3uJD1NE
+        081ARB9ehTaeq/RdI6uVNmS9fYJnJP0AXvB4pLE3XpakWIwMPJUG1D4P8+XtHwmb
+        BPP5eGdW6MB0dw2/dqTriTRxXVYy8fEwNisAH3tCUsp1uqJzofDY3Rh7kPqOU9Bg
+        pG7sDigVZIi8d+Pu50uKOHRMjokZkYmv4JVFdILB1c6ioKhadtZgSzOUHTFo4ey0
+        NeEqVDF2VahZ4QNBS7/dtxuh/rTUkJcY+htPe0itoA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=MvwFPa
+        yhTcEWvcEKv5TmWDsTvmr0uW8J60CdljadmjU=; b=vE6KlurLNw53dkBYH8EL2n
+        9Jkl/4Hz3XbvsZ1KXAUCTPZRdWBPTzQLOD4Zlp04/gZDoNVsnyh0Mb+qJpiUlk8/
+        Snd+qkuYOBDDFlI00sIDWshBOnvwDQS6AYTpz2IIYTMtkamu+hjRWjj3OZ18d019
+        6liUA6na4BjR18xbSby1QculoUE+y4PIgIxKcyIudhOnwmzYCJMhARiXswSU8Hea
+        zGYVY4dr41SMtiJwTZaGt218eFTB+Scn5MeFXBDI7FiftalgOsC+D/ybuYBfTbTZ
+        QYIEoJbYzatA1eavW1UvM66o9S+GeN8I54ah2Yf2GTezcA/0dvgh5gEL0/e1U8Nw
+        ==
+X-ME-Sender: <xms:Yh69YLICqtCInGw4nSR1CQjjwXbsWoqpwSEfQpZph3s85fsSkXgbqQ>
+    <xme:Yh69YPIt3bYtF4xtWzCshCFmHtiSivm3KuL8TcPACBppjk_ObD5amG0I8kQz-Knh0
+    P0ji7azBxf8Oug4n3A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedthedgudefiecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudeh
+    vdefkeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:Yh69YDtU7MGezEX6tXJPpnMJyRxAMFvAJYH4IdTPDMolBY7WRGn14w>
+    <xmx:Yh69YEZLlPpEzoaTTFMtpmcqp5Qe1Vd-n1yi2Dg6Wkz5zj16O1_hUQ>
+    <xmx:Yh69YCa1kEHSGvPGxa10_dMm7svRkC8DICUbQ6siXtYwvWo9whDbSQ>
+    <xmx:Yh69YBkBc9maanbms25rrGOBoaLzjOhl29efwsazPxCmiO8VT9E4PQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2FE7F51C0060; Sun,  6 Jun 2021 15:13:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-519-g27a961944e-fm-20210531.001-g27a96194
+Mime-Version: 1.0
+Message-Id: <f321012c-8108-4797-9f24-7786c1f7d468@www.fastmail.com>
+In-Reply-To: <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
 References: <20210606103656.71079-1-sven@svenpeter.dev>
-In-Reply-To: <20210606103656.71079-1-sven@svenpeter.dev>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sun, 6 Jun 2021 17:43:39 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
-Message-ID: <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
+ <CAK8P3a3TetrYDq0un8NT2ZPM=MSGg68Qr0gEV0Ua4Jfqoy-ErQ@mail.gmail.com>
+Date:   Sun, 06 Jun 2021 21:13:17 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "USB list" <linux-usb@vger.kernel.org>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2] usb: dwc3: support 64 bit DMA in platform driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:gFrwvFMRjzWLG74QxE6g7S/QvbeOVNsRRetFPZM2/nMmrCeDbz2
- HJQP+YSBK2fqxCAEWdxttO9U9pCFsDfe4oxVH0GsiD2O0jGhSHsFRuextKzPgA5ZE44NxEE
- Ec+dzQpYYdwVdXpNXlCT6MKOn80yhjGr0yTU9LrJX5RW0ZB2a432ugCFkJElxQv/Zat1TTY
- ukzBHWFWzhmb4tb9ZJnyw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:KgQcoNB7rK0=:Fzl8i+NOf5PrBrN4JjgKrj
- XqXftn0tuqj5ttxWD7u0O37Z+0C3lB7WiAY0dzXlYEmglIJkvwgGJvHHQ1+Dmw2arHq+d/rtT
- P9WKVXHjKfDuqMK3R0UyoR4Wcz7hrXKCQ/yRo1U+opdfFM/VIAQ2p/VPtsz5i+gTyefW09Umu
- LfLF8maKbOQSD6mqDzgH43GF/5qTZ/VDt4G3ZLnlTBwbbWjSMfgWQY3k4yb0cKxTzSIlpjuOi
- mUIi6AsYpmgRWqzCSV/aU7piHZaou31VYp8H/K23s3jtk1IHlwq0oy5VZxlGuKheHbhnPs7xx
- 9FStf1piCZ96T6jWIeFfxb2cR0ezwPWl9YwVPoz5N7z3F3KxbytUfbTcYXvPJDL9Te6xpCR/e
- GuEj82iW0qoCnh7xmzmS/oTCWoKarzI8PUtKAWWka4xqClodTDGVK0/1enxpCtYUt9XMWq0Ag
- GeNWWm2u4CJaHS3by/fsRAwRW0RBCv6psr/DYNXkPrGgHDDysVdb4cG8kZlulm9YsoqkSvz01
- b7M3NQwyfBkNyzNXfWHoAE=
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 6, 2021 at 12:36 PM Sven Peter <sven@svenpeter.dev> wrote:
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index b6e53d8212cd..4930541a8984 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1545,6 +1545,21 @@ static int dwc3_probe(struct platform_device *pdev)
->
->         dwc3_get_properties(dwc);
->
-> +       /* Try to set 64-bit DMA first */
-> +       if (!dwc->sysdev->dma_mask)
-> +               /* Platform did not initialize dma_mask */
-> +               ret = dma_coerce_mask_and_coherent(dwc->sysdev,
-> +                                                  DMA_BIT_MASK(64));
-> +       else
-> +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-> +
-> +       /* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
-> +       if (ret) {
-> +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(32));
-> +               if (ret)
-> +                       return ret;
-> +       }
 
-Please drop the dma_coerce_mask_and_coherent() code path as well: if
-the device is marked as non-DMA capable in the platform, it's better have
-it not be usable at all than to assume a particular bus property that may
-or may not be present on that bus.
 
-The 32-bit mask is the default on all buses you might see a dwc3 controller
-on, so you can drop that as well, and just leave the
-dma_set_mask_and_coherent().
+On Sun, Jun 6, 2021, at 17:43, Arnd Bergmann wrote:
+> On Sun, Jun 6, 2021 at 12:36 PM Sven Peter <sven@svenpeter.dev> wrote:
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index b6e53d8212cd..4930541a8984 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1545,6 +1545,21 @@ static int dwc3_probe(struct platform_device *pdev)
+> >
+> >         dwc3_get_properties(dwc);
+> >
+> > +       /* Try to set 64-bit DMA first */
+> > +       if (!dwc->sysdev->dma_mask)
+> > +               /* Platform did not initialize dma_mask */
+> > +               ret = dma_coerce_mask_and_coherent(dwc->sysdev,
+> > +                                                  DMA_BIT_MASK(64));
+> > +       else
+> > +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> > +
+> > +       /* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
+> > +       if (ret) {
+> > +               ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(32));
+> > +               if (ret)
+> > +                       return ret;
+> > +       }
+> 
+> Please drop the dma_coerce_mask_and_coherent() code path as well: if
+> the device is marked as non-DMA capable in the platform, it's better have
+> it not be usable at all than to assume a particular bus property that may
+> or may not be present on that bus.
+> 
+> The 32-bit mask is the default on all buses you might see a dwc3 controller
+> on, so you can drop that as well, and just leave the
+> dma_set_mask_and_coherent().
+> 
+>         Arnd
+> 
 
-        Arnd
+Makes sense, will drop the two things for v3.
+
+Thanks,
+
+Sven
+
