@@ -2,84 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5AE39CDFE
-	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 10:15:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BFE639CE6A
+	for <lists+linux-usb@lfdr.de>; Sun,  6 Jun 2021 11:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbhFFIQu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 04:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229465AbhFFIQt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 04:16:49 -0400
-Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 881CFC061766
-        for <linux-usb@vger.kernel.org>; Sun,  6 Jun 2021 01:15:00 -0700 (PDT)
-Received: by mail-qv1-xf49.google.com with SMTP id f18-20020a0cbed20000b029021ef79a8921so8187246qvj.17
-        for <linux-usb@vger.kernel.org>; Sun, 06 Jun 2021 01:15:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=VOkk9SHKODEiIaCjHRVGDFttv1xB96FlGn6EoEewOHo=;
-        b=iDi+D4O/64oMalj7NDWxWFAJhNOxmwvywuHRupaZeJVE44Cwq1VIfhbgZbehE8iYQM
-         EYid8RlUhLT0xc4twZV6rknQ+Jqky6Egc6Iymtaal5SUi5QaLGCxfGcQe8FhofhJuVwV
-         Z/jZisMQwazLdgX/a9pIHpF8g4pHhBu7M8oc5jH497nDTitfifFNNShHolzp2bfnhflN
-         r/BTKt+iS6TXUDY/t1sUuqtwlX8+tbR2I+KzrqoKKKvOuwFUnY7ZIqE+vj6ugVlcP7ZT
-         oZizGgYnT7j82zX/sjqpmsrl6/za8OJCMJfGxlhDhi/sbGSVQqngUrNhPo38kvTtAhIm
-         aHdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=VOkk9SHKODEiIaCjHRVGDFttv1xB96FlGn6EoEewOHo=;
-        b=AUl3yWWWY8FetpTU2i2Z29ui8sUDc4+0HapWft4s6cGjgMnoiAbZdtf8O0aRZjKBYl
-         UVEf4UyfVDLI5dJ73IkI9T7Ehja0ZOw5JZN/XpR99bKGQtzaCFHra0YrTKfbd2hm/w67
-         KLMoChrotqMivwve4h9GbkuYm74OxY6NJdR7yPgbsI8ivLbI7KRhwNwtlbpcukv97847
-         IpA7wMaHR7j6taEpQN2QNCIGtVSkWGAXlTNXs9TN/2tg4kMkvWm1jnmF4W04hyEEtuYQ
-         zoNjEH5pGl8UCIShJ3ZNrv6BUejQIrl3TDtVmiR0aeyIbRABkeiHDxE5vlYjUyJqq3Cv
-         9Gyg==
-X-Gm-Message-State: AOAM5323Ife/t2EmOfzO7oHtIkSoA0OklaYzoKBXikV2T4cSlSDNDrYP
-        AQtUvKbkQHCD+/xc2Q0SvGooGmZgQzaI
-X-Google-Smtp-Source: ABdhPJy4We1ZBM0a34557fIrttfTWocguftYAyyopbi5pamCZqd3FxN+7xSZFyPhZCzYm5jp40HNHnl8/HpK
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:5235:5c99:43:ac3])
- (user=kyletso job=sendgmr) by 2002:a0c:e942:: with SMTP id
- n2mr12441036qvo.5.1622967299273; Sun, 06 Jun 2021 01:14:59 -0700 (PDT)
-Date:   Sun,  6 Jun 2021 16:14:52 +0800
-Message-Id: <20210606081452.764032-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
-Subject: [PATCH] usb: typec: tcpm: Do not finish VDM AMS for retrying Responses
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S230060AbhFFJib (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 6 Jun 2021 05:38:31 -0400
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:57213 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229962AbhFFJia (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 6 Jun 2021 05:38:30 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id E83565C00DB;
+        Sun,  6 Jun 2021 05:36:40 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Sun, 06 Jun 2021 05:36:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=LJcFNkqkwBNMBLl3DFLZ1dS+fa
+        kHnDWkRd6GlAOn3lo=; b=OILKlS5oLwBhgpURjfVoumk5v8MmeuviTO0jszfl8c
+        MXPCj14y/W5hDMzqJjdJfspVvkapQ7wqiEzk7gLNJonosxcgLNuobLNj6j08O0qy
+        smdNch3VW1BZ4emxiVgBXZnoeJYLksP6DLOKnVPRGbSNObRj0gzGv1P976dWmfYK
+        vVy3Ethd3xmBuz2TY80qDZrxUoZrMvhlgc9VxB4YymMRcIA5AzwHeRtY07R76Kz7
+        7D2oBcunxtUttgNwKtdVba0yKwyxD7RL29X6s7QY6eBURQvTjt6HERdMQklK+pTM
+        gFivZKe5Uqmu9eVMcCekIMim22Zw9evt60gUc9rmFxJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=LJcFNkqkwBNMBLl3D
+        FLZ1dS+fakHnDWkRd6GlAOn3lo=; b=rrvgsUdsYtZLKAsoVumCXOPivchcgSA5t
+        oVDNQSehz5uEpcrCgoHPiL/2ZsoChXNM+oYP+zi0azlTgWMpG0llzb7AwlwOhqBX
+        g5K13h21hMvG54/m5eKYOGAJ/49VLis++Nk6jBtUSmVtw1LW1Jm2EIRE5Pxe+L8I
+        yZDayG17BD8OFYRTHuNk1o9//WJiJF1UJmh6BBj++YWlmcCKdjGxYkMBdXQigcW/
+        vN2ZXvpF9SsrFwHS8KQ+nphUgqlDU5/o9AXn1Y3cYLm1WIAs8FTjRysnAKPtR9xC
+        MZrNwSudrlHdbKNGjwDPEN+gyiMI+L20qbYb0tYajvM6oaj3EOY+A==
+X-ME-Sender: <xms:KJe8YKieZWyvgX_QeqACrwBaxpjC8ZAybhsOZJdE5cz7Fb5pdoeOoA>
+    <xme:KJe8YLCZpa5p0wYUBSSBvDir2oZJOOmMg57B_hN_t-wjQOpmxH7ZyYpZZT48cu3GC
+    sBy3c3HdFGvE1bNNss>
+X-ME-Received: <xmr:KJe8YCHoNmp6weGsJsvh0IP50CLgFoAeoAGUwIrJ4hfld20lA9KL6oRrwixsHx4UGRpvvgo9uDIq_Bxmx5qzI7rUxBKgsFh4Mv9_Fv6KePCioGB3n7ZA6tchPD5uDA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedthedgudekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epuefgleekvddtjefffeejheevleefveekgfduudfhgefhfeegtdehveejfefffffgnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:KJe8YDToPW8W6SDWLEqsEN9Wlbw3dT-ZyWgzytmRsUFpIe_yybQ9yw>
+    <xmx:KJe8YHxaLmB45_pdM6Vb_8yz7LHoXiNpAm0C4qReWIgfyWWYG40woQ>
+    <xmx:KJe8YB6LPgz5ps87rCwoZbFgcj9yuQhYq04oHJm1CGFBdRwIZAv-cQ>
+    <xmx:KJe8YJutV8hBCqd_SSIknHcrZRVMSBrXFfAN8cr3ikndsQm6g6bOFw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 6 Jun 2021 05:36:39 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     linux-usb@vger.kernel.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: [PATCH] usb: dwc3: support 64 bit DMA in platform driver
+Date:   Sun,  6 Jun 2021 11:36:29 +0200
+Message-Id: <20210606093629.69786-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the VDM responses couldn't be sent successfully, it doesn't need to
-finish the AMS until the retry count reaches the limit.
+Currently, the dwc3 platform driver does not explicitly ask for
+a DMA mask. This makes it fall back to the default 32-bit mask which
+breaks the driver on systems that only have RAM starting above the
+first 4G like the Apple M1 SoC.
 
-Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
-Signed-off-by: Kyle Tso <kyletso@google.com>
+Fix this by using the same logic already present in xhci-plat.c:
+First, try to set a coherent dma mask for 64-bit, and then attempt
+again with a 32-bit mask if this fails.
+
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
 ---
- drivers/usb/typec/tcpm/tcpm.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 0db685d5d9c0..08fabe1fc31d 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -1965,6 +1965,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 			tcpm_log(port, "VDM Tx error, retry");
- 			port->vdm_retries++;
- 			port->vdm_state = VDM_STATE_READY;
-+			if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMDT(vdo_hdr) == CMDT_INIT)
-+				tcpm_ams_finish(port);
-+		} else {
- 			tcpm_ams_finish(port);
- 		}
- 		break;
+I have taken the code directly from the xhci-plat.c driver so
+I think this change should be fairly low risk.
+Unfortunately I only have the Apple M1 to test this on but here
+the driver still works with the iommu enabled which limits the
+address space to 32 bit. It also enables to use this with the iommu
+in bypass mode which requires 64 bit addresses.
+
+I believe this has been working fine so far since the dwc3 driver
+only uses a few very small buffers in host mode which might still
+fit within the first 4G of address space on many devices. The
+majority of DMA buffers are allocated inside the xhci driver which
+will already call dma_set_mask_and_coherent.
+
+Best,
+
+Sven
+
+ drivers/usb/dwc3/core.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index b6e53d8212cd..ef6bb6aaffd8 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1545,6 +1545,21 @@ static int dwc3_probe(struct platform_device *pdev)
+ 
+ 	dwc3_get_properties(dwc);
+ 
++	/* Try to set 64-bit DMA first */
++	if (WARN_ON(!dwc->sysdev->dma_mask))
++		/* Platform did not initialize dma_mask */
++		ret = dma_coerce_mask_and_coherent(dwc->sysdev,
++						   DMA_BIT_MASK(64));
++	else
++		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
++
++	/* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
++	if (ret) {
++		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(32));
++		if (ret)
++			return ret;
++	}
++
+ 	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+ 	if (IS_ERR(dwc->reset))
+ 		return PTR_ERR(dwc->reset);
 -- 
-2.32.0.rc1.229.g3e70b5a671-goog
+2.25.1
 
