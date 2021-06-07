@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE40539E44C
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA8939E491
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230386AbhFGQro (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:47:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36806 "EHLO mail.kernel.org"
+        id S231410AbhFGQy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:54:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45056 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230197AbhFGQro (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:47:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D872C60FDA;
-        Mon,  7 Jun 2021 16:45:52 +0000 (UTC)
+        id S230446AbhFGQy5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 12:54:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 51E3160FDA;
+        Mon,  7 Jun 2021 16:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623084352;
-        bh=y7n15FAEb/+6+nW/J1mPpFtkRRNv5X0ZXigzoiiGRQ8=;
+        s=k20201202; t=1623084786;
+        bh=/tfrK9SqrQkiyu3G5dlDMR6ncPkcSVXzOtse53jthQc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IQeBg5inTPtieRrQGtnVZkpwT0SkaA8ANl4y2wACo9Ul5C18cL+fuCJ6HnVUdJ4H6
-         nxlfQ4Fcj1kjZCS0DkzwQbqUcb+x1mJ5QCc82HnC2s3ty06MtJR/8JrbtgXsyQs5DW
-         bLXmlmCJbAnekDlmuW52KThJtvli3cc0JPqJyueQmlmV0a8UaSnGrYxCpSedmoXONq
-         8Wt7au6fcSrMV8k0seLf54bgSJQZtMWROZLRC5rN588imHOwrIqC19yvImTHnHhhR8
-         se4CVkAEOy40gBU2/YRi1tbw3XjA5GrOmsqfRnNGvqVDMv6RfgJnn3CJnTNk68O2LT
-         0lvbZCF4fUKpQ==
+        b=pmB9YcbGuCg0rJhjltEoNfL7o/NFozO5di3+ex1teSStlbQGoQWltQPu8epEVmZp8
+         3kkz5vhhl7pUwGZaM8cYMSwsgq+JFJLAoNJh5mBGFb+l/oM6FGf9kDYM3FjysGGjXE
+         dWS0K29O53nxix87xprF/26lYeDOR1HuILAIC4mM3mGtrtBYw6dFGF1V+ZJNNb4xKz
+         U9zwC+Y7+Gwn4gfw9AB24aG3bYfyrDnmayf3LI5OAy415qmT8xYI5cOL3DA8PZ464b
+         4tE/F7q8w0NFeCHlM+QPnwfk7xGKNUsGdC9zHw2FDuvu2H8ARlRuairITlx7AjEYL/
+         Xi4S45p7EXteQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lqINm-00039p-71; Mon, 07 Jun 2021 18:45:46 +0200
-Date:   Mon, 7 Jun 2021 18:45:46 +0200
+        id 1lqIUl-0003Cq-N0; Mon, 07 Jun 2021 18:53:00 +0200
+Date:   Mon, 7 Jun 2021 18:52:59 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>
-Cc:     David Frey <dpfrey@gmail.com>, linux-usb@vger.kernel.org,
-        Pho Tran <pho.tran@silabs.com>,
+To:     David Frey <dpfrey@gmail.com>
+Cc:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>,
+        linux-usb@vger.kernel.org, Pho Tran <pho.tran@silabs.com>,
         Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
 Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21
  (with bisection)
-Message-ID: <YL5NOq2N8dNWDVbc@hovoldconsulting.com>
+Message-ID: <YL5O6/GrlnpNwGjT@hovoldconsulting.com>
 References: <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
  <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
  <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
@@ -44,82 +44,47 @@ References: <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
  <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
  <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
  <YLtOL5aZUnntfqWB@hovoldconsulting.com>
- <7b8c5109-3654-7e65-0b94-f6b861ff78f5@palosanto.com>
+ <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <7b8c5109-3654-7e65-0b94-f6b861ff78f5@palosanto.com>
+In-Reply-To: <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 10:16:30AM -0500, Alex Villacís Lasso wrote:
-> El 5/6/21 a las 05:13, Johan Hovold escribió:
-> > On Fri, Jun 04, 2021 at 04:16:26PM -0700, David Frey wrote:
-> >> I'm not sure if this matters, but I have been told that the failing
-> >> boards have CP2102N chips with"A01" firmware.  I tried to install
-> >> SIlicon Labs Simplicity Studio on Windows because I read that it would
-> >> be able to identify the firmware version of the device, but I couldn't
-> >> actually figure out how to find the information. If someone can tell
-> >> me a way to get the firmware version, I can check to see if it's
-> >> different between the device that does exhibit this failure and the
-> >> one that doesn't.
-> > That is definitely worth pursuing. The A01 is apparently EOLed and
-> > there's a later A02 and possibly even A03:
+On Mon, Jun 07, 2021 at 09:44:59AM -0700, David Frey wrote:
+> On Sat, Jun 5, 2021 at 3:13 AM Johan Hovold <johan@kernel.org> wrote:
 > >
-> > 	https://www.silabs.com/community/interface/knowledge-base.entry.html/2020/03/31/how_to_determinecp2102nrevisiona01vsa02-DCJI
+> > I found an errata for A01 on here, but no mention if this particular
+> > bug:
 > >
-> > That page refers to that vendor tool "Simplicity Studio" as well as a
-> > Windows library described by
-> >
-> > 	https://www.silabs.com/documents/public/application-notes/AN978-cp210x-usb-to-uart-api-specification.pdf
-> >
-> > that can be used to read out the firmware version on CP2102N and CP2108
-> > (three bytes). We just need to figure out which vendor request the
-> > library (and tool) uses and we could key off of this in the driver if
-> > this turns out to be related to the firmware revision.
+> >         https://www.silabs.com/documents/public/pcns/190315471-CP2102N-Product-Revision-with-Datasheet-and-Errata-Update.pdf
 > 
-> I modified the patch that added cp210x_dump_props() function, to dump 
-> the raw buffer received using the print_hex_dump() kernel function. For 
-> my device, I get this output:
-> 
-> jun 07 10:00:51 karlalex-asus kernel: cp210x propdata: 00000000: 42 00 
-> 00 01 01 00 00 00 00 00 00 00 80 02 00 00  B...............
-> jun 07 10:00:51 karlalex-asus kernel: cp210x propdata: 00000010: 80 02 
-> 00 00 c0 c6 2d 10 01 00 00 00 3f 01 00 00  ......-.....?...
-> jun 07 10:00:51 karlalex-asus kernel: cp210x propdata: 00000020: 7f 00 
-> 00 00 ff ff 07 10 0f 00 07 1f 80 02 00 00  ................
-> jun 07 10:00:51 karlalex-asus kernel: cp210x propdata: 00000030: 80 02 
-> 00 00 00 00 00 00 00 00 00 00 33 00 2e 00  ............3...
-> jun 07 10:00:51 karlalex-asus kernel: cp210x propdata: 00000040: 30 
-> 00                                            0.
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: wLength = 66
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulMaxTxQueue = 640
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulMaxRxQueue = 640
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulProvSubType = 1
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulProvCapabilities 
-> = 0x13f
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulSettableParams = 
-> 0x7f
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentTx-Queue 
-> = 640
-> jun 07 10:00:51 karlalex-asus kernel: cp210x ttyUSB0: ulCurrentRx-Queue 
-> = 640
-> 
-> According to the datasheet at 
-> https://www.silabs.com/documents/public/application-notes/AN571.pdf , 
-> the data at offset 60 should be an Unicode string containing the device 
-> vendor, with the last 3 characters denoting the version. The datasheet 
-> gives an example of "SILABS USB Vx.y". However, my actual output decodes 
-> to just "3.0". Is this enough for a blacklisting decision?
+> I believe this document has some more errata details:
+> https://www.silabs.com/documents/public/errata/cp2102n-errata.pdf'
 
-I'm afraid not; I have the same string encoded at offset 60 as you do:
+Thanks for the link.
 
-	uniProvName = 33 00 2e 00 30 00 00 00 00 00 00 00 00 00 00
+This seems to confirm that this is a known issue with A01 that was fixed
+in A02:
 
-It seems we need help from Silabs here unless someone can reverse
-engineer the Windows tool or library to determine the firmware version
-request.
+	3.6 CP2102N_E104 – IO Exception in .NET Applications when
+	Manually Controlling RTS
+
+	The CP2102N uses the incorrect byte of the SERIAL_HANDFLOW
+	structure
+	(https://msdn.microsoft.com/en-us/library/windows/hard-
+	ware/jj680685(v=vs.85).aspx) to control the RTS signal. Instead
+	of looking at the first byte of FlowReplace, the device is
+	reading the first byte of the XonLimit and interpreting that as
+	the first byte of FlowReplace.
+
+	Applications written in .NET set the Xon/Xoff limits to 160,
+	equal to 0xA0, which the CP2102N interprets as hardware flow
+	control, and so it returns an error when manually setting RTS.
+
+Now we just need to figure out how to determine the firmware revision.
 
 Johan
