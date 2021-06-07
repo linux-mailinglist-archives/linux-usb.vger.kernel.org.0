@@ -2,90 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C9439E733
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 21:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB8F939E7BA
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 21:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbhFGTI3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 15:08:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42896 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230264AbhFGTI2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 15:08:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 348E861130
-        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 19:06:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623092797;
-        bh=lq+8BVFB4esSK47jgU5fdxJ9uxNuCK9sLZN0Tt01WUs=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=dJGtyoZx1QXMoQCfG+xqq1H8d6MzIFo5kItV8MtadpB8UNBglGzNP8cu8d8cUifUE
-         Jl4C6ywryiokYmFqJzvPGQYdIBUVIs8caOwdqpN2uqwc90HskwVgAqeQKDwkPxf6bm
-         YnS6S2WoO0pspE/MsA4j3GexuCi8ErgkB76GjzRhjrwa4HzBmlbaRqP9NrANJrt+ZB
-         SmY9XWhPY7iD99+MiQ5TajZC3t/hGr/cWOXdnWTKrppwfSBL6L0hc1faWa3WF+l1/F
-         oyBr3n78m2DVsobkwYR1NypvBanYwH7KM9jUw7p4vh9CZHfKxPlsrbITjmCbOeTRk2
-         Y87ySxc/SJcfQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 2BF3E6115A; Mon,  7 Jun 2021 19:06:37 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Mon, 07 Jun 2021 19:06:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jaffa225man@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-pjYbEAYKD4@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
+        id S231358AbhFGTub (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 15:50:31 -0400
+Received: from mail-wr1-f49.google.com ([209.85.221.49]:40941 "EHLO
+        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230425AbhFGTua (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 15:50:30 -0400
+Received: by mail-wr1-f49.google.com with SMTP id y7so14295094wrh.7
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 12:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:content-transfer-encoding:date:message-id:to:cc
+         :subject:from:references:in-reply-to;
+        bh=ebDVMcKsv/UX9GHo//XkDLGULvc/vGm3pd15+MJ8wAM=;
+        b=kjOogvipm6GY7xcEY0orGyK8FpY8FwbioaCHcRx2VDqkPBpnIK7sV44oxaLBaxw+rv
+         9HltXNyL3o5T7aCKPNDGeTMLO5gzgPIXzCrcNnM4zUx4KZlnh2iQW+WIKkRdwU4jwt3S
+         ZtU3HDnFG3/gcuHQHIjFyrH21pe6KNLEVHhtQ+1nEWMJza9q4x7ZVYOkXfLzoFfB3F8R
+         pg7w+8l5F63zAuiL4zp35+EDkZJi6/fzleUPEIcQNey6HWJxabafCMPTR0rgOmOi3fSI
+         HJUzz8XN0YQosHY8KLetZ7ERIHoJK955deFRu4PEEd6si9ftPP11ZIOZipN5x/dr0hu+
+         7mOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:to:cc:subject:from:references:in-reply-to;
+        bh=ebDVMcKsv/UX9GHo//XkDLGULvc/vGm3pd15+MJ8wAM=;
+        b=SdpGuFxwTkP0qfO3t+M+iUZb5+6nFWKgOlP51BuBJzj90fUmdmQfth1fF8VtVwOBW2
+         wlO5J3mbj4x8azx+x9zYtZYGUa6XkID1Qysq5xEZjsrgqp97J5P6cz3o2d7der0a09TN
+         vwOaq+iTZ5yUrImuCYry7SWMed7i9t5xQdIA/8fefpNdAcRCqs5X8jaXP6VZl9553GY+
+         cmJyD3Y/FvQC9x9OU1vN4gjH6LvCkSP7hMaN4YG1m8pNiR6Vz3NlnqJwe8CpDU73aV1+
+         7csjTNAm1gByjYAJWFZErK92Z3aXVnSi6qcAdBh7nZKYhwFlv2ygUulUCsScoZVrnwI3
+         j9XA==
+X-Gm-Message-State: AOAM533/Z/tDtFZQy7c7YET75Rk5zjpNA7wL1vVq+Hg8A6wZW7zMoNtH
+        4oNZHcS5paN9x+6v8WNcySf/ow==
+X-Google-Smtp-Source: ABdhPJzjX+v2jqafQjzrqrnUkLtRsnTbQdgsORR3N8ntQgyM3gtHh3AR2W/0ijT1tPrVruWWb73SnA==
+X-Received: by 2002:a5d:6952:: with SMTP id r18mr18337542wrw.392.1623095258284;
+        Mon, 07 Jun 2021 12:47:38 -0700 (PDT)
+Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id l16sm482603wmj.47.2021.06.07.12.47.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 12:47:37 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 07 Jun 2021 20:47:37 +0100
+Message-Id: <CBXN8ZEEZBLL.G07343E9H3YV@arch-thunder>
+To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v3] MAINTAINERS: usb: add entry for isp1760
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+References: <20210607170054.220975-1-rui.silva@linaro.org>
+ <YL5tMGFyTDU3ExUo@pendragon.ideasonboard.com>
+In-Reply-To: <YL5tMGFyTDU3ExUo@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+Hi,
+On Mon Jun 7, 2021 at 8:02 PM WEST, Laurent Pinchart wrote:
 
---- Comment #23 from Lucas Endres (jaffa225man@gmail.com) ---
-(In reply to Alan Stern from comment #22)
-> Using two different drivers would definitely explain the different patter=
-ns
-> of communication with the device in your two usbmon traces.
->=20
-> But it doesn't explain why, with one of the drivers, the device seems to
-> stop responding when used with EHCI (and works okay with xHCI!).  Maybe t=
-his
-> is caused by a bug in the device's firmware.  It that's true, changing the
-> communication pattern might work around the problem.
+> Hi Rui,
+>
+> Thank you for the patch.
+>
+> On Mon, Jun 07, 2021 at 06:00:54PM +0100, Rui Miguel Silva wrote:
+> > Giving support for isp1763 made a little revival to this driver, add
+> > entry in the MAINTAINERS file with me as maintainer.
+> >=20
+> > Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
+> > ---
+> >=20
+> > v2[1] -> v3:                                                           =
+                                                                           =
+                           =20
+> >      - remove Laurent completely
+>
+> Sorry for the misunderstanding.
 
-Sorry, but here's another pertinent factor that I should have mentioned ear=
-lier
-if I haven't:
-It could very well be a bug in the UA-101's firmware, since if I connect an
-audible input and watch it on the UA-101's builtin levels meter (with it
-already on), I think it does freeze.  The levels remain when the input is
-unplugged, after plugging in USB while running a nonworking commit.
+My fault, no problem and...
 
-Thanks for the insight!
+>
+> Acked-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I suppose I should start comparing the code to each module, since I think
-that's what you're suggesting.
+thanks for the tag.
 
---=20
-You may reply to this email to add a comment.
+------
+Cheers,
+     Rui
+>
+> > v1[0] -> v2:                                                           =
+                                                                           =
+                           =20
+> >      - move Laurent to reviewer instead of maintainer by his request   =
+                                                                           =
+                            =20
+> >        because of lack of bandwidth
+> >=20
+> > [0]: https://lore.kernel.org/linux-usb/20210607083921.38441-1-rui.silva=
+@linaro.org/T/#u
+> > [1]: https://lore.kernel.org/linux-usb/20210607101538.74836-1-rui.silva=
+@linaro.org/
+> >=20
+> >  MAINTAINERS | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >=20
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 503fd21901f1..28ebc6423cf1 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -18869,6 +18869,13 @@ S:	Maintained
+> >  F:	drivers/usb/host/isp116x*
+> >  F:	include/linux/usb/isp116x.h
+> > =20
+> > +USB ISP1760 DRIVER
+> > +M:	Rui Miguel Silva <rui.silva@linaro.org>
+> > +L:	linux-usb@vger.kernel.org
+> > +S:	Maintained
+> > +F:	drivers/usb/isp1760/*
+> > +F:	Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+> > +
+> >  USB LAN78XX ETHERNET DRIVER
+> >  M:	Woojung Huh <woojung.huh@microchip.com>
+> >  M:	UNGLinuxDriver@microchip.com
+>
+> --=20
+> Regards,
+>
+> Laurent Pinchart
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+
+
