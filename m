@@ -2,111 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2606439E172
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9155239E210
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbhFGQHB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:07:01 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:41898 "EHLO m43-7.mailgun.net"
+        id S231902AbhFGQPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:15:04 -0400
+Received: from mga07.intel.com ([134.134.136.100]:13356 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230311AbhFGQHA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:07:00 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623081909; h=In-Reply-To: Content-Transfer-Encoding:
- Content-Type: MIME-Version: References: Message-ID: Subject: Cc: To:
- From: Date: Sender; bh=Hu7hZRn9/CiOlHP4zv466pCsqGDUOMHQFg60eY5w1oY=; b=LxuCGtkbfVNWbrjzt51qnOIkjRbMZGC+xkJntsspT2OHhErNiPRgNaIyWtJa6WCr70LR7ZzZ
- VwsltPiBeoPf2DMTYMtLo+fckQ/xCQx/D6wUdpVR46IFNbqOzR/QIoXkWJ5mGI+i7aVI81Ob
- LeAehlOvxrZ2zdGhPdWPIs9G+VU=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 60be439c265e7370f70a8782 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Jun 2021 16:04:44
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 05A7BC43460; Mon,  7 Jun 2021 16:04:44 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BEB5AC433D3;
-        Mon,  7 Jun 2021 16:04:42 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org BEB5AC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Mon, 7 Jun 2021 09:04:38 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, balbi@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
-Message-ID: <20210607160438.GA2975@jackp-linux.qualcomm.com>
-References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
- <YLoUiO8tpRpmvcyU@kroah.com>
+        id S231660AbhFGQOn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 12:14:43 -0400
+IronPort-SDR: xJg8cG6rRa0qWa0oJtQFo6DawrpOoJ3rb+hHe6A6pSwePtctoIJawAUXqnopFi0ypnmdd/mbVk
+ VFmq0ln2hH/Q==
+X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="268508856"
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="268508856"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:11:05 -0700
+IronPort-SDR: YbmSNma6iUqC07OzWNUuxi1hbN8G5FrRJ110wp3qsnaAmURg7PCHpA5GcZ/GnIqdx+anLH7QGB
+ dGU5MWzhugig==
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="447537317"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 09:11:01 -0700
+Received: by lahna (sSMTP sendmail emulation); Mon, 07 Jun 2021 19:10:59 +0300
+Date:   Mon, 7 Jun 2021 19:10:59 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     joeyli <jlee@suse.com>
+Cc:     linux-usb@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Mario Limonciello <mario.limonciello@dell.com>,
+        Christian Kellner <christian@kellner.me>,
+        Len Brown <lenb@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-acpi@vger.kernel.org, iqgrande@gmail.com
+Subject: Re: [PATCH v2 3/5] ACPI: Execute platform _OSC also with query bit
+ clear
+Message-ID: <YL5FExiUMfHi+K/X@lahna.fi.intel.com>
+References: <20210129083241.72497-1-mika.westerberg@linux.intel.com>
+ <20210129083241.72497-4-mika.westerberg@linux.intel.com>
+ <20210203081415.GR2542@lahna.fi.intel.com>
+ <20210607123110.GE22028@linux-l9pv.suse>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YLoUiO8tpRpmvcyU@kroah.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210607123110.GE22028@linux-l9pv.suse>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hey Wesley,
+Hi,
 
-On Fri, Jun 04, 2021 at 01:54:48PM +0200, Greg KH wrote:
-> On Wed, May 19, 2021 at 12:49:16AM -0700, Wesley Cheng wrote:
-> > Changes in V9:
-> >  - Fixed incorrect patch in series.  Removed changes in DTSI, as dwc3-qcom will
-> >    add the property by default from the kernel.
+On Mon, Jun 07, 2021 at 08:31:10PM +0800, joeyli wrote:
+> Hi Mika,
 > 
-> This patch series has one build failure and one warning added:
+> There have some machines be found on openSUSE Tumbleweed that this patch
+> causes that SSDT tables can not be dynamic loaded. The symptom is that
+> dmesg shows '_CPC not found' because SSDT table did not dynamic load.
 > 
-> drivers/usb/dwc3/gadget.c: In function ‘dwc3_gadget_calc_tx_fifo_size’:
-> drivers/usb/dwc3/gadget.c:653:45: warning: passing argument 1 of ‘dwc3_mdwidth’ makes pointer from integer without a cast [-Wint-conversion]
->   653 |         mdwidth = dwc3_mdwidth(dwc->hwparams.hwparams0);
->       |                                ~~~~~~~~~~~~~^~~~~~~~~~
->       |                                             |
->       |                                             u32 {aka unsigned int}
-> In file included from drivers/usb/dwc3/debug.h:14,
->                  from drivers/usb/dwc3/gadget.c:25:
-> drivers/usb/dwc3/core.h:1493:45: note: expected ‘struct dwc3 *’ but argument is of type ‘u32’ {aka ‘unsigned int’}
->  1493 | static inline u32 dwc3_mdwidth(struct dwc3 *dwc)
->       |                                ~~~~~~~~~~~~~^~~
+> [    1.149107] ACPI BIOS Error (bug): Could not resolve symbol [\_PR.PR00._CPC], AE_NOT_FOUND (20210105/psargs-330)
+> 
+> Looks that the firmware didn't response OSC_SB_CPCV2_SUPPORT after
+> kernel changed to new behavior. The openSUSE bug is here:
+> 
+> Bug 1185513 - ACPI BIOS Error after upgrade to 5.12.0-1-default 
+> https://bugzilla.suse.com/show_bug.cgi?id=1185513
+> 
+> Could you please help to give any suggestion?
 
-I'm guessing you were previously using the DWC3_MDWIDTH macro which
-operated on the 'hwparams0' reg value directly, but probably had to
-switch it to the dwc3_mdwidth() inline function that Thinh had replaced
-it with recently. Forgot to compile-test I bet? :)
+There is another one that Red Hat reported here:
 
-> drivers/usb/dwc3/dwc3-qcom.c: In function ‘dwc3_qcom_of_register_core’:
-> drivers/usb/dwc3/dwc3-qcom.c:660:23: error: implicit declaration of function ‘of_add_property’; did you mean ‘of_get_property’? [-Werror=implicit-function-declaration]
->   660 |                 ret = of_add_property(dwc3_np, prop);
->       |                       ^~~~~~~~~~~~~~~
->       |                       of_get_property
+https://bugzilla.kernel.org/show_bug.cgi?id=213023
 
-Scratched my head on this one a bit, since 'of_add_property' is clearly
-declared in <linux/of.h> which dwc3-qcom.c directly includes. Then I
-looked closer and saw the declaration only in case of #ifdef CONFIG_OF
-and noticed it doesn't have a corresponding no-op static inline
-definition in the case of !CONFIG_OF. Again I'm guessing here that Greg
-must have built on a non-OF config.  We should probably include a patch
-that adds the stub.
+The Bugzilla entry also has a patch attached [1] from Hans, can you try it
+out and see if that fixes the issue?
 
-Thanks,
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+[1] https://bugzilla.kernel.org/attachment.cgi?id=297195
+
+Thanks!
