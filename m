@@ -2,84 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 017C639E444
+	by mail.lfdr.de (Postfix) with ESMTP id 5142D39E445
 	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbhFGQqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:46:51 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:60222 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbhFGQqu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 12:46:50 -0400
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F02498DB;
-        Mon,  7 Jun 2021 18:44:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1623084298;
-        bh=kRzXEFlIY6blhsNhbZvE2ox54PoHMgMmZhk4M6TNpCA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LEAni0EDsvIIqx/TyozAvNrFOwSxYncnKwlr4+1gYXkz7H9t2/rH881LlV5Mx4IpJ
-         7lUFc82/hGTS2PYZ1K8fyX4TlffZ867ullz8q4zV7SfjPewBPWPkiFd3Rs6kHiJANK
-         5C2rbnnoRAfGCwu7bFDC6V1+7k6ZPFD4zssNkjmA=
-Date:   Mon, 7 Jun 2021 19:44:43 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Rui Miguel Silva <rui.silva@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] MAINTAINERS: usb: add entry for isp1760
-Message-ID: <YL5M+xnwS1yGEVqk@pendragon.ideasonboard.com>
-References: <20210607101538.74836-1-rui.silva@linaro.org>
+        id S230323AbhFGQqx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:46:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230306AbhFGQqw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 12:46:52 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5065C061766
+        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 09:44:45 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id b12so3042155plg.11
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 09:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=g2fubb5r3Ekskdxny80qSYuGJlyYIMGKhJWLNJ6m7zc=;
+        b=JeucdIYlWbyri6ZOWU5hYnIa1riL9/oLTP6qyRj3w/RWY15tv5lZOUjqZqvoGYmyT4
+         WOgJ8F2FCxcldtXioP2q4Jaslyf1xAWL/TAwSjAyM70XQfm3naZQUOwuQbyWRaf6oWeW
+         MpApheKnn+pI1k6UIlck/lNhk9i97AS0Z4jd6UsARIwDVRxz7DU5ttnuorG7LxFOZuvR
+         4uU9pOYTCnnn7iaTeqc+UcpOURQgy2eD8NzpK3iP84g1BWgjvI5zeO7gUEuL8KA05fG0
+         vIFYCSgL0sH5dbLA/lxBrfy9ps5TyaAYbCtlepIGcOSnjr3Y35tquvQp3x9eaxfLut1k
+         gTTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=g2fubb5r3Ekskdxny80qSYuGJlyYIMGKhJWLNJ6m7zc=;
+        b=e/sKb6Mwepceei2q5zxtjs3DiWxjf5BZZQqmTzjmsoeDp5q+SjelIL38Uu66TWRVf0
+         kmpGlSykWMk3Tzd9lkKzaAxXCX2X68T7lvdOE5TCqe6lLBcIveI4Rm9vZZ9zOqsCNN4O
+         t0GDPevGudQRP3bs5+TYSh+wGpHtGc9GulXcV9ko0TJgU79qH6fhew33vQrgahkhU0xZ
+         3MTSVt2eHI6C5vsFts2sK3XGlxx6N06mkAQCHOB+gIQC4Tj0lK/wVpA1G0v/W60glDM9
+         mt4Is7FiMXYulMysbRq5CdDfNOGmyCeref6B1CReX4fzuCWhml9nvZjiLX4etWwGqMAY
+         EPvA==
+X-Gm-Message-State: AOAM530hgME4qejCgJhqLr5Y3gYowJbYVT8w5GdOKdDUnFj1L576CinB
+        ZZjzlibNdY3JB8DrB0usBK03eS8ADvdXKYM8FWI=
+X-Google-Smtp-Source: ABdhPJzwEVmm84CwzOx2n5F0caNq9f5eisYo/K88/StotI6fdykGF85aEbQA5hsGsreDsdIUQs5l/ivEEY76pWKI1/Q=
+X-Received: by 2002:a17:90a:fee:: with SMTP id 101mr35401pjz.230.1623084285461;
+ Mon, 07 Jun 2021 09:44:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20210607101538.74836-1-rui.silva@linaro.org>
+References: <465ef3ac-4291-6392-e52b-26cc0c34dd7c@palosanto.com>
+ <YLXmrmW9/fB1WbzR@hovoldconsulting.com> <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
+ <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com> <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
+ <YLeapcNbvExeGKuE@hovoldconsulting.com> <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
+ <YLpJzTmAnfsrE7UP@hovoldconsulting.com> <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
+ <YLtOL5aZUnntfqWB@hovoldconsulting.com>
+In-Reply-To: <YLtOL5aZUnntfqWB@hovoldconsulting.com>
+From:   David Frey <dpfrey@gmail.com>
+Date:   Mon, 7 Jun 2021 09:44:59 -0700
+Message-ID: <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
+Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21 (with bisection)
+To:     Johan Hovold <johan@kernel.org>
+Cc:     =?UTF-8?Q?Alex_Villac=C3=ADs_Lasso?= <a_villacis@palosanto.com>,
+        linux-usb@vger.kernel.org, Pho Tran <pho.tran@silabs.com>,
+        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Rui,
+On Sat, Jun 5, 2021 at 3:13 AM Johan Hovold <johan@kernel.org> wrote:
+>
+> I found an errata for A01 on here, but no mention if this particular
+> bug:
+>
+>         https://www.silabs.com/documents/public/pcns/190315471-CP2102N-Product-Revision-with-Datasheet-and-Errata-Update.pdf
 
-On Mon, Jun 07, 2021 at 11:15:38AM +0100, Rui Miguel Silva wrote:
-> Giving support for isp1763 made a little revival to this driver, add
-> entry in the MAINTAINERS file with me as maintainer, and
-> Laurent Pinchart as reviewer in a best effort style.
-> 
-> Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
-> ---
-> v1[0] -> v2:
->     - move Laurent to reviewer instead of maintainer by his request
->       because of lack of bandwidth
-> 
-> [0]: https://lore.kernel.org/linux-usb/20210607083921.38441-1-rui.silva@linaro.org/T/#u
->  MAINTAINERS | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 503fd21901f1..bd3bdb22a608 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -18869,6 +18869,14 @@ S:	Maintained
->  F:	drivers/usb/host/isp116x*
->  F:	include/linux/usb/isp116x.h
->  
-> +USB ISP1760 DRIVER
-> +M:	Rui Miguel Silva <rui.silva@linaro.org>
-> +R:	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-
-Honestly, what's the value of listing me if all the e-mails will go to
-/dev/null for the time being ? :-)
-
-> +L:	linux-usb@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/usb/isp1760/*
-> +F:	Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> +
->  USB LAN78XX ETHERNET DRIVER
->  M:	Woojung Huh <woojung.huh@microchip.com>
->  M:	UNGLinuxDriver@microchip.com
-
--- 
-Regards,
-
-Laurent Pinchart
+I believe this document has some more errata details:
+https://www.silabs.com/documents/public/errata/cp2102n-errata.pdf
