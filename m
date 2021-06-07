@@ -2,99 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18C739E404
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:40:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017C639E444
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232591AbhFGQ2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:28:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38884 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234032AbhFGQZO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:25:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AFDAC6195F;
-        Mon,  7 Jun 2021 16:16:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623082570;
-        bh=t4iyIFmCTN8Vmq8cgjPcdXfx+c1ojJ8KTQ2POL6uTeU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sMhxyQxqb7jpbSbESnQdvbPtonTP54FcNL4u1UFKo9EO63t+v442rQO1xKQJVUWEE
-         /RiUoJvhnTl2FV7wl/CzIlYJtb4FSX3eLgSbi7M9+SMMaZa5EtokDMDPV7az2JbaUk
-         YApt6qytEJIgueBuMTJYoCKjKmJP32tnZ3oPRWGNpEenf+ymfkG9INq9yv/Q2YSU1Q
-         dEjof78XvepcO4f/Dv8kljY3nVc7LiUtOn2ICs0JDpFTn6BaOxCxUMqEUQh9ZRVHhY
-         17fgUEAi9yQ3yOV9Wb/5J/Cd0RljmsKktUHWoF4f57veg2FCl2Ug2l650PNyD0rqT+
-         vQ+U9tnZeVcUg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 03/14] HID: usbhid: fix info leak in hid_submit_ctrl
-Date:   Mon,  7 Jun 2021 12:15:54 -0400
-Message-Id: <20210607161605.3584954-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210607161605.3584954-1-sashal@kernel.org>
-References: <20210607161605.3584954-1-sashal@kernel.org>
+        id S230220AbhFGQqv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:46:51 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:60222 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230197AbhFGQqu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 12:46:50 -0400
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id F02498DB;
+        Mon,  7 Jun 2021 18:44:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1623084298;
+        bh=kRzXEFlIY6blhsNhbZvE2ox54PoHMgMmZhk4M6TNpCA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LEAni0EDsvIIqx/TyozAvNrFOwSxYncnKwlr4+1gYXkz7H9t2/rH881LlV5Mx4IpJ
+         7lUFc82/hGTS2PYZ1K8fyX4TlffZ867ullz8q4zV7SfjPewBPWPkiFd3Rs6kHiJANK
+         5C2rbnnoRAfGCwu7bFDC6V1+7k6ZPFD4zssNkjmA=
+Date:   Mon, 7 Jun 2021 19:44:43 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Rui Miguel Silva <rui.silva@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] MAINTAINERS: usb: add entry for isp1760
+Message-ID: <YL5M+xnwS1yGEVqk@pendragon.ideasonboard.com>
+References: <20210607101538.74836-1-rui.silva@linaro.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210607101538.74836-1-rui.silva@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Anirudh Rayabharam <mail@anirudhrb.com>
+Hi Rui,
 
-[ Upstream commit 6be388f4a35d2ce5ef7dbf635a8964a5da7f799f ]
+On Mon, Jun 07, 2021 at 11:15:38AM +0100, Rui Miguel Silva wrote:
+> Giving support for isp1763 made a little revival to this driver, add
+> entry in the MAINTAINERS file with me as maintainer, and
+> Laurent Pinchart as reviewer in a best effort style.
+> 
+> Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
+> ---
+> v1[0] -> v2:
+>     - move Laurent to reviewer instead of maintainer by his request
+>       because of lack of bandwidth
+> 
+> [0]: https://lore.kernel.org/linux-usb/20210607083921.38441-1-rui.silva@linaro.org/T/#u
+>  MAINTAINERS | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 503fd21901f1..bd3bdb22a608 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18869,6 +18869,14 @@ S:	Maintained
+>  F:	drivers/usb/host/isp116x*
+>  F:	include/linux/usb/isp116x.h
+>  
+> +USB ISP1760 DRIVER
+> +M:	Rui Miguel Silva <rui.silva@linaro.org>
+> +R:	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
 
-In hid_submit_ctrl(), the way of calculating the report length doesn't
-take into account that report->size can be zero. When running the
-syzkaller reproducer, a report of size 0 causes hid_submit_ctrl) to
-calculate transfer_buffer_length as 16384. When this urb is passed to
-the usb core layer, KMSAN reports an info leak of 16384 bytes.
+Honestly, what's the value of listing me if all the e-mails will go to
+/dev/null for the time being ? :-)
 
-To fix this, first modify hid_report_len() to account for the zero
-report size case by using DIV_ROUND_UP for the division. Then, call it
-from hid_submit_ctrl().
+> +L:	linux-usb@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/usb/isp1760/*
+> +F:	Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+> +
+>  USB LAN78XX ETHERNET DRIVER
+>  M:	Woojung Huh <woojung.huh@microchip.com>
+>  M:	UNGLinuxDriver@microchip.com
 
-Reported-by: syzbot+7c2bb71996f95a82524c@syzkaller.appspotmail.com
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/hid/usbhid/hid-core.c | 2 +-
- include/linux/hid.h           | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index b0eeb5090c91..d51fc2be0e10 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -372,7 +372,7 @@ static int hid_submit_ctrl(struct hid_device *hid)
- 	raw_report = usbhid->ctrl[usbhid->ctrltail].raw_report;
- 	dir = usbhid->ctrl[usbhid->ctrltail].dir;
- 
--	len = ((report->size - 1) >> 3) + 1 + (report->id > 0);
-+	len = hid_report_len(report);
- 	if (dir == USB_DIR_OUT) {
- 		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
- 		usbhid->urbctrl->transfer_buffer_length = len;
-diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 19c53b64e07a..6adea5a39724 100644
---- a/include/linux/hid.h
-+++ b/include/linux/hid.h
-@@ -1119,8 +1119,7 @@ static inline void hid_hw_wait(struct hid_device *hdev)
-  */
- static inline u32 hid_report_len(struct hid_report *report)
- {
--	/* equivalent to DIV_ROUND_UP(report->size, 8) + !!(report->id > 0) */
--	return ((report->size - 1) >> 3) + 1 + (report->id > 0);
-+	return DIV_ROUND_UP(report->size, 8) + (report->id > 0);
- }
- 
- int hid_report_raw_event(struct hid_device *hid, int type, u8 *data, u32 size,
 -- 
-2.30.2
+Regards,
 
+Laurent Pinchart
