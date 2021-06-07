@@ -2,96 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3962939D66A
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 09:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E50639D6AC
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 10:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbhFGH7i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 03:59:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56032 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229966AbhFGH7i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 03:59:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 89AF6611BE;
-        Mon,  7 Jun 2021 07:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623052667;
-        bh=MIco8xVVHa5E67bXh4IpymS+jPfSoqyuBdI4aMtVwDw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mYvB+LGeiirFDPX94F0yzJCj02xe1h8yvT2RITid/224wYl0XNAkZcY9FDi8Beg7q
-         VEj/srrbkacUDmY7yQZcm6dOTasMi0GIIM9PHu+j/fE5UEeiUgpxsSQYXgs6COzCh1
-         wngYYaKGm8/vZqJxMmRxUUPYUDJ2qjynI/0Wt8qRfesUf6C3xKpSLih0ViGRqkJgeU
-         wS63N/QDWl9gF6/Ag7MWMsKmjR6rWLmpXW2HeiXxcMDDN47Vs2jbBcxANmKAQepYs1
-         iLZaNwTPUQiaBecGMzBIJRQc8+wzlWNHbkQTAAsToQKtZ0NgNCvuMR/GHHc5bHtArP
-         le4g9znQ7hFnw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lqA8i-0004L1-Ky; Mon, 07 Jun 2021 09:57:40 +0200
-Date:   Mon, 7 Jun 2021 09:57:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <greg@kroah.com>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] USB: core: Avoid WARNings for 0-length descriptor
- requests
-Message-ID: <YL3RdAOH1dVriPe3@hovoldconsulting.com>
-References: <20210603014354.GA1626048@rowland.harvard.edu>
- <0000000000007450cd05c3d3905d@google.com>
- <20210604161039.GI1676809@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210604161039.GI1676809@rowland.harvard.edu>
+        id S230230AbhFGIEK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 04:04:10 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:38311 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230410AbhFGIEH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 04:04:07 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id EECC4DBD;
+        Mon,  7 Jun 2021 04:02:14 -0400 (EDT)
+Received: from imap21 ([10.202.2.71])
+  by compute3.internal (MEProxy); Mon, 07 Jun 2021 04:02:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm1; bh=pi51sQPyO+v+HxFzLV7xeS0Ul+G+
+        7aVbQaStkS90iwc=; b=p/Nu1H7vvxJLufWppVSbptoET2eqBryLbD1enxhS3BWb
+        b+sEiYKS3WcqyPx5PDO0qg8vVmHhw655EWjHvA2FkZByr42gPnQstHUu+zj3S4fO
+        lBg82ADuvNUjBdJGhbgRb5vqPCgfyVPJYnDmT6X+Ru0OdrzrvrakkZW8IASUmWkp
+        DEsG7oJuzKwmQfYmoIs/l/ooMhE25yAT00/j6wKcNkhqNaClUXFhPreZC++mRwwN
+        5DXh2vQ/oht161uXbuzw/d7/CpVl1rtfvBMAUmOIXNji+4fFHz2jfCazZTAtgQT2
+        v4yAJoJoFP7CD03VUN8XigWyjXONPDjoes2yihirwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=pi51sQ
+        PyO+v+HxFzLV7xeS0Ul+G+7aVbQaStkS90iwc=; b=eN1yEgQYNjJULIUkPXXEfy
+        E+b6MyqVsZ3gzK0fZSu0jMmVKkEdUnCi/CabGXKyRGQuf4mxgSUPzfNNcmfK4KE0
+        oSy89RWr8lfhwuWyi7JELUbwuxXb7LqeowuLqIVQBpdvAcF6FvPGF8Kg16aoBdI3
+        6bXgI1GSWXd4CBD0ihv5B6r/nzvO/Rj4PxzpePHxYgddBYLsJdwjJoGbmwdhaeP1
+        MA/IW1gPBr4vN5yoKi9pMG2mvHt+eqAhW/ynlQm3eO6COzBQ4uQYR/OviuB8gjI3
+        SCCY5VxZ3m/T8c2yVhlXdbFsr4pGIHiA9crd3hWrMPwrhdc4v2TaxA+6PLK2FIiw
+        ==
+X-ME-Sender: <xms:hdK9YBW6W3gZWyWOl2lWqckHjGzP3OraRCEZ9qEn5fEQD4yXOugExA>
+    <xme:hdK9YBk1j7H1oeczZ2GQfyTwp0UTKA-6rN0XlGFMbarpvkflFcnzzeI0Jw8B4mV-q
+    umHzz-YsRTuhhiCB00>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedtiedguddvgecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhv
+    vghnucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrf
+    grthhtvghrnhepgfeigeeiffeuhfettdejgfetjeetfeelfefgfefgvddvtdfghfffudeh
+    vdefkeffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:hdK9YNZpGty1FCzJJrfjLcaf-nZfgDav_cMg2me0_lgF04vsPyMSMg>
+    <xmx:hdK9YEXAgNz2z4wW3U6t5pTyUzyoXp8zuMLwYVQjjS0PhSE2jJphIQ>
+    <xmx:hdK9YLmfb-FSvhEFfjiL1y3_PH29DDdMC6IyFhYw6GKLk9yYN7GRNA>
+    <xmx:htK9YAyLHx0I6AvEKaUBfqODCnt-W8yqmzaPtcxxjDNxg3k1og3GtA>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B3D2A51C0061; Mon,  7 Jun 2021 04:02:13 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-519-g27a961944e-fm-20210531.001-g27a96194
+Mime-Version: 1.0
+Message-Id: <23348bfc-aad7-4e5f-83b1-e69463e618e5@www.fastmail.com>
+In-Reply-To: <CAK8P3a0vbyq-90pUQ6-0Ed=DadR3Pnf0juupLQ70psQSuu_1nw@mail.gmail.com>
+References: <20210607061751.89752-1-sven@svenpeter.dev>
+ <CAK8P3a0vbyq-90pUQ6-0Ed=DadR3Pnf0juupLQ70psQSuu_1nw@mail.gmail.com>
+Date:   Mon, 07 Jun 2021 10:01:50 +0200
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Arnd Bergmann" <arnd@arndb.de>
+Cc:     "USB list" <linux-usb@vger.kernel.org>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 12:10:39PM -0400, Alan Stern wrote:
-> The USB core has utility routines to retrieve various types of
-> descriptors.  These routines will now provoke a WARN if they are asked
-> to retrieve 0 bytes (USB "receive" requests must not have zero
-> length), so avert this by checking the size argument at the start.
-> 
-> Reported-and-tested-by: syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> CC: Johan Hovold <johan@kernel.org>
-> 
-> ---
-> 
-> 
-> [as1962]
-> 
-> 
->  drivers/usb/core/message.c |    4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> Index: usb-devel/drivers/usb/core/message.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/message.c
-> +++ usb-devel/drivers/usb/core/message.c
-> @@ -783,6 +783,8 @@ int usb_get_descriptor(struct usb_device
->  	int i;
->  	int result;
->  
-> +	if (size <= 0)		/* No point in asking for no data */
-> +		return -EINVAL;
 
-I'd put a newline after the sanity checks as Peter suggested too, but
-looks good otherwise so either way:
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+On Mon, Jun 7, 2021, at 09:25, Arnd Bergmann wrote:
+> On Mon, Jun 7, 2021 at 8:18 AM Sven Peter <sven@svenpeter.dev> wrote:
+> >
+> > Currently, the dwc3 platform driver does not explicitly ask for
+> > a DMA mask. This makes it fall back to the default 32-bit mask which
+> > breaks the driver on systems that only have RAM starting above the
+> > first 4G like the Apple M1 SoC.
+> >
+> > Fix this by calling dma_set_mask_and_coherent with a 64bit mask.
+> >
+> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > ---
+> >
+> > Third time's a charm I hope - this time much simpler :)
+> 
+> I think this is almost good, but there is still one small issue:
+> 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index b6e53d8212cd..ba4792b6a98f 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1545,6 +1545,10 @@ static int dwc3_probe(struct platform_device *pdev)
+> >
+> >         dwc3_get_properties(dwc);
+> >
+> > +       ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
+> > +       if (ret)
+> > +               return ret;
+> 
+> This will now  fail on machines with dwc3 connected to a 32-bit bus (or a
+> bus that is accidentally not annotated as supporting 64-bit) when there is
+> some memory that is not addressable through that bus.
+> 
+> If dma_set_mask_and_coherent() fails, the platform should just fall back to
+> 32-bit addressing as it did before your change. dma_alloc_*() will do that
+> implicitly by allocating from ZONE_DMA32, while dma_map_*() fails
+> on any non-addressable memory, or falls back to swiotlb if that is available.
 
->  	memset(buf, 0, size);	/* Make sure we parse really received data */
->  
->  	for (i = 0; i < 3; ++i) {
-> @@ -832,6 +834,8 @@ static int usb_get_string(struct usb_dev
->  	int i;
->  	int result;
->  
-> +	if (size <= 0)		/* No point in asking for no data */
-> +		return -EINVAL;
->  	for (i = 0; i < 3; ++i) {
->  		/* retry on length 0 or stall; some devices are flakey */
->  		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
 
-Johan
+Makes sense, but just to make sure I understand this correctly:
+All that needs to be done is call dma_set_mask_and_coherent with a 64 bit
+mask and then just ignore the return value?
+
+
+Thanks,
+
+Sven
