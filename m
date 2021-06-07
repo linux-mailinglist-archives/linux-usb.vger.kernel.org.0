@@ -2,75 +2,120 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D975B39D873
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDDA839D884
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:19:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbhFGJTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 05:19:07 -0400
-Received: from mga07.intel.com ([134.134.136.100]:45587 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230267AbhFGJS4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 05:18:56 -0400
-IronPort-SDR: aNqx72PCpWcQeWrmf+ZElPIT4PQK2Z31Jp92Lvb570rtDvPRHt3mpZaYTL2gmLV1DTTTpJBNG7
- 48w5N4XkpBRg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="268445288"
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="268445288"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 02:17:05 -0700
-IronPort-SDR: sVs0lgDz6oq1ZoYc5c5ZwINsv4W2Kc+gebsEtvNQu//qPCUkyrikpEC/rjLJdcYignqvLbLQ0W
- JH4g0EzbUNlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="551815317"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2021 02:17:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Jun 2021 12:17:01 +0300
-Date:   Mon, 7 Jun 2021 12:17:01 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: typec: tcpm: cancel frs hrtimer when unregister
- tcpm port
-Message-ID: <YL3kDTrlENicPuov@kuha.fi.intel.com>
-References: <1622627829-11070-1-git-send-email-jun.li@nxp.com>
- <1622627829-11070-2-git-send-email-jun.li@nxp.com>
+        id S230319AbhFGJVG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 05:21:06 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:51757 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230239AbhFGJVF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 05:21:05 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]) by
+ mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1Mw8cU-1lXH1B0kXE-00s5Rz; Mon, 07 Jun 2021 11:19:13 +0200
+Received: by mail-wm1-f45.google.com with SMTP id f20so5322833wmg.0;
+        Mon, 07 Jun 2021 02:19:13 -0700 (PDT)
+X-Gm-Message-State: AOAM530SJlhYovTtiwvFqWI4UZl/5bCSvQ9o1nBA9r7Vr+L2q1SSNOIx
+        YnFdAjYD6ExLC/gXrI7aEuKfdN6M5lxiVmOm8oM=
+X-Google-Smtp-Source: ABdhPJzcvd+A9rZtmx0hzRTGYQ0hqEKpsP4vMx0uVDfDg39fUB6bq9wPd4cZ0VuBPozn4Ngt2FUxKpC/JFTJQAj8hTQ=
+X-Received: by 2002:a1c:7d15:: with SMTP id y21mr15665529wmc.120.1623057552858;
+ Mon, 07 Jun 2021 02:19:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1622627829-11070-2-git-send-email-jun.li@nxp.com>
+References: <20210607061751.89752-1-sven@svenpeter.dev> <CAK8P3a0vbyq-90pUQ6-0Ed=DadR3Pnf0juupLQ70psQSuu_1nw@mail.gmail.com>
+ <23348bfc-aad7-4e5f-83b1-e69463e618e5@www.fastmail.com> <CAK8P3a0j=vowKpdJxt-GBsFuwqNJZv-dB-XoZihg=XHey1VoCg@mail.gmail.com>
+ <5b1431bc-64e3-4ecc-a498-eda8e46d5a95@www.fastmail.com>
+In-Reply-To: <5b1431bc-64e3-4ecc-a498-eda8e46d5a95@www.fastmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 7 Jun 2021 11:17:24 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1v1LB8-k7Ak_U23WxCbDbqCJGyCXGsXKJ-dW4QwO-dmw@mail.gmail.com>
+Message-ID: <CAK8P3a1v1LB8-k7Ak_U23WxCbDbqCJGyCXGsXKJ-dW4QwO-dmw@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:+xUF/QijDCdzh/EcoIz1p3tOSkCu6/DihfxelY73cBlT8sG/yzP
+ rdJN7iDEJRCk/nKIN/fGBlf35ShBUVfHQIcasjopvFhAuj1FNM4GHNQimcK1CcX/VQO9LNO
+ bRmF6Zgl0nhlu9NnlO58Q4irEuObXtlivBqB6wGQHvIXKEecff0QxyzWLHTOEywqjYQR/iw
+ gb1/y2ZI8fjKEznsy2TGA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:SZKk04KpVVQ=:NdoMkavpJiAk4p3mYCAHB9
+ 8+ZsenxgxIAaOe5vFN+CS5bffEL8/EmPgj8TNQ4Y18xvJ4d5Mc1Ci1sdamKiFggdaIiFNiGKJ
+ eoNngKCllCbCrUB2/d0YZliaxv5Z4St+V1VipwB7kyYO3CoZNvTWnIrSlTwkOUSv9WIqafTgR
+ L55YSzzu8nSSLAzDQUr0BaLM07HW9YCETavGrA/kIwhcl7f8kSepiLtRwwD8jUELF3C3+0Umg
+ OLoFOVUVmhiZleHgD1VE/OktLnvcHu+egslG0MYTNFH++eeyIdwfZZpw4J1kFhTrWYurk1lyc
+ 5GGd8pUa+y6OuPIDNMOMu2vP3GU0ZaNE4pz8wBvZ7lCLwfj4ohWDfdu+pF1wnw7EVzVqiE1Ic
+ EPQB38eD0LHO5i2tR2crXJU0Csctn0M/WsEDbWdqaHDcMUk5tKPLMYkix6Gyj64ngCS1PvOGp
+ EIT6YUDzytJa7g3en0lMWGC910gzjzf9jLh3seyl0SizuG2mLvG9yg5VL/zFkMkCOUbKvVLkA
+ VoiHKHhpxspNKOrZvULWysmw/KpIGYcBTuxeKu0OfHnQ8FVRLKYkdUyn4YElMFzaWy45aZpiX
+ oxv0fQraz+abItVmLe/oMWWelR1eFh8XqZfqrpGXxBDgGsMdWY0B50oL6V8g0KnauPwjssOxn
+ 0Dmk=
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 02, 2021 at 05:57:08PM +0800, Li Jun wrote:
-> Like the state_machine_timer, we should also cancel possible pending
-> frs hrtimer when unregister tcpm port.
-> 
-> Fixes: 8dc4bd073663 ("usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)")
-> Signed-off-by: Li Jun <jun.li@nxp.com>
+On Mon, Jun 7, 2021 at 11:06 AM Sven Peter <sven@svenpeter.dev> wrote:
+> On Mon, Jun 7, 2021, at 10:22, Arnd Bergmann wrote:
+>
+> I've looked at Documentation/core-api/dma-api-howto.rst again which mentions that
+>
+>         By default, the kernel assumes that your device can address 32-bits of DMA
+>         addressing.  For a 64-bit capable device, this needs to be increased, and for
+>         a device with limitations, it needs to be decreased.
+>         [...]
+>         These calls usually return zero to indicated your device can perform DMA
+>         properly on the machine given the address mask you provided, but they might
+>         return an error if the mask is too small to be supportable on the given
+>         system.  If it returns non-zero, your device cannot perform DMA properly on
+>         this platform, and attempting to do so will result in undefined behavior.
+>         You must not use DMA on this device unless the dma_set_mask family of
+>         functions has returned success.
+>
+> which, unless I'm reading this incorrectly, should mean that asking for a 64bit
+> mask is always fine. In the worst case the mask will just be downgraded to
+> 32bit if the bus is correctly annotated (the places I looked at that use the mask
+> take the min of that one and dev->bus_dma_limit).
+> Only asking for a mask that is too small would be bad.
+>
+> I have also found [1],[2] which made changes to that documentation and that also
+> seems to confirm that it's fine to just ask for a 64 bit mask either way.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Indeed, I forgot about that change, this does make it easier.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index f47685e7923d..c7460df2119d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -6328,6 +6328,7 @@ void tcpm_unregister_port(struct tcpm_port *port)
->  {
->  	int i;
->  
-> +	hrtimer_cancel(&port->enable_frs_timer);
->  	hrtimer_cancel(&port->vdm_state_machine_timer);
->  	hrtimer_cancel(&port->state_machine_timer);
->  
-> -- 
-> 2.25.1
+> So for these cases
+>
+> > > > This will now  fail on machines with dwc3 connected to a 32-bit bus (or a
+> > > > bus that is accidentally not annotated as supporting 64-bit) when there is
+> > > > some memory that is not addressable through that bus.
+>
+> the call should return success but the final mask used for allocations should
+> remain at 32bit. Before the change no memory above the 32bit limit was used by
+> the dwc3 core and after the change we still can't use any memory above the
+> 32bit limit.
 
--- 
-heikki
+Right.
+
+> Now if we had a dwc3 controller with
+>  * a quirk that only allows 32bit DMA for the core dwc3 controller
+>  * but support for >32bit DMA for xhci buffers (xhci already asks for a 64bit mask)
+>  * on a bus that's otherwise annotated to support 64bit
+> this change will break that.
+>
+> But that's unrelated to the dma_set_mask_and_coherent return value since
+> just calling it with a 64bit mask will already cause trouble (and also be successful!).
+>
+> The problem I see is that we likely wouldn't know about devices with a quirk like this
+> since so far everything has been working fine there. I'm not really sure how to guard
+> against that either since we would only notice on the first DMA transfer above the 32bit
+> limit. I'm also not sure how likely the existence of such a weird device is.
+>
+> This hypothetical dwc3 controller should probably either be confined to a bus with a
+> proper 32bit limit or get a quirk that enforces allocations from ZONE_DMA32. Doesn't
+> change the fact that they used to work but would now break after this patch.
+
+Makes sense, so for your v3 patch:
+
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
