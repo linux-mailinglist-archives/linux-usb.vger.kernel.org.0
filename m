@@ -2,34 +2,34 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2061739D3A2
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 05:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CAA39D41D
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 06:39:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbhFGDt2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 6 Jun 2021 23:49:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40318 "EHLO mail.kernel.org"
+        id S230230AbhFGElF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 00:41:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42872 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230241AbhFGDt1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 6 Jun 2021 23:49:27 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 46734611C0
-        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 03:47:37 +0000 (UTC)
+        id S229470AbhFGElF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 00:41:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 841DD6108D
+        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 04:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623037657;
-        bh=H+7HSMzO3HWeUE/Bxeo0+o1GVaHQCSFnj8NepXXuQ80=;
+        s=k20201202; t=1623040754;
+        bh=qq2IZrK4rnpdmozQgVSJClI0AySTFpvpRWWfG69S3NI=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=kfd4sYDoP0bflGfOmmTt5NuBN974B9lbm6f//DMuazRXcfhwJm2zkycVUntMoyS+b
-         uXKL07YXHO7f1wf95nt7ZC0d1eoYc+4ZikTAGHuQL2wdtkcGFNk0BoV9kagLwQGPg+
-         vP4jcbccpNpX3ioTmEUGmn78MijV3JfuQryzQkFE3WWu5SKjdQtQymCNrXn6woQUgf
-         iy1p/jfWc2x+46gaFligRaM6PcLs8e71c7Lc6S4xSFutTxceIYCTus6QXNW9WtA4+h
-         XYUJFsT2rhm8cLFmqbR80961QKthye6A3Br2zgZjyjeo2oDlGWr0uAdGuRy4jiD73q
-         sSNHsuFSo+W/g==
+        b=BQDhwCTr0GHRbU/SrFw1ug0/2MgZmt0HPoTmH8YTFY9YFdgFUWMywGfXOH3OCD0pj
+         zYRzxp2UU1LUgsIBTW+hPOsNtxXFzM8QAGTjsaMNSsymWAtgosGSwC3/F7gjje1B+x
+         f2gmDAtYdt9WWSSVO8JdHX+LEbDxa/0osoZx+sclmT54aeJcf0ejV6x+wedX2HyVef
+         Wd8xhTAY7G56+JCrV1bR/sQ2eA6jeIMuSGsdqhNgSYMRBkHFhnPcv2ZZGiWAjKGFyQ
+         dLO08qxihhtEYfUIkBKFc2p8HOS09OIlBnF5Uyw/Yq87OFUNV8lGM9jWUB7kwKL7Xw
+         SxG1DiB7LaySA==
 Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 335ED61179; Mon,  7 Jun 2021 03:47:37 +0000 (UTC)
+        id 6FDCB612A2; Mon,  7 Jun 2021 04:39:14 +0000 (UTC)
 From:   bugzilla-daemon@bugzilla.kernel.org
 To:     linux-usb@vger.kernel.org
 Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
  UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Mon, 07 Jun 2021 03:47:36 +0000
+Date:   Mon, 07 Jun 2021 04:39:14 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -45,7 +45,7 @@ X-Bugzilla-Priority: P1
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-fyjaV1kMTE@https.bugzilla.kernel.org/>
+Message-ID: <bug-212955-208809-Dy8uQkIMa5@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
 References: <bug-212955-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -59,52 +59,31 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
 
---- Comment #20 from Lucas Endres (jaffa225man@gmail.com) ---
-I sped through it this time with definite success:
+--- Comment #21 from Lucas Endres (jaffa225man@gmail.com) ---
+According to my comment here:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212477#c13
 
-The commit causing it was one I helped diagnose so that the UA-101's MIDI
-device became available, but since I told Takashi Iwai about the issue and =
-he
-wanted me to check with you USB gurus, maybe we can help eachother in figur=
-ing
-out why the snd-ua101 module doesn't work with its "Hi-SPEED" switch set to
-"off" (USB1 mode) only. The snd-usb-audio module apparently did work for US=
-B1
-mode, but caused the MIDI port to be unavailable.
+USB 1.1 mode was working for me there, but I was probably testing using the
+previous patch (not the finalized version), and I had just reverted the oth=
+er
+BOSS/EDIROL/Roland quirk patches we'd been working on to rule out any confl=
+icts
+with them.  Although, they are included in the linux-next branch I've been
+diagnosing here, they seem to appear after this, and otherwise shouldn't be
+causing it, due to this patch blacklisting the UA-101 from snd-usb-audio.
 
-And, yes, its parent commit tested good
-(473d5ae82d73c3b21160b725af0e247fa94d7832), and this really was tested as b=
-ad:
+Here's the culmination of the other BOSS/EDIROL/Roland quirk table patches:=
+=20
+https://patchwork.kernel.org/project/alsa-devel/patch/20210422120413.457-2-=
+tiwai@suse.de/
+And my bugzilla report leading to it:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D212519
 
-d763145312582c08c4e9ed99d61276cde8488256 is the first bad commit
-commit d763145312582c08c4e9ed99d61276cde8488256
-Author: Takashi Iwai <tiwai@suse.de>
-Date:   Thu Apr 8 09:56:56 2021 +0200
+Thanks for any light you can shed on the matter, but it seems to me that I =
+will
+have to contact Takashi Iwai again,
 
-    ALSA: usb-audio: Skip probe of UA-101 devices
-
-    UA-101 device and co are supported by another driver, snd-ua101, but
-    the USB audio class driver (snd-usb-audio) catches all and this
-    resulted in the lack of functionality like missing MIDI devices.
-
-    This patch introduces a sort of deny-listing for those devices to just
-    return -ENODEV at probe in snd-usb-audio driver, so that it falls back
-    to the probe by snd-ua101.
-
-    BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=3D212477
-    Link: https://lore.kernel.org/r/20210408075656.30184-1-tiwai@suse.de
-    Signed-off-by: Takashi Iwai <tiwai@suse.de>
-
- sound/usb/card.c         |  2 ++
- sound/usb/quirks-table.h | 21 +++++++++++++++++++++
- sound/usb/usbaudio.h     |  1 +
- 3 files changed, 24 insertions(+)
-
-
-I think it will, but can only hope that this time, it will lead to the
-solution.
-
-Thanks!
+  Lucas
 
 --=20
 You may reply to this email to add a comment.
