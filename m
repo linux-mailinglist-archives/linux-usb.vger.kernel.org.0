@@ -2,27 +2,27 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB99E39E400
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18C739E404
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:40:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbhFGQ2l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:28:41 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60180 "EHLO mail.kernel.org"
+        id S232591AbhFGQ2q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:28:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38884 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233728AbhFGQYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:24:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 092EE6193D;
-        Mon,  7 Jun 2021 16:15:48 +0000 (UTC)
+        id S234032AbhFGQZO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 12:25:14 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AFDAC6195F;
+        Mon,  7 Jun 2021 16:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623082550;
-        bh=ZMRYJ2E5UzaUn6wvHbPgIaGmRjOuSSXEp0XbRGK7eek=;
+        s=k20201202; t=1623082570;
+        bh=t4iyIFmCTN8Vmq8cgjPcdXfx+c1ojJ8KTQ2POL6uTeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aR7PbQs0NHZQVc72k4TvjFri4NyuzqUepN+OCYm3T5y73RNJfN4XyHwli9CHWmZy/
-         GDEfnPjdy/gCqaCywReJpf1qjd91DDC1cfUg9iSH0+eb3ELNVp+iXs5VSQKTTi3J85
-         I2/Drz3tR/gNP+kcTahBL6BnHGQUdNRmJZPF3Y6BnKRW3vZd4jM4TCETzgTFBRa3rg
-         5N6YLxBssWVa3iQmOOnxesTy69ewXFf6HiQYfDAOXm4oHbw6sV2WSNqvjM8kVLmny3
-         GFozGZW1XFo/3tr2UPMK7csrTW5jruwjSZcT3SXu/QVcYsJjxz2/eQwyW0mIpNt3MD
-         nQPpsrZLQJFqQ==
+        b=sMhxyQxqb7jpbSbESnQdvbPtonTP54FcNL4u1UFKo9EO63t+v442rQO1xKQJVUWEE
+         /RiUoJvhnTl2FV7wl/CzIlYJtb4FSX3eLgSbi7M9+SMMaZa5EtokDMDPV7az2JbaUk
+         YApt6qytEJIgueBuMTJYoCKjKmJP32tnZ3oPRWGNpEenf+ymfkG9INq9yv/Q2YSU1Q
+         dEjof78XvepcO4f/Dv8kljY3nVc7LiUtOn2ICs0JDpFTn6BaOxCxUMqEUQh9ZRVHhY
+         17fgUEAi9yQ3yOV9Wb/5J/Cd0RljmsKktUHWoF4f57veg2FCl2Ug2l650PNyD0rqT+
+         vQ+U9tnZeVcUg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
@@ -30,12 +30,12 @@ Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
         linux-usb@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 04/15] HID: usbhid: fix info leak in hid_submit_ctrl
-Date:   Mon,  7 Jun 2021 12:15:32 -0400
-Message-Id: <20210607161543.3584778-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 03/14] HID: usbhid: fix info leak in hid_submit_ctrl
+Date:   Mon,  7 Jun 2021 12:15:54 -0400
+Message-Id: <20210607161605.3584954-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210607161543.3584778-1-sashal@kernel.org>
-References: <20210607161543.3584778-1-sashal@kernel.org>
+In-Reply-To: <20210607161605.3584954-1-sashal@kernel.org>
+References: <20210607161605.3584954-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,7 +69,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 7838343eb37c..b6600329a272 100644
+index b0eeb5090c91..d51fc2be0e10 100644
 --- a/drivers/hid/usbhid/hid-core.c
 +++ b/drivers/hid/usbhid/hid-core.c
 @@ -372,7 +372,7 @@ static int hid_submit_ctrl(struct hid_device *hid)
@@ -82,10 +82,10 @@ index 7838343eb37c..b6600329a272 100644
  		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
  		usbhid->urbctrl->transfer_buffer_length = len;
 diff --git a/include/linux/hid.h b/include/linux/hid.h
-index 41c372573a28..2ed6850356ea 100644
+index 19c53b64e07a..6adea5a39724 100644
 --- a/include/linux/hid.h
 +++ b/include/linux/hid.h
-@@ -1127,8 +1127,7 @@ static inline void hid_hw_wait(struct hid_device *hdev)
+@@ -1119,8 +1119,7 @@ static inline void hid_hw_wait(struct hid_device *hdev)
   */
  static inline u32 hid_report_len(struct hid_report *report)
  {
