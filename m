@@ -2,95 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE3139E049
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 17:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE6B39E058
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 17:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbhFGP2i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 11:28:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35488 "EHLO mail.kernel.org"
+        id S230504AbhFGPax (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 11:30:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:28731 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230237AbhFGP2h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 11:28:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9D9D060FEB;
-        Mon,  7 Jun 2021 15:26:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623079606;
-        bh=oazZM59g/sO6SoY6WUSLNJhbBx1MPJJB/KkoD9Yv2yA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S+fxhveRhVuzuql9L1zY3p42TRJ0tXN5WqoPg4XjQ934Bf7AEhf1nCsdXX0Vmi3lV
-         aVc+2X0WJEYNykCI+SDmJ/7+NvXQtC6uUh/+OOWD77G/tAm1m1kIhB6iR7fleLXbiD
-         D4zLfwfNc3LV1TVcyMIs4j5fSn4JoSOfkPdiYyNX3rRN5gxHToVRnBdLSRNS2QzeY6
-         zYYMr+bXhXKpghnlPnL64XMF+8+9iPTLPRC81bBFPx5gVmONd5m3z56Mvc/1k7Pb/0
-         a8m1676Zu0ut0rwJPNuMgnVNLSx6yi875pZNO1JxUmC+gCR7D3pVzzFu9m5uZKrupc
-         MKnUA3FWMdJYQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lqH9E-0006Zz-HG; Mon, 07 Jun 2021 17:26:40 +0200
-Date:   Mon, 7 Jun 2021 17:26:40 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg KH <greg@kroah.com>,
-        USB mailing list <linux-usb@vger.kernel.org>,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH v2] USB: core: Avoid WARNings for 0-length descriptor
- requests
-Message-ID: <YL46sLvJihcKRz5s@hovoldconsulting.com>
-References: <20210603014354.GA1626048@rowland.harvard.edu>
- <0000000000007450cd05c3d3905d@google.com>
- <20210604161039.GI1676809@rowland.harvard.edu>
- <YL3RdAOH1dVriPe3@hovoldconsulting.com>
- <20210607152307.GD1768031@rowland.harvard.edu>
+        id S230500AbhFGPaw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 11:30:52 -0400
+IronPort-SDR: aVLnPAQEJDo4pPotTfC3rNSBzYPizkSax6qLIKCSR5wvzzUvFz8C+PUFIVgYW887Rnyn+FwipR
+ idfQaxa7QiCw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="265797684"
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="265797684"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:28:59 -0700
+IronPort-SDR: ZDOqp0VjZthuNlcLEFoR5ZLErRZX+kH4LxmMs0P5Nwo/qN5pmNsybcB552J7RHrqtV+eLZXb1w
+ 08vzIm1pFK5A==
+X-IronPort-AV: E=Sophos;i="5.83,255,1616482800"; 
+   d="scan'208";a="476244310"
+Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 08:28:57 -0700
+Received: from andy by smile with local (Exim 4.94)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1lqHBP-000Hpe-5q; Mon, 07 Jun 2021 18:28:55 +0300
+Date:   Mon, 7 Jun 2021 18:28:55 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Use LE to CPU conversion when
+ accessing msg->header
+Message-ID: <YL47Ny7hXZmgH/dx@smile.fi.intel.com>
+References: <20210519085534.48732-1-andriy.shevchenko@linux.intel.com>
+ <YKYrQXXk/X72iI+0@kuha.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210607152307.GD1768031@rowland.harvard.edu>
+In-Reply-To: <YKYrQXXk/X72iI+0@kuha.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 11:23:07AM -0400, Alan Stern wrote:
-> The USB core has utility routines to retrieve various types of
-> descriptors.  These routines will now provoke a WARN if they are asked
-> to retrieve 0 bytes (USB "receive" requests must not have zero
-> length), so avert this by checking the size argument at the start.
+On Thu, May 20, 2021 at 12:26:25PM +0300, Heikki Krogerus wrote:
+> On Wed, May 19, 2021 at 11:55:34AM +0300, Andy Shevchenko wrote:
+> > As LKP noticed the Sparse is not happy about strict type handling:
+> >    .../typec/tcpm/wcove.c:380:50: sparse:     expected unsigned short [usertype] header
+> >    .../typec/tcpm/wcove.c:380:50: sparse:     got restricted __le16 const [usertype] header
+> > 
+> > Fix this by switching to use pd_header_cnt_le() instead of pd_header_cnt()
+> > in the affected code.
+> > 
+> > Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> Reported-and-tested-by: syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> CC: Johan Hovold <johan@kernel.org>
-> 
-> ---
-> 
-> v2: Added extra blank lines following the sanity tests.
+> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Even better.
+Thanks!
 
-Reviewed-by: Johan Hovold <johan@kernel.org>
+Greg, should I amend or resend this?
 
->  drivers/usb/core/message.c |    6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> Index: usb-devel/drivers/usb/core/message.c
-> ===================================================================
-> --- usb-devel.orig/drivers/usb/core/message.c
-> +++ usb-devel/drivers/usb/core/message.c
-> @@ -783,6 +783,9 @@ int usb_get_descriptor(struct usb_device
->  	int i;
->  	int result;
->  
-> +	if (size <= 0)		/* No point in asking for no data */
-> +		return -EINVAL;
-> +
->  	memset(buf, 0, size);	/* Make sure we parse really received data */
->  
->  	for (i = 0; i < 3; ++i) {
-> @@ -832,6 +835,9 @@ static int usb_get_string(struct usb_dev
->  	int i;
->  	int result;
->  
-> +	if (size <= 0)		/* No point in asking for no data */
-> +		return -EINVAL;
-> +
->  	for (i = 0; i < 3; ++i) {
->  		/* retry on length 0 or stall; some devices are flakey */
->  		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
-> 
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
