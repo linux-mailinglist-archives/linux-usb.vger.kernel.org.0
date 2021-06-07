@@ -2,31 +2,31 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DA939DA72
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 13:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2276D39DA71
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 13:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbhFGLCC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 07:02:02 -0400
-Received: from mga09.intel.com ([134.134.136.24]:4781 "EHLO mga09.intel.com"
+        id S230508AbhFGLCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 07:02:01 -0400
+Received: from mga14.intel.com ([192.55.52.115]:36794 "EHLO mga14.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230507AbhFGLCA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S230139AbhFGLCA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Mon, 7 Jun 2021 07:02:00 -0400
-IronPort-SDR: vfuot7jVB7SAr2+DJbSSwfV/Zp/HdpvbMViLyW0rUh0bxnHn2CX9mTkycKdtoeM8MJkYLEwedp
- oaTUFUW2jd+A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="204569300"
+IronPort-SDR: cSH0MPg7zQIPsH6kHEU7mVIiZ6VhD2YQb9Q4KW5+d/tN6NzKB5a+/3HA8hIVU0mA80CB8y/4eS
+ bJl9XmDQC24Q==
+X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="204414442"
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="204569300"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 04:00:09 -0700
-IronPort-SDR: MpE/U940CBhjR4xeXMPmE2XHOv6YCGTbbvwFpc9zY//kmHpkj1AXnBWek2hoKnQBhl59Fv5t32
- NhlXTvIuH2vA==
+   d="scan'208";a="204414442"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 04:00:09 -0700
+IronPort-SDR: VeMnx+xCN+2KFoEsIr5HGdA4a5sgdqk+c78juRIAwI2Ja7pWL1fKHz+CCi2AVzANDqgopDFurX
+ DtPf8CA7B6mQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="413000837"
+   d="scan'208";a="469046621"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 07 Jun 2021 04:00:06 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 07 Jun 2021 04:00:07 -0700
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5AF4B67; Mon,  7 Jun 2021 14:00:30 +0300 (EEST)
+        id 628AC147; Mon,  7 Jun 2021 14:00:30 +0300 (EEST)
 From:   Mika Westerberg <mika.westerberg@linux.intel.com>
 To:     linux-usb@vger.kernel.org
 Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -38,9 +38,9 @@ Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
         kernel test robot <lkp@intel.com>,
         Gil Fine <gil.fine@intel.com>,
         Azhar Shaikh <azhar.shaikh@intel.com>
-Subject: [PATCH 1/5] thunderbolt: Bond lanes only when dual_link_port != NULL in alloc_dev_default()
-Date:   Mon,  7 Jun 2021 14:00:26 +0300
-Message-Id: <20210607110030.38664-2-mika.westerberg@linux.intel.com>
+Subject: [PATCH 2/5] thunderbolt: Add device links only when software connection manager is used
+Date:   Mon,  7 Jun 2021 14:00:27 +0300
+Message-Id: <20210607110030.38664-3-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210607110030.38664-1-mika.westerberg@linux.intel.com>
 References: <20210607110030.38664-1-mika.westerberg@linux.intel.com>
@@ -50,52 +50,199 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-We should not dereference ->dual_link_port if it is NULL and lane bonding
-is requested. For this reason move lane bonding configuration happen
-inside the block where ->dual_link_port != NULL.
+We only need to set up the device links when software connection manager
+path is used. The firmware connection manager does not need them and if
+they are present they may even cause problems.
 
-Fixes: 54509f5005ca ("thunderbolt: Add KUnit tests for path walking")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/test.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/thunderbolt/nhi.c | 67 ---------------------------------------
+ drivers/thunderbolt/tb.c  | 67 +++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 67 insertions(+), 67 deletions(-)
 
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index cf34c1ecf5d5..ba5afd471766 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -303,18 +303,18 @@ static struct tb_switch *alloc_dev_default(struct kunit *test,
- 	if (port->dual_link_port && upstream_port->dual_link_port) {
- 		port->dual_link_port->remote = upstream_port->dual_link_port;
- 		upstream_port->dual_link_port->remote = port->dual_link_port;
--	}
+diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
+index a0386d1e3fc9..478bf6701145 100644
+--- a/drivers/thunderbolt/nhi.c
++++ b/drivers/thunderbolt/nhi.c
+@@ -17,7 +17,6 @@
+ #include <linux/module.h>
+ #include <linux/delay.h>
+ #include <linux/property.h>
+-#include <linux/platform_data/x86/apple.h>
  
--	if (bonded) {
--		/* Bonding is used */
--		port->bonded = true;
--		port->total_credits *= 2;
--		port->dual_link_port->bonded = true;
--		port->dual_link_port->total_credits = 0;
--		upstream_port->bonded = true;
--		upstream_port->total_credits *= 2;
--		upstream_port->dual_link_port->bonded = true;
--		upstream_port->dual_link_port->total_credits = 0;
-+		if (bonded) {
-+			/* Bonding is used */
-+			port->bonded = true;
-+			port->total_credits *= 2;
-+			port->dual_link_port->bonded = true;
-+			port->dual_link_port->total_credits = 0;
-+			upstream_port->bonded = true;
-+			upstream_port->total_credits *= 2;
-+			upstream_port->dual_link_port->bonded = true;
-+			upstream_port->dual_link_port->total_credits = 0;
-+		}
+ #include "nhi.h"
+ #include "nhi_regs.h"
+@@ -1127,69 +1126,6 @@ static bool nhi_imr_valid(struct pci_dev *pdev)
+ 	return true;
+ }
+ 
+-/*
+- * During suspend the Thunderbolt controller is reset and all PCIe
+- * tunnels are lost. The NHI driver will try to reestablish all tunnels
+- * during resume. This adds device links between the tunneled PCIe
+- * downstream ports and the NHI so that the device core will make sure
+- * NHI is resumed first before the rest.
+- */
+-static void tb_apple_add_links(struct tb_nhi *nhi)
+-{
+-	struct pci_dev *upstream, *pdev;
+-
+-	if (!x86_apple_machine)
+-		return;
+-
+-	switch (nhi->pdev->device) {
+-	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
+-	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
+-	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
+-	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
+-		break;
+-	default:
+-		return;
+-	}
+-
+-	upstream = pci_upstream_bridge(nhi->pdev);
+-	while (upstream) {
+-		if (!pci_is_pcie(upstream))
+-			return;
+-		if (pci_pcie_type(upstream) == PCI_EXP_TYPE_UPSTREAM)
+-			break;
+-		upstream = pci_upstream_bridge(upstream);
+-	}
+-
+-	if (!upstream)
+-		return;
+-
+-	/*
+-	 * For each hotplug downstream port, create add device link
+-	 * back to NHI so that PCIe tunnels can be re-established after
+-	 * sleep.
+-	 */
+-	for_each_pci_bridge(pdev, upstream->subordinate) {
+-		const struct device_link *link;
+-
+-		if (!pci_is_pcie(pdev))
+-			continue;
+-		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
+-		    !pdev->is_hotplug_bridge)
+-			continue;
+-
+-		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
+-				       DL_FLAG_AUTOREMOVE_SUPPLIER |
+-				       DL_FLAG_PM_RUNTIME);
+-		if (link) {
+-			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
+-				dev_name(&pdev->dev));
+-		} else {
+-			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
+-				 dev_name(&pdev->dev));
+-		}
+-	}
+-}
+-
+ static struct tb *nhi_select_cm(struct tb_nhi *nhi)
+ {
+ 	struct tb *tb;
+@@ -1278,9 +1214,6 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 			return res;
  	}
  
- 	return sw;
+-	tb_apple_add_links(nhi);
+-	tb_acpi_add_links(nhi);
+-
+ 	tb = nhi_select_cm(nhi);
+ 	if (!tb) {
+ 		dev_err(&nhi->pdev->dev,
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index bc6d568dbb89..2897a77d44c3 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -10,6 +10,7 @@
+ #include <linux/errno.h>
+ #include <linux/delay.h>
+ #include <linux/pm_runtime.h>
++#include <linux/platform_data/x86/apple.h>
+ 
+ #include "tb.h"
+ #include "tb_regs.h"
+@@ -1571,6 +1572,69 @@ static const struct tb_cm_ops tb_cm_ops = {
+ 	.disconnect_xdomain_paths = tb_disconnect_xdomain_paths,
+ };
+ 
++/*
++ * During suspend the Thunderbolt controller is reset and all PCIe
++ * tunnels are lost. The NHI driver will try to reestablish all tunnels
++ * during resume. This adds device links between the tunneled PCIe
++ * downstream ports and the NHI so that the device core will make sure
++ * NHI is resumed first before the rest.
++ */
++static void tb_apple_add_links(struct tb_nhi *nhi)
++{
++	struct pci_dev *upstream, *pdev;
++
++	if (!x86_apple_machine)
++		return;
++
++	switch (nhi->pdev->device) {
++	case PCI_DEVICE_ID_INTEL_LIGHT_RIDGE:
++	case PCI_DEVICE_ID_INTEL_CACTUS_RIDGE_4C:
++	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_2C_NHI:
++	case PCI_DEVICE_ID_INTEL_FALCON_RIDGE_4C_NHI:
++		break;
++	default:
++		return;
++	}
++
++	upstream = pci_upstream_bridge(nhi->pdev);
++	while (upstream) {
++		if (!pci_is_pcie(upstream))
++			return;
++		if (pci_pcie_type(upstream) == PCI_EXP_TYPE_UPSTREAM)
++			break;
++		upstream = pci_upstream_bridge(upstream);
++	}
++
++	if (!upstream)
++		return;
++
++	/*
++	 * For each hotplug downstream port, create add device link
++	 * back to NHI so that PCIe tunnels can be re-established after
++	 * sleep.
++	 */
++	for_each_pci_bridge(pdev, upstream->subordinate) {
++		const struct device_link *link;
++
++		if (!pci_is_pcie(pdev))
++			continue;
++		if (pci_pcie_type(pdev) != PCI_EXP_TYPE_DOWNSTREAM ||
++		    !pdev->is_hotplug_bridge)
++			continue;
++
++		link = device_link_add(&pdev->dev, &nhi->pdev->dev,
++				       DL_FLAG_AUTOREMOVE_SUPPLIER |
++				       DL_FLAG_PM_RUNTIME);
++		if (link) {
++			dev_dbg(&nhi->pdev->dev, "created link from %s\n",
++				dev_name(&pdev->dev));
++		} else {
++			dev_warn(&nhi->pdev->dev, "device link creation from %s failed\n",
++				 dev_name(&pdev->dev));
++		}
++	}
++}
++
+ struct tb *tb_probe(struct tb_nhi *nhi)
+ {
+ 	struct tb_cm *tcm;
+@@ -1594,5 +1658,8 @@ struct tb *tb_probe(struct tb_nhi *nhi)
+ 
+ 	tb_dbg(tb, "using software connection manager\n");
+ 
++	tb_apple_add_links(nhi);
++	tb_acpi_add_links(nhi);
++
+ 	return tb;
+ }
 -- 
 2.30.2
 
