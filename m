@@ -2,142 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C736839E814
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 22:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3ED939E88C
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 22:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbhFGUL5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 16:11:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:54023 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231184AbhFGUL4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 16:11:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1623096604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UQ5xpMy9H3ySDeawEK3lsKg3g0iHKCavSdZYio+WCq0=;
-        b=e4CG3u15mIqqsbK3PxTzj0YJcj4zDFR1Ee5K1KeLzyP8NsONufFnnDejUHDsuCHZhHFhVF
-        QQdZPPMzMoamciX4lAJTB82Wt7vKe/2SA3A4+R84FOCxG2wZfg3PuRO4PFeud3BtW8k1rM
-        KgeWZ1UvsfgTht4pZCMP9T/XRMuLLEU=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-549-6ISxujBLOaqaId-_1cbueg-1; Mon, 07 Jun 2021 16:10:03 -0400
-X-MC-Unique: 6ISxujBLOaqaId-_1cbueg-1
-Received: by mail-ej1-f69.google.com with SMTP id e11-20020a170906080bb02903f9c27ad9f5so5723441ejd.6
-        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 13:10:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version;
-        bh=UQ5xpMy9H3ySDeawEK3lsKg3g0iHKCavSdZYio+WCq0=;
-        b=lYqR6qt6E95JBuIW5cpCYhXFMsSVkIe8s+jORHAUCCruwkFi0IFeI3+BNM1SObxvjl
-         JViZyFa4wEXcrybFjjmipsDz1PLRsEeZ1/fLloBdkfmx+IoPSLBQFYmaiGB/7xQUud/G
-         22JjOrr1z+Wzx56RRGILt5UrN0cEacwiVRVFHDBE29kj6mIwY/SI3AGDoRHBuMcDmm4U
-         wLjDmohYyweWLC7E2Ea4kEs2Snj/Zum1sFZN4th0IawxDldyuiim71DAwjYGrboGBlWK
-         T6dchLivRaWt0BtQjXu9MvpbjQVkYJjKYEtAqZ240taKg7wlROKnfotqRTiKKKS37uyk
-         eOvQ==
-X-Gm-Message-State: AOAM530t2CTd7l/8n9tMfXcDsY10R99ShzLEwC5zlgfdqo64YyXsJFst
-        FARXrC3ddmtFocEowZg8M1jOZg7Z4ZLCZPVEM4J0/pNKXVA1n1/Qr0DGiJb3Q5G9iXvdB+BLo6b
-        OgDVOVwHmQA7yi6F4beV/
-X-Received: by 2002:a17:906:c1c5:: with SMTP id bw5mr19551908ejb.552.1623096601843;
-        Mon, 07 Jun 2021 13:10:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxNyRGdzaq1Bntlewz/0qhpVhYXvvvnlZFiggbB41dNcsyIgSwhAu4EO7OprHiUzo0lP0lQ6w==
-X-Received: by 2002:a17:906:c1c5:: with SMTP id bw5mr19551897ejb.552.1623096601691;
-        Mon, 07 Jun 2021 13:10:01 -0700 (PDT)
-Received: from [10.0.4.217] (i59F776DE.versanet.de. [89.247.118.222])
-        by smtp.gmail.com with ESMTPSA id u4sm6810338eje.81.2021.06.07.13.10.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Jun 2021 13:10:00 -0700 (PDT)
-Message-ID: <4a76d2152f016b58298bec16aa2003a6ec55f8a8.camel@redhat.com>
-Subject: Re: [RFC PATCH 0/7] usb: typec: ucsi: Polling the alt modes and PDOs
-From:   Benjamin Berg <bberg@redhat.com>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 07 Jun 2021 22:09:58 +0200
-In-Reply-To: <20210607131442.20121-1-heikki.krogerus@linux.intel.com>
-References: <20210607131442.20121-1-heikki.krogerus@linux.intel.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-MwjrE0nA8w0YwPPjLjiH"
-User-Agent: Evolution 3.40.1 (3.40.1-1.fc34) 
+        id S231364AbhFGUl7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 16:41:59 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231266AbhFGUl7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 16:41:59 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id B041B61153;
+        Mon,  7 Jun 2021 20:40:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623098407;
+        bh=gHuCtipgI2q1I0zjV2FdCI0c5o2XlIfwzzPl815MSqE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=FbW3Gl+2czTxklICjC8DpfDpmIk5f4J4k9oKyVWxnuktbisNLwQlk0JpHOxGAtX65
+         VoTqQ9EXSF9BcWQIfoP6MwT1ISy0W0Sqwc5k3wgrR34E7SNAn7aceAE9I5ddbMmmVA
+         QnWc3D8WNx0Oafg6dkSbrEcHpcHUAPUVtjSm5Tl3Vuj/QGXM+XXTdPyre3Pj0F3eh+
+         UOL1s22tl6RqFi3oYVg6A7VD+KxQO1BfI0KWSQ3rU8kl88XZGz7r/RFsZWMoEGVjfE
+         6fcBDTYCiCK6YpYi0mu9r2wNXrxKmORESZwPtqiJwE5hEv0xz+Vi644PSqvWRzBAI0
+         Xn0Iggm79ji1g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id A8D8E60A16;
+        Mon,  7 Jun 2021 20:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/8] port asix ax88772 to the PHYlib
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <162309840768.17620.18116264543013097296.git-patchwork-notify@kernel.org>
+Date:   Mon, 07 Jun 2021 20:40:07 +0000
+References: <20210607082727.26045-1-o.rempel@pengutronix.de>
+In-Reply-To: <20210607082727.26045-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hello:
 
---=-MwjrE0nA8w0YwPPjLjiH
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This series was applied to netdev/net-next.git (refs/heads/master):
 
-Hi Heikki,
+On Mon,  7 Jun 2021 10:27:19 +0200 you wrote:
+> changes v2:
+> - add Reviewed-by: Andrew Lunn <andrew@lunn.ch> to some patches
+> - refactor asix_read_phy_addr() and add error handling for all callers
+> - refactor asix_mdio_bus_read()
+> 
+> Port ax88772 part of asix driver to the phylib to be able to use more
+> advanced external PHY attached to this controller.
+> 
+> [...]
 
-On Mon, 2021-06-07 at 16:14 +0300, Heikki Krogerus wrote:
-> This is the RFC series I promised [1].
+Here is the summary with links:
+  - [net-next,v2,1/8] net: usb: asix: ax88772_bind: use devm_kzalloc() instead of kzalloc()
+    https://git.kernel.org/netdev/net-next/c/218d154f540a
+  - [net-next,v2,2/8] net: usb: asix: refactor asix_read_phy_addr() and handle errors on return
+    https://git.kernel.org/netdev/net-next/c/7e88b11a862a
+  - [net-next,v2,3/8] net: usb/phy: asix: add support for ax88772A/C PHYs
+    https://git.kernel.org/netdev/net-next/c/dde258469257
+  - [net-next,v2,4/8] net: usb: asix: ax88772: add phylib support
+    https://git.kernel.org/netdev/net-next/c/e532a096be0e
+  - [net-next,v2,5/8] net: usb: asix: ax88772: add generic selftest support
+    https://git.kernel.org/netdev/net-next/c/34a1dee6bc44
+  - [net-next,v2,6/8] net: usb: asix: add error handling for asix_mdio_* functions
+    https://git.kernel.org/netdev/net-next/c/d275afb66371
+  - [net-next,v2,7/8] net: phy: do not print dump stack if device was removed
+    https://git.kernel.org/netdev/net-next/c/06edf1a940be
+  - [net-next,v2,8/8] usbnet: run unbind() before unregister_netdev()
+    https://git.kernel.org/netdev/net-next/c/2c9d6c2b871d
 
-Cool.
+You are awesome, thank you!
+--
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> I'm sorry it took this long to prepare these. I had to concentrate on
-> other task for a while.
->=20
-> Let me know if you still see any problems.
-
-Hmm, I am not sure this got better. I applied the patchset on top of of
-the 5.12.9 Fedora 34 kernel. On the machine in question (X1 Carbon 8),
-I see the online state getting stuck at 1 occasionally. This can happen
-for example when quickly plugging and unplugging a USB-C charger.
-
-Benjamin
-
-> [1]  =20
-> https://lore.kernel.org/linux-usb/YKT3oEt%2F9fX8k8mw@kuha.fi.intel.com/
->=20
-> thanks,
->=20
-> Heikki Krogerus (7):
-> =C2=A0 usb: typec: ucsi: Always cancel the command if PPM reports BUSY
-> =C2=A0=C2=A0=C2=A0 condition
-> =C2=A0 usb: typec: ucsi: Don't stop alt mode registration on busy
-> condition
-> =C2=A0 usb: typec: ucsi: Add poll worker for alternate modes
-> =C2=A0 usb: typec: ucsi: acpi: Reduce the command completion timeout
-> =C2=A0 usb: typec: ucsi: Process every connector change as unique
-> connector
-> =C2=A0=C2=A0=C2=A0 state
-> =C2=A0 usb: typec: ucsi: Filter out spurious events
-> =C2=A0 usb: typec: ucsi: Read the PDOs in separate work
->=20
-> =C2=A0drivers/usb/typec/ucsi/ucsi.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 317 +=
-+++++++++++++++-----------
-> --
-> =C2=A0drivers/usb/typec/ucsi/ucsi.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=
-=C2=A0 3 +-
-> =C2=A0drivers/usb/typec/ucsi/ucsi_acpi.c |=C2=A0=C2=A0 2 +-
-> =C2=A03 files changed, 183 insertions(+), 139 deletions(-)
->=20
-
-
---=-MwjrE0nA8w0YwPPjLjiH
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmC+fRYACgkQq6ZWhpmF
-Y3A0dQ//fF8Sa9KqO64UQxKOGPoxvIYm2XOKF+kHnJw/x6cMOXoJC7l0iHUAhVaK
-QeyMmpH886ivLVwsFj2wW9nUL9jT8M4iGOqlW5PNku4li0yanl291M6lBAwL7VMm
-iQAqsDaP66ARdcoHK/Fj6lauVmPzDQEsRcWkRx96hHLjbYX5H2EsOGLOpuTIKKaz
-dWPV4NTY9TWjD8t4yBkwc5mVQULalYlB/qnofbFsHqujCdN/pyGQ4gSGeBSQKSnE
-xV6ko35MyGwpeN0bxu3V2ga4+KLyKwdWx0GBo+qdELmSfJQGe4Lk5b10AePd2MA2
-ZSH2jiFdySHz6kkxOZgYSlAonNFBq3zYSgMze9MrK5GWUAgknnH264Y0dE0HQ+cS
-89AsOq2iOFP1D8eC+AZpI7Zofbh9RkmeHoDXQk2tXCRKte86G9Eb1G/zrAMxJIme
-l/SzVDOuUy4SbHgppkhS9xCTX8S4vUczRx2GeHtX1HGl7seKzYLUtx/TlJG1Cz2h
-klK+oZN/TXMmPkrDlIQK4UpF61+UkgqayfpD0wGEMYX7U1CIOVYS3pnXSvI/7w4V
-PPeqCsKDj5+VmX1IU9X77/+tTavjAAI6jAw/fczgiaJebiM6YGdHODmU1ke7i72t
-cdHPxELHcBP9aoJCmP2Cf32/SdKkaLEO9HuHJA++PhqqxqDJkyM=
-=BuYK
------END PGP SIGNATURE-----
-
---=-MwjrE0nA8w0YwPPjLjiH--
 
