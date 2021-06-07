@@ -2,91 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CAA39D41D
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 06:39:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D57639D483
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 07:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbhFGElF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 00:41:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42872 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229470AbhFGElF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 00:41:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 841DD6108D
-        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 04:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623040754;
-        bh=qq2IZrK4rnpdmozQgVSJClI0AySTFpvpRWWfG69S3NI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=BQDhwCTr0GHRbU/SrFw1ug0/2MgZmt0HPoTmH8YTFY9YFdgFUWMywGfXOH3OCD0pj
-         zYRzxp2UU1LUgsIBTW+hPOsNtxXFzM8QAGTjsaMNSsymWAtgosGSwC3/F7gjje1B+x
-         f2gmDAtYdt9WWSSVO8JdHX+LEbDxa/0osoZx+sclmT54aeJcf0ejV6x+wedX2HyVef
-         Wd8xhTAY7G56+JCrV1bR/sQ2eA6jeIMuSGsdqhNgSYMRBkHFhnPcv2ZZGiWAjKGFyQ
-         dLO08qxihhtEYfUIkBKFc2p8HOS09OIlBnF5Uyw/Yq87OFUNV8lGM9jWUB7kwKL7Xw
-         SxG1DiB7LaySA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 6FDCB612A2; Mon,  7 Jun 2021 04:39:14 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212955] Possible kernel regression USB2 (not USB3) port EDIROL
- UA-101 (in USB 1.1 mode, not USB2) error -110
-Date:   Mon, 07 Jun 2021 04:39:14 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: jaffa225man@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-212955-208809-Dy8uQkIMa5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212955-208809@https.bugzilla.kernel.org/>
-References: <bug-212955-208809@https.bugzilla.kernel.org/>
+        id S230208AbhFGFzg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 01:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230203AbhFGFzg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 01:55:36 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A963C06178B
+        for <linux-usb@vger.kernel.org>; Sun,  6 Jun 2021 22:53:29 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id n133so23265465ybf.6
+        for <linux-usb@vger.kernel.org>; Sun, 06 Jun 2021 22:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=/wBNVO8p0L0MwynFVGAli8Yo7FoOthJf6Cs8txsgWCg=;
+        b=T+8t6Az6PdvMfB+yzyglPyo+yaQBf6oVO96/QMyWzMG9Whc2t6ZjlxAK0ZEdTJ3xTO
+         coTL24OJNPdvory6l+4xFSF/qsq7Nb3HH5bkzUBNEGHdIhBPbSE93GbkBAEIvgEipwPx
+         dg9cgAQzUmWds97kD7nqSGt/3h21zDyjLJHlNv5paTeAaAulAsawJxUzj8UK4Nr3L6Lr
+         GVfo+DlDUFWKekQsRjvuPcIr9i/GVr54grKQEVTFYlyxzwyOKsNH2ezM7YaM/FSTgjlZ
+         O1uq8LS6A80kGCLdHADG+0mWYNtyQwkL5u2I8Gdf6PA3j8TtOYzwQqvs63q9H/YPT0ec
+         QxXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=/wBNVO8p0L0MwynFVGAli8Yo7FoOthJf6Cs8txsgWCg=;
+        b=bASg4YoTQpDZmvlZ+d63TdDhYspXsrBA01h2HPhk2X8ZRrju4lAXUBibmr2oD5bZjF
+         tLhswLhS9SWkn0ndFtnkArPsCX1bVHJUpQr1tFMEF6w9BpmMX72jf9SO2PwmcAqczg3W
+         NuBFnhscv+/hz+qlilOYxFAwshRiKW6QuXr0NWLbfxDBn59vvQCWfAw0Qu9ZBbCJ2hG7
+         AHgf1TtlbuITO4PYyzck6jxk+X1MTD7o5so9iX9nUMOQSfknDdhX7sc07gdRwpX0ngTx
+         Lt5Pv37uJUU5n6P8p1vD4MrOwj5iDStdBawRuGCZA5VZ3Kov66UxYx/sVxEPF2F8vUES
+         EJVw==
+X-Gm-Message-State: AOAM5321ahw88KCJNManIdyv3JtkPGXP6wO0YZ4xo9Ce6ib/jzjzb0hW
+        EP/VW2CccCdDxjDchcxeanU4c1FgUXL7S8qJosI=
+X-Google-Smtp-Source: ABdhPJwYOXOPH/EVoY4DKl+MttJrtHc87hRcOQb1taGIusu8b5K/kI3iijLlnwHlPGXM65hsUCGtpZUzv/b6/0WV4+Q=
+X-Received: by 2002:a25:e68c:: with SMTP id d134mr22215196ybh.477.1623045206417;
+ Sun, 06 Jun 2021 22:53:26 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a05:7110:a0c8:b029:cd:fa89:89f1 with HTTP; Sun, 6 Jun 2021
+ 22:53:25 -0700 (PDT)
+Reply-To: rita44303@yahoo.co.jp
+From:   Rita Williams <wirita98@gmail.com>
+Date:   Mon, 7 Jun 2021 06:53:26 +0100
+Message-ID: <CAJQGmc7CW19NFeau76T5Tah+mN_+yTAOmX5dWyEKkMKZ=P1Lgw@mail.gmail.com>
+Subject: Von Frau Rita Williams
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212955
+860 / 5000
+Translation results
+Liebster in Christus,
 
---- Comment #21 from Lucas Endres (jaffa225man@gmail.com) ---
-According to my comment here:
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212477#c13
+Ich bin Frau Rita Williams, ich habe Herrn David Williams 19 Jahre
+ohne Kind geheiratet und mein Mann ist 2007 gestorben von meinem
+verstorbenen Ehemann an eine Wohlt=C3=A4tigkeitsorganisation, derzeit ist
+der Fonds noch auf der Bank. K=C3=BCrzlich sagte mir mein Arzt, dass ich
+eine schwere Krankheit habe, die ein Krebsproblem ist und dass ich die
+n=C3=A4chsten 2 Monate nicht durchhalten werde.
+Ich m=C3=B6chte eine Person, die diesen Fonds f=C3=BCr Waisenh=C3=A4user, S=
+chulen,
+Kirchen, Witwen verwendet, um das Wort Gottes in seinem Land zu
+verbreiten.
+Antworten Sie mir f=C3=BCr weitere Informationen und senden Sie mir auch
+die folgenden Informationen, wie unten beschrieben.
+Ihren vollst=C3=A4ndigen Namen ..........
+Adresse ...........
+Foto ................
+Bleib gesegnet
+Deine Schwester in Christus
 
-USB 1.1 mode was working for me there, but I was probably testing using the
-previous patch (not the finalized version), and I had just reverted the oth=
-er
-BOSS/EDIROL/Roland quirk patches we'd been working on to rule out any confl=
-icts
-with them.  Although, they are included in the linux-next branch I've been
-diagnosing here, they seem to appear after this, and otherwise shouldn't be
-causing it, due to this patch blacklisting the UA-101 from snd-usb-audio.
-
-Here's the culmination of the other BOSS/EDIROL/Roland quirk table patches:=
-=20
-https://patchwork.kernel.org/project/alsa-devel/patch/20210422120413.457-2-=
-tiwai@suse.de/
-And my bugzilla report leading to it:
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212519
-
-Thanks for any light you can shed on the matter, but it seems to me that I =
-will
-have to contact Takashi Iwai again,
-
-  Lucas
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Frau Rita Williams
