@@ -2,89 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA8939E491
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742E239E494
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 18:56:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbhFGQy6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 12:54:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45056 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230446AbhFGQy5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 12:54:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 51E3160FDA;
-        Mon,  7 Jun 2021 16:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623084786;
-        bh=/tfrK9SqrQkiyu3G5dlDMR6ncPkcSVXzOtse53jthQc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pmB9YcbGuCg0rJhjltEoNfL7o/NFozO5di3+ex1teSStlbQGoQWltQPu8epEVmZp8
-         3kkz5vhhl7pUwGZaM8cYMSwsgq+JFJLAoNJh5mBGFb+l/oM6FGf9kDYM3FjysGGjXE
-         dWS0K29O53nxix87xprF/26lYeDOR1HuILAIC4mM3mGtrtBYw6dFGF1V+ZJNNb4xKz
-         U9zwC+Y7+Gwn4gfw9AB24aG3bYfyrDnmayf3LI5OAy415qmT8xYI5cOL3DA8PZ464b
-         4tE/F7q8w0NFeCHlM+QPnwfk7xGKNUsGdC9zHw2FDuvu2H8ARlRuairITlx7AjEYL/
-         Xi4S45p7EXteQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lqIUl-0003Cq-N0; Mon, 07 Jun 2021 18:53:00 +0200
-Date:   Mon, 7 Jun 2021 18:52:59 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     David Frey <dpfrey@gmail.com>
-Cc:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>,
-        linux-usb@vger.kernel.org, Pho Tran <pho.tran@silabs.com>,
-        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
-Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21
- (with bisection)
-Message-ID: <YL5O6/GrlnpNwGjT@hovoldconsulting.com>
-References: <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
- <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
- <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
- <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
- <YLeapcNbvExeGKuE@hovoldconsulting.com>
- <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
- <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
- <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
- <YLtOL5aZUnntfqWB@hovoldconsulting.com>
- <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
+        id S230446AbhFGQ5z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 12:57:55 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:40557 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230250AbhFGQ5z (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 12:57:55 -0400
+Received: by mail-wm1-f44.google.com with SMTP id b145-20020a1c80970000b029019c8c824054so94284wmd.5
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 09:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:content-transfer-encoding:date:message-id:to:cc
+         :subject:from:references:in-reply-to;
+        bh=+PCKLDjp91q61LUVlJCxNV4eAaiIcKWW2BEkZ+Rvjbk=;
+        b=V/VnQUlM3q4XbY6Tlv/xczQunJWbB5z17qVDOYQLrQH9ZnQNJdL1zpPKRNu1VXSk74
+         bhSw7fzgiSSjTp91aC8QGm6rvo/8i9tzwrJBGzQIhnMojRdB7FT9W7pPMn9aZK1ajGS6
+         Y636ebDwD4dBPkYEi3GPqX3JueHO8qTMbd2UbWYWSXyfGJ+EN/OaQQohD/dbtq2/lU8m
+         dumEdnOrODBa4EYzZlMirQ/IvJ6cIBuIGP7i7bwL2r7qf5TTijZyhDFdWCO94xdRW0gN
+         1RDsIW557ZPgSD9R1X53NAjkOTzaY/9rNTWfbAcc5BelQFCSTVmDv+zWHD6mtD846sLI
+         TlNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:to:cc:subject:from:references:in-reply-to;
+        bh=+PCKLDjp91q61LUVlJCxNV4eAaiIcKWW2BEkZ+Rvjbk=;
+        b=TplyFNnDRnV4vyaz8QkBKoNwctm/CLtXvJApxT4M4E1wexF+RcRUINRLGDD6sH8ArZ
+         qrp30w4WTmVcCCJ4vQMgKKfZSqu1uWTsbxhusJYyk4+LpuyHFAl1U7Qa4Xb7rMC+MGLZ
+         CE4PHoc0qDhNpQDC5ra2ckzg8q1qsWUtKwTIw33sJ4PHKehErq2uMVgGmt36PcCYnOXY
+         PQ1WbhSdkfA5c9oEiMpymvIQOYt1A1IfC07j8hJ8QNvt7JGabBnjkNyjO2ykDpi26dvG
+         2YVkMHP7ASRA6whwiwbXMHhwUbGLKYXZhByOv5rhD5DIBM+vdzS6yQFA9GEM0TPHoV72
+         BEHA==
+X-Gm-Message-State: AOAM531f0Y4VsqcWA7AXlBQ68ahMEQtpvcERDDNczs3eH2vXuVxfCwKm
+        vjHe4JpeTpmtkBS7KY7B/odmgg==
+X-Google-Smtp-Source: ABdhPJx7jW5FhA3ALAgVpCQCHAQH6QOST8RKrWTzkx9raiDDfZBEQxzYFo5hSLxt6TiksZc6au2pww==
+X-Received: by 2002:a05:600c:3b23:: with SMTP id m35mr31354wms.185.1623084903159;
+        Mon, 07 Jun 2021 09:55:03 -0700 (PDT)
+Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id l22sm46380wmq.28.2021.06.07.09.55.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 09:55:02 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 07 Jun 2021 17:55:01 +0100
+Message-Id: <CBXJKU9FGJD4.31VMI9Z0J5NZU@arch-thunder>
+To:     "Laurent Pinchart" <laurent.pinchart@ideasonboard.com>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Sebastian Siewior" <bigeasy@linutronix.de>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v2] MAINTAINERS: usb: add entry for isp1760
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+References: <20210607101538.74836-1-rui.silva@linaro.org>
+ <YL5M+xnwS1yGEVqk@pendragon.ideasonboard.com>
+In-Reply-To: <YL5M+xnwS1yGEVqk@pendragon.ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 09:44:59AM -0700, David Frey wrote:
-> On Sat, Jun 5, 2021 at 3:13 AM Johan Hovold <johan@kernel.org> wrote:
-> >
-> > I found an errata for A01 on here, but no mention if this particular
-> > bug:
-> >
-> >         https://www.silabs.com/documents/public/pcns/190315471-CP2102N-Product-Revision-with-Datasheet-and-Errata-Update.pdf
-> 
-> I believe this document has some more errata details:
-> https://www.silabs.com/documents/public/errata/cp2102n-errata.pdf'
+Hi Laurent,
 
-Thanks for the link.
+On Mon Jun 7, 2021 at 5:44 PM WEST, Laurent Pinchart wrote:
 
-This seems to confirm that this is a known issue with A01 that was fixed
-in A02:
+> Hi Rui,
+>
+> On Mon, Jun 07, 2021 at 11:15:38AM +0100, Rui Miguel Silva wrote:
+> > Giving support for isp1763 made a little revival to this driver, add
+> > entry in the MAINTAINERS file with me as maintainer, and
+> > Laurent Pinchart as reviewer in a best effort style.
+> >=20
+> > Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
+> > ---
+> > v1[0] -> v2:
+> >     - move Laurent to reviewer instead of maintainer by his request
+> >       because of lack of bandwidth
+> >=20
+> > [0]: https://lore.kernel.org/linux-usb/20210607083921.38441-1-rui.silva=
+@linaro.org/T/#u
+> >  MAINTAINERS | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >=20
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 503fd21901f1..bd3bdb22a608 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -18869,6 +18869,14 @@ S:	Maintained
+> >  F:	drivers/usb/host/isp116x*
+> >  F:	include/linux/usb/isp116x.h
+> > =20
+> > +USB ISP1760 DRIVER
+> > +M:	Rui Miguel Silva <rui.silva@linaro.org>
+> > +R:	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+>
+> Honestly, what's the value of listing me if all the e-mails will go to
+> /dev/null for the time being ? :-)
 
-	3.6 CP2102N_E104 – IO Exception in .NET Applications when
-	Manually Controlling RTS
+Sorry, I got you wrong there. I will remove you.
 
-	The CP2102N uses the incorrect byte of the SERIAL_HANDFLOW
-	structure
-	(https://msdn.microsoft.com/en-us/library/windows/hard-
-	ware/jj680685(v=vs.85).aspx) to control the RTS signal. Instead
-	of looking at the first byte of FlowReplace, the device is
-	reading the first byte of the XonLimit and interpreting that as
-	the first byte of FlowReplace.
+------
+Cheers,
+     Rui
 
-	Applications written in .NET set the Xon/Xoff limits to 160,
-	equal to 0xA0, which the CP2102N interprets as hardware flow
-	control, and so it returns an error when manually setting RTS.
+>
+> > +L:	linux-usb@vger.kernel.org
+> > +S:	Maintained
+> > +F:	drivers/usb/isp1760/*
+> > +F:	Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
+> > +
+> >  USB LAN78XX ETHERNET DRIVER
+> >  M:	Woojung Huh <woojung.huh@microchip.com>
+> >  M:	UNGLinuxDriver@microchip.com
+>
+> --=20
+> Regards,
+>
+> Laurent Pinchart
 
-Now we just need to figure out how to determine the firmware revision.
 
-Johan
+
