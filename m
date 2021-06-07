@@ -2,103 +2,76 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90EEF39D888
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6323839D88B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbhFGJVX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 05:21:23 -0400
-Received: from mga06.intel.com ([134.134.136.31]:43396 "EHLO mga06.intel.com"
+        id S230227AbhFGJWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 05:22:12 -0400
+Received: from mga03.intel.com ([134.134.136.65]:36156 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230239AbhFGJVW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 05:21:22 -0400
-IronPort-SDR: khPzT3tuV3/Yv/91MYRl5+PI4RkxVxtEXzVdLQg2VTvvh/Nm45N9CZM6HfvkzAUlqtugkw8GAN
- 3JpdQ4bRGarA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="265743711"
+        id S229966AbhFGJWM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 05:22:12 -0400
+IronPort-SDR: oqGam3Kis1j8g0gcDTRMb6xwoTFuVz771MdcQz+mGneCsCdCyLw5a3i1tpTfDuMq/GsZMrSUjS
+ Rv6nm71e3Hdw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="204610344"
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="265743711"
+   d="scan'208";a="204610344"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 02:19:31 -0700
-IronPort-SDR: D+TGh23U+FT9mUuSbPOMyIJcYIgbZrdRiQdCzlaWOigvRHKUm99Jb1DgoATUgo0+2f6UiYA6/9
- 2skc/Ujq0NNA==
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 02:20:21 -0700
+IronPort-SDR: z4C20yGvCTYUWBw0FSST4DuxuboqnJjtaHIEIzZAUosGdxQVwZg1AqwQuW1gWV8yFsxfTxYNJQ
+ 7NiU36d6CZyQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="551815937"
+   d="scan'208";a="551816159"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2021 02:19:28 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Jun 2021 12:19:27 +0300
-Date:   Mon, 7 Jun 2021 12:19:27 +0300
+  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2021 02:20:18 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Jun 2021 12:20:17 +0300
+Date:   Mon, 7 Jun 2021 12:20:17 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] usb: typec: tcpm: Fix misuses of AMS invocation
-Message-ID: <YL3kn3C0/3bdNPwi@kuha.fi.intel.com>
-References: <20210601123151.3441914-1-kyletso@google.com>
- <20210601123151.3441914-5-kyletso@google.com>
+Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: Do not finish VDM AMS for retrying
+ Responses
+Message-ID: <YL3k0aot51j3ntNY@kuha.fi.intel.com>
+References: <20210606081452.764032-1-kyletso@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210601123151.3441914-5-kyletso@google.com>
+In-Reply-To: <20210606081452.764032-1-kyletso@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 01, 2021 at 08:31:51PM +0800, Kyle Tso wrote:
-> tcpm_ams_start is used to initiate an AMS as well as checking Collision
-> Avoidance conditions but not for flagging passive AMS (initiated by the
-> port partner). Fix the misuses of tcpm_ams_start in tcpm_pd_svdm.
+On Sun, Jun 06, 2021 at 04:14:52PM +0800, Kyle Tso wrote:
+> If the VDM responses couldn't be sent successfully, it doesn't need to
+> finish the AMS until the retry count reaches the limit.
 > 
-> ATTENTION doesn't need responses so the AMS flag is not needed here.
-> 
-> Fixes: 0bc3ee92880d ("usb: typec: tcpm: Properly interrupt VDM AMS")
+> Fixes: 0908c5aca31e ("usb: typec: tcpm: AMS and Collision Avoidance")
 > Signed-off-by: Kyle Tso <kyletso@google.com>
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
 > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index ebe490949fa0..c4b02a6ca3d7 100644
+> index 0db685d5d9c0..08fabe1fc31d 100644
 > --- a/drivers/usb/typec/tcpm/tcpm.c
 > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1583,7 +1583,7 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  				svdm_version = PD_VDO_SVDM_VER(p[0]);
->  			}
->  
-> -			tcpm_ams_start(port, DISCOVER_IDENTITY);
-> +			port->ams = DISCOVER_IDENTITY;
->  			/*
->  			 * PD2.0 Spec 6.10.3: respond with NAK as DFP (data host)
->  			 * PD3.1 Spec 6.4.4.2.5.1: respond with NAK if "invalid field" or
-> @@ -1604,19 +1604,18 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
->  			}
->  			break;
->  		case CMD_DISCOVER_SVID:
-> -			tcpm_ams_start(port, DISCOVER_SVIDS);
-> +			port->ams = DISCOVER_SVIDS;
->  			break;
->  		case CMD_DISCOVER_MODES:
-> -			tcpm_ams_start(port, DISCOVER_MODES);
-> +			port->ams = DISCOVER_MODES;
->  			break;
->  		case CMD_ENTER_MODE:
-> -			tcpm_ams_start(port, DFP_TO_UFP_ENTER_MODE);
-> +			port->ams = DFP_TO_UFP_ENTER_MODE;
->  			break;
->  		case CMD_EXIT_MODE:
-> -			tcpm_ams_start(port, DFP_TO_UFP_EXIT_MODE);
-> +			port->ams = DFP_TO_UFP_EXIT_MODE;
->  			break;
->  		case CMD_ATTENTION:
-> -			tcpm_ams_start(port, ATTENTION);
->  			/* Attention command does not have response */
->  			*adev_action = ADEV_ATTENTION;
->  			return 0;
+> @@ -1965,6 +1965,9 @@ static void vdm_run_state_machine(struct tcpm_port *port)
+>  			tcpm_log(port, "VDM Tx error, retry");
+>  			port->vdm_retries++;
+>  			port->vdm_state = VDM_STATE_READY;
+> +			if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMDT(vdo_hdr) == CMDT_INIT)
+> +				tcpm_ams_finish(port);
+> +		} else {
+>  			tcpm_ams_finish(port);
+>  		}
+>  		break;
 > -- 
-> 2.32.0.rc0.204.g9fa02ecfa5-goog
+> 2.32.0.rc1.229.g3e70b5a671-goog
 
 -- 
 heikki
