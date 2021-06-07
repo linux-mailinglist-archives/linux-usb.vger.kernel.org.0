@@ -2,195 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C26939D4AC
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 08:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D393C39D4D5
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 08:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbhFGGNL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 02:13:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33752 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229449AbhFGGNL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 02:13:11 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 94E5961164;
-        Mon,  7 Jun 2021 06:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623046280;
-        bh=c0J+F+Ybh9qVuxvXFmsVWAXOl3lgD6egdDXXaYLMCIQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=InQZzKN8iTlmDt487UC+t9TxGNYUoLZZz10hHgLOwbvyhV3gpORLlkyLX1LoEYYWO
-         ljzqdgmExf4dlPoaosFmzYrtJHxSp3BJVJA37XrnYNrHI1fZyncta6XmJ/6TFDbKB/
-         1/beGd6czhId4fhjdTMVSPqZcnNoEXku2YNNk3+rdwap4F7rGWBGtiWPRYU5OBvsRy
-         439k4Qn5PIucnv4vtx0JWQ+x2WoAlXHqmaNCcZ82Kx3zfYowwRR+AyU0X/2yzSfj/Z
-         SEN/G9z2J4tTucKAYvqOf8yFI39cE0C1UOK675bJ+UTx03tK7dIscQu9xFQoL8GHxZ
-         0M7TyjWbELWmw==
-Date:   Mon, 7 Jun 2021 14:11:16 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     "Chow, Watson" <Watson.Chow@Avnet.com>
+        id S230197AbhFGGTt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 02:19:49 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:47551 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229436AbhFGGTs (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 02:19:48 -0400
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 5890E1652;
+        Mon,  7 Jun 2021 02:17:57 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 07 Jun 2021 02:17:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm1; bh=HoJ4ww4xZ6xdvjHoZ4iHbUzz9m
+        LoUDTInfZZuqlp+s4=; b=MukYE+aow5Vg4ecUV7a8wV8d/hIWNu8A9Dd6nWIj+Y
+        pChv0fc+3txFQd88BYiJTFKaG0e0ZyxnzLCAfeLw3qVlDOV+lb82OtZS7g+ZlrKv
+        sBHOyi1FtkM2p7V4nhQysPq2zFGXujO9YMSRIm0l41/X3XUHxfhDVtmFfJ1tcBO9
+        0p2BcLNPitPELPttIzwMiOCDm8GN2lcJoABabnRM597AA4R2sltHbzAX1UtOLQK2
+        bXZenB+FtHI0pEuAQqpqdYKvMXkf9TYYXcGpqKc9IXDdN2nZsE4G7692PjWd5UIE
+        Q/DXzdFsDtuSHlLjdjU9jkdu3/Iye0BeLmctVgBilXbg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=HoJ4ww4xZ6xdvjHoZ
+        4iHbUzz9mLoUDTInfZZuqlp+s4=; b=HNDDrP2EP2yDUxMLAkIzaCqmEHo5PZhv6
+        MrXqr6YaHRu2frLiPcvxSROZ2zFApOIMOF32efAVO2bXHi1vuSX4HveKaAOHil3z
+        6Srk7r23xXesj/ddVAsuD7Vf0bRrc+aW3JeX4whIV0Lj4JtMZnM9B3N3DvmrdBzk
+        DZ1/gGVTULgBMtpRr2opsu/0YizV3AQiUF+PWtgGJK56I/y1b+4hkZ3XVdKjA1Hr
+        jBuf3TiFz6Ywk5VmX31jOFMljwozpbzpENkpitWyFIJ5MT+Gz6Df3dJX54o0qNgI
+        SD5EqUqBi2edpF003+jU9AdZ+uuNLlSX6+5wt0UhfG81YT6DYBJQQ==
+X-ME-Sender: <xms:E7q9YMm8Lp8GCgHF_Zkj86M9F1wM1TUC1DUTdhVpvIkbH3_dgJ_y6g>
+    <xme:E7q9YL0TxWPDcoB1Ngdc6UNu6GVEPNHdPJ0eeO1G3x9oPsRFA2fzYgO2g_BnGtNSg
+    Jq0A6qF4mj3buWn5pQ>
+X-ME-Received: <xmr:E7q9YKqNQZpWJdDp8YNR7Nbj21F8ovtkqb_vOTeddq-6z7ltDmy-MmnqArJKgRf0KRaDXL-BwqBlK9RrGPqlWv3nuge3pF0gubNXR7wL7cLGes-Md6j7S0h8wRPwOg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedtiedguddtfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfr
+    vghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrh
+    hnpeeugfelkedvtdejffefjeehveelfeevkefgudduhfeghfefgedtheevjeefffffgfen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnh
+    esshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:E7q9YIl5y9xoBp3K4u5KM5z2Kxcd1PYndO4A7dtrAMWgbuKRdaUpdA>
+    <xmx:E7q9YK2ZY-Y0VLEQJPyWMXiyCrv8gN-gv3_E_1DetdgiAgcFTtQFsA>
+    <xmx:E7q9YPt43MZ70YdAdE98HoGMUoASpvfbu1sostcRVan2vu0zGq96Wg>
+    <xmx:FLq9YNSs2M76UzRz45K4odCGw8Y2GiLMq2tGyKfimrQZBRmBof7WVQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 7 Jun 2021 02:17:54 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     linux-usb@vger.kernel.org
 Cc:     Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer
- bandwidth on UVC gadget driver
-Message-ID: <20210607061116.GA25386@nchen>
-References: <6bc8ab9c4e3f4bafae13a7574b1ae0e3@Avnet.com>
- <87r1i97pkk.fsf@kernel.org>
- <4c354460a55e40c9938a1fdedfa62144@Avnet.com>
- <878s4h7giv.fsf@kernel.org>
- <9e8d9a55a0e64ab092ceb464db5f0119@Avnet.com>
- <87zgwu53jc.fsf@kernel.org>
- <c64f050b25d445ec8342ac25f7a563a4@Avnet.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
+Date:   Mon,  7 Jun 2021 08:17:51 +0200
+Message-Id: <20210607061751.89752-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c64f050b25d445ec8342ac25f7a563a4@Avnet.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-06-04 02:53:19, Chow, Watson wrote:
-> 
-> Upgraded the kernel version to 5.9, I can set the g_webcam module pararmeters
-> as follow (for max bandwidth):
-> 
-> streaming_maxpacket=3072
-> streaming_maxburst=15
-> streaming_interval=1
+Currently, the dwc3 platform driver does not explicitly ask for
+a DMA mask. This makes it fall back to the default 32-bit mask which
+breaks the driver on systems that only have RAM starting above the
+first 4G like the Apple M1 SoC.
 
-According the spec:
-Maximum number of packet within one SoF:
-(bMaxBurst + 1) * (Mult + 1) = (15  + 1) * (2 + 1)= 48
-Maximum bandwidth = 48 * 1024 * 8 (B/bit) * 8 (125us/1ms) = 3.072Gbps
-USB 3.0 is 8/10b coding, the theory maximum bandwidth is 5 * 0.8 = 4.096Gbps
-So, your setting tells host that your have the capabilities to get the
-maximum bandwidth,but you may can't get it due to the FIFO depth for endpoint
-and system bus latency.
+Fix this by calling dma_set_mask_and_coherent with a 64bit mask.
 
-Peter
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
 
-> 
-> Data transfer with above setting is working now - tested with dummy data
-> generator in the uvc-gadget app.
-> 
-> This concludes that kernel 5.4 is too old for DWC3 and UVC gadget driver
-> in high bandwidth usage
-> 
-> 
-> >>>> 4. I read through the procedures to capture debug info by debugfs. However,
-> >>>> in my test with "streaming_maxburst" set to 10 or above, my system would 
-> >>>> crash and I can't pick the log from that point. Any suggestion?
-> >>>
-> >>>have a look at ftrace_dump_on_oops.
-> >>
-> >> I will explore how to enable this
-> >>
-> >>>
-> >>
-> >> Btw, do you know which SoC platform can run the UVC gadget in max throughput.
-> >> Raspberry Pi/TI Beaglebone/i.MX ???
-> >
-> >Raspberry Pi uses dwc2
-> >Beaglebone uses musb
-> >i.MX, I think some of them use dwc3 at least.
-> >
-> 
-> Watson
-> 
-> -----Original Message-----
-> From: Felipe Balbi <balbi@kernel.org> 
-> Sent: Monday, May 17, 2021 1:32 PM
-> To: Chow, Watson <Watson.Chow@Avnet.com>; linux-usb@vger.kernel.org
-> Subject: RE: [BUG REPORT] usb: dwc3: Bug while setting the USB transfer bandwidth on UVC gadget driver
-> 
-> 
-> Hi,
-> 
-> "Chow, Watson" <Watson.Chow@Avnet.com> writes:
-> > Hi,
-> >
-> >>Hi,
-> >>
-> >>(please don't top-post :-)
-> > I have tried my best to meet the format requirement
-> 
-> Thanks
-> 
-> >>"Chow, Watson" <Watson.Chow@Avnet.com> writes:
-> >>> Balbi,
-> >>>
-> >>> Thanks for your quick reply.
-> >>>
-> >>> Some questions
-> >>>
-> >>> 1. You mentioned that the max bandwidth in isoc mode (USB3.0) should be 
-> >>> around 4Gbps.  
-> >>>
-> >>> I have the below calcuation on bandwidth:
-> >>> In USB3.0, 1 micro frame would take 125us and can transfer max 45000 bytes
-> >>> So, in 1 sec, we will have 8000 micro frames
-> >>>
-> >>> Max bandwidth = 8000 x 4500 x 8 = 2.88Gbps
-> >>>
-> >>> Is my understanding correct?
-> >>
-> >>probably, It's been a while since I've dug through the spec, to be frank
-> >>
-> >>> 2. To achieve the max throughput, I need to configure the uvc gadget driver 
-> >>> with below parameters. Am I right?
-> >>>
-> >>> # modprobe g_webcam streaming_maxpacket=3072 streaming_maxburst=15 
-> >>> streaming_interval=1
-> >>
-> >>right, but there's an assumption here that the gadget will be able to
-> >>feed data in a timely manner.
-> >
-> > How does the DWC3 driver or the gadget driver handle the case with intermittent
-> > drop of the input video streaming?
-> >
-> > Any recover mechanism?
-> 
-> yeah, the missed ISOC is reported to the gadget driver and that has to
-> queue new requests.
-> 
-> >>> 3. You suggest me to try on kernel v5.12 or the latest v5.13-rc. It looks not
-> >>> easy in my side to upgrade the kernel version. It would affect those other 
-> >>> device drivers I'm currently using. So, do you think there's any short cut 
-> >>> to fix this problem under my current kernel version - v5.4?
-> >>
-> >>In that case, you need to ask for support from whoever forces you to
-> >>stay with such an old kernel. I believe that would be Xilinx.
-> >
-> > I have a thought to back port those changes around the dwc3 and gadget driver
-> > from the latest kernel version to my kernel (v5.4). Do you think this is 
-> > feasible?
-> 
-> should be, but it's likely quite a bit of work:
-> 
-> $ git rev-list --count v5.4..linus/master -- drivers/usb/dwc3/
-> 257
-> 
-> >>> 4. I read through the procedures to capture debug info by debugfs. However,
-> >>> in my test with "streaming_maxburst" set to 10 or above, my system would 
-> >>> crash and I can't pick the log from that point. Any suggestion?
-> >>
-> >>have a look at ftrace_dump_on_oops.
-> >
-> > I will explore how to enable this
-> >
-> >>
-> >
-> > Btw, do you know which SoC platform can run the UVC gadget in max throughput.
-> > Raspberry Pi/TI Beaglebone/i.MX ???
-> 
-> Raspberry Pi uses dwc2
-> Beaglebone uses musb
-> i.MX, I think some of them use dwc3 at least.
-> 
-> -- 
-> balbi
+Third time's a charm I hope - this time much simpler :)
 
+I still think this change should be fairly low risk.
+
+Unfortunately I only have the Apple M1 to test this on but here
+the driver still works with the iommu enabled which limits the
+address space to 32 bit. It also enables to use this with the iommu
+in bypass mode which requires 64 bit addresses.
+
+I believe this has been working fine so far since the dwc3 driver
+only uses a few very small buffers in host mode which might still
+fit within the first 4G of address space on many devices. The
+majority of DMA buffers are allocated inside the xhci driver which
+will already call dma_set_mask_and_coherent.
+
+Best,
+
+Sven
+
+
+changes from v2:
+ - remove both dma_coerce_mask_and_coherent and the 32 bit
+   dma_set_mask_and_coherent as pointed out by Arnd Bergmann
+changes from v1:
+ - removed WARN_ON around !dwc->sysdev->dma_mask; pointed out by greg k-h
+
+ drivers/usb/dwc3/core.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index b6e53d8212cd..ba4792b6a98f 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1545,6 +1545,10 @@ static int dwc3_probe(struct platform_device *pdev)
+ 
+ 	dwc3_get_properties(dwc);
+ 
++	ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
++	if (ret)
++		return ret;
++
+ 	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+ 	if (IS_ERR(dwc->reset))
+ 		return PTR_ERR(dwc->reset);
 -- 
-
-Thanks,
-Peter Chen
+2.25.1
 
