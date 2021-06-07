@@ -2,76 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE80839D8A3
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEE439D8AC
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 11:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbhFGJZl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 05:25:41 -0400
-Received: from mga02.intel.com ([134.134.136.20]:45272 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230200AbhFGJZk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 05:25:40 -0400
-IronPort-SDR: qtv97T5fLMlaa/dX6JPQaO3UKVBv2ySlMolfmyhFBBMoZMTtoVoMF0bX19TbHdHdizCrJob3kw
- XCcAIjGwATKA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10007"; a="191699129"
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="191699129"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 02:23:49 -0700
-IronPort-SDR: E/b5jD69XqAgN7vOgsO9bOabpwL61YCNhJxGQ0CuzmFzc5neVxPc2fTSPBk3ImE4Pui9olj04h
- l8N0rblgc/Yg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,254,1616482800"; 
-   d="scan'208";a="551816907"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2021 02:23:46 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 07 Jun 2021 12:23:46 +0300
-Date:   Mon, 7 Jun 2021 12:23:46 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/3] usb: typec: intel_pmc_mux: Put fwnode in error
- case during ->probe()
-Message-ID: <YL3lomK79iIuE13f@kuha.fi.intel.com>
-References: <20210606200911.32076-1-andy.shevchenko@gmail.com>
+        id S230411AbhFGJ06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 05:26:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229966AbhFGJ06 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 05:26:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DEC9C061766;
+        Mon,  7 Jun 2021 02:25:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=mJFWyvVpJyGj+OAcSDuHr0rmetUi1/qBDaXb3QbiA1c=; b=joJUtBIfolUhyPQvaZZcvm4Dmk
+        KssSIVJNHCr5rt2OmIXXnTwgzxiTWDrat0S9MgQXQhsWGpX+l5yh1wCMOSjPUZXC77rLNCoXrYg9M
+        8hDHlMcyH7/jQknJAsHC3BLwBYzs9KSu7qCTbHxAF2EOiJuP1WK1XlaRUG62OaCZuRZcAF5fFKRKE
+        f8Vd5SUaZJmiUM8HfNmlsp8LMI/3hgRz7T71UweN/Z/4uNMwAI9xbqjvgUd1/39tt/Ois1if51zyY
+        re6SehpCObiovNuLhJerIYzajTNKW11MGi70OFhMrTQNiptFrZE8aZI+4rF7a1L2/SfJJS4d45dWl
+        9jmCy88w==;
+Received: from hch by casper.infradead.org with local (Exim 4.94 #2 (Red Hat Linux))
+        id 1lqBUs-00FZrq-NB; Mon, 07 Jun 2021 09:24:48 +0000
+Date:   Mon, 7 Jun 2021 10:24:38 +0100
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     linux-usb@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH] usb: dwc3: support 64 bit DMA in platform driver
+Message-ID: <YL3l1upzyU83+iL/@infradead.org>
+References: <20210606093629.69786-1-sven@svenpeter.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210606200911.32076-1-andy.shevchenko@gmail.com>
+In-Reply-To: <20210606093629.69786-1-sven@svenpeter.dev>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 06, 2021 at 11:09:09PM +0300, Andy Shevchenko wrote:
-> device_get_next_child_node() bumps a reference counting of a returned variable.
-> We have to balance it whenever we return to the caller.
-> 
-> Fixes: 6701adfa9693 ("usb: typec: driver for Intel PMC mux control")
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 46a25b8db72e..134325444e6a 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -645,6 +645,7 @@ static int pmc_usb_probe(struct platform_device *pdev)
->  	return 0;
->  
->  err_remove_ports:
-> +	fwnode_handle_put(fwnode);
+On Sun, Jun 06, 2021 at 11:36:29AM +0200, Sven Peter wrote:
+> +	/* Try to set 64-bit DMA first */
+> +	if (WARN_ON(!dwc->sysdev->dma_mask))
+> +		/* Platform did not initialize dma_mask */
+> +		ret = dma_coerce_mask_and_coherent(dwc->sysdev,
+> +						   DMA_BIT_MASK(64));
+> +	else
+> +		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
 
-Wouldn't it be more clear to do that in the condition that jumps to
-this lable?
+WARN_ON + fallback seems weird.  I'd suggest to just error out for the
+warn case.
 
->  	for (i = 0; i < pmc->num_ports; i++) {
->  		typec_switch_unregister(pmc->port[i].typec_sw);
->  		typec_mux_unregister(pmc->port[i].typec_mux);
-> -- 
-> 2.31.1
+> +	/* If seting 64-bit DMA mask fails, fall back to 32-bit DMA mask */
+> +	if (ret) {
+> +		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(32));
+> +		if (ret)
+> +			return ret;
+> +	}
 
--- 
-heikki
+Setting a 64-bit mask will not fail.  No need for the fallback.
