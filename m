@@ -2,82 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE7D739D747
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 10:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 308F239D78B
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 10:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbhFGI3i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 04:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S230127AbhFGIlW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 04:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbhFGI32 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 04:29:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39659C0613A2
-        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 01:27:37 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lqAbc-0004fJ-3X; Mon, 07 Jun 2021 10:27:32 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lqAbb-0006ob-Cm; Mon, 07 Jun 2021 10:27:31 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next v2 8/8] usbnet: run unbind() before unregister_netdev()
-Date:   Mon,  7 Jun 2021 10:27:27 +0200
-Message-Id: <20210607082727.26045-9-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20210607082727.26045-1-o.rempel@pengutronix.de>
-References: <20210607082727.26045-1-o.rempel@pengutronix.de>
+        with ESMTP id S229436AbhFGIlV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 04:41:21 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785BBC061766
+        for <linux-usb@vger.kernel.org>; Mon,  7 Jun 2021 01:39:30 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id k5-20020a05600c1c85b02901affeec3ef8so1699098wms.0
+        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 01:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B0Ls7RGiqur76yMNTl82bvhxlr41Kx4mSL6TwL2d7YQ=;
+        b=nuQeZOQt0mBwgyL5sQq/SdJ+2WpcNY6PUrumTx19Zvl4jKyOXAHgpZoPnRSFbBQ4Dc
+         7M5RPy6EVFNisdM0JL7JyjnmUM1kZSbC8IaXRafmZUz2BPM82wmR1VY3jaA0+AxySe5x
+         EuQ783hRMyd54uViWEN8+S3yjkHUNJWMXXJ36KGg/849YmyNQZkk9nQC6+wO/JTu4vxy
+         t/HPZq85FEB9aBWoHxbvFFiS7e3uxMrppHnJPK/JmTYoG5BBXPDf3vASLaLMZyjOdat1
+         MyOYiyZPyQ623w18N/7EVESK0KZIv3064aXog/nwGS+S3wPKtvcGiFHgH+TQIlhZX/Kd
+         BNuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B0Ls7RGiqur76yMNTl82bvhxlr41Kx4mSL6TwL2d7YQ=;
+        b=tIjIRPZDbonfG6UhqFuoZHENyvNHTeJYNIzk6Pg6kzKZ0TPoPMoQSyiZNXjpWvrJEl
+         VyhitWpPSnZML4IGZlHsiGhDeOFVjf3SMHtwtQVr2GfLvj6p+cRc67Ww3xqJ1S2jlrG+
+         mGvgyS9qh2KYsEjc/q6M9DDJC1TatOJx1ZTt294qFw2zuKSIBKJwDSDtRdiReKlFxY6j
+         kZ7tZpVGQjprWBJglFp3UHmC7k4vbgUZTiojLudsY5FltLn61CLWV5rlv4eWpwxbJdlx
+         +91aZ6Box032VzrnsI/WanluQLpFzOQiQQv9R3rz7ncr0r9FvCpAHFE9CO5qTodjg6cx
+         llrA==
+X-Gm-Message-State: AOAM5305/CSaEzdr4zv4aKHFSqy3uyWL+txER+Hq3QGQvoqbMqZvJiJs
+        cW9DDEHe7Nii4heV+rHx1qHzRA==
+X-Google-Smtp-Source: ABdhPJwlLwMrdXBwnoq1pGpXAY0Q6voXa8uOVmFUnMF7Dge4IrYWuxpLUiA4wVrcLyGopUh8Zm+XZw==
+X-Received: by 2002:a1c:43c3:: with SMTP id q186mr15709736wma.33.1623055169107;
+        Mon, 07 Jun 2021 01:39:29 -0700 (PDT)
+Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id n9sm13908794wmc.20.2021.06.07.01.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 01:39:28 -0700 (PDT)
+From:   Rui Miguel Silva <rui.silva@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-usb@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>
+Subject: [PATCH] MAINTAINERS: usb: add entry for isp1760
+Date:   Mon,  7 Jun 2021 09:39:21 +0100
+Message-Id: <20210607083921.38441-1-rui.silva@linaro.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-unbind() is the proper place to disconnect PHY, but it will fail if
-netdev is already unregistered.
+Giving support for isp1763 made a little revival to this driver, add
+entry in the MAINTAINERS file with me and Laurent Pinchart as
+maintainers.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
 ---
- drivers/net/usb/usbnet.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ MAINTAINERS | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index ecf62849f4c1..57a5a025255c 100644
---- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1597,6 +1597,9 @@ void usbnet_disconnect (struct usb_interface *intf)
- 		   xdev->bus->bus_name, xdev->devpath,
- 		   dev->driver_info->description);
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 503fd21901f1..254803fe599a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18869,6 +18869,14 @@ S:	Maintained
+ F:	drivers/usb/host/isp116x*
+ F:	include/linux/usb/isp116x.h
  
-+	if (dev->driver_info->unbind)
-+		dev->driver_info->unbind(dev, intf);
++USB ISP1760 DRIVER
++M:	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
++M:	Rui Miguel Silva <rui.silva@linaro.org>
++L:	linux-usb@vger.kernel.org
++S:	Maintained
++F:	drivers/usb/isp1760/*
++F:	Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
 +
- 	net = dev->net;
- 	unregister_netdev (net);
- 
-@@ -1604,9 +1607,6 @@ void usbnet_disconnect (struct usb_interface *intf)
- 
- 	usb_scuttle_anchored_urbs(&dev->deferred);
- 
--	if (dev->driver_info->unbind)
--		dev->driver_info->unbind (dev, intf);
--
- 	usb_kill_urb(dev->interrupt);
- 	usb_free_urb(dev->interrupt);
- 	kfree(dev->padding_pkt);
+ USB LAN78XX ETHERNET DRIVER
+ M:	Woojung Huh <woojung.huh@microchip.com>
+ M:	UNGLinuxDriver@microchip.com
 -- 
-2.29.2
+2.31.1
 
