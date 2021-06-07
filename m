@@ -2,96 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 789F439DBC0
-	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 13:53:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78B539DC61
+	for <lists+linux-usb@lfdr.de>; Mon,  7 Jun 2021 14:29:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhFGLz0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 07:55:26 -0400
-Received: from mail-ed1-f44.google.com ([209.85.208.44]:41696 "EHLO
-        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbhFGLzZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 07:55:25 -0400
-Received: by mail-ed1-f44.google.com with SMTP id g18so17980842edq.8
-        for <linux-usb@vger.kernel.org>; Mon, 07 Jun 2021 04:53:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NkT0qRHDK83AwCG1o0yHKyzYeQZeAEBfrbSqUE5BCWM=;
-        b=ahses5GZ0Bf+SGq2RXntVXxm6+T+nttMEFLrbBfx0UF2N+is1OxXoV6YVa88IhDXgJ
-         wZarI6kEBOwletzzvK2089uiMH+I3qa26S7/dnl2WAuDWzm58u1Lpf6jtzDH3pwJSbgN
-         mmuM4OaEdMansrqAOTRj4lSle6n1WB8UHsR7cXtvbNORSbImufcJt1YjHo8YcjUaQRFF
-         D5aHKF+c4KpHmawSvfKDvUqiPAmGBtWFU4S1sKuKQVVVUUQ/D3gSLhku9VHux9XjRpe5
-         +s+kkhwDr9vEWS7bb6vRZJSkmTOqQ5HT4e/6YtcEuA75vY+5O3kwgZ33wpQcDK8aXh9L
-         Yfbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NkT0qRHDK83AwCG1o0yHKyzYeQZeAEBfrbSqUE5BCWM=;
-        b=s+H3q4xDlK3Rim6Wfm+ZKs6zxoJf0tLyTHxlIOZo8GwoEKrGED7VirnYCfCycaHfge
-         CibosfWJRgo227Uf9z3HjupYlyYT7eEw1/kEIa3i//vpSb+Uc5mroEAE1p+p0P0FUx/c
-         t578iD+ruxQT923diKCK+pc6tH4/40B2C7OACHtKjP7Zl/POfAwa4LoGl6gxH3hdWrXT
-         HTXGpiJATzfHyGATTsGw9qxRdMMyQQx2N+b7j7NDGqe1+DfAYFrCJe/zQLP85+nLCQCP
-         TivLOwl2rDxQSfNdwMt5mTLR3uulNmK5VmI2Q7hwiOHzbonG6f9kQVrJnCgZZoO9CPk1
-         CUSg==
-X-Gm-Message-State: AOAM5330jofKRI9qoBlqFqtAiIdo8Egdqb6JiVhTeGyiMrduu5nMehvN
-        4dSU9eH9Yj/ZwHV8kCjYB29lelqLbh2ZFzdNr1s=
-X-Google-Smtp-Source: ABdhPJzkkKtiZbVXtyiy/EKFdp286OOH7WOHvsYA5QhjMZH+WmwZ23OmzT9l9eq4TAIe2unWR+o5vk04F3eOnEvXnIU=
-X-Received: by 2002:a05:6402:1771:: with SMTP id da17mr15580485edb.31.1623066742635;
- Mon, 07 Jun 2021 04:52:22 -0700 (PDT)
+        id S230289AbhFGMbK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 08:31:10 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:26207 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230209AbhFGMbJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 7 Jun 2021 08:31:09 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623068958; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=nnMaHTNW7V6t61B/K4XmaWZEIIl32P8m6s5d/Jz9Kmk=; b=FDSFbe1N46NI6KAjMOfGgt5+5PIrraWDwqE1oyuTAmdSA1gwYIirGbFc+/1ESnGgGwbqin5H
+ diBSu+nTQVemR3iNHPxqxdP3txdxX1oHbx+UpG/6FZ4AsGi/eL/aKU3QbPsGg5w3FVBipbUN
+ XZYCOjqIFY0d3EE8hR1zFvUGwxY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
+ 60be11086ddc3305c4e2c860 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 07 Jun 2021 12:28:56
+ GMT
+Sender: linyyuan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 89783C43217; Mon,  7 Jun 2021 12:28:55 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost.localdomain (unknown [101.87.142.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: linyyuan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4B495C433D3;
+        Mon,  7 Jun 2021 12:28:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 4B495C433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
+From:   Linyu Yuan <linyyuan@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Linyu Yuan <linyyuan@codeaurora.com>
+Subject: [PATCH][v2] usb: gadget: eem: fix wrong eem header operation
+Date:   Mon,  7 Jun 2021 20:28:25 +0800
+Message-Id: <20210607122825.3210-1-linyyuan@codeaurora.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210607110030.38664-1-mika.westerberg@linux.intel.com>
-In-Reply-To: <20210607110030.38664-1-mika.westerberg@linux.intel.com>
-From:   Yehezkel Bernat <yehezkelshb@gmail.com>
-Date:   Mon, 7 Jun 2021 14:52:06 +0300
-Message-ID: <CA+CmpXs3B-5KPzBjmyEtpY0or+0B_KHyeguFCqXuVitbqkHJug@mail.gmail.com>
-Subject: Re: [PATCH 0/5] thunderbolt: Support for Intel Alder Lake and improvements
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        kernel test robot <lkp@intel.com>,
-        Gil Fine <gil.fine@intel.com>,
-        Azhar Shaikh <azhar.shaikh@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 7, 2021 at 2:00 PM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi all,
->
-> This series adds support for Intel Alder Lake which is the successor of
-> Tiger Lake. The integrated Thunderbolt/USB4 controller is pretty close to
-> the one found in Tiger Lake too.
->
-> In addition there are few improvements for issues reported by Dan Carpenter
-> and kernel test robot.
->
-> The series applies on top of thunderbolt.git/next.
->
-> Azhar Shaikh (1):
->   thunderbolt: Add support for Intel Alder Lake
->
-> Gil Fine (1):
->   thunderbolt: Poll 10ms for REG_FW_STS_NVM_AUTH_DONE to be set
->
-> Mika Westerberg (3):
->   thunderbolt: Bond lanes only when dual_link_port != NULL in alloc_dev_default()
->   thunderbolt: Add device links only when software connection manager is used
->   thunderbolt: No need to include <linux/acpi.h> in usb4_port.c
->
->  drivers/thunderbolt/icm.c       | 20 ++++++----
->  drivers/thunderbolt/nhi.c       | 71 ++-------------------------------
->  drivers/thunderbolt/nhi.h       |  2 +
->  drivers/thunderbolt/tb.c        | 67 +++++++++++++++++++++++++++++++
->  drivers/thunderbolt/test.c      | 22 +++++-----
->  drivers/thunderbolt/usb4_port.c |  1 -
->  6 files changed, 97 insertions(+), 86 deletions(-)
->
+From: Linyu Yuan <linyyuan@codeaurora.com>
 
- Reviewed-by: Yehezkel Bernat <YehezkelShB@gmail.com>
+when skb_clone() or skb_copy_expand() fail,
+it should pull skb with lengh indicated by header,
+or not it will read network data and check it as header.
+
+Signed-off-by: Linyu Yuan <linyyuan@codeaurora.com>
+---
+ drivers/usb/gadget/function/f_eem.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/function/f_eem.c
+index cfcc4e81fb77..28dd5f1fd106 100644
+--- a/drivers/usb/gadget/function/f_eem.c
++++ b/drivers/usb/gadget/function/f_eem.c
+@@ -495,7 +495,7 @@ static int eem_unwrap(struct gether *port,
+ 			skb2 = skb_clone(skb, GFP_ATOMIC);
+ 			if (unlikely(!skb2)) {
+ 				DBG(cdev, "unable to unframe EEM packet\n");
+-				continue;
++				goto next;
+ 			}
+ 			skb_trim(skb2, len - ETH_FCS_LEN);
+ 
+@@ -505,7 +505,7 @@ static int eem_unwrap(struct gether *port,
+ 						GFP_ATOMIC);
+ 			if (unlikely(!skb3)) {
+ 				dev_kfree_skb_any(skb2);
+-				continue;
++				goto next;
+ 			}
+ 			dev_kfree_skb_any(skb2);
+ 			skb_queue_tail(list, skb3);
+-- 
+2.25.1
+
