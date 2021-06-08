@@ -2,106 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5555039FEB9
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 20:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287EC39FEEF
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 20:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbhFHSNa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Jun 2021 14:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231935AbhFHSN2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 14:13:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB86C061574
-        for <linux-usb@vger.kernel.org>; Tue,  8 Jun 2021 11:11:34 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lqgCH-0000FC-QN; Tue, 08 Jun 2021 20:11:29 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lqgCH-000412-6e; Tue, 08 Jun 2021 20:11:29 +0200
-Date:   Tue, 8 Jun 2021 20:11:29 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Colin King <colin.king@canonical.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2][next] net: usb: asix: ax88772: net: Fix less than
- zero comparison of a u16
-Message-ID: <20210608181129.7mnuba6dcaemslul@pengutronix.de>
-References: <20210608152249.160333-1-colin.king@canonical.com>
- <20210608152249.160333-2-colin.king@canonical.com>
+        id S233935AbhFHSWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Jun 2021 14:22:33 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:60027 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233348AbhFHSWc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 14:22:32 -0400
+Received: (qmail 1813769 invoked by uid 1000); 8 Jun 2021 14:20:38 -0400
+Date:   Tue, 8 Jun 2021 14:20:38 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        ierturk@ieee.org
+Subject: Re: Strange problem with USB device
+Message-ID: <20210608182038.GA1812516@rowland.harvard.edu>
+References: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210608152249.160333-2-colin.king@canonical.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 20:00:59 up 188 days,  8:07, 50 users,  load average: 0.04, 0.03,
- 0.00
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 04:22:49PM +0100, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On Tue, Jun 08, 2021 at 12:41:23PM -0500, Larry Finger wrote:
+> Hi,
 > 
-> The comparison of the u16 priv->phy_addr < 0 is always false because
-> phy_addr is unsigned. Fix this by assigning the return from the call
-> to function asix_read_phy_addr to int ret and using this for the
-> less than zero error check comparison.
+> In https://bugzilla.suse.com/show_bug.cgi?id=1186889, a user is
+> reporting that his Bluetooth component of a Realtek RTL8822CE is not
+
+Is that a USB device?  That is, does it connect to the computer 
+via a USB cable?  I'll assume it does...
+
+> being found in openSUSE's kernel 5.3.18. His lsusb scan is as follows:
 > 
-> Addresses-Coverity: ("Unsigned compared against 0")
-> Fixes: 7e88b11a862a ("net: usb: asix: refactor asix_read_phy_addr() and handle errors on return")
-
-Here is wrong Fixes tag. This assignment was bogus before this patch.
-
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/net/usb/ax88172a.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> $ lsusb
+> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+> Bus 001 Device 003: ID 13d3:56c9 IMC Networks HP TrueVision HD Camera
+> Bus 001 Device 002: ID 045e:07fd Microsoft Corp. Nano Transceiver 1.1
+> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 > 
-> diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
-> index 2e2081346740..e24773bb9398 100644
-> --- a/drivers/net/usb/ax88172a.c
-> +++ b/drivers/net/usb/ax88172a.c
-> @@ -205,7 +205,8 @@ static int ax88172a_bind(struct usbnet *dev, struct usb_interface *intf)
->  		goto free;
->  	}
->  
-> -	priv->phy_addr = asix_read_phy_addr(dev, priv->use_embdphy);
-> +	ret = asix_read_phy_addr(dev, priv->use_embdphy);
-> +	priv->phy_addr = ret;
-
-Ah.. it is same bug in different color :)
-You probably wonted to do:
-	if (ret < 0)
-		goto free;
-
-	priv->phy_addr = ret;
-
->  	if (priv->phy_addr < 0) {
->  		ret = priv->phy_addr;
->  		goto free;
-> -- 
-> 2.31.1
+> The Bluetooth device is found and works in Windows 10, where the Device
+> Manager reports hardware ID's of 0bda:b00c. This combination is in
+> driver btusb.
 > 
-> 
+> Is there a bug in the USB bus scan in kernel 5.3.18 that has since been
+> fixed, or is there still a bug that misses this device?
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Given only the information you have provided, it is impossible to 
+answer that question.  Broadly speaking, lots of bugs in the USB 
+subsystem have been fixed since kernel 5.3.18, but I don't know 
+if any of them would affect detecting new devices on the bus like 
+this.
+
+One thing you might try is to turn on USB debugging before 
+plugging in the device:
+
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+
+The additional information this adds to the dmesg log may be 
+helpful.
+
+Alan Stern
