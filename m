@@ -2,142 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B69039FCD2
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 18:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8423A39FDED
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 19:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232982AbhFHQwC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Jun 2021 12:52:02 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:23007 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232933AbhFHQwB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Jun 2021 12:52:01 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623171008; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=EPeBBDVg4zoe90Bs4rHzNFvF0gnJwZnIY9ZIr01e01g=; b=Tp7P5xRlfh6PHvnu6NLQB+AguUTSVbVbf/iRh/Ff+Al54w2NnmKk+gnVr+QFcc5kOoudfBpK
- DxAhjHRyXgIw1pbK09oSFXjD5/pAmfE8hTuUo4QPoTDWPY201T+CkjLtD4hc4r5IHDTMUNHX
- vVvxK3qRZl9yUqJ/Lz6BWQw9+ug=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
- 60bf9fbfabfd22a3dcde93ff (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 08 Jun 2021 16:50:07
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 8E85CC433F1; Tue,  8 Jun 2021 16:50:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9C4A1C4338A;
-        Tue,  8 Jun 2021 16:50:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9C4A1C4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Tue, 8 Jun 2021 09:50:01 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     balbi@kernel.org, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 1/1] usb: dwc3: core: fix kernel panic when do reboot
-Message-ID: <20210608164933.GA2601@jackp-linux.qualcomm.com>
-References: <20210608105656.10795-1-peter.chen@kernel.org>
+        id S233817AbhFHRnT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Jun 2021 13:43:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233407AbhFHRnS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 13:43:18 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89621C061574;
+        Tue,  8 Jun 2021 10:41:25 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id w23-20020a9d5a970000b02903d0ef989477so16722829oth.9;
+        Tue, 08 Jun 2021 10:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=/sggUjKo4ERU4nDD0hl9g9wOyDxCbIlg3GFVLsbW8R0=;
+        b=EqCboDcS3h7/bZhJx1HNnUBUbiPHY3zU0uwxmBYnphB/NbhP3FJ9UX1PC4htg7pDbY
+         SnusgUcXxyV74u0iY9wb3ebXGjDiUoj61ZxOxegxlsXd7U0zjBonJwVCFhzlODj4zA00
+         JGlKj2bYMtOBgc1RWhhA14vK35rhZwx5J4vpo8v4Vo4JCr+kgu9lZlRVKKX/bgOVUrOO
+         i7rSMwPsXwrMa2LNnGdNwvFK9vNLldFD0qBU+ctwSMNJb9Tk540rbdLDBMAFtMgJWN0U
+         fh0RRo7iZHjBT8P25DvPQzlXUsphAAO3/K1UJwQXmx+am9QHWYxGRomgwm1a0RzjfX1K
+         RxsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:to:cc:from:subject:message-id:date
+         :user-agent:mime-version:content-language:content-transfer-encoding;
+        bh=/sggUjKo4ERU4nDD0hl9g9wOyDxCbIlg3GFVLsbW8R0=;
+        b=c6DDcrc1gQjfLf2F5HUgQA3xdV/DuTvLATR+rz9mozfa8zRajR6Z7oqvNfvZKEhxpC
+         n/3Q32D+IIvgxA6kknap4lWFCSj3tEW4Wecn+PmSrPrWAZ7h+xdRjbj4lb8GqJ0Nppm+
+         IWP568E+nwX8b16fTXhgq27apbBA2rIUDSAtWIMh/365/83QQyWOnEbDyKJu1UCGx53h
+         sjykcRXvHr93Q5BUA9QT9mG6sBYde0TKHRUejWkSK5htVajEmXJX92j5xkoq7CNbDqG1
+         V/qbvIPPEPKD6SlljAzNOFC6xjFeZEb52RohBnX5KjJmfrz0yIVBrLWnQuzihUA731om
+         PCmg==
+X-Gm-Message-State: AOAM532nX1WuwushLPsilfwVwlHmGfnbZBXYEpzG9xfiILgAbVe5/sdR
+        0JKRmQWYz/pXGuhDY1yELPI=
+X-Google-Smtp-Source: ABdhPJyjPrkBTCH5CCqvLhr5CJ8xpPzjN9UfP2QdyobLcoO8qj382Qb3bPg/pKthTSA9W6Y3euED+w==
+X-Received: by 2002:a9d:4911:: with SMTP id e17mr19358922otf.38.1623174084930;
+        Tue, 08 Jun 2021 10:41:24 -0700 (PDT)
+Received: from localhost.localdomain (cpe-24-31-245-230.kc.res.rr.com. [24.31.245.230])
+        by smtp.gmail.com with ESMTPSA id m18sm2114905otr.61.2021.06.08.10.41.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 10:41:24 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+To:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Cc:     ierturk@ieee.org
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+Subject: Strange problem with USB device
+Message-ID: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
+Date:   Tue, 8 Jun 2021 12:41:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210608105656.10795-1-peter.chen@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+Hi,
 
-On Tue, Jun 08, 2021 at 06:56:56PM +0800, Peter Chen wrote:
-> When do system reboot, it calls dwc3_shutdown and the whole debugfs
-> for dwc3 has removed first, when the gadget tries to do deinit, and
-> remove debugfs for its endpoints, it meets NULL pointer dereference
-> issue when call debugfs_lookup. Fix it by removing the whole dwc3
-> debugfs later than dwc3_drd_exit.
+In https://bugzilla.suse.com/show_bug.cgi?id=1186889, a user is reporting that 
+his Bluetooth component of a Realtek RTL8822CE is not being found in openSUSE's 
+kernel 5.3.18. His lsusb scan is as follows:
 
-Ouch, thanks for catching this! I think in your previous reply[1] you
-did warn about the debugfs_remove_recursive() getting called twice, but
-it seems here the issue is due to the debugfs_lookup() getting called on
-a stale dwc->root pointer after it was already removed.
+$ lsusb
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 13d3:56c9 IMC Networks HP TrueVision HD Camera
+Bus 001 Device 002: ID 045e:07fd Microsoft Corp. Nano Transceiver 1.1
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
 
-Fortunately this is slightly mitigated due to the recent revert commit
-8f11fe7e4068[2]. So at least we might avoid the problem on the shutdown
-path since remove won't get called. However it can still trigger if
-dwc3_remove() is called in another way (driver unbind, module removal).
+The Bluetooth device is found and works in Windows 10, where the Device Manager 
+reports hardware ID's of 0bda:b00c. This combination is in driver btusb.
 
-[1] https://lore.kernel.org/linux-usb/20210601070744.GA9087@nchen/
-[2] https://lore.kernel.org/r/20210603151742.298243-1-alexandru.elisei@arm.com
+Is there a bug in the USB bus scan in kernel 5.3.18 that has since been fixed, 
+or is there still a bug that misses this device?
 
-> [ 2924.958838] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000002
-> ....
-> [ 2925.030994] pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
-> [ 2925.037005] pc : inode_permission+0x2c/0x198
-> [ 2925.041281] lr : lookup_one_len_common+0xb0/0xf8
-> [ 2925.045903] sp : ffff80001276ba70
-> [ 2925.049218] x29: ffff80001276ba70 x28: ffff0000c01f0000 x27: 0000000000000000
-> [ 2925.056364] x26: ffff800011791e70 x25: 0000000000000008 x24: dead000000000100
-> [ 2925.063510] x23: dead000000000122 x22: 0000000000000000 x21: 0000000000000001
-> [ 2925.070652] x20: ffff8000122c6188 x19: 0000000000000000 x18: 0000000000000000
-> [ 2925.077797] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000004
-> [ 2925.084943] x14: ffffffffffffffff x13: 0000000000000000 x12: 0000000000000030
-> [ 2925.092087] x11: 0101010101010101 x10: 7f7f7f7f7f7f7f7f x9 : ffff8000102b2420
-> [ 2925.099232] x8 : 7f7f7f7f7f7f7f7f x7 : feff73746e2f6f64 x6 : 0000000000008080
-> [ 2925.106378] x5 : 61c8864680b583eb x4 : 209e6ec2d263dbb7 x3 : 000074756f307065
-> [ 2925.113523] x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffff8000122c6188
-> [ 2925.120671] Call trace:
-> [ 2925.123119]  inode_permission+0x2c/0x198
-> [ 2925.127042]  lookup_one_len_common+0xb0/0xf8
-> [ 2925.131315]  lookup_one_len_unlocked+0x34/0xb0
-> [ 2925.135764]  lookup_positive_unlocked+0x14/0x50
-> [ 2925.140296]  debugfs_lookup+0x68/0xa0
-> [ 2925.143964]  dwc3_gadget_free_endpoints+0x84/0xb0
-> [ 2925.148675]  dwc3_gadget_exit+0x28/0x78
-> [ 2925.152518]  dwc3_drd_exit+0x100/0x1f8
-> [ 2925.156267]  dwc3_remove+0x11c/0x120
-> [ 2925.159851]  dwc3_shutdown+0x14/0x20
-> [ 2925.163432]  platform_shutdown+0x28/0x38
-> [ 2925.167360]  device_shutdown+0x15c/0x378
-> [ 2925.171291]  kernel_restart_prepare+0x3c/0x48
-> [ 2925.175650]  kernel_restart+0x1c/0x68
-> [ 2925.179316]  __do_sys_reboot+0x218/0x240
-> [ 2925.183247]  __arm64_sys_reboot+0x28/0x30
-> [ 2925.187262]  invoke_syscall+0x48/0x100
-> [ 2925.191017]  el0_svc_common.constprop.0+0x48/0xc8
-> [ 2925.195726]  do_el0_svc+0x28/0x88
-> [ 2925.199045]  el0_svc+0x20/0x30
-> [ 2925.202104]  el0_sync_handler+0xa8/0xb0
-> [ 2925.205942]  el0_sync+0x148/0x180
-> [ 2925.209270] Code: a9025bf5 2a0203f5 121f0056 370802b5 (79400660)
-> [ 2925.215372] ---[ end trace 124254d8e485a58b ]---
-> [ 2925.220012] Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> [ 2925.227676] Kernel Offset: disabled
-> [ 2925.231164] CPU features: 0x00001001,20000846
-> [ 2925.235521] Memory Limit: none
-> [ 2925.238580] ---[ end Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b ]---
-> 
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Fixes: 5ff90af9da8f ("usb: dwc3: debugfs: Add and remove endpoint dirs dynamically")
-> Signed-off-by: Peter Chen <peter.chen@kernel.org>
+Thanks,
 
-You can also add
+Larry
 
-Tested-by: Jack Pham <jackp@codeaurora.org>
 
-Thanks again and sorry for the regression!
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
