@@ -2,143 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD84F39EA68
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 01:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C2D39EB08
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 02:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbhFGXwE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 7 Jun 2021 19:52:04 -0400
-Received: from mail.palosanto.com ([181.39.87.190]:34392 "EHLO palosanto.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230209AbhFGXwE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 7 Jun 2021 19:52:04 -0400
-Received: from localhost (mail.palosanto.com [127.0.0.1])
-        by palosanto.com (Postfix) with ESMTP id 01ECB13C1BC4;
-        Mon,  7 Jun 2021 18:50:09 -0500 (-05)
-X-Virus-Scanned: Debian amavisd-new at mail.palosanto.com
-Received: from palosanto.com ([127.0.0.1])
-        by localhost (mail.palosanto.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 7H-5nJ4S9NZS; Mon,  7 Jun 2021 18:50:05 -0500 (-05)
-Received: from [192.168.0.2] (unknown [191.99.2.15])
-        by palosanto.com (Postfix) with ESMTPSA id C924513C175B;
-        Mon,  7 Jun 2021 18:50:03 -0500 (-05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=palosanto.com;
-        s=mail; t=1623109805;
-        bh=KItwyjvh+YCdp8ElncY8DXbsSIpx+c/+xQL0vqEMikM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ESlVytpTKbzhWdcv6WvuFx/3tERKambYZZLDWfoScI3gm7dMRAosU1uu/OBbc5KhM
-         HkKMt7kqf115S/CdWBCBDk7PCUb0hWsHbJC0B2Sb1BiKdPXBf6IkuuvVgI2gXxQlSc
-         djFvS3nKjuIZ0HO5pRhnT9uLVKDT7+NS9cA3FXHQ=
-Subject: Re: cp210x module broken in 5.12.5 and 5.12.6, works in 5.11.21 (with
- bisection)
-To:     David Frey <dpfrey@gmail.com>, Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, Pho Tran <pho.tran@silabs.com>,
-        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com
-References: <YLXmrmW9/fB1WbzR@hovoldconsulting.com>
- <2881bd97-f790-c4d6-aed6-de9ab8cd1a9e@palosanto.com>
- <YLZVAmYxFZ1Q/nrH@hovoldconsulting.com>
- <60705932-860a-701c-1019-16f9e16c39dd@palosanto.com>
- <YLeapcNbvExeGKuE@hovoldconsulting.com>
- <cb99a25e-5758-051c-afb6-29d8ef26ee0b@palosanto.com>
- <YLpJzTmAnfsrE7UP@hovoldconsulting.com>
- <CAAvkfd-vmi_VJrCQg-ktF+sZZUfb5J+DJfjHv=TdVafyj1m1Ew@mail.gmail.com>
- <YLtOL5aZUnntfqWB@hovoldconsulting.com>
- <CAAvkfd-o+g2_uc-HqK8svrU_E3NB1m03md8J_F_eTc8pDkXmdQ@mail.gmail.com>
- <YL5O6/GrlnpNwGjT@hovoldconsulting.com>
- <CAAvkfd91cdQ-6RwGErJuBTwQh9=8cajbngcOgjsThnFruz27DQ@mail.gmail.com>
- <CAAvkfd-mnb-g_ANwXeMn03rDfOSJrFkCREtPMGB=KZOUDg4gKg@mail.gmail.com>
-From:   =?UTF-8?Q?Alex_Villac=c3=ads_Lasso?= <a_villacis@palosanto.com>
-Message-ID: <9f7e4dac-dc1c-2011-2ddd-5debd32539fb@palosanto.com>
-Date:   Mon, 7 Jun 2021 18:50:05 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S230494AbhFHAzn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 7 Jun 2021 20:55:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230266AbhFHAzn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 7 Jun 2021 20:55:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A3FC061574;
+        Mon,  7 Jun 2021 17:53:51 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id md2-20020a17090b23c2b029016de4440381so1156969pjb.1;
+        Mon, 07 Jun 2021 17:53:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m6uCAgEmRBvwgNVPuMnu8ZzA3zqXUQKko37CRRAo32U=;
+        b=DxBRAnjdlGnKI0c5WbmCz4z21w/1VTwspI1UzQ1p/QxpQ7ZpsCAXPhNKkrTjthK9Im
+         yJE+Wvjr//vI9YRjVhd6m8gYcBLY1x2XZ1RXU3l8PmIqKXhj8MlSKr7GfAiA1o054WJl
+         69riA84U05mkiS7kgnn07zVgw9CAnysdQ/Vw2RlEeaoQv9ukRP0o/o7jqUwRBYEVgbuW
+         I8D2ixgHO45Fs+HeX7js3bttWkEKRU9IN6eObbplZ169JTxNXE0fVQul0ZBkcDYPpDTf
+         iS3au9O47u7PQy7Jo5sCrlba+Gjrf6PNuYhF4QsG9Qux0tCrU86i8lOrPk2IzsVwCHbd
+         Fs3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m6uCAgEmRBvwgNVPuMnu8ZzA3zqXUQKko37CRRAo32U=;
+        b=lUjkBw4IFPCDoprs2Has/vkkpCeZstAa+V3MkrqjG6tNDdi1NzCTq2S6FVnJlBfwkW
+         hByQHbI0RpW3hS6v0sijh1EUnXdRkPeqUxBIc/OTGJJCcdxMnyqGJxYn4yNL1oLJWu0Q
+         ZSLO1KC7uNZveZ1dVkbh57hhO0FxxUvqhR4ZDa2BDw8fxdeGcutCtU8s7KuPlrcExRXI
+         eelgHV+WJLsp0bhhd8zNTd+JjpVvPFNT2LBktKVnl280ctHQ8+y2XwjP0jWp77UCBkq9
+         KcP3efhDTb+kf3nz2R9XrQodu9FPVKkJ8kHGjb6cWtjLs9VOuxhAP5d2CA2eCrP0ZxY4
+         VeiA==
+X-Gm-Message-State: AOAM531emRe6S82bbnD47TsQ4txPjPD5un7/NZcw9tZYn4zOkvZhgVSU
+        nE1Pa7KkcOx+hklBlrHXiWI=
+X-Google-Smtp-Source: ABdhPJwtAcFvqkph1cTg5IvbJrhX60lTqttu5NMTKEr9TMwmaxH1u+/uw630JwmoNpyCuHSt9HdqPg==
+X-Received: by 2002:a17:90a:ea14:: with SMTP id w20mr1881028pjy.65.1623113631254;
+        Mon, 07 Jun 2021 17:53:51 -0700 (PDT)
+Received: from athina.mtv.corp.google.com ([2620:15c:211:0:34c3:22d8:b92a:ddfa])
+        by smtp.gmail.com with ESMTPSA id y5sm9313181pfb.19.2021.06.07.17.53.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Jun 2021 17:53:50 -0700 (PDT)
+From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Brooke Basile <brookebasile@gmail.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Yauheni Kaliuta <yauheni.kaliuta@nokia.com>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>
+Subject: [PATCH] f_ncm: ncm_bitrate (speed) is unsigned
+Date:   Mon,  7 Jun 2021 17:53:44 -0700
+Message-Id: <20210608005344.3762668-1-zenczykowski@gmail.com>
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
 MIME-Version: 1.0
-In-Reply-To: <CAAvkfd-mnb-g_ANwXeMn03rDfOSJrFkCREtPMGB=KZOUDg4gKg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-El 7/6/21 a las 15:44, David Frey escribió:
-> On Mon, Jun 7, 2021 at 11:02 AM David Frey <dpfrey@gmail.com> wrote:
->> I made a bit of progress.  I found that CP210xManufacturing.dll was
->> bundled with Simplicity Studio and in the same folder as the DLL was
->> inspect_usbxpress.exe.  It looks like that tool is able to report the
->> firmware version of the device.  In the output below, the first run is
->> against the device that I am able to program successfully on any
->> kernel and that shows firmware 1.0.6.  The second run is against a
->> device that I can't program and it shows firmware version 1.0.4.  I
->> recall reading some information that 1.0.6 is A02 and that 1.0.4 is
->> A01, but I think there might have been another firmware revision
->> that's also A01 (maybe 1.0.2?).  I can't find the source of this
->> information anymore.  I'm going to try to figure out how to use
->> wireshark to capture USB traffic now.
->>
->> C:\SiliconLabs\SimplicityStudio\v5\developer\adapter_packs\inspect_usbxpress>.\inspect_usbxpress.exe
->> -slist
->> serial_no =
->> deviceCount = 1
->> device (0) {
->>    SoftIndex = 0
->>    adapterLabel = CP2102N USB to UART Bridge Controller (ID:0)
->>    SerialNo = 1017bfe99d98e8118ea47540c3e5cfbd
->>    Vid = 0
->>    Pid = 0
->>    PartNumber = 32
->>    BoardID =
->>    BoardCount = 0
->>    FirmwareVersion = 1.0.6
->>    Name = cp2102N version 1.0.6
->>    Type = CP210x
->>    Family = USBXpress
->>    Locked = 1
->> }
->>
->> C:\SiliconLabs\SimplicityStudio\v5\developer\adapter_packs\inspect_usbxpress>.\inspect_usbxpress.exe
->> -slist
->> serial_no =
->> deviceCount = 1
->> device (0) {
->>    SoftIndex = 0
->>    adapterLabel = CP2102N USB to UART Bridge Controller (ID:0)
->>    SerialNo = f06e721e74e1ea11bd9ddc2d9a583cc7
->>    Vid = 0
->>    Pid = 0
->>    PartNumber = 32
->>    BoardID =
->>    BoardCount = 0
->>    FirmwareVersion = 1.0.4
->>    Name = cp2102N version 1.0.4
->>    Type = CP210x
->>    Family = USBXpress
->>    Locked = 1
->> }
-> I configured wireshark on Windows to capture the USB traffic and I ran
-> the inspect_usbxpress.exe.  I believe the request/response where the
-> firmware version is provided is in packets 38/39 in the attached
-> trace.  Perhaps the mailing list will strip the trace, so I will
-> describe it a bit.
->
-> Setup packet:
->    bmRequestType: 0xC0 (device-to-host, vendor, device recipient)
->    bRequest: 255
->    wValue: 0x0010
->    wIndex: 0
->    wLength: 3
->
-> Response Data: {0x01, 0x00, 0x04}
->
-> When I captured the trace for the other device, the response data was
-> {0x01, 0x00, 0x06} indicating firmware version 1.0.6.
->
-> Let me know if there is any other information I can provide.
+From: Maciej Żenczykowski <maze@google.com>
 
-Yes! This is exactly the information required to query the firmware. Now 
-a patch should be made that calls cp210x_read_vendor_block(), which 
-internally uses CP210X_VENDOR_SPECIFIC (0xFF) with a #define 
-CP210X_READ_FIRMWARE_VER    0x0010, and a 3-byte buffer that will 
-contain the firmware version. Then the driver will refrain from 
-programming the XON/XOFF limits if the firmware version is not the fixed 
-one.
+[  190.544755] configfs-gadget gadget: notify speed -44967296
+
+This is because 4250000000 - 2**32 is -44967296.
+
+Cc: Brooke Basile <brookebasile@gmail.com>
+Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lorenzo Colitti <lorenzo@google.com>
+Cc: Yauheni Kaliuta <yauheni.kaliuta@nokia.com>
+Cc: Linux USB Mailing List <linux-usb@vger.kernel.org>
+Fixes: 9f6ce4240a2b ("usb: gadget: f_ncm.c added")
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+---
+ drivers/usb/gadget/function/f_ncm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
+index 019bea8e09cc..0d23c6c11a13 100644
+--- a/drivers/usb/gadget/function/f_ncm.c
++++ b/drivers/usb/gadget/function/f_ncm.c
+@@ -583,7 +583,7 @@ static void ncm_do_notify(struct f_ncm *ncm)
+ 		data[0] = cpu_to_le32(ncm_bitrate(cdev->gadget));
+ 		data[1] = data[0];
+ 
+-		DBG(cdev, "notify speed %d\n", ncm_bitrate(cdev->gadget));
++		DBG(cdev, "notify speed %u\n", ncm_bitrate(cdev->gadget));
+ 		ncm->notify_state = NCM_NOTIFY_CONNECT;
+ 		break;
+ 	}
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
 
