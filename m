@@ -2,69 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287EC39FEEF
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 20:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E8539FFB8
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 20:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233935AbhFHSWd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Jun 2021 14:22:33 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60027 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233348AbhFHSWc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 14:22:32 -0400
-Received: (qmail 1813769 invoked by uid 1000); 8 Jun 2021 14:20:38 -0400
-Date:   Tue, 8 Jun 2021 14:20:38 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
+        id S234565AbhFHSfo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Jun 2021 14:35:44 -0400
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:41686 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234682AbhFHSd4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 14:33:56 -0400
+Received: by mail-ot1-f50.google.com with SMTP id 36-20020a9d0ba70000b02902e0a0a8fe36so21291713oth.8;
+        Tue, 08 Jun 2021 11:32:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Oh1ALOBdiSICov5E64J+w95vSj9YVwXhKnwHIm+LmsM=;
+        b=H2PPCtO+EexlXhQXuVkhrtgGp0ETqvRJAGFfjY+MHzML0GPplHXm9ygGlHaMCwtoL3
+         2nKgCNIsnpFft7xKOgrskjXQkhB9HhFo/jwscuc48c8EEiNwWnEpRZ1bQu9psR63DcU7
+         Rws+cJsCLojeioBmJPQ1oXhaiBtPLddO00lsR0xOd9mqnX5Pn1sAQ1HNjNqfrYRxMzyO
+         8ijuUD8wHBUvPLSiheDlsLi/HA7RupFwm30tz/ZpSyds4CD8rt/ZrfKwt2ikVWd8TP3D
+         sfDHXv13r/I9C2g8sUDmUsAz3Wtvu48wjMzka6RmbTawPZuG5Djl0a94SSt/R9PuiYFa
+         +Jcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Oh1ALOBdiSICov5E64J+w95vSj9YVwXhKnwHIm+LmsM=;
+        b=Js6RrP1LAYC4gI+4OQVFI8ayg5sPl/eAvDfMD+XUxVnAzmvXlmt+ZN3uYYJZQ38ojn
+         CbKtKoudZyO5mJArpXAuHg9voTJ1OLPfKvELkMcjGxUXBlgOi0/SxKA55WZ8dAVTa8uw
+         bHXmNI53G9ZxXdMEdxRLVsblGA1QLcEn+6YNEhmaoyKx+8o9jlmTVrAMNUwG5iUtG248
+         euHZygzNdHnmXZ1r1i/6O+SfVuXz8QM+/1uu5appLX7Z+Pn8e+PPVlck+l4PRcUORYIe
+         txNnKi4cJkrnPkVTwsKfYI3dDRJ47HmVMSljj4JJq33tAZP2UAyx25ZneW18jsgYoqE4
+         vkIQ==
+X-Gm-Message-State: AOAM532L8n5WzOcpMtuXvoUzAPR4dI7ftBvkbQP4bi/bsgfJxP3tWYC/
+        MyXL8oV9lt7mkQXjgfyFaXjZTRf4Sek=
+X-Google-Smtp-Source: ABdhPJwoimhZDFBmHPUi2kfeq6UIdwZ3u5xg8+fRuPOH08pN85Z9uGNRFc7ALrzSus0cjZ+0ctANAw==
+X-Received: by 2002:a9d:2904:: with SMTP id d4mr18847414otb.238.1623177063222;
+        Tue, 08 Jun 2021 11:31:03 -0700 (PDT)
+Received: from localhost.localdomain (cpe-24-31-245-230.kc.res.rr.com. [24.31.245.230])
+        by smtp.gmail.com with ESMTPSA id f63sm188594otb.36.2021.06.08.11.31.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Jun 2021 11:31:02 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Subject: Re: Strange problem with USB device
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
         ierturk@ieee.org
-Subject: Re: Strange problem with USB device
-Message-ID: <20210608182038.GA1812516@rowland.harvard.edu>
 References: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
+ <YL+veAlZSCrniOyl@kroah.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+Message-ID: <5299a951-7d58-24e7-80da-56e72f65430d@lwfinger.net>
+Date:   Tue, 8 Jun 2021 13:31:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <YL+veAlZSCrniOyl@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 12:41:23PM -0500, Larry Finger wrote:
-> Hi,
+On 6/8/21 12:57 PM, Greg KH wrote:
 > 
-> In https://bugzilla.suse.com/show_bug.cgi?id=1186889, a user is
-> reporting that his Bluetooth component of a Realtek RTL8822CE is not
-
-Is that a USB device?  That is, does it connect to the computer 
-via a USB cable?  I'll assume it does...
-
-> being found in openSUSE's kernel 5.3.18. His lsusb scan is as follows:
+> Loads of things have changed since 5.3.18, that was a long time ago :)
 > 
-> $ lsusb
-> Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 001 Device 003: ID 13d3:56c9 IMC Networks HP TrueVision HD Camera
-> Bus 001 Device 002: ID 045e:07fd Microsoft Corp. Nano Transceiver 1.1
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> The Bluetooth device is found and works in Windows 10, where the Device
-> Manager reports hardware ID's of 0bda:b00c. This combination is in
-> driver btusb.
-> 
-> Is there a bug in the USB bus scan in kernel 5.3.18 that has since been
-> fixed, or is there still a bug that misses this device?
+> Are you sure this device doesn't need a "magic" command sent to it in
+> order for it to show up as a USB device on the bus?  That sometimes
+> happens :(
 
-Given only the information you have provided, it is impossible to 
-answer that question.  Broadly speaking, lots of bugs in the USB 
-subsystem have been fixed since kernel 5.3.18, but I don't know 
-if any of them would affect detecting new devices on the bus like 
-this.
+I am having the person with the problem try an openSUSE Tumbleweed rescue system 
+to see if a 5.12 kernel can see the device.
 
-One thing you might try is to turn on USB debugging before 
-plugging in the device:
+None of the other Realtek devices have hidden their USB ID behind some magic 
+command.
 
-echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+Larry
 
-The additional information this adds to the dmesg log may be 
-helpful.
-
-Alan Stern
