@@ -2,77 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5616539EF02
-	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 08:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B180E39F005
+	for <lists+linux-usb@lfdr.de>; Tue,  8 Jun 2021 09:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbhFHG4D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Jun 2021 02:56:03 -0400
-Received: from mga06.intel.com ([134.134.136.31]:49866 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229512AbhFHG4C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 8 Jun 2021 02:56:02 -0400
-IronPort-SDR: vMW+UB9Ue7wEWTDXi5Yp5feF8nm2PW8OlB6A97Tqc3uj03GNN9cbh0PDnZLGB49eAmBQ2av7BK
- D2N1/HfUk5mg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10008"; a="265935166"
-X-IronPort-AV: E=Sophos;i="5.83,257,1616482800"; 
-   d="scan'208";a="265935166"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jun 2021 23:54:09 -0700
-IronPort-SDR: maRWrmr4eAl9j4yK/dNJ7RZrD+zeMCLt6Sj/28SnCBQ/6FdHVbeu6IuxAg+5lZG/4rlqqaRFPr
- T0xbo63sVbKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,257,1616482800"; 
-   d="scan'208";a="552162586"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 07 Jun 2021 23:54:07 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 08 Jun 2021 09:54:07 +0300
-Date:   Tue, 8 Jun 2021 09:54:07 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Benjamin Berg <bberg@redhat.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] usb: typec: ucsi: Polling the alt modes and PDOs
-Message-ID: <YL8UD+nlBSSQGIMO@kuha.fi.intel.com>
-References: <20210607131442.20121-1-heikki.krogerus@linux.intel.com>
- <4a76d2152f016b58298bec16aa2003a6ec55f8a8.camel@redhat.com>
- <YL8RPiVsEFOM9PBo@kuha.fi.intel.com>
+        id S230268AbhFHH7r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Jun 2021 03:59:47 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:53161 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S230223AbhFHH7r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 03:59:47 -0400
+X-UUID: f33319f5c9144cc9bc476a6b7bd1d8a2-20210608
+X-UUID: f33319f5c9144cc9bc476a6b7bd1d8a2-20210608
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2144466894; Tue, 08 Jun 2021 15:57:52 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 8 Jun 2021 15:57:50 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 8 Jun 2021 15:57:49 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Yuwen Ng <yuwen.ng@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH 00/23] Add support gadget (runtime) PM
+Date:   Tue, 8 Jun 2021 15:57:26 +0800
+Message-ID: <1623139069-8173-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YL8RPiVsEFOM9PBo@kuha.fi.intel.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 09:42:09AM +0300, Heikki Krogerus wrote:
-> On Mon, Jun 07, 2021 at 10:09:58PM +0200, Benjamin Berg wrote:
-> > Hi Heikki,
-> > 
-> > On Mon, 2021-06-07 at 16:14 +0300, Heikki Krogerus wrote:
-> > > This is the RFC series I promised [1].
-> > 
-> > Cool.
-> > 
-> > > I'm sorry it took this long to prepare these. I had to concentrate on
-> > > other task for a while.
-> > > 
-> > > Let me know if you still see any problems.
-> > 
-> > Hmm, I am not sure this got better. I applied the patchset on top of of
-> > the 5.12.9 Fedora 34 kernel. On the machine in question (X1 Carbon 8),
-> > I see the online state getting stuck at 1 occasionally. This can happen
-> > for example when quickly plugging and unplugging a USB-C charger.
-> 
-> Please check does the partner device get removed. What do you have
-> under /sys/class/typec after that happens?
+This series mainly adds support for gadget suspend/resume when the controller
+works at device only mode or dual role mode, and also adds support runtime PM,
+in order to fix the sequence issue about resume and role switch event arised
+by extcon or role-switch, rebuild and unify the flow of dual role switch for
+all three supported ways.
 
-Oh yes. Could you also share the trace output when that happens?
+Chunfeng Yun (23):
+  dt-bindings: usb: mtu3: remove support VBUS detection of extcon
+  dt-bindings: usb: mtu3: add optional property to disable usb2 ports
+  dt-bindings: usb: mtu3: add support property role-switch-default-mode
+  dt-bindings: usb: mtu3: add wakeup interrupt
+  usb: mtu3: power down device IP by default
+  usb: mtu3: power down port when power down device IP
+  usb: mtu3: remove wakelock
+  usb: mtu3: drop support vbus detection
+  usb: mtu3: use enum usb_role instead of private defined ones
+  usb: mtu3: rebuild role switch flow of extcon
+  usb: mtu3: add helper to get pointer of ssusb_mtk struct
+  usb: mtu3: use force mode for dual role switch
+  usb: mtu3: rebuild role switch get/set hooks
+  usb: common: add helper to get role-switch-default-mode
+  usb: dwc3: drd: use helper to get role-switch-default-mode
+  usb: mtu3: support property role-switch-default-mode
+  usb: mtu3: support option to disable usb2 ports
+  usb: mtu3: add new helpers for host suspend/resume
+  usb: mtu3: support runtime PM for host mode
+  usb: mtu3: add helper to power on/down device
+  usb: mtu3: support suspend/resume for device mode
+  usb: mtu3: support suspend/resume for dual-role mode
+  usb: mtu3: use clock bulk to get clocks
 
-        cd /sys/kernel/debug/tracing
-        echo 1 > events/ucsi/enable
-        # now reproduce the issue
-        cat trace > ucsi.trace
-
-thanks,
+ .../bindings/usb/mediatek,mtu3.yaml           |  47 +++-
+ drivers/usb/common/common.c                   |  20 ++
+ drivers/usb/dwc3/drd.c                        |   8 +-
+ drivers/usb/mtu3/mtu3.h                       |  36 ++-
+ drivers/usb/mtu3/mtu3_core.c                  | 117 +++++++-
+ drivers/usb/mtu3/mtu3_dr.c                    | 193 +++++---------
+ drivers/usb/mtu3/mtu3_dr.h                    |  30 ++-
+ drivers/usb/mtu3/mtu3_gadget.c                |   5 +
+ drivers/usb/mtu3/mtu3_host.c                  | 112 ++++++--
+ drivers/usb/mtu3/mtu3_plat.c                  | 250 +++++++++++-------
+ include/linux/usb/otg.h                       |   1 +
+ 11 files changed, 530 insertions(+), 289 deletions(-)
 
 -- 
-heikki
+2.18.0
+
