@@ -2,71 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 429A23A200A
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 00:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB87F3A207F
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 01:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhFIWcE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 18:32:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34398 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229931AbhFIWcB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 18:32:01 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 0A90661405;
-        Wed,  9 Jun 2021 22:30:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623277806;
-        bh=zIL9opB5+Cnb+9ZiAUJj51E8H3ewM4qqlao7rIihN7U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=a7ACIOAalaEJWQCOvHdnf2CVwrZ4U1Gz9b4v2y0/mG4TyjNU3KTxXYxTdF9W1M02X
-         isAEJaRMPCuRG00M8JA7EF6MNYvKZx91Y5YxWtxK5m/T0a1RlECC/zXYhdEPJ9QBgB
-         neg4DugQ+YuO1kYZc4wrIpXRxK8pNKiitUHi3UF39eGAhYIMxkTQ207LjghtLjWv1X
-         wMl9S+o3kfCmJpF1OUx58njGkDYucSxXnwGYDQb4NFyUCs7JLF45QdOHlSh08mGXQs
-         zPX9lQin2NfVPtu6HDIP8xb2BIP/YA0Umpqk1bnVRyGALK+CRJoDgzwZqH0X0P4FJ/
-         6bT3zgNHKyGog==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F390A60CD8;
-        Wed,  9 Jun 2021 22:30:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S229689AbhFIXJb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 19:09:31 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49383 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229659AbhFIXJb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 19:09:31 -0400
+Received: (qmail 1862035 invoked by uid 1000); 9 Jun 2021 19:07:35 -0400
+Date:   Wed, 9 Jun 2021 19:07:35 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, ludovic.desroches@microchip.com,
+        cristian.birsan@microchip.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
+ OHCI accesses
+Message-ID: <20210609230735.GA1861855@rowland.harvard.edu>
+References: <20210609121027.70951-1-claudiu.beznea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/2][next][V2] net: usb: asix: Fix less than zero comparison
- of a u16
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162327780599.20375.14960133934732052088.git-patchwork-notify@kernel.org>
-Date:   Wed, 09 Jun 2021 22:30:05 +0000
-References: <20210609102448.182798-1-colin.king@canonical.com>
-In-Reply-To: <20210609102448.182798-1-colin.king@canonical.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210609121027.70951-1-claudiu.beznea@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+On Wed, Jun 09, 2021 at 03:10:27PM +0300, Claudiu Beznea wrote:
+> On SAMA7G5 suspending ports will cut the access to OHCI registers and
+> any subsequent access to them will lead to CPU being blocked trying to
+> access that memory. Same thing happens on resume: if OHCI memory is
+> accessed before resuming ports the CPU will block on that access. The
+> OCHI memory is accessed on suspend/resume though
+> ohci_suspend()/ohci_resume().
 
-This series was applied to netdev/net-next.git (refs/heads/master):
+That sounds very strange.  Suppose one of the ports is suspended, so access to the 
+OHCI registers is blocked.  Then how can you resume the port?  Don't you have to 
+access the OHCI registers in order to tell the controller to do the port resume?
 
-On Wed,  9 Jun 2021 11:24:47 +0100 you wrote:
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> The comparison of the u16 priv->phy_addr < 0 is always false because
-> phy_addr is unsigned. Fix this by assigning the return from the call
-> to function asix_read_phy_addr to int ret and using this for the
-> less than zero error check comparison.
-> 
-> [...]
+What happens when there's more than one port, and one of them is suspended while 
+the other one is still running?  How can you communicate with the active port if 
+access to the OHCI registers is blocked?
 
-Here is the summary with links:
-  - [1/2,next,V2] net: usb: asix: Fix less than zero comparison of a u16
-    https://git.kernel.org/netdev/net-next/c/e67665946599
-  - [2/2,next,V2] net: usb: asix: ax88772: Fix less than zero comparison of a u16
-    https://git.kernel.org/netdev/net-next/c/c6be5a22fde5
-
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Alan Stern
