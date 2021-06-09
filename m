@@ -2,270 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF8C3A1F1D
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 23:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29943A1FB4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 00:04:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbhFIVln (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 17:41:43 -0400
-Received: from mga14.intel.com ([192.55.52.115]:46835 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229517AbhFIVln (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 17:41:43 -0400
-IronPort-SDR: whgjsM9fZbL8EXj8IoFQ2O3Pn2SIJWBvVhQCvWlSr73muA2co+Ubcq1ftTV5clJt1DOpNRhszn
- d+hMoevCo/9g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="204987391"
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="204987391"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 14:39:45 -0700
-IronPort-SDR: f00xVnk0rMZbytoQTyZRDNhLxIiFG+wQ2Hm1bgdMiTQVHhz+woHfnvl1XCBekVSq7pb22qPGNi
- 5z11BM6vGL1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,261,1616482800"; 
-   d="scan'208";a="419425677"
-Received: from lkp-server02.sh.intel.com (HELO 1ec8406c5392) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 09 Jun 2021 14:39:42 -0700
-Received: from kbuild by 1ec8406c5392 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lr5vK-0009iQ-Ao; Wed, 09 Jun 2021 21:39:42 +0000
-Date:   Thu, 10 Jun 2021 05:39:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- e89bb4288378b85c82212b60dc98ecda6b3d3a70
-Message-ID: <60c1351b.VWchToIjJmJ7l2Cf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S230261AbhFIWGI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 18:06:08 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:42894 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230169AbhFIWGE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 18:06:04 -0400
+Received: by mail-pg1-f178.google.com with SMTP id i34so14440153pgl.9
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 15:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FSmG8JSTNYJB4mdr65MxKl2rnU6Do0CSqL9o/SwwmH8=;
+        b=mYno2CUBt+srYNkkvZxkbcWenzshrbVT0rkI9hQHk5JcPp+a1/qukg1XAfh/bp9PKy
+         tOuADKVuUrytj83Fnp+wzUBjsGNW8nr3kjPVZK+wtTBbCrGY6+lnc5K1XAlTO1idWTSK
+         iiDcYQAoFQDApt9xGemxq3tlqC3e/QVQDNXCI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FSmG8JSTNYJB4mdr65MxKl2rnU6Do0CSqL9o/SwwmH8=;
+        b=DNA/TP02v1wv44V/H7ivDhpa0y555zSH9g5YKyLaXMPV9muC/QkD+yW00in9T3ux92
+         F6M/MokePYhfAt7Wwgzlk4Tw3Om6nRpi44Io2n6KU3mEHV2kWj0wFfbr+J/yHIwH9VWm
+         Kcz/3Nq3xB1woIorevwAy7sjl46Mb3rZ9cqi7EUdmV/ZVjngOMUwSoSuL8Q8pFn5UwLH
+         9sYr6kum52FLj/SoGsMXOZyKt8B1U4S0GoWN6imTNMpIdXF8B2YcXvRNyuUkuHg8eLOm
+         HffzwAewhZUgSa3n2DZF9/mNbvz81VvpUc0wbmedFl/4fslvXg+aBz7tapbqnv+Bs8hC
+         Iu2A==
+X-Gm-Message-State: AOAM530rk189QTe5KFShRL+XzzFpKa1tzpWeeOe5zPGpMz3yBElN8Kya
+        pi1GBODYsB28h57/b7+wIlUhbw==
+X-Google-Smtp-Source: ABdhPJz4Kny4z2bVLbWkuDIljoKel/KIoiXmZ9FfqLEn86S9YrJ78VqUUOGMHNJG4mPFXt0x7bi8GA==
+X-Received: by 2002:a63:4b0f:: with SMTP id y15mr1719057pga.227.1623276173250;
+        Wed, 09 Jun 2021 15:02:53 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:cedb:c2b5:f22c:760])
+        by smtp.gmail.com with UTF8SMTPSA id h12sm463276pfh.9.2021.06.09.15.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Jun 2021 15:02:52 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-kernel@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        "Alexander A. Klimov" <grandmaster@al2klimov.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Colin Ian King <colin.king@canonical.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v12 0/5] USB: misc: Add onboard_usb_hub driver
+Date:   Wed,  9 Jun 2021 15:02:44 -0700
+Message-Id: <20210609220249.86061-1-mka@chromium.org>
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e89bb4288378b85c82212b60dc98ecda6b3d3a70  usb: gadget: u_audio: add real feedback implementation
+This series adds:
+- the onboard_usb_hub_driver
+- glue in the xhci-plat driver to create and destroy the
+  onboard_usb_hub platform devices if needed
+- a device tree binding for the Realtek RTS5411 USB hub controller
+- device tree changes that add RTS5411 entries for the QCA SC7180
+  based boards trogdor and lazor
+- a couple of stubs for platform device functions to avoid
+  unresolved symbols with certain kernel configs
 
-elapsed time: 721m
+The main issue the driver addresses is that a USB hub needs to be
+powered before it can be discovered. For discrete onboard hubs (an
+example for such a hub is the Realtek RTS5411) this is often solved
+by supplying the hub with an 'always-on' regulator, which is kind
+of a hack. Some onboard hubs may require further initialization
+steps, like changing the state of a GPIO or enabling a clock, which
+requires even more hacks. This driver creates a platform device
+representing the hub which performs the necessary initialization.
+Currently it only supports switching on a single regulator, support
+for multiple regulators or other actions can be added as needed.
+Different initialization sequences can be supported based on the
+compatible string.
 
-configs tested: 208
-configs skipped: 2
+Besides performing the initialization the driver can be configured
+to power the hub off during system suspend. This can help to extend
+battery life on battery powered devices which have no requirements
+to keep the hub powered during suspend. The driver can also be
+configured to leave the hub powered when a wakeup capable USB device
+is connected when suspending, and power it off otherwise.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Changes in v12:
+- onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+  in onboard_hub.h to also check for the driver built as module
+- onboard_hub_driver: include onboard_hub.h again to make sure there
+  are prototype declarations for the public functions
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-mips                         rt305x_defconfig
-mips                      malta_kvm_defconfig
-powerpc                     asp8347_defconfig
-arm                           spitz_defconfig
-sparc                       sparc32_defconfig
-nios2                            allyesconfig
-sh                          rsk7203_defconfig
-mips                    maltaup_xpa_defconfig
-openrisc                 simple_smp_defconfig
-mips                      maltasmvp_defconfig
-arm                         orion5x_defconfig
-sh                   sh7724_generic_defconfig
-sh                          kfr2r09_defconfig
-sparc                            alldefconfig
-arm                             rpc_defconfig
-arm                             ezx_defconfig
-sh                           se7724_defconfig
-sh                          sdk7786_defconfig
-arc                          axs103_defconfig
-xtensa                           allyesconfig
-sh                           se7722_defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                     loongson2k_defconfig
-powerpc                     taishan_defconfig
-xtensa                          iss_defconfig
-powerpc                     pseries_defconfig
-parisc                generic-32bit_defconfig
-h8300                    h8300h-sim_defconfig
-mips                      loongson3_defconfig
-ia64                      gensparse_defconfig
-m68k                            q40_defconfig
-openrisc                            defconfig
-mips                     cu1000-neo_defconfig
-arc                        nsim_700_defconfig
-arm                       versatile_defconfig
-powerpc                  mpc885_ads_defconfig
-powerpc                      pasemi_defconfig
-sh                          r7785rp_defconfig
-s390                                defconfig
-arm                              alldefconfig
-h8300                            allyesconfig
-sh                         microdev_defconfig
-sh                             espt_defconfig
-powerpc                 mpc837x_rdb_defconfig
-mips                      fuloong2e_defconfig
-xtensa                  audio_kc705_defconfig
-arm                         lpc32xx_defconfig
-sh                           se7343_defconfig
-mips                         tb0226_defconfig
-arm                      integrator_defconfig
-arm                         cm_x300_defconfig
-arm                         bcm2835_defconfig
-mips                            ar7_defconfig
-arm64                            alldefconfig
-arm                           tegra_defconfig
-s390                       zfcpdump_defconfig
-powerpc                    socrates_defconfig
-ia64                        generic_defconfig
-arm                          badge4_defconfig
-arm                  colibri_pxa270_defconfig
-xtensa                       common_defconfig
-sh                             sh03_defconfig
-sh                        sh7763rdp_defconfig
-sh                        dreamcast_defconfig
-m68k                             allyesconfig
-mips                  cavium_octeon_defconfig
-sh                          sdk7780_defconfig
-arm                             mxs_defconfig
-mips                             allmodconfig
-mips                       rbtx49xx_defconfig
-arm                       aspeed_g4_defconfig
-sh                           se7206_defconfig
-mips                           ip27_defconfig
-powerpc                      ppc6xx_defconfig
-arm                         s5pv210_defconfig
-xtensa                  nommu_kc705_defconfig
-arm                         shannon_defconfig
-m68k                          amiga_defconfig
-s390                             allyesconfig
-powerpc                     tqm8555_defconfig
-mips                         tb0287_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                       cns3420vb_defconfig
-sh                           se7721_defconfig
-um                           x86_64_defconfig
-arc                         haps_hs_defconfig
-ia64                         bigsur_defconfig
-sh                     sh7710voipgw_defconfig
-powerpc                    gamecube_defconfig
-powerpc                 mpc8540_ads_defconfig
-arm                         s3c6400_defconfig
-mips                      bmips_stb_defconfig
-mips                      pistachio_defconfig
-arc                 nsimosci_hs_smp_defconfig
-arm                         mv78xx0_defconfig
-sh                           se7619_defconfig
-m68k                          sun3x_defconfig
-mips                   sb1250_swarm_defconfig
-xtensa                         virt_defconfig
-powerpc                 mpc832x_rdb_defconfig
-arm                       imx_v6_v7_defconfig
-arm                       netwinder_defconfig
-um                             i386_defconfig
-powerpc                     mpc5200_defconfig
-parisc                           alldefconfig
-arm                         assabet_defconfig
-mips                           ip32_defconfig
-sh                   rts7751r2dplus_defconfig
-mips                           ci20_defconfig
-mips                     loongson1c_defconfig
-microblaze                          defconfig
-m68k                          multi_defconfig
-powerpc                  mpc866_ads_defconfig
-mips                        workpad_defconfig
-nds32                             allnoconfig
-powerpc                     mpc83xx_defconfig
-arm                      jornada720_defconfig
-sh                 kfr2r09-romimage_defconfig
-sparc64                             defconfig
-arc                                 defconfig
-powerpc                          allyesconfig
-riscv                               defconfig
-arc                           tb10x_defconfig
-powerpc                     kilauea_defconfig
-m68k                        m5307c3_defconfig
-nios2                         10m50_defconfig
-powerpc                     sbc8548_defconfig
-arm                          pxa168_defconfig
-um                               alldefconfig
-m68k                             alldefconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                               defconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210608
-x86_64               randconfig-a002-20210608
-x86_64               randconfig-a003-20210608
-x86_64               randconfig-a006-20210608
-x86_64               randconfig-a005-20210608
-x86_64               randconfig-a001-20210608
-i386                 randconfig-a003-20210608
-i386                 randconfig-a006-20210608
-i386                 randconfig-a004-20210608
-i386                 randconfig-a001-20210608
-i386                 randconfig-a005-20210608
-i386                 randconfig-a002-20210608
-i386                 randconfig-a003-20210609
-i386                 randconfig-a006-20210609
-i386                 randconfig-a004-20210609
-i386                 randconfig-a001-20210609
-i386                 randconfig-a002-20210609
-i386                 randconfig-a005-20210609
-i386                 randconfig-a015-20210608
-i386                 randconfig-a013-20210608
-i386                 randconfig-a016-20210608
-i386                 randconfig-a011-20210608
-i386                 randconfig-a012-20210608
-i386                 randconfig-a014-20210608
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
+Changes in v11:
+- support multiple onboard hubs connected to the same parent
+- don't include ‘onboard_hub.h’ from the onboard hub driver
 
-clang tested configs:
-x86_64               randconfig-a002-20210607
-x86_64               randconfig-a004-20210607
-x86_64               randconfig-a003-20210607
-x86_64               randconfig-a006-20210607
-x86_64               randconfig-a005-20210607
-x86_64               randconfig-a001-20210607
-x86_64               randconfig-a015-20210608
-x86_64               randconfig-a012-20210608
-x86_64               randconfig-a014-20210608
-x86_64               randconfig-a011-20210608
-x86_64               randconfig-a016-20210608
-x86_64               randconfig-a013-20210608
+Changes in v10:
+- always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+- keep 'regulator-boot-on' property for pp3300_hub
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Changes in v9:
+- added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+  USB_PLATFORM_XHCI
+
+Changes in v7:
+- updated DT binding
+- series rebased on qcom/arm64-for-5.13
+
+Changes in v6:
+- updated summary
+
+Changes in v5:
+- cover letter added
+
+Matthias Kaehlcke (5):
+  dt-bindings: usb: Add binding for Realtek RTS5411 hub controller
+  USB: misc: Add onboard_usb_hub driver
+  of/platform: Add stubs for of_platform_device_create/destroy()
+  usb: host: xhci-plat: Create platform device for onboard hubs in
+    probe()
+  arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+
+ .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+ .../bindings/usb/realtek,rts5411.yaml         |  62 +++
+ MAINTAINERS                                   |   7 +
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
+ .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+ drivers/usb/host/Kconfig                      |   1 +
+ drivers/usb/host/xhci-plat.c                  |   6 +
+ drivers/usb/host/xhci.h                       |   2 +
+ drivers/usb/misc/Kconfig                      |  17 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/onboard_usb_hub.c            | 497 ++++++++++++++++++
+ include/linux/of_platform.h                   |  22 +-
+ include/linux/usb/onboard_hub.h               |  18 +
+ 15 files changed, 676 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+ create mode 100644 Documentation/devicetree/bindings/usb/realtek,rts5411.yaml
+ create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+ create mode 100644 include/linux/usb/onboard_hub.h
+
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
+
