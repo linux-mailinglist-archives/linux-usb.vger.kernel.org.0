@@ -2,148 +2,219 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 306E73A14A6
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16E03A14CA
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233424AbhFIMmR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 08:42:17 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:50367 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbhFIMmQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:42:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1623242422; x=1654778422;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=5zFddy7XzQ7kQ5Mr+nWnyexNNlueuTF7XbqLXWbdygk=;
-  b=qA8g0p47OsMzPJO9E+zeCG0N/ZTgvPjDaFFT/hyJpFvZLE5q8Hx1IXSp
-   hjtChppeeF/eYhp504SqZq6Kb5nIp5s8oitSogQ7yxycndYKMnRsqu0Qa
-   ERnuSaDClOlpHdC3Qr31Ovem4z+DQBOZ7ZxBKB1ngtrGdBai9W40CiizW
-   K7TQpEI3uccZMuwmk4GYAkbde/BwoH6y2UQatW7ULvRGPH1huq2NwuUBc
-   roGN6bOwspIBgvG5klHPx92Ba/CDJTJhnAmt7LP6i2joA6Q3xfX4jg46c
-   +wC7RUZSeEffwCGxiw3bGr596GP1T7Gkp11EYiK8RnuvzVRFLrdWKsHd5
-   g==;
-IronPort-SDR: 3x7DKgYbgTGAMfPgmsNKBP1qv3u11OS4L5HpC7VXRqi48chqvY75rYXyBZcHjLiaQv9RjZOrZR
- Ha5RTC9DSONLrRSlc5hwM5L7ejqlUC3Px9pyf2xrIH1Lp2XhIkUbzmxZIC7H5LaZwHE25dgawH
- HOYBmqOptP1O0TN3dZr5MzrDPofwDQHgSwCz36hqxBaaXw+7sq1LBDHHCkY6ZbB4Cbyy2MziYe
- 9mk0k0uk4uYmCCMikkol1FNV8KoRPa237mBRd1Tx2RbJpHCGKcKuw/7/0xg5O4J2H7qW3yQ9kb
- BWU=
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="120692322"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2021 05:40:22 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 9 Jun 2021 05:40:21 -0700
-Received: from [10.12.74.10] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Wed, 9 Jun 2021 05:40:19 -0700
-Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
- OHCI accesses
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <alexandre.belloni@bootlin.com>, <ludovic.desroches@microchip.com>,
-        <cristian.birsan@microchip.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20210609121027.70951-1-claudiu.beznea@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-Message-ID: <21280c02-0dd2-461a-1baf-464f280d2f0e@microchip.com>
-Date:   Wed, 9 Jun 2021 14:40:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S235308AbhFIMsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 08:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43932 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235314AbhFIMsQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:48:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 123E4C061574
+        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 05:46:22 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lqxb1-0004eX-Ez; Wed, 09 Jun 2021 14:46:11 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lqxaz-0006JN-FP; Wed, 09 Jun 2021 14:46:09 +0200
+Date:   Wed, 9 Jun 2021 14:46:09 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
+ support
+Message-ID: <20210609124609.zngg6sfcu6cj4p2m@pengutronix.de>
+References: <20210607082727.26045-1-o.rempel@pengutronix.de>
+ <20210607082727.26045-5-o.rempel@pengutronix.de>
+ <CGME20210609095923eucas1p2e692c9a482151742d543316c91f29802@eucas1p2.samsung.com>
+ <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
 MIME-Version: 1.0
-In-Reply-To: <20210609121027.70951-1-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 14:44:04 up 189 days,  2:50, 46 users,  load average: 0.06, 0.03,
+ 0.00
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 09/06/2021 at 14:10, Claudiu Beznea wrote:
-> On SAMA7G5 suspending ports will cut the access to OHCI registers and
-> any subsequent access to them will lead to CPU being blocked trying to
-> access that memory. Same thing happens on resume: if OHCI memory is
-> accessed before resuming ports the CPU will block on that access. The
-> OCHI memory is accessed on suspend/resume though
-> ohci_suspend()/ohci_resume().
+Hi Marek,
+
+On Wed, Jun 09, 2021 at 11:59:23AM +0200, Marek Szyprowski wrote:
+> Hi Oleksij,
 > 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-
-Claudiu,
-
-Your patch look good to me.
-
-In addition, I see ohci_at91_port_suspend() function also used in 
-ohci_at91_hub_control(). It might suffer the same problem as I see 
-accesses to ohci register, at first glance.
-
-Can you please double check that we are not in such condition with calls 
-to ohci_at91_hub_control()?
-
-Best regards,
-   Nicolas
-
-
-> ---
+> On 07.06.2021 10:27, Oleksij Rempel wrote:
+> > To be able to use ax88772 with external PHYs and use advantage of
+> > existing PHY drivers, we need to port at least ax88772 part of asix
+> > driver to the phylib framework.
+> >
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > 
-> The patch was tested on SAMA7G5, SAMA5D2 and SAM9X60.
+> This patch landed recently in linux-next as commit e532a096be0e ("net: 
+> usb: asix: ax88772: add phylib support"). I found that it causes some 
+> warnings on boards with those devices, see the following log:
 > 
-> Thank you,
-> Claudiu Beznea
+> root@target:~# time rtcwake -s10 -mmem
+> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:16:41 2021
+> [  231.226579] PM: suspend entry (deep)
+> [  231.231697] Filesystems sync: 0.002 seconds
+> [  231.261761] Freezing user space processes ... (elapsed 0.002 seconds) 
+> done.
+> [  231.270526] OOM killer disabled.
+> [  231.273557] Freezing remaining freezable tasks ... (elapsed 0.002 
+> seconds) done.
+> [  231.282229] printk: Suspending console(s) (use no_console_suspend to 
+> debug)
+> ...
+> [  231.710852] Disabling non-boot CPUs ...
+> ...
+> [  231.901794] Enabling non-boot CPUs ...
+> ...
+> [  232.225640] usb usb3: root hub lost power or was reset
+> [  232.225746] usb usb1: root hub lost power or was reset
+> [  232.225864] usb usb5: root hub lost power or was reset
+> [  232.226206] usb usb6: root hub lost power or was reset
+> [  232.226207] usb usb4: root hub lost power or was reset
+> [  232.297749] usb usb2: root hub lost power or was reset
+> [  232.343227] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> [  232.343293] asix 3-1:1.0 eth0: Failed to enable software MII access
+> [  232.344486] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
+> [  232.344512] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> [  232.344529] PM: dpm_run_callback(): mdio_bus_phy_resume+0x0/0x78 
+> returns -22
+> [  232.344554] Asix Electronics AX88772C usb-003:002:10: PM: failed to 
+> resume: error -22
+> [  232.563712] usb 1-1: reset high-speed USB device number 2 using 
+> exynos-ehci
+> [  232.757653] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
+> [  233.730994] OOM killer enabled.
+> [  233.734122] Restarting tasks ... done.
+> [  233.754992] PM: suspend exit
 > 
->   drivers/usb/host/ohci-at91.c | 9 +++++----
->   1 file changed, 5 insertions(+), 4 deletions(-)
+> real    0m11.546s
+> user    0m0.000s
+> sys     0m0.530s
+> root@target:~# sleep 2
+> root@target:~# time rtcwake -s10 -mmem
+> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:17:02 2021
+> [  241.959608] PM: suspend entry (deep)
+> [  241.963446] Filesystems sync: 0.001 seconds
+> [  241.978619] Freezing user space processes ... (elapsed 0.004 seconds) 
+> done.
+> [  241.989199] OOM killer disabled.
+> [  241.992215] Freezing remaining freezable tasks ... (elapsed 0.005 
+> seconds) done.
+> [  242.003979] printk: Suspending console(s) (use no_console_suspend to 
+> debug)
+> ...
+> [  242.592030] Disabling non-boot CPUs ...
+> ...
+> [  242.879721] Enabling non-boot CPUs ...
+> ...
+> [  243.145870] usb usb3: root hub lost power or was reset
+> [  243.145910] usb usb4: root hub lost power or was reset
+> [  243.147084] usb usb5: root hub lost power or was reset
+> [  243.147157] usb usb6: root hub lost power or was reset
+> [  243.147298] usb usb1: root hub lost power or was reset
+> [  243.217137] usb usb2: root hub lost power or was reset
+> [  243.283807] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> [  243.284005] asix 3-1:1.0 eth0: Failed to enable software MII access
+> [  243.285526] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
+> [  243.285676] asix 3-1:1.0 eth0: Failed to read reg index 0x0004: -22
+> [  243.285769] ------------[ cut here ]------------
+> [  243.286011] WARNING: CPU: 2 PID: 2069 at drivers/net/phy/phy.c:916 
+> phy_error+0x28/0x68
+> [  243.286115] Modules linked in: cmac bnep mwifiex_sdio mwifiex 
+> sha256_generic libsha256 sha256_arm cfg80211 btmrvl_sdio btmrvl 
+> bluetooth s5p_mfc uvcvideo s5p_jpeg exynos_gsc v
+> [  243.287490] CPU: 2 PID: 2069 Comm: kworker/2:5 Not tainted 
+> 5.13.0-rc5-next-20210608 #10443
+> [  243.287555] Hardware name: Samsung Exynos (Flattened Device Tree)
+> [  243.287609] Workqueue: events_power_efficient phy_state_machine
+> [  243.287716] [<c0111920>] (unwind_backtrace) from [<c010d0cc>] 
+> (show_stack+0x10/0x14)
+> [  243.287807] [<c010d0cc>] (show_stack) from [<c0b62360>] 
+> (dump_stack_lvl+0xa0/0xc0)
+> [  243.287882] [<c0b62360>] (dump_stack_lvl) from [<c0127960>] 
+> (__warn+0x118/0x11c)
+> [  243.287954] [<c0127960>] (__warn) from [<c0127a18>] 
+> (warn_slowpath_fmt+0xb4/0xbc)
+> [  243.288021] [<c0127a18>] (warn_slowpath_fmt) from [<c0734968>] 
+> (phy_error+0x28/0x68)
+> [  243.288094] [<c0734968>] (phy_error) from [<c0735d6c>] 
+> (phy_state_machine+0x218/0x278)
+> [  243.288173] [<c0735d6c>] (phy_state_machine) from [<c014ae08>] 
+> (process_one_work+0x30c/0x884)
+> [  243.288254] [<c014ae08>] (process_one_work) from [<c014b3d8>] 
+> (worker_thread+0x58/0x594)
+> [  243.288333] [<c014b3d8>] (worker_thread) from [<c0153944>] 
+> (kthread+0x160/0x1c0)
+> [  243.288408] [<c0153944>] (kthread) from [<c010011c>] 
+> (ret_from_fork+0x14/0x38)
+> [  243.288475] Exception stack(0xc4683fb0 to 0xc4683ff8)
+> [  243.288531] 3fa0:                                     00000000 
+> 00000000 00000000 00000000
+> [  243.288587] 3fc0: 00000000 00000000 00000000 00000000 00000000 
+> 00000000 00000000 00000000
+> [  243.288641] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [  243.288690] irq event stamp: 1611
+> [  243.288744] hardirqs last  enabled at (1619): [<c01a6ef0>] 
+> vprintk_emit+0x230/0x290
+> [  243.288830] hardirqs last disabled at (1626): [<c01a6f2c>] 
+> vprintk_emit+0x26c/0x290
+> [  243.288906] softirqs last  enabled at (1012): [<c0101768>] 
+> __do_softirq+0x500/0x63c
+> [  243.288978] softirqs last disabled at (1007): [<c01315b4>] 
+> irq_exit+0x214/0x220
+> [  243.289055] ---[ end trace eeacda95eb7db60a ]---
+> [  243.289345] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> [  243.289466] asix 3-1:1.0 eth0: Failed to write Medium Mode mode to 
+> 0x0000: ffffffea
+> [  243.289540] asix 3-1:1.0 eth0: Link is Down
+> [  243.482809] usb 1-1: reset high-speed USB device number 2 using 
+> exynos-ehci
+> [  243.647251] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
+> [  244.847161] OOM killer enabled.
+> [  244.850221] Restarting tasks ... done.
+> [  244.861372] PM: suspend exit
 > 
-> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-> index b3a6a497dcb1..7c6202b05ff4 100644
-> --- a/drivers/usb/host/ohci-at91.c
-> +++ b/drivers/usb/host/ohci-at91.c
-> @@ -666,8 +666,6 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
->   	if (ohci_at91->wakeup)
->   		enable_irq_wake(hcd->irq);
->   
-> -	ohci_at91_port_suspend(ohci_at91, 1);
-> -
->   	ret = ohci_suspend(hcd, ohci_at91->wakeup);
->   	if (ret) {
->   		if (ohci_at91->wakeup)
-> @@ -687,7 +685,10 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
->   		/* flush the writes */
->   		(void) ohci_readl (ohci, &ohci->regs->control);
->   		msleep(1);
-> +		ohci_at91_port_suspend(ohci_at91, 1);
->   		at91_stop_clock(ohci_at91);
-> +	} else {
-> +		ohci_at91_port_suspend(ohci_at91, 1);
->   	}
->   
->   	return ret;
-> @@ -699,6 +700,8 @@ ohci_hcd_at91_drv_resume(struct device *dev)
->   	struct usb_hcd	*hcd = dev_get_drvdata(dev);
->   	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
->   
-> +	ohci_at91_port_suspend(ohci_at91, 0);
-> +
->   	if (ohci_at91->wakeup)
->   		disable_irq_wake(hcd->irq);
->   	else
-> @@ -706,8 +709,6 @@ ohci_hcd_at91_drv_resume(struct device *dev)
->   
->   	ohci_resume(hcd, false);
->   
-> -	ohci_at91_port_suspend(ohci_at91, 0);
-> -
->   	return 0;
->   }
->   
+> real    0m13.050s
+> user    0m0.000s
+> sys     0m1.152s
+> root@target:~#
 > 
+> It looks that some kind of system suspend/resume integration for phylib 
+> is not implemented.
 
+Probably it is should be handled only by the asix driver. I'll take a
+look in to it. Did interface was able to resume after printing some
+warnings?
 
+Regards,
+Oleksij
 -- 
-Nicolas Ferre
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
