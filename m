@@ -2,68 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 197FC3A15A8
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 15:31:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42A53A1718
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 16:23:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236409AbhFINda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 09:33:30 -0400
-Received: from flippie-beckerswealthsa.xyz ([62.173.138.170]:52002 "EHLO
-        host.flippie-beckerswealthsa.xyz" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233773AbhFINd1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 09:33:27 -0400
-Received: from flippie-beckerswealthsa.xyz (ec2-18-118-29-154.us-east-2.compute.amazonaws.com [18.118.29.154])
-        by host.flippie-beckerswealthsa.xyz (Postfix) with ESMTPA id 5C2E63115DCC
-        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 15:09:34 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz 5C2E63115DCC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealthsa.xyz; s=default; t=1623240574;
-        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=ZXMe5H+6V+6mKlSeCXKX83rapldqU4LB4zwzkl2D6q+khhXHt6OlIuAYb2PReD454
-         wHW36owJKOjkjH6Ww+6xRsK/5zmXy7ysBmD8n4QqYyXCkNz+UVivOxs5gU+9NiVmSA
-         NWAEACS4s1pOWF3lJuhLXs2A87igrjoJ4Gh/QSBA=
-DKIM-Filter: OpenDKIM Filter v2.11.0 host.flippie-beckerswealthsa.xyz 5C2E63115DCC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=flippie-beckerswealthsa.xyz; s=default; t=1623240574;
-        bh=h0ivQLrZuUWuyEKz/TWb+FP9AASpHhVqOsJtRcwKQV4=;
-        h=Reply-To:From:To:Subject:Date:From;
-        b=ZXMe5H+6V+6mKlSeCXKX83rapldqU4LB4zwzkl2D6q+khhXHt6OlIuAYb2PReD454
-         wHW36owJKOjkjH6Ww+6xRsK/5zmXy7ysBmD8n4QqYyXCkNz+UVivOxs5gU+9NiVmSA
-         NWAEACS4s1pOWF3lJuhLXs2A87igrjoJ4Gh/QSBA=
-Reply-To: jmasuku40@flippiebeckerwealthservices.com
-From:   Jotham Masuku <jmasuku40@flippie-beckerswealthsa.xyz>
-To:     linux-usb@vger.kernel.org
-Subject: Projects
-Date:   09 Jun 2021 12:09:34 +0000
-Message-ID: <20210609120934.A3FD773160D827E8@flippie-beckerswealthsa.xyz>
-Mime-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+        id S238005AbhFIOZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 10:25:12 -0400
+Received: from szxga01-in.huawei.com ([45.249.212.187]:3815 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237850AbhFIOYy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 10:24:54 -0400
+Received: from nkgeml705-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G0Tj80MPxzWsTw;
+        Wed,  9 Jun 2021 22:18:04 +0800 (CST)
+Received: from nkgeml706-chm.china.huawei.com (10.98.57.153) by
+ nkgeml705-chm.china.huawei.com (10.98.57.154) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 22:22:56 +0800
+Received: from nkgeml706-chm.china.huawei.com ([10.98.57.153]) by
+ nkgeml706-chm.china.huawei.com ([10.98.57.153]) with mapi id 15.01.2176.012;
+ Wed, 9 Jun 2021 22:22:56 +0800
+From:   "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
+To:     "Xuetao (kirin)" <xuetao09@huawei.com>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "chenyu (U)" <chenyu56@huawei.com>,
+        Caiyadong <caiyadong@huawei.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>
+Subject: [PATCH] xhci: solve a double free problem while doing s4
+Thread-Topic: [PATCH] xhci: solve a double free problem while doing s4
+Thread-Index: AQHXXTD5CgkqbtPEIEyqX6Nz35qOtasLuySA
+Date:   Wed, 9 Jun 2021 14:22:55 +0000
+Message-ID: <1428e2d7b7b74fccb3493384f96c521a@huawei.com>
+References: <1623244292-108534-1-git-send-email-xuetao09@huawei.com>
+In-Reply-To: <1623244292-108534-1-git-send-email-xuetao09@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.136.108.160]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello there,
-
-I hope this message finds you in good spirits especially during=20
-this challenging time of coronavirus pandemic. I hope you and=20
-your family are well and keeping safe. Anyway, I am Jotham=20
-Masuku, a broker working with Flippiebecker Wealth. I got your=20
-contact (along with few other contacts) through an online=20
-business directory and I thought I should contact you to see if=20
-you are interested in this opportunity. I am contacting you=20
-because one of my high profile clients is interested in investing=20
-abroad and has asked me to look for individuals and companies=20
-with interesting business ideas and projects that he can invest=20
-in. He wants to invest a substantial amount of asset abroad.
-
-Please kindly respond back to this email if you are interested in=20
-this opportunity. Once I receive your response, I will give you=20
-more details and we can plan a strategy that will be beneficial=20
-to all parties.
-
-Best regards
-
-J Masuku
-Flippiebecker Wealth
+d2hlbiBzeXN0ZW0gaXMgZG9pbmcgczQsIHRoZSBwcm9jZXNzIG9mIHhoY2lfcmVzdW1lIG1heSBi
+ZSBhcyBiZWxvdzoNCjHjgIF4aGNpX21lbV9jbGVhbnVwDQoy44CBeGhjaV9pbml0LT54aGNpX21l
+bV9pbml0LT54aGNpX21lbV9jbGVhbnVwKHdoZW4gbWVtb3J5IGlzIG5vdCBlbm91Z2gpLg0KeGhj
+aV9tZW1fY2xlYW51cCB3aWxsIGJlIGV4ZWN1dGVkIHR3aWNlIHdoZW4gc3lzdGVtIGlzIG91dCBv
+ZiBtZW1vcnkuDQp4aGNpLT5wb3J0X2NhcHMgaXMgZnJlZWQgaW4geGhjaV9tZW1fY2xlYW51cCxi
+dXQgaXQgaXNuJ3Qgc2V0IHRvIE5VTEwuDQpJdCB3aWxsIGJlIGZyZWVkIHR3aWNlIHdoZW4geGhj
+aV9tZW1fY2xlYW51cCBpcyBjYWxsZWQgdGhlIHNlY29uZCB0aW1lLg0KDQpXZSBnb3QgZm9sbG93
+aW5nIGJ1ZyB3aGVuIHN5c3RlbSByZXN1bWVzIGZyb20gczQ6DQoNCmtlcm5lbCBCVUcgYXQgbW0v
+c2x1Yi5jOjMwOSENCkludGVybmFsIGVycm9yOiBPb3BzIC0gQlVHOiAwIFsjMV0gUFJFRU1QVCBT
+TVANCkNQVTogMCBQSUQ6IDU5MjkgVGFpbnRlZDogRyBTICAgVyAgIDUuNC45Ni1hcm02NC1kZXNr
+dG9wICMxDQpwYyA6IF9fc2xhYl9mcmVlKzB4NWMvMHg0MjQNCmxyIDoga2ZyZWUrMHgzMGMvMHgz
+MmMNCg0KQ2FsbCB0cmFjZToNCiBfX3NsYWJfZnJlZSsweDVjLzB4NDI0DQoga2ZyZWUrMHgzMGMv
+MHgzMmMNCiB4aGNpX21lbV9jbGVhbnVwKzB4Mzk0LzB4M2NjDQogeGhjaV9tZW1faW5pdCsweDlh
+Yy8weDEwNzANCiB4aGNpX2luaXQrMHg4Yy8weDFkMA0KIHhoY2lfcmVzdW1lKzB4MWNjLzB4NWZj
+DQogeGhjaV9wbGF0X3Jlc3VtZSsweDY0LzB4NzANCiBwbGF0Zm9ybV9wbV90aGF3KzB4MjgvMHg2
+MA0KIGRwbV9ydW5fY2FsbGJhY2srMHg1NC8weDI0Yw0KIGRldmljZV9yZXN1bWUrMHhkMC8weDIw
+MA0KIGFzeW5jX3Jlc3VtZSsweDI0LzB4NjANCiBhc3luY19ydW5fZW50cnlfZm4rMHg0NC8weDEx
+MA0KIHByb2Nlc3Nfb25lX3dvcmsrMHgxZjAvMHg0OTANCiB3b3JrZXJfdGhyZWFkKzB4NWMvMHg0
+NTANCiBrdGhyZWFkKzB4MTU4LzB4MTYwDQogcmV0X2Zyb21fZm9yaysweDEwLzB4MjQNCg0KU2ln
+bmVkLW9mZi1ieTogVGFvIFh1ZSA8eHVldGFvMDlAaHVhd2VpLmNvbT4NCi0tLQ0KIGRyaXZlcnMv
+dXNiL2hvc3QveGhjaS1tZW0uYyB8IDEgKw0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
+KQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jIGIvZHJpdmVycy91
+c2IvaG9zdC94aGNpLW1lbS5jIGluZGV4IGY2NjgxNWYuLmU0YjBjMDQgMTAwNjQ0DQotLS0gYS9k
+cml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmMNCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1t
+ZW0uYw0KQEAgLTE5MjQsNiArMTkyNCw3IEBAIHZvaWQgeGhjaV9tZW1fY2xlYW51cChzdHJ1Y3Qg
+eGhjaV9oY2QgKnhoY2kpDQogCXhoY2ktPmh3X3BvcnRzID0gTlVMTDsNCiAJeGhjaS0+cmhfYncg
+PSBOVUxMOw0KIAl4aGNpLT5leHRfY2FwcyA9IE5VTEw7DQorCXhoY2ktPnBvcnRfY2FwcyA9IE5V
+TEw7DQogDQogCXhoY2ktPnBhZ2Vfc2l6ZSA9IDA7DQogCXhoY2ktPnBhZ2Vfc2hpZnQgPSAwOw0K
+LS0NCjIuNy40DQoNCg==
