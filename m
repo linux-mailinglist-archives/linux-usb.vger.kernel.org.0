@@ -2,77 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC273A1107
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 12:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABB93A12A0
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 13:26:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbhFIK0t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 06:26:49 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:38483 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238766AbhFIK0r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 06:26:47 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lqvOD-0007LP-4r; Wed, 09 Jun 2021 10:24:49 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2][next][V2] net: usb: asix: ax88772: Fix less than zero comparison of a u16
-Date:   Wed,  9 Jun 2021 11:24:48 +0100
-Message-Id: <20210609102448.182798-2-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210609102448.182798-1-colin.king@canonical.com>
-References: <20210609102448.182798-1-colin.king@canonical.com>
+        id S239061AbhFIL1z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 07:27:55 -0400
+Received: from mga11.intel.com ([192.55.52.93]:22014 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239057AbhFIL1z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 07:27:55 -0400
+IronPort-SDR: mAM37eUPQgoX8Jxzj8zLXDb9Yzy1lUUR7KuYDB7eOiFHjY4Zg+bXBJ/0zNDDXfrEdRXWqrbKiw
+ kl7lWBFIifDQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="202028741"
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="202028741"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 04:26:00 -0700
+IronPort-SDR: dZEKBJhI74Ef4xMKb71rzCQINR0E6fZ8nlQ9ijauWzDSJ266mMWgJ62E0rjbiCIfsN13bCaVZ2
+ R2r23ogX6M2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="552645489"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Jun 2021 04:25:58 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Jun 2021 14:25:57 +0300
+Date:   Wed, 9 Jun 2021 14:25:57 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Benjamin Berg <bberg@redhat.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] usb: typec: ucsi: Polling the alt modes and PDOs
+Message-ID: <YMClRTC8wW82IrDT@kuha.fi.intel.com>
+References: <20210607131442.20121-1-heikki.krogerus@linux.intel.com>
+ <4a76d2152f016b58298bec16aa2003a6ec55f8a8.camel@redhat.com>
+ <YL8RPiVsEFOM9PBo@kuha.fi.intel.com>
+ <YL8UD+nlBSSQGIMO@kuha.fi.intel.com>
+ <f9e1640d4d1a2acbaacf83dee021cd4aa55f233f.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <f9e1640d4d1a2acbaacf83dee021cd4aa55f233f.camel@redhat.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+On Tue, Jun 08, 2021 at 09:32:01PM +0200, Benjamin Berg wrote:
+> On Tue, 2021-06-08 at 09:54 +0300, Heikki Krogerus wrote:
+> > On Tue, Jun 08, 2021 at 09:42:09AM +0300, Heikki Krogerus wrote:
+> > > Please check does the partner device get removed. What do you have
+> > > under /sys/class/typec after that happens?
+> > 
+> > Oh yes. Could you also share the trace output when that happens?
+> > 
+> >         cd /sys/kernel/debug/tracing
+> >         echo 1 > events/ucsi/enable
+> >         # now reproduce the issue
+> >         cat trace > ucsi.trace
+> 
+> So, the partner device is still there when this happens (see below). I
+> also only see a single event in the trace for the fast plug/unplug
+> case:
+>    kworker/u16:8-1771    [003] .... 18848.872145: ucsi_connector_change: port1 status: change=4a04, opmode=5, connected=1, sourcing=0, partner_flags=1, partner_type=1, request_data_obj=1304b12c, BC status=1
 
-The comparison of the u16 priv->phy_addr < 0 is always false because
-phy_addr is unsigned. Fix this by assigning the return from the call
-to function asix_read_phy_addr to int ret and using this for the
-less than zero error check comparison.
+OK. Sorry I had to double check because you were only talking about
+the psy online state.
 
-Fixes: 7e88b11a862a ("net: usb: asix: refactor asix_read_phy_addr() and handle errors on return")
-Addresses-Coverity: ("Unsigned compared against 0")
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
+Can you now try this HACK on top of these patches:
 
-V2: fix up return check.
-
----
- drivers/net/usb/ax88172a.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
-index 2e2081346740..530947d7477b 100644
---- a/drivers/net/usb/ax88172a.c
-+++ b/drivers/net/usb/ax88172a.c
-@@ -205,11 +205,11 @@ static int ax88172a_bind(struct usbnet *dev, struct usb_interface *intf)
- 		goto free;
- 	}
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index bd39fe2cb1d0b..99f072700ce7f 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -843,7 +843,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
  
--	priv->phy_addr = asix_read_phy_addr(dev, priv->use_embdphy);
--	if (priv->phy_addr < 0) {
--		ret = priv->phy_addr;
-+	ret = asix_read_phy_addr(dev, priv->use_embdphy);
-+	if (ret < 0)
- 		goto free;
--	}
-+
-+	priv->phy_addr = ret;
+        if (!status.change) {
+                dev_dbg(con->ucsi->dev, "con%d: spurious event\n", con->num);
+-               goto out_ack;
++               /* XXX Force connection check. */
++               status.change = UCSI_CONSTAT_CONNECT_CHANGE;
+        }
  
- 	ax88172a_reset_phy(dev, priv->use_embdphy);
- 
+        event = kzalloc(sizeof(*event), GFP_KERNEL);
+
+thanks,
+
 -- 
-2.31.1
-
+heikki
