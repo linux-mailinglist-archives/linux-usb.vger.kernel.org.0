@@ -2,101 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4D763A0ECB
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 10:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C52BB3A0F1A
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 10:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbhFIIgq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 04:36:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39244 "EHLO mail.kernel.org"
+        id S233790AbhFII6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 04:58:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47846 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236210AbhFIIgq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 04:36:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BE40261359;
-        Wed,  9 Jun 2021 08:34:51 +0000 (UTC)
+        id S233595AbhFII6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 04:58:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 17C6361040;
+        Wed,  9 Jun 2021 08:56:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623227692;
-        bh=XRKLd0Qti/+7vzl4HZwSkCpz46IYkFlAQN6V7uPZc3k=;
+        s=korg; t=1623229004;
+        bh=y+rZC8ET704ZyS2De756e+uIOdbE3GgO+5jsgP/wVHM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=x1Yozhkq6Xm4K/Z/M2Sn2JFXdOPT8Zib1AmXf5u2sSeVKXlqvRVCjeSe77eRdV5Es
-         Au6cRmlNDA+idVld6wXP0YTV9xXHZbnr+4hOIPvZUSsileFX94CwxIVQEpyKTMnnrm
-         Qezf/H8zX6Ab2yPXCkE/oZeRlXpsIchKvRX1baY4=
-Date:   Wed, 9 Jun 2021 10:34:50 +0200
+        b=cZ978C9G3XwZmTJTDMir+CoiQtR2oyMeMSKp9wMx/JlLPdrT3x39jvc351tPpe9SM
+         0mzvQskwYMhzSRJD1ohOGpKYvsh7rrImM9laSRwHvz1U8lW1m7kWo4VdeZIUIcUUTM
+         8wO0ND0g6XtGJ1xfP4q5C0zrUtt40e9TqtMojvbI=
+Date:   Wed, 9 Jun 2021 10:56:42 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <zenczykowski@gmail.com>
-Cc:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Brooke Basile <brookebasile@gmail.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Lorenzo Colitti <lorenzo@google.com>
-Subject: Re: [PATCH] usb: f_ncm: only first packet of aggregate needs to
- start timer
-Message-ID: <YMB9Knbpif9AopIJ@kroah.com>
-References: <20210608085438.813960-1-zenczykowski@gmail.com>
- <YMB7hD2fLwlHY4/t@kroah.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <linux@roeck-us.net>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Use LE to CPU conversion when
+ accessing msg->header
+Message-ID: <YMCCSiNnvc9oh7P+@kroah.com>
+References: <20210519085534.48732-1-andriy.shevchenko@linux.intel.com>
+ <YKYrQXXk/X72iI+0@kuha.fi.intel.com>
+ <YL47Ny7hXZmgH/dx@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YMB7hD2fLwlHY4/t@kroah.com>
+In-Reply-To: <YL47Ny7hXZmgH/dx@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 10:27:48AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jun 08, 2021 at 01:54:38AM -0700, Maciej Żenczykowski wrote:
-> > From: Maciej Żenczykowski <maze@google.com>
+On Mon, Jun 07, 2021 at 06:28:55PM +0300, Andy Shevchenko wrote:
+> On Thu, May 20, 2021 at 12:26:25PM +0300, Heikki Krogerus wrote:
+> > On Wed, May 19, 2021 at 11:55:34AM +0300, Andy Shevchenko wrote:
+> > > As LKP noticed the Sparse is not happy about strict type handling:
+> > >    .../typec/tcpm/wcove.c:380:50: sparse:     expected unsigned short [usertype] header
+> > >    .../typec/tcpm/wcove.c:380:50: sparse:     got restricted __le16 const [usertype] header
+> > > 
+> > > Fix this by switching to use pd_header_cnt_le() instead of pd_header_cnt()
+> > > in the affected code.
+> > > 
+> > > Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > > 
-> > The reasoning for this change is that if we already had
-> > a packet pending, then we also already had a pending timer,
-> > and as such there is no need to reschedule it.
-> > 
-> > This also prevents packets getting delayed 60 ms worst case
-> > under a tiny packet every 290us transmit load, by keeping the
-> > timeout always relative to the first queued up packet.
-> > (300us delay * 16KB max aggregation / 80 byte packet =~ 60 ms)
-> > 
-> > As such the first packet is now at most delayed by 300us.
-> > 
-> > Under low transmit load, this will simply result in us sending
-> > a shorter aggregate, as originally intended.
-> > 
-> > This patch has the benefit of greatly reducing (by ~10 factor
-> > with 1500 byte frames aggregated into 16 kiB) the number of
-> > (potentially pretty costly) updates to the hrtimer.
-> > 
-> > Cc: Brooke Basile <brookebasile@gmail.com>
-> > Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Cc: Lorenzo Colitti <lorenzo@google.com>
-> > Signed-off-by: Maciej Żenczykowski <maze@google.com>
-> > ---
-> >  drivers/usb/gadget/function/f_ncm.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-> > index 0d23c6c11a13..855127249f24 100644
-> > --- a/drivers/usb/gadget/function/f_ncm.c
-> > +++ b/drivers/usb/gadget/function/f_ncm.c
-> > @@ -1101,11 +1101,11 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
-> >  			ncm->ndp_dgram_count = 1;
-> >  
-> >  			/* Note: we skip opts->next_ndp_index */
-> > -		}
-> >  
-> > -		/* Delay the timer. */
-> > -		hrtimer_start(&ncm->task_timer, TX_TIMEOUT_NSECS,
-> > -			      HRTIMER_MODE_REL_SOFT);
-> > +			/* Start the timer. */
-> > +			hrtimer_start(&ncm->task_timer, TX_TIMEOUT_NSECS,
-> > +				      HRTIMER_MODE_REL_SOFT);
-> > +		}
-> >  
-> >  		/* Add the datagram position entries */
-> >  		ntb_ndp = skb_put_zero(ncm->skb_tx_ndp, dgram_idx_len);
+> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > 
-> Nice, hopefully this helps out a lot on the systems where re-arming
-> timers are slow.
+> Thanks!
+> 
+> Greg, should I amend or resend this?
 
-And that's what the changelog said, I need more coffee...
+Both please.
+
+thanks,
+
+greg k-h
