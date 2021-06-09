@@ -2,66 +2,75 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9583A0BAA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 06:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB13F3A0CD5
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 08:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236599AbhFIEtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 00:49:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39038 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230401AbhFIEtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 00:49:18 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 20EDB61351;
-        Wed,  9 Jun 2021 04:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623214045;
-        bh=/bvJ4VTCfVrClXydbE5TyXaRfwzZ02GngWXdY4kSr6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xf3ZofrYrcKOvidZ0sNsCNsnuUGiPzhbFmLmC09ryTj6vvHRwMBlKDtiqi+Ja5yLn
-         pVyo/rIaycCRU/RiwdJxUEtHDP2FfockfbdkYr/QIQD5HhVBhBQ+Ht4mopqWjBDvpC
-         vmnbpOPLwZ215shdbErJAz2+cmJIKDHt2LGewGMo=
-Date:   Wed, 9 Jun 2021 06:47:21 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        kbuild-all@lists.01.org, Michal Simek <monstr@monstr.eu>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 2/5] USB: misc: Add onboard_usb_hub driver
-Message-ID: <YMBH2SUor2kNeMWL@kroah.com>
-References: <20210604144027.v11.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
- <202106050751.uNo0uAEm-lkp@intel.com>
- <YL5cvT4NvMLIuH+C@google.com>
- <YL5kL38o8JLDp8LK@kroah.com>
- <YL5mP4lGoiHNjAYN@google.com>
- <YL8wqCQZvim7iB02@kroah.com>
- <YL/ZHyvnRlS4AC5N@google.com>
+        id S234605AbhFIG7B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 02:59:01 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3914 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234065AbhFIG67 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 02:58:59 -0400
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G0Hrm1ZRCz6wk6;
+        Wed,  9 Jun 2021 14:54:00 +0800 (CST)
+Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 14:57:03 +0800
+Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
+ (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 9 Jun 2021
+ 14:57:03 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Zqiang <qiang.zhang@windriver.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Michael R Sweet <msweet@msweet.org>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <yangjihong1@huawei.com>, <yukuai3@huawei.com>,
+        <libaokun1@huawei.com>, <linux-usb@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next v2] usb: gadget: function: printer: use list_move instead of list_del/list_add
+Date:   Wed, 9 Jun 2021 15:06:12 +0800
+Message-ID: <20210609070612.1325044-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YL/ZHyvnRlS4AC5N@google.com>
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500020.china.huawei.com (7.185.36.88)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 01:54:55PM -0700, Matthias Kaehlcke wrote:
-> Also please let me know if you have other comments besides the prototype
-> question, I'd prefer to avoid version churn if possible, this series
-> already had a bit of that primarily due to the prototype issue.
+Using list_move() instead of list_del() + list_add().
 
-When the kernel test robot finds issues, I drop the patches from my
-review queue as I don't have time to review stuff with obvious issues,
-so I do not even have the changes around to review at the moment.  I
-have plenty of patches that do not have build problems to review :)
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+V1->V2:
+	CC mailist
 
-Fix them up and resend, there's nothing wrong with sending lots of
-versions if you have to resolve problems.
+ drivers/usb/gadget/function/f_printer.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-thanks,
+diff --git a/drivers/usb/gadget/function/f_printer.c b/drivers/usb/gadget/function/f_printer.c
+index f47fdc1fa7f1..b5112f6974f2 100644
+--- a/drivers/usb/gadget/function/f_printer.c
++++ b/drivers/usb/gadget/function/f_printer.c
+@@ -667,8 +667,7 @@ printer_write(struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
+ 		value = usb_ep_queue(dev->in_ep, req, GFP_ATOMIC);
+ 		spin_lock(&dev->lock);
+ 		if (value) {
+-			list_del(&req->list);
+-			list_add(&req->list, &dev->tx_reqs);
++			list_move(&req->list, &dev->tx_reqs);
+ 			spin_unlock_irqrestore(&dev->lock, flags);
+ 			mutex_unlock(&dev->lock_printer_io);
+ 			return -EAGAIN;
 
-greg k-h
