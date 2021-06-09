@@ -2,123 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D19603A13CA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F82F3A141C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbhFIMMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 08:12:38 -0400
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:63417 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232515AbhFIMMh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:12:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1623240643; x=1654776643;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9Xk1ujB2kl+qiFwhxmEUDgjYRlHoyizFUOvEaQMLa0Q=;
-  b=tXSUyw2cWH8jBLfG86cGT9FcEm253iJ7gc2pert7i7SM8n3gWc7zXVH/
-   pL6EEZbs4s6Ulbrk1xGfB5ZbSnL/o/dgQwwPhSnGlzZri0NHepZJMsTJg
-   Vx2jqIQIkOCOXmXm709g/LnuVuTYGKsu96VkiZ27rvIYqD5WOFe7YYNAU
-   9yKi1U3oNKgomfmY4sTPdpnb3OLpWexxQNZqP92C0uHepkC4HSwU5N8/S
-   jPwYQuGnakrBOYwOIl9HRwxJbXdPIy6zPiy2cCDRdTb5v7DF+E/ex4GBd
-   vSBENC1hOFn3kBBt2C3BZ7BhQH5Yx3dyCDO7Ef2vIrtI9iS8g2fgPNdYd
-   g==;
-IronPort-SDR: 3KzQrg30tx/nO9bPITuPmyiWWqx6Ljl9T7xHt4v9Qgo9Hqwn2eOA1iX/acZsDFbKKUkbD8MRoW
- DZpuQ4UJCIVKPH7JK4ELc/XhBuS4yiyBdbqFv4c4DVY36sZu4NPlWxyx6m23Uy33zDwWvTg8v1
- pdwbtllNctVMs0K1X6EQZvLmi4C7mMkzeZXfUhuAB/KCGOutsgBvVnKvWM9MunReDEZPMhVdOL
- 2ofz/IFDXqKbZzsZS+R3rb9ypyqOrJvVgdqjF0Ty2LyxKttm1sbF0NdtDRd/ZREmBFzOFM90MA
- xiE=
+        id S235692AbhFIMUD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 08:20:03 -0400
+Received: from mga01.intel.com ([192.55.52.88]:23373 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235243AbhFIMUC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 08:20:02 -0400
+IronPort-SDR: bNdQ8RVx4TAm3LjgvNy+PxHUTVUlMUoKLPJxLrjhHXoc2KaFtTNiKRNjoy9QgdW2PXjZMKceVS
+ qSf2Go4+GN8w==
+X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="226428813"
 X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="120688966"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2021 05:10:42 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 9 Jun 2021 05:10:41 -0700
-Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2176.2 via Frontend Transport; Wed, 9 Jun 2021 05:10:33 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
-        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <cristian.birsan@microchip.com>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before OHCI accesses
-Date:   Wed, 9 Jun 2021 15:10:27 +0300
-Message-ID: <20210609121027.70951-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.25.1
+   d="scan'208";a="226428813"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:18:07 -0700
+IronPort-SDR: EH4gy6QgomgDypw9L4jlR3zQpF1n7SFvtt13NqIYJebiMLwNT8yhyRXg6ohE4s+0VxZlSYP3dg
+ MUvhzMyzAXaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="552657263"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 09 Jun 2021 05:18:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Jun 2021 15:18:04 +0300
+Date:   Wed, 9 Jun 2021 15:18:04 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Benjamin Berg <bberg@redhat.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] usb: typec: ucsi: Polling the alt modes and PDOs
+Message-ID: <YMCxfC+S9EJNEiwq@kuha.fi.intel.com>
+References: <20210607131442.20121-1-heikki.krogerus@linux.intel.com>
+ <4a76d2152f016b58298bec16aa2003a6ec55f8a8.camel@redhat.com>
+ <YL8RPiVsEFOM9PBo@kuha.fi.intel.com>
+ <YL8UD+nlBSSQGIMO@kuha.fi.intel.com>
+ <f9e1640d4d1a2acbaacf83dee021cd4aa55f233f.camel@redhat.com>
+ <YMClRTC8wW82IrDT@kuha.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+In-Reply-To: <YMClRTC8wW82IrDT@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On SAMA7G5 suspending ports will cut the access to OHCI registers and
-any subsequent access to them will lead to CPU being blocked trying to
-access that memory. Same thing happens on resume: if OHCI memory is
-accessed before resuming ports the CPU will block on that access. The
-OCHI memory is accessed on suspend/resume though
-ohci_suspend()/ohci_resume().
+On Wed, Jun 09, 2021 at 02:26:00PM +0300, Heikki Krogerus wrote:
+> On Tue, Jun 08, 2021 at 09:32:01PM +0200, Benjamin Berg wrote:
+> > On Tue, 2021-06-08 at 09:54 +0300, Heikki Krogerus wrote:
+> > > On Tue, Jun 08, 2021 at 09:42:09AM +0300, Heikki Krogerus wrote:
+> > > > Please check does the partner device get removed. What do you have
+> > > > under /sys/class/typec after that happens?
+> > > 
+> > > Oh yes. Could you also share the trace output when that happens?
+> > > 
+> > >         cd /sys/kernel/debug/tracing
+> > >         echo 1 > events/ucsi/enable
+> > >         # now reproduce the issue
+> > >         cat trace > ucsi.trace
+> > 
+> > So, the partner device is still there when this happens (see below). I
+> > also only see a single event in the trace for the fast plug/unplug
+> > case:
+> >    kworker/u16:8-1771    [003] .... 18848.872145: ucsi_connector_change: port1 status: change=4a04, opmode=5, connected=1, sourcing=0, partner_flags=1, partner_type=1, request_data_obj=1304b12c, BC status=1
+> 
+> OK. Sorry I had to double check because you were only talking about
+> the psy online state.
+> 
+> Can you now try this HACK on top of these patches:
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index bd39fe2cb1d0b..99f072700ce7f 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -843,7 +843,8 @@ static void ucsi_handle_connector_change(struct work_struct *work)
+>  
+>         if (!status.change) {
+>                 dev_dbg(con->ucsi->dev, "con%d: spurious event\n", con->num);
+> -               goto out_ack;
+> +               /* XXX Force connection check. */
+> +               status.change = UCSI_CONSTAT_CONNECT_CHANGE;
+>         }
+>  
+>         event = kzalloc(sizeof(*event), GFP_KERNEL);
 
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
----
+No, that's not enough. Sorry.
 
-The patch was tested on SAMA7G5, SAMA5D2 and SAM9X60.
+I'm trying to get a confirmation on my suspecion that we do always
+actually get an event from the EC firmware, but we just end up
+filtering it out in this case because we are too slow in the driver. I
+have an idea what could be done about that, but I need to test if that
+really is the case.
 
-Thank you,
-Claudiu Beznea
+I'll prepare a new version out of this entire series.
 
- drivers/usb/host/ohci-at91.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index b3a6a497dcb1..7c6202b05ff4 100644
---- a/drivers/usb/host/ohci-at91.c
-+++ b/drivers/usb/host/ohci-at91.c
-@@ -666,8 +666,6 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
- 	if (ohci_at91->wakeup)
- 		enable_irq_wake(hcd->irq);
- 
--	ohci_at91_port_suspend(ohci_at91, 1);
--
- 	ret = ohci_suspend(hcd, ohci_at91->wakeup);
- 	if (ret) {
- 		if (ohci_at91->wakeup)
-@@ -687,7 +685,10 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
- 		/* flush the writes */
- 		(void) ohci_readl (ohci, &ohci->regs->control);
- 		msleep(1);
-+		ohci_at91_port_suspend(ohci_at91, 1);
- 		at91_stop_clock(ohci_at91);
-+	} else {
-+		ohci_at91_port_suspend(ohci_at91, 1);
- 	}
- 
- 	return ret;
-@@ -699,6 +700,8 @@ ohci_hcd_at91_drv_resume(struct device *dev)
- 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
- 	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
- 
-+	ohci_at91_port_suspend(ohci_at91, 0);
-+
- 	if (ohci_at91->wakeup)
- 		disable_irq_wake(hcd->irq);
- 	else
-@@ -706,8 +709,6 @@ ohci_hcd_at91_drv_resume(struct device *dev)
- 
- 	ohci_resume(hcd, false);
- 
--	ohci_at91_port_suspend(ohci_at91, 0);
--
- 	return 0;
- }
- 
 -- 
-2.25.1
-
+heikki
