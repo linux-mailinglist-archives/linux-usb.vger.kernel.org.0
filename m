@@ -2,80 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C42A53A1718
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 16:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E25E3A195C
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 17:24:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238005AbhFIOZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 10:25:12 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:3815 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237850AbhFIOYy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 10:24:54 -0400
-Received: from nkgeml705-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G0Tj80MPxzWsTw;
-        Wed,  9 Jun 2021 22:18:04 +0800 (CST)
-Received: from nkgeml706-chm.china.huawei.com (10.98.57.153) by
- nkgeml705-chm.china.huawei.com (10.98.57.154) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 9 Jun 2021 22:22:56 +0800
-Received: from nkgeml706-chm.china.huawei.com ([10.98.57.153]) by
- nkgeml706-chm.china.huawei.com ([10.98.57.153]) with mapi id 15.01.2176.012;
- Wed, 9 Jun 2021 22:22:56 +0800
-From:   "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
-To:     "Xuetao (kirin)" <xuetao09@huawei.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "chenyu (U)" <chenyu56@huawei.com>,
-        Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-Subject: [PATCH] xhci: solve a double free problem while doing s4
-Thread-Topic: [PATCH] xhci: solve a double free problem while doing s4
-Thread-Index: AQHXXTD5CgkqbtPEIEyqX6Nz35qOtasLuySA
-Date:   Wed, 9 Jun 2021 14:22:55 +0000
-Message-ID: <1428e2d7b7b74fccb3493384f96c521a@huawei.com>
-References: <1623244292-108534-1-git-send-email-xuetao09@huawei.com>
-In-Reply-To: <1623244292-108534-1-git-send-email-xuetao09@huawei.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.136.108.160]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S234947AbhFIP0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 11:26:18 -0400
+Received: from mail-oi1-f182.google.com ([209.85.167.182]:43907 "EHLO
+        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235847AbhFIP0N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 11:26:13 -0400
+Received: by mail-oi1-f182.google.com with SMTP id x196so25040780oif.10
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 08:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZFEb5EC9h4Oz558wWnJgGSYdu9KSgRo/Ld9B/b/Md7Y=;
+        b=cQcyYlxISWWBA2YLmgU2YVXdQODOaPSyusUsSWNcjb5ImIMmwXUS3y20YkzKIx8Gwr
+         CRrhp7FT5vtJbuIpiXWb8rn7eIMJA9g/JuOE/BqVGxzDZeRaZKtOAJDROtF4n9WNM5Uo
+         jtVVNNeGQWmjT3hALCh2dGbzv2Ll+t04aAnAI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZFEb5EC9h4Oz558wWnJgGSYdu9KSgRo/Ld9B/b/Md7Y=;
+        b=n16vWKOl9QA1V1FIYQtlZvcTjlcYbawoSczQtCE5PUyKl8htNNHvNi1780Sq2Dk3cB
+         rMRmtHtIBc5xgGnuOje2+iJSXzCs140fYhUvBLKB0CEiRUL6l3QNPLJIj1sQqvMWrcj1
+         AyhfGcN5Cz5Y1CaRzpcptYeeQAZOnjCufdIUh1jxMiHzrgN8Csnd2AF7aE/A15zGqwXc
+         5wBgTFQ/T7q3p0cuiPb15VCprOK0AgzdZk3RQxKZIPbu5ePiPH/HEDZEbtgl01FbAq9R
+         8eTiooqlTt037V7xpNoJhK123CcfPSboF9kwIwYum7K17Np0xYqqXy/7zU+BvVYSiq50
+         vhhw==
+X-Gm-Message-State: AOAM530BcWvRi2v6YBwh+4uo6r+FdU+EFV0xQhQ0jUZHAI9OClST11by
+        hWhtlleCkmf+9k+ATZqTeVkgQQ==
+X-Google-Smtp-Source: ABdhPJx+h5JcfyhNXaJ/xKmlw9d6bbCaq+UZA2pK0fHEP9513o4/OhyPZEM2zRePXQMHWN4oLYQAaA==
+X-Received: by 2002:aca:4fd7:: with SMTP id d206mr6722685oib.16.1623252197949;
+        Wed, 09 Jun 2021 08:23:17 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id t15sm30975oie.14.2021.06.09.08.23.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Jun 2021 08:23:17 -0700 (PDT)
+Subject: Re: [PATCH] usbip: tools: usbipd: use ARRAY_SIZE for sockfdlist
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        valentina.manea.m@gmail.com
+Cc:     shuah@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1623232316-89719-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <a6b75133-e85f-903e-82e3-c04cc2a14d00@linuxfoundation.org>
+Date:   Wed, 9 Jun 2021 09:23:16 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+In-Reply-To: <1623232316-89719-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-d2hlbiBzeXN0ZW0gaXMgZG9pbmcgczQsIHRoZSBwcm9jZXNzIG9mIHhoY2lfcmVzdW1lIG1heSBi
-ZSBhcyBiZWxvdzoNCjHjgIF4aGNpX21lbV9jbGVhbnVwDQoy44CBeGhjaV9pbml0LT54aGNpX21l
-bV9pbml0LT54aGNpX21lbV9jbGVhbnVwKHdoZW4gbWVtb3J5IGlzIG5vdCBlbm91Z2gpLg0KeGhj
-aV9tZW1fY2xlYW51cCB3aWxsIGJlIGV4ZWN1dGVkIHR3aWNlIHdoZW4gc3lzdGVtIGlzIG91dCBv
-ZiBtZW1vcnkuDQp4aGNpLT5wb3J0X2NhcHMgaXMgZnJlZWQgaW4geGhjaV9tZW1fY2xlYW51cCxi
-dXQgaXQgaXNuJ3Qgc2V0IHRvIE5VTEwuDQpJdCB3aWxsIGJlIGZyZWVkIHR3aWNlIHdoZW4geGhj
-aV9tZW1fY2xlYW51cCBpcyBjYWxsZWQgdGhlIHNlY29uZCB0aW1lLg0KDQpXZSBnb3QgZm9sbG93
-aW5nIGJ1ZyB3aGVuIHN5c3RlbSByZXN1bWVzIGZyb20gczQ6DQoNCmtlcm5lbCBCVUcgYXQgbW0v
-c2x1Yi5jOjMwOSENCkludGVybmFsIGVycm9yOiBPb3BzIC0gQlVHOiAwIFsjMV0gUFJFRU1QVCBT
-TVANCkNQVTogMCBQSUQ6IDU5MjkgVGFpbnRlZDogRyBTICAgVyAgIDUuNC45Ni1hcm02NC1kZXNr
-dG9wICMxDQpwYyA6IF9fc2xhYl9mcmVlKzB4NWMvMHg0MjQNCmxyIDoga2ZyZWUrMHgzMGMvMHgz
-MmMNCg0KQ2FsbCB0cmFjZToNCiBfX3NsYWJfZnJlZSsweDVjLzB4NDI0DQoga2ZyZWUrMHgzMGMv
-MHgzMmMNCiB4aGNpX21lbV9jbGVhbnVwKzB4Mzk0LzB4M2NjDQogeGhjaV9tZW1faW5pdCsweDlh
-Yy8weDEwNzANCiB4aGNpX2luaXQrMHg4Yy8weDFkMA0KIHhoY2lfcmVzdW1lKzB4MWNjLzB4NWZj
-DQogeGhjaV9wbGF0X3Jlc3VtZSsweDY0LzB4NzANCiBwbGF0Zm9ybV9wbV90aGF3KzB4MjgvMHg2
-MA0KIGRwbV9ydW5fY2FsbGJhY2srMHg1NC8weDI0Yw0KIGRldmljZV9yZXN1bWUrMHhkMC8weDIw
-MA0KIGFzeW5jX3Jlc3VtZSsweDI0LzB4NjANCiBhc3luY19ydW5fZW50cnlfZm4rMHg0NC8weDEx
-MA0KIHByb2Nlc3Nfb25lX3dvcmsrMHgxZjAvMHg0OTANCiB3b3JrZXJfdGhyZWFkKzB4NWMvMHg0
-NTANCiBrdGhyZWFkKzB4MTU4LzB4MTYwDQogcmV0X2Zyb21fZm9yaysweDEwLzB4MjQNCg0KU2ln
-bmVkLW9mZi1ieTogVGFvIFh1ZSA8eHVldGFvMDlAaHVhd2VpLmNvbT4NCi0tLQ0KIGRyaXZlcnMv
-dXNiL2hvc3QveGhjaS1tZW0uYyB8IDEgKw0KIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigr
-KQ0KDQpkaWZmIC0tZ2l0IGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW1lbS5jIGIvZHJpdmVycy91
-c2IvaG9zdC94aGNpLW1lbS5jIGluZGV4IGY2NjgxNWYuLmU0YjBjMDQgMTAwNjQ0DQotLS0gYS9k
-cml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmMNCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1t
-ZW0uYw0KQEAgLTE5MjQsNiArMTkyNCw3IEBAIHZvaWQgeGhjaV9tZW1fY2xlYW51cChzdHJ1Y3Qg
-eGhjaV9oY2QgKnhoY2kpDQogCXhoY2ktPmh3X3BvcnRzID0gTlVMTDsNCiAJeGhjaS0+cmhfYncg
-PSBOVUxMOw0KIAl4aGNpLT5leHRfY2FwcyA9IE5VTEw7DQorCXhoY2ktPnBvcnRfY2FwcyA9IE5V
-TEw7DQogDQogCXhoY2ktPnBhZ2Vfc2l6ZSA9IDA7DQogCXhoY2ktPnBhZ2Vfc2hpZnQgPSAwOw0K
-LS0NCjIuNy40DQoNCg==
+On 6/9/21 3:51 AM, Jiapeng Chong wrote:
+> Use ARRAY_SIZE instead of dividing sizeof array with sizeof an
+> element.
+> 
+> Clean up the following coccicheck warning:
+> 
+> ./tools/usb/usbip/src/usbipd.c:536:19-20: WARNING: Use ARRAY_SIZE.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>   tools/usb/usbip/src/usbipd.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
+> index 48398a7..4826d13 100644
+> --- a/tools/usb/usbip/src/usbipd.c
+> +++ b/tools/usb/usbip/src/usbipd.c
+> @@ -532,8 +532,7 @@ static int do_standalone_mode(int daemonize, int ipv4, int ipv6)
+>   		usbip_driver_close(driver);
+>   		return -1;
+>   	}
+> -	nsockfd = listen_all_addrinfo(ai_head, sockfdlist,
+> -		sizeof(sockfdlist) / sizeof(*sockfdlist));
+> +	nsockfd = listen_all_addrinfo(ai_head, sockfdlist, ARRAY_SIZE(sockfdlist));
+>   	freeaddrinfo(ai_head);
+>   	if (nsockfd <= 0) {
+>   		err("failed to open a listening socket");
+> 
+
+The change looks good. Does this change compile for you?
+Doesn't for me?
+
+thanks,
+-- Shuah
+
