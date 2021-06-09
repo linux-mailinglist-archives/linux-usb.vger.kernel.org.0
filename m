@@ -2,73 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99D1F3A0D8F
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 09:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853573A0DCA
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 09:33:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbhFIHUI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 03:20:08 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:8111 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbhFIHUH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 03:20:07 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G0JKQ1GX9zYsXy;
-        Wed,  9 Jun 2021 15:15:22 +0800 (CST)
-Received: from dggpeml500020.china.huawei.com (7.185.36.88) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.2; Wed, 9 Jun 2021 15:18:11 +0800
-Received: from huawei.com (10.175.127.227) by dggpeml500020.china.huawei.com
- (7.185.36.88) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2176.2; Wed, 9 Jun 2021
- 15:18:11 +0800
-From:   Baokun Li <libaokun1@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, Peter Chen <peter.chen@kernel.org>,
-        "Pawel Laszczak" <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <yangjihong1@huawei.com>, <yukuai3@huawei.com>,
-        <libaokun1@huawei.com>, <linux-usb@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>, Hulk Robot <hulkci@huawei.com>
-Subject: [PATCH -next v2] usb: cdns3: cdns3-gadget: Use list_move_tail instead of list_del/list_add_tail
-Date:   Wed, 9 Jun 2021 15:27:20 +0800
-Message-ID: <20210609072720.1358527-1-libaokun1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        id S236964AbhFIHfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 03:35:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43830 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236025AbhFIHfd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 03:35:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C5A676135D;
+        Wed,  9 Jun 2021 07:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623224019;
+        bh=sf3DQW0Ey1By/Rw/Aftj1JCbuq4U/NXXCk4qj9KBwFg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Pii0NALyIX/OXj3uLaQryrhuQira8IEfrwJFugOMugkyETtbj7AZDXOZwoDRMg7M3
+         OQ7E/ULz5oz/2a1a7Sh+CmrfErGzQQ+CePv++j5Pxu5bcQ4j4W6otRvgDwZftLHhOJ
+         cF2fI5Tp37hfxb0Rlg6JoL5/CExGysJk9iB6bZyn1pSqyeyBn5BQtz3RMct3kZgsi0
+         EKZqLK63ZYxFZZXECdPr5eh7sRvTZiP/IJDBGy9VuoA252XG8QNtDn4kZcQyArWfDt
+         BSEfHYIFSE4+qXaK/qIZSVi76My62exB6g/42RG6Cmr7XYNZQEmrV8+SS0R5/KYlay
+         4M4xkvyCJeLhw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lqsiS-0004r2-Br; Wed, 09 Jun 2021 09:33:32 +0200
+Date:   Wed, 9 Jun 2021 09:33:32 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Tung Pham <Tung.Pham@silabs.com>
+Cc:     Pho Tran <photranvan0712@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Hung Nguyen <Hung.Nguyen@silabs.com>,
+        Pho Tran <Pho.Tran@silabs.com>
+Subject: Re: [PATCH v12] USB: serial: cp210x: Add support for GPIOs on CP2108
+Message-ID: <YMBuzDqpcr+WLE5H@hovoldconsulting.com>
+References: <CO1PR11MB488255D1B04D3B90886A59BE812C9@CO1PR11MB4882.namprd11.prod.outlook.com>
+ <YKNnBckiw4fLIuQL@hovoldconsulting.com>
+ <CO1PR11MB4882BE3951A2CDFC8F060B58812A9@CO1PR11MB4882.namprd11.prod.outlook.com>
+ <YKdqKDj/Qbw4k5IA@hovoldconsulting.com>
+ <CO1PR11MB488295663735895484C264CF81369@CO1PR11MB4882.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type:   text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7BIT
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500020.china.huawei.com (7.185.36.88)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CO1PR11MB488295663735895484C264CF81369@CO1PR11MB4882.namprd11.prod.outlook.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Using list_move_tail() instead of list_del() + list_add_tail().
+On Wed, Jun 09, 2021 at 03:06:16AM +0000, Tung Pham wrote:
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
----
-V1->V2:
-	CC mailist
+> Thanks for your effort to reviewing our code.
+> What about status of this patch?.
 
- drivers/usb/cdns3/cdns3-gadget.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+It's still on my list. I'm a bit short on time at the moment and had to
+prioritise the CP2102N regression. I'm still hoping to get to this patch
+this week.
 
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index 57adcdbfab5f..5d8c982019af 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -430,9 +430,7 @@ static int cdns3_start_all_request(struct cdns3_device *priv_dev,
- 		if (ret)
- 			return ret;
- 
--		list_del(&request->list);
--		list_add_tail(&request->list,
--			      &priv_ep->pending_req_list);
-+		list_move_tail(&request->list, &priv_ep->pending_req_list);
- 		if (request->stream_id != 0 || (priv_ep->flags & EP_TDLCHK_EN))
- 			break;
- 	}
-
+Johan
