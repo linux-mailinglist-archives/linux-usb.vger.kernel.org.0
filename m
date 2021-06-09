@@ -2,95 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4635D3A0B11
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 06:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9583A0BAA
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 06:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbhFIEVe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 00:21:34 -0400
-Received: from gw.atmark-techno.com ([13.115.124.170]:36342 "EHLO
-        gw.atmark-techno.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231216AbhFIEVe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 00:21:34 -0400
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-        by gw.atmark-techno.com (Postfix) with ESMTPS id BB22C80262
-        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 13:13:12 +0900 (JST)
-Received: by mail-pl1-f197.google.com with SMTP id t5-20020a170902e845b0290102b8314d05so5596619plg.8
-        for <linux-usb@vger.kernel.org>; Tue, 08 Jun 2021 21:13:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9QfyL1AUne5+PBkZwxn6iFg7I6n6SWl6hKQ4WQ41Sdw=;
-        b=caH/EA0zeArbSTmZuVxesXAUHJ2A1+Q8t27eeHL4XgH7BZ7bGeIfPYEdkM1sr1lCSo
-         h5ag6nzyoA95uyR8q2Z2vwi59MDHTUxLw+IacQzbwgOCW9J4I/E3GaWgYhHEdmbWGbIy
-         l3ofHQVoJtIh3Jm7dl+/09fJdyvqtCvbd7lsKpBs9BJ7zgxtH2uo5axTVz83gRy+D3O1
-         F7RbNouQOaBSEOaVq55XuqulWC+D0MxskPXMir2DePHsePVWa00Bou+aCzO9OK+uCk97
-         aqoccW46GnUMdx/Uar6MrdgWW8SqvXrOmyv5o9UJzQSEJM3BdBxxk0ss+YJKYjL4hqG9
-         MLNg==
-X-Gm-Message-State: AOAM530G+sfi6EhC23MuQRzfIJf458+yJcfYlKKiLZFfQqC2JRMhnQXi
-        WwWD5Z3uO5YeJ8uY6sfZXaiyn6ptheCsLpKj+galm38ytHeSqFKTaaF9tD3KaCuEM3CYIR1mC+I
-        3n4QFGeovS7WqeURhcwYRHGeU
-X-Received: by 2002:a63:e453:: with SMTP id i19mr1792187pgk.134.1623211991859;
-        Tue, 08 Jun 2021 21:13:11 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJw9HC5Bv6qB3T/yEtdheshM0zEACgeTRb+kFv+9S95dtq6BS65/TpUlvArfNquzDDeJmTnupQ==
-X-Received: by 2002:a63:e453:: with SMTP id i19mr1792172pgk.134.1623211991610;
-        Tue, 08 Jun 2021 21:13:11 -0700 (PDT)
-Received: from pc-0115 (178.101.200.35.bc.googleusercontent.com. [35.200.101.178])
-        by smtp.gmail.com with ESMTPSA id nn6sm15509433pjb.57.2021.06.08.21.13.10
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Jun 2021 21:13:11 -0700 (PDT)
-Received: from martinet by pc-0115 with local (Exim 4.94.2)
-        (envelope-from <martinet@pc-0115>)
-        id 1lqpaX-009K8i-MQ; Wed, 09 Jun 2021 13:13:09 +0900
-Date:   Wed, 9 Jun 2021 13:12:59 +0900
-From:   Dominique MARTINET <dominique.martinet@atmark-techno.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        linux-uvc-devel@lists.sourceforge.net, linux-usb@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND v3 0/5] media: uvcvideo: Fix race conditions
-Message-ID: <YMA/y9RZZmumuXVd@atmark-techno.com>
-References: <20200917022547.198090-1-linux@roeck-us.net>
- <20200917124714.GD3969@pendragon.ideasonboard.com>
- <990652f1-b6e4-211c-7a96-8c3fc3ea6efd@roeck-us.net>
- <YEsZ7qnSRv0EkJGG@atmark-techno.com>
- <74c0c32a-ebb5-34e0-d3a2-6b417ce328a1@roeck-us.net>
+        id S236599AbhFIEtT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 00:49:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230401AbhFIEtS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 00:49:18 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 20EDB61351;
+        Wed,  9 Jun 2021 04:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623214045;
+        bh=/bvJ4VTCfVrClXydbE5TyXaRfwzZ02GngWXdY4kSr6A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xf3ZofrYrcKOvidZ0sNsCNsnuUGiPzhbFmLmC09ryTj6vvHRwMBlKDtiqi+Ja5yLn
+         pVyo/rIaycCRU/RiwdJxUEtHDP2FfockfbdkYr/QIQD5HhVBhBQ+Ht4mopqWjBDvpC
+         vmnbpOPLwZ215shdbErJAz2+cmJIKDHt2LGewGMo=
+Date:   Wed, 9 Jun 2021 06:47:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        kbuild-all@lists.01.org, Michal Simek <monstr@monstr.eu>,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        linux-usb@vger.kernel.org, Bastien Nocera <hadess@hadess.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 2/5] USB: misc: Add onboard_usb_hub driver
+Message-ID: <YMBH2SUor2kNeMWL@kroah.com>
+References: <20210604144027.v11.2.I7c9a1f1d6ced41dd8310e8a03da666a32364e790@changeid>
+ <202106050751.uNo0uAEm-lkp@intel.com>
+ <YL5cvT4NvMLIuH+C@google.com>
+ <YL5kL38o8JLDp8LK@kroah.com>
+ <YL5mP4lGoiHNjAYN@google.com>
+ <YL8wqCQZvim7iB02@kroah.com>
+ <YL/ZHyvnRlS4AC5N@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <74c0c32a-ebb5-34e0-d3a2-6b417ce328a1@roeck-us.net>
+In-Reply-To: <YL/ZHyvnRlS4AC5N@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Guenter Roeck wrote on Fri, Mar 12, 2021 at 06:54:52AM -0800:
-> On 3/11/21 11:36 PM, Dominique MARTINET wrote:
-> > Guenter Roeck wrote on Thu, Sep 17, 2020 at 07:16:17PM -0700:
-> >> On 9/17/20 5:47 AM, Laurent Pinchart wrote:
-> >>> I haven't checked the mailing list, but I've found it in my inbox :-)
-> >>> I'm not forgetting about you, just been fairly busy recently. I still
-> >>> plan to try and provide an alternative implementation in the V4L2 core
-> >>> (in a form that I think should even be moved to the cdev core) that
-> >>> would fix this for all drivers.
-> >>>
-> >> Thanks for letting me know. As it turns out, this problem is responsible
-> >> for about 2% of all Chromebook crashes, so I'll probably not wait for
-> >> the series to be accepted upstream but apply it as-is to the various
-> >> ChromeOS kernel branches.
-> > 
-> > We have a customer who reported the same issue recently, has there been
-> > any development?
-> > 
-> 
-> Not that I know of. We applied the series to all Chrome OS kernel branches,
-> and it reliably fixes the problem for us. We'd like to have the problem
-> fixed upstream; until that happens we'll have to carry the series forward.
+On Tue, Jun 08, 2021 at 01:54:55PM -0700, Matthias Kaehlcke wrote:
+> Also please let me know if you have other comments besides the prototype
+> question, I'd prefer to avoid version churn if possible, this series
+> already had a bit of that primarily due to the prototype issue.
 
-Thanks for confirming.
-Laurent, would it make sense to take the patches as they are until a
-better fix is ready?
+When the kernel test robot finds issues, I drop the patches from my
+review queue as I don't have time to review stuff with obvious issues,
+so I do not even have the changes around to review at the moment.  I
+have plenty of patches that do not have build problems to review :)
 
--- 
-Dominique
+Fix them up and resend, there's nothing wrong with sending lots of
+versions if you have to resolve problems.
+
+thanks,
+
+greg k-h
