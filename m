@@ -2,95 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA5F3A13B1
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D73EA3A13BB
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239705AbhFIMGF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 08:06:05 -0400
-Received: from mga02.intel.com ([134.134.136.20]:32422 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232552AbhFIMFS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 08:05:18 -0400
-IronPort-SDR: GCJPDIxDl37wt1m0rqQaM75L2FwbWjIYI/K0PEEfJ/P8qqF1gLg4ocMIgGTL49WWlSK2POTNXo
- euxLxIjRimwA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10009"; a="192166392"
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="192166392"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jun 2021 05:03:09 -0700
-IronPort-SDR: U0GKMQgmwTl08QH8x1cTH/q4OCe0ePTSxCLq74sWbR89JBOU1gSdtGnfJnqzIN/ig0PVO+821f
- dAxEfq00bP7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
-   d="scan'208";a="552653465"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 09 Jun 2021 05:03:06 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 09 Jun 2021 15:03:05 +0300
-Date:   Wed, 9 Jun 2021 15:03:05 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
-        linux-usb@vger.kernel.org, Mayank Rana <mrana@codeaurora.org>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: ucsi: Clear PPM capability data in
- ucsi_init() error path
-Message-ID: <YMCt+aiot6yObtZA@kuha.fi.intel.com>
-References: <20210609073535.5094-1-jackp@codeaurora.org>
+        id S235066AbhFIMH1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 08:07:27 -0400
+Received: from mail-lf1-f41.google.com ([209.85.167.41]:42745 "EHLO
+        mail-lf1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239047AbhFIMH1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:07:27 -0400
+Received: by mail-lf1-f41.google.com with SMTP id j2so10018299lfg.9;
+        Wed, 09 Jun 2021 05:05:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tZCtQMsPj6MqTMMB9OICoZBXpm2RZpvCwMPjZq6lUwg=;
+        b=Z8P89ckWEfrdYLEzk8hMiruknY00sSelI3mQZ1roumXi7lpgnpvHeHLSwgCnViNmB6
+         l2ZeYN5BcVUCzqlIpZGWVoC5ttMLmGdv3sT5KORIf1hufdrS3tdz26RWcvXUvES80VvO
+         tPQUj2UWIwuwHF7bxPDYucydIUluBHNJ77lXT5TrTSIqT34zP6DAUPorPRyuuG5fKGqr
+         EAW9Dg8G7Pm1Vu6fDWGEsiWvuvgAQ5x+1Kvs6k8z3MRDFiniPWq34EUkAG0bhPUPCpaP
+         mEbuaF4Fwm6e2Eb/cnakYKhzAKLwDk1F2DgwLrh0r0SpzQqobfguZhfgSuJA8kCqx1XB
+         M0PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tZCtQMsPj6MqTMMB9OICoZBXpm2RZpvCwMPjZq6lUwg=;
+        b=dYieoxjWBYh2StE+MQOMJ9R/EDMU+TOIvPXdgnxonUvzQ2ZZOW8CcZObslES0wQjFk
+         l1vzk8rm1LcpTgN+mRdZHa/VfKeAMoRFAS9pTTB3BdKhh/jTEBUczEYTA7hStwZ3s4MZ
+         +WnOkHo9tImDOqroLHB6rO8d4Z82j3zJ7wpr8cNLQgl95Kae6dunCx+rxyaGAHweQskP
+         zbY5vh0Y98CkKE/BYH8GXCZf/X+uOfK05pOL7Hlh8DzAqUBeLn8Ed80KbOkNpwbUM6Sx
+         +uSXO/MsIwCO8LdlT1ILthwuPhxnjw3biTutTniKSkco355ulVq5kzuTbO4pIuBeyy2c
+         o1DQ==
+X-Gm-Message-State: AOAM530FiKlXslGX3E0skcBiZnZU2qwzpXHLSZsMxkx5hqb7eUWrY8dS
+        RM4zMr5TIU3/V68rWl6vroU=
+X-Google-Smtp-Source: ABdhPJwY/S91q5i0lz2bcOndUtszbqCfLijy1yXbwEHJEnQpC2RlW9H6eg7X5dfwVnxNZ7zaU7XPng==
+X-Received: by 2002:a19:7d83:: with SMTP id y125mr10538351lfc.135.1623240271419;
+        Wed, 09 Jun 2021 05:04:31 -0700 (PDT)
+Received: from localhost.localdomain (94-29-21-60.dynamic.spd-mgts.ru. [94.29.21.60])
+        by smtp.gmail.com with ESMTPSA id h19sm338580lfc.225.2021.06.09.05.04.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jun 2021 05:04:31 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <Peter.Chen@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Felipe Balbi <balbi@kernel.org>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] usb: chipidea: tegra: Delay PHY suspending
+Date:   Wed,  9 Jun 2021 15:04:04 +0300
+Message-Id: <20210609120404.3991-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609073535.5094-1-jackp@codeaurora.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 12:35:35AM -0700, Jack Pham wrote:
-> From: Mayank Rana <mrana@codeaurora.org>
-> 
-> If ucsi_init() fails for some reason (e.g. ucsi_register_port()
-> fails or general communication failure to the PPM), particularly at
-> any point after the GET_CAPABILITY command had been issued, this
-> results in unwinding the initialization and returning an error.
-> However the ucsi structure's ucsi_capability member retains its
-> current value, including likely a non-zero num_connectors.
-> And because ucsi_init() itself is done in a workqueue a UCSI
-> interface driver will be unaware that it failed and may think the
-> ucsi_register() call was completely successful.  Later, if
-> ucsi_unregister() is called, due to this stale ucsi->cap value it
-> would try to access the items in the ucsi->connector array which
-> might not be in a proper state or not even allocated at all and
-> results in NULL or invalid pointer dereference.
-> 
-> Fix this by clearing the ucsi->cap value to 0 during the error
-> path of ucsi_init() in order to prevent a later ucsi_unregister()
-> from entering the connector cleanup loop.
-> 
-> Fixes: c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Mayank Rana <mrana@codeaurora.org>
-> Signed-off-by: Jack Pham <jackp@codeaurora.org>
+The ChipIdea driver enters into suspend immediately after seeing a
+VBUS disconnection. Some devices need an extra delay after losing
+VBUS, otherwise VBUS may be floating, preventing the PHY's suspending
+by the VBUS detection sensors. This problem was found on Tegra30 Asus
+Transformer TF700T tablet device, where the USB PHY wakes up immediately
+from suspend because VBUS sensor continues to detect VBUS as active after
+disconnection. A minimum delay of 20ms is needed in order to fix this
+issue, hence add 25ms delay before suspending the PHY.
 
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/usb/chipidea/ci_hdrc_tegra.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index b433169ef6fa..b7d104c80d85 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1253,6 +1253,7 @@ static int ucsi_init(struct ucsi *ucsi)
->  	}
->  
->  err_reset:
-> +	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
->  	ucsi_reset_ppm(ucsi);
->  err:
->  	return ret;
-> -- 
-> 2.24.0
-
+diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
+index 60361141ac04..d1359b76a0e8 100644
+--- a/drivers/usb/chipidea/ci_hdrc_tegra.c
++++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
+@@ -4,6 +4,7 @@
+  */
+ 
+ #include <linux/clk.h>
++#include <linux/delay.h>
+ #include <linux/io.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+@@ -255,6 +256,13 @@ static int tegra_ehci_hub_control(struct ci_hdrc *ci, u16 typeReq, u16 wValue,
+ 
+ static void tegra_usb_enter_lpm(struct ci_hdrc *ci, bool enable)
+ {
++	/*
++	 * Give hardware time to settle down after VBUS disconnection,
++	 * otherwise PHY may wake up from suspend immediately.
++	 */
++	if (enable)
++		msleep(25);
++
+ 	/*
+ 	 * Touching any register which belongs to AHB clock domain will
+ 	 * hang CPU if USB controller is put into low power mode because
 -- 
-heikki
+2.30.2
+
