@@ -2,91 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9AA3A09D4
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 04:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35CD3A0A33
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 04:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233486AbhFICOd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 8 Jun 2021 22:14:33 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36659 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233303AbhFICOc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 22:14:32 -0400
-Received: (qmail 1828243 invoked by uid 1000); 8 Jun 2021 22:12:37 -0400
-Date:   Tue, 8 Jun 2021 22:12:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        ierturk@ieee.org
-Subject: Re: Strange problem with USB device
-Message-ID: <20210609021237.GA1826754@rowland.harvard.edu>
-References: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
- <20210608182038.GA1812516@rowland.harvard.edu>
- <a7c7ba62-a74f-d7db-bfd9-4f6c8e25e0b8@lwfinger.net>
- <20210608185314.GB1812516@rowland.harvard.edu>
- <960057be-ef17-49e7-adba-ba2929d3a01f@lwfinger.net>
+        id S235825AbhFICsO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 8 Jun 2021 22:48:14 -0400
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:55042 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231668AbhFICsO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 8 Jun 2021 22:48:14 -0400
+Received: by mail-pj1-f44.google.com with SMTP id g24so489424pji.4
+        for <linux-usb@vger.kernel.org>; Tue, 08 Jun 2021 19:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6pyM9qx2wNrDkcCVnHu2542oT0QO41UA4mh+x+A7AdE=;
+        b=FErClxm/bRZmLe6FhJt/GSnmFJNbrLpAct88FR0CugarRNFYVBfZHV8O0bi+BFr0kw
+         E4RIr8vJ+cGxtukCJ+6DPVGIBZbxaBmnAmOD2owlh9yCILc0UezBXwZdKGCqnz1gWu5C
+         K/gCBu8/wSP79LDhHifBnjPtQdF2DtZAOQ1sSz0pad8I6bVNlizQ3n/7Ub00ZFTm/+wt
+         whQzClvYesx4aSSbSuQ7xRzbcsE8a/tgyRHLjLVe+0wzyCc6W+dbBuGHsD1GLmh/S6OP
+         lSwGJ4x8IxrSY2HM7aN5jw1noIxExHYZU5zpmTdVIAfEDVl7Vx7Hv4g4qF/grAzQMiuZ
+         ZRuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6pyM9qx2wNrDkcCVnHu2542oT0QO41UA4mh+x+A7AdE=;
+        b=cu0HakXtl3eQfnxqwneovpAtbNr1WBIttqN+ShgkaelOX9IrqkoL4j6alFury82ulX
+         Ighw4DlWFRv6SS6k6dxGiXAMLqilS4UuvhpokQDtjNAR7cUavDJEqxTuGrglMF/ebEWu
+         IpPP7IxkBjPUnBt1BI/0VwSNNZa5W1MOREiN/l8lhseWSYwWT7xU4pzKbFIkWQU+GpzK
+         YmVRMF4H7K7hLq72+MnwNjkgSwSjlH6mUpdVeAivFRlMzNdUj6AfANFA1T70O0UGu9FV
+         01pPRg9sdcoc1u/sX7P0lswmmpzeFzhFa7aIH6ZsUQyqhoasxS/Y7vTglTJ9NJhndy6z
+         e9Ww==
+X-Gm-Message-State: AOAM532Z9FSwngzh9AavZOHtXP4g3RoEcuegAYGO7ZID774H+O3Bc+FX
+        SahjweNnSl329NmjhfgdYpI=
+X-Google-Smtp-Source: ABdhPJz0Jemz249Gi1bk2aVy+3vJ92EMsJuB8+K17BI8zD1l9E9oO4mqihOYRTLlQvdTh3wcPiwQ4A==
+X-Received: by 2002:a17:902:9042:b029:10f:c864:6090 with SMTP id w2-20020a1709029042b029010fc8646090mr3213211plz.39.1623206708903;
+        Tue, 08 Jun 2021 19:45:08 -0700 (PDT)
+Received: from athina.mtv.corp.google.com ([2620:15c:211:0:e8f0:d5c3:a6b3:bbff])
+        by smtp.gmail.com with ESMTPSA id e24sm12750994pgi.17.2021.06.08.19.45.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Jun 2021 19:45:08 -0700 (PDT)
+From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
+To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] usb: fix various gadget panics on 10gbps cabling
+Date:   Tue,  8 Jun 2021 19:44:59 -0700
+Message-Id: <20210609024459.1126080-1-zenczykowski@gmail.com>
+X-Mailer: git-send-email 2.32.0.rc1.229.g3e70b5a671-goog
+In-Reply-To: <YL8wSsGso94F6lEH@kroah.com>
+References: <YL8wSsGso94F6lEH@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <960057be-ef17-49e7-adba-ba2929d3a01f@lwfinger.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 08, 2021 at 03:56:11PM -0500, Larry Finger wrote:
-> On 6/8/21 1:53 PM, Alan Stern wrote:
-> > I don't get it.  If this is a PCIe device, why should it appear
-> > on a USB bus?  Wouldn't you expect it to show up as a PCI device
-> > on a PCI bus instead?
-> > 
-> 
-> I do not know the internal details, but Realtek packages a PCIe wifi
-> device and a bluetooth USB device in the same package. Intel does the
-> same thing on my Wireless 7260.
-> 
-> My lsusb shows:
-> Bus 003 Device 002: ID 8087:8000 Intel Corp. Integrated Rate Matching Hub
-> Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 001 Device 002: ID 8087:8008 Intel Corp. Integrated Rate Matching Hub
-> Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-> Bus 002 Device 004: ID 8087:07dc Intel Corp. Bluetooth wireless interface
-> Bus 002 Device 003: ID 0bda:c822 Realtek Semiconductor Corp. Bluetooth Radio
-> Bus 002 Device 002: ID 04f2:b3b2 Chicony Electronics Co., Ltd TOSHIBA
-> Web Camera - FHD
-> Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-> 
-> I have no devices plugged into a USB port.
+From: Maciej Żenczykowski <maze@google.com>
 
-Okay, now I get the picture.  The Intel PCIe card contains an 
-EHCI USB host controller plus a couple of on-board USB Bluetooth 
-devices and an on-board USB webcam, in addition to the PCIe wifi 
-device.
+usb_assign_descriptors() is called with 5 parameters,
+the last 4 of which are the usb_descriptor_header for:
+  full-speed (USB1.1 - 12Mbps [including USB1.0 low-speed @ 1.5Mbps),
+  high-speed (USB2.0 - 480Mbps),
+  super-speed (USB3.0 - 5Gbps),
+  super-speed-plus (USB3.1 - 10Gbps).
 
-Which means you're looking at the problem all wrong.  It isn't a 
-USB problem at all; it's a PCI problem.  Namely, why doesn't the 
-system detect the USB host controller on the PCIe board?
+The differences between full/high/super-speed descriptors are usually
+substantial (due to changes in the maximum usb block size from 64 to 512
+to 1024 bytes and other differences in the specs), while the difference
+between 5 and 10Gbps descriptors may be as little as nothing
+(in many cases the same tuning is simply good enough).
 
-I have added the PCI maintainer and mailing list to the CC.  
-Maybe they can help shed some light.
+However if a gadget driver calls usb_assign_descriptors() with
+a NULL descriptor for super-speed-plus and is then used on a max 10gbps
+configuration, the kernel will crash with a null pointer dereference,
+when a 10gbps capable device port + cable + host port combination shows up.
+(This wouldn't happen if the gadget max-speed was set to 5gbps, but
+it of course defaults to the maximum, and there's no real reason to
+artificially limit it)
 
-The original Suse Bugzilla report:
+The fix is to simply use the 5gbps descriptor as the 10gbps descriptor,
+if a 10gbps descriptor wasn't provided.
 
-	https://bugzilla.suse.com/show_bug.cgi?id=1186889
+Obviously this won't fix the problem if the 5gbps descriptor is also
+NULL, but such cases can't be so trivially solved (and any such gadgets
+are unlikely to be used with USB3 ports any way).
 
-shows the Realtek board at PCI address 0000:03:00.0, but there's 
-no mention of a USB host controller on that board.  The only host 
-controller on the system is the one at address 0000:00:14.0, 
-which is xHCI and is directly on the motherboard.
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Maciej Żenczykowski <maze@google.com>
+---
+ drivers/usb/gadget/config.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Furthermore, there's no trace of any mention of an EHCI USB host 
-controller in the system log.  So maybe the board has to be told 
-somehow to turn that controller on before it will show up, and 
-the rtw_8822ce driver isn't giving the appropriate order.
+diff --git a/drivers/usb/gadget/config.c b/drivers/usb/gadget/config.c
+index 8bb25773b61e..05507606b2b4 100644
+--- a/drivers/usb/gadget/config.c
++++ b/drivers/usb/gadget/config.c
+@@ -164,6 +164,14 @@ int usb_assign_descriptors(struct usb_function *f,
+ {
+ 	struct usb_gadget *g = f->config->cdev->gadget;
+ 
++	/* super-speed-plus descriptor falls back to super-speed one,
++	 * if such a descriptor was provided, thus avoiding a NULL
++	 * pointer dereference if a 5gbps capable gadget is used with
++	 * a 10gbps capable config (device port + cable + host port)
++	 */
++	if (!ssp)
++		ssp = ss;
++
+ 	if (fs) {
+ 		f->fs_descriptors = usb_copy_descriptors(fs);
+ 		if (!f->fs_descriptors)
+-- 
+2.32.0.rc1.229.g3e70b5a671-goog
 
-Can the bug reporter get information from Windows about the USB 
-host controllers, and in particular, the one on the RTL8822 
-board?
-
-Alan Stern
