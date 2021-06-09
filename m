@@ -2,66 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C52BB3A0F1A
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 10:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F353A0F37
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 11:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbhFII6j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 04:58:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47846 "EHLO mail.kernel.org"
+        id S233930AbhFIJDX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 05:03:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49644 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233595AbhFII6i (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 04:58:38 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 17C6361040;
-        Wed,  9 Jun 2021 08:56:43 +0000 (UTC)
+        id S231919AbhFIJDV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 05:03:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C925A61182;
+        Wed,  9 Jun 2021 09:01:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623229004;
-        bh=y+rZC8ET704ZyS2De756e+uIOdbE3GgO+5jsgP/wVHM=;
+        s=korg; t=1623229270;
+        bh=QY9p7QigWQvKh0dZh2qPkN32nYvRy2rehUvJ5ev1hT4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cZ978C9G3XwZmTJTDMir+CoiQtR2oyMeMSKp9wMx/JlLPdrT3x39jvc351tPpe9SM
-         0mzvQskwYMhzSRJD1ohOGpKYvsh7rrImM9laSRwHvz1U8lW1m7kWo4VdeZIUIcUUTM
-         8wO0ND0g6XtGJ1xfP4q5C0zrUtt40e9TqtMojvbI=
-Date:   Wed, 9 Jun 2021 10:56:42 +0200
+        b=JVIWJpu0fo5rKal/RoOce324EqW8gZNwfqhaF/V1jTUN/6MbjMIJI5DBV2s6U+PfS
+         vk8n4SxbZzaPUH9uF22fEIuPb5OS0/zuc15Jg5oHaTNtZQdEM08enZREIS8zX7IF/k
+         9U+alHBTR4avIiwgvTfLKZ8rO6riEW6SdFWriXHM=
+Date:   Wed, 9 Jun 2021 11:01:07 +0200
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v1 1/1] usb: typec: wcove: Use LE to CPU conversion when
- accessing msg->header
-Message-ID: <YMCCSiNnvc9oh7P+@kroah.com>
-References: <20210519085534.48732-1-andriy.shevchenko@linux.intel.com>
- <YKYrQXXk/X72iI+0@kuha.fi.intel.com>
- <YL47Ny7hXZmgH/dx@smile.fi.intel.com>
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Peter Chen <peter.chen@kernel.org>, balbi@kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: dwc3: core: fix kernel panic when do reboot
+Message-ID: <YMCDU+qoShVvJCGK@kroah.com>
+References: <20210608105656.10795-1-peter.chen@kernel.org>
+ <20210608164933.GA2601@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YL47Ny7hXZmgH/dx@smile.fi.intel.com>
+In-Reply-To: <20210608164933.GA2601@jackp-linux.qualcomm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 07, 2021 at 06:28:55PM +0300, Andy Shevchenko wrote:
-> On Thu, May 20, 2021 at 12:26:25PM +0300, Heikki Krogerus wrote:
-> > On Wed, May 19, 2021 at 11:55:34AM +0300, Andy Shevchenko wrote:
-> > > As LKP noticed the Sparse is not happy about strict type handling:
-> > >    .../typec/tcpm/wcove.c:380:50: sparse:     expected unsigned short [usertype] header
-> > >    .../typec/tcpm/wcove.c:380:50: sparse:     got restricted __le16 const [usertype] header
-> > > 
-> > > Fix this by switching to use pd_header_cnt_le() instead of pd_header_cnt()
-> > > in the affected code.
-> > > 
-> > > Fixes: ae8a2ca8a221 ("usb: typec: Group all TCPCI/TCPM code together")
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On Tue, Jun 08, 2021 at 09:50:01AM -0700, Jack Pham wrote:
+> Hi Peter,
 > 
-> Thanks!
+> On Tue, Jun 08, 2021 at 06:56:56PM +0800, Peter Chen wrote:
+> > When do system reboot, it calls dwc3_shutdown and the whole debugfs
+> > for dwc3 has removed first, when the gadget tries to do deinit, and
+> > remove debugfs for its endpoints, it meets NULL pointer dereference
+> > issue when call debugfs_lookup. Fix it by removing the whole dwc3
+> > debugfs later than dwc3_drd_exit.
 > 
-> Greg, should I amend or resend this?
+> Ouch, thanks for catching this! I think in your previous reply[1] you
+> did warn about the debugfs_remove_recursive() getting called twice, but
+> it seems here the issue is due to the debugfs_lookup() getting called on
+> a stale dwc->root pointer after it was already removed.
 
-Both please.
+We can also fix this by getting rid of that "root" pointer as it's
+useless (we can look it up if we need it.)  I'll send a patch later to
+do that, as it's a good idea to do anyway, and is independant of this
+fix.
 
 thanks,
 
