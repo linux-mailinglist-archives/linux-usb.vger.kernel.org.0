@@ -2,118 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AA23A13C3
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D19603A13CA
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 14:10:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbhFIMKa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 08:10:30 -0400
-Received: from mail-lf1-f53.google.com ([209.85.167.53]:41712 "EHLO
-        mail-lf1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231612AbhFIMK2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:10:28 -0400
-Received: by mail-lf1-f53.google.com with SMTP id j20so8330541lfe.8;
-        Wed, 09 Jun 2021 05:08:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S8n0jQRFElQLEp8hvxDm0SO8rf3gl/kuZnGhnAjKgQU=;
-        b=KK2chBW66zdf8R49oD5I+CR26o91hvjM99NwaPRpvez8WF9WaEWG8q/LogToiilZlK
-         QYSKe90AXXs6oa43vYY5g2V49ZxVT5l3XGZPtIf0PJkwfOpyZjYvcEPygjyAUt6BX6sd
-         unXSkrb5QaJRkDo+nT00edrhAqNNzX5ZCNY8vRFbjat2lISZInmh+r+WdYU1KDnnM9ag
-         SuKSslVZrXWykIeqt/CxQf0GjFszT1DdLu1oMmc8mBaDPD4uJ3IlL+++Yhan8ycYDDpr
-         xqMzYDEBBfColLC/tRBn8HptdnoIPiaroBrsilIGm6qL4FjDHNBQV2sYdjU8nqI1UMnI
-         By6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S8n0jQRFElQLEp8hvxDm0SO8rf3gl/kuZnGhnAjKgQU=;
-        b=QGzQlPac8LbfGjDbz3a0R5cbXKOt6wqdYklLBMsdS2gXWcE3zKtCDeVAbU71c5lD3K
-         /4/0R0hTx60NPx4hW4vPMtLlPbamOY0Z7EhQxnJaYlEFcteCK1BN1yHwPErX7/chKZMz
-         f6FAPk30WEKkbo/xiTmEiRtQIIW73CrqGO4xWHaKRWHvY5pUD89s+pS6s15jNgat2dPZ
-         JiihzL2fZXypPFgfa6nDZyx6hovIh3BHULa67XGb58d5Nyb+ezttVMoEBCAMyewH1cJz
-         RihNF7HXM39AtsgjCbB0eDjeQYGLJanFeUJbpcLzHBt3GlcAuq/tC0t9nl+g6VAwHYee
-         2G+w==
-X-Gm-Message-State: AOAM530ycjicxUJZlLzpeW4qeX6hdBHSJH9qNMIe7FDRy83UArBJMqdv
-        6WVZK/ZG8rp56XrkJgBus9/yT+GfLZE=
-X-Google-Smtp-Source: ABdhPJxf6x+u2R513tmhJJ1RQsO2yFImXGuTHk2KF2irZ2hgTRjlSBSK4VWXKPUKlLhEUj3NMbbZ3g==
-X-Received: by 2002:a05:6512:507:: with SMTP id o7mr3112088lfb.453.1623240452794;
-        Wed, 09 Jun 2021 05:07:32 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-21-60.dynamic.spd-mgts.ru. [94.29.21.60])
-        by smtp.googlemail.com with ESMTPSA id l12sm375174lfk.10.2021.06.09.05.07.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Jun 2021 05:07:32 -0700 (PDT)
-Subject: Re: [PATCH v1] usb: chipidea: tegra: Delay PHY suspending
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        Peter Chen <peter.chen@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210609120404.3991-1-digetx@gmail.com>
-Message-ID: <d476a149-1b97-9762-fbc7-5ba41f72523b@gmail.com>
-Date:   Wed, 9 Jun 2021 15:07:31 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232868AbhFIMMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 08:12:38 -0400
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:63417 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232515AbhFIMMh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 08:12:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1623240643; x=1654776643;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9Xk1ujB2kl+qiFwhxmEUDgjYRlHoyizFUOvEaQMLa0Q=;
+  b=tXSUyw2cWH8jBLfG86cGT9FcEm253iJ7gc2pert7i7SM8n3gWc7zXVH/
+   pL6EEZbs4s6Ulbrk1xGfB5ZbSnL/o/dgQwwPhSnGlzZri0NHepZJMsTJg
+   Vx2jqIQIkOCOXmXm709g/LnuVuTYGKsu96VkiZ27rvIYqD5WOFe7YYNAU
+   9yKi1U3oNKgomfmY4sTPdpnb3OLpWexxQNZqP92C0uHepkC4HSwU5N8/S
+   jPwYQuGnakrBOYwOIl9HRwxJbXdPIy6zPiy2cCDRdTb5v7DF+E/ex4GBd
+   vSBENC1hOFn3kBBt2C3BZ7BhQH5Yx3dyCDO7Ef2vIrtI9iS8g2fgPNdYd
+   g==;
+IronPort-SDR: 3KzQrg30tx/nO9bPITuPmyiWWqx6Ljl9T7xHt4v9Qgo9Hqwn2eOA1iX/acZsDFbKKUkbD8MRoW
+ DZpuQ4UJCIVKPH7JK4ELc/XhBuS4yiyBdbqFv4c4DVY36sZu4NPlWxyx6m23Uy33zDwWvTg8v1
+ pdwbtllNctVMs0K1X6EQZvLmi4C7mMkzeZXfUhuAB/KCGOutsgBvVnKvWM9MunReDEZPMhVdOL
+ 2ofz/IFDXqKbZzsZS+R3rb9ypyqOrJvVgdqjF0Ty2LyxKttm1sbF0NdtDRd/ZREmBFzOFM90MA
+ xiE=
+X-IronPort-AV: E=Sophos;i="5.83,260,1616482800"; 
+   d="scan'208";a="120688966"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Jun 2021 05:10:42 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Wed, 9 Jun 2021 05:10:41 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2176.2 via Frontend Transport; Wed, 9 Jun 2021 05:10:33 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <stern@rowland.harvard.edu>, <gregkh@linuxfoundation.org>,
+        <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <ludovic.desroches@microchip.com>, <cristian.birsan@microchip.com>
+CC:     <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before OHCI accesses
+Date:   Wed, 9 Jun 2021 15:10:27 +0300
+Message-ID: <20210609121027.70951-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20210609120404.3991-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-09.06.2021 15:04, Dmitry Osipenko пишет:
-> The ChipIdea driver enters into suspend immediately after seeing a
-> VBUS disconnection. Some devices need an extra delay after losing
-> VBUS, otherwise VBUS may be floating, preventing the PHY's suspending
-> by the VBUS detection sensors. This problem was found on Tegra30 Asus
-> Transformer TF700T tablet device, where the USB PHY wakes up immediately
-> from suspend because VBUS sensor continues to detect VBUS as active after
-> disconnection. A minimum delay of 20ms is needed in order to fix this
-> issue, hence add 25ms delay before suspending the PHY.
-> 
-> Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
-> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/usb/chipidea/ci_hdrc_tegra.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
-> index 60361141ac04..d1359b76a0e8 100644
-> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
-> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
-> @@ -4,6 +4,7 @@
->   */
->  
->  #include <linux/clk.h>
-> +#include <linux/delay.h>
->  #include <linux/io.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> @@ -255,6 +256,13 @@ static int tegra_ehci_hub_control(struct ci_hdrc *ci, u16 typeReq, u16 wValue,
->  
->  static void tegra_usb_enter_lpm(struct ci_hdrc *ci, bool enable)
->  {
-> +	/*
-> +	 * Give hardware time to settle down after VBUS disconnection,
-> +	 * otherwise PHY may wake up from suspend immediately.
-> +	 */
-> +	if (enable)
-> +		msleep(25);
-> +
->  	/*
->  	 * Touching any register which belongs to AHB clock domain will
->  	 * hang CPU if USB controller is put into low power mode because
-> 
+On SAMA7G5 suspending ports will cut the access to OHCI registers and
+any subsequent access to them will lead to CPU being blocked trying to
+access that memory. Same thing happens on resume: if OHCI memory is
+accessed before resuming ports the CPU will block on that access. The
+OCHI memory is accessed on suspend/resume though
+ohci_suspend()/ohci_resume().
 
-I missed that Peter's email address changed. Making this reply to the
-new address for visibility.
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+
+The patch was tested on SAMA7G5, SAMA5D2 and SAM9X60.
+
+Thank you,
+Claudiu Beznea
+
+ drivers/usb/host/ohci-at91.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index b3a6a497dcb1..7c6202b05ff4 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -666,8 +666,6 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+ 	if (ohci_at91->wakeup)
+ 		enable_irq_wake(hcd->irq);
+ 
+-	ohci_at91_port_suspend(ohci_at91, 1);
+-
+ 	ret = ohci_suspend(hcd, ohci_at91->wakeup);
+ 	if (ret) {
+ 		if (ohci_at91->wakeup)
+@@ -687,7 +685,10 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+ 		/* flush the writes */
+ 		(void) ohci_readl (ohci, &ohci->regs->control);
+ 		msleep(1);
++		ohci_at91_port_suspend(ohci_at91, 1);
+ 		at91_stop_clock(ohci_at91);
++	} else {
++		ohci_at91_port_suspend(ohci_at91, 1);
+ 	}
+ 
+ 	return ret;
+@@ -699,6 +700,8 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+ 	struct ohci_at91_priv *ohci_at91 = hcd_to_ohci_at91_priv(hcd);
+ 
++	ohci_at91_port_suspend(ohci_at91, 0);
++
+ 	if (ohci_at91->wakeup)
+ 		disable_irq_wake(hcd->irq);
+ 	else
+@@ -706,8 +709,6 @@ ohci_hcd_at91_drv_resume(struct device *dev)
+ 
+ 	ohci_resume(hcd, false);
+ 
+-	ohci_at91_port_suspend(ohci_at91, 0);
+-
+ 	return 0;
+ }
+ 
+-- 
+2.25.1
+
