@@ -2,133 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAEC3A1D62
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 20:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD69D3A1E69
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 22:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbhFITBP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 15:01:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33644 "EHLO mail.kernel.org"
+        id S229771AbhFIU7q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 16:59:46 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:47095 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229472AbhFITBP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 15:01:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFFFF61364;
-        Wed,  9 Jun 2021 18:59:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623265160;
-        bh=nXoyJTJxIU3jLPEO7r7vkSzXDt/P6SnO6auwIHMlV/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d5vtyGuXmMyksM3Z7Ybx3hLNe6SGBJvUCtgsPr7YTMlCz1h51l2fjMxlmix04G5Jz
-         4Z2liKHYdyYSlJehNHJA/hBC3qac9U9znTMz6xobrAoKKGGzi1Kgb2jeL3CIv5wY4G
-         dqmwEDO5mrmCfGJ+EJEznfWjXFcR9Auxqk3vIQII=
-Date:   Wed, 9 Jun 2021 20:59:17 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jack Pham <jackp@codeaurora.org>
+        id S229578AbhFIU7p (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 16:59:45 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623272270; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
+ Subject: Sender; bh=nzlPsbiXe8YZGFdkYnkK+8MI+UNQoJBQtFJDPoUTWE8=; b=pDL1ow8ZPwGOoDBLO9M9hKCjBYPS1PDWIBKhIWx73QEscNpQBNstGzLm/+L+J3wK/gJxmA13
+ DytsS3Y99H2zt7obkZCQlM28eC+7BYKIcAj37wRQCJTe1pbCoRM1NpTyb5w1oPAoaQnld4ng
+ qdK3WW74lsh4EVvDJORukyQdj7w=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 60c12b3df726fa4188d0e0e8 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 09 Jun 2021 20:57:33
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id DACDFC4338A; Wed,  9 Jun 2021 20:57:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.62.3] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CEDCBC433D3;
+        Wed,  9 Jun 2021 20:57:31 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CEDCBC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace list_for_each_entry_safe()
+ if using giveback
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Felipe Balbi <balbi@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>
-Subject: Re: [PATCH] USB: dwc3: remove debugfs root dentry storage
-Message-ID: <YMEPhay2knIEc3sZ@kroah.com>
-References: <20210609093924.3293230-1-gregkh@linuxfoundation.org>
- <20210609184715.GA28957@jackp-linux.qualcomm.com>
+        jackp@codeaurora.org
+References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+ <87tun9g01v.fsf@kernel.org>
+ <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
+Message-ID: <5156238d-c1d8-a0d3-47af-8b52467fd071@codeaurora.org>
+Date:   Wed, 9 Jun 2021 13:57:30 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609184715.GA28957@jackp-linux.qualcomm.com>
+In-Reply-To: <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 11:47:15AM -0700, Jack Pham wrote:
-> On Wed, Jun 09, 2021 at 11:39:24AM +0200, Greg Kroah-Hartman wrote:
-> > There is no need to keep around the debugfs "root" directory for the
-> > dwc3 device.  Instead, look it up anytime we need to find it.  This will
-> > help when callers get out-of-order and we had the potential to have a
-> > "stale" pointer around for the root dentry, as has happened in the past.
-> > 
-> > Cc: Felipe Balbi <balbi@kernel.org>
-> > Cc: Jack Pham <jackp@codeaurora.org>
-> > Cc: Peter Chen <peter.chen@kernel.org>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  drivers/usb/dwc3/core.h    | 2 --
-> >  drivers/usb/dwc3/debugfs.c | 8 ++++----
-> >  drivers/usb/dwc3/gadget.c  | 4 +++-
-> >  3 files changed, 7 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > index c5d5760cdf53..dccdf13b5f9e 100644
-> > --- a/drivers/usb/dwc3/core.h
-> > +++ b/drivers/usb/dwc3/core.h
-> > @@ -1013,7 +1013,6 @@ struct dwc3_scratchpad_array {
-> >   * @link_state: link state
-> >   * @speed: device speed (super, high, full, low)
-> >   * @hwparams: copy of hwparams registers
-> > - * @root: debugfs root folder pointer
-> >   * @regset: debugfs pointer to regdump file
-> >   * @dbg_lsp_select: current debug lsp mux register selection
-> >   * @test_mode: true when we're entering a USB test mode
-> > @@ -1222,7 +1221,6 @@ struct dwc3 {
-> >  	u8			num_eps;
-> >  
-> >  	struct dwc3_hwparams	hwparams;
-> > -	struct dentry		*root;
-> >  	struct debugfs_regset32	*regset;
-> >  
-> >  	u32			dbg_lsp_select;
-> > diff --git a/drivers/usb/dwc3/debugfs.c b/drivers/usb/dwc3/debugfs.c
-> > index 5dbbe53269d3..f2b7675c7f62 100644
-> > --- a/drivers/usb/dwc3/debugfs.c
-> > +++ b/drivers/usb/dwc3/debugfs.c
-> > @@ -889,8 +889,10 @@ static void dwc3_debugfs_create_endpoint_files(struct dwc3_ep *dep,
-> >  void dwc3_debugfs_create_endpoint_dir(struct dwc3_ep *dep)
-> >  {
-> >  	struct dentry		*dir;
-> > +	struct dentry		*root;
-> >  
-> > -	dir = debugfs_create_dir(dep->name, dep->dwc->root);
-> > +	root = debugfs_lookup(dev_name(dep->dwc->dev), usb_debug_root);
-> > +	dir = debugfs_create_dir(dep->name, root);
-> >  	dwc3_debugfs_create_endpoint_files(dep, dir);
-> >  }
-> >  
-> > @@ -909,8 +911,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
-> >  	dwc->regset->base = dwc->regs - DWC3_GLOBALS_REGS_START;
-> >  
-> >  	root = debugfs_create_dir(dev_name(dwc->dev), usb_debug_root);
-> > -	dwc->root = root;
-> > -
-> >  	debugfs_create_regset32("regdump", 0444, root, dwc->regset);
-> >  	debugfs_create_file("lsp_dump", 0644, root, dwc, &dwc3_lsp_fops);
-> >  
-> > @@ -929,6 +929,6 @@ void dwc3_debugfs_init(struct dwc3 *dwc)
-> >  
-> >  void dwc3_debugfs_exit(struct dwc3 *dwc)
-> >  {
-> > -	debugfs_remove_recursive(dwc->root);
-> > +	debugfs_remove(debugfs_lookup(dev_name(dwc->dev), usb_debug_root));
-> >  	kfree(dwc->regset);
-> >  }
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index 7cc99b6d0bfe..026a2ad0fc80 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -2799,7 +2799,9 @@ static void dwc3_gadget_free_endpoints(struct dwc3 *dwc)
-> >  			list_del(&dep->endpoint.ep_list);
-> >  		}
-> >  
-> > -		debugfs_remove_recursive(debugfs_lookup(dep->name, dwc->root));
-> > +		debugfs_remove_recursive(debugfs_lookup(dep->name,
-> > +				debugfs_lookup(dev_name(dep->dwc->dev),
-> > +					       usb_debug_root)));
+Hi Felipe,
+
+On 5/19/2021 1:52 AM, Wesley Cheng wrote:
 > 
-> Nested calls to debugfs_lookup() :). But it does work, and similarly
-> avoids the out-of-order debugfs removal issue as well even without
-> Peter's fix.
+> 
+> On 5/11/2021 1:13 AM, Felipe Balbi wrote:
+>>
+>> Hi,
+>>
+>> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>> The list_for_each_entry_safe() macro saves the current item (n) and
+>>> the item after (n+1), so that n can be safely removed without
+>>> corrupting the list.  However, when traversing the list and removing
+>>> items using gadget giveback, the DWC3 lock is briefly released,
+>>> allowing other routines to execute.  There is a situation where, while
+>>> items are being removed from the cancelled_list using
+>>> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+>>> routine is running in parallel (due to UDC unbind).  As the cleanup
+>>> routine removes n, and the pullup disable removes n+1, once the
+>>> cleanup retakes the DWC3 lock, it references a request who was already
+>>> removed/handled.  With list debug enabled, this leads to a panic.
+>>> Ensure all instances of the macro are replaced where gadget giveback
+>>> is used.
+>>>
+>>> Example call stack:
+>>>
+>>> Thread#1:
+>>> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>>>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>>>     ->list_for_each_entry_safe()
+>>>     ->dwc3_gadget_giveback(n)
+>>>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+>>>       ->spin_unlock
+>>>       ->Thread#2 executes
+>>>       ...
+>>>     ->dwc3_gadget_giveback(n+1)
+>>>       ->Already removed!
+>>>
+>>> Thread#2:
+>>> dwc3_gadget_pullup()
+>>>   ->waiting for dwc3 spin_lock
+>>>   ...
+>>>   ->Thread#1 released lock
+>>>   ->dwc3_stop_active_transfers()
+>>>     ->dwc3_remove_requests()
+>>>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+>>>       ->dwc3_gadget_giveback()
+>>>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
+>>>         ->spin_unlock
+>>>
+>>> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+>>> ---
+>>> Changes in v2:
+>>>  - Updated commit message with context call stack of an example scenario
+>>>    seen on device.
+>>>
+>>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index dd80e5c..efa939b 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+>>>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+>>>  {
+>>>  	struct dwc3_request		*req;
+>>> -	struct dwc3_request		*tmp;
+>>>  	struct dwc3			*dwc = dep->dwc;
+>>>  
+>>> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+>>> +	while (!list_empty(&dep->cancelled_list)) {
+>>> +		req = next_request(&dep->cancelled_list);
+>>
+>> couldn't this be solved list_replace_init() instead? Then we can keep
+>> using the regular list_for_each_entry_safe() which has an added semantic
+>> meaning due to its name.
+>>
+> 
+> Hi Felipe,
+> 
+> Sorry for the late response.  So I tried with a list_replace_init() to
+> within the list_for_each_entry_safe() loop to update tmp w/ the
+> cancelled_list list head, but the issue was still observed.  This is
+> because we can't replace the reference the loop already has stored in
+> tmp, which is simply updated as the current item on the next iteration.
+> 
+> I believe this is what you were trying to achieve?
+> 
+Was wondering if you had any further inputs on this change?  As
+mentioned, I tried a few things with list_replace_init(), which did not
+work.
 
-Yeah, it's funny, but it's safer than trying to store a pointer around :)
+Thanks
+Wesley Cheng
 
-> Tested-by: Jack Pham <jackp@codeaurora.org>
-
-Many thanks for testing.
-
-greg k-h
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
