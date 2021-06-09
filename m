@@ -2,62 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C50063A1063
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 12:48:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E383A1089
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 12:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238159AbhFIJov (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 05:44:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36666 "EHLO mail.kernel.org"
+        id S234463AbhFIJuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 05:50:24 -0400
+Received: from smtpbgsg2.qq.com ([54.254.200.128]:44124 "EHLO smtpbgsg2.qq.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238162AbhFIJou (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 05:44:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0143E6136D;
-        Wed,  9 Jun 2021 09:42:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623231775;
-        bh=MJZ1xoC4SXgXBo4T0p99ORsxRs0/VJPIQky2Q1NkXRw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lAMnwkE82U1Ge6HXVNIWaT9Ism9kuGK/rhlV3hXhQoUhjwYgKnfVO6hOn5rW15d18
-         Ycfm5PWJ0U3Ys8zsrPQNtJDmtj15kvVGkA6lJ56JKw3C5LQJt5vKLcfIlKaPKNLZCw
-         f1YUPVNs3vQ6oB+ZixScG4O69Ednv6JDL29cLhEI=
-Date:   Wed, 9 Jun 2021 11:42:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Peter Chen <peter.chen@kernel.org>, balbi@kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: dwc3: core: fix kernel panic when do reboot
-Message-ID: <YMCNHRLfLPqUhHtu@kroah.com>
-References: <20210608105656.10795-1-peter.chen@kernel.org>
- <20210608164933.GA2601@jackp-linux.qualcomm.com>
- <YMCDU+qoShVvJCGK@kroah.com>
+        id S232867AbhFIJuY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 9 Jun 2021 05:50:24 -0400
+X-Greylist: delayed 77913 seconds by postgrey-1.27 at vger.kernel.org; Wed, 09 Jun 2021 05:50:23 EDT
+X-QQ-mid: bizesmtp47t1623232098t5dm3y2h
+Received: from localhost.localdomain (unknown [182.148.12.106])
+        by esmtp6.qq.com (ESMTP) with 
+        id ; Wed, 09 Jun 2021 17:48:16 +0800 (CST)
+X-QQ-SSF: 01000000007000207000B00A0000000
+X-QQ-FEAT: zqIuYHvuydxzkEdvYoc6NyZRcS3yR/bOPKdePmVgf3PadKVkKS0SylSZUQN1D
+        9Dnw2mz88GF/udNJeT5jItFVX9Ojo4lcOUBb2pVmHJrMC6VKGrikV5/wRSPn5xMp6W9RtNy
+        QTIlIUJqDeJk/8b6hvkYddXprsbmyS/TlhzsvjlMjpISwPSkO9u2VVWRLn0WUWocF6Zdw6p
+        l/u2GhLyjdhLD0qXu6gKM96/l39fbVRSREE1nMv+21fVgFQpK+5BShLhrz/yan2oolXe10m
+        KZEzqXMGe4bJTzumFbTx1TLQUPDqm5XaGJXi/2lNp5C4SZo88heSp+GP4=
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     stern@rowland.harvard.edu
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] usb: ehci: do not initialise static variables
+Date:   Wed,  9 Jun 2021 17:47:26 +0800
+Message-Id: <20210609094726.62459-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMCDU+qoShVvJCGK@kroah.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybgforeign:qybgforeign7
+X-QQ-Bgrelay: 1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 11:01:07AM +0200, Greg Kroah-Hartman wrote:
-> On Tue, Jun 08, 2021 at 09:50:01AM -0700, Jack Pham wrote:
-> > Hi Peter,
-> > 
-> > On Tue, Jun 08, 2021 at 06:56:56PM +0800, Peter Chen wrote:
-> > > When do system reboot, it calls dwc3_shutdown and the whole debugfs
-> > > for dwc3 has removed first, when the gadget tries to do deinit, and
-> > > remove debugfs for its endpoints, it meets NULL pointer dereference
-> > > issue when call debugfs_lookup. Fix it by removing the whole dwc3
-> > > debugfs later than dwc3_drd_exit.
-> > 
-> > Ouch, thanks for catching this! I think in your previous reply[1] you
-> > did warn about the debugfs_remove_recursive() getting called twice, but
-> > it seems here the issue is due to the debugfs_lookup() getting called on
-> > a stale dwc->root pointer after it was already removed.
-> 
-> We can also fix this by getting rid of that "root" pointer as it's
-> useless (we can look it up if we need it.)  I'll send a patch later to
-> do that, as it's a good idea to do anyway, and is independant of this
-> fix.
+Global static variables dont need to be initialised manully.
 
-Now sent:
-	https://lore.kernel.org/r/20210609093924.3293230-1-gregkh@linuxfoundation.org
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/usb/host/ehci-hcd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index 35eec0c0edcd..36f5bf6a0752 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -76,12 +76,12 @@ static const char	hcd_name [] = "ehci_hcd";
+ #define	EHCI_TUNE_FLS		1	/* (medium) 512-frame schedule */
+ 
+ /* Initial IRQ latency:  faster than hw default */
+-static int log2_irq_thresh = 0;		// 0 to 6
++static int log2_irq_thresh;		// 0 to 6
+ module_param (log2_irq_thresh, int, S_IRUGO);
+ MODULE_PARM_DESC (log2_irq_thresh, "log2 IRQ latency, 1-64 microframes");
+ 
+ /* initial park setting:  slower than hw default */
+-static unsigned park = 0;
++static unsigned park;
+ module_param (park, uint, S_IRUGO);
+ MODULE_PARM_DESC (park, "park setting; 1-3 back-to-back async packets");
+ 
+-- 
+2.31.1
+
+
+
