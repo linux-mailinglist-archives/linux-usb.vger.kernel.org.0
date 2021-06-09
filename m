@@ -2,61 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 853573A0DCA
-	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 09:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB223A0DD0
+	for <lists+linux-usb@lfdr.de>; Wed,  9 Jun 2021 09:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236964AbhFIHfe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 03:35:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236025AbhFIHfd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 9 Jun 2021 03:35:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C5A676135D;
-        Wed,  9 Jun 2021 07:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623224019;
-        bh=sf3DQW0Ey1By/Rw/Aftj1JCbuq4U/NXXCk4qj9KBwFg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pii0NALyIX/OXj3uLaQryrhuQira8IEfrwJFugOMugkyETtbj7AZDXOZwoDRMg7M3
-         OQ7E/ULz5oz/2a1a7Sh+CmrfErGzQQ+CePv++j5Pxu5bcQ4j4W6otRvgDwZftLHhOJ
-         cF2fI5Tp37hfxb0Rlg6JoL5/CExGysJk9iB6bZyn1pSqyeyBn5BQtz3RMct3kZgsi0
-         EKZqLK63ZYxFZZXECdPr5eh7sRvTZiP/IJDBGy9VuoA252XG8QNtDn4kZcQyArWfDt
-         BSEfHYIFSE4+qXaK/qIZSVi76My62exB6g/42RG6Cmr7XYNZQEmrV8+SS0R5/KYlay
-         4M4xkvyCJeLhw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lqsiS-0004r2-Br; Wed, 09 Jun 2021 09:33:32 +0200
-Date:   Wed, 9 Jun 2021 09:33:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Tung Pham <Tung.Pham@silabs.com>
-Cc:     Pho Tran <photranvan0712@gmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        Pho Tran <Pho.Tran@silabs.com>
-Subject: Re: [PATCH v12] USB: serial: cp210x: Add support for GPIOs on CP2108
-Message-ID: <YMBuzDqpcr+WLE5H@hovoldconsulting.com>
-References: <CO1PR11MB488255D1B04D3B90886A59BE812C9@CO1PR11MB4882.namprd11.prod.outlook.com>
- <YKNnBckiw4fLIuQL@hovoldconsulting.com>
- <CO1PR11MB4882BE3951A2CDFC8F060B58812A9@CO1PR11MB4882.namprd11.prod.outlook.com>
- <YKdqKDj/Qbw4k5IA@hovoldconsulting.com>
- <CO1PR11MB488295663735895484C264CF81369@CO1PR11MB4882.namprd11.prod.outlook.com>
+        id S231644AbhFIHhq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 03:37:46 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:14166 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230507AbhFIHho (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 03:37:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623224150; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=c0MwbkHmD93++vx2BU6gbFJyRd6o/+E+bfQJuaHSQPY=; b=jnUoyxkil70nOYADs62oD0eE8DIELRG1AwQZOioYdP0NfadEx6kgF1MXNfQ0TTXvasPJ10tV
+ jVYM5vT1S6Tqay6jWBvABE1mMAGKDdacLrAtRIcfwf2YLgy4xJVX9T2V4J36L25lJ5WlKLrC
+ RkdNyv5R+iO/GNfe2OI1L2xv52c=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60c06f562eaeb98b5eca6998 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 09 Jun 2021 07:35:50
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 0AB14C43460; Wed,  9 Jun 2021 07:35:50 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E28A2C433F1;
+        Wed,  9 Jun 2021 07:35:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E28A2C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Subbaraman Narayanamurthy <subbaram@codeaurora.org>,
+        linux-usb@vger.kernel.org, Mayank Rana <mrana@codeaurora.org>,
+        stable@vger.kernel.org, Jack Pham <jackp@codeaurora.org>
+Subject: [PATCH] usb: typec: ucsi: Clear PPM capability data in ucsi_init() error path
+Date:   Wed,  9 Jun 2021 00:35:35 -0700
+Message-Id: <20210609073535.5094-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CO1PR11MB488295663735895484C264CF81369@CO1PR11MB4882.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 03:06:16AM +0000, Tung Pham wrote:
+From: Mayank Rana <mrana@codeaurora.org>
 
-> Thanks for your effort to reviewing our code.
-> What about status of this patch?.
+If ucsi_init() fails for some reason (e.g. ucsi_register_port()
+fails or general communication failure to the PPM), particularly at
+any point after the GET_CAPABILITY command had been issued, this
+results in unwinding the initialization and returning an error.
+However the ucsi structure's ucsi_capability member retains its
+current value, including likely a non-zero num_connectors.
+And because ucsi_init() itself is done in a workqueue a UCSI
+interface driver will be unaware that it failed and may think the
+ucsi_register() call was completely successful.  Later, if
+ucsi_unregister() is called, due to this stale ucsi->cap value it
+would try to access the items in the ucsi->connector array which
+might not be in a proper state or not even allocated at all and
+results in NULL or invalid pointer dereference.
 
-It's still on my list. I'm a bit short on time at the moment and had to
-prioritise the CP2102N regression. I'm still hoping to get to this patch
-this week.
+Fix this by clearing the ucsi->cap value to 0 during the error
+path of ucsi_init() in order to prevent a later ucsi_unregister()
+from entering the connector cleanup loop.
 
-Johan
+Fixes: c1b0bc2dabfa ("usb: typec: Add support for UCSI interface")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mayank Rana <mrana@codeaurora.org>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/typec/ucsi/ucsi.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index b433169ef6fa..b7d104c80d85 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -1253,6 +1253,7 @@ static int ucsi_init(struct ucsi *ucsi)
+ 	}
+ 
+ err_reset:
++	memset(&ucsi->cap, 0, sizeof(ucsi->cap));
+ 	ucsi_reset_ppm(ucsi);
+ err:
+ 	return ret;
+-- 
+2.24.0
+
