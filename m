@@ -2,101 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D643A22EA
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1AB3A22F7
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbhFJDnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 23:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S229557AbhFJDwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 23:52:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbhFJDnK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:43:10 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED033C06175F
-        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:41:02 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id g4so2841342pjk.0
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:41:02 -0700 (PDT)
+        with ESMTP id S229655AbhFJDwF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:52:05 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF0AC061574
+        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:50:09 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id fy24-20020a17090b0218b029016c5a59021fso2935796pjb.0
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:50:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=94pKNGw6aDmClK5qtz94uwCrVTPu2QawOX0eEueaQtw=;
-        b=hgdu2EGMeJKw7Zqbcjnq4JgrvciYatqrsvp/Hq38+r3dbFHb3YEZhBI4aQP80VcU84
-         XTI2zxdzIwKN0fntEi2P4wfCt1Sjc2W6QvJ2Ge6+EzN69HFwWHdVZa7c5odI7eC4fmbY
-         fXfkc4SQl0zDWr1xTXh6Mrc+hVLODwK88TSjU=
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pwLscPt/B/b/5SFEs+HEyMeL+d3/cTsy8u9p+tu3dIo=;
+        b=qv8v8cqG/Ai5hMpH29a1Q5T6WTaZ4NIrnjR7FhyNFtOKgcW9hmlCU70zYVrhvvDLqY
+         UY33gGZykUoKQSAN9jQCoq/iedqBijDGaSG035hsMTsxxl2VjuFMFBycKVk4I8QL3dfS
+         3ro3lQ0sgaBszICT3LUjgW505aUGgNdBPhJR1N8FyGvY4IhC8ir8pbLZX7y8JOXGxnwZ
+         RNIWKR0wV3CaJBWXRzNxUUc26pgmlBhEJ8r1dEEjOxE56liOa4YtS1iuOnA9XdcXcHcm
+         mYQSg17HTK0Xrh4dTpVrfJtw7GuzTm341QJDbqS5a44hgXqMoe0rVoeo4WJrpQhANm2b
+         qSSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=94pKNGw6aDmClK5qtz94uwCrVTPu2QawOX0eEueaQtw=;
-        b=VpaUZ4PWACdhh5RjaHJYGqfJK4g8L0fRl3KFhRk3qf7xs5a3dssqqty38Hly7f1tFH
-         vo0UY3/yEPdxuSmKKT6TNV2Hia6XFWZhtodFtcSeafPfgpOfwcRziaOjZ1WETB6tpyPQ
-         Lbid0oKhdpSi+7NbdA30FtHrUo12RAJjWIqZg21Vj/uSSfZcHXe+5+OS++BGW9R8UHSx
-         /PyTvv9nWRUpGpHSN4ttfjIgvnFGqj7FvqOhvH4U+/xeOLhtQo2zk9jWQUu9mZGEPghc
-         rL8bJx7xkIiOu438EnP6jL74q+JZg0rVBpjFNlFkCu3faq2eT1k1zUjmLYob8t8o0S7D
-         +qjA==
-X-Gm-Message-State: AOAM533rcAL10YYaqGo0lAecCkpbAPiBACUS4fDFG0UvqRMOW5hjFq/O
-        IAoteR5b/VXBBSfFkT3+FRVJowpPf9Eww6lBxN/hzQ==
-X-Google-Smtp-Source: ABdhPJxfhXQZP1C7d97G/hx7Snn+K2LH9xusJE2FA5qGXcVH1gpUQP62dNOS5MgnxVxXRcpVPneWdOueRi+vrJScXkw=
-X-Received: by 2002:a17:902:fe83:b029:106:2e:97b6 with SMTP id
- x3-20020a170902fe83b0290106002e97b6mr2950199plm.49.1623296462349; Wed, 09 Jun
- 2021 20:41:02 -0700 (PDT)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=pwLscPt/B/b/5SFEs+HEyMeL+d3/cTsy8u9p+tu3dIo=;
+        b=Yf96/KeEsw4f6CF9NplIBF/vkQ3bCPbwDgdKT+uoMbL6PAO91O4PUAXiN/+CzjUIgi
+         ODDleraD1+pgLJiTY3tojd2F5KEEaWeP5x8AF5o7VcpYOHoTaTZ0xGXJraz2gNIuzWlu
+         e+vEYWRABrAY5jmXiCjYguhjOBjW7UeWVWZEI9RhSilkT6/PfETS/ixskbn1n9GzCUQy
+         Et15rtaFYOwddQbJuSNKntfvAcEZ2E/wSC7/Rhi0prqGdAnp03+15Vqhei3X/+Lk2vCL
+         fL4LqLE2KrpIqgVfXEp1iAfl0Fj6WeoFB/fu2VYlYUI1Jh0YKo2wM3+HslZlXx63AgUf
+         meww==
+X-Gm-Message-State: AOAM530bMFA+MR1zGyX24xDfWzV5koKmn/qnKDy/vvDGWcjIcbRqXOhM
+        MN+dyuOagGh5NQ2e2Lm0Kog=
+X-Google-Smtp-Source: ABdhPJxYN735f1W6bGAzwHfU6tFYnMOyQ9KVGyE7AC5r+T8MjcCYyzO3aS0lWNvp10/46STzr3lIkw==
+X-Received: by 2002:a17:90a:6289:: with SMTP id d9mr1157140pjj.84.1623297009088;
+        Wed, 09 Jun 2021 20:50:09 -0700 (PDT)
+Received: from localhost.localdomain ([45.124.203.19])
+        by smtp.gmail.com with ESMTPSA id j13sm1062652pgp.29.2021.06.09.20.50.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Jun 2021 20:50:08 -0700 (PDT)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     Fabio Estevam <festevam@gmail.com>,
+        Peter Chen <peter.chen@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] usb: gadget: fsl: Re-enable driver for ARM SoCs
+Date:   Thu, 10 Jun 2021 13:19:57 +0930
+Message-Id: <20210610034957.93376-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210507021127.54717-1-chunfeng.yun@mediatek.com> <20210507021127.54717-4-chunfeng.yun@mediatek.com>
-In-Reply-To: <20210507021127.54717-4-chunfeng.yun@mediatek.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Thu, 10 Jun 2021 11:40:50 +0800
-Message-ID: <CAATdQgAmms=x=go7TBy9WRTGT05rtc82pBH4NxYdM5d-ohN5MA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] usb: xhci-mtk: use first-fit for LS/FS
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-usb@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, May 7, 2021 at 10:11 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
->
-> Use first-fit instead of best-fit for LS/FS devices under TT,
-> we found that best-fit will consume more bandwidth for some
-> cases.
->
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+The commit a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
+dropped the ARCH_MXC dependency from USB_FSL_USB2, leaving it depending
+solely on FSL_SOC.
 
-Reviewed-and-Tested-by: Ikjoon Jang <ikjn@chromium.org>
+FSL_SOC is powerpc only; it was briefly available on ARM in 2014 but was
+removed by commit cfd074ad8600 ("ARM: imx: temporarily remove
+CONFIG_SOC_FSL from LS1021A"). Therefore the driver can no longer be
+enabled on ARM platforms.
 
-> ---
-> v3: no changes
-> ---
->  drivers/usb/host/xhci-mtk-sch.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-> index 9fb75085e40f..c07411d9b16f 100644
-> --- a/drivers/usb/host/xhci-mtk-sch.c
-> +++ b/drivers/usb/host/xhci-mtk-sch.c
-> @@ -634,6 +634,11 @@ static int check_sch_bw(struct mu3h_sch_bw_info *sch_bw,
->                         min_bw = worst_bw;
->                         min_index = offset;
->                 }
-> +
-> +               /* use first-fit for LS/FS */
-> +               if (sch_ep->sch_tt && min_index >= 0)
-> +                       break;
-> +
->                 if (min_bw == 0)
->                         break;
->         }
-> --
-> 2.18.0
->
+This appears to be a mistake as arm64's ARCH_LAYERSCAPE and arm32
+SOC_LS1021A SoCs use this symbol. It's enabled in these defconfigs:
+
+arch/arm/configs/imx_v6_v7_defconfig:CONFIG_USB_FSL_USB2=y
+arch/arm/configs/multi_v7_defconfig:CONFIG_USB_FSL_USB2=y
+arch/powerpc/configs/mgcoge_defconfig:CONFIG_USB_FSL_USB2=y
+arch/powerpc/configs/mpc512x_defconfig:CONFIG_USB_FSL_USB2=y
+
+To fix, expand the dependencies so USB_FSL_USB2 can be enabled on the
+ARM platforms, and with COMPILE_TEST.
+
+Fixes: a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+---
+v2: Fix spelling of ARCH_LAYERSCAPE
+---
+ drivers/usb/gadget/udc/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
+index 8c614bb86c66..7348acbdc560 100644
+--- a/drivers/usb/gadget/udc/Kconfig
++++ b/drivers/usb/gadget/udc/Kconfig
+@@ -90,7 +90,7 @@ config USB_BCM63XX_UDC
+ 
+ config USB_FSL_USB2
+ 	tristate "Freescale Highspeed USB DR Peripheral Controller"
+-	depends on FSL_SOC
++	depends on FSL_SOC || ARCH_LAYERSCAPE || SOC_LS1021A || COMPILE_TEST
+ 	help
+ 	   Some of Freescale PowerPC and i.MX processors have a High Speed
+ 	   Dual-Role(DR) USB controller, which supports device mode.
+-- 
+2.30.2
+
