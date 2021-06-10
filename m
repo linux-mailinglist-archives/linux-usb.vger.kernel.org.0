@@ -2,109 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE753A2562
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 09:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334D3A25E0
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 09:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbhFJHZ4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 03:25:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45760 "EHLO mail.kernel.org"
+        id S229989AbhFJHzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 03:55:48 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230381AbhFJHZw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 03:25:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CE849613BC;
-        Thu, 10 Jun 2021 07:23:56 +0000 (UTC)
+        id S229778AbhFJHzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 03:55:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F1D1E6109E;
+        Thu, 10 Jun 2021 07:53:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623309836;
-        bh=B1IcCG+KuCmNUwhkJc/FlqjT5JB0FoFOqKtap1NCQGY=;
+        s=k20201202; t=1623311632;
+        bh=QT7o7XS/J8ORfpY0OE0aSxb6FIwCHoQPz0qB6zl8pDA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QvB/prxQbCJKSHWv2x4oW6qS1FGMfOp2qrszKhQYI4iWt1ya5aYNn6i33UhSOpn53
-         uxAQ04UlfPxfmTgsq9jEwQhFFY2LsuSFQOLpMpzdjC68x1bv3fp0E9Mdw9tQWDQbVd
-         ssQQ/LBNgTh0x2+FTm+B/ub2A9ygUEwIt+zB7xqRBu8dA55rydMZ5wpbePNTO6860s
-         PuaPbQJ/YV6ToJZdrFOHkvILBTBJLJ2gaJaCq/9x3yyXJXrBAZBsHcnujmDkmFvww3
-         6f8YKKM3SkKei8AT6jo+wYoAyMPU+RcIefyGfx4ivj71cpaoHHtNYQF3eAvMNtzDH6
-         KFC3uj/22gh+g==
+        b=hP2571xsRDFkk+6vWJSZKMc9JhPpT1X46oOnEFeG+wVWbNx2b42LRqBpb1waWXERY
+         TR43ciGB5QcgYE3VfbhVw1ofFlh/hVmix6RZJsNz383416KZ1KE9dS95/lOrsok1NM
+         sd6qD1KLc5UK4ZRAYspSIs9guYXZ8vaI6xjR8rlb6unf3VLaEiV0A1xweqkCq7Xk90
+         y6R3vnoAPZ0f47vlgb19nC/8/yW3Z+NlropyPXVEiWpuF05t7ENxqzIaRkTXPxqNwp
+         2V0TeSFGff+aVLLJJmGxMOUh6IKVCA6aR8mQrJNjinqMDY+A+IQhgM8N1Vui/fsoNI
+         gdEajo8l1ByAA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lrF2b-00030X-7l; Thu, 10 Jun 2021 09:23:50 +0200
-Date:   Thu, 10 Jun 2021 09:23:49 +0200
+        id 1lrFVY-0004Lu-G2; Thu, 10 Jun 2021 09:53:45 +0200
+Date:   Thu, 10 Jun 2021 09:53:44 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Alex =?utf-8?B?VmlsbGFjw61z?= Lasso <a_villacis@palosanto.com>
-Cc:     David Frey <dpfrey@gmail.com>, linux-usb@vger.kernel.org,
-        Pho Tran <pho.tran@silabs.com>,
-        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: cp210x: fix CP2102N-A01 modem control
-Message-ID: <YMG+Be220/sZ4QIC@hovoldconsulting.com>
-References: <YL87Na0MycRA6/fW@hovoldconsulting.com>
- <20210609161509.9459-1-johan@kernel.org>
- <22113673-a359-f783-166f-acbe5dbc9298@palosanto.com>
+To:     Stefan Agner <stefan@agner.ch>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: cp210x: Fix alternate function for CP2102N
+ QFN20
+Message-ID: <YMHFCNbTAHxPDmqv@hovoldconsulting.com>
+References: <51830b2b24118eb0f77c5c9ac64ffb2f519dbb1d.1622218300.git.stefan@agner.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <22113673-a359-f783-166f-acbe5dbc9298@palosanto.com>
+In-Reply-To: <51830b2b24118eb0f77c5c9ac64ffb2f519dbb1d.1622218300.git.stefan@agner.ch>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 12:00:36PM -0500, Alex Villacís Lasso wrote:
-> El 9/6/21 a las 11:15, Johan Hovold escribió:
-> > CP2102N revision A01 (firmware version <= 1.0.4) has a buggy
-> > flow-control implementation that uses the ulXonLimit instead of
-> > ulFlowReplace field of the flow-control settings structure (erratum
-> > CP2102N_E104).
-> >
-> > A recent change that set the input software flow-control limits
-> > incidentally broke RTS control for these devices when CRTSCTS is not set
-> > as the new limits would always enable hardware flow control.
-> >
-> > Fix this by explicitly disabling flow control for the buggy firmware
-> > versions and only updating the input software flow-control limits when
-> > IXOFF is requested. This makes sure that the terminal settings matches
-> > the default zero ulXonLimit (ulFlowReplace) for these devices.
-> >
-> > Reported-by: David Frey <dpfrey@gmail.com>
-> > Reported-by: Alex Villacís Lasso <a_villacis@palosanto.com>
-> > Fixes: f61309d9c96a ("USB: serial: cp210x: set IXOFF thresholds")
-> > Cc: stable@vger.kernel.org      # 5.12
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >   drivers/usb/serial/cp210x.c | 64 ++++++++++++++++++++++++++++++++++---
-> >   1 file changed, 59 insertions(+), 5 deletions(-)
-> >
-> > David and Alex,
-> >
-> > Would you mind testing this one with your CP2108N-A01? I've verified it
-> > against a CP2108N-A02 (fw 1.0.8) here.
-
-I meant CP2102N here of course. It had been a long day...
-
-> Applied patch and tested with ESP32 board under kernel 5.12.9:
-
-> jun 09 11:56:00 karlalex-asus kernel: cp210x 1-9:1.0: 
-> cp210x_get_fw_version - 1.0.4
-
-> $ miniterm.py /dev/ttyUSB0 115200
-> <successful connect>
+On Fri, May 28, 2021 at 10:39:31PM +0200, Stefan Agner wrote:
+> The QFN20 part has a different GPIO/port function assignment. The
+> configuration struct bit field ordered as TX/RX/RS485/WAKEUP/CLK
+> which exactly matches GPIO0-3 for QFN24/28. However, QFN20 has a
+> different GPIO to primary function assignment.
 > 
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_change_speed - setting baud rate to 9600
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_set_flow_control - ctrl = 0x00, flow = 0x00
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_tiocmset_port - control = 0x0303
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_change_speed - setting baud rate to 115384
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_tiocmset_port - control = 0x0101
-> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0: 
-> cp210x_tiocmset_port - control = 0x0202
+> Special case QFN20 to follow to properly detect which GPIOs are
+> available.
 > 
-> At least in my case, this patch fixes the regression for my workflow.
+> Signed-off-by: Stefan Agner <stefan@agner.ch>
+> ---
+> Tested on a custom PCB with a CP2102N QFP20 device. I noticed the bug after
+> configuring GPIO.2/3 to be TX/RX LED.
 
-Thanks for confirming. Can I add a "Tested-by" tag for you as well?
+Thanks for fixing this, Stefan.
 
-And again, thanks for the detailed report, bisection and thorough
-testing throughout.
+Nice and clean and patch, and your findings match the datasheet ("Table
+4.2. GPIO Pin Alternate Functions").
+
+Now applied for 5.13 with a stable tag.
 
 Johan
