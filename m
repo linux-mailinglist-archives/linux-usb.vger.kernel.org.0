@@ -2,48 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C593A22D4
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D643A22EA
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbhFJDfi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 23:35:38 -0400
-Received: from mail-pf1-f172.google.com ([209.85.210.172]:43808 "EHLO
-        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhFJDfh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:35:37 -0400
-Received: by mail-pf1-f172.google.com with SMTP id m7so432190pfa.10
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:33:28 -0700 (PDT)
+        id S230000AbhFJDnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 23:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbhFJDnK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:43:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED033C06175F
+        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:41:02 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id g4so2841342pjk.0
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xUW1QYivvyjjAgnt50OixHHdXR+qpa5RaoXkpg+0Z1M=;
-        b=Ckk34yOiLznSSdYmHluvlvw2OSugkHIAcSI40L06ddrl1WVeu9lXyJKAySZr7I/6lx
-         L836XZ32h5BAbCgwQE46EsuxXnQxKGyeSqwD00a0X8Jl9oP+RTO3Mi8P+NnpJGUSpbSN
-         7UB4hKaHAkMX/VHG9tiyztZzgqJ5TWFOxM0D4=
+        bh=94pKNGw6aDmClK5qtz94uwCrVTPu2QawOX0eEueaQtw=;
+        b=hgdu2EGMeJKw7Zqbcjnq4JgrvciYatqrsvp/Hq38+r3dbFHb3YEZhBI4aQP80VcU84
+         XTI2zxdzIwKN0fntEi2P4wfCt1Sjc2W6QvJ2Ge6+EzN69HFwWHdVZa7c5odI7eC4fmbY
+         fXfkc4SQl0zDWr1xTXh6Mrc+hVLODwK88TSjU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xUW1QYivvyjjAgnt50OixHHdXR+qpa5RaoXkpg+0Z1M=;
-        b=kXMOJ/oeU3ehsKhpyl3TE9K2uU2HS3PvGhRjn9FRQRIDWtf3GYeTReM/csEiwEz7nB
-         q8XvmuWPKAYqVkh197p80B1BvERforcSVJaMqcmt7x7oBs+tIj2sspyCqybGZXUFKP02
-         9Z/iyddYFIz9ypCeq2+qhVQPMLi2lmGI1yMUhetHfRrFzrlhs/lKisAe9CQm7vw0eHBe
-         ccY/rA1sE7ApN6emgMeVFpNGWTD79qQ6AIj08idfPaD5XUNaIq6mieFlNBwkAPmwC0bj
-         lRUknxrymFIzH5/dcCveNTXWFh8WZE7L97+osWonw8nk9xjbb50DFfLn/CU+YTMJ5gJT
-         v40Q==
-X-Gm-Message-State: AOAM533XQ5GKaertg/kEPMlq/lI0B8lTV4yBz7ldkTkKWQR+L02NIx2r
-        Y9Lxo/TATguXru9l/yWVB/4PCVc1CU0pJpUMy7uIkQ==
-X-Google-Smtp-Source: ABdhPJwe3SJDAt53Ax1wi7DIEJ7gvGIkAxJ9U/9K0Mhis4k/681JzWIKUxqMMmr9kGyLMHjJbzCsDbc5afgxvWOYbpg=
-X-Received: by 2002:a63:5d19:: with SMTP id r25mr2802205pgb.317.1623295948478;
- Wed, 09 Jun 2021 20:32:28 -0700 (PDT)
+        bh=94pKNGw6aDmClK5qtz94uwCrVTPu2QawOX0eEueaQtw=;
+        b=VpaUZ4PWACdhh5RjaHJYGqfJK4g8L0fRl3KFhRk3qf7xs5a3dssqqty38Hly7f1tFH
+         vo0UY3/yEPdxuSmKKT6TNV2Hia6XFWZhtodFtcSeafPfgpOfwcRziaOjZ1WETB6tpyPQ
+         Lbid0oKhdpSi+7NbdA30FtHrUo12RAJjWIqZg21Vj/uSSfZcHXe+5+OS++BGW9R8UHSx
+         /PyTvv9nWRUpGpHSN4ttfjIgvnFGqj7FvqOhvH4U+/xeOLhtQo2zk9jWQUu9mZGEPghc
+         rL8bJx7xkIiOu438EnP6jL74q+JZg0rVBpjFNlFkCu3faq2eT1k1zUjmLYob8t8o0S7D
+         +qjA==
+X-Gm-Message-State: AOAM533rcAL10YYaqGo0lAecCkpbAPiBACUS4fDFG0UvqRMOW5hjFq/O
+        IAoteR5b/VXBBSfFkT3+FRVJowpPf9Eww6lBxN/hzQ==
+X-Google-Smtp-Source: ABdhPJxfhXQZP1C7d97G/hx7Snn+K2LH9xusJE2FA5qGXcVH1gpUQP62dNOS5MgnxVxXRcpVPneWdOueRi+vrJScXkw=
+X-Received: by 2002:a17:902:fe83:b029:106:2e:97b6 with SMTP id
+ x3-20020a170902fe83b0290106002e97b6mr2950199plm.49.1623296462349; Wed, 09 Jun
+ 2021 20:41:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210507021127.54717-1-chunfeng.yun@mediatek.com> <20210507021127.54717-2-chunfeng.yun@mediatek.com>
-In-Reply-To: <20210507021127.54717-2-chunfeng.yun@mediatek.com>
+References: <20210507021127.54717-1-chunfeng.yun@mediatek.com> <20210507021127.54717-4-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210507021127.54717-4-chunfeng.yun@mediatek.com>
 From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Thu, 10 Jun 2021 11:32:17 +0800
-Message-ID: <CAATdQgAr=wwbuJ=0nKKmO6Rb7qcW2BobFAb30DUsMA2s6EOxhA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] usb: xhci-mtk: remove unnecessary setting of has_ippc
+Date:   Thu, 10 Jun 2021 11:40:50 +0800
+Message-ID: <CAATdQgAmms=x=go7TBy9WRTGT05rtc82pBH4NxYdM5d-ohN5MA@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] usb: xhci-mtk: use first-fit for LS/FS
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -63,33 +67,36 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 On Fri, May 7, 2021 at 10:11 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
 >
-> Due to @has_ippc's default value is 0, no need set it again if fail
-> to get ippc base address
+> Use first-fit instead of best-fit for LS/FS devices under TT,
+> we found that best-fit will consume more bandwidth for some
+> cases.
 >
 > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
 Reviewed-and-Tested-by: Ikjoon Jang <ikjn@chromium.org>
 
 > ---
-> v3: new patch suggested by Greg
->     fix typo suggested by Sergei
+> v3: no changes
 > ---
->  drivers/usb/host/xhci-mtk.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/usb/host/xhci-mtk-sch.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 >
-> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-> index b2058b3bc834..2548976bcf05 100644
-> --- a/drivers/usb/host/xhci-mtk.c
-> +++ b/drivers/usb/host/xhci-mtk.c
-> @@ -495,8 +495,6 @@ static int xhci_mtk_probe(struct platform_device *pdev)
->                         goto put_usb2_hcd;
+> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+> index 9fb75085e40f..c07411d9b16f 100644
+> --- a/drivers/usb/host/xhci-mtk-sch.c
+> +++ b/drivers/usb/host/xhci-mtk-sch.c
+> @@ -634,6 +634,11 @@ static int check_sch_bw(struct mu3h_sch_bw_info *sch_bw,
+>                         min_bw = worst_bw;
+>                         min_index = offset;
 >                 }
->                 mtk->has_ippc = true;
-> -       } else {
-> -               mtk->has_ippc = false;
+> +
+> +               /* use first-fit for LS/FS */
+> +               if (sch_ep->sch_tt && min_index >= 0)
+> +                       break;
+> +
+>                 if (min_bw == 0)
+>                         break;
 >         }
->
->         device_init_wakeup(dev, true);
 > --
 > 2.18.0
 >
