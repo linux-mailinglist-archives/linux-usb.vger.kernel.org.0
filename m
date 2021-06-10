@@ -2,37 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF683A2838
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 11:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC8E3A2840
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 11:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbhFJJ0e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 05:26:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53304 "EHLO mail.kernel.org"
+        id S229943AbhFJJaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 05:30:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55420 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230023AbhFJJ0c (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 05:26:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4E9CE613FE;
-        Thu, 10 Jun 2021 09:24:35 +0000 (UTC)
+        id S229715AbhFJJay (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 05:30:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A01FC61182;
+        Thu, 10 Jun 2021 09:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623317076;
-        bh=oy4qESkdnKcP3NQlBhbmQ9kp6vNt7W4YelwBDv3HMhs=;
+        s=k20201202; t=1623317339;
+        bh=YKbH7RY9wgcda2Wl0gjS0fCDjC49wsG2m1zMvoWhqwk=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=G0tM02obRUONAjN4/SwVjbc5w+QUPX8BZqucF0ldMd4VQ6OOPegHfT7RRl2S3AXDs
-         zWSHYy2GNbJFSx+XqdNVl5gOuhwfZIP5LM3NFzYdHh/wGcgKbwREkt08l4MJS68YnI
-         rXiIjYKzp2704ZR+W78Vg0I/U7YA3eQ7y0vnpTuhjnd9sc8q3cWtPiH5Iilrdm+urm
-         HRWsaz7TVnlNZVkKDSIJ/Qb3nr8cQXmm0BBXwiXtQGRhpcEURumGl3ZQbiSen0CraE
-         QCh3TCta3xM7HaZ8Mg+hyb4F4O1NZ4YaaV+CD2Ago1Q1GERLt3Hg/xfUzs/96t6svI
-         FeOugIVm8yHrA==
+        b=FRDb2/ZD82DQsWzqFHq/6Gk0rFccbgZQb7AL9shwRQaM4SDBhbg5BKTxI6JqJlTpX
+         IjC+ZcGo2ZUlMyHkxqX7mMi64IscT6nM1zyr90eWpQ6scGiirSEGgtJ9RNUcDxfkHs
+         vCLd9XNVcNnf49Ani5wDP3EbQhxr8//taX6nlifBGxiit/dt6h0bXUBEPjVowWi/XM
+         /ahI5nirEVpZGHC8MEwDazHKc4TCr0QUe+ZfT4Ugm/HWGSHK5nKVkvhGBYzibs8YM5
+         TWT0gCrxm6mxlfATHfxG73cZWI9QR6Wv523lXFR1oull1FXZTJb+UFWDHOPH14p8jI
+         zNKaJs9S22NyQ==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>, linux-usb@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
-In-Reply-To: <20210607061751.89752-1-sven@svenpeter.dev>
-References: <20210607061751.89752-1-sven@svenpeter.dev>
-Date:   Thu, 10 Jun 2021 12:24:28 +0300
-Message-ID: <871r9a2htf.fsf@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Peter Chen <peter.chen@kernel.org>
+Subject: Re: [PATCH] USB: dwc3: remove debugfs root dentry storage
+In-Reply-To: <20210609093924.3293230-1-gregkh@linuxfoundation.org>
+References: <20210609093924.3293230-1-gregkh@linuxfoundation.org>
+Date:   Thu, 10 Jun 2021 12:28:50 +0300
+Message-ID: <87y2bi131p.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -44,31 +46,19 @@ X-Mailing-List: linux-usb@vger.kernel.org
 Content-Type: text/plain
 Content-Transfer-Encoding: quoted-printable
 
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
 
-Hi,
-
-Sven Peter <sven@svenpeter.dev> writes:
-> Currently, the dwc3 platform driver does not explicitly ask for
-> a DMA mask. This makes it fall back to the default 32-bit mask which
-> breaks the driver on systems that only have RAM starting above the
-> first 4G like the Apple M1 SoC.
+> There is no need to keep around the debugfs "root" directory for the
+> dwc3 device.  Instead, look it up anytime we need to find it.  This will
+> help when callers get out-of-order and we had the potential to have a
+> "stale" pointer around for the root dentry, as has happened in the past.
 >
-> Fix this by calling dma_set_mask_and_coherent with a 64bit mask.
->
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Jack Pham <jackp@codeaurora.org>
+> Cc: Peter Chen <peter.chen@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
-
-> ---
->
-> Third time's a charm I hope - this time much simpler :)
->
-> I still think this change should be fairly low risk.
->
-> Unfortunately I only have the Apple M1 to test this on but here
-
-wait a minute. The M1 includes a dwc3? That's awesome. Mind sharing a
-regdump? Should be in debugfs.
 
 =2D-=20
 balbi
@@ -78,13 +68,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB2kwRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUhOVQgArAs3+Ywns0Y7SVUQSIAwRGUnHuSVqK0i
-5xGxGB5tEiQa4FA1DwywFkhJBcnq1JW0180X0rSZfSf6mSTLo3GJDD017GY5AKom
-Zn8YXZZ0RCwoW2TxFda2QDv49m1RH8mwn4YS9F96x7Q71qbc5tM5dRctYqhJKprL
-O6pn3vHztKI3a6/NR2L1MePdtxKItia8OKGt1Eq/YOoK4Soh1kMf8rKMnle3t8p9
-XhL7ToKD4PLpFP1LMJyBIR0Df7AIZKwv48rpDGvmQklTCXJ0MVrtg7zONI1WwG0x
-AQBMojE9tJ2ix15hkH9O/IlgLrn/ERINLN9xbm8kdCeoSJGrY3PB2Q==
-=CWyw
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB21IRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUgwCgf/atPiB7V/9a8tB6tAjn7vw/LNH7WpnNKc
+byRQHvI3U0QB2w48cQu+TWbQtqD9+38dALTqyvbXW3vAoU/73+nTdPnUwM4I2cZY
+XEccdsyihd2CDM6CD7fh4dQbtyfqPqQzx1pu+m3c+kJamR4L4V+mV3wA7yPmqKqc
+cXVclp4cXOvwKwLkQDyUGf0dE3PmS1LFAKOR6fMMiVp3rIUKZDiYXe0/gwZL99eX
+00SL2C81LCcXIYVBjKgZbyXLQYnjCsXlrD4aCPC9XxVXxvSH64tAtEkHeRtC6kw7
+Lleg2aZv8xuHNbbw7Fu7Z2yqyaG4eYmcDef7YgJI1BQeTI1E4LKoLQ==
+=4Axh
 -----END PGP SIGNATURE-----
 --=-=-=--
