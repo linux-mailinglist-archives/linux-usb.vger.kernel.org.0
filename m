@@ -2,180 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290373A2DFF
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 16:22:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC8583A2EB4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 16:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbhFJOYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 10:24:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbhFJOYf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 10:24:35 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA90C061760
-        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 07:22:38 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lrLZo-0007eu-1E; Thu, 10 Jun 2021 16:22:32 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1lrLZn-0002iX-JU; Thu, 10 Jun 2021 16:22:31 +0200
-Date:   Thu, 10 Jun 2021 16:22:31 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-tegra <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
- support
-Message-ID: <20210610142231.jwan57reetfsuyjw@pengutronix.de>
-References: <20210607082727.26045-1-o.rempel@pengutronix.de>
- <20210607082727.26045-5-o.rempel@pengutronix.de>
- <CGME20210609095923eucas1p2e692c9a482151742d543316c91f29802@eucas1p2.samsung.com>
- <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
- <0ebb1698-cd52-d8ad-b5cc-045d29ea964f@nvidia.com>
+        id S231299AbhFJO50 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 10:57:26 -0400
+Received: from mail.palosanto.com ([181.39.87.190]:35762 "EHLO palosanto.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230298AbhFJO5Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 10:57:25 -0400
+Received: from localhost (mail.palosanto.com [127.0.0.1])
+        by palosanto.com (Postfix) with ESMTP id 83CD313C248E;
+        Thu, 10 Jun 2021 09:55:23 -0500 (-05)
+X-Virus-Scanned: Debian amavisd-new at mail.palosanto.com
+Received: from palosanto.com ([127.0.0.1])
+        by localhost (mail.palosanto.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id iIGQVPJSTKfT; Thu, 10 Jun 2021 09:55:21 -0500 (-05)
+Received: from [192.168.0.2] (unknown [191.99.4.100])
+        by palosanto.com (Postfix) with ESMTPSA id EBFBB13C2439;
+        Thu, 10 Jun 2021 09:55:20 -0500 (-05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=palosanto.com;
+        s=mail; t=1623336921;
+        bh=OTFcSkjqBOSPqEr4jPF2tyefPn+62ZuUn3qckFwwmos=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=A43UdQTezO/6jtQiIZr1u2XNwnHXh2WQ0Or/2H9rAT3GT71NNrVdIUn3tgpPI2hfH
+         iNW+E9PbO4u/oMThryaUy8HfrEz1U6/armqJ46cCGuAcuBQzOkKiFy1f4wScxzJLpg
+         Z6wRLTScDXRP1+RC11OmCUZQO5KritwTXR+x4/88=
+Subject: Re: [PATCH] USB: serial: cp210x: fix CP2102N-A01 modem control
+To:     Johan Hovold <johan@kernel.org>
+Cc:     David Frey <dpfrey@gmail.com>, linux-usb@vger.kernel.org,
+        Pho Tran <pho.tran@silabs.com>,
+        Tung Pham <tung.pham@silabs.com>, Hung.Nguyen@silabs.com,
+        stable@vger.kernel.org
+References: <YL87Na0MycRA6/fW@hovoldconsulting.com>
+ <20210609161509.9459-1-johan@kernel.org>
+ <22113673-a359-f783-166f-acbe5dbc9298@palosanto.com>
+ <YMG+Be220/sZ4QIC@hovoldconsulting.com>
+From:   =?UTF-8?Q?Alex_Villac=c3=ads_Lasso?= <a_villacis@palosanto.com>
+Message-ID: <06b6ecb6-9ea9-ae91-1ba0-78a924bbd543@palosanto.com>
+Date:   Thu, 10 Jun 2021 09:55:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <YMG+Be220/sZ4QIC@hovoldconsulting.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0ebb1698-cd52-d8ad-b5cc-045d29ea964f@nvidia.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 16:21:02 up 190 days,  4:27, 50 users,  load average: 0.07, 0.04,
- 0.01
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Marek and Jon,
+El 10/6/21 a las 02:23, Johan Hovold escribió:
+> On Wed, Jun 09, 2021 at 12:00:36PM -0500, Alex Villacís Lasso wrote:
+>> El 9/6/21 a las 11:15, Johan Hovold escribió:
+>>> CP2102N revision A01 (firmware version <= 1.0.4) has a buggy
+>>> flow-control implementation that uses the ulXonLimit instead of
+>>> ulFlowReplace field of the flow-control settings structure (erratum
+>>> CP2102N_E104).
+>>>
+>>> A recent change that set the input software flow-control limits
+>>> incidentally broke RTS control for these devices when CRTSCTS is not set
+>>> as the new limits would always enable hardware flow control.
+>>>
+>>> Fix this by explicitly disabling flow control for the buggy firmware
+>>> versions and only updating the input software flow-control limits when
+>>> IXOFF is requested. This makes sure that the terminal settings matches
+>>> the default zero ulXonLimit (ulFlowReplace) for these devices.
+>>>
+>>> Reported-by: David Frey <dpfrey@gmail.com>
+>>> Reported-by: Alex Villacís Lasso <a_villacis@palosanto.com>
+>>> Fixes: f61309d9c96a ("USB: serial: cp210x: set IXOFF thresholds")
+>>> Cc: stable@vger.kernel.org      # 5.12
+>>> Signed-off-by: Johan Hovold <johan@kernel.org>
+>>> ---
+>>>    drivers/usb/serial/cp210x.c | 64 ++++++++++++++++++++++++++++++++++---
+>>>    1 file changed, 59 insertions(+), 5 deletions(-)
+>>>
+>>> David and Alex,
+>>>
+>>> Would you mind testing this one with your CP2108N-A01? I've verified it
+>>> against a CP2108N-A02 (fw 1.0.8) here.
+> I meant CP2102N here of course. It had been a long day...
+>
+>> Applied patch and tested with ESP32 board under kernel 5.12.9:
+>> jun 09 11:56:00 karlalex-asus kernel: cp210x 1-9:1.0:
+>> cp210x_get_fw_version - 1.0.4
+>> $ miniterm.py /dev/ttyUSB0 115200
+>> <successful connect>
+>>
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_change_speed - setting baud rate to 9600
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_set_flow_control - ctrl = 0x00, flow = 0x00
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_tiocmset_port - control = 0x0303
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_change_speed - setting baud rate to 115384
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_tiocmset_port - control = 0x0101
+>> jun 09 11:56:50 karlalex-asus kernel: cp210x ttyUSB0:
+>> cp210x_tiocmset_port - control = 0x0202
+>>
+>> At least in my case, this patch fixes the regression for my workflow.
+> Thanks for confirming. Can I add a "Tested-by" tag for you as well?
+>
+> And again, thanks for the detailed report, bisection and thorough
+> testing throughout.
+>
+> Johan
 
-I just send a patch to fix suspend/resume. It was tested on ax88772A and ax88772C
-on iMX6 host. Can you please confirm if it works for you?
+Yes, go ahead. You can put the Tested-by on my behalf.
 
-Regards,
-Oleksij
-
-net: usb: asix: ax88772: manage PHY PM from MAC 
-
-On Thu, Jun 10, 2021 at 01:54:12PM +0100, Jon Hunter wrote:
-> 
-> On 09/06/2021 10:59, Marek Szyprowski wrote:
-> > Hi Oleksij,
-> > 
-> > On 07.06.2021 10:27, Oleksij Rempel wrote:
-> >> To be able to use ax88772 with external PHYs and use advantage of
-> >> existing PHY drivers, we need to port at least ax88772 part of asix
-> >> driver to the phylib framework.
-> >>
-> >> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > 
-> > This patch landed recently in linux-next as commit e532a096be0e ("net: 
-> > usb: asix: ax88772: add phylib support"). I found that it causes some 
-> > warnings on boards with those devices, see the following log:
-> > 
-> > root@target:~# time rtcwake -s10 -mmem
-> > rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:16:41 2021
-> > [  231.226579] PM: suspend entry (deep)
-> > [  231.231697] Filesystems sync: 0.002 seconds
-> > [  231.261761] Freezing user space processes ... (elapsed 0.002 seconds) 
-> > done.
-> > [  231.270526] OOM killer disabled.
-> > [  231.273557] Freezing remaining freezable tasks ... (elapsed 0.002 
-> > seconds) done.
-> > [  231.282229] printk: Suspending console(s) (use no_console_suspend to 
-> > debug)
-> > ...
-> > [  231.710852] Disabling non-boot CPUs ...
-> > ...
-> > [  231.901794] Enabling non-boot CPUs ...
-> > ...
-> > [  232.225640] usb usb3: root hub lost power or was reset
-> > [  232.225746] usb usb1: root hub lost power or was reset
-> > [  232.225864] usb usb5: root hub lost power or was reset
-> > [  232.226206] usb usb6: root hub lost power or was reset
-> > [  232.226207] usb usb4: root hub lost power or was reset
-> > [  232.297749] usb usb2: root hub lost power or was reset
-> > [  232.343227] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
-> > [  232.343293] asix 3-1:1.0 eth0: Failed to enable software MII access
-> > [  232.344486] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
-> > [  232.344512] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
-> > [  232.344529] PM: dpm_run_callback(): mdio_bus_phy_resume+0x0/0x78 
-> > returns -22
-> > [  232.344554] Asix Electronics AX88772C usb-003:002:10: PM: failed to 
-> > resume: error -22
-> > [  232.563712] usb 1-1: reset high-speed USB device number 2 using 
-> > exynos-ehci
-> > [  232.757653] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
-> > [  233.730994] OOM killer enabled.
-> > [  233.734122] Restarting tasks ... done.
-> > [  233.754992] PM: suspend exit
-> 
-> 
-> I am seeing a similar problem on a couple of our Tegra boards that
-> use AX88772A device. When resuming from suspend I see ...
-> 
-> [   54.733266] PM: suspend entry (deep)
-> 
-> [   54.737179] Filesystems sync: 0.000 seconds
-> 
-> [   54.741904] Freezing user space processes ... (elapsed 0.001 seconds) done.
-> 
-> [   54.750895] OOM killer disabled.
-> 
-> [   54.754452] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
-> 
-> [   54.763505] printk: Suspending console(s) (use no_console_suspend to debug)
-> 
-> [   54.898334] Disabling non-boot CPUs ...
-> 
-> [   54.899546] IRQ 26: no longer affine to CPU1
-> 
-> [   54.924373] Entering suspend state LP1
-> 
-> [   54.924493] Enabling non-boot CPUs ...
-> 
-> [   54.933164] CPU1 is up
-> 
-> [   55.005166] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -113
-> 
-> [   55.005226] asix 3-1:1.0 eth0: Failed to enable software MII access
-> 
-> [   55.006579] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -113
-> 
-> [   55.006722] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -113
-> 
-> [   55.006762] asix 3-1:1.0 eth0: Failed to enable software MII access
-> 
-> 
-> Interestingly once commit d275afb66371 ("net: usb: asix: add error
-> handling for asix_mdio_* functions") is applied, then resume from
-> suspend completely fails because the error is propagated. Bisect
-> is pointing to that patch, however, it is this patch that is
-> causing the problem.
-> 
-> Cheers
-> Jon
-> 
-> -- 
-> nvpublic
-> 
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
