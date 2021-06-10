@@ -2,204 +2,437 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EC63A2C12
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 14:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7975C3A2CF4
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 15:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbhFJM4Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 08:56:16 -0400
-Received: from mail-dm6nam10on2062.outbound.protection.outlook.com ([40.107.93.62]:62752
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S230248AbhFJM4P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:56:15 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YlDDd3IdmGjy3xckZaCfiQkxBM9A5AsuRGjBar3AdK8BgwZlHVo30aZ1/iyK0/W3ldm2+D+YOF0GwxJ6tiPT9gcW5JGBU3kMeWBBDgn9M0lmQLXJRMy1yIaE7z14fr7wRxi4rp9B1KZoun0qf9/OcyqLAaN3rgLw4QchhfgEmMi9gV+xIluFNgyl0K1eMz08xe1LL4sZobgOKl7k0l/rc6m7wFK9pIRK25aYBSAXkroBW++WFx+6cMivo+5rQIydeoZQ7wsF1aTAKp2xSHKo/jx2wnxWHlrjjchRK1VAW9o5Zh9rWTImSYRo4dwc1srCOGfNL98XDEhkfxUxqknH/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O+oWDPeo7Q+1evX/7/SWM7k/Pcrr/I+qdWXpMNUF+Us=;
- b=JXpqoTeX5HLRdFSjb47JTiemGB9b6ALIos64ykcrIzldAo8DHgWhk3+0v8Q9N6DpVSa3FJncuZKQjKrN7cJX4fLpG1k9yU7sOPUCjUqXiERNBSynDZUiVzPnlkApR/P4bvGq5THG+R93jCWmpw7qWgBdD/1aohTFlmYLIDdxDVpdm6RqP9iyJ6GMBkVtbSIknv9VgxDE5/kmZKfVtdgNcwLIiUd5yR9CiyU7a4jmbnqkEqyc/QkSpS6PICRTk1Ymviuy+tPtvQNjfIPfj5lBA6tGkRel5FY4zYDvcmAaGs6bAjaHLdEDlxP+csHA8LVJBcDAVqQ5k4EaehxTfwlDzg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.34) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O+oWDPeo7Q+1evX/7/SWM7k/Pcrr/I+qdWXpMNUF+Us=;
- b=jaHs/YJ+M7rgwKmA4LAA9UQ/Z38b+x5R7pKwtVbEcZH4XMZBYyve2D25Cjh+a6ESvPQmGM66457LOMIgL4e8dMAEopieUndB1Lu6N9dCgCXpQ2Tm9LFW9Y2HbLUwv3706+5nseKXLKVGWnMvlret+7QWU7SPiAPgC409VyuOTNC/nT4Oeqabmi46DBpLgYKTUPk2aEuTtffUfUgu3NnuMb0xVyh6B9OIcz2imGo0JU3hJ0nVd9Kvx58GZE5kmq3ejyiz8StN0VcBuUNikSy0qhqVWrnvdmY/uyuCabaL3uMNy3USx2dmp04Q5kOr8gMSKoQ7MLAq/QpOsjS3+RRj0A==
-Received: from CO2PR04CA0202.namprd04.prod.outlook.com (2603:10b6:104:5::32)
- by DM6PR12MB3819.namprd12.prod.outlook.com (2603:10b6:5:1c6::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.24; Thu, 10 Jun
- 2021 12:54:18 +0000
-Received: from CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:104:5:cafe::61) by CO2PR04CA0202.outlook.office365.com
- (2603:10b6:104:5::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.20 via Frontend
- Transport; Thu, 10 Jun 2021 12:54:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.34)
- smtp.mailfrom=nvidia.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.34 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.34; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.34) by
- CO1NAM11FT037.mail.protection.outlook.com (10.13.174.91) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4219.21 via Frontend Transport; Thu, 10 Jun 2021 12:54:17 +0000
-Received: from [10.26.49.10] (172.20.187.6) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 10 Jun
- 2021 12:54:14 +0000
-Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
- support
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-CC:     <kernel@pengutronix.de>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20210607082727.26045-1-o.rempel@pengutronix.de>
- <20210607082727.26045-5-o.rempel@pengutronix.de>
- <CGME20210609095923eucas1p2e692c9a482151742d543316c91f29802@eucas1p2.samsung.com>
- <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <0ebb1698-cd52-d8ad-b5cc-045d29ea964f@nvidia.com>
-Date:   Thu, 10 Jun 2021 13:54:12 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231162AbhFJN2m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 09:28:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38166 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230413AbhFJN2m (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 09:28:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F333F613DE;
+        Thu, 10 Jun 2021 13:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623331606;
+        bh=HRWGM8U5uk1Jr5eXvzBS5bpaAGmP4Fjz6ld8w5qV1xY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JbBiWYMZud8RFl+cWKLQ81lctP+P7ys5BCJ8XSLPyAp5DP0I3g7oGBOivffECIGLm
+         SLv/10za6gIiwYJRrtX9KA7Gd2yG4ogN+AJs8maqaENhWee62TJ0kdpx2r8dFdWAko
+         /uWwQOuYCINTO5bdm0X/uxO0yhNri8xDC+m/fJM1gQlXABDMHAAN+e/cWTpgimydNO
+         MC7nxe/NM4hDf7FjV2xZGd9+mtPiBpmP430powfeyqrQByIy/zaZtdnm0Thfuz1/9+
+         Jzt+401/zNCmV90Sob685Inv/P/kIiaB99ykMTH9EAXT7pNiY95ZdixQdJcZ+71ZD2
+         JF7xINpqpDW3Q==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lrKhj-0006cQ-PO; Thu, 10 Jun 2021 15:26:39 +0200
+Date:   Thu, 10 Jun 2021 15:26:39 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     tu pham <thanhtung1909@gmail.com>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hung.Nguyen@silabs.com,
+        Tung.Pham@silabs.com, Pho Tran <pho.tran@silabs.com>
+Subject: Re: [PATCH v12] USB: serial: cp210x: Add support for GPIOs on CP2108
+Message-ID: <YMITDyLtcPinbHMv@hovoldconsulting.com>
+References: <20210426091244.19994-1-tupham@silabs.com>
 MIME-Version: 1.0
-In-Reply-To: <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5d304fd-bbd0-4219-e8ac-08d92c0edbd5
-X-MS-TrafficTypeDiagnostic: DM6PR12MB3819:
-X-Microsoft-Antispam-PRVS: <DM6PR12MB3819D78605E7C72412806E10D9359@DM6PR12MB3819.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:255;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qp+VULzv+p5ROxUxGntO/nSiGeGiDV9Ob0z7XMMvvNHYTku1rHOt/a/R7V4De2L1/ANVG/eYQN4D8UEJTX5VJSftXnjaLbvt72F/FflxX0fMY8TcqgRVObWMaVaAHbTdQa0uIibCynZqZn4UQeuBY8ZYvb2aSqIJ53v7rqPSphvyROQL+Gj/LDcH4GT+tcKY9SY2ZaAG/5wdsIMtZSEvzpYR77JzbuL3Yxpu4hPuYZdixAo4HmSMl4xjlC1X6P3aLIP7RnMxLGJsi+owgqo+ViMrmRD4GI0mUn1NWaHiU7udP6VyYKFihTNqaAl+1w91xLxT/S7JvZwgc8/XXI05smpWNWVIXUnmmxip1LWtJrpps2XrLUmed5yqUHbb91g/ihGd4knVn4XBBMuSvCYr8HXqxEBCCkXGOJMa4Ya+2aKSiyURpV5dB3nDsuz6AH5egywzLMqXDciiRbbOv4FxeHCBTFyNQMIor/E5bhf+60bPD1ltXEQxi0MFCNyaSooXyusHFbsC4Ux/jyDhgsOKgTiuedQEkvp4rcxGENLyC0+rcYQo/Xdq288SxDfn4Dx120dgVxlifyWBFbP177kNHBvR/d8dYu8j3v4cjvcSiAk3zjlLhD1awLQ1aMVwAl7ZALlpW1C80iMdh/8VEuf+T4UEnGTqGNBnM2na6gAT4AjUxfFYG6ftUvl51roYWZdS
-X-Forefront-Antispam-Report: CIP:216.228.112.34;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid03.nvidia.com;CAT:NONE;SFS:(4636009)(39860400002)(346002)(396003)(376002)(136003)(36840700001)(46966006)(31696002)(70206006)(110136005)(8676002)(70586007)(53546011)(336012)(5660300002)(36860700001)(8936002)(36756003)(7416002)(82740400003)(31686004)(186003)(2906002)(54906003)(478600001)(47076005)(7636003)(82310400003)(356005)(86362001)(316002)(426003)(16576012)(4326008)(36906005)(26005)(83380400001)(16526019)(2616005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jun 2021 12:54:17.8029
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5d304fd-bbd0-4219-e8ac-08d92c0edbd5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.34];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3819
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210426091244.19994-1-tupham@silabs.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-On 09/06/2021 10:59, Marek Szyprowski wrote:
-> Hi Oleksij,
+On Mon, Apr 26, 2021 at 04:12:44PM +0700, tu pham wrote:
+> From: Pho Tran <pho.tran@silabs.com>
 > 
-> On 07.06.2021 10:27, Oleksij Rempel wrote:
->> To be able to use ax88772 with external PHYs and use advantage of
->> existing PHY drivers, we need to port at least ax88772 part of asix
->> driver to the phylib framework.
->>
->> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> Similar to other CP210x devices, GPIO interfaces (gpiochip) should be
+> supported for CP2108.
 > 
-> This patch landed recently in linux-next as commit e532a096be0e ("net: 
-> usb: asix: ax88772: add phylib support"). I found that it causes some 
-> warnings on boards with those devices, see the following log:
+> CP2108 has 4 serial interfaces but only 1 set of GPIO pins are shared
+> to all of those interfaces. So, just need to initialize GPIOs of CP2108
+> with only one interface (I use interface 0). It means just only 1 gpiochip
+> device file will be created for CP2108.
 > 
-> root@target:~# time rtcwake -s10 -mmem
-> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:16:41 2021
-> [  231.226579] PM: suspend entry (deep)
-> [  231.231697] Filesystems sync: 0.002 seconds
-> [  231.261761] Freezing user space processes ... (elapsed 0.002 seconds) 
-> done.
-> [  231.270526] OOM killer disabled.
-> [  231.273557] Freezing remaining freezable tasks ... (elapsed 0.002 
-> seconds) done.
-> [  231.282229] printk: Suspending console(s) (use no_console_suspend to 
-> debug)
-> ...
-> [  231.710852] Disabling non-boot CPUs ...
-> ...
-> [  231.901794] Enabling non-boot CPUs ...
-> ...
-> [  232.225640] usb usb3: root hub lost power or was reset
-> [  232.225746] usb usb1: root hub lost power or was reset
-> [  232.225864] usb usb5: root hub lost power or was reset
-> [  232.226206] usb usb6: root hub lost power or was reset
-> [  232.226207] usb usb4: root hub lost power or was reset
-> [  232.297749] usb usb2: root hub lost power or was reset
-> [  232.343227] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
-> [  232.343293] asix 3-1:1.0 eth0: Failed to enable software MII access
-> [  232.344486] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
-> [  232.344512] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
-> [  232.344529] PM: dpm_run_callback(): mdio_bus_phy_resume+0x0/0x78 
-> returns -22
-> [  232.344554] Asix Electronics AX88772C usb-003:002:10: PM: failed to 
-> resume: error -22
-> [  232.563712] usb 1-1: reset high-speed USB device number 2 using 
-> exynos-ehci
-> [  232.757653] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
-> [  233.730994] OOM killer enabled.
-> [  233.734122] Restarting tasks ... done.
-> [  233.754992] PM: suspend exit
+> CP2108 has 16 GPIOs, So data types of several variables need to be is u16
+> instead of u8(in struct cp210x_serial_private). This doesn't affect other
+> CP210x devices.
+> 
+> Because CP2108 has 16 GPIO pins, the parameter passed by cp210x functions
+> will be different from other CP210x devices. So need to check part number
+> of the device to use correct data format  before sending commands to
+> devices.
+> 
+> Like CP2104, CP2108 have GPIO pins with configurable options. Therefore,
+> should be mask all pins which are not in GPIO mode in cp2108_gpio_init()
+> function.
+> 
+> Signed-off-by: Pho Tran <pho.tran@silabs.com>
+> Co-developed-by: Tung Pham <tung.pham@silabs.com>
+> Signed-off-by: Tung Pham <tung.pham@silabs.com>
+> ---
+> 
+> 04/26/2021: Patch v11 Add Signed-off-by Tung Pham
+> 04/26/2021: Patch v10 Add Co-developed-by Tung Pham
+> 04/23/2021: Patch v9 Modified code according to comment of Johan:
+>         1. Remove quad-port-config comment.
+>         2. Move defice EF_IFC_GPIOs go after the quad-port-config 
+>         structure with the other port config defines, add CP2108_ prefix.
+>         3. Drop CP2108 Quad Port State structure sentence comment;
+>          clear from the code.
+>         4. remove Double new line.
+>         5. Use lowercase pb for consistency.
+>         6. Avoid // comments. CP2108 (uppercase P).
+>         7. remove Double new line.
+>         8. Lowercase ifc.
+>         9. Just keep the current struct as is and add a second one for 16 bits
+>          (e.g. struct cp210x_gpio_write16).
+>         10. don't need both u16 buf, but it may be cleaner to use u8 buf[2] 
+>         for the transfer buffer.
+>         11. Add missing indentation.
+>         12. Try to be consistent with capitalisation of CP210x.
+>         13. Just do the read after the switch into a common u8 buf[2] and 
+>         use the full length only for CP2108.
+>         14. Add leak the PM counter reference here.
+>         15. Change buf = le16_to_cpu(wbuf); to le16_to_cpup((__le16 *)buf).
+>         16. Keep the original struct as is cp210x_gpio_write.
+>         17. Add another one for cp2108 with a suitable suffix.
+>         18. No need to do open-parenthesis alignment; two tabs is enough.
+>         19. Random whitespace changes.
+>         20. Change check enhancedfxn_ifc.
+>         21. Remove case EF_IFC_GPIO_RS485_LOGIC.
+>         22. Remove case EF_IFC_DYNAMIC_SUSPEND.
+>         23. Correct typo: only.
+> 04/08/2021: Patch v8 Fixed build warning reported by kernel test robot
+> with ARCH=i386
+> 04/05/2021: Patch v7 Modified commit message follow Greg's comment.
+> 04/05/2021: Patch v6 Fixed build warning reported by kernel test robot
+> with ARCH=x86_64
+> 03/15/2021: Patch v5 Modified code according to comment of Johan:
+>         1. Unified the handling of CP2108 and other types and
+>         take care about endianness.
+>         2. Used suitable types data for variable.
+>         3. Fixed cp2108_gpio_init and add more detail on
+>         commit message and comment.
+>         4. Dropped some of the ones that don't add any value.
+>         5. Changed how the altfunctions were detected and fixed the gpio_init
+>          error handling.
+> 03/12/2021: Patch v4 used git send-mail instead of send patch by manual
+> follow the instructions of Johan Hovold <johan@kernel.org>.
+> 03/05/2021: Patch v3 modified format and contents of changelog follow feedback
+> from Johan Hovold <johan@kernel.org>.
+> 03/04/2021: Patch v2 modified format patch as comment from
+> Johan Hovold <johan@kernel.org>:
+>         1. Break commit message lines at 80 cols
+>         2. Use kernel u8 and u16 instead of the c99 ones.
+> 03/01/2021: Initialed submission of patch "Make the CP210x driver work with
+> GPIOs of CP2108.".
 
+Checkpatch now complains about five white-space issues.
 
-I am seeing a similar problem on a couple of our Tegra boards that
-use AX88772A device. When resuming from suspend I see ...
+Normally, I'd just ask you to fix up and resend, but I fear this will
+take all summer to get into shape so I'll fix up the warnings and a
+number of issues that I point out below *this* time.
 
-[   54.733266] PM: suspend entry (deep)
+I'm really quite annoyed to find that you have again ignored a number of
+my comments on v9.
 
-[   54.737179] Filesystems sync: 0.000 seconds
+Next time, do some proper internal review before posting and make sure
+you have addressed all review comments (by following the suggestions or
+arguing why you will not).
 
-[   54.741904] Freezing user space processes ... (elapsed 0.001 seconds) done.
+>  drivers/usb/serial/cp210x.c | 211 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 182 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> index 7bec1e730b20..24cdf86ed23c 100644
+> --- a/drivers/usb/serial/cp210x.c
+> +++ b/drivers/usb/serial/cp210x.c
+> @@ -245,9 +245,9 @@ struct cp210x_serial_private {
+>  #ifdef CONFIG_GPIOLIB
+>  	struct gpio_chip	gc;
+>  	bool			gpio_registered;
+> -	u8			gpio_pushpull;
+> -	u8			gpio_altfunc;
+> -	u8			gpio_input;
+> +	u16			gpio_pushpull;
+> +	u16			gpio_altfunc;
+> +	u16			gpio_input;
+>  #endif
+>  	u8			partnum;
+>  	speed_t			min_speed;
+> @@ -500,6 +500,50 @@ struct cp210x_single_port_config {
+>  	u8	device_cfg;
+>  } __packed;
+>  
+> +/*
+> + * Quad Port Config definitions
+> + * Refer to https://www.silabs.com/documents/public/application-notes/an978-cp210x-usb-to-uart-api-specification.pdf
+> + * for more information.
+> + * CP210X_VENDOR_SPECIFIC, CP210X_GET_PORTCONFIG call reads these 0x49 bytes
+> + * on a CP2108 chip.
+> + */
 
-[   54.750895] OOM killer disabled.
+At least the last part of this comment belongs above the config
+structure itself.
 
-[   54.754452] Freezing remaining freezable tasks ... (elapsed 0.001 seconds) done.
+> +struct cp210x_quad_port_state {
+> +	__le16 gpio_mode_pb0;
+> +	__le16 gpio_mode_pb1;
+> +	__le16 gpio_mode_pb2;
+> +	__le16 gpio_mode_pb3;
+> +	__le16 gpio_mode_pb4;
+> +
+> +	__le16 gpio_lowpower_pb0;
+> +	__le16 gpio_lowpower_pb1;
+> +	__le16 gpio_lowpower_pb2;
+> +	__le16 gpio_lowpower_pb3;
+> +	__le16 gpio_lowpower_pb4;
+> +
+> +	__le16 gpio_latch_pb0;
+> +	__le16 gpio_latch_pb1;
+> +	__le16 gpio_latch_pb2;
+> +	__le16 gpio_latch_pb3;
+> +	__le16 gpio_latch_pb4;
+> +};
+> +
+> +#define CP2108_EF_IFC_GPIO_TXLED		0x01
+> +#define CP2108_EF_IFC_GPIO_RXLED		0x02
+> +#define CP2108_EF_IFC_GPIO_RS485		0x04
+> +#define CP2108_EF_IFC_GPIO_RS485_LOGIC 0x08
+> +#define CP2108_EF_IFC_GPIO_CLOCK		0x10
+> +#define CP2108_EF_IFC_DYNAMIC_SUSPEND	0x40
 
-[   54.763505] printk: Suspending console(s) (use no_console_suspend to debug)
+Why aren't all the values aligned?
 
-[   54.898334] Disabling non-boot CPUs ...
+> +
+> +/* CP2108 Quad Port Config structure */
+> +struct cp210x_quad_port_config {
+> +	struct cp210x_quad_port_state reset_state;
+> +	struct cp210x_quad_port_state suspend_state;
+> +	u8 ipdelay_ifc[4];
+> +	u8 enhancedfxn_ifc[4];
+> +	u8 enhancedfxn_device;
+> +	u8 extclkfreq[4];
+> +} __packed;
+> +
+>  /* GPIO modes */
+>  #define CP210X_SCI_GPIO_MODE_OFFSET	9
+>  #define CP210X_SCI_GPIO_MODE_MASK	GENMASK(11, 9)
+> @@ -510,6 +554,9 @@ struct cp210x_single_port_config {
+>  #define CP210X_GPIO_MODE_OFFSET		8
+>  #define CP210X_GPIO_MODE_MASK		GENMASK(11, 8)
+>  
+> +#define CP2108_GPIO_MODE_OFFSET		0
+> +#define CP2108_GPIO_MODE_MASK		GENMASK(15, 0)
+> +
+>  /* CP2105 port configuration values */
+>  #define CP2105_GPIO0_TXLED_MODE		BIT(0)
+>  #define CP2105_GPIO1_RXLED_MODE		BIT(1)
+> @@ -526,7 +573,19 @@ struct cp210x_single_port_config {
+>  #define CP210X_2NCONFIG_GPIO_RSTLATCH_IDX	587
+>  #define CP210X_2NCONFIG_GPIO_CONTROL_IDX	600
+>  
+> -/* CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x2 bytes. */
+> +/*
+> + * CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these
+> + * 0x04 bytes on CP2108.
+> + */
+> +struct cp210x_gpio_write16 {
+> +	__le16	mask;
+> +	__le16	state;
+> +};
+> +
+> +/*
+> + * CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these
+> + * 0x02 bytes on CP2102N, Cp2103, Cp2104 and CP2105.
 
-[   54.899546] IRQ 26: no longer affine to CPU1
+You're still using lower-case 'p' for some of the models above.
 
-[   54.924373] Entering suspend state LP1
+> + */
+>  struct cp210x_gpio_write {
+>  	u8	mask;
+>  	u8	state;
+> @@ -1298,22 +1357,39 @@ static int cp210x_gpio_get(struct gpio_chip *gc, unsigned int gpio)
+>  	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+>  	u8 req_type = REQTYPE_DEVICE_TO_HOST;
+>  	int result;
+> -	u8 buf;
+> -
+> -	if (priv->partnum == CP210X_PARTNUM_CP2105)
+> -		req_type = REQTYPE_INTERFACE_TO_HOST;
+> +	u8 buf[2];
+>  
+>  	result = usb_autopm_get_interface(serial->interface);
+>  	if (result)
+>  		return result;
+> +	/*
+> +	 * This function will be read latch value of gpio and storage to buf(16bit)
+> +	 * where bit 0 is GPIO0, bit 1 is GPIO1, etc. Up to GPIOn where n is
+> +	 * total number of GPIO pins the interface supports.
+> +	 * Interfaces on CP2102N supports 7 GPIOs
+> +	 * Interfaces on CP2103 amd CP2104 supports 4 GPIOs
+> +	 * Enhanced interfaces on CP2105 support 3 GPIOs
+> +	 * Standard interfaces on CP2105 support 4 GPIOs
+> +	 * Interfaces on CP2108 supports 16 GPIOs
+> +	 */
 
-[   54.924493] Enabling non-boot CPUs ...
+Typo: "amd".
 
-[   54.933164] CPU1 is up
+But as I mentioned earlier, I'm not sure it's worth adding this comment.
+The code should be made obvious enough that it isn't needed.
 
-[   55.005166] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -113
+> +	if ((priv->partnum == CP210X_PARTNUM_CP2108) || (priv->partnum == CP210X_PARTNUM_CP2105)) {
+> +	/*
+> +	 * Request type to Read_Latch of CP2105 and CP2108
+> +	 * is 0xc1 <REQTYPE_INTERFACE_TO_HOST>
+> +	 */
 
-[   55.005226] asix 3-1:1.0 eth0: Failed to enable software MII access
+This comment is not indented correctly. It also not needed since what it
+says is obvious from the code as I mentioned before.
 
-[   55.006579] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -113
+> +		req_type = REQTYPE_INTERFACE_TO_HOST;
+> +	}
 
-[   55.006722] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -113
+The above should be a switch that also sets a length variable.
 
-[   55.006762] asix 3-1:1.0 eth0: Failed to enable software MII access
+>  
+>  	result = cp210x_read_vendor_block(serial, req_type,
+> -					  CP210X_READ_LATCH, &buf, sizeof(buf));
+> -	usb_autopm_put_interface(serial->interface);
 
+Why are you changing the autopm call?
 
-Interestingly once commit d275afb66371 ("net: usb: asix: add error
-handling for asix_mdio_* functions") is applied, then resume from
-suspend completely fails because the error is propagated. Bisect
-is pointing to that patch, however, it is this patch that is
-causing the problem.
+> -	if (result < 0)
+> -		return result;
+> +				CP210X_READ_LATCH, buf, 2);
 
-Cheers
-Jon
+And no need to read 2 bytes for any device types but CP2108 as I also
+mentioned earlier. Does that even work?
 
--- 
-nvpublic
+>  
+> -	return !!(buf & BIT(gpio));
+> +	if (result < 0){
+
+Missing space before {.
+
+> +		usb_autopm_put_interface(serial->interface);
+> +		return result;
+> +	}
+> +	result = le16_to_cpup((__le16 *)buf);
+> +	usb_autopm_put_interface(serial->interface);
+> +	return !!(result & BIT(gpio));
+>  }
+
+When cleaning up the above, I switched to reading into a u16 mask
+directly instead, which makes the code a bit more readable still.
+
+>  static void cp210x_gpio_set(struct gpio_chip *gc, unsigned int gpio, int value)
+> @@ -1321,37 +1397,51 @@ static void cp210x_gpio_set(struct gpio_chip *gc, unsigned int gpio, int value)
+>  	struct usb_serial *serial = gpiochip_get_data(gc);
+>  	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+>  	struct cp210x_gpio_write buf;
+> +	struct cp210x_gpio_write16 buf16;
+> +	u16 wIndex;
+>  	int result;
+>  
+> -	if (value == 1)
+> +	if (value == 1) {
+>  		buf.state = BIT(gpio);
+> -	else
+> +		buf16.state = cpu_to_le16(BIT(gpio));
+> +	} else {
+>  		buf.state = 0;
+> -
+> +		buf16.state = 0;
+> +	}
+>  	buf.mask = BIT(gpio);
+> +	buf16.mask = cpu_to_le16(BIT(gpio));
+
+Here I asked you to use two u16 variables for mask and state, which you
+then use to set up the arguments below.
+  
+>  	result = usb_autopm_get_interface(serial->interface);
+>  	if (result)
+>  		goto out;
+>  
+> -	if (priv->partnum == CP210X_PARTNUM_CP2105) {
+> +	switch (priv->partnum) {
+> +	case CP210X_PARTNUM_CP2108:
+>  		result = cp210x_write_vendor_block(serial,
+> -						   REQTYPE_HOST_TO_INTERFACE,
+> -						   CP210X_WRITE_LATCH, &buf,
+> -						   sizeof(buf));
+> -	} else {
+> -		u16 wIndex = buf.state << 8 | buf.mask;
+> -
+> +						REQTYPE_HOST_TO_INTERFACE,
+> +						CP210X_WRITE_LATCH, &buf16,
+> +						sizeof(buf16));
+> +		break;
+> +	case CP210X_PARTNUM_CP2105:
+> +		result = cp210x_write_vendor_block(serial,
+> +						REQTYPE_HOST_TO_INTERFACE,
+> +						CP210X_WRITE_LATCH, &buf,
+> +						sizeof(buf));
+> +		break;
+> +	default:
+> +		wIndex = buf.state << 8 | buf.mask;
+>  		result = usb_control_msg(serial->dev,
+> -					 usb_sndctrlpipe(serial->dev, 0),
+> -					 CP210X_VENDOR_SPECIFIC,
+> -					 REQTYPE_HOST_TO_DEVICE,
+> -					 CP210X_WRITE_LATCH,
+> -					 wIndex,
+> -					 NULL, 0, USB_CTRL_SET_TIMEOUT);
+> +						usb_sndctrlpipe(serial->dev, 0),
+> +						CP210X_VENDOR_SPECIFIC,
+> +						REQTYPE_HOST_TO_DEVICE,
+> +						CP210X_WRITE_LATCH,
+> +						wIndex,
+> +						NULL, 0, USB_CTRL_SET_TIMEOUT);
+> +		break;
+
+No need to be shuffling all the existing code around.
+
+>  	}
+>  
+>  	usb_autopm_put_interface(serial->interface);
+> +
+
+Random whitespace change.
+
+>  out:
+>  	if (result < 0) {
+>  		dev_err(&serial->interface->dev, "failed to set GPIO value: %d\n",
+> @@ -1420,6 +1510,60 @@ static int cp210x_gpio_set_config(struct gpio_chip *gc, unsigned int gpio,
+>  	return -ENOTSUPP;
+>  }
+>  
+> +static int cp2108_gpio_init(struct usb_serial *serial)
+> +{
+> +	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
+> +	struct cp210x_quad_port_config config;
+> +	u16 gpio_latch;
+> +	u16 temp;
+> +	int result;
+> +	u8 i;
+> +
+> +	result = cp210x_read_vendor_block(serial, REQTYPE_DEVICE_TO_HOST,
+> +					  CP210X_GET_PORTCONFIG, &config,
+> +					  sizeof(config));
+> +	if (result < 0)
+> +		return result;
+> +	priv->gc.ngpio = 16;
+> +	temp = le16_to_cpu(config.reset_state.gpio_mode_pb1);
+> +	priv->gpio_pushpull = (temp & CP2108_GPIO_MODE_MASK) >> CP2108_GPIO_MODE_OFFSET;
+> +	temp = le16_to_cpu(config.reset_state.gpio_latch_pb1);
+> +	gpio_latch = (temp & CP2108_GPIO_MODE_MASK) >> CP2108_GPIO_MODE_OFFSET;
+
+As I mentioned earlier, the temporaries do not buy you anything since
+the masks are 16 bits just like the structure fields, and the shifting
+and masking is pointless.
+
+I'll reply to this mail with an updated v13 addressing the above.
+
+Johan
