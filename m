@@ -2,371 +2,233 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A2F3A2D0F
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 15:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 360783A2D31
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 15:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbhFJNct (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 09:32:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40940 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230402AbhFJNct (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 09:32:49 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 12170613F5;
-        Thu, 10 Jun 2021 13:30:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623331853;
-        bh=08tg9EmwQcTk6h4F94sHDVXBbTWUbexJPjygK7f+0CA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ngE3NZvlsYNccrKT5GNnKvKUH7L1tIxwGkmFU05Y7qA7SZQwigDB8Dor0mD4sAZDf
-         dBNrhtbTUassdpuCo32zX64pnopj8y2XD8SYUJypTPZNYDaD3i4hCogNM9l66NOmxn
-         3SaRatsOEnuhuBYNS+2PywBUuMzPSidkhEHVe9AA7gkDuYve29tVpprgJnJK/g191T
-         zAKiR0+iEfA5Nl5zVD3EIfhxC1v4j/xvOftJXlJIzc8gVFNgckDuFTQYAxvTIIsreX
-         j4AYgZOSCH4VIbFVyjVK+UFfBBlWw+rHavLHoHlD9sZP56zDbcdV7sLweCd3sLc6ZC
-         2ijSyxwkZYv5w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lrKli-0006eV-It; Thu, 10 Jun 2021 15:30:46 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     tu pham <thanhtung1909@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hung.Nguyen@silabs.com, Tung.Pham@silabs.com,
-        Pho Tran <pho.tran@silabs.com>,
-        Tung Pham <tung.pham@silabs.com>
-Subject: [PATCH v13] USB: serial: cp210x: add support for GPIOs on CP2108
-Date:   Thu, 10 Jun 2021 15:28:44 +0200
-Message-Id: <20210610132844.25495-1-johan@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <YMITDyLtcPinbHMv@hovoldconsulting.com>
-References: <YMITDyLtcPinbHMv@hovoldconsulting.com>
+        id S231280AbhFJNjK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 09:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231209AbhFJNjG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 09:39:06 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63129C0617A6
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 06:37:09 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lrKrl-0001DZ-0G; Thu, 10 Jun 2021 15:37:01 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lrKrh-00017e-Kr; Thu, 10 Jun 2021 15:36:57 +0200
+Date:   Thu, 10 Jun 2021 15:36:57 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
+ support
+Message-ID: <20210610133657.7hchbeidynpd7m7b@pengutronix.de>
+References: <20210607082727.26045-1-o.rempel@pengutronix.de>
+ <20210607082727.26045-5-o.rempel@pengutronix.de>
+ <CGME20210609095923eucas1p2e692c9a482151742d543316c91f29802@eucas1p2.samsung.com>
+ <84ff1dab-ab0a-f27c-a948-e1ebdf778485@samsung.com>
+ <20210609124609.zngg6sfcu6cj4p2m@pengutronix.de>
+ <44a16219-0575-49ee-758b-be6fe9971962@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <44a16219-0575-49ee-758b-be6fe9971962@gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 15:36:14 up 190 days,  3:42, 50 users,  load average: 0.07, 0.04,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pho Tran <pho.tran@silabs.com>
+On Wed, Jun 09, 2021 at 03:12:37PM +0200, Heiner Kallweit wrote:
+> On 09.06.2021 14:46, Oleksij Rempel wrote:
+> > Hi Marek,
+> > 
+> > On Wed, Jun 09, 2021 at 11:59:23AM +0200, Marek Szyprowski wrote:
+> >> Hi Oleksij,
+> >>
+> >> On 07.06.2021 10:27, Oleksij Rempel wrote:
+> >>> To be able to use ax88772 with external PHYs and use advantage of
+> >>> existing PHY drivers, we need to port at least ax88772 part of asix
+> >>> driver to the phylib framework.
+> >>>
+> >>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> >>
+> >> This patch landed recently in linux-next as commit e532a096be0e ("net: 
+> >> usb: asix: ax88772: add phylib support"). I found that it causes some 
+> >> warnings on boards with those devices, see the following log:
+> >>
+> >> root@target:~# time rtcwake -s10 -mmem
+> >> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:16:41 2021
+> >> [  231.226579] PM: suspend entry (deep)
+> >> [  231.231697] Filesystems sync: 0.002 seconds
+> >> [  231.261761] Freezing user space processes ... (elapsed 0.002 seconds) 
+> >> done.
+> >> [  231.270526] OOM killer disabled.
+> >> [  231.273557] Freezing remaining freezable tasks ... (elapsed 0.002 
+> >> seconds) done.
+> >> [  231.282229] printk: Suspending console(s) (use no_console_suspend to 
+> >> debug)
+> >> ...
+> >> [  231.710852] Disabling non-boot CPUs ...
+> >> ...
+> >> [  231.901794] Enabling non-boot CPUs ...
+> >> ...
+> >> [  232.225640] usb usb3: root hub lost power or was reset
+> >> [  232.225746] usb usb1: root hub lost power or was reset
+> >> [  232.225864] usb usb5: root hub lost power or was reset
+> >> [  232.226206] usb usb6: root hub lost power or was reset
+> >> [  232.226207] usb usb4: root hub lost power or was reset
+> >> [  232.297749] usb usb2: root hub lost power or was reset
+> >> [  232.343227] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> >> [  232.343293] asix 3-1:1.0 eth0: Failed to enable software MII access
+> >> [  232.344486] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
+> >> [  232.344512] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> >> [  232.344529] PM: dpm_run_callback(): mdio_bus_phy_resume+0x0/0x78 
+> >> returns -22
+> >> [  232.344554] Asix Electronics AX88772C usb-003:002:10: PM: failed to 
+> >> resume: error -22
+> >> [  232.563712] usb 1-1: reset high-speed USB device number 2 using 
+> >> exynos-ehci
+> >> [  232.757653] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
+> >> [  233.730994] OOM killer enabled.
+> >> [  233.734122] Restarting tasks ... done.
+> >> [  233.754992] PM: suspend exit
+> >>
+> >> real    0m11.546s
+> >> user    0m0.000s
+> >> sys     0m0.530s
+> >> root@target:~# sleep 2
+> >> root@target:~# time rtcwake -s10 -mmem
+> >> rtcwake: wakeup from "mem" using /dev/rtc0 at Wed Jun  9 08:17:02 2021
+> >> [  241.959608] PM: suspend entry (deep)
+> >> [  241.963446] Filesystems sync: 0.001 seconds
+> >> [  241.978619] Freezing user space processes ... (elapsed 0.004 seconds) 
+> >> done.
+> >> [  241.989199] OOM killer disabled.
+> >> [  241.992215] Freezing remaining freezable tasks ... (elapsed 0.005 
+> >> seconds) done.
+> >> [  242.003979] printk: Suspending console(s) (use no_console_suspend to 
+> >> debug)
+> >> ...
+> >> [  242.592030] Disabling non-boot CPUs ...
+> >> ...
+> >> [  242.879721] Enabling non-boot CPUs ...
+> >> ...
+> >> [  243.145870] usb usb3: root hub lost power or was reset
+> >> [  243.145910] usb usb4: root hub lost power or was reset
+> >> [  243.147084] usb usb5: root hub lost power or was reset
+> >> [  243.147157] usb usb6: root hub lost power or was reset
+> >> [  243.147298] usb usb1: root hub lost power or was reset
+> >> [  243.217137] usb usb2: root hub lost power or was reset
+> >> [  243.283807] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> >> [  243.284005] asix 3-1:1.0 eth0: Failed to enable software MII access
+> >> [  243.285526] asix 3-1:1.0 eth0: Failed to read reg index 0x0000: -22
+> >> [  243.285676] asix 3-1:1.0 eth0: Failed to read reg index 0x0004: -22
+> >> [  243.285769] ------------[ cut here ]------------
+> >> [  243.286011] WARNING: CPU: 2 PID: 2069 at drivers/net/phy/phy.c:916 
+> >> phy_error+0x28/0x68
+> >> [  243.286115] Modules linked in: cmac bnep mwifiex_sdio mwifiex 
+> >> sha256_generic libsha256 sha256_arm cfg80211 btmrvl_sdio btmrvl 
+> >> bluetooth s5p_mfc uvcvideo s5p_jpeg exynos_gsc v
+> >> [  243.287490] CPU: 2 PID: 2069 Comm: kworker/2:5 Not tainted 
+> >> 5.13.0-rc5-next-20210608 #10443
+> >> [  243.287555] Hardware name: Samsung Exynos (Flattened Device Tree)
+> >> [  243.287609] Workqueue: events_power_efficient phy_state_machine
+> >> [  243.287716] [<c0111920>] (unwind_backtrace) from [<c010d0cc>] 
+> >> (show_stack+0x10/0x14)
+> >> [  243.287807] [<c010d0cc>] (show_stack) from [<c0b62360>] 
+> >> (dump_stack_lvl+0xa0/0xc0)
+> >> [  243.287882] [<c0b62360>] (dump_stack_lvl) from [<c0127960>] 
+> >> (__warn+0x118/0x11c)
+> >> [  243.287954] [<c0127960>] (__warn) from [<c0127a18>] 
+> >> (warn_slowpath_fmt+0xb4/0xbc)
+> >> [  243.288021] [<c0127a18>] (warn_slowpath_fmt) from [<c0734968>] 
+> >> (phy_error+0x28/0x68)
+> >> [  243.288094] [<c0734968>] (phy_error) from [<c0735d6c>] 
+> >> (phy_state_machine+0x218/0x278)
+> >> [  243.288173] [<c0735d6c>] (phy_state_machine) from [<c014ae08>] 
+> >> (process_one_work+0x30c/0x884)
+> >> [  243.288254] [<c014ae08>] (process_one_work) from [<c014b3d8>] 
+> >> (worker_thread+0x58/0x594)
+> >> [  243.288333] [<c014b3d8>] (worker_thread) from [<c0153944>] 
+> >> (kthread+0x160/0x1c0)
+> >> [  243.288408] [<c0153944>] (kthread) from [<c010011c>] 
+> >> (ret_from_fork+0x14/0x38)
+> >> [  243.288475] Exception stack(0xc4683fb0 to 0xc4683ff8)
+> >> [  243.288531] 3fa0:                                     00000000 
+> >> 00000000 00000000 00000000
+> >> [  243.288587] 3fc0: 00000000 00000000 00000000 00000000 00000000 
+> >> 00000000 00000000 00000000
+> >> [  243.288641] 3fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> >> [  243.288690] irq event stamp: 1611
+> >> [  243.288744] hardirqs last  enabled at (1619): [<c01a6ef0>] 
+> >> vprintk_emit+0x230/0x290
+> >> [  243.288830] hardirqs last disabled at (1626): [<c01a6f2c>] 
+> >> vprintk_emit+0x26c/0x290
+> >> [  243.288906] softirqs last  enabled at (1012): [<c0101768>] 
+> >> __do_softirq+0x500/0x63c
+> >> [  243.288978] softirqs last disabled at (1007): [<c01315b4>] 
+> >> irq_exit+0x214/0x220
+> >> [  243.289055] ---[ end trace eeacda95eb7db60a ]---
+> >> [  243.289345] asix 3-1:1.0 eth0: Failed to write reg index 0x0000: -22
+> >> [  243.289466] asix 3-1:1.0 eth0: Failed to write Medium Mode mode to 
+> >> 0x0000: ffffffea
+> >> [  243.289540] asix 3-1:1.0 eth0: Link is Down
+> >> [  243.482809] usb 1-1: reset high-speed USB device number 2 using 
+> >> exynos-ehci
+> >> [  243.647251] usb 3-1: reset high-speed USB device number 2 using xhci-hcd
+> >> [  244.847161] OOM killer enabled.
+> >> [  244.850221] Restarting tasks ... done.
+> >> [  244.861372] PM: suspend exit
+> >>
+> >> real    0m13.050s
+> >> user    0m0.000s
+> >> sys     0m1.152s
+> >> root@target:~#
+> >>
+> >> It looks that some kind of system suspend/resume integration for phylib 
+> >> is not implemented.
+> > 
+> > Probably it is should be handled only by the asix driver. I'll take a
+> > look in to it. Did interface was able to resume after printing some
+> > warnings?
+> > 
+> > Regards,
+> > Oleksij
+> > 
+> 
+> Maybe it's a use case for the new mac_managed_pm flag, see
+> fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
+> 
 
-Similar to some other CP210x device types, CP2108 has a number of GPIO
-pins that can be exposed through gpiolib.
+Thx! this is the right one :)
 
-CP2108 has four serial interfaces but only one set of GPIO pins, which
-is modelled as a single gpio chip and registered as a child of the first
-interface.
-
-CP2108 has 16 GPIOs so the width of the state variables needs to be
-extended to 16 bits and this is also reflected in the control requests.
-
-Like CP2104, CP2108 have GPIO pins with configurable alternate
-functions and pins unavailable for GPIO use are determined and reported
-to gpiolib at probe.
-
-Signed-off-by: Pho Tran <pho.tran@silabs.com>
-Co-developed-by: Tung Pham <tung.pham@silabs.com>
-Signed-off-by: Tung Pham <tung.pham@silabs.com>
-[ johan: rewrite gpio get() and set(); misc cleanups; amend commit
-         message ]
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
-
-Tested using CP2108 and CP2102N.
-
-Changes in v13
- - rewrite cp210x_gpio_get() using a shared 16 bit mask and
-   le16_to_cpus()
- - rewrite cp210x_gpio_set() using shared 16-bit mask and state
-   variables
- - drop pointless no-op shift and mask operations during initialisation
- - reorder defines
- - reword some comments
- - fix some style issues
- - amend commit message
-
-v12 can be found here:
- - https://lore.kernel.org/r/20210426091244.19994-1-tupham@silabs.com
-
-
- drivers/usb/serial/cp210x.c | 189 ++++++++++++++++++++++++++++++++----
- 1 file changed, 170 insertions(+), 19 deletions(-)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index ee595d1bea0a..8424ad9f0955 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -247,9 +247,9 @@ struct cp210x_serial_private {
- #ifdef CONFIG_GPIOLIB
- 	struct gpio_chip	gc;
- 	bool			gpio_registered;
--	u8			gpio_pushpull;
--	u8			gpio_altfunc;
--	u8			gpio_input;
-+	u16			gpio_pushpull;
-+	u16			gpio_altfunc;
-+	u16			gpio_input;
- #endif
- 	u8			partnum;
- 	speed_t			min_speed;
-@@ -531,18 +531,72 @@ struct cp210x_single_port_config {
- #define CP2104_GPIO1_RXLED_MODE		BIT(1)
- #define CP2104_GPIO2_RS485_MODE		BIT(2)
- 
-+struct cp210x_quad_port_state {
-+	__le16 gpio_mode_pb0;
-+	__le16 gpio_mode_pb1;
-+	__le16 gpio_mode_pb2;
-+	__le16 gpio_mode_pb3;
-+	__le16 gpio_mode_pb4;
-+
-+	__le16 gpio_lowpower_pb0;
-+	__le16 gpio_lowpower_pb1;
-+	__le16 gpio_lowpower_pb2;
-+	__le16 gpio_lowpower_pb3;
-+	__le16 gpio_lowpower_pb4;
-+
-+	__le16 gpio_latch_pb0;
-+	__le16 gpio_latch_pb1;
-+	__le16 gpio_latch_pb2;
-+	__le16 gpio_latch_pb3;
-+	__le16 gpio_latch_pb4;
-+};
-+
-+/*
-+ * CP210X_VENDOR_SPECIFIC, CP210X_GET_PORTCONFIG call reads these 0x49 bytes
-+ * on a CP2108 chip.
-+ *
-+ * See https://www.silabs.com/documents/public/application-notes/an978-cp210x-usb-to-uart-api-specification.pdf
-+ */
-+struct cp210x_quad_port_config {
-+	struct cp210x_quad_port_state reset_state;
-+	struct cp210x_quad_port_state suspend_state;
-+	u8 ipdelay_ifc[4];
-+	u8 enhancedfxn_ifc[4];
-+	u8 enhancedfxn_device;
-+	u8 extclkfreq[4];
-+} __packed;
-+
-+#define CP2108_EF_IFC_GPIO_TXLED		0x01
-+#define CP2108_EF_IFC_GPIO_RXLED		0x02
-+#define CP2108_EF_IFC_GPIO_RS485		0x04
-+#define CP2108_EF_IFC_GPIO_RS485_LOGIC		0x08
-+#define CP2108_EF_IFC_GPIO_CLOCK		0x10
-+#define CP2108_EF_IFC_DYNAMIC_SUSPEND		0x40
-+
- /* CP2102N configuration array indices */
- #define CP210X_2NCONFIG_CONFIG_VERSION_IDX	2
- #define CP210X_2NCONFIG_GPIO_MODE_IDX		581
- #define CP210X_2NCONFIG_GPIO_RSTLATCH_IDX	587
- #define CP210X_2NCONFIG_GPIO_CONTROL_IDX	600
- 
--/* CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x2 bytes. */
-+/*
-+ * CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x02 bytes
-+ * for CP2102N, CP2103, CP2104 and CP2105.
-+ */
- struct cp210x_gpio_write {
- 	u8	mask;
- 	u8	state;
- };
- 
-+/*
-+ * CP210X_VENDOR_SPECIFIC, CP210X_WRITE_LATCH call writes these 0x04 bytes
-+ * for CP2108.
-+ */
-+struct cp210x_gpio_write16 {
-+	__le16	mask;
-+	__le16	state;
-+};
-+
- /*
-  * Helper to get interface number when we only have struct usb_serial.
-  */
-@@ -1414,52 +1468,84 @@ static int cp210x_gpio_get(struct gpio_chip *gc, unsigned int gpio)
- {
- 	struct usb_serial *serial = gpiochip_get_data(gc);
- 	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
--	u8 req_type = REQTYPE_DEVICE_TO_HOST;
-+	u8 req_type;
-+	u16 mask;
- 	int result;
--	u8 buf;
--
--	if (priv->partnum == CP210X_PARTNUM_CP2105)
--		req_type = REQTYPE_INTERFACE_TO_HOST;
-+	int len;
- 
- 	result = usb_autopm_get_interface(serial->interface);
- 	if (result)
- 		return result;
- 
--	result = cp210x_read_vendor_block(serial, req_type,
--					  CP210X_READ_LATCH, &buf, sizeof(buf));
-+	switch (priv->partnum) {
-+	case CP210X_PARTNUM_CP2105:
-+		req_type = REQTYPE_INTERFACE_TO_HOST;
-+		len = 1;
-+		break;
-+	case CP210X_PARTNUM_CP2108:
-+		req_type = REQTYPE_INTERFACE_TO_HOST;
-+		len = 2;
-+		break;
-+	default:
-+		req_type = REQTYPE_DEVICE_TO_HOST;
-+		len = 1;
-+		break;
-+	}
-+
-+	mask = 0;
-+	result = cp210x_read_vendor_block(serial, req_type, CP210X_READ_LATCH,
-+					  &mask, len);
-+
- 	usb_autopm_put_interface(serial->interface);
-+
- 	if (result < 0)
- 		return result;
- 
--	return !!(buf & BIT(gpio));
-+	le16_to_cpus((__le16 *)&mask);
-+
-+	return !!(mask & BIT(gpio));
- }
- 
- static void cp210x_gpio_set(struct gpio_chip *gc, unsigned int gpio, int value)
- {
- 	struct usb_serial *serial = gpiochip_get_data(gc);
- 	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-+	struct cp210x_gpio_write16 buf16;
- 	struct cp210x_gpio_write buf;
-+	u16 mask, state;
-+	u16 wIndex;
- 	int result;
- 
- 	if (value == 1)
--		buf.state = BIT(gpio);
-+		state = BIT(gpio);
- 	else
--		buf.state = 0;
-+		state = 0;
- 
--	buf.mask = BIT(gpio);
-+	mask = BIT(gpio);
- 
- 	result = usb_autopm_get_interface(serial->interface);
- 	if (result)
- 		goto out;
- 
--	if (priv->partnum == CP210X_PARTNUM_CP2105) {
-+	switch (priv->partnum) {
-+	case CP210X_PARTNUM_CP2105:
-+		buf.mask = (u8)mask;
-+		buf.state = (u8)state;
- 		result = cp210x_write_vendor_block(serial,
- 						   REQTYPE_HOST_TO_INTERFACE,
- 						   CP210X_WRITE_LATCH, &buf,
- 						   sizeof(buf));
--	} else {
--		u16 wIndex = buf.state << 8 | buf.mask;
--
-+		break;
-+	case CP210X_PARTNUM_CP2108:
-+		buf16.mask = cpu_to_le16(mask);
-+		buf16.state = cpu_to_le16(state);
-+		result = cp210x_write_vendor_block(serial,
-+						   REQTYPE_HOST_TO_INTERFACE,
-+						   CP210X_WRITE_LATCH, &buf16,
-+						   sizeof(buf16));
-+		break;
-+	default:
-+		wIndex = state << 8 | mask;
- 		result = usb_control_msg(serial->dev,
- 					 usb_sndctrlpipe(serial->dev, 0),
- 					 CP210X_VENDOR_SPECIFIC,
-@@ -1467,6 +1553,7 @@ static void cp210x_gpio_set(struct gpio_chip *gc, unsigned int gpio, int value)
- 					 CP210X_WRITE_LATCH,
- 					 wIndex,
- 					 NULL, 0, USB_CTRL_SET_TIMEOUT);
-+		break;
- 	}
- 
- 	usb_autopm_put_interface(serial->interface);
-@@ -1676,6 +1763,61 @@ static int cp2104_gpioconf_init(struct usb_serial *serial)
- 	return 0;
- }
- 
-+static int cp2108_gpio_init(struct usb_serial *serial)
-+{
-+	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-+	struct cp210x_quad_port_config config;
-+	u16 gpio_latch;
-+	int result;
-+	u8 i;
-+
-+	result = cp210x_read_vendor_block(serial, REQTYPE_DEVICE_TO_HOST,
-+					  CP210X_GET_PORTCONFIG, &config,
-+					  sizeof(config));
-+	if (result < 0)
-+		return result;
-+
-+	priv->gc.ngpio = 16;
-+	priv->gpio_pushpull = le16_to_cpu(config.reset_state.gpio_mode_pb1);
-+	gpio_latch = le16_to_cpu(config.reset_state.gpio_latch_pb1);
-+
-+	/*
-+	 * Mark all pins which are not in GPIO mode.
-+	 *
-+	 * Refer to table 9.1 "GPIO Mode alternate Functions" in the datasheet:
-+	 * https://www.silabs.com/documents/public/data-sheets/cp2108-datasheet.pdf
-+	 *
-+	 * Alternate functions of GPIO0 to GPIO3 are determine by enhancedfxn_ifc[0]
-+	 * and the similarly for the other pins; enhancedfxn_ifc[1]: GPIO4 to GPIO7,
-+	 * enhancedfxn_ifc[2]: GPIO8 to GPIO11, enhancedfxn_ifc[3]: GPIO12 to GPIO15.
-+	 */
-+	for (i = 0; i < 4; i++) {
-+		if (config.enhancedfxn_ifc[i] & CP2108_EF_IFC_GPIO_TXLED)
-+			priv->gpio_altfunc |= BIT(i * 4);
-+		if (config.enhancedfxn_ifc[i] & CP2108_EF_IFC_GPIO_RXLED)
-+			priv->gpio_altfunc |= BIT((i * 4) + 1);
-+		if (config.enhancedfxn_ifc[i] & CP2108_EF_IFC_GPIO_RS485)
-+			priv->gpio_altfunc |= BIT((i * 4) + 2);
-+		if (config.enhancedfxn_ifc[i] & CP2108_EF_IFC_GPIO_CLOCK)
-+			priv->gpio_altfunc |= BIT((i * 4) + 3);
-+	}
-+
-+	/*
-+	 * Like CP2102N, CP2108 has also no strict input and output pin
-+	 * modes. Do the same input mode emulation as CP2102N.
-+	 */
-+	for (i = 0; i < priv->gc.ngpio; ++i) {
-+		/*
-+		 * Set direction to "input" iff pin is open-drain and reset
-+		 * value is 1.
-+		 */
-+		if (!(priv->gpio_pushpull & BIT(i)) && (gpio_latch & BIT(i)))
-+			priv->gpio_input |= BIT(i);
-+	}
-+
-+	return 0;
-+}
-+
- static int cp2102n_gpioconf_init(struct usb_serial *serial)
- {
- 	struct cp210x_serial_private *priv = usb_get_serial_data(serial);
-@@ -1780,6 +1922,15 @@ static int cp210x_gpio_init(struct usb_serial *serial)
- 	case CP210X_PARTNUM_CP2105:
- 		result = cp2105_gpioconf_init(serial);
- 		break;
-+	case CP210X_PARTNUM_CP2108:
-+		/*
-+		 * The GPIOs are not tied to any specific port so only register
-+		 * once for interface 0.
-+		 */
-+		if (cp210x_interface_num(serial) != 0)
-+			return 0;
-+		result = cp2108_gpio_init(serial);
-+		break;
- 	case CP210X_PARTNUM_CP2102N_QFN28:
- 	case CP210X_PARTNUM_CP2102N_QFN24:
- 	case CP210X_PARTNUM_CP2102N_QFN20:
+Regards,
+Oleksij
 -- 
-2.31.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
