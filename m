@@ -2,208 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3B53A2F41
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 17:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFB93A2F67
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 17:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbhFJP1d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 11:27:33 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:53649 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230322AbhFJP1b (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 11:27:31 -0400
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id B276C5C0238;
-        Thu, 10 Jun 2021 11:25:32 -0400 (EDT)
-Received: from imap21 ([10.202.2.71])
-  by compute3.internal (MEProxy); Thu, 10 Jun 2021 11:25:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm1; bh=hgIWeMcs0WaS6LFG8rrruJfEcZAE
-        +U7xIPv+dywc0xs=; b=BGD+q6anMOYGnnJQI7bp3FxKonK6jI4vs/9yv99bb55R
-        n1fda1ZgLXGoLhpewsROFiIIY2rymBbS36+ioOsTHzJ4cgEfwAlkLKl7OLXFPDc3
-        cxt0c7Op0qWfOEgqKkrSf7VxETsPUMmJmibDWM3gB0y3MPvjmLTgQ96hem3P424D
-        c2o+yDz11ELSI7N6HAIGeUyrmSJpfuakdLjrJD+dL4oQNEUn7iwFHBWxM6LVk5W6
-        V8yKJb5Av8Jp2GWcLVvGjGUu19408ArVcdY2fFpMKnz8jo5sxKNGQcuk1rr/Bxn/
-        eQPXO2DnPxtPkAWTh2a0N7dkeUAp+ReUKTEBgycEJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=hgIWeM
-        cs0WaS6LFG8rrruJfEcZAE+U7xIPv+dywc0xs=; b=GOro9iB+HIXpaB/mQad9L+
-        UMJEFd7v4vILyVJaHfXIIIejVR42mJxCYVmqRAyAHrVy7G+1TQ769D0FTjFenPnE
-        ycvaWpDliL18RqfxCyLXeiUJH0POSDg77GKkP5MY7l/I8wg0sLn+J3o9GznoWuY6
-        udRH199aC/ij40rRnyCqiXt+xEFw0aaygxvEJ6sUjQ0wZaB27i1udaYn10NG9xO5
-        BizySrNQfFZqd2qMAG9v36FgMuhib232LulWk4C98WVV1NM1aaO/Gy7Pp/4hKFm5
-        1S8BKfGYLkuyp3R70OyUQww2nQBREvRtkw3+AeCmCSg2mPsNbsHVl3mv5ptUJbFg
-        ==
-X-ME-Sender: <xms:7C7CYOHHLGh3Dp53gT5qcq5viu7tXfIrCQwO65cc43Xcj3EQWvYCeQ>
-    <xme:7C7CYPVcB0DxeMzQxFQZ2gvtFLKoJT7Mq1f7wdD50vIV5H2Q0CNj4qFp5I48EuDhF
-    JHgVJpEJUaZhpwQlCs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedufedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeettdffjeejkeevtdejfeekhfffkeevtdegjeehueeiveefgefgvdehvdeh
-    fedvvdenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdgu
-    vghv
-X-ME-Proxy: <xmx:7C7CYIIK4__e2U_B3xdESXbXWc3tokUEHZFiE9J7rIDWQy9SAfrkSA>
-    <xmx:7C7CYIGx15-_1_c0MKiuegQX6IeyB0If_kuYMEWfACiNrTpjRAazUw>
-    <xmx:7C7CYEU-gJUQuKhpwA6t0twvhVom3MbHdftrfuntXFw-p2hS9faiWQ>
-    <xmx:7C7CYBjv-IP14MaEV7uQYk2_qoD0yaf1OiQq_6eeoqjLPGyQVi_LeA>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1EAA551C0061; Thu, 10 Jun 2021 11:25:32 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-519-g27a961944e-fm-20210531.001-g27a96194
-Mime-Version: 1.0
-Message-Id: <2cd8231e-c246-4255-a08e-c88ae9b62ed2@www.fastmail.com>
-In-Reply-To: <871r9a2htf.fsf@kernel.org>
-References: <20210607061751.89752-1-sven@svenpeter.dev>
- <871r9a2htf.fsf@kernel.org>
-Date:   Thu, 10 Jun 2021 17:24:14 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Felipe Balbi" <balbi@kernel.org>, linux-usb@vger.kernel.org
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, "Arnd Bergmann" <arnd@arndb.de>
-Subject: Re: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
-Content-Type: text/plain
+        id S231570AbhFJPgI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 11:36:08 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:17180 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231365AbhFJPgE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 11:36:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623339247; h=In-Reply-To: Content-Type: MIME-Version:
+ References: Message-ID: Subject: Cc: To: From: Date: Sender;
+ bh=sF6NMZApoo9aWXMckXro/xfGEShqVev3nfjgAcTi8Yw=; b=B+dv2D5mf3ezsf9d3Op+2g4pNGdGZhnE+kZcL0QfVIMeiFSUj8utJkWKfMnKEKHEdXQXIaC+
+ Ip6aV3dWKRyYWQCrbCacUI/XmffVqDh9trZ2sOGRugsSGZtS+R04SAkC6sIJSfhwMAfi+OBK
+ Aff68NvZxE5HHaSWtSP/WT2ZE2Q=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 60c230e1ed59bf69cc0b08ef (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 10 Jun 2021 15:33:53
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7C552C43460; Thu, 10 Jun 2021 15:33:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 05BB5C4338A;
+        Thu, 10 Jun 2021 15:33:50 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 05BB5C4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+Date:   Thu, 10 Jun 2021 08:33:46 -0700
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Alexandru Elisei <alexandru.elisei@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [BUG] usb: dwc3: Kernel NULL pointer dereference in dwc3_remove()
+Message-ID: <20210610153346.GA26872@jackp-linux.qualcomm.com>
+References: <c3c75895-313a-5be7-6421-b32bac741a88@arm.com>
+ <87r1hjcvf6.fsf@kernel.org>
+ <70be179c-d36b-de6f-6efc-2888055b1312@arm.com>
+ <YLi/u9J5f+nQO4Cm@kroah.com>
+ <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
+ <877djbc8xq.fsf@kernel.org>
+ <20210603173632.GA25299@jackp-linux.qualcomm.com>
+ <87mts6avnn.fsf@kernel.org>
+ <20210607180023.GA23045@jackp-linux.qualcomm.com>
+ <87sg1q1129.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87sg1q1129.fsf@kernel.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On Thu, Jun 10, 2021, at 11:24, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Sven Peter <sven@svenpeter.dev> writes:
-> > Currently, the dwc3 platform driver does not explicitly ask for
-> > a DMA mask. This makes it fall back to the default 32-bit mask which
-> > breaks the driver on systems that only have RAM starting above the
-> > first 4G like the Apple M1 SoC.
+On Thu, Jun 10, 2021 at 01:11:42PM +0300, Felipe Balbi wrote:
+> Jack Pham <jackp@codeaurora.org> writes:
+> > On Fri, Jun 04, 2021 at 11:20:12AM +0300, Felipe Balbi wrote:
+> >> Jack Pham <jackp@codeaurora.org> writes:
+> >> >> >>>> Alexandru Elisei <alexandru.elisei@arm.com> writes:
+> >> >> >>>>> I've been able to bisect the panic and the offending commit is 568262bf5492 ("usb:
+> >> >> >>>>> dwc3: core: Add shutdown callback for dwc3"). I can provide more diagnostic
+> >> >> >>>>> information if needed and I can help test the fix.
+> >> >> >>>> if you simply revert that commit in HEAD, does the problem really go
+> >> >> >>>> away?
+> >> >> >>> Kernel built from commit 324c92e5e0ee, which is the kernel tip today, the panic is
+> >> >> >>> there. Reverting the offending commit, 568262bf5492, makes the panic disappear.
+> >> >> >> Want to send a revert so I can take it now?
+> >> >> >
+> >> >> > I can send a revert, but Felipe was asking Sandeep (the commit author) for a fix,
+> >> >> > so I'll leave it up to Felipe to decide how to proceed.
+> >> >> 
+> >> >> I'm okay with a revert. Feel free to add my Acked-by: Felipe Balbi
+> >> >> <balbi@kernel.org> or it.
+> >> >> 
+> >> >> Sandeep, please send a new version that doesn't encounter the same
+> >> >> issue. Make sure to test by reloading the driver in a tight loop for
+> >> >> several iterations.
+> >> >
+> >> > This would probably be tricky to test on other "glue" drivers as the
+> >> > problem appears to be specific only to dwc3_of_simple.  It looks like
+> >> > both dwc3_of_simple and the dwc3 core now (due to 568262bf5492) each
+> >> > implement respective .shutdown callbacks. The latter is simply a wrapper
+> >> > around dwc3_remove(). And from the panic call stack above we see that
+> >> > dwc3_of_simple_shutdown() calls of_platform_depopulate() which will 
+> >> > again call dwc3_remove() resulting in the double remove.
+> >> >
+> >> > So would an alternative approach be to protect against dwc3_remove()
+> >> > getting called multiple times? IMO it'd be a bit messy to have to add
+> >> 
+> >> no, I  don't think so. That sounds like a workaround. We should be able
+> >> to guarantee that ->remove() doesn't get called twice using the driver
+> >> model properly.
 > >
-> > Fix this by calling dma_set_mask_and_coherent with a 64bit mask.
-> >
-> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > Completely fair.  So then having a .shutdown callback that directly calls
+> > dwc3_remove() is probably not the right thing to do as it completely
+> > bypasses the driver model so if and when the driver core does later
+> > release the device from the driver that's how we end up with the double
+> > remove.
 > 
-> Acked-by: Felipe Balbi <balbi@kernel.org>
-
-Cheers!
-
+> yeah, I would agree with that.
 > 
-> > ---
+> >> > additional checks there to know if it had already been called. So maybe
+> >> > avoid it altogether--should dwc3_of_simple_shutdown() just skip calling
+> >> > of_platform_depopulate()?
+> >> 
+> >> I don't know what the idiomatic is nowadays, but at least early on, we
+> >> had to call depopulate.
 > >
-> > Third time's a charm I hope - this time much simpler :)
-> >
-> > I still think this change should be fairly low risk.
-> >
-> > Unfortunately I only have the Apple M1 to test this on but here
+> > So any suggestions on how to fix the original issue Sandeep was trying
+> > to fix with 568262bf5492? Maybe implement .shutdown in dwc3_qcom and have
+> > it follow what dwc3_of_simple does with of_platform_depopulate()? But
+> > then wouldn't other "glues" want/need to follow suit?
 > 
-> wait a minute. The M1 includes a dwc3? That's awesome. Mind sharing a
-> regdump? Should be in debugfs.
+> I think we can implement shutdown in core, but we need to careful with
+> it. Instead of just blindly calling remove, let's extract the common
+> parts to another internal function that both remove and shutdown
+> call. debugfs removal should not be part of that generic method :-)
 
+Hi Sandeep,
 
+Upon re-reading your description in 568262bf5492 it sounds like the
+original intention of your patch is basically to quiesce the HW so that
+it doesn't continue to run after SMMU/IOMMU is disabled right?
 
-Two of them, actually :-)
-One for each of the USB C ports together with an unknown PHY and some weird
-quirks (neither the dwc3 gadget mode nor the xhci hardware seem to receive
-more than a single connect event).
-I've actually written a very basic dwc3 gadget driver for our bootloader
-m1n1 [1,2] loosely based on your Linux driver from before it was switched to
-GPLv2-only to experiment with the hardware and load linux kernels over usb :-)
+If that is the case, couldn't we simply call only dwc3_core_exit_mode()
+assuming there is no other requirement to do any other cleanup/teardown
+(PHYs, clocks, resets, runtime PM, et al)? This function should do the
+bare minimum of stopping the controller in whatever mode (host or
+peripheral) it is currently operating in.
 
-I haven't found anything in debugfs, but I can share a simple dump of the MMIO
-space. This is already after the controller has been initialized in gadget mode.
-If you need something else just let me know.
+> Anything in that generic method should, probably, be idempotent.
 
->>> reghexdump32(0x502280000, 0xda00)
-00000000  01100020 0200047f 1c0000f1 0200000a 0238ffcd 000004e0 00000440 0000003f
-00000020  00000000 00000001 00000001 00000000 00000000 00000000 00000000 00000000
-00000040  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000060  *
-00000420  00000280 00000000 00000000 00000000 00000280 00000000 00000000 00000000
-00000440  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000460  00000000 00000fa0 00000000 00000000 00000000 00000000 00000000 00000000
-00000480  *
-000004e0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000500  *
-000008e0  00000401 00000000 00000000 00000000 02000402 20425355 00180101 00000000
-00000900  03100002 20425355 20000102 00000000 00050134 000a4135 00000000 00000000
-00000920  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-00000940  *
-0000c100  00000001 00006f00 00f00000 01500000 30c12004 00000000 7e800020 00001908
-0000c120  33313130 00000000 12345678 0a416802 00000000 00000000 00000000 00000000
-0000c140  4020800a 02092486 12345678 10420086 48422019 643d0410 18cc803f 0f000e92
-0000c160  00230000 9cc20006 00000000 00000000 257cf70a 00000000 00000000 00800000
-0000c180  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c1a0  3139302a 736f3035 33313130 00000000 00000000 00000000 00000000 00000000
-0000c1c0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c1e0  *
-0000c200  00102400 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c220  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c240  *
-0000c2c0  01021102 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c2e0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c300  00000023 002300c7 00ea00c7 01b180c7 027800c7 033f00c7 040600c7 04cd80c7
-0000c320  059400c7 065b00c7 072200c7 07e900c7 08b000c7 097700c7 0a3e00c7 0b0500c7
-0000c340  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c360  *
-0000c380  000003e8 03e88809 0bf10000 0bf18000 0bf10000 0bf18000 00000000 00000000
-0000c3a0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c3c0  *
-0000c400  dead0000 00000000 00000100 00000000 00000000 00000000 00000000 00000000
-0000c420  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c440  *
-0000c600  00001744 00000000 18094246 0085560c 00000000 00000000 00000000 00000000
-0000c620  00000000 0a0a0101 18181218 20201820 0a87f020 0001ffff 00000000 00000000
-0000c640  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c660  *
-0000c700  00080800 80f00000 00000007 008e0001 00000000 00000005 00000000 00000000
-0000c720  00000003 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c740  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c760  *
-0000c800  00000000 00000000 00000001 00010002 00000000 00000000 00000001 00020002
-0000c820  00000000 00000000 00000000 00000000 00000000 00000000 00000001 00030002
-0000c840  00000000 00000000 00000001 00050002 00000000 00000000 00000001 00040002
-0000c860  00000000 00000000 00000000 00000000 00000000 00000000 00000001 00060002
-0000c880  00000000 00000000 00000001 00080002 00000000 00000000 00000001 00070002
-0000c8a0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000c8c0  *
-0000cd20  00000000 00000000 00000886 00000886 00000000 00000000 00000000 00000000
-0000cd40  3c20060c 0002000b 00000000 00000000 00000000 00000000 00000000 00000000
-0000cd60  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000cd80  *
-0000d000  30302626 00940076 26261f1f 00000052 9c067d05 3fff3b15 42843603 0023287d
-0000d020  4e928162 008b8080 00000c00 0047e1f4 00753546 5dc2f07d 00000ea6 f0966b32
-0000d040  00026cf5 1130c850 00000000 00000000 01090650 00000000 00000000 00000000
-0000d060  000034c2 00000582 00003540 00000600 00000000 00000000 00051565 00000000
-0000d080  00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-0000d0a0  *
+Yes we'll need to ensure that dwc3_core_exit_mode() can be called
+multiple times without additional side effects. At first glance this
+probably means setting dwc->xhci and dwc->gadget to NULL from
+dwc3_host_exit() and dwc3_gadget_exit(), respectively.
 
-
-fyi, the Apple Device Tree defines the following register ranges, some of
-those are related the PHY and at least two are for the dwc3 itself. No idea what
-the rest is used for yet.
-
-<0x00000005 0x02280000 0x00000000 0x0000da00> <-- DWC3 + something else at the end
-<0x00000005 0x02200000 0x00000000 0x00080000>
-<0x00000005 0x0228c000 0x00000000 0x00001800> <-- DWC3, just before GLOBALS_REGS
-<0x00000005 0x02a84000 0x00000000 0x00004000> <-- possibly related to the PHY
-<0x00000005 0x02800000 0x00000000 0x00004000>
-<0x00000005 0x02a80000 0x00000000 0x00004000>
-<0x00000005 0x02000000 0x00000000 0x00080000>
-<0x00000005 0x02080000 0x00000000 0x00080000>
-<0x00000005 0x0228d000 0x00000000 0x00000800> <-- just after DWC3
-
-
-Best,
-
-
-Sven
-
-
-[1] https://github.com/AsahiLinux/m1n1
-[2] https://github.com/AsahiLinux/m1n1/blob/main/src/usb_dwc3.c
-
+Thanks,
+Jack
+-- 
+The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+a Linux Foundation Collaborative Project
