@@ -2,75 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6723A29E6
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 13:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3328C3A2A46
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 13:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbhFJLLs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 07:11:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229961AbhFJLLr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 07:11:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id DB290613F5
-        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 11:09:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623323391;
-        bh=D9vaJEqcHCEhbIZqduY4HJC14uLuGGSv7gPGwsidbMc=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ezaIbNLnJ1VkqVioQ/64vNT9qiRcwzFtmJ69zaeizO+8MuJBg6vNQIU364rzLIuSZ
-         VzqaWqnyj9k6f+N7Gj5dTYpxdi+7ovlB7kXikZMaLMH7lAvMKZ0SEGH7cyVktOGbAm
-         tB3KLSaON7w7FN/dQkdbEBmg6PNxgg0+wnOpuGV2MusbxPUy4DeYFEsXcQ0IhyTAZj
-         QTU0FwbxvnKeMG6Zecdi2HRP23Q8A8lg89NrQ/cLngApTNF7mswf/yQwHnOzqDQnxj
-         RGTfAnMEgCk7KpJHEVYcMTq3pGSN5ri69vGGkQx1A/ZiS7K6CgsuWI2PmPDhJdCkzJ
-         LBDwHOS9QVDbA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id C89256113E; Thu, 10 Jun 2021 11:09:51 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 212751] acm_port_activate - usb_submit_urb(ctrl irq) failed
- after kernel update
-Date:   Thu, 10 Jun 2021 11:09:51 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: m.mroz@wb.com.pl
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: PATCH_ALREADY_AVAILABLE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-212751-208809-nXtoE3cVWS@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-212751-208809@https.bugzilla.kernel.org/>
-References: <bug-212751-208809@https.bugzilla.kernel.org/>
+        id S230259AbhFJLgH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 07:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34654 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230130AbhFJLgG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 07:36:06 -0400
+Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70870C061574
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 04:33:54 -0700 (PDT)
+Received: by mail-yb1-xb41.google.com with SMTP id b9so40262110ybg.10
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 04:33:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=KX2wSl2vs51YrloYX15vxn1pxG1FqSR60QOwRgo78Gw=;
+        b=Wh/uYq5LY83ZdIMgEyzEASq8MOMF8qvX0ojafimLHTg+oAH4ovLHjhpDp4YNmv2f+0
+         UyvRshoxQgGfjLohwjWz+ci0s6UTnPGuxE9cL7CZgOrjn1Jbsdn3PJ2tcfsUHqRIx+Ts
+         4w8BpexV1pDMel0AfCHb8/JMwA2PHJSkVs/GIFFmhwpKMtg5/vRMoy4AyuD43L2ss7if
+         SpD/nKP6KL/QN3EOegKmF2HzESns7ypzHFZMJElXNHdMWujy+FRl9IeiIytHrhO2xe8l
+         vYYXU99tJCthaKhFxKnCT2NOXszGQk7D4dG62zcU4YlgGuCgfMT/55PPo+25ood2+DVN
+         nLMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=KX2wSl2vs51YrloYX15vxn1pxG1FqSR60QOwRgo78Gw=;
+        b=Agq4a4pLP9bjeoKJhfwESmVDa8DUSe+tqSzJbtTzUvMUwh48FDG3zSqeAdBAyV0zFx
+         UBndp6e+9n1bcxcrPU6PdQByoWE+TxcMseSzVcHF6GqLX4AU3qCJemEq5/mDmSPCd+yx
+         Bb4UVMvOzfBdAckj+6U26547FrQ2inPwoSSNC7Vpv8EOxBoIUpWJW6sNFN7SSKTipJYw
+         m22ciYQmJS/EyvtBqArKTM+XzGaQD6Rzlsn6l5SZTzkQNv4/liK/YGI+7QntpmGf4/tV
+         pdzoMyNFgA1D16pfby0C0pq0qRgkDt2JqElGnlPSHYNKut2pDxFIYccIfndZav/rSS3I
+         LbVA==
+X-Gm-Message-State: AOAM530LT7SC/MPQjnEgZvJpC80wNyN03xRKDxVRj2wQr0ah7yNlAZAW
+        qOMqcQq2dOP0/J+ao8974awV/Fw/zhVBfoSKcdgAUjasodM=
+X-Google-Smtp-Source: ABdhPJxPSVikSUDCuEsDUo3ezMwyQrUha1PvNO2SGqPoYwHp4J1vepzd4S64l+Ep6xwuxB0Hcs4I0oKbT9+9UQ1BMw0=
+X-Received: by 2002:a5b:ac9:: with SMTP id a9mr7035104ybr.475.1623324833749;
+ Thu, 10 Jun 2021 04:33:53 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAJa5FiHh3oWGt3qMRWTBRorENhsKNODTRd+0meK2qpYnMk6U8g@mail.gmail.com>
+ <87v96m119n.fsf@kernel.org>
+In-Reply-To: <87v96m119n.fsf@kernel.org>
+From:   kun peng <kunpeng0891@gmail.com>
+Date:   Thu, 10 Jun 2021 19:33:43 +0800
+Message-ID: <CAJa5FiGTsM3+QS-+9P=8EZbNxZm+MqpPM3P4KU+=nD4KeA-qew@mail.gmail.com>
+Subject: Re: usb3.0: dwc3: isoc: missisoc while setting the USB transfer UVC data
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D212751
+On Thu, Jun 10, 2021 at 6:07 PM Felipe Balbi <balbi@kernel.org> wrote:
+>
+> Hi,
+>
+> kun peng <kunpeng0891@gmail.com> writes:
+> > Hi =EF=BC=8C I'm using the 4*A53 with DWC3 USB controller, my hardware =
+to work
+> > like a USB camera and so make use of the USB 3.0 UVC gadget driver=E3=
+=80=82
+> > usb3.0 isoc transfer with  missisoc -18=EF=BC=8Clarger maxburst is set,=
+ the
+> > more -18 appears=E3=80=82
+> > but from trace info, the trb has been put in advance=E3=80=82
+> >
+> > test setting:
+> > dwc3 driver version=EF=BC=9A5.12
+> > PC=EF=BC=9A potplayer
+> >
+> > maxpacket : 3072
+> > maxburst : 15
+> > interval : 1
+> > UVC_NUM_REQUESTS: 8
+>
+> sorry, you're running 4.14.74 kernel. That's far too old for this forum
+> to help you. Try reproducing with the latest v5.13-rc kernel.
+>
+> --
+> balbi
 
-Mateusz (m.mroz@wb.com.pl) changed:
+thanks for your reply.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |m.mroz@wb.com.pl
+my kernel is 4.14, but usb and uvc related driver has been update to
+5.12.0 linux main line.
+The problem mentioned above is after the update.
 
---- Comment #4 from Mateusz (m.mroz@wb.com.pl) ---
-Found the same issue on ubuntu 18.04 : 4.15.0-144.
-It started to work properly when tried running at 4.15.0-143.
+best regards
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+kun
