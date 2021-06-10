@@ -2,38 +2,38 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E843A27D0
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 11:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3F03A27D9
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 11:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbhFJJLA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 05:11:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45444 "EHLO mail.kernel.org"
+        id S229914AbhFJJMO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 05:12:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46104 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229895AbhFJJLA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 05:11:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 736DB613F5;
-        Thu, 10 Jun 2021 09:09:03 +0000 (UTC)
+        id S230161AbhFJJMK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 05:12:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA2A061249;
+        Thu, 10 Jun 2021 09:10:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623316144;
-        bh=dVil8GqDefw3NrzGtEwwRo2nkdFlVIHdyo5RRTS319Y=;
+        s=k20201202; t=1623316214;
+        bh=tqns342DjsFzzzVflidIJPF5i22KOjRjc+AfSjr/Id0=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=H240bBNNOEpH9D+r+IafX3ylLEKlBoMwNLmUaaj3YHbTca/hkfzSE3olUSECzDQdu
-         cIHZvtyG1GsYM3Xa9PvbyUdHwa3MRfmyAOPjjpNTqHYgxLn1gSLdmFb05GoDTqHW1Z
-         a0qEyM2/yi+6W3MGYqugIv0TVQv2EiRNaUmcN5rEPbG6+QQBr62zj0KpGBw/pG1ueT
-         /jpv5/kA5CX9AKJaHky7EkqWATQUXk9JYYD2wX5jW56FHoxvESdk3dv7qwUooLGn4f
-         1isaFK9m6HSePhyx86uNrAqy2foMNZWSRBJKC74H0Vvdu1LJlvtbuLwUkWiTPwmEwN
-         EVRnC5lePbttA==
+        b=QVoalWA5YM7vwNg186dVdNFi3MP80IJ5RCMak7Fq9z31+Hd77I9JsKrKQsPwsyqYN
+         B5hcYfcrawcnebhXJwjt0JkDbpNnRvHi0bhEZNmjQkIIhsrXdLFvQBXGS40sK9pIbO
+         Bfr0Ux/UC/WHUw4W4vakOOWQAnBKjtZao/nHb0Z4K0EwmtuPyu/awH05If8RZ8kbTW
+         9Nwgn3pW3NfySIvPEkzI0lJE4LhW0gGVdFh8eSnbOXX+jokb3g6QSBkhq6YJBU/ejl
+         2Q4cBoUoo78+nKJU+AVaKjq1Ddz5M9QLhGSgA0pRP0JvhTUnPpoYPr+zJ+MN5A+QTj
+         6kmnp43W8Mglg==
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Marian-Cristian Rotariu <marian.c.rotariu@gmail.com>,
-        Greg KH <greg@kroah.com>
-Cc:     linux-usb@vger.kernel.org, mircescu@gmail.com
-Subject: Re: [PATCH] usb: dwc3: ep0: fix NULL pointer exception
-In-Reply-To: <CA+i-z3XHqsSBb6KC-Y0hvQqk-u2O07B-jrp836FL2Z=woHe_uQ@mail.gmail.com>
-References: <20210608162650.58426-1-marian.c.rotariu@gmail.com>
- <YMCDyCgwOaTBKg9f@kroah.com>
- <CA+i-z3XHqsSBb6KC-Y0hvQqk-u2O07B-jrp836FL2Z=woHe_uQ@mail.gmail.com>
-Date:   Thu, 10 Jun 2021 12:08:55 +0300
-Message-ID: <87bl8e2ijc.fsf@kernel.org>
+To:     Maciej =?utf-8?Q?=C5=BBenczykowski?= <zenczykowski@gmail.com>,
+        Maciej =?utf-8?Q?=C5=BBenczykowski?= <maze@google.com>
+Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v2] usb: fix various gadget panics on 10gbps cabling
+In-Reply-To: <20210609024459.1126080-1-zenczykowski@gmail.com>
+References: <YL8wSsGso94F6lEH@kroah.com>
+ <20210609024459.1126080-1-zenczykowski@gmail.com>
+Date:   Thu, 10 Jun 2021 12:10:07 +0300
+Message-ID: <878s3i2ihc.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; boundary="=-=-=";
         micalg=pgp-sha256; protocol="application/pgp-signature"
@@ -42,19 +42,51 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 --=-=-=
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Marian-Cristian Rotariu <marian.c.rotariu@gmail.com> writes:
+Maciej =C5=BBenczykowski <zenczykowski@gmail.com> writes:
 
->> How did you create this?  It's one level too "deep" for git.
-> I forgot to rebase it on the adequate kernel repo. Sorry for that.
-> We use an in-house repo where the 4.19 kernel is inside a directory
-> as you could see.
+> From: Maciej =C5=BBenczykowski <maze@google.com>
+>
+> usb_assign_descriptors() is called with 5 parameters,
+> the last 4 of which are the usb_descriptor_header for:
+>   full-speed (USB1.1 - 12Mbps [including USB1.0 low-speed @ 1.5Mbps),
+>   high-speed (USB2.0 - 480Mbps),
+>   super-speed (USB3.0 - 5Gbps),
+>   super-speed-plus (USB3.1 - 10Gbps).
+>
+> The differences between full/high/super-speed descriptors are usually
+> substantial (due to changes in the maximum usb block size from 64 to 512
+> to 1024 bytes and other differences in the specs), while the difference
+> between 5 and 10Gbps descriptors may be as little as nothing
+> (in many cases the same tuning is simply good enough).
+>
+> However if a gadget driver calls usb_assign_descriptors() with
+> a NULL descriptor for super-speed-plus and is then used on a max 10gbps
+> configuration, the kernel will crash with a null pointer dereference,
+> when a 10gbps capable device port + cable + host port combination shows u=
+p.
+> (This wouldn't happen if the gadget max-speed was set to 5gbps, but
+> it of course defaults to the maximum, and there's no real reason to
+> artificially limit it)
+>
+> The fix is to simply use the 5gbps descriptor as the 10gbps descriptor,
+> if a 10gbps descriptor wasn't provided.
+>
+> Obviously this won't fix the problem if the 5gbps descriptor is also
+> NULL, but such cases can't be so trivially solved (and any such gadgets
+> are unlikely to be used with USB3 ports any way).
+>
+> Cc: Felipe Balbi <balbi@kernel.org>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
 
-Make sure you can reproduce the bug with upstream too. If you can run
-upstream, at a minimum provide a minimal method for reproducing the NULL
-pointer deref.
+nice catch!!
+
+I think this is already in Greg's tree, but in any  case:
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
 =2D-=20
 balbi
@@ -64,13 +96,13 @@ Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB1qgRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUi9iAf7BT31QlMCJWT58x5b25C28hsMdSByJPG5
-FZNbpmQc+P6Sbv7jTQZ1Afqh3mE7iJltVW/44ODayihh80BIYzWh5Zas/6LXXxa+
-RnIgmCcfnBsqvX5TGgvlT2LR2YxT0+DV0yvXXQQS7F6YFxMXrFhe5c4eONIcV2Hc
-pBsBXJpElS8GhnNgfvm/DKgNcvZl1EJsCyKj9uRzLB2LaK8xZN7KmnTem17WUNM7
-XsVEc6HjseBPgdxt+vpLT9FYiWcnEpTSJ27ZhsGAbUh5FiKITh7qfRwxxxijbeYv
-J5iwiag87lP/Io3gOjaMmcoWXczp5IytZ2/+exASHgfxQ9RcUVmbyw==
-=Ox/o
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB1u8RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUhkQQgAjuwmNuH1gYrvpizVo7lF2di1444xq81b
+0uybIL3M67Vl5MiheqaDmZ9RogYCF53XFZ+6eW0P+wIlVjBdx0H24aeOR5NJXm7t
+NoIk29cQcn5qEgeQJOxK+06MSy3hYYTV1y+QofyTxKFokUnUDvsNEJXuhhpcT8fa
+ehO0wgtUdm5sRMMTwNWeEwc3Up4HdOhuJaEC4fYupia0ALECCwmynj+etAXcCZye
+QqRNlIO7DF9I4rI+XuQjt+1KsGKM1PIdzxeXN37vIGV/IV3ntsp+8FMQg8OKJG1v
+MdAtf84Ue28wEy2XGFHlHuEHDPD629bdPImpSTn/xz7z7h3OzsQ40A==
+=mK2X
 -----END PGP SIGNATURE-----
 --=-=-=--
