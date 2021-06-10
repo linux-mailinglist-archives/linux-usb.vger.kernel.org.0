@@ -2,73 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A96313A28F1
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 12:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE473A2901
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 12:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbhFJKFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 06:05:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45728 "EHLO mail.kernel.org"
+        id S230055AbhFJKIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 06:08:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229937AbhFJKFl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 06:05:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B32E561184;
-        Thu, 10 Jun 2021 10:03:32 +0000 (UTC)
+        id S229910AbhFJKIp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 06:08:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0706C60FDA;
+        Thu, 10 Jun 2021 10:06:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623319413;
-        bh=P+4fvz19UNgFMuHYNnQV49m2+gIWnRhS7jOvbkcZJN8=;
+        s=korg; t=1623319609;
+        bh=1fRWWIsS0EzmFB2f6c4CQ2/VYD7gJ2/ox+YVPrSpBy8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KrvsjIRCSAcWUhGHZsaQxWkkek9ie2X9+zA6p3hyUTMVzhA1niySok8zBDqE7JoWR
-         fPnfSMYxipx7db9LIEXNXMfOoR6gRQuU7zy0rw+rmWznVSgfEV0dEhmmH3//DcqTrm
-         2HyNRRXTByBPhEyOuxejokiKFA3AcaDMa7jpvbis=
-Date:   Thu, 10 Jun 2021 12:03:30 +0200
+        b=Y35lLmHQtdvE6shQv9Rzs8VFxcgBX6P3eU8r/80pzwbwyZV5HHSAlkGfljLbX9drb
+         UV2PszxX7c6svsuwTiE4Jq1h3VSyPlR/M6lAz4aALYRimuLn5bRN9J1QgiLnsRV2QZ
+         oBtStkOjHvCfMEB7P7Ei19Zi+bWdPwr9UENfNmF0=
+Date:   Thu, 10 Jun 2021 12:06:46 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
-Message-ID: <YMHjctQsGttUJ1QJ@kroah.com>
-References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
- <YLoUiO8tpRpmvcyU@kroah.com>
- <87k0n9btnb.fsf@kernel.org>
- <YLo6W5sKaXvy51eW@kroah.com>
- <c2daab34-1b25-7ee3-e203-a414c1e486d5@codeaurora.org>
- <874ke62i0v.fsf@kernel.org>
+To:     kun peng <kunpeng0891@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: usb3.0: dwc3: isoc: missisoc while setting the USB transfer UVC
+ data
+Message-ID: <YMHkNhAy4pkePSWO@kroah.com>
+References: <CAJa5FiHh3oWGt3qMRWTBRorENhsKNODTRd+0meK2qpYnMk6U8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <874ke62i0v.fsf@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJa5FiHh3oWGt3qMRWTBRorENhsKNODTRd+0meK2qpYnMk6U8g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 10, 2021 at 12:20:00PM +0300, Felipe Balbi wrote:
-> > As mentioned above, these changes are currently present on end user
-> > devices for the past few years, so its been through a lot of testing :).
-> 
-> all with the same gadget driver. Also, who uses USB on android devices
-> these days? Most of the data transfer goes via WiFi or Bluetooth, anyway
-> :-)
+On Thu, Jun 10, 2021 at 04:52:19PM +0800, kun peng wrote:
+> Hi ， I'm using the 4*A53 with DWC3 USB controller, my hardware to work
+> like a USB camera and so make use of the USB 3.0 UVC gadget driver。
+> usb3.0 isoc transfer with  missisoc -18，larger maxburst is set, the
+> more -18 appears。
+> but from trace info, the trb has been put in advance。
 
-I used to think that too, until I saw some of the new crazy designs
-where lots of SoC connections internally to the device run on USB.  Also
-look at the USB offload stuff as one example of how the voice sound path
-goes through the USB controller on the SoC on the latest Samsung Galaxy
-phones that are shipping now :(
+What exactly is the problem you are having here?
 
-There's also devices with the modem/network connection going over USB,
-along with other device types as well.  Android Auto is crazy with
-almost everything hooked up directly with a USB connection to the host
-system running Linux.
+What is not working how you expect it to?
 
-> I guess only developers are using USB during development to flash dev
-> images heh.
+> test setting:
+> dwc3 driver version：5.12
 
-I wish, we are reaching the point where the stability of the overall
-Android system depends on how well the USB controller works.  We are a
-product of our success...
+You mean kernel version?
 
 thanks,
 
