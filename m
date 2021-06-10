@@ -2,79 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FC8E3A2840
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 11:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96313A28F1
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 12:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbhFJJaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 05:30:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55420 "EHLO mail.kernel.org"
+        id S230118AbhFJKFm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 06:05:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45728 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229715AbhFJJay (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 05:30:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A01FC61182;
-        Thu, 10 Jun 2021 09:28:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623317339;
-        bh=YKbH7RY9wgcda2Wl0gjS0fCDjC49wsG2m1zMvoWhqwk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=FRDb2/ZD82DQsWzqFHq/6Gk0rFccbgZQb7AL9shwRQaM4SDBhbg5BKTxI6JqJlTpX
-         IjC+ZcGo2ZUlMyHkxqX7mMi64IscT6nM1zyr90eWpQ6scGiirSEGgtJ9RNUcDxfkHs
-         vCLd9XNVcNnf49Ani5wDP3EbQhxr8//taX6nlifBGxiit/dt6h0bXUBEPjVowWi/XM
-         /ahI5nirEVpZGHC8MEwDazHKc4TCr0QUe+ZfT4Ugm/HWGSHK5nKVkvhGBYzibs8YM5
-         TWT0gCrxm6mxlfATHfxG73cZWI9QR6Wv523lXFR1oull1FXZTJb+UFWDHOPH14p8jI
-         zNKaJs9S22NyQ==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Peter Chen <peter.chen@kernel.org>
-Subject: Re: [PATCH] USB: dwc3: remove debugfs root dentry storage
-In-Reply-To: <20210609093924.3293230-1-gregkh@linuxfoundation.org>
-References: <20210609093924.3293230-1-gregkh@linuxfoundation.org>
-Date:   Thu, 10 Jun 2021 12:28:50 +0300
-Message-ID: <87y2bi131p.fsf@kernel.org>
+        id S229937AbhFJKFl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 06:05:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B32E561184;
+        Thu, 10 Jun 2021 10:03:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623319413;
+        bh=P+4fvz19UNgFMuHYNnQV49m2+gIWnRhS7jOvbkcZJN8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KrvsjIRCSAcWUhGHZsaQxWkkek9ie2X9+zA6p3hyUTMVzhA1niySok8zBDqE7JoWR
+         fPnfSMYxipx7db9LIEXNXMfOoR6gRQuU7zy0rw+rmWznVSgfEV0dEhmmH3//DcqTrm
+         2HyNRRXTByBPhEyOuxejokiKFA3AcaDMa7jpvbis=
+Date:   Thu, 10 Jun 2021 12:03:30 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com
+Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
+Message-ID: <YMHjctQsGttUJ1QJ@kroah.com>
+References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
+ <YLoUiO8tpRpmvcyU@kroah.com>
+ <87k0n9btnb.fsf@kernel.org>
+ <YLo6W5sKaXvy51eW@kroah.com>
+ <c2daab34-1b25-7ee3-e203-a414c1e486d5@codeaurora.org>
+ <874ke62i0v.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <874ke62i0v.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 10, 2021 at 12:20:00PM +0300, Felipe Balbi wrote:
+> > As mentioned above, these changes are currently present on end user
+> > devices for the past few years, so its been through a lot of testing :).
+> 
+> all with the same gadget driver. Also, who uses USB on android devices
+> these days? Most of the data transfer goes via WiFi or Bluetooth, anyway
+> :-)
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> writes:
+I used to think that too, until I saw some of the new crazy designs
+where lots of SoC connections internally to the device run on USB.  Also
+look at the USB offload stuff as one example of how the voice sound path
+goes through the USB controller on the SoC on the latest Samsung Galaxy
+phones that are shipping now :(
 
-> There is no need to keep around the debugfs "root" directory for the
-> dwc3 device.  Instead, look it up anytime we need to find it.  This will
-> help when callers get out-of-order and we had the potential to have a
-> "stale" pointer around for the root dentry, as has happened in the past.
->
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Jack Pham <jackp@codeaurora.org>
-> Cc: Peter Chen <peter.chen@kernel.org>
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+There's also devices with the modem/network connection going over USB,
+along with other device types as well.  Android Auto is crazy with
+almost everything hooked up directly with a USB connection to the host
+system running Linux.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+> I guess only developers are using USB during development to flash dev
+> images heh.
 
-=2D-=20
-balbi
+I wish, we are reaching the point where the stability of the overall
+Android system depends on how well the USB controller works.  We are a
+product of our success...
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB21IRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUgwCgf/atPiB7V/9a8tB6tAjn7vw/LNH7WpnNKc
-byRQHvI3U0QB2w48cQu+TWbQtqD9+38dALTqyvbXW3vAoU/73+nTdPnUwM4I2cZY
-XEccdsyihd2CDM6CD7fh4dQbtyfqPqQzx1pu+m3c+kJamR4L4V+mV3wA7yPmqKqc
-cXVclp4cXOvwKwLkQDyUGf0dE3PmS1LFAKOR6fMMiVp3rIUKZDiYXe0/gwZL99eX
-00SL2C81LCcXIYVBjKgZbyXLQYnjCsXlrD4aCPC9XxVXxvSH64tAtEkHeRtC6kw7
-Lleg2aZv8xuHNbbw7Fu7Z2yqyaG4eYmcDef7YgJI1BQeTI1E4LKoLQ==
-=4Axh
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
