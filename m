@@ -2,73 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF053A2B97
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 14:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF083A2BAB
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 14:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbhFJMbh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 08:31:37 -0400
-Received: from mga03.intel.com ([134.134.136.65]:25808 "EHLO mga03.intel.com"
+        id S230199AbhFJMfI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 08:35:08 -0400
+Received: from mga18.intel.com ([134.134.136.126]:26823 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230349AbhFJMbg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 08:31:36 -0400
-IronPort-SDR: pfDhI9nXof7VdYThIweUDsvDfTJU66pKHCZaVZiu/ZQQY7+pdXEC86f/YYp3DRlHaM1R9w9tCL
- h8u9Q0m4HvIg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="205319776"
+        id S229937AbhFJMfH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 08:35:07 -0400
+IronPort-SDR: UNxD5yM9qPNkwKyhPjoPzsMJ6L9MRP22ku5imiXs7Y4oZpPhbO0JB2UpMox2NNcoKHUg2MfrXQ
+ atY+z8J+Z6vg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10010"; a="192603373"
 X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="205319776"
+   d="scan'208";a="192603373"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 05:29:31 -0700
-IronPort-SDR: zpA0ZZxF75K68uTIe1ciykYV9G3kIG+OozDmixKAO+vQAjgAKbUfJTKuEiMBNDMeqzUNIxzHOW
- PAp5j+KsOxwg==
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 05:33:08 -0700
+IronPort-SDR: U8b+ipgi7ha5iwopJ6dXgIEYNDRUmtBHaIpSwrlpi9pNy4R6aMuSVS7xVbwpnDXV8oGSU0LiZB
+ yiydpmRsr1nA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.83,263,1616482800"; 
-   d="scan'208";a="553050336"
+   d="scan'208";a="553051116"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 10 Jun 2021 05:29:29 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Jun 2021 15:29:28 +0300
-Date:   Thu, 10 Jun 2021 15:29:28 +0300
+  by fmsmga001.fm.intel.com with SMTP; 10 Jun 2021 05:33:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 10 Jun 2021 15:33:04 +0300
+Date:   Thu, 10 Jun 2021 15:33:04 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Jack Pham <jackp@codeaurora.org>,
-        Mayank Rana <mrana@codeaurora.org>
-Subject: Re: [PATCH] usb: typec: ucsi: Fix a comment in ucsi_init()
-Message-ID: <YMIFqCKbdREW7YRf@kuha.fi.intel.com>
-References: <1623274076-6287-1-git-send-email-subbaram@codeaurora.org>
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: mux: Fix copy-paste mistake in
+ typec_mux_match
+Message-ID: <YMIGgI34cc7OG+rh@kuha.fi.intel.com>
+References: <20210610002132.3088083-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1623274076-6287-1-git-send-email-subbaram@codeaurora.org>
+In-Reply-To: <20210610002132.3088083-1-bjorn.andersson@linaro.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 09, 2021 at 02:27:56PM -0700, Subbaraman Narayanamurthy wrote:
-> ucsi_unregister_ppm() got replaced with ucsi_unregister(). Fix
-> the comment in ucsi_init() as well.
+On Wed, Jun 09, 2021 at 05:21:32PM -0700, Bjorn Andersson wrote:
+> Fix the copy-paste mistake in the return path of typec_mux_match(),
+> where dev is considered a member of struct typec_switch rather than
+> struct typec_mux.
 > 
-> Signed-off-by: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
+> The two structs are identical in regards to having the struct device as
+> the first entry, so this provides no functional change.
+> 
+> Fixes: 3370db35193b ("usb: typec: Registering real device entries for the muxes")
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 2 +-
+> 
+> Changes since v1:
+> - Don't touch the typec_switch part of mux.c...
+> 
+>  drivers/usb/typec/mux.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index b433169..96cf541 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -1219,7 +1219,7 @@ static int ucsi_init(struct ucsi *ucsi)
->  		goto err_reset;
->  	}
+> diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
+> index 664fb3513f48..c8340de0ed49 100644
+> --- a/drivers/usb/typec/mux.c
+> +++ b/drivers/usb/typec/mux.c
+> @@ -246,7 +246,7 @@ static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
+>  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
+>  				mux_fwnode_match);
 >  
-> -	/* Allocate the connectors. Released in ucsi_unregister_ppm() */
-> +	/* Allocate the connectors. Released in ucsi_unregister() */
->  	ucsi->connector = kcalloc(ucsi->cap.num_connectors + 1,
->  				  sizeof(*ucsi->connector), GFP_KERNEL);
->  	if (!ucsi->connector) {
-
+> -	return dev ? to_typec_switch(dev) : ERR_PTR(-EPROBE_DEFER);
+> +	return dev ? to_typec_mux(dev) : ERR_PTR(-EPROBE_DEFER);
+>  }
+>  
+>  /**
 
 -- 
 heikki
