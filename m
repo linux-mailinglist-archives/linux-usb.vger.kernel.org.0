@@ -2,108 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A1AB3A22F7
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ABBD3A2449
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 08:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbhFJDwG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 23:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbhFJDwF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:52:05 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF0AC061574
-        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:50:09 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id fy24-20020a17090b0218b029016c5a59021fso2935796pjb.0
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:50:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=pwLscPt/B/b/5SFEs+HEyMeL+d3/cTsy8u9p+tu3dIo=;
-        b=qv8v8cqG/Ai5hMpH29a1Q5T6WTaZ4NIrnjR7FhyNFtOKgcW9hmlCU70zYVrhvvDLqY
-         UY33gGZykUoKQSAN9jQCoq/iedqBijDGaSG035hsMTsxxl2VjuFMFBycKVk4I8QL3dfS
-         3ro3lQ0sgaBszICT3LUjgW505aUGgNdBPhJR1N8FyGvY4IhC8ir8pbLZX7y8JOXGxnwZ
-         RNIWKR0wV3CaJBWXRzNxUUc26pgmlBhEJ8r1dEEjOxE56liOa4YtS1iuOnA9XdcXcHcm
-         mYQSg17HTK0Xrh4dTpVrfJtw7GuzTm341QJDbqS5a44hgXqMoe0rVoeo4WJrpQhANm2b
-         qSSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=pwLscPt/B/b/5SFEs+HEyMeL+d3/cTsy8u9p+tu3dIo=;
-        b=Yf96/KeEsw4f6CF9NplIBF/vkQ3bCPbwDgdKT+uoMbL6PAO91O4PUAXiN/+CzjUIgi
-         ODDleraD1+pgLJiTY3tojd2F5KEEaWeP5x8AF5o7VcpYOHoTaTZ0xGXJraz2gNIuzWlu
-         e+vEYWRABrAY5jmXiCjYguhjOBjW7UeWVWZEI9RhSilkT6/PfETS/ixskbn1n9GzCUQy
-         Et15rtaFYOwddQbJuSNKntfvAcEZ2E/wSC7/Rhi0prqGdAnp03+15Vqhei3X/+Lk2vCL
-         fL4LqLE2KrpIqgVfXEp1iAfl0Fj6WeoFB/fu2VYlYUI1Jh0YKo2wM3+HslZlXx63AgUf
-         meww==
-X-Gm-Message-State: AOAM530bMFA+MR1zGyX24xDfWzV5koKmn/qnKDy/vvDGWcjIcbRqXOhM
-        MN+dyuOagGh5NQ2e2Lm0Kog=
-X-Google-Smtp-Source: ABdhPJxYN735f1W6bGAzwHfU6tFYnMOyQ9KVGyE7AC5r+T8MjcCYyzO3aS0lWNvp10/46STzr3lIkw==
-X-Received: by 2002:a17:90a:6289:: with SMTP id d9mr1157140pjj.84.1623297009088;
-        Wed, 09 Jun 2021 20:50:09 -0700 (PDT)
-Received: from localhost.localdomain ([45.124.203.19])
-        by smtp.gmail.com with ESMTPSA id j13sm1062652pgp.29.2021.06.09.20.50.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Jun 2021 20:50:08 -0700 (PDT)
-Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
-From:   Joel Stanley <joel@jms.id.au>
-To:     Fabio Estevam <festevam@gmail.com>,
-        Peter Chen <peter.chen@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2] usb: gadget: fsl: Re-enable driver for ARM SoCs
-Date:   Thu, 10 Jun 2021 13:19:57 +0930
-Message-Id: <20210610034957.93376-1-joel@jms.id.au>
-X-Mailer: git-send-email 2.30.2
+        id S229797AbhFJGM7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 02:12:59 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:19319 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229715AbhFJGM6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 02:12:58 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623305463; h=Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Message-ID: Date: Subject: Cc: To: From: Sender;
+ bh=jIX3aYx1BMoqk5WRI/kxfbys7dPIfQcOTPn3b00X2m8=; b=nr5mpD9ZlYiG4YPru8KtMaDtaJ30HHdVaS41rjQ1BBm6akwt6OrnWo6P08QW4k9vsLrIvdoV
+ BdhqTVd2LJjJReChMjH2Ys86n0MqOopZxkFuzZeNOveNz8jbOZLo4FH546Vf7rmMcDk1rONW
+ g1yIeIEt2ETbWPwfshfT87mJMgc=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 60c1ace6e27c0cc77f67275f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 10 Jun 2021 06:10:46
+ GMT
+Sender: linyyuan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 19601C43460; Thu, 10 Jun 2021 06:10:46 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from linyyuan (unknown [180.166.53.21])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: linyyuan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B270CC433D3;
+        Thu, 10 Jun 2021 06:10:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B270CC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
+From:   <linyyuan@codeaurora.org>
+To:     "'Felipe Balbi'" <balbi@kernel.org>,
+        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: gadget: eem: fix command packet transfer issue
+Date:   Thu, 10 Jun 2021 14:10:40 +0800
+Message-ID: <000201d75dbf$58d1cc40$0a7564c0$@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-us
+Thread-Index: AdddvrdSHyFlR9ZoTh6zFIq8vt/Gcg==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The commit a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
-dropped the ARCH_MXC dependency from USB_FSL_USB2, leaving it depending
-solely on FSL_SOC.
+From: Linyu Yuan <linyyuan@codeaurora.com>
 
-FSL_SOC is powerpc only; it was briefly available on ARM in 2014 but was
-removed by commit cfd074ad8600 ("ARM: imx: temporarily remove
-CONFIG_SOC_FSL from LS1021A"). Therefore the driver can no longer be
-enabled on ARM platforms.
+there is following warning,
+[<ffffff8008905a94>] dwc3_gadget_ep_queue+0x1b4/0x1c8
+[<ffffff800895ec9c>] usb_ep_queue+0x3c/0x120
+[<ffffff80089677a0>] eem_unwrap+0x180/0x330
+[<ffffff80089634f8>] rx_complete+0x70/0x230
+[<ffffff800895edbc>] usb_gadget_giveback_request+0x3c/0xe8
+[<ffffff8008901e7c>] dwc3_gadget_giveback+0xb4/0x190
+[<ffffff8008905254>] dwc3_endpoint_transfer_complete+0x32c/0x410
+[<ffffff80089060fc>] dwc3_bh_work+0x654/0x12e8
+[<ffffff80080c63fc>] process_one_work+0x1d4/0x4a8
+[<ffffff80080c6720>] worker_thread+0x50/0x4a8
+[<ffffff80080cc8e8>] kthread+0xe8/0x100
+[<ffffff8008083980>] ret_from_fork+0x10/0x50
+request ffffffc0716bf200 belongs to 'ep0out'
 
-This appears to be a mistake as arm64's ARCH_LAYERSCAPE and arm32
-SOC_LS1021A SoCs use this symbol. It's enabled in these defconfigs:
+when gadget receive a eem command packet from host, it need to response,
+but queue usb request to wrong endpoint.
+fix it by queue usb request to eem IN endpoint and allow host read it.
 
-arch/arm/configs/imx_v6_v7_defconfig:CONFIG_USB_FSL_USB2=y
-arch/arm/configs/multi_v7_defconfig:CONFIG_USB_FSL_USB2=y
-arch/powerpc/configs/mgcoge_defconfig:CONFIG_USB_FSL_USB2=y
-arch/powerpc/configs/mpc512x_defconfig:CONFIG_USB_FSL_USB2=y
-
-To fix, expand the dependencies so USB_FSL_USB2 can be enabled on the
-ARM platforms, and with COMPILE_TEST.
-
-Fixes: a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
 ---
-v2: Fix spelling of ARCH_LAYERSCAPE
----
- drivers/usb/gadget/udc/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/gadget/function/f_eem.c | 44
+++++++++++++++++++++++++++++++++-----
+ 1 file changed, 39 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-index 8c614bb86c66..7348acbdc560 100644
---- a/drivers/usb/gadget/udc/Kconfig
-+++ b/drivers/usb/gadget/udc/Kconfig
-@@ -90,7 +90,7 @@ config USB_BCM63XX_UDC
+diff --git a/drivers/usb/gadget/function/f_eem.c
+b/drivers/usb/gadget/function/f_eem.c
+index 2cd9942..2c2ca1e 100644
+--- a/drivers/usb/gadget/function/f_eem.c
++++ b/drivers/usb/gadget/function/f_eem.c
+@@ -30,6 +30,11 @@ struct f_eem {
+ 	u8				ctrl_id;
+ };
  
- config USB_FSL_USB2
- 	tristate "Freescale Highspeed USB DR Peripheral Controller"
--	depends on FSL_SOC
-+	depends on FSL_SOC || ARCH_LAYERSCAPE || SOC_LS1021A || COMPILE_TEST
- 	help
- 	   Some of Freescale PowerPC and i.MX processors have a High Speed
- 	   Dual-Role(DR) USB controller, which supports device mode.
++struct in_context {
++	struct sk_buff	*skb;
++	struct usb_ep	*ep;
++};
++
+ static inline struct f_eem *func_to_eem(struct usb_function *f)
+ {
+ 	return container_of(f, struct f_eem, port.func);
+@@ -320,9 +325,12 @@ static int eem_bind(struct usb_configuration *c, struct
+usb_function *f)
+ 
+ static void eem_cmd_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+-	struct sk_buff *skb = (struct sk_buff *)req->context;
++	struct in_context *ctx = req->context;
+ 
+-	dev_kfree_skb_any(skb);
++	kfree(req->buf);
++	dev_kfree_skb_any(ctx->skb);
++	usb_ep_free_request(ctx->ep, req);
++	kfree(ctx);
+ }
+ 
+ /*
+@@ -410,7 +418,9 @@ static int eem_unwrap(struct gether *port,
+ 		 * b15:		bmType (0 == data, 1 == command)
+ 		 */
+ 		if (header & BIT(15)) {
+-			struct usb_request	*req = cdev->req;
++			struct usb_request	*req;
++			struct in_context	*ctx;
++			struct usb_ep		*ep;
+ 			u16			bmEEMCmd;
+ 
+ 			/* EEM command packet format:
+@@ -439,13 +449,37 @@ static int eem_unwrap(struct gether *port,
+ 				skb_trim(skb2, len);
+ 				put_unaligned_le16(BIT(15) | BIT(11) | len,
+ 							skb_push(skb2, 2));
++
++				ep = port->in_ep;
++				req = usb_ep_alloc_request(ep, GFP_ATOMIC);
++				if (!req) {
++					dev_kfree_skb_any(skb2);
++					break;
++				}
++
++				ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
++				if (!ctx)
++					goto nomem;
++				ctx->skb = skb2;
++				ctx->ep = ep;
++
++				req->buf = kmalloc(skb2->len, GFP_KERNEL);
++				if (!req->buf)
++					goto nomem;
++
+ 				skb_copy_bits(skb2, 0, req->buf, skb2->len);
+ 				req->length = skb2->len;
+ 				req->complete = eem_cmd_complete;
+ 				req->zero = 1;
+-				req->context = skb2;
+-				if (usb_ep_queue(port->in_ep, req,
+GFP_ATOMIC))
++				req->context = ctx;
++				if (usb_ep_queue(ep, req, GFP_ATOMIC)) {
+ 					DBG(cdev, "echo response queue
+fail\n");
++nomem:
++					kfree(req->buf);
++					usb_ep_free_request(ep, req);
++					dev_kfree_skb_any(skb2);
++					kfree(ctx);
++				}
+ 				break;
+ 
+ 			case 1:  /* echo response */
 -- 
-2.30.2
+2.7.4
 
