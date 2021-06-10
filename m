@@ -2,117 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9003A292C
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 12:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD8243A294A
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 12:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbhFJKS6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 06:18:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52274 "EHLO mail.kernel.org"
+        id S229993AbhFJKZx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 06:25:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56116 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230196AbhFJKS5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 06:18:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7A3FC613E9;
-        Thu, 10 Jun 2021 10:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623320221;
-        bh=/aIpC1FstLWlWF3NH/yW0VxMrUiuut5VKmUgwVjhzR0=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=f/A9rQWZjmkoFvw0ujjfWmUTL1JsUCNyZBpri4OZZ0OCLekSjPKrmz7fKXjaRTuam
-         ogNn1CSik6El9Q/hE1c7kPIaC0++RQ+jzHXzVKw5JSj4RfJ/HskHE6OnQRoD8XjTki
-         mK9ZgDP3aWGhpcWFL7AGzH7aL46PafsBqX/qFx+pR2f87BmiWMnkB04MzogKobToak
-         pnxVbuCaeRCXNCM11PFExXa2Iv50I8Ev1v/0xd5JLgar9upI/lyAI4V7Q+ZVpCetPX
-         rr4QsrimLzjPToK21YpqtTiNNIkszm7iacugL84nIlnCJGUl4u3jHkkdiTSsD2x6UJ
-         Nzm7+ZThUpvpA==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com
-Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
-In-Reply-To: <YMHjctQsGttUJ1QJ@kroah.com>
-References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
- <YLoUiO8tpRpmvcyU@kroah.com> <87k0n9btnb.fsf@kernel.org>
- <YLo6W5sKaXvy51eW@kroah.com>
- <c2daab34-1b25-7ee3-e203-a414c1e486d5@codeaurora.org>
- <874ke62i0v.fsf@kernel.org> <YMHjctQsGttUJ1QJ@kroah.com>
-Date:   Thu, 10 Jun 2021 13:16:51 +0300
-Message-ID: <87mtry10to.fsf@kernel.org>
+        id S229935AbhFJKZv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 06:25:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5594D6135C;
+        Thu, 10 Jun 2021 10:23:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623320635;
+        bh=qTjkBEr9IWyUn76eTdVsCaQRo1eslrmrF1WO/gzptz0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DMxg9uCkVxAuDLJ03F9WaIcM5CvXfNVMTfDizodoXVfQxi+pKPasNU6Zjm9pAP7M/
+         q51UZRM1OU6vP0dEQdywBcYJxuGOon+oruzwA8k1AOTO/lCBmvkP+Xlw/fg3v4jap6
+         WoC+oj/LuW5aLm/FRgzgfYzsEkU3ISiVZwHLsAtE=
+Date:   Thu, 10 Jun 2021 12:23:53 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Johan Hovold <johan@kernel.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v4 2/2] USB: serial: blacklist USB-UIRT when driver is
+ selected
+Message-ID: <YMHoOcoXKvvkdNP5@kroah.com>
+References: <cover.1623318855.git.sean@mess.org>
+ <900ce7cbcae2597767e59a335848e089ac82c73a.1623318855.git.sean@mess.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <900ce7cbcae2597767e59a335848e089ac82c73a.1623318855.git.sean@mess.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 10, 2021 at 11:16:25AM +0100, Sean Young wrote:
+> The USB-UIRT device has its own driver, so blacklist the fdti driver
+> from using it if the driver has been enabled.
+> 
+> Signed-off-by: Sean Young <sean@mess.org>
+> ---
+>  drivers/usb/serial/ftdi_sio.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+> index 369ef140df78..2e9a9076a38d 100644
+> --- a/drivers/usb/serial/ftdi_sio.c
+> +++ b/drivers/usb/serial/ftdi_sio.c
+> @@ -106,7 +106,7 @@ static const struct ftdi_sio_quirk ftdi_NDI_device_quirk = {
+>  	.probe	= ftdi_NDI_device_setup,
+>  };
+>  
+> -static const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
+> +static __maybe_unused const struct ftdi_sio_quirk ftdi_USB_UIRT_quirk = {
 
+Why make this change?
 
-Hi,
+>  	.port_probe = ftdi_USB_UIRT_setup,
+>  };
+>  
+> @@ -568,8 +568,10 @@ static const struct usb_device_id id_table_combined[] = {
+>  	{ USB_DEVICE(OCT_VID, OCT_DK201_PID) },
+>  	{ USB_DEVICE(FTDI_VID, FTDI_HE_TIRA1_PID),
+>  		.driver_info = (kernel_ulong_t)&ftdi_HE_TIRA1_quirk },
+> +#if !IS_ENABLED(CONFIG_IR_UIRT)
+>  	{ USB_DEVICE(FTDI_VID, FTDI_USB_UIRT_PID),
+>  		.driver_info = (kernel_ulong_t)&ftdi_USB_UIRT_quirk },
+> +#endif
+>  	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_1) },
+>  	{ USB_DEVICE(FTDI_VID, PROTEGO_R2X0) },
+>  	{ USB_DEVICE(FTDI_VID, PROTEGO_SPECIAL_3) },
+> @@ -2281,7 +2283,7 @@ static int ftdi_sio_port_probe(struct usb_serial_port *port)
+>  /* Setup for the USB-UIRT device, which requires hardwired
+>   * baudrate (38400 gets mapped to 312500) */
+>  /* Called from usbserial:serial_probe */
+> -static void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
+> +static __maybe_unused void ftdi_USB_UIRT_setup(struct ftdi_private *priv)
 
-Greg KH <gregkh@linuxfoundation.org> writes:
-> On Thu, Jun 10, 2021 at 12:20:00PM +0300, Felipe Balbi wrote:
->> > As mentioned above, these changes are currently present on end user
->> > devices for the past few years, so its been through a lot of testing :=
-).
->>=20
->> all with the same gadget driver. Also, who uses USB on android devices
->> these days? Most of the data transfer goes via WiFi or Bluetooth, anyway
->> :-)
->
-> I used to think that too, until I saw some of the new crazy designs
-> where lots of SoC connections internally to the device run on USB.  Also
-> look at the USB offload stuff as one example of how the voice sound path
-> goes through the USB controller on the SoC on the latest Samsung Galaxy
-> phones that are shipping now :(
+Again, why this change here?
 
-yeah, that's one reason NOT to touch the FIFO sizes :-) OMAP5 has, as
-mentioned before, processor trace offload via USB too. If we modify the
-FIFO configuration set by the HW designer we risk loosing those features.
+thanks,
 
-> There's also devices with the modem/network connection going over USB,
-> along with other device types as well.  Android Auto is crazy with
-
-yeah, and there will be more coming. USB Debug class is already
-integrated in some SoCs, that gives us jtag-like access over USB.
-
-> almost everything hooked up directly with a USB connection to the host
-> system running Linux.
-
-that's running against USB host, though, right? Android is the host, not
-the gadget :-)
-
-The FIFO sizes here are for the gadget side.
-
->> I guess only developers are using USB during development to flash dev
->> images heh.
->
-> I wish, we are reaching the point where the stability of the overall
-> Android system depends on how well the USB controller works.  We are a
-> product of our success...
->
-> thanks,
->
-> greg k-h
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDB5pMRHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjw2wf/crhEH0ndZUqRm7jaTsBxQg7pcZNB5IIa
-B8VUxk/3eGa1Yi7EfiKnoHtxSUDMDKYnyT58C7OdrPZOX1I32NkDWqiLY64k+lSt
-IZn5DcEPYg2m14IfJvz7MYgrWZy2Inz1XKB4iVJodQaVq7ayYa7OqhVrB3ScJ46s
-TYsf+9UtXE53HFNNk/bR8LIUMFxGYn+jTyv3Y3YoOOqqHRyCgH11jI/XbWdEtpbb
-7B7F70ZihlF1lxEuOyzmKdbp713+kFrnZTvqqt90PVfdGDLGCVip06ZoiGigpTZE
-V9iEXnpTaXwcj8d4GXDuSdg9RLQCW/mNJr09zkbQ7a/6UtN62x1pVA==
-=87B3
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
