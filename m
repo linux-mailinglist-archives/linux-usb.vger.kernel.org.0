@@ -2,81 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F10433A2DE2
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 16:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9011A3A2DFC
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 16:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbhFJOT3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 10:19:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43198 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230387AbhFJOTY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 10:19:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB7F2613D9;
-        Thu, 10 Jun 2021 14:17:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623334648;
-        bh=RsxEWAIXQZfs+po6RGl38wHzZWi2MVveikiBWMNibGA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6FObbXCb9egJCrCRk6BZlkp8VdSKvXFpU1mIWh4XaMIAokIiMql2pZt7pp9B8Ipj
-         DnxFKjsbC63dDVQ52j0itePU2TbtLszEwqpWcEWMpcyqQUmCdGu+26y+VAqqmtf5lr
-         aFiN2kmxRXk2MeLsGBFGVhoEsF8vD6eahiD7Fy7Q27H2PL9xht4rKwWVRSmHud5ali
-         OHB3T2fwpHL5wpwCp9fC68aNb0Xsh8kplyKiwS4FAMTc7VnZP29BiuTo8CbuGDxA4l
-         xtud/0UMz4utFQHmTy7Am0kVJv0/uclE4EIeLoxKmUDFkVkT2kMFKmkqrNmEd2smpo
-         greg0Ehg8vgkQ==
-Date:   Thu, 10 Jun 2021 22:17:12 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com,
-        yangjihong1@huawei.com, yukuai3@huawei.com,
-        linux-usb@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Hulk Robot <hulkci@huawei.com>
-Subject: Re: [PATCH -next v2] usb: cdns3: cdns3-gadget: Use list_move_tail
- instead of list_del/list_add_tail
-Message-ID: <20210610141712.GB7839@Peter>
-References: <20210609072720.1358527-1-libaokun1@huawei.com>
+        id S231376AbhFJOW0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 10:22:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231365AbhFJOWZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 10:22:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68DFC061574
+        for <linux-usb@vger.kernel.org>; Thu, 10 Jun 2021 07:20:28 -0700 (PDT)
+Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lrLXb-0007L1-2W; Thu, 10 Jun 2021 16:20:15 +0200
+Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lrLXZ-0004Df-5r; Thu, 10 Jun 2021 16:20:13 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Jon Hunter <jonathanh@nvidia.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH v1 1/1] net: usb: asix: ax88772: manage PHY PM from MAC
+Date:   Thu, 10 Jun 2021 16:20:09 +0200
+Message-Id: <20210610142009.16162-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210609072720.1358527-1-libaokun1@huawei.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-06-09 15:27:20, Baokun Li wrote:
-> Using list_move_tail() instead of list_del() + list_add_tail().
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
-> V1->V2:
-> 	CC mailist
-> 
->  drivers/usb/cdns3/cdns3-gadget.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 57adcdbfab5f..5d8c982019af 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -430,9 +430,7 @@ static int cdns3_start_all_request(struct cdns3_device *priv_dev,
->  		if (ret)
->  			return ret;
->  
-> -		list_del(&request->list);
-> -		list_add_tail(&request->list,
-> -			      &priv_ep->pending_req_list);
-> +		list_move_tail(&request->list, &priv_ep->pending_req_list);
->  		if (request->stream_id != 0 || (priv_ep->flags & EP_TDLCHK_EN))
->  			break;
->  	}
-> 
+Take over PHY power management, otherwise PHY framework will try to
+access ASIX MDIO bus before MAC resume was completed.
 
-Applied, thanks.
+Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-by: Jon Hunter <jonathanh@nvidia.com>
+Suggested-by: Heiner Kallweit <hkallweit1@gmail.com>
+---
+ drivers/net/usb/asix_devices.c | 43 ++++++++++------------------------
+ 1 file changed, 12 insertions(+), 31 deletions(-)
 
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 8a477171e8f5..aec97b021a73 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -598,6 +598,9 @@ static void ax88772_suspend(struct usbnet *dev)
+ 	struct asix_common_private *priv = dev->driver_priv;
+ 	u16 medium;
+ 
++	if (netif_running(dev->net))
++		phy_stop(priv->phydev);
++
+ 	/* Stop MAC operation */
+ 	medium = asix_read_medium_status(dev, 1);
+ 	medium &= ~AX_MEDIUM_RE;
+@@ -605,14 +608,6 @@ static void ax88772_suspend(struct usbnet *dev)
+ 
+ 	netdev_dbg(dev->net, "ax88772_suspend: medium=0x%04x\n",
+ 		   asix_read_medium_status(dev, 1));
+-
+-	/* Preserve BMCR for restoring */
+-	priv->presvd_phy_bmcr =
+-		asix_mdio_read_nopm(dev->net, dev->mii.phy_id, MII_BMCR);
+-
+-	/* Preserve ANAR for restoring */
+-	priv->presvd_phy_advertise =
+-		asix_mdio_read_nopm(dev->net, dev->mii.phy_id, MII_ADVERTISE);
+ }
+ 
+ static int asix_suspend(struct usb_interface *intf, pm_message_t message)
+@@ -626,39 +621,22 @@ static int asix_suspend(struct usb_interface *intf, pm_message_t message)
+ 	return usbnet_suspend(intf, message);
+ }
+ 
+-static void ax88772_restore_phy(struct usbnet *dev)
+-{
+-	struct asix_common_private *priv = dev->driver_priv;
+-
+-	if (priv->presvd_phy_advertise) {
+-		/* Restore Advertisement control reg */
+-		asix_mdio_write_nopm(dev->net, dev->mii.phy_id, MII_ADVERTISE,
+-				     priv->presvd_phy_advertise);
+-
+-		/* Restore BMCR */
+-		if (priv->presvd_phy_bmcr & BMCR_ANENABLE)
+-			priv->presvd_phy_bmcr |= BMCR_ANRESTART;
+-
+-		asix_mdio_write_nopm(dev->net, dev->mii.phy_id, MII_BMCR,
+-				     priv->presvd_phy_bmcr);
+-
+-		priv->presvd_phy_advertise = 0;
+-		priv->presvd_phy_bmcr = 0;
+-	}
+-}
+-
+ static void ax88772_resume(struct usbnet *dev)
+ {
++	struct asix_common_private *priv = dev->driver_priv;
+ 	int i;
+ 
+ 	for (i = 0; i < 3; i++)
+ 		if (!ax88772_hw_reset(dev, 1))
+ 			break;
+-	ax88772_restore_phy(dev);
++
++	if (netif_running(dev->net))
++		phy_start(priv->phydev);
+ }
+ 
+ static void ax88772a_resume(struct usbnet *dev)
+ {
++	struct asix_common_private *priv = dev->driver_priv;
+ 	int i;
+ 
+ 	for (i = 0; i < 3; i++) {
+@@ -666,7 +644,8 @@ static void ax88772a_resume(struct usbnet *dev)
+ 			break;
+ 	}
+ 
+-	ax88772_restore_phy(dev);
++	if (netif_running(dev->net))
++		phy_start(priv->phydev);
+ }
+ 
+ static int asix_resume(struct usb_interface *intf)
+@@ -722,6 +701,8 @@ static int ax88772_init_phy(struct usbnet *dev)
+ 		return ret;
+ 	}
+ 
++	priv->phydev->mac_managed_pm = 1;
++
+ 	phy_attached_info(priv->phydev);
+ 
+ 	return 0;
 -- 
-
-Thanks,
-Peter Chen
+2.29.2
 
