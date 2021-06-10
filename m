@@ -2,152 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0A43A33FE
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 21:25:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B4E3A34CE
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 22:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230506AbhFJT1H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 15:27:07 -0400
-Received: from mga12.intel.com ([192.55.52.136]:46920 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231328AbhFJT1E (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 10 Jun 2021 15:27:04 -0400
-IronPort-SDR: kgi7mug0sTxg2oFKMudnWAbEzG4pFpFlMRjOJRzFZhKq/0WIp7nUk8z4s+HEXQ+NEB74cpCPEG
- hteTyQMo/AcA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="185073004"
-X-IronPort-AV: E=Sophos;i="5.83,264,1616482800"; 
-   d="scan'208";a="185073004"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jun 2021 12:25:05 -0700
-IronPort-SDR: nBqvT8KpLHHVKoEmxz1QgXbkK5x9fEax9mtmnHgobFQ3F6t6VPesuiKeW558Nx//tDyZEspX8P
- sVx/rpbpt1Pg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,264,1616482800"; 
-   d="scan'208";a="448844244"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 10 Jun 2021 12:24:59 -0700
-Subject: Re: [PATCH] xhci: solve a double free problem while doing s4
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
-Cc:     "Xuetao (kirin)" <xuetao09@huawei.com>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chenyu (U)" <chenyu56@huawei.com>,
-        Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-References: <1623244292-108534-1-git-send-email-xuetao09@huawei.com>
- <1428e2d7b7b74fccb3493384f96c521a@huawei.com>
- <e6ca9524-67a6-1eef-a44f-b9a1acd5205c@linux.intel.com>
- <YMIbUN3HkyKjn6am@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <417ae6d7-a602-6803-9407-bf0cf809bb5a@linux.intel.com>
-Date:   Thu, 10 Jun 2021 22:27:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S230167AbhFJUaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 16:30:06 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:44667 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229961AbhFJUaG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 16:30:06 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623356889; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
+ Subject: Sender; bh=iTxrC4mF4w/Quqh7s+egckNZ4to2Zt81mjmqcIDFHTE=; b=dV/HjaYFOyr5ZAnPrcWCkZcN4Disyyqb5LTO+C17rrFtN4ANO1ig82YUCbeXnaSFwssauXU5
+ gqYj0GjcxEj/emuxuCF8QrguWksE65ExT3sv0yYP3uJiib+JIj4Zs5fMFHUxI2wxPxnD5wxN
+ GKwGMxq1WL6XzhW9TuumNoT45P8=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 60c275ceed59bf69cc763aac (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 10 Jun 2021 20:27:58
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 7B0C9C4323A; Thu, 10 Jun 2021 20:27:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.41.194] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D4A37C433F1;
+        Thu, 10 Jun 2021 20:27:55 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org D4A37C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Disable gadget IRQ during pullup
+ disable
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+References: <1621571037-1424-1-git-send-email-wcheng@codeaurora.org>
+ <87h7i60ye8.fsf@kernel.org>
+ <724ba69a-8c67-4b4b-3e6a-a5834b09e6e1@codeaurora.org>
+Message-ID: <a59a81c1-367f-b4b0-b6bf-dbe91ab3613d@codeaurora.org>
+Date:   Thu, 10 Jun 2021 13:27:54 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.2
 MIME-Version: 1.0
-In-Reply-To: <YMIbUN3HkyKjn6am@kroah.com>
+In-Reply-To: <724ba69a-8c67-4b4b-3e6a-a5834b09e6e1@codeaurora.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 10.6.2021 17.01, gregkh@linuxfoundation.org wrote:
-> On Thu, Jun 10, 2021 at 04:45:54PM +0300, Mathias Nyman wrote:
->> On 9.6.2021 17.22, Zhangjiantao (Kirin, nanjing) wrote:
->>> when system is doing s4, the process of xhci_resume may be as below:
->>> 1、xhci_mem_cleanup
->>> 2、xhci_init->xhci_mem_init->xhci_mem_cleanup(when memory is not enough).
->>> xhci_mem_cleanup will be executed twice when system is out of memory.
->>> xhci->port_caps is freed in xhci_mem_cleanup,but it isn't set to NULL.
->>> It will be freed twice when xhci_mem_cleanup is called the second time.
->>>
->>
->> Thanks, nice catch
->>
->>> We got following bug when system resumes from s4:
->>>
->>> kernel BUG at mm/slub.c:309!
->>> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->>> CPU: 0 PID: 5929 Tainted: G S   W   5.4.96-arm64-desktop #1
->>> pc : __slab_free+0x5c/0x424
->>> lr : kfree+0x30c/0x32c
->>>
->>> Call trace:
->>>  __slab_free+0x5c/0x424
->>>  kfree+0x30c/0x32c
->>>  xhci_mem_cleanup+0x394/0x3cc
->>>  xhci_mem_init+0x9ac/0x1070
->>>  xhci_init+0x8c/0x1d0
->>>  xhci_resume+0x1cc/0x5fc
->>>  xhci_plat_resume+0x64/0x70
->>>  platform_pm_thaw+0x28/0x60
->>>  dpm_run_callback+0x54/0x24c
->>>  device_resume+0xd0/0x200
->>>  async_resume+0x24/0x60
->>>  async_run_entry_fn+0x44/0x110
->>>  process_one_work+0x1f0/0x490
->>>  worker_thread+0x5c/0x450
->>>  kthread+0x158/0x160
->>>  ret_from_fork+0x10/0x24
->>>
->>> Signed-off-by: Tao Xue <xuetao09@huawei.com>
->>
->> Checkpatch complains:
->> ERROR: Missing Signed-off-by: line by nominal patch author 'Zhangjiantao (Kirin, nanjing) <water.zhangjiantao@huawei.com>'
->>
->> Is Zhangjiantao (Kirin, nanjing)  the correct author? If yes can I add 
->> "Signed-off-by: Zhangjiantao (Kirin, nanjing) <water.zhangjiantao@huawei.com>?
-> 
-> Please note that it is generally a bad thing for others to add someone
-> else's s-o-b line, as it is a legal agreement.  It is best for them to
-> send it instead.
 
-Good point.
-Zhangjiantao (Kirin, nanjing), could you resend with Author/Signed-off-by corrected.
+
+On 6/10/2021 11:21 AM, Wesley Cheng wrote:
+> 
+> 
+> On 6/10/2021 4:09 AM, Felipe Balbi wrote:
+>> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>
+>>> Current sequence utilizes dwc3_gadget_disable_irq() alongside
+>>> synchronize_irq() to ensure that no further DWC3 events are generated.
+>>> However, the dwc3_gadget_disable_irq() API only disables device
+>>> specific events.  Endpoint events can still be generated.  Briefly
+>>> disable the interrupt line, so that the cleanup code can run to
+>>> prevent device and endpoint events. (i.e. __dwc3_gadget_stop() and
+>>> dwc3_stop_active_transfers() respectively)
+>>>
+>>> Without doing so, it can lead to both the interrupt handler and the
+>>> pullup disable routine both writing to the GEVNTCOUNT register, which
+>>> will cause an incorrect count being read from future interrupts.
+>>>
+>>> Fixes: ae7e86108b12 ("usb: dwc3: Stop active transfers before halting the controller")
+>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>> ---
+>>>  drivers/usb/dwc3/gadget.c | 11 +++++------
+>>>  1 file changed, 5 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index 49ca5da..89aa9ac 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -2260,13 +2260,10 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>  	}
+>>>  
+>>>  	/*
+>>> -	 * Synchronize any pending event handling before executing the controller
+>>> -	 * halt routine.
+>>> +	 * Synchronize and disable any further event handling while controller
+>>> +	 * is being enabled/disabled.
+>>>  	 */
+>>> -	if (!is_on) {
+>>> -		dwc3_gadget_disable_irq(dwc);
+>>> -		synchronize_irq(dwc->irq_gadget);
+>>> -	}
+>>> +	disable_irq(dwc->irq_gadget);
+>>>  
+>>>  	spin_lock_irqsave(&dwc->lock, flags);
+>>
+>> spin_lock_irqsave() is already disabling interrupt, right? Why do we
+>> need another call to disable_irq()?
+>>
+> 
+> Hi Felipe,
+> 
+> Yes, I remember you brought up that point as well before.  So when I
+> checked the logs (USB and scheduler ftrace) for this issue, I clearly
+> saw that we were handling a soft disconnect on CPU3 and then an DWC3 IRQ
+> being scheduled into CPU0.  Last time we discussed, I mentioned that
+> spin_lock_irqsave() only disables interrupts on that particular CPU the
+> thread is running on.
+> 
+Hi Felipe,
+
+Let me share the ftrace snippets as well:
+
+USB FTRACE:
+
+<idle>-0    [002]   304.567900:  dwc3_gadget_ep_cmd   name=ep0out
+cmd=1030  param0=0  param1=4026523648  param2=0  cmd_status=0
+<idle>-0    [004]   304.583225:  dwc3_gadget_ep_cmd   name=ep1out
+cmd=134152  param0=0  param1=0  param2=0  cmd_status=0
+
+//We don't have any logging in pullup disable, but this is when that
+occurs, as we start to see -ESHUTDOWN statuses due to stop active
+transfer.
+<idle>-0    [004]   304.583237:  dwc3_gadget_giveback   name=ep1out
+req=1243650560  actual=0  length=16384  status=4294967188  zero=0
+short_not_ok=0  no_interrupt=0
+<idle>-0    [004]   304.583275:  dwc3_gadget_giveback   name=ep1out
+req=1243645440  actual=0  length=16384  status=4294967188  zero=0
+short_not_ok=0  no_interrupt=0
+<idle>-0    [004]   304.583282:  dwc3_gadget_giveback   name=ep1out
+req=1243648256  actual=0  length=16384  status=4294967188  zero=0
+short_not_ok=0  no_interrupt=0
+<idle>-0    [004]   304.583312:  dwc3_gadget_giveback   name=ep1out
+req=4075146240  actual=0  length=16384  status=4294967188  zero=0
+short_not_ok=0  no_interrupt=0
+...
+//USB gadget disconnect is printed AFTER the pullup(0) routine is complete.
+<idle>-0    [004]   304.584240:  usb_gadget_disconnect   speed=3
+max_speed=6  state=7  mA=500  sg_supported=1  is_otg=0
+is_a_peripheral=0  b_hnp_enable=0  a_hnp_support=0
+hnp_polling_support=0  host_request_flag=0  quirk_ep_out_aligned_size=0
+ quirk_altset_not_supp=0  quirk_stall_not_supp=0  quirk_zlp_not_supp=0
+is_selfpowered=0  deactivated=0  connected=1  ret=4294967186
+
+---------------------------------------------------------
+CPU2 SCHED FTRACE:
+
+kworker/u16:5-192    [002]   304.583354:  irq_handler_entry   irq=343
+name=dwc3-msm
+kworker/u16:5-192    [002]   304.583356:  irq_handler_exit   irq=343
+ret=0
+kworker/u16:5-192    [002]   304.583358:  irq_handler_entry   irq=343
+name=dwc3
+kworker/u16:5-192    [002]   304.583366:  irq_handler_exit   irq=343
+ret=2
+kworker/u16:5-192    [002]   304.583377:  sched_wakeup
+comm=irq/343-dwc3  pid=20174  prio=100  success=1  target_cpu=2
+kworker/u16:5-192   [002]  304.583411: sched_switch:
+prev_comm=kworker/u16:5 prev_pid=192 prev_prio=120 prev_state=R ==>
+next_comm=irq/343-dwc3 next_pid=20174 next_prio=100
+irq/343-dwc3-20174    [002]   304.583454:  irq_handler_entry   irq=343
+name=dwc3-msm
+irq/343-dwc3-20174    [002]   304.583455:  irq_handler_exit   irq=343
+ret=0
+irq/343-dwc3-20174    [002]   304.583458:  irq_handler_entry   irq=343
+name=dwc3
+irq/343-dwc3-20174    [002]   304.583465:  irq_handler_exit   irq=343
+ret=2
+
+So if we assume that the point of error happens @ 304.567900 due to the
+below points:
+- DWC3 pullup disable routine synchronized IRQs (w/ previous logic)
+before calling stop active transfers.
+- DWC3 request statuses shows ESHUTDOWN, which occurs during stop active
+transfer, as we call giveback w/ that error code
+
+Then we can see that on CPU2, we're still getting DWC3 core IRQs, and
+DWC3 IRQ handler is returning --> 2, which is IRQ_WAKE_THREAD.
 
 Thanks
--Mathias
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
