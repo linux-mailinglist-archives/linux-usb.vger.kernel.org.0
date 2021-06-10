@@ -2,109 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 046F53A229B
-	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3203A22D0
+	for <lists+linux-usb@lfdr.de>; Thu, 10 Jun 2021 05:31:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbhFJDQS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 9 Jun 2021 23:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36546 "EHLO
+        id S229972AbhFJDdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 9 Jun 2021 23:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229937AbhFJDJ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:09:56 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B29C061574
-        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:07:32 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn21so2688952ljb.1
-        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:07:32 -0700 (PDT)
+        with ESMTP id S229966AbhFJDdw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 9 Jun 2021 23:33:52 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C6F0C06175F
+        for <linux-usb@vger.kernel.org>; Wed,  9 Jun 2021 20:31:41 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id l184so5908685pgd.8
+        for <linux-usb@vger.kernel.org>; Wed, 09 Jun 2021 20:31:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=2uGJuGe9Mb5XmAyPYwxLJlGYNRHWrY7TCsKD4dEygoc=;
-        b=F/2/TpxK/1Ifo0A7NOQqeZX/SSPgF/SpE8RssNXUBZIqiR74/dY4AuZBlQ+vqoSWvx
-         DBLbum5oB4SKiMIVCJzxZbO/Mq/2eAfinRYQl7JRsxiSw3pFV8CXyugaFf51gaqmtx/e
-         FI5WTt2Z5Rgd0TGBv9K2KYmAQG/5Ar+ODGm9SoV70eP5Ykv1pu9MWuVfSOtuEBtDKeXU
-         I499Xlt+Vi45crcImmM1UEqTIW+IvLaly61h3qFu3RGvrpH8RXPxVW/zI+QQdpeqXL6B
-         eGSd+q9eHgpvQE/U1CdBg204m35oCkRUkx6tzsshb2Az8IQk5eaZ6UDumfNEYHhCxul4
-         Rnkw==
+        bh=7oIVo7Xzbw9TVkKcvpifrqSvzyU32kz1bTpH+C80Wns=;
+        b=S6u4QNuWHqphKFRnJIadQXQdMQsCC7NxnhI9qTnr6ftqvS7l4znkBCbGb2pMZJiMIR
+         rQaw+QzRZnzNuzyZjx6/9d47myK85kBWR1swpwXRCheQQ0Y13A6Ynh4zIYub4GWLGUpe
+         2QTve5fmuvSwsQR2MdT86gN7Rg6pbFM8m6KMU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=2uGJuGe9Mb5XmAyPYwxLJlGYNRHWrY7TCsKD4dEygoc=;
-        b=aCRh+igofBLUJLrBqUAfCwsSIoOUGRy2qz4FSGcttFY3TCSC88gAdQoUz83IQRg37G
-         0SOKcMoGG6hyLPlmM08zNpQaY5AiStm6drkWgPjghHyCL/G+2r+JqdD1fiui+F7AMRnW
-         BwtD1KB1JprzyNHkaAcidW+nLIpg89U7tY18/sFlFk7cXLMMGp/JUKRjIeASNKVjDThF
-         58KpwX+3irlMVXdQNdeiEAQEwBgIkhtNnc4EcBiPlMLug4TlPIyJgQwHKI0GgOaxvcRl
-         5AvBlb1TujnHq18zLrjTk636AD5ZJchnSTbX7pObxuweA8ogNUQeY0e0Rk2FVc7/2QUD
-         UOoQ==
-X-Gm-Message-State: AOAM533HbxMjfGaelBzQbdH84NuoqX1vYuzXqVSrIvhrsTU68EtApwal
-        HQvuL/Mybww+tuACpSMlcsZjSab1c+JS9l4CAm0=
-X-Google-Smtp-Source: ABdhPJwI4QoOu99oca4P0J8CGU7PL9QcbBCqsMv8WWQfpkMhV/9ppzzKb45oLL9PmOsITHHMx6cYMky/wQWgWNGzPMo=
-X-Received: by 2002:a2e:93d0:: with SMTP id p16mr534395ljh.444.1623294450487;
- Wed, 09 Jun 2021 20:07:30 -0700 (PDT)
+        bh=7oIVo7Xzbw9TVkKcvpifrqSvzyU32kz1bTpH+C80Wns=;
+        b=icW7QwfakOwiRYbTFy8b9BfTPYRJdWlBWyKlwqZuB5LBdRjqGO/1sB9h6y5e//KeY1
+         cOd0zKt5m8IQqQ++SVgkcjbWDZ/pBP5bnFDjM/7+9gqWi5LQ4U1/uY+mf83YxdEFacX9
+         gh+98CeOl/icrSfkwS55IrguqmhefZwDeF14eO7zFlUs8SGbp/IXiQdvpmnrVXunYV+S
+         l2sdGNVZX14CUOmdgKPpQyAM1sq8LOMs9yCVbipQMRR/maZOKa2gI0LtMqepVOyPEUFI
+         enwRTgP3GWn5okAYI85OTJmru674tfyY9MhR6alMAFOIXOAILsgolBM6zsWfSjBNImc+
+         6gUQ==
+X-Gm-Message-State: AOAM531jScqsdjUrQJxFAYmg0djQ+gTDxTHNK1vO7NNb6GtkZX9U1cIM
+        9dPbRliVHrB6s1Ps3L6J+I9rtpOMzV3Mtbci28j0QA==
+X-Google-Smtp-Source: ABdhPJxFOr3K6ngAtBXDCOFBaf1TZc1JxsWX46LnWiU7oVYxdsIbn1LDXznYMFDG2KjGXlDY+RA8/uwdzZBwoByfIRk=
+X-Received: by 2002:a63:234f:: with SMTP id u15mr2906536pgm.257.1623295897282;
+ Wed, 09 Jun 2021 20:31:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210610030035.76864-1-joel@jms.id.au>
-In-Reply-To: <20210610030035.76864-1-joel@jms.id.au>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 10 Jun 2021 00:07:19 -0300
-Message-ID: <CAOMZO5AfiuaL4MhL7Xam_SPL2b-jCiMd96RciP88rMRq4G-3uw@mail.gmail.com>
-Subject: Re: [PATCH] usb: gadget: fsl: Re-enable driver for ARM SoCs
-To:     Joel Stanley <joel@jms.id.au>
-Cc:     Peter Chen <peter.chen@nxp.com>, Arnd Bergmann <arnd@arndb.de>,
-        Felipe Balbi <balbi@kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
+References: <20210507021127.54717-1-chunfeng.yun@mediatek.com>
+In-Reply-To: <20210507021127.54717-1-chunfeng.yun@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Thu, 10 Jun 2021 11:31:25 +0800
+Message-ID: <CAATdQgD+e6FSFfOvmuib14f1-O6w6znH5agf3gP774Qd6udCUw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/4] usb: xhci-mtk: use bitfield instead of bool
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Joel,
+On Fri, May 7, 2021 at 10:11 AM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+> Use bitfield instead of bool in struct
+>
+> Refer to coding-style.rst 17) Using bool:
+> "If a structure has many true/false values, consider consolidating
+> them into a bitfield with 1 bit members, or using an appropriate
+> fixed width type, such as u8."
+>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Thanks for your patch.
+Reviewed-and-Tested-by: Ikjoon Jang <ikjn@chromium.org>
 
-On Thu, Jun 10, 2021 at 12:01 AM Joel Stanley <joel@jms.id.au> wrote:
->
-> The commit a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
-> dropped the ARCH_MXC dependency from USB_FSL_USB2, leaving it depending
-> solely on FSL_SOC.
->
-> FSL_SOC is powerpc only; it was briefly available on ARM in 2014 with
-> commit cfd074ad8600 ("ARM: imx: temporarily remove CONFIG_SOC_FSL from
-> LS1021A"). Therefore the driver can no longer be enabled on ARM
-> platforms.
->
-> This appears to be a mistake as arm64's ARCH_LAERSCAPE and arm32
-
-Typo: ARCH_LAYERSCAPE
-
-> SOC_LS1021A SoCs use this symbol. It's enabled in these defconfigs:
->
-> arch/arm/configs/imx_v6_v7_defconfig:CONFIG_USB_FSL_USB2=y
-> arch/arm/configs/multi_v7_defconfig:CONFIG_USB_FSL_USB2=y
-> arch/powerpc/configs/mgcoge_defconfig:CONFIG_USB_FSL_USB2=y
-> arch/powerpc/configs/mpc512x_defconfig:CONFIG_USB_FSL_USB2=y
->
-> To fix, expand the dependencies so USB_FSL_USB2 can be enabled on the
-> ARM platforms, and with COMPILE_TEST.
->
-> Fixes: a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
-> Signed-off-by: Joel Stanley <joel@jms.id.au>
 > ---
->  drivers/usb/gadget/udc/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> v3: split @has_ippc out into anather patch suggested by Greg
+> v2: add more changelog suggested by Greg
+> ---
+>  drivers/usb/host/xhci-mtk.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/usb/gadget/udc/Kconfig b/drivers/usb/gadget/udc/Kconfig
-> index 8c614bb86c66..b32cea2fb99f 100644
-> --- a/drivers/usb/gadget/udc/Kconfig
-> +++ b/drivers/usb/gadget/udc/Kconfig
-> @@ -90,7 +90,7 @@ config USB_BCM63XX_UDC
+> diff --git a/drivers/usb/host/xhci-mtk.h b/drivers/usb/host/xhci-mtk.h
+> index cd3a37bb73e6..94a59b3d178f 100644
+> --- a/drivers/usb/host/xhci-mtk.h
+> +++ b/drivers/usb/host/xhci-mtk.h
+> @@ -138,17 +138,17 @@ struct xhci_hcd_mtk {
+>         struct mu3h_sch_bw_info *sch_array;
+>         struct list_head bw_ep_chk_list;
+>         struct mu3c_ippc_regs __iomem *ippc_regs;
+> -       bool has_ippc;
+>         int num_u2_ports;
+>         int num_u3_ports;
+>         int u3p_dis_msk;
+>         struct regulator *vusb33;
+>         struct regulator *vbus;
+>         struct clk_bulk_data clks[BULK_CLKS_NUM];
+> -       bool lpm_support;
+> -       bool u2_lpm_disable;
+> +       unsigned int has_ippc:1;
+> +       unsigned int lpm_support:1;
+> +       unsigned int u2_lpm_disable:1;
+>         /* usb remote wakeup */
+> -       bool uwk_en;
+> +       unsigned int uwk_en:1;
+>         struct regmap *uwk;
+>         u32 uwk_reg_base;
+>         u32 uwk_vers;
+> --
+> 2.18.0
 >
->  config USB_FSL_USB2
->         tristate "Freescale Highspeed USB DR Peripheral Controller"
-> -       depends on FSL_SOC
-> +       depends on FSL_SOC || ARCH_LAYERSACPE || SOC_LS1021A || COMPILE_TEST
-
-ARCH_LAYERSCAPE here too :-)
