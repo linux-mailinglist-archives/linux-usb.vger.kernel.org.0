@@ -2,224 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4D63A3C9C
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 09:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251773A3CDB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 09:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhFKHKJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 03:10:09 -0400
-Received: from mga05.intel.com ([192.55.52.43]:53385 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230484AbhFKHKF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Jun 2021 03:10:05 -0400
-IronPort-SDR: maztCeUqLSssqFCR6OP1ew5QbYdsJnoD8SvE1Ti1ZzIhjme0Qwpfxy7Oj5vPGruRt83TyhaE6T
- EzoFbXOHRl5g==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="291106457"
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="291106457"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 00:07:57 -0700
-IronPort-SDR: 8sNLJHx2EkUFxl0W9HxuxF12e3hTHY1fQO1/WNXYPiDQ0wvPQzJPuGu9x8VRUVRHZob6duA9s+
- diC2hBswav0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="419991519"
-Received: from lkp-server02.sh.intel.com (HELO 3cb98b298c7e) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 11 Jun 2021 00:07:55 -0700
-Received: from kbuild by 3cb98b298c7e with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lrbGl-0000UR-7R; Fri, 11 Jun 2021 07:07:55 +0000
-Date:   Fri, 11 Jun 2021 15:07:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD REGRESSION
- 142d0b24c1b17139f1aaaacae7542a38aa85640f
-Message-ID: <60c30b9a.GY4WXEsFbZ2xvld8%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+        id S231379AbhFKHUQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 03:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230307AbhFKHUO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 03:20:14 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6395DC061574
+        for <linux-usb@vger.kernel.org>; Fri, 11 Jun 2021 00:18:17 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id s17-20020a17090a8811b029016e89654f93so156795pjn.1
+        for <linux-usb@vger.kernel.org>; Fri, 11 Jun 2021 00:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=h1n/zuYlwqp+rHpksQ0F0YWXfiHRXbQ+IawrWkwik+U=;
+        b=T0kxJqFHf70lY+njXDWqYAN6vBaTKGc99PhXMEg6pSXfRI32J0p7uzXFul+MzUolIP
+         04QCrPJXKMir5BGYPmFJlHFGCnqyHtrg8y6Q/fwGJygsQq86dTqMj+3U+kRmkBZmXULz
+         qNCigbqjP1zvuJ0Tw3onxW1+gfWr/TQals09Lxn+xn5/JsmC/9SN8IKY6j43KbR25e8u
+         vQD+p1TySlbAnwkKny4tfqxJvhPOJ3PJu2r+JrbrfhKweyrFN0g2m4tpjz0LKe847WGp
+         FZqn7+IRpkvpoyEPKpBYaWmf/c7CxQ1+CnzNZt30HjZqxNs5Q9WueOVPxqHVHIzW1SKV
+         RlRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=h1n/zuYlwqp+rHpksQ0F0YWXfiHRXbQ+IawrWkwik+U=;
+        b=Oi3OqFLeoQTEYVc5QRyVR1hSSeOdyu9abZcUXFr0Xvo7p/c0ogsCnYpfS0hh5CMtMR
+         qMng7xYhWACWgOSkk255UriFAubRqxknhdxhjX4//2ROhGtcYFv+yO3poG6Cz8TF86eb
+         iNx1N9SW0/RUPkyoGUeiyxNGW1c4Ob4af84pFIpdGmwwK6ma81jL9TJW7+PS6ruEklLn
+         /ZjX1REjakMRGZAZBwi4SFZ/Pa96ZGRBm0WHk3eTuBZtjb1AKfDFYxFdKQEwI7dPHsQT
+         z4vPSN8XhCuUvRKZuv27xQWzU6uyNJheVKNzral69kelQ0MF6whhMP7vBXgpmHqZyTs2
+         E7XQ==
+X-Gm-Message-State: AOAM530ivW9PBBLu1tLHwqXdi0msy6Im2mvx6OC4B7nV8f9oxx+hySiP
+        dim+l9ve8xRXw7wPqA/xXkwLHiGZgS2RvsjCq2o=
+X-Google-Smtp-Source: ABdhPJzlMwMMR1TulJ0QfJsKDdrDNmI5BKy90mUsVAz80HraIJY/XUiwzC71u7xD64AyJ5Z3o+9y0Q==
+X-Received: by 2002:a17:90a:cd03:: with SMTP id d3mr1402488pju.31.1623395896874;
+        Fri, 11 Jun 2021 00:18:16 -0700 (PDT)
+Received: from coding1257.verisilicon.com ([116.227.119.103])
+        by smtp.googlemail.com with ESMTPSA id w59sm4286174pjj.13.2021.06.11.00.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Jun 2021 00:18:16 -0700 (PDT)
+From:   Yuan Fang <fangyuanseu@gmail.com>
+X-Google-Original-From: Yuan Fang <yuan.fang@verisilicon.com>
+To:     linux-usb@vger.kernel.org
+Cc:     balbi@kernel.org, Yuan Fang <yuan.fang@verisilicon.com>
+Subject: [PATCH] drivers/usb/dwc3: Set PHY ready after soft reset done
+Date:   Fri, 11 Jun 2021 15:18:05 +0800
+Message-Id: <20210611071805.9169-1-yuan.fang@verisilicon.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 142d0b24c1b17139f1aaaacae7542a38aa85640f  usb: typec: mux: Fix copy-paste mistake in typec_mux_match
+It's more safe to set PHY ready after soft reset done
 
-Error/Warning in current branch:
+Let's consider a test case like this:
+I have a usb PHY which don't need SW initial before access
+it, But i have a wrong PHY clock default setting in PHY
+register which means PHY is not ready in fact.
+in dwc3_core_init, dwc3_core_get_phy will return 0 despite
+usb get PHYs with return -ENODEV, and set phys_ready=true
+but at this point, we can not say phys is ready or at least
+it not safe to do that.
+then, go on with dwc3_core_soft_reset,dwc3 reset core and
+PHY, as phy->init is NULL in this case, so, usb_phy_init
+do nothing and go on with a while loop which cost 1000*
+20 ms, and return with -ETIMEDOUT
+check phys_ready is set to TRUE but actually not.
+Move phys_ready after soft reset done is more reasonable
+and don't see side-effect yet.
 
-arm-linux-gnueabi-ld: fsl_udc_core.c:(.text+0x29d4): undefined reference to `fsl_udc_clk_finalize'
-arm-linux-gnueabi-ld: fsl_udc_core.c:(.text+0x2ba8): undefined reference to `fsl_udc_clk_release'
-fsl_udc_core.c:(.text+0x2848): undefined reference to `fsl_udc_clk_init'
-fsl_udc_core.c:(.text+0xe88): undefined reference to `fsl_udc_clk_release'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-`-- arm-defconfig
-    |-- arm-linux-gnueabi-ld:fsl_udc_core.c:(.text):undefined-reference-to-fsl_udc_clk_finalize
-    |-- arm-linux-gnueabi-ld:fsl_udc_core.c:(.text):undefined-reference-to-fsl_udc_clk_release
-    |-- fsl_udc_core.c:(.text):undefined-reference-to-fsl_udc_clk_init
-    `-- fsl_udc_core.c:(.text):undefined-reference-to-fsl_udc_clk_release
-
-elapsed time: 722m
-
-configs tested: 149
-configs skipped: 2
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                         shannon_defconfig
-sh                          rsk7269_defconfig
-arm                       imx_v6_v7_defconfig
-arm                        mini2440_defconfig
-arm                        keystone_defconfig
-sh                          sdk7780_defconfig
-arc                    vdk_hs38_smp_defconfig
-arm                         vf610m4_defconfig
-m68k                           sun3_defconfig
-mips                        nlm_xlp_defconfig
-sh                          rsk7264_defconfig
-ia64                        generic_defconfig
-arm                           viper_defconfig
-powerpc                 mpc836x_mds_defconfig
-arm                       mainstone_defconfig
-arm                           sama5_defconfig
-powerpc                 mpc832x_mds_defconfig
-mips                          rb532_defconfig
-xtensa                          iss_defconfig
-arm                     davinci_all_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                      pxa255-idp_defconfig
-mips                           ip32_defconfig
-powerpc                     tqm8560_defconfig
-ia64                             allmodconfig
-sh                          polaris_defconfig
-arc                                 defconfig
-m68k                          sun3x_defconfig
-arm                      footbridge_defconfig
-arm                   milbeaut_m10v_defconfig
-xtensa                    xip_kc705_defconfig
-sparc                       sparc64_defconfig
-mips                         mpc30x_defconfig
-h8300                            alldefconfig
-sh                           se7721_defconfig
-powerpc                    ge_imp3a_defconfig
-sh                          urquell_defconfig
-arm                          gemini_defconfig
-parisc                           alldefconfig
-mips                            gpr_defconfig
-mips                         db1xxx_defconfig
-sh                               j2_defconfig
-powerpc                          allmodconfig
-powerpc                      pmac32_defconfig
-arc                           tb10x_defconfig
-arm                          lpd270_defconfig
-mips                     loongson2k_defconfig
-arm                      tct_hammer_defconfig
-powerpc64                           defconfig
-m68k                        mvme16x_defconfig
-mips                       bmips_be_defconfig
-arm                            mps2_defconfig
-powerpc                 mpc832x_rdb_defconfig
-sh                          r7780mp_defconfig
-powerpc                      walnut_defconfig
-arc                        nsimosci_defconfig
-x86_64                            allnoconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-i386                 randconfig-a003-20210609
-i386                 randconfig-a006-20210609
-i386                 randconfig-a004-20210609
-i386                 randconfig-a001-20210609
-i386                 randconfig-a002-20210609
-i386                 randconfig-a005-20210609
-i386                 randconfig-a002-20210610
-i386                 randconfig-a006-20210610
-i386                 randconfig-a004-20210610
-i386                 randconfig-a001-20210610
-i386                 randconfig-a005-20210610
-i386                 randconfig-a003-20210610
-x86_64               randconfig-a015-20210610
-x86_64               randconfig-a011-20210610
-x86_64               randconfig-a012-20210610
-x86_64               randconfig-a014-20210610
-x86_64               randconfig-a016-20210610
-x86_64               randconfig-a013-20210610
-i386                 randconfig-a015-20210610
-i386                 randconfig-a013-20210610
-i386                 randconfig-a016-20210610
-i386                 randconfig-a014-20210610
-i386                 randconfig-a012-20210610
-i386                 randconfig-a011-20210610
-i386                 randconfig-a015-20210611
-i386                 randconfig-a013-20210611
-i386                 randconfig-a016-20210611
-i386                 randconfig-a014-20210611
-i386                 randconfig-a012-20210611
-i386                 randconfig-a011-20210611
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a002-20210610
-x86_64               randconfig-a001-20210610
-x86_64               randconfig-a004-20210610
-x86_64               randconfig-a003-20210610
-x86_64               randconfig-a006-20210610
-x86_64               randconfig-a005-20210610
-x86_64               randconfig-a002-20210607
-x86_64               randconfig-a004-20210607
-x86_64               randconfig-a003-20210607
-x86_64               randconfig-a006-20210607
-x86_64               randconfig-a005-20210607
-x86_64               randconfig-a001-20210607
-
+Signed-off-by: Yuan Fang <yuan.fang@verisilicon.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+Hi,
+	please take a look at issue description above and kindly
+	review this CL if any side-effect, many thanks.
+
+B.R
+Yuan Fang
+
+ drivers/usb/dwc3/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index b6e53d8212cd..04b1bbaf694a 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -324,6 +324,7 @@ static int dwc3_core_soft_reset(struct dwc3 *dwc)
+ 	if (DWC3_VER_IS_WITHIN(DWC31, ANY, 180A))
+ 		msleep(50);
+ 
++	dwc->phys_ready = true;
+ 	return 0;
+ }
+ 
+@@ -979,7 +980,6 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		ret = dwc3_core_get_phy(dwc);
+ 		if (ret)
+ 			goto err0a;
+-		dwc->phys_ready = true;
+ 	}
+ 
+ 	ret = dwc3_core_soft_reset(dwc);
+-- 
+2.17.1
+
