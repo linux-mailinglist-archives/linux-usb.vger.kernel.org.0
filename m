@@ -2,120 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FDEA3A4487
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 16:59:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855973A44DB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 17:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231744AbhFKPB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 11:01:26 -0400
-Received: from mail-lj1-f180.google.com ([209.85.208.180]:36366 "EHLO
-        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbhFKPBZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 11:01:25 -0400
-Received: by mail-lj1-f180.google.com with SMTP id 131so10105025ljj.3;
-        Fri, 11 Jun 2021 07:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=w+w3f5U3pFKKo+MRudY4zkE/DD31vq/T708Ozk8AEO8=;
-        b=k/UsRWbH7KtsSomlx4S1xzQjieljZPFppy1YfMfuJEfCMf6uTSdYc6IPFGzwnF/p83
-         5nxnKXmLT6qlpSGYBBosxKRLFXR5XmJl9J+IyFOK8nuqVq03MP9EMsVU9KKgq6hlCUhk
-         al5Llac1ghQo5T12pjlzc8Rfid2TVJqCyCWJSS8DENSCC2mZxStuZfgrA1KKSIRiyZEU
-         eb/2txeVpnGTYhdMppYEGrXA/ha0BXY9hV78wai016ZjEBdUtmiEdPXJT3QWxDwDF38h
-         NMQOIdAMf3XXPIkPADqsRiI/YjbrjWjE2xlu+GaSPnDgs2yG+WjPqBNI3rxB1CjNhmbs
-         zPUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=w+w3f5U3pFKKo+MRudY4zkE/DD31vq/T708Ozk8AEO8=;
-        b=OgH13X7KDvL+SejkvtkLJzlNo+q8d1kDUTeGLd2at7o8PcpZiXaCevC0QUmVHV4+AQ
-         kyhwaX8h+7aJ4yk5k/QmEUxLp4n7v1rWBfrHzAyzCuitjhm6Wl0sk7QsO3tboVRCij/q
-         QIbNIWhqvMSWaOl6VH2k4QAecZyyP68yJiVSOuG5A/2FlN2qefk3C8KJlJ2tu/tFp7pW
-         effuwvD88B35qw9LNwiBqZ4hfaL3/Wkz4/LNXuoNWbUDzuQqIkc0XRnN/6xDPpKuJUJi
-         MKjmUQwLq9jfA7S5dLkxAPTDsE8qQynovZeSBG/+CwNd13XjsCou/LcGkxay0mg93wLs
-         +pEg==
-X-Gm-Message-State: AOAM533fiddLgy0J2GnkqyBpczI9ulVSUOPZASUpSDGv0y1iyPP71SBE
-        /Acu8o63x/S5ENJCdAFpbKyNwTxD0c7HsvWEjqM=
-X-Google-Smtp-Source: ABdhPJytclHzrB/R0k5jSua3KyutaoJZxty30z6FNamSFgDTpEgsQqFDW8uoFbTmLRobyzLJnZIZKhtK+ahxzyzatAg=
-X-Received: by 2002:a2e:a4a4:: with SMTP id g4mr3382766ljm.376.1623423490556;
- Fri, 11 Jun 2021 07:58:10 -0700 (PDT)
+        id S231605AbhFKP0W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 11:26:22 -0400
+Received: from mx0a-002c1b01.pphosted.com ([148.163.151.68]:38374 "EHLO
+        mx0a-002c1b01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229705AbhFKP0V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 11:26:21 -0400
+Received: from pps.filterd (m0127840.ppops.net [127.0.0.1])
+        by mx0a-002c1b01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15BF93ko024796;
+        Fri, 11 Jun 2021 08:24:17 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nutanix.com; h=from : to : cc :
+ subject : date : message-id : content-type : mime-version;
+ s=proofpoint20171006; bh=f3yzJkJ3b8DcesJNGxv58s107zaJUGuIZYhDN31lYfo=;
+ b=fC7vsqxPr7FcUGTCROlOS8xP8fKrGXPQrPHHKrAG3kb1pVHsKCjKyHcwz0ZAyiub16W6
+ zXMJFVMWioRxUzgJUrJkGkXZVIhXVN8IIT8AuiYUDboHRUUXPCZOQdpwFcHhYAPBjfFv
+ hxYIm6wDrVebnOIP9GSnM0zWmfMdihUE/YotK2nsFA5/FayZLA9YgX0RhfdO6xDruNO+
+ SEljVG3Yy+95/alT1vnppTTqCfXJ0CVWTsIaz/fQF8RwHZbgslBs1m1WJ+tjLJCPrWIP
+ SXQ8d8Bfnl/igcSiTYmjNkv95SjoLQ1HYWXczqtDEjkHEl4VXG9LugSZEiV0dDvYVFC0 Mg== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by mx0a-002c1b01.pphosted.com with ESMTP id 393jd9k00k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 11 Jun 2021 08:24:16 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bcJgrlmPiXLbDs2R2+WaIcgwxILZUr3nv4Xmv1+S/ykLeZPVQimaTuLb6jEB0WEVSam3tauj3lDCriBPePAa6ehZGx8dW6XpAXd90Zz3ThGwAyeIl8wojpYcEqu2CS9cLOi8/0nw1NtyEg5SjuDEtmScjGETdWeFIuXqi9IAioXvmduiDoNP9FxshrxyTbkXwMlhZVOgvXkRioQOYB/psad2A0D1vioVoBVMQkepvhgjHG1+qnWH29iUVqkRRlI+WBoHCh9d1s+w1psMtH6dherDO6qH3+kRHEqTcSJX/CWqp882E4qQ1nF6BCv7tYlyvI7onvXymQyJVFIQ96m/pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=f3yzJkJ3b8DcesJNGxv58s107zaJUGuIZYhDN31lYfo=;
+ b=Killj3e37TeaJ8+Wdc6TDizfo8mKHdAY/x2CCC2TQHbLc1jsvat94t03z8ZokhOIDUZOFFzSTtPGZe6BfJIAKuXWsufKc7zsKdL2cbZG/eXcM/Qjo3KW1BImwvZ9KeD+E762WaqbEu/Svf4VRNOAEtPcWxUZFf6OyZpfFyfry4cxOITunjyOjL/D9M6Ssl/vwc7g6+zVpXTfvzw1hriYjYLr35/JkjLPL0PFLpJ5mcBX5ABOqyBju8fwczO6ENssjDXKb6/xwv1ZQXTHppZKshu9y8d4MhiNsQ+L4z+opdCxv1UGSnnmfZKF5dK3+EFsdvEqd82/RAbdLBrFHqQVKQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nutanix.com; dmarc=pass action=none header.from=nutanix.com;
+ dkim=pass header.d=nutanix.com; arc=none
+Authentication-Results: suse.com; dkim=none (message not signed)
+ header.d=none;suse.com; dmarc=none action=none header.from=nutanix.com;
+Received: from CH0PR02MB7964.namprd02.prod.outlook.com (2603:10b6:610:105::16)
+ by CH2PR02MB7016.namprd02.prod.outlook.com (2603:10b6:610:81::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4195.24; Fri, 11 Jun
+ 2021 15:24:14 +0000
+Received: from CH0PR02MB7964.namprd02.prod.outlook.com
+ ([fe80::f833:4420:8225:5d12]) by CH0PR02MB7964.namprd02.prod.outlook.com
+ ([fe80::f833:4420:8225:5d12%7]) with mapi id 15.20.4219.023; Fri, 11 Jun 2021
+ 15:24:14 +0000
+From:   Jonathan Davies <jonathan.davies@nutanix.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Jonathan Davies <jonathan.davies@nutanix.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usbnet: allow overriding of default USB interface naming
+Date:   Fri, 11 Jun 2021 15:23:39 +0000
+Message-Id: <20210611152339.182710-1-jonathan.davies@nutanix.com>
+X-Mailer: git-send-email 2.9.3
+Content-Type: text/plain
+X-Originating-IP: [192.146.154.247]
+X-ClientProxiedBy: SJ0PR13CA0089.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c4::34) To CH0PR02MB7964.namprd02.prod.outlook.com
+ (2603:10b6:610:105::16)
 MIME-Version: 1.0
-References: <20210611014755.124483-1-breno.lima@nxp.com> <VI1PR04MB59358BDBE0A6FA8A8966C66789349@VI1PR04MB5935.eurprd04.prod.outlook.com>
-In-Reply-To: <VI1PR04MB59358BDBE0A6FA8A8966C66789349@VI1PR04MB5935.eurprd04.prod.outlook.com>
-From:   Breno Matheus Lima <brenomatheus@gmail.com>
-Date:   Fri, 11 Jun 2021 10:57:59 -0400
-Message-ID: <CAC4tdFUBGUiX4ydq4VeJcEXqmx6f2fvu4cq1ETw5mtueADz6yw@mail.gmail.com>
-Subject: Re: [PATCH] mx8mm: usb: chipidea: Fix Battery Charger 1.2 CDP detection
-To:     Jun Li <jun.li@nxp.com>
-Cc:     Breno Matheus Lima <breno.lima@nxp.com>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+Received: from nutanix.com (192.146.154.247) by SJ0PR13CA0089.namprd13.prod.outlook.com (2603:10b6:a03:2c4::34) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.9 via Frontend Transport; Fri, 11 Jun 2021 15:24:13 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1fcbcfd5-00e5-427f-7603-08d92cecf8a4
+X-MS-TrafficTypeDiagnostic: CH2PR02MB7016:
+X-MS-Exchange-Transport-Forked: True
+X-Microsoft-Antispam-PRVS: <CH2PR02MB7016CE94C9E03F8ADAFEEDA1CB349@CH2PR02MB7016.namprd02.prod.outlook.com>
+x-proofpoint-crosstenant: true
+X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sEmy8e7tpMCLH09W7ofL5kbQ5GK6O6drt72UCefNCIN7/AA/u7IbMSm9uuh/PK+lyftoC4J187H3SIG+15C5IRUoL7oB4EkuLySEYVjwpTHxpB8fIgLm/6DCqNtXBa98LRSNniSnU4HtDaxfIVdzRinAWIF1lK+W6+SPo1eKfRRhiy141RS7LcqxtyMERtMjuAGe/3Qvn4JfC+l1loAyXC4jNy6COOjqsCGDB5pyF8dbxOH4sv2r+LXGSgmDCaMUvK/javPp5nDJaEBsW8xm2zIuWhQEYgKy5qHA3HDplGitwo3I8oDgc8g5qqJYdaMqQrXV6gmN+6RXMUwl7gaW4/OyO+kfhrXyC2WdRgZVsrN2+AKl6JtQOiu/vKrrenFsHqdGRat1CH94qAb8WGfAFX82WSSD2VhpvkBJzoP6zrIb1/PaJBhUgkaj6YzFQyhuOcZKgT9pkkLsDqXUz5Xbd/PGUw7T9r3JNCPjBB42XS6mPnO/SBJrIA3d+gfVUASf6dRWJ7X13Gsp1xdOunOqaAKQY6PCyMuVGUm7S46eQuh4ok/RzJA6qouwViIfQabceRdQMCpYa4Ol6yjo2wNh9tkmfi6BObNgycCtHB3Ilr7tOMqdEyb6j/QYMehSyeu2Qryo5cHY5ZUctVGSa3Pb/kHnVuKSsQ/xJszAzVBR69k=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR02MB7964.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(136003)(376002)(39860400002)(396003)(346002)(52116002)(7696005)(44832011)(5660300002)(4326008)(2616005)(66946007)(16526019)(2906002)(66556008)(316002)(6916009)(186003)(55016002)(956004)(54906003)(1076003)(8676002)(6666004)(36756003)(66476007)(478600001)(8886007)(38100700002)(26005)(8936002)(38350700002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?lnIXlw6ZAEB32ZQkLnx8+mJkCrpTINOFjyp373UDNgfLlPgBinWsJb3t6UIo?=
+ =?us-ascii?Q?oI/FirP4iXdEc2i+s+02AT9Pg8v2zOkvpSQEyWaEMN0wQgX8Zjs+cpGIZhtS?=
+ =?us-ascii?Q?oi53lP9auynhtjGrvnNcEcYdRCCDIo3ZRFtUML1XpHT525bcYgzLKlh+SXHt?=
+ =?us-ascii?Q?GuuL5wXRkkc1KisHAeVsqd9KVXrOAr79eMLoO408Odzy2Ivxn/wwSNjb9a0V?=
+ =?us-ascii?Q?GXsAbBvsCJ572Osj+YQtYJoysx+6ZeqK4rUSY5bmv4a23c66ikfrjnAPpcGZ?=
+ =?us-ascii?Q?bN5Q1w3Krj9Ew4cb/Ykus4CkQHV7304h8m9cklP9czYkJjJWg1/MSlGiVCyl?=
+ =?us-ascii?Q?OoQhljqAqcvO2JsgdBtW+F0Pm1gwCazRUAQ+NdH+LmTynpyVZvKqR/mC47Ok?=
+ =?us-ascii?Q?ECJu6O9OcU+k4ryNLofSHW75oPj/hvD+655j3OQf+L4YNTIJefojvFTTgahw?=
+ =?us-ascii?Q?Q54C7rN6h/4bN2g8d3s+pCzspSCXQUa9S0UZKQBDUW5MpO9JewbhrRfbcn5P?=
+ =?us-ascii?Q?klZamRA28O6brlk8F6BsFc7zclLxAn7z0FxQaVYXvJoQfgRI+Gk99Ejyvyu9?=
+ =?us-ascii?Q?OATb+6OaphEeM+zmA9A6TxlUnxtkwCaFvcio/M62U/UVtUga81m061UC9ncb?=
+ =?us-ascii?Q?xI6IPvC9XmI16RycQhSBEhOE0lX9Mo9JqO4SY7VwCs6aDLiwg0hvL54ua6lw?=
+ =?us-ascii?Q?z09YOMqykO4UXeEOyoU5SgzyWxmRa/MOp1KLSSb7J6166te6OwYOwjzir/VA?=
+ =?us-ascii?Q?MdKCOZbkj+urov8QPmqmVScg9szvjUHDM7DY2fqo+3FecreP034Rel2HG/Yq?=
+ =?us-ascii?Q?1zeiqr6JDzO1ziclsmDZzPaG1Sm4QN3qMMmquFOxR7C598cAmcqbkkfpkGXy?=
+ =?us-ascii?Q?+8jQOgJnT7ENNDJ5sDstoWfP3Dft4DFDZ8XHPReRQ3LQSSdLaf7T7WbSvVKa?=
+ =?us-ascii?Q?dBV9sKy4j6XIIBA4ZBae7HePa45b9F2l1gtct1Ibz/dyornvMfmtNMqcY2re?=
+ =?us-ascii?Q?jM/56Tk5C+QeId6WJdeXBy9lpzq/KXjGgl0HrC8gKHHN4JFHeobG1sXF4GHb?=
+ =?us-ascii?Q?cbG3bEtiA+w4qED6ym8VPO1IGI3PIRRGjA7F5KRxo+sPGKggt+d7fPiXMyq0?=
+ =?us-ascii?Q?Nf38Bknj3cxOJErNq06lN7r5uv56ePbYLchiGISs3iCgV1f+fZl4Njmt+tYl?=
+ =?us-ascii?Q?hhjnoQMgUYAjHLCUymb6IMtPvs9uIf8m2uIDo1W1vhrxdAh53d5r/GiWKtUn?=
+ =?us-ascii?Q?nehWQFDsgzPlCB2QfZXaf7Uq2XejCmmgE3TApgHwMgGrTDjJdHIbnfg8gFaD?=
+ =?us-ascii?Q?ZRk2qJ6EObk5suGRrsa3yRcV?=
+X-OriginatorOrg: nutanix.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fcbcfd5-00e5-427f-7603-08d92cecf8a4
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR02MB7964.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Jun 2021 15:24:14.6172
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bb047546-786f-4de1-bd75-24e5b6f79043
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2Lu+SWUdNXXlerje2oHW5OoustLox31eCkZ9ZYHflSLf1//c06vuecGooRx5oLm36aEWaL+L0WQBzlCUZGeP0JQLzzOKPvGJQYg5gIfYbC0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR02MB7016
+X-Proofpoint-ORIG-GUID: -I_K0HvNz_SHJRUxPGIzde34QTNCribt
+X-Proofpoint-GUID: -I_K0HvNz_SHJRUxPGIzde34QTNCribt
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.761
+ definitions=2021-06-11_05:2021-06-11,2021-06-11 signatures=0
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jun,
+When the predictable device naming scheme for NICs is not in use, it is
+common for there to be udev rules to rename interfaces to names with
+prefix "eth".
 
-Em sex., 11 de jun. de 2021 =C3=A0s 02:24, Jun Li <jun.li@nxp.com> escreveu=
-:
->
->
-> > -----Original Message-----
-> > From: Breno Matheus Lima <breno.lima@nxp.com>
-> > Sent: Friday, June 11, 2021 9:48 AM
-> > To: peter.chen@kernel.org
-> > Cc: gregkh@linuxfoundation.org; shawnguo@kernel.org;
-> > s.hauer@pengutronix.de; kernel@pengutronix.de; festevam@gmail.com;
-> > dl-linux-imx <linux-imx@nxp.com>; linux-usb@vger.kernel.org;
-> > linux-arm-kernel@lists.infradead.org; linux-kernel@vger.kernel.org;
-> > brenomatheus@gmail.com; Jun Li <jun.li@nxp.com>; Breno Matheus Lima
-> > <breno.lima@nxp.com>
-> > Subject: [PATCH] mx8mm: usb: chipidea: Fix Battery Charger 1.2 CDP dete=
-ction
-> >
-> > i.MX8MM cannot detect certain CDP USB HUBs. usbmisc_imx.c driver is not
-> > following CDP timing requirements defined by USB BC 1.2 specification a=
-nd
-> > section 3.2.4 Detection Timing CDP.
-> >
-> > During Primary Detection the i.MX device should turn on VDP_SRC and IDM=
-_SINK
-> > for a minimum of 40ms (TVDPSRC_ON). After a time of TVDPSRC_ON, the PD =
-is
-> > allowed to check the status of the D- line. Current implementation is w=
-aiting
-> > between 1ms and 2ms, and certain BC 1.2 complaint USB HUBs cannot be de=
-tected.
-> > Increase delay to 40ms allowing enough time for primary detection.
-> >
-> > During secondary detection the PD is required to disable VDP_SRC and ID=
-M_SNK,
-> > and enable VDM_SRC and IDP_SINK for at least 40ms (TVDMSRC_ON).
-> >
-> > Current implementation is not disabling VDP_SRC and IDM_SNK, introduce
-> > disable sequence in imx7d_charger_secondary_detection() function.
-> >
-> > VDM_SRC and IDP_SINK should be enabled for at least 40ms (TVDMSRC_ON).
-> > Increase delay allowing enough time for detection.
-> >
->
-> Fixes: 746f316b753a ("usb: chipidea: introduce imx7d USB charger detectio=
-n")
->
+Since the timing at which USB NICs are discovered is unpredictable, it
+can be interfere with udev's attempt to rename another interface to
+"eth0" if a freshly discovered USB interface is initially given the name
+"eth0".
 
-Thanks for pointing this out, I have just sent another version.
+Hence it is useful to be able to override the default name. A new usbnet
+module parameter allows this to be configured.
 
-Best regards,
-Breno Lima
+Signed-off-by: Jonathan Davies <jonathan.davies@nutanix.com>
+Suggested-by: Prashanth Sreenivasa <prashanth.sreenivasa@nutanix.com>
+---
+ drivers/net/usb/usbnet.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index ecf6284..55f6230 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -72,6 +72,13 @@ static int msg_level = -1;
+ module_param (msg_level, int, 0);
+ MODULE_PARM_DESC (msg_level, "Override default message level");
+ 
++#define DEFAULT_ETH_DEV_NAME "eth%d"
++
++static char *eth_device_name = DEFAULT_ETH_DEV_NAME;
++module_param(eth_device_name, charp, 0644);
++MODULE_PARM_DESC(eth_device_name, "Device name pattern for Ethernet devices"
++				  " (default: \"" DEFAULT_ETH_DEV_NAME "\")");
++
+ /*-------------------------------------------------------------------------*/
+ 
+ /* handles CDC Ethernet and many other network "bulk data" interfaces */
+@@ -1730,12 +1737,12 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
+ 			goto out1;
+ 
+ 		// heuristic:  "usb%d" for links we know are two-host,
+-		// else "eth%d" when there's reasonable doubt.  userspace
+-		// can rename the link if it knows better.
++		// else eth_device_name when there's reasonable doubt.
++		// userspace can rename the link if it knows better.
+ 		if ((dev->driver_info->flags & FLAG_ETHER) != 0 &&
+ 		    ((dev->driver_info->flags & FLAG_POINTTOPOINT) == 0 ||
+ 		     (net->dev_addr [0] & 0x02) == 0))
+-			strcpy (net->name, "eth%d");
++			strscpy(net->name, eth_device_name, sizeof(net->name));
+ 		/* WLAN devices should always be named "wlan%d" */
+ 		if ((dev->driver_info->flags & FLAG_WLAN) != 0)
+ 			strcpy(net->name, "wlan%d");
+-- 
+2.9.3
+
