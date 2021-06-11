@@ -2,345 +2,278 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6537A3A42D9
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 15:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B283A42EB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 15:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbhFKNQM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 09:16:12 -0400
-Received: from mga05.intel.com ([192.55.52.43]:54119 "EHLO mga05.intel.com"
+        id S231458AbhFKNTo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 09:19:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231597AbhFKNQJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Jun 2021 09:16:09 -0400
-IronPort-SDR: F2ovnmd6zKl8KNIkLMAQ5BMir3fzK+SSfiMxJe/gpXDLhl3DJz5io//k57+kA2g3DGMmybxNLJ
- 2ODNwNclMhfQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10011"; a="291152567"
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="291152567"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jun 2021 06:14:10 -0700
-IronPort-SDR: GUNpHEMiRQTzXqKG04eSN0ahY5vmERssW8Ah9fV9lzW0ejpv+Vftz275jlXFquDLBkk/1+SI3j
- h221C1Y3jvqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,265,1616482800"; 
-   d="scan'208";a="553402864"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Jun 2021 06:14:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 11 Jun 2021 16:14:04 +0300
-Date:   Fri, 11 Jun 2021 16:14:04 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>,
-        Greg KH <gregkh@linuxfoundation.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com,
-        John Youn <John.Youn@synopsys.com>
-Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
-Message-ID: <YMNhnCBq2lb7oUZK@kuha.fi.intel.com>
-References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
- <YLoUiO8tpRpmvcyU@kroah.com>
- <87k0n9btnb.fsf@kernel.org>
- <YLo6W5sKaXvy51eW@kroah.com>
- <c2daab34-1b25-7ee3-e203-a414c1e486d5@codeaurora.org>
- <874ke62i0v.fsf@kernel.org>
- <e5f231ca-6807-bcea-29c2-ab3926057310@codeaurora.org>
- <8735to29tt.fsf@kernel.org>
- <f1d57fca-3ac1-d8c8-bd23-cf525b366573@codeaurora.org>
- <87tum4zhc9.fsf@kernel.org>
+        id S229633AbhFKNTn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Jun 2021 09:19:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D44D5613CF;
+        Fri, 11 Jun 2021 13:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623417466;
+        bh=jNzQ0TG0h6XTvMoCnRJucQt9h+fq2NEVGqRXeok5m9Q=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=grXs1Z3J7VJmXFkGze9KeySIlmphYvM4WTaWDGdtuR+PseTgG2TF5CgSP6353recZ
+         3Y3OFE97Mc7aoYwV7/BIwz1FxJniLxjMDf5E0KBBssPU3GjQajQTEfKBCeJBmUGCX6
+         UGZobUBPq80M53XQDwnIr/3V0LHJ32xTIb2Auyyjhk96AICq396TqtR7AGVYm7EFlK
+         LHYH24VmzqYiGQQ3Sk0t9ufP0mBu0F+q43tZRNRdCQJup7JnmDDzpqubDHjXf9WxVa
+         CL+6gPNgvS04pxDIk3VJSHGNim4nA3T1XyxWCBW/pDyTKwE+6HHbFGfKRhO13mdWHv
+         Kthc3mRBNJ09Q==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>, linux-usb@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v3] usb: dwc3: support 64 bit DMA in platform driver
+In-Reply-To: <2cd8231e-c246-4255-a08e-c88ae9b62ed2@www.fastmail.com>
+References: <20210607061751.89752-1-sven@svenpeter.dev>
+ <871r9a2htf.fsf@kernel.org>
+ <2cd8231e-c246-4255-a08e-c88ae9b62ed2@www.fastmail.com>
+Date:   Fri, 11 Jun 2021 16:17:38 +0300
+Message-ID: <87o8cczgjx.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87tum4zhc9.fsf@kernel.org>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 04:00:38PM +0300, Felipe Balbi wrote:
-> 
-> Hi,
-> 
-> Wesley Cheng <wcheng@codeaurora.org> writes:
-> >>>>>>> to be honest, I don't think these should go in (apart from the build
-> >>>>>>> failure) because it's likely to break instantiations of the core with
-> >>>>>>> differing FIFO sizes. Some instantiations even have some endpoints with
-> >>>>>>> dedicated functionality that requires the default FIFO size configured
-> >>>>>>> during coreConsultant instantiation. I know of at OMAP5 and some Intel
-> >>>>>>> implementations which have dedicated endpoints for processor tracing.
-> >>>>>>>
-> >>>>>>> With OMAP5, these endpoints are configured at the top of the available
-> >>>>>>> endpoints, which means that if a gadget driver gets loaded and takes
-> >>>>>>> over most of the FIFO space because of this resizing, processor tracing
-> >>>>>>> will have a hard time running. That being said, processor tracing isn't
-> >>>>>>> supported in upstream at this moment.
-> >>>>>>>
-> >>>>>
-> >>>>> I agree that the application of this logic may differ between vendors,
-> >>>>> hence why I wanted to keep this controllable by the DT property, so that
-> >>>>> for those which do not support this use case can leave it disabled.  The
-> >>>>> logic is there to ensure that for a given USB configuration, for each EP
-> >>>>> it would have at least 1 TX FIFO.  For USB configurations which don't
-> >>>>> utilize all available IN EPs, it would allow re-allocation of internal
-> >>>>> memory to EPs which will actually be in use.
-> >>>>
-> >>>> The feature ends up being all-or-nothing, then :-) It sounds like we can
-> >>>> be a little nicer in this regard.
-> >>>>
-> >>>
-> >>> Don't get me wrong, I think once those features become available
-> >>> upstream, we can improve the logic.  From what I remember when looking
-> >> 
-> >> sure, I support that. But I want to make sure the first cut isn't likely
-> >> to break things left and right :)
-> >> 
-> >> Hence, let's at least get more testing.
-> >> 
-> >
-> > Sure, I'd hope that the other users of DWC3 will also see some pretty
-> > big improvements on the TX path with this.
-> 
-> fingers crossed
-> 
-> >>> at Andy Shevchenko's Github, the Intel tracer downstream changes were
-> >>> just to remove physical EP1 and 2 from the DWC3 endpoint list.  If that
-> >> 
-> >> right, that's the reason why we introduced the endpoint feature
-> >> flags. The end goal was that the UDC would be able to have custom
-> >> feature flags paired with ->validate_endpoint() or whatever before
-> >> allowing it to be enabled. Then the UDC driver could tell UDC core to
-> >> skip that endpoint on that particular platform without interefering with
-> >> everything else.
-> >> 
-> >> Of course, we still need to figure out a way to abstract the different
-> >> dwc3 instantiations.
-> >> 
-> >>> was the change which ended up upstream for the Intel tracer then we
-> >>> could improve the logic to avoid re-sizing those particular EPs.
-> >> 
-> >> The problem then, just as I mentioned in the previous paragraph, will be
-> >> coming up with a solution that's elegant and works for all different
-> >> instantiations of dwc3 (or musb, cdns3, etc).
-> >> 
-> >
-> > Well, at least for the TX FIFO resizing logic, we'd only be needing to
-> > focus on the DWC3 implementation.
-> >
-> > You bring up another good topic that I'll eventually needing to be
-> > taking a look at, which is a nice way we can handle vendor specific
-> > endpoints and how they can co-exist with other "normal" endpoints.  We
-> > have a few special HW eps as well, which we try to maintain separately
-> > in our DWC3 vendor driver, but it isn't the most convenient, or most
-> > pretty method :).
-> 
-> Awesome, as mentioned, the endpoint feature flags were added exactly to
-> allow for these vendor-specific features :-)
-> 
-> I'm more than happy to help testing now that I finally got our SM8150
-> Surface Duo device tree accepted by Bjorn ;-)
-> 
-> >>> However, I'm not sure how the changes would look like in the end, so I
-> >>> would like to wait later down the line to include that :).
-> >> 
-> >> Fair enough, I agree. Can we get some more testing of $subject, though?
-> >> Did you test $subject with upstream too? Which gadget drivers did you
-> >> use? How did you test
-> >> 
-> >
-> > The results that I included in the cover page was tested with the pure
-> > upstream kernel on our device.  Below was using the ConfigFS gadget w/ a
-> > mass storage only composition.
-> >
-> > Test Parameters:
-> >  - Platform: Qualcomm SM8150
-> >  - bMaxBurst = 6
-> >  - USB req size = 256kB
-> >  - Num of USB reqs = 16
-> 
-> do you mind testing with the regular request size (16KiB) and 250
-> requests? I think we can even do 15 bursts in that case.
-> 
-> >  - USB Speed = Super-Speed
-> >  - Function Driver: Mass Storage (w/ ramdisk)
-> >  - Test Application: CrystalDiskMark
-> >
-> > Results:
-> >
-> > TXFIFO Depth = 3 max packets
-> >
-> > Test Case | Data Size | AVG tput (in MB/s)
-> > -------------------------------------------
-> > Sequential|1 GB x     |
-> > Read      |9 loops    | 193.60
-> >           |           | 195.86
-> >           |           | 184.77
-> >           |           | 193.60
-> > -------------------------------------------
-> >
-> > TXFIFO Depth = 6 max packets
-> >
-> > Test Case | Data Size | AVG tput (in MB/s)
-> > -------------------------------------------
-> > Sequential|1 GB x     |
-> > Read      |9 loops    | 287.35
-> > 	    |           | 304.94
-> >           |           | 289.64
-> >           |           | 293.61
-> 
-> I remember getting close to 400MiB/sec with Intel platforms without
-> resizing FIFOs and I'm sure the FIFO size was set to 2x1024, though my
-> memory could be failing.
-> 
-> Then again, I never ran with CrystalDiskMark, I was using my own tool
-> (it's somewhere in github. If you care, I can look up the URL).
-> 
-> > We also have internal numbers which have shown similar improvements as
-> > well.  Those are over networking/tethering interfaces, so testing IPERF
-> > loopback over TCP/UDP.
-> 
-> loopback iperf? That would skip the wire, no?
-> 
-> >>> size of 2 and TX threshold of 1, this would really be not beneficial to
-> >>> us, because we can only change the TX threshold to 2 at max, and at
-> >>> least in my observations, once we have to go out to system memory to
-> >>> fetch the next data packet, that latency takes enough time for the
-> >>> controller to end the current burst.
-> >> 
-> >> What I noticed with g_mass_storage is that we can amortize the cost of
-> >> fetching data from memory, with a deeper request queue. Whenever I
-> >> test(ed) g_mass_storage, I was doing so with 250 requests. And that was
-> >> enough to give me very good performance. Never had to poke at TX FIFO
-> >> resizing. Did you try something like this too?
-> >> 
-> >> I feel that allocating more requests is a far simpler and more generic
-> >> method that changing FIFO sizes :)
-> >> 
-> >
-> > I wish I had a USB bus trace handy to show you, which would make it very
-> > clear how the USB bus is currently utilized with TXFIFO size 2 vs 6.  So
-> > by increasing the number of USB requests, that will help if there was a
-> > bottleneck at the SW level where the application/function driver
-> > utilizing the DWC3 was submitting data much faster than the HW was
-> > processing them.
-> >
-> > So yes, this method of increasing the # of USB reqs will definitely help
-> > with situations such as HSUSB or in SSUSB when EP bursting isn't used.
-> > The TXFIFO resize comes into play for SSUSB, which utilizes endpoint
-> > bursting.
-> 
-> Hmm, that's not what I remember. Perhaps the TRB cache size plays a role
-> here too. I have clear memories of testing this very scenario of
-> bursting (using g_mass_storage at the time) because I was curious about
-> it. Back then, my tests showed no difference in behavior.
-> 
-> It could be nice if Heikki could test Intel parts with and without your
-> changes on g_mass_storage with 250 requests.
-
-Andy, you have a system at hand that has the DWC3 block enabled,
-right? Can you help out here?
-
-thanks,
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-> > Now with endpoint bursting, if the function notifies the host that
-> > bursting is supported, when the host sends the ACK for the Data Packet,
-> > it should have a NumP value equal to the bMaxBurst reported in the EP
-> 
-> Yes and no. Looking back at the history, we used to configure NUMP based
-> on bMaxBurst, but it was changed later in commit
-> 4e99472bc10bda9906526d725ff6d5f27b4ddca1 by yours truly because of a
-> problem reported by John Youn.
-> 
-> And now we've come full circle. Because even if I believe more requests
-> are enough for bursting, NUMP is limited by the RxFIFO size. This ends
-> up supporting your claim that we need RxFIFO resizing if we want to
-> squeeze more throughput out of the controller.
-> 
-> However, note that this is about RxFIFO size, not TxFIFO size. In fact,
-> looking at Table 8-13 of USB 3.1 r1.0, we read the following about NumP
-> (emphasis is mine):
-> 
-> 	"Number of Packets (NumP). This field is used to indicate the
-> 	number of Data Packet buffers that the **receiver** can
-> 	accept. The value in this field shall be less than or equal to
-> 	the maximum burst size supported by the endpoint as determined
-> 	by the value in the bMaxBurst field in the Endpoint Companion
-> 	Descriptor (refer to Section 9.6.7)."
-> 
-> So, NumP is for the receiver, not the transmitter. Could you clarify
-> what you mean here?
-> 
-> /me keeps reading
-> 
-> Hmm, table 8-15 tries to clarify:
-> 
-> 	"Number of Packets (NumP).
-> 
-> 	For an OUT endpoint, refer to Table 8-13 for the description of
-> 	this field.
-> 
-> 	For an IN endpoint this field is set by the endpoint to the
-> 	number of packets it can transmit when the host resumes
-> 	transactions to it. This field shall not have a value greater
-> 	than the maximum burst size supported by the endpoint as
-> 	indicated by the value in the bMaxBurst field in the Endpoint
-> 	Companion Descriptor. Note that the value reported in this field
-> 	may be treated by the host as informative only."
-> 
-> However, if I remember correctly (please verify dwc3 databook), NUMP in
-> DCFG was only for receive buffers. Thin, John, how does dwc3 compute
-> NumP for TX/IN endpoints? Is that computed as a function of DCFG.NUMP or
-> TxFIFO size?
-> 
-> > desc.  If we have a TXFIFO size of 2, then normally what I have seen is
-> > that after 2 data packets, the device issues a NRDY.  So then we'd need
-> > to send an ERDY once data is available within the FIFO, and the same
-> > sequence happens until the USB request is complete.  With this constant
-> > NRDY/ERDY handshake going on, you actually see that the bus is under
-> > utilized.  When we increase an EP's FIFO size, then you'll see constant
-> > bursts for a request, until the request is done, or if the host runs out
-> > of RXFIFO. (ie no interruption [on the USB protocol level] during USB
-> > request data transfer)
-> 
-> Unfortunately I don't have access to a USB sniffer anymore :-(
-> 
-> >>>>>> Good points.
-> >>>>>>
-> >>>>>> Wesley, what kind of testing have you done on this on different devices?
-> >>>>>>
-> >>>>>
-> >>>>> As mentioned above, these changes are currently present on end user
-> >>>>> devices for the past few years, so its been through a lot of testing :).
-> >>>>
-> >>>> all with the same gadget driver. Also, who uses USB on android devices
-> >>>> these days? Most of the data transfer goes via WiFi or Bluetooth, anyway
-> >>>> :-)
-> >>>>
-> >>>> I guess only developers are using USB during development to flash dev
-> >>>> images heh.
-> >>>>
-> >>>
-> >>> I used to be a customer facing engineer, so honestly I did see some
-> >>> really interesting and crazy designs.  Again, we do have non-Android
-> >>> products that use the same code, and it has been working in there for a
-> >>> few years as well.  The TXFIFO sizing really has helped with multimedia
-> >>> use cases, which use isoc endpoints, since esp. in those lower end CPU
-> >>> chips where latencies across the system are much larger, and a missed
-> >>> ISOC interval leads to a pop in your ear.
-> >> 
-> >> This is good background information. Thanks for bringing this
-> >> up. Admitedly, we still have ISOC issues with dwc3. I'm interested in
-> >> knowing if a deeper request queue would also help here.
-> >> 
-> >> Remember dwc3 can accomodate 255 requests + link for each endpoint. If
-> >> our gadget driver uses a low number of requests, we're never really
-> >> using the TRB ring in our benefit.
-> >> 
-> >
-> > We're actually using both a deeper USB request queue + TX fifo resizing. :).
-> 
-> okay, great. Let's see what John and/or Thinh respond WRT dwc3 TX Burst
-> behavior.
+Hi,
 
--- 
-heikki
+"Sven Peter" <sven@svenpeter.dev> writes:
+> On Thu, Jun 10, 2021, at 11:24, Felipe Balbi wrote:
+>> Sven Peter <sven@svenpeter.dev> writes:
+>> > Currently, the dwc3 platform driver does not explicitly ask for
+>> > a DMA mask. This makes it fall back to the default 32-bit mask which
+>> > breaks the driver on systems that only have RAM starting above the
+>> > first 4G like the Apple M1 SoC.
+>> >
+>> > Fix this by calling dma_set_mask_and_coherent with a 64bit mask.
+>> >
+>> > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>>=20
+>> Acked-by: Felipe Balbi <balbi@kernel.org>
+>
+> Cheers!
+>
+>>=20
+>> > ---
+>> >
+>> > Third time's a charm I hope - this time much simpler :)
+>> >
+>> > I still think this change should be fairly low risk.
+>> >
+>> > Unfortunately I only have the Apple M1 to test this on but here
+>>=20
+>> wait a minute. The M1 includes a dwc3? That's awesome. Mind sharing a
+>> regdump? Should be in debugfs.
+>
+> Two of them, actually :-)
+
+Sweet! Now we have a mobile platform that can test dwc3 role switch in
+isolation :-p Just plug one dwc3 to the other lol
+
+> One for each of the USB C ports together with an unknown PHY and some wei=
+rd
+
+I'll bet the PHY is a generic Synopsys PHY. There's no SW control for
+it.
+
+> quirks (neither the dwc3 gadget mode nor the xhci hardware seem to receive
+> more than a single connect event).
+
+
+> I've actually written a very basic dwc3 gadget driver for our bootloader
+> m1n1 [1,2] loosely based on your Linux driver from before it was switched=
+ to
+> GPLv2-only to experiment with the hardware and load linux kernels over us=
+b :-)
+
+noice!
+
+> I haven't found anything in debugfs, but I can share a simple dump of the=
+ MMIO
+> space. This is already after the controller has been initialized in gadge=
+t mode.
+> If you need something else just let me know.
+
+there should be a directory with the device's name. Under which you
+should find a file called regdump :-)
+
+>>>> reghexdump32(0x502280000, 0xda00)
+> 00000000  01100020 0200047f 1c0000f1 0200000a 0238ffcd 000004e0 00000440 =
+0000003f
+> 00000020  00000000 00000001 00000001 00000000 00000000 00000000 00000000 =
+00000000
+> 00000040  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 00000060  *
+> 00000420  00000280 00000000 00000000 00000000 00000280 00000000 00000000 =
+00000000
+> 00000440  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 00000460  00000000 00000fa0 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 00000480  *
+> 000004e0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 00000500  *
+> 000008e0  00000401 00000000 00000000 00000000 02000402 20425355 00180101 =
+00000000
+> 00000900  03100002 20425355 20000102 00000000 00050134 000a4135 00000000 =
+00000000
+> 00000920  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 00000940  *
+> 0000c100  00000001 00006f00 00f00000 01500000 30c12004 00000000 7e800020 =
+00001908
+> 0000c120  33313130 00000000 12345678 0a416802 00000000 00000000 00000000 =
+00000000
+
+This is the revision (0xc120). This confirms the IP as dwc3.1.
+
+> 0000c140  4020800a 02092486 12345678 10420086 48422019 643d0410 18cc803f =
+0f000e92
+> 0000c160  00230000 9cc20006 00000000 00000000 257cf70a 00000000 00000000 =
+00800000
+> 0000c180  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c1a0  3139302a 736f3035 33313130 00000000 00000000 00000000 00000000 =
+00000000
+
+And this (0xc1a0) is the version number 1.90A
+
+> 0000c1c0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c1e0  *
+> 0000c200  00102400 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c220  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c240  *
+> 0000c2c0  01021102 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c2e0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c300  00000023 002300c7 00ea00c7 01b180c7 027800c7 033f00c7 040600c7 =
+04cd80c7
+> 0000c320  059400c7 065b00c7 072200c7 07e900c7 08b000c7 097700c7 0a3e00c7 =
+0b0500c7
+> 0000c340  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c360  *
+> 0000c380  000003e8 03e88809 0bf10000 0bf18000 0bf10000 0bf18000 00000000 =
+00000000
+> 0000c3a0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c3c0  *
+> 0000c400  dead0000 00000000 00000100 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c420  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c440  *
+> 0000c600  00001744 00000000 18094246 0085560c 00000000 00000000 00000000 =
+00000000
+> 0000c620  00000000 0a0a0101 18181218 20201820 0a87f020 0001ffff 00000000 =
+00000000
+> 0000c640  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c660  *
+> 0000c700  00080800 80f00000 00000007 008e0001 00000000 00000005 00000000 =
+00000000
+> 0000c720  00000003 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c740  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c760  *
+> 0000c800  00000000 00000000 00000001 00010002 00000000 00000000 00000001 =
+00020002
+> 0000c820  00000000 00000000 00000000 00000000 00000000 00000000 00000001 =
+00030002
+> 0000c840  00000000 00000000 00000001 00050002 00000000 00000000 00000001 =
+00040002
+> 0000c860  00000000 00000000 00000000 00000000 00000000 00000000 00000001 =
+00060002
+> 0000c880  00000000 00000000 00000001 00080002 00000000 00000000 00000001 =
+00070002
+> 0000c8a0  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000c8c0  *
+> 0000cd20  00000000 00000000 00000886 00000886 00000000 00000000 00000000 =
+00000000
+> 0000cd40  3c20060c 0002000b 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000cd60  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000cd80  *
+> 0000d000  30302626 00940076 26261f1f 00000052 9c067d05 3fff3b15 42843603 =
+0023287d
+> 0000d020  4e928162 008b8080 00000c00 0047e1f4 00753546 5dc2f07d 00000ea6 =
+f0966b32
+> 0000d040  00026cf5 1130c850 00000000 00000000 01090650 00000000 00000000 =
+00000000
+> 0000d060  000034c2 00000582 00003540 00000600 00000000 00000000 00051565 =
+00000000
+> 0000d080  00000000 00000000 00000000 00000000 00000000 00000000 00000000 =
+00000000
+> 0000d0a0  *
+>
+>
+> fyi, the Apple Device Tree defines the following register ranges, some of
+> those are related the PHY and at least two are for the dwc3 itself. No id=
+ea what
+> the rest is used for yet.
+
+could be some debugging thing. DWC3 has this EBC feature which allows an
+external piece of HW to directly control the FIFOs. Usually used for
+some processor tracing capability.
+
+> <0x00000005 0x02280000 0x00000000 0x0000da00> <-- DWC3 + something else a=
+t the end
+> <0x00000005 0x02200000 0x00000000 0x00080000>
+> <0x00000005 0x0228c000 0x00000000 0x00001800> <-- DWC3, just before GLOBA=
+LS_REGS
+> <0x00000005 0x02a84000 0x00000000 0x00004000> <-- possibly related to the=
+ PHY
+> <0x00000005 0x02800000 0x00000000 0x00004000>
+> <0x00000005 0x02a80000 0x00000000 0x00004000>
+> <0x00000005 0x02000000 0x00000000 0x00080000>
+> <0x00000005 0x02080000 0x00000000 0x00080000>
+> <0x00000005 0x0228d000 0x00000000 0x00000800> <-- just after DWC3
+
+nice.
+
+> [1] https://github.com/AsahiLinux/m1n1
+> [2] https://github.com/AsahiLinux/m1n1/blob/main/src/usb_dwc3.c
+
+pretty cool, this may just become the best ARM linux laptop :-p
+
+
+PS: _do_ ping me if you have dwc3 issues, this is super interesting heh
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDDYnIRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUh9BAf/df6LZQr9qVdCl7KmG5A8Lm8WM13kHUmk
+P1BiU1IvqstYG5pQcuNUxjPk4g170STU4EmPPcOVGqhqEB5A2pERcH0UHlNNp92w
++JnqTt33JPL9ZutUGnfUCoUamWpsvshfDgbZt2xc98uTREXFPSrfHcDxAtxcf7Dc
+VKHq+Q7VwHHOUmqNsMIXO9vDD+DOWc/VxpEScDQpAeqjCOuu/z7p9bFMXCKwCEiv
+f+baYdoPV1eA4z47/Xrp14cKaSd71PDrlHK04QKiFYKh3e8ejmTk1yKgKahDra2O
+cd9svcaMT1XHVrdhX+7i9yJ0lOI6XymBvLv2L05s/dG7KbthWaVk+Q==
+=xVcP
+-----END PGP SIGNATURE-----
+--=-=-=--
