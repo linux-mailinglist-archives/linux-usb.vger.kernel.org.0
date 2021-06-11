@@ -2,123 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AC033A40AF
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 12:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B4A3A40CB
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 13:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbhFKLAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 07:00:50 -0400
-Received: from mail-eopbgr1310131.outbound.protection.outlook.com ([40.107.131.131]:47008
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231388AbhFKK75 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 11 Jun 2021 06:59:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TqkEbJt06yG1yAhZ0aJ8QXVfkZQrEQApqiiaUQHf59i5MNVM+zWlfoLs6iXi8gVbZfQkA9sDnx/xwTVjMSl88KW/cjdvLzt2LpQ+ywfq6+8xZUfmjmXzN97zSAm1W9iD1Ml9ngxYi9GdEfHQiN9ue7iIlYb8piJHqjHXoztFhCRghHFjopEjIzUsyr6TtnxC+8fAzv1/Ow1LAY0RLC2e4SB//uVobwWQLI7h95YRnbdytZq789MtmPHzhkzCqAuXwidUz27LIRaW7IfmzFtJMBf3WW01ZJ+QMFST1cC19spnZ3I/EfDuvYmye+ozUclG0U8S4Mip28lsaMN0leJq+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wf/PmzQG4ytdKoN7YKnt7R0go62A2zlIrUZyC1/sX9Y=;
- b=Ax5JdjJZACbS60pv2dUg8wR9ZPL2WoSv/6OrXzK5SwmW0gGOCEeROtQ0lfCQQZBHJIT8qIZLr5aPw7jAtmI9eE7ImdzJPzlSn81Yv40xJgC3vpRLpuT+IBKB5oLJaRGvy2s3egBZfhv4ncIH0dK/vjhmXC2tCydzcL5JAgTcXlt8aIOaj1oiWShthgbOF1YSBln9DF1Uk/iUNJld59F2XVNjb6Q4YpD0+K/Cp50olqWikeB76K/mvlGn2ltYy1H5T2VRtiDzSa6P862SzttvXb8hbK4wf1uEG/KtyI2r8d4NlfPJXIOsqLz1iz4ewzXVYdVKsM/RH8+YGrAloIuVUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wf/PmzQG4ytdKoN7YKnt7R0go62A2zlIrUZyC1/sX9Y=;
- b=kpqi3aMXs1G0m/E63LcoixrBriko5SdlzEgx9tkeMB1/Ha+yO14TpLmx9YPm9xcNb+BXzxL7KqSWFa//ljkCqfkySdQ/vCG9+6B3qzgTV3oxCaEVbQaF2JIKww4+sSkln0hQFuLdyZ5TSQRP9j7y8FXA6G75QRBRMA4qU5ywbTU=
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
- by TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.22; Fri, 11 Jun
- 2021 10:57:56 +0000
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::4c5d:66ee:883a:72a5]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::4c5d:66ee:883a:72a5%6]) with mapi id 15.20.4219.022; Fri, 11 Jun 2021
- 10:57:56 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     "balbi@kernel.org" <balbi@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        id S231140AbhFKLKd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 07:10:33 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:5507 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229969AbhFKLKc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 07:10:32 -0400
+Received: from nkgeml707-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G1dLC3dmlzZg9n;
+        Fri, 11 Jun 2021 19:05:39 +0800 (CST)
+Received: from nkgeml706-chm.china.huawei.com (10.98.57.153) by
+ nkgeml707-chm.china.huawei.com (10.98.57.157) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.2; Fri, 11 Jun 2021 19:08:30 +0800
+Received: from nkgeml706-chm.china.huawei.com ([10.98.57.153]) by
+ nkgeml706-chm.china.huawei.com ([10.98.57.153]) with mapi id 15.01.2176.012;
+ Fri, 11 Jun 2021 19:08:30 +0800
+From:   "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
+To:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
         "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH] usb: renesas_usbhs: Fix superfluous interrupt happens
- after usb_pkt_pop()
-Thread-Topic: [PATCH] usb: renesas_usbhs: Fix superfluous interrupt happens
- after usb_pkt_pop()
-Thread-Index: AQHXXrAl3oGBwSWR9UqYPWlt9Cdaa6sOo3uw
-Date:   Fri, 11 Jun 2021 10:57:56 +0000
-Message-ID: <TY2PR01MB36925F99E90B91E235CEE168D8349@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-References: <20210611105411.543008-1-yoshihiro.shimoda.uh@renesas.com>
-In-Reply-To: <20210611105411.543008-1-yoshihiro.shimoda.uh@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "Xuetao (kirin)" <xuetao09@huawei.com>,
+        "chenyu (U)" <chenyu56@huawei.com>,
+        Caiyadong <caiyadong@huawei.com>,
+        xuhaiyang <xuhaiyang5@hisilicon.com>,
+        "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
+Subject: [PATCH v2] xhci: solve a double free problem while doing s4
+Thread-Topic: [PATCH v2] xhci: solve a double free problem while doing s4
+Thread-Index: AQHXXqK7hImcHidT6ESyBJu1wIWDJKsOppkQ
+Date:   Fri, 11 Jun 2021 11:08:30 +0000
+Message-ID: <3f5f7a1a46a847ca8bb793050cf30b98@huawei.com>
+References: <1623403104-121391-1-git-send-email-xuetao09@huawei.com>
+In-Reply-To: <1623403104-121391-1-git-send-email-xuetao09@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=renesas.com;
-x-originating-ip: [240f:60:5f3e:1:205c:8ef0:b7f0:4c01]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b13b810f-2790-48ea-43f5-08d92cc7c4de
-x-ms-traffictypediagnostic: TY2PR01MB3692:
-x-microsoft-antispam-prvs: <TY2PR01MB369254A5DC2F33CA4061169ED8349@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:3276;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YLX3h1CveeWQD9YuzKtDjJJJ6ToNa2V+omnqqw8YjiOQggyFVklyrw7pJcxK9KXQx0XLR5FPuLbpgoxo64ugZVVfj2YwCf1yh0ksM9gMtz87LMqVrY8/Vh7g+bt1T/QGHXe7owYZh9DjctujEqr9xqxj9zx1wBzK0LELmvL8fIHwSxHgXXHWFgIdwQ8768uAVuHTxe5WPcPKEIUIElrJfTucy2WdNe9COASb1CzbGgipcghCe3rCzULwmYxQLDAxvrMchAN2Qo6UmdrXYxFvolmi2WK01n+yPsgVKWW3YVEHjYwtr7T10O3N8atzCqzYjo1+4WKeqIDDMO3dTPgePboffK2TaiaSrYKkDYnerzy5NqGuGd7kxLRd1V36owPL9Uyy0I5sG9oYrZCZUq2bytAM27AbtF1x3XIN36jjBffRchF92Nwxjh8Om860r6YxsRaLk8AsqtupE+S2Wi9TdZqyz4AbH3qAh5ZxtJPh4WoZjG+NhWrL65m+KBRbGYB1hcH0YXxYfXIYj0tHix0oEH0qm8UyB6y8oYlL4Ct/DyfEXYZOXOVZkDKqYe2eFGl0VdQNCEK+bI/RoqiLeoT/X43Y3ZWcFXKvS+c48Xtqhrg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(136003)(376002)(396003)(346002)(366004)(38100700002)(55016002)(122000001)(33656002)(52536014)(71200400001)(558084003)(2906002)(8936002)(478600001)(8676002)(86362001)(4326008)(9686003)(53546011)(5660300002)(66476007)(64756008)(66556008)(66946007)(6916009)(186003)(54906003)(66446008)(6506007)(76116006)(316002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata: =?us-ascii?Q?tg84yQbase4mTjjx/G/1SnvYFMGfUDnHlS98nEkdbSLk+dz+wH8nSVZQv9Dl?=
- =?us-ascii?Q?57BEiqbuu4rZZkxXWBrsH0UoXQRsQkyJS5kE4n8YW5N2oVAKmgw6sgV42G5A?=
- =?us-ascii?Q?P14o1uSbHq6l8Jj0pEqTQhRWvNx5E+ujeLuReT35SVZs+H22i+txPhHowKM3?=
- =?us-ascii?Q?lkgd6WQQvDGQuwWyDE7LRDGFsrZtUL4SNyC3fZMuV80W/tI+8SDusgglJ4I0?=
- =?us-ascii?Q?IJ8wdU1Zrza9oC27cOfm+YTo6aWD/5rO1bPEoTQ1D6VnReNHzXQpphxtLHer?=
- =?us-ascii?Q?57vNtkgLtWNrdmQ6eRRifknVO0WbYlodIX98DeAECdkAd0UcrwSXPKdxml1W?=
- =?us-ascii?Q?d0Hpt+sgWuOSw1SGum380c8kHvU7fDaTkiIcCv0ZTFeofeKyorEGMlmkAOf4?=
- =?us-ascii?Q?m7xHo22FSR1gGCA4mAm8ml6k6zeJD/lB6dN6axWbMjTbYbO5XnenzfKjmSAK?=
- =?us-ascii?Q?X35j56T7+8+cl5JKFFeFfnTgt/GXO4AelpH1pvVxmPaC5GrQ8gev+sQlDpw9?=
- =?us-ascii?Q?m3JBnjoitSGtu0QaRIHgG1vR86WfkkITkq/3D3vmxjhcC4kjlEuZMhb4NOFg?=
- =?us-ascii?Q?cor0rjGJ5yDqsJXSFvVZ34ZHjJFZZJElLyBz8tZrnoKpO2iSzNsoub4JehRM?=
- =?us-ascii?Q?olewKeGhgWFGp8J0iT4mo/VGlSfQQ2hEf7pcACHbyaf4rmOB2LkcgU/xr1mt?=
- =?us-ascii?Q?0/6WKd5zX/8wQIBdcxNtu/XPUcYX1a30kGvVaHNR7fhZX3iPgIWPdHBidmwa?=
- =?us-ascii?Q?f7+zvREPhDLQktYrPYt4UkDeDzvwZa7eoUAYVay9FDg0Tz/16RNg33UBvEmu?=
- =?us-ascii?Q?m+CRlNP7ydmnWLhBiipOttR3n7YtY9hGZt99OsrMg5Bh+QlArPMbmwGgSwhL?=
- =?us-ascii?Q?DFtFZ6UeWyXw1KOr5CN6f2GT+NUS3fooSBorS22gRCBZmN9TZ49nM1O0cpav?=
- =?us-ascii?Q?w8IZSuDVrQotqjcV6NxjsdK3DIj8SN13feCOdfRx7FcXNB+IEKUuwWWsq2eH?=
- =?us-ascii?Q?8qF+G9E4JW5pedctmpNsePj0aSrWnrpbS6jEBCJrIXKVkrxgQhlBeN1qrmWS?=
- =?us-ascii?Q?FzeadafHPKYfHHECYBlzv/O85p26CR9WFr/Xr8l4qziIbQ6Kb+JQ1fO4+QUA?=
- =?us-ascii?Q?0FA+XudVfebFyNu7aTom/0ZguFGictJWkaVmEC3CrivssIFBhCcmDVdjFvmx?=
- =?us-ascii?Q?Fj9IWNZB6hWEQoWH+V0AMkvoSAJMTPQ6kFnKPO1F5zrxaq53E6xciIHmM6/k?=
- =?us-ascii?Q?MocIzuVcYsqSAPml9TGLRFBO9Cmlu5P8lDjUcE2+d0tMPlO3cO0BFUOsulME?=
- =?us-ascii?Q?F8wAJstQeYmDmZfNiV84wwuFoOduo/kFw7/V+Rrmm9y39ABiP9tAIQP+0MQF?=
- =?us-ascii?Q?AcyCxwU=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+x-originating-ip: [10.137.38.30]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b13b810f-2790-48ea-43f5-08d92cc7c4de
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jun 2021 10:57:56.1411
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9SBFT5qAZbnz1mF7bnT3YvE8qhaG8Upc716V4w/vAM44SzN3z5V3DTWF4lZ0oi6Ih0m0nJx7E8CVtQWGdaUtUBFDdzL6W+0UaPU0uhGVRIz4DBXssRzcWza/0NmOMZdI
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB3692
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi again,
-
-> From: Yoshihiro Shimoda, Sent: Friday, June 11, 2021 7:54 PM
-> Subject: [PATCH] usb: renesas_usbhs: Fix superfluous interrupt happens af=
-ter usb_pkt_pop()
-
-I'm sorry. I mistook to send this patch.
-So, I would like to recall this version.
-
-Best regards,
-Yoshihiro Shimoda
-
+d2hlbiBzeXN0ZW0gaXMgZG9pbmcgczQsIHRoZSBwcm9jZXNzIG9mIHhoY2lfcmVzdW1lIG1heSBi
+ZSBhcyBiZWxvdzoNCjHjgIF4aGNpX21lbV9jbGVhbnVwDQoy44CBeGhjaV9pbml0LT54aGNpX21l
+bV9pbml0LT54aGNpX21lbV9jbGVhbnVwKHdoZW4gbWVtb3J5IGlzIG5vdCBlbm91Z2gpLg0KeGhj
+aV9tZW1fY2xlYW51cCB3aWxsIGJlIGV4ZWN1dGVkIHR3aWNlIHdoZW4gc3lzdGVtIGlzIG91dCBv
+ZiBtZW1vcnkuDQp4aGNpLT5wb3J0X2NhcHMgaXMgZnJlZWQgaW4geGhjaV9tZW1fY2xlYW51cCxi
+dXQgaXQgaXNuJ3Qgc2V0IHRvIE5VTEwuDQpJdCB3aWxsIGJlIGZyZWVkIHR3aWNlIHdoZW4geGhj
+aV9tZW1fY2xlYW51cCBpcyBjYWxsZWQgdGhlIHNlY29uZCB0aW1lLg0KDQpXZSBnb3QgZm9sbG93
+aW5nIGJ1ZyB3aGVuIHN5c3RlbSByZXN1bWVzIGZyb20gczQ6DQoNCmtlcm5lbCBCVUcgYXQgbW0v
+c2x1Yi5jOjMwOSENCkludGVybmFsIGVycm9yOiBPb3BzIC0gQlVHOiAwIFsjMV0gUFJFRU1QVCBT
+TVANCkNQVTogMCBQSUQ6IDU5MjkgVGFpbnRlZDogRyBTICAgVyAgIDUuNC45Ni1hcm02NC1kZXNr
+dG9wICMxDQpwYyA6IF9fc2xhYl9mcmVlKzB4NWMvMHg0MjQNCmxyIDoga2ZyZWUrMHgzMGMvMHgz
+MmMNCg0KQ2FsbCB0cmFjZToNCiBfX3NsYWJfZnJlZSsweDVjLzB4NDI0DQoga2ZyZWUrMHgzMGMv
+MHgzMmMNCiB4aGNpX21lbV9jbGVhbnVwKzB4Mzk0LzB4M2NjDQogeGhjaV9tZW1faW5pdCsweDlh
+Yy8weDEwNzANCiB4aGNpX2luaXQrMHg4Yy8weDFkMA0KIHhoY2lfcmVzdW1lKzB4MWNjLzB4NWZj
+DQogeGhjaV9wbGF0X3Jlc3VtZSsweDY0LzB4NzANCiBwbGF0Zm9ybV9wbV90aGF3KzB4MjgvMHg2
+MA0KIGRwbV9ydW5fY2FsbGJhY2srMHg1NC8weDI0Yw0KIGRldmljZV9yZXN1bWUrMHhkMC8weDIw
+MA0KIGFzeW5jX3Jlc3VtZSsweDI0LzB4NjANCiBhc3luY19ydW5fZW50cnlfZm4rMHg0NC8weDEx
+MA0KIHByb2Nlc3Nfb25lX3dvcmsrMHgxZjAvMHg0OTANCiB3b3JrZXJfdGhyZWFkKzB4NWMvMHg0
+NTANCiBrdGhyZWFkKzB4MTU4LzB4MTYwDQogcmV0X2Zyb21fZm9yaysweDEwLzB4MjQNCg0KU2ln
+bmVkLW9mZi1ieTogSmlhbnRhbyBaaGFuZyA8d2F0ZXIuemhhbmdqaWFudGFvQGh1YXdlaS5jb20+
+DQpTaWduZWQtb2ZmLWJ5OiBUYW8gWHVlIDx4dWV0YW8wOUBodWF3ZWkuY29tPg0KLS0tDQogZHJp
+dmVycy91c2IvaG9zdC94aGNpLW1lbS5jIHwgMSArDQogMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0
+aW9uKCspDQoNCmRpZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmMgYi9kcml2
+ZXJzL3VzYi9ob3N0L3hoY2ktbWVtLmMgaW5kZXggZjY2ODE1Zi4uZTRiMGMwNCAxMDA2NDQNCi0t
+LSBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tZW0uYw0KKysrIGIvZHJpdmVycy91c2IvaG9zdC94
+aGNpLW1lbS5jDQpAQCAtMTkyNCw2ICsxOTI0LDcgQEAgdm9pZCB4aGNpX21lbV9jbGVhbnVwKHN0
+cnVjdCB4aGNpX2hjZCAqeGhjaSkNCiAJeGhjaS0+aHdfcG9ydHMgPSBOVUxMOw0KIAl4aGNpLT5y
+aF9idyA9IE5VTEw7DQogCXhoY2ktPmV4dF9jYXBzID0gTlVMTDsNCisJeGhjaS0+cG9ydF9jYXBz
+ID0gTlVMTDsNCiANCiAJeGhjaS0+cGFnZV9zaXplID0gMDsNCiAJeGhjaS0+cGFnZV9zaGlmdCA9
+IDA7DQotLQ0KMi43LjQNCg0K
