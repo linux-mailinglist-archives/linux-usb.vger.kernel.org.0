@@ -2,62 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1169F3A3990
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 04:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816A93A3994
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 04:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbhFKCPD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 10 Jun 2021 22:15:03 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58703 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230453AbhFKCPC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 10 Jun 2021 22:15:02 -0400
-Received: (qmail 24249 invoked by uid 1000); 10 Jun 2021 22:13:04 -0400
-Date:   Thu, 10 Jun 2021 22:13:04 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Ibrahim Erturk <ierturk@ieee.org>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: Strange problem with USB device
-Message-ID: <20210611021304.GA23289@rowland.harvard.edu>
-References: <cfc37ce0-823e-0d19-f5d7-fcd571a94943@lwfinger.net>
- <20210608182038.GA1812516@rowland.harvard.edu>
- <a7c7ba62-a74f-d7db-bfd9-4f6c8e25e0b8@lwfinger.net>
- <20210608185314.GB1812516@rowland.harvard.edu>
- <960057be-ef17-49e7-adba-ba2929d3a01f@lwfinger.net>
- <20210609021237.GA1826754@rowland.harvard.edu>
- <CAFHYy-iMty-jjZzgzRA6tOezN-RJ+o4hRL1kZk+tuN1i-K9Ukg@mail.gmail.com>
+        id S231374AbhFKCP6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 10 Jun 2021 22:15:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53524 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231366AbhFKCP6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 10 Jun 2021 22:15:58 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 03816613AE
+        for <linux-usb@vger.kernel.org>; Fri, 11 Jun 2021 02:14:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623377641;
+        bh=ug/QpKbPPXHs+j8+xpUcqSnCdePTmi/U9dHtiSXsOVM=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=WAa6yStMyy2hfxEoe/KCCbCmMi2XcogM0WARZUBVYJ8e9T9LaDw0Q6Y055TN4R2Xy
+         hE1Ehop0f3Xx6VGEFD0Un5cplTBmgF+OiK0Azquqhs7GP9v0q1kmbNtjBuEUPD5sZT
+         +k0Du630XGVfu4GSnEg+JEi4Fv4sCZHAj2/0JaXyZge5GQleu4ebkd/q/VMjzGqXVv
+         4ITN0CsDRiO3Fw4TuvRqG5WRqvVpXqIXAhpjHrGcbsbXnHQkKXrvnzmiqQiytQe2yZ
+         O042TgTPA9Lnhps8jD2qwUOcM9m4Rq1cLlkx6qYpBe5adKqMtgiAjBdmbnWxSzNWLF
+         UEnBBdGLhcKfg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 00AEA6115A; Fri, 11 Jun 2021 02:14:00 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 209469] [bisected] usb_modeswitch is broken on Linux 5.9, at
+ least with Snapdragon X12 LTE modem
+Date:   Fri, 11 Jun 2021 02:14:00 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: russianneuromancer@ya.ru
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-209469-208809-JNJN7HVrFE@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-209469-208809@https.bugzilla.kernel.org/>
+References: <bug-209469-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFHYy-iMty-jjZzgzRA6tOezN-RJ+o4hRL1kZk+tuN1i-K9Ukg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 03:08:16AM +0300, Ibrahim Erturk wrote:
-> Hi,
-> 
-> I've already attached logs and a snapshot from the device manager on
-> the windows side into the bug report. Hope this helps.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D209469
 
-Yes, it does help.  Although the information in those reports is somewhat 
-disorganized, it clearly shows there is only one USB host controller in the 
-system, and that is the one Linux detects.  So my impression that we weren't 
-finding the host controller was wrong.
+--- Comment #18 from RussianNeuroMancer (russianneuromancer@ya.ru) ---
+> In a nutshell, it was about treating devices that are already connected at
+> boot but not set up yet.
 
-Back to my earlier guess: The Realtek board has to be told to do something in 
-order to make the Bluetooth device start working, such as turning on a power 
-source.  (And perhaps that is what the RealTek people were talking about when 
-they suggested the problem could be in the rtw8822 power-up sequence.)  Whatever 
-it is, the rtw8822 driver isn't doing it.
+Please clarify, is this should be fixed on kernel side or on usb modeswitch
+side? (Or maybe it was already fixed somewhere and I just doesn't know about
+it.)
 
-This means it's still a PCI problem.
+--=20
+You may reply to this email to add a comment.
 
-Alan Stern
-
-PS: Larry, the discrepancy between Windows reporting an Intel USB hub and Linux 
-reporting two Linux Foundation hubs isn't real -- or at least, it's what should 
-be expected.  I can explain in more detail if you're curious, but you don't need 
-to worry about it.
+You are receiving this mail because:
+You are watching the assignee of the bug.=
