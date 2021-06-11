@@ -2,76 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2E03A3FF8
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 12:15:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32933A4039
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 12:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbhFKKRm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 06:17:42 -0400
-Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:45410 "EHLO
-        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230356AbhFKKRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 06:17:40 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=alimailimapcm10staff010182156082;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Uc2YY7m_1623406522;
-Received: from j63c13417.sqa.eu95.tbsite.net(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Uc2YY7m_1623406522)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 11 Jun 2021 18:15:41 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     valentina.manea.m@gmail.com
-Cc:     shuah@kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Subject: [PATCH v2] usbip: tools: usbipd: use ARRAY_SIZE for sockfdlist
-Date:   Fri, 11 Jun 2021 18:15:10 +0800
-Message-Id: <1623406510-50900-1-git-send-email-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        id S231246AbhFKKf0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 06:35:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55482 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230382AbhFKKfW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Jun 2021 06:35:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 07009613DE;
+        Fri, 11 Jun 2021 10:33:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623407605;
+        bh=5WadPKSiLW4dx4lYOs2lFpxn4Zz5o5yVCJzwf6Jmzn0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gq0Z7NjT5PoJijBBXexNohBqbFZljNWjPDo5YwPhDBompbhm8PAzedSDLOYIvHrCj
+         V5xJWAIS8R9lKoyrtdUZ+q57OylGV7gV+jYPvZRd8VzLA/Cz5Qw7/WxuOOET6rGNSN
+         P0vijAHIQIYzYWzrz605hcJKwzu7PrRPrP5I/Liw=
+Date:   Fri, 11 Jun 2021 12:33:15 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] USB-serial fixes for 5.13-rc6
+Message-ID: <YMM768yexdUZkOwO@kroah.com>
+References: <YMM24hYHEe78rHoJ@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMM24hYHEe78rHoJ@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use ARRAY_SIZE instead of dividing sizeof array with sizeof an
-element.
+On Fri, Jun 11, 2021 at 12:11:46PM +0200, Johan Hovold wrote:
+> The following changes since commit bc96c72df33ee81b24d87eab953c73f7bcc04f29:
+> 
+>   USB: serial: ftdi_sio: add NovaTech OrionMX product ID (2021-06-05 12:26:01 +0200)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.13-rc6
 
-Clean up the following coccicheck warning:
+Pulled and pushed out, thanks,
 
-./tools/usb/usbip/src/usbipd.c:536:19-20: WARNING: Use ARRAY_SIZE.
-
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
-Changes in v2:
-  -Add ARRAY_SIZE definition to usbip_common.h file.
-
- tools/usb/usbip/libsrc/usbip_common.h | 2 ++
- tools/usb/usbip/src/usbipd.c          | 3 +--
- 2 files changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-index 73a367a..4e12dc4 100644
---- a/tools/usb/usbip/libsrc/usbip_common.h
-+++ b/tools/usb/usbip/libsrc/usbip_common.h
-@@ -101,6 +101,8 @@
- 		abort();				\
- 	} while (0)
- 
-+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-+
- struct usbip_usb_interface {
- 	uint8_t bInterfaceClass;
- 	uint8_t bInterfaceSubClass;
-diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
-index 48398a7..4826d13 100644
---- a/tools/usb/usbip/src/usbipd.c
-+++ b/tools/usb/usbip/src/usbipd.c
-@@ -532,8 +532,7 @@ static int do_standalone_mode(int daemonize, int ipv4, int ipv6)
- 		usbip_driver_close(driver);
- 		return -1;
- 	}
--	nsockfd = listen_all_addrinfo(ai_head, sockfdlist,
--		sizeof(sockfdlist) / sizeof(*sockfdlist));
-+	nsockfd = listen_all_addrinfo(ai_head, sockfdlist, ARRAY_SIZE(sockfdlist));
- 	freeaddrinfo(ai_head);
- 	if (nsockfd <= 0) {
- 		err("failed to open a listening socket");
--- 
-1.8.3.1
-
+greg k-h
