@@ -2,109 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 702FF3A46A1
-	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 18:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E7C3A479A
+	for <lists+linux-usb@lfdr.de>; Fri, 11 Jun 2021 19:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbhFKQlS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 12:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55008 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbhFKQlQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 12:41:16 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4348BC061574;
-        Fri, 11 Jun 2021 09:39:03 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id y7so6734536wrh.7;
-        Fri, 11 Jun 2021 09:39:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vYIMo2kK1HR0D/HaxbggTV2mSjd3Ph79XbWAi78jtog=;
-        b=HPmCRZaQTVPs7wWCO4Kdvv/bx6Mvg7TDmRumb5RWqXI7j5F4XBQQKm2HFtFi/9kNvB
-         NKGdgB1EX/d9ZwdXIhGsxDnazcJ1fJWzhIWI1OW4s/UhBmzE3q0Yj6pAbRnqSi3fpq+e
-         wITjoWp5qIG90SxbzngmcyM8sbtps1/F/OiM2yl521NkgRFG/TJctGxHKaGGBtl3vrfH
-         SezkjZYCWnwn+wLhtfwQPCyPNHEA/NfM9ykw1IiAqQm87asbdckmp1F60YmLL87ejRZo
-         Rq3MSidQyvk9SwBaEt2YjLCC/DmCA9Fa2EHkdyqAEuJ5GZCYgJ6KqRbBWqr5qc8huNcR
-         CzoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=vYIMo2kK1HR0D/HaxbggTV2mSjd3Ph79XbWAi78jtog=;
-        b=GVxJ8Pzw4DXj3N2H4uah3vRRMYJe8GB59iH36qgKSE54FAq6xBjOgbPvY/5y4KrW+4
-         iwwVI+3HSYi8gLcC1rRYky1ooqxxpOVVsuR3WM4V+aEaQIrLywhM7n5UT6Im7YGVzj5D
-         SkSlTaBqejojKEp3xBAYzeRSJYtclDqmZzmk2N+ffxRnZOa8APScxQg6u3SFZq3EEsZ0
-         toxjZn1MrHTWoaQBokwPogqXB0ZKRaYaUJJHjYL7q/D66IIOICh5GRF6oMvoP02AWW9b
-         uDmCWqm5noJDdQwr03nOjCFwSiYwLU3jrTYr+cUACHWlaqziRH/htPTrzJabhmRkaoxg
-         AwZA==
-X-Gm-Message-State: AOAM532TxT8zVMyNAKq2dhnWytY4KX3v5kC4alIfCPDo9yLcZL0oI844
-        zkz0Zgr0BoyWMD7b+Zm4+xE=
-X-Google-Smtp-Source: ABdhPJwtJKEBcxiZ9Un12SC7ERbwDyuA/+2tRc75Q2GSs7PFaDIOavICmsZji3vO74R6RhqECL1Qfw==
-X-Received: by 2002:a5d:4903:: with SMTP id x3mr4887361wrq.376.1623429541940;
-        Fri, 11 Jun 2021 09:39:01 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id l10sm7299105wrs.11.2021.06.11.09.39.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 09:39:00 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [GIT PULL 1/2] phy: tegra: Changes for v5.14-rc1
-Date:   Fri, 11 Jun 2021 18:40:36 +0200
-Message-Id: <20210611164037.3567270-1-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.32.0
-Content-Type: text/plain; charset="utf-8"
+        id S230280AbhFKRSZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 13:18:25 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:59722 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229510AbhFKRSZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 11 Jun 2021 13:18:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=TvM1tGh9c3xs7mHGT3XCOu41VC7yHDCxbSRhbqeUah4=; b=GaCUOtlRRYolMt+/zTVtDYsfLC
+        LfhOc9v8xu4fRDyMfMJi+kR1KOUFbDhXca/lkPitQMB+ALcljQh63uIn80PWHYp9uhBaGLn0YPPIU
+        WTm4NuUv0Ap+Hnjfou1PJ416+Lc6EdS0tnYtHPlw2kDOsfsLBdCuutoaHd3c4YE23mS4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lrklY-008t5y-AG; Fri, 11 Jun 2021 19:16:20 +0200
+Date:   Fri, 11 Jun 2021 19:16:20 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jonathan Davies <jonathan.davies@nutanix.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usbnet: allow overriding of default USB interface
+ naming
+Message-ID: <YMOaZB6xf2xOpC0S@lunn.ch>
+References: <20210611152339.182710-1-jonathan.davies@nutanix.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210611152339.182710-1-jonathan.davies@nutanix.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Kishon, Vinod,
+On Fri, Jun 11, 2021 at 03:23:39PM +0000, Jonathan Davies wrote:
+> When the predictable device naming scheme for NICs is not in use, it is
+> common for there to be udev rules to rename interfaces to names with
+> prefix "eth".
+> 
+> Since the timing at which USB NICs are discovered is unpredictable, it
+> can be interfere with udev's attempt to rename another interface to
+> "eth0" if a freshly discovered USB interface is initially given the name
+> "eth0".
+> 
+> Hence it is useful to be able to override the default name. A new usbnet
+> module parameter allows this to be configured.
+> 
+> Signed-off-by: Jonathan Davies <jonathan.davies@nutanix.com>
+> Suggested-by: Prashanth Sreenivasa <prashanth.sreenivasa@nutanix.com>
+> ---
+>  drivers/net/usb/usbnet.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> index ecf6284..55f6230 100644
+> --- a/drivers/net/usb/usbnet.c
+> +++ b/drivers/net/usb/usbnet.c
+> @@ -72,6 +72,13 @@ static int msg_level = -1;
+>  module_param (msg_level, int, 0);
+>  MODULE_PARM_DESC (msg_level, "Override default message level");
+>  
+> +#define DEFAULT_ETH_DEV_NAME "eth%d"
+> +
+> +static char *eth_device_name = DEFAULT_ETH_DEV_NAME;
+> +module_param(eth_device_name, charp, 0644);
+> +MODULE_PARM_DESC(eth_device_name, "Device name pattern for Ethernet devices"
+> +				  " (default: \"" DEFAULT_ETH_DEV_NAME "\")");
 
-The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+Module parameter are not liked in the network stack.
 
-  Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+It actually seems like a udev problem, and you need to solve it
+there. It is also not specific to USB. Any sort of interface can pop
+up at an time, especially with parallel probing of busses. So you need
+udev to detect there has been a race condition and try again with the
+rename.
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/for-5.14-phy
-
-for you to fetch changes up to 1f9cab6cc20c6ed35c659aa25e282265275f0732:
-
-  phy: tegra: xusb: Add wake/sleepwalk for Tegra186 (2021-06-03 14:52:45 +0200)
-
-There should be no need to pull this into the PHY tree because these
-patches are dependencies for the second (USB) pull request in this set,
-but I'm sending this out for completeness in case you need this in your
-tree to resolve a conflict.
-
-Thanks,
-Thierry
-
-----------------------------------------------------------------
-phy: tegra: Changes for v5.14-rc1
-
-This set of changes adds USB wake and sleepwalk support to Tegra210 and
-Tegra186, which will be used to properly suspend and resume USB devices.
-
-----------------------------------------------------------------
-JC Kuo (7):
-      phy: tegra: xusb: Move usb3 port init for Tegra210
-      phy: tegra: xusb: Rearrange UPHY init on Tegra210
-      phy: tegra: xusb: Add Tegra210 lane_iddq operation
-      phy: tegra: xusb: Add sleepwalk and suspend/resume
-      phy: tegra: xusb: Add wake/sleepwalk for Tegra210
-      phy: tegra: xusb: Tegra210 host mode VBUS control
-      phy: tegra: xusb: Add wake/sleepwalk for Tegra186
-
- drivers/phy/tegra/xusb-tegra186.c |  550 ++++++++++++-
- drivers/phy/tegra/xusb-tegra210.c | 1533 +++++++++++++++++++++++++++++++------
- drivers/phy/tegra/xusb.c          |   92 ++-
- drivers/phy/tegra/xusb.h          |   22 +-
- include/linux/phy/tegra/xusb.h    |   10 +-
- 5 files changed, 1955 insertions(+), 252 deletions(-)
+     Andrew
