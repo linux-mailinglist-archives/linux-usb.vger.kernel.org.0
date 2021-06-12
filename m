@@ -2,84 +2,132 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A083A4D35
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 09:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BE23A4D57
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 09:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbhFLHDO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Jun 2021 03:03:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47730 "EHLO mail.kernel.org"
+        id S229898AbhFLH0p (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Jun 2021 03:26:45 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51308 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229584AbhFLHDO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 12 Jun 2021 03:03:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 104C561009;
-        Sat, 12 Jun 2021 07:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623481275;
-        bh=iKKyGp0fUDKDEcJ9RZ05rQW+0YvDlhXFzxPG/BdB7KE=;
+        id S229532AbhFLH0o (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 12 Jun 2021 03:26:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6BC5861001;
+        Sat, 12 Jun 2021 07:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623482685;
+        bh=t/XgaghKUAW5fxfIyI1pGDsxc8Nx4j/oqsUFlYCf95A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0I63GfFvAYt0uAA2pS1BDbGxuAsn5MfkmsuAmA9dpSGAvePJOH49D8iUzi7o7ZXEm
-         arMa95ZzYmBqT1pqnb0j7UICbMD+ejJkIp2Z4FWDQP4LbJxryPD5lkEDHWMkMNhuKN
-         4OtaaFAUP5nTa5o5jJaz1C17jSKDeh6re6Kd5HmY=
-Date:   Sat, 12 Jun 2021 09:01:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jonathan Davies <jonathan.davies@nutanix.com>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: usbnet: allow overriding of default USB interface
- naming
-Message-ID: <YMRbt+or+QTlqqP9@kroah.com>
-References: <20210611152339.182710-1-jonathan.davies@nutanix.com>
+        b=F93w5krVy5rN/nUpUkyS3OZy1OARVmNHDpaf0oWXXjel4wxg1enDo26a4XVxfUpkf
+         0gHrvfv8CGndUS5EYRTMDSw2b9KffdXfne8T5c7X9iM+/NxeKXbICNxcaER2paOKEo
+         CYaulMrzN6yvV06erad0M3OGVTzh2d8eSbMco0zaq/uXFj7PUN3kU3OnUAh589h7Z7
+         E8sasOynewQB0QjlkV+6tThNb/IbtF4bhFgxdGoxSD4yl2Q5xMCrNuYY8q22nTGRLV
+         csA+pc9E12A+fYMQKiGt8OqhGe3n6jvvPey9wak3hvrpRWlpr6aTjCOwhwUxR3ihou
+         /ppjuY3QEM3sw==
+Date:   Sat, 12 Jun 2021 15:24:38 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Breno Lima <breno.lima@nxp.com>
+Cc:     gregkh@linuxfoundation.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        brenomatheus@gmail.com, jun.li@nxp.com
+Subject: Re: [PATCH v2] mx8mm: usb: chipidea: Fix Battery Charger 1.2 CDP
+ detection
+Message-ID: <20210612072438.GA4580@Peter>
+References: <20210611145607.147207-1-breno.lima@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210611152339.182710-1-jonathan.davies@nutanix.com>
+In-Reply-To: <20210611145607.147207-1-breno.lima@nxp.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 11, 2021 at 03:23:39PM +0000, Jonathan Davies wrote:
-> When the predictable device naming scheme for NICs is not in use, it is
-> common for there to be udev rules to rename interfaces to names with
-> prefix "eth".
+On 21-06-11 10:56:07, Breno Lima wrote:
+> i.MX8MM cannot detect certain CDP USB HUBs. usbmisc_imx.c driver is not
+> following CDP timing requirements defined by USB BC 1.2 specification
+> and section 3.2.4 Detection Timing CDP.
 > 
-> Since the timing at which USB NICs are discovered is unpredictable, it
-> can be interfere with udev's attempt to rename another interface to
-> "eth0" if a freshly discovered USB interface is initially given the name
-> "eth0".
+> During Primary Detection the i.MX device should turn on VDP_SRC and
+> IDM_SINK for a minimum of 40ms (TVDPSRC_ON). After a time of TVDPSRC_ON,
+> the PD is allowed to check the status of the D- line. Current
+> implementation is waiting between 1ms and 2ms, and certain BC 1.2
+> complaint USB HUBs cannot be detected. Increase delay to 40ms allowing
+> enough time for primary detection.
 > 
-> Hence it is useful to be able to override the default name. A new usbnet
-> module parameter allows this to be configured.
+> During secondary detection the PD is required to disable VDP_SRC and
+
+What does the "PD" mean here?
+
+> IDM_SNK, and enable VDM_SRC and IDP_SINK for at least 40ms (TVDMSRC_ON).
 > 
-> Signed-off-by: Jonathan Davies <jonathan.davies@nutanix.com>
-> Suggested-by: Prashanth Sreenivasa <prashanth.sreenivasa@nutanix.com>
+> Current implementation is not disabling VDP_SRC and IDM_SNK, introduce
+> disable sequence in imx7d_charger_secondary_detection() function.
+> 
+> VDM_SRC and IDP_SINK should be enabled for at least 40ms (TVDMSRC_ON).
+> Increase delay allowing enough time for detection.
+> 
+> Fixes: 746f316b753a ("usb: chipidea: introduce imx7d USB charger detection")
+
+I assume this one needs to go stable tree?
+
+Peter
+> 
+> Signed-off-by: Breno Lima <breno.lima@nxp.com>
+> Signed-off-by: Jun Li <jun.li@nxp.com>
 > ---
->  drivers/net/usb/usbnet.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+> Changes since V1:
+> - Updated commit log to include commit ID fix
+>  drivers/usb/chipidea/usbmisc_imx.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-> index ecf6284..55f6230 100644
-> --- a/drivers/net/usb/usbnet.c
-> +++ b/drivers/net/usb/usbnet.c
-> @@ -72,6 +72,13 @@ static int msg_level = -1;
->  module_param (msg_level, int, 0);
->  MODULE_PARM_DESC (msg_level, "Override default message level");
+> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
+> index 4545b23bda3f..bac0f5458cab 100644
+> --- a/drivers/usb/chipidea/usbmisc_imx.c
+> +++ b/drivers/usb/chipidea/usbmisc_imx.c
+> @@ -686,6 +686,16 @@ static int imx7d_charger_secondary_detection(struct imx_usbmisc_data *data)
+>  	int val;
+>  	unsigned long flags;
 >  
-> +#define DEFAULT_ETH_DEV_NAME "eth%d"
+> +	/* Clear VDATSRCENB0 to disable VDP_SRC and IDM_SNK required by BC 1.2 spec */
+> +	spin_lock_irqsave(&usbmisc->lock, flags);
+> +	val = readl(usbmisc->base + MX7D_USB_OTG_PHY_CFG2);
+> +	val &= ~MX7D_USB_OTG_PHY_CFG2_CHRG_VDATSRCENB0;
+> +	writel(val, usbmisc->base + MX7D_USB_OTG_PHY_CFG2);
+> +	spin_unlock_irqrestore(&usbmisc->lock, flags);
 > +
-> +static char *eth_device_name = DEFAULT_ETH_DEV_NAME;
-> +module_param(eth_device_name, charp, 0644);
-> +MODULE_PARM_DESC(eth_device_name, "Device name pattern for Ethernet devices"
-> +				  " (default: \"" DEFAULT_ETH_DEV_NAME "\")");
+> +	/* TVDMSRC_DIS */
+> +	msleep(20);
+> +
+>  	/* VDM_SRC is connected to D- and IDP_SINK is connected to D+ */
+>  	spin_lock_irqsave(&usbmisc->lock, flags);
+>  	val = readl(usbmisc->base + MX7D_USB_OTG_PHY_CFG2);
+> @@ -695,7 +705,8 @@ static int imx7d_charger_secondary_detection(struct imx_usbmisc_data *data)
+>  				usbmisc->base + MX7D_USB_OTG_PHY_CFG2);
+>  	spin_unlock_irqrestore(&usbmisc->lock, flags);
+>  
+> -	usleep_range(1000, 2000);
+> +	/* TVDMSRC_ON */
+> +	msleep(40);
+>  
+>  	/*
+>  	 * Per BC 1.2, check voltage of D+:
+> @@ -798,7 +809,8 @@ static int imx7d_charger_primary_detection(struct imx_usbmisc_data *data)
+>  				usbmisc->base + MX7D_USB_OTG_PHY_CFG2);
+>  	spin_unlock_irqrestore(&usbmisc->lock, flags);
+>  
+> -	usleep_range(1000, 2000);
+> +	/* TVDPSRC_ON */
+> +	msleep(40);
+>  
+>  	/* Check if D- is less than VDAT_REF to determine an SDP per BC 1.2 */
+>  	val = readl(usbmisc->base + MX7D_USB_OTG_PHY_STATUS);
+> -- 
+> 2.25.1
+> 
 
-This is not the 1990's, please do not add new module parameters as they
-are on a global driver level, and not on a device level.
+-- 
 
-Also changing the way usb network devices are named is up to userspace,
-the kernel should not be involved in this.  What is wrong with just
-renaming it in userspace as you want to today?
+Thanks,
+Peter Chen
 
-thanks,
-
-greg k-h
