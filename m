@@ -2,94 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 113503A4FF5
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 19:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675BF3A505E
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 21:37:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbhFLSBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Jun 2021 14:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45692 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbhFLSBg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Jun 2021 14:01:36 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A800C061574;
-        Sat, 12 Jun 2021 10:59:36 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 131so14078713ljj.3;
-        Sat, 12 Jun 2021 10:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=91owpaF2W4JTE1rLDzae7eV/utnfUIkLjonIrTqWctw=;
-        b=T8e0ZAXkaUaUkD4HeUO7qhqHzDK+IhSwWzQ9/TohafpqcLqKdMvjjhn+DrBpQUKZZC
-         rjqWcZ2se/jMMgJ09vPHTBe4uUTo0kmh5/7m3AJzgtZl2Rc1CbNf4GOajsdTs0LBcQUq
-         2OrsMLloBV3xfjBuIWd63W/OWrkfnG1OiAcLsFbKNTWTpAkF3h5TkElKjpkJOI9DuFAP
-         B+7KKwAFrsjLzCfZht7q4zplsKZyeV6e00ugZ/cFPF717kJPSuNZuCqrItoA2K7n0Psu
-         oNproxBU38PkPWVt+bNMf8PYvpZxRePRPYCMy50illm5JRjkyvkaNhnSdLlpW9lGREQm
-         pZQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=91owpaF2W4JTE1rLDzae7eV/utnfUIkLjonIrTqWctw=;
-        b=nPK0PbAKFFWOCnKL6CUMFQDMUUeCVfDTQQjJdsJUDBMLvIMjrPVQfWg9BxZdV4rtXr
-         6lt7Ywb4jd3pok/n7LYaX5bZP4++O77JZDp2YuBn9m2TuRQCQ8Z0QUkSG9Ubk5zvix93
-         kbXdtVpTPoxH/aVJqrky9xkCLb+gnBScPdugtFzbC3z9bX5+1XOu3eMVcgYBw/U1eCSf
-         mVyFz4ekDtCJ/m2D1mPV4B2cxcD4sK1rjrOL3qXUUOoJWT3L+UKpbnsIoULjlCqPoc+K
-         W56XcpeqUghW+4Wa+SpuoQQnPJ89NF6VgubJLbrLaYTKaHQbRYBrEYXLOeT+VTzMYh72
-         5vQg==
-X-Gm-Message-State: AOAM533/Oh0VMFYr7/Elu8tackArBm4zM0Nf7lxhUJWGl58FoFWqTC35
-        yC72pHddeUWtRZvAAI5tvYD8PIRHvHv7CFiDLHs=
-X-Google-Smtp-Source: ABdhPJzrKD1MyMwrpMGoTcyk7feA6asP4uJ32aZoFpDWXOILBrLXS48SNSKB/XYWWXY/1GJ213e4ijzKPI4ihdpnfX8=
-X-Received: by 2002:a2e:9715:: with SMTP id r21mr7632513lji.46.1623520773299;
- Sat, 12 Jun 2021 10:59:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210611145607.147207-1-breno.lima@nxp.com> <20210612072438.GA4580@Peter>
-In-Reply-To: <20210612072438.GA4580@Peter>
-From:   Breno Matheus Lima <brenomatheus@gmail.com>
-Date:   Sat, 12 Jun 2021 13:59:21 -0400
-Message-ID: <CAC4tdFXrGmmgui2uc-K2sgzxsgsQhQoARwO0720_wFb2ehpJ1A@mail.gmail.com>
-Subject: Re: [PATCH v2] mx8mm: usb: chipidea: Fix Battery Charger 1.2 CDP detection
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Breno Lima <breno.lima@nxp.com>, gregkh@linuxfoundation.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        Fabio Estevam <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jun Li <jun.li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S231301AbhFLTjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Jun 2021 15:39:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33672 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230186AbhFLTjm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 12 Jun 2021 15:39:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 90209611CA;
+        Sat, 12 Jun 2021 19:37:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623526662;
+        bh=GKYLo/sNdEikOkvVvmowMF/vZaE0zZXqST0IZpz/H1o=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=M8SO5bRnYk4IaSZ6gDkek8dgsJzyHu7MyzkgZn0Xeoo1mhWT+8x0IE0/By/prth2f
+         HUF4LaDWUtbOXaNj1spmAb6Xs6CgjmN22EIEQj3WRpfdxzguuaWg385VXlnU81nO2M
+         MsCIgV2ldp5CMpvoUQ3rPM+WvWoIj/EIAj+5coduVHa4cD71NiyTEEQzI9/3I12Ea4
+         tNyVO40w9W3YlBtZKfQyaon63eszb5GiH8//F3qwSsy7IUzGx17yyKkboiN9ZAtqGo
+         B6dT+DuiJF7Op0JYKB0Bl00jy0YTLPWrAA8BVyCyEfkHxTPblNWqbCV5VlmV7AExap
+         rsRAqpJdzU/mQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 8A88A60A49;
+        Sat, 12 Jun 2021 19:37:42 +0000 (UTC)
+Subject: Re: [GIT PULL] USB driver fixes for 5.13-rc6
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <YMTY5JKo71X92y/S@kroah.com>
+References: <YMTY5JKo71X92y/S@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <YMTY5JKo71X92y/S@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.13-rc6
+X-PR-Tracked-Commit-Id: 7c4363d3948535e6a9116a325b2fb56eab6b88ff
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 43cb5d49a99b3ecd9fef9826899aac948c3048da
+Message-Id: <162352666256.18796.5493327846133677612.pr-tracker-bot@kernel.org>
+Date:   Sat, 12 Jun 2021 19:37:42 +0000
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Peter,
+The pull request you sent on Sat, 12 Jun 2021 17:55:16 +0200:
 
-Em s=C3=A1b., 12 de jun. de 2021 =C3=A0s 03:24, Peter Chen
-<peter.chen@kernel.org> escreveu:
->
-> On 21-06-11 10:56:07, Breno Lima wrote:
-> > i.MX8MM cannot detect certain CDP USB HUBs. usbmisc_imx.c driver is not
-> > following CDP timing requirements defined by USB BC 1.2 specification
-> > and section 3.2.4 Detection Timing CDP.
-> >
-> > During Primary Detection the i.MX device should turn on VDP_SRC and
-> > IDM_SINK for a minimum of 40ms (TVDPSRC_ON). After a time of TVDPSRC_ON=
-,
-> > the PD is allowed to check the status of the D- line. Current
-> > implementation is waiting between 1ms and 2ms, and certain BC 1.2
-> > complaint USB HUBs cannot be detected. Increase delay to 40ms allowing
-> > enough time for primary detection.
-> >
-> > During secondary detection the PD is required to disable VDP_SRC and
->
-> What does the "PD" mean here?
->
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.13-rc6
 
-PD stands for Portable Device, I can send another version and mention
-i.MX instead.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/43cb5d49a99b3ecd9fef9826899aac948c3048da
 
-Thanks for pointing this out.
+Thank you!
 
-Best regards,
-Breno Lima
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
