@@ -2,701 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5213A4F86
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 17:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44173A4F99
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 17:55:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231312AbhFLPoe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Jun 2021 11:44:34 -0400
-Received: from smtprelay0171.hostedemail.com ([216.40.44.171]:38412 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230200AbhFLPoe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Jun 2021 11:44:34 -0400
-Received: from omf05.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay07.hostedemail.com (Postfix) with ESMTP id 93289181D341E;
-        Sat, 12 Jun 2021 15:42:31 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 6F4BAB2798;
-        Sat, 12 Jun 2021 15:42:29 +0000 (UTC)
-Message-ID: <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
-Subject: [PATCH V2] treewide: Add missing semicolons to __assign_str uses
-From:   Joe Perches <joe@perches.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, lima@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Date:   Sat, 12 Jun 2021 08:42:27 -0700
-In-Reply-To: <20210604122128.0d348960@oasis.local.home>
-References: <cover.1621024265.git.bristot@redhat.com>
-         <2c59beee3b36b15592bfbb9f26dee7f8b55fd814.1621024265.git.bristot@redhat.com>
-         <20210603172902.41648183@gandalf.local.home>
-         <1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com>
-         <20210604122128.0d348960@oasis.local.home>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.38.1-1 
+        id S231516AbhFLP5a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Jun 2021 11:57:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48026 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231373AbhFLP53 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 12 Jun 2021 11:57:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7657B610FC;
+        Sat, 12 Jun 2021 15:55:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623513319;
+        bh=JG9O4NfiHdk3nCHbc/jik2VZDdoYJZACnH1oPGBd1q0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=M5/Dcja4NYy5DoWnRJo5eDcjoealiVBlAPB3mpwJdb5kF1T980YEjit8go345+kMc
+         5XeH9F0s91ePwfNd7GX75WR6MM7EjVunikOw3gw/6MmWZ4jkGLAN81ukfRiDkUW1gi
+         /dADR/eu63TztBHK8KEB9K5KjynAMwrzysPsF9o8=
+Date:   Sat, 12 Jun 2021 17:55:16 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB driver fixes for 5.13-rc6
+Message-ID: <YMTY5JKo71X92y/S@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.88
-X-Stat-Signature: naut8xoa6f3fyo7799wa7ej8dchz71sq
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 6F4BAB2798
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/CIdPhjk9thDh+AeVl0mUrCY9Ae99aWoA=
-X-HE-Tag: 1623512549-116996
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The __assign_str macro has an unusual ending semicolon but the vast
-majority of uses of the macro already have semicolon termination.
+The following changes since commit 8124c8a6b35386f73523d27eacb71b5364a68c4c:
 
-$ git grep -P '\b__assign_str\b' | wc -l
-551
-$ git grep -P '\b__assign_str\b.*;' | wc -l
-480
+  Linux 5.13-rc4 (2021-05-30 11:58:25 -1000)
 
-Add semicolons to the __assign_str() uses without semicolon termination
-and all the other uses without semicolon termination via additional defines
-that are equivalent to __assign_str() with the eventual goal of removing
-the semicolon from the __assign_str() macro definition.
+are available in the Git repository at:
 
-Link: https://lore.kernel.org/lkml/1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com/
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.13-rc6
 
-Signed-off-by: Joe Perches <joe@perches.com>
----
+for you to fetch changes up to 7c4363d3948535e6a9116a325b2fb56eab6b88ff:
 
-V2: Remove semicolon addition to #define VIF_ASSIGN as every use of
-    this macro already has a semicolon termination.
+  Merge tag 'usb-serial-5.13-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus (2021-06-11 12:32:49 +0200)
 
-Compiled x84-64 allyesconfig
+----------------------------------------------------------------
+USB fixes for 5.13-rc6
 
- drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h          | 14 ++++----
- drivers/gpu/drm/lima/lima_trace.h                  |  2 +-
- drivers/infiniband/hw/hfi1/trace_misc.h            |  4 +--
- drivers/infiniband/hw/hfi1/trace_rc.h              |  4 +--
- drivers/infiniband/hw/hfi1/trace_tid.h             |  6 ++--
- drivers/infiniband/hw/hfi1/trace_tx.h              |  8 ++---
- drivers/infiniband/sw/rdmavt/trace_cq.h            |  4 +--
- drivers/infiniband/sw/rdmavt/trace_mr.h            |  2 +-
- drivers/infiniband/sw/rdmavt/trace_qp.h            |  4 +--
- drivers/infiniband/sw/rdmavt/trace_rc.h            |  2 +-
- drivers/infiniband/sw/rdmavt/trace_tx.h            |  4 +--
- drivers/misc/mei/mei-trace.h                       |  6 ++--
- .../net/ethernet/marvell/octeontx2/af/rvu_trace.h  | 12 +++----
- drivers/net/fjes/fjes_trace.h                      |  4 +--
- drivers/usb/cdns3/cdnsp-trace.h                    |  2 +-
- fs/nfs/nfs4trace.h                                 |  6 ++--
- fs/nfs/nfstrace.h                                  |  4 +--
- include/trace/events/btrfs.h                       |  2 +-
- include/trace/events/dma_fence.h                   |  4 +--
- include/trace/events/rpcgss.h                      |  4 +--
- include/trace/events/sunrpc.h                      | 40 +++++++++++-----------
- 21 files changed, 69 insertions(+), 69 deletions(-)
+Here are a number of tiny USB fixes for 5.13-rc6.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-index 0527772fe1b80..d855cb53c7e09 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_trace.h
-@@ -176,10 +176,10 @@ TRACE_EVENT(amdgpu_cs_ioctl,
- 
- 	    TP_fast_assign(
- 			   __entry->sched_job_id = job->base.id;
--			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
-+			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job));
- 			   __entry->context = job->base.s_fence->finished.context;
- 			   __entry->seqno = job->base.s_fence->finished.seqno;
--			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name)
-+			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name);
- 			   __entry->num_ibs = job->num_ibs;
- 			   ),
- 	    TP_printk("sched_job=%llu, timeline=%s, context=%u, seqno=%u, ring_name=%s, num_ibs=%u",
-@@ -201,10 +201,10 @@ TRACE_EVENT(amdgpu_sched_run_job,
- 
- 	    TP_fast_assign(
- 			   __entry->sched_job_id = job->base.id;
--			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job))
-+			   __assign_str(timeline, AMDGPU_JOB_GET_TIMELINE_NAME(job));
- 			   __entry->context = job->base.s_fence->finished.context;
- 			   __entry->seqno = job->base.s_fence->finished.seqno;
--			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name)
-+			   __assign_str(ring, to_amdgpu_ring(job->base.sched)->name);
- 			   __entry->num_ibs = job->num_ibs;
- 			   ),
- 	    TP_printk("sched_job=%llu, timeline=%s, context=%u, seqno=%u, ring_name=%s, num_ibs=%u",
-@@ -229,7 +229,7 @@ TRACE_EVENT(amdgpu_vm_grab_id,
- 
- 	    TP_fast_assign(
- 			   __entry->pasid = vm->pasid;
--			   __assign_str(ring, ring->name)
-+			   __assign_str(ring, ring->name);
- 			   __entry->vmid = job->vmid;
- 			   __entry->vm_hub = ring->funcs->vmhub,
- 			   __entry->pd_addr = job->vm_pd_addr;
-@@ -424,7 +424,7 @@ TRACE_EVENT(amdgpu_vm_flush,
- 			     ),
- 
- 	    TP_fast_assign(
--			   __assign_str(ring, ring->name)
-+			   __assign_str(ring, ring->name);
- 			   __entry->vmid = vmid;
- 			   __entry->vm_hub = ring->funcs->vmhub;
- 			   __entry->pd_addr = pd_addr;
-@@ -525,7 +525,7 @@ TRACE_EVENT(amdgpu_ib_pipe_sync,
- 			     ),
- 
- 	    TP_fast_assign(
--			   __assign_str(ring, sched_job->base.sched->name)
-+			   __assign_str(ring, sched_job->base.sched->name);
- 			   __entry->id = sched_job->base.id;
- 			   __entry->fence = fence;
- 			   __entry->ctx = fence->context;
-diff --git a/drivers/gpu/drm/lima/lima_trace.h b/drivers/gpu/drm/lima/lima_trace.h
-index 3a430e93d384c..494b9790b1daf 100644
---- a/drivers/gpu/drm/lima/lima_trace.h
-+++ b/drivers/gpu/drm/lima/lima_trace.h
-@@ -24,7 +24,7 @@ DECLARE_EVENT_CLASS(lima_task,
- 		__entry->task_id = task->base.id;
- 		__entry->context = task->base.s_fence->finished.context;
- 		__entry->seqno = task->base.s_fence->finished.seqno;
--		__assign_str(pipe, task->base.sched->name)
-+		__assign_str(pipe, task->base.sched->name);
- 		),
- 
- 	TP_printk("task=%llu, context=%u seqno=%u pipe=%s",
-diff --git a/drivers/infiniband/hw/hfi1/trace_misc.h b/drivers/infiniband/hw/hfi1/trace_misc.h
-index 8db2253523ffe..93338988b9220 100644
---- a/drivers/infiniband/hw/hfi1/trace_misc.h
-+++ b/drivers/infiniband/hw/hfi1/trace_misc.h
-@@ -63,7 +63,7 @@ TRACE_EVENT(hfi1_interrupt,
- 			     __array(char, buf, 64)
- 			     __field(int, src)
- 			     ),
--	    TP_fast_assign(DD_DEV_ASSIGN(dd)
-+	    TP_fast_assign(DD_DEV_ASSIGN(dd);
- 			   is_entry->is_name(__entry->buf, 64,
- 					     src - is_entry->start);
- 			   __entry->src = src;
-@@ -100,7 +100,7 @@ TRACE_EVENT(hfi1_fault_opcode,
- 			     __field(u32, qpn)
- 			     __field(u8, opcode)
- 			     ),
--	    TP_fast_assign(DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+	    TP_fast_assign(DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 			   __entry->qpn = qp->ibqp.qp_num;
- 			   __entry->opcode = opcode;
- 			   ),
-diff --git a/drivers/infiniband/hw/hfi1/trace_rc.h b/drivers/infiniband/hw/hfi1/trace_rc.h
-index 1ebca37862e06..5f49e1eeb2116 100644
---- a/drivers/infiniband/hw/hfi1/trace_rc.h
-+++ b/drivers/infiniband/hw/hfi1/trace_rc.h
-@@ -70,7 +70,7 @@ DECLARE_EVENT_CLASS(hfi1_rc_template,
- 			__field(u32, r_psn)
- 			),
- 		    TP_fast_assign(
--			DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+			DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 			__entry->qpn = qp->ibqp.qp_num;
- 			__entry->s_flags = qp->s_flags;
- 			__entry->psn = psn;
-@@ -130,7 +130,7 @@ DECLARE_EVENT_CLASS(/* rc_ack */
- 		__field(u32, lpsn)
- 	),
- 	TP_fast_assign(/* assign */
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->aeth = aeth;
- 		__entry->psn = psn;
-diff --git a/drivers/infiniband/hw/hfi1/trace_tid.h b/drivers/infiniband/hw/hfi1/trace_tid.h
-index 985ffa9cc958f..d129b81959599 100644
---- a/drivers/infiniband/hw/hfi1/trace_tid.h
-+++ b/drivers/infiniband/hw/hfi1/trace_tid.h
-@@ -886,7 +886,7 @@ DECLARE_EVENT_CLASS(/* sender_info */
- 		__field(u8, s_retry)
- 	),
- 	TP_fast_assign(/* assign */
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->state = qp->state;
- 		__entry->s_cur = qp->s_cur;
-@@ -1285,7 +1285,7 @@ DECLARE_EVENT_CLASS(/* rc_rcv_err */
- 		__field(int, diff)
- 	),
- 	TP_fast_assign(/* assign */
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->s_flags = qp->s_flags;
- 		__entry->state = qp->state;
-@@ -1574,7 +1574,7 @@ DECLARE_EVENT_CLASS(/* tid_ack */
- 		__field(u32, resync_psn)
- 	),
- 	TP_fast_assign(/* assign */
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->aeth = aeth;
- 		__entry->psn = psn;
-diff --git a/drivers/infiniband/hw/hfi1/trace_tx.h b/drivers/infiniband/hw/hfi1/trace_tx.h
-index d44fc54858b90..f1922a7619fe8 100644
---- a/drivers/infiniband/hw/hfi1/trace_tx.h
-+++ b/drivers/infiniband/hw/hfi1/trace_tx.h
-@@ -120,7 +120,7 @@ DECLARE_EVENT_CLASS(hfi1_qpsleepwakeup_template,
- 		    __field(unsigned long, iow_flags)
- 		    ),
- 		    TP_fast_assign(
--		    DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		    DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		    __entry->flags = flags;
- 		    __entry->qpn = qp->ibqp.qp_num;
- 		    __entry->s_flags = qp->s_flags;
-@@ -868,7 +868,7 @@ TRACE_EVENT(
- 		__field(int, send_flags)
- 	),
- 	TP_fast_assign(
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->wqe = wqe;
- 		__entry->wr_id = wqe->wr.wr_id;
- 		__entry->qpn = qp->ibqp.qp_num;
-@@ -904,7 +904,7 @@ DECLARE_EVENT_CLASS(
- 		__field(bool, flag)
- 	),
- 	TP_fast_assign(
--		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device))
-+		DD_DEV_ASSIGN(dd_from_ibdev(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->flag = flag;
- 	),
-@@ -952,7 +952,7 @@ DECLARE_EVENT_CLASS(/* AIP  */
- 		__field(u8, stopped)
- 	),
- 	TP_fast_assign(/* assign */
--		DD_DEV_ASSIGN(txq->priv->dd)
-+		DD_DEV_ASSIGN(txq->priv->dd);
- 		__entry->txq = txq;
- 		__entry->sde = txq->sde;
- 		__entry->head = txq->tx_ring.head;
-diff --git a/drivers/infiniband/sw/rdmavt/trace_cq.h b/drivers/infiniband/sw/rdmavt/trace_cq.h
-index e3c416c6f900f..91bc192cee5e4 100644
---- a/drivers/infiniband/sw/rdmavt/trace_cq.h
-+++ b/drivers/infiniband/sw/rdmavt/trace_cq.h
-@@ -85,7 +85,7 @@ DECLARE_EVENT_CLASS(rvt_cq_template,
- 				     __field(int, comp_vector_cpu)
- 				     __field(u32, flags)
- 				     ),
--		    TP_fast_assign(RDI_DEV_ASSIGN(cq->rdi)
-+		    TP_fast_assign(RDI_DEV_ASSIGN(cq->rdi);
- 				   __entry->ip = cq->ip;
- 				   __entry->cqe = attr->cqe;
- 				   __entry->comp_vector = attr->comp_vector;
-@@ -123,7 +123,7 @@ DECLARE_EVENT_CLASS(
- 		__field(u32, imm)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(cq->rdi)
-+		RDI_DEV_ASSIGN(cq->rdi);
- 		__entry->wr_id = wc->wr_id;
- 		__entry->status = wc->status;
- 		__entry->opcode = wc->opcode;
-diff --git a/drivers/infiniband/sw/rdmavt/trace_mr.h b/drivers/infiniband/sw/rdmavt/trace_mr.h
-index 95b8a0e3b8bdb..c5b675ca4fa08 100644
---- a/drivers/infiniband/sw/rdmavt/trace_mr.h
-+++ b/drivers/infiniband/sw/rdmavt/trace_mr.h
-@@ -195,7 +195,7 @@ TRACE_EVENT(
- 		__field(uint, sg_offset)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(ib_to_rvt(to_imr(ibmr)->mr.pd->device))
-+		RDI_DEV_ASSIGN(ib_to_rvt(to_imr(ibmr)->mr.pd->device));
- 		__entry->ibmr_iova = ibmr->iova;
- 		__entry->iova = to_imr(ibmr)->mr.iova;
- 		__entry->user_base = to_imr(ibmr)->mr.user_base;
-diff --git a/drivers/infiniband/sw/rdmavt/trace_qp.h b/drivers/infiniband/sw/rdmavt/trace_qp.h
-index c32d21cc615e4..800cec8bb3c76 100644
---- a/drivers/infiniband/sw/rdmavt/trace_qp.h
-+++ b/drivers/infiniband/sw/rdmavt/trace_qp.h
-@@ -65,7 +65,7 @@ DECLARE_EVENT_CLASS(rvt_qphash_template,
- 		__field(u32, bucket)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
-+		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->bucket = bucket;
- 	),
-@@ -97,7 +97,7 @@ DECLARE_EVENT_CLASS(
- 		__field(u32, to)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
-+		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
- 		__entry->qpn = qp->ibqp.qp_num;
- 		__entry->hrtimer = &qp->s_rnr_timer;
- 		__entry->s_flags = qp->s_flags;
-diff --git a/drivers/infiniband/sw/rdmavt/trace_rc.h b/drivers/infiniband/sw/rdmavt/trace_rc.h
-index c47357af20998..9de52e1380251 100644
---- a/drivers/infiniband/sw/rdmavt/trace_rc.h
-+++ b/drivers/infiniband/sw/rdmavt/trace_rc.h
-@@ -71,7 +71,7 @@ DECLARE_EVENT_CLASS(rvt_rc_template,
- 			__field(u32, r_psn)
- 			),
- 		    TP_fast_assign(
--			RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
-+			RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
- 			__entry->qpn = qp->ibqp.qp_num;
- 			__entry->s_flags = qp->s_flags;
- 			__entry->psn = psn;
-diff --git a/drivers/infiniband/sw/rdmavt/trace_tx.h b/drivers/infiniband/sw/rdmavt/trace_tx.h
-index d963ca755828f..cb96be0f8f194 100644
---- a/drivers/infiniband/sw/rdmavt/trace_tx.h
-+++ b/drivers/infiniband/sw/rdmavt/trace_tx.h
-@@ -111,7 +111,7 @@ TRACE_EVENT(
- 		__field(int, wr_num_sge)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
-+		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
- 		__entry->wqe = wqe;
- 		__entry->wr_id = wqe->wr.wr_id;
- 		__entry->qpn = qp->ibqp.qp_num;
-@@ -170,7 +170,7 @@ TRACE_EVENT(
- 		__field(int, send_flags)
- 	),
- 	TP_fast_assign(
--		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device))
-+		RDI_DEV_ASSIGN(ib_to_rvt(qp->ibqp.device));
- 		__entry->wqe = wqe;
- 		__entry->wr_id = wqe->wr.wr_id;
- 		__entry->qpn = qp->ibqp.qp_num;
-diff --git a/drivers/misc/mei/mei-trace.h b/drivers/misc/mei/mei-trace.h
-index df758033dc937..fe46ff2b9d69f 100644
---- a/drivers/misc/mei/mei-trace.h
-+++ b/drivers/misc/mei/mei-trace.h
-@@ -26,7 +26,7 @@ TRACE_EVENT(mei_reg_read,
- 		__field(u32, val)
- 	),
- 	TP_fast_assign(
--		__assign_str(dev, dev_name(dev))
-+		__assign_str(dev, dev_name(dev));
- 		__entry->reg  = reg;
- 		__entry->offs = offs;
- 		__entry->val = val;
-@@ -45,7 +45,7 @@ TRACE_EVENT(mei_reg_write,
- 		__field(u32, val)
- 	),
- 	TP_fast_assign(
--		__assign_str(dev, dev_name(dev))
-+		__assign_str(dev, dev_name(dev));
- 		__entry->reg = reg;
- 		__entry->offs = offs;
- 		__entry->val = val;
-@@ -64,7 +64,7 @@ TRACE_EVENT(mei_pci_cfg_read,
- 		__field(u32, val)
- 	),
- 	TP_fast_assign(
--		__assign_str(dev, dev_name(dev))
-+		__assign_str(dev, dev_name(dev));
- 		__entry->reg  = reg;
- 		__entry->offs = offs;
- 		__entry->val = val;
-diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h b/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
-index e6609068e81be..64aa7d350df16 100644
---- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_trace.h
-@@ -21,7 +21,7 @@ TRACE_EVENT(otx2_msg_alloc,
- 			     __field(u16, id)
- 			     __field(u64, size)
- 	    ),
--	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
-+	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
- 			   __entry->id = id;
- 			   __entry->size = size;
- 	    ),
-@@ -36,7 +36,7 @@ TRACE_EVENT(otx2_msg_send,
- 			     __field(u16, num_msgs)
- 			     __field(u64, msg_size)
- 	    ),
--	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
-+	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
- 			   __entry->num_msgs = num_msgs;
- 			   __entry->msg_size = msg_size;
- 	    ),
-@@ -52,7 +52,7 @@ TRACE_EVENT(otx2_msg_check,
- 			     __field(u16, rspid)
- 			     __field(int, rc)
- 	    ),
--	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
-+	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
- 			   __entry->reqid = reqid;
- 			   __entry->rspid = rspid;
- 			   __entry->rc = rc;
-@@ -69,8 +69,8 @@ TRACE_EVENT(otx2_msg_interrupt,
- 			     __string(str, msg)
- 			     __field(u64, intr)
- 	    ),
--	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
--			   __assign_str(str, msg)
-+	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
-+			   __assign_str(str, msg);
- 			   __entry->intr = intr;
- 	    ),
- 	    TP_printk("[%s] mbox interrupt %s (0x%llx)\n", __get_str(dev),
-@@ -84,7 +84,7 @@ TRACE_EVENT(otx2_msg_process,
- 			     __field(u16, id)
- 			     __field(int, err)
- 	    ),
--	    TP_fast_assign(__assign_str(dev, pci_name(pdev))
-+	    TP_fast_assign(__assign_str(dev, pci_name(pdev));
- 			   __entry->id = id;
- 			   __entry->err = err;
- 	    ),
-diff --git a/drivers/net/fjes/fjes_trace.h b/drivers/net/fjes/fjes_trace.h
-index 9237b69d8e217..6437ddbd7842e 100644
---- a/drivers/net/fjes/fjes_trace.h
-+++ b/drivers/net/fjes/fjes_trace.h
-@@ -232,7 +232,7 @@ TRACE_EVENT(fjes_hw_start_debug_err,
- 		 __string(err, err)
- 	),
- 	TP_fast_assign(
--		__assign_str(err, err)
-+		__assign_str(err, err);
- 	),
- 	TP_printk("%s", __get_str(err))
- );
-@@ -258,7 +258,7 @@ TRACE_EVENT(fjes_hw_stop_debug_err,
- 		 __string(err, err)
- 	),
- 	TP_fast_assign(
--		__assign_str(err, err)
-+		__assign_str(err, err);
- 	),
- 	TP_printk("%s", __get_str(err))
- );
-diff --git a/drivers/usb/cdns3/cdnsp-trace.h b/drivers/usb/cdns3/cdnsp-trace.h
-index 5aa88ca012de1..6a2571c6aa9ed 100644
---- a/drivers/usb/cdns3/cdnsp-trace.h
-+++ b/drivers/usb/cdns3/cdnsp-trace.h
-@@ -138,7 +138,7 @@ DECLARE_EVENT_CLASS(cdnsp_log_simple,
- 		__string(text, msg)
- 	),
- 	TP_fast_assign(
--		__assign_str(text, msg)
-+		__assign_str(text, msg);
- 	),
- 	TP_printk("%s", __get_str(text))
- );
-diff --git a/fs/nfs/nfs4trace.h b/fs/nfs/nfs4trace.h
-index 2ef75caad6dab..7a2567aa2b86d 100644
---- a/fs/nfs/nfs4trace.h
-+++ b/fs/nfs/nfs4trace.h
-@@ -625,7 +625,7 @@ TRACE_EVENT(nfs4_state_mgr,
- 
- 		TP_fast_assign(
- 			__entry->state = clp->cl_state;
--			__assign_str(hostname, clp->cl_hostname)
-+			__assign_str(hostname, clp->cl_hostname);
- 		),
- 
- 		TP_printk(
-@@ -1637,7 +1637,7 @@ DECLARE_EVENT_CLASS(nfs4_inode_callback_event,
- 				__entry->fileid = 0;
- 				__entry->dev = 0;
- 			}
--			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown")
-+			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown");
- 		),
- 
- 		TP_printk(
-@@ -1694,7 +1694,7 @@ DECLARE_EVENT_CLASS(nfs4_inode_stateid_callback_event,
- 				__entry->fileid = 0;
- 				__entry->dev = 0;
- 			}
--			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown")
-+			__assign_str(dstaddr, clp ? clp->cl_hostname : "unknown");
- 			__entry->stateid_seq =
- 				be32_to_cpu(stateid->seqid);
- 			__entry->stateid_hash =
-diff --git a/fs/nfs/nfstrace.h b/fs/nfs/nfstrace.h
-index ae513e1718fe5..8a224871be74c 100644
---- a/fs/nfs/nfstrace.h
-+++ b/fs/nfs/nfstrace.h
-@@ -1423,8 +1423,8 @@ DECLARE_EVENT_CLASS(nfs_xdr_event,
- 			__entry->version = task->tk_client->cl_vers;
- 			__entry->error = error;
- 			__assign_str(program,
--				     task->tk_client->cl_program->name)
--			__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
-+				     task->tk_client->cl_program->name);
-+			__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
- 		),
- 
- 		TP_printk(
-diff --git a/include/trace/events/btrfs.h b/include/trace/events/btrfs.h
-index 76e0be7e14d05..8cf61e42900e8 100644
---- a/include/trace/events/btrfs.h
-+++ b/include/trace/events/btrfs.h
-@@ -1093,7 +1093,7 @@ TRACE_EVENT(btrfs_trigger_flush,
- 		__entry->flags	= flags;
- 		__entry->bytes	= bytes;
- 		__entry->flush	= flush;
--		__assign_str(reason, reason)
-+		__assign_str(reason, reason);
- 	),
- 
- 	TP_printk_btrfs("%s: flush=%d(%s) flags=%llu(%s) bytes=%llu",
-diff --git a/include/trace/events/dma_fence.h b/include/trace/events/dma_fence.h
-index 64e92d56c6a8f..3963e79ca7b42 100644
---- a/include/trace/events/dma_fence.h
-+++ b/include/trace/events/dma_fence.h
-@@ -23,8 +23,8 @@ DECLARE_EVENT_CLASS(dma_fence,
- 	),
- 
- 	TP_fast_assign(
--		__assign_str(driver, fence->ops->get_driver_name(fence))
--		__assign_str(timeline, fence->ops->get_timeline_name(fence))
-+		__assign_str(driver, fence->ops->get_driver_name(fence));
-+		__assign_str(timeline, fence->ops->get_timeline_name(fence));
- 		__entry->context = fence->context;
- 		__entry->seqno = fence->seqno;
- 	),
-diff --git a/include/trace/events/rpcgss.h b/include/trace/events/rpcgss.h
-index ffdbe6f85da8b..b2a2672e66322 100644
---- a/include/trace/events/rpcgss.h
-+++ b/include/trace/events/rpcgss.h
-@@ -152,7 +152,7 @@ DECLARE_EVENT_CLASS(rpcgss_ctx_class,
- 	TP_fast_assign(
- 		__entry->cred = gc;
- 		__entry->service = gc->gc_service;
--		__assign_str(principal, gc->gc_principal)
-+		__assign_str(principal, gc->gc_principal);
- 	),
- 
- 	TP_printk("cred=%p service=%s principal='%s'",
-@@ -535,7 +535,7 @@ TRACE_EVENT(rpcgss_upcall_msg,
- 	),
- 
- 	TP_fast_assign(
--		__assign_str(msg, buf)
-+		__assign_str(msg, buf);
- 	),
- 
- 	TP_printk("msg='%s'", __get_str(msg))
-diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
-index d02e01a27b690..861f199896c6a 100644
---- a/include/trace/events/sunrpc.h
-+++ b/include/trace/events/sunrpc.h
-@@ -154,8 +154,8 @@ TRACE_EVENT(rpc_clnt_new,
- 		__entry->client_id = clnt->cl_clid;
- 		__assign_str(addr, xprt->address_strings[RPC_DISPLAY_ADDR]);
- 		__assign_str(port, xprt->address_strings[RPC_DISPLAY_PORT]);
--		__assign_str(program, program)
--		__assign_str(server, server)
-+		__assign_str(program, program);
-+		__assign_str(server, server);
- 	),
- 
- 	TP_printk("client=%u peer=[%s]:%s program=%s server=%s",
-@@ -180,8 +180,8 @@ TRACE_EVENT(rpc_clnt_new_err,
- 
- 	TP_fast_assign(
- 		__entry->error = error;
--		__assign_str(program, program)
--		__assign_str(server, server)
-+		__assign_str(program, program);
-+		__assign_str(server, server);
- 	),
- 
- 	TP_printk("program=%s server=%s error=%d",
-@@ -284,8 +284,8 @@ TRACE_EVENT(rpc_request,
- 		__entry->client_id = task->tk_client->cl_clid;
- 		__entry->version = task->tk_client->cl_vers;
- 		__entry->async = RPC_IS_ASYNC(task);
--		__assign_str(progname, task->tk_client->cl_program->name)
--		__assign_str(procname, rpc_proc_name(task))
-+		__assign_str(progname, task->tk_client->cl_program->name);
-+		__assign_str(procname, rpc_proc_name(task));
- 	),
- 
- 	TP_printk("task:%u@%u %sv%d %s (%ssync)",
-@@ -494,10 +494,10 @@ DECLARE_EVENT_CLASS(rpc_reply_event,
- 		__entry->task_id = task->tk_pid;
- 		__entry->client_id = task->tk_client->cl_clid;
- 		__entry->xid = be32_to_cpu(task->tk_rqstp->rq_xid);
--		__assign_str(progname, task->tk_client->cl_program->name)
-+		__assign_str(progname, task->tk_client->cl_program->name);
- 		__entry->version = task->tk_client->cl_vers;
--		__assign_str(procname, rpc_proc_name(task))
--		__assign_str(servername, task->tk_xprt->servername)
-+		__assign_str(procname, rpc_proc_name(task));
-+		__assign_str(servername, task->tk_xprt->servername);
- 	),
- 
- 	TP_printk("task:%u@%d server=%s xid=0x%08x %sv%d %s",
-@@ -622,8 +622,8 @@ TRACE_EVENT(rpc_stats_latency,
- 		__entry->task_id = task->tk_pid;
- 		__entry->xid = be32_to_cpu(task->tk_rqstp->rq_xid);
- 		__entry->version = task->tk_client->cl_vers;
--		__assign_str(progname, task->tk_client->cl_program->name)
--		__assign_str(procname, rpc_proc_name(task))
-+		__assign_str(progname, task->tk_client->cl_program->name);
-+		__assign_str(procname, rpc_proc_name(task));
- 		__entry->backlog = ktime_to_us(backlog);
- 		__entry->rtt = ktime_to_us(rtt);
- 		__entry->execute = ktime_to_us(execute);
-@@ -669,15 +669,15 @@ TRACE_EVENT(rpc_xdr_overflow,
- 			__entry->task_id = task->tk_pid;
- 			__entry->client_id = task->tk_client->cl_clid;
- 			__assign_str(progname,
--				     task->tk_client->cl_program->name)
-+				     task->tk_client->cl_program->name);
- 			__entry->version = task->tk_client->cl_vers;
--			__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
-+			__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
- 		} else {
- 			__entry->task_id = 0;
- 			__entry->client_id = 0;
--			__assign_str(progname, "unknown")
-+			__assign_str(progname, "unknown");
- 			__entry->version = 0;
--			__assign_str(procedure, "unknown")
-+			__assign_str(procedure, "unknown");
- 		}
- 		__entry->requested = requested;
- 		__entry->end = xdr->end;
-@@ -735,9 +735,9 @@ TRACE_EVENT(rpc_xdr_alignment,
- 		__entry->task_id = task->tk_pid;
- 		__entry->client_id = task->tk_client->cl_clid;
- 		__assign_str(progname,
--			     task->tk_client->cl_program->name)
-+			     task->tk_client->cl_program->name);
- 		__entry->version = task->tk_client->cl_vers;
--		__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
-+		__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
- 
- 		__entry->offset = offset;
- 		__entry->copied = copied;
-@@ -1107,9 +1107,9 @@ TRACE_EVENT(xprt_retransmit,
- 		__entry->xid = be32_to_cpu(rqst->rq_xid);
- 		__entry->ntrans = rqst->rq_ntrans;
- 		__assign_str(progname,
--			     task->tk_client->cl_program->name)
-+			     task->tk_client->cl_program->name);
- 		__entry->version = task->tk_client->cl_vers;
--		__assign_str(procedure, task->tk_msg.rpc_proc->p_name)
-+		__assign_str(procedure, task->tk_msg.rpc_proc->p_name);
- 	),
- 
- 	TP_printk(
-@@ -1842,7 +1842,7 @@ TRACE_EVENT(svc_xprt_accept,
- 
- 	TP_fast_assign(
- 		__assign_str(addr, xprt->xpt_remotebuf);
--		__assign_str(protocol, xprt->xpt_class->xcl_name)
-+		__assign_str(protocol, xprt->xpt_class->xcl_name);
- 		__assign_str(service, service);
- 	),
- 
+There are more than I would normally like, but there's been a bunch of
+people banging on the gadget and dwc3 and typec code recently for I
+think an Android release, which has resulted in a number of small fixes.
+It's nice to see companies send fixes upstream for this type of work, a
+notable change from years ago.
 
+Anyway, fixes in here are:
+	- usb-serial device id updates
+	- usb-serial cp210x driver fixes for broken firmware versions
+	- typec fixes for crazy charging devices and other reported
+	  problems
+	- dwc3 fixes for reported problems found
+	- gadget fixes for reported problems
+	- tiny xhci fixes
+	- other small fixes for reported issues.
+	- revert of a problem fix found by linux-next testing
+
+All of these have passed 0-day and linux-next testing with no reported
+problems (the revert for the found linux-next build problem included).
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alexandre GRIVEAUX (2):
+      USB: serial: omninet: add device id for Zyxel Omni 56K Plus
+      USB: serial: omninet: update driver description
+
+Alexandru Elisei (1):
+      Revert "usb: dwc3: core: Add shutdown callback for dwc3"
+
+Andy Shevchenko (4):
+      usb: typec: intel_pmc_mux: Put fwnode in error case during ->probe()
+      usb: typec: intel_pmc_mux: Add missed error check for devm_ioremap_resource()
+      usb: typec: intel_pmc_mux: Put ACPI device using acpi_dev_put()
+      usb: typec: wcove: Use LE to CPU conversion when accessing msg->header
+
+Bjorn Andersson (1):
+      usb: typec: mux: Fix copy-paste mistake in typec_mux_match
+
+Christophe JAILLET (1):
+      usb: dwc3: meson-g12a: Disable the regulator in the error handling path of the probe
+
+George McCollister (1):
+      USB: serial: ftdi_sio: add NovaTech OrionMX product ID
+
+Greg Kroah-Hartman (4):
+      Merge tag 'usb-serial-5.13-rc5' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+      Merge tag 'usb-v5.13-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
+      Revert "usb: gadget: fsl: Re-enable driver for ARM SoCs"
+      Merge tag 'usb-serial-5.13-rc6' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+
+Jack Pham (2):
+      usb: dwc3: gadget: Bail from dwc3_gadget_exit() if dwc->gadget is NULL
+      usb: dwc3: debugfs: Add and remove endpoint dirs dynamically
+
+Joel Stanley (1):
+      usb: gadget: fsl: Re-enable driver for ARM SoCs
+
+Johan Hovold (2):
+      USB: serial: quatech2: fix control-request directions
+      USB: serial: cp210x: fix CP2102N-A01 modem control
+
+Kyle Tso (8):
+      usb: pd: Set PD_T_SINK_WAIT_CAP to 310ms
+      dt-bindings: connector: Replace BIT macro with generic bit ops
+      usb: typec: tcpm: Correct the responses in SVDM Version 2.0 DFP
+      dt-bindings: connector: Add PD rev 2.0 VDO definition
+      usb: typec: tcpm: Introduce snk_vdo_v1 for SVDM version 1.0
+      usb: typec: tcpm: Fix misuses of AMS invocation
+      usb: typec: tcpm: Properly handle Alert and Status Messages
+      usb: typec: tcpm: Do not finish VDM AMS for retrying Responses
+
+Li Jun (3):
+      usb: typec: tcpm: cancel vdm and state machine hrtimer when unregister tcpm port
+      usb: typec: tcpm: cancel frs hrtimer when unregister tcpm port
+      usb: typec: tcpm: cancel send discover hrtimer when unregister tcpm port
+
+Linyu Yuan (1):
+      usb: gadget: eem: fix wrong eem header operation
+
+Maciej Żenczykowski (4):
+      USB: f_ncm: ncm_bitrate (speed) is unsigned
+      usb: f_ncm: only first packet of aggregate needs to start timer
+      usb: fix various gadgets null ptr deref on 10gbps cabling.
+      usb: fix various gadget panics on 10gbps cabling
+
+Marian-Cristian Rotariu (1):
+      usb: dwc3: ep0: fix NULL pointer exception
+
+Mario Limonciello (1):
+      usb: pci-quirks: disable D3cold on xhci suspend for s2idle on AMD Renoir
+
+Mayank Rana (1):
+      usb: typec: ucsi: Clear PPM capability data in ucsi_init() error path
+
+Neil Armstrong (1):
+      usb: dwc3-meson-g12a: fix usb2 PHY glue init when phy0 is disabled
+
+Pawel Laszczak (1):
+      usb: cdnsp: Fix deadlock issue in cdnsp_thread_irq_handler
+
+Rui Miguel Silva (1):
+      MAINTAINERS: usb: add entry for isp1760
+
+Sanket Parmar (1):
+      usb: cdns3: Enable TDL_CHK only for OUT ep
+
+Stefan Agner (1):
+      USB: serial: cp210x: fix alternate function for CP2102N QFN20
+
+Thomas Petazzoni (1):
+      usb: musb: fix MUSB_QUIRK_B_DISCONNECT_99 handling
+
+Wesley Cheng (2):
+      usb: dwc3: gadget: Disable gadget IRQ during pullup disable
+      usb: gadget: f_fs: Ensure io_completion_wq is idle during unbind
+
+Yang Yingliang (1):
+      usb: misc: brcmstb-usb-pinmap: check return value after calling platform_get_resource()
+
+ .../bindings/connector/usb-connector.yaml          |  15 +++
+ MAINTAINERS                                        |   7 ++
+ drivers/usb/cdns3/cdns3-gadget.c                   |   8 +-
+ drivers/usb/cdns3/cdnsp-ring.c                     |   7 +-
+ drivers/usb/dwc3/core.c                            |   6 -
+ drivers/usb/dwc3/debug.h                           |   3 +
+ drivers/usb/dwc3/debugfs.c                         |  21 +---
+ drivers/usb/dwc3/dwc3-meson-g12a.c                 |  13 ++-
+ drivers/usb/dwc3/ep0.c                             |   3 +
+ drivers/usb/dwc3/gadget.c                          |  18 ++-
+ drivers/usb/gadget/config.c                        |   8 ++
+ drivers/usb/gadget/function/f_ecm.c                |   2 +-
+ drivers/usb/gadget/function/f_eem.c                |   6 +-
+ drivers/usb/gadget/function/f_fs.c                 |   3 +
+ drivers/usb/gadget/function/f_hid.c                |   3 +-
+ drivers/usb/gadget/function/f_loopback.c           |   2 +-
+ drivers/usb/gadget/function/f_ncm.c                |  10 +-
+ drivers/usb/gadget/function/f_printer.c            |   3 +-
+ drivers/usb/gadget/function/f_rndis.c              |   2 +-
+ drivers/usb/gadget/function/f_serial.c             |   2 +-
+ drivers/usb/gadget/function/f_sourcesink.c         |   3 +-
+ drivers/usb/gadget/function/f_subset.c             |   2 +-
+ drivers/usb/gadget/function/f_tcm.c                |   3 +-
+ drivers/usb/host/xhci-pci.c                        |   7 +-
+ drivers/usb/host/xhci.h                            |   1 +
+ drivers/usb/misc/brcmstb-usb-pinmap.c              |   2 +
+ drivers/usb/musb/musb_core.c                       |   3 +-
+ drivers/usb/serial/cp210x.c                        |  84 +++++++++++++-
+ drivers/usb/serial/ftdi_sio.c                      |   1 +
+ drivers/usb/serial/ftdi_sio_ids.h                  |   1 +
+ drivers/usb/serial/omninet.c                       |   8 +-
+ drivers/usb/serial/quatech2.c                      |   6 +-
+ drivers/usb/typec/mux.c                            |   2 +-
+ drivers/usb/typec/mux/intel_pmc_mux.c              |  15 ++-
+ drivers/usb/typec/tcpm/tcpm.c                      | 123 +++++++++++++--------
+ drivers/usb/typec/tcpm/wcove.c                     |   2 +-
+ drivers/usb/typec/ucsi/ucsi.c                      |   1 +
+ include/dt-bindings/usb/pd.h                       |  89 ++++++++++++---
+ include/linux/usb/pd.h                             |   2 +-
+ include/linux/usb/pd_ext_sdb.h                     |   4 -
+ 40 files changed, 357 insertions(+), 144 deletions(-)
