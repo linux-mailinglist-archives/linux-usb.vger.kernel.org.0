@@ -2,132 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B582B3A4F29
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 15:56:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38BDB3A4F39
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 16:19:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbhFLN6S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 12 Jun 2021 09:58:18 -0400
-Received: from mail-lf1-f48.google.com ([209.85.167.48]:37883 "EHLO
-        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbhFLN6Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Jun 2021 09:58:16 -0400
-Received: by mail-lf1-f48.google.com with SMTP id p7so13079828lfg.4;
-        Sat, 12 Jun 2021 06:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AEFhASB6FA/sHSDoXSCJ570NmZcT07RYolnmbpHiMTE=;
-        b=Skxwgi9RubBgGnhzJqe+B/AVGoxz0CTV1XIW5b/+vwG4RVNeiNTn/DoRIPpSn7FVNA
-         E45P0erFzlHW/kWbzF9qeB9aBwHkkVmoFyCKf4CHANJAXE6j+8LtU7a7UgMxUhL8WAwd
-         mv3GAFD814FHCqQiMdW7WlBYHcUppewtCXdUI34OTuTubZNkdzyIrS1mCpZj/BeEkfDY
-         q4gcpe8FEA9pKhMD0d1OfnehO6VKBy3qN4QhcgLbI2T485pwtHjODPloJUTaoPG1ruJ9
-         hr8fpZnbYF+3F1YVy+pHGTsVlg9t/D29zWD1JiLDZTHnNQQPjI3xNYJGzVExv97jYi2q
-         Uc6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AEFhASB6FA/sHSDoXSCJ570NmZcT07RYolnmbpHiMTE=;
-        b=gj6f1PJ7siTIFyUecYMKfrsTDDSye1YTzOivAivpJdgZtWH+OccJKo+GUgHpil2QMS
-         O9ncwyUo0lHdnNa+SziogRDHn2Jv9w2xwpkJKpxAkcmLOwX4mplgTurvXBE1LAerqGob
-         gyzEZj9wBw8/M+nyGpjrbHlay2xOD9KHViE5x0EeXkLgSqQfRiTxa8XcvnM1JKNWB1u1
-         alq4aE1Q0sPjXWJrZULo3uKn5D/sRvTC/RIVf6+F77gxEYypRmoaw50mcOzE4ECpNhW8
-         ZpjLNdB/SGRtaPCjOSpGMi1iqQqkhijeErSn7deq4Y9lBfOY+7yC3INfqg96T61ZqFCy
-         uuGQ==
-X-Gm-Message-State: AOAM5335oIRjpPPR8ocx1iyXvcKlry2q6eJIMsAbueDID18a7sUIIwWG
-        2h1y3fwQybBsm5BN3H1AbU0ZZh1UDZo=
-X-Google-Smtp-Source: ABdhPJwrYXbQ0qxTrcqAQSmIDmbRI3MfCeLIKbfrW3CrTrhxNUAuyQBB4QFwxUUk82IZxli2COVtZQ==
-X-Received: by 2002:a05:6512:c23:: with SMTP id z35mr1210901lfu.549.1623506116048;
-        Sat, 12 Jun 2021 06:55:16 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-21-60.dynamic.spd-mgts.ru. [94.29.21.60])
-        by smtp.googlemail.com with ESMTPSA id d4sm900138lfk.295.2021.06.12.06.55.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Jun 2021 06:55:15 -0700 (PDT)
-Subject: Re: [PATCH v1] usb: chipidea: tegra: Delay PHY suspending
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Peter Chen <Peter.Chen@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Felipe Balbi <balbi@kernel.org>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210609120404.3991-1-digetx@gmail.com>
- <20210612073450.GB4580@Peter>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <968bdb71-0c36-b8c7-3d8a-42d494c8a7cd@gmail.com>
-Date:   Sat, 12 Jun 2021 16:55:14 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S231320AbhFLOV1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 12 Jun 2021 10:21:27 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:35461 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231302AbhFLOV1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 12 Jun 2021 10:21:27 -0400
+Received: (qmail 78830 invoked by uid 1000); 12 Jun 2021 10:19:26 -0400
+Date:   Sat, 12 Jun 2021 10:19:26 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     syzbot <syzbot+5f29dc6a889fc42bd896@syzkaller.appspotmail.com>,
+        johan@kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in vmk80xx_auto_attach/usb_submit_urb
+Message-ID: <20210612141926.GA78629@rowland.harvard.edu>
+References: <00000000000074a21005c482fce2@google.com>
+ <YMRbTj2RAbIFZKw6@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <20210612073450.GB4580@Peter>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMRbTj2RAbIFZKw6@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-12.06.2021 10:34, Peter Chen пишет:
-> On 21-06-09 15:04:04, Dmitry Osipenko wrote:
->> The ChipIdea driver enters into suspend immediately after seeing a
->> VBUS disconnection. Some devices need an extra delay after losing
->> VBUS, otherwise VBUS may be floating, preventing the PHY's suspending
->> by the VBUS detection sensors. This problem was found on Tegra30 Asus
->> Transformer TF700T tablet device, where the USB PHY wakes up immediately
->> from suspend because VBUS sensor continues to detect VBUS as active after
->> disconnection. A minimum delay of 20ms is needed in order to fix this
->> issue, hence add 25ms delay before suspending the PHY.
->>
->> Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
->> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/usb/chipidea/ci_hdrc_tegra.c | 8 ++++++++
->>  1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/usb/chipidea/ci_hdrc_tegra.c b/drivers/usb/chipidea/ci_hdrc_tegra.c
->> index 60361141ac04..d1359b76a0e8 100644
->> --- a/drivers/usb/chipidea/ci_hdrc_tegra.c
->> +++ b/drivers/usb/chipidea/ci_hdrc_tegra.c
->> @@ -4,6 +4,7 @@
->>   */
->>  
->>  #include <linux/clk.h>
->> +#include <linux/delay.h>
->>  #include <linux/io.h>
->>  #include <linux/module.h>
->>  #include <linux/of_device.h>
->> @@ -255,6 +256,13 @@ static int tegra_ehci_hub_control(struct ci_hdrc *ci, u16 typeReq, u16 wValue,
->>  
->>  static void tegra_usb_enter_lpm(struct ci_hdrc *ci, bool enable)
->>  {
->> +	/*
->> +	 * Give hardware time to settle down after VBUS disconnection,
->> +	 * otherwise PHY may wake up from suspend immediately.
->> +	 */
->> +	if (enable)
->> +		msleep(25);
->> +
+On Sat, Jun 12, 2021 at 08:59:26AM +0200, Greg KH wrote:
+> On Fri, Jun 11, 2021 at 01:02:23PM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    614124be Linux 5.13-rc5
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=12188667d00000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=547a5e42ca601229
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=5f29dc6a889fc42bd896
+> > compiler:       Debian clang version 11.0.1-2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1687ec3fd00000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=172f44ffd00000
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+5f29dc6a889fc42bd896@syzkaller.appspotmail.com
+> > 
+> > usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
+> > usb 1-1: config 0 descriptor??
+> > ------------[ cut here ]------------
+> > usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+> > WARNING: CPU: 1 PID: 20 at drivers/usb/core/urb.c:494 usb_submit_urb+0xacd/0x1550 drivers/usb/core/urb.c:493
 > 
-> How could you know 25ms is enough for other Tegra designs?
+> Looks correct to me, you did not create a valid USB device for the
+> system to use :)
 
-I don't know what is the maximum timeout could be, but it shouldn't be a
-problem to bump the timeout if somebody will report the need to do so.
+The problem is that vmk80xx_write_packet submits an interrupt URB to 
+the ep_tx endpoint, but vmk80xx_find_usb_endpoints will set ep_tx to the 
+first OUT endpoint it finds that is either interrupt or bulk.  In this 
+case it was bulk, so the driver submitted an interrupt URB to a bulk 
+endpoint.
 
-> Could you poll VBUS wakeup threshold register to ensure the
-> wakeup will not occur?
-
-We indeed can poll the wakeup threshold status in the PHY driver, it
-works too. I'll make the patch for the PHY driver, thank you for the
-suggestion.
-
-> The similar design exists at function:
-> hw_wait_vbus_lower_bsv.
-
-The hw_wait_vbus_lower_bsv uses 5sec timeout, which should be too much.
-I'll set the polling timeout to 100ms.
+Alan Stern
