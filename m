@@ -2,104 +2,238 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 055333A4B64
-	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 01:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643FF3A4BBC
+	for <lists+linux-usb@lfdr.de>; Sat, 12 Jun 2021 02:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbhFKXtq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 11 Jun 2021 19:49:46 -0400
-Received: from mail-qt1-f178.google.com ([209.85.160.178]:39692 "EHLO
-        mail-qt1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbhFKXtq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 19:49:46 -0400
-Received: by mail-qt1-f178.google.com with SMTP id p21so3923404qtw.6
-        for <linux-usb@vger.kernel.org>; Fri, 11 Jun 2021 16:47:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vt-edu.20150623.gappssmtp.com; s=20150623;
-        h=sender:from:to:cc:subject:in-reply-to:references:mime-version
-         :content-transfer-encoding:date:message-id;
-        bh=9k5XTuzdGjpcIWll5aNtcDOwxzv06WPFRNlOE7yNKzU=;
-        b=hWWOILzIj3GVS133jYfWoDePKUXOfR6PPnuTZGbbkuQzy0ANnotLLpzqCt7AspwSR6
-         TWFcnYKNczG36U7xSyWIXJclofsB5ZxG/0ElGlUTeG8EOmK5iSeOYJaGVDtf/ptUuYcg
-         TY/k9bbaI1XRc0QpMUMduMNO70tspZ9S6ZiM4Tqsf+qjuv/oZcpKGiX7bDqrxlWumkel
-         /xm26vs9qCY+d2N6JeNCysnExHSUp79owoYY4CO+T+N4hhKcKcRFCacbRUg8o1FedqAu
-         mVpL3uCCSjOl2LsrFjXv3L/3EnZT20j8QONlw6gXrNjdGTuiM3/Ed6ntDQFrZpqSBmDu
-         a8HQ==
+        id S229937AbhFLAdy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 11 Jun 2021 20:33:54 -0400
+Received: from mail-ot1-f54.google.com ([209.85.210.54]:34360 "EHLO
+        mail-ot1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229584AbhFLAdy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 11 Jun 2021 20:33:54 -0400
+Received: by mail-ot1-f54.google.com with SMTP id w22-20020a0568304116b02904060c6415c7so2518545ott.1;
+        Fri, 11 Jun 2021 17:31:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:content-transfer-encoding:date:message-id;
-        bh=9k5XTuzdGjpcIWll5aNtcDOwxzv06WPFRNlOE7yNKzU=;
-        b=bG3xCvi9RbCaxCikx9Cd0pLxcc4n/jjBxx7neK8OKpt+Fw1WFlEaYAFHXZqlO0nMmO
-         1ksiaW7ApEzzru5CRTrDDfH7cJbLBz2MF0hRsyysZdPDKrSQPneo46Jx8h0uN9TfFed6
-         oTI6eWN9ZOFKMSmAkvWFgUUOnlChL+Vrvq7HCVF8Sdl0arv6PcAqv59Ok/4IQ2xCW/2j
-         8ww7l/qA0+vnEAefGzT4grKESIqlkE184c371wV1+m7zO1YNT+Scu0cdtbg/SxKu2JMv
-         wsjEv8v3FY73vmrHXeVurrhKyMS7QfFrnE8LaIa89jHF+yux5olQCjtqlbvG26om68dX
-         rBpQ==
-X-Gm-Message-State: AOAM532G8gptL/XLRR3wQHpmuLAtQtlFiZgoBAUqnNm1hmsuJ8sP/mU/
-        slxBJVsFwfUv2HYU6lhk94W+Fg==
-X-Google-Smtp-Source: ABdhPJxDo9CKPwfYYQ62I6co+RpPSdFHSZp0VsmTQ8KneCoKgTbWkekdRlvpRjBbJ2rtjB3lgfF5MA==
-X-Received: by 2002:ac8:5ed5:: with SMTP id s21mr6420142qtx.87.1623455196302;
-        Fri, 11 Jun 2021 16:46:36 -0700 (PDT)
-Received: from turing-police ([2601:5c0:c380:d61::359])
-        by smtp.gmail.com with ESMTPSA id g5sm5496121qke.101.2021.06.11.16.46.35
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qga+c0C77T21FQKulI0d4f+Rhv/BssoNhwHf+62zha8=;
+        b=kh0SdKgSRpAGaOvwfgQHXr8ik8iFcDkCEnUcDXSzOe0bNv2V+Z+TSL6UHIXO3Al+HA
+         vot7JhrEHO155I4QTcN9cYwcLmnneeABM/i4Vrc6xHrLMRh5g2NZfLtWRtwVdK5QqbM/
+         h88kxbIb3p8zEcVyRFk56mf+wrhoVzUFTbotqfZ977IbuBZHkubqzz2iZpQ/oIwZRKfo
+         ydehDZy5n4/UCbAXK31w1GswOEcU1feFuw9JWLNKfPrG693mpWtmD2ADdeyVjH23io/G
+         UqfKyoDqJ73fS8VlhcsC7ufAX0McMJCzmVxho4fEJvGSgE/rJefDCvtp6c0QQfpj4RfC
+         9evA==
+X-Gm-Message-State: AOAM530ijMIjBvkTJj0+3MZypxW4/1bDPqUg1hLICAYQOmdqo0GvHAZ0
+        7kxdyjEtKVAMvolY55t6gjU=
+X-Google-Smtp-Source: ABdhPJw/Pdj10SN92PG4Bdy28rQf1qV8jsWTF5ft7sQMfDfaPTuxwn/WHn0hzVjI1cjYn56YgHt0fw==
+X-Received: by 2002:a05:6830:3147:: with SMTP id c7mr5204852ots.332.1623457915004;
+        Fri, 11 Jun 2021 17:31:55 -0700 (PDT)
+Received: from Powerful.. ([2605:a601:aac6:6c00:4376:94a1:82c5:6517])
+        by smtp.gmail.com with ESMTPSA id z6sm1553331oiz.39.2021.06.11.17.31.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Jun 2021 16:46:35 -0700 (PDT)
-Sender: Valdis Kletnieks <valdis@vt.edu>
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
-To:     Muni Sekhar <munisekharrms@gmail.com>
-Cc:     linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
-        alsa-devel <alsa-devel@alsa-project.org>,
-        kernelnewbies <kernelnewbies@kernelnewbies.org>
-Subject: Re: USB sound card issues
-In-Reply-To: <CAHhAz+haTa8FJep+mokae4O7Gy9zzq2dbPk28fuEH5FO24uTzw@mail.gmail.com>
-References: <CAHhAz+haTa8FJep+mokae4O7Gy9zzq2dbPk28fuEH5FO24uTzw@mail.gmail.com>
-Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="==_Exmh_1623455194_23653P";
-         micalg=pgp-sha1; protocol="application/pgp-signature"
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 11 Jun 2021 19:46:34 -0400
-Message-ID: <26698.1623455194@turing-police>
+        Fri, 11 Jun 2021 17:31:53 -0700 (PDT)
+From:   Li Yang <leoyang.li@nxp.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>
+Cc:     linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de, ran.wang_1@nxp.com,
+        Fabio Estevam <festevam@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>
+Subject: [PATCH] usb: gadget: fsl: properly remove remnant of MXC support
+Date:   Fri, 11 Jun 2021 19:31:28 -0500
+Message-Id: <20210612003128.372238-1-leoyang.li@nxp.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---==_Exmh_1623455194_23653P
-Content-Type: text/plain; charset=us-ascii
+Commit a390bef7db1f ("usb: gadget: fsl_mxc_udc: Remove the driver")
+didn't remove all the MXC related stuff which can cause build problem
+for LS1021 when enabled again in Kconfig.  This patch remove all the
+remnants.
 
-On Tue, 08 Jun 2021 16:20:07 +0530, Muni Sekhar said:
+Signed-off-by: Li Yang <leoyang.li@nxp.com>
+---
+ drivers/usb/gadget/udc/fsl_udc_core.c | 36 +++++----------------------
+ drivers/usb/gadget/udc/fsl_usb2_udc.h | 19 --------------
+ 2 files changed, 6 insertions(+), 49 deletions(-)
 
-> $ arecord --device hw:1,0 --channels 1 --format S16_LE --rate 32000_Hz x.wav
-> Recording WAVE 'x.wav' : Signed 16 bit Little Endian, Rate 32000 Hz, Mono
-> arecord: pcm_read:2032: read error: Input/output error
+diff --git a/drivers/usb/gadget/udc/fsl_udc_core.c b/drivers/usb/gadget/udc/fsl_udc_core.c
+index 2b357b3f64c0..29fcb9b461d7 100644
+--- a/drivers/usb/gadget/udc/fsl_udc_core.c
++++ b/drivers/usb/gadget/udc/fsl_udc_core.c
+@@ -36,7 +36,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/fsl_devices.h>
+ #include <linux/dmapool.h>
+-#include <linux/delay.h>
+ #include <linux/of_device.h>
+ 
+ #include <asm/byteorder.h>
+@@ -323,13 +322,11 @@ static int dr_controller_setup(struct fsl_udc *udc)
+ 		fsl_writel(tmp, &dr_regs->endptctrl[ep_num]);
+ 	}
+ 	/* Config control enable i/o output, cpu endian register */
+-#ifndef CONFIG_ARCH_MXC
+ 	if (udc->pdata->have_sysif_regs) {
+ 		ctrl = __raw_readl(&usb_sys_regs->control);
+ 		ctrl |= USB_CTRL_IOENB;
+ 		__raw_writel(ctrl, &usb_sys_regs->control);
+ 	}
+-#endif
+ 
+ #if defined(CONFIG_PPC32) && !defined(CONFIG_NOT_COHERENT_CACHE)
+ 	/* Turn on cache snooping hardware, since some PowerPC platforms
+@@ -2153,7 +2150,6 @@ static int fsl_proc_read(struct seq_file *m, void *v)
+ 	tmp_reg = fsl_readl(&dr_regs->endpointprime);
+ 	seq_printf(m, "EP Prime Reg = [0x%x]\n\n", tmp_reg);
+ 
+-#ifndef CONFIG_ARCH_MXC
+ 	if (udc->pdata->have_sysif_regs) {
+ 		tmp_reg = usb_sys_regs->snoop1;
+ 		seq_printf(m, "Snoop1 Reg : = [0x%x]\n\n", tmp_reg);
+@@ -2161,7 +2157,6 @@ static int fsl_proc_read(struct seq_file *m, void *v)
+ 		tmp_reg = usb_sys_regs->control;
+ 		seq_printf(m, "General Control Reg : = [0x%x]\n\n", tmp_reg);
+ 	}
+-#endif
+ 
+ 	/* ------fsl_udc, fsl_ep, fsl_request structure information ----- */
+ 	ep = &udc->eps[0];
+@@ -2412,28 +2407,21 @@ static int fsl_udc_probe(struct platform_device *pdev)
+ 	 */
+ 	if (pdata->init && pdata->init(pdev)) {
+ 		ret = -ENODEV;
+-		goto err_iounmap_noclk;
++		goto err_iounmap;
+ 	}
+ 
+ 	/* Set accessors only after pdata->init() ! */
+ 	fsl_set_accessors(pdata);
+ 
+-#ifndef CONFIG_ARCH_MXC
+ 	if (pdata->have_sysif_regs)
+ 		usb_sys_regs = (void *)dr_regs + USB_DR_SYS_OFFSET;
+-#endif
+-
+-	/* Initialize USB clocks */
+-	ret = fsl_udc_clk_init(pdev);
+-	if (ret < 0)
+-		goto err_iounmap_noclk;
+ 
+ 	/* Read Device Controller Capability Parameters register */
+ 	dccparams = fsl_readl(&dr_regs->dccparams);
+ 	if (!(dccparams & DCCPARAMS_DC)) {
+ 		ERR("This SOC doesn't support device role\n");
+ 		ret = -ENODEV;
+-		goto err_iounmap;
++		goto err_exit;
+ 	}
+ 	/* Get max device endpoints */
+ 	/* DEN is bidirectional ep number, max_ep doubles the number */
+@@ -2442,7 +2430,7 @@ static int fsl_udc_probe(struct platform_device *pdev)
+ 	ret = platform_get_irq(pdev, 0);
+ 	if (ret <= 0) {
+ 		ret = ret ? : -ENODEV;
+-		goto err_iounmap;
++		goto err_exit;
+ 	}
+ 	udc_controller->irq = ret;
+ 
+@@ -2451,7 +2439,7 @@ static int fsl_udc_probe(struct platform_device *pdev)
+ 	if (ret != 0) {
+ 		ERR("cannot request irq %d err %d\n",
+ 				udc_controller->irq, ret);
+-		goto err_iounmap;
++		goto err_exit;
+ 	}
+ 
+ 	/* Initialize the udc structure including QH member and other member */
+@@ -2467,10 +2455,6 @@ static int fsl_udc_probe(struct platform_device *pdev)
+ 		dr_controller_setup(udc_controller);
+ 	}
+ 
+-	ret = fsl_udc_clk_finalize(pdev);
+-	if (ret)
+-		goto err_free_irq;
+-
+ 	/* Setup gadget structure */
+ 	udc_controller->gadget.ops = &fsl_gadget_ops;
+ 	udc_controller->gadget.max_speed = USB_SPEED_HIGH;
+@@ -2530,11 +2514,10 @@ static int fsl_udc_probe(struct platform_device *pdev)
+ 	dma_pool_destroy(udc_controller->td_pool);
+ err_free_irq:
+ 	free_irq(udc_controller->irq, udc_controller);
+-err_iounmap:
++err_exit:
+ 	if (pdata->exit)
+ 		pdata->exit(pdev);
+-	fsl_udc_clk_release();
+-err_iounmap_noclk:
++err_iounmap:
+ 	iounmap(dr_regs);
+ err_release_mem_region:
+ 	if (pdata->operating_mode == FSL_USB2_DR_DEVICE)
+@@ -2561,8 +2544,6 @@ static int fsl_udc_remove(struct platform_device *pdev)
+ 	udc_controller->done = &done;
+ 	usb_del_gadget_udc(&udc_controller->gadget);
+ 
+-	fsl_udc_clk_release();
+-
+ 	/* DR has been stopped in usb_gadget_unregister_driver() */
+ 	remove_proc_file();
+ 
+@@ -2677,10 +2658,6 @@ static int fsl_udc_otg_resume(struct device *dev)
+ --------------------------------------------------------------------------*/
+ static const struct platform_device_id fsl_udc_devtype[] = {
+ 	{
+-		.name = "imx-udc-mx27",
+-	}, {
+-		.name = "imx-udc-mx51",
+-	}, {
+ 		.name = "fsl-usb2-udc",
+ 	}, {
+ 		/* sentinel */
+@@ -2689,7 +2666,6 @@ static const struct platform_device_id fsl_udc_devtype[] = {
+ MODULE_DEVICE_TABLE(platform, fsl_udc_devtype);
+ static struct platform_driver udc_driver = {
+ 	.remove		= fsl_udc_remove,
+-	/* Just for FSL i.mx SoC currently */
+ 	.id_table	= fsl_udc_devtype,
+ 	/* these suspend and resume are not usb suspend and resume */
+ 	.suspend	= fsl_udc_suspend,
+diff --git a/drivers/usb/gadget/udc/fsl_usb2_udc.h b/drivers/usb/gadget/udc/fsl_usb2_udc.h
+index 4ba651ae9048..2efc5a930b48 100644
+--- a/drivers/usb/gadget/udc/fsl_usb2_udc.h
++++ b/drivers/usb/gadget/udc/fsl_usb2_udc.h
+@@ -588,23 +588,4 @@ static inline struct ep_queue_head *get_qh_by_ep(struct fsl_ep *ep)
+ 				USB_DIR_IN) ? 1 : 0];
+ }
+ 
+-struct platform_device;
+-#ifdef CONFIG_ARCH_MXC
+-int fsl_udc_clk_init(struct platform_device *pdev);
+-int fsl_udc_clk_finalize(struct platform_device *pdev);
+-void fsl_udc_clk_release(void);
+-#else
+-static inline int fsl_udc_clk_init(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-static inline int fsl_udc_clk_finalize(struct platform_device *pdev)
+-{
+-	return 0;
+-}
+-static inline void fsl_udc_clk_release(void)
+-{
+-}
+-#endif
+-
+ #endif
+-- 
+2.30.2
 
-Always check the obvious stuff first  does the card support S16_LE 32Khz data?
-And if it's configurable for multiple formats, was it set for the correct one?
-
-Does wireshark or other USB snoop program show any traffic at all?
-Does the record die immediately, or hang for a few seconds and timeout?
-Does 'arecord -v' or arecord -vv' tell us anything more about the situation?
-
---==_Exmh_1623455194_23653P
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Comment: Exmh version 2.9.0 11/07/2018
-
-iQIVAwUBYMP12gdmEQWDXROgAQLIDg/+OTEH8NUNHBi0Z0ZAwqC40hjQlz5u+K/x
-/1Lm/4vfMZo5O9Xs3S1pgtTkElRWkKls5gErziSPTOFsKF9yAWsz+rTxKT4+NKNt
-OK8DQicMfmbzKYNslThtm6V5JTLRJMGDtho6tK9K2V8n9C3WJTJHclvuTyWBXyLE
-ZeJQa//b95ce8q+9e4MmYv9KU1Nyf7uKTleQPUWMNBcYC2MvB6okb/D6Q3N0zSZV
-wWbMMC00oilqfkJxBw0AvjhdpQ+0Yc2dbx58NaIwirAs/okE1z1uPJoW05XoSdwo
-unQuKKa6qoN85wwo4qkKjN2H4Ev9ao5+427M+xPPc2AjhBoctNzA7CQJeg9ZmyTI
-T1ewBD8sxNrharNeZ0BLtMTgpfcFhpXCLOcaMbUqIqu9iE6hDypACSWYSLZgN1ee
-fJr8tkIe6qUx75VbbY1f0H+UfRqVrogp/EFqJYQaiXL461Ls0Lc4PyzqRMEMEjwR
-vRMjOci0Q1tbEO0UXjaw7XSs8lKE0IcBYHGOBGanrPNDfDlMu0RCbAeWiHgC0vxn
-ZFZ4m37nJN0Pj9mQiuyk1RAzTMyOCc/t213dNjOElYb8ZpvqjyHngIxTtAHzCSVG
-g1l5m6gXxWM54gN6pDn/4sk40TPmwPHNcCaYpzkUa2/8xudTs/zZ+lQoc8Znd4nx
-LxU/hQOag6s=
-=1MM3
------END PGP SIGNATURE-----
-
---==_Exmh_1623455194_23653P--
