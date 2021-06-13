@@ -2,137 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8073A5836
-	for <lists+linux-usb@lfdr.de>; Sun, 13 Jun 2021 14:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99B53A592E
+	for <lists+linux-usb@lfdr.de>; Sun, 13 Jun 2021 17:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbhFMMKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 13 Jun 2021 08:10:52 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:6466 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbhFMMKw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Jun 2021 08:10:52 -0400
-Received: from nkgeml706-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4G2tZq6RCNzZgn6;
-        Sun, 13 Jun 2021 20:05:55 +0800 (CST)
-Received: from [10.136.108.160] (10.136.108.160) by
- nkgeml706-chm.china.huawei.com (10.98.57.153) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Sun, 13 Jun 2021 20:08:48 +0800
-Subject: Re: [PATCH v2] xhci: solve a double free problem while doing s4
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Xuetao (kirin)" <xuetao09@huawei.com>,
-        "chenyu (U)" <chenyu56@huawei.com>,
-        Caiyadong <caiyadong@huawei.com>,
-        xuhaiyang <xuhaiyang5@hisilicon.com>
-References: <1623403104-121391-1-git-send-email-xuetao09@huawei.com>
- <3f5f7a1a46a847ca8bb793050cf30b98@huawei.com> <YMNhZdRN/qsySpSp@kroah.com>
-From:   "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
-Message-ID: <42e90d95-0544-cb46-a066-85d0cea0be48@huawei.com>
-Date:   Sun, 13 Jun 2021 20:08:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231946AbhFMPE0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 13 Jun 2021 11:04:26 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:34633 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231755AbhFMPEZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 13 Jun 2021 11:04:25 -0400
+Received: by mail-lj1-f178.google.com with SMTP id bn21so16487085ljb.1;
+        Sun, 13 Jun 2021 08:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ASZtt9RicUC6Li5nnAiBicxpu/Z78FYFE+q293rWAv4=;
+        b=WjENKTp316jAB/g3HUjC5zwc5CBlihmCSLBIhFpD/wzCb2VjZpLJ1F57d2ky/M8Kda
+         5D8IjWM1UgO/ivr/ItE2579NYXdqi4689uTwS8tvsybXCDRxuns0zle+ZomNBrroJTPe
+         UeZzk831ppOrd2bDRaJmEU3zDUUHiLvnN7fIGQOGYvoQDoT3l+iTzV0VGtYj6QfjLBAq
+         67PeR5J2ZaTOEicGb02kOjgWy3mFmxvjYU+vFFCmyfcgTozXtMF0W5ZQhxathC6LJlsP
+         RwYbfXFH/yrkUW3aeHkl2YbHuN7Iric782426fQWHVsuaQ65qyjPHHGycg/4nIAKxTZm
+         haBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ASZtt9RicUC6Li5nnAiBicxpu/Z78FYFE+q293rWAv4=;
+        b=cMGeAi9LQo+v8V7t6K2m2An1eT6hS1tmg1p6gKTLvoyntk3jDS8QIxuVwT39125h0D
+         YQrbsDm7vgyfla5WpP5tKz8ODpisDKKRt5kcpqd4a90GFDflVGzU+rBGNYTAoFA7/lXa
+         qB+nIEKPgLi78jty51GQI9YB3X4YN2fQByMbDUOzHv+MpFv+htPLPFjwKNbn1cjt61Nq
+         j5bkgoaffcHstnvZp2k+otelEEcZzdVjpL9JF/fCh+uf7UbSSH8ji+2hqET/MOXNMbwi
+         z1xJxYhd/29bw0rna+anwufv1AWEbPjfVFYkXjMNqaVILcWxV1GEqlWo+650HvTr94aK
+         KzxA==
+X-Gm-Message-State: AOAM531aUHqYTJi/JfIp0k/PrLl2WzsTjz6W89lXjrj3Lx4duDljT4V/
+        sxC/5KLXAJP6d98eI7Mbvp4=
+X-Google-Smtp-Source: ABdhPJzDUZYYGFXmlBUv9wVpn8FtmOm3sjTTS5l1UfkXwSPIEyrBJss8+Yy1uo0ZkV2fLg7B/cSSag==
+X-Received: by 2002:a2e:1414:: with SMTP id u20mr10180144ljd.416.1623596483438;
+        Sun, 13 Jun 2021 08:01:23 -0700 (PDT)
+Received: from localhost.localdomain (46-138-6-137.dynamic.spd-mgts.ru. [46.138.6.137])
+        by smtp.gmail.com with ESMTPSA id b16sm1473192ljh.93.2021.06.13.08.01.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Jun 2021 08:01:23 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 1/2] usb: phy: tegra: Wait for VBUS wakeup status deassertion on suspend
+Date:   Sun, 13 Jun 2021 17:59:35 +0300
+Message-Id: <20210613145936.9902-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YMNhZdRN/qsySpSp@kroah.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.136.108.160]
-X-ClientProxiedBy: dggeme702-chm.china.huawei.com (10.1.199.98) To
- nkgeml706-chm.china.huawei.com (10.98.57.153)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Some devices need an extra delay after losing VBUS, otherwise VBUS may
+be detected as active at suspend time, preventing the PHY's suspension
+by the VBUS detection sensor. This problem was found on Asus Transformer
+TF700T (Tegra30) tablet device, where the USB PHY wakes up immediately
+from suspend because VBUS sensor continues to detect VBUS as active after
+disconnection. We need to poll the PHY's VBUS wakeup status until it's
+deasserted before suspending PHY in order to fix this minor trouble.
 
-On 2021/6/11 21:13, gregkh@linuxfoundation.org wrote :
-> On Fri, Jun 11, 2021 at 11:08:30AM +0000, Zhangjiantao (Kirin, nanjing) wrote:
->> when system is doing s4, the process of xhci_resume may be as below:
->> 1、xhci_mem_cleanup
->> 2、xhci_init->xhci_mem_init->xhci_mem_cleanup(when memory is not enough).
->> xhci_mem_cleanup will be executed twice when system is out of memory.
->> xhci->port_caps is freed in xhci_mem_cleanup,but it isn't set to NULL.
->> It will be freed twice when xhci_mem_cleanup is called the second time.
->>
->> We got following bug when system resumes from s4:
->>
->> kernel BUG at mm/slub.c:309!
->> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->> CPU: 0 PID: 5929 Tainted: G S   W   5.4.96-arm64-desktop #1
->> pc : __slab_free+0x5c/0x424
->> lr : kfree+0x30c/0x32c
->>
->> Call trace:
->>   __slab_free+0x5c/0x424
->>   kfree+0x30c/0x32c
->>   xhci_mem_cleanup+0x394/0x3cc
->>   xhci_mem_init+0x9ac/0x1070
->>   xhci_init+0x8c/0x1d0
->>   xhci_resume+0x1cc/0x5fc
->>   xhci_plat_resume+0x64/0x70
->>   platform_pm_thaw+0x28/0x60
->>   dpm_run_callback+0x54/0x24c
->>   device_resume+0xd0/0x200
->>   async_resume+0x24/0x60
->>   async_run_entry_fn+0x44/0x110
->>   process_one_work+0x1f0/0x490
->>   worker_thread+0x5c/0x450
->>   kthread+0x158/0x160
->>   ret_from_fork+0x10/0x24
->>
->> Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
->> Signed-off-by: Tao Xue <xuetao09@huawei.com>
->> ---
->>   drivers/usb/host/xhci-mem.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c index f66815f..e4b0c04 100644
->> --- a/drivers/usb/host/xhci-mem.c
->> +++ b/drivers/usb/host/xhci-mem.c
->> @@ -1924,6 +1924,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
->>   	xhci->hw_ports = NULL;
->>   	xhci->rh_bw = NULL;
->>   	xhci->ext_caps = NULL;
->> +	xhci->port_caps = NULL;
->>   
->>   	xhci->page_size = 0;
->>   	xhci->page_shift = 0;
->> --
->> 2.7.4
->>
->
-> Hi,
->
-> This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-> a patch that has triggered this response.  He used to manually respond
-> to these common problems, but in order to save his sanity (he kept
-> writing the same thing over and over, yet to different people), I was
-> created.  Hopefully you will not take offence and will fix the problem
-> in your patch and resubmit it so that it can be accepted into the Linux
-> kernel tree.
->
-> You are receiving this message because of the following common error(s)
-> as indicated below:
->
-> - This looks like a new version of a previously submitted patch, but you
->    did not list below the --- line any changes from the previous version.
->    Please read the section entitled "The canonical patch format" in the
->    kernel file, Documentation/SubmittingPatches for what needs to be done
->    here to properly describe this.
->
-> If you wish to discuss this problem further, or you have questions about
-> how to resolve this issue, please feel free to respond to this email and
-> Greg will reply once he has dug out from the pending patches received
-> from other developers.
->
-> thanks,
->
-> greg k-h's patch email bot
+Fixes: 35192007d28d ("usb: phy: tegra: Support waking up from a low power mode")
+Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+---
+ drivers/usb/phy/phy-tegra-usb.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Yes,there is no change of code line. I only added
-"Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>" in the comments.
-thanks，
-    Jiantao Zhang
+diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+index fc5c6cab58ba..ff482c694200 100644
+--- a/drivers/usb/phy/phy-tegra-usb.c
++++ b/drivers/usb/phy/phy-tegra-usb.c
+@@ -64,6 +64,7 @@
+ #define   A_VBUS_VLD_WAKEUP_EN			BIT(30)
+ 
+ #define USB_PHY_VBUS_WAKEUP_ID			0x408
++#define   VBUS_WAKEUP_STS			BIT(10)
+ #define   VBUS_WAKEUP_WAKEUP_EN			BIT(30)
+ 
+ #define USB1_LEGACY_CTRL			0x410
+@@ -645,6 +646,15 @@ static int utmi_phy_power_off(struct tegra_usb_phy *phy)
+ 	void __iomem *base = phy->regs;
+ 	u32 val;
+ 
++	/*
++	 * Give hardware time to settle down after VBUS disconnection,
++	 * otherwise PHY will immediately wake up from suspend.
++	 */
++	if (phy->wakeup_enabled && phy->mode != USB_DR_MODE_HOST)
++		readl_relaxed_poll_timeout(base + USB_PHY_VBUS_WAKEUP_ID,
++					   val, !(val & VBUS_WAKEUP_STS),
++					   5000, 100000);
++
+ 	utmi_phy_clk_disable(phy);
+ 
+ 	/* PHY won't resume if reset is asserted */
+-- 
+2.30.2
 
