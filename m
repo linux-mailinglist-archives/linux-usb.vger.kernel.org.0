@@ -2,118 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B7B73A685D
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 15:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1E03A68B2
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 16:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbhFNNv6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 09:51:58 -0400
-Received: from mga14.intel.com ([192.55.52.115]:49039 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233434AbhFNNv5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 09:51:57 -0400
-IronPort-SDR: cH3pgZBBVB3/g0YkPh/TKtxIJoLTyJLp+jIH8X3MMhbUbWt2XPA/rVxpJ6v4ZKnwf7OGshcCte
- IMEVynQzoJdg==
-X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="205631114"
-X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
-   d="scan'208";a="205631114"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2021 06:49:54 -0700
-IronPort-SDR: KhrLnVeM+ZRfyw83WFQG15hm+t+jrEYphqDJkh2t+wkDpg/Ron847hJfAyOYLAHYupWVXrNTBw
- Yly1UghhSV+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
-   d="scan'208";a="403661401"
-Received: from ccdjpclinux26.jer.intel.com ([10.12.48.253])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2021 06:49:52 -0700
-From:   Gil Fine <gil.fine@intel.com>
-To:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com
-Cc:     gil.fine@intel.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: [PATCH] thunderbolt: Fix DROM handling for USB4 DROM
-Date:   Mon, 14 Jun 2021 16:52:10 +0300
-Message-Id: <20210614135210.29787-1-gil.fine@intel.com>
-X-Mailer: git-send-email 2.17.1
+        id S234246AbhFNOIj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 10:08:39 -0400
+Received: from new3-smtp.messagingengine.com ([66.111.4.229]:50437 "EHLO
+        new3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234235AbhFNOIj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 10:08:39 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D033F580B07;
+        Mon, 14 Jun 2021 10:06:35 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 14 Jun 2021 10:06:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=liKeoJ3++Py15OkYaEK8u1d9a18
+        jSrl+1rutSitPmxU=; b=mk2+qLXelYuK85U6hzJHcesmhuCd/1DQYR4Zx6Xx34f
+        13soCjwxzwB0G8NUUvzM/DNrOrZ+lWIG2me0Ygz1JoonYEfVzbb+pxZMy/a2IWrj
+        PV/qp8jll81uJuvP9bjmgbbCcNG3BP17b9pc4akgXTHKSrBHv2WT/v3csadUguYG
+        wQsELn2hD8afjqa/RsrWNqE3MpVeyG3f5uBO58gRsK/iAZo3X78Y7BTuMJgeeXfs
+        +Vi4JPnR+9baKC/0OyiWrFWrJH27kFjfIu6mVzGWpNyGIgy94UwsIwvX0Wgdz75W
+        enJqworrmB5GMfUyJwVCujjgMfIZ5TRYM7qetWHF6Xg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=liKeoJ
+        3++Py15OkYaEK8u1d9a18jSrl+1rutSitPmxU=; b=RzZlhF63wLd+u2/tLqzPqp
+        0CJEC6OrOHXA5qCemWHSbEvZ56+7b+PGGORqaXPWBR0R4r+GHlpho+8MAqzmpbGH
+        fcjtJPojuOOOSQh1fbNN5w3PTG1s9oq+TqRE4/0D4WQ+lvyrFn49OwDt/EyIRjYW
+        VMPBf8NeqQ3gavCVAUAsjZxyJjaD9vc4i2/NMMAXO4dFD6JGHVO9fMZcxfETkV6t
+        0QVMo1gaM70psScNaihYDStGRmphALmWPc4LW8wDdsXHIX4CzYDdjXd5MVG2SuH7
+        Uw/YqkV6s/gS7v97O1wgZYGwDcpigkcG5oC9phUKoGNAgcjtFmLB6iyqH3kVXBaw
+        ==
+X-ME-Sender: <xms:amLHYGJWoy-1piv-zhakc1t72F3qejqvWx1t53_50PMxJjDnKmetrg>
+    <xme:amLHYOLvde6dRJBrxqP8xxEKgm9a5mMWXbppjx3ykaw8KVxbl8yQwDc76XAgtQFPu
+    aC8cRtwN1jRsA>
+X-ME-Received: <xmr:amLHYGuHdJWE6C8kZPS-ZPqqDs_2KZx927D_l24dXnxON3Zw9Ez40qKd7DjBv2nTeA-CfnLcanHVMhnSNxgRNoTpGnhV6tS7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedvhedgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:amLHYLY2zzlgRgYrxam6vdrqfyfoyjFAnYC8isdlQIwIiBCxhPhXlA>
+    <xmx:amLHYNaTbUjZT1eTMnZXUq9sI9In48Xyi_hh3SP2Xe-dhs3GBIFBrw>
+    <xmx:amLHYHDSqKcElxMAZnKnB3ngK8fyFbs89254B_pdFv7oiccHJ9RCJg>
+    <xmx:a2LHYBQFfbCTnxuT-yZBOnpbpkqu9keYIwPVRnc2rhsVqhn2Hth0Cg>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 14 Jun 2021 10:06:33 -0400 (EDT)
+Date:   Mon, 14 Jun 2021 16:06:30 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Gil Fine <gil.fine@intel.com>
+Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
+        mika.westerberg@linux.intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, lukas@wunner.de
+Subject: Re: [PATCH] thunderbolt: Fix DROM handling for USB4 DROM
+Message-ID: <YMdiZnPKqjyK6FQ5@kroah.com>
+References: <20210614135210.29787-1-gil.fine@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210614135210.29787-1-gil.fine@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-DROM for USB4 host/device has a shorter header than Thunderbolt DROM
-header. This patch addresses host/device with USB4 DROM (According to spec:
-Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
+On Mon, Jun 14, 2021 at 04:52:10PM +0300, Gil Fine wrote:
+> DROM for USB4 host/device has a shorter header than Thunderbolt DROM
+> header. This patch addresses host/device with USB4 DROM (According to spec:
+> Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
+> 
+> Signed-off-by: Gil Fine <gil.fine@intel.com>
+> ---
+>  drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+> index 46d0906a3070..f9d26bd4f486 100644
+> --- a/drivers/thunderbolt/eeprom.c
+> +++ b/drivers/thunderbolt/eeprom.c
+> @@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
+>  	return ~__crc32c_le(~0, data, len);
+>  }
+>  
+> -#define TB_DROM_DATA_START 13
+> +#define TB_DROM_DATA_START		13
+> +#define TB_DROM_HEADER_LENGTH		22
+> +/* BYTES 16-21 - nonexistent in USB4 DROM */
+> +#define TB_DROM_USB4_HEADER_LENGTH	16
+>  struct tb_drom_header {
+>  	/* BYTE 0 */
+>  	u8 uid_crc8; /* checksum for uid */
+> @@ -224,9 +227,9 @@ struct tb_drom_header {
+>  	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
+>  	/* BYTE 13 */
+>  	u8 device_rom_revision; /* should be <= 1 */
+> -	u16 data_len:10;
+> -	u8 __unknown1:6;
+> -	/* BYTES 16-21 */
+> +	u16 data_len:12;
+> +	u8 reserved:4;
+> +	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
 
-Signed-off-by: Gil Fine <gil.fine@intel.com>
----
- drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+What is the odds the above does not work properly for big endian
+systems?
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index 46d0906a3070..f9d26bd4f486 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
- 	return ~__crc32c_le(~0, data, len);
- }
- 
--#define TB_DROM_DATA_START 13
-+#define TB_DROM_DATA_START		13
-+#define TB_DROM_HEADER_LENGTH		22
-+/* BYTES 16-21 - nonexistent in USB4 DROM */
-+#define TB_DROM_USB4_HEADER_LENGTH	16
- struct tb_drom_header {
- 	/* BYTE 0 */
- 	u8 uid_crc8; /* checksum for uid */
-@@ -224,9 +227,9 @@ struct tb_drom_header {
- 	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
- 	/* BYTE 13 */
- 	u8 device_rom_revision; /* should be <= 1 */
--	u16 data_len:10;
--	u8 __unknown1:6;
--	/* BYTES 16-21 */
-+	u16 data_len:12;
-+	u8 reserved:4;
-+	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
- 	u16 vendor_id;
- 	u16 model_id;
- 	u8 model_rev;
-@@ -401,10 +404,10 @@ static int tb_drom_parse_entry_port(struct tb_switch *sw,
-  *
-  * Drom must have been copied to sw->drom.
-  */
--static int tb_drom_parse_entries(struct tb_switch *sw)
-+static int tb_drom_parse_entries(struct tb_switch *sw, size_t header_length)
- {
- 	struct tb_drom_header *header = (void *) sw->drom;
--	u16 pos = sizeof(*header);
-+	u16 pos = header_length;
- 	u16 drom_size = header->data_len + TB_DROM_DATA_START;
- 	int res;
- 
-@@ -566,7 +569,7 @@ static int tb_drom_parse(struct tb_switch *sw)
- 			header->data_crc32, crc);
- 	}
- 
--	return tb_drom_parse_entries(sw);
-+	return tb_drom_parse_entries(sw, TB_DROM_HEADER_LENGTH);
- }
- 
- static int usb4_drom_parse(struct tb_switch *sw)
-@@ -583,7 +586,7 @@ static int usb4_drom_parse(struct tb_switch *sw)
- 		return -EINVAL;
- 	}
- 
--	return tb_drom_parse_entries(sw);
-+	return tb_drom_parse_entries(sw, TB_DROM_USB4_HEADER_LENGTH);
- }
- 
- /**
--- 
-2.17.1
+And why put the comment after the area and not before?
 
----------------------------------------------------------------------
-Intel Israel (74) Limited
+thanks,
 
-This e-mail and any attachments may contain confidential material for
-the sole use of the intended recipient(s). Any review or distribution
-by others is strictly prohibited. If you are not the intended
-recipient, please contact the sender and delete all copies.
-
+greg k-h
