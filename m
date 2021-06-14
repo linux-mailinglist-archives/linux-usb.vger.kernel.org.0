@@ -2,135 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE483A7249
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 01:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1D23A728F
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 01:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbhFNXE5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 19:04:57 -0400
-Received: from mail-ed1-f42.google.com ([209.85.208.42]:43529 "EHLO
-        mail-ed1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbhFNXE4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 19:04:56 -0400
-Received: by mail-ed1-f42.google.com with SMTP id s6so48560827edu.10;
-        Mon, 14 Jun 2021 16:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xptdFCYBt+DjA9CbQxpyV5Tq5GSDlhdqPmEhWjQXrUg=;
-        b=MHouzfSasrE3u/M3ZGURu717kwnTWfQprP27KA63w+Af6l4ZfunAfkZo9STcczn+zz
-         SzDBnuIVED0rEhGUWBpGcQeSJWGwCyp812i3mH7UwHr+pNN03Lq4i5Ej33AhryhBYVQm
-         8NjFnw242+Ghtl3sTzidgZZUopZoOOJnbD3pXjVOXNPkj5WFM1bTH6GZVwd/1ShOD4nc
-         3MXntAkjMfsi6GHJ2euph0PQ2pQ6+KZwpESxDjLyZ5/uBsMtwsLYISE41XG9EMV0wwvy
-         FQqFH0+6hSIbn23/J+801S9hSgPfJkPZbAIs0PVF07h0M2fVHZ8HXsA2BFTXiWQNfNE8
-         SJdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xptdFCYBt+DjA9CbQxpyV5Tq5GSDlhdqPmEhWjQXrUg=;
-        b=Vcv6TEsL4AaruIsn1s/XJRQqZVizRcQ6G22slDJGnGrBVXOe6QM0YGL544DZX3N6mQ
-         uX+T2fgIpoKuNPC7pPxu1+X2DOGrKUjKAN+inK3uR1mAGRs/L5QXlibkEfe91G+Xwj7Z
-         VptKDAu9FhOYGSqin++gLtl9MpojTHvOD4+I0FkGwb+6gZCwfrSIWIS+/Ha0EGGGTpzk
-         Ic3avxLMh7uwlfmVx6/FncKKYr3JKNpH1nBjkbHZ0BfxToZjnGU7ScunWJMK5cwpUHkl
-         P7Ej9lupRBW7m81Ey2I5cZLIVt6DXBfTtd14+sj6xkntchPuNQ9ZRfNsWolJVS+AQpPi
-         c+Rg==
-X-Gm-Message-State: AOAM532zbbGMtk4RlNL0jL/zZzEOsS4oSM3nNWl1IiuCJhaC67L5vbAu
-        kVc5ljFgrB+3h4UCyPwmPjQPAVcg6ewYJCZOmW4=
-X-Google-Smtp-Source: ABdhPJzDIFrOVrYqg2F2uDLxlfsHL3r4DyaB1+6ZAAk9b2Uj7NKSjPce91VFwOgzPxqET8X5vPj+nkZi8x1SqDCmipA=
-X-Received: by 2002:a05:6402:54f:: with SMTP id i15mr19390460edx.339.1623711699919;
- Mon, 14 Jun 2021 16:01:39 -0700 (PDT)
+        id S231671AbhFNXk1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 19:40:27 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:24572 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231499AbhFNXk1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 19:40:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623713903; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=ibeoOv7R2fFr7c9P5sK8mLpBRVjlFyC7DS3rMGgAaIo=; b=JpfMtk3iy9bvCp/hgYOxWVOX1VxY2wsHG+cGG5yW8R0PaKgoSZea9iHzAHLaM7ZZSiJCIq+S
+ 86fpsbGXxAIC5xOOJEFGfts+Yz29Le+BTFcfT3T5mhUZi7EyH+CamIbXaejWcMGl8c/dwhml
+ a5rb1MwKUeL+GjrQtvHbJ9dkzAY=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 60c7e8552eaeb98b5ea92fed (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 14 Jun 2021 23:37:57
+ GMT
+Sender: linyyuan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 452C7C4323A; Mon, 14 Jun 2021 23:37:57 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost.localdomain (unknown [101.87.142.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: linyyuan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7866FC433F1;
+        Mon, 14 Jun 2021 23:37:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7866FC433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
+From:   Linyu Yuan <linyyuan@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Linyu Yuan <linyyuan@codeaurora.com>
+Subject: [PATCH] usb: gadget: eem: fix echo command packet response issue
+Date:   Tue, 15 Jun 2021 07:37:32 +0800
+Message-Id: <20210614233732.17604-1-linyyuan@codeaurora.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20210614153712.2172662-1-mudongliangabcd@gmail.com> <20210614190045.5b4c92e6@gmail.com>
-In-Reply-To: <20210614190045.5b4c92e6@gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 15 Jun 2021 07:01:13 +0800
-Message-ID: <CAD-N9QVG40CqgkHb1w68FL-d1LkTzjcAhF9O8whmzWo67=4KJg@mail.gmail.com>
-Subject: Re: [PATCH] net: usb: fix possible use-after-free in smsc75xx_bind
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 12:00 AM Pavel Skripkin <paskripkin@gmail.com> wrote:
->
-> On Mon, 14 Jun 2021 23:37:12 +0800
-> Dongliang Mu <mudongliangabcd@gmail.com> wrote:
->
-> > The commit 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
-> > fails to clean up the work scheduled in smsc75xx_reset->
-> > smsc75xx_set_multicast, which leads to use-after-free if the work is
-> > scheduled to start after the deallocation. In addition, this patch
-> > also removes one dangling pointer - dev->data[0].
-> >
-> > This patch calls cancel_work_sync to cancel the schedule work and set
-> > the dangling pointer to NULL.
-> >
-> > Fixes: 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > ---
-> >  drivers/net/usb/smsc75xx.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
-> > index b286993da67c..f81740fcc8d5 100644
-> > --- a/drivers/net/usb/smsc75xx.c
-> > +++ b/drivers/net/usb/smsc75xx.c
-> > @@ -1504,7 +1504,10 @@ static int smsc75xx_bind(struct usbnet *dev,
-> > struct usb_interface *intf) return 0;
-> >
-> >  err:
-> > +     cancel_work_sync(&pdata->set_multicast);
-> >       kfree(pdata);
-> > +     pdata = NULL;
-> > +     dev->data[0] = 0;
-> >       return ret;
-> >  }
-> >
->
-> Hi, Dongliang!
->
-> Just my thougth about this patch:
->
-> INIT_WORK(&pdata->set_multicast, smsc75xx_deferred_multicast_write);
-> does not queue anything, it just initalizes list structure and assigns
-> callback function. The actual work sheduling happens in
-> smsc75xx_set_multicast() which is smsc75xx_netdev_ops member.
->
+From: Linyu Yuan <linyyuan@codeaurora.com>
 
-Yes, you are right. However, as written in the commit message,
-smsc75xx_set_multicast will be called by smsc75xx_reset [1].
+when receive eem echo command, it will send a response,
+but queue this response to the usb request which allocate
+from gadget device endpoint zero,
+and transmit the request to IN endpoint of eem interface.
 
-If smsc75xx_set_multicast is called before any check failure occurs,
-this work(set_multicast) will be queued into the global list with
+on dwc3 gadget, it will trigger following warning in function
+__dwc3_gadget_ep_queue(),
 
-schedule_work(&pdata->set_multicast); [2]
+	if (WARN(req->dep != dep, "request %pK belongs to '%s'\n",
+				&req->request, req->dep->name))
+		return -EINVAL;
 
-At last, if the pdata or dev->data[0] is freed before the
-set_multicast really executes, it may lead to a UAF. Is this correct?
+fix it by allocating a usb request from IN endpoint of eem interface,
+and transmit the usb request to same IN endpoint of eem interface.
 
-BTW, even if the above is true, I don't know if I call the API
-``cancel_work_sync(&pdata->set_multicast)'' properly if the
-schedule_work is not called.
+Signed-off-by: Linyu Yuan <linyyuan@codeaurora.com>
+---
 
-[1] https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/smsc75xx.c#L1322
+v2: fix mail format and expand commit message
 
-[2] https://elixir.bootlin.com/linux/latest/source/drivers/net/usb/smsc75xx.c#L583
+ drivers/usb/gadget/function/f_eem.c | 44 +++++++++++++++++++++++++----
+ 1 file changed, 39 insertions(+), 5 deletions(-)
 
-> In case of any error in smsc75xx_bind() the device registration fails
-> and smsc75xx_netdev_ops won't be registered, so, i guess, there is no
-> chance of UAF.
->
->
-> Am I missing something? :)
->
->
->
-> With regards,
-> Pavel Skripkin
+diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/function/f_eem.c
+index 2cd9942707b4..7de355c63189 100644
+--- a/drivers/usb/gadget/function/f_eem.c
++++ b/drivers/usb/gadget/function/f_eem.c
+@@ -30,6 +30,11 @@ struct f_eem {
+ 	u8				ctrl_id;
+ };
+ 
++struct in_context {
++	struct sk_buff	*skb;
++	struct usb_ep	*ep;
++};
++
+ static inline struct f_eem *func_to_eem(struct usb_function *f)
+ {
+ 	return container_of(f, struct f_eem, port.func);
+@@ -320,9 +325,12 @@ static int eem_bind(struct usb_configuration *c, struct usb_function *f)
+ 
+ static void eem_cmd_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+-	struct sk_buff *skb = (struct sk_buff *)req->context;
++	struct in_context *ctx = req->context;
+ 
+-	dev_kfree_skb_any(skb);
++	dev_kfree_skb_any(ctx->skb);
++	kfree(req->buf);
++	usb_ep_free_request(ctx->ep, req);
++	kfree(ctx);
+ }
+ 
+ /*
+@@ -410,7 +418,9 @@ static int eem_unwrap(struct gether *port,
+ 		 * b15:		bmType (0 == data, 1 == command)
+ 		 */
+ 		if (header & BIT(15)) {
+-			struct usb_request	*req = cdev->req;
++			struct usb_request	*req;
++			struct in_context	*ctx;
++			struct usb_ep		*ep;
+ 			u16			bmEEMCmd;
+ 
+ 			/* EEM command packet format:
+@@ -439,13 +449,37 @@ static int eem_unwrap(struct gether *port,
+ 				skb_trim(skb2, len);
+ 				put_unaligned_le16(BIT(15) | BIT(11) | len,
+ 							skb_push(skb2, 2));
++
++				ep = port->in_ep;
++				req = usb_ep_alloc_request(ep, GFP_ATOMIC);
++				if (!req)
++					goto freeskb;
++
++				ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
++				if (!ctx)
++					goto freereq;
++				ctx->skb = skb2;
++				ctx->ep = ep;
++
++				req->buf = kmalloc(skb2->len, GFP_KERNEL);
++				if (!req->buf)
++					goto freectx;
++
+ 				skb_copy_bits(skb2, 0, req->buf, skb2->len);
+ 				req->length = skb2->len;
+ 				req->complete = eem_cmd_complete;
+ 				req->zero = 1;
+-				req->context = skb2;
+-				if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC))
++				req->context = ctx;
++				if (usb_ep_queue(ep, req, GFP_ATOMIC)) {
+ 					DBG(cdev, "echo response queue fail\n");
++					kfree(req->buf);
++freectx:
++					kfree(ctx);
++freereq:
++					usb_ep_free_request(ep, req);
++freeskb:
++					dev_kfree_skb_any(skb2);
++				}
+ 				break;
+ 
+ 			case 1:  /* echo response */
+-- 
+2.25.1
+
