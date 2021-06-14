@@ -2,100 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2944F3A6B45
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 18:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1C303A6C75
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 18:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbhFNQJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 12:09:36 -0400
-Received: from mga11.intel.com ([192.55.52.93]:31270 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233640AbhFNQJf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 12:09:35 -0400
-IronPort-SDR: EZNnWDNdqhlmLDexTTXwTt64VRA74atiTY4vVaPPc1s8zKjQ3/s/pNi0GgSHoY0O1CfHijOIG3
- +BqwE6DKYBOw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="202809728"
-X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
-   d="scan'208";a="202809728"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2021 09:07:29 -0700
-IronPort-SDR: ozv5OR2btG/U0rA5ssXkgharZ66M0u/6eI7VdMfv0pMcQskGPc3YiWZU0dsH8cgEGjFEjiKVgk
- +i9GFSpox5kw==
-X-IronPort-AV: E=Sophos;i="5.83,273,1616482800"; 
-   d="scan'208";a="415132908"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2021 09:07:26 -0700
-Received: by lahna (sSMTP sendmail emulation); Mon, 14 Jun 2021 19:07:24 +0300
-Date:   Mon, 14 Jun 2021 19:07:24 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg KH <greg@kroah.com>
-Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH] thunderbolt: Fix DROM handling for USB4 DROM
-Message-ID: <YMd+vAL+Lzccj2kK@lahna>
-References: <20210614135210.29787-1-gil.fine@intel.com>
- <YMdiZnPKqjyK6FQ5@kroah.com>
- <YMdu1/1sRCItaKrj@lahna>
- <YMdz4qEZbQ/dnloN@kroah.com>
+        id S235214AbhFNQyO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 12:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59814 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234348AbhFNQyN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 12:54:13 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B85C061767
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jun 2021 09:52:10 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id f21so8172047vsl.4
+        for <linux-usb@vger.kernel.org>; Mon, 14 Jun 2021 09:52:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qI8JpFMh7+nrwzVv1jWVM5ml0OUiY5MJQrtGKYX8w3k=;
+        b=eVGDtJeB3NP1YU2OckLCU2+if7afqsRRCInB7mMgNIybpYLMLgzkFefYdr+bFXX+Pb
+         hWcIUU4wrrjVcAsG1xldBIq8Y/94R08Z6b34qYhl6CuMujqc5WzJp0a92p7n3NJrE2rR
+         hZcpCcTurdeVtAylilTWhvpgauRPC9zSn5DSXQR4TfY97RCg91PTjlFD8AoTHiTTUC+J
+         NyaY6Uy/QmLvbqKT116GwLKOiEHJBfMhjIiP+bmqKTYNElNCgk3UTFw4VXNzphhE41uK
+         xTC9JbDWs64guA4T+VE3waJTio+tKZzVPhJflJEFzbs7rxQYfM+fcvIoEstDI4HJDSWQ
+         Bkbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qI8JpFMh7+nrwzVv1jWVM5ml0OUiY5MJQrtGKYX8w3k=;
+        b=arUhGWsZxj7o+JWiF4bEUgI8ShajVl4XUdvfEUoh5e3bOS4CVu0g0fTktRHlL5Vqc2
+         33K+PFozi8KLmGar33R8jeodbzDOJzC+y/fs0Hhqg+O3CBVmCzoArkOGdPZl6kFgr0Gh
+         rTASSGAHHPenPF2Ooe6PhDw52rUJjglqkrjhBh/EnWFqHhZK+DWBGGNEOP1s33BOdQeZ
+         9Fso7aBcHQctmxnqSJuXPPme+x7IFZBC3Akh52ujmtfKOZ3kreOdqsji+Rnh0F40Q9Io
+         K+jTttHFz8YCXcPAwuccktIRzEbpriaICaFQQxH6R6CM+O5o6OgJG4kgmT5zttEKZ9Sw
+         3oWQ==
+X-Gm-Message-State: AOAM531aVwBIc47BgLNpSMjaDJdcKlXg9ag4quwX/x4Su2iGHDI7J2TH
+        bf2Cup2SUktn/mukVPJbSr6YbkItG/MBnsa3hpbd5A==
+X-Google-Smtp-Source: ABdhPJwTOtTYWIw8/DHdS2gKarUJzdUDIoUmiwbV/4/1y92NutyH5q2jqvt2X7yb7d5Ds03TnsjJOYAamVmKwRFgULo=
+X-Received: by 2002:a05:6102:2378:: with SMTP id o24mr292281vsa.12.1623689527787;
+ Mon, 14 Jun 2021 09:52:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMdz4qEZbQ/dnloN@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210613151223.563736-1-kyletso@google.com>
+In-Reply-To: <20210613151223.563736-1-kyletso@google.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Mon, 14 Jun 2021 09:51:31 -0700
+Message-ID: <CAPTae5JHHYO=y7279pFcHrt1oD3HHU8m3qkdb1vmNkbf6rLpqA@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Relax disconnect threshold during power negotiation
+To:     Kyle Tso <kyletso@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 05:21:06PM +0200, Greg KH wrote:
-> On Mon, Jun 14, 2021 at 05:59:35PM +0300, Mika Westerberg wrote:
-> > Hi Greg,
-> > 
-> > On Mon, Jun 14, 2021 at 04:06:30PM +0200, Greg KH wrote:
-> > > On Mon, Jun 14, 2021 at 04:52:10PM +0300, Gil Fine wrote:
-> > > > DROM for USB4 host/device has a shorter header than Thunderbolt DROM
-> > > > header. This patch addresses host/device with USB4 DROM (According to spec:
-> > > > Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
-> > > > 
-> > > > Signed-off-by: Gil Fine <gil.fine@intel.com>
-> > > > ---
-> > > >  drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
-> > > >  1 file changed, 11 insertions(+), 8 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-> > > > index 46d0906a3070..f9d26bd4f486 100644
-> > > > --- a/drivers/thunderbolt/eeprom.c
-> > > > +++ b/drivers/thunderbolt/eeprom.c
-> > > > @@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
-> > > >  	return ~__crc32c_le(~0, data, len);
-> > > >  }
-> > > >  
-> > > > -#define TB_DROM_DATA_START 13
-> > > > +#define TB_DROM_DATA_START		13
-> > > > +#define TB_DROM_HEADER_LENGTH		22
-> > > > +/* BYTES 16-21 - nonexistent in USB4 DROM */
-> > > > +#define TB_DROM_USB4_HEADER_LENGTH	16
-> > > >  struct tb_drom_header {
-> > > >  	/* BYTE 0 */
-> > > >  	u8 uid_crc8; /* checksum for uid */
-> > > > @@ -224,9 +227,9 @@ struct tb_drom_header {
-> > > >  	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
-> > > >  	/* BYTE 13 */
-> > > >  	u8 device_rom_revision; /* should be <= 1 */
-> > > > -	u16 data_len:10;
-> > > > -	u8 __unknown1:6;
-> > > > -	/* BYTES 16-21 */
-> > > > +	u16 data_len:12;
-> > > > +	u8 reserved:4;
-> > > > +	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
-> > > 
-> > > What is the odds the above does not work properly for big endian
-> > > systems?
-> > 
-> > If you mean the bitfields, we have been trying to get rid of them. Any
-> > new code is expected not to introduce new structures like this but it
-> > has been OK for existing structures (for now).
-> 
-> Ok, as long as you all realize this is broken :)
+Hi Kyle,
 
-Yes we do :) This is one of the things that need to be sorted out once
-we have all the "features" in place.
+The change doesn't seem to handle the cases where the partner does not
+accept the request i.e.
+       "case PD_CTRL_REJECT:
+        case PD_CTRL_WAIT:
+        case PD_CTRL_NOT_SUPP:"
+We should fall back to the disconnect threshold based on the
+previously negotiated voltage levels in those cases.
+
+Regards,
+Badhri
+
+
+On Sun, Jun 13, 2021 at 8:13 AM Kyle Tso <kyletso@google.com> wrote:
+>
+> If the voltage is being decreased in power negotiation, the Source will
+> set the power supply to operate at the new voltage level before sending
+> PS_RDY. Relax the disconnect threshold for Sink after receiving Accept
+> Message to ensure the relaxed setting is enabled before the voltage
+> collapse. And the real threshold will be set after Sink receives PS_RDY
+> Message.
+>
+> Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
+> Cc: Badhri Jagan Sridharan <badhri@google.com>
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 0db685d5d9c0..9f3f37da71b6 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2646,6 +2646,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>                 switch (port->state) {
+>                 case SNK_NEGOTIATE_CAPABILITIES:
+>                         port->pps_data.active = false;
+> +                       /* Voltage is going to be at new level. Relax the threshold here. */
+> +                       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
+>                         tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
+>                         break;
+>                 case SNK_NEGOTIATE_PPS_CAPABILITIES:
+> @@ -2656,6 +2658,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+>                         port->req_supply_voltage = port->pps_data.req_out_volt;
+>                         port->req_current_limit = port->pps_data.req_op_curr;
+>                         power_supply_changed(port->psy);
+> +                       /* Voltage is going to be at new level. Relax the threshold here. */
+> +                       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
+>                         tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
+>                         break;
+>                 case SOFT_RESET_SEND:
+> --
+> 2.32.0.272.g935e593368-goog
+>
