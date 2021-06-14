@@ -2,123 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2323A63BA
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 13:14:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307743A6677
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 14:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235514AbhFNLQ2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 07:16:28 -0400
-Received: from mail-io1-f69.google.com ([209.85.166.69]:49753 "EHLO
-        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235510AbhFNLOX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 07:14:23 -0400
-Received: by mail-io1-f69.google.com with SMTP id t17-20020a5e99110000b02904b3e60c561aso18518558ioj.16
-        for <linux-usb@vger.kernel.org>; Mon, 14 Jun 2021 04:12:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=NeLkXXASh21M69mAfwaOBicjaWen+btZJMPkBkicr9U=;
-        b=dX0W+/6GbNyg06DYjNwfAsQoFSE6rUV0byLciyrfVibVMWXGU4ZBUtDbXYAsQrkjmP
-         FPoStwNY1wWapqvzZIbV/VGtELmzmCvjkfeGQuKG+tCCoUw6qm8HWpRViZuUAM7xWhe5
-         Yde74VXrg9ZY54FwB9DERBenOtTmP0uwtwjq0cwwd7gcIKNxmzQxZxhdX+eiNIeuz56E
-         NcgGSvAajBYQamS39XskTfDDz3SwAwRZXzBHARWeDPsgltJJh0KXtqOp04ayHN7QbsSe
-         t3oYJXvSyL0WY2c1SbmHy2G+40cA8QupDMrcC50NcOshGwqguODWM4wA1jEGWJjlM5Dz
-         2NjA==
-X-Gm-Message-State: AOAM532jYLYZQ/A1KbTqxmA/5V24aQ6K8k6WOzGs3VLicJqwJYzvYnDg
-        yv0/KogIWsG8ifLg9wsNIbzRxKM6uxBaeUdwvAxgqC2OOKxb
-X-Google-Smtp-Source: ABdhPJxomWz0H427AcDUAWX1WQpbscXIHwlYAOFYZDEwUW8frxVyLHSC+3M7w4ggUvSf0/Aw7apxIxsZ6u/F8vbsTtF2C5kbaIZU
+        id S233562AbhFNM0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 08:26:06 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:35470 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233071AbhFNM0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 08:26:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=oiBH2JKjoAAJbc4R4FuVxQ59nQgyPuSoFXb64F6CMmU=; b=slkrvpp+tamTu2ZaMxFaIDixL+
+        oRV4DLfpYHor4zMd8HmORon+sEyP1ls3SpDmlnryret0sFXgIl9coS0dPWcz1G3peItdGfT1zXsnN
+        KykDF2++tlhKywwJkY07Aq+yKSK8hMPX+nfPt3jU2eLC+rCRErQAzTKFwfBdxBIrqlnY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1lsldB-009JmZ-8C; Mon, 14 Jun 2021 14:23:53 +0200
+Date:   Mon, 14 Jun 2021 14:23:53 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jonathan Davies <jonathan.davies@nutanix.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usbnet: allow overriding of default USB interface
+ naming
+Message-ID: <YMdKWSjiXeiDESKR@lunn.ch>
+References: <20210611152339.182710-1-jonathan.davies@nutanix.com>
+ <YMRbt+or+QTlqqP9@kroah.com>
+ <469dd530-ebd2-37a4-9c6a-9de86e7a38dc@nutanix.com>
+ <YMckz2Yu8L3IQNX9@kroah.com>
+ <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:168d:: with SMTP id f13mr16430226jat.124.1623669140859;
- Mon, 14 Jun 2021 04:12:20 -0700 (PDT)
-Date:   Mon, 14 Jun 2021 04:12:20 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005fb5a005c4b7ee3f@google.com>
-Subject: [syzbot] INFO: trying to register non-static key in ath9k_wmi_event_tasklet
-From:   syzbot <syzbot+31d54c60c5b254d6f75b@syzkaller.appspotmail.com>
-To:     ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+> > > Userspace solutions include:
+> > >   1. udev backing off and retrying in the event of a collision; or
+> > >   2. avoiding ever renaming a device to a name in the "eth%d" namespace.
+> > 
+> > Picking a different namespace does not cause a lack of collisions to
+> > happen, you could have multiple usb network devices being found at the
+> > same time, right?
+> > 
+> > So no matter what, 1) has to happen.
+> 
+> Within a namespace, the "%d" in "eth%d" means __dev_alloc_name finds a name
+> that's not taken. I didn't check the locking but assume that can only happen
+> serially, in which case two devices probed in parallel would not mutually
+> collide.
+> 
+> So I don't think it's necessarily true that 1) has to happen.
 
-syzbot found the following issue on:
+Say you changed the namespace to usb%d. And you want the device in USB
+port 1.4 to be usb1 and the device in USB port 1.3 to be usb0. They
+probe the other way around. You have the same problem, you need to
+handle the race condition in udev, back off an try again.
 
-HEAD commit:    e89bb428 usb: gadget: u_audio: add real feedback implement..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=124450f7d00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=33d364f85e0000cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=31d54c60c5b254d6f75b
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1205b4ebd00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148b2570300000
+As GregKH said, 1) has to happen.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+31d54c60c5b254d6f75b@syzkaller.appspotmail.com
-
-INFO: trying to register non-static key.
-The code is fine but needs lockdep annotation, or maybe
-you didn't initialize this object before use?
-turning off the locking correctness validator.
-CPU: 0 PID: 10 Comm: ksoftirqd/0 Not tainted 5.13.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x143/0x1db lib/dump_stack.c:120
- assign_lock_key kernel/locking/lockdep.c:937 [inline]
- register_lock_class+0x1077/0x1180 kernel/locking/lockdep.c:1249
- __lock_acquire+0x102/0x5230 kernel/locking/lockdep.c:4781
- lock_acquire kernel/locking/lockdep.c:5512 [inline]
- lock_acquire+0x19d/0x700 kernel/locking/lockdep.c:5477
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:135 [inline]
- _raw_spin_lock_bh+0x2f/0x40 kernel/locking/spinlock.c:175
- spin_lock_bh include/linux/spinlock.h:359 [inline]
- ath9k_wmi_event_tasklet+0x231/0x3f0 drivers/net/wireless/ath/ath9k/wmi.c:172
- tasklet_action_common.constprop.0+0x201/0x2e0 kernel/softirq.c:784
- __do_softirq+0x1b0/0x944 kernel/softirq.c:559
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x21/0x50 kernel/softirq.c:913
- smpboot_thread_fn+0x3ec/0x870 kernel/smpboot.c:165
- kthread+0x38c/0x460 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 10 at drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:656 ath9k_htc_txstatus+0x3bb/0x500 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:656
-Modules linked in:
-CPU: 0 PID: 10 Comm: ksoftirqd/0 Not tainted 5.13.0-rc4-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ath9k_htc_txstatus+0x3bb/0x500 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:656
-Code: de e8 69 6c 3d fe 84 db 75 27 e8 c0 65 3d fe 48 89 ef 48 83 c4 38 5b 5d 41 5c 41 5d 41 5e 41 5f e9 7a be b3 02 e8 a5 65 3d fe <0f> 0b e9 36 fd ff ff e8 99 65 3d fe 49 8d 7c 24 08 41 83 e5 fe 48
-RSP: 0018:ffffc900000afce0 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000100
-RDX: ffff888100289b40 RSI: ffffffff8303b1eb RDI: 0000000000000003
-RBP: ffff888119fe480d R08: 0000000000000000 R09: 000000000000001c
-R10: ffffffff8303af1e R11: 000000000000000c R12: ffff88811d52b1e0
-R13: 000000000000001c R14: ffff888119fe480c R15: ffff888119fe480c
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020001038 CR3: 0000000007825000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- ath9k_wmi_event_tasklet+0x306/0x3f0 drivers/net/wireless/ath/ath9k/wmi.c:179
- tasklet_action_common.constprop.0+0x201/0x2e0 kernel/softirq.c:784
- __do_softirq+0x1b0/0x944 kernel/softirq.c:559
- run_ksoftirqd kernel/softirq.c:921 [inline]
- run_ksoftirqd+0x21/0x50 kernel/softirq.c:913
- smpboot_thread_fn+0x3ec/0x870 kernel/smpboot.c:165
- kthread+0x38c/0x460 kernel/kthread.c:313
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+   Andrew
