@@ -2,131 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 052253A69F5
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 17:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370A23A6AA0
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 17:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233435AbhFNPXR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 11:23:17 -0400
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:54933 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233222AbhFNPXP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 11:23:15 -0400
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 734055807DB;
-        Mon, 14 Jun 2021 11:21:11 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 14 Jun 2021 11:21:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=l3f3M//GA2R6a07+weQvlk+BlL+
-        JArI2S3vr2whtaj8=; b=XRKMV9OUNdx4H2uosQMUeAoenlv3g+1rFOmSDLJ6U69
-        WUmKkwwlk4bFpODWhof5lNDiymTxyfqdr/5ebSfQFUQaOlkb23/rej8i5OhEj6NM
-        EYavmp0J6WtLJbXl8WrqyJ1gKhHbVX8eowOTjfG+Yq0I74GaXMBkSGqqdRdN29Lx
-        uS/LwIoTAwbdHItV/0Pp1rAe3zd6rhIKNaQ5uaeCo6mgoTqtnebYWYZ2VvqxDaiI
-        gNChJNjwIGNJSdI5MGE3Zb7g98dS1VEtdYMybeAeFCXjlm8L9Jb3mgN3gPLnpMlI
-        YI2yig60z/+yoHDM0RTQF0IUyN0D2hJFL78wiE+Rdwg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=l3f3M/
-        /GA2R6a07+weQvlk+BlL+JArI2S3vr2whtaj8=; b=XgvLaFp0I1EohOCPYNqpP8
-        +FxoJG7XBCOnB4E8k2t3aDEF45QusBIEN0zur8x72WyBaFcSECLHl6UHil5zY/KW
-        7K7n3TWpnGL2QjxlPgLxUjod0WIqWNKBNAxBnaQN7amhr6hJ1XIHnv1/Y44Wttpn
-        C4EOl+LHxMkNpBXLwEKbkezMYvP1qomLpxQ4v81Zh0XsERzm1j7EXKi4gwSu70oo
-        0OJEHvfpMBFfqZA+JyOgsEOTCbOAwF61epbEPgnuN4sOu40ombQif9UtLarUl6DC
-        QsKsqHip/m22kmQ3PRdExxVnzZfvT0u1ZiHiGazaGosiRuP88RZGoVclGGXoDbUw
-        ==
-X-ME-Sender: <xms:5XPHYBmSXwSFflrwEv1Uhtng69yUsghaf0-f25Ihh21vUd78q5kdfg>
-    <xme:5XPHYM3G9V6K8S96mhNLCvjlOn4B3e_B_gFkX3bA1TnGEbemD6UWbU6LkRRbSMJlz
-    iBLyxfBMCtTbQ>
-X-ME-Received: <xmr:5XPHYHornkH4aNj3LwkCVK7I_yThOT_0zbv82l5UAlhvsjwaCpGGA3jMkWQDEB2YXbcbR4931DGlZhg-15Zeo73b70obwHs2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduledrfedvhedgkeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:5XPHYBmLwzARfLtvCIG9R2NuMemaEuXb7q-CU0UFF-lcegdPlc_BVA>
-    <xmx:5XPHYP1zipcieGj66AQ520LYQRJ5nWmvLw6maIHLv81Azw3IP6Dxgg>
-    <xmx:5XPHYAtNS74734VzCmmw4DfNPyvLeKdIPr2TU_kIiiwfvT5B46F0Ow>
-    <xmx:53PHYNP4i9c8ALKbL64Kb9opz063U0O87WSZoB5fD4aCgVAewqpOEw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 14 Jun 2021 11:21:08 -0400 (EDT)
-Date:   Mon, 14 Jun 2021 17:21:06 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Gil Fine <gil.fine@intel.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, YehezkelShB@gmail.com,
-        linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH] thunderbolt: Fix DROM handling for USB4 DROM
-Message-ID: <YMdz4qEZbQ/dnloN@kroah.com>
-References: <20210614135210.29787-1-gil.fine@intel.com>
- <YMdiZnPKqjyK6FQ5@kroah.com>
- <YMdu1/1sRCItaKrj@lahna>
+        id S233977AbhFNPkj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 11:40:39 -0400
+Received: from mail-pg1-f178.google.com ([209.85.215.178]:42598 "EHLO
+        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233528AbhFNPkg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 11:40:36 -0400
+Received: by mail-pg1-f178.google.com with SMTP id i34so8936625pgl.9;
+        Mon, 14 Jun 2021 08:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k0S1cmvYXsguMzhn//4kJjmpVofxyX3uWpaVIXA04XY=;
+        b=RdfUGhVGFRZUhJaIg6tmSBAzhW2dDn+0dJ/8oEa+w5mP7UHzck/r9lTG7T2WwnY13w
+         5zqIUZj8oIqr5ZDL97A+hACiJFJ9q19DiaIe3QJsGO4HjSRAWctmz9GYRB72/PljDh7U
+         i2cKAwo+uGY0ahOh7Xurf+jIJ6fVR7uPSljJ+sVgmPYy7gInoHF3Y6yCWF3kcarnTNBn
+         P8uCHaNDdtxQ/wdc7kBuENjJx0rMT0YV2mFshOBNXGd6WbvbNEY5RAkN/1FPd+4PXNQr
+         yFOhIycBuSWzSfbM7xeQy+FzkSv28G/VGITt8KQr6FJnC2eEyTyRP3CveTNXRdj524LD
+         OmeQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=k0S1cmvYXsguMzhn//4kJjmpVofxyX3uWpaVIXA04XY=;
+        b=ZmMuf6iI9vKTkzqefqMbpTmgqapZ/Jow1Guizx1FN52bk5tHfWk3NUCd4ncRTWlVC6
+         xkpAHIe73Qv7ffqRrzUWtGwspI0x1xzAw1u1G5lGYHj0NkRvSCfgFwZ4glDJasgyGDW9
+         1Q2XF5KT+g2/NHyLCHpbsYCFe3zkbe0Txdm25Gplhmc+B9mPXu0poRenOhydt+iIzBj0
+         x2wQUFn32PbGIrXwLKbT9SU/6z0hPmMAZkaB77ecSTNV+EwLJ+FreIGZx7xBykp4+LOu
+         Yvk+jrf8NSd93wH2R/N5geXsNRUibJ8nVfc28qnEQmauvxn/HVFLDIsCN07w36XLdlrk
+         pIEQ==
+X-Gm-Message-State: AOAM532EU0DR1I4o7iRNKlsnQkHowj6PsyQ/zYnWKCxaDVEhQZe5dRi7
+        u1p01QP3e261Vs7mYVdeFrY=
+X-Google-Smtp-Source: ABdhPJyE7XZOKUhHvkQqFzcFoLFmaeIi7yd9MTxC3uYdE+DkmYD9+fvnMjRYrO2FAvGcZO8wB199dA==
+X-Received: by 2002:a63:d213:: with SMTP id a19mr17878821pgg.28.1623685045224;
+        Mon, 14 Jun 2021 08:37:25 -0700 (PDT)
+Received: from localhost.localdomain ([45.135.186.34])
+        by smtp.gmail.com with ESMTPSA id z18sm1216630pfe.214.2021.06.14.08.37.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 08:37:24 -0700 (PDT)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     steve.glendinning@shawell.net, davem@davemloft.net,
+        kuba@kernel.org, paskripkin@gmail.com
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Dongliang Mu <mudongliangabcd@gmail.com>
+Subject: [PATCH] net: usb: fix possible use-after-free in smsc75xx_bind
+Date:   Mon, 14 Jun 2021 23:37:12 +0800
+Message-Id: <20210614153712.2172662-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMdu1/1sRCItaKrj@lahna>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 05:59:35PM +0300, Mika Westerberg wrote:
-> Hi Greg,
-> 
-> On Mon, Jun 14, 2021 at 04:06:30PM +0200, Greg KH wrote:
-> > On Mon, Jun 14, 2021 at 04:52:10PM +0300, Gil Fine wrote:
-> > > DROM for USB4 host/device has a shorter header than Thunderbolt DROM
-> > > header. This patch addresses host/device with USB4 DROM (According to spec:
-> > > Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
-> > > 
-> > > Signed-off-by: Gil Fine <gil.fine@intel.com>
-> > > ---
-> > >  drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
-> > >  1 file changed, 11 insertions(+), 8 deletions(-)
-> > > 
-> > > diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-> > > index 46d0906a3070..f9d26bd4f486 100644
-> > > --- a/drivers/thunderbolt/eeprom.c
-> > > +++ b/drivers/thunderbolt/eeprom.c
-> > > @@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
-> > >  	return ~__crc32c_le(~0, data, len);
-> > >  }
-> > >  
-> > > -#define TB_DROM_DATA_START 13
-> > > +#define TB_DROM_DATA_START		13
-> > > +#define TB_DROM_HEADER_LENGTH		22
-> > > +/* BYTES 16-21 - nonexistent in USB4 DROM */
-> > > +#define TB_DROM_USB4_HEADER_LENGTH	16
-> > >  struct tb_drom_header {
-> > >  	/* BYTE 0 */
-> > >  	u8 uid_crc8; /* checksum for uid */
-> > > @@ -224,9 +227,9 @@ struct tb_drom_header {
-> > >  	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
-> > >  	/* BYTE 13 */
-> > >  	u8 device_rom_revision; /* should be <= 1 */
-> > > -	u16 data_len:10;
-> > > -	u8 __unknown1:6;
-> > > -	/* BYTES 16-21 */
-> > > +	u16 data_len:12;
-> > > +	u8 reserved:4;
-> > > +	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
-> > 
-> > What is the odds the above does not work properly for big endian
-> > systems?
-> 
-> If you mean the bitfields, we have been trying to get rid of them. Any
-> new code is expected not to introduce new structures like this but it
-> has been OK for existing structures (for now).
+The commit 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+fails to clean up the work scheduled in smsc75xx_reset->
+smsc75xx_set_multicast, which leads to use-after-free if the work is
+scheduled to start after the deallocation. In addition, this patch also
+removes one dangling pointer - dev->data[0].
 
-Ok, as long as you all realize this is broken :)
+This patch calls cancel_work_sync to cancel the schedule work and set
+the dangling pointer to NULL.
 
-> > And why put the comment after the area and not before?
-> 
-> The gap is there after the "reserved" field.
+Fixes: 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/net/usb/smsc75xx.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Ah, I read the patch wrong, sorry, my fault.
+diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+index b286993da67c..f81740fcc8d5 100644
+--- a/drivers/net/usb/smsc75xx.c
++++ b/drivers/net/usb/smsc75xx.c
+@@ -1504,7 +1504,10 @@ static int smsc75xx_bind(struct usbnet *dev, struct usb_interface *intf)
+ 	return 0;
+ 
+ err:
++	cancel_work_sync(&pdata->set_multicast);
+ 	kfree(pdata);
++	pdata = NULL;
++	dev->data[0] = 0;
+ 	return ret;
+ }
+ 
+-- 
+2.25.1
 
-greg k-h
