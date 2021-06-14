@@ -2,147 +2,148 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0D23A6837
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 15:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85E1E3A6869
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 15:51:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234222AbhFNNmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 09:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45436 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234057AbhFNNmS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 09:42:18 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E3FFC061574
-        for <linux-usb@vger.kernel.org>; Mon, 14 Jun 2021 06:40:06 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ho18so16757166ejc.8
-        for <linux-usb@vger.kernel.org>; Mon, 14 Jun 2021 06:40:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=web591Pt5+AQQiKHLxdfvUXAI+r6XXpcpBp1AONGuYI=;
-        b=nHXvVeV+RWdRQ8gPuuchzQGLIUzG40Tx94jZVClbV/vg74FWlli0P5wF5ZDGRkpLG0
-         KMwsXiXQgq660HJENaaoHpe7Sb+I0PFzGLbho/dIqw8FUQKN4DOEHXPqEnP148qnRwlj
-         P/FHPUzH/TcO9QYNYU5N5LQUAQcFGEqoYokCXXW4ngxnSa6zZqfR1GkJqIa0Igxbl7Pw
-         o2Bkh4Y4fbTqhCVNJa7QX+cVm3MSPhK4I8RQDbagN8HkWG77jR6wprZDlFZNF9O+FQzq
-         015VId31RjCvTOpXJ0DIcKalf+WRniFzL39wJlL5BC7QnF8ehiYi1X3AhERzKCUbGny+
-         dGGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=web591Pt5+AQQiKHLxdfvUXAI+r6XXpcpBp1AONGuYI=;
-        b=Pc2gc2S65aMMzkfDNrKRTHooefqMMb6getGABn7OMFYS76r+hQjQ7octYmSqk6GycB
-         yKUFPmzh/HbKIzVTi9XYVWFcf80KthUS8705i82o2bzBHDlCs8UdcyiZmkqWOOA6l8V+
-         X0tTZ4+vhga2AG65joJ0g2ubfrtUQBiYLtrUINW2evoP0YNnJttjzoU6QfgqXwdlTwYN
-         buSZP2Ul5SFBd+nT9O6MthHCumsmb4ZLtUELfRKDDqPf9ildKLrBbo+1ADcxLpgI/oww
-         wUdd1J1S0Hy+ChVIfft6Nf90j7lMNyXaiP8/YMdq3Rd37tntxMuEmlAmrCQzkVluTp57
-         Tmug==
-X-Gm-Message-State: AOAM533rwfK3WxBtGJY2iOSdw1UVL3kN5YymfKkfuxIO/tQ6LgWOICWp
-        Xo6rEpyL8tUxF/EdXgTpjAsqORFHWXrHboyUh5JKxQ==
-X-Google-Smtp-Source: ABdhPJzSBdx7sGxpqiRcmQ0LmzbbXwVt/v35DOQ9xEKx+nNZRHKXL3MZq2bjf4K462vUGfFm6HYfaX19XreYeacWFck=
-X-Received: by 2002:a17:906:25db:: with SMTP id n27mr15005693ejb.170.1623678004491;
- Mon, 14 Jun 2021 06:40:04 -0700 (PDT)
+        id S233674AbhFNNx1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 09:53:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35032 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233180AbhFNNxX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 09:53:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1AF7C6102A;
+        Mon, 14 Jun 2021 13:51:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623678680;
+        bh=8IzECU7eHlJMjDQFB8s1Qw6JGmtQq0c3I/cE7rJ4Qrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Htqu7IBXLoNAN50Z7d9D009mnP7brJ5nMN927jYUTtWbFZq0HMAdgj0TrjU9VJ7S
+         o7YtLCveaklyDYHjTVsAZYM4U5q9HQiGj6XrOc79bEiENM82ICBh/kHMaYVhRkmuYV
+         P6jESntpPymnS/ZT2352OKPVEZzyJaByRj5evZDY=
+Date:   Mon, 14 Jun 2021 15:51:17 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jonathan Davies <jonathan.davies@nutanix.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrew@lunn.ch
+Subject: Re: [PATCH] net: usbnet: allow overriding of default USB interface
+ naming
+Message-ID: <YMde1fN+qIBfCWpD@kroah.com>
+References: <20210611152339.182710-1-jonathan.davies@nutanix.com>
+ <YMRbt+or+QTlqqP9@kroah.com>
+ <469dd530-ebd2-37a4-9c6a-9de86e7a38dc@nutanix.com>
+ <YMckz2Yu8L3IQNX9@kroah.com>
+ <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
 MIME-Version: 1.0
-References: <20210614102652.964395392@linuxfoundation.org>
-In-Reply-To: <20210614102652.964395392@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 14 Jun 2021 19:09:53 +0530
-Message-ID: <CA+G9fYuQy0c6_POrWNs51rKyuQ2O-PnY5edCDMDgyGTA-txA_A@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/131] 5.10.44-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Jon Hunter <jonathanh@nvidia.com>,
-        linux-stable <stable@vger.kernel.org>,
-        Pavel Machek <pavel@denx.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        Peter Chen <peter.chen@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Felipe Balbi <balbi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 14 Jun 2021 at 16:11, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.44 release.
-> There are 131 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 16 Jun 2021 10:26:30 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.44-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Jun 14, 2021 at 11:58:57AM +0100, Jonathan Davies wrote:
+> On 14/06/2021 10:43, Greg KH wrote:
+> > On Mon, Jun 14, 2021 at 10:32:05AM +0100, Jonathan Davies wrote:
+> > > On 12/06/2021 08:01, Greg KH wrote:
+> > > > On Fri, Jun 11, 2021 at 03:23:39PM +0000, Jonathan Davies wrote:
+> > > > > When the predictable device naming scheme for NICs is not in use, it is
+> > > > > common for there to be udev rules to rename interfaces to names with
+> > > > > prefix "eth".
+> > > > > 
+> > > > > Since the timing at which USB NICs are discovered is unpredictable, it
+> > > > > can be interfere with udev's attempt to rename another interface to
+> > > > > "eth0" if a freshly discovered USB interface is initially given the name
+> > > > > "eth0".
+> > > > > 
+> > > > > Hence it is useful to be able to override the default name. A new usbnet
+> > > > > module parameter allows this to be configured.
+> > > > > 
+> > > > > Signed-off-by: Jonathan Davies <jonathan.davies@nutanix.com>
+> > > > > Suggested-by: Prashanth Sreenivasa <prashanth.sreenivasa@nutanix.com>
+> > > > > ---
+> > > > >    drivers/net/usb/usbnet.c | 13 ++++++++++---
+> > > > >    1 file changed, 10 insertions(+), 3 deletions(-)
+> > > > > 
+> > > > > diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+> > > > > index ecf6284..55f6230 100644
+> > > > > --- a/drivers/net/usb/usbnet.c
+> > > > > +++ b/drivers/net/usb/usbnet.c
+> > > > > @@ -72,6 +72,13 @@ static int msg_level = -1;
+> > > > >    module_param (msg_level, int, 0);
+> > > > >    MODULE_PARM_DESC (msg_level, "Override default message level");
+> > > > > +#define DEFAULT_ETH_DEV_NAME "eth%d"
+> > > > > +
+> > > > > +static char *eth_device_name = DEFAULT_ETH_DEV_NAME;
+> > > > > +module_param(eth_device_name, charp, 0644);
+> > > > > +MODULE_PARM_DESC(eth_device_name, "Device name pattern for Ethernet devices"
+> > > > > +				  " (default: \"" DEFAULT_ETH_DEV_NAME "\")");
+> > > > 
+> > > > This is not the 1990's, please do not add new module parameters as they
+> > > > are on a global driver level, and not on a device level.
+> > > 
+> > > The initial name is set at probe-time, so the device doesn't exist yet. So I
+> > > felt like it was a choice between either changing the hard-coded "eth%d"
+> > > string or providing a driver-level module parameter. Is there a better
+> > > alternative?
+> > 
+> > This has always been this way, why is this suddenly an issue?  What
+> > changed to cause the way we can name these devices after they have been
+> > found like we have been for the past decade+?
+> 
+> The thing that changed for me was that system-udevd does *not* have the
+> backoff and retry logic that traditional versions of udev had.
+> 
+> Compare implementations of rename_netif in
+> https://git.kernel.org/pub/scm/linux/hotplug/udev.git/tree/src/udev-event.c
+> (traditional udev, which handles collisions) and
+> https://github.com/systemd/systemd/blob/main/src/udev/udev-event.c
+> (systemd-udevd, which does not handle collisions).
 
+Then submit a change to add the logic back.  This looks like a userspace
+tool breaking existing setups, so please take it up with the developers
+of that tool.  The kernel has not changed or "broken" anything here.
 
-The following kernel crash reported on stable rc 5.10 arm64 db845c board.
-I have not bisected this problem yet.
+> I think this logic was removed under the assumption that users of
+> systemd-udevd would also use the predictable device naming scheme, meaning
+> renames are guaranteed to not collide with devices being probed.
 
-But there is a crash like this reported and discussed on a mailing thread.
-https://lore.kernel.org/linux-usb/20210608105656.10795-1-peter.chen@kernel.org/
+Why are you not using the predictable device naming scheme?  If you have
+multiple network devices in the system, it seems like that is a good
+idea to follow as the developers added that for a reason.
 
-Crash log on dragonboard 845c:
-[ 0.000000] Linux version 5.10.44-rc1 (tuxmake@7e2c3dff6c75)
-(aarch64-linux-gnu-gcc (Debian 9.3.0-22) 9.3.0, GNU ld (GNU Binutils
-for Debian) 2.35.2) #1 SMP PREEMPT Mon Jun 14 11:22:34 UTC 2021
-[ 0.000000] Machine model: Thundercomm Dragonboard 845c
-<>
-[    5.095538] dwc3-qcom a6f8800.usb: failed to get usb-ddr path: -517
-[    5.113805] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000002
-[    5.122686] Mem abort info:
-[    5.125531]   ESR = 0x96000004
-[    5.128635]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    5.134005]   SET = 0, FnV = 0
-[    5.137106]   EA = 0, S1PTW = 0
-[    5.140297] Data abort info:
-[    5.143212]   ISV = 0, ISS = 0x00000004
-[    5.147092]   CM = 0, WnR = 0
-[    5.150103] [0000000000000002] user address but active_mm is swapper
-[    5.156530] Internal error: Oops: 96000004 [#1] PREEMPT SMP
-[    5.162151] Modules linked in:
-[    5.165254] CPU: 7 PID: 251 Comm: kworker/7:3 Not tainted 5.10.44-rc1 #1
-[    5.172011] Hardware name: Thundercomm Dragonboard 845c (DT)
-[    5.175959] ufshcd-qcom 1d84000.ufshc: ufshcd_print_pwr_info:[RX,
-TX]: gear=[3, 3], lane[2, 2], pwr[FAST MODE, FAST MODE], rate = 2
-[    5.177738] Workqueue: events deferred_probe_work_func
-[    5.190098] ufshcd-qcom 1d84000.ufshc:
-ufshcd_find_max_sup_active_icc_level: Regulator capability was not
-set, actvIccLevel=0
-[    5.194832] pstate: 60c00005 (nZCv daif +PAN +UAO -TCO BTYPE=--)
-[    5.194843] pc : inode_permission+0x2c/0x178
-[    5.194851] lr : lookup_one_len_common+0xac/0x100
-[    5.207380] scsi 1:0:0:49488: Well-known LUN    SKhynix
-H28S7Q302BMR     A001 PQ: 0 ANSI: 6
+> > > > Also changing the way usb network devices are named is up to userspace,
+> > > > the kernel should not be involved in this.  What is wrong with just
+> > > > renaming it in userspace as you want to today?
+> > > 
+> > > Yes, renaming devices is the responsibility of userspace. Normally udev will
+> > > rename a device shortly after it is probed. But there's a window during
+> > > which it has the name the kernel initially assigns. If there's other
+> > > renaming activity happening during that window there's a chance of
+> > > collisions.
+> > > 
+> > > Userspace solutions include:
+> > >   1. udev backing off and retrying in the event of a collision; or
+> > >   2. avoiding ever renaming a device to a name in the "eth%d" namespace.
+> > 
+> > Picking a different namespace does not cause a lack of collisions to
+> > happen, you could have multiple usb network devices being found at the
+> > same time, right?
+> > 
+> > So no matter what, 1) has to happen.
+> 
+> Within a namespace, the "%d" in "eth%d" means __dev_alloc_name finds a name
+> that's not taken. I didn't check the locking but assume that can only happen
+> serially, in which case two devices probed in parallel would not mutually
+> collide.
+> 
+> So I don't think it's necessarily true that 1) has to happen.
 
-ref:
-https://lkft.validation.linaro.org/scheduler/job/2896831#L2835
+Multiple USB devices in the system will cause the same exact thing to
+happen with your patch, so you still need 1).
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+thanks
 
-metadata:
-  git branch: linux-5.10.y
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-  git commit: 406cd5feace812b3715b6fc8114472b6e3bd6d1f
-  git describe: v5.10.43-132-g406cd5feace8
-  make_kernelversion: 5.10.44-rc1
-  kernel-config: https://builds.tuxbuild.com/1twAFGbHcDipBArvNuGfeOtyY9H/config
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h
