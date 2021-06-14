@@ -2,85 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E663A6B0F
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 17:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C643A6B2F
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 18:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234446AbhFNP6M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 11:58:12 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:35996 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234429AbhFNP6L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 11:58:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:From:Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:
-        Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-        Content-Disposition:In-Reply-To:References;
-        bh=8p8DIkgI123uyaFucDHlL3THLzWQithE96inzTy5GLI=; b=xqoDnhNiFFQP8me6Cib1z1liH5
-        /Ui4a3e1rpsOiws7lFNpDlXaaTY99VkwWaNFVmMuIgOEsqIxRwEIKIpTwNrpld3y9wZON8ldLGtRb
-        4W4gh5SQNEFKC3XgGoisDwHqUBYm0iWRrXJ7BQ4K5FXHzretMvPqCX+mX71BdYjmAIQ8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lsow4-009LpY-4w; Mon, 14 Jun 2021 17:55:36 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu, Thinh.Nguyen@synopsys.com,
-        gustavoars@kernel.org, tglx@linutronix.de, cuibixuan@huawei.com,
-        oneukum@suse.com, chris.chiu@canonical.com, hgajjar@de.adit-jv.com,
-        linux-usb@vger.kernel.org, martin.zobel@kinexon.com,
-        philipp.mohrenweiser@kinexon.com, Andrew Lunn <andrew@lunn.ch>,
-        stable@vger.kernel.org
-Subject: [PATCH] usb: core: hub: Disable autosuspend for Cypress CY7C65632
-Date:   Mon, 14 Jun 2021 17:55:23 +0200
-Message-Id: <20210614155524.2228800-1-andrew@lunn.ch>
-X-Mailer: git-send-email 2.32.0
+        id S234518AbhFNQEE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 12:04:04 -0400
+Received: from mail-lf1-f51.google.com ([209.85.167.51]:40924 "EHLO
+        mail-lf1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233779AbhFNQEE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 12:04:04 -0400
+Received: by mail-lf1-f51.google.com with SMTP id k40so21940511lfv.7;
+        Mon, 14 Jun 2021 09:01:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=FV9HGOUAE7b4IZzZmRAbso8S6XwSXYjDPYy+Xj3hAAg=;
+        b=KCe2OsJe+ygPPHOLSI6DFy56Z1+7CVqaNtiQdXJAhaMEk+K8Nkl1s0A2qXAw3PNu5k
+         EqLLmSpkJAxkQGn6lsrHSBPILY8aUqCTZIHGtNEZQkeT5D20K0w6qRgKQXATLwp8nJF6
+         jZ8NUF5tJVOamjef2Mu6EIJu9mu6PlO8D9oweKesmyyXR+4gj1v2NUY9H5nzEewyT547
+         Ad5engDloXONKDcOrQRDqLz/E99iFSVEsHKRKGFPPb67Yximw2RyyytCJRG1IBtdflIb
+         dwFbqodZuFwINSD9uT2wgvfqg4+tGPZL5IiGC+KO9h3I4rVXOElNIWZ8Z6n94XiNeY/C
+         SfWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=FV9HGOUAE7b4IZzZmRAbso8S6XwSXYjDPYy+Xj3hAAg=;
+        b=qEz2WZ6PLYRiQHSX7sM+0PC94/LlqKHn1/g8nBuKy5/znzQGOhNljdPWENS+AdWy53
+         +r4uzEn8bnr7KiFB4Pfg2Yu6cQ+CKj9Yoy/2rGOETSvwaMH9JUapcpv7RRv5BE97oxOC
+         AZmQcPRLSLqO+t0f80ZUdW+DFycP2BL0orxYB22NC5VhjCs61PKuwToBUfM0fqxpEE3x
+         Ok/8W/bDZmpwVUPF3ueLtw17bHspcUBbpk+LW9pInzYrRpJ0dWuGUVzhBqCQ1INrJHUh
+         IOj4ToEO6zpnDlmZOPPTQidCai+bFEk6nCNYCXKAJIwvsykLqCh7k1QBhx8v28lzfl+Z
+         qqMg==
+X-Gm-Message-State: AOAM530E/nykHfmxUFg5xd9nnlcT0hbTDW+nXkQ2Q6fKnw5fpViDU0Ie
+        K1Wk/y37Jnox/JD40gza8J0=
+X-Google-Smtp-Source: ABdhPJw2/JOEKiGuLWuRM2C7SZE/UXE6y6M9zal/gIoxum9HS86rIuVgxgwI8Df6wDRmbBUoL2PEZA==
+X-Received: by 2002:a05:6512:31c2:: with SMTP id j2mr11990556lfe.69.1623686450083;
+        Mon, 14 Jun 2021 09:00:50 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.229.24])
+        by smtp.gmail.com with ESMTPSA id o8sm942948ljj.108.2021.06.14.09.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Jun 2021 09:00:49 -0700 (PDT)
+Date:   Mon, 14 Jun 2021 19:00:45 +0300
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     steve.glendinning@shawell.net, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: fix possible use-after-free in smsc75xx_bind
+Message-ID: <20210614190045.5b4c92e6@gmail.com>
+In-Reply-To: <20210614153712.2172662-1-mudongliangabcd@gmail.com>
+References: <20210614153712.2172662-1-mudongliangabcd@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The Cypress CY7C65632 appears to have an issue with auto suspend and
-detecting devices, not too dissimilar to the SMSC 5534B hub. It is
-easiest to reproduce by connecting multiple mass storage devices to
-the hub at the same time. On a Lenovo Yoga, around 1 in 3 attempts
-result in the devices not being detected. It is however possible to
-make them appear using lsusb -v.
+On Mon, 14 Jun 2021 23:37:12 +0800
+Dongliang Mu <mudongliangabcd@gmail.com> wrote:
 
-Disabling autosuspend for this hub resolves the issue.
+> The commit 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+> fails to clean up the work scheduled in smsc75xx_reset->
+> smsc75xx_set_multicast, which leads to use-after-free if the work is
+> scheduled to start after the deallocation. In addition, this patch
+> also removes one dangling pointer - dev->data[0].
+> 
+> This patch calls cancel_work_sync to cancel the schedule work and set
+> the dangling pointer to NULL.
+> 
+> Fixes: 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/net/usb/smsc75xx.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+> index b286993da67c..f81740fcc8d5 100644
+> --- a/drivers/net/usb/smsc75xx.c
+> +++ b/drivers/net/usb/smsc75xx.c
+> @@ -1504,7 +1504,10 @@ static int smsc75xx_bind(struct usbnet *dev,
+> struct usb_interface *intf) return 0;
+>  
+>  err:
+> +	cancel_work_sync(&pdata->set_multicast);
+>  	kfree(pdata);
+> +	pdata = NULL;
+> +	dev->data[0] = 0;
+>  	return ret;
+>  }
+>  
 
-Cc: stable@vger.kernel.org
-Fixes: 1208f9e1d758 ("USB: hub: Fix the broken detection of USB3 device in SMSC hub")
-Signed-off-by: Andrew Lunn <andrew@lunn.ch>
----
- drivers/usb/core/hub.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Hi, Dongliang!
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 3bd379d5d1be..d1efc7141333 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -41,6 +41,8 @@
- #define USB_VENDOR_GENESYS_LOGIC		0x05e3
- #define USB_VENDOR_SMSC				0x0424
- #define USB_PRODUCT_USB5534B			0x5534
-+#define USB_VENDOR_CYPRESS			0x04b4
-+#define USB_PRODUCT_CY7C65632			0x6570
- #define HUB_QUIRK_CHECK_PORT_AUTOSUSPEND	0x01
- #define HUB_QUIRK_DISABLE_AUTOSUSPEND		0x02
- 
-@@ -5719,6 +5721,11 @@ static const struct usb_device_id hub_id_table[] = {
-       .idProduct = USB_PRODUCT_USB5534B,
-       .bInterfaceClass = USB_CLASS_HUB,
-       .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-+    { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
-+                   | USB_DEVICE_ID_MATCH_PRODUCT,
-+      .idVendor = USB_VENDOR_CYPRESS,
-+      .idProduct = USB_PRODUCT_CY7C65632,
-+      .driver_info = HUB_QUIRK_DISABLE_AUTOSUSPEND},
-     { .match_flags = USB_DEVICE_ID_MATCH_VENDOR
- 			| USB_DEVICE_ID_MATCH_INT_CLASS,
-       .idVendor = USB_VENDOR_GENESYS_LOGIC,
--- 
-2.32.0
+Just my thougth about this patch:
 
+INIT_WORK(&pdata->set_multicast, smsc75xx_deferred_multicast_write);
+does not queue anything, it just initalizes list structure and assigns
+callback function. The actual work sheduling happens in
+smsc75xx_set_multicast() which is smsc75xx_netdev_ops member.
+
+In case of any error in smsc75xx_bind() the device registration fails
+and smsc75xx_netdev_ops won't be registered, so, i guess, there is no
+chance of UAF. 
+
+
+Am I missing something? :)
+
+
+
+With regards,
+Pavel Skripkin
