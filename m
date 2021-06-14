@@ -2,24 +2,24 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D6A3A6105
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 12:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E68FC3A61F5
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 12:51:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbhFNKli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 06:41:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44668 "EHLO mail.kernel.org"
+        id S234623AbhFNKxi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 06:53:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59482 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233979AbhFNKj2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 06:39:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id F051A611CA;
-        Mon, 14 Jun 2021 10:34:18 +0000 (UTC)
+        id S234411AbhFNKvd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 06:51:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5368861469;
+        Mon, 14 Jun 2021 10:39:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623666859;
-        bh=ZQrsn40FlsNzVSMZCPl45JSsIfd0bSqQkJ/eM4Ab12I=;
+        s=korg; t=1623667151;
+        bh=2SgvNj6ou6VNa7dm/tdITAyo9EzdsLrOwNOltAcAyho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hpHPusnN7pClNzQYcrMJlrWFeR3ydFOhMgBdcBhSu2Yw2pLsL2NLG7YLjCMrr8KI1
-         gFzeLGfmHB952YAIhIbD4PF4ePFHzK+psNHOdZ/SzOgnHMQ8hy05GRaSmBPqnEW/ZN
-         CirdcuZWl+/DEm52K+GzGiK9hGXOWvufOlQbQyw4=
+        b=1Sq7OiRN3P2prPxsEhYlwh2e7holqcOKEwW3qGy2pTHmn9hCnIX1Djtch1Vt9nudJ
+         TIcGP4C/73x6IP/OVprF7NHmsmCiH5lMLvh0uMrOsV1Lj2qsw8uL0Q9PbWFF/q4Amf
+         nPvmQgEVz/KGJxiMr72WuGLmrFF8RGznulhZPprw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -30,12 +30,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yauheni Kaliuta <yauheni.kaliuta@nokia.com>,
         Linux USB Mailing List <linux-usb@vger.kernel.org>,
         =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-Subject: [PATCH 4.14 27/49] USB: f_ncm: ncm_bitrate (speed) is unsigned
-Date:   Mon, 14 Jun 2021 12:27:20 +0200
-Message-Id: <20210614102642.759366503@linuxfoundation.org>
+Subject: [PATCH 5.4 46/84] USB: f_ncm: ncm_bitrate (speed) is unsigned
+Date:   Mon, 14 Jun 2021 12:27:24 +0200
+Message-Id: <20210614102647.941385889@linuxfoundation.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210614102641.857724541@linuxfoundation.org>
-References: <20210614102641.857724541@linuxfoundation.org>
+In-Reply-To: <20210614102646.341387537@linuxfoundation.org>
+References: <20210614102646.341387537@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,7 +70,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/drivers/usb/gadget/function/f_ncm.c
 +++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -589,7 +589,7 @@ static void ncm_do_notify(struct f_ncm *
+@@ -583,7 +583,7 @@ static void ncm_do_notify(struct f_ncm *
  		data[0] = cpu_to_le32(ncm_bitrate(cdev->gadget));
  		data[1] = data[0];
  
