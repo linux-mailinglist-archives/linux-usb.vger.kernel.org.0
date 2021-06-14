@@ -2,72 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 307743A6677
-	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 14:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB613A66CA
+	for <lists+linux-usb@lfdr.de>; Mon, 14 Jun 2021 14:40:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbhFNM0G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 08:26:06 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:35470 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233071AbhFNM0F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 08:26:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=oiBH2JKjoAAJbc4R4FuVxQ59nQgyPuSoFXb64F6CMmU=; b=slkrvpp+tamTu2ZaMxFaIDixL+
-        oRV4DLfpYHor4zMd8HmORon+sEyP1ls3SpDmlnryret0sFXgIl9coS0dPWcz1G3peItdGfT1zXsnN
-        KykDF2++tlhKywwJkY07Aq+yKSK8hMPX+nfPt3jU2eLC+rCRErQAzTKFwfBdxBIrqlnY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lsldB-009JmZ-8C; Mon, 14 Jun 2021 14:23:53 +0200
-Date:   Mon, 14 Jun 2021 14:23:53 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Jonathan Davies <jonathan.davies@nutanix.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+        id S233076AbhFNMmo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 08:42:44 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:37366 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232791AbhFNMmn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 14 Jun 2021 08:42:43 -0400
+Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 027192197A;
+        Mon, 14 Jun 2021 12:40:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1623674439; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XBYOvFAFTda/NVTkMZ0PeZiEtTLP6Wn9QeCT3FHWm6s=;
+        b=k4e1oIMCQH05405X0OEqHcA34zn7X5BMMFN6uRoeakLI/bSmkKyqmv2xUk3whG0BRMMgJg
+        KT+Xzggu277Ntm78EwDPzStut9sDhEVfNyFIkdTYOcnlMb4/hFO/7Y5WB/ckYNywz0I4oW
+        KrrvC1jedquufkilCZBjfGvlV+1Rkfc=
+Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
+        by imap.suse.de (Postfix) with ESMTP id A24C5118DD;
+        Mon, 14 Jun 2021 12:40:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1623674438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XBYOvFAFTda/NVTkMZ0PeZiEtTLP6Wn9QeCT3FHWm6s=;
+        b=bI7gcEeAsDNvz1ea4QsseLE+hrztdiYgYiiCLWdVt99cR415yNbJdVuxHmu1vdM/EUC6Kn
+        iv8VQg8QZ0OV09xWfkqEpEK1VH5uZfHyFnRra/KOGfUeBiXHL3PWqTVtZAQGyGC7e5O+Wi
+        GcX7U7JRzwMz0WCwl9QIDzFCf5kStEA=
+Received: from director2.suse.de ([192.168.254.72])
+        by imap3-int with ESMTPSA
+        id iLUpJUZOx2DuPAAALh3uQQ
+        (envelope-from <oneukum@suse.com>); Mon, 14 Jun 2021 12:40:38 +0000
+Message-ID: <3567e925f1750babe9508377678c55a2e4610af5.camel@suse.com>
 Subject: Re: [PATCH] net: usbnet: allow overriding of default USB interface
  naming
-Message-ID: <YMdKWSjiXeiDESKR@lunn.ch>
+From:   Oliver Neukum <oneukum@suse.com>
+To:     Jonathan Davies <jonathan.davies@nutanix.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 14 Jun 2021 14:40:37 +0200
+In-Reply-To: <e35ddece-3fd2-4252-6786-af507ba819d2@nutanix.com>
 References: <20210611152339.182710-1-jonathan.davies@nutanix.com>
- <YMRbt+or+QTlqqP9@kroah.com>
- <469dd530-ebd2-37a4-9c6a-9de86e7a38dc@nutanix.com>
- <YMckz2Yu8L3IQNX9@kroah.com>
- <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
+         <YMOaZB6xf2xOpC0S@lunn.ch>
+         <e35ddece-3fd2-4252-6786-af507ba819d2@nutanix.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a620bc87-5ee7-6132-6aa0-6b99e1052960@nutanix.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> > > Userspace solutions include:
-> > >   1. udev backing off and retrying in the event of a collision; or
-> > >   2. avoiding ever renaming a device to a name in the "eth%d" namespace.
-> > 
-> > Picking a different namespace does not cause a lack of collisions to
-> > happen, you could have multiple usb network devices being found at the
-> > same time, right?
-> > 
-> > So no matter what, 1) has to happen.
+Am Montag, den 14.06.2021, 10:32 +0100 schrieb Jonathan Davies:
+> On 11/06/2021 18:16, Andrew Lunn wrote:
+> > On Fri, Jun 11, 2021 at 03:23:39PM +0000, Jonathan Davies wrote:
+
+Hi,
+
+> > > Hence it is useful to be able to override the default name. A new
+> > > usbnet
+> > > module parameter allows this to be configured.
+
+1. This issue exists with all hotpluggable interfaces
+2. It exists for all USB devices so it does not belong in usbnet,
+leaving out drivers like kaweth.
+
+> > > 
+> > Module parameter are not liked in the network stack.
 > 
-> Within a namespace, the "%d" in "eth%d" means __dev_alloc_name finds a name
-> that's not taken. I didn't check the locking but assume that can only happen
-> serially, in which case two devices probed in parallel would not mutually
-> collide.
+> Thanks, I wasn't aware. Please help me understand: is that in an
+> effort 
+> to avoid configurability altogether, or because there's some
+> preferred 
+> mechanism for performing configuration?
+
+Configurability belongs into user space if possible.
 > 
-> So I don't think it's necessarily true that 1) has to happen.
+> > It actually seems like a udev problem, and you need to solve it
+> > there. It is also not specific to USB. Any sort of interface can
+> > pop
+> > up at an time, especially with parallel probing of busses.
+> 
+> Yes, this is also applicable to the naming done for all ethernet 
+> devices. But I've seen the problem multiple times for USB NICs, which
+> is 
+> why I proposed a fix here first.
 
-Say you changed the namespace to usb%d. And you want the device in USB
-port 1.4 to be usb1 and the device in USB port 1.3 to be usb0. They
-probe the other way around. You have the same problem, you need to
-handle the race condition in udev, back off an try again.
+Because USb devices are common. Your observations are determined
+by ubiquity, not intrinsic factors.
 
-As GregKH said, 1) has to happen.
+> > So you need
+> > udev to detect there has been a race condition and try again with
+> > the
+> > rename.
+> 
 
-   Andrew
+Yes, now, it may be that we do not export the information udev
+would need to or you want new kinds of rules. But I see no evidence
+of that.
+
+	Regards
+		Oliver
+
+
+
