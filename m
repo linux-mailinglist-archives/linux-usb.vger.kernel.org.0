@@ -2,112 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A22FC3A7735
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 08:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA223A777C
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 09:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229937AbhFOGmU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 02:42:20 -0400
-Received: from szxga01-in.huawei.com ([45.249.212.187]:4782 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhFOGmS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 02:42:18 -0400
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4G3z8J0jrbzXg4G;
-        Tue, 15 Jun 2021 14:35:12 +0800 (CST)
-Received: from dggemi762-chm.china.huawei.com (10.1.198.148) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2176.2; Tue, 15 Jun 2021 14:40:09 +0800
-Received: from linux-lmwb.huawei.com (10.175.103.112) by
- dggemi762-chm.china.huawei.com (10.1.198.148) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Tue, 15 Jun 2021 14:40:08 +0800
-From:   Zou Wei <zou_wei@huawei.com>
-To:     <valentina.manea.m@gmail.com>, <shuah@kernel.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Zou Wei <zou_wei@huawei.com>
-Subject: [PATCH -next] usbip: tools: Convert list_for_each to entry variant
-Date:   Tue, 15 Jun 2021 14:58:39 +0800
-Message-ID: <1623740319-15988-1-git-send-email-zou_wei@huawei.com>
-X-Mailer: git-send-email 2.6.2
+        id S230187AbhFOHDG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 03:03:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230184AbhFOHDD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 03:03:03 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173B3C061574;
+        Tue, 15 Jun 2021 00:00:58 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id f30so25279523lfj.1;
+        Tue, 15 Jun 2021 00:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=9R6yJGe9iXR+QKQYp3ed6kj3FohafuSvjRzw5BTEgL8=;
+        b=umkC6wBaORmGymofAod7RGVV1/CFa3gkF1CQn9wzc5EdLRiFhVCfpGj4KyX7JTVjvx
+         uuhHrzT0515t+Yvglmxuz/XKjq2Xfggw8B78fd/15+Me4cfqluoK9kRKk7G+jVYTbctV
+         OWOWHqY/XBcg7EcN2XnFoYNHquUWFVVyjhy8mklTV3vIqFFheMmfQ0aVQMir+C/7eUx1
+         K9np5llFqzLB3Npo13I8KgtbuLAIbRImfo2gaktQujf5aU5kZryi4p5r35tKRSLMYype
+         Y2nCX8mu+3XxjtZzDZFtpNfRDjwldRgdSW18jXGwCN8rx6oPpq//Nlfq5ndG9WJykeVY
+         jSpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=9R6yJGe9iXR+QKQYp3ed6kj3FohafuSvjRzw5BTEgL8=;
+        b=i+8BKjAxlNBQrZtK7uFNrE/P+2xOoRNd8WraApuVfDoMiOiyV2gVLKUYgDPoMhhTlT
+         az2+XuYWPuqBWOIy+McC4dhJDJMJrAU65j9mxu70r3l4giRb1bnTtqaJ67YQcHxOt7S1
+         qz2Wl57zUEM6GygMA0Jfkgk66en8ucA33JaIz7LYW5OFq87mTLxOswiaqbjAvvV+FbQH
+         9IeIIsL+W0UEnnOlo/uQQmjEsbjEMZVqk6a/4YhitWBEI4ZPF3+AkCagkgpDMAOK7q3D
+         qsLDreSnNNA2XA2tLG5N0ych3vWnPCOCVStSnyPy0pgOlYfGEptshOZu1Cpj3H3FcqZo
+         zSDA==
+X-Gm-Message-State: AOAM531zNM7gd/0e3OzSslM99F+MlRKXaoG0eRRCkMDskNFVcrTEZQwn
+        Dv53ExKpoFJNdTh9LkkbrsF/HWk3BRSKbh8EV10=
+X-Google-Smtp-Source: ABdhPJytbmpBc/v6/ujKDjf3vh3FQsf5IDAR1hAnC4zwXLCCxyHZEhLaHGrG2m9yRzgcGvIdYRh4TaR09Z8B2Z0GQfM=
+X-Received: by 2002:ac2:5ecc:: with SMTP id d12mr15247436lfq.539.1623740456413;
+ Tue, 15 Jun 2021 00:00:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.103.112]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggemi762-chm.china.huawei.com (10.1.198.148)
-X-CFilter-Loop: Reflected
+References: <CAHhAz+haTa8FJep+mokae4O7Gy9zzq2dbPk28fuEH5FO24uTzw@mail.gmail.com>
+ <26698.1623455194@turing-police> <CAHhAz+goVhacpDPc-OaVuG151TS8QKYdsqdnK9UcAx+Hc07zSg@mail.gmail.com>
+ <27987.1623737660@turing-police>
+In-Reply-To: <27987.1623737660@turing-police>
+From:   Muni Sekhar <munisekharrms@gmail.com>
+Date:   Tue, 15 Jun 2021 12:30:45 +0530
+Message-ID: <CAHhAz+iOFda+T3=ri2o8UhNR1L1KVdKJUYABS8djijqvhsn3JQ@mail.gmail.com>
+Subject: Re: USB sound card issues
+To:     =?UTF-8?Q?Valdis_Kl=C4=93tnieks?= <valdis.kletnieks@vt.edu>
+Cc:     linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-convert list_for_each() to list_for_each_entry() where
-applicable.
+On Tue, Jun 15, 2021 at 11:44 AM Valdis Kl=C4=93tnieks
+<valdis.kletnieks@vt.edu> wrote:
+>
+> On Sat, 12 Jun 2021 16:45:00 +0530, Muni Sekhar said:
+>
+> > > And if it's configurable for multiple formats, was it set for the cor=
+rect one?
+> > Is there a way to verify was it set for the correct one or not?
+>
+> arecord -v gives what it thinks the setup is.
+>
+> > > Does the record die immediately, or hang for a few seconds and timeou=
+t?
+> > What is the difference between these two ways?
+>
+> An immediate failure is usually related to a "Can't do it" situation wher=
+e the
+> USB interaction to configure the device has failed, while a timeout usual=
+ly
+> indicates that the configuration at least *claimed* to succeed, but is fa=
+iling
+> to properly transfer valid data.
+>
+> > For my hardware, I noticed that it hangs for a few seconds and gives EI=
+O (arecord:
+> > pcm_read:2032: read error: Input/output error).
+>
+> Given that the usbmon output ran to several megabytes, that's tending to
+> point at "the card was returning lots of packets, but they weren't actual=
+ly the
+> format/data that arecord was expecting.
+So, is it a USB card issue?
 
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Zou Wei <zou_wei@huawei.com>
----
- tools/usb/usbip/libsrc/usbip_host_common.c | 4 +---
- tools/usb/usbip/src/usbipd.c               | 8 ++------
- 2 files changed, 3 insertions(+), 9 deletions(-)
 
-diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
-index ca78aa3..80f16f0 100644
---- a/tools/usb/usbip/libsrc/usbip_host_common.c
-+++ b/tools/usb/usbip/libsrc/usbip_host_common.c
-@@ -267,12 +267,10 @@ int usbip_export_device(struct usbip_exported_device *edev, int sockfd)
- struct usbip_exported_device *usbip_generic_get_device(
- 		struct usbip_host_driver *hdriver, int num)
- {
--	struct list_head *i;
- 	struct usbip_exported_device *edev;
- 	int cnt = 0;
- 
--	list_for_each(i, &hdriver->edev_list) {
--		edev = list_entry(i, struct usbip_exported_device, node);
-+	list_for_each_entry(edev, &hdriver->edev_list, node) {
- 		if (num == cnt)
- 			return edev;
- 		cnt++;
-diff --git a/tools/usb/usbip/src/usbipd.c b/tools/usb/usbip/src/usbipd.c
-index 48398a7..438346e 100644
---- a/tools/usb/usbip/src/usbipd.c
-+++ b/tools/usb/usbip/src/usbipd.c
-@@ -93,7 +93,6 @@ static int recv_request_import(int sockfd)
- 	struct op_import_request req;
- 	struct usbip_exported_device *edev;
- 	struct usbip_usb_device pdu_udev;
--	struct list_head *i;
- 	int found = 0;
- 	int status = ST_OK;
- 	int rc;
-@@ -107,8 +106,7 @@ static int recv_request_import(int sockfd)
- 	}
- 	PACK_OP_IMPORT_REQUEST(0, &req);
- 
--	list_for_each(i, &driver->edev_list) {
--		edev = list_entry(i, struct usbip_exported_device, node);
-+	list_for_each_entry(edev, &driver->edev_list, node) {
- 		if (!strncmp(req.busid, edev->udev.busid, SYSFS_BUS_ID_SIZE)) {
- 			info("found requested device: %s", req.busid);
- 			found = 1;
-@@ -160,7 +158,6 @@ static int send_reply_devlist(int connfd)
- 	struct usbip_usb_device pdu_udev;
- 	struct usbip_usb_interface pdu_uinf;
- 	struct op_devlist_reply reply;
--	struct list_head *j;
- 	int rc, i;
- 
- 	/*
-@@ -174,8 +171,7 @@ static int send_reply_devlist(int connfd)
- 
- 	reply.ndev = 0;
- 	/* number of exported devices */
--	list_for_each(j, &driver->edev_list) {
--		edev = list_entry(j, struct usbip_exported_device, node);
-+	list_for_each_entry(edev, &driver->edev_list, node) {
- 		if (edev->status != SDEV_ST_USED)
- 			reply.ndev += 1;
- 	}
--- 
-2.6.2
 
+--=20
+Thanks,
+Sekhar
