@@ -2,103 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F09113A748D
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 05:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFA63A7570
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 05:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbhFODDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 23:03:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51132 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230238AbhFODDh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 14 Jun 2021 23:03:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 45500613BF;
-        Tue, 15 Jun 2021 01:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623719165;
-        bh=5nFeD8wP5nu+m9jfAlQJ3IU5zCr3m3wHffbBI/kxC+g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cI0ZAUKHSteG8ONkxc/ThavDvsqJrcD7JO88Gz0X6tpJrYNU2wmC/2o/xkDa/y6j9
-         iJ9Gqybh+cDoKlXzAVCKsS9rHrBF5jFABJQtk1r6rtL4b6jS1brCwgIYKV28I5Qwjr
-         VzM0WzzU+ezTwKaz1JMLDneEq61gkoynFFKhD7ohJ07ygzltuie4V0sxPFZW920cuI
-         EoapArbKqYaii6i4hOQ8LKXWphvea2grXo+uOKXbd8TAGSogP/NAj0dnQK6lPCxvB/
-         E/ihC2iZt7F+2jXHzsd/tEEpgzmeHJcG+K3lHpsJUS9XVhtGABjWwR4gZF+3yqqKTG
-         +l7y6DGl/8XTg==
-Date:   Tue, 15 Jun 2021 09:06:00 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
+        id S230358AbhFOD4o (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 14 Jun 2021 23:56:44 -0400
+Received: from mail-eopbgr20062.outbound.protection.outlook.com ([40.107.2.62]:53568
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229919AbhFOD4n (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 23:56:43 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jkaD01B31aJdApm0MTjPhVZR3ydgbT9F+hzqWYkKvv/QwpGLvwoHJy03DDoMKjooTSNM6eDfDcfmMChaN0mICkr9VtmCK4XYfkFFZ2i1OvzJ96XPlcg0Wz1d9WFipt24s+NpGSz87vjzQYxFs3a4AdmmS7kSGrzO3HsQTFWb0fEKo4qNtW4+RBP2wOL7BuADGf/36llQXKly3JTcs2/HgN6AUhuAmhnrRPhS6Q8N+BIj3lQk/fZkiLBVcKeRyZslax6O7EYuNk4/pR3YuHuSoFsevu8nB3tvwBUd/8bF5o0Yg51+ftCBfnUmmmiAVl6aT1fOzQuQ07NSa5bSCUk+xQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XjeOIdQgJTVZ763sYZu286nieJjHnhbQuSePIv+eO+o=;
+ b=K7MtJfECxOuxVa0eQT8MzBIU/SUV5Xgg/H6M52xVAFB2I1s4w1FkA4akj2V1GDuF5O/BBMmjgvDp8Lg93xyE0j/1Jz/kJ+Lm8NW7R9/MBfrA0mvY95/WY2SxPUOuJ7QijO0WL2k2S9Bq0N19nTpazR6bnqE9LT5cS6+34GbB5w5+WDGE5Co0Uzv9xnLBd/6d1T7xNQw95I5iD+CuhY1W6IQ9z+zGhHWBpew+fYsX4r7WS3gGhu24NBtYecOdq5+jhtLsAWc+uSrBDsMmVq6Mv3YECSXhg0FThb2twP2IgqBbegA0FIYL4clnj8hBRZwU0374u1BQ7eW76Mr+w3FwpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XjeOIdQgJTVZ763sYZu286nieJjHnhbQuSePIv+eO+o=;
+ b=Gh1/j2qhJqY1FvLnUMBrOTDbevTiE1naGdddnH3QTAG73IqW4AtDhLGixt/sFgjQb53ivIf3LBnBRva48Ewe++pHvZjv+eXAVmLJ7dEyJ+uCCVMxZlRSbikwFfiZX52+KnsnX2317B4FDz2GFNVxYDkKqZP2efgoum2SQmpVuok=
+Received: from VI1PR04MB4478.eurprd04.prod.outlook.com (2603:10a6:803:67::30)
+ by VE1PR04MB7246.eurprd04.prod.outlook.com (2603:10a6:800:1ae::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4219.23; Tue, 15 Jun
+ 2021 03:54:37 +0000
+Received: from VI1PR04MB4478.eurprd04.prod.outlook.com
+ ([fe80::f1f8:ff94:2b66:8429]) by VI1PR04MB4478.eurprd04.prod.outlook.com
+ ([fe80::f1f8:ff94:2b66:8429%5]) with mapi id 15.20.4219.025; Tue, 15 Jun 2021
+ 03:54:36 +0000
+From:   Leo Li <leoyang.li@nxp.com>
+To:     Joel Stanley <joel@jms.id.au>
+CC:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Maxim Schwalm <maxim.schwalm@gmail.com>,
-        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: phy: tegra: Wait for VBUS wakeup status
- deassertion on suspend
-Message-ID: <20210615010600.GB28352@nchen>
-References: <20210613145936.9902-1-digetx@gmail.com>
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Ran Wang <ran.wang_1@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>
+Subject: RE: [PATCH] usb: gadget: fsl: properly remove remnant of MXC support
+Thread-Topic: [PATCH] usb: gadget: fsl: properly remove remnant of MXC support
+Thread-Index: AQHXXyJaPtbrvsFOdEq86ntFi4l5gqsUU8MAgAAhrQA=
+Date:   Tue, 15 Jun 2021 03:54:36 +0000
+Message-ID: <VI1PR04MB44782C719DCEA2FF0DB03DBF8F309@VI1PR04MB4478.eurprd04.prod.outlook.com>
+References: <20210612003128.372238-1-leoyang.li@nxp.com>
+ <CACPK8XfUiiBM=KQiqSJ5uSUpOHLTp_wxhNyEw-gYkTBsZjbZVg@mail.gmail.com>
+In-Reply-To: <CACPK8XfUiiBM=KQiqSJ5uSUpOHLTp_wxhNyEw-gYkTBsZjbZVg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: jms.id.au; dkim=none (message not signed)
+ header.d=none;jms.id.au; dmarc=none action=none header.from=nxp.com;
+x-originating-ip: [136.49.83.111]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: dbfae566-083c-4f00-81fb-08d92fb14b4a
+x-ms-traffictypediagnostic: VE1PR04MB7246:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VE1PR04MB724663252FE6FBC5D256E6AF8F309@VE1PR04MB7246.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: G8mLqLa71ivDpT+PaKgqrddhKKnN9IcvSC+y0En3On9j6uHvdkn28yT+XqR5LV9I5+vDeAQ6HoIn9FJWmyGQiveTWy2O3d0wZIJ9sNNMRlFydOjoAl8mbbCa2ikRgzve05M5EMwI/nq76ujmjhuEQUE6rRnxBw2X2skW08MH/vKiNK0Kxm1VoKXxHj3PLZxkcFsMMHf6PQD2ZibXpC6nt4cE2JGYgJNAvCjh1BnKHI2fyfgGbi+odSDkQsYtt+Jg6HuNFvMxiqwx4NIdo/CwZtX/dIkiZ9AAFYPrnJTjY8MsbRP9yZlhW8CnYqVLnvzdei3nZb7SZHiZzD8Fq2X8I+0u43N4pRH0sMdBHz0hiz8q0TWr09344u99J8VlALMI/0OYFEC+2cSIbuvgbVnKYVxAmCz1L1FpGvCO0kKSBRP/qHpqyZLNY71Y/l8bSJWOMXR0DRyMA0BMtJgT8SAvwlTgFnKhZSXeC7gwsN/1K2s/IkhRJ0t9Oa3xIMz9OAw8d7A8OQPmdXZXuSZN58+uE/ULpNu2cWpnzZTdCCWpSMGCuDM0PtXYclHURHmYfOpqY1yahLXwevOUyOB72u8/Ci9LOs9isdUk5JSpbBpqWB8=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4478.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(376002)(366004)(136003)(346002)(39860400002)(5660300002)(83380400001)(4744005)(55016002)(66946007)(76116006)(86362001)(9686003)(6916009)(4326008)(33656002)(66476007)(52536014)(71200400001)(6506007)(53546011)(8936002)(122000001)(38100700002)(2906002)(66556008)(64756008)(186003)(8676002)(478600001)(7696005)(54906003)(316002)(66446008)(26005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M1VTd01GcE9SN1Q3NTZmUkh0cEtrb0ZuZm5XQ3IzMXp4UlV3YWJaN3dMaUpQ?=
+ =?utf-8?B?Y0VIemJKNnpqWWN3TFdHdWh4MWZpbG9XeDI0Sm12ZDVEQ3hHNVRrOG9IVFcy?=
+ =?utf-8?B?MmZSbDlpd0E2WGdNN3dudmpaUFVUeFg5OGFCbjV3UTFFQzNBaCtVY0pCSFdu?=
+ =?utf-8?B?aG9hajFpWjhkOEpVMVZucXlsbVBpbGJGZU1GdmZhcGQ0ZGJ6QTJkT2FvaXNp?=
+ =?utf-8?B?UkVJWXlLYVVickxEK1JrSXB1TjVmMkNNdHVNSkZXVE1WTEltMlpFQnVXYVJH?=
+ =?utf-8?B?dkQxZXVkWXdWRFZnT1dZZEY0V3JLTkJFdDVTNXZvZzhNSEtOYkJLeG1EWGxa?=
+ =?utf-8?B?N0praDFFenJvUzBrUVd0Qjl3MzArVWUxOTFQKzZ2Q01PYnZndU9uR1NyV2lj?=
+ =?utf-8?B?dE9COVVsOVhzSmo1MHVqRm5rKzFSZU9pc0pibmRhSTBWcHRTeVdUNXhXbGdv?=
+ =?utf-8?B?RDIxM040dGltQmlRODBFS05FcEJoUUQxcnBXNGh3S3BCMzIycW44c2VkazVO?=
+ =?utf-8?B?Z2tyN0N0L0ZIb01IT2Vxd2VZMHZRUjJHU0RRVFNGQVkrenZOTlA4QkF5Q2tW?=
+ =?utf-8?B?TDZpZ1NLVDdQZmhoT2o0dmNWOHRSenBWQ1haMWhWTFoyQ1Z5SXlyUk5LcDdw?=
+ =?utf-8?B?RWExOFk2c3dBY3JmRVFzMklSam5mUUtBTWl0UE0rSXlsZytOT0c2aXZxenZj?=
+ =?utf-8?B?Y3M4WS9MK2NoMVZDRVNjL3JkL0hUdy9vQUo4TEY5WW5NblVPSzF3T2I1T3Zs?=
+ =?utf-8?B?djc5NHl4Vi85RXl3dm1ud2hENnVEQXRCNkFScitsS0ZPc3ByN0Z5dnYwR2FH?=
+ =?utf-8?B?V2Z0eEkxTWEzRjZGVW41QW1xRjRtUnVhVFMzZDJ6WDNCdkFDMDJTZjgvY0hq?=
+ =?utf-8?B?QkhCUGpHNDhOZjRaS2p3alEzdWdpazRWazhaUkdZY0V3VkdxdkJtTU5JY05S?=
+ =?utf-8?B?cmYycEl2YzJMYnVlRzZmQUNaZ1g1SVYzcEdTcnRkQkdqT2J6NmdqYm0wNysy?=
+ =?utf-8?B?NC9WNW5YQndzcGNYV0hzUHhzS2ROU1hMemppdUIzeEJsT0M3LzhBejVXNVZE?=
+ =?utf-8?B?dDhkK3ZDWnJtRTRZZjBDSGtBTGJ5M2ZMUGM2TmZOcGhDQW9YL0ROVnJGZ0Fz?=
+ =?utf-8?B?cW5BRm9VZ1lKTlNRNUVlb2w0WXJpMHJYUWlXb04rdmNGSkNmNlcvbWFoWmY3?=
+ =?utf-8?B?S0x1NjEvOFpjUURUVVczZEVJVEwrQUpRdWZGVzNKaWdLQlNzK2lNWkhDT0xO?=
+ =?utf-8?B?SGp0R2k3RHd4Q09lalNPZzNLS3NrMHE1K0RyaXBmdUdsUVZKQnFZUk1DWE4z?=
+ =?utf-8?B?L05KNkJ2cXdoVElQWDhPdlJMVGs5VnpyTjNBV0s0aWZGbHpHZ2hLbk5STDVv?=
+ =?utf-8?B?Vkp4OWNVeXNsOHU1bWx5SHF1V096b28xKzJ0MjZVNlpzZXBBa290ZXZJcG96?=
+ =?utf-8?B?UzhDemVOUHBjTWN4M3FSek5Vek1rNDkxWWMvZEszU2VqcE1iOU1VcHZqRFYv?=
+ =?utf-8?B?WS9qamZWN1FjMkk0bGMvNVJ3bkVFU0wwM2pUYVBTNURSdXlCL3NSbW8rL3c3?=
+ =?utf-8?B?YkE4VkNXbGtnczJEVS9vSzM0R3E3Ri95WUVERFRwU2RyQW43VTB3RFZ3Q3g0?=
+ =?utf-8?B?ZnhYQWxiOVVxdzZyODUvcDZ2L2svMTVwREw4cmg1QjZsL0lGb0FMVkgrSnN5?=
+ =?utf-8?B?Qk9PWm9KK21xMmZkcHVjWU9RYVR3S1U1L3VuN0tUdWF3TkJZdXVjZGhMVlpn?=
+ =?utf-8?Q?UBaFL5ZHhAeyYlaQqvgPmlGhipWUg5ei1tAp0nJ?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210613145936.9902-1-digetx@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4478.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbfae566-083c-4f00-81fb-08d92fb14b4a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2021 03:54:36.6787
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dJEHROcZ+7JL/Q90KTH8/lWekX7QwdV9cDhDPts9j/ptrpJ2sVHjWkUJa7g78CIYD08VHXOaZyNPy4Kk2LJVhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7246
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-06-13 17:59:35, Dmitry Osipenko wrote:
-> Some devices need an extra delay after losing VBUS, otherwise VBUS may
-> be detected as active at suspend time, preventing the PHY's suspension
-> by the VBUS detection sensor. This problem was found on Asus Transformer
-> TF700T (Tegra30) tablet device, where the USB PHY wakes up immediately
-> from suspend because VBUS sensor continues to detect VBUS as active after
-> disconnection. We need to poll the PHY's VBUS wakeup status until it's
-> deasserted before suspending PHY in order to fix this minor trouble.
-> 
-> Fixes: 35192007d28d ("usb: phy: tegra: Support waking up from a low power mode")
-> Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
-> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-
-Reviewed-by: Peter Chen <peter.chen@kernel.org>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
-> index fc5c6cab58ba..ff482c694200 100644
-> --- a/drivers/usb/phy/phy-tegra-usb.c
-> +++ b/drivers/usb/phy/phy-tegra-usb.c
-> @@ -64,6 +64,7 @@
->  #define   A_VBUS_VLD_WAKEUP_EN			BIT(30)
->  
->  #define USB_PHY_VBUS_WAKEUP_ID			0x408
-> +#define   VBUS_WAKEUP_STS			BIT(10)
->  #define   VBUS_WAKEUP_WAKEUP_EN			BIT(30)
->  
->  #define USB1_LEGACY_CTRL			0x410
-> @@ -645,6 +646,15 @@ static int utmi_phy_power_off(struct tegra_usb_phy *phy)
->  	void __iomem *base = phy->regs;
->  	u32 val;
->  
-> +	/*
-> +	 * Give hardware time to settle down after VBUS disconnection,
-> +	 * otherwise PHY will immediately wake up from suspend.
-> +	 */
-> +	if (phy->wakeup_enabled && phy->mode != USB_DR_MODE_HOST)
-> +		readl_relaxed_poll_timeout(base + USB_PHY_VBUS_WAKEUP_ID,
-> +					   val, !(val & VBUS_WAKEUP_STS),
-> +					   5000, 100000);
-> +
->  	utmi_phy_clk_disable(phy);
->  
->  	/* PHY won't resume if reset is asserted */
-> -- 
-> 2.30.2
-> 
-
--- 
-
-Thanks,
-Peter Chen
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSm9lbCBTdGFubGV5IDxq
+b2VsQGptcy5pZC5hdT4NCj4gU2VudDogTW9uZGF5LCBKdW5lIDE0LCAyMDIxIDg6NTIgUE0NCj4g
+VG86IExlbyBMaSA8bGVveWFuZy5saUBueHAuY29tPg0KPiBDYzogRmVsaXBlIEJhbGJpIDxiYWxi
+aUBrZXJuZWwub3JnPjsgR3JlZyBLcm9haC1IYXJ0bWFuDQo+IDxncmVna2hAbGludXhmb3VuZGF0
+aW9uLm9yZz47IGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4cHBjLWRldg0KPiA8bGlu
+dXhwcGMtZGV2QGxpc3RzLm96bGFicy5vcmc+OyBMaW51eCBLZXJuZWwgTWFpbGluZyBMaXN0IDxs
+aW51eC0NCj4ga2VybmVsQHZnZXIua2VybmVsLm9yZz47IEFybmQgQmVyZ21hbm4gPGFybmRAYXJu
+ZGIuZGU+OyBSYW4gV2FuZw0KPiA8cmFuLndhbmdfMUBueHAuY29tPjsgRmFiaW8gRXN0ZXZhbSA8
+ZmVzdGV2YW1AZ21haWwuY29tPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSB1c2I6IGdhZGdldDog
+ZnNsOiBwcm9wZXJseSByZW1vdmUgcmVtbmFudCBvZiBNWEMNCj4gc3VwcG9ydA0KPiANCj4gT24g
+U2F0LCAxMiBKdW4gMjAyMSBhdCAwMDozMSwgTGkgWWFuZyA8bGVveWFuZy5saUBueHAuY29tPiB3
+cm90ZToNCj4gPg0KPiA+IENvbW1pdCBhMzkwYmVmN2RiMWYgKCJ1c2I6IGdhZGdldDogZnNsX214
+Y191ZGM6IFJlbW92ZSB0aGUgZHJpdmVyIikNCj4gPiBkaWRuJ3QgcmVtb3ZlIGFsbCB0aGUgTVhD
+IHJlbGF0ZWQgc3R1ZmYgd2hpY2ggY2FuIGNhdXNlIGJ1aWxkIHByb2JsZW0NCj4gPiBmb3IgTFMx
+MDIxIHdoZW4gZW5hYmxlZCBhZ2FpbiBpbiBLY29uZmlnLiAgVGhpcyBwYXRjaCByZW1vdmUgYWxs
+IHRoZQ0KPiA+IHJlbW5hbnRzLg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogTGkgWWFuZyA8bGVv
+eWFuZy5saUBueHAuY29tPg0KPiANCj4gUmV2aWV3ZWQtYnk6IEpvZWwgU3RhbmxleSA8am9lbEBq
+bXMuaWQuYXU+DQo+IA0KPiBXaWxsIHlvdSByZS1zdWJtaXQgdGhlIGtjb25maWcgY2hhbmdlIG9u
+Y2UgdGhpcyBpcyBtZXJnZWQ/DQoNCkkgdGhpbmsgdGhhdCB3ZSBjYW4gcmUtdXNlIHlvdXIgcHJl
+dmlvdXMgcGF0Y2guDQoNCkhpIEdyZWcsDQoNCkNhbiB5b3UgYXBwbHkgdGhlIHJldmVydGVkIEtj
+b25maWcgcGF0Y2ggYWdhaW4/ICBPciBkbyB5b3UgcHJlZmVyIHVzIHRvIHJlLXN1Ym1pdCBpdCBh
+Z2Fpbj8NCg0KUmVnYXJkcywNCkxlbw0K
