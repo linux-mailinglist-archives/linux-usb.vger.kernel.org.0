@@ -2,112 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEABA3A87EB
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 19:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6EEE3A880B
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 19:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbhFORpd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 13:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56194 "EHLO
+        id S231200AbhFORs0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 13:48:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbhFORpc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 13:45:32 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3620CC061767
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:43:28 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id p190-20020a625bc70000b02902fb3dbe05a2so2634063pfb.21
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:43:28 -0700 (PDT)
+        with ESMTP id S231168AbhFORsZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 13:48:25 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C794C06175F
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:46:20 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id 68so10286830vsu.6
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:46:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=50dJ8BchFOci3A0yvk4/mrwi6BOktMhfxZ2dJA5Q/50=;
-        b=dHSg5uHO+WryCWM/qB2U8Qc31sZ4MGk7Lf6JgXykCFPS3T5BiiSvzatPC/ky+oogVg
-         PSbYno76lPg7XCYY8YFzMeOK62omeBzDd6sNyAKONT3uh7G4nYekPrx9PB1h7jKFqYV4
-         b58Aq3mPO7jVKefTpn1+bjZf8Tmvks8jDMfekXrrIGMBmBoKtzIPqFaVff/9SqT4/eTB
-         rBa1yl9vEn3z9pTiqjlDHodstPE35tO7H3t9MuAwXkWLreVjXFIQsMBmhuFI8AjoPRC8
-         5kUs8sjS5awXpcOZR4zi9A5MFclnw682vXIVmbJvRRNoMBsP62bO+V3RiSo4qjD3y6WE
-         MX7A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nyGASXjZK6+KaCFSY7M57pQho7eXR3tu7GtXUlEdjrI=;
+        b=L/qX46GD8snGzvccBZlifarMswFYhBDW1qSLHsFffckOgg/GzJ9C1qZ2SlxXCnbF3n
+         aCAGRoAuHyruQsWR0hf0CwR9tUuPFMOuIOc+X6R32nl1hJrf9gNNSXI2ldriRak6CcrA
+         ldORFDeCc5ect6ffiKNvx9xS24m4v2ncV6hULVja935vO1q0otxWMuI+fWY4nDaRA/65
+         ANfSnKLKO1CMeop3L99hLm59yObrVS/8nneMIFyxD1pNveTGvr2PE04sXtzo8p7+Kwaa
+         i9D9H4ugxuTV9VBZ+e3jDKSfzGDXVrVFZTt8xJQFzxwyFfYwB4V5u9Mlv71Hq0pQQvj7
+         uo0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=50dJ8BchFOci3A0yvk4/mrwi6BOktMhfxZ2dJA5Q/50=;
-        b=fVu1XKQqdJlpdgX0Yc43Ls/4FGS11a49KxPNx5XJUoGg4b1n42tRIwXBmWUsipYSuz
-         S9LlZc5DHPNPvAw/Hkw8n8tFSGhkVLxy3dr2vzVYFyVrUAH0WdQR2gRyLTuD1fYVs0EU
-         Il6dCJ/k6iu3cv+gU9CpeDEDPnLNJIdm+68EsDHxaKbhyUiJMyDc7v+vvcCt2VDVJarh
-         mj9MXbpQrI1Pw5XGeKoeyI4/Ls8R5MrsmFAhN34yQDGwu7B3YOeWqcTOfD9LfGQpUeu2
-         TIAZL5C+lI/t4Sz+z/6d37bS9o2w5DnwEfBxeTmdrfZmAC6mqB+imRDBQ5YGYWeMVgj2
-         eumw==
-X-Gm-Message-State: AOAM5325lryv5Ha9eovT9mdJzqz3RyPwXs6gEp1lkvsfgyiODXWKzpQ5
-        BhbTfJfUB064BHO55k39ynF8p4VhaOc=
-X-Google-Smtp-Source: ABdhPJywZcKWzV+RRUOI+TqAyZn8x3y5mnLXQPhCIk0HihBrSmcHSc4rultD1YJxN6KoaMgxDDO0g08HvhM=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:74bf:7746:fe5:5dad])
- (user=badhri job=sendgmr) by 2002:a17:90a:2acc:: with SMTP id
- i12mr110133pjg.0.1623779006876; Tue, 15 Jun 2021 10:43:26 -0700 (PDT)
-Date:   Tue, 15 Jun 2021 10:43:23 -0700
-Message-Id: <20210615174323.1160132-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
-Subject: [PATCH v1] usb: typec: tcpci: Fix up sink disconnect thresholds for PD
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nyGASXjZK6+KaCFSY7M57pQho7eXR3tu7GtXUlEdjrI=;
+        b=i2TXnU+hirP6vTA9ngguQgAMIxki+/Eo/wGTRxo5Im5/qZ9LhhXCgZOH4+Rg6HoJDa
+         2gkPGgslpqNsGHO4mfvq3z4MgwQWhT4pk2MpPBTK5LiOA3FmepaV64UwY20X+63TJRzs
+         fHoWr1wfbfIkJk8HiaaDWjS9RY/+6teIZX9mo0WZ3wuyl3wcqtkHr2P/u3KUEdZGU4wH
+         7tXmq590TQ5fLCQ7aBcWDVHJQpIxoNSJj4OEVtJvmQJ1ZEtY23L3AY8TZv21AcdNRrTn
+         LgNjVAL5rUzpXD0TTe66kfEqbu9vAQqHrGYyNQg1v0PQFd7ENfIOmztHGggRT9r0+qMN
+         UJVg==
+X-Gm-Message-State: AOAM532NyloHt9A98ZSUAOs0jNpiI2Aa3hWWeew/veqjvWpn6Q9Eo+lc
+        BjgguAZJFk7nQQRhdDX3fwk1gMOZ0GI6MGBcRib5YQ==
+X-Google-Smtp-Source: ABdhPJxAHcDuOVlus4gjMRwSFbeAYLv4eiEq85ZPvI766hdWcE2C0hfBadGUAp2NzI/VRs4/2rcp1fFkxQfkI1hZ3OA=
+X-Received: by 2002:a67:df93:: with SMTP id x19mr6894195vsk.49.1623779179091;
+ Tue, 15 Jun 2021 10:46:19 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210615173206.1646477-1-kyletso@google.com>
+In-Reply-To: <20210615173206.1646477-1-kyletso@google.com>
 From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
+Date:   Tue, 15 Jun 2021 10:45:42 -0700
+Message-ID: <CAPTae5KaCiXEOdNY-Ct3a0uaCDd8onmtM_bSaGzy0fkooJMC1g@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: Ignore Vsafe0v in PR_SWAP_SNK_SRC_SOURCE_ON
+ state
+To:     Kyle Tso <kyletso@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-"Table 4-3 VBUS Sink Characteristics" of "Type-C Cable and Connector
-Specification" defines the disconnect voltage thresholds of various
-configurations. This change fixes the disconnect threshold voltage
-calculation based on vSinkPD_min and vSinkDisconnectPD as defined
-by the table.
-
-Fixes: e1a97bf80a022 ("usb: typec: tcpci: Implement Auto discharge disconnect callbacks")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpci.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-index 22862345d1ab..9858716698df 100644
---- a/drivers/usb/typec/tcpm/tcpci.c
-+++ b/drivers/usb/typec/tcpm/tcpci.c
-@@ -21,8 +21,12 @@
- #define	PD_RETRY_COUNT_DEFAULT			3
- #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
- #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
--#define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
--#define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
-+#define	VSINKPD_MIN_IR_DROP_MV			750
-+#define	VSRC_NEW_MIN_PERCENT			95
-+#define	VSRC_VALID_MIN_MV			500
-+#define	VPPS_NEW_MIN_PERCENT			95
-+#define	VPPS_VALID_MIN_MV			100
-+#define	VSINKDISCONNECT_PD_MIN_PERCENT		90
- 
- #define tcpc_presenting_rd(reg, cc) \
- 	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
-@@ -351,11 +355,13 @@ static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum ty
- 		threshold = AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV;
- 	} else if (mode == TYPEC_PWR_MODE_PD) {
- 		if (pps_active)
--			threshold = (95 * requested_vbus_voltage_mv / 100) -
--				AUTO_DISCHARGE_PD_HEADROOM_MV;
-+			threshold = ((VPPS_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
-+				     VSINKPD_MIN_IR_DROP_MV - VPPS_VALID_MIN_MV) *
-+				     VSINKDISCONNECT_PD_MIN_PERCENT / 100;
- 		else
--			threshold = (95 * requested_vbus_voltage_mv / 100) -
--				AUTO_DISCHARGE_PPS_HEADROOM_MV;
-+			threshold = ((VSRC_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
-+				     VSINKPD_MIN_IR_DROP_MV - VSRC_VALID_MIN_MV) *
-+				     VSINKDISCONNECT_PD_MIN_PERCENT / 100;
- 	} else {
- 		/* 3.5V for non-pd sink */
- 		threshold = AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV;
--- 
-2.32.0.272.g935e593368-goog
-
+On Tue, Jun 15, 2021 at 10:32 AM Kyle Tso <kyletso@google.com> wrote:
+>
+> In PR_SWAP_SNK_SRC_SOURCE_ON state, Vsafe0v is expected as well so do
+> nothing here to avoid state machine going into SNK_UNATTACHED.
+>
+> Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 197556038ba4..e11e9227107d 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5212,6 +5212,7 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
+>                 }
+>                 break;
+>         case PR_SWAP_SNK_SRC_SINK_OFF:
+> +       case PR_SWAP_SNK_SRC_SOURCE_ON:
+>                 /* Do nothing, vsafe0v is expected during transition */
+>                 break;
+>         default:
+> --
+> 2.32.0.272.g935e593368-goog
+>
