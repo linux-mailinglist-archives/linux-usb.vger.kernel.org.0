@@ -2,146 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 075C73A79E2
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 11:14:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74933A79F4
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 11:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbhFOJQ2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 15 Jun 2021 05:16:28 -0400
-Received: from out28-123.mail.aliyun.com ([115.124.28.123]:50984 "EHLO
-        out28-123.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231209AbhFOJQY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 05:16:24 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07603748|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.166083-0.00128143-0.832635;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.KSYsb6a_1623748456;
-Received: from zhouyanjie-virtual-machine(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KSYsb6a_1623748456)
-          by smtp.aliyun-inc.com(10.147.42.197);
-          Tue, 15 Jun 2021 17:14:17 +0800
-Date:   Tue, 15 Jun 2021 17:14:14 +0800
-From:   =?UTF-8?B?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
-To:     Paul Cercueil <paul@opendingux.net>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, hminas@synopsys.com,
-        paul@crapouillou.net, linux-mips@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        sernia.zhou@foxmail.com,
-        Dragan =?UTF-8?B?xIxlxI1hdmFj?= <dragancecavac@yahoo.com>
-Subject: Re: [PATCH] USB: DWC2: Add VBUS overcurrent detection control.
-Message-ID: <20210615171414.2020ad9b@zhouyanjie-virtual-machine>
-In-Reply-To: <8BJQUQ.QJOE5WOSWVBU@opendingux.net>
-References: <1616513066-62025-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <YFoJ0Z6K4B5smbQx@kroah.com>
-        <20210615161456.2dd501a1@zhouyanjie-virtual-machine>
-        <8BJQUQ.QJOE5WOSWVBU@opendingux.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.30; x86_64-pc-linux-gnu)
+        id S231289AbhFOJTq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 05:19:46 -0400
+Received: from mga02.intel.com ([134.134.136.20]:38241 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230502AbhFOJTq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Jun 2021 05:19:46 -0400
+IronPort-SDR: t5fIPVHdWeyf2G61A/GtbS4hQkyTo8ufvUp31GsVDjY45FSgRFMj05dJ5IGAHyW1sxjiIIVuRy
+ TAXLlqlMa4ew==
+X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="193071245"
+X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
+   d="scan'208";a="193071245"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2021 02:17:41 -0700
+IronPort-SDR: X+QdLOjb6Azm7muOS+lYLikk+VXDAgtNJ1f6Rov9Unkirp6YXjkQRPdiy6+G7xRawWSIASZxas
+ VBLhlE+6eFIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
+   d="scan'208";a="471589684"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2021 02:17:41 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lt5CV-0000JA-UR; Tue, 15 Jun 2021 09:17:39 +0000
+Date:   Tue, 15 Jun 2021 17:16:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1f28f6f091b49040c3e198c982704c3f21cad1e5
+Message-ID: <60c87004.PDOLcw3EwDHHuhtM%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-于 Tue, 15 Jun 2021 09:52:20 +0100
-Paul Cercueil <paul@opendingux.net> 写道:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 1f28f6f091b49040c3e198c982704c3f21cad1e5  usb: gadget: fsl: properly remove remnant of MXC support
 
-> Hi Zhou,
-> 
-> Le mar., juin 15 2021 at 16:16:39 +0800, 周琰杰 
-> <zhouyanjie@wanyeetech.com> a écrit :
-> > Hi Greg,
-> > 
-> > Sorry for taking so long to reply.
-> > 
-> > 于 Tue, 23 Mar 2021 16:31:29 +0100
-> > Greg KH <gregkh@linuxfoundation.org> 写道:
-> >   
-> >>  On Tue, Mar 23, 2021 at 11:24:26PM +0800, 周琰杰 (Zhou Yanjie) 
-> >> wrote:  
-> >>  > Introduce configurable option for enabling GOTGCTL register
-> >>  > bits VbvalidOvEn and VbvalidOvVal. Once selected it disables
-> >>  > VBUS overcurrent detection.
-> >>  >
-> >>  > This patch is derived from Dragan Čečavac (in the kernel 3.18
-> >>  > tree of CI20). It is very useful for the MIPS Creator CI20(r1).
-> >>  > Without this patch, CI20's OTG port has a great probability to
-> >>  > face overcurrent warning, which breaks the OTG functionality.
-> >>  >
-> >>  > Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
-> >>  > Signed-off-by: Dragan Čečavac <dragancecavac@yahoo.com>
-> >>  > ---
-> >>  >  drivers/usb/dwc2/Kconfig | 6 ++++++
-> >>  >  drivers/usb/dwc2/core.c  | 9 +++++++++
-> >>  >  2 files changed, 15 insertions(+)
-> >>  >
-> >>  > diff --git a/drivers/usb/dwc2/Kconfig b/drivers/usb/dwc2/Kconfig
-> >>  > index c131719..e40d187 100644
-> >>  > --- a/drivers/usb/dwc2/Kconfig
-> >>  > +++ b/drivers/usb/dwc2/Kconfig
-> >>  > @@ -94,4 +94,10 @@ config USB_DWC2_DEBUG_PERIODIC
-> >>  >  	  non-periodic transfers, but of course the debug logs
-> >>  > will be incomplete. Note that this also disables some debug   
-> >> messages  
-> >>  >  	  for which the transfer type cannot be deduced.
-> >>  > +
-> >>  > +config USB_DWC2_DISABLE_VOD
-> >>  > +	bool "Disable VBUS overcurrent detection"
-> >>  > +	help
-> >>  > +	  Say Y here to switch off VBUS overcurrent detection.
-> >>  > It enables USB
-> >>  > +	  functionality blocked by overcurrent detection.  
-> >> 
-> >>  Why would this be a configuration option?  Shouldn't this be
-> >> dynamic and just work properly automatically?
-> >> 
-> >>  You should not have to do this on a build-time basis, it should be
-> >>  able to be detected and handled properly at run-time for all 
-> >> devices.
-> >>   
-> > 
-> > I consulted the original author Dragan Čečavac, he think since this 
-> > is
-> > a feature which disables overcurrent detection, so we are not sure
-> > if it could be harmful for some devices. Therefore he advise against
-> > enabling it in runtime, and in favor that user explicitely has to
-> > enable it.  
-> 
-> This could still be enabled at runtime, though, via a module
-> parameter. Leave it enabled by default, and those who want to disable
-> it can do it.
-> 
-> Also, overcurrent detection is just "detection", so enabling or 
-> disabling it won't change the fact that you can get overcurrent 
-> conditions, right?
+elapsed time: 1464m
 
-emmm, the main problem now is that there is a phenomenon on CI20 r1
-(JZ4780) and CU1000 (X1000) that even if there is no overcurrent
-(nothing is connected), there is still a high probability (about every
-10 times it will be 6 to 7 times) an overcurrent warning appears (even
-when just finish detect the OTG driver during the kernel startup),
-which then causes the OTG function to not work normally before the
-system restarts.
+configs tested: 127
+configs skipped: 2
 
-Thanks and best regards!
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> -Paul
-> 
-> >>  If you know this is needed for a specific type of device, detect
-> >> it and make the change then, otherwise this could break working 
-> >> systems,
-> >>  right?  
-> > 
-> > According to the information provided by Dragan Čečavac, this 
-> > function
-> > (select whether to enable over-current detection through the otgctl
-> > register) don't seem to be available for all dwc2 controllers, so it
-> > might make sense to add MACH_INGENIC dependency to
-> > USB_DWC2_DISABLE_VOD, which could provide additional protection from
-> > unwanted usage.
-> > 
-> > Thanks and best regards!
-> >   
-> >> 
-> >>  thanks,
-> >> 
-> >>  greg k-h  
-> 
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arc                              allyesconfig
+sh                          kfr2r09_defconfig
+powerpc                 mpc85xx_cds_defconfig
+arm                        spear3xx_defconfig
+powerpc                    klondike_defconfig
+csky                             alldefconfig
+powerpc                 mpc837x_mds_defconfig
+arm                       spear13xx_defconfig
+arm                          pxa910_defconfig
+powerpc                 mpc8315_rdb_defconfig
+powerpc                      chrp32_defconfig
+nios2                         10m50_defconfig
+arm                           omap1_defconfig
+csky                                defconfig
+sh                     magicpanelr2_defconfig
+x86_64                           alldefconfig
+powerpc                       ppc64_defconfig
+mips                        bcm47xx_defconfig
+sh                           se7619_defconfig
+powerpc                     ppa8548_defconfig
+mips                         bigsur_defconfig
+sh                             sh03_defconfig
+powerpc                     taishan_defconfig
+arm                          ixp4xx_defconfig
+mips                        nlm_xlp_defconfig
+mips                      malta_kvm_defconfig
+arm                          pcm027_defconfig
+powerpc                      ppc40x_defconfig
+arm                          simpad_defconfig
+sh                          rsk7201_defconfig
+powerpc                 mpc8272_ads_defconfig
+powerpc                      walnut_defconfig
+m68k                        mvme16x_defconfig
+arm                         mv78xx0_defconfig
+arm                            dove_defconfig
+mips                      maltasmvp_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210613
+i386                 randconfig-a006-20210613
+i386                 randconfig-a001-20210613
+i386                 randconfig-a004-20210613
+i386                 randconfig-a005-20210613
+i386                 randconfig-a003-20210613
+i386                 randconfig-a002-20210614
+i386                 randconfig-a006-20210614
+i386                 randconfig-a004-20210614
+i386                 randconfig-a001-20210614
+i386                 randconfig-a005-20210614
+i386                 randconfig-a003-20210614
+i386                 randconfig-a015-20210613
+i386                 randconfig-a013-20210613
+i386                 randconfig-a016-20210613
+i386                 randconfig-a014-20210613
+i386                 randconfig-a012-20210613
+i386                 randconfig-a011-20210613
+i386                 randconfig-a015-20210614
+i386                 randconfig-a013-20210614
+i386                 randconfig-a016-20210614
+i386                 randconfig-a012-20210614
+i386                 randconfig-a014-20210614
+i386                 randconfig-a011-20210614
+x86_64               randconfig-a001-20210615
+x86_64               randconfig-a004-20210615
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
 
+clang tested configs:
+x86_64               randconfig-b001-20210614
+x86_64               randconfig-a001-20210614
+x86_64               randconfig-a004-20210614
+x86_64               randconfig-a002-20210614
+x86_64               randconfig-a003-20210614
+x86_64               randconfig-a006-20210614
+x86_64               randconfig-a005-20210614
+x86_64               randconfig-a015-20210613
+x86_64               randconfig-a011-20210613
+x86_64               randconfig-a014-20210613
+x86_64               randconfig-a012-20210613
+x86_64               randconfig-a013-20210613
+x86_64               randconfig-a016-20210613
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
