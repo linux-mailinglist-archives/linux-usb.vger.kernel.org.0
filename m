@@ -2,90 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EEE3A880B
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 19:49:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682023A8812
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 19:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbhFORs0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 13:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S231325AbhFORu6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 13:50:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbhFORsZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 13:48:25 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C794C06175F
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:46:20 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id 68so10286830vsu.6
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:46:20 -0700 (PDT)
+        with ESMTP id S231241AbhFORu5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 13:50:57 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB05C061574
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:48:51 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id h5so68561iok.5
+        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 10:48:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nyGASXjZK6+KaCFSY7M57pQho7eXR3tu7GtXUlEdjrI=;
-        b=L/qX46GD8snGzvccBZlifarMswFYhBDW1qSLHsFffckOgg/GzJ9C1qZ2SlxXCnbF3n
-         aCAGRoAuHyruQsWR0hf0CwR9tUuPFMOuIOc+X6R32nl1hJrf9gNNSXI2ldriRak6CcrA
-         ldORFDeCc5ect6ffiKNvx9xS24m4v2ncV6hULVja935vO1q0otxWMuI+fWY4nDaRA/65
-         ANfSnKLKO1CMeop3L99hLm59yObrVS/8nneMIFyxD1pNveTGvr2PE04sXtzo8p7+Kwaa
-         i9D9H4ugxuTV9VBZ+e3jDKSfzGDXVrVFZTt8xJQFzxwyFfYwB4V5u9Mlv71Hq0pQQvj7
-         uo0A==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=OMBjXE0nRB8hM4ofcPKfdh+yz7lSZL32Yvdx3/K1Jlo=;
+        b=hKxtm8WFh9YoGvi0n7W5NAiFIcqM6qTSjF8UPIf1AJdLVuS9d4lDmVdlZ2CbC3LEBh
+         OzNJQHSrOk7cyez+SEwLHyCLXJL+2nOUoUL45k8eDRYJrmDlPzX+LSlA6AEqRjebAi/E
+         Uw19hk04bLMxvlKlW+t9l6GIpAqjntY+JrygE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nyGASXjZK6+KaCFSY7M57pQho7eXR3tu7GtXUlEdjrI=;
-        b=i2TXnU+hirP6vTA9ngguQgAMIxki+/Eo/wGTRxo5Im5/qZ9LhhXCgZOH4+Rg6HoJDa
-         2gkPGgslpqNsGHO4mfvq3z4MgwQWhT4pk2MpPBTK5LiOA3FmepaV64UwY20X+63TJRzs
-         fHoWr1wfbfIkJk8HiaaDWjS9RY/+6teIZX9mo0WZ3wuyl3wcqtkHr2P/u3KUEdZGU4wH
-         7tXmq590TQ5fLCQ7aBcWDVHJQpIxoNSJj4OEVtJvmQJ1ZEtY23L3AY8TZv21AcdNRrTn
-         LgNjVAL5rUzpXD0TTe66kfEqbu9vAQqHrGYyNQg1v0PQFd7ENfIOmztHGggRT9r0+qMN
-         UJVg==
-X-Gm-Message-State: AOAM532NyloHt9A98ZSUAOs0jNpiI2Aa3hWWeew/veqjvWpn6Q9Eo+lc
-        BjgguAZJFk7nQQRhdDX3fwk1gMOZ0GI6MGBcRib5YQ==
-X-Google-Smtp-Source: ABdhPJxAHcDuOVlus4gjMRwSFbeAYLv4eiEq85ZPvI766hdWcE2C0hfBadGUAp2NzI/VRs4/2rcp1fFkxQfkI1hZ3OA=
-X-Received: by 2002:a67:df93:: with SMTP id x19mr6894195vsk.49.1623779179091;
- Tue, 15 Jun 2021 10:46:19 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OMBjXE0nRB8hM4ofcPKfdh+yz7lSZL32Yvdx3/K1Jlo=;
+        b=qWqNQ397jpa8vE+ivFYnrz/nKALXOgk12wiieCrGd65UkND8DSxrcNZY3SowCOBoLR
+         Sb2hPljHxS4lALRy5wsOBP6wuvmnKLMSGhFx6d+cb9OVkrJA/JMNYBrcqZOjKLNhOwLX
+         TkxUlbl4IUu0ZhpP3h57zh53EmLCdL/1FrX9XTNfa6gQGPoSLt+gHN+9owm7Ih9WOM70
+         +n5rF8BQIivqptRRhgz9fqYCvD4jbYWU+Psok9GAaGweXNmDR+qwqPRdm075cwZKMIaP
+         mtBnMROzVuzjLqaRduF7sj5MkYQbShP/VHDFNNd2KPDjop8yZ8/07kGYoJrt4+GT7p/u
+         wClw==
+X-Gm-Message-State: AOAM532HbchkTcSJXCpcQQCTdMcsVU8ox0fYT4G/lNsKG7q0rG8bQetS
+        VF7HsZM3uKpAP1qgRYlMFMqnCA==
+X-Google-Smtp-Source: ABdhPJzRmw+gb2MPsjwBJ8v4iy5MCoEBD646f5nqJkHMdAYrFtY+hr/mpSeNhJ0hTqIQ7KCPKyuOrQ==
+X-Received: by 2002:a02:838c:: with SMTP id z12mr387399jag.89.1623779331309;
+        Tue, 15 Jun 2021 10:48:51 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id e14sm9444583ile.2.2021.06.15.10.48.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Jun 2021 10:48:50 -0700 (PDT)
+Subject: Re: [PATCH -next] usbip: tools: Convert list_for_each to entry
+ variant
+To:     Zou Wei <zou_wei@huawei.com>, valentina.manea.m@gmail.com,
+        shuah@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <1623740319-15988-1-git-send-email-zou_wei@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <e86d8888-e8a2-bb20-4295-26442af455fa@linuxfoundation.org>
+Date:   Tue, 15 Jun 2021 11:48:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210615173206.1646477-1-kyletso@google.com>
-In-Reply-To: <20210615173206.1646477-1-kyletso@google.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Tue, 15 Jun 2021 10:45:42 -0700
-Message-ID: <CAPTae5KaCiXEOdNY-Ct3a0uaCDd8onmtM_bSaGzy0fkooJMC1g@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Ignore Vsafe0v in PR_SWAP_SNK_SRC_SOURCE_ON
- state
-To:     Kyle Tso <kyletso@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <1623740319-15988-1-git-send-email-zou_wei@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 15, 2021 at 10:32 AM Kyle Tso <kyletso@google.com> wrote:
->
-> In PR_SWAP_SNK_SRC_SOURCE_ON state, Vsafe0v is expected as well so do
-> nothing here to avoid state machine going into SNK_UNATTACHED.
->
-> Fixes: 28b43d3d746b ("usb: typec: tcpm: Introduce vsafe0v for vbus")
-> Signed-off-by: Kyle Tso <kyletso@google.com>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+On 6/15/21 12:58 AM, Zou Wei wrote:
+> convert list_for_each() to list_for_each_entry() where
+> applicable.
+>  > Reported-by: Hulk Robot <hulkci@huawei.com>
+
+What is the report? Please include the reports.
+
+> Signed-off-by: Zou Wei <zou_wei@huawei.com>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 197556038ba4..e11e9227107d 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -5212,6 +5212,7 @@ static void _tcpm_pd_vbus_vsafe0v(struct tcpm_port *port)
->                 }
->                 break;
->         case PR_SWAP_SNK_SRC_SINK_OFF:
-> +       case PR_SWAP_SNK_SRC_SOURCE_ON:
->                 /* Do nothing, vsafe0v is expected during transition */
->                 break;
->         default:
-> --
-> 2.32.0.272.g935e593368-goog
->
+>   tools/usb/usbip/libsrc/usbip_host_common.c | 4 +---
+>   tools/usb/usbip/src/usbipd.c               | 8 ++------
+>   2 files changed, 3 insertions(+), 9 deletions(-)
+> 
+
+Please explain why this change is necessary. Is it a good
+idea to explain what happens if you don't make this change?
+
+thanks,
+-- Shuah
