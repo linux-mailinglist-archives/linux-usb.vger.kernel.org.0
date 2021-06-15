@@ -2,71 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6089A3A7D18
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 13:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A09033A7DDC
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 14:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbhFOL2K convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 15 Jun 2021 07:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53616 "EHLO
+        id S230241AbhFOMJn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 08:09:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbhFOL2K (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 07:28:10 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5831C06175F
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 04:26:05 -0700 (PDT)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1lt7CU-0003gA-A2; Tue, 15 Jun 2021 13:25:46 +0200
-Received: from pza by lupine with local (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1lt7CQ-0004AZ-TV; Tue, 15 Jun 2021 13:25:42 +0200
-Message-ID: <869864f6f85c1f1d3427bf6be32d703758bdad71.camel@pengutronix.de>
-Subject: Re: [PATCH v7 13/19] phy: sun4i-usb: Allow reset line to be shared
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ondrej Jirman <megous@megous.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
-        linux-usb@vger.kernel.org
-Date:   Tue, 15 Jun 2021 13:25:42 +0200
-In-Reply-To: <20210615110636.23403-14-andre.przywara@arm.com>
-References: <20210615110636.23403-1-andre.przywara@arm.com>
-         <20210615110636.23403-14-andre.przywara@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.30.5-1.1 
+        with ESMTP id S229983AbhFOMJm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 08:09:42 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35CBBC061574;
+        Tue, 15 Jun 2021 05:07:38 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id g8so22182534ejx.1;
+        Tue, 15 Jun 2021 05:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=F2WOp7laceuxMILuVpXWmQIN4CP/UaKDpQrNGuoiets=;
+        b=bpIE1xt9f4WHxc1LIBkz+TxemnxivXcZLk3PGwB9kZY3wEhtdoaHdaNGjkp0jFD8k1
+         N1iud+3xq0b+kGQuusZcT2CSyTBCurvuJk3iQ1PecywAzsAAnwEzpDHqQfYUln9+Zoi0
+         6RqzEA8NfkaBoMoOC+vPlk37DoBwqMlk/1m888jTNKYAB1au9ay8aouvG2bYtURbnkZI
+         XCnW5XJDnlQaL4QXdOvH9KsYWG/mwwG3mMRi5kTARQfWRBO8a25rUlvHJAoa3CI6Y+yF
+         8mfFFIGh05/+67prKlVF/nksi253pKlnzlwVxYW5cOG3tQ5G7u5SLvfq73fukSLKP2tP
+         LGMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=F2WOp7laceuxMILuVpXWmQIN4CP/UaKDpQrNGuoiets=;
+        b=mgdkzI93KEinQ3qkKM6oUwjO5VJJtysgAA8J8u5VSMhES2fQIjDrgqGXky11cmcP0C
+         /cGm52QwjCZj7WgsEt+U8q4Psza/YD7z4P2A4BRselRqcCMcjsO3SG5Ug0bZWTPVl5zA
+         C56T8WNkWAQ7nhhttAtMoOtHM7uaV1wZt3ucqf47qqgWyIFDiDQpo9G2cOJ1VOPbIYyy
+         FmbwHuJzI57fKsem7uaLiww98d4NXY92lhMJDxYdZMwiA5f0SCMWDLSh+bY/GA7AbHhU
+         Pdq7kW5ve/SR2fzE6NKGoUXqmuHwWPedDwuXLTKyZT5ugOYWfMf8N+oZt/dLwGqhlp4z
+         PUPg==
+X-Gm-Message-State: AOAM531Dti6SR9C8W104FFkno90Vs5HAjDmnzJISH9vHntrw+1RklMJZ
+        zEc0Q3gUJjl7dD9SH2oGCgxNwRWcxTcewYrGdBE=
+X-Google-Smtp-Source: ABdhPJw1witA7P6CqSUgKjswjF/s/f7Lze23dP/muWUzifZszk/k00kEmbKiYr6L65YTPHEo+Jeuo+Kad6fWwCCm+QI=
+X-Received: by 2002:a17:906:7f0e:: with SMTP id d14mr20030316ejr.103.1623758856683;
+ Tue, 15 Jun 2021 05:07:36 -0700 (PDT)
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+References: <20210614153712.2172662-1-mudongliangabcd@gmail.com>
+ <YMhY9NHf1itQyup7@kroah.com> <CAD-N9QVfDQQo0rRiaa6Cx-xO80yox9hNzK91_UVj0KNgkhpvnQ@mail.gmail.com>
+ <YMh2b0LvT9H7SuNC@kroah.com> <CAD-N9QV+GMURatPx4qJT2nMsKHQhj+BXC9C-ZyQed3pN8a9YUA@mail.gmail.com>
+ <CAD-N9QW6LhRO+D-rr4xCCuq+m=jtD7LS_+GDVs9DkHe5paeSOg@mail.gmail.com> <YMiLFFRfXfBHpfAF@kroah.com>
+In-Reply-To: <YMiLFFRfXfBHpfAF@kroah.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Tue, 15 Jun 2021 20:07:10 +0800
+Message-ID: <CAD-N9QUVCc8Gaw0pTqCCHMby2R4_8VNcVy+QcndoXpYe7vbt0Q@mail.gmail.com>
+Subject: Re: [PATCH] net: usb: fix possible use-after-free in smsc75xx_bind
+To:     Greg KH <greg@kroah.com>
+Cc:     Steve Glendinning <steve.glendinning@shawell.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Pavel Skripkin <paskripkin@gmail.com>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 2021-06-15 at 12:06 +0100, Andre Przywara wrote:
-> The USB HCIs (and PHYs?) in Allwinner's newer generation SoCs (H616)
-> rely on the reset line of USB PHY 2 to be de-asserted, even when only
-> one of the other PHYs is actually in use.
-> 
-> To make those ports work, we include this reset line in the HCIs' resets
-> property, which requires this line to be shareable.
-> 
-> Change the call to allocate the reset line to mark it as shared, to
-> enable the other ports on those SoCs.
-> 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+On Tue, Jun 15, 2021 at 7:12 PM Greg KH <greg@kroah.com> wrote:
+>
+> On Tue, Jun 15, 2021 at 06:24:17PM +0800, Dongliang Mu wrote:
+> > On Tue, Jun 15, 2021 at 6:10 PM Dongliang Mu <mudongliangabcd@gmail.com> wrote:
+> > >
+> > > On Tue, Jun 15, 2021 at 5:44 PM Greg KH <greg@kroah.com> wrote:
+> > > >
+> > > > On Tue, Jun 15, 2021 at 03:56:32PM +0800, Dongliang Mu wrote:
+> > > > > On Tue, Jun 15, 2021 at 3:38 PM Greg KH <greg@kroah.com> wrote:
+> > > > > >
+> > > > > > On Mon, Jun 14, 2021 at 11:37:12PM +0800, Dongliang Mu wrote:
+> > > > > > > The commit 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+> > > > > > > fails to clean up the work scheduled in smsc75xx_reset->
+> > > > > > > smsc75xx_set_multicast, which leads to use-after-free if the work is
+> > > > > > > scheduled to start after the deallocation. In addition, this patch also
+> > > > > > > removes one dangling pointer - dev->data[0].
+> > > > > > >
+> > > > > > > This patch calls cancel_work_sync to cancel the schedule work and set
+> > > > > > > the dangling pointer to NULL.
+> > > > > > >
+> > > > > > > Fixes: 46a8b29c6306 ("net: usb: fix memory leak in smsc75xx_bind")
+> > > > > > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > > > > > ---
+> > > > > > >  drivers/net/usb/smsc75xx.c | 3 +++
+> > > > > > >  1 file changed, 3 insertions(+)
+> > > > > > >
+> > > > > > > diff --git a/drivers/net/usb/smsc75xx.c b/drivers/net/usb/smsc75xx.c
+> > > > > > > index b286993da67c..f81740fcc8d5 100644
+> > > > > > > --- a/drivers/net/usb/smsc75xx.c
+> > > > > > > +++ b/drivers/net/usb/smsc75xx.c
+> > > > > > > @@ -1504,7 +1504,10 @@ static int smsc75xx_bind(struct usbnet *dev, struct usb_interface *intf)
+> > > > > > >       return 0;
+> > > > > > >
+> > > > > > >  err:
+> > > > > > > +     cancel_work_sync(&pdata->set_multicast);
+> > > > > > >       kfree(pdata);
+> > > > > > > +     pdata = NULL;
+> > > > > >
+> > > > > > Why do you have to set pdata to NULL afterward?
+> > > > > >
+> > > > >
+> > > > > It does not have to. pdata will be useless when the function exits. I
+> > > > > just referred to the implementation of smsc75xx_unbind.
+> > > >
+> > > > It's wrong there too :)
+> > >
+> > > /: I will fix such two sites in the v2 patch.
+> >
+> > Hi gregkh,
+> >
+> > If the schedule_work is not invoked, can I call
+> > ``cancel_work_sync(&pdata->set_multicast)''?
+>
+> Why can you not call this then?
 
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+I don't know the internal of schedule_work and cancel_work_sync, so I
+ask this question to confirm my patch does not introduce any new
+issues.
 
-regards
-Philipp
+>
+> Did you try it and see?
+
+Yes, I thought up a method and tested it in my local workspace.
+
+First, I reproduced the memory leak in smsc75xx_bind [1] since the PoC
+triggered an error before schedule_work.
+Then, I merged two patches, and run the PoC. The result showed that my
+patch does not trigger any new issues even the schedule_work is not
+called.
+
+[1] https://syzkaller.appspot.com/bug?id=c978ec308a1b89089a17ff48183d70b4c840dfb0
+
+>
+> thanks,
+>
+> greg k-h
