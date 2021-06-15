@@ -2,51 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBAB23A7C86
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 12:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C8E3A7CC3
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 13:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231612AbhFOK5H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 06:57:07 -0400
-Received: from mga01.intel.com ([192.55.52.88]:16021 "EHLO mga01.intel.com"
+        id S231193AbhFOLJw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 07:09:52 -0400
+Received: from foss.arm.com ([217.140.110.172]:60634 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231651AbhFOK5H (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Jun 2021 06:57:07 -0400
-IronPort-SDR: TOnkqmnp3Ml0fKaUBdU/gF4x6jWPFBP0zsoboVxytJLvyEGPERB3z8cdcPXPeM7L9ZpWK+2eEt
- 8TsRiXuuBWvA==
-X-IronPort-AV: E=McAfee;i="6200,9189,10015"; a="227432797"
-X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
-   d="scan'208";a="227432797"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2021 03:55:02 -0700
-IronPort-SDR: Rm2KjeB6nKNr3Ho9NNRcX7UIuAlshgT7KptFL2w164ULKZv6oeEvl/Kfe83AX6GT0AXOws3Jxf
- DCTKNCTyRD7Q==
-X-IronPort-AV: E=Sophos;i="5.83,275,1616482800"; 
-   d="scan'208";a="553651280"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2021 03:54:59 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 15 Jun 2021 13:54:57 +0300
-Date:   Tue, 15 Jun 2021 13:54:57 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Gil Fine <gil.fine@intel.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org, lukas@wunner.de
-Subject: Re: [PATCH] thunderbolt: Fix DROM handling for USB4 DROM
-Message-ID: <YMiHAaPycVFrb+Kv@lahna>
-References: <20210614135210.29787-1-gil.fine@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210614135210.29787-1-gil.fine@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S231143AbhFOLJ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Jun 2021 07:09:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AB054113E;
+        Tue, 15 Jun 2021 04:07:23 -0700 (PDT)
+Received: from localhost.localdomain (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 542D43F719;
+        Tue, 15 Jun 2021 04:07:21 -0700 (PDT)
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ondrej Jirman <megous@megous.com>, devicetree@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v7 10/19] dt-bindings: usb: Add H616 compatible string
+Date:   Tue, 15 Jun 2021 12:06:27 +0100
+Message-Id: <20210615110636.23403-11-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.14.1
+In-Reply-To: <20210615110636.23403-1-andre.przywara@arm.com>
+References: <20210615110636.23403-1-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 14, 2021 at 04:52:10PM +0300, Gil Fine wrote:
-> DROM for USB4 host/device has a shorter header than Thunderbolt DROM
-> header. This patch addresses host/device with USB4 DROM (According to spec:
-> Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
-> 
-> Signed-off-by: Gil Fine <gil.fine@intel.com>
+The H616 has four PHYs as the H3, along with their respective clock
+gates and resets, so the property description is identical.
 
-I did some minor tweaks and applied to thunderbolt.git/next, thanks!
+However the PHYs itself need some special bits, so we need a new
+compatible string for it.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml   | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+index f80431060803..e288450e0844 100644
+--- a/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun8i-h3-usb-phy.yaml
+@@ -15,7 +15,9 @@ properties:
+     const: 1
+ 
+   compatible:
+-    const: allwinner,sun8i-h3-usb-phy
++    enum:
++      - allwinner,sun8i-h3-usb-phy
++      - allwinner,sun50i-h616-usb-phy
+ 
+   reg:
+     items:
+-- 
+2.17.5
+
