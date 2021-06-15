@@ -2,103 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1E23A7825
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 09:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E157C3A7887
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 09:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230236AbhFOHnD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 03:43:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57316 "EHLO mail.kernel.org"
+        id S230484AbhFOHzE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 03:55:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59888 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230074AbhFOHnD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 15 Jun 2021 03:43:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 564E3610CD;
-        Tue, 15 Jun 2021 07:40:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623742859;
-        bh=VwEjZA+HLYCz2yRgKmTJNqgBt/h66NCTj9MfoC5gaww=;
+        id S230223AbhFOHzE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Jun 2021 03:55:04 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D004861419;
+        Tue, 15 Jun 2021 07:52:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623743579;
+        bh=hR3i6WsZ4T5X2Tz2TzIiE15s3WyK8FTVskdsaWZbG6k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kYMdoWDLs7rJmcw26Crm656vvOkuphOrxxa5mnTunPuTHKsG8IbcQFOp6D454pdo1
-         W5vWO4J1i3yTSSzNBVrZLld7ptk8LW31Bk/OE34hHcej7SXGTvrmkL21SggR+/ryV6
-         9ypiyBuaas3MxZTluSc3fWmwJy9Obf3iYfXAe/dY=
-Date:   Tue, 15 Jun 2021 09:40:56 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Imre Deak <imre.deak@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org,
-        platform-driver-x86@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/8] drm + usb-type-c: Add support for out-of-band
- hotplug notification (v4)
-Message-ID: <YMhZiAFshz1xklUK@kroah.com>
-References: <20210604194840.14655-1-hdegoede@redhat.com>
+        b=EbzGT52B4GScwZCC1azCtp9lOfIrVy+nUxFWT9tV5xV/ZW8n274gHwSzWnQkDWGU8
+         jP+xRKellkrcYOmxwVJvKRjZ47pmUtZZBXntICSnjwkWbHq50RrE9zJkdeKzhQD86y
+         LSa+u9njZC+Oa4UEeJrtBQLGbxG+oT3n6sMGOFf/DcMNYX923aqXMExWDQJOFGLird
+         BS+ThgBeMUtb9tbJ7LhsMYwKT0DNhR3dqlMbQwG5teMriphkE+W7mhEryMbTbENJ9Y
+         ZsalG8CXZpt3C/U1svxNZn9vDDPabaHPP4ErrI92zqAQweEB5G+h5QfZdJ8BH3BaKD
+         a5gY8jf4Qghrg==
+Date:   Tue, 15 Jun 2021 13:22:55 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Moritz Fischer <mdf@kernel.org>, maz@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>
+Subject: Re: [PATCH] usb: renesas-xhci: Fix handling of unknown ROM state
+Message-ID: <YMhcV39CtSx0F45o@vkoul-mobl>
+References: <20210615022514.245274-1-mdf@kernel.org>
+ <YMhTddYjJwDcNau/@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210604194840.14655-1-hdegoede@redhat.com>
+In-Reply-To: <YMhTddYjJwDcNau/@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 04, 2021 at 09:48:32PM +0200, Hans de Goede wrote:
-> Here is v3 of my patchset making DP over Type-C work on devices where the
-> Type-C controller does not drive the HPD pin on the GPU, but instead
-> we need to forward HPD events from the Type-C controller to the DRM driver.
+On 15-06-21, 09:15, Greg KH wrote:
+> On Mon, Jun 14, 2021 at 07:25:14PM -0700, Moritz Fischer wrote:
+> > If the ROM status returned is unknown (RENESAS_ROM_STATUS_NO_RESULT)
+> > we need to attempt loading the firmware rather than just skipping
+> > it all together.
 > 
-> Changes in v4:
-> - Rebase on top of latest drm-tip
-> - Add forward declaration for struct fwnode_handle to drm_crtc_internal.h
->   (fixes warning reported by kernel test robot <lkp@intel.com>)
-> - Add Heikki's Reviewed-by to patch 7 & 8
-> - Add Heikki's Tested-by to the series
-> 
-> Changes in v3:
-> - Base on top of latest drm-tip, which should fix the CI being unable to
->   apply (and thus to test) the patches
-> - Make intel_acpi_assign_connector_fwnodes() take a ref on the fwnode
->   it stores in connector->fwnode and have drm_connector_cleanup() put
->   this reference
-> - Drop data argument from drm_connector_oob_hotplug_event()
-> - Make the Type-C DP altmode code only call drm_connector_oob_hotplug_event()
->   when the HPD bit in the status vdo changes
-> - Drop the platform/x86/intel_cht_int33fe: Correct "displayport" fwnode
->   reference patch, this will be merged independently through the pdx86 tree
-> 
-> Changes in v2:
-> - Replace the bogus "drm/connector: Make the drm_sysfs connector->kdev
->   device hold a reference to the connector" patch with:
->   "drm/connector: Give connector sysfs devices there own device_type"
->   the new patch is a dep for patch 2/9 see the patches
-> 
-> - Stop using a class-dev-iter, instead at a global connector list
->   to drm_connector.c and use that to find the connector by the fwnode,
->   similar to how we already do this in drm_panel.c and drm_bridge.c
-> 
-> - Make drm_connector_oob_hotplug_event() take a fwnode pointer as
->   argument, rather then a drm_connector pointer and let it do the
->   lookup itself. This allows making drm_connector_find_by_fwnode() a
->   drm-internal function and avoids code outside the drm subsystem
->   potentially holding on the a drm_connector reference for a longer
->   period.
-> 
-> This series not only touches drm subsys files but it also touches
-> drivers/usb/typec/altmodes/typec_displayport.c, that file usually
-> does not see a whole lot of changes. So I believe it would be best
-> to just merge the entire series through drm-misc, Assuming we can
-> get an ack from Greg for merging the typec_displayport.c changes
-> this way.
+> How can this happen?  Can you provide more information here?
 
-No objection from me, I've replied with reviewed-by for those USB
-patches now.
+Sometimes ROM load seems to return unknown status, this helps in those
+cases by doing attempting RAM load. The status should be success of
+fail, here it is neither :(
 
-thanks,
-greg k-h
+I have tested this on 96 boards RB3 on a loaded ROM device as well as
+ROM erased one. Works good and is improvement in the cases where ROM
+status is 'unknown'
+
+
+Tested-by: Vinod Koul <vkoul@kernel.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+
+-- 
+~Vinod
