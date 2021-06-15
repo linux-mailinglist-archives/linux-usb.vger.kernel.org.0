@@ -2,28 +2,28 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C554A3A748E
-	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 05:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F09113A748D
+	for <lists+linux-usb@lfdr.de>; Tue, 15 Jun 2021 05:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbhFODDi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 14 Jun 2021 23:03:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51134 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230239AbhFODDh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S230322AbhFODDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
         Mon, 14 Jun 2021 23:03:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D5E20611AB;
-        Tue, 15 Jun 2021 01:05:20 +0000 (UTC)
+Received: from mail.kernel.org ([198.145.29.99]:51132 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230238AbhFODDh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 14 Jun 2021 23:03:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 45500613BF;
+        Tue, 15 Jun 2021 01:06:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623719122;
-        bh=JowlqCnPSb4zz316zjuQPncCWVeSVEJsJRR6AJAI1SE=;
+        s=k20201202; t=1623719165;
+        bh=5nFeD8wP5nu+m9jfAlQJ3IU5zCr3m3wHffbBI/kxC+g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FtZQP1L3wOJJQ3lQRa2yCPA79Dj1fEvpClc3UBsJNhL/ydK/dIdi7RAXlq7aiHl+4
-         KfxN293mMtTchVS+AZCvuFFNolo8Ho3YA/csiLLs/rM0TFwmZ5TFbAEL2xFmZV77wJ
-         Lj9LtrZ9R+GmIRRpcJB4TAhJT2HfvoPSanuCBJ37oK5Gatmx5as3Rh0Nphj7EsY5ur
-         Src7pu9r2MT+7RboovQmnX18jreeLiLL15t86RVaJqI6EP8OzSOYIQJCaOZK/yR38+
-         baN7BwXVOiIRVCDve3dDel5iX7uBs6V7hjVoaGp4q1DPqgu4igQvGw6TXXPexDuGAd
-         Q/5DntGx/u5iw==
-Date:   Tue, 15 Jun 2021 09:05:16 +0800
+        b=cI0ZAUKHSteG8ONkxc/ThavDvsqJrcD7JO88Gz0X6tpJrYNU2wmC/2o/xkDa/y6j9
+         iJ9Gqybh+cDoKlXzAVCKsS9rHrBF5jFABJQtk1r6rtL4b6jS1brCwgIYKV28I5Qwjr
+         VzM0WzzU+ezTwKaz1JMLDneEq61gkoynFFKhD7ohJ07ygzltuie4V0sxPFZW920cuI
+         EoapArbKqYaii6i4hOQ8LKXWphvea2grXo+uOKXbd8TAGSogP/NAj0dnQK6lPCxvB/
+         E/ihC2iZt7F+2jXHzsd/tEEpgzmeHJcG+K3lHpsJUS9XVhtGABjWwR4gZF+3yqqKTG
+         +l7y6DGl/8XTg==
+Date:   Tue, 15 Jun 2021 09:06:00 +0800
 From:   Peter Chen <peter.chen@kernel.org>
 To:     Dmitry Osipenko <digetx@gmail.com>
 Cc:     Thierry Reding <thierry.reding@gmail.com>,
@@ -35,7 +35,7 @@ Cc:     Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v1 1/2] usb: phy: tegra: Wait for VBUS wakeup status
  deassertion on suspend
-Message-ID: <20210615010516.GA28352@nchen>
+Message-ID: <20210615010600.GB28352@nchen>
 References: <20210613145936.9902-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -59,6 +59,8 @@ On 21-06-13 17:59:35, Dmitry Osipenko wrote:
 > Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
 > Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
 > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 > ---
 >  drivers/usb/phy/phy-tegra-usb.c | 10 ++++++++++
 >  1 file changed, 10 insertions(+)
@@ -88,9 +90,12 @@ On 21-06-13 17:59:35, Dmitry Osipenko wrote:
 > +					   val, !(val & VBUS_WAKEUP_STS),
 > +					   5000, 100000);
 > +
-
-Where will clear VBUS_WAKEUP_STS? Or it will be cleared by HW after VBUS lower than
-B Session Valid?
+>  	utmi_phy_clk_disable(phy);
+>  
+>  	/* PHY won't resume if reset is asserted */
+> -- 
+> 2.30.2
+> 
 
 -- 
 
