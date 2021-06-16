@@ -2,164 +2,119 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FF33A9577
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 11:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35FF23A9796
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 12:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbhFPJDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 05:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231513AbhFPJDR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 05:03:17 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95640C061574
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 02:01:11 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id e78-20020a25d3510000b029054f20395eddso1547218ybf.13
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 02:01:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=3M0UKlv9SOpLXUL9qCPgM2BG4Do5o9apkVkW/TG2GZY=;
-        b=XUUaWCKmiuW4vDogg4QoHBx8qvu2ygQ5gyuUydllq4h5NX0BZFN3ZgFb/opCPL9Haq
-         JWmayPho/GZFgz9Da110xPx/UXrlBT/2W80DWm3Lb8pmJ0ODrvmwwwRmPVEF/2XuLb+E
-         sJImWCIX0ilq5YpZFF1sRelBfRbtaOlp30NwzxS1BwxWOazp3oZGGxBKJR8F+/rrv6dy
-         2bsAvAVWCAXPDokwd7GHCN+4rRJLH4qOMXEan6oF8RrxSaTv0wm7OimbmFCtvHHvTWxY
-         9oEAshM/jUwG3Mfi4n7EluXJhOXsl4KY7JAIsTfypH9Et8TubFZwwLGdxGGKCcQPk0JR
-         YNbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=3M0UKlv9SOpLXUL9qCPgM2BG4Do5o9apkVkW/TG2GZY=;
-        b=EYxu1a0Utu22MHyn2ZNltqK5rMYIUWmfob6Thpj8yxKhHxgIOwGTQ+0z+Hrmzn/Rmz
-         t4PpMIcM0Q6h4WF1Sy+oj5FIpDiGD+HdhiGFfMKbPzXYTcmq4sqY+FowDM3zF6jm4mnu
-         MrVfbK424kEmNwo+kd5+bE8JK6JUTBS9s5n7C5GtN8lmA9nfbn6pgrgZ1t1SW7Z+i3x3
-         tu+E2UDVm+8FrI1dCn8nRo2p8seXkEXZQ1YTw20kG11uN26J3TVotaO+MRrLxgdpZoFr
-         wkjHe3NkLX5j6/cFIroJNA14/olFG5yC5Pu+8x7Rm3MRVZ0QTLzNP0iW1VCwuPl21Dgi
-         SPvA==
-X-Gm-Message-State: AOAM532XszBIY96cAk44fqcFTHV4xu0gFpKa4Ry559Ed659yQAnPpJQy
-        Ue+OUbtWSDV7J8FTVDKGVhOvzUml/9Zw
-X-Google-Smtp-Source: ABdhPJwng0J1nrvO5rVrzAydm5TO3Oi6kIALs3pguNbRP6QqiQuA2oZhFG6nu3vAmNLpZ4Br5VgOMwi/Ic6Q
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:490b:5c68:72a5:d6d7])
- (user=kyletso job=sendgmr) by 2002:a25:9bc4:: with SMTP id
- w4mr4516910ybo.168.1623834067902; Wed, 16 Jun 2021 02:01:07 -0700 (PDT)
-Date:   Wed, 16 Jun 2021 17:01:02 +0800
-Message-Id: <20210616090102.1897674-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
-Subject: [PATCH v3] usb: typec: tcpm: Relax disconnect threshold during power negotiation
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232549AbhFPKhh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 06:37:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50158 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232370AbhFPKhA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Jun 2021 06:37:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 998E661107;
+        Wed, 16 Jun 2021 10:34:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623839691;
+        bh=uJEv3OvJMqswalWvG2rx1DCmioR+VtUOrO7CZGR2Ajw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=A6wsFevRhS9CeafwlT529v2rV3Gm9GGwn4GGkmYDghQBgvSltNdLhA2d1VwUgm9YV
+         V+BZ/Z7dkVuRC9jA+aF8uUIN4oppwPSoc0YE3UC/NPxsGiCugwhXT7XZEbbeh2pmB/
+         M4rdDOJ4s0X9LmiRn4axjJlxF+T4B+Wd1HYLAz0MgEG64RvZ+ZZaXxAxnqcCDwPJej
+         pW3zx7fe6lsVprl/vQScwg/OlH7/cEN61iAlussljsV2mRmi/pOkb0n3FbRiUdCHAK
+         H6X3SZGPBKP1nePHfXCLHq/6yaW3vQZyt5NRvZBipljaN3xhgyRVkvGP83STRQZ1Xh
+         jhhQBOeaewbeQ==
+Date:   Wed, 16 Jun 2021 16:04:47 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <YMnTx4GqTWu75o2n@vkoul-mobl>
+References: <20210615191543.1043414-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the voltage is being decreased in power negotiation, the Source will
-set the power supply to operate at the new voltage level before sending
-PS_RDY. Relax the threshold before sending Request Message so that it
-will not race with Source which begins to adjust the voltage right after
-it sends Accept Message (PPS) or tSrcTransition (25~35ms) after it sends
-Accept Message (non-PPS).
+On 15-06-21, 13:15, Rob Herring wrote:
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+> 
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
 
-The real threshold will be set after Sink receives PS_RDY Message.
+>  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
 
-Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
-Cc: Badhri Jagan Sridharan <badhri@google.com>
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
-Changes in v3:
-- move the timing of setting threshold for Fixed RDO as I did for PPS in
-  v2, i.e. move it to tcpm_pd_send_request.
-- add Cc: tag for Badhri
-- update the commit message for the above changes
+>  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+>  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+>  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+>  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+>  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
 
-Changes in v2:
-- move the timing of setting threshold up to "before sending Request"
-  for PPS power negotiation so that it won't race with the Source.
-- PPS: if it fails to send the Request, fallback to previous threshold
-- PPS: if the Source doesn't respond Accept, fallback to previous
-  threshold
-- update the commit message for above changes
+Acked-By: Vinod Koul <vkoul@kernel.org>
 
- drivers/usb/typec/tcpm/tcpm.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 197556038ba4..b1d310ab84c4 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -2604,6 +2604,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			} else {
- 				next_state = SNK_WAIT_CAPABILITIES;
- 			}
-+
-+			/* Threshold was relaxed before sending Request. Restore it back. */
-+			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-+							       port->pps_data.active,
-+							       port->supply_voltage);
- 			tcpm_set_state(port, next_state, 0);
- 			break;
- 		case SNK_NEGOTIATE_PPS_CAPABILITIES:
-@@ -2617,6 +2622,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			    port->send_discover)
- 				port->vdm_sm_running = true;
- 
-+			/* Threshold was relaxed before sending Request. Restore it back. */
-+			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-+							       port->pps_data.active,
-+							       port->supply_voltage);
-+
- 			tcpm_set_state(port, SNK_READY, 0);
- 			break;
- 		case DR_SWAP_SEND:
-@@ -3336,6 +3346,12 @@ static int tcpm_pd_send_request(struct tcpm_port *port)
- 	if (ret < 0)
- 		return ret;
- 
-+	/*
-+	 * Relax the threshold as voltage will be adjusted after Accept Message plus tSrcTransition.
-+	 * It is safer to modify the threshold here.
-+	 */
-+	tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
-+
- 	memset(&msg, 0, sizeof(msg));
- 	msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
- 				  port->pwr_role,
-@@ -3433,6 +3449,9 @@ static int tcpm_pd_send_pps_request(struct tcpm_port *port)
- 	if (ret < 0)
- 		return ret;
- 
-+	/* Relax the threshold as voltage will be adjusted right after Accept Message. */
-+	tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
-+
- 	memset(&msg, 0, sizeof(msg));
- 	msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
- 				  port->pwr_role,
-@@ -4196,6 +4215,10 @@ static void run_state_machine(struct tcpm_port *port)
- 		port->hard_reset_count = 0;
- 		ret = tcpm_pd_send_request(port);
- 		if (ret < 0) {
-+			/* Restore back to the original state */
-+			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-+							       port->pps_data.active,
-+							       port->supply_voltage);
- 			/* Let the Source send capabilities again. */
- 			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
- 		} else {
-@@ -4206,6 +4229,10 @@ static void run_state_machine(struct tcpm_port *port)
- 	case SNK_NEGOTIATE_PPS_CAPABILITIES:
- 		ret = tcpm_pd_send_pps_request(port);
- 		if (ret < 0) {
-+			/* Restore back to the original state */
-+			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-+							       port->pps_data.active,
-+							       port->supply_voltage);
- 			port->pps_status = ret;
- 			/*
- 			 * If this was called due to updates to sink
 -- 
-2.32.0.272.g935e593368-goog
-
+~Vinod
