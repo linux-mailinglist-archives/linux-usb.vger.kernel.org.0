@@ -2,95 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDC43AA4B4
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 21:53:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E5B3AA4D1
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 21:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233054AbhFPTzR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 15:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbhFPTzN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 15:55:13 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13749C061767
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 12:53:07 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id m13-20020a17090b068db02901656cc93a75so4654796pjz.3
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 12:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=REKNtCEqXaJGJPXgH7GO4G/xkEFE5z6abOnwkjeEOOM=;
-        b=nSXDtstthFYk3A2ZD9WYBvz0SWa87AmhYmluGZALm2zmSgBpJcRLa+M9YLc2ZxPOOG
-         lX75jtHSXyM0egGqzaJmw33YPXQpKMG305SNV1xm34k/5dPZ48AvkO5xVSJpN7CapZ38
-         Jl7tgiQeXOttbtGseIOBlt0i76zZkBt/knaqM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=REKNtCEqXaJGJPXgH7GO4G/xkEFE5z6abOnwkjeEOOM=;
-        b=pKVFzkCTBoCBlZB0POj3vWxlH5I1A8y6xYIFEi07HWEWCQJfjG/fzAa1ED11sz+AZ7
-         58gZzjYhs5NiQdHVIYm67sSgJ+rfNR5tvPg3iboso784YmPwEGSy9X5BdZAkv6q6lXSn
-         07INkFTig/KeYWECnNXOU8JZoblhN2h7U1xxxf1AE4J7OUrioJKIgXBpqwPNWUuYfrlh
-         fSljGM11qieUBS1zwVqIzoZwTkhIQ+jLxGQxzeI1MZW37C78PbgCUM67A4EfkkLl4XmH
-         CL8Ol9MaKluu0wCx+SMIsSVkzF3S6gwj1+St3zaRyY4G3SAtxTBP9opFnNyxL6+NKnhC
-         XBSw==
-X-Gm-Message-State: AOAM531/CEn+JD4d1M9d8+edJ/mAyusdvRtSCwDQxXE2bObmx9H7GkaY
-        83ERP2wbTyWAG3GTZXgsPgf2Sg==
-X-Google-Smtp-Source: ABdhPJySx5ku8Zq623xzQd4AkI8yYKtixtRFQEZZOmLEeOFMPh/2wkuxDpRu6vr08dRhwclNWsOrdw==
-X-Received: by 2002:a17:90a:4f0a:: with SMTP id p10mr12733702pjh.36.1623873186468;
-        Wed, 16 Jun 2021 12:53:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q23sm2920275pff.175.2021.06.16.12.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Jun 2021 12:53:05 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     netdev@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Lee Jones <lee.jones@linaro.org>, EJ Hsu <ejh@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-Date:   Wed, 16 Jun 2021 12:53:03 -0700
-Message-Id: <20210616195303.1231429-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.25.1
+        id S231143AbhFPT7L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 15:59:11 -0400
+Received: from mga02.intel.com ([134.134.136.20]:32237 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230155AbhFPT7L (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Jun 2021 15:59:11 -0400
+IronPort-SDR: 6daqN2uryK+s7kOGi8mp1iHKJvN5j4Lp3jSy/nmZlFH6EmqUbHbWToa4X2d2y0sQPN8o2gXnHR
+ lNAaFaQlJOUg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10016"; a="193369689"
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="193369689"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 12:57:03 -0700
+IronPort-SDR: ALzjgRJcgXlLcufnh+3hODq/xc3bSsjCbM9O4UaUsxM/JqcR84dUYa7delRbdXPKvqzbV8TzJ1
+ 5iaG7P98rtkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="554157061"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 16 Jun 2021 12:57:02 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ltben-0001UG-NV; Wed, 16 Jun 2021 19:57:01 +0000
+Date:   Thu, 17 Jun 2021 03:56:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 60ed39db6e861f4a42dfa75f9b53f10093f6d672
+Message-ID: <60ca5767.ofTbljnh531xeIzV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Patch-Hashes: v=1; h=sha256; g=e288d7a5d47b450f2b94459be58b809b0f9b078e; i=IIyfLh/uWBux4FKJ8uy3gqu60Pe0+DygS5gZC5j95a8=; m=CF57NG64wUjRAJMr07rJpYR31VG7hNQuEGsWk+kxwfo=; p=pFlDJK5bThxCv+AjngYUxbnf83MuyxEMc3SAV1dXHT4=
-X-Patch-Sig: m=pgp; i=keescook@chromium.org; s=0x0x8972F4DFDC6DC026; b=iQIzBAABCgAdFiEEpcP2jyKd1g9yPm4TiXL039xtwCYFAmDKVp8ACgkQiXL039xtwCZyqA/+JfK nd+cjG9VsUhUfLcjOzVyzLHaDABMvQZZpnOBMM+ID99MK4ADVRFSEszL895QlRyrdD0J3mkf7QQas BL8BGtqpgoexWikR9W8a5MlCMFzlDJoLCxqAZ0gEyn/suDEbbzJ0DJ5Tqw0wIHDHTjHQG3937vs0c Yy+ov9dkv8P/NWyis3cDe/iGnFS+Mz8iuWulYHbbum5DuyXte7G+4mKvNYscyiyrVwMCrDKd1jOJX aKFvn6zozBWDvdLluNvQYQjs7ZbVejM+Fa6MmVMkH4i0iNTc04HoTRpooLHZvHUxPwLuelfGdnG4X 0FD0weNJYjtp5C6X5LNBiAtnGcMsJM4r/D47HKa8RATZBJuk5y5dz0/L60Gjq9NaHUzhf0R+K9sZX FT0ql+eJH8Jq4/kANsuJ9f2uIQdtihvlCr9+6xA/UH6O+OSa9Wm0suEe9f76XDAqLMusdisAv4DBm ohpYaW5JWpKu5aGypbgxcEfFwyRr6oAAateKckvFH7QucgInx5SMzEALiMWGGImWWnc6tsit0dBKG YydG1FGlMl7wtrCB+MI+gXpcMymmvV34d8XiJ6TdVjQaaCxCgdfw31uXu7tElc1bXagpK92a6Xy0S BrCsrypePKT0YAgGjVoOsQtqXzQt6V4npZPkcCuEaPOWmvnvEaKgIxI+p38hwdOo=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), memmove(), and memset(), avoid
-intentionally reading across neighboring array fields.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 60ed39db6e861f4a42dfa75f9b53f10093f6d672  Merge tag 'usb-v5.13-rc7' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
 
-The memcpy() is copying the entire structure, not just the first array.
-Adjust the source argument so the compiler can do appropriate bounds
-checking.
+elapsed time: 733m
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
+configs tested: 131
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      chrp32_defconfig
+powerpc                  mpc866_ads_defconfig
+mips                     cu1000-neo_defconfig
+ia64                        generic_defconfig
+arm                       versatile_defconfig
+arm                         lpc32xx_defconfig
+arm                        clps711x_defconfig
+sparc                       sparc64_defconfig
+ia64                            zx1_defconfig
+mips                        vocore2_defconfig
+m68k                          multi_defconfig
+xtensa                    smp_lx200_defconfig
+mips                          ath79_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                      ep88xc_defconfig
+mips                           rs90_defconfig
+powerpc                       ppc64_defconfig
+sh                             shx3_defconfig
+sh                           se7721_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                    socrates_defconfig
+arc                        nsim_700_defconfig
+arm                            hisi_defconfig
+sh                            migor_defconfig
+sh                            hp6xx_defconfig
+m68k                          atari_defconfig
+powerpc                        fsp2_defconfig
+powerpc                     sbc8548_defconfig
+s390                             alldefconfig
+riscv             nommu_k210_sdcard_defconfig
+arm                            zeus_defconfig
+m68k                          sun3x_defconfig
+arm                          exynos_defconfig
+sh                           se7343_defconfig
+arm                              alldefconfig
+s390                          debug_defconfig
+powerpc                 mpc832x_mds_defconfig
+arm                        mvebu_v5_defconfig
+powerpc                 mpc85xx_cds_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20210615
+x86_64               randconfig-a004-20210615
+x86_64               randconfig-a002-20210615
+x86_64               randconfig-a003-20210615
+x86_64               randconfig-a006-20210615
+x86_64               randconfig-a005-20210615
+i386                 randconfig-a002-20210615
+i386                 randconfig-a006-20210615
+i386                 randconfig-a004-20210615
+i386                 randconfig-a001-20210615
+i386                 randconfig-a005-20210615
+i386                 randconfig-a003-20210615
+i386                 randconfig-a015-20210615
+i386                 randconfig-a013-20210615
+i386                 randconfig-a016-20210615
+i386                 randconfig-a012-20210615
+i386                 randconfig-a014-20210615
+i386                 randconfig-a011-20210615
+i386                 randconfig-a015-20210616
+i386                 randconfig-a013-20210616
+i386                 randconfig-a016-20210616
+i386                 randconfig-a012-20210616
+i386                 randconfig-a014-20210616
+i386                 randconfig-a011-20210616
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210615
+x86_64               randconfig-a004-20210616
+x86_64               randconfig-a001-20210616
+x86_64               randconfig-a002-20210616
+x86_64               randconfig-a003-20210616
+x86_64               randconfig-a006-20210616
+x86_64               randconfig-a005-20210616
+x86_64               randconfig-a015-20210615
+x86_64               randconfig-a011-20210615
+x86_64               randconfig-a012-20210615
+x86_64               randconfig-a014-20210615
+x86_64               randconfig-a016-20210615
+x86_64               randconfig-a013-20210615
+
 ---
- drivers/net/usb/r8152.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 85039e17f4cd..5f08720bf1c9 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8678,7 +8678,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
- {
- 	switch (stringset) {
- 	case ETH_SS_STATS:
--		memcpy(data, *rtl8152_gstrings, sizeof(rtl8152_gstrings));
-+		memcpy(data, rtl8152_gstrings, sizeof(rtl8152_gstrings));
- 		break;
- 	}
- }
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
