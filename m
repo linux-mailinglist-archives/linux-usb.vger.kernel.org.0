@@ -2,176 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB563A8D47
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 02:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 085A73A8DE7
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 02:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbhFPAQP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 20:16:15 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:47968 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbhFPAQM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 20:16:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623802447; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=8PntudIYp0vlQsQeDmisRAFUg8D33rXwezS9JBiNG38=; b=aRIikmXHh9NtTVKNVgzviYwUc3KPMFi/4p13F+Sn6c6/4YqsNBW7WYyTTKWBxgR1E6iVE471
- g0IT2KHOC/3UvgKbyQop3DZQ2R2h8m+9otFa+Yx2JqS6C9UaBLX1+4CbPjdWnedBIGT1vyyk
- zpmgfz2/xSI33DMjP8XgecOlyK4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 60c9423ae27c0cc77f8e11de (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Jun 2021 00:13:46
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id BC503C4338A; Wed, 16 Jun 2021 00:13:45 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 722BCC433F1;
-        Wed, 16 Jun 2021 00:13:43 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 722BCC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Tue, 15 Jun 2021 17:13:41 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
+        id S231761AbhFPA6r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 20:58:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230265AbhFPA6q (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Jun 2021 20:58:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C966C60FE6;
+        Wed, 16 Jun 2021 00:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623805001;
+        bh=tykSCrhMj9oIg5fZltaBtQORVAoQ00lf7s/Go9WGD9g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o8kQ/VfO6WbIfltUOrrHcjd/+jH+LBTTTLJU79jwnPsz40YyKPj1CrWWo7K/EaXzP
+         9JDqOsv7UgIKe46vU2Xhr2RHt0UO/EtO5HT57FhRBHWUdL8/bJxzLdUoJmttDAHJ4H
+         ebSKEEOkepCYCVLJj/oeAQTHcjEi3FO2zwV59abQ66egiSMrNq650nm4W8xnaasRjR
+         pxfg1prT/3FgjHQDlo3fbR4tx+i0HJLpjG/SV8Z6QVRulxeH9rUhuo4o3/IEQ2mW6P
+         iVmb0x32LWkKPA2PYmF6u1Oc+z5Rs/TzwBt8QEJbllx53OWAZuYw43BPs/vHgigFqB
+         2/i28B20n+fLg==
+Date:   Wed, 16 Jun 2021 08:56:36 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        p.zabel@pengutronix.de, linux-usb@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [BUG] usb: dwc3: Kernel NULL pointer dereference in dwc3_remove()
-Message-ID: <20210616001341.GC25299@jackp-linux.qualcomm.com>
-References: <70be179c-d36b-de6f-6efc-2888055b1312@arm.com>
- <YLi/u9J5f+nQO4Cm@kroah.com>
- <8272121c-ac8a-1565-a047-e3a16dcf13b0@arm.com>
- <877djbc8xq.fsf@kernel.org>
- <20210603173632.GA25299@jackp-linux.qualcomm.com>
- <87mts6avnn.fsf@kernel.org>
- <20210607180023.GA23045@jackp-linux.qualcomm.com>
- <87sg1q1129.fsf@kernel.org>
- <20210610153346.GA26872@jackp-linux.qualcomm.com>
- <d9ab95a1-f901-6bfe-899b-e4577d14cb52@codeaurora.org>
+        Felipe Balbi <balbi@kernel.org>,
+        Maxim Schwalm <maxim.schwalm@gmail.com>,
+        linux-tegra@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] usb: phy: tegra: Wait for VBUS wakeup status
+ deassertion on suspend
+Message-ID: <20210616005636.GA19025@nchen>
+References: <20210613145936.9902-1-digetx@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d9ab95a1-f901-6bfe-899b-e4577d14cb52@codeaurora.org>
+In-Reply-To: <20210613145936.9902-1-digetx@gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Sandeep,
-
-On Mon, Jun 14, 2021 at 01:07:11PM +0530, Sandeep Maheswaram wrote:
+On 21-06-13 17:59:35, Dmitry Osipenko wrote:
+> Some devices need an extra delay after losing VBUS, otherwise VBUS may
+> be detected as active at suspend time, preventing the PHY's suspension
+> by the VBUS detection sensor. This problem was found on Asus Transformer
+> TF700T (Tegra30) tablet device, where the USB PHY wakes up immediately
+> from suspend because VBUS sensor continues to detect VBUS as active after
+> disconnection. We need to poll the PHY's VBUS wakeup status until it's
+> deasserted before suspending PHY in order to fix this minor trouble.
 > 
-> On 6/10/2021 9:03 PM, Jack Pham wrote:
-> > On Thu, Jun 10, 2021 at 01:11:42PM +0300, Felipe Balbi wrote:
-> > > Jack Pham <jackp@codeaurora.org> writes:
-> > > > On Fri, Jun 04, 2021 at 11:20:12AM +0300, Felipe Balbi wrote:
-> > > > > Jack Pham <jackp@codeaurora.org> writes:
-> > > > > > > > > > > Alexandru Elisei <alexandru.elisei@arm.com> writes:
-> > > > > > > > > > > > I've been able to bisect the panic and the offending commit is 568262bf5492 ("usb:
-> > > > > > > > > > > > dwc3: core: Add shutdown callback for dwc3"). I can provide more diagnostic
-> > > > > > > > > > > > information if needed and I can help test the fix.
-> > > > > > > > > > > if you simply revert that commit in HEAD, does the problem really go
-> > > > > > > > > > > away?
-> > > > > > > > > > Kernel built from commit 324c92e5e0ee, which is the kernel tip today, the panic is
-> > > > > > > > > > there. Reverting the offending commit, 568262bf5492, makes the panic disappear.
-> > > > > > > > > Want to send a revert so I can take it now?
-> > > > > > > > I can send a revert, but Felipe was asking Sandeep (the commit author) for a fix,
-> > > > > > > > so I'll leave it up to Felipe to decide how to proceed.
-> > > > > > > I'm okay with a revert. Feel free to add my Acked-by: Felipe Balbi
-> > > > > > > <balbi@kernel.org> or it.
-> > > > > > > 
-> > > > > > > Sandeep, please send a new version that doesn't encounter the same
-> > > > > > > issue. Make sure to test by reloading the driver in a tight loop for
-> > > > > > > several iterations.
-> > > > > > This would probably be tricky to test on other "glue" drivers as the
-> > > > > > problem appears to be specific only to dwc3_of_simple.  It looks like
-> > > > > > both dwc3_of_simple and the dwc3 core now (due to 568262bf5492) each
-> > > > > > implement respective .shutdown callbacks. The latter is simply a wrapper
-> > > > > > around dwc3_remove(). And from the panic call stack above we see that
-> > > > > > dwc3_of_simple_shutdown() calls of_platform_depopulate() which will
-> > > > > > again call dwc3_remove() resulting in the double remove.
-> > > > > > 
-> > > > > > So would an alternative approach be to protect against dwc3_remove()
-> > > > > > getting called multiple times? IMO it'd be a bit messy to have to add
-> > > > > no, I  don't think so. That sounds like a workaround. We should be able
-> > > > > to guarantee that ->remove() doesn't get called twice using the driver
-> > > > > model properly.
-> > > > Completely fair.  So then having a .shutdown callback that directly calls
-> > > > dwc3_remove() is probably not the right thing to do as it completely
-> > > > bypasses the driver model so if and when the driver core does later
-> > > > release the device from the driver that's how we end up with the double
-> > > > remove.
-> > > yeah, I would agree with that.
-> > > 
-> > > > > > additional checks there to know if it had already been called. So maybe
-> > > > > > avoid it altogether--should dwc3_of_simple_shutdown() just skip calling
-> > > > > > of_platform_depopulate()?
-> > > > > I don't know what the idiomatic is nowadays, but at least early on, we
-> > > > > had to call depopulate.
-> > > > So any suggestions on how to fix the original issue Sandeep was trying
-> > > > to fix with 568262bf5492? Maybe implement .shutdown in dwc3_qcom and have
-> > > > it follow what dwc3_of_simple does with of_platform_depopulate()? But
-> > > > then wouldn't other "glues" want/need to follow suit?
-> > > I think we can implement shutdown in core, but we need to careful with
-> > > it. Instead of just blindly calling remove, let's extract the common
-> > > parts to another internal function that both remove and shutdown
-> > > call. debugfs removal should not be part of that generic method :-)
-> > Hi Sandeep,
-> > 
-> > Upon re-reading your description in 568262bf5492 it sounds like the
-> > original intention of your patch is basically to quiesce the HW so that
-> > it doesn't continue to run after SMMU/IOMMU is disabled right?
-> > 
-> > If that is the case, couldn't we simply call only dwc3_core_exit_mode()
-> > assuming there is no other requirement to do any other cleanup/teardown
-> > (PHYs, clocks, resets, runtime PM, et al)? This function should do the
-> > bare minimum of stopping the controller in whatever mode (host or
-> > peripheral) it is currently operating in.
+> Fixes: 35192007d28d ("usb: phy: tegra: Support waking up from a low power mode")
+> Reported-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+> Tested-by: Maxim Schwalm <maxim.schwalm@gmail.com> # Asus TF700T
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/usb/phy/phy-tegra-usb.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> Yes that was the intention. I will call only dwc3_core_exit_mode()
-> and check. Is there any way we can do from dwc3 qcom glue driver to
-> avoid problems for other glue drivers?
+> diff --git a/drivers/usb/phy/phy-tegra-usb.c b/drivers/usb/phy/phy-tegra-usb.c
+> index fc5c6cab58ba..ff482c694200 100644
+> --- a/drivers/usb/phy/phy-tegra-usb.c
+> +++ b/drivers/usb/phy/phy-tegra-usb.c
+> @@ -64,6 +64,7 @@
+>  #define   A_VBUS_VLD_WAKEUP_EN			BIT(30)
+>  
+>  #define USB_PHY_VBUS_WAKEUP_ID			0x408
+> +#define   VBUS_WAKEUP_STS			BIT(10)
+>  #define   VBUS_WAKEUP_WAKEUP_EN			BIT(30)
+>  
+>  #define USB1_LEGACY_CTRL			0x410
+> @@ -645,6 +646,15 @@ static int utmi_phy_power_off(struct tegra_usb_phy *phy)
+>  	void __iomem *base = phy->regs;
+>  	u32 val;
+>  
+> +	/*
+> +	 * Give hardware time to settle down after VBUS disconnection,
+> +	 * otherwise PHY will immediately wake up from suspend.
+> +	 */
+> +	if (phy->wakeup_enabled && phy->mode != USB_DR_MODE_HOST)
+> +		readl_relaxed_poll_timeout(base + USB_PHY_VBUS_WAKEUP_ID,
+> +					   val, !(val & VBUS_WAKEUP_STS),
+> +					   5000, 100000);
+> +
 
-As I mentioned above maybe you could just implement a dwc3_qcom specific
-.shutdown callback which mimics what dwc3_of_simple() does by calling
-of_platform_depopulate(). This will allow the kernel driver core to
-invoke dwc3_remove() rather than calling it directly yourself.
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
 
-The downside is that if other glue drivers want to follow this they'd
-have to duplicate the same logic. But maybe this is a more cautious
-approach until we start seeing other drivers needing this generically
-within core.c.
 
-> > > Anything in that generic method should, probably, be idempotent.
-> > Yes we'll need to ensure that dwc3_core_exit_mode() can be called
-> > multiple times without additional side effects. At first glance this
-> > probably means setting dwc->xhci and dwc->gadget to NULL from
-> > dwc3_host_exit() and dwc3_gadget_exit(), respectively.
+>  	utmi_phy_clk_disable(phy);
+>  
+>  	/* PHY won't resume if reset is asserted */
+> -- 
+> 2.30.2
 > 
-> Ok. Is there any way to test this ?
 
-You could implement both the dwc3_qcom_shutdown() as above as well as
-adding back dwc3_shutdown() which only does dwc3_core_exit_mode(). Make
-sure that even though dwc3_core_exit_mode() gets called twice nothing
-bad happens.
-
-Jack
 -- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+
+Thanks,
+Peter Chen
+
