@@ -2,78 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15213A94C7
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 10:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FF33A9577
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 11:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231614AbhFPIMN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 04:12:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51786 "EHLO
+        id S231524AbhFPJDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 05:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbhFPIML (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 04:12:11 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF69C061574
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 01:10:05 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id p21so1212079qtw.6
-        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 01:10:05 -0700 (PDT)
+        with ESMTP id S231513AbhFPJDR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 05:03:17 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95640C061574
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 02:01:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id e78-20020a25d3510000b029054f20395eddso1547218ybf.13
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 02:01:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
-        bh=DgxgseXBWOYqbBA+JxmlNVvdFvt4QCj+rfq3cCB9AVw=;
-        b=Xs9W3wEhYO0f/V97vv605k9MPx5YgaK9C8hX1eDtfwjAkKDmGCRlQBiGjzuc0kHL+f
-         xKF5gzA1f7xfuh9Y7oxaTF++OoJNgd0mSSk2ALMIAx/MWwiwoKl47YzNW55nigyXW8Oi
-         nSFyTnjcDc2ANiY9iZ5G92PFWlZ8aCq3TbjUF8Pgwop5GwTHLc0BlsMZwbhVHNICGO4e
-         ed0xFy8d3nBThYg/1o7kh0k5mj52ZIKJ9YLhMGaMMOO8tK1OwssnUS6+hfDkhtuWxIPf
-         UxIftb7EsSpoA1vM2QOorP1+oZu3bkceg2PBhXTD5hTbECOxXkqznvkv/PQSW/dwIont
-         B+sA==
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=3M0UKlv9SOpLXUL9qCPgM2BG4Do5o9apkVkW/TG2GZY=;
+        b=XUUaWCKmiuW4vDogg4QoHBx8qvu2ygQ5gyuUydllq4h5NX0BZFN3ZgFb/opCPL9Haq
+         JWmayPho/GZFgz9Da110xPx/UXrlBT/2W80DWm3Lb8pmJ0ODrvmwwwRmPVEF/2XuLb+E
+         sJImWCIX0ilq5YpZFF1sRelBfRbtaOlp30NwzxS1BwxWOazp3oZGGxBKJR8F+/rrv6dy
+         2bsAvAVWCAXPDokwd7GHCN+4rRJLH4qOMXEan6oF8RrxSaTv0wm7OimbmFCtvHHvTWxY
+         9oEAshM/jUwG3Mfi4n7EluXJhOXsl4KY7JAIsTfypH9Et8TubFZwwLGdxGGKCcQPk0JR
+         YNbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to;
-        bh=DgxgseXBWOYqbBA+JxmlNVvdFvt4QCj+rfq3cCB9AVw=;
-        b=LegRwnXljxSIxULONK4kI2fVgrLobPd6NvoNZgr9w77SU4+inVHzHzEvHXbxmCNT1F
-         NnzE8T15hMWzM6jSHD5yeQZnf3viqVwwSfT1yFiKzfUVKQH9+377Qpl6hiW+MnO0nIs/
-         NAn4gLqPTCgfqQpf3z190hT05OZxCkEw73Z71UTcMxbh6ysvHHADYCKrYdsRriI7ZhbN
-         7KCa5L49GfN6Xa68Eijym9QI1NeuvNoBldZKppdTGOm/g+rTTr0qLpeZiQLjh2TxbsBe
-         m6iGquYdGVhHIvr71YHCg4h/cmILBt9BlWNYLXRWjJUovdnX5qtDq4dMzCojqJL/wMBg
-         LdEw==
-X-Gm-Message-State: AOAM531Wt0HswgVAtocXwOMVv8+Jwfh5oCVVRIh2+1xSAxt7a9YDUtsg
-        HeqrxgzhMPKt8L5PjXiBS8vjdReOP1+E2YqXdn4=
-X-Google-Smtp-Source: ABdhPJz5xYiVnYdSoXWKqH7RjV8JEHMYavDg7g0J5Sfr7E6bWPlvvSpPzZ+FT71M7kNss+ne6SLTjTaWCUIsVdMpTv8=
-X-Received: by 2002:ac8:5d4c:: with SMTP id g12mr3902982qtx.363.1623831004426;
- Wed, 16 Jun 2021 01:10:04 -0700 (PDT)
-MIME-Version: 1.0
-Reply-To: richardnabasaa@gmail.com
-Sender: modestavictory@gmail.com
-Received: by 2002:ac8:60d5:0:0:0:0:0 with HTTP; Wed, 16 Jun 2021 01:10:03
- -0700 (PDT)
-From:   Richard Nabasa <richardnabasaa@gmail.com>
-Date:   Wed, 16 Jun 2021 09:10:03 +0100
-X-Google-Sender-Auth: jBJZzeBaMXYC7xvrDVMzQM9EJZY
-Message-ID: <CAEBkHkfV8NTFf=RfCjdfuJ3Pvq1cRHC4mm+cLr2BaeS-Z9pKKQ@mail.gmail.com>
-Subject: I NEED YOUR URGENT RESPONSE
-To:     undisclosed-recipients:;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=3M0UKlv9SOpLXUL9qCPgM2BG4Do5o9apkVkW/TG2GZY=;
+        b=EYxu1a0Utu22MHyn2ZNltqK5rMYIUWmfob6Thpj8yxKhHxgIOwGTQ+0z+Hrmzn/Rmz
+         t4PpMIcM0Q6h4WF1Sy+oj5FIpDiGD+HdhiGFfMKbPzXYTcmq4sqY+FowDM3zF6jm4mnu
+         MrVfbK424kEmNwo+kd5+bE8JK6JUTBS9s5n7C5GtN8lmA9nfbn6pgrgZ1t1SW7Z+i3x3
+         tu+E2UDVm+8FrI1dCn8nRo2p8seXkEXZQ1YTw20kG11uN26J3TVotaO+MRrLxgdpZoFr
+         wkjHe3NkLX5j6/cFIroJNA14/olFG5yC5Pu+8x7Rm3MRVZ0QTLzNP0iW1VCwuPl21Dgi
+         SPvA==
+X-Gm-Message-State: AOAM532XszBIY96cAk44fqcFTHV4xu0gFpKa4Ry559Ed659yQAnPpJQy
+        Ue+OUbtWSDV7J8FTVDKGVhOvzUml/9Zw
+X-Google-Smtp-Source: ABdhPJwng0J1nrvO5rVrzAydm5TO3Oi6kIALs3pguNbRP6QqiQuA2oZhFG6nu3vAmNLpZ4Br5VgOMwi/Ic6Q
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:490b:5c68:72a5:d6d7])
+ (user=kyletso job=sendgmr) by 2002:a25:9bc4:: with SMTP id
+ w4mr4516910ybo.168.1623834067902; Wed, 16 Jun 2021 02:01:07 -0700 (PDT)
+Date:   Wed, 16 Jun 2021 17:01:02 +0800
+Message-Id: <20210616090102.1897674-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.272.g935e593368-goog
+Subject: [PATCH v3] usb: typec: tcpm: Relax disconnect threshold during power negotiation
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Greetings, I am a banker by profession, i am contacting you in regards
-to a business transfer of a huge sum of money from a deceased account.
-I need your urgent assistance in transferring the sum of $11.6million
-dollars to your private bank account, the fund belongs to one of our
-foreign customer who died along with his supposed next of kin since
-July 22, 2003.The money has been here in our bank lying dormant about
-19years now without anybody coming for the claim of it.
+If the voltage is being decreased in power negotiation, the Source will
+set the power supply to operate at the new voltage level before sending
+PS_RDY. Relax the threshold before sending Request Message so that it
+will not race with Source which begins to adjust the voltage right after
+it sends Accept Message (PPS) or tSrcTransition (25~35ms) after it sends
+Accept Message (non-PPS).
 
-I seek your permission to have you stand in as the deceased relative
-to enable the bank to release the fund in your favor as the
-beneficiary and the next of kin to our deceased customer. The banking
-laws here does not allow such money to stay more than 20years, because
-the money will be recalled to the bank treasury account as unclaimed
-fund. That is why contacted you for a business deal where this money
-can be shared between us in the ratio of 60% for me and 40% for you by
-indicating your interest, i will send you the full details on how the
-business will be executed.
+The real threshold will be set after Sink receives PS_RDY Message.
 
-Mr.Richard
+Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
+Cc: Badhri Jagan Sridharan <badhri@google.com>
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+Changes in v3:
+- move the timing of setting threshold for Fixed RDO as I did for PPS in
+  v2, i.e. move it to tcpm_pd_send_request.
+- add Cc: tag for Badhri
+- update the commit message for the above changes
+
+Changes in v2:
+- move the timing of setting threshold up to "before sending Request"
+  for PPS power negotiation so that it won't race with the Source.
+- PPS: if it fails to send the Request, fallback to previous threshold
+- PPS: if the Source doesn't respond Accept, fallback to previous
+  threshold
+- update the commit message for above changes
+
+ drivers/usb/typec/tcpm/tcpm.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 197556038ba4..b1d310ab84c4 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -2604,6 +2604,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 			} else {
+ 				next_state = SNK_WAIT_CAPABILITIES;
+ 			}
++
++			/* Threshold was relaxed before sending Request. Restore it back. */
++			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
++							       port->pps_data.active,
++							       port->supply_voltage);
+ 			tcpm_set_state(port, next_state, 0);
+ 			break;
+ 		case SNK_NEGOTIATE_PPS_CAPABILITIES:
+@@ -2617,6 +2622,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+ 			    port->send_discover)
+ 				port->vdm_sm_running = true;
+ 
++			/* Threshold was relaxed before sending Request. Restore it back. */
++			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
++							       port->pps_data.active,
++							       port->supply_voltage);
++
+ 			tcpm_set_state(port, SNK_READY, 0);
+ 			break;
+ 		case DR_SWAP_SEND:
+@@ -3336,6 +3346,12 @@ static int tcpm_pd_send_request(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/*
++	 * Relax the threshold as voltage will be adjusted after Accept Message plus tSrcTransition.
++	 * It is safer to modify the threshold here.
++	 */
++	tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
++
+ 	memset(&msg, 0, sizeof(msg));
+ 	msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
+ 				  port->pwr_role,
+@@ -3433,6 +3449,9 @@ static int tcpm_pd_send_pps_request(struct tcpm_port *port)
+ 	if (ret < 0)
+ 		return ret;
+ 
++	/* Relax the threshold as voltage will be adjusted right after Accept Message. */
++	tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
++
+ 	memset(&msg, 0, sizeof(msg));
+ 	msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
+ 				  port->pwr_role,
+@@ -4196,6 +4215,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 		port->hard_reset_count = 0;
+ 		ret = tcpm_pd_send_request(port);
+ 		if (ret < 0) {
++			/* Restore back to the original state */
++			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
++							       port->pps_data.active,
++							       port->supply_voltage);
+ 			/* Let the Source send capabilities again. */
+ 			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+ 		} else {
+@@ -4206,6 +4229,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 	case SNK_NEGOTIATE_PPS_CAPABILITIES:
+ 		ret = tcpm_pd_send_pps_request(port);
+ 		if (ret < 0) {
++			/* Restore back to the original state */
++			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
++							       port->pps_data.active,
++							       port->supply_voltage);
+ 			port->pps_status = ret;
+ 			/*
+ 			 * If this was called due to updates to sink
+-- 
+2.32.0.272.g935e593368-goog
+
