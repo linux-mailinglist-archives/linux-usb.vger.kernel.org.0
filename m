@@ -2,167 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AE93A999B
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 13:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8A1D3A9A56
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 14:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbhFPLyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 07:54:21 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:56019 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232546AbhFPLyT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 07:54:19 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623844333; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=x8YM41tIK2n4ialB5PxG4YvrBi5avZ4s6tNfI+y5Hf0=; b=O41fG28PoXhjtOMxDAw9raU7jnTGUUjvDhILfaTg+xj/ilYLk9OdjNMIU9vvo29eMXwBmdqN
- 3n/De4c4XkeZr8bXQIKN0vXJdTAb+HTkvW7Hpx71chZXY/Lq4Jql5GZcy0CuIck6S6PLSWYv
- JAoMvREAnmp+f3NyGRIpA5gRnJY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60c9e5e7f726fa4188cae770 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Jun 2021 11:52:07
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 24C4EC4338A; Wed, 16 Jun 2021 11:52:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost.localdomain (unknown [101.87.142.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S231749AbhFPM34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 08:29:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232637AbhFPM3l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Jun 2021 08:29:41 -0400
+Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C961CC433F1;
-        Wed, 16 Jun 2021 11:51:53 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C961CC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
-From:   Linyu Yuan <linyyuan@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id BBA8561369;
+        Wed, 16 Jun 2021 12:27:07 +0000 (UTC)
+Date:   Wed, 16 Jun 2021 13:29:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
+        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Linyu Yuan <linyyuan@codeaurora.com>
-Subject: [PATCH v3] usb: gadget: eem: fix echo command packet response issue
-Date:   Wed, 16 Jun 2021 19:51:42 +0800
-Message-Id: <20210616115142.34075-1-linyyuan@codeaurora.org>
-X-Mailer: git-send-email 2.25.1
+        Mark Brown <broonie@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+Message-ID: <20210616132908.76a780b8@jic23-huawei>
+In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
+References: <20210615191543.1043414-1-robh@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Linyu Yuan <linyyuan@codeaurora.com>
+On Tue, 15 Jun 2021 13:15:43 -0600
+Rob Herring <robh@kernel.org> wrote:
 
-when receive eem echo command, it will send a response,
-but queue this response to the usb request which allocate
-from gadget device endpoint zero,
-and transmit the request to IN endpoint of eem interface.
+> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
+> same size as the list is redundant and can be dropped. Note that is DT
+> schema specific behavior and not standard json-schema behavior. The tooling
+> will fixup the final schema adding any unspecified minItems/maxItems.
+> 
+> This condition is partially checked with the meta-schema already, but
+> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> An improved meta-schema is pending.
+> 
 
-on dwc3 gadget, it will trigger following warning in function
-__dwc3_gadget_ep_queue(),
+...
 
-	if (WARN(req->dep != dep, "request %pK belongs to '%s'\n",
-				&req->request, req->dep->name))
-		return -EINVAL;
+>  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
 
-fix it by allocating a usb request from IN endpoint of eem interface,
-and transmit the usb request to same IN endpoint of eem interface.
+For this one, the fact it overrides maxItems elsewhere makes this a little
+bit odd.  I guess we can get used to it being implicit.
 
-Signed-off-by: Linyu Yuan <linyyuan@codeaurora.com>
----
+>  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
 
-v3: use exist goto label 'next'
-v2: fix mail format and expand commit message
+Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
- drivers/usb/gadget/function/f_eem.c | 43 ++++++++++++++++++++++++++---
- 1 file changed, 39 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_eem.c b/drivers/usb/gadget/function/f_eem.c
-index 2cd9942707b4..5d38f29bda72 100644
---- a/drivers/usb/gadget/function/f_eem.c
-+++ b/drivers/usb/gadget/function/f_eem.c
-@@ -30,6 +30,11 @@ struct f_eem {
- 	u8				ctrl_id;
- };
- 
-+struct in_context {
-+	struct sk_buff	*skb;
-+	struct usb_ep	*ep;
-+};
-+
- static inline struct f_eem *func_to_eem(struct usb_function *f)
- {
- 	return container_of(f, struct f_eem, port.func);
-@@ -320,9 +325,12 @@ static int eem_bind(struct usb_configuration *c, struct usb_function *f)
- 
- static void eem_cmd_complete(struct usb_ep *ep, struct usb_request *req)
- {
--	struct sk_buff *skb = (struct sk_buff *)req->context;
-+	struct in_context *ctx = req->context;
- 
--	dev_kfree_skb_any(skb);
-+	dev_kfree_skb_any(ctx->skb);
-+	kfree(req->buf);
-+	usb_ep_free_request(ctx->ep, req);
-+	kfree(ctx);
- }
- 
- /*
-@@ -410,7 +418,9 @@ static int eem_unwrap(struct gether *port,
- 		 * b15:		bmType (0 == data, 1 == command)
- 		 */
- 		if (header & BIT(15)) {
--			struct usb_request	*req = cdev->req;
-+			struct usb_request	*req;
-+			struct in_context	*ctx;
-+			struct usb_ep		*ep;
- 			u16			bmEEMCmd;
- 
- 			/* EEM command packet format:
-@@ -439,11 +449,36 @@ static int eem_unwrap(struct gether *port,
- 				skb_trim(skb2, len);
- 				put_unaligned_le16(BIT(15) | BIT(11) | len,
- 							skb_push(skb2, 2));
-+
-+				ep = port->in_ep;
-+				req = usb_ep_alloc_request(ep, GFP_ATOMIC);
-+				if (!req) {
-+					dev_kfree_skb_any(skb2);
-+					goto next;
-+				}
-+
-+				req->buf = kmalloc(skb2->len, GFP_KERNEL);
-+				if (!req->buf) {
-+					usb_ep_free_request(ep, req);
-+					dev_kfree_skb_any(skb2);
-+					goto next;
-+				}
-+
-+				ctx = kmalloc(sizeof(*ctx), GFP_KERNEL);
-+				if (!ctx) {
-+					kfree(req->buf);
-+					usb_ep_free_request(ep, req);
-+					dev_kfree_skb_any(skb2);
-+					goto next;
-+				}
-+				ctx->skb = skb2;
-+				ctx->ep = ep;
-+
- 				skb_copy_bits(skb2, 0, req->buf, skb2->len);
- 				req->length = skb2->len;
- 				req->complete = eem_cmd_complete;
- 				req->zero = 1;
--				req->context = skb2;
-+				req->context = ctx;
- 				if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC))
- 					DBG(cdev, "echo response queue fail\n");
- 				break;
--- 
-2.25.1
 
