@@ -2,80 +2,280 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C173AA078
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 17:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A01C3AA343
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 20:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234669AbhFPP5l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 11:57:41 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59659 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S234754AbhFPP5a (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 11:57:30 -0400
-Received: (qmail 223233 invoked by uid 1000); 16 Jun 2021 11:55:19 -0400
-Date:   Wed, 16 Jun 2021 11:55:19 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Li Jun <jun.li@nxp.com>
-Cc:     peter.chen@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-imx@nxp.com,
-        zhipeng.wang_1@nxp.com
-Subject: Re: [PATCH] usb: chipidea: host: fix port index underflow and UBSAN
- complains
-Message-ID: <20210616155519.GB221112@rowland.harvard.edu>
-References: <1623810298-32001-1-git-send-email-jun.li@nxp.com>
+        id S231734AbhFPSkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 14:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230410AbhFPSkL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 14:40:11 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E8EC061574
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 11:38:05 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id n12so2684691pgs.13
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 11:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=rCB4Sxhjb3IJDur7EGEbMevpyoxyrDVxSR6KcbN8xsg=;
+        b=c6HGDoEBkrZnOYN+KG5Cj9LssJq6pOrfBXMKH8KmlFIeyMnI+Djj819PV1EzFJzj4L
+         k2tTvOG3RdSNcG1D4L2xpCKttDjQPW8p5ouinsKIchdUSVxmbIR7FMm8HffhTZUxddmT
+         COAe6zodmfpR+w9WY9OwIJXYAUYKdroQ9XIjra6MsODCQiUFUxWg7GeSfWcunJG0aVF8
+         6BM6F3KxrFrVfxcPNSNr7f106XSUMY9hiynyQEbIOFH3NnsnpIfvYbbH8fCQjxsu1yyI
+         WStZDju5wqXFKrKiED9FS0X0qGzuc6NCNNVNG+EU3xbapHwymXNtReLDP2JwXx7tZFX8
+         e91A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=rCB4Sxhjb3IJDur7EGEbMevpyoxyrDVxSR6KcbN8xsg=;
+        b=aseOzDeH1hySOwiEvfXA/TbgImY7CdZFxMBMROrcJDlQ5OAKu3IjsRtM5xHTdEWC1R
+         Kr2SKhL42afooO2IwyBD4YYDK6cu9f/bYLsz0gaOIwhV+ZAH92udcBcvd82D4YMWD1XT
+         6Z1S4xp8RtRFx7PfSW1iW+eC04pnFYAYmZq6BtpSQkc39ak+CwOxVFLjRoqz4CJjMKfX
+         tOn04TJxdL9quzRYC9TVV9mt/8Llq5MQ5qUX8nf8TjeKks/3xVp5SHnS7kFNu0m0uohw
+         46WH2j2J/enXA7CXR7YX5QT52+ymXMhe36DGmLbXdKPLTfzkh3LVVlYGLQAYe3r4xOdn
+         taMQ==
+X-Gm-Message-State: AOAM531ypNZ+apLsuLMVM6sEGCPp1SIG6dNQaacgP27qfKt7hQlGhcRH
+        vKh6hWG6V+X7LG9/kj14oeU1sRz5dwj1eyRYelSmFYiHuyEYyw==
+X-Google-Smtp-Source: ABdhPJwIzwOEQG2qNS9j+SS2lm4556/kvTZawVE9/b9bbpnw40+Hou56wbMF6FVOQDE+tMAujVl+9elX4jfyHTTXuPU=
+X-Received: by 2002:a63:f10b:: with SMTP id f11mr946117pgi.203.1623868684643;
+ Wed, 16 Jun 2021 11:38:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1623810298-32001-1-git-send-email-jun.li@nxp.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 16 Jun 2021 21:37:46 +0300
+Message-ID: <CAHp75Vc3RZSZaOD_DOd3nkm4MWHu_O8Kwibn18rXYQw2jWo4tg@mail.gmail.com>
+Subject: RCU stall and/or host->device broken transition
+To:     USB <linux-usb@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Ferry Toth <fntoth@gmail.com>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 10:24:58AM +0800, Li Jun wrote:
-> If wIndex is 0 (and it often is), these calculations underflow and
-> UBSAN complains, here resolve this by not decrementing the index when
-> it is equal to 0, this copies the solution from commit 85e3990bea49
-> ("USB: EHCI: avoid undefined pointer arithmetic and placate UBSAN")
-> 
-> Reported-by: zhipeng.wang <zhipeng.wang_1@nxp.com>
-> Signed-off-by: Li Jun <jun.li@nxp.com>
-> ---
->  drivers/usb/chipidea/host.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-> index e86d13c04bdb..25327b1b49b7 100644
-> --- a/drivers/usb/chipidea/host.c
-> +++ b/drivers/usb/chipidea/host.c
-> @@ -241,14 +241,16 @@ static int ci_ehci_hub_control(
->  {
->  	struct ehci_hcd	*ehci = hcd_to_ehci(hcd);
->  	u32 __iomem	*status_reg;
-> -	u32		temp;
-> +	u32		temp, port_index;
->  	unsigned long	flags;
->  	int		retval = 0;
->  	bool		done = false;
->  	struct device *dev = hcd->self.controller;
->  	struct ci_hdrc *ci = dev_get_drvdata(dev);
->  
-> -	status_reg = &ehci->regs->port_status[(wIndex & 0xff) - 1];
-> +	port_index = wIndex & 0xff;
-> +	port_index -= (port_index > 0);
-> +	status_reg = &ehci->regs->port_status[port_index];
->  
->  	spin_lock_irqsave(&ehci->lock, flags);
->  
-> @@ -288,7 +290,7 @@ static int ci_ehci_hub_control(
->  			ehci_writel(ehci, temp, status_reg);
->  		}
->  
-> -		set_bit((wIndex & 0xff) - 1, &ehci->suspended_ports);
-> +		set_bit(port_index, &ehci->suspended_ports);
->  		goto done;
->  	}
+Hi!
 
-Does this code test anywhere to ensure that wIndex > 0 and wIndex <= 
-number of ports?
+There is a bug somewhere and I have already spent too much time
+whacking the mole. Need some hints, ideas on how to debug, etc.
 
-Alan Stern
+So, my setup is that:
+platform: Intel Merrifield
+USB host and device controller: DWC3
+USB host connected device: Diolan DLN-2 IO expander
+In device mode: USB EEM
+
+
+The workflow
+~~~~~~~~~~
+The following steps to reproduce the issue (with some patches applied
+/ reverted it may give different results from less than 10% up to
+almost 100% of reproducibility):
+
+(Note the board has a manual switch of an ID pin and two connectors
+depending on the role)
+1. Connect the DLN-2 to USB A
+2. Connect the PC machine to USB micro-B
+3. Boot the board in device mode
+4. Setup USB EEM gadget via ConfigFS
+5. Turn the switch (see above note) to the host and back to the device
+mode as many times (usually a very few are needed) and with
+(semi-)arbitrary time in between (usually 2-5 seconds) till the issue
+occurs.
+
+
+The issue
+~~~~~~~~
+When switching from the host to the gadget mode
+ - the status LED on the DLN-2 board continues blinking (Vbus is on)
+ - the driver may be still xhci (rarely), but often already switched to dwc3
+ - due to above `lsusb` (rarely) still shows hub devices
+ - the EEM does not appear (PC doesn't see network iface)
+ - in ~50% cases RCU stall (there are only two CPUs)
+
+
+RCU stall
+~~~~~~~~
+cat /proc/interrupts
+ 16:     176129          0   IO-APIC  34-fasteoi   xhci-hcd:usb1
+
+[434689.740982] rcu: INFO: rcu_sched self-detected stall on CPU
+[434689.746856] rcu:    0-....: (24661 ticks this GP)
+idle=ee2/1/0x4000000000000000 softirq=4162/4163 fqs=5238
+[434689.756867]         (t=21000 jiffies g=8489 q=52)
+[434689.761204] NMI backtrace for cpu 0
+[434689.764919] CPU: 0 PID: 222 Comm: kworker/0:0 Not tainted 5.13.0-rc5+ #4
+[434689.771948] Hardware name: Intel Corporation Merrifield/BODEGA
+BAY, BIOS 542 2015.01.21:18.19.48
+[434689.781126] Workqueue: usb_hub_wq hub_event
+[434689.785590] Call Trace:
+[434689.788232]  <IRQ>
+[434689.790431]  dump_stack+0x69/0x8e
+[434689.793996]  nmi_cpu_backtrace.cold+0x32/0x69
+[434689.798612]  ? lapic_can_unplug_cpu+0x80/0x80
+[434689.803249]  nmi_trigger_cpumask_backtrace+0x8a/0xa0
+[434689.808508]  rcu_dump_cpu_stacks+0xbf/0xed
+[434689.812873]  rcu_sched_clock_irq.cold+0xc7/0x1e9
+[434689.817805]  update_process_times+0x8c/0xc0
+[434689.822255]  tick_sched_handle+0x34/0x50
+[434689.826432]  tick_sched_timer+0x7a/0xd0
+[434689.830513]  ? get_cpu_iowait_time_us+0x110/0x110
+[434689.835499]  __hrtimer_run_queues+0x157/0x350
+[434689.840171]  hrtimer_interrupt+0x110/0x2c0
+[434689.844569]  __sysvec_apic_timer_interrupt+0x76/0x150
+[434689.849911]  sysvec_apic_timer_interrupt+0x2f/0x90
+[434689.854990]  asm_sysvec_apic_timer_interrupt+0x12/0x20
+[434689.860415] RIP: 0010:_raw_spin_unlock_irqrestore+0x37/0x50
+[434689.866294] Code: 53 48 89 f3 48 8b 74 24 10 e8 45 fa 3a ff 48 89
+ef e8 6d 23 3b ff 9c 58 f6 c4 02 75 10 80 e7 02 74 01 fb 65 ff 0d e9
+d3 4f 78 <5b> 5d c3 e8 b1 3b ff ff eb e9 66 66 2e 0f 1f 84 00 00 00 00
+00 0f
+[434689.885773] RSP: 0000:ffff9ac140003da8 EFLAGS: 00000206
+[434689.891294] RAX: 0000000000000046 RBX: 0000000000000202 RCX:
+ffff8b7e4ad208d0
+[434689.898775] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
+ffffffff89460720
+[434689.906255] RBP: ffffffff89460720 R08: 00000000897fe2f0 R09:
+0000000000000001
+[434689.913733] R10: 0000000000000000 R11: ffff8b7e46226db0 R12:
+ffff8b7e4b29c000
+[434689.921214] R13: 0000000000000000 R14: ffff8b7e4b29c2f8 R15:
+ffff8b7e42e65780
+[434689.928798]  debug_dma_unmap_page+0x7e/0x90
+[434689.933324]  ? __lock_acquire.constprop.0+0x27d/0x550
+[434689.938681]  ? find_held_lock+0x2b/0x80
+[434689.942787]  usb_hcd_unmap_urb_for_dma+0x65/0x100
+[434689.947785]  __usb_hcd_giveback_urb+0x4b/0x100
+[434689.952513]  usb_giveback_urb_bh+0xa7/0x100
+[434689.956994]  tasklet_action_common.constprop.0+0xd0/0x140
+[434689.962712]  __do_softirq+0xeb/0x2dd
+[434689.966565]  irq_exit_rcu+0x95/0xc0
+[434689.970288]  common_interrupt+0x7b/0xa0
+[434689.974375]  </IRQ>
+[434689.976670]  asm_common_interrupt+0x1e/0x40
+[434689.981109] RIP: 0010:_raw_spin_unlock_irq+0x27/0x30
+[434689.986359] Code: 35 ff 90 0f 1f 44 00 00 55 48 8b 74 24 08 48 89
+fd 48 8d 7f 18 e8 79 fa 3a ff 48 89 ef e8 a1 23 3b ff fb 65 ff 0d 29
+d4 4f 78 <5d> c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 55 48 89 fd 48 83
+c7 18
+[434690.005836] RSP: 0000:ffff9ac140293b98 EFLAGS: 00000246
+[434690.011352] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
+ffff8b7e4ad208d0
+[434690.018832] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
+ffffffff8881ab00
+[434690.026309] RBP: ffffffff8881ab00 R08: 00000000897fe2f0 R09:
+0000000000000001
+[434690.033790] R10: ffff8b7e7e23ac30 R11: 0000000000000000 R12:
+0000000000000000
+[434690.041268] R13: ffff8b7e4b29c000 R14: ffff8b7e4b40c018 R15:
+ffff8b7e4af62950
+[434690.048840]  ? _raw_spin_unlock_irq+0x1f/0x30
+[434690.053465]  usb_hcd_submit_urb+0x294/0xbf0
+[434690.057948]  ? lockdep_init_map_type+0x47/0x220
+[434690.062805]  usb_start_wait_urb+0x65/0x160
+[434690.067230]  usb_control_msg+0xdf/0x140
+[434690.071355]  hub_event+0x8f4/0x1890
+[434690.075184]  ? lock_acquire+0x93/0x150
+[434690.079175]  ? process_one_work+0x1bc/0x4b0
+[434690.083652]  process_one_work+0x24d/0x4b0
+[434690.087970]  worker_thread+0x55/0x3c0
+[434690.091875]  ? rescuer_thread+0x390/0x390
+[434690.096154]  kthread+0x137/0x150
+[434690.099612]  ? __kthread_bind_mask+0x60/0x60
+[434690.104166]  ret_from_fork+0x22/0x30
+
+followed by Watchdog one
+
+[434725.296748] Kernel panic - not syncing: Kernel Watchdog
+[434725.302247] CPU: 0 PID: 222 Comm: kworker/0:0 Not tainted 5.13.0-rc5+ #4
+[434725.309242] Hardware name: Intel Corporation Merrifield/BODEGA
+BAY, BIOS 542 2015.01.21:18.19.48
+[434725.318367] Workqueue: usb_hub_wq hub_event
+[434725.322801] Call Trace:
+[434725.325424]  <IRQ>
+[434725.327607]  dump_stack+0x69/0x8e
+[434725.331145]  panic+0x102/0x2d1
+[434725.334460]  mid_wdt_irq+0x11/0x11
+[434725.338072]  __handle_irq_event_percpu+0x65/0x1c0
+[434725.343048]  handle_irq_event+0x55/0xb0
+[434725.347124]  handle_fasteoi_irq+0x78/0x1d0
+[434725.351461]  __common_interrupt+0x3e/0xa0
+[434725.355713]  common_interrupt+0x3b/0xa0
+[434725.359784]  asm_common_interrupt+0x1e/0x40
+[434725.364192] RIP: 0010:_raw_spin_lock_irqsave+0x0/0x50
+[434725.369501] Code: 8d 7f 18 45 31 c9 31 c9 41 b8 01 00 00 00 31 d2
+31 f6 e8 03 ff 3a ff 48 89 ef 58 5d e9 99 24 3b ff 66 0f 1f 84 00 00
+00 00 00 <0f> 1f 44 00 00 41 54 55 48 89 fd 9c 41 5c fa 65 ff 05 ea d5
+4f 78
+[434725.388866] RSP: 0000:ffff9ac140003d00 EFLAGS: 00000202
+[434725.394347] RAX: 0000000000000028 RBX: 00000000002b5ea8 RCX:
+ffff8b7e4ad208d0
+[434725.401779] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
+ffffffff887579e0
+[434725.409211] RBP: 0000000000000282 R08: 00000000897fe2f0 R09:
+0000000000000001
+[434725.416641] R10: 0000000000000000 R11: ffff8b7e46226db0 R12:
+ffff8b7e41282500
+[434725.424073] R13: ffff8b7e41281f00 R14: 0000000000000200 R15:
+000000000ad7aa00
+[434725.431582]  add_dma_entry+0xa9/0x1d0
+[434725.435487]  dma_map_page_attrs+0xd8/0x220
+[434725.439847]  usb_hcd_map_urb_for_dma+0x3b6/0x4f0
+[434725.444734]  usb_hcd_submit_urb+0x98/0xbf0
+[434725.449059]  ? __lock_acquire.constprop.0+0x27d/0x550
+[434725.454378]  ? find_held_lock+0x2b/0x80
+[434725.458493]  dln2_rx+0x1d6/0x2b0 [dln2]
+[434725.462595]  __usb_hcd_giveback_urb+0x91/0x100
+[434725.467291]  usb_giveback_urb_bh+0xa7/0x100
+[434725.471740]  tasklet_action_common.constprop.0+0xd0/0x140
+[434725.477420]  __do_softirq+0xeb/0x2dd
+[434725.481240]  irq_exit_rcu+0x95/0xc0
+[434725.484939]  common_interrupt+0x7b/0xa0
+[434725.489000]  </IRQ>
+[434725.491275]  asm_common_interrupt+0x1e/0x40
+[434725.495682] RIP: 0010:_raw_spin_unlock_irq+0x27/0x30
+[434725.500898] Code: 35 ff 90 0f 1f 44 00 00 55 48 8b 74 24 08 48 89
+fd 48 8d 7f 18 e8 79 fa 3a ff 48 89 ef e8 a
+1 23 3b ff fb 65 ff 0d 29 d4 4f 78 <5d> c3 0f 1f 80 00 00 00 00 0f 1f
+44 00 00 55 48 89 fd 48 83 c7 18
+[434725.520261] RSP: 0000:ffff9ac140293b98 EFLAGS: 00000246
+[434725.525742] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
+ffff8b7e4ad208d0
+[434725.533174] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
+ffffffff8881ab00
+[434725.540606] RBP: ffffffff8881ab00 R08: 00000000897fe2f0 R09:
+0000000000000001
+[434725.548037] R10: ffff8b7e7e23ac30 R11: 0000000000000000 R12:
+0000000000000000
+[434725.555469] R13: ffff8b7e4b29c000 R14: ffff8b7e4b40c018 R15:
+ffff8b7e4af62950
+[434725.562975]  ? _raw_spin_unlock_irq+0x1f/0x30
+[434725.567571]  usb_hcd_submit_urb+0x294/0xbf0
+[434725.572017]  ? lockdep_init_map_type+0x47/0x220
+[434725.576831]  usb_start_wait_urb+0x65/0x160
+[434725.581213]  usb_control_msg+0xdf/0x140
+[434725.585302]  hub_event+0x8f4/0x1890
+[434725.589087]  ? lock_acquire+0x93/0x150
+[434725.593053]  ? process_one_work+0x1bc/0x4b0
+[434725.597494]  process_one_work+0x24d/0x4b0
+[434725.601776]  worker_thread+0x55/0x3c0
+[434725.605657]  ? rescuer_thread+0x390/0x390
+[434725.609904]  kthread+0x137/0x150
+[434725.613342]  ? __kthread_bind_mask+0x60/0x60
+[434725.617862]  ret_from_fork+0x22/0x30
+[434725.622038] Kernel Offset: 0x5e00000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[434725.633177] ---[ end Kernel panic - not syncing: Kernel Watchdog ]---
+
+Any ideas, hints, etc are welcome!
+
+-- 
+With Best Regards,
+Andy Shevchenko
