@@ -2,52 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13FAE3A9344
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 08:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD643A934B
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 08:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbhFPG5Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 02:57:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34578 "EHLO mail.kernel.org"
+        id S231964AbhFPG5Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 02:57:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34626 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231168AbhFPG5X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        id S231400AbhFPG5X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
         Wed, 16 Jun 2021 02:57:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E86AE613B9;
-        Wed, 16 Jun 2021 06:55:17 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 10776613C2;
+        Wed, 16 Jun 2021 06:55:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1623826518;
-        bh=JNLoEzRSUmckl8eLY94oHxsjeBDCiLlJ5aZAc+3RHhw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=bIRjmcsZh0nDrGHZVv9Hdcp/Q7V4uZte3M33hb9qtbnnI2Do02YGKEM+D6wRBXJX8
-         fXP7U8eEtlIoGGBRfcltvRJKfVLv6QfEzHWXg0RqgPTC/cqVmoVPlD3eInloJymMLC
-         YFImERmycprD4hLIQfwK4FMud3KE6g98aGIK3QdPZWSv6z/ri/7N3dR5lTH3MJ8aUe
-         Bp3u9e2L/j8FbtxvpC2tQVJI5GuWTuVepuuIxKMIBQ2anYz1TSwnwP/6dC4Hclk/V0
-         JEx814LnbdMa7n/p9vSS8FAmzoK9B1aSqdGnO1eWFyBdMyWaXbzC4IY2JvfPF0KgqH
-         Uy3+bF3abccxA==
+        bh=k6NTNp63lzWLLXxRP68+OTKIkex+SaEUw6CMpvbd8gk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=VdmCExCcU4NX8miOD5KFN1SAdvmsPXrhXsRf5aQh+0RR9pJsNt8hHByxo+NOFnmso
+         hFMMe5jLl+02aRvg7mpH/LcfRs97W9y8Bt4W2HDcfZ0Lx58FKwK5DQPiG+c+WhOTbC
+         S7PCpXlhfEODVBdvFkuxQFl3gPZadNdl4U8UOdQrkCPijd1QQ8SIgeyWfS0ibuVEB7
+         deo0IRjYq1DKuWHs4wP+aVY0Nn2ArX3+PrsMcgksUhD+RgViOwZxRCduTtD5UbU/l+
+         mA+WZBszn7wsHZtUTFKkhTpme/85wZypOHpdNZLwNd1Hihb8UGJPVsy6d+MvGxo2Ed
+         vIgMfa5zrq+Yw==
 Received: by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1ltPSG-004lCD-7Q; Wed, 16 Jun 2021 08:55:16 +0200
+        id 1ltPSG-004lCS-Cq; Wed, 16 Jun 2021 08:55:16 +0200
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Linux Doc Mailing List <linux-doc@vger.kernel.org>
 Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        "Theodore Ts'o" <tytso@mit.edu>,
         Alan Stern <stern@rowland.harvard.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jakub Kicinski <kuba@kernel.org>, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        coresight@lists.linaro.org, intel-wired-lan@lists.osuosl.org,
-        linux-arm-kernel@lists.infradead.org, linux-ext4@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH 0/8] Replace some bad characters on documents
-Date:   Wed, 16 Jun 2021 08:55:06 +0200
-Message-Id: <cover.1623826294.git.mchehab+huawei@kernel.org>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [PATCH 4/8] docs: usb: replace some characters
+Date:   Wed, 16 Jun 2021 08:55:10 +0200
+Message-Id: <0a4b0c38a9cd1133402a04a7ff60fefd9682d42e.1623826294.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <cover.1623826294.git.mchehab+huawei@kernel.org>
+References: <cover.1623826294.git.mchehab+huawei@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -56,40 +47,42 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Jon,
+The conversion tools used during DocBook/LaTeX/html/Markdown->ReST
+conversion and some cut-and-pasted text contain some characters that
+aren't easily reachable on standard keyboards and/or could cause
+troubles when parsed by the documentation build system.
 
-This series contain the remaining 8 patches I submitted at v3 that
-weren't merged yet at -next.
+Replace the occurences of the following characters:
 
-This series is rebased on the top of your docs-next branch.
+	- U+feff ('﻿'): BOM
+	  as it is not needed on UTF-8
 
-No changes here, except by some Reviewed/ack lines, and at the
-name of the final patch (per PCI maintainer's request).
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+---
+ Documentation/usb/ehci.rst           | 2 +-
+ Documentation/usb/gadget_printer.rst | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Mauro Carvalho Chehab (8):
-  docs: admin-guide: reporting-issues.rst: replace some characters
-  docs: trace: coresight: coresight-etm4x-reference.rst: replace some
-    characters
-  docs: driver-api: ioctl.rst: replace some characters
-  docs: usb: replace some characters
-  docs: vm: zswap.rst: replace some characters
-  docs: filesystems: ext4: blockgroup.rst: replace some characters
-  docs: networking: device_drivers: replace some characters
-  docs: PCI: Replace non-breaking spaces to avoid PDF issues
-
- Documentation/PCI/acpi-info.rst                | 18 +++++++++---------
- Documentation/admin-guide/reporting-issues.rst |  2 +-
- Documentation/driver-api/ioctl.rst             |  8 ++++----
- Documentation/filesystems/ext4/blockgroup.rst  |  2 +-
- .../device_drivers/ethernet/intel/i40e.rst     |  6 +++---
- .../device_drivers/ethernet/intel/iavf.rst     |  2 +-
- .../coresight/coresight-etm4x-reference.rst    |  2 +-
- Documentation/usb/ehci.rst                     |  2 +-
- Documentation/usb/gadget_printer.rst           |  2 +-
- Documentation/vm/zswap.rst                     |  4 ++--
- 10 files changed, 24 insertions(+), 24 deletions(-)
-
+diff --git a/Documentation/usb/ehci.rst b/Documentation/usb/ehci.rst
+index 31f650e7c1b4..76190501907a 100644
+--- a/Documentation/usb/ehci.rst
++++ b/Documentation/usb/ehci.rst
+@@ -1,4 +1,4 @@
+-﻿===========
++===========
+ EHCI driver
+ ===========
+ 
+diff --git a/Documentation/usb/gadget_printer.rst b/Documentation/usb/gadget_printer.rst
+index 5e5516c69075..e611a6d91093 100644
+--- a/Documentation/usb/gadget_printer.rst
++++ b/Documentation/usb/gadget_printer.rst
+@@ -1,4 +1,4 @@
+-﻿===============================
++===============================
+ Linux USB Printer Gadget Driver
+ ===============================
+ 
 -- 
 2.31.1
-
 
