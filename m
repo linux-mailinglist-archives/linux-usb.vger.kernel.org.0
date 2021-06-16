@@ -2,83 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCCC53AA4FE
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 22:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5669D3AA786
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 01:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbhFPUNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 16:13:10 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:41348 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231547AbhFPUM4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Jun 2021 16:12:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=BfYsI7z39PAUGQ/stOp0Qiw8/9pQyWAMWRq2/aFB2ak=; b=L4sF/Wno662v7Y6vzpw+7OVeV2
-        vMP6R4N/JxVgUL0oWg1IWFiirSCJ2Ug27prlBC5YEDbupnb1MGqUiHg4EZNC2edR3QKSMK4lH4qo0
-        gRtHhPBBRgaJBhqN7mP85MJX/A33HCRi4ZVmVL9lx7uO+41JFYN9CZ6nSg2D/5jEQlTY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ltbs0-009m1A-A9; Wed, 16 Jun 2021 22:10:40 +0200
-Date:   Wed, 16 Jun 2021 22:10:40 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Lee Jones <lee.jones@linaro.org>, EJ Hsu <ejh@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-Message-ID: <YMpawKzzect5nqs9@lunn.ch>
-References: <20210616195303.1231429-1-keescook@chromium.org>
- <YMpY49PLAyObVxC4@lunn.ch>
+        id S234633AbhFPXfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 19:35:40 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:30787 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234642AbhFPXfh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 19:35:37 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1623886411; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=fLfryfp35i1oOAe40HSpJ35HKGxrhO8MsCZS16Y/a7Y=; b=XlvC2uREgbeS0AyLyimJRmFYg3PrdlvivGj9xsPu+i6vIfy8lrcE7PVVRS95Gelm25XwsOx/
+ n4hBtXcaieInnbc4R0IObJj+AE6hWmtOsCfylqZUpqtgCqVJ6w01j42oTozZ0UGLR1dlsq5K
+ Cglbsaxlr/ChVfeuQ7Mc0N4HklM=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 60ca8a2de27c0cc77faea7e3 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Jun 2021 23:33:01
+ GMT
+Sender: linyyuan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1B562C43217; Wed, 16 Jun 2021 23:33:01 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost.localdomain (unknown [101.87.142.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: linyyuan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id CC3AFC433D3;
+        Wed, 16 Jun 2021 23:32:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CC3AFC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
+From:   Linyu Yuan <linyyuan@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        Linyu Yuan <linyyuan@codeaurora.org>
+Subject: [PATCH v2] net: cdc_eem: fix tx fixup skb leak
+Date:   Thu, 17 Jun 2021 07:32:32 +0800
+Message-Id: <20210616233232.4561-1-linyyuan@codeaurora.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YMpY49PLAyObVxC4@lunn.ch>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 10:02:43PM +0200, Andrew Lunn wrote:
-> On Wed, Jun 16, 2021 at 12:53:03PM -0700, Kees Cook wrote:
-> > In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> > field bounds checking for memcpy(), memmove(), and memset(), avoid
-> > intentionally reading across neighboring array fields.
-> > 
-> > The memcpy() is copying the entire structure, not just the first array.
-> > Adjust the source argument so the compiler can do appropriate bounds
-> > checking.
-> > 
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> >  drivers/net/usb/r8152.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> > index 85039e17f4cd..5f08720bf1c9 100644
-> > --- a/drivers/net/usb/r8152.c
-> > +++ b/drivers/net/usb/r8152.c
-> > @@ -8678,7 +8678,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
-> >  {
-> >  	switch (stringset) {
-> >  	case ETH_SS_STATS:
-> > -		memcpy(data, *rtl8152_gstrings, sizeof(rtl8152_gstrings));
-> > +		memcpy(data, rtl8152_gstrings, sizeof(rtl8152_gstrings));
-> >  		break;
-> 
-> Is this correct? The call is supposed to return all the statistic
-> strings, which would be the entire structure.
+when usbnet transmit a skb, eem fixup it in eem_tx_fixup(),
+if skb_copy_expand() failed, it return NULL,
+usbnet_start_xmit() will have no chance to free original skb.
 
-Ah! now i think i get it.
+fix it by free orginal skb in eem_tx_fixup() first,
+then check skb clone status, if failed, return NULL to usbnet.
 
-Although *rtl8152_gstrings == rtl8152_gstrings in terms of addresses,
-the compiler sees that *rtl8152_gstrings is sizeof(ETH_GSTRING_LEN),
-but we are copying sizeof(rtl8152_gstrings), so it will issue a
-warning. So you remove the * to indicate we are interesting in the
-whole structure of arrays.
+Fixes: 9f722c0978b0 ("usbnet: CDC EEM support (v5)")
+Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
+---
 
-      Andrew
+v2: add Fixes tag
+
+ drivers/net/usb/cdc_eem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/usb/cdc_eem.c b/drivers/net/usb/cdc_eem.c
+index 2e60bc1b9a6b..359ea0d10e59 100644
+--- a/drivers/net/usb/cdc_eem.c
++++ b/drivers/net/usb/cdc_eem.c
+@@ -123,10 +123,10 @@ static struct sk_buff *eem_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
+ 	}
+ 
+ 	skb2 = skb_copy_expand(skb, EEM_HEAD, ETH_FCS_LEN + padlen, flags);
++	dev_kfree_skb_any(skb);
+ 	if (!skb2)
+ 		return NULL;
+ 
+-	dev_kfree_skb_any(skb);
+ 	skb = skb2;
+ 
+ done:
+-- 
+2.25.1
+
