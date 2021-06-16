@@ -2,156 +2,176 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7E93A8E2A
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 03:17:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7343A8EBA
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 04:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbhFPBTP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 15 Jun 2021 21:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbhFPBTN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 15 Jun 2021 21:19:13 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BE4EC061574
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 18:17:07 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id a15so576758qtx.13
-        for <linux-usb@vger.kernel.org>; Tue, 15 Jun 2021 18:17:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ArgsnqaZfbK1PmZFHo3aGB4ctcJO4bEDv0BIWr1Mhqo=;
-        b=qM+dE4F9/DjU/ahxr/CX4LfZaxeCQk+2hrHx0zpjXHeNrzNUMAaBq5JV+3PIzDlGEv
-         8T5f3bpmDhXjRL9R3rTq2wtJND8qHG2NurOY6x8aq39WQE3vVikqlFslgABThBVswD0e
-         KPZd9tXgCkDVY53z+GQCsht4sGmUqVjGML7rOwWTc0slNSFsPVal72AXHGO39odAzi6y
-         nT19fE5d14DjqScBxS91U6XO+Olob9UmFo7dpvRz7oEW7rZhM2USm7NEYTmA/m/4l9wO
-         KxInis99dTPQlzEf9QGsyB7yKpjP0ppihqltIT0tGksbt0LrYKDNfLBi9zp76wmjcelH
-         LSRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ArgsnqaZfbK1PmZFHo3aGB4ctcJO4bEDv0BIWr1Mhqo=;
-        b=rmx9v1L2jJoGZY5u1SL7oxcuf8mHfxvaX0UevdFuubDuPfy9Vufiwwwr7i+fi2KXHT
-         HCWMB9oVsEW1A+KmAj1Y3u6Cj/j3Kshmy7Km7akgA1MQnvYYve1U7y8xtkcTVr1/n9AE
-         2leaIm667eLHD0SHFiBlfY1lMzVDO2m6ieQmtjDodB9lQ/7IHMim3AP/7TzLaFiEkvLh
-         09/3CrD2Tb9ECTeWuR3yP+pxOwQAcOAPju4F+SWqT3q1GnvYT23f/K1XjmE7caMJ+PGD
-         fMdIAPfDMm5+SIno0Lhke1L6ws4xRq6cU4tTngqhf4vds9D9hNFn7Lp7nnulhnDYI81r
-         Fy2g==
-X-Gm-Message-State: AOAM5318W1WgyH2iu768WZAOU2fv3ZjytP1P7p9c1yUDv0GEQZb6AyKJ
-        Dc2chgdZZd9hoRWzJFSJqNU5D8n796PesW38NxnKAg==
-X-Google-Smtp-Source: ABdhPJx09zSWtbxHsXmUbAXN1gmSYYNdkbx+Lx1s+RJe8HmKOh+Zf1qUVYShN7DePwlZXldCU7u9vizdGLhdLWvhZsg=
-X-Received: by 2002:ac8:4e1b:: with SMTP id c27mr2576154qtw.22.1623806226037;
- Tue, 15 Jun 2021 18:17:06 -0700 (PDT)
+        id S231287AbhFPCNG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 15 Jun 2021 22:13:06 -0400
+Received: from mga12.intel.com ([192.55.52.136]:57583 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231172AbhFPCNF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 15 Jun 2021 22:13:05 -0400
+IronPort-SDR: P/s2KY9UKzbKpuZJGmkDBpwoHVSxzsshpVyYE98SBgfiXWOyunM1o/gXQZx78d/zjPJcFbmmxA
+ OFTQcEYROe0w==
+X-IronPort-AV: E=McAfee;i="6200,9189,10016"; a="185793749"
+X-IronPort-AV: E=Sophos;i="5.83,276,1616482800"; 
+   d="scan'208";a="185793749"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2021 19:11:00 -0700
+IronPort-SDR: IYEddz41ZdTT+K6XBVKXnD16RAO5Ky5boG7Sp/GXFmFFYplmLpG3nY4MLONVvywTilug7R5UP8
+ q08dFM2Z1cEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,276,1616482800"; 
+   d="scan'208";a="554645227"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2021 19:10:59 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ltL18-0000kT-Az; Wed, 16 Jun 2021 02:10:58 +0000
+Date:   Wed, 16 Jun 2021 10:09:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 1da8116eb0c5dfc05cfb89896239badb18c4daf3
+Message-ID: <60c95d77.eh34F9xh/rXk5OJX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20210615080817.1417169-1-kyletso@google.com> <CAPTae5JfhDdCjNh8jxE6XMsvV0cC3McH6Hx4MGoOgrcRrT94Vg@mail.gmail.com>
-In-Reply-To: <CAPTae5JfhDdCjNh8jxE6XMsvV0cC3McH6Hx4MGoOgrcRrT94Vg@mail.gmail.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Wed, 16 Jun 2021 09:16:49 +0800
-Message-ID: <CAGZ6i=0RgyYJBvw7g+tGyFwBvBE-nV_WjpyZQ3HGToRgC-JhAQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: tcpm: Relax disconnect threshold during
- power negotiation
-To:     Badhri Jagan Sridharan <badhri@google.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 16, 2021 at 2:06 AM Badhri Jagan Sridharan
-<badhri@google.com> wrote:
->
-> On Tue, Jun 15, 2021 at 1:08 AM Kyle Tso <kyletso@google.com> wrote:
-> >
-> > If the voltage is being decreased in power negotiation, the Source will
-> > set the power supply to operate at the new voltage level before sending
-> > PS_RDY. For non-PPS negotiation, relax the disconnect threshold on Sink
-> > after receiving Accept Message to ensure the relaxed setting is enabled
-> > before the voltage collapse. For PPS, relax the threshold before
-> > sending Request Message so that it will not race with Source which
-> > begins to adjust the voltage right after it sends Accept Message.
-> >
-> > The real threshold will be set after Sink receives PS_RDY Message.
-> >
-> > Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
-> > Cc: Badhri Jagan Sridharan <badhri@google.com>
-> > Signed-off-by: Kyle Tso <kyletso@google.com>
-> > ---
-> > Changes since v1:
-> > - move the timing of setting threshold up to "before sending Request"
-> >   for PPS power negotiation so that it won't race with the Source.
-> > - PPS: if it fails to send the Request, fallback to previous threshold
-> > - PPS: if the Source doesn't respond Accept, fallback to previous
-> >   threshold
-> > - update the commit message for above changes
-> >
-> >  drivers/usb/typec/tcpm/tcpm.c | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index 0db685d5d9c0..00f3fd7c05d6 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -2599,6 +2599,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
-> >                             port->send_discover)
-> >                                 port->vdm_sm_running = true;
-> >
-> > +                       /* Threshold was relaxed before sending Request. Restore it back. */
-> > +                       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-> > +                                                              port->pps_data.active,
-> > +                                                              port->supply_voltage);
-> > +
-> >                         tcpm_set_state(port, SNK_READY, 0);
-> >                         break;
-> >                 case DR_SWAP_SEND:
-> > @@ -2646,6 +2651,8 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
-> >                 switch (port->state) {
-> >                 case SNK_NEGOTIATE_CAPABILITIES:
-> >                         port->pps_data.active = false;
-> > +                       /* Voltage is going to be at new level. Relax the threshold here. */
-> > +                       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
-> >                         tcpm_set_state(port, SNK_TRANSITION_SINK, 0);
-> >                         break;
-> >                 case SNK_NEGOTIATE_PPS_CAPABILITIES:
-> > @@ -3423,6 +3430,9 @@ static int tcpm_pd_send_pps_request(struct tcpm_port *port)
-> >         if (ret < 0)
-> >                 return ret;
-> >
-> > +       /* Relax the threshold as voltage will be adjusted right after Accept Message. */
-> This makes sense. Shouldn't we have the same approach for
-> tcpm_pd_send_request as it's equally applicable for fixed RDO as well
-> ?
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 1da8116eb0c5dfc05cfb89896239badb18c4daf3  arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
 
-I don't think we need to do that because for the power negotiation
-using Fixed RDO, the voltage adjustment from Source side takes place
-after the time sending Accept Message plus tSrcTransition (25~35ms).
-So setting the threshold after the Sink gets Accept Message should be
-enough.
+elapsed time: 721m
 
-thanks,
-Kyle
+configs tested: 114
+configs skipped: 2
 
-> > +       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
-> > +
-> >         memset(&msg, 0, sizeof(msg));
-> >         msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
-> >                                   port->pwr_role,
-> > @@ -4196,6 +4206,10 @@ static void run_state_machine(struct tcpm_port *port)
-> >         case SNK_NEGOTIATE_PPS_CAPABILITIES:
-> >                 ret = tcpm_pd_send_pps_request(port);
-> >                 if (ret < 0) {
-> > +                       /* Restore back to the original state */
-> > +                       tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-> > +                                                              port->pps_data.active,
-> > +                                                              port->supply_voltage);
-> >                         port->pps_status = ret;
-> >                         /*
-> >                          * If this was called due to updates to sink
-> > --
-> > 2.32.0.272.g935e593368-goog
-> >
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                      chrp32_defconfig
+xtensa                generic_kc705_defconfig
+powerpc                 mpc8540_ads_defconfig
+arm                        oxnas_v6_defconfig
+s390                                defconfig
+arm                        multi_v7_defconfig
+arm                            lart_defconfig
+sh                          sdk7786_defconfig
+xtensa                    smp_lx200_defconfig
+arm                          collie_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sparc                       sparc32_defconfig
+powerpc64                        alldefconfig
+mips                 decstation_r4k_defconfig
+openrisc                            defconfig
+sh                        sh7763rdp_defconfig
+mips                      bmips_stb_defconfig
+um                            kunit_defconfig
+arm                            zeus_defconfig
+m68k                          atari_defconfig
+arm                        mvebu_v5_defconfig
+ia64                            zx1_defconfig
+powerpc                     ksi8560_defconfig
+ia64                             alldefconfig
+h8300                       h8s-sim_defconfig
+arm                           u8500_defconfig
+powerpc                       holly_defconfig
+sh                        sh7785lcr_defconfig
+mips                     cu1000-neo_defconfig
+m68k                       m5275evb_defconfig
+arm                        keystone_defconfig
+arm                         palmz72_defconfig
+powerpc                mpc7448_hpc2_defconfig
+m68k                          sun3x_defconfig
+i386                                defconfig
+arm                          exynos_defconfig
+sh                           se7343_defconfig
+arm                              alldefconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a002-20210615
+i386                 randconfig-a006-20210615
+i386                 randconfig-a004-20210615
+i386                 randconfig-a001-20210615
+i386                 randconfig-a005-20210615
+i386                 randconfig-a003-20210615
+i386                 randconfig-a015-20210615
+i386                 randconfig-a013-20210615
+i386                 randconfig-a016-20210615
+i386                 randconfig-a012-20210615
+i386                 randconfig-a014-20210615
+i386                 randconfig-a011-20210615
+x86_64               randconfig-a001-20210615
+x86_64               randconfig-a004-20210615
+x86_64               randconfig-a002-20210615
+x86_64               randconfig-a003-20210615
+x86_64               randconfig-a006-20210615
+x86_64               randconfig-a005-20210615
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210615
+x86_64               randconfig-a015-20210615
+x86_64               randconfig-a011-20210615
+x86_64               randconfig-a012-20210615
+x86_64               randconfig-a014-20210615
+x86_64               randconfig-a016-20210615
+x86_64               randconfig-a013-20210615
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
