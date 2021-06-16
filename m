@@ -2,70 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DABC83AA4F2
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 22:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCC53AA4FE
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 22:11:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232905AbhFPUML (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 16:12:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58314 "EHLO mail.kernel.org"
+        id S233195AbhFPUNK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 16:13:10 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:41348 "EHLO vps0.lunn.ch"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232586AbhFPUMK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Jun 2021 16:12:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 94B1D613CD;
-        Wed, 16 Jun 2021 20:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1623874203;
-        bh=4Gt/aoI3FNo6u7V9Lxpm3MdaYQU+NTOW+paRxy40gyY=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Amxym1gDYBqP1qzPAel24TXflq6JFkmZ/YLnxTSQYTRI2nBvcmM3L1vtfsqC2SdrK
-         xw2cJ11aby/LloHWOj6a3+J5ZvFL2Ijrfhb1HZHBuzSzykZ4Pgv4kWTJlnwpKow0Sq
-         kkVuF3ur/quRFHpQqa0yarcBQEtP3n3KLTEb8zpLSHbDX0OeJ6ewsQFPQQGHrzOTmW
-         wnT3SYw8KfgVtadI6AD5qYAHOOMPSLnz0A3ht+n4f/nLu129avANwuAwRcb85PpItk
-         4uLkkfrFuLUT0c8umBn0zpoCmtBkg+3qMZ6Ii7OH6vVVtdXFUd9+YK9L5uHdU1hQhH
-         qncwTVXsFdcIg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 87BC260A54;
-        Wed, 16 Jun 2021 20:10:03 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162387420355.22643.16457529126274171882.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Jun 2021 20:10:03 +0000
-References: <20210616195303.1231429-1-keescook@chromium.org>
-In-Reply-To: <20210616195303.1231429-1-keescook@chromium.org>
+        id S231547AbhFPUM4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Jun 2021 16:12:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=BfYsI7z39PAUGQ/stOp0Qiw8/9pQyWAMWRq2/aFB2ak=; b=L4sF/Wno662v7Y6vzpw+7OVeV2
+        vMP6R4N/JxVgUL0oWg1IWFiirSCJ2Ug27prlBC5YEDbupnb1MGqUiHg4EZNC2edR3QKSMK4lH4qo0
+        gRtHhPBBRgaJBhqN7mP85MJX/A33HCRi4ZVmVL9lx7uO+41JFYN9CZ6nSg2D/5jEQlTY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ltbs0-009m1A-A9; Wed, 16 Jun 2021 22:10:40 +0200
+Date:   Wed, 16 Jun 2021 22:10:40 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     Kees Cook <keescook@chromium.org>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        hayeswang@realtek.com, lee.jones@linaro.org, ejh@nvidia.com,
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>,
+        Lee Jones <lee.jones@linaro.org>, EJ Hsu <ejh@nvidia.com>,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
         linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
+Message-ID: <YMpawKzzect5nqs9@lunn.ch>
+References: <20210616195303.1231429-1-keescook@chromium.org>
+ <YMpY49PLAyObVxC4@lunn.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMpY49PLAyObVxC4@lunn.ch>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (refs/heads/master):
-
-On Wed, 16 Jun 2021 12:53:03 -0700 you wrote:
-> In preparation for FORTIFY_SOURCE performing compile-time and run-time
-> field bounds checking for memcpy(), memmove(), and memset(), avoid
-> intentionally reading across neighboring array fields.
+On Wed, Jun 16, 2021 at 10:02:43PM +0200, Andrew Lunn wrote:
+> On Wed, Jun 16, 2021 at 12:53:03PM -0700, Kees Cook wrote:
+> > In preparation for FORTIFY_SOURCE performing compile-time and run-time
+> > field bounds checking for memcpy(), memmove(), and memset(), avoid
+> > intentionally reading across neighboring array fields.
+> > 
+> > The memcpy() is copying the entire structure, not just the first array.
+> > Adjust the source argument so the compiler can do appropriate bounds
+> > checking.
+> > 
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  drivers/net/usb/r8152.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> > index 85039e17f4cd..5f08720bf1c9 100644
+> > --- a/drivers/net/usb/r8152.c
+> > +++ b/drivers/net/usb/r8152.c
+> > @@ -8678,7 +8678,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+> >  {
+> >  	switch (stringset) {
+> >  	case ETH_SS_STATS:
+> > -		memcpy(data, *rtl8152_gstrings, sizeof(rtl8152_gstrings));
+> > +		memcpy(data, rtl8152_gstrings, sizeof(rtl8152_gstrings));
+> >  		break;
 > 
-> The memcpy() is copying the entire structure, not just the first array.
-> Adjust the source argument so the compiler can do appropriate bounds
-> checking.
-> 
-> [...]
+> Is this correct? The call is supposed to return all the statistic
+> strings, which would be the entire structure.
 
-Here is the summary with links:
-  - r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-    https://git.kernel.org/netdev/net/c/99718abdc00e
+Ah! now i think i get it.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Although *rtl8152_gstrings == rtl8152_gstrings in terms of addresses,
+the compiler sees that *rtl8152_gstrings is sizeof(ETH_GSTRING_LEN),
+but we are copying sizeof(rtl8152_gstrings), so it will issue a
+warning. So you remove the * to indicate we are interesting in the
+whole structure of arrays.
 
-
+      Andrew
