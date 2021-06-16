@@ -2,110 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A1D3A9A56
-	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 14:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4573A9C44
+	for <lists+linux-usb@lfdr.de>; Wed, 16 Jun 2021 15:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbhFPM34 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 08:29:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48688 "EHLO mail.kernel.org"
+        id S233111AbhFPNnL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 09:43:11 -0400
+Received: from mga11.intel.com ([192.55.52.93]:6739 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232637AbhFPM3l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 16 Jun 2021 08:29:41 -0400
-Received: from jic23-huawei (cpc108967-cmbg20-2-0-cust86.5-4.cable.virginm.net [81.101.6.87])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BBA8561369;
-        Wed, 16 Jun 2021 12:27:07 +0000 (UTC)
-Date:   Wed, 16 Jun 2021 13:29:08 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, dmaengine@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-iio@vger.kernel.org,
-        alsa-devel@alsa-project.org, iommu@lists.linux-foundation.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-can@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>, Stephen Boyd <sboyd@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Vinod Koul <vkoul@kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        id S233162AbhFPNnI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 16 Jun 2021 09:43:08 -0400
+IronPort-SDR: cdU14Jz4ghW37p3YToV4VZ6GisTpFme2FHdyaZnZtrUiXn4Wy2093K/aXaJcDV8SkwqQmRREzE
+ EQmp2IvMVgNg==
+X-IronPort-AV: E=McAfee;i="6200,9189,10016"; a="203154409"
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="203154409"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2021 06:40:42 -0700
+IronPort-SDR: Lt07RJrdxe5oOrfZmM+ZpHT4AIw0XB/Z9/g/TyrMb9KXvSXMSRmUpNkEjbqEWfdRgR1Xmgw7lu
+ mCQBv1C0BtBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,278,1616482800"; 
+   d="scan'208";a="554809828"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 16 Jun 2021 06:40:39 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 16 Jun 2021 16:40:39 +0300
+Date:   Wed, 16 Jun 2021 16:40:38 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Badhri Jagan Sridharan <badhri@google.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
-Message-ID: <20210616132908.76a780b8@jic23-huawei>
-In-Reply-To: <20210615191543.1043414-1-robh@kernel.org>
-References: <20210615191543.1043414-1-robh@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpci: Fix up sink disconnect thresholds
+ for PD
+Message-ID: <YMn/Vu13ApE1t024@kuha.fi.intel.com>
+References: <20210615174323.1160132-1-badhri@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615174323.1160132-1-badhri@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 15 Jun 2021 13:15:43 -0600
-Rob Herring <robh@kernel.org> wrote:
-
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
+On Tue, Jun 15, 2021 at 10:43:23AM -0700, Badhri Jagan Sridharan wrote:
+> "Table 4-3 VBUS Sink Characteristics" of "Type-C Cable and Connector
+> Specification" defines the disconnect voltage thresholds of various
+> configurations. This change fixes the disconnect threshold voltage
+> calculation based on vSinkPD_min and vSinkDisconnectPD as defined
+> by the table.
 > 
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
+> Fixes: e1a97bf80a022 ("usb: typec: tcpci: Implement Auto discharge disconnect callbacks")
+> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 18 ++++++++++++------
+>  1 file changed, 12 insertions(+), 6 deletions(-)
 > 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 22862345d1ab..9858716698df 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -21,8 +21,12 @@
+>  #define	PD_RETRY_COUNT_DEFAULT			3
+>  #define	PD_RETRY_COUNT_3_0_OR_HIGHER		2
+>  #define	AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV	3500
+> -#define	AUTO_DISCHARGE_PD_HEADROOM_MV		850
+> -#define	AUTO_DISCHARGE_PPS_HEADROOM_MV		1250
+> +#define	VSINKPD_MIN_IR_DROP_MV			750
+> +#define	VSRC_NEW_MIN_PERCENT			95
+> +#define	VSRC_VALID_MIN_MV			500
+> +#define	VPPS_NEW_MIN_PERCENT			95
+> +#define	VPPS_VALID_MIN_MV			100
+> +#define	VSINKDISCONNECT_PD_MIN_PERCENT		90
+>  
+>  #define tcpc_presenting_rd(reg, cc) \
+>  	(!(TCPC_ROLE_CTRL_DRP & (reg)) && \
+> @@ -351,11 +355,13 @@ static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum ty
+>  		threshold = AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV;
+>  	} else if (mode == TYPEC_PWR_MODE_PD) {
+>  		if (pps_active)
+> -			threshold = (95 * requested_vbus_voltage_mv / 100) -
+> -				AUTO_DISCHARGE_PD_HEADROOM_MV;
+> +			threshold = ((VPPS_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
+> +				     VSINKPD_MIN_IR_DROP_MV - VPPS_VALID_MIN_MV) *
+> +				     VSINKDISCONNECT_PD_MIN_PERCENT / 100;
+>  		else
+> -			threshold = (95 * requested_vbus_voltage_mv / 100) -
+> -				AUTO_DISCHARGE_PPS_HEADROOM_MV;
+> +			threshold = ((VSRC_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
+> +				     VSINKPD_MIN_IR_DROP_MV - VSRC_VALID_MIN_MV) *
+> +				     VSINKDISCONNECT_PD_MIN_PERCENT / 100;
+>  	} else {
+>  		/* 3.5V for non-pd sink */
+>  		threshold = AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV;
+> -- 
+> 2.32.0.272.g935e593368-goog
 
-...
-
->  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
-
-For this one, the fact it overrides maxItems elsewhere makes this a little
-bit odd.  I guess we can get used to it being implicit.
-
->  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
-
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
+-- 
+heikki
