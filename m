@@ -2,77 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E58F3AB49C
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 15:23:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B6F3AB4C4
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 15:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232605AbhFQNZZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 09:25:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59192 "EHLO mail.kernel.org"
+        id S232164AbhFQNcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 09:32:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33640 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232500AbhFQNZU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:25:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 202D3613BA;
-        Thu, 17 Jun 2021 13:23:10 +0000 (UTC)
+        id S231176AbhFQNcm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:32:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 986E861026;
+        Thu, 17 Jun 2021 13:30:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623936191;
-        bh=J1OZ63WoZwmr/Ax4WnpUQzPNxGLbutVnezfNd0vafkk=;
+        s=korg; t=1623936634;
+        bh=xlbIXi7JbyJzE3qSeyqhFbJJovuNN0NtZ7HgQ2zU/XM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V6hrbfjwmq/3vEpMQpyMOKAXVY2cLhRHXxnIkvLubsPUtkXPtq88YZgjy9cv3WEWS
-         Swrtu6g8CUR4sFupACxDLwdJeHzBHn76+NDH5FVASgi6nok9PTDkbdII1dwTCaf6lA
-         CBNkIcSB0N1w5SyDnWuRd4oDUPvQsvs0vIjA08pg=
-Date:   Thu, 17 Jun 2021 15:23:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Linyu Yuan <linyyuan@codeaurora.org>
-Cc:     Oliver Neukum <oliver@neukum.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2] net: cdc_eem: fix tx fixup skb leak
-Message-ID: <YMtMvYtUrgaM8m7d@kroah.com>
-References: <20210616233232.4561-1-linyyuan@codeaurora.org>
+        b=nz1Tskep2no7gsD9oTzCWb379gPRG6tC7Ln7keaHrCj8kHTaiRCQci3gR02KSNZFM
+         LDmI0S5T3SNlKaW9ClYtWh11chGBpuEGg7kXjjdiMVwnMVKyF7NaogYKv9AK0GW4cW
+         ecuQoJSguLXS86WiFosQkfiiCifPT8Nz5HE4an5o=
+Date:   Thu, 17 Jun 2021 15:30:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        balbi@kernel.org
+Subject: Re: [PATCH -next] usb: gadget: hid: fix error return code
+Message-ID: <YMtOd9qsL4D/glmZ@kroah.com>
+References: <20210617065625.1206872-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210616233232.4561-1-linyyuan@codeaurora.org>
+In-Reply-To: <20210617065625.1206872-1-yangyingliang@huawei.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 07:32:32AM +0800, Linyu Yuan wrote:
-> when usbnet transmit a skb, eem fixup it in eem_tx_fixup(),
-> if skb_copy_expand() failed, it return NULL,
-> usbnet_start_xmit() will have no chance to free original skb.
+On Thu, Jun 17, 2021 at 02:56:25PM +0800, Yang Yingliang wrote:
+> Fix to return a negative error code from the error handling
+> case instead of 0.
 > 
-> fix it by free orginal skb in eem_tx_fixup() first,
-> then check skb clone status, if failed, return NULL to usbnet.
-> 
-> Fixes: 9f722c0978b0 ("usbnet: CDC EEM support (v5)")
-> Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 > ---
+>  drivers/usb/gadget/legacy/hid.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
 > 
-> v2: add Fixes tag
-> 
->  drivers/net/usb/cdc_eem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/net/usb/cdc_eem.c b/drivers/net/usb/cdc_eem.c
-> index 2e60bc1b9a6b..359ea0d10e59 100644
-> --- a/drivers/net/usb/cdc_eem.c
-> +++ b/drivers/net/usb/cdc_eem.c
-> @@ -123,10 +123,10 @@ static struct sk_buff *eem_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
->  	}
+> diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
+> index c4eda7fe7ab4..3912cc805f3a 100644
+> --- a/drivers/usb/gadget/legacy/hid.c
+> +++ b/drivers/usb/gadget/legacy/hid.c
+> @@ -99,8 +99,10 @@ static int do_config(struct usb_configuration *c)
 >  
->  	skb2 = skb_copy_expand(skb, EEM_HEAD, ETH_FCS_LEN + padlen, flags);
-> +	dev_kfree_skb_any(skb);
->  	if (!skb2)
->  		return NULL;
->  
-> -	dev_kfree_skb_any(skb);
->  	skb = skb2;
->  
->  done:
-> -- 
-> 2.25.1
-> 
+>  	list_for_each_entry(e, &hidg_func_list, node) {
+>  		e->f = usb_get_function(e->fi);
+> -		if (IS_ERR(e->f))
+> +		if (IS_ERR(e->f)) {
+> +			status = PTR_ERR(e->f);
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Are you _SURE_ that you now want to return an error?  This code has
+never done this, what is going to break now that it will?
+
+>  			goto put;
+> +		}
+>  		status = usb_add_function(c, e->f);
+>  		if (status < 0) {
+>  			usb_put_function(e->f);
+> @@ -171,8 +173,10 @@ static int hid_bind(struct usb_composite_dev *cdev)
+>  		struct usb_descriptor_header *usb_desc;
+>  
+>  		usb_desc = usb_otg_descriptor_alloc(gadget);
+> -		if (!usb_desc)
+> +		if (!usb_desc) {
+> +			status = -ENOMEM;
+
+This looks correct, can you resend just this chunk, and then go test the
+above change to verify it doesn't break things?
+
+thanks,
+
+greg k-h
