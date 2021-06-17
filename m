@@ -2,122 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6649C3AB1D5
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 13:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512EF3AB1F1
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 13:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbhFQLEE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 07:04:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51002 "EHLO mail.kernel.org"
+        id S231923AbhFQLJc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 07:09:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229783AbhFQLED (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 07:04:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B4CCC6113C;
-        Thu, 17 Jun 2021 11:01:55 +0000 (UTC)
+        id S230291AbhFQLJ2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 07:09:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2541861209;
+        Thu, 17 Jun 2021 11:07:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623927716;
-        bh=/21BUcbCVrKKDbYsDl8HVVlMxEwa6AZmmpAofoOTQkc=;
+        s=korg; t=1623928040;
+        bh=PeGZ1cLj00k0RPgo/UNeh5ota3U/cIizQo1ijpzwC/k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XsPu2XFZ8VckFGpo9pVq9e87A3zV6kvRViOyzzqtMGLTtRDKB9aEOAWm09YsO7+/0
-         ERgHlqduBsDJYj4vwwAdaBbPfCHmczfr7zaXVM4vHFran6nScN0AiEJPg4RoQgyqCE
-         EWzriFHM35RNQi5q8GtWkFf2jG+h3cWC7cWHAfNk=
-Date:   Thu, 17 Jun 2021 13:01:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Peter Chen <peter.chen@kernel.org>
-Subject: Re: [PATCH] usb: dwc3: Fix debugfs creation flow
-Message-ID: <YMsrofH0AVUUMH7y@kroah.com>
-References: <7f5167c67cd95102b2acab967d19af7962415a66.1623906350.git.Minas.Harutyunyan@synopsys.com>
- <YMrnaS0EcVQpNpXH@kroah.com>
- <e68070dd-84b0-efdc-78dd-9035b7e911c8@synopsys.com>
- <YMr63WwtOJkc5YhH@kroah.com>
- <0ba79afb-2b34-6e01-9ec3-622a3591ba5b@synopsys.com>
+        b=0Xq1mc3q7DJ5UQnfNr3Zh+Xu8FrlLQWpyAo0fDePKavzGfsEq47TDz33O1zvfkFIp
+         bcmgvK4ak4mxsOtOwIjxHjJnCUGo2xDsswdaeWa3o5AFu5Yd6Pqrj9TjdYzzLhczmh
+         nZyr0J1A2x+q7Ftcji7YxcPfRKFJzt21PZxam2Po=
+Date:   Thu, 17 Jun 2021 13:07:18 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     balbi@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, frowand.list@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        jackp@codeaurora.org, fntoth@gmail.com,
+        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com
+Subject: Re: [PATCH v10 2/6] usb: gadget: configfs: Check USB configuration
+ before adding
+Message-ID: <YMss5tFFBjokk1k6@kroah.com>
+References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+ <1623923899-16759-3-git-send-email-wcheng@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0ba79afb-2b34-6e01-9ec3-622a3591ba5b@synopsys.com>
+In-Reply-To: <1623923899-16759-3-git-send-email-wcheng@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 09:14:37AM +0000, Minas Harutyunyan wrote:
-> Hi Greg,
+On Thu, Jun 17, 2021 at 02:58:15AM -0700, Wesley Cheng wrote:
+> Ensure that the USB gadget is able to support the configuration being
+> added based on the number of endpoints required from all interfaces.  This
+> is for accounting for any bandwidth or space limitations.
 > 
-> On 6/17/2021 11:33 AM, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 17, 2021 at 07:11:33AM +0000, Minas Harutyunyan wrote:
-> >> Hi Greg,
-> >>
-> >> On 6/17/2021 10:10 AM, Greg Kroah-Hartman wrote:
-> >>> On Wed, Jun 16, 2021 at 10:56:02PM -0700, Minas Harutyunyan wrote:
-> >>>> Creation EP's debugfs called earlier than debugfs folder for dwc3
-> >>>> device created. As result EP's debugfs are created in '/sys/kernel/debug'
-> >>>> instead of '/sys/kernel/debug/usb/dwc3.1.auto'.
-> >>>>
-> >>>> Moved dwc3_debugfs_init() function call before calling
-> >>>> dwc3_core_init_mode() to allow create dwc3 debugfs parent before
-> >>>> creating EP's debugfs's.
-> >>>>
-> >>>> Fixes: 8562d5bfc0fc ("USB: dwc3: remove debugfs root dentry storage")
-> >>>> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
-> >>>> ---
-> >>>>    drivers/usb/dwc3/core.c | 3 ++-
-> >>>>    1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> >>>> index e0a8e796c158..ba74ad7f6995 100644
-> >>>> --- a/drivers/usb/dwc3/core.c
-> >>>> +++ b/drivers/usb/dwc3/core.c
-> >>>> @@ -1620,17 +1620,18 @@ static int dwc3_probe(struct platform_device *pdev)
-> >>>>    	}
-> >>>>    
-> >>>>    	dwc3_check_params(dwc);
-> >>>> +	dwc3_debugfs_init(dwc);
-> >>>>    
-> >>>>    	ret = dwc3_core_init_mode(dwc);
-> >>>>    	if (ret)
-> >>>>    		goto err5;
-> >>>>    
-> >>>> -	dwc3_debugfs_init(dwc);
-> >>>>    	pm_runtime_put(dev);
-> >>>>    
-> >>>>    	return 0;
-> >>>>    
-> >>>>    err5:
-> >>>> +	dwc3_debugfs_exit(dwc);
-> >>>>    	dwc3_event_buffers_cleanup(dwc);
-> >>>>    
-> >>>>    	usb_phy_shutdown(dwc->usb2_phy);
-> >>>>
-> >>>> base-commit: 1da8116eb0c5dfc05cfb89896239badb18c4daf3
-> >>>
-> >>> I thought we fixed this already in usb-next and usb-linus, right?  Where
-> >>> are you seeing this problem happening?
-> >>
-> >> I faced this issue on 5.13.0-rc6. Patch "USB: dwc3: remove debugfs root
-> >> dentry storage" introduced this issue, because of debugfs_lookup()
-> >> function. I don't see any fix in usb-next.
-> > 
-> > 4bf584a03eec ("usb: dwc3: core: fix kernel panic when do reboot") in
-> > linux-next "should" solve this issue.  Or it was supposed to.  I
-> > thought.  I'm getting confused about this problem these days...
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> ---
+>  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
 > 
-> No, 4bf584a03eec ("usb: dwc3: core: fix kernel panic when do reboot") 
-> fix another thing.
-> > 
-> > The commit you reference above in the fixes line is NOT in 5.13-rc6, so
-> > how can this commit fix a problem in 5.13-rc6?
-> 
-> I see that commit in your "usb-next" below "Merge tag 'v5.13-rc6'":
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?qt=grep&q=&h=usb-next
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 15a607c..76b9983 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -1374,6 +1374,7 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>  		struct usb_function *f;
+>  		struct usb_function *tmp;
+>  		struct gadget_config_name *cn;
+> +		unsigned long ep_map = 0;
+>  
+>  		if (gadget_is_otg(gadget))
+>  			c->descriptors = otg_desc;
+> @@ -1403,7 +1404,28 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>  				list_add(&f->list, &cfg->func_list);
+>  				goto err_purge_funcs;
+>  			}
+> +			if (f->fs_descriptors) {
+> +				struct usb_descriptor_header **d;
+> +
+> +				d = f->fs_descriptors;
+> +				for (; *d; ++d) {
 
-Yes, but that is NOT in 5.13-rc6, so your above comment does not make
-sense to me.
+With this check, there really is not a need to check for
+f->fs_descriptors above in the if statement, right?
 
-So, to be specific, what commit causes this problem, that this patch
-fixes?
+> +					struct usb_endpoint_descriptor *ep;
+> +					int addr;
+> +
+> +					if ((*d)->bDescriptorType != USB_DT_ENDPOINT)
+> +						continue;
+> +
+> +					ep = (struct usb_endpoint_descriptor *)*d;
+> +					addr = ((ep->bEndpointAddress & 0x80) >> 3) |
+> +						(ep->bEndpointAddress & 0x0f);
+
+Don't we have direction macros for this type of check?
+
+> +					set_bit(addr, &ep_map);
+> +				}
+
+What is this loop trying to do?  Please document it as I can not figure
+it out at all.
 
 thanks,
 
