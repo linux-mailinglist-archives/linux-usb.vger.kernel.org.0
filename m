@@ -2,107 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9963AB6C8
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 17:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622163AB794
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 17:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbhFQPD7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 11:03:59 -0400
-Received: from mga14.intel.com ([192.55.52.115]:4084 "EHLO mga14.intel.com"
+        id S232495AbhFQPhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 11:37:08 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51622 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232992AbhFQPD5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 11:03:57 -0400
-IronPort-SDR: PgW8vbWx0dOYmwhHmAuaDpqgK1hlDEmDoZYI/Si8YB3O4ie79GWBvzfFqWpIJpEKESH5gcxg3s
- GgFSaP4KfIEw==
-X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="206204845"
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="206204845"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 08:01:49 -0700
-IronPort-SDR: m+D+iwYW9+M+cxiIAwGg0XL2LSOI5Kf4OAb7y4dRZfFuMWBtFi+e+q6tMJaqquw1qeL7U0/lJm
- XkZCtkBLRk0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="479490865"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by FMSMGA003.fm.intel.com with ESMTP; 17 Jun 2021 08:01:47 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>,
-        stable@vger.kernel.org, Tao Xue <xuetao09@huawei.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4/4] xhci: solve a double free problem while doing s4
-Date:   Thu, 17 Jun 2021 18:03:54 +0300
-Message-Id: <20210617150354.1512157-5-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210617150354.1512157-1-mathias.nyman@linux.intel.com>
+        id S231661AbhFQPhH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 11:37:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CCB76613E3;
+        Thu, 17 Jun 2021 15:34:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623944099;
+        bh=t4cqAotYFIZ9hB+jZeUS/qHr4r4rUoGAB2wzu7Ziro0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TetBQJVuGcDP9+fEtcAQJFS5Qde+zVWUIvaLKcZIJSnwXed2m44u0uw3edbN0cu2G
+         x5qYd/0uq9xEjG/t9o/SPD5BE5/wI7js3rGK4IMK3EJamvSZ4pUj4PS56oX0+hvKPk
+         M5z85bIZFPfnAY6ykchz+1CT6WKmk1zZ22O/iCcU=
+Date:   Thu, 17 Jun 2021 17:34:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/4] xhci features for usb-next
+Message-ID: <YMtroYzBimzT8tCz@kroah.com>
 References: <20210617150354.1512157-1-mathias.nyman@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210617150354.1512157-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: "Zhangjiantao (Kirin, nanjing)" <water.zhangjiantao@huawei.com>
+On Thu, Jun 17, 2021 at 06:03:50PM +0300, Mathias Nyman wrote:
+> Hi Greg
+> 
+> A few small patches for usb-next.
+> 
+> There's one double free fix here as well that I normally would send to
+> usb-linus, but we're late in the cycle and this issue should be rare.
+> It has been there since 5.6 and requires system to be out of memory, so
+> I thought it can be added this way.
 
-when system is doing s4, the process of xhci_resume may be as below:
-1、xhci_mem_cleanup
-2、xhci_init->xhci_mem_init->xhci_mem_cleanup(when memory is not enough).
-xhci_mem_cleanup will be executed twice when system is out of memory.
-xhci->port_caps is freed in xhci_mem_cleanup,but it isn't set to NULL.
-It will be freed twice when xhci_mem_cleanup is called the second time.
+Yes, that's fine, all now applied, thanks.
 
-We got following bug when system resumes from s4:
-
-kernel BUG at mm/slub.c:309!
-Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-CPU: 0 PID: 5929 Tainted: G S   W   5.4.96-arm64-desktop #1
-pc : __slab_free+0x5c/0x424
-lr : kfree+0x30c/0x32c
-
-Call trace:
- __slab_free+0x5c/0x424
- kfree+0x30c/0x32c
- xhci_mem_cleanup+0x394/0x3cc
- xhci_mem_init+0x9ac/0x1070
- xhci_init+0x8c/0x1d0
- xhci_resume+0x1cc/0x5fc
- xhci_plat_resume+0x64/0x70
- platform_pm_thaw+0x28/0x60
- dpm_run_callback+0x54/0x24c
- device_resume+0xd0/0x200
- async_resume+0x24/0x60
- async_run_entry_fn+0x44/0x110
- process_one_work+0x1f0/0x490
- worker_thread+0x5c/0x450
- kthread+0x158/0x160
- ret_from_fork+0x10/0x24
-
-Original patch that caused this issue was backported to 4.4 stable,
-so this should be backported to 4.4 stabe as well.
-
-Fixes: cf0ee7c60c89 ("xhci: Fix memory leak when caching protocol extended capability PSI tables - take 2")
-Cc: stable@vger.kernel.org # v4.4+
-Signed-off-by: Jiantao Zhang <water.zhangjiantao@huawei.com>
-Signed-off-by: Tao Xue <xuetao09@huawei.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-mem.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 2f6da35e7977..0e312066c5c6 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1924,6 +1924,7 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
- 	xhci->hw_ports = NULL;
- 	xhci->rh_bw = NULL;
- 	xhci->ext_caps = NULL;
-+	xhci->port_caps = NULL;
- 
- 	xhci->page_size = 0;
- 	xhci->page_shift = 0;
--- 
-2.25.1
-
+greg k-h
