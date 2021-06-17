@@ -2,312 +2,318 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6843ABE5E
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 23:50:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94CC93ABEB4
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 00:17:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbhFQVwp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 17:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229816AbhFQVwo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 17:52:44 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EE6C061574
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jun 2021 14:50:34 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id s15so5742084edt.13
-        for <linux-usb@vger.kernel.org>; Thu, 17 Jun 2021 14:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=dF+OKSKFdx4BEeoGuUfA36CyCMPKLqm7sTeAmmXMD9M=;
-        b=Cf8LsKl3OoRENafJnrqTb5BqG2T7SomlbqmgzcC9Noyj0Qlm38153D9N/Jh0eQP9ZT
-         X/g1bAReJmDpXiBYjHdALu/PedsJ5MQN/vZtD+v3f/eftpMMtAlTxutx/OjdOivXn8ef
-         SeznH9/QysHtNCDWeyadLDGL5bkgD9m8mTyIUlmNSyWQabx0MUiaaVwRDR5sdb7q4puo
-         WPlVP7cDwrnp7x3uiUJ+CNSfvvXimNZhw6g/MXM6Y+LJqtSR8tXsOKjvgZ2fwpCN/2ES
-         Duh4jqEZB9NpFatOy3cHhhb7KmH/9LsgsEtZ4qQjviVtfz0Snm7XGvJ7nvPg1EzFTmFI
-         K9SQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=dF+OKSKFdx4BEeoGuUfA36CyCMPKLqm7sTeAmmXMD9M=;
-        b=WCSumoO/cvcreC6U+VmYNtUpGxHvIf6a+4q1JxXq2G+nAZkiGc6gL2zfC3mNPxf6d0
-         m0He65Nr19kqei1dqHp0wuqzsGTx1jQFcN+rQN39z9xGFdezCIAhoTuBZHTA0BJ1Mz/O
-         us0edcADlC3AHiHJqJS0ldbNwvPlhIf40w3JFmacwPfCrY3dYr/yo9/fep9X3h4zwyi1
-         RN0pwHHHGMcK7r8BBj3lXB1rcbaQDCo5Rs4Jgun39QW8M4knwL/pRkFQikiFJHIqlC2u
-         WTHkLK6gcukzDjjTEpZdklo8Ui2WNfCaw6EDtj38SRTpzlpNexMwQH1Gv2JtI8FfFbe9
-         N9gg==
-X-Gm-Message-State: AOAM533rip6Us7om2PDu773beHclJBX1IMeSmGSibIOm+aTDTpwMRzfZ
-        DoqI4f7FtCabFTSVr+Un+24=
-X-Google-Smtp-Source: ABdhPJxNwtM2JK3sv9mFRm15FDgIMSUNdSYeDqM5dbXMhWqHlZV3UMetEqAzv6qvTYRPMF725MDkhQ==
-X-Received: by 2002:aa7:d34a:: with SMTP id m10mr571618edr.57.1623966633275;
-        Thu, 17 Jun 2021 14:50:33 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:4797:59e9:cc4f:f12? ([2001:981:6fec:1:4797:59e9:cc4f:f12])
-        by smtp.gmail.com with ESMTPSA id me11sm126548ejb.93.2021.06.17.14.50.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Jun 2021 14:50:32 -0700 (PDT)
-Subject: Re: RCU stall and/or host->device broken transition
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        USB <linux-usb@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <CAHp75Vc3RZSZaOD_DOd3nkm4MWHu_O8Kwibn18rXYQw2jWo4tg@mail.gmail.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <efff402c-a8fc-0b13-9845-122f98ea784b@gmail.com>
-Date:   Thu, 17 Jun 2021 23:50:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232335AbhFQWTY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 18:19:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56494 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232088AbhFQWTM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 18:19:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id F0DD6613B4;
+        Thu, 17 Jun 2021 22:17:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1623968224;
+        bh=8lLNvAQJFBYHcwyHgNEpUKH4liF//tJL8IXh/++g2VQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=huvrHHpH2Av8vejTexiFgCIX8gaey/rp/0fjLnRAt1uHvre0POa9FMvPn6CSKF4vP
+         c1dyDYSMYo16eAP+y8b7jCtqCSK/GxM08QdxX1G394l3E8JBesdgSfezsVwCObf+XY
+         7aWLgTlzsBBO6TKNEHxE7nsZ/+OgD85yLW8ohdjh7wOtV4YkqobaNmS5taze+KHWCO
+         fK6lrJ8I7DNEWJB2YicAQ/PLhU6Y66Is1uaJonoeXzDn/9t9wK0lIH/tQqckcXFuET
+         u5Swl2hwja6dodRo6iE7Vpv+Vl8JR6ZLXVJxbLuKQjO/HsCiolAUliP6AHbf478B1T
+         ZnwiO+IrhijxQ==
+Received: by mail-ej1-f42.google.com with SMTP id g8so12572868ejx.1;
+        Thu, 17 Jun 2021 15:17:03 -0700 (PDT)
+X-Gm-Message-State: AOAM533H3WTBiNxJM6fB2cmYC7GQaa7pmWFlsaU47n2KIwiQ92m1Lq8f
+        UK4pz+k6qhTXDxkxwrDizAPdZXHPBGMyCwOnhw==
+X-Google-Smtp-Source: ABdhPJxzgkf6C07sPN7yjl1phyvHCv9pAxXmIQ1iuWsb7n6aw/LK46UKCpGaWvweVtQco41YaA9gmDx268LBgSxFl4o=
+X-Received: by 2002:a17:907:264b:: with SMTP id ar11mr7391845ejc.525.1623968222450;
+ Thu, 17 Jun 2021 15:17:02 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CAHp75Vc3RZSZaOD_DOd3nkm4MWHu_O8Kwibn18rXYQw2jWo4tg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210615191543.1043414-1-robh@kernel.org> <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
+In-Reply-To: <bb8c18f6-139d-76be-87e7-0c93e03cc92c@ti.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 17 Jun 2021 16:16:50 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
+Message-ID: <CAL_Jsq+-ggeBMT_507HN+mM1KirM+w2ZnhZNe+Q7tRsFRJxDOw@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop redundant minItems/maxItems
+To:     Suman Anna <s-anna@ti.com>
+Cc:     devicetree@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "open list:REMOTE PROCESSOR (REMOTEPROC) SUBSYSTEM" 
+        <linux-remoteproc@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
+        <linux-ide@vger.kernel.org>, Linux I2C <linux-i2c@vger.kernel.org>,
+        linux-phy@lists.infradead.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
+        <linux-rtc@vger.kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Jakub Kicinski <kuba@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Linux PWM List <linux-pwm@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        LINUX-WATCHDOG <linux-watchdog@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        linux-can@vger.kernel.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kamal Dasu <kdasu.kdev@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-crypto@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        dmaengine@vger.kernel.org, Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jonathan Cameron <jic23@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andy
+On Thu, Jun 17, 2021 at 10:06 AM Suman Anna <s-anna@ti.com> wrote:
+>
+> Hi Rob,
+>
+> On 6/15/21 2:15 PM, Rob Herring wrote:
+> > If a property has an 'items' list, then a 'minItems' or 'maxItems' with=
+ the
+> > same size as the list is redundant and can be dropped. Note that is DT
+> > schema specific behavior and not standard json-schema behavior. The too=
+ling
+> > will fixup the final schema adding any unspecified minItems/maxItems.
+> >
+> > This condition is partially checked with the meta-schema already, but
+> > only if both 'minItems' and 'maxItems' are equal to the 'items' length.
+> > An improved meta-schema is pending.
+> >
+> > Cc: Jens Axboe <axboe@kernel.dk>
+> > Cc: Stephen Boyd <sboyd@kernel.org>
+> > Cc: Herbert Xu <herbert@gondor.apana.org.au>
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: David Airlie <airlied@linux.ie>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Cc: Bartosz Golaszewski <bgolaszewski@baylibre.com>
+> > Cc: Kamal Dasu <kdasu.kdev@gmail.com>
+> > Cc: Jonathan Cameron <jic23@kernel.org>
+> > Cc: Lars-Peter Clausen <lars@metafoo.de>
+> > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > Cc: Marc Zyngier <maz@kernel.org>
+> > Cc: Joerg Roedel <joro@8bytes.org>
+> > Cc: Jassi Brar <jassisinghbrar@gmail.com>
+> > Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Wolfgang Grandegger <wg@grandegger.com>
+> > Cc: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Cc: Andrew Lunn <andrew@lunn.ch>
+> > Cc: Vivien Didelot <vivien.didelot@gmail.com>
+> > Cc: Vladimir Oltean <olteanv@gmail.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>
+> > Cc: Kishon Vijay Abraham I <kishon@ti.com>
+> > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > Cc: "Uwe Kleine-K=C3=B6nig" <u.kleine-koenig@pengutronix.de>
+> > Cc: Lee Jones <lee.jones@linaro.org>
+> > Cc: Ohad Ben-Cohen <ohad@wizery.com>
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> > Cc: Paul Walmsley <paul.walmsley@sifive.com>
+> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > Cc: Albert Ou <aou@eecs.berkeley.edu>
+> > Cc: Alessandro Zummo <a.zummo@towertech.it>
+> > Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Mark Brown <broonie@kernel.org>
+> > Cc: Zhang Rui <rui.zhang@intel.com>
+> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > Cc: Wim Van Sebroeck <wim@linux-watchdog.org>
+> > Cc: Guenter Roeck <linux@roeck-us.net>
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../devicetree/bindings/ata/nvidia,tegra-ahci.yaml          | 1 -
+> >  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml  | 2 --
+> >  .../devicetree/bindings/clock/qcom,gcc-apq8064.yaml         | 1 -
+> >  Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml | 2 --
+> >  .../devicetree/bindings/clock/qcom,gcc-sm8350.yaml          | 2 --
+> >  .../devicetree/bindings/clock/sprd,sc9863a-clk.yaml         | 1 -
+> >  .../devicetree/bindings/crypto/allwinner,sun8i-ce.yaml      | 2 --
+> >  Documentation/devicetree/bindings/crypto/fsl-dcp.yaml       | 1 -
+> >  .../display/allwinner,sun4i-a10-display-backend.yaml        | 6 ------
+> >  .../bindings/display/allwinner,sun6i-a31-mipi-dsi.yaml      | 1 -
+> >  .../bindings/display/allwinner,sun8i-a83t-dw-hdmi.yaml      | 4 ----
+> >  .../bindings/display/allwinner,sun8i-a83t-hdmi-phy.yaml     | 2 --
+> >  .../bindings/display/allwinner,sun8i-r40-tcon-top.yaml      | 2 --
+> >  .../devicetree/bindings/display/bridge/cdns,mhdp8546.yaml   | 2 --
+> >  .../bindings/display/rockchip/rockchip,dw-hdmi.yaml         | 2 --
+> >  Documentation/devicetree/bindings/display/st,stm32-dsi.yaml | 2 --
+> >  .../devicetree/bindings/display/st,stm32-ltdc.yaml          | 1 -
+> >  .../devicetree/bindings/display/xlnx/xlnx,zynqmp-dpsub.yaml | 4 ----
+> >  .../devicetree/bindings/dma/renesas,rcar-dmac.yaml          | 1 -
+> >  .../devicetree/bindings/edac/amazon,al-mc-edac.yaml         | 2 --
+> >  Documentation/devicetree/bindings/eeprom/at24.yaml          | 1 -
+> >  Documentation/devicetree/bindings/example-schema.yaml       | 2 --
+> >  Documentation/devicetree/bindings/gpu/brcm,bcm-v3d.yaml     | 1 -
+> >  Documentation/devicetree/bindings/gpu/vivante,gc.yaml       | 1 -
+> >  Documentation/devicetree/bindings/i2c/brcm,brcmstb-i2c.yaml | 1 -
+> >  .../devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml        | 2 --
+> >  .../devicetree/bindings/i2c/mellanox,i2c-mlxbf.yaml         | 1 -
+> >  .../devicetree/bindings/iio/adc/amlogic,meson-saradc.yaml   | 1 -
+> >  .../devicetree/bindings/iio/adc/st,stm32-dfsdm-adc.yaml     | 2 --
+> >  .../bindings/interrupt-controller/fsl,irqsteer.yaml         | 1 -
+> >  .../bindings/interrupt-controller/loongson,liointc.yaml     | 1 -
+> >  Documentation/devicetree/bindings/iommu/arm,smmu-v3.yaml    | 1 -
+> >  .../devicetree/bindings/iommu/renesas,ipmmu-vmsa.yaml       | 1 -
+> >  .../devicetree/bindings/mailbox/st,stm32-ipcc.yaml          | 2 --
+> >  .../devicetree/bindings/media/amlogic,gx-vdec.yaml          | 1 -
+> >  Documentation/devicetree/bindings/media/i2c/adv7604.yaml    | 1 -
+> >  .../devicetree/bindings/media/marvell,mmp2-ccic.yaml        | 1 -
+> >  .../devicetree/bindings/media/qcom,sc7180-venus.yaml        | 1 -
+> >  .../devicetree/bindings/media/qcom,sdm845-venus-v2.yaml     | 1 -
+> >  .../devicetree/bindings/media/qcom,sm8250-venus.yaml        | 1 -
+> >  Documentation/devicetree/bindings/media/renesas,drif.yaml   | 1 -
+> >  .../bindings/memory-controllers/mediatek,smi-common.yaml    | 6 ++----
+> >  .../bindings/memory-controllers/mediatek,smi-larb.yaml      | 1 -
+> >  .../devicetree/bindings/mmc/allwinner,sun4i-a10-mmc.yaml    | 2 --
+> >  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml    | 1 -
+> >  Documentation/devicetree/bindings/mmc/mtk-sd.yaml           | 2 --
+> >  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml     | 2 --
+> >  Documentation/devicetree/bindings/mmc/sdhci-am654.yaml      | 1 -
+> >  Documentation/devicetree/bindings/mmc/sdhci-pxa.yaml        | 1 -
+> >  .../devicetree/bindings/net/amlogic,meson-dwmac.yaml        | 2 --
+> >  .../devicetree/bindings/net/brcm,bcm4908-enet.yaml          | 2 --
+> >  Documentation/devicetree/bindings/net/can/bosch,m_can.yaml  | 2 --
+> >  Documentation/devicetree/bindings/net/dsa/brcm,sf2.yaml     | 2 --
+> >  Documentation/devicetree/bindings/net/snps,dwmac.yaml       | 2 --
+> >  Documentation/devicetree/bindings/net/stm32-dwmac.yaml      | 1 -
+> >  Documentation/devicetree/bindings/pci/brcm,stb-pcie.yaml    | 2 --
+> >  Documentation/devicetree/bindings/pci/loongson.yaml         | 1 -
+> >  .../devicetree/bindings/pci/mediatek-pcie-gen3.yaml         | 1 -
+> >  .../devicetree/bindings/pci/microchip,pcie-host.yaml        | 2 --
+> >  Documentation/devicetree/bindings/perf/arm,cmn.yaml         | 1 -
+> >  .../devicetree/bindings/phy/brcm,bcm63xx-usbh-phy.yaml      | 1 -
+> >  .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml       | 3 ---
+> >  Documentation/devicetree/bindings/phy/brcm,sata-phy.yaml    | 1 -
+> >  Documentation/devicetree/bindings/phy/mediatek,tphy.yaml    | 2 --
+> >  .../devicetree/bindings/phy/phy-cadence-sierra.yaml         | 2 --
+> >  .../devicetree/bindings/phy/phy-cadence-torrent.yaml        | 4 ----
+> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-hs.yaml    | 1 -
+> >  .../devicetree/bindings/phy/qcom,ipq806x-usb-phy-ss.yaml    | 1 -
+> >  Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml     | 1 -
+> >  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml   | 2 --
+> >  Documentation/devicetree/bindings/phy/renesas,usb2-phy.yaml | 2 --
+> >  Documentation/devicetree/bindings/phy/renesas,usb3-phy.yaml | 1 -
+> >  .../devicetree/bindings/pinctrl/actions,s500-pinctrl.yaml   | 1 -
+> >  .../devicetree/bindings/power/amlogic,meson-ee-pwrc.yaml    | 1 -
+> >  .../devicetree/bindings/pwm/allwinner,sun4i-a10-pwm.yaml    | 1 -
+> >  .../devicetree/bindings/remoteproc/st,stm32-rproc.yaml      | 2 --
+> >  .../devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml     | 1 -
+> >  .../devicetree/bindings/remoteproc/ti,omap-remoteproc.yaml  | 1 -
+> >  Documentation/devicetree/bindings/reset/fsl,imx-src.yaml    | 1 -
+> >  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 1 -
+> >  .../devicetree/bindings/rtc/allwinner,sun6i-a31-rtc.yaml    | 1 -
+> >  Documentation/devicetree/bindings/rtc/imxdi-rtc.yaml        | 1 -
+> >  Documentation/devicetree/bindings/serial/fsl-lpuart.yaml    | 2 --
+> >  Documentation/devicetree/bindings/serial/samsung_uart.yaml  | 1 -
+> >  .../devicetree/bindings/soc/qcom/qcom,geni-se.yaml          | 1 -
+> >  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml      | 2 --
+> >  .../bindings/sound/nvidia,tegra-audio-graph-card.yaml       | 1 -
+> >  .../devicetree/bindings/sound/nvidia,tegra210-i2s.yaml      | 2 --
+> >  Documentation/devicetree/bindings/sound/st,stm32-sai.yaml   | 3 ---
+> >  .../devicetree/bindings/spi/amlogic,meson-gx-spicc.yaml     | 1 -
+> >  .../devicetree/bindings/spi/brcm,spi-bcm-qspi.yaml          | 2 --
+> >  .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml          | 2 --
+> >  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml   | 1 -
+> >  .../bindings/timer/allwinner,sun5i-a13-hstimer.yaml         | 1 -
+> >  Documentation/devicetree/bindings/timer/arm,arch_timer.yaml | 1 -
+> >  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml      | 2 --
+> >  .../devicetree/bindings/timer/intel,ixp4xx-timer.yaml       | 1 -
+> >  .../devicetree/bindings/usb/maxim,max3420-udc.yaml          | 2 --
+> >  .../devicetree/bindings/usb/nvidia,tegra-xudc.yaml          | 4 ----
+> >  Documentation/devicetree/bindings/usb/renesas,usbhs.yaml    | 3 ---
+> >  .../devicetree/bindings/watchdog/st,stm32-iwdg.yaml         | 1 -
+> >  101 files changed, 2 insertions(+), 163 deletions(-)
+> >
+>
+> [snip]
+>
+> > diff --git a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rpr=
+oc.yaml b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > index 6070456a7b67..f399743b631b 100644
+> > --- a/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > +++ b/Documentation/devicetree/bindings/remoteproc/ti,k3-dsp-rproc.yaml
+> > @@ -57,7 +57,6 @@ properties:
+> >
+> >    memory-region:
+> >      minItems: 2
+> > -    maxItems: 8
+> >      description: |
+> >        phandle to the reserved memory nodes to be associated with the r=
+emoteproc
+> >        device. There should be at least two reserved memory nodes defin=
+ed. The
+>
+> Does this enforce the maxItems to be 2 only now? Or should this be droppi=
+ng the
+> minItems here which matches the length of items instead of maxItems?
+>
+> I have originally listed the individual item list only for the mandatory =
+items
+> and rest are scalable. I provided this through "additionalItems: true" un=
+der
+> this property.
 
-Op 16-06-2021 om 20:37 schreef Andy Shevchenko:
-> Hi!
-> 
-> There is a bug somewhere and I have already spent too much time
-> whacking the mole. Need some hints, ideas on how to debug, etc.
-> 
-> So, my setup is that:
-> platform: Intel Merrifield
-> USB host and device controller: DWC3
-> USB host connected device: Diolan DLN-2 IO expander
-> In device mode: USB EEM
+Good catch. This should be dropped. The meta-schema doesn't enforce
+this if "additionalItems: true" which is rarely used.
 
-I'd like to try to reproduce, but don't have the Diolan DLN-2. Is that 
-essential to generating the stall? What if you just plug a USB stick?
+> Also, have the exact same usage in
+> Documentation/devicetree/bindings/remoteproc/ti,k3-r5f-rproc.yaml as well=
+ which
+> is not included in this patch.
 
-> 
-> The workflow
-> ~~~~~~~~~~
-> The following steps to reproduce the issue (with some patches applied
-> / reverted it may give different results from less than 10% up to
-> almost 100% of reproducibility):
-> 
-> (Note the board has a manual switch of an ID pin and two connectors
-> depending on the role)
-> 1. Connect the DLN-2 to USB A
-> 2. Connect the PC machine to USB micro-B
-> 3. Boot the board in device mode
+Yeah, I just missed this one. I've double checked and there aren't any more=
+.
 
-I've tested by booting in host mostly, so may have missed this case. Did 
-you find it is essential to boot in device mode to generate the stall?
-
-> 4. Setup USB EEM gadget via ConfigFS
-> 5. Turn the switch (see above note) to the host and back to the device
-> mode as many times (usually a very few are needed) and with
-> (semi-)arbitrary time in between (usually 2-5 seconds) till the issue
-> occurs.
-
-2 sec is a bit faster then I tested. Reason is that in user space in my 
-case connman needs a bit of time to actually establish an ethernet 
-connection to the PC. Are you using connman or other network manager?
-On the PC side I have network manager providing a shared connection and 
-when all is well I see on the PC side a notification of the connection 
-being established. Do you have something similar?
-
-> 
-> The issue
-> ~~~~~~~~
-> When switching from the host to the gadget mode
->   - the status LED on the DLN-2 board continues blinking (Vbus is on)
-
-This looks like something I had before. Can you try switching very fast 
-host-gadget-host-gadget ( like in a 1 sec.)?
-
->   - the driver may be still xhci (rarely), but often already switched to dwc3
->   - due to above `lsusb` (rarely) still shows hub devices
->   - the EEM does not appear (PC doesn't see network iface)
->   - in ~50% cases RCU stall (there are only two CPUs)
-> 
-> 
-> RCU stall
-> ~~~~~~~~
-> cat /proc/interrupts
->   16:     176129          0   IO-APIC  34-fasteoi   xhci-hcd:usb1
-> 
-> [434689.740982] rcu: INFO: rcu_sched self-detected stall on CPU
-> [434689.746856] rcu:    0-....: (24661 ticks this GP)
-> idle=ee2/1/0x4000000000000000 softirq=4162/4163 fqs=5238
-> [434689.756867]         (t=21000 jiffies g=8489 q=52)
-> [434689.761204] NMI backtrace for cpu 0
-> [434689.764919] CPU: 0 PID: 222 Comm: kworker/0:0 Not tainted 5.13.0-rc5+ #4
-> [434689.771948] Hardware name: Intel Corporation Merrifield/BODEGA
-> BAY, BIOS 542 2015.01.21:18.19.48
-> [434689.781126] Workqueue: usb_hub_wq hub_event
-> [434689.785590] Call Trace:
-> [434689.788232]  <IRQ>
-> [434689.790431]  dump_stack+0x69/0x8e
-> [434689.793996]  nmi_cpu_backtrace.cold+0x32/0x69
-> [434689.798612]  ? lapic_can_unplug_cpu+0x80/0x80
-> [434689.803249]  nmi_trigger_cpumask_backtrace+0x8a/0xa0
-> [434689.808508]  rcu_dump_cpu_stacks+0xbf/0xed
-> [434689.812873]  rcu_sched_clock_irq.cold+0xc7/0x1e9
-> [434689.817805]  update_process_times+0x8c/0xc0
-> [434689.822255]  tick_sched_handle+0x34/0x50
-> [434689.826432]  tick_sched_timer+0x7a/0xd0
-> [434689.830513]  ? get_cpu_iowait_time_us+0x110/0x110
-> [434689.835499]  __hrtimer_run_queues+0x157/0x350
-> [434689.840171]  hrtimer_interrupt+0x110/0x2c0
-> [434689.844569]  __sysvec_apic_timer_interrupt+0x76/0x150
-> [434689.849911]  sysvec_apic_timer_interrupt+0x2f/0x90
-> [434689.854990]  asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [434689.860415] RIP: 0010:_raw_spin_unlock_irqrestore+0x37/0x50
-> [434689.866294] Code: 53 48 89 f3 48 8b 74 24 10 e8 45 fa 3a ff 48 89
-> ef e8 6d 23 3b ff 9c 58 f6 c4 02 75 10 80 e7 02 74 01 fb 65 ff 0d e9
-> d3 4f 78 <5b> 5d c3 e8 b1 3b ff ff eb e9 66 66 2e 0f 1f 84 00 00 00 00
-> 00 0f
-> [434689.885773] RSP: 0000:ffff9ac140003da8 EFLAGS: 00000206
-> [434689.891294] RAX: 0000000000000046 RBX: 0000000000000202 RCX:
-> ffff8b7e4ad208d0
-> [434689.898775] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
-> ffffffff89460720
-> [434689.906255] RBP: ffffffff89460720 R08: 00000000897fe2f0 R09:
-> 0000000000000001
-> [434689.913733] R10: 0000000000000000 R11: ffff8b7e46226db0 R12:
-> ffff8b7e4b29c000
-> [434689.921214] R13: 0000000000000000 R14: ffff8b7e4b29c2f8 R15:
-> ffff8b7e42e65780
-> [434689.928798]  debug_dma_unmap_page+0x7e/0x90
-> [434689.933324]  ? __lock_acquire.constprop.0+0x27d/0x550
-> [434689.938681]  ? find_held_lock+0x2b/0x80
-> [434689.942787]  usb_hcd_unmap_urb_for_dma+0x65/0x100
-> [434689.947785]  __usb_hcd_giveback_urb+0x4b/0x100
-> [434689.952513]  usb_giveback_urb_bh+0xa7/0x100
-> [434689.956994]  tasklet_action_common.constprop.0+0xd0/0x140
-> [434689.962712]  __do_softirq+0xeb/0x2dd
-> [434689.966565]  irq_exit_rcu+0x95/0xc0
-> [434689.970288]  common_interrupt+0x7b/0xa0
-> [434689.974375]  </IRQ>
-> [434689.976670]  asm_common_interrupt+0x1e/0x40
-> [434689.981109] RIP: 0010:_raw_spin_unlock_irq+0x27/0x30
-> [434689.986359] Code: 35 ff 90 0f 1f 44 00 00 55 48 8b 74 24 08 48 89
-> fd 48 8d 7f 18 e8 79 fa 3a ff 48 89 ef e8 a1 23 3b ff fb 65 ff 0d 29
-> d4 4f 78 <5d> c3 0f 1f 80 00 00 00 00 0f 1f 44 00 00 55 48 89 fd 48 83
-> c7 18
-> [434690.005836] RSP: 0000:ffff9ac140293b98 EFLAGS: 00000246
-> [434690.011352] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
-> ffff8b7e4ad208d0
-> [434690.018832] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
-> ffffffff8881ab00
-> [434690.026309] RBP: ffffffff8881ab00 R08: 00000000897fe2f0 R09:
-> 0000000000000001
-> [434690.033790] R10: ffff8b7e7e23ac30 R11: 0000000000000000 R12:
-> 0000000000000000
-> [434690.041268] R13: ffff8b7e4b29c000 R14: ffff8b7e4b40c018 R15:
-> ffff8b7e4af62950
-> [434690.048840]  ? _raw_spin_unlock_irq+0x1f/0x30
-> [434690.053465]  usb_hcd_submit_urb+0x294/0xbf0
-> [434690.057948]  ? lockdep_init_map_type+0x47/0x220
-> [434690.062805]  usb_start_wait_urb+0x65/0x160
-> [434690.067230]  usb_control_msg+0xdf/0x140
-> [434690.071355]  hub_event+0x8f4/0x1890
-> [434690.075184]  ? lock_acquire+0x93/0x150
-> [434690.079175]  ? process_one_work+0x1bc/0x4b0
-> [434690.083652]  process_one_work+0x24d/0x4b0
-> [434690.087970]  worker_thread+0x55/0x3c0
-> [434690.091875]  ? rescuer_thread+0x390/0x390
-> [434690.096154]  kthread+0x137/0x150
-> [434690.099612]  ? __kthread_bind_mask+0x60/0x60
-> [434690.104166]  ret_from_fork+0x22/0x30
-> 
-> followed by Watchdog one
-> 
-> [434725.296748] Kernel panic - not syncing: Kernel Watchdog
-> [434725.302247] CPU: 0 PID: 222 Comm: kworker/0:0 Not tainted 5.13.0-rc5+ #4
-> [434725.309242] Hardware name: Intel Corporation Merrifield/BODEGA
-> BAY, BIOS 542 2015.01.21:18.19.48
-> [434725.318367] Workqueue: usb_hub_wq hub_event
-> [434725.322801] Call Trace:
-> [434725.325424]  <IRQ>
-> [434725.327607]  dump_stack+0x69/0x8e
-> [434725.331145]  panic+0x102/0x2d1
-> [434725.334460]  mid_wdt_irq+0x11/0x11
-> [434725.338072]  __handle_irq_event_percpu+0x65/0x1c0
-> [434725.343048]  handle_irq_event+0x55/0xb0
-> [434725.347124]  handle_fasteoi_irq+0x78/0x1d0
-> [434725.351461]  __common_interrupt+0x3e/0xa0
-> [434725.355713]  common_interrupt+0x3b/0xa0
-> [434725.359784]  asm_common_interrupt+0x1e/0x40
-> [434725.364192] RIP: 0010:_raw_spin_lock_irqsave+0x0/0x50
-> [434725.369501] Code: 8d 7f 18 45 31 c9 31 c9 41 b8 01 00 00 00 31 d2
-> 31 f6 e8 03 ff 3a ff 48 89 ef 58 5d e9 99 24 3b ff 66 0f 1f 84 00 00
-> 00 00 00 <0f> 1f 44 00 00 41 54 55 48 89 fd 9c 41 5c fa 65 ff 05 ea d5
-> 4f 78
-> [434725.388866] RSP: 0000:ffff9ac140003d00 EFLAGS: 00000202
-> [434725.394347] RAX: 0000000000000028 RBX: 00000000002b5ea8 RCX:
-> ffff8b7e4ad208d0
-> [434725.401779] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
-> ffffffff887579e0
-> [434725.409211] RBP: 0000000000000282 R08: 00000000897fe2f0 R09:
-> 0000000000000001
-> [434725.416641] R10: 0000000000000000 R11: ffff8b7e46226db0 R12:
-> ffff8b7e41282500
-> [434725.424073] R13: ffff8b7e41281f00 R14: 0000000000000200 R15:
-> 000000000ad7aa00
-> [434725.431582]  add_dma_entry+0xa9/0x1d0
-> [434725.435487]  dma_map_page_attrs+0xd8/0x220
-> [434725.439847]  usb_hcd_map_urb_for_dma+0x3b6/0x4f0
-> [434725.444734]  usb_hcd_submit_urb+0x98/0xbf0
-> [434725.449059]  ? __lock_acquire.constprop.0+0x27d/0x550
-> [434725.454378]  ? find_held_lock+0x2b/0x80
-> [434725.458493]  dln2_rx+0x1d6/0x2b0 [dln2]
-> [434725.462595]  __usb_hcd_giveback_urb+0x91/0x100
-> [434725.467291]  usb_giveback_urb_bh+0xa7/0x100
-> [434725.471740]  tasklet_action_common.constprop.0+0xd0/0x140
-> [434725.477420]  __do_softirq+0xeb/0x2dd
-> [434725.481240]  irq_exit_rcu+0x95/0xc0
-> [434725.484939]  common_interrupt+0x7b/0xa0
-> [434725.489000]  </IRQ>
-> [434725.491275]  asm_common_interrupt+0x1e/0x40
-> [434725.495682] RIP: 0010:_raw_spin_unlock_irq+0x27/0x30
-> [434725.500898] Code: 35 ff 90 0f 1f 44 00 00 55 48 8b 74 24 08 48 89
-> fd 48 8d 7f 18 e8 79 fa 3a ff 48 89 ef e8 a
-> 1 23 3b ff fb 65 ff 0d 29 d4 4f 78 <5d> c3 0f 1f 80 00 00 00 00 0f 1f
-> 44 00 00 55 48 89 fd 48 83 c7 18
-> [434725.520261] RSP: 0000:ffff9ac140293b98 EFLAGS: 00000246
-> [434725.525742] RAX: 0000000000000000 RBX: 0000000000000000 RCX:
-> ffff8b7e4ad208d0
-> [434725.533174] RDX: 0000000062c241c0 RSI: 0000000042fee84d RDI:
-> ffffffff8881ab00
-> [434725.540606] RBP: ffffffff8881ab00 R08: 00000000897fe2f0 R09:
-> 0000000000000001
-> [434725.548037] R10: ffff8b7e7e23ac30 R11: 0000000000000000 R12:
-> 0000000000000000
-> [434725.555469] R13: ffff8b7e4b29c000 R14: ffff8b7e4b40c018 R15:
-> ffff8b7e4af62950
-> [434725.562975]  ? _raw_spin_unlock_irq+0x1f/0x30
-> [434725.567571]  usb_hcd_submit_urb+0x294/0xbf0
-> [434725.572017]  ? lockdep_init_map_type+0x47/0x220
-> [434725.576831]  usb_start_wait_urb+0x65/0x160
-> [434725.581213]  usb_control_msg+0xdf/0x140
-> [434725.585302]  hub_event+0x8f4/0x1890
-> [434725.589087]  ? lock_acquire+0x93/0x150
-> [434725.593053]  ? process_one_work+0x1bc/0x4b0
-> [434725.597494]  process_one_work+0x24d/0x4b0
-> [434725.601776]  worker_thread+0x55/0x3c0
-> [434725.605657]  ? rescuer_thread+0x390/0x390
-> [434725.609904]  kthread+0x137/0x150
-> [434725.613342]  ? __kthread_bind_mask+0x60/0x60
-> [434725.617862]  ret_from_fork+0x22/0x30
-> [434725.622038] Kernel Offset: 0x5e00000 from 0xffffffff81000000
-> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
-> [434725.633177] ---[ end Kernel panic - not syncing: Kernel Watchdog ]---
-> 
-> Any ideas, hints, etc are welcome!
-> 
-
+Rob
