@@ -2,78 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D8A3AB12B
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 12:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6649C3AB1D5
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 13:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbhFQKUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 06:20:19 -0400
-Received: from mga14.intel.com ([192.55.52.115]:45837 "EHLO mga14.intel.com"
+        id S231332AbhFQLEE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 07:04:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230269AbhFQKUS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 06:20:18 -0400
-IronPort-SDR: JuoiUbDJxYrjVqj2c6/aS71KnJrNKJT1ArnsHxSpjweeNswvS2BxahQtUu3bpkZdxkAo1gVzhI
- CBjMGQ+Rkp4A==
-X-IronPort-AV: E=McAfee;i="6200,9189,10017"; a="206160893"
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="206160893"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 03:18:10 -0700
-IronPort-SDR: HpqYa4kpXC0ZuelTPE4bdlUaMvgp+k5NgcFyeQmvzkydBKSNtK7nnOxSkDChNcJr25Lil23b+B
- 49lLl0k0L7dQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,280,1616482800"; 
-   d="scan'208";a="555162421"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 Jun 2021 03:18:08 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 17 Jun 2021 13:18:07 +0300
-Date:   Thu, 17 Jun 2021 13:18:07 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Jing Xiangfeng <jingxiangfeng@huawei.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: Add the missed altmode_id_remove() in
- typec_register_altmode()
-Message-ID: <YMshX75xfDczNmS1@kuha.fi.intel.com>
-References: <20210617073226.47599-1-jingxiangfeng@huawei.com>
+        id S229783AbhFQLED (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 07:04:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B4CCC6113C;
+        Thu, 17 Jun 2021 11:01:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1623927716;
+        bh=/21BUcbCVrKKDbYsDl8HVVlMxEwa6AZmmpAofoOTQkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XsPu2XFZ8VckFGpo9pVq9e87A3zV6kvRViOyzzqtMGLTtRDKB9aEOAWm09YsO7+/0
+         ERgHlqduBsDJYj4vwwAdaBbPfCHmczfr7zaXVM4vHFran6nScN0AiEJPg4RoQgyqCE
+         EWzriFHM35RNQi5q8GtWkFf2jG+h3cWC7cWHAfNk=
+Date:   Thu, 17 Jun 2021 13:01:53 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Peter Chen <peter.chen@kernel.org>
+Subject: Re: [PATCH] usb: dwc3: Fix debugfs creation flow
+Message-ID: <YMsrofH0AVUUMH7y@kroah.com>
+References: <7f5167c67cd95102b2acab967d19af7962415a66.1623906350.git.Minas.Harutyunyan@synopsys.com>
+ <YMrnaS0EcVQpNpXH@kroah.com>
+ <e68070dd-84b0-efdc-78dd-9035b7e911c8@synopsys.com>
+ <YMr63WwtOJkc5YhH@kroah.com>
+ <0ba79afb-2b34-6e01-9ec3-622a3591ba5b@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210617073226.47599-1-jingxiangfeng@huawei.com>
+In-Reply-To: <0ba79afb-2b34-6e01-9ec3-622a3591ba5b@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 03:32:26PM +0800, Jing Xiangfeng wrote:
-> typec_register_altmode() misses to call altmode_id_remove() in an error
-> path. Add the missed function call to fix it.
+On Thu, Jun 17, 2021 at 09:14:37AM +0000, Minas Harutyunyan wrote:
+> Hi Greg,
 > 
-> Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-> Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
-
-Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
-> ---
->  drivers/usb/typec/class.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> On 6/17/2021 11:33 AM, Greg Kroah-Hartman wrote:
+> > On Thu, Jun 17, 2021 at 07:11:33AM +0000, Minas Harutyunyan wrote:
+> >> Hi Greg,
+> >>
+> >> On 6/17/2021 10:10 AM, Greg Kroah-Hartman wrote:
+> >>> On Wed, Jun 16, 2021 at 10:56:02PM -0700, Minas Harutyunyan wrote:
+> >>>> Creation EP's debugfs called earlier than debugfs folder for dwc3
+> >>>> device created. As result EP's debugfs are created in '/sys/kernel/debug'
+> >>>> instead of '/sys/kernel/debug/usb/dwc3.1.auto'.
+> >>>>
+> >>>> Moved dwc3_debugfs_init() function call before calling
+> >>>> dwc3_core_init_mode() to allow create dwc3 debugfs parent before
+> >>>> creating EP's debugfs's.
+> >>>>
+> >>>> Fixes: 8562d5bfc0fc ("USB: dwc3: remove debugfs root dentry storage")
+> >>>> Signed-off-by: Minas Harutyunyan <hminas@synopsys.com>
+> >>>> ---
+> >>>>    drivers/usb/dwc3/core.c | 3 ++-
+> >>>>    1 file changed, 2 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> >>>> index e0a8e796c158..ba74ad7f6995 100644
+> >>>> --- a/drivers/usb/dwc3/core.c
+> >>>> +++ b/drivers/usb/dwc3/core.c
+> >>>> @@ -1620,17 +1620,18 @@ static int dwc3_probe(struct platform_device *pdev)
+> >>>>    	}
+> >>>>    
+> >>>>    	dwc3_check_params(dwc);
+> >>>> +	dwc3_debugfs_init(dwc);
+> >>>>    
+> >>>>    	ret = dwc3_core_init_mode(dwc);
+> >>>>    	if (ret)
+> >>>>    		goto err5;
+> >>>>    
+> >>>> -	dwc3_debugfs_init(dwc);
+> >>>>    	pm_runtime_put(dev);
+> >>>>    
+> >>>>    	return 0;
+> >>>>    
+> >>>>    err5:
+> >>>> +	dwc3_debugfs_exit(dwc);
+> >>>>    	dwc3_event_buffers_cleanup(dwc);
+> >>>>    
+> >>>>    	usb_phy_shutdown(dwc->usb2_phy);
+> >>>>
+> >>>> base-commit: 1da8116eb0c5dfc05cfb89896239badb18c4daf3
+> >>>
+> >>> I thought we fixed this already in usb-next and usb-linus, right?  Where
+> >>> are you seeing this problem happening?
+> >>
+> >> I faced this issue on 5.13.0-rc6. Patch "USB: dwc3: remove debugfs root
+> >> dentry storage" introduced this issue, because of debugfs_lookup()
+> >> function. I don't see any fix in usb-next.
+> > 
+> > 4bf584a03eec ("usb: dwc3: core: fix kernel panic when do reboot") in
+> > linux-next "should" solve this issue.  Or it was supposed to.  I
+> > thought.  I'm getting confused about this problem these days...
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index b9429c9f65f6..aeef453aa658 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -517,8 +517,10 @@ typec_register_altmode(struct device *parent,
->  	int ret;
->  
->  	alt = kzalloc(sizeof(*alt), GFP_KERNEL);
-> -	if (!alt)
-> +	if (!alt) {
-> +		altmode_id_remove(parent, id);
->  		return ERR_PTR(-ENOMEM);
-> +	}
->  
->  	alt->adev.svid = desc->svid;
->  	alt->adev.mode = desc->mode;
-> -- 
-> 2.26.0.106.g9fadedd
+> No, 4bf584a03eec ("usb: dwc3: core: fix kernel panic when do reboot") 
+> fix another thing.
+> > 
+> > The commit you reference above in the fixes line is NOT in 5.13-rc6, so
+> > how can this commit fix a problem in 5.13-rc6?
+> 
+> I see that commit in your "usb-next" below "Merge tag 'v5.13-rc6'":
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/log/?qt=grep&q=&h=usb-next
 
--- 
-heikki
+Yes, but that is NOT in 5.13-rc6, so your above comment does not make
+sense to me.
+
+So, to be specific, what commit causes this problem, that this patch
+fixes?
+
+thanks,
+
+greg k-h
