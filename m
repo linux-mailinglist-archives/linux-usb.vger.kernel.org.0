@@ -2,105 +2,162 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D04603AB0B1
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 11:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F3E13AB0C9
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 12:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232157AbhFQKA7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 06:00:59 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:51805 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbhFQKAq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 06:00:46 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623923919; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=nZjdf/YIZuObh/zYQVUmteSyPqAUYoSWQnYeQyM+fME=; b=fASMv8gCE1szOBod3lVpQbvaeuE/QRCOPImTwBrdOkvpmLWhgFGNsCf29TbC9Ze81xKEBtoT
- YiX5xaRx4wZEzWfPEA9MVeqBIshuZ7Ft5Zyk8nPMePBkmGtX/rAGWyIb53Jbzs2Z29qXqMmm
- QoTRz2GZAvTBdGD5XESgM636uKk=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 60cb1cc8e27c0cc77f937ad1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Jun 2021 09:58:32
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 53883C43460; Thu, 17 Jun 2021 09:58:31 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id E036CC433F1;
-        Thu, 17 Jun 2021 09:58:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org E036CC433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        frowand.list@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jackp@codeaurora.org, fntoth@gmail.com,
-        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v10 6/6] dt-bindings: usb: dwc3: Update dwc3 TX fifo properties
-Date:   Thu, 17 Jun 2021 02:58:19 -0700
-Message-Id: <1623923899-16759-7-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+        id S231668AbhFQKCr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 06:02:47 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:60396 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231593AbhFQKCp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 06:02:45 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 15HA0PfK4010237, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 15HA0PfK4010237
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 17 Jun 2021 18:00:26 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Thu, 17 Jun 2021 18:00:25 +0800
+Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Thu, 17 Jun
+ 2021 18:00:24 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net-next] r8152: store the information of the pipes
+Date:   Thu, 17 Jun 2021 18:00:15 +0800
+Message-ID: <1394712342-15778-367-Taiwan-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXMBS02.realtek.com.tw (172.21.6.95) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/17/2021 09:38:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzYvMTcgpFekyCAwNzo1MDowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/17/2021 09:36:41
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 164440 [Jun 17 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 448 448 71fb1b37213ce9a885768d4012c46ac449c77b17
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: realtek.com:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/17/2021 09:38:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update the tx-fifo-resize property with a better description, while
-adding the tx-fifo-max-num, which is a new parameter allowing
-adjustments for the maximum number of packets the txfifo resizing logic
-can account for while resizing the endpoints.
+Store the information of the pipes to avoid calling usb_rcvctrlpipe(),
+usb_sndctrlpipe(), usb_rcvbulkpipe(), usb_sndbulkpipe(), and
+usb_rcvintpipe() frequently.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+Signed-off-by: Hayes Wang <hayeswang@realtek.com>
 ---
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+ drivers/net/usb/r8152.c | 18 +++++++++++++-----
+ 1 file changed, 13 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 41416fb..078fb78 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -289,10 +289,21 @@ properties:
-     maximum: 16
+diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+index 85039e17f4cd..62cd48dc2878 100644
+--- a/drivers/net/usb/r8152.c
++++ b/drivers/net/usb/r8152.c
+@@ -931,6 +931,8 @@ struct r8152 {
+ 	u32 rx_pending;
+ 	u32 fc_pause_on, fc_pause_off;
  
-   tx-fifo-resize:
--    description: Determines if the FIFO *has* to be reallocated
--    deprecated: true
-+    description: Determines if the TX fifos can be dynamically resized depending
-+      on the number of IN endpoints used and if bursting is supported.  This
-+      may help improve bandwidth on platforms with higher system latencies, as
-+      increased fifo space allows for the controller to prefetch data into its
-+      internal memory.
-     type: boolean
- 
-+  tx-fifo-max-num:
-+    description: Specifies the max number of packets the txfifo resizing logic
-+      can account for when higher endpoint bursting is used. (bMaxBurst > 6) The
-+      higher the number, the more fifo space the txfifo resizing logic will
-+      allocate for that endpoint.
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    minimum: 3
++	unsigned int pipe_in, pipe_out, pipe_intr, pipe_ctrl_in, pipe_ctrl_out;
 +
-   snps,incr-burst-type-adjustment:
-     description:
-       Value for INCR burst type of GSBUSCFG0 register, undefined length INCR
+ 	u32 support_2500full:1;
+ 	u32 lenovo_macpassthru:1;
+ 	u32 dell_tb_rx_agg_bug:1;
+@@ -1198,7 +1200,7 @@ int get_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
+ 	if (!tmp)
+ 		return -ENOMEM;
+ 
+-	ret = usb_control_msg(tp->udev, usb_rcvctrlpipe(tp->udev, 0),
++	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_in,
+ 			      RTL8152_REQ_GET_REGS, RTL8152_REQT_READ,
+ 			      value, index, tmp, size, 500);
+ 	if (ret < 0)
+@@ -1221,7 +1223,7 @@ int set_registers(struct r8152 *tp, u16 value, u16 index, u16 size, void *data)
+ 	if (!tmp)
+ 		return -ENOMEM;
+ 
+-	ret = usb_control_msg(tp->udev, usb_sndctrlpipe(tp->udev, 0),
++	ret = usb_control_msg(tp->udev, tp->pipe_ctrl_out,
+ 			      RTL8152_REQ_SET_REGS, RTL8152_REQT_WRITE,
+ 			      value, index, tmp, size, 500);
+ 
+@@ -2041,7 +2043,7 @@ static int alloc_all_mem(struct r8152 *tp)
+ 		goto err1;
+ 
+ 	tp->intr_interval = (int)ep_intr->desc.bInterval;
+-	usb_fill_int_urb(tp->intr_urb, tp->udev, usb_rcvintpipe(tp->udev, 3),
++	usb_fill_int_urb(tp->intr_urb, tp->udev, tp->pipe_intr,
+ 			 tp->intr_buff, INTBUFSIZE, intr_callback,
+ 			 tp, tp->intr_interval);
+ 
+@@ -2305,7 +2307,7 @@ static int r8152_tx_agg_fill(struct r8152 *tp, struct tx_agg *agg)
+ 	if (ret < 0)
+ 		goto out_tx_fill;
+ 
+-	usb_fill_bulk_urb(agg->urb, tp->udev, usb_sndbulkpipe(tp->udev, 2),
++	usb_fill_bulk_urb(agg->urb, tp->udev, tp->pipe_out,
+ 			  agg->head, (int)(tx_data - (u8 *)agg->head),
+ 			  (usb_complete_t)write_bulk_callback, agg);
+ 
+@@ -2620,7 +2622,7 @@ int r8152_submit_rx(struct r8152 *tp, struct rx_agg *agg, gfp_t mem_flags)
+ 	    !test_bit(WORK_ENABLE, &tp->flags) || !netif_carrier_ok(tp->netdev))
+ 		return 0;
+ 
+-	usb_fill_bulk_urb(agg->urb, tp->udev, usb_rcvbulkpipe(tp->udev, 1),
++	usb_fill_bulk_urb(agg->urb, tp->udev, tp->pipe_in,
+ 			  agg->buffer, tp->rx_buf_sz,
+ 			  (usb_complete_t)read_bulk_callback, agg);
+ 
+@@ -9507,6 +9509,12 @@ static int rtl8152_probe(struct usb_interface *intf,
+ 	tp->intf = intf;
+ 	tp->version = version;
+ 
++	tp->pipe_ctrl_in = usb_rcvctrlpipe(udev, 0);
++	tp->pipe_ctrl_out = usb_sndctrlpipe(udev, 0);
++	tp->pipe_in = usb_rcvbulkpipe(udev, 1);
++	tp->pipe_out = usb_sndbulkpipe(udev, 2);
++	tp->pipe_intr = usb_rcvintpipe(udev, 3);
++
+ 	switch (version) {
+ 	case RTL_VER_01:
+ 	case RTL_VER_02:
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.26.3
 
