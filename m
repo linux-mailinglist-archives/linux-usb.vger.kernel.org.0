@@ -2,80 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B6F3AB4C4
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 15:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D613AB4CA
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 15:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232164AbhFQNcn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 09:32:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33640 "EHLO mail.kernel.org"
+        id S232362AbhFQNdn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 09:33:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34030 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231176AbhFQNcm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 09:32:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 986E861026;
-        Thu, 17 Jun 2021 13:30:33 +0000 (UTC)
+        id S231654AbhFQNdn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 09:33:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C81D6044F;
+        Thu, 17 Jun 2021 13:31:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1623936634;
-        bh=xlbIXi7JbyJzE3qSeyqhFbJJovuNN0NtZ7HgQ2zU/XM=;
+        s=korg; t=1623936695;
+        bh=u0qd6O0XohK2blFPQxVjvBt/wYTUHl/fZzzKtLhEk7E=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nz1Tskep2no7gsD9oTzCWb379gPRG6tC7Ln7keaHrCj8kHTaiRCQci3gR02KSNZFM
-         LDmI0S5T3SNlKaW9ClYtWh11chGBpuEGg7kXjjdiMVwnMVKyF7NaogYKv9AK0GW4cW
-         ecuQoJSguLXS86WiFosQkfiiCifPT8Nz5HE4an5o=
-Date:   Thu, 17 Jun 2021 15:30:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        balbi@kernel.org
-Subject: Re: [PATCH -next] usb: gadget: hid: fix error return code
-Message-ID: <YMtOd9qsL4D/glmZ@kroah.com>
-References: <20210617065625.1206872-1-yangyingliang@huawei.com>
+        b=gsmcnqVxOrJtKmRUja/eV6hZhh9xFUtY4FQU7G4cPnZWA3Z/MNAN+W/ur6Sazs6VL
+         sI+R36fTde9mqKcZZjB3PQ48qhcdWlLZDRrZmLa7XrNtiXCzhJQkbaodqG+fs60A/h
+         06kGpw4YNvtfIm0YJD5yKXkPtL4igREkK3VE7RgY=
+Date:   Thu, 17 Jun 2021 15:31:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ikjoon Jang <ikjn@chromium.org>,
+        Tianping Fang <tianping.fang@mediatek.com>
+Subject: Re: [PATCH] usb: xhci-mtk: allow multiple Start-Split in a microframe
+Message-ID: <YMtOtC1j2DouJ9Is@kroah.com>
+References: <1623895911-29259-1-git-send-email-chunfeng.yun@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210617065625.1206872-1-yangyingliang@huawei.com>
+In-Reply-To: <1623895911-29259-1-git-send-email-chunfeng.yun@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 02:56:25PM +0800, Yang Yingliang wrote:
-> Fix to return a negative error code from the error handling
-> case instead of 0.
+On Thu, Jun 17, 2021 at 10:11:51AM +0800, Chunfeng Yun wrote:
+> This patch is used to relax bandwidth schedule by allowing multiple
+> Start-Split in the same microframe.
 > 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 > ---
->  drivers/usb/gadget/legacy/hid.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+>  drivers/usb/host/xhci-mtk-sch.c | 16 ----------------
+>  drivers/usb/host/xhci-mtk.h     |  2 --
+>  2 files changed, 18 deletions(-)
 > 
-> diff --git a/drivers/usb/gadget/legacy/hid.c b/drivers/usb/gadget/legacy/hid.c
-> index c4eda7fe7ab4..3912cc805f3a 100644
-> --- a/drivers/usb/gadget/legacy/hid.c
-> +++ b/drivers/usb/gadget/legacy/hid.c
-> @@ -99,8 +99,10 @@ static int do_config(struct usb_configuration *c)
+> diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
+> index c07411d9b16f..149a0f4a6ec4 100644
+> --- a/drivers/usb/host/xhci-mtk-sch.c
+> +++ b/drivers/usb/host/xhci-mtk-sch.c
+> @@ -470,11 +470,9 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
 >  
->  	list_for_each_entry(e, &hidg_func_list, node) {
->  		e->f = usb_get_function(e->fi);
-> -		if (IS_ERR(e->f))
-> +		if (IS_ERR(e->f)) {
-> +			status = PTR_ERR(e->f);
-
-Are you _SURE_ that you now want to return an error?  This code has
-never done this, what is going to break now that it will?
-
->  			goto put;
-> +		}
->  		status = usb_add_function(c, e->f);
->  		if (status < 0) {
->  			usb_put_function(e->f);
-> @@ -171,8 +173,10 @@ static int hid_bind(struct usb_composite_dev *cdev)
->  		struct usb_descriptor_header *usb_desc;
+>  static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+>  {
+> -	struct mu3h_sch_tt *tt = sch_ep->sch_tt;
+>  	u32 extra_cs_count;
+>  	u32 start_ss, last_ss;
+>  	u32 start_cs, last_cs;
+> -	int i;
 >  
->  		usb_desc = usb_otg_descriptor_alloc(gadget);
-> -		if (!usb_desc)
-> +		if (!usb_desc) {
-> +			status = -ENOMEM;
+>  	if (!sch_ep->sch_tt)
+>  		return 0;
+> @@ -491,10 +489,6 @@ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+>  		if (!(start_ss == 7 || last_ss < 6))
+>  			return -ESCH_SS_Y6;
+>  
+> -		for (i = 0; i < sch_ep->cs_count; i++)
+> -			if (test_bit(offset + i, tt->ss_bit_map))
+> -				return -ESCH_SS_OVERLAP;
+> -
+>  	} else {
+>  		u32 cs_count = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
+>  
+> @@ -521,9 +515,6 @@ static int check_sch_tt(struct mu3h_sch_ep_info *sch_ep, u32 offset)
+>  		if (cs_count > 7)
+>  			cs_count = 7; /* HW limit */
+>  
+> -		if (test_bit(offset, tt->ss_bit_map))
+> -			return -ESCH_SS_OVERLAP;
+> -
+>  		sch_ep->cs_count = cs_count;
+>  		/* one for ss, the other for idle */
+>  		sch_ep->num_budget_microframes = cs_count + 2;
+> @@ -558,13 +549,6 @@ static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
+>  	for (i = 0; i < num_esit; i++) {
+>  		base = sch_ep->offset + i * sch_ep->esit;
+>  
+> -		for (j = 0; j < bits; j++) {
 
-This looks correct, can you resend just this chunk, and then go test the
-above change to verify it doesn't break things?
+Now that bits is no longer used, we get a build warning.
+
+Can you fix this patch and resend it?
 
 thanks,
 
