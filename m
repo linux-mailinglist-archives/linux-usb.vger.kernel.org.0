@@ -2,276 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CACE3ABEDF
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 00:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA653ABFA8
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 01:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232176AbhFQW1i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 18:27:38 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:23182 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbhFQW1h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 18:27:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623968729; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=yBM+qlvNpbmj6TXaUOyvzV/aaXDmeD/2bYLyqODrPWo=; b=qZBKAH8LYvUO7+4W07PQZjXMGPL/Wpmef6rq+qMWdQUK+zo23uhb2/I4Ll3KH5pvkADXxkyK
- HgsfJ9X7oBsSmGeizkRH5CMBkC/J8uq58U92VpAib09IQPFr8ZnVB6ePfypgqNB/PzObCdtf
- /XzaICyy9t48Bg5LML+eVmWnWCc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 60cbcbd9e27c0cc77fe580d2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 17 Jun 2021 22:25:29
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2F8F7C433D3; Thu, 17 Jun 2021 22:25:27 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.2 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.94.190] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C3AAFC4338A;
-        Thu, 17 Jun 2021 22:25:24 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C3AAFC4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
- bursting
-To:     Ferry Toth <fntoth@gmail.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, frowand.list@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jackp@codeaurora.org, heikki.krogerus@linux.intel.com,
-        andy.shevchenko@gmail.com
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
- <cfb83fe4-369c-ec72-7887-3bcb0f20fe15@gmail.com>
- <ec8050c5-c013-4af6-b39e-69779c009a9c@codeaurora.org>
- <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <2e01c435-9ecc-4e3b-f55c-612a86667020@codeaurora.org>
-Date:   Thu, 17 Jun 2021 15:25:23 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232466AbhFQXqa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 19:46:30 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:43365 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232349AbhFQXqa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 19:46:30 -0400
+Received: (qmail 296032 invoked by uid 1000); 17 Jun 2021 19:44:21 -0400
+Date:   Thu, 17 Jun 2021 19:44:21 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Fabien Chouteau <fabien.chouteau@barco.com>,
+        Segiy Stetsyuk <serg_stetsuk@ukr.net>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: fix endianness issue with descriptors
+Message-ID: <20210617234421.GA295854@rowland.harvard.edu>
+References: <20210617162755.29676-1-ruslan.bilovol@gmail.com>
+ <YMt95iarFDUDvjQ8@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YMt95iarFDUDvjQ8@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 6/17/2021 2:55 PM, Ferry Toth wrote:
-> Hi
+On Thu, Jun 17, 2021 at 06:52:54PM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Jun 17, 2021 at 07:27:55PM +0300, Ruslan Bilovol wrote:
+> > Running sparse checker it shows warning message about
+> > incorrect endianness used for descriptor initialization:
+> > 
+> > | f_hid.c:91:43: warning: incorrect type in initializer (different base types)
+> > | f_hid.c:91:43:    expected restricted __le16 [usertype] bcdHID
+> > | f_hid.c:91:43:    got int
+> > 
+> > Fixing issue with cpu_to_le16() macro
+> > 
+> > Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
+> > Cc: Fabien Chouteau <fabien.chouteau@barco.com>
+> > Cc: Segiy Stetsyuk <serg_stetsuk@ukr.net>
+> > Cc: stable@kernel.org
+> > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> > ---
+> >  drivers/usb/gadget/function/f_hid.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> > index 70774d8cb14e..02683ac0719d 100644
+> > --- a/drivers/usb/gadget/function/f_hid.c
+> > +++ b/drivers/usb/gadget/function/f_hid.c
+> > @@ -88,7 +88,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+> >  static struct hid_descriptor hidg_desc = {
+> >  	.bLength			= sizeof hidg_desc,
+> >  	.bDescriptorType		= HID_DT_HID,
+> > -	.bcdHID				= 0x0101,
+> > +	.bcdHID				= cpu_to_le16(0x0101),
 > 
-> Op 17-06-2021 om 23:48 schreef Wesley Cheng:
->> Hi,
->>
->> On 6/17/2021 2:01 PM, Ferry Toth wrote:
->>> Hi
->>>
->>> Op 17-06-2021 om 11:58 schreef Wesley Cheng:
->>>> Changes in V10:
->>>>   - Fixed compilation errors in config where OF is not used (error due to
->>>>     unknown symbol for of_add_property()).  Add of_add_property() stub.
->>>>   - Fixed compilation warning for incorrect argument being passed to
->>>> dwc3_mdwidth
->>> This fixes the OOPS I had in V9. I do not see any change in performance
->>> on Merrifield though.
->> I see...thanks Ferry! With your testing, are you writing to the device's
->> internal storage (ie UFS, eMMC, etc...), or did you use a ramdisk as well?
-> 
-> In this case I just tested the EEM path using iperf3.
-> 
+> This is a BCD value, not a little-endian value, are you sure this
+> conversion is correct?
 
-Got it.  I don't believe f_eem will use a high enough (if at all)
-bMaxBurst value to change the TXFIFO size.
+It's a BCD value, but the storage format is little endian.  So yes, the 
+conversion is correct.
 
->> If not with a ramdisk, we might want to give that a try to avoid the
->> storage path being the bottleneck.  You can use "dd" to create an empty
->> file, and then just use that as the LUN's backing file.
->>
->> echo ramdisk.img >
->> /sys/kernel/config/usb_gadget/g1/functions/mass_storage.0/lun.0/file
-> 
-> Ah, why didn't I think of that. I have currently mass storage setup with
-> eMMC but it seems that is indeed the bottleneck.
-> 
+But even more, the conversion is correct because 0x0101 yields exactly 
+the same sequence of bytes in little-endian and big-endian orders!  
+Either way, it is two bytes each containing 0x01.
 
-:), not a problem...I've been working on getting the ideal set up for
-the performance profiling for awhile, so anything I can do to make sure
-we get some good results.
-
-> I'll try with a ramdisk and let you know.
-> 
-
-Thanks again for the testing, Ferry.
-
-Thanks
-Wesley Cheng
-
->> Thanks
->> Wesley Cheng
->>
->>>> Changes in V9:
->>>>   - Fixed incorrect patch in series.  Removed changes in DTSI, as
->>>> dwc3-qcom will
->>>>     add the property by default from the kernel.
->>>>
->>>> Changes in V8:
->>>>   - Rebased to usb-testing
->>>>   - Using devm_kzalloc for adding txfifo property in dwc3-qcom
->>>>   - Removed DWC3 QCOM ACPI property for enabling the txfifo resize
->>>>
->>>> Changes in V7:
->>>>   - Added a new property tx-fifo-max-num for limiting how much fifo
->>>> space the
->>>>     resizing logic can allocate for endpoints with large burst
->>>> values.  This
->>>>     can differ across platforms, and tie in closely with overall
->>>> system latency.
->>>>   - Added recommended checks for DWC32.
->>>>   - Added changes to set the tx-fifo-resize property from dwc3-qcom by
->>>> default
->>>>     instead of modifying the current DTSI files.
->>>>   - Added comments on all APIs/variables introduced.
->>>>   - Updated the DWC3 YAML to include a better description of the
->>>> tx-fifo-resize
->>>>     property and added an entry for tx-fifo-max-num.
->>>>
->>>> Changes in V6:
->>>>   - Rebased patches to usb-testing.
->>>>   - Renamed to PATCH series instead of RFC.
->>>>   - Checking for fs_descriptors instead of ss_descriptors for
->>>> determining the
->>>>     endpoint count for a particular configuration.
->>>>   - Re-ordered patch series to fix patch dependencies.
->>>>
->>>> Changes in V5:
->>>>   - Added check_config() logic, which is used to communicate the
->>>> number of EPs
->>>>     used in a particular configuration.  Based on this, the DWC3
->>>> gadget driver
->>>>     has the ability to know the maximum number of eps utilized in all
->>>> configs.
->>>>     This helps reduce unnecessary allocation to unused eps, and will
->>>> catch fifo
->>>>     allocation issues at bind() time.
->>>>   - Fixed variable declaration to single line per variable, and
->>>> reverse xmas.
->>>>   - Created a helper for fifo clearing, which is used by ep0.c
->>>>
->>>> Changes in V4:
->>>>   - Removed struct dwc3* as an argument for dwc3_gadget_resize_tx_fifos()
->>>>   - Removed WARN_ON(1) in case we run out of fifo space
->>>>   Changes in V3:
->>>>   - Removed "Reviewed-by" tags
->>>>   - Renamed series back to RFC
->>>>   - Modified logic to ensure that fifo_size is reset if we pass the
->>>> minimum
->>>>     threshold.  Tested with binding multiple FDs requesting 6 FIFOs.
->>>>
->>>> Changes in V2:
->>>>   - Modified TXFIFO resizing logic to ensure that each EP is reserved a
->>>>     FIFO.
->>>>   - Removed dev_dbg() prints and fixed typos from patches
->>>>   - Added some more description on the dt-bindings commit message
->>>>
->>>> Currently, there is no functionality to allow for resizing the
->>>> TXFIFOs, and
->>>> relying on the HW default setting for the TXFIFO depth.  In most
->>>> cases, the
->>>> HW default is probably sufficient, but for USB compositions that contain
->>>> multiple functions that require EP bursting, the default settings
->>>> might not be enough.  Also to note, the current SW will assign an EP to a
->>>> function driver w/o checking to see if the TXFIFO size for that
->>>> particular
->>>> EP is large enough. (this is a problem if there are multiple HW defined
->>>> values for the TXFIFO size)
->>>>
->>>> It is mentioned in the SNPS databook that a minimum of TX FIFO depth = 3
->>>> is required for an EP that supports bursting.  Otherwise, there may be
->>>> frequent occurences of bursts ending.  For high bandwidth functions,
->>>> such as data tethering (protocols that support data aggregation), mass
->>>> storage, and media transfer protocol (over FFS), the bMaxBurst value
->>>> can be
->>>> large, and a bigger TXFIFO depth may prove to be beneficial in terms
->>>> of USB
->>>> throughput. (which can be associated to system access latency,
->>>> etc...)  It
->>>> allows for a more consistent burst of traffic, w/o any interruptions, as
->>>> data is readily available in the FIFO.
->>>>
->>>> With testing done using the mass storage function driver, the results
->>>> show
->>>> that with a larger TXFIFO depth, the bandwidth increased significantly.
->>>>
->>>> Test Parameters:
->>>>   - Platform: Qualcomm SM8150
->>>>   - bMaxBurst = 6
->>>>   - USB req size = 256kB
->>>>   - Num of USB reqs = 16
->>>>   - USB Speed = Super-Speed
->>>>   - Function Driver: Mass Storage (w/ ramdisk)
->>>>   - Test Application: CrystalDiskMark
->>>>
->>>> Results:
->>>>
->>>> TXFIFO Depth = 3 max packets
->>>>
->>>> Test Case | Data Size | AVG tput (in MB/s)
->>>> -------------------------------------------
->>>> Sequential|1 GB x     |
->>>> Read      |9 loops    | 193.60
->>>>       |           | 195.86
->>>>            |           | 184.77
->>>>            |           | 193.60
->>>> -------------------------------------------
->>>>
->>>> TXFIFO Depth = 6 max packets
->>>>
->>>> Test Case | Data Size | AVG tput (in MB/s)
->>>> -------------------------------------------
->>>> Sequential|1 GB x     |
->>>> Read      |9 loops    | 287.35
->>>>       |           | 304.94
->>>>            |           | 289.64
->>>>            |           | 293.61
->>>> -------------------------------------------
->>>>
->>>> Wesley Cheng (6):
->>>>    usb: gadget: udc: core: Introduce check_config to verify USB
->>>>      configuration
->>>>    usb: gadget: configfs: Check USB configuration before adding
->>>>    usb: dwc3: Resize TX FIFOs to meet EP bursting requirements
->>>>    of: Add stub for of_add_property()
->>>>    usb: dwc3: dwc3-qcom: Enable tx-fifo-resize property by default
->>>>    dt-bindings: usb: dwc3: Update dwc3 TX fifo properties
->>>>
->>>>   .../devicetree/bindings/usb/snps,dwc3.yaml         |  15 +-
->>>>   drivers/usb/dwc3/core.c                            |   9 +
->>>>   drivers/usb/dwc3/core.h                            |  15 ++
->>>>   drivers/usb/dwc3/dwc3-qcom.c                       |   9 +
->>>>   drivers/usb/dwc3/ep0.c                             |   2 +
->>>>   drivers/usb/dwc3/gadget.c                          | 212
->>>> +++++++++++++++++++++
->>>>   drivers/usb/gadget/configfs.c                      |  22 +++
->>>>   drivers/usb/gadget/udc/core.c                      |  25 +++
->>>>   include/linux/of.h                                 |   5 +
->>>>   include/linux/usb/gadget.h                         |   5 +
->>>>   10 files changed, 317 insertions(+), 2 deletions(-)
->>>>
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Alan Stern
