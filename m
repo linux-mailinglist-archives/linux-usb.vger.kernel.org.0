@@ -2,66 +2,54 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C994B3AAD6F
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 09:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED8D3AAE2B
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 09:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbhFQH0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 03:26:18 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:7317 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbhFQH0S (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 03:26:18 -0400
-Received: from dggeme764-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4G5D2301Ptz1BNF1;
-        Thu, 17 Jun 2021 15:19:07 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggeme764-chm.china.huawei.com (10.3.19.110) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.2; Thu, 17 Jun 2021 15:24:08 +0800
-From:   Jing Xiangfeng <jingxiangfeng@huawei.com>
-To:     <heikki.krogerus@linux.intel.com>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jingxiangfeng@huawei.com>
-Subject: [PATCH] usb: typec: Add the missed altmode_id_remove() in typec_register_altmode()
-Date:   Thu, 17 Jun 2021 15:32:26 +0800
-Message-ID: <20210617073226.47599-1-jingxiangfeng@huawei.com>
-X-Mailer: git-send-email 2.20.1
+        id S230409AbhFQH6l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 03:58:41 -0400
+Received: from [122.15.141.162] ([122.15.141.162]:42940 "EHLO
+        UPCDCDAMX02.upcl.org" rhost-flags-FAIL-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229666AbhFQH6g (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 17 Jun 2021 03:58:36 -0400
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF84AC3EEC;
+        Thu, 17 Jun 2021 12:51:17 +0530 (IST)
+Received: from UPCDCDAMX02.upcl.org (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9D8C1C318F;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Received: from User (unknown [210.212.82.37])
+        by UPCDCDAMX02.upcl.org (Postfix) with SMTP;
+        Thu, 17 Jun 2021 12:50:14 +0530 (IST)
+Reply-To: <marielthiago102@gmail.com>
+From:   "Mariel Thiago" <info@infotools.in>
+Subject: Re:: Please contact me it's very urgent.
+Date:   Thu, 17 Jun 2021 07:20:41 -0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggeme764-chm.china.huawei.com (10.3.19.110)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain;
+        charset="Windows-1251"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-Id: <20210617072014.9D8C1C318F@UPCDCDAMX02.upcl.org>
+To:     undisclosed-recipients:;
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSVA-9.1.0.1960-8.6.0.1013-26224.006
+X-TM-AS-Result: No-2.497-5.0-31-10
+X-imss-scan-details: No-2.497-5.0-31-10
+X-TMASE-Version: IMSVA-9.1.0.1960-8.6.1013-26224.006
+X-TMASE-Result: 10-2.496900-10.000000
+X-TMASE-MatchedRID: PEpoWB/n4wPoJ7ZHxnJI6/6CJzEkJBKDVOXpHWpii+ddyparHcc9UIhu
+        TvsiBEc/JfjcKHKDDk8K4MBRf7I7puawzjZNF/+9gM4D72plZiep43A0ENmZJqRrhpwKFLjUkZO
+        l7WKIImpu9tOD27u7FNTHX+rg7MGt505jRA97RdWRSAi45KhHyaxczqyf2GA9LHdIgRft8S1QSp
+        LfxZGQcl8vMu11r33KXPP583vQDYF3yrRBFBiPVS2s/H4x5wHg3QfwsVk0UbuGrPnef/I+ej6N5
+        5/6MNSnpdDo0PaPyGFHwD2XNKdI8sVZh7bvPcyg0m3qDro1rgcxP1evyC/00KVBBtW+D6/IR7CD
+        JBvMFOms6dZMAot5Yg==
+X-IMSS-DKIM-White-List: No
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-12:0,22:0,33:0,34:0-0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-typec_register_altmode() misses to call altmode_id_remove() in an error
-path. Add the missed function call to fix it.
-
-Fixes: 8a37d87d72f0 ("usb: typec: Bus type for alternate modes")
-Signed-off-by: Jing Xiangfeng <jingxiangfeng@huawei.com>
----
- drivers/usb/typec/class.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index b9429c9f65f6..aeef453aa658 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -517,8 +517,10 @@ typec_register_altmode(struct device *parent,
- 	int ret;
- 
- 	alt = kzalloc(sizeof(*alt), GFP_KERNEL);
--	if (!alt)
-+	if (!alt) {
-+		altmode_id_remove(parent, id);
- 		return ERR_PTR(-ENOMEM);
-+	}
- 
- 	alt->adev.svid = desc->svid;
- 	alt->adev.mode = desc->mode;
--- 
-2.26.0.106.g9fadedd
-
+ I think I have something huge you might be interested in.
