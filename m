@@ -2,95 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5669D3AA786
-	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 01:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B1C3AA8C7
+	for <lists+linux-usb@lfdr.de>; Thu, 17 Jun 2021 03:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234633AbhFPXfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 16 Jun 2021 19:35:40 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:30787 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234642AbhFPXfh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 19:35:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623886411; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=fLfryfp35i1oOAe40HSpJ35HKGxrhO8MsCZS16Y/a7Y=; b=XlvC2uREgbeS0AyLyimJRmFYg3PrdlvivGj9xsPu+i6vIfy8lrcE7PVVRS95Gelm25XwsOx/
- n4hBtXcaieInnbc4R0IObJj+AE6hWmtOsCfylqZUpqtgCqVJ6w01j42oTozZ0UGLR1dlsq5K
- Cglbsaxlr/ChVfeuQ7Mc0N4HklM=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 60ca8a2de27c0cc77faea7e3 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 16 Jun 2021 23:33:01
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 1B562C43217; Wed, 16 Jun 2021 23:33:01 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost.localdomain (unknown [101.87.142.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id CC3AFC433D3;
-        Wed, 16 Jun 2021 23:32:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org CC3AFC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
-From:   Linyu Yuan <linyyuan@codeaurora.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        Linyu Yuan <linyyuan@codeaurora.org>
-Subject: [PATCH v2] net: cdc_eem: fix tx fixup skb leak
-Date:   Thu, 17 Jun 2021 07:32:32 +0800
-Message-Id: <20210616233232.4561-1-linyyuan@codeaurora.org>
-X-Mailer: git-send-email 2.25.1
+        id S232235AbhFQBwt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 16 Jun 2021 21:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35836 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232211AbhFQBwt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 16 Jun 2021 21:52:49 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AAC7C061574
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 18:50:41 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id x8so2134778vso.5
+        for <linux-usb@vger.kernel.org>; Wed, 16 Jun 2021 18:50:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=T4XUxb4X2jLRPJlgce1PUKbINkwgcyiSSmfRX55y3ro=;
+        b=ZDqLAxpdz8/XV2AShxA4hfhKJV6WvaHUe4qsWjZdsv/gMVWoSKok+fdhKeN4I8JL4O
+         kX/XUGFzirvnJh5Jq/pCF2iuO+ak1c9xhNX+IkVHJ4wVYp+SyWw5m2FAHLi2/bD+uct8
+         MCw64kpOCcECw23Q3M0if1oB10ZCg/meJmwtYYK3qw71+Ax7POPbK87WEZpf+APmcG+W
+         M4NtUgY1Bqh51pFcFOIFPzcvlwW/CjO88AGScnXBdSxEGC1dmT6kK1lcJG6AYkxwIkkL
+         SK7E0JkeykUc44twXYWmE1HMmyJqNuYeSGnbo/AjmenNeLKQJtjITPLbB/OlpxMqZqvL
+         SD/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=T4XUxb4X2jLRPJlgce1PUKbINkwgcyiSSmfRX55y3ro=;
+        b=jAtvGITt8/CHQYqEkbqXD9Nrq31LVGaF99V8p5xWdAD1OD1rlOSCegW662kTOddKeA
+         RSoKYy19tDyKQR1fIn44hksLG+L3uZ5uk1xpshuSLMHjD3YSgxufyf/CGq1xkbh/RPGV
+         LwZOplfxWAqd6b8ngatD1QPCtj0tTTNLX+9orXbRK4akmMRTi1NRr6J7XbZYBFeI+su/
+         DHocrEzRDiRcirtKnTjwjleRQVTWJz+kkoeFdWqqt53xHV1iuh9Q7xspeKoGqg8SfASO
+         elezZk9KW6FPr5/VNF8OVJTHgAcZX3QNpCo/ETUhLnJn2A4yfIEtudjLCEhWDucMcxPB
+         GPUw==
+X-Gm-Message-State: AOAM530535a78pR4hHUJ/xasEpb863NgK7GH8CL4dzrE6Iee4Zsa22Y/
+        bfH+7zyxs8SHVAHBKvpTgHVgjXTx6cxtgIot2jS4cw==
+X-Google-Smtp-Source: ABdhPJyFRSl6kVKplmXtWOV97NYN2Ps8o/fwzP+BshzExEMWH53ArDhx8EO4/LJHWDgjVj0+AWw4k/b/7JY51GZBCaY=
+X-Received: by 2002:a05:6102:2378:: with SMTP id o24mr2460396vsa.12.1623894639745;
+ Wed, 16 Jun 2021 18:50:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+References: <20210616090102.1897674-1-kyletso@google.com> <YMn/x631dHngLxFw@kuha.fi.intel.com>
+In-Reply-To: <YMn/x631dHngLxFw@kuha.fi.intel.com>
+From:   Badhri Jagan Sridharan <badhri@google.com>
+Date:   Wed, 16 Jun 2021 18:50:02 -0700
+Message-ID: <CAPTae5LK0jM38roMfBz3OQ4SWK0f3h5qvmuoa=nqybjf5gjNmw@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: typec: tcpm: Relax disconnect threshold during
+ power negotiation
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Kyle Tso <kyletso@google.com>, Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        USB <linux-usb@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-when usbnet transmit a skb, eem fixup it in eem_tx_fixup(),
-if skb_copy_expand() failed, it return NULL,
-usbnet_start_xmit() will have no chance to free original skb.
-
-fix it by free orginal skb in eem_tx_fixup() first,
-then check skb clone status, if failed, return NULL to usbnet.
-
-Fixes: 9f722c0978b0 ("usbnet: CDC EEM support (v5)")
-Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
----
-
-v2: add Fixes tag
-
- drivers/net/usb/cdc_eem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/cdc_eem.c b/drivers/net/usb/cdc_eem.c
-index 2e60bc1b9a6b..359ea0d10e59 100644
---- a/drivers/net/usb/cdc_eem.c
-+++ b/drivers/net/usb/cdc_eem.c
-@@ -123,10 +123,10 @@ static struct sk_buff *eem_tx_fixup(struct usbnet *dev, struct sk_buff *skb,
- 	}
- 
- 	skb2 = skb_copy_expand(skb, EEM_HEAD, ETH_FCS_LEN + padlen, flags);
-+	dev_kfree_skb_any(skb);
- 	if (!skb2)
- 		return NULL;
- 
--	dev_kfree_skb_any(skb);
- 	skb = skb2;
- 
- done:
--- 
-2.25.1
-
+On Wed, Jun 16, 2021 at 6:42 AM Heikki Krogerus
+<heikki.krogerus@linux.intel.com> wrote:
+>
+> On Wed, Jun 16, 2021 at 05:01:02PM +0800, Kyle Tso wrote:
+> > If the voltage is being decreased in power negotiation, the Source will
+> > set the power supply to operate at the new voltage level before sending
+> > PS_RDY. Relax the threshold before sending Request Message so that it
+> > will not race with Source which begins to adjust the voltage right after
+> > it sends Accept Message (PPS) or tSrcTransition (25~35ms) after it sends
+> > Accept Message (non-PPS).
+> >
+> > The real threshold will be set after Sink receives PS_RDY Message.
+> >
+> > Fixes: f321a02caebd ("usb: typec: tcpm: Implement enabling Auto Discharge disconnect support")
+> > Cc: Badhri Jagan Sridharan <badhri@google.com>
+> > Signed-off-by: Kyle Tso <kyletso@google.com>
+>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+>
+> > ---
+> > Changes in v3:
+> > - move the timing of setting threshold for Fixed RDO as I did for PPS in
+> >   v2, i.e. move it to tcpm_pd_send_request.
+> > - add Cc: tag for Badhri
+> > - update the commit message for the above changes
+> >
+> > Changes in v2:
+> > - move the timing of setting threshold up to "before sending Request"
+> >   for PPS power negotiation so that it won't race with the Source.
+> > - PPS: if it fails to send the Request, fallback to previous threshold
+> > - PPS: if the Source doesn't respond Accept, fallback to previous
+> >   threshold
+> > - update the commit message for above changes
+> >
+> >  drivers/usb/typec/tcpm/tcpm.c | 27 +++++++++++++++++++++++++++
+> >  1 file changed, 27 insertions(+)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 197556038ba4..b1d310ab84c4 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -2604,6 +2604,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+> >                       } else {
+> >                               next_state = SNK_WAIT_CAPABILITIES;
+> >                       }
+> > +
+> > +                     /* Threshold was relaxed before sending Request. Restore it back. */
+> > +                     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
+> > +                                                            port->pps_data.active,
+> > +                                                            port->supply_voltage);
+> >                       tcpm_set_state(port, next_state, 0);
+> >                       break;
+> >               case SNK_NEGOTIATE_PPS_CAPABILITIES:
+> > @@ -2617,6 +2622,11 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
+> >                           port->send_discover)
+> >                               port->vdm_sm_running = true;
+> >
+> > +                     /* Threshold was relaxed before sending Request. Restore it back. */
+> > +                     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
+> > +                                                            port->pps_data.active,
+> > +                                                            port->supply_voltage);
+> > +
+> >                       tcpm_set_state(port, SNK_READY, 0);
+> >                       break;
+> >               case DR_SWAP_SEND:
+> > @@ -3336,6 +3346,12 @@ static int tcpm_pd_send_request(struct tcpm_port *port)
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     /*
+> > +      * Relax the threshold as voltage will be adjusted after Accept Message plus tSrcTransition.
+> > +      * It is safer to modify the threshold here.
+> > +      */
+> > +     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
+> > +
+> >       memset(&msg, 0, sizeof(msg));
+> >       msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
+> >                                 port->pwr_role,
+> > @@ -3433,6 +3449,9 @@ static int tcpm_pd_send_pps_request(struct tcpm_port *port)
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > +     /* Relax the threshold as voltage will be adjusted right after Accept Message. */
+> > +     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB, false, 0);
+> > +
+> >       memset(&msg, 0, sizeof(msg));
+> >       msg.header = PD_HEADER_LE(PD_DATA_REQUEST,
+> >                                 port->pwr_role,
+> > @@ -4196,6 +4215,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >               port->hard_reset_count = 0;
+> >               ret = tcpm_pd_send_request(port);
+> >               if (ret < 0) {
+> > +                     /* Restore back to the original state */
+> > +                     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
+> > +                                                            port->pps_data.active,
+> > +                                                            port->supply_voltage);
+> >                       /* Let the Source send capabilities again. */
+> >                       tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+> >               } else {
+> > @@ -4206,6 +4229,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >       case SNK_NEGOTIATE_PPS_CAPABILITIES:
+> >               ret = tcpm_pd_send_pps_request(port);
+> >               if (ret < 0) {
+> > +                     /* Restore back to the original state */
+> > +                     tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
+> > +                                                            port->pps_data.active,
+> > +                                                            port->supply_voltage);
+> >                       port->pps_status = ret;
+> >                       /*
+> >                        * If this was called due to updates to sink
+> > --
+> > 2.32.0.272.g935e593368-goog
+>
+> --
+> heikki
