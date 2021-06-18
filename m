@@ -2,108 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B623AC080
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 03:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5239B3AC0B1
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 04:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233512AbhFRBWF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 17 Jun 2021 21:22:05 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:47829 "EHLO m43-7.mailgun.net"
+        id S232021AbhFRCDa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 17 Jun 2021 22:03:30 -0400
+Received: from mga09.intel.com ([134.134.136.24]:33666 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233477AbhFRBWF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 17 Jun 2021 21:22:05 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623979196; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=Te1OEokvJhjTR8jBU8EtGwNCNTt2ynnj5hYiv5wlBvY=;
- b=PXEJ6obaLDFFN4Cgmy10ofViuUv/dBPtE8Ut0bhHDBjiw1XZK2s4ac42djToTogNIVS8QZff
- gZdhM4k5L74sGu+Zd7kQsix1HQNFYgc+cSyn8/pq0LS2QbcqKlm4Qnk+/KL4rQV9HN5sTvjd
- omE1+5z+DpLr3YWexilXHWUz3OQ=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 60cbf495b6ccaab753b4d76d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 18 Jun 2021 01:19:17
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 96760C433F1; Fri, 18 Jun 2021 01:19:17 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2C67CC433D3;
-        Fri, 18 Jun 2021 01:19:16 +0000 (UTC)
+        id S231289AbhFRCDa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 17 Jun 2021 22:03:30 -0400
+IronPort-SDR: w/lWOylOql++QqUD9bQPawVem1GSFk3QeNx21GfeuYFd1Leb/mhbMV9kc7mJiyJWHs6LH5Skyq
+ DrTABhfI9GMw==
+X-IronPort-AV: E=McAfee;i="6200,9189,10018"; a="206434330"
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="206434330"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2021 19:01:21 -0700
+IronPort-SDR: a2A2UaolxDqK1vxaehUbMjTGGUF9+fdyphoRHjClVoH1ZT2bY9faAxxTwBgfG4HlojySBleTMX
+ nEBYKA1a0GHA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,281,1616482800"; 
+   d="scan'208";a="472614543"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 17 Jun 2021 19:01:19 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lu3ot-0002Qh-3j; Fri, 18 Jun 2021 02:01:19 +0000
+Date:   Fri, 18 Jun 2021 10:00:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ a7d8d1c7a7f73e780aa9ae74926ae5985b2f895f
+Message-ID: <60cbfe4e.jUI6VGVj+j4k0NqU%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 18 Jun 2021 09:19:16 +0800
-From:   linyyuan@codeaurora.org
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Linyu Yuan <linyyuan@codeaurora.com>
-Subject: Re: [PATCH v3] usb: gadget: eem: fix echo command packet response
- issue
-In-Reply-To: <YMtMlmwuIU3YmwAq@kroah.com>
-References: <20210616115142.34075-1-linyyuan@codeaurora.org>
- <YMtMlmwuIU3YmwAq@kroah.com>
-Message-ID: <5b55b8b8649cbe9049e088cdd7b0d24f@codeaurora.org>
-X-Sender: linyyuan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-17 21:22, Greg Kroah-Hartman wrote:
-> On Wed, Jun 16, 2021 at 07:51:42PM +0800, Linyu Yuan wrote:
->> From: Linyu Yuan <linyyuan@codeaurora.com>
->> 
->> when receive eem echo command, it will send a response,
->> but queue this response to the usb request which allocate
->> from gadget device endpoint zero,
->> and transmit the request to IN endpoint of eem interface.
->> 
->> on dwc3 gadget, it will trigger following warning in function
->> __dwc3_gadget_ep_queue(),
->> 
->> 	if (WARN(req->dep != dep, "request %pK belongs to '%s'\n",
->> 				&req->request, req->dep->name))
->> 		return -EINVAL;
-> 
-> Is this really a problem?  I am guessing the request will not work at
-> all?  Or just warn and continue with it?
-yes, it is a real problem of f_eem driver which request from it will 
-queue fail,
-which means following error happen.
-       if (usb_ep_queue(port->in_ep, req, GFP_ATOMIC))
-		DBG(cdev, "echo response queue fail\n");
-> 
-> How was this ever working?
-i think for eem link command packet, normally we will never seen it if 
-both side arelinux system.
-as eem driver will add data header and send it to peer.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: a7d8d1c7a7f73e780aa9ae74926ae5985b2f895f  usb: core: hub: Disable autosuspend for Cypress CY7C65632
 
-only it is eem driver bug which read network data as link command packet 
-(this issue fixed in my last change).
-> 
->> 
->> fix it by allocating a usb request from IN endpoint of eem interface,
->> and transmit the usb request to same IN endpoint of eem interface.
->> 
->> Signed-off-by: Linyu Yuan <linyyuan@codeaurora.com>
->> ---
-> 
-> What commit does this fix?  Should it be backported to older stable
-> kernels?  If so, how far back?
-yes, we can backport to all active LTS kernel.
-> 
-> thanks,
-> 
-> greg k-h
+elapsed time: 725m
+
+configs tested: 135
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+sh                           se7705_defconfig
+arm                         s3c6400_defconfig
+powerpc                      arches_defconfig
+arm                          ep93xx_defconfig
+um                            kunit_defconfig
+arm                         cm_x300_defconfig
+mips                           ip27_defconfig
+mips                      bmips_stb_defconfig
+arm                        mini2440_defconfig
+mips                        bcm63xx_defconfig
+arm                          pxa3xx_defconfig
+sh                          rsk7203_defconfig
+sh                         ap325rxa_defconfig
+parisc                           alldefconfig
+h8300                    h8300h-sim_defconfig
+powerpc                 mpc834x_mds_defconfig
+nios2                         3c120_defconfig
+m68k                        mvme16x_defconfig
+sh                            hp6xx_defconfig
+s390                                defconfig
+m68k                            q40_defconfig
+arm                       aspeed_g5_defconfig
+m68k                       m5249evb_defconfig
+riscv                    nommu_virt_defconfig
+arm                          lpd270_defconfig
+arc                      axs103_smp_defconfig
+sh                        dreamcast_defconfig
+m68k                           sun3_defconfig
+mips                       lemote2f_defconfig
+powerpc                      walnut_defconfig
+arm                           h3600_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                          pxa910_defconfig
+mips                      maltasmvp_defconfig
+arm                         hackkit_defconfig
+sh                           se7206_defconfig
+mips                           rs90_defconfig
+powerpc                     tqm8555_defconfig
+powerpc                     taishan_defconfig
+sh                           se7750_defconfig
+arc                            hsdk_defconfig
+openrisc                 simple_smp_defconfig
+mips                        omega2p_defconfig
+powerpc                          g5_defconfig
+sh                             shx3_defconfig
+powerpc                      makalu_defconfig
+arm                          moxart_defconfig
+powerpc                     redwood_defconfig
+powerpc                       ppc64_defconfig
+arm                        trizeps4_defconfig
+mips                        workpad_defconfig
+mips                           gcw0_defconfig
+arm                         lubbock_defconfig
+arc                              alldefconfig
+xtensa                       common_defconfig
+arm                      tct_hammer_defconfig
+arm                         s5pv210_defconfig
+arm                        keystone_defconfig
+m68k                          multi_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a004-20210617
+x86_64               randconfig-a001-20210617
+x86_64               randconfig-a002-20210617
+x86_64               randconfig-a003-20210617
+x86_64               randconfig-a006-20210617
+x86_64               randconfig-a005-20210617
+i386                 randconfig-a002-20210617
+i386                 randconfig-a006-20210617
+i386                 randconfig-a001-20210617
+i386                 randconfig-a004-20210617
+i386                 randconfig-a005-20210617
+i386                 randconfig-a003-20210617
+i386                 randconfig-a015-20210617
+i386                 randconfig-a013-20210617
+i386                 randconfig-a016-20210617
+i386                 randconfig-a012-20210617
+i386                 randconfig-a014-20210617
+i386                 randconfig-a011-20210617
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210617
+x86_64               randconfig-a015-20210617
+x86_64               randconfig-a011-20210617
+x86_64               randconfig-a014-20210617
+x86_64               randconfig-a012-20210617
+x86_64               randconfig-a013-20210617
+x86_64               randconfig-a016-20210617
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
