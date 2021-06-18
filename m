@@ -2,277 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 105503AC2F1
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 07:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C343AC3C8
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 08:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbhFRFzG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Jun 2021 01:55:06 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:21880 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbhFRFzF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Jun 2021 01:55:05 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1623995576; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=9WIqUSuKCeA4a7nGZlVezbJMr5o9Xyi76lV6kdDhfPM=;
- b=dGj5jn7VJp5PP67LJTdfk99NBZcK0sXYtCy3KBONo2BH1LtmggZLbhWc8H/IpjBh9tG8mHO7
- CuB8Pw1jyZgs8uzpwe9OiLyYoUSehEOtpLdhbzSoNkTRMvXc6w/EL12kCB823EtJxuxWlQ5F
- 3yVIqm5f+iZolXBOJqCiMwbRux0=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 60cc34a1ed59bf69cc3e2e04 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 18 Jun 2021 05:52:33
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B1AC8C4360C; Fri, 18 Jun 2021 05:52:33 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 627E5C433D3;
-        Fri, 18 Jun 2021 05:52:32 +0000 (UTC)
+        id S232467AbhFRGZM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Jun 2021 02:25:12 -0400
+Received: from mail-eopbgr80087.outbound.protection.outlook.com ([40.107.8.87]:54849
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232870AbhFRGY7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Jun 2021 02:24:59 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=B6eV2FhOuWpVc6fqKEVF2v6FP5HPQc94BeSSKLvBHDXTioUvKhy3378s61caVbyAGXV10X9n5Qw5kWo+J+qCaMDsUb+OJKVTjm4spXbcbEw2pQvFhpX/BEZQgYS3blWwnyODh0Tr1aw115PsvVGS/h+modljYHt92kCVVKiNUrQJhkXhzghfO6mN/NxUvxsu6sFkEliCuQOva5mqDnYVo0Fp4Q8ikw443dSPp00s0iTdCs9A+DsXNrfDUxvjQIV3d20Im0MmShqfvUWKGVFnqN/UF3tfjy3qB80QEVJCkyAuV9sDFd+cAssDFRUfW0WGFVCVKNMjkvt2j5GPMKX6sw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3l7Ww1IhUYJWbxxdUxmjeu/QEbr/kxNrSnsumikaSzM=;
+ b=cJmbJ+VYvDxu2bPZUNVwocIJ2FBnZ7jFyszekHekxgGbnmYn5f1BFsJZsLExSFueMgWNLO7YdxAxXO3wCl9dAgPBtkmBQUrfoUDGz4mZP1p87csTViKE5l1tOEk4XkMd/VXvo0xOhlYeWVvy7OE0fjE/I8/VYhbCuQ7cNLvANfTgizTRLOjdEOaGB/JLjhi6/XrBUcKiMB4VhaAn/UqGDWa+fqKsfP2gDVNOg57fOVV850RMzb3WTLZj/SEA4V6DIOV1U+O8sN3wjRDkbTmbUBcHH3LnvNr39zN4TBp0etqxz2/KGUQ2FM5T8lTLc+aj7EC6AsjxPpsAWk5PS1pp4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3l7Ww1IhUYJWbxxdUxmjeu/QEbr/kxNrSnsumikaSzM=;
+ b=MarUQcDHofXnRFSEajfhcU50DxLoacJqzsJJZThoNV347YkPj5RnNc4aKxPoAiY62VkRzvxT2JM/Q9ak+SwofX7dTwn7Hr8tq7VPa+940OrJBrUmq+N27rFLtZWYAHprA0hDgkW1JPyUgnzPdLSD36ub1Vovpsalr0Oev7T636g=
+Received: from VI1PR04MB5935.eurprd04.prod.outlook.com (2603:10a6:803:e9::17)
+ by VI1PR04MB3998.eurprd04.prod.outlook.com (2603:10a6:803:49::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.18; Fri, 18 Jun
+ 2021 06:22:48 +0000
+Received: from VI1PR04MB5935.eurprd04.prod.outlook.com
+ ([fe80::79b2:6f7:b5ef:ed81]) by VI1PR04MB5935.eurprd04.prod.outlook.com
+ ([fe80::79b2:6f7:b5ef:ed81%5]) with mapi id 15.20.4242.019; Fri, 18 Jun 2021
+ 06:22:48 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+CC:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Zhipeng Wang <zhipeng.wang_1@nxp.com>
+Subject: RE: [PATCH] usb: chipidea: host: fix port index underflow and UBSAN
+ complains
+Thread-Topic: [PATCH] usb: chipidea: host: fix port index underflow and UBSAN
+ complains
+Thread-Index: AQHXYllejn8/r3APiEKeAYiLkq9KVqsWy1CAgAKDgwA=
+Date:   Fri, 18 Jun 2021 06:22:48 +0000
+Message-ID: <VI1PR04MB593586478C811695DE02CF7F890D9@VI1PR04MB5935.eurprd04.prod.outlook.com>
+References: <1623810298-32001-1-git-send-email-jun.li@nxp.com>
+ <20210616155519.GB221112@rowland.harvard.edu>
+In-Reply-To: <20210616155519.GB221112@rowland.harvard.edu>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: rowland.harvard.edu; dkim=none (message not signed)
+ header.d=none;rowland.harvard.edu; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 03fe579b-1185-49eb-3eb4-08d932217e79
+x-ms-traffictypediagnostic: VI1PR04MB3998:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <VI1PR04MB39985A37C2C85B091FEA8FF6890D9@VI1PR04MB3998.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:345;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: y949yDWIMEuq7eCpTsnBy2DCK8ESJsoNqxPyU5qR9c7CP9cfyNH39nVNO7v+swJbDuAsFYJcwE5jlf8rxwHZk0Caw+zWWgVsJ8bc5f01riK4T0B7nNAGufzarVOQGzUXyjC3dFAYCSQQdP8sPcBlw4+8czZMgCorpdUiKx/45kIto47hucyW2H0VFEca5bWwvolJv7KkE5iWXcaFD7kCQ+rxlfNs2yVyjpHYeHYM4Ek3FjS1c8gb8BWJEFMy3iXFaqiNzKF0KchEIZL9pmHxA4g5vIOxI3w4figFbsf1ZKFSABfKO/gv3S9mN6qH4RIN5VdBmAtfC6L6rPV1JX0v2dxPhNBfVEa5B8wnJzaYmO0j81h7fs74mldSarBU953kvr5M1QcCGgYFwk2Fa+U3qTBB2+9vV1YOPB2jMomna0zZGAXdL1iUNSvb/W8kR/XIdh0ngKYQ1xGvVUsQ3MWteQr8D01bVUr7lQzGttAL8JptA1J4jnOzoZXBrkzQDtZ/iJfzEdj+0j8aEV7s7a3IzhpVW4v7EbbEbkujJs3cCLK9YhYDVPSvCGyAmuwA+uemz/oDzIEoLpM3XU62VjbbZSawR6bnPDh2dSXe5NjZHKc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5935.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(346002)(366004)(136003)(396003)(39860400002)(122000001)(2906002)(86362001)(316002)(54906003)(26005)(186003)(7696005)(6916009)(38100700002)(478600001)(76116006)(8936002)(8676002)(53546011)(6506007)(5660300002)(55016002)(66476007)(9686003)(66446008)(66556008)(64756008)(44832011)(71200400001)(33656002)(83380400001)(66946007)(4326008)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ioSypbUnoESQrs79Gj+6/kT/MeH1l63TlHfiDAKwb6d+WnOX63ZY4ed82nf/?=
+ =?us-ascii?Q?h19YgZoM5rdhJ40PDgstoiiWve9D84WWFDm7OQ3IB6Nb131k4WBrNEWz+U6C?=
+ =?us-ascii?Q?XvJEi3A39muI3NN2XTWUIWZrJJE5tP5hl5zwrVkIwttdlXuNMEHxVlGoVi8x?=
+ =?us-ascii?Q?kk1UM51aBo14H0rxiYXKnrJGhM0+NsHJMgCTEzlbqzWvCEpv7baS1QPBotzC?=
+ =?us-ascii?Q?SFlLjJRbCIgQ8A1Axk8z4clhTCS60F+M5svUfuYaKlXKjUbA7LjC4j56n3qS?=
+ =?us-ascii?Q?70bFCpGI4zhrFdDD0iEjogLJnYqeD6WJoZomF8bFpHJr+rM8M7DwnCnTUq9a?=
+ =?us-ascii?Q?6XVttEfSBZHFESmwMwOr9NG9XqaCEuLMJHmXpqJzvVWNH0KK/aUBvuLS5oSW?=
+ =?us-ascii?Q?/4zo1X3+afg9VGhGMOOMuilvbwjGT2fRaZZBB0UAPvgZwN1eKAzy6H3aupVP?=
+ =?us-ascii?Q?plcFWJBkXAxWjEH1bz4nnEYw1xuZLuEZuXy6S2Z8enUvv4tn+CEX4+NW9sBR?=
+ =?us-ascii?Q?SmFftRKPe8CRgvrnYSX4NoYytGG4PXF02Nf3OVp0OiQa/35YoVLfVmWq2OZY?=
+ =?us-ascii?Q?fHKQ2p8VyjGJKkYkQXkwUVWW4u2OsL5TEopUxAyZ3SV/iZOBtV6KJtVx6V73?=
+ =?us-ascii?Q?0QkB1y3IEqRLW49bOsrGBidDo5HJJainq12kyN1t0t0xs/89XMdu69JWGDpR?=
+ =?us-ascii?Q?/+RpNOYnutbzc2QxYJ1o6lEpPjuAkVsw4tCzafvgB0/u0lf7VuJ/z7giceej?=
+ =?us-ascii?Q?vdMpcBkGLUXIAx9Utm1qa+yZ7b+TVS017XUWrGXlL0Vrna3w6g851emGByXF?=
+ =?us-ascii?Q?HEv5SQMYdBUweDkxl/OFVM8Oq5homJrAtDU0E0LbcBDYwtgTq2vAcex2VDUg?=
+ =?us-ascii?Q?K1gcWFCAhZJkC8D+NEY2OWsJ4PRgYl2x/okbRmdjvWy2Gb/t0P2eLZQJJUoT?=
+ =?us-ascii?Q?Z1jPEMni8407NZ0Pib1KttV3rf2Wy1qLnPvAR6Dh7tm+bflnDTXCQjnX6GoL?=
+ =?us-ascii?Q?E4kS+04vnHEZOXJKeqgJ0CQvQk3WEEhUKPUF90S3uy6HONNzy0Pybo1tYN06?=
+ =?us-ascii?Q?4CouPF3Mj8FLnh4O80j1nVSCL3f0BJR90ZOWRJkH+h8LOTXZnfAbIkZsdlFG?=
+ =?us-ascii?Q?IGtwDIC9RBY2IOUxpTUQ5ziuE/+4i7lEm4O2Lml9NePrwLPt2YGCmqOqQnDa?=
+ =?us-ascii?Q?pECNTKph1CFEeIe8simjR59FCiA7DQ3LLow1PDoyJ62pV8MpT3piOPyJ9XQ0?=
+ =?us-ascii?Q?tTZQHL57wxx/BF6HfszOzzGfylq+3MPFCJGPWGqa3HofsXWqUNumR6Icpm1e?=
+ =?us-ascii?Q?pm5PQPLs879xD4TY2ezz0P2u?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 18 Jun 2021 11:22:32 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, robh+dt@kernel.org,
-        swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgautam@codeaurora.org,
-        dianders@chromium.org, mka@chromium.org, sanm@codeaurora.org
-Subject: Re: [PATCH v2 2/4] arm64: dts: qcom: sc7280: Add PCIe and PHY related
- nodes
-In-Reply-To: <YLwyVh4xyEyvXKDU@builder.lan>
-References: <1622904059-21244-1-git-send-email-pmaliset@codeaurora.org>
- <1622904059-21244-3-git-send-email-pmaliset@codeaurora.org>
- <YLwyVh4xyEyvXKDU@builder.lan>
-Message-ID: <b9beccabc8ba88e889d6f6317afecd05@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5935.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03fe579b-1185-49eb-3eb4-08d932217e79
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2021 06:22:48.4801
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0rJ3Wax7QdiMbk7aG052SiNWZR+Ie+/dXtxw80bjkC0oMviOWpA6Cy5Dds2OCTS6
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3998
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-06 07:56, Bjorn Andersson wrote:
-> On Sat 05 Jun 09:40 CDT 2021, Prasad Malisetty wrote:
-> 
->> Add PCIe controller and PHY nodes for sc7280 SOC.
->> 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 138 
->> +++++++++++++++++++++++++++++++++++
->>  1 file changed, 138 insertions(+)
->> 
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
->> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 0b6f119..9e8414d 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -15,6 +15,7 @@
->>  #include <dt-bindings/reset/qcom,sdm845-pdc.h>
->>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->>  #include <dt-bindings/thermal/thermal.h>
->> +#include <dt-bindings/gpio/gpio.h>
->> 
->>  / {
->>  	interrupt-parent = <&intc>;
->> @@ -484,6 +485,117 @@
->>  			#power-domain-cells = <1>;
->>  		};
->> 
->> +		pcie1: pci@1c08000 {
-> 
-> Does this name imply that you have a pcie0 as well? Please introduce it
-> while you're at it.
-> 
->> We are not using pcie0 for HLOS.
 
->> +			compatible = "qcom,pcie-sc7280", "qcom,pcie-sm8250", 
->> "snps,dw-pcie";
->> +			reg = <0 0x01c08000 0 0x3000>,
->> +			      <0 0x40000000 0 0xf1d>,
->> +			      <0 0x40000f20 0 0xa8>,
->> +			      <0 0x40001000 0 0x1000>,
->> +			      <0 0x40100000 0 0x100000>;
->> +
->> +			reg-names = "parf", "dbi", "elbi", "atu", "config";
->> +			device_type = "pci";
->> +			linux,pci-domain = <1>;
->> +			bus-range = <0x00 0xff>;
->> +			num-lanes = <2>;
->> +
->> +			#address-cells = <3>;
->> +			#size-cells = <2>;
->> +
->> +			ranges = <0x01000000 0x0 0x40200000 0x0 0x40200000 0x0 0x100000>,
->> +				 <0x02000000 0x0 0x40300000 0x0 0x40300000 0x0 0x1fd00000>;
->> +
->> +			interrupts = <GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>;
->> +			interrupt-names = "msi";
->> +			#interrupt-cells = <1>;
->> +			interrupt-map-mask = <0 0 0 0x7>;
->> +			interrupt-map = <0 0 0 1 &intc 0 434 IRQ_TYPE_LEVEL_HIGH>, /* 
->> int_a */
->> +					<0 0 0 2 &intc 0 435 IRQ_TYPE_LEVEL_HIGH>, /* int_b */
->> +					<0 0 0 3 &intc 0 438 IRQ_TYPE_LEVEL_HIGH>, /* int_c */
->> +					<0 0 0 4 &intc 0 439 IRQ_TYPE_LEVEL_HIGH>; /* int_d */
->> +
->> +			clocks = <&gcc GCC_PCIE_1_PIPE_CLK>,
->> +				 <&gcc GCC_PCIE_1_PIPE_CLK_SRC>,
->> +				 <&pcie1_lane 0>,
->> +				 <&rpmhcc RPMH_CXO_CLK>,
->> +				 <&gcc GCC_PCIE_1_AUX_CLK>,
->> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
->> +				 <&gcc GCC_PCIE_1_MSTR_AXI_CLK>,
->> +				 <&gcc GCC_PCIE_1_SLV_AXI_CLK>,
->> +				 <&gcc GCC_PCIE_1_SLV_Q2A_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_NOC_PCIE_TBU_CLK>,
->> +				 <&gcc GCC_DDRSS_PCIE_SF_CLK>;
->> +
->> +			clock-names = "pipe",
->> +				      "pipe_src",
->> +				      "pipe_ext",
->> +				      "ref",
->> +				      "aux",
->> +				      "cfg",
->> +				      "bus_master",
->> +				      "bus_slave",
->> +				      "slave_q2a",
->> +				      "tbu",
->> +				      "ddrss_sf_tbu";
->> +
->> +			assigned-clocks = <&gcc GCC_PCIE_1_AUX_CLK>;
->> +			assigned-clock-rates = <19200000>;
->> +
->> +			resets = <&gcc GCC_PCIE_1_BCR>;
->> +			reset-names = "pci";
->> +
->> +			power-domains = <&gcc GCC_PCIE_1_GDSC>;
->> +
->> +			phys = <&pcie1_lane>;
->> +			phy-names = "pciephy";
->> +
->> +			perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
->> +			pinctrl-names = "default";
->> +			pinctrl-0 = <&pcie1_default_state>;
->> +
->> +			iommus = <&apps_smmu 0x1c80 0x1>;
->> +
->> +			iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
->> +				    <0x100 &apps_smmu 0x1c81 0x1>;
->> +
->> +			status = "disabled";
->> +		};
->> +
->> +		pcie1_phy: phy@1c0e000 {
->> +			compatible = "qcom,sm8250-qmp-gen3x2-pcie-phy";
-> 
-> No, you don't have a sm8250-qmp-gen3x2-pcie-phy in your sc7280.
-> 
->> Both are having same PHY sequence.
 
->> +			status = "disabled";
->> +			reg = <0 0x01c0e000 0 0x1c0>;
->> +			#address-cells = <2>;
->> +			#size-cells = <2>;
->> +			ranges;
->> +			clocks = <&gcc GCC_PCIE_1_AUX_CLK>,
->> +				 <&gcc GCC_PCIE_1_CFG_AHB_CLK>,
->> +				 <&gcc GCC_PCIE_CLKREF_EN>,
->> +				 <&gcc GCC_PCIE1_PHY_RCHNG_CLK>;
->> +			clock-names = "aux", "cfg_ahb", "ref", "refgen";
->> +
->> +			resets = <&gcc GCC_PCIE_1_PHY_BCR>;
->> +			reset-names = "phy";
->> +
->> +			assigned-clocks = <&gcc GCC_PCIE1_PHY_RCHNG_CLK>;
->> +			assigned-clock-rates = <100000000>;
->> +
->> +			pcie1_lane: lanes@1c0e200 {
->> +				reg = <0 0x01c0e200 0 0x170>,
->> +				      <0 0x01c0e400 0 0x200>,
->> +				      <0 0x01c0ea00 0 0x1f0>,
->> +				      <0 0x01c0e600 0 0x170>,
->> +				      <0 0x01c0e800 0 0x200>,
->> +				      <0 0x01c0ee00 0 0xf4>;
->> +				clocks = <&rpmhcc RPMH_CXO_CLK>;
->> +				clock-names = "pipe0";
->> +
->> +				#phy-cells = <0>;
->> +				#clock-cells = <1>;
->> +				clock-output-names = "pcie_1_pipe_clk";
->> +			};
->> +		};
->> +
->>  		stm@6002000 {
->>  			compatible = "arm,coresight-stm", "arm,primecell";
->>  			reg = <0 0x06002000 0 0x1000>,
->> @@ -1102,6 +1214,32 @@
->>  				pins = "gpio46", "gpio47";
->>  				function = "qup13";
->>  			};
->> +
->> +			pcie1_default_state: pcie1-default {
-> 
-> Per the binding the name has to end with "-pins", although I would like
-> us to change that to "-state". Either way, this is not correct.
-> 
->> +				clkreq {
->> +					pins = "gpio79";
->> +					function = "pcie1_clkreqn";
->> +				};
->> +
->> +				reset-n {
->> +					pins = "gpio2";
->> +					function = "gpio";
->> +
->> +					drive-strength = <16>;
->> +					output-low;
->> +					bias-disable;
->> +				};
->> +
->> +				wake-n {
->> +					pins = "gpio3";
->> +					function = "gpio";
->> +				};
->> +
->> +				nvme-n {
-> 
-> This doesn't look like a standard PCIe pin, is it perhaps the enable 
-> pin
-> for the regulator powering your NVME, or something along those lines?
-> 
-> If so you should describe it as a fixed-regulator...and either way I
-> suspect it should be moved to the device specific file.
-> 
-> Regards,
-> Bjorn
-> 
-> Agree, will move into board specific file.
+> -----Original Message-----
+> From: Alan Stern <stern@rowland.harvard.edu>
+> Sent: Wednesday, June 16, 2021 11:55 PM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: peter.chen@kernel.org; gregkh@linuxfoundation.org;
+> linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Zhipeng Wang
+> <zhipeng.wang_1@nxp.com>
+> Subject: Re: [PATCH] usb: chipidea: host: fix port index underflow and UB=
+SAN
+> complains
+>=20
+> On Wed, Jun 16, 2021 at 10:24:58AM +0800, Li Jun wrote:
+> > If wIndex is 0 (and it often is), these calculations underflow and
+> > UBSAN complains, here resolve this by not decrementing the index when
+> > it is equal to 0, this copies the solution from commit 85e3990bea49
+> > ("USB: EHCI: avoid undefined pointer arithmetic and placate UBSAN")
+> >
+> > Reported-by: zhipeng.wang <zhipeng.wang_1@nxp.com>
+> > Signed-off-by: Li Jun <jun.li@nxp.com>
+> > ---
+> >  drivers/usb/chipidea/host.c | 8 +++++---
+> >  1 file changed, 5 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
+> > index e86d13c04bdb..25327b1b49b7 100644
+> > --- a/drivers/usb/chipidea/host.c
+> > +++ b/drivers/usb/chipidea/host.c
+> > @@ -241,14 +241,16 @@ static int ci_ehci_hub_control(  {
+> >  	struct ehci_hcd	*ehci =3D hcd_to_ehci(hcd);
+> >  	u32 __iomem	*status_reg;
+> > -	u32		temp;
+> > +	u32		temp, port_index;
+> >  	unsigned long	flags;
+> >  	int		retval =3D 0;
+> >  	bool		done =3D false;
+> >  	struct device *dev =3D hcd->self.controller;
+> >  	struct ci_hdrc *ci =3D dev_get_drvdata(dev);
+> >
+> > -	status_reg =3D &ehci->regs->port_status[(wIndex & 0xff) - 1];
+> > +	port_index =3D wIndex & 0xff;
+> > +	port_index -=3D (port_index > 0);
+> > +	status_reg =3D &ehci->regs->port_status[port_index];
+> >
+> >  	spin_lock_irqsave(&ehci->lock, flags);
+> >
+> > @@ -288,7 +290,7 @@ static int ci_ehci_hub_control(
+> >  			ehci_writel(ehci, temp, status_reg);
+> >  		}
+> >
+> > -		set_bit((wIndex & 0xff) - 1, &ehci->suspended_ports);
+> > +		set_bit(port_index, &ehci->suspended_ports);
+> >  		goto done;
+> >  	}
+>=20
+> Does this code test anywhere to ensure that wIndex > 0 and wIndex <=3D nu=
+mber
+> of ports?
 
->> +					pins = "gpio19";
->> +					function = "gpio";
->> +				};
->> +			};
->>  		};
->> 
->>  		apps_smmu: iommu@15000000 {
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
->> 
+Missed that, thanks for pointing it out, will add it in v2.
+
+Li Jun
+
+>=20
+> Alan Stern
