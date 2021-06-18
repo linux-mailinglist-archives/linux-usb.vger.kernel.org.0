@@ -2,340 +2,171 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBAB3AC79B
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 11:30:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54A63AC817
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 11:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbhFRJcy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Jun 2021 05:32:54 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:57542 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233472AbhFRJcX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Jun 2021 05:32:23 -0400
-X-UUID: 3e726c11f3ca4147ad36a8bbee9e69af-20210618
-X-UUID: 3e726c11f3ca4147ad36a8bbee9e69af-20210618
-Received: from mtkcas34.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 619443617; Fri, 18 Jun 2021 17:30:11 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- MTKMBS31N1.mediatek.inc (172.27.4.69) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 18 Jun 2021 17:29:58 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 18 Jun 2021 17:29:56 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 13/13] usb: mtu3: support suspend/resume for dual-role mode
-Date:   Fri, 18 Jun 2021 17:29:18 +0800
-Message-ID: <1624008558-16949-14-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1624008558-16949-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1624008558-16949-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S232912AbhFRJ5N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Jun 2021 05:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230399AbhFRJ5N (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Jun 2021 05:57:13 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D0FC061574;
+        Fri, 18 Jun 2021 02:55:03 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id gt18so14912555ejc.11;
+        Fri, 18 Jun 2021 02:55:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=w6OHpzFqMhfGysmy1AjapbSWOUF8PkX0rUS/FwR+ecA=;
+        b=qaGlPMxABKfJyXTb0/wTCoPW8b97JlTZ0vf0gVMPkt/LRRigN3XmsHfRkDH34vMx4F
+         AGicn5KaCu4h2i/4Zqf99m9qL0/5lZMu9kbouE3ItC+sCCztNaH5FoI5Js4evjaD5ex7
+         VcbTr9paOIua3fsblA5xFO9erK5kRnLXGHuFFW3x3ndVNN3NJZACi/9Mp+TRwZQoMywn
+         0+q1JLhhMAUUS7aE8iosmainGCTJ2WXcj0khqBOs7lJ+4M/7tBuh/bmh01n7oxRnnxkA
+         3d5ycOADzsI8J7VLxMbLVlKO1wEiP3VTf9eKkF0RgvTvEX+NCsKujQgeEHWc42vv/kJJ
+         cZ8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=w6OHpzFqMhfGysmy1AjapbSWOUF8PkX0rUS/FwR+ecA=;
+        b=RUUsrHcWMMy4IPHJ+749uSMM1ti935MklfKNDv8TGzFU1GYQE1r3QqW5MkOGs4RNpu
+         r5Eufv7IV1M3BQBKaGxfnpfFEYrgF5JIkVQEEkIgX+1zeKlys5BMmzrpYzYki8/SjRb9
+         /yPa+dBSpYXP0qKq2ImIa8dmKMleSmQK1KlcowT4a6hzEozpbbJSMleg81zXF9Mk72kL
+         pHZP4TAv0HXHWvrSuky/W1Ur+X+GOnw2+JsdVimMPZVrjvYL7xu8ldRgqbkDPXOVBMW3
+         C+wP4LKmhk4ImU5VuIEEM78i1+osHQAsiJyhJK38njp2xE6BV4f8k17383HkDwQ0iXJs
+         pnvg==
+X-Gm-Message-State: AOAM5302ZAT4XBlD6ihHOZWOQhzOwtHHUcRvqLFPEghVRckUPCW+LHkQ
+        1S9YWxQsVxqHdWlWZGKWXb8=
+X-Google-Smtp-Source: ABdhPJykYF/zptHx7zpqrTLT8w4dZMVzpPcKGfLn8gJgk3Tcqhei8wEXFKxedWCrPXnMb0HoLCs3Dg==
+X-Received: by 2002:a17:907:1b20:: with SMTP id mp32mr10188290ejc.495.1624010101951;
+        Fri, 18 Jun 2021 02:55:01 -0700 (PDT)
+Received: from [192.168.2.2] (81-204-249-205.fixed.kpn.net. [81.204.249.205])
+        by smtp.gmail.com with ESMTPSA id n18sm818960ejx.41.2021.06.18.02.55.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Jun 2021 02:55:01 -0700 (PDT)
+Subject: Re: [PATCH 1/3] arm64: dts: rockchip: add ES8316 codec for Rock Pi4
+To:     Alex Bee <knaerzche@gmail.com>, Heiko Stuebner <heiko@sntech.de>
+Cc:     devicetree@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20210617044955.598994-1-knaerzche@gmail.com>
+From:   Johan Jonker <jbx6244@gmail.com>
+Message-ID: <d562b025-23cc-f26d-b118-e269501f459b@gmail.com>
+Date:   Fri, 18 Jun 2021 11:54:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux i686; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-SNTS-SMTP: D6DFC2FC4B8D1D0542543F30B45D8F370DFB9715F39C62A9742B32CD9BD2B5F82000:8
-X-MTK:  N
+In-Reply-To: <20210617044955.598994-1-knaerzche@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Support suspend/resume for dual-role mode including the single
-port and multi-ports supported by host controller, when the host
-supports mult-ports, only port0 (u2/u3) is used to support dual
-role mode.
+Hi Alex,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: no changes
----
- drivers/usb/mtu3/mtu3_core.c | 32 +++++++-------
- drivers/usb/mtu3/mtu3_dr.c   |  2 +
- drivers/usb/mtu3/mtu3_dr.h   |  8 ++++
- drivers/usb/mtu3/mtu3_host.c | 10 +----
- drivers/usb/mtu3/mtu3_plat.c | 84 ++++++++++++++++++++++++++----------
- 5 files changed, 89 insertions(+), 47 deletions(-)
+On 6/17/21 6:49 AM, Alex Bee wrote:
+> Rock Pi4 boards have the codec connected to i2s0 and it is accessible
+> via i2c1 address 0x11.
+> Add an audio-graph-card it.
+> 
+> Signed-off-by: Alex Bee <knaerzche@gmail.com>
+> ---
+>  .../boot/dts/rockchip/rk3399-rock-pi-4.dtsi   | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+> index 7d0a7c697703..e5c1083174ff 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4.dtsi
+> @@ -36,6 +36,12 @@ sdio_pwrseq: sdio-pwrseq {
+>  		reset-gpios = <&gpio0 RK_PB2 GPIO_ACTIVE_LOW>;
+>  	};
+>  
+> +	sound {
+> +		compatible = "audio-graph-card";
 
-diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
-index a800920d38b9..f90e5cdec614 100644
---- a/drivers/usb/mtu3/mtu3_core.c
-+++ b/drivers/usb/mtu3/mtu3_core.c
-@@ -9,7 +9,6 @@
-  */
- 
- #include <linux/dma-mapping.h>
--#include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of_address.h>
-@@ -1008,12 +1007,25 @@ void ssusb_gadget_exit(struct ssusb_mtk *ssusb)
- 	mtu3_hw_exit(mtu);
- }
- 
-+bool ssusb_gadget_ip_sleep_check(struct ssusb_mtk *ssusb)
-+{
-+	struct mtu3 *mtu = ssusb->u3d;
-+
-+	/* host only, should wait for ip sleep */
-+	if (!mtu)
-+		return true;
-+
-+	/* device is started and pullup D+, ip can sleep */
-+	if (mtu->is_active && mtu->softconnect)
-+		return true;
-+
-+	/* ip can't sleep if not pullup D+ when support device mode */
-+	return false;
-+}
-+
- int ssusb_gadget_suspend(struct ssusb_mtk *ssusb, pm_message_t msg)
- {
- 	struct mtu3 *mtu = ssusb->u3d;
--	void __iomem *ibase = mtu->ippc_base;
--	u32 value;
--	int ret = 0;
- 
- 	if (!mtu->gadget_driver)
- 		return 0;
-@@ -1024,17 +1036,7 @@ int ssusb_gadget_suspend(struct ssusb_mtk *ssusb, pm_message_t msg)
- 	mtu3_dev_suspend(mtu);
- 	synchronize_irq(mtu->irq);
- 
--	/* wait for ip to sleep */
--	if (mtu->is_active && mtu->softconnect) {
--		ret = readl_poll_timeout(ibase + U3D_SSUSB_IP_PW_STS1,
--				value, (value & SSUSB_IP_SLEEP_STS), 100, 100000);
--		if (ret) {
--			dev_err(mtu->dev, "ip sleep failed!!!\n");
--			ret = -EBUSY;
--		}
--	}
--
--	return ret;
-+	return 0;
- }
- 
- int ssusb_gadget_resume(struct ssusb_mtk *ssusb, pm_message_t msg)
-diff --git a/drivers/usb/mtu3/mtu3_dr.c b/drivers/usb/mtu3/mtu3_dr.c
-index 30e7e5fc0f88..a6b04831b20b 100644
---- a/drivers/usb/mtu3/mtu3_dr.c
-+++ b/drivers/usb/mtu3/mtu3_dr.c
-@@ -149,6 +149,7 @@ static void ssusb_mode_sw_work(struct work_struct *work)
- 
- 	dev_dbg(ssusb->dev, "set role : %s\n", usb_role_string(desired_role));
- 	mtu3_dbg_trace(ssusb->dev, "set role : %s", usb_role_string(desired_role));
-+	pm_runtime_get_sync(ssusb->dev);
- 
- 	switch (desired_role) {
- 	case USB_ROLE_HOST:
-@@ -169,6 +170,7 @@ static void ssusb_mode_sw_work(struct work_struct *work)
- 	default:
- 		dev_err(ssusb->dev, "invalid role\n");
- 	}
-+	pm_runtime_put(ssusb->dev);
- }
- 
- static void ssusb_set_mode(struct otg_switch_mtk *otg_sx, enum usb_role role)
-diff --git a/drivers/usb/mtu3/mtu3_dr.h b/drivers/usb/mtu3/mtu3_dr.h
-index 5286f9f5ee18..e325508bddf4 100644
---- a/drivers/usb/mtu3/mtu3_dr.h
-+++ b/drivers/usb/mtu3/mtu3_dr.h
-@@ -59,6 +59,8 @@ int ssusb_gadget_init(struct ssusb_mtk *ssusb);
- void ssusb_gadget_exit(struct ssusb_mtk *ssusb);
- int ssusb_gadget_suspend(struct ssusb_mtk *ssusb, pm_message_t msg);
- int ssusb_gadget_resume(struct ssusb_mtk *ssusb, pm_message_t msg);
-+bool ssusb_gadget_ip_sleep_check(struct ssusb_mtk *ssusb);
-+
- #else
- static inline int ssusb_gadget_init(struct ssusb_mtk *ssusb)
- {
-@@ -79,6 +81,12 @@ ssusb_gadget_resume(struct ssusb_mtk *ssusb, pm_message_t msg)
- {
- 	return 0;
- }
-+
-+static inline bool ssusb_gadget_ip_sleep_check(struct ssusb_mtk *ssusb)
-+{
-+	return true;
-+}
-+
- #endif
- 
- 
-diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-index a0a6a181b752..7d528f3c2482 100644
---- a/drivers/usb/mtu3/mtu3_host.c
-+++ b/drivers/usb/mtu3/mtu3_host.c
-@@ -8,7 +8,6 @@
-  */
- 
- #include <linux/clk.h>
--#include <linux/iopoll.h>
- #include <linux/irq.h>
- #include <linux/kernel.h>
- #include <linux/mfd/syscon.h>
-@@ -254,7 +253,6 @@ int ssusb_host_suspend(struct ssusb_mtk *ssusb)
- 	int num_u3p = ssusb->u3_ports;
- 	int num_u2p = ssusb->u2_ports;
- 	u32 value;
--	int ret;
- 	int i;
- 
- 	/* power down u3 ports except skipped ones */
-@@ -280,13 +278,7 @@ int ssusb_host_suspend(struct ssusb_mtk *ssusb)
- 	/* power down host ip */
- 	mtu3_setbits(ibase, U3D_SSUSB_IP_PW_CTRL1, SSUSB_IP_HOST_PDN);
- 
--	/* wait for host ip to sleep */
--	ret = readl_poll_timeout(ibase + U3D_SSUSB_IP_PW_STS1, value,
--			  (value & SSUSB_IP_SLEEP_STS), 100, 100000);
--	if (ret)
--		dev_err(ssusb->dev, "ip sleep failed!!!\n");
--
--	return ret;
-+	return 0;
- }
- 
- static void ssusb_host_setup(struct ssusb_mtk *ssusb)
-diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-index 2bb6f58cbcc4..537c6552831e 100644
---- a/drivers/usb/mtu3/mtu3_plat.c
-+++ b/drivers/usb/mtu3/mtu3_plat.c
-@@ -45,6 +45,29 @@ int ssusb_check_clocks(struct ssusb_mtk *ssusb, u32 ex_clks)
- 	return 0;
- }
- 
-+static int wait_for_ip_sleep(struct ssusb_mtk *ssusb)
-+{
-+	bool sleep_check = true;
-+	u32 value;
-+	int ret;
-+
-+	if (!ssusb->is_host)
-+		sleep_check = ssusb_gadget_ip_sleep_check(ssusb);
-+
-+	if (!sleep_check)
-+		return 0;
-+
-+	/* wait for ip enter sleep mode */
-+	ret = readl_poll_timeout(ssusb->ippc_base + U3D_SSUSB_IP_PW_STS1, value,
-+				 (value & SSUSB_IP_SLEEP_STS), 100, 100000);
-+	if (ret) {
-+		dev_err(ssusb->dev, "ip sleep failed!!!\n");
-+		ret = -EBUSY;
-+	}
-+
-+	return ret;
-+}
-+
- static int ssusb_phy_init(struct ssusb_mtk *ssusb)
- {
- 	int i;
-@@ -421,6 +444,28 @@ static int mtu3_remove(struct platform_device *pdev)
- 	return 0;
- }
- 
-+static int resume_ip_and_ports(struct ssusb_mtk *ssusb, pm_message_t msg)
-+{
-+	switch (ssusb->dr_mode) {
-+	case USB_DR_MODE_PERIPHERAL:
-+		ssusb_gadget_resume(ssusb, msg);
-+		break;
-+	case USB_DR_MODE_HOST:
-+		ssusb_host_resume(ssusb, false);
-+		break;
-+	case USB_DR_MODE_OTG:
-+		ssusb_host_resume(ssusb, !ssusb->is_host);
-+		if (!ssusb->is_host)
-+			ssusb_gadget_resume(ssusb, msg);
-+
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int mtu3_suspend_common(struct device *dev, pm_message_t msg)
- {
- 	struct ssusb_mtk *ssusb = dev_get_drvdata(dev);
-@@ -432,26 +477,36 @@ static int mtu3_suspend_common(struct device *dev, pm_message_t msg)
- 	case USB_DR_MODE_PERIPHERAL:
- 		ret = ssusb_gadget_suspend(ssusb, msg);
- 		if (ret)
--			return ret;
-+			goto err;
- 
- 		break;
- 	case USB_DR_MODE_HOST:
- 		ssusb_host_suspend(ssusb);
- 		break;
- 	case USB_DR_MODE_OTG:
--		if (!ssusb->is_host)
--			return 0;
--
-+		if (!ssusb->is_host) {
-+			ret = ssusb_gadget_suspend(ssusb, msg);
-+			if (ret)
-+				goto err;
-+		}
- 		ssusb_host_suspend(ssusb);
- 		break;
- 	default:
- 		return -EINVAL;
- 	}
-+
-+	ret = wait_for_ip_sleep(ssusb);
-+	if (ret)
-+		goto sleep_err;
-+
- 	ssusb_phy_power_off(ssusb);
- 	clk_bulk_disable_unprepare(BULK_CLKS_CNT, ssusb->clks);
- 	ssusb_wakeup_set(ssusb, true);
- 
--	return 0;
-+sleep_err:
-+	resume_ip_and_ports(ssusb, msg);
-+err:
-+	return ret;
- }
- 
- static int mtu3_resume_common(struct device *dev, pm_message_t msg)
-@@ -470,24 +525,7 @@ static int mtu3_resume_common(struct device *dev, pm_message_t msg)
- 	if (ret)
- 		goto phy_err;
- 
--	switch (ssusb->dr_mode) {
--	case USB_DR_MODE_PERIPHERAL:
--		ssusb_gadget_resume(ssusb, msg);
--		break;
--	case USB_DR_MODE_HOST:
--		ssusb_host_resume(ssusb, false);
--		break;
--	case USB_DR_MODE_OTG:
--		if (!ssusb->is_host)
--			return 0;
--
--		ssusb_host_resume(ssusb, true);
--		break;
--	default:
--		return -EINVAL;
--	}
--
--	return 0;
-+	return resume_ip_and_ports(ssusb, msg);
- 
- phy_err:
- 	clk_bulk_disable_unprepare(BULK_CLKS_CNT, ssusb->clks);
--- 
-2.18.0
+> +		label = "rockchip,rk3399";
 
+See previous discussion:
+
+https://lore.kernel.org/linux-rockchip/e5ab2c62-ad00-4cdf-8b0a-24fda59c980b@gmail.com/
+
+It seems that aplay/linux? adds "-1" to it and removes the comma and
+"-", so we get:
+
+hdmisound
+rockchiprk3399
+rockchiprk339_1
+
+Shouldn't we label it with something that reflect the function/output.
+Shouldn't we standardize to SPDIF, HDMI and Analog similar to rk3318/rk3328?
+Make a shorter label without spaces or special chars, so that chars
+don't get removed?
+
+Proposal:
+
+Analog
+HDMI
+ES8316 <---
+SPDIF
+
+
+Possible example solutions:
+
+[PATCH] arm64: dts: rockchip: more user friendly name of sound nodes
+https://lore.kernel.org/lkml/20210110151913.3615326-1-katsuhiro@katsuster.net/
+
+===
+
+Johan
+
+> +		dais = <&i2s0_p0>;
+> +	};
+> +
+>  	vcc12v_dcin: dc-12v {
+>  		compatible = "regulator-fixed";
+>  		regulator-name = "vcc12v_dcin";
+> @@ -422,6 +428,20 @@ &i2c1 {
+>  	i2c-scl-rising-time-ns = <300>;
+>  	i2c-scl-falling-time-ns = <15>;
+>  	status = "okay";
+> +
+> +	es8316: codec@11 {
+> +		compatible = "everest,es8316";
+> +		reg = <0x11>;
+> +		clocks = <&cru SCLK_I2S_8CH_OUT>;
+> +		clock-names = "mclk";
+> +		#sound-dai-cells = <0>;
+> +
+> +		port {
+> +			es8316_p0_0: endpoint {
+> +				remote-endpoint = <&i2s0_p0_0>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &i2c3 {
+> @@ -441,6 +461,14 @@ &i2s0 {
+>  	rockchip,capture-channels = <2>;
+>  	rockchip,playback-channels = <2>;
+>  	status = "okay";
+> +
+> +	i2s0_p0: port {
+> +		i2s0_p0_0: endpoint {
+> +			dai-format = "i2s";
+> +			mclk-fs = <256>;
+> +			remote-endpoint = <&es8316_p0_0>;
+> +		};
+> +	};
+>  };
+>  
+>  &i2s1 {
+> 
