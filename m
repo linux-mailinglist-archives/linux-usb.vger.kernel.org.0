@@ -2,145 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A00F3ACB89
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 15:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3067D3ACBBD
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 15:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbhFRNCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Jun 2021 09:02:23 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:22913 "EHLO m43-7.mailgun.net"
+        id S231377AbhFRNKq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Jun 2021 09:10:46 -0400
+Received: from gloria.sntech.de ([185.11.138.130]:45216 "EHLO gloria.sntech.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230315AbhFRNCX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 18 Jun 2021 09:02:23 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624021214; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=tD4U/RzNqFGWpjdS5wnIrcWZDQlWRWp1xuR2I5dn0+o=;
- b=Latgy3Tx6uIyiXZV15D42mjrgPAmx6Mdl+NRnrbr5alyjy1CKOqcn0BqnVVaWpd2RrWZr9hv
- Ji1ag55paeZygN4oCg5H2I6lenJgnq3ZlK6QO3TDVCaaYYUZF2TjO6d4rk8w9Ffk1nOZxmrr
- CuIgoOVbFtohtsyr21p9bJAv0dg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 60cc98d3e27c0cc77f72ae5a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 18 Jun 2021 13:00:03
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A2BF0C43217; Fri, 18 Jun 2021 13:00:02 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id F3DDDC4338A;
-        Fri, 18 Jun 2021 13:00:01 +0000 (UTC)
+        id S230430AbhFRNKn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Jun 2021 09:10:43 -0400
+Received: from ip5f5aa64a.dynamic.kabel-deutschland.de ([95.90.166.74] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1luEEZ-00022y-QZ; Fri, 18 Jun 2021 15:08:31 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Alex Bee <knaerzche@gmail.com>
+Cc:     devicetree@vger.kernel.org, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        robh+dt@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Alex Bee <knaerzche@gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: rockchip: Add RK3399 Rock Pi 4a plus board
+Date:   Fri, 18 Jun 2021 15:08:31 +0200
+Message-ID: <4545451.QWXsJ6tzlI@diego>
+In-Reply-To: <20210617044955.598994-2-knaerzche@gmail.com>
+References: <20210617044955.598994-1-knaerzche@gmail.com> <20210617044955.598994-2-knaerzche@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 18 Jun 2021 18:30:01 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mgautam@codeaurora.org,
-        dianders@chromium.org, mka@chromium.org, sanm@codeaurora.org
-Subject: Re: [PATCH v2 3/4] PCIe: qcom: Add support to control pipe clk mux
-In-Reply-To: <CAE-0n50WxF_S7Zo4MhFqppjSELTFo7nOEtmCXJ4DoqvhF7kMQw@mail.gmail.com>
-References: <1622904059-21244-1-git-send-email-pmaliset@codeaurora.org>
- <1622904059-21244-4-git-send-email-pmaliset@codeaurora.org>
- <CAE-0n50WxF_S7Zo4MhFqppjSELTFo7nOEtmCXJ4DoqvhF7kMQw@mail.gmail.com>
-Message-ID: <915d51888c2577cc3266370bfda603e8@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-06 02:56, Stephen Boyd wrote:
-> Quoting Prasad Malisetty (2021-06-05 07:40:58)
->> In PCIe driver pipe-clk mux needs to switch between pipe_clk
->> and XO for GDSC enable. This is done by setting pipe_clk mux
->> as parent of pipe_clk after phy init.
+Am Donnerstag, 17. Juni 2021, 06:49:54 CEST schrieb Alex Bee:
+> Rock Pi 4a plus board is the successor of Rock Pi 4a board.
 > 
-> Just to confirm, we can't set this parent via assigned-clock-parents
-> property in DT?
+> Differences to the original version are
+> - has RK3399 OP1 SoC revision
+> - has eMMC (16 or 32 GB) soldered on board (no changes required,
+>   since it is enabled in rk3399-rock-pi-4.dtsi)
+> - dev boards have SPI flash soldered, but as per manufacturer response,
+>   this won't be the case for mass production boards
 > 
->> 
-This clock setting need be done after phy init.
+> I didn't add yet another compatible, since the small set of differences
+> are captured by the device tree.
+> 
+> Signed-off-by: Alex Bee <knaerzche@gmail.com>
+> ---
+>  arch/arm64/boot/dts/rockchip/Makefile              |  1 +
+>  .../boot/dts/rockchip/rk3399-rock-pi-4a-plus.dts   | 14 ++++++++++++++
+>  2 files changed, 15 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4a-plus.dts
+> 
+> diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
+> index c3e00c0e2db7..dbd7d37950f1 100644
+> --- a/arch/arm64/boot/dts/rockchip/Makefile
+> +++ b/arch/arm64/boot/dts/rockchip/Makefile
+> @@ -43,6 +43,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-puma-haikou.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-roc-pc-mezzanine.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4a.dtb
+> +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4a-plus.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4b.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock-pi-4c.dtb
+>  dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rock960.dtb
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4a-plus.dts b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4a-plus.dts
+> new file mode 100644
+> index 000000000000..2deaab7f9307
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-rock-pi-4a-plus.dts
+> @@ -0,0 +1,14 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> +/*
+> + * Copyright (c) 2019 Akash Gajjar <Akash_Gajjar@mentor.com>
+> + * Copyright (c) 2019 Pragnesh Patel <Pragnesh_Patel@mentor.com>
+> + */
+> +
+> +/dts-v1/;
+> +#include "rk3399-rock-pi-4.dtsi"
+> +#include "rk3399-op1-opp.dtsi"
+> +
+> +/ {
+> +	model = "Radxa ROCK Pi 4A plus";
+> +	compatible = "radxa,rockpi4a", "radxa,rockpi4", "rockchip,rk3399";
 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
->>  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
->>  1 file changed, 22 insertions(+)
->> 
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c 
->> b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 8a7a300..5cbbea4 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
->>         struct regulator_bulk_data supplies[2];
->>         struct reset_control *pci_reset;
->>         struct clk *pipe_clk;
->> +       struct clk *pipe_clk_mux;
->> +       struct clk *pipe_ext_src;
->> +       struct clk *ref_clk_src;
->>  };
->> 
->>  union qcom_pcie_resources {
->> @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct 
->> qcom_pcie *pcie)
->>         if (ret < 0)
->>                 return ret;
->> 
->> +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) 
->> {
->> +               res->pipe_clk_mux = devm_clk_get(dev, "pipe_src");
->> +               if (IS_ERR(res->pipe_clk_mux))
->> +                       return PTR_ERR(res->pipe_clk_mux);
->> +
->> +               res->pipe_ext_src = devm_clk_get(dev, "pipe_ext");
->> +               if (IS_ERR(res->pipe_ext_src))
->> +                       return PTR_ERR(res->pipe_ext_src);
->> +
->> +               res->ref_clk_src = devm_clk_get(dev, "ref");
-> 
-> Is this going to be used by any code?
-> 
-Yes, ref clock will be used in system suspend case. currently system 
-suspend changes are in under validation.
+hmm, I don't really follow why you're re-using the radxa,rockpi4a
+compatible. I'd assume this should be radxa,rockpi4a+ or something?
 
->> +               if (IS_ERR(res->ref_clk_src))
->> +                       return PTR_ERR(res->ref_clk_src);
->> +       }
->> +
->>         res->pipe_clk = devm_clk_get(dev, "pipe");
->>         return PTR_ERR_OR_ZERO(res->pipe_clk);
->>  }
->> @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct 
->> qcom_pcie *pcie)
->>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->>  {
->>         struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
->> +       struct dw_pcie *pci = pcie->pci;
->> +       struct device *dev = pci->dev;
->> +
->> +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
->> +               clk_set_parent(res->pipe_clk_mux, res->pipe_ext_src);
->> 
->>         return clk_prepare_enable(res->pipe_clk);
->>  }
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
->> 
+I.e. if a bootloader needs to select the matching devicetree from a list
+of available devicetrees, this could end up running a regular rockpi4a
+(without +) using the OP1 operating points and thus at way too high
+frequencies.
+
+
+Heiko
+
+
+> +};
+> 
+
+
+
+
