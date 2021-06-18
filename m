@@ -2,531 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BA383AC64F
-	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 10:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3885C3AC656
+	for <lists+linux-usb@lfdr.de>; Fri, 18 Jun 2021 10:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbhFRIlb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 18 Jun 2021 04:41:31 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:49086 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbhFRIlb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 18 Jun 2021 04:41:31 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210618083915euoutp02d09077a346e281cbd561c7673d110745~JoHLFrcip1212512125euoutp02i
-        for <linux-usb@vger.kernel.org>; Fri, 18 Jun 2021 08:39:15 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210618083915euoutp02d09077a346e281cbd561c7673d110745~JoHLFrcip1212512125euoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1624005555;
-        bh=bQH/rySBRfjkbrAHug4e4+/Yc/s63zosIz7bIr475g0=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=i9k376kMeD47gfomkeF31doiWJal6nEUoHUwhYiRXOvOOHUFz6KQlEMIqk/aEXeR9
-         SOzTBVCEfoTIIWSrLbG4YJhKYRATEhklVsOLAE/WjKfNs7WLnbKH//yDRdcBY0/dzs
-         8rJCTINmxvFjrykeqfshJC+mDVdZ1QIo127SLY9w=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210618083914eucas1p1c055d56f34ceeb6156541608c418feea~JoHKnqI1t2978929789eucas1p1Q;
-        Fri, 18 Jun 2021 08:39:14 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 59.BF.56448.2BB5CC06; Fri, 18
-        Jun 2021 09:39:14 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9~JoHKQ6MI10595605956eucas1p2i;
-        Fri, 18 Jun 2021 08:39:14 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210618083914eusmtrp189b4ae3088c1823a35ee891f13ca8f81~JoHKQJ4Dg1328513285eusmtrp1i;
-        Fri, 18 Jun 2021 08:39:14 +0000 (GMT)
-X-AuditID: cbfec7f5-d53ff7000002dc80-57-60cc5bb25ba9
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B7.CA.31287.2BB5CC06; Fri, 18
-        Jun 2021 09:39:14 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20210618083913eusmtip268f2606c4b5f2b8a766cf374852202b0~JoHJi1zNi1850418504eusmtip2H;
-        Fri, 18 Jun 2021 08:39:13 +0000 (GMT)
-Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
- support
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <15e1bb24-7d67-9d45-54c1-c1c1a0fe444a@samsung.com>
-Date:   Fri, 18 Jun 2021 10:39:12 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0)
-        Gecko/20100101 Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <20210607082727.26045-5-o.rempel@pengutronix.de>
-Content-Transfer-Encoding: 8bit
+        id S233704AbhFRImO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 18 Jun 2021 04:42:14 -0400
+Received: from mail-eopbgr80072.outbound.protection.outlook.com ([40.107.8.72]:55465
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233129AbhFRImN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 18 Jun 2021 04:42:13 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZYPQy+wtwYkoh4xUX88ZzQh3iT+cDMtUa8Dd0nXbYmdCd32V6p+imNXgI1LAsOC3yGuS2clbPNP1gBYMF4rjONsUUeU6g6BYpG9LNfN9Ii7RypCWpnMFEAlRjWyYMITI9it2RpcNGcPql8u61Ovsx1/pD1FUvfZZLKNV7HU3JeCeq0NmmdQwJ8GQ34zKP7nivbMVW2vyuhUbjcRlOS7o8/T/jE6mThNJ9U6calu4ee6gUoxFVn6LLV8I74MXk7MDoTP9p+3opWyly/vMOmxJ67R2OO430Zmn2ehP50179s5dqAKixV0ry0zVjnBuMFH8etqPdVEMw4oyPL/phSkCqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kFGbmKH3nstUHpKikC80Ey5jBu7rGxCVTvz2v6oZIWg=;
+ b=DRx3QFg7XMzzGclb0haLyv3X8x2VJxRInxvKrfe4LtL2Pv2LTp7Bc702tHIkX8A+MKaKYMfAZTHTA300LVIpjy+GLrY7qfXvYy2fKkvoIPMBdfrp02N5GqO062uh+76IOTg1zj6/IUdHxdTVCoO0SywTRq0RjQZcwRxQkQ8wAfspYuZTLrGkMd96J1tkH87H5WQp1f7WyQVzret74zM0ehKE98iQlbT3vJWDZ3tyZVc5uECdjAC7KRE9wG0IlHl5kf2Yva1BK4h3Fk9FjyTbE6YUSCNusB0H5nCkzWG9VPeTmj1HKCJvqtsKa+ZvGoZNH5fHDkVXRs87isDcTVSMlg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kFGbmKH3nstUHpKikC80Ey5jBu7rGxCVTvz2v6oZIWg=;
+ b=n/auo6tWPU55DwRSWqLdhxWr5qQ6Nqgau6pd/pc2B/JhbnlaHbKjoM4CNVpICr4CKKrkaCkf+IhaO/q2CUIZYPW1MvSR8jzOeBMhE3uz/7Mxhxuz3JD3jwdy7vbqY/upoUxb1/aOvpd3x6mhRIniMyPXOA6uU6yodcJLBx4LpTo=
+Received: from DB8PR04MB5931.eurprd04.prod.outlook.com (2603:10a6:10:ae::12)
+ by DB9PR04MB8217.eurprd04.prod.outlook.com (2603:10a6:10:244::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.18; Fri, 18 Jun
+ 2021 08:40:02 +0000
+Received: from DB8PR04MB5931.eurprd04.prod.outlook.com
+ ([fe80::d018:debb:2e0:530a]) by DB8PR04MB5931.eurprd04.prod.outlook.com
+ ([fe80::d018:debb:2e0:530a%7]) with mapi id 15.20.4242.021; Fri, 18 Jun 2021
+ 08:40:02 +0000
+From:   Jun Li <jun.li@nxp.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Zhipeng Wang <zhipeng.wang_1@nxp.com>
+Subject: RE: [PATCH v2] usb: chipidea: host: fix port index underflow and
+ UBSAN complains
+Thread-Topic: [PATCH v2] usb: chipidea: host: fix port index underflow and
+ UBSAN complains
+Thread-Index: AQHXZBLMLyw5eU0oS0CEb7m7+mLZhasZY5OAgAADlQCAAAjREA==
+Date:   Fri, 18 Jun 2021 08:40:02 +0000
+Message-ID: <DB8PR04MB5931ECDECBBF988E4D3AD3B4890D9@DB8PR04MB5931.eurprd04.prod.outlook.com>
+References: <1623999879-2277-1-git-send-email-jun.li@nxp.com>
+ <YMxPBdaTNNMf5rIg@kroah.com> <YMxSBpXrOCljlVuF@kroah.com>
+In-Reply-To: <YMxSBpXrOCljlVuF@kroah.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0hTYRjmO+dsO65mx2nuU1fGokBJZyzrdFGMStYIMYMCpXLpQccu2qZ2
-        o9S0smFa6lLnaOYPM7Mky3khJUe4bN7KrpaVqYSWiczKC1Yej5X/nud93+d93ufjw1H+PZYn
-        rtAkUVqNXCViczFL61SXX01Ue3TAA4eE7OqzoqSpKxMjy8aKWGSloQEjuy05LLKn0cQmy8rP
-        oaTV0ATI1lJ3cvA9COFKe14+RaX3b75BpA3GPo60pvIiW9pQ70CkubMBUkfNynBOJHdbLKVS
-        pFBacXA0N9509QEnsVl7/EVlH5oGvkXpAY5DYgMseBGmB1ycT1QA2HHxA4shEwDWVswChjjm
-        OqUDHD1wmlfkmLIXGjcAbKxNxxgyDmDflZ8IvdeViIA3WiJogRsxDOCta0oao4QKznZnITRm
-        E+uhflTPpjGPCIY331ahNMaINTD3bt282XIiBo5dK2IxMy6wrXgQo7ETEQSvl4wBZqc3zKgt
-        QRksgL2DZoS+BxK/cfj1+VfAXL0TOiY6UQa7whHb/YU0QmjPz8YYQQaA/Z23OQzJBrDnbNGC
-        eit81znNppOhhA+sbhQz5e2wqCITYx7SGb4edWGOcIZ5lkKUKfNg1nk+M70WGm13/tm2dD9D
-        LwORcVE046I4xkVxjP99SwFWCQRUsk4dR+kkGuqYv06u1iVr4vxjEtQ1YO5f2X/ZvteDipFx
-        fytAcGAFEEdFbjw/3eNoPi9WfuIkpU04rE1WUTor8MIxkYDXWFt1mE/EyZMoJUUlUtq/XQR3
-        8kxDUvOE9m/NiLur8Y1ceamZ97nDy60cHf2YbpYl+ZrZ5T+WHOh+KPi0Kcuw8UrHjHK136vd
-        dpemCZdDuwPjzBd6n7Rkpky3hsgurbZN5+YNYR0iSfu+YO64a8HJIaPlUHqEbEvUdaH5QEy4
-        x9KR0+2pshwy76hVQdQ5DXE3Z3G4isBUu36XULAqE4/MrwuJDLBICqntj4rzQ50tYecSLogl
-        B1W9QkehLN3Ap9pN1MveyWG1TTwWoPJIXCZWasIQVYH3iXXm04FIOLG52n0/r18x4Os1nVRv
-        2RNUmrBDEPqluOrIpPvOU1/6WVNnUoY1M62Te7HRsh2nVnwvafNRizBdvHy9L6rVyf8AmADg
-        vMYDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrGIsWRmVeSWpSXmKPExsVy+t/xe7qbos8kGPR8FLc4f/cQs8Wc8y0s
-        Fovez2C1WDV1J4vFhW19rBaXd81hs1i0rJXZ4tDUvYwWxxaIWTy5x+jA5XH52kVmjy0rbzJ5
-        7Jx1l91j06pONo+dOz4zefT/NfD4vEkugD1Kz6Yov7QkVSEjv7jEVina0MJIz9DSQs/IxFLP
-        0Ng81srIVEnfziYlNSezLLVI3y5BL2POtD3sBfuKKq6uusvcwPguuouRk0NCwESib04PYxcj
-        F4eQwFJGiR/t81ghEjISJ6c1QNnCEn+udbFBFL1nlGh9vw/I4eAQFgiSWH4wCCQuIvCSUeLX
-        1idsIA3MAjkSOzZcZgGxhQTyJc4/mwVmswkYSnS97QKr4RWwk1h5ew0ziM0ioCrRv3E7O4gt
-        KpAs8XN9O1SNoMTJmU/AejkFbCUWzn7PCDHfTGLe5ofMELa8RPPW2VC2uMStJ/OZJjAKzULS
-        PgtJyywkLbOQtCxgZFnFKJJaWpybnltsqFecmFtcmpeul5yfu4kRGKHbjv3cvINx3quPeocY
-        mTgYDzFKcDArifDqFp9IEOJNSaysSi3Kjy8qzUktPsRoCvTPRGYp0eR8YIrIK4k3NDMwNTQx
-        szQwtTQzVhLn3Tp3TbyQQHpiSWp2ampBahFMHxMHp1QD0+K/D1QmXY+Z+NjUZfmUbd5Bdx5X
-        lJx+07D3+aP8d6vuNsS0rDewXqI4Ky141q6gilk/mzvOVVv/mcbxzOc/x9HsFcvFwgMrRM8z
-        Nste+lf38vICm2Nbw5af9Dj5amq9yZmGVU1BPlu3T3v0foYOW4aFjLiuUPaxUxaPCrOO5v7i
-        VG6a/tpi97Ufn3rfGslO37WhLK9VZrnpgxO5n9Z9a/Jy1nm+9H3N1eUiczg8J315ZZEfHrOQ
-        zWXZ4t5qxVdCVlwdH65vZ5zn3qNh2aroelbpmJSMdYXwjcLnrZ47lngWJnNJLWSekhPWsmvf
-        bjkmYZekA66rv4nN3yfNPj905mTRK+4ZbRn5AheZv5y3Oq7EUpyRaKjFXFScCABPNvHQWQMA
-        AA==
-X-CMS-MailID: 20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9
-References: <20210607082727.26045-1-o.rempel@pengutronix.de>
-        <20210607082727.26045-5-o.rempel@pengutronix.de>
-        <CGME20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9@eucas1p2.samsung.com>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=nxp.com;
+x-originating-ip: [119.31.174.71]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 770769de-911c-4e4b-1d4b-08d93234aa19
+x-ms-traffictypediagnostic: DB9PR04MB8217:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DB9PR04MB8217B50C12C7C96C07A8426A890D9@DB9PR04MB8217.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1265;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2JaPfgF6z1Jf7Aq8UB+ezDft/FHe33FCUkexSnnxUbczhbAzMpXYyk921EKHYayv6ia6+P/0nrvNjmS3aMBx3Bh592DsHyEIIRI2IB9BDtjHhg6ZL6WICa+igQ8yftqPWbJV+vj6PX9KMbjABWOt8CeZb7Y4tD7PNvUigGM0cziuw+uj/bis7sTdZH2qZY6SzaZzn/5eRe/tlGe7p+WIL//PeYmVdS9I72Wsf+eV0gMyKFJQQKBkpbW8w7aVwxexr6nisb3ucaSQ0LbdxDZMVMKSJbXo6nxYn8lVbTveiOcSK8i2CRCoOm7x21ntm3RkQ1mWzBNeVD3ikzpujKFCG6SuZVu2/xcAypzqOPQ4yJ9pAg27aNmc3UlnD07q9BHLn2c8CTD/Jldd88+ZQMQFeqWCSYO8hL2EwigPV4LANNHqRS70TVUMgcnfWjjG/Qn5CUfiHzwVo0X6LKyePJGadoJVU5MN/poZtlNrCYqTVGXWsT4AZjoisStvn0uTP6PTzYD8ajGFW0WuWaeaN4B4YUIVClgUp4aw3MXFAYkQgKDsk6roov+9dhCwkbHVYC8IALLuSklj9FvpcitHKR5J8/BMlo2+J5dilqK5ipmvoCQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB8PR04MB5931.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(366004)(136003)(376002)(346002)(71200400001)(33656002)(5660300002)(54906003)(26005)(4744005)(6916009)(44832011)(38100700002)(122000001)(66556008)(66946007)(66476007)(55016002)(8936002)(66446008)(86362001)(64756008)(83380400001)(2906002)(186003)(478600001)(7696005)(52536014)(6506007)(4326008)(316002)(76116006)(9686003)(53546011)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VzJteNMuB98NipW0cuh1vGGjR0T4hWH91/ikxK6pzPjO+UTun5k348JEVWl5?=
+ =?us-ascii?Q?KAqAEtBH/wqHQbpz9bUZrrMsR+1B11nkSy3krB6FNOszjTv01U+j+6nZTqpg?=
+ =?us-ascii?Q?GoE227hHiKvynhAhP2WGKuRLhOKFrK6F+z0KNLWI3f//xPOS2sqyusl5QIta?=
+ =?us-ascii?Q?GIc/DSjGkSqk8X3Wh6WDXkrh40bCXhd07WrvGezP0oHPX/ScF7Y1X/3T7+1C?=
+ =?us-ascii?Q?xgAOEk9jiH6ICzlyvx3hHbxblczfYEsx6cMDXv1W8jjgQ1u0aFMeWFfau9tH?=
+ =?us-ascii?Q?nKtnwRc6rZJBSh5VM588WdBc3yi1IuJTNB3Xi81YguetWAEJh2coQqCFCU0P?=
+ =?us-ascii?Q?VW2h5aWXSS843Qi4LeX4EtnUfwD6pDag5xBxNNqWmMHkecNqDI3PVCSGNAJW?=
+ =?us-ascii?Q?3H99nO9OKiuLWG5u+iriZ7KMjjJuk4FG13ZyZZMhsBDQbFMQReuaRuv9djJC?=
+ =?us-ascii?Q?oiSF2piWr+7eYXaxh3FAc6/hCSN9FPravjlXYaQUmt8ulR/7EnyT2uFWNJFI?=
+ =?us-ascii?Q?9HwpwI1TdK2rexCewQKsC/CnnhVfxsFZ+/ikj0iYFRHvPPpr+d4AGga2AiJD?=
+ =?us-ascii?Q?u+eIRFjGMxpVx6BUXZ4bTYSht3AEYUy0hIpfnE/M3lIX3bnBFjTaQCMgjEdX?=
+ =?us-ascii?Q?QNQGMRZZeXylBF9sxLOnpAPlx3AkHpXYg3AXLHxsQeKSFO7hUTQaM/iBRNH8?=
+ =?us-ascii?Q?dsu4lIz8VmH0W+OKC+952jxYpAd2O5e0eser++dDHchH6nzlQ/RhjpDDJyrr?=
+ =?us-ascii?Q?8pPDAuMHZ/Jkms5i8hpvV1DPTNHeiNizVyvGel/xOMBk6JQ0xkzdmWFtP8FQ?=
+ =?us-ascii?Q?S2hAwLy7ANxUdcoITFbVhVTDhnnU3CdLsKPpb90XWZprZzYAJE862kEuNhi0?=
+ =?us-ascii?Q?QQXz/vMHRFwVAcUEDehoy0LkHrvEjqnwTqvGXilHzV+hDdFxw5KtMrfRSWPE?=
+ =?us-ascii?Q?NrpmGJ6aA2iwGYzvQTggcCoqmDhhHP05ANcFsq6KlpOuXWzAijVXZBs9Uq6T?=
+ =?us-ascii?Q?1qFBFUZwHK3+Qgr6OXmvjuSfxbls2IendUEmAj0dAZjgZUJ6rMKT7eE5dxRn?=
+ =?us-ascii?Q?Gtoi/wel3YvpJ3/N5xgpkTc44550g43tTeKJmMwHhOpB/5IFQSXP3BzG0Qpf?=
+ =?us-ascii?Q?If+jwNb6/dSwARzuws9xkPcZ6xNv7oxXJ7/cSPAX8ebdC3usuNv836zBw8G2?=
+ =?us-ascii?Q?XdAWfezg6CUq9kIy4m1h2MPC57Sgazu5PzQ8KwP24hW3RqUMjsVjQBpq3ZL/?=
+ =?us-ascii?Q?qZ+bAynzFAL602Yjl3f9ChTqigzLXM2BbHtiVOif+BJqOVtQ54sJcBBehk/G?=
+ =?us-ascii?Q?vZMvnQwdDfH3FsmoHFyvgbUm?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB8PR04MB5931.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 770769de-911c-4e4b-1d4b-08d93234aa19
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jun 2021 08:40:02.2247
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: X1SpVaF8O8TnTjnDZZufRV2X3tF8pNNNA/8vKT2JpXTXyYQ6vzJJjDey8NxjVbzj
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8217
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Oleksij,
 
-On 07.06.2021 10:27, Oleksij Rempel wrote:
-> To be able to use ax88772 with external PHYs and use advantage of
-> existing PHY drivers, we need to port at least ax88772 part of asix
-> driver to the phylib framework.
->
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-I found one more issue with this patch. On one of my test boards 
-(Samsung Exynos5250 SoC based Arndale) system fails to establish network 
-connection just after starting the kernel when the driver is build-in.
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Friday, June 18, 2021 3:58 PM
+> To: Jun Li <jun.li@nxp.com>
+> Cc: peter.chen@kernel.org; stern@rowland.harvard.edu;
+> linux-usb@vger.kernel.org; dl-linux-imx <linux-imx@nxp.com>; Zhipeng Wang
+> <zhipeng.wang_1@nxp.com>
+> Subject: Re: [PATCH v2] usb: chipidea: host: fix port index underflow and
+> UBSAN complains
+>=20
+> On Fri, Jun 18, 2021 at 09:45:09AM +0200, Greg KH wrote:
+> > On Fri, Jun 18, 2021 at 03:04:39PM +0800, Li Jun wrote:
+> > > If wIndex is 0 (and it often is), these calculations underflow and
+> > > UBSAN complains, here resolve this by not decrementing the index
+> > > when it is equal to 0, this copies the solution from commit
+> > > 85e3990bea49
+> > > ("USB: EHCI: avoid undefined pointer arithmetic and placate UBSAN")
+> > >
+> > > Reported-by: zhipeng.wang <zhipeng.wang_1@nxp.com>
+> >
+> > Please use a name here that makes sense, "Zhipeng Wang"?
+>=20
+> Specifically, the "." in the name as written originally does not make sen=
+se,
+> right?
 
---->8---
-# dmesg | grep asix
-[    2.761928] usbcore: registered new interface driver asix
-[    5.003110] asix 1-3.2.4:1.0 (unnamed net_device) (uninitialized): 
-invalid hw address, using random
-[    6.065400] asix 1-3.2.4:1.0 eth0: register 'asix' at 
-usb-12110000.usb-3.2.4, ASIX AX88772 USB 2.0 Ethernet, 7a:9b:9a:f2:94:8e
-[   14.043868] asix 1-3.2.4:1.0 eth0: Link is Up - 100Mbps/Full - flow 
-control off
-# ping -c2  host
-PING host (192.168.100.1) 56(84) bytes of data.
- From 192.168.100.20 icmp_seq=1 Destination Host Unreachable
- From 192.168.100.20 icmp_seq=2 Destination Host Unreachable
+Yes, should be "Zhipeng Wang", I will change and send v3.
 
---- host ping statistics ---
-2 packets transmitted, 0 received, +2 errors, 100% packet loss, time 59ms
---->8---
-
-Calling ifup eth0 && ifdown eth0 fixes the network status:
-
---->8---
-# ifdown eth0 && ifup eth0
-[   60.474929] asix 1-3.2.4:1.0 eth0: Link is Down
-[   60.623516] asix 1-3.2.4:1.0 eth0: Link is Down
-[   62.774304] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-[   62.786354] asix 1-3.2.4:1.0 eth0: Link is Up - 100Mbps/Full - flow 
-control off
-# ping -c2 host
-PING host (192.168.100.1) 56(84) bytes of data.
-64 bytes from host (192.168.100.1): icmp_seq=1 ttl=64 time=1.25 ms
-64 bytes from host (192.168.100.1): icmp_seq=2 ttl=64 time=0.853 ms
-
---- host ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 3ms
-rtt min/avg/max/mdev = 0.853/1.053/1.254/0.203 ms
---->8---
-
-When driver is loaded as a module (and without any other modules, so 
-this is not a dependency issue), the connection is established properly 
-just after the boot:
-
---->8---
-# dmesg | grep asix
-[   13.633284] asix 1-3.2.4:1.0 (unnamed net_device) (uninitialized): 
-invalid hw address, using random
-[   15.390350] asix 1-3.2.4:1.0 eth0: register 'asix' at 
-usb-12110000.usb-3.2.4, ASIX AX88772 USB 2.0 Ethernet, 3a:51:11:08:aa:ea
-[   15.414052] usbcore: registered new interface driver asix
-[   15.832564] asix 1-3.2.4:1.0 eth0: Link is Down
-[   18.053747] asix 1-3.2.4:1.0 eth0: Link is Up - 100Mbps/Full - flow 
-control off
-# ping -c2 host
-PING host (192.168.100.1) 56(84) bytes of data.
-64 bytes from host (192.168.100.1): icmp_seq=1 ttl=64 time=0.545 ms
-64 bytes from host (192.168.100.1): icmp_seq=2 ttl=64 time=0.742 ms
-
---- host ping statistics ---
-2 packets transmitted, 2 received, 0% packet loss, time 3ms
-rtt min/avg/max/mdev = 0.545/0.643/0.742/0.101 ms
-
---->8---
-
-Let me know if I can make any other tests that would help fixing this issue.
-
-> ---
->   drivers/net/usb/asix.h         |   9 +++
->   drivers/net/usb/asix_common.c  |  37 ++++++++++
->   drivers/net/usb/asix_devices.c | 120 +++++++++++++++++++++------------
->   drivers/net/usb/ax88172a.c     |  14 ----
->   4 files changed, 122 insertions(+), 58 deletions(-)
->
-> diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-> index edb94efd265e..2122d302e643 100644
-> --- a/drivers/net/usb/asix.h
-> +++ b/drivers/net/usb/asix.h
-> @@ -25,6 +25,7 @@
->   #include <linux/usb/usbnet.h>
->   #include <linux/slab.h>
->   #include <linux/if_vlan.h>
-> +#include <linux/phy.h>
->   
->   #define DRIVER_VERSION "22-Dec-2011"
->   #define DRIVER_NAME "asix"
-> @@ -178,6 +179,10 @@ struct asix_common_private {
->   	u16 presvd_phy_advertise;
->   	u16 presvd_phy_bmcr;
->   	struct asix_rx_fixup_info rx_fixup_info;
-> +	struct mii_bus *mdio;
-> +	struct phy_device *phydev;
-> +	u16 phy_addr;
-> +	char phy_name[20];
->   };
->   
->   extern const struct driver_info ax88172a_info;
-> @@ -214,6 +219,7 @@ int asix_write_rx_ctl(struct usbnet *dev, u16 mode, int in_pm);
->   
->   u16 asix_read_medium_status(struct usbnet *dev, int in_pm);
->   int asix_write_medium_mode(struct usbnet *dev, u16 mode, int in_pm);
-> +void asix_adjust_link(struct net_device *netdev);
->   
->   int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm);
->   
-> @@ -222,6 +228,9 @@ void asix_set_multicast(struct net_device *net);
->   int asix_mdio_read(struct net_device *netdev, int phy_id, int loc);
->   void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val);
->   
-> +int asix_mdio_bus_read(struct mii_bus *bus, int phy_id, int regnum);
-> +int asix_mdio_bus_write(struct mii_bus *bus, int phy_id, int regnum, u16 val);
-> +
->   int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc);
->   void asix_mdio_write_nopm(struct net_device *netdev, int phy_id, int loc,
->   			  int val);
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index e1109f1a8dd5..085bc8281082 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -384,6 +384,27 @@ int asix_write_medium_mode(struct usbnet *dev, u16 mode, int in_pm)
->   	return ret;
->   }
->   
-> +/* set MAC link settings according to information from phylib */
-> +void asix_adjust_link(struct net_device *netdev)
-> +{
-> +	struct phy_device *phydev = netdev->phydev;
-> +	struct usbnet *dev = netdev_priv(netdev);
-> +	u16 mode = 0;
-> +
-> +	if (phydev->link) {
-> +		mode = AX88772_MEDIUM_DEFAULT;
-> +
-> +		if (phydev->duplex == DUPLEX_HALF)
-> +			mode &= ~AX_MEDIUM_FD;
-> +
-> +		if (phydev->speed != SPEED_100)
-> +			mode &= ~AX_MEDIUM_PS;
-> +	}
-> +
-> +	asix_write_medium_mode(dev, mode, 0);
-> +	phy_print_status(phydev);
-> +}
-> +
->   int asix_write_gpio(struct usbnet *dev, u16 value, int sleep, int in_pm)
->   {
->   	int ret;
-> @@ -506,6 +527,22 @@ void asix_mdio_write(struct net_device *netdev, int phy_id, int loc, int val)
->   	mutex_unlock(&dev->phy_mutex);
->   }
->   
-> +/* MDIO read and write wrappers for phylib */
-> +int asix_mdio_bus_read(struct mii_bus *bus, int phy_id, int regnum)
-> +{
-> +	struct usbnet *priv = bus->priv;
-> +
-> +	return asix_mdio_read(priv->net, phy_id, regnum);
-> +}
-> +
-> +int asix_mdio_bus_write(struct mii_bus *bus, int phy_id, int regnum, u16 val)
-> +{
-> +	struct usbnet *priv = bus->priv;
-> +
-> +	asix_mdio_write(priv->net, phy_id, regnum, val);
-> +	return 0;
-> +}
-> +
->   int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
->   {
->   	struct usbnet *dev = netdev_priv(netdev);
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index 00b6ac0570eb..e4cd85e38edd 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -285,7 +285,7 @@ static int ax88172_bind(struct usbnet *dev, struct usb_interface *intf)
->   
->   static const struct ethtool_ops ax88772_ethtool_ops = {
->   	.get_drvinfo		= asix_get_drvinfo,
-> -	.get_link		= asix_get_link,
-> +	.get_link		= usbnet_get_link,
->   	.get_msglevel		= usbnet_get_msglevel,
->   	.set_msglevel		= usbnet_set_msglevel,
->   	.get_wol		= asix_get_wol,
-> @@ -293,37 +293,15 @@ static const struct ethtool_ops ax88772_ethtool_ops = {
->   	.get_eeprom_len		= asix_get_eeprom_len,
->   	.get_eeprom		= asix_get_eeprom,
->   	.set_eeprom		= asix_set_eeprom,
-> -	.nway_reset		= usbnet_nway_reset,
-> -	.get_link_ksettings	= usbnet_get_link_ksettings_mii,
-> -	.set_link_ksettings	= usbnet_set_link_ksettings_mii,
-> +	.nway_reset		= phy_ethtool_nway_reset,
-> +	.get_link_ksettings	= phy_ethtool_get_link_ksettings,
-> +	.set_link_ksettings	= phy_ethtool_set_link_ksettings,
->   };
->   
-> -static int ax88772_link_reset(struct usbnet *dev)
-> -{
-> -	u16 mode;
-> -	struct ethtool_cmd ecmd = { .cmd = ETHTOOL_GSET };
-> -
-> -	mii_check_media(&dev->mii, 1, 1);
-> -	mii_ethtool_gset(&dev->mii, &ecmd);
-> -	mode = AX88772_MEDIUM_DEFAULT;
-> -
-> -	if (ethtool_cmd_speed(&ecmd) != SPEED_100)
-> -		mode &= ~AX_MEDIUM_PS;
-> -
-> -	if (ecmd.duplex != DUPLEX_FULL)
-> -		mode &= ~AX_MEDIUM_FD;
-> -
-> -	netdev_dbg(dev->net, "ax88772_link_reset() speed: %u duplex: %d setting mode to 0x%04x\n",
-> -		   ethtool_cmd_speed(&ecmd), ecmd.duplex, mode);
-> -
-> -	asix_write_medium_mode(dev, mode, 0);
-> -
-> -	return 0;
-> -}
-> -
->   static int ax88772_reset(struct usbnet *dev)
->   {
->   	struct asix_data *data = (struct asix_data *)&dev->data;
-> +	struct asix_common_private *priv = dev->driver_priv;
->   	int ret;
->   
->   	/* Rewrite MAC address */
-> @@ -342,6 +320,8 @@ static int ax88772_reset(struct usbnet *dev)
->   	if (ret < 0)
->   		goto out;
->   
-> +	phy_start(priv->phydev);
-> +
->   	return 0;
->   
->   out:
-> @@ -586,7 +566,7 @@ static const struct net_device_ops ax88772_netdev_ops = {
->   	.ndo_get_stats64	= dev_get_tstats64,
->   	.ndo_set_mac_address 	= asix_set_mac_address,
->   	.ndo_validate_addr	= eth_validate_addr,
-> -	.ndo_do_ioctl		= asix_ioctl,
-> +	.ndo_do_ioctl		= phy_do_ioctl_running,
->   	.ndo_set_rx_mode        = asix_set_multicast,
->   };
->   
-> @@ -677,12 +657,57 @@ static int asix_resume(struct usb_interface *intf)
->   	return usbnet_resume(intf);
->   }
->   
-> +static int ax88772_init_mdio(struct usbnet *dev)
-> +{
-> +	struct asix_common_private *priv = dev->driver_priv;
-> +
-> +	priv->mdio = devm_mdiobus_alloc(&dev->udev->dev);
-> +	if (!priv->mdio)
-> +		return -ENOMEM;
-> +
-> +	priv->mdio->priv = dev;
-> +	priv->mdio->read = &asix_mdio_bus_read;
-> +	priv->mdio->write = &asix_mdio_bus_write;
-> +	priv->mdio->name = "Asix MDIO Bus";
-> +	/* mii bus name is usb-<usb bus number>-<usb device number> */
-> +	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
-> +		 dev->udev->bus->busnum, dev->udev->devnum);
-> +
-> +	return devm_mdiobus_register(&dev->udev->dev, priv->mdio);
-> +}
-> +
-> +static int ax88772_init_phy(struct usbnet *dev)
-> +{
-> +	struct asix_common_private *priv = dev->driver_priv;
-> +	int ret;
-> +
-> +	priv->phy_addr = asix_read_phy_addr(dev, true);
-> +	if (priv->phy_addr < 0)
-> +		return priv->phy_addr;
-> +
-> +	snprintf(priv->phy_name, sizeof(priv->phy_name), PHY_ID_FMT,
-> +		 priv->mdio->id, priv->phy_addr);
-> +
-> +	priv->phydev = phy_connect(dev->net, priv->phy_name, &asix_adjust_link,
-> +				   PHY_INTERFACE_MODE_INTERNAL);
-> +	if (IS_ERR(priv->phydev)) {
-> +		netdev_err(dev->net, "Could not connect to PHY device %s\n",
-> +			   priv->phy_name);
-> +		ret = PTR_ERR(priv->phydev);
-> +		return ret;
-> +	}
-> +
-> +	phy_attached_info(priv->phydev);
-> +
-> +	return 0;
-> +}
-> +
->   static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->   {
-> -	int ret, i;
->   	u8 buf[ETH_ALEN] = {0}, chipcode = 0;
-> -	u32 phyid;
->   	struct asix_common_private *priv;
-> +	int ret, i;
-> +	u32 phyid;
->   
->   	usbnet_get_endpoints(dev, intf);
->   
-> @@ -714,17 +739,6 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->   
->   	asix_set_netdev_dev_addr(dev, buf);
->   
-> -	/* Initialize MII structure */
-> -	dev->mii.dev = dev->net;
-> -	dev->mii.mdio_read = asix_mdio_read;
-> -	dev->mii.mdio_write = asix_mdio_write;
-> -	dev->mii.phy_id_mask = 0x1f;
-> -	dev->mii.reg_num_mask = 0x1f;
-> -
-> -	dev->mii.phy_id = asix_read_phy_addr(dev, true);
-> -	if (dev->mii.phy_id < 0)
-> -		return dev->mii.phy_id;
-> -
->   	dev->net->netdev_ops = &ax88772_netdev_ops;
->   	dev->net->ethtool_ops = &ax88772_ethtool_ops;
->   	dev->net->needed_headroom = 4; /* cf asix_tx_fixup() */
-> @@ -768,11 +782,31 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
->   		priv->suspend = ax88772_suspend;
->   	}
->   
-> +	ret = ax88772_init_mdio(dev);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ax88772_init_phy(dev);
-> +}
-> +
-> +static int ax88772_stop(struct usbnet *dev)
-> +{
-> +	struct asix_common_private *priv = dev->driver_priv;
-> +
-> +	/* On unplugged USB, we will get MDIO communication errors and the
-> +	 * PHY will be set in to PHY_HALTED state.
-> +	 */
-> +	if (priv->phydev->state != PHY_HALTED)
-> +		phy_stop(priv->phydev);
-> +
->   	return 0;
->   }
->   
->   static void ax88772_unbind(struct usbnet *dev, struct usb_interface *intf)
->   {
-> +	struct asix_common_private *priv = dev->driver_priv;
-> +
-> +	phy_disconnect(priv->phydev);
->   	asix_rx_fixup_common_free(dev->driver_priv);
->   }
->   
-> @@ -1161,8 +1195,8 @@ static const struct driver_info ax88772_info = {
->   	.bind = ax88772_bind,
->   	.unbind = ax88772_unbind,
->   	.status = asix_status,
-> -	.link_reset = ax88772_link_reset,
->   	.reset = ax88772_reset,
-> +	.stop = ax88772_stop,
->   	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR | FLAG_MULTI_PACKET,
->   	.rx_fixup = asix_rx_fixup_common,
->   	.tx_fixup = asix_tx_fixup,
-> @@ -1173,7 +1207,6 @@ static const struct driver_info ax88772b_info = {
->   	.bind = ax88772_bind,
->   	.unbind = ax88772_unbind,
->   	.status = asix_status,
-> -	.link_reset = ax88772_link_reset,
->   	.reset = ax88772_reset,
->   	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
->   	         FLAG_MULTI_PACKET,
-> @@ -1209,7 +1242,6 @@ static const struct driver_info hg20f9_info = {
->   	.bind = ax88772_bind,
->   	.unbind = ax88772_unbind,
->   	.status = asix_status,
-> -	.link_reset = ax88772_link_reset,
->   	.reset = ax88772_reset,
->   	.flags = FLAG_ETHER | FLAG_FRAMING_AX | FLAG_LINK_INTR |
->   	         FLAG_MULTI_PACKET,
-> diff --git a/drivers/net/usb/ax88172a.c b/drivers/net/usb/ax88172a.c
-> index c8ca5187eece..2e2081346740 100644
-> --- a/drivers/net/usb/ax88172a.c
-> +++ b/drivers/net/usb/ax88172a.c
-> @@ -25,20 +25,6 @@ struct ax88172a_private {
->   	struct asix_rx_fixup_info rx_fixup_info;
->   };
->   
-> -/* MDIO read and write wrappers for phylib */
-> -static int asix_mdio_bus_read(struct mii_bus *bus, int phy_id, int regnum)
-> -{
-> -	return asix_mdio_read(((struct usbnet *)bus->priv)->net, phy_id,
-> -			      regnum);
-> -}
-> -
-> -static int asix_mdio_bus_write(struct mii_bus *bus, int phy_id, int regnum,
-> -			       u16 val)
-> -{
-> -	asix_mdio_write(((struct usbnet *)bus->priv)->net, phy_id, regnum, val);
-> -	return 0;
-> -}
-> -
->   /* set MAC link settings according to information from phylib */
->   static void ax88172a_adjust_link(struct net_device *netdev)
->   {
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Thanks
+Li Jun
