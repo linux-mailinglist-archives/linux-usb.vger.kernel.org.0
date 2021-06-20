@@ -2,106 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2FDA3ADC7B
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Jun 2021 05:53:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C50C13ADDAE
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Jun 2021 10:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbhFTDzw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 19 Jun 2021 23:55:52 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:51588 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229591AbhFTDzv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 19 Jun 2021 23:55:51 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624161219; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=tE+R1AzeEp0EUe214AcQa1UZC60tq85rg/F6OsM6CrY=;
- b=hPvk5BspQCWQfYL00co+4svZBd1TVb/RYd72Qdky1EvA2lu7hUENem+5xXcBdv3kJPwrBSJ0
- 5NgMaFAsG8wIvzumP1cbQ72wmcqI1aDiiPINOlA3T5t4tJ1g4kdAe7bcJhoS/zcYotJtf90F
- mFALr7pqeaD27R4rSKcKNrR7PnY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 60cebbb0e27c0cc77f932fdf (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sun, 20 Jun 2021 03:53:20
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 71BDBC4323A; Sun, 20 Jun 2021 03:53:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B6DF2C433D3;
-        Sun, 20 Jun 2021 03:53:18 +0000 (UTC)
+        id S229782AbhFTIIR convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 20 Jun 2021 04:08:17 -0400
+Received: from 6-200-5-45.rpnnetprovedor.com.br ([45.5.200.6]:59544 "EHLO
+        srv01.rpnnetprovedor.com.br" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229684AbhFTIH6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Jun 2021 04:07:58 -0400
+Received: from [84.38.130.143] (helo=IP-130-143.dataclub.eu)
+        by srv01.rpnnetprovedor.com.br with esmtpa (Exim 4.92.2)
+        (envelope-from <robertnellsona@citromail.hu>)
+        id 1lusSd-00068r-4L
+        for linux-usb@vger.kernel.org; Sun, 20 Jun 2021 05:05:43 -0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sun, 20 Jun 2021 11:53:18 +0800
-From:   linyyuan@codeaurora.org
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH v3 1/2] usb: udc: core: hide struct usb_gadget_driver to
- gadget driver
-In-Reply-To: <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
-References: <20210619154309.52127-1-linyyuan@codeaurora.org>
- <20210619154309.52127-2-linyyuan@codeaurora.org>
- <20210620021337.GA361976@rowland.harvard.edu>
- <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
-Message-ID: <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
-X-Sender: linyyuan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: CAN YOU INVEST WITH ME?...6
+To:     linux-usb@vger.kernel.org
+From:   "Mr.  Robert" <robertnellsona@citromail.hu>
+Date:   Sun, 20 Jun 2021 11:05:42 +0300
+Reply-To: robertnellsona@citromail.hu
+Message-Id: <E1lusSd-00068r-4L@srv01.rpnnetprovedor.com.br>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-20 11:46, linyyuan@codeaurora.org wrote:
-> On 2021-06-20 10:13, Alan Stern wrote:
->> On Sat, Jun 19, 2021 at 11:43:08PM +0800, Linyu Yuan wrote:
->>> currently most gadget driver have a pointer to save
->>> struct usb_gadget_driver from upper layer,
->>> it allow upper layer set and unset of the pointer.
->>> 
->>> there is race that upper layer unset the pointer first,
->>> but gadget driver use the pointer later,
->>> and it cause system crash due to NULL pointer access.
->> 
->> This race has already been fixed in Greg's usb-next branch.  See 
->> commit
->> 7dc0c55e9f30 ("USB: UDC core: Add udc_async_callbacks gadget op") and
->> following commits 04145a03db9d ("USB: UDC: Implement
->> udc_async_callbacks in dummy-hcd") and b42e8090ba93 ("USB: UDC:
->> Implement udc_async_callbacks in net2280").
->> 
-> thanks, this is better, lower driver only need change several places.
->> You just need to write a corresponding patch implementing the
->> async_callbacks op for dwc3.
-> yes, i will do.
->> 
-Alan, i want to discuss your suggestion again in b42e8090ba93 ("USB: 
-UDC:
-Implement udc_async_callbacks in net2280")
 
-+                       if (dev->async_callbacks) { ----> if CPU1 saw 
-this is true
-+                               spin_unlock(&dev->lock); ---> CPU2 get 
-lock after this unlock,
-it will set async_callbacks to false, then follow call also crash, right 
-?
-+                               tmp = dev->driver->setup(&dev->gadget, 
-&u.r);
-+                               spin_lock(&dev->lock);
-+                       }
+ATTENTION; linux-usb@vger.kernel.org,
 
->> Alan Stern
+IMPORTANT INVESTMENT INFORMATION
+
+We have a good investment program going on now.
+We have $95m USD for Investment in your Country.
+We use this opportunity to invest you to join the investment program and you will never regret it.
+Please kindly invest with us and you will be receiving monthly income/return/profit every month.
+We can also give you Loan, 
+
+We have: 
+
+1. Short Term Loan, 
+
+2. Medium Term Loan 
+
+3. and Long Term Loan, 
+
+There is no need of collateral security. We will use our company to sign agreement and guarantee on your behalf and our Lawyer will sign on your behalf.
+
+Reply for more detail.
+
+Thank you Sir.
+
+Robert Nellson.
+INVESTMENT MANAGER.
