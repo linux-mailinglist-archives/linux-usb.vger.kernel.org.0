@@ -2,90 +2,66 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B8C3ADEEC
-	for <lists+linux-usb@lfdr.de>; Sun, 20 Jun 2021 15:47:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D4B3AE005
+	for <lists+linux-usb@lfdr.de>; Sun, 20 Jun 2021 21:31:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbhFTNt5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Jun 2021 09:49:57 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36315 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229593AbhFTNt4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Jun 2021 09:49:56 -0400
-Received: (qmail 377833 invoked by uid 1000); 20 Jun 2021 09:47:43 -0400
-Date:   Sun, 20 Jun 2021 09:47:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     linyyuan@codeaurora.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH v3 1/2] usb: udc: core: hide struct usb_gadget_driver to
- gadget driver
-Message-ID: <20210620134743.GA377492@rowland.harvard.edu>
-References: <20210619154309.52127-1-linyyuan@codeaurora.org>
- <20210619154309.52127-2-linyyuan@codeaurora.org>
- <20210620021337.GA361976@rowland.harvard.edu>
- <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
- <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
+        id S230052AbhFTTeI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 20 Jun 2021 15:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60760 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229901AbhFTTeI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Jun 2021 15:34:08 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CB4C061574
+        for <linux-usb@vger.kernel.org>; Sun, 20 Jun 2021 12:31:55 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id t17so6239783lfq.0
+        for <linux-usb@vger.kernel.org>; Sun, 20 Jun 2021 12:31:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=iflwn4cIxv25yOsZKdLgt8lZ88RsB7Nr9ggBnAKolHp/dwTUDD3pBPDDTiug1SZ8FN
+         el58RaXeB1sWxDUsp52pYf5rPYVUklw8KYIVUNx+ScxMt+4XqV4dNr811wWcafNOULJD
+         HOWfFnqgx+aBYRK+gRes9F9dcfjtdl0HuVndiv7MQylhoS3Cf27Z4bYf+Z46uSE+hw+P
+         l/TPbrNqhWAxXfSjk5JqVfN00FwmW1sAJ5gagPw/DkT3YMaWjjJr/BVQ7YLSGghmbkeV
+         MsrY+zHJSqJxoLDMlJ6ksV62G6LtnuYjXOgIUll92PUiK9zaJVYrUBscb7j5VGjQxQYk
+         bQWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=a2zlJLb2cHVJ/vhYiwd0h6Ss03bH4wa1SiOeNNr1qqA=;
+        b=r9n84php5D1dmJrItrVbkwGhlDz4v5lG+nkHkEKPCQqeG7Tdngqj51KHkfJxyDD98z
+         JYZYyL2A38/Ysae9VxmcEdrI3P/gLp8Nyq5k6iovGFcGClfh+zBfOfhpe69NfLib9ozn
+         3MWVcLVKOpQ0zNq+Up4pMf/WMam+bL8vxf0YVAt5zGO6azlseEb5S5dF383IGNnVtX/3
+         sHniFyiyKuGHnvnNnTFVk/qjTz94x6UcV6IRJXOLKUXHbZrYhLVqUe+Zg58s1cP08+yn
+         KhZsWq6uSzorGvXq+jU29s5Fnc70arreFy7tQaMCJll3Bg1iKIBU39q6Qu4RGTeN5EkF
+         RiDw==
+X-Gm-Message-State: AOAM532X+lZt6pixgRWLboWLyDjwyjZA/9It9r6Jtlccahdsj0ZByvTs
+        QtCwWKmaGw7sAzvnK1rbbfddjldfRQXn31FpZzA=
+X-Google-Smtp-Source: ABdhPJyeD1lLPYBQdT9VT9jzW1iiMX2kB/cgKkQsdodYNEEprA9r8h08EieL/xXDNy3TrLJahxntNc5yIm1qlCe8dMU=
+X-Received: by 2002:a05:6512:1041:: with SMTP id c1mr10869668lfb.364.1624217514009;
+ Sun, 20 Jun 2021 12:31:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Received: by 2002:aa6:da47:0:b029:fa:6d7d:24c with HTTP; Sun, 20 Jun 2021
+ 12:31:53 -0700 (PDT)
+Reply-To: contactcenter@gnbinvestorsb.com
+From:   Gnb Investors Bank <sandraquntoo@gmail.com>
+Date:   Sun, 20 Jun 2021 22:31:53 +0300
+Message-ID: <CAPu=tC6QxtV57F7_bKWOdn9JnKUo0zSAbPoQZnRysWNPApU87w@mail.gmail.com>
+Subject: Brauchen Sie einen Kredit?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 20, 2021 at 11:53:18AM +0800, linyyuan@codeaurora.org wrote:
-> On 2021-06-20 11:46, linyyuan@codeaurora.org wrote:
-> > On 2021-06-20 10:13, Alan Stern wrote:
-> > > On Sat, Jun 19, 2021 at 11:43:08PM +0800, Linyu Yuan wrote:
-> > > > currently most gadget driver have a pointer to save
-> > > > struct usb_gadget_driver from upper layer,
-> > > > it allow upper layer set and unset of the pointer.
-> > > > 
-> > > > there is race that upper layer unset the pointer first,
-> > > > but gadget driver use the pointer later,
-> > > > and it cause system crash due to NULL pointer access.
-> > > 
-> > > This race has already been fixed in Greg's usb-next branch.  See
-> > > commit
-> > > 7dc0c55e9f30 ("USB: UDC core: Add udc_async_callbacks gadget op") and
-> > > following commits 04145a03db9d ("USB: UDC: Implement
-> > > udc_async_callbacks in dummy-hcd") and b42e8090ba93 ("USB: UDC:
-> > > Implement udc_async_callbacks in net2280").
-> > > 
-> > thanks, this is better, lower driver only need change several places.
-> > > You just need to write a corresponding patch implementing the
-> > > async_callbacks op for dwc3.
-> > yes, i will do.
-> > > 
-> Alan, i want to discuss your suggestion again in b42e8090ba93 ("USB: UDC:
-> Implement udc_async_callbacks in net2280")
-> 
-> +                       if (dev->async_callbacks) { ----> if CPU1 saw this
-> is true
-> +                               spin_unlock(&dev->lock); ---> CPU2 get lock
-> after this unlock,
-> it will set async_callbacks to false, then follow call also crash, right ?
-> +                               tmp = dev->driver->setup(&dev->gadget,
-> &u.r);
-> +                               spin_lock(&dev->lock);
-> +                       }
+--=20
+Brauchen Sie einen Kredit? Unsere Bank vergibt Kredite zu einem Zinssatz vo=
+n 2%
 
-No, this is okay.  The reason is because usb_gadget_remove_driver (CPU2 
-in your example) does this:
+Melden Sie sich f=C3=BCr weitere Informationen bei uns.
 
-        usb_gadget_disable_async_callbacks(udc);
-        if (udc->gadget->irq)
-                synchronize_irq(udc->gadget->irq);
-        udc->driver->unbind(udc->gadget);
-        usb_gadget_udc_stop(udc);
-
-The synchronize_irq call will make CPU2 wait until CPU1 has finished 
-handling the interrupt for the setup packet.  The system won't crash, 
-because dev->driver->setup will be called before unbind and udc_stop 
-instead of after.
-
-Alan Stern
+E-Mail: contactcenter@gnbinvestorsb.com
