@@ -2,135 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAF8D3AE156
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 03:37:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CB53AE277
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 06:36:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbhFUBkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 20 Jun 2021 21:40:03 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:25027 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbhFUBkD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 20 Jun 2021 21:40:03 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624239470; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=lYEMqrykgWc6HM062opojkGd6Q6iRcgqfcdWknEUeUY=;
- b=Oo7904a39D9DiVXHPDw6yG6zMumTxDglJqAud3HJj7GiF7unYDBbwOki5ym/nK9KaC8qmzvh
- pHjdNy9/LS/LQeYGETbxm1gi5SnAs1QRLbzNOQk9sCmZ4ITC7TzbQw5KQsgGAWFG9UGLm9zm
- vVcRencTqyZ54O5ddaJ+AL/mBxo=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 60cfed5fe570c056194d4f82 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Jun 2021 01:37:35
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id CAFB3C43217; Mon, 21 Jun 2021 01:37:35 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id EA65EC433F1;
-        Mon, 21 Jun 2021 01:37:34 +0000 (UTC)
+        id S229486AbhFUEit (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 00:38:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50466 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229441AbhFUEit (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Jun 2021 00:38:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id E32D76100B;
+        Mon, 21 Jun 2021 04:36:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624250195;
+        bh=GLB/Ss+fGkEW5XRiJrP+WIsTTmWHJUEvXYecRI+A+zU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E29iI/9595aKLEZxqKyB/JV3uYkLMZJCqyShqYyOzF7gGwUqhsSO6NGQwT7Pk8hvp
+         +Qy2Sca5MIZhJgeb4p2Rr20sUoFo7/TgS/QbNat/DP4+QEyPCoyfgEsY+VWZtr7hYV
+         ewBStgVxfKFWEpXuThTrMhd5w4dyXXpfzS/T32A6/Fu2yuKVdo05H2YqeCYFXyxYV1
+         4htxOU6/7ieOvptwz2YowjsoLGeGI1kX/u0iwf9xe45amdgeZonKYbi82lAUvMGW6P
+         p9533otvBBO/l6j+P6zWXwpFFH7chrEypjHDo081arHxnvG1dOEhaUzamfD1WGbytK
+         +ddfwJtiObamA==
+Date:   Mon, 21 Jun 2021 10:06:31 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Andre Przywara <andre.przywara@arm.com>
+Cc:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rob Herring <robh@kernel.org>, Icenowy Zheng <icenowy@aosc.io>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@googlegroups.com,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Ondrej Jirman <megous@megous.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 14/19] phy: sun4i-usb: Introduce port2 SIDDQ quirk
+Message-ID: <YNAXT5lYVcJ309zJ@vkoul-mobl>
+References: <20210615110636.23403-1-andre.przywara@arm.com>
+ <20210615110636.23403-15-andre.przywara@arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 21 Jun 2021 09:37:34 +0800
-From:   linyyuan@codeaurora.org
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH v3 1/2] usb: udc: core: hide struct usb_gadget_driver to
- gadget driver
-In-Reply-To: <20210620134743.GA377492@rowland.harvard.edu>
-References: <20210619154309.52127-1-linyyuan@codeaurora.org>
- <20210619154309.52127-2-linyyuan@codeaurora.org>
- <20210620021337.GA361976@rowland.harvard.edu>
- <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
- <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
- <20210620134743.GA377492@rowland.harvard.edu>
-Message-ID: <98c2729c25442d6c66131d17cabdda27@codeaurora.org>
-X-Sender: linyyuan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210615110636.23403-15-andre.przywara@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-20 21:47, Alan Stern wrote:
-> On Sun, Jun 20, 2021 at 11:53:18AM +0800, linyyuan@codeaurora.org 
-> wrote:
->> On 2021-06-20 11:46, linyyuan@codeaurora.org wrote:
->> > On 2021-06-20 10:13, Alan Stern wrote:
->> > > On Sat, Jun 19, 2021 at 11:43:08PM +0800, Linyu Yuan wrote:
->> > > > currently most gadget driver have a pointer to save
->> > > > struct usb_gadget_driver from upper layer,
->> > > > it allow upper layer set and unset of the pointer.
->> > > >
->> > > > there is race that upper layer unset the pointer first,
->> > > > but gadget driver use the pointer later,
->> > > > and it cause system crash due to NULL pointer access.
->> > >
->> > > This race has already been fixed in Greg's usb-next branch.  See
->> > > commit
->> > > 7dc0c55e9f30 ("USB: UDC core: Add udc_async_callbacks gadget op") and
->> > > following commits 04145a03db9d ("USB: UDC: Implement
->> > > udc_async_callbacks in dummy-hcd") and b42e8090ba93 ("USB: UDC:
->> > > Implement udc_async_callbacks in net2280").
->> > >
->> > thanks, this is better, lower driver only need change several places.
->> > > You just need to write a corresponding patch implementing the
->> > > async_callbacks op for dwc3.
->> > yes, i will do.
->> > >
->> Alan, i want to discuss your suggestion again in b42e8090ba93 ("USB: 
->> UDC:
->> Implement udc_async_callbacks in net2280")
->> 
->> +                       if (dev->async_callbacks) { ----> if CPU1 saw 
->> this
->> is true
->> +                               spin_unlock(&dev->lock); ---> CPU2 get 
->> lock
->> after this unlock,
->> it will set async_callbacks to false, then follow call also crash, 
->> right ?
->> +                               tmp = dev->driver->setup(&dev->gadget,
->> &u.r);
->> +                               spin_lock(&dev->lock);
->> +                       }
+On 15-06-21, 12:06, Andre Przywara wrote:
+> At least the Allwinner H616 SoC requires a weird quirk to make most
+> USB PHYs work: Only port2 works out of the box, but all other ports
+> need some help from this port2 to work correctly: The CLK_BUS_PHY2 and
+> RST_USB_PHY2 clock and reset need to be enabled, and the SIDDQ bit in
+> the PMU PHY control register needs to be cleared. For this register to
+> be accessible, CLK_BUS_ECHI2 needs to be ungated. Don't ask ....
 > 
-> No, this is okay.  The reason is because usb_gadget_remove_driver (CPU2
-> in your example) does this:
+> Instead of disguising this as some generic feature, do exactly that
+> in our PHY init:
+> If the quirk bit is set, and we initialise a PHY other than PHY2, ungate
+> this one special clock, and clear the SIDDQ bit. We can pull in the
+> other required clocks via the DT.
 > 
->         usb_gadget_disable_async_callbacks(udc);
->         if (udc->gadget->irq)
->                 synchronize_irq(udc->gadget->irq);
->         udc->driver->unbind(udc->gadget);
->         usb_gadget_udc_stop(udc);
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> ---
+>  drivers/phy/allwinner/phy-sun4i-usb.c | 59 +++++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
 > 
-> The synchronize_irq call will make CPU2 wait until CPU1 has finished
-> handling the interrupt for the setup packet.  The system won't crash,
-> because dev->driver->setup will be called before unbind and udc_stop
-> instead of after.
-still several question,
-1. how about suspend calll dev->driver->suspend ?
-2. will 04145a03db9d ("USB: UDC: Implement udc_async_callbacks in 
-dummy-hcd") backport to LTS branch ?
-3. how about coding style ? so following code
-if (foo->gadget_driver && foo->gadget_driver->resume)
-change to
-if (foo->asnyc_callbacks && foo->gadget_driver->resume)
-> 
-> Alan Stern
+> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c b/drivers/phy/allwinner/phy-sun4i-usb.c
+> index 126ef74d013c..316ef5fca831 100644
+> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
+> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
+> @@ -120,6 +120,7 @@ struct sun4i_usb_phy_cfg {
+>  	u8 phyctl_offset;
+>  	bool dedicated_clocks;
+>  	bool phy0_dual_route;
+> +	bool needs_phy2_siddq;
+>  	int missing_phys;
+>  };
+>  
+> @@ -289,6 +290,50 @@ static int sun4i_usb_phy_init(struct phy *_phy)
+>  		return ret;
+>  	}
+>  
+> +	/* Some PHYs on some SoCs need the help of PHY2 to work. */
+> +	if (data->cfg->needs_phy2_siddq && phy->index != 2) {
+> +		struct sun4i_usb_phy *phy2 = &data->phys[2];
+> +
+> +		ret = clk_prepare_enable(phy2->clk);
+> +		if (ret) {
+> +			reset_control_assert(phy->reset);
+> +			clk_disable_unprepare(phy->clk2);
+> +			clk_disable_unprepare(phy->clk);
+> +			return ret;
+> +		}
+> +
+> +		ret = reset_control_deassert(phy2->reset);
+> +		if (ret) {
+> +			clk_disable_unprepare(phy2->clk);
+> +			reset_control_assert(phy->reset);
+> +			clk_disable_unprepare(phy->clk2);
+> +			clk_disable_unprepare(phy->clk);
+> +			return ret;
+> +		}
+
+no delay between deassert and assert... ?
+
+
+-- 
+~Vinod
