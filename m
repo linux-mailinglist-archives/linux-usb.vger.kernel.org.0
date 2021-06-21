@@ -2,93 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D08483AF223
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488C93AF2A2
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231477AbhFURme (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 13:42:34 -0400
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:40625 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbhFURmc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 13:42:32 -0400
-Received: by mail-ot1-f45.google.com with SMTP id v11-20020a9d340b0000b0290455f7b8b1dcso5607689otb.7;
-        Mon, 21 Jun 2021 10:40:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ycr2MVX2QStXzBDnJmHYFgyl6vWy5atj59T2tUN3oGs=;
-        b=TPqQyDvWNFkvu7BIzaJV0FbNND4W3adG6YKG8ypGaO/LxCU54hhDH62Q2os3DW9BTt
-         wgv3V7iUBQaYRvT+fg+XHl/U5rEyuDu8+1AL+NnHt/tMSaCLljH1Nu3JraFple+jjqmb
-         8Geo2vWcHslE3epvfMsBXrY8uz3Gq8D09vcA00rooaHnU4BI+B8P11qkFQ9QCuWY1XhB
-         Ngl7NDCqCJ7sj75XczFYqfwTzmIt0sKc2FWT1K955FM6HLpclQMR/JjzF/NV0/gx6rep
-         o67o/14OGf6m27NuWkZAw2sZPRwaQvX/RX0CgzJJIoUNqm6hAXGeRl+8ewoHXCUvI6dG
-         tzig==
-X-Gm-Message-State: AOAM531+0LIcUo9UWsS8JE3wN60z5RZJyQQLg06DMvh2tnQZ5kYjHNw5
-        wBV6zjnaYTcKOzmfa5q4HA==
-X-Google-Smtp-Source: ABdhPJwEdEOTURr205hHEkYgMTtaTA+IHNYydHc+eoQXCKth8FENQNTTuXPq7nCfQSdbabasrp1onA==
-X-Received: by 2002:a9d:1c9f:: with SMTP id l31mr21456301ota.244.1624297217906;
-        Mon, 21 Jun 2021 10:40:17 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id d20sm4078210otq.62.2021.06.21.10.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 10:40:17 -0700 (PDT)
-Received: (nullmailer pid 1161641 invoked by uid 1000);
-        Mon, 21 Jun 2021 17:40:02 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20210621093943.12143-7-biju.das.jz@bp.renesas.com>
-References: <20210621093943.12143-1-biju.das.jz@bp.renesas.com> <20210621093943.12143-7-biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 06/11] dt-bindings: usb: generic-ohci: Document RZ/G2L SoC bindings
-Date:   Mon, 21 Jun 2021 11:40:02 -0600
-Message-Id: <1624297202.383434.1161640.nullmailer@robh.at.kernel.org>
+        id S232848AbhFUR4J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 13:56:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39046 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232035AbhFURzJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Jun 2021 13:55:09 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 706066128A;
+        Mon, 21 Jun 2021 17:52:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624297959;
+        bh=HXZWMFTM4rc1VvbXjfrhFeBANb2/h4lWBdB8XBCt/d0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nXQuR0qvmvqSqE9OlD7UeeENfJnKWaxWJqoitjL4jBQu3yK2f3z+s/VsOtgexbAd3
+         y7Z9uFTn3iVQFfx7g2xdE8l7JpqdaQ0QIIDl4zAxshjuZ13u6WHaRq7dq9OZuA8a9W
+         PPMeuqW7yD7azj0GLBhSzvIS0vx9KtcYdAbmo/YwODwu8DqMVARs+haKJAq0Wrcl6W
+         EjykRLV/FtqlbKfTl0RqhQ2X8CeqNVsAOdzMih/0ZoRrzUCK2Z4braPSkAOEmM/vSx
+         w+LoA5E2xKR4X9WEdvFkAbs/xgenxekBrJGy9mmyfwTqz9XCvFSgFfv2W48lvma1i4
+         dkTRDhz3px1Nw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Kristian Evensen <kristian.evensen@gmail.com>,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.12 25/39] qmi_wwan: Do not call netif_rx from rx_fixup
+Date:   Mon, 21 Jun 2021 13:51:41 -0400
+Message-Id: <20210621175156.735062-25-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210621175156.735062-1-sashal@kernel.org>
+References: <20210621175156.735062-1-sashal@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 21 Jun 2021 10:39:38 +0100, Biju Das wrote:
-> Renesas RZ/G2L SoC has USBPHY Control and USB2.0 PHY module. We need to
-> turn on both these phy modules before accessing host registers.
-> 
-> Apart from this, document the optional property dr_mode present on both
-> RZ/G2 and R-Car Gen3 SoCs.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  .../devicetree/bindings/usb/generic-ohci.yaml | 32 +++++++++++++++++--
->  1 file changed, 30 insertions(+), 2 deletions(-)
-> 
+From: Kristian Evensen <kristian.evensen@gmail.com>
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+[ Upstream commit 057d49334c02a79af81c30a8d240e641bd6f1741 ]
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/generic-ohci.yaml:14:13: [warning] wrong indentation: expected 10 but found 12 (indentation)
+When the QMI_WWAN_FLAG_PASS_THROUGH is set, netif_rx() is called from
+qmi_wwan_rx_fixup(). When the call to netif_rx() is successful (which is
+most of the time), usbnet_skb_return() is called (from rx_process()).
+usbnet_skb_return() will then call netif_rx() a second time for the same
+skb.
 
-dtschema/dtc warnings/errors:
-\ndoc reference errors (make refcheckdocs):
+Simplify the code and avoid the redundant netif_rx() call by changing
+qmi_wwan_rx_fixup() to always return 1 when QMI_WWAN_FLAG_PASS_THROUGH
+is set. We then leave it up to the existing infrastructure to call
+netif_rx().
 
-See https://patchwork.ozlabs.org/patch/1494981
+Suggested-by: Bjørn Mork <bjorn@mork.no>
+Signed-off-by: Kristian Evensen <kristian.evensen@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 6700f1970b24..bc55ec739af9 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -575,7 +575,7 @@ static int qmi_wwan_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 
+ 	if (info->flags & QMI_WWAN_FLAG_PASS_THROUGH) {
+ 		skb->protocol = htons(ETH_P_MAP);
+-		return (netif_rx(skb) == NET_RX_SUCCESS);
++		return 1;
+ 	}
+ 
+ 	switch (skb->data[0] & 0xf0) {
+-- 
+2.30.2
 
