@@ -2,122 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B0A53AEA80
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 15:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448F93AEAEC
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 16:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbhFUNzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 09:55:47 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:36981 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229736AbhFUNzr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 09:55:47 -0400
-Received: (qmail 414341 invoked by uid 1000); 21 Jun 2021 09:53:32 -0400
-Date:   Mon, 21 Jun 2021 09:53:32 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     linyyuan@codeaurora.org
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        id S229949AbhFUOQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 10:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229765AbhFUOQU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 10:16:20 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F4CC061574;
+        Mon, 21 Jun 2021 07:14:05 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id h11so2381515wrx.5;
+        Mon, 21 Jun 2021 07:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1wxL7/RZgkd7tzTUkekvfvdCHWar3oCq1tWFko1E9o=;
+        b=RuksT6jTR8FRNNY+r+xkD9D05mnTIAzomimttWV8HrkQiP6qs+LaCDvepu7wkURaDw
+         6+bjKabwE1K5qbkpz6PXmDPgkD5pDdho39AbIUw2tX1ytfPvEHNAejH9fgba7AXxtoI9
+         CrK/iVmqR612IHN3etPmtCkpcTVR/C3bJbblCQUFwMbySvwf6RoB7NBKBl32eoBDiz4N
+         KBlVE1WAa1fFg+vW+iMCK8i7Xg7AtWzxYkT2YThQQV4gM13lZq2INxSGggRMfFFgroHJ
+         hteSfCxPrfIXAjkfEXWXfQ12cjhNi4Irli4lPolXvqY8Pg4DMpfBnyPZBBB3UqA7MwOe
+         vEBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1wxL7/RZgkd7tzTUkekvfvdCHWar3oCq1tWFko1E9o=;
+        b=eZsI2QcQvxi3EaRv+VrYJ89zHSBXOjou1yHBEmpM4wxoXAGaYskZwbvHHyWSSKMfCN
+         vsKX69xuCcbZsJzLSBVe9CKOmXDmallCDAzOSetcfWDMsJUJVU8pEuvG2BXb7oEwTGbn
+         83UE6JM8eO1DUn3VdxkGQ8oeFEMaGpKR9qyUr9wrQoyP4UOTJ9Hlk8bewMSgROCvyfNA
+         +sixjtmiETvC71jklt5ZJB6dfAj0YHBYRt9TM28hdbmRpku9aAohVXHWTTpg6TqHNCGx
+         rpDStv2kuEMtUZO7sF7UaaSzw3yTyXKXtibu8Ww9GiDBuI3sq0ewQfITWybXUULApwfV
+         RiWg==
+X-Gm-Message-State: AOAM532b2WD+kFs/sOKZXmA8AxwFhQUM5qDKYybWt0wXQGUG4Zo+fXbW
+        /9hHTzPr2k+1GekQCLOiYck=
+X-Google-Smtp-Source: ABdhPJwvfVK82TRkJ9edAJjGFovTzoAfUgqKsZ1ehD0CESqOH5He4xP1LHxPExUT10LLiFBzzlkeuw==
+X-Received: by 2002:a5d:6d8c:: with SMTP id l12mr29183005wrs.189.1624284844108;
+        Mon, 21 Jun 2021 07:14:04 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id j17sm7725707wrx.0.2021.06.21.07.14.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 07:14:03 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH v3 1/2] usb: udc: core: hide struct usb_gadget_driver to
- gadget driver
-Message-ID: <20210621135332.GA413023@rowland.harvard.edu>
-References: <20210619154309.52127-1-linyyuan@codeaurora.org>
- <20210619154309.52127-2-linyyuan@codeaurora.org>
- <20210620021337.GA361976@rowland.harvard.edu>
- <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
- <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
- <20210620134743.GA377492@rowland.harvard.edu>
- <98c2729c25442d6c66131d17cabdda27@codeaurora.org>
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: clock: tegra: Fix USB controller nodes in examples
+Date:   Mon, 21 Jun 2021 16:15:58 +0200
+Message-Id: <20210621141559.2881667-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <98c2729c25442d6c66131d17cabdda27@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 09:37:34AM +0800, linyyuan@codeaurora.org wrote:
-> On 2021-06-20 21:47, Alan Stern wrote:
-> > On Sun, Jun 20, 2021 at 11:53:18AM +0800, linyyuan@codeaurora.org wrote:
-> > > On 2021-06-20 11:46, linyyuan@codeaurora.org wrote:
-> > > > On 2021-06-20 10:13, Alan Stern wrote:
-> > > > > On Sat, Jun 19, 2021 at 11:43:08PM +0800, Linyu Yuan wrote:
-> > > > > > currently most gadget driver have a pointer to save
-> > > > > > struct usb_gadget_driver from upper layer,
-> > > > > > it allow upper layer set and unset of the pointer.
-> > > > > >
-> > > > > > there is race that upper layer unset the pointer first,
-> > > > > > but gadget driver use the pointer later,
-> > > > > > and it cause system crash due to NULL pointer access.
-> > > > >
-> > > > > This race has already been fixed in Greg's usb-next branch.  See
-> > > > > commit
-> > > > > 7dc0c55e9f30 ("USB: UDC core: Add udc_async_callbacks gadget op") and
-> > > > > following commits 04145a03db9d ("USB: UDC: Implement
-> > > > > udc_async_callbacks in dummy-hcd") and b42e8090ba93 ("USB: UDC:
-> > > > > Implement udc_async_callbacks in net2280").
-> > > > >
-> > > > thanks, this is better, lower driver only need change several places.
-> > > > > You just need to write a corresponding patch implementing the
-> > > > > async_callbacks op for dwc3.
-> > > > yes, i will do.
-> > > > >
-> > > Alan, i want to discuss your suggestion again in b42e8090ba93 ("USB:
-> > > UDC:
-> > > Implement udc_async_callbacks in net2280")
-> > > 
-> > > +                       if (dev->async_callbacks) { ----> if CPU1
-> > > saw this
-> > > is true
-> > > +                               spin_unlock(&dev->lock); ---> CPU2
-> > > get lock
-> > > after this unlock,
-> > > it will set async_callbacks to false, then follow call also crash,
-> > > right ?
-> > > +                               tmp = dev->driver->setup(&dev->gadget,
-> > > &u.r);
-> > > +                               spin_lock(&dev->lock);
-> > > +                       }
-> > 
-> > No, this is okay.  The reason is because usb_gadget_remove_driver (CPU2
-> > in your example) does this:
-> > 
-> >         usb_gadget_disable_async_callbacks(udc);
-> >         if (udc->gadget->irq)
-> >                 synchronize_irq(udc->gadget->irq);
-> >         udc->driver->unbind(udc->gadget);
-> >         usb_gadget_udc_stop(udc);
-> > 
-> > The synchronize_irq call will make CPU2 wait until CPU1 has finished
-> > handling the interrupt for the setup packet.  The system won't crash,
-> > because dev->driver->setup will be called before unbind and udc_stop
-> > instead of after.
+From: Thierry Reding <treding@nvidia.com>
 
-> still several question,
-> 1. how about suspend calll dev->driver->suspend ?
+A subsequent patch will convert the USB controller device tree bindings
+to json-schema, which will cause the DT validation to point out various
+issues with the examples in the clock and reset controller bindings.
 
-The same reasoning applies.  The synchronize_irq call will make CPU2 
-wait until CPU1 has finished handling the interrupt for the USB bus 
-suspend.  The system won't crash, because dev->driver->suspend will be 
-called before unbind and udc_stop instead of after.
+Fix these issues so that the subsequent patch will not cause validation
+warnings.
 
-> 2. will 04145a03db9d ("USB: UDC: Implement udc_async_callbacks in
-> dummy-hcd") backport to LTS branch ?
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ .../bindings/clock/nvidia,tegra124-car.yaml           | 11 ++++++++---
+ .../devicetree/bindings/clock/nvidia,tegra20-car.yaml |  5 +++++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-None of these commits are marked for back-porting to the -stable 
-kernels.  The race they fix does not occur often.
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+index ec7ab1483652..d5a873097379 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+@@ -99,6 +99,7 @@ additionalProperties: false
+ examples:
+   - |
+     #include <dt-bindings/clock/tegra124-car.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     car: clock-controller@60006000 {
+         compatible = "nvidia,tegra124-car";
+@@ -107,9 +108,13 @@ examples:
+         #reset-cells = <1>;
+     };
+ 
+-    usb-controller@c5004000 {
+-        compatible = "nvidia,tegra20-ehci";
+-        reg = <0xc5004000 0x4000>;
++    usb-controller@7d000000 {
++        compatible = "nvidia,tegra124-ehci", "nvidia,tegra30-ehci";
++        reg = <0x7d000000 0x4000>;
++        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
++        phy_type = "utmi";
+         clocks = <&car TEGRA124_CLK_USB2>;
+         resets = <&car TEGRA124_CLK_USB2>;
++        reset-names = "usb";
++        nvidia,phy = <&phy1>;
+     };
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+index 459d2a525393..11e6d9513373 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+@@ -53,6 +53,7 @@ additionalProperties: false
+ examples:
+   - |
+     #include <dt-bindings/clock/tegra20-car.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     car: clock-controller@60006000 {
+         compatible = "nvidia,tegra20-car";
+@@ -64,6 +65,10 @@ examples:
+     usb-controller@c5004000 {
+         compatible = "nvidia,tegra20-ehci";
+         reg = <0xc5004000 0x4000>;
++        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
++        phy_type = "utmi";
+         clocks = <&car TEGRA20_CLK_USB2>;
+         resets = <&car TEGRA20_CLK_USB2>;
++        reset-names = "usb";
++        nvidia,phy = <&phy1>;
+     };
+-- 
+2.32.0
 
-If you the commits to be applied to the LTS stable kernels, you can ask 
-Greg KH to do it.
-
-> 3. how about coding style ? so following code
-> if (foo->gadget_driver && foo->gadget_driver->resume)
-> change to
-> if (foo->asnyc_callbacks && foo->gadget_driver->resume)
-
-I don't understand this question.
-
-Alan Stern
