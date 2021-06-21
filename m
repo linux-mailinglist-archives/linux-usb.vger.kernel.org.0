@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 901663AF380
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8F43AF3C4
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 20:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233390AbhFUSCB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 14:02:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39622 "EHLO mail.kernel.org"
+        id S232646AbhFUSEH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 14:04:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232947AbhFUSAI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Jun 2021 14:00:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EB564613D5;
-        Mon, 21 Jun 2021 17:54:31 +0000 (UTC)
+        id S233533AbhFUSCA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Jun 2021 14:02:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 91794613FA;
+        Mon, 21 Jun 2021 17:55:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624298072;
-        bh=6DnWgGcJxdSYdGsEZMZ0kDzjERj0+WXcC5vnghvr9TU=;
+        s=k20201202; t=1624298107;
+        bh=V8wVtzYXxX7ZY1kfeeRnGHt+Q4QO/IFJYN+Y6g7FpIY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k/eFEVs1i0rY9QgHwnqY6a1Gq+YWaKp4vrs+pAjuVmsIgOJIwfGOECcJ2KGzGGW2Q
-         H6u48B8pRw5gENbimcyVuqcB030/Eyo3hBESgvYV6jdIcqhw+mZPSEgtCHCpAfHJoH
-         OJFmYd4jOgxREkr5EJcCAS9o9xodRXFUtaWkJ9p5ungDbTNN2mPvXe9+huhrL7Zf4A
-         82OR51RYtjxCnF/+wWFJS+dEzCAlYyF71APla3bjGrf6lfao0En+VWHK7g3d2oCY0e
-         MyhLvDkKnqy4qpcPV+MJBF2U9S1v6j7Nbge2USWi5TDc2noqd+aNekChgidDjl14o7
-         SxmbwFpKhyA0A==
+        b=OTJIKIYbyK/dkLwuIzr9F4B6W8eggVBmGcO9y1l3knURkSrGMFxnsuV3wSbKWyv5u
+         xKflnmLilpxmUMkE3/fKxHh5aDFLJi8gxM2MNabgg3EmHe4ceMlYu7wDAI7o2Qiu0O
+         KwX8h9L2Wcrr0AU5uWdrIYGkXAiyULVB/ag4m7oZ8+g+lOLGCHpdd0k9W8tHDYuHng
+         fBXUKGl/xPoeg2hcFQIGksVSKMFFXmqAgQKqVcPTLzh5zLuG/hayBuV2qLvr9Xw4Km
+         OkGD3FGkd6GtK8qYddd9p2nHqu0KjJTp4K75EYm93ApHTKRuNMrHsGp3AAtDs5MICZ
+         aH5m9mNf1Phgw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Kees Cook <keescook@chromium.org>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 18/26] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-Date:   Mon, 21 Jun 2021 13:53:51 -0400
-Message-Id: <20210621175400.735800-18-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 10/16] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
+Date:   Mon, 21 Jun 2021 13:54:44 -0400
+Message-Id: <20210621175450.736067-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210621175400.735800-1-sashal@kernel.org>
-References: <20210621175400.735800-1-sashal@kernel.org>
+In-Reply-To: <20210621175450.736067-1-sashal@kernel.org>
+References: <20210621175450.736067-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,10 +63,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index f6d643ecaf39..24d124633037 100644
+index a27ea04cfa6c..726fb5561a0f 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -5065,7 +5065,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
+@@ -4649,7 +4649,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
  {
  	switch (stringset) {
  	case ETH_SS_STATS:
