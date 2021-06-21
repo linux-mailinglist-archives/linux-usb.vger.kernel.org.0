@@ -2,83 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5C913AF226
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F20183AF22C
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:40:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbhFURmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 13:42:38 -0400
-Received: from mail-oi1-f175.google.com ([209.85.167.175]:34659 "EHLO
-        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbhFURmg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 13:42:36 -0400
-Received: by mail-oi1-f175.google.com with SMTP id u11so20738760oiv.1;
-        Mon, 21 Jun 2021 10:40:22 -0700 (PDT)
+        id S231694AbhFURmt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 13:42:49 -0400
+Received: from mail-oo1-f43.google.com ([209.85.161.43]:41947 "EHLO
+        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231614AbhFURmr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 13:42:47 -0400
+Received: by mail-oo1-f43.google.com with SMTP id k21-20020a4a2a150000b029024955603642so4684588oof.8;
+        Mon, 21 Jun 2021 10:40:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=NiwyQX8lqU+xqmCr8Fm4w/OcGtce3FSVkndbdiJtpF4=;
-        b=Ab5Xw7PExmAJZbs5auqmOhxK+GJ4q3AsM5m4gPzQpesnKcv/+SQ4NZ8ABgy+m8OMWR
-         kHVReP3uWWYA0D2OMYizJavj0j83nFQpqXtZsWA3Z4aDI9mN1k0qIiFFPCyHj6yVSDVU
-         hNri8hewUEcK5+Vntl9aYj6a3aIDZcnIbKgtcffD6JeDhhNGaLSYKdCFrUWMBKRYATXm
-         jCcoYk7/+Ezml+NEwZSUN8HfSJuM+/eqA9cH9PaZcvj343g53ypnXlBjIrZoQtepTl6S
-         EaEwvVUbeZDjhr5ywcz2yZoFQMwlv2zlEpv4bGWpFJd5K1VhPl30LO0YGhP1YRYg7avi
-         HSyQ==
-X-Gm-Message-State: AOAM531qVeTvItrLCzKR/E/JZpQolI02pEiq27dWwOZDYk2QRPcnBjAQ
-        CD0JuHZ62pocSNARscfEwlOXbupzDQ==
-X-Google-Smtp-Source: ABdhPJzbPfb/Y28dy/MWbQmLnRce9SBrwv07dwj3K58T+jt6Fqi9fqCoUZNhy2xeU0HpvRCRk66DpA==
-X-Received: by 2002:aca:3102:: with SMTP id x2mr24018935oix.112.1624297221566;
-        Mon, 21 Jun 2021 10:40:21 -0700 (PDT)
+        bh=eZRvTitUTXg79vCUcBqtliWJ27F6/oY71n/zgGdrqfk=;
+        b=kWTcnedxKX4h6qDK7yDA0g+K+9lCi1I5Er9B8gkY+x74XszgKygB5u4oI4+r/QX9Bv
+         nyW8RmJ398POvqdzSmI4ZocHezVv1mppoHRpJbWWkJ4Re9okXWhpgPSW3ggfh1a6HejZ
+         md+OAKZiOBDlbxY6hPM0qJGRSvH7Uh8e9qfqApP9Ooq8OybKmi2jsjqpmhufPQTus1su
+         tlfjhDCXBCg1L0qm4i7m3URmc8IsFvcE7Xu6SBJwxtpliicdft1BQ8oOOSPBl1zglVnp
+         yovjWvSrS6URsNUUTElgCfXY+jZFlpXK5eT4XUDzX9FBX6h9jnYF3ssLMEg+bC3N2IH3
+         tTvg==
+X-Gm-Message-State: AOAM531WtHDo4tXf516/ot3ZBTALsyDqa5v/TYVwpZ4+CXkdlzyfKvKX
+        ZTB26mh+1AYeUXbERGnT5g==
+X-Google-Smtp-Source: ABdhPJxtCbL9mw6b/aMOND5CNu6uLtvO3vUcxYX9T/Pg61Q//F01DNoeEEpQaUcIKm7dP2ZPiM65/A==
+X-Received: by 2002:a4a:8749:: with SMTP id a9mr21523118ooi.71.1624297232669;
+        Mon, 21 Jun 2021 10:40:32 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a22sm1516862otq.10.2021.06.21.10.40.19
+        by smtp.gmail.com with ESMTPSA id t3sm3317001oic.48.2021.06.21.10.40.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 10:40:21 -0700 (PDT)
-Received: (nullmailer pid 1161643 invoked by uid 1000);
+        Mon, 21 Jun 2021 10:40:32 -0700 (PDT)
+Received: (nullmailer pid 1161645 invoked by uid 1000);
         Mon, 21 Jun 2021 17:40:02 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>
-In-Reply-To: <20210621093943.12143-8-biju.das.jz@bp.renesas.com>
-References: <20210621093943.12143-1-biju.das.jz@bp.renesas.com> <20210621093943.12143-8-biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH v2 07/11] dt-bindings: usb: generic-ehci: Document RZ/G2L SoC bindings
+        Jon Hunter <jonathanh@nvidia.com>
+In-Reply-To: <20210621141559.2881667-2-thierry.reding@gmail.com>
+References: <20210621141559.2881667-1-thierry.reding@gmail.com> <20210621141559.2881667-2-thierry.reding@gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: usb: tegra: Convert to json-schema
 Date:   Mon, 21 Jun 2021 11:40:02 -0600
-Message-Id: <1624297202.390358.1161642.nullmailer@robh.at.kernel.org>
+Message-Id: <1624297202.397900.1161644.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 21 Jun 2021 10:39:39 +0100, Biju Das wrote:
-> Renesas RZ/G2L SoC has USBPHY Control and USB2.0 PHY module. We need to
-> turn on both these phy modules before accessing host registers.
+On Mon, 21 Jun 2021 16:15:59 +0200, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
 > 
-> Apart from this, document the optional property dr_mode present on both
-> RZ/G2 and R-Car Gen3 SoCs.
+> Convert the old plain-text device tree bindings for the USB EHCI
+> controller found on NVIDIA Tegra SoCs to the json-schema format.
 > 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  .../devicetree/bindings/usb/generic-ehci.yaml | 33 +++++++++++++++++--
->  1 file changed, 31 insertions(+), 2 deletions(-)
+>  .../bindings/usb/nvidia,tegra20-ehci.txt      |  23 ---
+>  .../bindings/usb/nvidia,tegra20-ehci.yaml     | 151 ++++++++++++++++++
+>  2 files changed, 151 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/generic-ehci.yaml:28:13: [warning] wrong indentation: expected 10 but found 12 (indentation)
+./Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml:22:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml:23:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
+./Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml:28:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml:30:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.example.dt.yaml: usb@7d000000: 'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
 \ndoc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1494982
+See https://patchwork.ozlabs.org/patch/1495151
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.
