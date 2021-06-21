@@ -2,74 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E30A3AEA1E
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 15:34:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B0A53AEA80
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 15:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbhFUNhI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 09:37:08 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:52528 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbhFUNhH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 09:37:07 -0400
-Received: from imap.suse.de (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        (using TLSv1.2 with cipher ECDHE-ECDSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A1ED621A62;
-        Mon, 21 Jun 2021 13:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1624282492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wq61hA8VpK15+asqyxgoJBgQRR/UMP1AaeemXMhFQn4=;
-        b=EiiKPNVnJASX3uoJD+RlXYMcoiifKWJ0oT8akppe07HJGisIGcv2fpr8ox4rb6LdL6F+Wh
-        glTGZ2aloxH9vkYtfrtqZiqZeF6cXmzMEDKsPoBoAKCzxnRcZDz/ouDIWR8SXBKJ2FoQVj
-        zKtB9lOH8kHSAqYmGwx3OTPWDAPNkMs=
-Received: from imap3-int (imap-alt.suse-dmz.suse.de [192.168.254.47])
-        by imap.suse.de (Postfix) with ESMTP id 4AC69118DD;
-        Mon, 21 Jun 2021 13:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1624282492; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wq61hA8VpK15+asqyxgoJBgQRR/UMP1AaeemXMhFQn4=;
-        b=EiiKPNVnJASX3uoJD+RlXYMcoiifKWJ0oT8akppe07HJGisIGcv2fpr8ox4rb6LdL6F+Wh
-        glTGZ2aloxH9vkYtfrtqZiqZeF6cXmzMEDKsPoBoAKCzxnRcZDz/ouDIWR8SXBKJ2FoQVj
-        zKtB9lOH8kHSAqYmGwx3OTPWDAPNkMs=
-Received: from director2.suse.de ([192.168.254.72])
-        by imap3-int with ESMTPSA
-        id NKRLEHyV0GAJVAAALh3uQQ
-        (envelope-from <oneukum@suse.com>); Mon, 21 Jun 2021 13:34:52 +0000
-Message-ID: <6122b97bb4a30a917b16837e8f98b6aac69f897a.camel@suse.com>
-Subject: Re: [PATCH] usb: class: cdc-wdm: return the correct errno code
-From:   Oliver Neukum <oneukum@suse.com>
-To:     Junlin Yang <angkery@163.com>, gregkh@linuxfoundation.org,
-        penguin-kernel@i-love.sakura.ne.jp, loic.poulain@linaro.org,
-        davem@davemloft.net, lee.jones@linaro.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Junlin Yang <yangjunlin@yulong.com>
-Date:   Mon, 21 Jun 2021 15:34:51 +0200
-In-Reply-To: <20210621132415.2341-1-angkery@163.com>
-References: <20210621132415.2341-1-angkery@163.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        id S229887AbhFUNzr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 09:55:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:36981 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229736AbhFUNzr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 09:55:47 -0400
+Received: (qmail 414341 invoked by uid 1000); 21 Jun 2021 09:53:32 -0400
+Date:   Mon, 21 Jun 2021 09:53:32 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     linyyuan@codeaurora.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>
+Subject: Re: [PATCH v3 1/2] usb: udc: core: hide struct usb_gadget_driver to
+ gadget driver
+Message-ID: <20210621135332.GA413023@rowland.harvard.edu>
+References: <20210619154309.52127-1-linyyuan@codeaurora.org>
+ <20210619154309.52127-2-linyyuan@codeaurora.org>
+ <20210620021337.GA361976@rowland.harvard.edu>
+ <42b3ebc2316495328e2d0061af81ef17@codeaurora.org>
+ <018a4e222c2c3d6f5ca63b5f2036f8d8@codeaurora.org>
+ <20210620134743.GA377492@rowland.harvard.edu>
+ <98c2729c25442d6c66131d17cabdda27@codeaurora.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98c2729c25442d6c66131d17cabdda27@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Montag, den 21.06.2021, 21:24 +0800 schrieb Junlin Yang:
-> From: Junlin Yang <yangjunlin@yulong.com>
-> 
-> The "rv" is initialized to "-ENOMEM", because "rv" is re-assigned to
-> "-EINVAL", when kmalloc & usb_alloc_urb failed, the return value
-> should
-> return "-ENOMEM" rather than "-EINVAL",so the "rv" assignment is
-> placed
-> in the position where usb_endpoint_is_int_in is false.
-> 
-> Signed-off-by: Junlin Yang <yangjunlin@yulong.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+On Mon, Jun 21, 2021 at 09:37:34AM +0800, linyyuan@codeaurora.org wrote:
+> On 2021-06-20 21:47, Alan Stern wrote:
+> > On Sun, Jun 20, 2021 at 11:53:18AM +0800, linyyuan@codeaurora.org wrote:
+> > > On 2021-06-20 11:46, linyyuan@codeaurora.org wrote:
+> > > > On 2021-06-20 10:13, Alan Stern wrote:
+> > > > > On Sat, Jun 19, 2021 at 11:43:08PM +0800, Linyu Yuan wrote:
+> > > > > > currently most gadget driver have a pointer to save
+> > > > > > struct usb_gadget_driver from upper layer,
+> > > > > > it allow upper layer set and unset of the pointer.
+> > > > > >
+> > > > > > there is race that upper layer unset the pointer first,
+> > > > > > but gadget driver use the pointer later,
+> > > > > > and it cause system crash due to NULL pointer access.
+> > > > >
+> > > > > This race has already been fixed in Greg's usb-next branch.  See
+> > > > > commit
+> > > > > 7dc0c55e9f30 ("USB: UDC core: Add udc_async_callbacks gadget op") and
+> > > > > following commits 04145a03db9d ("USB: UDC: Implement
+> > > > > udc_async_callbacks in dummy-hcd") and b42e8090ba93 ("USB: UDC:
+> > > > > Implement udc_async_callbacks in net2280").
+> > > > >
+> > > > thanks, this is better, lower driver only need change several places.
+> > > > > You just need to write a corresponding patch implementing the
+> > > > > async_callbacks op for dwc3.
+> > > > yes, i will do.
+> > > > >
+> > > Alan, i want to discuss your suggestion again in b42e8090ba93 ("USB:
+> > > UDC:
+> > > Implement udc_async_callbacks in net2280")
+> > > 
+> > > +                       if (dev->async_callbacks) { ----> if CPU1
+> > > saw this
+> > > is true
+> > > +                               spin_unlock(&dev->lock); ---> CPU2
+> > > get lock
+> > > after this unlock,
+> > > it will set async_callbacks to false, then follow call also crash,
+> > > right ?
+> > > +                               tmp = dev->driver->setup(&dev->gadget,
+> > > &u.r);
+> > > +                               spin_lock(&dev->lock);
+> > > +                       }
+> > 
+> > No, this is okay.  The reason is because usb_gadget_remove_driver (CPU2
+> > in your example) does this:
+> > 
+> >         usb_gadget_disable_async_callbacks(udc);
+> >         if (udc->gadget->irq)
+> >                 synchronize_irq(udc->gadget->irq);
+> >         udc->driver->unbind(udc->gadget);
+> >         usb_gadget_udc_stop(udc);
+> > 
+> > The synchronize_irq call will make CPU2 wait until CPU1 has finished
+> > handling the interrupt for the setup packet.  The system won't crash,
+> > because dev->driver->setup will be called before unbind and udc_stop
+> > instead of after.
 
+> still several question,
+> 1. how about suspend calll dev->driver->suspend ?
+
+The same reasoning applies.  The synchronize_irq call will make CPU2 
+wait until CPU1 has finished handling the interrupt for the USB bus 
+suspend.  The system won't crash, because dev->driver->suspend will be 
+called before unbind and udc_stop instead of after.
+
+> 2. will 04145a03db9d ("USB: UDC: Implement udc_async_callbacks in
+> dummy-hcd") backport to LTS branch ?
+
+None of these commits are marked for back-porting to the -stable 
+kernels.  The race they fix does not occur often.
+
+If you the commits to be applied to the LTS stable kernels, you can ask 
+Greg KH to do it.
+
+> 3. how about coding style ? so following code
+> if (foo->gadget_driver && foo->gadget_driver->resume)
+> change to
+> if (foo->asnyc_callbacks && foo->gadget_driver->resume)
+
+I don't understand this question.
+
+Alan Stern
