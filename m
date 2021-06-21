@@ -2,79 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C38EC3AF438
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 20:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F723AF8AA
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 00:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbhFUSHP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 14:07:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47232 "EHLO mail.kernel.org"
+        id S232216AbhFUWly (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 18:41:54 -0400
+Received: from mga06.intel.com ([134.134.136.31]:63548 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234314AbhFUSFF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Jun 2021 14:05:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AF52B6141B;
-        Mon, 21 Jun 2021 17:56:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624298177;
-        bh=CpiTn6fwGgaGXTMYGMgfNW+cWjoAaiD92xplXobmz54=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q6C3TgXlNZRmeMJudTkanx6Lyypd8xShfOwHigjbEHp/XBZIB0Bgxuno6rpBObk60
-         SjhSPjiXUtlOOzXqxRzJOK3ddR+vYXgmG4LeGgKSftFy/qgU+8eCsQpUTwsw6HUmBg
-         WmzEqp2YVnYgmOipn8SH1NZIBjWB+nuzMxh4KfM5VmvwPAN5ckw5ElJvW0THUQb6w1
-         oRtEe2Pw5DB/lwvmgW0ovwDiZwZwfDhbWJNGduqGIiHoj9euq86E2nbsOZiLBmdzWq
-         YIdjBW2PTLrswjb3giwcMVNux4seQYAr/ic+WOYOotJ3crZjn+XSQFrv2QY1ukxIz7
-         LkFMhmAYN0GtA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 6/9] r8152: Avoid memcpy() over-reading of ETH_SS_STATS
-Date:   Mon, 21 Jun 2021 13:56:04 -0400
-Message-Id: <20210621175608.736581-6-sashal@kernel.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210621175608.736581-1-sashal@kernel.org>
-References: <20210621175608.736581-1-sashal@kernel.org>
+        id S232112AbhFUWly (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Jun 2021 18:41:54 -0400
+IronPort-SDR: sIYATkhqThhHQpXLrpX4ar+gde3vsiYk+87WbqLherQ08AzyjpZQQADvNFPI2+Or8kvblaR97q
+ mF4LGKJewXXA==
+X-IronPort-AV: E=McAfee;i="6200,9189,10022"; a="268082925"
+X-IronPort-AV: E=Sophos;i="5.83,290,1616482800"; 
+   d="scan'208";a="268082925"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2021 15:39:38 -0700
+IronPort-SDR: TkiZT+uWTJFJDpxIKq9fsZnw245wX6vgP+Hzde/Ff/TCJpAh/ecQBlYp6Z+7LMxw5Rgs0i86wY
+ NjERtu+qyaww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,290,1616482800"; 
+   d="scan'208";a="423100496"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2021 15:39:37 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lvSZs-0004oz-Oq; Mon, 21 Jun 2021 22:39:36 +0000
+Date:   Tue, 22 Jun 2021 06:39:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ 00a738b86ec0c88ad4745f658966f951cbe4c885
+Message-ID: <60d11512.lso9Yht5YKc/CWyu%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: 00a738b86ec0c88ad4745f658966f951cbe4c885  Merge tag 'thunderbolt-for-v5.14-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-next
 
-[ Upstream commit 99718abdc00e86e4f286dd836408e2834886c16e ]
+elapsed time: 720m
 
-In preparation for FORTIFY_SOURCE performing compile-time and run-time
-field bounds checking for memcpy(), memmove(), and memset(), avoid
-intentionally reading across neighboring array fields.
+configs tested: 134
+configs skipped: 3
 
-The memcpy() is copying the entire structure, not just the first array.
-Adjust the source argument so the compiler can do appropriate bounds
-checking.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+powerpc                    sam440ep_defconfig
+powerpc                 mpc8540_ads_defconfig
+powerpc                    socrates_defconfig
+m68k                            mac_defconfig
+riscv                               defconfig
+um                               alldefconfig
+arm                            zeus_defconfig
+arm                  colibri_pxa270_defconfig
+sh                           se7780_defconfig
+arm                         shannon_defconfig
+mips                      pic32mzda_defconfig
+arm                   milbeaut_m10v_defconfig
+arm                         lpc32xx_defconfig
+arc                              allyesconfig
+nios2                         10m50_defconfig
+arm                             mxs_defconfig
+powerpc                     sequoia_defconfig
+arm                          badge4_defconfig
+mips                          ath79_defconfig
+sh                 kfr2r09-romimage_defconfig
+sh                ecovec24-romimage_defconfig
+ia64                        generic_defconfig
+powerpc                      ppc44x_defconfig
+mips                             allyesconfig
+powerpc                  mpc866_ads_defconfig
+sh                          landisk_defconfig
+powerpc                      ep88xc_defconfig
+mips                  maltasmvp_eva_defconfig
+s390                             alldefconfig
+m68k                          multi_defconfig
+powerpc                     tqm5200_defconfig
+m68k                        mvme16x_defconfig
+h8300                    h8300h-sim_defconfig
+mips                       lemote2f_defconfig
+powerpc                       holly_defconfig
+parisc                generic-32bit_defconfig
+arm                          pxa168_defconfig
+mips                           ip22_defconfig
+powerpc                     redwood_defconfig
+powerpc               mpc834x_itxgp_defconfig
+sh                          sdk7786_defconfig
+powerpc                     pseries_defconfig
+mips                         mpc30x_defconfig
+arm                           h5000_defconfig
+h8300                     edosk2674_defconfig
+powerpc                   lite5200b_defconfig
+powerpc                      acadia_defconfig
+powerpc                       eiger_defconfig
+mips                        vocore2_defconfig
+powerpc                      katmai_defconfig
+mips                  decstation_64_defconfig
+m68k                        m5272c3_defconfig
+sh                         ecovec24_defconfig
+arm                          collie_defconfig
+s390                                defconfig
+powerpc                   motionpro_defconfig
+arm                       cns3420vb_defconfig
+mips                       bmips_be_defconfig
+m68k                           sun3_defconfig
+x86_64                            allnoconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a002-20210621
+x86_64               randconfig-a001-20210621
+x86_64               randconfig-a005-20210621
+x86_64               randconfig-a003-20210621
+x86_64               randconfig-a004-20210621
+x86_64               randconfig-a006-20210621
+i386                 randconfig-a002-20210621
+i386                 randconfig-a001-20210621
+i386                 randconfig-a003-20210621
+i386                 randconfig-a006-20210621
+i386                 randconfig-a005-20210621
+i386                 randconfig-a004-20210621
+i386                 randconfig-a011-20210621
+i386                 randconfig-a014-20210621
+i386                 randconfig-a013-20210621
+i386                 randconfig-a015-20210621
+i386                 randconfig-a012-20210621
+i386                 randconfig-a016-20210621
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210621
+x86_64               randconfig-a012-20210621
+x86_64               randconfig-a016-20210621
+x86_64               randconfig-a015-20210621
+x86_64               randconfig-a014-20210621
+x86_64               randconfig-a013-20210621
+x86_64               randconfig-a011-20210621
+
 ---
- drivers/net/usb/r8152.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 27e9c089b2fc..5baaa8291624 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -3820,7 +3820,7 @@ static void rtl8152_get_strings(struct net_device *dev, u32 stringset, u8 *data)
- {
- 	switch (stringset) {
- 	case ETH_SS_STATS:
--		memcpy(data, *rtl8152_gstrings, sizeof(rtl8152_gstrings));
-+		memcpy(data, rtl8152_gstrings, sizeof(rtl8152_gstrings));
- 		break;
- 	}
- }
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
