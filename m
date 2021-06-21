@@ -2,204 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0A523AEC8B
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 17:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5C913AF226
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 19:40:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbhFUPhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 11:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbhFUPhm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 11:37:42 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2756EC06175F
-        for <linux-usb@vger.kernel.org>; Mon, 21 Jun 2021 08:35:27 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c8so94083pfp.5
-        for <linux-usb@vger.kernel.org>; Mon, 21 Jun 2021 08:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6Z6um6vSOtXASiA7h2j5aaZlwZWv+UAQVbbl8FBT3SM=;
-        b=ffvYO8VWnq3MSBjukp958TsYixRe7qd48kpaRn7fgJOe/7QsngOiqhwV5kYc0cFwfQ
-         LzKzGMOWg7X0TvOCgwNEXjkQvu0ZKA1gubVd8iIKMy1EBTGXO9Y6rn/5+YUh2StDVdxK
-         h+edQ+VH0AHoXhUt1ZyzooyiPblJndzuzTs0o=
+        id S231635AbhFURmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 13:42:38 -0400
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:34659 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231599AbhFURmg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 13:42:36 -0400
+Received: by mail-oi1-f175.google.com with SMTP id u11so20738760oiv.1;
+        Mon, 21 Jun 2021 10:40:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6Z6um6vSOtXASiA7h2j5aaZlwZWv+UAQVbbl8FBT3SM=;
-        b=gLXnA6mmyU0yu928kHFOe/YHIY3gU9bM8g7h4NJ48Kd86kRspNZE6lM32QC6pm7qme
-         eHtivjd7BOK2Qr9cwaqMFX+nmgz6fDkpSUQAzk3gR8oyiyo9hQL2PcNbkxTMfrohGnIj
-         A/eqUqsDsnXvv60Q8bnb9BEBejiJFn1kz8jFUSsXBvuuocXymIDWWxEbn+Zy0Jtzr0Mg
-         oV3S4jvlNvEG+33x/StV3at3ss8erxcNYYG9hMBCpP08svi9TRuYhNxqXRZEaPUaZj+H
-         ECjfDaF8YXPnoYPA79vWVpsmXEOxE6lxyiJK6rsVgigBup/JPZBwpxiJeC87PteZkeDM
-         R9Ww==
-X-Gm-Message-State: AOAM5329AH9btR3I4XNrTLVJf/ISln0cxChjZ9tNaQaG92vDcXrsQd2P
-        qDt/5fNPlCXbqxx7kAHbMZ7SPw==
-X-Google-Smtp-Source: ABdhPJz1vb3hujhC4eOPR46a/Q/L3haHuLhXnVF/0Ibjv+WaXLv2AwdF11r5C72da2EEKHfiMahMxQ==
-X-Received: by 2002:a63:921e:: with SMTP id o30mr16620136pgd.346.1624289726620;
-        Mon, 21 Jun 2021 08:35:26 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:9f0f:4fd2:adeb:6f55])
-        by smtp.gmail.com with UTF8SMTPSA id f12sm1628243pfc.100.2021.06.21.08.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Jun 2021 08:35:26 -0700 (PDT)
-Date:   Mon, 21 Jun 2021 08:35:24 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=NiwyQX8lqU+xqmCr8Fm4w/OcGtce3FSVkndbdiJtpF4=;
+        b=Ab5Xw7PExmAJZbs5auqmOhxK+GJ4q3AsM5m4gPzQpesnKcv/+SQ4NZ8ABgy+m8OMWR
+         kHVReP3uWWYA0D2OMYizJavj0j83nFQpqXtZsWA3Z4aDI9mN1k0qIiFFPCyHj6yVSDVU
+         hNri8hewUEcK5+Vntl9aYj6a3aIDZcnIbKgtcffD6JeDhhNGaLSYKdCFrUWMBKRYATXm
+         jCcoYk7/+Ezml+NEwZSUN8HfSJuM+/eqA9cH9PaZcvj343g53ypnXlBjIrZoQtepTl6S
+         EaEwvVUbeZDjhr5ywcz2yZoFQMwlv2zlEpv4bGWpFJd5K1VhPl30LO0YGhP1YRYg7avi
+         HSyQ==
+X-Gm-Message-State: AOAM531qVeTvItrLCzKR/E/JZpQolI02pEiq27dWwOZDYk2QRPcnBjAQ
+        CD0JuHZ62pocSNARscfEwlOXbupzDQ==
+X-Google-Smtp-Source: ABdhPJzbPfb/Y28dy/MWbQmLnRce9SBrwv07dwj3K58T+jt6Fqi9fqCoUZNhy2xeU0HpvRCRk66DpA==
+X-Received: by 2002:aca:3102:: with SMTP id x2mr24018935oix.112.1624297221566;
+        Mon, 21 Jun 2021 10:40:21 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id a22sm1516862otq.10.2021.06.21.10.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Jun 2021 10:40:21 -0700 (PDT)
+Received: (nullmailer pid 1161643 invoked by uid 1000);
+        Mon, 21 Jun 2021 17:40:02 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Looking for help with Kconfig dependencies
-Message-ID: <YNCxvElIL0RxreKe@google.com>
-References: <YMzSbDL+XvpLPaTb@google.com>
- <dc68833d-e525-eeda-5c7c-fbbd8a3287c8@metux.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <dc68833d-e525-eeda-5c7c-fbbd8a3287c8@metux.net>
+        linux-usb@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>
+In-Reply-To: <20210621093943.12143-8-biju.das.jz@bp.renesas.com>
+References: <20210621093943.12143-1-biju.das.jz@bp.renesas.com> <20210621093943.12143-8-biju.das.jz@bp.renesas.com>
+Subject: Re: [PATCH v2 07/11] dt-bindings: usb: generic-ehci: Document RZ/G2L SoC bindings
+Date:   Mon, 21 Jun 2021 11:40:02 -0600
+Message-Id: <1624297202.390358.1161642.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 21, 2021 at 01:26:01PM +0200, Enrico Weigelt, metux IT consult wrote:
-> On 18.06.21 19:05, Matthias Kaehlcke wrote:
+On Mon, 21 Jun 2021 10:39:39 +0100, Biju Das wrote:
+> Renesas RZ/G2L SoC has USBPHY Control and USB2.0 PHY module. We need to
+> turn on both these phy modules before accessing host registers.
 > 
-> Hi,
+> Apart from this, document the optional property dr_mode present on both
+> RZ/G2 and R-Car Gen3 SoCs.
 > 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  .../devicetree/bindings/usb/generic-ehci.yaml | 33 +++++++++++++++++--
+>  1 file changed, 31 insertions(+), 2 deletions(-)
 > 
-> Cc'ing to linux-usb ...
-> 
-> > Patch https://lore.kernel.org/patchwork/patch/1444212/ adds the new
-> > onboard_usb_hub driver which exports two functions,
-> > onboard_hub_create_pdevs() and onboard_hub_destroy_pdevs(). It also
-> > provides stubs for these functions which are used when the driver
-> > is not selected (CONFIG_USB_ONBOARD_HUB=n).
-> > 
-> > The new exported functions are called by the xhci-plat driver
-> > (https://lore.kernel.org/patchwork/patch/1444215/). Since xhci-plat
-> > now depends on symbols from the onboard_hub_driver the following
-> > dependency was added to its Kconfig entry:
-> > 
-> >   config USB_XHCI_PLATFORM
-> >     tristate "Generic xHCI driver for a platform device"
-> >     select USB_XHCI_RCAR if ARCH_RENESAS
-> >  +  depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB
-> 
-> What exactly do you intent to archieve with this ?
-> 
-> X or !X = 1, isn't it ?
-> 
-> Why should something depend on something present or absent ?
-> 
-> Is that depends on ... statement necessary at all ?
 
-I know, it's confusing, I had the same reaction when I first saw that
-construct.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Effectively USB_XHCI_PLATFORM can be built without USB_ONBOARD_HUB.
-However if USB_ONBOARD_HUB is built as a module then USB_XHCI_PLATFORM
-should also be built as a module, which is what the above statement
-achieves, unless there are conflicting dependencies.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/generic-ehci.yaml:28:13: [warning] wrong indentation: expected 10 but found 12 (indentation)
 
-The same construct is used for CONFIG_USB_XHCI_PCI.
+dtschema/dtc warnings/errors:
+\ndoc reference errors (make refcheckdocs):
 
-> > This generally seems to work, however when USB_XHCI_PLATFORM is
-> > forced to be builtin by another driver that depends on it (e.g.
-> > USB_DWC3) it is still possible to build the onboard_hub driver
-> > as a module, which results in unresolved symbols:
-> > 
-> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
-> > `xhci_plat_remove':
-> > drivers/usb/host/xhci-plat.c:427: undefined reference to
-> > `onboard_hub_destroy_pdevs'
-> > drivers/usb/host/xhci-plat.c:427:(.text+0x82c): relocation truncated
-> > to fit: R_AARCH64_CALL26 against undefined symbol
-> > `onboard_hub_destroy_pdevs'
-> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
-> > `xhci_plat_probe':
-> > drivers/usb/host/xhci-plat.c:379: undefined reference to
-> > `onboard_hub_create_pdevs'
-> > drivers/usb/host/xhci-plat.c:379:(.text+0x131c): relocation truncated
-> > to fit: R_AARCH64_CALL26 against undefined symbol
-> > `onboard_hub_create_pdevs'
-> > 
-> > Kconfig generates the following warning with this configuration:
-> > 
-> > WARNING: unmet direct dependencies detected for USB_XHCI_PLATFORM
-> >   Depends on [m]: USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && (USB_ONBOARD_HUB [=m] || !USB_ONBOARD_HUB [=m])
-> >   Selected by [y]:
-> >   - USB_DWC3 [=y] && USB_SUPPORT [=y] && (USB [=y] || USB_GADGET [=y]) && HAS_DMA [=y] && USB_XHCI_HCD [=y]
-> >   Selected by [m]:
-> >   - USB_CDNS_SUPPORT [=m] && USB_SUPPORT [=y] && (USB [=y] || USB_GADGET [=y]) && HAS_DMA [=y] && USB_XHCI_HCD [=y]
-> >   - USB_BRCMSTB [=m] && USB_SUPPORT [=y] && USB [=y] && (ARCH_BRCMSTB [=y] && PHY_BRCM_USB [=m] || COMPILE_TEST [=y]) && USB_XHCI_HCD [=y]
-> >   - USB_XHCI_MVEBU [=m] && USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && HAS_IOMEM [=y] && (ARCH_MVEBU [=y] || COMPILE_TEST [=y])
-> 
-> It seems that Kconfig is confused by trying to enforce contradicting
-> dependencies.
+See https://patchwork.ozlabs.org/patch/1494982
 
-yep, the purpose of my post was to sort that out :)
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-> Now for your driver:
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-TBH I don't think this is the right thread to discuss the driver, this
-should be done on the corresponding patches.
+pip3 install dtschema --upgrade
 
-> If I understand it correctly, you've got a topology like this:
-> 
-> 
-> root hub -+--> 2ndary hub #0 -+--> usb-dev #0
->           |                   \--> usb-dev #1
->           |                     ..
->           \--> 2ndary hub #1 -+--> usb-dev #3
->                               \--> usb-dev #4
-> 
-> 
-> And in order to get usb-dev #foo running, you need the corresponding
-> hub on its path powered (which in turn is platform specific).
-> 
-> Correct ?
+Please check and re-submit.
 
-yep
-
-> So, why not reflecting exactly this topology in the device tree ?
-> In that case, the power management *IMHO* could pretty automatically
-> (assuming you've implemented the corresponding pm functions on the
-> 2ndary hub driver).
-> 
-> Okay, that could become a bit tricky when the usb-dev's are
-> automatically enumerated on the root hub and would need to be
-> reparented somehow ... @usb folks: it that possible ?
-
-AFAIK the USB devices (including the secondary hubs) are all automatically
-enumerated, the representation in the device tree is optional in the vast
-majority of cases, so it's a bit of a chicken-egg problem.
-
-> Another option could be implementing this as a regulator that the
-> individual usb devices will be attached to. Not completely semantically
-> correct (since a hub isn't exactly a regulator :o), but should at least
-> do the job: the regulator will be switched on when the device is used
-> and can be switched off when it isn't used anymore.
-
-IMO the representation as a hub is preferable, also initialization might
-be more complex than switching on a single regulator (e.g. multiple
-regulators, GPIOs, clocks, ...)
-
-> The cleanest approach, IMHO, might be adding an hub subsys, somewhat
-> similar to the existing phy subsys. I can imagine similar cases with
-> other interfaces, not just USB only, at least certainly not specific
-> to xhci.
-> 
-> Or could existing phy subsys already be sufficient for that ?
-
-I'll leave that to the USB maintainers, who seem to be happy/ok with
-the current approach. There was discussion about other solutions,
-including a revival of the pwrseq series
-(https://lore.kernel.org/patchwork/project/lkml/list/?series=314989&state=%2A&archive=both),
-which was discarded.
-
-In any case the current solution isn't specific to xHCI. At this point
-only xhci-plat is supported, however it could be extended to other
-USB controllers if needed.
