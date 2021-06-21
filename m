@@ -2,92 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841CF3AE5EA
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 11:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7EB3AE63E
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 11:40:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbhFUJYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 05:24:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45432 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230397AbhFUJYy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Jun 2021 05:24:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 23FE261002;
-        Mon, 21 Jun 2021 09:22:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624267359;
-        bh=7nH7mh7nw4aBeDVanu7wJ25k1fGBowCozGKRrUJTO9Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=klRlPDCar6MsklKGuq5Jeog4PvJP80d0xihaELpclU7T+Kd2CM3WjPPEUNOkcJ7ks
-         ShLQYFBp61AMiiDVS+ZuROCig05qjflnH7vEy40VIvXRSusEi8bHrlOJBVFF3ix+Fq
-         19vG+QuUnzSQBFJCJMNV66ZaeNh55VTzV8t3Edz8=
-Date:   Mon, 21 Jun 2021 11:22:36 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Fabien Chouteau <fabien.chouteau@barco.com>,
-        Segiy Stetsyuk <serg_stetsuk@ukr.net>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@kernel.org
-Subject: Re: [PATCH] usb: gadget: f_hid: fix endianness issue with descriptors
-Message-ID: <YNBaXLAOq+/UO9sN@kroah.com>
-References: <20210617162755.29676-1-ruslan.bilovol@gmail.com>
- <YMt95iarFDUDvjQ8@kroah.com>
- <20210617234421.GA295854@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210617234421.GA295854@rowland.harvard.edu>
+        id S230292AbhFUJmZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 05:42:25 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:12185 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230397AbhFUJmX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 05:42:23 -0400
+X-IronPort-AV: E=Sophos;i="5.83,289,1616425200"; 
+   d="scan'208";a="84924687"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 21 Jun 2021 18:40:08 +0900
+Received: from localhost.localdomain (unknown [10.226.92.241])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 2C53E400C4E6;
+        Mon, 21 Jun 2021 18:40:05 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 06/11] dt-bindings: usb: generic-ohci: Document RZ/G2L SoC bindings
+Date:   Mon, 21 Jun 2021 10:39:38 +0100
+Message-Id: <20210621093943.12143-7-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210621093943.12143-1-biju.das.jz@bp.renesas.com>
+References: <20210621093943.12143-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 17, 2021 at 07:44:21PM -0400, Alan Stern wrote:
-> On Thu, Jun 17, 2021 at 06:52:54PM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 17, 2021 at 07:27:55PM +0300, Ruslan Bilovol wrote:
-> > > Running sparse checker it shows warning message about
-> > > incorrect endianness used for descriptor initialization:
-> > > 
-> > > | f_hid.c:91:43: warning: incorrect type in initializer (different base types)
-> > > | f_hid.c:91:43:    expected restricted __le16 [usertype] bcdHID
-> > > | f_hid.c:91:43:    got int
-> > > 
-> > > Fixing issue with cpu_to_le16() macro
-> > > 
-> > > Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
-> > > Cc: Fabien Chouteau <fabien.chouteau@barco.com>
-> > > Cc: Segiy Stetsyuk <serg_stetsuk@ukr.net>
-> > > Cc: stable@kernel.org
-> > > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
-> > > ---
-> > >  drivers/usb/gadget/function/f_hid.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> > > index 70774d8cb14e..02683ac0719d 100644
-> > > --- a/drivers/usb/gadget/function/f_hid.c
-> > > +++ b/drivers/usb/gadget/function/f_hid.c
-> > > @@ -88,7 +88,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
-> > >  static struct hid_descriptor hidg_desc = {
-> > >  	.bLength			= sizeof hidg_desc,
-> > >  	.bDescriptorType		= HID_DT_HID,
-> > > -	.bcdHID				= 0x0101,
-> > > +	.bcdHID				= cpu_to_le16(0x0101),
-> > 
-> > This is a BCD value, not a little-endian value, are you sure this
-> > conversion is correct?
-> 
-> It's a BCD value, but the storage format is little endian.  So yes, the 
-> conversion is correct.
-> 
-> But even more, the conversion is correct because 0x0101 yields exactly 
-> the same sequence of bytes in little-endian and big-endian orders!  
-> Either way, it is two bytes each containing 0x01.
+Renesas RZ/G2L SoC has USBPHY Control and USB2.0 PHY module. We need to
+turn on both these phy modules before accessing host registers.
 
-Ah, which is why no one has noticed this yet :)
+Apart from this, document the optional property dr_mode present on both
+RZ/G2 and R-Car Gen3 SoCs.
 
-I'll go apply this just to be "correct".
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+ .../devicetree/bindings/usb/generic-ohci.yaml | 32 +++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-thanks,
+diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+index 0f5f6ea702d0..c0644fae5db9 100644
+--- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+@@ -8,6 +8,26 @@ title: USB OHCI Controller Device Tree Bindings
+ 
+ allOf:
+   - $ref: "usb-hcd.yaml"
++  - if:
++      properties:
++        compatible:
++            contains:
++              const: renesas,r9a07g044-ohci
++    then:
++      properties:
++        phys:
++          maxItems: 2
++        phy-names:
++          items:
++            - const: usbphyctrl
++            - const: usb
++    else:
++      properties:
++        phys:
++          maxItems: 1
++        phy-names:
++          items:
++            - const: usb
+ 
+ maintainers:
+   - Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+@@ -43,6 +63,7 @@ properties:
+               - brcm,bcm7435-ohci
+               - ibm,476gtr-ohci
+               - ingenic,jz4740-ohci
++              - renesas,r9a07g044-ohci
+               - snps,hsdk-v1.0-ohci
+           - const: generic-ohci
+       - const: generic-ohci
+@@ -101,14 +122,21 @@ properties:
+       Overrides the detected port count
+ 
+   phys:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 2
+ 
+   phy-names:
+-    const: usb
++    minItems: 1
++    maxItems: 2
+ 
+   iommus:
+     maxItems: 1
+ 
++  dr_mode:
++    enum:
++      - host
++      - otg
++
+ required:
+   - compatible
+   - reg
+-- 
+2.17.1
 
-greg k-h
