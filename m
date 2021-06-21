@@ -2,48 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C553AE5C1
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 11:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 841CF3AE5EA
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 11:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhFUJRc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 05:17:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44236 "EHLO mail.kernel.org"
+        id S230429AbhFUJYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 05:24:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45432 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230061AbhFUJRb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 21 Jun 2021 05:17:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D9F5A61059;
-        Mon, 21 Jun 2021 09:15:16 +0000 (UTC)
+        id S230397AbhFUJYy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 21 Jun 2021 05:24:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 23FE261002;
+        Mon, 21 Jun 2021 09:22:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624266917;
-        bh=AXRrXRNLq0BDB++1HSfkoXpt2mnysReljEJFpd9zNdA=;
+        s=korg; t=1624267359;
+        bh=7nH7mh7nw4aBeDVanu7wJ25k1fGBowCozGKRrUJTO9Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nKJzQfRMOtAzUjQtGJBsx/PBSfKNkzX5Wtttud2s/xnWwBgHuKo5YtNn9JL8yLY57
-         ZMljmYP4g5svXfewTRhPYc1K4DU1N3/I4Ss8ypTtQeQyts8j3Ih7IpPQ9XdjbcJA7F
-         e5eLwuV1v04Iv6ARmRpYiGdPivNSTWEoGwMen04o=
-Date:   Mon, 21 Jun 2021 11:15:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] usb: changes for v5.14-rc1
-Message-ID: <YNBYos63bZoPcP6h@kroah.com>
-References: <20210619090655.GA9299@Peter>
+        b=klRlPDCar6MsklKGuq5Jeog4PvJP80d0xihaELpclU7T+Kd2CM3WjPPEUNOkcJ7ks
+         ShLQYFBp61AMiiDVS+ZuROCig05qjflnH7vEy40VIvXRSusEi8bHrlOJBVFF3ix+Fq
+         19vG+QuUnzSQBFJCJMNV66ZaeNh55VTzV8t3Edz8=
+Date:   Mon, 21 Jun 2021 11:22:36 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Fabien Chouteau <fabien.chouteau@barco.com>,
+        Segiy Stetsyuk <serg_stetsuk@ukr.net>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: fix endianness issue with descriptors
+Message-ID: <YNBaXLAOq+/UO9sN@kroah.com>
+References: <20210617162755.29676-1-ruslan.bilovol@gmail.com>
+ <YMt95iarFDUDvjQ8@kroah.com>
+ <20210617234421.GA295854@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210619090655.GA9299@Peter>
+In-Reply-To: <20210617234421.GA295854@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Jun 19, 2021 at 05:06:55PM +0800, Peter Chen wrote:
-> The following changes since commit 6efb943b8616ec53a5e444193dccf1af9ad627b5:
+On Thu, Jun 17, 2021 at 07:44:21PM -0400, Alan Stern wrote:
+> On Thu, Jun 17, 2021 at 06:52:54PM +0200, Greg Kroah-Hartman wrote:
+> > On Thu, Jun 17, 2021 at 07:27:55PM +0300, Ruslan Bilovol wrote:
+> > > Running sparse checker it shows warning message about
+> > > incorrect endianness used for descriptor initialization:
+> > > 
+> > > | f_hid.c:91:43: warning: incorrect type in initializer (different base types)
+> > > | f_hid.c:91:43:    expected restricted __le16 [usertype] bcdHID
+> > > | f_hid.c:91:43:    got int
+> > > 
+> > > Fixing issue with cpu_to_le16() macro
+> > > 
+> > > Fixes: 71adf1189469 ("USB: gadget: add HID gadget driver")
+> > > Cc: Fabien Chouteau <fabien.chouteau@barco.com>
+> > > Cc: Segiy Stetsyuk <serg_stetsuk@ukr.net>
+> > > Cc: stable@kernel.org
+> > > Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+> > > ---
+> > >  drivers/usb/gadget/function/f_hid.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> > > index 70774d8cb14e..02683ac0719d 100644
+> > > --- a/drivers/usb/gadget/function/f_hid.c
+> > > +++ b/drivers/usb/gadget/function/f_hid.c
+> > > @@ -88,7 +88,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+> > >  static struct hid_descriptor hidg_desc = {
+> > >  	.bLength			= sizeof hidg_desc,
+> > >  	.bDescriptorType		= HID_DT_HID,
+> > > -	.bcdHID				= 0x0101,
+> > > +	.bcdHID				= cpu_to_le16(0x0101),
+> > 
+> > This is a BCD value, not a little-endian value, are you sure this
+> > conversion is correct?
 > 
->   Linux 5.13-rc1 (2021-05-09 14:17:44 -0700)
+> It's a BCD value, but the storage format is little endian.  So yes, the 
+> conversion is correct.
 > 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb.git/ tags/usb-v5.14-rc1
+> But even more, the conversion is correct because 0x0101 yields exactly 
+> the same sequence of bytes in little-endian and big-endian orders!  
+> Either way, it is two bytes each containing 0x01.
 
-Pulled and pushed out, thanks.
+Ah, which is why no one has noticed this yet :)
+
+I'll go apply this just to be "correct".
+
+thanks,
 
 greg k-h
