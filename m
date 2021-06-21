@@ -2,268 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3B63AEAEF
-	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 16:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A523AEC8B
+	for <lists+linux-usb@lfdr.de>; Mon, 21 Jun 2021 17:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbhFUOQX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 21 Jun 2021 10:16:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
+        id S230165AbhFUPhn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 21 Jun 2021 11:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbhFUOQW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 10:16:22 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332A5C061574;
-        Mon, 21 Jun 2021 07:14:07 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id i94so19846922wri.4;
-        Mon, 21 Jun 2021 07:14:07 -0700 (PDT)
+        with ESMTP id S230006AbhFUPhm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 21 Jun 2021 11:37:42 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2756EC06175F
+        for <linux-usb@vger.kernel.org>; Mon, 21 Jun 2021 08:35:27 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id c8so94083pfp.5
+        for <linux-usb@vger.kernel.org>; Mon, 21 Jun 2021 08:35:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=B3taWVflSNylsyETfTA2qz7hFyJkqD7B41nXPhtbmMM=;
-        b=ILfXpMfbXFI52bS+OLSGcSm5AdXrhBPsn3GzBXvdhY6d+Gy5rrvJyjXr525xGVvkgt
-         zNvLTQY3n5jhCSjKyddoKbM6rfupKP2FPp3gDHaL7QX6vTtT7PimtgAJJnYtY5ls9KA5
-         +4gsrzeR1WzHbkVCZcWJ/nMnVrn+3WkbItKSs8gEnuw+DvTOxXQOgIfu6Ar2XlDC/Wtn
-         I20qT9EQ88hhZslXiVrsIwjX/WASb7KxTohsAMUYZKcmV56lwiqLRY1MBM3xDfkEmlQQ
-         Xa3oLXBA712NOIaVXUSfs29n2LIoEydgoc5GeUe1hJ8uo20lVs3ALYQcQ2gRPJYXzbdq
-         wg2g==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6Z6um6vSOtXASiA7h2j5aaZlwZWv+UAQVbbl8FBT3SM=;
+        b=ffvYO8VWnq3MSBjukp958TsYixRe7qd48kpaRn7fgJOe/7QsngOiqhwV5kYc0cFwfQ
+         LzKzGMOWg7X0TvOCgwNEXjkQvu0ZKA1gubVd8iIKMy1EBTGXO9Y6rn/5+YUh2StDVdxK
+         h+edQ+VH0AHoXhUt1ZyzooyiPblJndzuzTs0o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=B3taWVflSNylsyETfTA2qz7hFyJkqD7B41nXPhtbmMM=;
-        b=P/wb4JnQ/JBtr6chqZ8/vUxA6lZ8k120U1KMUgyE8ww0LfGBREXab5ZDgjOZDBPlVa
-         xd+Nedrg/WyB0g3MD+DX9YHzUCw27NcOwbbsHMf6lGkZSDpZisELeKmB7oiO52+NRTHU
-         B9J/tA9YFtVUtWbipgN/jgWJt24nzGx10nKtiYLibX8JJ/aPF5uvGnzSU2RNrfYG2T5O
-         YXDLFf5fkHLPHpCW7u7r5ahvqEHth03LCp69ggPUCAXR6r2EQzRkjNYvEERXuP5lQFqm
-         FsiY8F8his0x+wgf1d1uVrRnkU/oiznEEYBYL38WAaNK/XZRklQ8NSsJllr03jz9iEEg
-         HDJA==
-X-Gm-Message-State: AOAM531+QIMGDVSRGIY8MApjcNdtH8wPEx+SIyd9t2EBAqBpFKkSvxde
-        +z4Aggad9HFLzhEBR8L4ezA=
-X-Google-Smtp-Source: ABdhPJyJyriNIBCsaFIx9vHLJg93yV6yRIn3ucJeKoI1hXdQtzc1oYE6aE2g0tfId+fVEvfGx4iQYw==
-X-Received: by 2002:adf:f946:: with SMTP id q6mr27924025wrr.283.1624284845819;
-        Mon, 21 Jun 2021 07:14:05 -0700 (PDT)
-Received: from localhost ([62.96.65.119])
-        by smtp.gmail.com with ESMTPSA id r6sm17676638wrz.91.2021.06.21.07.14.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Jun 2021 07:14:05 -0700 (PDT)
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6Z6um6vSOtXASiA7h2j5aaZlwZWv+UAQVbbl8FBT3SM=;
+        b=gLXnA6mmyU0yu928kHFOe/YHIY3gU9bM8g7h4NJ48Kd86kRspNZE6lM32QC6pm7qme
+         eHtivjd7BOK2Qr9cwaqMFX+nmgz6fDkpSUQAzk3gR8oyiyo9hQL2PcNbkxTMfrohGnIj
+         A/eqUqsDsnXvv60Q8bnb9BEBejiJFn1kz8jFUSsXBvuuocXymIDWWxEbn+Zy0Jtzr0Mg
+         oV3S4jvlNvEG+33x/StV3at3ss8erxcNYYG9hMBCpP08svi9TRuYhNxqXRZEaPUaZj+H
+         ECjfDaF8YXPnoYPA79vWVpsmXEOxE6lxyiJK6rsVgigBup/JPZBwpxiJeC87PteZkeDM
+         R9Ww==
+X-Gm-Message-State: AOAM5329AH9btR3I4XNrTLVJf/ISln0cxChjZ9tNaQaG92vDcXrsQd2P
+        qDt/5fNPlCXbqxx7kAHbMZ7SPw==
+X-Google-Smtp-Source: ABdhPJz1vb3hujhC4eOPR46a/Q/L3haHuLhXnVF/0Ibjv+WaXLv2AwdF11r5C72da2EEKHfiMahMxQ==
+X-Received: by 2002:a63:921e:: with SMTP id o30mr16620136pgd.346.1624289726620;
+        Mon, 21 Jun 2021 08:35:26 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:9f0f:4fd2:adeb:6f55])
+        by smtp.gmail.com with UTF8SMTPSA id f12sm1628243pfc.100.2021.06.21.08.35.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Jun 2021 08:35:26 -0700 (PDT)
+Date:   Mon, 21 Jun 2021 08:35:24 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     "Enrico Weigelt, metux IT consult" <lkml@metux.net>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: usb: tegra: Convert to json-schema
-Date:   Mon, 21 Jun 2021 16:15:59 +0200
-Message-Id: <20210621141559.2881667-2-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210621141559.2881667-1-thierry.reding@gmail.com>
-References: <20210621141559.2881667-1-thierry.reding@gmail.com>
+        Douglas Anderson <dianders@chromium.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: Looking for help with Kconfig dependencies
+Message-ID: <YNCxvElIL0RxreKe@google.com>
+References: <YMzSbDL+XvpLPaTb@google.com>
+ <dc68833d-e525-eeda-5c7c-fbbd8a3287c8@metux.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dc68833d-e525-eeda-5c7c-fbbd8a3287c8@metux.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thierry Reding <treding@nvidia.com>
+On Mon, Jun 21, 2021 at 01:26:01PM +0200, Enrico Weigelt, metux IT consult wrote:
+> On 18.06.21 19:05, Matthias Kaehlcke wrote:
+> 
+> Hi,
+> 
+> 
+> Cc'ing to linux-usb ...
+> 
+> > Patch https://lore.kernel.org/patchwork/patch/1444212/ adds the new
+> > onboard_usb_hub driver which exports two functions,
+> > onboard_hub_create_pdevs() and onboard_hub_destroy_pdevs(). It also
+> > provides stubs for these functions which are used when the driver
+> > is not selected (CONFIG_USB_ONBOARD_HUB=n).
+> > 
+> > The new exported functions are called by the xhci-plat driver
+> > (https://lore.kernel.org/patchwork/patch/1444215/). Since xhci-plat
+> > now depends on symbols from the onboard_hub_driver the following
+> > dependency was added to its Kconfig entry:
+> > 
+> >   config USB_XHCI_PLATFORM
+> >     tristate "Generic xHCI driver for a platform device"
+> >     select USB_XHCI_RCAR if ARCH_RENESAS
+> >  +  depends on USB_ONBOARD_HUB || !USB_ONBOARD_HUB
+> 
+> What exactly do you intent to archieve with this ?
+> 
+> X or !X = 1, isn't it ?
+> 
+> Why should something depend on something present or absent ?
+> 
+> Is that depends on ... statement necessary at all ?
 
-Convert the old plain-text device tree bindings for the USB EHCI
-controller found on NVIDIA Tegra SoCs to the json-schema format.
+I know, it's confusing, I had the same reaction when I first saw that
+construct.
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- .../bindings/usb/nvidia,tegra20-ehci.txt      |  23 ---
- .../bindings/usb/nvidia,tegra20-ehci.yaml     | 151 ++++++++++++++++++
- 2 files changed, 151 insertions(+), 23 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
- create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
+Effectively USB_XHCI_PLATFORM can be built without USB_ONBOARD_HUB.
+However if USB_ONBOARD_HUB is built as a module then USB_XHCI_PLATFORM
+should also be built as a module, which is what the above statement
+achieves, unless there are conflicting dependencies.
 
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
-deleted file mode 100644
-index f60785f73d3d..000000000000
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
-+++ /dev/null
-@@ -1,23 +0,0 @@
--Tegra SOC USB controllers
--
--The device node for a USB controller that is part of a Tegra
--SOC is as described in the document "Open Firmware Recommended
--Practice : Universal Serial Bus" with the following modifications
--and additions :
--
--Required properties :
-- - compatible : For Tegra20, must contain "nvidia,tegra20-ehci".
--   For Tegra30, must contain "nvidia,tegra30-ehci".  Otherwise, must contain
--   "nvidia,<chip>-ehci" plus at least one of the above, where <chip> is
--   tegra114, tegra124, tegra132, or tegra210.
-- - nvidia,phy : phandle of the PHY that the controller is connected to.
-- - clocks : Must contain one entry, for the module clock.
--   See ../clocks/clock-bindings.txt for details.
-- - resets : Must contain an entry for each entry in reset-names.
--   See ../reset/reset.txt for details.
-- - reset-names : Must include the following entries:
--   - usb
--
--Optional properties:
-- - nvidia,needs-double-reset : boolean is to be set for some of the Tegra20
--   USB ports, which need reset twice due to hardware issues.
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
-new file mode 100644
-index 000000000000..3d942f598eac
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
-@@ -0,0 +1,151 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/usb/nvidia,tegra20-ehci.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: Device tree binding for NVIDIA Tegra USB controllers
-+
-+description: |
-+  The device node for a USB controller that is part of a Tegra SOC is as
-+  described in the document "Open Firmware Recommended Practice : Universal
-+  Serial Bus". Modifications and additions are detailed in this document.
-+
-+maintainers:
-+  - Thierry Reding <treding@nvidia.com>
-+  - Jon Hunter <jonathanh@nvidia.com>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+        - enum:
-+          - nvidia,tegra210-ehci
-+          - nvidia,tegra124-ehci
-+          - nvidia,tegra114-ehci
-+        - const: nvidia,tegra30-ehci
-+      - items:
-+        - const: nvidia,tegra30-ehci
-+      - items:
-+        - const: nvidia,tegra20-ehci
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  phy_type:
-+    $ref: /schemas/types.yaml#/definitions/string
-+
-+  clocks:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  reset-names:
-+    items:
-+      - const: usb
-+
-+  nvidia,phy:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle of the PHY that the controller is connected to
-+
-+  nvidia,needs-double-reset:
-+    type: boolean
-+    description:
-+      This must be set for some instances of the USB controller found on
-+      Tegra20 that need to be reset twice due to some hardware issue.
-+
-+additionalProperties: false
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - resets
-+  - reset-names
-+  - phy_type
-+  - nvidia,phy
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/tegra20-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@c5000000 {
-+        compatible = "nvidia,tegra20-ehci";
-+        reg = <0xc5000000 0x4000>;
-+        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+        phy_type = "utmi";
-+        clocks = <&tegra_car TEGRA20_CLK_USBD>;
-+        resets = <&tegra_car 22>;
-+        reset-names = "usb";
-+        nvidia,needs-double-reset;
-+        nvidia,phy = <&phy1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/clock/tegra30-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@7d000000 {
-+        compatible = "nvidia,tegra30-ehci";
-+        reg = <0x7d000000 0x4000>;
-+        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+        phy_type = "utmi";
-+        clocks = <&tegra_car TEGRA30_CLK_USBD>;
-+        resets = <&tegra_car 22>;
-+        reset-names = "usb";
-+        nvidia,needs-double-reset;
-+        nvidia,phy = <&phy1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/clock/tegra114-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@7d000000 {
-+        compatible = "nvidia,tegra114-ehci", "nvidia,tegra30-ehci";
-+        reg = <0x7d000000 0x4000>;
-+        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+        phy_type = "utmi";
-+        clocks = <&tegra_car TEGRA114_CLK_USBD>;
-+        resets = <&tegra_car 22>;
-+        reset-names = "usb";
-+        nvidia,phy = <&phy1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/clock/tegra124-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@7d000000 {
-+        compatible = "nvidia,tegra124-ehci", "nvidia,tegra30-ehci";
-+        reg = <0x7d000000 0x4000>;
-+        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+        phy_type = "utmi";
-+        clocks = <&tegra_car TEGRA124_CLK_USBD>;
-+        resets = <&tegra_car 22>;
-+        reset-names = "usb";
-+        nvidia,phy = <&phy1>;
-+    };
-+
-+  - |
-+    #include <dt-bindings/clock/tegra210-car.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    usb@7d000000 {
-+        compatible = "nvidia,tegra210-ehci", "nvidia,tegra30-ehci";
-+        reg = <0x7d000000 0x4000>;
-+        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
-+        phy_type = "utmi";
-+        clocks = <&tegra_car TEGRA210_CLK_USBD>;
-+        clock-names = "usb";
-+        resets = <&tegra_car 22>;
-+        reset-names = "usb";
-+        nvidia,phy = <&phy1>;
-+    };
--- 
-2.32.0
+The same construct is used for CONFIG_USB_XHCI_PCI.
 
+> > This generally seems to work, however when USB_XHCI_PLATFORM is
+> > forced to be builtin by another driver that depends on it (e.g.
+> > USB_DWC3) it is still possible to build the onboard_hub driver
+> > as a module, which results in unresolved symbols:
+> > 
+> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > `xhci_plat_remove':
+> > drivers/usb/host/xhci-plat.c:427: undefined reference to
+> > `onboard_hub_destroy_pdevs'
+> > drivers/usb/host/xhci-plat.c:427:(.text+0x82c): relocation truncated
+> > to fit: R_AARCH64_CALL26 against undefined symbol
+> > `onboard_hub_destroy_pdevs'
+> > aarch64-linux-gnu-ld: drivers/usb/host/xhci-plat.o: in function
+> > `xhci_plat_probe':
+> > drivers/usb/host/xhci-plat.c:379: undefined reference to
+> > `onboard_hub_create_pdevs'
+> > drivers/usb/host/xhci-plat.c:379:(.text+0x131c): relocation truncated
+> > to fit: R_AARCH64_CALL26 against undefined symbol
+> > `onboard_hub_create_pdevs'
+> > 
+> > Kconfig generates the following warning with this configuration:
+> > 
+> > WARNING: unmet direct dependencies detected for USB_XHCI_PLATFORM
+> >   Depends on [m]: USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && (USB_ONBOARD_HUB [=m] || !USB_ONBOARD_HUB [=m])
+> >   Selected by [y]:
+> >   - USB_DWC3 [=y] && USB_SUPPORT [=y] && (USB [=y] || USB_GADGET [=y]) && HAS_DMA [=y] && USB_XHCI_HCD [=y]
+> >   Selected by [m]:
+> >   - USB_CDNS_SUPPORT [=m] && USB_SUPPORT [=y] && (USB [=y] || USB_GADGET [=y]) && HAS_DMA [=y] && USB_XHCI_HCD [=y]
+> >   - USB_BRCMSTB [=m] && USB_SUPPORT [=y] && USB [=y] && (ARCH_BRCMSTB [=y] && PHY_BRCM_USB [=m] || COMPILE_TEST [=y]) && USB_XHCI_HCD [=y]
+> >   - USB_XHCI_MVEBU [=m] && USB_SUPPORT [=y] && USB [=y] && USB_XHCI_HCD [=y] && HAS_IOMEM [=y] && (ARCH_MVEBU [=y] || COMPILE_TEST [=y])
+> 
+> It seems that Kconfig is confused by trying to enforce contradicting
+> dependencies.
+
+yep, the purpose of my post was to sort that out :)
+
+> Now for your driver:
+
+TBH I don't think this is the right thread to discuss the driver, this
+should be done on the corresponding patches.
+
+> If I understand it correctly, you've got a topology like this:
+> 
+> 
+> root hub -+--> 2ndary hub #0 -+--> usb-dev #0
+>           |                   \--> usb-dev #1
+>           |                     ..
+>           \--> 2ndary hub #1 -+--> usb-dev #3
+>                               \--> usb-dev #4
+> 
+> 
+> And in order to get usb-dev #foo running, you need the corresponding
+> hub on its path powered (which in turn is platform specific).
+> 
+> Correct ?
+
+yep
+
+> So, why not reflecting exactly this topology in the device tree ?
+> In that case, the power management *IMHO* could pretty automatically
+> (assuming you've implemented the corresponding pm functions on the
+> 2ndary hub driver).
+> 
+> Okay, that could become a bit tricky when the usb-dev's are
+> automatically enumerated on the root hub and would need to be
+> reparented somehow ... @usb folks: it that possible ?
+
+AFAIK the USB devices (including the secondary hubs) are all automatically
+enumerated, the representation in the device tree is optional in the vast
+majority of cases, so it's a bit of a chicken-egg problem.
+
+> Another option could be implementing this as a regulator that the
+> individual usb devices will be attached to. Not completely semantically
+> correct (since a hub isn't exactly a regulator :o), but should at least
+> do the job: the regulator will be switched on when the device is used
+> and can be switched off when it isn't used anymore.
+
+IMO the representation as a hub is preferable, also initialization might
+be more complex than switching on a single regulator (e.g. multiple
+regulators, GPIOs, clocks, ...)
+
+> The cleanest approach, IMHO, might be adding an hub subsys, somewhat
+> similar to the existing phy subsys. I can imagine similar cases with
+> other interfaces, not just USB only, at least certainly not specific
+> to xhci.
+> 
+> Or could existing phy subsys already be sufficient for that ?
+
+I'll leave that to the USB maintainers, who seem to be happy/ok with
+the current approach. There was discussion about other solutions,
+including a revival of the pwrseq series
+(https://lore.kernel.org/patchwork/project/lkml/list/?series=314989&state=%2A&archive=both),
+which was discarded.
+
+In any case the current solution isn't specific to xHCI. At this point
+only xhci-plat is supported, however it could be extended to other
+USB controllers if needed.
