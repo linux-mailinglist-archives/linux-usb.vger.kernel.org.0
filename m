@@ -2,88 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 612743B0736
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 16:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20913B0747
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 16:21:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbhFVOTh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Jun 2021 10:19:37 -0400
-Received: from mail-lf1-f52.google.com ([209.85.167.52]:42812 "EHLO
-        mail-lf1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbhFVOTh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 10:19:37 -0400
-Received: by mail-lf1-f52.google.com with SMTP id j2so36259385lfg.9
-        for <linux-usb@vger.kernel.org>; Tue, 22 Jun 2021 07:17:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=hEcoyVMHcZa0SwNISKE49LScQwvkbXhr7D+wPOeWhzw=;
-        b=GSUUKOEHnFCNL4O2pE+oEruQ/1M7U0TKR4J2MDIEViB0w/yzL03VMDJJ6LGcK5LaO3
-         nv5WXIQ9FaLb1CMfo7lf1ToAwSUJHbrJ6u2pKHy5PYLQrJetTTSaQy2kjTFMspIicad5
-         LPJg1zgu7wBoU1PrSnlCWhNhfUKzDxnAaKYqWfjty0yc78BS5GUi9Dc+T5Tr0sIBhVr1
-         z4Uy8AMcRP3cx7ODg1p2za6ZdjMgroYeRr7upKnLlcScmIPKPlbroiQ9pFYPj9w/2fo1
-         rkYL10lh+LTtg4X4FYdGIUjEkNqe+3lSF9/I+Zo1sjs2zizYXumUsUyxot5JHJPhRXAN
-         FnQA==
-X-Gm-Message-State: AOAM530T7CT2KeYp3bmXBH3MVP9J50m11BAcj8MYs63qFB1TN2Vv0e7e
-        lHyJYXXcSSjBPhS/PpgFuHw7x9kOzYBwRw==
-X-Google-Smtp-Source: ABdhPJzT84aA0Xq8kPQyvGhf22P4eSTF4FVLSI/mxuygGBJJ9UhonS/m8nSBAa0h06+tQ3x75ZdHBQ==
-X-Received: by 2002:a05:6512:7a:: with SMTP id i26mr3055708lfo.2.1624371439531;
-        Tue, 22 Jun 2021 07:17:19 -0700 (PDT)
-Received: from localhost (88-112-11-80.elisa-laajakaista.fi. [88.112.11.80])
-        by smtp.gmail.com with ESMTPSA id g12sm2229156lfu.48.2021.06.22.07.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jun 2021 07:17:19 -0700 (PDT)
-From:   Hannu Hartikainen <hannu@hrtk.in>
-To:     linux-usb@vger.kernel.org
-Cc:     Oliver Neukum <oneukum@suse.com>, Hannu Hartikainen <hannu@hrtk.in>
-Subject: [PATCH] USB: cdc-acm: blacklist Heimann USB Appset device
-Date:   Tue, 22 Jun 2021 17:14:54 +0300
-Message-Id: <20210622141454.337948-1-hannu@hrtk.in>
-X-Mailer: git-send-email 2.32.0
+        id S231661AbhFVOXw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Tue, 22 Jun 2021 10:23:52 -0400
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:44429 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231445AbhFVOXu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 10:23:50 -0400
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-60-ZAfcHqbRPfSLTlwrCStpTA-1; Tue, 22 Jun 2021 15:21:28 +0100
+X-MC-Unique: ZAfcHqbRPfSLTlwrCStpTA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 22 Jun
+ 2021 15:21:27 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.018; Tue, 22 Jun 2021 15:21:27 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Alan Stern' <stern@rowland.harvard.edu>
+CC:     'Mauro Carvalho Chehab' <mchehab+huawei@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxarm@huawei.com" <linuxarm@huawei.com>,
+        "mauro.chehab@huawei.com" <mauro.chehab@huawei.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH v3] media: uvc: don't do DMA on stack
+Thread-Topic: [PATCH v3] media: uvc: don't do DMA on stack
+Thread-Index: AQHXZqL+Rr1YUDB8sUS3jMuLXE5TdKsfq6kggABLhgCAAB2gMA==
+Date:   Tue, 22 Jun 2021 14:21:27 +0000
+Message-ID: <c5dd6d33cb844025bc8451b46980d96b@AcuMS.aculab.com>
+References: <6832dffafd54a6a95b287c4a1ef30250d6b9237a.1624282817.git.mchehab+huawei@kernel.org>
+ <d33c39aa824044ad8cacc93234f1e1cd@AcuMS.aculab.com>
+ <20210622132922.GB452785@rowland.harvard.edu>
+In-Reply-To: <20210622132922.GB452785@rowland.harvard.edu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The device (32a7:0000 Heimann Sensor GmbH USB appset demo) claims to be
-a CDC-ACM device in its descriptors but in fact is not. If it is run
-with echo disabled it returns garbled data, probably due to something
-that happens in the TTY layer. And when run with echo enabled (the
-default), it will mess up the calibration data of the sensor the first
-time any data is sent to the device.
+From: Alan Stern
+> Sent: 22 June 2021 14:29
+...
+> > Thought...
+> >
+> > Is kmalloc(1, GFP_KERNEL) guaranteed to return a pointer into
+> > a cache line that will not be accessed by any other code?
+> > (This is slightly weaker than requiring a cache-line aligned
+> > pointer - but very similar.)
+> 
+> As I understand it, on architectures that do not have cache-coherent
+> I/O, kmalloc is guaranteed to return a buffer that is
+> cacheline-aligned and whose length is a multiple of the cacheline
+> size.
+> 
+> Now, whether that buffer ends up being accessed by any other code
+> depends on what your driver does with the pointer it gets from
+> kmalloc.  :-)
 
-In short, I had a bad time after connecting the sensor and trying to get
-it to work. I hope blacklisting it in the cdc-acm driver will save
-someone else a bit of trouble.
+Thanks for the clarification.
 
-Signed-off-by: Hannu Hartikainen <hannu@hrtk.in>
----
+Most of the small allocates in the usb stack are for transmits
+where it is only necessary to ensure a cache write-back.
 
-This is my first time submitting a patch. I hope I'll be able to submit
-a driver for this device later. The device is a microcontroller-based
-USB implementation/converter for a thermal camera that communicates over
-SPI.
+I know there has been some confusion because one of the
+allocators can add a small header to every allocation.
+This can lead to unexpectedly inadequately aligned pointers.
+If it is updated when the preceding block is freed (as some
+user-space mallocs do) then it would need to be in a
+completely separate cache line.
 
- drivers/usb/class/cdc-acm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+	David
 
-diff --git a/drivers/usb/class/cdc-acm.c b/drivers/usb/class/cdc-acm.c
-index ca7a61190dd9..d50b606d09aa 100644
---- a/drivers/usb/class/cdc-acm.c
-+++ b/drivers/usb/class/cdc-acm.c
-@@ -1959,6 +1959,11 @@ static const struct usb_device_id acm_ids[] = {
- 	.driver_info = IGNORE_DEVICE,
- 	},
- 
-+	/* Exclude Heimann Sensor GmbH USB appset demo */
-+	{ USB_DEVICE(0x32a7, 0x0000),
-+	.driver_info = IGNORE_DEVICE,
-+	},
-+
- 	/* control interfaces without any protocol set */
- 	{ USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ACM,
- 		USB_CDC_PROTO_NONE) },
--- 
-2.32.0
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
