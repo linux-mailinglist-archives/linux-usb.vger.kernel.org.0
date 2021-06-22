@@ -2,142 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 060DF3B0EDD
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 22:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2383B0F17
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 23:00:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbhFVUfM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Jun 2021 16:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbhFVUfK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 16:35:10 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2BBC061766;
-        Tue, 22 Jun 2021 13:32:53 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id h17so464471edw.11;
-        Tue, 22 Jun 2021 13:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=bRmU0C3A1PBdjl5vqeNkyE5P00d04OKPIvoyRXjo+cI=;
-        b=eh78Bnm+j6S+6X8B4s3AYZQLwNjytisFyOUjyuDFx/wSupiyaqCr2ozjjOv6M3xEqX
-         LU8IHRiV8IikDPeGWn/cBz0LRw5XUW1oZZJikY2RaYpnqDuq+3itzyiBjkUKKA0UOP9l
-         cFi8EcRZyKKbhool2g1Amf2jS3UevUz5Q4OfwvgdsBYgcZHT2RHKBzUXmWH3+XAPgYXa
-         jfNLyJSbdoK0ztXXFJf8QNHc7ZYjqVosv/vk4a1Si7e6iGL+Kzy/pS36SOzBK2kpIAR3
-         2NH4RdTLdZkWdxqJi68zLT1icK5SJ+nuniJ72MUADL+Yvq3IryMgUigBgelEnS+5O6iX
-         5OOQ==
+        id S229625AbhFVVCo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Jun 2021 17:02:44 -0400
+Received: from mail-lj1-f180.google.com ([209.85.208.180]:40698 "EHLO
+        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229501AbhFVVCo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 17:02:44 -0400
+Received: by mail-lj1-f180.google.com with SMTP id d25so42582lji.7
+        for <linux-usb@vger.kernel.org>; Tue, 22 Jun 2021 14:00:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=bRmU0C3A1PBdjl5vqeNkyE5P00d04OKPIvoyRXjo+cI=;
-        b=I/GoTaPyD/BuTjdQYbatJKdNIBXTV4UL1Rw0NC0/qSkJ5EnFeN3mLCSYuRfYlBLpSg
-         SUXCJXGhAd9Md+dXEL21LhuWgjKCNbzf8yQJ/VRa+L1MElBTcslfhYjx7Jw14VF+5P/0
-         5olodnEewA35rOKm5Aaul55zl6AS6FqInq4tbneH2PFKGEPUPSg5QsXz+HPIb7LPExXw
-         9OMyfEUNCKXVs7wY9O60sI33kuyX236lnh5OBdOsum7qvzUMrxNsLIzpS/XaWcjU/1ez
-         ogPWOnrCid8mKpdqee8umRmFDF8b3362PPBJtXtirECi3ib4OXRx7znOfTgB7CperkkU
-         p+9Q==
-X-Gm-Message-State: AOAM530xILXF8KCiEvGBkoNZACWCjS4gXFFCMx+w0EgvXdj/kw4v2aFV
-        8ych88WeF+hHUIFAsCek/iM=
-X-Google-Smtp-Source: ABdhPJwbz3QUmSTzQ0fczfEhsl+CmyOYAFuQUrl3h0/d+tDgTfmd4HKyyk8/MVZ3hoPB7fbCSsY/BA==
-X-Received: by 2002:a05:6402:138c:: with SMTP id b12mr7698964edv.268.1624393972375;
-        Tue, 22 Jun 2021 13:32:52 -0700 (PDT)
-Received: from localhost (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
-        by smtp.gmail.com with ESMTPSA id fl21sm6514883ejc.79.2021.06.22.13.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Jun 2021 13:32:51 -0700 (PDT)
-From:   Iskren Chernev <iskren.chernev@gmail.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Iskren Chernev <iskren.chernev@gmail.com>
-Subject: [PATCH v1 3/3] phy: qcom-qusb2: Add configuration for SM4250 and SM6115
-Date:   Tue, 22 Jun 2021 23:32:40 +0300
-Message-Id: <20210622203240.559979-4-iskren.chernev@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210622203240.559979-1-iskren.chernev@gmail.com>
-References: <20210622203240.559979-1-iskren.chernev@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:message-id:date:from:subject:to:cc:in-reply-to
+         :references;
+        bh=BUjvtf72w4Yiw9fUZso/Co2w3LxaQ/+ehSg1BeZe1Bo=;
+        b=ZBbpiLj3Y2bLdv2hwyS4hvvEv6/ZKsPJgTF3im89YYNJC0BSIAqLdyI8x3v38BAave
+         DUoH3Lb6JUqCEwuqWMCHSP+jQGSIoT1oZOnEcv+GcipvE3kVLDPM9zcOfjo2w7DsTOu9
+         FBsab8KqarX5ADzTsnEoQY/P7r3hfnS9Ui9xEwDIhK41cBIsP+9522Ra4LF1PFasYHjN
+         Ll1wT2QTbW0oHETgAQUDnLjUuvCT4n6hjvDaS+HtR5k1CSm2hFOg8uf0RNLydVGyUJqI
+         ky5h7L9XyqkxrFbuevhm/NZcrea32okyQsinTqAvn5dblH8j/dao2RfA9IA7Qw7FudAN
+         ifDg==
+X-Gm-Message-State: AOAM533/tsvKAjs6igzMLNhWxBrH9q98oc/plOwPuzOybDCFAV3EpYDR
+        mQ6/3dJ01uFuMfxuMjYDe0M=
+X-Google-Smtp-Source: ABdhPJw0GmqNijdQtQczvQEzvjZ19XE7VEQIl+OyoVBp/zLRPcDEjxUGC10z4T8lGufZZd+l2Uv7ew==
+X-Received: by 2002:a2e:9b58:: with SMTP id o24mr4917732ljj.129.1624395625998;
+        Tue, 22 Jun 2021 14:00:25 -0700 (PDT)
+Received: from localhost (88-112-11-80.elisa-laajakaista.fi. [88.112.11.80])
+        by smtp.gmail.com with ESMTPSA id f3sm230782lfu.262.2021.06.22.14.00.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jun 2021 14:00:25 -0700 (PDT)
+Message-ID: <60d24f69.1c69fb81.fcc6c.14d6@mx.google.com>
+Date:   Wed, 23 Jun 2021 00:00:24 +0300
+From:   Hannu Hartikainen <hannu@hrtk.in>
+Subject: Re: [PATCH] USB: cdc-acm: blacklist Heimann USB Appset device
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <YNI/9/gbehhaNC1t@kroah.com>
+References: <20210622141454.337948-1-hannu@hrtk.in>
+        <YNI/9/gbehhaNC1t@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The SM4250 and SM6115 uses the same register layout as MSM8996, but the
-tune sequence is a bit different.
+On Tue, 22 Jun 2021 21:54:31 +0200, Greg KH <gregkh@linuxfoundation.org> wrote:
+> If it's blacklisted here, what driver does control this device?
 
-Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
----
- drivers/phy/qualcomm/phy-qcom-qusb2.c | 34 +++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+On my machine, no other device driver takes control. The `usbcore`
+driver loads the `cdc-acm` driver because the descriptors match but
+after cdc-acm returns without claiming the interfaces, no other driver
+is probed AFAICT.
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qusb2.c b/drivers/phy/qualcomm/phy-qcom-qusb2.c
-index 8f1bf7e2186b..3c1d3b71c825 100644
---- a/drivers/phy/qualcomm/phy-qcom-qusb2.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qusb2.c
-@@ -219,6 +219,22 @@ static const struct qusb2_phy_init_tbl msm8998_init_tbl[] = {
- 	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_DIGITAL_TIMERS_TWO, 0x19),
- };
- 
-+static const struct qusb2_phy_init_tbl sm6115_init_tbl[] = {
-+	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE1, 0xf8),
-+	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE2, 0x53),
-+	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE3, 0x81),
-+	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE4, 0x17),
-+
-+	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_TUNE, 0x30),
-+	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL1, 0x79),
-+	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL2, 0x21),
-+
-+	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TEST2, 0x14),
-+
-+	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_AUTOPGM_CTL1, 0x9f),
-+	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_PWR_CTRL, 0x00),
-+};
-+
- static const unsigned int qusb2_v2_regs_layout[] = {
- 	[QUSB2PHY_PLL_CORE_INPUT_OVERRIDE] = 0xa8,
- 	[QUSB2PHY_PLL_STATUS]		= 0x1a0,
-@@ -342,6 +358,18 @@ static const struct qusb2_phy_cfg sdm660_phy_cfg = {
- 	.autoresume_en	 = BIT(3),
- };
- 
-+static const struct qusb2_phy_cfg sm6115_phy_cfg = {
-+	.tbl		= sm6115_init_tbl,
-+	.tbl_num	= ARRAY_SIZE(sm6115_init_tbl),
-+	.regs		= msm8996_regs_layout,
-+
-+	.has_pll_test	= true,
-+	.se_clk_scheme_default = true,
-+	.disable_ctrl	= (CLAMP_N_EN | FREEZIO_N | POWER_DOWN),
-+	.mask_core_ready = PLL_LOCKED,
-+	.autoresume_en	 = BIT(3),
-+};
-+
- static const char * const qusb2_phy_vreg_names[] = {
- 	"vdda-pll", "vdda-phy-dpdm",
- };
-@@ -888,6 +916,12 @@ static const struct of_device_id qusb2_phy_of_match_table[] = {
- 	}, {
- 		.compatible	= "qcom,sdm660-qusb2-phy",
- 		.data		= &sdm660_phy_cfg,
-+	}, {
-+		.compatible	= "qcom,sm4250-qusb2-phy",
-+		.data		= &sm6115_phy_cfg,
-+	}, {
-+		.compatible	= "qcom,sm6115-qusb2-phy",
-+		.data		= &sm6115_phy_cfg,
- 	}, {
- 		/*
- 		 * Deprecated. Only here to support legacy device
--- 
-2.31.1
+I've written an incomplete driver myself; I'll see if I can publish it
+later. But the traffic is just USB bulk messages and should be doable in
+userspace without a driver. Sadly the devices are not very common and
+the USB traffic is undocumented.
 
+Best,
+Hannu
