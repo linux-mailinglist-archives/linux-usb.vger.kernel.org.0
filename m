@@ -2,96 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B20913B0747
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 16:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B383B074E
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 16:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231661AbhFVOXw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 22 Jun 2021 10:23:52 -0400
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:44429 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231445AbhFVOXu (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 10:23:50 -0400
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-60-ZAfcHqbRPfSLTlwrCStpTA-1; Tue, 22 Jun 2021 15:21:28 +0100
-X-MC-Unique: ZAfcHqbRPfSLTlwrCStpTA-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 22 Jun
- 2021 15:21:27 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.018; Tue, 22 Jun 2021 15:21:27 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alan Stern' <stern@rowland.harvard.edu>
-CC:     'Mauro Carvalho Chehab' <mchehab+huawei@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linuxarm@huawei.com" <linuxarm@huawei.com>,
-        "mauro.chehab@huawei.com" <mauro.chehab@huawei.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: RE: [PATCH v3] media: uvc: don't do DMA on stack
-Thread-Topic: [PATCH v3] media: uvc: don't do DMA on stack
-Thread-Index: AQHXZqL+Rr1YUDB8sUS3jMuLXE5TdKsfq6kggABLhgCAAB2gMA==
-Date:   Tue, 22 Jun 2021 14:21:27 +0000
-Message-ID: <c5dd6d33cb844025bc8451b46980d96b@AcuMS.aculab.com>
-References: <6832dffafd54a6a95b287c4a1ef30250d6b9237a.1624282817.git.mchehab+huawei@kernel.org>
- <d33c39aa824044ad8cacc93234f1e1cd@AcuMS.aculab.com>
- <20210622132922.GB452785@rowland.harvard.edu>
-In-Reply-To: <20210622132922.GB452785@rowland.harvard.edu>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        id S231804AbhFVOZC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Jun 2021 10:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231478AbhFVOZC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 10:25:02 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91413C061574;
+        Tue, 22 Jun 2021 07:22:44 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id gn32so7405083ejc.2;
+        Tue, 22 Jun 2021 07:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1wxL7/RZgkd7tzTUkekvfvdCHWar3oCq1tWFko1E9o=;
+        b=K0s90OpuUasXmEcnW7aJ7+aN10JN9D4RtXySCNUKeNDWoB/rlU4u/V76NM+yI4o3di
+         rQtJBHeVzkMMzo2ljfPapl1JkqtNcmv+F+ldsUtksi19aeRTTut3VybuCaX63T3OKC/x
+         3Ku6e7dqufAqjIqu/MZPrHC003ATxbVhjZOf0AhPlQR3rUIsItlgwuVrIduSs3JgmaNL
+         ES5pwMOR5HGdrcg6o3J84uCSprufkpIbNZ20f4Mvya2cg//QZmb3gFazPv0niO8ckA3a
+         Ts5rujQEnD5zib+gc3QCYT1tnU+1GwrNF3rvKexL6nq39zgOzzf/P3qrlE49Bdz7vQNU
+         jjWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l1wxL7/RZgkd7tzTUkekvfvdCHWar3oCq1tWFko1E9o=;
+        b=QjamAB/bl0NX75Vgiato10tQoAJIixgASxnOglG7HV+EeVCEPD97KMgLk9lRDR2RkA
+         gW2E6bltF0J+fZRBtPCic61/amfNZ6IraRykDficOvYhp6TmhEFBumJ2D8mVWsX8josn
+         kNJGeLrjdyDYMU/JhOU5en0o4clQ2pxvSG6WCyTXFVldJG4OZM8g5drZ3IXbWKvUx6rV
+         EwyNl/46HLW5EJwpi3MsHyG0SfcMtf/NQYmo7U5E/VgVFfCnlQyEsKsW+W1cZOdG9yM1
+         kVrVlYY2HBruSGoTb49Xky8yJhPwz56YlhPv7WviBXHy7+9xVY+r5+ICUkSQwnAFw4yx
+         ogEg==
+X-Gm-Message-State: AOAM5330EQXsGkFkd8V/sFDqN3QmIrNY3dmbiafsmPvS55D0/Q8QA285
+        +0+vCij9U8ASPidg+Nm9K6XJG88WhU0=
+X-Google-Smtp-Source: ABdhPJxnOLah/gAWqNsAI+1P63GgZm12QCYFmmCIcOQ3qQH7mu0OD2mRNbvbGNsbxKfK2NLOkkfAZg==
+X-Received: by 2002:a17:907:9cc:: with SMTP id bx12mr4326755ejc.25.1624371763050;
+        Tue, 22 Jun 2021 07:22:43 -0700 (PDT)
+Received: from localhost ([62.96.65.119])
+        by smtp.gmail.com with ESMTPSA id v8sm12117666edc.59.2021.06.22.07.22.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jun 2021 07:22:42 -0700 (PDT)
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Jon Hunter <jonathanh@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v2 1/2] dt-bindings: clock: tegra: Fix USB controller nodes in examples
+Date:   Tue, 22 Jun 2021 16:24:35 +0200
+Message-Id: <20210622142436.4014610-1-thierry.reding@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alan Stern
-> Sent: 22 June 2021 14:29
-...
-> > Thought...
-> >
-> > Is kmalloc(1, GFP_KERNEL) guaranteed to return a pointer into
-> > a cache line that will not be accessed by any other code?
-> > (This is slightly weaker than requiring a cache-line aligned
-> > pointer - but very similar.)
-> 
-> As I understand it, on architectures that do not have cache-coherent
-> I/O, kmalloc is guaranteed to return a buffer that is
-> cacheline-aligned and whose length is a multiple of the cacheline
-> size.
-> 
-> Now, whether that buffer ends up being accessed by any other code
-> depends on what your driver does with the pointer it gets from
-> kmalloc.  :-)
+From: Thierry Reding <treding@nvidia.com>
 
-Thanks for the clarification.
+A subsequent patch will convert the USB controller device tree bindings
+to json-schema, which will cause the DT validation to point out various
+issues with the examples in the clock and reset controller bindings.
 
-Most of the small allocates in the usb stack are for transmits
-where it is only necessary to ensure a cache write-back.
+Fix these issues so that the subsequent patch will not cause validation
+warnings.
 
-I know there has been some confusion because one of the
-allocators can add a small header to every allocation.
-This can lead to unexpectedly inadequately aligned pointers.
-If it is updated when the preceding block is freed (as some
-user-space mallocs do) then it would need to be in a
-completely separate cache line.
+Signed-off-by: Thierry Reding <treding@nvidia.com>
+---
+ .../bindings/clock/nvidia,tegra124-car.yaml           | 11 ++++++++---
+ .../devicetree/bindings/clock/nvidia,tegra20-car.yaml |  5 +++++
+ 2 files changed, 13 insertions(+), 3 deletions(-)
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+index ec7ab1483652..d5a873097379 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
+@@ -99,6 +99,7 @@ additionalProperties: false
+ examples:
+   - |
+     #include <dt-bindings/clock/tegra124-car.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     car: clock-controller@60006000 {
+         compatible = "nvidia,tegra124-car";
+@@ -107,9 +108,13 @@ examples:
+         #reset-cells = <1>;
+     };
+ 
+-    usb-controller@c5004000 {
+-        compatible = "nvidia,tegra20-ehci";
+-        reg = <0xc5004000 0x4000>;
++    usb-controller@7d000000 {
++        compatible = "nvidia,tegra124-ehci", "nvidia,tegra30-ehci";
++        reg = <0x7d000000 0x4000>;
++        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
++        phy_type = "utmi";
+         clocks = <&car TEGRA124_CLK_USB2>;
+         resets = <&car TEGRA124_CLK_USB2>;
++        reset-names = "usb";
++        nvidia,phy = <&phy1>;
+     };
+diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+index 459d2a525393..11e6d9513373 100644
+--- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
++++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+@@ -53,6 +53,7 @@ additionalProperties: false
+ examples:
+   - |
+     #include <dt-bindings/clock/tegra20-car.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     car: clock-controller@60006000 {
+         compatible = "nvidia,tegra20-car";
+@@ -64,6 +65,10 @@ examples:
+     usb-controller@c5004000 {
+         compatible = "nvidia,tegra20-ehci";
+         reg = <0xc5004000 0x4000>;
++        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
++        phy_type = "utmi";
+         clocks = <&car TEGRA20_CLK_USB2>;
+         resets = <&car TEGRA20_CLK_USB2>;
++        reset-names = "usb";
++        nvidia,phy = <&phy1>;
+     };
+-- 
+2.32.0
 
