@@ -2,85 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 841D23B0DDC
-	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 21:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A862B3B0DF4
+	for <lists+linux-usb@lfdr.de>; Tue, 22 Jun 2021 21:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232709AbhFVT6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 22 Jun 2021 15:58:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36798 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231726AbhFVT6k (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 22 Jun 2021 15:58:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5965F6100B;
-        Tue, 22 Jun 2021 19:56:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624391782;
-        bh=LyYRwhLs+JRdEP5xKhL9L3kwtUp9LtMKTUuL1voWUnI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nc6wVvjslJbKHAsLCOm5PtRWWXx7gVsFj8vTiTi3OfX7IVzIunNVftSgFaLe6xtlP
-         bgeOA6xb167WmvUxlavsFjSMiU0tTK9DOwVbf08UnSF6bSZQFygtAdsiJ6kQG+QpNW
-         CHofzexvPV2vA46eGeG/KvAK530z7fFcPwF9HSQk=
-Date:   Tue, 22 Jun 2021 21:56:20 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Daehwan Jung <dh10.jung@samsung.com>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: usb: host: Reduce xhci_handshake timeout in xhci_reset
-Message-ID: <YNJAZDwuFmEoTJHe@kroah.com>
-References: <CGME20210622113915epcas2p284c61291fc9d83487f6dfebb65fd4e9b@epcas2p2.samsung.com>
- <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+        id S231726AbhFVUAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 22 Jun 2021 16:00:55 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:47241 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232565AbhFVUAx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 22 Jun 2021 16:00:53 -0400
+Received: (qmail 468382 invoked by uid 1000); 22 Jun 2021 15:58:36 -0400
+Date:   Tue, 22 Jun 2021 15:58:36 -0400
+From:   'Alan Stern' <stern@rowland.harvard.edu>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     'Mauro Carvalho Chehab' <mchehab+huawei@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linuxarm@huawei.com" <linuxarm@huawei.com>,
+        "mauro.chehab@huawei.com" <mauro.chehab@huawei.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v3] media: uvc: don't do DMA on stack
+Message-ID: <20210622195836.GA468074@rowland.harvard.edu>
+References: <6832dffafd54a6a95b287c4a1ef30250d6b9237a.1624282817.git.mchehab+huawei@kernel.org>
+ <d33c39aa824044ad8cacc93234f1e1cd@AcuMS.aculab.com>
+ <20210622132922.GB452785@rowland.harvard.edu>
+ <c5dd6d33cb844025bc8451b46980d96b@AcuMS.aculab.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1624361096-41282-1-git-send-email-dh10.jung@samsung.com>
+In-Reply-To: <c5dd6d33cb844025bc8451b46980d96b@AcuMS.aculab.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 08:24:56PM +0900, Daehwan Jung wrote:
-> It seems 10 secs timeout is too long in general case. A core would wait for
-> 10 secs without doing other task and it can be happended on every device.
-
-Only if the handshake does not come back sooner, right?
-
-What is causing your device to timeout here?
-
-> It's better to reduce timeout for general case and use new quirk if needed.
-
-What new quirk?
-
-And why 1 second, where did that number come from?
-
+On Tue, Jun 22, 2021 at 02:21:27PM +0000, David Laight wrote:
+> From: Alan Stern
+> > Sent: 22 June 2021 14:29
+> ...
+> > > Thought...
+> > >
+> > > Is kmalloc(1, GFP_KERNEL) guaranteed to return a pointer into
+> > > a cache line that will not be accessed by any other code?
+> > > (This is slightly weaker than requiring a cache-line aligned
+> > > pointer - but very similar.)
+> > 
+> > As I understand it, on architectures that do not have cache-coherent
+> > I/O, kmalloc is guaranteed to return a buffer that is
+> > cacheline-aligned and whose length is a multiple of the cacheline
+> > size.
+> > 
+> > Now, whether that buffer ends up being accessed by any other code
+> > depends on what your driver does with the pointer it gets from
+> > kmalloc.  :-)
 > 
-> Signed-off-by: Daehwan Jung <dh10.jung@samsung.com>
-> ---
->  drivers/usb/host/xhci.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Thanks for the clarification.
 > 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 9248ce8..0a1b6be 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -196,7 +196,7 @@ int xhci_reset(struct xhci_hcd *xhci)
->  		udelay(1000);
->  
->  	ret = xhci_handshake(&xhci->op_regs->command,
-> -			CMD_RESET, 0, 10 * 1000 * 1000);
-> +			CMD_RESET, 0, 1 * 1000 * 1000);
->  	if (ret)
->  		return ret;
->  
-> @@ -210,7 +210,7 @@ int xhci_reset(struct xhci_hcd *xhci)
->  	 * than status until the "Controller Not Ready" flag is cleared.
->  	 */
->  	ret = xhci_handshake(&xhci->op_regs->status,
-> -			STS_CNR, 0, 10 * 1000 * 1000);
-> +			STS_CNR, 0, 1 * 1000 * 1000);
+> Most of the small allocates in the usb stack are for transmits
+> where it is only necessary to ensure a cache write-back.
+> 
+> I know there has been some confusion because one of the
+> allocators can add a small header to every allocation.
+> This can lead to unexpectedly inadequately aligned pointers.
+> If it is updated when the preceding block is freed (as some
+> user-space mallocs do) then it would need to be in a
+> completely separate cache line.
 
-With this change, what "goes faster"?  What is currently causing
-problems with your host controller that this timeout value actually
-matters?  Why is it failing?
+If you really want to find out what the true story is, you should ask 
+on the linux-mm mailing list.  The rest of us are not experts on this 
+stuff.
 
-thanks,
-
-greg k-h
+Alan Stern
