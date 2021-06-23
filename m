@@ -2,174 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3173B1713
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 11:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D113B17A8
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 12:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbhFWJlh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Jun 2021 05:41:37 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:45784 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbhFWJlg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 05:41:36 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624441159; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=iQUbJJkTYH21v/zV2fd4UAhlsRo8LDHs+RWxQUQeX/c=; b=An5B3iJHo8OzUIs9D+zLn+WfMkbRvNciADk3g54Fn9f5KLTTZKiXUBehD5ZbQzX43zXK2m4D
- GjTi4QxQ+yNO5AOVzGS+Af4C0myTUfpcYtzXIJJuhbiknZsbbBRknVZrU3NLNq923vSJ/fnl
- OLUjtIuloJT1Fur20/zByaM03Nw=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 60d30133638039e997b35dcb (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 23 Jun 2021 09:38:59
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 77D2DC433F1; Wed, 23 Jun 2021 09:38:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.11.224] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9947EC4338A;
-        Wed, 23 Jun 2021 09:38:56 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9947EC4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v10 2/6] usb: gadget: configfs: Check USB configuration
- before adding
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     balbi@kernel.org, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, frowand.list@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jackp@codeaurora.org, fntoth@gmail.com,
-        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
- <1623923899-16759-3-git-send-email-wcheng@codeaurora.org>
- <YMss5tFFBjokk1k6@kroah.com>
- <012b0264-107a-5596-d73f-3a2fd20470cf@codeaurora.org>
- <YNF9kv0kWAz6Pp00@kroah.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <afe0c718-1c16-1b20-4b0c-d8592a13af42@codeaurora.org>
-Date:   Wed, 23 Jun 2021 02:38:55 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230224AbhFWKFY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 06:05:24 -0400
+Received: from www.zeus03.de ([194.117.254.33]:52128 "EHLO mail.zeus03.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230031AbhFWKFX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Jun 2021 06:05:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=XPrfcgwTlWv7hKIBZVC49IllNoi
+        E8aL74vnq4wCcUak=; b=IAR2rlHnHrFtxoEJWB9tU0vfRvb0+JviGXAqDZZ8u4d
+        LPUOqn1y9eYdqb4zz4ilcLeof/O4FzunFsR0k7eIxD3boVHP2owM/7h1+TmOezwq
+        /mNRxRPMtwPvKaVM3wCxuWcpRfkq0bpP9ecRvlUzSNWsM11oCVaWv5rJksZXouJo
+        =
+Received: (qmail 2553713 invoked from network); 23 Jun 2021 12:03:05 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 23 Jun 2021 12:03:05 +0200
+X-UD-Smtp-Session: l3s3148p1@5f44A2zFIqogARa4RfhaAavnjlTTqzSz
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-renesas-soc@vger.kernel.org,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RFC] usb: renesas_usbhs: fifo: : use proper DMAENGINE API for termination
+Date:   Wed, 23 Jun 2021 12:03:04 +0200
+Message-Id: <20210623100304.3697-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-In-Reply-To: <YNF9kv0kWAz6Pp00@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+dmaengine_terminate_all() is deprecated in favor of explicitly saying if
+it should be sync or async. Here, we want dmaengine_terminate_sync()
+because there is no other synchronization code in the driver to handle
+an async case.
 
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-On 6/21/2021 11:05 PM, Greg KH wrote:
-> On Mon, Jun 21, 2021 at 10:27:09PM -0700, Wesley Cheng wrote:
->>
->>
->> On 6/17/2021 4:07 AM, Greg KH wrote:
->>> On Thu, Jun 17, 2021 at 02:58:15AM -0700, Wesley Cheng wrote:
->>>> Ensure that the USB gadget is able to support the configuration being
->>>> added based on the number of endpoints required from all interfaces.  This
->>>> is for accounting for any bandwidth or space limitations.
->>>>
->>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>> ---
->>>>  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
->>>>  1 file changed, 22 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
->>>> index 15a607c..76b9983 100644
->>>> --- a/drivers/usb/gadget/configfs.c
->>>> +++ b/drivers/usb/gadget/configfs.c
->>>> @@ -1374,6 +1374,7 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
->>>>  		struct usb_function *f;
->>>>  		struct usb_function *tmp;
->>>>  		struct gadget_config_name *cn;
->>>> +		unsigned long ep_map = 0;
->>>>  
->>>>  		if (gadget_is_otg(gadget))
->>>>  			c->descriptors = otg_desc;
->>>> @@ -1403,7 +1404,28 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
->>>>  				list_add(&f->list, &cfg->func_list);
->>>>  				goto err_purge_funcs;
->>>>  			}
->>>> +			if (f->fs_descriptors) {
->>>> +				struct usb_descriptor_header **d;
->>>> +
->>>> +				d = f->fs_descriptors;
->>>> +				for (; *d; ++d) {
->>
->> Hi Greg,
->>
->> Thanks for the review and feedback.
->>
->>>
->>> With this check, there really is not a need to check for
->>> f->fs_descriptors above in the if statement, right?
->>>
->>
->> f->fs_descriptor will carry the table of descriptors that a particular
->> function driver has assigned to it.  The for loop here, will dereference
->> the individual descriptors within that descriptor array, so we need to
->> first ensure the descriptor array is present before traversing through
->> the individual entries/elements.
-> 
-> Ah, it's a dereference of an array element.  Subtle.  Tricky.  Messy :(
-> 
->>>> +					struct usb_endpoint_descriptor *ep;
->>>> +					int addr;
->>>> +
->>>> +					if ((*d)->bDescriptorType != USB_DT_ENDPOINT)
->>>> +						continue;
->>>> +
->>>> +					ep = (struct usb_endpoint_descriptor *)*d;
->>>> +					addr = ((ep->bEndpointAddress & 0x80) >> 3) |
->>>> +						(ep->bEndpointAddress & 0x0f);
->>>
->>> Don't we have direction macros for this type of check?
->>>
->>
->> I don't believe we have a macro which would be able to convert the
->> bEndpointAddress field into the bit which needs to be set, assuming that
->> the 32bit ep_map has the lower 16bits carrying OUT EPs, and the upper
->> 16bits carrying the IN EPs.
+Shimoda-san, can you please double check if this works with the
+additional locking in this function? Thank you!
 
-Hi Greg,
+ drivers/usb/renesas_usbhs/fifo.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> We have macros to tell if an endpoint is IN or OUT, please use those.
-> 
-> And this "cram the whole thing into 64 bits" is not obvious at all.
-> Just pass around the original pointer to the descriptors if someone
-> wants to use it or not, don't make up yet-another-data-structure here
-> for no good reason.  We aren't so memory constrained we need to pack
-> stuff into bits here.
-> 
-
-Hmm ok, what I can do is to move this logic into the check_config()
-callback itself, which is implemented by the UDC driver.  So now, the
-DWC3 will have to do something similar to what is done here, ie loop the
-EP descriptors for each function to determine the number of IN endpoints
-being used.
-
-Thanks
-Wesley Cheng
-
-> thanks,
-> 
-> greg k-h
-> 
-
+diff --git a/drivers/usb/renesas_usbhs/fifo.c b/drivers/usb/renesas_usbhs/fifo.c
+index b5e7991dc7d9..6176f2325f03 100644
+--- a/drivers/usb/renesas_usbhs/fifo.c
++++ b/drivers/usb/renesas_usbhs/fifo.c
+@@ -121,7 +121,7 @@ struct usbhs_pkt *usbhs_pkt_pop(struct usbhs_pipe *pipe, struct usbhs_pkt *pkt)
+ 		if (fifo)
+ 			chan = usbhsf_dma_chan_get(fifo, pkt);
+ 		if (chan) {
+-			dmaengine_terminate_all(chan);
++			dmaengine_terminate_sync(chan);
+ 			usbhsf_dma_unmap(pkt);
+ 		}
+ 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.30.2
+
