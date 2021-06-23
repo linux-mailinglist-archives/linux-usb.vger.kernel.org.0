@@ -2,66 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA38D3B1E1F
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 17:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BA63B1EDB
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 18:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbhFWP5C convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Wed, 23 Jun 2021 11:57:02 -0400
-Received: from [183.90.58.236] ([183.90.58.236]:51762 "EHLO ns1.zackeruz.tk"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231553AbhFWP5B (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Jun 2021 11:57:01 -0400
-Received: from johnlewis.com (unknown [192.168.20.1])
-        by ns1.zackeruz.tk (Postfix) with ESMTPSA id 8BB408462CD
-        for <linux-usb@vger.kernel.org>; Wed, 23 Jun 2021 23:54:42 +0800 (+08)
-Reply-To: robert_turner@johnlewis-trading.com,
-          pippawicks.sales@johnlewis-trading.com
-From:   John Lewis & Partnersip <robert.turner107@johnlewis.com>
-To:     linux-usb@vger.kernel.org
-Subject: 6/23/2021 Product Inquiry 
-Date:   23 Jun 2021 15:54:41 +0000
-Message-ID: <20210623094114.A6F105A4CE68D907@johnlewis.com>
+        id S229924AbhFWQoH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 12:44:07 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:41521 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229929AbhFWQoH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 12:44:07 -0400
+Received: (qmail 500580 invoked by uid 1000); 23 Jun 2021 12:41:48 -0400
+Date:   Wed, 23 Jun 2021 12:41:48 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Claudiu.Beznea@microchip.com
+Cc:     gregkh@linuxfoundation.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        Cristian.Birsan@microchip.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
+ OHCI accesses
+Message-ID: <20210623164148.GC499969@rowland.harvard.edu>
+References: <20210609121027.70951-1-claudiu.beznea@microchip.com>
+ <20210609230735.GA1861855@rowland.harvard.edu>
+ <0621eaba-db4d-a174-1b15-535e804b52ac@microchip.com>
+ <20210623135915.GB491169@rowland.harvard.edu>
+ <a5c68849-a48c-5224-7ba3-1ad44e0d9874@microchip.com>
+ <20210623141907.GC491169@rowland.harvard.edu>
+ <8bff20a7-8eb8-276a-086e-f1729fbbdbe4@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8bff20a7-8eb8-276a-086e-f1729fbbdbe4@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear linux-usb
+On Wed, Jun 23, 2021 at 02:33:14PM +0000, Claudiu.Beznea@microchip.com wrote:
+> On 23.06.2021 17:19, Alan Stern wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Wed, Jun 23, 2021 at 02:09:16PM +0000, Claudiu.Beznea@microchip.com wrote:
+> >> On 23.06.2021 16:59, Alan Stern wrote:
+> >>> One thing you might consider changing: The name of the
+> >>> ohci_at91_port_suspend routine is misleading.  It doesn't really
+> >>> handle suspending the port; instead it handles the clocks that drive
+> >>> the entire OHCI controller.  Right?
+> >>
+> >> It does both as far as I can tell at the moment.
+> > 
+> > But the name suggests that it only handles suspending a port.  That's
+> > misleading.
+> > 
+> > And the way it is used in the SetPortFeature(USB_PORT_FEAT_SUSPEND)
+> > case in ohci_at91_hub_control is just plain wrong.  It won't merely
+> > suspend a single port; it will disable the entire OHCI controller.
+> 
+> Agree with all the above!
 
-The famous brand John Lewis Partnership, is UK's largest multi-
-channel retailer with over 126 shops and multiple expansion in 
-Africa furnished by European/Asian/American products. We are 
-sourcing new products to attract new customers and also retain 
-our existing ones, create new partnerships with companies dealing 
-with different kinds of goods globally.
+Are there any systems beside the SAMA7G5 and others you tested which 
+might be affected by this patch?  Do they all work pretty much the 
+same way?  (I want to make sure no others will be adversely affected 
+by this change.)
 
-Your company's products are of interest to our market as we have 
-an amazing market for your products.
-
-Provide us your current catalog through email to review more. We 
-hope to be able to order with you and start a long-term friendly,
-respectable and solid business partnership. Please we would 
-appreciate it if you could send us your stock availability via 
-email if any.
-
-Our payment terms are 15 days net in Europe, 30 days Net in UK 
-and 30 days net in Asia/USA as we operate with over 5297 
-suppliers around the globe for the past 50 years now. For 
-immediate response Send your reply to robert_turner@johnlewis-
-trading.com for us to be able to 
-treat with care and urgency.
-
-
-Best Regards
-
-Rob Turner
-Head Of Procurement Operations
-John Lewis & Partners.
-robert_turner@johnlewis-trading.com
-Tel: +44-7451-274090
-WhatsApp: +447497483925
-www.johnlewis.com
-REGISTERED OFFICE: 171 VICTORIA STREET, LONDON SW1E 5NN 
+Alan Stern
