@@ -2,115 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F2E3B1ACD
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 15:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED683B1BCA
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 15:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbhFWNMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Jun 2021 09:12:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38466 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230019AbhFWNMj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Jun 2021 09:12:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EA51E61076;
-        Wed, 23 Jun 2021 13:10:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624453822;
-        bh=3GHxrS4L3QbnAx1faho6OvaJPejPcxHg6A6g5Y1fwZQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rtGWujC8sqqmwvbon2nnZVkOH58WzoegDdx7+JjZ4ZxKXW0dp3f3qL0HalFYmA5ym
-         MnXkLs/pwm1vUXyptVRcNC02cnwB53wqXlTI/0cVe8vQ9RQFkWHGwyBFacPAbYGZmJ
-         S+As5O0Rinirkosnyc2ZDUqrpeUbzab+CcCRG4b9X3LyE9kTxqXGjtv+B0GAwlZvAB
-         9XB97S0ejdNebsqAf+xG1OXzuybYA79e00iEIXUXxQ1Nr996DK6NKFnVawIvGSAWsc
-         adgcYPmj/l7es0efbB98vl2ZVGwBL8dMhYXrYi00vmfP8f1R6sWb+5pNoSdO0FOOqy
-         FpdjS5yElBfPA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lw2e4-0007Ej-GC; Wed, 23 Jun 2021 15:10:21 +0200
-Date:   Wed, 23 Jun 2021 15:10:20 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Rhees <support@usbuirt.com>
-Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
-Message-ID: <YNMyvCaZUIDOnSc9@hovoldconsulting.com>
-References: <cover.1620304986.git.sean@mess.org>
- <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
- <20210511103219.GA13769@gofer.mess.org>
- <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
- <20210515092226.GA31801@gofer.mess.org>
- <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
- <20210517103522.GA4644@gofer.mess.org>
- <YKZktqzkddh3amqX@hovoldconsulting.com>
- <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
+        id S230411AbhFWOBe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 10:01:34 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:57895 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230292AbhFWOBe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 10:01:34 -0400
+Received: (qmail 492480 invoked by uid 1000); 23 Jun 2021 09:59:15 -0400
+Date:   Wed, 23 Jun 2021 09:59:15 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Claudiu.Beznea@microchip.com
+Cc:     gregkh@linuxfoundation.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        Cristian.Birsan@microchip.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
+ OHCI accesses
+Message-ID: <20210623135915.GB491169@rowland.harvard.edu>
+References: <20210609121027.70951-1-claudiu.beznea@microchip.com>
+ <20210609230735.GA1861855@rowland.harvard.edu>
+ <0621eaba-db4d-a174-1b15-535e804b52ac@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
+In-Reply-To: <0621eaba-db4d-a174-1b15-535e804b52ac@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sorry about the late reply on this one too.
-
-On Tue, May 25, 2021 at 02:25:49PM +0200, Oliver Neukum wrote:
-> Am Donnerstag, den 20.05.2021, 15:31 +0200 schrieb Johan Hovold:
-
-> > Isn't that already handled by lircd using uinput?
+On Wed, Jun 23, 2021 at 12:47:56PM +0000, Claudiu.Beznea@microchip.com wrote:
+> On 10.06.2021 02:07, Alan Stern wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Wed, Jun 09, 2021 at 03:10:27PM +0300, Claudiu Beznea wrote:
+> >> On SAMA7G5 suspending ports will cut the access to OHCI registers and
+> >> any subsequent access to them will lead to CPU being blocked trying to
+> >> access that memory. Same thing happens on resume: if OHCI memory is
+> >> accessed before resuming ports the CPU will block on that access. The
+> >> OCHI memory is accessed on suspend/resume though
+> >> ohci_suspend()/ohci_resume().
+> > 
+> > That sounds very strange.
 > 
-> The problem with that reasoning, though it is true, is
+> The clock scheme for OHCI and EHCI IPs on SAMA7G5 is as follows
+> (I hope it is readable):
 > 
-> 1) We would need to remove a lot of subsystems if we took that
-> to the logical conclusion. 
-
-Removing code is always nice. ;)
-
-> 2) It makes runtime PM much harder
-
-Possibly, depends on the bus and device.
-
-> 3) We end up with two classes of LIRC devices
-
-We already do, right? That's kind of my point since we have lircd
-supporting uinput.
-
-> > I hear you, but we still need to have those discussions from time to
-> > time to make sure our architecture is sane. One of the problems today
-> > with the kernel development process appears to be that too few
-> > questions
-> > are asked. If it builds, ship it...
+>                                             Main Xtal
+>                                                |
+>                                                +-------------+
+>                                                |             |
+> +---------------------------+                 \ /            |
+> |                 +------+  | 60MHz  +--------------------+  |
+> |                 |      |  |        |                    |------+
+> |                 | Port |<----------| UTMI Transceiver A |  |   |
+> |                 |      |  |        |                    |----+ |
+> |  USB 2.0 EHCI   |Router|  |        +--------------------+  | | |
+> | Host Controller |      |  | 60MHz  +--------------------+  | | |
+> |                 |      |<----------| UTMI Transceiver B |<-+ | |
+> |                 |      |  |        +--------------------+  | | |
+> |                 |      |  | 60MHz  +--------------------+  | | |
+> |                 |      |<----------| UTMI Transceiver C |<-+ | |
+> |                 |      |  |        +--------------------+    | |
+> |                 +------+  |                                  | |
+> |                           |                                  | |
+> +---------------------------+                                  | |
+>                                                                | |
+> +---------------------------+                                  | |
+> |                 +------+  |         UHP48M                   | |
+> |                 | Root |  |<---------------------------------+ |
+> |  USB 1.1 OHCI   | hub  |  |                                    |
+> | Host Controller | and  |  |         UHP12M                     |
+> |                 | host |  |<-----------------------------------+
+> |                 | SIE  |  |
+> |                 +------+  |
+> |                           |
+> +---------------------------+
 > 
-> Indeed, so, could we force a line discipline on a device on the kernel
-> level? Code duplication is bad.
-
-Not sure I understand what you have mind here. serdev is sort of a
-line-discipline which we'd "force" on a device if there's a matching
-description in devicetree, while line disciplines always need to be
-instantiated by user space. Or are you referring to ldisc/serdev code
-reuse?
-
-> > But I think I've got that point across by now.
+> Where UTMI transceiver A generates the 48MHz and 12MHz clocks for OHCI
+> full-speed operations.
 > 
-> Yes and and we need to think about the conclusion we draw from
-> that point. It seems to me that an architecture that pushes data
-> through the whole tty layer into a demon, then through uinput
-> is definitely not elegant.
+> The ports control is done through AT91_SFR_OHCIICR via
+> ohci_at91_port_suspend() function where. Setting 0 in AT91_SFR_OHCIICR
+> means suspend is controlled by EHCI-OHCI and 1 forces the port suspend.
+> Suspending the port A will cut the clocks for OHCI. I want to mention that
+> AT91_SFR_OHCIICR register is not in the same memory space of OHCI, EHCI IPs
+> and is clocked by other clocks.
+> 
+> > Suppose one of the ports is suspended, so access to the
+> > OHCI registers is blocked.  Then how can you resume the port? 
+> 
+> For run-time control (via ohci_at91_hub_control()), I agree with you that
+> the current implemented approach is not healthy (taking into account the
+> clock scheme above) and the fact that we do force the ports suspend on
+> ohci_at91_hub_control(). For suspend/resume it should be OK as the ports
+> are suspended at the end of any OHCI accesses (I don't know how the Linux
+> USB subsystem behaves so please do correct me if I'm wrong).
 
-The elegant answer is serdev, but it does not yet support the features
-needed in this case (i.e. hotplugging).
+(I haven't checked the details recently, so I'm not certain about 
+this.)  In some -- perhaps all -- cases, we don't suspend the ports at 
+all during system suspend.  We just rely on the USB devices 
+automatically going into suspend when the root hub stops sending 
+packets.
 
-Since we already support user-space drivers for these devices, I see
-nothing wrong with implementing support for another one in user space
-unless there are strong reasons against doing so (e.g. performance,
-pm or usability). But if uinput works then great, we're done.
+> > Don't you have to
+> > access the OHCI registers in order to tell the controller to do the port resume?
+> 
+> On our implementation we control the port suspend/resume via
+> AT91_SFR_OHCIICR, a special kind of register, memory mapped at different
+> address (compared w/ OHCI, EHCI IPs), so clocked by other clocks.
+> 
+> > 
+> > What happens when there's more than one port, and one of them is suspended while
+> > the other one is still running?  How can you communicate with the active port if
+> > access to the OHCI registers is blocked?
+> 
+> For this kind of scenario (the run-time suspend of a port, not system
+> suspend/resume) a different mechanism should be implemented taking into
+> account the clock schema presented above.
 
-> So what else can we do, so that devices that are internally
-> a serial chip plus additional stuff but externally unrelated
-> devices? It looks to me we are in need of creativity beyond two options
-> here.
+Okay, I see.  It seems like the driver will need some significant 
+changes to handle runtime power management properly.
 
-Why? Leaving hotplugging aside for a moment, what is it that you cannot
-do using either a serdev/ldisc driver or a user-space driver?
+One thing you might consider changing: The name of the 
+ohci_at91_port_suspend routine is misleading.  It doesn't really 
+handle suspending the port; instead it handles the clocks that drive 
+the entire OHCI controller.  Right?
 
-Johan
+Alan Stern
