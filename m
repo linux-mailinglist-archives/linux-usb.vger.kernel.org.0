@@ -2,158 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD1E03B1454
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 09:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF3E3B1462
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 09:06:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbhFWHGG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Jun 2021 03:06:06 -0400
-Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:3544 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229775AbhFWHGF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 03:06:05 -0400
-Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
-        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15N6xZZ6002075;
-        Wed, 23 Jun 2021 00:03:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=proofpoint;
- bh=b1wph9qbVnYFz+/0mORGZKgtDEEwdrk+PbkgVpr0JBE=;
- b=cbH1UEGQVRAetOp4gR1JmO0Amo+GjWUakpSObpgeWRNvF6na0oJXRmgj+F7nLSe738vx
- a7fdQYHUpczG8AeHkoxVjDXpcngK0Y08otENqHl0aPrMTbXrnFs9OWiF7UwhHpnNHW/U
- Zn1Ag1186/yTA5oP2uA+WRMfq2Iu79hZBO0TBCQ2FXFK/0szQr1VbQr0hsOANq/1I4sK
- SmGNR4vbwtyNx5h7/rZrqlu5PO6YV+ZdVndFzQVFI5WQrdzlziCVcVnCNpI6KjZ3PUE8
- 1DU6n6maP3LeHTuMB1y/TwWqPHoNV/exaFpdQMYBLle70RWrdjUxTXLacTs+qcvItJ4M ww== 
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
-        by mx0b-0014ca01.pphosted.com with ESMTP id 39atwmqnxg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 23 Jun 2021 00:03:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aE+LCzveanJ/u7XuqpnC07ukdlcoE9ZoGUyb+xBzzWFrrEIVriyoEqDQFB9gnPnpRJWaau3C++MBym54vBN+oUMNIHIhiXXJ13vuCfMY1fRqQ4QlIW5Vn5DOinWVPD1RN5d55otnAEhO5Hmz+ko73yFoupu0zA2zL4w8OA+N7869MNpjGGsrTh7IhJ5zSqRIhNMvDkXtTA8dkdMYUficwMYTPlUkW8g15sagdv9L+TRfnXZq5rl7drDwu1oEkFWPqTyTLkTRcWIbH2uZ53lEmQlULAiv05lttKkOxG2qBNG3jao8VHQ0+auDQ5DdmakBcbXbUB4F6w1DYa9CUJg5kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b1wph9qbVnYFz+/0mORGZKgtDEEwdrk+PbkgVpr0JBE=;
- b=br1ZY+qjid48tEEgtUaGcpOx1Rz20K64V4pyhxH9I6EDs7rW9z1wFU7uXZm/NVtOIKVBOCE5DagWKhxGXYoQ7M2KOlwNcJmpfS3LvCQ2bX0ZtzI/vWA9ah+tzRVSbK52iyEpgl5TKjly7hOfuirLcHbuRML6Zvo3MSun6UEuDfRMcA4auRvy0fGGR7BU8HPr/JIrFS0whhe1nugbKemysnL5ZV6DBpts1lHcTN43PfJjAVIeYE8z1POR+pLTKaakcIp4I2ZU+AC1qffiqAYXbo4o80GVRwfvdLCBIXTWtUfGilTo9GApkWcsGj5D0l8ziLFZeHQMFSd2mORdTu3Rvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 158.140.1.148) smtp.rcpttodomain=ti.com smtp.mailfrom=cadence.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=cadence.com; dkim=none
- (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b1wph9qbVnYFz+/0mORGZKgtDEEwdrk+PbkgVpr0JBE=;
- b=Euecb9Krgt518zCFOkA70Cx/thH0cYcbpnlqybCbVEIYs6GC8L5yVg8H2AwT/Z34rxkzvntP6VbdSnbtn6j6sBo1Pr/Q1m975ALTNN/CuY/bQXrh8LpLHyzwzF/R/ZFgG2sGr+uasXlh058k3rKqRhwPElyiNg9XJ5iUxvYbqbU=
-Received: from MW4P223CA0005.NAMP223.PROD.OUTLOOK.COM (2603:10b6:303:80::10)
- by BYAPR07MB4421.namprd07.prod.outlook.com (2603:10b6:a02:cd::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.21; Wed, 23 Jun
- 2021 07:03:39 +0000
-Received: from MW2NAM12FT005.eop-nam12.prod.protection.outlook.com
- (2603:10b6:303:80:cafe::61) by MW4P223CA0005.outlook.office365.com
- (2603:10b6:303:80::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18 via Frontend
- Transport; Wed, 23 Jun 2021 07:03:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 158.140.1.148)
- smtp.mailfrom=cadence.com; ti.com; dkim=none (message not signed)
- header.d=none;ti.com; dmarc=pass action=none header.from=cadence.com;
-Received-SPF: Pass (protection.outlook.com: domain of cadence.com designates
- 158.140.1.148 as permitted sender) receiver=protection.outlook.com;
- client-ip=158.140.1.148; helo=sjmaillnx2.cadence.com;
-Received: from sjmaillnx2.cadence.com (158.140.1.148) by
- MW2NAM12FT005.mail.protection.outlook.com (10.13.180.72) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4264.10 via Frontend Transport; Wed, 23 Jun 2021 07:03:39 +0000
-Received: from maileu3.global.cadence.com (maileu3.cadence.com [10.160.88.99])
-        by sjmaillnx2.cadence.com (8.14.4/8.14.4) with ESMTP id 15N73at4014388
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 23 Jun 2021 00:03:37 -0700
-X-CrossPremisesHeadersFilteredBySendConnector: maileu3.global.cadence.com
-Received: from maileu3.global.cadence.com (10.160.88.99) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 23 Jun 2021 09:03:36 +0200
-Received: from gli-login.cadence.com (10.187.128.100) by
- maileu3.global.cadence.com (10.160.88.99) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2 via Frontend Transport; Wed, 23 Jun 2021 09:03:36 +0200
-Received: from gli-login.cadence.com (localhost [127.0.0.1])
-        by gli-login.cadence.com (8.14.4/8.14.4) with ESMTP id 15N73ZJb047602;
-        Wed, 23 Jun 2021 09:03:35 +0200
-Received: (from pawell@localhost)
-        by gli-login.cadence.com (8.14.4/8.14.4/Submit) id 15N73YV1047601;
-        Wed, 23 Jun 2021 09:03:34 +0200
-From:   Pawel Laszczak <pawell@cadence.com>
-To:     <peter.chen@kernel.org>
-CC:     <rogerq@kernel.org>, <a-govindraju@ti.com>,
-        <gregkh@linuxfoundation.org>, <felipe.balbi@linux.intel.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kishon@ti.com>, <kurahul@cadence.com>, <sparmar@cadence.com>,
-        Pawel Laszczak <pawell@cadence.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: cdns3: Fixed incorrect gadget state
-Date:   Wed, 23 Jun 2021 09:02:47 +0200
-Message-ID: <20210623070247.46151-1-pawell@gli-login.cadence.com>
-X-Mailer: git-send-email 2.18.0
+        id S229978AbhFWHI5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 03:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229844AbhFWHIy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 03:08:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986D5C061574
+        for <linux-usb@vger.kernel.org>; Wed, 23 Jun 2021 00:06:37 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lvwxq-0002I8-3K; Wed, 23 Jun 2021 09:06:22 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1lvwxm-0001DJ-K9; Wed, 23 Jun 2021 09:06:18 +0200
+Date:   Wed, 23 Jun 2021 09:06:18 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v2 4/8] net: usb: asix: ax88772: add phylib
+ support
+Message-ID: <20210623070618.nfv4yizuijbrv575@pengutronix.de>
+References: <20210607082727.26045-1-o.rempel@pengutronix.de>
+ <20210607082727.26045-5-o.rempel@pengutronix.de>
+ <CGME20210618083914eucas1p240f88e7064a7bf15b68370b7506d24a9@eucas1p2.samsung.com>
+ <15e1bb24-7d67-9d45-54c1-c1c1a0fe444a@samsung.com>
+ <20210618101317.55fr5vl5akmtgcf6@pengutronix.de>
+ <b1c48fa1-d406-766e-f8d7-54f76d3acb7c@gmail.com>
+ <e868450d-c623-bea9-6325-aca4e8367ad5@samsung.com>
+ <20210618132035.6vg53gjwuyildlry@pengutronix.de>
+ <2d0bdf2e-49bc-60c0-789e-b909cf1e2667@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-OrganizationHeadersPreserved: maileu3.global.cadence.com
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4746d020-1207-405a-fd46-08d936150740
-X-MS-TrafficTypeDiagnostic: BYAPR07MB4421:
-X-Microsoft-Antispam-PRVS: <BYAPR07MB44218F27F9A339757026F1E6DD089@BYAPR07MB4421.namprd07.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2201;
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WhHrFPhodmV9QIKZcd6P5hyPhNPy1eg69XGBLfXQVD2VLWx+EHmy6eg4sDUim5qNg21UtQCQoDMwc3XtHUhY1RncBpNGRTufBWctG5xtda7bZpbol+I3SHIeYVArV7jlOX5n9XLWCWZ7mUr6rgK7sldDkyt7ch/5RzKIsjzwdK5lhpOCcqDKU6JkO4PTcyBgvtteqevRxZi9fc4suza1GSO8yZpbxaJgjeq93eM2ERTCD/5W2F4qoU+OuspggaLbE89vLzV7yDJ75ZpACNcVjNJEn1mOaShqDsk3lZcz7wz6tHPpAq0DbQZpXfOZ98mrrJChTTOoqu+2Ohf+XZIMaskODgn4EwoBJN6LfqPrZXBKXu8DsikfylveZO+OPmvixXEiheQRZT29Ik01am0kIaN1c0u3N3dwPtdX+YK8L/SI6cGRs8Fw+GRbJRur+xpoKnyqPQnAoCWLlg9eWWgDYNJoxME8CD6d89XODxiTAd5DA03TPQh8uwg6M7BKbMXGiB7blL3GtB3nFc9DsByeVeYgsH24LcKj8O1lGxCI3cvYdTuFPJdhi3bjaKkBCgbQhP8CvsqTXajXLU3OUQE8mt2qAro8r9mVaOpHL3CLSmZWTq0TsPW8TJY28AVkPaKDKLzWRFt7ypvDRiqOzWn4sYC81WwDPIZ/xY8AbofE36IRTn/ARk7KVWgbvRS8ketK
-X-Forefront-Antispam-Report: CIP:158.140.1.148;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:sjmaillnx2.cadence.com;PTR:unknown.Cadence.COM;CAT:NONE;SFS:(4636009)(136003)(39860400002)(346002)(396003)(376002)(36092001)(36840700001)(46966006)(47076005)(8676002)(8936002)(42186006)(316002)(36906005)(336012)(54906003)(36860700001)(83380400001)(478600001)(186003)(426003)(26005)(1076003)(82740400003)(6916009)(2906002)(70206006)(86362001)(4326008)(356005)(6666004)(5660300002)(7636003)(82310400003)(70586007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: cadence.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jun 2021 07:03:39.2918
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4746d020-1207-405a-fd46-08d936150740
-X-MS-Exchange-CrossTenant-Id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=d36035c5-6ce6-4662-a3dc-e762e61ae4c9;Ip=[158.140.1.148];Helo=[sjmaillnx2.cadence.com]
-X-MS-Exchange-CrossTenant-AuthSource: MW2NAM12FT005.eop-nam12.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR07MB4421
-X-Proofpoint-GUID: U7LeBa_1k7nXSsNerInqTtS_lLgeFkpc
-X-Proofpoint-ORIG-GUID: U7LeBa_1k7nXSsNerInqTtS_lLgeFkpc
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-06-23_02:2021-06-22,2021-06-23 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 adultscore=0
- suspectscore=0 mlxlogscore=710 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 bulkscore=0 clxscore=1011
- phishscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106230041
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2d0bdf2e-49bc-60c0-789e-b909cf1e2667@samsung.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 08:56:17 up 202 days, 21:02, 38 users,  load average: 0.10, 0.06,
+ 0.01
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Pawel Laszczak <pawell@cadence.com>
+Hi Marek,
 
-For delayed status phase, the usb_gadget->state was set
-to USB_STATE_ADDRESS and it has never been updated to
-USB_STATE_CONFIGURED.
-Patch updates the gadget state to correct USB_STATE_CONFIGURED.
-As a result of this bug the controller was not able to enter to
-Test Mode while using MSC function.
+On Mon, Jun 21, 2021 at 08:05:49AM +0200, Marek Szyprowski wrote:
+> Hi Oleksij,
+> 
+> On 18.06.2021 15:20, Oleksij Rempel wrote:
+> > On Fri, Jun 18, 2021 at 01:11:41PM +0200, Marek Szyprowski wrote:
+> >> On 18.06.2021 13:04, Heiner Kallweit wrote:
+> >>> On 18.06.2021 12:13, Oleksij Rempel wrote:
+> >>>> thank you for your feedback.
+> >>>>
+> >>>> On Fri, Jun 18, 2021 at 10:39:12AM +0200, Marek Szyprowski wrote:
+> >>>>> On 07.06.2021 10:27, Oleksij Rempel wrote:
+> >>>>>> To be able to use ax88772 with external PHYs and use advantage of
+> >>>>>> existing PHY drivers, we need to port at least ax88772 part of asix
+> >>>>>> driver to the phylib framework.
+> >>>>>>
+> >>>>>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> >>>>> I found one more issue with this patch. On one of my test boards
+> >>>>> (Samsung Exynos5250 SoC based Arndale) system fails to establish network
+> >>>>> connection just after starting the kernel when the driver is build-in.
+> >>>>>
+> >>> If you build in the MAC driver, do you also build in the PHY driver?
+> >>> If the PHY driver is still a module this could explain why genphy
+> >>> driver is used.
+> >>> And your dmesg filtering suppresses the phy_attached_info() output
+> >>> that would tell us the truth.
+> >> Here is a bit more complete log:
+> >>
+> >> # dmesg | grep -i Asix
+> >> [    2.412966] usbcore: registered new interface driver asix
+> >> [    4.620094] usb 1-3.2.4: Manufacturer: ASIX Elec. Corp.
+> >> [    4.641797] asix 1-3.2.4:1.0 (unnamed net_device) (uninitialized):
+> >> invalid hw address, using random
+> >> [    5.657009] libphy: Asix MDIO Bus: probed
+> >> [    5.750584] Asix Electronics AX88772A usb-001:004:10: attached PHY
+> >> driver (mii_bus:phy_addr=usb-001:004:10, irq=POLL)
+> >> [    5.763908] asix 1-3.2.4:1.0 eth0: register 'asix' at
+> >> usb-12110000.usb-3.2.4, ASIX AX88772 USB 2.0 Ethernet, fe:a5:29:e2:97:3e
+> >> [    9.090270] asix 1-3.2.4:1.0 eth0: Link is Up - 100Mbps/Full - flow
+> >> control off
+> >>
+> >> This seems to be something different than missing PHY driver.
+> > Can you please test it:
+> >
+> > diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+> > index aec97b021a73..7897108a1a42 100644
+> > --- a/drivers/net/usb/asix_devices.c
+> > +++ b/drivers/net/usb/asix_devices.c
+> > @@ -453,6 +453,7 @@ static int ax88772a_hw_reset(struct usbnet *dev, int in_pm)
+> >   	u16 rx_ctl, phy14h, phy15h, phy16h;
+> >   	u8 chipcode = 0;
+> >   
+> > +	netdev_info(dev->net, "ax88772a_hw_reset\n");
+> >   	ret = asix_write_gpio(dev, AX_GPIO_RSE, 5, in_pm);
+> >   	if (ret < 0)
+> >   		goto out;
+> > @@ -509,31 +510,7 @@ static int ax88772a_hw_reset(struct usbnet *dev, int in_pm)
+> >   			goto out;
+> >   		}
+> >   	} else if ((chipcode & AX_CHIPCODE_MASK) == AX_AX88772A_CHIPCODE) {
+> > -		/* Check if the PHY registers have default settings */
+> > -		phy14h = asix_mdio_read_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY14H);
+> > -		phy15h = asix_mdio_read_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY15H);
+> > -		phy16h = asix_mdio_read_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY16H);
+> > -
+> > -		netdev_dbg(dev->net,
+> > -			   "772a_hw_reset: MR20=0x%x MR21=0x%x MR22=0x%x\n",
+> > -			   phy14h, phy15h, phy16h);
+> > -
+> > -		/* Restore PHY registers default setting if not */
+> > -		if (phy14h != AX88772A_PHY14H_DEFAULT)
+> > -			asix_mdio_write_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY14H,
+> > -					     AX88772A_PHY14H_DEFAULT);
+> > -		if (phy15h != AX88772A_PHY15H_DEFAULT)
+> > -			asix_mdio_write_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY15H,
+> > -					     AX88772A_PHY15H_DEFAULT);
+> > -		if (phy16h != AX88772A_PHY16H_DEFAULT)
+> > -			asix_mdio_write_nopm(dev->net, dev->mii.phy_id,
+> > -					     AX88772A_PHY16H,
+> > -					     AX88772A_PHY16H_DEFAULT);
+> > +		netdev_info(dev->net, "do not touch PHY regs\n");
+> >   	}
+> >   
+> >   	ret = asix_write_cmd(dev, AX_CMD_WRITE_IPG0,
+> 
+> This doesn't help for this issue.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
-Signed-off-by: Pawel Laszczak <pawell@cadence.com>
----
- drivers/usb/cdns3/cdns3-ep0.c | 1 +
- 1 file changed, 1 insertion(+)
+Ok.
+So far I was not able to see obvious differences between:
+probe -> ip link set dev eth1 up
 
-diff --git a/drivers/usb/cdns3/cdns3-ep0.c b/drivers/usb/cdns3/cdns3-ep0.c
-index 9a17802275d5..ec5bfd8944c3 100644
---- a/drivers/usb/cdns3/cdns3-ep0.c
-+++ b/drivers/usb/cdns3/cdns3-ep0.c
-@@ -731,6 +731,7 @@ static int cdns3_gadget_ep0_queue(struct usb_ep *ep,
- 		request->actual = 0;
- 		priv_dev->status_completion_no_call = true;
- 		priv_dev->pending_status_request = request;
-+		usb_gadget_set_state(&priv_dev->gadget, USB_STATE_CONFIGURED);
- 		spin_unlock_irqrestore(&priv_dev->lock, flags);
+and
+
+probe -> ip link set dev eth1 up;
+	 ip link set dev eth1 down;
+	 ip link set dev eth1 up
+
+
+Except of PHY sate. By default the PHY is in resumed state after probe
+and is able to negotiate the link even if the MAC is down.
+After ip link set dev eth1 down, the PHY is in suspend state, as
+expected.
+
+Can you please test this change?
+
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index aec97b021a73..2c115216420a 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -701,6 +701,7 @@ static int ax88772_init_phy(struct usbnet *dev)
+ 		return ret;
+ 	}
  
- 		/*
--- 
-2.25.1
++	phy_suspend(priv->phydev);
+ 	priv->phydev->mac_managed_pm = 1;
+ 
+ 	phy_attached_info(priv->phydev);
 
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
