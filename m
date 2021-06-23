@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B013B1A7A
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 14:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F2E3B1ACD
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 15:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbhFWMur (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Jun 2021 08:50:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32770 "EHLO mail.kernel.org"
+        id S230274AbhFWNMk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 09:12:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38466 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230170AbhFWMuq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Jun 2021 08:50:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 54E9161076;
-        Wed, 23 Jun 2021 12:48:29 +0000 (UTC)
+        id S230019AbhFWNMj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 23 Jun 2021 09:12:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EA51E61076;
+        Wed, 23 Jun 2021 13:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624452509;
-        bh=K+5dKr3zilSP240WS+KJeqCS0bnQZKIHN+HX2HUn7OE=;
+        s=k20201202; t=1624453822;
+        bh=3GHxrS4L3QbnAx1faho6OvaJPejPcxHg6A6g5Y1fwZQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sCJw1ayGLuOTZs4Hff+aKc4eNrqPCmQvHfow6DF/QjPGPJGbpWUicXPGr7pT31l+f
-         FFI5YgWc+Wb+PYcyQW1U+08NCX2awskg6q6ooUo0NiUdq+vvXgKk0Nd4fbRaYoSqvw
-         JyCVek6MwPiYT7pWueI96ad53zm82TyIGkLHiOi0pjx3CumBGxjhk4vfNNSIdplq7B
-         8ytCLJdt+dfVq+5Xpb1GNT0aRRinYxMg/ZDL+MqiWgz5sFKSbhglJ3VIZwN4L8TJJe
-         YutPnirY67aHZtRWumJL7YqrkRas4wGzVA9yMXYrD2fQ76fCtIm9nBMIvZzKjFLWpL
-         jj1qBlxe9h+dA==
+        b=rtGWujC8sqqmwvbon2nnZVkOH58WzoegDdx7+JjZ4ZxKXW0dp3f3qL0HalFYmA5ym
+         MnXkLs/pwm1vUXyptVRcNC02cnwB53wqXlTI/0cVe8vQ9RQFkWHGwyBFacPAbYGZmJ
+         S+As5O0Rinirkosnyc2ZDUqrpeUbzab+CcCRG4b9X3LyE9kTxqXGjtv+B0GAwlZvAB
+         9XB97S0ejdNebsqAf+xG1OXzuybYA79e00iEIXUXxQ1Nr996DK6NKFnVawIvGSAWsc
+         adgcYPmj/l7es0efbB98vl2ZVGwBL8dMhYXrYi00vmfP8f1R6sWb+5pNoSdO0FOOqy
+         FpdjS5yElBfPA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1lw2It-0007CT-M6; Wed, 23 Jun 2021 14:48:28 +0200
-Date:   Wed, 23 Jun 2021 14:48:27 +0200
+        id 1lw2e4-0007Ej-GC; Wed, 23 Jun 2021 15:10:21 +0200
+Date:   Wed, 23 Jun 2021 15:10:20 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Sean Young <sean@mess.org>
-Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Rhees <support@usbuirt.com>,
-        Oliver Neukum <oneukum@suse.com>
+        Jon Rhees <support@usbuirt.com>
 Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
-Message-ID: <YNMtmyc95nuF5qlP@hovoldconsulting.com>
+Message-ID: <YNMyvCaZUIDOnSc9@hovoldconsulting.com>
 References: <cover.1620304986.git.sean@mess.org>
  <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
  <20210511103219.GA13769@gofer.mess.org>
@@ -43,59 +43,74 @@ References: <cover.1620304986.git.sean@mess.org>
  <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
  <20210517103522.GA4644@gofer.mess.org>
  <YKZktqzkddh3amqX@hovoldconsulting.com>
- <20210521113954.GA21275@gofer.mess.org>
+ <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210521113954.GA21275@gofer.mess.org>
+In-Reply-To: <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sorry about the late reply on this one.
+Sorry about the late reply on this one too.
 
-On Fri, May 21, 2021 at 12:39:54PM +0100, Sean Young wrote:
-> On Thu, May 20, 2021 at 03:31:34PM +0200, Johan Hovold wrote:
-> > On Mon, May 17, 2021 at 11:35:22AM +0100, Sean Young wrote:
-> > > On Mon, May 17, 2021 at 11:30:39AM +0200, Johan Hovold wrote:
+On Tue, May 25, 2021 at 02:25:49PM +0200, Oliver Neukum wrote:
+> Am Donnerstag, den 20.05.2021, 15:31 +0200 schrieb Johan Hovold:
 
-> > > > Thanks for that pointer. Judging from a quick look, the new driver
-> > > > appears to based on this one. By abstracting the serial interface bits
-> > > > in a generic RC serdev/ldisc driver you may be able reuse more code,
-> > > > even if I'm not in a position to judge how much of the IR protocol bits
-> > > > that can be shared.
-> > > 
-> > > Yes, I agree. Once hotplugging is in place. If you have patches for that,
-> > > please CC me and I can see if will work for IR drivers.
-> > 
-> > Let's hope someone steps up to fund that work then.
+> > Isn't that already handled by lircd using uinput?
 > 
-> I'm just a volunteer. I've literally never heard anything about kernel work
-> being funded by anyone.
+> The problem with that reasoning, though it is true, is
+> 
+> 1) We would need to remove a lot of subsystems if we took that
+> to the logical conclusion. 
 
-Someone always pays whether it's a client, an employer or you yourself
-with your spare time.
+Removing code is always nice. ;)
 
-> Would you mind giving a brief summary what is needed to implement hotplugging
-> for serdev? I get the impression it's not a lot of work, but I'm probably
-> missing something obvious.
+> 2) It makes runtime PM much harder
 
-First, it's the matching bits we already touched on where we would like
-to be able to use something like devicetree overlays to avoid rolling a
-new mechanism for every bus. But devicetree overlays has its issues
-currently (e.g. theres no user-space interface for providing them and
-last time I checked they could not be reverted).
+Possibly, depends on the bus and device.
 
-Second, serdev does not use the file abstraction and does not support
-hangups which is used to implement tty hotplugging (e.g. by signalling
-the consumer and making all file operations become noops after a
-disconnect).
+> 3) We end up with two classes of LIRC devices
 
-This would take some thinking-through to get right, and hopefully it can
-be done without having to update every current serdev driver.
+We already do, right? That's kind of my point since we have lircd
+supporting uinput.
 
-Retrofitting serdev into the tty layer wasn't painless and broke things
-here and there. Supporting hotplugging should be doable but it's not as
-straight-forward as it may sound.
+> > I hear you, but we still need to have those discussions from time to
+> > time to make sure our architecture is sane. One of the problems today
+> > with the kernel development process appears to be that too few
+> > questions
+> > are asked. If it builds, ship it...
+> 
+> Indeed, so, could we force a line discipline on a device on the kernel
+> level? Code duplication is bad.
+
+Not sure I understand what you have mind here. serdev is sort of a
+line-discipline which we'd "force" on a device if there's a matching
+description in devicetree, while line disciplines always need to be
+instantiated by user space. Or are you referring to ldisc/serdev code
+reuse?
+
+> > But I think I've got that point across by now.
+> 
+> Yes and and we need to think about the conclusion we draw from
+> that point. It seems to me that an architecture that pushes data
+> through the whole tty layer into a demon, then through uinput
+> is definitely not elegant.
+
+The elegant answer is serdev, but it does not yet support the features
+needed in this case (i.e. hotplugging).
+
+Since we already support user-space drivers for these devices, I see
+nothing wrong with implementing support for another one in user space
+unless there are strong reasons against doing so (e.g. performance,
+pm or usability). But if uinput works then great, we're done.
+
+> So what else can we do, so that devices that are internally
+> a serial chip plus additional stuff but externally unrelated
+> devices? It looks to me we are in need of creativity beyond two options
+> here.
+
+Why? Leaving hotplugging aside for a moment, what is it that you cannot
+do using either a serdev/ldisc driver or a user-space driver?
 
 Johan
