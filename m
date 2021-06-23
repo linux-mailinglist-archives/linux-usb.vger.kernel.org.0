@@ -2,93 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D9C3B163C
-	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 10:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3173B1713
+	for <lists+linux-usb@lfdr.de>; Wed, 23 Jun 2021 11:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbhFWIyX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 23 Jun 2021 04:54:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229833AbhFWIyW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 23 Jun 2021 04:54:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A8822611AD;
-        Wed, 23 Jun 2021 08:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624438325;
-        bh=q1/pZ+8XNyXmDYADtZuYnclhptwzKj9U01waM05X9kM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G3Q2NGpduDsEzBbm+JtSbBOWO8IxUb5//355wIoeaDmbU6jQ2dj1m7J336hvTIpZ7
-         xWomRwFI2rkCcJvbpp3DG4ewNXRHSBaoI0YdSXwgb0jcYY25U4WeeCxYreT1C4047X
-         ivvm/aFuHyTN8aazHHb76orlBvrUt0REJTBl1jNU/gF4ggfxNaHwffhfaJ31qnj8PZ
-         TdD+ujwj5I6itPUFrN5dnMzrxlPF9ErQ+DQH9An5dRAxxnD21s/qRq6XXZLC+8thta
-         dJzgCzejV/VGrHIzAAZX17La7HiBni1JWoibGmgqESqAsfdt+BXOP3+j6r12kcWfkC
-         orP1bJ3ou1Scg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lvyc8-0001tR-79; Wed, 23 Jun 2021 10:52:04 +0200
-Date:   Wed, 23 Jun 2021 10:52:04 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com,
-        stable@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH] i2c: robotfuzz-osif: fix control-request directions
-Message-ID: <YNL2NLSpBQqnc2bH@hovoldconsulting.com>
-References: <20210524090912.3989-1-johan@kernel.org>
+        id S230283AbhFWJlh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 23 Jun 2021 05:41:37 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:45784 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230235AbhFWJlg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 23 Jun 2021 05:41:36 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1624441159; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=iQUbJJkTYH21v/zV2fd4UAhlsRo8LDHs+RWxQUQeX/c=; b=An5B3iJHo8OzUIs9D+zLn+WfMkbRvNciADk3g54Fn9f5KLTTZKiXUBehD5ZbQzX43zXK2m4D
+ GjTi4QxQ+yNO5AOVzGS+Af4C0myTUfpcYtzXIJJuhbiknZsbbBRknVZrU3NLNq923vSJ/fnl
+ OLUjtIuloJT1Fur20/zByaM03Nw=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 60d30133638039e997b35dcb (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 23 Jun 2021 09:38:59
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 77D2DC433F1; Wed, 23 Jun 2021 09:38:59 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.110.11.224] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9947EC4338A;
+        Wed, 23 Jun 2021 09:38:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 9947EC4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v10 2/6] usb: gadget: configfs: Check USB configuration
+ before adding
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     balbi@kernel.org, robh+dt@kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, frowand.list@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        jackp@codeaurora.org, fntoth@gmail.com,
+        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com
+References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+ <1623923899-16759-3-git-send-email-wcheng@codeaurora.org>
+ <YMss5tFFBjokk1k6@kroah.com>
+ <012b0264-107a-5596-d73f-3a2fd20470cf@codeaurora.org>
+ <YNF9kv0kWAz6Pp00@kroah.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <afe0c718-1c16-1b20-4b0c-d8592a13af42@codeaurora.org>
+Date:   Wed, 23 Jun 2021 02:38:55 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210524090912.3989-1-johan@kernel.org>
+In-Reply-To: <YNF9kv0kWAz6Pp00@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, May 24, 2021 at 11:09:12AM +0200, Johan Hovold wrote:
-> The direction of the pipe argument must match the request-type direction
-> bit or control requests may fail depending on the host-controller-driver
-> implementation.
-> 
-> Control transfers without a data stage are treated as OUT requests by
-> the USB stack and should be using usb_sndctrlpipe(). Failing to do so
-> will now trigger a warning.
-> 
-> Fix the OSIFI2C_SET_BIT_RATE and OSIFI2C_STOP requests which erroneously
-> used the osif_usb_read() helper and set the IN direction bit.
-> 
-> Reported-by: syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com
-> Fixes: 83e53a8f120f ("i2c: Add bus driver for for OSIF USB i2c device.")
-> Cc: stable@vger.kernel.org      # 3.14
-> Cc: Andrew Lunn <andrew@lunn.ch>
-> Signed-off-by: Johan Hovold <johan@kernel.org>
-> ---
 
-Wolfram, can you pick this one up for 5.14?
 
-Johan
-
->  drivers/i2c/busses/i2c-robotfuzz-osif.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+On 6/21/2021 11:05 PM, Greg KH wrote:
+> On Mon, Jun 21, 2021 at 10:27:09PM -0700, Wesley Cheng wrote:
+>>
+>>
+>> On 6/17/2021 4:07 AM, Greg KH wrote:
+>>> On Thu, Jun 17, 2021 at 02:58:15AM -0700, Wesley Cheng wrote:
+>>>> Ensure that the USB gadget is able to support the configuration being
+>>>> added based on the number of endpoints required from all interfaces.  This
+>>>> is for accounting for any bandwidth or space limitations.
+>>>>
+>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>>> ---
+>>>>  drivers/usb/gadget/configfs.c | 22 ++++++++++++++++++++++
+>>>>  1 file changed, 22 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+>>>> index 15a607c..76b9983 100644
+>>>> --- a/drivers/usb/gadget/configfs.c
+>>>> +++ b/drivers/usb/gadget/configfs.c
+>>>> @@ -1374,6 +1374,7 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>>>>  		struct usb_function *f;
+>>>>  		struct usb_function *tmp;
+>>>>  		struct gadget_config_name *cn;
+>>>> +		unsigned long ep_map = 0;
+>>>>  
+>>>>  		if (gadget_is_otg(gadget))
+>>>>  			c->descriptors = otg_desc;
+>>>> @@ -1403,7 +1404,28 @@ static int configfs_composite_bind(struct usb_gadget *gadget,
+>>>>  				list_add(&f->list, &cfg->func_list);
+>>>>  				goto err_purge_funcs;
+>>>>  			}
+>>>> +			if (f->fs_descriptors) {
+>>>> +				struct usb_descriptor_header **d;
+>>>> +
+>>>> +				d = f->fs_descriptors;
+>>>> +				for (; *d; ++d) {
+>>
+>> Hi Greg,
+>>
+>> Thanks for the review and feedback.
+>>
+>>>
+>>> With this check, there really is not a need to check for
+>>> f->fs_descriptors above in the if statement, right?
+>>>
+>>
+>> f->fs_descriptor will carry the table of descriptors that a particular
+>> function driver has assigned to it.  The for loop here, will dereference
+>> the individual descriptors within that descriptor array, so we need to
+>> first ensure the descriptor array is present before traversing through
+>> the individual entries/elements.
 > 
-> diff --git a/drivers/i2c/busses/i2c-robotfuzz-osif.c b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> index a39f7d092797..66dfa211e736 100644
-> --- a/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> +++ b/drivers/i2c/busses/i2c-robotfuzz-osif.c
-> @@ -83,7 +83,7 @@ static int osif_xfer(struct i2c_adapter *adapter, struct i2c_msg *msgs,
->  			}
->  		}
->  
-> -		ret = osif_usb_read(adapter, OSIFI2C_STOP, 0, 0, NULL, 0);
-> +		ret = osif_usb_write(adapter, OSIFI2C_STOP, 0, 0, NULL, 0);
->  		if (ret) {
->  			dev_err(&adapter->dev, "failure sending STOP\n");
->  			return -EREMOTEIO;
-> @@ -153,7 +153,7 @@ static int osif_probe(struct usb_interface *interface,
->  	 * Set bus frequency. The frequency is:
->  	 * 120,000,000 / ( 16 + 2 * div * 4^prescale).
->  	 * Using dev = 52, prescale = 0 give 100KHz */
-> -	ret = osif_usb_read(&priv->adapter, OSIFI2C_SET_BIT_RATE, 52, 0,
-> +	ret = osif_usb_write(&priv->adapter, OSIFI2C_SET_BIT_RATE, 52, 0,
->  			    NULL, 0);
->  	if (ret) {
->  		dev_err(&interface->dev, "failure sending bit rate");
+> Ah, it's a dereference of an array element.  Subtle.  Tricky.  Messy :(
+> 
+>>>> +					struct usb_endpoint_descriptor *ep;
+>>>> +					int addr;
+>>>> +
+>>>> +					if ((*d)->bDescriptorType != USB_DT_ENDPOINT)
+>>>> +						continue;
+>>>> +
+>>>> +					ep = (struct usb_endpoint_descriptor *)*d;
+>>>> +					addr = ((ep->bEndpointAddress & 0x80) >> 3) |
+>>>> +						(ep->bEndpointAddress & 0x0f);
+>>>
+>>> Don't we have direction macros for this type of check?
+>>>
+>>
+>> I don't believe we have a macro which would be able to convert the
+>> bEndpointAddress field into the bit which needs to be set, assuming that
+>> the 32bit ep_map has the lower 16bits carrying OUT EPs, and the upper
+>> 16bits carrying the IN EPs.
+
+Hi Greg,
+
+> 
+> We have macros to tell if an endpoint is IN or OUT, please use those.
+> 
+> And this "cram the whole thing into 64 bits" is not obvious at all.
+> Just pass around the original pointer to the descriptors if someone
+> wants to use it or not, don't make up yet-another-data-structure here
+> for no good reason.  We aren't so memory constrained we need to pack
+> stuff into bits here.
+> 
+
+Hmm ok, what I can do is to move this logic into the check_config()
+callback itself, which is implemented by the UDC driver.  So now, the
+DWC3 will have to do something similar to what is done here, ie loop the
+EP descriptors for each function to determine the number of IN endpoints
+being used.
+
+Thanks
+Wesley Cheng
+
+> thanks,
+> 
+> greg k-h
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
