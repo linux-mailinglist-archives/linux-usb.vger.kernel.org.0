@@ -2,74 +2,227 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CE63B37E0
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 22:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC27B3B39D1
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 01:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232524AbhFXUe1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 16:34:27 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:54532 "EHLO vps0.lunn.ch"
+        id S229741AbhFXXsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 19:48:45 -0400
+Received: from mga11.intel.com ([192.55.52.93]:32504 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232163AbhFXUe0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Jun 2021 16:34:26 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:To:From:Date:From:Sender:Reply-To:Subject:Date:
-        Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=DQaVe3svyqtnMuTAQBTKyVNiLfF5PLoMKvvy1C7mW1A=; b=ijwSo6GU38nyg5zIJU9iXy83Vs
-        CZilmBC5pEFAycYay1pNJsMetUPMd+sr+MSak1aPo0Tu8CQ6c1BWPbLdkHwsIrlOC2VFw0tSlY56g
-        4fUwWHWH3j/HlY8APC+9zSBFkHQcvJIaeQP47LulKI9y6+PyAHv6jzi7mdPC/DJ4cVKk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1lwW17-00B1gI-7R; Thu, 24 Jun 2021 22:32:05 +0200
-Date:   Thu, 24 Jun 2021 22:32:05 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>,
-        linux-i2c@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] i2c: robotfuzz-osif: fix control-request directions
-Message-ID: <YNTrxT9gRrfMlN+2@lunn.ch>
-References: <20210524090912.3989-1-johan@kernel.org>
- <YNL2NLSpBQqnc2bH@hovoldconsulting.com>
- <YNTmqcrYb9KzW8Zh@kunai>
+        id S229585AbhFXXso (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 19:48:44 -0400
+IronPort-SDR: n73yUfUnktOrRcICxD6RhdcIxqJ2s4vxbmm9uWM1Zcd6F98dSM9Rz+xf6uaG4ywLlN4nXNpiC4
+ IjxePmDe1FPQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10025"; a="204570385"
+X-IronPort-AV: E=Sophos;i="5.83,297,1616482800"; 
+   d="scan'208";a="204570385"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2021 16:46:24 -0700
+IronPort-SDR: bN1LXcdq2Omin092N0IznTQY0ECfR6AfkostwWAWKVd6eqlSjt7eyNzjOmjJtq3ei+B1r7kXLX
+ HMPcP66x+FtA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.83,297,1616482800"; 
+   d="scan'208";a="424254387"
+Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 24 Jun 2021 16:46:23 -0700
+Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1lwZ38-0006p1-EK; Thu, 24 Jun 2021 23:46:22 +0000
+Date:   Fri, 25 Jun 2021 07:45:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-next] BUILD SUCCESS
+ 8e9910c5ad97aa9479ab19e6535065522d6a0f08
+Message-ID: <60d51930.VydjCz/ezz8DwyAV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YNTmqcrYb9KzW8Zh@kunai>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jun 24, 2021 at 10:10:17PM +0200, Wolfram Sang wrote:
-> On Wed, Jun 23, 2021 at 10:52:04AM +0200, Johan Hovold wrote:
-> > On Mon, May 24, 2021 at 11:09:12AM +0200, Johan Hovold wrote:
-> > > The direction of the pipe argument must match the request-type direction
-> > > bit or control requests may fail depending on the host-controller-driver
-> > > implementation.
-> > > 
-> > > Control transfers without a data stage are treated as OUT requests by
-> > > the USB stack and should be using usb_sndctrlpipe(). Failing to do so
-> > > will now trigger a warning.
-> > > 
-> > > Fix the OSIFI2C_SET_BIT_RATE and OSIFI2C_STOP requests which erroneously
-> > > used the osif_usb_read() helper and set the IN direction bit.
-> > > 
-> > > Reported-by: syzbot+9d7dadd15b8819d73f41@syzkaller.appspotmail.com
-> > > Fixes: 83e53a8f120f ("i2c: Add bus driver for for OSIF USB i2c device.")
-> > > Cc: stable@vger.kernel.org      # 3.14
-> > > Cc: Andrew Lunn <andrew@lunn.ch>
-> > > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > > ---
-> > 
-> > Wolfram, can you pick this one up for 5.14?
-> 
-> Sorry, I thought Andrew was the maintainer of this driver and was
-> waiting for his ack.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+branch HEAD: 8e9910c5ad97aa9479ab19e6535065522d6a0f08  Merge tag 'usb-serial-5.14-rc1' of https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-next
 
-Ah, sorry. I did take a quick look at the change, it seemed
-sensible. But i've not used this hardware in years, i have no way to
-test it, etc.
+elapsed time: 726m
 
-     Andrew
+configs tested: 165
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+arm                             rpc_defconfig
+arm                        magician_defconfig
+mips                      maltasmvp_defconfig
+powerpc                      ppc44x_defconfig
+mips                     decstation_defconfig
+arm                       aspeed_g5_defconfig
+mips                     loongson1c_defconfig
+sh                        dreamcast_defconfig
+sh                        sh7785lcr_defconfig
+arm                         axm55xx_defconfig
+nios2                         10m50_defconfig
+powerpc                       holly_defconfig
+powerpc                      makalu_defconfig
+arc                        nsimosci_defconfig
+sparc64                          alldefconfig
+arm                        keystone_defconfig
+mips                          ath79_defconfig
+powerpc                     akebono_defconfig
+xtensa                generic_kc705_defconfig
+riscv                             allnoconfig
+openrisc                    or1ksim_defconfig
+ia64                             allmodconfig
+mips                         rt305x_defconfig
+sh                           se7206_defconfig
+nios2                            alldefconfig
+powerpc                 mpc8540_ads_defconfig
+mips                malta_qemu_32r6_defconfig
+arm                       aspeed_g4_defconfig
+powerpc                     tqm8540_defconfig
+ia64                      gensparse_defconfig
+arm                       spear13xx_defconfig
+powerpc                        fsp2_defconfig
+powerpc                     tqm8555_defconfig
+xtensa                       common_defconfig
+powerpc                     stx_gp3_defconfig
+xtensa                  cadence_csp_defconfig
+sh                        edosk7760_defconfig
+powerpc                      katmai_defconfig
+powerpc                 mpc834x_mds_defconfig
+m68k                        m5307c3_defconfig
+m68k                         amcore_defconfig
+xtensa                          iss_defconfig
+arm                       multi_v4t_defconfig
+m68k                          amiga_defconfig
+powerpc                     sequoia_defconfig
+arm                          badge4_defconfig
+sh                   rts7751r2dplus_defconfig
+arc                          axs103_defconfig
+sh                      rts7751r2d1_defconfig
+sh                           se7722_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     ep8248e_defconfig
+arm                        clps711x_defconfig
+sh                           se7343_defconfig
+m68k                        m5272c3_defconfig
+arm                           sunxi_defconfig
+nios2                         3c120_defconfig
+sh                          rsk7269_defconfig
+mips                      malta_kvm_defconfig
+sh                   secureedge5410_defconfig
+arm                        multi_v7_defconfig
+mips                           gcw0_defconfig
+arc                        vdk_hs38_defconfig
+sh                          rsk7203_defconfig
+m68k                          sun3x_defconfig
+powerpc                       maple_defconfig
+arm                           corgi_defconfig
+arm                          ep93xx_defconfig
+powerpc                 mpc836x_mds_defconfig
+powerpc                     sbc8548_defconfig
+arm                         palmz72_defconfig
+m68k                        mvme147_defconfig
+arm                          ixp4xx_defconfig
+arm                          pxa910_defconfig
+powerpc                     ppa8548_defconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                               defconfig
+i386                                defconfig
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+i386                 randconfig-a001-20210622
+i386                 randconfig-a002-20210622
+i386                 randconfig-a003-20210622
+i386                 randconfig-a006-20210622
+i386                 randconfig-a005-20210622
+i386                 randconfig-a004-20210622
+i386                 randconfig-a002-20210623
+i386                 randconfig-a001-20210623
+i386                 randconfig-a003-20210623
+i386                 randconfig-a006-20210623
+i386                 randconfig-a005-20210623
+i386                 randconfig-a004-20210623
+x86_64               randconfig-a012-20210622
+x86_64               randconfig-a016-20210622
+x86_64               randconfig-a015-20210622
+x86_64               randconfig-a014-20210622
+x86_64               randconfig-a013-20210622
+x86_64               randconfig-a011-20210622
+i386                 randconfig-a011-20210623
+i386                 randconfig-a014-20210623
+i386                 randconfig-a013-20210623
+i386                 randconfig-a015-20210623
+i386                 randconfig-a012-20210623
+i386                 randconfig-a016-20210623
+i386                 randconfig-a011-20210622
+i386                 randconfig-a014-20210622
+i386                 randconfig-a013-20210622
+i386                 randconfig-a015-20210622
+i386                 randconfig-a012-20210622
+i386                 randconfig-a016-20210622
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+um                            kunit_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                      rhel-8.3-kbuiltin
+x86_64                                  kexec
+
+clang tested configs:
+x86_64               randconfig-b001-20210622
+x86_64               randconfig-b001-20210624
+x86_64               randconfig-a002-20210622
+x86_64               randconfig-a001-20210622
+x86_64               randconfig-a005-20210622
+x86_64               randconfig-a003-20210622
+x86_64               randconfig-a004-20210622
+x86_64               randconfig-a006-20210622
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
