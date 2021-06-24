@@ -2,283 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D89093B2AAF
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 10:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858D03B2AF0
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 11:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230028AbhFXIuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 04:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbhFXIut (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 04:50:49 -0400
-Received: from mail-qk1-x749.google.com (mail-qk1-x749.google.com [IPv6:2607:f8b0:4864:20::749])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2145FC061574
-        for <linux-usb@vger.kernel.org>; Thu, 24 Jun 2021 01:48:30 -0700 (PDT)
-Received: by mail-qk1-x749.google.com with SMTP id i3-20020a05620a1503b02903b2ffa0a87fso4490951qkk.18
-        for <linux-usb@vger.kernel.org>; Thu, 24 Jun 2021 01:48:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=lv2M20z/E4ZxJIA5BSrsj1Pd/uieTDDMaCAFj2QM1E8=;
-        b=IeSP/P+6W72fNG1FYxWpwjwWHSvA4GP51ldPbpR8fGH8ihBxnYZRyLqIvkWwEohXQ0
-         w2lEcMUn26vViVoVh35zcG9nnPfIXrPt4UXymf8gXIqhjcKIJBmCybVwAqDEGCp6i8dM
-         1jvDvQSulXTiNegPxp6P2VTY2yGZn6VrI935s/OR9ejkzTPtCpI78FYfk8oAVPHcZuhu
-         Wl4MlcV96PtLq9Ku2OzSkaqzqYpDGbzEqCmvh7K7Wr3i5id+P72AGNMJZnkNJaf6AgNA
-         kV+kQlahP9hRjQ3Q3W4u+DZGbxEvKY6TOGAr7azm7jNyStvKz/ugRVczpalIMxIlHbRt
-         GCfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=lv2M20z/E4ZxJIA5BSrsj1Pd/uieTDDMaCAFj2QM1E8=;
-        b=YL2C7j5E/pwVYbOqAByliAQ79mDHozbgHB8Fq/D+3+nmwnQrXc2O4UmeIALXVdwMwg
-         WF2UPPWRgQSLZhAukQk61PKEJ1Yg2aAvz6sDDaR3BNMmu8apWnE8JxQlVrvt3CDE1qyo
-         ztCS2xvjqfh5xogTlxHsdRb5HqZ56nobTncsh4TSCl1luIvk1j5Ts+wCV6NKqoLO9uUj
-         BisZTh7Jq4XSRAbC7r7yRtTSo3MknnzIC5dCpa9IxhmcNheEmounGUYTStcEMy3W0jlI
-         j6yRzakGBK5jcv3yAvY53v9i4X64hgURgv4X98WBc+vbpoRRgxkJU3EtbMF5DqERlYci
-         l27Q==
-X-Gm-Message-State: AOAM533PTu61+vH6vhEpLw8aWGSJUl/oqc9d7YfZAVsmcP+RAJtzDxjM
-        BsnhV0sNnJ7yc6zwnO//MOrjklDtnzNu5g==
-X-Google-Smtp-Source: ABdhPJwz1UOj+BLfRPLtOTXYIGACJG+pK0CeffrKCgJOCpSZdJGztv47Cvb+WbdaCzYGKtiNvpeWn//XiWqIdw==
-X-Received: from spirogrip.svl.corp.google.com ([2620:15c:2cb:201:a802:69a8:1b1e:dc34])
- (user=davidgow job=sendgmr) by 2002:ad4:58f2:: with SMTP id
- di18mr4493438qvb.4.1624524509302; Thu, 24 Jun 2021 01:48:29 -0700 (PDT)
-Date:   Thu, 24 Jun 2021 01:48:23 -0700
-Message-Id: <20210624084823.15031-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.288.g62a8d224e6-goog
-Subject: [PATCH kunit-next] thunderbolt: test: Reinstate a few casts of bitfields
-From:   David Gow <davidgow@google.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     David Gow <davidgow@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-usb@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S230403AbhFXJFN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 05:05:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59714 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229958AbhFXJFM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 05:05:12 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6ABAB613E7;
+        Thu, 24 Jun 2021 09:02:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624525373;
+        bh=RipF1Knz8sFbeKctWLgXvVEeh2TWOKZIJX2SkI+qPeU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Q6hNVazeCbQy28r3AP/zzpTWruHs/ILDY2lgizCZQeP/E4++FWZbBqXPDEILM3zS4
+         yt0vsfRBLEl+o4VyPwZOnFcVmKjmyEixhOmsh48da1SCfA3dSx9WjaAjOjYQO+GRS2
+         Smtt60K/Ag7/fc1TLCuyv/olY2CuezkfhrcBe9302LT14ABA0IW29FxXxWi73ciLui
+         Go9DkUHH8m+bHJeIceRtpEu5ehmlzWsDLyNk+hMnEHP+1CTighcE6Ui12ymfYynAbB
+         q41eqFLHBBAdEyydOajM98AV6a3An+wTxR42m4HblTLXq8ukQFDY8wfC0ceZwYe7LX
+         HsxS5EWgGQjuQ==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lwLG6-003jrn-LG; Thu, 24 Jun 2021 11:02:50 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org
+Subject: [PATCH RESEND v6 0/8] Move Hisilicon 6421v600 SPMI and USB drivers out of staging
+Date:   Thu, 24 Jun 2021 11:01:04 +0200
+Message-Id: <cover.1624525118.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Partially revert "thunderbolt: test: Remove some casts which are no
-longer required". It turns out that typeof() doesn't support bitfields,
-so these still need to be cast to the appropriate enum.
+Notes:
+   1. Patch resent with --no-renames, in order to show the full code when
+      moving the code out of staging (on this RESEND);
 
-The only mention of typeof() and bitfields I can find is in the proposal
-to standardise them:
-http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2619.htm
+   2. the previous series is at:
+      https://lore.kernel.org/lkml/cover.1616695231.git.mchehab+huawei@kernel.org/
 
-This was caught by the kernel test robot:
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/FDKBHAV7QNLNFU5NBI2RKV56DWDSOLGM/
+Hi Greg,
 
-Fixes: 	8f0877c26e ("thunderbolt: test: Remove some casts which are no longer required")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: David Gow <davidgow@google.com>
----
+Those are the remaining patches that are needed for the USB to work
+with Hikey970.
 
-Whoops: I didn't notice this was broken earlier. If it's easier to just
-revert the broken patch, that's fine, too.
+This series address the comments made on v5. Sorry for taking so long to
+return back on this. Got sidetracked by other unrelated stuff.
 
-Cheers,
--- David
+Changes from v5:
 
- drivers/thunderbolt/test.c | 66 +++++++++++++++++++++++++-------------
- 1 file changed, 44 insertions(+), 22 deletions(-)
+- Some changes at DT to comply with Rob Herring's feedback;
+- a couple of cleanups at the phy-hi3670-usb3;
+- Vinod's ack added to patch 4;
+- Several cleanups at hi6421-spmi-pmic.c, in order to address
+  Lee Jones feedbacks.
 
-diff --git a/drivers/thunderbolt/test.c b/drivers/thunderbolt/test.c
-index 247dc9f4757e..3cc36ef639f3 100644
---- a/drivers/thunderbolt/test.c
-+++ b/drivers/thunderbolt/test.c
-@@ -384,7 +384,8 @@ static void tb_test_path_single_hop_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i++;
- 	}
- 
-@@ -395,7 +396,8 @@ static void tb_test_path_single_hop_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i--;
- 	}
- 
-@@ -441,7 +443,8 @@ static void tb_test_path_daisy_chain_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i++;
- 	}
- 
-@@ -452,7 +455,8 @@ static void tb_test_path_daisy_chain_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i--;
- 	}
- 
-@@ -502,7 +506,8 @@ static void tb_test_path_simple_tree_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i++;
- 	}
- 
-@@ -513,7 +518,8 @@ static void tb_test_path_simple_tree_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i--;
- 	}
- 
-@@ -584,7 +590,8 @@ static void tb_test_path_complex_tree_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i++;
- 	}
- 
-@@ -595,7 +602,8 @@ static void tb_test_path_complex_tree_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i--;
- 	}
- 
-@@ -685,7 +693,8 @@ static void tb_test_path_max_length_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i++;
- 	}
- 
-@@ -696,7 +705,8 @@ static void tb_test_path_max_length_walk(struct kunit *test)
- 		KUNIT_EXPECT_TRUE(test, i < ARRAY_SIZE(test_data));
- 		KUNIT_EXPECT_EQ(test, tb_route(p->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, p->port, test_data[i].port);
--		KUNIT_EXPECT_EQ(test, p->config.type, test_data[i].type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)p->config.type,
-+				test_data[i].type);
- 		i--;
- 	}
- 
-@@ -779,10 +789,12 @@ static void tb_test_path_not_bonded_lane0(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
-@@ -839,10 +851,12 @@ static void tb_test_path_not_bonded_lane1(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
-@@ -917,10 +931,12 @@ static void tb_test_path_not_bonded_lane1_chain(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
-@@ -995,10 +1011,12 @@ static void tb_test_path_not_bonded_lane1_chain_reverse(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
-@@ -1085,10 +1103,12 @@ static void tb_test_path_mixed_chain(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
-@@ -1175,10 +1195,12 @@ static void tb_test_path_mixed_chain_reverse(struct kunit *test)
- 
- 		KUNIT_EXPECT_EQ(test, tb_route(in_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, in_port->port, test_data[i].in_port);
--		KUNIT_EXPECT_EQ(test, in_port->config.type, test_data[i].in_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)in_port->config.type,
-+				test_data[i].in_type);
- 		KUNIT_EXPECT_EQ(test, tb_route(out_port->sw), test_data[i].route);
- 		KUNIT_EXPECT_EQ(test, out_port->port, test_data[i].out_port);
--		KUNIT_EXPECT_EQ(test, out_port->config.type, test_data[i].out_type);
-+		KUNIT_EXPECT_EQ(test, (enum tb_port_type)out_port->config.type,
-+				test_data[i].out_type);
- 	}
- 	tb_path_free(path);
- }
+On this series, I opted to keep using "gpios" for the DT IRQ gpios needed
+by the PMIC driver, as this is the string expected by of_get_gpio(), and
+it is the most common pattern for IRQ gpios. If required, I'll send a
+followup patch changing it to use, instead, the of_get_named_gpio_flags()
+variant.
+
+
+Mauro Carvalho Chehab (8):
+  staging: phy-hi3670-usb3: do a some minor cleanups
+  staging: hisi-spmi-controller: rename spmi-channel property
+  staging: phy-hi3670-usb3: do some additional cleanups
+  phy: phy-hi3670-usb3: move driver from staging into phy
+  spmi: hisi-spmi-controller: move driver from staging
+  mfd: hi6421-spmi-pmic: move driver from staging
+  dts: hisilicon: add support for the PMIC found on Hikey 970
+  dts: hisilicon: add support for USB3 on Hikey 970
+
+ .../mfd/hisilicon,hi6421-spmi-pmic.yaml       | 134 ++++
+ .../bindings/phy/hisilicon,hi3670-usb3.yaml   |  73 ++
+ .../spmi/hisilicon,hisi-spmi-controller.yaml  |  73 ++
+ MAINTAINERS                                   |  23 +-
+ .../boot/dts/hisilicon/hi3670-hikey970.dts    | 129 +++-
+ arch/arm64/boot/dts/hisilicon/hi3670.dtsi     |  56 ++
+ .../boot/dts/hisilicon/hikey970-pmic.dtsi     |  87 +++
+ drivers/mfd/Kconfig                           |  16 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/hi6421-spmi-pmic.c                | 316 +++++++++
+ drivers/phy/hisilicon/Kconfig                 |  10 +
+ drivers/phy/hisilicon/Makefile                |   1 +
+ drivers/phy/hisilicon/phy-hi3670-usb3.c       | 661 +++++++++++++++++
+ drivers/spmi/Kconfig                          |   9 +
+ drivers/spmi/Makefile                         |   1 +
+ drivers/spmi/hisi-spmi-controller.c           | 367 ++++++++++
+ drivers/staging/Kconfig                       |   2 -
+ drivers/staging/Makefile                      |   1 -
+ drivers/staging/hikey9xx/Kconfig              |  41 --
+ drivers/staging/hikey9xx/Makefile             |   6 -
+ drivers/staging/hikey9xx/TODO                 |   5 -
+ drivers/staging/hikey9xx/hi6421-spmi-pmic.c   | 297 --------
+ .../staging/hikey9xx/hisi-spmi-controller.c   | 367 ----------
+ .../hikey9xx/hisilicon,hi6421-spmi-pmic.yaml  | 135 ----
+ .../hisilicon,hisi-spmi-controller.yaml       |  71 --
+ drivers/staging/hikey9xx/phy-hi3670-usb3.c    | 668 ------------------
+ drivers/staging/hikey9xx/phy-hi3670-usb3.yaml |  73 --
+ 27 files changed, 1937 insertions(+), 1686 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/hisilicon,hi6421-spmi-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+ create mode 100644 Documentation/devicetree/bindings/spmi/hisilicon,hisi-spmi-controller.yaml
+ create mode 100644 arch/arm64/boot/dts/hisilicon/hikey970-pmic.dtsi
+ create mode 100644 drivers/mfd/hi6421-spmi-pmic.c
+ create mode 100644 drivers/phy/hisilicon/phy-hi3670-usb3.c
+ create mode 100644 drivers/spmi/hisi-spmi-controller.c
+ delete mode 100644 drivers/staging/hikey9xx/Kconfig
+ delete mode 100644 drivers/staging/hikey9xx/Makefile
+ delete mode 100644 drivers/staging/hikey9xx/TODO
+ delete mode 100644 drivers/staging/hikey9xx/hi6421-spmi-pmic.c
+ delete mode 100644 drivers/staging/hikey9xx/hisi-spmi-controller.c
+ delete mode 100644 drivers/staging/hikey9xx/hisilicon,hi6421-spmi-pmic.yaml
+ delete mode 100644 drivers/staging/hikey9xx/hisilicon,hisi-spmi-controller.yaml
+ delete mode 100644 drivers/staging/hikey9xx/phy-hi3670-usb3.c
+ delete mode 100644 drivers/staging/hikey9xx/phy-hi3670-usb3.yaml
+
 -- 
-2.32.0.288.g62a8d224e6-goog
+2.31.1
+
 
