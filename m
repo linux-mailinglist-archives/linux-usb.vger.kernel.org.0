@@ -2,70 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE513B2D93
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 13:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789013B2E8C
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 14:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbhFXLRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 07:17:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232456AbhFXLRl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 07:17:41 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA249C061767;
-        Thu, 24 Jun 2021 04:15:22 -0700 (PDT)
-Received: from miraculix.mork.no ([IPv6:2a01:79d:469a:7994:53d7:1944:55a:91c0])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 15OBFDT7018095
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 24 Jun 2021 13:15:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1624533313; bh=5b6YZR358Wi3JQ4ZkLcOC7UPJZD+b3tWEuj0//aMkNs=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=O0PHfPOg0NEtLdTjAcRzOnviAPE6+Qp8ZQG+7BMcaB0PpbYu6dhN1sOyWlXiVWq6x
-         s1FJiPCPYJR74dn4yRqaSjW7FfcpHR5e1Ot4ChS6M8Cfr1gaH4S8K8/SvJzOKgZ27K
-         LSOp2TFqutnCyqCmGVhBnxodi2qpBiw1HZPncFfA=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1lwNK7-001FQQ-Ut; Thu, 24 Jun 2021 13:15:07 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Stefan =?utf-8?Q?Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniele Palmas <dnlplm@gmail.com>
-Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based
- Sierra Wireless 5G modules
-Organization: m
-References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
-        <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
-        <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
-Date:   Thu, 24 Jun 2021 13:15:07 +0200
-In-Reply-To: <YNQ0O0vhtpStp0n/@hovoldconsulting.com> (Johan Hovold's message
-        of "Thu, 24 Jun 2021 09:28:59 +0200")
-Message-ID: <87tulnms3o.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S230008AbhFXMHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 08:07:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55772 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229437AbhFXMHs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 08:07:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B5FDC613DC;
+        Thu, 24 Jun 2021 12:05:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624536329;
+        bh=QRt9BUhdryDuOCzNWCyDrqVE4QwtYRomdv7yMTB/nMk=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=EpFi0xXq/cFCB6PSCxSO0RdIf4hZ98tp7GqO7uhD7gV9megfhjyZYqp+Tzh7h2BWV
+         d4atNYSky4ccXBNvKgc+KLgo4frKHw1Mhp77kWgxrL2LEqq1/xpnrhf24VJE5HLbUE
+         06Of7pz4wionkM0F5MFhZ6Pc7wHApHb4Kqw+YtWJXtnhv/l6JQ/xpgVydOgh2DF9Px
+         fk8+IcvNiLkQ1ATwHA7Y9jv/HXW426/EbDzgiFJ3XdTwMCMPp7PB50VlG2eqw92Z1U
+         6GGyzjz7Eitn4zP6zp1hNC0hx3wz3JFPtlNjlznmLJSiZ4TG37tl1fo5jKf00RUV+Q
+         PAvKV91Sc2dHQ==
+Date:   Thu, 24 Jun 2021 14:05:26 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+cc:     benjamin.tissoires@redhat.com, linux-usb@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] HID: usbhid: hid-pidff: Fix missing error code in
+ hid_pidff_init()
+In-Reply-To: <1622545518-18949-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+Message-ID: <nycvar.YFH.7.76.2106241405110.18969@cbobk.fhfr.pm>
+References: <1622545518-18949-1-git-send-email-jiapeng.chong@linux.alibaba.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.2 at canardo
-X-Virus-Status: Clean
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Johan Hovold <johan@kernel.org> writes:
+On Tue, 1 Jun 2021, Jiapeng Chong wrote:
 
-> Could you please also post the output of usb-devices (or lsusb -v) for
-> this device in MBIM mode?
+> The error code is missing in this code scenario, add the error code
+> '-EINVAL' to the return value 'error'.
+> 
+> Eliminate the follow smatch warning:
+> 
+> drivers/hid/usbhid/hid-pidff.c:1297 hid_pidff_init() warn: missing error
+> code 'error'.
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Yes, this would be nice to have.
+This has already been fixed in hid.git via 3dd653c077efd.
 
-I suspect that this device is like other SDX55 devices we've seen, using
-class/subclass/function to map the vendor specific functions
-too. Dropping static interface numbers.  If correct, then the patch is
-bogus and the interface numbers might change based on firmware version
-and configuration.
+Thanks,
 
+-- 
+Jiri Kosina
+SUSE Labs
 
-Bj=C3=B8rn
