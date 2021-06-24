@@ -2,129 +2,135 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 025843B2AE4
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 11:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C19E3B2B2B
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 11:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhFXJDy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 05:03:54 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58726 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229889AbhFXJDv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Jun 2021 05:03:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9283C613BE;
-        Thu, 24 Jun 2021 09:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624525292;
-        bh=YnyWkWEizzBW+4L6vyTdV/hlaYvEAtpeYkBydMQ2mow=;
-        h=Date:From:To:Cc:Subject:From;
-        b=aQwL/UrAMMlnmYoIM+R5MOrDefVKmYZm/yxt9D8zGy5sUDzyDVtb3TdNzXSjgvRMj
-         djKQmw5pwgYL9fZi0I266mgA/Jhm3s8qsb5+/cvflZx3N4hZP9j7y84v0vXE/HYorV
-         heTSRcxGg9xCZdI2HO7qWQlxVNnCvuFOCMoJcYgwQrsotfywVvH9fF1ZdAVjFb8dPq
-         PMKdp1NerfmZ91nbQC38JPNV0MJKUgU30x90awHGZkS5DtLgm9DF5RmCFqcoszyRr+
-         zaAsUbaaDLM+m5jmaMxhfOvjWvDMs6G9tRseAJXOj23d7HB8Js0mf/W4uSUU+HBzQa
-         D38fo3WJG/urQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lwLEq-0006iJ-OO; Thu, 24 Jun 2021 11:01:32 +0200
-Date:   Thu, 24 Jun 2021 11:01:32 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 5.14-rc1
-Message-ID: <YNRJ7D7kVwaLWXe5@hovoldconsulting.com>
+        id S231446AbhFXJQL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 05:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231424AbhFXJQK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 05:16:10 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA16C061574;
+        Thu, 24 Jun 2021 02:13:52 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id B5ED6C63B7; Thu, 24 Jun 2021 10:13:49 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1624526029; bh=KUgP+ME1MWJ7e04FwEMW140Cs6G9wwty/yFb8PwlM1Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o7VZ2d4qH4zCommCiqd1vL8NzbZm4wfNbNtvmuQQIhRvcQQCvlqKDwlNhbhdeY1ZZ
+         f+Fr5Hz4pwHYWTX8FAAK38Rn6x/w8e0l/KfsvtQjIA3HLU7gCx4IxKJCJ+Bw288G92
+         NViV/OQbeMpb0y7GTrLxfp0FHfeRNhtDwFdFkWUQ5MymW02wnvofkxCBmcsgAiJ/cY
+         kV+fDaP6948g7NUb3rIqDD/uUhbdTO0HmxN6BEGUZKdTpXZCu6ePDxFnngUixFQo9D
+         wMWkA3s+FOpwQcevTnMmFcDj+cd3pVbGXT+JCnD5013rztwXP9Wty8HMV5oeIWNDD/
+         FDLeBVO2IrGHA==
+Date:   Thu, 24 Jun 2021 10:13:49 +0100
+From:   Sean Young <sean@mess.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <20210624091349.GA7476@gofer.mess.org>
+References: <cover.1620304986.git.sean@mess.org>
+ <YJjrkhfN9Sgq6UX8@hovoldconsulting.com>
+ <20210511103219.GA13769@gofer.mess.org>
+ <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
+ <20210515092226.GA31801@gofer.mess.org>
+ <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
+ <20210517103522.GA4644@gofer.mess.org>
+ <YKZktqzkddh3amqX@hovoldconsulting.com>
+ <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
+ <YNMyvCaZUIDOnSc9@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YNMyvCaZUIDOnSc9@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+On Wed, Jun 23, 2021 at 03:10:20PM +0200, Johan Hovold wrote:
+> Sorry about the late reply on this one too.
+> 
+> On Tue, May 25, 2021 at 02:25:49PM +0200, Oliver Neukum wrote:
+> > Am Donnerstag, den 20.05.2021, 15:31 +0200 schrieb Johan Hovold:
+> 
+> > > Isn't that already handled by lircd using uinput?
+> > 
+> > The problem with that reasoning, though it is true, is
+> > 
+> > 1) We would need to remove a lot of subsystems if we took that
+> > to the logical conclusion. 
+> 
+> Removing code is always nice. ;)
 
-Here are the USB serial updates for 5.14-rc1.
+So rather than adding hotplug to serdev, we should remove line-discipline,
+serdev, and serio and all its drivers from the kernel? This is taking
+your own argument and applying it your code.
 
-Note that you'll get a merge conflict in cp210x between 
+> > 2) It makes runtime PM much harder
+> 
+> Possibly, depends on the bus and device.
+> 
+> > 3) We end up with two classes of LIRC devices
+> 
+> We already do, right? That's kind of my point since we have lircd
+> supporting uinput.
 
-	6f7ec77cc8b6 ("USB: serial: cp210x: fix alternate function for CP2102N QFN20")
+This is not an either-or situation, lircd is the "old" solution which is
+slowing being supplanted with rc-core. All the new keymaps are rc-core and
+do not work with lircd. The new rc-core tooling (in the v4l-utils package) 
+does not work with lircd. lircd hasn't had any real patches merged for years
+now.
 
-which is already in your tree and
+There is whole new tooling in the works for rc-core which is not compatible
+with lircd.
 
-	8051334e901f ("USB: serial: cp210x: add support for GPIOs on CP2108")
+> > > I hear you, but we still need to have those discussions from time to
+> > > time to make sure our architecture is sane. One of the problems today
+> > > with the kernel development process appears to be that too few
+> > > questions
+> > > are asked. If it builds, ship it...
+> > 
+> > Indeed, so, could we force a line discipline on a device on the kernel
+> > level? Code duplication is bad.
+> 
+> Not sure I understand what you have mind here. serdev is sort of a
+> line-discipline which we'd "force" on a device if there's a matching
+> description in devicetree, while line disciplines always need to be
+> instantiated by user space. Or are you referring to ldisc/serdev code
+> reuse?
 
-This was also reported by Stephen here
+I am pretty sure Oliver is suggesting that all ldisc/serdev code in
+the kernel is duplication of code which can be done in userspace, by your
+own argument.
 
-	https://lore.kernel.org/r/20210617150224.19213166@canb.auug.org.au
+> > > But I think I've got that point across by now.
+> > 
+> > Yes and and we need to think about the conclusion we draw from
+> > that point. It seems to me that an architecture that pushes data
+> > through the whole tty layer into a demon, then through uinput
+> > is definitely not elegant.
+> 
+> The elegant answer is serdev, but it does not yet support the features
+> needed in this case (i.e. hotplugging).
+> 
+> Since we already support user-space drivers for these devices, I see
+> nothing wrong with implementing support for another one in user space
+> unless there are strong reasons against doing so (e.g. performance,
+> pm or usability). But if uinput works then great, we're done.
 
-and the resolution should be straight forward.
+As discussed lircd has terrible latency, and lircd is out of date and
+unmaintained and does not work with modern tooling and keymaps.
 
-Let me know if you prefer I pull in Linus's rc:s like you do to resolve any
-issues like this in the future.
+Also essentially your saying that any input device that connects to a
+serial port should be done in user space. There are a ton of kernel
+drivers doing exactly that, and that is why serio exists in the first
+place.
 
-Johan
 
-
-
-The following changes since commit d07f6ca923ea0927a1024dfccafc5b53b61cfecc:
-
-  Linux 5.13-rc2 (2021-05-16 15:27:44 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.14-rc1
-
-for you to fetch changes up to 8051334e901f2f7ab9fa30a15b74cdc8e58dfde2:
-
-  USB: serial: cp210x: add support for GPIOs on CP2108 (2021-06-16 17:40:01 +0200)
-
-----------------------------------------------------------------
-USB-serial updates for 5.14-rc1
-
-Here are the USB-serial updates for 5.14-rc1, including:
-
- - gpio support for CP2108
- - chars_in_buffer and write_room return-value updates
- - chars_in_buffer and write_room clean ups
-
-Included are also various clean ups.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Jiri Slaby (2):
-      USB: serial: make usb_serial_driver::write_room return uint
-      USB: serial: make usb_serial_driver::chars_in_buffer return uint
-
-Johan Hovold (6):
-      USB: serial: digi_acceleport: reduce chars_in_buffer over-reporting
-      USB: serial: digi_acceleport: add chars_in_buffer locking
-      USB: serial: io_edgeport: drop buffer-callback sanity checks
-      USB: serial: mos7720: drop buffer-callback sanity checks
-      USB: serial: mos7840: drop buffer-callback return-value comments
-      USB: serial: drop irq-flags initialisations
-
-Pho Tran (1):
-      USB: serial: cp210x: add support for GPIOs on CP2108
-
- drivers/usb/serial/cp210x.c           | 189 ++++++++++++++++++++++++++++++----
- drivers/usb/serial/cyberjack.c        |   4 +-
- drivers/usb/serial/cypress_m8.c       |  16 +--
- drivers/usb/serial/digi_acceleport.c  |  46 ++++-----
- drivers/usb/serial/garmin_gps.c       |   2 +-
- drivers/usb/serial/generic.c          |  12 +--
- drivers/usb/serial/io_edgeport.c      |  39 ++-----
- drivers/usb/serial/io_ti.c            |  12 +--
- drivers/usb/serial/ir-usb.c           |   6 +-
- drivers/usb/serial/keyspan.c          |   4 +-
- drivers/usb/serial/kobil_sct.c        |   4 +-
- drivers/usb/serial/metro-usb.c        |  12 +--
- drivers/usb/serial/mos7720.c          |  29 ++----
- drivers/usb/serial/mos7840.c          |  17 ++-
- drivers/usb/serial/opticon.c          |   6 +-
- drivers/usb/serial/oti6858.c          |  12 +--
- drivers/usb/serial/quatech2.c         |   6 +-
- drivers/usb/serial/sierra.c           |   8 +-
- drivers/usb/serial/ti_usb_3410_5052.c |  16 +--
- drivers/usb/serial/usb-wwan.h         |   4 +-
- drivers/usb/serial/usb_wwan.c         |  12 +--
- include/linux/usb/serial.h            |   8 +-
- 22 files changed, 286 insertions(+), 178 deletions(-)
+Sean
