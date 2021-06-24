@@ -2,80 +2,134 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1E813B281E
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 09:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEEC73B289F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 09:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbhFXHE3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 03:04:29 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:43304 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229454AbhFXHE2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 03:04:28 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost1.synopsys.com [10.225.0.209])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E2ABBC0B39;
-        Thu, 24 Jun 2021 07:02:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1624518130; bh=3IaNpKsXs8zGMv44mhIIHI2F9/SqWHCi+gnKaoegfHw=;
-        h=Date:From:Subject:To:Cc:From;
-        b=gOJ3HmjiCxpf8YsEM06vqAoRXmwOVNWW09UyGVNubW1zLd9uovlBUUsyziZxMV5cO
-         k8NIXX+lVk+rPAkGaOn6hhCjySFRKb4HOgsxSp3gW4gLsLhosMQhVhjhib1LzsIvVh
-         bDpxgzBA1/tjy7yIUO3gYha4sKsmPZRuJ7xJflgJ4XwGgOY4jGO8EFbzacNH8ehL24
-         UNxxheucBLsm55gRfbRtDROzWuT2aXZAM1ZQ1XpTuK+RZp4+GDYdK7YjbPgnelVDpL
-         udxmzbq9tXUEQP6M839DEv36TCYLKbBfRjQnu2mKmQuSjwwC1GhTq4USpsVuQnk+G9
-         ITy3HjCnj15SQ==
-Received: from Armenia_lab (armenia_lab.internal.synopsys.com [10.116.75.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id D6BA7A005C;
-        Thu, 24 Jun 2021 07:02:06 +0000 (UTC)
-Received: by Armenia_lab (sSMTP sendmail emulation); Thu, 24 Jun 2021 00:02:05 -0700
-Date:   Thu, 24 Jun 2021 00:02:05 -0700
-Message-Id: <84d3432b0331ea5f612eb10ad1c03ba89cc4d5a2.1624517653.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH] usb: dwc2: gadget: Fix sending zero length packet in DDMA mode.
-To:     linux-usb@vger.kernel.org
-Cc:     John.Youn@synopsys.com, balbi@kernel.org, yousaf.kaukab@intel.com
+        id S231633AbhFXHbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 03:31:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45918 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231630AbhFXHbT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 03:31:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BB806023B;
+        Thu, 24 Jun 2021 07:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624519741;
+        bh=QvbfkFPqbdVYI2vQ6XJWPcJ3DP/t0747GD4/aq152Ds=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NQPdZDQNFuGEbjdQjMpBp52gSF8RYN7JkDmaNLFSgITt0rc4oe86gnuIyz8RUXi24
+         dLdbOCvL8mAeu68VSWfHTxEfQiAfYlnQQqDQk13waEQp48C4h6BSDIzQctpYFec4JM
+         Ays/+XtWg6B7eO0nx7Lndk6zUFa2et7+/YxSIVKIo1cBhT6+gx6LvPPmEpTJgNcf8F
+         bebRFbhPHbkyfHNzPx2BMD8xWoMrW+pPeINVixvQwB3G+pPB2b+IliMmHbXYrLNLXa
+         1jlVu/Fe/RDOpjM/4i98s2UCwZo1VZmv6ihpxWw28TSJgV5GMqKd6/a5ec2rCuE9Ai
+         l2ZUQ9CyDp2Zw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lwJnH-0005cY-BJ; Thu, 24 Jun 2021 09:29:00 +0200
+Date:   Thu, 24 Jun 2021 09:28:59 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Stefan =?utf-8?B?QnLDvG5z?= <stefan.bruens@rwth-aachen.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniele Palmas <dnlplm@gmail.com>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based Sierra
+ Wireless 5G modules
+Message-ID: <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
+ <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sending zero length packet in DDMA mode perform by DMA descriptor
-by setting SP (short packet) flag.
+[ +CC: Daniele and Bjørn ]
 
-For DDMA in function dwc2_hsotg_complete_in() does not need to send
-zlp.
+On Fri, Jun 11, 2021 at 03:58:41PM +0200, Stefan Brüns wrote:
+> The devices exposes two different interface compositions:
+> - QDL mode, single interface
+> - MBIM mode, MBIM class compliant plus AT/DM(/ADB)
+> 
+> Current firmware versions (up to 01.07.19) do not expose an NMEA port.
 
-Tested by USBCV MSC tests.
+We already have at least one SDX55 based modem (FN980) supported by the
+option driver. Any particular reason why you chose to add it to qcserial
+instead of option?
 
-Fixes: f71b5e2533de ("usb: dwc2: gadget: fix zero length packet transfers")
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- drivers/usb/dwc2/gadget.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Note that the FN980 also needs the ZLP flag set in QDL (flashing) mode,
+I'd assume this one needs it too.
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index c581ee41ac81..f467db1747d6 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -2749,9 +2749,11 @@ static void dwc2_hsotg_complete_in(struct dwc2_hsotg *hsotg,
- 		return;
- 	}
- 
--	/* Zlp for all endpoints, for ep0 only in DATA IN stage */
-+	/* Zlp for all endpoints in non_DDMA, for ep0 only in DATA IN stage */
- 	if (hs_ep->send_zlp) {
--		dwc2_hsotg_program_zlp(hsotg, hs_ep);
-+		if (!using_desc_dma(hsotg))
-+			dwc2_hsotg_program_zlp(hsotg, hs_ep);
-+
- 		hs_ep->send_zlp = 0;
- 		/* transfer will be completed on next complete interrupt */
- 		return;
+Could you please also post the output of usb-devices (or lsusb -v) for
+this device in MBIM mode?
 
-base-commit: 00a738b86ec0c88ad4745f658966f951cbe4c885
--- 
-2.11.0
+> Signed-off-by: Stefan Brüns <stefan.bruens@rwth-aachen.de>
+> ---
+>  drivers/usb/serial/qcserial.c | 29 +++++++++++++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 83da8236e3c8..4ff325a14c98 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -26,12 +26,15 @@ enum qcserial_layouts {
+>  	QCSERIAL_G1K = 1,	/* Gobi 1000 */
+>  	QCSERIAL_SWI = 2,	/* Sierra Wireless */
+>  	QCSERIAL_HWI = 3,	/* Huawei */
+> +	QCSERIAL_SWI2 = 4,	/* Sierra Wireless */
+>  };
+>  
+>  #define DEVICE_G1K(v, p) \
+>  	USB_DEVICE(v, p), .driver_info = QCSERIAL_G1K
+>  #define DEVICE_SWI(v, p) \
+>  	USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI
+> +#define DEVICE_SWI2(v, p) \
+> +	USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI2
+>  #define DEVICE_HWI(v, p) \
+>  	USB_DEVICE(v, p), .driver_info = QCSERIAL_HWI
+>  
+> @@ -181,6 +184,10 @@ static const struct usb_device_id id_table[] = {
+>  	{DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
+>  	{DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
+>  
+> +	/* SDX55 based Sierra Wireless devices */
+> +	{DEVICE_SWI2(0x1199, 0x90d2)},	/* Sierra Wireless EM919x QDL */
+> +	{DEVICE_SWI2(0x1199, 0x90d3)},	/* Sierra Wireless EM919x */
+> +
+>  	/* Huawei devices */
+>  	{DEVICE_HWI(0x03f0, 0x581d)},	/* HP lt4112 LTE/HSPA+ Gobi 4G Modem (Huawei me906e) */
+>  
+> @@ -359,6 +366,28 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
+>  			break;
+>  		}
+>  		break;
+> +	case QCSERIAL_SWI2:
+> +		/*
+> +		 * Sierra Wireless SDX55 in MBIM mode:
+> +		 * 0/1: MBIM Control/Data
+> +		 * 3: AT-capable modem port
+> +		 * 4: DM/DIAG (use libqcdm from ModemManager for communication)
+> +		 * 5: ADB
+> +		 */
+> +		switch (ifnum) {
+> +		case 3:
+> +			dev_dbg(dev, "Modem port found\n");
+> +			sendsetup = true;
+> +			break;
+> +		case 4:
+> +			dev_dbg(dev, "DM/DIAG interface found\n");
+> +			break;
+> +		default:
+> +			/* don't claim any unsupported interface */
+> +			altsetting = -1;
+> +			break;
+> +		}
+> +		break;
+>  	case QCSERIAL_HWI:
+>  		/*
+>  		 * Huawei devices map functions by subclass + protocol
 
+Johan
