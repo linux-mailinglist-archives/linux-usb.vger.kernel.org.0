@@ -2,88 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0903E3B2709
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 07:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302303B272F
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 08:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbhFXF4Y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 01:56:24 -0400
-Received: from www.zeus03.de ([194.117.254.33]:45500 "EHLO mail.zeus03.de"
+        id S230464AbhFXGMj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 02:12:39 -0400
+Received: from mga18.intel.com ([134.134.136.126]:34971 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230298AbhFXF4X (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Jun 2021 01:56:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=n67uatpfXLyIHHV1EPlcxgPblzft
-        RI+gNuElRxsC2yU=; b=cUwHMPxg75kA9h22EEqUvjhfYHFHAN9lH87J/RH5YL26
-        3+4YrGUc+tk+LbpQT3KJcd+OgLxjZKve51qCycNj0lcSdbesFQFwKPWlseLgR5D0
-        6CJbhRGWPFl9lvlN8GuZzPv9YvXNj3blwiybH4IrXv+xcQBhp1V7+K5mh2m0kfo=
-Received: (qmail 2848297 invoked from network); 24 Jun 2021 07:54:02 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 24 Jun 2021 07:54:02 +0200
-X-UD-Smtp-Session: l3s3148p1@WDY7pnzFns4gAwDPXwgVAAQm652OYQ07
-Date:   Thu, 24 Jun 2021 07:53:58 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH RFC] usb: renesas_usbhs: fifo: : use proper DMAENGINE API
- for termination
-Message-ID: <YNQd9hS+hqPYvLNp@kunai>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20210623100304.3697-1-wsa+renesas@sang-engineering.com>
- <TY2PR01MB3692C7B6E0FD027B5C3E05B5D8079@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+        id S230257AbhFXGMi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 02:12:38 -0400
+IronPort-SDR: AqCD/jl9+mAza7ovppDp3LtsUGXuMr6trTLDXSwA+wErlyjAacD91/Ao2tclqIkwMNrpRVreZo
+ 7UY3qRtmRUUQ==
+X-IronPort-AV: E=McAfee;i="6200,9189,10024"; a="194704341"
+X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
+   d="scan'208";a="194704341"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2021 23:10:20 -0700
+IronPort-SDR: 3heOI5PpuXAKMihCVArKaG223AGkFF4teY9GgZKbNfERvMEDgMZla31qHhb906ESHa/+EmVixs
+ nQ7Kjq7PHW2w==
+X-IronPort-AV: E=Sophos;i="5.83,295,1616482800"; 
+   d="scan'208";a="423958862"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2021 23:10:17 -0700
+Received: by lahna (sSMTP sendmail emulation); Thu, 24 Jun 2021 09:10:13 +0300
+Date:   Thu, 24 Jun 2021 09:10:13 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     linux-usb@vger.kernel.org
+Cc:     Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: Thunderbolt/USB4 maintenance on vacation 25.6 - 23.7.2021
+Message-ID: <YNQhxXRCztlFVVR7@lahna>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gb/GYRUtYYZSy6bC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <TY2PR01MB3692C7B6E0FD027B5C3E05B5D8079@TY2PR01MB3692.jpnprd01.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi all,
 
---gb/GYRUtYYZSy6bC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I will be on vacation starting from tomorrow. Most of the time I don't
+have access to email so expect delays. I will be picking up patches that
+were sent during my vacation once I'm back.
 
-Hi Shimoda-san,
-
-> In backporting point of view, I guess it's better to apply my fixed patch at first,
-> and then apply this DMAENGINE patch. But, what do you think?
-
-Yes, I agree. Could you kindly notify me when your patch is accepted
-upstream? Or CC me on your patch?
-
-Thank you and kind regards,
-
-   Wolfram
-
-
---gb/GYRUtYYZSy6bC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmDUHfEACgkQFA3kzBSg
-KbYHZA/8DALuavEWfJkui0rm56H2wrwUwiegsSfvfGZrlpRuW36i71US4mr0GZKn
-NbeekEeDpygQK0n5zZwZFzg8gNMaHOvCaaWy+BFxvY90l2PlnXiDLgpFd7e93DPe
-ZfpxzM4uohYPzLjeQNy+hsDp/Kj8BJV3ZXCzaBHL0qnCcTrBb/EbKfo0pcCVR6aG
-y0MiD9WZpk+gwbKpGWja5HcAF9M39e+9yRgv1TZIZ/K/oXDcELm4MXRqT54vNFE4
-s5Exg1OXEi7JlMVj8LYRGU/aZwD6dCXKD/OjefD90olP513pTKLS/q9UayyUVApO
-FBDPQn8QqurgDg+qPBo9q4Yx4h0uXI/RLVgdOwvnJTHEunR2TWV9EyO7sxMnIFH+
-m7XnJbVwGwIrwCCk39bGcyaPHahoBVNif/FWDfkuN/EJ013CLDnvtyUkdd9Pl8/1
-CXAFoFnYD3EaEjODq6DMjnGJv962faHjs9W/HWzcauYG44Q95tdki7Hu6N4AMYJV
-JfV42nw92+IHEkCnjusI0r274FjEf01oYWwOza+qwHfVuJ2n2HThKsF445OXDCMa
-WXqpyAOimXPRjzfEotc4yeG1c2sxyVKfaUVEt02fTzOgGCdPSxNWqHVrGm8Bc22A
-NczoQmr5rL2UF59LEdXYAaotglS7wFhFrTcOUj07XveE6e4hYuY=
-=0bFP
------END PGP SIGNATURE-----
-
---gb/GYRUtYYZSy6bC--
+Thanks!
