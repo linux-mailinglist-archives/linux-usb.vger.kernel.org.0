@@ -2,134 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEC73B289F
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 09:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8933F3B2963
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 09:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbhFXHbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 03:31:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45918 "EHLO mail.kernel.org"
+        id S231663AbhFXHhm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 03:37:42 -0400
+Received: from out0.migadu.com ([94.23.1.103]:25753 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231630AbhFXHbT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Jun 2021 03:31:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2BB806023B;
-        Thu, 24 Jun 2021 07:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1624519741;
-        bh=QvbfkFPqbdVYI2vQ6XJWPcJ3DP/t0747GD4/aq152Ds=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NQPdZDQNFuGEbjdQjMpBp52gSF8RYN7JkDmaNLFSgITt0rc4oe86gnuIyz8RUXi24
-         dLdbOCvL8mAeu68VSWfHTxEfQiAfYlnQQqDQk13waEQp48C4h6BSDIzQctpYFec4JM
-         Ays/+XtWg6B7eO0nx7Lndk6zUFa2et7+/YxSIVKIo1cBhT6+gx6LvPPmEpTJgNcf8F
-         bebRFbhPHbkyfHNzPx2BMD8xWoMrW+pPeINVixvQwB3G+pPB2b+IliMmHbXYrLNLXa
-         1jlVu/Fe/RDOpjM/4i98s2UCwZo1VZmv6ihpxWw28TSJgV5GMqKd6/a5ec2rCuE9Ai
-         l2ZUQ9CyDp2Zw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lwJnH-0005cY-BJ; Thu, 24 Jun 2021 09:29:00 +0200
-Date:   Thu, 24 Jun 2021 09:28:59 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Stefan =?utf-8?B?QnLDvG5z?= <stefan.bruens@rwth-aachen.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Daniele Palmas <dnlplm@gmail.com>,
-        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
-Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based Sierra
- Wireless 5G modules
-Message-ID: <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
-References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
- <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
+        id S231638AbhFXHhl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 24 Jun 2021 03:37:41 -0400
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1624520121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=WtRNll+ZJ6pXyBsiyWqUKQEx5bX3swnM8hdPj0hfXss=;
+        b=lErlhr+TcTRagg7IABfZGUyPVw+Qi/P5cwBaUzq1w8Ct35xluH5GLEl/L/VU8ixUjWmUoO
+        FLOcvBhaT2rDq9At38K8HWD+vtbm7khOA0nX+S8F+owBg8VTu9MtkuPEy2DUU5DafNysS8
+        vUu5tFCcXAPHhghkdQKONVnYMMXhN9M=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     oneukum@suse.com, davem@davemloft.net, kuba@kernel.org
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] usbnet: add usbnet_event_names[] for kevent
+Date:   Thu, 24 Jun 2021 15:35:08 +0800
+Message-Id: <20210624073508.10094-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: yajun.deng@linux.dev
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[ +CC: Daniele and Bjørn ]
+Modify the netdev_dbg content from int to char * in usbnet_defer_kevent(),
+this looks more readable.
 
-On Fri, Jun 11, 2021 at 03:58:41PM +0200, Stefan Brüns wrote:
-> The devices exposes two different interface compositions:
-> - QDL mode, single interface
-> - MBIM mode, MBIM class compliant plus AT/DM(/ADB)
-> 
-> Current firmware versions (up to 01.07.19) do not expose an NMEA port.
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ drivers/net/usb/usbnet.c | 21 +++++++++++++++++++--
+ 1 file changed, 19 insertions(+), 2 deletions(-)
 
-We already have at least one SDX55 based modem (FN980) supported by the
-option driver. Any particular reason why you chose to add it to qcserial
-instead of option?
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 57a5a025255c..264b5048d0fb 100644
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -74,6 +74,23 @@ MODULE_PARM_DESC (msg_level, "Override default message level");
+ 
+ /*-------------------------------------------------------------------------*/
+ 
++static const char * const usbnet_event_names[] = {
++	[EVENT_TX_HALT]		   = "EVENT_TX_HALT",
++	[EVENT_RX_HALT]		   = "EVENT_RX_HALT",
++	[EVENT_RX_MEMORY]	   = "EVENT_RX_MEMORY",
++	[EVENT_STS_SPLIT]	   = "EVENT_STS_SPLIT",
++	[EVENT_LINK_RESET]	   = "EVENT_LINK_RESET",
++	[EVENT_RX_PAUSED]	   = "EVENT_RX_PAUSED",
++	[EVENT_DEV_ASLEEP]	   = "EVENT_DEV_ASLEEP",
++	[EVENT_DEV_OPEN]	   = "EVENT_DEV_OPEN",
++	[EVENT_DEVICE_REPORT_IDLE] = "EVENT_DEVICE_REPORT_IDLE",
++	[EVENT_NO_RUNTIME_PM]	   = "EVENT_NO_RUNTIME_PM",
++	[EVENT_RX_KILL]		   = "EVENT_RX_KILL",
++	[EVENT_LINK_CHANGE]	   = "EVENT_LINK_CHANGE",
++	[EVENT_SET_RX_MODE]	   = "EVENT_SET_RX_MODE",
++	[EVENT_NO_IP_ALIGN]	   = "EVENT_NO_IP_ALIGN",
++};
++
+ /* handles CDC Ethernet and many other network "bulk data" interfaces */
+ int usbnet_get_endpoints(struct usbnet *dev, struct usb_interface *intf)
+ {
+@@ -452,9 +469,9 @@ void usbnet_defer_kevent (struct usbnet *dev, int work)
+ {
+ 	set_bit (work, &dev->flags);
+ 	if (!schedule_work (&dev->kevent))
+-		netdev_dbg(dev->net, "kevent %d may have been dropped\n", work);
++		netdev_dbg(dev->net, "kevent %s may have been dropped\n", usbnet_event_names[work]);
+ 	else
+-		netdev_dbg(dev->net, "kevent %d scheduled\n", work);
++		netdev_dbg(dev->net, "kevent %s scheduled\n", usbnet_event_names[work]);
+ }
+ EXPORT_SYMBOL_GPL(usbnet_defer_kevent);
+ 
+-- 
+2.32.0
 
-Note that the FN980 also needs the ZLP flag set in QDL (flashing) mode,
-I'd assume this one needs it too.
-
-Could you please also post the output of usb-devices (or lsusb -v) for
-this device in MBIM mode?
-
-> Signed-off-by: Stefan Brüns <stefan.bruens@rwth-aachen.de>
-> ---
->  drivers/usb/serial/qcserial.c | 29 +++++++++++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-> index 83da8236e3c8..4ff325a14c98 100644
-> --- a/drivers/usb/serial/qcserial.c
-> +++ b/drivers/usb/serial/qcserial.c
-> @@ -26,12 +26,15 @@ enum qcserial_layouts {
->  	QCSERIAL_G1K = 1,	/* Gobi 1000 */
->  	QCSERIAL_SWI = 2,	/* Sierra Wireless */
->  	QCSERIAL_HWI = 3,	/* Huawei */
-> +	QCSERIAL_SWI2 = 4,	/* Sierra Wireless */
->  };
->  
->  #define DEVICE_G1K(v, p) \
->  	USB_DEVICE(v, p), .driver_info = QCSERIAL_G1K
->  #define DEVICE_SWI(v, p) \
->  	USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI
-> +#define DEVICE_SWI2(v, p) \
-> +	USB_DEVICE(v, p), .driver_info = QCSERIAL_SWI2
->  #define DEVICE_HWI(v, p) \
->  	USB_DEVICE(v, p), .driver_info = QCSERIAL_HWI
->  
-> @@ -181,6 +184,10 @@ static const struct usb_device_id id_table[] = {
->  	{DEVICE_SWI(0x413c, 0x81d1)},   /* Dell Wireless 5818 */
->  	{DEVICE_SWI(0x413c, 0x81d2)},   /* Dell Wireless 5818 */
->  
-> +	/* SDX55 based Sierra Wireless devices */
-> +	{DEVICE_SWI2(0x1199, 0x90d2)},	/* Sierra Wireless EM919x QDL */
-> +	{DEVICE_SWI2(0x1199, 0x90d3)},	/* Sierra Wireless EM919x */
-> +
->  	/* Huawei devices */
->  	{DEVICE_HWI(0x03f0, 0x581d)},	/* HP lt4112 LTE/HSPA+ Gobi 4G Modem (Huawei me906e) */
->  
-> @@ -359,6 +366,28 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
->  			break;
->  		}
->  		break;
-> +	case QCSERIAL_SWI2:
-> +		/*
-> +		 * Sierra Wireless SDX55 in MBIM mode:
-> +		 * 0/1: MBIM Control/Data
-> +		 * 3: AT-capable modem port
-> +		 * 4: DM/DIAG (use libqcdm from ModemManager for communication)
-> +		 * 5: ADB
-> +		 */
-> +		switch (ifnum) {
-> +		case 3:
-> +			dev_dbg(dev, "Modem port found\n");
-> +			sendsetup = true;
-> +			break;
-> +		case 4:
-> +			dev_dbg(dev, "DM/DIAG interface found\n");
-> +			break;
-> +		default:
-> +			/* don't claim any unsupported interface */
-> +			altsetting = -1;
-> +			break;
-> +		}
-> +		break;
->  	case QCSERIAL_HWI:
->  		/*
->  		 * Huawei devices map functions by subclass + protocol
-
-Johan
