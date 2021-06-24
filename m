@@ -2,83 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A56B33B2D70
-	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 13:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE513B2D93
+	for <lists+linux-usb@lfdr.de>; Thu, 24 Jun 2021 13:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232398AbhFXLQW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 07:16:22 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:55376 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232378AbhFXLQU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 07:16:20 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A97C9C0B4B;
-        Thu, 24 Jun 2021 11:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1624533241; bh=xmXIzEkmMzhx4lN0IwEcUbjcj8OiuoyfF8HOLYNDzE0=;
-        h=Date:From:Subject:To:Cc:From;
-        b=O6S/UVj1v8msDQ1qqYQ4vQDmiICF0fOimablru+y0kV736ldugppXtJIhXYYYXaHN
-         4N785hP0LeHVTsXaXsjDmehSc3W9onfmtzkQlfLDj0+FTg54oaB122Gx1+v9YId8VT
-         GOEDSch/nBxcrJjCXsLIjR9fSXB6EbzO5CnmsW1cdCK3nXpK67pDRd4+BEkD3XQRko
-         dt6QYgkO6jCi9BWOhDjwg3ycsc9DSITwdqMCVsPgQxINlnV4r3oA0f82g/Ww80G3Zh
-         Hj9XG2OIYBvGkdfJIQpiiBhpDsT0FFbj8YCljqaN1i19RfK0MQRQSSzlH59sP6qCZ9
-         nva61IJYyBltw==
-Received: from Armenia_lab (armenia_lab.internal.synopsys.com [10.116.75.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id A2F12A005E;
-        Thu, 24 Jun 2021 11:13:57 +0000 (UTC)
-Received: by Armenia_lab (sSMTP sendmail emulation); Thu, 24 Jun 2021 04:13:56 -0700
-Date:   Thu, 24 Jun 2021 04:13:56 -0700
-Message-Id: <7de9dbf515b15464f8f6db3bab76123c950597d7.1624533048.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: gadget: Fix sending zero length packet in DDMA mode.
-To:     linux-usb@vger.kernel.org
-Cc:     John.Youn@synopsys.com, balbi@kernel.org, yousaf.kaukab@intel.com
+        id S232478AbhFXLRs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 07:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232456AbhFXLRl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 07:17:41 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA249C061767;
+        Thu, 24 Jun 2021 04:15:22 -0700 (PDT)
+Received: from miraculix.mork.no ([IPv6:2a01:79d:469a:7994:53d7:1944:55a:91c0])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 15OBFDT7018095
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Thu, 24 Jun 2021 13:15:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1624533313; bh=5b6YZR358Wi3JQ4ZkLcOC7UPJZD+b3tWEuj0//aMkNs=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=O0PHfPOg0NEtLdTjAcRzOnviAPE6+Qp8ZQG+7BMcaB0PpbYu6dhN1sOyWlXiVWq6x
+         s1FJiPCPYJR74dn4yRqaSjW7FfcpHR5e1Ot4ChS6M8Cfr1gaH4S8K8/SvJzOKgZ27K
+         LSOp2TFqutnCyqCmGVhBnxodi2qpBiw1HZPncFfA=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1lwNK7-001FQQ-Ut; Thu, 24 Jun 2021 13:15:07 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Stefan =?utf-8?Q?Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniele Palmas <dnlplm@gmail.com>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based
+ Sierra Wireless 5G modules
+Organization: m
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
+        <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
+        <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
+Date:   Thu, 24 Jun 2021 13:15:07 +0200
+In-Reply-To: <YNQ0O0vhtpStp0n/@hovoldconsulting.com> (Johan Hovold's message
+        of "Thu, 24 Jun 2021 09:28:59 +0200")
+Message-ID: <87tulnms3o.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.2 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Sending zero length packet in DDMA mode perform by DMA descriptor
-by setting SP (short packet) flag.
+Johan Hovold <johan@kernel.org> writes:
 
-For DDMA in function dwc2_hsotg_complete_in() does not need to send
-zlp.
+> Could you please also post the output of usb-devices (or lsusb -v) for
+> this device in MBIM mode?
 
-Tested by USBCV MSC tests.
+Yes, this would be nice to have.
 
-Fixes: f71b5e2533de ("usb: dwc2: gadget: fix zero length packet transfers")
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- Changes in v2:
- - Minor typo correction in comments
+I suspect that this device is like other SDX55 devices we've seen, using
+class/subclass/function to map the vendor specific functions
+too. Dropping static interface numbers.  If correct, then the patch is
+bogus and the interface numbers might change based on firmware version
+and configuration.
 
- drivers/usb/dwc2/gadget.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index c581ee41ac81..bf456b4e191f 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -2749,9 +2749,11 @@ static void dwc2_hsotg_complete_in(struct dwc2_hsotg *hsotg,
- 		return;
- 	}
- 
--	/* Zlp for all endpoints, for ep0 only in DATA IN stage */
-+	/* Zlp for all endpoints in non DDMA, for ep0 only in DATA IN stage */
- 	if (hs_ep->send_zlp) {
--		dwc2_hsotg_program_zlp(hsotg, hs_ep);
-+		if (!using_desc_dma(hsotg))
-+			dwc2_hsotg_program_zlp(hsotg, hs_ep);
-+
- 		hs_ep->send_zlp = 0;
- 		/* transfer will be completed on next complete interrupt */
- 		return;
-
-base-commit: 00a738b86ec0c88ad4745f658966f951cbe4c885
--- 
-2.11.0
-
+Bj=C3=B8rn
