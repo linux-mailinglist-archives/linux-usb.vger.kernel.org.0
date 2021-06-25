@@ -2,111 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A827D3B3B7A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 06:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3F83B3BB6
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 06:39:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhFYEZi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Jun 2021 00:25:38 -0400
-Received: from mx0a-0014ca01.pphosted.com ([208.84.65.235]:7414 "EHLO
-        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229458AbhFYEZh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 00:25:37 -0400
-Received: from pps.filterd (m0042385.ppops.net [127.0.0.1])
-        by mx0a-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15P46mpn009673;
-        Thu, 24 Jun 2021 21:23:14 -0700
+        id S230173AbhFYEli (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Jun 2021 00:41:38 -0400
+Received: from mx0b-0014ca01.pphosted.com ([208.86.201.193]:41826 "EHLO
+        mx0a-0014ca01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S229458AbhFYEli (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 00:41:38 -0400
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+        by mx0b-0014ca01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 15P4Xpor031067;
+        Thu, 24 Jun 2021 21:39:16 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=from : to : cc :
  subject : date : message-id : references : in-reply-to : content-type :
  content-transfer-encoding : mime-version; s=proofpoint;
- bh=8b7vwy6koBzZFcslHpN1km4JEY56oKLuuq3l7DW4XBI=;
- b=QzI34kvoS3V0vnXl+TERIzcYt22peAFnW1yedJxfiqR7qR+8MSC2AhfrkH1hyN22LKKy
- FeO5MuLEMbyWt0x2dllSl7KHErLdzPl/9LeDFmWBaP9bpirjLhEviYSn0S5szL9MqVGE
- otZ14vkQ4gGlizj396bMRRfT/kyJ3XvfPGo4vLWc7ROSNm+r0f4BvA/vdFMKzAen9FRV
- t/yu9Im1ZRy7GaoToJBjVjbOONEIsllobZwmZpxRr5j0Kl9VCb//zU7OtH2lqnDv7nPY
- Bx0HIVTNiAO0rFpvDJVH4q2FNRpjMvwYfNbegwg9GXLafVhrFg1UCLiGSVHZ9iJuN5oG Yw== 
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
-        by mx0a-0014ca01.pphosted.com with ESMTP id 39d22x1bwm-1
+ bh=JKQRZ1TX6EqOwqJSqQaJW7W/93QtFnQrLd3VULJwuZ0=;
+ b=kf647/LH8rj8VGXShdaGAhjTdk2ncETKoGShHH8dTcFw4/DZZh7X28R9zGSY+XkymB2u
+ 0y7CmQVK9frpFByKQ4iahheJ8z8kTlTSudYioF1MGDQEw0GQf0gHDS0ya/yqFzaKiShO
+ kZmAYrFf5OQrgxUk1Q/bEdem5MYJzZVNLKRy89Z8gwavQUV6UkZFLOezvpINS+vZ/P8/
+ AXmmq7qftcCe34ldSLDkwMVqpMpfOudHyH7Np1ehS6uHxfxdtDQzvzyPue/3pln+pVy8
+ x8kbHNQFzj60KS9TuP3KNJKGwcH8K8yDiuEYG6jC5its8aOe7nuFDrtdhIr78OSb/FJS fQ== 
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2175.outbound.protection.outlook.com [104.47.73.175])
+        by mx0b-0014ca01.pphosted.com with ESMTP id 39d23c1ew0-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Jun 2021 21:23:14 -0700
+        Thu, 24 Jun 2021 21:39:16 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i0FdBStUdERbr8mOLcxEDPNtdo3ljg2MMHb4nIKo1IXdpKXiPWuIl/p1vvtFE78Wz3O44pWOSBUXKphgutCiMwe1iR6haxEgEuURGizzZj7tlsdafXZn7szL1Cod6IUbZJtz9ofAYUYXLv5MqgvxyJcRuC5uYwWYE0dhsbnEMw1gqGh/bEavtxLmYyW1kpYDZ7wrn7CWKk8bES75DLfMjWWcGNjXkPJyun8734KkjhmTvfGlLPJOhZl7tlaOU1m55gjZQs0/ckFs3R99a88jwHg2fq5jOWHpw7vmKEABNT7jq1kHyzu8c6hWbaZq+/pDkBSKA/oOJcwqatGGgdfdiQ==
+ b=HtSfXssBURikQDyBMtxA29dtS7RR+cuwWmncP9WZ1ZoTfe1eDHxH+aLuMw9Mq36M4eBn21b/am16HLGRV5parnFaI2zbq99C+x90PH1JCOg1tCTzsdRxALw3yCSB25oJpKmSxNSDG3wNvJQjH9NogRhCSJHcWCKvTnHrboa8WlQOcA6PpXXMas5fHd+uYJHbPFVmLB35PFw1aVKPW+Eev1W3hxMDDR3Oyaexj9YsZwBpg6m46Ggt5iTboFQz8zHtvpZISiLpb90CR3mfTXO8k9ya77VF7FPgOGJMRpMZpxe96aqjL7TCo7v+X/yhlB73nMozjiNiAKMM08rihTNnZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8b7vwy6koBzZFcslHpN1km4JEY56oKLuuq3l7DW4XBI=;
- b=DLIMXE+9ElZNtYoXe3z89UGwcCZW9wF418o5HqDnaU4+100jq9e9Y8IpDhHG5r3NukOIWhiQvMzh8QBbkBSv3nEdAZkSj8MOgKLq1UDG6ITku21/0Vg18q8Bn78hGs0H+fk6Xquf37dXFDLG3Cd0hjXY4+DMqsqXSx6oKJLM0cknjvhq4jYnV0Zc4EXDek6m2rSFvS0me6tqLYLMJS2Ql3v8Tm8jkCQo0anneeRYV+p2i8ZrJcSQvGFPHtsRw66mgGO86xvAzfRzj86SlquOMHHUQii62WfbeNS/fK+9VcsOzWpQISgr+CIzt8VHsxeOAB1cKtUFEODg7lN7ixq6SA==
+ bh=JKQRZ1TX6EqOwqJSqQaJW7W/93QtFnQrLd3VULJwuZ0=;
+ b=Ze7sx7XFZsZFcGaaXx7jjNzHZEsv03+2MUir8GWo+CcEDkV3H30zTYAATy1toY4kORB/FUPVJlbyG2Qa6VPAgJkS/SvS1mo1J6ijiblXO7LP1h6dcxVMMSOs/M8zdnvmyp3jFXx8vOkaO/RCiPIJsPto3Hk7XjzyVaeaxI6WUKQH/cnQUguMDV1NzM2I9dBRqfWY2V/Ivh/ym4AvHJDyG5YabdBbGRIyXkcTvPYYGmoMtc5ZPJIg+p1h8KFOo6dNb4Kzpd+ZP85ynXJEHVA3uuRealIKWqIdFsoFN/9It61Wk989IKZCu2b6OcvCsp6S2Um/uYIrSHfrnMckmVe2bg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
  dkim=pass header.d=cadence.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8b7vwy6koBzZFcslHpN1km4JEY56oKLuuq3l7DW4XBI=;
- b=kZty8uoQ9KXNbsnL/d2bmymJcz/9q9u2c/JNEGWm2U3ETp+WmXyc6wuxN3YYEgNhmgedsqmY9l9sWDzT5qYGlkQnB/b5J1/rbTLv4m5tEyyO17Pviw4sbXB8JGTMOv2dkOxn/JFhDuEAuUDGdbA7fJae69vWvXrSQLh5YBeo9io=
+ bh=JKQRZ1TX6EqOwqJSqQaJW7W/93QtFnQrLd3VULJwuZ0=;
+ b=OxcUvRiXews3avL6E3NS7CTYqb3w2XiVOmG4R5e7O/dlwQMI4QSuyA+jJocJG0kU90nXH+aqB2/K+Uj+vljLKvg17N10N0XDpXKjIZV77fzfqDzOf19ZENNBKYcH6Yur03qH6C7ESgvP2+HVC9RLtW57JdgTsjszjq+OSEaRLIc=
 Received: from BYAPR07MB5381.namprd07.prod.outlook.com (2603:10b6:a03:6d::24)
- by SJ0PR07MB8662.namprd07.prod.outlook.com (2603:10b6:a03:374::21) with
+ by SJ0PR07MB8726.namprd07.prod.outlook.com (2603:10b6:a03:377::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4264.18; Fri, 25 Jun
- 2021 04:23:09 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4242.21; Fri, 25 Jun
+ 2021 04:39:13 +0000
 Received: from BYAPR07MB5381.namprd07.prod.outlook.com
  ([fe80::21a3:4648:fcda:e438]) by BYAPR07MB5381.namprd07.prod.outlook.com
  ([fe80::21a3:4648:fcda:e438%4]) with mapi id 15.20.4242.025; Fri, 25 Jun 2021
- 04:23:08 +0000
+ 04:39:13 +0000
 From:   Pawel Laszczak <pawell@cadence.com>
 To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
         "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "peter.chen@nxp.com" <peter.chen@nxp.com>
+        Peter Chen <peter.chen@kernel.org>
 CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>
 Subject: RE: [PATCH] usb: cdnsp: Fix the IMAN_IE_SET and IMAN_IE_CLEAR macro.
 Thread-Topic: [PATCH] usb: cdnsp: Fix the IMAN_IE_SET and IMAN_IE_CLEAR macro.
-Thread-Index: AQHXZ54aqs4YpaHOu0aHRPbIczk5K6skH+sw
-Date:   Fri, 25 Jun 2021 04:23:08 +0000
-Message-ID: <BYAPR07MB538179F3E10205B43C52DB19DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
+Thread-Index: AQHXZ54aqs4YpaHOu0aHRPbIczk5K6skH+swgAAIeDA=
+Date:   Fri, 25 Jun 2021 04:39:13 +0000
+Message-ID: <BYAPR07MB53812DBF7D5860FD4DEFD485DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
 References: <d12bfcc9cbffb89e27b120668821b3c4f09b6755.1624390584.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <d12bfcc9cbffb89e27b120668821b3c4f09b6755.1624390584.git.christophe.jaillet@wanadoo.fr>
+ <BYAPR07MB538179F3E10205B43C52DB19DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
+In-Reply-To: <BYAPR07MB538179F3E10205B43C52DB19DD069@BYAPR07MB5381.namprd07.prod.outlook.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctMDk3NzQwNWYtZDU2ZC0xMWViLTg3OTEtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XDA5Nzc0MDYwLWQ1NmQtMTFlYi04NzkxLWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMTkyMCIgdD0iMTMyNjkwNjg1ODYyMzgyNTQyIiBoPSI2ZDJoUzRNZnl1VkVUMHNOS3JvSEN1MFNyV1k9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNccGF3ZWxsXGFwcGRhdGFccm9hbWluZ1wwOWQ4NDliNi0zMmQzLTRhNDAtODVlZS02Yjg0YmEyOWUzNWJcbXNnc1xtc2ctNDg2NDhhNDQtZDU2Zi0xMWViLTg3OTEtYTQ0Y2M4MWIwYzU1XGFtZS10ZXN0XDQ4NjQ4YTQ2LWQ1NmYtMTFlYi04NzkxLWE0NGNjODFiMGM1NWJvZHkudHh0IiBzej0iMjAzNSIgdD0iMTMyNjkwNjk1NTA3NzM2NjE1IiBoPSJDekkyZGQzQmRjYmxiTmlhTUx2UGFjSUFpWkE9IiBpZD0iIiBibD0iMCIgYm89IjEiLz48L21ldGE+
 x-dg-rorf: true
 authentication-results: wanadoo.fr; dkim=none (message not signed)
  header.d=none;wanadoo.fr; dmarc=none action=none header.from=cadence.com;
 x-originating-ip: [185.217.253.59]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 183398e8-18dc-4108-d2cd-08d93790efe7
-x-ms-traffictypediagnostic: SJ0PR07MB8662:
-x-microsoft-antispam-prvs: <SJ0PR07MB8662C4F4828A0FF68AC0EE78DD069@SJ0PR07MB8662.namprd07.prod.outlook.com>
+x-ms-office365-filtering-correlation-id: aa7c0255-cac4-4c2f-50b0-08d937932ec2
+x-ms-traffictypediagnostic: SJ0PR07MB8726:
+x-microsoft-antispam-prvs: <SJ0PR07MB87266CBDB294D9AFAC76B1ADDD069@SJ0PR07MB8726.namprd07.prod.outlook.com>
 x-ms-oob-tlc-oobclassifiers: OLM:10000;
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: UIweJEsd9R2r02DXm9SRAjKP3/RJTCVmm0TSunDfPsfnB7U7JWB6dE01ia5opnTUqHywSQLc6a9Yir951ZHF8srweeR3IpgGTlCJRbOUbnLNxqaxPchmSeDR0g9idf+OfwarGDrPrMFz9FNeiOpV8qVILvKNQ9ieIfZZHY9DuXnJTT9YFD2GxgvKCvWlhPkveBDJpJx5msqz9O7owQSaophWSe0NICBCi1rSfZ5i7EqlnKjp1YSK1xE/2bVJlreCdG7y4YO0UFjTK3S1fIvO8dhtFQigdk5S6iyyoR9zEEZaeaEhFetehTIxgo7h1HS5IxyBtnXoAjQy1/fZHuGyQU76wsDkcPoAUiQVaHvyEFj0PoZETr0M5WPpkrj3g7bf2beJ+1lBfy675baCzXnsEiv4kCg5MLQXXhA/NHpr7ECEAsp0PlN3WPEuUHb44yF7CPvXmP3XRbp9JFyI7gRZB4s1nFjUsQIbJTc8BP3qjgXF8SDxjto4GFYdZFyvC8uESfdCfcsXaN+QcYYQmTPqQWeLsdoPYePLXnANiOWQGXJ+iRlnm7faGjN66DB9SPx9e2tVHEmD8EmUdWvmjlzpyg65onyms8If9KKxGj170kQChtkTFm+iFKIU8W2ZgCHW4h8PaAP2O9l9X0/ioM2HBrGM1iELA5aiRIijmJlty8q0BUuTA97GSuVY/Sf2OY7KkLcgWOLS5A3NJgAPW5hBOQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(39860400002)(346002)(396003)(136003)(366004)(36092001)(6506007)(8936002)(7696005)(55016002)(478600001)(9686003)(66446008)(83380400001)(76116006)(52536014)(66476007)(66556008)(66946007)(64756008)(8676002)(5660300002)(122000001)(38100700002)(71200400001)(110136005)(33656002)(186003)(26005)(4326008)(54906003)(316002)(2906002)(86362001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: jYCbcKc988F2pqFWOVn+ZgJsR3qMUJ6/kcDft9RF9SC9bBtVsJFIzbJ+SbNGVNsErB1xNddpCHOfo1VIu28+uJjSyp4n4APpACmDH3pDJGfzBrRn455D3JjlWRhCPQFN7fYrFowG/iAUugRumFLUC2jWeiLheNPdjhInqhlcKv06YbnV02ZuLW8sUQK5rsmQjnhGSl6xsl1SHHaYgxPsr9OdfMzTBzCbRQ8ZX7NuMFqjoiLxGEYPy9Efu0oPFgSaun6efFn2J6gLg0Oj9CWLO6qyiBtUO/Swga+ZdpY+bnIsKUGUuzzBfxbas4bw3fUoFYv50WDeErennrJ5rCVPhFbkrmvRGt8mIlz104aukLBxc3XMLRU/kiyZsbFEO14kg6+TeBzTrHE/Gt2pXxnny3O8UtmXu3HWk+D3d+SGrbcLeY+qxOnq+ea7t7yvF2P1W+LJ2SibnZrjSM9tb8RA1sPlAuXdSiOKunRjVyj63qI2/cX80mAZr/1wvLQY4wG2rVBoLjsQ5wEfglfzuWq9PRynBT7JVqZ6Te2TZC88X9TyzKQ9YvxtSlkRk2WNBDRcea8bpYD8Psv24IqF5UzignjTcL4MrYdd8lg8zYfggp2QxwJ07L0iRrFv2G18Hu+Q+mkyyO6VRjzMttnQFED7aCtD95PVadO9QVFnor0++rG49lYnT73CTY8hYC3oFYrFjhj0P384hXdQEc8zdsQ2UQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR07MB5381.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(136003)(39860400002)(376002)(396003)(346002)(366004)(36092001)(76116006)(122000001)(38100700002)(4326008)(66556008)(8936002)(64756008)(52536014)(26005)(186003)(7696005)(66946007)(66476007)(8676002)(66446008)(33656002)(316002)(55016002)(9686003)(83380400001)(478600001)(6506007)(54906003)(2906002)(86362001)(5660300002)(71200400001)(110136005)(2940100002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jmPeXUe4yH/VUXGnoI+Y/W9I2ESdZQVynCDS0rmgpCKO55dYWwcrV87XJWck?=
- =?us-ascii?Q?nHR9Bj8LRGB29V5mQe9FDzujqHxLLzclIrVgsJlF0ZYMpjsxic5qMqLwgAeg?=
- =?us-ascii?Q?x4FMQ0k557J4DTm1rvj/mfbE8REH8LFstHV5edfZoBzj9rFDOfJl3Zgyegtr?=
- =?us-ascii?Q?B0/ulGG2JlOxttazr/AUnABy4Vy061hDCb1dR8SkPK4R7s+RQK6veo8tePCE?=
- =?us-ascii?Q?21eFOWbsFZnCFcrAjt1JCfIPBykrfmuwNU6FQHnLPOglcfuhYm9YsQ+ObwUX?=
- =?us-ascii?Q?smM3js7hGDEoNCwKHx/tgro9JwKk/6cCqqRb6tJG0jNxVXLaM7om+aj9ijXD?=
- =?us-ascii?Q?933okY2JLgOfATJSFoJu0Hr9xyPH9xHURexMaTTKKKM7au/bStQY2HUei5H4?=
- =?us-ascii?Q?PMIXin3nvjhJv3h8Z/IgtMbsp0HRhC6yBHptU0RxSXKWCAZ7NJOIMOm6woF/?=
- =?us-ascii?Q?tMIQRE0j5jB4eWmhCIqIpz4OrP4x5l8NPMnJUvuqsGjc2JCh/s6Mlq+ExWjC?=
- =?us-ascii?Q?r01t2V3G3CvCKMO3d27BtdMOxBtdFWNfvFgAv2ipc4YjVQvfmIM1Bc+XX97i?=
- =?us-ascii?Q?OWO9Pe0emX4M/shIgZkNuWIO5Amz8SZtQL3kR0bGLLvxLSrIjGxVAQInGoJO?=
- =?us-ascii?Q?BJyidAKpIktDnNLfH+pXZ2mCR277tksHmd4ss7xbBKnDHvdJOoL2ye+FlBBQ?=
- =?us-ascii?Q?lmSUdwXJ4vPVzxND5lCoN0g8MAI78LeTY0LJfdyUnT5KfHQF8Q7a92zYl8rF?=
- =?us-ascii?Q?Yw8xwqvueN0GhMDRcGIbA3BygTqd20y0AteXGdsgnSCnCQi/HoOyNqriTNTb?=
- =?us-ascii?Q?KSyCgfPeO2bXuuTr8gfrfWw6mZK9eyM3jQdwbZnlB+nZu9OQhrfmvPdlPlEk?=
- =?us-ascii?Q?Mv2ai9pG4i9xKkyPO+ouK+lGcXDvT/6GaWGjxwYA4AorSQA4H6sgsYKtJ0eP?=
- =?us-ascii?Q?fpr6+sEyQeMpv2G1AFxI+gS/Y/Biq6DJcmgvJUaBKEprObWKiDpdZjHPyVj7?=
- =?us-ascii?Q?4aUE2n7vLLLZLHREdg/WWdZ8VGWif4vbYddGq9CEV1T3RhIeUJoA/U7Qb+zN?=
- =?us-ascii?Q?43GAlqzsOnVHVSay7wsBHesZGf9yQB4WDfT2wtSTkaQ4wMFSvzPsiExtaVZi?=
- =?us-ascii?Q?72A283vFP8MLPsWIxisJMxR6f6dfPanHZ7+SnNipTtsh0eKY/vQag00T5Uft?=
- =?us-ascii?Q?PUMk5QF8H9f6I31eV9BCszSoDHs7yJM/DuGz2uMCqVgrabgjPU6lNMtIFrJv?=
- =?us-ascii?Q?oOxwrV7vaunYGRJssoEQaOyYYkX0ON1l/m/ysqSx8M47b503jQzimILGC82e?=
- =?us-ascii?Q?JyQeglaHeJXj5GF7fj7xKu9/?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?39WjQeFWSJ+iWjd+ewxP2SwxurTDy61vGVL6YcUQ6hTbOR/kOOBdRY3ZSXLf?=
+ =?us-ascii?Q?FvVh2imSph3WXRt13762JUgj0n1E3QBpKji6462igQA1Py/0mHJtMdU74UkF?=
+ =?us-ascii?Q?drjq+TKf3M3QZ7axiOdWbnHVRLvpTIptoMhjD4IzKPkhCrsME5yC2bwlHWvP?=
+ =?us-ascii?Q?+P/YXPZOBUhsP1ltluq/kBCiZ3I6/v0LXxGD0a2kyP7FACmb+fbSmytbM1Gb?=
+ =?us-ascii?Q?rflMQkRDqdW5vsgrECTVjKSj9h89ihq+TAmoa5evlyo25bLYs36hH0glpJh4?=
+ =?us-ascii?Q?S04o2G3Drc4+yibNQkWdauGhcvZV1V6wnuOY2zm1P+adVB+7K7/Qma1kgHkF?=
+ =?us-ascii?Q?wwagDnnPCzf63T+t/i8VTffZ7jfPFHSL+0TGGIxmY8aM/OOBRO4768UVhrxC?=
+ =?us-ascii?Q?uYq6fcB/GanxxMTUPto+cta7PHBAw38jU5MEOzMTnWfFEP18sXEqPaOB/aO0?=
+ =?us-ascii?Q?GCXq2PRgkVgSfGxj0YiOPW4snOtJTTQCirftdtrDvwJiAm20JhO3jDF8KGSw?=
+ =?us-ascii?Q?iI/82grb6pqkZDPHEUlsudNstb1Y+wLuRGIxlJ6RYxpy7GI4bVNc58mPmPhw?=
+ =?us-ascii?Q?BVvfT6wfa8+Rdeop7PG8KCZgIqGRXUTy+vaSIxVvIWHHDm64MKzth1UE7aP3?=
+ =?us-ascii?Q?Gb5u4NmkJQt22kaPgIa+PMcXMQYSUzHF8GdS+d/Jxb9qzQ01G9/uWiOQNGi+?=
+ =?us-ascii?Q?HnP42+zSPPJ3d+HpEjFzdX2+SsATz2HO9jm7yye+rHWs1USzE4DyzwDWGC43?=
+ =?us-ascii?Q?R4zw8+/NHv6cHi+EyPHYODZ56UrQXhBS3Q7GZ2HbkxNjEKALZ0JZ3iA8DmCo?=
+ =?us-ascii?Q?AngumE1aBrFU1w37Kp8Uk3BF0kfUOqKD1r8FS4uYQ53byM6ciufpRUXu/liX?=
+ =?us-ascii?Q?/0xrdf3FloCA4KVQEtzDPq0M/voSs+Ft4JgsfVWgbcpi95Rsp1Y8LfRrgYvS?=
+ =?us-ascii?Q?+yrR/uQ3nOXDhXdVEYiW3o2gv6uB6n9IdabUGOJb08aNdSlobqRqKOyTAr++?=
+ =?us-ascii?Q?8OmoYwDUHa/CZFEzjIOhg38Vy/BL5+I0Jk/ZeD6pBLDr219z3Rf6Nruqk7cM?=
+ =?us-ascii?Q?EfdmSapdIjkBt8Ht3sFyLRsYUfHiRPOBWL7qtTLkoNC1BOGcccT0akfd+rJ+?=
+ =?us-ascii?Q?Bo4U0BPmc9bak2Ybvsg9KQH4XBkeTVBQqfx26dJu0KvK0qxpgN66O3VzUw4T?=
+ =?us-ascii?Q?YDPAYaxgpmd4cJlGcd9HG3icPIVB1C3XFFyw61tx6KZ7LVNKAzujwhTDKIWq?=
+ =?us-ascii?Q?hBpYmjueX481uOKGyGzgNjnaJX+ZpP1dMvLbmDmL954khcIt+jsHY5uw/hdW?=
+ =?us-ascii?Q?17/uU5+V1Uxh0PuL/KC22m7W?=
 x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
@@ -114,82 +115,84 @@ MIME-Version: 1.0
 X-OriginatorOrg: cadence.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: BYAPR07MB5381.namprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 183398e8-18dc-4108-d2cd-08d93790efe7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2021 04:23:08.7522
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa7c0255-cac4-4c2f-50b0-08d937932ec2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jun 2021 04:39:13.2113
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CQ6XlUyG9coNe3ycgNzBX2cJM+EF/SR/HjS5cyGV7JII+mmx2RvBAqeCYEQXz1zbo1UWzSngvHrGGUfPUmwg8psaz/uRpCZoSGaX9aGySJo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB8662
-X-Proofpoint-ORIG-GUID: zWX339g9tCOL444kWzlaAbXX4lfcYbtd
-X-Proofpoint-GUID: zWX339g9tCOL444kWzlaAbXX4lfcYbtd
+X-MS-Exchange-CrossTenant-userprincipalname: HRJtxwD2qterXgQZcqrTPDerjZMyj5WVuDI/FALHzYu4tiQcbjGzzUUsJA7RhazG4f+mzzZzxjXFgetn7N3BrwrzWZXUw2+OODWk4/Qkcm8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR07MB8726
+X-Proofpoint-GUID: qNHIn7RnD2guMeMh4Dql_gTqlcG9fIPi
+X-Proofpoint-ORIG-GUID: qNHIn7RnD2guMeMh4Dql_gTqlcG9fIPi
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
  definitions=2021-06-25_01:2021-06-24,2021-06-25 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 malwarescore=0
- priorityscore=1501 impostorscore=0 spamscore=0 phishscore=0 suspectscore=0
- clxscore=1011 mlxlogscore=999 adultscore=0 mlxscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2106250023
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 mlxscore=0 adultscore=0 malwarescore=0
+ spamscore=0 mlxlogscore=999 phishscore=0 priorityscore=1501 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2106250025
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
->
->IMAN_IE is BIT(1), so these macro are respectively equivalent to BIT(1)
->and 0, whatever the value of 'p'.
->
->The purpose was to set and reset a single bit in 'p'.
->Fix these macros to do that correctly.
->
->Fixes: e93e58d27402 ("usb: cdnsp: Device side header file for CDNSP driver=
-")
->Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Corrected Peter Chen address - should be peter.chen@kernel.org
 
-Acked-by: Pawel Laszczak <pawell@cadence.com>
-
-Currently the bit 1(RW) and bit 0 (W1toClr) are implemented.=20
-All other bits are not used and are reserved for future RW implementations.
-I was a bit afraid about bit 0 which is "write 1 to clear" but I haven't fo=
-und any
-issue with this patch during testing so we can simplify these macros=20
-
-Thanks Christophe
-
->---
->This patch is speculative. It is not tested.
->Please, review with care.
+>>IMAN_IE is BIT(1), so these macro are respectively equivalent to BIT(1)
+>>and 0, whatever the value of 'p'.
+>>
+>>The purpose was to set and reset a single bit in 'p'.
+>>Fix these macros to do that correctly.
+>>
+>>Fixes: e93e58d27402 ("usb: cdnsp: Device side header file for CDNSP drive=
+r")
+>>Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 >
->Actually, the usage of these macros is:
->   readl(somewhere)
->   set or reset the IMAN_IE bit
->   write(somewhere)
->So it is likely that we want to preserve the other bits read. Otherwise,
->the code could be much simpler.
->---
-> drivers/usb/cdns3/cdnsp-gadget.h | 4 ++--
-> 1 file changed, 2 insertions(+), 2 deletions(-)
+>Acked-by: Pawel Laszczak <pawell@cadence.com>
 >
->diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-ga=
-dget.h
->index 783ca8ffde00..f740fa6089d8 100644
->--- a/drivers/usb/cdns3/cdnsp-gadget.h
->+++ b/drivers/usb/cdns3/cdnsp-gadget.h
->@@ -383,8 +383,8 @@ struct cdnsp_intr_reg {
-> #define IMAN_IE			BIT(1)
-> #define IMAN_IP			BIT(0)
-> /* bits 2:31 need to be preserved */
->-#define IMAN_IE_SET(p)		(((p) & IMAN_IE) | 0x2)
->-#define IMAN_IE_CLEAR(p)	(((p) & IMAN_IE) & ~(0x2))
->+#define IMAN_IE_SET(p)		((p) | IMAN_IE)
->+#define IMAN_IE_CLEAR(p)	((p) & ~IMAN_IE)
+>Currently the bit 1(RW) and bit 0 (W1toClr) are implemented.
+>All other bits are not used and are reserved for future RW implementations=
+.
+>I was a bit afraid about bit 0 which is "write 1 to clear" but I haven't f=
+ound any
+>issue with this patch during testing so we can simplify these macros
 >
-> /* IMOD - Interrupter Moderation Register - irq_control bitmasks. */
-> /*
+>Thanks Christophe
+>
+>>---
+>>This patch is speculative. It is not tested.
+>>Please, review with care.
+>>
+>>Actually, the usage of these macros is:
+>>   readl(somewhere)
+>>   set or reset the IMAN_IE bit
+>>   write(somewhere)
+>>So it is likely that we want to preserve the other bits read. Otherwise,
+>>the code could be much simpler.
+>>---
+>> drivers/usb/cdns3/cdnsp-gadget.h | 4 ++--
+>> 1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>>diff --git a/drivers/usb/cdns3/cdnsp-gadget.h b/drivers/usb/cdns3/cdnsp-g=
+adget.h
+>>index 783ca8ffde00..f740fa6089d8 100644
+>>--- a/drivers/usb/cdns3/cdnsp-gadget.h
+>>+++ b/drivers/usb/cdns3/cdnsp-gadget.h
+>>@@ -383,8 +383,8 @@ struct cdnsp_intr_reg {
+>> #define IMAN_IE			BIT(1)
+>> #define IMAN_IP			BIT(0)
+>> /* bits 2:31 need to be preserved */
+>>-#define IMAN_IE_SET(p)		(((p) & IMAN_IE) | 0x2)
+>>-#define IMAN_IE_CLEAR(p)	(((p) & IMAN_IE) & ~(0x2))
+>>+#define IMAN_IE_SET(p)		((p) | IMAN_IE)
+>>+#define IMAN_IE_CLEAR(p)	((p) & ~IMAN_IE)
+>>
+>> /* IMOD - Interrupter Moderation Register - irq_control bitmasks. */
+>> /*
+>>--
+>>2.30.2
+>
 >--
->2.30.2
-
---
-
-Regards,
-Pawel Laszczak
+>
+>Regards,
+>Pawel Laszczak
