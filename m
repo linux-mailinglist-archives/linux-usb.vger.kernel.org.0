@@ -2,206 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A03FB3B41DE
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 12:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C567B3B41E0
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 12:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbhFYKrO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Jun 2021 06:47:14 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:56849 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbhFYKrO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 06:47:14 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624617893; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=30tOO7LTxPTZ1XcUwe0x/AhKaRExethlXl2sly8VV4o=; b=JtnKFSrAqVywBCv9a9Id09LmEtDXlk8ar0wuOF16Zg92ZXJ/QTb0I7dIqJhS40kFQxsCvHd1
- qEzGQXk7UGlRT9UhtM+QEv2YPOjkaHNdxiBHF/Li43rnhgx2k8cvg9BOrg+QKLAnCuapqW2Q
- bNCxrh54WbRKf79zIGBQ71tpXno=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 60d5b3a23a8b6d0a4587e371 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 25 Jun 2021 10:44:50
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5BB8CC4338A; Fri, 25 Jun 2021 10:44:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost.localdomain (unknown [101.87.142.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 21F45C433F1;
-        Fri, 25 Jun 2021 10:44:38 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 21F45C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
-From:   Linyu Yuan <linyyuan@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>,
-        Linyu Yuan <linyyuan@codeaurora.org>
-Subject: [PATCH] usb: dwc3: fix race of usb_gadget_driver operation
-Date:   Fri, 25 Jun 2021 18:44:15 +0800
-Message-Id: <20210625104415.8072-1-linyyuan@codeaurora.org>
-X-Mailer: git-send-email 2.25.1
+        id S231182AbhFYKsc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Jun 2021 06:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230526AbhFYKsb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 06:48:31 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C53C061574
+        for <linux-usb@vger.kernel.org>; Fri, 25 Jun 2021 03:46:10 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id c8so3948357ybq.1
+        for <linux-usb@vger.kernel.org>; Fri, 25 Jun 2021 03:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=d5YWNPacjZGy0Wn0i1FPGx9+cX3LzXl1pss7rjm2gS8=;
+        b=prxIRTYLAMJvuPpaz93iyA7cekZDrme8X4IVCe5wwqngwYiZBpBGglANs2LyeJSpGX
+         UMe73i80S2lmAFUdY35UbY/vYf8Q3AxiDjNumdMqhZ2UAnnz0JNTLL8Iqw0sS847h3Dn
+         y/Q1OMw7p9OrrwQ369tv8vxRuhoL3dR01k4ajC6siNEOBwB9v0X2V3qeT1sRKYMrMwnw
+         3a5HW9JLxNNagWZPdTxVZeHO6rcgzjQb+r6EEIyAnzscV1lu+KUQctlnvdlOXuBuQXNy
+         h9O8qs8new4wt4kuvmYDWdt+6tdsX9olc4cllhMXBlHClW7DvO6LCCEHH8ls59vEgqM8
+         B/Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=d5YWNPacjZGy0Wn0i1FPGx9+cX3LzXl1pss7rjm2gS8=;
+        b=RK9h+A3gFudnT4N+eF5ZjYhDgezRrWMI/gWqrEa/DzpVhIxLhGWFQb6jHL7u2erS40
+         siguIsCmYyjwe0CBK4A9hXfj989B7jYdOOpMygLBBcgTkpHlRDWqWaVzJZzwz0s3a4yU
+         H7ZZ/8/xqV7fxLOiLV2qrefy6uW+K+q7NGC567KcmnrW+QtFuMOlCkGdQINj+96l14R6
+         Y/4lhNTa2u++IhEtbQwNoHcqj34RDNlkkPUSJ2kh0VTPgYTCya+QFWs6V9jcrHf1pvO9
+         Ti0c4ESgyRbKde7a0tLXTui9V6vzfFFCVoRQou3wONjfjaLnvqlS7ceXgl8d8igbl4kQ
+         lgIg==
+X-Gm-Message-State: AOAM531SgplTcoiz3wu77RmbyGE26PZEMn+w3Cqefu4NELH7C6c3R9rO
+        sVn31v3w9URrC+lTFG9hG1XzzuyvhSBEOK6Qf8kn7a1a
+X-Google-Smtp-Source: ABdhPJx+qbBxybOmB+dBRwHjxTxoJajl688eLSyOwCbe/EKVw1cSVO00b8EMTwojhOASv03je2RV3g9EwUas+TW5vyw=
+X-Received: by 2002:a25:3496:: with SMTP id b144mr11832019yba.70.1624617969885;
+ Fri, 25 Jun 2021 03:46:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Received: by 2002:a05:7000:464e:0:0:0:0 with HTTP; Fri, 25 Jun 2021 03:46:09
+ -0700 (PDT)
+From:   Laurentiu-Cristian Duca <laurentiu.duca@gmail.com>
+Date:   Fri, 25 Jun 2021 13:46:09 +0300
+Message-ID: <CAPm8-H6=X+++n8O3DLXxdLEh6RX9Qmche9ZYz5wfHb6=5aSyeA@mail.gmail.com>
+Subject: Question about usb3 host code
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-there is following race condition,
+Hello linux-usb community,
 
-      CPU1                         CPU2
-dwc3_runtime_suspend()        dwc3_gadget_stop()
-spin_lock(&dwc->lock)
-dwc3_gadget_suspend()
-dwc3_disconnect_gadget()
-dwc->gadget_driver != NULL
-spin_unlock(&dwc->lock)
-                              spin_lock(&dwc->lock)
-                              dwc->gadget_driver = NULL
-                              spin_unlock(&dwc->lock)
-dwc->gadget_driver->disconnect(dwc->gadget);
+  I am new to linux-usb code and I hope that my question is not silly.
+I am interested in real-time usb.
 
-system will crash when access NULL gadget_driver.
+  I know that on USB3, the gadget can initiate transactions
+and I am searching for the function that is called in the usb3 host
+when an USB3 gadget wants to start a transaction.
+For example for raspberry pi 4 or other host.
+Is it on the xhci host code or on the USB3 controller code (for example dwc3) ?
 
-7dc0c55e9f30 ('USB: UDC core: Add udc_async_callbacks gadget op')
-suggest a common way to avoid such kind of race.
+  Do you have any hints?
+I appreciate any help.
 
-this change implment the callback in dwc3 and
-change related functions which have callback to UDC core.
-
-Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
----
- drivers/usb/dwc3/core.h   |  1 +
- drivers/usb/dwc3/ep0.c    |  5 +++--
- drivers/usb/dwc3/gadget.c | 39 +++++++++++++++++++++++----------------
- 3 files changed, 27 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index dccdf13b5f9e..5991766239ba 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1279,6 +1279,7 @@ struct dwc3 {
- 	unsigned		dis_metastability_quirk:1;
- 
- 	unsigned		dis_split_quirk:1;
-+	unsigned		async_callbacks:1;
- 
- 	u16			imod_interval;
- };
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 3cd294264372..26419077c7c9 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -597,10 +597,11 @@ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
- 
- static int dwc3_ep0_delegate_req(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
- {
--	int ret;
-+	int ret = 0;
- 
- 	spin_unlock(&dwc->lock);
--	ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
-+	if (dwc->async_callbacks)
-+		ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
- 	spin_lock(&dwc->lock);
- 	return ret;
- }
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index af6d7f157989..d868f30007cc 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2585,6 +2585,16 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- 	return ret;
- }
- 
-+static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
-+{
-+	struct dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	dwc->async_callbacks = enable;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+}
-+
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-@@ -2596,6 +2606,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.udc_set_ssp_rate	= dwc3_gadget_set_ssp_rate,
- 	.get_config_params	= dwc3_gadget_config_params,
- 	.vbus_draw		= dwc3_gadget_vbus_draw,
-+	.udc_async_callbacks	= dwc3_gadget_async_callbacks,
- };
- 
- /* -------------------------------------------------------------------------- */
-@@ -3231,29 +3242,26 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 
- static void dwc3_disconnect_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
--		spin_unlock(&dwc->lock);
-+	spin_unlock(&dwc->lock);
-+	if (dwc->async_callbacks && dwc->gadget_driver->disconnect)
- 		dwc->gadget_driver->disconnect(dwc->gadget);
--		spin_lock(&dwc->lock);
--	}
-+	spin_lock(&dwc->lock);
- }
- 
- static void dwc3_suspend_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->suspend) {
--		spin_unlock(&dwc->lock);
-+	spin_unlock(&dwc->lock);
-+	if (dwc->async_callbacks && dwc->gadget_driver->suspend)
- 		dwc->gadget_driver->suspend(dwc->gadget);
--		spin_lock(&dwc->lock);
--	}
-+	spin_lock(&dwc->lock);
- }
- 
- static void dwc3_resume_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
--		spin_unlock(&dwc->lock);
-+	spin_unlock(&dwc->lock);
-+	if (dwc->async_callbacks && dwc->gadget_driver->resume)
- 		dwc->gadget_driver->resume(dwc->gadget);
--		spin_lock(&dwc->lock);
--	}
-+	spin_lock(&dwc->lock);
- }
- 
- static void dwc3_reset_gadget(struct dwc3 *dwc)
-@@ -3585,11 +3593,10 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
- 	 * implemented.
- 	 */
- 
--	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
--		spin_unlock(&dwc->lock);
-+	spin_unlock(&dwc->lock);
-+	if (dwc->async_callbacks && dwc->gadget_driver->resume)
- 		dwc->gadget_driver->resume(dwc->gadget);
--		spin_lock(&dwc->lock);
--	}
-+	spin_lock(&dwc->lock);
- }
- 
- static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
--- 
-2.25.1
-
+Thank you,
+Laurentiu-Cristian
