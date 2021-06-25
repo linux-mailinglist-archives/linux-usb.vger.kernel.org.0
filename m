@@ -2,152 +2,129 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B381A3B3C9A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 08:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358AE3B3DE7
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 09:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbhFYGYK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Jun 2021 02:24:10 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:35538 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230386AbhFYGYK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 02:24:10 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id DADDF41566;
-        Fri, 25 Jun 2021 06:21:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1624602110; bh=Os0DTWcOcOk3QpFDcU5w0G8hHuaDVcQsW4AJfy8j8eM=;
-        h=Date:From:Subject:To:Cc:From;
-        b=ApLq220/zKFtI46eI6SddG4+2UhnvUgJ9j+QumBQ9Sie7od0dlc1O6is6VElHeFyl
-         UxeNWb954H8QtzznL0e+Akom08rG/rRT2XALprcP5zkRF0CBLSlTi1G42n/il0FdwU
-         5OrDpHUBxWJEzLNrXQJddlz5fYYWBLzbZiLKPyIZEfbSVgMB6GblU6XsX8H5h+5T0m
-         jYeLJFVSqz7ZCMzUXChdQTjEwkhYhixZ3BPSkAheIjhqsRZCMBflXnfFcMYQYR2SXl
-         WxAXM9kLT3xC6kXqD6hctQa9x8aYZLBZ5l5L2ON8THX39pGP8G0u4V+PtBypvTpsgb
-         g6Fq/lzREhNdg==
-Received: from Armenia_lab (armenia_lab.internal.synopsys.com [10.116.75.26])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 9EE5FA005E;
-        Fri, 25 Jun 2021 06:21:46 +0000 (UTC)
-Received: by Armenia_lab (sSMTP sendmail emulation); Thu, 24 Jun 2021 23:21:45 -0700
-Date:   Thu, 24 Jun 2021 23:21:45 -0700
-Message-Id: <2fc584eee4d5959ca3a54c3901ca9b2b958f1ffe.1624599316.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH] usb: dwc2: gadget: Add endpoint wedge support
-To:     linux-usb@vger.kernel.org
-Cc:     John.Youn@synopsys.com, balbi@kernel.org,
-        Argishti.Aleksanyan@synopsys.com
+        id S230091AbhFYHse (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Jun 2021 03:48:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40286 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230025AbhFYHsd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 25 Jun 2021 03:48:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 61BC36142C;
+        Fri, 25 Jun 2021 07:46:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624607172;
+        bh=X3wjcU/BQy8GCBDaVQvj+55WHVFoAZZ33UGx75kbwJk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qKn6xupDGpi5uOfK3/Mtp2T6dIsoq6mEtDq51n6UcNUlAKY+CxtsdA4iYyBL+Mfcd
+         FTNlTFujDZHcFe62YNxMbwBQAlw79SeO1kNngqVmkz+OyUS1eYuFPAOl3otu6pz67b
+         D1MrKq6yW7tUQxI/gKedEMEZZTJ+HwpKibJQjCP7RsoWXlbsuK04XHrhysdKzLOqwJ
+         t1z+/dyiFasHf2eIOHL/tYAugpKDS0fEJ8A2skEPjrdOfh/IYFWm7IfIOAkZ5ej9OA
+         OeJaIREv91wiwye9nsCotmdr6J+M/MM7AtgfN3kSvURH0Sp/sFsC3HQox4bURnDeRx
+         HB2ovOP7KjDQA==
+Received: by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1lwgXS-004ae2-7T; Fri, 25 Jun 2021 09:46:10 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org
+Subject: [PATCH v8 00/12] Move Hisilicon 6421v600 SPMI and USB drivers out of staging
+Date:   Fri, 25 Jun 2021 09:45:52 +0200
+Message-Id: <cover.1624606660.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Addd endpoint wedge support. Tested by USBCV MSC tests.
+Hi Greg,
 
-Signed-off-by: Argishti Aleksanyan <Argishti.Aleksanyan@synopsys.com>
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- drivers/usb/dwc2/core.h   |  2 ++
- drivers/usb/dwc2/gadget.c | 28 +++++++++++++++++++++++++++-
- 2 files changed, 29 insertions(+), 1 deletion(-)
+Thanks for merging patches 1 and 2 from the v7 series!
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index ab6b815e0089..1f14bcc94b69 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -122,6 +122,7 @@ struct dwc2_hsotg_req;
-  * @periodic: Set if this is a periodic ep, such as Interrupt
-  * @isochronous: Set if this is a isochronous ep
-  * @send_zlp: Set if we need to send a zero-length packet.
-+ * @wedged: Set if ep is wedged.
-  * @desc_list_dma: The DMA address of descriptor chain currently in use.
-  * @desc_list: Pointer to descriptor DMA chain head currently in use.
-  * @desc_count: Count of entries within the DMA descriptor chain of EP.
-@@ -172,6 +173,7 @@ struct dwc2_hsotg_ep {
- 	unsigned int            periodic:1;
- 	unsigned int            isochronous:1;
- 	unsigned int            send_zlp:1;
-+	unsigned int            wedged:1;
- 	unsigned int            target_frame;
- #define TARGET_FRAME_INITIAL   0xFFFFFFFF
- 	bool			frame_overrun;
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index c581ee41ac81..fe567069dcb2 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -1806,7 +1806,8 @@ static int dwc2_hsotg_process_req_feature(struct dwc2_hsotg *hsotg,
- 		case USB_ENDPOINT_HALT:
- 			halted = ep->halted;
- 
--			dwc2_hsotg_ep_sethalt(&ep->ep, set, true);
-+			if (!ep->wedged)
-+				dwc2_hsotg_ep_sethalt(&ep->ep, set, true);
- 
- 			ret = dwc2_hsotg_send_reply(hsotg, ep0, NULL, 0);
- 			if (ret) {
-@@ -4046,6 +4047,7 @@ static int dwc2_hsotg_ep_enable(struct usb_ep *ep,
- 	hs_ep->isochronous = 0;
- 	hs_ep->periodic = 0;
- 	hs_ep->halted = 0;
-+	hs_ep->wedged = 0;
- 	hs_ep->interval = desc->bInterval;
- 
- 	switch (ep_type) {
-@@ -4286,6 +4288,27 @@ static int dwc2_hsotg_ep_dequeue(struct usb_ep *ep, struct usb_request *req)
- 	return 0;
- }
- 
-+/**
-+ * dwc2_gadget_ep_set_wedge - set wedge on a given endpoint
-+ * @ep: The endpoint to be wedged.
-+ *
-+ */
-+static int dwc2_gadget_ep_set_wedge(struct usb_ep *ep)
-+{
-+	struct dwc2_hsotg_ep *hs_ep = our_ep(ep);
-+	struct dwc2_hsotg *hs = hs_ep->parent;
-+
-+	unsigned long	flags;
-+	int		ret;
-+
-+	spin_lock_irqsave(&hs->lock, flags);
-+	hs_ep->wedged = 1;
-+	ret = dwc2_hsotg_ep_sethalt(ep, 1, false);
-+	spin_unlock_irqrestore(&hs->lock, flags);
-+
-+	return ret;
-+}
-+
- /**
-  * dwc2_hsotg_ep_sethalt - set halt on a given endpoint
-  * @ep: The endpoint to set halt.
-@@ -4337,6 +4360,7 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
- 				epctl |= DXEPCTL_EPDIS;
- 		} else {
- 			epctl &= ~DXEPCTL_STALL;
-+			hs_ep->wedged = 0;
- 			xfertype = epctl & DXEPCTL_EPTYPE_MASK;
- 			if (xfertype == DXEPCTL_EPTYPE_BULK ||
- 			    xfertype == DXEPCTL_EPTYPE_INTERRUPT)
-@@ -4353,6 +4377,7 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
- 			// STALL bit will be set in GOUTNAKEFF interrupt handler
- 		} else {
- 			epctl &= ~DXEPCTL_STALL;
-+			hs_ep->wedged = 0;
- 			xfertype = epctl & DXEPCTL_EPTYPE_MASK;
- 			if (xfertype == DXEPCTL_EPTYPE_BULK ||
- 			    xfertype == DXEPCTL_EPTYPE_INTERRUPT)
-@@ -4392,6 +4417,7 @@ static const struct usb_ep_ops dwc2_hsotg_ep_ops = {
- 	.queue		= dwc2_hsotg_ep_queue_lock,
- 	.dequeue	= dwc2_hsotg_ep_dequeue,
- 	.set_halt	= dwc2_hsotg_ep_sethalt_lock,
-+	.set_wedge	= dwc2_gadget_ep_set_wedge,
- 	/* note, don't believe we have any call for the fifo routines */
- };
- 
+Those are the remaining patches that are needed for the USB to work
+with Hikey970.
 
-base-commit: 00a738b86ec0c88ad4745f658966f951cbe4c885
+I guess patches 1 and 2 on this series are also OK, as they were acked
+by the PHY and SPMI maintainers.
+
+As suggested on your last review, I broke the MFD staging patches 
+into one logical change per patch.
+
+Except for the split, the only change from v7 was at the copyright: 
+I'm using 20xx-2021 instead of 20xx- to indicate that the copyrights
+extend to the present. I also changed the HiSilicon name to better
+reflect the name of the company.
+
+Mauro Carvalho Chehab (12):
+  phy: phy-hi3670-usb3: move driver from staging into phy
+  spmi: hisi-spmi-controller: move driver from staging
+  staging: hisilicon,hi6421-spmi-pmic.yaml: cleanup descriptions
+  staging: hi6421-spmi-pmic: update copyright's year
+  staging: hi6421-spmi-pmic: use devm_request_threaded_irq()
+  staging: hi6421-spmi-pmic: better name IRQs
+  staging: hi6421-spmi-pmic: change a return code
+  staging: hi6421-spmi-pmic: change identation of a table
+  staging: hi6421-spmi-pmic: cleanup some macros
+  mfd: hi6421-spmi-pmic: move driver from staging
+  dts: hisilicon: add support for the PMIC found on Hikey 970
+  dts: hisilicon: add support for USB3 on Hikey 970
+
+ .../mfd/hisilicon,hi6421-spmi-pmic.yaml       | 134 ++++
+ .../bindings/phy/hisilicon,hi3670-usb3.yaml   |  73 ++
+ .../spmi/hisilicon,hisi-spmi-controller.yaml  |  73 ++
+ MAINTAINERS                                   |  23 +-
+ .../boot/dts/hisilicon/hi3670-hikey970.dts    | 129 +++-
+ arch/arm64/boot/dts/hisilicon/hi3670.dtsi     |  56 ++
+ .../boot/dts/hisilicon/hikey970-pmic.dtsi     |  87 +++
+ drivers/mfd/Kconfig                           |  16 +
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/hi6421-spmi-pmic.c                | 311 ++++++++
+ drivers/phy/hisilicon/Kconfig                 |  10 +
+ drivers/phy/hisilicon/Makefile                |   1 +
+ drivers/phy/hisilicon/phy-hi3670-usb3.c       | 661 ++++++++++++++++++
+ drivers/spmi/Kconfig                          |   9 +
+ drivers/spmi/Makefile                         |   1 +
+ drivers/spmi/hisi-spmi-controller.c           | 367 ++++++++++
+ drivers/staging/Kconfig                       |   2 -
+ drivers/staging/Makefile                      |   1 -
+ drivers/staging/hikey9xx/Kconfig              |  41 --
+ drivers/staging/hikey9xx/Makefile             |   6 -
+ drivers/staging/hikey9xx/TODO                 |   5 -
+ drivers/staging/hikey9xx/hi6421-spmi-pmic.c   | 297 --------
+ .../staging/hikey9xx/hisi-spmi-controller.c   | 367 ----------
+ .../hikey9xx/hisilicon,hi6421-spmi-pmic.yaml  | 135 ----
+ .../hisilicon,hisi-spmi-controller.yaml       |  73 --
+ drivers/staging/hikey9xx/phy-hi3670-usb3.c    | 661 ------------------
+ drivers/staging/hikey9xx/phy-hi3670-usb3.yaml |  73 --
+ 27 files changed, 1932 insertions(+), 1681 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/hisilicon,hi6421-spmi-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+ create mode 100644 Documentation/devicetree/bindings/spmi/hisilicon,hisi-spmi-controller.yaml
+ create mode 100644 arch/arm64/boot/dts/hisilicon/hikey970-pmic.dtsi
+ create mode 100644 drivers/mfd/hi6421-spmi-pmic.c
+ create mode 100644 drivers/phy/hisilicon/phy-hi3670-usb3.c
+ create mode 100644 drivers/spmi/hisi-spmi-controller.c
+ delete mode 100644 drivers/staging/hikey9xx/Kconfig
+ delete mode 100644 drivers/staging/hikey9xx/Makefile
+ delete mode 100644 drivers/staging/hikey9xx/TODO
+ delete mode 100644 drivers/staging/hikey9xx/hi6421-spmi-pmic.c
+ delete mode 100644 drivers/staging/hikey9xx/hisi-spmi-controller.c
+ delete mode 100644 drivers/staging/hikey9xx/hisilicon,hi6421-spmi-pmic.yaml
+ delete mode 100644 drivers/staging/hikey9xx/hisilicon,hisi-spmi-controller.yaml
+ delete mode 100644 drivers/staging/hikey9xx/phy-hi3670-usb3.c
+ delete mode 100644 drivers/staging/hikey9xx/phy-hi3670-usb3.yaml
+
 -- 
-2.11.0
+2.31.1
+
 
