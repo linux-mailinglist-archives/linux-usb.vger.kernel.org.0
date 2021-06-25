@@ -2,207 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A823C3B3A40
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 02:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3950A3B3B16
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 05:15:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbhFYAtp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 24 Jun 2021 20:49:45 -0400
-Received: from mga18.intel.com ([134.134.136.126]:19565 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229521AbhFYAto (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 24 Jun 2021 20:49:44 -0400
-IronPort-SDR: F95Xco2RJuT2FsL/y2R5xiroBJgGg72XSBix6VI6s0S4kydDxsxmBlm27hhr+o0BOEJuwxcpxC
- YWTMnm6/0HfQ==
-X-IronPort-AV: E=McAfee;i="6200,9189,10025"; a="194882067"
-X-IronPort-AV: E=Sophos;i="5.83,297,1616482800"; 
-   d="scan'208";a="194882067"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2021 17:47:24 -0700
-IronPort-SDR: OP4JjhmwGLexxp0p7Q8h4xphU2ihCWgrN4QlI04YXjM9dNtL2r8ZqOuH2XJmuwEGm8jXJvEshz
- RtRC6WTZwNLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.83,297,1616482800"; 
-   d="scan'208";a="557525252"
-Received: from lkp-server01.sh.intel.com (HELO 4aae0cb4f5b5) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 24 Jun 2021 17:47:23 -0700
-Received: from kbuild by 4aae0cb4f5b5 with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1lwa0A-0006pb-Py; Fri, 25 Jun 2021 00:47:22 +0000
-Date:   Fri, 25 Jun 2021 08:46:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- 7756f1d6369e61d1cc47d6e51619d1e1d1681a2e
-Message-ID: <60d52773.5KA3n2WWAJ4QtLZc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S233017AbhFYDRX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 24 Jun 2021 23:17:23 -0400
+Received: from gate2.alliedtelesis.co.nz ([202.36.163.20]:48582 "EHLO
+        gate2.alliedtelesis.co.nz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232996AbhFYDRW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 24 Jun 2021 23:17:22 -0400
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 72770806B6;
+        Fri, 25 Jun 2021 15:15:00 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1624590900;
+        bh=ktThmXty8YAzG1eQJh2MVeDGxBBLur6M3Jhb6X4oIMk=;
+        h=From:To:Cc:Subject:Date;
+        b=FngkMnEECzBa+M0Bju4CTW6nUeF/55ak+jZhoZb8MquKsjJgPYfyPvMegNdyNjPuU
+         6Lb43jIIdqbx5w3SWFS1u5F1fsNDW5oYwpkki+u6KOOL9ceiC50KlXNCkhT+R0c7p9
+         OCV1PHy4PF7UL7VIRua1twThxzlZnSuih4zXGKPSpuE84+KfKISO+S8r/4p6Xf5yXK
+         ODJzBkSeKWXCSX0w2zmuvDR0ABZQ0o7KAdDQ3fkpZrmpkgc7yg2BsvlcGY0Mzvy6se
+         nimg0D72OZ/ZpWMGvH8qc+1dTvlR89uHU0AstrptiGAVSQnO1I3FgraCy6XYDjTlDA
+         uJfBfxE8oqS1w==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B60d54a340000>; Fri, 25 Jun 2021 15:15:00 +1200
+Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.25])
+        by pat.atlnz.lc (Postfix) with ESMTP id 550BA13EE13;
+        Fri, 25 Jun 2021 15:15:00 +1200 (NZST)
+Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
+        id 506A5340CEC; Fri, 25 Jun 2021 15:15:00 +1200 (NZST)
+From:   Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+To:     gregkh@linuxfoundation.org, yangyingliang@huawei.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Subject: [PATCH] usb: max-3421: Prevent corruption of freed memory
+Date:   Fri, 25 Jun 2021 15:14:56 +1200
+Message-Id: <20210625031456.8632-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=IOh89TnG c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=r6YtysWOX24A:10 a=Ih58b2DSK4Og19acf1kA:9 a=tZlN334bbdxLhB9B:21 a=29jYiaooX7ZjB_0x:21
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 7756f1d6369e61d1cc47d6e51619d1e1d1681a2e  phy: qcom-qusb2: Add configuration for SM4250 and SM6115
+The MAX-3421 USB driver remembers the state of the USB toggles for a
+device/endpoint. To save SPI writes, this was only done when a new
+device/endpoint was being used. Unfortunately, if the old device was
+removed, this would cause writes to freed memory.
 
-elapsed time: 728m
+To fix this, a simpler scheme is used. The toggles are read from
+hardware when a URB is completed, and the toggles are always written to
+hardware when any URB transaction is started. This will cause a few more
+SPI transactions, but no causes kernel panics.
 
-configs tested: 145
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm                             rpc_defconfig
-arm                        magician_defconfig
-mips                      maltasmvp_defconfig
-powerpc                      ppc44x_defconfig
-mips                     decstation_defconfig
-arm                       aspeed_g5_defconfig
-mips                     loongson1c_defconfig
-sh                        dreamcast_defconfig
-sh                        sh7785lcr_defconfig
-powerpc                     akebono_defconfig
-xtensa                generic_kc705_defconfig
-riscv                             allnoconfig
-openrisc                    or1ksim_defconfig
-ia64                             allmodconfig
-mips                       capcella_defconfig
-arm                        mini2440_defconfig
-arm                            hisi_defconfig
-arm                        neponset_defconfig
-mips                        bcm63xx_defconfig
-mips                         rt305x_defconfig
-sh                           se7206_defconfig
-nios2                            alldefconfig
-powerpc                 mpc8540_ads_defconfig
-mips                malta_qemu_32r6_defconfig
-powerpc                        fsp2_defconfig
-powerpc                     tqm8555_defconfig
-xtensa                       common_defconfig
-powerpc                     stx_gp3_defconfig
-xtensa                  cadence_csp_defconfig
-sh                        edosk7760_defconfig
-powerpc                      katmai_defconfig
-powerpc                 mpc834x_mds_defconfig
-arc                        nsimosci_defconfig
-m68k                        m5307c3_defconfig
-m68k                         amcore_defconfig
-xtensa                          iss_defconfig
-arm                       multi_v4t_defconfig
-m68k                          amiga_defconfig
-powerpc                     sequoia_defconfig
-arm                          badge4_defconfig
-sh                   rts7751r2dplus_defconfig
-arc                          axs103_defconfig
-arm                        clps711x_defconfig
-sh                           se7343_defconfig
-m68k                        m5272c3_defconfig
-arm                           sunxi_defconfig
-s390                          debug_defconfig
-powerpc                       ebony_defconfig
-powerpc                       holly_defconfig
-powerpc                     sbc8548_defconfig
-arm                         palmz72_defconfig
-m68k                        mvme147_defconfig
-arm                          ixp4xx_defconfig
-arm                          pxa910_defconfig
-powerpc                     ppa8548_defconfig
-x86_64                            allnoconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-sparc                            allyesconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a001-20210622
-i386                 randconfig-a002-20210622
-i386                 randconfig-a003-20210622
-i386                 randconfig-a006-20210622
-i386                 randconfig-a005-20210622
-i386                 randconfig-a004-20210622
-i386                 randconfig-a002-20210623
-i386                 randconfig-a001-20210623
-i386                 randconfig-a003-20210623
-i386                 randconfig-a006-20210623
-i386                 randconfig-a005-20210623
-i386                 randconfig-a004-20210623
-x86_64               randconfig-a012-20210622
-x86_64               randconfig-a016-20210622
-x86_64               randconfig-a015-20210622
-x86_64               randconfig-a014-20210622
-x86_64               randconfig-a013-20210622
-x86_64               randconfig-a011-20210622
-i386                 randconfig-a011-20210623
-i386                 randconfig-a014-20210623
-i386                 randconfig-a013-20210623
-i386                 randconfig-a015-20210623
-i386                 randconfig-a012-20210623
-i386                 randconfig-a016-20210623
-i386                 randconfig-a011-20210622
-i386                 randconfig-a014-20210622
-i386                 randconfig-a013-20210622
-i386                 randconfig-a015-20210622
-i386                 randconfig-a012-20210622
-i386                 randconfig-a016-20210622
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-um                            kunit_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                      rhel-8.3-kbuiltin
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-b001-20210624
-x86_64               randconfig-b001-20210622
-x86_64               randconfig-a002-20210622
-x86_64               randconfig-a001-20210622
-x86_64               randconfig-a005-20210622
-x86_64               randconfig-a003-20210622
-x86_64               randconfig-a004-20210622
-x86_64               randconfig-a006-20210622
-
+Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host dri=
+ver.")
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/host/max3421-hcd.c | 44 +++++++++++-----------------------
+ 1 file changed, 14 insertions(+), 30 deletions(-)
+
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hc=
+d.c
+index afd9174d83b1..abceca1c9c0f 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -153,8 +153,6 @@ struct max3421_hcd {
+ 	 */
+ 	struct urb *curr_urb;
+ 	enum scheduling_pass sched_pass;
+-	struct usb_device *loaded_dev;	/* dev that's loaded into the chip */
+-	int loaded_epnum;		/* epnum whose toggles are loaded */
+ 	int urb_done;			/* > 0 -> no errors, < 0: errno */
+ 	size_t curr_len;
+ 	u8 hien;
+@@ -492,39 +490,17 @@ max3421_set_speed(struct usb_hcd *hcd, struct usb_d=
+evice *dev)
+  * Caller must NOT hold HCD spinlock.
+  */
+ static void
+-max3421_set_address(struct usb_hcd *hcd, struct usb_device *dev, int epn=
+um,
+-		    int force_toggles)
++max3421_set_address(struct usb_hcd *hcd, struct usb_device *dev, int epn=
+um)
+ {
+-	struct max3421_hcd *max3421_hcd =3D hcd_to_max3421(hcd);
+-	int old_epnum, same_ep, rcvtog, sndtog;
+-	struct usb_device *old_dev;
++	int rcvtog, sndtog;
+ 	u8 hctl;
+=20
+-	old_dev =3D max3421_hcd->loaded_dev;
+-	old_epnum =3D max3421_hcd->loaded_epnum;
+-
+-	same_ep =3D (dev =3D=3D old_dev && epnum =3D=3D old_epnum);
+-	if (same_ep && !force_toggles)
+-		return;
+-
+-	if (old_dev && !same_ep) {
+-		/* save the old end-points toggles: */
+-		u8 hrsl =3D spi_rd8(hcd, MAX3421_REG_HRSL);
+-
+-		rcvtog =3D (hrsl >> MAX3421_HRSL_RCVTOGRD_BIT) & 1;
+-		sndtog =3D (hrsl >> MAX3421_HRSL_SNDTOGRD_BIT) & 1;
+-
+-		/* no locking: HCD (i.e., we) own toggles, don't we? */
+-		usb_settoggle(old_dev, old_epnum, 0, rcvtog);
+-		usb_settoggle(old_dev, old_epnum, 1, sndtog);
+-	}
+ 	/* setup new endpoint's toggle bits: */
+ 	rcvtog =3D usb_gettoggle(dev, epnum, 0);
+ 	sndtog =3D usb_gettoggle(dev, epnum, 1);
+ 	hctl =3D (BIT(rcvtog + MAX3421_HCTL_RCVTOG0_BIT) |
+ 		BIT(sndtog + MAX3421_HCTL_SNDTOG0_BIT));
+=20
+-	max3421_hcd->loaded_epnum =3D epnum;
+ 	spi_wr8(hcd, MAX3421_REG_HCTL, hctl);
+=20
+ 	/*
+@@ -532,7 +508,6 @@ max3421_set_address(struct usb_hcd *hcd, struct usb_d=
+evice *dev, int epnum,
+ 	 * address-assignment so it's best to just always load the
+ 	 * address whenever the end-point changed/was forced.
+ 	 */
+-	max3421_hcd->loaded_dev =3D dev;
+ 	spi_wr8(hcd, MAX3421_REG_PERADDR, dev->devnum);
+ }
+=20
+@@ -667,7 +642,7 @@ max3421_select_and_start_urb(struct usb_hcd *hcd)
+ 	struct max3421_hcd *max3421_hcd =3D hcd_to_max3421(hcd);
+ 	struct urb *urb, *curr_urb =3D NULL;
+ 	struct max3421_ep *max3421_ep;
+-	int epnum, force_toggles =3D 0;
++	int epnum;
+ 	struct usb_host_endpoint *ep;
+ 	struct list_head *pos;
+ 	unsigned long flags;
+@@ -777,7 +752,6 @@ max3421_select_and_start_urb(struct usb_hcd *hcd)
+ 			usb_settoggle(urb->dev, epnum, 0, 1);
+ 			usb_settoggle(urb->dev, epnum, 1, 1);
+ 			max3421_ep->pkt_state =3D PKT_STATE_SETUP;
+-			force_toggles =3D 1;
+ 		} else
+ 			max3421_ep->pkt_state =3D PKT_STATE_TRANSFER;
+ 	}
+@@ -785,7 +759,7 @@ max3421_select_and_start_urb(struct usb_hcd *hcd)
+ 	spin_unlock_irqrestore(&max3421_hcd->lock, flags);
+=20
+ 	max3421_ep->last_active =3D max3421_hcd->frame_number;
+-	max3421_set_address(hcd, urb->dev, epnum, force_toggles);
++	max3421_set_address(hcd, urb->dev, epnum);
+ 	max3421_set_speed(hcd, urb->dev);
+ 	max3421_next_transfer(hcd, 0);
+ 	return 1;
+@@ -1380,6 +1354,16 @@ max3421_urb_done(struct usb_hcd *hcd)
+ 		status =3D 0;
+ 	urb =3D max3421_hcd->curr_urb;
+ 	if (urb) {
++		/* save the old end-points toggles: */
++		u8 hrsl =3D spi_rd8(hcd, MAX3421_REG_HRSL);
++		int rcvtog =3D (hrsl >> MAX3421_HRSL_RCVTOGRD_BIT) & 1;
++		int sndtog =3D (hrsl >> MAX3421_HRSL_SNDTOGRD_BIT) & 1;
++		int epnum =3D usb_endpoint_num(&urb->ep->desc);
++
++		/* no locking: HCD (i.e., we) own toggles, don't we? */
++		usb_settoggle(urb->dev, epnum, 0, rcvtog);
++		usb_settoggle(urb->dev, epnum, 1, sndtog);
++
+ 		max3421_hcd->curr_urb =3D NULL;
+ 		spin_lock_irqsave(&max3421_hcd->lock, flags);
+ 		usb_hcd_unlink_urb_from_ep(hcd, urb);
+--=20
+2.32.0
+
