@@ -2,79 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C643B3E3A
-	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 10:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31F73B3E3E
+	for <lists+linux-usb@lfdr.de>; Fri, 25 Jun 2021 10:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbhFYIJv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Jun 2021 04:09:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46368 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230048AbhFYIJu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 25 Jun 2021 04:09:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 650EA61425;
-        Fri, 25 Jun 2021 08:07:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1624608448;
-        bh=3U9dOh8ubJIZg7LPE4ibu71lztZPpneG4VY8XUeQMJU=;
+        id S229982AbhFYIKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 25 Jun 2021 04:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55700 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229748AbhFYIKX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 25 Jun 2021 04:10:23 -0400
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806E7C061574;
+        Fri, 25 Jun 2021 01:08:03 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id 5FC1BC6459; Fri, 25 Jun 2021 09:08:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mess.org; s=2020;
+        t=1624608480; bh=amkY74lh1X/rDudc8tVavuYeXKhobyg9/z/WmVzcVBU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NecY4QLc6B1Iy1Wn0nDs+hgKCfA11BmN3lJ9UndAuFph4V3CxfXgv9bNevvKbpEhL
-         QZnZm+rwc2daJFC6U+4YlxDUBufuRCTZrFc3D2uKjcT6s7O9TLGP4upUN3PqsmiEB4
-         JINWJt7rhwJymccYInvr130+hYknFGYWh7OT+CPw=
-Date:   Fri, 25 Jun 2021 10:07:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v8 00/12] Move Hisilicon 6421v600 SPMI and USB drivers
- out of staging
-Message-ID: <YNWOvn67Gl2v3Cco@kroah.com>
-References: <cover.1624606660.git.mchehab+huawei@kernel.org>
+        b=gElQlNxn6t2aTCOvxeKkYTpnnyE4XJi2e/xw2WVp635+hsphQnGuPAm1/UVS98lu1
+         MzMBdj1kclVk7c3AA5Mni74nvkTB+PKv5WvD+s7dksIOH45cezSvDHpUdgrx7enRNE
+         IoLRItkZXuHSvDEiGVQO+BpaUmoc4YVIxEq+2WzBRZvsI/Kp0PvnPqEDJlx3kxq8Nq
+         LEuCKARnNM+HyLe+K564XDgeLzVPEyABV3x0qW/SDhJG0ffOMQh/hC6cqI3iLCmSZL
+         jZowJh52CreDufxz66OSCyh1g+VbgAYyOWBz52jUscuARS4hDSOKCayrFTBBfvbEVx
+         lf5tkPOEPFwQw==
+Date:   Fri, 25 Jun 2021 09:08:00 +0100
+From:   Sean Young <sean@mess.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-media@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>
+Subject: Re: [PATCH v3 0/3] IR driver for USB-UIRT device
+Message-ID: <20210625080800.GA25403@gofer.mess.org>
+References: <20210511103219.GA13769@gofer.mess.org>
+ <YJ5cH1Z5MdZHE8HU@hovoldconsulting.com>
+ <20210515092226.GA31801@gofer.mess.org>
+ <YKI3vyOE8XmpNAuC@hovoldconsulting.com>
+ <20210517103522.GA4644@gofer.mess.org>
+ <YKZktqzkddh3amqX@hovoldconsulting.com>
+ <35840cdac1dcb2808e98ebb57afeba352624d15c.camel@suse.com>
+ <YNMyvCaZUIDOnSc9@hovoldconsulting.com>
+ <20210624091349.GA7476@gofer.mess.org>
+ <YNRTSLEHzFKU1KOa@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1624606660.git.mchehab+huawei@kernel.org>
+In-Reply-To: <YNRTSLEHzFKU1KOa@hovoldconsulting.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jun 25, 2021 at 09:45:52AM +0200, Mauro Carvalho Chehab wrote:
-> Hi Greg,
+On Thu, Jun 24, 2021 at 11:41:28AM +0200, Johan Hovold wrote:
+> I'm not, again see above. I'm saying that we should not make one-off
+> copies of serial drivers if we can avoid it.
 > 
-> Thanks for merging patches 1 and 2 from the v7 series!
-> 
-> Those are the remaining patches that are needed for the USB to work
-> with Hikey970.
-> 
-> I guess patches 1 and 2 on this series are also OK, as they were acked
-> by the PHY and SPMI maintainers.
-> 
-> As suggested on your last review, I broke the MFD staging patches 
-> into one logical change per patch.
-> 
-> Except for the split, the only change from v7 was at the copyright: 
-> I'm using 20xx-2021 instead of 20xx- to indicate that the copyrights
-> extend to the present. I also changed the HiSilicon name to better
-> reflect the name of the company.
+> In this case the limitations of lircd and the lack of hotplugging in
+> serdev may be a sufficient reason for making an exception. As we've
+> already discussed.
 
-The copyright change is still not correct.  I recommend you take a look
-at this:
-	https://www.linuxfoundation.org/blog/copyright-notices-in-open-source-software-projects/
-and:
-	https://training.linuxfoundation.org/training/open-source-licensing-basics-for-software-developers/
-	(the copyright chapter)
-for specifics as to what to, and not to do with regards to copyright
-notices.
+Great, thanks very much. I totally agree a serdev solution would be
+preferable.
 
-I'm sure your employer also has some information about what to do with
-regards to this as well.
+In that case, can have your Signed-off-by for the ftdi_sio.c change, or
+could this be merged through the usb tree please?
 
-I've taken patches 1-3, 5-9 now.
+Thanks
 
-thanks,
-
-greg k-h
+Sean
