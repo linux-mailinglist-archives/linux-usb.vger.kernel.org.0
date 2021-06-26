@@ -2,234 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7C43B4BC6
-	for <lists+linux-usb@lfdr.de>; Sat, 26 Jun 2021 03:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5971C3B4DC3
+	for <lists+linux-usb@lfdr.de>; Sat, 26 Jun 2021 10:57:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbhFZBS4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 25 Jun 2021 21:18:56 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:57620 "EHLO m43-7.mailgun.net"
+        id S229741AbhFZI7Z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 26 Jun 2021 04:59:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229934AbhFZBSz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 25 Jun 2021 21:18:55 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624670194; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=usxB2fTMPZ0wlWrn+jFkba6X4DkXnAbk3HG4iu9PnVE=;
- b=li8a1uomeqNnfFSI54Sbjt9KPxd4FRa+i9H0SqR77VF0MBMA5PuT2UU/rhYaaAutFGroYICY
- LC83tgjLiu0motJfni6cupJnVq+acJqp0uRiMUWl8BeRbnv9h99FQuCgaxrNtp2HQXkOuIxG
- J+OpAFv34kwsS7IVXPpEXANOP6w=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 60d67febd2559fe392f59b33 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 26 Jun 2021 01:16:27
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C1118C43460; Sat, 26 Jun 2021 01:16:26 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C8D96C433D3;
-        Sat, 26 Jun 2021 01:16:25 +0000 (UTC)
+        id S229518AbhFZI7Z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 26 Jun 2021 04:59:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 94AF661920;
+        Sat, 26 Jun 2021 08:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1624697823;
+        bh=qmG1JfvdGzsA0YlwqYbabUV+AHbdvuyoe9DUjculXA8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZMUoH0PVIaYf1Uix6rrjUT5KrcQKsvOWAgPMXRrykwR0NU+uTmfW6bZRysxzxn8P0
+         OiBKET2vFg0BZ2lqa9qIW15uFYVQY7mVULDZDAG6GAjLAjjoxzVlHQHhJqPrFkrEhy
+         npHIeNS17+gXb4XfgioqT8jv9DcrcgRaKRrJd7bVMzkqSq1a0GeiI5Fxa+QRD/dnnx
+         +CIpI1Qj7+TtWOoVUuaSIVe6OHGrAtrCYgM+jMqMuJKflN1vx4cWH6bGQY2ZSFyyl/
+         GgJEb8RDnTFOPnkTGJWC+k3LIts337H4K72bdNPjNcb1nAuHeqfccqy0PD+cMV1LHZ
+         +yQJ3gato9zCw==
+Date:   Sat, 26 Jun 2021 16:56:55 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Pawel Laszczak <pawell@cadence.com>
+Cc:     rogerq@kernel.org, a-govindraju@ti.com, gregkh@linuxfoundation.org,
+        felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kishon@ti.com, kurahul@cadence.com,
+        sparmar@cadence.com, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: cdns3: Fixed incorrect gadget state
+Message-ID: <20210626085655.GA13671@Peter>
+References: <20210623070247.46151-1-pawell@gli-login.cadence.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 26 Jun 2021 09:16:25 +0800
-From:   linyyuan@codeaurora.org
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>
-Subject: Re: [PATCH] usb: dwc3: fix race of usb_gadget_driver operation
-In-Reply-To: <20210625163707.GC574023@rowland.harvard.edu>
-References: <20210625104415.8072-1-linyyuan@codeaurora.org>
- <20210625163707.GC574023@rowland.harvard.edu>
-Message-ID: <b24825113327c72c742d55e89ec2726e@codeaurora.org>
-X-Sender: linyyuan@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210623070247.46151-1-pawell@gli-login.cadence.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-06-26 00:37, Alan Stern wrote:
-> On Fri, Jun 25, 2021 at 06:44:15PM +0800, Linyu Yuan wrote:
->> there is following race condition,
->> 
->>       CPU1                         CPU2
->> dwc3_runtime_suspend()        dwc3_gadget_stop()
->> spin_lock(&dwc->lock)
->> dwc3_gadget_suspend()
->> dwc3_disconnect_gadget()
->> dwc->gadget_driver != NULL
->> spin_unlock(&dwc->lock)
->>                               spin_lock(&dwc->lock)
->>                               dwc->gadget_driver = NULL
->>                               spin_unlock(&dwc->lock)
->> dwc->gadget_driver->disconnect(dwc->gadget);
->> 
->> system will crash when access NULL gadget_driver.
->> 
->> 7dc0c55e9f30 ('USB: UDC core: Add udc_async_callbacks gadget op')
->> suggest a common way to avoid such kind of race.
->> 
->> this change implment the callback in dwc3 and
->> change related functions which have callback to UDC core.
->> 
->> Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
->> ---
->>  drivers/usb/dwc3/core.h   |  1 +
->>  drivers/usb/dwc3/ep0.c    |  5 +++--
->>  drivers/usb/dwc3/gadget.c | 39 
->> +++++++++++++++++++++++----------------
->>  3 files changed, 27 insertions(+), 18 deletions(-)
->> 
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index dccdf13b5f9e..5991766239ba 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -1279,6 +1279,7 @@ struct dwc3 {
->>  	unsigned		dis_metastability_quirk:1;
->> 
->>  	unsigned		dis_split_quirk:1;
->> +	unsigned		async_callbacks:1;
->> 
->>  	u16			imod_interval;
->>  };
->> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->> index 3cd294264372..26419077c7c9 100644
->> --- a/drivers/usb/dwc3/ep0.c
->> +++ b/drivers/usb/dwc3/ep0.c
->> @@ -597,10 +597,11 @@ static int dwc3_ep0_set_address(struct dwc3 
->> *dwc, struct usb_ctrlrequest *ctrl)
->> 
->>  static int dwc3_ep0_delegate_req(struct dwc3 *dwc, struct 
->> usb_ctrlrequest *ctrl)
->>  {
->> -	int ret;
->> +	int ret = 0;
->> 
->>  	spin_unlock(&dwc->lock);
->> -	ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
->> +	if (dwc->async_callbacks)
->> +		ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
->>  	spin_lock(&dwc->lock);
+On 21-06-23 09:02:47, Pawel Laszczak wrote:
+> From: Pawel Laszczak <pawell@cadence.com>
 > 
-> Here and in the other places, you should test dwc->async_callbacks
-> _before_ dropping the spinlock.  Otherwise there is a race (the flag
-> could be written at about the same time it is checked).
-thanks for your comments,
+> For delayed status phase, the usb_gadget->state was set
+> to USB_STATE_ADDRESS and it has never been updated to
+> USB_STATE_CONFIGURED.
+> Patch updates the gadget state to correct USB_STATE_CONFIGURED.
+> As a result of this bug the controller was not able to enter to
+> Test Mode while using MSC function.
 
-if you think there is race here, how to make sure gadget_driver pointer 
-is safe,
-this is closest place where we can confirm it is non-NULL by checking 
-async_callbacks ?
+Pawel, would you please describe more about this issue? I remember the cdns3
+controller at i.mx series SoC could enter test mode by using current
+code.
+
+Peter
+
 > 
-> Alan Stern
+> Cc: <stable@vger.kernel.org>
+> Fixes: 7733f6c32e36 ("usb: cdns3: Add Cadence USB3 DRD Driver")
+> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ep0.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
->>  	return ret;
->>  }
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index af6d7f157989..d868f30007cc 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2585,6 +2585,16 @@ static int dwc3_gadget_vbus_draw(struct 
->> usb_gadget *g, unsigned int mA)
->>  	return ret;
->>  }
->> 
->> +static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool 
->> enable)
->> +{
->> +	struct dwc3		*dwc = gadget_to_dwc(g);
->> +	unsigned long		flags;
->> +
->> +	spin_lock_irqsave(&dwc->lock, flags);
->> +	dwc->async_callbacks = enable;
->> +	spin_unlock_irqrestore(&dwc->lock, flags);
->> +}
->> +
->>  static const struct usb_gadget_ops dwc3_gadget_ops = {
->>  	.get_frame		= dwc3_gadget_get_frame,
->>  	.wakeup			= dwc3_gadget_wakeup,
->> @@ -2596,6 +2606,7 @@ static const struct usb_gadget_ops 
->> dwc3_gadget_ops = {
->>  	.udc_set_ssp_rate	= dwc3_gadget_set_ssp_rate,
->>  	.get_config_params	= dwc3_gadget_config_params,
->>  	.vbus_draw		= dwc3_gadget_vbus_draw,
->> +	.udc_async_callbacks	= dwc3_gadget_async_callbacks,
->>  };
->> 
->>  /* 
->> -------------------------------------------------------------------------- 
->> */
->> @@ -3231,29 +3242,26 @@ static void dwc3_endpoint_interrupt(struct 
->> dwc3 *dwc,
->> 
->>  static void dwc3_disconnect_gadget(struct dwc3 *dwc)
->>  {
->> -	if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
->> -		spin_unlock(&dwc->lock);
->> +	spin_unlock(&dwc->lock);
->> +	if (dwc->async_callbacks && dwc->gadget_driver->disconnect)
->>  		dwc->gadget_driver->disconnect(dwc->gadget);
->> -		spin_lock(&dwc->lock);
->> -	}
->> +	spin_lock(&dwc->lock);
->>  }
->> 
->>  static void dwc3_suspend_gadget(struct dwc3 *dwc)
->>  {
->> -	if (dwc->gadget_driver && dwc->gadget_driver->suspend) {
->> -		spin_unlock(&dwc->lock);
->> +	spin_unlock(&dwc->lock);
->> +	if (dwc->async_callbacks && dwc->gadget_driver->suspend)
->>  		dwc->gadget_driver->suspend(dwc->gadget);
->> -		spin_lock(&dwc->lock);
->> -	}
->> +	spin_lock(&dwc->lock);
->>  }
->> 
->>  static void dwc3_resume_gadget(struct dwc3 *dwc)
->>  {
->> -	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
->> -		spin_unlock(&dwc->lock);
->> +	spin_unlock(&dwc->lock);
->> +	if (dwc->async_callbacks && dwc->gadget_driver->resume)
->>  		dwc->gadget_driver->resume(dwc->gadget);
->> -		spin_lock(&dwc->lock);
->> -	}
->> +	spin_lock(&dwc->lock);
->>  }
->> 
->>  static void dwc3_reset_gadget(struct dwc3 *dwc)
->> @@ -3585,11 +3593,10 @@ static void 
->> dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
->>  	 * implemented.
->>  	 */
->> 
->> -	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
->> -		spin_unlock(&dwc->lock);
->> +	spin_unlock(&dwc->lock);
->> +	if (dwc->async_callbacks && dwc->gadget_driver->resume)
->>  		dwc->gadget_driver->resume(dwc->gadget);
->> -		spin_lock(&dwc->lock);
->> -	}
->> +	spin_lock(&dwc->lock);
->>  }
->> 
->>  static void dwc3_gadget_linksts_change_interrupt(struct dwc3 *dwc,
->> --
->> 2.25.1
->> 
+> diff --git a/drivers/usb/cdns3/cdns3-ep0.c b/drivers/usb/cdns3/cdns3-ep0.c
+> index 9a17802275d5..ec5bfd8944c3 100644
+> --- a/drivers/usb/cdns3/cdns3-ep0.c
+> +++ b/drivers/usb/cdns3/cdns3-ep0.c
+> @@ -731,6 +731,7 @@ static int cdns3_gadget_ep0_queue(struct usb_ep *ep,
+>  		request->actual = 0;
+>  		priv_dev->status_completion_no_call = true;
+>  		priv_dev->pending_status_request = request;
+> +		usb_gadget_set_state(&priv_dev->gadget, USB_STATE_CONFIGURED);
+>  		spin_unlock_irqrestore(&priv_dev->lock, flags);
+>  
+>  		/*
+> -- 
+> 2.25.1
+> 
+
+-- 
+
+Thanks,
+Peter Chen
+
