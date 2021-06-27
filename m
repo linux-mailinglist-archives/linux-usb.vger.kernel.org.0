@@ -2,124 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1333B5462
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Jun 2021 18:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95ED73B54CF
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Jun 2021 20:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbhF0Ql6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Jun 2021 12:41:58 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:59291 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230505AbhF0Ql6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Jun 2021 12:41:58 -0400
-Received: (qmail 629122 invoked by uid 1000); 27 Jun 2021 12:39:33 -0400
-Date:   Sun, 27 Jun 2021 12:39:33 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "i.kononenko" <i.kononenko@yadro.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
+        id S231466AbhF0TAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Jun 2021 15:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231298AbhF0TAU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Jun 2021 15:00:20 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C5DC061574;
+        Sun, 27 Jun 2021 11:57:54 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id d11so17968057wrm.0;
+        Sun, 27 Jun 2021 11:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M/3/joTnhRd17fCBvR7XJw02bsdVZrFj5dA6ttjMmdo=;
+        b=L7wp89raLmw2Qhvg8cJyD+vjhtQp9x60n5BoouREW91gbZqyVqpX2yJd8YNlrF0FpK
+         fY7Zy1yZhMUk8D21USjI+XjmPFkXVCEgvJ7APRKoeCMk3WYX4krWXvo0NMwJTIyVzkuh
+         6xM6RVzM5duxFlEb+f7fYZqrJpAjtLVWL2VDgLybOflPcPTFqqFH4Q83q9Cs4SOYDA6J
+         okRlWL5Jb5+AysEfv98Re033KkkkY/MCjPKl68xfewRoDPLrvXZn8WiXF1oKgvNpVaLe
+         4548stdjNIV/yn5w/v3uPpuoIvvaxtDimQusO/JovK8fMybBGwL8YqKuzK7xDtTmYOLt
+         pe7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M/3/joTnhRd17fCBvR7XJw02bsdVZrFj5dA6ttjMmdo=;
+        b=BsiumquqABMCj9F6J98AJrheqI3ZNxPWESjOeeZ9T4c/KcOpD6sDamctshyVkjWIVi
+         EDLfpNQ1IHvvTyv1ylyqTiFnCCi9AvURb3sMYYB3d5+Bg8gLXQlHdM4rSYRaFQNO1S0C
+         mvkpTrh5ROfPzYrKjXFeSpWY2yKebAlsdBy59DtqC2GJierFTnJC7SeWRGo1QQ0rscHe
+         C4YzzDrcKwb1eS4ZcnkGgR5CrHBuP2UIYXiA4W9FoTgjRJ4sJPhPbSX/K9VKihFMrt8i
+         rp/AcLqtbU8H+Mvb1ppg/oKYmF8EQFsdowUAv8kokU7B6eGHi/YgNIBP/V7fxAft9zqA
+         +2sQ==
+X-Gm-Message-State: AOAM531pPS2W0GSvQeEss/m2RVa7LNf4N/+BHyhIn40QZEFjgeQiNN5E
+        E1x6iKBcP1JKAUJfVhDbYIA=
+X-Google-Smtp-Source: ABdhPJykFvXVZYIxBISkFs/2/ZDJTHrGDO7IOLNgjL/04Qhbm/69bPZ322YUI3TVd5AwaTBZyGtdTA==
+X-Received: by 2002:a5d:5685:: with SMTP id f5mr15391725wrv.101.1624820273454;
+        Sun, 27 Jun 2021 11:57:53 -0700 (PDT)
+Received: from localhost (178-169-161-196.razgrad.ddns.bulsat.com. [178.169.161.196])
+        by smtp.gmail.com with ESMTPSA id a4sm4022812wru.55.2021.06.27.11.57.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 27 Jun 2021 11:57:52 -0700 (PDT)
+From:   Iskren Chernev <iskren.chernev@gmail.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] usb:gadget:mass-storage: Improve the signature of
- SCSI handler function
-Message-ID: <20210627163933.GA628603@rowland.harvard.edu>
-References: <20210626211820.107310-1-i.kononenko@yadro.com>
- <20210626211820.107310-2-i.kononenko@yadro.com>
- <20210627141836.GC624763@rowland.harvard.edu>
- <ded6e647-6dd9-ebd0-0ea5-b20e113bf57f@yadro.com>
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Iskren Chernev <iskren.chernev@gmail.com>
+Subject: [PATCH v2 0/3] Add USB HS support for SM4250/6115
+Date:   Sun, 27 Jun 2021 21:57:47 +0300
+Message-Id: <20210627185750.693222-1-iskren.chernev@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ded6e647-6dd9-ebd0-0ea5-b20e113bf57f@yadro.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 27, 2021 at 06:32:03PM +0300, i.kononenko wrote:
-> Good morning, Alan!
-> 
-> First of all, thank you for your time to review my first patchset for 
-> the Linux Kernel and valuable advice on the right way of patchwriting!
-> 
-> On 27.06.2021 17:18, Alan Stern wrote:
-> > On Sun, Jun 27, 2021 at 12:18:14AM +0300, Igor Kononenko wrote:
-> >> SCSI command handlers currently have an ambiguous return value. This
-> > 
-> > (I dislike very much this way of writing patch descriptions.  Unless
-> > the reader has already looked at the email subject line and remembers
-> > that this patch affects the mass-storage gadget, he will think the
-> > sentence above is talking about command handlers in the SCSI core -- a
-> > completely different part of the kernel.  When writing patch
-> > descriptions, please do not assume that the reader already knows what
-> > the patch is about.)
-> > 
-> >> return value may indicate the length of the data written to the response
-> >> buffer and the command's processing status. Thus, the understanding of
-> >> command handling may be implicit.
-> 
-> First of all, thank you for your time to review my first patchset for the
-> Linux Kernel and valuable advice on the right way of patchwriting!
-> 
-> I noticed that the status/datasize return value pattern is pervasive for 
-> Linux and used through many subsystems. But for the f_mass_storage.c,
-> such approach use case is not documented anywhere, and implementation has 
-> too many magic-constant, e.g.
-> ```
-> static int do_inquiry(struct fsg_common *common, struct fsg_buffhd *bh)
-> {
->    ....
->    return 36;
-> }
-> ```
-> IMHO, this way is not giving the developer an explicit understanding of 
-> 'what is the 36' and its origin.
-> If moving to the suggested way is unwanted, I'd keep the implementation 
-> as is with additional documentation for each function where uses this 
-> approach.
+The USB controller found on SM4250/6115 is dwc3 (phy v1), very similar to
+existing supported phys (like msm8996), with slighly different tune seq.
 
-Since every one of the command handler functions uses this convention, 
-it would be wasteful to have separate documentation of the return value 
-for each function.  A single documentation comment that covers all the 
-command handlers would be acceptable.
+PS1: I know the series is already in usb-next, I can make a new series that
+will remove the 4250 compat from the existing code (but it would be 3 commits
+as well), let me know how to proceed.
 
-> Additionally, I guess, define clarify macros of return value instead of 
-> magic numbers is required.
+PS2: I kept the Bjorn Reviewed-by, because I'm only removing the compat string,
+which he agreed to, in a similar setting https://lkml.org/lkml/2021/6/25/351
 
-If you want, okay.  That should go in a separate patch from the 
-documentation patch.
+v1: https://lkml.org/lkml/2021/6/22/1183
 
-Also, since the return values are different for each command handler, I 
-suggest that the macro definitions be placed along with the handler 
-functions and not in a separate header file.  Having a separate file for 
-these macros would not make any sense, because the values do not need to 
-be shared across multiple functions or source files.
+Changes from v1:
+- remove 4250 compat, both platforms will share one dtsi
 
-> > The return value is _not_ ambiguous.  If the value is >= 0 then it is
-> > a data length, otherwise it is a status.  Yes, this is implicit, but it
-> > is a very common pattern used throughout the kernel and everyone
-> > understands it.
-> > 
-> >> After this patch, the output buffer's size will be set in the
-> >> 'data_size_to_handle' field of 'struct fsg_common', and the command
-> >> handler's return value indicates only the processing status.
-> > 
-> > What is the reason for making this change?  Does it fix any problems
-> > or prepare the way for any future patches?  It seems like this is
-> > completely unnecessary.
-> 
-> Yes, the patch uses as part of the incoming implementation of refactoring
-> 'usb:gadget:mass-storage:scsi' command handling.
+Iskren Chernev (3):
+  dt-bindings: usb: qcom,dwc3: Add bindings for sm6115
+  dt-bindings: phy: qcom,qusb2: document sm6115 compatible
+  phy: qcom-qusb2: Add configuration for SM6115
 
-That incoming implementation uses the refactored command handling but 
-doesn't depend on the refactoring.  It could just as easily use the 
-existing command handling.
+ .../bindings/phy/qcom,qusb2-phy.yaml          |  1 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  1 +
+ drivers/phy/qualcomm/phy-qcom-qusb2.c         | 31 +++++++++++++++++++
+ 3 files changed, 33 insertions(+)
 
-> I believed the suggested improvement would be useful for the community as 
-> an improvement of code.
 
-Unless you can provide a convincing reason for this change, it doesn't 
-seem like an improvement to me.  It's no easier to read or understand, 
-and it doesn't improve execution speed on a critical pathway.  It just 
-seems like pointless code churn.
+base-commit: e71e3a48a7e89fa71fb70bf4602367528864d2ff
+-- 
+2.32.0
 
-Alan Stern
