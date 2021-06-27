@@ -2,65 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 573CD3B53B9
-	for <lists+linux-usb@lfdr.de>; Sun, 27 Jun 2021 16:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662D73B53C7
+	for <lists+linux-usb@lfdr.de>; Sun, 27 Jun 2021 16:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbhF0O0V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 27 Jun 2021 10:26:21 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:45673 "HELO
+        id S231288AbhF0OcR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 27 Jun 2021 10:32:17 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:37867 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230268AbhF0O0U (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Jun 2021 10:26:20 -0400
-Received: (qmail 625898 invoked by uid 1000); 27 Jun 2021 10:23:55 -0400
-Date:   Sun, 27 Jun 2021 10:23:55 -0400
+        with SMTP id S231210AbhF0OcQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 27 Jun 2021 10:32:16 -0400
+Received: (qmail 625995 invoked by uid 1000); 27 Jun 2021 10:29:52 -0400
+Date:   Sun, 27 Jun 2021 10:29:52 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Igor Kononenko <i.kononenko@yadro.com>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        openbmc@lists.ozlabs.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/6] usb:gadget:mass-storage: refactoring the SCSI
- command handling
-Message-ID: <20210627142355.GD624763@rowland.harvard.edu>
+        Jens Axboe <axboe@kernel.dk>, openbmc@lists.ozlabs.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] fms: Add TOC/PMA/ATIP DVD-ROM capabilities
+Message-ID: <20210627142952.GE624763@rowland.harvard.edu>
 References: <20210626211820.107310-1-i.kononenko@yadro.com>
- <20210626211820.107310-3-i.kononenko@yadro.com>
+ <20210626211820.107310-4-i.kononenko@yadro.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210626211820.107310-3-i.kononenko@yadro.com>
+In-Reply-To: <20210626211820.107310-4-i.kononenko@yadro.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 27, 2021 at 12:18:15AM +0300, Igor Kononenko wrote:
-> Implements a universal way to define SCSI commands and configure
-> precheck handlers.
-
-What is the reason for doing this?
-
-At first glance, it appears you have added a great deal of complexity
-to the driver.  The patch replaces a large amount of easily understood
-(albeit rather repetitious) code with an approximately equal amount
-of rather complicated code.  This does not seem like an improvement.
-
-Furthermore, the code you removed is flexible; it easily allows for
-small variations as neede by some command handlers.  But the code you
-added is all table-driven, which does not easily permit arbitrary
-variations.
-
-> Tested: By probing the USBGadget Mass-Storage on the YADRO VEGMAN
-> BMC(AST2500) sample, each SCSI command was sent through HOST->BMC; the
-> USBGadget MassStorage debug print showed all sent commands works
-> properly.
+On Sun, Jun 27, 2021 at 12:18:16AM +0300, Igor Kononenko wrote:
+> The DVD-ROM required the SCSI 6.25 READ TOC/PMA/ATIP Command formats:
+>  * Response Format 0000b: Formatted TOC
+>  * Response Format 0001b: Multi-session Information
+> (MMC-6 Specification).
 > 
-> Signed-off-by: Igor Kononenko <i.kononenko@yadro.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 540 +++++++++++--------
->  drivers/usb/gadget/function/storage_common.h |   5 +
->  2 files changed, 310 insertions(+), 235 deletions(-)
+> This patch adds an implementation of that described above formats.
 
-I don't see the point of adding 75 lines to the kernel source if they
-don't accomplish anything new.
+I will sum up the last four patches of this series by saying that they
+add features for emulating DVD-ROM and BD devices.  Doing so increases
+the size of the f_mass_storage driver by a considerable amount and
+also adds a large amount of new material to Jens Axboe's
+include/uapi/linux/cdrom.h.
+
+Is any of this really needed?  What usage scenarios require
+f_mass_storage to emulate a DVD-ROM that couldn't use f_tcm instead?
 
 Alan Stern
