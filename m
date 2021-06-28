@@ -2,61 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1396C3B69C1
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 22:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C27CD3B6A59
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 23:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbhF1Ukn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 16:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S237893AbhF1V0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 17:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232957AbhF1Ukm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 16:40:42 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5935EC061574;
-        Mon, 28 Jun 2021 13:38:15 -0700 (PDT)
-Received: from miraculix.mork.no ([IPv6:2a01:799:95d:4a0a:c6de:35d9:792f:bbcf])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 15SKbxHx013070
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Mon, 28 Jun 2021 22:38:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1624912681; bh=Ytrhd6z8WEzd0MS5LyinrOj2ijImEHc564T7sYUloiM=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=n710+EWWXR1kfZWDKk8Rv5qwoHNBw2lbjLS8S1s49YRUZ1YZVoH+WxEgTG8LIf++i
-         A7HmSGcuRkYtpsiJ9Lhdt/6iuo/2NsgDthNAzcmIO5sxFuG0SYLelvel0linE5Ht7j
-         HUHd3araClX5sM4ZnHb3s6NmFoIWv1FVo5zAIkb4=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1lxy0w-00017T-FZ; Mon, 28 Jun 2021 22:37:54 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Marco De Marco <marco.demarco@posteo.net>
-Cc:     johan@kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] usb: net: Add support for u-blox LARA-R6 modules family
-Organization: m
-References: <4911218.dTlGXAFRqV@mars>
-Date:   Mon, 28 Jun 2021 22:37:54 +0200
-In-Reply-To: <4911218.dTlGXAFRqV@mars> (Marco De Marco's message of "Mon, 28
-        Jun 2021 14:35:56 +0000")
-Message-ID: <87v95xiv31.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        with ESMTP id S237963AbhF1V03 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 17:26:29 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F5C061760
+        for <linux-usb@vger.kernel.org>; Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id z4so377873plg.8
+        for <linux-usb@vger.kernel.org>; Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=beDcbwnP5As/mpTZp4157m7lhvaIkwus448ktxDYZvw=;
+        b=hWBO2BGhHo4wGkJVLXWZrYlXf4KDPCrSBwu9CLS9i1uqZziusrG8bjJ9mhC2Gvqo5U
+         /9D563iCVi95+zuDP6wh8g98G0A1nr54k9YZIqal45xzZx/Sfu6Cq+WGvFHtcpRh9CmK
+         p1i4f38U+srKWyf3c+pGv9BuT7Vfe4zLq5qtU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=beDcbwnP5As/mpTZp4157m7lhvaIkwus448ktxDYZvw=;
+        b=RCjam40F36iyQgKlTl3V+iVOEIqKC/ABy4LDlkU6yTZje0G82QqIFlnA4QtZY7wfiX
+         2Lyi+N3ErxcGC5ORHinjnjaX3XsvInAV8o3AGQFXyoIWcMKAOi9izr+vmB8LKbxhCmG9
+         UmqGV6P/O90NTksLd9PnAXOKYG8LcghbQSpPqduU6xy4XvO5Umz0mjr3eiG5Z4p5DQnh
+         GASMywxLOzf1yKkt42tzy2sSclm/GK5bmnC/V5aGirjdUj9OfAWqSvNEc6qcgnhKorGH
+         /bt9er/jttiR+SDTIlXysfAzuAaJsaRX4nkK6jtuTkfjs8BunE03Z40irTQAryR9Jd64
+         xJJA==
+X-Gm-Message-State: AOAM533u/bYyK2Y/80QCD94oznaSZLxIxojh9wGWc2Nx1ayn640nMVee
+        mLL0tjQ2Hwotetd8ppFQhrjqyQ==
+X-Google-Smtp-Source: ABdhPJzWVQZwXtcZku9Aom+JoyFe8QXif5vNo/7e47b/swit2rYKntKf8tytD9UEe1i5oQdJKiBXnQ==
+X-Received: by 2002:a17:90a:390d:: with SMTP id y13mr39170373pjb.133.1624915438390;
+        Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:df70:d2d8:b384:35cf])
+        by smtp.gmail.com with UTF8SMTPSA id j2sm15093743pfi.111.2021.06.28.14.23.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Jun 2021 14:23:57 -0700 (PDT)
+Date:   Mon, 28 Jun 2021 14:23:56 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pratham Pratap <prathampratap@codeaurora.org>
+Subject: Re: [PATCH v8 6/6] usb: dwc3: qcom: Keep power domain on to support
+ wakeup
+Message-ID: <YNo97HQXmYjUNz/C@google.com>
+References: <1624882097-23265-1-git-send-email-sanm@codeaurora.org>
+ <1624882097-23265-7-git-send-email-sanm@codeaurora.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.2 at canardo
-X-Virus-Status: Clean
+Content-Disposition: inline
+In-Reply-To: <1624882097-23265-7-git-send-email-sanm@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Marco De Marco <marco.demarco@posteo.net> writes:
+On Mon, Jun 28, 2021 at 05:38:17PM +0530, Sandeep Maheswaram wrote:
+> If wakeup capable devices are connected to the controller (directly
+> or through hubs) at suspend time keep the power domain on in order
+> to support wakeup from these devices.
+> 
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> ---
+> Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
+> to keep gdsc active.
+> 
+>  drivers/usb/dwc3/dwc3-qcom.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 82125bc..ba31aa3 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/phy/phy.h>
+> +#include <linux/pm_domain.h>
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> @@ -355,9 +356,15 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
+>  	u32 val;
+>  	int i, ret;
+>  
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
+> +
+>  	if (qcom->is_suspended)
+>  		return 0;
+>  
+> +	if (!dwc->phy_power_off && dwc->xhci)
+> +		genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
+> +
+>  	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
+>  	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
+>  		dev_err(qcom->dev, "HS-PHY not in L2\n");
+> @@ -382,9 +389,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
+>  	int ret;
+>  	int i;
+>  
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
+> +
+>  	if (!qcom->is_suspended)
+>  		return 0;
+>  
+> +	if (dwc->xhci)
+> +		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
+> +
+>  	if (device_may_wakeup(qcom->dev))
+>  		dwc3_qcom_disable_interrupts(qcom);
+>  
 
-> Support for u-blox LARA-R6 modules family.
+This is essentially the same as v7, which Felipe NAKed
+(https://patchwork.kernel.org/project/linux-arm-msm/patch/1619586716-8687-6-git-send-email-sanm@codeaurora.org/)
 
-Thanks.  But please split this in separate patches for net and usb.
-Different subsystems with different trees and maintainers.
+I think Felipe wants to see the handling of the power domain in the
+xhci-plat driver. One problem here is that the power domain is owned
+by the glue driver. For dwc3 the glue device is the parent of the xHCI
+device, this is also the case for some other drivers like histb or
+cdns3, but I'm not sure if it is universally true. If it isn't
+xhci-plat could only make use of dev->parent->pm_domain for certain
+compatible strings.
 
-And while you are at it:  Use lower case hex digits.  In general:
-Always try to follow the style of nearby code.
-
-
-Bj=C3=B8rn
+One could argue that it isn't very clean either if xhci-plat manipulates
+a resource of it's parent. At the same time the glue driver isn't
+supposed to check for the wakeup capable devices, so I guess some kind
+of trade-off needs to be made.
