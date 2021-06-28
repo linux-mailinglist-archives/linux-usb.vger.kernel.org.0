@@ -2,61 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A10C63B60BB
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 16:28:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E144A3B617D
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 16:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbhF1O2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 10:28:50 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:53175 "HELO
+        id S234577AbhF1OgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 10:36:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:54559 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232542AbhF1O0p (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 10:26:45 -0400
-Received: (qmail 657845 invoked by uid 1000); 28 Jun 2021 10:24:18 -0400
-Date:   Mon, 28 Jun 2021 10:24:18 -0400
+        with SMTP id S234862AbhF1OeY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 10:34:24 -0400
+Received: (qmail 658330 invoked by uid 1000); 28 Jun 2021 10:31:58 -0400
+Date:   Mon, 28 Jun 2021 10:31:58 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Matt Corallo <oc2udbzfd@mattcorallo.com>
-Cc:     linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
-Message-ID: <20210628142418.GC656159@rowland.harvard.edu>
-References: <0badab7c-f12e-e9ed-2f90-2cf5f25f4038@bluematt.me>
- <20210628005825.GA638648@rowland.harvard.edu>
- <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
- <20210628011628.GC638648@rowland.harvard.edu>
- <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
+To:     "i.kononenko" <i.kononenko@yadro.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jens Axboe <axboe@kernel.dk>, openbmc@lists.ozlabs.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/6] fms: Add TOC/PMA/ATIP DVD-ROM capabilities
+Message-ID: <20210628143158.GD656159@rowland.harvard.edu>
+References: <20210626211820.107310-1-i.kononenko@yadro.com>
+ <20210626211820.107310-4-i.kononenko@yadro.com>
+ <20210627142952.GE624763@rowland.harvard.edu>
+ <3f9c6e4a-18b7-db11-8b23-f0473a649d06@yadro.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
+In-Reply-To: <3f9c6e4a-18b7-db11-8b23-f0473a649d06@yadro.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 27, 2021 at 09:24:45PM -0400, Matt Corallo wrote:
+On Sun, Jun 27, 2021 at 09:45:07PM +0300, i.kononenko wrote:
 > 
 > 
-> On 6/27/21 21:16, Alan Stern wrote:
-> > You mean that only devices in the first group are affected by this bug?
-> > Devices in the second group are always detected correctly regardless of
-> > what else is plugged in?  (This contradicts what you wrote above.)
+> On 27.06.2021 17:29, Alan Stern wrote:
+> > Is any of this really needed?  What usage scenarios require
+> > f_mass_storage to emulate a DVD-ROM that couldn't use f_tcm instead?
 > 
+> I can't see any impediments to supplement the already existing 
+> implementation of MMC-(2/3) specification of multimedia devices to 
+> represent the DVD/BD features. If the kernel presents the CD-ROM SCSI 
+> commands, why the mass_storage:usb-gadget-function still doesn't include
+> that for DVD/BD?
 > 
-> Correct. Ignoring hotplug (ie on fresh boot or lsusb -vvv), the devices in
-> the second group work great. The devices in the first group do too, but only
-> if a device from the second group is present.
+> Many modern embedded systems (e.g., BMC, OpenBMC) implements their 
+> required features, e.g., Virtual Media Device, which is based on the 
+> usb:gadget:mass-storage. 
+> The purpose of that features is extensive, and their use the mass-storage
+> not only as a cdrom-device.
+> 
+> The required features of such systems might expect image back-end files
+> that size is significant than 2.1Gb, but such medium is not the CD-ROM 
+> device. USB-gadget consumers can incorrectly interpret such device by 
+> loading the wrong driver. I believe that should be the DVD-medium device,
+> at least. 
 
-Okay.  You can try collecting some usbmon traces to see what's going on.  
+You should include this information in the patch description, so that 
+people will understand why you wrote the patch.
 
-First test: Boot with nothing plugged in, start a usbmon trace for bus 0 
-(cat /sys/kernel/debug/usb/usbmon/0u >mon1.txt), plug in a first-group 
-device, run lsusb -v to trigger enumeration, and then kill the "cat" 
-process.
+> Additionally, please note the current patch also fixes the incorrect 
+> implementation of retrieving TOC/PMA/ATIP data, which is required for the 
+> CD-ROM. One system might correct works with retrieving first with the 
+> last session together, but for some systems, e.g., OS ESXi, OS Windows, 
+> should retrieving first and last border sessions in separate SCSI-request. 
 
-Second test: Same as the first except that you boot with a second-group 
-device already plugged in.
+What's wrong with the existing implementation?  Are you talking about 
+the do_read_toc function?  The driver only supports one session in any 
+case.
 
-The differences between the two traces may indicate where the problem 
-is.
+In general, fixes to existing code and additions of new code should go 
+in separate patches.
 
 Alan Stern
