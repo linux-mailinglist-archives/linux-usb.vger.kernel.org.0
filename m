@@ -2,77 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E144A3B617D
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 16:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610CE3B6202
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 16:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234577AbhF1OgJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 10:36:09 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:54559 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S234862AbhF1OeY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 10:34:24 -0400
-Received: (qmail 658330 invoked by uid 1000); 28 Jun 2021 10:31:58 -0400
-Date:   Mon, 28 Jun 2021 10:31:58 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     "i.kononenko" <i.kononenko@yadro.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, openbmc@lists.ozlabs.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/6] fms: Add TOC/PMA/ATIP DVD-ROM capabilities
-Message-ID: <20210628143158.GD656159@rowland.harvard.edu>
-References: <20210626211820.107310-1-i.kononenko@yadro.com>
- <20210626211820.107310-4-i.kononenko@yadro.com>
- <20210627142952.GE624763@rowland.harvard.edu>
- <3f9c6e4a-18b7-db11-8b23-f0473a649d06@yadro.com>
+        id S234114AbhF1Okx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 10:40:53 -0400
+Received: from mout01.posteo.de ([185.67.36.65]:38817 "EHLO mout01.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234567AbhF1OiZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 28 Jun 2021 10:38:25 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 1712324002A
+        for <linux-usb@vger.kernel.org>; Mon, 28 Jun 2021 16:35:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1624890958; bh=ALDlTvxIe3ykDRTBGondySmeGFvUACUQLrZIeO34JYs=;
+        h=From:To:Subject:Date:From;
+        b=Z82Qj8XVIYx9pVADLNH6dDGRL9o9jQ4VD89CQUqEHpkG04pf/6X6ErssxBzWIz8hs
+         38cZ5tF1D8lae2+GhWQIuaQwGZOEfT5hfO4PDKL0/FI5PYA3xQG+7YFs8xtmTECPU8
+         l1+bhlP0c5sxFjM9y3UMo44j9Wgtqz2FXbzzOaBST18IYkoQLfKvzq0clOi1RXdVXn
+         IOzN9rGDsVowzBMMiqpfXCrPh0ss7aXnMynBJtkwcNq+qTeZgrVM6XSgbfgT0F+RQX
+         l96aBG3UbGwWDUtTsZwjquIqv7/SdpQzZug39YLIR+oAoe41YcwQVCojwX8rmt5pUX
+         2zIoVl9IogaNA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4GD9C115qsz9rxM;
+        Mon, 28 Jun 2021 16:35:57 +0200 (CEST)
+From:   Marco De Marco <marco.demarco@posteo.net>
+To:     johan@kernel.org, linux-usb@vger.kernel.org, bjorn@mork.no,
+        netdev@vger.kernel.org
+Subject: [PATCH] usb: net: Add support for u-blox LARA-R6 modules family
+Date:   Mon, 28 Jun 2021 14:35:56 +0000
+Message-ID: <4911218.dTlGXAFRqV@mars>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f9c6e4a-18b7-db11-8b23-f0473a649d06@yadro.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jun 27, 2021 at 09:45:07PM +0300, i.kononenko wrote:
-> 
-> 
-> On 27.06.2021 17:29, Alan Stern wrote:
-> > Is any of this really needed?  What usage scenarios require
-> > f_mass_storage to emulate a DVD-ROM that couldn't use f_tcm instead?
-> 
-> I can't see any impediments to supplement the already existing 
-> implementation of MMC-(2/3) specification of multimedia devices to 
-> represent the DVD/BD features. If the kernel presents the CD-ROM SCSI 
-> commands, why the mass_storage:usb-gadget-function still doesn't include
-> that for DVD/BD?
-> 
-> Many modern embedded systems (e.g., BMC, OpenBMC) implements their 
-> required features, e.g., Virtual Media Device, which is based on the 
-> usb:gadget:mass-storage. 
-> The purpose of that features is extensive, and their use the mass-storage
-> not only as a cdrom-device.
-> 
-> The required features of such systems might expect image back-end files
-> that size is significant than 2.1Gb, but such medium is not the CD-ROM 
-> device. USB-gadget consumers can incorrectly interpret such device by 
-> loading the wrong driver. I believe that should be the DVD-medium device,
-> at least. 
+Support for u-blox LARA-R6 modules family.
 
-You should include this information in the patch description, so that 
-people will understand why you wrote the patch.
+Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
 
-> Additionally, please note the current patch also fixes the incorrect 
-> implementation of retrieving TOC/PMA/ATIP data, which is required for the 
-> CD-ROM. One system might correct works with retrieving first with the 
-> last session together, but for some systems, e.g., OS ESXi, OS Windows, 
-> should retrieving first and last border sessions in separate SCSI-request. 
+---
 
-What's wrong with the existing implementation?  Are you talking about 
-the do_read_toc function?  The driver only supports one session in any 
-case.
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index d08e1de26..cb92c7c1e 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1115,6 +1115,7 @@ static const struct usb_device_id products[] = {
+ 	{QMI_FIXED_INTF(0x05c6, 0x9083, 3)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9084, 4)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x90b2, 3)},    /* ublox R410M */
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x90fA, 3)}, /* ublox R6XX  */
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 0)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 5)},
+ 	{QMI_QUIRK_SET_DTR(0x05c6, 0x9625, 4)},	/* YUGA CLM920-NC5 */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index aeaa3756f..05d0379c9 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -238,6 +238,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_UC15			0x9090
+ /* These u-blox products use Qualcomm's vendor ID */
+ #define UBLOX_PRODUCT_R410M			0x90b2
++#define UBLOX_PRODUCT_R6XX          0x90FA
+ /* These Yuga products use Qualcomm's vendor ID */
+ #define YUGA_PRODUCT_CLM920_NC5			0x9625
+ 
+@@ -1101,6 +1102,8 @@ static const struct usb_device_id option_ids[] = {
+ 	/* u-blox products using Qualcomm vendor ID */
+ 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+ 	  .driver_info = RSVD(1) | RSVD(3) },
++	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
++	  .driver_info = RSVD(3) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, 0xff, 0xff, 0xff),
+ 	  .driver_info = NUMEP2 },
 
-In general, fixes to existing code and additions of new code should go 
-in separate patches.
 
-Alan Stern
+
