@@ -2,105 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB2B3B5DA8
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 14:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B43443B5FAB
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 16:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbhF1ML2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 08:11:28 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:6161 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232946AbhF1ML0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 08:11:26 -0400
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 28 Jun 2021 05:09:01 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 28 Jun 2021 05:08:59 -0700
-X-QCInternal: smtphost
-Received: from c-sanm-linux.qualcomm.com ([10.206.25.31])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 28 Jun 2021 17:38:32 +0530
-Received: by c-sanm-linux.qualcomm.com (Postfix, from userid 2343233)
-        id 7B60F3A48; Mon, 28 Jun 2021 17:38:31 +0530 (IST)
-From:   Sandeep Maheswaram <sanm@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S232361AbhF1OMy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 10:12:54 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52257 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S230256AbhF1OMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 10:12:54 -0400
+Received: (qmail 657388 invoked by uid 1000); 28 Jun 2021 10:10:27 -0400
+Date:   Mon, 28 Jun 2021 10:10:27 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     linyyuan@codeaurora.org
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pratham Pratap <prathampratap@codeaurora.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: [PATCH v8 6/6] usb: dwc3: qcom: Keep power domain on to support wakeup
-Date:   Mon, 28 Jun 2021 17:38:17 +0530
-Message-Id: <1624882097-23265-7-git-send-email-sanm@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1624882097-23265-1-git-send-email-sanm@codeaurora.org>
-References: <1624882097-23265-1-git-send-email-sanm@codeaurora.org>
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>
+Subject: Re: [PATCH] usb: dwc3: fix race of usb_gadget_driver operation
+Message-ID: <20210628141027.GA656159@rowland.harvard.edu>
+References: <20210625104415.8072-1-linyyuan@codeaurora.org>
+ <20210625163707.GC574023@rowland.harvard.edu>
+ <b24825113327c72c742d55e89ec2726e@codeaurora.org>
+ <20210626150304.GA601624@rowland.harvard.edu>
+ <1d1f06763c7cdeb67264128537c6a8f4@codeaurora.org>
+ <20210627140903.GB624763@rowland.harvard.edu>
+ <ca669cb24f424e1c28adfa3a84d7bad2@codeaurora.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ca669cb24f424e1c28adfa3a84d7bad2@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If wakeup capable devices are connected to the controller (directly
-or through hubs) at suspend time keep the power domain on in order
-to support wakeup from these devices.
+On Mon, Jun 28, 2021 at 05:36:22PM +0800, linyyuan@codeaurora.org wrote:
+> On 2021-06-27 22:09, Alan Stern wrote:
+> > 
+> > 	CPU0				CPU1
+> > 	----				----
+> > 					usb_gadget_remove_driver runs
+> > 					  Calls synchronize_irq
+> > 					    synchronize_irq returns
+> > 					  Calls udc_driver_unbind
+> > 	IRQ happens for disconnect
+> > 	  Handler unlocks dwc->lock
+> > 	  Calls dwc->gadget_driver->disconnect
+> > 	    Gadget driver has already been unbound
+> > 	      and is not prepared to handle a
+> > 	      callback, so it crashes
+> > 					  Calls usb_gadget_udc_stop
+> > 					    dwc->gadget_driver is
+> > 					      set to NULL
+> > 
+> > Without the async_callbacks mechanism, the gadget driver can get a
+> > callback at the wrong time (after it has been unbound), which might
+> > cause it to crash.
+> 1. do you think we need to back to my original patch,
+> https://lore.kernel.org/linux-usb/20210619154309.52127-1-linyyuan@codeaurora.org/T/#t
 
-Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
----
-Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
-to keep gdsc active.
+No, I think the async_callbacks approach is slightly better.
 
- drivers/usb/dwc3/dwc3-qcom.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+> i think we can add the spin lock or mutex lock to protect this kind of race
+> from UDC layer, it will be easy understanding.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 82125bc..ba31aa3 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -17,6 +17,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/phy/phy.h>
-+#include <linux/pm_domain.h>
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-@@ -355,9 +356,15 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
- 	u32 val;
- 	int i, ret;
- 
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (qcom->is_suspended)
- 		return 0;
- 
-+	if (!dwc->phy_power_off && dwc->xhci)
-+		genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
- 	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
- 		dev_err(qcom->dev, "HS-PHY not in L2\n");
-@@ -382,9 +389,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
- 	int ret;
- 	int i;
- 
-+	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-+	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-+
- 	if (!qcom->is_suspended)
- 		return 0;
- 
-+	if (dwc->xhci)
-+		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-+
- 	if (device_may_wakeup(qcom->dev))
- 		dwc3_qcom_disable_interrupts(qcom);
- 
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a member
-of Code Aurora Forum, hosted by The Linux Foundation
+We don't actually need a lock or mutex to fix this problem.  We just 
+need to make the remove_driver sequence issue two calls to the UDC 
+driver rather than just one: async_callbacks and udc_stop.
 
+> 2. if you insist this kind of change, how to change following code in dwc3 ?
+> if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
+> 
+> 2.1 if (dwc->async_callbacks && dwc->gadget_driver->disconnect) {
+> or
+> 2.2 if (dwc->async_callbacks && vdwc->gadget_driver &&
+> dwc->gadget_driver->disconnect) {
+
+Either one would be okay.  If async_callbacks is enabled then 
+dwc->gadget_driver should never be NULL, but it won't hurt to check.  
+After all, disconnect does not occur often and it doesn't need to run 
+extremely quickly.
+
+Alan Stern
