@@ -2,190 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1846F3B6C4C
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 03:51:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 993E03B6C9A
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 04:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbhF2ByK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 21:54:10 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:23133 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229936AbhF2ByI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 28 Jun 2021 21:54:08 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1624931502; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=V7MkLYVUh7QkyDJ4bXWNaj4vQ0h8YkJSt2barMKR2o0=; b=Fv/+/hKGfVmF2ffHz8X2y2QDFXDGgM0/FBEqe7/qR7+Z5o59Jv+Z8ph66MWFP1H+9mb4LYTt
- HI2jVinDWGi0/eT3UsHspxZOygYgs9+z/rY818HFKJMMrqJQYEFExNZrVAnYOawCSHas+Sx5
- x3hZBLGX9uKw/f7nGNajQSIjWRA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 60da7cadec0b18a745b5ccc8 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 29 Jun 2021 01:51:41
- GMT
-Sender: linyyuan=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 52CCEC43217; Tue, 29 Jun 2021 01:51:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from localhost.localdomain (unknown [101.87.142.17])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: linyyuan)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2575FC00A27;
-        Tue, 29 Jun 2021 01:51:27 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2575FC00A27
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
-From:   Linyu Yuan <linyyuan@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jack Pham <jackp@codeaurora.org>,
-        Linyu Yuan <linyyuan@codeaurora.org>
-Subject: [PATCH v2] usb: dwc3: avoid NULL access of usb_gadget_driver
-Date:   Tue, 29 Jun 2021 09:51:18 +0800
-Message-Id: <20210629015118.7944-1-linyyuan@codeaurora.org>
-X-Mailer: git-send-email 2.25.1
+        id S231925AbhF2Con (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 22:44:43 -0400
+Received: from shasxm03.verisilicon.com ([101.89.135.44]:45859 "EHLO
+        shasxm03.verisilicon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231924AbhF2Com (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 22:44:42 -0400
+Content-Language: zh-CN
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
+DKIM-Signature: v=1; a=rsa-sha256; d=Verisilicon.com; s=default;
+        c=simple/simple; t=1624934530; h=from:subject:to:date:message-id;
+        bh=Byv3ayTq5WXT2M/TdNnjgf3tTKl3xjeapNWVFVavpWc=;
+        b=e2aE0p9v3kM7+ynaCaHZyfPQlFuIm/yGUsw0+QSB5xG42s49A4MHhhh2qWuS1fUeM2c27jHa4Qa
+        D3Pym24tiiWuIob2dqm6ssNxEyAjYCamMXGScGVp+jjRbNuQknhkE4M511cwen54yLhkTJThXW6XP
+        WDkCyTclO+fJdItLMjk=
+Received: from SHASXM06.verisilicon.com ([fe80::59a8:ce34:dc14:ddda]) by
+ SHASXM03.verisilicon.com ([fe80::938:4dda:a2f9:38aa%14]) with mapi id
+ 14.03.0408.000; Tue, 29 Jun 2021 10:42:09 +0800
+From:   "Fang, Yuan" <Yuan.Fang@verisilicon.com>
+To:     "Fang, Yuan" <Yuan.Fang@verisilicon.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Yuan Fang <fangyuanseu@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSBkcml2ZXJzL3VzYi9kd2MzOiBTZXQgUEhZIHJlYWR5?=
+ =?gb2312?Q?_after_soft_reset_done?=
+Thread-Topic: [PATCH] drivers/usb/dwc3: Set PHY ready after soft reset done
+Thread-Index: AQHXXpH16kk4ndlpHUqkheri6gWwB6sOQNqAgAexvOCAFHCLsA==
+Date:   Tue, 29 Jun 2021 02:42:08 +0000
+Message-ID: <678AD2A4F5F78445B722FED0965FE327776E6111@SHASXM06.verisilicon.com>
+References: <20210611071805.9169-1-yuan.fang@verisilicon.com>
+ <87r1h8zh8y.fsf@kernel.org> 
+Accept-Language: zh-CN, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.10.13.191]
+x-tm-as-product-ver: SMEX-11.0.0.4179-8.100.1062-25628.004
+x-tm-as-result: No--5.972800-0.000000-31
+x-tm-as-user-approved-sender: Yes
+x-tm-as-user-blocked-sender: No
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-we found crash in dwc3_disconnect_gadget(),
-it is because dwc->gadget_driver become NULL before async access.
-7dc0c55e9f30 ('USB: UDC core: Add udc_async_callbacks gadget op')
-suggest a common way to avoid such kind of issue.
-
-this change implment the callback in dwc3 and
-change related functions which have callback to usb gadget driver.
-
-Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
----
-
-v2: add missing check in dwc3_reset_gadget(), found by Alan Stern.
-
- drivers/usb/dwc3/core.h   |  1 +
- drivers/usb/dwc3/ep0.c    | 10 ++++++----
- drivers/usb/dwc3/gadget.c | 21 ++++++++++++++++-----
- 3 files changed, 23 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index dccdf13b5f9e..5991766239ba 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -1279,6 +1279,7 @@ struct dwc3 {
- 	unsigned		dis_metastability_quirk:1;
- 
- 	unsigned		dis_split_quirk:1;
-+	unsigned		async_callbacks:1;
- 
- 	u16			imod_interval;
- };
-diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
-index 3cd294264372..2f9e45eed228 100644
---- a/drivers/usb/dwc3/ep0.c
-+++ b/drivers/usb/dwc3/ep0.c
-@@ -597,11 +597,13 @@ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
- 
- static int dwc3_ep0_delegate_req(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
- {
--	int ret;
-+	int ret = -EINVAL;
- 
--	spin_unlock(&dwc->lock);
--	ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
--	spin_lock(&dwc->lock);
-+	if (dwc->async_callbacks) {
-+		spin_unlock(&dwc->lock);
-+		ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
-+		spin_lock(&dwc->lock);
-+	}
- 	return ret;
- }
- 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index af6d7f157989..45f2bc0807e8 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2585,6 +2585,16 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
- 	return ret;
- }
- 
-+static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
-+{
-+	struct dwc3		*dwc = gadget_to_dwc(g);
-+	unsigned long		flags;
-+
-+	spin_lock_irqsave(&dwc->lock, flags);
-+	dwc->async_callbacks = enable;
-+	spin_unlock_irqrestore(&dwc->lock, flags);
-+}
-+
- static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.get_frame		= dwc3_gadget_get_frame,
- 	.wakeup			= dwc3_gadget_wakeup,
-@@ -2596,6 +2606,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
- 	.udc_set_ssp_rate	= dwc3_gadget_set_ssp_rate,
- 	.get_config_params	= dwc3_gadget_config_params,
- 	.vbus_draw		= dwc3_gadget_vbus_draw,
-+	.udc_async_callbacks	= dwc3_gadget_async_callbacks,
- };
- 
- /* -------------------------------------------------------------------------- */
-@@ -3231,7 +3242,7 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
- 
- static void dwc3_disconnect_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
-+	if (dwc->async_callbacks && dwc->gadget_driver->disconnect) {
- 		spin_unlock(&dwc->lock);
- 		dwc->gadget_driver->disconnect(dwc->gadget);
- 		spin_lock(&dwc->lock);
-@@ -3240,7 +3251,7 @@ static void dwc3_disconnect_gadget(struct dwc3 *dwc)
- 
- static void dwc3_suspend_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->suspend) {
-+	if (dwc->async_callbacks && dwc->gadget_driver->suspend) {
- 		spin_unlock(&dwc->lock);
- 		dwc->gadget_driver->suspend(dwc->gadget);
- 		spin_lock(&dwc->lock);
-@@ -3249,7 +3260,7 @@ static void dwc3_suspend_gadget(struct dwc3 *dwc)
- 
- static void dwc3_resume_gadget(struct dwc3 *dwc)
- {
--	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
-+	if (dwc->async_callbacks && dwc->gadget_driver->resume) {
- 		spin_unlock(&dwc->lock);
- 		dwc->gadget_driver->resume(dwc->gadget);
- 		spin_lock(&dwc->lock);
-@@ -3261,7 +3272,7 @@ static void dwc3_reset_gadget(struct dwc3 *dwc)
- 	if (!dwc->gadget_driver)
- 		return;
- 
--	if (dwc->gadget->speed != USB_SPEED_UNKNOWN) {
-+	if (dwc->async_callbacks && dwc->gadget->speed != USB_SPEED_UNKNOWN) {
- 		spin_unlock(&dwc->lock);
- 		usb_gadget_udc_reset(dwc->gadget, dwc->gadget_driver);
- 		spin_lock(&dwc->lock);
-@@ -3585,7 +3596,7 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
- 	 * implemented.
- 	 */
- 
--	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
-+	if (dwc->async_callbacks && dwc->gadget_driver->resume) {
- 		spin_unlock(&dwc->lock);
- 		dwc->gadget_driver->resume(dwc->gadget);
- 		spin_lock(&dwc->lock);
--- 
-2.25.1
-
+SGkgTWFpbnRhaW5uZXIsDQoNCkNvdWxkIHlvdSBwbGVhc2Ugc2hhcmUgeW91ciB0aG91Z2h0cyB3
+aXRoIG1lPw0KVGhhbmtzIGEgbG90Lg0KDQoNCi0tLS0t08q8/tStvP4tLS0tLQ0Kt6K8/sjLOiBG
+YW5nLCBZdWFuIA0Kt6LLzcqxvOQ6IDIwMjHE6jbUwjE2yNUgMTA6NTYNCsrVvP7IyzogJ0ZlbGlw
+ZSBCYWxiaSc7IFl1YW4gRmFuZzsgbGludXgtdXNiQHZnZXIua2VybmVsLm9yZw0K1vfM4jogtPC4
+tDogW1BBVENIXSBkcml2ZXJzL3VzYi9kd2MzOiBTZXQgUEhZIHJlYWR5IGFmdGVyIHNvZnQgcmVz
+ZXQgZG9uZQ0KDQpIaSBCYWxiaSwNCg0KPiBJdCdzIG1vcmUgc2FmZSB0byBzZXQgUEhZIHJlYWR5
+IGFmdGVyIHNvZnQgcmVzZXQgZG9uZQ0KPg0KPiBMZXQncyBjb25zaWRlciBhIHRlc3QgY2FzZSBs
+aWtlIHRoaXM6DQo+IEkgaGF2ZSBhIHVzYiBQSFkgd2hpY2ggZG9uJ3QgbmVlZCBTVyBpbml0aWFs
+IGJlZm9yZSBhY2Nlc3MgaXQsIEJ1dCBpIA0KPiBoYXZlIGEgd3JvbmcgUEhZIGNsb2NrIGRlZmF1
+bHQgc2V0dGluZyBpbiBQSFkgcmVnaXN0ZXIgd2hpY2ggbWVhbnMgUEhZIA0KPiBpcyBub3QgcmVh
+ZHkgaW4gZmFjdC4NCj4gaW4gZHdjM19jb3JlX2luaXQsIGR3YzNfY29yZV9nZXRfcGh5IHdpbGwg
+cmV0dXJuIDAgZGVzcGl0ZSB1c2IgZ2V0IA0KPiBQSFlzIHdpdGggcmV0dXJuIC1FTk9ERVYsIGFu
+ZCBzZXQgcGh5c19yZWFkeT10cnVlDQoNCj4geW91ciBQSFkgZHJpdmVyIHNob3VsZG4ndCByZXR1
+cm4gLUVOT0RFViBoZXJlLiBXaHkgYXJlIHlvdSByZXR1cm5pbmcgLUVOT0RFVj8gVGhlIFBIWSBp
+c24ndCByZWFkeSBidXQgaXQgX2RvZXNfIGV4aXN0Lg0KDQpTb3JyeSBmb3IgdGhlIGxhdGUgcmVw
+bHksIG15IGV4cGxhaW4gbWF5IGJlIG5vdCBjbGVhciwgbGV0IG1lIGRlc2NyaWJlIGl0IG9uY2Ug
+bW9yZSAxLCBJIGRvbqGvdCBjb2RpbmcgYSBQSFkgZHJpdmVyLCBJIGhhdmUgYSBQSFkgd2hpY2gg
+ZG8gTk9UIG5lZWQgU1cgb3BlcmF0aW9uIEFsbCBJIHNob3VsZCBkbyBpcyBzZXQgdGhlIHJlbGF0
+ZWQgUEhZIGN0cmwgcmVncyBjb3JyZWN0bHkuIFNvIEkgZG8gbm90IHJldHVybiBhbnl0aGluZyB0
+byBnZW5lcmljIFBIWSBmcmFtZXdvcmsuDQoyLCBJbiBteSBhYm92ZSBjYXNlLCBkd2MzX2NvcmVf
+Z2V0X3BoeSB3aWxsIHJldHVybiAwLCBhbmQgc2V0IGR3Yy0+cGh5c19yZWFkeT10cnVlLCBBbmQg
+dGhlbiwgZHdjM19jb3JlX3NvZnRfcmVzZXQgd2lsbCBjb3N0IHJldHJpZXMqMjBtcyB0byBjaGVj
+ayBpZiBzb2Z0LXJlc2V0IGlzIGRvbmUgLCBhbmQgcmV0dXJuIC1FVElNRURPVVQgaWYgdGltZSBv
+dXQsIGlzIHRoYXQgY29ycmVjdD8NCg0KTXkgcG9pbnQgaXMsIGluIHRoaXMgY2FzZShQSFkgZG8g
+bm90IHNldCBjb3JyZWN0bHksIHdoaWNoIGlzIG5vdCByYXJlIGR1cmluZyBkZXZlbG9wbWVudCBz
+dGFnZSBJIHRoaW5rKSwgUEhZIGluaXRpYWwgZmFpbCBsZWQgdG8gc29mdC1yZXNldCB0aW1lb3V0
+IGJ1dCBkd2MtPnBoeXNfcmVhZHkgaXMgdHJ1ZSwgU28gSSB0aGluayBpcyBtb3JlIHNhZmUgdG8g
+c2F5ICJQSFkgaXMgcmVhZHkiIGFmdGVyIHNvZnQtcmVzZXQgZG9uZSwgcGxlYXNlIGxldCBtZSBr
+bm93IHlvdXIgb3BpbmlvbiwgdGhhbmtzIGEgbG90DQoNCll1YW4gRmFuZw0KIA0KLS0tLS3Tyrz+
+1K28/i0tLS0tDQq3orz+yMs6IEZlbGlwZSBCYWxiaSBbbWFpbHRvOmJhbGJpQGtlcm5lbC5vcmdd
+DQq3osvNyrG85DogMjAyMcTqNtTCMTHI1SAyMTowMw0KytW8/sjLOiBZdWFuIEZhbmc7IGxpbnV4
+LXVzYkB2Z2VyLmtlcm5lbC5vcmcNCrOty806IEZhbmcsIFl1YW4NCtb3zOI6IFJlOiBbUEFUQ0hd
+IGRyaXZlcnMvdXNiL2R3YzM6IFNldCBQSFkgcmVhZHkgYWZ0ZXIgc29mdCByZXNldCBkb25lDQoN
+Cll1YW4gRmFuZyA8ZmFuZ3l1YW5zZXVAZ21haWwuY29tPiB3cml0ZXM6DQoNCj4gSXQncyBtb3Jl
+IHNhZmUgdG8gc2V0IFBIWSByZWFkeSBhZnRlciBzb2Z0IHJlc2V0IGRvbmUNCj4NCj4gTGV0J3Mg
+Y29uc2lkZXIgYSB0ZXN0IGNhc2UgbGlrZSB0aGlzOg0KPiBJIGhhdmUgYSB1c2IgUEhZIHdoaWNo
+IGRvbid0IG5lZWQgU1cgaW5pdGlhbCBiZWZvcmUgYWNjZXNzIGl0LCBCdXQgaSANCj4gaGF2ZSBh
+IHdyb25nIFBIWSBjbG9jayBkZWZhdWx0IHNldHRpbmcgaW4gUEhZIHJlZ2lzdGVyIHdoaWNoIG1l
+YW5zIFBIWSANCj4gaXMgbm90IHJlYWR5IGluIGZhY3QuDQo+IGluIGR3YzNfY29yZV9pbml0LCBk
+d2MzX2NvcmVfZ2V0X3BoeSB3aWxsIHJldHVybiAwIGRlc3BpdGUgdXNiIGdldCANCj4gUEhZcyB3
+aXRoIHJldHVybiAtRU5PREVWLCBhbmQgc2V0IHBoeXNfcmVhZHk9dHJ1ZQ0KDQp5b3VyIFBIWSBk
+cml2ZXIgc2hvdWxkbid0IHJldHVybiAtRU5PREVWIGhlcmUuIFdoeSBhcmUgeW91IHJldHVybmlu
+ZyAtRU5PREVWPyBUaGUgUEhZIGlzbid0IHJlYWR5IGJ1dCBpdCBfZG9lc18gZXhpc3QuDQoNCi0t
+DQpiYWxiaQ0K
