@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EBE3B748A
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 16:43:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A8E3B748E
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 16:43:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234495AbhF2Opb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Jun 2021 10:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49076 "EHLO
+        id S234510AbhF2Opc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 10:45:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234480AbhF2Opa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 10:45:30 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EC3C061760
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 07:43:03 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id j34so1117214wms.5
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 07:43:03 -0700 (PDT)
+        with ESMTP id S234491AbhF2Opb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 10:45:31 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6990AC061766
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 07:43:04 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id l8so17371861wry.13
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 07:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vyZHNV0bYck2LLGhVRM7Nx0MUkp0pARsR3Zkn6AAnGw=;
-        b=slZUUdBLu8YLFENbWwDy5dBZsX0RRHuJMAYcfcNGVyWfoVR7awQW9J9dyyU/kmHGlB
-         QVkie/tIeH3gy8AynGEKZVFS0mOpv3Ms4kScCljaXG8xA3vdWmB0f9u68VgZ3tmQjOSL
-         4OAuuoBYT+BycnoIgaulQuE91sKmnRA4tjgLcSvCUytylkB9gs9sZzwnA4wbTDzuXWMT
-         PsBATKPrjCKmTqdW1Nufshbj4fOEOCjz6Xnm2kwTi60c70UoeMxEv36haW/jVxHNWLUD
-         2SXAYLCo8IsHmUU41xYSnSPAf0yDHi6yfEeasERA43PLlJ8hYUkm965r4VMrp3mmqb/H
-         kd5Q==
+        bh=UeZyBgOCC8jTdK5dxJUnoASqLw0aXvTqd4hglX6p1ZM=;
+        b=hqfGLoH1PPX/dR2C4weT86PBNGIVvFbMbcxV6DStSFLOqLEP82uegommw7fNCCSXwo
+         4V8dSDl2CT4jWyN1NK7u0i5AF0GSPh0R7dR5MMA9Pm/odaFmp09sdhcjWbPMrfEc0FFR
+         v5QtiIJ09gRlxa7tUXyVo6IvlrzXAuKS/UDGeFCQSyqYcZZszCuhSbj1ufqC6NF8/UR8
+         0f+WwWjTzyMn4XmmL5M/mnkvG534ie3VFA8jxvOzcq/IMTOGAkRZSp+Pnf5xTsIc+LjY
+         3kMsZkTPmTCdMo2bE7zY0emqIWCZVNHoTeuZgf6Je9M+SNCZcWs0FMKfuGRgIy7heq1A
+         kf/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vyZHNV0bYck2LLGhVRM7Nx0MUkp0pARsR3Zkn6AAnGw=;
-        b=ai9e58Z65Exabee0mKwP7bRdqOHUe6luXsPBdeC5oLJvIuVbHG2redcKI91fv9/xzA
-         g0ByBJl7rvNiX5m5YTeotTeMnO67cBdUYgB0Cykkc97V5uAUS4DBsFxHs+I9CexiDaJ0
-         Nclni6ecqTrpbm2D7y3/0UxHCXZiFtzUcV1KaubOjMu7QP3+soY/3P26cvE1Q/v8sCF1
-         S/s0FApYS4j3BjZQSr4R6ztvpHTHqDEdxYbnNZXC/gtjgvsW0ExtZ/t522EPdLBCOPhP
-         nDx3m3lGy6mwreqYASbJngh52X/qod7I6OlVTAd0AeGi1RIsyOQpROiI6mXDWZ/6TU3o
-         siXQ==
-X-Gm-Message-State: AOAM533PYcT/0tUuPzsdwD+uN5SOHtzMd4SWz6anC2nDx1kOgycYeBlh
-        1P7bUcNv+9DnnuXU/UqrR+Yo5g==
-X-Google-Smtp-Source: ABdhPJw80IDI4ecQtnePdpduV9DvtPUSyWCg1yCH7mUnsO8L0lr6tm0A2qpg9RWgCawwkGlD3LblUg==
-X-Received: by 2002:a05:600c:3782:: with SMTP id o2mr3763296wmr.152.1624977781898;
-        Tue, 29 Jun 2021 07:43:01 -0700 (PDT)
+        bh=UeZyBgOCC8jTdK5dxJUnoASqLw0aXvTqd4hglX6p1ZM=;
+        b=LzUwqYQtzoc+IKXCitLLvtwaZ+M5BXZfcO1xXuMrByNEi/W6YC5lJ35l49WkXtyWNt
+         l+L9Q0I9fvxRl60FSH6suJP0tgeXD+5zMATk1WTpGC0otsoPwHT/idt+LOWKYR9Ql/B+
+         PlEBnPZnr35KMZTjr+i5/ApAQjomEIlqthJKD/Ip6MehHByic72MM8Qg1fHp0fcZGHYM
+         6xRUNlGHeABkaMkToX+1BPLWomC1phPZ7B3H87u57L+ngIucI8djSk630iBd49OpQzlE
+         myiD6mozRsCGTZyODQOq4WqOyCaGoQNZktjjC1LORYngncYLufhzCZL4uhq4NK+fqKvI
+         PeTQ==
+X-Gm-Message-State: AOAM532Ih7m/mFQVnzFMvPU8JjB9nEn3FumZX1SwWuc9YcASOF+XNWgZ
+        MoZ6aBi0krN0fa11Z99mA74crg==
+X-Google-Smtp-Source: ABdhPJxI0QnzFoepzOQ/sHAUNG/T1RRNDfdJ8gYg2aMbVAwg6ijFzIhEFxpTBfJ2u7VSJPBhwQDaZQ==
+X-Received: by 2002:adf:f40d:: with SMTP id g13mr34713211wro.413.1624977782975;
+        Tue, 29 Jun 2021 07:43:02 -0700 (PDT)
 Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id u15sm2832266wmq.1.2021.06.29.07.43.00
+        by smtp.gmail.com with ESMTPSA id u15sm2832266wmq.1.2021.06.29.07.43.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 07:43:01 -0700 (PDT)
+        Tue, 29 Jun 2021 07:43:02 -0700 (PDT)
 From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 To:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
         bjorn.andersson@linaro.org, linux-usb@vger.kernel.org,
         linux-arm-msm@vger.kernel.org
 Cc:     wcheng@codeaurora.org, bryan.odonoghue@linaro.org
-Subject: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and register role switch
-Date:   Tue, 29 Jun 2021 15:44:48 +0100
-Message-Id: <20210629144449.2550737-2-bryan.odonoghue@linaro.org>
+Subject: [PATCH 2/2] usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
+Date:   Tue, 29 Jun 2021 15:44:49 +0100
+Message-Id: <20210629144449.2550737-3-bryan.odonoghue@linaro.org>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
 References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
@@ -66,184 +66,64 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Wesley Cheng <wcheng@codeaurora.org>
 
-If registering a USB typeC connector, the connector node may not be a child
-of the DWC3 QCOM device.  Utilize devcon graph search to lookup if any
-remote endpoints contain the connector.  If a connector is present, the
-DWC3 QCOM will register a USB role switch to receive role change events, as
-well as attain a reference to the DWC3 core role switch to pass the event
-down.
+There was an extra character in the dwc3_qcom_vbus_override_enable()
+function.  Removed the extra character.
 
 Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 ---
- drivers/usb/dwc3/dwc3-qcom.c | 118 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 116 insertions(+), 2 deletions(-)
+ drivers/usb/dwc3/dwc3-qcom.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 49e6ca94486d..4491704503ab 100644
+index 4491704503ab..541e2626294a 100644
 --- a/drivers/usb/dwc3/dwc3-qcom.c
 +++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -20,6 +20,8 @@
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-+#include <linux/fwnode.h>
-+#include <linux/usb/role.h>
- 
- #include "core.h"
- 
-@@ -82,6 +84,9 @@ struct dwc3_qcom {
- 	struct notifier_block	vbus_nb;
- 	struct notifier_block	host_nb;
- 
-+	struct usb_role_switch *role_sw;
-+	struct usb_role_switch *dwc3_drd_sw;
-+
- 	const struct dwc3_acpi_pdata *acpi_pdata;
- 
- 	enum usb_dr_mode	mode;
-@@ -296,6 +301,73 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
- 	icc_put(qcom->icc_path_apps);
+@@ -120,7 +120,7 @@ static inline void dwc3_qcom_clrbits(void __iomem *base, u32 offset, u32 val)
+ 	readl(base + offset);
  }
  
-+static int dwc3_qcom_usb_role_switch_set(struct usb_role_switch *sw,
-+					 enum usb_role role)
-+{
-+	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-+	struct fwnode_handle *child;
-+	bool enable = false;
-+
-+	if (!qcom->dwc3_drd_sw) {
-+		child = device_get_next_child_node(qcom->dev, NULL);
-+		if (child) {
-+			qcom->dwc3_drd_sw = usb_role_switch_find_by_fwnode(child);
-+			fwnode_handle_put(child);
-+			if (IS_ERR(qcom->dwc3_drd_sw)) {
-+				qcom->dwc3_drd_sw = NULL;
-+				return 0;
-+			}
-+		}
-+	}
-+
-+	usb_role_switch_set_role(qcom->dwc3_drd_sw, role);
-+
-+	if (role == USB_ROLE_DEVICE)
-+		enable = true;
-+	else
-+		enable = false;
-+
-+	qcom->mode = (role == USB_ROLE_HOST) ? USB_DR_MODE_HOST :
-+					       USB_DR_MODE_PERIPHERAL;
-+	dwc3_qcom_vbus_overrride_enable(qcom, enable);
-+	return 0;
-+}
-+
-+static enum usb_role dwc3_qcom_usb_role_switch_get(struct usb_role_switch *sw)
-+{
-+	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-+	enum usb_role role;
-+
-+	switch (qcom->mode) {
-+	case USB_DR_MODE_HOST:
-+		role = USB_ROLE_HOST;
-+		break;
-+	case USB_DR_MODE_PERIPHERAL:
-+		role = USB_ROLE_DEVICE;
-+		break;
-+	default:
-+		role = USB_ROLE_DEVICE;
-+		break;
-+	}
-+
-+	return role;
-+}
-+
-+static int dwc3_qcom_setup_role_switch(struct dwc3_qcom *qcom)
-+{
-+	struct usb_role_switch_desc dwc3_role_switch = {NULL};
-+
-+	dwc3_role_switch.fwnode = dev_fwnode(qcom->dev);
-+	dwc3_role_switch.set = dwc3_qcom_usb_role_switch_set;
-+	dwc3_role_switch.get = dwc3_qcom_usb_role_switch_get;
-+	dwc3_role_switch.driver_data = qcom;
-+	qcom->role_sw = usb_role_switch_register(qcom->dev, &dwc3_role_switch);
-+	if (IS_ERR(qcom->role_sw))
-+		return PTR_ERR(qcom->role_sw);
-+
-+	return 0;
-+}
-+
- static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
+-static void dwc3_qcom_vbus_overrride_enable(struct dwc3_qcom *qcom, bool enable)
++static void dwc3_qcom_vbus_override_enable(struct dwc3_qcom *qcom, bool enable)
  {
- 	if (qcom->hs_phy_irq) {
-@@ -698,6 +770,40 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
- 	return acpi_create_platform_device(adev, NULL);
+ 	if (enable) {
+ 		dwc3_qcom_setbits(qcom->qscratch_base, QSCRATCH_SS_PHY_CTRL,
+@@ -141,7 +141,7 @@ static int dwc3_qcom_vbus_notifier(struct notifier_block *nb,
+ 	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, vbus_nb);
+ 
+ 	/* enable vbus override for device mode */
+-	dwc3_qcom_vbus_overrride_enable(qcom, event);
++	dwc3_qcom_vbus_override_enable(qcom, event);
+ 	qcom->mode = event ? USB_DR_MODE_PERIPHERAL : USB_DR_MODE_HOST;
+ 
+ 	return NOTIFY_DONE;
+@@ -153,7 +153,7 @@ static int dwc3_qcom_host_notifier(struct notifier_block *nb,
+ 	struct dwc3_qcom *qcom = container_of(nb, struct dwc3_qcom, host_nb);
+ 
+ 	/* disable vbus override in host mode */
+-	dwc3_qcom_vbus_overrride_enable(qcom, !event);
++	dwc3_qcom_vbus_override_enable(qcom, !event);
+ 	qcom->mode = event ? USB_DR_MODE_HOST : USB_DR_MODE_PERIPHERAL;
+ 
+ 	return NOTIFY_DONE;
+@@ -329,7 +329,7 @@ static int dwc3_qcom_usb_role_switch_set(struct usb_role_switch *sw,
+ 
+ 	qcom->mode = (role == USB_ROLE_HOST) ? USB_DR_MODE_HOST :
+ 					       USB_DR_MODE_PERIPHERAL;
+-	dwc3_qcom_vbus_overrride_enable(qcom, enable);
++	dwc3_qcom_vbus_override_enable(qcom, enable);
+ 	return 0;
  }
  
-+static int dwc3_qcom_connector_check(struct fwnode_handle *fwnode)
-+{
-+	if (fwnode && (!fwnode_property_match_string(fwnode, "compatible",
-+						     "gpio-usb-b-connector") ||
-+	    !fwnode_property_match_string(fwnode, "compatible",
-+					  "usb-c-connector")))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void *dwc3_qcom_find_usb_connector_match(struct fwnode_handle *fwnode,
-+						const char *id, void *data)
-+{
-+	/* Check if the "connector" node is the parent of the remote endpoint */
-+	if (dwc3_qcom_connector_check(fwnode))
-+		return fwnode;
-+
-+	/* else, check if it is a child node */
-+	fwnode = fwnode_get_named_child_node(fwnode, "connector");
-+	if (dwc3_qcom_connector_check(fwnode))
-+		return fwnode;
-+
-+	return 0;
-+}
-+
-+static bool dwc3_qcom_find_usb_connector(struct platform_device *pdev)
-+{
-+	struct fwnode_handle *fwnode = pdev->dev.fwnode;
-+
-+	return fwnode_connection_find_match(fwnode, "connector", NULL,
-+					    dwc3_qcom_find_usb_connector_match);
-+}
-+
- static int dwc3_qcom_probe(struct platform_device *pdev)
- {
- 	struct device_node	*np = pdev->dev.of_node;
-@@ -813,8 +919,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+@@ -917,7 +917,7 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ 
+ 	/* enable vbus override for device mode */
  	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
- 		dwc3_qcom_vbus_overrride_enable(qcom, true);
+-		dwc3_qcom_vbus_overrride_enable(qcom, true);
++		dwc3_qcom_vbus_override_enable(qcom, true);
  
--	/* register extcon to override sw_vbus on Vbus change later */
--	ret = dwc3_qcom_register_extcon(qcom);
-+	if (dwc3_qcom_find_usb_connector(pdev)) {
-+		ret = dwc3_qcom_setup_role_switch(qcom);
-+	} else {
-+		/* register extcon to override sw_vbus on Vbus change later */
-+		ret = dwc3_qcom_register_extcon(qcom);
-+	}
-+
- 	if (ret)
- 		goto interconnect_exit;
- 
-@@ -850,6 +961,9 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int i;
- 
-+	usb_role_switch_unregister(qcom->role_sw);
-+	usb_role_switch_put(qcom->dwc3_drd_sw);
-+
- 	device_remove_software_node(&qcom->dwc3->dev);
- 	of_platform_depopulate(dev);
- 
+ 	if (dwc3_qcom_find_usb_connector(pdev)) {
+ 		ret = dwc3_qcom_setup_role_switch(qcom);
 -- 
 2.30.1
 
