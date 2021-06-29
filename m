@@ -2,144 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C27CD3B6A59
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Jun 2021 23:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E143B6BA7
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 02:21:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237893AbhF1V0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 28 Jun 2021 17:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44574 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237963AbhF1V03 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 17:26:29 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F5C061760
-        for <linux-usb@vger.kernel.org>; Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id z4so377873plg.8
-        for <linux-usb@vger.kernel.org>; Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=beDcbwnP5As/mpTZp4157m7lhvaIkwus448ktxDYZvw=;
-        b=hWBO2BGhHo4wGkJVLXWZrYlXf4KDPCrSBwu9CLS9i1uqZziusrG8bjJ9mhC2Gvqo5U
-         /9D563iCVi95+zuDP6wh8g98G0A1nr54k9YZIqal45xzZx/Sfu6Cq+WGvFHtcpRh9CmK
-         p1i4f38U+srKWyf3c+pGv9BuT7Vfe4zLq5qtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=beDcbwnP5As/mpTZp4157m7lhvaIkwus448ktxDYZvw=;
-        b=RCjam40F36iyQgKlTl3V+iVOEIqKC/ABy4LDlkU6yTZje0G82QqIFlnA4QtZY7wfiX
-         2Lyi+N3ErxcGC5ORHinjnjaX3XsvInAV8o3AGQFXyoIWcMKAOi9izr+vmB8LKbxhCmG9
-         UmqGV6P/O90NTksLd9PnAXOKYG8LcghbQSpPqduU6xy4XvO5Umz0mjr3eiG5Z4p5DQnh
-         GASMywxLOzf1yKkt42tzy2sSclm/GK5bmnC/V5aGirjdUj9OfAWqSvNEc6qcgnhKorGH
-         /bt9er/jttiR+SDTIlXysfAzuAaJsaRX4nkK6jtuTkfjs8BunE03Z40irTQAryR9Jd64
-         xJJA==
-X-Gm-Message-State: AOAM533u/bYyK2Y/80QCD94oznaSZLxIxojh9wGWc2Nx1ayn640nMVee
-        mLL0tjQ2Hwotetd8ppFQhrjqyQ==
-X-Google-Smtp-Source: ABdhPJzWVQZwXtcZku9Aom+JoyFe8QXif5vNo/7e47b/swit2rYKntKf8tytD9UEe1i5oQdJKiBXnQ==
-X-Received: by 2002:a17:90a:390d:: with SMTP id y13mr39170373pjb.133.1624915438390;
-        Mon, 28 Jun 2021 14:23:58 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:df70:d2d8:b384:35cf])
-        by smtp.gmail.com with UTF8SMTPSA id j2sm15093743pfi.111.2021.06.28.14.23.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 28 Jun 2021 14:23:57 -0700 (PDT)
-Date:   Mon, 28 Jun 2021 14:23:56 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pratham Pratap <prathampratap@codeaurora.org>
-Subject: Re: [PATCH v8 6/6] usb: dwc3: qcom: Keep power domain on to support
- wakeup
-Message-ID: <YNo97HQXmYjUNz/C@google.com>
-References: <1624882097-23265-1-git-send-email-sanm@codeaurora.org>
- <1624882097-23265-7-git-send-email-sanm@codeaurora.org>
+        id S232021AbhF2AXf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 28 Jun 2021 20:23:35 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:12949 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232018AbhF2AXf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 28 Jun 2021 20:23:35 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1624926068; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=iQMYetUye9xqOFpBrvrgWZrNKB88y6EU2wd7YeKk3/4=; b=jiSXKUFuPgQoJ4eqRkz5aA8mqRoQ5En82ZSFEyWk3MdK5z+9VwiOvr8CjY1c68qQTuO3A3Ie
+ HjZWvvDeGQ7saPjv/QLM1Jf6vfNr7EzJvr4AIF5Q5l90bp/rnCY940LpwHIu0auD58s3lRi2
+ wRNMuj4tiTWi8JVRedZ6TpcGYmk=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 60da676cc4cc5436029ea210 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 29 Jun 2021 00:21:00
+ GMT
+Sender: linyyuan=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 40662C4360C; Tue, 29 Jun 2021 00:21:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from localhost.localdomain (unknown [101.87.142.17])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: linyyuan)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2E582C433F1;
+        Tue, 29 Jun 2021 00:20:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2E582C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=linyyuan@codeaurora.org
+From:   Linyu Yuan <linyyuan@codeaurora.org>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jack Pham <jackp@codeaurora.org>,
+        Linyu Yuan <linyyuan@codeaurora.org>
+Subject: [PATCH] usb: dwc3: avoid NULL access of usb_gadget_driver
+Date:   Tue, 29 Jun 2021 08:20:28 +0800
+Message-Id: <20210629002029.6295-1-linyyuan@codeaurora.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1624882097-23265-7-git-send-email-sanm@codeaurora.org>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jun 28, 2021 at 05:38:17PM +0530, Sandeep Maheswaram wrote:
-> If wakeup capable devices are connected to the controller (directly
-> or through hubs) at suspend time keep the power domain on in order
-> to support wakeup from these devices.
-> 
-> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
-> ---
-> Checking phy_power_off flag instead of usb_wakeup_enabled_descendants 
-> to keep gdsc active.
-> 
->  drivers/usb/dwc3/dwc3-qcom.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 82125bc..ba31aa3 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -17,6 +17,7 @@
->  #include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/phy/phy.h>
-> +#include <linux/pm_domain.h>
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> @@ -355,9 +356,15 @@ static int dwc3_qcom_suspend(struct dwc3_qcom *qcom)
->  	u32 val;
->  	int i, ret;
->  
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-> +
->  	if (qcom->is_suspended)
->  		return 0;
->  
-> +	if (!dwc->phy_power_off && dwc->xhci)
-> +		genpd->flags |= GENPD_FLAG_ACTIVE_WAKEUP;
-> +
->  	val = readl(qcom->qscratch_base + PWR_EVNT_IRQ_STAT_REG);
->  	if (!(val & PWR_EVNT_LPM_IN_L2_MASK))
->  		dev_err(qcom->dev, "HS-PHY not in L2\n");
-> @@ -382,9 +389,15 @@ static int dwc3_qcom_resume(struct dwc3_qcom *qcom)
->  	int ret;
->  	int i;
->  
-> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
-> +	struct generic_pm_domain *genpd = pd_to_genpd(qcom->dev->pm_domain);
-> +
->  	if (!qcom->is_suspended)
->  		return 0;
->  
-> +	if (dwc->xhci)
-> +		genpd->flags &= ~GENPD_FLAG_ACTIVE_WAKEUP;
-> +
->  	if (device_may_wakeup(qcom->dev))
->  		dwc3_qcom_disable_interrupts(qcom);
->  
+we found crash in dwc3_disconnect_gadget(),
+it is because dwc->gadget_driver become NULL before async access.
+7dc0c55e9f30 ('USB: UDC core: Add udc_async_callbacks gadget op')
+suggest a common way to avoid such kind of issue.
 
-This is essentially the same as v7, which Felipe NAKed
-(https://patchwork.kernel.org/project/linux-arm-msm/patch/1619586716-8687-6-git-send-email-sanm@codeaurora.org/)
+this change implment the callback in dwc3 and
+change related functions which have callback to UDC core.
 
-I think Felipe wants to see the handling of the power domain in the
-xhci-plat driver. One problem here is that the power domain is owned
-by the glue driver. For dwc3 the glue device is the parent of the xHCI
-device, this is also the case for some other drivers like histb or
-cdns3, but I'm not sure if it is universally true. If it isn't
-xhci-plat could only make use of dev->parent->pm_domain for certain
-compatible strings.
+Signed-off-by: Linyu Yuan <linyyuan@codeaurora.org>
+---
+ drivers/usb/dwc3/core.h   |  1 +
+ drivers/usb/dwc3/ep0.c    | 10 ++++++----
+ drivers/usb/dwc3/gadget.c | 19 +++++++++++++++----
+ 3 files changed, 22 insertions(+), 8 deletions(-)
 
-One could argue that it isn't very clean either if xhci-plat manipulates
-a resource of it's parent. At the same time the glue driver isn't
-supposed to check for the wakeup capable devices, so I guess some kind
-of trade-off needs to be made.
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index dccdf13b5f9e..5991766239ba 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1279,6 +1279,7 @@ struct dwc3 {
+ 	unsigned		dis_metastability_quirk:1;
+ 
+ 	unsigned		dis_split_quirk:1;
++	unsigned		async_callbacks:1;
+ 
+ 	u16			imod_interval;
+ };
+diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+index 3cd294264372..2f9e45eed228 100644
+--- a/drivers/usb/dwc3/ep0.c
++++ b/drivers/usb/dwc3/ep0.c
+@@ -597,11 +597,13 @@ static int dwc3_ep0_set_address(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ 
+ static int dwc3_ep0_delegate_req(struct dwc3 *dwc, struct usb_ctrlrequest *ctrl)
+ {
+-	int ret;
++	int ret = -EINVAL;
+ 
+-	spin_unlock(&dwc->lock);
+-	ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
+-	spin_lock(&dwc->lock);
++	if (dwc->async_callbacks) {
++		spin_unlock(&dwc->lock);
++		ret = dwc->gadget_driver->setup(dwc->gadget, ctrl);
++		spin_lock(&dwc->lock);
++	}
+ 	return ret;
+ }
+ 
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index af6d7f157989..a815ba96b502 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2585,6 +2585,16 @@ static int dwc3_gadget_vbus_draw(struct usb_gadget *g, unsigned int mA)
+ 	return ret;
+ }
+ 
++static void dwc3_gadget_async_callbacks(struct usb_gadget *g, bool enable)
++{
++	struct dwc3		*dwc = gadget_to_dwc(g);
++	unsigned long		flags;
++
++	spin_lock_irqsave(&dwc->lock, flags);
++	dwc->async_callbacks = enable;
++	spin_unlock_irqrestore(&dwc->lock, flags);
++}
++
+ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.get_frame		= dwc3_gadget_get_frame,
+ 	.wakeup			= dwc3_gadget_wakeup,
+@@ -2596,6 +2606,7 @@ static const struct usb_gadget_ops dwc3_gadget_ops = {
+ 	.udc_set_ssp_rate	= dwc3_gadget_set_ssp_rate,
+ 	.get_config_params	= dwc3_gadget_config_params,
+ 	.vbus_draw		= dwc3_gadget_vbus_draw,
++	.udc_async_callbacks	= dwc3_gadget_async_callbacks,
+ };
+ 
+ /* -------------------------------------------------------------------------- */
+@@ -3231,7 +3242,7 @@ static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+ 
+ static void dwc3_disconnect_gadget(struct dwc3 *dwc)
+ {
+-	if (dwc->gadget_driver && dwc->gadget_driver->disconnect) {
++	if (dwc->async_callbacks && dwc->gadget_driver->disconnect) {
+ 		spin_unlock(&dwc->lock);
+ 		dwc->gadget_driver->disconnect(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+@@ -3240,7 +3251,7 @@ static void dwc3_disconnect_gadget(struct dwc3 *dwc)
+ 
+ static void dwc3_suspend_gadget(struct dwc3 *dwc)
+ {
+-	if (dwc->gadget_driver && dwc->gadget_driver->suspend) {
++	if (dwc->async_callbacks && dwc->gadget_driver->suspend) {
+ 		spin_unlock(&dwc->lock);
+ 		dwc->gadget_driver->suspend(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+@@ -3249,7 +3260,7 @@ static void dwc3_suspend_gadget(struct dwc3 *dwc)
+ 
+ static void dwc3_resume_gadget(struct dwc3 *dwc)
+ {
+-	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
++	if (dwc->async_callbacks && dwc->gadget_driver->resume) {
+ 		spin_unlock(&dwc->lock);
+ 		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+@@ -3585,7 +3596,7 @@ static void dwc3_gadget_wakeup_interrupt(struct dwc3 *dwc)
+ 	 * implemented.
+ 	 */
+ 
+-	if (dwc->gadget_driver && dwc->gadget_driver->resume) {
++	if (dwc->async_callbacks && dwc->gadget_driver->resume) {
+ 		spin_unlock(&dwc->lock);
+ 		dwc->gadget_driver->resume(dwc->gadget);
+ 		spin_lock(&dwc->lock);
+-- 
+2.25.1
+
