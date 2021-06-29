@@ -2,269 +2,91 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5ED3B79E6
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 23:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C75BE3B7A24
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 23:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234978AbhF2VfL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 29 Jun 2021 17:35:11 -0400
-Received: from mout.kundenserver.de ([217.72.192.75]:48563 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbhF2VfK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 17:35:10 -0400
-Received: from [192.168.1.107] ([37.4.249.97]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1MBE3k-1m5Xft1f2M-00Cm0F; Tue, 29 Jun 2021 23:31:59 +0200
-Subject: Re: dwc2: RPi 3 B plus - USB mass storage boot broken
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-To:     Saravana Kannan <saravanak@google.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
-References: <a385bbdf-8806-896d-5b9a-d26df907e43a@i2se.com>
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- LS0tLS1CRUdJTiBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tClZlcnNpb246IEdudVBHIHYy
- CgptUUlOQkZ0NmdCTUJFQUN1Yi9wQmV2SHhidkplZnlaRzMySklObW4yYnNFUFgyNVY2ZmVq
- bXlZd21DR0tqRnRMCi9Eb1VNRVZIRHhDSjQ3Qk1YbzM0NGZIVjFDM0FudWRnTjFCZWhMb0J0
- TEh4bW5lQ3pnSDNLY1B0V1c3cHRqNEcKdEp2OUNRRFp5MjdTS29FUHh5YUk4Q0YweWdSeEpj
- NzJNOUk5d21zUFo1YlVIc0x1WVdNcVE3SmNSbVBzNkQ4ZwpCa2srOC95bmdFeU5FeHd4SnBS
- MXlsajVianhXREh5WVF2dUo1THpaS3VPOUxCM2xYVnNjNGJxWEVqYzZWRnVaCkZDQ2svc3lp
- by9ZaHNlOE4rUXN4N01RYWd6NHdLVWtRUWJmWGcxVnFrVG5BaXZYczQyVm5Ja211NWd6SXcv
- MHQKUkp2NTBGUmhIaHhweUtBSThCOG5oTjhRdng3TVZrUGM1dkRmZDN1R1lXNDdKUGhWUUJj
- VXdKd05rLzQ5RjllQQp2ZzJtdE1QRm5GT1JrV1VSdlArRzZGSmZtNitDdk92N1lmUDF1ZXdB
- aTRsbitKTzFnK2dqVklXbC9XSnB5MG5UCmlwZGZlSDlkSGtnU2lmUXVuWWN1Y2lzTXlvUmJG
- OTU1dENna0VZOUVNRWRZMXQ4aUdEaUNnWDZzNTBMSGJpM2sKNDUzdWFjcHhmUVhTYUF3UGtz
- bDhNa0NPc3YyZUVyNElOQ0hZUUR5WmljbEJ1dUNnOEVOYlI2QUdWdFpTUGNRYgplbnpTektS
- Wm9POUNhcUlEK2ZhdkxpQi9kaHptSEErOWJnSWhtWGZ2WFJMRFp6ZThwbzFkeXQzRTFzaFhp
- ZGRaClBBOE51SlZ6RUl0MmxtSTZWOHBaRHBuMjIxcmZLaml2UlFpYW9zNTRUZ1pqak1ZSTdu
- bko3ZTZ4endBUkFRQUIKdENCVGRHVm1ZVzRnVjJGb2NtVnVJRHgzWVdoeVpXNXpkRUJuYlhn
- dWJtVjBQb2tDTndRVEFRZ0FJUVVDWElkYwo0Z0liQXdVTENRZ0hBZ1lWQ0FrS0N3SUVGZ0lE
- QVFJZUFRSVhnQUFLQ1JDVWdld1BFWkR5MjFPVEQvOUdpWkxkCnRSWWNteVJKZ2x0aVFRekFp
- UWRjSUQ3OGxHb1dwL3grci92Y1U2YjZqdVl1ZVR3Z1Iwclc3djdsMklSQnlEN24KSEp4YSt0
- SVNvUVpCZ2hvbE1JZmI5TXRoR09KTENZNzdrL1FoQWhuMzJOR1prZWp3OXR6a3MvNDBtclpT
- VVQ4NApaeWJzUVhyTE0vSFI2VElJL0RlUEIwbktEM0ppcHBzMlVIUUQ5cUQySWpFd1NRUGxI
- akNPckVaaDQ1UFo3bTkrClo5M0x6aVRlc1dabFlRdUxpSndzNHJLcHRIVzFkL3dSZWxzaG1t
- NlFxY0wybDRDL2U0MGVEQjlncTRkU1poOVgKUEVZbGxpeU5RaDdhMkxTZHVtRTFyK2NTd0lq
- RS91ZHRSdmRPOWFLb0psT2JVSzVkTmpTUEg3d0tUYndkWGRZRApHUHdEaFhkNThOQXdyK1BY
- QmxQajB0STFMQ3ErTEJ4ZUt6aFdYK0dWcTlEb2pWanlVREV4Rk5Ga1h1b0M3ZzhtClY5VDB0
- ZUJpdVpSbm91WEt3VjJGcHRaT0hIN0JVRVd0a0t0aGgxZXRmT1dwaWdCemtVN2JQc2ZJWVQr
- cnk5dGIKMW9KK3Y0MVBOYXFaRW1QVXBKeHZmek5UN3Ayd01lRDdaajlmMHJ1YlJQdExBSjJR
- R2pyRkhzdVh3QU9xcHl6ZQoxOEVidHNZazBOMHp1SEVoY2orUEJJQmZoMFlJWWQ1MW9mNkdJ
- aU95UjlxMFhYdHBsVUo3VDIvSDF1UXFrWGxwCitnVzRWa2lmc2NJckl1eWZueFpXMTJlSXZq
- NnlicVdMN2FZS0dZbVQ2aUxDUGJIWXlZY2F5bDRFa0ZjckNGN0UKZTBXVC9zY1ZNaE8vNVgv
- SGFOQTVIQngvcjUycGdMY3Y0aTlNeExRbVUzUmxabUZ1SUZkaGFISmxiaUE4YzNSbApabUZ1
- TG5kaGFISmxia0JwTW5ObExtTnZiVDZKQWpnRUV3RUNBQ0lGQWx0NmdCTUNHd01HQ3drSUJ3
- TUNCaFVJCkFna0tDd1FXQWdNQkFoNEJBaGVBQUFvSkVKU0I3QThSa1BMYmpic1AvamdqYVNz
- NUh0bGtBSXZXUytGcm15N2MKaG5jT0F4TFRWL0Q2UkV3SU95R0poRkt3d29pck55UTJnOXZV
- YTNZQ1lDZjFmSjh3RWhhS09COWQwTHBNUm5MNApkRVQ4ZDgyMzhFL3BLK0hxTktpSXNKaHM2
- SnNLOFpnalZRR3JtbWZua0dyWisxdjBIQnV4ZGljZ0duUC9XdHVBClVsOGw2Mi9BTGJheXlq
- KzYxQ2xyc0V0UklhcU82N0xJWXdQaVBEUkkrWGlNek5pR3pIRi8xUTZHUjAyUkg2YTMKRjg5
- ejhhUHhjSGkxWnZDdDJ5a3o2VUVjaHpQMHI1Z3FGSisvTC9VcHU4ME1YaVk0djVlSWFCNTJn
- VlBnaXlNQQpsTDJkRHMxbUladm5yUkxSWTJ0YjNtQVlOa1Y1QjVJRFQzcGtXeTZrS281T0Nn
- SytZZFlPUjhGTloyb04ydDhPCnJLK1ZudGFLN01NU0tIbG1ZL3NPd3RSbEVoMU9CbXJjQ3dH
- d21wLzA1R2tSNDZmL0lzaFJWZUZPUmF3K0dBcXQKUDIrQ0ZhMkNOQS9JSG5aTm95aWtsRHpQ
- UUhVVUdzck5wcERyaFg5Sm1oQm1nMXYyeXdIMU5YdTFpRGZQMUJBdwpLZ29rdDVmNVVhUkY5
- c0FBNTN2V0V2YlVVTjllZXNGR0x6UFdkSkdRNWhwZC9WSDVJUXk5U0JyaC93SWNla3E1Cm4w
- a042cGJUSHhHRTUyU2kvTVZJa05UdURaM2FwbjJqbERaNHBPdHBCWEkydlAzYlBPK05pcUJa
- anNVM3R4TGkKV2R2MkZqeXp6NlhMUndlV1JZVkw1SGE2TER0eG9yMnZ1NlVQMDdwOXh6MXhS
- WmFPRFczb1lsSEZ6WXBhNFc1ZwpMSGIybEVrSXVVZlNjaWNHYmpqQXRDbFRkR1ZtWVc0Z1Yy
- Rm9jbVZ1SUR4emRHVm1ZVzR1ZDJGb2NtVnVRR2x1CkxYUmxZMmd1WTI5dFBva0NOd1FUQVFn
- QUlRVUNYSWRlaHdJYkF3VUxDUWdIQWdZVkNBa0tDd0lFRmdJREFRSWUKQVFJWGdBQUtDUkNV
- Z2V3UEVaRHkyeUhURC85VUY3UWxEa0d4elE3QWFDSTZOOTVpUWY4LzFvU1VhRE51Mlk2SQpL
- K0R6UXBiMVRiVE9yM1ZKd3dZOGEzT1d6NU5MU09MTVdlVnh0K29zTW1sUUlHdWJEM09EWko4
- aXpQbEcvSnJOCnQ1elNkbU41SUE1ZjNlc1dXUVZLdmdoWkFnVERxZHB2K1pIVzJFbXhuQUox
- dUxGWFhlUWQzVVpjQzVyMy9nL3YKU2FNbzl4ZWszSjVtTnVEbTcxbEVXc0FzL0JBY0ZjK3lu
- TGh4d0JXQld3c3Z3UjhiSHRKNURPTVd2YUt1RHNrcApJR0ZVZS9LYjJCK2pyYXZRM1RuNnMv
- SHFKTTBjZXhTSHo1cGUrMHNHdlArdDlKNzIzNEJGUXdlRkV4cmlleThVCkl4T3I0WEFiYWFi
- U3J5WW5VL3pWSDlVMWkyQUlRWk1XSkFldkN2VmdRL1UrTmVSaFh1ZGU5WVVtRE1EbzJzQjIK
- VkFGRUFxaUYyUVVIUEEybThhN0VPM3lmTDRyTWswaUh6TElLdmg2L3JIOFFDWThpM1h4VE5M
- OWlDTHpCV3UvTgpPbkNBYlMremx2TFphaVNNaDVFZnV4VHR2NFBsVmRFamY2MlArWkhJRDE2
- Z1VEd0VtYXpMQU1yeDY2NmpINWt1ClVDVFZ5bWJMMFR2Qis2TDZBUmw4QU55TTRBRG1rV2tw
- eU0yMmtDdUlTWUFFZlFSM3VXWFo5WWd4YVBNcWJWK3cKQnJoSmc0SGFONkM2eFRxR3YzcjRC
- MmFxYjc3L0NWb1JKMVo5Y3BIQ3dpT3pJYUFtdnl6UFU2TXhDRFhaOEZnWQpsVDR2MjNHNWlt
- SlAyemdYNXMrRjZBQ1VKOVVRUEQwdVRmK0o5RGEycitza2gvc1dPbloreWNvSE5CUXZvY1pF
- Ck5BSFFmN2tDRFFSYmVvQVRBUkFBMkhkMGZzRFZLNzJSTFNESGJ5ME9oZ0RjRGxWQk0yTSto
- WVlwTzNmWDFyKysKc2hpcVBLQ0hWQXNRNWJ4ZTdIbUppbUhhNEtLWXMya3YvbWx0L0NhdUNK
- Ly9wbWN5Y0JNN0d2d25Lem11WHp1QQpHbVZUWkM2V1I1TGtha0ZydEhPelZtc0VHcE52NVJj
- OWw2SFlGcExrYlNrVmk1U1BRWkp5K0VNZ01DRmdqclpmClZGNnlvdHdFMWFmN0hOdE1oTlBh
- TEROMW9VS0Y1aitSeVJnNWl3SnVDRGtuSGp3QlFWNHBndzIvNXZTOEE3WlEKdjJNYlcvVExF
- eXBLWGlmNzhJaGdBelh0RTJYck0xbi9vNlpINzFvUkZGS096NDJsRmR6ZHJTWDBZc3FYZ0hD
- WAo1Z0l0TGZxemoxcHNNYTlvMWVpTlRFbTFkVlFyVHFueXMwbDE4b2FsUk5zd1lsUW1uWUJ3
- cHdDa2FUSExNSHdLCmZHQmJvNWRMUEVzaHRWb3dJNm5zZ3FMVHlRSG1xSFlxVVpZSXBpZ21t
- QzNTd0JXWTFWNmZmVUVta3FwQUFDRW4KTDQvZ1Vnbjd5US81ZDBzZXFuQXEycFNCSE1VVW9D
- Y1R6RVFVV1ZraUR2M1JrN2hURm1oVHNNcTc4eHYyWFJzWApNUjZ5UWhTVFBGWkNZRFVFeEVs
- RXNTbzlGV0hXcjZ6SHlZY2M4cURMRnZHOUZQaG1RdVQyczlCbHg2Z0kzMjNHCm5FcTFsd1dQ
- SlZ6UDRqUWtKS0lBWHdGcHYrVzhDV0xxekRXT3ZkbHJEYVRhVk1zY0ZUZUg1VzZVcHJsNjVq
- cUYKUUdNcGNSR0NzOEdDVVcxM0gwSXlPdFF0d1dYQTRueStTTDgxcHZpQW1hU1hVOGxhS2FS
- dTkxVk9WYUY5ZjRzQQpFUUVBQVlrQ0h3UVlBUUlBQ1FVQ1czcUFFd0liREFBS0NSQ1VnZXdQ
- RVpEeTIrb1hELzljSEhSa0JaT2ZrbVNxCjE0U3Z4MDYyUHRVMEtWNDcwVFNucC9qV29ZSm5L
- SXczRzBtWElSZ3J0SDJkUHdwSWdWanNZeVJTVk1LbVNwdDUKWnJEZjlOdFRiTldnazhWb0xl
- WnpZRW8rSjNvUHFGclRNczNhWVl2N2U0K0pLNjk1WW5tUSttT0Q5bmlhOTE1dApyNUFaajk1
- VWZTVGx5VW15aWMxZDhvdnNmMWZQN1hDVVZSRmNSamZOZkRGMW9ML3BEZ01QNUdaMk93YVRl
- am15CkN1SGpNOElSMUNpYXZCcFlEbUJuVFlrN1B0aHk2YXRXdllsMGZ5L0NxYWpUS3N4Nytw
- OXh6aXU4WmZWWCtpS0IKQ2MrSGUrRURFZEdJRGh2TlovSVFIZk9CMlBVWFdHUytzOUZOVHhy
- L0E2bkxHWG5BOVk2dzkzaVBkWUl3eFM3SwpYTG9LSmVlMTBEamx6c1lzUmZsRk9XMFpPaVNp
- aElDWGlRVjF1cU02dHpGRzlndFJjaXVzNVVBdGhXYU8xT3dVClNDUW1mQ09tNGZ2TUlKSUE5
- cnh0b1M2T3FSUWNpRjNjcm1vMHJKQ3ROMmF3WmZnaThYRWlmN2Q2aGp2MEVLTTkKWFpvaUFa
- WVpEKy9pTG01VGFLV042b0dJdGkwVmpKdjhaWk9aT2ZDYjZ2cUZJa0pXK2FPdTRvclRMRk16
- MjhhbwpVM1F5V3BOQzhGRm1kWXNWdWE4czZnTjFOSWE2eTNxYS9aQjhiQS9pa3k1OUFFejRp
- RElScmdVek1FZzhBazdUCmZtMUtpWWVpVHRCRENvMjVCdlhqYnFzeXhrUUQxbmtSbTZGQVZ6
- RXVPUEllOEp1cVcyeEQ5aXhHWXZqVTVoa1IKZ0pwM2dQNWIrY25HM0xQcXF1UTJFNmdvS1VN
- TEFia0NEUVJiZmw5REFSQUFzRExjYStMbFAydm5mdEVHaHBjQQpCR1ZOUUVGbkdQckNhdVU2
- SGhOODA1V3RQVHRtc1JPdUp6cWdVVDBtcHFXSWZacTZzTXd5dkhLOVRzL0tIM0paClVWYlJD
- M3oyaDNLZmhIL0RhZjk1cGQ2bVBjL2g5dkYvT3kzK2VUV2hnR25QNmNBNWtsUitmTzFXaEc4
- VnJpWHYKck5lUkcyMHN6emplSG9jblNJY1Q1WHVaUjB1REhPaUd4T2l6MXNNUkZUR3h6R095
- MTlSOXJ2dTYzdGlJM2Q3dgpnYzc1T0NBZGtlQi9TZUNFbGFSdzBUZjdMWmJQampzRjI2M0JZ
- bk1mNGtrTkVLdnFXY1UyaWNNcCtxZXpqeW5CCnB2ZXVlMHJDVFFCWUFRbG9GQ1ZUR0hyV1dB
- NkQ0VzVPMkFmSWRJYzF1MUpDWnAyZjVMV1ZvVUZUVklyUW5RUVUKU0hDaWZyOU1aeExUdFBK
- ZFU1Mm9TUHczZGs0aExQOGlKSUx1dnYvYXZhakNzUVlIRXR3WXNiZUZaeGl1TGdscApBN1lj
- Sk5ObXBnQ3BNRDR3VWh2bEN0QUtOQlFXeXIyOTc2OThFUVRuNDZlQmVVNkttMkNpaFhrZ3dD
- eWY4ZXlLCkxFM3NYZXdhcTVrZ1pXdk5xNml1NXFZSVJCOXl3K2NYYzYwZE9aRE9scTkzWDVT
- QVJZemFvZXBrSHo0cmtMa1AKUG8rdENIeUhRUHNHblBYYzlXVDgwREM5Tm5KR2R2VWx5NXJk
- TUk0eHBaeWdlb2tqd293VlFsUFV1Y1M2TXluNwpmOHc4Y2dmQjdDMklBSWNEeDJwUC9IendY
- dmtDT1FOQTdtVjFsTTA4bitnVmtUcnpweGlwNURicTRDSW9ZeDJNCkpaVDhiR1JINlhqY1VE
- S2EwOVFoeVpzQUVRRUFBWWtFUkFRWUFRZ0FEd1VDVzM1ZlF3SWJBZ1VKQThKbkFBSXAKQ1JD
- VWdld1BFWkR5MjhGZElBUVpBUWdBQmdVQ1czNWZRd0FLQ1JCVnhETFBjVk1NamNkc0QvMFJo
- QXN1UVlPeQpyMTNCbDNOaFhrWUFaR3AyWkZER3VrZTdPU2tWOG9qT09UZFR5ei9jT1JHQ2J5
- ZEQrRGd2cUZ5VmRuT1hLZ08wCmxKbUd3ckdlTGRnZ0F2aDBpaHJwNU8wWVVKOWJCU1htR01t
- UVRZSC9BbUxUR2FkYnVqQ1dqNWZGVWtDeXd4aW0KSHV5MFBiMjRwelR2UzUwR1k1WStxSDBG
- SE5haWdka2tpV04zcnVnN0haRXUvQ3lsUFpqT1h6K0QxUVBNckV4dwo3ZC9NS2FiVis5YU5i
- UVlabGRJajk4UXd2VUYxS1N6YThqbFVJdnBoUnEyN0FUOGZER1lHUGZERU1nMmNCT2FlCkty
- N29uUXM0YjdhV082aWZEbHhRVHB6c3pvK0FuODA3Tk1TdFZFRmYrczNBaFZEM2U3bmY4SkJh
- dmJWckFlMGsKb20yNm96elBubnh6K2xxVlZ0dzZVazRYTUl6dGl4L0h3SFl3dUNuY1VYWndL
- MEkzeUFKd2pZd29vck9DaEozUwpFVWJKUVB0R3NneFJERXhWQkZlNk5MUC82MnhQOU82dGFj
- d09kYjBNbVAxYjM5cFJBVEM3YmdkMWxkVUxpNzVaCmxKckowL1NpVkVyb3FOWXk3OXRmbWdB
- WjJVeFptczlTckV5Nm85UVNmc24xYVh2K01QTDlKYUNHbWtQNnpiTFEKTm5kajBKY2FRbmtD
- MHZneWRPMUJtNk11OTZQOXVmbEtaY0FTNndtTE01SWRIT3lqTDg4d0h3anVjakFPQnRjdwpw
- MG9HVG5WT25Sc05ZU084VzhZWi9LZGJ1Nzg1ZGF6TXFKMmlOakFEdUJiZG02TjRqNUVkTW5r
- TG4wQklmUEpwCmRnbTR2bDJVcExqd1JHci9NM3dtbTVwdnMrNnVCN2hrL0ZKaUQvNGxsRU5Q
- NGVNMWg3U200aitWcTZOMSt6VEIKSVhKQWViSXFhc0RwNXlaUzdYcnk0STM2bjg1WEVZZkcw
- MWx0QXlob05WMkRPOFNJUlFwdWkydHErOVJQM1JLMQpKREJ4eEVKWTJFTzVKWjhNeGFQSFEw
- RFQwNWxSRmpLMkFsaGRFSXRqTGpwSjNmVW05c3FMeE1XeHpQNlV6M2lpCjJ1YTR1bnJ0Nk9D
- VHFRd2lqRi8zYlRXaXd2VkFBSG5NRlVpb1hzaEhhb2hWRGNWZm5lSU1mVjBiUUNYWWkzTnAK
- WTB2MFp3Y2lGSCtnU0M3cUQ2WE51aHBWR1NMNElpbGlGeS9TemNhSkV6QUhlTERTaFpQMkNX
- ZG5DNHZnbDM3dApocHg4aDU1WWhKbjZIU3VVelBnaGFLdFZCMmsrajdaZXlaK1NGeHA3SXVi
- SEN3TEhsUWhUNzVSd1EzaUF4S242CjBxajUxY1lUbnF4ZFpYVzZmSDNQa3VNellVNUdwcVIv
- MU9sNWMvd2ZJNmc2QW04eUtXLzBFVUx0K0tuNExGc1MKbTdZM201SDV2MTJVNkpCWXZWK3Ix
- M2paaW9zNEVFREU5M0Q1c05IMk1JeVJ6Q0RxMXpkZHQ0WHV5S0ZqUEtXMQo5aWJaRGZGVjdL
- dUNzdnVMMjNzQmMxc0NNb3ArRTFtVC9ReE9JQTZvRFQxTVFzdHdPVnVReURDdi9PdktTZ2Z6
- CjhGWEdMNkFQY2xqQ3FqOEFKaHhReXN4ZG9pUVA4bS92dStialdHR3Z4dzVzMWxncGlSRFRS
- VVBnY0pKTmFHWTIKVklEclpRaTROU2lOUTBOSWkrZGp1NGZOTW1DcFFxZzh0YkMzY0FhNnl3
- bTZvUUIxU0JobURYMmUxMWdSbGx1SQpPblRHUEUwSFRvM2w3MmxoYmc9PQo9cVpNVgotLS0t
- LUVORCBQR1AgUFVCTElDIEtFWSBCTE9DSy0tLS0tCg==
-Message-ID: <6104f60b-9ba2-523f-de4b-af42b6c67e2e@i2se.com>
-Date:   Tue, 29 Jun 2021 23:31:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235209AbhF2V6W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 17:58:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232997AbhF2V6V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 17:58:21 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692D7C061766
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 14:55:53 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id u6so916702wrs.5
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 14:55:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=F+tHr9nTZPsP/L41LDDEeXiY0HeubYowRUu2DqE1fyw=;
+        b=pcQR2h7Jed2UG/FMm0+KicDSHQp1wQnG4gT3Cw429cEttDeFVP4vxP8XNPTvt8TmCm
+         3/HrFR2/8V7MezHIZ64l2jcko73d2P2qQlkglgn8J2vfGI4nV1Opy85ZJYwlMJZGWnNZ
+         gk2r6zIfgYVMYC40u0WuuQ2ADhaknYdgVSC6irQaLgB+4re64i7dc1YTcKV3SW/1uNX9
+         K25HYwN938KnKITeYRSqrQ+7B5FrsRF4s0Vhxh37oNY1J3xmpiTXL7s98VKVDN1O66tb
+         AMq58x98lGE3wtZtWllBAcG+6k7wVqXkk5eGFi6jxDh8U1p8SlGsrvKrKGGkKcvMSj10
+         aTpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=F+tHr9nTZPsP/L41LDDEeXiY0HeubYowRUu2DqE1fyw=;
+        b=KBnWPM4cs3g8DYVSSz4aVa/N/EWoVM62MIh+Fum9WxcAbPK3BSG9EqmpGYl8BH17pm
+         SgftBs6Jq047DhAPuw7/dmqOdpbLJ2GCHw/M3KQPcLdbXBHdVO3EFHwd0eIz6P5BshGh
+         LYBatUlLFdTixZNne/d3Vh46HhsHYGXDux12OspT0Hr6X1obfV3EA6x1g2+efopBvAWO
+         J1CrbRQMjUGiO9aS9Y+ZmHuzypf4oDkQgpjEp3FITQN0Wkwzlcb8NOsAZUHP1tOwkSFy
+         MpHApjyHdz/RWprBoA2Wfyyx0Dyr99CFbnvieBl13/bgxwahaZnGNhQ1KoBxsdEy26Zw
+         XymQ==
+X-Gm-Message-State: AOAM531lLM2MyoCu1q2XzEOGG4BrZsZIWOcYLeFL/A0oB+7tmEBzXkC1
+        iThh+p3llpdH3MSSlFlv+7vBNw==
+X-Google-Smtp-Source: ABdhPJyugJMxao8ifmhKqSukK7m4MpSBZ4JJN1rKdHb5/H2Q6QsGd3+0ZAuIxvmTOtfSwwrHDUjokw==
+X-Received: by 2002:a5d:5586:: with SMTP id i6mr16021895wrv.195.1625003751963;
+        Tue, 29 Jun 2021 14:55:51 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id j11sm17830318wms.6.2021.06.29.14.55.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jun 2021 14:55:51 -0700 (PDT)
+Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and register
+ role switch
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jack Pham <jackp@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        wcheng@codeaurora.org
+References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
+ <20210629144449.2550737-2-bryan.odonoghue@linaro.org> <YNtAt3dCGGyj5DU/@yoga>
+ <c63c286a-f7c0-0874-59ad-e9ee43660a33@linaro.org>
+ <20210629200228.GE25299@jackp-linux.qualcomm.com> <YNuC0Njwr4B1Q1xZ@yoga>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <0f112cf5-1f71-f189-5a3a-2ff4dbcaa8e8@linaro.org>
+Date:   Tue, 29 Jun 2021 22:57:40 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-In-Reply-To: <a385bbdf-8806-896d-5b9a-d26df907e43a@i2se.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <YNuC0Njwr4B1Q1xZ@yoga>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-X-Provags-ID: V03:K1:F2h4nl+4HhJSB50IDmGcVMnlNr2UnG1M4kirRdh/HzWoHYBqU7D
- bvx1QPyAmghyXJDvHuaL+wox3XG7iFfKzlbnuNMThi0uPOgG3QVhRAoUPgIJNszUKPGQ4xE
- iU5cLKcECDVNVyBmR7JLaHtWl1K4iSEADdd8JdCpZ6j4gkJdp98vwNj0OQMux4qUMgnD14L
- ePJbp/QNl9p0TcBsLbstg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3djWI/Py3R4=:x86tBiW7EHq/iap12deXZL
- OCiXDZqxb6EH08stkX54xKN6+JspiNXZ6TjOIr+NeZusyVKOp9j6PXKZhQ8ED1rihxuYbsq2y
- CPbQyRLLL4CDcBjI8R08QcuCDxT2bNeBEOeHycmK59N+b0kQIsMidQL49MC8iwxSnths1L1zx
- 3hnLjvUFdwMhwZU8fgyU53I5+a0sohEg4pI1PJN65p3erLNeGAgr8Kdyemk9NIeZnMvMoTArw
- 5/DehpKV8o0QYPw31P98T4DC/Mvdmap+8CB3P83bgypKU16jKxMDAmWICUzKxM3HdOkq0I0XT
- d1tIqekhXNqxSXcW+N5h/t7h+F7UK7aTiZXKincAoFV6MX4yaPIUi7JfR+QfOMVNMmB8k5TgG
- WsATlYX6kn3eTb4D8KRPPmSfMMWbACQS3YqevJ3BInymr70yuW3BHUEJ5MmtN3xdLif2HPG7e
- tVHFS7G3BhmKokKDJzTu1fZQix7OyQhbrGCOPVVDto9ysg6ZzodoRUMu3RMTAE5b3mMPiFI0R
- ZoIW4cw6F+ikGae1yHTvQg=
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am 29.06.21 um 13:37 schrieb Stefan Wahren:
-> Hi,
->
-> i noticed more fallout connected to the recent fw_devlink changes in
-> Linux 5.13. Since fw_devlink=on the Raspberry Pi 3 B Plus
-> (multi_v7_defconfig, 32 bit) is unable to boot from USB because the dwc2
-> driver probe too late and the kernel waits endlessly for the rootfs.
-> Switching fw_devlink back to permissive makes the dwc2 driver probe
-> earlier and make USB mass storage boot work again.
->
-> Here are some dmesg extracts taken from a Raspberry Pi 3 B Plus (5.13,
-> multi_v7_defconfig, booting from SD card to show good and bad case):
->
-> fw_devlink=permissive
->
-> [    2.198105] calling  dwc2_platform_driver_init+0x0/0x10 @ 1
-> [    2.198663] initcall dwc2_platform_driver_init+0x0/0x10 returned 0
-> after 529 usecs
-> [    4.156494] dwc2 3f980000.usb: supply vusb_d not found, using dummy
-> regulator
-> [    4.174514] dwc2 3f980000.usb: supply vusb_a not found, using dummy
-> regulator
-> [    4.242973] dwc2 3f980000.usb: DWC OTG Controller
-> [    4.259505] dwc2 3f980000.usb: new USB bus registered, assigned bus
-> number 1
-> [    4.278483] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
-> [    4.759700] usb 1-1: new high-speed USB device number 2 using dwc2
-> [    5.359793] usb 1-1.1: new high-speed USB device number 3 using dwc2
-> [    5.899703] usb 1-1.2: new low-speed USB device number 4 using dwc2
-> [    6.149705] usb 1-1.1.3: new low-speed USB device number 5 using dwc2
-> [    6.629761] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
->
-> fw_devlink=on
->
-> [    2.198579] calling  dwc2_platform_driver_init+0x0/0x10 @ 1
-> [    2.199021] initcall dwc2_platform_driver_init+0x0/0x10 returned 0
-> after 416 usecs
-> [    7.693987] dwc2 3f980000.usb: supply vusb_d not found, using dummy
-> regulator
-> [    7.694228] dwc2 3f980000.usb: supply vusb_a not found, using dummy
-> regulator
-> [    7.747111] dwc2 3f980000.usb: DWC OTG Controller
-> [    7.747152] dwc2 3f980000.usb: new USB bus registered, assigned bus
-> number 1
-> [    7.747192] dwc2 3f980000.usb: irq 66, io mem 0x3f980000
-> [    8.179985] usb 1-1: new high-speed USB device number 2 using dwc2
-> [    8.749920] usb 1-1.1: new high-speed USB device number 3 using dwc2
-> [    9.179900] usb 1-1.2: new low-speed USB device number 4 using dwc2
-> [    9.409951] usb 1-1.1.3: new low-speed USB device number 5 using dwc2
-> [    9.849927] usb 1-1.1.1: new high-speed USB device number 6 using dwc2
->
-> Unfortunately i wasn't able to find the root cause for this delay of 3
-> seconds during boot. I noticed that usb_phy_generic_init is called very
-> late. Maybe this is related.
+On 29/06/2021 21:30, Bjorn Andersson wrote:
+> I liked this, and it worked when I tested it, but iirc it suffered from
+> the problem that the core's probe may or may not have finished
+> successfully at the time that of_platform_populate() returns.
+> 
+> But fixing this problem would save us quite a bit of headache.
 
-I was able to investigate this further. The Raspberry Pi has a PHY
-defined in device tree ( compatible = "usb-nop-xceiv", bcm283x.dtsi )
-and in arm/multi_v7_defconfig the relevant driver is compiled as a module.
+OK.
 
-The dwc2 platform code attempt to find the optional PHY. With
-fw_devlink=permissive the dwc2 driver seems to fail getting the PHY and
-proceed. But with fw_devlink=on the dwc2 driver seems to go the
-EPROBE_DEFER path and wait endlessly for the PHY driver which isn't
-built into the kernel. This PHY handling was a troublemaker in the past [1]
+I will take a look at resurrecting the old patches either fixing the 
+probe order - or perhaps using something like Wesley's role-switch to 
+have dwc3 core optionally trigger dwc3-qcom
 
-So there are two workarounds to avoid this issue with fw_devlink=on:
+Binding tcpm into &usb_1_dwc3 instead of &usb_1
 
-a) make CONFIG_NOP_USB_XCEIV=y for multi_v7_defconfig
-b) remove the usb-nop-xceiv PHY from the device tree
-
-But it would be nice to have a clean solution.
-
-Best regards
-Stefan
-
-[1] -
-https://patchwork.kernel.org/project/linux-arm-kernel/patch/20180112101223.3661181-1-arnd@arndb.de/
-
->
-> Best regards
-> Stefan
->
->
-
+---
+bod
