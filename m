@@ -2,261 +2,159 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BB03B75D5
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 17:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50A43B75E7
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 17:52:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233660AbhF2Puj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Jun 2021 11:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S233073AbhF2Pyb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 11:54:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbhF2Pui (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 11:50:38 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5069CC061760
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 08:48:11 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id b2so24373900oiy.6
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 08:48:11 -0700 (PDT)
+        with ESMTP id S232929AbhF2Pya (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 11:54:30 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78063C061760
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 08:52:03 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id nd37so37220918ejc.3
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 08:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eSKZnNIRUKzRzjpfV+QcfterYDHeolkGTCLO2ji6H8A=;
-        b=i8SQMR5FUR5xDa2jEPOQ2quIWgzt2DGPCXtNycZFZtGLAsn5kVfSRBayMX5TrrWXst
-         K48ZMv0pgmBbh7Pes3MN9U4bi6TVXM8u3OkDt0B3xVdO7zKcBFHQ0zQpsG/GozvphQEF
-         CaN1MbcoWBn0h8ohFaArbNWkSbzyILiVdt0GeC6nn+x10J0yLxuPGQEBT8WFWsyPwgou
-         m++nZlK+efHnkiaCueQtoB03Kkz7PN1DK5IVkpP/bSkmlrFrqvq85Lh2BkAxZdjr/CaI
-         HbLfIT28mZF73RMBW6ud1K7n5ppPHxMBsyT81iIYfnnz4l/jX6Jkt3UECqaItgFKVZqu
-         HGCw==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xM/tkT/GPS6chgDovlrJLUCLh8SRJ9QQOLwPJZFx9ds=;
+        b=aOrABFKmmHNJL4ocxxHXSZ2DmAJjm5EzlKBMVljZVraw3gwq//06mHHOfx0PzCQo3h
+         yx230bOLGgQNWtxiRydz9c1Th8aYWsJODZDIkl3uFgjn/EBMcYPo+OLO75ubZO5Et9Db
+         KVDNdYEFPoOOtlZApfsP/PNGcOVRamWbYgfD/xQ7wOLzi2jsRHK0HWkkWOAYA/Xy8J3O
+         LjFiRjZK4dwHVYK86tTAJOta1+Ssl9yw+SD02eAQOIfw2cRAnxgoc7D1NxDsjnQurI1g
+         284vJXgunRb8j12q9/11Vurn+kvKbWPDm4qPBuW4n2+2Dr6RoXPvxbPW+QwO5qiAPok6
+         u4hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=eSKZnNIRUKzRzjpfV+QcfterYDHeolkGTCLO2ji6H8A=;
-        b=iCj0Gt+QHaOAf38h/8sEj2fnVdNF/sBrxnSBdsQNlHWVQqhgYoT8VxOTZXGfiYuGEy
-         VQyo/BImC/yKFDXxij7dqrt56++pGWjdxj3DLmGfmEEgwdP53NZh4VxXPTwpgLW0Vytz
-         X4cM4c7Vd8pMxoRhvld/Dy1OMSBcOH93YuFkQbzBYbTLNUHwpL/r3vSqTJkGcEUr9HOV
-         gWNXrvxy/LqfUgDK+A7Y7q1MfhxWg6CWEhGrAtnF9Mj1J0dTMLshWFg2ljK6km9Fry3e
-         LvlXD4s70t+wuHQ2HxeEbASmxTxsbuHI3D/cYf3NbVdVy5hK94bkmF9JZ0xXqnZsSARJ
-         5C8Q==
-X-Gm-Message-State: AOAM533fRq6sjWB5d+qdQOzAyU59ZuzdaaUj4qcL2ts7HKdr+4CiVT2u
-        W+hFXsyKuqSwf9UXXYvj1aAbIQ==
-X-Google-Smtp-Source: ABdhPJyzyfgjGm3FcunjCc/AqchnZJt1m+JFIFwhyipeErRomqrEarC009tJmz/gKKNM4eu9ZSP++A==
-X-Received: by 2002:a05:6808:148:: with SMTP id h8mr15601147oie.12.1624981690556;
-        Tue, 29 Jun 2021 08:48:10 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id f25sm4157929oto.26.2021.06.29.08.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Jun 2021 08:48:09 -0700 (PDT)
-Date:   Tue, 29 Jun 2021 10:48:07 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        wcheng@codeaurora.org
-Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and
- register role switch
-Message-ID: <YNtAt3dCGGyj5DU/@yoga>
-References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
- <20210629144449.2550737-2-bryan.odonoghue@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xM/tkT/GPS6chgDovlrJLUCLh8SRJ9QQOLwPJZFx9ds=;
+        b=ssV4L+HBm6EXfMaQVe4uXwMJLqxqK5MY/cqgyrFhIXoyvEZ3eGENztpqQLPQanf2OC
+         8mIhjgY4Ze5mjRvzCmKKk52sS6dEzgrBaoYnTVT7g5eDNrK17g0HkP83hy2WrfvPgPlC
+         kPkXdED05v+k2U3/0TrlBNDbkcxtPSlz3aoCivtABUZAxRZar4uNeBpuOsClZ6WFJxi/
+         auOSEhHbNd0D54QlrMiQduUfWTa9UbBv8+4Wi4fHdsY2i1KSEfCv3uEzpeAnmy1Y78UV
+         0J7DphTFrHh+21E7pFaUAroxGhgt5tlVxjuBmol0Wsq/I5g0QW+sMg8QTwRHvAqJzUuu
+         WqmA==
+X-Gm-Message-State: AOAM5330YSd8XuQOtzi/UNz0bqdGXHwqCInkEj0F4+CjGAfeLm56Zl71
+        TzYOokj1evanJDdE4qj6+iJzqqHDACqNmqKCo8A=
+X-Google-Smtp-Source: ABdhPJxzsdqC2WrSFDo7TtSAAn2U0t5CNfpahdnc+eKlDtIrM0RzHnMAnB6InNbkuUUgdLkNUz9jiHe+iT6Jddjky6E=
+X-Received: by 2002:a17:906:39c3:: with SMTP id i3mr15721290eje.527.1624981922000;
+ Tue, 29 Jun 2021 08:52:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210629144449.2550737-2-bryan.odonoghue@linaro.org>
+References: <0badab7c-f12e-e9ed-2f90-2cf5f25f4038@bluematt.me>
+ <20210628005825.GA638648@rowland.harvard.edu> <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
+ <20210628011628.GC638648@rowland.harvard.edu> <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
+ <20210628142418.GC656159@rowland.harvard.edu> <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
+ <20210629150541.GB699290@rowland.harvard.edu>
+In-Reply-To: <20210629150541.GB699290@rowland.harvard.edu>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Tue, 29 Jun 2021 17:51:51 +0200
+Message-ID: <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
+Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Matt Corallo <oc2udbzfd@mattcorallo.com>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux.amoon@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 29 Jun 09:44 CDT 2021, Bryan O'Donoghue wrote:
+Hi Alan,
 
-> From: Wesley Cheng <wcheng@codeaurora.org>
-> 
-> If registering a USB typeC connector, the connector node may not be a child
-> of the DWC3 QCOM device.  Utilize devcon graph search to lookup if any
-> remote endpoints contain the connector.  If a connector is present, the
-> DWC3 QCOM will register a USB role switch to receive role change events, as
-> well as attain a reference to the DWC3 core role switch to pass the event
-> down.
-> 
+Your help here is very much appreciated!
 
-What's wrong with the switch that dwc3_setup_role_switch() sets up?
+On Tue, Jun 29, 2021 at 5:05 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+[...]
+> > The attached mon1.txt is the output I get
+>
+> Did you remove something from the beginning of this trace?  It starts
+> with what appears to be the tail end of a resume sequence for the
+> on-board Genesys Logic hub.  If you didn't remove anything then
+> something is pretty wrong because the hub was apparently only
+> partially suspended.
+I have not removed anything from the output (at least not on purpose).
+To verify I just re-tried and got a similar result
 
-That's what I've been using in my UCSI hacking on Snapdragon 888 and it
-seems to work...
+> Anyway, the trace says that when the lsusb command ran, the hub woke up
+> and didn't see any connections on any of its ports.  This could be
+> caused by a bug in the hub itself, a bug in the way the system handles
+> the hub, or maybe a bug in the way it handles a PHY or other component
+> external to the hub.
+This reminds me of commit cc10ce0c51b13d ("usb: dwc2: disable
+power_down on Amlogic devices") [0]
+I checked and the code for this commit is still in mainline (so it was
+not reverted - either on purpose or by accident).
 
-Regards,
-Bjorn
+[...]
+> > In case it's relevant for your further analysis:
+> > - Odroid-C1+ and Odroid-C2 both use the USB PHY driver from
+> > drivers/phy/amlogic/phy-meson8b-usb2.c
+> > - Odroid-C1+ and Odroid-C2 both use use the dwc2 driver (running in
+> > host-only mode in this scenario. there's a second OTG capable dwc2
+> > controller which is currently disabled in mainline Linux on both
+> > devices)
+> > - Odroid-C1+ and Odroid-C2 have a soldered down 4-port Genesys Logic USB hub
+> > - Odroid-C1+ does not use any GPIO to control VBUS on usb1
+>
+> Since the problem may be related to runtime power management, you
+> should try booting with the command line parameter
+>
+>         usbcore.autosuspend=-1
+wow, this helps indeed
+my steps are:
+- power off my Odroid-C1+
+- unplug all USB devices
+- boot with usbcore.autosuspend=-1 in the kernel cmdline
+- plugin my Corsair Voyager USB 3.0 flash drive (which was only
+detected before if an additional USB 2.0 flash drive was plugged in
+during boot)
+-> without any lsusb magic the device was immediately recognized
 
-> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
->  drivers/usb/dwc3/dwc3-qcom.c | 118 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 116 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index 49e6ca94486d..4491704503ab 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -20,6 +20,8 @@
->  #include <linux/usb/of.h>
->  #include <linux/reset.h>
->  #include <linux/iopoll.h>
-> +#include <linux/fwnode.h>
-> +#include <linux/usb/role.h>
->  
->  #include "core.h"
->  
-> @@ -82,6 +84,9 @@ struct dwc3_qcom {
->  	struct notifier_block	vbus_nb;
->  	struct notifier_block	host_nb;
->  
-> +	struct usb_role_switch *role_sw;
-> +	struct usb_role_switch *dwc3_drd_sw;
-> +
->  	const struct dwc3_acpi_pdata *acpi_pdata;
->  
->  	enum usb_dr_mode	mode;
-> @@ -296,6 +301,73 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
->  	icc_put(qcom->icc_path_apps);
->  }
->  
-> +static int dwc3_qcom_usb_role_switch_set(struct usb_role_switch *sw,
-> +					 enum usb_role role)
-> +{
-> +	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-> +	struct fwnode_handle *child;
-> +	bool enable = false;
-> +
-> +	if (!qcom->dwc3_drd_sw) {
-> +		child = device_get_next_child_node(qcom->dev, NULL);
-> +		if (child) {
-> +			qcom->dwc3_drd_sw = usb_role_switch_find_by_fwnode(child);
-> +			fwnode_handle_put(child);
-> +			if (IS_ERR(qcom->dwc3_drd_sw)) {
-> +				qcom->dwc3_drd_sw = NULL;
-> +				return 0;
-> +			}
-> +		}
-> +	}
-> +
-> +	usb_role_switch_set_role(qcom->dwc3_drd_sw, role);
-> +
-> +	if (role == USB_ROLE_DEVICE)
-> +		enable = true;
-> +	else
-> +		enable = false;
-> +
-> +	qcom->mode = (role == USB_ROLE_HOST) ? USB_DR_MODE_HOST :
-> +					       USB_DR_MODE_PERIPHERAL;
-> +	dwc3_qcom_vbus_overrride_enable(qcom, enable);
-> +	return 0;
-> +}
-> +
-> +static enum usb_role dwc3_qcom_usb_role_switch_get(struct usb_role_switch *sw)
-> +{
-> +	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-> +	enum usb_role role;
-> +
-> +	switch (qcom->mode) {
-> +	case USB_DR_MODE_HOST:
-> +		role = USB_ROLE_HOST;
-> +		break;
-> +	case USB_DR_MODE_PERIPHERAL:
-> +		role = USB_ROLE_DEVICE;
-> +		break;
-> +	default:
-> +		role = USB_ROLE_DEVICE;
-> +		break;
-> +	}
-> +
-> +	return role;
-> +}
-> +
-> +static int dwc3_qcom_setup_role_switch(struct dwc3_qcom *qcom)
-> +{
-> +	struct usb_role_switch_desc dwc3_role_switch = {NULL};
-> +
-> +	dwc3_role_switch.fwnode = dev_fwnode(qcom->dev);
-> +	dwc3_role_switch.set = dwc3_qcom_usb_role_switch_set;
-> +	dwc3_role_switch.get = dwc3_qcom_usb_role_switch_get;
-> +	dwc3_role_switch.driver_data = qcom;
-> +	qcom->role_sw = usb_role_switch_register(qcom->dev, &dwc3_role_switch);
-> +	if (IS_ERR(qcom->role_sw))
-> +		return PTR_ERR(qcom->role_sw);
-> +
-> +	return 0;
-> +}
-> +
->  static void dwc3_qcom_disable_interrupts(struct dwc3_qcom *qcom)
->  {
->  	if (qcom->hs_phy_irq) {
-> @@ -698,6 +770,40 @@ dwc3_qcom_create_urs_usb_platdev(struct device *dev)
->  	return acpi_create_platform_device(adev, NULL);
->  }
->  
-> +static int dwc3_qcom_connector_check(struct fwnode_handle *fwnode)
-> +{
-> +	if (fwnode && (!fwnode_property_match_string(fwnode, "compatible",
-> +						     "gpio-usb-b-connector") ||
-> +	    !fwnode_property_match_string(fwnode, "compatible",
-> +					  "usb-c-connector")))
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +static void *dwc3_qcom_find_usb_connector_match(struct fwnode_handle *fwnode,
-> +						const char *id, void *data)
-> +{
-> +	/* Check if the "connector" node is the parent of the remote endpoint */
-> +	if (dwc3_qcom_connector_check(fwnode))
-> +		return fwnode;
-> +
-> +	/* else, check if it is a child node */
-> +	fwnode = fwnode_get_named_child_node(fwnode, "connector");
-> +	if (dwc3_qcom_connector_check(fwnode))
-> +		return fwnode;
-> +
-> +	return 0;
-> +}
-> +
-> +static bool dwc3_qcom_find_usb_connector(struct platform_device *pdev)
-> +{
-> +	struct fwnode_handle *fwnode = pdev->dev.fwnode;
-> +
-> +	return fwnode_connection_find_match(fwnode, "connector", NULL,
-> +					    dwc3_qcom_find_usb_connector_match);
-> +}
-> +
->  static int dwc3_qcom_probe(struct platform_device *pdev)
->  {
->  	struct device_node	*np = pdev->dev.of_node;
-> @@ -813,8 +919,13 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
->  	if (qcom->mode == USB_DR_MODE_PERIPHERAL)
->  		dwc3_qcom_vbus_overrride_enable(qcom, true);
->  
-> -	/* register extcon to override sw_vbus on Vbus change later */
-> -	ret = dwc3_qcom_register_extcon(qcom);
-> +	if (dwc3_qcom_find_usb_connector(pdev)) {
-> +		ret = dwc3_qcom_setup_role_switch(qcom);
-> +	} else {
-> +		/* register extcon to override sw_vbus on Vbus change later */
-> +		ret = dwc3_qcom_register_extcon(qcom);
-> +	}
-> +
->  	if (ret)
->  		goto interconnect_exit;
->  
-> @@ -850,6 +961,9 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
->  	struct device *dev = &pdev->dev;
->  	int i;
->  
-> +	usb_role_switch_unregister(qcom->role_sw);
-> +	usb_role_switch_put(qcom->dwc3_drd_sw);
-> +
->  	device_remove_software_node(&qcom->dwc3->dev);
->  	of_platform_depopulate(dev);
->  
-> -- 
-> 2.30.1
-> 
+> to disable default USB runtime suspends.  Also, check the contents of
+> /sys/bus/usb/devices/1-2/power/autosuspend to make sure that runtime
+> suspend really is disabled.  Does that make the problem go away?
+with usbcore.autosuspend=-1 (after plugging in my Corsair Voyager):
+# grep "" /sys/bus/usb/devices/*/power/autosuspend
+/sys/bus/usb/devices/1-1.1/power/autosuspend:-1
+/sys/bus/usb/devices/1-1/power/autosuspend:-1
+/sys/bus/usb/devices/usb1/power/autosuspend:-1
+
+after rebooting without usbcore.autosuspend=-1 (and no USB device
+plugged in during boot):
+# grep "" /sys/bus/usb/devices/*/power/autosuspend
+/sys/bus/usb/devices/1-1/power/autosuspend:0
+/sys/bus/usb/devices/usb1/power/autosuspend:0
+
+I think the next step is narrowing down which component is causing this issue.
+
+Interestingly my PC (running 5.12.13-arch1-2) also has two Genesys
+Logic USB hubs with the same USB vendor and device IDs as my
+Odroid-C1+: 05e3:0610.
+These hubs are connected to my AMD Ryzen 5000 CPU or the B550 chipset:
+usb1              1d6b:0002 09 1IF  [USB 2.00,   480 Mbps,   0mA]
+(xhci-hcd 0000:02:00.0) hub
+ 1-3               05e3:0610 09 1IF  [USB 2.10,   480 Mbps, 100mA]
+(GenesysLogic USB2.0 Hub) hub
+[...]
+ 1-7               05e3:0610 09 1IF  [USB 2.00,   480 Mbps, 100mA]
+(Genesys Logic, Inc. Hub) hub
+
+So far I have not observed any problems on my PC.
+
+This is the lsusb.py output on my Odroid-C1+:
+usb1              1d6b:0002 09 1IF  [USB 2.00,   480 Mbps,   0mA]
+(Linux 5.13.0-02058-g8452e2c291aa-dirty dwc2_hsotg DWC OTG Controller
+c90c0000.usb) hub
+ 1-1               05e3:0610 09 1IF  [USB 2.00,   480 Mbps, 100mA]
+(Genesys Logic, Inc. Hub) hub
+
+
+Best regards,
+Martin
+
+
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/usb/dwc2/params.c?id=cc10ce0c51b13d1566d0ec1dcb472fb86330b391
