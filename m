@@ -2,53 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1213B724C
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 14:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A466F3B7372
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 15:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233740AbhF2Mvw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 29 Jun 2021 08:51:52 -0400
-Received: from [218.75.92.58] ([218.75.92.58]:65062 "EHLO WIN-VTPUBHNS72V"
-        rhost-flags-FAIL-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232685AbhF2Mvv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 29 Jun 2021 08:51:51 -0400
-Received: from [192.168.43.47] (Unknown [197.210.85.75])
-        by WIN-VTPUBHNS72V with ESMTPA
-        ; Thu, 24 Jun 2021 20:46:26 +0800
-Message-ID: <480BE1B6-0979-42C8-AB15-2653D044DE7D@WIN-VTPUBHNS72V>
-Content-Type: text/plain; charset="iso-8859-1"
+        id S234145AbhF2NsZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 09:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35938 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233050AbhF2NsZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 09:48:25 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06254C061760
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 06:45:58 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id o139so16483974ybg.9
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 06:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=HRTmpwpH5bcqsgViVo+tzjiKz41aMk5YgpdTNp3QNP0=;
+        b=dKln60ZoIaqFKnA0YNLWDf5RpwfmYQJEUYOj2GoG+wyDkkMnsb8y6BYv+0VYIABRLf
+         g2iiVCgezFZReLQg/v0gz1a7mHmhRqkgAiNUAgCKnjXnx+n2rIYY0Ot35PpPXoUhmtY3
+         eW2TYQuz8lvspZZf/OcsFrWQWRLkxFUZEmFFE8YdGw5xp9rTUM6dH1iyPYcvFhNm1lsB
+         iacwlkRiOtJqAxne4FR2wIJRwaBj/CnZ+6ly0WQzComoHkq8YyNCuhgW2NFJ2tgamh7d
+         VkysFMUJJ2iEanXvdIJrSESm1FdgaLOPfgRdw6oz+8AaDNBqFu9WEUH8xBVzehsFbc7I
+         NtTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=HRTmpwpH5bcqsgViVo+tzjiKz41aMk5YgpdTNp3QNP0=;
+        b=roNi0vEF9Enf+jAS/772pPJwnJmQpwhqc39+gprZpfkYK2U304yoX3azB7JkwUy4TD
+         uPoU8lTfBvnhjMekA4i/FX5Ya1weEp6vVjZjMUayOk7wD6SbBeGf+Zp8Fp4OglbSVpy8
+         QliYecspFvWP9aIqUU4wsvyJIQCjCBqG+5vnq1nAzPCs/nHinjxNNBUU0mPRe6jcfZtm
+         RR2e+t3NN7A0C8OA+A/cCQ+De59+Jio9bA9elbOoZ/V/ZElUNpVkywpg+0zOQHU2F+0X
+         IVpmaXfAquWgD2IJG90wis2100fwZ/ZdfSXjXer5s/8iOJnWGZSnFIxZfPonxgtGAJ7e
+         xejQ==
+X-Gm-Message-State: AOAM533eXkZsO+V1GoMhmpcMufRaAyqNSu5cp3B1Lnh+g6bJvVhPm31q
+        z79FcEC7d92ritbXp7pd+qjQErGe0vQUEXHms3q2O4Wy6u0=
+X-Google-Smtp-Source: ABdhPJx3Jyrclz89Pj9OS66hYoR4ozUGIWxL1o0btEU26k/GlUzUN/+N/3dc6MnL/0ny/fg1h/a4KQUpWCJKZzJioVk=
+X-Received: by 2002:a25:be44:: with SMTP id d4mr40116130ybm.497.1624974357334;
+ Tue, 29 Jun 2021 06:45:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: URGENT ATTENTION
-To:     Recipients <wjjt@wjjt.cn>
-From:   "Andres Auchincloss" <wjjt@wjjt.cn>
-Date:   Thu, 24 Jun 2021 14:45:54 +0200
-Reply-To: andresauchincloss926@gmail.com
+From:   Benjamin Marty <benjamin.marty@gmail.com>
+Date:   Tue, 29 Jun 2021 15:45:46 +0200
+Message-ID: <CABSdY3LGN202SN5YJxnk_bMAx2-js=AB0hictqo69ENgWbMQSw@mail.gmail.com>
+Subject: USB Gadget Filesystem HID stuck on write when using mass storage at
+ the same time
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+Hello
 
-I will like to use this opportunity to wish you a productive time in 2021 and also confide in you to finalize this transaction of mutual benefits. It may seem strange to you, but it is real. This is a transaction that has no risk at all, due process shall be followed and it shall be carried out under the ambit of the financial laws. Being the Chief Financial Officer, BP Plc. I want to trust and put in your care Eighteen Million British Pounds Sterling, The funds were acquired from an over-invoiced payment from a past contract executed in one of my departments.
+In my application, I boot a Linux System through USB Gadget mass
+storage and at the same time pass in USB Touch commands via USB HID
+Device. Both over the same USB OTG Gadget Link.
 
-I can't successfully achieve this transaction without presenting you as foreign contractor who will provide a bank account to receive the funds.
+If I execute USB HID commands during high traffic over the USB Mass
+Storage, the HID device gets stuck. Writes to it are then blocking
+forever. I'm not sure if I use something wrong or if this is a Kernel
+issue. Do I maybe need to check something before I'm allowed to write
+to the HID device?
 
-Documentation for the claim of the funds will be legally processed and documented, so I will need your full cooperation on this matter for our mutual benefits. We will discuss details if you are interested to work with me to secure this funds. I will appreciate your prompt response in every bit of our communication. Stay Blessed and Stay Safe.
+Hardware issue are unlikely, I tried it on the Raspberry Pi Platform
+and also on the NXP iMX8MM platform. Both have this HID device stuck
+issue. I have also tried multiple Intel Computers as USB Host.
 
+I tried to document my issue here with test scripts to replicate what
+I do in my C Application with the same result:
+https://github.com/raspberrypi/linux/issues/4373
 
+Thanks
 
-Best Regards
-
-
-
-
-Tel: +1 (587) 770-0485
-Andres .B. Auchincloss
-Chief financial officerBP Petroleum p.l.c.
-
-
-
-
-                                  Copyright ©? 1996-2021
-
+Benjamin
