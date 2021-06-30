@@ -2,94 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C42EC3B87C0
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 19:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4461A3B8847
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 20:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232881AbhF3Rda (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 13:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39328 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232802AbhF3Rd1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 13:33:27 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C10C0617A8;
-        Wed, 30 Jun 2021 10:30:57 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id h3so3625754ilc.9;
-        Wed, 30 Jun 2021 10:30:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3KbPgH3Xk8vzy7N0rAGS5ZuHlPaO+BHPUcyIIVc3h3I=;
-        b=u8HkHov21WA1HExul/8zyGWEsbf1N/U5ZMyWGWWpgejRWaeGKJT+r3zuHbAbzOtMnM
-         +lbI3Eym1qhs8PFQ21FppbrjBC/jqwdr0FxownqnwE8vvztzUJudox3sJFUPczhtmJnn
-         iRl6xvPqRP4GARFP1jPMJ9hZoRBIyrKrjAcAIxOs3vQPAX47OxhW1mnCLp2Z94ufA4Da
-         dbwriB8AeK6tBe8V6l1yl4L8RaZ0B17+2DHEP5XaUrPnR8jPwJm4YctnNpduPfepQV2H
-         KA8qGmWkeWRkiuBE8VyRuyB+M6qtfZRakkGlwHJZevmG9+drbNW0HwMvJ1uC0aHPVb/2
-         MkQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3KbPgH3Xk8vzy7N0rAGS5ZuHlPaO+BHPUcyIIVc3h3I=;
-        b=dhv2ecpqs+Sbytcvxtwi4KHr4V1JOcpISAGHXLrfpo9G4Xzx1WD1wp1fV+ys7Y/wIy
-         7XGA/5cE1ZcNhZQ29PaCOxK64o56YXnafQBLyS0hjm99fvKnPmlkKP7pzn9vi+7iCbIE
-         drSSQLYQDZUOVWbsaPkz0uhgF/0/LhfStcG9lIAUtKvgXxcOrUTF6oPdKGj4VdpRjlOd
-         qusTmNMzm8xboN7wkx+jWzpzZYhWQBUox7XAE2fGPfQMnFUn5rFg0XJLyv+IBm9l3BPE
-         WVz6r3bf29eqkT/Fe0Dxy4nHtX0Jjl8AKJCrBpruetWc0kxEu8gtm44TBezA0GOJrz24
-         GV0g==
-X-Gm-Message-State: AOAM533m/HAM/+wu3e74GYjx8jvDjT8a99BLJDpV2vMg/oijmBbPCM5g
-        1Feqc9MXgfotOCNNSD/ToDOEyNBq/AxGemVU
-X-Google-Smtp-Source: ABdhPJxkQ7etaWYt01MmObyEx/AcGL616JW9qRgYnObv+//ZvlM0vNWrHrAk86WLeywUHb7iZNF4BA==
-X-Received: by 2002:a05:6e02:1d04:: with SMTP id i4mr13985844ila.149.1625074256038;
-        Wed, 30 Jun 2021 10:30:56 -0700 (PDT)
-Received: from aford-IdeaCentre-A730.lan (c-73-37-219-234.hsd1.mn.comcast.net. [73.37.219.234])
-        by smtp.gmail.com with ESMTPSA id q19sm12207278ilc.70.2021.06.30.10.30.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Jun 2021 10:30:55 -0700 (PDT)
-From:   Adam Ford <aford173@gmail.com>
-To:     linux-usb@vger.kernel.org
-Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH 3/3] arm64: dts: renesas: beacon: Fix HSUSB ref clock references
-Date:   Wed, 30 Jun 2021 12:30:42 -0500
-Message-Id: <20210630173042.186394-3-aford173@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210630173042.186394-1-aford173@gmail.com>
-References: <20210630173042.186394-1-aford173@gmail.com>
+        id S233129AbhF3SYJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 14:24:09 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:56293 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S233076AbhF3SYI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 14:24:08 -0400
+Received: (qmail 745964 invoked by uid 1000); 30 Jun 2021 14:21:38 -0400
+Date:   Wed, 30 Jun 2021 14:21:37 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Claudiu.Beznea@microchip.com
+Cc:     gregkh@linuxfoundation.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        Cristian.Birsan@microchip.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
+ OHCI accesses
+Message-ID: <20210630182137.GA743974@rowland.harvard.edu>
+References: <20210609230735.GA1861855@rowland.harvard.edu>
+ <0621eaba-db4d-a174-1b15-535e804b52ac@microchip.com>
+ <20210623135915.GB491169@rowland.harvard.edu>
+ <a5c68849-a48c-5224-7ba3-1ad44e0d9874@microchip.com>
+ <20210623141907.GC491169@rowland.harvard.edu>
+ <8bff20a7-8eb8-276a-086e-f1729fbbdbe4@microchip.com>
+ <20210623164148.GC499969@rowland.harvard.edu>
+ <f03ccb09-4b5e-4db7-2cf0-375d53234099@microchip.com>
+ <20210624132304.GA528247@rowland.harvard.edu>
+ <856493cd-9d53-24b3-8e8b-c3c366f282bd@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <856493cd-9d53-24b3-8e8b-c3c366f282bd@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The RZ/G2 boards expect there to be an external clock reference for
-USBHS controller.  For the Beacon boards, this reference clock
-is controlled by a programmable versaclock.  Because the RZ/G2
-family has a special clock driver when using an external clock,
-the third clock reference in the USBHS node needs to point to this
-special clock, called usb2_clksel, and the 4th clock is the versaclock.
+On Wed, Jun 30, 2021 at 02:46:47PM +0000, Claudiu.Beznea@microchip.com wrote:
+> On 24.06.2021 16:23, Alan Stern wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Thu, Jun 24, 2021 at 06:40:25AM +0000, Claudiu.Beznea@microchip.com wrote:
+> >> On 23.06.2021 19:41, Alan Stern wrote:
+> >>> Are there any systems beside the SAMA7G5 and others you tested which
+> >>> might be affected by this patch?  Do they all work pretty much the
+> >>> same way?  (I want to make sure no others will be adversely affected
+> >>> by this change.)
+> >>
+> >> I tested it on SAMA7G5, SAMA5D2 and SAM9X60. I tested the suspend/resume
+> >> to/from mem. On SAMA5D2 and SAM9X60 there is no clock provided by
+> >> transceiver A to OHCI. I encountered no issues on tested systems. These IPs
+> >> are also present on SAMA5D3 and SAMA5D4 systems which I haven't tested as I
+> >> expect to behave as SAMA5D2 (as the clocking scheme is the same with
+> >> SAMA5D2). I can also try it on a SAMA5D3 (I don't have a SAMA5D4 with me at
+> >> the moment), tough, just to be sure nothing is broken there too.
+> > 
+> > That doesn't answer my question.  I asked if there were any systems
+> > which might be affected by your patch, and you listed a bunch of
+> > systems that _aren't_ affected (that is, they continue to work
+> > properly).
+> 
+> I wrongly understood the initial question.
+> 
+> > 
+> > What systems might run into trouble with this patch?
+> 
+> These are all I haven't tested and might be affected:
+> AT91RM9200,
+> SAM9260,
+> SAM9261,
+> SAM9263,
+> SAM9N12,
+> SAM9X35,
+> SAM9G45.
+> 
+> The last two (SAM9X35 and SAM9G45) have the same clocking scheme with
+> SAMA5D2 (which I tested). For the rest of them I cannot find the clocking
+> scheme in datasheet and don't have them to test (at least at the moment).
 
-Signed-off-by: Adam Ford <aford173@gmail.com>
+I see.  That seems reasonable; the others are probably the same as the 
+ones you tested.
 
-diff --git a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-index e3c8b2fe143e..bcbf7eb5195b 100644
---- a/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-+++ b/arch/arm64/boot/dts/renesas/beacon-renesom-baseboard.dtsi
-@@ -313,6 +313,7 @@ &hscif1 {
- };
- 
- &hsusb {
-+	clocks = <&cpg CPG_MOD 704>, <&cpg CPG_MOD 703>, <&usb2_clksel>, <&versaclock6_som 3>;
- 	dr_mode = "otg";
- 	status = "okay";
- };
--- 
-2.25.1
+Did you ever answer the question that Nicolas raised back on June 9 in:
 
+	https://marc.info/?l=linux-usb&m=162324242003349&w=2
+
+Alan Stern
