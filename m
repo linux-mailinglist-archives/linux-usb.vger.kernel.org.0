@@ -2,114 +2,279 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 282673B7B09
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 02:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E1E3B7B79
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 04:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235690AbhF3AiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Jun 2021 20:38:25 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:40599 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S235637AbhF3AiY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 20:38:24 -0400
-Received: (qmail 718644 invoked by uid 1000); 29 Jun 2021 20:35:56 -0400
-Date:   Tue, 29 Jun 2021 20:35:56 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Matt Corallo <oc2udbzfd@mattcorallo.com>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux.amoon@gmail.com
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
-Message-ID: <20210630003556.GA718579@rowland.harvard.edu>
-References: <20210628005825.GA638648@rowland.harvard.edu>
- <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
- <20210628011628.GC638648@rowland.harvard.edu>
- <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
- <20210628142418.GC656159@rowland.harvard.edu>
- <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
- <20210629150541.GB699290@rowland.harvard.edu>
- <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
- <20210629161807.GB703497@rowland.harvard.edu>
- <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
+        id S232327AbhF3CW2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 22:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33522 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232311AbhF3CW2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 22:22:28 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0209EC061766
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 19:19:58 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id f14so1179708wrs.6
+        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 19:19:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language;
+        bh=PG5/J+SO2n+cg94gCD3DX5ddKn8LFLdn7n7a/3xcG20=;
+        b=e6Ir0qVSFRD79WyNHySA/DWWE6IqoZvhDvBmzgx7102B7+ZMvjpFgaFoO5Nn09iNOQ
+         OQDWmgPYl5MAfV0apnzhboQLGnch8k6JxB8vdobVwUglvk9/1CksPeKKojy6UNRz1W1M
+         sWoLJYf74fREtXOeVK2NMycl+W7D+M1E/xHvODM+CRNczg/qE9KWDLHX1X08FYcXHKVp
+         fj1ZkBiCl94cWiR6hUql9qHsTqZvfyA3YhWfjeOLWnFAh068OmsG5fqu6PKKjuoqtiFH
+         NOKTDVGXbzJLOEQW8Gk+Ctmdgn+jprdjTSAqWyQkVnsovEutMXYKMbVZTasMSefwF6Pt
+         gn0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language;
+        bh=PG5/J+SO2n+cg94gCD3DX5ddKn8LFLdn7n7a/3xcG20=;
+        b=YeBqLa3fhE18KUsUf5zr6KHScSuEmALBIKe0S5RjVY8UN3eNiv46Gp23aX2o0ugy6a
+         HCNuOlwEJthU8rgI7niLVgW+YCErlp1fuCwRqAfsYQu3i5GOPPFx81ZjZFRermnMcAxy
+         ZH9B7Hrs5qdB20M5hRh2d15cgmqfWtLnim6JMBTfXooTqWHbgQR0W0Bw+k4jJGNav7Wn
+         A+mKq4ZlS1RgdrMc5uRbWjwyhm6bllSOA0pmJDxfhIuuylqIOjLzV2SUb7WzJdWFWvMe
+         z2xo+EV0MSTFaT2+3X6snjjAsriLoo74Y4khZe/tpWUnQfH/YaoRuiKwqZuBN9pHmtG7
+         fnJA==
+X-Gm-Message-State: AOAM5326f51xAjCVzZYBPCcC62/i3B9oW6Kp5Y+S4JC8mSfmAk8Z4PAN
+        1WKM2YWwjasPpV/ksdJEl/qcLQ==
+X-Google-Smtp-Source: ABdhPJwwTM7EYb99pb6cG30rty/k412lovy4rhiVU/+q0aMTRFYTI7vZMd2H3bBASMJDA4iZVqrwpw==
+X-Received: by 2002:a05:6000:5:: with SMTP id h5mr36620344wrx.216.1625019597448;
+        Tue, 29 Jun 2021 19:19:57 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id t9sm18952179wmq.14.2021.06.29.19.19.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Jun 2021 19:19:56 -0700 (PDT)
+Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and register
+ role switch
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Jack Pham <jackp@codeaurora.org>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        wcheng@codeaurora.org
+References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
+ <20210629144449.2550737-2-bryan.odonoghue@linaro.org> <YNtAt3dCGGyj5DU/@yoga>
+ <c63c286a-f7c0-0874-59ad-e9ee43660a33@linaro.org>
+ <20210629200228.GE25299@jackp-linux.qualcomm.com> <YNuC0Njwr4B1Q1xZ@yoga>
+ <0f112cf5-1f71-f189-5a3a-2ff4dbcaa8e8@linaro.org>
+Message-ID: <d8902c0d-ae51-644d-f33b-19f452308097@linaro.org>
+Date:   Wed, 30 Jun 2021 03:21:46 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <0f112cf5-1f71-f189-5a3a-2ff4dbcaa8e8@linaro.org>
+Content-Type: multipart/mixed;
+ boundary="------------42AF9040477A4BAD376EE0FE"
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 29, 2021 at 06:30:08PM +0200, Martin Blumenstingl wrote:
-> Hi Alan,
-> 
-> On Tue, Jun 29, 2021 at 6:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> [...]
-> > > >         usbcore.autosuspend=-1
-> > > wow, this helps indeed
-> > > my steps are:
-> > > - power off my Odroid-C1+
-> > > - unplug all USB devices
-> > > - boot with usbcore.autosuspend=-1 in the kernel cmdline
-> > > - plugin my Corsair Voyager USB 3.0 flash drive (which was only
-> > > detected before if an additional USB 2.0 flash drive was plugged in
-> > > during boot)
-> > > -> without any lsusb magic the device was immediately recognized
-> >
-> > That does show pretty convincingly that runtime suspend is causing the
-> > problem.  But I still have no idea why the problem affects some devices
-> > and not others.  It's a mystery.
-> Maybe because there's two related problems (I am guessing here):
-> The first issue is that USB hotplug is not working at all on my
-> Odroid-C1+ (which means: dwc2 + GL852G USB hub).
-> The second issue is that the workaround we had before (running lsusb
-> -vv to make "hot plugged" devices show up) is not working for some USB
-> devices.
-> 
-> It seems that using a different workaround (usbcore.autosuspend=-1)
-> makes *all* USB devices show up - even without any "lsusb -vv" call.
-> So I think we should focus on the first issue as it may also fix the
-> other problem as well.
+This is a multi-part message in MIME format.
+--------------42AF9040477A4BAD376EE0FE
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Those two issues could well be related; they could both be a result of 
-improper handling of USB bus suspend.  Fixing that might fix both 
-issues.
+On 29/06/2021 22:57, Bryan O'Donoghue wrote:
+> On 29/06/2021 21:30, Bjorn Andersson wrote:
+>> I liked this, and it worked when I tested it, but iirc it suffered from
+>> the problem that the core's probe may or may not have finished
+>> successfully at the time that of_platform_populate() returns.
+>>
+>> But fixing this problem would save us quite a bit of headache.
+> 
+> OK.
+> 
+> I will take a look at resurrecting the old patches either fixing the 
+> probe order - or perhaps using something like Wesley's role-switch to 
+> have dwc3 core optionally trigger dwc3-qcom
+> 
+> Binding tcpm into &usb_1_dwc3 instead of &usb_1
+> 
+> ---
+> bod
 
-Alan Stern
+So here's a potential way forward. Not technically breaking my "no 
+patches at 3am rule"
 
-> [...]
-> > > after rebooting without usbcore.autosuspend=-1 (and no USB device
-> > > plugged in during boot):
-> > > # grep "" /sys/bus/usb/devices/*/power/autosuspend
-> > > /sys/bus/usb/devices/1-1/power/autosuspend:0
-> > > /sys/bus/usb/devices/usb1/power/autosuspend:0
-> > >
-> > > I think the next step is narrowing down which component is causing this issue.
-> >
-> > Maybe Minas can help.  He knows a lot more about dwc2 than I do (which
-> > is practically nothing).
-> I'll wait for Minas then
-> 
-> > > Interestingly my PC (running 5.12.13-arch1-2) also has two Genesys
-> > > Logic USB hubs with the same USB vendor and device IDs as my
-> > > Odroid-C1+: 05e3:0610.
-> > > These hubs are connected to my AMD Ryzen 5000 CPU or the B550 chipset:
-> > > usb1              1d6b:0002 09 1IF  [USB 2.00,   480 Mbps,   0mA]
-> > > (xhci-hcd 0000:02:00.0) hub
-> > >  1-3               05e3:0610 09 1IF  [USB 2.10,   480 Mbps, 100mA]
-> > > (GenesysLogic USB2.0 Hub) hub
-> > > [...]
-> > >  1-7               05e3:0610 09 1IF  [USB 2.00,   480 Mbps, 100mA]
-> > > (Genesys Logic, Inc. Hub) hub
-> > >
-> > > So far I have not observed any problems on my PC.
-> >
-> > Presumably because it uses xHCI rather than dwc2.
-> indeed. I think it's good to know that it's not an issue affecting all
-> Genesys Logic USB 2.0 hubs.
-> As you mentioned above it's most likely that dwc2 is the culprit here.
-> Or it might be some interoperability issue between dwc2 and GL852G
-> 
-> 
-> Best regards,
-> Martin
+Basically we can fix the probe order problem if we have dwc3 drd call 
+into dwc3-qcom.
+
+In order to make that not be a problem for all non qcom platforms - use 
+a function with weak binding in drd - which a wrapper - in this case the 
+qcom wrapper can over ride..
+
+---
+bod
+
+--------------42AF9040477A4BAD376EE0FE
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-usb-dwc3-Add-support-for-a-role-switch-notifier.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0001-usb-dwc3-Add-support-for-a-role-switch-notifier.patch"
+
+From 329ffacea542163fe7ac798b77db7cb3599a65ac Mon Sep 17 00:00:00 2001
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Date: Wed, 11 Mar 2020 19:15:00 +0000
+Subject: [PATCH 1/2] usb: dwc3: Add support for a role-switch notifier
+
+Role-switching is a 1:1 mapping between a producer and a consumer. For DWC3
+we have some vendor specific wrappers, notably the qcom wrapper that want
+to toggle some PHY related bits on a USB role switch.
+
+This patch adds a role-switch notifier to the dwc3 drd code. When the USB
+role-switch set() routine runs, the notifier will fire passing the notified
+mode to the consumer, thus allowing vendor specific fix-ups to toggle from
+the role-switching events.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/usb/dwc3/core.h | 8 ++++++++
+ drivers/usb/dwc3/drd.c  | 5 +++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index dccdf13b5f9e..7f81ee3a9657 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -995,6 +995,7 @@ struct dwc3_scratchpad_array {
+  * @role_sw: usb_role_switch handle
+  * @role_switch_default_mode: default operation mode of controller while
+  *			usb role is USB_ROLE_NONE.
++ * @role_sw_nl: role switch notifier list
+  * @usb_psy: pointer to power supply interface.
+  * @usb2_phy: pointer to USB2 PHY
+  * @usb3_phy: pointer to USB3 PHY
+@@ -1136,6 +1137,7 @@ struct dwc3 {
+ 	struct notifier_block	edev_nb;
+ 	enum usb_phy_interface	hsphy_mode;
+ 	struct usb_role_switch	*role_sw;
++	struct raw_notifier_head role_sw_nl;
+ 	enum usb_dr_mode	role_switch_default_mode;
+ 
+ 	struct power_supply	*usb_psy;
+@@ -1586,4 +1588,10 @@ static inline void dwc3_ulpi_exit(struct dwc3 *dwc)
+ { }
+ #endif
+ 
++#if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
++void __weak
++dwc3_set_parent_role_switch_notifier(struct device *parent,
++				     struct raw_notifier_head *role_sw_nl) {}
++#endif
++
+ #endif /* __DRIVERS_USB_DWC3_CORE_H */
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index 8fcbac10510c..7ae09730a319 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -507,6 +507,8 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
+ 	}
+ 
+ 	dwc3_set_mode(dwc, mode);
++	raw_notifier_call_chain(&dwc->role_sw_nl, mode, NULL);
++
+ 	return 0;
+ }
+ 
+@@ -563,6 +565,9 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
+ 	if (IS_ERR(dwc->role_sw))
+ 		return PTR_ERR(dwc->role_sw);
+ 
++	RAW_INIT_NOTIFIER_HEAD(&dwc->role_sw_nl);
++	dwc3_set_parent_role_switch_notifier(dwc->dev->parent,
++					     &dwc->role_sw_nl);
+ 	dwc3_set_mode(dwc, mode);
+ 	return 0;
+ }
+-- 
+2.30.1
+
+
+--------------42AF9040477A4BAD376EE0FE
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0002-usb-dwc3-qcom-Implement-VBUS-role-switch-notifier-ho.patch"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0="0002-usb-dwc3-qcom-Implement-VBUS-role-switch-notifier-ho.pa";
+ filename*1="tch"
+
+From 9d2b50b448f7efd8b3891a2e8f52440794ed2958 Mon Sep 17 00:00:00 2001
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Date: Wed, 30 Jun 2021 03:10:49 +0100
+Subject: [PATCH 2/2] usb: dwc3: qcom: Implement VBUS role-switch notifier
+ hooks
+
+Implement dwc3_set_parent_role_switch_notifier() in dwc3-qcom allowing the
+core drd code to call into the parent device when it has successfully setup
+all necessary role-switching logic.
+
+The qcom-dwc3 binding reuses the existing VBUS notifier for extcon
+receiving notifications from the role-switch layer instead of extcon.
+
+Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+---
+ drivers/usb/dwc3/dwc3-qcom.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index 49e6ca94486d..1b5aa345d025 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -81,6 +81,7 @@ struct dwc3_qcom {
+ 	struct extcon_dev	*host_edev;
+ 	struct notifier_block	vbus_nb;
+ 	struct notifier_block	host_nb;
++	struct raw_notifier_head *role_sw_nl;
+ 
+ 	const struct dwc3_acpi_pdata *acpi_pdata;
+ 
+@@ -154,6 +155,20 @@ static int dwc3_qcom_host_notifier(struct notifier_block *nb,
+ 	return NOTIFY_DONE;
+ }
+ 
++#if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
++void dwc3_set_parent_role_switch_notifier(struct device *dev,
++					  struct raw_notifier_head *role_sw_nl)
++{
++	struct platform_device *pdev = container_of(dev,
++						    struct platform_device, dev);
++	struct dwc3_qcom *qcom = platform_get_drvdata(pdev);
++
++	qcom->vbus_nb.notifier_call = dwc3_qcom_vbus_notifier;
++	if (!raw_notifier_chain_register(role_sw_nl, &qcom->vbus_nb))
++		qcom->role_sw_nl = role_sw_nl;
++}
++#endif
++
+ static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
+ {
+ 	struct device		*dev = qcom->dev;
+@@ -829,6 +844,8 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
+ interconnect_exit:
+ 	dwc3_qcom_interconnect_exit(qcom);
+ depopulate:
++	if (qcom->role_sw_nl)
++		raw_notifier_chain_unregister(qcom->role_sw_nl, &qcom->vbus_nb);
+ 	if (np)
+ 		of_platform_depopulate(&pdev->dev);
+ 	else
+@@ -850,6 +867,9 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	int i;
+ 
++	if (qcom->role_sw_nl)
++		raw_notifier_chain_unregister(qcom->role_sw_nl, &qcom->vbus_nb);
++
+ 	device_remove_software_node(&qcom->dwc3->dev);
+ 	of_platform_depopulate(dev);
+ 
+-- 
+2.30.1
+
+
+--------------42AF9040477A4BAD376EE0FE--
