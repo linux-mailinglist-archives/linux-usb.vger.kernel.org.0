@@ -2,91 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C75BE3B7A24
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Jun 2021 23:55:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 282673B7B09
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 02:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235209AbhF2V6W (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 29 Jun 2021 17:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232997AbhF2V6V (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 17:58:21 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692D7C061766
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 14:55:53 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id u6so916702wrs.5
-        for <linux-usb@vger.kernel.org>; Tue, 29 Jun 2021 14:55:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=F+tHr9nTZPsP/L41LDDEeXiY0HeubYowRUu2DqE1fyw=;
-        b=pcQR2h7Jed2UG/FMm0+KicDSHQp1wQnG4gT3Cw429cEttDeFVP4vxP8XNPTvt8TmCm
-         3/HrFR2/8V7MezHIZ64l2jcko73d2P2qQlkglgn8J2vfGI4nV1Opy85ZJYwlMJZGWnNZ
-         gk2r6zIfgYVMYC40u0WuuQ2ADhaknYdgVSC6irQaLgB+4re64i7dc1YTcKV3SW/1uNX9
-         K25HYwN938KnKITeYRSqrQ+7B5FrsRF4s0Vhxh37oNY1J3xmpiTXL7s98VKVDN1O66tb
-         AMq58x98lGE3wtZtWllBAcG+6k7wVqXkk5eGFi6jxDh8U1p8SlGsrvKrKGGkKcvMSj10
-         aTpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=F+tHr9nTZPsP/L41LDDEeXiY0HeubYowRUu2DqE1fyw=;
-        b=KBnWPM4cs3g8DYVSSz4aVa/N/EWoVM62MIh+Fum9WxcAbPK3BSG9EqmpGYl8BH17pm
-         SgftBs6Jq047DhAPuw7/dmqOdpbLJ2GCHw/M3KQPcLdbXBHdVO3EFHwd0eIz6P5BshGh
-         LYBatUlLFdTixZNne/d3Vh46HhsHYGXDux12OspT0Hr6X1obfV3EA6x1g2+efopBvAWO
-         J1CrbRQMjUGiO9aS9Y+ZmHuzypf4oDkQgpjEp3FITQN0Wkwzlcb8NOsAZUHP1tOwkSFy
-         MpHApjyHdz/RWprBoA2Wfyyx0Dyr99CFbnvieBl13/bgxwahaZnGNhQ1KoBxsdEy26Zw
-         XymQ==
-X-Gm-Message-State: AOAM531lLM2MyoCu1q2XzEOGG4BrZsZIWOcYLeFL/A0oB+7tmEBzXkC1
-        iThh+p3llpdH3MSSlFlv+7vBNw==
-X-Google-Smtp-Source: ABdhPJyugJMxao8ifmhKqSukK7m4MpSBZ4JJN1rKdHb5/H2Q6QsGd3+0ZAuIxvmTOtfSwwrHDUjokw==
-X-Received: by 2002:a5d:5586:: with SMTP id i6mr16021895wrv.195.1625003751963;
-        Tue, 29 Jun 2021 14:55:51 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id j11sm17830318wms.6.2021.06.29.14.55.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Jun 2021 14:55:51 -0700 (PDT)
-Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and register
- role switch
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Jack Pham <jackp@codeaurora.org>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org, agross@kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        wcheng@codeaurora.org
-References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
- <20210629144449.2550737-2-bryan.odonoghue@linaro.org> <YNtAt3dCGGyj5DU/@yoga>
- <c63c286a-f7c0-0874-59ad-e9ee43660a33@linaro.org>
- <20210629200228.GE25299@jackp-linux.qualcomm.com> <YNuC0Njwr4B1Q1xZ@yoga>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <0f112cf5-1f71-f189-5a3a-2ff4dbcaa8e8@linaro.org>
-Date:   Tue, 29 Jun 2021 22:57:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        id S235690AbhF3AiZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 29 Jun 2021 20:38:25 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:40599 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S235637AbhF3AiY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 29 Jun 2021 20:38:24 -0400
+Received: (qmail 718644 invoked by uid 1000); 29 Jun 2021 20:35:56 -0400
+Date:   Tue, 29 Jun 2021 20:35:56 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Minas Harutyunyan <hminas@synopsys.com>,
+        Matt Corallo <oc2udbzfd@mattcorallo.com>,
+        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux.amoon@gmail.com
+Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
+Message-ID: <20210630003556.GA718579@rowland.harvard.edu>
+References: <20210628005825.GA638648@rowland.harvard.edu>
+ <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
+ <20210628011628.GC638648@rowland.harvard.edu>
+ <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
+ <20210628142418.GC656159@rowland.harvard.edu>
+ <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
+ <20210629150541.GB699290@rowland.harvard.edu>
+ <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
+ <20210629161807.GB703497@rowland.harvard.edu>
+ <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <YNuC0Njwr4B1Q1xZ@yoga>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 29/06/2021 21:30, Bjorn Andersson wrote:
-> I liked this, and it worked when I tested it, but iirc it suffered from
-> the problem that the core's probe may or may not have finished
-> successfully at the time that of_platform_populate() returns.
+On Tue, Jun 29, 2021 at 06:30:08PM +0200, Martin Blumenstingl wrote:
+> Hi Alan,
 > 
-> But fixing this problem would save us quite a bit of headache.
+> On Tue, Jun 29, 2021 at 6:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> [...]
+> > > >         usbcore.autosuspend=-1
+> > > wow, this helps indeed
+> > > my steps are:
+> > > - power off my Odroid-C1+
+> > > - unplug all USB devices
+> > > - boot with usbcore.autosuspend=-1 in the kernel cmdline
+> > > - plugin my Corsair Voyager USB 3.0 flash drive (which was only
+> > > detected before if an additional USB 2.0 flash drive was plugged in
+> > > during boot)
+> > > -> without any lsusb magic the device was immediately recognized
+> >
+> > That does show pretty convincingly that runtime suspend is causing the
+> > problem.  But I still have no idea why the problem affects some devices
+> > and not others.  It's a mystery.
+> Maybe because there's two related problems (I am guessing here):
+> The first issue is that USB hotplug is not working at all on my
+> Odroid-C1+ (which means: dwc2 + GL852G USB hub).
+> The second issue is that the workaround we had before (running lsusb
+> -vv to make "hot plugged" devices show up) is not working for some USB
+> devices.
+> 
+> It seems that using a different workaround (usbcore.autosuspend=-1)
+> makes *all* USB devices show up - even without any "lsusb -vv" call.
+> So I think we should focus on the first issue as it may also fix the
+> other problem as well.
 
-OK.
+Those two issues could well be related; they could both be a result of 
+improper handling of USB bus suspend.  Fixing that might fix both 
+issues.
 
-I will take a look at resurrecting the old patches either fixing the 
-probe order - or perhaps using something like Wesley's role-switch to 
-have dwc3 core optionally trigger dwc3-qcom
+Alan Stern
 
-Binding tcpm into &usb_1_dwc3 instead of &usb_1
-
----
-bod
+> [...]
+> > > after rebooting without usbcore.autosuspend=-1 (and no USB device
+> > > plugged in during boot):
+> > > # grep "" /sys/bus/usb/devices/*/power/autosuspend
+> > > /sys/bus/usb/devices/1-1/power/autosuspend:0
+> > > /sys/bus/usb/devices/usb1/power/autosuspend:0
+> > >
+> > > I think the next step is narrowing down which component is causing this issue.
+> >
+> > Maybe Minas can help.  He knows a lot more about dwc2 than I do (which
+> > is practically nothing).
+> I'll wait for Minas then
+> 
+> > > Interestingly my PC (running 5.12.13-arch1-2) also has two Genesys
+> > > Logic USB hubs with the same USB vendor and device IDs as my
+> > > Odroid-C1+: 05e3:0610.
+> > > These hubs are connected to my AMD Ryzen 5000 CPU or the B550 chipset:
+> > > usb1              1d6b:0002 09 1IF  [USB 2.00,   480 Mbps,   0mA]
+> > > (xhci-hcd 0000:02:00.0) hub
+> > >  1-3               05e3:0610 09 1IF  [USB 2.10,   480 Mbps, 100mA]
+> > > (GenesysLogic USB2.0 Hub) hub
+> > > [...]
+> > >  1-7               05e3:0610 09 1IF  [USB 2.00,   480 Mbps, 100mA]
+> > > (Genesys Logic, Inc. Hub) hub
+> > >
+> > > So far I have not observed any problems on my PC.
+> >
+> > Presumably because it uses xHCI rather than dwc2.
+> indeed. I think it's good to know that it's not an issue affecting all
+> Genesys Logic USB 2.0 hubs.
+> As you mentioned above it's most likely that dwc2 is the culprit here.
+> Or it might be some interoperability issue between dwc2 and GL852G
+> 
+> 
+> Best regards,
+> Martin
