@@ -2,128 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EEC13B80D7
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 12:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AFF3B8148
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 13:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234014AbhF3K1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 06:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbhF3K1u (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 06:27:50 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF09C061756
-        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 03:25:21 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id p15so4133936ybe.6
-        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 03:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vycuH5kI+EmbhBmtqtupQN6izlv7YCQHgkRvx/zTlCU=;
-        b=nVCCzT5AbE6RFlQ2UE+ekXLBfKRzj1FR3gf+qegApydTG/3Me2/timnMRgpaf9qX7h
-         4vJef5FYOnJo+MWzufhbyKpURRVykG4WLwgJ7fan1xclVyYQm2mmNIJ8x0ToHdfCEMjN
-         fwdfGiIbyb4+u7Q48QdJkquVrs+/SbuUGOonxOaU/oz0OgeM3b0Jygl5LAiKL0OuVSV7
-         0/mqqYvbxVe4OsvXVeCV9wMr/FKFkRPCQMaEVBDHGEI3gGCpIFwcOqyUw42RgCIDmZ0c
-         0SbU6ssgra2rIWSX7wm+P6LMBTOG/yGzmeVZfInU0vfEW5YkxcvxBxKWpfrPdj9riOQ/
-         TjFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vycuH5kI+EmbhBmtqtupQN6izlv7YCQHgkRvx/zTlCU=;
-        b=caM4GzN84QGAzcaRkd7mI4BDN0+T2ywNN63AHomp/UkqTNVMDniOXIqOsPUmUluWMe
-         Jk4ntPt30tJjBGWuR9uur+B4AnMqKcoGzqv/iDIXiqxj4kx3f+kJf8iuZ7Sqf16naMeu
-         1E7rz3eLA/h5bvuzHCaCQl7D4WexGPXTGKu28cJ+/7tbdr1G7l5+FCzza5x03gQ3RMrm
-         2sF6q8KbdGKRfcEuKyQ2eylg8NzAe1kNf64Ds8fEtkX6Tevv8lRyDYb6Fa1cQHKqYuiZ
-         dDGSNOc2BWgfBIVZnhed7gEcnvjbs70TNSZUyT7xVSfhosgoa6EP7IH4PGDzW4KENURS
-         ULfQ==
-X-Gm-Message-State: AOAM531epQ57hedcjIUi3jlXH/N2KcQ/gmjynZsCzv5x+38nXgQZUknc
-        dLs7lg7Bj30EioNX1yxQVvamXn6z3ttH/xByJUuEl37zteM=
-X-Google-Smtp-Source: ABdhPJxmWFJhKl8IdwLVjdy+/3mcJ/TYjJWQIuHiEmB/Miq7Q6UxSf8vcIGDWRjGS3WzCgdCTXpWniwa1TPPc0DyyaE=
-X-Received: by 2002:a25:7ec4:: with SMTP id z187mr43610029ybc.136.1625048720371;
- Wed, 30 Jun 2021 03:25:20 -0700 (PDT)
+        id S234321AbhF3LbN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 07:31:13 -0400
+Received: from smtprelay0064.hostedemail.com ([216.40.44.64]:58038 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234148AbhF3LbM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 07:31:12 -0400
+Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 670E2100E7B4F;
+        Wed, 30 Jun 2021 11:28:42 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 6764C1727C;
+        Wed, 30 Jun 2021 11:28:40 +0000 (UTC)
+Message-ID: <e3a04d2554bfbe6a7e516c18b5f2848aa040e498.camel@perches.com>
+Subject: Re: [PATCH V2] treewide: Add missing semicolons to __assign_str uses
+From:   Joe Perches <joe@perches.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, lima@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Date:   Wed, 30 Jun 2021 04:28:39 -0700
+In-Reply-To: <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
+References: <cover.1621024265.git.bristot@redhat.com>
+         <2c59beee3b36b15592bfbb9f26dee7f8b55fd814.1621024265.git.bristot@redhat.com>
+         <20210603172902.41648183@gandalf.local.home>
+         <1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com>
+         <20210604122128.0d348960@oasis.local.home>
+         <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-References: <CABSdY3LGN202SN5YJxnk_bMAx2-js=AB0hictqo69ENgWbMQSw@mail.gmail.com>
- <YNtWMnNUsuL5YE3g@kroah.com> <CABSdY3KORj8JNg8PATysXSaWjWVfHHA-uFhEEY4f-U8nvOUCWw@mail.gmail.com>
- <YNw5Iemje5SddNzc@kroah.com>
-In-Reply-To: <YNw5Iemje5SddNzc@kroah.com>
-From:   Benjamin Marty <benjamin.marty@gmail.com>
-Date:   Wed, 30 Jun 2021 12:25:09 +0200
-Message-ID: <CABSdY3KyA-R3RDcnPZ2W5GNtdrPee_0WQMKBJRaJe3ZQu_N+fw@mail.gmail.com>
-Subject: Re: USB Gadget Filesystem HID stuck on write when using mass storage
- at the same time
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.52
+X-Stat-Signature: whcnsbfbnesep8uuw6hx4999zh9dre4t
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 6764C1727C
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19avg+OhJp2lgEOQwhdkfQyil/n7SIpQsE=
+X-HE-Tag: 1625052520-537384
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Am Mi., 30. Juni 2021 um 11:28 Uhr schrieb Greg KH <gregkh@linuxfoundation.org>:
-> On Wed, Jun 30, 2021 at 10:55:04AM +0200, Benjamin Marty wrote:
-> > On the iMX8 device `Linux imx8mm-var-dart 5.4.3-g050b21f4b394 #1 SMP
-> > PREEMPT Fri Oct 9 11:36:53 PDT 2020 aarch64 GNU/Linux` and on the
-> > Raspberry Pi device `Linux raspberry 5.10.17-v7l+ #1403 SMP Mon Feb 22
-> > 11:33:35 GMT 2021 armv7l GNU/Linux`.
->
-> I do not understand, which is the host and which is the gadget here?
+On Sat, 2021-06-12 at 08:42 -0700, Joe Perches wrote:
+> The __assign_str macro has an unusual ending semicolon but the vast
+> majority of uses of the macro already have semicolon termination.
 
-I use both as Gadget, two different HW platforms to rule out a
-Hardware related issue.
-As Host, I've tried multiple normal Intel computers.
-I was able to reproduce this issue with all HW Combinations
+ping?
 
-> > File write to `/dev/hidg0` starts to hang when there was high mass
-> > storage traffic. It also doesn't recover itself. There is no `complete
-> > kernel lockup`.
->
-> File write on the host or gadget?
 
-File write on the gadget to the gadget HID device `/dev/hidg0`
-
-> If things are not locked up, what is stalled?
-
-The File write to the gadget HID device is stalled.
-
-> > I haven't used usbmon yet but if I don't have high traffic scenarios
-> > on the mass storage then the mass storage and HID device works as
-> > expected. So I'm confident that I send the correct data.
->
-> That's fine, but it is good to use usbmon to see what the errors are as
-> well when things go wrong.
-
-Unfortunately both Kernel Versions don't have the usbmon module, need
-to recompile the Kernel first.
-
-> > Also saw that I'm getting this error in dmesg on both devices:
-> > [ 1895.677053] configfs-gadget gadget: End Point Request ERROR: -108
->
-> Ah, is your userspace code on the gadget not handling this properly?
-> What userspace code is running on the gadget for your USB device
-> emulation?
-
-Yes, my userspace code is on the gadget. It runs after I've setup the
-gadget HID + gadget Mass Storage. But it starts to fail after High
-Traffic scenarios to the gadget Mass Storage.
-
-To replicate the issue, I wrote a simple Bash script which just
-wiggles the gadget HID (Mouse) every 50ms:
-
-while true; do
-if [ -e "/dev/hidg0" ]; then
-echo write0
-echo \\x00\\xff\\xff\\x00\\xff\\xff > /dev/hidg0
-sleep 0.05
-echo write1
-echo \\x00\\xff\\xff\\x00\\xff\\x00 > /dev/hidg0
-sleep 0.05
-fi
-done
-
-Do I need to check something before writing to the gadget HID device?
-Or should this usage of the gadget HID device be fine?
-
-Thanks
-
-Benjamin
