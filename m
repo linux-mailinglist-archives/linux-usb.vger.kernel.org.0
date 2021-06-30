@@ -2,57 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AFF3B8148
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 13:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B95CF3B820B
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 14:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234321AbhF3LbN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 07:31:13 -0400
-Received: from smtprelay0064.hostedemail.com ([216.40.44.64]:58038 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234148AbhF3LbM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 07:31:12 -0400
-Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay01.hostedemail.com (Postfix) with ESMTP id 670E2100E7B4F;
-        Wed, 30 Jun 2021 11:28:42 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 6764C1727C;
-        Wed, 30 Jun 2021 11:28:40 +0000 (UTC)
-Message-ID: <e3a04d2554bfbe6a7e516c18b5f2848aa040e498.camel@perches.com>
-Subject: Re: [PATCH V2] treewide: Add missing semicolons to __assign_str uses
-From:   Joe Perches <joe@perches.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        id S234634AbhF3MY5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 08:24:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234507AbhF3MYy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Jun 2021 08:24:54 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4594F613ED;
+        Wed, 30 Jun 2021 12:22:24 +0000 (UTC)
+Date:   Wed, 30 Jun 2021 08:22:22 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Joe Perches <joe@perches.com>
 Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, lima@lists.freedesktop.org,
         linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-nfs@vger.kernel.org,
         linux-wireless@vger.kernel.org, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
-Date:   Wed, 30 Jun 2021 04:28:39 -0700
-In-Reply-To: <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
+Subject: Re: [PATCH V2] treewide: Add missing semicolons to __assign_str
+ uses
+Message-ID: <20210630082222.497170a3@oasis.local.home>
+In-Reply-To: <e3a04d2554bfbe6a7e516c18b5f2848aa040e498.camel@perches.com>
 References: <cover.1621024265.git.bristot@redhat.com>
-         <2c59beee3b36b15592bfbb9f26dee7f8b55fd814.1621024265.git.bristot@redhat.com>
-         <20210603172902.41648183@gandalf.local.home>
-         <1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com>
-         <20210604122128.0d348960@oasis.local.home>
-         <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.0-1 
+        <2c59beee3b36b15592bfbb9f26dee7f8b55fd814.1621024265.git.bristot@redhat.com>
+        <20210603172902.41648183@gandalf.local.home>
+        <1e068d21106bb6db05b735b4916bb420e6c9842a.camel@perches.com>
+        <20210604122128.0d348960@oasis.local.home>
+        <48a056adabd8f70444475352f617914cef504a45.camel@perches.com>
+        <e3a04d2554bfbe6a7e516c18b5f2848aa040e498.camel@perches.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.52
-X-Stat-Signature: whcnsbfbnesep8uuw6hx4999zh9dre4t
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 6764C1727C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19avg+OhJp2lgEOQwhdkfQyil/n7SIpQsE=
-X-HE-Tag: 1625052520-537384
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, 2021-06-12 at 08:42 -0700, Joe Perches wrote:
-> The __assign_str macro has an unusual ending semicolon but the vast
-> majority of uses of the macro already have semicolon termination.
+On Wed, 30 Jun 2021 04:28:39 -0700
+Joe Perches <joe@perches.com> wrote:
 
-ping?
+> On Sat, 2021-06-12 at 08:42 -0700, Joe Perches wrote:
+> > The __assign_str macro has an unusual ending semicolon but the vast
+> > majority of uses of the macro already have semicolon termination.  
+> 
+> ping?
+> 
 
+I wasn't sure I was the one to take this. I can, as I can run tests on
+it as well. I have some last minute fixes sent to me on something else,
+and I can apply this along with them.
 
+-- Steve
