@@ -2,143 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 328D23B808C
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 12:06:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEC13B80D7
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Jun 2021 12:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbhF3KIa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 06:08:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40688 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233954AbhF3KI3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 30 Jun 2021 06:08:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 41A61611CE;
-        Wed, 30 Jun 2021 10:06:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625047561;
-        bh=4bVaVq2RW0tAQ/r22NkCWzOP2yVyJCoEZvtctw0YhOc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kJHFBiQBq/wpd/iDkYzYEgZiuvXaZeQuxUx8/MP8WHjdi5JmnNUz1bhAfdxrLaxxA
-         TdKRiVxV3wdEUQvh/BE4Ahxf0ybhS7ih2cZT5dmXbT8d6V7ParwixNXa9mTb5vk1Wr
-         WXl9jsemfkjY3vIKvCTPSyU9ueeanLNnUo6od1mo1Po6W5nuqXoqIa1YQgCBNYTYv+
-         QAYm7MyPk0Nsb6sHZVQrJGCYP7OOCySa7QUZU1hG8Wxp57txElL5NTL9v12417dDQv
-         ABAEN4olrUt9mT/YCNYfIwd1lyfUUNBzT5GmGLYPacSNSD416uZkqA8L7CDpiT/qoz
-         OmWc0xNHuPypw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1lyX6U-0002B4-2Z; Wed, 30 Jun 2021 12:05:58 +0200
-Date:   Wed, 30 Jun 2021 12:05:58 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Tung Pham <Tung.Pham@silabs.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Pho Tran <Pho.Tran@silabs.com>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>, linux-usb@vger.kernel.org
-Subject: Re: patch "USB: serial: cp210x: add support for GPIOs on CP2108"
- added to usb-next
-Message-ID: <YNxCBreFm7uisstJ@hovoldconsulting.com>
-References: <1624532158188214@kroah.com>
- <PH0PR11MB4888B9D24A5F90E8AA02B28B81019@PH0PR11MB4888.namprd11.prod.outlook.com>
+        id S234014AbhF3K1v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 06:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233959AbhF3K1u (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 06:27:50 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF09C061756
+        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 03:25:21 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id p15so4133936ybe.6
+        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 03:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vycuH5kI+EmbhBmtqtupQN6izlv7YCQHgkRvx/zTlCU=;
+        b=nVCCzT5AbE6RFlQ2UE+ekXLBfKRzj1FR3gf+qegApydTG/3Me2/timnMRgpaf9qX7h
+         4vJef5FYOnJo+MWzufhbyKpURRVykG4WLwgJ7fan1xclVyYQm2mmNIJ8x0ToHdfCEMjN
+         fwdfGiIbyb4+u7Q48QdJkquVrs+/SbuUGOonxOaU/oz0OgeM3b0Jygl5LAiKL0OuVSV7
+         0/mqqYvbxVe4OsvXVeCV9wMr/FKFkRPCQMaEVBDHGEI3gGCpIFwcOqyUw42RgCIDmZ0c
+         0SbU6ssgra2rIWSX7wm+P6LMBTOG/yGzmeVZfInU0vfEW5YkxcvxBxKWpfrPdj9riOQ/
+         TjFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vycuH5kI+EmbhBmtqtupQN6izlv7YCQHgkRvx/zTlCU=;
+        b=caM4GzN84QGAzcaRkd7mI4BDN0+T2ywNN63AHomp/UkqTNVMDniOXIqOsPUmUluWMe
+         Jk4ntPt30tJjBGWuR9uur+B4AnMqKcoGzqv/iDIXiqxj4kx3f+kJf8iuZ7Sqf16naMeu
+         1E7rz3eLA/h5bvuzHCaCQl7D4WexGPXTGKu28cJ+/7tbdr1G7l5+FCzza5x03gQ3RMrm
+         2sF6q8KbdGKRfcEuKyQ2eylg8NzAe1kNf64Ds8fEtkX6Tevv8lRyDYb6Fa1cQHKqYuiZ
+         dDGSNOc2BWgfBIVZnhed7gEcnvjbs70TNSZUyT7xVSfhosgoa6EP7IH4PGDzW4KENURS
+         ULfQ==
+X-Gm-Message-State: AOAM531epQ57hedcjIUi3jlXH/N2KcQ/gmjynZsCzv5x+38nXgQZUknc
+        dLs7lg7Bj30EioNX1yxQVvamXn6z3ttH/xByJUuEl37zteM=
+X-Google-Smtp-Source: ABdhPJxmWFJhKl8IdwLVjdy+/3mcJ/TYjJWQIuHiEmB/Miq7Q6UxSf8vcIGDWRjGS3WzCgdCTXpWniwa1TPPc0DyyaE=
+X-Received: by 2002:a25:7ec4:: with SMTP id z187mr43610029ybc.136.1625048720371;
+ Wed, 30 Jun 2021 03:25:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR11MB4888B9D24A5F90E8AA02B28B81019@PH0PR11MB4888.namprd11.prod.outlook.com>
+References: <CABSdY3LGN202SN5YJxnk_bMAx2-js=AB0hictqo69ENgWbMQSw@mail.gmail.com>
+ <YNtWMnNUsuL5YE3g@kroah.com> <CABSdY3KORj8JNg8PATysXSaWjWVfHHA-uFhEEY4f-U8nvOUCWw@mail.gmail.com>
+ <YNw5Iemje5SddNzc@kroah.com>
+In-Reply-To: <YNw5Iemje5SddNzc@kroah.com>
+From:   Benjamin Marty <benjamin.marty@gmail.com>
+Date:   Wed, 30 Jun 2021 12:25:09 +0200
+Message-ID: <CABSdY3KyA-R3RDcnPZ2W5GNtdrPee_0WQMKBJRaJe3ZQu_N+fw@mail.gmail.com>
+Subject: Re: USB Gadget Filesystem HID stuck on write when using mass storage
+ at the same time
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Tung,
+Am Mi., 30. Juni 2021 um 11:28 Uhr schrieb Greg KH <gregkh@linuxfoundation.org>:
+> On Wed, Jun 30, 2021 at 10:55:04AM +0200, Benjamin Marty wrote:
+> > On the iMX8 device `Linux imx8mm-var-dart 5.4.3-g050b21f4b394 #1 SMP
+> > PREEMPT Fri Oct 9 11:36:53 PDT 2020 aarch64 GNU/Linux` and on the
+> > Raspberry Pi device `Linux raspberry 5.10.17-v7l+ #1403 SMP Mon Feb 22
+> > 11:33:35 GMT 2021 armv7l GNU/Linux`.
+>
+> I do not understand, which is the host and which is the gadget here?
 
-On Wed, Jun 30, 2021 at 08:58:29AM +0000, Tung Pham wrote:
+I use both as Gadget, two different HW platforms to rule out a
+Hardware related issue.
+As Host, I've tried multiple normal Intel computers.
+I was able to reproduce this issue with all HW Combinations
 
-First, thanks for testing the patch.
+> > File write to `/dev/hidg0` starts to hang when there was high mass
+> > storage traffic. It also doesn't recover itself. There is no `complete
+> > kernel lockup`.
+>
+> File write on the host or gadget?
 
-Please make sure to CC the usb list when reporting problems. I've added
-it to CC now.
+File write on the gadget to the gadget HID device `/dev/hidg0`
 
-> When I test the apply patch with Linux kernel.
-> https://github.com/torvalds/linux/blob/master/drivers/usb/serial/cp210x.c
-> 
-> when I setting the CP2108 with GPIO 0 and GPIO 1 are alternative
-> functions (not GPIO) using simplicity studio.
-> And then test with the driver, it shows:
-> root@ubuntu:/sys/class/gpio# ls
-> export  gpiochip496  unexport
-> root@ubuntu:/sys/class/gpio# echo 496 > /sys/class/gpio/export
-> bash: echo: write error: No such device
-> root@ubuntu:/sys/class/gpio# echo 497 > /sys/class/gpio/export
-> bash: echo: write error: No such device
-> This is what we expected because the GPIO 0 and GPIO 1 are alternative
-> functions (not GPIO).
+> If things are not locked up, what is stalled?
 
-Are you sure you're using the latest mainline kernel here, that is,
-5.13 here?
+The File write to the gadget HID device is stalled.
 
-With recent kernel's you would not see -ENODEV ("No such device") but
-rather -EINVAL ("Invalid argument").
+> > I haven't used usbmon yet but if I don't have high traffic scenarios
+> > on the mass storage then the mass storage and HID device works as
+> > expected. So I'm confident that I send the correct data.
+>
+> That's fine, but it is good to use usbmon to see what the errors are as
+> well when things go wrong.
 
-What does "uname -a" say?
+Unfortunately both Kernel Versions don't have the usbmon module, need
+to recompile the Kernel first.
 
-And which version of the patch are you applying? Are you sure it's the
-latest?
+> > Also saw that I'm getting this error in dmesg on both devices:
+> > [ 1895.677053] configfs-gadget gadget: End Point Request ERROR: -108
+>
+> Ah, is your userspace code on the gadget not handling this properly?
+> What userspace code is running on the gadget for your USB device
+> emulation?
 
-> But when I test the branch of Mr Gregkh. 
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/tree/drivers/usb/serial/cp210x.c?h=usb-testing
-> when I setting the CP2108 with GPIO 0 and GPIO 1 are alternative
-> functions (not GPIO) using simplicity studio.
-> And then test with the driver, it shows:
-> root@ubuntu:/sys/class/gpio# ls
-> export  gpiochip496  unexport
-> root@ubuntu:/sys/class/gpio# echo 496 > /sys/class/gpio/export
-> root@ubuntu:/sys/class/gpio# echo 497 > /sys/class/gpio/export
-> That mean it still use GPIO 0 and GPIO 1 as GPIO functions.
+Yes, my userspace code is on the gadget. It runs after I've setup the
+gadget HID + gadget Mass Storage. But it starts to fail after High
+Traffic scenarios to the gadget Mass Storage.
 
-It does seem that way, but to be sure, do the 
+To replicate the issue, I wrote a simple Bash script which just
+wiggles the gadget HID (Mouse) every 50ms:
 
-	/sys/class/gpio/gpio496
-	/sys/class/gpio/gpio497
+while true; do
+if [ -e "/dev/hidg0" ]; then
+echo write0
+echo \\x00\\xff\\xff\\x00\\xff\\xff > /dev/hidg0
+sleep 0.05
+echo write1
+echo \\x00\\xff\\xff\\x00\\xff\\x00 > /dev/hidg0
+sleep 0.05
+fi
+done
 
-directories show up as well?
-	
-> I don't know why there is that different. We can discuss more if you
-> know the information.
+Do I need to check something before writing to the gadget HID device?
+Or should this usage of the gadget HID device be fine?
 
-I just did a quick test using the code in the usb-next (testing) branch
-and it seems to work as expected when hard-coding alternate functions
-for some of the pins in the driver.
+Thanks
 
-I did not actually reprogram the device so perhaps something is broken
-with regards to reading the port configuration. But then you should see
-the problem if you apply the patch to an earlier kernel as well.
-
-Can you apply the below patch on top of Greg's usb-next (or usb-testing)
-branch and send me the logs from when connecting the device?
-
-Johan
-
-
-From 4ac38b282cfa1e6a17ff9d11b886cbebce3b9654 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Wed, 30 Jun 2021 11:59:28 +0200
-Subject: [PATCH] dbg: USB: serial: cp210x: dump CP2108 alternate function
- config
-
----
- drivers/usb/serial/cp210x.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index 09b845d0da41..1628ea1e9948 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -1797,6 +1797,9 @@ static int cp2108_gpio_init(struct usb_serial *serial)
- 	if (result < 0)
- 		return result;
- 
-+	dev_info(&serial->interface->dev, "%s - %*ph\n", __func__,
-+			4, config.enhancedfxn_ifc);
-+
- 	priv->gc.ngpio = 16;
- 	priv->gpio_pushpull = le16_to_cpu(config.reset_state.gpio_mode_pb1);
- 	gpio_latch = le16_to_cpu(config.reset_state.gpio_latch_pb1);
--- 
-2.31.1
-
+Benjamin
