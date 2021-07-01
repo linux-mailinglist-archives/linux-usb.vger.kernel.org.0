@@ -2,113 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2C33B914F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 13:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D5E3B923F
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 15:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236291AbhGALv0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 07:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbhGALv0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 07:51:26 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540D4C061756
-        for <linux-usb@vger.kernel.org>; Thu,  1 Jul 2021 04:48:56 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id g24so4074678pji.4
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jul 2021 04:48:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=40hk2UKCucED2JvsthYv/hJYjyDf5D1LuQwzsb/vpGM=;
-        b=KYCsnlyv7f6188gFGR2vyzcJ9civF4+0g6sv90xIgHzyzZkusKH4UUVs326FYgxmOi
-         lf/faXDbuJtZS5jSoJ9tC3py3xc+FN9mDoDClaCnLKDjZQq2viZkto9u8VYK2uQ216K+
-         u5cWCUgoA+/3lHh0F7d8qXnog03ZA3Oq8HBPaPIHl+/QDE++7/AkqVPagc/EbxXKTggt
-         xA9eppj0yP/lxs/9kDQmPBkEMhOg++IIZ262T1SfK6nuHx/DDQVTwRdCamrHCzu70v/P
-         1AlKB7H4MQVXMck08dhgQhGtVwYnIRCqEzTez8yKHmyHRpiGJmFq14zF3LPvQDlEk0lL
-         5PxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=40hk2UKCucED2JvsthYv/hJYjyDf5D1LuQwzsb/vpGM=;
-        b=SiZjxcmpAAUQxiSFTed3CKFBWlTOH/69RIHcqzSh0UYR0EtjcmLPJWBVJ+wX//btpa
-         zKn7ISJdcNfbcQ01ZCP4XuWgzmGyj/87cYK90+dXWKQIBPbIozIfQKENvG94FbrfoHiq
-         aAaMVSIp8fwLFZdgLYaLj4OiTgm8FkamKrTpJcuRBRNUNaBknGPC0FBRr1iL2Ei8+fup
-         bveAO1Q/doos+aa8yAvC+7U2xjdAQBTkYJ90MBj6UB0L6aB5d7E3BJS+aJ+QysfCMVsS
-         g+GT/Il/1aDEXLvROwm7iTW/KQkT5vjiIuyKnw4Uv4xgFpBYdZcsQGhKHRbML9zF1wjS
-         ih4A==
-X-Gm-Message-State: AOAM5322gBokgXuWv43PoHpObhQahrQVblsvgbanl5CenbDzIhG56f6S
-        Y3sl76AvMRViamIEuqoucyw=
-X-Google-Smtp-Source: ABdhPJwFGuOpahXmkzNYOXHFx7Sw5C6xRn24GJaqPyxT0Xrn13Cki8ohhrQRn56UdNdNeYitwvrxVw==
-X-Received: by 2002:a17:90a:be0e:: with SMTP id a14mr9516217pjs.43.1625140135889;
-        Thu, 01 Jul 2021 04:48:55 -0700 (PDT)
-Received: from athina.mtv.corp.google.com ([2620:15c:211:200:6c1:7d8f:dfdc:fc1e])
-        by smtp.gmail.com with ESMTPSA id w2sm24600601pjq.5.2021.07.01.04.48.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jul 2021 04:48:55 -0700 (PDT)
-From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
-To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
-Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        Brooke Basile <brookebasile@gmail.com>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Lorenzo Colitti <lorenzo@google.com>
-Subject: [PATCH 6/6] usb: gadget: u_ether: fix a potential null pointer dereference
-Date:   Thu,  1 Jul 2021 04:48:34 -0700
-Message-Id: <20210701114834.884597-6-zenczykowski@gmail.com>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-In-Reply-To: <20210701114834.884597-1-zenczykowski@gmail.com>
-References: <20210701114834.884597-1-zenczykowski@gmail.com>
+        id S231244AbhGAN3G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 09:29:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230005AbhGAN3F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 1 Jul 2021 09:29:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B692261417;
+        Thu,  1 Jul 2021 13:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625145995;
+        bh=KE08IZ7N2zGxao9rEaDNwWtGrUCeXJ7OIw+RZIM0zO0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GoA8R/OrX31Xp7phjzlnKyn5dy9p8dTsHF2AL0FSbKKDcVIdrPJKWfNv24hD1ZNjd
+         pz055uJeRm05yW2OKnly9+QykHCAkpTcYhSnlUliWCVrRryWgzx4jILXXZ2RvJCWYA
+         XPvVgUM0wlpJN7YJV0kMX3gnKSSckNAcNHibVu12NSDu5HKUOXSOyfmvFSaLF5rwsy
+         l5/eU8zAHlS77ouQ8CUTTRNQl370GKHC4Le1OX5mTJc1LdEhN2bUk+u75Np4JClWYZ
+         upnerC74FpqaLdnXGH3GnaKf9k5zPpuWv8Ipy+/7ystk6in6Ah0lmeMfk48EYNLa4o
+         ck8m4gHpSZS4Q==
+Date:   Thu, 1 Jul 2021 15:26:29 +0200
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linuxarm@huawei.com, mauro.chehab@huawei.com,
+        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: repair reference in USB IP DRIVER FOR
+ HISILICON KIRIN 970
+Message-ID: <20210701152629.66a47fe2@coco.lan>
+In-Reply-To: <20210701093903.28733-1-lukas.bulwahn@gmail.com>
+References: <20210701093903.28733-1-lukas.bulwahn@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Maciej Żenczykowski <maze@google.com>
+Em Thu,  1 Jul 2021 11:39:03 +0200
+Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
 
-f_ncm tx timeout can call us with null skb to flush
-a pending frame.  In this case skb is NULL to begin
-with but ceases to be null after dev->wrap() completes.
+> Commit 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into
+> phy") moves phy-hi3670-usb3.c from ./drivers/staging/hikey9xx/ to
+> ./drivers/phy/hisilicon/, but the new file entry in MAINTAINERS refers to
+> ./drivers/phy/hisilicon/phy-kirin970-usb3.c.
+> 
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
+> 
+>   warning: no file matches  F:  drivers/phy/hisilicon/phy-kirin970-usb3.c
+> 
+> Repair the file entry by referring to the right location.
+> 
+> Fixes: 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into phy")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+> applies cleanly on next-20210701
+> 
+> Mauro, please ack.
 
-In such a case in->maxpacket will be read, even though
-we've failed to check that 'in' is not NULL.
+Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Though I've never observed this fail in practice,
-however the 'flush operation' simply does not make sense with
-a null usb IN endpoint - there's nowhere to flush to...
-(note that we're the gadget/device, and IN is from the point
- of view of the host, so here IN actually means outbound...)
+> Greg, please pick this non-urgent minor fix on top of commit 8de6b7edd493
+> 
+>  MAINTAINERS | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 66d047dc6880..a4e0c20b416a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19153,7 +19153,7 @@ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+>  L:	linux-usb@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+> -F:	drivers/phy/hisilicon/phy-kirin970-usb3.c
+> +F:	drivers/phy/hisilicon/phy-hi3670-usb3.c
+>  
+>  USB ISP116X DRIVER
+>  M:	Olav Kongas <ok@artecdesign.ee>
 
-Cc: Brooke Basile <brookebasile@gmail.com>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: Felipe Balbi <balbi@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Lorenzo Colitti <lorenzo@google.com>
-Signed-off-by: Maciej Żenczykowski <maze@google.com>
----
- drivers/usb/gadget/function/u_ether.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index d1d044d9f859..85a3f6d4b5af 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -492,8 +492,9 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
- 	}
- 	spin_unlock_irqrestore(&dev->lock, flags);
- 
--	if (skb && !in) {
--		dev_kfree_skb_any(skb);
-+	if (!in) {
-+		if (skb)
-+			dev_kfree_skb_any(skb);
- 		return NETDEV_TX_OK;
- 	}
- 
--- 
-2.32.0.93.g670b81a890-goog
 
+Thanks,
+Mauro
