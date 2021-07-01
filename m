@@ -2,108 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 184AE3B8BAD
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 03:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6843B8BE6
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 04:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238310AbhGABO7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 21:14:59 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:18738 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238272AbhGABO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 21:14:58 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1625101949; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=Q7PapGSaWPR00xB20bhIktvihaeRm2Mmc6GEc+phKIQ=; b=miqsua3fPjRtoQazJDA3Dpl33Rrq6UFLKUIS0AaCTNx+RVgdo63pBFfE3s+GqBDKT5J2/FuH
- iiqzg8jm5852wCx742sEkmDzfCMvblwG0V2X5W7k7MaB28W+toghKCkxfzWnmcdJIIKkGw55
- beChwmh4bzoLUuCtQotspqFlkCY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 60dd167b2a2a9a97618c4b9d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Jul 2021 01:12:27
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 85AC4C4338A; Thu,  1 Jul 2021 01:12:27 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 91D90C433F1;
-        Thu,  1 Jul 2021 01:12:26 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 91D90C433F1
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-Date:   Wed, 30 Jun 2021 18:12:24 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+        id S238579AbhGACIq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 22:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238578AbhGACIp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 22:08:45 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBCEC0617A8
+        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 19:06:14 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id a13so6001756wrf.10
+        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 19:06:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rCnIWuA91Y7q+in2ZETAzHkZMmw0aFfjdiM1y2bTeDU=;
+        b=DUXJBxFkkLGQdSK6f+3sTLV79wMBKrls4BqbvHSBNyAXnwIIRiYEBJ8NvyPBeIbmEx
+         QYvmb/iyMiBA23ePsuoeYv7G3ifc1ha5UhxIBSktTHx2lpJzWaAbQexZG2cX5SdXmCZf
+         J/gw0HxsoMElbirfPdyWkAPnVE011460fc/QsQopgp9+Iz8vEunAQhW+W0iJpVQCoz0i
+         3DxSKK2qyOiDefWGWyfR/QwlAxznrz6/I1T4Ghl36dCxedCscCSKpoHNE7qvziNZXK4X
+         1Be0gIw3HMmda0kFWCMAd+bqWBku9b80XLnZwGbRtw2i98ugy2M0UiIGIt5E53UIWGsh
+         AOEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rCnIWuA91Y7q+in2ZETAzHkZMmw0aFfjdiM1y2bTeDU=;
+        b=YFjUfqm1SjB3xXzw1oa8f7m7vmAZwLdPuweTBIH8ft9M9wf1H6fZj67bRL8Y0ACm8D
+         0a6hj/CKZIL8KDwbEN3y9YqdmR2DmXSjVFzqmGAWQfNiqdSpLX0MywmXwY0FCIhAi+Un
+         9Y0b3n8azhgVSBMAeHVbdKtjI53xpgRQAWSo6+CsMxMZmLTipALxf1iKI9zt1UkehAle
+         TmmAtjiuWYFaSyO+eQk1E6t4hHV+wc2HiotB5ws6CGVPU+D/xc7iPEyiAEeMNCZvKTKl
+         OXNc2c7RqGu5OHUjN7dfN+snWHm0rxeeNi4JEYJzSUicklZC40UotmilEKXmbhShMEjY
+         0Dgg==
+X-Gm-Message-State: AOAM531T5JYkLCrZtPohtlHsskr3P1Li/YdigvUD+Bu2G7Zfw/+qLF2v
+        h8lJWCaqPI5xStLZHXrBH86PeA==
+X-Google-Smtp-Source: ABdhPJwhcV1ryOgRLBPgEg4AVc9LbYT6OqexvPLdsJRbJqNgueaKc6LwLWgIOg2K7AHZnzYjUNaYLA==
+X-Received: by 2002:a05:6000:18ab:: with SMTP id b11mr43332508wri.42.1625105172871;
+        Wed, 30 Jun 2021 19:06:12 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id u10sm22200257wmm.21.2021.06.30.19.06.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Jun 2021 19:06:12 -0700 (PDT)
+Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and register
+ role switch
+To:     Jack Pham <jackp@codeaurora.org>
 Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>, balbi@kernel.org,
         gregkh@linuxfoundation.org, agross@kernel.org,
         linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         wcheng@codeaurora.org
-Subject: Re: [PATCH 1/2] usb: dwc3: dwc3-qcom: Find USB connector and
- register role switch
-Message-ID: <20210701011153.GF25299@jackp-linux.qualcomm.com>
 References: <20210629144449.2550737-1-bryan.odonoghue@linaro.org>
- <20210629144449.2550737-2-bryan.odonoghue@linaro.org>
- <YNtAt3dCGGyj5DU/@yoga>
+ <20210629144449.2550737-2-bryan.odonoghue@linaro.org> <YNtAt3dCGGyj5DU/@yoga>
  <c63c286a-f7c0-0874-59ad-e9ee43660a33@linaro.org>
- <20210629200228.GE25299@jackp-linux.qualcomm.com>
- <YNuC0Njwr4B1Q1xZ@yoga>
+ <20210629200228.GE25299@jackp-linux.qualcomm.com> <YNuC0Njwr4B1Q1xZ@yoga>
  <0f112cf5-1f71-f189-5a3a-2ff4dbcaa8e8@linaro.org>
  <d8902c0d-ae51-644d-f33b-19f452308097@linaro.org>
+ <20210701011153.GF25299@jackp-linux.qualcomm.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <85110545-0369-f7b3-724f-866d3ce1438b@linaro.org>
+Date:   Thu, 1 Jul 2021 03:08:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d8902c0d-ae51-644d-f33b-19f452308097@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20210701011153.GF25299@jackp-linux.qualcomm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 03:21:46AM +0100, Bryan O'Donoghue wrote:
-> On 29/06/2021 22:57, Bryan O'Donoghue wrote:
-> > On 29/06/2021 21:30, Bjorn Andersson wrote:
-> > > I liked this, and it worked when I tested it, but iirc it suffered from
-> > > the problem that the core's probe may or may not have finished
-> > > successfully at the time that of_platform_populate() returns.
-> > > 
-> > > But fixing this problem would save us quite a bit of headache.
-> > 
-> > OK.
-> > 
-> > I will take a look at resurrecting the old patches either fixing the
-> > probe order - or perhaps using something like Wesley's role-switch to
-> > have dwc3 core optionally trigger dwc3-qcom
-> > 
-> > Binding tcpm into &usb_1_dwc3 instead of &usb_1
-> > 
-> > ---
-> > bod
-> 
-> So here's a potential way forward. Not technically breaking my "no patches
-> at 3am rule"
-> 
-> Basically we can fix the probe order problem if we have dwc3 drd call into
-> dwc3-qcom.
-> 
-> In order to make that not be a problem for all non qcom platforms - use a
-> function with weak binding in drd - which a wrapper - in this case the qcom
-> wrapper can over ride..
+On 01/07/2021 02:12, Jack Pham wrote:
+> I'm afraid I'm not too familiar with weak symbols. Would that still work
+> if dwc3 & dwc3-qcom are built as modules? Also is it supported with
+> Clang/LLVM?
 
-I'm afraid I'm not too familiar with weak symbols. Would that still work
-if dwc3 & dwc3-qcom are built as modules? Also is it supported with
-Clang/LLVM?
+__weak would work fine, until you tried to have two strong implementations.
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Your linker should choke if dwc3-meson-g12a, dwc3-qcom and dwc3-drd 
+linked together with both wrappers implementing normal linkage.
+
+However, I do think its possible to use role switching to have dwc3-drd 
+trigger dwc3-qcom.
+
+The role switch code is resilient to deferral so we don't have to solve 
+the problem we had with get_drvdata() in the notifier solution and it 
+gets us out of the business of having dwc3-qcom relay the role-switch 
+onto the core - or indeed care about what sort of connector is attached.
+
+dwc3-qcom shouldn't have to know or care what sort of connector is 
+attached to it, ecros, gpio-typec, tcpm or a raw type-c driver and like 
+Bjorn said, it shouldn't be the case that the wrapper relays onto the core.
+
+Anyway I'm playing with that prototype now
