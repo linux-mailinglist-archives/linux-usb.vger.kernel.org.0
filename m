@@ -2,124 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 080F53B981B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 23:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 627D73B9978
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 01:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhGAVV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 17:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
+        id S234306AbhGAXqX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 19:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233080AbhGAVV2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 17:21:28 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A380C061762
-        for <linux-usb@vger.kernel.org>; Thu,  1 Jul 2021 14:18:56 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id bu12so12833207ejb.0
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jul 2021 14:18:56 -0700 (PDT)
+        with ESMTP id S234063AbhGAXqX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 19:46:23 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB263C061762;
+        Thu,  1 Jul 2021 16:43:51 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id k10so14778033lfv.13;
+        Thu, 01 Jul 2021 16:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0cXgfhaS3T+6AeXrGti3lI1yzJ85a5zFdUA+jB/hiwU=;
-        b=rEam05Z3TTFpU9SVYzbXP6UGWx86WhLZN47CXYFMmMVkwIsrp58nHOAeECMVVscPrX
-         FGt+hLjt6JVPKHKAUfaKdu+CweI7eoBbwsDog/l7ysjLEo7rntkwtQP/OQeYyOVWkhgv
-         hORmp1+wlgHaOfIK7H+JDbi4MPeQPPPW8SspbxTmEUJcBV2TjVGiOn557KLox6TPEzda
-         MvBZJScUP21/uoR4sdpoU4nza7k42Yvmr8CmxR1ncpdooTuyzDZeju36YcrrWdGCEuiM
-         yLH8vFdUndtbv+ufvSnUUMs+IeLNm3pmZHFoYsgJaN7SNwNPyuzb6gVcBp2xU8TGc42A
-         murQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GxmceOXlSx//Z7AXWshXZETJTGUmHRmXWRqvH0CzuXQ=;
+        b=JvIypy2z9SDBnwZ4f3wpB2JNJWN+WoyyQ2FKe3wp1MlfN2Rr7TwZ8DBy6fec4zP2V8
+         af8F0t5uAxkeK+vQoDqaq6fVwLgPKE0E6UL5IDEYvnaDu5EiVGYNsWdre8xPury6ACe5
+         xCp+TA43FMxkFpK1kHtxYWMNBeZKk+eJVH26ERWzc7Xy6hF3qvWmtq+1nKTEKQCHQY3I
+         9o9SyhNWQe31BcQ6lhluLWO4BYiYkr6fWf8UIoKcgr+kCaA9YUN9d7YOaUxz6SU4XSh1
+         zID/5Bd6Lh5hhDYcQShw31k/zIYox+pVciSPGRYT8pyuXAjNnc+/HjYJnDsJjvIAmXvz
+         VO5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0cXgfhaS3T+6AeXrGti3lI1yzJ85a5zFdUA+jB/hiwU=;
-        b=X1kmFKJlQCT0Aoc0c7B2ACfPjzm8C0apTtqmryCzpmQygv3ex7KNePUAxELcAy12d6
-         eedWcdcDwmiyxXVdoGMyfLkqU1VHKkA4reVDxNU8JRv9akczRcHeNQj953yY2qpeZZWz
-         7Mk6RZN13EYlPCAPiDWbNOK38UO1Gsmz5DrPYscWwdjNK3MU//FPu92P3NI8BVTZP/Nd
-         2YjAxpaspP+Bmgxn2K8H7LNWTUIjwH2qieJmt1OqcnyDQkOAcwp1vBp7xB5DdVIUsLof
-         87P7JsEQ2ptvVjCzi+/p4Us0Ff39tedTNPbsC0xFKLCNz6WLeELQec8QUYYe2LUnkEd9
-         cTnw==
-X-Gm-Message-State: AOAM5306zKr5F2lJPhoMJn0hmUsXOkSIrgHyFvEjdMRi6rCvoqFjrZpT
-        vxCiXzek1PCEtVOMF/xKvTk3z6YW2DsZM692r4bTB/rsQyo=
-X-Google-Smtp-Source: ABdhPJw60MN4UpI84csCY2nCthSkx+KwRFteOnlczML7u0gH2Ta/2aIxzy2w1zr6zd6Lpg0rlRxBM7r94hhFxSWj/GM=
-X-Received: by 2002:a17:907:d28:: with SMTP id gn40mr1973997ejc.471.1625174334943;
- Thu, 01 Jul 2021 14:18:54 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=GxmceOXlSx//Z7AXWshXZETJTGUmHRmXWRqvH0CzuXQ=;
+        b=mb7ECcHnJC/IC24fp268h/X6X1gQHzVn1smlO6oveg550bHZWvbx6NcgxDcv+OSG85
+         ex/E95qYTwm1/W7XfzHz3mvmCWs+mc/IY3I2TKvfjvTSdH9QGSx3Jk+tFhLO/53CBaFN
+         StrJs1ucb/oAtA5OQdS9Aeq7aCOKT9iOegmFkG+iQ91UdqJRX7qUQhn3o6qSbg4mVN3I
+         0SDKzAhVCkUoPr2njq1ozUCXYjyhLW0Ke0fYP/Rhf0Pt1rrDYtZygE3srW2U7ONRRkEN
+         rZ0FmgrGA7OsQVOIfjBhOCCe9jxY2FWJSxRX1tBiGHGK5h/fSbfg0lE1i9oD3xfx875M
+         oeYw==
+X-Gm-Message-State: AOAM531fY03MlIodKuQq9GaiEJyOXyfnCh/EytgHmRj03uqDHFgjHCJP
+        gANm2qRBGT+aVO5BS2vX59s=
+X-Google-Smtp-Source: ABdhPJww81eLXSEUQEKQ4zGmxQndbDRbQvxhqYQpJSQB6vXHcAEwqkwiWSdaIqhn9IYO4qqkgQVz6Q==
+X-Received: by 2002:a05:6512:30d:: with SMTP id t13mr1609874lfp.14.1625183030356;
+        Thu, 01 Jul 2021 16:43:50 -0700 (PDT)
+Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.gmail.com with ESMTPSA id e23sm60743lfq.221.2021.07.01.16.43.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jul 2021 16:43:50 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v2 00/12] Add OTG mode support to Tegra USB PHY, SMB347 and Nexus 7
+Date:   Fri,  2 Jul 2021 02:43:05 +0300
+Message-Id: <20210701234317.26393-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20210628005825.GA638648@rowland.harvard.edu> <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
- <20210628011628.GC638648@rowland.harvard.edu> <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
- <20210628142418.GC656159@rowland.harvard.edu> <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
- <20210629150541.GB699290@rowland.harvard.edu> <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
- <20210629161807.GB703497@rowland.harvard.edu> <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
- <20210630003556.GA718579@rowland.harvard.edu> <CANAwSgQadG+A2Tg2Ok5-Nw4i1a2tenABeyQnyTjzJKGHHw+6aA@mail.gmail.com>
-In-Reply-To: <CANAwSgQadG+A2Tg2Ok5-Nw4i1a2tenABeyQnyTjzJKGHHw+6aA@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 1 Jul 2021 23:18:44 +0200
-Message-ID: <CAFBinCC0nfrnQGmrXJ4FDTuy3RGX_FC8egjVaxhKaOSi9q+xzA@mail.gmail.com>
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
-To:     Anand Moon <linux.amoon@gmail.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Matt Corallo <oc2udbzfd@mattcorallo.com>,
-        Linux USB Mailing List <linux-usb@vger.kernel.org>,
-        linux-amlogic@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Anand,
+Hi,
 
-On Thu, Jul 1, 2021 at 12:04 PM Anand Moon <linux.amoon@gmail.com> wrote:
-[...]
-> I have been trying some reorder code changes with PHY some new DTS
-> changes both on C1+ and C2.
-> with my changes I got false positve results.
->
-> So in my debug investigation, it seems that USB reset is not working.
-> I am attaching my latest code changes so that you could verify at your end.
-> If we drop the  phy_meson8b_usb2_reset(phy) all the USB PHY get initialized.
-> Note:  phy core does not call the .reset callback function on its own
->
-> I have tried crazy ideas with reset API and new approaches, but it seems to fail
-> and also used the reset-name features, but with no luck at my end.
-> I wil try to followup on the suggestion shared in this email thread.
-with your patch USB is not working for me at all on my Odroid-C1+.
-kernel log extract:
-...
-[    5.089251] phy phy-c1108800.phy.0: phy poweron failed --> -22
-[    5.096456] dwc2: probe of c9040000.usb failed with error -22
-[    5.102182] dwc2 c90c0000.usb: supply vusb_d not found, using dummy regulator
-[    5.108781] dwc2 c90c0000.usb: supply vusb_a not found, using dummy regulator
-[    5.117140] phy phy-c1108820.phy.1: Anand you are calling USB reset1
-[    5.121408] phy phy-c1108820.phy.1: Anand you are calling USB reset2
-[    5.131197] dwc2 c90c0000.usb: dwc2_core_reset: HANG! Soft Reset
-timeout GRSTCTL_CSFTRST
-[    5.137163] dwc2: probe of c90c0000.usb failed with error -16
+This series adds USB OTG mode support to the NVIDIA Tegra USB PHY driver,
+SMB347 charger driver and Nexus 7 tablet.
 
-and then:
-# lsusb
-#
+Changelog:
 
-With your patch applied (on top of v5.13) the dwc2 driver does not
-probe anymore.
-I suggest we move the discussion about your patch elsewhere so we can
-focus on getting USB devices detected (again) with the help of Minas
-and Alan.
+v2: - The PHY's interrupt is now enabled from PHY's set_wakeup() callback.
+      It prevents getting a spurious interrupt during the CI driver probe
+      time.
 
-> I am attaching my usbmon output on Odroid C2.
-Can you please specifically state the testing steps you have used to
-obtain that output?
-This is important so people who are involved in this discussion don't
-get confused about the results.
+Dmitry Osipenko (12):
+  dt-bindings: phy: tegra20-usb-phy: Convert to schema
+  dt-bindings: phy: tegra20-usb-phy: Document properties needed for OTG
+    mode
+  soc/tegra: pmc: Expose USB regmap to all SoCs
+  usb: phy: tegra: Support OTG mode programming
+  usb: otg-fsm: Fix hrtimer list corruption
+  dt-bindings: power: supply: smb347-charger: Document USB VBUS
+    regulator
+  power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+  power: supply: smb347-charger: Remove caching of charger state
+  power: supply: smb347-charger: Implement USB VBUS regulator
+  arm64: tegra132: Add new properties to USB PHY device-tree node
+  ARM: tegra: Add new properties to USB PHY device-tree nodes
+  ARM: tegra: nexus7: Enable USB OTG mode
 
-> On some other note on USB HUB reset. I recollect following series (it
-> like *mmc_pwrseq*)
-> [0] https://lore.kernel.org/linux-devicetree/1474342607-27512-1-git-send-email-peter.chen@nxp.com/
-this is being replaced by "usb: misc: Add onboard_usb_hub driver"
-which is currently at version 13: [1]
+ .../bindings/phy/nvidia,tegra20-usb-phy.txt   |  74 ----
+ .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 377 ++++++++++++++++++
+ .../power/supply/summit,smb347-charger.yaml   |  28 ++
+ arch/arm/boot/dts/tegra114.dtsi               |   6 +
+ arch/arm/boot/dts/tegra124.dtsi               |   9 +
+ arch/arm/boot/dts/tegra20.dtsi                |   9 +
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |  25 +-
+ arch/arm/boot/dts/tegra30.dtsi                |   9 +
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi      |   9 +
+ drivers/power/supply/Kconfig                  |   1 +
+ drivers/power/supply/smb347-charger.c         | 259 +++++++++++-
+ drivers/soc/tegra/pmc.c                       |   6 +-
+ drivers/usb/common/usb-otg-fsm.c              |   6 +-
+ drivers/usb/phy/phy-tegra-usb.c               | 202 +++++++++-
+ .../dt-bindings/power/summit,smb347-charger.h |   4 +
+ include/linux/usb/otg-fsm.h                   |   1 +
+ include/linux/usb/tegra_usb_phy.h             |   5 +
+ 17 files changed, 926 insertions(+), 104 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.yaml
 
+-- 
+2.30.2
 
-Best regards,
-Martin
-
-
-[1] https://marc.info/?l=linux-usb&m=162447367404217&w=2
