@@ -2,111 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F06903B964F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 21:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 080F53B981B
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 23:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbhGATDn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 15:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37910 "EHLO
+        id S233687AbhGAVV2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 17:21:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233327AbhGATDm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 15:03:42 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18685C061762;
-        Thu,  1 Jul 2021 12:01:11 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id h4so7001143pgp.5;
-        Thu, 01 Jul 2021 12:01:11 -0700 (PDT)
+        with ESMTP id S233080AbhGAVV2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 17:21:28 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A380C061762
+        for <linux-usb@vger.kernel.org>; Thu,  1 Jul 2021 14:18:56 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id bu12so12833207ejb.0
+        for <linux-usb@vger.kernel.org>; Thu, 01 Jul 2021 14:18:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zuuuKETYTTaSFfx3LmdO74kAIcVPtY1K3CKJhQJ0z4Q=;
-        b=f3AxasF9oZPjccbYZnsq+cyvBw/7hU0StYGfkeCJEqFBTQ5l9K0Uuf9UU7bipsqBoF
-         fwBGIp0+4UYd8GMNzxv6AoGqjgr1JEpESfEFFJIleh3LLGU5t1mwDsv537lFDWqeRVxq
-         kd01C4JDm79TUWQfK+rF3iyf5M1eg/CouVAoV/TPTBOCPzuIJHsjdtSFSzEffA8Awwll
-         Ne34IcLUkbu1dq+aj/RLCd5OZIOwtD94r5F1Z6sFHEQY4FdtDEyxBn8B6t8abHIC+FzL
-         47kYp2SH2wOsDv0V6DaTk+O/uncf3l/i0VO8kHzt4gPCZb6ixLeiwS0bJvwBHy3J+3g9
-         NIAw==
+        d=googlemail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0cXgfhaS3T+6AeXrGti3lI1yzJ85a5zFdUA+jB/hiwU=;
+        b=rEam05Z3TTFpU9SVYzbXP6UGWx86WhLZN47CXYFMmMVkwIsrp58nHOAeECMVVscPrX
+         FGt+hLjt6JVPKHKAUfaKdu+CweI7eoBbwsDog/l7ysjLEo7rntkwtQP/OQeYyOVWkhgv
+         hORmp1+wlgHaOfIK7H+JDbi4MPeQPPPW8SspbxTmEUJcBV2TjVGiOn557KLox6TPEzda
+         MvBZJScUP21/uoR4sdpoU4nza7k42Yvmr8CmxR1ncpdooTuyzDZeju36YcrrWdGCEuiM
+         yLH8vFdUndtbv+ufvSnUUMs+IeLNm3pmZHFoYsgJaN7SNwNPyuzb6gVcBp2xU8TGc42A
+         murQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zuuuKETYTTaSFfx3LmdO74kAIcVPtY1K3CKJhQJ0z4Q=;
-        b=Osm986opySeHCNJa59X4AoRYwWmf7q1SgnhIB2Qhu4CyaRXE/vO+sKsseHZju4Bk3s
-         dPtYP8/zghTwFUG6exll9BZ/wOZDShETc151GCktbohX0ddlHeDzgPhfBNGY+h+ojqYJ
-         W1R2YI48y1i57sXDZtWofFtDwVjxoqjQzbouAnDmebgSEg0Qf+NkExgy7Jfy9yKnpeGG
-         XmdqzuWvqd0NLaRa9AHJTDwe7AxgCMDtGrcEr6i/wuLl2D6vu+XpkUH/xiCDh03z6pTq
-         qCUccMoCJHm93XxAf1j+TUDVz1+eKa3roSEoEhaJDTBfnZMusJh7uF+XkI3iHXJbJKLY
-         vvkA==
-X-Gm-Message-State: AOAM5320UUi+pvoe8uAQepcwJWsqNSxo+CBjlj7GZng7OkwR9uV9UrUL
-        PA1fMG4L1rvWR9r8fUYzy+ohYA7jDCqk4g==
-X-Google-Smtp-Source: ABdhPJz/eUSEWo0QVh5j7rnqa8Zby+3Kv0kHgJgigDcoRLfXSRVvqtrOiWWBdN9Ifr1MQ4y2KfB7Dw==
-X-Received: by 2002:aa7:9ed1:0:b029:2f2:fb20:bac3 with SMTP id r17-20020aa79ed10000b02902f2fb20bac3mr1474827pfq.6.1625166070073;
-        Thu, 01 Jul 2021 12:01:10 -0700 (PDT)
-Received: from [10.67.49.104] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id i18sm761753pfa.37.2021.07.01.12.01.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jul 2021 12:01:09 -0700 (PDT)
-Subject: Re: [PATCH net-next v1 1/1] net: usb: asix: ax88772: suspend PHY on
- driver probe
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20210629044305.32322-1-o.rempel@pengutronix.de>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <931f10ca-2d81-8264-950c-8d29c18a7b35@gmail.com>
-Date:   Thu, 1 Jul 2021 12:01:04 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0cXgfhaS3T+6AeXrGti3lI1yzJ85a5zFdUA+jB/hiwU=;
+        b=X1kmFKJlQCT0Aoc0c7B2ACfPjzm8C0apTtqmryCzpmQygv3ex7KNePUAxELcAy12d6
+         eedWcdcDwmiyxXVdoGMyfLkqU1VHKkA4reVDxNU8JRv9akczRcHeNQj953yY2qpeZZWz
+         7Mk6RZN13EYlPCAPiDWbNOK38UO1Gsmz5DrPYscWwdjNK3MU//FPu92P3NI8BVTZP/Nd
+         2YjAxpaspP+Bmgxn2K8H7LNWTUIjwH2qieJmt1OqcnyDQkOAcwp1vBp7xB5DdVIUsLof
+         87P7JsEQ2ptvVjCzi+/p4Us0Ff39tedTNPbsC0xFKLCNz6WLeELQec8QUYYe2LUnkEd9
+         cTnw==
+X-Gm-Message-State: AOAM5306zKr5F2lJPhoMJn0hmUsXOkSIrgHyFvEjdMRi6rCvoqFjrZpT
+        vxCiXzek1PCEtVOMF/xKvTk3z6YW2DsZM692r4bTB/rsQyo=
+X-Google-Smtp-Source: ABdhPJw60MN4UpI84csCY2nCthSkx+KwRFteOnlczML7u0gH2Ta/2aIxzy2w1zr6zd6Lpg0rlRxBM7r94hhFxSWj/GM=
+X-Received: by 2002:a17:907:d28:: with SMTP id gn40mr1973997ejc.471.1625174334943;
+ Thu, 01 Jul 2021 14:18:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210629044305.32322-1-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210628005825.GA638648@rowland.harvard.edu> <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
+ <20210628011628.GC638648@rowland.harvard.edu> <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
+ <20210628142418.GC656159@rowland.harvard.edu> <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
+ <20210629150541.GB699290@rowland.harvard.edu> <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
+ <20210629161807.GB703497@rowland.harvard.edu> <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
+ <20210630003556.GA718579@rowland.harvard.edu> <CANAwSgQadG+A2Tg2Ok5-Nw4i1a2tenABeyQnyTjzJKGHHw+6aA@mail.gmail.com>
+In-Reply-To: <CANAwSgQadG+A2Tg2Ok5-Nw4i1a2tenABeyQnyTjzJKGHHw+6aA@mail.gmail.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Thu, 1 Jul 2021 23:18:44 +0200
+Message-ID: <CAFBinCC0nfrnQGmrXJ4FDTuy3RGX_FC8egjVaxhKaOSi9q+xzA@mail.gmail.com>
+Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
+To:     Anand Moon <linux.amoon@gmail.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Matt Corallo <oc2udbzfd@mattcorallo.com>,
+        Linux USB Mailing List <linux-usb@vger.kernel.org>,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 6/28/21 9:43 PM, Oleksij Rempel wrote:
-> After probe/bind sequence is the PHY in active state, even if interface
-> is stopped. As result, on some systems like Samsung Exynos5250 SoC based Arndale
-> board, the ASIX PHY will be able to negotiate the link but fail to
-> transmit the data.
-> 
-> To handle it, suspend the PHY on probe.
+Hi Anand,
 
-Very unusual, could not the PHY be attached/connected to a ndo_open()
-time like what most drivers do?
+On Thu, Jul 1, 2021 at 12:04 PM Anand Moon <linux.amoon@gmail.com> wrote:
+[...]
+> I have been trying some reorder code changes with PHY some new DTS
+> changes both on C1+ and C2.
+> with my changes I got false positve results.
+>
+> So in my debug investigation, it seems that USB reset is not working.
+> I am attaching my latest code changes so that you could verify at your end.
+> If we drop the  phy_meson8b_usb2_reset(phy) all the USB PHY get initialized.
+> Note:  phy core does not call the .reset callback function on its own
+>
+> I have tried crazy ideas with reset API and new approaches, but it seems to fail
+> and also used the reset-name features, but with no luck at my end.
+> I wil try to followup on the suggestion shared in this email thread.
+with your patch USB is not working for me at all on my Odroid-C1+.
+kernel log extract:
+...
+[    5.089251] phy phy-c1108800.phy.0: phy poweron failed --> -22
+[    5.096456] dwc2: probe of c9040000.usb failed with error -22
+[    5.102182] dwc2 c90c0000.usb: supply vusb_d not found, using dummy regulator
+[    5.108781] dwc2 c90c0000.usb: supply vusb_a not found, using dummy regulator
+[    5.117140] phy phy-c1108820.phy.1: Anand you are calling USB reset1
+[    5.121408] phy phy-c1108820.phy.1: Anand you are calling USB reset2
+[    5.131197] dwc2 c90c0000.usb: dwc2_core_reset: HANG! Soft Reset
+timeout GRSTCTL_CSFTRST
+[    5.137163] dwc2: probe of c90c0000.usb failed with error -16
 
-> 
-> Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->  drivers/net/usb/asix_devices.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-> index aec97b021a73..2c115216420a 100644
-> --- a/drivers/net/usb/asix_devices.c
-> +++ b/drivers/net/usb/asix_devices.c
-> @@ -701,6 +701,7 @@ static int ax88772_init_phy(struct usbnet *dev)
->  		return ret;
->  	}
->  
-> +	phy_suspend(priv->phydev);
->  	priv->phydev->mac_managed_pm = 1;
->  
->  	phy_attached_info(priv->phydev);
-> 
+and then:
+# lsusb
+#
+
+With your patch applied (on top of v5.13) the dwc2 driver does not
+probe anymore.
+I suggest we move the discussion about your patch elsewhere so we can
+focus on getting USB devices detected (again) with the help of Minas
+and Alan.
+
+> I am attaching my usbmon output on Odroid C2.
+Can you please specifically state the testing steps you have used to
+obtain that output?
+This is important so people who are involved in this discussion don't
+get confused about the results.
+
+> On some other note on USB HUB reset. I recollect following series (it
+> like *mmc_pwrseq*)
+> [0] https://lore.kernel.org/linux-devicetree/1474342607-27512-1-git-send-email-peter.chen@nxp.com/
+this is being replaced by "usb: misc: Add onboard_usb_hub driver"
+which is currently at version 13: [1]
 
 
--- 
-Florian
+Best regards,
+Martin
+
+
+[1] https://marc.info/?l=linux-usb&m=162447367404217&w=2
