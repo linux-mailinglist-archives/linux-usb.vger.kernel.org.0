@@ -2,261 +2,567 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 770173B8ACD
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 01:09:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E34593B8BA4
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 03:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbhF3XMQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 30 Jun 2021 19:12:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbhF3XMP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 30 Jun 2021 19:12:15 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDCEC061756
-        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 16:09:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id bu12so7143538ejb.0
-        for <linux-usb@vger.kernel.org>; Wed, 30 Jun 2021 16:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0Yj/+VE/hYrluELPDIeX+nRbpJ0sABuSG/agfLisvH4=;
-        b=Tz6eDd1KONp4CUzBfckoib90k8BAWleZza318VCqHErAE9fwKjFQ/PfD1EaITs51qU
-         31EOPdhDorPRp9o7lnzExjT/vR4HCR58Jwz+5IwJuXpiN3P4N8qphmOC+NIy86zqx8Gf
-         Ao1HJO5iDmeXLdaGH1/GS3EohjD6ORYNKtqWjJJBGsG6e09bsikuh/TnZanrT14X4LN9
-         l6o5JGEABqhc4RdO3VZzuLJ/mYyYZ1do4/ce5ZOGb7c/xQcdJlDQDycSSNPPyhX1FbDm
-         ZnSanTvpgEdL1Eo2ZHiYSWrO44DQtEgIR8BPAfLmiKgnMohLeeWOQh+vb7mtAWH5kTT+
-         GU6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0Yj/+VE/hYrluELPDIeX+nRbpJ0sABuSG/agfLisvH4=;
-        b=RXuhBXVP9CLi5c8LjLd9xD3Jt4vGTs5H5RCw6cH/r+G2rRUplS+B8nJ6Vyt3AsDSVw
-         xNoAYsRw6MhQF0YfEFeqeikgifK9ICbAU9zjYBGI60x3hxbEOOg6lvHRdFdZTJSxPwVi
-         KNvWIYEflitiCHugcjwdfe0KiUddHWD+AA8IogtPiJX3Qt7+lHCh3rN9qPjgMGrnjLvM
-         0DrCsEKn8NWiSOHygJ1dRz5hVvLEwK79gdUicbrlPZout1gcLtin4EvLcSpDPfMJc2/1
-         iaZSPKnZjm/OBL689ZLMG28uWJU4Jz8uoUQtN8l+veEYzi1wC+gtsx2czIYMqNv6fuIV
-         TzgQ==
-X-Gm-Message-State: AOAM5306yiL9PIk1+MHYX6/Xvuf6Z5DieLBvlnvv9roblL77ZSLwpSK+
-        8lqG8lSuj6RW5tE4baAducVhgNd1OizhfmIrIV8=
-X-Google-Smtp-Source: ABdhPJx6SqoqhZGlgfRDnql7D28rWC8eMbbDRcgbZVUuZVi6usLSRmFeXE33WvWLW/euLPJE32Esv9quaX2O7ucHbJg=
-X-Received: by 2002:a17:906:6cf:: with SMTP id v15mr22883781ejb.208.1625094583883;
- Wed, 30 Jun 2021 16:09:43 -0700 (PDT)
+        id S238341AbhGABLo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 30 Jun 2021 21:11:44 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:17308 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238326AbhGABLo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 30 Jun 2021 21:11:44 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1625101754; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=JFYJO+qyG+q92WJ9/Y+Wik5jnLf2tNgDDwYjDPgawic=; b=E+e+IK6dSD1HvR7v7MqLOURZoJM5Rqnn/NJMeiNjlmqKa4sy0U14cJu+jNA4TMzbY2eaKYFK
+ Y5nWQIn0+bVIyUGU1uAFWnbxkMBS8GNQv2EwIboCEoaZ6erGBt+qUdlpgmKYp97lN4DOq8pb
+ okVHro8kPAWjaaqLj14nSzrbHJ8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
+ 60dd15a03a8b6d0a45e772b9 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 01 Jul 2021 01:08:48
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 420FAC433D3; Thu,  1 Jul 2021 01:08:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
+Received: from [10.71.83.156] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C5CA7C433F1;
+        Thu,  1 Jul 2021 01:08:43 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C5CA7C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v9 0/5] Re-introduce TX FIFO resize for larger EP bursting
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        jackp@codeaurora.org, Thinh.Nguyen@synopsys.com,
+        John Youn <John.Youn@synopsys.com>
+References: <1621410561-32762-1-git-send-email-wcheng@codeaurora.org>
+ <YLoUiO8tpRpmvcyU@kroah.com> <87k0n9btnb.fsf@kernel.org>
+ <YLo6W5sKaXvy51eW@kroah.com>
+ <c2daab34-1b25-7ee3-e203-a414c1e486d5@codeaurora.org>
+ <874ke62i0v.fsf@kernel.org>
+ <e5f231ca-6807-bcea-29c2-ab3926057310@codeaurora.org>
+ <8735to29tt.fsf@kernel.org>
+ <f1d57fca-3ac1-d8c8-bd23-cf525b366573@codeaurora.org>
+ <87tum4zhc9.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <60132429-cbc7-5343-51f1-74d3eae58327@codeaurora.org>
+Date:   Wed, 30 Jun 2021 18:08:43 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <0badab7c-f12e-e9ed-2f90-2cf5f25f4038@bluematt.me>
- <20210628005825.GA638648@rowland.harvard.edu> <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
- <20210628011628.GC638648@rowland.harvard.edu> <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
- <20210628142418.GC656159@rowland.harvard.edu> <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
- <20210629150541.GB699290@rowland.harvard.edu> <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
- <20210629161807.GB703497@rowland.harvard.edu> <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
-In-Reply-To: <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Thu, 1 Jul 2021 01:09:33 +0200
-Message-ID: <CAFBinCDc6RUypJpujmYdkjo6j-xsg0HkZEZGxTCsTW4tZ-bJPA@mail.gmail.com>
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
-To:     Minas Harutyunyan <hminas@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Matt Corallo <oc2udbzfd@mattcorallo.com>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux.amoon@gmail.com
-Content-Type: multipart/mixed; boundary="00000000000066393605c603d101"
+In-Reply-To: <87tum4zhc9.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---00000000000066393605c603d101
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Minas,
-
-On Tue, Jun 29, 2021 at 6:30 PM Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
->
-> Hi Alan,
->
-> On Tue, Jun 29, 2021 at 6:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> [...]
-> > > >         usbcore.autosuspend=-1
-> > > wow, this helps indeed
-> > > my steps are:
-> > > - power off my Odroid-C1+
-> > > - unplug all USB devices
-> > > - boot with usbcore.autosuspend=-1 in the kernel cmdline
-> > > - plugin my Corsair Voyager USB 3.0 flash drive (which was only
-> > > detected before if an additional USB 2.0 flash drive was plugged in
-> > > during boot)
-> > > -> without any lsusb magic the device was immediately recognized
-> >
-> > That does show pretty convincingly that runtime suspend is causing the
-> > problem.  But I still have no idea why the problem affects some devices
-> > and not others.  It's a mystery.
-> Maybe because there's two related problems (I am guessing here):
-> The first issue is that USB hotplug is not working at all on my
-> Odroid-C1+ (which means: dwc2 + GL852G USB hub).
-> The second issue is that the workaround we had before (running lsusb
-> -vv to make "hot plugged" devices show up) is not working for some USB
-> devices.
->
-> It seems that using a different workaround (usbcore.autosuspend=-1)
-> makes *all* USB devices show up - even without any "lsusb -vv" call.
-> So I think we should focus on the first issue as it may also fix the
-> other problem as well.
-above paragraph sums up the issues which Matt and I are seeing (on
-Odroid-C1+ and Odroid-C2) in case you didn't follow the full email
-thread
-
-> [...]
-> > > after rebooting without usbcore.autosuspend=-1 (and no USB device
-> > > plugged in during boot):
-> > > # grep "" /sys/bus/usb/devices/*/power/autosuspend
-> > > /sys/bus/usb/devices/1-1/power/autosuspend:0
-> > > /sys/bus/usb/devices/usb1/power/autosuspend:0
-> > >
-> > > I think the next step is narrowing down which component is causing this issue.
-> >
-> > Maybe Minas can help.  He knows a lot more about dwc2 than I do (which
-> > is practically nothing).
-> I'll wait for Minas then
-I have attached the dwc2 debugfs output to this email as well as I
-think that it'll be useful
-unfortunately I could not attach the "regdump" because that hangs my
-Odroid-C1+ (not sure but this seems like an unrelated issue?)
-
-in params.c dwc2_set_amlogic_params is used to override a few hardware
-parameters.
-power_down is one of them (although Alan's comment suggests that it
-may not be related) is overwritten there to
-DWC2_POWER_DOWN_PARAM_NONE. When removing that overriding then the
-value (probably as set by the designer) is
-DWC2_POWER_DOWN_PARAM_PARTIAL.
 
 
-Best regards,
-Martin
+On 6/11/2021 6:00 AM, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>>>>>>> to be honest, I don't think these should go in (apart from the build
+>>>>>>>> failure) because it's likely to break instantiations of the core with
+>>>>>>>> differing FIFO sizes. Some instantiations even have some endpoints with
+>>>>>>>> dedicated functionality that requires the default FIFO size configured
+>>>>>>>> during coreConsultant instantiation. I know of at OMAP5 and some Intel
+>>>>>>>> implementations which have dedicated endpoints for processor tracing.
+>>>>>>>>
+>>>>>>>> With OMAP5, these endpoints are configured at the top of the available
+>>>>>>>> endpoints, which means that if a gadget driver gets loaded and takes
+>>>>>>>> over most of the FIFO space because of this resizing, processor tracing
+>>>>>>>> will have a hard time running. That being said, processor tracing isn't
+>>>>>>>> supported in upstream at this moment.
+>>>>>>>>
+>>>>>>
+>>>>>> I agree that the application of this logic may differ between vendors,
+>>>>>> hence why I wanted to keep this controllable by the DT property, so that
+>>>>>> for those which do not support this use case can leave it disabled.  The
+>>>>>> logic is there to ensure that for a given USB configuration, for each EP
+>>>>>> it would have at least 1 TX FIFO.  For USB configurations which don't
+>>>>>> utilize all available IN EPs, it would allow re-allocation of internal
+>>>>>> memory to EPs which will actually be in use.
+>>>>>
+>>>>> The feature ends up being all-or-nothing, then :-) It sounds like we can
+>>>>> be a little nicer in this regard.
+>>>>>
+>>>>
+>>>> Don't get me wrong, I think once those features become available
+>>>> upstream, we can improve the logic.  From what I remember when looking
+>>>
+>>> sure, I support that. But I want to make sure the first cut isn't likely
+>>> to break things left and right :)
+>>>
+>>> Hence, let's at least get more testing.
+>>>
+>>
+>> Sure, I'd hope that the other users of DWC3 will also see some pretty
+>> big improvements on the TX path with this.
 
---00000000000066393605c603d101
-Content-Type: text/plain; charset="US-ASCII"; name="dwc2-debugfs.txt"
-Content-Disposition: attachment; filename="dwc2-debugfs.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_kqk38ra30>
-X-Attachment-Id: f_kqk38ra30
+Hi Felipe,
 
-L3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9kcl9tb2RlOmhvc3QKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9maWZvOk5vbi1wZXJpb2RpYyBGSUZPczoKL3N5cy9r
-ZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9maWZvOlJYRklGTzogU2l6ZSA1MTIKL3N5cy9r
-ZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9maWZvOk5QVFhGSUZPOiBTaXplIDUwMCwgU3Rh
-cnQgMHgwMDAwMDIwMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2ZpZm86Ci9z
-eXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvZmlmbzpQZXJpb2RpYyBUWEZJRk9zOgov
-c3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFtczpvcF9tb2RlICAgICAg
-ICAgICAgICAgICAgICAgICA6IDUKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9o
-d19wYXJhbXM6YXJjaCAgICAgICAgICAgICAgICAgICAgICAgICAgOiAyCi9zeXMva2VybmVsL2Rl
-YnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1zOmRtYV9kZXNjX2VuYWJsZSAgICAgICAgICAg
-ICAgIDogMQovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFtczplbmFi
-bGVfZHluYW1pY19maWZvICAgICAgICAgICA6IDEKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMw
-MDAwLnVzYi9od19wYXJhbXM6ZW5fbXVsdGlwbGVfdHhfZmlmbyAgICAgICAgICAgOiAwCi9zeXMv
-a2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1zOnJ4X2ZpZm9fc2l6ZSAgICAg
-ICAgICAgICAgICAgIDogMjA0OAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3
-X3BhcmFtczpob3N0X25wZXJpb190eF9maWZvX3NpemUgICAgICA6IDIwNDgKL3N5cy9rZXJuZWwv
-ZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9od19wYXJhbXM6ZGV2X25wZXJpb190eF9maWZvX3NpemUg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1zOmhv
-c3RfcGVyaW9fdHhfZmlmb19zaXplICAgICAgIDogMjA0OAovc3lzL2tlcm5lbC9kZWJ1Zy91c2Iv
-YzkwYzAwMDAudXNiL2h3X3BhcmFtczpucGVyaW9fdHhfcV9kZXB0aCAgICAgICAgICAgICA6IDQK
-L3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9od19wYXJhbXM6aG9zdF9wZXJpb190
-eF9xX2RlcHRoICAgICAgICAgOiA0Ci9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2Iv
-aHdfcGFyYW1zOmRldl90b2tlbl9xX2RlcHRoICAgICAgICAgICAgIDogOAovc3lzL2tlcm5lbC9k
-ZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFtczptYXhfdHJhbnNmZXJfc2l6ZSAgICAgICAg
-ICAgICA6IDUyNDI4Nwovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFt
-czptYXhfcGFja2V0X2NvdW50ICAgICAgICAgICAgICA6IDEwMjMKL3N5cy9rZXJuZWwvZGVidWcv
-dXNiL2M5MGMwMDAwLnVzYi9od19wYXJhbXM6aG9zdF9jaGFubmVscyAgICAgICAgICAgICAgICAg
-OiAxNgovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFtczpoc19waHlf
-dHlwZSAgICAgICAgICAgICAgICAgICA6IDEKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAw
-LnVzYi9od19wYXJhbXM6ZnNfcGh5X3R5cGUgICAgICAgICAgICAgICAgICAgOiAwCi9zeXMva2Vy
-bmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1zOmkyY19lbmFibGUgICAgICAgICAg
-ICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFt
-czpudW1fZGV2X2VwICAgICAgICAgICAgICAgICAgICA6IDIKL3N5cy9rZXJuZWwvZGVidWcvdXNi
-L2M5MGMwMDAwLnVzYi9od19wYXJhbXM6bnVtX2Rldl9wZXJpb19pbl9lcCAgICAgICAgICAgOiAw
-Ci9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1zOnRvdGFsX2ZpZm9f
-c2l6ZSAgICAgICAgICAgICAgIDogMTk4NAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAu
-dXNiL2h3X3BhcmFtczpwb3dlcl9vcHRpbWl6ZWQgICAgICAgICAgICAgICA6IDEKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9od19wYXJhbXM6dXRtaV9waHlfZGF0YV93aWR0aCAg
-ICAgICAgICAgOiAxCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvaHdfcGFyYW1z
-OnNucHNpZCAgICAgICAgICAgICAgICAgICAgICAgIDogMHg0ZjU0MzEwYQovc3lzL2tlcm5lbC9k
-ZWJ1Zy91c2IvYzkwYzAwMDAudXNiL2h3X3BhcmFtczpkZXZfZXBfZGlycyAgICAgICAgICAgICAg
-ICAgICA6IDB4MAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpvdGdf
-Y2FwICAgICAgICAgICAgICAgICAgICAgICA6IDIKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMw
-MDAwLnVzYi9wYXJhbXM6ZG1hX2Rlc2NfZW5hYmxlICAgICAgICAgICAgICAgOiAwCi9zeXMva2Vy
-bmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmRtYV9kZXNjX2ZzX2VuYWJsZSAgICAg
-ICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpzcGVl
-ZCAgICAgICAgICAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMw
-MDAwLnVzYi9wYXJhbXM6ZW5hYmxlX2R5bmFtaWNfZmlmbyAgICAgICAgICAgOiAxCi9zeXMva2Vy
-bmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmVuX211bHRpcGxlX3R4X2ZpZm8gICAg
-ICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpob3N0
-X3J4X2ZpZm9fc2l6ZSAgICAgICAgICAgICA6IDUxMgovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkw
-YzAwMDAudXNiL3BhcmFtczpob3N0X25wZXJpb190eF9maWZvX3NpemUgICAgICA6IDUwMAovc3lz
-L2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpob3N0X3BlcmlvX3R4X2ZpZm9f
-c2l6ZSAgICAgICA6IDUwMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFt
-czptYXhfdHJhbnNmZXJfc2l6ZSAgICAgICAgICAgICA6IDUyNDI4Nwovc3lzL2tlcm5lbC9kZWJ1
-Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczptYXhfcGFja2V0X2NvdW50ICAgICAgICAgICAgICA6
-IDEwMjMKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6aG9zdF9jaGFu
-bmVscyAgICAgICAgICAgICAgICAgOiAxNgovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAu
-dXNiL3BhcmFtczpwaHlfdHlwZSAgICAgICAgICAgICAgICAgICAgICA6IDEKL3N5cy9rZXJuZWwv
-ZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6cGh5X3V0bWlfd2lkdGggICAgICAgICAgICAg
-ICAgOiAxNgovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpwaHlfdWxw
-aV9kZHIgICAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAw
-LnVzYi9wYXJhbXM6cGh5X3VscGlfZXh0X3ZidXMgICAgICAgICAgICAgOiAwCi9zeXMva2VybmVs
-L2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmkyY19lbmFibGUgICAgICAgICAgICAgICAg
-ICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczppcGdfaXNv
-Y19lbiAgICAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAw
-LnVzYi9wYXJhbXM6dWxwaV9mc19scyAgICAgICAgICAgICAgICAgICAgOiAwCi9zeXMva2VybmVs
-L2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmhvc3Rfc3VwcG9ydF9mc19sc19sb3dfcG93
-ZXIgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczpob3N0X2xz
-X2xvd19wb3dlcl9waHlfY2xrICAgICA6IDAKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAw
-LnVzYi9wYXJhbXM6YWN0aXZhdGVfc3RtX2ZzX3RyYW5zY2VpdmVyICAgOiAwCi9zeXMva2VybmVs
-L2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmFjdGl2YXRlX3N0bV9pZF92Yl9kZXRlY3Rp
-b24gIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAwMDAudXNiL3BhcmFtczp0c19kbGlu
-ZSAgICAgICAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJuZWwvZGVidWcvdXNiL2M5MGMwMDAw
-LnVzYi9wYXJhbXM6cmVsb2FkX2N0bCAgICAgICAgICAgICAgICAgICAgOiAxCi9zeXMva2VybmVs
-L2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmFoYmNmZyAgICAgICAgICAgICAgICAgICAg
-ICAgIDogMHhhCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOnVmcmFt
-ZV9zY2hlZCAgICAgICAgICAgICAgICAgIDogMQovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpleHRlcm5hbF9pZF9waW5fY3RsICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6cG93ZXJfZG93biAgICAgICAgICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmxwbSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpscG1fY2xvY2tfZ2F0aW5nICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6YmVzbCAgICAgICAgICAgICAgICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmhpcmRf
-dGhyZXNob2xkX2VuICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpoaXJkX3RocmVzaG9sZCAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6c2VydmljZV9pbnRlcnZhbCAgICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmhvc3Rf
-ZG1hICAgICAgICAgICAgICAgICAgICAgIDogMQovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX2RtYSAgICAgICAgICAgICAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z19kbWFfZGVzYyAgICAgICAgICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfcnhf
-Zmlmb19zaXplICAgICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX25wX3R4X2ZpZm9fc2l6ZSAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbMF0gICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfdHhf
-Zmlmb19zaXplWzFdICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX3R4X2ZpZm9fc2l6ZVsyXSAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbM10gICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfdHhf
-Zmlmb19zaXplWzRdICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX3R4X2ZpZm9fc2l6ZVs1XSAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbNl0gICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfdHhf
-Zmlmb19zaXplWzddICAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX3R4X2ZpZm9fc2l6ZVs4XSAgICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbOV0gICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfdHhf
-Zmlmb19zaXplWzEwXSAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX3R4X2ZpZm9fc2l6ZVsxMV0gICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbMTJdICAgICAg
-ICAgICAgOiAwCi9zeXMva2VybmVsL2RlYnVnL3VzYi9jOTBjMDAwMC51c2IvcGFyYW1zOmdfdHhf
-Zmlmb19zaXplWzEzXSAgICAgICAgICAgIDogMAovc3lzL2tlcm5lbC9kZWJ1Zy91c2IvYzkwYzAw
-MDAudXNiL3BhcmFtczpnX3R4X2ZpZm9fc2l6ZVsxNF0gICAgICAgICAgICA6IDAKL3N5cy9rZXJu
-ZWwvZGVidWcvdXNiL2M5MGMwMDAwLnVzYi9wYXJhbXM6Z190eF9maWZvX3NpemVbMTVdICAgICAg
-ICAgICAgOiAwCg==
---00000000000066393605c603d101--
+Sorry for the delayed response.  I went into the office to capture a USB
+trace to better show you the difference with and without the TXFIFO
+resize changes.  Let me address your comments below first before showing
+the traces.
+
+> 
+> fingers crossed
+> 
+
+Unfortunately, based on Ferry's testing, it looks like the Intel HW
+platform itself doesn't have a SS capable port.  Although, we did get
+some good information from it, as we found that math is different
+between controller revisions.
+
+>>>> at Andy Shevchenko's Github, the Intel tracer downstream changes were
+>>>> just to remove physical EP1 and 2 from the DWC3 endpoint list.  If that
+>>>
+>>> right, that's the reason why we introduced the endpoint feature
+>>> flags. The end goal was that the UDC would be able to have custom
+>>> feature flags paired with ->validate_endpoint() or whatever before
+>>> allowing it to be enabled. Then the UDC driver could tell UDC core to
+>>> skip that endpoint on that particular platform without interefering with
+>>> everything else.
+>>>
+>>> Of course, we still need to figure out a way to abstract the different
+>>> dwc3 instantiations.
+>>>
+>>>> was the change which ended up upstream for the Intel tracer then we
+>>>> could improve the logic to avoid re-sizing those particular EPs.
+>>>
+>>> The problem then, just as I mentioned in the previous paragraph, will be
+>>> coming up with a solution that's elegant and works for all different
+>>> instantiations of dwc3 (or musb, cdns3, etc).
+>>>
+>>
+>> Well, at least for the TX FIFO resizing logic, we'd only be needing to
+>> focus on the DWC3 implementation.
+>>
+>> You bring up another good topic that I'll eventually needing to be
+>> taking a look at, which is a nice way we can handle vendor specific
+>> endpoints and how they can co-exist with other "normal" endpoints.  We
+>> have a few special HW eps as well, which we try to maintain separately
+>> in our DWC3 vendor driver, but it isn't the most convenient, or most
+>> pretty method :).
+> 
+> Awesome, as mentioned, the endpoint feature flags were added exactly to
+> allow for these vendor-specific features :-)
+> 
+> I'm more than happy to help testing now that I finally got our SM8150
+> Surface Duo device tree accepted by Bjorn ;-)
+> 
+>>>> However, I'm not sure how the changes would look like in the end, so I
+>>>> would like to wait later down the line to include that :).
+>>>
+>>> Fair enough, I agree. Can we get some more testing of $subject, though?
+>>> Did you test $subject with upstream too? Which gadget drivers did you
+>>> use? How did you test
+>>>
+>>
+>> The results that I included in the cover page was tested with the pure
+>> upstream kernel on our device.  Below was using the ConfigFS gadget w/ a
+>> mass storage only composition.
+>>
+>> Test Parameters:
+>>  - Platform: Qualcomm SM8150
+>>  - bMaxBurst = 6
+>>  - USB req size = 256kB
+>>  - Num of USB reqs = 16
+> 
+> do you mind testing with the regular request size (16KiB) and 250
+> requests? I think we can even do 15 bursts in that case.
+> 
+
+Let's go over the trace.  If you are still convinced this would help
+with the particular scenario we're looking at, then I can run this test
+with the above.
+
+>>  - USB Speed = Super-Speed
+>>  - Function Driver: Mass Storage (w/ ramdisk)
+>>  - Test Application: CrystalDiskMark
+>>
+>> Results:
+>>
+>> TXFIFO Depth = 3 max packets
+>>
+>> Test Case | Data Size | AVG tput (in MB/s)
+>> -------------------------------------------
+>> Sequential|1 GB x     |
+>> Read      |9 loops    | 193.60
+>>           |           | 195.86
+>>           |           | 184.77
+>>           |           | 193.60
+>> -------------------------------------------
+>>
+>> TXFIFO Depth = 6 max packets
+>>
+>> Test Case | Data Size | AVG tput (in MB/s)
+>> -------------------------------------------
+>> Sequential|1 GB x     |
+>> Read      |9 loops    | 287.35
+>> 	    |           | 304.94
+>>           |           | 289.64
+>>           |           | 293.61
+> 
+> I remember getting close to 400MiB/sec with Intel platforms without
+> resizing FIFOs and I'm sure the FIFO size was set to 2x1024, though my
+> memory could be failing.
+> 
+> Then again, I never ran with CrystalDiskMark, I was using my own tool
+> (it's somewhere in github. If you care, I can look up the URL).
+> 
+>> We also have internal numbers which have shown similar improvements as
+>> well.  Those are over networking/tethering interfaces, so testing IPERF
+>> loopback over TCP/UDP.
+> 
+> loopback iperf? That would skip the wire, no?
+> 
+
+The iperf server (receiver) would be running on the PC, and the iperf
+client would be running on our device (transmitter).
+
+>>>> size of 2 and TX threshold of 1, this would really be not beneficial to
+>>>> us, because we can only change the TX threshold to 2 at max, and at
+>>>> least in my observations, once we have to go out to system memory to
+>>>> fetch the next data packet, that latency takes enough time for the
+>>>> controller to end the current burst.
+>>>
+>>> What I noticed with g_mass_storage is that we can amortize the cost of
+>>> fetching data from memory, with a deeper request queue. Whenever I
+>>> test(ed) g_mass_storage, I was doing so with 250 requests. And that was
+>>> enough to give me very good performance. Never had to poke at TX FIFO
+>>> resizing. Did you try something like this too?
+>>>
+>>> I feel that allocating more requests is a far simpler and more generic
+>>> method that changing FIFO sizes :)
+>>>
+>>
+>> I wish I had a USB bus trace handy to show you, which would make it very
+>> clear how the USB bus is currently utilized with TXFIFO size 2 vs 6.  So
+>> by increasing the number of USB requests, that will help if there was a
+>> bottleneck at the SW level where the application/function driver
+>> utilizing the DWC3 was submitting data much faster than the HW was
+>> processing them.
+>>
+>> So yes, this method of increasing the # of USB reqs will definitely help
+>> with situations such as HSUSB or in SSUSB when EP bursting isn't used.
+>> The TXFIFO resize comes into play for SSUSB, which utilizes endpoint
+>> bursting.
+> 
+> Hmm, that's not what I remember. Perhaps the TRB cache size plays a role
+> here too. I have clear memories of testing this very scenario of
+> bursting (using g_mass_storage at the time) because I was curious about
+> it. Back then, my tests showed no difference in behavior.
+> 
+> It could be nice if Heikki could test Intel parts with and without your
+> changes on g_mass_storage with 250 requests.
+> 
+>> Now with endpoint bursting, if the function notifies the host that
+>> bursting is supported, when the host sends the ACK for the Data Packet,
+>> it should have a NumP value equal to the bMaxBurst reported in the EP
+> 
+> Yes and no. Looking back at the history, we used to configure NUMP based
+> on bMaxBurst, but it was changed later in commit
+> 4e99472bc10bda9906526d725ff6d5f27b4ddca1 by yours truly because of a
+> problem reported by John Youn.
+> 
+> And now we've come full circle. Because even if I believe more requests
+> are enough for bursting, NUMP is limited by the RxFIFO size. This ends
+> up supporting your claim that we need RxFIFO resizing if we want to
+> squeeze more throughput out of the controller.
+> 
+> However, note that this is about RxFIFO size, not TxFIFO size. In fact,
+> looking at Table 8-13 of USB 3.1 r1.0, we read the following about NumP
+> (emphasis is mine):
+> 
+> 	"Number of Packets (NumP). This field is used to indicate the
+> 	number of Data Packet buffers that the **receiver** can
+> 	accept. The value in this field shall be less than or equal to
+> 	the maximum burst size supported by the endpoint as determined
+> 	by the value in the bMaxBurst field in the Endpoint Companion
+> 	Descriptor (refer to Section 9.6.7)."
+> 
+> So, NumP is for the receiver, not the transmitter. Could you clarify
+> what you mean here?
+> 
+> /me keeps reading
+> 
+> Hmm, table 8-15 tries to clarify:
+> 
+> 	"Number of Packets (NumP).
+> 
+> 	For an OUT endpoint, refer to Table 8-13 for the description of
+> 	this field.
+> 
+> 	For an IN endpoint this field is set by the endpoint to the
+> 	number of packets it can transmit when the host resumes
+> 	transactions to it. This field shall not have a value greater
+> 	than the maximum burst size supported by the endpoint as
+> 	indicated by the value in the bMaxBurst field in the Endpoint
+> 	Companion Descriptor. Note that the value reported in this field
+> 	may be treated by the host as informative only."
+> 
+> However, if I remember correctly (please verify dwc3 databook), NUMP in
+> DCFG was only for receive buffers. Thin, John, how does dwc3 compute
+> NumP for TX/IN endpoints? Is that computed as a function of DCFG.NUMP or
+> TxFIFO size?
+> 
+
+Sorry for confusing you.  So you are right about NumP being applicable
+to the receiver path, and the PC USB host controller also will have its
+own RXFIFO, which for the IN direction correlates to the NumP value
+being sent by the host within the ACK.  The point I was trying to make
+is that, the bus utilization is not hampered by the host running out of
+RXFIFO (getting ACKs w/ NumP=0), but with the device always pre-maturely
+ending the burst.
+
+>> desc.  If we have a TXFIFO size of 2, then normally what I have seen is
+>> that after 2 data packets, the device issues a NRDY.  So then we'd need
+>> to send an ERDY once data is available within the FIFO, and the same
+>> sequence happens until the USB request is complete.  With this constant
+>> NRDY/ERDY handshake going on, you actually see that the bus is under
+>> utilized.  When we increase an EP's FIFO size, then you'll see constant
+>> bursts for a request, until the request is done, or if the host runs out
+>> of RXFIFO. (ie no interruption [on the USB protocol level] during USB
+>> request data transfer)
+> 
+> Unfortunately I don't have access to a USB sniffer anymore :-(
+> 
+
+So I went ahead and captured USB Lecroy log with the following conditions:
+- bMaxBurst value = 6
+- TXFIFOSZ = 6 max packets (with resize) / TXFIFOSZ = 1 max packet (w/o)
+- Test case = USB tethering w/ IPERF loopback (between PC and device)
+- USB request size = 32kB
+- Speed = USB3.1 gen 1
+
+Trace Hierarchy:
+Transfer
+   --> Transaction
+      --> Packet
+
+1 transfer has multiple transactions, and 1 transaction has multiple
+packets.  This is just how Lecroy does the packet groupings to help make
+the traces more readable.  For now, we can focus on the "Packet" entries.
+
+With TXFIFO resize:
+
+Transfer(1062) Left("Left") G1(x1) Bulk(IN) ADDR(15) ENDP(4)
+_______| Bytes Transferred(31584) Time Stamp(0 . 400 271 196)
+_______|_______________________________________________________________________
+Transaction(1768) Left("Left") G1(x1) IN ADDR(15) ENDP(4) Data(31584 bytes)
+_______| Time Stamp(0 . 400 271 196)
+_______|_______________________________________________________________________L
+
+Packet(268690) Left("Left") Dir G1(x1) TP ACK(1) ADDR(15) ENDP(4)
+_______| Dir(In) SeqN(31) NumP(3) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:2)
+_______| Duration(40.100 ns) Time(358.000 ns) Time Stamp(0 . 400 271 196)
+_______|_______________________________________________________________________R
+
+Packet(268692) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(15)
+_______| ENDP(4) Dir(In) SeqN(31) EoB(N) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:3) Data(1024 bytes) Duration(  2.117 us) Time(
+2.140 us)
+_______| Time Stamp(0 . 400 271 554)
+_______|_______________________________________________________________________R
+
+Packet(268696) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(15)
+_______| ENDP(4) Dir(In) SeqN(0) EoB(N) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:4) Data(1024 bytes) Duration(  2.117 us)
+Time(262.000 ns)
+_______| Time Stamp(0 . 400 273 694)
+_______|_______________________________________________________________________L
+
+Packet(268699) Left("Left") Dir G1(x1) TP ACK(1) ADDR(15) ENDP(4)
+_______| Dir(In) SeqN(0) NumP(3) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:3)
+_______| Duration(40.100 ns) Time(  1.890 us) Time Stamp(0 . 400 273 956)
+_______|_______________________________________________________________________R
+
+Packet(268702) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(15)
+_______| ENDP(4) Dir(In) SeqN(1) EoB(N) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:5) Data(1024 bytes) Duration(  2.117 us)
+Time(258.000 ns)
+_______| Time Stamp(0 . 400 275 846)
+_______|_______________________________________________________________________L
+
+Packet(268705) Left("Left") Dir G1(x1) TP ACK(1) ADDR(15) ENDP(4)
+_______| Dir(In) SeqN(1) NumP(3) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:4)
+_______| Duration(40.100 ns) Time(  1.918 us) Time Stamp(0 . 400 276 104)
+_______|_______________________________________________________________________R
+
+Packet(268708) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(15)
+_______| ENDP(4) Dir(In) SeqN(2) EoB(N) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:6) Data(1024 bytes) Duration(  2.117 us)
+Time(246.000 ns)
+_______| Time Stamp(0 . 400 278 022)
+_______|_______________________________________________________________________L
+
+Packet(268711) Left("Left") Dir G1(x1) TP ACK(1) ADDR(15) ENDP(4)
+_______| Dir(In) SeqN(2) NumP(2) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:5)
+_______| Duration(40.100 ns) Time(  1.962 us) Time Stamp(0 . 400 278 268)
+_______|_______________________________________________________________________R
+
+
+Observations:
+- Within a transfer, there are no data packets w/ the EoB set to yes.
+- Host never runs out of RXFIFO (NumP never reaches 0)
+- Packets within a transaction is never interrupted with a NRDY.
+(followed by an ERDY from the device to continue the transaction)
+
+
+==========================================================================
+
+Without TXFIFO resize:
+
+Transfer(1542) Left("Left") G1(x1) Bulk(IN) ADDR(19) ENDP(4)
+_______| Bytes Transferred(31584) Time Stamp(0 . 619 833 722)
+_______|_______________________________________________________________________
+Transaction(7677) Left("Left") G1(x1) IN ADDR(19) ENDP(4) Condition(Flow
+Ctrl)
+_______| Data(1024 bytes) Time Stamp(0 . 619 833 722)
+_______|_______________________________________________________________________L
+
+Packet(415331) Left("Left") Dir G1(x1) TP ACK(1) ADDR(19) ENDP(4)
+_______| Dir(In) SeqN(13) NumP(4) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:3)
+_______| Duration(40.100 ns) Time(396.000 ns) Time Stamp(0 . 619 833 722)
+_______|_______________________________________________________________________R
+
+Packet(415338) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(19)
+_______| ENDP(4) Dir(In) SeqN(13) EoB(Y) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:5) Data(1024 bytes) Duration(  2.117 us) Time(
+4.012 us)
+_______| Time Stamp(0 . 619 834 118)
+_______|_______________________________________________________________________L
+
+Packet(415349) Left("Left") Dir G1(x1) TP ACK(1) ADDR(19) ENDP(4)
+_______| Dir(In) SeqN(14) NumP(0) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:6)
+_______| Duration(40.100 ns) Time(460.000 ns) Time Stamp(0 . 619 838 130)
+_______|_______________________________________________________________________
+Transaction(7681) Right("Right") G1(x1) EP Ready ADDR(19) ENDP(4) Dir(IN)
+_______| Time Stamp(0 . 619 838 590)
+_______|_______________________________________________________________________R
+
+Packet(415354) Right("Right") Dir G1(x1) TP ERDY(3) ADDR(19) ENDP(4)
+_______| Dir(In) NumP(7) Stream ID(0x0000)   LCW  (Hseq:7)
+Duration(40.100 ns)
+_______| Time(  2.148 us) Time Stamp(0 . 619 838 590)
+_______|_______________________________________________________________________
+Transaction(7682) Left("Left") G1(x1) IN ADDR(19) ENDP(4) Condition(Flow
+Ctrl)
+_______| Data(1024 bytes) Time Stamp(0 . 619 840 738)
+_______|_______________________________________________________________________L
+
+Packet(415358) Left("Left") Dir G1(x1) TP ACK(1) ADDR(19) ENDP(4)
+_______| Dir(In) SeqN(14) NumP(3) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:0)
+_______| Duration(40.100 ns) Time(428.000 ns) Time Stamp(0 . 619 840 738)
+_______|_______________________________________________________________________R
+
+Packet(415365) Right("Right") Dir G1(x1) DP Data Len(1024) ADDR(19)
+_______| ENDP(4) Dir(In) SeqN(14) EoB(Y) Stream ID(0x0000) PP(Not Pnd)
+_______|   LCW  (Hseq:1) Data(1024 bytes) Duration(  2.117 us) Time(
+3.980 us)
+_______| Time Stamp(0 . 619 841 166)
+_______|_______________________________________________________________________L
+
+Packet(415376) Left("Left") Dir G1(x1) TP ACK(1) ADDR(19) ENDP(4)
+_______| Dir(In) SeqN(15) NumP(0) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:3)
+_______| Duration(40.100 ns) Time(444.000 ns) Time Stamp(0 . 619 845 146)
+_______|_______________________________________________________________________
+Transaction(7683) Right("Right") G1(x1) EP Ready ADDR(19) ENDP(4) Dir(IN)
+_______| Time Stamp(0 . 619 845 590)
+_______|_______________________________________________________________________R
+
+Packet(415383) Right("Right") Dir G1(x1) TP ERDY(3) ADDR(19) ENDP(4)
+_______| Dir(In) NumP(7) Stream ID(0x0000)   LCW  (Hseq:4)
+Duration(40.100 ns)
+_______| Time(  3.964 us) Time Stamp(0 . 619 845 590)
+_______|_______________________________________________________________________
+Transaction(7684) Left("Left") G1(x1) IN ADDR(19) ENDP(4) Condition(Flow
+Ctrl)
+_______| Data(1024 bytes) Time Stamp(0 . 619 849 554)
+_______|_______________________________________________________________________L
+
+Packet(415394) Left("Left") Dir G1(x1) TP ACK(1) ADDR(19) ENDP(4)
+_______| Dir(In) SeqN(15) NumP(1) Stream ID(0x0000) PP(Pnd)   LCW  (Hseq:6)
+_______| Duration(40.100 ns) Time(396.000 ns) Time Stamp(0 . 619 849 554)
+
+Observations:
+- Since the current setting has TXFIFO size to only have 1 max packet,
+the device sets the EoB to yes during the data packet.
+- Within a transfer, there are multiple "transactions" as Lecroy groups
+transactions whenever there is a NRDY --> ERDY transition.
+- Frequent NRDY --> ERDY transitions coming from the device
+
+
+I hope this clears up what the TXFIFO resize is actually helping with.
+It keeps the burst continuously going w/o having to do a NRDY-->ERDY
+handshake. (which is unnecessary overhead)  Even though we allocate more
+USB requests from the SW, the SW has no control over how the request is
+sent over the link.
+
+Thanks
+Wesley Cheng
+
+>>>>>>> Good points.
+>>>>>>>
+>>>>>>> Wesley, what kind of testing have you done on this on different devices?
+>>>>>>>
+>>>>>>
+>>>>>> As mentioned above, these changes are currently present on end user
+>>>>>> devices for the past few years, so its been through a lot of testing :).
+>>>>>
+>>>>> all with the same gadget driver. Also, who uses USB on android devices
+>>>>> these days? Most of the data transfer goes via WiFi or Bluetooth, anyway
+>>>>> :-)
+>>>>>
+>>>>> I guess only developers are using USB during development to flash dev
+>>>>> images heh.
+>>>>>
+>>>>
+>>>> I used to be a customer facing engineer, so honestly I did see some
+>>>> really interesting and crazy designs.  Again, we do have non-Android
+>>>> products that use the same code, and it has been working in there for a
+>>>> few years as well.  The TXFIFO sizing really has helped with multimedia
+>>>> use cases, which use isoc endpoints, since esp. in those lower end CPU
+>>>> chips where latencies across the system are much larger, and a missed
+>>>> ISOC interval leads to a pop in your ear.
+>>>
+>>> This is good background information. Thanks for bringing this
+>>> up. Admitedly, we still have ISOC issues with dwc3. I'm interested in
+>>> knowing if a deeper request queue would also help here.
+>>>
+>>> Remember dwc3 can accomodate 255 requests + link for each endpoint. If
+>>> our gadget driver uses a low number of requests, we're never really
+>>> using the TRB ring in our benefit.
+>>>
+>>
+>> We're actually using both a deeper USB request queue + TX fifo resizing. :).
+> 
+> okay, great. Let's see what John and/or Thinh respond WRT dwc3 TX Burst
+> behavior.
+> 
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
