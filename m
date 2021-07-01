@@ -2,110 +2,301 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F2B93B9389
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 16:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2293B94AA
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 18:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbhGAOpi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 10:45:38 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34737 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbhGAOpi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 10:45:38 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.93)
-        (envelope-from <colin.king@canonical.com>)
-        id 1lyxuE-0001vL-5Z; Thu, 01 Jul 2021 14:43:06 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_serial: remove WARN_ON on null port
-Date:   Thu,  1 Jul 2021 15:43:05 +0100
-Message-Id: <20210701144305.110078-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.31.1
+        id S232157AbhGAQbE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 12:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60132 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229881AbhGAQbC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 12:31:02 -0400
+Received: from mail-out-2.itc.rwth-aachen.de (mail-out-2.itc.rwth-aachen.de [IPv6:2a00:8a60:1:e501::5:47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 971A9C061762;
+        Thu,  1 Jul 2021 09:28:31 -0700 (PDT)
+IronPort-SDR: B1DT+5Hddtx9k1MoaPHtuA3VZwiuwpoMIdFYOK3ooEsogMI+ajDW/axwjoNqlVlWz1h0STGziS
+ RhPrR/p+pWig==
+X-IPAS-Result: =?us-ascii?q?A2DNBADH691g/5wagoZagQmBWYFTgidqljuQVox5CwEBA?=
+ =?us-ascii?q?QEBAQEBAQQEAT8CBAEBhFICgnMCJTcGDgIEAQEBAQMCAwEBAQEFAQEGAQEBA?=
+ =?us-ascii?q?QEBBQSBBIUvRoZFAQEBAQIBeQULCxgJJQ8BRwYBCQQFgnKCZiEBqA54gTSBA?=
+ =?us-ascii?q?YpCEAkBgTCBU4Qjg3qDeieCKYEVgnUvPoo/BIMZgkAvgQmSDoJFikmLR5IMB?=
+ =?us-ascii?q?4F9gSeeTRCDUYtBhgOKTYYvlXKkbwIEAgQFAhaCPYF+cYM4UBcCDo4oGRWOG?=
+ =?us-ascii?q?UAxOAIGAQkBAQMJWCSKeQEB?=
+IronPort-HdrOrdr: A9a23:uk318a4h4HEBKJDbfgPXwK3XdLJyesId70hD6qkRc203TiX2ra
+ qTdZgguCMc6wxwZJhDo7690cC7KBu2yXcS2+Us1NyZPTUO1lHGEL1f
+X-IronPort-Anti-Spam-Filtered: true
+X-IronPort-AV: E=Sophos;i="5.83,314,1616454000"; 
+   d="asc'?scan'208";a="150217551"
+Received: from rwthex-w1-a.rwth-ad.de ([134.130.26.156])
+  by mail-in-2.itc.rwth-aachen.de with ESMTP; 01 Jul 2021 18:28:20 +0200
+Received: from pebbles.localnet (2a01:c22:b5df:f100:8632:645c:3e39:ad8f) by
+ rwthex-w1-a.rwth-ad.de (2a00:8a60:1:e500::26:156) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.858.12; Thu, 1 Jul 2021 18:28:19 +0200
+From:   Stefan =?ISO-8859-1?Q?Br=FCns?= <stefan.bruens@rwth-aachen.de>
+To:     Johan Hovold <johan@kernel.org>,
+        =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Daniele Palmas <dnlplm@gmail.com>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based Sierra Wireless 5G modules
+Date:   Thu, 1 Jul 2021 18:28:14 +0200
+Message-ID: <1727850.UKLhYeRy6v@pebbles>
+In-Reply-To: <87tulnms3o.fsf@miraculix.mork.no>
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de> <YNQ0O0vhtpStp0n/@hovoldconsulting.com> <87tulnms3o.fsf@miraculix.mork.no>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="nextPart1733362.ex2yW7nU1P";
+        micalg=pgp-sha1; protocol="application/pgp-signature"
+X-Originating-IP: [2a01:c22:b5df:f100:8632:645c:3e39:ad8f]
+X-ClientProxiedBy: rwthex-w1-b.rwth-ad.de (2a00:8a60:1:e500::26:157) To
+ rwthex-w1-a.rwth-ad.de (2a00:8a60:1:e500::26:156)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
+--nextPart1733362.ex2yW7nU1P
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
+From: Stefan =?ISO-8859-1?Q?Br=FCns?= <stefan.bruens@rwth-aachen.de>
+To: Johan Hovold <johan@kernel.org>, =?ISO-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, Daniele Palmas <dnlplm@gmail.com>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based Sierra Wireless 5G modules
+Date: Thu, 01 Jul 2021 18:28:14 +0200
+Message-ID: <1727850.UKLhYeRy6v@pebbles>
+In-Reply-To: <87tulnms3o.fsf@miraculix.mork.no>
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de> <YNQ0O0vhtpStp0n/@hovoldconsulting.com> <87tulnms3o.fsf@miraculix.mork.no>
 
-Loading and then unloading module g_dpgp on a VM that does not
-support the driver currently throws a WARN_ON message because
-the port has not been initialized. Removing an unused driver
-is a valid use-case and the WARN_ON kernel warning is a bit
-excessive, so remove it.
+On Donnerstag, 24. Juni 2021 13:15:07 CEST Bj=F8rn Mork wrote:
+> Johan Hovold <johan@kernel.org> writes:
+> > Could you please also post the output of usb-devices (or lsusb -v) for
+> > this device in MBIM mode?
+>=20
+> Yes, this would be nice to have.
 
-Cleans up:
+See below.
+=20
+> I suspect that this device is like other SDX55 devices we've seen, using
+> class/subclass/function to map the vendor specific functions
+> too. Dropping static interface numbers.  If correct, then the patch is
+> bogus and the interface numbers might change based on firmware version
+> and configuration.
 
-[27654.638698] ------------[ cut here ]------------
-[27654.638705] WARNING: CPU: 6 PID: 2956336 at drivers/usb/gadget/function/u_serial.c:1201 gserial_free_line+0x7c/0x90 [u_serial]
-[27654.638728] Modules linked in: g_dbgp(-) u_serial usb_f_tcm target_core_mod libcomposite udc_core vmw_vmci mcb i2c_nforce2 i2c_amd756 nfit cx8800 videobuf2_dma_sg videobuf2_memops videobuf2_v4l2 cx88xx tveeprom videobuf2_common videodev mc ccp hid_generic hid intel_ishtp cros_ec mc13xxx_core vfio_mdev mdev i915 i2c_algo_bit kvm ppdev parport zatm eni suni uPD98402 atm rio_scan binder_linux hwmon_vid video ipmi_devintf ipmi_msghandler zstd nls_utf8 decnet qrtr ns sctp ip6_udp_tunnel udp_tunnel fcrypt pcbc nhc_udp nhc_ipv6 nhc_routing nhc_mobility nhc_hop nhc_dest nhc_fragment 6lowpan ts_kmp dccp_ipv6 dccp_ipv4 dccp snd_seq_midi snd_seq_midi_event snd_rawmidi snd_seq_dummy snd_seq snd_seq_device xen_front_pgdir_shbuf binfmt_misc nls_iso8859_1 dm_multipath scsi_dh_rdac scsi_dh_emc scsi_dh_alua intel_rapl_msr intel_rapl_common snd_hda_codec_generic ledtrig_audio snd_hda_codec snd_hda_core snd_hwdep snd_pcm snd_timer snd rapl soundcore joydev input_leds mac_hid serio_raw efi_pstore
-[27654.638880]  qemu_fw_cfg sch_fq_codel msr virtio_rng autofs4 btrfs blake2b_generic zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 multipath linear qxl drm_ttm_helper crct10dif_pclmul ttm drm_kms_helper syscopyarea sysfillrect sysimgblt virtio_net fb_sys_fops cec net_failover rc_core ahci psmouse drm libahci lpc_ich virtio_blk failover [last unloaded: u_ether]
-[27654.638949] CPU: 6 PID: 2956336 Comm: modprobe Tainted: P           O      5.13.0-9-generic #9
-[27654.638956] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
-[27654.638969] RIP: 0010:gserial_free_line+0x7c/0x90 [u_serial]
-[27654.638981] Code: 20 00 00 00 00 e8 74 1a ba c9 4c 89 e7 e8 8c fe ff ff 48 8b 3d 75 3b 00 00 44 89 f6 e8 3d 7c 69 c9 5b 41 5c 41 5d 41 5e 5d c3 <0f> 0b 4c 89 ef e8 4a 1a ba c9 5b 41 5c 41 5d 41 5e 5d c3 90 0f 1f
-[27654.638986] RSP: 0018:ffffba0b81403da0 EFLAGS: 00010246
-[27654.638992] RAX: 0000000000000000 RBX: ffffffffc0eaf6a0 RCX: 0000000000000000
-[27654.638996] RDX: ffff8e21c0cac8c0 RSI: 0000000000000006 RDI: ffffffffc0eaf6a0
-[27654.639000] RBP: ffffba0b81403dc0 R08: ffffba0b81403de0 R09: fefefefefefefeff
-[27654.639003] R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-[27654.639006] R13: ffffffffc0eaf6a0 R14: 0000000000000000 R15: 0000000000000000
-[27654.639010] FS:  00007faa1935e740(0000) GS:ffff8e223bd80000(0000) knlGS:0000000000000000
-[27654.639015] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[27654.639019] CR2: 00007ffc840cd4e8 CR3: 000000000e1ac006 CR4: 0000000000370ee0
-[27654.639028] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[27654.639031] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[27654.639035] Call Trace:
-[27654.639044]  dbgp_exit+0x1c/0xa1a [g_dbgp]
-[27654.639054]  __do_sys_delete_module.constprop.0+0x144/0x260
-[27654.639066]  ? call_rcu+0xe/0x10
-[27654.639073]  __x64_sys_delete_module+0x12/0x20
-[27654.639081]  do_syscall_64+0x61/0xb0
-[27654.639092]  ? exit_to_user_mode_loop+0xec/0x160
-[27654.639098]  ? exit_to_user_mode_prepare+0x37/0xb0
-[27654.639104]  ? syscall_exit_to_user_mode+0x27/0x50
-[27654.639110]  ? __x64_sys_close+0x12/0x40
-[27654.639119]  ? do_syscall_64+0x6e/0xb0
-[27654.639126]  ? exit_to_user_mode_prepare+0x37/0xb0
-[27654.639132]  ? syscall_exit_to_user_mode+0x27/0x50
-[27654.639137]  ? __x64_sys_newfstatat+0x1e/0x20
-[27654.639146]  ? do_syscall_64+0x6e/0xb0
-[27654.639154]  ? exc_page_fault+0x8f/0x170
-[27654.639159]  ? asm_exc_page_fault+0x8/0x30
-[27654.639166]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-[27654.639173] RIP: 0033:0x7faa194a4b2b
-[27654.639179] Code: 73 01 c3 48 8b 0d 3d 73 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 0d 73 0c 00 f7 d8 64 89 01 48
-[27654.639185] RSP: 002b:00007ffc840d0578 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
-[27654.639191] RAX: ffffffffffffffda RBX: 000056060f9f4e70 RCX: 00007faa194a4b2b
-[27654.639194] RDX: 0000000000000000 RSI: 0000000000000800 RDI: 000056060f9f4ed8
-[27654.639197] RBP: 000056060f9f4e70 R08: 0000000000000000 R09: 0000000000000000
-[27654.639200] R10: 00007faa1951eac0 R11: 0000000000000206 R12: 000056060f9f4ed8
-[27654.639203] R13: 0000000000000000 R14: 000056060f9f4ed8 R15: 00007ffc840d06c8
-[27654.639219] ---[ end trace 8dd0ea0bb32ce94a ]---
+Do you really expect Sierra do to something sensible? According to their=20
+documentation functions are matched by interface numbers.
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- drivers/usb/gadget/function/u_serial.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+They still use broken interface descriptors with holes in interface numberi=
+ng=20
+(i.e. interface number 2 does not exist, which violates the USB standard).
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index 1e59204..83fb82c 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1198,7 +1198,7 @@ void gserial_free_line(unsigned char port_num)
- 	struct gs_port	*port;
- 
- 	mutex_lock(&ports[port_num].lock);
--	if (WARN_ON(!ports[port_num].port)) {
-+	if (!ports[port_num].port) {
- 		mutex_unlock(&ports[port_num].lock);
- 		return;
- 	}
--- 
-2.7.4
+Regards, Stefan
 
+
+lsusb -v -d 1199:
+
+
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.10
+  bDeviceClass            0=20
+  bDeviceSubClass         0=20
+  bDeviceProtocol         0=20
+  bMaxPacketSize0        64
+  idVendor           0x1199 Sierra Wireless, Inc.
+  idProduct          0x90d3=20
+  bcdDevice            0.06
+  iManufacturer           1 Sierra Wireless, Incorporated
+  iProduct                2 Sierra Wireless EM9191
+  iSerial                 3 8W<nnnnnnnnnnnnn>
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x00a7
+    bNumInterfaces          4
+    bConfigurationValue     1
+    iConfiguration          4=20
+    bmAttributes         0xa0
+      (Bus Powered)
+      Remote Wakeup
+    MaxPower              500mA
+    Interface Association:
+      bLength                 8
+      bDescriptorType        11
+      bFirstInterface         0
+      bInterfaceCount         2
+      bFunctionClass          2 Communications
+      bFunctionSubClass      14=20
+      bFunctionProtocol       0=20
+      iFunction               0=20
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass         2 Communications
+      bInterfaceSubClass     14=20
+      bInterfaceProtocol      0=20
+      iInterface              0=20
+      CDC Header:
+        bcdCDC               1.10
+      CDC Union:
+        bMasterInterface        0
+        bSlaveInterface         1=20
+      CDC MBIM:
+        bcdMBIMVersion       1.00
+        wMaxControlMessage   4096
+        bNumberFilters       32
+        bMaxFilterSize       128
+        wMaxSegmentSize      2048
+        bmNetworkCapabilities 0x20
+          8-byte ntb input size
+      CDC MBIM Extended:
+        bcdMBIMExtendedVersion           1.00
+        bMaxOutstandingCommandMessages     64
+        wMTU                             1500
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           0
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0=20
+      bInterfaceProtocol      2=20
+      iInterface              0=20
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       1
+      bNumEndpoints           2
+      bInterfaceClass        10 CDC Data
+      bInterfaceSubClass      0=20
+      bInterfaceProtocol      2=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0f  EP 15 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass      0=20
+      bInterfaceProtocol      0=20
+      iInterface              0=20
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol     48=20
+      iInterface              0=20
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+
+
+
+
+=2D-=20
+Stefan Br=FCns  /  Bergstra=DFe 21  /  52062 Aachen
+home: +49 241 53809034     mobile: +49 151 50412019
+--nextPart1733362.ex2yW7nU1P
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQSwWRWIpJbl0W4DemNvf0o9jP6qUwUCYN3tHgAKCRBvf0o9jP6q
+U1tlAKCCXZqbC4n9AsvLYyyKw7c2NJIrhwCfSUJaDw5xKPKfEcLDkb1OPPC4RnU=
+=lS7s
+-----END PGP SIGNATURE-----
+
+--nextPart1733362.ex2yW7nU1P--
