@@ -2,51 +2,51 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E89B3B914C
+	by mail.lfdr.de (Postfix) with ESMTP id A806E3B914D
 	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 13:48:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236262AbhGALvW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 07:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
+        id S236274AbhGALvX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 07:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236156AbhGALvW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 07:51:22 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC6C061756
-        for <linux-usb@vger.kernel.org>; Thu,  1 Jul 2021 04:48:52 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id h4so5820367pgp.5
-        for <linux-usb@vger.kernel.org>; Thu, 01 Jul 2021 04:48:52 -0700 (PDT)
+        with ESMTP id S236156AbhGALvX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 07:51:23 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F0DC061756
+        for <linux-usb@vger.kernel.org>; Thu,  1 Jul 2021 04:48:53 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 22-20020a17090a0c16b0290164a5354ad0so6781588pjs.2
+        for <linux-usb@vger.kernel.org>; Thu, 01 Jul 2021 04:48:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VJ88TBEkn9DMUr5XtkGsO2dQ2TXYCRQIgpV85RpU7YE=;
-        b=SO15mV7G3HfjlbW57e8b1Pmok9WFuGrdbXOsWMnIXoMgw7Wvp6kMUQBM9e8S3vJuHd
-         ckvqdfTRbL5zm6EdXK5rO3O9JXNgbC/S2JJ4FWCNxj5oE3uEhvvDVnEXsfMLirF8u/kx
-         J2yxv/+ZD2aKMq1XbnxbUnJvUxkCA8CnrmeZIvojcWbjo30yllYcltlCU9QBKM5DhdxY
-         YXvJ1RegNmTIR6IdDBLCy9UUbFXNJbDIRgVE8EXKPdsZYdPgxo48LTdJMSfRWkS1gJAj
-         6qh5kHIiyHiqf5wS6FP7YCNV0lCWgmuwxGyxne/tfYMMWNx7NMHiEKL0n9tvVZcWf6YW
-         ZlPQ==
+        bh=uV014lyWot4q3dxJvgp7qp4hRNRtbOV39xG3WiDgjAA=;
+        b=boitMiY6+yRilBgegCnp0jclEgFE/fEhk7DTEia3CbqWPILmlpFPou4y5fdncqJllr
+         ZWRLvlReyDCGPgpjDervSm7lg7ZRxwGs3jZWO/yDaNR+Oa5+prXMjgsmlkQyJI4pDh2B
+         t9ck43tZXS1NZdrQss73iJeBs8zSZxnlbZHZ2FH0FZIPBp9bnieUK/86Gp6sWFBfep3X
+         cEWCa+stFwOVw91bLuBVFTLlp3+jReFbGgMfAXmlQtabuAEtrxP+J2PviRmhqzlqI/sB
+         p5QD+d86e+ZolsZMlKrvB96EWZyn4oK+DO2+i0X6S4Vkd3ov5/DsybmyT0C365FpQFUc
+         S/PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VJ88TBEkn9DMUr5XtkGsO2dQ2TXYCRQIgpV85RpU7YE=;
-        b=Vb/AKWb7u346QpHMNQrne7Znx8Xy2CeraHpHCdWLP4AIyoXdfy3cvTcc6uNlWzBmH/
-         i2iPXvRzCgwKxSqJnZiaMFwuBs2Yzkl2vIi5lF33gaxE6I0q0lzDcRRK8wJUkt6iLwsV
-         9fWAPzXKSlC31jQaHSUcOhfrivuJ/nC6vLAFCHqEXeeOiJmsDCjej3C37KSiDQD+qDHU
-         CnHqlU8xC0De4N0sMe4EvCSbhv0RzlZ6NvC0hK9Qdm4C+8v2HG9d5gAhYxJ/E0phx21V
-         LmqIKM02+KrC3XzXBEMZwJ3nlc50ZXXhCAXI4nnoNCuXuyJHQ6OsJGnwRfOZ/Bi5F6Ov
-         2+3g==
-X-Gm-Message-State: AOAM5317ncZEuAEkap4EgmvID4s2s7qxNCXk4n5cg0FqFEkByrWJRUzF
-        ZkLMLeuC8zrvtSMG7jqYSiM=
-X-Google-Smtp-Source: ABdhPJwEZ4q4k6Qy+fXaPug6E9AW7PdWT11XpLDquKdcH43+5YV3wtwqV0khQIVc0C8moCrDeD23KQ==
-X-Received: by 2002:a65:57cc:: with SMTP id q12mr39128085pgr.155.1625140131676;
-        Thu, 01 Jul 2021 04:48:51 -0700 (PDT)
+        bh=uV014lyWot4q3dxJvgp7qp4hRNRtbOV39xG3WiDgjAA=;
+        b=nFO4ZYqDPdRT3wuLUWBgEsjhNqc8vJAG0sSzOsqhNyxzloabMpGMwt5WwBt+W3YbZU
+         q/0E4CxHzSbPExDyUv+eC187RyE6FgJImf8+HXLHeYUbHwQ2q7rG90osfjrSEeyXo8TR
+         OA018hQXu8Y2GLLYAwnhCokJ5vTihz1z/ym6G4H5BeBsZ9tgfYiDfxZ+6u+mLPFX9w6b
+         itscvsT3kQKe4a3327PIjbLLvrkbP11LLyInIuFhV6MqZqEBmQ7+sKFK8Adx0s80lBuh
+         sxN38y3/Seup44z5et+FexMJCbS4ntqBpws+xERYvE8eePbK67lUJSIR/RvSAeDUy0i9
+         /y7w==
+X-Gm-Message-State: AOAM531cGNOK6Ib/4l3dkxQYBtuL0+yvYpqBUumql8ieu7knmi/LdRQx
+        7KLArJTT8BQ1EK83xc0Pano=
+X-Google-Smtp-Source: ABdhPJyPyhEiQrlqPqDi+zfmDaBnrTqlpF71Idbpr5PYH4+729aEXYo0FQaTtxXQerQW6iwPuYHibw==
+X-Received: by 2002:a17:90a:e7d1:: with SMTP id kb17mr9357563pjb.95.1625140133050;
+        Thu, 01 Jul 2021 04:48:53 -0700 (PDT)
 Received: from athina.mtv.corp.google.com ([2620:15c:211:200:6c1:7d8f:dfdc:fc1e])
-        by smtp.gmail.com with ESMTPSA id w2sm24600601pjq.5.2021.07.01.04.48.50
+        by smtp.gmail.com with ESMTPSA id w2sm24600601pjq.5.2021.07.01.04.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Jul 2021 04:48:51 -0700 (PDT)
+        Thu, 01 Jul 2021 04:48:52 -0700 (PDT)
 From:   =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <zenczykowski@gmail.com>
 To:     =?UTF-8?q?Maciej=20=C5=BBenczykowski?= <maze@google.com>
 Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
@@ -55,9 +55,9 @@ Cc:     Linux USB Mailing List <linux-usb@vger.kernel.org>,
         Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Lorenzo Colitti <lorenzo@google.com>
-Subject: [PATCH 3/6] usb: gadget: f_ncm: remove check for NULL skb_tx_data in timer function
-Date:   Thu,  1 Jul 2021 04:48:31 -0700
-Message-Id: <20210701114834.884597-3-zenczykowski@gmail.com>
+Subject: [PATCH 4/6] usb: gadget: f_ncm: remove spurious if statement
+Date:   Thu,  1 Jul 2021 04:48:32 -0700
+Message-Id: <20210701114834.884597-4-zenczykowski@gmail.com>
 X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
 In-Reply-To: <20210701114834.884597-1-zenczykowski@gmail.com>
 References: <20210701114834.884597-1-zenczykowski@gmail.com>
@@ -70,11 +70,23 @@ X-Mailing-List: linux-usb@vger.kernel.org
 
 From: Maciej Żenczykowski <maze@google.com>
 
-This condition is already checked for in ncm_wrap_ntb(),
-except that that check is done with eth_dev->lock held
-(it is grabbed by eth_start_xmit).
+the current logic is:
 
-It's best to not be reaching into ncm struct without locks held.
+  struct sk_buff  *skb2 = NULL;
+  ...
+
+  if (!skb && !ncm->skb_tx_data)
+    return NULL;
+
+  if (skb) {
+    ...
+  } else if (ncm->skb_tx_data)
+    ...
+  }
+
+  return skb2;
+
+Which means that first if statement is simply not needed.
 
 Cc: Brooke Basile <brookebasile@gmail.com>
 Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
@@ -83,23 +95,23 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Lorenzo Colitti <lorenzo@google.com>
 Signed-off-by: Maciej Żenczykowski <maze@google.com>
 ---
- drivers/usb/gadget/function/f_ncm.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_ncm.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/drivers/usb/gadget/function/f_ncm.c b/drivers/usb/gadget/function/f_ncm.c
-index e45a938424a4..77f55b3c805a 100644
+index 77f55b3c805a..cab17ae4fa34 100644
 --- a/drivers/usb/gadget/function/f_ncm.c
 +++ b/drivers/usb/gadget/function/f_ncm.c
-@@ -1156,8 +1156,7 @@ static enum hrtimer_restart ncm_tx_timeout(struct hrtimer *data)
- 	struct f_ncm *ncm = container_of(data, struct f_ncm, task_timer);
- 	struct net_device *netdev = READ_ONCE(ncm->netdev);
+@@ -1025,9 +1025,6 @@ static struct sk_buff *ncm_wrap_ntb(struct gether *port,
+ 	const int rem = le16_to_cpu(ntb_parameters.wNdpInPayloadRemainder);
+ 	const int dgram_idx_len = 2 * 2 * opts->dgram_item_len;
  
--	/* Only send if data is available. */
--	if (netdev && ncm->skb_tx_data) {
-+	if (netdev) {
- 		/* XXX This allowance of a NULL skb argument to ndo_start_xmit
- 		 * XXX is not sane.  The gadget layer should be redesigned so
- 		 * XXX that the dev->wrap() invocations to build SKBs is transparent
+-	if (!skb && !ncm->skb_tx_data)
+-		return NULL;
+-
+ 	if (skb) {
+ 		/* Add the CRC if required up front */
+ 		if (ncm->is_crc) {
 -- 
 2.32.0.93.g670b81a890-goog
 
