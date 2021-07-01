@@ -2,92 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D5E3B923F
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 15:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C79353B9286
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 15:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbhGAN3G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 09:29:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40034 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230005AbhGAN3F (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Jul 2021 09:29:05 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B692261417;
-        Thu,  1 Jul 2021 13:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625145995;
-        bh=KE08IZ7N2zGxao9rEaDNwWtGrUCeXJ7OIw+RZIM0zO0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GoA8R/OrX31Xp7phjzlnKyn5dy9p8dTsHF2AL0FSbKKDcVIdrPJKWfNv24hD1ZNjd
-         pz055uJeRm05yW2OKnly9+QykHCAkpTcYhSnlUliWCVrRryWgzx4jILXXZ2RvJCWYA
-         XPvVgUM0wlpJN7YJV0kMX3gnKSSckNAcNHibVu12NSDu5HKUOXSOyfmvFSaLF5rwsy
-         l5/eU8zAHlS77ouQ8CUTTRNQl370GKHC4Le1OX5mTJc1LdEhN2bUk+u75Np4JClWYZ
-         upnerC74FpqaLdnXGH3GnaKf9k5zPpuWv8Ipy+/7ystk6in6Ah0lmeMfk48EYNLa4o
-         ck8m4gHpSZS4Q==
-Date:   Thu, 1 Jul 2021 15:26:29 +0200
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linuxarm@huawei.com, mauro.chehab@huawei.com,
-        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-usb@vger.kernel.org,
-        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: repair reference in USB IP DRIVER FOR
- HISILICON KIRIN 970
-Message-ID: <20210701152629.66a47fe2@coco.lan>
-In-Reply-To: <20210701093903.28733-1-lukas.bulwahn@gmail.com>
-References: <20210701093903.28733-1-lukas.bulwahn@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        id S232333AbhGAN5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 09:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231915AbhGAN5h (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 09:57:37 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B3C061762;
+        Thu,  1 Jul 2021 06:55:06 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id k10so11912899lfv.13;
+        Thu, 01 Jul 2021 06:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0VL4IXxd5AnZL1Kenx9fq6N8MYqIdB30L/yz2TQItQ8=;
+        b=Af5CwAOdB2vCyDpMdR43RknHlmbUBESopoD3qTgU3+XlT9dKUMkFNNi9z21EVTCFh0
+         kQcvi+i0NbDIRMdStKIft9x6Zl7VepkmE9uMZhqDLChO11ADD1AN564LS3pO3TtNkQJc
+         BiCUq6xfuafu9rZDWbVl4wxdvfAlLVW2z4eZm2teDxQcG1tHRmbbtIV61PItPRK1K5eV
+         gsHrpyJcRTIKD4ZC11IQoMfgFA2MN/AeMieluJ3M202LIoLtTCN1LIpKYkQmEovnU/p4
+         MEqgqpkHvLnawqp531g3/x27DCq63gOLVJd/LBtwJOb/WgHduApC40iJotBVh2c//yJo
+         95xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0VL4IXxd5AnZL1Kenx9fq6N8MYqIdB30L/yz2TQItQ8=;
+        b=g5vEZBHk3mjlE2FTpxeS5q1ekObZwOJhL0RdTfB1d7KP70y35Axj43ZTQ1vt6mkUYl
+         RM5W59EdTkP0nDQPxVjnuFrei672TCjepUN4NMKdmAV1+qFb7Cb3CSAGb6yyjcFxDq0S
+         oUXqEHLHhD1KZbr1Avj+J00NwTmgswI25Xm1mC45xdTYTfr0CelSTPUpw0usEbg1lTmY
+         h5C/T3pn3NInjND0X9TBz8DnAF5PqD56OeTKZP2mSoXmb6F20BY6/wyIoYUcc5OnTpsU
+         mCYJH5bhZbQ6h3N0jWAMi0T55brRhj87ZJTaYzu/iMuI5JCy513VGQMrBRUq4fZR1Sqs
+         5e/Q==
+X-Gm-Message-State: AOAM530zsx8F2zuvv1kXw9dyHAfg38y39v70auQFEFnfzlkMla+lXJLZ
+        HPXFaqzCJzDCSHXPI1+GBVGzrze2t90=
+X-Google-Smtp-Source: ABdhPJzJ7Tg9H51VzbUqiuSbZJdvpdDBjZQ84opVMhpLNLjdh1cOuj+PWDDACLDZVp+3+gc/Gr+e1A==
+X-Received: by 2002:a05:6512:1683:: with SMTP id bu3mr33422652lfb.520.1625147704518;
+        Thu, 01 Jul 2021 06:55:04 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.googlemail.com with ESMTPSA id k11sm9694ljj.132.2021.07.01.06.55.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Jul 2021 06:55:03 -0700 (PDT)
+Subject: Re: [PATCH v1 04/12] usb: phy: tegra: Support OTG mode programming
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+References: <20210701022405.10817-1-digetx@gmail.com>
+ <20210701022405.10817-5-digetx@gmail.com>
+Message-ID: <12f5b8cc-982e-f112-e0a4-21afdf3bce06@gmail.com>
+Date:   Thu, 1 Jul 2021 16:55:03 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210701022405.10817-5-digetx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Em Thu,  1 Jul 2021 11:39:03 +0200
-Lukas Bulwahn <lukas.bulwahn@gmail.com> escreveu:
-
-> Commit 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into
-> phy") moves phy-hi3670-usb3.c from ./drivers/staging/hikey9xx/ to
-> ./drivers/phy/hisilicon/, but the new file entry in MAINTAINERS refers to
-> ./drivers/phy/hisilicon/phy-kirin970-usb3.c.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
-> 
->   warning: no file matches  F:  drivers/phy/hisilicon/phy-kirin970-usb3.c
-> 
-> Repair the file entry by referring to the right location.
-> 
-> Fixes: 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into phy")
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> applies cleanly on next-20210701
-> 
-> Mauro, please ack.
-
-Acked-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-
-> Greg, please pick this non-urgent minor fix on top of commit 8de6b7edd493
-> 
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 66d047dc6880..a4e0c20b416a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19153,7 +19153,7 @@ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
->  L:	linux-usb@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
-> -F:	drivers/phy/hisilicon/phy-kirin970-usb3.c
-> +F:	drivers/phy/hisilicon/phy-hi3670-usb3.c
+01.07.2021 05:23, Dmitry Osipenko пишет:
+>  static int tegra_usb_phy_init(struct usb_phy *u_phy)
+> @@ -967,12 +1057,26 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy)
+>  			goto disable_vbus;
+>  	}
 >  
->  USB ISP116X DRIVER
->  M:	Olav Kongas <ok@artecdesign.ee>
+> +	err = tegra_usb_phy_configure_pmc(phy);
+> +	if (err)
+> +		goto close_phy;
+> +
+>  	err = tegra_usb_phy_power_on(phy);
+>  	if (err)
+>  		goto close_phy;
+>  
+> +	if (phy->irq > 0) {
+> +		err = request_irq(phy->irq, tegra_usb_phy_isr, IRQF_SHARED,
+> +				  dev_name(phy->u_phy.dev), phy);
+> +		if (err)
+> +			goto pwr_off_phy;
+> +	}
 
+There were reports that this patch was casing an unhandled USB interrupt
+event on some devices. I thought this problem was fixed already, but
+looking again at the offending kernel log again, it still should be a
+problem.
 
-
-Thanks,
-Mauro
+The interrupt fires from the usb_add_hcd() of the CI driver before CI
+driver have requested interrupt in ci_hdrc_probe(). So either CI driver
+should request interrupt earlier or Tegra PHY driver should keep shared
+interrupt disabled after requesting it, the latter variant should be
+more robust. I'll improve it in v2.
