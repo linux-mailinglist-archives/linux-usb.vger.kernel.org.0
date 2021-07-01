@@ -2,123 +2,101 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F046E3B8F7B
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 11:07:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BCE3B8FE0
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 11:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235737AbhGAJKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 05:10:07 -0400
-Received: from mail-ua1-f45.google.com ([209.85.222.45]:35600 "EHLO
-        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235088AbhGAJKH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 05:10:07 -0400
-Received: by mail-ua1-f45.google.com with SMTP id n61so2196631uan.2;
-        Thu, 01 Jul 2021 02:07:37 -0700 (PDT)
+        id S235352AbhGAJls (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 05:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235296AbhGAJls (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 05:41:48 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02BD7C061756;
+        Thu,  1 Jul 2021 02:39:18 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id m18so7359533wrv.2;
+        Thu, 01 Jul 2021 02:39:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=EteEmF3Lp/VaCzgm6zJMhc5umO2ASKXQnNmmMqr1tyY=;
+        b=n27K8xSc5i9k4pRnthrnVcOCeJ7Nl2hOJLEBy4pNnYc/TBewzXbVZfhTzlnkCiSZkH
+         +p1Ml12cArHwaAQuucyF4Y7bsC9WQLu3qOFSN5G8liifR9f/TYUXxg8Zr9qwoW21817z
+         Ljigm3UGNACmRDtyQJ+XcTFhI423ymHuXLbP7HECNQFoy7CaNNRBzmQyCvjEfpgToYyj
+         okdbdH9iH20L5JXc+M0diFvNYFBft9LDb1decwb2boaSbwXKriengXBtHtyruoR7vpHQ
+         dkAI1A67aUvw+wzWs7fllAZ6Zd/rVs2+9pGhOTttsJCzoF2q7idqNXde1mPxDGQ1sBJ0
+         kFEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sIqUpSy3WHJ9LFXbxhxyvcyP769k+GgXVkD4XIt1npQ=;
-        b=fC8ODdPVYjPREdI8THrYL44SFYEIxCc4X0Kuk8IFNYjUeCsCXJ8+40YGdOEEXlOFWw
-         v8fp1ZM4PwyOhOXYjI2AW4IZkf6EXZOrY/r/CsKGxG53ibDEiL8G18m7PfSSpPDLO0hK
-         kMly2if8eHYqD+pYsTmLkp5JGyJQ6Sf6k5JGP9GHyPvvmzuu7HwRnnEFsoWEbCrKal0+
-         QRHE/hKVL3Zpr13MJSSG3GTRoPwfHKfElyxN9Zv+vOOhyWHHtcbxyrDXaVHFRFvJYZtW
-         kilK62qy9M0q8FOS3geWNVtPQF+W2oxbsyesLTDtLXxLj8GDu8j7huEGQ9nNvOUtvl4b
-         1WdQ==
-X-Gm-Message-State: AOAM533nzpXIjobhj3VRnrKO1iKPxBuShRPI2iM8AbTioY+fOkT3FH3t
-        +fwqT0Y3a9VeVBCEKiWVimEufMwoXrNuicBSbybdeVMz0Z+IZg==
-X-Google-Smtp-Source: ABdhPJwSnd+W/J0P9TXelJ4FicEnSI+QCWCk1Q85kOlLiIK0Xw+UCgAVpcQfY9FmPzhd6caL6KHABcksAAv39MCVf50=
-X-Received: by 2002:ab0:484b:: with SMTP id c11mr38743288uad.100.1625130456571;
- Thu, 01 Jul 2021 02:07:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210630173042.186394-1-aford173@gmail.com> <20210630173042.186394-2-aford173@gmail.com>
-In-Reply-To: <20210630173042.186394-2-aford173@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 1 Jul 2021 11:07:25 +0200
-Message-ID: <CAMuHMdXoWZMj8+LhUPSpqa4t-G1WrW-wfOy3XzEDe0ihSKQkCw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] usb: renesas_usbhs: Enable support for more than two clks
-To:     Adam Ford <aford173@gmail.com>
-Cc:     USB list <linux-usb@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=EteEmF3Lp/VaCzgm6zJMhc5umO2ASKXQnNmmMqr1tyY=;
+        b=IwSvdeQXicPNvWItp3sWubunMdOyOM4WXaZtUDnwE/rp2OlzA00haeNdAm+9IpQKr+
+         pb7wzWTs1clYpdqA9HQpLvX4S+FoKiMClI/NOMbgzpgtjrBb9K3wooBNYhUjU5s8zqQo
+         L4ys6UXr+PzYOUrCuF15GX7PYLafD1oklqIKcATagL2x8G0UpGFh6EcT3lbeIVwuT81B
+         GxU63cicS4IyWYf0tQK8CuoH9zRIVAm096gUJTnIVyeWa5J2lcF1A0aXn0E7b/v6v214
+         8rzhHXG3sIJfYOwUUqgerIgwFCBqeDoelXrTgd50Z6znmNNlm+4TniGNTT4DE48s7VM2
+         u3Pg==
+X-Gm-Message-State: AOAM531AvampGsptftqReZw5rCQcnQmYXIeZa2QZvvl6lmLNlL6L8WfB
+        kP21mtCinWz1z5pFsnV/UOfKBaretYk=
+X-Google-Smtp-Source: ABdhPJy1ZxB6OSrNUo8EIlwIhP2R2Oh066AMEgk+CCD2AjW50J2Uohgej+UhDxh5J4YfsYDMcgb8FA==
+X-Received: by 2002:a5d:6841:: with SMTP id o1mr14964784wrw.370.1625132356515;
+        Thu, 01 Jul 2021 02:39:16 -0700 (PDT)
+Received: from felia.fritz.box ([2001:16b8:2de7:3e00:21:6759:f8f2:826e])
+        by smtp.gmail.com with ESMTPSA id k6sm22370164wms.8.2021.07.01.02.39.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Jul 2021 02:39:15 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        linux-phy@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-usb@vger.kernel.org,
+        Ralf Ramsauer <ralf.ramsauer@oth-regensburg.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: repair reference in USB IP DRIVER FOR HISILICON KIRIN 970
+Date:   Thu,  1 Jul 2021 11:39:03 +0200
+Message-Id: <20210701093903.28733-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Adam,
+Commit 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into
+phy") moves phy-hi3670-usb3.c from ./drivers/staging/hikey9xx/ to
+./drivers/phy/hisilicon/, but the new file entry in MAINTAINERS refers to
+./drivers/phy/hisilicon/phy-kirin970-usb3.c.
 
-Thanks for your patch!
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains:
 
-On Wed, Jun 30, 2021 at 7:30 PM Adam Ford <aford173@gmail.com> wrote:
-> The RZ/G2 boards expect there to be an external clock reference for
-> USBHS controller, but this could be set by a programmable clock.
-> For those devices using a programmable clock, there need to be two
-> additional clocks beyond the internal reference clocks:
->
-> rcar-usb2-clock-sel to specify we using an external clock, and
-> the external reference clock itself.
+  warning: no file matches  F:  drivers/phy/hisilicon/phy-kirin970-usb3.c
 
-Something is missing in the above sentence?
+Repair the file entry by referring to the right location.
 
->
-> Make this driver dynamically enable all the clocks assigned to it
-> instead of only enabling the first one or two clocks.
->
-> Signed-off-by: Adam Ford <aford173@gmail.com>
->
-> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> index 3af91b2b8f76..255e4bd68ed3 100644
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -297,6 +297,8 @@ static bool usbhsc_is_multi_clks(struct usbhs_priv *priv)
->
->  static int usbhsc_clk_get(struct device *dev, struct usbhs_priv *priv)
->  {
-> +       unsigned int i;
-> +
->         if (!usbhsc_is_multi_clks(priv))
->                 return 0;
->
-> @@ -309,11 +311,13 @@ static int usbhsc_clk_get(struct device *dev, struct usbhs_priv *priv)
->          * To backward compatibility with old DT, this driver checks the return
->          * value if it's -ENOENT or not.
->          */
-> -       priv->clks[1] = of_clk_get(dev_of_node(dev), 1);
-> -       if (PTR_ERR(priv->clks[1]) == -ENOENT)
-> -               priv->clks[1] = NULL;
-> -       else if (IS_ERR(priv->clks[1]))
-> -               return PTR_ERR(priv->clks[1]);
-> +       for (i = 1; i < ARRAY_SIZE(priv->clks); i++) {
-> +               priv->clks[1] = of_clk_get(dev->of_node, i);
-> +               if (PTR_ERR(priv->clks[i]) == -ENOENT)
-> +                       priv->clks[i] = NULL;
-> +               else if (IS_ERR(priv->clks[i]))
-> +                       return PTR_ERR(priv->clks[i]);
-> +       }
+Fixes: 8de6b7edd493 ("phy: phy-hi3670-usb3: move driver from staging into phy")
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+applies cleanly on next-20210701
 
-This is identical to the current code, as ARRAY_SIZE(priv->clks) == 2.
-Probably you wanted to increase usbhs_priv.clks[], too?
+Mauro, please ack.
+Greg, please pick this non-urgent minor fix on top of commit 8de6b7edd493
 
-Does it make sense to start using the clk_bulk*() API?
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->         return 0;
->  }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 66d047dc6880..a4e0c20b416a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19153,7 +19153,7 @@ M:	Mauro Carvalho Chehab <mchehab@kernel.org>
+ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/phy/hisilicon,hi3670-usb3.yaml
+-F:	drivers/phy/hisilicon/phy-kirin970-usb3.c
++F:	drivers/phy/hisilicon/phy-hi3670-usb3.c
+ 
+ USB ISP116X DRIVER
+ M:	Olav Kongas <ok@artecdesign.ee>
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
