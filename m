@@ -2,109 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C79353B9286
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 15:55:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BA43B9299
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 16:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232333AbhGAN5h (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 09:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231915AbhGAN5h (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 09:57:37 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644B3C061762;
-        Thu,  1 Jul 2021 06:55:06 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id k10so11912899lfv.13;
-        Thu, 01 Jul 2021 06:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=0VL4IXxd5AnZL1Kenx9fq6N8MYqIdB30L/yz2TQItQ8=;
-        b=Af5CwAOdB2vCyDpMdR43RknHlmbUBESopoD3qTgU3+XlT9dKUMkFNNi9z21EVTCFh0
-         kQcvi+i0NbDIRMdStKIft9x6Zl7VepkmE9uMZhqDLChO11ADD1AN564LS3pO3TtNkQJc
-         BiCUq6xfuafu9rZDWbVl4wxdvfAlLVW2z4eZm2teDxQcG1tHRmbbtIV61PItPRK1K5eV
-         gsHrpyJcRTIKD4ZC11IQoMfgFA2MN/AeMieluJ3M202LIoLtTCN1LIpKYkQmEovnU/p4
-         MEqgqpkHvLnawqp531g3/x27DCq63gOLVJd/LBtwJOb/WgHduApC40iJotBVh2c//yJo
-         95xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=0VL4IXxd5AnZL1Kenx9fq6N8MYqIdB30L/yz2TQItQ8=;
-        b=g5vEZBHk3mjlE2FTpxeS5q1ekObZwOJhL0RdTfB1d7KP70y35Axj43ZTQ1vt6mkUYl
-         RM5W59EdTkP0nDQPxVjnuFrei672TCjepUN4NMKdmAV1+qFb7Cb3CSAGb6yyjcFxDq0S
-         oUXqEHLHhD1KZbr1Avj+J00NwTmgswI25Xm1mC45xdTYTfr0CelSTPUpw0usEbg1lTmY
-         h5C/T3pn3NInjND0X9TBz8DnAF5PqD56OeTKZP2mSoXmb6F20BY6/wyIoYUcc5OnTpsU
-         mCYJH5bhZbQ6h3N0jWAMi0T55brRhj87ZJTaYzu/iMuI5JCy513VGQMrBRUq4fZR1Sqs
-         5e/Q==
-X-Gm-Message-State: AOAM530zsx8F2zuvv1kXw9dyHAfg38y39v70auQFEFnfzlkMla+lXJLZ
-        HPXFaqzCJzDCSHXPI1+GBVGzrze2t90=
-X-Google-Smtp-Source: ABdhPJzJ7Tg9H51VzbUqiuSbZJdvpdDBjZQ84opVMhpLNLjdh1cOuj+PWDDACLDZVp+3+gc/Gr+e1A==
-X-Received: by 2002:a05:6512:1683:: with SMTP id bu3mr33422652lfb.520.1625147704518;
-        Thu, 01 Jul 2021 06:55:04 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id k11sm9694ljj.132.2021.07.01.06.55.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Jul 2021 06:55:03 -0700 (PDT)
-Subject: Re: [PATCH v1 04/12] usb: phy: tegra: Support OTG mode programming
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20210701022405.10817-1-digetx@gmail.com>
- <20210701022405.10817-5-digetx@gmail.com>
-Message-ID: <12f5b8cc-982e-f112-e0a4-21afdf3bce06@gmail.com>
-Date:   Thu, 1 Jul 2021 16:55:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232631AbhGAOED (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 10:04:03 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49277 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S232076AbhGAOEC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 10:04:02 -0400
+Received: (qmail 772620 invoked by uid 1000); 1 Jul 2021 10:01:31 -0400
+Date:   Thu, 1 Jul 2021 10:01:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Claudiu.Beznea@microchip.com
+Cc:     gregkh@linuxfoundation.org, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, Ludovic.Desroches@microchip.com,
+        Cristian.Birsan@microchip.com, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-at91: suspend/resume ports after/before
+ OHCI accesses
+Message-ID: <20210701140131.GA772273@rowland.harvard.edu>
+References: <20210623135915.GB491169@rowland.harvard.edu>
+ <a5c68849-a48c-5224-7ba3-1ad44e0d9874@microchip.com>
+ <20210623141907.GC491169@rowland.harvard.edu>
+ <8bff20a7-8eb8-276a-086e-f1729fbbdbe4@microchip.com>
+ <20210623164148.GC499969@rowland.harvard.edu>
+ <f03ccb09-4b5e-4db7-2cf0-375d53234099@microchip.com>
+ <20210624132304.GA528247@rowland.harvard.edu>
+ <856493cd-9d53-24b3-8e8b-c3c366f282bd@microchip.com>
+ <20210630182137.GA743974@rowland.harvard.edu>
+ <6a33e55d-b101-cda2-7f53-ce6e5e6ace93@microchip.com>
 MIME-Version: 1.0
-In-Reply-To: <20210701022405.10817-5-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6a33e55d-b101-cda2-7f53-ce6e5e6ace93@microchip.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-01.07.2021 05:23, Dmitry Osipenko пишет:
->  static int tegra_usb_phy_init(struct usb_phy *u_phy)
-> @@ -967,12 +1057,26 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy)
->  			goto disable_vbus;
->  	}
->  
-> +	err = tegra_usb_phy_configure_pmc(phy);
-> +	if (err)
-> +		goto close_phy;
-> +
->  	err = tegra_usb_phy_power_on(phy);
->  	if (err)
->  		goto close_phy;
->  
-> +	if (phy->irq > 0) {
-> +		err = request_irq(phy->irq, tegra_usb_phy_isr, IRQF_SHARED,
-> +				  dev_name(phy->u_phy.dev), phy);
-> +		if (err)
-> +			goto pwr_off_phy;
-> +	}
+On Thu, Jul 01, 2021 at 05:45:50AM +0000, Claudiu.Beznea@microchip.com wrote:
+> On 30.06.2021 21:21, Alan Stern wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> > 
+> > On Wed, Jun 30, 2021 at 02:46:47PM +0000, Claudiu.Beznea@microchip.com wrote:
+> >> On 24.06.2021 16:23, Alan Stern wrote:
+> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >>>
+> >>> On Thu, Jun 24, 2021 at 06:40:25AM +0000, Claudiu.Beznea@microchip.com wrote:
+> >>>> On 23.06.2021 19:41, Alan Stern wrote:
+> >>>>> Are there any systems beside the SAMA7G5 and others you tested which
+> >>>>> might be affected by this patch?  Do they all work pretty much the
+> >>>>> same way?  (I want to make sure no others will be adversely affected
+> >>>>> by this change.)
+> >>>>
+> >>>> I tested it on SAMA7G5, SAMA5D2 and SAM9X60. I tested the suspend/resume
+> >>>> to/from mem. On SAMA5D2 and SAM9X60 there is no clock provided by
+> >>>> transceiver A to OHCI. I encountered no issues on tested systems. These IPs
+> >>>> are also present on SAMA5D3 and SAMA5D4 systems which I haven't tested as I
+> >>>> expect to behave as SAMA5D2 (as the clocking scheme is the same with
+> >>>> SAMA5D2). I can also try it on a SAMA5D3 (I don't have a SAMA5D4 with me at
+> >>>> the moment), tough, just to be sure nothing is broken there too.
+> >>>
+> >>> That doesn't answer my question.  I asked if there were any systems
+> >>> which might be affected by your patch, and you listed a bunch of
+> >>> systems that _aren't_ affected (that is, they continue to work
+> >>> properly).
+> >>
+> >> I wrongly understood the initial question.
+> >>
+> >>>
+> >>> What systems might run into trouble with this patch?
+> >>
+> >> These are all I haven't tested and might be affected:
+> >> AT91RM9200,
+> >> SAM9260,
+> >> SAM9261,
+> >> SAM9263,
+> >> SAM9N12,
+> >> SAM9X35,
+> >> SAM9G45.
+> >>
+> >> The last two (SAM9X35 and SAM9G45) have the same clocking scheme with
+> >> SAMA5D2 (which I tested). For the rest of them I cannot find the clocking
+> >> scheme in datasheet and don't have them to test (at least at the moment).
+> > 
+> > I see.  That seems reasonable; the others are probably the same as the
+> > ones you tested.
+> > 
+> > Did you ever answer the question that Nicolas raised back on June 9 in:
+> > 
+> >         https://marc.info/?l=linux-usb&m=162324242003349&w=2
+> 
+> Not directly. I replied previously in this thread "For run-time control
+> (via ohci_at91_hub_control()), I agree with you that
+> the current implemented approach is not healthy (taking into account the
+> clock scheme above) and the fact that we do force the ports suspend on
+> ohci_at91_hub_control()". Nicolas was referring to ohci_at91_port_suspend()
+> calls in ohci_at91_hub_control() so I agreed with him that work might need
+> to be done also for this function.
 
-There were reports that this patch was casing an unhandled USB interrupt
-event on some devices. I thought this problem was fixed already, but
-looking again at the offending kernel log again, it still should be a
-problem.
+All right.  I guess this is the best that can be done at this time.
 
-The interrupt fires from the usb_add_hcd() of the CI driver before CI
-driver have requested interrupt in ci_hdrc_probe(). So either CI driver
-should request interrupt earlier or Tegra PHY driver should keep shared
-interrupt disabled after requesting it, the latter variant should be
-more robust. I'll improve it in v2.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+Greg KH may not have the original patch still in his queue.  And in any 
+case he'll probably ask you to resubmit it after the current merge 
+window ends.
+
+Alan Stern
