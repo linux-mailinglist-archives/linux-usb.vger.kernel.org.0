@@ -2,144 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E21D3B8E58
-	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 09:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F046E3B8F7B
+	for <lists+linux-usb@lfdr.de>; Thu,  1 Jul 2021 11:07:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234812AbhGAHst (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 1 Jul 2021 03:48:49 -0400
-Received: from mail-dm6nam10on2042.outbound.protection.outlook.com ([40.107.93.42]:35109
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229906AbhGAHss (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 1 Jul 2021 03:48:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eVN1adTlQyIz/YbaGWkRQUP5xBKsaWRNi+/0kLpYPyXK3zjBYq3dZxleC+XGeuPrCTdvnsuJMlkKPvh8kjKYfChChMpuyXxINBVt1KmH2VWsWd/qcUfxQnYbl+WJLd86N28x/xqF8u1B0VR+slA8tCPe7GcHX22b3F6xSITDfETm+eJkzIfSJRlZMk2KyKYXaM0w9olnXrMLbChkodpxRhTfI5HD1eWUGft7chqMls4xP7sCXkfz4+N6Pal+dc7L402bcOg0a5jpPAnKPUzrqtYlDNHjwt0ZfLSEh/dXTIYM8bMBmumsOmKWLcwazgsqtgwXB6Saw9uk/HxFWdC5Hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RxjfN17jhp8DpRvla3TY5ju5TaMyjc69tSXueUarK68=;
- b=T6eFqxhFxX7uOrw6YOxV4rB2Nnjr2GPY49mO6/xbpfGBLi7GaYxgx+7xaEbR8bY+veC/sf9cGBvScfcgOvnMKMhBj1zN+cXTAAEOtE3H0qdMT4WKzCCqX+Z4OrXfqMm4ogxlRXmFsmvRPAJ5q8Mj8co1y9vR8oEewZK01mIK1x1IIwaMZ/XKCEQE5TYcUGs7jvMMHmid4dwvn79zsf5Xq0/eJNM4z6iFKT+bk63EmJGh050zAuAcEV0SRIEEnmyKvmd4XQyC6xPAndm+rUlGlcndGCY9Os3j1YPXhh0fpr4M3xzdOCyO3O2NhAjmz1J7FoKSUPRYyOrgiAOS+IrCVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=silabs.com; dmarc=pass action=none header.from=silabs.com;
- dkim=pass header.d=silabs.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=silabs.onmicrosoft.com; s=selector2-silabs-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RxjfN17jhp8DpRvla3TY5ju5TaMyjc69tSXueUarK68=;
- b=AtNtuK3afpnFlgElbfsxKw+n7qyc9Ty/fujHycPEyJ+EihFUgX1t5gWskIVM8ve1MBeFqu2eqjC4VJZhZmcPQ/lXOVu4VTgLsOqyStp9sGMD0RdVIhr6ZPzrs23BEH0hIhAzBi/drgG9JXHsHc8RmuzoUDIQYX67Towu3Xv0k80=
-Received: from CO1PR11MB4882.namprd11.prod.outlook.com (2603:10b6:303:97::8)
- by MWHPR1101MB2271.namprd11.prod.outlook.com (2603:10b6:301:52::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.22; Thu, 1 Jul
- 2021 07:46:14 +0000
-Received: from CO1PR11MB4882.namprd11.prod.outlook.com
- ([fe80::905b:f608:d0e6:6cf4]) by CO1PR11MB4882.namprd11.prod.outlook.com
- ([fe80::905b:f608:d0e6:6cf4%7]) with mapi id 15.20.4287.023; Thu, 1 Jul 2021
- 07:46:14 +0000
-From:   Tung Pham <Tung.Pham@silabs.com>
-To:     Johan Hovold <johan@kernel.org>
-CC:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        Pho Tran <Pho.Tran@silabs.com>,
-        Hung Nguyen <Hung.Nguyen@silabs.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: patch "USB: serial: cp210x: add support for GPIOs on CP2108"
- added to usb-next
-Thread-Topic: patch "USB: serial: cp210x: add support for GPIOs on CP2108"
- added to usb-next
-Thread-Index: AQHXaOeVhA2iY4NHiEazqc2bjICcJ6ssRT8wgAAX/QCAARa3EIAASDwAgAAHkGA=
-Date:   Thu, 1 Jul 2021 07:46:14 +0000
-Message-ID: <CO1PR11MB48827E1D157F5C8EF67361E781009@CO1PR11MB4882.namprd11.prod.outlook.com>
-References: <1624532158188214@kroah.com>
- <PH0PR11MB4888B9D24A5F90E8AA02B28B81019@PH0PR11MB4888.namprd11.prod.outlook.com>
- <YNxCBreFm7uisstJ@hovoldconsulting.com>
- <CO1PR11MB4882C876E69D61C52C42DAB981009@CO1PR11MB4882.namprd11.prod.outlook.com>
- <YN1obE99oebXaD24@hovoldconsulting.com>
-In-Reply-To: <YN1obE99oebXaD24@hovoldconsulting.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=silabs.com;
-x-originating-ip: [1.55.242.165]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b08d4e95-02d4-4470-6cb6-08d93c644db7
-x-ms-traffictypediagnostic: MWHPR1101MB2271:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR1101MB22718DD4231537C9F59079A481009@MWHPR1101MB2271.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qvwz9D2+MD89ZmndCpfkgSHgfIOaQwzwT9lsbu1p7Q+mJaCP6og3ETCQZCwTvxTCRYL+kAR9dQeaLooE0n+LmzhFlHu3/nkl65oYTMRlyc+lOLBpAZoakrVIs1U/7h2fvgzaXL5NW7y5XY7mIcJMTUQUFwbGjlLz3nUESkZhmSnmojbxTr3uugV7HvANZYFUzUHFpyHn/GYh4ARVhhP3yTieybF3kNOMRZ70ZvN+rOf009xNRgfjQyl6Uyzr/ptq6qO9x8g31jcFT6zTs9Obu06TVGd5QksARlhVR6VSbd8+RKQ1DSZXeKChcX0w2fM8jblh9gduTWgWTufwBydDug4xTVz25aU05yeS79fDafYc+WeL871btfo0MZF9Sx2S3REEoiObDp74hfHxq2iavuZOIRyt6NjhCvB70DlcPHZB4kHAU92cq++OfkgkF7OK2ZhQpOp25zSfXEu2cj7T3nfOz/nMiGAt0W0NMMZLY67/WO4mCgfMzWyEhH5A5w4HScpHwC+7drEjxsCOur2lW4pSe6CQJmrxpuHjW6lqfGWB0SpGoIv9U4jcJ8jy1boLnr4NzDIcKPfYhk3NxCwWHepv8/qG5KNbDtpHxgZQa2vPsItXz8iPNIxOi/EMnFJZYz97R7nBvnNhJc5z0OhCEg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB4882.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(376002)(39850400004)(366004)(346002)(396003)(5660300002)(122000001)(7696005)(66446008)(186003)(66556008)(64756008)(8676002)(38100700002)(26005)(2906002)(6916009)(52536014)(83380400001)(66476007)(6506007)(86362001)(9686003)(55016002)(71200400001)(316002)(478600001)(54906003)(4326008)(33656002)(66946007)(8936002)(76116006);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ytA4g4xGQ//lqm82EvXx6rAUDReYE2VDgCfzR1SvmfocENEgDo0ZZNZVPSWx?=
- =?us-ascii?Q?GFFjTfC8zoVumpt0J29ICmD2AQdqnf02g2ZOYKuhHwfgtm5bN/YFXWzrRZRp?=
- =?us-ascii?Q?aWSbDxGsizCZK3BlNWFctIykB2JGRq27dmiZttAeHMBPNy8XFkZj6+WI0ROC?=
- =?us-ascii?Q?hooikm6s6k6vG6Ud/xPI9d3W4sJxpE5VBjxtZTEiXa0NDHxH/2TAEqoS3ivL?=
- =?us-ascii?Q?5QIylYOSwcshFSIPhJhE+4Djr9Mo2O2YkZxFNSa/TmqgxNU1eVgZjEGL3rOB?=
- =?us-ascii?Q?rgI/ELSw28u6qAfawLBFUOuEvDai6W355SYk+IcNu8p27iaEtToGxjxQs5Xx?=
- =?us-ascii?Q?CFUTMHyZL/nT2Xl86kc8fCQ4zW4yLkyIf6lekfS0wIPZUJ9QOLWVDpCFx+HO?=
- =?us-ascii?Q?I3OyBryFvSy3yrt39u93jUxATdHnzmKABWOjubPYaOcjV0YZR7rdiIRs5Win?=
- =?us-ascii?Q?fLAqxumI4Iwhlbe/Jyn01xZoPwhqGuXi/w2d98CqJuVQZx5V7OFMXlo/gjV3?=
- =?us-ascii?Q?OAc9yGBrQXJZNqiEkLO/NUrffmY3FnIRk6g5m5xVLaQf1lzeVExE9OEIPwMH?=
- =?us-ascii?Q?dnmxJI3cIPa7Oxiz6UW7cs93yD/VhYA+fnSyw7wiIDA2IFz9NbTjLLxeK2WL?=
- =?us-ascii?Q?nf+26f+QKR7o434WC4wIyF12x/0ZvknKV37XZzhPsgNeqYDeSG0UY69ZTk4o?=
- =?us-ascii?Q?/vbzpT0r3PesMg4yKmSd363s3DElYIm4jNFuY27sMFrf5ZJ7nQ8TBtCoUu8l?=
- =?us-ascii?Q?q1SYLnz9JYR8aYyLcyPLUYuN0Br71QY9zTm3pH6fp89RiFZjgo2Gna6j8Z9r?=
- =?us-ascii?Q?5aQUQVccLhiiPziLaqz2FSLD2saFknpCVvKlYv5xtrgU6ImkkNBeS9RpJyfi?=
- =?us-ascii?Q?bmmkNfKZANdnPv8gXj5ohea1Wg1Q4e/mpm++b/v8ysqJ0N3FHJ4dcpjUq2RT?=
- =?us-ascii?Q?Ye7HqXn5eGWG0NsKH1YaJW0vc9TOWYlh7UTgDTpvSZjU+f9SbfkLUgHzstpx?=
- =?us-ascii?Q?f/p9NIlK8T65t/Fk9ruf8VXdrrmZ53AVPbRWvGSXjCyiyllC0oR+ebUcCWbT?=
- =?us-ascii?Q?Wgm8+whn3zbntCVKc1O9GitZc7ShNUIzmADl7Hi/ydX1wfr3HGLsVveP41PD?=
- =?us-ascii?Q?wDN/aW18j2v2C9gg0iK2aNmGcZV0aXgnwNr1n+TZUeOoB2D0/yBGXFNyllY7?=
- =?us-ascii?Q?3QKl4Q2FjrAdM5nHpYcVT2n5kHYTjtPKAJtm4xe6Mg4d+7EmVtsOXAK2QdDU?=
- =?us-ascii?Q?C7aO740DzoAjVARp9ifWjVCsBmmdWz0jm7ywTL11I+X17qqfVtOns5gHACah?=
- =?us-ascii?Q?A7Y=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S235737AbhGAJKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 1 Jul 2021 05:10:07 -0400
+Received: from mail-ua1-f45.google.com ([209.85.222.45]:35600 "EHLO
+        mail-ua1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235088AbhGAJKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 1 Jul 2021 05:10:07 -0400
+Received: by mail-ua1-f45.google.com with SMTP id n61so2196631uan.2;
+        Thu, 01 Jul 2021 02:07:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sIqUpSy3WHJ9LFXbxhxyvcyP769k+GgXVkD4XIt1npQ=;
+        b=fC8ODdPVYjPREdI8THrYL44SFYEIxCc4X0Kuk8IFNYjUeCsCXJ8+40YGdOEEXlOFWw
+         v8fp1ZM4PwyOhOXYjI2AW4IZkf6EXZOrY/r/CsKGxG53ibDEiL8G18m7PfSSpPDLO0hK
+         kMly2if8eHYqD+pYsTmLkp5JGyJQ6Sf6k5JGP9GHyPvvmzuu7HwRnnEFsoWEbCrKal0+
+         QRHE/hKVL3Zpr13MJSSG3GTRoPwfHKfElyxN9Zv+vOOhyWHHtcbxyrDXaVHFRFvJYZtW
+         kilK62qy9M0q8FOS3geWNVtPQF+W2oxbsyesLTDtLXxLj8GDu8j7huEGQ9nNvOUtvl4b
+         1WdQ==
+X-Gm-Message-State: AOAM533nzpXIjobhj3VRnrKO1iKPxBuShRPI2iM8AbTioY+fOkT3FH3t
+        +fwqT0Y3a9VeVBCEKiWVimEufMwoXrNuicBSbybdeVMz0Z+IZg==
+X-Google-Smtp-Source: ABdhPJwSnd+W/J0P9TXelJ4FicEnSI+QCWCk1Q85kOlLiIK0Xw+UCgAVpcQfY9FmPzhd6caL6KHABcksAAv39MCVf50=
+X-Received: by 2002:ab0:484b:: with SMTP id c11mr38743288uad.100.1625130456571;
+ Thu, 01 Jul 2021 02:07:36 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: silabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB4882.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b08d4e95-02d4-4470-6cb6-08d93c644db7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Jul 2021 07:46:14.6285
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 54dbd822-5231-4b20-944d-6f4abcd541fb
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kKLyzKEWoui75mwWAoQaV9ZTjdIZeQe3qxsEaRLhVYXRhnGbbGlkPghbXrbts7N9utZcogap6qGIJQlHQoPr+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2271
+References: <20210630173042.186394-1-aford173@gmail.com> <20210630173042.186394-2-aford173@gmail.com>
+In-Reply-To: <20210630173042.186394-2-aford173@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 1 Jul 2021 11:07:25 +0200
+Message-ID: <CAMuHMdXoWZMj8+LhUPSpqa4t-G1WrW-wfOy3XzEDe0ihSKQkCw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: renesas_usbhs: Enable support for more than two clks
+To:     Adam Ford <aford173@gmail.com>
+Cc:     USB list <linux-usb@vger.kernel.org>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Dear Johan.
+Hi Adam,
 
->Yes, you should be able to apply this patch to older kernels without many =
-additional changes, but you should still mention which kernel you're using =
->since backporting may not always work as expected.
+Thanks for your patch!
 
-Yes. Thank you for remaining me.
+On Wed, Jun 30, 2021 at 7:30 PM Adam Ford <aford173@gmail.com> wrote:
+> The RZ/G2 boards expect there to be an external clock reference for
+> USBHS controller, but this could be set by a programmable clock.
+> For those devices using a programmable clock, there need to be two
+> additional clocks beyond the internal reference clocks:
+>
+> rcar-usb2-clock-sel to specify we using an external clock, and
+> the external reference clock itself.
 
->Good.
->Very odd.
->Were you using the very same device in both tests? And did you try with th=
-e older kernel before the new one? Perhaps the new settings had not yet >ta=
-ken effect otherwise?
+Something is missing in the above sentence?
 
-Both test I use same device and same kernel version 5.8.0-59-generic.
-May be in the wrong test, the device that have been configuring and the dri=
-ver may not load new setting from device, I think the wrong may come from d=
-evice. Just some plug and unplug problem.
+>
+> Make this driver dynamically enable all the clocks assigned to it
+> instead of only enabling the first one or two clocks.
+>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+>
+> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+> index 3af91b2b8f76..255e4bd68ed3 100644
+> --- a/drivers/usb/renesas_usbhs/common.c
+> +++ b/drivers/usb/renesas_usbhs/common.c
+> @@ -297,6 +297,8 @@ static bool usbhsc_is_multi_clks(struct usbhs_priv *priv)
+>
+>  static int usbhsc_clk_get(struct device *dev, struct usbhs_priv *priv)
+>  {
+> +       unsigned int i;
+> +
+>         if (!usbhsc_is_multi_clks(priv))
+>                 return 0;
+>
+> @@ -309,11 +311,13 @@ static int usbhsc_clk_get(struct device *dev, struct usbhs_priv *priv)
+>          * To backward compatibility with old DT, this driver checks the return
+>          * value if it's -ENOENT or not.
+>          */
+> -       priv->clks[1] = of_clk_get(dev_of_node(dev), 1);
+> -       if (PTR_ERR(priv->clks[1]) == -ENOENT)
+> -               priv->clks[1] = NULL;
+> -       else if (IS_ERR(priv->clks[1]))
+> -               return PTR_ERR(priv->clks[1]);
+> +       for (i = 1; i < ARRAY_SIZE(priv->clks); i++) {
+> +               priv->clks[1] = of_clk_get(dev->of_node, i);
+> +               if (PTR_ERR(priv->clks[i]) == -ENOENT)
+> +                       priv->clks[i] = NULL;
+> +               else if (IS_ERR(priv->clks[i]))
+> +                       return PTR_ERR(priv->clks[i]);
+> +       }
 
->> The log written is:
->> [ 3599.781531] cp210x 2-2.1:1.0: cp2108_gpio_init - 03 00 00 00
+This is identical to the current code, as ARRAY_SIZE(priv->clks) == 2.
+Probably you wanted to increase usbhs_priv.clks[], too?
 
->Thanks for confirming. So everything appears to work as expected, and you =
-should have seen the expected -EINVAL unless the device actually did return=
- >all-zero here for some reason.
+Does it make sense to start using the clk_bulk*() API?
 
-Yes, now it return -EINVAL ("Invalid argument"). As expected.
+>
+>         return 0;
+>  }
 
-Thank you.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
