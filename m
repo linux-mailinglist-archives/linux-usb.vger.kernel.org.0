@@ -2,105 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05C513B9D73
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 10:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C7593B9D82
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 10:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbhGBIWW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jul 2021 04:22:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51742 "EHLO mail.kernel.org"
+        id S230256AbhGBIa2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jul 2021 04:30:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52520 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230149AbhGBIWW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 2 Jul 2021 04:22:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B826A61289;
-        Fri,  2 Jul 2021 08:19:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625213990;
-        bh=AWYQNC3rvZNhl/Ddxs99aViYr0yWm46slFcCjx7kqXE=;
+        id S230174AbhGBIa2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Jul 2021 04:30:28 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 845D3613F1;
+        Fri,  2 Jul 2021 08:27:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625214474;
+        bh=aXPyxGZlTIBZvE1WJ/B5WJEX0VZKFvbH4NwBdjJckck=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gas3jGgIvaPUEQyKIr48k7mGCCG5RB1q99BQKo7aK9V6pFhTNZgQT2JV+TV0Ypviq
-         dFhYcV1jhdLLU1rUAsMlGEEYGGUq6fwnsSln6y+Bf2v+j8H85ZUCKInf5mJA0aVc+T
-         Hn35Lji5TWliVcthck2rEDYlEE29JtuRP4TQUrTM=
-Date:   Fri, 2 Jul 2021 10:19:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        balbi@kernel.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
-        fntoth@gmail.com
-Subject: Re: [PATCH v11 4/5] usb: dwc3: dwc3-qcom: Enable tx-fifo-resize
- property by default
-Message-ID: <YN7MIzqOxf/3b8zl@kroah.com>
-References: <1625043642-29822-1-git-send-email-wcheng@codeaurora.org>
- <1625043642-29822-5-git-send-email-wcheng@codeaurora.org>
- <YN6e8G1e9cZBBMr7@kroah.com>
- <83237faa-9840-5d31-43da-8ce551e75067@codeaurora.org>
+        b=ASz/KTzQqGgZc1bdKnhYJVXO8ahlTpVBeS6GikRtBJCkMwbuxBJnJE3hIHUwTB+GU
+         MmzCm8UhJ3ZmnIMV0rkKLsLlUZbN0UC6A2Lz9XQrLwuUcy2HVvusFgjQfJ4oZFZad1
+         HAhDJNP62mvdcgsl+1ub7yGApCj/fK/0OZwKlXAg9kDHG532ch7jNGrZ5yUGlWno7o
+         R9hBWVG3LgGfiM7HX0ge1rhwZSyL9+nH1Keup9I+/Hjz+ApJrWeOdC4Q+oWYPt0owx
+         sabICxkAfMfMVgprWZolcsoUpCsqgxPi3yNS2jMAceXeiKtbyPQO27gANerCEKIl8B
+         gp0aEfXzhzu3A==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lzEWd-0002Vm-Ni; Fri, 02 Jul 2021 10:27:51 +0200
+Date:   Fri, 2 Jul 2021 10:27:51 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Stefan =?utf-8?B?QnLDvG5z?= <stefan.bruens@rwth-aachen.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Daniele Palmas <dnlplm@gmail.com>,
+        =?utf-8?B?QmrDuHJu?= Mork <bjorn@mork.no>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based Sierra
+ Wireless 5G modules
+Message-ID: <YN7OBzmcsidWIG0F@hovoldconsulting.com>
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
+ <20210611135842.14415-1-stefan.bruens@rwth-aachen.de>
+ <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
+ <3614092.7mX7SIBJgt@pebbles>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="+fSrOke19xwIognt"
 Content-Disposition: inline
-In-Reply-To: <83237faa-9840-5d31-43da-8ce551e75067@codeaurora.org>
+In-Reply-To: <3614092.7mX7SIBJgt@pebbles>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 01:10:13AM -0700, Wesley Cheng wrote:
-> 
-> 
-> On 7/1/2021 10:06 PM, Greg KH wrote:
-> > On Wed, Jun 30, 2021 at 02:00:41AM -0700, Wesley Cheng wrote:
-> >> In order to take advantage of the TX fifo resizing logic, manually add
-> >> these properties to the DWC3 child node by default.  This will allow
-> >> the DWC3 gadget to resize the TX fifos for the IN endpoints, which
-> >> help with performance.
-> >>
-> >> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> >> ---
-> >>  drivers/usb/dwc3/dwc3-qcom.c | 21 +++++++++++++++++++++
-> >>  1 file changed, 21 insertions(+)
-> >>
-> >> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> >> index 49e6ca9..cec4f4a 100644
-> >> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> >> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> >> @@ -640,6 +640,25 @@ static int dwc3_qcom_acpi_register_core(struct platform_device *pdev)
-> >>  	return ret;
-> >>  }
-> >>  
-> >> +#ifdef CONFIG_OF
-> >> +static void dwc3_qcom_add_dt_props(struct device *dev, struct device_node *np)
-> >> +{
-> >> +	struct property		*prop;
-> >> +	int ret;
-> >> +
-> >> +	prop = devm_kzalloc(dev, sizeof(*prop), GFP_KERNEL);
-> >> +	if (prop) {
-> >> +		prop->name = "tx-fifo-resize";
-> >> +		ret = of_add_property(np, prop);
-> >> +		if (ret < 0)
-> >> +			dev_info(dev, "unable to add tx-fifo-resize prop\n");
-> 
-> Hi Greg,
-> > 
-> > Is that really an "informational" error?  :(
-> > 
-> >
-> We can remove it.  If anything we can always check the sysfs if the
-> property is present or not.
 
-Sorry for being vague.  That message should be dev_err(), and not
-dev_info(), right?
+--+fSrOke19xwIognt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >> +	}
-> > 
-> > So if you can not allocate memory, you just fail quietly?  Are you sure
-> > that is ok?
-> > 
-> > Please properly handle errors.
-> > 
-> OK, will handle the case where we can't allocate memory for the property.
+On Thu, Jul 01, 2021 at 06:41:26PM +0200, Stefan Br=C3=BCns wrote:
+> On Donnerstag, 24. Juni 2021 09:28:59 CEST Johan Hovold wrote:
+> > [ +CC: Daniele and Bj=C3=B8rn ]
+> >=20
+> > On Fri, Jun 11, 2021 at 03:58:41PM +0200, Stefan Br=C3=BCns wrote:
+> > > The devices exposes two different interface compositions:
+> > > - QDL mode, single interface
+> > > - MBIM mode, MBIM class compliant plus AT/DM(/ADB)
+> > >=20
+> > > Current firmware versions (up to 01.07.19) do not expose an NMEA port.
+> >=20
+> > We already have at least one SDX55 based modem (FN980) supported by the
+> > option driver. Any particular reason why you chose to add it to qcserial
+> > instead of option?
+> >=20
+> Support for qualcomm based modems are spread over option and qcserial. Al=
+l=20
+> other Sierra devices are supported by qcserial.
 
-And the case for when of_add_property() fails.
+Ok, but we may still end up adding this one to option if matching on the
+interface protocol works.
 
-thanks,
+> > Note that the FN980 also needs the ZLP flag set in QDL (flashing) mode,
+> > I'd assume this one needs it too.
+>=20
+> It depends if you implement the Firehose protocol in accordance to the=20
+> specification or not. 80-NG319-1 (Firehose specification) explicitly stat=
+es to=20
+> pad any XML command packet which is an exact multiple of 512 bytes with a=
+n=20
+> extra newline or other whitespace character.
 
-greg k-h
+Thanks for the details. If you're referring to the device-side
+implementation it seems a bit fragile to not just set the ZLP flag since
+apparently there are some non-standard implementations out there. But
+sure, we can do that later if needed.
+
+Johan
+
+--+fSrOke19xwIognt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYN7OAwAKCRALxc3C7H1l
+CPH7AP949REvyDQL0GzQ/Iu/PBYxRIjegY+tX1YWWlsgut4yOgD9FJiHMoJ6P+lm
+l1CqjIUHAzuTd3+YHA7gtM+Mbiog2Ak=
+=6cXq
+-----END PGP SIGNATURE-----
+
+--+fSrOke19xwIognt--
