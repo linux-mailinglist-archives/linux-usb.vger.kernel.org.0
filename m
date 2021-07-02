@@ -2,127 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EF33B9CF7
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 09:32:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA5C43B9D42
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 10:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbhGBHfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jul 2021 03:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbhGBHfK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 03:35:10 -0400
-Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35882C061762;
-        Fri,  2 Jul 2021 00:32:38 -0700 (PDT)
-Received: from miraculix.mork.no (fwa219.mork.no [192.168.9.219])
-        (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1627WTFM008403
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 2 Jul 2021 09:32:29 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1625211149; bh=4IcPPKCPtha5caFpsZbpIXIABLLgrcYiJzOTZgq2fqI=;
-        h=From:To:Cc:Subject:References:Date:Message-ID:From;
-        b=mbkGlWgP+f+Jtzg6EonrswIcr+5x61PhMzBMiQpBdbZB7dz5nJt1cCX3fbToaE6Wu
-         9tHZjLKHB/uSGsdoC0iqs8AILR2Rp1lqSVjJsBL+VYtzexo1qe9FZR8rmYjpaDqDRl
-         3US7PtdhvWQssy53NQ83xesqC/ay6G3c+zvWcWdE=
-Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@mork.no>)
-        id 1lzDf2-000BB9-Rw; Fri, 02 Jul 2021 09:32:28 +0200
-From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
-To:     Stefan =?utf-8?Q?Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
-Cc:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Daniele Palmas <dnlplm@gmail.com>
-Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based
- Sierra Wireless 5G modules
-Organization: m
-References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
-        <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
-        <87tulnms3o.fsf@miraculix.mork.no> <1727850.UKLhYeRy6v@pebbles>
-Date:   Fri, 02 Jul 2021 09:32:28 +0200
-In-Reply-To: <1727850.UKLhYeRy6v@pebbles> ("Stefan =?utf-8?Q?Br=C3=BCns=22?=
- =?utf-8?Q?'s?= message of "Thu, 1
-        Jul 2021 18:28:14 +0200")
-Message-ID: <87y2apf9wz.fsf@miraculix.mork.no>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        id S230235AbhGBIDu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jul 2021 04:03:50 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:37583 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230099AbhGBIDu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Jul 2021 04:03:50 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1625212878; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=fm1B5BNET6BDsQrPVz8M3jEbJSGGPTas8DsTraQQ0io=; b=tpc18zacngTpCQUSZdEwtEFwwHCkOAm6Y+wLtY3IscGx4fqAWKqvwX4ynzzR8c7AC2WRFSx/
+ xTxYriazJ9gZPTyl5LWITk5g+54UmKy3wVquaDwmuOdvhojiZ8ZzpM+cscY+rO/sQzLfZVTx
+ kvIDICPjjZhubNRElv51yBkzgY8=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 60dec79d7b2963a282197f3a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 02 Jul 2021 08:00:29
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id D310BC43460; Fri,  2 Jul 2021 08:00:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.67.21] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 3F78FC433F1;
+        Fri,  2 Jul 2021 08:00:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 3F78FC433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v11 1/5] usb: gadget: udc: core: Introduce check_config to
+ verify USB configuration
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
+        fntoth@gmail.com
+References: <1625043642-29822-1-git-send-email-wcheng@codeaurora.org>
+ <1625043642-29822-2-git-send-email-wcheng@codeaurora.org>
+ <YN6dY8RBXRN4BW3n@kroah.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <95224646-6dd7-874e-517c-b106b474e487@codeaurora.org>
+Date:   Fri, 2 Jul 2021 01:00:26 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <YN6dY8RBXRN4BW3n@kroah.com>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Virus-Scanned: clamav-milter 0.103.2 at canardo
-X-Virus-Status: Clean
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Stefan Br=C3=BCns <stefan.bruens@rwth-aachen.de> writes:
 
-> On Donnerstag, 24. Juni 2021 13:15:07 CEST Bj=C3=B8rn Mork wrote:
->> Johan Hovold <johan@kernel.org> writes:
->> > Could you please also post the output of usb-devices (or lsusb -v) for
->> > this device in MBIM mode?
->>=20
->> Yes, this would be nice to have.
+
+On 7/1/2021 10:00 PM, Greg KH wrote:
+> On Wed, Jun 30, 2021 at 02:00:38AM -0700, Wesley Cheng wrote:
+>> Some UDCs may have constraints on how many high bandwidth endpoints it can
+>> support in a certain configuration.  This API allows for the composite
+>> driver to pass down the total number of endpoints to the UDC so it can verify
+>> it has the required resources to support the configuration.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/gadget/udc/core.c | 25 +++++++++++++++++++++++++
+>>  include/linux/usb/gadget.h    |  4 ++++
+>>  2 files changed, 29 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+>> index b7f0b1e..f1f44a6 100644
+>> --- a/drivers/usb/gadget/udc/core.c
+>> +++ b/drivers/usb/gadget/udc/core.c
+>> @@ -1003,6 +1003,31 @@ int usb_gadget_ep_match_desc(struct usb_gadget *gadget,
+>>  }
+>>  EXPORT_SYMBOL_GPL(usb_gadget_ep_match_desc);
+>>  
+>> +/**
+>> + * usb_gadget_check_config - checks if the UDC can support the number of eps
+
+Hi Greg,
+
+Thanks for the feedback.
+> 
+> "eps"?  What is that?
 >
-> See below.
->=20=20
->> I suspect that this device is like other SDX55 devices we've seen, using
->> class/subclass/function to map the vendor specific functions
->> too. Dropping static interface numbers.  If correct, then the patch is
->> bogus and the interface numbers might change based on firmware version
->> and configuration.
+
+Fixed to "endpoints"
+
+>> + * @gadget: controller to check the USB configuration
+>> + * @ep_map: bitmap of endpoints being requested by a USB configuration
+> 
+> There is no such option in this function, did you run 'make htmldocs'
+> and see that this adds a warning?
+> 
+Removed the ep_map comment, as we've removed it from the arguments.
+
+>> + *
+>> + * Ensure that a UDC is able to support the number of endpoints within a USB
+>> + * configuration, and that there are no resource limitations to support all
+>> + * requested eps.
+>> + *
+>> + * Returns zero on success, else a negative errno.
+>> + */
+>> +int usb_gadget_check_config(struct usb_gadget *gadget)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	if (!gadget->ops->check_config)
+>> +		goto out;
+>> +
+>> +	ret = gadget->ops->check_config(gadget);
+>> +
+>> +out:
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(usb_gadget_check_config);
+> 
+> This can be written in the much simpler form:
+> {
+> 	if (gadget->ops->check_config)
+> 		return gadget->ops->check_config(gadget);
+> 	return 0;
+> }
 >
-> Do you really expect Sierra do to something sensible? According to their=
-=20
-> documentation functions are matched by interface numbers.
+thanks for this suggestion.
 
-Well... I expect them to be as sensible as any other vendor.  And I
-expect docs to be intendend as guidance only ;-)
+> But where are the endpoints that need to be checked???
+> 
+> How is this working?
+> 
+The USB gadget will have ep_list, do we'll be looping through the
+endpoints that have been claimed to get the number of IN eps being used
+by a particular configuration.
 
-> They still use broken interface descriptors with holes in interface numbe=
-ring=20
-> (i.e. interface number 2 does not exist, which violates the USB standard).
+Thanks
+Wesley Cheng
 
-Right. Wrt the violation, I think that train left a decade ago.=20=20
-
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        3
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0=20
->       bInterfaceProtocol      0=20
-[..]
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        4
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass    255 Vendor Specific Subclass
->       bInterfaceProtocol     48=20
-
-
-So Sierra do follow the same pattern we've seen on other X55 devices:
-
-ff/00/00 - AT
-ff/ff/30 - QCDM
-
-See commits
-
- accf227de4d2 ("USB: serial: option: Add support for Quectel RM500Q")
- d6c1ddd938d8 ("USB: serial: option: add Quectel EM160R-GL")
-
-for other examples.
-
-This obviously doesn't make any difference if your configuration is the
-only one.  But I believe that is unlikely.  There are probably ways the
-layout can be changed, even if currenly not documented.  The advantage
-of class/subclass/protocol matching to function is that it works
-regardless of the number of functions and their interface number.
-
-
-Bj=C3=B8rn
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
