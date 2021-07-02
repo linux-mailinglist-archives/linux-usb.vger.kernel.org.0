@@ -2,106 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C5D3B9CCB
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 09:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F943B9CCF
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 09:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbhGBHPE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jul 2021 03:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S230094AbhGBHQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jul 2021 03:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbhGBHPE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 03:15:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFD8C061762
-        for <linux-usb@vger.kernel.org>; Fri,  2 Jul 2021 00:12:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id w13-20020a056902100db0290559a715f5bbso11352647ybt.23
-        for <linux-usb@vger.kernel.org>; Fri, 02 Jul 2021 00:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=UnsUVbnKrmyU1lgIL4DYjS7D/XYOp3W6UGWKGs+lUZA=;
-        b=E+z6hu7lKYUyuWKm+szD1aJe1A0llfRSOkbyhTv9LsPXBWMIKDNzTe/u59jQkUbJFh
-         jyZZg/9L8SYZjInggezn/F5Cb8+VP1Jw9uLJHCb8eg9asRZxpFElyTA2EG9yKv1UF09Y
-         KQc7Vkjl+UJxA5J+N+4+BK9ycQWXJC8dfes0KpCRjP10T3QF/fWkH7Eu3mRAEJPrq0nd
-         GbUr9FK6nHjrkBfskM0NPSgGrZy8wmcv9kF48t3fJclvv6PHsF37SLgA24YLtql6AazV
-         VvpfRUkb56dN2rYblA7DcH7E+saT4TJE0fcDx98iHUaaDOydE4+q/xgPIy9D8QGg79FG
-         xEMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=UnsUVbnKrmyU1lgIL4DYjS7D/XYOp3W6UGWKGs+lUZA=;
-        b=uAyAldFTsKA13ofRVOiXGT1Q9WeZtt2qys76gVUrFlW5mVZACB7ayy/28xHp+Z2qhH
-         Fk8aJ9rxgfyVGk7ZHp8WoMGhk6QESDNiDfNkxM5LwafXfRCxTaCpgzoksZ8a/mjLAdpm
-         ky42bhnnbzxvHo2OkdVpX82mRz9VI893J2TqUg2lJqXagoKHk5Ixj8FmT1J9iZcG84iu
-         n/goOmGd2nnE02uLSquQiWbWeEohAneA0DUSJ6zAOyeHUXn3s6a51/BjCt+2nIc3PZLy
-         A4AmJP+STxrwTqxSQgl84z7MSjQj1lQUtHA9wBAoloVgnODy67uvn5WkBRVacytC13R2
-         FL/Q==
-X-Gm-Message-State: AOAM532wl5gP3dNJJlmh+CeSYRhyqbmE6nLqZU8ChKxoIX8oFOFYETF+
-        tXPxRrzy2/B6W6sJH3Lv41FSincENM0L
-X-Google-Smtp-Source: ABdhPJzsH3mqEkh3V1kTNtE1Mz0ju8P5J6AfhJCXdPCem19ojYXCkcPxUSkNWenLGL/qZEITZPHxXzp1GDs3
-X-Received: from gthelen2.svl.corp.google.com ([2620:15c:2cd:202:81c6:dd12:da9f:dd72])
- (user=gthelen job=sendgmr) by 2002:a25:c709:: with SMTP id
- w9mr4870053ybe.456.1625209951580; Fri, 02 Jul 2021 00:12:31 -0700 (PDT)
-Date:   Fri,  2 Jul 2021 00:12:24 -0700
-In-Reply-To: <xr93czs1p4uj.fsf@gthelen2.svl.corp.google.com>
-Message-Id: <20210702071224.3673568-1-gthelen@google.com>
-Mime-Version: 1.0
-References: <xr93czs1p4uj.fsf@gthelen2.svl.corp.google.com>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
-Subject: [PATCH V2] usb: xhci: avoid renesas_usb_fw.mem when it's unusable
-From:   Greg Thelen <gthelen@google.com>
-To:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Thelen <gthelen@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        with ESMTP id S230093AbhGBHQe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 03:16:34 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05957C061762;
+        Fri,  2 Jul 2021 00:14:02 -0700 (PDT)
+Received: from miraculix.mork.no (fwa219.mork.no [192.168.9.219])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1627DiI7029093
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Fri, 2 Jul 2021 09:13:44 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1625210024; bh=R+jGgdiTe8/f1x+VMR1Hlad0GTYYmFFXNCFVp1D8WiY=;
+        h=From:To:Cc:Subject:Date:Message-Id:From;
+        b=Q8esaDJGLcbe6m7l22xWUab1Yisgb9k6VR7wxObgfc1/KK8Kj/zp5FSceDqSveIp+
+         ky7NjtELywL+126oALJhqI620YBbiaixU5cjOlbGJj/OXIAMYdi7d5QCGbo+0d+zL6
+         huMsiDRpKv/PzobC5rv7R1WTq7+TTeGTeZUZatI8=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@miraculix.mork.no>)
+        id 1lzDMt-000B8i-Sf; Fri, 02 Jul 2021 09:13:43 +0200
+From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+To:     Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-usb@vger.kernel.org,
+        Jonathan Bell <jonathan@raspberrypi.org>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
+Subject: [PATCH] xhci: add quirk for host controllers that don't update endpoint DCS
+Date:   Fri,  2 Jul 2021 09:13:38 +0200
+Message-Id: <20210702071338.42777-1-bjorn@mork.no>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.2 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit a66d21d7dba8 ("usb: xhci: Add support for Renesas controller with
-memory") added renesas_usb_fw.mem firmware reference to xhci-pci.  Thus
-modinfo indicates xhci-pci.ko has "firmware: renesas_usb_fw.mem".  But
-the firmware is only actually used with CONFIG_USB_XHCI_PCI_RENESAS.  An
-unusable firmware reference can trigger safety checkers which look for
-drivers with unmet firmware dependencies.
+From: Jonathan Bell <jonathan@raspberrypi.org>
 
-Avoid referring to renesas_usb_fw.mem in circumstances when it cannot be
-loaded (when CONFIG_USB_XHCI_PCI_RENESAS isn't set).
+Seen on a VLI VL805 PCIe to USB controller. For non-stream endpoints
+at least, if the xHC halts on a particular TRB due to an error then
+the DCS field in the Out Endpoint Context maintained by the hardware
+is not updated with the current cycle state.
 
-Fixes: a66d21d7dba8 ("usb: xhci: Add support for Renesas controller with memory")
-Signed-off-by: Greg Thelen <gthelen@google.com>
+Using the quirk XHCI_EP_CTX_BROKEN_DCS and instead fetch the DCS bit
+from the TRB that the xHC stopped on.
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/raspberrypi/linux/issues/3060
+Signed-off-by: Jonathan Bell <jonathan@raspberrypi.org>
+Signed-off-by: Bjørn Mork <bjorn@mork.no>
 ---
-Changelog since v1:
-- Smaller patch, only filters out MODULE_FIRMWARE()
-- Added blank line
-- Added Fixes footer to commit log
 
-drivers/usb/host/xhci-pci.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Ran into this issue on an RPi4 running Debian bullseye, having mostly
+a plain v5.10.40 kernel. Using an RTL2838 (0bda:2838) with rtl-sdr
+just did not work, showing all the issues described on the above link.
+
+This quirk found in https://github.com/raspberrypi/linux.git solves
+the problem for me.  I don't see why it shouldn't be in mainline. And
+I propose adding it to stable as well, since it solves a real problem.
+Mostly for my own convenience as I'd prefer just using a Debian built
+kernel ;-)
+
+Did not check this submission with Jonathan - hoping it is OK...
+
+
+Bjørn
+
+ drivers/usb/host/xhci-pci.c  |  4 +++-
+ drivers/usb/host/xhci-ring.c | 26 ++++++++++++++++++++++++++
+ drivers/usb/host/xhci.h      |  1 +
+ 3 files changed, 30 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 18c2bbddf080..1c9a7957c45c 100644
+index 18c2bbddf080..6f3bed09028c 100644
 --- a/drivers/usb/host/xhci-pci.c
 +++ b/drivers/usb/host/xhci-pci.c
-@@ -636,7 +636,14 @@ static const struct pci_device_id pci_ids[] = {
- 	{ /* end: all zeroes */ }
- };
- MODULE_DEVICE_TABLE(pci, pci_ids);
-+
-+/*
-+ * Without CONFIG_USB_XHCI_PCI_RENESAS renesas_xhci_check_request_fw() won't
-+ * load firmware, so don't encumber the xhci-pci driver with it.
-+ */
-+#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
- MODULE_FIRMWARE("renesas_usb_fw.mem");
-+#endif
+@@ -279,8 +279,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 			pdev->device == 0x3432)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
  
- /* pci driver glue; this is a "new style" PCI driver module */
- static struct pci_driver xhci_pci_driver = {
+-	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
++	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
+ 		xhci->quirks |= XHCI_LPM_SUPPORT;
++		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
++	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 8fea44bbc266..a9c860ff5177 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -559,8 +559,11 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+ 	struct xhci_ring *ep_ring;
+ 	struct xhci_command *cmd;
+ 	struct xhci_segment *new_seg;
++	struct xhci_segment *halted_seg = NULL;
+ 	union xhci_trb *new_deq;
+ 	int new_cycle;
++	union xhci_trb *halted_trb;
++	int index = 0;
+ 	dma_addr_t addr;
+ 	u64 hw_dequeue;
+ 	bool cycle_found = false;
+@@ -600,6 +603,29 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+ 	new_deq = ep_ring->dequeue;
+ 	new_cycle = hw_dequeue & 0x1;
+ 
++	/*
++	 * Quirk: xHC write-back of the DCS field in the hardware dequeue
++	 * pointer is wrong - use the cycle state of the TRB pointed to by
++	 * the dequeue pointer.
++	 */
++	if (xhci->quirks & XHCI_EP_CTX_BROKEN_DCS &&
++	    !(ep->ep_state & EP_HAS_STREAMS))
++		halted_seg = trb_in_td(xhci, cur_td->start_seg,
++				       cur_td->first_trb, cur_td->last_trb,
++				       hw_dequeue & ~0xf, false);
++	if (halted_seg) {
++		index = ((dma_addr_t)(hw_dequeue & ~0xf) - halted_seg->dma) /
++			 sizeof(*halted_trb);
++		halted_trb = &halted_seg->trbs[index];
++		state->new_cycle_state = halted_trb->generic.field[3] & 0x1;
++		xhci_dbg(xhci, "Endpoint DCS = %d TRB index = %d cycle = %d\n",
++			 (u8)(hw_dequeue & 0x1), index,
++			 state->new_cycle_state);
++	} else {
++		state->new_cycle_state = hw_dequeue & 0x1;
++	}
++	state->stream_id = stream_id;
++
+ 	/*
+ 	 * We want to find the pointer, segment and cycle state of the new trb
+ 	 * (the one after current TD's last_trb). We know the cycle state at
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 3c7d281672ae..911aeb7d8a19 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1896,6 +1896,7 @@ struct xhci_hcd {
+ #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
+ #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
+ #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
++#define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
+ 
+ 	unsigned int		num_active_eps;
+ 	unsigned int		limit_active_eps;
 -- 
-2.32.0.93.g670b81a890-goog
+2.30.2
 
