@@ -2,104 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 049FD3B9E6C
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 11:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40673B9EC5
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 12:02:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbhGBJlA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jul 2021 05:41:00 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:50700 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbhGBJkp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 05:40:45 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1625218694; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=nZjdf/YIZuObh/zYQVUmteSyPqAUYoSWQnYeQyM+fME=; b=Uym+uCtCAm9ezhs8MdQu0wgApDbXkSFjfySSgybcOJFAHrN2k+1XUcArrBKR38GrC27FTZa7
- 0R9CqCR/9tRauIIojmDBr4SDXn2xzfgYBg+PgEnxut4VcEEaUHlQexmv0n1JgYU6ZxjCP/Xy
- VAl/VnCXhU3YgBWIcWfnAbjQFQY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 60dede712a2a9a976135c3a7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 02 Jul 2021 09:37:53
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 95B57C43144; Fri,  2 Jul 2021 09:37:53 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 37CC4C4323A;
-        Fri,  2 Jul 2021 09:37:52 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 37CC4C4323A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        frowand.list@gmail.com
-Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org, fntoth@gmail.com,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH v12 6/6] dt-bindings: usb: dwc3: Update dwc3 TX fifo properties
-Date:   Fri,  2 Jul 2021 02:37:35 -0700
-Message-Id: <1625218655-14180-7-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1625218655-14180-1-git-send-email-wcheng@codeaurora.org>
-References: <1625218655-14180-1-git-send-email-wcheng@codeaurora.org>
+        id S231320AbhGBKEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jul 2021 06:04:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231340AbhGBKEe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 2 Jul 2021 06:04:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C6336613CD;
+        Fri,  2 Jul 2021 10:02:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625220122;
+        bh=M9shyW+u2hUlibuSUqsrhw0+G4/tOavULWXI/ipsb6g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZZNgNYl75+8YJ9gjg5GGL5Llm+arpc1rjvT+zV2Wo6+/ov2f/5mh7oqcP6Ote1tmU
+         yaOOKTPMJHfZn1cwxlu2vJJoiYarqxek+j8b75UtY6Abmm8EcR6BF1tQrdCWxMo72m
+         +9DjdqKB26bZbOIrqhtTKJvzA8JloqZyIgaRoFLrFhFHv5MngR1HtyUrx/NeT9VqT4
+         hCUAd7onalQN8PcZjNmXjtFj3/1E3rAqTar3DD2kPMmd3gDBhHed1+Vkc/2gUjYYtY
+         2X+aNcB8iW4eqw83yI4kcJfCkpvsWU7YAiQs+EYXASdEbCeeqpm0XL4HrA8B4i8ZX1
+         nwZckTj3F3OZw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1lzFzj-00031e-Kk; Fri, 02 Jul 2021 12:02:00 +0200
+Date:   Fri, 2 Jul 2021 12:01:59 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Sean Young <sean@mess.org>
+Cc:     linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Rhees <support@usbuirt.com>,
+        Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH v5 0/2] IR driver for USB-UIRT device
+Message-ID: <YN7kF17pfhDr1ccy@hovoldconsulting.com>
+References: <cover.1624006513.git.sean@mess.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1624006513.git.sean@mess.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Update the tx-fifo-resize property with a better description, while
-adding the tx-fifo-max-num, which is a new parameter allowing
-adjustments for the maximum number of packets the txfifo resizing logic
-can account for while resizing the endpoints.
+On Fri, Jun 18, 2021 at 11:18:45AM +0100, Sean Young wrote:
+> This is a new rc-core driver for the USB-UIRT which you can see here
+> http://www.usbuirt.com/
+> 
+> This device is supported in lirc, via the usb serial kernel driver. This
+> driver is both for rc-core, which means it can use kernel/BPF decoding
+> ec. Also this implement is superior because it can:
+>  - support learning mode
+>  - setting transmit carrier
+>  - larger transmits using streaming tx command
+>  - Much better latency since it is a kernel driver
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+A ball-park number to back this claim up would be good here. Your driver
+sets the ftdi latency timer to 50 ms which adds quite a bit of latency
+for short packets (e.g. a single key press?) to begin with.
 
-diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-index 41416fb..078fb78 100644
---- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-@@ -289,10 +289,21 @@ properties:
-     maximum: 16
- 
-   tx-fifo-resize:
--    description: Determines if the FIFO *has* to be reallocated
--    deprecated: true
-+    description: Determines if the TX fifos can be dynamically resized depending
-+      on the number of IN endpoints used and if bursting is supported.  This
-+      may help improve bandwidth on platforms with higher system latencies, as
-+      increased fifo space allows for the controller to prefetch data into its
-+      internal memory.
-     type: boolean
- 
-+  tx-fifo-max-num:
-+    description: Specifies the max number of packets the txfifo resizing logic
-+      can account for when higher endpoint bursting is used. (bMaxBurst > 6) The
-+      higher the number, the more fifo space the txfifo resizing logic will
-+      allocate for that endpoint.
-+    $ref: /schemas/types.yaml#/definitions/uint8
-+    minimum: 3
-+
-   snps,incr-burst-type-adjustment:
-     description:
-       Value for INCR burst type of GSBUSCFG0 register, undefined length INCR
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+> Changes since v4:
+>  - Fixed clang warning/uninitialized variable usage
+>  - Some cosmetic changes
+> 
+> Changes since v3:
+>  - Review comments from Johan Hovold
 
+In the future, please include some details on what changed also when
+addressing review feedback.
+
+>  - Do not move the ftdi_sio.h file an copy FTDI_* definitions instead
+> 
+> Changes since v2:
+>  - Fixed race condition is disconnect
+>  - Removed superfluous kmalloc in short tx
+> 
+> Changes since v1:
+>  - Review comments from Oliver Neukum
+>  - Simplified wideband read function
+> 
+> Sean Young (2):
+>   media: rc: new driver for USB-UIRT device
+>   USB: serial: blacklist USB-UIRT when driver is selected
+> 
+>  drivers/media/rc/Kconfig      |  11 +
+>  drivers/media/rc/Makefile     |   1 +
+>  drivers/media/rc/uirt.c       | 744 ++++++++++++++++++++++++++++++++++
+>  drivers/usb/serial/ftdi_sio.c |   6 +-
+>  4 files changed, 760 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/media/rc/uirt.c
+
+Johan
