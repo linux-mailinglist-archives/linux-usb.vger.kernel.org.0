@@ -2,161 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F943B9CCF
-	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 09:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3EF33B9CF7
+	for <lists+linux-usb@lfdr.de>; Fri,  2 Jul 2021 09:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbhGBHQf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 2 Jul 2021 03:16:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S230108AbhGBHfL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 2 Jul 2021 03:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbhGBHQe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 03:16:34 -0400
+        with ESMTP id S229847AbhGBHfK (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 2 Jul 2021 03:35:10 -0400
 Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05957C061762;
-        Fri,  2 Jul 2021 00:14:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35882C061762;
+        Fri,  2 Jul 2021 00:32:38 -0700 (PDT)
 Received: from miraculix.mork.no (fwa219.mork.no [192.168.9.219])
         (authenticated bits=0)
-        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1627DiI7029093
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 1627WTFM008403
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Fri, 2 Jul 2021 09:13:44 +0200
+        Fri, 2 Jul 2021 09:32:29 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
-        t=1625210024; bh=R+jGgdiTe8/f1x+VMR1Hlad0GTYYmFFXNCFVp1D8WiY=;
-        h=From:To:Cc:Subject:Date:Message-Id:From;
-        b=Q8esaDJGLcbe6m7l22xWUab1Yisgb9k6VR7wxObgfc1/KK8Kj/zp5FSceDqSveIp+
-         ky7NjtELywL+126oALJhqI620YBbiaixU5cjOlbGJj/OXIAMYdi7d5QCGbo+0d+zL6
-         huMsiDRpKv/PzobC5rv7R1WTq7+TTeGTeZUZatI8=
+        t=1625211149; bh=4IcPPKCPtha5caFpsZbpIXIABLLgrcYiJzOTZgq2fqI=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=mbkGlWgP+f+Jtzg6EonrswIcr+5x61PhMzBMiQpBdbZB7dz5nJt1cCX3fbToaE6Wu
+         9tHZjLKHB/uSGsdoC0iqs8AILR2Rp1lqSVjJsBL+VYtzexo1qe9FZR8rmYjpaDqDRl
+         3US7PtdhvWQssy53NQ83xesqC/ay6G3c+zvWcWdE=
 Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
-        (envelope-from <bjorn@miraculix.mork.no>)
-        id 1lzDMt-000B8i-Sf; Fri, 02 Jul 2021 09:13:43 +0200
-From:   =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-To:     Mathias Nyman <mathias.nyman@intel.com>
-Cc:     linux-usb@vger.kernel.org,
-        Jonathan Bell <jonathan@raspberrypi.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>
-Subject: [PATCH] xhci: add quirk for host controllers that don't update endpoint DCS
-Date:   Fri,  2 Jul 2021 09:13:38 +0200
-Message-Id: <20210702071338.42777-1-bjorn@mork.no>
-X-Mailer: git-send-email 2.30.2
+        (envelope-from <bjorn@mork.no>)
+        id 1lzDf2-000BB9-Rw; Fri, 02 Jul 2021 09:32:28 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Stefan =?utf-8?Q?Br=C3=BCns?= <stefan.bruens@rwth-aachen.de>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Daniele Palmas <dnlplm@gmail.com>
+Subject: Re: [PATCH v2] USB: serial: qcserial: Support for SDX55 based
+ Sierra Wireless 5G modules
+Organization: m
+References: <20210611134507.8780-1-stefan.bruens@rwth-aachen.de>
+        <YNQ0O0vhtpStp0n/@hovoldconsulting.com>
+        <87tulnms3o.fsf@miraculix.mork.no> <1727850.UKLhYeRy6v@pebbles>
+Date:   Fri, 02 Jul 2021 09:32:28 +0200
+In-Reply-To: <1727850.UKLhYeRy6v@pebbles> ("Stefan =?utf-8?Q?Br=C3=BCns=22?=
+ =?utf-8?Q?'s?= message of "Thu, 1
+        Jul 2021 18:28:14 +0200")
+Message-ID: <87y2apf9wz.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Virus-Scanned: clamav-milter 0.103.2 at canardo
 X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Jonathan Bell <jonathan@raspberrypi.org>
+Stefan Br=C3=BCns <stefan.bruens@rwth-aachen.de> writes:
 
-Seen on a VLI VL805 PCIe to USB controller. For non-stream endpoints
-at least, if the xHC halts on a particular TRB due to an error then
-the DCS field in the Out Endpoint Context maintained by the hardware
-is not updated with the current cycle state.
+> On Donnerstag, 24. Juni 2021 13:15:07 CEST Bj=C3=B8rn Mork wrote:
+>> Johan Hovold <johan@kernel.org> writes:
+>> > Could you please also post the output of usb-devices (or lsusb -v) for
+>> > this device in MBIM mode?
+>>=20
+>> Yes, this would be nice to have.
+>
+> See below.
+>=20=20
+>> I suspect that this device is like other SDX55 devices we've seen, using
+>> class/subclass/function to map the vendor specific functions
+>> too. Dropping static interface numbers.  If correct, then the patch is
+>> bogus and the interface numbers might change based on firmware version
+>> and configuration.
+>
+> Do you really expect Sierra do to something sensible? According to their=
+=20
+> documentation functions are matched by interface numbers.
 
-Using the quirk XHCI_EP_CTX_BROKEN_DCS and instead fetch the DCS bit
-from the TRB that the xHC stopped on.
+Well... I expect them to be as sensible as any other vendor.  And I
+expect docs to be intendend as guidance only ;-)
 
-Cc: stable@vger.kernel.org
-Link: https://github.com/raspberrypi/linux/issues/3060
-Signed-off-by: Jonathan Bell <jonathan@raspberrypi.org>
-Signed-off-by: Bjørn Mork <bjorn@mork.no>
----
+> They still use broken interface descriptors with holes in interface numbe=
+ring=20
+> (i.e. interface number 2 does not exist, which violates the USB standard).
 
-Ran into this issue on an RPi4 running Debian bullseye, having mostly
-a plain v5.10.40 kernel. Using an RTL2838 (0bda:2838) with rtl-sdr
-just did not work, showing all the issues described on the above link.
+Right. Wrt the violation, I think that train left a decade ago.=20=20
 
-This quirk found in https://github.com/raspberrypi/linux.git solves
-the problem for me.  I don't see why it shouldn't be in mainline. And
-I propose adding it to stable as well, since it solves a real problem.
-Mostly for my own convenience as I'd prefer just using a Debian built
-kernel ;-)
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        3
+>       bAlternateSetting       0
+>       bNumEndpoints           3
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass      0=20
+>       bInterfaceProtocol      0=20
+[..]
+>     Interface Descriptor:
+>       bLength                 9
+>       bDescriptorType         4
+>       bInterfaceNumber        4
+>       bAlternateSetting       0
+>       bNumEndpoints           2
+>       bInterfaceClass       255 Vendor Specific Class
+>       bInterfaceSubClass    255 Vendor Specific Subclass
+>       bInterfaceProtocol     48=20
 
-Did not check this submission with Jonathan - hoping it is OK...
+
+So Sierra do follow the same pattern we've seen on other X55 devices:
+
+ff/00/00 - AT
+ff/ff/30 - QCDM
+
+See commits
+
+ accf227de4d2 ("USB: serial: option: Add support for Quectel RM500Q")
+ d6c1ddd938d8 ("USB: serial: option: add Quectel EM160R-GL")
+
+for other examples.
+
+This obviously doesn't make any difference if your configuration is the
+only one.  But I believe that is unlikely.  There are probably ways the
+layout can be changed, even if currenly not documented.  The advantage
+of class/subclass/protocol matching to function is that it works
+regardless of the number of functions and their interface number.
 
 
-Bjørn
-
- drivers/usb/host/xhci-pci.c  |  4 +++-
- drivers/usb/host/xhci-ring.c | 26 ++++++++++++++++++++++++++
- drivers/usb/host/xhci.h      |  1 +
- 3 files changed, 30 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 18c2bbddf080..6f3bed09028c 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -279,8 +279,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 			pdev->device == 0x3432)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 
--	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
-+	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483) {
- 		xhci->quirks |= XHCI_LPM_SUPPORT;
-+		xhci->quirks |= XHCI_EP_CTX_BROKEN_DCS;
-+	}
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI)
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 8fea44bbc266..a9c860ff5177 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -559,8 +559,11 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	struct xhci_ring *ep_ring;
- 	struct xhci_command *cmd;
- 	struct xhci_segment *new_seg;
-+	struct xhci_segment *halted_seg = NULL;
- 	union xhci_trb *new_deq;
- 	int new_cycle;
-+	union xhci_trb *halted_trb;
-+	int index = 0;
- 	dma_addr_t addr;
- 	u64 hw_dequeue;
- 	bool cycle_found = false;
-@@ -600,6 +603,29 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
- 	new_deq = ep_ring->dequeue;
- 	new_cycle = hw_dequeue & 0x1;
- 
-+	/*
-+	 * Quirk: xHC write-back of the DCS field in the hardware dequeue
-+	 * pointer is wrong - use the cycle state of the TRB pointed to by
-+	 * the dequeue pointer.
-+	 */
-+	if (xhci->quirks & XHCI_EP_CTX_BROKEN_DCS &&
-+	    !(ep->ep_state & EP_HAS_STREAMS))
-+		halted_seg = trb_in_td(xhci, cur_td->start_seg,
-+				       cur_td->first_trb, cur_td->last_trb,
-+				       hw_dequeue & ~0xf, false);
-+	if (halted_seg) {
-+		index = ((dma_addr_t)(hw_dequeue & ~0xf) - halted_seg->dma) /
-+			 sizeof(*halted_trb);
-+		halted_trb = &halted_seg->trbs[index];
-+		state->new_cycle_state = halted_trb->generic.field[3] & 0x1;
-+		xhci_dbg(xhci, "Endpoint DCS = %d TRB index = %d cycle = %d\n",
-+			 (u8)(hw_dequeue & 0x1), index,
-+			 state->new_cycle_state);
-+	} else {
-+		state->new_cycle_state = hw_dequeue & 0x1;
-+	}
-+	state->stream_id = stream_id;
-+
- 	/*
- 	 * We want to find the pointer, segment and cycle state of the new trb
- 	 * (the one after current TD's last_trb). We know the cycle state at
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 3c7d281672ae..911aeb7d8a19 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1896,6 +1896,7 @@ struct xhci_hcd {
- #define XHCI_SG_TRB_CACHE_SIZE_QUIRK	BIT_ULL(39)
- #define XHCI_NO_SOFT_RETRY	BIT_ULL(40)
- #define XHCI_BROKEN_D3COLD	BIT_ULL(41)
-+#define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
--- 
-2.30.2
-
+Bj=C3=B8rn
