@@ -2,140 +2,174 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921923BA8B7
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jul 2021 14:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F63BA8C7
+	for <lists+linux-usb@lfdr.de>; Sat,  3 Jul 2021 14:53:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230257AbhGCMhF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jul 2021 08:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbhGCMhF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jul 2021 08:37:05 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A822C061762;
-        Sat,  3 Jul 2021 05:34:31 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id b2so21005888ejg.8;
-        Sat, 03 Jul 2021 05:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=o/dhGEJDXnhd4O/PyBgBhUjqZwqKj7pT+ZJXSGfTD3o=;
-        b=EE2+9xsv09MFJtNSIqyMrI+bLtLWipPrpuP/sF6wPmW3tyeE9CfPzHMF9SHvNOTZC0
-         OtgLLT/FWBrqefGc+qROJZplPmY+SSr9fRdMvtKDgYDA1KsBQARLpG/JTgc9Ey3dAL2G
-         bRE3LI6yfpgri9CPdasuudQ8BEoFbAPx5QbmCy74Xe1rh2kH6UFLbx8DXYwpMaBmMbUs
-         NRgtU+lVwS4P1Tu5hfG1qSC6SLMmrhiGKOcLNVq/hcDXzFGUqVpdgo4c4oYwVKL+wWIU
-         VYW5oK8bUmCSW1hSiwV/cuc6DbvDy+pK+T+CDbnnlGd5ZLqY2qI9xJAqC37XsqHMvENW
-         0Y9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=o/dhGEJDXnhd4O/PyBgBhUjqZwqKj7pT+ZJXSGfTD3o=;
-        b=ZMJ8rAwE96HWsPJHvXh6pEYVcROBYRWLUvULSg1warx4KWHusQnaVijMHqMUEAVdVu
-         b41DmE7a4rOcmzRUEbRB9fLbehY+8ZVPcUn1s1Vk+T3v6v/SCpvv00n6gTW3xmhk8wRh
-         yk/yooBCFzFtoy12nZVgv138EBLY5xxsxbMqile6jErbqsuKHt9qjUnFzcMd0iWOj8/d
-         29WUyp5Xm69iItNXMJlqFeHG/BY5kvBqjcsYFrJEnLbwB3HVg6MyzQ2lqzN1Te0T2eYr
-         s30eg/fqHkW/qHVtLsoEUjI5/pEfw6qE8hxfjc6ckdkpZSALHz/lfpQ5hzuZk3krzE/4
-         RhgQ==
-X-Gm-Message-State: AOAM532B6u5LtWbbacClOzSVsCg9L8jrHbJbUHT7W1GvBVfwrDdnyPDO
-        RFe82Gh/zuHFUWP4cq7ONuiVn7PykFlbjQ==
-X-Google-Smtp-Source: ABdhPJzt1eSIv6W8ZH01/Gcl7czAyujXvk2NdaH/C4/l85s1/ldtqzbEoyZIaZISzQN6FleV0m71XA==
-X-Received: by 2002:a17:906:9b86:: with SMTP id dd6mr103956ejc.178.1625315669616;
-        Sat, 03 Jul 2021 05:34:29 -0700 (PDT)
-Received: from ?IPv6:2003:ea:8f3f:3d00:c18f:5fab:3a99:54e9? (p200300ea8f3f3d00c18f5fab3a9954e9.dip0.t-ipconnect.de. [2003:ea:8f3f:3d00:c18f:5fab:3a99:54e9])
-        by smtp.googlemail.com with ESMTPSA id i6sm2132310ejr.68.2021.07.03.05.34.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jul 2021 05:34:28 -0700 (PDT)
-Subject: Re: [PATCH net-next v1 1/1] net: usb: asix: ax88772: suspend PHY on
- driver probe
-To:     Oleksij Rempel <o.rempel@pengutronix.de>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org
-References: <20210629044305.32322-1-o.rempel@pengutronix.de>
- <931f10ca-2d81-8264-950c-8d29c18a7b35@gmail.com>
- <20210702035340.sdoc5dqpuo4cgsqe@pengutronix.de>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Message-ID: <53535272-c28f-092a-f068-87253da4013c@gmail.com>
-Date:   Sat, 3 Jul 2021 14:34:21 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S229649AbhGCMz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jul 2021 08:55:57 -0400
+Received: from mout02.posteo.de ([185.67.36.66]:40127 "EHLO mout02.posteo.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229488AbhGCMz4 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 3 Jul 2021 08:55:56 -0400
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout02.posteo.de (Postfix) with ESMTPS id 9CBCB2400E5
+        for <linux-usb@vger.kernel.org>; Sat,  3 Jul 2021 14:53:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1625316801; bh=cTAS6jnLHw5wSKAvgGLK/HWE5xksPvue7CmuoXNFnzU=;
+        h=From:To:Subject:Date:From;
+        b=PAiYS9N+/5msoVE7I3nL8AgYzdSVAY/wg9cjtPu1r8WcYMBf6Ngb7btbInTRbrvSr
+         39NAVBdJ56oH8KqT6YTWwKJURkF/f60ayS/8D+pKw/bZlgqnKNAaBvduFAJtwpOom1
+         VFD9gCtbhbwU53DpdZ3Law6ZelvI1v/hQNTfh5UHo+kJn8wzO7qxDHZOUkEO+eKBKO
+         VoKwk5D0kL1yFEw2B0D2imEeroBrzf08dNFfCnTkJXGAWjZdLGDg2f9x9WhfCq2nPX
+         ruiKgs95CS3qukh7dQ+LL1NvtbAXnDZ7yaFP7lW8OXT6px6obcEZhMWq9nEJ883l5M
+         qR1d2Wo100PgA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4GHBhK0kMjz6tm5;
+        Sat,  3 Jul 2021 14:53:21 +0200 (CEST)
+From:   Marco De Marco <marco.demarco@posteo.net>
+To:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: serial: option: Add support for u-blox LARA-R6 family
+Date:   Sat, 03 Jul 2021 12:53:20 +0000
+Message-ID: <2990355.UxunKf390f@mars>
+In-Reply-To: <YN1rUbJ9OKWMfwDp@hovoldconsulting.com>
+References: <2644396.hb5XgcuobH@mars> <YN1rUbJ9OKWMfwDp@hovoldconsulting.com>
 MIME-Version: 1.0
-In-Reply-To: <20210702035340.sdoc5dqpuo4cgsqe@pengutronix.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 02.07.2021 05:53, Oleksij Rempel wrote:
-> On Thu, Jul 01, 2021 at 12:01:04PM -0700, Florian Fainelli wrote:
->> On 6/28/21 9:43 PM, Oleksij Rempel wrote:
->>> After probe/bind sequence is the PHY in active state, even if interface
->>> is stopped. As result, on some systems like Samsung Exynos5250 SoC based Arndale
->>> board, the ASIX PHY will be able to negotiate the link but fail to
->>> transmit the data.
->>>
->>> To handle it, suspend the PHY on probe.
->>
->> Very unusual, could not the PHY be attached/connected to a ndo_open()
->> time like what most drivers do?
-> 
-> May be this can be done to.
-> But, should not the PHY be in the same state after phy_connect() and after
-> phy_stop()?
-> 
-> Currently, phy_connect() and phy_start() resume the PHY. The phy_stop()
-> is suspending it. Since the driver calls phy_connect(), phy_start() and
-> phy_stop(), the resume/suspend state is out of balance.
+The patch is meant to support LARA-R6 Cat 1 module family.
 
-At least currently there is no requirement that phy_resume()/phy_suspend()
-calls have to be balanced. Drivers must be able to deal with this.
-However phy_suspend() checks the state of phydev->suspended and skips the
-suspend callback if set.
+Module USB ID:
+Vendor  ID: 0x05c6
+Product ID: 0x90fA
 
-> In case some one will add for example something like regulator_enable/disable
-> callbacks in to phydev->syspend/resume callbacks, this would never work.
-> 
-> So, the question is, should phy_connect() put the PHY back in to suspend
-> mode? Or should the MAC driver take care of this?
-> 
->>>
->>> Fixes: e532a096be0e ("net: usb: asix: ax88772: add phylib support")
->>> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
->>> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
->>> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
->>> ---
->>>  drivers/net/usb/asix_devices.c | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
->>> index aec97b021a73..2c115216420a 100644
->>> --- a/drivers/net/usb/asix_devices.c
->>> +++ b/drivers/net/usb/asix_devices.c
->>> @@ -701,6 +701,7 @@ static int ax88772_init_phy(struct usbnet *dev)
->>>  		return ret;
->>>  	}
->>>  
->>> +	phy_suspend(priv->phydev);
->>>  	priv->phydev->mac_managed_pm = 1;
->>>  
->>>  	phy_attached_info(priv->phydev);
->>>
->>
->>
->> -- 
->> Florian
->>
-> 
-> Regards,
-> Oleksij
-> 
+Interface layout:
+If 0: Diagnostic
+If 1: AT parser
+If 2: AT parser
+If 3: QMI wwan (not available in all versions)
+
+Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
+
+=2D--
+
+ADB interface is not available.=20
+Diagnostic interface (If 0) can be used with option driver.
+
+Output of usb-devices command (this version does not have QMI WWAN):
+T:  Bus=3D01 Lev=3D01 Prnt=3D01 Port=3D00 Cnt=3D01 Dev#=3D  3 Spd=3D480 MxC=
+h=3D 0
+D:  Ver=3D 2.00 Cls=3D00(>ifc ) Sub=3D00 Prot=3D00 MxPS=3D64 #Cfgs=3D  1
+P:  Vendor=3D05c6 ProdID=3D90fa Rev=3D00.00
+S:  Manufacturer=3DQualcomm, Incorporated
+S:  Product=3DQualcomm CDMA Technologies MSM
+S:  SerialNumber=3D7da8aacd
+C:  #Ifs=3D 3 Cfg#=3D 1 Atr=3Dc0 MxPwr=3D500mA
+I:  If#=3D0x0 Alt=3D 0 #EPs=3D 2 Cls=3Dff(vend.) Sub=3Dff Prot=3D30 Driver=
+=3D(none)
+I:  If#=3D0x1 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dff Prot=3Dff Driver=
+=3D(none)
+I:  If#=3D0x2 Alt=3D 0 #EPs=3D 3 Cls=3Dff(vend.) Sub=3Dfe Prot=3Dff Driver=
+=3D(none)
+
+Thanks for your patience.
+
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index d08e1de26..bef24b50b 100644
+=2D-- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1115,6 +1115,7 @@ static const struct usb_device_id products[] =3D {
+ 	{QMI_FIXED_INTF(0x05c6, 0x9083, 3)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x9084, 4)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x90b2, 3)},    /* ublox R410M */
++	{QMI_QUIRK_SET_DTR(0x05c6, 0x90fa, 3)}, /* ublox R6XX  */
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 0)},
+ 	{QMI_FIXED_INTF(0x05c6, 0x920d, 5)},
+ 	{QMI_QUIRK_SET_DTR(0x05c6, 0x9625, 4)},	/* YUGA CLM920-NC5 */
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index aeaa3756f..32d1eac8c 100644
+=2D-- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -238,6 +238,7 @@ static void option_instat_callback(struct urb *urb);
+ #define QUECTEL_PRODUCT_UC15			0x9090
+ /* These u-blox products use Qualcomm's vendor ID */
+ #define UBLOX_PRODUCT_R410M			0x90b2
++#define UBLOX_PRODUCT_R6XX			0x90fa
+ /* These Yuga products use Qualcomm's vendor ID */
+ #define YUGA_PRODUCT_CLM920_NC5			0x9625
+=20
+@@ -1101,6 +1102,8 @@ static const struct usb_device_id option_ids[] =3D {
+ 	/* u-blox products using Qualcomm vendor ID */
+ 	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+ 	  .driver_info =3D RSVD(1) | RSVD(3) },
++	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
++	  .driver_info =3D RSVD(3) },
+ 	/* Quectel products using Quectel vendor ID */
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC21, =
+0xff, 0xff, 0xff),
+ 	  .driver_info =3D NUMEP2 },
+
+
+
+
+On gioved=EC 1 luglio 2021 09:14:25 CEST you wrote:
+> On Wed, Jun 30, 2021 at 07:09:20PM +0000, Marco De Marco wrote:
+> > Support for u-blox LARA-R6 modules family, usb serial interface.
+>=20
+> Please include the interface layout here too (cf. commit 4205cb01f6e9
+> ("USB: serial: option: adding support for ublox R410M")) and post the
+> output of usb-devices (or lsusb -v) for this device.
+>=20
+> Isn't there an ADB interface that should be reserved as well for
+> example?
+>=20
+> Please also use the common "USB: serial: option:" prefix in your commit
+> summary (Subject).
+>=20
+> > Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
+> > ---
+> >=20
+> >=20
+> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> > index aeaa3756f..05d0379c9 100644
+> > --- a/drivers/usb/serial/option.c
+> > +++ b/drivers/usb/serial/option.c
+> > @@ -238,6 +238,7 @@ static void option_instat_callback(struct urb *urb);
+> >=20
+> >  #define QUECTEL_PRODUCT_UC15			0x9090
+> >  /* These u-blox products use Qualcomm's vendor ID */
+> >  #define UBLOX_PRODUCT_R410M			0x90b2
+> >=20
+> > +#define UBLOX_PRODUCT_R6XX          0x90fa
+>=20
+> Looks like the indentation for the value is off here, or in any case you
+> should be using tabs rather than spaces.
+>=20
+> >  /* These Yuga products use Qualcomm's vendor ID */
+> >  #define YUGA_PRODUCT_CLM920_NC5			0x9625
+> >=20
+> > @@ -1101,6 +1102,8 @@ static const struct usb_device_id option_ids[] =
+=3D {
+> >=20
+> >  	/* u-blox products using Qualcomm vendor ID */
+> >  	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R410M),
+> >  =09
+> >  	  .driver_info =3D RSVD(1) | RSVD(3) },
+> >=20
+> > +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, UBLOX_PRODUCT_R6XX),
+> > +	  .driver_info =3D RSVD(3) },
+> >=20
+> >  	/* Quectel products using Quectel vendor ID */
+> >  	{ USB_DEVICE_AND_INTERFACE_INFO(QUECTEL_VENDOR_ID, QUECTEL_PRODUCT_EC=
+21,
+> >  	0xff, 0xff, 0xff),>  =09
+> >  	  .driver_info =3D NUMEP2 },
+>=20
+> Johan
+
+
+
 
