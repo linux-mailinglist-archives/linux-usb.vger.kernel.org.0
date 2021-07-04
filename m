@@ -2,196 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD033BAAD0
-	for <lists+linux-usb@lfdr.de>; Sun,  4 Jul 2021 03:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFE93BAF72
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 00:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbhGDBeF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jul 2021 21:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S229874AbhGDW6k (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jul 2021 18:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbhGDBeE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jul 2021 21:34:04 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AA9C061764
-        for <linux-usb@vger.kernel.org>; Sat,  3 Jul 2021 18:31:29 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id a5-20020a7bc1c50000b02901e3bbe0939bso8909318wmj.0
-        for <linux-usb@vger.kernel.org>; Sat, 03 Jul 2021 18:31:29 -0700 (PDT)
+        with ESMTP id S229642AbhGDW6i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jul 2021 18:58:38 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BBCDC061574;
+        Sun,  4 Jul 2021 15:56:01 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id bu19so29035948lfb.9;
+        Sun, 04 Jul 2021 15:56:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FJTWw8Pi2vNY+U/Yk6KX19a+CG+yNBMYeBmGQoKmOCU=;
-        b=rqXZU9YRXFxZkySDque6oPwZjmqJhZOeR8WiZxDmp2XG/CFk5RYWQkdi1neHe5Dq7r
-         6aGKn2kUVYRSg48L5OeiAPhspN5USvha5PROuXO3BdMZRUu++SgZswhnHawmWY8/9P92
-         IS3uLN2iOlSFzz4KP+aoSr7UWnhcAMjOi2eeRdAUNx02ngJ8lH1wBgvr4kObEX+ZyROz
-         gxP1/HgFPI1AfkOeyjjBesPNEKI8xq/XCNCYauIzD0a99WWUhWpl2RdOXVFbwCdSCDKZ
-         YkO1n6ojzAxydTLJq5IHvfKlO1pUdS5j67mtS2/4G10GMpUXki7qPvApqVFdo0bbF5i3
-         dsOA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fwDoLURDHKozXTahEpur8mu1fJsMk0Ebl7SqcPMfBPw=;
+        b=C/hYSUpFQgC9QKbD1nlcmsQpG1PDQOsT45ZLXQKcIMh7y0iGOolSnubsJ97nuZ/o6f
+         8k2j6+wQ1Ao2OpA59+C6ASr8CLUGDidpgj2eItjQPhaOG+7EKVx1cWI/0CTFKr5BfNCP
+         Yge5Cq1uzvA81CMTC4Syz5ZzcCy6CSU74fpvjCo700+KBAHNMYBkzD9lKwVB9GwVvUn7
+         61eKVv3sWwTE63E7qPMGhHl3ROGv3W/T8FC1NYqMpflZOqvRgoLgLwfrsmahuLegLU8K
+         yWkOnfOk2OYQomfyNXcVKhtY/9FerWa4b4qLW5VoFQv4ONx3ww+YwDL8UodI4YOcslNT
+         Pwjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FJTWw8Pi2vNY+U/Yk6KX19a+CG+yNBMYeBmGQoKmOCU=;
-        b=NMKlunaYYYwXtMdlYNZmE80ofyY3U6xm9TCnx1F2iJvjSlgO7UvXOXn7Mb32YA8mBv
-         oHmD+FQvTye4Cs1MAxGVRegkE8EcMbYzZ7pZkD19VvAWPON6eQMbIZ7NgNWrUY03TuFD
-         yBPoVf+8lQVWKmxRAAIEPj4Ne1b61qrhGibpyHTsW0dTYBHZA0jyVoANreq6/8ARHsxM
-         u+tA6S6Ugfqm6JQBvJNct7ZcBlJxVJ35K/t3uDuqMGKba+KvgssaUe0Df7NH9Q8rJO31
-         0bfZ7yylWK57Uek6vlQZufzWUZhkezJ56DhgsxmXqAxNwp1rdL4B+NcY1SN2MQmKTeU/
-         o3FA==
-X-Gm-Message-State: AOAM533IAttvFKFQYKW4sKGdWvZhGU379sqE/x3R7hTW97p20mW2X/Z4
-        y6hThIwnSRW8iThK6QAdNZZCUw==
-X-Google-Smtp-Source: ABdhPJzvSuHuXfAorKKlLszH9A1Gd7FDtg6qNmKiSNBBwNr1dT02kfAof2KZPL4TlMJikGe6r5MCfw==
-X-Received: by 2002:a1c:35c2:: with SMTP id c185mr7013862wma.126.1625362287881;
-        Sat, 03 Jul 2021 18:31:27 -0700 (PDT)
-Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l16sm18026717wmj.47.2021.07.03.18.31.27
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fwDoLURDHKozXTahEpur8mu1fJsMk0Ebl7SqcPMfBPw=;
+        b=OHizu0G0V2swkoevRUwHU8bn3/70PpZQbf/J2ux2LWcwUrD0pBgeE4BrQn7lfPn29c
+         nVW22HC9HiD7t8lXiiIfOHSmHAQ5dE71h6C6bpP/Dp1depjb6KRwOexmpLcR5UGUCgWa
+         AZ8ArZkH+LSha8pGriRtzijqZihLlLVM9IFukaVXVBR03ftSufbpTVzMQhBwjYUGhkmW
+         jrjNGARGhxyUINZnGsJ3FW3lxfB1n9L3sM5JHHHsBQO8T4sYyJGsyNb7otRq/91ySFCb
+         HtIwRXFdZVg+lxryFnE9ihpUkZ0dpBotpDlTk4jghurI4MiZ4wAvdJbirun1+9JSXH94
+         hWtQ==
+X-Gm-Message-State: AOAM532dLo4aEWsLuUB/RSLFbbRhJuLtxiG3XfoNEcE+1+FtC75YW3gQ
+        Cb9NWNX+BIA1MMPtKGc/8Fc=
+X-Google-Smtp-Source: ABdhPJyLSMj3Nn4vxMNiqosM/wWNvkeVTKUemnKgBQKHedyCJUfF2Y9d1Zqvgl8F+PABW24RuD8zNA==
+X-Received: by 2002:a05:6512:3618:: with SMTP id f24mr1084494lfs.517.1625439359975;
+        Sun, 04 Jul 2021 15:55:59 -0700 (PDT)
+Received: from localhost.localdomain (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.gmail.com with ESMTPSA id i13sm497921lfc.111.2021.07.04.15.55.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jul 2021 18:31:27 -0700 (PDT)
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     balbi@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org,
-        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Cc:     bryan.odonoghue@linaro.org
-Subject: [PATCH 3/3] usb: dwc3: dwc3-qcom: Make dwc3-qcom a role-switch signal recipient
-Date:   Sun,  4 Jul 2021 02:33:14 +0100
-Message-Id: <20210704013314.200951-4-bryan.odonoghue@linaro.org>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+        Sun, 04 Jul 2021 15:55:59 -0700 (PDT)
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org
+Subject: [PATCH v3 00/12] Add OTG mode support to Tegra USB PHY, SMB347 and Nexus 7
+Date:   Mon,  5 Jul 2021 01:54:21 +0300
+Message-Id: <20210704225433.32029-1-digetx@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When switching role from host to peripheral or peripheral to host we need
-to set SoC UTMI signal logic in software since this is not done
-automatically by the PHY or DWC3 core.
+Hi,
 
-We have existing extcon code in dwc3-qcom which already implements the
-right logic for extcon based systems, however, as we move to USB
-role-switching we need to similarly facilitate the same UTMI switch
-notification.
+This series adds USB OTG mode support to the NVIDIA Tegra USB PHY driver,
+SMB347 charger driver and Nexus 7 tablet.
 
-Setting the dwc3-qcom wrapper up as a USB role switch signal recipient
-allows us to replicate the extcon logic with the role-switch API by
-receiving the set_role() from dwc3-core and calling the existing VBUS
-extcon code.
+Changelog:
 
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
----
- drivers/usb/dwc3/dwc3-qcom.c | 69 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+v3: - Further improved interrupt handling in the PHY driver by removing
+      assumption that interrupt is enabled by the CI driver at the time
+      of set_wakeup() invocation, which makes this function a bit more
+      universal.
 
-diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-index 2e61302e3e91..1aec387a8537 100644
---- a/drivers/usb/dwc3/dwc3-qcom.c
-+++ b/drivers/usb/dwc3/dwc3-qcom.c
-@@ -20,6 +20,7 @@
- #include <linux/usb/of.h>
- #include <linux/reset.h>
- #include <linux/iopoll.h>
-+#include <linux/usb/role.h>
- 
- #include "core.h"
- 
-@@ -81,6 +82,7 @@ struct dwc3_qcom {
- 	struct extcon_dev	*host_edev;
- 	struct notifier_block	vbus_nb;
- 	struct notifier_block	host_nb;
-+	struct usb_role_switch	*role_sw;
- 
- 	const struct dwc3_acpi_pdata *acpi_pdata;
- 
-@@ -154,6 +156,66 @@ static int dwc3_qcom_host_notifier(struct notifier_block *nb,
- 	return NOTIFY_DONE;
- }
- 
-+#if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
-+static int dwc3_qcom_usb_role_switch_set(struct usb_role_switch *sw,
-+					 enum usb_role role)
-+{
-+	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-+	bool enable;
-+
-+	switch (role) {
-+	case USB_ROLE_DEVICE:
-+		qcom->mode = USB_DR_MODE_PERIPHERAL;
-+		enable = true;
-+		break;
-+	case USB_ROLE_HOST:
-+	default:
-+		qcom->mode = USB_DR_MODE_HOST;
-+		enable = false;
-+		break;
-+	}
-+
-+	dwc3_qcom_vbus_override_enable(qcom, enable);
-+	return 0;
-+}
-+
-+static enum usb_role dwc3_qcom_usb_role_switch_get(struct usb_role_switch *sw)
-+{
-+	struct dwc3_qcom *qcom = usb_role_switch_get_drvdata(sw);
-+	enum usb_role role;
-+
-+	switch (qcom->mode) {
-+	case USB_DR_MODE_PERIPHERAL:
-+		role = USB_ROLE_DEVICE;
-+		break;
-+	case  USB_DR_MODE_HOST:
-+	default:
-+		role = USB_ROLE_HOST;
-+		break;
-+	}
-+
-+	return role;
-+}
-+
-+static int dwc3_qcom_setup_role_switch(struct dwc3_qcom *qcom)
-+{
-+	struct usb_role_switch_desc dwc3_qcom_role_switch = {NULL};
-+
-+	dwc3_qcom_role_switch.fwnode = dev_fwnode(qcom->dev);
-+	dwc3_qcom_role_switch.set = dwc3_qcom_usb_role_switch_set;
-+	dwc3_qcom_role_switch.get = dwc3_qcom_usb_role_switch_get;
-+	dwc3_qcom_role_switch.driver_data = qcom;
-+	qcom->role_sw = usb_role_switch_register(qcom->dev,
-+						 &dwc3_qcom_role_switch);
-+	if (IS_ERR(qcom->role_sw))
-+		return PTR_ERR(qcom->role_sw);
-+
-+	return 0;
-+}
-+#else
-+#define dwc3_qcom_setup_role_switch(x) 0
-+#endif
-+
- static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
- {
- 	struct device		*dev = qcom->dev;
-@@ -818,6 +880,10 @@ static int dwc3_qcom_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto interconnect_exit;
- 
-+	ret = dwc3_qcom_setup_role_switch(qcom);
-+	if (ret)
-+		goto interconnect_exit;
-+
- 	device_init_wakeup(&pdev->dev, 1);
- 	qcom->is_suspended = false;
- 	pm_runtime_set_active(dev);
-@@ -850,6 +916,9 @@ static int dwc3_qcom_remove(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	int i;
- 
-+	if (qcom->role_sw)
-+		usb_role_switch_unregister(qcom->role_sw);
-+
- 	device_remove_software_node(&qcom->dwc3->dev);
- 	of_platform_depopulate(dev);
- 
+v2: - The PHY's interrupt is now enabled from PHY's set_wakeup() callback.
+      It prevents getting a spurious interrupt during the CI driver probe
+      time.
+
+Dmitry Osipenko (12):
+  dt-bindings: phy: tegra20-usb-phy: Convert to schema
+  dt-bindings: phy: tegra20-usb-phy: Document properties needed for OTG
+    mode
+  soc/tegra: pmc: Expose USB regmap to all SoCs
+  usb: phy: tegra: Support OTG mode programming
+  usb: otg-fsm: Fix hrtimer list corruption
+  dt-bindings: power: supply: smb347-charger: Document USB VBUS
+    regulator
+  power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+  power: supply: smb347-charger: Remove caching of charger state
+  power: supply: smb347-charger: Implement USB VBUS regulator
+  arm64: tegra132: Add new properties to USB PHY device-tree node
+  ARM: tegra: Add new properties to USB PHY device-tree nodes
+  ARM: tegra: nexus7: Enable USB OTG mode
+
+ .../bindings/phy/nvidia,tegra20-usb-phy.txt   |  74 ----
+ .../bindings/phy/nvidia,tegra20-usb-phy.yaml  | 377 ++++++++++++++++++
+ .../power/supply/summit,smb347-charger.yaml   |  28 ++
+ arch/arm/boot/dts/tegra114.dtsi               |   6 +
+ arch/arm/boot/dts/tegra124.dtsi               |   9 +
+ arch/arm/boot/dts/tegra20.dtsi                |   9 +
+ .../tegra30-asus-nexus7-grouper-common.dtsi   |  25 +-
+ arch/arm/boot/dts/tegra30.dtsi                |   9 +
+ arch/arm64/boot/dts/nvidia/tegra132.dtsi      |   9 +
+ drivers/power/supply/Kconfig                  |   1 +
+ drivers/power/supply/smb347-charger.c         | 259 +++++++++++-
+ drivers/soc/tegra/pmc.c                       |   6 +-
+ drivers/usb/common/usb-otg-fsm.c              |   6 +-
+ drivers/usb/phy/phy-tegra-usb.c               | 202 +++++++++-
+ .../dt-bindings/power/summit,smb347-charger.h |   4 +
+ include/linux/usb/otg-fsm.h                   |   1 +
+ include/linux/usb/tegra_usb_phy.h             |   5 +
+ 17 files changed, 926 insertions(+), 104 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.txt
+ create mode 100644 Documentation/devicetree/bindings/phy/nvidia,tegra20-usb-phy.yaml
+
 -- 
-2.30.1
+2.32.0
 
