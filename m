@@ -2,91 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C76763BA9C9
-	for <lists+linux-usb@lfdr.de>; Sat,  3 Jul 2021 19:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E54AB3BAACF
+	for <lists+linux-usb@lfdr.de>; Sun,  4 Jul 2021 03:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbhGCRZR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 3 Jul 2021 13:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54380 "EHLO
+        id S229898AbhGDBeE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 3 Jul 2021 21:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbhGCRZR (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jul 2021 13:25:17 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21D77C061762;
-        Sat,  3 Jul 2021 10:22:42 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id r16so18120421ljk.9;
-        Sat, 03 Jul 2021 10:22:41 -0700 (PDT)
+        with ESMTP id S229529AbhGDBeB (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 3 Jul 2021 21:34:01 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3DEC061762
+        for <linux-usb@vger.kernel.org>; Sat,  3 Jul 2021 18:31:26 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id l1so8975056wme.4
+        for <linux-usb@vger.kernel.org>; Sat, 03 Jul 2021 18:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=GkqlghX39ZQMv0VL5XMqearbdcMjcK0zkdFdKOtJnZE=;
-        b=JPznIM0Ow6NR7CkKU2r2nhwUcgQydZM7A1VNBFp+isDWXxuevJXSfv8RQkurrGQL2k
-         WPQI59y6D3Tsnx8EwwRGVJArttxiRuNmrmX1DG58hyG/SDRlYihmk353i+llBl2zLCjg
-         fSfnVH9lD/Rjs5dJf9p75JWWl84pxuczO6ZuoD1hB9/JVLPHUnTQgeKPUkfLS/dmG/qs
-         mu7ImVMZ3anXjv9croyzuBMSReWpgtRDi5WnHEFhqT59Iw0O6HEU7d/z8JGkWoGPo/Fb
-         73S7EShfF1P5P9sxmGyFsvelgFUCsky2sQDBx8HSB7pWnbs6tI/NdFzBJAIfzggsLDFP
-         PnUQ==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gNEaQb0fIENMx1ex6ijnu94BNCTxNqJRzzbxuRHhkzU=;
+        b=cwYcW/cSxPsqnmivuYII4nJI67xKGifXXJeEdKJEcH6btMBQceTk36zl0nF7lN5Ewj
+         TG4Gfk6RZE3oz0iT6fIfGwDP7mMF3pOa1AdYMu03dWCZnIT1cy+q6R1d2EJq4A17rgvs
+         2+P3Q7R9patIw/AKbE1F8e5uMY2ctIjNxdZ8gY+B9GMIZTLZZgp8Qf6PsEqGDzMfWX/C
+         tQByU9R1Y8ugYTOC7XGXzwG79tvOn8JerjB/BkHk42k9BJ5pwMYe7WWEuHylnD/ANCsy
+         xisAml9IMDlsn9EKluiEL3mbIzZox/3X+vQzPAgM653vdGc2X41GvHBuYe30N9iiuv1R
+         Qgow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=GkqlghX39ZQMv0VL5XMqearbdcMjcK0zkdFdKOtJnZE=;
-        b=GeCZbNj+hh0yyo7eYN02DKa4NLy1JaEjUhANj7AAm63LXNTdpYng27AjUrraamfinE
-         RpsHUKymFlmZtoPrQ7/iwnDOLFt+yoFTK1lOgKxsGMMtxcRjqhSdS1WDy3ybieZJgXDV
-         tj8eX8c3Do5ZLor2biOE5D012gN3nQCovPtQLkgJKqaZtAuRKnxA75EcevcNWpLJeuc0
-         uGyO4Oq/L+ZGRo+GW6hTdWCrDcSUt7jEBMIXcQgrvMmcskmq67P9eEEThEnSW/Lnt01v
-         H3fxRZT3EsVD04DlGUFBcWhLwmodp4L3NidcF1FfKQpFQ8V9s1uY6L3P3x5GJE5RgUWm
-         a2uQ==
-X-Gm-Message-State: AOAM532P/42N91FIo73btN+xMXlfihmTk/OKv73jlcFeWzleWR3ziOgm
-        4hofPYh2lBOlWCclEBA9PqPYrFhtjsQ=
-X-Google-Smtp-Source: ABdhPJz99JpS1s9M1J2vPLOFyo50q0z+BC5l0L+5Y8kLjHwHDWH3mZKaBsEFzY7LPxfB6iP5MWp3FQ==
-X-Received: by 2002:a05:651c:504:: with SMTP id o4mr4090359ljp.357.1625332960228;
-        Sat, 03 Jul 2021 10:22:40 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id x3sm749371ljm.43.2021.07.03.10.22.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jul 2021 10:22:39 -0700 (PDT)
-Subject: Re: [PATCH v2 05/12] usb: otg-fsm: Fix hrtimer list corruption
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210701234317.26393-1-digetx@gmail.com>
- <20210701234317.26393-6-digetx@gmail.com> <20210703110809.GA4289@Peter>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <29476aa3-c34e-8bf0-5eab-f7def493f329@gmail.com>
-Date:   Sat, 3 Jul 2021 20:22:38 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=gNEaQb0fIENMx1ex6ijnu94BNCTxNqJRzzbxuRHhkzU=;
+        b=TpaPpN9egPc+dUB2wFhbuRXrD1k8VaSPxUtp/0NVzXK+vIg3iKDiUaKFQhoU6w8wRb
+         O3F+BxW+0Nnc/N8HPz5SYc8BaCeyEoq/5HERILYahGL0Nqrq0zR5NCdpptcrFYBRblfh
+         bozY0aYGwCXLvkLy7+yni5EsVzBCY8EvwnT2FoB/1y4AZcBYzzasULmVZGHCS/1nu+fN
+         haN7/h3Qrm5EdCsWurxt0dDwEr/3soqo6B4Z9b0CEFMniOrPcF8FX4IITyOMiZt0Hw3M
+         z9Kd2bIYfqlsq/YCqSPzN1lmYKI0kahIgO7HFXz7rXhg1vImwQpaK5xt34PoyzFVeWEp
+         7qKw==
+X-Gm-Message-State: AOAM5311wwly7njeiYwounlwfg3eHKU0+1UxytBI6d1KVn+Tw+gtcno0
+        f2iTZlG+d7wAiCyH+q8Mjdodqw==
+X-Google-Smtp-Source: ABdhPJw7sk7ctRLD7L9MfqhmLRUKyUBrSBPKOftH6fRS5gfm0xeVtI69S2h57dR8VCCdPshwyqByhQ==
+X-Received: by 2002:a05:600c:218f:: with SMTP id e15mr7347926wme.28.1625362284850;
+        Sat, 03 Jul 2021 18:31:24 -0700 (PDT)
+Received: from sagittarius-a.chello.ie (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id l16sm18026717wmj.47.2021.07.03.18.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 03 Jul 2021 18:31:24 -0700 (PDT)
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     balbi@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        gregkh@linuxfoundation.org, jackp@codeaurora.org,
+        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     bryan.odonoghue@linaro.org
+Subject: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to dwc3-qcom
+Date:   Sun,  4 Jul 2021 02:33:11 +0100
+Message-Id: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-In-Reply-To: <20210703110809.GA4289@Peter>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-03.07.2021 14:08, Peter Chen пишет:
-> On 21-07-02 02:43:10, Dmitry Osipenko wrote:
->> The HNP work can be re-scheduled while it's still in-fly. This results in
->> re-initialization of the busy work, resetting the hrtimer's list node of
->> the work and crashing kernel with null dereference within kernel/timer
->> once work's timer is expired. It's very easy to trigger this problem by
->> re-plugging USB cable quickly. Initialize HNP work only once to fix this
->> trouble.
-> 
-> Fully OTG compliance support has not maintained for years, what's the use case you
-> still want to use?
+This is a topic we have been discussing for some time, initially in the
+context of gpio usb-c-connector role-switching.
 
-I don't have any use case for it, but I had CONFIG_USB_OTG_FSM=y and it
-was crashing kernel badly. The OTG works perfectly fine without the FSM.
+https://lore.kernel.org/linux-usb/20200311191501.8165-1-bryan.odonoghue@linaro.org
+
+Hardware availability constraints limited scope to finish that off.
+
+Thankfully Wesley Cheng made a new set of USB role-switch related patches
+for dwc3-qcom, this time in conjunction with the qcom pm8150b type-c
+silicon.
+
+https://lore.kernel.org/linux-usb/20201009082843.28503-1-wcheng@codeaurora.org
+
+For the RB5 project we picked Wesley's changes and developed them further,
+around a type-c port manager.
+
+As a precursor to that TCPM I reposted Wesley's patches
+https://lore.kernel.org/linux-usb/20210629144449.2550737-1-bryan.odonoghue@linaro.org
+
+Bjorn pointed out that having the role-switch triggered from dwc3-qcom to
+dwc3-drd is not the right way around, indicating a preference for the
+original notifier from dwc3-drd to dwc3-qcom.
+
+There are two approaches I considred and prototyped to accomplish the
+desired dwc3-drd -> dwc3-qcom messaging.
+
+#1 Using a notifier in dwc3-drd to trigger dwc3-qcom
+
+   This would be nice since it would accomplish the desired layering
+   dwc3-drd -> dwc3-qcom.
+
+   However:
+   a) It would be a real mess as dwc3-qcom is the parent device of
+      dwc3-core so, if the child-device dwc3-core deferred probing for
+      whatever reason we would have to detect this and retry the parent's
+      probe again. The point in time that dwc3-qcom could potentially parse
+      such a deferral in the child device is late. It would also be weird
+      and messy to try to roll back the parent's probe because of a child
+      device deferral.
+
+      I considered making some sort of worker in the parent to check for
+      child device probe but, again this seemed like an atrocious hack so,
+      I didn't even try to prototype that.
+
+   b) One potential solution was using "__weak" linkage in a function
+      provided by dwc3-drd that a wrapper such as dwc3-qcom could then
+      over-ride.
+
+      If a wrapper such as dwc3-qcom then implemented a function with
+      regular linkage it would over-ride the __weak function and provide a
+      method for the dwc3-drd code to call into dwc3-qcom when probing was
+      complete, thus allowing registration of the notifier when the child
+      was ready.
+
+      This would work up until the point that you tried to compile two
+      implementations of a dwc3 wrapper into the one kernel module or the
+      one kernel image say dwc3-qcom and a similar implementation in
+      dwc3-meson. At that point you would get linker breakage.
+
+#2 Using USB role switching for the notification
+
+   Wesley's implementation took the approach dwc3-qcom -> dwc3-drd, whereas
+   the approach I'm proposing here is dwc3-drd -> dwc3-qcom, which is also
+   what we discussed on the list.
+
+   Having implemented it, I think USB role-switching in the direction
+   dwc3-drd -> dwc3-qcom is also a much cleaner solution for several
+   reasons.
+
+   a) Handling probe deferral is built into Linux' USB role switching today
+      so we don't have to re-invent that wheel, unlike with the original
+      notifier model.
+
+   b) There is no "wiring up" or traversing the graph tree for the wrapper
+      layer to determine if the parent device has a compliant type-c
+      connector associated with it, unlike in the dwc3-qcom -> dwc3-drd
+      model.
+
+      All that has to happen is "usb-role-switch" is declared in the parent
+      dwc3-qcom node and the role-switch API takes care of the rest.
+
+      That means its possible to use a usb-c-connector, qcom type-c pm8150b
+      driver, a USCI, a tps659x, a fusb302 or something like ChromeOS
+      cros_ec to notify dwc3-drd without dwc3-qcom having to have
+      the slighest clue which type of device is sending the signal.
+
+      All dwc3-qcom needs to do is waggle UTMI signals in a register when a
+      role-switch happens.
+
+   c) It "feels" like a layering violation to have the dwc3-qcom SoC
+      wrapper receive the event and trigger the dwc3-drd core.
+
+      The standard model of parent/child role switching or remote-endpoint
+      traversal that USB role switching already has works just fine for
+      dwc3-drd, we just need to trigger dwc3-qcom for the role-switch in a
+      non-vendor and non-SoC specific way.
+
+   d) Less code. It turns out there's less code implementing as a
+      role-switch interface in the direction dwc3-drd -> dwc3-qcom.
+
+   e) Portability. The mechanism used for dwc3-drd -> dwc3 qcom can be
+      reused for any other similar wrapper which models the wrapper as a
+      parent of the dwc3-drd.
+
+For all of those reasons I've opted to use USB role-switch notification
+from dwc3-drd to dwc3-qcom.
+
+git add bod git://git.linaro.org/people/bryan.odonoghue/kernel.git
+git fetch bod
+git diff usb-next-5.13.rcx-rb5-tcpm..usb-next-5.13.rcx-rb5-tcpm-v2
+
+Bryan O'Donoghue (2):
+  usb: dwc3: Add role switch relay support
+  usb: dwc3: dwc3-qcom: Make dwc3-qcom a role-switch signal recipient
+
+Wesley Cheng (1):
+  usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
+
+ drivers/usb/dwc3/core.h      |  2 +
+ drivers/usb/dwc3/drd.c       | 10 +++++
+ drivers/usb/dwc3/dwc3-qcom.c | 77 ++++++++++++++++++++++++++++++++++--
+ 3 files changed, 85 insertions(+), 4 deletions(-)
+
+-- 
+2.30.1
+
