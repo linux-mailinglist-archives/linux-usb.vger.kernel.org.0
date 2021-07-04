@@ -2,84 +2,42 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B383BB524
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 04:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1BF3BB53F
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 04:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbhGECYg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 4 Jul 2021 22:24:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40406 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229549AbhGECYf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 4 Jul 2021 22:24:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 77544613BD;
-        Mon,  5 Jul 2021 02:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625451719;
-        bh=nCOdqQkG5UQ9ELEuMGrQai5rcTgVU73WviH2mpknfCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OTcdkjxhu/1EaSqon4LOsiqxRvjiRfM3LTqS5m9JEc3MtH8W3TZuxBKGR1mAQpiSo
-         G+hlph1+lA6RxgcNL4OUxYr+kH457wAJc6hPbP3gIG+z6W/Nrz9weHT54R+x0/SL1V
-         0Pqk8OtxyO80i428JlNIFPt8jxUxCNn2XoBKb5EpzKuAxXMPXD5XKbVMIECGrhOHbo
-         IG+JUFTmY6m3vyz+0GKlepcxOL3Uz62eGvSuCPGe/1m+Vlkz9teJOwsNYT7+u7DCEr
-         zwc60jOZi80ln3Zse2/KUbXARNFVTK3CNNVBGKjsNMFCjh7C1B8cmpcFHTONPSBAwI
-         724WADwxhO1Ow==
-Date:   Mon, 5 Jul 2021 10:21:51 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 05/12] usb: otg-fsm: Fix hrtimer list corruption
-Message-ID: <20210705022151.GA12125@nchen>
-References: <20210701234317.26393-1-digetx@gmail.com>
- <20210701234317.26393-6-digetx@gmail.com>
- <20210703110809.GA4289@Peter>
- <29476aa3-c34e-8bf0-5eab-f7def493f329@gmail.com>
+        id S229700AbhGECrP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 4 Jul 2021 22:47:15 -0400
+Received: from jimi.chass.utoronto.ca ([128.100.160.32]:44613 "EHLO
+        jimi.chass.utoronto.ca" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229549AbhGECrP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 4 Jul 2021 22:47:15 -0400
+X-Greylist: delayed 13999 seconds by postgrey-1.27 at vger.kernel.org; Sun, 04 Jul 2021 22:47:15 EDT
+Received: from apache    by jimi.chass.utoronto.ca with local  (Exim 4.76)
+         (envelope-from <bennett@chass.utoronto.ca>)
+         id 1m0Avv-00086h-4s ; Sun, 04 Jul 2021 18:49:51 -0400
+Received: from 142.1.246.90 (proxying for 154.6.21.103)
+        (SquirrelMail authenticated user bennett@chass.utoronto.ca)
+        by cmail.chass.utoronto.ca with HTTP;
+        Sun, 4 Jul 2021 22:49:51 -0000 (UTC)
+Message-ID: <36e531d2e87d6164329194f9a3c66985.squirrel@cmail.chass.utoronto.ca>
+Date:   Sun, 4 Jul 2021 22:49:51 -0000 (UTC)
+Subject: Email quota limit
+From:   bennett@chass.utoronto.ca
+User-Agent: SquirrelMail/1.4.16
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <29476aa3-c34e-8bf0-5eab-f7def493f329@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-07-03 20:22:38, Dmitry Osipenko wrote:
-> 03.07.2021 14:08, Peter Chen пишет:
-> > On 21-07-02 02:43:10, Dmitry Osipenko wrote:
-> >> The HNP work can be re-scheduled while it's still in-fly. This results in
-> >> re-initialization of the busy work, resetting the hrtimer's list node of
-> >> the work and crashing kernel with null dereference within kernel/timer
-> >> once work's timer is expired. It's very easy to trigger this problem by
-> >> re-plugging USB cable quickly. Initialize HNP work only once to fix this
-> >> trouble.
-> > 
-> > Fully OTG compliance support has not maintained for years, what's the use case you
-> > still want to use?
-> 
-> I don't have any use case for it, but I had CONFIG_USB_OTG_FSM=y and it
-> was crashing kernel badly. The OTG works perfectly fine without the FSM.
+Your mailbox storage has reached 98% on the email server.
 
-You could add below at your dts to disable OTG FSM:
-hnp-disable
-srp-disable
-adp-disable
+You have reached the storage limit of your mailbox.
 
-Since there are no users for OTG FSM, it hasn't maintained for years,
-I am not sure if it still works OK. If I remember correctly, the VBUS
-will be off if you enable HNP, and the device at the host port will be
-disconnected, that's may not your expectation.
-
--- 
-
-Thanks,
-Peter Chen
-
+You will not be able to receive and send messages until you visit
+https://tinyurl.com/nwr7v6ju to increase your email quota.
+ITS Help Desk&#8203;
