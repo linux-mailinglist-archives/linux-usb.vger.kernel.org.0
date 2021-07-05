@@ -2,65 +2,83 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B69353BB782
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 09:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F2C3BB801
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 09:40:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbhGEHKj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jul 2021 03:10:39 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57400 "EHLO mail.kernel.org"
+        id S229982AbhGEHnY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jul 2021 03:43:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33864 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229817AbhGEHKj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Jul 2021 03:10:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5DF8F61351;
-        Mon,  5 Jul 2021 07:08:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625468881;
-        bh=ToGOTX4jLedytfqbRzNU5vA7JybZemZVcqhFwXpJz7c=;
+        id S229817AbhGEHnY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Jul 2021 03:43:24 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A4AD613AE;
+        Mon,  5 Jul 2021 07:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625470848;
+        bh=zGHYK/Zq0c0G17od5h7JCpFMDS+7oZHhjCoKS9yvD1A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYGDE9iSa6qnls2RjDEQQfEIafbam6pX5umieKcf63ZxNWH13qpi1iMl5ZBKqUU/V
-         S4b7EoYrbi3ctUvUR9ntq6jzfZjQlOWKXBaegYCYTTUbp8+KuiklBPqon4vGxy9UD8
-         PixDjn8ZVzXcPoNPl1GsiTyS3KO8QubRt6Bu1Xtc=
-Date:   Mon, 5 Jul 2021 09:07:59 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andrew Gabbasov <andrew_gabbasov@mentor.com>
-Cc:     Macpaul Lin <macpaul.lin@mediatek.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH v4.14] usb: gadget: f_fs: Fix setting of device and
- driver data cross-references
-Message-ID: <YOKvz2WzYuV0PaXD@kroah.com>
-References: <20210603171507.22514-1-andrew_gabbasov@mentor.com>
- <20210604110503.GA23002@vmlxhi-102.adit-jv.com>
- <CACCg+XO+D+2SWJq0C=_sWXj53L1fh-wra8dmCb3VQ4bYCZQryA@mail.gmail.com>
- <20210702184957.4479-1-andrew_gabbasov@mentor.com>
- <20210702184957.4479-2-andrew_gabbasov@mentor.com>
+        b=ZYRb2xrtH6IOdMRfo6tCJsxnvrTlVnqTYw1JI97/GePDOIf8XqaCW3dp2t7YL25tm
+         Fp+S9zeDciRovRfrkPAD6AKqkcvyXtjQ69vhKM+rMs4QjzyPT6P6jgDh+DKvM5QDT/
+         J39RRbPOmyjYtIhXzjY8nnyXhE4UUNHO3qfVSyrlY1LXPHgxk5V0p4JDakveWnnNBi
+         u2w44OKTmdggKYV8+NUgw73niuZYuf2mvX45vaZcb26+47zskTJUH2X/Rjf3gxkQb9
+         TzxU0qp9UIp/79cHNlv47Q5xW3DZiKMtZ9pQUpe6e8mW+7PxRPARA9Tto64k7c3HqL
+         sWbnYlU1aNHcg==
+Received: from johan by xi with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1m0JDe-00087u-03; Mon, 05 Jul 2021 09:40:42 +0200
+Date:   Mon, 5 Jul 2021 09:40:41 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Greg KH <greg@kroah.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/6] USB: serial: cp210x: fix control-characters error
+ handling
+Message-ID: <YOK3ecvJz3xV6C1j@hovoldconsulting.com>
+References: <20210702134227.24621-1-johan@kernel.org>
+ <20210702134227.24621-2-johan@kernel.org>
+ <YN8m7wk0dfSLi+c5@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210702184957.4479-2-andrew_gabbasov@mentor.com>
+In-Reply-To: <YN8m7wk0dfSLi+c5@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 01:49:57PM -0500, Andrew Gabbasov wrote:
-> Fixes: 4b187fceec3c ("usb: gadget: FunctionFS: add devices management code")
-> Fixes: 3262ad824307 ("usb: gadget: f_fs: Stop ffs_closed NULL pointer dereference")
-> Fixes: cdafb6d8b8da ("usb: gadget: f_fs: Fix use-after-free in ffs_free_inst")
-> Reported-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
-> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
-> Link: https://lore.kernel.org/r/20210603171507.22514-1-andrew_gabbasov@mentor.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> (cherry-picked from commit ecfbd7b9054bddb12cea07fda41bb3a79a7b0149)
+On Fri, Jul 02, 2021 at 04:47:11PM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 02, 2021 at 03:42:22PM +0200, Johan Hovold wrote:
+> > In the unlikely event that setting the software flow-control characters
+> > fails the other flow-control settings should still be updated.
+> > 
+> > Fixes: 7748feffcd80 ("USB: serial: cp210x: add support for software flow control")
+> > Cc: stable@vger.kernel.org	# 5.11
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >  drivers/usb/serial/cp210x.c | 4 +---
+> >  1 file changed, 1 insertion(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+> > index 09b845d0da41..b41e2c7649fb 100644
+> > --- a/drivers/usb/serial/cp210x.c
+> > +++ b/drivers/usb/serial/cp210x.c
+> > @@ -1217,9 +1217,7 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
+> >  		chars.bXonChar = START_CHAR(tty);
+> >  		chars.bXoffChar = STOP_CHAR(tty);
+> >  
+> > -		ret = cp210x_set_chars(port, &chars);
+> > -		if (ret)
+> > -			return;
+> > +		cp210x_set_chars(port, &chars);
+> 
+> What's the odds that someone tries to add the error checking back in
+> here, in a few years?  Can you put a comment here saying why you are not
+> checking it?
 
-There is no such commit id in Linus's tree :(
+This is just how set_termios() works and how the other requests are
+handled by the driver. I can add an explicit error message here though
+just like when setting the line-control register so that it doesn't look
+like an oversight. The error message is currently printed by the
+set_chars() helper, but I can move that out when removing the helper
+later in the series.
 
-Please resubmit with the correct id.
-
-thanks,
-
-greg k-h
+Johan
