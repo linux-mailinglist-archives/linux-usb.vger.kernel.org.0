@@ -2,83 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F2C3BB801
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 09:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B8F3BB8ED
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 10:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbhGEHnY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jul 2021 03:43:24 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33864 "EHLO mail.kernel.org"
+        id S230309AbhGEIXX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jul 2021 04:23:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40942 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229817AbhGEHnY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Jul 2021 03:43:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0A4AD613AE;
-        Mon,  5 Jul 2021 07:40:48 +0000 (UTC)
+        id S230330AbhGEIXU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Jul 2021 04:23:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id D1CE761447;
+        Mon,  5 Jul 2021 08:20:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625470848;
-        bh=zGHYK/Zq0c0G17od5h7JCpFMDS+7oZHhjCoKS9yvD1A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZYRb2xrtH6IOdMRfo6tCJsxnvrTlVnqTYw1JI97/GePDOIf8XqaCW3dp2t7YL25tm
-         Fp+S9zeDciRovRfrkPAD6AKqkcvyXtjQ69vhKM+rMs4QjzyPT6P6jgDh+DKvM5QDT/
-         J39RRbPOmyjYtIhXzjY8nnyXhE4UUNHO3qfVSyrlY1LXPHgxk5V0p4JDakveWnnNBi
-         u2w44OKTmdggKYV8+NUgw73niuZYuf2mvX45vaZcb26+47zskTJUH2X/Rjf3gxkQb9
-         TzxU0qp9UIp/79cHNlv47Q5xW3DZiKMtZ9pQUpe6e8mW+7PxRPARA9Tto64k7c3HqL
-         sWbnYlU1aNHcg==
+        s=k20201202; t=1625473241;
+        bh=LFyp+REsgurXPkNsy24a7z98TwA4hJdMX8wTWIyMHYI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=jHnVtFcWj6+aYiacfOiLgjmuzr/pP+FzjjT2ElJMLh5NgqsMZODGWQ9uv2VEkWTdN
+         QiW8bd3Nz/3fOMW21eS22ZpnYPm/H0yrNAXNQSS+TSH0pwCbsQ1ysalm1IUj4yOJQ/
+         znaxZnbTFtnj2qJXh/K1RU+/F6AdkW2CLibxHPZc7JnearEqTqzLEPkP12n2pcMCpP
+         +C/rIklajMRqwkYE324NpBG1XPFWnZiIEmScqC8baKVipRfUxH1Vg94agoykBaCHKt
+         7sL8TN/InJiyJs6peCEigv0KaFReUvqNyAeCY1pKzt0h+jbunMf/D0Vkaw8Dg/EwQY
+         EIgNR6hJrp5IQ==
 Received: from johan by xi with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1m0JDe-00087u-03; Mon, 05 Jul 2021 09:40:42 +0200
-Date:   Mon, 5 Jul 2021 09:40:41 +0200
+        id 1m0JqE-0004ln-9v; Mon, 05 Jul 2021 10:20:35 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/6] USB: serial: cp210x: fix control-characters error
- handling
-Message-ID: <YOK3ecvJz3xV6C1j@hovoldconsulting.com>
-References: <20210702134227.24621-1-johan@kernel.org>
- <20210702134227.24621-2-johan@kernel.org>
- <YN8m7wk0dfSLi+c5@kroah.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/6] USB: serial: cp210x: fixes and CP2105/CP2108 fw version
+Date:   Mon,  5 Jul 2021 10:20:09 +0200
+Message-Id: <20210705082015.18286-1-johan@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YN8m7wk0dfSLi+c5@kroah.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 02, 2021 at 04:47:11PM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jul 02, 2021 at 03:42:22PM +0200, Johan Hovold wrote:
-> > In the unlikely event that setting the software flow-control characters
-> > fails the other flow-control settings should still be updated.
-> > 
-> > Fixes: 7748feffcd80 ("USB: serial: cp210x: add support for software flow control")
-> > Cc: stable@vger.kernel.org	# 5.11
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/usb/serial/cp210x.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-> > index 09b845d0da41..b41e2c7649fb 100644
-> > --- a/drivers/usb/serial/cp210x.c
-> > +++ b/drivers/usb/serial/cp210x.c
-> > @@ -1217,9 +1217,7 @@ static void cp210x_set_flow_control(struct tty_struct *tty,
-> >  		chars.bXonChar = START_CHAR(tty);
-> >  		chars.bXoffChar = STOP_CHAR(tty);
-> >  
-> > -		ret = cp210x_set_chars(port, &chars);
-> > -		if (ret)
-> > -			return;
-> > +		cp210x_set_chars(port, &chars);
-> 
-> What's the odds that someone tries to add the error checking back in
-> here, in a few years?  Can you put a comment here saying why you are not
-> checking it?
+Here are couple of minor fixes and some cleanups related to the recent
+regression which broke RTS control on some CP2102N devices with buggy
+firmware.
 
-This is just how set_termios() works and how the other requests are
-handled by the driver. I can add an explicit error message here though
-just like when setting the line-control register so that it doesn't look
-like an oversight. The error message is currently printed by the
-set_chars() helper, but I can move that out when removing the helper
-later in the series.
+In case we run into another one of these, let's log the firmware
+version also for CP2105 and CP2108 for which it can be retrieved.
 
 Johan
+
+
+Changes in v2
+ - keep the special-chars error message to make it more obvious that
+   continuing on errors is intentional (1/6) (Greg)
+
+
+Johan Hovold (6):
+  USB: serial: cp210x: fix control-characters error handling
+  USB: serial: cp210x: fix flow-control error handling
+  USB: serial: cp210x: clean up control-request timeout
+  USB: serial: cp210x: clean up set-chars request
+  USB: serial: cp210x: clean up type detection
+  USB: serial: cp210x: determine fw version for CP2105 and CP2108
+
+ drivers/usb/serial/cp210x.c | 77 +++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 45 deletions(-)
+
+-- 
+2.31.1
+
