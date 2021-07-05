@@ -2,55 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF043BB95D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 10:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FE33BBB30
+	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 12:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbhGEIex (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jul 2021 04:34:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44718 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230114AbhGEIex (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Jul 2021 04:34:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F6D261374;
-        Mon,  5 Jul 2021 08:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625473936;
-        bh=/AgnkzuMvDPW3umEWUlJz3KteQYiDoT9pBzOhGC/svI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NpVOFaFot8/5u9vTh+tHSj4iDhPO8PR4GJaRYLEdSrEBlBHUkrnxhDjNXnuHcn0VH
-         owbQkiyq8lD/ZjS1857Ar3ZLSMuMXtQrrOp0lbFtEEiFsRqhJFQFNZcaScJ5HwdHuh
-         N61IgSpxiMcx3/Twv0crQuqt0ufjB48fYqfauNno=
-Date:   Mon, 5 Jul 2021 10:32:14 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] USB: serial: cp210x: fixes and CP2105/CP2108 fw
- version
-Message-ID: <YOLDjgUFoIbWjilh@kroah.com>
-References: <20210705082015.18286-1-johan@kernel.org>
+        id S230504AbhGEK13 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Mon, 5 Jul 2021 06:27:29 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:32342 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230355AbhGEK13 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 5 Jul 2021 06:27:29 -0400
+IronPort-SDR: x19yaK8FMMXdYeV1+rulOYinKUQYSerLHBbMLwZWLjGeiakKNX+rpghPmVQbddxZH6aeFfCrde
+ nIY1uwZJthurM6LAekkrj6EoiCCnxGj2iT6WsL46LMLZ7qFhb7ZIsKT0S27k2b42Go63nDBQkY
+ CQMH0QWmBvXnj6tq1XKLh8GKJgUCDL8gmXmb+fuWj3Coahzg4g78FfberLEgvhta/vhdUhSB9z
+ puhk87FOZRdRkKeQMefCZxNq/0lsZJ6gvuwDMjErDwqiXn+ZmDlFwaLDht0QL/uLsRgEf3K20n
+ VyM=
+X-IronPort-AV: E=Sophos;i="5.83,325,1616486400"; 
+   d="scan'208";a="63323899"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa4.mentor.iphmx.com with ESMTP; 05 Jul 2021 02:24:52 -0800
+IronPort-SDR: haRR03jtahUrQIuvRKMhvKdXpNT0JW6p+VmoLXe7rTcXIAmV54oYszJxU/ykcAm+2SSXUkPO+O
+ zSJ4Ql9AAD4qzAKHfOdGsgAO3yzuHDm3cpmyUDmUQYkVVfrO/kiThKW3D0ep7oLewWYJjthArd
+ eMLIAFtHcSSSRt3Bi/LDEl/U42dW6BZirc593WNgL76rB7JwKnFZItpH9i3QEfOCRDJPtNMyFq
+ sEI8vlc0KpzI0WHp4qkWPqqxpwODeXWeRWi9ydhrfHMMyPCI/l8RP1gDKq7GtOMl+0VPanNg7X
+ hyQ=
+From:   Andrew Gabbasov <andrew_gabbasov@mentor.com>
+To:     'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+CC:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <20210603171507.22514-1-andrew_gabbasov@mentor.com> <20210604110503.GA23002@vmlxhi-102.adit-jv.com> <CACCg+XO+D+2SWJq0C=_sWXj53L1fh-wra8dmCb3VQ4bYCZQryA@mail.gmail.com> <20210702184957.4479-1-andrew_gabbasov@mentor.com> <20210702184957.4479-2-andrew_gabbasov@mentor.com> <YOKvz2WzYuV0PaXD@kroah.com>
+In-Reply-To: <YOKvz2WzYuV0PaXD@kroah.com>
+Subject: RE: [PATCH v4.14] usb: gadget: f_fs: Fix setting of device and driver data cross-references
+Date:   Mon, 5 Jul 2021 13:24:10 +0300
+Organization: Mentor Graphics Corporation
+Message-ID: <000001d77187$e9782dd0$bc688970$@mentor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210705082015.18286-1-johan@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8BIT
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHXb3MiK5x8JbQzK0Wthg8LyVovu6sz6U+AgABFBzA=
+Content-Language: en-us
+X-Originating-IP: [137.202.0.90]
+X-ClientProxiedBy: SVR-IES-MBX-03.mgc.mentorg.com (139.181.222.3) To
+ svr-ies-mbx-01.mgc.mentorg.com (139.181.222.1)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 05, 2021 at 10:20:09AM +0200, Johan Hovold wrote:
-> Here are couple of minor fixes and some cleanups related to the recent
-> regression which broke RTS control on some CP2102N devices with buggy
-> firmware.
-> 
-> In case we run into another one of these, let's log the firmware
-> version also for CP2105 and CP2108 for which it can be retrieved.
-> 
-> Johan
-> 
-> 
-> Changes in v2
->  - keep the special-chars error message to make it more obvious that
->    continuing on errors is intentional (1/6) (Greg)
+Hello Greg,
 
-Thanks for the change, looks good to me!
+> -----Original Message-----
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Monday, July 05, 2021 10:08 AM
+> To: Gabbasov, Andrew <Andrew_Gabbasov@mentor.com>
+> Cc: Macpaul Lin <macpaul.lin@mediatek.com>; Eugeniu Rosca <erosca@de.adit-jv.com>; linux-usb@vger.kernel.org;
+> linux-kernel@vger.kernel.org; stable@vger.kernel.org; Felipe Balbi <balbi@kernel.org>; Eugeniu Rosca
+> <roscaeugeniu@gmail.com>; Eddie Hung <eddie.hung@mediatek.com>
+> Subject: Re: [PATCH v4.14] usb: gadget: f_fs: Fix setting of device and driver data cross-references
+> 
+> On Fri, Jul 02, 2021 at 01:49:57PM -0500, Andrew Gabbasov wrote:
+> > Fixes: 4b187fceec3c ("usb: gadget: FunctionFS: add devices management code")
+> > Fixes: 3262ad824307 ("usb: gadget: f_fs: Stop ffs_closed NULL pointer dereference")
+> > Fixes: cdafb6d8b8da ("usb: gadget: f_fs: Fix use-after-free in ffs_free_inst")
+> > Reported-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+> > Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> > Link: https://lore.kernel.org/r/20210603171507.22514-1-andrew_gabbasov@mentor.com
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > (cherry-picked from commit ecfbd7b9054bddb12cea07fda41bb3a79a7b0149)
+> 
+> There is no such commit id in Linus's tree :(
+> 
+> Please resubmit with the correct id.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This commit is not yet included to the mainline, it only exists in linux-next:
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ecfbd7b9054bddb12cea07fda41bb3a79a7b0149
+
+Could you please advise if I need to somehow denote the linux-next repo in the "cherry picked from" line,
+or just remove this line, or so far wait and re-submit the patch after the original commit is merged to Linus' tree?
+BTW, I just noticed that the line contains incorrect "cherry-picked" instead of "cherry picked",
+so I'll have to re-submit the patch anyway 😉
+
+Thanks!
+
+Best regards,
+Andrew
+
