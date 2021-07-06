@@ -2,54 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D88353BDE1B
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 21:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66FE53BDE20
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 21:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbhGFTlD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jul 2021 15:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
+        id S229935AbhGFTp3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jul 2021 15:45:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbhGFTlC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 15:41:02 -0400
-Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E779BC06175F
-        for <linux-usb@vger.kernel.org>; Tue,  6 Jul 2021 12:38:22 -0700 (PDT)
-Received: by mail-il1-x12f.google.com with SMTP id b18so2608953ilf.8
-        for <linux-usb@vger.kernel.org>; Tue, 06 Jul 2021 12:38:22 -0700 (PDT)
+        with ESMTP id S229730AbhGFTp2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 15:45:28 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988CFC061574
+        for <linux-usb@vger.kernel.org>; Tue,  6 Jul 2021 12:42:49 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e13so20101ilc.1
+        for <linux-usb@vger.kernel.org>; Tue, 06 Jul 2021 12:42:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
         bh=udkimfHwvw+UAlkC6MgehkJhzie88fdqV4nLq+86CHM=;
-        b=cFvXWYzEtoaENTstfb5jXZaLGvtAM+sJNFB6YxGtWJ3aP3g6Mufby5ag/PfhWUIUiw
-         SC4hQHjhfMQpRlhgRcRCZnlsrjD7txYA911yd29NMNoG6POt4gEq6dtUx+NqpPR+AWmo
-         EHy3WCYBTNxxLaBJ3Qs4NqknQoeDjXM7dvplvfmUU5TtEy8vicUF3paSwuEldR/Zf6QS
-         Kx7he9US+0NOB9M05+B01sV+Ta2vfxpewJ0iStlMm0RFWN9+cTF8bZWK7H/9F0rQcmpC
-         tJyNoYDTy9LDAJcthTo4CC1Lp/cquKSPhnozt7MyTo8BgCEFhUQafU18WcRJ6/3HN4sG
-         V4BA==
+        b=Sd3ZF9TONTS0hUr6pYlUr6m3OSJm4/7jEUY1oQ1bDS181m8Ak/v9zd7LNpkHNUqXF2
+         qVdvLAsEza+yk9b8g/f8/AAsZLvMDg9xWXNOCvMuTnk0FfSOxuFwSTgRn7xRhNv5DfTa
+         FAV3mHhkhZ+M7WlKxFngRkMFg2TfdMWroSQRES8VygJU6R5tXaBb7c0bw0u9U/B0LVCy
+         8mA5ZbVGgf4cqM7PXEov0lWnuPivsT2U2VJF/gFEYP2r6GmHV5y1P/HllMyHcEhYo4dU
+         xuhro/EYfZC+YbqhxnJ1eIkRdOC2Rif/4kWBrYJavNP0x28Y5teyyx0QSWP2zFqPVgSz
+         4rwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:reply-to:from:date:message-id
          :subject:to:content-transfer-encoding;
         bh=udkimfHwvw+UAlkC6MgehkJhzie88fdqV4nLq+86CHM=;
-        b=nZOoPtr9dthNHpS1xQPWQ3FjrGybBHBRtS0PkUfB9xEg8aJgZyuLPBs+XBw9TovSZ0
-         aXh4Q+LOTw/zbSsFLNtEexFJsx1TzIafxqzktG0TmQQBuccsHESKBPaFIIAcARmCEod5
-         oOGF22JJrjRKQTZuOwtkJEI4tlCjbL/c8ZfKoXU/d8PotFzPWAwv3z3h7GFf3BHs+WHZ
-         JxNT5P3OX0Aw2CZ+F+mqY32ERIT3SUdBtiYFns9+1acHRZ54QJxbRgEMHM4iW/rDE/e/
-         huX0IUJgoWAFToKF31F/4Westa45VTL4eZ/yPsjaTry3kCRbFu21KT6+OuVeNN4qyiNV
-         K3Jg==
-X-Gm-Message-State: AOAM531NYw2gnkPazfrrG3UiaI0ifeeaIixj2Yc10yEU7qfRj1TqDYBH
-        1rboAd1xi5dNuI9hDRipIpVtLBDSp5nzdwBPJqM=
-X-Google-Smtp-Source: ABdhPJwOH8+qPiVQqQJg5gBplgUCh4HoibUQtuunp+ZZRjjuK+Ek7/YRZ8Rs4OXufzkh5ozFT9ZAEiH+3okV2pXaedk=
-X-Received: by 2002:a92:3f01:: with SMTP id m1mr16115072ila.122.1625600302368;
- Tue, 06 Jul 2021 12:38:22 -0700 (PDT)
+        b=OoLoiKRQriBpWPnBmUxx84Rl5kI9vnjDfm1xyS7qlB5jZgQHiC91KxsPH6n7Qps/Zw
+         bJ/AFsqCFIc7l7D5WPM6vknuyLReSoIjlR5qS7CA7GE3jmULMKn1GEka0Td0fN4H9VwM
+         Kylhws11zNMgBt4hBfsoQ1tPJfhY6pHr8R00xp+6zTcV52ZV296hxoHMKAkbZMF2Zewc
+         tPneF5VHeYMhamKvxvmWaJsM0PiAJ34KikzDj+kUfi7b/bhlDFkEty/DwroZOzshTbrY
+         4dxEaLfEolEO1Aew5ZUyAajV0/cNVVbnH/j03qP7UaxLW4qTzMmpQDaGtaoYsRGj9Cbi
+         zrtg==
+X-Gm-Message-State: AOAM532TSXI9VtCYrwSX4BRBnr8bITHvLE35HA+Cky/YTVj36MEdLCZN
+        K1cSYJyORtm49Wz6b5YfUfreS/4cCZyG0LAKKnw=
+X-Google-Smtp-Source: ABdhPJzsWhF7LUdPz7y1PdooPhy2QDnwGAYDJPSaTr1XxWy8UWjozwDLm+Jt6vFZikIfEG/2VUbdCiMXgRQf+j1FqdA=
+X-Received: by 2002:a92:bd06:: with SMTP id c6mr15377231ile.110.1625600568996;
+ Tue, 06 Jul 2021 12:42:48 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:6e04:68b:0:0:0:0 with HTTP; Tue, 6 Jul 2021 12:38:21
- -0700 (PDT)
+Received: by 2002:a92:c605:0:0:0:0:0 with HTTP; Tue, 6 Jul 2021 12:42:48 -0700 (PDT)
 Reply-To: rotoloapposo371@gmail.com
-From:   Rotolo Apposo <uenorn@gmail.com>
-Date:   Tue, 6 Jul 2021 19:38:21 +0000
-Message-ID: <CAPcW-qrWgjZgHKKwe+iPuqqYQ0br80J_pD85094o2LZZsz35yQ@mail.gmail.com>
+From:   Rotolo Apposo <ewiluen@gmail.com>
+Date:   Tue, 6 Jul 2021 19:42:48 +0000
+Message-ID: <CAEDm--UDLwzYG=PH4CT1SMGMcJ31zMv2078cK2ZveJq2X7NOqQ@mail.gmail.com>
 Subject: Antworten
 To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
