@@ -2,157 +2,190 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A71AA3BDE65
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 22:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED953BDE88
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 22:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbhGFUW2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jul 2021 16:22:28 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:33685 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbhGFUW1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 16:22:27 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1625602789; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=bVsxEM7GBkgihUbSf5tSkkwxcoMoVHENciajGKiwiQA=; b=ofbfwM47CxfN5LaZkparvRaHg5GMDw1Ob300Nc7hID31hzy/XlHhhPQzJE5iEvmByFncFSUw
- rHDzo0i1Y+Sej8HvNsfW3PYginJLXnCEPcCrGl/Es6wiBmwdQP4NNqJURXdgbdFaUJZcK9Os
- plzsD4Ch0/WPQ/eISU3WQVQ18mc=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 60e4bae0f30429861410fb7e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 06 Jul 2021 20:19:44
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2ED16C4360C; Tue,  6 Jul 2021 20:19:43 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.78.185] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C4A73C4360C;
-        Tue,  6 Jul 2021 20:19:39 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C4A73C4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v12 3/6] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, balbi@kernel.org,
-        robh+dt@kernel.org, frowand.list@gmail.com,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        jackp@codeaurora.org, fntoth@gmail.com
-References: <1625218655-14180-1-git-send-email-wcheng@codeaurora.org>
- <1625218655-14180-4-git-send-email-wcheng@codeaurora.org>
- <YOSdRKTy3+CdV/UF@kroah.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <2ee71465-d921-8904-2009-1e46ad1a988b@codeaurora.org>
-Date:   Tue, 6 Jul 2021 13:19:38 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230195AbhGFUqG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jul 2021 16:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59334 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230144AbhGFUqE (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 16:46:04 -0400
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9399BC0613E1
+        for <linux-usb@vger.kernel.org>; Tue,  6 Jul 2021 13:43:25 -0700 (PDT)
+Received: by mail-oo1-xc2f.google.com with SMTP id e85-20020a4a55580000b02902579a1a1393so1780566oob.6
+        for <linux-usb@vger.kernel.org>; Tue, 06 Jul 2021 13:43:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=pxMY07o9eA6SvMdwqfO/Cy/RP18zRy8WHvKUzTEaaNE=;
+        b=cMEULcwqLZ1Wut54PhoGe8eWn9DWOkTBGefRRfl5OdVDl+rs626G5wMaH28cgDjzcy
+         C3SrxS4IBWN9GT87WmK8g47N1LXQplCWDOfx8int0/GS3k/x/nkilLmTHNlFEJRG7MNd
+         XBIkEEXZ1pU0eRvjS1TRSvA1B76ydqAA34SpYmKB2ihzHjiFB86o3rkOkpvBUwbSv3hH
+         SAJ7sWW3535WnApBT/aqgm8mqOlZd3rAIlZ18pf5XSKHOT2S+byWJIp1xZIbcvBH0etl
+         zsjB18jSpkL6JUn2+voD9bKAbUaWuj/V1AbjBFUkZHMHiCqgtvfqmj4sQqDjclnu51kM
+         rRng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pxMY07o9eA6SvMdwqfO/Cy/RP18zRy8WHvKUzTEaaNE=;
+        b=flTKrfIfUK4f8plI18tbbkO8XywLqSarfv6I5/PP/Dv1PiQ/GS/5Cd5hcuM8tJkL2h
+         zsCMOxq+bRz0rRsR54z+QDmAFQK+ndUR6t7HLTNG7zf0/q/cUHj5noYOeM5811PIQELv
+         FWGkux9G9xRI+J30+KaQRfPQk7yShoNWHI8rThbNVE+pqO9I2ie+sHVvK00NNaHBmnol
+         sUr/W9W0RqGYcAcgVzn7UOi6BjhVsREFXWaog39jTvTowjvTPYtn5Ih7XNKrmqqx+dFI
+         AnAJXazW7BuybZLBBRzQ0rw1T1d2vwg7XiupoYMmXC3CRPt7CawkbmiFzLlwwMjNbERS
+         QUBg==
+X-Gm-Message-State: AOAM5309A8E236f05UJ7iG31i+TXoRXiANdzsZXvbnY9yEYHF1j4glmK
+        nWL5Jh9svbvPYulWrF7Qx1EQ2A==
+X-Google-Smtp-Source: ABdhPJxDvDPv3ADYsyyhWPVlnzb7CaqMGlOMdSkFiej4dUoXbTCedb2luVlDDH/zGyqw6KpVymfMhg==
+X-Received: by 2002:a4a:d6cc:: with SMTP id j12mr2894172oot.0.1625604204373;
+        Tue, 06 Jul 2021 13:43:24 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id x130sm1332892oix.22.2021.07.06.13.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jul 2021 13:43:23 -0700 (PDT)
+Date:   Tue, 6 Jul 2021 15:43:21 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Uwe Kleine-K?nig <u.kleine-koenig@pengutronix.de>
+Cc:     nvdimm@lists.linux.dev, linux-hyperv@vger.kernel.org,
+        kvm@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-pci@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-cxl@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, target-devel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        linux1394-devel@lists.sourceforge.net, linux-scsi@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-acpi@vger.kernel.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-input@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-sunxi@lists.linux.dev, linux-media@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, greybus-dev@lists.linaro.org,
+        virtualization@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-spi@vger.kernel.org, kernel@pengutronix.de,
+        dmaengine@vger.kernel.org, linux-ntb@googlegroups.com,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+Message-ID: <YOTAaQ7AnkCvRQaS@yoga>
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
+ <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+ <YOSb1+yeVeLxiSRc@yoga>
+ <20210706184323.fudcbsiu4i34dojs@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YOSdRKTy3+CdV/UF@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210706184323.fudcbsiu4i34dojs@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue 06 Jul 13:43 CDT 2021, Uwe Kleine-K?nig wrote:
 
-
-On 7/6/2021 11:13 AM, Greg KH wrote:
-> On Fri, Jul 02, 2021 at 02:37:32AM -0700, Wesley Cheng wrote:
->> Some devices have USB compositions which may require multiple endpoints
->> that support EP bursting.  HW defined TX FIFO sizes may not always be
->> sufficient for these compositions.  By utilizing flexible TX FIFO
->> allocation, this allows for endpoints to request the required FIFO depth to
->> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
->> a larger TX FIFO size results in better TX throughput.
->>
->> By introducing the check_config() callback, the resizing logic can fetch
->> the maximum number of endpoints used in the USB composition (can contain
->> multiple configurations), which helps ensure that the resizing logic can
->> fulfill the configuration(s), or return an error to the gadget layer
->> otherwise during bind time.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/dwc3/core.c   |   9 ++
->>  drivers/usb/dwc3/core.h   |  15 ++++
->>  drivers/usb/dwc3/ep0.c    |   2 +
->>  drivers/usb/dwc3/gadget.c | 221 ++++++++++++++++++++++++++++++++++++++++++++++
->>  4 files changed, 247 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index e0a8e79..a7bcdb9d 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -1267,6 +1267,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>  	u8			rx_max_burst_prd;
->>  	u8			tx_thr_num_pkt_prd;
->>  	u8			tx_max_burst_prd;
->> +	u8			tx_fifo_resize_max_num;
->>  	const char		*usb_psy_name;
->>  	int			ret;
->>  
->> @@ -1282,6 +1283,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>  	 */
->>  	hird_threshold = 12;
->>  
->> +	tx_fifo_resize_max_num = 6;
->> +
-
-Hi Greg,
+> Hello Bjorn,
 > 
-> No comment as to why 6 was picked, like the other defaults in this
-> function?
+> On Tue, Jul 06, 2021 at 01:08:18PM -0500, Bjorn Andersson wrote:
+> > On Tue 06 Jul 10:48 CDT 2021, Uwe Kleine-K?nig wrote:
+> > > diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> > > index c1404d3dae2c..7f6fac618ab2 100644
+> > > --- a/drivers/rpmsg/rpmsg_core.c
+> > > +++ b/drivers/rpmsg/rpmsg_core.c
+> > > @@ -530,7 +530,7 @@ static int rpmsg_dev_probe(struct device *dev)
+> > >  	return err;
+> > >  }
+> > >  
+> > > -static int rpmsg_dev_remove(struct device *dev)
+> > > +static void rpmsg_dev_remove(struct device *dev)
+> > >  {
+> > >  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
+> > >  	struct rpmsg_driver *rpdrv = to_rpmsg_driver(rpdev->dev.driver);
+> > > @@ -546,8 +546,6 @@ static int rpmsg_dev_remove(struct device *dev)
+> > >  
+> > >  	if (rpdev->ept)
+> > >  		rpmsg_destroy_ept(rpdev->ept);
+> > > -
+> > > -	return err;
+> > 
+> > This leaves err assigned but never used, but I don't mind following up
+> > with a patch cleaning that up after this has landed.
 > 
-> Why was 6 picked?
+> Ah, good catch. If I send out a v3 I will fold the following into this
+> patch:
 > 
+> diff --git a/drivers/rpmsg/rpmsg_core.c b/drivers/rpmsg/rpmsg_core.c
+> index 7f6fac618ab2..9151836190ce 100644
+> --- a/drivers/rpmsg/rpmsg_core.c
+> +++ b/drivers/rpmsg/rpmsg_core.c
+> @@ -534,10 +534,9 @@ static void rpmsg_dev_remove(struct device *dev)
+>  {
+>  	struct rpmsg_device *rpdev = to_rpmsg_device(dev);
+>  	struct rpmsg_driver *rpdrv = to_rpmsg_driver(rpdev->dev.driver);
+> -	int err = 0;
+>  
+>  	if (rpdev->ops->announce_destroy)
+> -		err = rpdev->ops->announce_destroy(rpdev);
+> +		rpdev->ops->announce_destroy(rpdev);
+>  
+>  	if (rpdrv->remove)
+>  		rpdrv->remove(rpdev);
 > 
-Talked with Thinh about this sometime back about why 6 was picked.  It
-was just an arbitrary setting we decided on throughout our testing, as
-that was what provided the best tput numbers for our system.  Hence why
-it was suggested to have a separate property, so other vendors can set
-this to accommodate their difference in HW latencies.
 
->>  	dwc->maximum_speed = usb_get_maximum_speed(dev);
->>  	dwc->max_ssp_rate = usb_get_maximum_ssp_rate(dev);
->>  	dwc->dr_mode = usb_get_dr_mode(dev);
->> @@ -1325,6 +1328,10 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>  				&tx_thr_num_pkt_prd);
->>  	device_property_read_u8(dev, "snps,tx-max-burst-prd",
->>  				&tx_max_burst_prd);
->> +	dwc->do_fifo_resize = device_property_read_bool(dev,
->> +							"tx-fifo-resize");
->> +	device_property_read_u8(dev, "tx-fifo-max-num",
->> +				&tx_fifo_resize_max_num);
+Sounds good, feel free to keep my ack on this.
+
+> Maybe .announce_destroy() should then be changed to return void, too?
+> Something like:
 > 
-> So you overwrite the "max" with whatever is given to you?  What if
-> tx-fifo-resize is not enabled?
->
-If tx-fifo-resize is not enabled, then there shouldn't be anything that
-will reference this property.  As mentioned in the previous comment, HW
-vendors may not need a FIFO size of 6 max packets for their particular
-system, so they should be able to program this to their needs.
 
-If someone programs to this a large number, the logic works where it
-will allocate based off the space left after ensuring enough space for 1
-FIFO per ep.
+Yes, I saw this opportunity as well. But that will fan out further, so
+let's postpone that until your series has landed and we can follow up
+with such changes through the remoteproc tree.
 
-Thanks
-Wesley Cheng
+> diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
+> index a76c344253bf..d5204756714c 100644
+> --- a/drivers/rpmsg/rpmsg_internal.h
+> +++ b/drivers/rpmsg/rpmsg_internal.h
+> @@ -40,7 +40,7 @@ struct rpmsg_device_ops {
+>  					    struct rpmsg_channel_info chinfo);
+>  
+>  	int (*announce_create)(struct rpmsg_device *ept);
+> -	int (*announce_destroy)(struct rpmsg_device *ept);
+> +	void (*announce_destroy)(struct rpmsg_device *ept);
+>  };
+>  
+>  /**
+> diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+> index 8e49a3bacfc7..4e05994634f8 100644
+> --- a/drivers/rpmsg/virtio_rpmsg_bus.c
+> +++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+> @@ -340,7 +340,7 @@ static int virtio_rpmsg_announce_create(struct rpmsg_device *rpdev)
+>  	return err;
+>  }
+>  
+> -static int virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
+> +static void virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
+>  {
+>  	struct virtio_rpmsg_channel *vch = to_virtio_rpmsg_channel(rpdev);
+>  	struct virtproc_info *vrp = vch->vrp;
+> @@ -360,8 +360,6 @@ static int virtio_rpmsg_announce_destroy(struct rpmsg_device *rpdev)
+>  		if (err)
+>  			dev_err(dev, "failed to announce service %d\n", err);
+>  	}
+> -
+> -	return err;
+>  }
+>  
+>  static const struct rpmsg_device_ops virtio_rpmsg_ops = {
+> 
+> though it's not obvious for me that the last hunk is sensible. (OTOH the
+> return code is ignored anyhow as rpmsg_dev_remove() is the only caller.
+> 
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+I need to backtrack a little bit more to figure out why we ended up with
+this...
+
+Thanks,
+Bjorn
