@@ -2,140 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEF03BC4EB
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 04:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801E23BC6B3
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 08:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbhGFCyP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jul 2021 22:54:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37872 "EHLO mail.kernel.org"
+        id S230096AbhGFGi0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jul 2021 02:38:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41004 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229879AbhGFCyO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Jul 2021 22:54:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A558D6109D;
-        Tue,  6 Jul 2021 02:51:34 +0000 (UTC)
+        id S230089AbhGFGiZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Jul 2021 02:38:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 972596141C;
+        Tue,  6 Jul 2021 06:35:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625539896;
-        bh=DOj5t4ByBa5Zd1xRABEC1HHiGOWLQi/qVtIsko5gLFM=;
+        s=k20201202; t=1625553347;
+        bh=O+WYoee/ArsT6Dg1Z/XyBEVlNaE06k6zREBLnQkh44k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZrnCCTY3T1Q4l7y+WZGxF63CrFnQDzjbRcO4XPnpdkliU7o2FHbRNSGUrW7S+PUyb
-         +H5SC3SP6AyjwBBiBFosayq7Na0koPEdrmCsbiypI9qllsMTCmTl0wKbpCVgMvPJ7C
-         29FEFnaZVJ+nXTk82Tpp3LOOu1u2HHagq4/EN+eM7pjCa+6DRGroaJ4QoINRFKw2rn
-         57xkvFpi86Q5qL55HMcMUyPirussFssY//kly3rVz8DQwzwUpGzU/Q2AhXGNlKETB7
-         TfvKnBdf0+1xJZJ3OKmQ2V40e/oaVC6SN9WkEIr6peAS3V7JRB9L8hcoRfaDj9wsSy
-         gIwxi8kzSuztg==
-Date:   Tue, 6 Jul 2021 10:51:30 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     balbi@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org,
-        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 2/3] usb: dwc3: Add role switch relay support
-Message-ID: <20210706025130.GA19460@nchen>
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210704013314.200951-3-bryan.odonoghue@linaro.org>
+        b=uZbswDS8rGLoPHJugPOXvmo7Las0Y1wnP4rlKcg6Wq0vP4jqYdYocYvF9jNl6czIV
+         /1ooq35q2P5TdOL50KX0rj+iZ9ARIZ3hgrduh3fEMwimd9Mvv5E2xObXipOg9MbT2E
+         k/K1aFZykSDCvNJQf49WIOy0gp2wfL99NX5zdmV8aYfsNq1lk4xZ4VbhzvLRj77uab
+         gXVrDyJUOSBAN47W/mNZQbFGxF//P4bEl8LObzK0HLx6m9PWefxwJ5AekKj1qS1PTE
+         n1LWH7axvkQ4AruHJHJNxuvQ1Sy052nn45XSWpDh3emQKlP2eYfCBrUS5HL6OwJW6k
+         g1syWLFoEoOSA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1m0egG-00027T-D4; Tue, 06 Jul 2021 08:35:40 +0200
+Date:   Tue, 6 Jul 2021 08:35:40 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marco De Marco <marco.demarco@posteo.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: option: Add support for u-blox LARA-R6
+ family
+Message-ID: <YOP5vFZogjqU3cCw@hovoldconsulting.com>
+References: <49260184.kfMIbaSn9k@mars>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210704013314.200951-3-bryan.odonoghue@linaro.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <49260184.kfMIbaSn9k@mars>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-07-04 02:33:13, Bryan O'Donoghue wrote:
-> Add the ability to relay a role switch message from the core to the parent
-> device of the controller.
+On Mon, Jul 05, 2021 at 07:44:21PM +0000, Marco De Marco wrote:
+> The patch is meant to support LARA-R6 Cat 1 module family.
 > 
-> This is useful for the qcom-dwc3 wrapper which wants to receive role-switch
-> notifications in order to waggle internal SoC UTMI signals.
+> Module USB ID:
+> Vendor  ID: 0x05c6
+> Product ID: 0x90fA
 > 
-> Having the core trigger the parent wrapper has the advantage of keeping the
-> connector mechanism agnostic from dwc3 wrapper code and means that any
-> other wrapper implementation on any other SoC or architecture need not
-> write custom code to find various types of Type-C role switch mechanisms.
-
-If I understand correctly, the call trace like below:
-
-Connector (GPIO/Type-C, usb_role_switch_set_role) -> dwc3 core (func: dwc3_usb_role_switch_set)
--> dwc3 qcom glue (func: dwc3_qcom_usb_role_switch_set)
-
-And, at dts, the property "usb-role-switch" will be at both dwc3 glue and core node
-dwc3 core is the connector (GPIO/Type-C)'s role switch 
-dwc3 glue is the dwc3 core's role switch
-
-right?
-
-Peter
-
+> Interface layout:
+> If 0: Diagnostic
+> If 1: AT parser
+> If 2: AT parser
+> If 3: QMI wwan (not available in all versions)
 > 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
+> 
 > ---
->  drivers/usb/dwc3/core.h |  2 ++
->  drivers/usb/dwc3/drd.c  | 10 ++++++++++
->  2 files changed, 12 insertions(+)
 > 
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index dccdf13b5f9e..974104cc16f7 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -993,6 +993,7 @@ struct dwc3_scratchpad_array {
->   *		- USBPHY_INTERFACE_MODE_UTMI
->   *		- USBPHY_INTERFACE_MODE_UTMIW
->   * @role_sw: usb_role_switch handle
-> + * @role_sw_relay: usb_role_switch relay handle
->   * @role_switch_default_mode: default operation mode of controller while
->   *			usb role is USB_ROLE_NONE.
->   * @usb_psy: pointer to power supply interface.
-> @@ -1136,6 +1137,7 @@ struct dwc3 {
->  	struct notifier_block	edev_nb;
->  	enum usb_phy_interface	hsphy_mode;
->  	struct usb_role_switch	*role_sw;
-> +	struct usb_role_switch	*role_sw_relay;
->  	enum usb_dr_mode	role_switch_default_mode;
->  
->  	struct power_supply	*usb_psy;
-> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-> index 8fcbac10510c..74293861bd8f 100644
-> --- a/drivers/usb/dwc3/drd.c
-> +++ b/drivers/usb/dwc3/drd.c
-> @@ -507,6 +507,9 @@ static int dwc3_usb_role_switch_set(struct usb_role_switch *sw,
->  	}
->  
->  	dwc3_set_mode(dwc, mode);
-> +	if (dwc->role_sw_relay)
-> +		usb_role_switch_set_role(dwc->role_sw_relay, role);
-> +
->  	return 0;
->  }
->  
-> @@ -563,6 +566,10 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
->  	if (IS_ERR(dwc->role_sw))
->  		return PTR_ERR(dwc->role_sw);
->  
-> +	dwc->role_sw_relay = usb_role_switch_get(dwc->dev);
-> +	if (IS_ERR(dwc->role_sw_relay))
-> +		return PTR_ERR(dwc->role_sw_relay);
-> +
->  	dwc3_set_mode(dwc, mode);
->  	return 0;
->  }
-> @@ -630,6 +637,9 @@ void dwc3_drd_exit(struct dwc3 *dwc)
->  {
->  	unsigned long flags;
->  
-> +	if (dwc->role_sw_relay)
-> +		usb_role_switch_put(dwc->role_sw_relay);
-> +
->  	if (dwc->role_sw)
->  		usb_role_switch_unregister(dwc->role_sw);
->  
-> -- 
-> 2.30.1
+> ADB interface is not available. 
+> Diagnostic interface (If 0) can be used with option driver.
 > 
+> Output of usb-devices command (this version does not have QMI WWAN):
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=05c6 ProdID=90fa Rev=00.00
+> S:  Manufacturer=Qualcomm, Incorporated
+> S:  Product=Qualcomm CDMA Technologies MSM
+> S:  SerialNumber=7da8aacd
+> C:  #Ifs= 3 Cfg#= 1 Atr=c0 MxPwr=500mA
+> I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=(none)
+> 
+> Thanks for your patience and the tireless endeavour.
 
--- 
+Thanks for the update. I'll pick this one up next week when -rc1 is out.
 
-Thanks,
-Peter Chen
-
+Johan
