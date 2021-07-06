@@ -2,60 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21ADF3BC39D
-	for <lists+linux-usb@lfdr.de>; Mon,  5 Jul 2021 23:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8033BC477
+	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 02:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbhGEV1m (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 5 Jul 2021 17:27:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39384 "EHLO mail.kernel.org"
+        id S229783AbhGFBAY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 5 Jul 2021 21:00:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46790 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229793AbhGEV1l (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 5 Jul 2021 17:27:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 30E7661985;
-        Mon,  5 Jul 2021 21:25:04 +0000 (UTC)
+        id S229722AbhGFBAX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 5 Jul 2021 21:00:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A021F6195E;
+        Tue,  6 Jul 2021 00:57:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625520304;
-        bh=ASXc1IQiZkgWc5L7qccU92fl42cImi1euHaOnepkbyE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MciShCF+1SH07MvHnUWtGPr+hu3xIoNoCQDUUVRa9V+pKr65W/5BcccqKcKJAaX92
-         rYZTyoP8RMcykboIOs8eitdlG53ZLFcsn+Gz5CRCqkOffWe5lVqDdDMRRDJITsZM/D
-         MztDzQHutmtqvFHmuov46TeWaLaHJuyhGceyK7v2WTFyjL8MRkD6v+jHnSv8H4r38c
-         5UqjyGpaYk7fNGh/v+v5+eNWVZ7xOWWH67sJyTC8BTQKT+M8xosienLigMYDz0Ok2k
-         Coi9NUSGiNsrzfei8PXIoe7PiAiVq8fCdicqr9y84ibLMA50yQ6yAWEM/AS2+jM1Yo
-         I4R+0FRNRwHdQ==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 1D13D60A4D;
-        Mon,  5 Jul 2021 21:25:04 +0000 (UTC)
-Subject: Re: [GIT PULL] USB / Thunderbolt driver changes for 5.14-rc1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YOM9yTZZsEicMW3f@kroah.com>
-References: <YOM9yTZZsEicMW3f@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YOM9yTZZsEicMW3f@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.14-rc1
-X-PR-Tracked-Commit-Id: 7756f1d6369e61d1cc47d6e51619d1e1d1681a2e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 79160a603bdb51916226caf4a6616cc4e1c58a58
-Message-Id: <162552030405.6675.1261054931935515577.pr-tracker-bot@kernel.org>
-Date:   Mon, 05 Jul 2021 21:25:04 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+        s=k20201202; t=1625533065;
+        bh=3sZXtqzPBmQeDtxCNP5rxxVJeRlFAwqPjm3IYlPYZLg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dq0wOX39lFI1rViG4OrBnjClqeJW3nZ6ovSvlw0cGfvB/K7EZnA2KWFcshzstdftr
+         HBhNWQle5uDA/IYsbJJe66Z3i7Clq7NeQVE0ulqNAg9P0Ffqics1ANoyUh5mfCEMlG
+         mit6X+HBvVHHxhehKOAc7ro31jW7FEeOJbLylbc1PUAF3FPnSTYyU//AONbpKd/N+q
+         AxGU7cixYxF1iN13OsBzD2PsXkcd9VGZJTikRuI1SglIba7jKpUGU1JGE03XYv1lQr
+         PAE1FCLFp/94YhmxXxGjYQKcXvclDu/mA7cPXD1rURIycDkxfFf57vW+gpL/9Ovo2l
+         POJBzuN21/m5A==
+Date:   Tue, 6 Jul 2021 08:57:39 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 05/12] usb: otg-fsm: Fix hrtimer list corruption
+Message-ID: <20210706005739.GA19143@nchen>
+References: <20210704225433.32029-1-digetx@gmail.com>
+ <20210704225433.32029-6-digetx@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210704225433.32029-6-digetx@gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The pull request you sent on Mon, 5 Jul 2021 19:13:45 +0200:
+On 21-07-05 01:54:26, Dmitry Osipenko wrote:
+> The HNP work can be re-scheduled while it's still in-fly. This results in
+> re-initialization of the busy work, resetting the hrtimer's list node of
+> the work and crashing kernel with null dereference within kernel/timer
+> once work's timer is expired. It's very easy to trigger this problem by
+> re-plugging USB cable quickly. Initialize HNP work only once to fix this
+> trouble.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.14-rc1
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/79160a603bdb51916226caf4a6616cc4e1c58a58
+It is better to append kernel dump if you have v4 patchset.
 
-Thank you!
+Peter
+
+> ---
+>  drivers/usb/common/usb-otg-fsm.c | 6 +++++-
+>  include/linux/usb/otg-fsm.h      | 1 +
+>  2 files changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/common/usb-otg-fsm.c b/drivers/usb/common/usb-otg-fsm.c
+> index 3740cf95560e..0697fde51d00 100644
+> --- a/drivers/usb/common/usb-otg-fsm.c
+> +++ b/drivers/usb/common/usb-otg-fsm.c
+> @@ -193,7 +193,11 @@ static void otg_start_hnp_polling(struct otg_fsm *fsm)
+>  	if (!fsm->host_req_flag)
+>  		return;
+>  
+> -	INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> +	if (!fsm->hnp_work_inited) {
+> +		INIT_DELAYED_WORK(&fsm->hnp_polling_work, otg_hnp_polling_work);
+> +		fsm->hnp_work_inited = true;
+> +	}
+> +
+>  	schedule_delayed_work(&fsm->hnp_polling_work,
+>  					msecs_to_jiffies(T_HOST_REQ_POLL));
+>  }
+> diff --git a/include/linux/usb/otg-fsm.h b/include/linux/usb/otg-fsm.h
+> index 3aee78dda16d..784659d4dc99 100644
+> --- a/include/linux/usb/otg-fsm.h
+> +++ b/include/linux/usb/otg-fsm.h
+> @@ -196,6 +196,7 @@ struct otg_fsm {
+>  	struct mutex lock;
+>  	u8 *host_req_flag;
+>  	struct delayed_work hnp_polling_work;
+> +	bool hnp_work_inited;
+>  	bool state_changed;
+>  };
+>  
+> -- 
+> 2.32.0
+> 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+
+Thanks,
+Peter Chen
+
