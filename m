@@ -2,203 +2,186 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 141973BE091
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jul 2021 03:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4403BE0AF
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jul 2021 03:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbhGGBcK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jul 2021 21:32:10 -0400
-Received: from mx0a-0064b401.pphosted.com ([205.220.166.238]:64814 "EHLO
-        mx0a-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229949AbhGGBcJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 21:32:09 -0400
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1671T8Es006712;
-        Tue, 6 Jul 2021 18:29:15 -0700
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
-        by mx0a-0064b401.pphosted.com with ESMTP id 39mmkd8j5t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Jul 2021 18:29:15 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k+q30oluSlCVdOiA1w6WtjQM/0a4OjBzGfVsB6CafchvMnSFBAGzVuM9m4d44gs+9VgPf3ZJalmnkGoZmFzZPh4XndETLSUo1QGiaDD/GH6CYGA0X5m3W2SbGXBBdQzQd3mITkxP2NequAjLW4Bailfiv0/eYaYAn/Mn/QEQI6lJavZ2aT6dqALFljLF2kab+DAHfy7kkKlmeo+tDNxJcRbeNiP6VMcrCaWWx6s68SjjcKClBRnMR8B6yNNLeXX44hUkuAX5tS0+/IFBZtp+Xt4toxYZ42CPRC3rSxrYw1qGL7JpRBMzt4f/0A1b8DAWjEBePcZ1GHnxrs6JfdczZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aPoZhrF2ccWyd2qV/yjtuT4V/bK08jDnvR6DFq6Ctmc=;
- b=chZ2q87fy+QlKp2AyEYRYQ+h3Qh0hhzDaVEbnt6vHc6g/7TMDvqa6Q3BHxrdlq715DJyUbvTLeCuIjhFN05BQKitm+EpxjE16KXNmE8AU7g3iwM9nyavw4kZm77XmHZKj8kHVSsEWI7jszgB7NVPIaujf22jtnWovpFXuZCZAOV91K/HKgv8aVC9Id8Qh/Cu67iis24RpJ0Oiw3rbMPVHpoYXxSJcglI/s0G6oxG25H4/OYxTrl6Qv0R8wgMdSoD7N4YrHj7emgUBc+UsTwwZgRp+c73H+tQsikNDr0JUb2VDAs4eakY9PJIyu+6xVtZNwksUpw1i3q9Vq6ocsIa+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=windriver.com; dmarc=pass action=none
- header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=windriversystems.onmicrosoft.com;
- s=selector2-windriversystems-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aPoZhrF2ccWyd2qV/yjtuT4V/bK08jDnvR6DFq6Ctmc=;
- b=lMqYUNVXdxXlsLzqtAk+uIY+5CxxQbBUEpvsvi4vHIVyqvp4kSHPvT1RGzUIoWYbP/ZKU4pLq+0QTjXHAevHrGtZRMOqh8NW+Lv+SoIjatVElBdMzwankL4+wzNtt7lC/trsM/sQCU53UmfwY87XqYrBLjqCaEjIXCuJhtWgVEQ=
-Received: from BL1PR11MB5478.namprd11.prod.outlook.com (2603:10b6:208:31d::12)
- by MN2PR11MB4381.namprd11.prod.outlook.com (2603:10b6:208:189::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.27; Wed, 7 Jul
- 2021 01:29:12 +0000
-Received: from BL1PR11MB5478.namprd11.prod.outlook.com
- ([fe80::a140:b563:8725:5c2b]) by BL1PR11MB5478.namprd11.prod.outlook.com
- ([fe80::a140:b563:8725:5c2b%8]) with mapi id 15.20.4287.033; Wed, 7 Jul 2021
- 01:29:12 +0000
-From:   "Zhang, Qiang" <Qiang.Zhang@windriver.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-        "dvyukov@google.com" <dvyukov@google.com>
-CC:     "dpenkler@gmail.com" <dpenkler@gmail.com>,
-        "guido.kiener@rohde-schwarz.com" <guido.kiener@rohde-schwarz.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Thread-Topic: [PATCH] USB: usbtmc: Fix RCU stall warning
-Thread-Index: AQHXbJdxsEWtRMwgSkWpoKhE+HBk+6s2xIs0
-Date:   Wed, 7 Jul 2021 01:29:12 +0000
-Message-ID: <BL1PR11MB5478A82D5B2B558FAFF4B50FFF1A9@BL1PR11MB5478.namprd11.prod.outlook.com>
-References: <20210629033236.7107-1-qiang.zhang@windriver.com>
-In-Reply-To: <20210629033236.7107-1-qiang.zhang@windriver.com>
-Accept-Language: en-001, zh-CN, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=windriver.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 47419b9c-ad8d-4ea2-adf9-08d940e6a01a
-x-ms-traffictypediagnostic: MN2PR11MB4381:
-x-microsoft-antispam-prvs: <MN2PR11MB43812121EB91A5FC541E9F25FF1A9@MN2PR11MB4381.namprd11.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: wkFChAMt7jsHLdELlpcUS740Wwk1pj0gGuiNPT1At5YODQ30aQXdvEbgZdNAib+DDMeXYYc4Quze1FNRo6LXseLsOMU7/RWmo4UUjL3B1sNgLTlX+97pR8bdNQ4ayyx0ZQUotTkxRNB7ML46/92znSgI3MydRSmGCI5yNIhQnVzGulkxrfFOonKxIYwvXmkoEtjpMrhjsMU91P0KLDv52Pd7mJjkFFJIarto1anYfrD3QxbxoWS2Buf+633gZU3tT1vwXSBtM3uvJVQhdZg4WVMyMuLNGEs30Iiq0JzGvT53lkWvJ2EnA07dkCOuDTmrRZEyuxJBmLWBFW2TpiclmrGQwm2wR9/HtVB1VVnl/UIJ7dna9uQABONh+S/BLtPRjuponWZgr2LZ7SXWNLTpi7XB4vkFKdcK6VyBeRgKbKTjp99uml7icvACs7KupIZp+rj2J1cZbOTnivDs2NJg5DyxuC7vLH2c4qPanZyEwWvTdUTEJvo0J6t8TY5xjmZgF+QwKmkIMEQWIEFAG2qi0Ed79wbTo13Dw5f9fF9WlpQVs087PxN3QPEy3WNlWI5m81XJljBH5G02MjgX22P2isp/ehDVGc8jqJ3IKKSj8L46cg0433HydSTdRsGuJlQ6gkLyUHLEF95hAHOMuqTvRlMtmHUU9vS2qVk2NOUrWrZoymgDXGAxIABgj9BPCDsdR51r/X68qkJ3XP3Mxt3R7g==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5478.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(366004)(396003)(39850400004)(376002)(4326008)(316002)(33656002)(7696005)(66946007)(66446008)(2906002)(52536014)(478600001)(86362001)(5660300002)(83380400001)(110136005)(8676002)(38100700002)(122000001)(76116006)(26005)(8936002)(53546011)(64756008)(54906003)(91956017)(55016002)(66556008)(186003)(6506007)(9686003)(66476007)(71200400001)(586874002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wgxhBFGtt5pCgCPwVQIxb/AnTFH7yKSE7xYpOFei4C1SbXyQ3Zf719FFvgt+?=
- =?us-ascii?Q?quUuGDhYmznx0MHsVROqh/gM6tD3PMt1mXNTjLAYq4FjlpkMZhhahdTrJnxU?=
- =?us-ascii?Q?othTeh8rYK/qnt8U4CPtJ5JMqMXLLW+K+U7KDmTUPiBv6Di0bjTYhxJiZDNF?=
- =?us-ascii?Q?meb+9AZslGw/gvhKl9UZbLfmRNUwQQ3BYHvpzyLnCSrvRKfBsyc5c5Yg/IJh?=
- =?us-ascii?Q?FOgSEhlumbdy/movWLZ4ldM2umfbfqnogM3SlBf/j06agjNFdRGp/jnI9iLS?=
- =?us-ascii?Q?7KqgC+XqhIxgy1cXYsIKZStg414gNGJ93TVz88ayPKbjgjzLC+LlfSZlVOZd?=
- =?us-ascii?Q?gAeYYFYwzVb4gs7qexJjBTdwq9NvchJxVS8otXtfpQFCZVMpTr2EeY/jbjaA?=
- =?us-ascii?Q?Gi0Ie7vZNXltzvX9Vyh/Rm3ulESnCKNM1z+xj/3etonv+LO9tyWRRRISnaQN?=
- =?us-ascii?Q?BG4LSpdpX8AYAx16yHDGBLDZfW42jH3DsBn/iZQ/22fUju/xDpNz7Ew8Fn+J?=
- =?us-ascii?Q?GaDj0ZKUcj7wQXJGH9p8Qze4hKrPur8fx8AAw/KYvwh/+gye/E2ag0btf1ze?=
- =?us-ascii?Q?y9OrNY/GYpvgm0YVUrTtuLy6ysCykVnhp80XCQLb1RoDPHOVST5wXKwhnqm0?=
- =?us-ascii?Q?kzKcKEfHVjFno/0aoeb+RgzJCoDGiHz3ZG4UI7+d+tJzPc2LMt35/Z5tk6lI?=
- =?us-ascii?Q?IyN2dbD2LvEfAO/LYeuoQyspLiT3NfB5HmlAXjBLK4Yng02/pbEQJeVocRRJ?=
- =?us-ascii?Q?6dWt77Yq3N9rpVr3ZCxknCksSdCWNT3Ty0cxR0eJHkJb76Lm4/HbzaYzYnJ/?=
- =?us-ascii?Q?zgaV+kGalrBa1OpvpjOZ/SmD2f8PppMpa+aEGwC71ptzkI5AzUpRjasPUMhv?=
- =?us-ascii?Q?A7fx6cNzo0KBGEg7WRVKnWnTkhYAfrGK946w3V57dZfdk/MCIEWwR41OgDr9?=
- =?us-ascii?Q?7KhlzVezeGLsZv8XW8s7SRyz5+k1XgwVHi8VnOtyD1cqe6EbT9ld8LzUchzY?=
- =?us-ascii?Q?fjpgiHcq0yq/DSqabgN5L6cNpPVdlVfgFTUFk8zPW125lilbrZZJIu3siFXg?=
- =?us-ascii?Q?wg4tbH3ttAbhn52MmaczZXFvo9oaoYDcNjOic6BRID8/E11VDQnicJn1Yy8i?=
- =?us-ascii?Q?jWOZJ7iLOQCCdcCbsqwflT5sMG/9racCSU1p2ATeW7vjKwGt8bBFlpcewoEY?=
- =?us-ascii?Q?142YOa9kwr6sCU598hiMYytRJlYjpxKYLHNJ9GxaAQz0CDVL3sDujJMUnooH?=
- =?us-ascii?Q?1LjEW2RelZ1j4F1vOCxNcfTLnvrDTGu6oPwG6ioUA70qr7OMJbEIpz8KxpWA?=
- =?us-ascii?Q?BSE=3D?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S229971AbhGGB7t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jul 2021 21:59:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58610 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229949AbhGGB7s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 6 Jul 2021 21:59:48 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 37A7761CB6;
+        Wed,  7 Jul 2021 01:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1625623029;
+        bh=dm/9asNINHO/sAl70bjbmQrc++My3HTNxoleWdGVjSE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cLScf8TLfrGRv5zvFiuBVuApHH/X0a97Ylkelc9tDUc7HjJrru1ByJYKlJD8JJMuE
+         7DJdl18OxspA7c0r8OBLHCDbfeeXn1SB4F0bj1Ie3wcjDunGJZTO2IF5mHzm82eFDx
+         GBUW6qwPZ5GtCMlmAPv4kL04e4eb6OjL8zZGGK8POvCAGLsfOmjjeerd8wB6MlQ2QZ
+         EuzL908Cdk6veo7YssNlMEXlR/wrefmFsq6k2D0mx5MuGEVjOyhW243/3qDofDZYmb
+         PrnCdHSC8QX91Aim2ccMDrdDwvsn5+MYCnffUoJ6vk4N1xBnViOdOPwdezB4A250TV
+         4AHphu+CiVcCQ==
+Date:   Wed, 7 Jul 2021 09:57:04 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     balbi@kernel.org, bjorn.andersson@linaro.org, agross@kernel.org,
+        gregkh@linuxfoundation.org, jackp@codeaurora.org,
+        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
+ dwc3-qcom
+Message-ID: <20210707015704.GA28125@nchen>
+References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-X-OriginatorOrg: windriver.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5478.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47419b9c-ad8d-4ea2-adf9-08d940e6a01a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2021 01:29:12.1199
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: j0zS5xjsFP+Fbs537/7rnRGFsUKwtGCJUJjTD5Z7RLgQjaudq2Pq3oCotmK/8R9IrrecxhRtvi+flKaiZG10Rb3bY/DSz4fxiPNd7jTw4S0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4381
-X-Proofpoint-ORIG-GUID: Yby1Dx9UrlUFFKvw53R3QwdUpuFkK48U
-X-Proofpoint-GUID: Yby1Dx9UrlUFFKvw53R3QwdUpuFkK48U
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
- definitions=2021-07-06_13:2021-07-06,2021-07-06 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- priorityscore=1501 suspectscore=0 spamscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2104190000 definitions=main-2107070005
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-=0A=
-=0A=
-________________________________________=0A=
-From: Zhang, Qiang <qiang.zhang@windriver.com>=0A=
-Sent: Tuesday, 29 June 2021 11:32=0A=
-To: gregkh@linuxfoundation.org; stern@rowland.harvard.edu; dvyukov@google.c=
-om=0A=
-Cc: paulmck@kernel.org; dpenkler@gmail.com; guido.kiener@rohde-schwarz.com;=
- linux-usb@vger.kernel.org=0A=
-=0A=
-Hello Greg KH=0A=
-=0A=
-Have you reviewed this change? =0A=
-=0A=
-Thanks=0A=
-Qiang=0A=
-=0A=
->Subject: [PATCH] USB: usbtmc: Fix RCU stall warning=0A=
->=0A=
->From: Zqiang <qiang.zhang@windriver.com>=0A=
->=0A=
->rcu: INFO: rcu_preempt self-detected stall on CPU=0A=
->rcu:    1-...!: (2 ticks this GP) idle=3Dd92/1/0x4000000000000000=0A=
->        softirq=3D25390/25392 fqs=3D3=0A=
->        (t=3D12164 jiffies g=3D31645 q=3D43226)=0A=
->rcu: rcu_preempt kthread starved for 12162 jiffies! g31645 f0x0=0A=
->     RCU_GP_WAIT_FQS(5) ->state=3D0x0 ->cpu=3D0=0A=
->rcu:    Unless rcu_preempt kthread gets sufficient CPU time,=0A=
->        OOM is now expected behavior.=0A=
->rcu: RCU grace-period kthread stack dump:=0A=
->task:rcu_preempt     state:R  running task=0A=
->=0A=
->In the case of system use dummy_hcd as usb controller, when the=0A=
->usbtmc devices is disconnected, in usbtmc_interrupt(), if the urb=0A=
->status is unknown, the urb will be resubmit, the urb may be insert=0A=
->to dum_hcd->urbp_list again, this will cause the dummy_timer() not=0A=
->to exit for a long time, beacause the dummy_timer() be called in=0A=
->softirq and local_bh is disable, this not only causes the RCU reading=0A=
->critical area to consume too much time but also makes the tasks in=0A=
->the current CPU runq not run in time, and that triggered RCU stall.=0A=
->=0A=
->return directly when find the urb status is not zero to fix it.=0A=
->=0A=
->Reported-by: syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com=0A=
->Signed-off-by: Zqiang <qiang.zhang@windriver.com>=0A=
->---=0A=
-> drivers/usb/class/usbtmc.c | 12 ++----------=0A=
-> 1 file changed, 2 insertions(+), 10 deletions(-)=0A=
->=0A=
->diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c=0A=
->index 74d5a9c5238a..c4e1a88fff78 100644=0A=
->--- a/drivers/usb/class/usbtmc.c=0A=
->+++ b/drivers/usb/class/usbtmc.c=0A=
->@@ -2324,17 +2324,9 @@ static void usbtmc_interrupt(struct urb *urb)=0A=
->                dev_err(dev, "overflow with length %d, actual length is %d=
-\n",=0A=
->                        data->iin_wMaxPacketSize, urb->actual_length);=0A=
->                fallthrough;=0A=
->-       case -ECONNRESET:=0A=
->-       case -ENOENT:=0A=
->-       case -ESHUTDOWN:=0A=
->-       case -EILSEQ:=0A=
->-       case -ETIME:=0A=
->-       case -EPIPE:=0A=
->-               /* urb terminated, clean up */=0A=
->-               dev_dbg(dev, "urb terminated, status: %d\n", status);=0A=
->-               return;=0A=
->        default:=0A=
->-               dev_err(dev, "unknown status received: %d\n", status);=0A=
->+               dev_err(dev, "error status received: %d\n", status);=0A=
->+               return;=0A=
->        }=0A=
-> exit:=0A=
->        rv =3D usb_submit_urb(urb, GFP_ATOMIC);=0A=
->--=0A=
->2.17.1=0A=
-=0A=
+On 21-07-04 02:33:11, Bryan O'Donoghue wrote:
+> This is a topic we have been discussing for some time, initially in the
+> context of gpio usb-c-connector role-switching.
+> 
+> https://lore.kernel.org/linux-usb/20200311191501.8165-1-bryan.odonoghue@linaro.org
+> 
+> Hardware availability constraints limited scope to finish that off.
+> 
+> Thankfully Wesley Cheng made a new set of USB role-switch related patches
+> for dwc3-qcom, this time in conjunction with the qcom pm8150b type-c
+> silicon.
+> 
+> https://lore.kernel.org/linux-usb/20201009082843.28503-1-wcheng@codeaurora.org
+> 
+> For the RB5 project we picked Wesley's changes and developed them further,
+> around a type-c port manager.
+> 
+> As a precursor to that TCPM I reposted Wesley's patches
+> https://lore.kernel.org/linux-usb/20210629144449.2550737-1-bryan.odonoghue@linaro.org
+> 
+> Bjorn pointed out that having the role-switch triggered from dwc3-qcom to
+> dwc3-drd is not the right way around, indicating a preference for the
+> original notifier from dwc3-drd to dwc3-qcom.
+> 
+> There are two approaches I considred and prototyped to accomplish the
+> desired dwc3-drd -> dwc3-qcom messaging.
+> 
+> #1 Using a notifier in dwc3-drd to trigger dwc3-qcom
+> 
+>    This would be nice since it would accomplish the desired layering
+>    dwc3-drd -> dwc3-qcom.
+> 
+>    However:
+>    a) It would be a real mess as dwc3-qcom is the parent device of
+>       dwc3-core so, if the child-device dwc3-core deferred probing for
+>       whatever reason we would have to detect this and retry the parent's
+>       probe again.
+
+Why do you think we need to retry the parent's probe again? And why using
+a notifier need to concern core's deferral probe? I know there are some
+downstream code which using this way, I would like to know the shortcoming
+for it.
+
+Peter
+
+>	The point in time that dwc3-qcom could potentially parse
+>       such a deferral in the child device is late. It would also be weird
+>       and messy to try to roll back the parent's probe because of a child
+>       device deferral.
+> 
+>       I considered making some sort of worker in the parent to check for
+>       child device probe but, again this seemed like an atrocious hack so,
+>       I didn't even try to prototype that.
+> 
+>    b) One potential solution was using "__weak" linkage in a function
+>       provided by dwc3-drd that a wrapper such as dwc3-qcom could then
+>       over-ride.
+> 
+>       If a wrapper such as dwc3-qcom then implemented a function with
+>       regular linkage it would over-ride the __weak function and provide a
+>       method for the dwc3-drd code to call into dwc3-qcom when probing was
+>       complete, thus allowing registration of the notifier when the child
+>       was ready.
+> 
+>       This would work up until the point that you tried to compile two
+>       implementations of a dwc3 wrapper into the one kernel module or the
+>       one kernel image say dwc3-qcom and a similar implementation in
+>       dwc3-meson. At that point you would get linker breakage.
+> 
+> #2 Using USB role switching for the notification
+> 
+>    Wesley's implementation took the approach dwc3-qcom -> dwc3-drd, whereas
+>    the approach I'm proposing here is dwc3-drd -> dwc3-qcom, which is also
+>    what we discussed on the list.
+> 
+>    Having implemented it, I think USB role-switching in the direction
+>    dwc3-drd -> dwc3-qcom is also a much cleaner solution for several
+>    reasons.
+> 
+>    a) Handling probe deferral is built into Linux' USB role switching today
+>       so we don't have to re-invent that wheel, unlike with the original
+>       notifier model.
+> 
+>    b) There is no "wiring up" or traversing the graph tree for the wrapper
+>       layer to determine if the parent device has a compliant type-c
+>       connector associated with it, unlike in the dwc3-qcom -> dwc3-drd
+>       model.
+> 
+>       All that has to happen is "usb-role-switch" is declared in the parent
+>       dwc3-qcom node and the role-switch API takes care of the rest.
+> 
+>       That means its possible to use a usb-c-connector, qcom type-c pm8150b
+>       driver, a USCI, a tps659x, a fusb302 or something like ChromeOS
+>       cros_ec to notify dwc3-drd without dwc3-qcom having to have
+>       the slighest clue which type of device is sending the signal.
+> 
+>       All dwc3-qcom needs to do is waggle UTMI signals in a register when a
+>       role-switch happens.
+> 
+>    c) It "feels" like a layering violation to have the dwc3-qcom SoC
+>       wrapper receive the event and trigger the dwc3-drd core.
+> 
+>       The standard model of parent/child role switching or remote-endpoint
+>       traversal that USB role switching already has works just fine for
+>       dwc3-drd, we just need to trigger dwc3-qcom for the role-switch in a
+>       non-vendor and non-SoC specific way.
+> 
+>    d) Less code. It turns out there's less code implementing as a
+>       role-switch interface in the direction dwc3-drd -> dwc3-qcom.
+> 
+>    e) Portability. The mechanism used for dwc3-drd -> dwc3 qcom can be
+>       reused for any other similar wrapper which models the wrapper as a
+>       parent of the dwc3-drd.
+> 
+> For all of those reasons I've opted to use USB role-switch notification
+> from dwc3-drd to dwc3-qcom.
+> 
+> git add bod git://git.linaro.org/people/bryan.odonoghue/kernel.git
+> git fetch bod
+> git diff usb-next-5.13.rcx-rb5-tcpm..usb-next-5.13.rcx-rb5-tcpm-v2
+> 
+> Bryan O'Donoghue (2):
+>   usb: dwc3: Add role switch relay support
+>   usb: dwc3: dwc3-qcom: Make dwc3-qcom a role-switch signal recipient
+> 
+> Wesley Cheng (1):
+>   usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
+> 
+>  drivers/usb/dwc3/core.h      |  2 +
+>  drivers/usb/dwc3/drd.c       | 10 +++++
+>  drivers/usb/dwc3/dwc3-qcom.c | 77 ++++++++++++++++++++++++++++++++++--
+>  3 files changed, 85 insertions(+), 4 deletions(-)
+> 
+> -- 
+> 2.30.1
+> 
+
+-- 
+
+Thanks,
+Peter Chen
+
