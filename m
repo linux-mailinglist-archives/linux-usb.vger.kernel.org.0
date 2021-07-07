@@ -2,156 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D9A63BDF0D
-	for <lists+linux-usb@lfdr.de>; Tue,  6 Jul 2021 23:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141973BE091
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jul 2021 03:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbhGFVkd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 6 Jul 2021 17:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43092 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbhGFVka (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 17:40:30 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE21C061574;
-        Tue,  6 Jul 2021 14:37:51 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h1-20020a17090a3d01b0290172d33bb8bcso2390238pjc.0;
-        Tue, 06 Jul 2021 14:37:51 -0700 (PDT)
+        id S229956AbhGGBcK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 6 Jul 2021 21:32:10 -0400
+Received: from mx0a-0064b401.pphosted.com ([205.220.166.238]:64814 "EHLO
+        mx0a-0064b401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229949AbhGGBcJ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 6 Jul 2021 21:32:09 -0400
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 1671T8Es006712;
+        Tue, 6 Jul 2021 18:29:15 -0700
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+        by mx0a-0064b401.pphosted.com with ESMTP id 39mmkd8j5t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Jul 2021 18:29:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=k+q30oluSlCVdOiA1w6WtjQM/0a4OjBzGfVsB6CafchvMnSFBAGzVuM9m4d44gs+9VgPf3ZJalmnkGoZmFzZPh4XndETLSUo1QGiaDD/GH6CYGA0X5m3W2SbGXBBdQzQd3mITkxP2NequAjLW4Bailfiv0/eYaYAn/Mn/QEQI6lJavZ2aT6dqALFljLF2kab+DAHfy7kkKlmeo+tDNxJcRbeNiP6VMcrCaWWx6s68SjjcKClBRnMR8B6yNNLeXX44hUkuAX5tS0+/IFBZtp+Xt4toxYZ42CPRC3rSxrYw1qGL7JpRBMzt4f/0A1b8DAWjEBePcZ1GHnxrs6JfdczZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aPoZhrF2ccWyd2qV/yjtuT4V/bK08jDnvR6DFq6Ctmc=;
+ b=chZ2q87fy+QlKp2AyEYRYQ+h3Qh0hhzDaVEbnt6vHc6g/7TMDvqa6Q3BHxrdlq715DJyUbvTLeCuIjhFN05BQKitm+EpxjE16KXNmE8AU7g3iwM9nyavw4kZm77XmHZKj8kHVSsEWI7jszgB7NVPIaujf22jtnWovpFXuZCZAOV91K/HKgv8aVC9Id8Qh/Cu67iis24RpJ0Oiw3rbMPVHpoYXxSJcglI/s0G6oxG25H4/OYxTrl6Qv0R8wgMdSoD7N4YrHj7emgUBc+UsTwwZgRp+c73H+tQsikNDr0JUb2VDAs4eakY9PJIyu+6xVtZNwksUpw1i3q9Vq6ocsIa+g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Ocbz7plpl2GsaeWZtT2xSwu/ECmgcGgX+U0mFWoVx8o=;
-        b=fjV4+ka8h0vH05QQfb5mosysrP9nHimBGyZMIaa5AG6oYKlZIJ9fBu1u8zdUGxqK0V
-         Um+d4Woup62vh1nDeTEMfYQu/z07c7tU/WMAtzd8zyjZ+D++/9qAcGD3Qi5HWfAEidnP
-         LVIhoqq3BcdDCaWawKEqjjS8yu6I4JR+nAEzkK0jeMXN28vBiyhs3oL9vVM3I/zG4bRq
-         0ch+fVpWTwIZJdpOA5MGN4Hsas/DzY0s55S8/73rafQT0BQHzaPtbSSjdX9FgBPH3Kng
-         zdOUu0zymj0lCUC9mcaI5h90C5jAW9R9slEqBMssceloFyAtObCoJPafpr9GaUMLPWWg
-         1jSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ocbz7plpl2GsaeWZtT2xSwu/ECmgcGgX+U0mFWoVx8o=;
-        b=WK3yTWnvM5htSk/VSimnCQqje/FGFNelVEcwioYL2R7o83YW8eHgkZ6evNB3mBqPc0
-         b3GB1gLkWojJs9XG4BTClxxWXSVq9Gv09epEhdKJWYrb06H3nFuUuHgoZMgPD+WJybRF
-         3gZPab5P9vzwNlIIVEEo5Jl90VKSVHHxvBhjU3Pay3BEhOy6ShtVlTPAKjzUw+5LPvM3
-         g6Hpy3G6QibGd3AnFNfSCRKBRvetF31DDjQDeo8pnbGgCNJEzMmdhIwT1ify8AXwqciQ
-         XYOzvzRvY9jKXvHDc86y1R7eC14/aeggf/uWlHU2/VXBeEU0HO0uKcxPPx3BI1CBvsUI
-         0OtQ==
-X-Gm-Message-State: AOAM531T2RTDL3ySJyrUH9BdixZdoksL8kUK7Ivl7hx7XCT9buaF/thj
-        cTEAlptetL3RDzHa5EJYnN0=
-X-Google-Smtp-Source: ABdhPJyn2Hi8kaCYu+WokB25snaMIG+9Q6KwjeQoMDQJIrAIZd3JeXm641055Ca25Y6q1bD80UK2hA==
-X-Received: by 2002:a17:90a:3009:: with SMTP id g9mr2332932pjb.82.1625607470831;
-        Tue, 06 Jul 2021 14:37:50 -0700 (PDT)
-Received: from shinobu ([156.146.35.76])
-        by smtp.gmail.com with ESMTPSA id h14sm14343197pgv.47.2021.07.06.14.37.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jul 2021 14:37:49 -0700 (PDT)
-Date:   Wed, 7 Jul 2021 06:37:39 +0900
-From:   William Breathitt Gray <vilhelm.gray@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
-        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
-        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
-        industrypack-devel@lists.sourceforge.net,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
-Message-ID: <YOTMp88HfFiy6+RM@shinobu>
-References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de>
- <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+ d=windriversystems.onmicrosoft.com;
+ s=selector2-windriversystems-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aPoZhrF2ccWyd2qV/yjtuT4V/bK08jDnvR6DFq6Ctmc=;
+ b=lMqYUNVXdxXlsLzqtAk+uIY+5CxxQbBUEpvsvi4vHIVyqvp4kSHPvT1RGzUIoWYbP/ZKU4pLq+0QTjXHAevHrGtZRMOqh8NW+Lv+SoIjatVElBdMzwankL4+wzNtt7lC/trsM/sQCU53UmfwY87XqYrBLjqCaEjIXCuJhtWgVEQ=
+Received: from BL1PR11MB5478.namprd11.prod.outlook.com (2603:10b6:208:31d::12)
+ by MN2PR11MB4381.namprd11.prod.outlook.com (2603:10b6:208:189::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4287.27; Wed, 7 Jul
+ 2021 01:29:12 +0000
+Received: from BL1PR11MB5478.namprd11.prod.outlook.com
+ ([fe80::a140:b563:8725:5c2b]) by BL1PR11MB5478.namprd11.prod.outlook.com
+ ([fe80::a140:b563:8725:5c2b%8]) with mapi id 15.20.4287.033; Wed, 7 Jul 2021
+ 01:29:12 +0000
+From:   "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "dvyukov@google.com" <dvyukov@google.com>
+CC:     "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "guido.kiener@rohde-schwarz.com" <guido.kiener@rohde-schwarz.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
+Thread-Topic: [PATCH] USB: usbtmc: Fix RCU stall warning
+Thread-Index: AQHXbJdxsEWtRMwgSkWpoKhE+HBk+6s2xIs0
+Date:   Wed, 7 Jul 2021 01:29:12 +0000
+Message-ID: <BL1PR11MB5478A82D5B2B558FAFF4B50FFF1A9@BL1PR11MB5478.namprd11.prod.outlook.com>
+References: <20210629033236.7107-1-qiang.zhang@windriver.com>
+In-Reply-To: <20210629033236.7107-1-qiang.zhang@windriver.com>
+Accept-Language: en-001, zh-CN, en-US
+Content-Language: aa
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: linuxfoundation.org; dkim=none (message not signed)
+ header.d=none;linuxfoundation.org; dmarc=none action=none
+ header.from=windriver.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 47419b9c-ad8d-4ea2-adf9-08d940e6a01a
+x-ms-traffictypediagnostic: MN2PR11MB4381:
+x-microsoft-antispam-prvs: <MN2PR11MB43812121EB91A5FC541E9F25FF1A9@MN2PR11MB4381.namprd11.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wkFChAMt7jsHLdELlpcUS740Wwk1pj0gGuiNPT1At5YODQ30aQXdvEbgZdNAib+DDMeXYYc4Quze1FNRo6LXseLsOMU7/RWmo4UUjL3B1sNgLTlX+97pR8bdNQ4ayyx0ZQUotTkxRNB7ML46/92znSgI3MydRSmGCI5yNIhQnVzGulkxrfFOonKxIYwvXmkoEtjpMrhjsMU91P0KLDv52Pd7mJjkFFJIarto1anYfrD3QxbxoWS2Buf+633gZU3tT1vwXSBtM3uvJVQhdZg4WVMyMuLNGEs30Iiq0JzGvT53lkWvJ2EnA07dkCOuDTmrRZEyuxJBmLWBFW2TpiclmrGQwm2wR9/HtVB1VVnl/UIJ7dna9uQABONh+S/BLtPRjuponWZgr2LZ7SXWNLTpi7XB4vkFKdcK6VyBeRgKbKTjp99uml7icvACs7KupIZp+rj2J1cZbOTnivDs2NJg5DyxuC7vLH2c4qPanZyEwWvTdUTEJvo0J6t8TY5xjmZgF+QwKmkIMEQWIEFAG2qi0Ed79wbTo13Dw5f9fF9WlpQVs087PxN3QPEy3WNlWI5m81XJljBH5G02MjgX22P2isp/ehDVGc8jqJ3IKKSj8L46cg0433HydSTdRsGuJlQ6gkLyUHLEF95hAHOMuqTvRlMtmHUU9vS2qVk2NOUrWrZoymgDXGAxIABgj9BPCDsdR51r/X68qkJ3XP3Mxt3R7g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5478.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(346002)(136003)(366004)(396003)(39850400004)(376002)(4326008)(316002)(33656002)(7696005)(66946007)(66446008)(2906002)(52536014)(478600001)(86362001)(5660300002)(83380400001)(110136005)(8676002)(38100700002)(122000001)(76116006)(26005)(8936002)(53546011)(64756008)(54906003)(91956017)(55016002)(66556008)(186003)(6506007)(9686003)(66476007)(71200400001)(586874002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?wgxhBFGtt5pCgCPwVQIxb/AnTFH7yKSE7xYpOFei4C1SbXyQ3Zf719FFvgt+?=
+ =?us-ascii?Q?quUuGDhYmznx0MHsVROqh/gM6tD3PMt1mXNTjLAYq4FjlpkMZhhahdTrJnxU?=
+ =?us-ascii?Q?othTeh8rYK/qnt8U4CPtJ5JMqMXLLW+K+U7KDmTUPiBv6Di0bjTYhxJiZDNF?=
+ =?us-ascii?Q?meb+9AZslGw/gvhKl9UZbLfmRNUwQQ3BYHvpzyLnCSrvRKfBsyc5c5Yg/IJh?=
+ =?us-ascii?Q?FOgSEhlumbdy/movWLZ4ldM2umfbfqnogM3SlBf/j06agjNFdRGp/jnI9iLS?=
+ =?us-ascii?Q?7KqgC+XqhIxgy1cXYsIKZStg414gNGJ93TVz88ayPKbjgjzLC+LlfSZlVOZd?=
+ =?us-ascii?Q?gAeYYFYwzVb4gs7qexJjBTdwq9NvchJxVS8otXtfpQFCZVMpTr2EeY/jbjaA?=
+ =?us-ascii?Q?Gi0Ie7vZNXltzvX9Vyh/Rm3ulESnCKNM1z+xj/3etonv+LO9tyWRRRISnaQN?=
+ =?us-ascii?Q?BG4LSpdpX8AYAx16yHDGBLDZfW42jH3DsBn/iZQ/22fUju/xDpNz7Ew8Fn+J?=
+ =?us-ascii?Q?GaDj0ZKUcj7wQXJGH9p8Qze4hKrPur8fx8AAw/KYvwh/+gye/E2ag0btf1ze?=
+ =?us-ascii?Q?y9OrNY/GYpvgm0YVUrTtuLy6ysCykVnhp80XCQLb1RoDPHOVST5wXKwhnqm0?=
+ =?us-ascii?Q?kzKcKEfHVjFno/0aoeb+RgzJCoDGiHz3ZG4UI7+d+tJzPc2LMt35/Z5tk6lI?=
+ =?us-ascii?Q?IyN2dbD2LvEfAO/LYeuoQyspLiT3NfB5HmlAXjBLK4Yng02/pbEQJeVocRRJ?=
+ =?us-ascii?Q?6dWt77Yq3N9rpVr3ZCxknCksSdCWNT3Ty0cxR0eJHkJb76Lm4/HbzaYzYnJ/?=
+ =?us-ascii?Q?zgaV+kGalrBa1OpvpjOZ/SmD2f8PppMpa+aEGwC71ptzkI5AzUpRjasPUMhv?=
+ =?us-ascii?Q?A7fx6cNzo0KBGEg7WRVKnWnTkhYAfrGK946w3V57dZfdk/MCIEWwR41OgDr9?=
+ =?us-ascii?Q?7KhlzVezeGLsZv8XW8s7SRyz5+k1XgwVHi8VnOtyD1cqe6EbT9ld8LzUchzY?=
+ =?us-ascii?Q?fjpgiHcq0yq/DSqabgN5L6cNpPVdlVfgFTUFk8zPW125lilbrZZJIu3siFXg?=
+ =?us-ascii?Q?wg4tbH3ttAbhn52MmaczZXFvo9oaoYDcNjOic6BRID8/E11VDQnicJn1Yy8i?=
+ =?us-ascii?Q?jWOZJ7iLOQCCdcCbsqwflT5sMG/9racCSU1p2ATeW7vjKwGt8bBFlpcewoEY?=
+ =?us-ascii?Q?142YOa9kwr6sCU598hiMYytRJlYjpxKYLHNJ9GxaAQz0CDVL3sDujJMUnooH?=
+ =?us-ascii?Q?1LjEW2RelZ1j4F1vOCxNcfTLnvrDTGu6oPwG6ioUA70qr7OMJbEIpz8KxpWA?=
+ =?us-ascii?Q?BSE=3D?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="VOubNWsj2sFIOkFX"
-Content-Disposition: inline
-In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5478.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 47419b9c-ad8d-4ea2-adf9-08d940e6a01a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jul 2021 01:29:12.1199
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: j0zS5xjsFP+Fbs537/7rnRGFsUKwtGCJUJjTD5Z7RLgQjaudq2Pq3oCotmK/8R9IrrecxhRtvi+flKaiZG10Rb3bY/DSz4fxiPNd7jTw4S0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4381
+X-Proofpoint-ORIG-GUID: Yby1Dx9UrlUFFKvw53R3QwdUpuFkK48U
+X-Proofpoint-GUID: Yby1Dx9UrlUFFKvw53R3QwdUpuFkK48U
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-07-06_13:2021-07-06,2021-07-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 mlxscore=0
+ lowpriorityscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
+ clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2104190000 definitions=main-2107070005
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
---VOubNWsj2sFIOkFX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jul 06, 2021 at 05:48:03PM +0200, Uwe Kleine-K=C3=B6nig wrote:
-> The driver core ignores the return value of this callback because there
-> is only little it can do when a device disappears.
->=20
-> This is the final bit of a long lasting cleanup quest where several
-> buses were converted to also return void from their remove callback.
-> Additionally some resource leaks were fixed that were caused by drivers
-> returning an error code in the expectation that the driver won't go
-> away.
->=20
-> With struct bus_type::remove returning void it's prevented that newly
-> implemented buses return an ignored error code and so don't anticipate
-> wrong expectations for driver authors.
->=20
-> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Am=
-ba and related parts)
-> Acked-by: Mark Brown <broonie@kernel.org>
-> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
-> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
-> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
-> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
-> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Acked-By: Vinod Koul <vkoul@kernel.org>
-> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
-> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
-> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
-> Acked-by: Johan Hovold <johan@kernel.org>
-> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drive=
-rs/slimbus)
-> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
-> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and=
- typec)
-> Acked-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com> (For ipac=
-k)
-> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
-> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
-> ---
-
->  drivers/base/isa.c                        | 4 +---
-
-Acked-by: William Breathitt Gray <vilhelm.gray@gmail.com>
-
---VOubNWsj2sFIOkFX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEk5I4PDJ2w1cDf/bghvpINdm7VJIFAmDkzSMACgkQhvpINdm7
-VJLVFhAAyxEk2xOSRC1xhJSnjLQvNeb+KeTAJr+uaSAwwExERXcbGlIryhqCZSij
-fZRzkvgPIscNAegWidvmuhZlhkFJPwvPArfhB/pFIDvQ1xX0kCPH3T51Lncu35Tf
-vgluc4JhAW9+1UzoKZsv8RK4uY2ETRMBBeYs7epjqK2RhCvzG8rDMD+Dy49nxrYX
-eNdmcR+7EcK8RjLmb/YEfNXxcXdDW0KlU5ATAh+PKuAPKbOKpoKfKuYsOYS7VrGJ
-MAk5lC5J/bqbBWM4eqm+g5NbskWMr1N5WC60R7K3isMCoaEpnKNhSD3kvYIFe2Tf
-mWyIE2c7D+UWhzbp+Kq4+DHzBN4ajLBy0oMd28HrGOQmD+/chjjc1zTOK9uNBvKz
-xBRbxQl7OrAnKhUqcrgVpVL30EvTNajZIOZdwtGXhQCWW+MX747JE+H291VLg3gz
-a0p6IJ8TS+gOgGGvmNjVg6yHYuKv6XDbDfI7tc0dRJUOoVqfbkIHSvAQQzn0LIFn
-k/Ln4D8LDFj8X3fHbfz200+nzo9gwA5ZXhWXzvTKXhSEyBoc3+i+Ihn3bgYf6rI8
-j8LozqWaWpNxaLMBrLuy06ldAuzhnQ7wPw1JuGXDAY1vdMYVVRp1XcbjBSqybXMA
-weoaxx4Lwh05XikzxZpXDQBx5N+5V3sYRuqGrYs7H1ZUm0rT0I0=
-=yTaM
------END PGP SIGNATURE-----
-
---VOubNWsj2sFIOkFX--
+=0A=
+=0A=
+________________________________________=0A=
+From: Zhang, Qiang <qiang.zhang@windriver.com>=0A=
+Sent: Tuesday, 29 June 2021 11:32=0A=
+To: gregkh@linuxfoundation.org; stern@rowland.harvard.edu; dvyukov@google.c=
+om=0A=
+Cc: paulmck@kernel.org; dpenkler@gmail.com; guido.kiener@rohde-schwarz.com;=
+ linux-usb@vger.kernel.org=0A=
+=0A=
+Hello Greg KH=0A=
+=0A=
+Have you reviewed this change? =0A=
+=0A=
+Thanks=0A=
+Qiang=0A=
+=0A=
+>Subject: [PATCH] USB: usbtmc: Fix RCU stall warning=0A=
+>=0A=
+>From: Zqiang <qiang.zhang@windriver.com>=0A=
+>=0A=
+>rcu: INFO: rcu_preempt self-detected stall on CPU=0A=
+>rcu:    1-...!: (2 ticks this GP) idle=3Dd92/1/0x4000000000000000=0A=
+>        softirq=3D25390/25392 fqs=3D3=0A=
+>        (t=3D12164 jiffies g=3D31645 q=3D43226)=0A=
+>rcu: rcu_preempt kthread starved for 12162 jiffies! g31645 f0x0=0A=
+>     RCU_GP_WAIT_FQS(5) ->state=3D0x0 ->cpu=3D0=0A=
+>rcu:    Unless rcu_preempt kthread gets sufficient CPU time,=0A=
+>        OOM is now expected behavior.=0A=
+>rcu: RCU grace-period kthread stack dump:=0A=
+>task:rcu_preempt     state:R  running task=0A=
+>=0A=
+>In the case of system use dummy_hcd as usb controller, when the=0A=
+>usbtmc devices is disconnected, in usbtmc_interrupt(), if the urb=0A=
+>status is unknown, the urb will be resubmit, the urb may be insert=0A=
+>to dum_hcd->urbp_list again, this will cause the dummy_timer() not=0A=
+>to exit for a long time, beacause the dummy_timer() be called in=0A=
+>softirq and local_bh is disable, this not only causes the RCU reading=0A=
+>critical area to consume too much time but also makes the tasks in=0A=
+>the current CPU runq not run in time, and that triggered RCU stall.=0A=
+>=0A=
+>return directly when find the urb status is not zero to fix it.=0A=
+>=0A=
+>Reported-by: syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com=0A=
+>Signed-off-by: Zqiang <qiang.zhang@windriver.com>=0A=
+>---=0A=
+> drivers/usb/class/usbtmc.c | 12 ++----------=0A=
+> 1 file changed, 2 insertions(+), 10 deletions(-)=0A=
+>=0A=
+>diff --git a/drivers/usb/class/usbtmc.c b/drivers/usb/class/usbtmc.c=0A=
+>index 74d5a9c5238a..c4e1a88fff78 100644=0A=
+>--- a/drivers/usb/class/usbtmc.c=0A=
+>+++ b/drivers/usb/class/usbtmc.c=0A=
+>@@ -2324,17 +2324,9 @@ static void usbtmc_interrupt(struct urb *urb)=0A=
+>                dev_err(dev, "overflow with length %d, actual length is %d=
+\n",=0A=
+>                        data->iin_wMaxPacketSize, urb->actual_length);=0A=
+>                fallthrough;=0A=
+>-       case -ECONNRESET:=0A=
+>-       case -ENOENT:=0A=
+>-       case -ESHUTDOWN:=0A=
+>-       case -EILSEQ:=0A=
+>-       case -ETIME:=0A=
+>-       case -EPIPE:=0A=
+>-               /* urb terminated, clean up */=0A=
+>-               dev_dbg(dev, "urb terminated, status: %d\n", status);=0A=
+>-               return;=0A=
+>        default:=0A=
+>-               dev_err(dev, "unknown status received: %d\n", status);=0A=
+>+               dev_err(dev, "error status received: %d\n", status);=0A=
+>+               return;=0A=
+>        }=0A=
+> exit:=0A=
+>        rv =3D usb_submit_urb(urb, GFP_ATOMIC);=0A=
+>--=0A=
+>2.17.1=0A=
+=0A=
