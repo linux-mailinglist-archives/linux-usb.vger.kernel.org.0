@@ -2,273 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1AE3BEFFF
-	for <lists+linux-usb@lfdr.de>; Wed,  7 Jul 2021 21:03:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501C93BF19C
+	for <lists+linux-usb@lfdr.de>; Wed,  7 Jul 2021 23:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbhGGTGE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 7 Jul 2021 15:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
+        id S233104AbhGGVwW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 7 Jul 2021 17:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230505AbhGGTGD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jul 2021 15:06:03 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6533C06175F
-        for <linux-usb@vger.kernel.org>; Wed,  7 Jul 2021 12:03:22 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id w127so4574560oig.12
-        for <linux-usb@vger.kernel.org>; Wed, 07 Jul 2021 12:03:22 -0700 (PDT)
+        with ESMTP id S230378AbhGGVwV (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 7 Jul 2021 17:52:21 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FB2C061574
+        for <linux-usb@vger.kernel.org>; Wed,  7 Jul 2021 14:49:40 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id a11so4526005ilf.2
+        for <linux-usb@vger.kernel.org>; Wed, 07 Jul 2021 14:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KaPa84ygk+ZcA+IJ9wP//R6Sdf66KLaVmf1OOXt+eKw=;
-        b=EaMA37B8VTcVuwQu4Z9R//TNXKuPEFYvn9v63yOFjkiJJohvwjdmiOXDCULD5UoAtk
-         7Kalmal7q9ccJcHax5+vk2t4yQO/kY4A3rdXVz9YWodlWW0/VW58Tp+241AK5jspCHmU
-         gP0xDqGraXLDXxRFY/CwW81JApodt/k28dWrN3m/lHrah0dznplAXjwIeB5VpWosGPbh
-         w9q1OX1x/D5KbaUiyBGbzuNgdcPaeXDsiPUORTkzWK4SUetYNiz4IWRCJpmEtp6IwS2/
-         Xg1DaXZYV4N3gUj7geYF4d2mjMbZaNyaINKe5ZvTN4gmL8obuFpRobWlH2sre5g2FUUH
-         Jfyg==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to;
+        bh=P7WVE3Kn9bKFxqlGB4nhjd8Rv1kIuhxeXdAtAUOYODA=;
+        b=ufieIpZx3zu0niHUsLfz8ANw4nCZTvtknngW+o6oDv/TZfdHufFjDwQelrvERV8yWh
+         DFDWKek9W8K56QjrcGGjRrMvfaJzR8JCqJUvlK4pmo4fbjzdrIOB1bt1MZeNqwYtSv8q
+         yIQaweQX451kp3y8ePyC9hx9FwTTX7hGnZElGpfuCeRTdfhpw1tx5OaOOTGAg8iZwShx
+         6PQ5fcnrGbdzHWs+xnkf4Emf/53OaWmmAe1cYTjAqV8SsW46bQT/nuylzQRE4XRzWBYs
+         g2oYPtPcOl24hsKHHFROebt1eOOUjNQP3X4w/DzJmAg29v4WlJtuin7KoUgKKk3WbiXm
+         RDKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KaPa84ygk+ZcA+IJ9wP//R6Sdf66KLaVmf1OOXt+eKw=;
-        b=cJy+H7C0f2CcWg/jmJ7OnvRcFub57A4BjEzRhUh0zizBdN6f5gBXSyCH9s/SNZSLd6
-         a/16+8W4xKs/zw6yy0/gtJCP+kQpNzsyTDzkqrQrxqXVSUpZn8u6cnuRcGPZoRCl30h4
-         znBs/pRNSi6fedu9yKCjDHc+PQX6H8FdUU9TFqYI5n0R7l9TLeCBe78spB7DFx54z4Ae
-         c3bxZiNmVpvTFOFUSfiyGRIqA1QS1yg7qOKwL5h0llRH2jCC1jJhgSgP2OgcTCcGc17h
-         HYcbIC5ZzAhYqq+kfKapY7a/W/o2Y5OaoSKh2JVg1K1j98+cKOoFq/FoMnPlNjKWa/HP
-         rqUQ==
-X-Gm-Message-State: AOAM531guKTv9vBBBjvTVSmT9jq68iIpO0egC/3479yheRf/mVWVJsdG
-        cqRDG4sUjM30sFvNpP+IH4eTZw==
-X-Google-Smtp-Source: ABdhPJxSexRgy/TYKYqFmb8UjONCN7q/tdJupQ0Un9NIoyq8OMGPfaE1CWUFJSKXfysd0oOEa4DUZg==
-X-Received: by 2002:a05:6808:200d:: with SMTP id q13mr20086393oiw.24.1625684602159;
-        Wed, 07 Jul 2021 12:03:22 -0700 (PDT)
-Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id m21sm3668547ooe.36.2021.07.07.12.03.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Jul 2021 12:03:21 -0700 (PDT)
-Date:   Wed, 7 Jul 2021 14:03:19 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, balbi@kernel.org,
-        agross@kernel.org, gregkh@linuxfoundation.org,
-        jackp@codeaurora.org, wcheng@codeaurora.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
- dwc3-qcom
-Message-ID: <YOX6d+sBEJMP4V3q@yoga>
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210707015704.GA28125@nchen>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to;
+        bh=P7WVE3Kn9bKFxqlGB4nhjd8Rv1kIuhxeXdAtAUOYODA=;
+        b=GyF3AiFnfPUFYHAz6hVRk7yaQtyHNofAVCl/ng0WfwK+NrxGPZifRvLMABGho7p3nH
+         9DkwG0URMxZt3zuU8lNIzBGJqi8j8RJ5HRrnnDNIYKBp0yGY5iH1eS3tk+IHiLVr/G6o
+         508lUjhtqkuVu3U0BpwRB8J4L0sr1thNyfA6eu6k02rrxVRYOJ6P83Ceu8C8mSNysBah
+         Gf0fjQxIagrWub9M4i6He+k/rMVdnhf+GY69WZBdoa9v2GGyzATETB4bwr1PjBOr53Xp
+         PtGYzyzhACsN2PG9F60MP7/ZTNXkBavfxCsNfXdJ+ezoeS8vJeANAILqqwzGcbO7QrZB
+         xZ4A==
+X-Gm-Message-State: AOAM531Mzf5du/KBt+JIgTkHrfcGmQ5dzgG47K8pV9NiHnP35YjUkRiz
+        oBBN5SnoGZtZ5wK9h+3+aaqPeze5tcPKXbaKSNApJwSYF4U=
+X-Google-Smtp-Source: ABdhPJz03GxwrjRKmccprUjtUC3TFsGxb4BpppVNQ6n2l/eSZiLxtEpXeUxX3lQP9L/O6si6DQcrspY2dOUdAjsUlxc=
+X-Received: by 2002:a05:6e02:1082:: with SMTP id r2mr19359161ilj.41.1625694579683;
+ Wed, 07 Jul 2021 14:49:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210707015704.GA28125@nchen>
+References: <CAH8yC8=9arZhsPruxMmT+NL65=-YB57Mzg0fVfRdjMy5bmBbdg@mail.gmail.com>
+In-Reply-To: <CAH8yC8=9arZhsPruxMmT+NL65=-YB57Mzg0fVfRdjMy5bmBbdg@mail.gmail.com>
+Reply-To: noloader@gmail.com
+From:   Jeffrey Walton <noloader@gmail.com>
+Date:   Wed, 7 Jul 2021 17:48:48 -0400
+Message-ID: <CAH8yC8nqqwcn0xXgKpzum-4YHkaX+YAMdVfaL_2yHyuNteU1BA@mail.gmail.com>
+Subject: Re: CH341 driver and the 5.4 kernel
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue 06 Jul 20:57 CDT 2021, Peter Chen wrote:
+> I'm trying to track down the cause of some garbage in a response when
+> using an ELM327 (https://www.elmelectronics.com/ic/elm327/) with a
+> CH341 serial controller.
 
-> On 21-07-04 02:33:11, Bryan O'Donoghue wrote:
-> > This is a topic we have been discussing for some time, initially in the
-> > context of gpio usb-c-connector role-switching.
-> > 
-> > https://lore.kernel.org/linux-usb/20200311191501.8165-1-bryan.odonoghue@linaro.org
-> > 
-> > Hardware availability constraints limited scope to finish that off.
-> > 
-> > Thankfully Wesley Cheng made a new set of USB role-switch related patches
-> > for dwc3-qcom, this time in conjunction with the qcom pm8150b type-c
-> > silicon.
-> > 
-> > https://lore.kernel.org/linux-usb/20201009082843.28503-1-wcheng@codeaurora.org
-> > 
-> > For the RB5 project we picked Wesley's changes and developed them further,
-> > around a type-c port manager.
-> > 
-> > As a precursor to that TCPM I reposted Wesley's patches
-> > https://lore.kernel.org/linux-usb/20210629144449.2550737-1-bryan.odonoghue@linaro.org
-> > 
-> > Bjorn pointed out that having the role-switch triggered from dwc3-qcom to
-> > dwc3-drd is not the right way around, indicating a preference for the
-> > original notifier from dwc3-drd to dwc3-qcom.
-> > 
-> > There are two approaches I considred and prototyped to accomplish the
-> > desired dwc3-drd -> dwc3-qcom messaging.
-> > 
-> > #1 Using a notifier in dwc3-drd to trigger dwc3-qcom
-> > 
-> >    This would be nice since it would accomplish the desired layering
-> >    dwc3-drd -> dwc3-qcom.
-> > 
-> >    However:
-> >    a) It would be a real mess as dwc3-qcom is the parent device of
-> >       dwc3-core so, if the child-device dwc3-core deferred probing for
-> >       whatever reason we would have to detect this and retry the parent's
-> >       probe again.
-> 
+To follow up on this...
 
-Allow me to reorder your two questions:
+Here's the device I am working with: OBD2 Scanner Adapter OBD2 ELM327
+USB Cable Car Code Reader Diagnostic Scan Tool v1.5,
+https://www.amazon.com/gp/product/B0897G6BMZ. It has a controller for
+interfacing with a vehicle's OBD II, and a CH340 for USB
+communications.
 
-> And why using a notifier need to concern core's deferral probe?
+I contacted ELM Electronics Support [1] about the garbage I was
+seeing. I thought I may have the serial port misconfigured in a subtle
+way. Support wrote back that they did not make the OBD controller in a
+v1.5. They make, among others, v1.4b and v2.0 [2]. It appears the OBD
+chip is a knockoff.
 
-The problem at hand calls for the core for somehow invoking
-dwc3_qcom_vbus_overrride_enable() with a pointer to dwc3_qcom passed.
+I also think I tracked down the vendor for the CH340. It is a company
+called WCH. It looks like they provide a GPL'd driver for Linux [3]
+and name the driver ch34x. The driver is a lot different than the one
+provided by the Linux kernel [4].
 
-This means that dwc3-qcom somehow needs to inform the dwc3-core about
-this (and stash the pointer). And this can't be done until dwc3-core
-actually exist, which it won't until dwc3_probe() has completed
-successfully (or in particular allocated struct dwc).
+What I don't know is, if the WCH serial controller is another
+knock-off. If it is an ill-performing knock-off, then that may explain
+the problems using the existing Linux driver. Using the WCH driver
+probably explains why things work under Windows. The WCH driver may
+fix the problems I am seeing under Linux.
 
-> Why do you think we need to retry the parent's probe again?
+Jeff
 
-There's four options here:
-
-0) Hope that of_platform_populate() always succeeds in invoking
-dwc3_probe() on the first attempt, so that it is available when
-of_find_device_by_node() is invoked in dwc3_qcom_probe() (and a few of
-the other platform's drivers).
-
-1) Ensure that the operations performed by dwc3_probe() happens
-synchronously and return a failure to dwc3-qcom, which depending on how
-dwc3_probe() failed can propagate that failure - i.e. either probe defer
-or clean up its resources if the failure from dwc3-core is permanent.
-
-2) Register the dwc3-core and then return from dwc3_qcom_probe() in some
-half-initialized state and through some yet to be invented notification
-mechanism continue the tail of dwc3_qcom_probe() once dwc3_probe() has
-finished. But I know of no such notification mechanism in place today
-and we can just register a callback, because of 1).
-Furthermore we'd leave dwc3-qcom half-initialized until the dwc3-core is
-done probing - which might never happen.
-
-3) Make drvdata of all the platform drivers be some known struct that
-dwc3-core can retrieve and dereference - containing the optional
-callback to the role_switch callback.
-
-
-We've tried the option 0) for a few years now. Option 2) is a variant of
-what we have today, where we patch one problem up and hope that nothing
-unexpected happens until things has fully probed. We're doing 3) in
-various other places, but in my view it's abusing a void * and has to be
-kept synchronized between all the possible parent drivers.
-
-Left is 1), which will take some refactoring, but will leave the
-interaction between the two drivers in a state that's very easy to
-reason about.
-
-> I know there are some downstream code which using this way, I would
-> like to know the shortcoming for it.
-> 
-
-The shortcoming of having dwc3_qcom_probe() invoke dwc3_probe()
-"manually" and then returning -EPROBE_DEFER if the dwc3-core's resources
-aren't yet available is that we're wasting some time tearing down the
-dwc3-qcom state and then re-initialize it next time this is attempted.
-
-But as this is the idiomatic way to deal with the problem of "resources
-not yet ready" there are mitigation being put in place to reduce the
-number of such attempts being made.
-
-Regards,
-Bjorn
-
-> Peter
-> 
-> >	The point in time that dwc3-qcom could potentially parse
-> >       such a deferral in the child device is late. It would also be weird
-> >       and messy to try to roll back the parent's probe because of a child
-> >       device deferral.
-> > 
-> >       I considered making some sort of worker in the parent to check for
-> >       child device probe but, again this seemed like an atrocious hack so,
-> >       I didn't even try to prototype that.
-> > 
-> >    b) One potential solution was using "__weak" linkage in a function
-> >       provided by dwc3-drd that a wrapper such as dwc3-qcom could then
-> >       over-ride.
-> > 
-> >       If a wrapper such as dwc3-qcom then implemented a function with
-> >       regular linkage it would over-ride the __weak function and provide a
-> >       method for the dwc3-drd code to call into dwc3-qcom when probing was
-> >       complete, thus allowing registration of the notifier when the child
-> >       was ready.
-> > 
-> >       This would work up until the point that you tried to compile two
-> >       implementations of a dwc3 wrapper into the one kernel module or the
-> >       one kernel image say dwc3-qcom and a similar implementation in
-> >       dwc3-meson. At that point you would get linker breakage.
-> > 
-> > #2 Using USB role switching for the notification
-> > 
-> >    Wesley's implementation took the approach dwc3-qcom -> dwc3-drd, whereas
-> >    the approach I'm proposing here is dwc3-drd -> dwc3-qcom, which is also
-> >    what we discussed on the list.
-> > 
-> >    Having implemented it, I think USB role-switching in the direction
-> >    dwc3-drd -> dwc3-qcom is also a much cleaner solution for several
-> >    reasons.
-> > 
-> >    a) Handling probe deferral is built into Linux' USB role switching today
-> >       so we don't have to re-invent that wheel, unlike with the original
-> >       notifier model.
-> > 
-> >    b) There is no "wiring up" or traversing the graph tree for the wrapper
-> >       layer to determine if the parent device has a compliant type-c
-> >       connector associated with it, unlike in the dwc3-qcom -> dwc3-drd
-> >       model.
-> > 
-> >       All that has to happen is "usb-role-switch" is declared in the parent
-> >       dwc3-qcom node and the role-switch API takes care of the rest.
-> > 
-> >       That means its possible to use a usb-c-connector, qcom type-c pm8150b
-> >       driver, a USCI, a tps659x, a fusb302 or something like ChromeOS
-> >       cros_ec to notify dwc3-drd without dwc3-qcom having to have
-> >       the slighest clue which type of device is sending the signal.
-> > 
-> >       All dwc3-qcom needs to do is waggle UTMI signals in a register when a
-> >       role-switch happens.
-> > 
-> >    c) It "feels" like a layering violation to have the dwc3-qcom SoC
-> >       wrapper receive the event and trigger the dwc3-drd core.
-> > 
-> >       The standard model of parent/child role switching or remote-endpoint
-> >       traversal that USB role switching already has works just fine for
-> >       dwc3-drd, we just need to trigger dwc3-qcom for the role-switch in a
-> >       non-vendor and non-SoC specific way.
-> > 
-> >    d) Less code. It turns out there's less code implementing as a
-> >       role-switch interface in the direction dwc3-drd -> dwc3-qcom.
-> > 
-> >    e) Portability. The mechanism used for dwc3-drd -> dwc3 qcom can be
-> >       reused for any other similar wrapper which models the wrapper as a
-> >       parent of the dwc3-drd.
-> > 
-> > For all of those reasons I've opted to use USB role-switch notification
-> > from dwc3-drd to dwc3-qcom.
-> > 
-> > git add bod git://git.linaro.org/people/bryan.odonoghue/kernel.git
-> > git fetch bod
-> > git diff usb-next-5.13.rcx-rb5-tcpm..usb-next-5.13.rcx-rb5-tcpm-v2
-> > 
-> > Bryan O'Donoghue (2):
-> >   usb: dwc3: Add role switch relay support
-> >   usb: dwc3: dwc3-qcom: Make dwc3-qcom a role-switch signal recipient
-> > 
-> > Wesley Cheng (1):
-> >   usb: dwc3: dwc3-qcom: Fix typo in the dwc3 vbus override API
-> > 
-> >  drivers/usb/dwc3/core.h      |  2 +
-> >  drivers/usb/dwc3/drd.c       | 10 +++++
-> >  drivers/usb/dwc3/dwc3-qcom.c | 77 ++++++++++++++++++++++++++++++++++--
-> >  3 files changed, 85 insertions(+), 4 deletions(-)
-> > 
-> > -- 
-> > 2.30.1
-> > 
-> 
-> -- 
-> 
-> Thanks,
-> Peter Chen
-> 
+[1] https://www.elmelectronics.com/ic/elm327/
+[2] https://www.elmelectronics.com/wp-content/uploads/2020/05/AT_Command_Table.pdf
+[3] http://wch-ic.com/downloads/CH341SER_LINUX_ZIP.html
+[4] https://github.com/torvalds/linux/blob/master/drivers/usb/serial/ch341.c
