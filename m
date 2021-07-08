@@ -2,228 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6685C3BF708
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 10:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6E53BF83A
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 12:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbhGHIpt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jul 2021 04:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56204 "EHLO
+        id S231494AbhGHKRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jul 2021 06:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbhGHIps (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 04:45:48 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07E3DC06175F
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jul 2021 01:43:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id v13so2566864ple.9
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jul 2021 01:43:06 -0700 (PDT)
+        with ESMTP id S231332AbhGHKRx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 06:17:53 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209A3C061574
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jul 2021 03:15:11 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id r11so1567228wro.9
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jul 2021 03:15:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4X56iU4N0E+ayaaRhTpJj7zvU3AsIErwbtf4WUrMOX4=;
-        b=abKm7nXfVZFt9n9AK0hzyALrAYUSVBDSHoibzI+wMgOOFUCtcwKZcDklDg0oypMdnZ
-         aumSkyGlQn7nmgtGY2eMcTzkpxAwwtsb9rNgA1LSyXer9qAuFGcrMt4dMQs0kB8z0Pm0
-         rJQstvWvVLP5tv8f83fPK3I5FXpFxgUw4Wijk=
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=hQCK+Zcd2t60sEgEFMh43/KmT8Y7J1HENZolpobLhN0=;
+        b=u0qWpWCDJGGNvS+FqBecOwPYuNDzATIU9G+y5Hz2C9hnUW4Tf11XZLL1EJwOGh9VML
+         c1ljWCDeYkMWFVWkRlCCL1TMvz0+O6Ift8p7JnAGndjgbQYSePWanjsJ+VyMVhUjw5tn
+         HXvIbHlvHQCHZvnl9qh3nWTgV5+rrdIzhGG/7nSrlIR+8sOjHrhtfnTvKh/GjxQQbSQ8
+         rMHeuLY2gi+qW6bcc+dLXYgq9rPgIvFDAwW49v16SexvKC7oBaGdMk5VHbWkTI5wPCPr
+         o2dXQ9PE3puh+Hui4ddog5gCRQelga6UZVLU2pONFKv5mnhmFc8eQtM+y6nY0YvswiOc
+         gtWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=4X56iU4N0E+ayaaRhTpJj7zvU3AsIErwbtf4WUrMOX4=;
-        b=m+Q6CFP/5WRKNlhBtcILd/LN12vS4RS/UwxSywKHF6tU3AYmi5Cudt28FuhCUKJI0v
-         ijlyCoDYenw8b1FKjzcmcA3vvPiOM8MPvkIlGUABKsr417a356xxRF3KUwhSIN0n0jUg
-         Gl7GDpZcUVkfwKuEbyV73G7N7djXr7wP0IkiUQr4kvdtjk737mObZLuZzPd/R5MZ3GnP
-         WLGTi/uZmXtePcgo9QLvp3Cj+OeH39QQVqL4AcxYZYPpqeYZpjjBDi/9Bfg/oX7YERzp
-         ZJaV1ok1s2zzAMItSPfwuTMAs0j2xp+MRbg1QySX1BtwYqH4/VJbb3mjujq8B2A59FKw
-         JhoA==
-X-Gm-Message-State: AOAM533qtY0eCKeDAV90tKN3g9j26ZIgwhS83xQOLsOmX/kFGiTkLm2z
-        GQ2RzW5tDud+43FIozuYtLr6IHt+d9RraA==
-X-Google-Smtp-Source: ABdhPJwiIDoPmZy8pzUM6Kg1dXNKRIBXDHjKKlnSzgiOzOnWNNjpvkbYx7J5i713ZeOLIDSkeCrLeg==
-X-Received: by 2002:a17:90a:6903:: with SMTP id r3mr15518869pjj.105.1625733785397;
-        Thu, 08 Jul 2021 01:43:05 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:45e5:3e18:ee2f:e9d7])
-        by smtp.gmail.com with ESMTPSA id n3sm1901559pfn.216.2021.07.08.01.43.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jul 2021 01:43:04 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     linux-usb@vger.kernel.org
-Cc:     Ikjoon Jang <ikjn@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] xhci: fix unmatched num_trbs_free
-Date:   Thu,  8 Jul 2021 16:43:01 +0800
-Message-Id: <20210708164256.1.Ib344a977b52486ec81b60f9820338f1b43655f8d@changeid>
-X-Mailer: git-send-email 2.32.0.93.g670b81a890-goog
+        bh=hQCK+Zcd2t60sEgEFMh43/KmT8Y7J1HENZolpobLhN0=;
+        b=fghbgmRfr33ZpjZ/loFrqCsZ30ZA9CvRms45vlE9VbHAwYmnGSmIfExOw9xOry+xWH
+         epk+pSO9nRfaQEOr2EP9Vls9mUvrXUCSm1PKOWpYL/paegSRuA0ZHBVPIylbpvN6OzVM
+         IMwTbertFSHECM6aB9tyUv411bkDQdM+NojKqJ2x2jfz39AC/hvXNczDLL7Da0QPa9UO
+         xquwgOQHYt2aJXERkTkCBRfwlDW815xtbLenJTO0KQX2wRYAZMS5SDc2lkWWd3lnfhD3
+         VSBnaR+3gVRO6OICl/fFgCnUtHKEnnO/jGNegjvnsdtohMozjnehwzsKBZZ1y2whpMGk
+         1CHw==
+X-Gm-Message-State: AOAM5338Z3w1wYgZJJFkdhxrv5kEZtDP+BtjVuBVEhwV78Cs01vw78/j
+        4lB7Q8IQlTe7CHN8xTxNAn0NDg==
+X-Google-Smtp-Source: ABdhPJz/JDSbpj7RRseOXudH3Z8vk1hTRWlR/bPVaFvzJC+3xTHcaueRQuI02V/gG+QumZdGCSIzDQ==
+X-Received: by 2002:adf:f8c5:: with SMTP id f5mr33269437wrq.420.1625739309730;
+        Thu, 08 Jul 2021 03:15:09 -0700 (PDT)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id t17sm1728273wrs.61.2021.07.08.03.15.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jul 2021 03:15:09 -0700 (PDT)
+Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
+ dwc3-qcom
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Peter Chen <peter.chen@kernel.org>
+Cc:     balbi@kernel.org, agross@kernel.org, gregkh@linuxfoundation.org,
+        jackp@codeaurora.org, wcheng@codeaurora.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+ <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga>
+ <20210708030631.GA22420@nchen> <YOZ3CBNTXFTa+fNx@yoga>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <de86a2c5-92cf-da0a-8819-2de4c3c88b3f@linaro.org>
+Date:   Thu, 8 Jul 2021 11:17:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YOZ3CBNTXFTa+fNx@yoga>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When unlinked urbs are queued to the cancelled td list, many tds
-might be located after hw dequeue pointer and just marked as no-op
-but not reclaimed to num_trbs_free. This bias can leads to unnecessary
-ring expansions and leaks in atomic pool.
+On 08/07/2021 04:54, Bjorn Andersson wrote:
+> Bryan had a previous patch where the glue layer was notified about role
+> switching (iirc) and as soon as we hit a probe deferal in the core
+> driver we'd dereference some pointer in the glue layer. I don't find the
+> patch right now, but I suspect it might have been caused by the same
+> platform_get_drvdata() as we see in qcom_dwc3_resume_irq().
 
-To prevent this bias, this patch counts free TRBs every time xhci moves
-dequeue pointer. This patch utilizes existing
-update_ring_for_set_deq_completion() function, renamed it to move_deq().
+Here
 
-When it walks through to the new dequeue pointer, it also counts
-free TRBs manually. This patch adds a fast path for the most cases
-where the new dequeue pointer is still in the current segment.
+https://lore.kernel.org/linux-usb/20200311191501.8165-7-bryan.odonoghue@linaro.org/
 
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
----
+and here
 
- drivers/usb/host/xhci-ring.c | 106 +++++++++++++++++------------------
- 1 file changed, 52 insertions(+), 54 deletions(-)
+https://lore.kernel.org/linux-usb/20200311191501.8165-8-bryan.odonoghue@linaro.org/
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 3c12a6fc406b..6414ffe33581 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -152,6 +152,54 @@ static void next_trb(struct xhci_hcd *xhci,
- 	}
- }
- 
-+/* Forward dequeue pointer to the specific position,
-+ * walk through the ring and reclaim free trb slots to num_trbs_free
-+ */
-+static int move_deq(struct xhci_hcd *xhci, struct xhci_ring *ep_ring,
-+		    struct xhci_segment *new_seg, union xhci_trb *new_deq)
+one thing about that I don't think is right now in retrospect is having 
+to find a DT connector in the core, meaning it incorrectly assumes you 
+have a node named "connector" as a child of dwc3-core
+
+https://lore.kernel.org/linux-usb/158463604559.152100.9219030962819234620@swboyd.mtv.corp.google.com/
+
+Having done some work with TCPM on pm8150b silicon I see what Stephen 
+was saying about that
+
+That's one solid reason I like the USB role-switch API - because it gets 
+you out of the business of trying to discern from dwc3-qcom if dwc3-core 
+has role-switching turned on by iterating through its range of DT nodes 
+and looking for a special one named "connector"
+
+The initial and imperfect solution I had for that looked like this
+
+if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {}
+
+Wesley had another iteration on that that was a little better
+
+https://lore.kernel.org/linux-usb/20201009082843.28503-4-wcheng@codeaurora.org/
+
++static int dwc3_qcom_connector_check(struct fwnode_handle *fwnode)
 +{
-+	unsigned int steps;
-+	union xhci_trb *deq;
-+	struct xhci_segment *seg = ep_ring->deq_seg;
-+
-+	/* direct paths */
-+	if (ep_ring->dequeue == new_deq) {
-+		return 0;
-+	} else if ((ep_ring->deq_seg == new_seg) &&
-+	    (ep_ring->dequeue <= new_deq)) {
-+		steps = new_deq - ep_ring->dequeue;
-+		deq = new_deq;
-+		goto found;
-+	}
-+
-+	/* fast walk to the next segment */
-+	seg = seg->next;
-+	steps = (TRBS_PER_SEGMENT - 1) -
-+		(ep_ring->dequeue - ep_ring->deq_seg->trbs);
-+	deq = &seg->trbs[0];
-+
-+	while (deq != new_deq) {
-+		if (trb_is_link(deq)) {
-+			seg = seg->next;
-+			deq = seg->trbs;
-+		} else {
-+			steps++;
-+			deq++;
-+		}
-+		if (deq == ep_ring->dequeue) {
-+			xhci_warn(xhci, "Unable to find new dequeue pointer\n");
-+			return -ENOENT;
-+		}
-+	}
-+
-+found:
-+	ep_ring->deq_seg = seg;
-+	ep_ring->dequeue = deq;
-+	ep_ring->num_trbs_free += steps;
++	if (fwnode && (!fwnode_property_match_string(fwnode, "compatible",
++						     "gpio-usb-b-connector") ||
++	    !fwnode_property_match_string(fwnode, "compatible",
++					  "usb-c-connector")))
++		return 1;
 +
 +	return 0;
 +}
-+
- /*
-  * See Cycle bit rules. SW is the consumer for the event ring only.
-  */
-@@ -1245,52 +1293,6 @@ void xhci_stop_endpoint_command_watchdog(struct timer_list *t)
- 			"xHCI host controller is dead.");
- }
- 
--static void update_ring_for_set_deq_completion(struct xhci_hcd *xhci,
--		struct xhci_virt_device *dev,
--		struct xhci_ring *ep_ring,
--		unsigned int ep_index)
--{
--	union xhci_trb *dequeue_temp;
--	int num_trbs_free_temp;
--	bool revert = false;
--
--	num_trbs_free_temp = ep_ring->num_trbs_free;
--	dequeue_temp = ep_ring->dequeue;
--
--	/* If we get two back-to-back stalls, and the first stalled transfer
--	 * ends just before a link TRB, the dequeue pointer will be left on
--	 * the link TRB by the code in the while loop.  So we have to update
--	 * the dequeue pointer one segment further, or we'll jump off
--	 * the segment into la-la-land.
--	 */
--	if (trb_is_link(ep_ring->dequeue)) {
--		ep_ring->deq_seg = ep_ring->deq_seg->next;
--		ep_ring->dequeue = ep_ring->deq_seg->trbs;
--	}
--
--	while (ep_ring->dequeue != dev->eps[ep_index].queued_deq_ptr) {
--		/* We have more usable TRBs */
--		ep_ring->num_trbs_free++;
--		ep_ring->dequeue++;
--		if (trb_is_link(ep_ring->dequeue)) {
--			if (ep_ring->dequeue ==
--					dev->eps[ep_index].queued_deq_ptr)
--				break;
--			ep_ring->deq_seg = ep_ring->deq_seg->next;
--			ep_ring->dequeue = ep_ring->deq_seg->trbs;
--		}
--		if (ep_ring->dequeue == dequeue_temp) {
--			revert = true;
--			break;
--		}
--	}
--
--	if (revert) {
--		xhci_dbg(xhci, "Unable to find new dequeue pointer\n");
--		ep_ring->num_trbs_free = num_trbs_free_temp;
--	}
--}
--
- /*
-  * When we get a completion for a Set Transfer Ring Dequeue Pointer command,
-  * we need to clear the set deq pending flag in the endpoint ring state, so that
-@@ -1377,8 +1379,8 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
- 			/* Update the ring's dequeue segment and dequeue pointer
- 			 * to reflect the new position.
- 			 */
--			update_ring_for_set_deq_completion(xhci, ep->vdev,
--				ep_ring, ep_index);
-+			move_deq(xhci, ep_ring, ep->queued_deq_seg,
-+				 ep->queued_deq_ptr);
- 		} else {
- 			xhci_warn(xhci, "Mismatch between completed Set TR Deq Ptr command & xHCI internal state.\n");
- 			xhci_warn(xhci, "ep deq seg = %p, deq ptr = %p\n",
-@@ -2212,9 +2214,7 @@ static int finish_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	}
- 
- 	/* Update ring dequeue pointer */
--	ep_ring->dequeue = td->last_trb;
--	ep_ring->deq_seg = td->last_trb_seg;
--	ep_ring->num_trbs_free += td->num_trbs - 1;
-+	move_deq(xhci, ep_ring, td->last_trb_seg, td->last_trb);
- 	inc_deq(xhci, ep_ring);
- 
- 	return xhci_td_cleanup(xhci, td, ep_ring, td->status);
-@@ -2434,9 +2434,7 @@ static int skip_isoc_td(struct xhci_hcd *xhci, struct xhci_td *td,
- 	frame->actual_length = 0;
- 
- 	/* Update ring dequeue pointer */
--	ep->ring->dequeue = td->last_trb;
--	ep->ring->deq_seg = td->last_trb_seg;
--	ep->ring->num_trbs_free += td->num_trbs - 1;
-+	move_deq(xhci, ep->ring, td->last_trb_seg, td->last_trb);
- 	inc_deq(xhci, ep->ring);
- 
- 	return xhci_td_cleanup(xhci, td, ep->ring, status);
--- 
-2.32.0.93.g670b81a890-goog
 
+All we are really doing there is replicating functionality that the 
+role-switch API already provides
+
+
+---
+bod
