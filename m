@@ -2,127 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6E53BF83A
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 12:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D5E3BFA73
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 14:42:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbhGHKRy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jul 2021 06:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48514 "EHLO
+        id S229901AbhGHMoe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jul 2021 08:44:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbhGHKRx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 06:17:53 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209A3C061574
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jul 2021 03:15:11 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r11so1567228wro.9
-        for <linux-usb@vger.kernel.org>; Thu, 08 Jul 2021 03:15:11 -0700 (PDT)
+        with ESMTP id S231628AbhGHMob (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 08:44:31 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED162C061762
+        for <linux-usb@vger.kernel.org>; Thu,  8 Jul 2021 05:41:49 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id n11so3462123pjo.1
+        for <linux-usb@vger.kernel.org>; Thu, 08 Jul 2021 05:41:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hQCK+Zcd2t60sEgEFMh43/KmT8Y7J1HENZolpobLhN0=;
-        b=u0qWpWCDJGGNvS+FqBecOwPYuNDzATIU9G+y5Hz2C9hnUW4Tf11XZLL1EJwOGh9VML
-         c1ljWCDeYkMWFVWkRlCCL1TMvz0+O6Ift8p7JnAGndjgbQYSePWanjsJ+VyMVhUjw5tn
-         HXvIbHlvHQCHZvnl9qh3nWTgV5+rrdIzhGG/7nSrlIR+8sOjHrhtfnTvKh/GjxQQbSQ8
-         rMHeuLY2gi+qW6bcc+dLXYgq9rPgIvFDAwW49v16SexvKC7oBaGdMk5VHbWkTI5wPCPr
-         o2dXQ9PE3puh+Hui4ddog5gCRQelga6UZVLU2pONFKv5mnhmFc8eQtM+y6nY0YvswiOc
-         gtWg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
+        b=VetX2Cfr8bdRNaZiWLEm04u6bqZW3l6DI4CAN74JIY7k4z1gUX2WPAhVDnzm350lf2
+         zN9Z12JQmbzlk/BWNUXvjVAbpB66ZXuvK3SPb444QQ5diXQOytBY51L2/oTaoUD9VeXU
+         uFurAnxdtCpnicZBLB0yD9ojUwv6W/qtm1PvBS9AFUFJNPr3tKxeC4wQWDvFkNeWRoRf
+         7SjXn45LyDiaoeLgbbyRwVPp/zZWqO3qYud0+Xn/514eUefuiFS0gjROioJ7tCP2C/ZN
+         ZUSLS7lmtDXFsaxdqMahs7f08oqXmzo9A5DfBGmAWg3PByPV9/9CFdzFbNZ8GtPMsFJE
+         z42g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hQCK+Zcd2t60sEgEFMh43/KmT8Y7J1HENZolpobLhN0=;
-        b=fghbgmRfr33ZpjZ/loFrqCsZ30ZA9CvRms45vlE9VbHAwYmnGSmIfExOw9xOry+xWH
-         epk+pSO9nRfaQEOr2EP9Vls9mUvrXUCSm1PKOWpYL/paegSRuA0ZHBVPIylbpvN6OzVM
-         IMwTbertFSHECM6aB9tyUv411bkDQdM+NojKqJ2x2jfz39AC/hvXNczDLL7Da0QPa9UO
-         xquwgOQHYt2aJXERkTkCBRfwlDW815xtbLenJTO0KQX2wRYAZMS5SDc2lkWWd3lnfhD3
-         VSBnaR+3gVRO6OICl/fFgCnUtHKEnnO/jGNegjvnsdtohMozjnehwzsKBZZ1y2whpMGk
-         1CHw==
-X-Gm-Message-State: AOAM5338Z3w1wYgZJJFkdhxrv5kEZtDP+BtjVuBVEhwV78Cs01vw78/j
-        4lB7Q8IQlTe7CHN8xTxNAn0NDg==
-X-Google-Smtp-Source: ABdhPJz/JDSbpj7RRseOXudH3Z8vk1hTRWlR/bPVaFvzJC+3xTHcaueRQuI02V/gG+QumZdGCSIzDQ==
-X-Received: by 2002:adf:f8c5:: with SMTP id f5mr33269437wrq.420.1625739309730;
-        Thu, 08 Jul 2021 03:15:09 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id t17sm1728273wrs.61.2021.07.08.03.15.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jul 2021 03:15:09 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
- dwc3-qcom
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Peter Chen <peter.chen@kernel.org>
-Cc:     balbi@kernel.org, agross@kernel.org, gregkh@linuxfoundation.org,
-        jackp@codeaurora.org, wcheng@codeaurora.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga>
- <20210708030631.GA22420@nchen> <YOZ3CBNTXFTa+fNx@yoga>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <de86a2c5-92cf-da0a-8819-2de4c3c88b3f@linaro.org>
-Date:   Thu, 8 Jul 2021 11:17:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hP9H7HVTE7TFrRNTl1vyqWVVeZcuqXBCZg0bGqclL/A=;
+        b=uHFCngEC32AdOJAcAOOciWM50yWWJFXLifqYuOfYwb9eHxVX1cLjBC4bhyD1xxVEvm
+         zrwKsPGgKmkuo4iSEZJ3oHnBOY/+yWUltpLI3TggFKN5n7PYzoyU7zMF01LUnINptPh1
+         LWvWf5mQKF++zCtKTtrSaZg2yhSIeHevywxbuM9s6Lj8bEi5eymnS9wB2REn/aVMBfUk
+         Q4y2adB7wPf+GJ2MV1KQ/8VigETC3znL/SYAuZUWE7ch195u+zWAgXrpsduDGINyK67w
+         xDCcctdXnxcXxkPvC9JLXNJYROHKnh12nzi5395VhOu6ueyjQexh2wFc48yeo5MQu5S/
+         p4fw==
+X-Gm-Message-State: AOAM530fNImz0KLnAaMclFNc96LU0flw4lR2ED8vqXcXJMi0Nda0WbEY
+        t/RTc4iHLQ0JmYhior4P5F9dV8m7nxA6NCZeseTh/JFmjKL64w==
+X-Google-Smtp-Source: ABdhPJywz4fR2V+V+6/E9OWxEVi9/b58VFa4IZ2LlJTPpT0B9SRAdSG9PM7u1rPMHG2ZlSabjmUDzfVjnsqdUEe3bFI=
+X-Received: by 2002:a67:8783:: with SMTP id j125mr27888650vsd.42.1625748098931;
+ Thu, 08 Jul 2021 05:41:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YOZ3CBNTXFTa+fNx@yoga>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20210706154803.1631813-1-u.kleine-koenig@pengutronix.de> <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20210706154803.1631813-5-u.kleine-koenig@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Jul 2021 14:41:02 +0200
+Message-ID: <CAPDyKFo0zuooWAkuR=BcsvcJ2pmSrcEoBhuC8+ne18GQphyPHA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] bus: Make remove callback return void
+To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sascha Hauer <kernel@pengutronix.de>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Geoff Levand <geoff@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>,
+        William Breathitt Gray <vilhelm.gray@gmail.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Moritz Fischer <mdf@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jens Taprogge <jens.taprogge@taprogge.org>,
+        Johannes Thumshirn <morbidrsa@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxim Levitsky <maximlevitsky@gmail.com>,
+        Alex Dubov <oakad@yahoo.com>, Lee Jones <lee.jones@linaro.org>,
+        Tomas Winkler <tomas.winkler@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        Alexandre Bounine <alex.bou9@gmail.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Thorsten Scherer <t.scherer@eckelmann.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Michael Buesch <m@bues.ch>,
+        Sven Van Asbroeck <TheSven73@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Marc Zyngier <maz@kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Qinglang Miao <miaoqinglang@huawei.com>,
+        Alexey Kardashevskiy <aik@ozlabs.ru>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Joey Pabalan <jpabalanb@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Frank Li <lznuaa@gmail.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>,
+        Hannes Reinecke <hare@suse.de>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        SeongJae Park <sjpark@amazon.de>,
+        Julien Grall <jgrall@amazon.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-acpi@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, linux-cxl@vger.kernel.org,
+        nvdimm@lists.linux.dev, dmaengine@vger.kernel.org,
+        linux1394-devel@lists.sourceforge.net, linux-fpga@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-i3c@lists.infradead.org,
+        industrypack-devel@lists.sourceforge.net,
+        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-ntb@googlegroups.com,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
+        greybus-dev@lists.linaro.org, target-devel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, kvm@vger.kernel.org,
+        xen-devel@lists.xenproject.org,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Johannes Thumshirn <jth@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 08/07/2021 04:54, Bjorn Andersson wrote:
-> Bryan had a previous patch where the glue layer was notified about role
-> switching (iirc) and as soon as we hit a probe deferal in the core
-> driver we'd dereference some pointer in the glue layer. I don't find the
-> patch right now, but I suspect it might have been caused by the same
-> platform_get_drvdata() as we see in qcom_dwc3_resume_irq().
+On Tue, 6 Jul 2021 at 17:53, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
+>
+> The driver core ignores the return value of this callback because there
+> is only little it can do when a device disappears.
+>
+> This is the final bit of a long lasting cleanup quest where several
+> buses were converted to also return void from their remove callback.
+> Additionally some resource leaks were fixed that were caused by drivers
+> returning an error code in the expectation that the driver won't go
+> away.
+>
+> With struct bus_type::remove returning void it's prevented that newly
+> implemented buses return an ignored error code and so don't anticipate
+> wrong expectations for driver authors.
+>
+> Acked-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk> (For ARM, Am=
+ba and related parts)
+> Acked-by: Mark Brown <broonie@kernel.org>
+> Acked-by: Chen-Yu Tsai <wens@csie.org> (for drivers/bus/sunxi-rsb.c)
+> Acked-by: Pali Roh=C3=A1r <pali@kernel.org>
+> Acked-by: Mauro Carvalho Chehab <mchehab@kernel.org> (for drivers/media)
+> Acked-by: Hans de Goede <hdegoede@redhat.com> (For drivers/platform)
+> Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> Acked-By: Vinod Koul <vkoul@kernel.org>
+> Acked-by: Juergen Gross <jgross@suse.com> (For Xen)
+> Acked-by: Lee Jones <lee.jones@linaro.org> (For drivers/mfd)
+> Acked-by: Johannes Thumshirn <jth@kernel.org> (For drivers/mcb)
+> Acked-by: Johan Hovold <johan@kernel.org>
+> Acked-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org> (For drive=
+rs/slimbus)
+> Acked-by: Kirti Wankhede <kwankhede@nvidia.com> (For drivers/vfio)
+> Acked-by: Maximilian Luz <luzmaximilian@gmail.com>
+> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com> (For ulpi and=
+ typec)
+> Acked-by: Samuel Iglesias Gons=C3=A1lvez <siglesias@igalia.com> (For ipac=
+k)
+> Reviewed-by: Tom Rix <trix@redhat.com> (For fpga)
+> Acked-by: Geoff Levand <geoff@infradead.org> (For ps3)
+> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
 
-Here
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
 
-https://lore.kernel.org/linux-usb/20200311191501.8165-7-bryan.odonoghue@linaro.org/
+[...]
 
-and here
-
-https://lore.kernel.org/linux-usb/20200311191501.8165-8-bryan.odonoghue@linaro.org/
-
-one thing about that I don't think is right now in retrospect is having 
-to find a DT connector in the core, meaning it incorrectly assumes you 
-have a node named "connector" as a child of dwc3-core
-
-https://lore.kernel.org/linux-usb/158463604559.152100.9219030962819234620@swboyd.mtv.corp.google.com/
-
-Having done some work with TCPM on pm8150b silicon I see what Stephen 
-was saying about that
-
-That's one solid reason I like the USB role-switch API - because it gets 
-you out of the business of trying to discern from dwc3-qcom if dwc3-core 
-has role-switching turned on by iterating through its range of DT nodes 
-and looking for a special one named "connector"
-
-The initial and imperfect solution I had for that looked like this
-
-if (dwc3_qcom_find_gpio_usb_connector(qcom->dwc3)) {}
-
-Wesley had another iteration on that that was a little better
-
-https://lore.kernel.org/linux-usb/20201009082843.28503-4-wcheng@codeaurora.org/
-
-+static int dwc3_qcom_connector_check(struct fwnode_handle *fwnode)
-+{
-+	if (fwnode && (!fwnode_property_match_string(fwnode, "compatible",
-+						     "gpio-usb-b-connector") ||
-+	    !fwnode_property_match_string(fwnode, "compatible",
-+					  "usb-c-connector")))
-+		return 1;
-+
-+	return 0;
-+}
-
-All we are really doing there is replicating functionality that the 
-role-switch API already provides
-
-
----
-bod
+Kind regards
+Uffe
