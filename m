@@ -2,94 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6A0D3C1475
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 15:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B35F3C1B86
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jul 2021 00:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231902AbhGHNmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jul 2021 09:42:52 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:58275 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231882AbhGHNmv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 09:42:51 -0400
-Received: (qmail 208127 invoked by uid 1000); 8 Jul 2021 09:40:08 -0400
-Date:   Thu, 8 Jul 2021 09:40:08 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Evgeny Novikov <novikov@ispras.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ldv-project@linuxtesting.org
-Subject: Re: [PATCH] USB: EHCI: ehci-mv: improve error handling in
- mv_ehci_enable()
-Message-ID: <20210708134008.GA207717@rowland.harvard.edu>
-References: <20210708083056.21543-1-novikov@ispras.ru>
+        id S230362AbhGHWnQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jul 2021 18:43:16 -0400
+Received: from rere.qmqm.pl ([91.227.64.183]:61645 "EHLO rere.qmqm.pl"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229497AbhGHWnP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 8 Jul 2021 18:43:15 -0400
+X-Greylist: delayed 455 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 18:43:15 EDT
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4GLWJn47tgzTS;
+        Fri,  9 Jul 2021 00:32:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1625783577; bh=aSRPhRNGkFjEWLH2kg/7j89z1gCsuMcB8R59/oKF8I8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JdcfHB95JZvOq9AwYo66uRnlaRCmz91L8Cj5IBH0eXUke32R+PvFPcm9toZQMM95N
+         /Y1gk1nfN/MyGCcH8tOzDn5CPBgAbfJUuhxi8Hgfdj4287vlB1Uy55dz8kuI3ru4zE
+         nPwcHhb+5U8xxrys8VlQTA4haGyH+2Hf5MXA7XBFkk/whZRjfgWRInFjZ6AkyXa6O6
+         tJHBNGGyUq9mGtzeAelqMxVyajw9fLe9JC7Su0DM9J06GugR2q4CbIywIP8HFx2/Tz
+         r1+1EjF/z+UP4xoMK1xsPiL/43cmyUwSWpAV1vmSVw8blvRcxefhWqJCG7vg1W6LC1
+         fzlGVc5wXAiWA==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.2 at mail
+Date:   Fri, 9 Jul 2021 00:32:56 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v1 04/12] usb: phy: tegra: Support OTG mode programming
+Message-ID: <YOd9GE7xM150i1XT@qmqm.qmqm.pl>
+References: <20210701022405.10817-1-digetx@gmail.com>
+ <20210701022405.10817-5-digetx@gmail.com>
+ <12f5b8cc-982e-f112-e0a4-21afdf3bce06@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210708083056.21543-1-novikov@ispras.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <12f5b8cc-982e-f112-e0a4-21afdf3bce06@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 11:30:56AM +0300, Evgeny Novikov wrote:
-> mv_ehci_enable() did not disable and unprepare clocks in case of
-> failures of phy_init(). Besides, it did not take into account failures
-> of ehci_clock_enable() (in effect, failures of clk_prepare_enable()).
-> The patch fixes both issues and gets rid of redundant wrappers around
-> clk_prepare_enable() and clk_disable_unprepare() to simplify this a bit.
+On Thu, Jul 01, 2021 at 04:55:03PM +0300, Dmitry Osipenko wrote:
+> 01.07.2021 05:23, Dmitry Osipenko пишет:
+> >  static int tegra_usb_phy_init(struct usb_phy *u_phy)
+> > @@ -967,12 +1057,26 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy)
+> >  			goto disable_vbus;
+> >  	}
+> >  
+> > +	err = tegra_usb_phy_configure_pmc(phy);
+> > +	if (err)
+> > +		goto close_phy;
+> > +
+> >  	err = tegra_usb_phy_power_on(phy);
+> >  	if (err)
+> >  		goto close_phy;
+> >  
+> > +	if (phy->irq > 0) {
+> > +		err = request_irq(phy->irq, tegra_usb_phy_isr, IRQF_SHARED,
+> > +				  dev_name(phy->u_phy.dev), phy);
+> > +		if (err)
+> > +			goto pwr_off_phy;
+> > +	}
 > 
-> Found by Linux Driver Verification project (linuxtesting.org).
+> There were reports that this patch was casing an unhandled USB interrupt
+> event on some devices. I thought this problem was fixed already, but
+> looking again at the offending kernel log again, it still should be a
+> problem.
 > 
-> Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-> ---
+> The interrupt fires from the usb_add_hcd() of the CI driver before CI
+> driver have requested interrupt in ci_hdrc_probe(). So either CI driver
+> should request interrupt earlier or Tegra PHY driver should keep shared
+> interrupt disabled after requesting it, the latter variant should be
+> more robust. I'll improve it in v2.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+I'd suggest the first solution, as the latter is a workaround for what
+is a normal shared interrupt behaviour. Maybe a controller reset is
+needed in CI driver before going on with PHY init?
 
->  drivers/usb/host/ehci-mv.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
-> index cffdc8d01b2a..8fd27249ad25 100644
-> --- a/drivers/usb/host/ehci-mv.c
-> +++ b/drivers/usb/host/ehci-mv.c
-> @@ -42,26 +42,25 @@ struct ehci_hcd_mv {
->  	int (*set_vbus)(unsigned int vbus);
->  };
->  
-> -static void ehci_clock_enable(struct ehci_hcd_mv *ehci_mv)
-> +static int mv_ehci_enable(struct ehci_hcd_mv *ehci_mv)
->  {
-> -	clk_prepare_enable(ehci_mv->clk);
-> -}
-> +	int retval;
->  
-> -static void ehci_clock_disable(struct ehci_hcd_mv *ehci_mv)
-> -{
-> -	clk_disable_unprepare(ehci_mv->clk);
-> -}
-> +	retval = clk_prepare_enable(ehci_mv->clk);
-> +	if (retval)
-> +		return retval;
->  
-> -static int mv_ehci_enable(struct ehci_hcd_mv *ehci_mv)
-> -{
-> -	ehci_clock_enable(ehci_mv);
-> -	return phy_init(ehci_mv->phy);
-> +	retval = phy_init(ehci_mv->phy);
-> +	if (retval)
-> +		clk_disable_unprepare(ehci_mv->clk);
-> +
-> +	return retval;
->  }
->  
->  static void mv_ehci_disable(struct ehci_hcd_mv *ehci_mv)
->  {
->  	phy_exit(ehci_mv->phy);
-> -	ehci_clock_disable(ehci_mv);
-> +	clk_disable_unprepare(ehci_mv->clk);
->  }
->  
->  static int mv_ehci_reset(struct usb_hcd *hcd)
-> -- 
-> 2.26.2
-> 
+Best Regards
+Michał Mirosław
