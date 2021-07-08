@@ -2,46 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 106C73C1469
-	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 15:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A0D3C1475
+	for <lists+linux-usb@lfdr.de>; Thu,  8 Jul 2021 15:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231808AbhGHNlJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 8 Jul 2021 09:41:09 -0400
-Received: from mx-n08.wc2.phx1.stabletransit.com ([207.246.242.254]:48210 "HELO
-        mx-n08.wc2.phx1.stabletransit.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with SMTP id S231747AbhGHNlJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 09:41:09 -0400
-X-Greylist: delayed 355 seconds by postgrey-1.27 at vger.kernel.org; Thu, 08 Jul 2021 09:41:09 EDT
-Received: by mx-n08.wc2.phx1.stabletransit.com (Postfix, from userid 114)
-        id 31098B41AE; Thu,  8 Jul 2021 08:32:32 -0500 (CDT)
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on
-        mx-n08.wc2.phx1.stabletransit.com
-X-Spam-Level: **
-X-Spam-Status: No, score=2.6 required=6.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.2
-X-Spam-Virus: No
-Received: from php-v027.wc2.phx1.stabletransit.com (unknown [10.40.206.156])
-        by mx-n08.wc2.phx1.stabletransit.com (Postfix) with ESMTP id 7B15EB41B1
-        for <linux-usb@vger.kernel.org>; Thu,  8 Jul 2021 08:32:31 -0500 (CDT)
-Received: from digilu (uid 2914979)
-        (envelope-from mabeljohnson@citromail.hu)
-        id 20198
-        by php-v027.wc2.phx1.stabletransit.com (DragonFly Mail Agent v0.11);
-        Thu, 08 Jul 2021 08:32:31 -0500
-To:     linux-usb@vger.kernel.org
-Subject: WORK OF GOD.
-X-PHP-Originating-Script: 2914979:class.engine.php(12) : runtime-created function
-Date:   Thu, 8 Jul 2021 08:32:31 -0500
-From:   MARY JOHNSON <mabeljohnson@citromail.hu>
-Reply-To: mj224294@gmail.com
-Message-ID: <6a878aaa7d69a3a0daece990a3360626@jackieleestudio.com>
+        id S231902AbhGHNmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 8 Jul 2021 09:42:52 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58275 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231882AbhGHNmv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 8 Jul 2021 09:42:51 -0400
+Received: (qmail 208127 invoked by uid 1000); 8 Jul 2021 09:40:08 -0400
+Date:   Thu, 8 Jul 2021 09:40:08 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Evgeny Novikov <novikov@ispras.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: Re: [PATCH] USB: EHCI: ehci-mv: improve error handling in
+ mv_ehci_enable()
+Message-ID: <20210708134008.GA207717@rowland.harvard.edu>
+References: <20210708083056.21543-1-novikov@ispras.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210708083056.21543-1-novikov@ispras.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I am Mrs. Mary Johnson,78years,an aging widow suffering from cancer, I am on admission at a hospital.I would like to willfully entrust the rest of my monetary assets to you, Kindly reply back with your full Name, cellphone, address, to enable me to send you a letter of authorization to contact my bank first inland bank nigeria plc so that they can transfer my funds to your account for the purpose of helping the poor as indicated on my WILL.
+On Thu, Jul 08, 2021 at 11:30:56AM +0300, Evgeny Novikov wrote:
+> mv_ehci_enable() did not disable and unprepare clocks in case of
+> failures of phy_init(). Besides, it did not take into account failures
+> of ehci_clock_enable() (in effect, failures of clk_prepare_enable()).
+> The patch fixes both issues and gets rid of redundant wrappers around
+> clk_prepare_enable() and clk_disable_unprepare() to simplify this a bit.
+> 
+> Found by Linux Driver Verification project (linuxtesting.org).
+> 
+> Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
+> ---
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/host/ehci-mv.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-mv.c b/drivers/usb/host/ehci-mv.c
+> index cffdc8d01b2a..8fd27249ad25 100644
+> --- a/drivers/usb/host/ehci-mv.c
+> +++ b/drivers/usb/host/ehci-mv.c
+> @@ -42,26 +42,25 @@ struct ehci_hcd_mv {
+>  	int (*set_vbus)(unsigned int vbus);
+>  };
+>  
+> -static void ehci_clock_enable(struct ehci_hcd_mv *ehci_mv)
+> +static int mv_ehci_enable(struct ehci_hcd_mv *ehci_mv)
+>  {
+> -	clk_prepare_enable(ehci_mv->clk);
+> -}
+> +	int retval;
+>  
+> -static void ehci_clock_disable(struct ehci_hcd_mv *ehci_mv)
+> -{
+> -	clk_disable_unprepare(ehci_mv->clk);
+> -}
+> +	retval = clk_prepare_enable(ehci_mv->clk);
+> +	if (retval)
+> +		return retval;
+>  
+> -static int mv_ehci_enable(struct ehci_hcd_mv *ehci_mv)
+> -{
+> -	ehci_clock_enable(ehci_mv);
+> -	return phy_init(ehci_mv->phy);
+> +	retval = phy_init(ehci_mv->phy);
+> +	if (retval)
+> +		clk_disable_unprepare(ehci_mv->clk);
+> +
+> +	return retval;
+>  }
+>  
+>  static void mv_ehci_disable(struct ehci_hcd_mv *ehci_mv)
+>  {
+>  	phy_exit(ehci_mv->phy);
+> -	ehci_clock_disable(ehci_mv);
+> +	clk_disable_unprepare(ehci_mv->clk);
+>  }
+>  
+>  static int mv_ehci_reset(struct usb_hcd *hcd)
+> -- 
+> 2.26.2
+> 
