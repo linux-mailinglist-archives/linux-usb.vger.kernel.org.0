@@ -2,96 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132E73C1F06
-	for <lists+linux-usb@lfdr.de>; Fri,  9 Jul 2021 07:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB6B3C2AD6
+	for <lists+linux-usb@lfdr.de>; Fri,  9 Jul 2021 23:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhGIFoJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jul 2021 01:44:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47104 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229576AbhGIFoJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Jul 2021 01:44:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7531861441;
-        Fri,  9 Jul 2021 05:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1625809286;
-        bh=/CNQjpGPr/GvEiTEJ8KFSEyMdrlPYed6RJHrMeMrv6I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bW3yy0tyJZCVLwVleL9DGimD9FsKhumwwMTiN1W7YKeNL7lh6QZiBTqkuXzGt8EBk
-         1CX5SOxgFIDic5awY0GDYZ6E31u4rgIXthJU1rrcjd1BrVMMBq08DZNRDVvEbsbJUA
-         R7z/xeVGPBUjuq3Cs0AI5tSp/038IF0+CXJ8/Ibs=
-Date:   Fri, 9 Jul 2021 07:41:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     robh+dt@kernel.org, frowand.list@gmail.com, balbi@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jackp@codeaurora.org, fntoth@gmail.com
-Subject: Re: [PATCH v13 3/6] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-Message-ID: <YOfhg9FK8y72A/mw@kroah.com>
-References: <1625790474-8376-1-git-send-email-wcheng@codeaurora.org>
- <1625790474-8376-4-git-send-email-wcheng@codeaurora.org>
+        id S231158AbhGIVb6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jul 2021 17:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229546AbhGIVb6 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 9 Jul 2021 17:31:58 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B62C0613DD;
+        Fri,  9 Jul 2021 14:29:14 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id u25so10181531ljj.11;
+        Fri, 09 Jul 2021 14:29:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=n0pfSYVBqfYvbhafERT7C/3uYLaoAC4+eDT96OIhYTg=;
+        b=Myw6i+pThWV7QbfFuFJeUBZKzaOoiw/AVYZOVNSJIptvdX8HGgYwhhD32SLd04xPYH
+         +dd1uFoTovo8kAWX6AczxwKEunKaiH/6a7U/ks2rWAiVs2KsU1V5hnh9Vi1/tQeazDO/
+         aqYgoCR31S706J17XFvi0sP4AkuaA7H51g02zf0iekw4WG7CEx4mFNBB1susFUj3r5pd
+         3RWuyQd4CNN7yIj3lJTA+4AWkckjo2PfA/O30XGjKhVvHg8qVeUNZkmdSDJfSt3kuw3+
+         oDhhoAzEF0WZiX5VwNuW1dEvyetWZgwHymIRkSmplONc7NPDtd2t9hYAgLoRklJSHdfb
+         3xmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=n0pfSYVBqfYvbhafERT7C/3uYLaoAC4+eDT96OIhYTg=;
+        b=UcQQUD7ARXTP9Q2prJFaC6ebR4RM1Ko0154+tVHaBApwnZB+WUOcL8xDnZf95K9uEk
+         2UDOpbQ9IQR5Jj1PGeXpOmhuguiZnS+kO0x+IbYeYoXE4zfgFrQBgCi4TagNFs+KdV0a
+         b8nfpSdWDlb8F3s1xZ6WSDRbnqDUXqsv+osQd5mziVmRVnsatNmH89qOl8GgjU+Eak5P
+         LwKPhIk82p0f5lXmboQydbQc9rCBmI5gC37KAvLxUOD1iBSU5K2lRLCWE9+5b2YfF3zT
+         7gfakEjVJvjbBQ7EpFevh8i6Rm70eb4d8q+TI21vLnHDGQ1m/ciEcQIv6g1rlsuswC4v
+         E5EQ==
+X-Gm-Message-State: AOAM532W+YIArig4NDqD8kggxEJQWsobxnQfFEqS21qe23U8iTovcgCQ
+        9B7H3iJ9VpY+u/H54llBwDwy3bXSSDM=
+X-Google-Smtp-Source: ABdhPJxj10EO1lGxzlIT3gS6U3RVrU1QxVlIxaqXNWaph5WsP/B+oQU0p2z+yYdDlzmLcMuY2ic3nw==
+X-Received: by 2002:a2e:9884:: with SMTP id b4mr31093656ljj.242.1625866152311;
+        Fri, 09 Jul 2021 14:29:12 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.googlemail.com with ESMTPSA id v16sm686726ljn.93.2021.07.09.14.29.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jul 2021 14:29:11 -0700 (PDT)
+Subject: Re: [PATCH v1 04/12] usb: phy: tegra: Support OTG mode programming
+To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210701022405.10817-1-digetx@gmail.com>
+ <20210701022405.10817-5-digetx@gmail.com>
+ <12f5b8cc-982e-f112-e0a4-21afdf3bce06@gmail.com>
+ <YOd9GE7xM150i1XT@qmqm.qmqm.pl>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <2fbfc146-a563-fc58-19d2-fc1f43381fa6@gmail.com>
+Date:   Sat, 10 Jul 2021 00:29:11 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1625790474-8376-4-git-send-email-wcheng@codeaurora.org>
+In-Reply-To: <YOd9GE7xM150i1XT@qmqm.qmqm.pl>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 08, 2021 at 05:27:51PM -0700, Wesley Cheng wrote:
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index dccdf13..dd985ba 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -1023,6 +1023,7 @@ struct dwc3_scratchpad_array {
->   * @rx_max_burst_prd: max periodic ESS receive burst size
->   * @tx_thr_num_pkt_prd: periodic ESS transmit packet count
->   * @tx_max_burst_prd: max periodic ESS transmit burst size
-> + * @tx_fifo_resize_max_num: max number of fifos allocated during txfifo resize
->   * @hsphy_interface: "utmi" or "ulpi"
->   * @connected: true when we're connected to a host, false otherwise
->   * @delayed_status: true when gadget driver asks for delayed status
-> @@ -1079,6 +1080,11 @@ struct dwc3_scratchpad_array {
->   * @dis_split_quirk: set to disable split boundary.
->   * @imod_interval: set the interrupt moderation interval in 250ns
->   *			increments or 0 to disable.
-> + * @max_cfg_eps: current max number of IN eps used across all USB configs.
-> + * @last_fifo_depth: last fifo depth used to determine next fifo ram start
-> + *		     address.
-> + * @num_ep_resized: carries the current number endpoints which have had its tx
-> + *		    fifo resized.
->   */
->  struct dwc3 {
->  	struct work_struct	drd_work;
-> @@ -1233,6 +1239,7 @@ struct dwc3 {
->  	u8			rx_max_burst_prd;
->  	u8			tx_thr_num_pkt_prd;
->  	u8			tx_max_burst_prd;
-> +	u8			tx_fifo_resize_max_num;
->  
->  	const char		*hsphy_interface;
->  
-> @@ -1246,6 +1253,7 @@ struct dwc3 {
->  	unsigned		is_utmi_l1_suspend:1;
->  	unsigned		is_fpga:1;
->  	unsigned		pending_events:1;
-> +	unsigned		do_fifo_resize:1;
->  	unsigned		pullups_connected:1;
->  	unsigned		setup_packet_pending:1;
->  	unsigned		three_stage_setup:1;
-> @@ -1281,6 +1289,10 @@ struct dwc3 {
->  	unsigned		dis_split_quirk:1;
->  
->  	u16			imod_interval;
-> +
-> +	int			max_cfg_eps;
-> +	int			last_fifo_depth;
-> +	int			num_ep_resized;
->  };
->  
+09.07.2021 01:32, Michał Mirosław пишет:
+> On Thu, Jul 01, 2021 at 04:55:03PM +0300, Dmitry Osipenko wrote:
+>> 01.07.2021 05:23, Dmitry Osipenko пишет:
+>>>  static int tegra_usb_phy_init(struct usb_phy *u_phy)
+>>> @@ -967,12 +1057,26 @@ static int tegra_usb_phy_init(struct usb_phy *u_phy)
+>>>  			goto disable_vbus;
+>>>  	}
+>>>  
+>>> +	err = tegra_usb_phy_configure_pmc(phy);
+>>> +	if (err)
+>>> +		goto close_phy;
+>>> +
+>>>  	err = tegra_usb_phy_power_on(phy);
+>>>  	if (err)
+>>>  		goto close_phy;
+>>>  
+>>> +	if (phy->irq > 0) {
+>>> +		err = request_irq(phy->irq, tegra_usb_phy_isr, IRQF_SHARED,
+>>> +				  dev_name(phy->u_phy.dev), phy);
+>>> +		if (err)
+>>> +			goto pwr_off_phy;
+>>> +	}
+>>
+>> There were reports that this patch was casing an unhandled USB interrupt
+>> event on some devices. I thought this problem was fixed already, but
+>> looking again at the offending kernel log again, it still should be a
+>> problem.
+>>
+>> The interrupt fires from the usb_add_hcd() of the CI driver before CI
+>> driver have requested interrupt in ci_hdrc_probe(). So either CI driver
+>> should request interrupt earlier or Tegra PHY driver should keep shared
+>> interrupt disabled after requesting it, the latter variant should be
+>> more robust. I'll improve it in v2.
+> 
+> I'd suggest the first solution, as the latter is a workaround for what
+> is a normal shared interrupt behaviour. Maybe a controller reset is
+> needed in CI driver before going on with PHY init?
 
-You document 4 new variables being added, but add 5 variables to the
-structure.  Something is out of sync :(
+I already implemented the second solution. The controller reset should
+be okay. We could improve it all later on if will ever be needed, so far
+it's unnecessary. I can't really work on improving the CI interrupt
+because it requires to have a special testing setup to reproduce the
+problem and I don't have that setup.
