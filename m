@@ -2,37 +2,35 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 407F53C2D57
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9DC3C2D63
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232956AbhGJCWb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jul 2021 22:22:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37792 "EHLO mail.kernel.org"
+        id S232601AbhGJCWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jul 2021 22:22:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232735AbhGJCWE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:22:04 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 828AA613D9;
-        Sat, 10 Jul 2021 02:19:12 +0000 (UTC)
+        id S232866AbhGJCWT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:22:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BB2D2613C3;
+        Sat, 10 Jul 2021 02:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883553;
-        bh=TOcl3h8y0zUeqb5SQcKCPtz9ZLYgerjxGs4W3oevh8A=;
+        s=k20201202; t=1625883565;
+        bh=oZYv39VanAcQo8CfNJJXpZS4pXJWzXIkBY41UUMDDt0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a9yMuNP5ccY0opbDiBVE4ta3rOIynlZ2MIQj5V1Hk/v14AjLgrk4Wv1M9PRduAukA
-         Fqbv0Gy2kjKzm+eewuxK3WPUanr0uPpP9c6vxzjRWZOJe8s9Jw2vuiS+hf8iuO5piS
-         6XXWGeO/BKu59M93A4tq9sEVwtHjEWPtfg3wZcgM8z1Qp8JYgIlrzI5GJQgcuPhrKs
-         K6DPdEF/mgoOGdS9N+8UcGx/YzEDoIpd/2OoTJMBLlRyZrWLAdF1zTYE6abStAW6hq
-         haspzYWYM8gcy8SeLpt2SAHWWA3lIUUsuOf0FI9Q+eYvL6YkaIP6RqaXYCC8XnYUt0
-         DH2vJ3VlAsXng==
+        b=h3+Pc1z5cMGuOj3LJjnJ024RvdGtEaOOUQoM5UgTo9MCWOeZfBCR/XnOS3fSXp5nX
+         hFr2Y4XDqz1buy4DARrFr4Re+Gpgf+bzp91MNwa/BfJo4ZYCJlatamue8bNTNdOCOk
+         n/HPhE24T/WYG5zwJbvhh1Ea3q++qXVDtdVlwsju03ZXlR7alpON2lcVpvvwy6nq9M
+         wFNW38d/2FniGuwHfSQalX++Q2FFfzuFOvBlVMTFHhrpLd26lINfi4nhY6dy+g3j/E
+         0T+Mul2WjC33I6IGq5sFrd+iA7K/ymIvUJqcNqM4mWRhn8SNcAsUsOPjgfcCnWJqzd
+         EnJT3sTP5Xwog==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Johan Hovold <johan@kernel.org>,
-        syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Gil Fine <gil.fine@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 062/114] USB: core: Avoid WARNings for 0-length descriptor requests
-Date:   Fri,  9 Jul 2021 22:16:56 -0400
-Message-Id: <20210710021748.3167666-62-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.13 072/114] thunderbolt: Fix DROM handling for USB4 DROM
+Date:   Fri,  9 Jul 2021 22:17:06 -0400
+Message-Id: <20210710021748.3167666-72-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710021748.3167666-1-sashal@kernel.org>
 References: <20210710021748.3167666-1-sashal@kernel.org>
@@ -44,50 +42,84 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Alan Stern <stern@rowland.harvard.edu>
+From: Gil Fine <gil.fine@intel.com>
 
-[ Upstream commit 60dfe484cef45293e631b3a6e8995f1689818172 ]
+[ Upstream commit b18f901382fdb74a138a0bf30458c54a023a1d86 ]
 
-The USB core has utility routines to retrieve various types of
-descriptors.  These routines will now provoke a WARN if they are asked
-to retrieve 0 bytes (USB "receive" requests must not have zero
-length), so avert this by checking the size argument at the start.
+DROM for USB4 host/device has a shorter header than Thunderbolt DROM
+header. This patch addresses host/device with USB4 DROM (According to spec:
+Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
 
-CC: Johan Hovold <johan@kernel.org>
-Reported-and-tested-by: syzbot+7dbcd9ff34dc4ed45240@syzkaller.appspotmail.com
-Reviewed-by: Johan Hovold <johan@kernel.org>
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Link: https://lore.kernel.org/r/20210607152307.GD1768031@rowland.harvard.edu
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+While there correct the data_len field to be 12 bits and rename
+__unknown1 to reserved following the spec.
+
+Signed-off-by: Gil Fine <gil.fine@intel.com>
+Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/core/message.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/core/message.c b/drivers/usb/core/message.c
-index 30e9e680c74c..4d59d927ae3e 100644
---- a/drivers/usb/core/message.c
-+++ b/drivers/usb/core/message.c
-@@ -783,6 +783,9 @@ int usb_get_descriptor(struct usb_device *dev, unsigned char type,
- 	int i;
- 	int result;
+diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
+index 46d0906a3070..470885e6f1c8 100644
+--- a/drivers/thunderbolt/eeprom.c
++++ b/drivers/thunderbolt/eeprom.c
+@@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
+ 	return ~__crc32c_le(~0, data, len);
+ }
  
-+	if (size <= 0)		/* No point in asking for no data */
-+		return -EINVAL;
+-#define TB_DROM_DATA_START 13
++#define TB_DROM_DATA_START		13
++#define TB_DROM_HEADER_SIZE		22
++#define USB4_DROM_HEADER_SIZE		16
 +
- 	memset(buf, 0, size);	/* Make sure we parse really received data */
+ struct tb_drom_header {
+ 	/* BYTE 0 */
+ 	u8 uid_crc8; /* checksum for uid */
+@@ -224,9 +227,9 @@ struct tb_drom_header {
+ 	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
+ 	/* BYTE 13 */
+ 	u8 device_rom_revision; /* should be <= 1 */
+-	u16 data_len:10;
+-	u8 __unknown1:6;
+-	/* BYTES 16-21 */
++	u16 data_len:12;
++	u8 reserved:4;
++	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
+ 	u16 vendor_id;
+ 	u16 model_id;
+ 	u8 model_rev;
+@@ -401,10 +404,10 @@ static int tb_drom_parse_entry_port(struct tb_switch *sw,
+  *
+  * Drom must have been copied to sw->drom.
+  */
+-static int tb_drom_parse_entries(struct tb_switch *sw)
++static int tb_drom_parse_entries(struct tb_switch *sw, size_t header_size)
+ {
+ 	struct tb_drom_header *header = (void *) sw->drom;
+-	u16 pos = sizeof(*header);
++	u16 pos = header_size;
+ 	u16 drom_size = header->data_len + TB_DROM_DATA_START;
+ 	int res;
  
- 	for (i = 0; i < 3; ++i) {
-@@ -832,6 +835,9 @@ static int usb_get_string(struct usb_device *dev, unsigned short langid,
- 	int i;
- 	int result;
+@@ -566,7 +569,7 @@ static int tb_drom_parse(struct tb_switch *sw)
+ 			header->data_crc32, crc);
+ 	}
  
-+	if (size <= 0)		/* No point in asking for no data */
-+		return -EINVAL;
-+
- 	for (i = 0; i < 3; ++i) {
- 		/* retry on length 0 or stall; some devices are flakey */
- 		result = usb_control_msg(dev, usb_rcvctrlpipe(dev, 0),
+-	return tb_drom_parse_entries(sw);
++	return tb_drom_parse_entries(sw, TB_DROM_HEADER_SIZE);
+ }
+ 
+ static int usb4_drom_parse(struct tb_switch *sw)
+@@ -583,7 +586,7 @@ static int usb4_drom_parse(struct tb_switch *sw)
+ 		return -EINVAL;
+ 	}
+ 
+-	return tb_drom_parse_entries(sw);
++	return tb_drom_parse_entries(sw, USB4_DROM_HEADER_SIZE);
+ }
+ 
+ /**
 -- 
 2.30.2
 
