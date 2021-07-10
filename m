@@ -2,38 +2,40 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9DC3C2D63
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B48F23C2DB4
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232601AbhGJCWk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jul 2021 22:22:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38792 "EHLO mail.kernel.org"
+        id S232331AbhGJCYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jul 2021 22:24:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41680 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232866AbhGJCWT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:22:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BB2D2613C3;
-        Sat, 10 Jul 2021 02:19:24 +0000 (UTC)
+        id S231908AbhGJCYw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:24:52 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3927F613E8;
+        Sat, 10 Jul 2021 02:22:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883565;
-        bh=oZYv39VanAcQo8CfNJJXpZS4pXJWzXIkBY41UUMDDt0=;
+        s=k20201202; t=1625883728;
+        bh=LTJWYMUPiITN3Wa6Cf/Hoco6oaVd8XiUe0xBl1/a+Fo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h3+Pc1z5cMGuOj3LJjnJ024RvdGtEaOOUQoM5UgTo9MCWOeZfBCR/XnOS3fSXp5nX
-         hFr2Y4XDqz1buy4DARrFr4Re+Gpgf+bzp91MNwa/BfJo4ZYCJlatamue8bNTNdOCOk
-         n/HPhE24T/WYG5zwJbvhh1Ea3q++qXVDtdVlwsju03ZXlR7alpON2lcVpvvwy6nq9M
-         wFNW38d/2FniGuwHfSQalX++Q2FFfzuFOvBlVMTFHhrpLd26lINfi4nhY6dy+g3j/E
-         0T+Mul2WjC33I6IGq5sFrd+iA7K/ymIvUJqcNqM4mWRhn8SNcAsUsOPjgfcCnWJqzd
-         EnJT3sTP5Xwog==
+        b=lGplkn3OMf6cHh7S3IJ7VUI/Duaq5OaelPxDSLnaDTyznF7TZkXOC6FfD5YSefQhf
+         STLV+XYtvPo9e3W8/IbeZ2GpP0QFpWpjaiy2keVhyfNeQvSIfhG0DPfRDxgx1eoat3
+         MKJTHu02sb2nvu0t1ml6Fz5oHu3MlmPGf0IG068eiN94C6BHf5YDE2ocRyvxUH0d+S
+         PcWelUaTXoGiaJ1w5FP1ByI6OMqLOirFwxTKg0FECfUEjM36Fx78rAcXB2eiCbAOiD
+         V5JzJG78AfanCN64r+v1J2Jmbn+FdW4G8BPnB1j6GnN1OmbM8SoDLM0z1Sdd4M67BA
+         XOBnj+RPDxyGg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gil Fine <gil.fine@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
+Cc:     Raymond Tan <raymond.tan@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.13 072/114] thunderbolt: Fix DROM handling for USB4 DROM
-Date:   Fri,  9 Jul 2021 22:17:06 -0400
-Message-Id: <20210710021748.3167666-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 008/104] usb: dwc3: pci: Fix DEFINE for Intel Elkhart Lake
+Date:   Fri,  9 Jul 2021 22:20:20 -0400
+Message-Id: <20210710022156.3168825-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210710021748.3167666-1-sashal@kernel.org>
-References: <20210710021748.3167666-1-sashal@kernel.org>
+In-Reply-To: <20210710022156.3168825-1-sashal@kernel.org>
+References: <20210710022156.3168825-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -42,84 +44,56 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Gil Fine <gil.fine@intel.com>
+From: Raymond Tan <raymond.tan@intel.com>
 
-[ Upstream commit b18f901382fdb74a138a0bf30458c54a023a1d86 ]
+[ Upstream commit 457d22850b27de3aea336108272d08602c55fdf7 ]
 
-DROM for USB4 host/device has a shorter header than Thunderbolt DROM
-header. This patch addresses host/device with USB4 DROM (According to spec:
-Universal Serial Bus 4 (USB4) Device ROM Specification, Rev 1.0, Feb-2021).
+There's no separate low power (LP) version of Elkhart Lake, thus
+this patch updates the PCI Device ID DEFINE to indicate this.
 
-While there correct the data_len field to be 12 bits and rename
-__unknown1 to reserved following the spec.
-
-Signed-off-by: Gil Fine <gil.fine@intel.com>
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Acked-by: Felipe Balbi <balbi@kernel.org>
+Signed-off-by: Raymond Tan <raymond.tan@intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20210512135901.28495-1-heikki.krogerus@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/thunderbolt/eeprom.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/usb/dwc3/dwc3-pci.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/thunderbolt/eeprom.c b/drivers/thunderbolt/eeprom.c
-index 46d0906a3070..470885e6f1c8 100644
---- a/drivers/thunderbolt/eeprom.c
-+++ b/drivers/thunderbolt/eeprom.c
-@@ -214,7 +214,10 @@ static u32 tb_crc32(void *data, size_t len)
- 	return ~__crc32c_le(~0, data, len);
- }
+diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
+index 19789e94bbd0..45ec5ac9876e 100644
+--- a/drivers/usb/dwc3/dwc3-pci.c
++++ b/drivers/usb/dwc3/dwc3-pci.c
+@@ -36,7 +36,7 @@
+ #define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
+ #define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
+ #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
+-#define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
++#define PCI_DEVICE_ID_INTEL_EHL			0x4b7e
+ #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
+ #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
+ #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
+@@ -167,7 +167,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
+ 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
+ 		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
+ 		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
+-		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
++		    pdev->device == PCI_DEVICE_ID_INTEL_EHL) {
+ 			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
+ 			dwc->has_dsm_for_pm = true;
+ 		}
+@@ -375,8 +375,8 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICLLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
  
--#define TB_DROM_DATA_START 13
-+#define TB_DROM_DATA_START		13
-+#define TB_DROM_HEADER_SIZE		22
-+#define USB4_DROM_HEADER_SIZE		16
-+
- struct tb_drom_header {
- 	/* BYTE 0 */
- 	u8 uid_crc8; /* checksum for uid */
-@@ -224,9 +227,9 @@ struct tb_drom_header {
- 	u32 data_crc32; /* checksum for data_len bytes starting at byte 13 */
- 	/* BYTE 13 */
- 	u8 device_rom_revision; /* should be <= 1 */
--	u16 data_len:10;
--	u8 __unknown1:6;
--	/* BYTES 16-21 */
-+	u16 data_len:12;
-+	u8 reserved:4;
-+	/* BYTES 16-21 - Only for TBT DROM, nonexistent in USB4 DROM */
- 	u16 vendor_id;
- 	u16 model_id;
- 	u8 model_rev;
-@@ -401,10 +404,10 @@ static int tb_drom_parse_entry_port(struct tb_switch *sw,
-  *
-  * Drom must have been copied to sw->drom.
-  */
--static int tb_drom_parse_entries(struct tb_switch *sw)
-+static int tb_drom_parse_entries(struct tb_switch *sw, size_t header_size)
- {
- 	struct tb_drom_header *header = (void *) sw->drom;
--	u16 pos = sizeof(*header);
-+	u16 pos = header_size;
- 	u16 drom_size = header->data_len + TB_DROM_DATA_START;
- 	int res;
+-	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
+-	  (kernel_ulong_t) &dwc3_pci_intel_swnode },
++	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHL),
++	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
  
-@@ -566,7 +569,7 @@ static int tb_drom_parse(struct tb_switch *sw)
- 			header->data_crc32, crc);
- 	}
- 
--	return tb_drom_parse_entries(sw);
-+	return tb_drom_parse_entries(sw, TB_DROM_HEADER_SIZE);
- }
- 
- static int usb4_drom_parse(struct tb_switch *sw)
-@@ -583,7 +586,7 @@ static int usb4_drom_parse(struct tb_switch *sw)
- 		return -EINVAL;
- 	}
- 
--	return tb_drom_parse_entries(sw);
-+	return tb_drom_parse_entries(sw, USB4_DROM_HEADER_SIZE);
- }
- 
- /**
+ 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
+ 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
 -- 
 2.30.2
 
