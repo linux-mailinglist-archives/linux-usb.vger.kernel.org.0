@@ -2,37 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B48F23C2DB4
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E79E03C2DD8
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbhGJCYz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jul 2021 22:24:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41680 "EHLO mail.kernel.org"
+        id S232755AbhGJCZS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jul 2021 22:25:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42072 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231908AbhGJCYw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:24:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3927F613E8;
-        Sat, 10 Jul 2021 02:22:07 +0000 (UTC)
+        id S232525AbhGJCZK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:25:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AE2CD613E6;
+        Sat, 10 Jul 2021 02:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883728;
-        bh=LTJWYMUPiITN3Wa6Cf/Hoco6oaVd8XiUe0xBl1/a+Fo=;
+        s=k20201202; t=1625883745;
+        bh=N9tg4uOowuFl6i9wi0x5B9WKbHwNGTjWXkUqtqYIuno=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lGplkn3OMf6cHh7S3IJ7VUI/Duaq5OaelPxDSLnaDTyznF7TZkXOC6FfD5YSefQhf
-         STLV+XYtvPo9e3W8/IbeZ2GpP0QFpWpjaiy2keVhyfNeQvSIfhG0DPfRDxgx1eoat3
-         MKJTHu02sb2nvu0t1ml6Fz5oHu3MlmPGf0IG068eiN94C6BHf5YDE2ocRyvxUH0d+S
-         PcWelUaTXoGiaJ1w5FP1ByI6OMqLOirFwxTKg0FECfUEjM36Fx78rAcXB2eiCbAOiD
-         V5JzJG78AfanCN64r+v1J2Jmbn+FdW4G8BPnB1j6GnN1OmbM8SoDLM0z1Sdd4M67BA
-         XOBnj+RPDxyGg==
+        b=swyS7SKCsqM3yDLRaE2A+hDf1c3nyOkKXW5SX4LsiRAQNumIu9SU7jrLEI1uAT46b
+         2Zf2p6iceP5WpF8aNqwNTh7Vpyu7kBLMNewDOGtkufegJhQGfV2CF2/9ZToeuFkvZu
+         l8QdhO2lSzOG+0c3S7GQINs/lYK6Jd4Pqyo26b8c0aQjfw4zxyW4K7apa0xdgd6m6f
+         9xVG+l73kYFv6wPlHI1PFHpMbSkuWE1F2zYqGkqh/eMz5jnmLQwa6BoUg4RDrKCMwL
+         VjdFJ0Dx79LtqXYgw3KnMQa69i4336ta/Mm0SWtvVs8LHnLcqSS7PBfThT7iriCeOR
+         E0Q2u2K/XOolA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Raymond Tan <raymond.tan@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 008/104] usb: dwc3: pci: Fix DEFINE for Intel Elkhart Lake
-Date:   Fri,  9 Jul 2021 22:20:20 -0400
-Message-Id: <20210710022156.3168825-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.12 022/104] usb: common: usb-conn-gpio: fix NULL pointer dereference of charger
+Date:   Fri,  9 Jul 2021 22:20:34 -0400
+Message-Id: <20210710022156.3168825-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710022156.3168825-1-sashal@kernel.org>
 References: <20210710022156.3168825-1-sashal@kernel.org>
@@ -44,56 +44,96 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Raymond Tan <raymond.tan@intel.com>
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-[ Upstream commit 457d22850b27de3aea336108272d08602c55fdf7 ]
+[ Upstream commit 880287910b1892ed2cb38977893b947382a09d21 ]
 
-There's no separate low power (LP) version of Elkhart Lake, thus
-this patch updates the PCI Device ID DEFINE to indicate this.
+When power on system with OTG cable, IDDIG's interrupt arises before
+the charger registration, it will cause a NULL pointer dereference,
+fix the issue by registering the power supply before requesting
+IDDIG/VBUS irq.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Raymond Tan <raymond.tan@intel.com>
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20210512135901.28495-1-heikki.krogerus@linux.intel.com
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Link: https://lore.kernel.org/r/1621406386-18838-1-git-send-email-chunfeng.yun@mediatek.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/common/usb-conn-gpio.c | 44 ++++++++++++++++++------------
+ 1 file changed, 26 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 19789e94bbd0..45ec5ac9876e 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -36,7 +36,7 @@
- #define PCI_DEVICE_ID_INTEL_CNPH		0xa36e
- #define PCI_DEVICE_ID_INTEL_CNPV		0xa3b0
- #define PCI_DEVICE_ID_INTEL_ICLLP		0x34ee
--#define PCI_DEVICE_ID_INTEL_EHLLP		0x4b7e
-+#define PCI_DEVICE_ID_INTEL_EHL			0x4b7e
- #define PCI_DEVICE_ID_INTEL_TGPLP		0xa0ee
- #define PCI_DEVICE_ID_INTEL_TGPH		0x43ee
- #define PCI_DEVICE_ID_INTEL_JSP			0x4dee
-@@ -167,7 +167,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
- 	if (pdev->vendor == PCI_VENDOR_ID_INTEL) {
- 		if (pdev->device == PCI_DEVICE_ID_INTEL_BXT ||
- 		    pdev->device == PCI_DEVICE_ID_INTEL_BXT_M ||
--		    pdev->device == PCI_DEVICE_ID_INTEL_EHLLP) {
-+		    pdev->device == PCI_DEVICE_ID_INTEL_EHL) {
- 			guid_parse(PCI_INTEL_BXT_DSM_GUID, &dwc->guid);
- 			dwc->has_dsm_for_pm = true;
+diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/usb-conn-gpio.c
+index 6c4e3a19f42c..c9545a4eff66 100644
+--- a/drivers/usb/common/usb-conn-gpio.c
++++ b/drivers/usb/common/usb-conn-gpio.c
+@@ -149,14 +149,32 @@ static int usb_charger_get_property(struct power_supply *psy,
+ 	return 0;
+ }
+ 
+-static int usb_conn_probe(struct platform_device *pdev)
++static int usb_conn_psy_register(struct usb_conn_info *info)
+ {
+-	struct device *dev = &pdev->dev;
+-	struct power_supply_desc *desc;
+-	struct usb_conn_info *info;
++	struct device *dev = info->dev;
++	struct power_supply_desc *desc = &info->desc;
+ 	struct power_supply_config cfg = {
+ 		.of_node = dev->of_node,
+ 	};
++
++	desc->name = "usb-charger";
++	desc->properties = usb_charger_properties;
++	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
++	desc->get_property = usb_charger_get_property;
++	desc->type = POWER_SUPPLY_TYPE_USB;
++	cfg.drv_data = info;
++
++	info->charger = devm_power_supply_register(dev, desc, &cfg);
++	if (IS_ERR(info->charger))
++		dev_err(dev, "Unable to register charger\n");
++
++	return PTR_ERR_OR_ZERO(info->charger);
++}
++
++static int usb_conn_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct usb_conn_info *info;
+ 	bool need_vbus = true;
+ 	int ret = 0;
+ 
+@@ -218,6 +236,10 @@ static int usb_conn_probe(struct platform_device *pdev)
+ 		return PTR_ERR(info->role_sw);
+ 	}
+ 
++	ret = usb_conn_psy_register(info);
++	if (ret)
++		goto put_role_sw;
++
+ 	if (info->id_gpiod) {
+ 		info->id_irq = gpiod_to_irq(info->id_gpiod);
+ 		if (info->id_irq < 0) {
+@@ -252,20 +274,6 @@ static int usb_conn_probe(struct platform_device *pdev)
  		}
-@@ -375,8 +375,8 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_ICLLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 	}
  
--	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHLLP),
--	  (kernel_ulong_t) &dwc3_pci_intel_swnode },
-+	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_EHL),
-+	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+-	desc = &info->desc;
+-	desc->name = "usb-charger";
+-	desc->properties = usb_charger_properties;
+-	desc->num_properties = ARRAY_SIZE(usb_charger_properties);
+-	desc->get_property = usb_charger_get_property;
+-	desc->type = POWER_SUPPLY_TYPE_USB;
+-	cfg.drv_data = info;
+-
+-	info->charger = devm_power_supply_register(dev, desc, &cfg);
+-	if (IS_ERR(info->charger)) {
+-		dev_err(dev, "Unable to register charger\n");
+-		return PTR_ERR(info->charger);
+-	}
+-
+ 	platform_set_drvdata(pdev, info);
  
- 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_TGPLP),
- 	  (kernel_ulong_t) &dwc3_pci_intel_swnode, },
+ 	/* Perform initial detection */
 -- 
 2.30.2
 
