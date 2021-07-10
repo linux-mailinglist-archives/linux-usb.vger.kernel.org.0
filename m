@@ -2,118 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5AE63C35B7
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 19:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742833C3735
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jul 2021 00:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbhGJRKw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 10 Jul 2021 13:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbhGJRKv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Jul 2021 13:10:51 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84192C0613DD
-        for <linux-usb@vger.kernel.org>; Sat, 10 Jul 2021 10:08:06 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id b2so23106833ejg.8
-        for <linux-usb@vger.kernel.org>; Sat, 10 Jul 2021 10:08:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8sBYTJuQ75JTZT4uHwVhodoPEm3mG4wWISso+dIOLYk=;
-        b=RpcCUwmSSb7NNcjart/+Nz5p0W6e9bl/Qtqpi4UskBwAhgw00UAmDHiS5Ul0CCe5t9
-         9iQOJv0+7mcoTcW01YjsMoxvNqUX5QFN8yCYXidvw4OlESnSHomPPRFlyjngAgqC51Qh
-         VWHQoad4/dcGmysSeZA6s9uCFHKx79fFM8bJzFtfLwIDJ6zcBP4uMBxbb1vH6xiU6WnP
-         tf7Eo83rCJZMMLaIlpModMik0J/mPeANUqd4rAnZoJl+mIleKsAfFZ6A7Wdy1W/GxcOZ
-         VWA0XJEy6MC9zltKUJGKZgU4NAtyi5VhZpmfn+fvf4IaSISjVcrAXDtgJqGduqWUlpsR
-         nuaw==
+        id S231344AbhGJXA5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 10 Jul 2021 19:00:57 -0400
+Received: from mail-io1-f71.google.com ([209.85.166.71]:41610 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229515AbhGJXA5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 10 Jul 2021 19:00:57 -0400
+Received: by mail-io1-f71.google.com with SMTP id b13-20020a056602330db02905101d652a35so9066976ioz.8
+        for <linux-usb@vger.kernel.org>; Sat, 10 Jul 2021 15:58:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8sBYTJuQ75JTZT4uHwVhodoPEm3mG4wWISso+dIOLYk=;
-        b=QwOJ+IlMfx6i0RD1BZnNDJ/ps39+EAbkUUXK/SlwiwyjSWYmFznIeKvkNg8jC2a5BQ
-         4AmoIe2JNxNs33fmJcok2uwtA7T3aRycDXs4r/8wI4KX48ePENT6Tb6FQ3FJyHcmnD5+
-         1ybdiWBTFes5yOiNGQbVMtdyqrlyqqEyo3mKu/3l1NcE+4pbVeRL6OMZqBrXTbCy825d
-         UWtfF/+9Lfs62Zq0Rpf0Yn7Z2i6oRlIs98IpEC1gpXNA4upCwTlVFdhttpOKg2Ic9WvJ
-         IeExuUa84+r84ju1BZBkzl0Lu8lw+1TjUKZFURcAVfbGOl8LOrZeDnHIgmVN4w4wAawl
-         AJUw==
-X-Gm-Message-State: AOAM530JN4Rkr3+Cn7k9qK1QSWyZg/q/XM8KSW+q1aSr97hOE44OVodo
-        mgleQsXE/o8XN+sn8X+WKlqR0DRPZgtEVTLy2r8=
-X-Google-Smtp-Source: ABdhPJzDljglsF2bwqagKTnNx1jViPlKg5RdyLJejdd8xFuatysTEXQgE+C52tds4bMMu8jatSndxbF8d+knW/byZVI=
-X-Received: by 2002:a17:906:2306:: with SMTP id l6mr43270855eja.362.1625936885095;
- Sat, 10 Jul 2021 10:08:05 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=0wWgh8WDnJgLadErj8DWSwgmkIyzT68Is8EEUbs0ddQ=;
+        b=GBPdgfm5vqdnKOQjsbo9RwjlpjMxcqR2LV9fZGk33xLTg4uZFx/ptnEXRY0YzraMmU
+         k7dDOK3Iazvy0I0oJTEeqnuWwDutXm+mHtC6lCUX7MQrq9hiDg1dRYVvPQjx0FevlXkY
+         jxEoxyFCssSFeehr/ubGX8R2dxpYQL99ggoxVEuC65RNtxZ0buuoXgBsp9BpUkB1KMI3
+         A7v/zdODYO8tRzYvLyStAsHptcrGQ4eQZuL5SbmsgYIW9ZVV1E9Q26NDcoML+Id5X+0S
+         C6DqLI/U6xPgsOyw2GtbuB4RKWogSnrKbQ4AtQkJSF4RCe5xLffX4ucRxK4UxoQiUx/E
+         p+MA==
+X-Gm-Message-State: AOAM532rL7eLYS0TUECZPPfa9WMPgOXkmy9UQIohF0B+3yvaTnoUy1kC
+        XNbcaevRYYc0OxgaR5Xm3crKtB2xNA2ZZUaKtgiGjywWflPr
+X-Google-Smtp-Source: ABdhPJwAk7j/AxYEQqJarBacdXTmM+yZUFZf9Fpye5npVWKkm6ieOMuaia0W7pJz+2O4hR6RcS/69icRLZzQItgboi+DNUlOEIOM
 MIME-Version: 1.0
-References: <0badab7c-f12e-e9ed-2f90-2cf5f25f4038@bluematt.me>
- <20210628005825.GA638648@rowland.harvard.edu> <e421818c-dea4-ba6b-e737-bb8d99582588@bluematt.me>
- <20210628011628.GC638648@rowland.harvard.edu> <0c62655d-738c-4d71-6b7b-fe7fa90b54e3@bluematt.me>
- <20210628142418.GC656159@rowland.harvard.edu> <CAFBinCA9Y16Ej3PEBN1Rsqo=6V1AZXKOpTfc_siHP0rvVo7wWQ@mail.gmail.com>
- <20210629150541.GB699290@rowland.harvard.edu> <CAFBinCCOGJfHSSHgRrOO-FQJZAUB=QuMr=BoddPLt19spp0QBg@mail.gmail.com>
- <20210629161807.GB703497@rowland.harvard.edu> <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
- <CAFBinCDc6RUypJpujmYdkjo6j-xsg0HkZEZGxTCsTW4tZ-bJPA@mail.gmail.com>
-In-Reply-To: <CAFBinCDc6RUypJpujmYdkjo6j-xsg0HkZEZGxTCsTW4tZ-bJPA@mail.gmail.com>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 10 Jul 2021 19:07:54 +0200
-Message-ID: <CAFBinCA083iP4T2b1+MoDGZFKMO8eyy-WceRBA-QibatqboO1A@mail.gmail.com>
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices
-To:     Minas Harutyunyan <hminas@synopsys.com>
-Cc:     Alan Stern <stern@rowland.harvard.edu>,
-        Matt Corallo <oc2udbzfd@mattcorallo.com>,
-        linux-usb@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux.amoon@gmail.com
+X-Received: by 2002:a92:bf0b:: with SMTP id z11mr33610032ilh.60.1625957890058;
+ Sat, 10 Jul 2021 15:58:10 -0700 (PDT)
+Date:   Sat, 10 Jul 2021 15:58:10 -0700
+In-Reply-To: <20210710145003.GA271154@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000074f06705c6ccd2a4@google.com>
+Subject: Re: [syzbot] WARNING in do_proc_control/usb_submit_urb
+From:   syzbot <syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, johan@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Minas,
+Hello,
 
-On Thu, Jul 1, 2021 at 1:09 AM Martin Blumenstingl
-<martin.blumenstingl@googlemail.com> wrote:
->
-> Hi Minas,
->
-> On Tue, Jun 29, 2021 at 6:30 PM Martin Blumenstingl
-> <martin.blumenstingl@googlemail.com> wrote:
-> >
-> > Hi Alan,
-> >
-> > On Tue, Jun 29, 2021 at 6:18 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > [...]
-> > > > >         usbcore.autosuspend=-1
-> > > > wow, this helps indeed
-> > > > my steps are:
-> > > > - power off my Odroid-C1+
-> > > > - unplug all USB devices
-> > > > - boot with usbcore.autosuspend=-1 in the kernel cmdline
-> > > > - plugin my Corsair Voyager USB 3.0 flash drive (which was only
-> > > > detected before if an additional USB 2.0 flash drive was plugged in
-> > > > during boot)
-> > > > -> without any lsusb magic the device was immediately recognized
-> > >
-> > > That does show pretty convincingly that runtime suspend is causing the
-> > > problem.  But I still have no idea why the problem affects some devices
-> > > and not others.  It's a mystery.
-> > Maybe because there's two related problems (I am guessing here):
-> > The first issue is that USB hotplug is not working at all on my
-> > Odroid-C1+ (which means: dwc2 + GL852G USB hub).
-> > The second issue is that the workaround we had before (running lsusb
-> > -vv to make "hot plugged" devices show up) is not working for some USB
-> > devices.
-> >
-> > It seems that using a different workaround (usbcore.autosuspend=-1)
-> > makes *all* USB devices show up - even without any "lsusb -vv" call.
-> > So I think we should focus on the first issue as it may also fix the
-> > other problem as well.
-> above paragraph sums up the issues which Matt and I are seeing (on
-> Odroid-C1+ and Odroid-C2) in case you didn't follow the full email
-> thread
-It's been a week since I sent my last mail
-In case you are taking some days off: enjoy that time!
-Please let us know if you have any questions about this as we're
-looking forward to some hints on how to debug (and of course fix!)
-this.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+BUG: sleeping function called from invalid context in lock_sock_nested
+
+BUG: sleeping function called from invalid context at net/core/sock.c:3159
+in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 8829, name: syz-executor.5
+1 lock held by syz-executor.5/8829:
+ #0: ffffffff8d2ecee0 (hci_sk_list.lock){++++}-{2:2}, at: hci_sock_dev_event+0x3db/0x660 net/bluetooth/hci_sock.c:763
+Preemption disabled at:
+[<0000000000000000>] 0x0
+CPU: 1 PID: 8829 Comm: syz-executor.5 Not tainted 5.13.0-next-20210707-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:105
+ ___might_sleep.cold+0x1f1/0x237 kernel/sched/core.c:9171
+ lock_sock_nested+0x25/0x120 net/core/sock.c:3159
+ lock_sock include/net/sock.h:1613 [inline]
+ hci_sock_dev_event+0x465/0x660 net/bluetooth/hci_sock.c:765
+ hci_unregister_dev+0x2fd/0x1130 net/bluetooth/hci_core.c:4033
+ vhci_release+0x70/0xe0 drivers/bluetooth/hci_vhci.c:340
+ __fput+0x288/0x920 fs/file_table.c:280
+ task_work_run+0xdd/0x1a0 kernel/task_work.c:164
+ exit_task_work include/linux/task_work.h:32 [inline]
+ do_exit+0xbd4/0x2a60 kernel/exit.c:825
+ do_group_exit+0x125/0x310 kernel/exit.c:922
+ __do_sys_exit_group kernel/exit.c:933 [inline]
+ __se_sys_exit_group kernel/exit.c:931 [inline]
+ __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:931
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4665d9
+Code: Unable to access opcode bytes at RIP 0x4665af.
+RSP: 002b:00007ffd31aadb08 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007ffd31aae2c8 RCX: 00000000004665d9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000043
+RBP: 0000000000000000 R08: 0000000000000025 R09: 00007ffd31aae2c8
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00000000004bef54
+R13: 0000000000000010 R14: 0000000000000000 R15: 0000000000400538
+
+======================================================
 
 
-Best regards,
-Martin
+Tested on:
+
+commit:         ee268dee Add linux-next specific files for 20210707
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=159cf1e2300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=59e1e3bbc3afca75
+dashboard link: https://syzkaller.appspot.com/bug?extid=72af3105289dcb4c055b
+compiler:       
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=163fd772300000
+
