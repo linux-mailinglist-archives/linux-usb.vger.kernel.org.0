@@ -2,35 +2,37 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 964A73C2E62
-	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1813C2E91
+	for <lists+linux-usb@lfdr.de>; Sat, 10 Jul 2021 04:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233546AbhGJC06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 9 Jul 2021 22:26:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43192 "EHLO mail.kernel.org"
+        id S233656AbhGJC1i (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 9 Jul 2021 22:27:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43064 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233266AbhGJC0b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 9 Jul 2021 22:26:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 622D8613EE;
-        Sat, 10 Jul 2021 02:23:43 +0000 (UTC)
+        id S233104AbhGJC0z (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 9 Jul 2021 22:26:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 46887613ED;
+        Sat, 10 Jul 2021 02:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1625883824;
-        bh=wVFWZjD32RCEOXrQYqbhnw7dQOnDS4glSrjrbV4SPHo=;
+        s=k20201202; t=1625883843;
+        bh=dHZi18C9lJeUvnD0sWQG3L29nXUo5nkGqGTKq+/lsCs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XF/Xz+Dmweuf/emnq/LdQPZPYr5GdWtW1v/wywEIAioznrBBgg1Rg6Ks1wFyL2tJM
-         nW5bRopze2jTPa6d87Dx02T9HpHE3tTpqyMWti0TpimqsjylnAbjDz29FyO0+3I4O2
-         00R3+O00W9xOxMBkbgu5GPN6QvBtFckCafewxyXig1yw6Hi16TT+kzoR83GkemrnZj
-         9fFXSgL4tTGa5eGuvJtncJHCbVP0W+Oj+ebbzW2FG33CbT5HgqUfQjbcTL8lcboldn
-         aKDbIbfkdkiTxF/8MY11sQBGv9WTdFQNWDfBOUZepUoc6cAbZbMf0eh3STvwv7tJfu
-         AjRZ9GrtEST/w==
+        b=bwhjOEaeUuYDT6i8wQK+gfBESQo3c8eKC2loSVV+tehFh/XCwDGR1agelJzIeBLbP
+         zKFDKcGpLdn98xDNS5uaWadg5fMxQp9EBDfkmuz2mVTmqyYM4W3uH7SKnR1gzBPbYd
+         DxIUoLGnSHeY+CTavSCKTfG1/vHqDWA+hPntTHQaSBQzbfPVNFrRYyrda/pr8Ydq9P
+         oONJAkY/Oa5pzSzFEJIvdvZoOiGUT+Tt5JjQpZqik4OBh0JDkJAgvBAHZrdgqYG8v1
+         GvtS6614QzLv8KuLMTvMlWohss98VKUxe8NnXz2yFAc+OtnXcjDIXxRLmY9lNdH3pC
+         xj0IMUdC8Pv0A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Fabien Chouteau <fabien.chouteau@barco.com>,
+        Segiy Stetsyuk <serg_stetsuk@ukr.net>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.12 072/104] xhci: handle failed buffer copy to URB sg list and fix a W=1 copiler warning
-Date:   Fri,  9 Jul 2021 22:21:24 -0400
-Message-Id: <20210710022156.3168825-72-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.12 088/104] usb: gadget: f_hid: fix endianness issue with descriptors
+Date:   Fri,  9 Jul 2021 22:21:40 -0400
+Message-Id: <20210710022156.3168825-88-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20210710022156.3168825-1-sashal@kernel.org>
 References: <20210710022156.3168825-1-sashal@kernel.org>
@@ -42,46 +44,43 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
 
-[ Upstream commit 271a21d8b280b186f8cc9ca6f7151902efde9512 ]
+[ Upstream commit 33cb46c4676d01956811b68a29157ea969a5df70 ]
 
-Set the urb->actual_length to bytes successfully copied in case all bytes
-weren't copied from a temporary buffer to the URB sg list.
-Also print a debug message
+Running sparse checker it shows warning message about
+incorrect endianness used for descriptor initialization:
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20210617150354.1512157-4-mathias.nyman@linux.intel.com
+| f_hid.c:91:43: warning: incorrect type in initializer (different base types)
+| f_hid.c:91:43:    expected restricted __le16 [usertype] bcdHID
+| f_hid.c:91:43:    got int
+
+Fixing issue with cpu_to_le16() macro, however this is not a real issue
+as the value is the same both endians.
+
+Cc: Fabien Chouteau <fabien.chouteau@barco.com>
+Cc: Segiy Stetsyuk <serg_stetsuk@ukr.net>
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Link: https://lore.kernel.org/r/20210617162755.29676-1-ruslan.bilovol@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/xhci.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/usb/gadget/function/f_hid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 0d2f1c37ab74..73cdaa3f3067 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1362,12 +1362,17 @@ static void xhci_unmap_temp_buf(struct usb_hcd *hcd, struct urb *urb)
- 				 urb->transfer_buffer_length,
- 				 dir);
- 
--	if (usb_urb_dir_in(urb))
-+	if (usb_urb_dir_in(urb)) {
- 		len = sg_pcopy_from_buffer(urb->sg, urb->num_sgs,
- 					   urb->transfer_buffer,
- 					   buf_len,
- 					   0);
--
-+		if (len != buf_len) {
-+			xhci_dbg(hcd_to_xhci(hcd),
-+				 "Copy from tmp buf to urb sg list failed\n");
-+			urb->actual_length = len;
-+		}
-+	}
- 	urb->transfer_flags &= ~URB_DMA_MAP_SINGLE;
- 	kfree(urb->transfer_buffer);
- 	urb->transfer_buffer = NULL;
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index e55699308117..a82b3de1a54b 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -88,7 +88,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+ static struct hid_descriptor hidg_desc = {
+ 	.bLength			= sizeof hidg_desc,
+ 	.bDescriptorType		= HID_DT_HID,
+-	.bcdHID				= 0x0101,
++	.bcdHID				= cpu_to_le16(0x0101),
+ 	.bCountryCode			= 0x00,
+ 	.bNumDescriptors		= 0x1,
+ 	/*.desc[0].bDescriptorType	= DYNAMIC */
 -- 
 2.30.2
 
