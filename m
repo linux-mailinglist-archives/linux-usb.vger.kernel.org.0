@@ -2,137 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD003C3D78
-	for <lists+linux-usb@lfdr.de>; Sun, 11 Jul 2021 16:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72ACE3C3D9D
+	for <lists+linux-usb@lfdr.de>; Sun, 11 Jul 2021 17:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233903AbhGKO5R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 11 Jul 2021 10:57:17 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:32845 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S233866AbhGKO5R (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Jul 2021 10:57:17 -0400
-Received: (qmail 294122 invoked by uid 1000); 11 Jul 2021 10:54:29 -0400
-Date:   Sun, 11 Jul 2021 10:54:29 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Tristan Miller <psychonaut@nothingisreal.com>
-Cc:     linux-usb@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: Re: "Chipmunk audio" on Logitech USB webcams
-Message-ID: <20210711145429.GA293743@rowland.harvard.edu>
-References: <20210711102503.179b154b.psychonaut@nothingisreal.com>
- <YOrKFIlEHopiVKJT@kroah.com>
- <20210711141546.0ac1eec7.psychonaut@nothingisreal.com>
+        id S235620AbhGKP2H (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 11 Jul 2021 11:28:07 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:48021 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235615AbhGKP2G (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 11 Jul 2021 11:28:06 -0400
+Received: by mail-il1-f199.google.com with SMTP id c7-20020a92b7470000b0290205c6edd752so6476147ilm.14
+        for <linux-usb@vger.kernel.org>; Sun, 11 Jul 2021 08:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=NIgq3uh+Hjjwi2oxrtORLjfC9P7t2E8mL5wuw+P+97E=;
+        b=DXvGu31rEpEi5/fPhoZQjQpWPI/t1kWvz6nJ6tGkwiAHh3wzuwiBDgRWQ6EXtG0hT/
+         PENueLpHIGtWeHn8z0bVA4HctJKFYOYH33gTyTRTH0jnQWpJBYRJw0/fIEvrEMAeJszA
+         hIA5kqX09zApln6SFCaQabXZaXHNNokqA0wtj+hMohSuRvJWJoqMShNXh2wgCP5fFfIV
+         M6Cf0ZoTsmJrCRbh8uo2HEJ1LVvY4nkqo/nGqZ6QZpqPoQyZrHlMKf7SkLgaFQ7aEYP2
+         g/TAqB3EwZV3zggI+G5XRP2lyqp6Zpcn/l8fVxAcc5DobEm7YEcSFDryuEahq4OXJ1y0
+         NR2w==
+X-Gm-Message-State: AOAM5324DvL0ndKUn/0ZMpntkdH35klxnvC3YyILibMCIbvtxuLSm9tr
+        g4j5rVvCfnpcZBK8x/o+q8p+ENvIGVo3s4OlqA95HVs7/UXK
+X-Google-Smtp-Source: ABdhPJyWaAHrLW1elRgVV+7cbOyIFhtTK+7A6xQtj6HSJZmbYtmoamFG2SdlnBtuSsx7DOKuaq+rx3Scb9mqmuTjz3F6yV3k3NfR
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210711141546.0ac1eec7.psychonaut@nothingisreal.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a5e:dd42:: with SMTP id u2mr25445953iop.135.1626017119844;
+ Sun, 11 Jul 2021 08:25:19 -0700 (PDT)
+Date:   Sun, 11 Jul 2021 08:25:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d3be7905c6da9c25@google.com>
+Subject: [syzbot] WARNING in usb_remove_ep_devs
+From:   syzbot <syzbot+a0c54eb26c7b8130c9b9@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, rafael@kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Jul 11, 2021 at 02:15:46PM +0200, Tristan Miller wrote:
-> Greetings.
-> 
-> On Sun, 11 Jul 2021 12:38:12 +0200, Greg KH
-> <gregkh@linuxfoundation.org> wrote:
-> > On Sun, Jul 11, 2021 at 10:25:03AM +0200, Tristan Miller wrote:
-> > > Many models of Logitech USB webcams malfunction under Linux by
-> > > producing audio that sounds distorted, garbled, or high-pitched.
-> > > For most users, the problem happens randomly, and can usually be
-> > > worked around by restarting the audio application or by unplugging
-> > > the webcam and then plugging it back in again.
-> > 
-> > Please report the information directly here, to this list, and to the
-> > sound developers at alsa-devel@alsa-project.org and we can all work to
-> > resolve this.
-> 
-> The problem as I'm currently experiencing it is as follows:
-> 
-> I have a Logitech C270 USB webcam running on openSUSE Tumbleweed for
-> x86_64 with the 5.13.0 kernel.  Sometimes audio recorded by the
-> camera's built-in microphone sounds artificially high-pitched and
-> garbled.  I've experienced this with lots of different applications,
-> including arecord, Skype, and various browser-based videoconferencing
-> software running in Firefox or Chromium.  The problem occurs rarely
-> (maybe once every 30 times I use the webcam microphone) and seemingly
-> at random; restarting the audio application or unplugging the webcam
-> and plugging it back in again usually works around the issue.  So
-> unfortunately I can't reliably reproduce the problem.  I haven't
-> noticed any errors in the system logs but then again am not sure exactly
-> what to look for and where. I've been experiencing this problem at
-> least as far back as kernel 4.13.12.
-> 
-> Some further details (more available on request):
-> 
-> # uname -a
-> Linux butterfield.nothingisreal.com 5.13.0-1-default #1 SMP Fri Jul 2 05:54:32 UTC 2021 (aa40472) x86_64 x86_64 x86_64 GNU/Linux
-> 
-> # lsusb -s 001:004 -v |head -17
-> Bus 001 Device 004: ID 046d:0825 Logitech, Inc. Webcam C270
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass          239 Miscellaneous Device
->   bDeviceSubClass         2 
->   bDeviceProtocol         1 Interface Association
->   bMaxPacketSize0        64
->   idVendor           0x046d Logitech, Inc.
->   idProduct          0x0825 Webcam C270
->   bcdDevice            0.10
->   iManufacturer           0 
->   iProduct                0 
->   iSerial                 2 6457F4D0
->   bNumConfigurations
-> 
-> Previous reports which apparently cover the same problem:
+Hello,
 
-Some additional details about these bug reports:
+syzbot found the following issue on:
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=35922
+HEAD commit:    7756f1d6 phy: qcom-qusb2: Add configuration for SM4250 and..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15d03bac300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8df8c74fda98ee5f
+dashboard link: https://syzkaller.appspot.com/bug?extid=a0c54eb26c7b8130c9b9
 
-This is a completely different bug, which was fixed back in 2011.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=44281
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a0c54eb26c7b8130c9b9@syzkaller.appspotmail.com
 
-This report mentions three separate bugs, the first of which was 
-fixed in 2012.  The bug discussed here is the third one in the 
-report.
+usb 6-1: ath9k_htc: USB layer deinitialized
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 7255 at kernel/locking/mutex.c:941 __mutex_lock_common kernel/locking/mutex.c:941 [inline]
+WARNING: CPU: 0 PID: 7255 at kernel/locking/mutex.c:941 __mutex_lock+0xb8d/0x1080 kernel/locking/mutex.c:1104
+Modules linked in:
+CPU: 0 PID: 7255 Comm: kworker/0:7 Not tainted 5.13.0-rc7-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:941 [inline]
+RIP: 0010:__mutex_lock+0xb8d/0x1080 kernel/locking/mutex.c:1104
+Code: 08 84 d2 0f 85 ab 04 00 00 8b 05 46 7c b6 02 85 c0 0f 85 8f f5 ff ff 48 c7 c6 60 3a 07 86 48 c7 c7 20 38 07 86 e8 22 77 d3 ff <0f> 0b e9 75 f5 ff ff 65 48 8b 1c 25 40 ef 01 00 be 08 00 00 00 48
+RSP: 0018:ffffc9000566f810 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000040000 RSI: ffffffff812a6723 RDI: fffff52000acdef4
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: ffffffff814b9bef R11: 0000000000000000 R12: dffffc0000000000
+R13: ffff888147adc120 R14: ffff88811a3e10a8 R15: ffff88810f5fe008
+FS:  0000000000000000(0000) GS:ffff8881f6a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005635c64e9457 CR3: 000000013faf2000 CR4: 00000000001506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ device_lock include/linux/device.h:763 [inline]
+ device_del+0x9e/0xd40 drivers/base/core.c:3502
+ device_unregister+0x22/0xc0 drivers/base/core.c:3573
+ usb_remove_ep_devs+0x3e/0x80 drivers/usb/core/endpoint.c:188
+ usb_disconnect.cold+0x4ab/0x791 drivers/usb/core/hub.c:2240
+ hub_port_connect drivers/usb/core/hub.c:5151 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5440 [inline]
+ port_event drivers/usb/core/hub.c:5586 [inline]
+ hub_event+0x1c9c/0x4330 drivers/usb/core/hub.c:5668
+ process_one_work+0x98d/0x1580 kernel/workqueue.c:2276
+ worker_thread+0x64c/0x1120 kernel/workqueue.c:2422
+ kthread+0x38c/0x460 kernel/kthread.c:313
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=105081
 
-This is a repeat of the second bug in #44281.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-> https://bugzilla.kernel.org/show_bug.cgi?id=203763
-
-This is the same as the bug discussed here.
-
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/459445
-
-This is the same as the second bug in #44281.
-
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/843431
-
-At first glance this seems to be the same as the bug discussed here, 
-but this one was fixed in 2011.
-
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/884210
-
-This is the same as the second bug in #44281.
-
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1018020
-
-This seems to be a combination of the first and second bugs in 
-#44281.
-
-The rest of these appear to be mixtures of the bugs mentioned above.
-
-> https://bugzilla.suse.com/show_bug.cgi?id=736093
-> https://bugzilla.redhat.com/show_bug.cgi?id=729269
-> https://bugzilla.redhat.com/show_bug.cgi?id=742010
-> https://bugs.archlinux.org/task/26528
-> https://bbs.archlinux.org/viewtopic.php?id=121607
-> https://bbs.archlinux.org/viewtopic.php?id=236056
-> https://forums.linuxmint.com/viewtopic.php?t=237677
-
-Alan Stern
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
