@@ -2,84 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4FA3C4FE4
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 12:44:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6EE3C57C0
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 12:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343769AbhGLH2t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 03:28:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36898 "EHLO mail.kernel.org"
+        id S1354484AbhGLIh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 04:37:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54002 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245618AbhGLH1R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Jul 2021 03:27:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id AA02161928
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 07:23:37 +0000 (UTC)
+        id S1351137AbhGLIdd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Jul 2021 04:33:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 36D8360FE7;
+        Mon, 12 Jul 2021 08:30:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626074617;
-        bh=HUmtDS4YXwA+YKt8lSqRGz1z27KEszWcJT0CmWNFqT4=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=blDK1yXuq0L6z1X9BseUO5v2KhwFbsrsURDGnjqRiOLHn9+E4PPFd6qdkWpvGKqye
-         ndVdLoVb3WFNqD422ZrvVJwsf2VsrrcUwhXnFWsPhRAoCnAWjYjfLLKWtoBrM8MlG3
-         Uuhul7VlcQZmLi93x5kx2C6pNSbJEI7tqMcREFhCPLhMweJjQa0nH4QlFobcDTtFZa
-         oKACDhI+29Y53YRB/xRHVFOt57FG0/q6EN2FVeD45tUslDkqQA/VCXVQPtV/lz7yFV
-         RAZWrZ6j+S9G6dbtU+V31eC0F100N5WdozQWziXCmY90Ie5B4llicp1Oj9VxMDzdBm
-         GSJ9IAkDenARA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id A38F4611AE; Mon, 12 Jul 2021 07:23:37 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 210425] Plugging in or unplugging power cord while system is
- suspended does not trigger updates
-Date:   Mon, 12 Jul 2021 07:23:36 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: maniette@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-210425-208809-AI0xg1Bg9F@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-210425-208809@https.bugzilla.kernel.org/>
-References: <bug-210425-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1626078645;
+        bh=3HxPYYHstWoqkXSePDGGbMnMcIbWwSgnimyfGxWJ7Us=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g5ehW+HU5DgmsBc+o4BwlhpnvLFdlsIBqf3GUC+7Cyek6mC5EIHT5zg+zDbAkCNSw
+         sLtg3xBlVdkLlD3dPk7PhGWkFhRZJhtgNAGKVxshNc+SBSNtDv3CaMIPOKG11ZI8y8
+         dXQtAbVYZ1+s8/8qzHM+TD17C5i4Lj4Nt5bJLMETqM9JARmrtNXi2Y3xC0keSXzRzj
+         oDdsv18FLpmwiAQ94iAsoGNr5eG+6luxcalZkQqeSg5RaVG6w5xR8i+BWTDFb3pGd/
+         tyDTidRAfik29cZBqwb5WW47MYuMrRi0BDbnD4BHliVqlWIy6MOJHFL/VutsxAKrgD
+         cfEDjdLrIYzvw==
+Received: from johan by xi with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1m2rKb-0003tq-8T; Mon, 12 Jul 2021 10:30:26 +0200
+Date:   Mon, 12 Jul 2021 10:30:25 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Marco De Marco <marco.demarco@posteo.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: serial: option: Add support for u-blox LARA-R6
+ family
+Message-ID: <YOv9odicL7IeHPYU@hovoldconsulting.com>
+References: <49260184.kfMIbaSn9k@mars>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49260184.kfMIbaSn9k@mars>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D210425
+On Mon, Jul 05, 2021 at 07:44:21PM +0000, Marco De Marco wrote:
+> The patch is meant to support LARA-R6 Cat 1 module family.
+> 
+> Module USB ID:
+> Vendor  ID: 0x05c6
+> Product ID: 0x90fA
+> 
+> Interface layout:
+> If 0: Diagnostic
+> If 1: AT parser
+> If 2: AT parser
+> If 3: QMI wwan (not available in all versions)
+> 
+> Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
+> 
+> ---
+> 
+> ADB interface is not available. 
+> Diagnostic interface (If 0) can be used with option driver.
+> 
+> Output of usb-devices command (this version does not have QMI WWAN):
+> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=05c6 ProdID=90fa Rev=00.00
+> S:  Manufacturer=Qualcomm, Incorporated
+> S:  Product=Qualcomm CDMA Technologies MSM
+> S:  SerialNumber=7da8aacd
+> C:  #Ifs= 3 Cfg#= 1 Atr=c0 MxPwr=500mA
+> I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=(none)
 
-Maniette (maniette@gmail.com) changed:
+Now applied, thanks!
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |maniette@gmail.com
-
---- Comment #4 from Maniette (maniette@gmail.com) ---
-I have the issue on a Panasonic CF-MX4.Running XFCE on Debian. When unplugg=
-ing,
-no prooblem. When plugging back the power cord, keyboard in not more
-responsive, nor the mouse. The only possiblr action is to try switching off.
-Then I have the shutdown pop-up, where I am allowed to click confirmation f=
-or
-shutdown or reboot. That is a serious issue.=20
-
-Release        =3D Debian GNU/Linux 10 (buster)
-Kernel         =3D 4.19.0-17-amd64 #1 SMP Debian 4.19.194-2 (2021-06-21) x8=
-6_64
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
