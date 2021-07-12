@@ -2,94 +2,189 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FD43C5FC7
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 17:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8474C3C600A
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 18:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbhGLPxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 11:53:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48436 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230436AbhGLPxs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Jul 2021 11:53:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B00C161221;
-        Mon, 12 Jul 2021 15:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626105059;
-        bh=+MjO3ta1BlU+l5guVK+FcHDHKXPCfDZf6w7qgKWHlN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NOqJEvhuKnKR9xDtq/J42efDjVAL9ny5OPgUSG55plRtFrF/Vbs89dtgGe0s/OFUg
-         oeS+8BfqxrIGmnBPajMlaM2zVvp0ON0GkNmODE9KlMcXm74GXLyk/iRHSEuwxZZjD6
-         Bq+5o1ns6CbD9VPGOVm1/6HGr8NwvKxUhIPU2HXegLs/EdOqcrLakDK1VQ4JqGVosh
-         y+Nxa2QqF5Q22SxJfVzTMyFePHs/CIPxKpIoq2/rWlcki2ZUvAU6mX64tWklPt8bt0
-         FM68o+urF/I5u4Qg5fIV4qjjSUSQVFNO0NAf/U32yuHGSy7zE1RCImcsV4BPzPtOKP
-         pI4aIlf5ot+PA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1m2yCf-0007Um-62; Mon, 12 Jul 2021 17:50:41 +0200
-Date:   Mon, 12 Jul 2021 17:50:41 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mathias.nyman@linux.intel.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING in do_proc_control/usb_submit_urb
-Message-ID: <YOxk0URZrLYv8SNU@hovoldconsulting.com>
-References: <20210711155345.GB293743@rowland.harvard.edu>
- <00000000000068b24405c6db3249@google.com>
- <20210712140004.GA316776@rowland.harvard.edu>
- <YOxf0OvoGOvWf14m@hovoldconsulting.com>
+        id S230022AbhGLQGl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 12:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230043AbhGLQGk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 12:06:40 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCEAC0613E9
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:03:51 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id h9so25043527oih.4
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:03:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=VYQdhl8WGpNZn7IHwYKLRg9DV0FPfiQGFVFR4KPgX0c=;
+        b=XSGbCrKyqK3ndOMFIBRp2HQGP9z52L4aOKWsy8RvSGGGFh+fx3biWqeYIqZwHykyu+
+         Jcz6zYKUDqSUwEDhLxYnftrY/LDZX+WEpNDBmyv5I2nyjHXPMnqLTTSz3nxLEFV4QbBA
+         OzW8SlBs5mCHHjCVVZp+b4mYvXXm94EtBVfHm8v4IbrykDmgM3De6gIKrVvbt8W/A/V6
+         beYDXOsm92b/ca0dXkn3rruOtDznbLyGfWxJ+Sd15Rnj7dUS6BJDVG6yFhb5jqSr3Bk8
+         OmDrAWqDlaIC5k70/KHUtRyrmVlHJQjkgnK05uzjpXXYWEeIXFNV0SDmJaLPUVr5vAIX
+         131Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VYQdhl8WGpNZn7IHwYKLRg9DV0FPfiQGFVFR4KPgX0c=;
+        b=smvK/Ls6la3NZnu8dNkoM0hA/pTLGahOKmKJ1Co2XYQweEqXl3PZPiIowguTcMbShY
+         Fa2WtEwbYZJrl8QGTrKXpXqVmWRrNdCNJ2ZBQnIAXkYozhFUh8titcXl8ucYXp9gj1ns
+         tFaZ0X3zT3KwkkrIFsSa+XFXsFpIfR6TkNzRBd7JcEQrGngXFc11myF9nUlnVd0axFcJ
+         pKBThiyjfTagZtxmL47VFUon8ECxG/VbOkAoGBLVzYIVupU1XqjENruGq9mLTYdIpBMc
+         8ji/8nDzQaSr5eMQxuP4K4IK86HTz1qnxbYXTAoBcd5ffQ8gNwJnDqgiBhg6PLI2L6RB
+         LpMg==
+X-Gm-Message-State: AOAM5327KpLXNPWzc5/8s4nL60Xi+TxdBODP+aw+1dSo5P5odguf/pe8
+        okwwE1QJGTzgTknfHw61oELz9g==
+X-Google-Smtp-Source: ABdhPJxWVvHGQqmw4XVHZ9oLKOii3peGSB6g8nki90kRoK68heA+KbKagj74e1DGjUmoUOwQsea0jA==
+X-Received: by 2002:aca:acc5:: with SMTP id v188mr10863888oie.167.1626105831020;
+        Mon, 12 Jul 2021 09:03:51 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id z5sm3229154oib.14.2021.07.12.09.03.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jul 2021 09:03:50 -0700 (PDT)
+Date:   Mon, 12 Jul 2021 11:03:48 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Prasad Malisetty <pmaliset@codeaurora.org>
+Cc:     agross@kernel.org, bhelgaas@google.com, robh+dt@kernel.org,
+        swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mgautam@codeaurora.org,
+        dianders@chromium.org, mka@chromium.org, sanm@codeaurora.org
+Subject: Re: [PATCH v3 4/4] PCIe: qcom: Add support to control pipe clk mux
+Message-ID: <YOxn5GWQsEH/+bSm@yoga>
+References: <1624377651-30604-1-git-send-email-pmaliset@codeaurora.org>
+ <1624377651-30604-5-git-send-email-pmaliset@codeaurora.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=windows-1252
 Content-Disposition: inline
-In-Reply-To: <YOxf0OvoGOvWf14m@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1624377651-30604-5-git-send-email-pmaliset@codeaurora.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 12, 2021 at 05:29:20PM +0200, Johan Hovold wrote:
-> On Mon, Jul 12, 2021 at 10:00:04AM -0400, Alan Stern wrote:
-> > On Sun, Jul 11, 2021 at 09:07:09AM -0700, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > WARNING in do_proc_control/usb_submit_urb
+On Tue 22 Jun 11:00 CDT 2021, Prasad Malisetty wrote:
 
-> > I don't get this.  It shouldn't be possible.  The fact that the 
-> > direction bit is set in both bRequestType and pipe means that the URB 
-> > was submitted as a control-IN but had length 0.  But the patch addresses 
-> > exactly that case:
-> > 
-> > --- usb-devel.orig/drivers/usb/core/devio.c
-> > +++ usb-devel/drivers/usb/core/devio.c
-> > @@ -1133,7 +1133,7 @@ static int do_proc_control(struct usb_de
-> >  		"wIndex=%04x wLength=%04x\n",
-> >  		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
-> >  		ctrl->wIndex, ctrl->wLength);
-> > -	if (ctrl->bRequestType & 0x80) {
-> > +	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength) {
-> >  		pipe = usb_rcvctrlpipe(dev, 0);
-> >  		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
-> >  
-> > and causes the kernel to handle it as a control-OUT instead.
-> > 
-> > Johan, any ideas?
+> pipe-clk mux needs to switch between pipe_clk
+
+If you spell "pipe-clk mux" as "gcc_pcie_N_pipe_clk_src" there's no
+ambiguity in which clock you refer to.
+
+> and XO as part of LPM squence. This is done by setting
+> pipe_clk mux as parent of pipe_clk after phy init.
+
+I thought the two possible cases where:
+
+xo -> gcc_pcie_N_pipe_clk_src -> gcc_pcie_N_pipe_clk
+PHY::pipe_clk -> gcc_pcie_N_pipe_clk_src -> gcc_pcie_N_pipe_clk
+
+But here you're saying that you're setting the parent of PHY::pipe_clk
+to gcc_pcie_N_pipe_clk?
+
+> This is a new requirement for sc7280.
+> For accessing to DBI registers during L23,
+> need to switch the pipe clock with free-running
+> clock (TCXO) using GCC’s registers
+
+So in previous platforms we could access DBI registers, in L23, without
+any clock?
+
+What happens if we use xo as parent for the pipe clock
+
 > 
-> Did syzbot actually test the patch? I can't see how the direction bit of
-> the pipe argument can be set with the above applied either.
+> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 8a7a300..80e9ee4 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
+>  	struct regulator_bulk_data supplies[2];
+>  	struct reset_control *pci_reset;
+>  	struct clk *pipe_clk;
+> +	struct clk *pipe_clk_mux;
+> +	struct clk *pipe_ext_src;
+> +	struct clk *ref_clk_src;
+>  };
+>  
+>  union qcom_pcie_resources {
+> @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
 
-It looks like the second patch you submitted was hand-edited and still
-quoted.
+So this is the first 2.7.0 that has this need? Are we just going to add
+more compatibles to this list going forward?
 
-And looking at the dashboard it seems like no patch was applied for your
-second test attempt:
+> +		res->pipe_clk_mux = devm_clk_get(dev, "pipe_mux");
+> +		if (IS_ERR(res->pipe_clk_mux))
+> +			return PTR_ERR(res->pipe_clk_mux);
 
-	https://syzkaller.appspot.com/bug?extid=72af3105289dcb4c055b
+So this is gcc_pcie_N_pipe_clk_src?
 
-I've been bitten by something like this before when erroneously thinking
-that a test command could be submitted as a reply to a patch.
+> +
+> +		res->pipe_ext_src = devm_clk_get(dev, "phy_pipe");
+> +		if (IS_ERR(res->pipe_ext_src))
+> +			return PTR_ERR(res->pipe_ext_src);
 
-Perhaps the report mail could include the patch tested or something so
-we don't spend time investigating syzbot interface failures.
+And this is the pipe_clk coming out of the PHY (What I call
+PHY::pipe_clk above)?
 
-Johan
+> +
+> +		res->ref_clk_src = devm_clk_get(dev, "ref");
+> +		if (IS_ERR(res->ref_clk_src))
+> +			return PTR_ERR(res->ref_clk_src);
+
+And this is TCXO?
+
+> +	}
+> +
+>  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>  }
+> @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
+>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +	struct dw_pcie *pci = pcie->pci;
+> +	struct device *dev = pci->dev;
+> +
+> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
+> +		clk_set_parent(res->pipe_clk_mux, res->pipe_ext_src);
+>  
+
+So after phy_power_on() (not "phy init" as you say in the commit
+message, perhaps you don't mean phy_init() but in general terms "phy
+initialization") you need to make sure that gcc_pcie_N_pipe_clk_src is
+actually fed by PHY::pipe_clk?
+
+1) What's the gcc_pcie_N_pipe_clk_src parent before this?
+
+2) Will the PHY initialization really succeed if the pipe_clk feeding
+back from gcc isn't based on the PHY's pipe_clk? Is this a change in
+sc7280?
+
+3) In the commit message you're talking about the need to make XO the
+parent of gcc_pcie_N_pipe_clk_src during L23, where in this patch does
+that happen?
+
+Regards,
+Bjorn
+
+>  	return clk_prepare_enable(res->pipe_clk);
+>  }
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 
