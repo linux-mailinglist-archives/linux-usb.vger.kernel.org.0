@@ -2,63 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6AD3C60A8
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 18:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80433C60D2
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 18:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233815AbhGLQe5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 12:34:57 -0400
-Received: from mail-io1-f72.google.com ([209.85.166.72]:38724 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233762AbhGLQe5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 12:34:57 -0400
-Received: by mail-io1-f72.google.com with SMTP id y8-20020a5e87080000b029050cfd126a26so12228374ioj.5
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:32:07 -0700 (PDT)
+        id S234642AbhGLQxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 12:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232710AbhGLQxP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 12:53:15 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5BC0613E5
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:50:25 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q4so25263330ljp.13
+        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=wirenboard-com.20150623.gappssmtp.com; s=20150623;
+        h=to:cc:references:subject:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=o8W1dNWyc77g/GhN9T2NWTwNOeLb+k1LmC+rbhxkZPc=;
+        b=MLL2y6mGJpe2v3dc+r2DITIyOSOUsd0A923QC4WmFqRpZJDdsZKUMuo0+xRo5BQCgg
+         Skpt2ZwNTKiCfEqYAFRARwHuin4Wp4kjXCUDc/UgWe90g+GnmT/+asoMQVk9Mazdi82n
+         J4VnCL3umFyyDSdAs9763NTJjn0VPVU/u+vE9rhoN2DJI1Y6ty3cKHtK2TW7PeMEvqEa
+         2Ooz2+tKUpQoBnoMZzOIJEzHJMZvbgQ9k5V2Yth/mmADEmOnDVQK1E2ryeasONwlZc5l
+         SvT9sw5FLV7l66C82YWQKpfMKQGr02hASm4GbfRCzYyAS+CnBM/VWvlwvhl7JsF3EpuJ
+         PkyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=g1EnsL14HF8LdZjkBNd6tkp4dBn0hH7K4Mtz8YY7q50=;
-        b=mEL3hDsqjnlAHrTqbIpEEXa1y427yEWMi9mpGUHA4xAr7obBa+Y+2iEZtGzs6IhqzD
-         lVZNV0FmLOiOHLB3ntb5oh5AWAUMrC+qRS+uEAGmYChdrRhxb7t7lEEM5yE5aZ7LoT3I
-         mFfSpZ2ciC+duVnXwvssFNDIZhIa9qLbgxlTNy9yxObxqGjg++e/BLrK+K0B//y1WqFg
-         dziENm9plHNdLfAh+zPhmWHMY8GeUQOXsCOotNuynpDe4VwCovJtbRcLmBC9REYsadCn
-         RzuqdkXhecDJ/CUFkNueQ1BG324qQU1OMLxvsYAPJwBoYFEKspJOcbkaDI2K+VIg57Pb
-         hnGg==
-X-Gm-Message-State: AOAM533m4gaBMNx9c2VwXjRR3baqNjX7DQhfeB2PTF7IPTrwxltMmO2T
-        hf8LhMu08Mq30/zt6EgWJAloWXPZpbL2MfyuT5bFMLSg8T33
-X-Google-Smtp-Source: ABdhPJx1HhlhyKyd/XTamXxBtDH5sKiC6WYruOEUPDeaHoqYYaVScDTEIO+gdoCm1CaNZ7P/F+GIzgfdUW5rTygF+IPU2D3pshZS
+        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=o8W1dNWyc77g/GhN9T2NWTwNOeLb+k1LmC+rbhxkZPc=;
+        b=nNIeg33QUAy1ipzr4d5UryNxKnn/EdmkRzr7A2RVfmDoXY5VQ54/fxyb0H2hfy+fFo
+         xMjAc5Ljgqxg36E/H5AQO/V83QpQIlokiM6zs2BB6nYcuyy+lMFfHhei0FYq+1zX2+qr
+         fw0CX89sPw6d0Qa7P28yiB0GFZVSyYlakGokIRNpXBdtkwObht1if+MsloV31CR6MW26
+         BNWmViY5M67zfHodSdbo/X2BtjVcluwnCsxvTR87sbQHs+Rj9vgYIH0inoW6dhl2F1DM
+         TdntL3q12oqSzRdX6oIB8J2HWkRJOKA1V7PVsqwNSl9r7MHZD8n4GQbTcNt8cJ+FYXIh
+         9p+A==
+X-Gm-Message-State: AOAM531RpGhagjIUqN4AJGcsq/27g9qhB7CpPsknj5INFENR5V6LgI+S
+        JRcbfhbxx0Esqlghb+MsOm+uCA==
+X-Google-Smtp-Source: ABdhPJzRmjg4ige4Q76R9GfUzKH6Q22fEzHtFe8dsyFLremmfKDTEGCbOYwPjkmdRfug1Ybfd1mC+A==
+X-Received: by 2002:a2e:9059:: with SMTP id n25mr130746ljg.314.1626108623325;
+        Mon, 12 Jul 2021 09:50:23 -0700 (PDT)
+Received: from [192.168.1.213] (81.5.110.226.dhcp.mipt-telecom.ru. [81.5.110.226])
+        by smtp.googlemail.com with ESMTPSA id f14sm1627141ljk.42.2021.07.12.09.50.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Jul 2021 09:50:22 -0700 (PDT)
+To:     andre.przywara@arm.com
+Cc:     icenowy@aosc.io, jernej.skrabec@gmail.com, kishon@ti.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-sunxi@googlegroups.com,
+        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
+        megous@megous.com, mripard@kernel.org, robh@kernel.org,
+        samuel@sholland.org, vkoul@kernel.org, wens@csie.org
+References: <20210615110636.23403-16-andre.przywara@arm.com>
+Subject: Re: [PATCH v7 15/19] phy: sun4i-usb: Add support for the H616 USB PHY
+From:   Evgeny Boger <boger@wirenboard.com>
+Message-ID: <880c62ea-4844-04f7-7b40-a9e8a14de202@wirenboard.com>
+Date:   Mon, 12 Jul 2021 19:50:22 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-Received: by 2002:a02:9f89:: with SMTP id a9mr13383499jam.51.1626107527446;
- Mon, 12 Jul 2021 09:32:07 -0700 (PDT)
-Date:   Mon, 12 Jul 2021 09:32:07 -0700
-In-Reply-To: <20210712161445.GA321728@rowland.harvard.edu>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008a429705c6efa94c@google.com>
-Subject: Re: [syzbot] WARNING in do_proc_control/usb_submit_urb
-From:   syzbot <syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com>
-To:     gregkh@linuxfoundation.org, johan@kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mathias.nyman@linux.intel.com, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20210615110636.23403-16-andre.przywara@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-GB
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+Hi Andre!
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> The USB PHY used in the Allwinner H616 SoC inherits some traits from its
+> various predecessors: it has four full PHYs like the H3, needs some
+> extra bits to be set like the H6, and puts SIDDQ on a different bit like
+> the A100. Plus it needs this weird PHY2 quirk.
+>
+> Name all those properties in a new config struct and assign a new
+> compatible name to it.
+>
+> Signed-off-by: Andre Przywara<andre.przywara@arm.com>
+> ---
+>   drivers/phy/allwinner/phy-sun4i-usb.c  <https://lore.kernel.org/linux-sunxi/20210615110636.23403-16-andre.przywara@arm.com/#Z30drivers:phy:allwinner:phy-sun4i-usb.c>  | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+>
+> diff 
+> <https://lore.kernel.org/linux-sunxi/20210615110636.23403-16-andre.przywara@arm.com/#iZ30drivers:phy:allwinner:phy-sun4i-usb.c> 
+> --git a/drivers/phy/allwinner/phy-sun4i-usb.c 
+> b/drivers/phy/allwinner/phy-sun4i-usb.c index 
+> 316ef5fca831..85a9771280b7 100644 --- 
+> a/drivers/phy/allwinner/phy-sun4i-usb.c +++ 
+> b/drivers/phy/allwinner/phy-sun4i-usb.c @@ -1024,6 +1024,17 @@ static 
+> const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {   	.missing_phys = BIT(1) | BIT(2),
+>   };
+>   
+> +static const struct sun4i_usb_phy_cfg sun50i_h616_cfg = { + .num_phys 
+> = 4, + .type = sun50i_h6_phy,
 
-Reported-and-tested-by: syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com
+Since this usb phy is considerable different from the one in H6, 
+wouldn't it better to define a new phy type here? The way the driver is 
+designed, I would expect the type to be shared by more or less identical 
+parts.
 
-Tested on:
+Honestly, I think it would be better to get rid of .type in the 
+sun4i_usb_phy_cfg completely replacing it by a couple more traits in 
+.cfg. It's impossible to know for sure which Allwinner parts really 
+share the identical revision of this hardware.
 
-commit:         ee268dee Add linux-next specific files for 20210707
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-kernel config:  https://syzkaller.appspot.com/x/.config?x=59e1e3bbc3afca75
-dashboard link: https://syzkaller.appspot.com/bug?extid=72af3105289dcb4c055b
-compiler:       
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=14b945d8300000
+> + .disc_thresh = 3, + .phyctl_offset = REG_PHYCTL_A33, + 
+> .dedicated_clocks = true, + .phy0_dual_route = true, + 
+> .hci_phy_ctl_clear = PHY_CTL_SIDDQ, + .needs_phy2_siddq = true, +}; +   static const struct of_device_id sun4i_usb_phy_of_match[] = {
+>   	{ .compatible = "allwinner,sun4i-a10-usb-phy", .data = &sun4i_a10_cfg },
+>   	{ .compatible = "allwinner,sun5i-a13-usb-phy", .data = &sun5i_a13_cfg },
+> @@ -1038,6 +1049,7 @@ static const struct of_device_id 
+> sun4i_usb_phy_of_match[] = {   	{ .compatible = "allwinner,sun50i-a64-usb-phy",
+>   	  .data = &sun50i_a64_cfg},
+>   	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = &sun50i_h6_cfg },
+> + { .compatible = "allwinner,sun50i-h616-usb-phy", .data = 
+> &sun50i_h616_cfg },   	{ },
+>   };
+>   MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
+> -- 
+> 2.17.5
+>
 
-Note: testing is done by a robot and is best-effort only.
