@@ -2,75 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E90E3C6340
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 21:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827693C6342
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 21:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236123AbhGLTLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 15:11:46 -0400
-Received: from mail-io1-f44.google.com ([209.85.166.44]:33455 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235800AbhGLTLq (ORCPT
+        id S236213AbhGLTLr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 15:11:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:56413 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S236104AbhGLTLq (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 15:11:46 -0400
-Received: by mail-io1-f44.google.com with SMTP id z11so2285632iow.0;
-        Mon, 12 Jul 2021 12:08:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CAts2agLd/mnZviBBFETzZ77DFMUAMf4FEiPP0zP5RQ=;
-        b=prQQ36rv4Sw12MuIyi1LgST7z1Jj47rQ9uIfZS5YzXrJ/MftZH2TgUMoWF4L0eyjVW
-         AY31O/sAAA8UTnR37WNy2I0L4p/bQrkNyA5TCZZkilTVKPlweGy/O92km9GTsSafQGhH
-         xHP8Or87496IGtYTIJJs9EtQVY+dxhM7pZdNuPpaIgLRMaq60cOsFilRdoYDSi3BHpeU
-         rxX7oJjM7Qz1aOVnX91NIwhgZ2C92vUXqnkaXkw3nhi2qfbFjll4un4i9/XVeF06SGVV
-         Fnw54UFiIymICN3HMMmOBsuIgrTI8OiMtSgMMtogVXTOLR3qsCzcDaaWrivMLj0df9gn
-         HZSw==
-X-Gm-Message-State: AOAM533yNTabmm03RQg7dQA+ukSXM3Ni2poJ1ffHFMwiUoFIXrrb0yU2
-        E3WIdY/JrMwGYBhQEnBJfw==
-X-Google-Smtp-Source: ABdhPJwjUsnO9+0Rr9NHf6pQZ9akG6i4y38MYh/3uuw8waRTheMGMZgLA8Exn9crR+H/HHiCNGNOXw==
-X-Received: by 2002:a02:a68e:: with SMTP id j14mr463927jam.104.1626116937046;
-        Mon, 12 Jul 2021 12:08:57 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b8sm8308873ils.74.2021.07.12.12.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jul 2021 12:08:56 -0700 (PDT)
-Received: (nullmailer pid 2312971 invoked by uid 1000);
-        Mon, 12 Jul 2021 19:08:54 -0000
-Date:   Mon, 12 Jul 2021 13:08:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v2 03/13] dt-bindings: usb: mtu3: add support property
- role-switch-default-mode
-Message-ID: <20210712190854.GA2312937@robh.at.kernel.org>
-References: <1624008558-16949-1-git-send-email-chunfeng.yun@mediatek.com>
- <1624008558-16949-4-git-send-email-chunfeng.yun@mediatek.com>
+Received: (qmail 327622 invoked by uid 1000); 12 Jul 2021 15:08:57 -0400
+Date:   Mon, 12 Jul 2021 15:08:57 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: host: ohci-spear: simplify calling usb_add_hcd()
+Message-ID: <20210712190857.GC326369@rowland.harvard.edu>
+References: <3e4ad969-f2ae-32f7-53fd-ea369f140703@omp.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1624008558-16949-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <3e4ad969-f2ae-32f7-53fd-ea369f140703@omp.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, 18 Jun 2021 17:29:08 +0800, Chunfeng Yun wrote:
-> Add support optional property of role-switch-default-mode,
-> used to set default mode while usb role is USB_ROLE_NONE when use
-> usb-role-switch to switch mode.
+On Mon, Jul 12, 2021 at 09:16:07PM +0300, Sergey Shtylyov wrote:
+> There is no need to call platform_get_irq() when the driver's probe()
+> method calls usb_add_hcd() -- the platform_get_irq()'s result will have
+> been stored already in the 'irq' local variable...
 > 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> v2: no changes
-> ---
->  Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 > 
+> ---
+> The patch is against the 'usb-next' branch of Greg KH's 'usb.git' repo...
 
-Acked-by: Rob Herring <robh@kernel.org>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/host/ohci-spear.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Index: usb/drivers/usb/host/ohci-spear.c
+> ===================================================================
+> --- usb.orig/drivers/usb/host/ohci-spear.c
+> +++ usb/drivers/usb/host/ohci-spear.c
+> @@ -84,7 +84,7 @@ static int spear_ohci_hcd_drv_probe(stru
+>  
+>  	clk_prepare_enable(sohci_p->clk);
+>  
+> -	retval = usb_add_hcd(hcd, platform_get_irq(pdev, 0), 0);
+> +	retval = usb_add_hcd(hcd, irq, 0);
+>  	if (retval == 0) {
+>  		device_wakeup_enable(hcd->self.controller);
+>  		return retval;
