@@ -2,127 +2,64 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A80433C60D2
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 18:50:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C21593C61F2
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 19:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbhGLQxP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 12:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232710AbhGLQxP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 12:53:15 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC5BC0613E5
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:50:25 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q4so25263330ljp.13
-        for <linux-usb@vger.kernel.org>; Mon, 12 Jul 2021 09:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard-com.20150623.gappssmtp.com; s=20150623;
-        h=to:cc:references:subject:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=o8W1dNWyc77g/GhN9T2NWTwNOeLb+k1LmC+rbhxkZPc=;
-        b=MLL2y6mGJpe2v3dc+r2DITIyOSOUsd0A923QC4WmFqRpZJDdsZKUMuo0+xRo5BQCgg
-         Skpt2ZwNTKiCfEqYAFRARwHuin4Wp4kjXCUDc/UgWe90g+GnmT/+asoMQVk9Mazdi82n
-         J4VnCL3umFyyDSdAs9763NTJjn0VPVU/u+vE9rhoN2DJI1Y6ty3cKHtK2TW7PeMEvqEa
-         2Ooz2+tKUpQoBnoMZzOIJEzHJMZvbgQ9k5V2Yth/mmADEmOnDVQK1E2ryeasONwlZc5l
-         SvT9sw5FLV7l66C82YWQKpfMKQGr02hASm4GbfRCzYyAS+CnBM/VWvlwvhl7JsF3EpuJ
-         PkyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:subject:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=o8W1dNWyc77g/GhN9T2NWTwNOeLb+k1LmC+rbhxkZPc=;
-        b=nNIeg33QUAy1ipzr4d5UryNxKnn/EdmkRzr7A2RVfmDoXY5VQ54/fxyb0H2hfy+fFo
-         xMjAc5Ljgqxg36E/H5AQO/V83QpQIlokiM6zs2BB6nYcuyy+lMFfHhei0FYq+1zX2+qr
-         fw0CX89sPw6d0Qa7P28yiB0GFZVSyYlakGokIRNpXBdtkwObht1if+MsloV31CR6MW26
-         BNWmViY5M67zfHodSdbo/X2BtjVcluwnCsxvTR87sbQHs+Rj9vgYIH0inoW6dhl2F1DM
-         TdntL3q12oqSzRdX6oIB8J2HWkRJOKA1V7PVsqwNSl9r7MHZD8n4GQbTcNt8cJ+FYXIh
-         9p+A==
-X-Gm-Message-State: AOAM531RpGhagjIUqN4AJGcsq/27g9qhB7CpPsknj5INFENR5V6LgI+S
-        JRcbfhbxx0Esqlghb+MsOm+uCA==
-X-Google-Smtp-Source: ABdhPJzRmjg4ige4Q76R9GfUzKH6Q22fEzHtFe8dsyFLremmfKDTEGCbOYwPjkmdRfug1Ybfd1mC+A==
-X-Received: by 2002:a2e:9059:: with SMTP id n25mr130746ljg.314.1626108623325;
-        Mon, 12 Jul 2021 09:50:23 -0700 (PDT)
-Received: from [192.168.1.213] (81.5.110.226.dhcp.mipt-telecom.ru. [81.5.110.226])
-        by smtp.googlemail.com with ESMTPSA id f14sm1627141ljk.42.2021.07.12.09.50.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jul 2021 09:50:22 -0700 (PDT)
-To:     andre.przywara@arm.com
-Cc:     icenowy@aosc.io, jernej.skrabec@gmail.com, kishon@ti.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@googlegroups.com,
-        linux-sunxi@lists.linux.dev, linux-usb@vger.kernel.org,
-        megous@megous.com, mripard@kernel.org, robh@kernel.org,
-        samuel@sholland.org, vkoul@kernel.org, wens@csie.org
-References: <20210615110636.23403-16-andre.przywara@arm.com>
-Subject: Re: [PATCH v7 15/19] phy: sun4i-usb: Add support for the H616 USB PHY
-From:   Evgeny Boger <boger@wirenboard.com>
-Message-ID: <880c62ea-4844-04f7-7b40-a9e8a14de202@wirenboard.com>
-Date:   Mon, 12 Jul 2021 19:50:22 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S235129AbhGLRdb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 13:33:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60550 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230033AbhGLRda (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Jul 2021 13:33:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C81EC61178;
+        Mon, 12 Jul 2021 17:30:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1626111042;
+        bh=H0JMHNh/sSgvf73iGLnKTvGS0AP0pYuM25c1eoveLxw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S4x07RcSCXlH0uDGVc/MO7Su/ecpX0e9jhM5P9DJkjuTSrCecz6wQe1pIe+QlsLWE
+         5f8MZjEURgrjKf7e148b1ONCflD22AEdk7ns9yhnFKZfevd9e/qBvj2RL9Ko8B5c+A
+         EFHkGZTDrppAHLIabVjltur7XqR8f/uWAa75RwW0=
+Date:   Mon, 12 Jul 2021 19:30:39 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     John Youn <John.Youn@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Vahram Aharonyan <Vahram.Aharonyan@synopsys.com>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc2: gadget: Fix GOUTNAK flow for Slave mode.
+Message-ID: <YOx8P3B0ZMwEGu+N@kroah.com>
+References: <75f383c94960b2c1305304bb380e6b6504c67262.1626085155.git.Minas.Harutyunyan@synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <20210615110636.23403-16-andre.przywara@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <75f383c94960b2c1305304bb380e6b6504c67262.1626085155.git.Minas.Harutyunyan@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Andre!
+On Mon, Jul 12, 2021 at 02:22:09PM +0400, Minas Harutyunyan wrote:
+> Because of dwc2_hsotg_ep_stop_xfr() function uses poll
+> mode, first need to mask GINTSTS_GOUTNAKEFF interrupt.
+> In Slave mode GINTSTS_GOUTNAKEFF interrupt will be
+> aserted only after pop OUT NAK status packet from RxFIFO.
+> 
+> In dwc2_hsotg_ep_sethalt() function before setting
+> DCTL_SGOUTNAK need to unmask GOUTNAKEFF interrupt.
+> 
+> Tested by USBCV CH9 and MSC tests set in Slave, BDMA and DDMA.
+> All tests are passed.
+> 
+> Fixes: a4f827714539a ("usb: dwc2: gadget: Disable enabled HW endpoint in
+> dwc2_hsotg_ep_disable")
 
-> The USB PHY used in the Allwinner H616 SoC inherits some traits from its
-> various predecessors: it has four full PHYs like the H3, needs some
-> extra bits to be set like the H6, and puts SIDDQ on a different bit like
-> the A100. Plus it needs this weird PHY2 quirk.
->
-> Name all those properties in a new config struct and assign a new
-> compatible name to it.
->
-> Signed-off-by: Andre Przywara<andre.przywara@arm.com>
-> ---
->   drivers/phy/allwinner/phy-sun4i-usb.c  <https://lore.kernel.org/linux-sunxi/20210615110636.23403-16-andre.przywara@arm.com/#Z30drivers:phy:allwinner:phy-sun4i-usb.c>  | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
->
-> diff 
-> <https://lore.kernel.org/linux-sunxi/20210615110636.23403-16-andre.przywara@arm.com/#iZ30drivers:phy:allwinner:phy-sun4i-usb.c> 
-> --git a/drivers/phy/allwinner/phy-sun4i-usb.c 
-> b/drivers/phy/allwinner/phy-sun4i-usb.c index 
-> 316ef5fca831..85a9771280b7 100644 --- 
-> a/drivers/phy/allwinner/phy-sun4i-usb.c +++ 
-> b/drivers/phy/allwinner/phy-sun4i-usb.c @@ -1024,6 +1024,17 @@ static 
-> const struct sun4i_usb_phy_cfg sun50i_h6_cfg = {   	.missing_phys = BIT(1) | BIT(2),
->   };
->   
-> +static const struct sun4i_usb_phy_cfg sun50i_h616_cfg = { + .num_phys 
-> = 4, + .type = sun50i_h6_phy,
+Please do not wrap this line.
 
-Since this usb phy is considerable different from the one in H6, 
-wouldn't it better to define a new phy type here? The way the driver is 
-designed, I would expect the type to be shared by more or less identical 
-parts.
+> Fixes: 6070636c4918c ("usb: dwc2: Fix Stalling a Non-Isochronous OUT EP")
+> 
 
-Honestly, I think it would be better to get rid of .type in the 
-sun4i_usb_phy_cfg completely replacing it by a couple more traits in 
-.cfg. It's impossible to know for sure which Allwinner parts really 
-share the identical revision of this hardware.
+No need for a blank line there please.
 
-> + .disc_thresh = 3, + .phyctl_offset = REG_PHYCTL_A33, + 
-> .dedicated_clocks = true, + .phy0_dual_route = true, + 
-> .hci_phy_ctl_clear = PHY_CTL_SIDDQ, + .needs_phy2_siddq = true, +}; +   static const struct of_device_id sun4i_usb_phy_of_match[] = {
->   	{ .compatible = "allwinner,sun4i-a10-usb-phy", .data = &sun4i_a10_cfg },
->   	{ .compatible = "allwinner,sun5i-a13-usb-phy", .data = &sun5i_a13_cfg },
-> @@ -1038,6 +1049,7 @@ static const struct of_device_id 
-> sun4i_usb_phy_of_match[] = {   	{ .compatible = "allwinner,sun50i-a64-usb-phy",
->   	  .data = &sun50i_a64_cfg},
->   	{ .compatible = "allwinner,sun50i-h6-usb-phy", .data = &sun50i_h6_cfg },
-> + { .compatible = "allwinner,sun50i-h616-usb-phy", .data = 
-> &sun50i_h616_cfg },   	{ },
->   };
->   MODULE_DEVICE_TABLE(of, sun4i_usb_phy_of_match);
-> -- 
-> 2.17.5
->
+thanks,
 
+gre gk-h
