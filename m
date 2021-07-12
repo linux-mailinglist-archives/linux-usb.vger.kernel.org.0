@@ -2,78 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF6EE3C57C0
-	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 12:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1288B3C5A26
+	for <lists+linux-usb@lfdr.de>; Mon, 12 Jul 2021 13:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354484AbhGLIh2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 04:37:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54002 "EHLO mail.kernel.org"
+        id S235786AbhGLJfz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 05:35:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51302 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351137AbhGLIdd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 12 Jul 2021 04:33:33 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 36D8360FE7;
-        Mon, 12 Jul 2021 08:30:45 +0000 (UTC)
+        id S1356758AbhGLJe3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Jul 2021 05:34:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4C8F26101E;
+        Mon, 12 Jul 2021 09:31:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626078645;
-        bh=3HxPYYHstWoqkXSePDGGbMnMcIbWwSgnimyfGxWJ7Us=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g5ehW+HU5DgmsBc+o4BwlhpnvLFdlsIBqf3GUC+7Cyek6mC5EIHT5zg+zDbAkCNSw
-         sLtg3xBlVdkLlD3dPk7PhGWkFhRZJhtgNAGKVxshNc+SBSNtDv3CaMIPOKG11ZI8y8
-         dXQtAbVYZ1+s8/8qzHM+TD17C5i4Lj4Nt5bJLMETqM9JARmrtNXi2Y3xC0keSXzRzj
-         oDdsv18FLpmwiAQ94iAsoGNr5eG+6luxcalZkQqeSg5RaVG6w5xR8i+BWTDFb3pGd/
-         tyDTidRAfik29cZBqwb5WW47MYuMrRi0BDbnD4BHliVqlWIy6MOJHFL/VutsxAKrgD
-         cfEDjdLrIYzvw==
-Received: from johan by xi with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1m2rKb-0003tq-8T; Mon, 12 Jul 2021 10:30:26 +0200
-Date:   Mon, 12 Jul 2021 10:30:25 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Marco De Marco <marco.demarco@posteo.net>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] usb: serial: option: Add support for u-blox LARA-R6
- family
-Message-ID: <YOv9odicL7IeHPYU@hovoldconsulting.com>
-References: <49260184.kfMIbaSn9k@mars>
+        s=k20201202; t=1626082300;
+        bh=SLyG9PB5xze2TXVay8AsDKn3rf1aPGEPwRhz6WO1OgY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Uk0tjRYmT5CgR9ClwEFtLlKeE+rPDwo3gzQttiGJj3W8VzQZ6ug0dUsPIHcD6Xw3u
+         L+P5bfn2/HPe3ANlt1J9hBJAVo0aVY3m63UvhddAKtISpJwTsiUIA3STOqgKrsTXaR
+         UuX5vU1Jyo2glF6NippVyx0EHLq2imlnahPgBfiH65gq0sVuSS61gPN2RATgP/Q52P
+         3hXNfj5o7eGN9p10bwwaOHOd5YeF4vPhNoyYsFgP1YEPwhBwn3R4ZPY5XpX0dbnoqS
+         W4TNcAi0aAz43eB5BMzYn8iw0ZYJWwg+wvcT1s4vF0l3LhrDPiPgO3Iy5Mf83CCXdW
+         sN6ckYUmPWorw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pratham Pratap <prathampratap@codeaurora.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: Re: [PATCH v8 2/6] usb: host: xhci: plat: Add suspend quirk for
+ dwc3 controller
+In-Reply-To: <1624882097-23265-3-git-send-email-sanm@codeaurora.org>
+References: <1624882097-23265-1-git-send-email-sanm@codeaurora.org>
+ <1624882097-23265-3-git-send-email-sanm@codeaurora.org>
+Date:   Mon, 12 Jul 2021 12:31:31 +0300
+Message-ID: <87im1fzxn0.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49260184.kfMIbaSn9k@mars>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 05, 2021 at 07:44:21PM +0000, Marco De Marco wrote:
-> The patch is meant to support LARA-R6 Cat 1 module family.
-> 
-> Module USB ID:
-> Vendor  ID: 0x05c6
-> Product ID: 0x90fA
-> 
-> Interface layout:
-> If 0: Diagnostic
-> If 1: AT parser
-> If 2: AT parser
-> If 3: QMI wwan (not available in all versions)
-> 
-> Signed-off-by: Marco De Marco <marco.demarco@posteo.net>
-> 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+
+
+Hi,
+
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+> During suspend read the status of all port and make sure the PHYs
+> are in the correct mode based on current speed.
+> Phy interrupt masks are set based on this mode. Keep track of the mode
+> of the HS PHY to be able to configure wakeup properly.
+>
+> Also check during suspend if any wakeup capable devices are
+> connected to the controller (directly or through hubs), if there
+> are none set a flag to indicate that the PHY should be powered
+> down during suspend.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
 > ---
-> 
-> ADB interface is not available. 
-> Diagnostic interface (If 0) can be used with option driver.
-> 
-> Output of usb-devices command (this version does not have QMI WWAN):
-> T:  Bus=01 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=480 MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=05c6 ProdID=90fa Rev=00.00
-> S:  Manufacturer=Qualcomm, Incorporated
-> S:  Product=Qualcomm CDMA Technologies MSM
-> S:  SerialNumber=7da8aacd
-> C:  #Ifs= 3 Cfg#= 1 Atr=c0 MxPwr=500mA
-> I:  If#=0x0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-> I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=fe Prot=ff Driver=(none)
+>  drivers/usb/host/xhci-plat.c | 38 ++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>
+> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+> index c1edcc9..ee87923 100644
+> --- a/drivers/usb/host/xhci-plat.c
+> +++ b/drivers/usb/host/xhci-plat.c
+> @@ -24,6 +24,7 @@
+>  #include "xhci-plat.h"
+>  #include "xhci-mvebu.h"
+>  #include "xhci-rcar.h"
+> +#include "../dwc3/core.h"
+>=20=20
+>  static struct hc_driver __read_mostly xhci_plat_hc_driver;
+>=20=20
+> @@ -430,6 +431,39 @@ static int xhci_plat_remove(struct platform_device *=
+dev)
+>=20=20
+>  	return 0;
+>  }
+> +static void xhci_dwc3_suspend_quirk(struct usb_hcd *hcd)
+> +{
+> +	int i, num_ports;
+> +	u32 reg;
+> +	unsigned int ss_phy_mode =3D 0;
+> +	struct dwc3 *dwc =3D dev_get_drvdata(hcd->self.controller->parent);
+> +	struct xhci_hcd	*xhci_hcd =3D hcd_to_xhci(hcd);
+> +
+> +	dwc->hs_phy_mode =3D 0;
 
-Now applied, thanks!
+you're still bypassing the driver layering. First you had dwc access
+xhci, now you want xhci to access dwc. Either way is wrong. You need to
+rely on drivers core and device properties for this stuff. Don't access
+data you don't own.
 
-Johan
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDsC/MRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUgX1QgAuLQkROuNiEzBb++memK/UL5PiEaYklbg
+TwXM6yJ5KcvCvosUXw6wpY8uHPuq6wJspPyKZYr5vUjzg/+B8pDmO6JELDiqFnph
+gXfUkimhDyRm+F/4tR/Ed7+H0AHS+g+2mDE1tjKcJOlcpLGr43AANRt3SEKYMqyT
+Ji2zedr4BV87GDdCuiVdJHWOMW8/TW8G3bQ5yZUR2BneTpqjlkgt/y8AC4hOxMbk
+xQAP0awJVaLU8QpVZdqxjLa5RwFTgERFnPGqpnOrnPs804sU/bq4Ygj/Rd7j4I+B
+HhGVbknxE4tvTDpf93qoXy3qSwtv8MFobSGc2KeaI+MtiLvY/KLOLQ==
+=6ret
+-----END PGP SIGNATURE-----
+--=-=-=--
