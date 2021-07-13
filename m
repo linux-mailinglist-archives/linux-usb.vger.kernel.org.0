@@ -2,116 +2,117 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D0D3C69BD
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 07:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DA983C69DE
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 07:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbhGMFfu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jul 2021 01:35:50 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:54324 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231998AbhGMFft (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 01:35:49 -0400
-Received: from mailhost.synopsys.com (mdc-mailhost2.synopsys.com [10.225.0.210])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id F02A8C06C4;
-        Tue, 13 Jul 2021 05:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1626154380; bh=BcDTSCmIof6ULEzv2PG1WT0i1kmSYFFKt7S8F8AqXJA=;
-        h=Date:From:Subject:To:Cc:From;
-        b=DshZpaFjVE/lTkTb+KWHlIqy00jNDs7sRI9sef1krTlSHyyQpNOZJn6/Tf9flPxlu
-         LSLdNrAxmIqVcZ70nMXqeoBrXa19dY61OTX4y0MKIIF6LdfJTgPrizCnb1UgNcVZcX
-         EwrzLmWWOmvaF989Pi5PbyMpzI/kOKy9yPU31VUudqO+Smjyf5CNSwG2IFFQZ0nj6t
-         o6OEl29+8ytiNnJiZZWed4i+qS8ao8y4zArzkR1aDavmrA+sCmRqwxTY8yzwGyrH0Z
-         gXymV5hwQ/rKiffFDOkUs34RAwYgapWZieRlE7/LQ7TpdfBWjZ/S1B2QDHTiVCvXdz
-         WvvaLj9EcGkqA==
-Received: from hminas-z420 (hminas-z420.internal.synopsys.com [10.116.75.77])
-        (using TLSv1 with cipher AES128-SHA (128/128 bits))
-        (Client did not present a certificate)
-        by mailhost.synopsys.com (Postfix) with ESMTPSA id 8A639A005C;
-        Tue, 13 Jul 2021 05:32:56 +0000 (UTC)
-Received: by hminas-z420 (sSMTP sendmail emulation); Tue, 13 Jul 2021 09:32:55 +0400
-Date:   Tue, 13 Jul 2021 09:32:55 +0400
-Message-Id: <e17fad802bbcaf879e1ed6745030993abb93baf8.1626152924.git.Minas.Harutyunyan@synopsys.com>
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Subject: [PATCH v2] usb: dwc2: gadget: Fix GOUTNAK flow for Slave mode.
-To:     John Youn <John.Youn@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Vahram Aharonyan <Vahram.Aharonyan@synopsys.com>,
+        id S230374AbhGMFsY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jul 2021 01:48:24 -0400
+Received: from smtp.bonedaddy.net ([45.33.94.42]:53798 "EHLO
+        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229581AbhGMFsX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 01:48:23 -0400
+Received: from [192.168.1.209] (n49-190-172-168.per1.wa.optusnet.com.au [49.190.172.168])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pabs3@bonedaddy.net)
+        by smtp.bonedaddy.net (Postfix) with ESMTPSA id 4169F180043;
+        Tue, 13 Jul 2021 01:45:30 -0400 (EDT)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
+        s=mail; t=1626155133;
+        bh=ae/NCnKrOM7/LUwH8sseWw/72c7pqHgQzV/3W9Y0nmI=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date;
+        b=Vh1xgkTNqZPr3nP6vSrUO0TGNHjEInk4iffvFdLNUUFGg8I8UFmDBL5nVcUVJFdO8
+         5xKFMf5ahuNalIFuYJK47NNPRJ2FfWae8Yhq4PbQIMsp1p/egX7VBjPAebIbaKsobz
+         sTo6Mi7O4TMCOUgsdicB7NcgeHOBaP77Ca33DfVgcXXCvAnxj3CYSlJHtKdOUM0gXH
+         4PXQ4xCNbzHzaNhVz1xFGlw3hH8+CxZEKgVurfoH7gkRdPgeVAVBFz3M9SliKpNZCX
+         M4ivBYRwwqR12JPcTYP6DtSP3y7pT/gV0hlodYHiwPnVp7JqRptjZ/lLlM8DQFG88b
+         AkoXSwBpDhoxA==
+Message-ID: <6be6edd3a30888ef7181735a1bbdac579578fd99.camel@bonedaddy.net>
+Subject: Re: proposal: move Linux userspace USB gadget projects to
+ linux-usb GitHub organisation?
+From:   Paul Wise <pabs3@bonedaddy.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
         linux-usb@vger.kernel.org
-Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+In-Reply-To: <YO0cL+4gzLSyTY7f@kroah.com>
+References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
+         <ac8342bbedc5aa0f5754cb6830e6d5628cc022f1.camel@bonedaddy.net>
+         <YO0cL+4gzLSyTY7f@kroah.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-AfMo5iRgjfaGF93x0unk"
+Date:   Tue, 13 Jul 2021 13:40:27 +0800
+MIME-Version: 1.0
+User-Agent: Evolution 3.40.2-1 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Because of dwc2_hsotg_ep_stop_xfr() function uses poll
-mode, first need to mask GINTSTS_GOUTNAKEFF interrupt.
-In Slave mode GINTSTS_GOUTNAKEFF interrupt will be
-aserted only after pop OUT NAK status packet from RxFIFO.
 
-In dwc2_hsotg_ep_sethalt() function before setting
-DCTL_SGOUTNAK need to unmask GOUTNAKEFF interrupt.
+--=-AfMo5iRgjfaGF93x0unk
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tested by USBCV CH9 and MSC tests set in Slave, BDMA and DDMA.
-All tests are passed.
+On Tue, 2021-07-13 at 06:53 +0200, Greg KH wrote:
 
-Fixes: a4f827714539a ("usb: dwc2: gadget: Disable enabled HW endpoint in dwc2_hsotg_ep_disable")
-Fixes: 6070636c4918c ("usb: dwc2: Fix Stalling a Non-Isochronous OUT EP")
-Signed-off-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
----
- Changes in v2:
- - Fix commit message formating
+> What do you mean "archive libusbg"?
+>=20
 
- drivers/usb/dwc2/gadget.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+GitHub repositories can be made read-only to indicate that they are no
+longer being developed, this is known as "archiving".
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index 7352f2720963..77d595738bdd 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -3903,9 +3903,27 @@ static void dwc2_hsotg_ep_stop_xfr(struct dwc2_hsotg *hsotg,
- 					 __func__);
- 		}
- 	} else {
-+		/* Mask GINTSTS_GOUTNAKEFF interrupt */
-+		dwc2_hsotg_disable_gsint(hsotg, GINTSTS_GOUTNAKEFF);
-+
- 		if (!(dwc2_readl(hsotg, GINTSTS) & GINTSTS_GOUTNAKEFF))
- 			dwc2_set_bit(hsotg, DCTL, DCTL_SGOUTNAK);
- 
-+		if (!using_dma(hsotg)) {
-+			/* Wait for GINTSTS_RXFLVL interrupt */
-+			if (dwc2_hsotg_wait_bit_set(hsotg, GINTSTS,
-+						    GINTSTS_RXFLVL, 100)) {
-+				dev_warn(hsotg->dev, "%s: timeout GINTSTS.RXFLVL\n",
-+					 __func__);
-+			} else {
-+				/*
-+				 * Pop GLOBAL OUT NAK status packet from RxFIFO
-+				 * to assert GOUTNAKEFF interrupt
-+				 */
-+				dwc2_readl(hsotg, GRXSTSP);
-+			}
-+		}
-+
- 		/* Wait for global nak to take effect */
- 		if (dwc2_hsotg_wait_bit_set(hsotg, GINTSTS,
- 					    GINTSTS_GOUTNAKEFF, 100))
-@@ -4374,6 +4392,9 @@ static int dwc2_hsotg_ep_sethalt(struct usb_ep *ep, int value, bool now)
- 		epctl = dwc2_readl(hs, epreg);
- 
- 		if (value) {
-+			/* Unmask GOUTNAKEFF interrupt */
-+			dwc2_hsotg_en_gsint(hs, GINTSTS_GOUTNAKEFF);
-+
- 			if (!(dwc2_readl(hs, GINTSTS) & GINTSTS_GOUTNAKEFF))
- 				dwc2_set_bit(hs, DCTL, DCTL_SGOUTNAK);
- 			// STALL bit will be set in GOUTNAKEFF interrupt handler
+https://github.blog/2017-11-08-archiving-repositories/
 
-base-commit: 3143ea6b8eee08761709a6c2788216292be46a34
--- 
-2.11.0
+
+> What type of funding and for what specific development?
+> What is lacking in the current projects here that needs to be
+> resolved? And who have you asked for funding from so far?
+
+
+The work needed is varied; the bugs/patches backlog, possibly porting
+to newer library APIs, cleaning up build complaints, cleaning up static
+and dynamic analysis complaints, integration with system software,
+integration with mobile user interfaces, integration into distros,
+automated testing with dummy_hcd, testing on devices, improving
+documentation, promoting the tools, encouraging gadget authors to use
+the tools, engaging with the user community, potentially additional UDC
+drivers if any are missing, ongoing maintenance and anything else that
+comes up during the course of that work.
+
+I've mentioned the need for investment in the Linux userspace USB
+gadget projects offlist to yourself, the other folks in CC, Bootlin and
+a few other folks around the Linux ARM/mobile space.
+
+--=20
+bye,
+pabs
+
+https://bonedaddy.net/pabs3/
+
+--=-AfMo5iRgjfaGF93x0unk
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmDtJ0cACgkQMRa6Xp/6
+aaOhew/9GRP9VpjMSTB5toUeqJQuyspl0Mrj6cFTbT9M52MX3bUQnIxxSPmrxXgS
+ZYoeuT8A3Ovqv2oib6H23REAk5CRFVcQ/yRRhYUNSD2eoAOaa/vTYSmYJdhMzl84
+vQ+q5eQ7AbXMPOd0n/Bkto3Ylu3OTGtXsLr9XFGUl3DoqUYdsykq5IGaVKRG5Vsu
+s3CkbbHsoqb8LMg8OHj6K8kzd+8XLslposYv++GAqoci8oXFa+c6L1gaXrPK59Co
+pxpWkSI5aXzYG34ZWgWlV8KagexEXEiyizu2cEneWw9gf0/HHpZSY0ogy8SKt30u
+j+26OzvEO70/ia3vj3y3psUKdyE/cmHIZlZgOsvp/5nOo90UdtZfsfArG0OwaK8K
+I+J22aUXjRpX/uk2W9yb8K4SEQA/h63A6mbeVMdghoemxJsWPjQgC3wYGzTQm4o/
+lE7ApGDrGZlrNX2fXslfjiPVXuBc9dfJN4Rnjtt1Q9uAB6DbdLcJUoU4F68XAEoY
+0Eqtw5Ho0bl/DCRrhujh5k9uQA5QHBOfjGX42S8Vgm4WNtHsIFfgEZ9gVYQjyCy/
+qNKFr3TbvwjqmJl0YaVY51REa0nysZ1LRkfX/oO06SsJvBH3f5cTC8h8xZEZ3q3R
+mKSMzFWamDeEzgv+v1GO2I6AjnDJbsAviZg9tZ4VtsfXpXIMWHM=
+=VPyZ
+-----END PGP SIGNATURE-----
+
+--=-AfMo5iRgjfaGF93x0unk--
 
