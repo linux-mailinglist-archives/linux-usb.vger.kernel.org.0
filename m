@@ -2,85 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 599B93C6CC8
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 11:00:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 908B53C6D20
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 11:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234816AbhGMJDh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jul 2021 05:03:37 -0400
-Received: from Mailgw01.mediatek.com ([1.203.163.78]:59226 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234121AbhGMJDg (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 05:03:36 -0400
-X-UUID: f648231f35e343cd92fe1bac49f99370-20210713
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=/SkvQQ3+rtq2S0/tdyj0Z0yx4+LQp8I/gV8vayHB1eA=;
-        b=eJeCnaVA92IGHPSnF4fRU+uuPIXGaxtF5vFMGURAcc/jXq0+2SDrAZP4SGsRcPmL8NZBqrS/GDtLMoFSFLv7q/NXzkM/mqHx4nvYKq94h1faSNM3SIOQkzjjk2tji5eH4S1LVq3RGdRgvk/Af0xx7D2zVDCI89YxU4uzn3J+GVc=;
-X-UUID: f648231f35e343cd92fe1bac49f99370-20210713
-Received: from mtkcas32.mediatek.inc [(172.27.4.253)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 777364225; Tue, 13 Jul 2021 17:00:41 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS33N2.mediatek.inc
- (172.27.4.76) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 13 Jul
- 2021 17:00:39 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 13 Jul 2021 17:00:38 +0800
-Message-ID: <1626166838.29490.4.camel@mhfsdcap03>
-Subject: Re: [PATCH v2 02/13] dt-bindings: usb: mtu3: add optional property
- to disable usb2 ports
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh@kernel.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Tue, 13 Jul 2021 17:00:38 +0800
-In-Reply-To: <20210712190809.GA2310371@robh.at.kernel.org>
-References: <1624008558-16949-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1624008558-16949-3-git-send-email-chunfeng.yun@mediatek.com>
-         <20210712190809.GA2310371@robh.at.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S235041AbhGMJWc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jul 2021 05:22:32 -0400
+Received: from rtits2.realtek.com ([211.75.126.72]:55525 "EHLO
+        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234959AbhGMJWb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 05:22:31 -0400
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 16D9JWKd8010080, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 16D9JWKd8010080
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 13 Jul 2021 17:19:32 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2106.2; Tue, 13 Jul 2021 17:19:32 +0800
+Received: from fc32.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
+ (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Tue, 13 Jul
+ 2021 17:19:31 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     <kuba@kernel.org>, <davem@davemloft.net>
+CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Hayes Wang <hayeswang@realtek.com>
+Subject: [PATCH net-next 0/2] r8152: split the source code
+Date:   Tue, 13 Jul 2021 17:18:34 +0800
+Message-ID: <1394712342-15778-368-Taiwan-albertk@realtek.com>
+X-Mailer: Microsoft Office Outlook 11
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 1F30D6F3E0CBFBFE6BBF7E6E74BA7C17CB540E6A07D0FFC39EB0D4C6EC885D8A2000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.21.177.102]
+X-ClientProxiedBy: RTEXMBS01.realtek.com.tw (172.21.6.94) To
+ RTEXMBS04.realtek.com.tw (172.21.6.97)
+X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/13/2021 03:03:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzcvMTMgpFekyCAwMTowNjowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzcvMTMgpFekyCAwNzo0OTowMA==?=
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 07/13/2021 08:57:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 0
+X-KSE-AntiSpam-Info: Lua profiles 165001 [Jul 13 2021]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
+X-KSE-AntiSpam-Info: LuaCore: 448 448 71fb1b37213ce9a885768d4012c46ac449c77b17
+X-KSE-AntiSpam-Info: {Tracking_from_exist}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2;realtek.com:7.1.1
+X-KSE-AntiSpam-Info: {Track_Chinese_Simplified, headers_charset}
+X-KSE-AntiSpam-Info: Rate: 0
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 07/13/2021 09:01:00
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gTW9uLCAyMDIxLTA3LTEyIGF0IDEzOjA4IC0wNjAwLCBSb2IgSGVycmluZyB3cm90ZToNCj4g
-T24gRnJpLCBKdW4gMTgsIDIwMjEgYXQgMDU6Mjk6MDdQTSArMDgwMCwgQ2h1bmZlbmcgWXVuIHdy
-b3RlOg0KPiA+IEFkZCBzdXBwb3J0IHRvIGRpc2FibGUgc3BlY2lmaWMgdXNiMiBob3N0IHBvcnRz
-LCBpdCdzIHVzZWZ1bCB3aGVuDQo+ID4gYSB1c2IyIHBvcnQgaXMgZGlzYWJsZWQgb24gc29tZSBw
-bGF0Zm9ybXMsIGJ1dCBlbmFibGVkIG9uIG90aGVycyBmb3INCj4gPiB0aGUgc2FtZSBTb0MsIGFu
-b3RoZXIgY2FzZSBpcyB0aGF0IHRoZSBkaWZmZXJlbnQgcGFja2FnZSBtYXkgc3VwcG9ydA0KPiA+
-IGRpZmZlcmVudCBudW1iZXIgb2YgcG9ydHMuDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogQ2h1
-bmZlbmcgWXVuIDxjaHVuZmVuZy55dW5AbWVkaWF0ZWsuY29tPg0KPiA+IC0tLQ0KPiA+IHYyOiBu
-byBjaGFuZ2VzDQo+ID4gLS0tDQo+ID4gIERvY3VtZW50YXRpb24vZGV2aWNldHJlZS9iaW5kaW5n
-cy91c2IvbWVkaWF0ZWssbXR1My55YW1sIHwgNiArKysrKysNCj4gPiAgMSBmaWxlIGNoYW5nZWQs
-IDYgaW5zZXJ0aW9ucygrKQ0KPiA+IA0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2Rl
-dmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10dTMueWFtbCBiL0RvY3VtZW50YXRpb24v
-ZGV2aWNldHJlZS9iaW5kaW5ncy91c2IvbWVkaWF0ZWssbXR1My55YW1sDQo+ID4gaW5kZXggMmNh
-YzdhODdjZTM2Li4zZTZmMjc1MGY0OGQgMTAwNjQ0DQo+ID4gLS0tIGEvRG9jdW1lbnRhdGlvbi9k
-ZXZpY2V0cmVlL2JpbmRpbmdzL3VzYi9tZWRpYXRlayxtdHUzLnlhbWwNCj4gPiArKysgYi9Eb2N1
-bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21lZGlhdGVrLG10dTMueWFtbA0KPiA+
-IEBAIC0xNjYsNiArMTY2LDEyIEBAIHByb3BlcnRpZXM6DQo+ID4gICAgICBkZXNjcmlwdGlvbjog
-VGhlIG1hc2sgdG8gZGlzYWJsZSB1M3BvcnRzLCBiaXQwIGZvciB1M3BvcnQwLA0KPiA+ICAgICAg
-ICBiaXQxIGZvciB1M3BvcnQxLCAuLi4gZXRjDQo+ID4gIA0KPiA+ICsgIG1lZGlhdGVrLHUycC1k
-aXMtbXNrOg0KPiANCj4gSnVzdCBzcGVsbCBvdXQgJ21hc2snLg0KVGhlcmUgaXMgYWxyZWFkeSBh
-IHByb3BlcnR5ICJtZWRpYXRlayx1M3AtZGlzLW1zayIsIHByZWZlciB0byB1c2UgdGhlDQpzYW1l
-IGZvcm1hdCwgdGhhbmtzDQoNCj4gDQo+ID4gKyAgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1s
-Iy9kZWZpbml0aW9ucy91aW50MzINCj4gPiArICAgIGRlc2NyaXB0aW9uOiBUaGUgbWFzayB0byBk
-aXNhYmxlIHUycG9ydHMsIGJpdDAgZm9yIHUycG9ydDAsDQo+ID4gKyAgICAgIGJpdDEgZm9yIHUy
-cG9ydDEsIC4uLiBldGM7IGJ1dCBjYW4ndCBkaXNhYmxlIHUycG9ydDAgaWYgZHVhbCByb2xlIG1v
-ZGUNCj4gPiArICAgICAgaXMgZW5hYmxlZCwgc28gd2lsbCBiZSBza2lwcGVkIGluIHRoaXMgY2Fz
-ZS4NCj4gPiArDQo+ID4gICMgUmVxdWlyZWQgY2hpbGQgbm9kZSB3aGVuIHN1cHBvcnQgZHVhbC1y
-b2xlDQo+ID4gIHBhdHRlcm5Qcm9wZXJ0aWVzOg0KPiA+ICAgICJedXNiQFswLTlhLWZdKyQiOg0K
-PiA+IC0tIA0KPiA+IDIuMTguMA0KPiA+IA0KPiA+IA0KDQo=
+The r8152.c is too large to find out the desired part, so I speparate it
+into r8152_main.c and r8152_fw.c.
+
+Hayes Wang (2):
+  r8152: group the usb ethernet of realtek
+  r8152: separate the r8152.c into r8152_main.c and r8152_fw.c
+
+ MAINTAINERS                                   |   10 +-
+ drivers/net/usb/Kconfig                       |   30 +-
+ drivers/net/usb/Makefile                      |    4 +-
+ drivers/net/usb/realtek/Kconfig               |   33 +
+ drivers/net/usb/realtek/Makefile              |    9 +
+ drivers/net/usb/realtek/r8152_basic.h         |  860 ++++++
+ drivers/net/usb/realtek/r8152_fw.c            | 1557 ++++++++++
+ .../net/usb/{r8152.c => realtek/r8152_main.c} | 2585 +----------------
+ drivers/net/usb/{ => realtek}/r8153_ecm.c     |    0
+ drivers/net/usb/{ => realtek}/rtl8150.c       |    0
+ 10 files changed, 2576 insertions(+), 2512 deletions(-)
+ create mode 100644 drivers/net/usb/realtek/Kconfig
+ create mode 100644 drivers/net/usb/realtek/Makefile
+ create mode 100644 drivers/net/usb/realtek/r8152_basic.h
+ create mode 100644 drivers/net/usb/realtek/r8152_fw.c
+ rename drivers/net/usb/{r8152.c => realtek/r8152_main.c} (75%)
+ rename drivers/net/usb/{ => realtek}/r8153_ecm.c (100%)
+ rename drivers/net/usb/{ => realtek}/rtl8150.c (100%)
+
+-- 
+2.26.3
 
