@@ -2,101 +2,168 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FCA3C6767
-	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 02:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2292E3C67C2
+	for <lists+linux-usb@lfdr.de>; Tue, 13 Jul 2021 02:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233691AbhGMAZn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 12 Jul 2021 20:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233672AbhGMAZc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 12 Jul 2021 20:25:32 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5747BC0613E9;
-        Mon, 12 Jul 2021 17:22:43 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id x25so34059549lfu.13;
-        Mon, 12 Jul 2021 17:22:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=LHMjl6v+1/z8wJKRrF+q+23p2ixGAoh6EkLjt4MZTjE=;
-        b=jiW8y8g6pdyhRM4uMdpXkWIFO7Xb89L5NGKePWnVUe+yA7+VP5URwMjPobX5jfWulK
-         gSb17dKjQdHcOQmvCyTekQFiWtEBOJi/Dl44qAZ4bCgiFIRXdnlR4exZw6QFLV+NxYrI
-         hiRJVYtwS+pj5u1yVrWfiQQviYYnUKAKDl0YloHnh9u35bNL0Gni6EtmDDlAci4+Zgp/
-         MHK1XrLdc4l4WINofxSEN8wyj5yuUpQo2hzdhPelq2ybm5G8+ZE+00HJW8QeSep4ncVc
-         MKwumlXVVL79ZHBN++QiG29p1zlmKOuz+M0Iu3wH/CkTYZpXRxhfzsd7O3yNwIvQs7aE
-         mu3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=LHMjl6v+1/z8wJKRrF+q+23p2ixGAoh6EkLjt4MZTjE=;
-        b=CZ+Nl/6ZiuYQPlTd9l/IIACU7TRSiUk8hdWxoE66wWKQ/SBT3ptm0N9PRT1cZWGJhn
-         5evh+nzNcUDUOwh+i84LWMzCPecX+x6dpPXkJzfajfyxqLvAqi9TmCsAIsD1GNdIRZhQ
-         TOo8eNVGsdt70hsz3gIC8oGqVfMuKMqaKNRfSaCXmbAcMMyS6eQ97TTVyePsNKifQHYT
-         tvNBqkJ3+GxCR4OR+Z5npq0ETsuXbp0G7el0RGCqlNxZHiptUWTbmL7HvUaBtNddNeRL
-         F6KMTjEpSyByKT+l4xY39uiluA/30/Ilv6eHNkO5eu1fvD1P2+0GuDZjzJXQwBGPlBMK
-         Y+KQ==
-X-Gm-Message-State: AOAM5300Dyb8C38u8RjWgbTnAzFapJ4PXuegeCfg771PacOwzua0gob/
-        b0ObVd57GP6mSwJSaODkDzYr6lQtByE=
-X-Google-Smtp-Source: ABdhPJyklp2niBlI5qcNHdbeTgIqoUU9MU2T6GictWwRo4KZQc1szt0TRJ+VAnZmAp8XOGBpm1z3eg==
-X-Received: by 2002:a05:6512:260a:: with SMTP id bt10mr1119212lfb.636.1626135761389;
-        Mon, 12 Jul 2021 17:22:41 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
-        by smtp.googlemail.com with ESMTPSA id r19sm1801133lji.108.2021.07.12.17.22.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jul 2021 17:22:40 -0700 (PDT)
-Subject: Re: [PATCH v3 06/12] dt-bindings: power: supply: smb347-charger:
- Document USB VBUS regulator
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
+        id S230374AbhGMBCD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 12 Jul 2021 21:02:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47934 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229604AbhGMBCD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 12 Jul 2021 21:02:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C8B456100C;
+        Tue, 13 Jul 2021 00:59:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626137954;
+        bh=Ioj8Hb9taKHRcMlzOb/mEP4KTz+O/6U2j/WCZvMG5Dw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LkJgyECCNgHg+FqXj8DynSf66cW5udJvndeLxmdM6D7nedkjANXh0RtM+cS/oTSFA
+         RT17xY9dc6c3bhodYrwFZgqvYWllT/c60S61VQ8gUpMDFoKJ0X5ccXhn2UkKU9ytVc
+         Hz9PKNTMSzUS6iM/zIX+5OpqIYJlDh/7WTEfIXIbmJfJiJ4hGFthgE90L4/ihoGKeP
+         7AcwsGESy2dTTfTF1hzrzKEO595W4IX9tOjRFiTYSu51o5fb8vdrQAKIWm9CNgKIWb
+         8eC1c9LK16GownjxYTZwRPrbBVKxtWfqbJrJippZD16+NyAtuWsQUuu2WoN0eRaApl
+         CZxaSAnTVyvKQ==
+Date:   Tue, 13 Jul 2021 08:59:09 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Cc:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <20210704225433.32029-1-digetx@gmail.com>
- <20210704225433.32029-7-digetx@gmail.com>
- <20210712153905.GA1980362@robh.at.kernel.org>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
-Date:   Tue, 13 Jul 2021 03:22:40 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH v2] usb: phy: Fix page fault from usb_phy_uevent
+Message-ID: <20210713005909.GA24531@nchen>
+References: <c0711737fe54efa72d35df42cc4b9db31c382e7a.1625896955.git.Arthur.Petrosyan@synopsys.com>
+ <20210710092247.D7AFEA005D@mailhost.synopsys.com>
 MIME-Version: 1.0
-In-Reply-To: <20210712153905.GA1980362@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210710092247.D7AFEA005D@mailhost.synopsys.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-12.07.2021 18:39, Rob Herring пишет:
->> +  summit,inok-polarity:
->> +    description: |
->> +      Polarity of INOK signal indicating presence of external power supply.
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum:
->> +      - 0 # SMB3XX_SYSOK_INOK_ACTIVE_LOW
->> +      - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
->> +
->> +  usb-vbus:
->> +    $ref: "../../regulator/regulator.yaml#"
->> +    type: object
->        unevaluatedProperties: false
+On 21-07-10 13:22:46, Artur Petrosyan wrote:
+> When the dwc2 platform device is removed, it unregisters the generic
+> phy. usb_remove_phy() is called and the dwc2 usb_phy is removed from the
+> "phy_list", but the uevent may still attempt to get the usb_phy from the
+> list, resulting in a page fault bug. Currently we can't access the usb_phy
+> from the "phy_list" after the device is removed. As a fix check to make
+> sure that we can get the usb_phy before moving forward with the uevent.
 > 
-> With that,
+> [   84.949345] BUG: unable to handle page fault for address:00000007935688d8
+> [   84.949349] #PF: supervisor read access in kernel mode
+> [   84.949351] #PF: error_code(0x0000) - not-present page
+> [   84.949353] PGD 0 P4D 0
+> [   84.949356] Oops: 0000 [#1] SMP PTI
+> [   84.949360] CPU: 2 PID: 2081 Comm: rmmod Not tainted 5.13.0-rc4-snps-16547-ga8534cb092d7-dirty #32
+> [   84.949363] Hardware name: Hewlett-Packard HP Z400 Workstation/0B4Ch, BIOS 786G3 v03.54 11/02/2011
+> [   84.949365] RIP: 0010:usb_phy_uevent+0x99/0x121
+> [   84.949372] Code: 8d 83 f8 00 00 00 48 3d b0 12 22 94 74 05 4c 3b 23
+> 75 5b 8b 83 9c 00 00 00 be 32 00 00 00 48 8d 7c 24 04 48 c7 c2 d4 5d 7b
+> 93 <48> 8b 0c c5 e0 88 56 93 e8 0f 63 8a ff 8b 83 98 00 00 00 be 32 00
+> [   84.949375] RSP: 0018:ffffa46bc0f2fc70 EFLAGS: 00010246
+> [   84.949378] RAX: 00000000ffffffff RBX: ffffffff942211b8 RCX: 0000000000000027
+> [   84.949380] RDX: ffffffff937b5dd4 RSI: 0000000000000032 RDI: ffffa46bc0f2fc74
+> [   84.949383] RBP: ffff94a306613000 R08: 0000000000000000 R09: 00000000fffeffff
+> [   84.949385] R10: ffffa46bc0f2faa8 R11: ffffa46bc0f2faa0 R12: ffff94a30186d410
+> [   84.949387] R13: ffff94a32d188a80 R14: ffff94a30029f960 R15: ffffffff93522dd0
+> [   84.949389] FS:  00007efdbd417540(0000) GS:ffff94a513a80000(0000) knlGS:0000000000000000
+> [   84.949392] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   84.949394] CR2: 00000007935688d8 CR3: 0000000165606000 CR4: 00000000000006e0
+> [   84.949396] Call Trace:
+> [   84.949401]  dev_uevent+0x190/0x1ad
+> [   84.949408]  kobject_uevent_env+0x18e/0x46c
+> [   84.949414]  device_release_driver_internal+0x17f/0x18e
+> [   84.949418]  bus_remove_device+0xd3/0xe5
+> [   84.949421]  device_del+0x1c3/0x31d
+> [   84.949425]  ? kobject_put+0x97/0xa8
+> [   84.949428]  platform_device_del+0x1c/0x63
+> [   84.949432]  platform_device_unregister+0xa/0x11
+> [   84.949436]  dwc2_pci_remove+0x1e/0x2c [dwc2_pci]
+> [   84.949440]  pci_device_remove+0x31/0x81
+> [   84.949445]  device_release_driver_internal+0xea/0x18e
+> [   84.949448]  driver_detach+0x68/0x72
+> [   84.949450]  bus_remove_driver+0x63/0x82
+> [   84.949453]  pci_unregister_driver+0x1a/0x75
+> [   84.949457]  __do_sys_delete_module+0x149/0x1e9
+> [   84.949462]  ? task_work_run+0x64/0x6e
+> [   84.949465]  ? exit_to_user_mode_prepare+0xd4/0x10d
+> [   84.949471]  do_syscall_64+0x5d/0x70
+> [   84.949475]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [   84.949480] RIP: 0033:0x7efdbd563bcb
+> [   84.949482] Code: 73 01 c3 48 8b 0d c5 82 0c 00 f7 d8 64 89 01 48 83
+> c8 ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa b8 b0 00 00 00 0f
+> 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 95 82 0c 00 f7 d8 64 89 01 48
+> [   84.949485] RSP: 002b:00007ffe944d7d98 EFLAGS: 00000206 ORIG_RAX: 00000000000000b0
+> [   84.949489] RAX: ffffffffffffffda RBX: 00005651072eb700 RCX: 00007efdbd563bcb
+> [   84.949491] RDX: 000000000000000a RSI: 0000000000000800 RDI: 00005651072eb768
+> [   84.949493] RBP: 00007ffe944d7df8 R08: 0000000000000000 R09: 0000000000000000
+> [   84.949495] R10: 00007efdbd5dfac0 R11: 0000000000000206 R12: 00007ffe944d7fd0
+> [   84.949497] R13: 00007ffe944d8610 R14: 00005651072eb2a0 R15: 00005651072eb700
+> [   84.949500] Modules linked in: uas configfs dwc2_pci(-) phy_generic fuse crc32c_intel [last unloaded: udc_core]
+> [   84.949508] CR2: 00000007935688d8
+> [   84.949510] ---[ end trace e40c871ca3e4dc9e ]---
+> [   84.949512] RIP: 0010:usb_phy_uevent+0x99/0x121
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Fixes: a8534cb092d7 ("usb: phy: introduce usb_phy device type with its own uevent handler")
+> Signed-off-by: Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+
+Reviewed-by: Peter Chen <peter.chen@kernel.org>
+
+Peter
+
+> ---
+>  Changes in v2:
+>  - Updated commit message end description.
+>  - Updated implementation. Now instead of checking if "phy_list" is empty, 
+>    checking if we can get the usb_phy before moving forward with the uevent.
+> 
+>  drivers/usb/phy/phy.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+> index 83ed5089475a..1b24492bb4e5 100644
+> --- a/drivers/usb/phy/phy.c
+> +++ b/drivers/usb/phy/phy.c
+> @@ -86,10 +86,10 @@ static struct usb_phy *__device_to_usb_phy(struct device *dev)
+>  
+>  	list_for_each_entry(usb_phy, &phy_list, head) {
+>  		if (usb_phy->dev == dev)
+> -			break;
+> +			return usb_phy;
+>  	}
+>  
+> -	return usb_phy;
+> +	return NULL;
+>  }
+>  
+>  static void usb_phy_set_default_current(struct usb_phy *usb_phy)
+> @@ -150,8 +150,14 @@ static int usb_phy_uevent(struct device *dev, struct kobj_uevent_env *env)
+>  	struct usb_phy *usb_phy;
+>  	char uchger_state[50] = { 0 };
+>  	char uchger_type[50] = { 0 };
+> +	unsigned long flags;
+>  
+> +	spin_lock_irqsave(&phy_lock, flags);
+>  	usb_phy = __device_to_usb_phy(dev);
+> +	spin_unlock_irqrestore(&phy_lock, flags);
+> +
+> +	if (!usb_phy)
+> +		return -ENODEV;
+>  
+>  	snprintf(uchger_state, ARRAY_SIZE(uchger_state),
+>  		 "USB_CHARGER_STATE=%s", usb_chger_state[usb_phy->chg_state]);
+> 
+> base-commit: 77d34a4683b053108ecd466cc7c4193b45805528
+> -- 
+> 2.25.1
 > 
 
-I tried to add the unevaluatedProperties + a random unrelated property
-to the example usb-vbus node and dt_binding_check is happy with that. So
-the unevaluatedProperties has no effect, is it supposed to be so?
+-- 
+
+Thanks,
+Peter Chen
+
