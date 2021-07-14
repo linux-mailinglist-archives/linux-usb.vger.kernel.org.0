@@ -2,151 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E45E63C7B99
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 04:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DF163C7BCB
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 04:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237436AbhGNCUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jul 2021 22:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S237628AbhGNCaf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jul 2021 22:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbhGNCUS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 22:20:18 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBF5C0613DD
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 19:17:27 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id a16so614665ybt.8
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 19:17:27 -0700 (PDT)
+        with ESMTP id S237621AbhGNCaf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 22:30:35 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C28D9C0613EE
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 19:27:43 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id h9so617587oih.4
+        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 19:27:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FtGRkP2Wmindi+aA2Tem/8osxLapjS6fE2xSA3aZ7y8=;
-        b=cLAg/lXumymtrJ5mdGcbDDJ1M05ObnQfXyP+Er7BnvhL0VYCZdGzdbKgILX3lHn8U1
-         l8L/YWUoIuvJUbg5bkxSBVIWsjXYIWuEjSWXfZnPzLNtAYW7CWLFvEEdrZJNucWk9zhI
-         xArbdcMEwxsA3kY64IsnscK41PTe0V92eqln/GSWtYPsa+s162vFtOoZs4Pi63l0r/nR
-         E3S3KUNMA2PKq0m7NCLGZctBR8rYLml7JkZuDWgx+rQO+XeNi+SAOXea+wDXoXsG1Y58
-         CqupP9lFSSQ+6gZRLKdGWkXDohOIrx/IyVoUFZ6AfE+SmVLTk3gj3S35R3fcIm/lntKi
-         sgqg==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=FKr65vfR2TdVe8GBpKpEMCo3zswr0/dtqzTR9ciGq6A=;
+        b=uoBMWDRKB2h5zkZgtNGjB5PUPYoGSOLtb3zF4sUvR2vepVPa1PFSMQpuOZMtsNSMF5
+         Hzt5PAC4Ae4rtH3smb6oPZAjFy7mh1HuAQ8xAB79NBCW54xVS0DQMIV0mPtbvwlqJXGj
+         ztHfmUKpK4Pr+PryEJH3QJWnCmFdsZUoM3TbuD+XrmZmzNG7Ryz6nkKixeQYSallRYsn
+         BmV7MG1ULrw8rNkFguVubx17Sf4FNw0XqVwmqVFmClOc6/Lm2Js6fgMMXmLT9GXkXKHl
+         3cbmOrvpLvXMDQVEDlISNIlIaLHB5Fj4qBjWSOKwBJKvXjLuE8R3MsUzp5hS3MQNzsVF
+         R1bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FtGRkP2Wmindi+aA2Tem/8osxLapjS6fE2xSA3aZ7y8=;
-        b=Rp0F+k4NdPw6OET+NfP4Al9SYlNSLcDZSrHK0wuWbSQ7EUm3DwzXUi1L/wLm5pefJX
-         fnj6Pk+bAKkzoTh4jBlZFQ+m5Y3YkIV5duG06BYM1qrfO2ns5sZg2KK4+lugDO/nlRvz
-         AATDXvYQTmPTpur1u8pnSR/+Md6+iCvxkPKwbkx5C8CPYqqeaDf0NoLC84Pg6FiS7c/y
-         Qkviz7N7Mi+1XuOM3BjFM3dpzkARZ4MbbtIVslRq+dgraRZBlvW0Ypxoq5K+K9satI+6
-         X5F28SVT8G1ideODWWxRXbHnMtwcjeyaPzkN6vXYkgxluSvkWKJF0vH5IEpf8ytLI5YM
-         FJrA==
-X-Gm-Message-State: AOAM5335i+pEIl0w+NQ0/UuIg9hk8IEAwDPcfa81vFx7XTeejj9XfyWP
-        /KaiBzFBFZrAHOrGhg3hxMfwht/q2eL42cL1bCuajScFsDfRWg==
-X-Google-Smtp-Source: ABdhPJzNEdZvqCNOB1vNLQXpTFAjWdjdhGs2uRmDL/1gW2BIzZ/77PKOXtx/iAi6mH63IzqMuuLLv+qS31H88Yup0Fg=
-X-Received: by 2002:a25:8b91:: with SMTP id j17mr9948186ybl.228.1626229046590;
- Tue, 13 Jul 2021 19:17:26 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=FKr65vfR2TdVe8GBpKpEMCo3zswr0/dtqzTR9ciGq6A=;
+        b=FWQ3HtaJlc7a/jxNse5yM4k+X446DpbivS/OPUD0DXZs28f6GitgebW2ax2wcVZNFg
+         A6Kf9wjWpos+wxCP93zFhDarIXCGT/tNb5dUZ3WtuBPhwH7CfUEi7qvFiz10B2pLM8PF
+         Ofk7Xdia1z7b041v7upR09xpj2YM0bMl8l4ZmSCyWCozZHMjhwndzdN4SqkTBhCTQ6Jt
+         xgehkYMZiQF2v01QukdOCWa6GTWyr8Y07q2Rja7hUNqT1aQJYRIFMsHOs4AeMrvWlEix
+         JNEfJ2e+pK2fXBtNBPluhstttIXJJjVipxn0UWLzNA5m7UvJq+LBvYO3pWeBfnCAxLUX
+         oZ3A==
+X-Gm-Message-State: AOAM530vzzyqESdDGUrlpGHfKmRgEYFZt1rXjHuspd2ManXohHp/IGT1
+        om3wUYZIrumnG35i3tYxG3MNOg==
+X-Google-Smtp-Source: ABdhPJz/ytXCZ8BRBiVtna/vi/6ubcxZ+G6RnZaRINMM7ogFKSWmRMxswDIcrHAlc372iWrarNnkiQ==
+X-Received: by 2002:aca:3d8a:: with SMTP id k132mr1058697oia.120.1626229663063;
+        Tue, 13 Jul 2021 19:27:43 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id v7sm172544ooj.46.2021.07.13.19.27.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jul 2021 19:27:42 -0700 (PDT)
+Date:   Tue, 13 Jul 2021 21:27:39 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     John Stultz <john.stultz@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <YO5Lm0zMEEP5uSSl@yoga>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
+ <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210713073946.102501-1-martin.kepplinger@puri.sm> <YO1VowaJ1Impm1U7@kuha.fi.intel.com>
-In-Reply-To: <YO1VowaJ1Impm1U7@kuha.fi.intel.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 13 Jul 2021 19:16:46 -0700
-Message-ID: <CAGETcx83TDPLwnm+63Wk_bo-mZfkA+XnBZC2GU=WQT60EgnozQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tipd: Don't block probing of consumer of
- "connector" nodes
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Martin Kepplinger <martin.kepplinger@puri.sm>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        gregkh@linuxfoundation.org, grandmaster@al2klimov.de,
-        kernel@puri.sm, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 13, 2021 at 1:58 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> +Rafael, Saravana
->
-> On Tue, Jul 13, 2021 at 09:39:46AM +0200, Martin Kepplinger wrote:
-> > Similar as with tcpm this patch lets fw_devlink know not to wait on the
-> > fwnode to be populated as a struct device.
+On Tue 13 Jul 19:07 CDT 2021, John Stultz wrote:
+
+> On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
 > >
-> > Without this patch, USB functionality can be broken on some previously
-> > supported boards.
+> > In accordance with the DWC USB3 bindings the corresponding node
+> > name is suppose to comply with the Generic USB HCD DT schema, which
+> > requires the USB nodes to have the name acceptable by the regexp:
+> > "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> > named.
 > >
-> > Fixes: 28ec344bb891 ("usb: typec: tcpm: Don't block probing of consumers of "connector" nodes")
->
-> That patch has gone under my radar.
->
-> > Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > ---
-> > hi,
-> >
-> > at least the boards based on imx8mq-librem5.dtsi suffer from this, possibly
-> > more.
-> >
-> > thanks,
-> >                            martin
-> >
-> >
-> >  drivers/usb/typec/tipd/core.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> > index 938219bc1b4b..b31aaf57eb3b 100644
-> > --- a/drivers/usb/typec/tipd/core.c
-> > +++ b/drivers/usb/typec/tipd/core.c
-> > @@ -629,6 +629,8 @@ static int tps6598x_probe(struct i2c_client *client)
-> >       if (!fwnode)
-> >               return -ENODEV;
-> >
-> > +     fw_devlink_purge_absent_suppliers(fwnode);
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
+> 
 
-Martin,
+Sorry, I totally forgot that the name of that node is part of the USB
+gadget configfs interface.
 
-Please include the comment from 28ec344bb891 that explains why the
-function is called.
+> In the exact same way an earlier patch broke HiKey960:
+>   https://lore.kernel.org/lkml/CALAqxLWGujgR7p8Vb5S_RimRVYxwm5XF-c4NkKgMH-43wEBaWg@mail.gmail.com/
+> 
+> (which I still have to carry a revert for).
+> 
+> I get that this change is useful so more dynamic userland can find
+> devices using consistent naming with future kernels (but doesn't the
+> dynamic userland have to handle the case for older kernels as well?)
+> But for userland that uses static configs, its painful as updating
+> userland to use the new node ids then causes older kernels to fail.
+> 
 
->
-> Why do we have to care about this kind of stuff in the drivers? It
-> sounds like something that only affects DT platforms, so why isn't
-> this being fixed in the DT core code?
->
-> I didn't have time to study this fw_deflink thing yet,
+It won't help you, but having a mechanism to provide user friendly names
+would certainly be welcome. I always struggle with the question of what
+"6a00000.dwc3" (now .usb) actually is...
 
-To give some context, fw_devlink (it's NOT limited to DT, but
-currently only implemented for DT) parses the firmware and infers the
-inter-device dependencies. And it creates device links between
-supplier and consumer devices and that has a lot of benefits: No
-initcall chicken between drivers, no/lot less deferred probing,
-allowing more drivers to be modules, support for sync_state() ops in
-drivers, allowing massively asynchronous probing, etc.
+> I'm looking into how we might be able to probe and set the property
+> dynamically, but AOSP's init system is far more aligned to static
+> configs.
+> 
+> This will probably be ignored again, but it would be nice if we could
+> have a release where DTS changes don't break userland for one of my
+> boards. As it feels like its been awhile.
+> 
 
-There's a lot of nuance and corner cases on how the dependencies are
-inferred (without any help from drivers), but simplifying the
-explanation to talk about the stuff relevant to this patch: fw_devlink
-expects all nodes with "compatible" property to be probed by a driver.
-That's what the "compatible" property is used by Linux for.
+I don't have any preference to this being names "dwc3" or "usb" and we
+could back out the change in time for v5.14. But you will still have the
+problem for Hikey iiuc and the dts would then violate the binding - so
+we need to fix that, and all the other Qualcomm boards defined by the
+same binding.
 
-In this specific case, instead of probing the "connector" with a
-driver, the USB framework/this driver directly parses the node based
-on the name (why even have the "compatible" property then?) and uses
-the info from the node and never probes this DT node. Since this
-driver/DT node doesn't follow the norms, this specific driver needs to
-inform fw_devlink that this is the case (that it's not going to probe
-this DT node). That's what this one line call is doing.
-
-> it is
-> completely new to me and unfortunately I'm going on vacation now, but
-> it looks like something that has been added to the driver core in a
-> haste without enough thinking, and which is now causing problems. Not
-> cool.
-
-I'm sorry that you didn't get a chance to look into fw_devlink before,
-but it certainly wasn't done in haste :) It took close to 2 years to
-get this in and I talked about this in at least 2 of the LPCs. It also
-had a trial run to catch issues from 5.12-rc1 (or something early like
-that) till 5.12-rc7 and then reverted before 5.12 release. And then
-finally enabled again in 5.13-rc1 and merged in 5.13.
-
--Saravana
+Regards,
+Bjorn
