@@ -2,55 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FDD3C9139
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 22:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28C143C9264
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 22:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241248AbhGNT7N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 15:59:13 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:49837 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S242496AbhGNTz2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 15:55:28 -0400
-Received: (qmail 391781 invoked by uid 1000); 14 Jul 2021 15:52:35 -0400
-Date:   Wed, 14 Jul 2021 15:52:35 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Hylke Hellinga <hylke.hellinga@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: ASMedia Technology Inc. ASM1143 USB 3.1 Host Controller causing
- random full speed USB resets
-Message-ID: <20210714195235.GG380727@rowland.harvard.edu>
-References: <20210713184251.GC355405@rowland.harvard.edu>
- <CABUoX8sNbLuG0FB2_VtH14KhuBoRFB19a2V3cpgzdNDqiVUULA@mail.gmail.com>
- <CABUoX8sT_=8aUdzhphwJXnRN2m_cKuJrDi1MtOrkaCTThT0wmA@mail.gmail.com>
- <CABUoX8tX6+JpPRz7oyJV2fsiEbWxE+aZEYoBdjqWvLKL-4Odow@mail.gmail.com>
- <20210714145423.GB380727@rowland.harvard.edu>
- <CABUoX8uUhW4bdUZ6Roo=jEn=3UwUq2QVAMPcnyg8rbLzua09=w@mail.gmail.com>
- <20210714180512.GF380727@rowland.harvard.edu>
- <CABUoX8vWDRtr4hiVOEkT48=doG8xbAVD65Hve0QByLJpV0JsqQ@mail.gmail.com>
- <CABUoX8uiYvDTcc8JvRk=T2n9Dr8ero+9dM1U7kh86_0f_U6rSw@mail.gmail.com>
- <CABUoX8sMSjHuq9awkJO8PcH07LQK9pEMRjxeuB2WghrMRUTuew@mail.gmail.com>
+        id S233366AbhGNUuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 16:50:03 -0400
+Received: from mail-il1-f175.google.com ([209.85.166.175]:47083 "EHLO
+        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231852AbhGNUuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 16:50:03 -0400
+Received: by mail-il1-f175.google.com with SMTP id y6so2905518ilj.13;
+        Wed, 14 Jul 2021 13:47:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kco+/XxZYLDb1ihGt1/0DCCP9J4L9oldTTVHBfVd0KI=;
+        b=QYhStsBpHNji4LowowaHof8agdkhv6i698pCTQiit5IjIx1S4PE7LfqKLRGi6ubne4
+         gabHftNVxMa3F12uzZr8DagWmwp0soCB/Y31cybpaZRVR6Ya7/P+rAmRZB+9QkbEwos2
+         nuajlRNay0aEaaXBtl6obSU3FeERGZiF1XcgTSKpHtjCzNgaC/swW+Q8rjSz0Dps12+Y
+         r9hiXxra4EqIlXB+e5JCsv8grMSRqPR+5dBq9l2vw+BBAxfn464aec1vcGxXTjwVxQ2q
+         AxPkL2/SAyo2MZn9KrIMeLz2GOK9NFyqPEsBIpUhuim6GgsqrJduotk2l42BHydFPKhT
+         /XLg==
+X-Gm-Message-State: AOAM531Yo7Hpm+Gxvq9mcpHjTs2B4DQPpj2VmTDLY4hw7/FbdFkVaCjl
+        U0COuNXclpc0dLytGMQXTA==
+X-Google-Smtp-Source: ABdhPJy9xASZGcOP/LI92DJsMDZVCmDOQGStFYEqHGuGiLCYT69R7undrrRAibu1aU/kGujw2Kr5mw==
+X-Received: by 2002:a92:c888:: with SMTP id w8mr7701379ilo.140.1626295629874;
+        Wed, 14 Jul 2021 13:47:09 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id w8sm1701212ill.50.2021.07.14.13.47.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jul 2021 13:47:09 -0700 (PDT)
+Received: (nullmailer pid 3492671 invoked by uid 1000);
+        Wed, 14 Jul 2021 20:47:07 -0000
+Date:   Wed, 14 Jul 2021 14:47:07 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Iskren Chernev <iskren.chernev@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manu Gautam <mgautam@codeaurora.org>,
+        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        linux-usb@vger.kernel.org, phone-devel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-phy@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: [PATCH v2 2/3] dt-bindings: phy: qcom,qusb2: document sm6115
+ compatible
+Message-ID: <20210714204707.GA3492616@robh.at.kernel.org>
+References: <20210627185750.693222-1-iskren.chernev@gmail.com>
+ <20210627185750.693222-3-iskren.chernev@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CABUoX8sMSjHuq9awkJO8PcH07LQK9pEMRjxeuB2WghrMRUTuew@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20210627185750.693222-3-iskren.chernev@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 14, 2021 at 07:02:04PM +0000, Hylke Hellinga wrote:
-> I think it definitely has to do with my linux distribution being messed up.
+On Sun, 27 Jun 2021 21:57:49 +0300, Iskren Chernev wrote:
+> This compatible string is for the HS USB PHY on sm4250/6115 platforms.
 > 
-> I just tried this on a ubuntu live cd with the same hardware, and I'm
-> not experiencing any issues.
-> I'll try to ask on the gentoo irc whether someone could help me figure
-> out what is causing it.
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-There could be different versions of the kernel on the SSD and the 
-LiveCD.
-
-> Sorry if I've wasted your time.
-
-No problem.
-
-Alan Stern
+Acked-by: Rob Herring <robh@kernel.org>
