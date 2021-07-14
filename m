@@ -2,77 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 654343C89A4
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 19:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DFC3C89F6
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 19:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbhGNRYB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 13:24:01 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57018 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229600AbhGNRX7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Jul 2021 13:23:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id BBD04613B5
-        for <linux-usb@vger.kernel.org>; Wed, 14 Jul 2021 17:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626283267;
-        bh=Z4l2rJrLgPm+HK5kob2Pt56T4pOr5E0JAYEM1DKvhSI=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=WBSzXqeDGbomsufotzMdv7MaGtpFzV9TXPxdLzno8vY8I5a1/PG+XPZSFTblnOi2U
-         eoICsQQRogKxApa9TO+L3iQxD4Osnu6Bwx03tQsR5mn24rUp6RndEHjc3vRSR4M4Iw
-         FhDSpZEfvDAGv/aGNkqWHUVAoEnVSTfYsNRaLDbcLQhbFrsujyUBMpRAzTqL96ORqH
-         QaRjxZtivtEKuvvg8gsK2n6MI411SwOC0/caXoiuKIK/+o1UX3gQzi8sRFXXZt2Rab
-         LSNNC4CoSVc4r7IZ/K4EIHl1+1GQWmsqNQ3EudfMGqbq7wnjHnz/LnLJbW3XNxYGEE
-         wsBC5vfLECKYA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id A9E9161287; Wed, 14 Jul 2021 17:21:07 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 211097] Resume from suspend sometimes makes some programs
- freeze for 30s
-Date:   Wed, 14 Jul 2021 17:21:07 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: yesmichel@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: OBSOLETE
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-211097-208809-xyJ5cHVnFD@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-211097-208809@https.bugzilla.kernel.org/>
-References: <bug-211097-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S239864AbhGNRp4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 13:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239860AbhGNRp4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 13:45:56 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929E8C061760
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jul 2021 10:43:03 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id r135so4591105ybc.0
+        for <linux-usb@vger.kernel.org>; Wed, 14 Jul 2021 10:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DJe/kKhBsVmdZ3tnIgCvmQhcMHHB8aDgbnkg5/uDir8=;
+        b=lwtqIMCjrrHmpR3jF7vPPuvT8Cd2dBjVFhiMrToo2WR/MrxPiMyGwA3L0SDe1Lj7MG
+         z2vo9shdL6aN1GPY08Y9fX0jaYatGRoZ4F1RTJnZY7D3U6jjZRqeEF1OAyaH7eIIZ5oG
+         jw/+7pCASD+mHFzCGUyt5h46sGXAwC9dOCxqEnCo12ClKRPX0yT2HVey8o/xDUzwOXU2
+         Uo3xKcHjhIKgqAxoQbQEi3cJBlHckhqo5RqQhPSLbtLb0Sto4bNzmznHTLlm9XhaWFRY
+         MOpG/fvNZZIzHX+DTVvf6NgWcUA0N2g5i2YEEsVzk88sElEVF1nLrX60InqjYJSub7Ub
+         RGrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DJe/kKhBsVmdZ3tnIgCvmQhcMHHB8aDgbnkg5/uDir8=;
+        b=nAv9yimV5hRZUsawLYqtvlFyTaJUbmBJeaF99F8NE28D4pVRSH71ULTp7cYrr545UG
+         Ra3watfEEfQHt8ZG1KAyxCNmRCo62ixcFNg8/BHoePoT2iZJjNi4PlyNt1xXVN6k+Uei
+         b7efBDY6ZYelhC/avTAvPNWSAKCthWwc/JtOJPr09NPG7qTY6VaGSZ6i6rZ2AmXapaHX
+         Z2BeVCb+JL4ScNcTkyCmFponFkgADJGXL+y4mq4BIad+VTPIOgy6iCu+sG+ck11z5Ybb
+         ZoO3tVDGYPHdbgJFYzAI2DiuZvfzEaKNy35j8fI644tW9J8xYiX45nLsXzNLgFwHeNgn
+         Ae2w==
+X-Gm-Message-State: AOAM531narTlbX/bxK9BRib70NIMs2neBbFZoRJGngMhmmUAXoMoVsYd
+        MO/5LBhOn8szT2whGd7oWay45m4lKJeu7g5XlDo=
+X-Google-Smtp-Source: ABdhPJxwiWJzXxJ3rb+1XLGo1v5b/62umFt6hEprlJCZAiW1L17uFPPAZf7Kdg7lfhU07w9QHm2l8vm8DW1G5vQTay8=
+X-Received: by 2002:a25:7316:: with SMTP id o22mr14776390ybc.349.1626284582871;
+ Wed, 14 Jul 2021 10:43:02 -0700 (PDT)
 MIME-Version: 1.0
+References: CABUoX8uUhW4bdUZ6Roo=jEn=3UwUq2QVAMPcnyg8rbLzua09=w@mail.gmail.com <20210714174004.3CC94C06175F@lindbergh.monkeyblade.net>
+In-Reply-To: <20210714174004.3CC94C06175F@lindbergh.monkeyblade.net>
+From:   Hylke Hellinga <hylke.hellinga@gmail.com>
+Date:   Wed, 14 Jul 2021 19:42:52 +0200
+Message-ID: <CABUoX8vULggf8kRMMwo9+gSCEy27nJ6ZdNj_HQb0Z4CtfQ3sWw@mail.gmail.com>
+Subject: Re: Undelivered Mail Returned to Sender
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D211097
+Yes, I did.
 
-Anthony Vital (yesmichel@gmail.com) changed:
+I've connected both the mouse, keyboard and headset to the pc and it
+would function normally. I know it has to do with the switch itself.
+But I have no idea how to fix it.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |OBSOLETE
+The switch works fine under windows and macos, and it is even
+advertised to work under linux. But you never know with amazon
+products whether that is actually the case.
 
---- Comment #2 from Anthony Vital (yesmichel@gmail.com) ---
-I haven't been able to reproduce this for a few weeks, I assume this has be=
-en
-fixed in one of the recent releases. Closing.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+I don't have a different usb switch I can test. I've tried different
+input usb cables as well. The usb cable coming from the switch going
+into my computer is pretty long.
