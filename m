@@ -2,222 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBF23C849D
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 14:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7C0A3C84D3
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 14:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239271AbhGNMrN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 08:47:13 -0400
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:15325 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231260AbhGNMrM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 08:47:12 -0400
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 59B93240005;
-        Wed, 14 Jul 2021 12:44:17 +0000 (UTC)
-Date:   Wed, 14 Jul 2021 14:44:17 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephen Boyd <sboyd@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
+        id S231535AbhGNM6B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 08:58:01 -0400
+Received: from mail.baikalelectronics.com ([87.245.175.226]:47070 "EHLO
+        mail.baikalelectronics.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231384AbhGNM6B (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 08:58:01 -0400
+X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Wed, 14 Jul 2021 08:58:00 EDT
+Date:   Wed, 14 Jul 2021 15:48:07 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     John Stultz <john.stultz@linaro.org>
+CC:     Serge Semin <fancer.lancer@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>,
-        Brian Norris <computersforpeace@gmail.com>,
-        Kamal Dasu <kdasu.kdev@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-clk@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-mtd@lists.infradead.org, linux-rtc@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: More dropping redundant minItems/maxItems
-Message-ID: <YO7cIQLn3i4+zOK/@piout.net>
-References: <20210713193453.690290-1-robh@kernel.org>
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <20210714124807.o22mottsrg3tv6nt@mobilestation>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
+ <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20210713193453.690290-1-robh@kernel.org>
+In-Reply-To: <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 13/07/2021 13:34:53-0600, Rob Herring wrote:
-> Another round of removing redundant minItems/maxItems from new schema in
-> the recent merge window.
-> 
-> If a property has an 'items' list, then a 'minItems' or 'maxItems' with the
-> same size as the list is redundant and can be dropped. Note that is DT
-> schema specific behavior and not standard json-schema behavior. The tooling
-> will fixup the final schema adding any unspecified minItems/maxItems.
-> 
-> This condition is partially checked with the meta-schema already, but
-> only if both 'minItems' and 'maxItems' are equal to the 'items' length.
-> An improved meta-schema is pending.
-> 
-> Cc: Stephen Boyd <sboyd@kernel.org>
-> Cc: Joerg Roedel <joro@8bytes.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Sureshkumar Relli <naga.sureshkumar.relli@xilinx.com>
-> Cc: Brian Norris <computersforpeace@gmail.com>
-> Cc: Kamal Dasu <kdasu.kdev@gmail.com>
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Sebastian Siewior <bigeasy@linutronix.de>
-> Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> Cc: linux-clk@vger.kernel.org
-> Cc: iommu@lists.linux-foundation.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-rtc@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> Signed-off-by: Rob Herring <robh@kernel.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Hello John,
 
-> ---
->  .../devicetree/bindings/clock/brcm,iproc-clocks.yaml      | 1 -
->  .../devicetree/bindings/iommu/rockchip,iommu.yaml         | 2 --
->  .../bindings/memory-controllers/arm,pl353-smc.yaml        | 1 -
->  Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml  | 8 --------
->  .../devicetree/bindings/rtc/faraday,ftrtc010.yaml         | 1 -
->  Documentation/devicetree/bindings/usb/nxp,isp1760.yaml    | 2 --
->  6 files changed, 15 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
-> index 8dc7b404ee12..1174c9aa9934 100644
-> --- a/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
-> +++ b/Documentation/devicetree/bindings/clock/brcm,iproc-clocks.yaml
-> @@ -50,7 +50,6 @@ properties:
->  
->    reg:
->      minItems: 1
-> -    maxItems: 3
->      items:
->        - description: base register
->        - description: power register
-> diff --git a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
-> index d2e28a9e3545..ba9124f721f1 100644
-> --- a/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/rockchip,iommu.yaml
-> @@ -28,14 +28,12 @@ properties:
->        - description: configuration registers for MMU instance 0
->        - description: configuration registers for MMU instance 1
->      minItems: 1
-> -    maxItems: 2
->  
->    interrupts:
->      items:
->        - description: interruption for MMU instance 0
->        - description: interruption for MMU instance 1
->      minItems: 1
-> -    maxItems: 2
->  
->    clocks:
->      items:
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
-> index 7a63c85ef8c5..01c9acf9275d 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/arm,pl353-smc.yaml
-> @@ -57,7 +57,6 @@ properties:
->  
->    ranges:
->      minItems: 1
-> -    maxItems: 3
->      description: |
->        Memory bus areas for interacting with the devices. Reflects
->        the memory layout with four integer values following:
-> diff --git a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> index e5f1a33332a5..dd5a64969e37 100644
-> --- a/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/brcm,brcmnand.yaml
-> @@ -84,7 +84,6 @@ properties:
->  
->    interrupts:
->      minItems: 1
-> -    maxItems: 3
->      items:
->        - description: NAND CTLRDY interrupt
->        - description: FLASH_DMA_DONE if flash DMA is available
-> @@ -92,7 +91,6 @@ properties:
->  
->    interrupt-names:
->      minItems: 1
-> -    maxItems: 3
->      items:
->        - const: nand_ctlrdy
->        - const: flash_dma_done
-> @@ -148,8 +146,6 @@ allOf:
->      then:
->        properties:
->          reg-names:
-> -          minItems: 2
-> -          maxItems: 2
->            items:
->              - const: nand
->              - const: nand-int-base
-> @@ -161,8 +157,6 @@ allOf:
->      then:
->        properties:
->          reg-names:
-> -          minItems: 3
-> -          maxItems: 3
->            items:
->              - const: nand
->              - const: nand-int-base
-> @@ -175,8 +169,6 @@ allOf:
->      then:
->        properties:
->          reg-names:
-> -          minItems: 3
-> -          maxItems: 3
->            items:
->              - const: nand
->              - const: iproc-idm
-> diff --git a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
-> index 657c13b62b67..056d42daae06 100644
-> --- a/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/faraday,ftrtc010.yaml
-> @@ -30,7 +30,6 @@ properties:
->      maxItems: 1
->  
->    clocks:
-> -    minItems: 2
->      items:
->        - description: PCLK clocks
->        - description: EXTCLK clocks. Faraday calls it CLK1HZ and says the clock
-> diff --git a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> index a88f99adfe8e..f238848ad094 100644
-> --- a/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> +++ b/Documentation/devicetree/bindings/usb/nxp,isp1760.yaml
-> @@ -25,14 +25,12 @@ properties:
->  
->    interrupts:
->      minItems: 1
-> -    maxItems: 2
->      items:
->        - description: Host controller interrupt
->        - description: Device controller interrupt in isp1761
->  
->    interrupt-names:
->      minItems: 1
-> -    maxItems: 2
->      items:
->        - const: host
->        - const: peripheral
-> -- 
-> 2.27.0
+On Tue, Jul 13, 2021 at 05:07:00PM -0700, John Stultz wrote:
+> On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
+> <Sergey.Semin@baikalelectronics.ru> wrote:
+> >
+> > In accordance with the DWC USB3 bindings the corresponding node
+> > name is suppose to comply with the Generic USB HCD DT schema, which
+> > requires the USB nodes to have the name acceptable by the regexp:
+> > "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> > named.
+> >
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
+
+Sorry to hear that. Alas there is no much can be done about it.
+DT-nodes name is a subject of DT-schema convention and as we've finally
+unified USB-controller nodes it shouldn't be reverted back. You can
+find the final USB-controller bindings in:
+Documentation/devicetree/bindings/usb/usb.yaml
+It strictly defines to have USB-nodes with names like "usb(@.*)".
+Reverting this patch will cause the DT-bindings check procedure
+failure. You can also find the naming convention defined in the
+latest DT spec:
+https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
+
+See also device-tree bindings requirements listed in the file:
+Documentation/devicetree/bindings/writing-bindings.rst
+It says: "DO use node names matching the class of the device. Many
+standard names are defined in the DT Spec. If there isn't one,
+consider adding it."
+
+> 
+> In the exact same way an earlier patch broke HiKey960:
+>   https://lore.kernel.org/lkml/CALAqxLWGujgR7p8Vb5S_RimRVYxwm5XF-c4NkKgMH-43wEBaWg@mail.gmail.com/
+> 
+> (which I still have to carry a revert for).
+> 
+> I get that this change is useful so more dynamic userland can find
+> devices using consistent naming with future kernels (but doesn't the
+> dynamic userland have to handle the case for older kernels as well?)
+> But for userland that uses static configs, its painful as updating
+> userland to use the new node ids then causes older kernels to fail.
+> 
+> I'm looking into how we might be able to probe and set the property
+> dynamically, but AOSP's init system is far more aligned to static
+> configs.
+> 
+
+As Krzysztof said in
+https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
+and Bjorn noted in his response to your email, the only way to solve
+the problem is to fix the user-land app so one would be able to deal
+with both old and new DT-nodes name. Alternatively you can just
+replace the dts with older one, where the name still have
+the "dwc3"-prefix.
+
+-Sergey
+
+> This will probably be ignored again, but it would be nice if we could
+> have a release where DTS changes don't break userland for one of my
+> boards. As it feels like its been awhile.
+> 
+> thanks
+> -john
