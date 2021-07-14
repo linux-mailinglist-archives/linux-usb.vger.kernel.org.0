@@ -2,74 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28C143C9264
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 22:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C5223C92E9
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 23:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbhGNUuD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 16:50:03 -0400
-Received: from mail-il1-f175.google.com ([209.85.166.175]:47083 "EHLO
-        mail-il1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbhGNUuD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 16:50:03 -0400
-Received: by mail-il1-f175.google.com with SMTP id y6so2905518ilj.13;
-        Wed, 14 Jul 2021 13:47:10 -0700 (PDT)
+        id S230308AbhGNVTK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 17:19:10 -0400
+Received: from mail-io1-f51.google.com ([209.85.166.51]:38499 "EHLO
+        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233918AbhGNVTG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 17:19:06 -0400
+Received: by mail-io1-f51.google.com with SMTP id k11so3884179ioa.5;
+        Wed, 14 Jul 2021 14:16:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=kco+/XxZYLDb1ihGt1/0DCCP9J4L9oldTTVHBfVd0KI=;
-        b=QYhStsBpHNji4LowowaHof8agdkhv6i698pCTQiit5IjIx1S4PE7LfqKLRGi6ubne4
-         gabHftNVxMa3F12uzZr8DagWmwp0soCB/Y31cybpaZRVR6Ya7/P+rAmRZB+9QkbEwos2
-         nuajlRNay0aEaaXBtl6obSU3FeERGZiF1XcgTSKpHtjCzNgaC/swW+Q8rjSz0Dps12+Y
-         r9hiXxra4EqIlXB+e5JCsv8grMSRqPR+5dBq9l2vw+BBAxfn464aec1vcGxXTjwVxQ2q
-         AxPkL2/SAyo2MZn9KrIMeLz2GOK9NFyqPEsBIpUhuim6GgsqrJduotk2l42BHydFPKhT
-         /XLg==
-X-Gm-Message-State: AOAM531Yo7Hpm+Gxvq9mcpHjTs2B4DQPpj2VmTDLY4hw7/FbdFkVaCjl
-        U0COuNXclpc0dLytGMQXTA==
-X-Google-Smtp-Source: ABdhPJy9xASZGcOP/LI92DJsMDZVCmDOQGStFYEqHGuGiLCYT69R7undrrRAibu1aU/kGujw2Kr5mw==
-X-Received: by 2002:a92:c888:: with SMTP id w8mr7701379ilo.140.1626295629874;
-        Wed, 14 Jul 2021 13:47:09 -0700 (PDT)
+        bh=K26yCSETh54rX7kd1+zlaFH8P9Xcv8M8/5lFHARyPJU=;
+        b=FB6Q37UoPcIaRfx5is2cda4TLgvfMedfqVwwFThX/DiQmTMQpBxQoOcc/xK+FrFPWz
+         5TLJhoNUH7pS48wIp+NZrlYnAFbonD0RG8K4rA8FC0TB5vsxU6f4a4hQe8EddiYt4bvX
+         2OEVSyVYt5ZvdflojISKwUEaSdT/R/7a5pKOu9A/8bmNYKo8ek3X6PYyoPkbRLS9C+eY
+         rcNXYSouEw/yqICxktxdF6bSW2sOgD6mMqHN2PCziaW8cbgXfAovtVLZV06h7Xxxza74
+         HdE90ZS3bd+t9TGQe368kCkJty1rHuLlSO9I1qngZ9bBYGnSilDmAYF7aOdu7+yIqsiQ
+         qKTQ==
+X-Gm-Message-State: AOAM530EdYn1RznBI3dGR5TtgN7lZBXjy79uPnLwgvdHE6xDik5GAEfS
+        Qe5+eFAJjtLR2Gn42wwvFy0cAFOz7gUU
+X-Google-Smtp-Source: ABdhPJzr+4CnkSMjmC+hlHuq2CHCzQcEAs5aOhSbBF1JrGtk/gwoZ9si+/GYAhI6AfgUK/MrHbrpAw==
+X-Received: by 2002:a6b:4412:: with SMTP id r18mr98061ioa.120.1626297374033;
+        Wed, 14 Jul 2021 14:16:14 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id w8sm1701212ill.50.2021.07.14.13.47.08
+        by smtp.gmail.com with ESMTPSA id z18sm1825748ilp.68.2021.07.14.14.16.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 13:47:09 -0700 (PDT)
-Received: (nullmailer pid 3492671 invoked by uid 1000);
-        Wed, 14 Jul 2021 20:47:07 -0000
-Date:   Wed, 14 Jul 2021 14:47:07 -0600
+        Wed, 14 Jul 2021 14:16:12 -0700 (PDT)
+Received: (nullmailer pid 3538862 invoked by uid 1000);
+        Wed, 14 Jul 2021 21:16:06 -0000
+Date:   Wed, 14 Jul 2021 15:16:06 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Iskren Chernev <iskren.chernev@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manu Gautam <mgautam@codeaurora.org>,
-        devicetree@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-        linux-usb@vger.kernel.org, phone-devel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-phy@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: phy: qcom,qusb2: document sm6115
- compatible
-Message-ID: <20210714204707.GA3492616@robh.at.kernel.org>
-References: <20210627185750.693222-1-iskren.chernev@gmail.com>
- <20210627185750.693222-3-iskren.chernev@gmail.com>
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: Re: [PATCH v3 01/11] dt-bindings: usb: generic-ohci: Document
+ dr_mode property
+Message-ID: <20210714211606.GA3538828@robh.at.kernel.org>
+References: <20210630073013.22415-1-biju.das.jz@bp.renesas.com>
+ <20210630073013.22415-2-biju.das.jz@bp.renesas.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210627185750.693222-3-iskren.chernev@gmail.com>
+In-Reply-To: <20210630073013.22415-2-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, 27 Jun 2021 21:57:49 +0300, Iskren Chernev wrote:
-> This compatible string is for the HS USB PHY on sm4250/6115 platforms.
+On Wed, 30 Jun 2021 08:30:03 +0100, Biju Das wrote:
+> Document the optional property dr_mode present on both RZ/G2 and
+> R-Car Gen3 SoCs.
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> It fixes the dtbs_check warning,
+> 'dr_mode' does not match any of the regexes: 'pinctrl-[0-9]+'
+> 
+> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
->  Documentation/devicetree/bindings/phy/qcom,qusb2-phy.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> v2->v3:
+>   * Dropped RZ/G2L SoC and USBPHY control IP is modelled as reset binding.
+> v2:
+>   * New patch
+> ---
+>  Documentation/devicetree/bindings/usb/generic-ohci.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
 
 Acked-by: Rob Herring <robh@kernel.org>
