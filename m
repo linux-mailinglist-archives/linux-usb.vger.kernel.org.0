@@ -2,91 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD953C931E
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 23:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28503C9429
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 01:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235899AbhGNVai (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 17:30:38 -0400
-Received: from mail-io1-f51.google.com ([209.85.166.51]:38408 "EHLO
-        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbhGNVah (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 17:30:37 -0400
-Received: by mail-io1-f51.google.com with SMTP id k11so3921197ioa.5;
-        Wed, 14 Jul 2021 14:27:44 -0700 (PDT)
+        id S237320AbhGNXEh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 19:04:37 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:34506 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230388AbhGNXEg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 19:04:36 -0400
+Received: by mail-io1-f44.google.com with SMTP id g22so4202866iom.1;
+        Wed, 14 Jul 2021 16:01:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=J/ReVbiTk2Pp+7qp5lYTj2UHDsQO4CZkglKvjFpt50o=;
-        b=MNe+jSxqEZhywvMGAQqAmbTbZbMGB1fO2ppZZSnxrgPbOkxBq9mWxNlg2V7lujV0L2
-         ACdeDLQ4duopE/xmQDvFPzk4UC6aT/ZJ5sIF6Q2HlscsLlO+t2ZHMBAc9R3KwG20oyIo
-         WPd4B6KiwCVIh9jRcyHk2GGdCJyCdgkkQ8zKhLlzNzmOsqe26aEg7d42z0dbMF9t2ztq
-         H54KuxNhDG3ACYCCosAPCkEYUqJLHhvY848DV9UBJH80GBHUJ48UQl3UuGniu1pVZ5Eh
-         CEbV5loegs0ew99dlGU64puN5HlTnIW4CGRDDq5b+aqJdc2PWq+y3jAAzxUUbwl+/+uJ
-         3EdA==
-X-Gm-Message-State: AOAM530bUfK6GgRueKZI0PqJCuI2rdf2hEKxQapN6tmLP/zcE4Fmjaic
-        YC9+Y4Qta6LIzjRP8bxLPw==
-X-Google-Smtp-Source: ABdhPJzF+WXVwhM3PBPCWb1ruVeuC7MbiUffW4p41YL3Rst7bjcEaPbzrlpMxyeJh4/X3UxCDF8X2A==
-X-Received: by 2002:a05:6602:1492:: with SMTP id a18mr123594iow.200.1626298064635;
-        Wed, 14 Jul 2021 14:27:44 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iWYj7BYmLf4sE9pZYmPOjA7KWU/Cdxu9ZYSyNE9Xa2o=;
+        b=CQX9I86nolMTA+nUCqykOHWs1MpTYKS1kP4Xoh+GVhuif5TTLZ+rBapSAP5afKv9ga
+         yiO8k80LBmwnd+2t62Sgk8UjPfWkW5J7EmzfybmH2zaNoW0t2U9T81/BdrKwqzYFvn7h
+         SZzihneyU/I67HaOL1n5mql4FS2AVJByG9ixER06ynfQ6K66Ff2KKm+zP5dTcl67fnz1
+         MckFkKlFK6wxo58/k+WKGwNL9HRdjeJgfl4eOaZoqfNnLqHZ0C0DPLiaS6v/F9TrajgL
+         /WXVT6UDUqwQWdxh03CM5GLkK7gND5rC/Om+EjNjdlZxt6TPwnq4RpN5SqS7VYh7GDlu
+         RmIg==
+X-Gm-Message-State: AOAM5324E19B95MeIlgVa0Fc9b+dkLKKeQW5t5nZ9G0ZhLLl6hQdICEp
+        dafCAAIgjqrQCuxa2akB8g==
+X-Google-Smtp-Source: ABdhPJxRnII1A4P7617nk+P/dL3rkhW199nEWSWXEjBvCWsHF3w+QlDdvckSGvOuEEncV11dSrn9uQ==
+X-Received: by 2002:a6b:6016:: with SMTP id r22mr407400iog.12.1626303703032;
+        Wed, 14 Jul 2021 16:01:43 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m13sm1887107ila.80.2021.07.14.14.27.42
+        by smtp.gmail.com with ESMTPSA id l8sm2217302iok.26.2021.07.14.16.01.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 14:27:43 -0700 (PDT)
-Received: (nullmailer pid 3556885 invoked by uid 1000);
-        Wed, 14 Jul 2021 21:27:41 -0000
-Date:   Wed, 14 Jul 2021 15:27:41 -0600
+        Wed, 14 Jul 2021 16:01:42 -0700 (PDT)
+Received: (nullmailer pid 3701173 invoked by uid 1000);
+        Wed, 14 Jul 2021 23:01:40 -0000
+Date:   Wed, 14 Jul 2021 17:01:40 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-usb@vger.kernel.org, aford@beaconembedded.com,
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: usb: renesas,usbhs: Support external
- ref clock
-Message-ID: <20210714212741.GA3554282@robh.at.kernel.org>
-References: <20210630173042.186394-1-aford173@gmail.com>
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 06/12] dt-bindings: power: supply: smb347-charger:
+ Document USB VBUS regulator
+Message-ID: <20210714230140.GA3697673@robh.at.kernel.org>
+References: <20210704225433.32029-1-digetx@gmail.com>
+ <20210704225433.32029-7-digetx@gmail.com>
+ <20210712153905.GA1980362@robh.at.kernel.org>
+ <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20210630173042.186394-1-aford173@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jun 30, 2021 at 12:30:40PM -0500, Adam Ford wrote:
-> The usbhs driver expects a fixed external reference clock, but it
-> could be sourced from a programmable clock instead of a fixed clock.
-> Add support for an optional 4th reference clock.
+On Tue, Jul 13, 2021 at 03:22:40AM +0300, Dmitry Osipenko wrote:
+> 12.07.2021 18:39, Rob Herring пишет:
+> >> +  summit,inok-polarity:
+> >> +    description: |
+> >> +      Polarity of INOK signal indicating presence of external power supply.
+> >> +    $ref: /schemas/types.yaml#/definitions/uint32
+> >> +    enum:
+> >> +      - 0 # SMB3XX_SYSOK_INOK_ACTIVE_LOW
+> >> +      - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
+> >> +
+> >> +  usb-vbus:
+> >> +    $ref: "../../regulator/regulator.yaml#"
+> >> +    type: object
+> >        unevaluatedProperties: false
+> > 
+> > With that,
+> > 
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > 
 > 
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> index e67223d90bb7..2372d8c42979 100644
-> --- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> +++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
-> @@ -53,11 +53,12 @@ properties:
->  
->    clocks:
->      minItems: 1
-> -    maxItems: 3
-> +    maxItems: 4
+> I tried to add the unevaluatedProperties + a random unrelated property
+> to the example usb-vbus node and dt_binding_check is happy with that. So
+> the unevaluatedProperties has no effect, is it supposed to be so?
 
-You won't need this in v5.14-rc1. These are implied by 'items' length if 
-not specified.
+Yes, until support lands upstream[1].
 
->      items:
->        - description: USB 2.0 host
->        - description: USB 2.0 peripheral
->        - description: USB 2.0 clock selector
-> +      - description: Optional external reference clock
->  
->    interrupts:
->      maxItems: 1
-> -- 
-> 2.25.1
-> 
-> 
+Rob
+
+[1] https://github.com/Julian/jsonschema/pull/817
