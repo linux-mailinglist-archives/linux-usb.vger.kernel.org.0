@@ -2,129 +2,269 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8389A3C8A47
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 19:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5289C3C8A5A
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 20:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239880AbhGNR7T (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 13:59:19 -0400
-Received: from mail-io1-f51.google.com ([209.85.166.51]:36618 "EHLO
-        mail-io1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238430AbhGNR7G (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 13:59:06 -0400
-Received: by mail-io1-f51.google.com with SMTP id u7so3215635ion.3;
-        Wed, 14 Jul 2021 10:56:14 -0700 (PDT)
+        id S230264AbhGNSEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 14:04:31 -0400
+Received: from mail-io1-f41.google.com ([209.85.166.41]:34496 "EHLO
+        mail-io1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229736AbhGNSEb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 14:04:31 -0400
+Received: by mail-io1-f41.google.com with SMTP id g22so3241841iom.1;
+        Wed, 14 Jul 2021 11:01:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=gVIppKbtY1UeFXwm4fuwqTPS0ST95tmK6bcLy6aK7tc=;
-        b=U4OPMbZIC4wSxROeVrNxe2GZjYhxSbRuvQipF1bM0VNr1rSv/8rm9opcUF/pVouEYR
-         eEpUn7DiGlpRgF1AFAQaJLt4DhASB2f8GFZOwXHqNcrT2XDWmluAsMYFaI3olxOr3cgA
-         wU2PRtJm/F/Pdhb3b/NaegATPsnkuZoAFa9+cV7trtYujBW1ku375MI8QrPmlglISsLY
-         UpMRPr+kIs0pOXGTFWZkTfLOnpSvjaJE3FrViN4L0+9OlkhZCkpIl6SK+h9OjHm9wCDL
-         1Ao+t2PA6BvuMd4AbDlMCYNME4PJyJuadDH//Pevt/Hh02mRGuMeJzr51UCg2V2CDz5j
-         OC/w==
-X-Gm-Message-State: AOAM531gGu+sFiPGxgzUPK6XpX+s6Y6MxRMEHcq9uq9fkBKjfICllgVx
-        rkmVR4WgrFLPaaPCBfEGbQ==
-X-Google-Smtp-Source: ABdhPJzwXllhi0G5VgAO6nEgXE1sfmgSG7BO/Qi9HaGw9pr62KMjnCs9xsQxRUr4yiKMB1C1kW5JOg==
-X-Received: by 2002:a5d:960b:: with SMTP id w11mr8206829iol.138.1626285373949;
-        Wed, 14 Jul 2021 10:56:13 -0700 (PDT)
+        bh=na9wNolD/elx+L0Xys11BQ42knQcqp0Yf0/ie6kUcz0=;
+        b=SEozEvVRwh+eNPltnRaj8hqr1yB3A4tVspLzh6egQm6I6VdMqbAHkcTLsYKUhP1eIt
+         7tOT7a297kbF5XiJ48N9okuH4IIVIK8oJogB4hqwq0HZvK16YmzcaX4C04SP/fz1/VUv
+         FOtsIMjOcwN7haXFpLkDiQltBOUvBDp5HO09myFIDYXHdtxmkQiCMCWulYjNw1CEw7kQ
+         JSYg/5BPwBOHkNHkOf+onS2cyYWz1N4EtfqX1OGf//1nkIy909/XAr6znJzgGLXt9WJ7
+         hSZFX3uAAcqB8ZPc1In6s52qjpqRM5/pAXsbl9g1gZVX94Or/17Hs2TlhLH3GPUuHTnq
+         RThQ==
+X-Gm-Message-State: AOAM532Gb6XDeB8ggsCFuLwCOu5/Cbv5HCYsZOb9oBosNS3rlZPhSgZM
+        qGwzy0j4vHbhapTHyOCknA==
+X-Google-Smtp-Source: ABdhPJywQd7j6MLKchw6NwruX/x2oZvJnaGwnkg9sEn4xhhsOR87Y3iJP57IR5jWQbiabDP46eGYBA==
+X-Received: by 2002:a02:866b:: with SMTP id e98mr10138783jai.48.1626285698248;
+        Wed, 14 Jul 2021 11:01:38 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id j24sm1584965ioo.16.2021.07.14.10.56.11
+        by smtp.gmail.com with ESMTPSA id h10sm1643971ioe.43.2021.07.14.11.01.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jul 2021 10:56:12 -0700 (PDT)
-Received: (nullmailer pid 2840153 invoked by uid 1000);
-        Wed, 14 Jul 2021 17:56:10 -0000
-Date:   Wed, 14 Jul 2021 11:56:10 -0600
+        Wed, 14 Jul 2021 11:01:36 -0700 (PDT)
+Received: (nullmailer pid 2848211 invoked by uid 1000);
+        Wed, 14 Jul 2021 18:01:34 -0000
+Date:   Wed, 14 Jul 2021 12:01:34 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Thierry Reding <thierry.reding@gmail.com>
 Cc:     Jon Hunter <jonathanh@nvidia.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: tegra: Fix USB controller
- nodes in examples
-Message-ID: <20210714175610.GA2834935@robh.at.kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: tegra: Convert to json-schema
+Message-ID: <20210714180134.GA2840485@robh.at.kernel.org>
 References: <20210622142436.4014610-1-thierry.reding@gmail.com>
+ <20210622142436.4014610-2-thierry.reding@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210622142436.4014610-1-thierry.reding@gmail.com>
+In-Reply-To: <20210622142436.4014610-2-thierry.reding@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jun 22, 2021 at 04:24:35PM +0200, Thierry Reding wrote:
+On Tue, Jun 22, 2021 at 04:24:36PM +0200, Thierry Reding wrote:
 > From: Thierry Reding <treding@nvidia.com>
 > 
-> A subsequent patch will convert the USB controller device tree bindings
-> to json-schema, which will cause the DT validation to point out various
-> issues with the examples in the clock and reset controller bindings.
-> 
-> Fix these issues so that the subsequent patch will not cause validation
-> warnings.
+> Convert the old plain-text device tree bindings for the USB EHCI
+> controller found on NVIDIA Tegra SoCs to the json-schema format.
 > 
 > Signed-off-by: Thierry Reding <treding@nvidia.com>
 > ---
->  .../bindings/clock/nvidia,tegra124-car.yaml           | 11 ++++++++---
->  .../devicetree/bindings/clock/nvidia,tegra20-car.yaml |  5 +++++
->  2 files changed, 13 insertions(+), 3 deletions(-)
+> Changes in v2:
+> - drop unneeded clock-names property
+> - fix indentation issues
 > 
-> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-> index ec7ab1483652..d5a873097379 100644
-> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-> @@ -99,6 +99,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/clock/tegra124-car.h>
+>  .../bindings/usb/nvidia,tegra20-ehci.txt      |  23 ---
+>  .../bindings/usb/nvidia,tegra20-ehci.yaml     | 150 ++++++++++++++++++
+>  2 files changed, 150 insertions(+), 23 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
+>  create mode 100644 Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
+> deleted file mode 100644
+> index f60785f73d3d..000000000000
+> --- a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.txt
+> +++ /dev/null
+> @@ -1,23 +0,0 @@
+> -Tegra SOC USB controllers
+> -
+> -The device node for a USB controller that is part of a Tegra
+> -SOC is as described in the document "Open Firmware Recommended
+> -Practice : Universal Serial Bus" with the following modifications
+> -and additions :
+> -
+> -Required properties :
+> - - compatible : For Tegra20, must contain "nvidia,tegra20-ehci".
+> -   For Tegra30, must contain "nvidia,tegra30-ehci".  Otherwise, must contain
+> -   "nvidia,<chip>-ehci" plus at least one of the above, where <chip> is
+> -   tegra114, tegra124, tegra132, or tegra210.
+> - - nvidia,phy : phandle of the PHY that the controller is connected to.
+> - - clocks : Must contain one entry, for the module clock.
+> -   See ../clocks/clock-bindings.txt for details.
+> - - resets : Must contain an entry for each entry in reset-names.
+> -   See ../reset/reset.txt for details.
+> - - reset-names : Must include the following entries:
+> -   - usb
+> -
+> -Optional properties:
+> - - nvidia,needs-double-reset : boolean is to be set for some of the Tegra20
+> -   USB ports, which need reset twice due to hardware issues.
+> diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
+> new file mode 100644
+> index 000000000000..079cae44b8d9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/nvidia,tegra20-ehci.yaml
+> @@ -0,0 +1,150 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: "http://devicetree.org/schemas/usb/nvidia,tegra20-ehci.yaml#"
+> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> +
+> +title: Device tree binding for NVIDIA Tegra USB controllers
+> +
+> +description: |
+> +  The device node for a USB controller that is part of a Tegra SOC is as
+> +  described in the document "Open Firmware Recommended Practice : Universal
+> +  Serial Bus". Modifications and additions are detailed in this document.
+> +
+> +maintainers:
+> +  - Thierry Reding <treding@nvidia.com>
+> +  - Jon Hunter <jonathanh@nvidia.com>
+
+allOf:
+  - $ref: usb-hcd.yaml#
+
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - nvidia,tegra210-ehci
+> +              - nvidia,tegra124-ehci
+> +              - nvidia,tegra114-ehci
+> +          - const: nvidia,tegra30-ehci
+> +      - items:
+> +          - const: nvidia,tegra30-ehci
+> +      - items:
+> +          - const: nvidia,tegra20-ehci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  phy_type:
+> +    $ref: /schemas/types.yaml#/definitions/string
+
+Already has a type (usb.yaml). You support all the possible modes? If 
+not, list what is supported.
+
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    items:
+> +      - const: usb
+> +
+> +  nvidia,phy:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      phandle of the PHY that the controller is connected to
+> +
+> +  nvidia,needs-double-reset:
+> +    type: boolean
+> +    description:
+> +      This must be set for some instances of the USB controller found on
+> +      Tegra20 that need to be reset twice due to some hardware issue.
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - reset-names
+> +  - phy_type
+> +  - nvidia,phy
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/tegra20-car.h>
 > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
->      car: clock-controller@60006000 {
->          compatible = "nvidia,tegra124-car";
-> @@ -107,9 +108,13 @@ examples:
->          #reset-cells = <1>;
->      };
->  
-> -    usb-controller@c5004000 {
-> -        compatible = "nvidia,tegra20-ehci";
-> -        reg = <0xc5004000 0x4000>;
-> +    usb-controller@7d000000 {
-
-Since you are here, 'usb' is the documented and preferred node name.
-
+> +
+> +    usb@c5000000 {
+> +        compatible = "nvidia,tegra20-ehci";
+> +        reg = <0xc5000000 0x4000>;
+> +        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+> +        phy_type = "utmi";
+> +        clocks = <&tegra_car TEGRA20_CLK_USBD>;
+> +        resets = <&tegra_car 22>;
+> +        reset-names = "usb";
+> +        nvidia,needs-double-reset;
+> +        nvidia,phy = <&phy1>;
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/clock/tegra30-car.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb@7d000000 {
+> +        compatible = "nvidia,tegra30-ehci";
+> +        reg = <0x7d000000 0x4000>;
+> +        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+> +        phy_type = "utmi";
+> +        clocks = <&tegra_car TEGRA30_CLK_USBD>;
+> +        resets = <&tegra_car 22>;
+> +        reset-names = "usb";
+> +        nvidia,needs-double-reset;
+> +        nvidia,phy = <&phy1>;
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/clock/tegra114-car.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb@7d000000 {
+> +        compatible = "nvidia,tegra114-ehci", "nvidia,tegra30-ehci";
+> +        reg = <0x7d000000 0x4000>;
+> +        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+> +        phy_type = "utmi";
+> +        clocks = <&tegra_car TEGRA114_CLK_USBD>;
+> +        resets = <&tegra_car 22>;
+> +        reset-names = "usb";
+> +        nvidia,phy = <&phy1>;
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/clock/tegra124-car.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    usb@7d000000 {
 > +        compatible = "nvidia,tegra124-ehci", "nvidia,tegra30-ehci";
 > +        reg = <0x7d000000 0x4000>;
 > +        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 > +        phy_type = "utmi";
->          clocks = <&car TEGRA124_CLK_USB2>;
->          resets = <&car TEGRA124_CLK_USB2>;
+> +        clocks = <&tegra_car TEGRA124_CLK_USBD>;
+> +        resets = <&tegra_car 22>;
 > +        reset-names = "usb";
 > +        nvidia,phy = <&phy1>;
->      };
-> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-> index 459d2a525393..11e6d9513373 100644
-> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
-> @@ -53,6 +53,7 @@ additionalProperties: false
->  examples:
->    - |
->      #include <dt-bindings/clock/tegra20-car.h>
+> +    };
+> +
+> +  - |
+> +    #include <dt-bindings/clock/tegra210-car.h>
 > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
->      car: clock-controller@60006000 {
->          compatible = "nvidia,tegra20-car";
-> @@ -64,6 +65,10 @@ examples:
->      usb-controller@c5004000 {
->          compatible = "nvidia,tegra20-ehci";
->          reg = <0xc5004000 0x4000>;
+> +
+> +    usb@7d000000 {
+> +        compatible = "nvidia,tegra210-ehci", "nvidia,tegra30-ehci";
+> +        reg = <0x7d000000 0x4000>;
 > +        interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
 > +        phy_type = "utmi";
->          clocks = <&car TEGRA20_CLK_USB2>;
->          resets = <&car TEGRA20_CLK_USB2>;
+> +        clocks = <&tegra_car TEGRA210_CLK_USBD>;
+> +        resets = <&tegra_car 22>;
 > +        reset-names = "usb";
 > +        nvidia,phy = <&phy1>;
->      };
+> +    };
 > -- 
 > 2.32.0
 > 
