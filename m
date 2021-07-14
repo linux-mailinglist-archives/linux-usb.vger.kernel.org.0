@@ -2,142 +2,179 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D1B3C80B6
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 10:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3390D3C8131
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 11:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238579AbhGNI4M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 04:56:12 -0400
-Received: from mail-eopbgr1310091.outbound.protection.outlook.com ([40.107.131.91]:24000
-        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238432AbhGNI4M (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 14 Jul 2021 04:56:12 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M1MMPAbGvU/uXFWj4ceHkFTT6ewfpTOa0vzTFpO6/Nrdg3TevuMLuv+iv/jP5VuFAYRfc+B6LvggrPmRDyL0MI8fsX21ByUJv8Hr6Ouz1q38EBkEoY/yO6p6ZqMZ4zSXzzDXs48e+i/CgaJJ1eIDhpFgfcj248yVWHwUDgN9EhCHrGdY42AwhwRABa47RFlUL8MRpLisNyakjWHoIgrW8kUyioYf0IcRKYM6YimkU+oFm9vboyl86vasItM93Snf3GEIYXWb3t6u6uiuW+kpdlDHb+dbjqQkN28aRSfT9R1YIhym+11bJzlmCQj/+IFp3++bTagZMQ3O+b8FZtgFiQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WRZCxW9PftqNFOSChRE4QSSNxcIoGTj0L8vIv/ehV5M=;
- b=JjwOB5AEEQX1wjXVO2i31Iqd/tRVXdnVwm+IOFzhGAKf8EVeNl6Qc2TR8i45+G0x2cGmZbGO1X9F/LaNPire1b0B8vgp+p1QqkD12mNEw7jHBruHol54xyDS3nMGcZ3KDNUzRixjijpyC58xPtScFdrCdgtPe4LyoTUflWmI3QGqjYGpHElpkfUwYyhUHUq4GXlASV8ex1PWep6mtdYmGsorqPOo5aR+jGfj15X669gbyhbyTuGqtbbwF9tK0Cp7BEaiG8LWXbD78Z/VClLfzBp84bPIdHpEMv8XKp4ILqF9t2TRSxp16h6yETSxVnp9eMfe5rx6aCDyBC98Ccm+mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
+        id S238981AbhGNJRU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 05:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238971AbhGNJRR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 05:17:17 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68100C06175F;
+        Wed, 14 Jul 2021 02:14:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id l11so1175744pji.5;
+        Wed, 14 Jul 2021 02:14:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=renesasgroup.onmicrosoft.com; s=selector2-renesasgroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WRZCxW9PftqNFOSChRE4QSSNxcIoGTj0L8vIv/ehV5M=;
- b=Ag0lL3htq/87Yo2ewfEtspt9SGPBvxbHXci+03e04EHSTTK7iCAt6MP9g7Y1eJR80JvzV155EOHLF/MsRXSNP9+qXncgYETg0tRXSylWSNpdkfSXU/3muZmvsKTLSMqS57COqayRwpq9dbBfr+UNi/TIieQ4P6o5UYZu5HYbCag=
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com (2603:1096:404:d5::22)
- by TY2PR01MB4026.jpnprd01.prod.outlook.com (2603:1096:404:e0::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.21; Wed, 14 Jul
- 2021 08:53:16 +0000
-Received: from TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::4c5d:66ee:883a:72a5]) by TY2PR01MB3692.jpnprd01.prod.outlook.com
- ([fe80::4c5d:66ee:883a:72a5%6]) with mapi id 15.20.4308.027; Wed, 14 Jul 2021
- 08:53:16 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "wsa@sang-engineering.com" <wsa@sang-engineering.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH/RESEND] usb: renesas_usbhs: Fix superfluous irqs happen
- after usb_pkt_pop()
-Thread-Topic: [PATCH/RESEND] usb: renesas_usbhs: Fix superfluous irqs happen
- after usb_pkt_pop()
-Thread-Index: AQHXaPNy5eOcuQRrhUSDiBaSRxu/fKtCSJdw
-Date:   Wed, 14 Jul 2021 08:53:16 +0000
-Message-ID: <TY2PR01MB3692BEA8919501DCFF1BD4ADD8139@TY2PR01MB3692.jpnprd01.prod.outlook.com>
-References: <20210624122039.596528-1-yoshihiro.shimoda.uh@renesas.com>
-In-Reply-To: <20210624122039.596528-1-yoshihiro.shimoda.uh@renesas.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=none action=none header.from=renesas.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 53439ab7-bc04-438f-0ad6-08d946a4d21e
-x-ms-traffictypediagnostic: TY2PR01MB4026:
-x-microsoft-antispam-prvs: <TY2PR01MB402644A463099A8106E48472D8139@TY2PR01MB4026.jpnprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pfQ22pj8QzHSVvVGkF0yneepv6WRLHzjkoTDw8A2PrAc4Iae5AhP65GeK5y2jS8PWor2NyhnTRif1ZXEbSha7KDzatrNm59b42Yy17CGkS+E0Xz7h52WCBwMSMbf+YViISnF9hhz8JFx0V1R97eQQ67iVccPiGJBheWXCBuDsEZa34GB5hZ28P/WQ5M/Mev5Ny09JgsJ4yoQooM7zbYwTn7atHzAp6Y30uwxmSGrrKLuQhDqZthAdF9dGllW+s5Oze41Sc/wftDeLeaNKPOnmfFKjL9/gf/TOtzO5sW7VPi8MD75C+Cmp0KDJQK/nZ82U7q7T0csegNuErsuahmpcMknnVzv1JuiROuJPDlj6N26soZCuoSfjN1/Rfn97MS16KJM2o5H304I4feKGQ4HtbA25be+HK2T4kHeoy+FPVcZ9szIeyonSSO+Ir89te8RAWnTPlndg9kRGIcOsIOmUKRGNs9quS7/bJ78iGkJZ9GtFe/OSAquzLZnHDOZ97dl5fPQyCYyRD4RYP5PoWwtjLABuZw1z2RmRM1g6FOtOc9IJDsoGMcSYs3tgNb0mTM4oSWtOUwn7H7RNmEjJdLz0os+icEoCiUuOiKRIHh21F5kWIJFr2YUCA0Sx7BlgAmV+pxMOBdwGgB0tDBaE77CSEwVEVayEMmGundZWggazWEkztCrZI1FnLBnr+d8se6hNDtE+du8beZ5pch2bd7mmqva3ouVOqs6YEtUfCwujooB/4LAm2lYNGQq5pU5SgqpK+sVSx8aQYokG7mO9kEg4bdysu8YzUfI6oMuXmCxxF8=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR01MB3692.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(396003)(366004)(39850400004)(346002)(136003)(5660300002)(45080400002)(478600001)(966005)(7696005)(71200400001)(33656002)(186003)(6506007)(86362001)(8676002)(8936002)(52536014)(9686003)(76116006)(122000001)(4326008)(66946007)(55236004)(55016002)(2906002)(66446008)(38100700002)(66556008)(66476007)(64756008)(316002)(54906003)(83380400001)(26005)(110136005)(38070700004);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jjG2XAwkblYmDeGc/PUen+RdVjP4J4im8A/OKS00UCLTd9pKLT9cErlyAnTl?=
- =?us-ascii?Q?5B6Fa7Sf9Apdi/0SS55dEpl+1yJ+SBCeTkI112q+2W82RwHHDle6QIoBKzJm?=
- =?us-ascii?Q?J58D0Ih8P9lMHfdyMzyovBBhcOQAdjY92i4LzR/skD9Zoahp/whPB2taCMvi?=
- =?us-ascii?Q?Jea7npvf+evG0xfXwEOtM2h18p5Ps6M63xa8b3mGCSqeU7k+B9sHvmM+mY5P?=
- =?us-ascii?Q?1aHWQz5b6PKcgTd2FwC1v9A1f62lYWQroULIVHZo5qnOC9D9VdEOe2NITO2V?=
- =?us-ascii?Q?h3AOhgRLfxhfTbXrqNVUh+Obt5x5UxFxdBLhUaYnbbdQP5I0LC7EdMomkhA6?=
- =?us-ascii?Q?jBSRPypeAoN01w+4sLaW1vyrDRmiOcxGVrZ3A1CKbPJbt6mBuLliiC9FZzPf?=
- =?us-ascii?Q?FO2X0AbBWCkYExpBF7rde/SUWyoPDb+YX45ca3Mnn9Sr+EkLQbLNZA/BSw0h?=
- =?us-ascii?Q?W6+IUfnN26GpbyqRmkss669EJKrWIgwyM63TgM8PjipjbQlu2e55yYVLAY7Z?=
- =?us-ascii?Q?asH6KH/Ijqmop/Jx2I2OKmJKP+rZwF5+werQJTqrINdPGae+Ibm+bmDV0BcV?=
- =?us-ascii?Q?q2L6yONBWzFXexwpj+hBdqZx5cCzqjimBHvhTb/hWp84KHZ3o4hFwbeTRQg+?=
- =?us-ascii?Q?5EyDkFCytE6s9ZthZMqT7zN/OB+z3rNw/6KYSiJDuuTgjoVRc7dbMXUyMtDV?=
- =?us-ascii?Q?ESpWBDWY5IpGErHX2zgD0FFGgdKWFGPWzjrK7aA6pS1wlFRH+5sQOB3dPBKT?=
- =?us-ascii?Q?Gllfx4oOo4s13MHQC0SGQqi+YtsNYs8X4WQgacUq2Nx+gMOrOeir3FCRXcZR?=
- =?us-ascii?Q?8UJWry5GLQXU2OkQpA1rPHWUV3ppwSR6GWmdOxdYuyR8tAKVykJflesZ+r9B?=
- =?us-ascii?Q?HwrgJ8dCcGyXtfgcNZsaaljWKSnhbmbTz7UN/E4+MXccKjmGMPzLFoV3eNd3?=
- =?us-ascii?Q?wEceAGD/9KBXtr9e6Db3RN/UFwHhJRPGuFRl9Qk9vADYbFBnsbwPA4LuQQ+s?=
- =?us-ascii?Q?//aP4JJmorwlozSGXmKT2LJR06tVUCLiyJVu2EBH25fvCGuXoAGBUxVcnRbc?=
- =?us-ascii?Q?tdrr9CvGcS8yZigePVmfTXztssVzkulEHOenT0iZ4S3UHAb7KJIcDBHEvvbu?=
- =?us-ascii?Q?zvz7NSedEcWZgtSa0r51dscDXt8otLq5igQnIJSFpWIq+aoNyM93Z3wrfls5?=
- =?us-ascii?Q?Qh8z8Xnn46zZUWvRmjIZxOJl2ueGRSMjx6VF3TMvhDMEAvz9NOzrhMZumXgy?=
- =?us-ascii?Q?c1CoI1gsUYevWDvfAYwexrW1/r4+R6j/WaXtMJOpN1T0IWzXBnNbcDYvuIRp?=
- =?us-ascii?Q?NmLYg41auj0/tMT6KMg+5MtU?=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Omd/xmMsedzAfyZeu1JPMqyvYANwg1OTgXgLY4V+rRo=;
+        b=mimqfYEfgpUrvcWumZukcmsTf+MVhbT+TCXF+ei9UjWoDoQDV7bb2mzBntAWaih1cC
+         3LK00hUcSr1GwL8rcGwXOZ5Z5q2Sy18VpPzeGKEEhw1/sNCR1L0RHg5hmqY5yU6mS7dq
+         0Z5EMAb+xGndaZGZz0z8EQRyXnSMIW52/5koroXSfuQWHDuJXjV6EwoRIJg+gbaN7Gff
+         4e1pb7H/JJ+rGnUjoodHgEaJKceKeApzsZOC3LJe3x7iJBtIFc1I/IuKHVG4GpdNftFf
+         BW9ouVAIG4O7ShFoO/f3uuuNOK/TPNwHUaeNvTsEUGvpOUNbzGMfbg32ByjOALNmIAIY
+         ZI1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Omd/xmMsedzAfyZeu1JPMqyvYANwg1OTgXgLY4V+rRo=;
+        b=tFRc1lcuMlB+u9grFxeHQk/vCWElb2+ztBb9/UBR0iHFYstAKW4Di0VJcUhoK1mDQh
+         xlwinmmPTrcTro5H9z0ICQuKfVnEMZ5/ev3BAuuGbLjSvZuLWlhp8/9jlstdbaHM3RT+
+         /Y/YI47C8vZyMmmY2T8DrRtSukNPnorxJ1zyIcSED/h24KEmNSQE7BQ3jfkf2UxRC1ep
+         HYAGbQmcNTZUKHyc+6kLrhK6V+pgvswo/0KIrLjGAic9S1iBw42e1JkuuS85xbbltBWY
+         HBLl8nKtQ+f30lfMsOY7oMu4kOEehXThZoPiSpK7N66vjyyBfcIgpg/jp8Eemnnq1iQD
+         hvSw==
+X-Gm-Message-State: AOAM532t61bctCpsOMycIhlSiKvbOZtYEc3qv1w2EJJmolkyTm3j/ut7
+        IBjWaysnTMKUyh7Tek9pXQw=
+X-Google-Smtp-Source: ABdhPJxUNo/W1JmruJT0Jefh9KaqfoQoqy4p9eOLwkKvbA+eRKrWi6WGmys9U5L0lzy1OoqlSaZ++g==
+X-Received: by 2002:a17:90b:11d4:: with SMTP id gv20mr816075pjb.87.1626254065784;
+        Wed, 14 Jul 2021 02:14:25 -0700 (PDT)
+Received: from localhost.localdomain ([154.16.166.218])
+        by smtp.gmail.com with ESMTPSA id d67sm1921191pfd.81.2021.07.14.02.14.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jul 2021 02:14:25 -0700 (PDT)
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
+        YueHaibing <yuehaibing@huawei.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/2] usb: hso: fix error handling code of hso_create_net_device
+Date:   Wed, 14 Jul 2021 17:13:22 +0800
+Message-Id: <20210714091327.677458-1-mudongliangabcd@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR01MB3692.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53439ab7-bc04-438f-0ad6-08d946a4d21e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jul 2021 08:53:16.1931
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DvKzhJuztBG07uz+8gDW0X204zX/zfOynMl0AKyqOmioQUVM82ez7wzkvUgRQt6glc9IFtlCdPQlGGPmdL2Yc5pFHsWQ7C9p8jO6LsJj8FJHdSYLOFDWVsZ941vBfbVQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY2PR01MB4026
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The current error handling code of hso_create_net_device is
+hso_free_net_device, no matter which errors lead to. For example,
+WARNING in hso_free_net_device [1].
 
-> From: Yoshihiro Shimoda , Sent: Thursday, June 24, 2021 9:21 PM
->=20
-> This driver has a potential issue which this driver is possible to
-> cause superfluous irqs after usb_pkt_pop() is called. So, after
-> the commit 3af32605289e ("usb: renesas_usbhs: fix error return
-> code of usbhsf_pkt_handler()") had been applied, we could observe
-> the following error happened when we used g_audio.
->=20
->     renesas_usbhs e6590000.usb: irq_ready run_error 1 : -22
->=20
-> To fix the issue, disable the tx or rx interrupt in usb_pkt_pop().
->=20
-> Fixes: 2743e7f90dc0 ("usb: renesas_usbhs: fix the usb_pkt_pop()")
-> Cc: <stable@vger.kernel.org> # v4.4+
-> Signed-off-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-> ---
->  I'm sorry for causing a trouble before [1], so I resend a suitable patch=
-.
->  [1]
->  https://lore.kernel.org/linux-renesas-soc/TY2PR01MB3692555C6EAC8F02BC8B3=
-D63D8329@TY2PR01MB3692.jpnprd01.prod.outlook.com/
+Fix this by refactoring the error handling code of
+hso_create_net_device by handling different errors by different code.
 
-I'm afraid, but would you review this patch?
-I confirmed this patch can be applied into v5.14-rc1.
-Or, should I resend this patch?
+[1] https://syzkaller.appspot.com/bug?id=66eff8d49af1b28370ad342787413e35bbe76efe
 
-Best regards,
-Yoshihiro Shimoda
+Reported-by: syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com
+Fixes: 5fcfb6d0bfcd ("hso: fix bailout in error case of probe")
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+v1->v2: change labels according to the comment of Dan Carpenter
+v2->v3: change the style of error handling labels
+ drivers/net/usb/hso.c | 33 +++++++++++++++++++++++----------
+ 1 file changed, 23 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
+index 54ef8492ca01..39c4e88eab62 100644
+--- a/drivers/net/usb/hso.c
++++ b/drivers/net/usb/hso.c
+@@ -2495,7 +2495,7 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 			   hso_net_init);
+ 	if (!net) {
+ 		dev_err(&interface->dev, "Unable to create ethernet device\n");
+-		goto exit;
++		goto err_hso_dev;
+ 	}
+ 
+ 	hso_net = netdev_priv(net);
+@@ -2508,13 +2508,13 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 				      USB_DIR_IN);
+ 	if (!hso_net->in_endp) {
+ 		dev_err(&interface->dev, "Can't find BULK IN endpoint\n");
+-		goto exit;
++		goto err_net;
+ 	}
+ 	hso_net->out_endp = hso_get_ep(interface, USB_ENDPOINT_XFER_BULK,
+ 				       USB_DIR_OUT);
+ 	if (!hso_net->out_endp) {
+ 		dev_err(&interface->dev, "Can't find BULK OUT endpoint\n");
+-		goto exit;
++		goto err_net;
+ 	}
+ 	SET_NETDEV_DEV(net, &interface->dev);
+ 	SET_NETDEV_DEVTYPE(net, &hso_type);
+@@ -2523,18 +2523,18 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 	for (i = 0; i < MUX_BULK_RX_BUF_COUNT; i++) {
+ 		hso_net->mux_bulk_rx_urb_pool[i] = usb_alloc_urb(0, GFP_KERNEL);
+ 		if (!hso_net->mux_bulk_rx_urb_pool[i])
+-			goto exit;
++			goto err_mux_bulk_rx;
+ 		hso_net->mux_bulk_rx_buf_pool[i] = kzalloc(MUX_BULK_RX_BUF_SIZE,
+ 							   GFP_KERNEL);
+ 		if (!hso_net->mux_bulk_rx_buf_pool[i])
+-			goto exit;
++			goto err_mux_bulk_rx;
+ 	}
+ 	hso_net->mux_bulk_tx_urb = usb_alloc_urb(0, GFP_KERNEL);
+ 	if (!hso_net->mux_bulk_tx_urb)
+-		goto exit;
++		goto err_mux_bulk_rx;
+ 	hso_net->mux_bulk_tx_buf = kzalloc(MUX_BULK_TX_BUF_SIZE, GFP_KERNEL);
+ 	if (!hso_net->mux_bulk_tx_buf)
+-		goto exit;
++		goto err_free_tx_urb;
+ 
+ 	add_net_device(hso_dev);
+ 
+@@ -2542,7 +2542,7 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 	result = register_netdev(net);
+ 	if (result) {
+ 		dev_err(&interface->dev, "Failed to register device\n");
+-		goto exit;
++		goto err_free_tx_buf;
+ 	}
+ 
+ 	hso_log_port(hso_dev);
+@@ -2550,8 +2550,21 @@ static struct hso_device *hso_create_net_device(struct usb_interface *interface,
+ 	hso_create_rfkill(hso_dev, interface);
+ 
+ 	return hso_dev;
+-exit:
+-	hso_free_net_device(hso_dev, true);
++
++err_free_tx_buf:
++	remove_net_device(hso_dev);
++	kfree(hso_net->mux_bulk_tx_buf);
++err_free_tx_urb:
++	usb_free_urb(hso_net->mux_bulk_tx_urb);
++err_mux_bulk_rx:
++	for (i = 0; i < MUX_BULK_RX_BUF_COUNT; i++) {
++		usb_free_urb(hso_net->mux_bulk_rx_urb_pool[i]);
++		kfree(hso_net->mux_bulk_rx_buf_pool[i]);
++	}
++err_net:
++	free_netdev(net);
++err_hso_dev:
++	kfree(hso_dev);
+ 	return NULL;
+ }
+ 
+-- 
+2.25.1
 
