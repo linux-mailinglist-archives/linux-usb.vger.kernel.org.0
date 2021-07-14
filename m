@@ -2,106 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C7D3C7A6A
-	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 02:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357C53C7B86
+	for <lists+linux-usb@lfdr.de>; Wed, 14 Jul 2021 04:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237114AbhGNAKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 13 Jul 2021 20:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237099AbhGNAKF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 20:10:05 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32386C0613EF
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 17:07:14 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id v6so359422lfp.6
-        for <linux-usb@vger.kernel.org>; Tue, 13 Jul 2021 17:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IEtc6WN0JMkgA1X93JOHMXDth957tk+vFhRSm4MpLAM=;
-        b=kjXNNfOnOZfSXBl9SvNCTU7DVpgzZWIJVg9FqMS+1JX+6OMWWH9CLz877AqiHOprT/
-         /lsKfkuIYEXI5WFMO1UydRgKvGakHia0Zef/k9HPAsht+GzeUkroxtZWMCQ2STLroRkq
-         FbqTR01kbBnrLWRZIyDwPLNuRZw8bHlvVIeiols+N3IWOXnQTDwnr76itERqCDK3hsXZ
-         ftqKLC+BlDomCfes9K25/WuyzNNNMkx43ZllqSA63P/fqo0Y8nrvLk14aMTDmLSU3tmX
-         DEurRNdYe9gDg4EtE+LjmrSjSrKtx9TtcvisAvYwwvXgU6rLgKJAohSbtf0H2B/+yt/o
-         Sq6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IEtc6WN0JMkgA1X93JOHMXDth957tk+vFhRSm4MpLAM=;
-        b=Q9xzxnFi7ko4L8/8pkXZO+Let0KB+wijCz9yZsEsjm/NRiO2NuXU+Isu045JXLLvga
-         FKm1t1/cH9iM5CEhI8p+8c5gO8tygP2WTwmBPaulrC00qCSi1Hu+zIhdU1S7n/hzz2li
-         9FjfkbdLeQeho2L68VdRI/zuUiibrlxmgwv4EaQZLlOrctDUqMAFx7vkwfqnmlbBnBpc
-         WcVuHh40+D3J2n0NsuzKlzPOOwWlbHrsRToPsJI2tVnH45C6dadVOX+yzvXRjEP3S45S
-         AW2snrt3Njtc0gkCEbSELMxdoLCxdq+KGf6IFOzkdvQX02ReAKSybxR+dPr4I+/N+rj2
-         XKiQ==
-X-Gm-Message-State: AOAM530B/TOfKBMVnmmCo9DHURI5RN29BP8bABsVJe9E9gvzZnH/OQsh
-        ivvCQP6saYM9bXjtmaN8zawsuoxpn5IZ9y4EW6vw0w==
-X-Google-Smtp-Source: ABdhPJz8YKla708wW5apcE2e48dD+UxOPlSdmQcDXhRj1YqgSttTekZln8X6HfzXhD+WqceB5w0KiAl65c8UEeH/5gw=
-X-Received: by 2002:a05:6512:22cc:: with SMTP id g12mr5427042lfu.535.1626221232412;
- Tue, 13 Jul 2021 17:07:12 -0700 (PDT)
+        id S237456AbhGNCPH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 13 Jul 2021 22:15:07 -0400
+Received: from smtp.bonedaddy.net ([45.33.94.42]:53802 "EHLO
+        smtp.bonedaddy.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237409AbhGNCPH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 13 Jul 2021 22:15:07 -0400
+Received: from [192.168.1.209] (n49-190-172-168.per1.wa.optusnet.com.au [49.190.172.168])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pabs3@bonedaddy.net)
+        by smtp.bonedaddy.net (Postfix) with ESMTPSA id BD08C180043;
+        Tue, 13 Jul 2021 22:12:14 -0400 (EDT)
+Authentication-Results: smtp.bonedaddy.net; dmarc=fail (p=none dis=none) header.from=bonedaddy.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bonedaddy.net;
+        s=mail; t=1626228736;
+        bh=HyUAKLaw2bp8FZDs25LdGWfFsJykNZt02sRTd/WkJM0=;
+        h=Subject:From:To:Cc:In-Reply-To:References:Date;
+        b=iLhjborlyvlaIOQHy921+tvti0zaH4d1yBCKySk1JndwirRMNgU12yyuWj5DIgR9B
+         qOynrVa98CY5ly7ll7xGL/Z1LntBYJYAbLgqWxma4EUZLXIBgc6AzLoBiG55kl9ED3
+         HOcMEFydNGgakWP0kyRd4cQGcEvHgPc5b5kur6XJueglRgiPWkaZRNalfqQ1TTHOEr
+         ZD43tqaMe1qYHyccxnBvioSt9W4bTIutE6lhbh2qjCFEG60RxgOWMAUkR/MVkztGdi
+         3q2pmojfES4D5P6jMjIvKOeK3jhLvSh0xmoeuxOAtuqBEaELZ7FDuP+SwpU7l5+O1K
+         Sg4rbV3kO96HA==
+Message-ID: <acfda565cf77cf79bdf951ddccb64420c2fdf288.camel@bonedaddy.net>
+Subject: Re: proposal: move Linux userspace USB gadget projects to
+ linux-usb GitHub organisation?
+From:   Paul Wise <pabs3@bonedaddy.net>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Krzysztof Opasiak <k.opasiak@samsung.com>,
+        Andrzej Pietrasiewicz <andrzej.p@collabora.com>,
+        Karol Lewandowski <k.lewandowsk@samsung.com>,
+        Matt Porter <mporter@kernel.crashing.org>,
+        linux-usb@vger.kernel.org
+In-Reply-To: <YO00rA8sTT2mrdOv@kroah.com>
+References: <c38162833d1c8fede734e41eb5ce23cf393d6555.camel@bonedaddy.net>
+         <ac8342bbedc5aa0f5754cb6830e6d5628cc022f1.camel@bonedaddy.net>
+         <YO0cL+4gzLSyTY7f@kroah.com>
+         <6be6edd3a30888ef7181735a1bbdac579578fd99.camel@bonedaddy.net>
+         <YO00rA8sTT2mrdOv@kroah.com>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="=-k0wBg2SL2f/V/qEf893P"
+Date:   Wed, 14 Jul 2021 10:11:51 +0800
 MIME-Version: 1.0
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru> <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
-In-Reply-To: <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 13 Jul 2021 17:07:00 -0700
-Message-ID: <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.2-1 
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
-<Sergey.Semin@baikalelectronics.ru> wrote:
->
-> In accordance with the DWC USB3 bindings the corresponding node
-> name is suppose to comply with the Generic USB HCD DT schema, which
-> requires the USB nodes to have the name acceptable by the regexp:
-> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
-> named.
->
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
+--=-k0wBg2SL2f/V/qEf893P
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In the exact same way an earlier patch broke HiKey960:
-  https://lore.kernel.org/lkml/CALAqxLWGujgR7p8Vb5S_RimRVYxwm5XF-c4NkKgMH-43wEBaWg@mail.gmail.com/
+On Tue, 2021-07-13 at 08:37 +0200, Greg KH wrote:
 
-(which I still have to carry a revert for).
+> Ah, hopefully people actually realize this :)
 
-I get that this change is useful so more dynamic userland can find
-devices using consistent naming with future kernels (but doesn't the
-dynamic userland have to handle the case for older kernels as well?)
-But for userland that uses static configs, its painful as updating
-userland to use the new node ids then causes older kernels to fail.
+GitHub makes it fairly obvious even in text based browsers, for eg:
 
-I'm looking into how we might be able to probe and set the property
-dynamically, but AOSP's init system is far more aligned to static
-configs.
+https://github.com/codilime/veles
 
-This will probably be ignored again, but it would be nice if we could
-have a release where DTS changes don't break userland for one of my
-boards. As it feels like its been awhile.
+> I find it suprising that if these projects are really being used, and
+> there are problems, that none of the companies using them are
+> contributing back to the projects for these issues.
 
-thanks
--john
+It appears Samsung is using them in Tizen and Collabora has some
+interest in them, presumably for some of their customers and the commit
+logs and bug reports show a few other companies. I expect that the
+projects are mostly considered "good enough" infrastructure that they
+don't have enough motivation to assign much work time to them.
+
+> The technical things should be easy for those companies to help with,
+> the "advocacy" is a different thing, and that you should be able to do
+> today by submitting talks to conferences to get the word out.=C2=A0 Almos=
+t
+> all conferences have travel stipends for speakers that are not sponsored
+> by companies to travel.
+
+Of course, all of the work needed can be done by anyone volunteering in
+their spare time or work time when no higher priority work needs doing,
+but allocating funding towards these projects would make it easier for
+this work to be prioritised.
+
+> good luck!
+
+Seems like luck will be needed indeed.
+
+--=20
+bye,
+pabs
+
+https://bonedaddy.net/pabs3/
+
+--=-k0wBg2SL2f/V/qEf893P
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEYQsotVz8/kXqG1Y7MRa6Xp/6aaMFAmDuR+MACgkQMRa6Xp/6
+aaMCWA//Z/2/OQ9+lsTiT7fN0p5wx4msucVbWUVHuZNRU66Mp0g4QEtSZD9E39Fc
+L2BSS3Bmd37K/Gj1nsqsIz6ozrEfCvFPLPL6BjFijluWlFTpK7QkmAwgI0LGl5+9
+qTn4KZoMLRXmBwdK6yjzAJZ4W2ifvd/YOxxjVg+s9DgICNfEis10H6t5ySGwRDcQ
+sEM8TkFWUDWCb5M32BR+2vOY2K0s7uyzie0zegaRr13k42pqMePo/ab/UEevUlNm
+DINy8K8wKPRnH/3+FdMwKs164feJ0DYw8yjyH4yd+OBuq1KK9y3A0/cIgu48DJXh
+afRPVA2jp+DFylpnkBzJdq0T05UcyVmB7WGK5YmQin3sLC7GjSqv5Vg58dwG9mUE
+qA07l8ZCw0OgtsIxcKm+jmwU5ts4in3bM5L3lo8WN0VrDGmAsWucIeOwDCcczJ2E
+Ehx87M5C8i7NmjX6wH3PDbPzV6CrUW1X7HqsFXxsPjaTJHpyitOId7dl1dVfivqj
+EkGAiZgYt5yz3Wfzwza9V362ZXRjnplo/j010ropjWzULMJ8XPBkcNi/wbRwbQWk
+946jwIU4xyD/lVWD5YIjNHSwhk82ACHMeFxisgtZMaSfSotd+8KNoiFNx7ReBD1d
+pu/c3Pc7/uJqWcvjmoX8emx53Cx6l3ow8Q5pNgyGgcPeYIKr6w8=
+=1/tS
+-----END PGP SIGNATURE-----
+
+--=-k0wBg2SL2f/V/qEf893P--
+
