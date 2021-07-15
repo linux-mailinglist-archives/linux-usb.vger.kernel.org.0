@@ -2,102 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F0E3CA118
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 17:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C6EA3CA182
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 17:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236733AbhGOPH2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 11:07:28 -0400
-Received: from mga09.intel.com ([134.134.136.24]:57122 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235204AbhGOPH2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 11:07:28 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10045"; a="210551980"
-X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
-   d="scan'208";a="210551980"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2021 08:04:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
-   d="scan'208";a="466708932"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga008.fm.intel.com with ESMTP; 15 Jul 2021 08:04:33 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     <gregkh@linuxfoundation.org>
-Cc:     <linux-usb@vger.kernel.org>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH 1/1] xhci: Fix lost USB 2 remote wake
-Date:   Thu, 15 Jul 2021 18:06:51 +0300
-Message-Id: <20210715150651.1996099-2-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210715150651.1996099-1-mathias.nyman@linux.intel.com>
-References: <20210715150651.1996099-1-mathias.nyman@linux.intel.com>
+        id S238932AbhGOPcx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 11:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238918AbhGOPcw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jul 2021 11:32:52 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E2AAC06175F;
+        Thu, 15 Jul 2021 08:29:58 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u14so9514169ljh.0;
+        Thu, 15 Jul 2021 08:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=CdIcOYksg8pHKzRiudEnxrqrqTv11M4NJ2rvZF2H7WA=;
+        b=nme9HccGkB0Rg4iueecc8lJqpYtdkf+1N2oSO2tdCeT0oDINOZ0vs7G8YphTgtbCzE
+         vA/C8owaAns9B9CsksDXeWbn4+wBz9AcrKXlE4Zw/e9zXECh8DEqEyev5HCwCbTbWD4E
+         wGEAOKCmrKAubTQU+ugkBvy8Z+7P/iGVxcZhykLQkQ2NdBeOcj8z/VV1bggKUnQGfw7f
+         73T8RwpLPUHC21MYNHzjwdqLcCUBaoZ7MQJtgAeCEFSXISmSnE8V5ynckOwr2+kxKsrV
+         xgapFn6rlPS7cIr9g/PekIlptQIVRUkDm+inTxprmBOMTjrkYL+8TzSHSBZ41xdTuCWT
+         z/9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=CdIcOYksg8pHKzRiudEnxrqrqTv11M4NJ2rvZF2H7WA=;
+        b=W+UkKzt39fAaMEvHeCKdgitWwuXFr7eJbDhIw+NZOLdgUGREslPXWw3h+COmbP9R0k
+         Kqgee5hOB4oDx4AMtYKfVzQSXzLRV/SI/OtD0m14h6sa55agwaZWysSeoaWp+lc+v2CB
+         fxUivzcIydF6iCb14dJEkoINRZnZXPNjbtrzS8IB/r9Nfrvwjsu332VQp5lO913UJZUy
+         SomaC0iq6Dj+jL859XFEyaOJYLcFKn5vaAx9eP2ebx9dROU7zs33+gTZeTg2z0LtJjHn
+         VjILdzKUkm9BXrh9rzFKvSGLV00MAU5x8CyORyGitezfNWUJcZ5JNGlN0THBf7rZqaLg
+         lFFg==
+X-Gm-Message-State: AOAM530ZHdmoo3z0f6IhQwvVGBOlsuztJLv2HsFTIxXkAu3aaUWjfOF2
+        4muqzvwuf0++a96QJ8HzdTHZwcHDNxE=
+X-Google-Smtp-Source: ABdhPJwhU1r2gnUTo6zmqgpT1R3dIr2OZf855m5yYz9IRQk6uAwjoF6BPFdbhFj4DO84ZiS0mlcukg==
+X-Received: by 2002:a2e:bc0a:: with SMTP id b10mr2439427ljf.271.1626362996402;
+        Thu, 15 Jul 2021 08:29:56 -0700 (PDT)
+Received: from [192.168.2.145] (94-29-37-113.dynamic.spd-mgts.ru. [94.29.37.113])
+        by smtp.googlemail.com with ESMTPSA id j18sm176347ljq.19.2021.07.15.08.29.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Jul 2021 08:29:56 -0700 (PDT)
+Subject: Re: [PATCH v3 06/12] dt-bindings: power: supply: smb347-charger:
+ Document USB VBUS regulator
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210704225433.32029-1-digetx@gmail.com>
+ <20210704225433.32029-7-digetx@gmail.com>
+ <20210712153905.GA1980362@robh.at.kernel.org>
+ <9032e807-b4d3-bacf-6c39-d3a2c7c57f3e@gmail.com>
+ <20210714230140.GA3697673@robh.at.kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <bffaea79-92a2-0355-d213-31dbe3d2b0b1@gmail.com>
+Date:   Thu, 15 Jul 2021 18:29:55 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <20210714230140.GA3697673@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There's a small window where a USB 2 remote wake may be left unhandled
-due to a race between hub thread and xhci port event interrupt handler.
+15.07.2021 02:01, Rob Herring пишет:
+> On Tue, Jul 13, 2021 at 03:22:40AM +0300, Dmitry Osipenko wrote:
+>> 12.07.2021 18:39, Rob Herring пишет:
+>>>> +  summit,inok-polarity:
+>>>> +    description: |
+>>>> +      Polarity of INOK signal indicating presence of external power supply.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>> +    enum:
+>>>> +      - 0 # SMB3XX_SYSOK_INOK_ACTIVE_LOW
+>>>> +      - 1 # SMB3XX_SYSOK_INOK_ACTIVE_HIGH
+>>>> +
+>>>> +  usb-vbus:
+>>>> +    $ref: "../../regulator/regulator.yaml#"
+>>>> +    type: object
+>>>        unevaluatedProperties: false
+>>>
+>>> With that,
+>>>
+>>> Reviewed-by: Rob Herring <robh@kernel.org>
+>>>
+>>
+>> I tried to add the unevaluatedProperties + a random unrelated property
+>> to the example usb-vbus node and dt_binding_check is happy with that. So
+>> the unevaluatedProperties has no effect, is it supposed to be so?
+> 
+> Yes, until support lands upstream[1].
+> 
+> Rob
+> 
+> [1] https://github.com/Julian/jsonschema/pull/817
+> 
 
-When the resume event is detected in the xhci interrupt handler it kicks
-the hub timer, which should move the port from resume to U0 once resume
-has been signalled for long enough.
-
-To keep the hub "thread" running we set a bus_state->resuming_ports flag.
-This flag makes sure hub timer function kicks itself.
-
-checking this flag was not properly protected by the spinlock. Flag was
-copied to a local variable before lock was taken. The local variable was
-then checked later with spinlock held.
-
-If interrupt is handled right after copying the flag to the local variable
-we end up stopping the hub thread before it can handle the USB 2 resume.
-
-CPU0					CPU1
-(hub thread)				(xhci event handler)
-
-xhci_hub_status_data()
-status = bus_state->resuming_ports;
-					<Interrupt>
-					handle_port_status()
-					spin_lock()
-					bus_state->resuming_ports = 1
-					set_flag(HCD_FLAG_POLL_RH)
-					spin_unlock()
-spin_lock()
-if (!status)
-  clear_flag(HCD_FLAG_POLL_RH)
-spin_unlock()
-
-Fix this by taking the lock a bit earlier so that it covers
-the resuming_ports flag copy in the hub thread
-
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-hub.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
-index e9b18fc17617..151e93c4bd57 100644
---- a/drivers/usb/host/xhci-hub.c
-+++ b/drivers/usb/host/xhci-hub.c
-@@ -1638,11 +1638,12 @@ int xhci_hub_status_data(struct usb_hcd *hcd, char *buf)
- 	 * Inform the usbcore about resume-in-progress by returning
- 	 * a non-zero value even if there are no status changes.
- 	 */
-+	spin_lock_irqsave(&xhci->lock, flags);
-+
- 	status = bus_state->resuming_ports;
- 
- 	mask = PORT_CSC | PORT_PEC | PORT_OCC | PORT_PLC | PORT_WRC | PORT_CEC;
- 
--	spin_lock_irqsave(&xhci->lock, flags);
- 	/* For each port, did anything change?  If so, set that bit in buf. */
- 	for (i = 0; i < max_ports; i++) {
- 		temp = readl(ports[i]->addr);
--- 
-2.25.1
-
+Thank you for the clarification.
