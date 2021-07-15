@@ -2,56 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FC03C95CF
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 04:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB533C965E
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 05:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231809AbhGOCHt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 14 Jul 2021 22:07:49 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55465 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S230087AbhGOCHt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 14 Jul 2021 22:07:49 -0400
-Received: (qmail 398522 invoked by uid 1000); 14 Jul 2021 22:04:55 -0400
-Date:   Wed, 14 Jul 2021 22:04:55 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Matt Corallo <oc2udbzfd@mattcorallo.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux.amoon@gmail.com" <linux.amoon@gmail.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
-Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices dwc2
-Message-ID: <20210715020455.GA398513@rowland.harvard.edu>
-References: <CAFBinCDsGtQaPLhMAb+A6DBihWzQiU409i2oer_ud5yQBvfM5w@mail.gmail.com>
- <CAFBinCDc6RUypJpujmYdkjo6j-xsg0HkZEZGxTCsTW4tZ-bJPA@mail.gmail.com>
- <CAFBinCA083iP4T2b1+MoDGZFKMO8eyy-WceRBA-QibatqboO1A@mail.gmail.com>
- <f084f45a-5be0-9542-260a-f4641e1215d0@synopsys.com>
- <CAFBinCCj5zUiv9LS2jKRxzX5pfcFTr4tVZwR7TA2CRQg68qwTw@mail.gmail.com>
- <822c3852-1d15-2976-8672-e49ae34c328f@synopsys.com>
- <CAFBinCC_0RpCMsj3AUt9fZrjHi6_qFirQtRR1g5VJcn45GpWAw@mail.gmail.com>
- <ad475275-eb2c-6309-fc59-494f94bf0605@synopsys.com>
- <CAFBinCCXioWL+ZGwvC8Ltrmx4y2XpGK03JAm8X=wDB4_dQ+pFA@mail.gmail.com>
- <20210715014451.GA397753@rowland.harvard.edu>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210715014451.GA397753@rowland.harvard.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S234018AbhGODTW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 14 Jul 2021 23:19:22 -0400
+Received: from foss.arm.com ([217.140.110.172]:46052 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231854AbhGODTV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 14 Jul 2021 23:19:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E00B21042;
+        Wed, 14 Jul 2021 20:16:28 -0700 (PDT)
+Received: from entos-ampere-02.shanghai.arm.com (entos-ampere-02.shanghai.arm.com [10.169.214.103])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C43593F7D8;
+        Wed, 14 Jul 2021 20:16:25 -0700 (PDT)
+From:   Jia He <justin.he@arm.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>, nd@arm.com,
+        Jia He <justin.he@arm.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Chen Lin <chen.lin5@zte.com.cn>, linux-usb@vger.kernel.org
+Subject: [PATCH RFC 10/13] usb: gadget: simplify the printing with '%pD' specifier
+Date:   Thu, 15 Jul 2021 11:15:30 +0800
+Message-Id: <20210715031533.9553-11-justin.he@arm.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210715031533.9553-1-justin.he@arm.com>
+References: <20210715031533.9553-1-justin.he@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 14, 2021 at 09:44:51PM -0400, Alan Stern wrote:
-> Martin, here's another test you can try, on both the Odroid and PC 
-> systems.  Boot with usb.autosuspend=-1 on the command line to disable 
-> default runtime suspend.  But then before plugging in the drive, start a 
-> usbmon trace and do:
-> 
-> 	echo 2 >/sys/bus/usb/devices/1-2/power/autosuspend
+After the behavior of '%pD' is changed to print the full path of file,
+the log printing in fsg_common_create_lun() can be simplified.
 
-Oops, that should be 1-1, not 1-2.  As you would discover when running 
-the command.
+Given the space with proper length would be allocated in vprintk_store(),
+it is worthy of dropping kmalloc()/kfree() to avoid additional space
+allocation. The error case is well handled in d_path_unsafe(), the error
+string would be copied in '%pD' buffer, no need to additionally handle
+IS_ERR().
 
-Alan Stern
+Cc: Felipe Balbi <balbi@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Chen Lin <chen.lin5@zte.com.cn>
+Cc: linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Jia He <justin.he@arm.com>
+---
+ drivers/usb/gadget/function/f_mass_storage.c | 28 ++++++++------------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 4a4703634a2a..04d4e8a0f6fd 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -2738,7 +2738,6 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
+ 			  const char **name_pfx)
+ {
+ 	struct fsg_lun *lun;
+-	char *pathbuf, *p;
+ 	int rc = -ENOMEM;
+ 
+ 	if (id >= ARRAY_SIZE(common->luns))
+@@ -2790,22 +2789,17 @@ int fsg_common_create_lun(struct fsg_common *common, struct fsg_lun_config *cfg,
+ 			goto error_lun;
+ 	}
+ 
+-	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);
+-	p = "(no medium)";
+-	if (fsg_lun_is_open(lun)) {
+-		p = "(error)";
+-		if (pathbuf) {
+-			p = file_path(lun->filp, pathbuf, PATH_MAX);
+-			if (IS_ERR(p))
+-				p = "(error)";
+-		}
+-	}
+-	pr_info("LUN: %s%s%sfile: %s\n",
+-	      lun->removable ? "removable " : "",
+-	      lun->ro ? "read only " : "",
+-	      lun->cdrom ? "CD-ROM " : "",
+-	      p);
+-	kfree(pathbuf);
++	if (fsg_lun_is_open(lun))
++		pr_info("LUN: %s%s%sfile: %pD\n",
++			lun->removable ? "removable " : "",
++			lun->ro ? "read only " : "",
++			lun->cdrom ? "CD-ROM " : "",
++			lun->filp);
++	else
++		pr_info("LUN: %s%s%sfile: (no medium)\n",
++			lun->removable ? "removable " : "",
++			lun->ro ? "read only " : "",
++			lun->cdrom ? "CD-ROM " : "");
+ 
+ 	return 0;
+ 
+-- 
+2.17.1
+
