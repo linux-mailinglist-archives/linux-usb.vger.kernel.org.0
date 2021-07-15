@@ -2,147 +2,161 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A402C3CA038
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 16:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27703CA094
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 16:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbhGOOIr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 10:08:47 -0400
-Received: from mga02.intel.com ([134.134.136.20]:58025 "EHLO mga02.intel.com"
+        id S230391AbhGOOZ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 10:25:57 -0400
+Received: from cable.insite.cz ([84.242.75.189]:34808 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232011AbhGOOIr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 10:08:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10045"; a="197736351"
-X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
-   d="scan'208";a="197736351"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2021 07:05:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
-   d="scan'208";a="495444425"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2021 07:05:47 -0700
-Subject: Re: [PATCH 2/2] usb: hub: Disable USB 3 device initiated lpm if exit
- latency is too high
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, stern@rowland.harvard.edu
-References: <20210715131544.1984726-1-mathias.nyman@linux.intel.com>
- <20210715131544.1984726-2-mathias.nyman@linux.intel.com>
- <YPA1ots7vdRclUkE@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- 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 fiD/
-Message-ID: <14c3a642-8166-d33d-bd83-40c7ee7c2c99@linux.intel.com>
-Date:   Thu, 15 Jul 2021 17:08:07 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S229457AbhGOOZ5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Jul 2021 10:25:57 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id C1019A1A3D402;
+        Thu, 15 Jul 2021 16:23:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1626358982; bh=K0Frxa1dSUm6C75pFO6WhpnaAm0imIL2ayMj2bB3Dq0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=rPHkF+OM90xqLj83xftkKVWhWEmAstHDPXg8TJTZOgnMzBZ+ToVyQxze14Ezcnt+P
+         PP6IXn6OGfFynzF5DP02M7Jd9FvlyIYqSudlKmBGQL/+Ny9qZw5btFMy1WGe1IXerF
+         gTAnogteIxX21rL0jtiLTy0GfhL7ry+ShDfZu6eY=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NkRBTYxMZOkl; Thu, 15 Jul 2021 16:22:57 +0200 (CEST)
+Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 59785A1A3D400;
+        Thu, 15 Jul 2021 16:22:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1626358977; bh=K0Frxa1dSUm6C75pFO6WhpnaAm0imIL2ayMj2bB3Dq0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=A4ZFg8vtLJkl9h+nTNF7ylzCPu6PskLIvh7HfXdU+fereZF6V6401xH0bIubxaM4X
+         6EhaNEDwSgZMX2WOibWwCByAz+B3y87QOjbP9wfeEXvmPClUlf1YXMJS0IDsndLB88
+         PYXuB+v+O1TGiWu3KRuPFWLJ1TxFHDxfJzTa2R2E=
+Subject: Re: usb:gadget:u_audio: Regression in [v3,3/3] usb: gadget: u_audio:
+ add real feedback implementation - wMaxPacketSize calculation
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+References: <f861e345-3642-5bfa-0ce7-a5cd34204613@ivitera.com>
+ <1j8s2aa071.fsf@starbuckisacylon.baylibre.com>
+ <25120679-fe61-fb6a-d671-393e15428da0@ivitera.com>
+ <1jeebzq5k6.fsf@starbuckisacylon.baylibre.com>
+ <94718a5e-ea36-4a86-da4d-a30179c1c2c7@ivitera.com>
+ <1jbl73ptt9.fsf@starbuckisacylon.baylibre.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <8c3d06ef-d2b2-3c87-75c5-602aab7d1e51@ivitera.com>
+Date:   Thu, 15 Jul 2021 16:22:56 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <YPA1ots7vdRclUkE@kroah.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <1jbl73ptt9.fsf@starbuckisacylon.baylibre.com>
+Content-Type: text/plain; charset=iso-8859-2; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 15.7.2021 16.18, Greg KH wrote:
-> On Thu, Jul 15, 2021 at 04:15:44PM +0300, Mathias Nyman wrote:
->> The device initiated link power management U1/U2 states should not be
->> enabled in case the system exit latency plus one bus interval (125us) is
->> greater than the shortest service interval of any periodic endpoint.
->>
->> This is the case for both U1 and U2 sytstem exit latencies and link states.
->>
->> See USB 3.2 section 9.4.9 "Set Feature" for more details
->>
->> If host initiated lpm is enabled but device initiated is not due to exit
->> latency limitations then still set the udev->usb3_lpm_ux_enabled flag so
->> that sysfs users can see the link may go to U1/U2.
->>
->> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
->> ---
->>  drivers/usb/core/hub.c | 68 ++++++++++++++++++++++++++++++++++--------
->>  1 file changed, 56 insertions(+), 12 deletions(-)
+
+Dne 15. 07. 21 v 15:53 Jerome Brunet napsal(a):
 > 
-> Do either of these need to go to older kernels?
-
-Right, first patch should go, I'll figure out to what version.
-
-Second one not so sure. It does a minor change in lpm logic.
-
-Before second patch enabling lpm meant enabling both host and device initiated
-lpm transitions. After this patch we might enable host initated lpm without device
-lpm.
-
-That could be stated clearer in the description as well..  
-
+> On Thu 15 Jul 2021 at 14:36, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
 > 
+>> Dne 15. 07. 21 v 11:39 Jerome Brunet napsal(a):
+>>> On Tue 13 Jul 2021 at 15:16, Pavel Hofman <pavel.hofman@ivitera.com>
+>>> wrote:
+>>>
+> 
+>>> So 48kHz / 2ch / 16bits. Let's assume USB_SPEED_FULL for example (result
+>>> is the same for the other speeds).
+>>> In such condition, the nominal packet size is 192B but to accomodate an
+>>> extra sample, the maximum should indeed be 196B.
+>>> 	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+>>> 		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
+>>> with fb_max being 5 by default, srate should be 48240 after this.
+>>>
+>>> 	max_size_bw = num_channels(chmask) * ssize *
+>>> 		DIV_ROUND_UP(srate, factor / (1 << (bInterval - 1)));
+>>> With USB_SPEED_FULL, bInterval is 1 and factor is 1000 so:
+>>> => DIV_ROUND_UP(48240, 1000 / 1) should give 49;
+>>> Then
+>>> => max_size_bw = 2 * 2 * 49 = 196
+>>> So the end result should be 196 with current code. I tried on an ARM64
+>>> platform. Here is what I get:
+>>> [   26.241946] set_ep_max_packet_size: speed is USB_SPEED_FULL
+>>> [   26.243208] set_ep_max_packet_size: intermediate Playback srate 48000
+>>> [   26.249758] set_ep_max_packet_size: max_size_bw 192
+>>> [   26.254559] set_ep_max_packet_size: speed is USB_SPEED_FULL
+>>> [   26.260130] set_ep_max_packet_size: intermediate Capture srate 48240
+>>> [   26.266401] set_ep_max_packet_size: max_size_bw 196
+>>> [   26.271209] set_ep_max_packet_size: speed is USB_SPEED_HIGH
+>>> [   26.276873] set_ep_max_packet_size: intermediate Playback srate 48000
+>>> [   26.283165] set_ep_max_packet_size: max_size_bw 192
+>>> [   26.288015] set_ep_max_packet_size: speed is USB_SPEED_HIGH
+>>> [   26.293691] set_ep_max_packet_size: intermediate Capture srate 48240
+>>> [   26.299965] set_ep_max_packet_size: max_size_bw 196
+>>> [   26.304753] set_ep_max_packet_size: speed is USB_SPEED_SUPER
+>>> [   26.310426] set_ep_max_packet_size: intermediate Playback srate 48000
+>>> [   26.316805] set_ep_max_packet_size: max_size_bw 192
+>>> [   26.321625] set_ep_max_packet_size: speed is USB_SPEED_SUPER
+>>> [   26.327309] set_ep_max_packet_size: intermediate Capture srate 48240
+>>> [   26.333613] set_ep_max_packet_size: max_size_bw 196
+>>> All seems OK and as expected with what's in mainline ATM.
+>>> So I'm not quite sure why you would get a different result. It would be
+>>> great if you could check further.
+>>>
 >>
->> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
->> index a35d0bedafa3..63e150982da9 100644
->> --- a/drivers/usb/core/hub.c
->> +++ b/drivers/usb/core/hub.c
->> @@ -4116,6 +4116,47 @@ static int usb_set_lpm_timeout(struct usb_device *udev,
->>  	return 0;
->>  }
->>  
->> +/*
->> + * Don't allow device intiated U1/U2 if the system exit latency + one bus
->> + * interval is greater than the minimum service interval of any active
->> + * periodic endpoint. See USB 3.2 section 9.4.9
->> + */
->> +static bool usb_device_may_initiate_lpm(struct usb_device *udev,
->> +					enum usb3_link_state state)
->> +{
->> +	unsigned long long sel;		/* us */
+>> The problem is max_size_bw=192 for the Playback (i.e. is_playback =
+>> true). If only capture direction is activated (p_chmask=0), only EP-OUT
+>> with max_size_bw=196 is generated and Win10 enumerates the playback-only
+>> audio device.
 > 
-> Do you mean u64 here?  If so, you might want to use that :)
+> Ok, that was not clear before.
+> 
+>> Once the other direction with max_size_bw=192 is activated
+>> (either duplex or capture-only), Win10 refuses to enumerate.
+> 
+> Looking further at the format specification [0] (and crawling the web to
+> decipher it), it seems that
+> 
+> * For isochronous links: packet size must match the nominal rate.
+> * For async and adaptative: it must match the nominal rate +/- 1
+>    packet. That is whether we intend on varying the packet size or not.
+>    
+> This has several implication
+> * In async mode, the device is running of its own clock. It has no
+>    reason to vary the playback packet size but it should still reserve
+>    bandwidth for an extra packet to satisfy the spec. This seems to be
+>    your problem and what Win10 insist on.
+> 
+>    When I tested, I had linux on both sides and apparently it is not too
+>    picky about that.
 
-Ah, my mistake, no need for 64 bits.
-Original sel value we store here is an unsigned int.
-sel = DIV_ROUND_UP(udev->u1_params.sel, 1000);
+Linux also accepts the async EP-OUT without the explicit feedback EP-IN, 
+unlike Win10. It also supports implicit async feedback, unlike Win10.
 
-Must have copied that from usb_req_set_sel() that uses unsigned long long for sel and pel
-values for some odd reason.
-I'll change it.
+But the WASAPI usbaudio2.sys driver in Win10 seems quite OK, I just 
+tested 1536kHz/2ch/16bits playback and works OK, also non-standard 
+samplerates are supported (I tested 512kHz/2ch/32bit), all with overhead 
+of the Win10 running in VMWare Player virtualization.
 
--Mathias 
+> 
+> * If we apply the spec strictly, like Win10 seems to insist on,
+>    calculating the maximum packet size based on explicit feedback limits
+>    is wrong too. Whatever happens, it should be +/- 1 around nominal.
+> 
+> Funny thing, is your change puts a +2 capture compared to nominal but
+> Win10 is not picky on that ...
+
+IMO the Win10 driver just makes sure the max packet size is at least the 
+maximum in the specs. If it's more, it does not care - more USB 
+bandwidth is wasted, but the operation is safe.
+
+> 
+> I'll send a fix to clean this up. Thanks reporting the problem.
+
+Thanks a lot,
+
+Pavel.
