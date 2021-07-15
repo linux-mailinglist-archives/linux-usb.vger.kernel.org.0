@@ -2,65 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B50C53C9A35
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 10:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E9E3C9AFF
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 11:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbhGOINe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 04:13:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42296 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231655AbhGOINe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 04:13:34 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 330B5610D1;
-        Thu, 15 Jul 2021 08:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626336640;
-        bh=rKCR00UG/qw5FUHKpBMFkLO1eC1tLjMCz6QzQc0jzfU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dMzQ/nK+v5/YHQsG39gOzjPIhC4/mL/kEO1MXg+9vj9NytAjO9JDdNom01GIirdBI
-         NEoQMexS6QUh3UwWA2leXiSGrnkLGe2aLgp+JCBt3SdROWrF303aPngb5xQvoP59wt
-         KrVmrqt+lx/GtyclskAIP5/LeIvw7XFGb4GnjJUU=
-Date:   Thu, 15 Jul 2021 10:10:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jia He <justin.he@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>, nd@arm.com,
-        Felipe Balbi <balbi@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Chen Lin <chen.lin5@zte.com.cn>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH RFC 10/13] usb: gadget: simplify the printing with '%pD'
- specifier
-Message-ID: <YO/tfvKCKwiIk5n9@kroah.com>
-References: <20210715031533.9553-1-justin.he@arm.com>
- <20210715031533.9553-11-justin.he@arm.com>
+        id S240804AbhGOJLJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 05:11:09 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:44298 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234002AbhGOJLI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 15 Jul 2021 05:11:08 -0400
+X-UUID: 74007920824a4c989aa500bc29d99f6a-20210715
+X-UUID: 74007920824a4c989aa500bc29d99f6a-20210715
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 80373001; Thu, 15 Jul 2021 17:08:12 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 15 Jul 2021 17:08:10 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 15 Jul 2021 17:08:10 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Yuwen Ng <yuwen.ng@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: [PATCH v3 00/13] Add support mtu3 gadget (runtime) PM
+Date:   Thu, 15 Jul 2021 17:07:45 +0800
+Message-ID: <1626340078-29111-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210715031533.9553-11-justin.he@arm.com>
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 11:15:30AM +0800, Jia He wrote:
-> After the behavior of '%pD' is changed to print the full path of file,
-> the log printing in fsg_common_create_lun() can be simplified.
-> 
-> Given the space with proper length would be allocated in vprintk_store(),
-> it is worthy of dropping kmalloc()/kfree() to avoid additional space
-> allocation. The error case is well handled in d_path_unsafe(), the error
-> string would be copied in '%pD' buffer, no need to additionally handle
-> IS_ERR().
-> 
-> Cc: Felipe Balbi <balbi@kernel.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Chen Lin <chen.lin5@zte.com.cn>
-> Cc: linux-usb@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Jia He <justin.he@arm.com>
-> ---
->  drivers/usb/gadget/function/f_mass_storage.c | 28 ++++++++------------
->  1 file changed, 11 insertions(+), 17 deletions(-)
+This series mainly adds support for mtu3 gadget suspend/resume when
+the controller works at device only mode or dual role mode, and also
+adds support runtime PM.
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+v3:
+  add Acked-by Rob
+  fix use-after-free issue when probe failed
+v2:
+  Change the comment of cover letter and its title.
+
+  In order to help review, v2 drops the patches about role-switch
+  rebuilding which are applied, and the left ones are identical.
+
+
+Chunfeng Yun (13):
+  dt-bindings: usb: mtu3: remove support VBUS detection of extcon
+  dt-bindings: usb: mtu3: add optional property to disable usb2 ports
+  dt-bindings: usb: mtu3: add support property role-switch-default-mode
+  dt-bindings: usb: mtu3: add wakeup interrupt
+  usb: common: add helper to get role-switch-default-mode
+  usb: dwc3: drd: use helper to get role-switch-default-mode
+  usb: mtu3: support property role-switch-default-mode
+  usb: mtu3: support option to disable usb2 ports
+  usb: mtu3: add new helpers for host suspend/resume
+  usb: mtu3: support runtime PM for host mode
+  usb: mtu3: add helper to power on/down device
+  usb: mtu3: support suspend/resume for device mode
+  usb: mtu3: support suspend/resume for dual-role mode
+
+ .../bindings/usb/mediatek,mtu3.yaml           |  47 ++++-
+ drivers/usb/common/common.c                   |  20 +++
+ drivers/usb/dwc3/drd.c                        |   8 +-
+ drivers/usb/mtu3/mtu3.h                       |   8 +
+ drivers/usb/mtu3/mtu3_core.c                  | 115 ++++++++++--
+ drivers/usb/mtu3/mtu3_dr.c                    |  26 ++-
+ drivers/usb/mtu3/mtu3_dr.h                    |  30 +++-
+ drivers/usb/mtu3/mtu3_gadget.c                |   5 +
+ drivers/usb/mtu3/mtu3_host.c                  | 106 +++++++++--
+ drivers/usb/mtu3/mtu3_plat.c                  | 166 +++++++++++++++---
+ include/linux/usb/otg.h                       |   1 +
+ 11 files changed, 457 insertions(+), 75 deletions(-)
+
+-- 
+2.18.0
+
