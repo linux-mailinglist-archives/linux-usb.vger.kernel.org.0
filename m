@@ -2,76 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 335A13C9D6C
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 13:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECE63C9E27
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 14:01:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241229AbhGOLHA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 07:07:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60168 "EHLO mail.kernel.org"
+        id S232119AbhGOMEb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 08:04:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59334 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241176AbhGOLHA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 07:07:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A6BC7613BA;
-        Thu, 15 Jul 2021 11:04:05 +0000 (UTC)
+        id S232003AbhGOMEa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Jul 2021 08:04:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 386DD611AD;
+        Thu, 15 Jul 2021 12:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626347046;
-        bh=CtZTxWBhgkfpj48NrkT/qW6992ERI7R/jVxq3j9XRC4=;
+        s=korg; t=1626350497;
+        bh=bvioZ2SUemkybSffe93+DiVDPw02jQlhXZRvrQVmXE4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OW+Uut5UyBiCKe8zReiC47xuKdCP+DvO6Mld2qsVHrNf088APKcqWk0MjCxkXh9L4
-         j4oj5ntEqj5tptncGvhQ08bEgcJEpK5Ryyj9W4OwvnTDKUMggAgFlihbGmzgqLTKY1
-         VpW14IBcipVmZ2r3xFi5GbHjPzcsmlhaHIcbks6U=
-Date:   Thu, 15 Jul 2021 13:03:58 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-Cc:     linux-stable <stable@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Ainge Hsu <ainge.hsu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Macpaul Lin <macpaul.lin@gmail.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        AceLan Kao <acelan.kao@canonical.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>
-Subject: Re: Fix: Please help to cherry-pick patch "bdi: Do not use freezable
- workqueue" to stable tree
-Message-ID: <YPAWHugJQhNMOpYN@kroah.com>
-References: <1626323319.18118.17.camel@mtkswgap22>
+        b=LzVt2L2+QbfBOtyG9/41D+3Iqb66JILbJJDS0h3sGdRRUhoRd/5iZbb4i0a0WKvCd
+         O0lU79n4DRs7uLTVHFMSNXzqk7sNsgEwcXsu1QaQdkaizYFff+Y3ze7uHECpCAMbD3
+         TH8B7suedWu9aHiE7T9vV1PEjHCiWM50ZTkWdYw4=
+Date:   Thu, 15 Jul 2021 14:01:32 +0200
+From:   'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>
+To:     Andrew Gabbasov <andrew_gabbasov@mentor.com>
+Cc:     Macpaul Lin <macpaul.lin@mediatek.com>,
+        Eugeniu Rosca <erosca@de.adit-jv.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Subject: Re: [PATCH v4.14] usb: gadget: f_fs: Fix setting of device and
+ driver data cross-references
+Message-ID: <YPAjnCXOBK5CFfHu@kroah.com>
+References: <CACCg+XO+D+2SWJq0C=_sWXj53L1fh-wra8dmCb3VQ4bYCZQryA@mail.gmail.com>
+ <20210702184957.4479-1-andrew_gabbasov@mentor.com>
+ <20210702184957.4479-2-andrew_gabbasov@mentor.com>
+ <YOKvz2WzYuV0PaXD@kroah.com>
+ <000001d77187$e9782dd0$bc688970$@mentor.com>
+ <YOLiDSs/9+RzMKqE@kroah.com>
+ <000001d7766a$a755ada0$f60108e0$@mentor.com>
+ <20210711155130.16305-1-andrew_gabbasov@mentor.com>
+ <YOsXQfWvIPXUydFv@kroah.com>
+ <000001d77674$0fd59b20$2f80d160$@mentor.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1626323319.18118.17.camel@mtkswgap22>
+In-Reply-To: <000001d77674$0fd59b20$2f80d160$@mentor.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 15, 2021 at 12:28:39PM +0800, Macpaul Lin wrote:
-> Dear Greg,
+On Sun, Jul 11, 2021 at 07:44:41PM +0300, Andrew Gabbasov wrote:
+> Hello Greg,
 > 
-> Our customers have feedback some similar issues as below link on Android
-> kernel-4.14 and kernel-4.19.
->   Link: https://marc.info/?l=linux-kernel&m=138695698516487
+> > -----Original Message-----
+> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Sent: Sunday, July 11, 2021 7:07 PM
+> > To: Gabbasov, Andrew <Andrew_Gabbasov@mentor.com>
+> > Cc: Macpaul Lin <macpaul.lin@mediatek.com>; Eugeniu Rosca <erosca@de.adit-jv.com>; linux-usb@vger.kernel.org;
+> > linux-kernel@vger.kernel.org; stable@vger.kernel.org; Felipe Balbi <balbi@kernel.org>; Eugeniu Rosca
+> > <roscaeugeniu@gmail.com>; Eddie Hung <eddie.hung@mediatek.com>
+> > Subject: Re: [PATCH v4.14] usb: gadget: f_fs: Fix setting of device and driver data cross-references
+> > 
+> > On Sun, Jul 11, 2021 at 10:51:30AM -0500, Andrew Gabbasov wrote:
+> > > commit ecfbd7b9054bddb12cea07fda41bb3a79a7b0149 upstream.
+> > >
 > 
-> They've reported system become abnormal when OTG U-disk has been plugged
-> out after the system has been suspended.
-> After debugging, we've found the root cause is the same of the issue
-> (link) has been reported. We've also tested the patch "bdi: Do not use
-> freezable workqueue" is worked.
->   Link: https://lkml.org/lkml/2019/10/4/176
->   commit id in Linus tree: a2b90f11217790ec0964ba9c93a4abb369758c26
+> [ skipped ]
 > 
-> However, we've checked that patch seems hasn't been applied to stable
-> tree (We've checked 4.14 and 4.19). Would you please help to cherry-pick
-> this patch to stable trees (and to Android trees)?
+> > > Fixes: 4b187fceec3c ("usb: gadget: FunctionFS: add devices management code")
+> > > Fixes: 3262ad824307 ("usb: gadget: f_fs: Stop ffs_closed NULL pointer dereference")
+> > > Fixes: cdafb6d8b8da ("usb: gadget: f_fs: Fix use-after-free in ffs_free_inst")
+> > > Reported-by: Bhuvanesh Surachari <bhuvanesh_surachari@mentor.com>
+> > > Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > > Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> > > Signed-off-by: Andrew Gabbasov <andrew_gabbasov@mentor.com>
+> > > Link: https://lore.kernel.org/r/20210603171507.22514-1-andrew_gabbasov@mentor.com
+> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > [agabbasov: Backported to earlier mount API, resolved context conflicts]
+> > > ---
+> > >  drivers/usb/gadget/function/f_fs.c | 67 ++++++++++++++----------------
+> > >  1 file changed, 32 insertions(+), 35 deletions(-)
+> > 
+> > I also need a 4.19 version of this commit, as you do not want to upgrade
+> > to a newer kernel and regress.  Can you also provide that?
+> 
+> If I correctly understand, this particular file has a very minor difference
+> between 4.14 and 4.19. So, this same patch for 4.14 can be just applied / cherry-picked
+> cleanly on top of latest stable 4.19.
 
-Now queued up to the stable kernel trees.  If you need something in
-Android kernel trees, please contact google or submit a patch to AOSP
-for the needed branches.
-
-thanks,
+Now queued up, thanks.
 
 greg k-h
