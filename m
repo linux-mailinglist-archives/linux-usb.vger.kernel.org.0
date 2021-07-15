@@ -2,161 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27703CA094
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 16:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12413CA109
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 16:59:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbhGOOZ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 10:25:57 -0400
-Received: from cable.insite.cz ([84.242.75.189]:34808 "EHLO cable.insite.cz"
+        id S236013AbhGOPCE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 11:02:04 -0400
+Received: from mga12.intel.com ([192.55.52.136]:64815 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229457AbhGOOZ5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 10:25:57 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id C1019A1A3D402;
-        Thu, 15 Jul 2021 16:23:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1626358982; bh=K0Frxa1dSUm6C75pFO6WhpnaAm0imIL2ayMj2bB3Dq0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=rPHkF+OM90xqLj83xftkKVWhWEmAstHDPXg8TJTZOgnMzBZ+ToVyQxze14Ezcnt+P
-         PP6IXn6OGfFynzF5DP02M7Jd9FvlyIYqSudlKmBGQL/+Ny9qZw5btFMy1WGe1IXerF
-         gTAnogteIxX21rL0jtiLTy0GfhL7ry+ShDfZu6eY=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id NkRBTYxMZOkl; Thu, 15 Jul 2021 16:22:57 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 59785A1A3D400;
-        Thu, 15 Jul 2021 16:22:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1626358977; bh=K0Frxa1dSUm6C75pFO6WhpnaAm0imIL2ayMj2bB3Dq0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=A4ZFg8vtLJkl9h+nTNF7ylzCPu6PskLIvh7HfXdU+fereZF6V6401xH0bIubxaM4X
-         6EhaNEDwSgZMX2WOibWwCByAz+B3y87QOjbP9wfeEXvmPClUlf1YXMJS0IDsndLB88
-         PYXuB+v+O1TGiWu3KRuPFWLJ1TxFHDxfJzTa2R2E=
-Subject: Re: usb:gadget:u_audio: Regression in [v3,3/3] usb: gadget: u_audio:
- add real feedback implementation - wMaxPacketSize calculation
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-References: <f861e345-3642-5bfa-0ce7-a5cd34204613@ivitera.com>
- <1j8s2aa071.fsf@starbuckisacylon.baylibre.com>
- <25120679-fe61-fb6a-d671-393e15428da0@ivitera.com>
- <1jeebzq5k6.fsf@starbuckisacylon.baylibre.com>
- <94718a5e-ea36-4a86-da4d-a30179c1c2c7@ivitera.com>
- <1jbl73ptt9.fsf@starbuckisacylon.baylibre.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <8c3d06ef-d2b2-3c87-75c5-602aab7d1e51@ivitera.com>
-Date:   Thu, 15 Jul 2021 16:22:56 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S232108AbhGOPCD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Jul 2021 11:02:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10045"; a="190242718"
+X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
+   d="scan'208";a="190242718"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2021 07:59:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,242,1620716400"; 
+   d="scan'208";a="495474083"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Jul 2021 07:59:08 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     <gregkh@linuxfoundation.org>
+Cc:     <linux-usb@vger.kernel.org>, <stern@rowland.harvard.edu>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        stable@kernel.org
+Subject: [PATCH v2 1/2] usb: hub: Fix link power management max exit latency (MEL) calculations
+Date:   Thu, 15 Jul 2021 18:01:21 +0300
+Message-Id: <20210715150122.1995966-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <1jbl73ptt9.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset=iso-8859-2; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Maximum Exit Latency (MEL) value is used by host to know how much in
+advance it needs to start waking up a U1/U2 suspended link in order to
+service a periodic transfer in time.
 
-Dne 15. 07. 21 v 15:53 Jerome Brunet napsal(a):
-> 
-> On Thu 15 Jul 2021 at 14:36, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
-> 
->> Dne 15. 07. 21 v 11:39 Jerome Brunet napsal(a):
->>> On Tue 13 Jul 2021 at 15:16, Pavel Hofman <pavel.hofman@ivitera.com>
->>> wrote:
->>>
-> 
->>> So 48kHz / 2ch / 16bits. Let's assume USB_SPEED_FULL for example (result
->>> is the same for the other speeds).
->>> In such condition, the nominal packet size is 192B but to accomodate an
->>> extra sample, the maximum should indeed be 196B.
->>> 	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
->>> 		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
->>> with fb_max being 5 by default, srate should be 48240 after this.
->>>
->>> 	max_size_bw = num_channels(chmask) * ssize *
->>> 		DIV_ROUND_UP(srate, factor / (1 << (bInterval - 1)));
->>> With USB_SPEED_FULL, bInterval is 1 and factor is 1000 so:
->>> => DIV_ROUND_UP(48240, 1000 / 1) should give 49;
->>> Then
->>> => max_size_bw = 2 * 2 * 49 = 196
->>> So the end result should be 196 with current code. I tried on an ARM64
->>> platform. Here is what I get:
->>> [   26.241946] set_ep_max_packet_size: speed is USB_SPEED_FULL
->>> [   26.243208] set_ep_max_packet_size: intermediate Playback srate 48000
->>> [   26.249758] set_ep_max_packet_size: max_size_bw 192
->>> [   26.254559] set_ep_max_packet_size: speed is USB_SPEED_FULL
->>> [   26.260130] set_ep_max_packet_size: intermediate Capture srate 48240
->>> [   26.266401] set_ep_max_packet_size: max_size_bw 196
->>> [   26.271209] set_ep_max_packet_size: speed is USB_SPEED_HIGH
->>> [   26.276873] set_ep_max_packet_size: intermediate Playback srate 48000
->>> [   26.283165] set_ep_max_packet_size: max_size_bw 192
->>> [   26.288015] set_ep_max_packet_size: speed is USB_SPEED_HIGH
->>> [   26.293691] set_ep_max_packet_size: intermediate Capture srate 48240
->>> [   26.299965] set_ep_max_packet_size: max_size_bw 196
->>> [   26.304753] set_ep_max_packet_size: speed is USB_SPEED_SUPER
->>> [   26.310426] set_ep_max_packet_size: intermediate Playback srate 48000
->>> [   26.316805] set_ep_max_packet_size: max_size_bw 192
->>> [   26.321625] set_ep_max_packet_size: speed is USB_SPEED_SUPER
->>> [   26.327309] set_ep_max_packet_size: intermediate Capture srate 48240
->>> [   26.333613] set_ep_max_packet_size: max_size_bw 196
->>> All seems OK and as expected with what's in mainline ATM.
->>> So I'm not quite sure why you would get a different result. It would be
->>> great if you could check further.
->>>
->>
->> The problem is max_size_bw=192 for the Playback (i.e. is_playback =
->> true). If only capture direction is activated (p_chmask=0), only EP-OUT
->> with max_size_bw=196 is generated and Win10 enumerates the playback-only
->> audio device.
-> 
-> Ok, that was not clear before.
-> 
->> Once the other direction with max_size_bw=192 is activated
->> (either duplex or capture-only), Win10 refuses to enumerate.
-> 
-> Looking further at the format specification [0] (and crawling the web to
-> decipher it), it seems that
-> 
-> * For isochronous links: packet size must match the nominal rate.
-> * For async and adaptative: it must match the nominal rate +/- 1
->    packet. That is whether we intend on varying the packet size or not.
->    
-> This has several implication
-> * In async mode, the device is running of its own clock. It has no
->    reason to vary the playback packet size but it should still reserve
->    bandwidth for an extra packet to satisfy the spec. This seems to be
->    your problem and what Win10 insist on.
-> 
->    When I tested, I had linux on both sides and apparently it is not too
->    picky about that.
+Current MEL calculation only includes the time to wake up the path from
+U1/U2 to U0. This is called tMEL1 in USB 3.1 section C 1.5.2
 
-Linux also accepts the async EP-OUT without the explicit feedback EP-IN, 
-unlike Win10. It also supports implicit async feedback, unlike Win10.
+Total MEL = tMEL1 + tMEL2 +tMEL3 + tMEL4 which should additinally include:
+- tMEL2 which is the time it takes for PING message to reach device
+- tMEL3 time for device to process the PING and submit a PING_RESPONSE
+- tMEL4 time for PING_RESPONSE to traverse back upstream to host.
 
-But the WASAPI usbaudio2.sys driver in Win10 seems quite OK, I just 
-tested 1536kHz/2ch/16bits playback and works OK, also non-standard 
-samplerates are supported (I tested 512kHz/2ch/32bit), all with overhead 
-of the Win10 running in VMWare Player virtualization.
+Add the missing tMEL2, tMEL3 and tMEL4 to MEL calculation.
 
-> 
-> * If we apply the spec strictly, like Win10 seems to insist on,
->    calculating the maximum packet size based on explicit feedback limits
->    is wrong too. Whatever happens, it should be +/- 1 around nominal.
-> 
-> Funny thing, is your change puts a +2 capture compared to nominal but
-> Win10 is not picky on that ...
+Cc: <stable@kernel.org> # v3.5
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+v2: Add stable tag
 
-IMO the Win10 driver just makes sure the max packet size is at least the 
-maximum in the specs. If it's more, it does not care - more USB 
-bandwidth is wasted, but the operation is safe.
+ drivers/usb/core/hub.c | 52 +++++++++++++++++++++++-------------------
+ 1 file changed, 28 insertions(+), 24 deletions(-)
 
-> 
-> I'll send a fix to clean this up. Thanks reporting the problem.
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index d1efc7141333..a35d0bedafa3 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -48,6 +48,7 @@
+ 
+ #define USB_TP_TRANSMISSION_DELAY	40	/* ns */
+ #define USB_TP_TRANSMISSION_DELAY_MAX	65535	/* ns */
++#define USB_PING_RESPONSE_TIME		400	/* ns */
+ 
+ /* Protect struct usb_device->state and ->children members
+  * Note: Both are also protected by ->dev.sem, except that ->state can
+@@ -182,8 +183,9 @@ int usb_device_supports_lpm(struct usb_device *udev)
+ }
+ 
+ /*
+- * Set the Maximum Exit Latency (MEL) for the host to initiate a transition from
+- * either U1 or U2.
++ * Set the Maximum Exit Latency (MEL) for the host to wakup up the path from
++ * U1/U2, send a PING to the device and receive a PING_RESPONSE.
++ * See USB 3.1 section C.1.5.2
+  */
+ static void usb_set_lpm_mel(struct usb_device *udev,
+ 		struct usb3_lpm_parameters *udev_lpm_params,
+@@ -193,35 +195,37 @@ static void usb_set_lpm_mel(struct usb_device *udev,
+ 		unsigned int hub_exit_latency)
+ {
+ 	unsigned int total_mel;
+-	unsigned int device_mel;
+-	unsigned int hub_mel;
+ 
+ 	/*
+-	 * Calculate the time it takes to transition all links from the roothub
+-	 * to the parent hub into U0.  The parent hub must then decode the
+-	 * packet (hub header decode latency) to figure out which port it was
+-	 * bound for.
+-	 *
+-	 * The Hub Header decode latency is expressed in 0.1us intervals (0x1
+-	 * means 0.1us).  Multiply that by 100 to get nanoseconds.
++	 * tMEL1. time to transition path from host to device into U0.
++	 * MEL for parent already contains the delay up to parent, so only add
++	 * the exit latency for the last link (pick the slower exit latency),
++	 * and the hub header decode latency. See USB 3.1 section C 2.2.1
++	 * Store MEL in nanoseconds
+ 	 */
+ 	total_mel = hub_lpm_params->mel +
+-		(hub->descriptor->u.ss.bHubHdrDecLat * 100);
++		max(udev_exit_latency, hub_exit_latency) * 1000 +
++		hub->descriptor->u.ss.bHubHdrDecLat * 100;
+ 
+ 	/*
+-	 * How long will it take to transition the downstream hub's port into
+-	 * U0?  The greater of either the hub exit latency or the device exit
+-	 * latency.
+-	 *
+-	 * The BOS U1/U2 exit latencies are expressed in 1us intervals.
+-	 * Multiply that by 1000 to get nanoseconds.
++	 * tMEL2. Time to submit PING packet. Sum of tTPTransmissionDelay for
++	 * each link + wHubDelay for each hub. Add only for last link.
++	 * tMEL4, the time for PING_RESPONSE to traverse upstream is similar.
++	 * Multiply by 2 to include it as well.
+ 	 */
+-	device_mel = udev_exit_latency * 1000;
+-	hub_mel = hub_exit_latency * 1000;
+-	if (device_mel > hub_mel)
+-		total_mel += device_mel;
+-	else
+-		total_mel += hub_mel;
++	total_mel += (__le16_to_cpu(hub->descriptor->u.ss.wHubDelay) +
++		      USB_TP_TRANSMISSION_DELAY) * 2;
++
++	/*
++	 * tMEL3, tPingResponse. Time taken by device to generate PING_RESPONSE
++	 * after receiving PING. Also add 2100ns as stated in USB 3.1 C 1.5.2.4
++	 * to cover the delay if the PING_RESPONSE is queued behind a Max Packet
++	 * Size DP.
++	 * Note these delays should be added only once for the entire path, so
++	 * add them to the MEL of the device connected to the roothub.
++	 */
++	if (!hub->hdev->parent)
++		total_mel += USB_PING_RESPONSE_TIME + 2100;
+ 
+ 	udev_lpm_params->mel = total_mel;
+ }
+-- 
+2.25.1
 
-Thanks a lot,
-
-Pavel.
