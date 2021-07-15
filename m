@@ -2,64 +2,56 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BFB3C999B
-	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 09:26:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B50C53C9A35
+	for <lists+linux-usb@lfdr.de>; Thu, 15 Jul 2021 10:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231617AbhGOH3b (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 15 Jul 2021 03:29:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34894 "EHLO mail.kernel.org"
+        id S232855AbhGOINe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 15 Jul 2021 04:13:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42296 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229973AbhGOH3b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 15 Jul 2021 03:29:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5E65B6128B;
-        Thu, 15 Jul 2021 07:26:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626333998;
-        bh=MX13di5LHd3D7Na23Fk3TKOgbM5nHbJhT3eiJPdsLTE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=V2888euA4ssGyF8u3AyHMeAqPi0aG/qo+WA8gLqa3qOiD/A17zXq0oBWYMrEIw2jN
-         n4hLAOG8XzK2t+BQF5Vz+TLJnoKfyvAPwzpe2MxaSSmBKjVyIcjC84bjJ0LRIB52vt
-         v1Iqaw03ng88nJdyhdnk4EQIBs751zMrB0X5SEc9MrPfz+ckbDD4RqidZ3SBoyo1DS
-         gBjlwPc7lvhdTYz0aZS5ZMVHH7+TdSzVG91a/0hW+RxjYwj+06FhFL+yY7LZKEKp/s
-         HVGjXhlvtWq3tCzqhL0UCpzcZQ9MvvgJOyytei9kZRWKJ1OyuKxKociaRA6fyx+k1H
-         Z/gh/y6RXqMXA==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jia He <justin.he@arm.com>, linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S231655AbhGOINe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 15 Jul 2021 04:13:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 330B5610D1;
+        Thu, 15 Jul 2021 08:10:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1626336640;
+        bh=rKCR00UG/qw5FUHKpBMFkLO1eC1tLjMCz6QzQc0jzfU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dMzQ/nK+v5/YHQsG39gOzjPIhC4/mL/kEO1MXg+9vj9NytAjO9JDdNom01GIirdBI
+         NEoQMexS6QUh3UwWA2leXiSGrnkLGe2aLgp+JCBt3SdROWrF303aPngb5xQvoP59wt
+         KrVmrqt+lx/GtyclskAIP5/LeIvw7XFGb4GnjJUU=
+Date:   Thu, 15 Jul 2021 10:10:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jia He <justin.he@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Christoph Hellwig <hch@infradead.org>, nd@arm.com,
-        Jia He <justin.he@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
         "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Chen Lin <chen.lin5@zte.com.cn>, linux-usb@vger.kernel.org
 Subject: Re: [PATCH RFC 10/13] usb: gadget: simplify the printing with '%pD'
  specifier
-In-Reply-To: <20210715031533.9553-11-justin.he@arm.com>
+Message-ID: <YO/tfvKCKwiIk5n9@kroah.com>
 References: <20210715031533.9553-1-justin.he@arm.com>
  <20210715031533.9553-11-justin.he@arm.com>
-Date:   Thu, 15 Jul 2021 10:26:29 +0300
-Message-ID: <874kcwyr4q.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210715031533.9553-11-justin.he@arm.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-
-Jia He <justin.he@arm.com> writes:
-
+On Thu, Jul 15, 2021 at 11:15:30AM +0800, Jia He wrote:
 > After the behavior of '%pD' is changed to print the full path of file,
 > the log printing in fsg_common_create_lun() can be simplified.
->
+> 
 > Given the space with proper length would be allocated in vprintk_store(),
 > it is worthy of dropping kmalloc()/kfree() to avoid additional space
 > allocation. The error case is well handled in d_path_unsafe(), the error
 > string would be copied in '%pD' buffer, no need to additionally handle
 > IS_ERR().
->
+> 
 > Cc: Felipe Balbi <balbi@kernel.org>
 > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
@@ -67,24 +59,8 @@ Jia He <justin.he@arm.com> writes:
 > Cc: linux-usb@vger.kernel.org
 > Cc: linux-kernel@vger.kernel.org
 > Signed-off-by: Jia He <justin.he@arm.com>
+> ---
+>  drivers/usb/gadget/function/f_mass_storage.c | 28 ++++++++------------
+>  1 file changed, 11 insertions(+), 17 deletions(-)
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmDv4yURHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjJKAgAiATl1ws5K/uJxFsWiLFkdu88ekG4GdT8
-6UEm/gfpSpJL/co64jwkj+ZgLVlftmWR2rMhy3Z33nBqcHDac1P1Z01dzEz7pHq1
-ObBhXD9Fa/Mcv9JlMT7nkuoThwGW8Z7Nk+s7YKKSoen0W8rOMGJ2jxDWOohHlu9y
-d+I+GrUMJGYtk1pdrkVslr6f9TlPXg0p7/dzaQZonQLrBMoAliOZPK/Ahzqi/Mig
-NPzBY/u1OIvo1XJw2xZRYKnhDOYSsyE79FjZJOhrxvfElQntsOUSNRhR5bwrenxN
-Sg1FWu1+fJRXlZZVygHbfvvvvkl7jRgorkBOfKlzVWWeiQxDpXbbNQ==
-=GqR6
------END PGP SIGNATURE-----
---=-=-=--
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
