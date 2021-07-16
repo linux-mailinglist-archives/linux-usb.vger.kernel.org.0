@@ -2,124 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDD293CB513
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 11:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB71A3CB562
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 11:39:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231506AbhGPJPO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jul 2021 05:15:14 -0400
-Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:55104
-        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231143AbhGPJPO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 05:15:14 -0400
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPS id 8F21B408B1
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 09:12:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1626426738;
-        bh=XxeFkpT94fzaqhSrGg614mOHSF8BqPdtoH/zJQ41EJ4=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=Pq76nxvIq2hFcvQY+SQJDr+Gvcv9UwOuE2M2EaqpYKZmLtgNIAJYn576PRI89JYjy
-         NGt+iteD5LfyePmTfrLyW6SPPp6wA9ZcsuVbXyvgGwDLqrE3jeVmuT3r7JB+p/6MfM
-         9sc71ZaUdsIFFm7/41sUbUrRtR0Vokh64BFuMHhQVBlCqKqQ0DaedbNg1Tm2vuEiQ8
-         pTpALo5LpEelST3WddIOg88YWWcTDdQGidbomTzAzm9/415T002dadAXUrjC95S9g2
-         le5UEOb3rrkX1Sr24FC7GCmePLdQQ7ddgbVIlIcqP+ppyXrCAKvdbD8c/XHFWmeqan
-         2OAPGVO06fBXA==
-Received: by mail-ej1-f72.google.com with SMTP id kf3-20020a17090776c3b0290536d9b62eb6so1959116ejc.2
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 02:12:18 -0700 (PDT)
+        id S234603AbhGPJm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jul 2021 05:42:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231490AbhGPJm3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 05:42:29 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB184C06175F
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 02:39:34 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id dw7-20020a17090b0947b0290173b4d6dd74so5161389pjb.0
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 02:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=i5RVB4vHIQ9nfl4HYaBlwICiig5AVs5as0lKSOXIVDA=;
+        b=jrCQeC/33Kk/hYXadEHP+UjkiH1AYtQsmDTNok9CcevcsGhAt1Wtaj/X1w0Y/biakA
+         fZTmYevuEaBlxOk1/0zuU4/llrPnRvhtCzVWQg6t/fGZ+rVq3SMgXT0FI+cftuHWHqh0
+         3YbgovKaIWCIm7IrMY7LnjaEwViDKM933FbV0l7r1cdbrUJRdaADDcABoPvoKrauB+tB
+         WDgdQtCLkUe9nV5ji73GLOSNCdmgdMc9uJ7U3JS6IJjm09xGf2VeRvQe25b1i+xePnns
+         1Df/cqU3kTv6G4DW7Jmga/xtRFHNj6PXFkKbcaCyRv0OewdKjWGKb9zEXa4TL+FtxbHw
+         7oHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=XxeFkpT94fzaqhSrGg614mOHSF8BqPdtoH/zJQ41EJ4=;
-        b=Z9ktYjm3zxBWjqfnj+fmWVVQOsnpEILGnjoYBlwj6X+c9vJ0yhK3jM57VPYqySs9jh
-         fQMGVQoPGMGaRw2lmiFQhYbCIJwwYiiJHdQY3bVi9bMVwxkwK0XEZrdshfoDFoxMUf9Z
-         own2CKEZC2W0PR4s4eveJUXjqd0Trq7owmSFTuwJogApXy4Z51qfgJHvXgjOTXO8lhgp
-         wNRuU00XpDEuMa8/2Lo2RUiq7tU8t5+s1DvQF7YlljMASqyfhrvKgA0XOMRY9lRAC9Kb
-         0HmMB9BkHT8j0iqiP26Rb0zGb1V9z83vjE9i0zJtt1wEBkVaECB2sd8gurrXPcnHAurI
-         OHVQ==
-X-Gm-Message-State: AOAM531yViE7A24tr34ZTqvwmyy699bASP0dSHUgH2o9a2xFCVz1Ry9Y
-        fDt82AveqK2m3dINuWFwFz+a8Ty4kXvu7laY45a9ezc2S4yDZfKAUy4MTenEsLtp6RaWtu/7tHZ
-        GyqI+gprqKZDqv5XG80IsZJ8v4rf3A9TxWqo0YQ==
-X-Received: by 2002:a17:906:ecb3:: with SMTP id qh19mr2748282ejb.113.1626426738229;
-        Fri, 16 Jul 2021 02:12:18 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzaMvFEXXfYpTa3bZrJ+/W4FPiffv73tNzG5zxnfnhbS0r8FmEL83ODvtv5wfqMkygLzhO7Sg==
-X-Received: by 2002:a17:906:ecb3:: with SMTP id qh19mr2748267ejb.113.1626426738085;
-        Fri, 16 Jul 2021 02:12:18 -0700 (PDT)
-Received: from [192.168.3.211] (xdsl-188-155-177-222.adslplus.ch. [188.155.177.222])
-        by smtp.gmail.com with ESMTPSA id d22sm2762654ejj.47.2021.07.16.02.12.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jul 2021 02:12:17 -0700 (PDT)
-Subject: Re: [PATCH] usb: dwc2: Skip clock gating on Samsung SoCs
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-References: <CGME20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23@eucas1p2.samsung.com>
- <20210716050127.4406-1-m.szyprowski@samsung.com>
- <e2fc4d3f-2f64-1d7e-5816-0275da23d6fa@canonical.com>
- <6fb5313e-b2c0-7b3e-84f7-6333216f4292@synopsys.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Message-ID: <bb750c51-c01a-fb95-4ad5-2fd3f1c625f9@canonical.com>
-Date:   Fri, 16 Jul 2021 11:12:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <6fb5313e-b2c0-7b3e-84f7-6333216f4292@synopsys.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=i5RVB4vHIQ9nfl4HYaBlwICiig5AVs5as0lKSOXIVDA=;
+        b=VZPACtKbYiAdNcrel6S9B/u+mjT++8uZBfHdpchMaeiEAL3spFr9w1nlLNiNWKHUO0
+         musjdwGrXrOTtSQq+XOIY6mHu4accsfsYQhYAdGCI1ztZo0aEMRffPtgXS9j1JgAkVQF
+         X6qyZj0/AzeeRdvA7fmQQeNcBmv7ogq8f9Hd7dZddRZ/xGNTtQlrj+wXzBck/As3tSMV
+         U3WV/mIuunEPeLe3edv0WXypyGVUTQvl1DwhHdwKMrbQAtJZyJpOHqGHPwtvsDl6zZMD
+         IbEQuAdcZkaF30T+WhbcJmlzCEd0E9o1wGNadMzqhbyBW1tSMcuTaQG93Haj5KzQ4mx2
+         0UyA==
+X-Gm-Message-State: AOAM531Re8AfFwYYlJBkViLVrAJRWLxZOqXGlfMJg682EWu33/NJupnH
+        Ep+491mCsjU15FEsKxxejq0sRqQoDlmU
+X-Google-Smtp-Source: ABdhPJx9plZN4fOdWaJMHqmQCeH4GXQeo/NMpNI6gdN00S6W00+o5rI1ZMqqLDJmO7as07bHoUv3EjE8GxPn
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:4ff3:81:775d:165c])
+ (user=kyletso job=sendgmr) by 2002:a62:cd47:0:b029:329:714e:cce2 with SMTP id
+ o68-20020a62cd470000b0290329714ecce2mr9622583pfg.22.1626428374280; Fri, 16
+ Jul 2021 02:39:34 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 17:39:16 +0800
+Message-Id: <20210716093916.1516845-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.402.g57bb445576-goog
+Subject: [PATCH] usb: typec: tcpm: Support non-PD mode
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+tcpm.c could work well without PD capabilities. Do not block the probe
+if capabilities are not defined in fwnode and skip the PD power
+negotiation in the state machine.
 
-On 16/07/2021 11:07, Minas Harutyunyan wrote:
-> Hi Krzysztof,
-> 
-> On 7/16/2021 12:10 PM, Krzysztof Kozlowski wrote:
->> On 16/07/2021 07:01, Marek Szyprowski wrote:
->>> Commit 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr
->>> function.") changed the way the driver handles power down modes in a such
->>> way that it uses clock gating when no other power down mode is available.
->>>
->>> This however doesn't work well on the DWC2 implementation used on the
->>> Samsung SoCs. When a clock gating is enabled, system hangs. It looks that
->>> the proper clock gating requires some additional glue code in the shared
->>> USB2 PHY and/or Samsung glue code for the DWC2. To restore driver
->>> operation on the Samsung SoCs simply skip enabling clock gating mode
->>> until one finds what is really needed to make it working reliably.
->>>
->>> Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
->>> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
->>> ---
->>>   drivers/usb/dwc2/core.h      | 4 ++++
->>>   drivers/usb/dwc2/core_intr.c | 3 ++-
->>>   drivers/usb/dwc2/hcd.c       | 6 ++++--
->>>   drivers/usb/dwc2/params.c    | 1 +
->>>   4 files changed, 11 insertions(+), 3 deletions(-)
->>>
->>
->>
->> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
->>
-> What mean your "Acked-by" tag? Do you want to mention that this commit 
-> "Tested-by" or "Reviewed-by" by you?
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 50 ++++++++++++++++++++---------------
+ 1 file changed, 29 insertions(+), 21 deletions(-)
 
-My "Acked-by" means exactly what Linux process defines:
-https://elixir.bootlin.com/linux/latest/source/Documentation/process/submitting-patches.rst#L426
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5b22a1c931a9..a42de5e17d24 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -3914,6 +3914,8 @@ static void run_state_machine(struct tcpm_port *port)
+ 		if (port->ams == POWER_ROLE_SWAP ||
+ 		    port->ams == FAST_ROLE_SWAP)
+ 			tcpm_ams_finish(port);
++		if (!port->nr_src_pdo)
++			tcpm_set_state(port, SRC_READY, 0);
+ 		port->upcoming_state = SRC_SEND_CAPABILITIES;
+ 		tcpm_ams_start(port, POWER_NEGOTIATION);
+ 		break;
+@@ -4161,7 +4163,10 @@ static void run_state_machine(struct tcpm_port *port)
+ 				current_lim = PD_P_SNK_STDBY_MW / 5;
+ 			tcpm_set_current_limit(port, current_lim, 5000);
+ 			tcpm_set_charge(port, true);
+-			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
++			if (!port->nr_snk_pdo)
++				tcpm_set_state(port, SNK_READY, 0);
++			else
++				tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+ 			break;
+ 		}
+ 		/*
+@@ -5939,15 +5944,17 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ 
+ 	/* Get source pdos */
+ 	ret = fwnode_property_count_u32(fwnode, "source-pdos");
+-	if (ret <= 0)
+-		return -EINVAL;
++	if (ret < 0)
++		ret = 0;
+ 
+ 	port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
+-	ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
+-					     port->src_pdo, port->nr_src_pdo);
+-	if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
+-					    port->nr_src_pdo))
+-		return -EINVAL;
++	if (port->nr_src_pdo) {
++		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
++						     port->src_pdo, port->nr_src_pdo);
++		if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
++						    port->nr_src_pdo))
++			return -EINVAL;
++	}
+ 
+ 	if (port->port_type == TYPEC_PORT_SRC)
+ 		return 0;
+@@ -5963,19 +5970,21 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+ sink:
+ 	/* Get sink pdos */
+ 	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
+-	if (ret <= 0)
+-		return -EINVAL;
++	if (ret < 0)
++		ret = 0;
+ 
+ 	port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
+-	ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
+-					     port->snk_pdo, port->nr_snk_pdo);
+-	if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
+-					    port->nr_snk_pdo))
+-		return -EINVAL;
++	if (port->nr_snk_pdo) {
++		ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
++						     port->snk_pdo, port->nr_snk_pdo);
++		if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
++						    port->nr_snk_pdo))
++			return -EINVAL;
+ 
+-	if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
+-		return -EINVAL;
+-	port->operating_snk_mw = mw / 1000;
++		if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
++			return -EINVAL;
++		port->operating_snk_mw = mw / 1000;
++	}
+ 
+ 	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+ 
+@@ -6283,9 +6292,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
+ 	int err;
+ 
+ 	if (!dev || !tcpc ||
+-	    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc ||
+-	    !tcpc->set_polarity || !tcpc->set_vconn || !tcpc->set_vbus ||
+-	    !tcpc->set_pd_rx || !tcpc->set_roles || !tcpc->pd_transmit)
++	    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc || !tcpc->set_polarity ||
++	    !tcpc->set_vconn || !tcpc->set_vbus || !tcpc->set_roles)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+-- 
+2.32.0.402.g57bb445576-goog
 
-Acked-by is neither Tested-by nor Reviewed-by. For the definition
-of these other tags, please also see link above.
-
-Best regards,
-Krzysztof
