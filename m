@@ -2,128 +2,169 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CF543CBCB8
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 21:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1983CBDD3
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 22:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbhGPTkU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jul 2021 15:40:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
+        id S233119AbhGPUe4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jul 2021 16:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbhGPTkT (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 15:40:19 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04837C061760
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 12:37:23 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 42-20020a9d012d0000b02904b98d90c82cso10999812otu.5
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 12:37:23 -0700 (PDT)
+        with ESMTP id S233180AbhGPUez (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 16:34:55 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0737FC061762
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 13:31:59 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id s23so12407712oij.0
+        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 13:31:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=B+qWxCxPzZUSJU5vf13De3C2NmLqgomQCz7PVp0POS0=;
-        b=KYe2848AYVmvn/mTfUfL3BTVz86s6+UrlpqAEHaGpaPKMcb+usLn5dJwy0fk1i00JK
-         xxv/wcSDryh3eyRV1QsHri6QURUr73J1yxhb0uAr5kF8wCaS1jgNE+bv0azLA5l0DS/Z
-         99UqnsSh4fWiQrl2JLZlaJQkIJMjmjtNjawVk=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=skur1GUOLazLI9sGw0mejIHq2wA0Qk680cR6nWMO0gg=;
+        b=LwwcqbgFHQkMbqk1jYcxEcYdIkZvuwGRMhi5jbFla+CtGB+Hewhiw/2KUAe7icFwAf
+         m4jub9zvG0KPDG/uOUhbbZ4cMi7YmBaL4ly31rmpmk96M6wlZpkcECO2+O4rY9bTh8K+
+         f0KnZTQfPF2QV3yjHHQOK3lFt6s2qgzADMaijUdYuWS4b+mPRCTG7K3LT1KXL1Uyl43X
+         8NQhA2YBYvkZWhN/pKrSdeOnPprxqNeno0XtwE+zc6LT3VLQfrHou3dQlGMRVpe2JU0y
+         r+m5szqGyXeI2UjF31//tUMgl3ouerRlNMexxMVR9V8XHhcGO8NydNIT+cmfyiBnvBFc
+         rknA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=B+qWxCxPzZUSJU5vf13De3C2NmLqgomQCz7PVp0POS0=;
-        b=aCnKWxYFkUtf4FEY8XtIS6bkAfHQhuS4CoakD5yhMshlfkfKRXRhqgkSES0+R+UTbB
-         M2DPemU+inWlxEb0RNvKtWLoUe5C/utF/xOwHgX+m3mp22XfLs7D3429UeOhBVt+Swa4
-         YiT2adIIrskQM6KQbGjH5BlAibcFVeX9tpCH0YGwAEom5qToplG4ix+MyYGL0puLFa4z
-         kBcEP0pMu2FqqE8LZh4Vx/F81OLZBmCUZN5+HPabdzxiRWZCcONSnyhxv9abPX2qw819
-         WnlmLpCI5kEX9G9LBcjgzlQWq34OkmRSK7heKyDGhihqZeDAUPyfkKMlciQh7V9vEQIZ
-         RbYw==
-X-Gm-Message-State: AOAM531Jfx7UTWh6QvcnZWr8m3RsQ8IFGeg/cPuCTXzp7SYTD627K9BL
-        d6zUskMo6lPGknL5U8iboAO70XWUxrb3J0alu1EMlQ==
-X-Google-Smtp-Source: ABdhPJwuLPCar4yVR7ZYLIvtXKz39byM22uYRQpClpwM27nlec63C4YHO4rpFAoKeLHeTOdMOs4KfMRjNlO5a8+zUZQ=
-X-Received: by 2002:a9d:2781:: with SMTP id c1mr9349710otb.34.1626464243318;
- Fri, 16 Jul 2021 12:37:23 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Fri, 16 Jul 2021 21:37:22 +0200
-MIME-Version: 1.0
-In-Reply-To: <1626443927-32028-5-git-send-email-pmaliset@codeaurora.org>
-References: <1626443927-32028-1-git-send-email-pmaliset@codeaurora.org> <1626443927-32028-5-git-send-email-pmaliset@codeaurora.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.9.1
-Date:   Fri, 16 Jul 2021 21:37:22 +0200
-Message-ID: <CAE-0n538LKQpeY_NKQF-VM3nHVxEE0B_pN4aN=sQ8iQzK+Yyxw@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=skur1GUOLazLI9sGw0mejIHq2wA0Qk680cR6nWMO0gg=;
+        b=W5H5ZfqQWrhAGyR9kZIRRgK8SpGYp2SZ5EqsLWsxwHXRlVkbiiTvG/rd6RXhkGdSsR
+         hVheilF1n9uiPuX6ziuYoNCbgv/ELztWRB6XQwObcC6ddL8XefZMrVTeG1JDPSTMuoG6
+         SJ8zD5R/2hw8eXnULYPF7K/vW6/ZyGvbDHNZXgmiFFCBJAvVNnoYHGlX8mgPeB/vmhSF
+         5JR6ySbNklYIbAMkUptxcV22wW9BvDJGxivUxnurNZNUu9WTCBKfQ1eALhoVQybVuewx
+         EZFBplRERt+c5QnwbHaw7f85pAYZZnxRzoi8az4K7UA0SefC2nUWg6Nt2txM8AFWhDbJ
+         7MXQ==
+X-Gm-Message-State: AOAM5325ISkEsVCHajz7uZ0ihd32DMJdc/7eqpJ5N8ExJYoHjWIwL7f3
+        TFwne9HRnjisUUwW3+ccLnm2wA==
+X-Google-Smtp-Source: ABdhPJxs3RU6KbEjxZ/8AJyPjwqCKUMC6jqq/YEpxrH8KZ+P+JJmCUyzDX79WSngCiWDogB29ttcuw==
+X-Received: by 2002:a05:6808:192:: with SMTP id w18mr14135102oic.61.1626467518434;
+        Fri, 16 Jul 2021 13:31:58 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id r16sm1208092otu.26.2021.07.16.13.31.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jul 2021 13:31:57 -0700 (PDT)
+Date:   Fri, 16 Jul 2021 15:31:55 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org
 Subject: Re: [PATCH v4 4/4] PCIe: qcom: Add support to control pipe clk src
-To:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org, svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <YPHsu+QLWRYpYRCz@yoga>
+References: <1626443927-32028-1-git-send-email-pmaliset@codeaurora.org>
+ <1626443927-32028-5-git-send-email-pmaliset@codeaurora.org>
+ <CAE-0n538LKQpeY_NKQF-VM3nHVxEE0B_pN4aN=sQ8iQzK+Yyxw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n538LKQpeY_NKQF-VM3nHVxEE0B_pN4aN=sQ8iQzK+Yyxw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Quoting Prasad Malisetty (2021-07-16 06:58:47)
-> This is a new requirement for sc7280 SoC.
-> To enable gdsc gcc_pcie_1_pipe_clk_src should be TCXO.
+On Fri 16 Jul 14:37 CDT 2021, Stephen Boyd wrote:
 
-Why? Can you add that detail here? Presumably it's something like the
-GDSC needs a running clk to send a reset through the flops or something
-like that.
+> Quoting Prasad Malisetty (2021-07-16 06:58:47)
+> > This is a new requirement for sc7280 SoC.
+> > To enable gdsc gcc_pcie_1_pipe_clk_src should be TCXO.
+> 
+> Why? Can you add that detail here? Presumably it's something like the
+> GDSC needs a running clk to send a reset through the flops or something
+> like that.
+> 
 
-> after PHY initialization gcc_pcie_1_pipe_clk_src needs
-> to switch from TCXO to gcc_pcie_1_pipe_clk.
->
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8a7a300..9e0e4ab 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
->         if (ret < 0)
->                 return ret;
->
-> +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
-> +               res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-> +               if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
-> +                       return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
-> +
-> +               res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-> +               if (IS_ERR(res->phy_pipe_clk))
-> +                       return PTR_ERR(res->phy_pipe_clk);
-> +
-> +               res->ref_clk_src = devm_clk_get(dev, "ref");
-> +               if (IS_ERR(res->ref_clk_src))
-> +                       return PTR_ERR(res->ref_clk_src);
-> +       }
-> +
->         res->pipe_clk = devm_clk_get(dev, "pipe");
->         return PTR_ERR_OR_ZERO(res->pipe_clk);
->  }
-> @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
->  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->  {
->         struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> +       struct dw_pcie *pci = pcie->pci;
-> +       struct device *dev = pci->dev;
-> +
-> +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
-> +               clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
+Which presumably means that we need to "park" gcc_pcie_N_pipe_clk_src
+whenever the PHY pipe is paused due to a suspend or runtime suspend.
 
-Is anything wrong if we call clk_set_parent() here when this driver is
-running on previous SoCs where the parent is assigned via DT? Also,
-shouldn't we make sure the parent is XO at driver probe time so that
-powering on the GDSC works properly?
+I find this part of the commit message to primarily describing the next
+patch (that is yet to be posted).
 
-It all feels like a kludge though given that the GDSC is the one that
-requires the clock to be running at XO and we're working around that in
-the pcie driver instead of sticking that logic into the GDSC. What do we
-do if the GDSC is already enabled out of boot instead of being the power
-on reset (POR) configuration?
+> > after PHY initialization gcc_pcie_1_pipe_clk_src needs
+> > to switch from TCXO to gcc_pcie_1_pipe_clk.
+> >
+> > Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> > index 8a7a300..9e0e4ab 100644
+> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+> >         if (ret < 0)
+> >                 return ret;
+> >
+> > +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
+> > +               res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+> > +               if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
+> > +                       return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
+> > +
+> > +               res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+> > +               if (IS_ERR(res->phy_pipe_clk))
+> > +                       return PTR_ERR(res->phy_pipe_clk);
+> > +
+> > +               res->ref_clk_src = devm_clk_get(dev, "ref");
+> > +               if (IS_ERR(res->ref_clk_src))
+> > +                       return PTR_ERR(res->ref_clk_src);
+> > +       }
+> > +
+> >         res->pipe_clk = devm_clk_get(dev, "pipe");
+> >         return PTR_ERR_OR_ZERO(res->pipe_clk);
+> >  }
+> > @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
+> >  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+> >  {
+> >         struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> > +       struct dw_pcie *pci = pcie->pci;
+> > +       struct device *dev = pci->dev;
+> > +
+> > +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
+> > +               clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
+> 
+> Is anything wrong if we call clk_set_parent() here when this driver is
+> running on previous SoCs where the parent is assigned via DT?
 
->
->         return clk_prepare_enable(res->pipe_clk);
->  }
+We don't assign the parent on previous platforms, we apparently just
+rely on the reset value (afaict).
+
+So I think it makes sense for all platforms to explicitly mux
+pipe_clk_src to phy::pipe_clk, one the PHY is up and running.
+
+But I was under the impression that we have the BRANCH_HALT_SKIP on the
+pipe_clk because there was some sort of feedback loop to the PHY's
+calibration... What this patch indicates is that we should park
+pipe_clk_src onto XO at boot time, then after the PHY starts ticking we
+should enable and reparent the clk_src - at which point I don't see why
+we need the HALT_SKIP.
+
+> Also, shouldn't we make sure the parent is XO at driver probe time so
+> that powering on the GDSC works properly?
+> 
+> It all feels like a kludge though given that the GDSC is the one that
+> requires the clock to be running at XO and we're working around that in
+> the pcie driver instead of sticking that logic into the GDSC. What do we
+> do if the GDSC is already enabled out of boot instead of being the power
+> on reset (POR) configuration?
+> 
+
+What happens if we boot the device out of NVME...
+
+
+PS. Are we certain that it's the PCIe driver and not the PHY that should
+do this dance? I really would like to see the continuation of this patch
+to see the full picture...
+
+Regards,
+Bjorn
+
+> >
+> >         return clk_prepare_enable(res->pipe_clk);
+> >  }
