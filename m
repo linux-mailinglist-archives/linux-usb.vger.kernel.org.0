@@ -2,196 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 695003CB1C0
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 07:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAC03CB2DC
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 08:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbhGPFEa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jul 2021 01:04:30 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:25689 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbhGPFEa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 01:04:30 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210716050134euoutp021a6dfca97bc581e7f97e5c2bbba8f963~SLNGn7RMi2207522075euoutp02V
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 05:01:34 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210716050134euoutp021a6dfca97bc581e7f97e5c2bbba8f963~SLNGn7RMi2207522075euoutp02V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1626411694;
-        bh=tlnKnhtiuN5X69bO+zZbqtZ5WXVcvvkwRcRObs1MPDY=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=iJ4j4jRPItwyKhnYGRLBU19LK0E3pyJsvJ4ld1V6eZnbp8+k+l3sQqst9hUXjOYrp
-         tyu2ebV9il0VM+ecWFWHXk/Jo9+2GVAU/Ybm2fRW4lUqT5ed+lzcY9queAj6EhxgTS
-         iYaKdmsQmRZUV4L79Pv6gG36kErtGZExgo2lZXmU=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20210716050133eucas1p1a8635c11b814b4b831610b2febd77f93~SLNGJ9k7I2287522875eucas1p1H;
-        Fri, 16 Jul 2021 05:01:33 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 56.60.42068.DA211F06; Fri, 16
-        Jul 2021 06:01:33 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23~SLNFIrIWE0138901389eucas1p2x;
-        Fri, 16 Jul 2021 05:01:32 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20210716050132eusmtrp1e7e85bfbdd812b3043d7b211ef2958c9~SLNFH_zkQ1937119371eusmtrp1k;
-        Fri, 16 Jul 2021 05:01:32 +0000 (GMT)
-X-AuditID: cbfec7f4-c89ff7000002a454-a0-60f112ad36d1
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 1F.14.20981.CA211F06; Fri, 16
-        Jul 2021 06:01:32 +0100 (BST)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20210716050132eusmtip1e14cbdb21a1f293aacdd2cb276f51aed~SLNEnnoAG0836508365eusmtip1U;
-        Fri, 16 Jul 2021 05:01:32 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Felipe Balbi <felipe.balbi@linux.intel.com>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: [PATCH] usb: dwc2: Skip clock gating on Samsung SoCs
-Date:   Fri, 16 Jul 2021 07:01:27 +0200
-Message-Id: <20210716050127.4406-1-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBIsWRmVeSWpSXmKPExsWy7djPc7prhT4mGPxsMbDovWNisXHGelaL
-        +TeTLBp/7WW3OH9+A7vF5V1z2CxmnN/HZLFoWSuzxdojd9kdOD02repk85h3MtCjb8sqRo8t
-        +z8zenzeJBfAGsVlk5Kak1mWWqRvl8CVcXNeN1PBbpmK88v/MjcwzhfvYuTkkBAwkfjes465
-        i5GLQ0hgBaNET8sURpCEkMAXRonLn60g7M+MEk0TGWEa1u9dygjRsJxRYsbCDlYIB6jhwok5
-        LCBVbAKGEl1vu9hAbBGBBIkjm98zg9jMAjOZJLqmCoDYwgK2EuvXLGQHsVkEVCWWfz3JCmLz
-        CthIrPm0nQVim7zE6g0HwM6TEOjlkPi0dT07RMJF4ubSg1BFwhKvjm+BistInJ7cwwLR0Mwo
-        8fDcWnYIpwfon6YZUE9YS9w59wvoPA6gkzQl1u/Shwg7Srye18kKEpYQ4JO48VYQ4mg+iUnb
-        pjNDhHklOtqEIKrVJGYdXwe39uCFS8wQtofEzqWzoaEYK/Hi40+2CYxysxB2LWBkXMUonlpa
-        nJueWmyUl1quV5yYW1yal66XnJ+7iRGYGE7/O/5lB+PyVx/1DjEycTAeYpTgYFYS4V1q9DZB
-        iDclsbIqtSg/vqg0J7X4EKM0B4uSOG/SljXxQgLpiSWp2ampBalFMFkmDk6pBqZex78ikxW2
-        LRL8FXW32F8vmKMsjGvV57YvKwoSS7fs3HdGIX9e7zHfzsNdru8zJwUIyCSm8f5naH11fUm3
-        3Roxiy8CodZeXhdXHdaeved4aGYj/2YPrc2Xlqxesbp7bsefC/OUZ39inK77NnLrJ7c2y+Sc
-        By/uzNbe9/365QmGHIf0J7IXXnTRbN4no3vw6+OZmzLnr3lexhXrfjWmKmzLNEuFsu3yp+/U
-        7l59WrN8EdeHEoFdGv4euw7kCKj/U/q3Q+R51eQTJW2Z7j+PLPivsPeWBO8moYqMToY/m74V
-        XzU9ncvNtW6v0zrdfxba5xrC6l5tMygT8n7R68/W5vaR+QGD/fElPjrv/WwrS84osRRnJBpq
-        MRcVJwIAohL+33sDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrALMWRmVeSWpSXmKPExsVy+t/xu7prhD4mGLzt17DovWNisXHGelaL
-        +TeTLBp/7WW3OH9+A7vF5V1z2CxmnN/HZLFoWSuzxdojd9kdOD02repk85h3MtCjb8sqRo8t
-        +z8zenzeJBfAGqVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mW
-        WqRvl6CXcXNeN1PBbpmK88v/MjcwzhfvYuTkkBAwkVi/dyljFyMXh5DAUkaJx32L2CASMhIn
-        pzWwQtjCEn+udbFBFH1ilLh/4jMzSIJNwFCi620XWIOIQJLE9SenWUCKmAXmMkl8n/cLrFtY
-        wFZi/ZqF7CA2i4CqxPKvJ8HivAI2Ems+bWeB2CAvsXrDAeYJjDwLGBlWMYqklhbnpucWG+kV
-        J+YWl+al6yXn525iBAbltmM/t+xgXPnqo94hRiYOxkOMEhzMSiK8S43eJgjxpiRWVqUW5ccX
-        leakFh9iNAXaN5FZSjQ5HxgXeSXxhmYGpoYmZpYGppZmxkrivCZH1sQLCaQnlqRmp6YWpBbB
-        9DFxcEo1MM081CKdLaOoWvVpifqWjuOzONn1m98KSO65+OJmUFniQfHVz17P9tnSdu7dNs8f
-        EY/ubdbkmfpddYL+/JSPiivk3drUzcV3eJ9V+O9yao3fS+bmF7IfHh6e61m55v7fjbv/R7Zn
-        i+rdF7qdVcM9edexf+xyc7bwvoi2Xdjz/ed6v71XZnpcvufft2XaF5slDRutNlWtYEptmPQw
-        7a5t7pWtHao8Mj327toHJbUd/qq4VZl8eP98w9bJZom9ykbnb7/YytbR0uEktp/TPPlduKNv
-        4Ja8TJ67+jZeD5acPPqq4/jmS7lf5px9cm5JsEDd1SWPblQFfYiynntb44bn35nbuq6KfJ/w
-        yDjTl/PDTh8GJZbijERDLeai4kQAy8uLwtMCAAA=
-X-CMS-MailID: 20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23
-References: <CGME20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23@eucas1p2.samsung.com>
+        id S235173AbhGPG5F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jul 2021 02:57:05 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:52949 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234855AbhGPG5E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 02:57:04 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1626418450; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=egpCdt6/boaiiUOxaKL5GbmqBK0oWlnYWcXclf7Y5ks=;
+ b=V+Rxd9mBXqm3l0GkneDf8aNnGelS0dbq2TnmVVi7Bo+VgChNzImFgSreL16tM35nxJKCFjc2
+ P63jNCFOq5QoldDCE/zWsWVcS1i2EWVYjxVgZBWOQ7EsRxe3Q+BzwUxNxftL4i57IlR9cnia
+ dm4rxeZKWXyJsISri0fldeqkRg4=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 60f12d081d1afe585e6cf305 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 16 Jul 2021 06:54:00
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 43074C43217; Fri, 16 Jul 2021 06:54:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 08FABC433D3;
+        Fri, 16 Jul 2021 06:53:58 +0000 (UTC)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+Date:   Fri, 16 Jul 2021 12:23:58 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     agross@kernel.org, bhelgaas@google.com, robh+dt@kernel.org,
+        swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, sanm@codeaurora.org, sallenki@codeaurora.org,
+        vbadigan@codeaurora.org
+Subject: Re: [PATCH v3 4/4] PCIe: qcom: Add support to control pipe clk mux
+In-Reply-To: <YOxn5GWQsEH/+bSm@yoga>
+References: <1624377651-30604-1-git-send-email-pmaliset@codeaurora.org>
+ <1624377651-30604-5-git-send-email-pmaliset@codeaurora.org>
+ <YOxn5GWQsEH/+bSm@yoga>
+Message-ID: <b0e037b9c6cb58d6ac9f47de9c5aabaf@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Commit 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr
-function.") changed the way the driver handles power down modes in a such
-way that it uses clock gating when no other power down mode is available.
+On 2021-07-12 21:33, Bjorn Andersson wrote:
+> On Tue 22 Jun 11:00 CDT 2021, Prasad Malisetty wrote:
+> 
+>> pipe-clk mux needs to switch between pipe_clk
+> 
+> If you spell "pipe-clk mux" as "gcc_pcie_N_pipe_clk_src" there's no
+> ambiguity in which clock you refer to.
+> 
+Sure, it looks fine, I will modify accordingly.
 
-This however doesn't work well on the DWC2 implementation used on the
-Samsung SoCs. When a clock gating is enabled, system hangs. It looks that
-the proper clock gating requires some additional glue code in the shared
-USB2 PHY and/or Samsung glue code for the DWC2. To restore driver
-operation on the Samsung SoCs simply skip enabling clock gating mode
-until one finds what is really needed to make it working reliably.
+>> and XO as part of LPM squence. This is done by setting
+>> pipe_clk mux as parent of pipe_clk after phy init.
+> 
+> I thought the two possible cases where:
+> 
+> xo -> gcc_pcie_N_pipe_clk_src -> gcc_pcie_N_pipe_clk
+> PHY::pipe_clk -> gcc_pcie_N_pipe_clk_src -> gcc_pcie_N_pipe_clk
+> 
+> But here you're saying that you're setting the parent of PHY::pipe_clk
+> to gcc_pcie_N_pipe_clk?
+> 
+Yeah, I will correct that statement.
 
-Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr function.")
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/usb/dwc2/core.h      | 4 ++++
- drivers/usb/dwc2/core_intr.c | 3 ++-
- drivers/usb/dwc2/hcd.c       | 6 ++++--
- drivers/usb/dwc2/params.c    | 1 +
- 4 files changed, 11 insertions(+), 3 deletions(-)
+>> This is a new requirement for sc7280.
+>> For accessing to DBI registers during L23,
+>> need to switch the pipe clock with free-running
+>> clock (TCXO) using GCC’s registers
+> 
+> So in previous platforms we could access DBI registers, in L23, without
+> any clock?
+> 
+> What happens if we use xo as parent for the pipe clock
+> 
+ From SC7280 onwards, POR value for "gcc_pcie_N_pipe_clk_src" is TCX0. we 
+need TCXO as parent to enable gdsc and then once PHY init successful we 
+are changing gcc_pcie_N_pipe_clk_src to PHY pipe clk. In system suspend 
+call back GDSC will be disabled and gcc_pcie_N_pipe_clk_src changed to 
+TCX0. In the same way resume call back switching back 
+gcc_pcie_N_pipe_clk_src to PHY pipe clk .
 
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index ab6b815e0089..483de2bbfaab 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -383,6 +383,9 @@ enum dwc2_ep0_state {
-  *			0 - No (default)
-  *			1 - Partial power down
-  *			2 - Hibernation
-+ * @no_clock_gating:	Specifies whether to avoid clock gating feature.
-+ *			0 - No (use clock gating)
-+ *			1 - Yes (avoid it)
-  * @lpm:		Enable LPM support.
-  *			0 - No
-  *			1 - Yes
-@@ -480,6 +483,7 @@ struct dwc2_core_params {
- #define DWC2_POWER_DOWN_PARAM_NONE		0
- #define DWC2_POWER_DOWN_PARAM_PARTIAL		1
- #define DWC2_POWER_DOWN_PARAM_HIBERNATION	2
-+	bool no_clock_gating;
- 
- 	bool lpm;
- 	bool lpm_clock_gating;
-diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
-index a5ab03808da6..a5c52b237e72 100644
---- a/drivers/usb/dwc2/core_intr.c
-+++ b/drivers/usb/dwc2/core_intr.c
-@@ -556,7 +556,8 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
- 				 * If neither hibernation nor partial power down are supported,
- 				 * clock gating is used to save power.
- 				 */
--				dwc2_gadget_enter_clock_gating(hsotg);
-+				if (!hsotg->params.no_clock_gating)
-+					dwc2_gadget_enter_clock_gating(hsotg);
- 			}
- 
- 			/*
-diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-index 035d4911a3c3..2a7828971d05 100644
---- a/drivers/usb/dwc2/hcd.c
-+++ b/drivers/usb/dwc2/hcd.c
-@@ -3338,7 +3338,8 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
- 		 * If not hibernation nor partial power down are supported,
- 		 * clock gating is used to save power.
- 		 */
--		dwc2_host_enter_clock_gating(hsotg);
-+		if (!hsotg->params.no_clock_gating)
-+			dwc2_host_enter_clock_gating(hsotg);
- 		break;
- 	}
- 
-@@ -4402,7 +4403,8 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
- 		 * If not hibernation nor partial power down are supported,
- 		 * clock gating is used to save power.
- 		 */
--		dwc2_host_enter_clock_gating(hsotg);
-+		if (!hsotg->params.no_clock_gating)
-+			dwc2_host_enter_clock_gating(hsotg);
- 
- 		/* After entering suspend, hardware is not accessible */
- 		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 67c5eb140232..59e119345994 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -76,6 +76,7 @@ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
- 	struct dwc2_core_params *p = &hsotg->params;
- 
- 	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
-+	p->no_clock_gating = true;
- 	p->phy_utmi_width = 8;
- }
- 
--- 
-2.17.1
+>> 
+>> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+>> ---
+>>  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
+>>  1 file changed, 22 insertions(+)
+>> 
+>> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c 
+>> b/drivers/pci/controller/dwc/pcie-qcom.c
+>> index 8a7a300..80e9ee4 100644
+>> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
+>>  	struct regulator_bulk_data supplies[2];
+>>  	struct reset_control *pci_reset;
+>>  	struct clk *pipe_clk;
+>> +	struct clk *pipe_clk_mux;
+>> +	struct clk *pipe_ext_src;
+>> +	struct clk *ref_clk_src;
+>>  };
+>> 
+>>  union qcom_pcie_resources {
+>> @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct 
+>> qcom_pcie *pcie)
+>>  	if (ret < 0)
+>>  		return ret;
+>> 
+>> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
+> 
+> So this is the first 2.7.0 that has this need? Are we just going to add
+> more compatibles to this list going forward?
+> 
+Will check and confirm whether above change will be applicable to future 
+targets or not.
 
+>> +		res->pipe_clk_mux = devm_clk_get(dev, "pipe_mux");
+>> +		if (IS_ERR(res->pipe_clk_mux))
+>> +			return PTR_ERR(res->pipe_clk_mux);
+> 
+> So this is gcc_pcie_N_pipe_clk_src?
+> 
+Yes
+>> +
+>> +		res->pipe_ext_src = devm_clk_get(dev, "phy_pipe");
+>> +		if (IS_ERR(res->pipe_ext_src))
+>> +			return PTR_ERR(res->pipe_ext_src);
+> 
+> And this is the pipe_clk coming out of the PHY (What I call
+> PHY::pipe_clk above)?
+> 
+Yes
+>> +
+>> +		res->ref_clk_src = devm_clk_get(dev, "ref");
+>> +		if (IS_ERR(res->ref_clk_src))
+>> +			return PTR_ERR(res->ref_clk_src);
+> 
+> And this is TCXO?
+> 
+Yes
+>> +	}
+>> +
+>>  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>>  }
+>> @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct 
+>> qcom_pcie *pcie)
+>>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>>  {
+>>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>> +	struct dw_pcie *pci = pcie->pci;
+>> +	struct device *dev = pci->dev;
+>> +
+>> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
+>> +		clk_set_parent(res->pipe_clk_mux, res->pipe_ext_src);
+>> 
+> 
+> So after phy_power_on() (not "phy init" as you say in the commit
+> message, perhaps you don't mean phy_init() but in general terms "phy
+> initialization") you need to make sure that gcc_pcie_N_pipe_clk_src is
+> actually fed by PHY::pipe_clk?
+> 
+> 1) What's the gcc_pcie_N_pipe_clk_src parent before this?
+> 
+TCXO is POR value.
+
+> 2) Will the PHY initialization really succeed if the pipe_clk feeding
+> back from gcc isn't based on the PHY's pipe_clk? Is this a change in
+> sc7280?
+> 
+PHY init will be successful but PCIe link will not be initialized.
+yes, this change is only applicable to SC7280.
+
+> 3) In the commit message you're talking about the need to make XO the
+> parent of gcc_pcie_N_pipe_clk_src during L23, where in this patch does
+> that happen?
+> 
+Changes are in validation stage. will submit them soon in coming 
+releases.
+Just mentioned the purpose of mux settings.
+
+> Regards,
+> Bjorn
+> 
+>>  	return clk_prepare_enable(res->pipe_clk);
+>>  }
+>> --
+>> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
+>> Forum,
+>> a Linux Foundation Collaborative Project
+>> 
