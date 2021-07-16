@@ -2,146 +2,180 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 906393CB406
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 10:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E3C13CB50A
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 11:07:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237208AbhGPIXV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jul 2021 04:23:21 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:35726 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236935AbhGPIXS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 04:23:18 -0400
-Received: by mail-il1-f198.google.com with SMTP id f5-20020a92b5050000b02901ff388acf98so4943733ile.2
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 01:20:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=NoP47C11oy09T6AEoTMg2yOrzw17CGIlWMAOu4IRbG4=;
-        b=Xo/ScCc7ohIT6yC+kEKKo/j9oBfZY8EyF8RoCLm5PWU+mAMOjUbE4UmeQNED0+3qMQ
-         AZQyV7aWcnQiEfXjGYT6JvoSLnLpi8b6wK5/A3PNdCmY/n5KioNrXxOXaDqeVenNms00
-         Wjekm0t/zOZ9vWq2a2Usp4nKRz1q2njKGisM8ozdTu+6CZlmbrxkyA2g2PpyO8i4nbMA
-         g5e4cTpv52wA074Eq9XZAsUqwgkVqmC00uw7jXwejoZLHeCPR4xJwb/pVzWTY2Jvj5G7
-         vQZIgMY4hqMGj1K0BL29dr+/2/zbrZHNr4BanvutVqaVvb+3gilPr+PwSMnvcQMA6IfL
-         1COA==
-X-Gm-Message-State: AOAM533VJ/FS3EUXV9C+28R1hktoLvPkTUPheQMZSm45/ASglHKxA9C5
-        2uuBOT4XgEIuqZ6WaWwec6rbZJ6NmXCrtVMSlnmArVafQntq
-X-Google-Smtp-Source: ABdhPJx6T5K8+FPUkB7w7RXnTjCNqXnbl6YHlJo1fMuaQ0+R31OuwCAZvUQDd6/L/XETf64RMbsvaAwU9L0sIVdV9wbzjPSsa9R9
+        id S231312AbhGPJK0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jul 2021 05:10:26 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:38600 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231143AbhGPJKY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 05:10:24 -0400
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 36FCFC0C33;
+        Fri, 16 Jul 2021 09:07:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1626426449; bh=49cOYxfih/gBkDyRFKKPjlu2s2oixY2Z4++lKk2GebA=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=cKTX1kB1e516UiTIPDUMS1B2WJe8zEYvGP48WSMiHjcMphNRIL5RIqvMZA7gNq5fC
+         tCMTwdqI8FKK7I96PTAu+qFxIItcgKrzRWedhzjJcIep3VT+QknPkf8R60K1zEewfm
+         q2wgyilWtX/LAa/44ZsanooqhBe1b/84CMer4BoJUgAg9mQbbzTeXnFA2WifvePaaN
+         66tUjrveivXxkzBamkf9i3K11E3tWIzRaSn+Xem7hEv2JKQJH6Bg+QtXThfyxASVMG
+         JbjlM/GoHKlJaPWI5Xvnigm7uQCL/jFfCL/IbyFDiceiAvGuD4c4Cxb7Rf1Co8GBdI
+         YH1eSsObhhDzw==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 08998A0254;
+        Fri, 16 Jul 2021 09:07:27 +0000 (UTC)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2045.outbound.protection.outlook.com [104.47.66.45])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 364574007B;
+        Fri, 16 Jul 2021 09:07:27 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="BlRyVBwi";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aPjRJ8ArnaURemD7VEEKzVtGud+KSE5HGCo5jXKdRceYSUEUWCq9MMRfmhUwtTd5gzebXl4e7RWWG6fzBuTsxwAAOSwvXlqAgHE3pUeD6RHArJXiV34e9Crfbo/uGOM9ZYyK3lDyKFcr381FvG4A2FMrqcKT6eF1u5zlkpzHY5C7L7V3yA4rfGABTc+Qt405qVpjllWinHjxUzvg1Ikgczxtv1/dxDS+WaZ8h+1MmLbUg2JGJ5j4LtaO5vIJwGcnXE9JGusKFBAUxOkLszIuDv9yA8UWCeHvJ8ULBk+k73rs0Agfnt1tFHp8rv4nqPxM2oTMGL1uth0v+ctBb5mstA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49cOYxfih/gBkDyRFKKPjlu2s2oixY2Z4++lKk2GebA=;
+ b=SV9B1VG2pLtd9IJtZtO0l/QBaj3w8ZyVzh3NUkOGpAFR9KDane1NuQQHUF88vM59AF13jmxauiVkqP5xUgmoT6aro2XXBUtad29lu7Bs/QY+1b0N/wT9ML4ODpyc+NK3IYVqu1X8fiEf+bd7xEoi7+pc/lKxsifjjSkH/Tk4zyI36Dw5Ke/U3VKYgtVegzY5ao96mbNwaKbl+Rc1oR9zBfXULeXASt6egf96nGbvB6MvDSH1Lu/OknJDKIr71E4t6NHD9mG9ibGHY50Vs3weG0wvbY18mBLFLzuNLRNJWPb0+3PqbeRn8I+0IWUydtsNgfG2Xahp14evNh2+w+o+lw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=49cOYxfih/gBkDyRFKKPjlu2s2oixY2Z4++lKk2GebA=;
+ b=BlRyVBwii0lKTHxB55glJZ7WO0n0Rv4Hp4x+cfvCJu2eYmGB76eGEuB7r7ygHmMKhLVYfOf9JeqirZvzOLQtL34c5NElcpLesvceJXboKsbQ33YF2e9M4vlXRcDVorPHUA1Ga+9aoF5oQ6dSq1uXuCM410I44hKm1t/xH7JiDvw=
+Received: from DM4PR12MB5390.namprd12.prod.outlook.com (2603:10b6:5:39a::12)
+ by DM4PR12MB5327.namprd12.prod.outlook.com (2603:10b6:5:39e::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4308.21; Fri, 16 Jul
+ 2021 09:07:25 +0000
+Received: from DM4PR12MB5390.namprd12.prod.outlook.com
+ ([fe80::d97c:7079:8a93:cd4]) by DM4PR12MB5390.namprd12.prod.outlook.com
+ ([fe80::d97c:7079:8a93:cd4%3]) with mapi id 15.20.4308.027; Fri, 16 Jul 2021
+ 09:07:25 +0000
+X-SNPS-Relay: synopsys.com
+From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Felipe Balbi <felipe.balbi@linux.intel.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: [PATCH] usb: dwc2: Skip clock gating on Samsung SoCs
+Thread-Topic: [PATCH] usb: dwc2: Skip clock gating on Samsung SoCs
+Thread-Index: AQHXef+pNOqQl/JGqEq/TztwoCjZgatFQBEAgAAP6wA=
+Date:   Fri, 16 Jul 2021 09:07:25 +0000
+Message-ID: <6fb5313e-b2c0-7b3e-84f7-6333216f4292@synopsys.com>
+References: <CGME20210716050132eucas1p285949f9a73764b173c29ad0fa8502f23@eucas1p2.samsung.com>
+ <20210716050127.4406-1-m.szyprowski@samsung.com>
+ <e2fc4d3f-2f64-1d7e-5816-0275da23d6fa@canonical.com>
+In-Reply-To: <e2fc4d3f-2f64-1d7e-5816-0275da23d6fa@canonical.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+authentication-results: canonical.com; dkim=none (message not signed)
+ header.d=none;canonical.com; dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 36348dd7-e849-4341-5f82-08d948392105
+x-ms-traffictypediagnostic: DM4PR12MB5327:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <DM4PR12MB5327494BA6F9E0D69FB4EEBCA7119@DM4PR12MB5327.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:873;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: A5ilqWTeAZQB4S7FsZgAnrjMSRLOSF4//KvXZ4XSJd1reTH5MiI1dtClchTuRv/jnT+InFPBYC9R2t3YYlhmZoRS7Aey15dOonN4Z9mrsMtM0dAiVxe949XBoHe/WQgGIycmME3nstTz2peFDqUcIS7/5v9YGmveKkmqEx2CTWFNkCRf/wSzyTo/BAThEhX74d4yBJkq3L5NvQDBYVfLUiZ+Ty4NblM327BnU6VK10NhQzEpiyJ5z7QGxuBn0fte9fnk/ZRjVUYWVUtTsLafYYVLipiyPBGloyPwmiFF+Z6LoapjUm4sDud2xJIMvyUykCoY5udPSwRykx+Z1sM/llD5dxASukCDhCKJ5K/syqzdxV1e2+iC+oCmjsqwW8hLAqWReIqaOLTDCrjVFJYA8kWBSOXolFKTaSQXhWP0UlMHFxD25Rp0YIWu8xrpENGzlfx8wtPi+nJviv7yi2cPtxhes8/nvlzJ1knbGVKrK+OIkM9ivWzqcedRanqo4no6Yy1lIrJYckmHpBS9fePs9uv5cbZp4FgLFcVfH+R0UzD4rrenuj9xiw5BmmRfbOMMDWzhg1xKVvhVY6ZRMmPVDGNR4vltpiFXDYfqDUw4DckysD0Y6STnv8mI56W8j72u1YqXbh7NMEJ8dk8Ueluc7rkFmWks1UeRTv2BrMYtsjDCc9nDm+daUudfSu/bnC0/1HKh5KpmU5W/YJqqwj4X+4AOFgPRlzPj9sZ1AvJ7MdnQmmGbWfPCoM3mcFtQZlGq2RXJKxYb5C9O2zJius9r6w==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(396003)(136003)(346002)(376002)(366004)(39860400002)(71200400001)(86362001)(31696002)(91956017)(83380400001)(122000001)(8676002)(53546011)(5660300002)(66946007)(76116006)(8936002)(2906002)(36756003)(186003)(316002)(6512007)(4326008)(64756008)(66446008)(66556008)(54906003)(38100700002)(110136005)(478600001)(31686004)(6506007)(6486002)(66476007)(26005)(2616005)(43740500002)(38070700004)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?M05iNEUyT3MxMUxNWkd2dWJoM0FQTTE0MUsxZGRoTk9SMTQ2V2lmaUJvS2w5?=
+ =?utf-8?B?Y1pKRlRxby9INVF6RVp0YklCRzJ3TUJwMVR1SkdyZWtMK1drNDdWd0RPUGla?=
+ =?utf-8?B?MmpBTVUxbFBzNm9tSFZlUXNWVHNMSEg2ZkZtNTBlM09GQVJxYVJIekpMb29W?=
+ =?utf-8?B?Z3I0UFRDU0NyQUUraHhzczBXRVp1dFVFZWg3WHBRWWo2ME0yRkE2MXM3c09h?=
+ =?utf-8?B?N1V5dVpJUFcwL0ZhaGZ3bGhwSFhLemlMSmJQZk1ITHVCbFpxMDc0aUhReWVi?=
+ =?utf-8?B?LzJGQ3krSXdrQU1ZdXBtLzhOL0NkbnRGZk5SaDVqRmZPRVZyY3dKd3hpVWFa?=
+ =?utf-8?B?L0dsYmJsQjgranRpV1dqcFd0V3RFWXpSOWZYZlZMUUx6Y0R4ZHBScDFqaDFX?=
+ =?utf-8?B?ZnlPbGRsN3FtanNFTFA1NGoyOTgwcWVqWHM2bkIyNktjeE4rVVlJdXAvU1dU?=
+ =?utf-8?B?MUhvOXJlRGo5Y2h5VGZYeHhOaU5oQlZ3a3N2Um5VRDZCWXNtVkZmUEd3QkIv?=
+ =?utf-8?B?U2MyL1N6VmRNZEJnODVZNzRuNURyRldvM1ZRQzRTTmNCb3FUK3RoQkl6UmdB?=
+ =?utf-8?B?d3lSN2NGTFZRN2RsSWxJNTRHL0xkZ3F2SEw5b0pkUU41MUZZaHRJVEF3ZTJq?=
+ =?utf-8?B?dURJWTZEUVhsSlpXWFRaRFF1ZEltSUpiNUFwenNKdVBQRnBDZ1NoMVEybEV1?=
+ =?utf-8?B?aUtXbVlRT0NuVzNKcHNMcSszVnZpcFZMQlRFZnpxay9jNHNINjEzWENIYXZU?=
+ =?utf-8?B?NDdScjczcExHblVSY1AvYUQ3SXFQbjJSOG9LS2pxSHM2Q1pZNnk3MnVkUXJV?=
+ =?utf-8?B?OVJVTjBISmV2TVB6TytlSm1iTVVHeG5nWlA0NHdsVWhOVk92bDBpR2NqZld2?=
+ =?utf-8?B?c1ZLQ2FFVEpPL21XNWx1MzZJZ2JiR1lWd3ZUTnRVRTVGVVo3SWg5bmFkTCtx?=
+ =?utf-8?B?c09XN2M1L09tRnN0Sjl0ekV6SlQ2VU5tWEhDS3JrWU1VOWI1Q2hPQ3pDQm5H?=
+ =?utf-8?B?ME1ZeDh4U3dSTDJNL3A5ZUVYMDgyL25OYVd5UWxCNllSbGFTbG5LS2h5Mmhm?=
+ =?utf-8?B?QVUxeDNKWWt1bkxoWFRjc3IyZC9WMDlXTC9BYnZHTEFWemJsNTNFYzdjNTlh?=
+ =?utf-8?B?N3NWK0hseWlJM0ZpRlJCdW1tUmdtaU02TmNuWG52KytiTWFMQUdVOTEveGo1?=
+ =?utf-8?B?a3huUll3aEJSbUFSS0ZBSHduTEo4NzIxbm1qY1ZIQUhraWc0MGVxLzB5eUdk?=
+ =?utf-8?B?K1hyb3Q4VFBWTDFvczVyWE4zak9sWFNsRzV5NXpiTUIwcThKLzBpWDltYjFF?=
+ =?utf-8?B?MzNTMUdjcEpra093VCtzRnF1cXJSVU12Yis2RElIenlTd2F4OXZSOU1SM3Vo?=
+ =?utf-8?B?cEpHREZJM3pTK29mcWJCSWVLemlwakxWZ0diZGtFbW1iM2FmNzdTalkrc1M5?=
+ =?utf-8?B?UlJCZDgzS201Q0FxNk9PVmZyVjhoaVd0RWxCMWdpTjN5KzlDV0dKTkNTTVdH?=
+ =?utf-8?B?TVNZYmhlOXptUmdLMnRJdTJvYXVOY2hSc051THB4T1RUa1E2TlFqMjFPL1Fq?=
+ =?utf-8?B?VmFENE4xdEwrODVBQ29sUGFzeEVSaGg2SnhheU5uQ1hRR21YZVBNU3k2TDhq?=
+ =?utf-8?B?WWFKM0tuWUl3SnJCQzdjT1ZRNUtKTDFYczd6SWJ3amFiZ1VuSEdXVFZVOHY0?=
+ =?utf-8?B?S3cvQUhYeU9EUzdWemdkMGtPQUkrWnUvcFhxKzFlRlhLNlZTSVlBVnlQMnpV?=
+ =?utf-8?Q?GBA0hzb1gf7s2EyVTw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <682AE45C528D4941ADF54074DACAF063@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:348c:: with SMTP id t12mr7918776jal.1.1626423623704;
- Fri, 16 Jul 2021 01:20:23 -0700 (PDT)
-Date:   Fri, 16 Jul 2021 01:20:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005866b005c7394288@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in ath9k_htc_rxep
-From:   syzbot <syzbot+dc6c749aec286992cea2@syzkaller.appspotmail.com>
-To:     ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
-        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5390.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36348dd7-e849-4341-5f82-08d948392105
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jul 2021 09:07:25.2996
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Q5+7pkJkQUGf23iQQqPPA4Sg7ydyRquWfU1F7YbsEpjhfHlHp6F/GgKq3u8tA6MTQS/CmC0JSpk39u9yR8B4DA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5327
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    97db1b081e12 dt-bindings: usb: dwc3: Update dwc3 TX fifo p..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=156217d2300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=db8b503c237253ee
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc6c749aec286992cea2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc6c749aec286992cea2@syzkaller.appspotmail.com
-
-BUG: unable to handle page fault for address: ffffffffffffffc8
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 7426067 P4D 7426067 PUD 7428067 PMD 0 
-Oops: 0000 [#1] SMP KASAN
-CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.14.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1135
-Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 f0 64 37 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 fd 6b 37 fe 45 84 ff 75 a8 e8 c3 64
-RSP: 0018:ffffc900000079b8 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffc90005909000
-RDX: 0000000000040000 RSI: ffffffff830a0050 RDI: ffffc90000007928
-RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52000000f25 R11: 0000000000000000 R12: ffff88813c17b678
-R13: ffff88813c17b240 R14: ffff88813c17b688 R15: ffff88814afef9a8
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffc8 CR3: 000000013ac0e000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- ath9k_htc_rx_msg+0x2e4/0xb70 drivers/net/wireless/ath/ath9k/htc_hst.c:461
- ath9k_hif_usb_reg_in_cb+0x1ac/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:733
- __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1656
- usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1726
- dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
- call_timer_fn+0x1a5/0x630 kernel/time/timer.c:1417
- expire_timers kernel/time/timer.c:1462 [inline]
- __run_timers.part.0+0x675/0xa10 kernel/time/timer.c:1731
- __run_timers kernel/time/timer.c:1712 [inline]
- run_timer_softirq+0x80/0x120 kernel/time/timer.c:1744
- __do_softirq+0x1b0/0x910 kernel/softirq.c:558
- invoke_softirq kernel/softirq.c:432 [inline]
- __irq_exit_rcu+0x117/0x160 kernel/softirq.c:636
- irq_exit_rcu+0x5/0x10 kernel/softirq.c:648
- sysvec_apic_timer_interrupt+0x6a/0x90 arch/x86/kernel/apic/apic.c:1100
- </IRQ>
- asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
-RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
-RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
-RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:132 [inline]
-RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:110 [inline]
-RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:553
-Code: 89 de e8 cd ed 80 fb 84 db 75 ac e8 94 e6 80 fb e8 5f f2 86 fb eb 0c e8 88 e6 80 fb 0f 00 2d 81 b0 88 00 e8 7c e6 80 fb fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 07 ef 80 fb 48 85 db
-RSP: 0018:ffffffff87407d60 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffffffff874523c0 RSI: ffffffff85c07ec4 RDI: ffffffff85c07eb1
-RBP: ffff8881053d7864 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff81477148 R11: 0000000000000000 R12: 0000000000000001
-R13: ffff8881053d7800 R14: ffff8881053d7864 R15: ffff88810c505804
- acpi_idle_enter+0x355/0x4f0 drivers/acpi/processor_idle.c:688
- cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
- cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
- call_cpuidle kernel/sched/idle.c:158 [inline]
- cpuidle_idle_call kernel/sched/idle.c:239 [inline]
- do_idle+0x3dd/0x580 kernel/sched/idle.c:306
- cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:403
- start_kernel+0x47a/0x49b init/main.c:1120
- secondary_startup_64_no_verify+0xb0/0xbb
-Modules linked in:
-CR2: ffffffffffffffc8
----[ end trace bce88d772af26b70 ]---
-RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1135
-Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 f0 64 37 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 fd 6b 37 fe 45 84 ff 75 a8 e8 c3 64
-RSP: 0018:ffffc900000079b8 EFLAGS: 00010046
-
-RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: ffffc90005909000
-RDX: 0000000000040000 RSI: ffffffff830a0050 RDI: ffffc90000007928
-RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000003
-R10: fffff52000000f25 R11: 0000000000000000 R12: ffff88813c17b678
-R13: ffff88813c17b240 R14: ffff88813c17b688 R15: ffff88814afef9a8
-FS:  0000000000000000(0000) GS:ffff8881f6800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffffffffffffc8 CR3: 000000013ac0e000 CR4: 00000000001506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+SGkgS3J6eXN6dG9mLA0KDQpPbiA3LzE2LzIwMjEgMTI6MTAgUE0sIEtyenlzenRvZiBLb3psb3dz
+a2kgd3JvdGU6DQo+IE9uIDE2LzA3LzIwMjEgMDc6MDEsIE1hcmVrIFN6eXByb3dza2kgd3JvdGU6
+DQo+PiBDb21taXQgMDExMmI3Y2U2OGVhICgidXNiOiBkd2MyOiBVcGRhdGUgZHdjMl9oYW5kbGVf
+dXNiX3N1c3BlbmRfaW50cg0KPj4gZnVuY3Rpb24uIikgY2hhbmdlZCB0aGUgd2F5IHRoZSBkcml2
+ZXIgaGFuZGxlcyBwb3dlciBkb3duIG1vZGVzIGluIGEgc3VjaA0KPj4gd2F5IHRoYXQgaXQgdXNl
+cyBjbG9jayBnYXRpbmcgd2hlbiBubyBvdGhlciBwb3dlciBkb3duIG1vZGUgaXMgYXZhaWxhYmxl
+Lg0KPj4NCj4+IFRoaXMgaG93ZXZlciBkb2Vzbid0IHdvcmsgd2VsbCBvbiB0aGUgRFdDMiBpbXBs
+ZW1lbnRhdGlvbiB1c2VkIG9uIHRoZQ0KPj4gU2Ftc3VuZyBTb0NzLiBXaGVuIGEgY2xvY2sgZ2F0
+aW5nIGlzIGVuYWJsZWQsIHN5c3RlbSBoYW5ncy4gSXQgbG9va3MgdGhhdA0KPj4gdGhlIHByb3Bl
+ciBjbG9jayBnYXRpbmcgcmVxdWlyZXMgc29tZSBhZGRpdGlvbmFsIGdsdWUgY29kZSBpbiB0aGUg
+c2hhcmVkDQo+PiBVU0IyIFBIWSBhbmQvb3IgU2Ftc3VuZyBnbHVlIGNvZGUgZm9yIHRoZSBEV0My
+LiBUbyByZXN0b3JlIGRyaXZlcg0KPj4gb3BlcmF0aW9uIG9uIHRoZSBTYW1zdW5nIFNvQ3Mgc2lt
+cGx5IHNraXAgZW5hYmxpbmcgY2xvY2sgZ2F0aW5nIG1vZGUNCj4+IHVudGlsIG9uZSBmaW5kcyB3
+aGF0IGlzIHJlYWxseSBuZWVkZWQgdG8gbWFrZSBpdCB3b3JraW5nIHJlbGlhYmx5Lg0KPj4NCj4+
+IEZpeGVzOiAwMTEyYjdjZTY4ZWEgKCJ1c2I6IGR3YzI6IFVwZGF0ZSBkd2MyX2hhbmRsZV91c2Jf
+c3VzcGVuZF9pbnRyIGZ1bmN0aW9uLiIpDQo+PiBTaWduZWQtb2ZmLWJ5OiBNYXJlayBTenlwcm93
+c2tpIDxtLnN6eXByb3dza2lAc2Ftc3VuZy5jb20+DQo+PiAtLS0NCj4+ICAgZHJpdmVycy91c2Iv
+ZHdjMi9jb3JlLmggICAgICB8IDQgKysrKw0KPj4gICBkcml2ZXJzL3VzYi9kd2MyL2NvcmVfaW50
+ci5jIHwgMyArKy0NCj4+ICAgZHJpdmVycy91c2IvZHdjMi9oY2QuYyAgICAgICB8IDYgKysrKy0t
+DQo+PiAgIGRyaXZlcnMvdXNiL2R3YzIvcGFyYW1zLmMgICAgfCAxICsNCj4+ICAgNCBmaWxlcyBj
+aGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4NCj4gDQo+IA0KPiBB
+Y2tlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBjYW5vbmlj
+YWwuY29tPg0KPiANCldoYXQgbWVhbiB5b3VyICJBY2tlZC1ieSIgdGFnPyBEbyB5b3Ugd2FudCB0
+byBtZW50aW9uIHRoYXQgdGhpcyBjb21taXQgDQoiVGVzdGVkLWJ5IiBvciAiUmV2aWV3ZWQtYnki
+IGJ5IHlvdT8NCg0KVGhhbmtzLA0KTWluYXMNCg0KPiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5
+c3p0b2YNCj4gDQoNCg==
