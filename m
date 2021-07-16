@@ -2,165 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB71A3CB562
-	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 11:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 298A53CB580
+	for <lists+linux-usb@lfdr.de>; Fri, 16 Jul 2021 11:56:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbhGPJm3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 16 Jul 2021 05:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231490AbhGPJm3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 16 Jul 2021 05:42:29 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB184C06175F
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 02:39:34 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id dw7-20020a17090b0947b0290173b4d6dd74so5161389pjb.0
-        for <linux-usb@vger.kernel.org>; Fri, 16 Jul 2021 02:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=i5RVB4vHIQ9nfl4HYaBlwICiig5AVs5as0lKSOXIVDA=;
-        b=jrCQeC/33Kk/hYXadEHP+UjkiH1AYtQsmDTNok9CcevcsGhAt1Wtaj/X1w0Y/biakA
-         fZTmYevuEaBlxOk1/0zuU4/llrPnRvhtCzVWQg6t/fGZ+rVq3SMgXT0FI+cftuHWHqh0
-         3YbgovKaIWCIm7IrMY7LnjaEwViDKM933FbV0l7r1cdbrUJRdaADDcABoPvoKrauB+tB
-         WDgdQtCLkUe9nV5ji73GLOSNCdmgdMc9uJ7U3JS6IJjm09xGf2VeRvQe25b1i+xePnns
-         1Df/cqU3kTv6G4DW7Jmga/xtRFHNj6PXFkKbcaCyRv0OewdKjWGKb9zEXa4TL+FtxbHw
-         7oHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=i5RVB4vHIQ9nfl4HYaBlwICiig5AVs5as0lKSOXIVDA=;
-        b=VZPACtKbYiAdNcrel6S9B/u+mjT++8uZBfHdpchMaeiEAL3spFr9w1nlLNiNWKHUO0
-         musjdwGrXrOTtSQq+XOIY6mHu4accsfsYQhYAdGCI1ztZo0aEMRffPtgXS9j1JgAkVQF
-         X6qyZj0/AzeeRdvA7fmQQeNcBmv7ogq8f9Hd7dZddRZ/xGNTtQlrj+wXzBck/As3tSMV
-         U3WV/mIuunEPeLe3edv0WXypyGVUTQvl1DwhHdwKMrbQAtJZyJpOHqGHPwtvsDl6zZMD
-         IbEQuAdcZkaF30T+WhbcJmlzCEd0E9o1wGNadMzqhbyBW1tSMcuTaQG93Haj5KzQ4mx2
-         0UyA==
-X-Gm-Message-State: AOAM531Re8AfFwYYlJBkViLVrAJRWLxZOqXGlfMJg682EWu33/NJupnH
-        Ep+491mCsjU15FEsKxxejq0sRqQoDlmU
-X-Google-Smtp-Source: ABdhPJx9plZN4fOdWaJMHqmQCeH4GXQeo/NMpNI6gdN00S6W00+o5rI1ZMqqLDJmO7as07bHoUv3EjE8GxPn
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:4ff3:81:775d:165c])
- (user=kyletso job=sendgmr) by 2002:a62:cd47:0:b029:329:714e:cce2 with SMTP id
- o68-20020a62cd470000b0290329714ecce2mr9622583pfg.22.1626428374280; Fri, 16
- Jul 2021 02:39:34 -0700 (PDT)
-Date:   Fri, 16 Jul 2021 17:39:16 +0800
-Message-Id: <20210716093916.1516845-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.32.0.402.g57bb445576-goog
-Subject: [PATCH] usb: typec: tcpm: Support non-PD mode
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S234603AbhGPJ7a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 16 Jul 2021 05:59:30 -0400
+Received: from mga14.intel.com ([192.55.52.115]:16010 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234095AbhGPJ7a (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 16 Jul 2021 05:59:30 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10046"; a="210519879"
+X-IronPort-AV: E=Sophos;i="5.84,244,1620716400"; 
+   d="scan'208";a="210519879"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jul 2021 02:56:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,244,1620716400"; 
+   d="scan'208";a="573620581"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 16 Jul 2021 02:56:32 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 16 Jul 2021 12:56:31 +0300
+Date:   Fri, 16 Jul 2021 12:56:31 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     saravanak@google.com, grandmaster@al2klimov.de,
+        gregkh@linuxfoundation.org, rjw@rjwysocki.net, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: tipd: Don't block probing of consumer of
+ "connector" nodes
+Message-ID: <YPFXz2yqDsGA1xK5@kuha.fi.intel.com>
+References: <20210714061807.5737-1-martin.kepplinger@puri.sm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210714061807.5737-1-martin.kepplinger@puri.sm>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tcpm.c could work well without PD capabilities. Do not block the probe
-if capabilities are not defined in fwnode and skip the PD power
-negotiation in the state machine.
+Wed, Jul 14, 2021 at 08:18:07AM +0200, Martin Kepplinger kirjoitti:
+> Similar as with tcpm this patch lets fw_devlink know not to wait on the
+> fwnode to be populated as a struct device.
+> 
+> Without this patch, USB functionality can be broken on some previously
+> supported boards.
+> 
+> Fixes: 28ec344bb891 ("usb: typec: tcpm: Don't block probing of consumers of "connector" nodes")
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
 
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 50 ++++++++++++++++++++---------------
- 1 file changed, 29 insertions(+), 21 deletions(-)
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5b22a1c931a9..a42de5e17d24 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -3914,6 +3914,8 @@ static void run_state_machine(struct tcpm_port *port)
- 		if (port->ams == POWER_ROLE_SWAP ||
- 		    port->ams == FAST_ROLE_SWAP)
- 			tcpm_ams_finish(port);
-+		if (!port->nr_src_pdo)
-+			tcpm_set_state(port, SRC_READY, 0);
- 		port->upcoming_state = SRC_SEND_CAPABILITIES;
- 		tcpm_ams_start(port, POWER_NEGOTIATION);
- 		break;
-@@ -4161,7 +4163,10 @@ static void run_state_machine(struct tcpm_port *port)
- 				current_lim = PD_P_SNK_STDBY_MW / 5;
- 			tcpm_set_current_limit(port, current_lim, 5000);
- 			tcpm_set_charge(port, true);
--			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
-+			if (!port->nr_snk_pdo)
-+				tcpm_set_state(port, SNK_READY, 0);
-+			else
-+				tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
- 			break;
- 		}
- 		/*
-@@ -5939,15 +5944,17 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
- 
- 	/* Get source pdos */
- 	ret = fwnode_property_count_u32(fwnode, "source-pdos");
--	if (ret <= 0)
--		return -EINVAL;
-+	if (ret < 0)
-+		ret = 0;
- 
- 	port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
--	ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
--					     port->src_pdo, port->nr_src_pdo);
--	if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
--					    port->nr_src_pdo))
--		return -EINVAL;
-+	if (port->nr_src_pdo) {
-+		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
-+						     port->src_pdo, port->nr_src_pdo);
-+		if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
-+						    port->nr_src_pdo))
-+			return -EINVAL;
-+	}
- 
- 	if (port->port_type == TYPEC_PORT_SRC)
- 		return 0;
-@@ -5963,19 +5970,21 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
- sink:
- 	/* Get sink pdos */
- 	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
--	if (ret <= 0)
--		return -EINVAL;
-+	if (ret < 0)
-+		ret = 0;
- 
- 	port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
--	ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
--					     port->snk_pdo, port->nr_snk_pdo);
--	if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
--					    port->nr_snk_pdo))
--		return -EINVAL;
-+	if (port->nr_snk_pdo) {
-+		ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
-+						     port->snk_pdo, port->nr_snk_pdo);
-+		if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
-+						    port->nr_snk_pdo))
-+			return -EINVAL;
- 
--	if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
--		return -EINVAL;
--	port->operating_snk_mw = mw / 1000;
-+		if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
-+			return -EINVAL;
-+		port->operating_snk_mw = mw / 1000;
-+	}
- 
- 	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
- 
-@@ -6283,9 +6292,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
- 	int err;
- 
- 	if (!dev || !tcpc ||
--	    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc ||
--	    !tcpc->set_polarity || !tcpc->set_vconn || !tcpc->set_vbus ||
--	    !tcpc->set_pd_rx || !tcpc->set_roles || !tcpc->pd_transmit)
-+	    !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc || !tcpc->set_polarity ||
-+	    !tcpc->set_vconn || !tcpc->set_vbus || !tcpc->set_roles)
- 		return ERR_PTR(-EINVAL);
- 
- 	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+> ---
+> 
+> revision history
+> ----------------
+> v2: (thank you Saravana)
+> * add a code-comment why the call is needed.
+> 
+> v1:
+> https://lore.kernel.org/linux-usb/20210713073946.102501-1-martin.kepplinger@puri.sm/
+> 
+> 
+> 
+>  drivers/usb/typec/tipd/core.c | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index 938219bc1b4b..21b3ae25c76d 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -629,6 +629,15 @@ static int tps6598x_probe(struct i2c_client *client)
+>  	if (!fwnode)
+>  		return -ENODEV;
+>  
+> +	/*
+> +	 * This fwnode has a "compatible" property, but is never populated as a
+> +	 * struct device. Instead we simply parse it to read the properties.
+> +	 * This breaks fw_devlink=on. To maintain backward compatibility
+> +	 * with existing DT files, we work around this by deleting any
+> +	 * fwnode_links to/from this fwnode.
+> +	 */
+> +	fw_devlink_purge_absent_suppliers(fwnode);
+> +
+>  	tps->role_sw = fwnode_usb_role_switch_get(fwnode);
+>  	if (IS_ERR(tps->role_sw)) {
+>  		ret = PTR_ERR(tps->role_sw);
+> -- 
+> 2.30.2
+
 -- 
-2.32.0.402.g57bb445576-goog
-
+heikki
