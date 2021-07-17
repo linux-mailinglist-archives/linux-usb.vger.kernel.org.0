@@ -2,135 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0133CC556
-	for <lists+linux-usb@lfdr.de>; Sat, 17 Jul 2021 20:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C55B63CC59D
+	for <lists+linux-usb@lfdr.de>; Sat, 17 Jul 2021 21:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235638AbhGQS0S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Jul 2021 14:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44288 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235444AbhGQS0L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Jul 2021 14:26:11 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A4C061766;
-        Sat, 17 Jul 2021 11:23:12 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id g22so9691536lfu.0;
-        Sat, 17 Jul 2021 11:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=SaXxFTfEqC7NQlicWHSd03MNyG0RY/znqNOu4rKxPWPMT0ZQh8EUVnKZA1kpZw7MYo
-         gMmTSBmrOtbO70/O/pRvEBTehOafvb1TYOzBqqVvsfLUir6/g4T+ZhcHrnYqeVILHoU3
-         kUqy8YrgPCwFY+AhW3jjdRmJStzEabxuBOJxG9S/qOTY0JW+VZxyeWmg9x+mlgrbVLgb
-         A2ci7JvQXzeac1GoEq1MgO84reNM6bIURlghKdyH8cKX9I7kVktxW5p6wV+wP96TH49H
-         nYjY5CrNc94G0uT2C8ibJc72V3BnwVZItcTepsUIE84a4FJfjFZRRtMSTNAKiePjd7vM
-         7T2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=y7SaHURNXyUBjsQfPYlKAP5ckfuIlCfIy3J3ukz+tBo=;
-        b=C71Y+UavVW+qJIRegTWGIgVC7FxUUfRvtcQc9rFiEaRLW2gQDfJIE6UXRhwsIulYLV
-         dvtjnHpoCGVSzA8CH6ySOiAIg+IpYmBuoRQKNYNPuLO7RuZmY84sTNcHe2w+3K2u38No
-         VvBVzPoOdbf0icVmkZe2Oi8UJalJYDQoZ+JE2RToZa+MR7tjvW5JXHt1qhv2t18uLqNs
-         OxiqW4oTRozE9/v2wSmtIWc4LiT80hzNsFB70dtoU+cgRzF1r9qT3p+wMRbS5ghins9e
-         cxm4RWSC1KogNl4tvpToGakodc+YTtu5TTdbFovyRmTPp8TFeMIzG7fEGGTp/sNPrIy/
-         lpDA==
-X-Gm-Message-State: AOAM533HabSKwygI4zEUluc5O7qdfxwHuJEZ5s2YqoSmehyLSwNngg/O
-        d60D5nq+wNlZb4M7jq66O0k=
-X-Google-Smtp-Source: ABdhPJx6kt3p/8AdTmBN/YG3dBRZZZ/0Uc//D7ucLTcZ1BioGC5bY11m6kaP7JckoOWhwxwWmO47CA==
-X-Received: by 2002:a05:6512:16a6:: with SMTP id bu38mr12308203lfb.92.1626546191314;
-        Sat, 17 Jul 2021 11:23:11 -0700 (PDT)
-Received: from localhost.localdomain (46-138-17-250.dynamic.spd-mgts.ru. [46.138.17.250])
-        by smtp.gmail.com with ESMTPSA id z20sm1409532ljk.123.2021.07.17.11.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 11:23:11 -0700 (PDT)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: [PATCH v5 12/12] arm64: tegra132: Add new properties to USB PHY device-tree node
-Date:   Sat, 17 Jul 2021 21:21:34 +0300
-Message-Id: <20210717182134.30262-13-digetx@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210717182134.30262-1-digetx@gmail.com>
-References: <20210717182134.30262-1-digetx@gmail.com>
+        id S234634AbhGQTYk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 17 Jul 2021 15:24:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36288 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235309AbhGQTYf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 17 Jul 2021 15:24:35 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 85A7860200
+        for <linux-usb@vger.kernel.org>; Sat, 17 Jul 2021 19:21:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626549697;
+        bh=uzXSe3s1ioASoi/4OCJOIhW5qLRA+rjS+jEtx1UU5vA=;
+        h=From:To:Subject:Date:From;
+        b=Vy25mCic1eYniWxMwjOzKrbIdqAr6Nucl7L+8n3hDGaLyzrUkciYSl79z5an8o7y7
+         N2Etu4ncAKhg1XNUhtD4M9Z/6pc8Wtqso6ru/VLdEY7bwWhj65PxT/558GFMoRdPCV
+         TtKmMj3B1hxu0Y84Kz3m/XEWxCOHN6i+ZPGzGTzG7kG84m9Fad3fipUXA7FLa1ck5/
+         JbMgZ6Vza7uB07taM1VDOCRMVp6Kb6JeXP3YzIGOZfuGexpkrWc9D2m/QXoJkGU+Cp
+         oAw3y9aFpUVg76iON5/mnmfy0nklhXYlJZtnv5unxOqyjxPHBKow1K+k0gYSDvNW71
+         W+UvVzC2LVKsQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 6E271612B3; Sat, 17 Jul 2021 19:21:37 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213771] New: ch341 USB-Serial converter receives but does not
+ send
+Date:   Sat, 17 Jul 2021 19:21:37 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: luzemario@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-213771-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add new properties to USB PHYs needed for enabling USB OTG mode.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
 
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
----
- arch/arm64/boot/dts/nvidia/tegra132.dtsi | 6 ++++++
- 1 file changed, 6 insertions(+)
+            Bug ID: 213771
+           Summary: ch341 USB-Serial converter receives but does not send
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.12-rc3
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: luzemario@gmail.com
+        Regression: No
 
-diff --git a/arch/arm64/boot/dts/nvidia/tegra132.dtsi b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-index 9928a87f593a..f79a66226457 100644
---- a/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-+++ b/arch/arm64/boot/dts/nvidia/tegra132.dtsi
-@@ -1123,6 +1123,7 @@ phy1: usb-phy@7d000000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d000000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USBD>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1142,6 +1143,7 @@ phy1: usb-phy@7d000000 {
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
- 		nvidia,has-utmi-pad-registers;
-+		nvidia,pmc = <&tegra_pmc 0>;
- 		status = "disabled";
- 	};
- 
-@@ -1162,6 +1164,7 @@ phy2: usb-phy@7d004000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d004000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB2>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1180,6 +1183,7 @@ phy2: usb-phy@7d004000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 1>;
- 		status = "disabled";
- 	};
- 
-@@ -1200,6 +1204,7 @@ phy3: usb-phy@7d008000 {
- 		compatible = "nvidia,tegra124-usb-phy", "nvidia,tegra30-usb-phy";
- 		reg = <0x0 0x7d008000 0x0 0x4000>,
- 		      <0x0 0x7d000000 0x0 0x4000>;
-+		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
- 		phy_type = "utmi";
- 		clocks = <&tegra_car TEGRA124_CLK_USB3>,
- 			 <&tegra_car TEGRA124_CLK_PLL_U>,
-@@ -1218,6 +1223,7 @@ phy3: usb-phy@7d008000 {
- 		nvidia,hssquelch-level = <2>;
- 		nvidia,hsdiscon-level = <5>;
- 		nvidia,xcvr-hsslew = <12>;
-+		nvidia,pmc = <&tegra_pmc 2>;
- 		status = "disabled";
- 	};
- 
--- 
-2.32.0
+Please see Ubuntu bug
+https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1919051.
 
+Tested with Alpine Linux alpine 5.10.16-0-lts kernel too.
+
+Possibly still exists in the latest (5.14) kernel.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
