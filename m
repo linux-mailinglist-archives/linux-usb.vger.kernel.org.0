@@ -2,115 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D6B3CC732
-	for <lists+linux-usb@lfdr.de>; Sun, 18 Jul 2021 03:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6B53CC961
+	for <lists+linux-usb@lfdr.de>; Sun, 18 Jul 2021 15:50:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232685AbhGRByR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 17 Jul 2021 21:54:17 -0400
-Received: from mail-pl1-f179.google.com ([209.85.214.179]:46973 "EHLO
-        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233428AbhGRByP (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 17 Jul 2021 21:54:15 -0400
-Received: by mail-pl1-f179.google.com with SMTP id c15so7618286pls.13;
-        Sat, 17 Jul 2021 18:51:17 -0700 (PDT)
+        id S233878AbhGRNxT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 18 Jul 2021 09:53:19 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:45610 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233807AbhGRNxS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 18 Jul 2021 09:53:18 -0400
+Received: by mail-il1-f200.google.com with SMTP id s18-20020a92cbd20000b02901bb78581beaso8746170ilq.12
+        for <linux-usb@vger.kernel.org>; Sun, 18 Jul 2021 06:50:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NG6pheoCZKg5UXChiGjOLrLU9fLUpsB1CjGA68gDk8k=;
-        b=tJDge/o+yeqJDcdkBEI9FsGha/sE8vIVAhoX4RJpYryq4sbAeSAPqe5HMjaCj6BhBt
-         TC3Cm+tRz4t6EMZ+cdyF6IiSnGx2jkwkTndxN0gldkvYZHrNGDmNfJs2/t4tLeMOGcmh
-         bBwvqzB0CL3Y4UutLNjOU7reYzgF/3gw8VHnOBDd3RMu60Zd7NUwqLU4rS4x5qp69jOH
-         FsuAKo5w3aWksy0nDCUivgNs8RS3ivZFvjusmej+yiS9HBH7zqcLYH36PHLIiW1QVtJ3
-         GtqSPLXbNvCZ7DGJQS8UiRoLCHRJDJ4mK7FN1EuvzQJcLNTC7I/3qRi8Zj1U0Qj9382f
-         x8iA==
-X-Gm-Message-State: AOAM532I6Y/OfBuOp9mc3F+Ap8/JvNLwtUKQbMlGPrFXL+2KJGy21v7/
-        GFlpdnLoZqVWtR2xkNC2EFlE+0uPpsc=
-X-Google-Smtp-Source: ABdhPJzto7UloYy2y1932tH4/csp9BczYENPIJQN0qn19MDDh3Lc0exmtcvMH1cFQ/pVNaGwxEQ/QA==
-X-Received: by 2002:a17:903:234f:b029:12b:7bad:75cb with SMTP id c15-20020a170903234fb029012b7bad75cbmr3028593plh.67.1626573076666;
-        Sat, 17 Jul 2021 18:51:16 -0700 (PDT)
-Received: from localhost ([24.4.24.239])
-        by smtp.gmail.com with ESMTPSA id q3sm14726441pfj.89.2021.07.17.18.51.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 17 Jul 2021 18:51:16 -0700 (PDT)
-From:   Moritz Fischer <mdf@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org, moritzf@google.com,
-        mathias.nyman@intel.com, gregkh@linuxfoundation.org,
-        Moritz Fischer <mdf@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 2/2] usb: renesas-xhci: Remove renesas_xhci_pci_exit()
-Date:   Sat, 17 Jul 2021 18:51:11 -0700
-Message-Id: <20210718015111.389719-3-mdf@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210718015111.389719-1-mdf@kernel.org>
-References: <20210718015111.389719-1-mdf@kernel.org>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=OXoW0tdh3u7kirLpVINFuQ3xib/WnFYX8gUfwjUENjk=;
+        b=kJoUGrtcqF6iMLIK5KkoIwtQUGO0XHQej4IqgYvZBCw+HFWHoQ5U2Ymf4M0JhQbfS3
+         ZyqxUZax5svAvIdKE3yD8Kxw7DdLhTJ+IuogOdl3kPfJvjXc8WqLPgxEpZ037gcOH/jW
+         QVjESZLQSkzdgyIhrGob75HxUl4KLbTCcm4D7HzqTEBtGIW8l83vgAe0Xr5GKzZPmYDQ
+         f2FOyPzhBUH4U3PWDlBwyYdXzOuv4HRZ++EX7WSo+z2uG5vDGvft41GoUy+cTq+dMf/I
+         +43ldCT6T25WxRkNqpaI1qYnLfzBX8FNDH0lvLmgYh1TvbOl2iNIzDSfWjSqIFld03TD
+         VaSA==
+X-Gm-Message-State: AOAM533FXIrihdJImC+/+ISEIuQYi/ADvjKUQhe+vpobuKD+nDXwu03q
+        Ahyb4kFUCsQx60EK99o37Yf3jIs516P4qB4AnNkKHDW0Q6ND
+X-Google-Smtp-Source: ABdhPJyFGBpgqB+KxTMFlxIFRrUzHrB23N5+7Q8y4qgeiIzmmR5jT7VlVjTFWPQysotCZaG+Zalw0PAJkLjKEJRzUYR31zdxvWi1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:550:: with SMTP id i16mr13219001ils.207.1626616220337;
+ Sun, 18 Jul 2021 06:50:20 -0700 (PDT)
+Date:   Sun, 18 Jul 2021 06:50:20 -0700
+In-Reply-To: <0000000000005866b005c7394288@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ffcb8205c7661908@google.com>
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in ath9k_htc_rxep
+From:   syzbot <syzbot+dc6c749aec286992cea2@syzkaller.appspotmail.com>
+To:     ath9k-devel@qca.qualcomm.com, davem@davemloft.net, kuba@kernel.org,
+        kvalo@codeaurora.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Remove empty function renesas_xhci_pci_exit() that does not
-actually do anything.
+syzbot has found a reproducer for the following issue on:
 
-Cc: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Vinod Koul <vkoul@kernel.org>
-Signed-off-by: Moritz Fischer <mdf@kernel.org>
----
- drivers/usb/host/xhci-pci-renesas.c | 5 -----
- drivers/usb/host/xhci-pci.c         | 2 --
- drivers/usb/host/xhci-pci.h         | 3 ---
- 3 files changed, 10 deletions(-)
+HEAD commit:    97db1b081e12 dt-bindings: usb: dwc3: Update dwc3 TX fifo p..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=13b7fd02300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=db8b503c237253ee
+dashboard link: https://syzkaller.appspot.com/bug?extid=dc6c749aec286992cea2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10431e54300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d2dc32300000
 
-diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
-index 327f6a6d5672..1ebacc42a552 100644
---- a/drivers/usb/host/xhci-pci-renesas.c
-+++ b/drivers/usb/host/xhci-pci-renesas.c
-@@ -620,9 +620,4 @@ int renesas_xhci_check_request_fw(struct pci_dev *pdev,
- }
- EXPORT_SYMBOL_GPL(renesas_xhci_check_request_fw);
- 
--void renesas_xhci_pci_exit(struct pci_dev *dev)
--{
--}
--EXPORT_SYMBOL_GPL(renesas_xhci_pci_exit);
--
- MODULE_LICENSE("GPL v2");
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 18c2bbddf080..4456ba338b74 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -449,8 +449,6 @@ static void xhci_pci_remove(struct pci_dev *dev)
- 	struct xhci_hcd *xhci;
- 
- 	xhci = hcd_to_xhci(pci_get_drvdata(dev));
--	if (xhci->quirks & XHCI_RENESAS_FW_QUIRK)
--		renesas_xhci_pci_exit(dev);
- 
- 	xhci->xhc_state |= XHCI_STATE_REMOVING;
- 
-diff --git a/drivers/usb/host/xhci-pci.h b/drivers/usb/host/xhci-pci.h
-index acd7cf0a1706..cb9a8f331a44 100644
---- a/drivers/usb/host/xhci-pci.h
-+++ b/drivers/usb/host/xhci-pci.h
-@@ -7,7 +7,6 @@
- #if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
- int renesas_xhci_check_request_fw(struct pci_dev *dev,
- 				  const struct pci_device_id *id);
--void renesas_xhci_pci_exit(struct pci_dev *dev);
- 
- #else
- static int renesas_xhci_check_request_fw(struct pci_dev *dev,
-@@ -16,8 +15,6 @@ static int renesas_xhci_check_request_fw(struct pci_dev *dev,
- 	return 0;
- }
- 
--static void renesas_xhci_pci_exit(struct pci_dev *dev) { };
--
- #endif
- 
- struct xhci_driver_data {
--- 
-2.32.0
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dc6c749aec286992cea2@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: ffffffffffffffc8
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 7426067 P4D 7426067 PUD 7428067 PMD 0 
+Oops: 0000 [#1] SMP KASAN
+CPU: 1 PID: 0 Comm: swapper/1 Tainted: G        W         5.14.0-rc1-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1135
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 f0 64 37 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 fd 6b 37 fe 45 84 ff 75 a8 e8 c3 64
+RSP: 0018:ffffc900001489b8 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: 0000000000000100
+RDX: ffff8881002c0000 RSI: ffffffff830a0050 RDI: ffffc90000148928
+RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52000029125 R11: 0000000000000000 R12: ffff888119a9b678
+R13: ffff888119a9b240 R14: ffff888119a9b688 R15: ffff8881088974a8
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 000000010719b000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ ath9k_htc_rx_msg+0x2e4/0xb70 drivers/net/wireless/ath/ath9k/htc_hst.c:461
+ ath9k_hif_usb_reg_in_cb+0x1ac/0x630 drivers/net/wireless/ath/ath9k/hif_usb.c:733
+ __usb_hcd_giveback_urb+0x2b0/0x5c0 drivers/usb/core/hcd.c:1656
+ usb_hcd_giveback_urb+0x367/0x410 drivers/usb/core/hcd.c:1726
+ dummy_timer+0x11f9/0x32b0 drivers/usb/gadget/udc/dummy_hcd.c:1987
+ call_timer_fn+0x1a5/0x630 kernel/time/timer.c:1417
+ expire_timers kernel/time/timer.c:1462 [inline]
+ __run_timers.part.0+0x675/0xa10 kernel/time/timer.c:1731
+ __run_timers kernel/time/timer.c:1712 [inline]
+ run_timer_softirq+0x80/0x120 kernel/time/timer.c:1744
+ __do_softirq+0x1b0/0x910 kernel/softirq.c:558
+ invoke_softirq kernel/softirq.c:432 [inline]
+ __irq_exit_rcu+0x117/0x160 kernel/softirq.c:636
+ irq_exit_rcu+0x5/0x10 kernel/softirq.c:648
+ sysvec_apic_timer_interrupt+0x6a/0x90 arch/x86/kernel/apic/apic.c:1100
+ </IRQ>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:638
+RIP: 0010:native_save_fl arch/x86/include/asm/irqflags.h:29 [inline]
+RIP: 0010:arch_local_save_flags arch/x86/include/asm/irqflags.h:70 [inline]
+RIP: 0010:arch_irqs_disabled arch/x86/include/asm/irqflags.h:132 [inline]
+RIP: 0010:acpi_safe_halt drivers/acpi/processor_idle.c:110 [inline]
+RIP: 0010:acpi_idle_do_entry+0x1c6/0x250 drivers/acpi/processor_idle.c:553
+Code: 89 de e8 cd ed 80 fb 84 db 75 ac e8 94 e6 80 fb e8 5f f2 86 fb eb 0c e8 88 e6 80 fb 0f 00 2d 81 b0 88 00 e8 7c e6 80 fb fb f4 <9c> 5b 81 e3 00 02 00 00 fa 31 ff 48 89 de e8 07 ef 80 fb 48 85 db
+RSP: 0018:ffffc900000dfd18 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff8881002c0000 RSI: ffffffff85c07ec4 RDI: ffffffff85c07eb1
+RBP: ffff888109b93064 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81477148 R11: 0000000000000000 R12: 0000000000000001
+R13: ffff888109b93000 R14: ffff888109b93064 R15: ffff88810cf00004
+ acpi_idle_enter+0x355/0x4f0 drivers/acpi/processor_idle.c:688
+ cpuidle_enter_state+0x1b1/0xc80 drivers/cpuidle/cpuidle.c:237
+ cpuidle_enter+0x4a/0xa0 drivers/cpuidle/cpuidle.c:351
+ call_cpuidle kernel/sched/idle.c:158 [inline]
+ cpuidle_idle_call kernel/sched/idle.c:239 [inline]
+ do_idle+0x3dd/0x580 kernel/sched/idle.c:306
+ cpu_startup_entry+0x14/0x20 kernel/sched/idle.c:403
+ start_secondary+0x267/0x340 arch/x86/kernel/smpboot.c:270
+ secondary_startup_64_no_verify+0xb0/0xbb
+Modules linked in:
+CR2: ffffffffffffffc8
+---[ end trace c812365639e6eb14 ]---
+RIP: 0010:ath9k_htc_rxep+0xb5/0x210 drivers/net/wireless/ath/ath9k/htc_drv_txrx.c:1135
+Code: 8b 43 38 48 8d 58 c8 49 39 c4 0f 84 ee 00 00 00 e8 f0 64 37 fe 48 89 d8 48 c1 e8 03 0f b6 04 28 84 c0 74 06 0f 8e 0a 01 00 00 <44> 0f b6 3b 31 ff 44 89 fe e8 fd 6b 37 fe 45 84 ff 75 a8 e8 c3 64
+RSP: 0018:ffffc900001489b8 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: ffffffffffffffc8 RCX: 0000000000000100
+RDX: ffff8881002c0000 RSI: ffffffff830a0050 RDI: ffffc90000148928
+RBP: dffffc0000000000 R08: 0000000000000001 R09: 0000000000000003
+R10: fffff52000029125 R11: 0000000000000000 R12: ffff888119a9b678
+R13: ffff888119a9b240 R14: ffff888119a9b688 R15: ffff8881088974a8
+FS:  0000000000000000(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffffffffffc8 CR3: 000000010719b000 CR4: 00000000001506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
