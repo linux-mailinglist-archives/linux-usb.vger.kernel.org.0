@@ -2,36 +2,36 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E899E3CD493
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jul 2021 14:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E750B3CD4A0
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jul 2021 14:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236938AbhGSLjJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jul 2021 07:39:09 -0400
-Received: from relmlor1.renesas.com ([210.160.252.171]:36092 "EHLO
+        id S236975AbhGSLj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jul 2021 07:39:29 -0400
+Received: from relmlor1.renesas.com ([210.160.252.171]:33185 "EHLO
         relmlie5.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S236845AbhGSLjI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 07:39:08 -0400
+        by vger.kernel.org with ESMTP id S236845AbhGSLj2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 07:39:28 -0400
 X-IronPort-AV: E=Sophos;i="5.84,252,1620658800"; 
-   d="scan'208";a="88130149"
+   d="scan'208";a="88130202"
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 19 Jul 2021 21:19:47 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 19 Jul 2021 21:20:07 +0900
 Received: from localhost.localdomain (unknown [10.226.92.6])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id EADED40061A1;
-        Mon, 19 Jul 2021 21:19:44 +0900 (JST)
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 8FA4D40061A1;
+        Mon, 19 Jul 2021 21:20:05 +0900 (JST)
 From:   Biju Das <biju.das.jz@bp.renesas.com>
 To:     Rob Herring <robh+dt@kernel.org>
 Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v4 02/10] dt-bindings: usb: generic-ehci: Document dr_mode property
-Date:   Mon, 19 Jul 2021 13:19:30 +0100
-Message-Id: <20210719121938.6532-3-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v4 09/10] dt-bindings: usb: renesas,usbhs: Document RZ/G2L bindings
+Date:   Mon, 19 Jul 2021 13:19:37 +0100
+Message-Id: <20210719121938.6532-10-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20210719121938.6532-1-biju.das.jz@bp.renesas.com>
 References: <20210719121938.6532-1-biju.das.jz@bp.renesas.com>
@@ -39,42 +39,66 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Document the optional property dr_mode present on both RZ/G2 and
-R-Car Gen3 SoCs.
-
-It fixes dtbs_check warning,
-'dr_mode' does not match any of the regexes: 'pinctrl-[0-9]+'
+Document RZ/G2L (R9A07G044L) SoC bindings.
 
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
 v3->v4:
-  * Added Rob's Acked-by tag.
-v2->v3:
-  * Dropped RZ/G2L SoC and USBPHY control IP is modelled as reset binding.
-v2:
-  * New patch
+ * Added maxitems in interrupt property as per Rob's suggestion.
+v3:
+ * Updated the bindings as per the USBPHY control IP.
 ---
- Documentation/devicetree/bindings/usb/generic-ehci.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../bindings/usb/renesas,usbhs.yaml           | 22 +++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index 8089dc956ba3..f6e5e4abb85b 100644
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@ -142,6 +142,11 @@ properties:
-   iommus:
-     maxItems: 1
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+index ad73339ffe1d..a85ad392d443 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+@@ -17,7 +17,9 @@ properties:
+           - const: renesas,rza1-usbhs
  
-+  dr_mode:
-+    enum:
-+      - host
-+      - otg
+       - items:
+-          - const: renesas,usbhs-r7s9210 # RZ/A2
++          - enum:
++              - renesas,usbhs-r7s9210   # RZ/A2
++              - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
+           - const: renesas,rza2-usbhs
+ 
+       - items:
+@@ -59,7 +61,8 @@ properties:
+       - description: USB 2.0 clock selector
+ 
+   interrupts:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 4
+ 
+   renesas,buswait:
+     $ref: /schemas/types.yaml#/definitions/uint32
+@@ -108,6 +111,21 @@ required:
+   - clocks
+   - interrupts
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: renesas,usbhs-r9a07g044
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: U2P_IXL_INT
++            - description: U2P_INT_DMA[0]
++            - description: U2P_INT_DMA[1]
++            - description: U2P_INT_DMAERR
 +
- required:
-   - compatible
-   - reg
+ additionalProperties: false
+ 
+ examples:
 -- 
 2.17.1
 
