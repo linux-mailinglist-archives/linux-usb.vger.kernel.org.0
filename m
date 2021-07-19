@@ -2,179 +2,123 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 941673CCD22
-	for <lists+linux-usb@lfdr.de>; Mon, 19 Jul 2021 06:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7F573CCE37
+	for <lists+linux-usb@lfdr.de>; Mon, 19 Jul 2021 09:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbhGSEj5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jul 2021 00:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbhGSEjw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 00:39:52 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439E9C061762
-        for <linux-usb@vger.kernel.org>; Sun, 18 Jul 2021 21:36:52 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id o8so8927274plg.11
-        for <linux-usb@vger.kernel.org>; Sun, 18 Jul 2021 21:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yYsZ+ikgce2hMzO++2AKM6wMqwMOnQFfBVChCh2032U=;
-        b=DodU3mHKvLOBpExF7PmlfcpdF899zpLvyq1NBc3PDsH+WmLWbrrUVlQLfDQOZlnryI
-         kBewVYDmDaiEGMJwtEraprQHnwuGObK7kOLPIz1cjRs4SJUEPJKcQ0Qa2invsB+sGB7r
-         PnBSQhWNObuOmhDc4VFYNmcYbth/avXqQDooE=
+        id S234727AbhGSHIf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jul 2021 03:08:35 -0400
+Received: from mail-pl1-f172.google.com ([209.85.214.172]:43000 "EHLO
+        mail-pl1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234441AbhGSHIf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 03:08:35 -0400
+Received: by mail-pl1-f172.google.com with SMTP id v14so9089486plg.9;
+        Mon, 19 Jul 2021 00:05:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yYsZ+ikgce2hMzO++2AKM6wMqwMOnQFfBVChCh2032U=;
-        b=XSdlDlhiz22fo/xcrXfh9pT5cp44joYM5qy1LlG/OpnpFKF0tDiZX828wxAboQqcLS
-         czNXkqjetWrHt1QeY4UQofHsG0YxdmV0sqq3Lg1rG+0gLMjlXOSn0IsP76sst85PnLiQ
-         pVyjF+5nCo8iVscQuOfqGwjsI35nTM0TjEpT9LwfYmBuAYgJ3hydM9aw/yoRJAGWRpXm
-         pB6TAILlMAaT/8nGZwqYqpiN+HcA+x0Xg7+7CvuBlS+4j7wupaofi26/Th1tVyGUW/S3
-         Yb0h1LXGUrVUJdnVWtGFoPkIarKqdEzIUFST+cabzPRe0qoQ1ZFpG0SWHx7VdHjmGwXn
-         q/fw==
-X-Gm-Message-State: AOAM530NkTVv+dvh92MAG1dz3ODgy+wkgJ8Xf5O2oVbfk1R/9/elhUip
-        mPEiEBQ2yQ7y2ngndPHvSS8H0H16e5DT5KS3qC/7Dg==
-X-Google-Smtp-Source: ABdhPJwV7nrvm/yXIQakkxsQ8Bv8R9xP9VVdYwLwek+kQO+5++gcNiNUT+rgMISjBwsedhdcDcBUM8SPQz8/maUKTKA=
-X-Received: by 2002:a17:902:8c83:b029:129:17e5:a1cc with SMTP id
- t3-20020a1709028c83b029012917e5a1ccmr17970476plo.49.1626669411408; Sun, 18
- Jul 2021 21:36:51 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210708164256.1.Ib344a977b52486ec81b60f9820338f1b43655f8d@changeid>
- <e13a1d38-cc0a-51b4-fe19-7a9145e75b1d@linux.intel.com>
-In-Reply-To: <e13a1d38-cc0a-51b4-fe19-7a9145e75b1d@linux.intel.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Mon, 19 Jul 2021 12:36:40 +0800
-Message-ID: <CAATdQgDEwOZaBeXrsocF-b5-wfXgNGNhfaEBPsmhf7nefo55KQ@mail.gmail.com>
-Subject: Re: [PATCH] xhci: fix unmatched num_trbs_free
-To:     Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3YrzJmFnmqMIqu+mKxLmp9ctb0s/ds5KBkIaLiUqcG0=;
+        b=JCKQl4k8izcy+U0tip3Hha4XCqbDaldy+gynZlrzjMnQ6LjdNUEnO7anlAlQ5yOURO
+         w+5xdi6ytBIqqX4ltb1E+iJAinGEhJJy0uUd38Qu63IevjhtGvYeMDyYsUSojYZaPbtr
+         R5FtB0gVIE469GT9gtZZW9zal79yFHQx9BzZFNHnAGTCRVGcBBwsNzck0gFgrUlLhf2P
+         sFZT4OiWN1HYmaIcCFiByiIqDQF7WOxF8tfac6SyxAuhLmnOLT0OLUrqqDEuxkwjIMAi
+         fI9/xqPGdBoISI4U4jz541gWdQN0VjhiwKmBB11b4puC6L0FSbiyZQvVTu9kkmSe2CeW
+         7PVw==
+X-Gm-Message-State: AOAM530CHuSkyAWb0gU5iC+iFvDa4/ekVvQGR1W/bM/szksDfuxvfwBm
+        HhssvaiqYpQFE3hRrNJfHOF21sqHvvc=
+X-Google-Smtp-Source: ABdhPJx5zvFmqBHUV1EJ2SRgn6Z9ESmfyQnpCldRIsIXEbXPjcK7Ho8IC3ubwVwJiXY1x5RpDo8gQg==
+X-Received: by 2002:a17:90a:9ab:: with SMTP id 40mr29074822pjo.9.1626678335096;
+        Mon, 19 Jul 2021 00:05:35 -0700 (PDT)
+Received: from localhost ([2601:647:5b00:6f70:be34:681b:b1e9:776f])
+        by smtp.gmail.com with ESMTPSA id k189sm20671984pgk.14.2021.07.19.00.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jul 2021 00:05:34 -0700 (PDT)
+From:   Moritz Fischer <mdf@kernel.org>
+To:     linux-usb@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
+        moritzf@google.com, Moritz Fischer <mdf@kernel.org>,
+        stable@vger.kernel.org, Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Vinod Koul <vkoul@kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>
+Subject: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM state"
+Date:   Mon, 19 Jul 2021 00:05:19 -0700
+Message-Id: <20210719070519.41114-1-mdf@kernel.org>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Mathias,
+This reverts commit d143825baf15f204dac60acdf95e428182aa3374.
 
-On Fri, Jul 16, 2021 at 8:54 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 8.7.2021 11.43, Ikjoon Jang wrote:
-> > When unlinked urbs are queued to the cancelled td list, many tds
-> > might be located after hw dequeue pointer and just marked as no-op
-> > but not reclaimed to num_trbs_free. This bias can leads to unnecessary
-> > ring expansions and leaks in atomic pool.
->
-> Good point, in that case trbs turned no-op never get added to free trb count.
->
-> >
-> > To prevent this bias, this patch counts free TRBs every time xhci moves
-> > dequeue pointer. This patch utilizes existing
-> > update_ring_for_set_deq_completion() function, renamed it to move_deq().
-> >
-> > When it walks through to the new dequeue pointer, it also counts
-> > free TRBs manually. This patch adds a fast path for the most cases
-> > where the new dequeue pointer is still in the current segment.
-> >
->
-> This looks like an option.
->
-> Another approach would be to keep the normal case fast, and the special case code simple.
-> Something like:
->
-> finish_td()
-> ...
->         /* Update ring dequeue pointer */
->         if (ep_ring->dequeue == td->first_trb) {
->                 ep_ring->dequeue = td->last_trb;
->                 ep_ring->deq_seg = td->last_trb_seg;
->                 ep_ring->num_trbs_free += td->num_trbs - 1;
->                 inc_deq(xhci, ep_ring);
->         } else {
->                 move_deq(...);
->         }
->
-> move_deq(...)
-> {
->         while(ring->dequeue != new_dequeue)
->                 inc_deq(ring);
->         inc_deq(ring);
-> }
+Justin reports some of his systems now fail as result of this commit:
 
-Yes, I think most cases would be in (ep_ring->dequeue == td->first_trb)
-so I think just repeating inc_deq() will be okay like the above example
-cancelling urbs is an expensive and unusual operation.
+ xhci_hcd 0000:04:00.0: Direct firmware load for renesas_usb_fw.mem failed with error -2
+ xhci_hcd 0000:04:00.0: request_firmware failed: -2
+ xhci_hcd: probe of 0000:04:00.0 failed with error -2
 
-But as you can see, I changed update_ring_for_set_deq_completion() to
-move_deq(),
-Do you think it's okay for that substitution In xhci_handle_cmd_set_deq()?
-I'm worrying about some weird situation where the new dequeue ptr is
-not in the ring.
+The revert brings back the original issue the commit tried to solve but
+at least unbreaks existing systems relying on previous behavior.
 
->
-> inc_deq() increases the num_trbs_free count.
->
-> I haven't looked at the details of this yet, but I'm away for the next two weeks so
-> I wanted to share this first anyway.
->
+Cc: stable@vger.kernel.org
+Cc: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: Justin Forbes <jmforbes@linuxtx.org>
+Reported-by: Justin Forbes <jmforbes@linuxtx.org>
+Signed-off-by: Moritz Fischer <mdf@kernel.org>
+---
 
-Thanks for reviewing, I hope to get some feedback when you come back.
+Justin,
 
-> -Mathias
+would you be able to help out testing follow up patches to this?
 
-On Fri, Jul 16, 2021 at 8:54 PM Mathias Nyman
-<mathias.nyman@linux.intel.com> wrote:
->
-> On 8.7.2021 11.43, Ikjoon Jang wrote:
-> > When unlinked urbs are queued to the cancelled td list, many tds
-> > might be located after hw dequeue pointer and just marked as no-op
-> > but not reclaimed to num_trbs_free. This bias can leads to unnecessary
-> > ring expansions and leaks in atomic pool.
->
-> Good point, in that case trbs turned no-op never get added to free trb count.
->
-> >
-> > To prevent this bias, this patch counts free TRBs every time xhci moves
-> > dequeue pointer. This patch utilizes existing
-> > update_ring_for_set_deq_completion() function, renamed it to move_deq().
-> >
-> > When it walks through to the new dequeue pointer, it also counts
-> > free TRBs manually. This patch adds a fast path for the most cases
-> > where the new dequeue pointer is still in the current segment.
-> >
->
-> This looks like an option.
->
-> Another approach would be to keep the normal case fast, and the special case code simple.
-> Something like:
->
-> finish_td()
-> ...
->         /* Update ring dequeue pointer */
->         if (ep_ring->dequeue == td->first_trb) {
->                 ep_ring->dequeue = td->last_trb;
->                 ep_ring->deq_seg = td->last_trb_seg;
->                 ep_ring->num_trbs_free += td->num_trbs - 1;
->                 inc_deq(xhci, ep_ring);
->         } else {
->                 move_deq(...);
->         }
->
-> move_deq(...)
-> {
->         while(ring->dequeue != new_dequeue)
->                 inc_deq(ring);
->         inc_deq(ring);
-> }
->
-> inc_deq() increases the num_trbs_free count.
->
-> I haven't looked at the details of this yet, but I'm away for the next two weeks so
-> I wanted to share this first anyway.
->
-> -Mathias
+I don't have a machine to test your use-case and mine definitly requires
+a firmware load on RENESAS_ROM_STATUS_NO_RESULT.
+
+Thanks
+- Moritz
+
+---
+ drivers/usb/host/xhci-pci-renesas.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhci-pci-renesas.c
+index 1da647961c25..5923844ed821 100644
+--- a/drivers/usb/host/xhci-pci-renesas.c
++++ b/drivers/usb/host/xhci-pci-renesas.c
+@@ -207,8 +207,7 @@ static int renesas_check_rom_state(struct pci_dev *pdev)
+ 			return 0;
+ 
+ 		case RENESAS_ROM_STATUS_NO_RESULT: /* No result yet */
+-			dev_dbg(&pdev->dev, "Unknown ROM status ...\n");
+-			break;
++			return 0;
+ 
+ 		case RENESAS_ROM_STATUS_ERROR: /* Error State */
+ 		default: /* All other states are marked as "Reserved states" */
+@@ -225,12 +224,13 @@ static int renesas_fw_check_running(struct pci_dev *pdev)
+ 	u8 fw_state;
+ 	int err;
+ 
+-	/*
+-	 * Only if device has ROM and loaded FW we can skip loading and
+-	 * return success. Otherwise (even unknown state), attempt to load FW.
+-	 */
+-	if (renesas_check_rom(pdev) && !renesas_check_rom_state(pdev))
+-		return 0;
++	/* Check if device has ROM and loaded, if so skip everything */
++	err = renesas_check_rom(pdev);
++	if (err) { /* we have rom */
++		err = renesas_check_rom_state(pdev);
++		if (!err)
++			return err;
++	}
+ 
+ 	/*
+ 	 * Test if the device is actually needing the firmware. As most
+-- 
+2.32.0
+
