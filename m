@@ -2,57 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F9603CF551
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 09:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8F93CF5DC
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 10:15:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbhGTGvu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jul 2021 02:51:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41712 "EHLO mail.kernel.org"
+        id S233028AbhGTHbO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jul 2021 03:31:14 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:10666 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232391AbhGTGvk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Jul 2021 02:51:40 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C5D561165;
-        Tue, 20 Jul 2021 07:32:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626766339;
-        bh=TtvpaEMsR3u6EKkMoDAPlGks7XH8v1RQa5GXSq+xLzg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hzGV7n6Vb2Kk2wd7nEyRxlpj31JiqUtV7JxckRkQ/BH0ePMyCA47cZnE9ZfTpP6ms
-         DbjweKsg3027diPn/JoiokG33elbsrq5eGrkfF4DDgF7JAsGIGk1d/x0Bh2zeEOUCp
-         GtJM1sC/KSDLa3KDNNF1q5yDW+Spd4NxR9an2O9BLcumnDNPEK+fVLJ/DQqxTYj0wS
-         dg83oBPbZVURfYfQydVvsmAQ/mtny+ALw3A/RaMJcy7UqBvBfnGbgM/ias/YedC8Xa
-         I0sZtZFssaNYhesS9H6UCCciowXUMH8NRRSTaaGpMeTrOkhlKFh5Q8OA55O3ThqlgK
-         eTuxx3GvPWKPQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1m5kEL-00079E-Eq; Tue, 20 Jul 2021 09:31:53 +0200
-Date:   Tue, 20 Jul 2021 09:31:53 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, Ian Ray <ian.ray@ge.com>
-Subject: Re: [PATCH] USB: serial: cp210x: fix comments for GE CS1000
-Message-ID: <YPZ76YwLdm/0heDz@hovoldconsulting.com>
-References: <20210719164349.137402-1-sebastian.reichel@collabora.com>
+        id S233955AbhGTHaJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Jul 2021 03:30:09 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1626768647; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=GDDAIIRW8L9Y1qw9IzLhoYgOdUsjfao0Yv3U2Ll8bkE=; b=uRTxxP2GRtlaveIeIOKnvR/D94162UgspItByNenV6hYdzfXR1vJamS9cu0UJgNRh9Nnh22m
+ lRDIC7xfG2/6twv/IP49qxN7v3N0pf/j9/ovXf8jjXskYPsrz5rZuyCH2SW3CloAkR1D4CpL
+ Q/W4C+AFWKJWeeywk5f47Yf6AXQ=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 60f684f7c923fb7e0959c0ea (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 20 Jul 2021 08:10:31
+ GMT
+Sender: jackp=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 15000C4360C; Tue, 20 Jul 2021 08:10:31 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: jackp)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C0F8AC4338A;
+        Tue, 20 Jul 2021 08:10:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C0F8AC4338A
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
+From:   Jack Pham <jackp@codeaurora.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     linux-usb@vger.kernel.org, Jack Pham <jackp@codeaurora.org>,
+        Ronak Vijay Raheja <rraheja@codeaurora.org>
+Subject: [PATCH] usb: gadget: composite: Allow bMaxPower=0 if self-powered
+Date:   Tue, 20 Jul 2021 01:09:07 -0700
+Message-Id: <20210720080907.30292-1-jackp@codeaurora.org>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210719164349.137402-1-sebastian.reichel@collabora.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 06:43:49PM +0200, Sebastian Reichel wrote:
-> From: Ian Ray <ian.ray@ge.com>
-> 
-> Fix comments for GE CS1000 CP210x USB ID assignments.
-> 
-> Fixes: 42213a0190b5 ("USB: serial: cp210x: add some more GE USB IDs")
-> Signed-off-by: Ian Ray <ian.ray@ge.com>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Currently the composite driver encodes the MaxPower field of
+the configuration descriptor by reading the c->MaxPower of the
+usb_configuration only if it is non-zero, otherwise it falls back
+to using the value hard-coded in CONFIG_USB_GADGET_VBUS_DRAW.
+However, there are cases when a configuration must explicitly set
+bMaxPower to 0, particularly if its bmAttributes also has the
+Self-Powered bit set, which is a valid combination.
 
-Now applied with a stable tag to make it easier for the stable
-maintainers. Thanks.
+This is specifically called out in the USB PD specification section
+9.1, in which a PDUSB device "shall report zero in the bMaxPower
+field after negotiating a mutually agreeable Contract", and also
+verified by the USB Type-C Functional Test TD.4.10.2 Sink Power
+Precedence Test.
 
-Johan
+The fix allows the c->MaxPower to be used for encoding the bMaxPower
+even if it is 0, if the self-powered bit is also set.  An example
+usage of this would be for a ConfigFS gadget to be dynamically
+updated by userspace when the Type-C connection is determined to be
+operating in Power Delivery mode.
+
+Co-developed-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
+Signed-off-by: Ronak Vijay Raheja <rraheja@codeaurora.org>
+Signed-off-by: Jack Pham <jackp@codeaurora.org>
+---
+ drivers/usb/gadget/composite.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index 72a9797dbbae..504c1cbc255d 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -482,7 +482,7 @@ static u8 encode_bMaxPower(enum usb_device_speed speed,
+ {
+ 	unsigned val;
+ 
+-	if (c->MaxPower)
++	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
+ 		val = c->MaxPower;
+ 	else
+ 		val = CONFIG_USB_GADGET_VBUS_DRAW;
+@@ -936,7 +936,11 @@ static int set_config(struct usb_composite_dev *cdev,
+ 	}
+ 
+ 	/* when we return, be sure our power usage is valid */
+-	power = c->MaxPower ? c->MaxPower : CONFIG_USB_GADGET_VBUS_DRAW;
++	if (c->MaxPower || (c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
++		power = c->MaxPower;
++	else
++		power = CONFIG_USB_GADGET_VBUS_DRAW;
++
+ 	if (gadget->speed < USB_SPEED_SUPER)
+ 		power = min(power, 500U);
+ 	else
+-- 
+2.24.0
+
