@@ -2,83 +2,61 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 485353CF9D7
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 14:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFDA3CF9E9
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 14:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238408AbhGTMGb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jul 2021 08:06:31 -0400
-Received: from pop31.abv.bg ([194.153.145.221]:52826 "EHLO pop31.abv.bg"
+        id S230467AbhGTMOa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jul 2021 08:14:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46342 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238265AbhGTMGS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Jul 2021 08:06:18 -0400
-Received: from smtp.abv.bg (localhost [127.0.0.1])
-        by pop31.abv.bg (Postfix) with ESMTP id 63D6A1805D3D;
-        Tue, 20 Jul 2021 15:46:33 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=abv.bg; s=smtp-out;
-        t=1626785193; bh=3n+oId2CcuiY7DARlUQCYAgosiVIv3DRNqh5ePKuPW0=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To:From;
-        b=VtfzwQisc+8A4Ov4xUN8PZpgmEG4NFE8oXQss9vBcGS3w5OOVAeD9ijRIUbrpcyTJ
-         dsYqs/CCU3Hu4RvY282vwL+DdPUVKxeOOtuI3v2ywSNVs0movGQO1cvUC56uefkqTY
-         xfmNlKD6D1JPjPFrCiVPNbPxHLMzE0gQTVBPNdR4=
-X-HELO: smtpclient.apple
-Authentication-Results: smtp.abv.bg; auth=pass (plain) smtp.auth=gvalkov@abv.bg
-Received: from 212-39-89-148.ip.btc-net.bg (HELO smtpclient.apple) (212.39.89.148)
- by smtp.abv.bg (qpsmtpd/0.96) with ESMTPSA (ECDHE-RSA-AES256-GCM-SHA384 encrypted); Tue, 20 Jul 2021 15:46:33 +0300
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.100.0.2.22\))
-Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-From:   Georgi Valkov <gvalkov@abv.bg>
-In-Reply-To: <YPa4ZelG2k8Z826E@kroah.com>
-Date:   Tue, 20 Jul 2021 15:46:11 +0300
+        id S231623AbhGTMOX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Jul 2021 08:14:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7F7AC610D2;
+        Tue, 20 Jul 2021 12:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1626785700;
+        bh=pI77XCIHidvCqn0bjmVbWNXeMP9eCvjJeUVEsiFJriE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BJAb+xUbmD9RZSSicF9kw+4lj71adK6LBPgjF6EIQV1oShZ5FJzjNB7g4wWqM6mXa
+         Rwa1Ec3J88m0BVFK7loIXVZkRaieKcsYASEAj2FPwlZ2iAYq9ww8nq5qRKA35k/8Wu
+         ja+DrNs3Cr6T03CoZ4LG07XlWbvjY5zlvLBFFb8M=
+Date:   Tue, 20 Jul 2021 14:54:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Georgi Valkov <gvalkov@abv.bg>
 Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
         mhabets@solarflare.com, luc.vanoostenryck@gmail.com,
         snelson@pensando.io, mst@redhat.com, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         corsac@corsac.net, matti.vuorela@bitfactor.fi,
-        stable@vger.kernel.org,
-        =?utf-8?B?0JPQtdC+0YDQs9C4INCT0LXQvtGA0LPQuNC10LIg0JLRitC70LrQvtCy?= 
-        <gvalkov@abv.bg>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg>
+        stable@vger.kernel.org
+Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
+Message-ID: <YPbHoScEo8ZJyox6@kroah.com>
 References: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
  <20210720122215.54abaf53@cakuba>
- <5D0CFF83-439B-4A10-A276-D2D17B037704@abv.bg> <YPa4ZelG2k8Z826E@kroah.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-X-Mailer: Apple Mail (2.3654.100.0.2.22)
+ <5D0CFF83-439B-4A10-A276-D2D17B037704@abv.bg>
+ <YPa4ZelG2k8Z826E@kroah.com>
+ <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <C6AA954F-8382-461D-835F-E5CA03363D84@abv.bg>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Yes, I read it, and before my previous e-mail that I also read the link =
-from Jakub,
-which essentially provides the same information.
+On Tue, Jul 20, 2021 at 03:46:11PM +0300, Georgi Valkov wrote:
+> Yes, I read it, and before my previous e-mail that I also read the link from Jakub,
+> which essentially provides the same information.
+> 
+> There is only one patch 0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
 
-There is only one patch =
-0001-ipheth-fix-EOVERFLOW-in-ipheth_rcvbulk_callback.patch
-The command I used from the example also generated a 0000-cover-letter, =
-so
-I included it as well.
+Great, send that using 'git send-email' and all is good.
 
-I still have no clue what exactly I should do. Can you please help me?
+> The command I used from the example also generated a 0000-cover-letter, so
+> I included it as well.
 
-Georgi Valkov
+Why do you need a cover letter for 1 patch?
 
-> On 2021-07-20, at 2:49 PM, Greg KH <gregkh@linuxfoundation.org> wrote:
->=20
-> On Tue, Jul 20, 2021 at 02:39:49PM +0300, Georgi Valkov wrote:
->> I am doing this for the first time, so any help would be appreciated!
->=20
-> Have you read Documentation/process/submitting-patches.rst yet?  If =
-not,
-> please do so.
->=20
-> And look at examples on this list, you have to send individual =
-patches,
-> not everything all crammed into one email.
->=20
-> thanks,
->=20
-> greg k-h
->=20
+thanks,
 
+greg k-h
