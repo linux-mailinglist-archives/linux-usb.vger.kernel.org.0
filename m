@@ -2,125 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87ED83CF0B8
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 02:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 654F73CF2FC
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 06:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237981AbhGSXnK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 19 Jul 2021 19:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359398AbhGSWoN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 18:44:13 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814F1C05BD19
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jul 2021 16:19:20 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id r135so30317828ybc.0
-        for <linux-usb@vger.kernel.org>; Mon, 19 Jul 2021 16:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=LlezL0fbSXWmQYTDFUaIce6BNOh5OLGq/7WOzksM/j8=;
-        b=XcvE/gHEKQsTS7bCpq2c1QLE/yk8wEn4Bx/tSLHz+IDwlhg6Unql03hSL0pJFK7/UT
-         jzQeRzRP6a28tdGhkEL2nnq0/RiqTGracaMOFsaOyVlbf/rdPsBji0ziqLDhu0nEU11D
-         a2C7ETw0B/mvWYKCOPjcf773kofD4yhteFe5uam9gIY9nOAJrV/LqfNwkL3GC3A8p6xQ
-         WUd5hNJx2A4SrqdpG5trgqbGO2iBaY1Hm2nD5djf4aQ3uwdYHnsWvIwV71C/QmSOU81c
-         m7624Pd3dNHGl/hVMikl7/JAGzHDoG/PWN+OdvL6HzE1YgSGzmNfe2NpUF8Z9XyofeGu
-         3Rkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=LlezL0fbSXWmQYTDFUaIce6BNOh5OLGq/7WOzksM/j8=;
-        b=uBRtcE45vUYSOwdNE7kKqbFYdwRXt6Tg03heHrmcfOHJDrawlA5DlLlo3iv17HaPLB
-         2a/KWIqKL9xUf/W8m3v90uWmUUW8QIYO7UdJSrb3Lse9MHHSiTsIAQDUCGA8wepv8dT4
-         kVci4oTY2UnR+4lRsOuqsquNkxxgh78UTJ8q6RaIwIjMhTIWpuqKjFbQX2V7AufWsuE5
-         wgLM2hbq6o4B+/pGkPx5dp7PQ/+Yex9BiOLNSvcdkY2YKFuYD0rB2HnoKTDxfiOKnBoc
-         SbKK2tvh/FnFA9d0p3pIk6t55GjIpCcGGJzvmWXF37N4eo7pl6BfO2RKG1Hyupn93F85
-         mfSA==
-X-Gm-Message-State: AOAM531oEtFmlKm1/CI8YwKtLl5Y+WYfalsTpjY/tEwJY4wPaizJarDL
-        pLIF8anD9NseRvG1PZ3QJ8deAjjA3tCFeDg9+ZY=
-X-Google-Smtp-Source: ABdhPJzIjY+RFh844oBvrjTF/QSAXR0NDQUqb4NG59ZhYeuqg2iz8jfmQaWT0vuGZ3d3MTBbOsypXmZtxU8FYOnKsfI=
-X-Received: by 2002:a25:b706:: with SMTP id t6mr35652520ybj.174.1626736759591;
- Mon, 19 Jul 2021 16:19:19 -0700 (PDT)
+        id S230449AbhGTD0B (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 19 Jul 2021 23:26:01 -0400
+Received: from mail-0201.mail-europe.com ([51.77.79.158]:36568 "EHLO
+        mail-0201.mail-europe.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241859AbhGTDZ5 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 19 Jul 2021 23:25:57 -0400
+Date:   Tue, 20 Jul 2021 04:05:51 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail; t=1626753953;
+        bh=CF66ovN+YSf9YBR9ds7RTgUBxPIbBt9/Vvb9vK60vdE=;
+        h=Date:To:From:Cc:Reply-To:Subject:From;
+        b=hh+W7g9OpxFb6zbZYWPF2i3zAYyAZ/W1WKLBPXCIsjhAmaffT749hojEApzgoHVHr
+         vftQpD2Pf2lafkvhccd9IuKhV/jrLdoZXtCELPImLJVr6qaIiPrrU/frj0ccrEvSpd
+         sn5E2pMY84ebzwqUyVsCBNFkt+Dtv2vClhbKp3fk=
+To:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vincent.whitchurch@axis.com" <vincent.whitchurch@axis.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        Mike Looijmans <mike.looijmans@topic.nl>
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH v4] usb: dwc3: Add support for VBUS power control
+Message-ID: <1iGAbanUDRO1WcnGiuoPm8cgSBNSp7KCy7Z8G-1fMKl98WXRi8_E9W8z2OagnJwaDwnneyf4hXVaRAlZNE8EZWIMpBsfoG_fi-a91Ev7AHs=@protonmail.com>
 MIME-Version: 1.0
-References: <20201116151735.178737-1-pgwipeout@gmail.com> <20201116151735.178737-2-pgwipeout@gmail.com>
- <6e7a5a02-cd3c-81d3-a473-f87385c41e5a@gmail.com>
-In-Reply-To: <6e7a5a02-cd3c-81d3-a473-f87385c41e5a@gmail.com>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 19 Jul 2021 19:19:07 -0400
-Message-ID: <CAMdYzYqUgd_uPOPCnGUvU7kxPDGNnoN+_1RmO_AyY6oUtpkfGw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] phy: rockchip: add rockchip usb3 innosilicon phy driver
-To:     Alex Bee <knaerzche@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        =?UTF-8?B?546L5piO5oiQ?= <frank.wang@rock-chips.com>,
-        zyw <zyw@rock-chips.com>, linux-usb@vger.kernel.org,
-        Kever Yang <kever.yang@rock-chips.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        =?UTF-8?B?5ZC06Imv5bOw?= <william.wu@rock-chips.com>,
-        wulf <wulf@rock-chips.com>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.2 required=10.0 tests=ALL_TRUSTED,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM shortcircuit=no
+        autolearn=disabled version=3.4.4
+X-Spam-Checker-Version: SpamAssassin 3.4.4 (2020-01-24) on
+        mailout.protonmail.ch
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 19, 2021 at 10:29 AM Alex Bee <knaerzche@gmail.com> wrote:
->
-> Hi Peter,
->
-> thanks for working on this (I hope to have picked the latest version of
-> your series).
->
-> It's pretty obvious that the quirky innosilicon phy Rockchip decided for
-> in RK3328 needs a additional glue layer. Even if this version isn't
-> perfect yet (usb3 devices "sometimes" do net get detected if detached
-> and attached again) - it makes thing *a lot* better than it is now (IIRC
-> its about the same in vendor tree)
+In-Reply-To: <20200805061744.20404-1-mike.looijmans@topic.nl>
 
-Yes, it certainly is broken.
-
+On Wed,  5 Aug 2020 08:17:44 +0200, Mike Looijmans wrote:
+> Support VBUS power control using regulator framework. Enables the regulat=
+or
+> while the port is in host mode.
 >
-> So: are you going to rebase this on current upstream?
-
-Honestly I hadn't planned on it, mostly because my board started
-exhibiting stability issues.
-This series had been tagged as an RFC as I was hoping to resolve the
-issues with it.
-Unfortunately either the documentation provided was insufficient to
-fix the problem, or the hardware doesn't behave as the documentation
-suggests.
-Also the way we have to tie into the usb core makes me really uncomfortable.
-
-Perhaps once the rk3566 is in good shape I can poke at this again.
-There's a number of other issues with older boards that have come to
-light that need attention.
-
+> The "vbus-supply" property can be provided using a usb-connector child no=
+de
+> and standard devicetree bindings.
 >
-> Regards,
+> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+> ---
+> v2: Add missing devm_regulator_get call which got lost during rebase
+> v3: Remove devicetree binding, use standard usb-connector
+>     Fix probe fail when vbus-supply is not present
+> v4: Use devm_regulator_get (without "optional")
 >
-> Alex
+>  drivers/usb/dwc3/core.c | 34 ++++++++++++++++++++++++++--------
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  drivers/usb/dwc3/drd.c  |  6 ++----
+>  3 files changed, 32 insertions(+), 12 deletions(-)
 >
-> Am 16.11.20 um 16:17 schrieb Peter Geis:
-> > The innosilicon based usb3 phy used in rockchip devices such as the rk3328 is bugged, requiring special handling.
-> > The following erata have been observed:
-> >   - usb3 device disconnect events are not detected by the controller
-> >   - usb2 hubs with no devices attached do not trigger disconnect events when removed
-> >   - interrupts are not reliable
-> >
-> > To work around these issue we implement polling of the usb2 and usb3 status.
-> > On usb3 disconnection we reset the usb3 phy which triggers the disconnect event.
-> > On usb2 disconnection we have to force reset the whole controller.
-> > This requires a handoff to a special dwc3 device driver.
-> >
-> > This has been tested on the rk3328-roc-cc board with the following devices:
-> >   - usb2 only device
-> >   - usb3 only device
-> >   - usb2 only hub without devices
-> >   - usb3 hub without devices
-> >   - usb2 hub with devices
-> >   - usb3 hub with devices
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index edc17155cb2b..abfd043bae21 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/of.h>
+>  #include <linux/acpi.h>
+>  #include <linux/pinctrl/consumer.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/reset.h>
+>
+>  #include <linux/usb/ch9.h>
+> @@ -112,6 +113,23 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
+>  =09dwc->current_dr_role =3D mode;
+>  }
+>
+> +void dwc3_set_vbus(struct dwc3 *dwc, bool enable)
+> +{
+> +=09int ret;
+> +
+> +=09if (enable !=3D dwc->vbus_reg_enabled) {
+> +=09=09if (enable)
+> +=09=09=09ret =3D regulator_enable(dwc->vbus_reg);
+> +=09=09else
+> +=09=09=09ret =3D regulator_disable(dwc->vbus_reg);
+> +=09=09if (!ret)
+> +=09=09=09dwc->vbus_reg_enabled =3D enable;
+> +=09}
+> +
+> +=09if (dwc->usb2_phy)
+> +=09=09otg_set_vbus(dwc->usb2_phy->otg, enable);
+> +}
+> +
+>  static void __dwc3_set_mode(struct work_struct *work)
+>  {
+>  =09struct dwc3 *dwc =3D work_to_dwc(work);
+> @@ -164,8 +182,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+>  =09=09if (ret) {
+>  =09=09=09dev_err(dwc->dev, "failed to initialize host\n");
+>  =09=09} else {
+> -=09=09=09if (dwc->usb2_phy)
+> -=09=09=09=09otg_set_vbus(dwc->usb2_phy->otg, true);
+> +=09=09=09dwc3_set_vbus(dwc, true);
+>  =09=09=09phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>  =09=09=09phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>  =09=09}
+> @@ -173,8 +190,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+>  =09case DWC3_GCTL_PRTCAP_DEVICE:
+>  =09=09dwc3_event_buffers_setup(dwc);
+>
+> -=09=09if (dwc->usb2_phy)
+> -=09=09=09otg_set_vbus(dwc->usb2_phy->otg, false);
+> +=09=09dwc3_set_vbus(dwc, false);
+>  =09=09phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
+>  =09=09phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
+>
+> @@ -1183,8 +1199,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+>  =09case USB_DR_MODE_PERIPHERAL:
+>  =09=09dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
+>
+> -=09=09if (dwc->usb2_phy)
+> -=09=09=09otg_set_vbus(dwc->usb2_phy->otg, false);
+> +=09=09dwc3_set_vbus(dwc, false);
+>  =09=09phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_DEVICE);
+>  =09=09phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_DEVICE);
+>
+> @@ -1198,8 +1213,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+>  =09case USB_DR_MODE_HOST:
+>  =09=09dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
+>
+> -=09=09if (dwc->usb2_phy)
+> -=09=09=09otg_set_vbus(dwc->usb2_phy->otg, true);
+> +=09=09dwc3_set_vbus(dwc, true);
+>  =09=09phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>  =09=09phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>
+> @@ -1470,6 +1484,10 @@ static int dwc3_probe(struct platform_device *pdev=
+)
+>
+>  =09dwc3_get_properties(dwc);
+>
+> +=09dwc->vbus_reg =3D devm_regulator_get(dev, "vbus");
+> +=09if (IS_ERR(dwc->vbus_reg))
+> +=09=09return PTR_ERR(dwc->vbus_reg);
+> +
+>  =09dwc->reset =3D devm_reset_control_array_get(dev, true, true);
+>  =09if (IS_ERR(dwc->reset))
+>  =09=09return PTR_ERR(dwc->reset);
+> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> index 4c171a8e215f..cee2574d7bf4 100644
+> --- a/drivers/usb/dwc3/core.h
+> +++ b/drivers/usb/dwc3/core.h
+> @@ -1085,6 +1085,9 @@ struct dwc3 {
+>
+>  =09bool=09=09=09phys_ready;
+>
+> +=09struct regulator=09*vbus_reg;
+> +=09bool=09=09=09vbus_reg_enabled;
+> +
+>  =09struct ulpi=09=09*ulpi;
+>  =09bool=09=09=09ulpi_ready;
+>
+> @@ -1397,6 +1400,7 @@ struct dwc3_gadget_ep_cmd_params {
+>
+>  /* prototypes */
+>  void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode);
+> +void dwc3_set_vbus(struct dwc3 *dwc, bool enable);
+>  void dwc3_set_mode(struct dwc3 *dwc, u32 mode);
+>  u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type);
+>
+> diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+> index 7db1ffc92bbd..45fdec2d128d 100644
+> --- a/drivers/usb/dwc3/drd.c
+> +++ b/drivers/usb/dwc3/drd.c
+> @@ -384,8 +384,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_id=
+status)
+>  =09=09if (ret) {
+>  =09=09=09dev_err(dwc->dev, "failed to initialize host\n");
+>  =09=09} else {
+> -=09=09=09if (dwc->usb2_phy)
+> -=09=09=09=09otg_set_vbus(dwc->usb2_phy->otg, true);
+> +=09=09=09dwc3_set_vbus(dwc, true);
+>  =09=09=09if (dwc->usb2_generic_phy)
+>  =09=09=09=09phy_set_mode(dwc->usb2_generic_phy,
+>  =09=09=09=09=09     PHY_MODE_USB_HOST);
+> @@ -398,8 +397,7 @@ void dwc3_otg_update(struct dwc3 *dwc, bool ignore_id=
+status)
+>  =09=09dwc3_event_buffers_setup(dwc);
+>  =09=09spin_unlock_irqrestore(&dwc->lock, flags);
+>
+> -=09=09if (dwc->usb2_phy)
+> -=09=09=09otg_set_vbus(dwc->usb2_phy->otg, false);
+> +=09=09dwc3_set_vbus(dwc, false);
+>  =09=09if (dwc->usb2_generic_phy)
+>  =09=09=09phy_set_mode(dwc->usb2_generic_phy,
+>  =09=09=09=09     PHY_MODE_USB_DEVICE);
+> --
+> 2.17.1
+
+Tested after fixing a couple of small conflicts.
+
+Tested-by: Yassine Oudjana <y.oudjana@protonmail.com>
