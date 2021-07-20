@@ -2,44 +2,47 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9180F3CF74E
-	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 11:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90AF83CF7CE
+	for <lists+linux-usb@lfdr.de>; Tue, 20 Jul 2021 12:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235892AbhGTJR6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 20 Jul 2021 05:17:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53950 "EHLO mail.kernel.org"
+        id S236489AbhGTJm5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 20 Jul 2021 05:42:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58696 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235803AbhGTJRr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 20 Jul 2021 05:17:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D23F60FE9;
-        Tue, 20 Jul 2021 09:58:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626775105;
-        bh=oZ6f/1tQAfo2KzOhKbZADa4GuV34otAXzMk8ZYbNLT4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eNbCh01MWy6I/oDBf8LFUFKfyJ8t2XHccON6nvWsMRWBIGm+bqJwz47+Laljrnl41
-         oQ9NsZEElRNyTQq+5h4QuF/gzu3JtC1AjpvpfBZ9kRNZ7vhgjcmDfelpmdUteYhUNe
-         0TLR4LY0SDvZphmAJwrLRcT1Mr4JQZpPAFlpE4BQ=
-Date:   Tue, 20 Jul 2021 11:58:22 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
+        id S236936AbhGTJlp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 20 Jul 2021 05:41:45 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C474D60FE9;
+        Tue, 20 Jul 2021 10:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626776543;
+        bh=8VKFt6lQcOHIqn7zxMC8HiQxuY7TKewOXFwLW8jygDE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XwMv/5quJCFkNlkHXbqVP1Euji05zX+9xp8KGwF1CD036JcdibYFL9/L+bLCbk1Pp
+         wMeGlAVGanJRlMThSci/7O1NxXtnotWAbt48OFBdoFpyqF1Mmo/n6bjlf27eqGw6uy
+         I/04jkg8P1kKnN/TEBKdTXvf26MSeG5HeLdbGTU1aHgJb40MMCRVA7g4QHK8/msIiL
+         PpeJewOMzJkDGDDYMkHPmT0xIWO1bfdCaU9XPfxwygPeVvkTLxbcWgC+5cxHRYs/5Z
+         lmbfkpJxF932OxzdiNJP8CV6lWFMJycU3YiabzvnnqWffdpljRG6j7ftSFXybGFaEx
+         Ygq5nGajtz4YQ==
+Date:   Tue, 20 Jul 2021 12:22:15 +0200
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Georgi Valkov <gvalkov@abv.bg>
-Cc:     davem@davemloft.net, kuba@kernel.org, mhabets@solarflare.com,
+Cc:     davem@davemloft.net, mhabets@solarflare.com,
         luc.vanoostenryck@gmail.com, snelson@pensando.io, mst@redhat.com,
         linux-usb@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, corsac@corsac.net,
         matti.vuorela@bitfactor.fi, stable@vger.kernel.org
 Subject: Re: ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-Message-ID: <YPaePrgEhhaHZAOT@kroah.com>
+Message-ID: <20210720122215.54abaf53@cakuba>
+In-Reply-To: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
 References: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B60B8A4B-92A0-49B3-805D-809A2433B46C@abv.bg>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 20, 2021 at 12:37:43PM +0300, Georgi Valkov wrote:
+On Tue, 20 Jul 2021 12:37:43 +0300, Georgi Valkov wrote:
 > ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
 > https://github.com/openwrt/openwrt/pull/4084
 > 
@@ -48,25 +51,9 @@ On Tue, Jul 20, 2021 at 12:37:43PM +0300, Georgi Valkov wrote:
 > From: Georgi Valkov <gvalkov@abv.bg>
 > Date: Fri, 16 Apr 2021 20:44:36 +0300
 > Subject: [PATCH] ipheth: fix EOVERFLOW in ipheth_rcvbulk_callback
-> 
-> When rx_buf is allocated we need to account for IPHETH_IP_ALIGN,
-> which reduces the usable size by 2 bytes. Otherwise we have 1512
-> bytes usable instead of 1514, and if we receive more than 1512
-> bytes, ipheth_rcvbulk_callback is called with status -EOVERFLOW,
-> after which the driver malfunctiones and all communication stops.
-> 
-> Fixes: ipheth 2-1:4.2: ipheth_rcvbulk_callback: urb status: -75
-> 
-> Signed-off-by: Georgi Valkov <gvalkov@abv.bg>
-> ---
->  drivers/net/usb/ipheth.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 
-<formletter>
-
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
-
-</formletter>
+This is all unnecessary, IIUC you're submitting this patch for upstream
+inclusion, please rebase it on the netdev/net tree, and try git
+send-email on a file generated by git format-patch. Before that please
+correct the fixes tag to the common format (you'll find it in docs or
+follow what others do).
