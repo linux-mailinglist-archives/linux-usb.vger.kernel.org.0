@@ -2,108 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 816B93D0C3A
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 12:13:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4229A3D0C3C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 12:13:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237794AbhGUJVD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 05:21:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41712 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237725AbhGUJHf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 05:07:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 377DD61019;
-        Wed, 21 Jul 2021 09:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626860879;
-        bh=Hqq6WYKy9wJbUIP58/uSs6NaLePG0mU7XSOV62c0NMA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jPAuWreckvVCIT1CHuToClCiBdB/mS8iusKzvBgo5awhdZrCkUsnZ9TUz+ckNqlUl
-         IEVrA1CNioJNbB47s7ePdL1lmget7sIErHrbO6XrNetglxLjvN2LAN7ErDp5oRaWWs
-         0cH1PbtD8pVJ9jRA0rFOoh8s0EfjPvUqWUhxfJAY=
-Date:   Wed, 21 Jul 2021 11:47:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     dave penkler <dpenkler@gmail.com>
-Cc:     qiang.zhang@windriver.com, Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>, paulmck@kernel.org,
-        Guido <guido.kiener@rohde-schwarz.com>,
-        USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Message-ID: <YPftTWUPlQ7akQl+@kroah.com>
-References: <20210629033236.7107-1-qiang.zhang@windriver.com>
- <YPfIAolSC8mJoQUr@kroah.com>
- <CAL=kjP0YnzF8sALwH5T5+NpWn3wsuqR+K3GLHDJXLkdO4usyWw@mail.gmail.com>
- <YPfSR4+XANsatypk@kroah.com>
- <CAL=kjP1OweXxw3zgs_WfpmZw-YJZN=dxand6twgQruwgAyfAaQ@mail.gmail.com>
+        id S237469AbhGUJVJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 05:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48854 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238221AbhGUJJF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 05:09:05 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7B1C061574;
+        Wed, 21 Jul 2021 02:49:41 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id j4so1357692pgk.5;
+        Wed, 21 Jul 2021 02:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p64r8KL6wIevGGwT3Mir3GkMuoxd3eg4xzs6ImulFaA=;
+        b=OYYSdOmikyQwETiV/RB4bb6Rq4zuo6z59GX3XQMgU2slIR/y9cGfoJ9smoIr2F7i0q
+         3nDN87imoOIHCQ93r9jUc9mr+nKseaiX/STEuIPl6b87aobdaKyXhDyUV9eK8sBiAzRF
+         5JdTA/7yB7AV0o1qRroWR6EhEhe2rEeTHU26huIVFZ9o6robQ0YvXx9nOK/LbHaUmxGx
+         PcdP4CCezPv2K+HZu2ypf6EGiCS+l6ePMa+pkYXvQS0wfw+MqWDrC+8ZfYp98iqC8zuj
+         QzXZlQi6twc68Zgbha9aEmTEboDpEtVNash2WzP+oxAKiL4VIqQ10sQaToPbI5fuQas9
+         WOCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=p64r8KL6wIevGGwT3Mir3GkMuoxd3eg4xzs6ImulFaA=;
+        b=c6gbfl6/OCdtgqrLRsJSxeCUszqFIRUwTdXl00AdQzVjk+YPRotx6MwItIrhOtwlTc
+         g++sgiF5FQUaczoZmta/VIWkHd5vKiil+kIacG+WdHEVqz2+WjniQlXn02dz0OeLZVmD
+         1hC6H0FpaWeO4XRUIFYMwlqIhaehD/C1CroqCLt6TUvRBglFyZWvIN8FrF/SIr3phABW
+         /YjGWul1J2A4rGGBoaBUWwN8dWOkJSl6H02D+QgCj182itocGDeZf/3HE0E3BIWvkaaM
+         b05QY7EihDvoqv0w5OqDWOlHDbXc3t1rT1Maq53/KyxkPHy4792KFv52yY+XE/Tg6V5A
+         yCkw==
+X-Gm-Message-State: AOAM531evvGJU8hOQB2SSmOfS0lDuQY5lqn4tNBdUgWjgFhGt+/ekLO0
+        yVsz7TYRqXnI94ZiNCOmUww=
+X-Google-Smtp-Source: ABdhPJz6UUZPtBAEHAso3bBHjzRnm6hr8zSKKVWOm/FzCx9nfmOqTEYbGN54PzWn31UlE1ADnAKKrQ==
+X-Received: by 2002:a63:1f0e:: with SMTP id f14mr30807250pgf.65.1626860980979;
+        Wed, 21 Jul 2021 02:49:40 -0700 (PDT)
+Received: from michael-gitpc.. ([1.132.144.53])
+        by smtp.gmail.com with ESMTPSA id l10sm3265581pjg.11.2021.07.21.02.49.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jul 2021 02:49:40 -0700 (PDT)
+From:   Michael Broadfoot <msbroadf@gmail.com>
+To:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Michael Broadfoot <msbroadf@gmail.com>
+Subject: [PATCH] vhci_hcd: Always re-enable a USB Port after reset
+Date:   Wed, 21 Jul 2021 19:49:22 +1000
+Message-Id: <20210721094922.15642-1-msbroadf@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL=kjP1OweXxw3zgs_WfpmZw-YJZN=dxand6twgQruwgAyfAaQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 11:44:23AM +0200, dave penkler wrote:
-> On Wed, 21 Jul 2021 at 09:52, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Jul 21, 2021 at 09:41:15AM +0200, dave penkler wrote:
-> > > On Wed, 21 Jul 2021 at 09:08, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > On Tue, Jun 29, 2021 at 11:32:36AM +0800, qiang.zhang@windriver.com wrote:
-> > > > > From: Zqiang <qiang.zhang@windriver.com>
-> > > >
-> > > > I need a "full" name here, and in the signed-off-by line please.
-> > > >
-> > > > >
-> > > > > rcu: INFO: rcu_preempt self-detected stall on CPU
-> > > > > rcu:    1-...!: (2 ticks this GP) idle=d92/1/0x4000000000000000
-> > > > >         softirq=25390/25392 fqs=3
-> > > > >         (t=12164 jiffies g=31645 q=43226)
-> > > > > rcu: rcu_preempt kthread starved for 12162 jiffies! g31645 f0x0
-> > > > >      RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
-> > > > > rcu:    Unless rcu_preempt kthread gets sufficient CPU time,
-> > > > >         OOM is now expected behavior.
-> > > > > rcu: RCU grace-period kthread stack dump:
-> > > > > task:rcu_preempt     state:R  running task
-> > > > >
-> > > > > In the case of system use dummy_hcd as usb controller, when the
-> > > > > usbtmc devices is disconnected, in usbtmc_interrupt(), if the urb
-> > > > > status is unknown, the urb will be resubmit, the urb may be insert
-> > > > > to dum_hcd->urbp_list again, this will cause the dummy_timer() not
-> > > > > to exit for a long time, beacause the dummy_timer() be called in
-> > > > > softirq and local_bh is disable, this not only causes the RCU reading
-> > > > > critical area to consume too much time but also makes the tasks in
-> > > > > the current CPU runq not run in time, and that triggered RCU stall.
-> > > > >
-> > > > > return directly when find the urb status is not zero to fix it.
-> > > > >
-> > > > > Reported-by: syzbot+e2eae5639e7203360018@syzkaller.appspotmail.com
-> > > > > Signed-off-by: Zqiang <qiang.zhang@windriver.com>
-> > > >
-> > > > What commit does this fix?  Does it need to go to stable kernels?
-> > > >
-> > > > What about the usbtmc maintainers, what do they think about this?
-> > >
-> > > This patch makes the babbling endpoint retry/recovery code in the real
-> > > world usb host controller drivers redundant and would prevent usbtmc
-> > > applications from benefiting from it.
-> >
-> > I do not understand, is this change ok or not?
-> >
-> > Why do usbtmc applications need to know if babbling happens or not?
-> >
-> > confused,
-> Sorry, the issue this patch is trying to fix occurs because the
-> current usbtmc driver resubmits the URB when it gets an EPROTO return.
-> The dummy usb host controller driver used in the syzbot tests keeps
-> returning the resubmitted URB with EPROTO causing a loop that starves
-> RCU. With an actual HCI driver it either recovers or returns an EPIPE.
-> In either case no loop occurs. So for my part as a user and maintainer
-> this patch is not ok.
+A (virtual) usb port can getting stuck in a disabled state on reset
+Always re-enable a usb port regardless of if its addressed or not
 
-Thanks for the review.
+Signed-off-by: Michael Broadfoot <msbroadf@gmail.com>
+---
+ drivers/usb/usbip/vhci_hcd.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Zqiang, can you fix this patch up based on this please?
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 4ba6bcdaa8e9..cea3781d04e6 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -455,15 +455,12 @@ static int vhci_hub_control(struct usb_hcd *hcd, u16 typeReq, u16 wValue,
+ 			vhci_hcd->port_status[rhport] &= ~(1 << USB_PORT_FEAT_RESET);
+ 			vhci_hcd->re_timeout = 0;
+ 
+-			if (vhci_hcd->vdev[rhport].ud.status ==
+-			    VDEV_ST_NOTASSIGNED) {
+ 				usbip_dbg_vhci_rh(
+ 					" enable rhport %d (status %u)\n",
+ 					rhport,
+ 					vhci_hcd->vdev[rhport].ud.status);
+ 				vhci_hcd->port_status[rhport] |=
+ 					USB_PORT_STAT_ENABLE;
+-			}
+ 
+ 			if (hcd->speed < HCD_USB3) {
+ 				switch (vhci_hcd->vdev[rhport].speed) {
+-- 
+2.30.2
 
-thanks,
-
-greg k-h
