@@ -2,82 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6B63D13A2
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 18:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCD33D1445
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232672AbhGUPgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 11:36:47 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52579 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S231732AbhGUPgq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 11:36:46 -0400
-Received: (qmail 638707 invoked by uid 1000); 21 Jul 2021 12:17:22 -0400
-Date:   Wed, 21 Jul 2021 12:17:22 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-Cc:     dave penkler <dpenkler@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "qiang.zhang@windriver.com" <qiang.zhang@windriver.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Message-ID: <20210721161722.GD633399@rowland.harvard.edu>
-References: <3bef7f032d2142ddac469eef8aee0d49@rohde-schwarz.com>
+        id S231751AbhGUPzA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 11:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230378AbhGUPy7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 11:54:59 -0400
+X-Greylist: delayed 1060 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jul 2021 09:35:33 PDT
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024F2C0613C1;
+        Wed, 21 Jul 2021 09:35:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=Content-Transfer-Encoding:Message-Id:Date:
+        Subject:Cc:To:From:Content-Type:Reply-To:Content-ID:Content-Description:
+        In-Reply-To:References; bh=XoZ4bSdSiVXYEMiyILsHY2KE5sWlXgaZX7yRUZoPcck=; b=3g
+        tbqDKILXrYqBjqGDs6j4QRFqdIac6DeMBmXqHneSfk6qy/b+O1hCJR3JErKO4LYp7GpfVf2PSif9/
+        4ubi+rF40ui84MKkjTnKNghVyXtky52kyk5XbW0dkwxXUOI6yQKsan0kQzJKHI0vZhe9sM4YTeGa4
+        1+t/DMgbTntPP7zpmPKzpBDPLbghYbJKjporVeXyJSb0IX7G+9YZd22dTL9XyMbjRl6YKoa9ISUZ/
+        DYMazvT7SPpGL6ks0iMpjYUbDOBHuaebYLmRpn43CT9oV4q4n47JK1mT8vV0Rs1L/dSZizXXIEAIE
+        qa5SU8IlAuANtNmsAOxtViSPX69vqIkA==;
+Received: from [81.174.171.191] (helo=donbot.metanate.com)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1m6Eus-00029F-5z; Wed, 21 Jul 2021 17:17:50 +0100
+From:   John Keeping <john@metanate.com>
+To:     linux-usb@vger.kernel.org
+Cc:     John Keeping <john@metanate.com>, Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: serial: cp210x: add ID for CEL EM3588 USB ZigBee stick
+Date:   Wed, 21 Jul 2021 17:17:45 +0100
+Message-Id: <20210721161745.2101328-1-john@metanate.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3bef7f032d2142ddac469eef8aee0d49@rohde-schwarz.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 03:24:13PM +0000, Guido Kiener wrote:
-> > -----Original Message-----
-> > From: Alan Stern <stern@rowland.harvard.edu>
-> > Sent: Wednesday, July 21, 2021 4:22 PM
-> > To: dave penkler <dpenkler@gmail.com>
-> > Cc: Greg KH <gregkh@linuxfoundation.org>; qiang.zhang@windriver.com; Dmitry
-> > Vyukov <dvyukov@google.com>; paulmck@kernel.org; Kiener Guido 14DS1
-> > <Guido.Kiener@rohde-schwarz.com>; USB <linux-usb@vger.kernel.org>
-> > Subject: *EXT* Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-> > 
-> > On Wed, Jul 21, 2021 at 11:44:23AM +0200, dave penkler wrote:
-> > > Sorry, the issue this patch is trying to fix occurs because the
-> > > current usbtmc driver resubmits the URB when it gets an EPROTO return.
-> > > The dummy usb host controller driver used in the syzbot tests keeps
-> > > returning the resubmitted URB with EPROTO causing a loop that starves
-> > > RCU. With an actual HCI driver it either recovers or returns an EPIPE.
-> > 
-> > Are you sure about that?  Have you ever observed a usbtmc device recovering and
-> > continuing to operate after an EPROTO error?
-> 
-> I can't speak for Dave and his investigations. However as you remember I did tests with
-> EPROTO errors, see thread: https://marc.info/?l=linux-usb&m=162163776930423&w=2
-> In the thread you can see the recovering.
+Add the USB serial device ID for the CEL ZigBee EM3588 radio stick.
 
-Ah yes, now I remember.
+Signed-off-by: John Keeping <john@metanate.com>
+---
+ drivers/usb/serial/cp210x.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-That message doesn't show the _device_ recovering and continuing to operate, 
-though.  It shows the _system_ recovering and realizing that the device has 
-been disconnected.
+diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
+index ee595d1bea0a..bea89ba58280 100644
+--- a/drivers/usb/serial/cp210x.c
++++ b/drivers/usb/serial/cp210x.c
+@@ -155,6 +155,7 @@ static const struct usb_device_id id_table[] = {
+ 	{ USB_DEVICE(0x10C4, 0x89A4) }, /* CESINEL FTBC Flexible Thyristor Bridge Controller */
+ 	{ USB_DEVICE(0x10C4, 0x89FB) }, /* Qivicon ZigBee USB Radio Stick */
+ 	{ USB_DEVICE(0x10C4, 0x8A2A) }, /* HubZ dual ZigBee and Z-Wave dongle */
++	{ USB_DEVICE(0x10C4, 0x8A5B) }, /* CEL EM3588 ZigBee USB Stick */
+ 	{ USB_DEVICE(0x10C4, 0x8A5E) }, /* CEL EM3588 ZigBee USB Stick Long Range */
+ 	{ USB_DEVICE(0x10C4, 0x8B34) }, /* Qivicon ZigBee USB Radio Stick */
+ 	{ USB_DEVICE(0x10C4, 0xEA60) }, /* Silicon Labs factory default */
+-- 
+2.32.0
 
-What I was asking about was whether you knew of a case where there was an 
-EPROTO error but afterward the usbtmc device continued to work -- no 
-disconnection.  Assuming such cases are vanishingly rare, there's no harm in 
-having the driver give up whenever it encounters EPROTO.
-
-> Since no user blamed the usbtmc driver for system locks up to now, it's worth to think about
-> whether the problem is caused by the dummy_hcd driver.
-
-Both drivers contributed to the lockup.  The question is: Which driver was 
-doing the wrong thing?  (Or which was _more_ wrong?)  I believe the usbtmc 
-driver was.
-
-> I still have no time for further investigations and would agree to use the simple patch
-> to get rid of the topic for the usbtmc driver. Then the syzbot will maybe find another usb driver.
-
-Agreed.  So Greg should go ahead and apply the $SUBJECT patch.
-
-Alan Stern
