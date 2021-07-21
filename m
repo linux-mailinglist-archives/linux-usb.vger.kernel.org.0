@@ -2,94 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9511A3D1241
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 17:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A631B3D1278
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 17:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239761AbhGUOns (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 10:43:48 -0400
-Received: from mail02.rohde-schwarz.com ([80.246.32.97]:10737 "EHLO
-        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237983AbhGUOnr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 10:43:47 -0400
-Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
- (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.12; Wed, 21 Jul
- 2021 17:24:16 +0200
-Received: from GMU418.rsint.net ([10.0.230.144])
-          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 537;
-          Wed, 21 Jul 2021 17:24:16 +0200 (CEST)
-Received: from GMU001.rsint.net (10.0.2.59) by GMU418.rsint.net (10.0.230.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.10; Wed, 21 Jul
- 2021 17:24:14 +0200
-Received: from GMU006.rsint.net (10.0.2.28) by GMU001.rsint.net (10.0.2.59)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.10; Wed, 21
- Jul 2021 17:24:13 +0200
-Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
- GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
- 15.01.2242.010; Wed, 21 Jul 2021 17:24:13 +0200
-From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        dave penkler <dpenkler@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        "qiang.zhang@windriver.com" <qiang.zhang@windriver.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Thread-Topic: [PATCH] USB: usbtmc: Fix RCU stall warning /ur/
-Thread-Index: Add+RDOqMNXQ8799SV+aKdp8ZJ3RwQ==
-Date:   Wed, 21 Jul 2021 15:24:13 +0000
-Message-ID: <3bef7f032d2142ddac469eef8aee0d49@rohde-schwarz.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-rus_sensitivity: 10
-hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
-hvs-prefix: R_S
-x-originating-ip: [10.0.9.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S239913AbhGUOxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 10:53:40 -0400
+Received: from orthanc.universe-factory.net ([104.238.176.138]:47414 "EHLO
+        orthanc.universe-factory.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239825AbhGUOxj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 10:53:39 -0400
+X-Greylist: delayed 350 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Jul 2021 10:53:37 EDT
+Received: from [IPv6:2001:19f0:6c01:100::2] (unknown [IPv6:2001:19f0:6c01:100::2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by orthanc.universe-factory.net (Postfix) with ESMTPSA id D53CB1F4E2;
+        Wed, 21 Jul 2021 17:28:21 +0200 (CEST)
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
+        moritzf@google.com, stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>, linux-usb@vger.kernel.org
+References: <20210719070519.41114-1-mdf@kernel.org>
+From:   Matthias Schiffer <mschiffer@universe-factory.net>
+Subject: Re: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM
+ state"
+Message-ID: <c0f191cc-6400-7309-e8a4-eab0925a3d54@universe-factory.net>
+Date:   Wed, 21 Jul 2021 17:28:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-X-IQAV: YES
-X-GBS-PROC: Lur79JjuH1xMgB+1ZuDqMWMWRP+bxEecAnaLNKh3axR/bYKo2OMR+3vfrLTLVt5hpQqvXIxKVs+6CEOQgKcIVYDg1Cw7vbR/jrS+krStV/SZeaCv1bDn7kLOjZPVRcHJ
-X-GBS-PROCJOB: GfwFfz39fcEVq4EidOW3de9WieyT2bfXaZ62IqSXWfU6yj5KWInoaX8P5tteKzeu
+In-Reply-To: <20210719070519.41114-1-mdf@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBbGFuIFN0ZXJuIDxzdGVybkBy
-b3dsYW5kLmhhcnZhcmQuZWR1Pg0KPiBTZW50OiBXZWRuZXNkYXksIEp1bHkgMjEsIDIwMjEgNDoy
-MiBQTQ0KPiBUbzogZGF2ZSBwZW5rbGVyIDxkcGVua2xlckBnbWFpbC5jb20+DQo+IENjOiBHcmVn
-IEtIIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz47IHFpYW5nLnpoYW5nQHdpbmRyaXZlci5j
-b207IERtaXRyeQ0KPiBWeXVrb3YgPGR2eXVrb3ZAZ29vZ2xlLmNvbT47IHBhdWxtY2tAa2VybmVs
-Lm9yZzsgS2llbmVyIEd1aWRvIDE0RFMxDQo+IDxHdWlkby5LaWVuZXJAcm9oZGUtc2Nod2Fyei5j
-b20+OyBVU0IgPGxpbnV4LXVzYkB2Z2VyLmtlcm5lbC5vcmc+DQo+IFN1YmplY3Q6ICpFWFQqIFJl
-OiBbUEFUQ0hdIFVTQjogdXNidG1jOiBGaXggUkNVIHN0YWxsIHdhcm5pbmcNCj4gDQo+IE9uIFdl
-ZCwgSnVsIDIxLCAyMDIxIGF0IDExOjQ0OjIzQU0gKzAyMDAsIGRhdmUgcGVua2xlciB3cm90ZToN
-Cj4gPiBTb3JyeSwgdGhlIGlzc3VlIHRoaXMgcGF0Y2ggaXMgdHJ5aW5nIHRvIGZpeCBvY2N1cnMg
-YmVjYXVzZSB0aGUNCj4gPiBjdXJyZW50IHVzYnRtYyBkcml2ZXIgcmVzdWJtaXRzIHRoZSBVUkIg
-d2hlbiBpdCBnZXRzIGFuIEVQUk9UTyByZXR1cm4uDQo+ID4gVGhlIGR1bW15IHVzYiBob3N0IGNv
-bnRyb2xsZXIgZHJpdmVyIHVzZWQgaW4gdGhlIHN5emJvdCB0ZXN0cyBrZWVwcw0KPiA+IHJldHVy
-bmluZyB0aGUgcmVzdWJtaXR0ZWQgVVJCIHdpdGggRVBST1RPIGNhdXNpbmcgYSBsb29wIHRoYXQg
-c3RhcnZlcw0KPiA+IFJDVS4gV2l0aCBhbiBhY3R1YWwgSENJIGRyaXZlciBpdCBlaXRoZXIgcmVj
-b3ZlcnMgb3IgcmV0dXJucyBhbiBFUElQRS4NCj4gDQo+IEFyZSB5b3Ugc3VyZSBhYm91dCB0aGF0
-PyAgSGF2ZSB5b3UgZXZlciBvYnNlcnZlZCBhIHVzYnRtYyBkZXZpY2UgcmVjb3ZlcmluZyBhbmQN
-Cj4gY29udGludWluZyB0byBvcGVyYXRlIGFmdGVyIGFuIEVQUk9UTyBlcnJvcj8NCg0KSSBjYW4n
-dCBzcGVhayBmb3IgRGF2ZSBhbmQgaGlzIGludmVzdGlnYXRpb25zLiBIb3dldmVyIGFzIHlvdSBy
-ZW1lbWJlciBJIGRpZCB0ZXN0cyB3aXRoDQpFUFJPVE8gZXJyb3JzLCBzZWUgdGhyZWFkOiBodHRw
-czovL21hcmMuaW5mby8/bD1saW51eC11c2ImbT0xNjIxNjM3NzY5MzA0MjMmdz0yDQpJbiB0aGUg
-dGhyZWFkIHlvdSBjYW4gc2VlIHRoZSByZWNvdmVyaW5nLg0KU2luY2Ugbm8gdXNlciBibGFtZWQg
-dGhlIHVzYnRtYyBkcml2ZXIgZm9yIHN5c3RlbSBsb2NrcyB1cCB0byBub3csIGl0J3Mgd29ydGgg
-dG8gdGhpbmsgYWJvdXQNCndoZXRoZXIgdGhlIHByb2JsZW0gaXMgY2F1c2VkIGJ5IHRoZSBkdW1t
-eV9oY2QgZHJpdmVyLg0KSSBzdGlsbCBoYXZlIG5vIHRpbWUgZm9yIGZ1cnRoZXIgaW52ZXN0aWdh
-dGlvbnMgYW5kIHdvdWxkIGFncmVlIHRvIHVzZSB0aGUgc2ltcGxlIHBhdGNoDQp0byBnZXQgcmlk
-IG9mIHRoZSB0b3BpYyBmb3IgdGhlIHVzYnRtYyBkcml2ZXIuIFRoZW4gdGhlIHN5emJvdCB3aWxs
-IG1heWJlIGZpbmQgYW5vdGhlciB1c2IgZHJpdmVyLg0KDQotR3VpZG8NCg0KPiBBbiBFUElQRSBl
-cnJvciBhbHNvIHNlZW1zIHJhdGhlciB1bmxpa2VseSAtLSBwYXJ0aWN1bGFybHkgaWYgdGhlIGRl
-dmljZSBpcyBub3QgcGx1Z2dlZA0KPiBpbnRvIGEgaGlnaC1zcGVlZCBodWIuDQo+IA0KPiBBbGFu
-IFN0ZXJuDQo+IA0KPiA+IEluIGVpdGhlciBjYXNlIG5vIGxvb3Agb2NjdXJzLiBTbyBmb3IgbXkg
-cGFydCBhcyBhIHVzZXIgYW5kIG1haW50YWluZXINCj4gPiB0aGlzIHBhdGNoIGlzIG5vdCBvay4N
-Cg==
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ
+Content-Type: multipart/mixed; boundary="dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1";
+ protected-headers="v1"
+From: Matthias Schiffer <mschiffer@universe-factory.net>
+To: Moritz Fischer <mdf@kernel.org>
+Cc: linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
+ moritzf@google.com, stable@vger.kernel.org,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Vinod Koul <vkoul@kernel.org>, Justin Forbes <jmforbes@linuxtx.org>,
+ linux-usb@vger.kernel.org
+Message-ID: <c0f191cc-6400-7309-e8a4-eab0925a3d54@universe-factory.net>
+Subject: Re: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM
+ state"
+References: <20210719070519.41114-1-mdf@kernel.org>
+In-Reply-To: <20210719070519.41114-1-mdf@kernel.org>
+
+--dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US-large
+Content-Transfer-Encoding: quoted-printable
+
+On 7/19/21 9:05 AM, Moritz Fischer wrote:
+> This reverts commit d143825baf15f204dac60acdf95e428182aa3374.
+>=20
+> Justin reports some of his systems now fail as result of this commit:
+>=20
+>   xhci_hcd 0000:04:00.0: Direct firmware load for renesas_usb_fw.mem fa=
+iled with error -2
+>   xhci_hcd 0000:04:00.0: request_firmware failed: -2
+>   xhci_hcd: probe of 0000:04:00.0 failed with error -2
+>=20
+> The revert brings back the original issue the commit tried to solve but=
+
+> at least unbreaks existing systems relying on previous behavior.
+>=20
+> Cc: stable@vger.kernel.org
+> Cc: Mathias Nyman <mathias.nyman@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Justin Forbes <jmforbes@linuxtx.org>
+> Reported-by: Justin Forbes <jmforbes@linuxtx.org>
+> Signed-off-by: Moritz Fischer <mdf@kernel.org>
+> ---
+>=20
+> Justin,
+>=20
+> would you be able to help out testing follow up patches to this?
+>=20
+> I don't have a machine to test your use-case and mine definitly require=
+s
+> a firmware load on RENESAS_ROM_STATUS_NO_RESULT.
+>=20
+> Thanks
+> - Moritz
+
+
+Hi Moritz,
+
+as an additional data point, here's the behaviour of my system, a Thinkpa=
+d=20
+T14 AMD with:
+
+06:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720202 USB 3.0=
+=20
+Host Controller [1912:0015] (rev 02)
+
+- On Kernel 5.13.1, no firmware: USB controller resets in an endless loop=
+=20
+when the system is running from battery
+- On Kernel 5.13.4, no firmware: USB controller probe fails with the=20
+mentioned firmware load error
+- On Kernel 5.13.4, with renesas_usb_fw.mem: everything is working fine, =
+
+the reset issue is gone
+
+So it seems to me that requiring a firmware is generally the correct driv=
+er=20
+behaviour for this hardware. The firmware I found in the Arch User=20
+Repository [1] unfortunately has a very restrictive license...
+
+Kind regards,
+Matthias
+
+
+[1] https://github.com/denisandroid/uPD72020x-Firmware
+
+
+
+>=20
+> ---
+>   drivers/usb/host/xhci-pci-renesas.c | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhc=
+i-pci-renesas.c
+> index 1da647961c25..5923844ed821 100644
+> --- a/drivers/usb/host/xhci-pci-renesas.c
+> +++ b/drivers/usb/host/xhci-pci-renesas.c
+> @@ -207,8 +207,7 @@ static int renesas_check_rom_state(struct pci_dev *=
+pdev)
+>   			return 0;
+>  =20
+>   		case RENESAS_ROM_STATUS_NO_RESULT: /* No result yet */
+> -			dev_dbg(&pdev->dev, "Unknown ROM status ...\n");
+> -			break;
+> +			return 0;
+>  =20
+>   		case RENESAS_ROM_STATUS_ERROR: /* Error State */
+>   		default: /* All other states are marked as "Reserved states" */
+> @@ -225,12 +224,13 @@ static int renesas_fw_check_running(struct pci_de=
+v *pdev)
+>   	u8 fw_state;
+>   	int err;
+>  =20
+> -	/*
+> -	 * Only if device has ROM and loaded FW we can skip loading and
+> -	 * return success. Otherwise (even unknown state), attempt to load FW=
+=2E
+> -	 */
+> -	if (renesas_check_rom(pdev) && !renesas_check_rom_state(pdev))
+> -		return 0;
+> +	/* Check if device has ROM and loaded, if so skip everything */
+> +	err =3D renesas_check_rom(pdev);
+> +	if (err) { /* we have rom */
+> +		err =3D renesas_check_rom_state(pdev);
+> +		if (!err)
+> +			return err;
+> +	}
+>  =20
+>   	/*
+>   	 * Test if the device is actually needing the firmware. As most
+>=20
+
+
+
+--dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1--
+
+--HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEEZmTnvaa2aYgexS51Fu8/ZMsgHZwFAmD4PRUFAwAAAAAACgkQFu8/ZMsgHZxu
+EBAA5q6s7FqVB71rjTBI5D46DCZ7m+yBlfD4cSDItuycPNAeNAbF8prz+KVX3uyFQnFixggBF5fK
+t6CiFuhE4FrunQJYX9pVOEJD6v5WnYZznRNEdciZ/Pa6EQ8XSWmnp0cfeR+C7Z+ur8ZAhjgfylzW
+7B+7wAYu/7vK7bGA5cSlZ0AW3SH2V/7A4DNdOuhgsGMSF3JuBOhoGdZQP8WhLz0wphSDXNBUi3uy
+koKo89u7bBv/hSKMW/HF4+mgUaVBvQdd7Wj7IQQ57QwWjRdG2nY1LIs/PQU0yKtGQQdjo6kGij56
+qLtADISuNrIdm4gWzC8qGVzWaUsNPAnrZmwnFxNwQ7YoEDwNti30hTbTnQbl9EBom/n+L47a23Eo
+mXuH/z9Kw78qyK5IokumDxSwNrSWpnMADywhkqSZDE6Ul6dFj2Z8ScDsu0HOgXp3BM11OI4Y1XHU
+DqEzZSyPTZmVzGsS59udJDznQV0cp2SWvt1PqB1EVpxwTGfXEehs+AWKaagaPgMqCK+0vDtM/C93
+de9d2vMPOt+F3Cu0OqjznPktycUlhuJ9zwgksDl7KLfemSqv8mRAb2jtZ3u9YI7aw8jMnpMXjQUl
+ndBCXEax7nQssarGoJZwQ/44YmNXxFr0gOTKlkY3754p5L1Cm2dNGeN/GVeWutbb6sHxMzcfXpqY
+krw=
+=2e4k
+-----END PGP SIGNATURE-----
+
+--HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ--
