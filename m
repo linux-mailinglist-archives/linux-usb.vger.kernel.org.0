@@ -2,216 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DFC693D16BD
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 21:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 875963D1797
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 22:10:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbhGUSTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 14:19:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237464AbhGUSTc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 14:19:32 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 19CB360FE7
-        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 19:00:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626894009;
-        bh=p0dYPlrOWLs+L1dvuhxoAG3U45sJQ1qkpo1unI7f4ms=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=f+fXPCwBApBPOTK8NRBu3RLyX60SEw4aosK/YXTMEJ7N1Jcz/03ngsrWwpBsBOPd4
-         J9J7g+KKEpMtvWm4aU8KDrpt6FxJlOHek3EGXYtT67L1rkXzTyE7k6FVeGuQ+b0V+j
-         hbnwfYQ5TAdbB9rFKLCCdms7FUH6g+AImNbueSzqAG0lOt1Aj27g9P8Flagq0mgvsB
-         9lPFdI/6kcUh3Cc/HAahTK6+fn9ezVPRT0pA0bx32P+oC98RrLwPw/Ohi2vu6a08o2
-         kWVMsDdLshx8xUFrX5yKBjRJz5+DyN6tBRYd++49UDEmrz7rJlNMc2MY/W/War1usd
-         Hyt3I4vqtiLbw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 0348761263; Wed, 21 Jul 2021 19:00:08 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
-Date:   Wed, 21 Jul 2021 19:00:08 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: luzemario@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-213771-208809-MHXSZYTL9g@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
-References: <bug-213771-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S231609AbhGUT3G (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 15:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240373AbhGUT3E (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 15:29:04 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82EA6C061757
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 13:09:40 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id 42-20020a9d012d0000b02904b98d90c82cso3209049otu.5
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 13:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ryhmjqV2eKLpoirk/rnB/jmjc8Sw5eUN/kn6KkHMSG8=;
+        b=f0V8sZc4aqzvTzm9SSyhFzpvTL6ZdbVxPHsnzMtxQXlcraRxoiKzAZYUxg1zQwSw0L
+         0t4aBZCwG3QntHJ9LRlAimJWvfxMAU79KZMV6rNopHZb+wI3BjQxhxb6zZ9MbyMmLz/K
+         5puTHinQ8S3T01ksLF63skMaFBcnizWmH9zM0DUWtkZ/I5qRcjVXZQfuFGP1nr9I4kCk
+         h9l9QMx8FExuaYAHmgnlfrOxarqJ1RNdIjLP01lXcV3Qherns4JHvRqCam3cwqEk5JSf
+         wLuGPWm+XbxRoEEVkPbJb5r0jR6y8KTtPriJAR6NomLoou0BKAiRUdAqCS40y9o7qSwi
+         L2Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ryhmjqV2eKLpoirk/rnB/jmjc8Sw5eUN/kn6KkHMSG8=;
+        b=aqmsQlGgg/1b9R2N8FOVZ8VuLpzRJFhgggVSSCdZrWyRexkPm+fL9cNdw0RLcdrBOC
+         AcjRtdOTmnj5vLEB8uhB7vL1ygNjMZb2nZUuDpggSftygwCKbYUpEAA7H7BD/MQZPUlZ
+         tF4p6YMD2VO8hrQskL+MNdAujMMbu7zNsllFWDQl+1eX7X+3ORIng4go/DIw826+f3mX
+         DjqYoylD+SC7ryUNayUzOa11wCwnC3+nzg22LXO42BxEpaVoaFoH/Dcx618j7/nhiAgy
+         Ia5F81mfhAZm2MXPfmaYE1rcBJHVnrbtGG+TedEnlK5vTbBBK9L8eqqCvoX+u2YiECYA
+         cozg==
+X-Gm-Message-State: AOAM531AxO9bFmOW5P2BSNCLR0uNqFAxLKrbQHuPSlXIevDj6oXi2U/+
+        JEYq7ygnxesrcs83XmUyULMvDw==
+X-Google-Smtp-Source: ABdhPJx/FxM5/zumxzNaWfIehVZW2nKUlw7DpxOp2p3sgrCBOL4NDneF4Gn+AdrfqtxLQvtaMfgcJw==
+X-Received: by 2002:a9d:5e15:: with SMTP id d21mr28331811oti.280.1626898179791;
+        Wed, 21 Jul 2021 13:09:39 -0700 (PDT)
+Received: from yoga (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id o26sm4900456otk.77.2021.07.21.13.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jul 2021 13:09:39 -0700 (PDT)
+Date:   Wed, 21 Jul 2021 15:09:37 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <YPh/AS5svBk+gddY@yoga>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
+ <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
+ <20210714124807.o22mottsrg3tv6nt@mobilestation>
+ <YPfPDqJhfzbvDLvB@kroah.com>
+ <20210721100220.ddfxwugivsndsedv@mobilestation>
+ <YPf29+ewbrYgHxRP@kroah.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YPf29+ewbrYgHxRP@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
+On Wed 21 Jul 05:29 CDT 2021, Greg Kroah-Hartman wrote:
 
---- Comment #2 from Luzemario (luzemario@gmail.com) ---
-Sorry. Description was copied from former bugtracker to make it self-contei=
-ned.
-Iw was tested within Ubuntu and Alpine, with Linuz original kernel. Please
-ignore Ubuntu-specific information.
+> On Wed, Jul 21, 2021 at 01:02:20PM +0300, Serge Semin wrote:
+> > Hi Greg,
+> > @Krzysztof, @Rob, please join the discussion so to finally get done
+> > with the concerned issue.
+> > 
+> > On Wed, Jul 21, 2021 at 09:38:54AM +0200, Greg Kroah-Hartman wrote:
+> > > On Wed, Jul 14, 2021 at 03:48:07PM +0300, Serge Semin wrote:
+> > > > Hello John,
+> > > > 
+> > > > On Tue, Jul 13, 2021 at 05:07:00PM -0700, John Stultz wrote:
+> > > > > On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
+> > > > > <Sergey.Semin@baikalelectronics.ru> wrote:
+> > > > > >
+> > > > > > In accordance with the DWC USB3 bindings the corresponding node
+> > > > > > name is suppose to comply with the Generic USB HCD DT schema, which
+> > > > > > requires the USB nodes to have the name acceptable by the regexp:
+> > > > > > "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+> > > > > > named.
+> > > > > >
+> > > > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > > > > 
+> > > > 
+> > > > > I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
+> > > > 
+> > > > Sorry to hear that. Alas there is no much can be done about it.
+> > > 
+> > > Yes there is, we can revert the change.  We do not break existing
+> > > configurations, sorry.
+> > 
+> > By reverting this patch we'll get back to the broken dt-bindings
+> > since it won't comply to the current USB DT-nodes requirements
+> > which at this state well describe the latest DT spec:
+> > https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
+> > Thus the dtbs_check will fail for these nodes.
+> > 
+> > Originally this whole patchset was connected with finally getting the
+> > DT-node names in order to comply with the standard requirement and it
+> > was successful mostly except a few patches which still haven't been
+> > merged in.
+> > 
+> > Anyway @Krzysztof has already responded to the complain regarding this
+> > issue here:
+> > https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
+> > but noone cared to respond on his reasonable questions in order to
+> > get to a suitable solution for everyone. Instead we are
+> > getting another email with the same request to revert the changes.
+> > Here is the quote from the Krzysztof email so we could continue the
+> > discussion:
+> > 
+> > On Mon, 21 Dec 2020 13:04:27 -0800 (PST), Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > On Mon, Dec 21, 2020 at 12:24:11PM -0800, John Stultz wrote:
+> > > > On Sat, Dec 19, 2020 at 3:06 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > > > > ...
+> > > > >
+> > > > > The node names are not part of an ABI, are they? I expect only
+> > > > > compatibles and properties to be stable. If user-space looks for
+> > > > > something by name, it's a user-space's mistake.  Not mentioning that you
+> > > > > also look for specific address... Imagine remapping of addresses with
+> > > > > ranges (for whatever reason) - AOSP also would be broken? Addresses are
+> > > > > definitely not an ABI.
+> > > > 
+> > > > Though that is how it's exported through sysfs.
+> > > 
+> > > The ABI is the format of sysfs file for example in /sys/devices. However
+> > > the ABI is not the exact address or node name of each device.
+> > > 
+> > > > In AOSP it is then used to setup the configfs gadget by writing that
+> > > > value into /config/usb_gadget/g1/UDC.
+> > > > 
+> > > > Given there may be multiple controllers on a device, or even if its
+> > > > just one and the dummy hcd driver is enabled, I'm not sure how folks
+> > > > reference the "right" one without the node name?
+> > > 
+> > > I think it is the same type of problem as for all other subsystems, e.g.
+> > > mmc, hwmon/iio.  They usually solve it either with aliases or with
+> > > special property with the name/label.
+> > > 
+> > > > I understand the fuzziness with sysfs ABI, and I get that having
+> > > > consistent naming is important, but like the eth0 -> enp3s0 changes,
+> > > > it seems like this is going to break things.
+> > > 
+> > > One could argue whether interface name is or is not ABI. But please tell
+> > > me how the address of a device in one's representation (for example DT)
+> > > is a part of a stable interface?
+> > > 
+> > > > Greg? Is there some better way AOSP should be doing this?
+> > > 
+> > > If you need to find specific device, maybe go through the given bus and
+> > > check compatibles?
+> > > 
+> > > Best regards,
+> > > Krzysztof
+> > 
+> > So the main question is how is the DT-node really connected with ABI
+> > and is supposed to be stable in that concern?
+> > 
+> > As I see it even if it affects the configfs node name, then we may
+> > either need to break that connection and somehow deliver DT-node-name
+> > independent interface to the user-space or we have no choice but to
+> > export the node with an updated name and ask of user-space to deal
+> > with it. In both suggested cases the DT-node name will still conform
+> > to the USB-node name DT spec. Currently we are at the second one.
+> 
+> I really do not care what you all decide on, but you CAN NOT break
+> existing working systems, sorry.  That is why I have reverted this
+> change in my tree and will send it to Linus soon.
+> 
 
-*********
+Which tree did you revert this in? 5.13.stable?)
 
-This device works flawlessly on Windows XP with native driver, both as a
-physical machine or inside a VM. It appears on XP's device management as "U=
-SB
-2.0" name.
+I'm onboard with us reverting this, but for any 5.14-rc and 5.15 this
+will conflict badly with the qcom tree, so I much rather take the revert
+in my tree - than have Linus run into this mess down the road.
 
-On Ubuntu, Shorting pins 2 and 3 of DB9 connector does not give back charac=
-ters
-sent (no echo), nor typed strings are sent to other RS232 devices, despite =
-of
-communication settings. Characters from remote devices are correctly receiv=
-ed.
-Using a null modem cable to other RS232 terminal shows that the local termi=
-nal
-receives, but does not transmit.
+For stable, I don't mind if you merge something...Perhaps you can point
+me to your revert and I can pick it up in my tree?
 
-Its worth to mention: passing through the device to a guest virtual machine
-(KVM) running Windows XP makes it work correctly with XP driver inside the
-guest OS. Bringing back the device stops transmitting. Only receive works.
-
-Tested with the version below:
-NAME=3D"Ubuntu"
-VERSION=3D"20.04.2 LTS (Focal Fossa)"
-ID=3Dubuntu
-ID_LIKE=3Ddebian
-PRETTY_NAME=3D"Ubuntu 20.04.2 LTS"
-VERSION_ID=3D"20.04"
-HOME_URL=3D"https://www.ubuntu.com/"
-SUPPORT_URL=3D"https://help.ubuntu.com/"
-BUG_REPORT_URL=3D"https://bugs.launchpad.net/ubuntu/"
-PRIVACY_POLICY_URL=3D"https://www.ubuntu.com/legal/terms-and-policies/priva=
-cy-policy"
-VERSION_CODENAME=3Dfocal
-UBUNTU_CODENAME=3Dfocal
-
-Kernel:
-Linux host 5.4.0-66-generic #74-Ubuntu SMP Wed Jan 27 22:54:38 UTC 2021 x86=
-_64
-x86_64 x86_64 GNU/Linux
-
-Device ID:
-ID 4348:5523 WinChipHead USB->RS 232 adapter with Prolifec PL 2303 chipset
-
-Modinfo:
-filename: /lib/modules/5.4.0-66-generic/kernel/drivers/usb/serial/ch341.ko
-license: GPL v2
-srcversion: 8F5F64E72BDA4E76E6F4F4D
-alias: usb:v4348p5523d*dc*dsc*dp*ic*isc*ip*in*
-alias: usb:v1A86p7523d*dc*dsc*dp*ic*isc*ip*in*
-alias: usb:v1A86p7522d*dc*dsc*dp*ic*isc*ip*in*
-alias: usb:v1A86p5523d*dc*dsc*dp*ic*isc*ip*in*
-alias: usb:v1A86p5512d*dc*dsc*dp*ic*isc*ip*in*
-depends: usbserial
-retpoline: Y
-intree: Y
-name: ch341
-vermagic: 5.4.0-66-generic SMP mod_unload
-sig_id: PKCS#7
-signer: Build time autogenerated kernel key
-sig_key: 1E:07:0D:94:23:77:98:99:05:31:F3:76:E8:6B:76:12:7C:83:9E:05
-sig_hashalgo: sha512
-signature: 50:CE:79:92:87:EA:82:77:A9:25:A3:B7:F2:B3:ED:63:FE:85:EB:61:
-                7A:31:C5:9E:E5:78:E5:44:C6:FE:5D:74:4A:60:B6:0A:94:3F:C3:70:
-                0B:6D:27:A6:89:F7:D2:AC:8E:71:AC:0D:AF:5D:3A:19:07:18:F9:7C:
-                B8:3C:47:DF:18:4D:13:C9:F8:45:AC:81:19:B0:DE:57:16:1A:F5:C6:
-                AC:41:7E:E7:F2:6D:29:9C:14:A3:04:F8:9B:DF:8D:2E:9F:34:44:18:
-                A8:FF:C6:A4:AF:04:86:D5:6D:F2:4C:AD:D2:65:4C:63:0F:C1:82:E3:
-                28:20:F2:D4:80:86:1A:67:1D:A2:56:18:87:E2:AB:40:E6:6A:48:E5:
-                D7:D2:6F:6F:DB:05:20:B2:76:81:5C:0C:36:02:37:E9:A2:08:4E:53:
-                5E:9C:18:03:50:11:2D:E4:62:74:6E:CB:42:67:25:22:0C:F6:55:D8:
-                6F:E3:5A:15:AC:10:B7:F2:B7:C9:20:6C:19:ED:CC:7D:CC:CB:48:3B:
-                B0:5E:E3:ED:05:DF:DF:65:FF:19:AD:76:6E:40:D2:0B:F0:11:65:D5:
-                92:7D:C9:3A:32:BE:A8:13:CE:C1:DE:D9:73:0F:0A:0B:8A:08:55:2E:
-                41:9D:B9:9A:AD:EC:4C:7D:98:3A:52:38:DF:78:DE:33:F1:14:A2:1B:
-                AC:93:FD:30:76:A5:7C:AF:13:16:B8:5E:0B:73:A7:1F:20:E4:54:44:
-                07:A2:11:7F:D7:0E:B3:1C:A9:AA:73:76:0E:89:E0:D5:74:39:66:2F:
-                E8:14:93:EC:7A:B2:23:E0:CC:77:9F:CD:D9:99:CB:B0:14:21:1C:1F:
-                0C:E9:30:B8:C3:55:8F:49:FC:88:5D:EF:20:B9:0E:F2:88:28:5A:93:
-                08:4D:2B:76:64:85:D1:E0:1C:9C:4B:86:2C:DB:65:F6:D8:23:A0:8D:
-                1B:22:74:0C:B9:41:9E:57:5A:67:4C:CC:1F:E2:43:5F:C2:21:82:E6:
-                D4:C1:66:6F:30:54:27:2E:1D:22:8C:65:7F:93:C8:1D:C0:51:F0:7D:
-                7A:96:3A:3B:3D:C4:6E:69:DF:83:8A:85:0D:35:15:F9:5E:89:0F:D5:
-                9E:6F:A1:5F:39:CE:2A:88:57:97:DF:42:5C:70:12:4E:91:9E:1A:92:
-                49:99:C3:7B:38:12:B0:3A:D0:92:38:45:C7:74:3C:66:0F:A1:9C:C2:
-                9F:DC:A2:1B:DF:20:BB:F5:A5:F0:10:D6:6F:4F:C1:90:00:C3:F9:D8:
-                42:96:D2:28:FD:DE:21:33:6C:F4:7F:18:B2:ED:F9:A6:A4:4A:A5:4F:
-                26:7C:C0:F7:8B:A9:B3:2F:5A:5B:E2:B8
-
-Demsg entries:
-usb 4-3: new full-speed USB device number 6 using ohci-pci
-usb 4-3: New USB device found, idVendor=3D4348, idProduct=3D5523, bcdDevice=
-=3D 2.50
-usb 4-3: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=3D0
-ch341 4-3:1.0: ch341-uart converter detected
-usb 4-3: ch341-uart converter now attached to ttyUSB0
----
-ProblemType: Bug
-ApportVersion: 2.20.11-0ubuntu27.16
-Architecture: amd64
-[...] # not relevant / stripped
-DistroRelease: Ubuntu 20.04
-InstallationDate: Installed on 2021-01-23 (50 days ago)
-InstallationMedia: Kubuntu 20.04.1 LTS "Focal Fossa" - Release amd64 (20200=
-731)
-MachineType: System manufacturer System Product Name
-NonfreeKernelModules: nvidia_modeset nvidia
-Package: linux (not installed)
-ProcFB: 0 VESA VGA
-ProcKernelCmdLine: BOOT_IMAGE=3D/boot/vmlinuz-5.4.0-66-generic
-root=3DUUID=3D68929bb0-3af4-4634-8d5b-c2846910c077 ro locale=3Dpt_BR quiet =
-splash
-vt.handoff=3D7
-ProcVersionSignature: Ubuntu 5.4.0-66.74-generic 5.4.86
-RelatedPackageVersions:
- linux-restricted-modules-5.4.0-66-generic N/A
- linux-backports-modules-5.4.0-66-generic N/A
- linux-firmware 1.187.10
-RfKill:
-
-Tags: focal
-Uname: Linux 5.4.0-66-generic x86_64
-UpgradeStatus: No upgrade log present (probably fresh install)
-UserGroups: adm cdrom dip libvirt lpadmin lxd plugdev sambashare sudo
-_MarkForUpload: True
-dmi.bios.date: 11/18/2016
-dmi.bios.vendor: American Megatrends Inc.
-dmi.bios.version: 0502
-dmi.board.asset.tag: To Be Filled By O.E.M.
-dmi.board.name: M5A78L-M PLUS/USB3
-dmi.board.vendor: ASUSTeK Computer INC.
-dmi.board.version: Rev X.0x
-dmi.chassis.asset.tag: Asset-1234567890
-dmi.chassis.type: 3
-dmi.chassis.vendor: Chassis Manufacture
-dmi.chassis.version: Chassis Version
-dmi.modalias:
-dmi:bvnAmericanMegatrendsInc.:bvr0502:bd11/18/2016:svnSystemmanufacturer:pn=
-SystemProductName:pvrSystemVersion:rvnASUSTeKComputerINC.:rnM5A78L-MPLUS/US=
-B3:rvrRevX.0x:cvnChassisManufacture:ct3:cvrChassisVersion:
-dmi.product.family: To Be Filled By O.E.M.
-dmi.product.name: System Product Name
-dmi.product.sku: To Be Filled By O.E.M.
-dmi.product.version: System Version
-dmi.sys.vendor: System manufacturer
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Regards,
+Bjorn
