@@ -2,204 +2,212 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A631B3D1278
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 17:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 197A83D1305
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 17:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239913AbhGUOxk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 10:53:40 -0400
-Received: from orthanc.universe-factory.net ([104.238.176.138]:47414 "EHLO
-        orthanc.universe-factory.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239825AbhGUOxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 10:53:39 -0400
-X-Greylist: delayed 350 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Jul 2021 10:53:37 EDT
-Received: from [IPv6:2001:19f0:6c01:100::2] (unknown [IPv6:2001:19f0:6c01:100::2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by orthanc.universe-factory.net (Postfix) with ESMTPSA id D53CB1F4E2;
-        Wed, 21 Jul 2021 17:28:21 +0200 (CEST)
-To:     Moritz Fischer <mdf@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
-        moritzf@google.com, stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Justin Forbes <jmforbes@linuxtx.org>, linux-usb@vger.kernel.org
-References: <20210719070519.41114-1-mdf@kernel.org>
-From:   Matthias Schiffer <mschiffer@universe-factory.net>
-Subject: Re: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM
- state"
-Message-ID: <c0f191cc-6400-7309-e8a4-eab0925a3d54@universe-factory.net>
-Date:   Wed, 21 Jul 2021 17:28:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S239930AbhGUPRm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 11:17:42 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42487 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S239841AbhGUPRl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 11:17:41 -0400
+Received: (qmail 637742 invoked by uid 1000); 21 Jul 2021 11:58:17 -0400
+Date:   Wed, 21 Jul 2021 11:58:17 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Cc:     Matt Corallo <oc2udbzfd@mattcorallo.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux.amoon@gmail.com" <linux.amoon@gmail.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+Subject: Re: ODROID-C1/-C2 USB Detection only triggered by some devices dwc2
+Message-ID: <20210721155817.GC633399@rowland.harvard.edu>
+References: <f084f45a-5be0-9542-260a-f4641e1215d0@synopsys.com>
+ <CAFBinCCj5zUiv9LS2jKRxzX5pfcFTr4tVZwR7TA2CRQg68qwTw@mail.gmail.com>
+ <822c3852-1d15-2976-8672-e49ae34c328f@synopsys.com>
+ <CAFBinCC_0RpCMsj3AUt9fZrjHi6_qFirQtRR1g5VJcn45GpWAw@mail.gmail.com>
+ <ad475275-eb2c-6309-fc59-494f94bf0605@synopsys.com>
+ <CAFBinCCXioWL+ZGwvC8Ltrmx4y2XpGK03JAm8X=wDB4_dQ+pFA@mail.gmail.com>
+ <20210715014451.GA397753@rowland.harvard.edu>
+ <CAFBinCD0GKcc8veWAkWG=NCban4k8n5E-QdhNfccuH8OXvtA6g@mail.gmail.com>
+ <20210719145322.GA565905@rowland.harvard.edu>
+ <CAFBinCDAXzDugaCcf52ubE+a==7CtDkmHpX2hAeO+DkJWQCNSg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210719070519.41114-1-mdf@kernel.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFBinCDAXzDugaCcf52ubE+a==7CtDkmHpX2hAeO+DkJWQCNSg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ
-Content-Type: multipart/mixed; boundary="dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1";
- protected-headers="v1"
-From: Matthias Schiffer <mschiffer@universe-factory.net>
-To: Moritz Fischer <mdf@kernel.org>
-Cc: linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
- moritzf@google.com, stable@vger.kernel.org,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Vinod Koul <vkoul@kernel.org>, Justin Forbes <jmforbes@linuxtx.org>,
- linux-usb@vger.kernel.org
-Message-ID: <c0f191cc-6400-7309-e8a4-eab0925a3d54@universe-factory.net>
-Subject: Re: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM
- state"
-References: <20210719070519.41114-1-mdf@kernel.org>
-In-Reply-To: <20210719070519.41114-1-mdf@kernel.org>
+Minas, some of the things noted below may require your attention.  In 
+particular, the usbmon traces don't show the root hub doing what it should, 
+which leads me to wonder whether the Genesys Logic hub attached to port 1 
+really is getting suspended and resumed properly.
 
---dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US-large
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 20, 2021 at 11:55:05PM +0200, Martin Blumenstingl wrote:
+> > That's what it looks like to me too.  This means that the hub on the
+> > Odroid doesn't support remote wakeup properly.  Or else the root hub
+> > gets the remote-wakeup message and doesn't handle it properly.  Either
+> > way it's a pretty nasty bug for a significant piece of hardware.
+> as a wild idea: I do have a 24MHz logic analyzer. If there was a way
+> for me to force the communication between the hub and dwc2 to use
+> "full speed" or or slower I might be able to look at the signals on
+> the bus.
+> in case you're aware of any possibility to force the communication to
+> use a slower speed then please let me know.
 
-On 7/19/21 9:05 AM, Moritz Fischer wrote:
-> This reverts commit d143825baf15f204dac60acdf95e428182aa3374.
->=20
-> Justin reports some of his systems now fail as result of this commit:
->=20
->   xhci_hcd 0000:04:00.0: Direct firmware load for renesas_usb_fw.mem fa=
-iled with error -2
->   xhci_hcd 0000:04:00.0: request_firmware failed: -2
->   xhci_hcd: probe of 0000:04:00.0 failed with error -2
->=20
-> The revert brings back the original issue the commit tried to solve but=
+In theory you don't need to worry about this.  When a high-speed device such 
+as the Genesys Logic hub goes into suspend, it reverts to full-speed 
+signalling (see section 7.1.7.6 of the USB-2 specification).
 
-> at least unbreaks existing systems relying on previous behavior.
->=20
-> Cc: stable@vger.kernel.org
-> Cc: Mathias Nyman <mathias.nyman@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Vinod Koul <vkoul@kernel.org>
-> Cc: Justin Forbes <jmforbes@linuxtx.org>
-> Reported-by: Justin Forbes <jmforbes@linuxtx.org>
-> Signed-off-by: Moritz Fischer <mdf@kernel.org>
-> ---
->=20
-> Justin,
->=20
-> would you be able to help out testing follow up patches to this?
->=20
-> I don't have a machine to test your use-case and mine definitly require=
-s
-> a firmware load on RENESAS_ROM_STATUS_NO_RESULT.
->=20
-> Thanks
-> - Moritz
+As such, you can easily measure the change from a suspend signal to a wakeup 
+or resume signal, although you can't easily tell which device (the computer 
+or the hub) caused the change.  A suspend signal has the D+ line steady at 
+high voltage (> 3 V) and the D- line at low voltage (close to 0 V).  A 
+resume signal is the opposite, typically lasting only a few (or a few tens) 
+of microseconds.
 
+> I misread your comment at first and used slightly different steps:
+> - boot without usbcore.autosuspend=-1
+> - plug in my Corsair Voyager USB 3.0 flash drive
+> - start the usbmon dump
+> - echo -1 >/sys/bus/usb/devices/1-1/power/autosuspend
+> - (the flash drive is detected automatically)
+> - stop the usbmon dump
+> 
+> The result of this test can be found in:
+> 0u.mon-odroidc1-plugged-after-boot-disable-autosuspend.out
 
-Hi Moritz,
+This was the second attachment to your email.
 
-as an additional data point, here's the behaviour of my system, a Thinkpa=
-d=20
-T14 AMD with:
+> After that I did the test as I believe you're expecting it to be done:
+> - plug in my Corsair Voyager USB 3.0 flash drive
+> - boot without usbcore.autosuspend=-1
+> - start the usbmon dump
+> - echo -1 >/sys/bus/usb/devices/1-1/power/autosuspend
+> - (the flash drive is detected automatically)
 
-06:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720202 USB 3.0=
-=20
-Host Controller [1912:0015] (rev 02)
+This is weird.  Didn't you say earlier that doing the same thing, except for 
+using "lsusb -vvv" to wake up the GL hub rather than this sysfs write, would 
+not lead to the Corsair drive being detected?
 
-- On Kernel 5.13.1, no firmware: USB controller resets in an endless loop=
-=20
-when the system is running from battery
-- On Kernel 5.13.4, no firmware: USB controller probe fails with the=20
-mentioned firmware load error
-- On Kernel 5.13.4, with renesas_usb_fw.mem: everything is working fine, =
+> - stop the usbmon dump
+> 
+> The result of this test can be found in:
+> 0u.mon-odroidc1-plugged-during-boot-disable-autosuspend.out
 
-the reset issue is gone
+That was the first attachment.
 
-So it seems to me that requiring a firmware is generally the correct driv=
-er=20
-behaviour for this hardware. The firmware I found in the Arch User=20
-Repository [1] unfortunately has a very restrictive license...
+> In both tests I observe the following in the kernel log:
+>   usb 1-1: reset high-speed USB device number 2 using dwc2
+> I assume that this brings the hub into a well-defined state where
+> remote wakeup may not be relevant
 
-Kind regards,
-Matthias
+I saw such a reset only in the first usbmon trace, not the second.  It looks 
+like the reset was performed because of a communication error (the -71 
+status code near the beginning of the trace), but it's not at all clear why 
+the error occurred.
 
+In fact, there were a few strange things in the traces.  Let's look at the 
+start of the first one.  The trace starts by showing the root hub 
+being resumed, which involves asking for the port status:
 
-[1] https://github.com/denisandroid/uPD72020x-Firmware
+c57f1680 41352445 S Ci:1:001:0 s a3 00 0000 0001 0004 4 <
+c57f1680 41352762 C Ci:1:001:0 0 4 = 03050000
 
+The status for port 1 shows that the port isn't suspended and hasn't 
+undergone a wakeup transition.  It's simply active, as though it had never 
+been suspended in the first place.
 
+(For those unaccustomed to reading these traces, the 03050000 status value 
+above means the following: The two bits in the "3" are "Port connected" and 
+"Port enabled", and the two bits in the "5" are "Port power on" and "Port is 
+high-speed".  If the port were still suspended, the 04000000 bit would be 
+set.  Notably missing is the bit which would indicate "Port suspend status 
+change", which is in the 00000400 position and is supposed to be set 
+whenever the port is resumed because of a wakeup request from the attached 
+device.)
 
->=20
-> ---
->   drivers/usb/host/xhci-pci-renesas.c | 16 ++++++++--------
->   1 file changed, 8 insertions(+), 8 deletions(-)
->=20
-> diff --git a/drivers/usb/host/xhci-pci-renesas.c b/drivers/usb/host/xhc=
-i-pci-renesas.c
-> index 1da647961c25..5923844ed821 100644
-> --- a/drivers/usb/host/xhci-pci-renesas.c
-> +++ b/drivers/usb/host/xhci-pci-renesas.c
-> @@ -207,8 +207,7 @@ static int renesas_check_rom_state(struct pci_dev *=
-pdev)
->   			return 0;
->  =20
->   		case RENESAS_ROM_STATUS_NO_RESULT: /* No result yet */
-> -			dev_dbg(&pdev->dev, "Unknown ROM status ...\n");
-> -			break;
-> +			return 0;
->  =20
->   		case RENESAS_ROM_STATUS_ERROR: /* Error State */
->   		default: /* All other states are marked as "Reserved states" */
-> @@ -225,12 +224,13 @@ static int renesas_fw_check_running(struct pci_de=
-v *pdev)
->   	u8 fw_state;
->   	int err;
->  =20
-> -	/*
-> -	 * Only if device has ROM and loaded FW we can skip loading and
-> -	 * return success. Otherwise (even unknown state), attempt to load FW=
-=2E
-> -	 */
-> -	if (renesas_check_rom(pdev) && !renesas_check_rom_state(pdev))
-> -		return 0;
-> +	/* Check if device has ROM and loaded, if so skip everything */
-> +	err =3D renesas_check_rom(pdev);
-> +	if (err) { /* we have rom */
-> +		err =3D renesas_check_rom_state(pdev);
-> +		if (!err)
-> +			return err;
-> +	}
->  =20
->   	/*
->   	 * Test if the device is actually needing the firmware. As most
->=20
+c5753280 41352977 S Ii:1:001:1 -115:2048 4 <
 
+The shows the root hub's interrupt URB starting up, the last part of a 
+normal resume.
 
+So was the GL hub actually suspended?  It's hard to tell exactly what the 
+hardware's doing, but you can get a trace that will help.  Do the following:
 
---dne6ivMkj5K2Ni6kCDeXZjNUQjHxV9xO1--
+Boot with no device plugged in and with "usbcore.autosuspend=-1" on the 
+command line.  Then start a usbmon trace.
 
---HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Next, do
 
------BEGIN PGP SIGNATURE-----
+	echo 2 >/sys/bus/usb/devices/1-1/power/autosuspend
 
-wsF5BAABCAAjFiEEZmTnvaa2aYgexS51Fu8/ZMsgHZwFAmD4PRUFAwAAAAAACgkQFu8/ZMsgHZxu
-EBAA5q6s7FqVB71rjTBI5D46DCZ7m+yBlfD4cSDItuycPNAeNAbF8prz+KVX3uyFQnFixggBF5fK
-t6CiFuhE4FrunQJYX9pVOEJD6v5WnYZznRNEdciZ/Pa6EQ8XSWmnp0cfeR+C7Z+ur8ZAhjgfylzW
-7B+7wAYu/7vK7bGA5cSlZ0AW3SH2V/7A4DNdOuhgsGMSF3JuBOhoGdZQP8WhLz0wphSDXNBUi3uy
-koKo89u7bBv/hSKMW/HF4+mgUaVBvQdd7Wj7IQQ57QwWjRdG2nY1LIs/PQU0yKtGQQdjo6kGij56
-qLtADISuNrIdm4gWzC8qGVzWaUsNPAnrZmwnFxNwQ7YoEDwNti30hTbTnQbl9EBom/n+L47a23Eo
-mXuH/z9Kw78qyK5IokumDxSwNrSWpnMADywhkqSZDE6Ul6dFj2Z8ScDsu0HOgXp3BM11OI4Y1XHU
-DqEzZSyPTZmVzGsS59udJDznQV0cp2SWvt1PqB1EVpxwTGfXEehs+AWKaagaPgMqCK+0vDtM/C93
-de9d2vMPOt+F3Cu0OqjznPktycUlhuJ9zwgksDl7KLfemSqv8mRAb2jtZ3u9YI7aw8jMnpMXjQUl
-ndBCXEax7nQssarGoJZwQ/44YmNXxFr0gOTKlkY3754p5L1Cm2dNGeN/GVeWutbb6sHxMzcfXpqY
-krw=
-=2e4k
------END PGP SIGNATURE-----
+and wait a few seconds for the GL hub to be suspended.  To make sure it has, 
+do "grep . /sys/bus/usb/devices/1-1/power/*" and include the output in your 
+reply.
 
---HqCk6ZiLytvFswwmG4LPja68eEOGyVngQ--
+Then do
+
+	echo 2 >/sys/bus/usb/devices/usb1/power/autosuspend
+
+and wait a few seconds for the root hub to be suspended.  Again, to make 
+sure it has, do "grep . /sys/bus/usb/devices/usb1/power/*".
+
+Once that has settled down, wake up the root hub by doing
+
+	echo -1 >/sys/bus/usb/devices/usb1/power/autosuspend
+
+and a few seconds later, wake up the GL hub by doing
+
+	echo -1 >/sys/bus/usb/devices/1-1/power/autosuspend
+
+All these suspends and resumes should show up in the usbmon trace.  I'd like 
+to see what it really says; my guess is that it won't show quite what it 
+should.
+
+> > It's possible to create a udev script that will perform this action
+> > automatically at startup (does your OS use udev?).  Again, the only way
+> > to see if the Corsair drive will then work is to try it.
+> I am an Arch Linux ARM user so udev scripts are possible.
+> 
+> > If this doesn't work, I think the only solution will be a kernel patch.
+> Personally I'd prefer a kernel patch (maybe with some flag in
+> device-tree like broken-remote-wakeup) as from my understanding all
+> Odroid-C1 and Odroid-C2 (both using Amlogic SoCs) boards are affected.
+> As a reviewer of the Amlogic platform patches I'd rather avoid
+> recommending some udev rules for every user.
+
+I want to nail down the actual reason for the problem before recommending 
+any changes.
+
+> > One other thought: It may be that the reason the Corsair drive and
+> > others don't work when they are plugged in before boot-up is because
+> > they are too slow to connect to the USB bus.  That would cause the
+> > Genesys Logic hub to go into runtime suspend before the drive is
+> > detected, and then the hub never resumes because its remote wakeup
+> > support is faulty.
+> >
+> > You can test this guess by plugging the Corsair drive into the Odroid
+> > before booting, and adding "usbcore.autosuspend=10" to the boot command
+> > line.  This will cause the hub to delay for ten seconds before going
+> > into runtime suspend, and that might be enough time for the drive to
+> > connect to the bus and be detected.
+> usbcore.autosuspend=10 doesn't make any difference for me, the device
+> is still not detected.
+> With autosuspend disabled it's quick to detect the device (I haven't
+> timed it but it's below 2 seconds).
+
+In the second usbmon trace, the detection required 2.05 seconds from the 
+time when the GL hub was resumed.  This may explain why waking up the hub 
+with "lsusb -vvv" doesn't cause the drive to be detected; the hub may be 
+suspended again before the drive shows up.
+
+But it doesn't tell us what happens during boot-up, and unfortunately 
+there's no way to start a usbmon trace at that time.
+
+Alan Stern
