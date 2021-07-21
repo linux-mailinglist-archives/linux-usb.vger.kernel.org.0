@@ -2,98 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18EEE3D116F
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 16:35:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F353D1180
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 16:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238141AbhGUNyt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 09:54:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50838 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232160AbhGUNyo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 09:54:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 21FCC608FE;
-        Wed, 21 Jul 2021 14:35:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626878121;
-        bh=bEM+kDm2sLkva1f/QePZ/LyZfm2n730ykL+StucW3ws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XaZY1Y0Uu9xYrizou2TN6tDrFFre1EX7/JOKy20nmzenJkpFQ/XI3b/NLyWB5MW2/
-         RV7fqYs9ajGXZPAi6NOH5SlGA+8DICv5248q65Sypk5Ht7Ofoum0Pv5L5VGZTMhr44
-         AQY8Sb1a3IJcAKn5ZiN6CxPTPkQHoPeY7n5eSbpHsp0rulcj1f62EeODhOZmKC3dye
-         eQi2gkX9R8JT6LaSOEr2rWeruOfMkaDdX5SC3lW/G6gtPsdAplPib9OvIBNL0DgrJ7
-         3MBcsB0tghTImTciCDuvTUhs7vsN4qOC0i4pBVWKW0MX6QNYNbiMORPwe277qr1D6+
-         AUSTQ72+zACpg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1m6DJI-0001Iz-0j; Wed, 21 Jul 2021 16:34:56 +0200
-Date:   Wed, 21 Jul 2021 16:34:56 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>,
-        Anirudh Rayabharam <mail@anirudhrb.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Rustam Kovhaev <rkovhaev@gmail.com>,
-        Zheng Yongjun <zhengyongjun3@huawei.com>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
-        YueHaibing <yuehaibing@huawei.com>, linux-usb@vger.kernel.org,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] usb: hso: fix error handling code of
- hso_create_net_device
-Message-ID: <YPgwkEHzmxSPSLVA@hovoldconsulting.com>
-References: <20210714091327.677458-1-mudongliangabcd@gmail.com>
- <YPfOZp7YoagbE+Mh@kroah.com>
- <CAD-N9QVi=TvS6sM+jcOf=Y5esECtRgTMgdFW+dqB-R_BuNv6AQ@mail.gmail.com>
+        id S239157AbhGUNz4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 09:55:56 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:58021 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S239174AbhGUNzz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 09:55:55 -0400
+Received: (qmail 634549 invoked by uid 1000); 21 Jul 2021 10:36:31 -0400
+Date:   Wed, 21 Jul 2021 10:36:31 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Jason Quackenbush <jfquackenbush@gmail.com>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [usb-storage] unusual diagnostic message requestl?
+Message-ID: <20210721143631.GB633399@rowland.harvard.edu>
+References: <CAORgStp5VT5MVHuBeZEVW08VaUkUfCNHqWhiEKFTchKGzrzf9g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAD-N9QVi=TvS6sM+jcOf=Y5esECtRgTMgdFW+dqB-R_BuNv6AQ@mail.gmail.com>
+In-Reply-To: <CAORgStp5VT5MVHuBeZEVW08VaUkUfCNHqWhiEKFTchKGzrzf9g@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 04:17:01PM +0800, Dongliang Mu wrote:
-> On Wed, Jul 21, 2021 at 3:36 PM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Jul 14, 2021 at 05:13:22PM +0800, Dongliang Mu wrote:
-> > > The current error handling code of hso_create_net_device is
-> > > hso_free_net_device, no matter which errors lead to. For example,
-> > > WARNING in hso_free_net_device [1].
-> > >
-> > > Fix this by refactoring the error handling code of
-> > > hso_create_net_device by handling different errors by different code.
-> > >
-> > > [1] https://syzkaller.appspot.com/bug?id=66eff8d49af1b28370ad342787413e35bbe76efe
-> > >
-> > > Reported-by: syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com
-> > > Fixes: 5fcfb6d0bfcd ("hso: fix bailout in error case of probe")
-> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-> > > ---
-> > > v1->v2: change labels according to the comment of Dan Carpenter
-> > > v2->v3: change the style of error handling labels
-> > >  drivers/net/usb/hso.c | 33 +++++++++++++++++++++++----------
-> > >  1 file changed, 23 insertions(+), 10 deletions(-)
-> >
-> > Please resend the whole series, not just one patch of the series.
-> > Otherwise it makes it impossible to determine what patch from what
-> > series should be applied in what order.
-> >
+On Tue, Jul 20, 2021 at 09:14:22PM -0700, Jason Quackenbush wrote:
+> Hi, I received a strange notice in the dmesg log while trying to figure out
+> why a thumb drive is misbehaving. It told me to send the message to these
+> email addresses so I am doing as instructed. I've also included all the
+> messages included in the string beginning with when I plugged the stick in
+> up to the point where the log stopped because i ran the dmesg command.
+
+Thanks for sending this in.
+
+> Please let me know if you would like any additional information. The dmesg
+> output was as follows:
 > 
-> Done. Please review the resend v3 patches.
+> [30931.644203] usb 1-2.1: new high-speed USB device number 23 using xhci_hcd
+> [30931.720562] usb 1-2.1: New USB device found, idVendor=ffff,
+> idProduct=1201
+> [30931.720580] usb 1-2.1: New USB device strings: Mfr=0, Product=0,
+> SerialNumber=0
+> [30931.725709] usb-storage 1-2.1:1.0: USB Mass Storage device detected
 > 
-> > All of these are now dropped from my queue, please fix up and resend.
+> 
+> *[30931.731119] usb-storage 1-2.1:1.0: This device (ffff,1201,0000 S 06 P
+> 50) has unneeded SubClass and Protocol entries in unusual_devs.h (kernel
+> 4.16.18-galliumos)                  Please send a copy of this message to
+> <linux-usb@vger.kernel.org <linux-usb@vger.kernel.org>> and
+> <usb-storage@lists.one-eyed-alien.net
+> <usb-storage@lists.one-eyed-alien.net>>*[30931.731321] scsi host0:
+> usb-storage 1-2.1:1.0
 
-A version of this patch has already been applied to net-next.
+I don't see any entry like that (vendor ID = 0xffff, product ID = 0x1201) in 
+unusual_devs.h in the standard 4.16.18 kernel source.  Has your kernel been 
+modified to add such an entry?
 
-No idea which version that was or why the second patch hasn't been
-applied yet.
+Assuming it has, it looks like the entry wasn't added correctly.  It 
+probably should contain USB_SC_DEVICE and USB_PR_DEVICE rather than 
+USB_SC_SCSI and USB_PR_BULK.
 
-Dongliang, if you're resending something here it should first be rebased
-on linux-next (net-next).
+Alan Stern
 
-Johan
+PS: It also looks like that thumb drive was was programmed in a rather 
+shoddy fashion, not compliant with the appropriate standards requirements.
