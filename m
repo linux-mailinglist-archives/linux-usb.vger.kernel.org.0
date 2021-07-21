@@ -2,74 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D1E3D1357
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 18:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6B63D13A2
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 18:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbhGUP3a (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 11:29:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54330 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231727AbhGUP33 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 11:29:29 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id EBA7261245;
-        Wed, 21 Jul 2021 16:10:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1626883806;
-        bh=9po4yHoqMYC7yQEp4hXhHwButVoTm8asp6b6zFpG190=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i1pp6A/+1HaTGhIDRl5RSZVvJKnDaluWox7ByBGakNQF2DwZaQ8k490JARPyDqJ0J
-         IV5176XqnR5C18u4lDdwuqOpSVel2BwiwfM81vA7+4GJQ2aPauy6sA9klqtI8EmeZ9
-         J5FwV6FzuTnZ1sNFpayMh7tEvWYx/s5y2fnO1if+jdlROs16o4es8Cnj3GUqa5iUrD
-         BFy7JdAQQJhCo4GC69gHiBBj0g/MJcshVyoQbTh8m6S+GHjmBdn6Pgu0ZB3kcGehaZ
-         DaP8v87bBKRlE26/wJ+q94sugb+KhsvivKY0LkJVP4plJw3kIN8KPltTQmVDrrzF4I
-         jX52MBBPma2OA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DFFAD60A4E;
-        Wed, 21 Jul 2021 16:10:05 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S232672AbhGUPgr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 11:36:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52579 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S231732AbhGUPgq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 11:36:46 -0400
+Received: (qmail 638707 invoked by uid 1000); 21 Jul 2021 12:17:22 -0400
+Date:   Wed, 21 Jul 2021 12:17:22 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+Cc:     dave penkler <dpenkler@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "qiang.zhang@windriver.com" <qiang.zhang@windriver.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        USB <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
+Message-ID: <20210721161722.GD633399@rowland.harvard.edu>
+References: <3bef7f032d2142ddac469eef8aee0d49@rohde-schwarz.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [RESEND PATCH V3 1/2] usb: hso: fix error handling code of
- hso_create_net_device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162688380591.30339.10495926052970334831.git-patchwork-notify@kernel.org>
-Date:   Wed, 21 Jul 2021 16:10:05 +0000
-References: <20210721081510.1516058-1-mudongliangabcd@gmail.com>
-In-Reply-To: <20210721081510.1516058-1-mudongliangabcd@gmail.com>
-To:     Dongliang Mu <mudongliangabcd@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, gregkh@linuxfoundation.org,
-        johan@kernel.org, oneukum@suse.com, jirislaby@kernel.org,
-        kernel@esmil.dk, dan.carpenter@oracle.com, mail@anirudhrb.com,
-        syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
-        rkovhaev@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3bef7f032d2142ddac469eef8aee0d49@rohde-schwarz.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (refs/heads/master):
-
-On Wed, 21 Jul 2021 16:14:56 +0800 you wrote:
-> The current error handling code of hso_create_net_device is
-> hso_free_net_device, no matter which errors lead to. For example,
-> WARNING in hso_free_net_device [1].
+On Wed, Jul 21, 2021 at 03:24:13PM +0000, Guido Kiener wrote:
+> > -----Original Message-----
+> > From: Alan Stern <stern@rowland.harvard.edu>
+> > Sent: Wednesday, July 21, 2021 4:22 PM
+> > To: dave penkler <dpenkler@gmail.com>
+> > Cc: Greg KH <gregkh@linuxfoundation.org>; qiang.zhang@windriver.com; Dmitry
+> > Vyukov <dvyukov@google.com>; paulmck@kernel.org; Kiener Guido 14DS1
+> > <Guido.Kiener@rohde-schwarz.com>; USB <linux-usb@vger.kernel.org>
+> > Subject: *EXT* Re: [PATCH] USB: usbtmc: Fix RCU stall warning
+> > 
+> > On Wed, Jul 21, 2021 at 11:44:23AM +0200, dave penkler wrote:
+> > > Sorry, the issue this patch is trying to fix occurs because the
+> > > current usbtmc driver resubmits the URB when it gets an EPROTO return.
+> > > The dummy usb host controller driver used in the syzbot tests keeps
+> > > returning the resubmitted URB with EPROTO causing a loop that starves
+> > > RCU. With an actual HCI driver it either recovers or returns an EPIPE.
+> > 
+> > Are you sure about that?  Have you ever observed a usbtmc device recovering and
+> > continuing to operate after an EPROTO error?
 > 
-> Fix this by refactoring the error handling code of
-> hso_create_net_device by handling different errors by different code.
-> 
-> [...]
+> I can't speak for Dave and his investigations. However as you remember I did tests with
+> EPROTO errors, see thread: https://marc.info/?l=linux-usb&m=162163776930423&w=2
+> In the thread you can see the recovering.
 
-Here is the summary with links:
-  - [RESEND,V3,1/2] usb: hso: fix error handling code of hso_create_net_device
-    https://git.kernel.org/netdev/net-next/c/788e67f18d79
-  - [RESEND,V3,2/2] usb: hso: remove the bailout parameter
-    https://git.kernel.org/netdev/net-next/c/dcb713d53e2e
+Ah yes, now I remember.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+That message doesn't show the _device_ recovering and continuing to operate, 
+though.  It shows the _system_ recovering and realizing that the device has 
+been disconnected.
 
+What I was asking about was whether you knew of a case where there was an 
+EPROTO error but afterward the usbtmc device continued to work -- no 
+disconnection.  Assuming such cases are vanishingly rare, there's no harm in 
+having the driver give up whenever it encounters EPROTO.
 
+> Since no user blamed the usbtmc driver for system locks up to now, it's worth to think about
+> whether the problem is caused by the dummy_hcd driver.
+
+Both drivers contributed to the lockup.  The question is: Which driver was 
+doing the wrong thing?  (Or which was _more_ wrong?)  I believe the usbtmc 
+driver was.
+
+> I still have no time for further investigations and would agree to use the simple patch
+> to get rid of the topic for the usbtmc driver. Then the syzbot will maybe find another usb driver.
+
+Agreed.  So Greg should go ahead and apply the $SUBJECT patch.
+
+Alan Stern
