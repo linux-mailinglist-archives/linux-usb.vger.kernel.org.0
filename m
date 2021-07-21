@@ -2,122 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8086A3D16B8
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 20:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC693D16BD
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 21:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbhGUSRv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 14:17:51 -0400
-Received: from mail02.rohde-schwarz.com ([80.246.32.97]:16055 "EHLO
-        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbhGUSRv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 14:17:51 -0400
-Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
- (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.12; Wed, 21 Jul
- 2021 20:58:25 +0200
-Received: from GMU418.rsint.net ([10.0.230.144])
-          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 641;
-          Wed, 21 Jul 2021 20:58:24 +0200 (CEST)
-Received: from GMU004.rsint.net (10.0.2.27) by GMU418.rsint.net (10.0.230.144)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.10; Wed, 21 Jul
- 2021 20:58:23 +0200
-Received: from GMU006.rsint.net (10.0.2.28) by GMU004.rsint.net (10.0.2.27)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.10; Wed, 21
- Jul 2021 20:58:23 +0200
-Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
- GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
- 15.01.2242.010; Wed, 21 Jul 2021 20:58:23 +0200
-From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-To:     Alan Stern <stern@rowland.harvard.edu>
-CC:     dave penkler <dpenkler@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "qiang.zhang@windriver.com" <qiang.zhang@windriver.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-Subject: RE:  Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Thread-Topic: *EXT* Re: [PATCH] USB: usbtmc: Fix RCU stall warning /ur/
-Thread-Index: Add+Yh5pQwFkNSa3So2Cm2Gj3lrPdg==
-Date:   Wed, 21 Jul 2021 18:58:23 +0000
-Message-ID: <22e7916ff3d849e5ac72cb04dc958bb0@rohde-schwarz.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-rus_sensitivity: 10
-hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
-hvs-prefix: R_S
-x-originating-ip: [10.0.9.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S231672AbhGUSTd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 14:19:33 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40946 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237464AbhGUSTc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Jul 2021 14:19:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 19CB360FE7
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 19:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626894009;
+        bh=p0dYPlrOWLs+L1dvuhxoAG3U45sJQ1qkpo1unI7f4ms=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=f+fXPCwBApBPOTK8NRBu3RLyX60SEw4aosK/YXTMEJ7N1Jcz/03ngsrWwpBsBOPd4
+         J9J7g+KKEpMtvWm4aU8KDrpt6FxJlOHek3EGXYtT67L1rkXzTyE7k6FVeGuQ+b0V+j
+         hbnwfYQ5TAdbB9rFKLCCdms7FUH6g+AImNbueSzqAG0lOt1Aj27g9P8Flagq0mgvsB
+         9lPFdI/6kcUh3Cc/HAahTK6+fn9ezVPRT0pA0bx32P+oC98RrLwPw/Ohi2vu6a08o2
+         kWVMsDdLshx8xUFrX5yKBjRJz5+DyN6tBRYd++49UDEmrz7rJlNMc2MY/W/War1usd
+         Hyt3I4vqtiLbw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 0348761263; Wed, 21 Jul 2021 19:00:08 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213771] ch341 USB-Serial converter receives but does not send
+Date:   Wed, 21 Jul 2021 19:00:08 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: luzemario@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213771-208809-MHXSZYTL9g@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213771-208809@https.bugzilla.kernel.org/>
+References: <bug-213771-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-X-IQAV: YES
-X-GBS-PROC: NbquItmNg0MgKxoWO+2k1bjHzHNht4DP2PPST2bHqieIl65eqdwnT7Wbm9LbPxb7FcpYpfPbgCumyyALOc9Rxq1YrBILP2uYs6ftP/caf9T4igjo9aZImNKvAl97LpXi
-X-GBS-PROCJOB: Chkgt0xuu68svUnsgJvY5xnv0jmUHbVOpZRUvownEbms2+TsjVJfAPRkPItNz9+T
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiBPbiBXZWQsIEp1bCAyMSwgMjAyMSBhdCAwNTowODo0OFBNICswMDAwLCBHdWlkbyBLaWVuZXIg
-d3JvdGU6DQo+ID4gPiA+ID4gU3ViamVjdDogKkVYVCogUmU6IFtQQVRDSF0gVVNCOiB1c2J0bWM6
-IEZpeCBSQ1Ugc3RhbGwgd2FybmluZw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gT24gV2VkLCBKdWwg
-MjEsIDIwMjEgYXQgMTE6NDQ6MjNBTSArMDIwMCwgZGF2ZSBwZW5rbGVyIHdyb3RlOg0KPiA+ID4g
-PiA+ID4gU29ycnksIHRoZSBpc3N1ZSB0aGlzIHBhdGNoIGlzIHRyeWluZyB0byBmaXggb2NjdXJz
-IGJlY2F1c2UNCj4gPiA+ID4gPiA+IHRoZSBjdXJyZW50IHVzYnRtYyBkcml2ZXIgcmVzdWJtaXRz
-IHRoZSBVUkIgd2hlbiBpdCBnZXRzIGFuIEVQUk9UTw0KPiByZXR1cm4uDQo+ID4gPiA+ID4gPiBU
-aGUgZHVtbXkgdXNiIGhvc3QgY29udHJvbGxlciBkcml2ZXIgdXNlZCBpbiB0aGUgc3l6Ym90IHRl
-c3RzDQo+ID4gPiA+ID4gPiBrZWVwcyByZXR1cm5pbmcgdGhlIHJlc3VibWl0dGVkIFVSQiB3aXRo
-IEVQUk9UTyBjYXVzaW5nIGEgbG9vcA0KPiA+ID4gPiA+ID4gdGhhdCBzdGFydmVzIFJDVS4gV2l0
-aCBhbiBhY3R1YWwgSENJIGRyaXZlciBpdCBlaXRoZXIgcmVjb3ZlcnMNCj4gPiA+ID4gPiA+IG9y
-IHJldHVybnMgYW4NCj4gPiA+IEVQSVBFLg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gQXJlIHlvdSBz
-dXJlIGFib3V0IHRoYXQ/ICBIYXZlIHlvdSBldmVyIG9ic2VydmVkIGEgdXNidG1jIGRldmljZQ0K
-PiA+ID4gPiA+IHJlY292ZXJpbmcgYW5kIGNvbnRpbnVpbmcgdG8gb3BlcmF0ZSBhZnRlciBhbiBF
-UFJPVE8gZXJyb3I/DQo+ID4gPiA+DQo+ID4gPiA+IEkgY2FuJ3Qgc3BlYWsgZm9yIERhdmUgYW5k
-IGhpcyBpbnZlc3RpZ2F0aW9ucy4gSG93ZXZlciBhcyB5b3UNCj4gPiA+ID4gcmVtZW1iZXIgSSBk
-aWQgdGVzdHMgd2l0aCBFUFJPVE8gZXJyb3JzLCBzZWUgdGhyZWFkOg0KPiA+ID4gPiBodHRwczov
-L21hcmMuaW5mby8/bD1saW51eC11c2ImbT0xNjIxNjM3NzY5MzA0MjMmdz0yDQo+ID4gPiA+IElu
-IHRoZSB0aHJlYWQgeW91IGNhbiBzZWUgdGhlIHJlY292ZXJpbmcuDQo+ID4gPg0KPiA+ID4gQWgg
-eWVzLCBub3cgSSByZW1lbWJlci4NCj4gPiA+DQo+ID4gPiBUaGF0IG1lc3NhZ2UgZG9lc24ndCBz
-aG93IHRoZSBfZGV2aWNlXyByZWNvdmVyaW5nIGFuZCBjb250aW51aW5nIHRvDQo+ID4gPiBvcGVy
-YXRlLCB0aG91Z2guICBJdCBzaG93cyB0aGUgX3N5c3RlbV8gcmVjb3ZlcmluZyBhbmQgcmVhbGl6
-aW5nDQo+ID4gPiB0aGF0IHRoZSBkZXZpY2UgaGFzIGJlZW4gZGlzY29ubmVjdGVkLg0KPiA+ID4N
-Cj4gPiA+IFdoYXQgSSB3YXMgYXNraW5nIGFib3V0IHdhcyB3aGV0aGVyIHlvdSBrbmV3IG9mIGEg
-Y2FzZSB3aGVyZSB0aGVyZQ0KPiA+ID4gd2FzIGFuIEVQUk9UTyBlcnJvciBidXQgYWZ0ZXJ3YXJk
-IHRoZSB1c2J0bWMgZGV2aWNlIGNvbnRpbnVlZCB0bw0KPiA+ID4gd29yayAtLSBubyBkaXNjb25u
-ZWN0aW9uLiAgQXNzdW1pbmcgc3VjaCBjYXNlcyBhcmUgdmFuaXNoaW5nbHkgcmFyZSwNCj4gPiA+
-IHRoZXJlJ3Mgbm8gaGFybSBpbiBoYXZpbmcgdGhlIGRyaXZlciBnaXZlIHVwIHdoZW5ldmVyIGl0
-IGVuY291bnRlcnMgRVBST1RPLg0KPiA+DQo+ID4gSSBoYXZlIG5vIGlkZWEgaG93IG9mdGVuIHRo
-ZSBFUFJPVE8gZXJyb3IgY2FuIGhhcHBlbiBkdXJpbmcgbm9ybWFsIG9wZXJhdGlvbg0KPiBhbmQg
-YmVsaWV2ZSB5b3UgdGhhdCBpdCdzIHZhbmlzaGluZ2x5IHJhcmUuDQo+ID4gV2hlbiBpdCBoYXBw
-ZW5zLCBkb2VzIHRoZSBVU0IgaGFyZHdhcmUgcHJvdG9jb2wgYXV0b21hdGljYWxseSByZXRyYW5z
-bWl0IHRoZQ0KPiBsb3N0L2ludmFsaWQgcGFja2V0Pw0KPiANCj4gV2hlbiBhIGxvdy1sZXZlbCBw
-cm90b2NvbCBlcnJvciBvY2N1cnMsIHRoZSBVU0IgaG9zdCBjb250cm9sbGVyIGhhcmR3YXJlIGRv
-ZXMNCj4gYXV0b21hdGljYWxseSByZXRyYW5zbWl0IHRoZSBwYWNrZXQuICBVU0IgaGFzIGEgIjMg
-c3RyaWtlcyBhbmQgeW91J3JlIG91dCIgYXBwcm9hY2g6DQo+IFRoZSBlcnJvciBkb2Vzbid0IGdl
-dCByZXBvcnRlZCB1bnRpbCB0aGVyZSBoYXZlIGJlZW4gdGhyZWUgZmFpbGVkIHRyYW5zbWlzc2lv
-bg0KPiBhdHRlbXB0cy4NCj4gDQo+IE9uIHRoZSBvdGhlciBoYW5kLCBkdW1teS1oY2QgbmV2ZXIg
-aGFzIHRoZXNlIGVycm9ycyAoZm9yIG9idmlvdXMgcmVhc29ucykgdW5sZXNzDQo+IHRoZSBmdW5j
-dGlvbiBkcml2ZXIgaGFzIGJlZW4gdW5ib3VuZCwgd2hpY2ggYWx3YXlzIHJlc3VsdHMgaW4gYSBk
-aXNjb25uZWN0LiAgT3IgaWYNCj4gdGhlIGhvc3Qtc2lkZSBkcml2ZXIgZG9lcyBzb21ldGhpbmcg
-d3JvbmcsIGxpa2UgdHJ5aW5nIHRvIGNvbW11bmljYXRlIHdpdGggYQ0KPiBub25leGlzdGVudCBl
-bmRwb2ludC4NCj4gDQo+ID4gSWYgeWVzLCB3ZSBzaG91bGQgdGhpbmsgYWJvdXQgYW4gZXJyb3Ig
-Y291bnRlci4NCj4gDQo+IFdoYXQgZm9yPw0KPiANCj4gQmVzaWRlcywgdGhlIGVoY2ktaGNkIGRy
-aXZlciBhbHJlYWR5IGhhcyBhIGhpZ2hlci1sZXZlbCByZXRyeSBsb29wIGZvciBsb3ctbGV2ZWwN
-Cj4gcHJvdG9jb2wgZXJyb3JzLiAgSXQgbWFrZXMgYXQgbGVhc3QgMzIgYXR0ZW1wdHMgYmVmb3Jl
-IGdpdmluZyB1cCBvbiBhIHRyYW5zYWN0aW9uLg0KPiANCj4gPiBJZiBub3QsIHRoZW4gd2UgcmVh
-bGx5IGNhbiBzdG9wIHRoZSBJTlQgcGlwZSBhbmQgdGhlIHVzZXIgd2lsbCBkZXRlY3QgdGhhdCBz
-b21ldGhpbmcNCj4gaXMgd3Jvbmcgd2hlbiByZWFkaW5nIHRoZSBzdGF0dXMuDQo+IA0KPiBPciBp
-biB0aGUgbW9zdCBsaWtlbHkgY2FzZSwgdGhlIHN5c3RlbSB3aWxsIHJlYWxpemUgKGFmdGVyIGEg
-ZmV3IGh1bmRyZWQNCj4gbWlsbGlzZWNvbmRzKSB0aGF0IHRoZSBkZXZpY2UgaGFzIGJlZW4gZGlz
-Y29ubmVjdGVkIGFuZCB3aWxsIGNsZWFuIHVwLiAgVGhlIG9ubHkNCj4gcXVlc3Rpb24gaXMgd2hl
-dGhlciB0aGUgdXNidG1jIGRyaXZlciBzaG91bGQgbWFrZSBtdWx0aXBsZSBmdXRpbGUgYXR0ZW1w
-dHMgdG8gcmVzdGFydA0KPiB0aGUgdHJhbnNtaXNzaW9uIGR1cmluZyB0aG9zZSBtaWxsaXNlY29u
-ZHMuICBJIHRoaW5rIGl0IHNob3VsZG4ndC4NCg0KVGhhbmsgeW91IGZvciB0aGUgY2xhcmlmaWNh
-dGlvbi4gSSBkaWQgbm90IGtub3cgdGhlc2UgbG93IGxldmVsIGhhcmR3YXJlL2RyaXZlciBmYWN0
-cy4NCkkgZnVsbHkgYWdyZWUgdGhhdCB3ZSBkbyBub3QgbmVlZCBhbiBleHRyYSBlcnJvciBjb3Vu
-dGVyIGhlcmUuIFRoZXJlIGlzIGVub3VnaCBlcnJvciBoYW5kbGluZy4NClNvIHdlIGNhbiBzYXkg
-dGhhdCB0aGUgRVBST1RPIGVycm9yIGlzIGEgZmF0YWwgZXJyb3IgYW5kIHRoZXJlIGlzIG5vIHJl
-YXNvbmFibGUgY2F1c2UgdG8NCnJlc3VibWl0IHRoZSB1cmIgb3IgdG8gdHJ5IG90aGVyIHdvcmth
-cm91bmRzLg0KDQpUaGFua3MuDQpHdWlkbw0K
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213771
+
+--- Comment #2 from Luzemario (luzemario@gmail.com) ---
+Sorry. Description was copied from former bugtracker to make it self-contei=
+ned.
+Iw was tested within Ubuntu and Alpine, with Linuz original kernel. Please
+ignore Ubuntu-specific information.
+
+*********
+
+This device works flawlessly on Windows XP with native driver, both as a
+physical machine or inside a VM. It appears on XP's device management as "U=
+SB
+2.0" name.
+
+On Ubuntu, Shorting pins 2 and 3 of DB9 connector does not give back charac=
+ters
+sent (no echo), nor typed strings are sent to other RS232 devices, despite =
+of
+communication settings. Characters from remote devices are correctly receiv=
+ed.
+Using a null modem cable to other RS232 terminal shows that the local termi=
+nal
+receives, but does not transmit.
+
+Its worth to mention: passing through the device to a guest virtual machine
+(KVM) running Windows XP makes it work correctly with XP driver inside the
+guest OS. Bringing back the device stops transmitting. Only receive works.
+
+Tested with the version below:
+NAME=3D"Ubuntu"
+VERSION=3D"20.04.2 LTS (Focal Fossa)"
+ID=3Dubuntu
+ID_LIKE=3Ddebian
+PRETTY_NAME=3D"Ubuntu 20.04.2 LTS"
+VERSION_ID=3D"20.04"
+HOME_URL=3D"https://www.ubuntu.com/"
+SUPPORT_URL=3D"https://help.ubuntu.com/"
+BUG_REPORT_URL=3D"https://bugs.launchpad.net/ubuntu/"
+PRIVACY_POLICY_URL=3D"https://www.ubuntu.com/legal/terms-and-policies/priva=
+cy-policy"
+VERSION_CODENAME=3Dfocal
+UBUNTU_CODENAME=3Dfocal
+
+Kernel:
+Linux host 5.4.0-66-generic #74-Ubuntu SMP Wed Jan 27 22:54:38 UTC 2021 x86=
+_64
+x86_64 x86_64 GNU/Linux
+
+Device ID:
+ID 4348:5523 WinChipHead USB->RS 232 adapter with Prolifec PL 2303 chipset
+
+Modinfo:
+filename: /lib/modules/5.4.0-66-generic/kernel/drivers/usb/serial/ch341.ko
+license: GPL v2
+srcversion: 8F5F64E72BDA4E76E6F4F4D
+alias: usb:v4348p5523d*dc*dsc*dp*ic*isc*ip*in*
+alias: usb:v1A86p7523d*dc*dsc*dp*ic*isc*ip*in*
+alias: usb:v1A86p7522d*dc*dsc*dp*ic*isc*ip*in*
+alias: usb:v1A86p5523d*dc*dsc*dp*ic*isc*ip*in*
+alias: usb:v1A86p5512d*dc*dsc*dp*ic*isc*ip*in*
+depends: usbserial
+retpoline: Y
+intree: Y
+name: ch341
+vermagic: 5.4.0-66-generic SMP mod_unload
+sig_id: PKCS#7
+signer: Build time autogenerated kernel key
+sig_key: 1E:07:0D:94:23:77:98:99:05:31:F3:76:E8:6B:76:12:7C:83:9E:05
+sig_hashalgo: sha512
+signature: 50:CE:79:92:87:EA:82:77:A9:25:A3:B7:F2:B3:ED:63:FE:85:EB:61:
+                7A:31:C5:9E:E5:78:E5:44:C6:FE:5D:74:4A:60:B6:0A:94:3F:C3:70:
+                0B:6D:27:A6:89:F7:D2:AC:8E:71:AC:0D:AF:5D:3A:19:07:18:F9:7C:
+                B8:3C:47:DF:18:4D:13:C9:F8:45:AC:81:19:B0:DE:57:16:1A:F5:C6:
+                AC:41:7E:E7:F2:6D:29:9C:14:A3:04:F8:9B:DF:8D:2E:9F:34:44:18:
+                A8:FF:C6:A4:AF:04:86:D5:6D:F2:4C:AD:D2:65:4C:63:0F:C1:82:E3:
+                28:20:F2:D4:80:86:1A:67:1D:A2:56:18:87:E2:AB:40:E6:6A:48:E5:
+                D7:D2:6F:6F:DB:05:20:B2:76:81:5C:0C:36:02:37:E9:A2:08:4E:53:
+                5E:9C:18:03:50:11:2D:E4:62:74:6E:CB:42:67:25:22:0C:F6:55:D8:
+                6F:E3:5A:15:AC:10:B7:F2:B7:C9:20:6C:19:ED:CC:7D:CC:CB:48:3B:
+                B0:5E:E3:ED:05:DF:DF:65:FF:19:AD:76:6E:40:D2:0B:F0:11:65:D5:
+                92:7D:C9:3A:32:BE:A8:13:CE:C1:DE:D9:73:0F:0A:0B:8A:08:55:2E:
+                41:9D:B9:9A:AD:EC:4C:7D:98:3A:52:38:DF:78:DE:33:F1:14:A2:1B:
+                AC:93:FD:30:76:A5:7C:AF:13:16:B8:5E:0B:73:A7:1F:20:E4:54:44:
+                07:A2:11:7F:D7:0E:B3:1C:A9:AA:73:76:0E:89:E0:D5:74:39:66:2F:
+                E8:14:93:EC:7A:B2:23:E0:CC:77:9F:CD:D9:99:CB:B0:14:21:1C:1F:
+                0C:E9:30:B8:C3:55:8F:49:FC:88:5D:EF:20:B9:0E:F2:88:28:5A:93:
+                08:4D:2B:76:64:85:D1:E0:1C:9C:4B:86:2C:DB:65:F6:D8:23:A0:8D:
+                1B:22:74:0C:B9:41:9E:57:5A:67:4C:CC:1F:E2:43:5F:C2:21:82:E6:
+                D4:C1:66:6F:30:54:27:2E:1D:22:8C:65:7F:93:C8:1D:C0:51:F0:7D:
+                7A:96:3A:3B:3D:C4:6E:69:DF:83:8A:85:0D:35:15:F9:5E:89:0F:D5:
+                9E:6F:A1:5F:39:CE:2A:88:57:97:DF:42:5C:70:12:4E:91:9E:1A:92:
+                49:99:C3:7B:38:12:B0:3A:D0:92:38:45:C7:74:3C:66:0F:A1:9C:C2:
+                9F:DC:A2:1B:DF:20:BB:F5:A5:F0:10:D6:6F:4F:C1:90:00:C3:F9:D8:
+                42:96:D2:28:FD:DE:21:33:6C:F4:7F:18:B2:ED:F9:A6:A4:4A:A5:4F:
+                26:7C:C0:F7:8B:A9:B3:2F:5A:5B:E2:B8
+
+Demsg entries:
+usb 4-3: new full-speed USB device number 6 using ohci-pci
+usb 4-3: New USB device found, idVendor=3D4348, idProduct=3D5523, bcdDevice=
+=3D 2.50
+usb 4-3: New USB device strings: Mfr=3D0, Product=3D0, SerialNumber=3D0
+ch341 4-3:1.0: ch341-uart converter detected
+usb 4-3: ch341-uart converter now attached to ttyUSB0
+---
+ProblemType: Bug
+ApportVersion: 2.20.11-0ubuntu27.16
+Architecture: amd64
+[...] # not relevant / stripped
+DistroRelease: Ubuntu 20.04
+InstallationDate: Installed on 2021-01-23 (50 days ago)
+InstallationMedia: Kubuntu 20.04.1 LTS "Focal Fossa" - Release amd64 (20200=
+731)
+MachineType: System manufacturer System Product Name
+NonfreeKernelModules: nvidia_modeset nvidia
+Package: linux (not installed)
+ProcFB: 0 VESA VGA
+ProcKernelCmdLine: BOOT_IMAGE=3D/boot/vmlinuz-5.4.0-66-generic
+root=3DUUID=3D68929bb0-3af4-4634-8d5b-c2846910c077 ro locale=3Dpt_BR quiet =
+splash
+vt.handoff=3D7
+ProcVersionSignature: Ubuntu 5.4.0-66.74-generic 5.4.86
+RelatedPackageVersions:
+ linux-restricted-modules-5.4.0-66-generic N/A
+ linux-backports-modules-5.4.0-66-generic N/A
+ linux-firmware 1.187.10
+RfKill:
+
+Tags: focal
+Uname: Linux 5.4.0-66-generic x86_64
+UpgradeStatus: No upgrade log present (probably fresh install)
+UserGroups: adm cdrom dip libvirt lpadmin lxd plugdev sambashare sudo
+_MarkForUpload: True
+dmi.bios.date: 11/18/2016
+dmi.bios.vendor: American Megatrends Inc.
+dmi.bios.version: 0502
+dmi.board.asset.tag: To Be Filled By O.E.M.
+dmi.board.name: M5A78L-M PLUS/USB3
+dmi.board.vendor: ASUSTeK Computer INC.
+dmi.board.version: Rev X.0x
+dmi.chassis.asset.tag: Asset-1234567890
+dmi.chassis.type: 3
+dmi.chassis.vendor: Chassis Manufacture
+dmi.chassis.version: Chassis Version
+dmi.modalias:
+dmi:bvnAmericanMegatrendsInc.:bvr0502:bd11/18/2016:svnSystemmanufacturer:pn=
+SystemProductName:pvrSystemVersion:rvnASUSTeKComputerINC.:rnM5A78L-MPLUS/US=
+B3:rvrRevX.0x:cvnChassisManufacture:ct3:cvrChassisVersion:
+dmi.product.family: To Be Filled By O.E.M.
+dmi.product.name: System Product Name
+dmi.product.sku: To Be Filled By O.E.M.
+dmi.product.version: System Version
+dmi.sys.vendor: System manufacturer
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
