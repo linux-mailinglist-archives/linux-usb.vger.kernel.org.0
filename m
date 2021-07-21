@@ -2,201 +2,202 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2840A3D08D6
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 08:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B39C13D08E8
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 08:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233216AbhGUFnP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 01:43:15 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:36228 "EHLO m43-7.mailgun.net"
+        id S233789AbhGUFuJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 01:50:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43240 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233995AbhGUFmm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 01:42:42 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1626848598; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=EXl6e0NnYNt6QhqMh3qY0wjuq0W1EMQQYn9QnynAyfE=; b=XTDhWsnFrEUCWRAPcm4d+DxIOU5lYFuSuuScHBiknONBS2JtLMG8mUoWuhYJHjVqARqPMJwG
- d9RcU05T/JSh0+HRc0wJFdUdtGUkbI5NMvhC3NT93miJfvVGF4qrtb/zPDFpjJNG7w1U/BZU
- RW7zkU/rC8SHGxWJqKRrbYpyrLU=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-west-2.postgun.com with SMTP id
- 60f7bd4ce31d882d1862dd71 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 21 Jul 2021 06:23:08
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id EF881C43144; Wed, 21 Jul 2021 06:23:07 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=no autolearn_force=no version=3.4.0
-Received: from [10.110.40.148] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2D3EEC433D3;
-        Wed, 21 Jul 2021 06:23:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2D3EEC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v14 3/6] usb: dwc3: Resize TX FIFOs to meet EP bursting
- requirements
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>
-References: <1625908395-5498-1-git-send-email-wcheng@codeaurora.org>
- <1625908395-5498-4-git-send-email-wcheng@codeaurora.org>
- <b65463e9-3a8d-1ee5-3e26-09990aa8ec53@synopsys.com>
- <87czrmzjym.fsf@kernel.org>
- <e08dac42-e999-fd97-21ab-34cd70429f03@synopsys.com>
- <877dhtz9de.fsf@kernel.org>
- <6bc35b95-8386-1a6b-46dd-f33035e6dee5@codeaurora.org>
- <YPa2YL2mfffiz4i4@kroah.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <b5917fc0-c916-0a51-dc4c-315d7f02cafa@codeaurora.org>
-Date:   Tue, 20 Jul 2021 23:23:03 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S233627AbhGUFuH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 21 Jul 2021 01:50:07 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id AD7FF61009;
+        Wed, 21 Jul 2021 06:30:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1626849045;
+        bh=LMgiDG+AUmFohhoLx005Uu8y4csMp/qVbebolLVz2K4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=aozV/IdCSbNc1QJH5GXe9w84mFC6pY+NBGw+/atE2J1+Pvn8rvD8kY71jTicR/2TA
+         +sKBXwcwi4DCIMPLkEJZkMwtGuP92fXj0zDdQ7SMqLoH9hiGXRjjVAj50VgPdPyOom
+         jK+JRJbA7hA4aq6WX9f6oROpQiUguCRJyKy0BC+kMM0MAjjTIjFeHStfulr6k+4qeC
+         DQ8K1+CSMOfgGBljWriI1n8ddKyUuWomWaEzbN1sXkmWuoVesN+PQbDa5mm6sNfFM4
+         QfAl7kSJIOLfXFrGWs9O74aiolyKawuck5eCwE2qa68fXvFRqz5Ym3VPsLWYHT6gIC
+         D9s5CQVuO/gWg==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace
+ list_for_each_entry_safe() if using giveback
+In-Reply-To: <fc346f3c-6e3d-b96c-d64a-2ae4cf4218d4@codeaurora.org>
+References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+ <87tun9g01v.fsf@kernel.org>
+ <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
+ <5156238d-c1d8-a0d3-47af-8b52467fd071@codeaurora.org>
+ <fc346f3c-6e3d-b96c-d64a-2ae4cf4218d4@codeaurora.org>
+Date:   Wed, 21 Jul 2021 09:30:36 +0300
+Message-ID: <87v954xjoz.fsf@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <YPa2YL2mfffiz4i4@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
-On 7/20/2021 4:41 AM, gregkh@linuxfoundation.org wrote:
-> On Wed, Jul 14, 2021 at 12:30:07AM -0700, Wesley Cheng wrote:
->>
->>
->> On 7/13/2021 11:40 PM, Felipe Balbi wrote:
+Hi Wesley,
+
+(first of all, sorry for the super long delay. This really fell through
+the cracks)
+
+Wesley Cheng <wcheng@codeaurora.org> writes:
+> Hi Felipe,
+>
+> On 6/9/2021 1:57 PM, Wesley Cheng wrote:
+>> Hi Felipe,
+>>=20
+>> On 5/19/2021 1:52 AM, Wesley Cheng wrote:
 >>>
->>> Hi,
 >>>
->>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>>> Wesley Cheng wrote:
->>>>>>> Some devices have USB compositions which may require multiple endpoints
->>>>>>> that support EP bursting.  HW defined TX FIFO sizes may not always be
->>>>>>> sufficient for these compositions.  By utilizing flexible TX FIFO
->>>>>>> allocation, this allows for endpoints to request the required FIFO depth to
->>>>>>> achieve higher bandwidth.  With some higher bMaxBurst configurations, using
->>>>>>> a larger TX FIFO size results in better TX throughput.
->>>>>>>
->>>>>>> By introducing the check_config() callback, the resizing logic can fetch
->>>>>>> the maximum number of endpoints used in the USB composition (can contain
->>>>>>> multiple configurations), which helps ensure that the resizing logic can
->>>>>>> fulfill the configuration(s), or return an error to the gadget layer
->>>>>>> otherwise during bind time.
->>>>>>>
->>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>>>>> ---
->>>>>>>  drivers/usb/dwc3/core.c   |  15 +++
->>>>>>>  drivers/usb/dwc3/core.h   |  16 ++++
->>>>>>>  drivers/usb/dwc3/ep0.c    |   2 +
->>>>>>>  drivers/usb/dwc3/gadget.c | 232 ++++++++++++++++++++++++++++++++++++++++++++++
->>>>>>>  4 files changed, 265 insertions(+)
->>>>>>>
->>>>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>>>> index ba74ad7..b194aecd 100644
->>>>>>> --- a/drivers/usb/dwc3/core.c
->>>>>>> +++ b/drivers/usb/dwc3/core.c
->>>>>>> @@ -1267,6 +1267,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>>>  	u8			rx_max_burst_prd;
->>>>>>>  	u8			tx_thr_num_pkt_prd;
->>>>>>>  	u8			tx_max_burst_prd;
->>>>>>> +	u8			tx_fifo_resize_max_num;
->>>>>>>  	const char		*usb_psy_name;
->>>>>>>  	int			ret;
->>>>>>>  
->>>>>>> @@ -1282,6 +1283,13 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>>>  	 */
->>>>>>>  	hird_threshold = 12;
->>>>>>>  
->>>>>>> +	/*
->>>>>>> +	 * default to a TXFIFO size large enough to fit 6 max packets.  This
->>>>>>> +	 * allows for systems with larger bus latencies to have some headroom
->>>>>>> +	 * for endpoints that have a large bMaxBurst value.
->>>>>>> +	 */
->>>>>>> +	tx_fifo_resize_max_num = 6;
->>>>>>> +
->>>>>>>  	dwc->maximum_speed = usb_get_maximum_speed(dev);
->>>>>>>  	dwc->max_ssp_rate = usb_get_maximum_ssp_rate(dev);
->>>>>>>  	dwc->dr_mode = usb_get_dr_mode(dev);
->>>>>>> @@ -1325,6 +1333,11 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>>>>>  				&tx_thr_num_pkt_prd);
->>>>>>>  	device_property_read_u8(dev, "snps,tx-max-burst-prd",
->>>>>>>  				&tx_max_burst_prd);
->>>>>>> +	dwc->do_fifo_resize = device_property_read_bool(dev,
->>>>>>> +							"tx-fifo-resize");
->>>>>>> +	if (dwc->do_fifo_resize)
->>>>>>> +		device_property_read_u8(dev, "tx-fifo-max-num",
->>>>>>> +					&tx_fifo_resize_max_num);
->>>>>>
->>>>>> Why is this check here? The dwc->tx_fifo_resize_max_num should store
->>>>>> whatever property the user sets. Whether the driver wants to use this
->>>>>
->>>>> Ack!
->>>>>
->>>>>> property should depend on "dwc->do_fifo_resize". Also why don't we have
->>>>>> "snps," prefix to be consistent with the other properties?
->>>>>
->>>>> Ack!
->>>>>
->>>>>> Can we enforce to a single property? If the designer wants to enable
->>>>>> this feature, he/she can to provide the tx-fifo-max-num. This would
->>>>>> simplify the driver a bit. Since this is to optimize for performance,
->>>>>> the user should know/want/test the specific value if they want to set
->>>>>> for their setup and not hoping that the default setting not break their
->>>>>> setup. So we can remove the "do_fifo_resize" property and just check
->>>>>> whether tx_fifo_resize_max_num is set.
->>>>>
->>>>> Ack!
->>>>>
->>>>> All very valid points :-)
->>>>>
->>
->> Hi Thinh/Felipe,
->>
+>>> On 5/11/2021 1:13 AM, Felipe Balbi wrote:
 >>>>
->>>> Looks like this series already landed in Greg's testing branch. Not sure
->>>> how we usually handle this to address some of our concerns. Add fix
->>>> patches on top of Greg's testing branch?
+>>>> Hi,
+>>>>
+>>>> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>>>> The list_for_each_entry_safe() macro saves the current item (n) and
+>>>>> the item after (n+1), so that n can be safely removed without
+>>>>> corrupting the list.  However, when traversing the list and removing
+>>>>> items using gadget giveback, the DWC3 lock is briefly released,
+>>>>> allowing other routines to execute.  There is a situation where, while
+>>>>> items are being removed from the cancelled_list using
+>>>>> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+>>>>> routine is running in parallel (due to UDC unbind).  As the cleanup
+>>>>> routine removes n, and the pullup disable removes n+1, once the
+>>>>> cleanup retakes the DWC3 lock, it references a request who was already
+>>>>> removed/handled.  With list debug enabled, this leads to a panic.
+>>>>> Ensure all instances of the macro are replaced where gadget giveback
+>>>>> is used.
+>>>>>
+>>>>> Example call stack:
+>>>>>
+>>>>> Thread#1:
+>>>>> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>>>>>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>>>>>     ->list_for_each_entry_safe()
+>>>>>     ->dwc3_gadget_giveback(n)
+>>>>>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+>>>>>       ->spin_unlock
+>>>>>       ->Thread#2 executes
+>>>>>       ...
+>>>>>     ->dwc3_gadget_giveback(n+1)
+>>>>>       ->Already removed!
+>>>>>
+>>>>> Thread#2:
+>>>>> dwc3_gadget_pullup()
+>>>>>   ->waiting for dwc3 spin_lock
+>>>>>   ...
+>>>>>   ->Thread#1 released lock
+>>>>>   ->dwc3_stop_active_transfers()
+>>>>>     ->dwc3_remove_requests()
+>>>>>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+>>>>>       ->dwc3_gadget_giveback()
+>>>>>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_=
+list]
+>>>>>         ->spin_unlock
+>>>>>
+>>>>> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_l=
+ist")
+>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>>>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+>>>>> ---
+>>>>> Changes in v2:
+>>>>>  - Updated commit message with context call stack of an example scena=
+rio
+>>>>>    seen on device.
+>>>>>
+>>>>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>>>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>> index dd80e5c..efa939b 100644
+>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct d=
+wc3_ep *dep, struct dwc3_request *r
+>>>>>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep=
+ *dep)
+>>>>>  {
+>>>>>  	struct dwc3_request		*req;
+>>>>> -	struct dwc3_request		*tmp;
+>>>>>  	struct dwc3			*dwc =3D dep->dwc;
+>>>>>=20=20
+>>>>> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+>>>>> +	while (!list_empty(&dep->cancelled_list)) {
+>>>>> +		req =3D next_request(&dep->cancelled_list);
+>>>>
+>>>> couldn't this be solved list_replace_init() instead? Then we can keep
+>>>> using the regular list_for_each_entry_safe() which has an added semant=
+ic
+>>>> meaning due to its name.
+>>>>
 >>>
->>> yup, no choice anymore :-(
+>>> Hi Felipe,
 >>>
->>
->> Let me review your feedback, which had some good points.  We can add a
->> change addressing everything on top of what is merged on Greg's branch.
+>>> Sorry for the late response.  So I tried with a list_replace_init() to
+>>> within the list_for_each_entry_safe() loop to update tmp w/ the
+>>> cancelled_list list head, but the issue was still observed.  This is
+>>> because we can't replace the reference the loop already has stored in
+>>> tmp, which is simply updated as the current item on the next iteration.
+>>>
+>>> I believe this is what you were trying to achieve?
+>>>
+>> Was wondering if you had any further inputs on this change?  As
+>> mentioned, I tried a few things with list_replace_init(), which did not
+>> work.
+>>=20
+>
+> Sorry for the ping.  Is this change OK to add as is?  We've been running
+> into this instance pretty frequently during our testing, so just wanted
+> to close on the proper changes being merged upstream.
 
-Hi Greg,
+The idea is this:
 
-> 
-> Any hint as to when these fixups will be sent?
-> 
+	struct list_head	local;
 
-Will get something by mid-week next week.  Sorry have been occupied with
-tasks on my end.
+        spin_lock_irq(&lock);
+        list_replace_init(&dwc->cancelled_list, &local);
+        spin_unlock_irq(&lock);
 
-Thanks
-Wesley Cheng
+	list_for_each_entry_safe(req, tmp, &local, list) {
+        	/* ... */
+	}
 
+It looks to me this should work fine, no? You can also follow what
+drivers/usb/core/hcd.c is doing in usb_giveback_urb_bh() and restarting
+if dwc->cancelled_list is not empty after list_for_each_entry_safe().
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Can you give that one a shot?
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmD3vwwRHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUh8gAf8C4yEtZxAbGgVPHxn/ZCyJOgrbOXvuGX/
+UoZg/65o8qKIFTwhP/+15Oyr59Bdnk2GJnTGRHhf2wOXLKUN5piybUxlXrqRK7Ey
+ueD0PQz/1T/AuWS49pNz6L79qgj9Eab+meYl3usfT8C7HR8Nwh6OzTdBYC21delx
+zW3eqkWI2czDParWXChpdP3n3prsv46hMM8yT8LEhKXPSjZkj+K2aRxOMqyDKsOL
++QfIAxwAGaYRFCH6inJo/bpYjZbR3wtugqu5JyoGwgiXgtJwNK4j3KbcP02wg3uJ
+DLo1L1Xc+5V7egCl73SPhs7fjPxoPcE4SW/hawzKlTDaGgO7FK2Rqg==
+=9pZO
+-----END PGP SIGNATURE-----
+--=-=-=--
