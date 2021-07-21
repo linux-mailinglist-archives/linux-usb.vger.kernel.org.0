@@ -2,216 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7E743D0D4A
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 13:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B313D0E02
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 13:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239573AbhGUKdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 06:33:38 -0400
-Received: from mail-ej1-f47.google.com ([209.85.218.47]:42765 "EHLO
-        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238995AbhGUK3r (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 06:29:47 -0400
-Received: by mail-ej1-f47.google.com with SMTP id hd33so2623800ejc.9;
-        Wed, 21 Jul 2021 04:10:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N0A8Xx4cyFvkR98y1BnECTlIegUnMrlPAgIEf1U6kC8=;
-        b=oPmq/KZfHHUm8JCho1LwivbISYRaBF/cDF1QbLyl3VB619LttAR8VWu1KpVfHjfzk3
-         w0es2zxb22BANpyNTtgB2KaDdBcK7skrjsqrqj18P+xWT+ng7zAetFMLlx/3Mcv3aKzn
-         1GRiPqkg7jqqgCTbYIExJ/PL2WFlnMsmak7m4/azGyX2dzVSYfZChPbcZxHXX8bUnht4
-         LGTMr7Y7+BG0Pmg9FuNUTZYLU/rvLzxnzcNLTqpvjT/Tv6oDitWSBkzgoqEV0cydBTB9
-         JDJt/M1uMPAXm7pYu8ZRH3GBnScbkSs+lZtHXmVtVqsXXFk1ynek1gnUEKDbRz3H7gCt
-         ooSA==
-X-Gm-Message-State: AOAM5319OpAKw8l2kU1sUIvgIMrMPtHGbM9h+pm7mjIAUV4e/FxvoP83
-        ZVhopP+cp5FpYKXsW3ohNUk=
-X-Google-Smtp-Source: ABdhPJxBsxbgxOzVnr4QTEnk45iH2+9wz3zRpguMKNWXLZtOCyZN1TGl2t4X79NGPy+B0QWweReDQw==
-X-Received: by 2002:a17:906:7629:: with SMTP id c9mr7344871ejn.527.1626865821778;
-        Wed, 21 Jul 2021 04:10:21 -0700 (PDT)
-Received: from [192.168.8.102] ([86.32.47.9])
-        by smtp.googlemail.com with ESMTPSA id x2sm9565351edj.37.2021.07.21.04.10.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jul 2021 04:10:20 -0700 (PDT)
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
- <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
- <20210714124807.o22mottsrg3tv6nt@mobilestation> <YPfPDqJhfzbvDLvB@kroah.com>
- <20210721100220.ddfxwugivsndsedv@mobilestation> <YPf29+ewbrYgHxRP@kroah.com>
- <0064cb2c-5ca6-e693-2e89-8f045c8f7502@kernel.org>
- <YPf+shNM6cXb3mfe@kroah.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Message-ID: <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
-Date:   Wed, 21 Jul 2021 13:10:19 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S238477AbhGULBI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 07:01:08 -0400
+Received: from mail02.rohde-schwarz.com ([80.246.32.97]:57277 "EHLO
+        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238914AbhGUKto (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 06:49:44 -0400
+X-Greylist: delayed 903 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Jul 2021 06:49:44 EDT
+Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
+ (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.12; Wed, 21 Jul
+ 2021 13:15:06 +0200
+Received: from GMU419.rsint.net ([10.0.230.184])
+          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 184;
+          Wed, 21 Jul 2021 13:15:06 +0200 (CEST)
+Received: from GMU002.rsint.net (10.0.2.26) by GMU419.rsint.net (10.0.230.184)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.10; Wed, 21 Jul
+ 2021 13:15:05 +0200
+Received: from GMU006.rsint.net (10.0.2.28) by GMU002.rsint.net (10.0.2.26)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.10; Wed, 21
+ Jul 2021 13:15:04 +0200
+Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
+ GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
+ 15.01.2242.010; Wed, 21 Jul 2021 13:15:04 +0200
+From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Zhang, Qiang" <Qiang.Zhang@windriver.com>
+CC:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "dvyukov@google.com" <dvyukov@google.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "dpenkler@gmail.com" <dpenkler@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
+Thread-Topic: [PATCH] USB: usbtmc: Fix RCU stall warning /ur/
+Thread-Index: Add+IWUwK7pDw0yGQ/uBCkz/1sU4ww==
+Date:   Wed, 21 Jul 2021 11:15:04 +0000
+Message-ID: <9cde635b5b5244d5971673612cc10acc@rohde-schwarz.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-rus_sensitivity: 10
+hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
+hvs-prefix: R_S
+x-originating-ip: [10.0.9.40]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-In-Reply-To: <YPf+shNM6cXb3mfe@kroah.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+X-IQAV: YES
+X-GBS-PROC: JG0h9sNiYjtEkfUAPnTkopXQkQfW/csVP+tVrDaKnu3C7zo8V6tQgsNcYQD3Sa8N0ccgriXY6xraxEczdMkyJhH+RUijWxwR7XUctTgt/7TOeJXy9nPWfMhC3KIVc4uN
+X-GBS-PROCJOB: 9uuSGy08FkdNzxsn2WYrzI9dPQ+iMJUalTQ7Zgz9bazY/qEhc5fZTdXuB55ZTt/O
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21/07/2021 13:02, Greg Kroah-Hartman wrote:
-> On Wed, Jul 21, 2021 at 12:45:32PM +0200, Krzysztof Kozlowski wrote:
->> On 21/07/2021 12:29, Greg Kroah-Hartman wrote:
->>> On Wed, Jul 21, 2021 at 01:02:20PM +0300, Serge Semin wrote:
->>>> Hi Greg,
->>>> @Krzysztof, @Rob, please join the discussion so to finally get done
->>>> with the concerned issue.
->>>>
->>>> On Wed, Jul 21, 2021 at 09:38:54AM +0200, Greg Kroah-Hartman wrote:
->>>>> On Wed, Jul 14, 2021 at 03:48:07PM +0300, Serge Semin wrote:
->>>>>> Hello John,
->>>>>>
->>>>>> On Tue, Jul 13, 2021 at 05:07:00PM -0700, John Stultz wrote:
->>>>>>> On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
->>>>>>> <Sergey.Semin@baikalelectronics.ru> wrote:
->>>>>>>>
->>>>>>>> In accordance with the DWC USB3 bindings the corresponding node
->>>>>>>> name is suppose to comply with the Generic USB HCD DT schema, which
->>>>>>>> requires the USB nodes to have the name acceptable by the regexp:
->>>>>>>> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
->>>>>>>> named.
->>>>>>>>
->>>>>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
->>>>>>>
->>>>>>
->>>>>>> I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
->>>>>>
->>>>>> Sorry to hear that. Alas there is no much can be done about it.
->>>>>
->>>>> Yes there is, we can revert the change.  We do not break existing
->>>>> configurations, sorry.
->>>>
->>>> By reverting this patch we'll get back to the broken dt-bindings
->>>> since it won't comply to the current USB DT-nodes requirements
->>>> which at this state well describe the latest DT spec:
->>>> https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
->>>> Thus the dtbs_check will fail for these nodes.
->>>>
->>>> Originally this whole patchset was connected with finally getting the
->>>> DT-node names in order to comply with the standard requirement and it
->>>> was successful mostly except a few patches which still haven't been
->>>> merged in.
->>>>
->>>> Anyway @Krzysztof has already responded to the complain regarding this
->>>> issue here:
->>>> https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
->>>> but noone cared to respond on his reasonable questions in order to
->>>> get to a suitable solution for everyone. Instead we are
->>>> getting another email with the same request to revert the changes.
->>>> Here is the quote from the Krzysztof email so we could continue the
->>>> discussion:
->>>>
->>>> On Mon, 21 Dec 2020 13:04:27 -0800 (PST), Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>>> On Mon, Dec 21, 2020 at 12:24:11PM -0800, John Stultz wrote:
->>>>>> On Sat, Dec 19, 2020 at 3:06 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>>>>>> ...
->>>>>>>
->>>>>>> The node names are not part of an ABI, are they? I expect only
->>>>>>> compatibles and properties to be stable. If user-space looks for
->>>>>>> something by name, it's a user-space's mistake.  Not mentioning that you
->>>>>>> also look for specific address... Imagine remapping of addresses with
->>>>>>> ranges (for whatever reason) - AOSP also would be broken? Addresses are
->>>>>>> definitely not an ABI.
->>>>>>
->>>>>> Though that is how it's exported through sysfs.
->>>>>
->>>>> The ABI is the format of sysfs file for example in /sys/devices. However
->>>>> the ABI is not the exact address or node name of each device.
->>>>>
->>>>>> In AOSP it is then used to setup the configfs gadget by writing that
->>>>>> value into /config/usb_gadget/g1/UDC.
->>>>>>
->>>>>> Given there may be multiple controllers on a device, or even if its
->>>>>> just one and the dummy hcd driver is enabled, I'm not sure how folks
->>>>>> reference the "right" one without the node name?
->>>>>
->>>>> I think it is the same type of problem as for all other subsystems, e.g.
->>>>> mmc, hwmon/iio.  They usually solve it either with aliases or with
->>>>> special property with the name/label.
->>>>>
->>>>>> I understand the fuzziness with sysfs ABI, and I get that having
->>>>>> consistent naming is important, but like the eth0 -> enp3s0 changes,
->>>>>> it seems like this is going to break things.
->>>>>
->>>>> One could argue whether interface name is or is not ABI. But please tell
->>>>> me how the address of a device in one's representation (for example DT)
->>>>> is a part of a stable interface?
->>>>>
->>>>>> Greg? Is there some better way AOSP should be doing this?
->>>>>
->>>>> If you need to find specific device, maybe go through the given bus and
->>>>> check compatibles?
->>>>>
->>>>> Best regards,
->>>>> Krzysztof
->>>>
->>>> So the main question is how is the DT-node really connected with ABI
->>>> and is supposed to be stable in that concern?
->>>>
->>>> As I see it even if it affects the configfs node name, then we may
->>>> either need to break that connection and somehow deliver DT-node-name
->>>> independent interface to the user-space or we have no choice but to
->>>> export the node with an updated name and ask of user-space to deal
->>>> with it. In both suggested cases the DT-node name will still conform
->>>> to the USB-node name DT spec. Currently we are at the second one.
->>>
->>> I really do not care what you all decide on, but you CAN NOT break
->>> existing working systems, sorry.  That is why I have reverted this
->>> change in my tree and will send it to Linus soon.
->>
->> I had impression that kernel defines interfaces which should be used and
->> are stable (e.g. syscalls, sysfs and so on). This case is example of
->> user-space relying on something not being marked as part of ABI. Instead
->> they found something working for them and now it is being used in "we
->> cannot break existing systems". Basically, AOSP unilaterally created a
->> stable ABI and now kernel has to stick to it.
-> 
-> Since when are configfs names NOT a user-visable api?
-> 
-> Why would you not depend on them?
-
-It's not good example. The configfs entries (file names) are
-user-visible however the USB gadget exposes specific value for specific
-one device. It encodes device specific DT node name and HW address and
-gives it to user-space. It is valid only on this one HW, all other
-devices will have different values.
-
-User-space has hard-coded this value (DT node name and hardware
-address). This value was never part of configfs ABI, maybe except of its
-format "[a-z]+\.[0-9a-f]+". Format is not broken. Just the value changes
-for a specific device/hardware.
-
-It's like you depend that lsusb will always report:
-  Bus 003 Device 008: ID 046d:c52b Logitech, Inc. Unifying Receiver
-and then probing order changed and this Logitech ends as Device 009.
-Then AOSP guys come, wait, we hard-coded that Logitech on our device
-will be always Device 008, not 009. Please revert it, we depend on
-specific value of Device number. It must be always 009...
-
-For the record - the change discussed here it's nothing like USB VID/PID. :)
-
-Best regards,
-Krzysztof
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHcmVnIEtIIDxncmVna2hAbGlu
+dXhmb3VuZGF0aW9uLm9yZz4NCj4gU2VudDogV2VkbmVzZGF5LCBKdWx5IDIxLCAyMDIxIDk6NTMg
+QU0NCj4gVG86IFpoYW5nLCBRaWFuZyA8UWlhbmcuWmhhbmdAd2luZHJpdmVyLmNvbT4NCj4gQ2M6
+IHN0ZXJuQHJvd2xhbmQuaGFydmFyZC5lZHU7IGR2eXVrb3ZAZ29vZ2xlLmNvbTsgcGF1bG1ja0Br
+ZXJuZWwub3JnOw0KPiBkcGVua2xlckBnbWFpbC5jb207IEtpZW5lciBHdWlkbyAxNERTMSA8R3Vp
+ZG8uS2llbmVyQHJvaGRlLXNjaHdhcnouY29tPjsNCj4gbGludXgtdXNiQHZnZXIua2VybmVsLm9y
+Zw0KPiBTdWJqZWN0OiAqRVhUKiBSZTogW1BBVENIXSBVU0I6IHVzYnRtYzogRml4IFJDVSBzdGFs
+bCB3YXJuaW5nDQo+IA0KPiBPbiBXZWQsIEp1bCAyMSwgMjAyMSBhdCAwNzozMDozOUFNICswMDAw
+LCBaaGFuZywgUWlhbmcgd3JvdGU6DQo+ID4NCj4gPg0KPiA+IF9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18NCj4gPiBGcm9tOiBHcmVnIEtIIDxncmVna2hAbGludXhmb3Vu
+ZGF0aW9uLm9yZz4NCj4gPiBTZW50OiBXZWRuZXNkYXksIDIxIEp1bHkgMjAyMSAxNTowOA0KPiA+
+IFRvOiBaaGFuZywgUWlhbmcNCj4gPiBDYzogc3Rlcm5Acm93bGFuZC5oYXJ2YXJkLmVkdTsgZHZ5
+dWtvdkBnb29nbGUuY29tOyBwYXVsbWNrQGtlcm5lbC5vcmc7DQo+ID4gZHBlbmtsZXJAZ21haWwu
+Y29tOyBndWlkby5raWVuZXJAcm9oZGUtc2Nod2Fyei5jb207DQo+ID4gbGludXgtdXNiQHZnZXIu
+a2VybmVsLm9yZw0KPiA+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIFVTQjogdXNidG1jOiBGaXggUkNV
+IHN0YWxsIHdhcm5pbmcNCj4gPg0KPiA+IFtQbGVhc2Ugbm90ZTogVGhpcyBlLW1haWwgaXMgZnJv
+bSBhbiBFWFRFUk5BTCBlLW1haWwgYWRkcmVzc10NCj4gPg0KPiA+IE9uIFR1ZSwgSnVuIDI5LCAy
+MDIxIGF0IDExOjMyOjM2QU0gKzA4MDAsIHFpYW5nLnpoYW5nQHdpbmRyaXZlci5jb20gd3JvdGU6
+DQo+ID4gPiBGcm9tOiBacWlhbmcgPHFpYW5nLnpoYW5nQHdpbmRyaXZlci5jb20+DQo+ID4NCj4g
+PiA+SSBuZWVkIGEgImZ1bGwiIG5hbWUgaGVyZSwgYW5kIGluIHRoZSBzaWduZWQtb2ZmLWJ5IGxp
+bmUgcGxlYXNlLg0KPiA+DQo+ID4gPg0KPiA+ID4gcmN1OiBJTkZPOiByY3VfcHJlZW1wdCBzZWxm
+LWRldGVjdGVkIHN0YWxsIG9uIENQVQ0KPiA+ID4gcmN1OiAgICAxLS4uLiE6ICgyIHRpY2tzIHRo
+aXMgR1ApIGlkbGU9ZDkyLzEvMHg0MDAwMDAwMDAwMDAwMDAwDQo+ID4gPiAgICAgICAgIHNvZnRp
+cnE9MjUzOTAvMjUzOTIgZnFzPTMNCj4gPiA+ICAgICAgICAgKHQ9MTIxNjQgamlmZmllcyBnPTMx
+NjQ1IHE9NDMyMjYpDQo+ID4gPiByY3U6IHJjdV9wcmVlbXB0IGt0aHJlYWQgc3RhcnZlZCBmb3Ig
+MTIxNjIgamlmZmllcyEgZzMxNjQ1IGYweDANCj4gPiA+ICAgICAgUkNVX0dQX1dBSVRfRlFTKDUp
+IC0+c3RhdGU9MHgwIC0+Y3B1PTANCj4gPiA+IHJjdTogICAgVW5sZXNzIHJjdV9wcmVlbXB0IGt0
+aHJlYWQgZ2V0cyBzdWZmaWNpZW50IENQVSB0aW1lLA0KPiA+ID4gICAgICAgICBPT00gaXMgbm93
+IGV4cGVjdGVkIGJlaGF2aW9yLg0KPiA+ID4gcmN1OiBSQ1UgZ3JhY2UtcGVyaW9kIGt0aHJlYWQg
+c3RhY2sgZHVtcDoNCj4gPiA+IHRhc2s6cmN1X3ByZWVtcHQgICAgIHN0YXRlOlIgIHJ1bm5pbmcg
+dGFzaw0KPiA+ID4NCj4gPiA+IEluIHRoZSBjYXNlIG9mIHN5c3RlbSB1c2UgZHVtbXlfaGNkIGFz
+IHVzYiBjb250cm9sbGVyLCB3aGVuIHRoZQ0KPiA+ID4gdXNidG1jIGRldmljZXMgaXMgZGlzY29u
+bmVjdGVkLCBpbiB1c2J0bWNfaW50ZXJydXB0KCksIGlmIHRoZSB1cmINCj4gPiA+IHN0YXR1cyBp
+cyB1bmtub3duLCB0aGUgdXJiIHdpbGwgYmUgcmVzdWJtaXQsIHRoZSB1cmIgbWF5IGJlIGluc2Vy
+dA0KPiA+ID4gdG8gZHVtX2hjZC0+dXJicF9saXN0IGFnYWluLCB0aGlzIHdpbGwgY2F1c2UgdGhl
+IGR1bW15X3RpbWVyKCkgbm90DQo+ID4gPiB0byBleGl0IGZvciBhIGxvbmcgdGltZSwgYmVhY2F1
+c2UgdGhlIGR1bW15X3RpbWVyKCkgYmUgY2FsbGVkIGluDQo+ID4gPiBzb2Z0aXJxIGFuZCBsb2Nh
+bF9iaCBpcyBkaXNhYmxlLCB0aGlzIG5vdCBvbmx5IGNhdXNlcyB0aGUgUkNVDQo+ID4gPiByZWFk
+aW5nIGNyaXRpY2FsIGFyZWEgdG8gY29uc3VtZSB0b28gbXVjaCB0aW1lIGJ1dCBhbHNvIG1ha2Vz
+IHRoZQ0KPiA+ID4gdGFza3MgaW4gdGhlIGN1cnJlbnQgQ1BVIHJ1bnEgbm90IHJ1biBpbiB0aW1l
+LCBhbmQgdGhhdCB0cmlnZ2VyZWQgUkNVIHN0YWxsLg0KPiA+ID4NCj4gPiA+IHJldHVybiBkaXJl
+Y3RseSB3aGVuIGZpbmQgdGhlIHVyYiBzdGF0dXMgaXMgbm90IHplcm8gdG8gZml4IGl0Lg0KPiA+
+ID4NCj4gPiA+IFJlcG9ydGVkLWJ5OiBzeXpib3QrZTJlYWU1NjM5ZTcyMDMzNjAwMThAc3l6a2Fs
+bGVyLmFwcHNwb3RtYWlsLmNvbQ0KPiA+ID4gU2lnbmVkLW9mZi1ieTogWnFpYW5nIDxxaWFuZy56
+aGFuZ0B3aW5kcml2ZXIuY29tPg0KPiA+DQo+ID4gPldoYXQgY29tbWl0IGRvZXMgdGhpcyBmaXg/
+ICBEb2VzIGl0IG5lZWQgdG8gZ28gdG8gc3RhYmxlIGtlcm5lbHM/DQo+ID4NCj4gPiAgSSB3aWxs
+IGFkZCBmaXggdGFncyByZXNlbmQsICAgbmVlZCB0byBnbyB0byBzdGFibGUga2VybmVsDQo+ID4N
+Cj4gPiA+DQo+ID4gPldoYXQgYWJvdXQgdGhlIHVzYnRtYyBtYWludGFpbmVycywgd2hhdCBkbyB0
+aGV5IHRoaW5rIGFib3V0IHRoaXM/DQoNCkknbSBvayB3aXRoIHRoZSBmaXguIEl0IHdpbGwgbWFr
+ZSB0aGUgc3l6Ym90IGFuZCBkdW1teV9oY2QgY29udHJvbGxlciBoYXBweSB3aGVuIHVzaW5nDQp0
+aGUgdXNidG1jIGRyaXZlci4gTmV2ZXJ0aGVsZXNzIHRoZXJlIGFyZSBtYW55IG90aGVyIHVzYiBr
+ZXJuZWwgZHJpdmVyIHRoYXQgcmVzdWJtaXQNCnRoZSB1cmIgd2hlbiB0aGUgY2FsbGJhY2sgaGFu
+ZGxlciBkZXRlY3RzIHRoZSB1cmIgc3RhdHVzID0gLUVQUk9UTy4NClNvIEkgZXhwZWN0IHRoZSBp
+c3N1ZSB3aWxsIHJlaGFwcGVuIHdpdGggb3RoZXIgdXNiIGRyaXZlcnMgYWdhaW4uDQpJbiAibm9y
+bWFsIiBlbnZpcm9ubWVudHMgdGhlIHVyYiBzdGF0dXMgPSAtRVBST1RPIHdpbGwgbW9zdGx5IGhh
+cHBlbiB3aGVuIHRoZSBjYWJsZSBpcw0KZGlzY29ubmVjdGVkLCBidXQgaXQgZG9lcyBub3QgZnJl
+ZXplIHRoZSBrZXJuZWwgYW5kIHNodXRzIGRvd24gdGhlIGNvbm5lY3Rpb24gYXMgdXN1YWwuDQpV
+cCB0byBub3cgd2UgaGF2ZSBubyBjdXN0b21lciBmZWVkYmFjayB3aGljaCBpcyBibGFtaW5nIHRo
+aXMgaXNzdWUuIEkgaG9wZSB0aGlzIGhlbHBzLg0KDQotR3VpZG8NCg==
