@@ -2,73 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 268A13D0A1A
-	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 09:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E073D0A3C
+	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 10:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbhGUHO4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 03:14:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40752 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235427AbhGUHNz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 21 Jul 2021 03:13:55 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 1C54260FE9;
-        Wed, 21 Jul 2021 07:54:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1626854069;
-        bh=r7maj2kuI2vO86xAHo4bhkYzsnBLjpZXw4i7HuI1fKo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S4+8tGxIJIsGfGI7MxKLPA5/acCyol3lQYiJMFk24n8hWJNiyOHP6JueaT8XE3kah
-         y+ZR98MwkHWJJHvsLOPvdQEkloisxIv76OMm5TSaTLsXcbCNnN7t/TzsVGn0/J84oa
-         uH9LRFB/t49zGMhWxfSH6TXADEMLXoj5QuekfqPA=
-Date:   Wed, 21 Jul 2021 09:54:27 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Moritz Fischer <moritz.fischer.private@gmail.com>,
-        Moritz Fischer <mdf@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: REGRESSION: Renesas USB host broken after commit d143825baf15
-Message-ID: <YPfSsx8p32w72OCB@kroah.com>
-References: <s5h7dhkoaa2.wl-tiwai@suse.de>
- <YPdcUrR5J6vA2Glr@epycbox.lan>
- <s5h1r7snneh.wl-tiwai@suse.de>
+        id S235400AbhGUHVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 03:21:02 -0400
+Received: from new2-smtp.messagingengine.com ([66.111.4.224]:37255 "EHLO
+        new2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234859AbhGUHUz (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 03:20:55 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 9EEFC5816BD;
+        Wed, 21 Jul 2021 04:01:20 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 21 Jul 2021 04:01:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=t/iRrQczCNXUrTQ/j8FZjeqa8BE
+        VK33aJLsccDr4NTM=; b=cxMnA1EIqfXTHhv+5C4H4uAia2YRug82j/R2D/QeC5H
+        9iUK8LMixRPvMy3puG3fmJmNHa4SfvnU5kN05hrIgs6FDeDmsnsIIKmW9WAPx6kS
+        QbJDN3ggQ3TZpqbENzIZgkLY/09k5U5t8bwfSYrLTmpkGSwwfhEsAQHQeIx7sMx+
+        pYLaOHFCndJCgTnQ4BbiCiwjGHwSBYiIttClIPabD5ws/z10Gepj+SGp67y39mVM
+        +E6+g1UYqjP13cDe06x6z2ZT3F4WXpBQ4IE8alRjFXl1vF/zayEMhEqz4+Z9AQcN
+        PI2df7/g258qZo3snhNpVkILipyDZANlnEcXRt4Wl4A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=t/iRrQ
+        czCNXUrTQ/j8FZjeqa8BEVK33aJLsccDr4NTM=; b=Qb8+YO/GrqzlJI+yalgu7s
+        lTBGTPjXrBO8tnUtII/ULj4NDVAPMk+DIhIjDgsjpAcbRDJTUIm+keJX0D9EM9Pr
+        ARxu8wP3QffCRab7R5JEs1NlIB4hLBzGRdJWnTs/WU7U/WhNWpkCBcJBIkyNC0Tr
+        fX9sO66WUOgZXLu6mc/aRoHsgisu/mQByS5VrB5G/6WBRBmPMH4+86xwIfecUoqy
+        Jyo1itoVO3fEEY6kQev4ULLsAVoTsqIdXenpCUR8rvQHpT0QFsZcy/WZ305zT5ae
+        01/5VklNMUCnhtp+/XSnsZt05sJv9n64QumQgWpK0rUfeRaoh3IW6IS7kypbVPHA
+        ==
+X-ME-Sender: <xms:UNT3YBsR5Km809Xz0861r6gsz72nzoG-dZbTg6V3f06CGQV9yboD7g>
+    <xme:UNT3YKemU7TX8JkTWcep3k-9eMFPGfp5lOHCDNVMEAEbmUtD1todDDEihOYTrhrtH
+    R-YnNBrYDqNug>
+X-ME-Received: <xmr:UNT3YExXrFpff64yGN8tKpbScZWL9IUiG37Cf6TMHLvqihN8ZG2bsYbXEQmg9n4X1rY3m0MM6D_9KcTRNntuvQQupJB4QyJS>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrfeefgdduudeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdortddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevhefgje
+    eitdfffefhvdegleeigeejgeeiffekieffjeeflefhieegtefhudejueenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:UNT3YIPfwhjI9MfCROjJ16nvbr4H6U6Cm1cfMU-IsRQ0pBKlkF2WfA>
+    <xmx:UNT3YB-h0ILo4BdMO0am5ydkEABv4c8Mf2mJYaYF6KfpiL11QE1xbA>
+    <xmx:UNT3YIUQEQ_UU-5ih19GfatQzkgd50ZgeXrD-qN3fT83J1rsEXNLfQ>
+    <xmx:UNT3YEVwIzrqQCi7Adqf7jdNkX4gqBwP7IyHlO5uvrMtBwhQGaW0IQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Jul 2021 04:01:19 -0400 (EDT)
+Date:   Wed, 21 Jul 2021 10:01:17 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc:     linux-usb@vger.kernel.org, laurent.pinchart@ideasonboard.com,
+        caleb.connolly@ideasonboard.com, paul.elder@ideasonboard.com,
+        balbi@kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH v3 1/5] usb: dwc3: gadget: set gadgets parent to the
+ right controller
+Message-ID: <YPfUTSOpXCSDnmyW@kroah.com>
+References: <20210628155311.16762-1-m.grzeschik@pengutronix.de>
+ <20210628155311.16762-2-m.grzeschik@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <s5h1r7snneh.wl-tiwai@suse.de>
+In-Reply-To: <20210628155311.16762-2-m.grzeschik@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Jul 21, 2021 at 09:20:38AM +0200, Takashi Iwai wrote:
-> On Wed, 21 Jul 2021 01:29:22 +0200,
-> Moritz Fischer wrote:
-> > 
-> > Hi Takashi,
-> > 
-> > On Wed, Jul 21, 2021 at 01:06:29AM +0200, Takashi Iwai wrote:
-> > > Hi,
-> > > 
-> > > the recent patch landed in 5.13.2 stable tree from the upstream commit
-> > > d143825baf15 ("usb: renesas-xhci: Fix handling of unknown ROM state")
-> > > seems causing a regression on a few machines, as reported on openSUSE
-> > > Bugzilla:
-> > >   https://bugzilla.opensuse.org/show_bug.cgi?id=1188485
-> > >   https://bugzilla.opensuse.org/show_bug.cgi?id=1188515
-> > > 
-> > > Reverting it on top of 5.13.3 fixed the problem, so it's likely the
-> > > cause.  Could you guys take a look?
-> > 
-> > I've sent out a revert patch.
-> > 
-> > https://lore.kernel.org/linux-usb/20210719070519.41114-1-mdf@kernel.org/T/#u
-> > 
-> > I think the driver has more problems but I'll tackle that in a follow up
-> > patch, lets get this unbricked, first.
+On Mon, Jun 28, 2021 at 05:53:07PM +0200, Michael Grzeschik wrote:
+> In case of dwc3 it is possible that the sysdev is the parent of the
+> controller. To ensure the right dev is set to the gadget's dev parent we
+> will hand over sysdev instead of dev, which will always point to the
+> controller.
 > 
-> OK, thank you for the information!
+> Signed-off-by: Michael Grzeschik <m.grzeschik@pengutronix.de>
+> 
+> ---
+>    -> v2: first version of patch
+>    -> v3: -
+> ---
+>  drivers/usb/dwc3/gadget.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index af6d7f157989d..8a1b1daff2e97 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -3990,7 +3990,7 @@ int dwc3_gadget_init(struct dwc3 *dwc)
+>  	}
+>  
+>  
+> -	usb_initialize_gadget(dwc->dev, dwc->gadget, dwc_gadget_release);
+> +	usb_initialize_gadget(dwc->sysdev, dwc->gadget, dwc_gadget_release);
 
-I've reverted this now, will get it to Linus for 5.14-rc3, sorry about
-that.
+Does this change how the device shows up in sysfs?  Why does the parent
+not always work properly here?
 
 thanks,
 
