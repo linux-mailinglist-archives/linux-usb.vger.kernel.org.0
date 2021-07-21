@@ -2,139 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B393D0D48
+	by mail.lfdr.de (Postfix) with ESMTP id D7E743D0D4A
 	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 13:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbhGUKdh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 06:33:37 -0400
-Received: from de-smtp-delivery-102.mimecast.com ([194.104.111.102]:23439 "EHLO
-        de-smtp-delivery-102.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239850AbhGUK0L (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 06:26:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=mimecast20200619;
-        t=1626865605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s3fScAKpV6YDStRyxZAfKbYlzvFG/elfA0hJZlTaXSc=;
-        b=iHbly+OLjXD162jYMGOom5Ix9uMCyzyWqrMA3Ra5GU6cpWMtPdKfWcRQ150cmJW2jZ5Jba
-        EMypo8MgKJpWWt0Yejd4wVNOsSux7q5/f36d3hxyhEbnRMZJ944VpZRLfNoTzAnFXw+Ov4
-        maQHgjvEYd6Sm8LTqzGY5oNHk4VAvjQ=
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur05lp2173.outbound.protection.outlook.com [104.47.17.173])
- (Using TLS) by relay.mimecast.com with ESMTP id
- de-mta-14-g5Q9l3QDO92ws4dKl0mXwQ-1; Wed, 21 Jul 2021 13:06:44 +0200
-X-MC-Unique: g5Q9l3QDO92ws4dKl0mXwQ-1
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eAGZxsuH6/613mUyma39FWl5EIj5bskj0eh6/NdwgHbasodxb1Oo+svW9L6GrJO73TWPs24J3OylOwTnChWM2qCAJ8LpFDOOabJrHWMeVvnG6WbRBZrQW4U3fejnsVnmVmx+1S/RvllfeHd2v6dnU2JfoWrauQdQjSazmk4VP/kERMLOR5nZAL0a5WEQi8RGJrjlfcEcA7CF5wtKZdlihN4NKsIEknu0p2xbQPZ0WabbyKRBjlS8xFCV6pNrvFItpbs5pLwrFDkdXW+rFQJfUlqja7FW0rm8DWwER8RHLfeYr0ignfSjwVe1+rdOvYHIHtGeKnMHbzxhgBAYX/atsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s3fScAKpV6YDStRyxZAfKbYlzvFG/elfA0hJZlTaXSc=;
- b=JX/N8WsgrzV4gOh/sNnOsdPBboQA4cyPzMx6wn8R6frdWcv7VXPTKoLEGLx5GN1/6Xh3Yv4BxQsjHAOBZ+ZLdrYzsBGk0mdn5NVp4l8YmUahaQJhhptnjnra4ICwisGXncOwVI7uktNWoTz16RgzdEuqDib/GUXhPMpcLFDj1Q/FASClzkPq/ENWjBD9RIHZRsWE01tY2RTc8TrkyChNk0cMDgKiK4g6X83JFiEeIxt/ZbCRUiiQrtsjU3Lu13cP/kq2nKbznLXpq5oWALGRZMhuEEGoCgb/pZredP4wqUNHAATxv0zywim4/P9+2CoOCBkNKhfy+g/Wug/eMVsfOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-Authentication-Results: gmail.com; dkim=none (message not signed)
- header.d=none;gmail.com; dmarc=none action=none header.from=suse.com;
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com (2603:10a6:10:22::23)
- by DBBPR04MB7644.eurprd04.prod.outlook.com (2603:10a6:10:20c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4331.24; Wed, 21 Jul
- 2021 11:06:43 +0000
-Received: from DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::4cc0:191d:5c04:8ede]) by DB7PR04MB5050.eurprd04.prod.outlook.com
- ([fe80::4cc0:191d:5c04:8ede%7]) with mapi id 15.20.4331.034; Wed, 21 Jul 2021
- 11:06:43 +0000
-Subject: Re: [PATCH] Add LaCie Rugged USB3-FW to IGNORE_UAS
-To:     Julian Sikorski <belegdol@gmail.com>, linux-usb@vger.kernel.org
-Cc:     stable@vger.kernel.org, Julian Sikorski <belegdol+github@gmail.com>
-References: <20210720171910.36497-1-belegdol+github@gmail.com>
-From:   Oliver Neukum <oneukum@suse.com>
-Message-ID: <e3741d60-d058-f730-e14a-bfe6d02023df@suse.com>
-Date:   Wed, 21 Jul 2021 13:06:41 +0200
+        id S239573AbhGUKdi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 06:33:38 -0400
+Received: from mail-ej1-f47.google.com ([209.85.218.47]:42765 "EHLO
+        mail-ej1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238995AbhGUK3r (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 06:29:47 -0400
+Received: by mail-ej1-f47.google.com with SMTP id hd33so2623800ejc.9;
+        Wed, 21 Jul 2021 04:10:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:references:from:subject:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=N0A8Xx4cyFvkR98y1BnECTlIegUnMrlPAgIEf1U6kC8=;
+        b=oPmq/KZfHHUm8JCho1LwivbISYRaBF/cDF1QbLyl3VB619LttAR8VWu1KpVfHjfzk3
+         w0es2zxb22BANpyNTtgB2KaDdBcK7skrjsqrqj18P+xWT+ng7zAetFMLlx/3Mcv3aKzn
+         1GRiPqkg7jqqgCTbYIExJ/PL2WFlnMsmak7m4/azGyX2dzVSYfZChPbcZxHXX8bUnht4
+         LGTMr7Y7+BG0Pmg9FuNUTZYLU/rvLzxnzcNLTqpvjT/Tv6oDitWSBkzgoqEV0cydBTB9
+         JDJt/M1uMPAXm7pYu8ZRH3GBnScbkSs+lZtHXmVtVqsXXFk1ynek1gnUEKDbRz3H7gCt
+         ooSA==
+X-Gm-Message-State: AOAM5319OpAKw8l2kU1sUIvgIMrMPtHGbM9h+pm7mjIAUV4e/FxvoP83
+        ZVhopP+cp5FpYKXsW3ohNUk=
+X-Google-Smtp-Source: ABdhPJxBsxbgxOzVnr4QTEnk45iH2+9wz3zRpguMKNWXLZtOCyZN1TGl2t4X79NGPy+B0QWweReDQw==
+X-Received: by 2002:a17:906:7629:: with SMTP id c9mr7344871ejn.527.1626865821778;
+        Wed, 21 Jul 2021 04:10:21 -0700 (PDT)
+Received: from [192.168.8.102] ([86.32.47.9])
+        by smtp.googlemail.com with ESMTPSA id x2sm9565351edj.37.2021.07.21.04.10.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jul 2021 04:10:20 -0700 (PDT)
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
+ <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
+ <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
+ <20210714124807.o22mottsrg3tv6nt@mobilestation> <YPfPDqJhfzbvDLvB@kroah.com>
+ <20210721100220.ddfxwugivsndsedv@mobilestation> <YPf29+ewbrYgHxRP@kroah.com>
+ <0064cb2c-5ca6-e693-2e89-8f045c8f7502@kernel.org>
+ <YPf+shNM6cXb3mfe@kroah.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
+Date:   Wed, 21 Jul 2021 13:10:19 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
-In-Reply-To: <20210720171910.36497-1-belegdol+github@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: PR0P264CA0139.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:100:1a::31) To DB7PR04MB5050.eurprd04.prod.outlook.com
- (2603:10a6:10:22::23)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from localhost.localdomain (2001:a61:3b82:3e01:c3c9:c93b:1b8e:a220) by PR0P264CA0139.FRAP264.PROD.OUTLOOK.COM (2603:10a6:100:1a::31) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.24 via Frontend Transport; Wed, 21 Jul 2021 11:06:42 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8faa22d5-4450-44ba-eadc-08d94c379f60
-X-MS-TrafficTypeDiagnostic: DBBPR04MB7644:
-X-Microsoft-Antispam-PRVS: <DBBPR04MB764482C8EC5DF69BD5451EB5C7E39@DBBPR04MB7644.eurprd04.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:595;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WXcqbotUxgYCXFOdM59eTxbnQ4Eq5sguCzPtoE+6QszooGMWq4Ey5C5tJoPLA4tbhSJrndWoXS/Lg5Yfj1jbSnX7i4dB0NfFZCt9SePjN2hKpPGTnG7M5XiDRDo0o0AIL9QkZ3g5CoruUh0gZgeAUceA5apZUGmfZS/zktwdIzw70ipP9nDBoSfWBgadbnxWjsa/qeyWy7A9MoNAqW4Aih4zYqPuSypcER9PXiNqpQ8VE4446AEZQ9ULXLDgbJVyP6UpLEUe3T6PBCVcoG7OaU8WHYXpvAnO2HCKosZ2CA/mf0O45QYjBjs1qbopXhDCYp6uOj78vCQlVYkp7lplSWVI4Y6nN12T51ZZb/C8seoi2EqUjQzmo6u1HTKTkubSHKEfLBvB8Cl1T9jkpmTHuFF+B44X2K8P/i2fZULyN2HpvT/0oazKt94T4F/6XwUTIFRXL87xRmBo7tD2S3ZZWGe5dF2ODnPNpZCW5jKAbkRUAUM6/ECPdw5GzqiZvIKgCFGcA33IepCcJUGqQYtI9jFtVjl+n7/dT9AZePyVB8RKD/KqQNDzj8Z4m4K+2S/6CYUnSA73ydqKKqBw7UgJBLtE3u16ZNVK3y9WvpJ+y8Yx5doQlPNvIyWf2wWlaS1nMSB0vyLYf1yTI/Q6oYVjbDKKHy4Jk17pJI/U4DMqx72dA9cpSXH6NurA9PaBBXI6sewM2nxMbkVYvOexAi14wSPNhrEpCOStAiK3OGwGke4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5050.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(6029001)(366004)(36756003)(316002)(38100700002)(8936002)(2906002)(6512007)(6486002)(53546011)(86362001)(66946007)(5660300002)(6506007)(186003)(66476007)(2616005)(31696002)(31686004)(4326008)(8676002)(66556008)(4744005)(508600001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjgrdmNaWVBpQ3hsbk1PRkRIa2lvV2lhZGNDenhUeFQyc2ZNMXQ1Um8rR0hu?=
- =?utf-8?B?U0RyWSszMTlrZklxbk1xbUpKWFdjM3ViczQycmUvVkNDYnZ5MTdzdmY2WU1K?=
- =?utf-8?B?V0dqMHcwZ1BFa253ZytBYVlzYWtmZjFiRVBBYmdjUXUwY3lTOVJMdURudDUz?=
- =?utf-8?B?aEhNREJZRTkxa2FiRS94cXhraVkrNnlyUVdxeklOSk9nUUd1RXlld3pDdDht?=
- =?utf-8?B?K0NiUUZjYUcrZGVtY1oyU3JxMXJKa0E1clQzSlF0VVl0aWhCM2VWZ1dFcGFt?=
- =?utf-8?B?OHNzRWdNMDkvdS9EU2IxZW1Bd21heVp3NGVLZXRnenlOYWhiZm5CbEdkRUhD?=
- =?utf-8?B?R2tNZjRsUi9tWnVCNmN3WTN6bjhvLy8xak9ZUDZ3WUpjeVFHVmQ0Y28yMlpO?=
- =?utf-8?B?RUdRVktHcGR2VE1xU2NSZ1l2LzhOdkFValZXVTAxVE1oNG8rZUNUemI0dFJO?=
- =?utf-8?B?d24yODFYYit4b0pnYldINXZzYTlZWjlCZG5xeVpDM3cxbGFaMWNGOEtFY2Zy?=
- =?utf-8?B?dzNZMEd5NGI4Q0hRcTFjb3FDbnJwaXhyRHBGWmExd0w2Smh5SXZnM1Fta050?=
- =?utf-8?B?aU1aRDUyaEd0NXRhRkJ6Tm14OUpZR3lRMGZ0emhpRzQ3MnBSRkRMNDNPRkNN?=
- =?utf-8?B?NXJSbU53SFl2bVhKdXI5MjJNVG0rRkFtRnp5eWZWNGpHcWhLa2x2U2dWQzZM?=
- =?utf-8?B?cFJRL0QyYXpmZ3B5b3NhQ3dPak5RQXV5dVlqYnltUHV0bzZnN2Zia0tod2tM?=
- =?utf-8?B?aUs3cm11V1M0dTN0SWhNRFBwR05Rb3ZhR0oxdDlzaTNMRlZmeEFoSk4vdXln?=
- =?utf-8?B?bjZXcnNxa1h4RkJZN2dvdjBMa2JNVVhQU1R3aDlGZDJ5VGc5YWxqWTBETHNn?=
- =?utf-8?B?VEJWZGN6bEFUd0ovOXY5QXMzTnorQktxV2trS2xwbHdrazJ6bGVMVzNlMklz?=
- =?utf-8?B?SHQ0MVdPanhyb1RrenBWYUNqKzdCMlQ2dld5emtmRzdDYkgzZUVQZHJVbU9o?=
- =?utf-8?B?RExleXBqTi9xc3lXcWVZcEp6Y05kVzZaU0lMOUI5aHc3MUlVTGhRakpGZHlT?=
- =?utf-8?B?SVFYRUZ4Z0ZocDQvQ0xyd3lEOXE5aEZFOGcvSmJpcXE2V09yVXpIdEFtSS9B?=
- =?utf-8?B?a0JkajBuR1VXZlFkQTNsb0wrbDBIbkpOM21xMTFOb2pBM2p0WUNPc3MyV1hv?=
- =?utf-8?B?ekJhbGR3NlBGM2tEQVNsNDNWQjh3MzBaRXlXN1FCbWhZTjVZL2c2QWUvYWVX?=
- =?utf-8?B?QmFsYkxsOEd1eUFWOVpycTc5QTEzSXkxTFNUaHVWTlJ0MEZuR3dGVHZrN2ZH?=
- =?utf-8?B?TjIxUld4MDQvWHlicE9IV0hQN3JCTFpJdkZZYkI3Z0h0bzFPZzNUbVpLbFQ0?=
- =?utf-8?B?VGlFQWlSVmVkYlJsOEozR0o5QXhiaCtFNDUwT3FMa0ZydmFJWXNKMDQ2MzVS?=
- =?utf-8?B?LzN1eWprVzMrTFZ0UCt4ZEk1L1JTdHN5clVXSVFtcGxiN3BFd3FwYTVBTmdO?=
- =?utf-8?B?TUZKT1lPR0xNaklqVy9OK09CK3JLQUVET3dQYmsxRnM2NXZ5NSszWlpWRlRJ?=
- =?utf-8?B?NmtCbEo2elphV0pKWXJvWmFRVDhURHh4QmJ0YXM3U05pK1JiQmJwZ1dSL0I3?=
- =?utf-8?B?SDlNZWpock41S05pVU80NjdGaW9QcW9jd0lkWVVya1lubnY1aUdSdmgxNFpy?=
- =?utf-8?B?dG9kc0Y3VzhZWUkyaHk5R1NreEJrckVtUHRKVlNiRTlScDNtY0lTbHo3WlVq?=
- =?utf-8?B?ZlVBZnVCQTN2dnpoMjlQZ2hMcEpjK3ljWEd3Tkdxd3lpRjlGWitoVHVjc2ZX?=
- =?utf-8?B?RXA2ODZYdzJvaE1GdWJXQmRFVGRhaWc3ZDlHQkg3OUk5NjhGUDBaOGNIRUZ3?=
- =?utf-8?Q?A/U9mNtKK23+R?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8faa22d5-4450-44ba-eadc-08d94c379f60
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5050.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2021 11:06:43.2495
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zT6cB+sd+7B9GVPSsH+O4uo71DVzpToDkFv8TmcG1dpd93CzRg3kyoOlCfeZ1BLXKHR2obLC0qGAYbue5CuSZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7644
+In-Reply-To: <YPf+shNM6cXb3mfe@kroah.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 21/07/2021 13:02, Greg Kroah-Hartman wrote:
+> On Wed, Jul 21, 2021 at 12:45:32PM +0200, Krzysztof Kozlowski wrote:
+>> On 21/07/2021 12:29, Greg Kroah-Hartman wrote:
+>>> On Wed, Jul 21, 2021 at 01:02:20PM +0300, Serge Semin wrote:
+>>>> Hi Greg,
+>>>> @Krzysztof, @Rob, please join the discussion so to finally get done
+>>>> with the concerned issue.
+>>>>
+>>>> On Wed, Jul 21, 2021 at 09:38:54AM +0200, Greg Kroah-Hartman wrote:
+>>>>> On Wed, Jul 14, 2021 at 03:48:07PM +0300, Serge Semin wrote:
+>>>>>> Hello John,
+>>>>>>
+>>>>>> On Tue, Jul 13, 2021 at 05:07:00PM -0700, John Stultz wrote:
+>>>>>>> On Tue, Oct 20, 2020 at 5:10 AM Serge Semin
+>>>>>>> <Sergey.Semin@baikalelectronics.ru> wrote:
+>>>>>>>>
+>>>>>>>> In accordance with the DWC USB3 bindings the corresponding node
+>>>>>>>> name is suppose to comply with the Generic USB HCD DT schema, which
+>>>>>>>> requires the USB nodes to have the name acceptable by the regexp:
+>>>>>>>> "^usb(@.*)?" . Make sure the "snps,dwc3"-compatible nodes are correctly
+>>>>>>>> named.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+>>>>>>>
+>>>>>>
+>>>>>>> I know folks like to ignore this, but this patch breaks AOSP on db845c. :(
+>>>>>>
+>>>>>> Sorry to hear that. Alas there is no much can be done about it.
+>>>>>
+>>>>> Yes there is, we can revert the change.  We do not break existing
+>>>>> configurations, sorry.
+>>>>
+>>>> By reverting this patch we'll get back to the broken dt-bindings
+>>>> since it won't comply to the current USB DT-nodes requirements
+>>>> which at this state well describe the latest DT spec:
+>>>> https://github.com/devicetree-org/devicetree-specification/releases/tag/v0.3
+>>>> Thus the dtbs_check will fail for these nodes.
+>>>>
+>>>> Originally this whole patchset was connected with finally getting the
+>>>> DT-node names in order to comply with the standard requirement and it
+>>>> was successful mostly except a few patches which still haven't been
+>>>> merged in.
+>>>>
+>>>> Anyway @Krzysztof has already responded to the complain regarding this
+>>>> issue here:
+>>>> https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
+>>>> but noone cared to respond on his reasonable questions in order to
+>>>> get to a suitable solution for everyone. Instead we are
+>>>> getting another email with the same request to revert the changes.
+>>>> Here is the quote from the Krzysztof email so we could continue the
+>>>> discussion:
+>>>>
+>>>> On Mon, 21 Dec 2020 13:04:27 -0800 (PST), Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>>> On Mon, Dec 21, 2020 at 12:24:11PM -0800, John Stultz wrote:
+>>>>>> On Sat, Dec 19, 2020 at 3:06 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>>>>>> ...
+>>>>>>>
+>>>>>>> The node names are not part of an ABI, are they? I expect only
+>>>>>>> compatibles and properties to be stable. If user-space looks for
+>>>>>>> something by name, it's a user-space's mistake.  Not mentioning that you
+>>>>>>> also look for specific address... Imagine remapping of addresses with
+>>>>>>> ranges (for whatever reason) - AOSP also would be broken? Addresses are
+>>>>>>> definitely not an ABI.
+>>>>>>
+>>>>>> Though that is how it's exported through sysfs.
+>>>>>
+>>>>> The ABI is the format of sysfs file for example in /sys/devices. However
+>>>>> the ABI is not the exact address or node name of each device.
+>>>>>
+>>>>>> In AOSP it is then used to setup the configfs gadget by writing that
+>>>>>> value into /config/usb_gadget/g1/UDC.
+>>>>>>
+>>>>>> Given there may be multiple controllers on a device, or even if its
+>>>>>> just one and the dummy hcd driver is enabled, I'm not sure how folks
+>>>>>> reference the "right" one without the node name?
+>>>>>
+>>>>> I think it is the same type of problem as for all other subsystems, e.g.
+>>>>> mmc, hwmon/iio.  They usually solve it either with aliases or with
+>>>>> special property with the name/label.
+>>>>>
+>>>>>> I understand the fuzziness with sysfs ABI, and I get that having
+>>>>>> consistent naming is important, but like the eth0 -> enp3s0 changes,
+>>>>>> it seems like this is going to break things.
+>>>>>
+>>>>> One could argue whether interface name is or is not ABI. But please tell
+>>>>> me how the address of a device in one's representation (for example DT)
+>>>>> is a part of a stable interface?
+>>>>>
+>>>>>> Greg? Is there some better way AOSP should be doing this?
+>>>>>
+>>>>> If you need to find specific device, maybe go through the given bus and
+>>>>> check compatibles?
+>>>>>
+>>>>> Best regards,
+>>>>> Krzysztof
+>>>>
+>>>> So the main question is how is the DT-node really connected with ABI
+>>>> and is supposed to be stable in that concern?
+>>>>
+>>>> As I see it even if it affects the configfs node name, then we may
+>>>> either need to break that connection and somehow deliver DT-node-name
+>>>> independent interface to the user-space or we have no choice but to
+>>>> export the node with an updated name and ask of user-space to deal
+>>>> with it. In both suggested cases the DT-node name will still conform
+>>>> to the USB-node name DT spec. Currently we are at the second one.
+>>>
+>>> I really do not care what you all decide on, but you CAN NOT break
+>>> existing working systems, sorry.  That is why I have reverted this
+>>> change in my tree and will send it to Linus soon.
+>>
+>> I had impression that kernel defines interfaces which should be used and
+>> are stable (e.g. syscalls, sysfs and so on). This case is example of
+>> user-space relying on something not being marked as part of ABI. Instead
+>> they found something working for them and now it is being used in "we
+>> cannot break existing systems". Basically, AOSP unilaterally created a
+>> stable ABI and now kernel has to stick to it.
+> 
+> Since when are configfs names NOT a user-visable api?
+> 
+> Why would you not depend on them?
 
-On 20.07.21 19:19, Julian Sikorski wrote:
-> LaCie Rugged USB3-FW appears to be incompatible with UAS. It generates
-> errors like:
-> [ 1151.582598] sd 14:0:0:0: tag#16 uas_eh_abort_handler 0 uas-tag 1 inflight: IN
-> [ 1151.582602] sd 14:0:0:0: tag#16 CDB: Report supported operation codes a3 0c 01 12 00 00 00 00 02 00 00 00
-> [ 1151.588594] scsi host14: uas_eh_device_reset_handler start
-> [ 1151.710482] usb 2-4: reset SuperSpeed Gen 1 USB device number 2 using xhci_hcd
-> [ 1151.741398] scsi host14: uas_eh_device_reset_handler success
-> [ 1181.785534] scsi host14: uas_eh_device_reset_handler start
->
-> Signed-off-by: Julian Sikorski <belegdol+github@gmail.com>
-Acked-by: Oliver Neukum <oneukum@suse.com>
+It's not good example. The configfs entries (file names) are
+user-visible however the USB gadget exposes specific value for specific
+one device. It encodes device specific DT node name and HW address and
+gives it to user-space. It is valid only on this one HW, all other
+devices will have different values.
 
+User-space has hard-coded this value (DT node name and hardware
+address). This value was never part of configfs ABI, maybe except of its
+format "[a-z]+\.[0-9a-f]+". Format is not broken. Just the value changes
+for a specific device/hardware.
+
+It's like you depend that lsusb will always report:
+  Bus 003 Device 008: ID 046d:c52b Logitech, Inc. Unifying Receiver
+and then probing order changed and this Logitech ends as Device 009.
+Then AOSP guys come, wait, we hard-coded that Logitech on our device
+will be always Device 008, not 009. Please revert it, we depend on
+specific value of Device number. It must be always 009...
+
+For the record - the change discussed here it's nothing like USB VID/PID. :)
+
+Best regards,
+Krzysztof
