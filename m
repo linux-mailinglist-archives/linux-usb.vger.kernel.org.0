@@ -2,118 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FCE3D0A90
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3ED3D0A91
 	for <lists+linux-usb@lfdr.de>; Wed, 21 Jul 2021 10:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235847AbhGUHll (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 03:41:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
+        id S236191AbhGUHl5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 21 Jul 2021 03:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236349AbhGUHfH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 03:35:07 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F073DC0613DB;
-        Wed, 21 Jul 2021 01:15:38 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id v14so578270plg.9;
-        Wed, 21 Jul 2021 01:15:38 -0700 (PDT)
+        with ESMTP id S236620AbhGUHg7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 03:36:59 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7EBC061574;
+        Wed, 21 Jul 2021 01:17:29 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id t2so1281242edd.13;
+        Wed, 21 Jul 2021 01:17:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Wxcy7B70uHdtCZtzYHY9+tkRqLtyDIYNmVQhqkQuKMQ=;
-        b=b7snUcK34wADOU+Vlxm8K2nbAVUjfcaAl9DEWsm8rB2SheW7gWN4xag9ASUuZea1bP
-         AGlvO3cr8OkBYiW+7y2URPAsCqeDfJzEFc3DE9FA/rj/2szlNCpsB8MCbGILBAsVjMpb
-         vdspvmYzPg2AEYC4UzWJkajJBlX1XYSk29MIDi6DOb9nhyJWH0407cA7kO8NWkeO33li
-         gC8qWjtcwfDqN1GshUPixMbwFGVsrpu2187uAV/YvuKslsgZ3rEmpDOgtLY1MqQgA7wi
-         Tx825rpS8IbwGJR0nM3CRZYiL9uRQReQQvl/cb/K/Qr6QXaEFWataTxGlLZ3dsAef0id
-         RGGQ==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sZgcPfQLiN9iP9K4OpawNyYKs238DZ60Ej7j3i33PTA=;
+        b=OWIZZmB+kIm0L5SFnNjmFXOtx+bO53YvZhJcG7R70xFGex0eMBAMLdTJXlS+t0r/nh
+         Q+g3yCP4m7Y2dULwwJGcmVHLmR/7LlaPJeBkAlSa86z+O7dVdcoi4qDbDucCvrpXvJHZ
+         wFD2jjuMGM7Aozet9MGX01lm6zre/oAwv7EUzSKbT6MFqzJuOpJN/1pZehO2PZ0Jh8CP
+         39SHRKcjd72t4ErLKDTz8JEhfdEQoqpZLFYQV9jJJHmRfG6e/KOyHnc0lEUqi1Bab/eY
+         3lFD5vEu2EgZzeEWUuscyE7cKWrmCAXIGkwXlSiKL+O47B2g3e7KjacfZ51kPe9Dhojc
+         0fTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Wxcy7B70uHdtCZtzYHY9+tkRqLtyDIYNmVQhqkQuKMQ=;
-        b=QVoQq0jjbIWPDVT71PAXQHbuy1qZl6h5UnqrMQJ668d+bHzGDNwPjoMoJmTF19W6Jf
-         g8It4drDoW0QeaZkIqKlMNLkb5nMa2Pv8+BucgLDifwGAZenC0EvmHWC5eWkuAh9xj8t
-         Hdpm3ixuB0SEfDM2ar6J3JTS9ZBqf8BKmEtfwk41hm9eA/xT3eSB/G+IofqG2C68Yz8o
-         tYiW/7hrj7XHau01XVx3uw9dP9bMpvw/3pkndnYGAP91r/ewYMkDdJeuTBEb0ZXUCkVL
-         iTiKAG2tVGVOiSl7wYEIvC1QNs/i57qUU9xzi6XOAhpQBNkfLgd4PUi5uUHxouWlxLXM
-         ++WQ==
-X-Gm-Message-State: AOAM5305dnrVocGKKiMErl6P5JHpm5RnggY92RXDNGALOyRAFvLVjsf/
-        RK6/345Uvs/ayrg/gKZ0z8U=
-X-Google-Smtp-Source: ABdhPJzq7o1yw/VLBQioWQfOJEjRLY8VoXnIzSelcqkVgT5OS8VTM2PyWoMOcDTZPcSwIRa3dUs3ng==
-X-Received: by 2002:a17:90a:86:: with SMTP id a6mr2583154pja.133.1626855338469;
-        Wed, 21 Jul 2021 01:15:38 -0700 (PDT)
-Received: from localhost.localdomain ([154.16.166.166])
-        by smtp.gmail.com with ESMTPSA id g1sm28391398pgs.23.2021.07.21.01.15.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 01:15:38 -0700 (PDT)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sZgcPfQLiN9iP9K4OpawNyYKs238DZ60Ej7j3i33PTA=;
+        b=QsUzu2FiRT4ODH+TkO4Ac/pnW6EfOHAa+1kAueTLOIAONo55ObMSF32YMtXHABaopD
+         GumP2ReL2ZZ2I55BKLc3Ejj6ngLrfXEit/5hS4Tdb2VEuj38tQz0FAoCRVnD/h1ztRLy
+         HMWe85njxWBhn6HjBURjiJhvHOJVJ2e0jhHK3NfXIVzgbRbQTmArRSWC8g3vB+tM1GbH
+         svoSwo7NhgJ+OfaUk5fpABpLmjFNuRzeM+fCki/p6M3yj9KpSZBYK9BisqPp/kq/4ZDv
+         LSc8HHRWBjs5BQgpeQ4B35NB9SSAyU7Yv13Y15xDpmYjQCir/WLpPoOmlmmTjnIlevYi
+         3Jew==
+X-Gm-Message-State: AOAM531Ehn8f0xtF6hXcCOwpBrVD6WzWpMO24SlnQDP8dwVAE4ktSmZc
+        HjcdwukX5gTj/y64TyIsPu3Ho1OFQkoyfbG77Fc=
+X-Google-Smtp-Source: ABdhPJxpJM6V8VTne3Bjivlmwlbhl1eoSQv2ktowYhYbL60h/j9SjuBb6rO4vAECr8gosa4TYfYCq7cynOjY+rhJCRA=
+X-Received: by 2002:a05:6402:270d:: with SMTP id y13mr46970258edd.66.1626855448078;
+ Wed, 21 Jul 2021 01:17:28 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210714091327.677458-1-mudongliangabcd@gmail.com> <YPfOZp7YoagbE+Mh@kroah.com>
+In-Reply-To: <YPfOZp7YoagbE+Mh@kroah.com>
 From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
+Date:   Wed, 21 Jul 2021 16:17:01 +0800
+Message-ID: <CAD-N9QVi=TvS6sM+jcOf=Y5esECtRgTMgdFW+dqB-R_BuNv6AQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] usb: hso: fix error handling code of hso_create_net_device
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <kuba@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Johan Hovold <johan@kernel.org>,
         Oliver Neukum <oneukum@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Anirudh Rayabharam <mail@anirudhrb.com>,
         Dan Carpenter <dan.carpenter@oracle.com>,
-        Anirudh Rayabharam <mail@anirudhrb.com>
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH V3 2/2] usb: hso: remove the bailout parameter
-Date:   Wed, 21 Jul 2021 16:14:57 +0800
-Message-Id: <20210721081510.1516058-2-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210721081510.1516058-1-mudongliangabcd@gmail.com>
-References: <20210721081510.1516058-1-mudongliangabcd@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com,
+        YueHaibing <yuehaibing@huawei.com>, linux-usb@vger.kernel.org,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are two invocation sites of hso_free_net_device. After
-refactoring hso_create_net_device, this parameter is useless.
-Remove the bailout in the hso_free_net_device and change the invocation
-sites of this function.
+On Wed, Jul 21, 2021 at 3:36 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Jul 14, 2021 at 05:13:22PM +0800, Dongliang Mu wrote:
+> > The current error handling code of hso_create_net_device is
+> > hso_free_net_device, no matter which errors lead to. For example,
+> > WARNING in hso_free_net_device [1].
+> >
+> > Fix this by refactoring the error handling code of
+> > hso_create_net_device by handling different errors by different code.
+> >
+> > [1] https://syzkaller.appspot.com/bug?id=66eff8d49af1b28370ad342787413e35bbe76efe
+> >
+> > Reported-by: syzbot+44d53c7255bb1aea22d2@syzkaller.appspotmail.com
+> > Fixes: 5fcfb6d0bfcd ("hso: fix bailout in error case of probe")
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+> > v1->v2: change labels according to the comment of Dan Carpenter
+> > v2->v3: change the style of error handling labels
+> >  drivers/net/usb/hso.c | 33 +++++++++++++++++++++++----------
+> >  1 file changed, 23 insertions(+), 10 deletions(-)
+>
+> Please resend the whole series, not just one patch of the series.
+> Otherwise it makes it impossible to determine what patch from what
+> series should be applied in what order.
+>
 
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/net/usb/hso.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Done. Please review the resend v3 patches.
 
-diff --git a/drivers/net/usb/hso.c b/drivers/net/usb/hso.c
-index dec96e8ab567..827d574f764a 100644
---- a/drivers/net/usb/hso.c
-+++ b/drivers/net/usb/hso.c
-@@ -2353,7 +2353,7 @@ static int remove_net_device(struct hso_device *hso_dev)
- }
- 
- /* Frees our network device */
--static void hso_free_net_device(struct hso_device *hso_dev, bool bailout)
-+static void hso_free_net_device(struct hso_device *hso_dev)
- {
- 	int i;
- 	struct hso_net *hso_net = dev2net(hso_dev);
-@@ -2376,7 +2376,7 @@ static void hso_free_net_device(struct hso_device *hso_dev, bool bailout)
- 	kfree(hso_net->mux_bulk_tx_buf);
- 	hso_net->mux_bulk_tx_buf = NULL;
- 
--	if (hso_net->net && !bailout)
-+	if (hso_net->net)
- 		free_netdev(hso_net->net);
- 
- 	kfree(hso_dev);
-@@ -3133,7 +3133,7 @@ static void hso_free_interface(struct usb_interface *interface)
- 				rfkill_unregister(rfk);
- 				rfkill_destroy(rfk);
- 			}
--			hso_free_net_device(network_table[i], false);
-+			hso_free_net_device(network_table[i]);
- 		}
- 	}
- }
--- 
-2.25.1
-
+> All of these are now dropped from my queue, please fix up and resend.
+>
+> thanks,
+>
+> greg k-h
