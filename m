@@ -2,153 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BACAE3D2B2E
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jul 2021 19:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496243D2B6D
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jul 2021 19:51:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbhGVQwa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jul 2021 12:52:30 -0400
-Received: from mail02.rohde-schwarz.com ([80.246.32.97]:24742 "EHLO
-        mail02.rohde-schwarz.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbhGVQwa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jul 2021 12:52:30 -0400
-Received: from amu316.rsint.net (10.0.26.65) by mail-emea.rohde-schwarz.com
- (172.21.64.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.858.12; Thu, 22 Jul
- 2021 19:33:02 +0200
-Received: from GMU419.rsint.net ([10.0.230.184])
-          by amu316.rsint.net (Totemo SMTP Server) with SMTP ID 489;
-          Thu, 22 Jul 2021 19:33:01 +0200 (CEST)
-Received: from GMU006.rsint.net (10.0.2.28) by GMU419.rsint.net (10.0.230.184)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2242.10; Thu, 22 Jul
- 2021 19:33:01 +0200
-Received: from GMU006.rsint.net (10.0.2.28) by GMU006.rsint.net (10.0.2.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2242.10; Thu, 22
- Jul 2021 19:33:00 +0200
-Received: from GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b]) by
- GMU006.rsint.net ([fe80::81e7:6ea1:2437:698b%12]) with mapi id
- 15.01.2242.010; Thu, 22 Jul 2021 19:33:00 +0200
-From:   Guido Kiener <Guido.Kiener@rohde-schwarz.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        dave penkler <dpenkler@gmail.com>
-CC:     "qiang.zhang@windriver.com" <qiang.zhang@windriver.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        USB <linux-usb@vger.kernel.org>
-Subject: Re: [PATCH] USB: usbtmc: Fix RCU stall warning
-Thread-Topic: [PATCH] USB: usbtmc: Fix RCU stall warning /ur/
-Thread-Index: Add/H1t4MNXQ8799SV+aKdp8ZJ3RwQ==
-Date:   Thu, 22 Jul 2021 17:33:00 +0000
-Message-ID: <7a4283b5b0b3484e8bc0aa82d75587bf@rohde-schwarz.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-rus_sensitivity: 10
-hvs-classificationid: 8485d17c-1b45-47c0-b496-903334a11e28
-hvs-prefix: R_S
-x-originating-ip: [10.0.9.40]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S229937AbhGVRLI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jul 2021 13:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229697AbhGVRLH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jul 2021 13:11:07 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49432C061575
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jul 2021 10:51:41 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id m16so9735505lfg.13
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jul 2021 10:51:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TmG//MwHJdKaLuyi5v/bKon+DjKAPtVgUySPjCaJ9Ao=;
+        b=rW2BVUmbnDE1vpoFFGaCFqGTpgZ5Q3iOQGAjwGu96iSuubeiTYbid4iXSEUTXOlI/T
+         PETbzZXIXA22evvZzYh8143TFQgxoY2Zy2AH+NpYG4LeNoQXzTcGhrO0TR0z+FYgNWik
+         oX4hGJCaO4mCtr7y/BteUU9LLyEi6BTxCAzPl3OdPLDnWauarOuM+VErfpi1vMIaanaL
+         OLGLE+EDqcEKukalasD5VYeFDwpJtNOMQ397yhGiDYGLYbsCx9yZzyO2hVbVQH39SUnj
+         t0gcsu5/PnygyodB1U2QVAlANSvHDYQZCO5ER9NHQTNqCCe8FY2zPbNwzCXl58EF0uHs
+         WlxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TmG//MwHJdKaLuyi5v/bKon+DjKAPtVgUySPjCaJ9Ao=;
+        b=ZwRy6A9m5oqsf+TkELD19zuq9lMYimYjynTMjzNWBL2hHSk17dQTU1xC73Hu6mqBDw
+         BjuOTb0x+ybn/ZLl3H5GMxy6doVuLro9VLSTSJBjTNw5W61EWwGthFekNIjQWs2AvBsD
+         lHHG4OyFh4j6VyuOzgbkaXCcrc0gXaMzy3NfFQPTp0QaucFMKxtOj+7hXvlBY+4j6dem
+         7BH7vBeuh8gqo4wj5sdv4/sptiHhbJQGNYV/AcNwEWrKUTYmGQ9P9qFShkz+p0eZz3hY
+         P9G0xt1iQ8MvDJR3QLLkNTMFPJId3X0qsFy2BDIeTHUg//7eXyMEwfWgv455NQig/fyE
+         GZ/g==
+X-Gm-Message-State: AOAM530602P1ze2NJ7/1+ZTAU/mt64Xgr+cOBzyTG5t1GRDwhOZWYPsl
+        RRtxpYbsDl7GiQ6glZhq/q8=
+X-Google-Smtp-Source: ABdhPJyt7Uc6lL7HA4TkeEKxjf8XtqCl3R2LVdhjk/2huJ+yy38epOoZR3dtufiWBQsMj+rlCx3phg==
+X-Received: by 2002:a05:6512:4004:: with SMTP id br4mr449677lfb.2.1626976299687;
+        Thu, 22 Jul 2021 10:51:39 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id h34sm2027965lfv.231.2021.07.22.10.51.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jul 2021 10:51:39 -0700 (PDT)
+Date:   Thu, 22 Jul 2021 20:51:32 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, sandeen@redhat.com,
+        linux-usb@vger.kernel.org, mdevaev@gmail.com
+Subject: Re: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE
+ handlers
+Message-ID: <20210722205132.7a168041@reki>
+In-Reply-To: <87y29ylga5.fsf@kernel.org>
+References: <20210721180351.129450-1-mdevaev@gmail.com>
+        <87y29ylga5.fsf@kernel.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-IQAV: YES
-X-GBS-PROC: C1ehjJ8FLV06kQbYwEo1G6hXraMjSPaaGfiG8ss+wqpGEcY5QLUwQgLObM6qZHrSMqAuy+ONV9k1obj71WDA7v5tmsHT46IGXotkJVwq5xUaRU+QANTrr/ZxF2tKxueI
-X-GBS-PROCJOB: 3zgIpTsbwJUEpPBn5DKH3jwut2HTs89fptmb5jv9VDSMm0rTZut+pnHUCsJZnesI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-PiBGcm9tOiBHcmVnIEtIDQo+IFNlbnQ6IFdlZG5lc2RheSwgSnVseSAyMSwgMjAyMSAxMTo0OCBB
-TQ0KPiBTdWJqZWN0OiAqRVhUKiBSZTogW1BBVENIXSBVU0I6IHVzYnRtYzogRml4IFJDVSBzdGFs
-bCB3YXJuaW5nDQo+IA0KPiBPbiBXZWQsIEp1bCAyMSwgMjAyMSBhdCAxMTo0NDoyM0FNICswMjAw
-LCBkYXZlIHBlbmtsZXIgd3JvdGU6DQo+ID4gT24gV2VkLCAyMSBKdWwgMjAyMSBhdCAwOTo1Miwg
-R3JlZyBLSCA8Z3JlZ2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+IHdyb3RlOg0KPiA+ID4NCj4gPiA+
-IE9uIFdlZCwgSnVsIDIxLCAyMDIxIGF0IDA5OjQxOjE1QU0gKzAyMDAsIGRhdmUgcGVua2xlciB3
-cm90ZToNCj4gPiA+ID4gT24gV2VkLCAyMSBKdWwgMjAyMSBhdCAwOTowOCwgR3JlZyBLSCA8Z3Jl
-Z2toQGxpbnV4Zm91bmRhdGlvbi5vcmc+DQo+IHdyb3RlOg0KPiA+ID4gPiA+DQo+ID4gPiA+ID4g
-T24gVHVlLCBKdW4gMjksIDIwMjEgYXQgMTE6MzI6MzZBTSArMDgwMCwgcWlhbmcuemhhbmdAd2lu
-ZHJpdmVyLmNvbQ0KPiB3cm90ZToNCj4gPiA+ID4gPiA+IEZyb206IFpxaWFuZyA8cWlhbmcuemhh
-bmdAd2luZHJpdmVyLmNvbT4NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IEkgbmVlZCBhICJmdWxsIiBu
-YW1lIGhlcmUsIGFuZCBpbiB0aGUgc2lnbmVkLW9mZi1ieSBsaW5lIHBsZWFzZS4NCj4gPiA+ID4g
-Pg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IHJjdTogSU5GTzogcmN1X3ByZWVtcHQgc2VsZi1k
-ZXRlY3RlZCBzdGFsbCBvbiBDUFUNCj4gPiA+ID4gPiA+IHJjdTogICAgMS0uLi4hOiAoMiB0aWNr
-cyB0aGlzIEdQKSBpZGxlPWQ5Mi8xLzB4NDAwMDAwMDAwMDAwMDAwMA0KPiA+ID4gPiA+ID4gICAg
-ICAgICBzb2Z0aXJxPTI1MzkwLzI1MzkyIGZxcz0zDQo+ID4gPiA+ID4gPiAgICAgICAgICh0PTEy
-MTY0IGppZmZpZXMgZz0zMTY0NSBxPTQzMjI2KQ0KPiA+ID4gPiA+ID4gcmN1OiByY3VfcHJlZW1w
-dCBrdGhyZWFkIHN0YXJ2ZWQgZm9yIDEyMTYyIGppZmZpZXMhIGczMTY0NSBmMHgwDQo+ID4gPiA+
-ID4gPiAgICAgIFJDVV9HUF9XQUlUX0ZRUyg1KSAtPnN0YXRlPTB4MCAtPmNwdT0wDQo+ID4gPiA+
-ID4gPiByY3U6ICAgIFVubGVzcyByY3VfcHJlZW1wdCBrdGhyZWFkIGdldHMgc3VmZmljaWVudCBD
-UFUgdGltZSwNCj4gPiA+ID4gPiA+ICAgICAgICAgT09NIGlzIG5vdyBleHBlY3RlZCBiZWhhdmlv
-ci4NCj4gPiA+ID4gPiA+IHJjdTogUkNVIGdyYWNlLXBlcmlvZCBrdGhyZWFkIHN0YWNrIGR1bXA6
-DQo+ID4gPiA+ID4gPiB0YXNrOnJjdV9wcmVlbXB0ICAgICBzdGF0ZTpSICBydW5uaW5nIHRhc2sN
-Cj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBJbiB0aGUgY2FzZSBvZiBzeXN0ZW0gdXNlIGR1bW15
-X2hjZCBhcyB1c2IgY29udHJvbGxlciwgd2hlbg0KPiA+ID4gPiA+ID4gdGhlIHVzYnRtYyBkZXZp
-Y2VzIGlzIGRpc2Nvbm5lY3RlZCwgaW4gdXNidG1jX2ludGVycnVwdCgpLCBpZg0KPiA+ID4gPiA+
-ID4gdGhlIHVyYiBzdGF0dXMgaXMgdW5rbm93biwgdGhlIHVyYiB3aWxsIGJlIHJlc3VibWl0LCB0
-aGUgdXJiDQo+ID4gPiA+ID4gPiBtYXkgYmUgaW5zZXJ0IHRvIGR1bV9oY2QtPnVyYnBfbGlzdCBh
-Z2FpbiwgdGhpcyB3aWxsIGNhdXNlIHRoZQ0KPiA+ID4gPiA+ID4gZHVtbXlfdGltZXIoKSBub3Qg
-dG8gZXhpdCBmb3IgYSBsb25nIHRpbWUsIGJlYWNhdXNlIHRoZQ0KPiA+ID4gPiA+ID4gZHVtbXlf
-dGltZXIoKSBiZSBjYWxsZWQgaW4gc29mdGlycSBhbmQgbG9jYWxfYmggaXMgZGlzYWJsZSwNCj4g
-PiA+ID4gPiA+IHRoaXMgbm90IG9ubHkgY2F1c2VzIHRoZSBSQ1UgcmVhZGluZyBjcml0aWNhbCBh
-cmVhIHRvIGNvbnN1bWUNCj4gPiA+ID4gPiA+IHRvbyBtdWNoIHRpbWUgYnV0IGFsc28gbWFrZXMg
-dGhlIHRhc2tzIGluIHRoZSBjdXJyZW50IENQVSBydW5xIG5vdCBydW4NCj4gaW4gdGltZSwgYW5k
-IHRoYXQgdHJpZ2dlcmVkIFJDVSBzdGFsbC4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiByZXR1
-cm4gZGlyZWN0bHkgd2hlbiBmaW5kIHRoZSB1cmIgc3RhdHVzIGlzIG5vdCB6ZXJvIHRvIGZpeCBp
-dC4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiBSZXBvcnRlZC1ieToNCj4gPiA+ID4gPiA+IHN5
-emJvdCtlMmVhZTU2MzllNzIwMzM2MDAxOEBzeXprYWxsZXIuYXBwc3BvdG1haWwuY29tDQo+ID4g
-PiA+ID4gPiBTaWduZWQtb2ZmLWJ5OiBacWlhbmcgPHFpYW5nLnpoYW5nQHdpbmRyaXZlci5jb20+
-DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBXaGF0IGNvbW1pdCBkb2VzIHRoaXMgZml4PyAgRG9lcyBp
-dCBuZWVkIHRvIGdvIHRvIHN0YWJsZSBrZXJuZWxzPw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4gV2hh
-dCBhYm91dCB0aGUgdXNidG1jIG1haW50YWluZXJzLCB3aGF0IGRvIHRoZXkgdGhpbmsgYWJvdXQg
-dGhpcz8NCj4gPiA+ID4NCj4gPiA+ID4gVGhpcyBwYXRjaCBtYWtlcyB0aGUgYmFiYmxpbmcgZW5k
-cG9pbnQgcmV0cnkvcmVjb3ZlcnkgY29kZSBpbiB0aGUNCj4gPiA+ID4gcmVhbCB3b3JsZCB1c2Ig
-aG9zdCBjb250cm9sbGVyIGRyaXZlcnMgcmVkdW5kYW50IGFuZCB3b3VsZCBwcmV2ZW50DQo+ID4g
-PiA+IHVzYnRtYyBhcHBsaWNhdGlvbnMgZnJvbSBiZW5lZml0aW5nIGZyb20gaXQuDQo+ID4gPg0K
-PiA+ID4gSSBkbyBub3QgdW5kZXJzdGFuZCwgaXMgdGhpcyBjaGFuZ2Ugb2sgb3Igbm90Pw0KPiA+
-ID4NCj4gPiA+IFdoeSBkbyB1c2J0bWMgYXBwbGljYXRpb25zIG5lZWQgdG8ga25vdyBpZiBiYWJi
-bGluZyBoYXBwZW5zIG9yIG5vdD8NCj4gPiA+DQo+ID4gPiBjb25mdXNlZCwNCj4gPiBTb3JyeSwg
-dGhlIGlzc3VlIHRoaXMgcGF0Y2ggaXMgdHJ5aW5nIHRvIGZpeCBvY2N1cnMgYmVjYXVzZSB0aGUN
-Cj4gPiBjdXJyZW50IHVzYnRtYyBkcml2ZXIgcmVzdWJtaXRzIHRoZSBVUkIgd2hlbiBpdCBnZXRz
-IGFuIEVQUk9UTyByZXR1cm4uDQo+ID4gVGhlIGR1bW15IHVzYiBob3N0IGNvbnRyb2xsZXIgZHJp
-dmVyIHVzZWQgaW4gdGhlIHN5emJvdCB0ZXN0cyBrZWVwcw0KPiA+IHJldHVybmluZyB0aGUgcmVz
-dWJtaXR0ZWQgVVJCIHdpdGggRVBST1RPIGNhdXNpbmcgYSBsb29wIHRoYXQgc3RhcnZlcw0KPiA+
-IFJDVS4gV2l0aCBhbiBhY3R1YWwgSENJIGRyaXZlciBpdCBlaXRoZXIgcmVjb3ZlcnMgb3IgcmV0
-dXJucyBhbiBFUElQRS4NCj4gPiBJbiBlaXRoZXIgY2FzZSBubyBsb29wIG9jY3Vycy4gU28gZm9y
-IG15IHBhcnQgYXMgYSB1c2VyIGFuZCBtYWludGFpbmVyDQo+ID4gdGhpcyBwYXRjaCBpcyBub3Qg
-b2suDQo+IA0KPiBUaGFua3MgZm9yIHRoZSByZXZpZXcuDQo+IA0KPiBacWlhbmcsIGNhbiB5b3Ug
-Zml4IHRoaXMgcGF0Y2ggdXAgYmFzZWQgb24gdGhpcyBwbGVhc2U/DQo+IA0KPiB0aGFua3MsDQo+
-IA0KPiBncmVnIGstaA0KDQpRaWFuZywNCg0KQWZ0ZXIgZGlzY3Vzc2lvbnMgd2l0aCBBbGFuIGFu
-ZCBEYXZlIHdlIHRoaW5rIHRoYXQgZml4aW5nIHRoZSB1c2J0bWMgZHJpdmVyIGlzIHRoZSBiZXN0
-IGFwcHJvYWNoIHRvIGZpeCB0aGUgUkNVIHN0YWxsIHdhcm5pbmcuDQpZb3VyIGZpcnN0IHByb3Bv
-c2FsIHdhcyBhbG1vc3Qgb2ssIGJ1dCBJIHRoaW5rIHdlIHNob3VsZCB1c2UgZGV2X2RiZygpIGlu
-c3RlYWQgb2YgZGV2X2VycigpIHRvIGF2b2lkIHByaW50aW5nIHRoZSBFUFJPVE8gZXJyb3JzLiBT
-ZWUgYmVsb3c6DQoNClBsZWFzZSBmZWVsIGZyZWUgdG8gYWRkIHRoZSBmb2xsb3dpbmcgdGV4dCB0
-byB5b3VyIHBhdGNoIGRlc2NyaXB0aW9uLg0KDQotR3VpZG8NCg0KDQpUaGUgZnVuY3Rpb24gdXNi
-dG1jX2ludGVycnVwdCgpIHJlc3VibWl0cyB1cmJzIHdoZW4gdGhlIGVycm9yIHN0YXR1cw0Kb2Yg
-YW4gdXJiIGlzIC1FUFJPVE8uIEluIHN5c3RlbXMgdXNpbmcgdGhlIGR1bW15X2hjZCB1c2IgY29u
-dHJvbGxlcg0KdGhpcyBjYW4gcmVzdWx0IGluIGVuZGxlc3MgaW50ZXJydXB0IGxvb3BzIHdoZW4g
-dGhlIHVzYnRtYyBkZXZpY2UgaXMNCmRpc2Nvbm5lY3RlZCBmcm9tIHRoZSBob3N0IHN5c3RlbS4N
-CiAgICANClNpbmNlIGhvc3QgY29udHJvbGxlciBkcml2ZXJzIGFscmVhZHkgdHJ5IHRvIHJlY292
-ZXIgZnJvbSB0cmFuc21pc3Npb24NCmVycm9ycywgdGhlcmUgaXMgbm8gbmVlZCB0byByZXN1Ym1p
-dCB0aGUgdXJiIG9yIHRyeSBvdGhlciBzb2x1dGlvbnMNCnRvIHJlcGFpciB0aGUgZXJyb3Igc2l0
-dWF0aW9uLg0KICAgIA0KSW4gY2FzZSBvZiBlcnJvcnMgdGhlIElOVCBwaXBlIGp1c3Qgc3RvcHMg
-dG8gd2FpdCBmb3IgZnVydGhlciBwYWNrZXRzLg0KDQpSZXZpZXdlZC1ieTogR3VpZG8gS2llbmVy
-IDxndWlkby5raWVuZXJAcm9oZGUtc2Nod2Fyei5jb20+DQoNCmRpZmYgLS1naXQgYS9kcml2ZXJz
-L3VzYi9jbGFzcy91c2J0bWMuYyBiL2RyaXZlcnMvdXNiL2NsYXNzL3VzYnRtYy5jDQppbmRleCA3
-NGQ1YTljNTIzOGEuLjczZjQxOWFkY2U2MSAxMDA2NDQNCi0tLSBhL2RyaXZlcnMvdXNiL2NsYXNz
-L3VzYnRtYy5jDQorKysgYi9kcml2ZXJzL3VzYi9jbGFzcy91c2J0bWMuYw0KQEAgLTIzMjQsMTcg
-KzIzMjQsMTAgQEAgc3RhdGljIHZvaWQgdXNidG1jX2ludGVycnVwdChzdHJ1Y3QgdXJiICp1cmIp
-DQogICAgICAgICAgICAgICAgZGV2X2VycihkZXYsICJvdmVyZmxvdyB3aXRoIGxlbmd0aCAlZCwg
-YWN0dWFsIGxlbmd0aCBpcyAlZFxuIiwNCiAgICAgICAgICAgICAgICAgICAgICAgIGRhdGEtPmlp
-bl93TWF4UGFja2V0U2l6ZSwgdXJiLT5hY3R1YWxfbGVuZ3RoKTsNCiAgICAgICAgICAgICAgICBm
-YWxsdGhyb3VnaDsNCi0gICAgICAgY2FzZSAtRUNPTk5SRVNFVDoNCi0gICAgICAgY2FzZSAtRU5P
-RU5UOg0KLSAgICAgICBjYXNlIC1FU0hVVERPV046DQotICAgICAgIGNhc2UgLUVJTFNFUToNCi0g
-ICAgICAgY2FzZSAtRVRJTUU6DQotICAgICAgIGNhc2UgLUVQSVBFOg0KKyAgICAgICBkZWZhdWx0
-Og0KICAgICAgICAgICAgICAgIC8qIHVyYiB0ZXJtaW5hdGVkLCBjbGVhbiB1cCAqLw0KICAgICAg
-ICAgICAgICAgIGRldl9kYmcoZGV2LCAidXJiIHRlcm1pbmF0ZWQsIHN0YXR1czogJWRcbiIsIHN0
-YXR1cyk7DQogICAgICAgICAgICAgICAgcmV0dXJuOw0KLSAgICAgICBkZWZhdWx0Og0KLSAgICAg
-ICAgICAgICAgIGRldl9lcnIoZGV2LCAidW5rbm93biBzdGF0dXMgcmVjZWl2ZWQ6ICVkXG4iLCBz
-dGF0dXMpOw0KICAgICAgICB9DQogZXhpdDoNCiAgICAgICAgcnYgPSB1c2Jfc3VibWl0X3VyYih1
-cmIsIEdGUF9BVE9NSUMpOw0K
+> Felipe Balbi <balbi@kernel.org> writes:
+>=20
+> yeah, I don't see any issues with this. If you have access to the tool,
+> mind running USBCV on the f_hid gadget? Would be cool to get some
+> confirmation that we're within spec.
+
+Thanks for pointing to USBCV. I used a hardware USB protocol analyzer
+to understand what was wrong with f_hid, and my hosts only sent idle=3D0.
+Thanks to the test, I realized that I should only use the upper byte
+that contains duration. Here a fixed version of the patch,
+which successfully passes all HID tests. The idle part:
+
+    Now Starting Test: HID Class GET/SET Idle Test (Configuration Index 0)
+    Start time: Jul 22, 2021 - 20:29:40
+    No report IDs found in report descriptor for Interface : 0x0
+    GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
+    No report IDs found in report descriptor for Interface : 0x1
+    GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
+   =20
+    Stop time: Jul 22, 2021 - 20:29:41
+    Duration:  1 second.
+    Stopping Test [ HID Class GET/SET Idle Test (Configuration Index 0):
+         Number of: Fails (0); Aborts (0); Warnings (0) ]
+
+
+=46rom ac56ddc1ab2dfa599a12a3bf064e520d587e89fe Mon Sep 17 00:00:00 2001
+From: Maxim Devaev <mdevaev@gmail.com>
+Date: Wed, 21 Jul 2021 20:48:28 +0300
+Subject: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
+
+The USB HID standard declares mandatory support for GET_IDLE and SET_IDLE
+requests for Boot Keyboard. Most hosts can handle their absence, but others
+like some old/strange UEFIs and BIOSes consider this a critical error
+and refuse to work with f_hid.
+
+This primitive implementation of saving and returning idle is sufficient
+to meet the requirements of the standard and these devices.
+
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+---
+ drivers/usb/gadget/function/f_hid.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/funct=
+ion/f_hid.c
+index 02683ac07..1010f0a3e 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -41,6 +41,7 @@ struct f_hidg {
+ 	unsigned char			bInterfaceSubClass;
+ 	unsigned char			bInterfaceProtocol;
+ 	unsigned char			protocol;
++	unsigned char			idle;
+ 	unsigned short			report_desc_length;
+ 	char				*report_desc;
+ 	unsigned short			report_length;
+@@ -523,6 +524,14 @@ static int hidg_setup(struct usb_function *f,
+ 		goto respond;
+ 		break;
+=20
++	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
++		  | HID_REQ_GET_IDLE):
++		VDBG(cdev, "get_idle\n");
++		length =3D min_t(unsigned int, length, 1);
++		((u8 *) req->buf)[0] =3D hidg->idle;
++		goto respond;
++		break;
++
+ 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+ 		  | HID_REQ_SET_REPORT):
+ 		VDBG(cdev, "set_report | wLength=3D%d\n", ctrl->wLength);
+@@ -546,6 +555,14 @@ static int hidg_setup(struct usb_function *f,
+ 		goto stall;
+ 		break;
+=20
++	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
++		  | HID_REQ_SET_IDLE):
++		VDBG(cdev, "set_idle\n");
++		length =3D 0;
++		hidg->idle =3D value >> 8;
++		goto respond;
++		break;
++
+ 	case ((USB_DIR_IN | USB_TYPE_STANDARD | USB_RECIP_INTERFACE) << 8
+ 		  | USB_REQ_GET_DESCRIPTOR):
+ 		switch (value >> 8) {
+@@ -773,6 +790,7 @@ static int hidg_bind(struct usb_configuration *c, struc=
+t usb_function *f)
+ 	hidg_interface_desc.bInterfaceSubClass =3D hidg->bInterfaceSubClass;
+ 	hidg_interface_desc.bInterfaceProtocol =3D hidg->bInterfaceProtocol;
+ 	hidg->protocol =3D HID_REPORT_PROTOCOL;
++	hidg->idle =3D 1;
+ 	hidg_ss_in_ep_desc.wMaxPacketSize =3D cpu_to_le16(hidg->report_length);
+ 	hidg_ss_in_comp_desc.wBytesPerInterval =3D
+ 				cpu_to_le16(hidg->report_length);
+--=20
+2.32.0
