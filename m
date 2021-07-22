@@ -2,81 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7E23D1C0F
-	for <lists+linux-usb@lfdr.de>; Thu, 22 Jul 2021 04:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5923D1D48
+	for <lists+linux-usb@lfdr.de>; Thu, 22 Jul 2021 07:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbhGVCJu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 21 Jul 2021 22:09:50 -0400
-Received: from mail-io1-f53.google.com ([209.85.166.53]:45885 "EHLO
-        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbhGVCJt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 21 Jul 2021 22:09:49 -0400
-Received: by mail-io1-f53.google.com with SMTP id z17so4673877iog.12;
-        Wed, 21 Jul 2021 19:50:25 -0700 (PDT)
+        id S229996AbhGVEgN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jul 2021 00:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229569AbhGVEgM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jul 2021 00:36:12 -0400
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CAF0C061575
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 22:16:48 -0700 (PDT)
+Received: by mail-yb1-xb34.google.com with SMTP id v189so2708850ybg.3
+        for <linux-usb@vger.kernel.org>; Wed, 21 Jul 2021 22:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tRveWtYDfRTxBNsXLv7NSph+s4fGOrwieyz6vTiYfP8=;
+        b=JibbNSl+sQSJXlegu+UpR6kAk9olWu6LT/tJ0jOyHwXOo7TwZPTvHMCg6eudUcMVch
+         +eKUWcImvlckSpc+LMG2VglJYof7+bPEUwYSnKyrlOAhupUYJx5jIvRSjHpsK0kTloNj
+         c8/rHKPYf8Lfw6ob+IjDMnRGr4CV1/UZNhYMJxie5N9kQi9WwtgUoOuPqpVzA/99x6rO
+         ZqJBIXUIXBSvSZU1OJaqxhNLU+AljG7Vie3RMDHcJJi1mvs2tNZf0u+Xfac1NRQOk1Xb
+         xr5NbBRemtUbGejACeBKEl1gGmklJjICCZswKotcG3/Ph/NHYPXAo8VG0lCku4CLWsy3
+         p6Hg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ufJOt3s4xnD/zrL6wx1XOxKXgCd7sL0/12l79h4dyKQ=;
-        b=MDz3lWpDZEZtaIi7YOLvYjPWmMTGVr2RXbjBmnMLhgj7lsrwz+iirlhbwHZmlCkOMH
-         20kgCBi5zT+RvFNU+ukJN4PO9+RIUKEJ58xafH2A4gvbFdd/kBbTKdlS4iD6elv2/6Kp
-         ND2BH/XdnNJKyHjcXgUHJnuimQLc9RP1Az3YqnSBjdjoAFlC1Wu2b7FbzPyyCLp7ZHtE
-         7yA5XnaimgC1k07Y73w/lUy/9+686aG+XPzqUAxFCK8kGSlkROOw7Uue3AGbNRtRpT3/
-         vkdrxrIF6/PfRaxGEM/w9RJstvBo2DK5sulGuDSL5MbsEeSjnWU0e4bfXWdd2jiZCAQT
-         gOPA==
-X-Gm-Message-State: AOAM532eKkKpuSiHbw1DNwm/st3B0kyMKsq0CScSMCKulzHKYhjTFzcc
-        6jRkFSEUzfVDT6yLzUvpQg==
-X-Google-Smtp-Source: ABdhPJyOeywBVnXkZ+x1O8LDM0zWz+/vkCtEewMhu1XJNVLdsdRM+UJVjTzN04GxJ5Mn128sIPTiJQ==
-X-Received: by 2002:a5d:89d6:: with SMTP id a22mr6520811iot.178.1626922224652;
-        Wed, 21 Jul 2021 19:50:24 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c16sm14583134ilo.72.2021.07.21.19.50.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jul 2021 19:50:24 -0700 (PDT)
-Received: (nullmailer pid 3202242 invoked by uid 1000);
-        Thu, 22 Jul 2021 02:50:22 -0000
-Date:   Wed, 21 Jul 2021 20:50:22 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     linux-usb@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mediatek@lists.infradead.org,
-        Yuwen Ng <yuwen.ng@mediatek.com>
-Subject: Re: [PATCH v3 02/13] dt-bindings: usb: mtu3: add optional property
- to disable usb2 ports
-Message-ID: <20210722025022.GA3202212@robh.at.kernel.org>
-References: <1626340078-29111-1-git-send-email-chunfeng.yun@mediatek.com>
- <1626340078-29111-3-git-send-email-chunfeng.yun@mediatek.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tRveWtYDfRTxBNsXLv7NSph+s4fGOrwieyz6vTiYfP8=;
+        b=HHaPXa6nn66lTzR66iZDRWk4/Yy2m/zI9OQlbKJmfcKH5c25spjURDb1GRDRBSzE5o
+         bN75lQn4E4CCQo5Cl3DE7ImwKkJuGBhpYnFF1BKKapzANbkk+zfgDeIqqzpe+yBC+pZX
+         wa/0zJFSdYzlsO0vAugTvFbf7xQ+n2PMJrFuoaVKNORqgvslLJBZhss8N0od+TXQCpU+
+         fB1RUIoNElzkZbPlh4OjUDmFipxyAJAONLwdl73LzX45TTNwKIYhSeZ8DHaMzsyJXSub
+         LXc8c2A4+Ryj1DizSEK0f28fsRhdtu7YVzQuGF4xJ5Md3wpDr3pUCeneD6pSLunE0gx6
+         RrXA==
+X-Gm-Message-State: AOAM530kXvvD8IG8YFAuND0t7sgUuH3tdkf2GxAUl7TEY4KIWdrUuxPt
+        rhvN7H0loUkplKL0JefKWyBEWOVEz3288hOiZrpNUiA2Fm1MUQ==
+X-Google-Smtp-Source: ABdhPJxTKTN8mS7voR0Bd6egxOKqRZvFRpzPJG9wFLV8Y5524n4afrJ21BcZ6HVgoYepWjcDmiJGMAfa0+WxkZgeRjo=
+X-Received: by 2002:a25:1c1:: with SMTP id 184mr49495666ybb.175.1626931007507;
+ Wed, 21 Jul 2021 22:16:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1626340078-29111-3-git-send-email-chunfeng.yun@mediatek.com>
+References: <20210622120906.743-1-charlesyeh522@gmail.com>
+In-Reply-To: <20210622120906.743-1-charlesyeh522@gmail.com>
+From:   Charles Yeh <charlesyeh522@gmail.com>
+Date:   Thu, 22 Jul 2021 13:16:36 +0800
+Message-ID: <CAAZvQQ7af2zowxUr7UikPkQvBkcx7PFFey-fs1DixwwpWco5CA@mail.gmail.com>
+Subject: Re: [PATCH] USB: serial: pl2303: Add new PID to support PL256X (TYPE_MP)
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org
+Cc:     =?UTF-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
+        <charles-yeh@prolific.com.tw>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, 15 Jul 2021 17:07:47 +0800, Chunfeng Yun wrote:
-> Add support to disable specific usb2 host ports, it's useful when
-> a usb2 port is disabled on some platforms, but enabled on others for
-> the same SoC, another case is that the different package may support
-> different number of ports.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> ---
-> Due to there is property 'mediatek,u3p-dis-msk', prefer to use
-> a similar name for the similar opertions, not spell out 'mask'
-> as suggested by Rob.
-> 
-> v2~3: no changes
-> ---
->  Documentation/devicetree/bindings/usb/mediatek,mtu3.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
+Any update?
 
-Acked-by: Rob Herring <robh@kernel.org>
+Charles.
