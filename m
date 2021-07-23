@@ -2,110 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 110D93D3503
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 09:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F32D3D352C
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 09:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234214AbhGWGYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 02:24:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59394 "EHLO mail.kernel.org"
+        id S232850AbhGWGkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jul 2021 02:40:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34526 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234089AbhGWGYl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Jul 2021 02:24:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 7D09260EAF;
-        Fri, 23 Jul 2021 07:05:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1627023914;
-        bh=bdg4IKmEOmIJGi9bkVNvHhOylDYZgIWiL34s3A6QfpU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KU+G+f3V+IKPMrH7fYe6wtoHAY292z9gPpkLy1mRmfD+9fI6nY2gSqQX1dBQPeoRK
-         oXNUBVPiVjRS4pokelk4eS6v9UEuJ/j7F2ZibDKupbXHZsAQmBFXL3QncaDzvC0IoP
-         se6vu0db4vug1+ZCIzEXP/EgSDZs0WJS6f6i4P/8=
-Date:   Fri, 23 Jul 2021 09:05:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rajatxjain@gmail.com
-Subject: Re: [PATCH] thunderbolt: For dev authorization changes, include the
- actual event in udev change notification
-Message-ID: <YPpqJ6k5M3skTYdA@kroah.com>
-References: <20210723012835.1935471-1-rajatja@google.com>
+        id S229774AbhGWGkD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Jul 2021 02:40:03 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B84C160EAF;
+        Fri, 23 Jul 2021 07:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627024836;
+        bh=bQh8M7TpD+pNf181uEcSVStCFCS4QULBmpH2FjgNdWU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=mFf7hDScnIXDZSHsooaPEnurUrLjwWCbUxG/hMp3vptBBuTeOm6OvmoyzH/jeZ201
+         vCLHf5onvBJdTFGC+/CGejMPrgb0N2T0RicxRyFJrJH4jWIrW1Q/qt6OcdgdoBvGdQ
+         stkqdQnowiEO3aQChwL7imYvNO5OOwE58dguP1+crK/gOoSTAEYwEbLZdJ6XR4TYU3
+         vH/7mH6ox90sPykghUxOChut6QFcVn/ZvhO/KZo809IREfcNHDD5J8ki+aBKqU0oJu
+         TS77YO3CU3iL9lj8KJN+pyC96vmOgokg8ZmOUwKuUd1VQlYp1uJktvrAKFNDuzmI3C
+         5wptDgxrBUBJw==
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     gregkh@linuxfoundation.org, sandeen@redhat.com,
+        linux-usb@vger.kernel.org, mdevaev@gmail.com
+Subject: Re: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
+In-Reply-To: <20210722205132.7a168041@reki>
+References: <20210721180351.129450-1-mdevaev@gmail.com>
+ <87y29ylga5.fsf@kernel.org> <20210722205132.7a168041@reki>
+Date:   Fri, 23 Jul 2021 10:20:29 +0300
+Message-ID: <87sg05lcn6.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210723012835.1935471-1-rajatja@google.com>
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 06:28:34PM -0700, Rajat Jain wrote:
-> For security, we would like to monitor and track when the
-> thunderbolt devices are authorized and deauthorized. Currently
-> the userspace gets a udev change notification when there is a
-> change, but the state may have changed (again) by the time we
-> look at the authorized attribute in sysfs. So an authorization
-> event may go unnoticed. Thus make it easier by informing the
-> actual change (authorized/deauthorized) in the udev change
-> notification.
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
-We do have 72 columns to work with... :)
+Maxim Devaev <mdevaev@gmail.com> writes:
 
-> 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> ---
->  drivers/thunderbolt/switch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 83b1ef3d5d03..5d3e9dcba44a 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -1499,6 +1499,7 @@ static ssize_t authorized_show(struct device *dev,
->  static int disapprove_switch(struct device *dev, void *not_used)
->  {
->  	struct tb_switch *sw;
-> +	char *envp[] = { "AUTHORIZED=0", NULL };
->  
->  	sw = tb_to_switch(dev);
->  	if (sw && sw->authorized) {
-> @@ -1514,7 +1515,7 @@ static int disapprove_switch(struct device *dev, void *not_used)
->  			return ret;
->  
->  		sw->authorized = 0;
-> -		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> +		kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
->  	}
->  
->  	return 0;
-> @@ -1523,6 +1524,8 @@ static int disapprove_switch(struct device *dev, void *not_used)
->  static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
->  {
->  	int ret = -EINVAL;
-> +	char envp_string[13];
-> +	char *envp[] = { envp_string, NULL };
->  
->  	if (!mutex_trylock(&sw->tb->lock))
->  		return restart_syscall();
-> @@ -1560,7 +1563,8 @@ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
->  	if (!ret) {
->  		sw->authorized = val;
->  		/* Notify status change to the userspace */
-> -		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> +		sprintf(envp_string, "AUTHORIZED=%u", val);
-> +		kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
+>> Felipe Balbi <balbi@kernel.org> writes:
+>>=20
+>> yeah, I don't see any issues with this. If you have access to the tool,
+>> mind running USBCV on the f_hid gadget? Would be cool to get some
+>> confirmation that we're within spec.
+>
+> Thanks for pointing to USBCV. I used a hardware USB protocol analyzer
+> to understand what was wrong with f_hid, and my hosts only sent idle=3D0.
+> Thanks to the test, I realized that I should only use the upper byte
+> that contains duration. Here a fixed version of the patch,
+> which successfully passes all HID tests. The idle part:
+>
+>     Now Starting Test: HID Class GET/SET Idle Test (Configuration Index 0)
+>     Start time: Jul 22, 2021 - 20:29:40
+>     No report IDs found in report descriptor for Interface : 0x0
+>     GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
+>     No report IDs found in report descriptor for Interface : 0x1
+>     GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
+>=20=20=20=20=20
+>     Stop time: Jul 22, 2021 - 20:29:41
+>     Duration:  1 second.
+>     Stopping Test [ HID Class GET/SET Idle Test (Configuration Index 0):
+>          Number of: Fails (0); Aborts (0); Warnings (0) ]
+>
+>
+> From ac56ddc1ab2dfa599a12a3bf064e520d587e89fe Mon Sep 17 00:00:00 2001
+> From: Maxim Devaev <mdevaev@gmail.com>
+> Date: Wed, 21 Jul 2021 20:48:28 +0300
+> Subject: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
+>
+> The USB HID standard declares mandatory support for GET_IDLE and SET_IDLE
+> requests for Boot Keyboard. Most hosts can handle their absence, but othe=
+rs
+> like some old/strange UEFIs and BIOSes consider this a critical error
+> and refuse to work with f_hid.
+>
+> This primitive implementation of saving and returning idle is sufficient
+> to meet the requirements of the standard and these devices.
+>
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
 
-So now "val" is a userspace visable value?  Is that documented anywhere
-what it is and what are you going to do to ensure it never changes in
-the future?
+Great, thank you.
 
-Also this new value "field" should be documented somewhere as well,
-otherwise how will any tool know it is there?
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-And what userspace tool will be looking for this?
+=2D-=20
+balbi
 
-thanks,
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
 
-greg k-h
+-----BEGIN PGP SIGNATURE-----
+
+iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmD6bb0RHGJhbGJpQGtl
+cm5lbC5vcmcACgkQzlfNM9wDzUjergf7B4T9jP8RFLZG9KmVza1mEgOPXQnMjdqG
+Wi5ht1zb6FO+2v0iUBu7bI6Y5dy+ujS9uJfSgqqIMlY4FnEWbFvKXHcYPyRCdWQn
+m8AwZXLNJWW0K8dVBIAGHXel0UncVBcZGQQdvW+9qPjvMyLjEivOVvy5gDuhRMEn
+i31vKO88mu03wfz7hXxF+tK3o0HJ9ZpvDUrKlRl/pDTencj+d2fN9spTEJV1YZKX
+G1NNSoAoQXbVGDWeMp3MiwbqxgOfAS+oLS7o22ZEoogbAr4NwtZzNGUUCYhr34eC
+0vbg1tdTj4SVoft8RPQBIXpSLn66jiBKTZwlY5GhPCq2XhnOLZM1jg==
+=MlhL
+-----END PGP SIGNATURE-----
+--=-=-=--
