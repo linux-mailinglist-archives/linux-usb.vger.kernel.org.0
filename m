@@ -2,110 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F32D3D352C
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 09:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EA93D367F
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 10:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbhGWGkD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 02:40:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34526 "EHLO mail.kernel.org"
+        id S234523AbhGWHhG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jul 2021 03:37:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56458 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229774AbhGWGkD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Jul 2021 02:40:03 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B84C160EAF;
-        Fri, 23 Jul 2021 07:20:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627024836;
-        bh=bQh8M7TpD+pNf181uEcSVStCFCS4QULBmpH2FjgNdWU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mFf7hDScnIXDZSHsooaPEnurUrLjwWCbUxG/hMp3vptBBuTeOm6OvmoyzH/jeZ201
-         vCLHf5onvBJdTFGC+/CGejMPrgb0N2T0RicxRyFJrJH4jWIrW1Q/qt6OcdgdoBvGdQ
-         stkqdQnowiEO3aQChwL7imYvNO5OOwE58dguP1+crK/gOoSTAEYwEbLZdJ6XR4TYU3
-         vH/7mH6ox90sPykghUxOChut6QFcVn/ZvhO/KZo809IREfcNHDD5J8ki+aBKqU0oJu
-         TS77YO3CU3iL9lj8KJN+pyC96vmOgokg8ZmOUwKuUd1VQlYp1uJktvrAKFNDuzmI3C
-         5wptDgxrBUBJw==
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     gregkh@linuxfoundation.org, sandeen@redhat.com,
-        linux-usb@vger.kernel.org, mdevaev@gmail.com
-Subject: Re: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
-In-Reply-To: <20210722205132.7a168041@reki>
-References: <20210721180351.129450-1-mdevaev@gmail.com>
- <87y29ylga5.fsf@kernel.org> <20210722205132.7a168041@reki>
-Date:   Fri, 23 Jul 2021 10:20:29 +0300
-Message-ID: <87sg05lcn6.fsf@kernel.org>
+        id S234311AbhGWHhF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Jul 2021 03:37:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BDD7A60EBD;
+        Fri, 23 Jul 2021 08:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627028259;
+        bh=xnAmVgoDuokti2NByNq6/FFRGTSMhdQRxWuJi2rHC0Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fzT5ISx3nPwKdbMu9BnIUTph2mjFB1lUM2vUb2DiOHFTRVsbeYjRZ9mIzVtd5w4BB
+         63ePNFLvEybFAJsW5Jd8b4VvRCudZ3uEULO/cI7h/8TaLYpaHj8U8tLSv9D/lxjAAz
+         NIQs5QlX5UnLX6OUSTzkVnUrKlMhXGZ29WXZ/1RE=
+Date:   Fri, 23 Jul 2021 10:17:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <YPp7Gi9xKtNJpC1a@kroah.com>
+References: <20210721100220.ddfxwugivsndsedv@mobilestation>
+ <YPf29+ewbrYgHxRP@kroah.com>
+ <0064cb2c-5ca6-e693-2e89-8f045c8f7502@kernel.org>
+ <YPf+shNM6cXb3mfe@kroah.com>
+ <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
+ <20210721112531.xvu6ni5ksaehsrjh@mobilestation>
+ <CALAqxLViEqSO17P3JGRGYJh-wDoHaJiQQV48zeoRgnar4Xd5Bg@mail.gmail.com>
+ <20210722181221.xh3r5kyu7zlcojjx@mobilestation>
+ <YPnEO6NVFZDS1s//@yoga>
+ <20210722215451.cdhvh5jjvtv5zncl@mobilestation>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210722215451.cdhvh5jjvtv5zncl@mobilestation>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jul 23, 2021 at 12:54:51AM +0300, Serge Semin wrote:
+> I always thought that ABI is supposed to be something what is
+> thoroughly documented and firmly declared to be so. It isn't something
+> claimed to be on a random nature but defined to be one when it's
+> more-or-less standardized. Thus the Linux kernel developers decide not
+> to change something unless it went through the series of iterations like
+> testing, stable, obsolete, remove. As I see it the rule-of-thumb is
+> supposed to be as "nothing is ABI unless it's declared as such".
 
-Maxim Devaev <mdevaev@gmail.com> writes:
+Not true at all.  Again, if something works in an older kernel version,
+and you upgrade to a new kernel version and it breaks, that is a
+regression and must be fixed/reverted.
 
->> Felipe Balbi <balbi@kernel.org> writes:
->>=20
->> yeah, I don't see any issues with this. If you have access to the tool,
->> mind running USBCV on the f_hid gadget? Would be cool to get some
->> confirmation that we're within spec.
->
-> Thanks for pointing to USBCV. I used a hardware USB protocol analyzer
-> to understand what was wrong with f_hid, and my hosts only sent idle=3D0.
-> Thanks to the test, I realized that I should only use the upper byte
-> that contains duration. Here a fixed version of the patch,
-> which successfully passes all HID tests. The idle part:
->
->     Now Starting Test: HID Class GET/SET Idle Test (Configuration Index 0)
->     Start time: Jul 22, 2021 - 20:29:40
->     No report IDs found in report descriptor for Interface : 0x0
->     GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
->     No report IDs found in report descriptor for Interface : 0x1
->     GET/SETIdle test for report ID 0. Setting Idle rate to : 0x7F
->=20=20=20=20=20
->     Stop time: Jul 22, 2021 - 20:29:41
->     Duration:  1 second.
->     Stopping Test [ HID Class GET/SET Idle Test (Configuration Index 0):
->          Number of: Fails (0); Aborts (0); Warnings (0) ]
->
->
-> From ac56ddc1ab2dfa599a12a3bf064e520d587e89fe Mon Sep 17 00:00:00 2001
-> From: Maxim Devaev <mdevaev@gmail.com>
-> Date: Wed, 21 Jul 2021 20:48:28 +0300
-> Subject: [PATCH] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
->
-> The USB HID standard declares mandatory support for GET_IDLE and SET_IDLE
-> requests for Boot Keyboard. Most hosts can handle their absence, but othe=
-rs
-> like some old/strange UEFIs and BIOSes consider this a critical error
-> and refuse to work with f_hid.
->
-> This primitive implementation of saving and returning idle is sufficient
-> to meet the requirements of the standard and these devices.
->
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Lack of documentation does not mean an ABI can be changed.
 
-Great, thank you.
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQFFBAEBCAAvFiEE9DumQ60WEZ09LIErzlfNM9wDzUgFAmD6bb0RHGJhbGJpQGtl
-cm5lbC5vcmcACgkQzlfNM9wDzUjergf7B4T9jP8RFLZG9KmVza1mEgOPXQnMjdqG
-Wi5ht1zb6FO+2v0iUBu7bI6Y5dy+ujS9uJfSgqqIMlY4FnEWbFvKXHcYPyRCdWQn
-m8AwZXLNJWW0K8dVBIAGHXel0UncVBcZGQQdvW+9qPjvMyLjEivOVvy5gDuhRMEn
-i31vKO88mu03wfz7hXxF+tK3o0HJ9ZpvDUrKlRl/pDTencj+d2fN9spTEJV1YZKX
-G1NNSoAoQXbVGDWeMp3MiwbqxgOfAS+oLS7o22ZEoogbAr4NwtZzNGUUCYhr34eC
-0vbg1tdTj4SVoft8RPQBIXpSLn66jiBKTZwlY5GhPCq2XhnOLZM1jg==
-=MlhL
------END PGP SIGNATURE-----
---=-=-=--
+greg k-h
