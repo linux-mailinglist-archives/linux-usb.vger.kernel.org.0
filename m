@@ -2,83 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADC83D3CF4
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 17:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FE33D3D0A
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 18:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235783AbhGWPOe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 11:14:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51646 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235702AbhGWPOX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 23 Jul 2021 11:14:23 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 592D260725;
-        Fri, 23 Jul 2021 15:54:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1627055696;
-        bh=gGq+nFNtYhXh8+LTHNU1d09X9anaFb/jJcdQ6OGEm6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=w7TXf5P/3VOLNqa3IGJS+/tL1WqsO3lubM2fNseWUGtviwChA0JbxioddqK5Xebzu
-         VBKcT7W2dFhFjKmcOBccaxPRa5CzvwMBY/+1zUDb1IQTjrxjksklcYYYeIcEmsMOL3
-         /z4TEJgfF9/B/bm0KWjIW9F/WJgTnJpsvFiJnY0U=
-Date:   Fri, 23 Jul 2021 17:54:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Message-ID: <YPrmTYQJ33AIxcwP@kroah.com>
-References: <20201020115959.2658-1-Sergey.Semin@baikalelectronics.ru>
- <20201020115959.2658-30-Sergey.Semin@baikalelectronics.ru>
- <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
- <20210714124807.o22mottsrg3tv6nt@mobilestation>
- <YPfPDqJhfzbvDLvB@kroah.com>
- <20210721100220.ddfxwugivsndsedv@mobilestation>
- <YPf29+ewbrYgHxRP@kroah.com>
- <YPh/AS5svBk+gddY@yoga>
- <YPp7Q4IofUYQlrqd@kroah.com>
- <YPrTbC7fNOY3qCcJ@yoga>
+        id S235588AbhGWPTw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jul 2021 11:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56054 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235568AbhGWPTv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jul 2021 11:19:51 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29AFC061575
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jul 2021 09:00:24 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id m9so2266994ljp.7
+        for <linux-usb@vger.kernel.org>; Fri, 23 Jul 2021 09:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l7OlcANZzieKaNWcpL+GOyiCkkPUEzYhjmL+cajXF5A=;
+        b=n9xjpUGaha17k8QVaPITfi0VUVS/H0pkyMCI1PN44doBoG8WrgKbOojBGXTXhjQEw4
+         w+bY6uk7GtK1KtGonU7+zH+cm23UfAgQ74Oqb0oAilXowKY6b6y2hU+1APfTfBnAxCAR
+         /bbApyzWWXVCPclcXjMGQmV125S4MgEhgy3SUOmuhVra/K4leOISqGcgUa1PFm4YhDBf
+         8lbKKtFjcFoiZ5//gwB3caQRCVmzA3tpol99jVM4cMTugvR31cetxgqI8hyYZIkclZ26
+         RPhlSi6WdbPKF1JCOEM4mVE6iOIg+8COUIr5K55Wlq+7jAvIeVLsw9s6y6mFTSkGJGUD
+         UMow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l7OlcANZzieKaNWcpL+GOyiCkkPUEzYhjmL+cajXF5A=;
+        b=VmKX5rkIWg0YSevSVS1iP1EW3T2DwV3iYXI01rusQU5MV43NpFwtMxJ6qAg0cgDRvy
+         VbrdKFFpDIvs4KgDqywpD3WjhloIC+XKlPffcKYC1j6WWI1KuiXXlHfF/Q56O540uiPG
+         Ohbc6Aqvm7DbfJIItPjlUTgT7pU/+tRyO6RZyvj1V2trQPmkImTbn1uU5VaJZP7Jdp3F
+         4bRd2HlgPbAXzEnXOymp+oDiKK6cvURA1n1CQ9+0DxYqqpe6Ingsdib0RwHH5s2JKgnv
+         VOczmhSlXRBiVXpYKakpsBzO2nS8hNeDGwZdk6oU3hfaHsVrOwile+ZKmqcCnu9ErxEm
+         4zIw==
+X-Gm-Message-State: AOAM530BfeFYmfN55h27CZ7/hrfPK3x6zJkvgR5QAB3xMCGMjb8O/aXF
+        x5RSz9DhqaRWw5khOPCrFuY=
+X-Google-Smtp-Source: ABdhPJy2pTJpwx6m7DHP3tCmX4uNEjwPLIVmYhAaBrHNVUsZuuAh5XeVdr8886mwFsuaWqXQE43duA==
+X-Received: by 2002:a2e:95cc:: with SMTP id y12mr3634365ljh.387.1627056023159;
+        Fri, 23 Jul 2021 09:00:23 -0700 (PDT)
+Received: from localhost.localdomain (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id n24sm450025lfb.54.2021.07.23.09.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jul 2021 09:00:22 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, sandeen@redhat.com,
+        linux-usb@vger.kernel.org, mdevaev@gmail.com,
+        Phil Elwell <phil@raspberrypi.com>
+Subject: [PATCH v2] usb: gadget: f_hid: fixed NULL pointer dereference
+Date:   Fri, 23 Jul 2021 18:59:30 +0300
+Message-Id: <20210723155928.210019-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YPrTbC7fNOY3qCcJ@yoga>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 09:34:20AM -0500, Bjorn Andersson wrote:
-> On Fri 23 Jul 03:18 CDT 2021, Greg Kroah-Hartman wrote:
-> 
-> > On Wed, Jul 21, 2021 at 03:09:37PM -0500, Bjorn Andersson wrote:
-> > > Which tree did you revert this in? 5.13.stable?)
-> > 
-> > My usb-linus branch which will go to Linus later today.  Then we can
-> > backport the revert to older kernels as needed.
-> > 
-> 
-> I'm not worried about the backports, I'm worried about conflicts you're
-> causing because you're taking a non-usb patch through the usb tree.
-> 
-> I was about to push a revert (to this and the other Qualcomm platforms),
-> but as you're taking some set of reverts through the usb tree we're just
-> in for a bunch of merge conflicts.
+From: Phil Elwell <phil@raspberrypi.com>
 
-It shouldn't be a merge conflict as you can apply the same revert to
-your tree now and keep on merging.  When you pick up 5.14-rc3 from Linus
-it should merge "correctly", right?
+Disconnecting and reconnecting the USB cable can lead to crashes
+and a variety of kernel log spam.
 
-thanks,
+The problem was found and reproduced on the Raspberry Pi [1]
+and the original fix was created in Raspberry's own fork [2].
 
-greg k-h
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+Signed-off-by: Phil Elwell <phil@raspberrypi.com>
+Link: https://github.com/raspberrypi/linux/issues/3870 [1]
+Link: https://github.com/raspberrypi/linux/commit/a6e47d5f4efbd2ea6a0b6565cd2f9b7bb217ded5 [2]
+---
+ drivers/usb/gadget/function/f_hid.c | 26 ++++++++++++++++++++------
+ 1 file changed, 20 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 02683ac07..08e73e812 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -338,6 +338,11 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
+ 
+ 	spin_lock_irqsave(&hidg->write_spinlock, flags);
+ 
++	if (!hidg->req) {
++		spin_unlock_irqrestore(&hidg->write_spinlock, flags);
++		return -ESHUTDOWN;
++	}
++
+ #define WRITE_COND (!hidg->write_pending)
+ try_again:
+ 	/* write queue */
+@@ -358,8 +363,14 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
+ 	count  = min_t(unsigned, count, hidg->report_length);
+ 
+ 	spin_unlock_irqrestore(&hidg->write_spinlock, flags);
+-	status = copy_from_user(req->buf, buffer, count);
+ 
++	if (!req) {
++		ERROR(hidg->func.config->cdev, "hidg->req is NULL\n");
++		status = -ESHUTDOWN;
++		goto release_write_pending;
++	}
++
++	status = copy_from_user(req->buf, buffer, count);
+ 	if (status != 0) {
+ 		ERROR(hidg->func.config->cdev,
+ 			"copy_from_user error\n");
+@@ -387,14 +398,17 @@ static ssize_t f_hidg_write(struct file *file, const char __user *buffer,
+ 
+ 	spin_unlock_irqrestore(&hidg->write_spinlock, flags);
+ 
++	if (!hidg->in_ep->enabled) {
++		ERROR(hidg->func.config->cdev, "in_ep is disabled\n");
++		status = -ESHUTDOWN;
++		goto release_write_pending;
++	}
++
+ 	status = usb_ep_queue(hidg->in_ep, req, GFP_ATOMIC);
+-	if (status < 0) {
+-		ERROR(hidg->func.config->cdev,
+-			"usb_ep_queue error on int endpoint %zd\n", status);
++	if (status < 0)
+ 		goto release_write_pending;
+-	} else {
++	else
+ 		status = count;
+-	}
+ 
+ 	return status;
+ release_write_pending:
+-- 
+2.32.0
+
