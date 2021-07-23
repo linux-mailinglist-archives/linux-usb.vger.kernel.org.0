@@ -2,173 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C443D2F85
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 00:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672B93D30B6
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 02:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbhGVV2u (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 22 Jul 2021 17:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39186 "EHLO
+        id S232763AbhGVXhD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 22 Jul 2021 19:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbhGVV2t (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jul 2021 17:28:49 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E074AC061575;
-        Thu, 22 Jul 2021 15:09:22 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id q16so10799033lfa.5;
-        Thu, 22 Jul 2021 15:09:22 -0700 (PDT)
+        with ESMTP id S232697AbhGVXhD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 22 Jul 2021 19:37:03 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED97C061575
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jul 2021 17:17:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id a17-20020a17090abe11b0290173ce472b8aso6609950pjs.2
+        for <linux-usb@vger.kernel.org>; Thu, 22 Jul 2021 17:17:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=sQcCO7T0VAeOgAPpjlMadGVJqKhrykjGpQRGvXrG7D4=;
-        b=P9Ye/XTsfh014C3IkLuJWNzEvvbK5NNSjz9ggjj2gNq1gshduWRYIhCF9ETVibqLgf
-         VUOYW7QWB0BjjkSn5AbCrOQNbD9ZIKHlpdqBHvpyDgyo+5YMUMp/zMNTs7Q0NGRkYmUn
-         UydSeXEKwZEfSiLMUu3YT/kJERY1Xf5IAGg+uCgXSHZNYn8nFuLY82y1yU259oknri4f
-         /cHM/1Mm07WZGR30SvqbasOvefUVihOjtIgxtZ63O+bik30eDhFg4s3SZ0SBBg0uczZt
-         W17HyEPFGhdhC2Yz8/pADAbzaNwpobpWxWAhVec0q3nMI1iJji00nKG6c/V+CI6QfdxP
-         Jdeg==
+        bh=vII52lR5avF5/D7xMgIb0yTqZk8+0rt8gmIw50zl2ag=;
+        b=aGA7GyrF6vTN9WKQmL++RXdUAyrqCyzmeO9DJGI9ESX4rBQboOjVZEzj7yTV1HhyiW
+         STszhq8KhzQVIpNxc1g9UHzJBCJv2ubOcqr2HDh4fJi9EeddgmRWYQCxfcsMoemasgOM
+         wTrgqA7OAV+0ZONUr42S8DXE9eb4VuicsPM3Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=sQcCO7T0VAeOgAPpjlMadGVJqKhrykjGpQRGvXrG7D4=;
-        b=OUO77xb0ViRRe9mtXQWZ2HbTzccyui1qn8tYAgmtz6pSyU/mxHroFQKc0TRC4DD1Bg
-         PL+LzkH83b8F1yktnVTsa1y9MmraW8otqS6xBxf4QbQsyfpd9PN/ioTvmScGGL/dhT3d
-         jOxcHnkhVRTcCZyayVBID3dDInWeZcMRthRHtFbPxz0YocKhZ03f3jOyT2NpqcqClmJA
-         keWiMaEUfCZ2QQzrbOIBrkQwf6azHa3LD82zSDiMiEhEe8n6RQl0PEuY88HdrmRzbZmU
-         lNPpoc3tyMOqCF4IIiFx4pMcz47Bw+G7UbaRMq9qTt7jHbAPlWftTG6dOD/TQZD2LSHc
-         iCHg==
-X-Gm-Message-State: AOAM530ahMVglekKeSoFxDPMOQMm/VHMYh9+qUotHxU+kF0jrVZod9uR
-        LKOnuEXn5c4L2SDqKCRIbrw=
-X-Google-Smtp-Source: ABdhPJxSj5Qrch2X3G0CeHYQm8Cr6HGhrry0iOsxNObScS97gZBVYhJYtco3C8u1Bdcfc/l8coFAow==
-X-Received: by 2002:ac2:43a6:: with SMTP id t6mr980010lfl.194.1626991761252;
-        Thu, 22 Jul 2021 15:09:21 -0700 (PDT)
-Received: from mobilestation ([95.79.127.110])
-        by smtp.gmail.com with ESMTPSA id g12sm3214158lja.13.2021.07.22.15.09.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jul 2021 15:09:20 -0700 (PDT)
-Date:   Fri, 23 Jul 2021 01:09:18 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     John Stultz <john.stultz@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bh=vII52lR5avF5/D7xMgIb0yTqZk8+0rt8gmIw50zl2ag=;
+        b=GjFPp5C6r64bdHPQyIAfqS9oMjgUxiGwREvALA7Jlc4DEbGvKL9i/2XzWZ/wEx9oFl
+         QP0KPFAq4/Jyichanm8Dwv3JAV1pdzuQqxJB4u8qcvczgBBEsFVcxxawpnqSgus2WYQ/
+         JCoi0DQUrZZxzxwFoeSImBpYazATYKeHuleDJEMQEKWvUebxN7oeomFsiWRaL7+TYMQr
+         tLYwshUkwt1IKM+KmXl1CeuwmqOo/yqHFMMExYAeti8VxwoS0ICukukWEeFvfmHJllhE
+         0patCyO+bEkXsg3EQ7uA7U2j84aFHT7Jz8kKM+9Dw2X9I5pYcky0UQPd+V30NkhpwhA+
+         4Bew==
+X-Gm-Message-State: AOAM533ItFwQdNzmGyxDUDaCIzdO1fq3kfKxC0Ncnqv0JT3h5cDs7p3j
+        UopvExHvt5juCfxXCch5aW5+AQ==
+X-Google-Smtp-Source: ABdhPJxpYVOU3EygLgcLac/ndORv1V2smY4bgwoMBiWOJJTRP9/yB6XCce7j+eSQijDZXcRBWjJkdw==
+X-Received: by 2002:a17:902:e752:b029:12b:8ae3:e9e9 with SMTP id p18-20020a170902e752b029012b8ae3e9e9mr1756503plf.33.1626999456250;
+        Thu, 22 Jul 2021 17:17:36 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:bbf7:30ab:1e60:9786])
+        by smtp.gmail.com with UTF8SMTPSA id u24sm32701196pfm.200.2021.07.22.17.17.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jul 2021 17:17:35 -0700 (PDT)
+Date:   Thu, 22 Jul 2021 17:17:34 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
         Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Message-ID: <20210722220918.l7j6zw3aaa27qato@mobilestation>
-References: <20210721100220.ddfxwugivsndsedv@mobilestation>
- <YPf29+ewbrYgHxRP@kroah.com>
- <0064cb2c-5ca6-e693-2e89-8f045c8f7502@kernel.org>
- <YPf+shNM6cXb3mfe@kroah.com>
- <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
- <20210721112531.xvu6ni5ksaehsrjh@mobilestation>
- <CALAqxLViEqSO17P3JGRGYJh-wDoHaJiQQV48zeoRgnar4Xd5Bg@mail.gmail.com>
- <20210722181221.xh3r5kyu7zlcojjx@mobilestation>
- <YPnEO6NVFZDS1s//@yoga>
- <CALAqxLUT0e+mHMVo685oVTxR8y76733cN0yciQ7ePS6GRE+_dg@mail.gmail.com>
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>, kbuild-all@lists.01.org,
+        Michal Simek <monstr@monstr.eu>, linux-usb@vger.kernel.org,
+        Peter Chen <peter.chen@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>
+Subject: Re: [PATCH v14 4/6] usb: Specify dependencies on USB_XHCI_PLATFORM
+ with 'depends on'
+Message-ID: <YPoKnkttCyCHHn4T@google.com>
+References: <20210719152055.v14.4.If248f05613bbb06a44eb0b0909be5d97218f417b@changeid>
+ <202107210812.LLUZpfu9-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CALAqxLUT0e+mHMVo685oVTxR8y76733cN0yciQ7ePS6GRE+_dg@mail.gmail.com>
+In-Reply-To: <202107210812.LLUZpfu9-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 01:09:05PM -0700, John Stultz wrote:
-> On Thu, Jul 22, 2021 at 12:17 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> > > On Jul 21, 2021, 1:45 PM +0200, Krzysztof Kozlowski wrote:
-> > > > I had impression that kernel defines interfaces which should be used and
-> > > > are stable (e.g. syscalls, sysfs and so on). This case is example of
-> > > > user-space relying on something not being marked as part of ABI. Instead
-> > > > they found something working for them and now it is being used in "we
-> > > > cannot break existing systems". Basically, AOSP unilaterally created a
-> > > > stable ABI and now kernel has to stick to it.
-> > > >
-> > > > Really, all normal systems depend on aliases or names and here we have
-> > > > dependency on device address. I proposed way how AOSP should be fixed.
-> > > > Anything happened? Nope.
-> > >
-> > > First time he sent a possible solution for the problem:
-> > > https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
-> > >
-> > > To sum up you could have used one of the more portable approaches
-> > > 1. add an udc alias to the controller and use it then to refer to the
-> > > corresponding USB controller
-> >
-> > Is there such a thing as "UDC alias"? Or are you suggesting that we
-> > should add such feature?
-> >
-> > I think it would be wonderful if we could identify the UDCs on our
-> > boards as "USB1" and "USB2", or "the one and only USB-C connector". But
-> > unless that will fall back to the existing naming it would break John's
-> > _existing_ userspace.
+On Wed, Jul 21, 2021 at 08:46:17AM +0800, kernel test robot wrote:
+> Hi Matthias,
 > 
-
-> Well, I'd not hold up the existing userspace I'm using as sacrosanct
-> (AOSP devices still usually don't have to work cross-kernel versions -
-> devboards being the main exception). I'm fine if we can rework
-> userland as proposed, so that the issues can be avoided, but I
-> honestly don't have enough context to really understand what that
-> looks like (no idea what udc aliases are).
+> I love your patch! Yet something to improve:
 > 
-> And whatever we do, the main constraint is that userland has to be
-> able to work with existing LTS kernels and newer kernels.
-
-As I said in my response to Bjorn even if it is added to the kernel it
-won't get to the official LTSes as it would be a new kernel feature.
-New features aren't normally backported to the older kernels.
-
+> [auto build test ERROR on usb/usb-testing]
+> [also build test ERROR on robh/for-next driver-core/driver-core-testing linus/master v5.14-rc2 next-20210720]
+> [cannot apply to char-misc/char-misc-testing]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch]
 > 
-> > > 2. search through DT-nodes looking for a specific compatible/reg
-> > > DT-properties.
-> > >
-> >
-> > We could define that this is the way, but again we didn't yesterday so
-> > your proposal is not backwards compatible.
+> url:    https://github.com/0day-ci/linux/commits/Matthias-Kaehlcke/usb-misc-Add-onboard_usb_hub-driver/20210720-144614
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+> config: i386-randconfig-a003-20210720 (attached as .config)
+> compiler: gcc-10 (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
+> reproduce (this is a W=1 build):
+>         # https://github.com/0day-ci/linux/commit/1ac4caccda0f2e6904b0e1462bc9735c690d719f
+>         git remote add linux-review https://github.com/0day-ci/linux
+>         git fetch --no-tags linux-review Matthias-Kaehlcke/usb-misc-Add-onboard_usb_hub-driver/20210720-144614
+>         git checkout 1ac4caccda0f2e6904b0e1462bc9735c690d719f
+>         # save the attached .config to linux build tree
+>         mkdir build_dir
+>         make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 > 
-
-> It may be backwards compatible, but I'm still not clear exactly how it
-> would work.
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> I guess if we look through all
-> sys/bus/platform/devices/*/of_node/compatbile strings for the desired
-> "snps,dwc3", then find which of the directories have the desired
-> address in the string? (The suggestion for looking at reg seems
-> better, but I don't get a char value out of the dwc3 of_node/reg
-> file).
-
-The algorithm is simple:
-1) You know what USB controllers you have on your platform. They are
-supposed to be compatible with snps,dwc3 string and have some pre-defined
-base address.
-2) Find all the files in the directory /sys/class/udc/.
-3) Walk through all the directories in /sys/bus/platform/devices/ with
-names found in 2) and stop on the device with matching compatible/base
-address defined in 1).
-
-In my case the strings could be retrieved like this:
-USB_NAME_COMPAT=$(/sys/bus/platform/devices/1f100000.usb/of_node/compatible | tr '\0' '\t' | cut -f1)
-USB_DEVICE_ADDR="$(head -c 4 /sys/bus/platform/devices/1f100000.usb/of_node/reg | hexdump -ve '/1 "%02x"' | sed -e 's/^0*//g')"
-
-Regards,
--Sergey
-
+> All errors (new ones prefixed by >>):
 > 
-> It seems much more straightforward to do an `ls /sys/class/udc/$GADGET_ADDR.*`
-> 
-> But again, if folks decide the names can be rearranged to usb.<addr>
-> in the future, that would break too.
-> 
-> thanks
-> -john
+>    ld: drivers/usb/dwc3/core.o: in function `dwc3_resume_common':
+> >> drivers/usb/dwc3/core.c:1853: undefined reference to `dwc3_gadget_resume'
+>    ld: drivers/usb/dwc3/core.o: in function `dwc3_runtime_resume':
+> >> drivers/usb/dwc3/core.c:1912: undefined reference to `dwc3_gadget_process_pending_events'
+>    ld: drivers/usb/dwc3/core.o: in function `dwc3_suspend_common':
+> >> drivers/usb/dwc3/core.c:1750: undefined reference to `dwc3_gadget_suspend'
+
+What happened here is that USB_DWC3 was selected, but one of USB_DWC3_HOST,
+USB_DWC3_GADGET or USB_DWC3_DUAL_ROLE.
+
+Typically one of them would be selected by:
+
+  choice
+          bool "DWC3 Mode Selection"
+          default USB_DWC3_DUAL_ROLE if (USB && USB_GADGET)
+          default USB_DWC3_HOST if (USB && !USB_GADGET)
+          default USB_DWC3_GADGET if (!USB && USB_GADGET)
+
+In this case USB_XHCI_PLATFORM is not set (previously it would be selected
+by USB_DWC3) and USB_DWC3_HOST (and USB_DWC3_DUAL_ROLE) now depends on it.
+
+The following change should fix this:
+
+  config USB_DWC3
+ -        depends on (USB || USB_GADGET) && HAS_DMA
+ +        depends on (USB && USB_XHCI_PLATFORM) || USB_GADGET)) && HAS_DMA
