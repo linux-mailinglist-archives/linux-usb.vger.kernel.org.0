@@ -2,216 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A0E3D4088
-	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 21:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2C13D4103
+	for <lists+linux-usb@lfdr.de>; Fri, 23 Jul 2021 21:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbhGWS1D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 14:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbhGWS1C (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jul 2021 14:27:02 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C28C061575;
-        Fri, 23 Jul 2021 12:07:36 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id v8-20020a0568301bc8b02904d5b4e5ca3aso2187800ota.13;
-        Fri, 23 Jul 2021 12:07:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:to:cc:references:from:subject:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/HO6+phJGX3lelq6t157Nbhv6ZLIzzcuXXmzn8gV64k=;
-        b=sFgt2eHfugv0KyuFTRnIZcY2+r7kPfQ02E6Fq/99y6A7LVKeLh/1y07mP8k522o5lL
-         tEA8EI/6RAONS36hjr71uNh2vWfE5nQCuQHvGQkBLbDayJQbgvGq2uJQLXjnwrLJo5Dk
-         8dz5svmE7eqkSBX3zRaKX2swck0uIeBp+yswdhjpWJTQfszUzWqc2w5YpuSZ2BgNb18f
-         vgKbiDevJAamAEqnBXRh6+INbGSOtNACN6n7sOvUHvRZUKAk2XPge4lOEafz3qtfia5K
-         Pwj+1DttV7Ghq8RSPdlScqz+/cAwQvfcRhajpaemezIuv1KmWSYJ2+FS2OMjGUvRzFNp
-         dHJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/HO6+phJGX3lelq6t157Nbhv6ZLIzzcuXXmzn8gV64k=;
-        b=DjWy4Qz+Sqr3o+7lp87nX3J3C7/YLW9Ec9QelLtWN+4eUkXCGZMh8iO6OxzJUG3cDv
-         YI3tMJkl2/lwv28Hw0WWniyJ8NNotF2B88RLtjd///AM778KsjWvGsd+SOP49VW27IGY
-         2YnHfS6xvhkG1OkdCayEs8qdGl1SE7Fr/UbfRt9BsSfbIbzpHS4D8W9DP6Ew5gmlc1fW
-         zc03BtgM/GwGfIIiacBFxiUECP0S4PnHvVM+TaXSHqCUByGslR3QcB/2qXliDpe70+tN
-         VM71yfX9auEyHkfVVt2550dEiGIzSPzgJUS8+nQVaJBj66uklxXtJrdGwEpiARKAFQXu
-         uhCg==
-X-Gm-Message-State: AOAM530mWb1IKPp8DsTotKLmmOYPzuFwz7p33JuM+erC7+AEZW5ys48D
-        ftF5FuNHvpoa504fnpS1y3c4PJWQuAE=
-X-Google-Smtp-Source: ABdhPJzeI4Mi77IefqObLdXaAkxJsEBtPf9A+KB/fCok66OreMmJ0OZxyGNaW+xOdiYvsXof8/z6CQ==
-X-Received: by 2002:a9d:c67:: with SMTP id 94mr4013908otr.344.1627067255181;
-        Fri, 23 Jul 2021 12:07:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s24sm4487667ooq.37.2021.07.23.12.07.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jul 2021 12:07:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20210716093916.1516845-1-kyletso@google.com>
- <CAGZ6i=3PJ+aRzM7=c6f9oCaCjvdQ7GqtCn+dv7H0yC8WMoe+KA@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] usb: typec: tcpm: Support non-PD mode
-Message-ID: <66b76646-3c40-fb12-6678-6542c10caaa9@roeck-us.net>
-Date:   Fri, 23 Jul 2021 12:07:32 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S230375AbhGWTAu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jul 2021 15:00:50 -0400
+Received: from mga12.intel.com ([192.55.52.136]:34045 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229528AbhGWTAt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 23 Jul 2021 15:00:49 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10054"; a="191530947"
+X-IronPort-AV: E=Sophos;i="5.84,264,1620716400"; 
+   d="scan'208";a="191530947"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jul 2021 12:41:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,264,1620716400"; 
+   d="scan'208";a="463253335"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga008.jf.intel.com with ESMTP; 23 Jul 2021 12:41:20 -0700
+Subject: Re: Possible race in 4.14 xhci stack
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+Cc:     USB list <linux-usb@vger.kernel.org>
+References: <513f81d8c17b4bcb97a60fd1d5b0738f@SVR-IES-MBX-03.mgc.mentorg.com>
+ <YPb1ngCpsEizHtUi@kroah.com>
+ <2c52cd176b134e6ab7806aeda8fcca1d@SVR-IES-MBX-03.mgc.mentorg.com>
+ <YPfXZBtd48oL7DaQ@kroah.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
+ 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 fiD/
+Message-ID: <9389e25a-d9e8-e0bf-d310-6a2b0a23e990@linux.intel.com>
+Date:   Fri, 23 Jul 2021 22:43:43 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-In-Reply-To: <CAGZ6i=3PJ+aRzM7=c6f9oCaCjvdQ7GqtCn+dv7H0yC8WMoe+KA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <YPfXZBtd48oL7DaQ@kroah.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/23/21 10:18 AM, Kyle Tso wrote:
-> On Fri, Jul 16, 2021 at 5:39 PM Kyle Tso <kyletso@google.com> wrote:
+On 21.7.2021 11.14, Greg KH wrote:
+> On Wed, Jul 21, 2021 at 07:51:58AM +0000, Schmid, Carsten wrote:
+>> Hi Greg,
 >>
->> tcpm.c could work well without PD capabilities. Do not block the probe
-
-"could" is a bit vague. What is the use case ?
-
->> if capabilities are not defined in fwnode and skip the PD power
->> negotiation in the state machine.
+>>>> Hi Mathias,
+>>>>
+>>>> i got a NULL pointer deref in the usbfs and analyzed it.
+>>>> The connected device seemed to have trouble on USB transmissions.
+>>>> However, I have the impression that there is a race between finishing URB handling and disconnection of devices.
+>>>> In detail:
+>>>> [ 4979.029666] xhci_hcd 0000:00:15.0: USB transfer error. Maybe the USB cable is bad?
+>>>
+>>> Did your cable die?
+>>>
+>>> And 4.14 is quite old, what about 5.13?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
 >>
->> Signed-off-by: Kyle Tso <kyletso@google.com>
->> ---
+>> That was reported from a device in the field.
+>> Yes, a defective cable is bad, but shouldn't the kernel's health avoid a NULL pointer deref?
 > 
-> Hi, any comments about this patch?
-> 
+> Yes, I am not disagreeing about that, patches always welcome :)
 
-First question would be if this is documented/standardized. More comments below.
+Current kernel already has a cure for the symptom, avoiding the NULL pointer deref:
 
-> thanks,
-> Kyle
-> 
->>   drivers/usb/typec/tcpm/tcpm.c | 50 ++++++++++++++++++++---------------
->>   1 file changed, 29 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
->> index 5b22a1c931a9..a42de5e17d24 100644
->> --- a/drivers/usb/typec/tcpm/tcpm.c
->> +++ b/drivers/usb/typec/tcpm/tcpm.c
->> @@ -3914,6 +3914,8 @@ static void run_state_machine(struct tcpm_port *port)
->>                  if (port->ams == POWER_ROLE_SWAP ||
->>                      port->ams == FAST_ROLE_SWAP)
->>                          tcpm_ams_finish(port);
->> +               if (!port->nr_src_pdo)
->> +                       tcpm_set_state(port, SRC_READY, 0);
->>                  port->upcoming_state = SRC_SEND_CAPABILITIES;
->>                  tcpm_ams_start(port, POWER_NEGOTIATION);
->>                  break;
->> @@ -4161,7 +4163,10 @@ static void run_state_machine(struct tcpm_port *port)
->>                                  current_lim = PD_P_SNK_STDBY_MW / 5;
->>                          tcpm_set_current_limit(port, current_lim, 5000);
->>                          tcpm_set_charge(port, true);
->> -                       tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
->> +                       if (!port->nr_snk_pdo)
->> +                               tcpm_set_state(port, SNK_READY, 0);
->> +                       else
->> +                               tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
->>                          break;
->>                  }
->>                  /*
->> @@ -5939,15 +5944,17 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->>
->>          /* Get source pdos */
->>          ret = fwnode_property_count_u32(fwnode, "source-pdos");
->> -       if (ret <= 0)
->> -               return -EINVAL;
->> +       if (ret < 0)
->> +               ret = 0;
->>
+struct xhci_ring *xhci_triad_to_transfer_ring(...)
+{
+	struct xhci_virt_ep *ep;
 
-This makes the capability properties optional. I think that would have
-to be documented.
+	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
+	if (!ep)
+		return NULL;
+	...
+}
 
->>          port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
->> -       ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
->> -                                            port->src_pdo, port->nr_src_pdo);
->> -       if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
->> -                                           port->nr_src_pdo))
->> -               return -EINVAL;
->> +       if (port->nr_src_pdo) {
->> +               ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
->> +                                                    port->src_pdo, port->nr_src_pdo);
->> +               if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
->> +                                                   port->nr_src_pdo))
->> +                       return -EINVAL;
->> +       }
->>
->>          if (port->port_type == TYPEC_PORT_SRC)
->>                  return 0;
->> @@ -5963,19 +5970,21 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
->>   sink:
->>          /* Get sink pdos */
->>          ret = fwnode_property_count_u32(fwnode, "sink-pdos");
->> -       if (ret <= 0)
->> -               return -EINVAL;
->> +       if (ret < 0)
->> +               ret = 0;
->>
->>          port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
->> -       ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
->> -                                            port->snk_pdo, port->nr_snk_pdo);
->> -       if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
->> -                                           port->nr_snk_pdo))
->> -               return -EINVAL;
->> +       if (port->nr_snk_pdo) {
->> +               ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
->> +                                                    port->snk_pdo, port->nr_snk_pdo);
->> +               if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
->> +                                                   port->nr_snk_pdo))
->> +                       return -EINVAL;
->>
->> -       if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
->> -               return -EINVAL;
->> -       port->operating_snk_mw = mw / 1000;
->> +               if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
->> +                       return -EINVAL;
->> +               port->operating_snk_mw = mw / 1000;
->> +       }
->>
->>          port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
->>
->> @@ -6283,9 +6292,8 @@ struct tcpm_port *tcpm_register_port(struct device *dev, struct tcpc_dev *tcpc)
->>          int err;
->>
->>          if (!dev || !tcpc ||
->> -           !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc ||
->> -           !tcpc->set_polarity || !tcpc->set_vconn || !tcpc->set_vbus ||
->> -           !tcpc->set_pd_rx || !tcpc->set_roles || !tcpc->pd_transmit)
->> +           !tcpc->get_vbus || !tcpc->set_cc || !tcpc->get_cc || !tcpc->set_polarity ||
->> +           !tcpc->set_vconn || !tcpc->set_vbus || !tcpc->set_roles)
+I'm still on vacation next week, but after that we could look closer at the root cause.
 
-With this change, if a driver does not define the necessary pd callbacks
-(set_pd_rx, pd_transmit), but its devicetree data does provide pdo properties,
-we'll get a nice crash.
-
-On top of that, I am quite sure that the set_pd_rx() callback is still called
-from various places even if neither sink-pdos nor source-pdos properties
-are defined.
-
-I think this really tries to handle two conditions: A low level driver that
-doesn't support PD, and a system where the low level driver does support PD
-but the system itself doesn't. And then there is the odd case where the system
-only supports either source or sink PD while claiming to support the other.
-Maybe it would make sense to separate both conditions, for example by introducing
-a new flag such as pd_supported to indicate that the system doesn't support the
-PD protocol.
-
-Guenter
-
->>                  return ERR_PTR(-EINVAL);
->>
->>          port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
->> --
->> 2.32.0.402.g57bb445576-goog
->>
-
+Thanks,
+Mathias
