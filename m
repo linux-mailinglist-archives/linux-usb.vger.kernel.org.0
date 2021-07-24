@@ -2,96 +2,142 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D766E3D47D9
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 15:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EF43D47EC
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 15:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234339AbhGXMnf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jul 2021 08:43:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49726 "EHLO mail.kernel.org"
+        id S231948AbhGXNAz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 09:00:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56252 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230449AbhGXMnf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Jul 2021 08:43:35 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 96FD860E8F;
-        Sat, 24 Jul 2021 13:24:03 +0000 (UTC)
+        id S229539AbhGXNAz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Jul 2021 09:00:55 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 0F00960E8F
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jul 2021 13:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627133046;
-        bh=mEUw99F293tWtz8wzxel1pIi1bx+JKngz0tGxATEfFo=;
-        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
-        b=W+y68Scxf5cvGO18Lk4XDQUEO3CQJV2QFJ9gKGnbRK3gSaCd+09v3zTyCUorG2awk
-         DnxfrgoAXrNac00GfAOa4X27hrfMIcwBX8c7mBPWbjm2hoJIFXyx/b764zK+gyoYmi
-         MbHAqgYyFyNCXBEy4HZFkFDdaxQHdNC2sqVoQiFb5Kqr2k39IqOufobxBL3hCyOEO+
-         Pu4smcXHc/dEtNn/3JkxXMuHnCx8gZaQLMPa3XBF9oPJzRbxyqC7P69jzxVbSCeXsM
-         bNQtNCzY2gsLIwasjX3xQSB731WcHmuMKcQNuCq+OUG+noj00gdgcIzRu1KfWjSpsY
-         +cEyxcfQ1Nr8g==
-References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1627116521-124612-3-git-send-email-zhouyanjie@wanyeetech.com>
- <IQWQWQ.9EAMZ76IPL892@crapouillou.net>
- <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, hminas@synopsys.com,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sihui.liu@ingenic.com,
-        jun.jiang@ingenic.com, sernia.zhou@foxmail.com,
-        Dragan =?utf-8?B?xIxlxI1h?= =?utf-8?B?dmFj?= 
-        <dragancecavac@yahoo.com>
-Subject: Re: [PATCH 2/2] USB: dwc2: Add OTG support for Ingenic SoCs.
-In-reply-to: <e4f7897a-6b70-d936-a968-e66556382851@wanyeetech.com>
-Date:   Sat, 24 Jul 2021 16:24:01 +0300
-Message-ID: <8735s37slq.fsf@kernel.org>
+        s=k20201202; t=1627134078;
+        bh=gdk4OFMEi9RvDqMVPbCnfJpHkr/NOH3bxAMMlF/Vq2o=;
+        h=From:To:Subject:Date:From;
+        b=Rgy0l0fatkF2ZHF89Dqajty80JD2q9lXyr23AIjDsN0mPaSvu0cZlbh0sNVp7q50Q
+         /ZUD+wDR/cxb91TUJrw0rysBhUOiQbSkLrwFjTfdkYR10rvp+WAEf/pfCOAOvOSSD4
+         dA8tcuEKLZi34cTOuQ+7UZ+6WjP7pAUXTD55JF9BNNcfli/SQE9H29FL4ldjkbk4kw
+         9299Du9gbLUzSVmWd8lvq7ejNbnjhfTzzzf5Uv5rwb1iOwP5+q4uMBoDXKIaI1YQNJ
+         ofxTYtgb7iijXCXKQ64wXKXz7hzBxP33U1iLQExgaFCIHWEwiUoFIm4GxDdYLR6lFw
+         xbfzXzqCuIU+A==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id EEDBA608FA; Sat, 24 Jul 2021 13:41:17 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213839] New: XHCI 7 port usb hub does not work correctly
+Date:   Sat, 24 Jul 2021 13:41:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tmezzadra@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-213839-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
-Hi Zhou,
+            Bug ID: 213839
+           Summary: XHCI 7 port usb hub does not work correctly
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.13.4
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: tmezzadra@gmail.com
+        Regression: No
 
-Zhou Yanjie writes:
->>> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
->>> index 67c5eb1..a7a1b50 100644
->>> --- a/drivers/usb/dwc2/params.c
->>> +++ b/drivers/usb/dwc2/params.c
->>> @@ -71,6 +71,47 @@ static void dwc2_set_his_params(struct
->>> dwc2_hsotg *hsotg)
->>>      p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
->>>  }
->>>
->>> +static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
->>> +{
->>> +    struct dwc2_core_params *p = &hsotg->params;
->>> +
->>> +    p->otg_cap = DWC2_CAP_PARAM_NO_HNP_SRP_CAPABLE;
->>> +    p->speed = DWC2_SPEED_PARAM_HIGH;
->>> +    p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
->>> +    p->phy_utmi_width = 16;
->>> +    p->deactivate_ingenic_overcurrent_detection =
->>> +        device_property_read_bool(hsotg->dev, "disable-over-current");
->>
->> That device property was not documented in the previous patch. Also
->> this probably should be "ingenic,disable-over-current".
->>
->
-> This device property already exists (it has been used in the
-> "dwc2_get_device_properties()" function below).
->
-> Under normal circumstances, after using this device attribute, it
-> should be possible to turn off the overcurrent
->
-> detection, but on the Ingenic processors, somehow it did not take
-> effect normally, and we must operate the
->
-> "VBVALOEN" bit and "VBVALOVAL" bit of "GOTGCTL" register to make it normal.
+I got an off brand 7-port usb 2.0 which internally has two ICs.
 
-I believe what Paul is suggesting is that this property lacks
-documentation under Documentation/devicetree/bindings/. If that's the
-case, you could take the opportunity to document the property and,
-perhaps, add the missing prefix.
+first IC connected to the host's usb port exposes 3 USB ports. its 4th usb =
+port
+has a second identical IC connected which exposes 4 USB ports making it a t=
+otal
+of 7 USB 2.0 ports available.
 
--- 
-balbi
+Bus 002 Device 065: ID 0a05:7211 Unknown Manufacturer hub
+Bus 002 Device 064: ID 0a05:7211 Unknown Manufacturer hub
+
+As they appear from lsusb
+
+the problem is that the first chip works correctly (first 3 USB ports conne=
+cted
+to it work). But as soon as I connect a usb device on any of the ports from=
+ the
+second chip. i get the following problems in dmesg:
+
+[ 2215.717828] usb 2-1.1: new full-speed USB device number 29 using xhci_hcd
+[ 2215.808680] usb 2-1.1: New USB device found, idVendor=3D0a05, idProduct=
+=3D7211,
+bcdDevice=3D 1.00
+[ 2215.808685] usb 2-1.1: New USB device strings: Mfr=3D0, Product=3D1,
+SerialNumber=3D0
+[ 2215.808688] usb 2-1.1: Product: USB2.0 HUB
+[ 2215.809333] hub 2-1.1:1.0: USB hub found
+[ 2215.809426] hub 2-1.1:1.0: 4 ports detected
+[ 2216.158062] usb 2-1.1: USB disconnect, device number 29
+[ 2216.174608] usb 2-1.1-port3: attempt power cycle
+[ 2216.561173] usb 2-1.1: new full-speed USB device number 34 using xhci_hcd
+[ 2216.652346] usb 2-1.1: New USB device found, idVendor=3D0a05, idProduct=
+=3D7211,
+bcdDevice=3D 1.00
+[ 2216.652359] usb 2-1.1: New USB device strings: Mfr=3D0, Product=3D1,
+SerialNumber=3D0
+[ 2216.652365] usb 2-1.1: Product: USB2.0 HUB
+[ 2216.654327] hub 2-1.1:1.0: USB hub found
+[ 2216.654480] hub 2-1.1:1.0: 4 ports detected
+[ 2217.001529] usb 2-1.1: USB disconnect, device number 34
+[ 2217.017975] usb 2-1.1-port3: attempt power cycle
+[ 2217.404536] usb 2-1.1: new full-speed USB device number 39 using xhci_hcd
+[ 2217.495411] usb 2-1.1: New USB device found, idVendor=3D0a05, idProduct=
+=3D7211,
+bcdDevice=3D 1.00
+[ 2217.495417] usb 2-1.1: New USB device strings: Mfr=3D0, Product=3D1,
+SerialNumber=3D0
+[ 2217.495419] usb 2-1.1: Product: USB2.0 HUB
+[ 2217.496120] hub 2-1.1:1.0: USB hub found
+[ 2217.496221] hub 2-1.1:1.0: 4 ports detected
+[ 2217.844888] usb 2-1.1: USB disconnect, device number 39
+[ 2217.861345] usb 2-1.1-port3: attempt power cycle
+
+
+
+and so on....
+
+
+This same device at a Windows computer works correctly.
+
+Ideas?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
