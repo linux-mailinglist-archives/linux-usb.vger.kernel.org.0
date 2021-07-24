@@ -2,64 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A63643D482E
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 16:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55FA43D4834
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 16:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbhGXOJ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jul 2021 10:09:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60928 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229545AbhGXOJ0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Jul 2021 10:09:26 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9DC7560E91;
-        Sat, 24 Jul 2021 14:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627138197;
-        bh=ITetXwkBC4Qi0UQsbPUxVMmbhoqv2WeZYd61YJqfmNY=;
-        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
-        b=QO7foexdgn42SguJdmEHw81chtUt65zlCdyBFkDilfviI76CdCjhHzDIdfOPU/Gw2
-         jqH2JBMvF9+1AQOnVBiBn6AOPnCPuriNlLU5hFWJUj9xENSFN4cShTfowM8hN2AwsE
-         5O29R1jukiwBsgSNIPXEK1RRUTaQA42V9TWdyWw6Cilr5dk/o+p7F91l5dl5WlzCL8
-         VDMca0ks06E2RLSDOGXDiY0JWWIAsu1X+MWofNbMd5Fh6fFlIG+hTh5ejY3E0+CMwY
-         Rteb8hx8kGz37jfpsn9NCv3ZRciCqAYNwDvtlh1bc163Myfz93vU7o+Dwvg4bV/JX0
-         S6UG9rYAZXp6w==
-References: <YPvjYIsu0G0HSu5I@pevik> <YPvrpUZ/VRc0eHvA@kroah.com>
- <YPwYlvh4DqaUsPCF@pevik>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Petr Vorel <petr.vorel@gmail.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-sunxi@googlegroups.com
+        id S229731AbhGXOOO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 10:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229545AbhGXOOO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jul 2021 10:14:14 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFC1C061575
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jul 2021 07:54:45 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id z26so5482055edr.0
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jul 2021 07:54:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=XUo1lk4Li+vqUd9hvUn6IiMsQ2dDNJJ7BPRUlWZDlh8=;
+        b=g6eRfAWvW0nrVMm35WoZBbMVMbqkTBxrN8bW0buINR1i4eGqw8Ru+jjXyUi70E6y/6
+         4WIy3yr3jyLcdjiNSn+1TUKB86VYT52LPyVo37pbt+rpUB6+We2A2rBhCGb2HLXgZizJ
+         9iZ3Tn9iMLGPC8TRLOLC5r7/6RA2/2h6H1dcjey8vF7Gh6y6lNdFLp/Dzu22R4VBkI79
+         JUT5+lRuh9YiEE8HuNv9dn1fAmDxqrXTksR8I25t+kVi/aWj5Yx9Iri2mBi4MGcEIsRE
+         91id7X0PX12Tk0MQZyr0hR/rirc+/hQNedPOhOGIOgzuEof/qOB+YkfmQuEjgubK5+vj
+         PcjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XUo1lk4Li+vqUd9hvUn6IiMsQ2dDNJJ7BPRUlWZDlh8=;
+        b=UC4lE1d0ZZ+00PD6n4YDUAv6PSiUoV008MNs+BM1KRkvyccYP4PS16P6xaRvqOJyW0
+         gPuXpb9D7xooZavlByA1UzSomao/wz7I6AlaOmO2mtKLy/YAYTTZ7cgXmc1wpy5XYjmj
+         Y/TZlEYrGD/jzQKhPDLdNyL5YzammXolRyuDZS+NVIELj/z2oiC9yadEx0CYFfGby2rE
+         q1PrMN0+HK201BMJ+LqjQKp4uCW20cRW/NIoQHODAXb9KQumDj2joagCHnDpLYcN6HZR
+         n5C823VyDnv9gF+aph5RNSFNxDQTi8mhtB6uNAJNtR5Zj9P6/V4vTHU3U4MuzAPfdujy
+         GmsQ==
+X-Gm-Message-State: AOAM5321TvgvHf0wXB54Hl7r1Kpk3vdFQ2wo7XPuIpFlFDD4phg4QOY0
+        kK35k93Pm7iDQ+5ho9x+PoU=
+X-Google-Smtp-Source: ABdhPJx1A2qX60pJax47DtdFdMyKLHhS7kQ5z6X+ZhLcUsy7SAlu/yLyD0FQ7aVdRJyEnbcmuE20pQ==
+X-Received: by 2002:a05:6402:1707:: with SMTP id y7mr6359642edu.167.1627138484200;
+        Sat, 24 Jul 2021 07:54:44 -0700 (PDT)
+Received: from jernej-laptop.localnet (cpe-86-58-46-198.static.triera.net. [86.58.46.198])
+        by smtp.gmail.com with ESMTPSA id z27sm1384796eja.59.2021.07.24.07.54.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 24 Jul 2021 07:54:43 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Petr Vorel <petr.vorel@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-sunxi@lists.linux.dev,
+        linux-sunxi@googlegroups.com
 Subject: Re: Mainlining Linux Sunxi SoC AW USB
-In-reply-to: <YPwYlvh4DqaUsPCF@pevik>
-Date:   Sat, 24 Jul 2021 17:49:54 +0300
-Message-ID: <87zgub6a25.fsf@kernel.org>
+Date:   Sat, 24 Jul 2021 16:54:42 +0200
+Message-ID: <4183659.s5WrjGzUDR@jernej-laptop>
+In-Reply-To: <YPwiGB7VnzECN/jg@pevik>
+References: <YPvjYIsu0G0HSu5I@pevik> <YPwhAsK/rDkVeK0y@kroah.com> <YPwiGB7VnzECN/jg@pevik>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Dne sobota, 24. julij 2021 ob 16:22:16 CEST je Petr Vorel napisal(a):
+> Hi Greg,
+> 
+> > On Sat, Jul 24, 2021 at 03:41:42PM +0200, Petr Vorel wrote:
+> > > > Why is this even a driver at all, it looks like you can write a small
+> > > > userspace program using libusb to do everything it does, right?  What
+> > > > exactly is this driver needed for?
+> > > 
+> > > I'm sorry for not providing more info at the beginning. This is a driver
+> > > for host computer (i.e. developers laptop) used by LiveSuit tool [2] to
+> > > flash Images to the NAND of Allwinner devices. LiveSuit itself [3] is
+> > > unfortunately provided only in binary form. The only open source code
+> > > with GPL v2 license is awusb driver. Thus I thought I could ease my
+> > > life with upstreaming at least the kernel driver. But maybe it's not a
+> > > good idea. I'm using LiveSuit for flashing Allwinner A31, but it
+> > > requires quite old distro due libqtgui4. Maybe sunxi folks use
+> > > something newer nowadays, but I haven't found anything in their wiki.> 
+> > Ah, that's not going to be good then.  Really, this doesn't seem to need
+> > to be a driver at all, and the ioctls are really strange so we would
+> > need to change them anyway before it could be merged.  But with no
+> > access to userspace code, that will be quite difficult, so I would push
+> > back on allwinner and have them work on resolving this.
+> 
+> Understand, it makes sense. Thanks for your time!
+> 
+> @Sunxi community: am I missing something? Using LiveSuit with old distro
+> chroot and Xephyr with out-of-tree module isn't fun :(.
 
-Hi,
+Community is mostly concerned with mainline kernel nowadays and thus with 
+standard tools. Few people still use vendor (BSP) kernel and most of those use 
+it without LiveSuit (like custom distro images).
 
-Petr Vorel <petr.vorel@gmail.com> writes:
->> > [1] https://github.com/linux-sunxi/sunxi-livesuite/blob/master/awusb/awusb.c
->
->> Why is this even a driver at all, it looks like you can write a small
->> userspace program using libusb to do everything it does, right?  What
->> exactly is this driver needed for?
->
-> I'm sorry for not providing more info at the beginning. This is a driver for
-> host computer (i.e. developers laptop) used by LiveSuit tool [2] to flash Images
-> to the NAND of Allwinner devices. LiveSuit itself [3] is unfortunately provided
-> only in binary form. The only open source code with GPL v2 license is awusb
-> driver. Thus I thought I could ease my life with upstreaming at least the
-> kernel driver. But maybe it's not a good idea. I'm using LiveSuit for flashing
-> Allwinner A31, but it requires quite old distro due libqtgui4. Maybe sunxi folks
-> use something newer nowadays, but I haven't found anything in their wiki.
+Now and then people ask about LiveSuit on IRC, but they usually get little 
+response.
 
-looks like you could implement that entirely in userspace with libusb ;-)
+Best regards,
+Jernej
 
--- 
-balbi
+> 
+> Kind regards,
+> Petr
+> 
+> > thanks,
+> > 
+> > greg k-h
+
+
+
+
