@@ -2,100 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EFD3D4389
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 01:59:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9033D4415
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 02:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbhGWXSf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 19:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51710 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233059AbhGWXSe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jul 2021 19:18:34 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FECC061575;
-        Fri, 23 Jul 2021 16:59:06 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id n19so4606824ioz.0;
-        Fri, 23 Jul 2021 16:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WiDACkcaGfVG9TmW2biO8dZY6cfo1/gxjtjvcU264pg=;
-        b=gWRe6SMgaPvcfXAdd6tpPvrUmvywiaCnBV5uYBeAn10agVBitz8ejYP0qjQ4b2E9aU
-         Yy0aDKawOx5k1btJ+y5Tl4MAyozu5dc4a5j7ejKzD97S9K8MAX17JF8jJiYTTFEAvIGm
-         6BNGvr+Xs7e/yXSUlnrY3egcwIVGfdQIoznWK8yUmNNHSvT1znpzwLzZPEcg/rA6ghwl
-         Ko0HEGV8CaT3/hG1JZEi715xP3eMMuY7FEkd5ZOyefP8oYdY8S4mSyzMaJ/Z6Zp0UgVA
-         WjRHiRnVIncXlyj8oBv5lJ6u0iRBF0ILL44hiN+0+LetCJR5UmjizjIFb212j0TBXb+c
-         pHJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WiDACkcaGfVG9TmW2biO8dZY6cfo1/gxjtjvcU264pg=;
-        b=SDR5GnM5NCOaKM6aAL7ZlZz77VeQS/Y/6N+bnRuf1LB59DuZdYlATolKE7eoKrSIfN
-         u81cMKS3MsDnNOA6Kfc1b18Le2xmUlFmGeU/iwMB24/JI9oQzliWOCBA+AlkpOO8bDZT
-         5L9oFOAtc9AVxa7Zj0tWMqJ5JECt02bbL3RZplM7DgH7DaiUNAxX5V1cXOvCLq8H3w+c
-         uOmtiCcviCxATYx+9kjT5DWcXvuZw/zYKjCJa69T1fyFD2L+nMr5PVEH5taRQS2bfIGA
-         apaYBtvcB/un7IVgIOiqaKhfYunf/JxPs2cA+JHdspyz2h/KLDPit0gdjl9J1++DMOxK
-         wf8A==
-X-Gm-Message-State: AOAM530ZZpJZ/b8EFUQ4J8zIhEXC3mSDitDEjSWI1IZG8+t9TeIYTGQB
-        gyYzTJnzfWGc55l+UfG265uEeLS1OqU2LKt1+LU=
-X-Google-Smtp-Source: ABdhPJwR1WbFxz9U2Ynuu7C/o0kObcKmhZHkNuOdmmMLocNfX/gIpZL1oofwMeAw22PyYW3zy5W1kIJYYz6T54K9MVU=
-X-Received: by 2002:a05:6638:240c:: with SMTP id z12mr6124273jat.41.1627084746308;
- Fri, 23 Jul 2021 16:59:06 -0700 (PDT)
+        id S233492AbhGXAKP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 23 Jul 2021 20:10:15 -0400
+Received: from shellb3.lnk.telstra.net ([110.143.216.122]:38522 "EHLO
+        mail.shellbypower.com.au" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233337AbhGXAKP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jul 2021 20:10:15 -0400
+X-Greylist: delayed 1597 seconds by postgrey-1.27 at vger.kernel.org; Fri, 23 Jul 2021 20:10:14 EDT
+Received: from localhost (localhost [127.0.0.1])
+        by mail.shellbypower.com.au (Postfix) with ESMTP id 0C8032553E;
+        Sat, 24 Jul 2021 10:12:20 +1000 (AEST)
+Received: from mail.shellbypower.com.au ([127.0.0.1])
+        by localhost (mail.shellbypower.com.au [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id vxBJU0o4iCRn; Sat, 24 Jul 2021 10:12:18 +1000 (AEST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.shellbypower.com.au (Postfix) with ESMTP id 719C52D41C;
+        Sat, 24 Jul 2021 10:12:13 +1000 (AEST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.shellbypower.com.au 719C52D41C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shellbypower.com.au;
+        s=8BBA43DA-3AA7-11EA-97BE-0AE12EF764A2; t=1627085534;
+        bh=tIcrqF9jb5+AisAeW5g2E9J08tvLmLd35fIw+kDaFCg=;
+        h=Date:From:Message-ID:MIME-Version;
+        b=Nzx2J7vLNA2MJXlU7TpWNJ5I/ixEyBpEfAmCblBG1Di8MGRZpCnec9rKlPSAFjfq0
+         gI9WNlYpfGQVB6Sflzl842naPjSQyJPKjN+r1cTPK5f+IJn3R5QJFM1jZ6cpOnTihD
+         xrV+bhJgxQKDnBdY/i0PlaxDuXiBlqbkjqUY44Kc=
+X-Virus-Scanned: amavisd-new at shellbypower.com.au
+Received: from mail.shellbypower.com.au ([127.0.0.1])
+        by localhost (mail.shellbypower.com.au [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id GpVqRzqX35bU; Sat, 24 Jul 2021 10:12:13 +1000 (AEST)
+Received: from mail.shellbypower.com.au (mail.shellbypower.com.au [192.168.1.200])
+        by mail.shellbypower.com.au (Postfix) with ESMTP id BD28825538;
+        Sat, 24 Jul 2021 10:12:05 +1000 (AEST)
+Date:   Sat, 24 Jul 2021 10:12:05 +1000 (AEST)
+From:   Rinat Akhmetov <no-reply@shellbypower.com.au>
+Reply-To: Rinat Akhmetov <rinatkhmetov@gmail.com>
+Message-ID: <432780866.874391.1627085525706.JavaMail.zimbra@shellbypower.com.au>
+Subject: Lesen Sie Ihre E-Mail.
 MIME-Version: 1.0
-References: <20210721235526.10588-1-msbroadf@gmail.com> <7b02cb66-d672-ae95-01ea-c6015725e1ac@linuxfoundation.org>
- <CALdjXpA4_eXen6RjhsEBYt8CQs-2gzwYs9h9q0Z2LKZ=rXVp+Q@mail.gmail.com> <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
-In-Reply-To: <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
-From:   Michael <msbroadf@gmail.com>
-Date:   Sat, 24 Jul 2021 09:58:54 +1000
-Message-ID: <CALdjXpBPRraC8xxORgE3SXw4xFnTW-Y6rLbcS+Cx0xYq3+aBeQ@mail.gmail.com>
-Subject: Re: [PATCH v2] vhci_hcd: USB port can get stuck in the disabled state
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Zimbra 8.7.11_GA_3865 (zclient/8.7.11_GA_3865)
+Thread-Index: 0Kn0UGxZYc14iyik7mQBMs/CnxWBgg==
+Thread-Topic: Lesen Sie Ihre E-Mail.
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here is the lsusb on the client when the device fails to attach
----------------------------------------
-michael@ubuntu:~$ lsusb
-Bus 006 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 005 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 004 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 003 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
-Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+Hallo Herr / Frau,
 
+Mein Name ist Rinat Achmetow. Ich bin ein ukrainischer Milliard=C3=A4r, Ges=
+ch=C3=A4ftsmann, Oligarch und auch Gr=C3=BCnder und Pr=C3=A4sident von Syst=
+em Capital Management in der Ukraine (Europa). Sie k=C3=B6nnen unten =C3=BC=
+ber mich lesen.
 
-Here is the lsusb on the host before use
------------------------------------------------------
-pi@raspberrypi:~ $ lsusb
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 003: ID 045e:02e6 Microsoft Corp. Wireless XBox Controller Dongle
-Bus 001 Device 002: ID 2109:3431 VIA Labs, Inc. Hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+https://en.wikipedia.org/wiki/Rinat_Akhmetov
 
-On Sat, 24 Jul 2021 at 02:29, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 7/21/21 8:27 PM, Michael wrote:
-> > You can pass through any bluetooth dongle (or xbox wireless dongle) through usbip and it will cause this issue.
-> >
-> > For example, here is one of my customers https://www.virtualhere.com/comment/9432#comment-9432 <https://www.virtualhere.com/comment/9432#comment-9432> with the issue.
-> >
-> > The device is in the VDEV_ST_USED state when a reset occurs and so its never re-enabled
-> >
-> > Furthermore there is a bug in the line pr_err("vhci_device speed not set\n");
-> > (L479) because resetting a full-speed device is not an error.
-> >
->
-> Can you provide me the full demsg from host and client including the part
-> where device is attached? I assume usbip tools from Linux sources are used?
->
-> Also send me lsusb output on host and client
->
-> thanks,
-> -- Shuah
+Ich beabsichtige, Ihnen im Rahmen unseres Charity-Projekts einen (Viertel-)=
+Teil meines Nettoverm=C3=B6gens von jeweils 500.000,00 EURO an 4 Personen w=
+eltweit zu spenden. Wenn Sie meine E-Mail erhalten haben, senden Sie uns bi=
+tte Ihre Daten
+
+Dein Name:
+Dein Land:
+Telefonnummer:
+Adresse:
+Staatsangeh=C3=B6rigkeit:
+Alter:
+Geschlecht:
+
+Wenn ich die obigen Angaben erhalte, werde ich Sie an meine Bank weiterleit=
+en, um die =C3=9Cberweisung des Geldes in H=C3=B6he von EURO 500.000,00 zu =
+veranlassen, in der Hoffnung, dass dies auch Ihnen und anderen hilft.
+
+Aufrichtig,
+
+Rinat Achmetow.
