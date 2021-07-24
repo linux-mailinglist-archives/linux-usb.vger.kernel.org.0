@@ -2,106 +2,55 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F0E3D4626
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 09:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 743743D4663
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 10:49:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbhGXHJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jul 2021 03:09:44 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40992 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234216AbhGXHJn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Jul 2021 03:09:43 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C9D060E96;
-        Sat, 24 Jul 2021 07:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1627113014;
-        bh=Mv1/eRYBc1I9fHOa8WKJt5bRfdu+6ed/06JZaNQIYQk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vPEwRgGF3bV/0durqSpg8K1A8aNhEFHln8YmJvdQdfNHa9HSG3islM4dJvx1TsltO
-         lWvwt0dCrvb71Kep06m5e4ub5MEAOjeh9+BSDiS9aLiHG1ufQxAfNTKB4XpnW+CPG+
-         Vd3ErK5k6Ssw3FvZTvdBDWueIP5BWEM0ynH0BLdE=
-Date:   Sat, 24 Jul 2021 09:50:10 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        John Stultz <john.stultz@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-Message-ID: <YPvGMtuP/ZpwTKN2@kroah.com>
-References: <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
- <20210714124807.o22mottsrg3tv6nt@mobilestation>
- <YPfPDqJhfzbvDLvB@kroah.com>
- <20210721100220.ddfxwugivsndsedv@mobilestation>
- <YPf29+ewbrYgHxRP@kroah.com>
- <YPh/AS5svBk+gddY@yoga>
- <YPp7Q4IofUYQlrqd@kroah.com>
- <YPrTbC7fNOY3qCcJ@yoga>
- <YPrmTYQJ33AIxcwP@kroah.com>
- <YPsejtV31WrYJX7e@yoga>
+        id S234782AbhGXIIu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 04:08:50 -0400
+Received: from out28-147.mail.aliyun.com ([115.124.28.147]:41635 "EHLO
+        out28-147.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234561AbhGXIIt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 24 Jul 2021 04:08:49 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.4749928|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0152612-0.00748325-0.977256;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047209;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.KpoL-m-_1627116542;
+Received: from zhouyanjie-virtual-machine.localdomain(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.KpoL-m-_1627116542)
+          by smtp.aliyun-inc.com(10.147.43.230);
+          Sat, 24 Jul 2021 16:49:17 +0800
+From:   =?UTF-8?q?=E5=91=A8=E7=90=B0=E6=9D=B0=20=28Zhou=20Yanjie=29?= 
+        <zhouyanjie@wanyeetech.com>
+To:     gregkh@linuxfoundation.org, robh+dt@kernel.org, hminas@synopsys.com
+Cc:     paul@crapouillou.net, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Subject: [PATCH 0/2] Add OTG support for Ingenic SoCs.
+Date:   Sat, 24 Jul 2021 16:48:39 +0800
+Message-Id: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YPsejtV31WrYJX7e@yoga>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 02:54:54PM -0500, Bjorn Andersson wrote:
-> On Fri 23 Jul 10:54 CDT 2021, Greg Kroah-Hartman wrote:
-> 
-> > On Fri, Jul 23, 2021 at 09:34:20AM -0500, Bjorn Andersson wrote:
-> > > On Fri 23 Jul 03:18 CDT 2021, Greg Kroah-Hartman wrote:
-> > > 
-> > > > On Wed, Jul 21, 2021 at 03:09:37PM -0500, Bjorn Andersson wrote:
-> > > > > Which tree did you revert this in? 5.13.stable?)
-> > > > 
-> > > > My usb-linus branch which will go to Linus later today.  Then we can
-> > > > backport the revert to older kernels as needed.
-> > > > 
-> > > 
-> > > I'm not worried about the backports, I'm worried about conflicts you're
-> > > causing because you're taking a non-usb patch through the usb tree.
-> > > 
-> > > I was about to push a revert (to this and the other Qualcomm platforms),
-> > > but as you're taking some set of reverts through the usb tree we're just
-> > > in for a bunch of merge conflicts.
-> > 
-> > It shouldn't be a merge conflict as you can apply the same revert to
-> > your tree now and keep on merging.  When you pick up 5.14-rc3 from Linus
-> > it should merge "correctly", right?
-> > 
-> 
-> I typically don't merge back the -rcs into my -next branch, is that
-> common practice?
+1.Add OTG support for the JZ4775 SoC, the JZ4780 SoC, the X1000
+  SoC, the X1600 SoC, the X1830 SoC, and the X2000 SoC.
+2.Introduce support for disable Ingenic overcurrent detection,
+  once selected it enables GOTGCTL register bits VbvalidOvEn
+  and VbvalidOvVal to disable the VBUS overcurrent detection.
 
-I do it when Linus takes patches from my -linus branch in order to
-ensure they end up in my -next branch for testing and merge issues.
+周琰杰 (Zhou Yanjie) (2):
+  dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+  USB: dwc2: Add OTG support for Ingenic SoCs.
 
-> But I still don't understand why you insist on driving this through your
-> tree. I've asked you several times to show me on the patch so I at least
-> can Ack it. I made a mistake, but why do you insist on keeping me - the
-> maintainer - out of the loop?
+ Documentation/devicetree/bindings/usb/dwc2.yaml |  6 +++
+ drivers/usb/dwc2/core.c                         |  9 +++++
+ drivers/usb/dwc2/core.h                         |  5 +++
+ drivers/usb/dwc2/params.c                       | 49 ++++++++++++++++++++++++-
+ 4 files changed, 68 insertions(+), 1 deletion(-)
 
-I had already done the revert, I wasn't trying to keep anyone out of the
-loop here, sorry if it came across that way.  I just wanted to ensure
-this got resolved quickly so I could move on to other issues.
+-- 
+2.7.4
 
-This is now 1f958f3dff42 ("Revert "arm64: dts: qcom: Harmonize DWC USB3
-DT nodes name"") in Linus's tree if you wish to cherry-pick it into your
-tree to resolve merge issues, sorry for the confusion.
-
-thanks,
-
-greg k-h
