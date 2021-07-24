@@ -2,82 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9214D3D456C
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 08:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F0E3D4626
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 09:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbhGXGIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jul 2021 02:08:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50160 "EHLO mail.kernel.org"
+        id S234624AbhGXHJo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 03:09:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40992 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229926AbhGXGIV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Jul 2021 02:08:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 23D8F60EAF;
-        Sat, 24 Jul 2021 06:48:51 +0000 (UTC)
-Date:   Sat, 24 Jul 2021 08:48:48 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.or, rajatxjain@gmail.com
-Subject: Re: [PATCH v2] thunderbolt: For dev authorization changes, include
- the actual event in udev change notification
-Message-ID: <YPu30AL27UwnfOrI@kroah.com>
-References: <20210724004043.2075819-1-rajatja@google.com>
+        id S234216AbhGXHJn (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Jul 2021 03:09:43 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6C9D060E96;
+        Sat, 24 Jul 2021 07:50:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627113014;
+        bh=Mv1/eRYBc1I9fHOa8WKJt5bRfdu+6ed/06JZaNQIYQk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vPEwRgGF3bV/0durqSpg8K1A8aNhEFHln8YmJvdQdfNHa9HSG3islM4dJvx1TsltO
+         lWvwt0dCrvb71Kep06m5e4ub5MEAOjeh9+BSDiS9aLiHG1ufQxAfNTKB4XpnW+CPG+
+         Vd3ErK5k6Ssw3FvZTvdBDWueIP5BWEM0ynH0BLdE=
+Date:   Sat, 24 Jul 2021 09:50:10 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        John Stultz <john.stultz@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <YPvGMtuP/ZpwTKN2@kroah.com>
+References: <CALAqxLX_FNvFndEDWtGbFPjSzuAbfqxQE07diBJFZtftwEJX5A@mail.gmail.com>
+ <20210714124807.o22mottsrg3tv6nt@mobilestation>
+ <YPfPDqJhfzbvDLvB@kroah.com>
+ <20210721100220.ddfxwugivsndsedv@mobilestation>
+ <YPf29+ewbrYgHxRP@kroah.com>
+ <YPh/AS5svBk+gddY@yoga>
+ <YPp7Q4IofUYQlrqd@kroah.com>
+ <YPrTbC7fNOY3qCcJ@yoga>
+ <YPrmTYQJ33AIxcwP@kroah.com>
+ <YPsejtV31WrYJX7e@yoga>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210724004043.2075819-1-rajatja@google.com>
+In-Reply-To: <YPsejtV31WrYJX7e@yoga>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 23, 2021 at 05:40:43PM -0700, Rajat Jain wrote:
-> For security, we would like to monitor and track when the thunderbolt
-> devices are authorized and deauthorized (i.e. when the thunderbolt sysfs
-> "authorized" attribute changes). Currently the userspace gets a udev
-> change notification when there is a change, but the state may have
-> changed (again) by the time we look at the authorized attribute in
-> sysfs. So an authorization event may go unnoticed. Thus make it easier
-> by informing the actual change (new value of authorized attribute) in
-> the udev change notification.
+On Fri, Jul 23, 2021 at 02:54:54PM -0500, Bjorn Andersson wrote:
+> On Fri 23 Jul 10:54 CDT 2021, Greg Kroah-Hartman wrote:
 > 
-> The change is included as a key value "authorized=<val>" where <val>
-> is the new value of sysfs attribute "authorized", and is described at
-> Documentation/ABI/testing/sysfs-bus-thunderbolt under
-> /sys/bus/thunderbolt/devices/.../authorized
+> > On Fri, Jul 23, 2021 at 09:34:20AM -0500, Bjorn Andersson wrote:
+> > > On Fri 23 Jul 03:18 CDT 2021, Greg Kroah-Hartman wrote:
+> > > 
+> > > > On Wed, Jul 21, 2021 at 03:09:37PM -0500, Bjorn Andersson wrote:
+> > > > > Which tree did you revert this in? 5.13.stable?)
+> > > > 
+> > > > My usb-linus branch which will go to Linus later today.  Then we can
+> > > > backport the revert to older kernels as needed.
+> > > > 
+> > > 
+> > > I'm not worried about the backports, I'm worried about conflicts you're
+> > > causing because you're taking a non-usb patch through the usb tree.
+> > > 
+> > > I was about to push a revert (to this and the other Qualcomm platforms),
+> > > but as you're taking some set of reverts through the usb tree we're just
+> > > in for a bunch of merge conflicts.
+> > 
+> > It shouldn't be a merge conflict as you can apply the same revert to
+> > your tree now and keep on merging.  When you pick up 5.14-rc3 from Linus
+> > it should merge "correctly", right?
+> > 
 > 
-> Signed-off-by: Rajat Jain <rajatja@google.com>
-> ---
->  drivers/thunderbolt/switch.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+> I typically don't merge back the -rcs into my -next branch, is that
+> common practice?
 
-Hi,
+I do it when Linus takes patches from my -linus branch in order to
+ensure they end up in my -next branch for testing and merge issues.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+> But I still don't understand why you insist on driving this through your
+> tree. I've asked you several times to show me on the patch so I at least
+> can Ack it. I made a mistake, but why do you insist on keeping me - the
+> maintainer - out of the loop?
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+I had already done the revert, I wasn't trying to keep anyone out of the
+loop here, sorry if it came across that way.  I just wanted to ensure
+this got resolved quickly so I could move on to other issues.
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+This is now 1f958f3dff42 ("Revert "arm64: dts: qcom: Harmonize DWC USB3
+DT nodes name"") in Linus's tree if you wish to cherry-pick it into your
+tree to resolve merge issues, sorry for the confusion.
 
 thanks,
 
-greg k-h's patch email bot
+greg k-h
