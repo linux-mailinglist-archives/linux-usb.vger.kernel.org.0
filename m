@@ -2,66 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4493D4857
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 17:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B323D4866
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 17:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbhGXOrg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 24 Jul 2021 10:47:36 -0400
-Received: from wtarreau.pck.nerim.net ([62.212.114.60]:33589 "EHLO 1wt.eu"
+        id S229898AbhGXPEj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 11:04:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39180 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229545AbhGXOrf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 24 Jul 2021 10:47:35 -0400
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 16OFS0nN018768;
-        Sat, 24 Jul 2021 17:28:00 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, Willy Tarreau <w@1wt.eu>
-Subject: [PATCH] USB: serial: ch341: fix character loss at high transfer rates
-Date:   Sat, 24 Jul 2021 17:27:39 +0200
-Message-Id: <20210724152739.18726-1-w@1wt.eu>
-X-Mailer: git-send-email 2.17.5
+        id S229545AbhGXPEj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Jul 2021 11:04:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 06A6560EB1
+        for <linux-usb@vger.kernel.org>; Sat, 24 Jul 2021 15:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627141511;
+        bh=1zzGlbN7RM3ax1T4JW6c3mtcsGl++w+VuevHCRi7X14=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=IWnKihG8CpzW3cBYdnYhRm2qYJ4ysnPbriWi10xoD+xVZlvbOpos/9vDxinHhNS+P
+         gSY2kQh7o0Y9Z1eXdSmz3a7ohPIKNjmi5wWMeUoX4aJ4RPlW0J/elxomWxTxN4Ro68
+         LeAOAh5e4TLcj8q6vRMMyeHP56Jy50dUDF8VlmPBH4kIw9o4oqUX8eRiz8xp2rufop
+         HTdKRlQ856S8usv/dYbCQl2gpP5JnLIFbLc+6UT0RauoRM+SStkrPDgp+bVl885+N7
+         gO+oZcndyLe4+yea2YdKt6LWXhpiLmL7z73DCfB6jnyJdlSmVg0Sg5ufN1gEhmOaEh
+         1sPYwKRchsnMg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id E9712608FD; Sat, 24 Jul 2021 15:45:10 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213839] XHCI 7 port usb hub does not work correctly
+Date:   Sat, 24 Jul 2021 15:45:10 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213839-208809-Z7A7soggwH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213839-208809@https.bugzilla.kernel.org/>
+References: <bug-213839-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The chip supports high transfer rates, but with the small default buffers
-(64 bytes read), some entire blocks are regularly lost. This typically
-happens at 1.5 Mbps (which is the default speed on Rockchip devices) when
-used as a console to access U-Boot where the output of the "help" command
-misses many lines and where "printenv" mangles the environment.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213839
 
-The FTDI driver doesn't suffer at all from this. One difference is that
-it uses 512 bytes rx buffers and 256 bytes tx buffers. Adopting these
-values completely resolved the issue, even the output of "dmesg" is
-reliable. I preferred to leave the Tx value unchanged as it is not
-involved in this issue, while a change could increase the risk of
-triggering the same issue with other devices having too small buffers.
+--- Comment #3 from Alan Stern (stern@rowland.harvard.edu) ---
+Have you tried using Wireshark to capture the USB communications to/from the
+hub under both Windows and Linux for comparison?  If there's a difference, =
+it
+should show up.
 
-I verified that it backports well (and works) at least to 5.4. It's of
-low importance enough to be dropped where it doesn't trivially apply
-anymore.
+--=20
+You may reply to this email to add a comment.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Willy Tarreau <w@1wt.eu>
----
- drivers/usb/serial/ch341.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index 2db917eab799..8a521b5ea769 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -851,6 +851,7 @@ static struct usb_serial_driver ch341_device = {
- 		.owner	= THIS_MODULE,
- 		.name	= "ch341-uart",
- 	},
-+	.bulk_in_size      = 512,
- 	.id_table          = id_table,
- 	.num_ports         = 1,
- 	.open              = ch341_open,
--- 
-2.17.5
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
