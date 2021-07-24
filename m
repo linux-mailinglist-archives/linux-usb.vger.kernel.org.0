@@ -2,71 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CC63D4407
-	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 02:42:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9214D3D456C
+	for <lists+linux-usb@lfdr.de>; Sat, 24 Jul 2021 08:49:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233487AbhGXACE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 23 Jul 2021 20:02:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232724AbhGXACE (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 23 Jul 2021 20:02:04 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCA3C061575
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jul 2021 17:42:36 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id h2so4830351lfu.4
-        for <linux-usb@vger.kernel.org>; Fri, 23 Jul 2021 17:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZdiEdCl11tN9UAOLZ3FMPR4kw5S1nl4qVLPulRI8atM=;
-        b=UE+/OmZhAo/f3kfvcwa7Xvp9Uk/AQe6Mv3C05Lixni9UORysKj8vQ8mUDoOObrngIT
-         AeP40zUy0GWnKPofO0DOzmbQBy2oJG706+XnbUyymNBwwCZ9UrxjWTrLWT7uy33Dt4Ml
-         NQdedpeiBR1ooEy99KxEoAAGKnZ+exanG9p9ZqroOnl6TKrJGaZBB7+dYg6A2/V2eJ8I
-         GF97XNxHnq1/LPQTFmTU/26TisYCZippyUUUbIv5Rha88NeZ2PzPleYGv2+eWwOj5Yt5
-         wOTc3WH71tOR0qrg/eMRi1GdHM6gsOHhTjSGt7P3fcjpTvD7iV0LHOEb4ZCB0svJ5Lq9
-         FN/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZdiEdCl11tN9UAOLZ3FMPR4kw5S1nl4qVLPulRI8atM=;
-        b=a0ZxkPD3hmnhitQHJCkT3NbvplEEDBYEd75Cl+DWYuKgpvy+QIDPeStk55WXR2tx0k
-         FTI3697PmY+VH6JpYuZEpMrRXTXgXkcY/PbwUpdjOXegDhq2FbuinTHwZMQIfXitsH0n
-         wkdaQpRj9OOfcU9CVsJjX1z+5QWT16knyzLks0fNEx8i8OTb/zAQoB+IIP0+Rw4eacaQ
-         27f69REpo1+pnUoeMihkCyhGHQnqFanN2B9g7C+6h3zzn/Z+ZUJ/Blk6+N5RUixJuEMZ
-         I6J2wTIzZyrrDglCmPl9cK5QmsJqcK11/m0ojug14dnxEUQSMM7kjheLRgnAq66kjxb1
-         gk1Q==
-X-Gm-Message-State: AOAM533Inu5Wah7j8bmU7gVAgjlPeNIB6GguDAC8QIS62YHhkWFNlqTA
-        lz2cutzrXZFoEQUELgrw06S0xXerWJRmofVvOMZKJQ==
-X-Google-Smtp-Source: ABdhPJzf/lwbgTN9xu9k+Xm9g4eU8Q2voKV2VZHFHJDDDBNhSbVRm9DCfLop4Ntp66yzKIeepPxcduJgGfXwn89HbIc=
-X-Received: by 2002:ac2:41c5:: with SMTP id d5mr4752289lfi.174.1627087354944;
- Fri, 23 Jul 2021 17:42:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210724004043.2075819-1-rajatja@google.com>
-In-Reply-To: <20210724004043.2075819-1-rajatja@google.com>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Fri, 23 Jul 2021 17:41:58 -0700
-Message-ID: <CACK8Z6GsNi9FVUdqdfj0vUFj0mJtMQ_pm4aPH8d3ozsa5Zswhg@mail.gmail.com>
-Subject: Re: [PATCH v2] thunderbolt: For dev authorization changes, include
- the actual event in udev change notification
-To:     Andreas Noever <andreas.noever@gmail.com>,
+        id S234091AbhGXGIW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 24 Jul 2021 02:08:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50160 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229926AbhGXGIV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 24 Jul 2021 02:08:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 23D8F60EAF;
+        Sat, 24 Jul 2021 06:48:51 +0000 (UTC)
+Date:   Sat, 24 Jul 2021 08:48:48 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Rajat Jain <rajatja@google.com>
+Cc:     Andreas Noever <andreas.noever@gmail.com>,
         Michael Jamet <michael.jamet@intel.com>,
         Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <yehezkelshb@gmail.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     rajatxjain@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        gregkh@linuxfoundation.or, rajatxjain@gmail.com
+Subject: Re: [PATCH v2] thunderbolt: For dev authorization changes, include
+ the actual event in udev change notification
+Message-ID: <YPu30AL27UwnfOrI@kroah.com>
+References: <20210724004043.2075819-1-rajatja@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210724004043.2075819-1-rajatja@google.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-(fixing the typo in the email ID for Greg).
-
-On Fri, Jul 23, 2021 at 5:40 PM Rajat Jain <rajatja@google.com> wrote:
->
+On Fri, Jul 23, 2021 at 05:40:43PM -0700, Rajat Jain wrote:
 > For security, we would like to monitor and track when the thunderbolt
 > devices are authorized and deauthorized (i.e. when the thunderbolt sysfs
 > "authorized" attribute changes). Currently the userspace gets a udev
@@ -75,57 +43,41 @@ On Fri, Jul 23, 2021 at 5:40 PM Rajat Jain <rajatja@google.com> wrote:
 > sysfs. So an authorization event may go unnoticed. Thus make it easier
 > by informing the actual change (new value of authorized attribute) in
 > the udev change notification.
->
+> 
 > The change is included as a key value "authorized=<val>" where <val>
 > is the new value of sysfs attribute "authorized", and is described at
 > Documentation/ABI/testing/sysfs-bus-thunderbolt under
 > /sys/bus/thunderbolt/devices/.../authorized
->
+> 
 > Signed-off-by: Rajat Jain <rajatja@google.com>
 > ---
 >  drivers/thunderbolt/switch.c | 8 ++++++--
 >  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> index 83b1ef3d5d03..382128dfbdee 100644
-> --- a/drivers/thunderbolt/switch.c
-> +++ b/drivers/thunderbolt/switch.c
-> @@ -1499,6 +1499,7 @@ static ssize_t authorized_show(struct device *dev,
->  static int disapprove_switch(struct device *dev, void *not_used)
->  {
->         struct tb_switch *sw;
-> +       char *envp[] = { "AUTHORIZED=0", NULL };
->
->         sw = tb_to_switch(dev);
->         if (sw && sw->authorized) {
-> @@ -1514,7 +1515,7 @@ static int disapprove_switch(struct device *dev, void *not_used)
->                         return ret;
->
->                 sw->authorized = 0;
-> -               kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> +               kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
->         }
->
->         return 0;
-> @@ -1523,6 +1524,8 @@ static int disapprove_switch(struct device *dev, void *not_used)
->  static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
->  {
->         int ret = -EINVAL;
-> +       char envp_string[13];
-> +       char *envp[] = { envp_string, NULL };
->
->         if (!mutex_trylock(&sw->tb->lock))
->                 return restart_syscall();
-> @@ -1560,7 +1563,8 @@ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
->         if (!ret) {
->                 sw->authorized = val;
->                 /* Notify status change to the userspace */
-> -               kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> +               sprintf(envp_string, "AUTHORIZED=%u", sw->authorized);
-> +               kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
->         }
->
->  unlock:
-> --
-> 2.32.0.432.gabb21c7263-goog
->
+
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
