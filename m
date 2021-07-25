@@ -2,129 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 984C53D4C25
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 07:45:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F359A3D4C45
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 08:06:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbhGYFFI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Jul 2021 01:05:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38202 "EHLO mail.kernel.org"
+        id S229689AbhGYFZe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Jul 2021 01:25:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39924 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229460AbhGYFFH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 25 Jul 2021 01:05:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 56FA8600D4
-        for <linux-usb@vger.kernel.org>; Sun, 25 Jul 2021 05:45:38 +0000 (UTC)
+        id S229460AbhGYFZe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 25 Jul 2021 01:25:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1F24660F11;
+        Sun, 25 Jul 2021 06:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627191938;
-        bh=dnPdjwoaI08A8ts++voYjlnkfGczAmjDD9GZ91E3wDQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=g8zQGyuDZNBrrJKSBHTdvr8RgBPQPiXN2Ts2lp4u29AItQMb97XcSuCn0e5JzxUWM
-         zfschXn9hlZvyhaW3gUo+GYMJK6z16AA/1RjGCpKH0mdLjrvm8fYchXr9boSV9He2B
-         xrWWrvU81r82KrmdxNJ/oQxFOgRlTWJOgHSLHlaP/d57mUwDuMtxu4Q7nMWZgq+Kow
-         vuXbK/VebDoR+3Yji9vRGaICSQYt0txZXp6Y3p+uaBtlLlmtRvdU+Z81Bz2Kq1dpK0
-         RSpavNeia/cxqFNRoYuzkuN5honhfsmXPIdpd6FxOztP2xk2imLWDcxRtyMXHMBeHM
-         mtGIf2I+Buo1A==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 4CEFB60E96; Sun, 25 Jul 2021 05:45:38 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
-Date:   Sun, 25 Jul 2021 05:45:38 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Minas.Harutyunyan@synopsys.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209555-208809-w127hdBmrK@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
-References: <bug-209555-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1627193164;
+        bh=ZwACYUIuv3VQ3Zylln4xFkQ+c4zLUmOSSX/7oAfYllI=;
+        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
+        b=aXX31zvkZ/ZwRtrJ3CgF6K3/zuHt5yQO2YeSv/tJ/DR+fOp6ZMReR+VNh3ZYF5HnU
+         RaNG+olL1p6swrh0aV8wmrB4R57fUbAQHwAvow+G5lqm6TLHb3b9oFHipbEkzKUJhc
+         Wf6tdusC/te0KJOoNTy7juJyeCmZYUNQCu0OhHunIGiUl85Kf8NdnWzP/aXSepfyWx
+         5bzaRtu6vo4zaIxS4hUPGvJrknWPlTjUlMz2+qc17d0fGgPGFIdbqcYaldE5aGglrb
+         6qv7w8IyLelLmXtQbxPeCj7F7qfIkWHYaZb5VgNEMHnUkR2t4UCEu57te1A2B7ZHzS
+         pd/KUfAmlIqMQ==
+References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+ <cfb83fe4-369c-ec72-7887-3bcb0f20fe15@gmail.com>
+ <ec8050c5-c013-4af6-b39e-69779c009a9c@codeaurora.org>
+ <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
+ <2e01c435-9ecc-4e3b-f55c-612a86667020@codeaurora.org>
+ <2ae9fa6a-3bb1-3742-0dd3-59678bdd8643@gmail.com>
+ <ebea75fe-5334-197b-f67a-cb6e1e30b39e@codeaurora.org>
+ <bafa93bb-11e3-c8a5-e14a-b0a6d5695055@gmail.com>
+ <87v951ldlt.fsf@kernel.org>
+ <d9aef50c-4bd1-4957-13d8-0b6a14b9fcd0@gmail.com>
+ <87pmv9l1dv.fsf@kernel.org>
+ <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com>
+User-agent: mu4e 1.4.15; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Ferry Toth <fntoth@gmail.com>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
+        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com
+Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP bursting
+In-reply-to: <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com>
+Date:   Sun, 25 Jul 2021 09:05:59 +0300
+Message-ID: <87a6mbudvc.fsf@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D209555
 
---- Comment #7 from Minas Harutyunyan (Minas.Harutyunyan@synopsys.com) ---
 Hi,
 
-On 7/24/2021 8:42 PM, bugzilla-daemon@bugzilla.kernel.org wrote:
+Ferry Toth <fntoth@gmail.com> writes:
+>>>>> Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542
+>>>>> 2015.01.21:18.19.48
+>>>>> RIP: 0010:0x500000000
+>>>>> Code: Unable to access opcode bytes at RIP 0x4ffffffd6.
+>>>>> RSP: 0018:ffffa4d00045fc28 EFLAGS: 00010046
+>>>>> RAX: 0000000500000000 RBX: ffff8cd546aed200 RCX: 0000000000000000
+>>>>> RDX: 0000000000000000 RSI: ffff8cd547bfcae0 RDI: ffff8cd546aed200
+>>>>> RBP: ffff8cd547bfcae0 R08: 0000000000000000 R09: 0000000000000001
+>>>>> R10: ffff8cd541fd28c0 R11: 0000000000000000 R12: ffff8cd547342828
+>>>>> R13: ffff8cd546aed248 R14: 0000000000000000 R15: ffff8cd548b1d000
+>>>>> FS:  0000000000000000(0000) GS:ffff8cd57e200000(0000) knlGS:0000000000000000
+>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>> CR2: 0000000500000000 CR3: 000000000311e000 CR4: 00000000001006f0
+>>>>> Call Trace:
+>>>>>     ? dwc3_remove_requests.constprop.0+0x14d/0x170
+>>>>>     ? __dwc3_gadget_ep_disable+0x7a/0x160
+>>>>>     ? dwc3_gadget_ep_disable+0x3d/0xd0
+>>>>>     ? usb_ep_disable+0x1c/0x
+>>>>>     ? u_audio_stop_capture+0x79/0x120 [u_audio]
+>>>>>     ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
+>>>>>     ? composite_setup+0x224/0x1b90 [libcomposite]
+>>>>>     ? __dwc3_gadget_kick_transfer+0x160/0x400
+>>>>>     ? dwc3_gadget_ep_queue+0xf3/0x1a0
+>>>>>     ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>     ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>     ? dwc3_ep0_interrupt+0x459/0xa40
+>>>>>     ? dwc3_thread_interrupt+0x8ee/0xf40
+>>>>>     ? __schedule+0x235/0x6c0
+>>>>>     ? disable_irq_nosync+0x10/0x10
+>>>>>     ? irq_thread_fn+0x1b/0x60
+>>>>>     ? irq_thread+0xc0/0x160
+>>>>>     ? irq_thread_check_affinity+0x70/0x70
+>>>>>     ? irq_forced_thread_fn+0x70/0x70
+>>>>>     ? kthread+0x122/0x140
+>>>>>     ? set_kthread_struct+0x40/0x40
+>>>>>     ? ret_from_fork+0x22/0x30
+>>>> Do you mind enabling dwc3 traces and collecting them? Trying to figure
+>>>> out how we got here.
+>>>>
+>>> I'll try if I can get the same error by booting with USB in host mode
+>>> and then switch to device mode. If so I can enable traces and collect as
+>>> you explained me before.
+>>>
+>>> I'll try before monday, as then I fly for a holiday and will not be
+>>> available before rc5.
+>> you can enable all of those with kernel cmdline :-)
+>>
+>> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+>>
+>> you need ftrace_dump_on_oops=1 and also need the correct options on
+>> trace_buf_size and trace_event.
+>>
+> On Edison-Arduino I have a switch to go to device mode, after which
+> udev triggers a script configure gadgets through configfs.
 >
-> https://urldefense.com/v3/__https://bugzilla.kernel.org/show_bug.cgi?id=
-=3D209555__;!!A4F2R9G_pg!L1C5v0Y0uLaHYGYBeR8HcEuRxTDT44Q7Bw2YABG-ORqKdbDL0s=
-ms340fBRmSSSH-Zo7r765Z$
->=20
-> Yunhao Tian (t123yh@outlook.com) changed:
->=20
->             What    |Removed                     |Added
-> -------------------------------------------------------------------------=
----
->                   CC|                            |t123yh@outlook.com
->=20
-> --- Comment #6 from Yunhao Tian (t123yh@outlook.com) ---
-> Hi,
->=20
-> I'm using RK3308 Rock Pi S, and experiencing a similar issue (though not =
-the
-> same) on v5.14.0-rc2. The mentioned workaround doesn't work. The following
-> testing is done with the workaround applied.
+> I tried to log following these instructions:
+>
+> https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs  <https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs>
+>
+> Unfortunately the kernel crashes so badly I can not get to the ` cp
+> /t/trace /root/trace.txt` line (after a while the watchdog kicks).
+>
+> What to do next?
 
-For 5.14-rc2 doesn't need to apply mentioned workaround because the=20
-power issue related to 'rmmod dwc2' resolved.
->=20
-> When the host is unplugged, the message buffer is bloated with the follow=
-ing
-> message repeatedly:
->=20
-> # [   23.215674] dwc2 ff400000.usb: dwc2_flush_rx_fifo:  HANG! AHB Idle
-> GRSCTL
-> [   23.216448] configfs-gadget gadget: 220 Error!
-> [   23.231677] dwc2 ff400000.usb: dwc2_flush_rx_fifo:  HANG! AHB Idle GRS=
-CTL
-> [   23.232382] configfs-gadget gadget: 220 Error!
-> [   23.247524] dwc2 ff400000.usb: dwc2_flush_rx_fifo:  HANG! AHB Idle GRS=
-CTL
-> [   23.263000] dwc2 ff400000.usb: dwc2_flush_rx_fifo:  HANG! AHB Idle GRS=
-CTL
-> [   23.278459] dwc2 ff400000.usb: dwc2_flush_rx_fifo:  HANG! AHB Idle GRS=
-CTL
->=20
-> And if we plug the cable in again, the HANG message stops, followed by th=
-ese
-> messages:
->=20
-> [   18.332489] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
-> GINTSTS.GOUTNAKEFF
-> [   18.333378] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
-> DOEPCTL.EPDisable
-> [   18.334265] dwc2 ff400000.usb: dwc2_hsotg_ep_stop_xfr: timeout
-> GINTSTS.GOUTNAKEFF
->=20
-> And then the kernel completely freezes, not able to even respond to a key
-> stroke or network ping.
->=20
-Could you please apply patch "[PATCH v2] usb: phy: Fix page fault from=20
-usb_phy_uevent" from Artur Petrosyan and test again.
+Pass ftrace_dump_on_oops to kernel cmdline.
 
-
-Thanks,
-Minas
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+balbi
