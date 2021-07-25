@@ -2,74 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB1C3D4CBA
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 10:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC423D4D1B
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 12:32:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbhGYILx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Jul 2021 04:11:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37116 "EHLO mail.kernel.org"
+        id S230075AbhGYJvX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-usb@lfdr.de>); Sun, 25 Jul 2021 05:51:23 -0400
+Received: from aposti.net ([89.234.176.197]:56838 "EHLO aposti.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229883AbhGYILw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 25 Jul 2021 04:11:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 3550B60F23
-        for <linux-usb@vger.kernel.org>; Sun, 25 Jul 2021 08:52:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627203143;
-        bh=C6vQh4K/4hBf7YEs2GICDvMTBa5GBRNtp/NTMURKByY=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=jUah1Cf37KEeXWkWbiUutbCN8X2n6vSuaX1IjU3ORoBBE6k5v5eUG+OqFYOPrVy6L
-         gqzc1rEmuuD/vZfOzOkyvZzVJBQ6G2RE6L+vmpt+r0tqJ6CdxzOdGyVYoJa37Uv9i+
-         99Q7FnfEaiGg9mQse0ZBXwAgZjeVHIiyk8YYXSm9Ql23pwb5Up9vO9Qv/dkQx7uelO
-         mygWlp1Gljo5/XdpCyd1kJy/a9vJ37ryrJzQXNJY38/t2fXFNjzQJf8x3Rbk7RmJUi
-         C/HsoGy0Ru0t/8ooEoEJlz3lW9sAELfRydVm3z3lVU/gNNbCO4bvRR5sQQhxC6/YzS
-         gUBhvtMamOjJw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 00FB260E9A; Sun, 25 Jul 2021 08:52:22 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 209555] dwc2 driver stops working after sudden disconnect
-Date:   Sun, 25 Jul 2021 08:52:22 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: t123yh@outlook.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-209555-208809-OoCjKSULwt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-209555-208809@https.bugzilla.kernel.org/>
-References: <bug-209555-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S229538AbhGYJvX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 25 Jul 2021 05:51:23 -0400
+Date:   Sun, 25 Jul 2021 11:31:41 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/2] dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        hminas@synopsys.com, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+Message-Id: <TKQSWQ.K11YHBO0B4FM2@crapouillou.net>
+In-Reply-To: <ad64396d-d7ab-b8dd-4086-f565e91edb00@wanyeetech.com>
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1627116521-124612-2-git-send-email-zhouyanjie@wanyeetech.com>
+        <CLWQWQ.DBCX3I00Y95T2@crapouillou.net>
+        <ad64396d-d7ab-b8dd-4086-f565e91edb00@wanyeetech.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D209555
+Hi Zhou,
 
---- Comment #15 from Yunhao Tian (t123yh@outlook.com) ---
-Hi Minas,
+Le sam., juil. 24 2021 at 20:52:30 +0800, Zhou Yanjie 
+<zhouyanjie@wanyeetech.com> a écrit :
+> Hi Paul,
+> 
+> On 2021/7/24 下午6:46, Paul Cercueil wrote:
+>> Hi Zhou,
+>> 
+>> Le sam., juil. 24 2021 at 16:48:40 +0800, 周琰杰 (Zhou Yanjie) 
+>> <zhouyanjie@wanyeetech.com> a écrit :
+>>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000 
+>>> SoC,
+>>> the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
+>>> 
+>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>>>  1 file changed, 6 insertions(+)
+>>> 
+>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml 
+>>> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> index 10c7d9b..e779d33 100644
+>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>> @@ -14,6 +14,12 @@ properties:
+>>>      oneOf:
+>>>        - const: brcm,bcm2835-usb
+>>>        - const: hisilicon,hi6220-usb
+>>> +      - const: ingenic,jz4775-otg
+>>> +      - const: ingenic,jz4780-otg
+>>> +      - const: ingenic,x1000-otg
+>>> +      - const: ingenic,x1600-otg
+>>> +      - const: ingenic,x1830-otg
+>>> +      - const: ingenic,x2000-otg
+>> 
+>> I don't know if all these IPs are the exact same, but if they are, 
+>> they all should have "ingenic,jz4775-otg" as the fallback.
+> 
+> 
+> I'm not too sure whether they are exactly the same, but comparing the 
+> code in Ingenics SDK,
+> 
+> the code of the USB part of jz4775, jz4780, and x1000 are the same, 
+> the code of the USB part
+> 
+> of x1600 and x1830 are the same, and the USB part code of X2000 are 
+> different from all of them.
 
-Params and regdump is sent as an attachment.
+In doubt - it's better to keep separate compatible strings, so this is 
+OK.
 
-I'm unable to get regdump after detach, because the system freezes after
-disconnecting USB now, with message dwc2_flush_rx_fifo:  HANG! AHB Idle GRS=
-CTL
-flooding.
+Cheers,
+-Paul
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
