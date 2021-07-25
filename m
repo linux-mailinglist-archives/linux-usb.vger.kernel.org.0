@@ -2,192 +2,259 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 840303D4ED3
-	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 18:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F30333D4ED7
+	for <lists+linux-usb@lfdr.de>; Sun, 25 Jul 2021 18:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbhGYQMi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 25 Jul 2021 12:12:38 -0400
-Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:56896 "EHLO
-        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229709AbhGYQMh (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jul 2021 12:12:37 -0400
-Received: from mailhost.synopsys.com (badc-mailhost1.synopsys.com [10.192.0.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 66F5CC0DEE;
-        Sun, 25 Jul 2021 16:53:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-        t=1627231987; bh=qPD04WVJ3RZPh9kKVLpR3EHhLF82dmZBfMo343OYQqw=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=iBUpBuR1V4YBSxUBD2uom1S89gHKIzLKvTXtNzLk7dV0+vtqSEvcmaekofCbx7PrV
-         rwDrDRy7pGb/YaefHaMDvH+RNU/3VXmL8Pc2RiQYWkEGlv9ceVm3kuVmKeIMOwkPia
-         To4tURiiiyCUh7qAEqZnNepe/pnv6YqJx76C7bnQAFAqSpiDoYpTF9AITZ9ck6v1sA
-         bVS6zc3doPsFRtviPFSX8PGaZBwX6McJfQ3TBAY3H59W583Fkzax7fZQF9VEA5Dn/8
-         HN38/0/KB1QqUOqN6p/izM2zGr9Xpfzf/9+TdsgvQuERW59VqqsnFkuYB+t2gBUogX
-         ESQEQgoVjqkyg==
-Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
-        by mailhost.synopsys.com (Postfix) with ESMTPS id 7C7E6A0071;
-        Sun, 25 Jul 2021 16:53:06 +0000 (UTC)
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-        by o365relay-in.synopsys.com (Postfix) with ESMTPS id F20C580026;
-        Sun, 25 Jul 2021 16:53:05 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=hminas@synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="GH6XVh+g";
-        dkim-atps=neutral
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k1Y2hyZc2LNaAu8EztVD4YwShLZ66qHkLbn/0Qn76okARWGMdM1sKplA0Gt1gIxPvu8CGF75OvA66/UADQPNpf5hi59ZdY0bzuKoz/R2R7Ir1Zc+jL8u8afbH15CNa40Wb9BGmC/vvWeNFyUcvTWEFoLPJLogMoh95oiuFIi5Uvx9e278dfApxmT/9q8KWNwU3SUu+JewWWRZ51cso6fyKZrJ36udK61ST2aj1TeXqFRiddvkuy1hgWiDMsRicrVrS1pZf8ayaGWPIFFP2fjFiAnCpxn6Fdx/Ly+yk4XCtAd3ekfWMduYL1sZzR/c+queLvqu6sfbjkYNmKJaXZGSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qPD04WVJ3RZPh9kKVLpR3EHhLF82dmZBfMo343OYQqw=;
- b=c+VqdMEw07j6Ifb4jXayVdvHaR3u3Ppeld2D2K8QiBCvl4NNx4laVA60Hbbsc0MStQfzrq3YACBWhTsSgSccBw2anA62nfy95z5jnO+0USXMWZhMCCd81DMbzt/HK583wEhvYupgNJCI/fAXENKuLMNb7U+4k38l6WHYzk7B3xd62mhcoHR6IjEeWUbVUyvzl1rsBllpecw2z+sXgV2+HYp1FSLy5tijIswouJQ+Eg34kazJgvB5AlZzUSO0tiq9VnDLk9n48Frcpm3cXmbyXagIxN+i4yW0lSefLj4Il20yFcdIE4xO0Vw7WQkIfBNIf1f+K4+Z2Rvmy252QRs41A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qPD04WVJ3RZPh9kKVLpR3EHhLF82dmZBfMo343OYQqw=;
- b=GH6XVh+g/0kwRP42dMHnlKhxP8ggRh5RU+e32hMTqmeAVrIIjZg3DjZmuO0Ib9J/ivmG0bFjFwgAto08lChX5OneRE5SOTxbilDLSrsNPiHL+7m4djU7iwGBJ5hUgbm6xAOdryKrwIHNbkx/n5tIFs/hxDkxdGZBkLi5D20iEOY=
-Received: from DM4PR12MB5390.namprd12.prod.outlook.com (2603:10b6:5:39a::12)
- by DM4PR12MB5245.namprd12.prod.outlook.com (2603:10b6:5:398::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4352.26; Sun, 25 Jul
- 2021 16:53:03 +0000
-Received: from DM4PR12MB5390.namprd12.prod.outlook.com
- ([fe80::d97c:7079:8a93:cd4]) by DM4PR12MB5390.namprd12.prod.outlook.com
- ([fe80::d97c:7079:8a93:cd4%3]) with mapi id 15.20.4352.031; Sun, 25 Jul 2021
- 16:53:03 +0000
-X-SNPS-Relay: synopsys.com
-From:   Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-CC:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: [GIT PULL] USB fixes for 5.14-rc3
-Thread-Topic: [GIT PULL] USB fixes for 5.14-rc3
-Thread-Index: AQHXf9KPagB9MEZbYkWVzShpGEQ9AatT3goAgAAC9YCAAAprAA==
-Date:   Sun, 25 Jul 2021 16:53:03 +0000
-Message-ID: <004e42ef-910e-f426-c777-f246e5bbb61a@synopsys.com>
-References: <YPrX98Lqa1xH8uH7@kroah.com>
- <970d93d8-38ec-0ff8-6178-825a0698b2ea@synopsys.com>
- <YP2OMa89rnd8hhft@kroah.com>
-In-Reply-To: <YP2OMa89rnd8hhft@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-authentication-results: linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=synopsys.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 218593c9-90fd-404b-7905-08d94f8cab51
-x-ms-traffictypediagnostic: DM4PR12MB5245:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <DM4PR12MB52451D5C6DC80C7C4DB6BE73A7E79@DM4PR12MB5245.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:7691;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0B2eb4zqzd2URXw0/57sf8OC4fFxr8XJOCfgPyR+FWLfL5zRFGR8IPXxDTZ0Slm/ej947TLvqf82f4vc1SHpxpR3TQDnWxdw5sxgSwXsZFJ+WJ32oPRdYcCHSetCKCAElLcpLtF4odTiFqyl2QpitqASiZ9ZhCd7PBTtnLkkdbTWZUgQnEFStQ7ZDyRVEAw8BigFGOQ1xA/GbAVxIvQRg0YC9AdwLOQWEUBFp3omaiOun9dJLhl6DjJMDIFXapK/8NmCpDS/+IY/3xiu1Rdm+SPfUQ5whA3M5aexIY33bn6B07t8GCM4CAj+U8Z7bfcYnYBSPFR0Ibifx5sXgKNr4sZKuExZu+PvlufZ0rjGQAjL3lMZ1qQWqnxaxXBSzFuuNSWSDGZdcgjtql3YRdlrEO/305GRnuobg81ugEfiWg2VNt/OjgD/tmqGXanA0cxta6tLyCN2YJI6mjMClajrnV4HRJLOYJ1oYoSyU+XfWhzBpBTsnFyizpF1zp7ZKfINpiYP2FnNxpy5xvTPGS0vaMmwNxePEB8aHzW/1QVy8qPK2O2ghshKUZPx/2jpL1tZpNSHhqly2RCMH/hEJanj7TU5LLF8PikqeNE27C/9/KXqpR6Qeyw6PqWxireBw8g+KcMJbqb5KXknsR5a3Y9OBfFA677hxK7nKbak/gh6XIltcZJEYt5GZh3+tS0KHRkWDtn841duikuOqeiXujsqd6Ccsh+ASS74ihKYwCx0Hb7dmJp3gzyyb4Pcq8DQLJbi2ufNTotuZQeD/c8BqxHbQZLS9ttOtwq3wGdD6ek/1m5hKAmQiqNnSXc7HDCWuv9yIUssHd0toRlsSRt1jegRlbJU7IclwnlO9nlhz6THjYY=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5390.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(39850400004)(136003)(366004)(376002)(396003)(346002)(5660300002)(316002)(91956017)(66446008)(53546011)(6512007)(6506007)(76116006)(66556008)(66946007)(110136005)(8676002)(122000001)(83380400001)(31696002)(38100700002)(36756003)(64756008)(66476007)(71200400001)(26005)(8936002)(31686004)(86362001)(966005)(478600001)(2906002)(2616005)(186003)(4326008)(6486002)(38070700004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?b3ZmZXZ1T1puOElZeFZnOE80d1BVazBkU2tYVmVkczFTN2xYazlabnA5bEVG?=
- =?utf-8?B?RVoxT2hXVEwwVFFXTkxLMW1DL0NzQzNrTlRKSU0wZ1hxT054c1k4MHpQLy9a?=
- =?utf-8?B?TisxWmxEdHVDcUVreHc2RjQ1WkwvMk1kQTJqbEgvbGRkNDNzeHhHWHBNcDNj?=
- =?utf-8?B?QkhWdTRmeTNiWFRNQisrbmRkMmxJSnNvNGlSSjlvWmgxWG1Ob3VteHY0UmZm?=
- =?utf-8?B?d1lRb3B4TzMvSjY2Nk56VWJxUlVMa3czbmRpd2tWUjJONWlObmE1SXIwc1pN?=
- =?utf-8?B?anN4cXdmd3BGQ0NqL0Y0YTloL3k4cENyRFlOUVE3TkZTalowekhnVXE1S2lh?=
- =?utf-8?B?TzVvalhMMzdpSXVUcUYvNHoxVTRINzBCZUpQZTFwU0JTVFc2OTlTRDhTTFRr?=
- =?utf-8?B?NnY5ck05NU9KeEg4bEx3NUxxNkVNV0FBNGpHaW9UWG4yUDc2ZXBITGhDRGsw?=
- =?utf-8?B?TkdjN0VUTnJiT1dGQUhQZlBDM2lkQjVybGs1MlkxbEZFRkR0WXNZNkJFemp5?=
- =?utf-8?B?M2FUM0Yra0lwZ3FscFJKMlBkUEpORi80VHA3NWs2S3ROMUdGZjhMSjBmcUg4?=
- =?utf-8?B?OXh5ZXhaVEk4N3lybjRDcTNqelJzNUZ6SGplMm5DTXg3OUxSdXJqY3dMMW5v?=
- =?utf-8?B?Zm0zRjZMMHZ3aGZQRGFrSlVQY0EvaHRYajJqeTF4RGNkWGc0MWJDMnhDekJX?=
- =?utf-8?B?U2hMdU1hdGprYVdSVkMyZlZXV3RuUUNDS1hqSzdiOThGSXhYYW11akROdEpE?=
- =?utf-8?B?MDkxUzBpK0p6VHN5T08zdk5uY3JTb3lwV1ByTGZoZjVvTk00Skh0TEwxTGxF?=
- =?utf-8?B?dVI1bkp0UWVtWWszN3M5SlpQMHJLcHdEWTV2dVdzdkZ2UU10TVhXREllNDR0?=
- =?utf-8?B?UTFnazFoTFFHandnS3Mrd0l5RWFqU3RjZWZJWUpXcGs5ZHJvaGJneEJUSU9p?=
- =?utf-8?B?dWdFRkRTL3dHNjJZZi9FMk5jWXdYK3N2Vm9qSEV6NURnb09pRENTY0hxUWJ6?=
- =?utf-8?B?SzFZV1ExYnJFMlBocTJocngwYnlOQjJLbjJFQWxaZlBGeGp2Rm1qTFA4eFlt?=
- =?utf-8?B?VmFRVXV5NEQxM2t3QThPSnVrQjd0dExMVGdZRDJDZWhBbmdDbXBxQ3NwR3N4?=
- =?utf-8?B?RUJ2ZzZPWnpnWWRGQ3ZLNVYxYmFUcjJSdzA2bWdkSXNKUGhDeDBpM08xQ2pZ?=
- =?utf-8?B?enJCbzRFamdQMUFmOU55UlN5VklKeHZuc0J2bjNwSGQwZXFSNk96bjFLRHZC?=
- =?utf-8?B?VGl1emFvbTBsZ1EyUHF6eE9hU0JrdTJHWHV1NHdKVDlWK0o1QUt1MzdHSDFl?=
- =?utf-8?B?TUJ6TzM1VXlSMVVSdVJRVlpXODUwaUo1QTRnd2RWT1FZWHIrZGVWTDRnNTJW?=
- =?utf-8?B?Mndlb3djVXF6aDZSZC94R1h5dDNLOGRMVFlFTG4zZXI1Y21pYndNWExmeWdW?=
- =?utf-8?B?NVdSRTlpQmRubS9NN2YwZmxHbnc1R0dmdWVJNDFEbmxkNkEwZTZmRXI1WUJR?=
- =?utf-8?B?dlFPM1o0Q1VOOGxSMFk1TnlvaEgxQ2ZpYkQ4YmN5RmJZTmZBQUdSQ0k1eTU2?=
- =?utf-8?B?VmozSW1sSjFXeGp1bHZlR1grc0lUUlNGRWc5aU5CVWs0eUpzYmsycHIxSHA5?=
- =?utf-8?B?YURvVFlIdU0vL1JYQXh0ZjYxSHhZYWh3MlJZSC9yaXB2YVI3czVjV0dUVlhB?=
- =?utf-8?B?Y3pjTHZrN25NTEFxSEsyUmM2SmdTNGVXSUpBREJGQnlnRFM4a2lGUWVQRnRQ?=
- =?utf-8?Q?lDR2UV3eBJXk1lGCDw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <880F7C5AA17C2343943D8CB0E43CB33C@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S230284AbhGYQOA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 25 Jul 2021 12:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229709AbhGYQN7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 25 Jul 2021 12:13:59 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51FAC061757;
+        Sun, 25 Jul 2021 09:54:28 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id e19so12443867ejs.9;
+        Sun, 25 Jul 2021 09:54:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=fVNIkRFxPFqkBrWKquYY8PI1zoIIunGjmbPoEXZACno=;
+        b=P+z3uQavxX3KT1zIGxD7Ta9v8KJNVstZGkAQI/hYgfczpo6bg8zHEwCRueqZ22J8P/
+         VfY4O8LRJ+zKVQS5+k8xb7+tV0FktqGSIV001Bx4W14CI4c3dLNMJc3LTErKp0oQl7jJ
+         pnAVJk904vNDjcq6lv+vSJMCZld/yK/TbjIe5BckjTeGvGIGLgZUlCmFgRTC1mrE2bSd
+         R9aer+8gAb7tVBGfed7C+gyIXODAOLrkOrGtGrVYavoGgL7W/EjHTt+4n92u2JczGzWq
+         t/8UUeUln7LBPc7zsGyMDi7Uv/xrkRZO3k0y9W64xNf5GVg3zG893s19AA6Y1wHgd7dd
+         i83w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=fVNIkRFxPFqkBrWKquYY8PI1zoIIunGjmbPoEXZACno=;
+        b=K9WULklKZBNm1HCFCESNUJEBxQ9CgLdW9Cz21RoI+uqzFc7J5mTjWpn7MSXb7qg32g
+         uUBRx/pzWIrp+t+JWsnEj77SesZjY57dsC7xfmUn5Ldt/o56hcQpYxhGO6ideNDTCCjV
+         YGZgZA7FYTwsdxUdsTa0VwM+EV5Y9iCrkhDloGI1q5wTRkdXNjYlO9e1NZpCsq/mskbp
+         7qpASQA1kNFXPUiMEAvUoyooROSxegKFrWs4j90efBbJcM8EuMoBS+IxvDKhIn+hXy9+
+         OztRdrMKDcb7MkR5NMITiXllnKy1YepoSlqftOTTdgFiJHdYh4EFgXALndwA5DEH6yDt
+         /H5g==
+X-Gm-Message-State: AOAM532HAg3YOgrqmeLp8/+jH4bGAdWv1HmpULTqv/FMJEIIJup3kCA5
+        JAulrdEXaN4lEhFB1EiuL7Q=
+X-Google-Smtp-Source: ABdhPJy2S05MmH+nLfALoqjHyVfOO++vC9RLItLI/9EDePyyKFvJxWXTWNDTnPiM++For4Abv/1NSQ==
+X-Received: by 2002:a17:906:544f:: with SMTP id d15mr13503451ejp.520.1627232067350;
+        Sun, 25 Jul 2021 09:54:27 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:8fb:64e7:6af7:81ac? ([2001:981:6fec:1:8fb:64e7:6af7:81ac])
+        by smtp.gmail.com with ESMTPSA id qo26sm195549ejb.65.2021.07.25.09.54.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 25 Jul 2021 09:54:26 -0700 (PDT)
+Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
+ bursting
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
+        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com
+References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+ <cfb83fe4-369c-ec72-7887-3bcb0f20fe15@gmail.com>
+ <ec8050c5-c013-4af6-b39e-69779c009a9c@codeaurora.org>
+ <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
+ <2e01c435-9ecc-4e3b-f55c-612a86667020@codeaurora.org>
+ <2ae9fa6a-3bb1-3742-0dd3-59678bdd8643@gmail.com>
+ <ebea75fe-5334-197b-f67a-cb6e1e30b39e@codeaurora.org>
+ <bafa93bb-11e3-c8a5-e14a-b0a6d5695055@gmail.com> <87v951ldlt.fsf@kernel.org>
+ <d9aef50c-4bd1-4957-13d8-0b6a14b9fcd0@gmail.com> <87pmv9l1dv.fsf@kernel.org>
+ <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com> <87a6mbudvc.fsf@kernel.org>
+ <6e8bb4ad-fe68-ad36-7416-2b8e10b6ae96@gmail.com> <877dhev68a.fsf@kernel.org>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <cca69e90-b0ef-00b8-75d3-3bf959a93b45@gmail.com>
+Date:   Sun, 25 Jul 2021 18:54:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5390.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 218593c9-90fd-404b-7905-08d94f8cab51
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jul 2021 16:53:03.6600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z18TSreFx4H++rx80uIVVpVMHDQDUcbaCJ7U9oL3ueu9nIU4jUW3PYpMtl0oUhtn+jKKGlDCNsS3Ahi7gL42RQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5245
+In-Reply-To: <877dhev68a.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgR3JlZywNCg0KT24gNy8yNS8yMDIxIDg6MTUgUE0sIEdyZWcgS0ggd3JvdGU6DQo+IE9uIFN1
-biwgSnVsIDI1LCAyMDIxIGF0IDA0OjA1OjExUE0gKzAwMDAsIE1pbmFzIEhhcnV0eXVueWFuIHdy
-b3RlOg0KPj4gSGkgIEdyZWcsDQo+PiBPbiA3LzIzLzIwMjEgNjo1MyBQTSwgR3JlZyBLSCB3cm90
-ZToNCj4+PiBUaGUgZm9sbG93aW5nIGNoYW5nZXMgc2luY2UgY29tbWl0IGU3M2YwZjBlZTc1NDEx
-NzFkODlmMmUyNDkxMTMwYzc3NzFiYTU4ZDM6DQo+Pj4NCj4+PiAgICAgTGludXggNS4xNC1yYzEg
-KDIwMjEtMDctMTEgMTU6MDc6NDAgLTA3MDApDQo+Pj4NCj4+PiBhcmUgYXZhaWxhYmxlIGluIHRo
-ZSBHaXQgcmVwb3NpdG9yeSBhdDoNCj4+Pg0KPj4+ICAgICBnaXQ6Ly9naXQua2VybmVsLm9yZy9w
-dWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvZ3JlZ2toL3VzYi5naXQgdGFncy91c2ItNS4xNC1yYzMN
-Cj4+Pg0KPj4+IGZvciB5b3UgdG8gZmV0Y2ggY2hhbmdlcyB1cCB0byAxZDFiOTdkNWU3NjM2ZDcy
-ODkwYTViZGQwYjQwZTk4MGU1NGIyZDM0Og0KPj4+DQo+Pj4gICAgIE1lcmdlIHRhZyAndXNiLXNl
-cmlhbC01LjE0LXJjMycgb2YgaHR0cHM6Ly91cmxkZWZlbnNlLmNvbS92My9fX2h0dHBzOi8vZ2l0
-Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2pvaGFuL3VzYi1zZXJpYWxfXzsh
-IUE0RjJSOUdfcGchTUo4cVlRWkVTZkE2U0FEZmtiS1RPdkxwUFVJV2o5ckMwbFNFRGpxckxQRUpq
-Zml1V1BDV2d6VTBZaV9WYjd3QzdKM1BKd2RYJCAgaW50byB1c2ItbGludXMgKDIwMjEtMDctMjIg
-MjA6NTE6MTQgKzAyMDApDQo+Pj4NCj4+PiAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQo+Pj4gVVNCIGZpeGVzIGZvciA1LjE0
-LXJjMw0KPj4+DQo+Pj4gSGVyZSBhcmUgc29tZSBVU0IgZml4ZXMgZm9yIDUuMTQtcmMzIHRvIHJl
-c29sdmUgYSBidW5jaCBvZiB0aW55IHByb2JsZW1zDQo+Pj4gcmVwb3J0ZWQuICBJbmNsdWRlZCBp
-biBoZXJlIGFyZToNCj4+PiAJLSBkdHNpIHJldmVydCB0byByZXNvbHZlIGEgcHJvYmxlbSB3aGlj
-aCBicm9rZSBhbmRyb2lkIHN5c3RlbXMNCj4+PiAJICB0aGF0IHJlbGllZCBvbiB0aGUgZHRzIG5h
-bWUgdG8gZmluZCB0aGUgVVNCIGNvbnRyb2xsZXIgZGV2aWNlLg0KPj4+IAkgIFBlb3BsZSBhcmUg
-c3RpbGwgd29ya2luZyBvdXQgdGhlICJyZWFsIiBzb2x1dGlvbiBmb3IgdGhpcywgYnV0DQo+Pj4g
-CSAgZm9yIG5vdyB0aGUgcmV2ZXJ0IGlzIG5lZWRlZC4NCj4+PiAJLSBjb3JlIFVTQiBmaXggZm9y
-IHBpcGUgY2FsY3VsYXRpb24gZm91bmQgYnkgc3l6Ym90DQo+Pj4gCS0gdHlwZWMgZml4ZXMNCj4+
-PiAJLSBnYWRnZXQgZHJpdmVyIGZpeGVzDQo+Pj4gCS0gbmV3IHVzYi1zZXJpYWwgZGV2aWNlIGlk
-cw0KPj4+IAktIG5ldyBVU0IgcXVpcmtzDQo+Pj4gCS0geGhjaSBmaXhlcw0KPj4+IAktIHVzYiBo
-dWIgZml4ZXMgZm9yIHBvd2VyIG1hbmFnZW1lbnQgaXNzdWVzIHJlcG9ydGVkDQo+Pj4gCS0gb3Ro
-ZXIgdGlueSBmaXhlcw0KPj4+DQo+Pj4gQWxsIGhhdmUgYmVlbiBpbiBsaW51eC1uZXh0IHdpdGgg
-bm8gcmVwb3J0ZWQgcHJvYmxlbXMuDQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBHcmVnIEtyb2Fo
-LUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPg0KPj4+DQo+Pg0KPj4NCj4+Pg0K
-Pj4+IE1hcmVrIFN6eXByb3dza2kgKDEpOg0KPj4+ICAgICAgICAgdXNiOiBkd2MyOiBTa2lwIGNs
-b2NrIGdhdGluZyBvbiBTYW1zdW5nIFNvQ3MNCj4+Pg0KPj4NCj4+IEkgZGlkbid0IEFDSyB0aGlz
-IHBhdGNoLiBNZSBhbmQgTWFyZWsgU3p5cHJvd3NraSBhZ3JlZWQgdG8gZGlzY3Vzcw0KPj4gZGV0
-YWlscyBvZiB0aGlzIHBhdGNoIGFmdGVyIGhlIHdpbGwgYmFjayBmcm9tIHZhY2F0aW9uIGFmdGVy
-IEF1Z3VzdCAyLg0KPiANCj4gT2ssIHNvIHNob3VsZCBJIHJldmVydCBpdCBub3cgdGhhdCBpdCBp
-cyBpbiBMaW51cydzIHRyZWU/ICBEaWQgSSBtaXNzDQo+IHRoZSBkaXNjdXNzaW9uIHRoYXQgc2Fp
-ZCB0aGVyZSB3ZXJlIHByb2JsZW1zIHdpdGggaXQ/ICBJIHNlZSBhbiBhY2sgZm9yDQo+IHRoZSBw
-YXRjaCwgd2hhdCB3YXMgd3Jvbmcgd2l0aCB0aGF0Pw0KPiANClllcywgcGxlYXNlIHJldmVydCBp
-dCB1bnRpbCB3ZSBkaXNjdXNzIHdpdGggYXV0aG9yIGRldGFpbHMgb2YgcGF0Y2guDQpBY3R1YWxs
-eSBJIGhhdmUgcmVwbGllZCB0byB0aGlzIHBhdGNoIHdpdGggc29tZSBxdWVzdGlvbnMgYW5kIGFk
-ZGl0aW9uYWwgDQp0ZXN0aW5nIHJlcXVlc3QuDQpQYXRjaCB3YXMgQUNLZWQtYnkgS3J6eXN6dG9m
-IEtvemxvd3NraSANCjxrcnp5c3p0b2Yua296bG93c2tpQGNhbm9uaWNhbC5jb20+LCBidXQgbm90
-IGJ5IG1lLg0KDQo+IHRoYW5rcywNCj4gDQo+IGdyZWcgay1oDQo+IA0KDQo=
+Hi
+
+Op 25-07-2021 om 16:05 schreef Felipe Balbi:
+> Hi,
+>
+> Ferry Toth <fntoth@gmail.com> writes:
+>
+>> Hi
+>>
+>> Op 25-07-2021 om 08:05 schreef Felipe Balbi:
+>>> Hi,
+>>>
+>>> Ferry Toth <fntoth@gmail.com> writes:
+>>>>>>>> Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542
+>>>>>>>> 2015.01.21:18.19.48
+>>>>>>>> RIP: 0010:0x500000000
+>>>>>>>> Code: Unable to access opcode bytes at RIP 0x4ffffffd6.
+>>>>>>>> RSP: 0018:ffffa4d00045fc28 EFLAGS: 00010046
+>>>>>>>> RAX: 0000000500000000 RBX: ffff8cd546aed200 RCX: 0000000000000000
+>>>>>>>> RDX: 0000000000000000 RSI: ffff8cd547bfcae0 RDI: ffff8cd546aed200
+>>>>>>>> RBP: ffff8cd547bfcae0 R08: 0000000000000000 R09: 0000000000000001
+>>>>>>>> R10: ffff8cd541fd28c0 R11: 0000000000000000 R12: ffff8cd547342828
+>>>>>>>> R13: ffff8cd546aed248 R14: 0000000000000000 R15: ffff8cd548b1d000
+>>>>>>>> FS:  0000000000000000(0000) GS:ffff8cd57e200000(0000) knlGS:0000000000000000
+>>>>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>>> CR2: 0000000500000000 CR3: 000000000311e000 CR4: 00000000001006f0
+>>>>>>>> Call Trace:
+>>>>>>>>       ? dwc3_remove_requests.constprop.0+0x14d/0x170
+>>>>>>>>       ? __dwc3_gadget_ep_disable+0x7a/0x160
+>>>>>>>>       ? dwc3_gadget_ep_disable+0x3d/0xd0
+>>>>>>>>       ? usb_ep_disable+0x1c/0x
+>>>>>>>>       ? u_audio_stop_capture+0x79/0x120 [u_audio]
+>>>>>>>>       ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
+> So this is triggered by a SetInterface request...
+>
+>>>>>>>>       ? composite_setup+0x224/0x1b90 [libcomposite]
+>>>>>>>>       ? __dwc3_gadget_kick_transfer+0x160/0x400
+>>>>>>>>       ? dwc3_gadget_ep_queue+0xf3/0x1a0
+>>>>>>>>       ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>>>>       ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>>>>       ? dwc3_ep0_interrupt+0x459/0xa40
+>>>>>>>>       ? dwc3_thread_interrupt+0x8ee/0xf40
+>>>>>>>>       ? __schedule+0x235/0x6c0
+>>>>>>>>       ? disable_irq_nosync+0x10/0x10
+>>>>>>>>       ? irq_thread_fn+0x1b/0x60
+>>>>>>>>       ? irq_thread+0xc0/0x160
+>>>>>>>>       ? irq_thread_check_affinity+0x70/0x70
+>>>>>>>>       ? irq_forced_thread_fn+0x70/0x70
+>>>>>>>>       ? kthread+0x122/0x140
+>>>>>>>>       ? set_kthread_struct+0x40/0x40
+>>>>>>>>       ? ret_from_fork+0x22/0x30
+>>>>>>> Do you mind enabling dwc3 traces and collecting them? Trying to figure
+>>>>>>> out how we got here.
+>>>>>>>
+>>>>>> I'll try if I can get the same error by booting with USB in host mode
+>>>>>> and then switch to device mode. If so I can enable traces and collect as
+>>>>>> you explained me before.
+>>>>>>
+>>>>>> I'll try before monday, as then I fly for a holiday and will not be
+>>>>>> available before rc5.
+>>>>> you can enable all of those with kernel cmdline :-)
+>>>>>
+>>>>> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html
+>>>>>
+>>>>> you need ftrace_dump_on_oops=1 and also need the correct options on
+>>>>> trace_buf_size and trace_event.
+>>>>>
+>>>> On Edison-Arduino I have a switch to go to device mode, after which
+>>>> udev triggers a script configure gadgets through configfs.
+>>>>
+>>>> I tried to log following these instructions:
+>>>>
+>>>> https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs  <https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs>
+>>>>
+>>>> Unfortunately the kernel crashes so badly I can not get to the ` cp
+>>>> /t/trace /root/trace.txt` line (after a while the watchdog kicks).
+>>>>
+>>>> What to do next?
+>>> Pass ftrace_dump_on_oops to kernel cmdline.
+>>>
+>> No sure if I did this right, on oops everything is pushed to console
+>> (115k2 serial), I hope nothing essential is lost.
+>>
+>> I copied the screen buffer to file see attached.
+> Thank you, I bet it took quite a some time :-) Anyway, looking at
+> the logs around Set Interface requests, we can track every endpoint
+> that's disabled. I'll take a guess and assume we're failing at the last
+> Set Interface, that means we should have something odd with ep6in, but
+> everything looks fine in the trace output:
+>
+> [   75.823107] irq/14-d-596       0d... 42789194us : dwc3_gadget_ep_enable: ep6in: mps 192/346 streams 16 burst 0 ring 0/0 flags E:swbp:<
+> [   75.835472] irq/14-d-596       0d... 42789198us : dwc3_alloc_request: ep6in: req 0000000002c71409 length 0/0 zsI ==> 0
+> [   75.846416] irq/14-d-596       0d... 42789202us : dwc3_ep_queue: ep6in: req 0000000002c71409 length 0/192 zsI ==> -115
+> [   75.857360] irq/14-d-596       0d... 42789204us : dwc3_alloc_request: ep6in: req 00000000a324f5d0 length 0/0 zsI ==> 0
+> [   75.868301] irq/14-d-596       0d... 42789206us : dwc3_ep_queue: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> -115
+> [   75.879244] irq/14-d-596       0d... 42789209us : dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] (Not Active) [Status Phase]
+> [   75.891880] irq/14-d-596       0d... 42789211us : dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
+> [   75.989131] irq/14-d-596       0d... 42789224us : dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+> [   76.096261] irq/14-d-596       0d... 42789272us : dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) [Status Phase]
+> [   76.107834] irq/14-d-596       0d... 42789275us : dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
+> [   76.122944] irq/14-d-596       0d... 42789277us : dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 zsI ==> 0
+> [   76.134160] irq/14-d-596       0d... 42789280us : dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
+> [   76.231322] irq/14-d-596       0d... 42789292us : dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+> [   76.297418] kworker/-23        0d... 42789670us : dwc3_ep_queue: ep3in: req 0000000029586135 length 0/96 ZsI ==> -115
+> [   76.308278] kworker/-23        0d... 42789695us : dwc3_prepare_trb: ep3in: trb 00000000b81213d6 (E1:D0) buf 0000000003b7a800 size 96 ctrl 00000811 (Hlcs:sC:normal)
+> [   76.395294] kworker/-23        0d... 42789707us : dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params 00000000 00000000 00000000 --> status: Successful
+> [   76.471900] irq/14-d-596       0d... 42789842us : dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
+> [   76.489308] irq/14-d-596       0d... 42789845us : dwc3_ctrl_req: Set Interface(Intf = 5, Alt.Setting = 0)
+> [   76.505650] irq/14-d-596       0d... 42789851us : dwc3_ep_dequeue: ep6in: req 0000000002c71409 length 0/192 zsI ==> -115
+> [   76.523315] irq/14-d-596       0d... 42789854us : dwc3_gadget_giveback: ep6in: req 0000000002c71409 length 0/192 zsI ==> -104
+> [   76.541427] irq/14-d-596       0d... 42789857us : dwc3_free_request: ep6in: req 0000000002c71409 length 0/192 zsI ==> -104
+> [   76.559267] irq/14-d-596       0d... 42789859us : dwc3_ep_dequeue: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> -115
+> [   76.576937] irq/14-d-596       0d... 42789861us : dwc3_gadget_giveback: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> -104
+> [   76.595046] irq/14-d-596       0d... 42789862us : dwc3_free_request: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> -104
+> [   76.612892] irq/14-d-596       0d... 42789865us : dwc3_gadget_ep_disable: ep6in: mps 192/346 streams 16 burst 0 ring 0/0 flags E:swbp:<
+> [   76.665535] irq/14-d-596       0d... 42789873us : dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] (Not Active) [Status Phase]
+> [   76.684716] irq/14-d-596       0d... 42789875us : dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
+> [   76.819195] irq/14-d-596       0d... 42789886us : dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+> [   76.926324] irq/14-d-596       0d... 42789930us : dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) [Status Phase]
+> [   76.937892] irq/14-d-596       0d... 42789933us : dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
+> [   76.953003] irq/14-d-596       0d... 42789935us : dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 zsI ==> 0
+> [   76.964217] irq/14-d-596       0d... 42789938us : dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
+> [   77.061379] irq/14-d-596       0d... 42789950us : dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+> [   77.168595] irq/14-d-596       0d... 42790509us : dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) [Setup Phase]
+> [   77.180159] irq/14-d-596       0d... 42790512us : dwc3_ctrl_req: Get String Descriptor(Index = 18, Length = 255)
+> [   77.190578] irq/14-d-596       0d... 42790537us : dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 0000000003b68000 size 36 ctrl 00000c53 (HLcs:SC:data)
+> [   77.287648] irq/14-d-596       0d... 42790550us : dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+> [   77.333107] irq/14-d-596       0d... 42790557us : dwc3_event: event (000010c2): ep0in: Transfer Not Ready [0] (Not Active) [Data Phase]
+> [   77.407223] irq/14-d-596       0d... 42790575us : dwc3_event: event (000090c2): ep0in: Transfer Not Ready [0] (Active) [Data Phase]
+> [   77.480985] irq/14-d-596       0d... 42790588us : dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) [Data Phase]
+> [   77.492376] irq/14-d-596       0d... 42790590us : dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 0000000003b68000 size 0 ctrl 00000c52 (hLcs:SC:data)
+> [   77.507221] irq/14-d-596       0d... 42790595us : dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 36/36 ZsI ==> 0
+> [   77.518609] irq/14-d-596       0d... 42790597us : dwc3_event: event (000020c0): ep0out: Transfer Not Ready [0] (Not Active) [Status Phase]
+> [   77.531332] irq/14-d-596       0d... 42790598us : dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 000000001bded000 size 0 ctrl 00000c43 (HLcs:SC:status3)
+> [   77.628669] irq/14-d-596       0d... 42790609us : dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 00000000 1bded000 00000000 --> status: Successful
+>
+> Do you mind adding a few prints in dwc3_remove_requests to tell us which
+> endpoint is being processed? Then we'll know for sure which one caused
+> the crash.
+>
+I wouldn't mind but am leaving on a holiday, won't have time until 6 aug.
+
+But as I am using configfs (excerpt follows) and just disabling the last 
+2 line resolves the issue, I'm guessing uac2 is the issue. Or exceeding 
+the available resources.
+
+# Create directory structure
+mkdir "${GADGET_BASE_DIR}"
+cd "${GADGET_BASE_DIR}"
+mkdir -p configs/c.1/strings/0x409
+mkdir -p strings/0x409
+
+# Serial device
+mkdir functions/gser.usb0
+ln -s functions/gser.usb0 configs/c.1/
+###
+
+# Ethernet device
+mkdir functions/eem.usb0
+echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
+echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
+ln -s functions/eem.usb0 configs/c.1/
+
+# Mass Storage device
+mkdir functions/mass_storage.usb0
+echo 1 > functions/mass_storage.usb0/stall
+echo 0 > functions/mass_storage.usb0/lun.0/cdrom
+echo 0 > functions/mass_storage.usb0/lun.0/ro
+echo 0 > functions/mass_storage.usb0/lun.0/nofua
+echo "${USBDISK}" > functions/mass_storage.usb0/lun.0/file
+ln -s functions/mass_storage.usb0 configs/c.1/
+
+# UAC2 device
+mkdir functions/uac2.usb0
+ln -s functions/uac2.usb0 configs/c.1
+
