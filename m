@@ -2,100 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CB23D56A8
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jul 2021 11:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4503D56AC
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jul 2021 11:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232692AbhGZIu4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jul 2021 04:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232877AbhGZIuz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jul 2021 04:50:55 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A5BC061757
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jul 2021 02:31:23 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id p5so5132817wro.7
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jul 2021 02:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
-         :from:to:references:in-reply-to;
-        bh=GtHKKi8HYmJ+iJNdAoq1P40IYtnBYeqGXfG2f9iaTII=;
-        b=ncMMtc/AWDb/tkI4OHfSne60CbO3udbDGAl27GD0TE9oUdrlCLR2ps2N4pKmbWZdjt
-         whqlwGkidKbiaYijYtJY69Twqf0bg5A+sBCp8x9hRKOp+zzZGrel+bKUIJl5draxdABq
-         RfQP8RB3zaKdzLwzQzTKIg/IZCMGcj1ldu/2nN47x4XnJFxE6IgLI5npQ1S+0Untxl0O
-         vkOsgWX8tJyzlf3dvk8tHPAT8uv+VTOz+IgPcgwO3ImtQ4sJuyKTIGYwp+ciflgTphu3
-         uOkm0ueKUGpLDseVb759hmmNgMp4CoR74yrH+wRqustIlT9RkVanz+MqtnBO86aI6yj1
-         vZrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:content-transfer-encoding:date
-         :message-id:cc:subject:from:to:references:in-reply-to;
-        bh=GtHKKi8HYmJ+iJNdAoq1P40IYtnBYeqGXfG2f9iaTII=;
-        b=LEYcD8OdLvkEj1G3RfuAMdnVuY1PUGdy8WTH5cdU0BeYj9VnDSvhdSHSoF5PYwI9ot
-         GcGyJjbDzPxG0MF7JKhgmpXoArUw0M7x4UYt0i/+D1nL8qr3q1ukueC05FlhD7T2xPAn
-         hs1gDq8l0cAoD6I6ZzTQ49KTD2jveAJJpgBnsJlQInIwnN8tIYhXkNRFdip5AhwvRJ6c
-         L0wnRupOBBK7JUwsI06g+k5WpWM4Om1gWvnLlAoU2a6XYgN6xuITRPVcUdcWfHOybuRA
-         tDyJdsV8fPR/p8NdG4tepWOco5Z7zwCIa3lb+i/cOBrydZxm1v+DQWIeWY62FqDy1L75
-         Q8GQ==
-X-Gm-Message-State: AOAM533Tqe7/6p9+HuPL2CfpYGjYUU2A81YnEngfS0y0a+Rpc6W56EZa
-        tbKD8e6tcFyjw6rtEfhgwDTtNg==
-X-Google-Smtp-Source: ABdhPJyT3tBCOc8eh1LYgNPHTXoXoeHjFdd9fIrmicEkuVzaXqfdZcALdNDGAvar4DHx4YVKl0MZKQ==
-X-Received: by 2002:a05:6000:11c5:: with SMTP id i5mr18769829wrx.268.1627291882143;
-        Mon, 26 Jul 2021 02:31:22 -0700 (PDT)
-Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id p11sm40935839wro.78.2021.07.26.02.31.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jul 2021 02:31:21 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 26 Jul 2021 10:31:20 +0100
-Message-Id: <CD2YTTPX49YH.2PKPUS4L09ZEK@arch-thunder>
-Cc:     <linux-usb@vger.kernel.org>
-Subject: Re: [bug report] usb: isp1760: move to regmap for register access
-From:   "Rui Miguel Silva" <rui.silva@linaro.org>
-To:     "Dan Carpenter" <dan.carpenter@oracle.com>
-References: <20210726071747.GA8604@kili>
-In-Reply-To: <20210726071747.GA8604@kili>
+        id S232862AbhGZIw3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jul 2021 04:52:29 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:57623 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232628AbhGZIw2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jul 2021 04:52:28 -0400
+IronPort-SDR: Jm35T4PJvKa3gBR9gEACL/MCjtJil+eklHAq3r4NZM5Nffc5TtAy10z3/5wSCFZ7A7hCLcwlPj
+ tZphL5sHRWrVrJNVAfs87cTsq7lfxkolkOCO9ckKQxRCbGemO1F+QLrO/eKqjN8/59os3i48Kh
+ 0JnnjSGOkuMjeUWxljcq0aqmgfZ71/nuXa5nXn6z8Zltfrsd+dcPr3SP2KUNtbXtZSFcBIKz/b
+ tHUjgldlByz3sxZTzcYhI0dZFvC05acgte0PZSOCIZ2oBhYaUc16DowLH2/RB1MIIKD+gx9OPY
+ n7V/+UPP/Yk0/U6lo40RNscS
+X-IronPort-AV: E=Sophos;i="5.84,270,1620720000"; 
+   d="scan'208";a="64086865"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa4.mentor.iphmx.com with ESMTP; 26 Jul 2021 01:32:57 -0800
+IronPort-SDR: GQ51j+12udpwXKb4mPBrIC08MdzfGM3+vN2DNFf5NIXU0VCBiRW6GiPTJbpThcuRti7OYQyqZJ
+ Nzy+LVJ+3qP5X1VFfyydpBCuAgxcjTk/gx8QlF7640161b9/HzbrAe3XVG7mBN+Hr4ClwL2KlV
+ avCILp0feSv+jl1qr1qVz44vAdAx9T+pyQM4dZFgodoPVatzd6oMGMsqCmC6h1Y2PqVpACEBYl
+ fwk2YQR/3pyBpHASDo01+k9Qj3nEO9+iodxum/jvGI7oLPgkjYJBFm48Dxu14gSta9qwlGBMy8
+ WyY=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     "Greg KH (gregkh@linuxfoundation.org)" <gregkh@linuxfoundation.org>
+CC:     USB list <linux-usb@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: RE: [PATCH for 4.14] xhci: add xhci_get_virt_ep() helper
+Thread-Topic: [PATCH for 4.14] xhci: add xhci_get_virt_ep() helper
+Thread-Index: AdeB/MZwIKb/vqPQSfySS+0zMoOZhv//9HiA///s/CA=
+Date:   Mon, 26 Jul 2021 09:32:32 +0000
+Message-ID: <2a9ea039f20d4835a5eb8fe1bb1e34b9@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <3c42fbd4599a4a3e8b065418592973d9@SVR-IES-MBX-03.mgc.mentorg.com>
+ <YP5+ORjnkKnwWRrt@kroah.com>
+In-Reply-To: <YP5+ORjnkKnwWRrt@kroah.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dan,
-On Mon Jul 26, 2021 at 8:17 AM WEST, Dan Carpenter wrote:
-
-> Hello Rui Miguel Silva,
->
-> The patch 1da9e1c06873: "usb: isp1760: move to regmap for register
-> access" from May 13, 2021, leads to the following static checker
-> warning:
->
-> 	drivers/usb/isp1760/isp1760-hcd.c:264 isp1760_hcd_set_and_wait_swap()
-> 	warn: sleeping in atomic context
->
-> drivers/usb/isp1760/isp1760-hcd.c
->     256 static int isp1760_hcd_set_and_wait_swap(struct usb_hcd *hcd, u32=
- field,
->     257 					 u32 timeout_us)
->     258 {
->     259 	struct isp1760_hcd *priv =3D hcd_to_priv(hcd);
->     260 	u32 val;
->     261=20
->     262 	isp1760_hcd_set(hcd, field);
->     263=20
-> --> 264 	return regmap_field_read_poll_timeout(priv->fields[field], val,
->     265 					      !val, 10, timeout_us);
->                                                             ^^
-> This used to call something else but it was still a sleep function.
->
-> The call tree is:
->   --> isp1760_stop() <-- takes a spinlock
->       --> ehci_reset()
->           --> isp1760_hcd_set_and_wait_swap()
-
-Thanks for both reports, I will send fix for this soon.
-
-------
-Cheers,
-     Rui
+SGkgR3JlZywNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBHcmVnIEtI
+IChncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZykgPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3Jn
+Pg0KPiBTZW50OiBNb250YWcsIDI2LiBKdWxpIDIwMjEgMTE6MjANCj4NCj4+IEBHcmVnOiBQYXRj
+aCBpcyBmb3IgNC4xNCwgbm90IHRlc3RlZCBpZiBhcHBsaWVzIG9uIG90aGVyIGtlcm5lbHMuDQo+
+IEkgY2FuIG5vdCBqdXN0IGFwcGx5IHRoaXMgdG8gNC4xNCwgaXQgYWxzbyBuZWVkcyB0byBnbyBp
+bnRvIDQuMTkgYW5kIDUuNCBhbmQgNS4xMCBhcyB5b3UgY2FuIG5vdCB1cGdyYWRlIHRvIGEgbmV3
+ZXIga2VybmVsIGFuZCBnZXQgYSByZWdyZXNzaW9uLCByaWdodD8NCkFhYWgsIGRpZG4ndCBoYXZl
+IHRoYXQgaW4gbWluZC4gU29ycnkuDQoNCj4gQ2FuIHlvdSBhbHNvIHByb3ZpZGUgcGF0Y2hlcyBm
+b3IgdGhvc2Uga2VybmVscyBhcyB3ZWxsIHNvIHRoYXQgSSBjYW4gdGFrZSB0aGlzIG9uZT8NCkkn
+bGwgdHJ5IHRvIGRvIHNvIPCfmIoNCg0KPiBBbmQgYWxzbywgeW91IGZvcmdvdCB0byBjYzogdGhl
+IHN0YWJsZUB2Z2VyLmtlcm5lbC5vcmcgbWFpbGluZyBsaXN0IDooDQpJIHJlYWxseSBuZWVkIHRv
+IGhhdmUgbW9yZSBwcmFjdGljZSDwn5iJDQoNCnRoYW5rcywNCkNhcnN0ZW4NCi0tLS0tLS0tLS0t
+LS0tLS0tDQpTaWVtZW5zIEVsZWN0cm9uaWMgRGVzaWduIEF1dG9tYXRpb24gR21iSDsgQW5zY2hy
+aWZ0OiBBcm51bGZzdHJhw59lIDIwMSwgODA2MzQgTcO8bmNoZW47IEdlc2VsbHNjaGFmdCBtaXQg
+YmVzY2hyw6Rua3RlciBIYWZ0dW5nOyBHZXNjaMOkZnRzZsO8aHJlcjogVGhvbWFzIEhldXJ1bmcs
+IEZyYW5rIFRow7xyYXVmOyBTaXR6IGRlciBHZXNlbGxzY2hhZnQ6IE3DvG5jaGVuOyBSZWdpc3Rl
+cmdlcmljaHQgTcO8bmNoZW4sIEhSQiAxMDY5NTUNCg==
