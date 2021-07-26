@@ -2,67 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB4D3D5734
-	for <lists+linux-usb@lfdr.de>; Mon, 26 Jul 2021 12:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E523D5741
+	for <lists+linux-usb@lfdr.de>; Mon, 26 Jul 2021 12:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232900AbhGZJdb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jul 2021 05:33:31 -0400
-Received: from esa4.mentor.iphmx.com ([68.232.137.252]:48874 "EHLO
-        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbhGZJdb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jul 2021 05:33:31 -0400
-IronPort-SDR: YQ123afdCios7H6zU+tIf0sFPJPVEeeDuz3APXl+RvZKr9UU9l/wN+LbfsCh18+cG6f10rH8pi
- Z6VNoq3IxsZFpVYsWuSn9URf/mKqrXqCkfEbFSgjlZ0wJZogKz8gOkIyr5LyzKtu1s5sI3i3Ig
- hNrz4pErS+cr3qhRrK6Memr6R9672SzK6psaldJEyF7zbLb5+aiBMJ/7Ger7/yF2KkdIhd1HWQ
- DffGnaQTOe1ofRZX31Tze/OZscyRv93EtoQ0+JA5jhTt00vtMvw1JWlL1JN6z+K5gNgJ4shgH4
- zgpKykOhli3hN/UC20cWzvs2
-X-IronPort-AV: E=Sophos;i="5.84,270,1620720000"; 
-   d="scan'208";a="64087810"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa4.mentor.iphmx.com with ESMTP; 26 Jul 2021 02:13:59 -0800
-IronPort-SDR: +aXHO7HmMHXqRqhEZOXzsRrrhFaNZ/45gaQExLSLd1CN9UpGDr/t31MkYtNf6EF8Wfsg25cHP2
- 0AndlhHY+4mGDbonfApxoLZ2/rb2aIIDZD+zNE+OVGx+4Rq9fTuHxaU1mNX1aN0mBjZCf3CPoG
- oLYpT6H/eJrI77TQ1Lc1jSpKh8IDmQ1+cEZCrw/SlH8GbzZa9nX1AvvrB9eqiG84AqMJ4xXTe8
- KeEaju9F9mZL/fNulqh+ygg+jfPBSWB6ysmGaNDw9ux+RC8cbq+6U/gIwhdEMMA84YF8PQb1aM
- ZoM=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     "Greg KH (gregkh@linuxfoundation.org)" <gregkh@linuxfoundation.org>,
-        "Merz, Thomas" <Thomas_Merz@mentor.com>
-CC:     USB list <linux-usb@vger.kernel.org>,
+        id S231990AbhGZJgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jul 2021 05:36:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60280 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231639AbhGZJgX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Jul 2021 05:36:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C7B5D60F37;
+        Mon, 26 Jul 2021 10:16:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627294612;
+        bh=y9tDln+5uxltAlHOfsI+z8+o5c4bHBqSRTsR6PS1Sg8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mLXLDRB/Fcdj+F15RJcklxW1xHALXt8Bycj3iG1FVARYDzMP85pVZHqZblw0V6NAA
+         xx8VB8kzVjrAkWOTuoQYqWa/4L26x46+asqAZNHBP9Vrio4rI7vRVaHc4+u7zvj2uQ
+         JLaqXqKCpTP3RbHu76tTgUFj6X95ZMr817mwmzaI=
+Date:   Mon, 26 Jul 2021 12:16:49 +0200
+From:   "Greg KH (gregkh@linuxfoundation.org)" <gregkh@linuxfoundation.org>
+To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+Cc:     "Merz, Thomas" <Thomas_Merz@mentor.com>,
+        USB list <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>,
         "Hardinge, Charles" <Charles_Hardinge@mentor.com>
-Subject: RE: [PATCH for 4.14] xhci: add xhci_get_virt_ep() helper
-Thread-Topic: [PATCH for 4.14] xhci: add xhci_get_virt_ep() helper
-Thread-Index: AdeB/MZwIKb/vqPQSfySS+0zMoOZhgAAImUAAAI2DBA=
-Date:   Mon, 26 Jul 2021 10:13:35 +0000
-Message-ID: <9eb2f4a413eb40609f91daf52436cc7b@SVR-IES-MBX-03.mgc.mentorg.com>
+Subject: Re: [PATCH for 4.14] xhci: add xhci_get_virt_ep() helper
+Message-ID: <YP6LkanQfzipHdOR@kroah.com>
 References: <3c42fbd4599a4a3e8b065418592973d9@SVR-IES-MBX-03.mgc.mentorg.com>
  <YP6IzGT6gZNgudI6@kroah.com>
-In-Reply-To: <YP6IzGT6gZNgudI6@kroah.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <9eb2f4a413eb40609f91daf52436cc7b@SVR-IES-MBX-03.mgc.mentorg.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9eb2f4a413eb40609f91daf52436cc7b@SVR-IES-MBX-03.mgc.mentorg.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgR3JlZywNCg0KPiBBbHNvLCB0aGUgcGF0Y2ggaXMgY29ycnVwdGVkIGFuZCBjYW4gbm90IGJl
-IGFwcGxpZWQsIGV2ZW4gaWYgSSB3YW50ZWQgdG8gOigNCj4gU28gY2FuIHlvdSBmaXggdGhhdCB1
-cCB3aGVuIHlvdSByZXNlbmQgYWxsIG9mIHRoZSBvdGhlciB2ZXJzaW9ucyB0b28/DQoNCkkndmUg
-c2VlbiB0aGF0IGFuZCBhbHJlYWR5IHNlbnQgYSBtYWlsIHRvIElUIHJlZ2FyZGluZyB0aGlzLg0K
-V2UgaGFkIHRvICJ1cGdyYWRlIiB0byBPMzY1IE91dGxvb2ssIGFuZCBJIHNlbGVjdGVkICJwbGFp
-biB0ZXh0IiB0byBzZW5kIGJ1dCAuLi4uDQpTdGlsbCBmaWdodGluZyB3aXRoIHRoYXQuDQoNCk1h
-eSBJIGF0dGFjaCB0aGUgcGF0Y2hlcyBhcyBhIGZpbGUsIGdlbmVyYXRlZCB3aXRoICJnaXQgZm9y
-bWF0LXBhdGNoIiBtZWFud2hpbGU/DQpJIGZlYXIgdGhhdCBJJ20gbm90IGFsbG93ZWQgdG8gdXNl
-ICJnaXQgc2VuZC1tYWlsIi4NCg0KVGhhbmtzLA0KQ2Fyc3Rlbg0KLS0tLS0tLS0tLS0tLS0tLS0N
-ClNpZW1lbnMgRWxlY3Ryb25pYyBEZXNpZ24gQXV0b21hdGlvbiBHbWJIOyBBbnNjaHJpZnQ6IEFy
-bnVsZnN0cmHDn2UgMjAxLCA4MDYzNCBNw7xuY2hlbjsgR2VzZWxsc2NoYWZ0IG1pdCBiZXNjaHLD
-pG5rdGVyIEhhZnR1bmc7IEdlc2Now6RmdHNmw7xocmVyOiBUaG9tYXMgSGV1cnVuZywgRnJhbmsg
-VGjDvHJhdWY7IFNpdHogZGVyIEdlc2VsbHNjaGFmdDogTcO8bmNoZW47IFJlZ2lzdGVyZ2VyaWNo
-dCBNw7xuY2hlbiwgSFJCIDEwNjk1NQ0K
+On Mon, Jul 26, 2021 at 10:13:35AM +0000, Schmid, Carsten wrote:
+> Hi Greg,
+> 
+> > Also, the patch is corrupted and can not be applied, even if I wanted to :(
+> > So can you fix that up when you resend all of the other versions too?
+> 
+> I've seen that and already sent a mail to IT regarding this.
+> We had to "upgrade" to O365 Outlook, and I selected "plain text" to send but ....
+> Still fighting with that.
+> 
+> May I attach the patches as a file, generated with "git format-patch" meanwhile?
+> I fear that I'm not allowed to use "git send-mail".
+
+For backports for the stable tree, yes, I can handle attachments just
+fine, you are not the only company with that problem :)
+
+thanks,
+
+greg k-h
