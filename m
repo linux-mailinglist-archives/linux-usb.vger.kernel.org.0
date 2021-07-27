@@ -2,68 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EC6D3D7A4C
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 17:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9323D7A6B
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 18:03:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbhG0P5c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 11:57:32 -0400
-Received: from mga03.intel.com ([134.134.136.65]:64454 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229506AbhG0P5b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 11:57:31 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10057"; a="212505769"
-X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
-   d="scan'208";a="212505769"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 08:57:31 -0700
-X-IronPort-AV: E=Sophos;i="5.84,274,1620716400"; 
-   d="scan'208";a="505940917"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2021 08:57:27 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 27 Jul 2021 18:57:25 +0300
-Date:   Tue, 27 Jul 2021 18:57:25 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        Christian Kellner <ckellner@redhat.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH] Revert "thunderbolt: Hide authorized attribute if router
- does not support PCIe tunnels"
-Message-ID: <YQAs5R67XkAJSeYQ@lahna>
-References: <20210727142501.27476-1-mika.westerberg@linux.intel.com>
- <YQAqnHL2E/QUHVnk@kroah.com>
+        id S229497AbhG0QD1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 12:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229441AbhG0QD0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 12:03:26 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9214C061757
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 09:03:25 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id z6-20020a9d24860000b02904d14e47202cso13939586ota.4
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 09:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=F9tveioMXVM337xRgQqWrONKltkgRfP5mCP6Dn9PfeA=;
+        b=S2RLHTyiqHlkO/oqFR2gjTzIKez9ZGvqPYHimiVwM7I7nNZ/p1vvSl7lM0S+kuwTwe
+         9QC+WqcIoOdp/ydtZP5uiX4lzdlqx/dA+h/IPtw3er7g6KSmII+hmwKJqPw93eBwAR/X
+         +Qv0GkaneDJLLmrglVi+xlNUWzgISwRPTfhyv7YUwxhWBdMepPuk94aaF93t57BwfNb0
+         0CDPpOVDvOjpn2Z0EMg4SlcY/bwuuPa8VD1Uh8RFXLuxSzGwuuEJQJoQEGEFC4zM9+A3
+         EvO58F8d+vjT9vEcPnF7YA29rO4qPc8jbn0hhTX8U1yDr9QAFntY0OrU7F+hoz+dGjZn
+         7bUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=F9tveioMXVM337xRgQqWrONKltkgRfP5mCP6Dn9PfeA=;
+        b=R9My9cztVbbAqU9TCQ+A1dSFABLdlTDhNI5qjEurcnQ2iG3iRheLcrUQb9YZwwcUXF
+         SbKGKaYByvL7eH9fnROUbajaYft4jqnAOaSLCjS+QZ4B4mCAarI4b1Md7Iz1usu1AQ9e
+         zMAFSBbhGzWbhUP6wuHgmhvHq1Ydmiw7ZKRCksrNclhfaBk0Lt6I3yPAhpnOzSp8syWX
+         YvUqz9mn3Qu4Jf/4lwekRvEfalVFzaTYS0tpixSLMWrhA0zZm+88T1HfroJRHO8ota+r
+         lgPLLqHBHYO5swTdYFp9Kjv/xvWE6SDkjNisE+B5sRbjJDhpD3qlYStFgey1kuJMQaQA
+         8VnQ==
+X-Gm-Message-State: AOAM531vqeSxtsZLJFnFvEF2vN88epaQmK8nNQnc+MysRyyeSu3ifxmj
+        mLQGMKl+OeJxIwImhttMfmMqWTJRteHdacKjUvI=
+X-Google-Smtp-Source: ABdhPJzmmb0zlbHhwVc5rQ/K+lQXzoWdZTNaCMNAJ0xq8cECZV8jtXnjPfQAaD01owrIUZp0ok5Zoup+4rvAwzZjD4s=
+X-Received: by 2002:a05:6830:2334:: with SMTP id q20mr15831860otg.225.1627401805181;
+ Tue, 27 Jul 2021 09:03:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YQAqnHL2E/QUHVnk@kroah.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Sender: mrszuthimalinshahinaz@gmail.com
+Received: by 2002:a05:6838:9d50:0:0:0:0 with HTTP; Tue, 27 Jul 2021 09:03:24
+ -0700 (PDT)
+From:   "Mrs. Shahinaz Zuthimalin" <mrsshahinazzuthimalin9@gmail.com>
+Date:   Tue, 27 Jul 2021 16:03:24 +0000
+X-Google-Sender-Auth: 9wNpG4ET58iJiwRhSz3kuuZ1hig
+Message-ID: <CAE34T_dZmn8HZcnoGjgxTyWtYXh_h9Rq5=L2psAwYG__axFVLw@mail.gmail.com>
+Subject: HELLO!!!!
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 05:47:40PM +0200, Greg KH wrote:
-> On Tue, Jul 27, 2021 at 05:25:01PM +0300, Mika Westerberg wrote:
-> > This reverts commit 6f3badead6a078cf3c71f381f9d84ac922984a00.
-> > 
-> > It turns out bolt depends on having authorized attribute visible under
-> > each device. Hiding it makes bolt crash as several people have reported
-> > on various bug trackers. For this reason revert the commit.
-> > 
-> > Link: https://gitlab.freedesktop.org/bolt/bolt/-/issues/174
-> > Link: https://bugzilla.redhat.com/show_bug.cgi?id=1979765
-> > Link: https://bugs.archlinux.org/task/71569
-> > Cc: stable@vger.kernel.org
-> > Cc: Christian Kellner <ckellner@redhat.com>
-> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > ---
-> >  drivers/thunderbolt/switch.c | 15 +--------------
-> >  1 file changed, 1 insertion(+), 14 deletions(-)
-> 
-> Want me to take this in my "usb-linus" tree now to get it into the tree
-> sooner?  Or will you have other thunderbolt fixes for me soon?
+Hello My Dear.
 
-I don't have any other fixes ATM so it would be great if you can pick
-this one directly :) Thanks!
+Please do not feel disturbed for contacting  you, based on the
+critical condition I find mine self, though, it's not financial
+problem, but my health, you might have know that cancer is not what to
+talk home about,
+I am married to  Mr. Shine Zuthimalin who worked with Tunisia embassy
+in Burkina Faso for nine years before he died in the year 2012.We were
+married for eleven years without a child. He died after a brief
+illness that lasted for five days.
+Since his death I decided not to remarry, When my late husband was
+alive he deposited the sum of US$ 9.2m (Nine million two hundred
+thousand dollars) in a bank in Burkina Faso, Presently this money is
+still in bank. And My Doctor told me that I don't have much time to
+live because of the cancer problem,
+Having known my condition I decided to hand you over this fond to take
+care of the less-privileged people, you will utilize this money the
+way I am going to instruct herein. I want you to take 30 Percent of
+the total money for your personal use While 70% of the money will go
+to charity" people and helping the orphanage.
+I don't want my husband's efforts to be used by the Government. I grew
+up as an Orphan and I don't have anybody as my family member,
+I am expecting your response to my private email
+mrsshahinazzuthimalin9@gmail.com.
+
+Regards,
+Mrs. Shahinaz Zuthimalin
+written from Hospital.
