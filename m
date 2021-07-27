@@ -2,144 +2,325 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CAC83D81B4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 23:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 297673D8365
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 00:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbhG0VWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 17:22:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56176 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232670AbhG0VTi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 17:19:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1627420777;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6T3hyx5Wd3tSDj0defm5CLFfxGj/ui51DEQ23tr7BJE=;
-        b=gMwVn77xsESv8cnHr/BOl06V8lZl2lNueCIFEUFE2GC5R2ytYHTexO1l/LXpGOLEPi/8x4
-        2CS449DRGaTD9FpePtZm8mdj666mky5W2wpOASfBt1qam5c5tPSc0kuyLytPVZCbvRgapR
-        hN+JAfo/d3zaNyITfZ3+eYSjWoCl6h4=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-498-CEvpR8zhMFCkKrI9_7T2ow-1; Tue, 27 Jul 2021 17:19:36 -0400
-X-MC-Unique: CEvpR8zhMFCkKrI9_7T2ow-1
-Received: by mail-ed1-f72.google.com with SMTP id k14-20020a05640212ceb02903bc50d32c17so108306edx.12
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 14:19:36 -0700 (PDT)
+        id S232464AbhG0Wq7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 18:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231730AbhG0Wq7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 18:46:59 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91859C061757;
+        Tue, 27 Jul 2021 15:46:58 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id k13so10759377qth.10;
+        Tue, 27 Jul 2021 15:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=L+/Bp26w3861l4NIDKUpFannir8uPje8Zb17lSzkieI=;
+        b=HfKe60KqwmnB17RxqYzT3d7aQtISHqHOUy0GKJSHVicc3Cs06gcSVWAQfs8AsaSG1m
+         DGdMYImnLdNH3nZIzumwkiJY/xczXpt2jqO3znu96K+AY+VeXYpouZDnGp+VtWfWOItQ
+         LyvStU9yb7MZGm2U7vZuao4jX5VIbto2FZEnrmdnSztGRrTx/Jlyt1fFXkXwjZOtK9wN
+         IjzUCMrJ7NPVspvVIprVw5DVWfermEyhcPQCCkjUlI/hIS3/ROtohTD9tliLCTmmQirh
+         iLgsE2O8j1omc9855zSf10ugyypyerSSlypgfKD0HbIrKC16cg4C4UAcvhMrX6EifM41
+         H4Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=6T3hyx5Wd3tSDj0defm5CLFfxGj/ui51DEQ23tr7BJE=;
-        b=tZTPB3tfE7Rs/Ac6ey5YitFK6ZvqRa8K0ShOkEZpB4gTYiVLB7O3j59RXad5OhN9Ti
-         l1mD8rJ5fad542+YtXIHB3c0f0kb/oWDSo1o0sa8oSdspn3WwiogEO0YDHxxW41gsEXZ
-         mYGaZSa/yRllrZw3I7QJzEqac5Eq4rnCFiX2zrfvlYjfPTml4IHbHER3e/+m5aM3PPmw
-         ZPObV3p7jpG3f9FDXYUByJTu0Oo5UH1JzN8XENBFjGUOW3366ve8hNHfKHvfEyUwhfA1
-         5ttzV/HBawiqmFy/sIuQyzNguKgK/6aa2/miIyn4/8eCrz9iMs6OEB9EDn6swjEy83ll
-         R4pg==
-X-Gm-Message-State: AOAM530MR0uDa2wbrhIn15rzMNH9nG2bYQpwW/lvJ5AvfD4anSNC4xru
-        +k+KDyTpxgLoJA7esaRzikwlTGerbPkX6YgTfNOh0p9Tylu/5bEMHllqEX+j/BWsbkgmf2JUlEO
-        EkubyMVfFfnJG824EhsQ1uGHBKRShan8LOb5p1Q4Qiq+WWzkfDEMvgUHJ5KSrM67XNr8/5ANf
-X-Received: by 2002:a05:6402:13c3:: with SMTP id a3mr29887680edx.187.1627420775082;
-        Tue, 27 Jul 2021 14:19:35 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzNEPBlWz8HV5AVPitaiuOcsrE6AmJWgrQ5D1gnAeGbDG7dAgxa5oSqUqS/Igy9Qgd/y+/bGA==
-X-Received: by 2002:a05:6402:13c3:: with SMTP id a3mr29887668edx.187.1627420774909;
-        Tue, 27 Jul 2021 14:19:34 -0700 (PDT)
-Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
-        by smtp.gmail.com with ESMTPSA id ch27sm1722761edb.57.2021.07.27.14.19.34
+        bh=L+/Bp26w3861l4NIDKUpFannir8uPje8Zb17lSzkieI=;
+        b=e00Wwefswu+aREIFv1/GjNZnZ1HAaJQH/i9F0p04QdvDsQbGXrmYYdflh5kWY9NOap
+         Z7ClxLvsAl9iCRh1UBeNgAls6V4WHxed7pgK+/p1NvMesDrsXobJQtPuh02AmbtFulvv
+         MWzvlfy9m36DChTeeve/bw0oWcoKtPHOaxZJ6XGRa9ZfQpcyvNKDkMuHV1tcdUt8ijZ/
+         R5DwkX+SwI5557X55x9LZeGKesT3jnvBaDe+sP0h86svtqTM4fj+8HIcZKKAfR1dDhfQ
+         RVD8E2FDYnqKbxIrDbb92FHk++RH3SSa5Mnjl9frSD/fH93byjkGAbXiG8LrKCFANxYT
+         BgGA==
+X-Gm-Message-State: AOAM531VYX/qotYhUhMQx3YXfZ3mAILjh246ruV6tEwpvhjscPDepAjO
+        tlOnTaQhQrRFUOUGQsMFnzPyGuRnmhw=
+X-Google-Smtp-Source: ABdhPJz57SCAsmcI0TwWDh9QXZXK018xcBXQhfUHlbxSssVqbFyeD5QInUuyiN2/NnR+reVclopo8w==
+X-Received: by 2002:ac8:124d:: with SMTP id g13mr21033612qtj.162.1627426017542;
+        Tue, 27 Jul 2021 15:46:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z21sm2044750qti.73.2021.07.27.15.46.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jul 2021 14:19:34 -0700 (PDT)
-Subject: Re: Lacie Rugged USB3-FW does not work with UAS
-To:     Julian Sikorski <belegdol@gmail.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Nathan Stratton Treadway <vgerlists@nathanst.com>
-Cc:     linux-usb@vger.kernel.org
-References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
- <1566567572.8347.54.camel@suse.com>
- <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
- <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
- <1566595393.8347.56.camel@suse.com>
- <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
- <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
- <1567424535.2469.11.camel@suse.com>
- <2a06a5dd-3fc9-0aac-a7e2-67be35e2d6bb@gmail.com>
- <20190904155831.GE4337@nathanst.com>
- <d11b22f3-3f09-2e3f-dc64-956193f2c5d3@gmail.com>
- <1568033125.365.17.camel@suse.com>
- <ed7f6cd6-b787-4876-2462-7977d69c8d4b@gmail.com>
- <f4682d70-9623-c877-78a1-2cdf471014f6@gmail.com>
- <4c2b1c8a-4126-ccfe-3431-323c4935566e@suse.com>
- <56cebf15-cf9d-475f-b388-b2be723697f6@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <c4d769e6-b906-f5f4-255b-7faf27f8702f@redhat.com>
-Date:   Tue, 27 Jul 2021 23:19:33 +0200
+        Tue, 27 Jul 2021 15:46:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210727151307.2178352-1-kyletso@google.com>
+ <20210727151307.2178352-3-kyletso@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Support non-PD mode
+Message-ID: <cbc4bdd6-de34-08a8-7968-9d3b0276e347@roeck-us.net>
+Date:   Tue, 27 Jul 2021 15:46:54 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <56cebf15-cf9d-475f-b388-b2be723697f6@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210727151307.2178352-3-kyletso@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 7/19/21 6:10 PM, Julian Sikorski wrote:
-> W dniu 19.07.2021 o 14:47, Oliver Neukum pisze:
->>
->>> Hi all,
->>>
->>> apologies for necro-ing this thread. I have just tried this drive with
->>> my new laptop (Asus ZenBook UM425IA) and the same quirk was needed to
->>> get the drive to work:
->>> options usb-storage quirks=059f:1061:u
->>>
->>> Should we still try to get uas working with this drive or should I
->>> send a patch hardcoding a quirk? I am on 5.13.2-300.fc34.x86_64 kernel
->>> now. Thanks for the feedback in advance.
->>>
->>
->> Hi,
->>
->>
->> sometimes we must give up. This thing is too elusive. Please send a
->> patch with a quirk.
->>
->>      Regards
->>
->>          Oliver
->>
->>
+On 7/27/21 8:13 AM, Kyle Tso wrote:
+> Even if the Type-C controller supports PD, it is doable to disable PD
+> capabilities with the current state machine in TCPM. Without enabling RX
+> in low-level drivers and with skipping the power negotiation, the port
+> is eligible to be a non-PD Type-C port. Use new flags whose values are
+> populated from the device tree to decide the port PD capability. Adding
+> "pd-supported" property in device tree indicates that the port supports
+> PD. If "pd-supported" is not found, "typec-power-opmode" shall be added
+> to specify the advertised Rp value if the port supports SRC role.
 > 
-> Hi,
+> Signed-off-by: Kyle Tso <kyletso@google.com>
+> ---
+> changes since v1:
+> - Revised the patch to use dt properties
+> - Added back the checks of callbacks set_pd_rx and pd_transmit
+> - Added src_rp to indicate which Rp value should be used in SRC. This
+>    variable is derived from dt property "typec-power-opmode"
 > 
-> thanks for confirming. Patch is attached, it appears to be working correctly when applied against 5.13.3. Please let me know if changes are required.
+>   drivers/usb/typec/tcpm/tcpm.c | 108 +++++++++++++++++++++++++---------
+>   1 file changed, 79 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 5b22a1c931a9..4cf77c787f54 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -316,6 +316,7 @@ struct tcpm_port {
+>   	struct typec_partner *partner;
+>   
+>   	enum typec_cc_status cc_req;
+> +	enum typec_cc_status src_rp;	/* work only if pd_supported == false */
+>   
+>   	enum typec_cc_status cc1;
+>   	enum typec_cc_status cc2;
+> @@ -323,6 +324,7 @@ struct tcpm_port {
+>   
+>   	bool attached;
+>   	bool connected;
+> +	bool pd_supported;
+>   	enum typec_port_type port_type;
+>   
+>   	/*
+> @@ -804,6 +806,7 @@ static void tcpm_apply_rc(struct tcpm_port *port)
+>   	}
+>   }
+>   
+> +
+>   /*
+>    * Determine RP value to set based on maximum current supported
+>    * by a port if configured as source.
+> @@ -815,6 +818,9 @@ static enum typec_cc_status tcpm_rp_cc(struct tcpm_port *port)
+>   	int nr_pdo = port->nr_src_pdo;
+>   	int i;
+>   
+> +	if (!port->pd_supported)
+> +		return port->src_rp;
+> +
+>   	/*
+>   	 * Search for first entry with matching voltage.
+>   	 * It should report the maximum supported current.
+> @@ -3568,9 +3574,11 @@ static int tcpm_src_attach(struct tcpm_port *port)
+>   	if (ret < 0)
+>   		return ret;
+>   
+> -	ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> -	if (ret < 0)
+> -		goto out_disable_mux;
+> +	if (port->pd_supported) {
+> +		ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> +		if (ret < 0)
+> +			goto out_disable_mux;
+> +	}
+>   
+>   	/*
+>   	 * USB Type-C specification, version 1.2,
+> @@ -3600,7 +3608,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
+>   out_disable_vconn:
+>   	tcpm_set_vconn(port, false);
+>   out_disable_pd:
+> -	port->tcpc->set_pd_rx(port->tcpc, false);
+> +	if (port->pd_supported)
+> +		port->tcpc->set_pd_rx(port->tcpc, false);
+>   out_disable_mux:
+>   	tcpm_mux_set(port, TYPEC_STATE_SAFE, USB_ROLE_NONE,
+>   		     TYPEC_ORIENTATION_NONE);
+> @@ -3804,6 +3813,20 @@ static enum typec_pwr_opmode tcpm_get_pwr_opmode(enum typec_cc_status cc)
+>   	}
+>   }
+>   
+> +static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
+> +{
+> +	switch (opmode) {
+> +	case TYPEC_PWR_MODE_USB:
+> +		return TYPEC_CC_RP_DEF;
+> +	case TYPEC_PWR_MODE_1_5A:
+> +		return TYPEC_CC_RP_1_5;
+> +	case TYPEC_PWR_MODE_3_0A:
+> +	case TYPEC_PWR_MODE_PD:
+> +	default:
+> +		return TYPEC_CC_RP_3_0;
+> +	}
+> +}
+> +
+>   static void run_state_machine(struct tcpm_port *port)
+>   {
+>   	int ret;
+> @@ -3914,6 +3937,10 @@ static void run_state_machine(struct tcpm_port *port)
+>   		if (port->ams == POWER_ROLE_SWAP ||
+>   		    port->ams == FAST_ROLE_SWAP)
+>   			tcpm_ams_finish(port);
+> +		if (!port->pd_supported) {
+> +			tcpm_set_state(port, SRC_READY, 0);
+> +			break;
+> +		}
+>   		port->upcoming_state = SRC_SEND_CAPABILITIES;
+>   		tcpm_ams_start(port, POWER_NEGOTIATION);
+>   		break;
+> @@ -4161,7 +4188,10 @@ static void run_state_machine(struct tcpm_port *port)
+>   				current_lim = PD_P_SNK_STDBY_MW / 5;
+>   			tcpm_set_current_limit(port, current_lim, 5000);
+>   			tcpm_set_charge(port, true);
+> -			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+> +			if (!port->pd_supported)
+> +				tcpm_set_state(port, SNK_READY, 0);
+> +			else
+> +				tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+>   			break;
+>   		}
+>   		/*
+> @@ -4389,7 +4419,8 @@ static void run_state_machine(struct tcpm_port *port)
+>   		tcpm_set_vbus(port, true);
+>   		if (port->ams == HARD_RESET)
+>   			tcpm_ams_finish(port);
+> -		port->tcpc->set_pd_rx(port->tcpc, true);
+> +		if (port->pd_supported)
+> +			port->tcpc->set_pd_rx(port->tcpc, true);
+>   		tcpm_set_attached_state(port, true);
+>   		tcpm_set_state(port, SRC_UNATTACHED, PD_T_PS_SOURCE_ON);
+>   		break;
+> @@ -5898,6 +5929,7 @@ EXPORT_SYMBOL_GPL(tcpm_tcpc_reset);
+>   static int tcpm_fw_get_caps(struct tcpm_port *port,
+>   			    struct fwnode_handle *fwnode)
+>   {
+> +	const char *opmode_str;
+>   	const char *cap_str;
+>   	int ret;
+>   	u32 mw, frs_current;
+> @@ -5932,22 +5964,36 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>   		return ret;
+>   	port->typec_caps.type = ret;
+>   	port->port_type = port->typec_caps.type;
+> +	port->pd_supported = fwnode_property_read_bool(fwnode, "pd-supported");
+>   
 
-I seem to have missed the earlier part of this thread somehow.
+As mentioned in the other patch, I think this needs to be negated.
+Not the variable itself, but the meaning of the property.
 
-Looking at the USB-ids, your model seems mightily close to this existing quirk:
+>   	port->slow_charger_loop = fwnode_property_read_bool(fwnode, "slow-charger-loop");
 
-UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
-                "LaCie",
-                "2Big Quadra USB3",
-                USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-                US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+It might make sense to move the properties needed with !pd_supported to here
+and return immediately after they are read. This would reduce the number of
+required changes and avoid trying to read irrelevant properties.
+Something like
 
-Before we go with the suggested patch, can you give the uas driver one last
-try with:
+	if (port->port_type != TYPEC_PORT_SRC)
+		port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
 
-options usb-storage quirks=059f:1061:fk
+	if (!port->pd_supported)
+		return 0;
 
-? The fk translates like this:
-
-f -> US_FL_NO_REPORT_OPCODES
-k -> US_FL_NO_SAME
-
-Regards,
-
-Hans
+>   	if (port->port_type == TYPEC_PORT_SNK)
+>   		goto sink;
+>   
+>   	/* Get source pdos */
+> -	ret = fwnode_property_count_u32(fwnode, "source-pdos");
+> -	if (ret <= 0)
+> -		return -EINVAL;
+> +	if (port->pd_supported) {
+> +		ret = fwnode_property_count_u32(fwnode, "source-pdos");
+> +		if (ret <= 0)
+> +			return -EINVAL;
+>   
+> -	port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
+> -	ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
+> -					     port->src_pdo, port->nr_src_pdo);
+> -	if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
+> -					    port->nr_src_pdo))
+> -		return -EINVAL;
+> +		port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
+> +		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
+> +						     port->src_pdo, port->nr_src_pdo);
+> +		if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
+> +						    port->nr_src_pdo))
+> +			return -EINVAL;
+> +	} else {
+> +		port->nr_src_pdo = 0;
+> +		ret = fwnode_property_read_string(fwnode, "typec-power-opmode", &opmode_str);
+> +		if (ret == 0) {
+> +			ret = typec_find_pwr_opmode(opmode_str);
+> +			if (ret < 0)
+> +				return ret;
+> +			port->src_rp = tcpm_pwr_opmode_to_rp(ret);
+> +		} else {
+> +			return ret;
+> +		}
+> +	}
+>   
+>   	if (port->port_type == TYPEC_PORT_SRC)
+>   		return 0;
+> @@ -5962,25 +6008,29 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+>   		return -EINVAL;
+>   sink:
+>   	/* Get sink pdos */
+> -	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
+> -	if (ret <= 0)
+> -		return -EINVAL;
+> +	if (port->pd_supported) {
+> +		ret = fwnode_property_count_u32(fwnode, "sink-pdos");
+> +		if (ret <= 0)
+> +			return -EINVAL;
+>   
+> -	port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
+> -	ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
+> -					     port->snk_pdo, port->nr_snk_pdo);
+> -	if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
+> -					    port->nr_snk_pdo))
+> -		return -EINVAL;
+> +		port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
+> +		ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
+> +						     port->snk_pdo, port->nr_snk_pdo);
+> +		if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
+> +						    port->nr_snk_pdo))
+> +			return -EINVAL;
+>   
+> -	if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
+> -		return -EINVAL;
+> -	port->operating_snk_mw = mw / 1000;
+> +		if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
+> +			return -EINVAL;
+> +		port->operating_snk_mw = mw / 1000;
+> +	} else {
+> +		port->nr_snk_pdo = 0;
+> +	}
+>   
+>   	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+>   
+> -	/* FRS can only be supported byb DRP ports */
+> -	if (port->port_type == TYPEC_PORT_DRP) {
+> +	/* FRS can only be supported by DRP ports */
+> +	if (port->port_type == TYPEC_PORT_DRP && port->pd_supported) {
+>   		ret = fwnode_property_read_u32(fwnode, "new-source-frs-typec-current",
+>   					       &frs_current);
+>   		if (ret >= 0 && frs_current <= FRS_5V_3A)
+> 
 
