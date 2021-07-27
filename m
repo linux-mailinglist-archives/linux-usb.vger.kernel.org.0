@@ -2,259 +2,138 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A57CA3D6B3E
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 02:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E06E43D6B7F
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 03:20:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234479AbhG0ABU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 26 Jul 2021 20:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234708AbhG0ABO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 26 Jul 2021 20:01:14 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3CCC0617A3
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jul 2021 17:41:36 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id a20so13997211plm.0
-        for <linux-usb@vger.kernel.org>; Mon, 26 Jul 2021 17:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=9Al1ux7YuqXRPafsBFOWjLmHby1bBOemA8+XtBPAfVc=;
-        b=hNKvrYYDXbs0bQ/S4N2V7WxsT8DFKL/XiPBXvURIvYuprNCF+bpk+zVLQUlaTLLHz2
-         xGpOtbJJpuXeh7Y6nLpslcr3tUYnb8Q7L2+JHjhXHf8eSzXuGJp5o/T+sCSsD3JWsCsd
-         XJ1CPuvNBBhmg9B2GbMP5baI42bjxOQNGOHw8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=9Al1ux7YuqXRPafsBFOWjLmHby1bBOemA8+XtBPAfVc=;
-        b=IjJsTGAqNv9ry7DFbcmkn01OB2lo6hAaxZnNartYQsx/jo7kR0IvxANwxYyeVKAepC
-         FNhRndo4lmrwIU4KwmCoVDqMZ4WRs5yHtpKxAdaWefA2ptvIiDZnnPnE2HQaFBF47c9v
-         MggfMrsHz2d4ZyP3+poBY4qw5P5WTF5rkbZAyj0Dg20gq2ojHE18V0hyH0pQOK9XX6Xj
-         mj2Vg45sUymdWTiN1Z1E/rPITb5+RpuSfS3dsVOUZJUZTvnqy2fdl4YwrmjjbbC34N6Y
-         2Wb+xWFNPsG8R5V3ad4Kpa0jXMF2XwyBbLYE/VK7GnxjJjJTegRe3TPBruK1SGIPECB5
-         A8Ng==
-X-Gm-Message-State: AOAM530/3g6vmMDlICbM4fyAS/CxuvP8Feu+P6Fef8zEM17FOOEI6ffr
-        NXs4DGN+bVJpNE6GU+7Ib1zVwA==
-X-Google-Smtp-Source: ABdhPJyGONapH77bjs5SRQ7UbOsyRnk4wBaK0crK59wBBjvjQUWzlKsewl5Cjn4Tc6RFXeDw3BtDcQ==
-X-Received: by 2002:a17:90a:3d0d:: with SMTP id h13mr20116865pjc.20.1627346496428;
-        Mon, 26 Jul 2021 17:41:36 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:9c3d:270c:6be9:9c33])
-        by smtp.gmail.com with UTF8SMTPSA id q21sm1040348pgk.71.2021.07.26.17.41.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jul 2021 17:41:36 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v15 6/6] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Mon, 26 Jul 2021 17:41:18 -0700
-Message-Id: <20210726174048.v15.6.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.32.0.432.gabb21c7263-goog
-In-Reply-To: <20210727004118.2583774-1-mka@chromium.org>
-References: <20210727004118.2583774-1-mka@chromium.org>
+        id S233990AbhG0Ak2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 26 Jul 2021 20:40:28 -0400
+Received: from pcug.org.au ([203.10.76.4]:39753 "EHLO pasta.tip.net.au"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232296AbhG0AkZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 26 Jul 2021 20:40:25 -0400
+X-Greylist: delayed 340 seconds by postgrey-1.27 at vger.kernel.org; Mon, 26 Jul 2021 20:40:25 EDT
+Received: from pasta.tip.net.au (pcug.org.au [203.10.76.4])
+        by mailhost.tip.net.au (Postfix) with ESMTP id 4GYf3h1lH5z9PwP
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 11:15:12 +1000 (AEST)
+Received: from e4.eyal.emu.id.au (unknown [121.45.32.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by pasta.tip.net.au (Postfix) with ESMTPSA id 4GYf3h1BvFz9PYd
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 11:15:12 +1000 (AEST)
+To:     list linux-usb <linux-usb@vger.kernel.org>
+From:   Eyal Lebedinsky <eyal@eyal.emu.id.au>
+Subject: usb port enumeration changed?
+Message-ID: <261c3985-28bc-b203-59fa-ecb650f2b42d@eyal.emu.id.au>
+Date:   Tue, 27 Jul 2021 11:15:11 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+I know that device numbers change, but bus/port numbers are stable and reflect the physical layout
+of the hubs and devices. I relied for years on these port numbers to identify specific (otherwise
+identical) devices.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Searching the list (I am now subscribed) and the web did not yield an answer.
 
-Changes in v15:
-- none
+For example, I have two TEMPer temperature sensor devices attached. They are both plugged into
+a 4-port USB3 hub. They are on ports 3 and 4. Port 2 is unused and port 1 has a bluetooth radio
+attached. I also have 5 dvb usb tuners which stayed in their old positions.
 
-Changes in v14:
-- none
+Until now (fedora 34, last on 5.12.17-300.fc34.x86_64), I would see this:
 
-Changes in v13:
-- none
+$ lsusb
+Bus 001 Device 013: ID 0c45:7401 Microdia TEMPer Temperature Sensor
+Bus 001 Device 025: ID 0c45:7401 Microdia TEMPer Temperature Sensor
 
-Changes in v12:
-- none
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+         |__ Port 4: Dev 4, If 0, Class=Hub, Driver=hub/4p, 5000M
+     |__ Port 5: Dev 3, If 0, Class=Hub, Driver=hub/4p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+     |__ Port 2: Dev 26, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 2: Dev 27, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+         |__ Port 2: Dev 27, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+     |__ Port 4: Dev 3, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 3: Dev 10, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 3: Dev 10, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 1: Dev 6, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 1: Dev 6, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 4: Dev 12, If 0, Class=Hub, Driver=hub/4p, 480M
+             |__ Port 3: Dev 15, If 0, Class=Printer, Driver=usblp, 12M
+             |__ Port 1: Dev 14, If 1, Class=Vendor Specific Class, Driver=, 480M
+             |__ Port 1: Dev 14, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+             |__ Port 4: Dev 16, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+             |__ Port 4: Dev 16, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 2: Dev 8, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 2: Dev 8, If 1, Class=Vendor Specific Class, Driver=, 480M
+     |__ Port 5: Dev 5, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 1: Dev 20, If 0, Class=Wireless, Driver=btusb, 12M
+         |__ Port 1: Dev 20, If 1, Class=Wireless, Driver=btusb, 12M
+         |__ Port 3: Dev 25, If 0, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+         |__ Port 3: Dev 25, If 1, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+         |__ Port 4: Dev 13, If 0, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+         |__ Port 4: Dev 13, If 1, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+     |__ Port 6: Dev 19, If 0, Class=Human Interface Device, Driver=usbfs, 1.5M
 
-Changes in v11:
-- rebased on qcom/arm64-for-5.14 (with the rest of the series)
+The TEMPer devices show on Bus 01 as was always:
+     Port 5.Port 3    (Dev 11)
+     Port 5.Port 4    (Dev 13)
 
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
+After rebooting the newly installed kernel 5.13.4-200.fc34.x86_64 I get:
 
-Changes in v9:
-- none
+$ lsusb
+Bus 001 Device 012: ID 0c45:7401 Microdia TEMPer Temperature Sensor
+Bus 001 Device 003: ID 0c45:7401 Microdia TEMPer Temperature Sensor
 
-Changes in v8:
-- none
+$ lsusb -t
+/:  Bus 02.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/10p, 10000M
+     |__ Port 4: Dev 2, If 0, Class=Hub, Driver=hub/4p, 5000M
+         |__ Port 4: Dev 4, If 0, Class=Hub, Driver=hub/4p, 5000M
+     |__ Port 5: Dev 3, If 0, Class=Hub, Driver=hub/4p, 5000M
+/:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
+     |__ Port 2: Dev 2, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 2: Dev 4, If 1, Class=Human Interface Device, Driver=usbhid, 12M
+         |__ Port 2: Dev 4, If 0, Class=Human Interface Device, Driver=usbhid, 12M
+     |__ Port 3: Dev 3, If 0, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+     |__ Port 3: Dev 3, If 1, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+     |__ Port 4: Dev 5, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 3: Dev 11, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 3: Dev 11, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 1: Dev 7, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 1: Dev 7, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 4: Dev 13, If 0, Class=Hub, Driver=hub/4p, 480M
+             |__ Port 3: Dev 15, If 0, Class=Printer, Driver=usblp, 12M
+             |__ Port 1: Dev 14, If 1, Class=Vendor Specific Class, Driver=, 480M
+             |__ Port 1: Dev 14, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+             |__ Port 4: Dev 16, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+             |__ Port 4: Dev 16, If 1, Class=Vendor Specific Class, Driver=, 480M
+         |__ Port 2: Dev 9, If 0, Class=Vendor Specific Class, Driver=dvb_usb_rtl28xxu, 480M
+         |__ Port 2: Dev 9, If 1, Class=Vendor Specific Class, Driver=, 480M
+     |__ Port 5: Dev 6, If 0, Class=Hub, Driver=hub/4p, 480M
+         |__ Port 1: Dev 10, If 0, Class=Wireless, Driver=btusb, 12M
+         |__ Port 1: Dev 10, If 1, Class=Wireless, Driver=btusb, 12M
+         |__ Port 3: Dev 12, If 0, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+         |__ Port 3: Dev 12, If 1, Class=Human Interface Device, Driver=, 1.5M            <<<<<
+     |__ Port 6: Dev 18, If 0, Class=Human Interface Device, Driver=usbfs, 1.5M
 
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
+One can see that the TEMPer devices are now showing on Bus 01 but in separate positions:
+     Port 3           (Dev 3)  new position
+     Port 5.Port 3    (Dev 12) old position
 
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
+This, naturally, confuses my script that collects the data from these sensors (I use temper-poll).
 
-Changes in v5:
-- patch added to the series
+Is this an intentional change?
+If so then what is the way to stably disambiguate usb devices (there is no s/n available)?
 
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
- 4 files changed, 39 insertions(+), 30 deletions(-)
+If no change was expected then does this reflect a possible hwr problem here?
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..5fb8e12af1a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..1dae714250f5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,11 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 2b522f9e0d8f..2f5263e3d1b9 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -42,17 +42,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -61,6 +50,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 77ae7561d436..f89c6a7045e5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -898,6 +897,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
 -- 
-2.32.0.432.gabb21c7263-goog
-
+Eyal Lebedinsky (eyal@eyal.emu.id.au)
