@@ -2,87 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6107F3D7B96
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 19:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC38B3D7DBA
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 20:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbhG0RGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 13:06:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54108 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229818AbhG0RGy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 13:06:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 77C2660FC1;
-        Tue, 27 Jul 2021 17:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627405614;
-        bh=mFat/twJRE7/pE/PXrNnbNG/3T4ZUp9mxW5y5Cift1A=;
-        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
-        b=GH5wjdLsBEkMBR3IbFFGSTknqQ1npBGAIS05Gr5qBVrlxvnLi9tWcc8R/mTGTNEnq
-         N6SRkOCVSvOCi/Ny+IvZ8QwiIah1S/ioyrddPPmMwg7/Ij+7SotOohawbMKW07iHuD
-         Qnq3XhUcN6r9ttfCpEvBBRkyT4CGPmZ4hy9wQoSGLOxXaGOuLUEson9zp2PX8Pcj04
-         uWCLlRGdoLfYk2UPBKIUZ0kuo0rY/iNiBMfa7ZaB+ha3CuBtWZb3NOP48anb8GSpYu
-         rIVWMYLkuQUeFikXtb4NBfdZAbHU5EHmn/mnu4Uyn4IZBXCopeHZukMrgUwvC0rjLh
-         DMFWII3Ant/Fw==
-References: <QUKVWQ.1T8HV94AM5X6@gmail.com>
- <CAJpVOidqd+tpNNkHGvC6fUQ7g3Z+FLpiDJrmPWtQmiL-AsYsLw@mail.gmail.com>
- <YP+kqqimY1BYZAwL@kroah.com>
- <a59c1173b77b4ace8db7181b1b0fc446@SVR-IES-MBX-03.mgc.mentorg.com>
- <RBHWWQ.R54EUTRRR5DN@gmail.com>
- <2c9ddbc65d1e4ce3a368c1d894281178@SVR-IES-MBX-03.mgc.mentorg.com>
- <GBNWWQ.KWQ1PXLOHKYW2@gmail.com>
- <adddde7315464623ba329dc4e5dcc5d7@SVR-IES-MBX-03.mgc.mentorg.com>
- <DMVWWQ.LUXSRV2XQXCW2@gmail.com>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     AMoonRabbit <razgriz.wilson6@gmail.com>
-Cc:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>,
-        Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Subject: Re: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
-In-reply-to: <DMVWWQ.LUXSRV2XQXCW2@gmail.com>
-Date:   Tue, 27 Jul 2021 20:06:51 +0300
-Message-ID: <87sfzzu1n8.fsf@kernel.org>
+        id S231479AbhG0Scj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 14:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229962AbhG0Sce (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 14:32:34 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A412C061765;
+        Tue, 27 Jul 2021 11:32:31 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id h14so23329387lfv.7;
+        Tue, 27 Jul 2021 11:32:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni9d4GzSQFfwhqPx8Gkoyybb1Q0rtG7dEF0EzTUPjlE=;
+        b=WS3UH+S8XHbWuEciXqSYFXERDceNzNb4BhpvYPNDpZjYK+nYzjEdzcX5XDGMMr/Pij
+         P6ZMWYkmtjDGB9qWmrzMsFzgsi2lZd7Q4I7bODwGguVWHfGvixzzPBkc1by4MmF6rkKf
+         fJ5gDZ2zQphd8HBTtaW3r5+7iwmB72Hv42GKjBd/+0Vv5F6W6eTu5RfjxlKU09Ds/BHX
+         fePZXrPa/2WexGH5E4slybR6MtiRtFVSdfVLVSSXDitYaefCnafEZhlN0S1hFx58hs6R
+         /Y62oeLMUiLKr74D7l/u7Q/bUcabPRtjrASEaUom3uZCM6MLq0X9LulzzHmjOhPJ8ZD6
+         VcTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ni9d4GzSQFfwhqPx8Gkoyybb1Q0rtG7dEF0EzTUPjlE=;
+        b=D1hZp/q1iIXdHqwvZAfJTKWV9SXJHPObp4dEYW8185pTwFfTOBjRdlDY8S+Pyyv/s3
+         qincRlB5esBATNt6VLp3EQ7g4osLGfON1iKVa88whjaFrYW8/w1Eg5SHTcvIcmDwbvsS
+         x6SWTfs+CBNKlfAyBbRnRhm4Mu1nKxJamkjNUwUHR+lkMc4Ok6DdzuIF0Hw1Bbs69G/z
+         AFqIT78kLKhMKSeDKc31u1nrjF37H59S4DCGCMN+P6RekPz8ld98BZLCyFzUFWAPYodo
+         ODgA3fBnsi/OJ3YPvHvra60pKE6wtRnxGLDD1+MFJOyaMZ/FYWwyc/Hk0RjpdPV8PX0G
+         A3Gg==
+X-Gm-Message-State: AOAM532JY7/EBiq/ARU0+bfwPsVgQWV27NHyOshv+K1f26Cm39qa+EJj
+        vcoJ8JDxPgUP/QfgVfBJsMc=
+X-Google-Smtp-Source: ABdhPJzxVaAJxzF9UODfocIvLHq2yFd0PXH0GJpMAJAQXOYgoLZ1aK03iSjprcXO18Ig2n6J0T1tJw==
+X-Received: by 2002:a05:6512:32aa:: with SMTP id q10mr16971418lfe.368.1627410749912;
+        Tue, 27 Jul 2021 11:32:29 -0700 (PDT)
+Received: from localhost.localdomain (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id b41sm326637ljr.67.2021.07.27.11.32.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jul 2021 11:32:29 -0700 (PDT)
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     balbi@kernel.org
+Cc:     gregkh@linuxfoundation.org, sandeen@redhat.com, mdevaev@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers
+Date:   Tue, 27 Jul 2021 21:31:41 +0300
+Message-Id: <20210727183140.42330-1-mdevaev@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+The USB HID standard declares mandatory support for GET_IDLE and SET_IDLE
+requests for Boot Keyboard. Most hosts can handle their absence, but others
+like some old/strange UEFIs and BIOSes consider this a critical error
+and refuse to work with f_hid.
 
-Hi,
+This primitive implementation of saving and returning idle is sufficient
+to meet the requirements of the standard and these devices.
 
-AMoonRabbit <razgriz.wilson6@gmail.com> writes:
-> On Tue, 27 Jul, 2021 at 3:05 pm, "Schmid, Carsten"
-> <Carsten_Schmid@mentor.com> wrote:
->> Hi,
->>=20
->>>  Dmesg output with the system rebooted and the Walkman kept in DAC
->>> mode
->>>  so the system will only have seen the device in that mode. And
->>> sorry,
->>>  not sure what you mean by no top posts, but guessing it has
->>> something
->>>  to do with leaving the original email I used in the CC?
->> No top posting means:
->> Write your answers _below_ the text that you answer to, not on top
->> of it.
->> When you read books, you read from top to bottom, isn't it?
->> Thanks,
->> Carsten
->> -----------------
->> Siemens Electronic Design Automation GmbH; Anschrift: Arnulfstra=C3=9Fe
->> 201, 80634 M=C3=BCnchen; Gesellschaft mit beschr=C3=A4nkter Haftung;=20
->> Gesch=C3=A4ftsf=C3=BChrer: Thomas Heurung, Frank Th=C3=BCrauf; Sitz der
->> Gesellschaft: M=C3=BCnchen; Registergericht M=C3=BCnchen, HRB 106955
->
-> Apologies, but that's not a concept I've heard of until now for
+Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+---
+ drivers/usb/gadget/function/f_hid.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-that's okay, we're here to help ;-)
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 02683ac07..1010f0a3e 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -41,6 +41,7 @@ struct f_hidg {
+ 	unsigned char			bInterfaceSubClass;
+ 	unsigned char			bInterfaceProtocol;
+ 	unsigned char			protocol;
++	unsigned char			idle;
+ 	unsigned short			report_desc_length;
+ 	char				*report_desc;
+ 	unsigned short			report_length;
+@@ -523,6 +524,14 @@ static int hidg_setup(struct usb_function *f,
+ 		goto respond;
+ 		break;
+ 
++	case ((USB_DIR_IN | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
++		  | HID_REQ_GET_IDLE):
++		VDBG(cdev, "get_idle\n");
++		length = min_t(unsigned int, length, 1);
++		((u8 *) req->buf)[0] = hidg->idle;
++		goto respond;
++		break;
++
+ 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+ 		  | HID_REQ_SET_REPORT):
+ 		VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
+@@ -546,6 +555,14 @@ static int hidg_setup(struct usb_function *f,
+ 		goto stall;
+ 		break;
+ 
++	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
++		  | HID_REQ_SET_IDLE):
++		VDBG(cdev, "set_idle\n");
++		length = 0;
++		hidg->idle = value >> 8;
++		goto respond;
++		break;
++
+ 	case ((USB_DIR_IN | USB_TYPE_STANDARD | USB_RECIP_INTERFACE) << 8
+ 		  | USB_REQ_GET_DESCRIPTOR):
+ 		switch (value >> 8) {
+@@ -773,6 +790,7 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+ 	hidg_interface_desc.bInterfaceSubClass = hidg->bInterfaceSubClass;
+ 	hidg_interface_desc.bInterfaceProtocol = hidg->bInterfaceProtocol;
+ 	hidg->protocol = HID_REPORT_PROTOCOL;
++	hidg->idle = 1;
+ 	hidg_ss_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
+ 	hidg_ss_in_comp_desc.wBytesPerInterval =
+ 				cpu_to_le16(hidg->report_length);
+-- 
+2.32.0
 
-> emails. Will put responses below the chain from now on.
-
-Not necessarily entirely below. We reply below each "topic", as I've
-done here. Hope this helps
-
---=20
-balbi
