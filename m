@@ -2,216 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C090C3D8052
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 23:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CAC83D81B4
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 23:22:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbhG0VBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 17:01:36 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:63647 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234451AbhG0VAc (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 17:00:32 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1627419631; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=Kq1881QGwVFiiS4S0da3eS/MhMFX22cv5dovHiGH+eE=; b=RixwWH2T2kBRdxwdHdFYkFVsiFA6bzHcBGj7xMlgO7IIDBQEUVUmD/DCQxllJJDIY5PWVTvs
- zO1JHkloBHHEKBSepO7VI3tEFyqHggO50aD7w3o/N4IsZCpASoHYsvRcGytT8165R2IsVikT
- q/5grSbAZG+eTryIlDpb7JGeh88=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
- 610073e417c2b4047d539d4b (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Jul 2021 21:00:20
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A45A0C43152; Tue, 27 Jul 2021 21:00:19 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.37.24] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1DC5CC43148;
-        Tue, 27 Jul 2021 21:00:16 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1DC5CC43148
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace list_for_each_entry_safe()
- if using giveback
-To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
-        peter.chen@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org
-References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
- <87tun9g01v.fsf@kernel.org>
- <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
- <5156238d-c1d8-a0d3-47af-8b52467fd071@codeaurora.org>
- <fc346f3c-6e3d-b96c-d64a-2ae4cf4218d4@codeaurora.org>
- <87v954xjoz.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <3c55dd4f-5ebd-3730-7428-cb15235465a7@codeaurora.org>
-Date:   Tue, 27 Jul 2021 14:00:16 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+        id S233634AbhG0VWM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 17:22:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:56176 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232670AbhG0VTi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 17:19:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627420777;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6T3hyx5Wd3tSDj0defm5CLFfxGj/ui51DEQ23tr7BJE=;
+        b=gMwVn77xsESv8cnHr/BOl06V8lZl2lNueCIFEUFE2GC5R2ytYHTexO1l/LXpGOLEPi/8x4
+        2CS449DRGaTD9FpePtZm8mdj666mky5W2wpOASfBt1qam5c5tPSc0kuyLytPVZCbvRgapR
+        hN+JAfo/d3zaNyITfZ3+eYSjWoCl6h4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-498-CEvpR8zhMFCkKrI9_7T2ow-1; Tue, 27 Jul 2021 17:19:36 -0400
+X-MC-Unique: CEvpR8zhMFCkKrI9_7T2ow-1
+Received: by mail-ed1-f72.google.com with SMTP id k14-20020a05640212ceb02903bc50d32c17so108306edx.12
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 14:19:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=6T3hyx5Wd3tSDj0defm5CLFfxGj/ui51DEQ23tr7BJE=;
+        b=tZTPB3tfE7Rs/Ac6ey5YitFK6ZvqRa8K0ShOkEZpB4gTYiVLB7O3j59RXad5OhN9Ti
+         l1mD8rJ5fad542+YtXIHB3c0f0kb/oWDSo1o0sa8oSdspn3WwiogEO0YDHxxW41gsEXZ
+         mYGaZSa/yRllrZw3I7QJzEqac5Eq4rnCFiX2zrfvlYjfPTml4IHbHER3e/+m5aM3PPmw
+         ZPObV3p7jpG3f9FDXYUByJTu0Oo5UH1JzN8XENBFjGUOW3366ve8hNHfKHvfEyUwhfA1
+         5ttzV/HBawiqmFy/sIuQyzNguKgK/6aa2/miIyn4/8eCrz9iMs6OEB9EDn6swjEy83ll
+         R4pg==
+X-Gm-Message-State: AOAM530MR0uDa2wbrhIn15rzMNH9nG2bYQpwW/lvJ5AvfD4anSNC4xru
+        +k+KDyTpxgLoJA7esaRzikwlTGerbPkX6YgTfNOh0p9Tylu/5bEMHllqEX+j/BWsbkgmf2JUlEO
+        EkubyMVfFfnJG824EhsQ1uGHBKRShan8LOb5p1Q4Qiq+WWzkfDEMvgUHJ5KSrM67XNr8/5ANf
+X-Received: by 2002:a05:6402:13c3:: with SMTP id a3mr29887680edx.187.1627420775082;
+        Tue, 27 Jul 2021 14:19:35 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzNEPBlWz8HV5AVPitaiuOcsrE6AmJWgrQ5D1gnAeGbDG7dAgxa5oSqUqS/Igy9Qgd/y+/bGA==
+X-Received: by 2002:a05:6402:13c3:: with SMTP id a3mr29887668edx.187.1627420774909;
+        Tue, 27 Jul 2021 14:19:34 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id ch27sm1722761edb.57.2021.07.27.14.19.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jul 2021 14:19:34 -0700 (PDT)
+Subject: Re: Lacie Rugged USB3-FW does not work with UAS
+To:     Julian Sikorski <belegdol@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>,
+        Nathan Stratton Treadway <vgerlists@nathanst.com>
+Cc:     linux-usb@vger.kernel.org
+References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
+ <1566567572.8347.54.camel@suse.com>
+ <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
+ <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
+ <1566595393.8347.56.camel@suse.com>
+ <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
+ <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
+ <1567424535.2469.11.camel@suse.com>
+ <2a06a5dd-3fc9-0aac-a7e2-67be35e2d6bb@gmail.com>
+ <20190904155831.GE4337@nathanst.com>
+ <d11b22f3-3f09-2e3f-dc64-956193f2c5d3@gmail.com>
+ <1568033125.365.17.camel@suse.com>
+ <ed7f6cd6-b787-4876-2462-7977d69c8d4b@gmail.com>
+ <f4682d70-9623-c877-78a1-2cdf471014f6@gmail.com>
+ <4c2b1c8a-4126-ccfe-3431-323c4935566e@suse.com>
+ <56cebf15-cf9d-475f-b388-b2be723697f6@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <c4d769e6-b906-f5f4-255b-7faf27f8702f@redhat.com>
+Date:   Tue, 27 Jul 2021 23:19:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <87v954xjoz.fsf@kernel.org>
+In-Reply-To: <56cebf15-cf9d-475f-b388-b2be723697f6@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+Hi,
 
-On 7/20/2021 11:30 PM, Felipe Balbi wrote:
-> 
-> Hi Wesley,
-> 
-> (first of all, sorry for the super long delay. This really fell through
-> the cracks)
-> 
-
-No problem, I understand that you probably get a whole bunch of things
-all at once, so its hard to keep track of each one :).
-
-> Wesley Cheng <wcheng@codeaurora.org> writes:
->> Hi Felipe,
+On 7/19/21 6:10 PM, Julian Sikorski wrote:
+> W dniu 19.07.2021 o 14:47, Oliver Neukum pisze:
 >>
->> On 6/9/2021 1:57 PM, Wesley Cheng wrote:
->>> Hi Felipe,
+>>> Hi all,
 >>>
->>> On 5/19/2021 1:52 AM, Wesley Cheng wrote:
->>>>
->>>>
->>>> On 5/11/2021 1:13 AM, Felipe Balbi wrote:
->>>>>
->>>>> Hi,
->>>>>
->>>>> Wesley Cheng <wcheng@codeaurora.org> writes:
->>>>>> The list_for_each_entry_safe() macro saves the current item (n) and
->>>>>> the item after (n+1), so that n can be safely removed without
->>>>>> corrupting the list.  However, when traversing the list and removing
->>>>>> items using gadget giveback, the DWC3 lock is briefly released,
->>>>>> allowing other routines to execute.  There is a situation where, while
->>>>>> items are being removed from the cancelled_list using
->>>>>> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
->>>>>> routine is running in parallel (due to UDC unbind).  As the cleanup
->>>>>> routine removes n, and the pullup disable removes n+1, once the
->>>>>> cleanup retakes the DWC3 lock, it references a request who was already
->>>>>> removed/handled.  With list debug enabled, this leads to a panic.
->>>>>> Ensure all instances of the macro are replaced where gadget giveback
->>>>>> is used.
->>>>>>
->>>>>> Example call stack:
->>>>>>
->>>>>> Thread#1:
->>>>>> __dwc3_gadget_ep_set_halt() - CLEAR HALT
->>>>>>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
->>>>>>     ->list_for_each_entry_safe()
->>>>>>     ->dwc3_gadget_giveback(n)
->>>>>>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
->>>>>>       ->spin_unlock
->>>>>>       ->Thread#2 executes
->>>>>>       ...
->>>>>>     ->dwc3_gadget_giveback(n+1)
->>>>>>       ->Already removed!
->>>>>>
->>>>>> Thread#2:
->>>>>> dwc3_gadget_pullup()
->>>>>>   ->waiting for dwc3 spin_lock
->>>>>>   ...
->>>>>>   ->Thread#1 released lock
->>>>>>   ->dwc3_stop_active_transfers()
->>>>>>     ->dwc3_remove_requests()
->>>>>>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
->>>>>>       ->dwc3_gadget_giveback()
->>>>>>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
->>>>>>         ->spin_unlock
->>>>>>
->>>>>> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
->>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>>>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
->>>>>> ---
->>>>>> Changes in v2:
->>>>>>  - Updated commit message with context call stack of an example scenario
->>>>>>    seen on device.
->>>>>>
->>>>>>  drivers/usb/dwc3/gadget.c | 8 ++++----
->>>>>>  1 file changed, 4 insertions(+), 4 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>> index dd80e5c..efa939b 100644
->>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
->>>>>>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
->>>>>>  {
->>>>>>  	struct dwc3_request		*req;
->>>>>> -	struct dwc3_request		*tmp;
->>>>>>  	struct dwc3			*dwc = dep->dwc;
->>>>>>  
->>>>>> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
->>>>>> +	while (!list_empty(&dep->cancelled_list)) {
->>>>>> +		req = next_request(&dep->cancelled_list);
->>>>>
->>>>> couldn't this be solved list_replace_init() instead? Then we can keep
->>>>> using the regular list_for_each_entry_safe() which has an added semantic
->>>>> meaning due to its name.
->>>>>
->>>>
->>>> Hi Felipe,
->>>>
->>>> Sorry for the late response.  So I tried with a list_replace_init() to
->>>> within the list_for_each_entry_safe() loop to update tmp w/ the
->>>> cancelled_list list head, but the issue was still observed.  This is
->>>> because we can't replace the reference the loop already has stored in
->>>> tmp, which is simply updated as the current item on the next iteration.
->>>>
->>>> I believe this is what you were trying to achieve?
->>>>
->>> Was wondering if you had any further inputs on this change?  As
->>> mentioned, I tried a few things with list_replace_init(), which did not
->>> work.
+>>> apologies for necro-ing this thread. I have just tried this drive with
+>>> my new laptop (Asus ZenBook UM425IA) and the same quirk was needed to
+>>> get the drive to work:
+>>> options usb-storage quirks=059f:1061:u
+>>>
+>>> Should we still try to get uas working with this drive or should I
+>>> send a patch hardcoding a quirk? I am on 5.13.2-300.fc34.x86_64 kernel
+>>> now. Thanks for the feedback in advance.
 >>>
 >>
->> Sorry for the ping.  Is this change OK to add as is?  We've been running
->> into this instance pretty frequently during our testing, so just wanted
->> to close on the proper changes being merged upstream.
+>> Hi,
+>>
+>>
+>> sometimes we must give up. This thing is too elusive. Please send a
+>> patch with a quirk.
+>>
+>>      Regards
+>>
+>>          Oliver
+>>
+>>
 > 
-> The idea is this:
+> Hi,
 > 
-> 	struct list_head	local;
-> 
->         spin_lock_irq(&lock);
->         list_replace_init(&dwc->cancelled_list, &local);
->         spin_unlock_irq(&lock);
-> 
-> 	list_for_each_entry_safe(req, tmp, &local, list) {
->         	/* ... */
-> 	}
-> 
-> It looks to me this should work fine, no? You can also follow what
-> drivers/usb/core/hcd.c is doing in usb_giveback_urb_bh() and restarting
-> if dwc->cancelled_list is not empty after list_for_each_entry_safe().
-> 
-> Can you give that one a shot?
-> 
+> thanks for confirming. Patch is attached, it appears to be working correctly when applied against 5.13.3. Please let me know if changes are required.
 
-Great, thanks for this suggestion!  Now I understand what you were
-referring to.  I gave this a try and it works well.  Will prepare a
-change to replace both places with list_replace_init()
+I seem to have missed the earlier part of this thread somehow.
 
-Thanks
-Wesley Cheng
+Looking at the USB-ids, your model seems mightily close to this existing quirk:
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
+                "LaCie",
+                "2Big Quadra USB3",
+                USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+                US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+
+Before we go with the suggested patch, can you give the uas driver one last
+try with:
+
+options usb-storage quirks=059f:1061:fk
+
+? The fk translates like this:
+
+f -> US_FL_NO_REPORT_OPCODES
+k -> US_FL_NO_SAME
+
+Regards,
+
+Hans
+
