@@ -2,103 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C74A3D7394
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 12:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C07B3D73AF
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 12:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236337AbhG0KpW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 06:45:22 -0400
-Received: from muru.com ([72.249.23.125]:55958 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236403AbhG0KpV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 06:45:21 -0400
-Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id EAE9080F0;
-        Tue, 27 Jul 2021 10:45:37 +0000 (UTC)
-From:   Tony Lindgren <tony@atomide.com>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        linux-omap@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH] phy: phy-twl4030-usb: Disable PHY for suspend
-Date:   Tue, 27 Jul 2021 13:45:12 +0300
-Message-Id: <20210727104512.52968-1-tony@atomide.com>
-X-Mailer: git-send-email 2.32.0
+        id S236417AbhG0Kuu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 06:50:50 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:52686 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S236293AbhG0Kuu (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 06:50:50 -0400
+X-UUID: cbe704db5b144178a1a6b3101c4e9843-20210727
+X-UUID: cbe704db5b144178a1a6b3101c4e9843-20210727
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw01.mediatek.com
+        (envelope-from <macpaul.lin@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1000917277; Tue, 27 Jul 2021 18:50:45 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 27 Jul 2021 18:50:44 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 27 Jul 2021 18:50:44 +0800
+From:   Macpaul Lin <macpaul.lin@mediatek.com>
+To:     <linux-phy@lists.infradead.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Ainge Hsu <ainge.hsu@mediatek.com>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Kuohong Wang <kuohong.wang@mediatek.com>,
+        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Macpaul Lin <macpaul@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
+Subject: [PATCH 1/2] phy: introduce phy mode PHY_MODE_UART and phy_get_mode_ext()
+Date:   Tue, 27 Jul 2021 18:50:12 +0800
+Message-ID: <1627383013-4535-1-git-send-email-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Since commit 88d26136a256 ("PM: Prevent runtime suspend during system
-resume"), PM runtime will not let devices idle during system suspend.
+Some embedded platform shared PINs between USB and UART.
 
-This is because of the pm_runtime_get_noresume() call done in
-device_prepare() that is not released until at device_complete() after
-resume.
+For example, some phone will use special cable detection in boot loader
+to switch USB port function into UART mode. Hence Kernel need to query
+the hardware state from PHY registers to confirm the initialzation flow
+for PHY and USB driver.
 
-We must now disable the USB PHY in suspend if no USB cable is connected.
+To support this kind of PIN switch, new PHY MODE and query API is
+required. Here we introduce a new PHY mode: PHY_MODE_UART.
 
-Cc: Andreas Kemnade <andreas@kemnade.info>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
+API phy_get_mode_ext() can be used to query the MODE from hardware
+instead of reading it from phy attributes.
+
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
 ---
- drivers/phy/ti/phy-twl4030-usb.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ drivers/phy/phy-core.c  |   17 +++++++++++++++++
+ include/linux/phy/phy.h |    3 +++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/drivers/phy/ti/phy-twl4030-usb.c b/drivers/phy/ti/phy-twl4030-usb.c
---- a/drivers/phy/ti/phy-twl4030-usb.c
-+++ b/drivers/phy/ti/phy-twl4030-usb.c
-@@ -162,6 +162,8 @@ struct twl4030_usb {
- 	atomic_t		connected;
- 	bool			vbus_supplied;
- 	bool			musb_mailbox_pending;
-+	unsigned long		runtime_suspended:1;
-+	unsigned long		needs_resume:1;
- 
- 	struct delayed_work	id_workaround_work;
- };
-@@ -384,6 +386,9 @@ static void __twl4030_phy_power(struct twl4030_usb *twl, int on)
- 	WARN_ON(twl4030_usb_write_verify(twl, PHY_PWR_CTRL, pwr) < 0);
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index ccb575b..b8f6539 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -373,6 +373,23 @@ int phy_set_mode_ext(struct phy *phy, enum phy_mode mode, int submode)
  }
+ EXPORT_SYMBOL_GPL(phy_set_mode_ext);
  
-+static int twl4030_usb_runtime_suspend(struct device *dev);
-+static int twl4030_usb_runtime_resume(struct device *dev);
++int phy_get_mode_ext(struct phy *phy)
++{
++	int ret;
 +
- static int __maybe_unused twl4030_usb_suspend(struct device *dev)
++	if (!phy || !phy->ops->get_mode_ext)
++		return 0;
++
++	mutex_lock(&phy->mutex);
++	ret = phy->ops->get_mode_ext(phy);
++	if (!ret)
++		ret = phy->attrs.mode;
++	mutex_unlock(&phy->mutex);
++
++	return ret;
++}
++EXPORT_SYMBOL_GPL(phy_get_mode_ext);
++
+ int phy_set_media(struct phy *phy, enum phy_media media)
  {
- 	struct twl4030_usb *twl = dev_get_drvdata(dev);
-@@ -395,6 +400,10 @@ static int __maybe_unused twl4030_usb_suspend(struct device *dev)
- 	 */
- 	dev_dbg(twl->dev, "%s\n", __func__);
- 	disable_irq(twl->irq);
-+	if (!twl->runtime_suspended && !atomic_read(&twl->connected)) {
-+		twl4030_usb_runtime_suspend(dev);
-+		twl->needs_resume = 1;
-+	}
- 
- 	return 0;
- }
-@@ -405,9 +414,13 @@ static int __maybe_unused twl4030_usb_resume(struct device *dev)
- 
- 	dev_dbg(twl->dev, "%s\n", __func__);
- 	enable_irq(twl->irq);
-+	if (twl->needs_resume)
-+		twl4030_usb_runtime_resume(dev);
- 	/* check whether cable status changed */
- 	twl4030_usb_irq(0, twl);
- 
-+	twl->runtime_suspended = 0;
-+
- 	return 0;
- }
- 
-@@ -422,6 +435,8 @@ static int __maybe_unused twl4030_usb_runtime_suspend(struct device *dev)
- 	regulator_disable(twl->usb1v8);
- 	regulator_disable(twl->usb3v1);
- 
-+	twl->runtime_suspended = 1;
-+
- 	return 0;
- }
+ 	int ret;
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index 0ed434d..7d32c6b 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -34,6 +34,7 @@ enum phy_mode {
+ 	PHY_MODE_USB_DEVICE_HS,
+ 	PHY_MODE_USB_DEVICE_SS,
+ 	PHY_MODE_USB_OTG,
++	PHY_MODE_UART,
+ 	PHY_MODE_UFS_HS_A,
+ 	PHY_MODE_UFS_HS_B,
+ 	PHY_MODE_PCIE,
+@@ -70,6 +71,7 @@ enum phy_media {
+  * @power_on: powering on the phy
+  * @power_off: powering off the phy
+  * @set_mode: set the mode of the phy
++ * @get_mode_ext: get the extented mode of the phy
+  * @set_media: set the media type of the phy (optional)
+  * @set_speed: set the speed of the phy (optional)
+  * @reset: resetting the phy
+@@ -83,6 +85,7 @@ struct phy_ops {
+ 	int	(*power_on)(struct phy *phy);
+ 	int	(*power_off)(struct phy *phy);
+ 	int	(*set_mode)(struct phy *phy, enum phy_mode mode, int submode);
++	int	(*get_mode_ext)(struct phy *phy);
+ 	int	(*set_media)(struct phy *phy, enum phy_media media);
+ 	int	(*set_speed)(struct phy *phy, int speed);
  
 -- 
-2.32.0
+1.7.9.5
+
