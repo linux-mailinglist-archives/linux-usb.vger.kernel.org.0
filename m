@@ -2,103 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E833D7E0C
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 20:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD1A3D7E1C
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 20:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbhG0SyK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 14:54:10 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44970 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229763AbhG0SyJ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 14:54:09 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 2E3E660FC2;
-        Tue, 27 Jul 2021 18:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627412049;
-        bh=CnQx3wr81XaUEHfLwYxFZaNssvQsTE5pyNST2aM3DGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=O6wTrKBXok6bAFhOdOaSJHZcUocJ4HxPQD8/w1vrl9DMIuT00AAPgeiXtC5naPxvE
-         rZUASHsxZIpBxcD8OydtOVYLZbc8p7q2kMLqJVZJC+yUmVczh6SZyN+ESMPnyvECTM
-         nYtoEb5VmqaXFH3tfg6xVgtZ2bi+t5K4T/dr1/MfNTPATHBAwEc/nGesK+tcmo9I1D
-         Od70XrG2MRS/b/TaW/JR+jYGixEu8NqRZH/iTV49DQZDWSVQx+PcuUXgXYNlvtle4b
-         3nbRvFK3loD/hiQ4ZpYa873M2Ka8ws+Qq4XhSgUbQKvvd4ogn4Q1UOnlZYcw4j4hDU
-         j8BjDKmiMpLjg==
-Date:   Tue, 27 Jul 2021 14:54:08 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 5.13 06/21] USB: core: Fix incorrect pipe
- calculation in do_proc_control()
-Message-ID: <YQBWUG0w/5FB7a7S@sashalap>
-References: <20210727131908.834086-1-sashal@kernel.org>
- <20210727131908.834086-6-sashal@kernel.org>
- <YQAJ9LzK8S7tJqwR@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <YQAJ9LzK8S7tJqwR@kroah.com>
+        id S231200AbhG0Szw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 14:55:52 -0400
+Received: from relmlor2.renesas.com ([210.160.252.172]:35412 "EHLO
+        relmlie6.idc.renesas.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S230290AbhG0Szv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 14:55:51 -0400
+X-IronPort-AV: E=Sophos;i="5.84,274,1620658800"; 
+   d="scan'208";a="88899508"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 28 Jul 2021 03:55:50 +0900
+Received: from localhost.localdomain (unknown [10.226.92.236])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id BCEFF4005161;
+        Wed, 28 Jul 2021 03:55:47 +0900 (JST)
+From:   Biju Das <biju.das.jz@bp.renesas.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Biju Das <biju.das.jz@bp.renesas.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v5 5/6] dt-bindings: usb: renesas,usbhs: Document RZ/G2L bindings
+Date:   Tue, 27 Jul 2021 19:55:26 +0100
+Message-Id: <20210727185527.19907-6-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210727185527.19907-1-biju.das.jz@bp.renesas.com>
+References: <20210727185527.19907-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 03:28:20PM +0200, Greg Kroah-Hartman wrote:
->On Tue, Jul 27, 2021 at 09:18:53AM -0400, Sasha Levin wrote:
->> From: Alan Stern <stern@rowland.harvard.edu>
->>
->> [ Upstream commit b0863f1927323110e3d0d69f6adb6a91018a9a3c ]
->>
->> When the user submits a control URB via usbfs, the user supplies the
->> bRequestType value and the kernel uses it to compute the pipe value.
->> However, do_proc_control() performs this computation incorrectly in
->> the case where the bRequestType direction bit is set to USB_DIR_IN and
->> the URB's transfer length is 0: The pipe's direction is also set to IN
->> but it should be OUT, which is the direction the actual transfer will
->> use regardless of bRequestType.
->>
->> Commit 5cc59c418fde ("USB: core: WARN if pipe direction != setup
->> packet direction") added a check to compare the direction bit in the
->> pipe value to a control URB's actual direction and to WARN if they are
->> different.  This can be triggered by the incorrect computation
->> mentioned above, as found by syzbot.
->>
->> This patch fixes the computation, thus avoiding the WARNing.
->>
->> Reported-and-tested-by: syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com
->> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
->> Link: https://lore.kernel.org/r/20210712185436.GB326369@rowland.harvard.edu
->> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> Signed-off-by: Sasha Levin <sashal@kernel.org>
->> ---
->>  drivers/usb/core/devio.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
->> index 2218941d35a3..73b60f013b20 100644
->> --- a/drivers/usb/core/devio.c
->> +++ b/drivers/usb/core/devio.c
->> @@ -1133,7 +1133,7 @@ static int do_proc_control(struct usb_dev_state *ps,
->>  		"wIndex=%04x wLength=%04x\n",
->>  		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
->>  		ctrl->wIndex, ctrl->wLength);
->> -	if (ctrl->bRequestType & 0x80) {
->> +	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength) {
->>  		pipe = usb_rcvctrlpipe(dev, 0);
->>  		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
->>
->> --
->> 2.30.2
->>
->
->This is not needed in any kernel that does not also have 5cc59c418fde
->("USB: core: WARN if pipe direction != setup packet direction"), which
->showed up in 5.14-rc1, so please drop this from all of the AUTOSEL
->trees.
+Document RZ/G2L (R9A07G044L) SoC bindings.
 
-Will do, thanks!
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+---
+v4->v5:
+ * Added interrupts maxitems=1 for SoC's other than RZ/G2L.
+v3->v4:
+ * Added maxitems in interrupt property as per Rob's suggestion.
+v3:
+ * Updated the bindings as per the USBPHY control IP.
+---
+ .../bindings/usb/renesas,usbhs.yaml           | 26 +++++++++++++++++--
+ 1 file changed, 24 insertions(+), 2 deletions(-)
 
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+index ad73339ffe1d..012fe80a7611 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usbhs.yaml
+@@ -17,7 +17,9 @@ properties:
+           - const: renesas,rza1-usbhs
+ 
+       - items:
+-          - const: renesas,usbhs-r7s9210 # RZ/A2
++          - enum:
++              - renesas,usbhs-r7s9210   # RZ/A2
++              - renesas,usbhs-r9a07g044 # RZ/G2{L,LC}
+           - const: renesas,rza2-usbhs
+ 
+       - items:
+@@ -59,7 +61,8 @@ properties:
+       - description: USB 2.0 clock selector
+ 
+   interrupts:
+-    maxItems: 1
++    minItems: 1
++    maxItems: 4
+ 
+   renesas,buswait:
+     $ref: /schemas/types.yaml#/definitions/uint32
+@@ -108,6 +111,25 @@ required:
+   - clocks
+   - interrupts
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: renesas,usbhs-r9a07g044
++    then:
++      properties:
++        interrupts:
++          items:
++            - description: U2P_IXL_INT
++            - description: U2P_INT_DMA[0]
++            - description: U2P_INT_DMA[1]
++            - description: U2P_INT_DMAERR
++    else:
++      properties:
++        interrupts:
++          maxItems: 1
++
+ additionalProperties: false
+ 
+ examples:
 -- 
-Thanks,
-Sasha
+2.17.1
+
