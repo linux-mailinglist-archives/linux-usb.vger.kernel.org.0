@@ -2,113 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A963D7580
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 15:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 445DC3D75F7
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 15:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236517AbhG0NDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 09:03:18 -0400
-Received: from esa4.mentor.iphmx.com ([68.232.137.252]:49355 "EHLO
-        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232067AbhG0NDS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 09:03:18 -0400
-IronPort-SDR: kg/m50MYQjWj9ED0iNKahYjzyfYSluZxNYrvqLM6FR2QqcgvF6D/Bud9velCizRtx3dck1zEjA
- awSBR+mhcmhCcgheeYr0jio7536HVC+nygxR4yQCW7YYGiQ4qFM/qOz9Bay9gw/Anp7uDPekWy
- el8Zvr+EECyt5ukr9WFL1v96FsSe91bsKz/BarJEIkmA7kIA0DoPrfpnuRjUOoyJaE12HqRL6P
- shDa39IEXvHsjovWVei92VtMcQfPiutwAPoFaTBEm8/+9iF7nedLVqdJ4tI5Cc85cpfIocbqav
- +EO0gzvnf2Owh4kmSsE8ZJuV
-X-IronPort-AV: E=Sophos;i="5.84,273,1620720000"; 
-   d="scan'208";a="64139301"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa4.mentor.iphmx.com with ESMTP; 27 Jul 2021 05:03:18 -0800
-IronPort-SDR: TlCf17dvliU+83uqfaiFG6fVvp+nXckyDok76aSMMq60WINFGVAoAeyOF5EgQKTgNnyCN1mAB8
- hDPYipJMKBOpPNRJHuJ2HHmGIvmYYPw/D/sCpYaWj7vEz7/PTVTUfDJxkRiYhYdNSMnmpVtd3v
- qUFiD0xbUj2VDilKepMqnKTbvnJoJskL/Qmz4MSmA4Bug3wLeCKrFHf3zQD3xN5D1wMHYLcL43
- U0wb36XZk+pjR7YZp87btsbHFvWw48t65STYb8lsa3NFvxOUPmNX+/qIMdeTf1KGEdw+FCg0q1
- O94=
-From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-To:     AMoonRabbit <razgriz.wilson6@gmail.com>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
-Thread-Topic: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
-Thread-Index: AQHXgnc1OBuFQo+G60aTmW/ZGwqjqqtWSBcAgAAnYmCAACiMgIAALrSg
-Date:   Tue, 27 Jul 2021 13:02:51 +0000
-Message-ID: <2c9ddbc65d1e4ce3a368c1d894281178@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <QUKVWQ.1T8HV94AM5X6@gmail.com>
-        <CAJpVOidqd+tpNNkHGvC6fUQ7g3Z+FLpiDJrmPWtQmiL-AsYsLw@mail.gmail.com>
-        <YP+kqqimY1BYZAwL@kroah.com>
-        <a59c1173b77b4ace8db7181b1b0fc446@SVR-IES-MBX-03.mgc.mentorg.com>
- <RBHWWQ.R54EUTRRR5DN@gmail.com>
-In-Reply-To: <RBHWWQ.R54EUTRRR5DN@gmail.com>
-Accept-Language: de-DE, en-IE, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [137.202.0.90]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S236881AbhG0NUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 09:20:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236741AbhG0NTv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:19:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7E95C61A8C;
+        Tue, 27 Jul 2021 13:19:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1627391957;
+        bh=udT0J8LbuFSyRMXl5YH7r4HlqXhQ2HNqHnm2/jMlvEw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=L0kXNjGxXP0sFs/nxbbkbuFjkzLBsAJ09TTe0sLBeept+yL6FhXkUspd/vhUlwk6t
+         ivkM1j6J7xLiD+DELYR022hypdEcJHLhmSh68mVLCybwuyHORf0fcyo4HLxrsCNIkv
+         KOUkMuSqSkax+OcY1ERNEc74IPALi9gjxnoVILPsXxjOtDHKw4KJZIpWp0gDFsfIiw
+         wkbB19JCQ091BSkEKIr/esrSedaz/5Yqg5unKAgF4uMWKSLtWs2v+cf7oTBSd3n3X8
+         dgDPOeEykrClXkXlxGk7wsRhAqyEJEjTiGgSNL5lPMxWqniX6s4crRaor29PmrQRO2
+         +TgrxdxbstN5A==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.13 06/21] USB: core: Fix incorrect pipe calculation in do_proc_control()
+Date:   Tue, 27 Jul 2021 09:18:53 -0400
+Message-Id: <20210727131908.834086-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210727131908.834086-1-sashal@kernel.org>
+References: <20210727131908.834086-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-SGkgTmVpbCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBTW9vblJh
-YmJpdCA8cmF6Z3Jpei53aWxzb242QGdtYWlsLmNvbT4NCg0KTm8gdG9wIHBvc3RzIHBsZWFzZS4N
-Cg0KT24gVHVlLCAyNyBKdWwsIDIwMjEgYXQgNzo0MyBhbSwgIlNjaG1pZCwgQ2Fyc3RlbiINCjxD
-YXJzdGVuX1NjaG1pZEBtZW50b3IuY29tPiB3cm90ZToNCj4gSGkgR3JlZywNCj4NCj4gT24gVHVl
-LCBKdWwgMjcsIDIwMjEgYXQgMTI6Mzc6MjhBTSArMDEwMCwgUmF6Z3JpejM3NSAoTmVpbCkgd3Jv
-dGU6DQo+DQo+Pj4gIFsgIDEwOS42Njg0NjVdIHVzYiAxLTE6IFVTQiBkaXNjb25uZWN0LCBkZXZp
-Y2UgbnVtYmVyIDINCj4+PiAgWyAgMTEwLjA4NDQyOV0gdXNiIDEtMTogbmV3IGhpZ2gtc3BlZWQg
-VVNCIGRldmljZSBudW1iZXIgNSB1c2luZw0KPj4+IHhoY2lfaGNkDQo+Pj4gIFsgIDExMC4yMzc5
-NjNdIHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPj4+IGlk
-UHJvZHVjdD0wYjhjLCBiY2REZXZpY2U9IDEuMDANCj4+PiAgWyAgMTEwLjIzNzk4OV0gdXNiIDEt
-MTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTIsIFByb2R1Y3Q9MywNCj4+PiBTZXJpYWxO
-dW1iZXI9NA0KPj4+ICBbICAxMTAuMjM4MDAyXSB1c2IgMS0xOiBQcm9kdWN0OiBXQUxLTUFODQo+
-Pj4gIFsgIDExMC4yMzgwMTFdIHVzYiAxLTE6IE1hbnVmYWN0dXJlcjogU29ueQ0KPj4+ICBbICAx
-MTAuMjM4MDE5XSB1c2IgMS0xOiBTZXJpYWxOdW1iZXI6IDEwNDU4QjU1NDc3OTE2DQo+Pj4gIFsg
-IDExMC4zNDIxMDRdIHVzYiAxLTE6IDE6NyA6IHVuc3VwcG9ydGVkIGZvcm1hdCBiaXRzIDB4MTAw
-MDAwMDAwDQo+Pj4gIFsgIDExMC4zNDM5NTNdIHVzYmNvcmU6IHJlZ2lzdGVyZWQgbmV3IGludGVy
-ZmFjZSBkcml2ZXINCj4+PiBzbmQtdXNiLWF1ZGlvDQo+Pj4NCj4+DQo+Pg0KPj4gIExvb2tzIGxp
-a2UgeW91IHJlbW92ZWQgdGhlIGRldmljZSBhbmQgdGhlbiBhZGRlZCBpdCBiYWNrPyAgQW5kIGl0
-DQo+PiBzYXlzDQo+PiAgdGhlIGRldmljZSBpcyBzdXBwb3J0ZWQgYnkgdGhlIGtlcm5lbCBub3cs
-IHdoYXQgZG9lcyBub3Qgd29yaw0KPj4gcHJvcGVybHk/DQo+DQo+IEJ1dCBlYXJsaWVyIGluIGJv
-b3QgdGhlc2UgbWVzc2FnZXMgYXJlIHNlZW46DQo+IFsgICAgMS45MDg0ODldIHVzYiAxLTE6IE5l
-dyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPiBpZFByb2R1Y3Q9MGNhMSwgYmNk
-RGV2aWNlPSAxLjAwDQo+IFsgICAgMS45MDg1MDNdIHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIHN0
-cmluZ3M6IE1mcj0yLCBQcm9kdWN0PTMsDQo+IFNlcmlhbE51bWJlcj00DQo+IFsgICAgMS45MDg1
-MDhdIHVzYiAxLTE6IFByb2R1Y3Q6IFdBTEtNQU4NCj4gWyAgICAxLjkwODUxM10gdXNiIDEtMTog
-TWFudWZhY3R1cmVyOiBTb255DQo+IFsgICAgMS45MDg1MTZdIHVzYiAxLTE6IFNlcmlhbE51bWJl
-cjogMTA0NThCNTU0Nzc5MTYNCj4gWyAgICAyLjE5NTgyMV0gdXNiLXN0b3JhZ2UgMS0xOjEuMDog
-VVNCIE1hc3MgU3RvcmFnZSBkZXZpY2UgZGV0ZWN0ZWQNCj4gWyAgICAyLjE5NTk4OF0gc2NzaSBo
-b3N0MDogdXNiLXN0b3JhZ2UgMS0xOjEuMA0KPg0KPiBQcm9kdWN0SWQgaXMgZGlmZmVyZW50LCB0
-aGF0J3Mgc3RyYW5nZS4NCj4NCj4gTmVpbCwgY291bGQgeW91IGNvbGxlY3QgdGhlIGRtZXNnIGZy
-b20gdGhlIHdvcmtpbmcga2VybmVsIDUuMTAgcGxlYXNlPw0KPiBBbmQ6IGlzIHRoZSBkZXZpY2Ug
-ZXhwZWN0ZWQgdG8gYmUgYSBtYXNzIHN0b3JhZ2UgKGFrYSBVU0IgZGlzaykgYW5kDQo+IHNvdW5k
-IGNhcmQgaW4gb25lPw0KPg0KDQo+IFNvIHRoaXMgaXMgdGhlIERtZXNnIG91dHB1dCBmcm9tIDUu
-MTAuMTcgd2l0aCB3b3JraW5nIG91dHB1dCB0byBVU0IgREFDDQo+IChXYWxrbWFuIHZpc3VhbGx5
-IGdldHMgYXVkaW8gYXMgdGhlIGFtcCBtZXRlciB2aXN1YWxpc2VyIHdvcmtzIHdoZXJlIGFzDQo+
-IG9uIG5ld2VyIGtlcm5lbHMsIHdoaWxzdCB0aGUgc3lzdGVtIGxvb2tzIHRvIGJlIG91dHB1dHRp
-bmcgc291bmQsIHRoZQ0KPiBXYWxrbWFuIHNob3dzIGl0J3MgcmVjZWl2aW5nIG5vdGhpbmcpLg0K
-Li4uDQo+IFsgICAxMi4yMDIzMTJddXNiIDEtMTogbmV3IGhpZ2gtc3BlZWQgVVNCIGRldmljZSBu
-dW1iZXIgMyB1c2luZyB4aGNpX2hjZA0KPiBbICAgMTIuMzUxODM4XXVzYiAxLTE6IE5ldyBVU0Ig
-ZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPiBpZFByb2R1Y3Q9MGI4YywgYmNkRGV2aWNl
-PSAxLjAwDQo+IFsgICAxMi4zNTE4NDRddXNiIDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczog
-TWZyPTIsIFByb2R1Y3Q9MywNCj4gU2VyaWFsTnVtYmVyPTQNCj4gWyAgIDEyLjM1MTg0N111c2Ig
-MS0xOiBQcm9kdWN0OiBXQUxLTUFODQo+IFsgICAxMi4zNTE4NTBddXNiIDEtMTogTWFudWZhY3R1
-cmVyOiBTb255DQo+IFsgICAxMi4zNTE4NTJddXNiIDEtMTogU2VyaWFsTnVtYmVyOiAxMDQ1OEI1
-NTQ3NzkxNg0KPiBbICAgMzguNTYwMTcyXXVzYiAxLTE6IDE6NyA6IHVuc3VwcG9ydGVkIGZvcm1h
-dCBiaXRzIDB4MTAwMDAwMDAwDQo+IFsgICAzOC41NjI3NTBddXNiY29yZTogcmVnaXN0ZXJlZCBu
-ZXcgaW50ZXJmYWNlIGRyaXZlciBzbmQtdXNiLWF1ZGlvDQo+IFsgICAzOC42MzA5OTVdc25kX2hk
-YV9pbnRlbCAwMDAwOjAwOjFmLjM6IERTUCBkZXRlY3RlZCB3aXRoIFBDSQ0KPiBjbGFzcy9zdWJj
-bGFzcy9wcm9nLWlmIGluZm8gMHgwNDAzODANCg0KTG9va3MgbGlrZSBvbiB0aGUgb2xkIGtlcm5l
-bCB0aGUgV2Fsa21hbiBpcyBzZWVuIGFzIHRoZSBmaXJzdCBzb3VuZCBjYXJkLg0KT24gdGhlIG5l
-dyBrZXJuZWwsIGl0IHdhcyBzZWVuIGFzIGEgbWFzcyBzdG9yYWdlIGZpcnN0IGFuZCBsYXRlciBz
-d2l0Y2hlZCB0byBzbmQtdXNiLg0KUGxlYXNlIGNoZWNrIGlmIHlvdXIgV2Fsa21hbiBhcHBlYXJz
-IGFzIGEgc291bmQgY2FyZCBpbiB0aGUgbmV3IGtlcm5lbA0KYW5kIGlmIGl0IGlzIG11dGVkIGR1
-ZSB0byBub3QgYmVpbmcgdGhlIGRlZmF1bHQgb3V0cHV0Lg0KDQpUaGFua3MsDQpDYXJzdGVuDQot
-LS0tLS0tLS0tLS0tLS0tLQ0KU2llbWVucyBFbGVjdHJvbmljIERlc2lnbiBBdXRvbWF0aW9uIEdt
-Ykg7IEFuc2NocmlmdDogQXJudWxmc3RyYcOfZSAyMDEsIDgwNjM0IE3DvG5jaGVuOyBHZXNlbGxz
-Y2hhZnQgbWl0IGJlc2NocsOkbmt0ZXIgSGFmdHVuZzsgR2VzY2jDpGZ0c2bDvGhyZXI6IFRob21h
-cyBIZXVydW5nLCBGcmFuayBUaMO8cmF1ZjsgU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBNw7xuY2hl
-bjsgUmVnaXN0ZXJnZXJpY2h0IE3DvG5jaGVuLCBIUkIgMTA2OTU1DQo=
+From: Alan Stern <stern@rowland.harvard.edu>
+
+[ Upstream commit b0863f1927323110e3d0d69f6adb6a91018a9a3c ]
+
+When the user submits a control URB via usbfs, the user supplies the
+bRequestType value and the kernel uses it to compute the pipe value.
+However, do_proc_control() performs this computation incorrectly in
+the case where the bRequestType direction bit is set to USB_DIR_IN and
+the URB's transfer length is 0: The pipe's direction is also set to IN
+but it should be OUT, which is the direction the actual transfer will
+use regardless of bRequestType.
+
+Commit 5cc59c418fde ("USB: core: WARN if pipe direction != setup
+packet direction") added a check to compare the direction bit in the
+pipe value to a control URB's actual direction and to WARN if they are
+different.  This can be triggered by the incorrect computation
+mentioned above, as found by syzbot.
+
+This patch fixes the computation, thus avoiding the WARNing.
+
+Reported-and-tested-by: syzbot+72af3105289dcb4c055b@syzkaller.appspotmail.com
+Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+Link: https://lore.kernel.org/r/20210712185436.GB326369@rowland.harvard.edu
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/core/devio.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+index 2218941d35a3..73b60f013b20 100644
+--- a/drivers/usb/core/devio.c
++++ b/drivers/usb/core/devio.c
+@@ -1133,7 +1133,7 @@ static int do_proc_control(struct usb_dev_state *ps,
+ 		"wIndex=%04x wLength=%04x\n",
+ 		ctrl->bRequestType, ctrl->bRequest, ctrl->wValue,
+ 		ctrl->wIndex, ctrl->wLength);
+-	if (ctrl->bRequestType & 0x80) {
++	if ((ctrl->bRequestType & USB_DIR_IN) && ctrl->wLength) {
+ 		pipe = usb_rcvctrlpipe(dev, 0);
+ 		snoop_urb(dev, NULL, pipe, ctrl->wLength, tmo, SUBMIT, NULL, 0);
+ 
+-- 
+2.30.2
+
