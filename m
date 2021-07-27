@@ -2,146 +2,216 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A563D7EC4
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 22:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C090C3D8052
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 23:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbhG0UAV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 16:00:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40750 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231204AbhG0UAO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 16:00:14 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id ED0CF60FA0;
-        Tue, 27 Jul 2021 20:00:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627416014;
-        bh=7gbluUXqRRDrRRn0YT85HoIea0afHl4fXkBq3wS8myc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZuKh0QZIr0bo4IkkVxJ+KGIS7CN6C3qN0vMjFXehfb5lPWADe0PwPwsnk1qMM5vvO
-         HlWCTVM4ZzSaJEPtmoNUa1vsliz463WcrdCQN1lkHHswUKgaNNtq29styVqu3BjN7r
-         JYjOpWXSrkVvfQxj9Ek6rU+aJOXdBkncGx3bb9Y1mzLSX2u2tkkakG1hfNRYcUUq4e
-         inTy+HHa8/MPQbmrfH3/IPLKgDL9lIMIjHc7+pUM2DHjS9wtjN7iT01LHakbA2lpny
-         sQF0HUZcKsDMvVwqgSaSNCqv1JR5iOvrYNY91Aq7W+oxmNXRaUF211VLnU6VOI+NyL
-         UUZx8tXVJZbzw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E1C38609CC;
-        Tue, 27 Jul 2021 20:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S235024AbhG0VBg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 17:01:36 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:63647 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234451AbhG0VAc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 17:00:32 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1627419631; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Kq1881QGwVFiiS4S0da3eS/MhMFX22cv5dovHiGH+eE=; b=RixwWH2T2kBRdxwdHdFYkFVsiFA6bzHcBGj7xMlgO7IIDBQEUVUmD/DCQxllJJDIY5PWVTvs
+ zO1JHkloBHHEKBSepO7VI3tEFyqHggO50aD7w3o/N4IsZCpASoHYsvRcGytT8165R2IsVikT
+ q/5grSbAZG+eTryIlDpb7JGeh88=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-east-1.postgun.com with SMTP id
+ 610073e417c2b4047d539d4b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 27 Jul 2021 21:00:20
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A45A0C43152; Tue, 27 Jul 2021 21:00:19 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.3 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [10.110.37.24] (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 1DC5CC43148;
+        Tue, 27 Jul 2021 21:00:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 1DC5CC43148
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace list_for_each_entry_safe()
+ if using giveback
+To:     Felipe Balbi <balbi@kernel.org>, gregkh@linuxfoundation.org,
+        peter.chen@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
+ <87tun9g01v.fsf@kernel.org>
+ <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
+ <5156238d-c1d8-a0d3-47af-8b52467fd071@codeaurora.org>
+ <fc346f3c-6e3d-b96c-d64a-2ae4cf4218d4@codeaurora.org>
+ <87v954xjoz.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <3c55dd4f-5ebd-3730-7428-cb15235465a7@codeaurora.org>
+Date:   Tue, 27 Jul 2021 14:00:16 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 00/31] ndo_ioctl rework
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162741601391.17427.11630081272562695042.git-patchwork-notify@kernel.org>
-Date:   Tue, 27 Jul 2021 20:00:13 +0000
-References: <20210727134517.1384504-1-arnd@kernel.org>
-In-Reply-To: <20210727134517.1384504-1-arnd@kernel.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kuba@kernel.org, davem@davemloft.net, arnd@arndb.de,
-        j.vosburgh@gmail.com, vfalico@gmail.com, andy@greyhouse.net,
-        rajur@chelsio.com, t.sailer@alumni.ethz.ch, jreuter@yaina.de,
-        jpr@f6fbb.org, jes@trained-monkey.org, khc@pm.waw.pl,
-        kevin.curtis@farsite.co.uk, qiang.zhao@nxp.com, ms@dev.tdt.de,
-        kvalo@codeaurora.org, j@w1.fi, jwi@linux.ibm.com,
-        kgraul@linux.ibm.com, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        roopa@nvidia.com, nikolay@nvidia.com, steffen.klassert@secunet.com,
-        herbert@gondor.apana.org.au, courmisch@gmail.com, andrew@lunn.ch,
-        hch@lst.de, linux-parisc@vger.kernel.org,
-        linux-hams@vger.kernel.org, linux-hippi@sunsite.dk,
-        linux-ppp@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-x25@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-s390@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
+In-Reply-To: <87v954xjoz.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+Hi Felipe,
 
-This series was applied to netdev/net-next.git (refs/heads/master):
-
-On Tue, 27 Jul 2021 15:44:46 +0200 you wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 7/20/2021 11:30 PM, Felipe Balbi wrote:
 > 
-> This series is a follow-up to the series for removing
-> compat_alloc_user_space() and copy_in_user() that has now
-> been merged.
+> Hi Wesley,
 > 
-> I wanted to be sure I address all the ways that 'struct ifreq' is used
-> in device drivers through .ndo_do_ioctl, originally to prove that
-> my approach of changing the struct definition was correct, but then
-> I discarded that approach and went on anyway.
+> (first of all, sorry for the super long delay. This really fell through
+> the cracks)
 > 
-> [...]
 
-Here is the summary with links:
-  - [net-next,v3,01/31] net: split out SIOCDEVPRIVATE handling from dev_ioctl
-    https://git.kernel.org/netdev/net-next/c/b9067f5dc4a0
-  - [net-next,v3,02/31] staging: rtlwifi: use siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/89939e890605
-  - [net-next,v3,03/31] staging: wlan-ng: use siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/3343c49a959d
-  - [net-next,v3,04/31] hostap: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/3f3fa5340745
-  - [net-next,v3,05/31] bridge: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/561d8352818f
-  - [net-next,v3,06/31] phonet: use siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/4747c1a8bc50
-  - [net-next,v3,07/31] tulip: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/029a4fef6b22
-  - [net-next,v3,08/31] bonding: use siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/232ec98ec35d
-  - [net-next,v3,09/31] appletalk: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/dbecb011eb78
-  - [net-next,v3,10/31] hamachi: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/99b78a37a371
-  - [net-next,v3,11/31] tehuti: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/32d05468c462
-  - [net-next,v3,12/31] eql: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/d92f7b59d32b
-  - [net-next,v3,13/31] fddi: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/043393d8b478
-  - [net-next,v3,14/31] net: usb: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/ef1b5b0c30bc
-  - [net-next,v3,15/31] slip/plip: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/76b5878cffab
-  - [net-next,v3,16/31] qeth: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/18787eeebd71
-  - [net-next,v3,17/31] cxgb3: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/ebb4a911e09a
-  - [net-next,v3,18/31] hamradio: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/25ec92fbdd23
-  - [net-next,v3,19/31] airo: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/ae6af0120dda
-  - [net-next,v3,20/31] ip_tunnel: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/3e7a1c7c561e
-  - [net-next,v3,21/31] hippi: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/81a68110a22a
-  - [net-next,v3,22/31] sb1000: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/cc0aa831a0d9
-  - [net-next,v3,23/31] ppp: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/34f7cac07c4e
-  - [net-next,v3,24/31] wan: use ndo_siocdevprivate
-    https://git.kernel.org/netdev/net-next/c/73d74f61a559
-  - [net-next,v3,25/31] wan: cosa: remove dead cosa_net_ioctl() function
-    https://git.kernel.org/netdev/net-next/c/8fb75b79cd98
-  - [net-next,v3,26/31] dev_ioctl: pass SIOCDEVPRIVATE data separately
-    https://git.kernel.org/netdev/net-next/c/a554bf96b49d
-  - [net-next,v3,27/31] dev_ioctl: split out ndo_eth_ioctl
-    https://git.kernel.org/netdev/net-next/c/a76053707dbf
-  - [net-next,v3,28/31] net: split out ndo_siowandev ioctl
-    https://git.kernel.org/netdev/net-next/c/ad7eab2ab014
-  - [net-next,v3,29/31] net: socket: return changed ifreq from SIOCDEVPRIVATE
-    https://git.kernel.org/netdev/net-next/c/88fc023f7de2
-  - [net-next,v3,30/31] net: bridge: move bridge ioctls out of .ndo_do_ioctl
-    https://git.kernel.org/netdev/net-next/c/ad2f99aedf8f
-  - [net-next,v3,31/31] net: bonding: move ioctl handling to private ndo operation
-    https://git.kernel.org/netdev/net-next/c/3d9d00bd1885
+No problem, I understand that you probably get a whole bunch of things
+all at once, so its hard to keep track of each one :).
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+>> Hi Felipe,
+>>
+>> On 6/9/2021 1:57 PM, Wesley Cheng wrote:
+>>> Hi Felipe,
+>>>
+>>> On 5/19/2021 1:52 AM, Wesley Cheng wrote:
+>>>>
+>>>>
+>>>> On 5/11/2021 1:13 AM, Felipe Balbi wrote:
+>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> Wesley Cheng <wcheng@codeaurora.org> writes:
+>>>>>> The list_for_each_entry_safe() macro saves the current item (n) and
+>>>>>> the item after (n+1), so that n can be safely removed without
+>>>>>> corrupting the list.  However, when traversing the list and removing
+>>>>>> items using gadget giveback, the DWC3 lock is briefly released,
+>>>>>> allowing other routines to execute.  There is a situation where, while
+>>>>>> items are being removed from the cancelled_list using
+>>>>>> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+>>>>>> routine is running in parallel (due to UDC unbind).  As the cleanup
+>>>>>> routine removes n, and the pullup disable removes n+1, once the
+>>>>>> cleanup retakes the DWC3 lock, it references a request who was already
+>>>>>> removed/handled.  With list debug enabled, this leads to a panic.
+>>>>>> Ensure all instances of the macro are replaced where gadget giveback
+>>>>>> is used.
+>>>>>>
+>>>>>> Example call stack:
+>>>>>>
+>>>>>> Thread#1:
+>>>>>> __dwc3_gadget_ep_set_halt() - CLEAR HALT
+>>>>>>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+>>>>>>     ->list_for_each_entry_safe()
+>>>>>>     ->dwc3_gadget_giveback(n)
+>>>>>>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+>>>>>>       ->spin_unlock
+>>>>>>       ->Thread#2 executes
+>>>>>>       ...
+>>>>>>     ->dwc3_gadget_giveback(n+1)
+>>>>>>       ->Already removed!
+>>>>>>
+>>>>>> Thread#2:
+>>>>>> dwc3_gadget_pullup()
+>>>>>>   ->waiting for dwc3 spin_lock
+>>>>>>   ...
+>>>>>>   ->Thread#1 released lock
+>>>>>>   ->dwc3_stop_active_transfers()
+>>>>>>     ->dwc3_remove_requests()
+>>>>>>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+>>>>>>       ->dwc3_gadget_giveback()
+>>>>>>         ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
+>>>>>>         ->spin_unlock
+>>>>>>
+>>>>>> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>>>>> Reviewed-by: Peter Chen <peter.chen@kernel.org>
+>>>>>> ---
+>>>>>> Changes in v2:
+>>>>>>  - Updated commit message with context call stack of an example scenario
+>>>>>>    seen on device.
+>>>>>>
+>>>>>>  drivers/usb/dwc3/gadget.c | 8 ++++----
+>>>>>>  1 file changed, 4 insertions(+), 4 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>>> index dd80e5c..efa939b 100644
+>>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>>> @@ -1737,10 +1737,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
+>>>>>>  static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+>>>>>>  {
+>>>>>>  	struct dwc3_request		*req;
+>>>>>> -	struct dwc3_request		*tmp;
+>>>>>>  	struct dwc3			*dwc = dep->dwc;
+>>>>>>  
+>>>>>> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+>>>>>> +	while (!list_empty(&dep->cancelled_list)) {
+>>>>>> +		req = next_request(&dep->cancelled_list);
+>>>>>
+>>>>> couldn't this be solved list_replace_init() instead? Then we can keep
+>>>>> using the regular list_for_each_entry_safe() which has an added semantic
+>>>>> meaning due to its name.
+>>>>>
+>>>>
+>>>> Hi Felipe,
+>>>>
+>>>> Sorry for the late response.  So I tried with a list_replace_init() to
+>>>> within the list_for_each_entry_safe() loop to update tmp w/ the
+>>>> cancelled_list list head, but the issue was still observed.  This is
+>>>> because we can't replace the reference the loop already has stored in
+>>>> tmp, which is simply updated as the current item on the next iteration.
+>>>>
+>>>> I believe this is what you were trying to achieve?
+>>>>
+>>> Was wondering if you had any further inputs on this change?  As
+>>> mentioned, I tried a few things with list_replace_init(), which did not
+>>> work.
+>>>
+>>
+>> Sorry for the ping.  Is this change OK to add as is?  We've been running
+>> into this instance pretty frequently during our testing, so just wanted
+>> to close on the proper changes being merged upstream.
+> 
+> The idea is this:
+> 
+> 	struct list_head	local;
+> 
+>         spin_lock_irq(&lock);
+>         list_replace_init(&dwc->cancelled_list, &local);
+>         spin_unlock_irq(&lock);
+> 
+> 	list_for_each_entry_safe(req, tmp, &local, list) {
+>         	/* ... */
+> 	}
+> 
+> It looks to me this should work fine, no? You can also follow what
+> drivers/usb/core/hcd.c is doing in usb_giveback_urb_bh() and restarting
+> if dwc->cancelled_list is not empty after list_for_each_entry_safe().
+> 
+> Can you give that one a shot?
+> 
 
+Great, thanks for this suggestion!  Now I understand what you were
+referring to.  I gave this a try and it works well.  Will prepare a
+change to replace both places with list_replace_init()
 
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
