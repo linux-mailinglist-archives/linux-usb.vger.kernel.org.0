@@ -2,39 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4233D761C
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 15:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2723D7673
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 15:29:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237158AbhG0NXk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 09:23:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57240 "EHLO mail.kernel.org"
+        id S236981AbhG0N3F (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 09:29:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56496 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236862AbhG0NUR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 27 Jul 2021 09:20:17 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8A1661AAD;
-        Tue, 27 Jul 2021 13:19:45 +0000 (UTC)
+        id S236946AbhG0NU3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Jul 2021 09:20:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 3D20061AFA;
+        Tue, 27 Jul 2021 13:20:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627391986;
-        bh=TDI08tLR/NnGq08rpgOJHeEMoqEPTSQ5y6xMVG/q2c4=;
+        s=k20201202; t=1627392008;
+        bh=IOb5L09PKj7J3uOQVbZ+w3JTUbB0AwULpZmvMN+jWv4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dgvin16CDifLFf1ORhcCi3A4Z0sa4qkwXxAJnpgYGsy7QeYNX1LU/zk5DdHkZv/Qp
-         FSudjV9B8aoqkUk19Gex0jzk3uqTyG3oid/EXjzdViWVP+AJElsgXrtsk+Z0k3Bdmr
-         OHScCstO0AKgHd8lIKBNkDHkhc8kFOxNqAaDpU1Q1TmwyLbU7oYgYRVfAnh4Dx7q5p
-         JdJ3mg+t3VzowrYr91Haz1k8MT0cWbTw/i6PFFtFC6CYjq4Qfz1DwIjchyenfZrMtv
-         CJoMw3mNWicyuNI3vYsgUSitkf7FJIEJhEoZCrwBIw+4MygsbcHgeQsShivGB8OLcU
-         +AXB1g0hCzrBQ==
+        b=Z75lfNDD9fvjUp1ukypVGbV1txqgtOqXA73oon1muDN2tvSoVH5iZEOLHppQ0C0FU
+         Dds4v0iMJyJajACmOWsns5AyYhZL0evbQYiORFJcE8/cdiw9sD8KEDsmg1qgfdNMIT
+         uI+8zXeKop2jF6NNQPy71BasW+CHoW3MhgH3OPFPU1BZcUepU/sQPaddxDCiAreNBG
+         nM0hmYtP2+8mtO8dYDTYj7RYwMvp8zZQxeUgwifa3blxrPDn9Lt75KCBuCivItjyrC
+         BtJYnnWd8hsy2f0ExOYV8DBUPvPL4Txw8t4SPVZOS+XdKdDkV2IKIxiQHx2EUX8FSe
+         Oo9Caa9YOya1w==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Takashi Iwai <tiwai@suse.de>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
         netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 06/17] r8152: Fix potential PM refcount imbalance
-Date:   Tue, 27 Jul 2021 09:19:27 -0400
-Message-Id: <20210727131938.834920-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 4/9] r8152: Fix potential PM refcount imbalance
+Date:   Tue, 27 Jul 2021 09:19:56 -0400
+Message-Id: <20210727132002.835130-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210727131938.834920-1-sashal@kernel.org>
-References: <20210727131938.834920-1-sashal@kernel.org>
+In-Reply-To: <20210727132002.835130-1-sashal@kernel.org>
+References: <20210727132002.835130-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -60,10 +60,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 95e27fb7d2c1..105622e1defa 100644
+index 24d124633037..873f288e7cec 100644
 --- a/drivers/net/usb/r8152.c
 +++ b/drivers/net/usb/r8152.c
-@@ -5282,9 +5282,10 @@ static int rtl8152_close(struct net_device *netdev)
+@@ -4317,9 +4317,10 @@ static int rtl8152_close(struct net_device *netdev)
  		tp->rtl_ops.down(tp);
  
  		mutex_unlock(&tp->control);
