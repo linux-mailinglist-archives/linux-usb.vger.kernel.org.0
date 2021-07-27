@@ -2,301 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4E63D797B
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 17:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C193D7A21
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 17:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237053AbhG0PNZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 11:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237036AbhG0PNV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 11:13:21 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FC9C0613C1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 08:13:20 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id ie12-20020a17090b400cb029017320bd1351so4646277pjb.1
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 08:13:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=hbGtnsIAzxr6tiUv7BNyp1DfTM1V3RQ/gpLoDyjw7h4=;
-        b=OGR/DHizIFvoeZavNRaqUL3+y6L8WzeRBOOndgl94sRCYx59qK5N8gKk5UGXPfvlTG
-         95Fc2/3UG+z44lAP+rT0lwvdt2WeY32EAIi8dASfF1aKa132+zgsH+8z5toBU9/Dfhjx
-         PChqutqyOYmVt8vLxPzvpGxnAEdeJ3QCJ8JYFYwB5RGXZJi1xGEk/suySvTGmGfiZTxv
-         bf1dZwM7wTTfQPy3s3yc1Hh+exw8oV1dqP94JvaYwRVOyGZjlSkpxcaEhT+YViQNtUHt
-         hjjR9HiO56iggvMM11Oxdqo3uP9iRc6/6p6MHNxYRZpLs19IX6DqzXRJEYUBpBHeq+Qi
-         Dnig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=hbGtnsIAzxr6tiUv7BNyp1DfTM1V3RQ/gpLoDyjw7h4=;
-        b=UkXix/GWdSStMfD1y0w3VEZBbzTejBu2ZkBvnKZXgxJ5UkJA0zMFi3CDMFmURsSa84
-         BTbBiI0A54fzWAEDAkkhvVCSbo/xvRlAt00XqkqYkjjbWSpMCVVtp2dKUOlXlb0flCXy
-         7KVWwhIk//F/cyfGK1uPOMHBfkhpJ1nUnMzgX58KMR5FQvtzV4IBSdap3QxXfu1Vx7Gd
-         EwDyhzc3j/69QqByxd99kCq7jCViJaS3CvUrsL4JDMPy6oRg9tN4bplyqLCO7UUtnMUr
-         mTLnOLXOcKDypN9/gwQ2rmEVHFiMux/JuFiykqPL0vskhmwhc21tH8FivwjfuJuLJ76j
-         HcQQ==
-X-Gm-Message-State: AOAM531lO8D256XPdOrBfOybW7TqAjg3u+oj6Sw1BgEm/HsSJKNC9/nC
-        +sW9D29bmZOHnk8EHCBprIdfTW30UwEG
-X-Google-Smtp-Source: ABdhPJy4bCselEXuoX3UVrzUMZ4jb0x8Kpqxznmzuac+GSP2eSARHKtIDNWX+CY+F1M3jT7SXdzTEMJJCr6u
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:da7f:a21b:ee74:66a2])
- (user=kyletso job=sendgmr) by 2002:a17:90b:3556:: with SMTP id
- lt22mr4848786pjb.174.1627398799814; Tue, 27 Jul 2021 08:13:19 -0700 (PDT)
-Date:   Tue, 27 Jul 2021 23:13:07 +0800
-In-Reply-To: <20210727151307.2178352-1-kyletso@google.com>
-Message-Id: <20210727151307.2178352-3-kyletso@google.com>
-Mime-Version: 1.0
-References: <20210727151307.2178352-1-kyletso@google.com>
-X-Mailer: git-send-email 2.32.0.432.gabb21c7263-goog
-Subject: [PATCH v2 2/2] usb: typec: tcpm: Support non-PD mode
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S232641AbhG0Prn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 11:47:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52502 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229615AbhG0Prm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 27 Jul 2021 11:47:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 1D57561B5F;
+        Tue, 27 Jul 2021 15:47:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627400862;
+        bh=T2OynXLQute/CObqcpAc6AwCb5VlWeu8sz1CRfPb59A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AEn/jux6OgifFmTTfOYSN3BaeRUwqiDjuv/Ytp1cKSQ2BBFP1/45VXvJH3RqbN/kq
+         98sIFzpSxxj/7BuWdfKG+UQfI2Bnp/h2FR7SjE52xPlY1nOp8j6Dy9ZpF1SBbwTddS
+         9u406fxplciVaG08kLaetZbPcU7tAiVXqZxUR5Oc=
+Date:   Tue, 27 Jul 2021 17:47:40 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        Christian Kellner <ckellner@redhat.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: Re: [PATCH] Revert "thunderbolt: Hide authorized attribute if router
+ does not support PCIe tunnels"
+Message-ID: <YQAqnHL2E/QUHVnk@kroah.com>
+References: <20210727142501.27476-1-mika.westerberg@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210727142501.27476-1-mika.westerberg@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Even if the Type-C controller supports PD, it is doable to disable PD
-capabilities with the current state machine in TCPM. Without enabling RX
-in low-level drivers and with skipping the power negotiation, the port
-is eligible to be a non-PD Type-C port. Use new flags whose values are
-populated from the device tree to decide the port PD capability. Adding
-"pd-supported" property in device tree indicates that the port supports
-PD. If "pd-supported" is not found, "typec-power-opmode" shall be added
-to specify the advertised Rp value if the port supports SRC role.
+On Tue, Jul 27, 2021 at 05:25:01PM +0300, Mika Westerberg wrote:
+> This reverts commit 6f3badead6a078cf3c71f381f9d84ac922984a00.
+> 
+> It turns out bolt depends on having authorized attribute visible under
+> each device. Hiding it makes bolt crash as several people have reported
+> on various bug trackers. For this reason revert the commit.
+> 
+> Link: https://gitlab.freedesktop.org/bolt/bolt/-/issues/174
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1979765
+> Link: https://bugs.archlinux.org/task/71569
+> Cc: stable@vger.kernel.org
+> Cc: Christian Kellner <ckellner@redhat.com>
+> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+>  drivers/thunderbolt/switch.c | 15 +--------------
+>  1 file changed, 1 insertion(+), 14 deletions(-)
 
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
-changes since v1:
-- Revised the patch to use dt properties
-- Added back the checks of callbacks set_pd_rx and pd_transmit
-- Added src_rp to indicate which Rp value should be used in SRC. This
-  variable is derived from dt property "typec-power-opmode"
+Want me to take this in my "usb-linus" tree now to get it into the tree
+sooner?  Or will you have other thunderbolt fixes for me soon?
 
- drivers/usb/typec/tcpm/tcpm.c | 108 +++++++++++++++++++++++++---------
- 1 file changed, 79 insertions(+), 29 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5b22a1c931a9..4cf77c787f54 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -316,6 +316,7 @@ struct tcpm_port {
- 	struct typec_partner *partner;
- 
- 	enum typec_cc_status cc_req;
-+	enum typec_cc_status src_rp;	/* work only if pd_supported == false */
- 
- 	enum typec_cc_status cc1;
- 	enum typec_cc_status cc2;
-@@ -323,6 +324,7 @@ struct tcpm_port {
- 
- 	bool attached;
- 	bool connected;
-+	bool pd_supported;
- 	enum typec_port_type port_type;
- 
- 	/*
-@@ -804,6 +806,7 @@ static void tcpm_apply_rc(struct tcpm_port *port)
- 	}
- }
- 
-+
- /*
-  * Determine RP value to set based on maximum current supported
-  * by a port if configured as source.
-@@ -815,6 +818,9 @@ static enum typec_cc_status tcpm_rp_cc(struct tcpm_port *port)
- 	int nr_pdo = port->nr_src_pdo;
- 	int i;
- 
-+	if (!port->pd_supported)
-+		return port->src_rp;
-+
- 	/*
- 	 * Search for first entry with matching voltage.
- 	 * It should report the maximum supported current.
-@@ -3568,9 +3574,11 @@ static int tcpm_src_attach(struct tcpm_port *port)
- 	if (ret < 0)
- 		return ret;
- 
--	ret = port->tcpc->set_pd_rx(port->tcpc, true);
--	if (ret < 0)
--		goto out_disable_mux;
-+	if (port->pd_supported) {
-+		ret = port->tcpc->set_pd_rx(port->tcpc, true);
-+		if (ret < 0)
-+			goto out_disable_mux;
-+	}
- 
- 	/*
- 	 * USB Type-C specification, version 1.2,
-@@ -3600,7 +3608,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
- out_disable_vconn:
- 	tcpm_set_vconn(port, false);
- out_disable_pd:
--	port->tcpc->set_pd_rx(port->tcpc, false);
-+	if (port->pd_supported)
-+		port->tcpc->set_pd_rx(port->tcpc, false);
- out_disable_mux:
- 	tcpm_mux_set(port, TYPEC_STATE_SAFE, USB_ROLE_NONE,
- 		     TYPEC_ORIENTATION_NONE);
-@@ -3804,6 +3813,20 @@ static enum typec_pwr_opmode tcpm_get_pwr_opmode(enum typec_cc_status cc)
- 	}
- }
- 
-+static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
-+{
-+	switch (opmode) {
-+	case TYPEC_PWR_MODE_USB:
-+		return TYPEC_CC_RP_DEF;
-+	case TYPEC_PWR_MODE_1_5A:
-+		return TYPEC_CC_RP_1_5;
-+	case TYPEC_PWR_MODE_3_0A:
-+	case TYPEC_PWR_MODE_PD:
-+	default:
-+		return TYPEC_CC_RP_3_0;
-+	}
-+}
-+
- static void run_state_machine(struct tcpm_port *port)
- {
- 	int ret;
-@@ -3914,6 +3937,10 @@ static void run_state_machine(struct tcpm_port *port)
- 		if (port->ams == POWER_ROLE_SWAP ||
- 		    port->ams == FAST_ROLE_SWAP)
- 			tcpm_ams_finish(port);
-+		if (!port->pd_supported) {
-+			tcpm_set_state(port, SRC_READY, 0);
-+			break;
-+		}
- 		port->upcoming_state = SRC_SEND_CAPABILITIES;
- 		tcpm_ams_start(port, POWER_NEGOTIATION);
- 		break;
-@@ -4161,7 +4188,10 @@ static void run_state_machine(struct tcpm_port *port)
- 				current_lim = PD_P_SNK_STDBY_MW / 5;
- 			tcpm_set_current_limit(port, current_lim, 5000);
- 			tcpm_set_charge(port, true);
--			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
-+			if (!port->pd_supported)
-+				tcpm_set_state(port, SNK_READY, 0);
-+			else
-+				tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
- 			break;
- 		}
- 		/*
-@@ -4389,7 +4419,8 @@ static void run_state_machine(struct tcpm_port *port)
- 		tcpm_set_vbus(port, true);
- 		if (port->ams == HARD_RESET)
- 			tcpm_ams_finish(port);
--		port->tcpc->set_pd_rx(port->tcpc, true);
-+		if (port->pd_supported)
-+			port->tcpc->set_pd_rx(port->tcpc, true);
- 		tcpm_set_attached_state(port, true);
- 		tcpm_set_state(port, SRC_UNATTACHED, PD_T_PS_SOURCE_ON);
- 		break;
-@@ -5898,6 +5929,7 @@ EXPORT_SYMBOL_GPL(tcpm_tcpc_reset);
- static int tcpm_fw_get_caps(struct tcpm_port *port,
- 			    struct fwnode_handle *fwnode)
- {
-+	const char *opmode_str;
- 	const char *cap_str;
- 	int ret;
- 	u32 mw, frs_current;
-@@ -5932,22 +5964,36 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
- 		return ret;
- 	port->typec_caps.type = ret;
- 	port->port_type = port->typec_caps.type;
-+	port->pd_supported = fwnode_property_read_bool(fwnode, "pd-supported");
- 
- 	port->slow_charger_loop = fwnode_property_read_bool(fwnode, "slow-charger-loop");
- 	if (port->port_type == TYPEC_PORT_SNK)
- 		goto sink;
- 
- 	/* Get source pdos */
--	ret = fwnode_property_count_u32(fwnode, "source-pdos");
--	if (ret <= 0)
--		return -EINVAL;
-+	if (port->pd_supported) {
-+		ret = fwnode_property_count_u32(fwnode, "source-pdos");
-+		if (ret <= 0)
-+			return -EINVAL;
- 
--	port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
--	ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
--					     port->src_pdo, port->nr_src_pdo);
--	if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
--					    port->nr_src_pdo))
--		return -EINVAL;
-+		port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
-+		ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
-+						     port->src_pdo, port->nr_src_pdo);
-+		if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
-+						    port->nr_src_pdo))
-+			return -EINVAL;
-+	} else {
-+		port->nr_src_pdo = 0;
-+		ret = fwnode_property_read_string(fwnode, "typec-power-opmode", &opmode_str);
-+		if (ret == 0) {
-+			ret = typec_find_pwr_opmode(opmode_str);
-+			if (ret < 0)
-+				return ret;
-+			port->src_rp = tcpm_pwr_opmode_to_rp(ret);
-+		} else {
-+			return ret;
-+		}
-+	}
- 
- 	if (port->port_type == TYPEC_PORT_SRC)
- 		return 0;
-@@ -5962,25 +6008,29 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
- 		return -EINVAL;
- sink:
- 	/* Get sink pdos */
--	ret = fwnode_property_count_u32(fwnode, "sink-pdos");
--	if (ret <= 0)
--		return -EINVAL;
-+	if (port->pd_supported) {
-+		ret = fwnode_property_count_u32(fwnode, "sink-pdos");
-+		if (ret <= 0)
-+			return -EINVAL;
- 
--	port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
--	ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
--					     port->snk_pdo, port->nr_snk_pdo);
--	if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
--					    port->nr_snk_pdo))
--		return -EINVAL;
-+		port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
-+		ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
-+						     port->snk_pdo, port->nr_snk_pdo);
-+		if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
-+						    port->nr_snk_pdo))
-+			return -EINVAL;
- 
--	if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
--		return -EINVAL;
--	port->operating_snk_mw = mw / 1000;
-+		if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
-+			return -EINVAL;
-+		port->operating_snk_mw = mw / 1000;
-+	} else {
-+		port->nr_snk_pdo = 0;
-+	}
- 
- 	port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
- 
--	/* FRS can only be supported byb DRP ports */
--	if (port->port_type == TYPEC_PORT_DRP) {
-+	/* FRS can only be supported by DRP ports */
-+	if (port->port_type == TYPEC_PORT_DRP && port->pd_supported) {
- 		ret = fwnode_property_read_u32(fwnode, "new-source-frs-typec-current",
- 					       &frs_current);
- 		if (ret >= 0 && frs_current <= FRS_5V_3A)
--- 
-2.32.0.432.gabb21c7263-goog
-
+greg k-h
