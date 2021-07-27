@@ -2,174 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 036DA3D7528
-	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 14:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A963D7580
+	for <lists+linux-usb@lfdr.de>; Tue, 27 Jul 2021 15:03:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232027AbhG0Mhf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 08:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbhG0Mhe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 08:37:34 -0400
-Received: from mail.cyber-anlage.de (cyber-anlage.de [IPv6:2a03:4000:6:30d5::1337])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8325C061757
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 05:37:34 -0700 (PDT)
-Received: from cyber-bucket.localnet (p200300f197121200264bfefffe4ac6f3.dip0.t-ipconnect.de [IPv6:2003:f1:9712:1200:264b:feff:fe4a:c6f3])
-        by mail.cyber-anlage.de (Postfix) with ESMTPSA id 8DA875139F
-        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 14:37:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cyber-anlage.de;
-        s=cyber; t=1627389453;
-        bh=wFSnGfQuC6dy5z1HLKOL5etz5pVV6HS0OXb6chOmKlI=;
-        h=From:To:Subject:Date;
-        b=FSl+64JgtsH0O44VfnLZOxwjqQT0icJL9XpG9OHmx4wHqOpeDftq6mIZs8S8Ib6yN
-         6c0dUKxecyCCKZC/P6jaUHcA/2vQV1BlHHs5Nf59MkSAYCeICxxAhplMfCqWyri3zD
-         839jMV/O/lBEdctoBt8xxTXNnvhACOg/fTA4dWW25nVR0YdtrnOXRn/Xx9YuHYZ3sI
-         NpPcbgzj3iWNgUTQ5+0fuBOTSX5gRefwu9grR5YSqnCJm1W5JKXn/drIYsVHo7VjC/
-         QzIp09dz2Uzs76CKMTL0ZQzZaGLYXe+AH5smpNgOwto7Yrv9Y8Wvllowl9x9ookDNK
-         GddWle6w4mkNA==
-From:   Chris <chris@cyber-anlage.de>
-To:     linux-usb@vger.kernel.org
-Subject: pl2303 : unknown device type
-Date:   Tue, 27 Jul 2021 14:37:23 +0200
-Message-ID: <2560053.x2KRyp2eMa@cyber-bucket>
+        id S236517AbhG0NDS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 09:03:18 -0400
+Received: from esa4.mentor.iphmx.com ([68.232.137.252]:49355 "EHLO
+        esa4.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232067AbhG0NDS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 09:03:18 -0400
+IronPort-SDR: kg/m50MYQjWj9ED0iNKahYjzyfYSluZxNYrvqLM6FR2QqcgvF6D/Bud9velCizRtx3dck1zEjA
+ awSBR+mhcmhCcgheeYr0jio7536HVC+nygxR4yQCW7YYGiQ4qFM/qOz9Bay9gw/Anp7uDPekWy
+ el8Zvr+EECyt5ukr9WFL1v96FsSe91bsKz/BarJEIkmA7kIA0DoPrfpnuRjUOoyJaE12HqRL6P
+ shDa39IEXvHsjovWVei92VtMcQfPiutwAPoFaTBEm8/+9iF7nedLVqdJ4tI5Cc85cpfIocbqav
+ +EO0gzvnf2Owh4kmSsE8ZJuV
+X-IronPort-AV: E=Sophos;i="5.84,273,1620720000"; 
+   d="scan'208";a="64139301"
+Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
+  by esa4.mentor.iphmx.com with ESMTP; 27 Jul 2021 05:03:18 -0800
+IronPort-SDR: TlCf17dvliU+83uqfaiFG6fVvp+nXckyDok76aSMMq60WINFGVAoAeyOF5EgQKTgNnyCN1mAB8
+ hDPYipJMKBOpPNRJHuJ2HHmGIvmYYPw/D/sCpYaWj7vEz7/PTVTUfDJxkRiYhYdNSMnmpVtd3v
+ qUFiD0xbUj2VDilKepMqnKTbvnJoJskL/Qmz4MSmA4Bug3wLeCKrFHf3zQD3xN5D1wMHYLcL43
+ U0wb36XZk+pjR7YZp87btsbHFvWw48t65STYb8lsa3NFvxOUPmNX+/qIMdeTf1KGEdw+FCg0q1
+ O94=
+From:   "Schmid, Carsten" <Carsten_Schmid@mentor.com>
+To:     AMoonRabbit <razgriz.wilson6@gmail.com>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
+Thread-Topic: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
+Thread-Index: AQHXgnc1OBuFQo+G60aTmW/ZGwqjqqtWSBcAgAAnYmCAACiMgIAALrSg
+Date:   Tue, 27 Jul 2021 13:02:51 +0000
+Message-ID: <2c9ddbc65d1e4ce3a368c1d894281178@SVR-IES-MBX-03.mgc.mentorg.com>
+References: <QUKVWQ.1T8HV94AM5X6@gmail.com>
+        <CAJpVOidqd+tpNNkHGvC6fUQ7g3Z+FLpiDJrmPWtQmiL-AsYsLw@mail.gmail.com>
+        <YP+kqqimY1BYZAwL@kroah.com>
+        <a59c1173b77b4ace8db7181b1b0fc446@SVR-IES-MBX-03.mgc.mentorg.com>
+ <RBHWWQ.R54EUTRRR5DN@gmail.com>
+In-Reply-To: <RBHWWQ.R54EUTRRR5DN@gmail.com>
+Accept-Language: de-DE, en-IE, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [137.202.0.90]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2278172.MlrV8VzQz5"; micalg="pgp-sha256"; protocol="application/pgp-signature"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---nextPart2278172.MlrV8VzQz5
-Content-Type: multipart/mixed; boundary="nextPart2512815.1ik1ktxZ7K"; protected-headers="v1"
-Content-Transfer-Encoding: 7Bit
-From: Chris <chris@cyber-anlage.de>
-To: linux-usb@vger.kernel.org
-Subject: pl2303 : unknown device type
-Date: Tue, 27 Jul 2021 14:37:23 +0200
-Message-ID: <2560053.x2KRyp2eMa@cyber-bucket>
-
-This is a multi-part message in MIME format.
-
---nextPart2512815.1ik1ktxZ7K
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-
-This problem was introduced with 5.13 and still persists in 5.13.5
-After downgrading to 5.12.x, everything works like expected. Tested on 
-archlinux. The device is an "ICP-DAS I-7561"
-
-
---nextPart2512815.1ik1ktxZ7K
-Content-Disposition: attachment; filename="dmsg"
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; name="dmsg"
-
-dmesg -w 
-
-[ 1999.689678] usb 2-4: new full-speed USB device number 3 using ohci-pci
-[ 1999.919763] usb 2-4: New USB device found, idVendor=067b, idProduct=2303, bcdDevice=5d.ca
-[ 1999.919772] usb 2-4: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[ 1999.919775] usb 2-4: Product: USB-Serial Controller
-[ 1999.919777] usb 2-4: Manufacturer: Prolific Technology Inc.
-[ 1999.923348] pl2303 2-4:1.0: pl2303 converter detected
-[ 1999.923365] pl2303 2-4:1.0: unknown device type, please report to linux-usb@vger.kernel.org 
-
---nextPart2512815.1ik1ktxZ7K
-Content-Disposition: attachment; filename="lsusb"
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; name="lsusb"
-
-lsusb -v
-
-Bus 002 Device 002: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial Port / Mobile Action MA-8910P
-Couldn't open device, some information will be missing
-
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               1.10
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x067b Prolific Technology, Inc.
-  idProduct          0x2303 PL2303 Serial Port / Mobile Action MA-8910P
-  bcdDevice           5d.ca
-  iManufacturer           1 Prolific Technology Inc.
-  iProduct                2 USB-Serial Controller
-  iSerial                 0
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0027
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-
---nextPart2512815.1ik1ktxZ7K--
-
---nextPart2278172.MlrV8VzQz5
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEn472JWEQLcP1NoSxpPnvy7Wy1NUFAmD//gMACgkQpPnvy7Wy
-1NVqxAf7Bjynbjt4S2kZ9XQeh88I8GI7MspSqUhryCBrrqYVAddiNPRkigyLBORY
-2Te07f2arCkzyUfPbHpZSu1dJ6z84JUYjpCsW6cJiSZ+tkxjHBtPcq/hGnwMpkXU
-W/KNq/ZnM+bzqWHAj0HcDQQynjLeEt9DT8SDbrCQh6gUx/2+oAT2eMNb4ao3tOGA
-7eHn4rD7ME/sgqcB5lNrxqjE+XzpEDM0CgeXmmSi+dXf6lghIcq9IbovXrqtSinD
-8UhBLPl0oW5/psoJ6Cz0KrgQ26B25+dkpC4D5IcL1whju5WTYh29cUorb3bUk1vs
-R5obNVs75oxl8IHlue2P6Xt0d+0KFA==
-=w1lY
------END PGP SIGNATURE-----
-
---nextPart2278172.MlrV8VzQz5--
-
-
-
+SGkgTmVpbCwNCg0KPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBBTW9vblJh
+YmJpdCA8cmF6Z3Jpei53aWxzb242QGdtYWlsLmNvbT4NCg0KTm8gdG9wIHBvc3RzIHBsZWFzZS4N
+Cg0KT24gVHVlLCAyNyBKdWwsIDIwMjEgYXQgNzo0MyBhbSwgIlNjaG1pZCwgQ2Fyc3RlbiINCjxD
+YXJzdGVuX1NjaG1pZEBtZW50b3IuY29tPiB3cm90ZToNCj4gSGkgR3JlZywNCj4NCj4gT24gVHVl
+LCBKdWwgMjcsIDIwMjEgYXQgMTI6Mzc6MjhBTSArMDEwMCwgUmF6Z3JpejM3NSAoTmVpbCkgd3Jv
+dGU6DQo+DQo+Pj4gIFsgIDEwOS42Njg0NjVdIHVzYiAxLTE6IFVTQiBkaXNjb25uZWN0LCBkZXZp
+Y2UgbnVtYmVyIDINCj4+PiAgWyAgMTEwLjA4NDQyOV0gdXNiIDEtMTogbmV3IGhpZ2gtc3BlZWQg
+VVNCIGRldmljZSBudW1iZXIgNSB1c2luZw0KPj4+IHhoY2lfaGNkDQo+Pj4gIFsgIDExMC4yMzc5
+NjNdIHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPj4+IGlk
+UHJvZHVjdD0wYjhjLCBiY2REZXZpY2U9IDEuMDANCj4+PiAgWyAgMTEwLjIzNzk4OV0gdXNiIDEt
+MTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczogTWZyPTIsIFByb2R1Y3Q9MywNCj4+PiBTZXJpYWxO
+dW1iZXI9NA0KPj4+ICBbICAxMTAuMjM4MDAyXSB1c2IgMS0xOiBQcm9kdWN0OiBXQUxLTUFODQo+
+Pj4gIFsgIDExMC4yMzgwMTFdIHVzYiAxLTE6IE1hbnVmYWN0dXJlcjogU29ueQ0KPj4+ICBbICAx
+MTAuMjM4MDE5XSB1c2IgMS0xOiBTZXJpYWxOdW1iZXI6IDEwNDU4QjU1NDc3OTE2DQo+Pj4gIFsg
+IDExMC4zNDIxMDRdIHVzYiAxLTE6IDE6NyA6IHVuc3VwcG9ydGVkIGZvcm1hdCBiaXRzIDB4MTAw
+MDAwMDAwDQo+Pj4gIFsgIDExMC4zNDM5NTNdIHVzYmNvcmU6IHJlZ2lzdGVyZWQgbmV3IGludGVy
+ZmFjZSBkcml2ZXINCj4+PiBzbmQtdXNiLWF1ZGlvDQo+Pj4NCj4+DQo+Pg0KPj4gIExvb2tzIGxp
+a2UgeW91IHJlbW92ZWQgdGhlIGRldmljZSBhbmQgdGhlbiBhZGRlZCBpdCBiYWNrPyAgQW5kIGl0
+DQo+PiBzYXlzDQo+PiAgdGhlIGRldmljZSBpcyBzdXBwb3J0ZWQgYnkgdGhlIGtlcm5lbCBub3cs
+IHdoYXQgZG9lcyBub3Qgd29yaw0KPj4gcHJvcGVybHk/DQo+DQo+IEJ1dCBlYXJsaWVyIGluIGJv
+b3QgdGhlc2UgbWVzc2FnZXMgYXJlIHNlZW46DQo+IFsgICAgMS45MDg0ODldIHVzYiAxLTE6IE5l
+dyBVU0IgZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPiBpZFByb2R1Y3Q9MGNhMSwgYmNk
+RGV2aWNlPSAxLjAwDQo+IFsgICAgMS45MDg1MDNdIHVzYiAxLTE6IE5ldyBVU0IgZGV2aWNlIHN0
+cmluZ3M6IE1mcj0yLCBQcm9kdWN0PTMsDQo+IFNlcmlhbE51bWJlcj00DQo+IFsgICAgMS45MDg1
+MDhdIHVzYiAxLTE6IFByb2R1Y3Q6IFdBTEtNQU4NCj4gWyAgICAxLjkwODUxM10gdXNiIDEtMTog
+TWFudWZhY3R1cmVyOiBTb255DQo+IFsgICAgMS45MDg1MTZdIHVzYiAxLTE6IFNlcmlhbE51bWJl
+cjogMTA0NThCNTU0Nzc5MTYNCj4gWyAgICAyLjE5NTgyMV0gdXNiLXN0b3JhZ2UgMS0xOjEuMDog
+VVNCIE1hc3MgU3RvcmFnZSBkZXZpY2UgZGV0ZWN0ZWQNCj4gWyAgICAyLjE5NTk4OF0gc2NzaSBo
+b3N0MDogdXNiLXN0b3JhZ2UgMS0xOjEuMA0KPg0KPiBQcm9kdWN0SWQgaXMgZGlmZmVyZW50LCB0
+aGF0J3Mgc3RyYW5nZS4NCj4NCj4gTmVpbCwgY291bGQgeW91IGNvbGxlY3QgdGhlIGRtZXNnIGZy
+b20gdGhlIHdvcmtpbmcga2VybmVsIDUuMTAgcGxlYXNlPw0KPiBBbmQ6IGlzIHRoZSBkZXZpY2Ug
+ZXhwZWN0ZWQgdG8gYmUgYSBtYXNzIHN0b3JhZ2UgKGFrYSBVU0IgZGlzaykgYW5kDQo+IHNvdW5k
+IGNhcmQgaW4gb25lPw0KPg0KDQo+IFNvIHRoaXMgaXMgdGhlIERtZXNnIG91dHB1dCBmcm9tIDUu
+MTAuMTcgd2l0aCB3b3JraW5nIG91dHB1dCB0byBVU0IgREFDDQo+IChXYWxrbWFuIHZpc3VhbGx5
+IGdldHMgYXVkaW8gYXMgdGhlIGFtcCBtZXRlciB2aXN1YWxpc2VyIHdvcmtzIHdoZXJlIGFzDQo+
+IG9uIG5ld2VyIGtlcm5lbHMsIHdoaWxzdCB0aGUgc3lzdGVtIGxvb2tzIHRvIGJlIG91dHB1dHRp
+bmcgc291bmQsIHRoZQ0KPiBXYWxrbWFuIHNob3dzIGl0J3MgcmVjZWl2aW5nIG5vdGhpbmcpLg0K
+Li4uDQo+IFsgICAxMi4yMDIzMTJddXNiIDEtMTogbmV3IGhpZ2gtc3BlZWQgVVNCIGRldmljZSBu
+dW1iZXIgMyB1c2luZyB4aGNpX2hjZA0KPiBbICAgMTIuMzUxODM4XXVzYiAxLTE6IE5ldyBVU0Ig
+ZGV2aWNlIGZvdW5kLCBpZFZlbmRvcj0wNTRjLA0KPiBpZFByb2R1Y3Q9MGI4YywgYmNkRGV2aWNl
+PSAxLjAwDQo+IFsgICAxMi4zNTE4NDRddXNiIDEtMTogTmV3IFVTQiBkZXZpY2Ugc3RyaW5nczog
+TWZyPTIsIFByb2R1Y3Q9MywNCj4gU2VyaWFsTnVtYmVyPTQNCj4gWyAgIDEyLjM1MTg0N111c2Ig
+MS0xOiBQcm9kdWN0OiBXQUxLTUFODQo+IFsgICAxMi4zNTE4NTBddXNiIDEtMTogTWFudWZhY3R1
+cmVyOiBTb255DQo+IFsgICAxMi4zNTE4NTJddXNiIDEtMTogU2VyaWFsTnVtYmVyOiAxMDQ1OEI1
+NTQ3NzkxNg0KPiBbICAgMzguNTYwMTcyXXVzYiAxLTE6IDE6NyA6IHVuc3VwcG9ydGVkIGZvcm1h
+dCBiaXRzIDB4MTAwMDAwMDAwDQo+IFsgICAzOC41NjI3NTBddXNiY29yZTogcmVnaXN0ZXJlZCBu
+ZXcgaW50ZXJmYWNlIGRyaXZlciBzbmQtdXNiLWF1ZGlvDQo+IFsgICAzOC42MzA5OTVdc25kX2hk
+YV9pbnRlbCAwMDAwOjAwOjFmLjM6IERTUCBkZXRlY3RlZCB3aXRoIFBDSQ0KPiBjbGFzcy9zdWJj
+bGFzcy9wcm9nLWlmIGluZm8gMHgwNDAzODANCg0KTG9va3MgbGlrZSBvbiB0aGUgb2xkIGtlcm5l
+bCB0aGUgV2Fsa21hbiBpcyBzZWVuIGFzIHRoZSBmaXJzdCBzb3VuZCBjYXJkLg0KT24gdGhlIG5l
+dyBrZXJuZWwsIGl0IHdhcyBzZWVuIGFzIGEgbWFzcyBzdG9yYWdlIGZpcnN0IGFuZCBsYXRlciBz
+d2l0Y2hlZCB0byBzbmQtdXNiLg0KUGxlYXNlIGNoZWNrIGlmIHlvdXIgV2Fsa21hbiBhcHBlYXJz
+IGFzIGEgc291bmQgY2FyZCBpbiB0aGUgbmV3IGtlcm5lbA0KYW5kIGlmIGl0IGlzIG11dGVkIGR1
+ZSB0byBub3QgYmVpbmcgdGhlIGRlZmF1bHQgb3V0cHV0Lg0KDQpUaGFua3MsDQpDYXJzdGVuDQot
+LS0tLS0tLS0tLS0tLS0tLQ0KU2llbWVucyBFbGVjdHJvbmljIERlc2lnbiBBdXRvbWF0aW9uIEdt
+Ykg7IEFuc2NocmlmdDogQXJudWxmc3RyYcOfZSAyMDEsIDgwNjM0IE3DvG5jaGVuOyBHZXNlbGxz
+Y2hhZnQgbWl0IGJlc2NocsOkbmt0ZXIgSGFmdHVuZzsgR2VzY2jDpGZ0c2bDvGhyZXI6IFRob21h
+cyBIZXVydW5nLCBGcmFuayBUaMO8cmF1ZjsgU2l0eiBkZXIgR2VzZWxsc2NoYWZ0OiBNw7xuY2hl
+bjsgUmVnaXN0ZXJnZXJpY2h0IE3DvG5jaGVuLCBIUkIgMTA2OTU1DQo=
