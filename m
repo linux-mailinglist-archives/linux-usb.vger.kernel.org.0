@@ -2,178 +2,326 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BAB3D85B4
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 03:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705AC3D85D1
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 04:11:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbhG1BzV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 27 Jul 2021 21:55:21 -0400
-Received: from mailgw02.mediatek.com ([210.61.82.184]:33138 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232926AbhG1BzU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 21:55:20 -0400
-X-UUID: c9f6666089d143e29dc82dc39c2571b9-20210728
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=58L+Btku+CwzhUYReBlGJltfCSXj2Yn897i2au2OlSc=;
-        b=U3BkHUMIA6xzBNrS69NkBtSsd9K2Vvwn7zUNA76F6quugxZ+TRJNO3tHkWnnYdoL53IWdNTJRIGOZpb7dxPx0o/SK0bR2EEoAia3TZoJVmi41Jl+2hBe8WE+OeYPokh2A0glX0yXwy1Vi2cog2K8cwtP6i5uDdak7jbzX4EZSpU=;
-X-UUID: c9f6666089d143e29dc82dc39c2571b9-20210728
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 24134824; Wed, 28 Jul 2021 09:55:17 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs06n2.mediatek.inc
- (172.21.101.130) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 28 Jul
- 2021 09:55:16 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 28 Jul 2021 09:55:14 +0800
-Message-ID: <1627437314.31194.13.camel@mhfsdcap03>
-Subject: Re: [PATCH 2/2] phy: mediatek: phy-mtk-tphy: support USB2UART switch
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Macpaul Lin <macpaul.lin@mediatek.com>
-CC:     <linux-phy@lists.infradead.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ainge Hsu <ainge.hsu@mediatek.com>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Kuohong Wang <kuohong.wang@mediatek.com>,
-        Mediatek WSD Upstream <wsd_upstream@mediatek.com>,
-        Macpaul Lin <macpaul@gmail.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-usb@vger.kernel.org>, <linux-mediatek@lists.infradead.org>
-Date:   Wed, 28 Jul 2021 09:55:14 +0800
-In-Reply-To: <1627383013-4535-2-git-send-email-macpaul.lin@mediatek.com>
-References: <1627383013-4535-1-git-send-email-macpaul.lin@mediatek.com>
-         <1627383013-4535-2-git-send-email-macpaul.lin@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S233394AbhG1CLp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 27 Jul 2021 22:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40156 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233352AbhG1CLp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 27 Jul 2021 22:11:45 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519F8C061764
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 19:11:44 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id w6so1833591oiv.11
+        for <linux-usb@vger.kernel.org>; Tue, 27 Jul 2021 19:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AfBXNgrMpBvktP8L3i6TARNdAjtCH+8h0QG9uYxjHTE=;
+        b=RVYpT0Zow2LjpWSbzV6llKwgsgjvpyMyZsHMedbzFOMjEJ5cDRXWlLpMDTI/gAIBNa
+         5aTzKV0hWOsvVEXlOMlf+eD1dAS1Js2f5f2yxwGU8LViv6/f3SOhpm8zuQpIQQjUPd9H
+         /jSXuRSKLAMevP4ROPTFmQWOw3/Uz274UTp+QYOtxW8TrbQIvZNwhXrlhEm8+IHxoYoN
+         nPs0xbLyrZW3cfsmBrBKp/8CxL9bZm3S9aBLSOLjhpcxCW2fegWSL3nARHl27rqAOr/J
+         oomHeWsSesVJhBlkz46pDiPWofa/Y7z7p3mPAZwlTp/cPuQseWOuY73XcXl6jlM/F7HL
+         bk8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AfBXNgrMpBvktP8L3i6TARNdAjtCH+8h0QG9uYxjHTE=;
+        b=t1oy/kzGYD38lRxD7j6XoxDtRDF5DjhpNlJIwa/pG7ELplaTWbX1RBpgGaTaq2AhDN
+         DlC4dil4rH4tUrhCKZRG123uCk21cuFLWYkIT6ww5hRhsScVFylML72MlSdcCoF/0nAL
+         iX00BXqEyU+06rs1w0Y5S2LLfQaRAWqU3TI150NUF3qx3lDe92HXMgn6Ved7vSyw4Uvc
+         OXHIfomcvBczAfekOfsHu7ipIR60bwVmrNuygPJZK02BRvHkO7SUBqYjFNIys8Mtxpc6
+         TkbMaVpgrEH3nuFtVvG8q8GLYJyAM3J3LIMNDuaMWfWnyYwz1VWL+ffkCpC6Nr6QQYoD
+         GbFw==
+X-Gm-Message-State: AOAM532QbqBywX95ACvZgaDwVry5d8MnmWNvnoXVZ5C3+FABRB/e7zmG
+        Kd/8XdgYqdnbKAQ0NyvxQ2o2a5Etl2FdbJR1nYItuw==
+X-Google-Smtp-Source: ABdhPJzFOZ78iIWSjSy7azGbbd9ETwT86fADXm1p0ytfl0juEToTmZBLjdB0d4o/VmDZTzKGIf7gZXtHzW2sQemXJyk=
+X-Received: by 2002:aca:ad10:: with SMTP id w16mr4782521oie.26.1627438303156;
+ Tue, 27 Jul 2021 19:11:43 -0700 (PDT)
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+References: <20210727151307.2178352-1-kyletso@google.com> <20210727151307.2178352-3-kyletso@google.com>
+ <cbc4bdd6-de34-08a8-7968-9d3b0276e347@roeck-us.net>
+In-Reply-To: <cbc4bdd6-de34-08a8-7968-9d3b0276e347@roeck-us.net>
+From:   Kyle Tso <kyletso@google.com>
+Date:   Wed, 28 Jul 2021 10:11:26 +0800
+Message-ID: <CAGZ6i=0CQy7sMvwT3e47w-3SFWgTXr-5kA2pOn1oLhH=GJJE0A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] usb: typec: tcpm: Support non-PD mode
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA3LTI3IGF0IDE4OjUwICswODAwLCBNYWNwYXVsIExpbiB3cm90ZToNCj4g
-U29tZSBlbWJlZGRlZCBwbGF0Zm9ybSBzaGFyZWQgUElOcyBiZXR3ZWVuIFVTQiBhbmQgVUFSVC4N
-Cj4gRm9yIGV4YW1wbGUsIHNvbWUgcGhvbmUgd2lsbCB1c2Ugc3BlY2lhbCBjYWJsZSBkZXRlY3Rp
-b24gaW4gYm9vdCBsb2FkZXINCj4gdG8gc3dpdGNoIFVTQiBwb3J0IGZ1bmN0aW9uIGludG8gVUFS
-VCBtb2RlLg0KPiANCj4gVGhpcyBwYXRjaCBzdXBwb3J0IFVTQjJVQVJUIHN3aXRjaCBmdW5jdGlv
-biBpbiBwaHktbXRrLXRwaHkuDQo+IDEuIEltcGxlbWVudCBVU0IyVUFSVCBzd2l0Y2ggQVBJIHN1
-cHBvcnQgaW4gcGh5LW10ay10cGh5Lg0KPiAyLiBVc2UgUEhZX01PREVfVUFSVCBzdXBwb3J0IGFj
-Y29yZGluZyB0byBuZXcgbW9kZSBpbiBwaHkuaC4NCj4gMy4gVXNlIG10a19waHlfZ2V0X21vZGVf
-ZXh0KCkgdG8gcXVlcnkgdGhlIGN1cnJlbnQgTU9ERSBmcm9tIGhhcmR3YXJlLg0KPiANCj4gU2ln
-bmVkLW9mZi1ieTogTWFjcGF1bCBMaW4gPG1hY3BhdWwubGluQG1lZGlhdGVrLmNvbT4NCj4gLS0t
-DQo+ICBkcml2ZXJzL3BoeS9tZWRpYXRlay9waHktbXRrLXRwaHkuYyB8ICAxMTQgKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrKysrKysNCj4gIDEgZmlsZSBjaGFuZ2VkLCAxMTQgaW5zZXJ0
-aW9ucygrKQ0KPiANCnRpdGxlOiBwbGVhc2UgdXNlICJwaHk6IHBoeS1tdGstdHBoeTogLi4uIiAg
-YXMgb3RoZXIgcGF0Y2hlcw0KDQoNCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvcGh5L21lZGlhdGVr
-L3BoeS1tdGstdHBoeS5jIGIvZHJpdmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay10cGh5LmMNCj4g
-aW5kZXggY2RiY2M0OS4uYTdkZmVlYyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9waHkvbWVkaWF0
-ZWsvcGh5LW10ay10cGh5LmMNCj4gKysrIGIvZHJpdmVycy9waHkvbWVkaWF0ZWsvcGh5LW10ay10
-cGh5LmMNCj4gQEAgLTY4LDYgKzY4LDcgQEANCj4gICNkZWZpbmUgUEE2X1JHX1UyX1NRVEhfVkFM
-KHgpCSgweGYgJiAoeCkpDQo+ICANCj4gICNkZWZpbmUgVTNQX1UyUEhZQUNSNAkJMHgwMjANCj4g
-KyNkZWZpbmUgUDJDX1JHX1VTQjIwX0RNXzEwMEtfRU4JCUJJVCgxNykNCj4gICNkZWZpbmUgUDJD
-X1JHX1VTQjIwX0dQSU9fQ1RMCQlCSVQoOSkNCj4gICNkZWZpbmUgUDJDX1VTQjIwX0dQSU9fTU9E
-RQkJQklUKDgpDQo+ICAjZGVmaW5lIFAyQ19VMl9HUElPX0NUUl9NU0sJKFAyQ19SR19VU0IyMF9H
-UElPX0NUTCB8IFAyQ19VU0IyMF9HUElPX01PREUpDQo+IEBAIC03Niw2ICs3NywxMiBAQA0KPiAg
-I2RlZmluZSBQMkNfUkdfU0lGX1UyUExMX0ZPUkNFX09OCUJJVCgyNCkNCj4gIA0KPiAgI2RlZmlu
-ZSBVM1BfVTJQSFlEVE0wCQkweDA2OA0KPiArI2RlZmluZSBQMkNfUkdfVUFSVF9NT0RFCQlHRU5N
-QVNLKDMxLCAzMCkNCj4gKyNkZWZpbmUgUDJDX1JHX1VBUlRfTU9ERV9WQUwoeCkJCSgoMHgzICYg
-KHgpKSA8PCAzMCkNCj4gKyNkZWZpbmUgUDJDX1JHX1VBUlRfTU9ERV9PRkVUCQkoMzApDQo+ICsj
-ZGVmaW5lIFAyQ19GT1JDRV9VQVJUX0kJCUJJVCgyOSkNCj4gKyNkZWZpbmUgUDJDX0ZPUkNFX1VB
-UlRfQklBU19FTgkJQklUKDI4KQ0KPiArI2RlZmluZSBQMkNfRk9SQ0VfVUFSVF9UWF9PRQkJQklU
-KDI3KQ0KPiAgI2RlZmluZSBQMkNfRk9SQ0VfVUFSVF9FTgkJQklUKDI2KQ0KPiAgI2RlZmluZSBQ
-MkNfRk9SQ0VfREFUQUlOCQlCSVQoMjMpDQo+ICAjZGVmaW5lIFAyQ19GT1JDRV9ETV9QVUxMRE9X
-TgkJQklUKDIxKQ0KPiBAQCAtOTgsNiArMTA1LDggQEANCj4gIAkJUDJDX1JHX0RQUFVMTERPV04g
-fCBQMkNfUkdfVEVSTVNFTCkNCj4gIA0KPiAgI2RlZmluZSBVM1BfVTJQSFlEVE0xCQkweDA2Qw0K
-PiArI2RlZmluZSBQMkNfUkdfVUFSVF9CSUFTX0VOCQlCSVQoMTgpDQo+ICsjZGVmaW5lIFAyQ19S
-R19VQVJUX1RYX09FCQlCSVQoMTcpDQo+ICAjZGVmaW5lIFAyQ19SR19VQVJUX0VOCQkJQklUKDE2
-KQ0KPiAgI2RlZmluZSBQMkNfRk9SQ0VfSURESUcJCUJJVCg5KQ0KPiAgI2RlZmluZSBQMkNfUkdf
-VkJVU1ZBTElECQlCSVQoNSkNCj4gQEAgLTYwMCw2ICs2MDksOTAgQEAgc3RhdGljIHZvaWQgdTJf
-cGh5X2luc3RhbmNlX2V4aXQoc3RydWN0IG10a190cGh5ICp0cGh5LA0KPiAgCX0NCj4gIH0NCj4g
-IA0KPiArc3RhdGljIHZvaWQgdTJfcGh5X2luc3RhbmNlX3NldF9tb2RlXzJ1YXJ0KHN0cnVjdCB1
-MnBoeV9iYW5rcyAqdTJfYmFua3MpDQo+ICt7DQo+ICsJdTMyIHRtcDsNCj4gKw0KPiArCS8qIENs
-ZWFyIFBBNl9SR19VMl9CQzExX1NXX0VOICovDQpyZW1vdmUgdGhlIGNvbW1lbnRzDQo+ICsJdG1w
-ID0gcmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VU0JQSFlBQ1I2KTsNCj4gKwl0bXAgJj0gfihQ
-QTZfUkdfVTJfQkMxMV9TV19FTik7DQo+ICsJd3JpdGVsKHRtcCwgdTJfYmFua3MtPmNvbSArIFUz
-UF9VU0JQSFlBQ1I2KTsNCj4gKw0KPiArCS8qIFNldCBQMkNfUkdfU1VTUEVORE0gKi8NCj4gKwl0
-bXAgPSByZWFkbCh1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICsJdG1wIHw9IFAy
-Q19SR19TVVNQRU5ETTsNCj4gKwl3cml0ZWwodG1wLCB1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZ
-RFRNMCk7DQo+ICsNCj4gKwkvKiBTZXQgUDJDX0ZPUkNFX1NVU1BFTkRNICovDQo+ICsJdG1wID0g
-cmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0KPiArCXRtcCB8PSBQMkNfRk9S
-Q0VfU1VTUEVORE07DQo+ICsJd3JpdGVsKHRtcCwgdTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURU
-TTApOw0KPiArDQo+ICsJLyogQ2xlYXIgYW5kIFNldCBQMkNfUkdfVUFSVF9NT0RFIHRvIDInYjAx
-ICovDQo+ICsJdG1wID0gcmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0KPiAr
-CXRtcCAmPSB+KFAyQ19SR19VQVJUX01PREUpOw0KPiArCXRtcCB8PSBQMkNfUkdfVUFSVF9NT0RF
-X1ZBTCgweDEpOw0KPiArCXdyaXRlbCh0bXAsIHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlEVE0w
-KTsNCj4gKw0KPiArCS8qIENsZWFyIFAyQ19GT1JDRV9VQVJUX0kgKi8NCj4gKwl0bXAgPSByZWFk
-bCh1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICsJdG1wICY9IH4oUDJDX0ZPUkNF
-X1VBUlRfSSk7DQo+ICsJd3JpdGVsKHRtcCwgdTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTAp
-Ow0KPiArDQo+ICsJLyogU2V0IFAyQ19GT1JDRV9VQVJUX0JJQVNfRU4gKi8NCj4gKwl0bXAgPSBy
-ZWFkbCh1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICsJdG1wIHw9IFAyQ19GT1JD
-RV9VQVJUX0JJQVNfRU47DQo+ICsJd3JpdGVsKHRtcCwgdTJfYmFua3MtPmNvbSArIFUzUF9VMlBI
-WURUTTApOw0KPiArDQo+ICsJLyogU2V0IFAyQ19GT1JDRV9VQVJUX1RYX09FICovDQo+ICsJdG1w
-ID0gcmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0KPiArCXRtcCB8PSBQMkNf
-Rk9SQ0VfVUFSVF9UWF9PRTsNCj4gKwl3cml0ZWwodG1wLCB1Ml9iYW5rcy0+Y29tICsgVTNQX1Uy
-UEhZRFRNMCk7DQo+ICsNCj4gKwkvKiBTZXQgUDJDX0ZPUkNFX1VBUlRfRU4gKi8NCj4gKwl0bXAg
-PSByZWFkbCh1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICsJdG1wIHw9IFAyQ19G
-T1JDRV9VQVJUX0VOOw0KPiArCXdyaXRlbCh0bXAsIHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlE
-VE0wKTsNCj4gKw0KPiArCS8qIFNldCBQMkNfUkdfVUFSVF9CSUFTX0VOICovDQo+ICsJdG1wID0g
-cmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0KPiArCXRtcCB8PSBQMkNfUkdf
-VUFSVF9CSUFTX0VOOw0KPiArCXdyaXRlbCh0bXAsIHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlE
-VE0wKTsNCj4gKw0KPiArCS8qIFNldCBQMkNfUkdfVUFSVF9UWF9PRSAqLw0KPiArCXRtcCA9IHJl
-YWRsKHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlEVE0wKTsNCj4gKwl0bXAgfD0gUDJDX1JHX1VB
-UlRfVFhfT0U7DQo+ICsJd3JpdGVsKHRtcCwgdTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTAp
-Ow0KPiArDQo+ICsJLyogU2V0IFAyQ19SR19VQVJUX0VOICovDQo+ICsJdG1wID0gcmVhZGwodTJf
-YmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0KPiArCXRtcCB8PSBQMkNfUkdfVUFSVF9FTjsN
-Cj4gKwl3cml0ZWwodG1wLCB1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICsNCj4g
-KwkvKiBTZXQgUDJDX1JHX1VTQjIwX0RNXzEwMEtfRU4gKi8NCj4gKwl0bXAgPSByZWFkbCh1Ml9i
-YW5rcy0+Y29tICsgVTNQX1UyUEhZQUNSNCk7DQo+ICsJdG1wIHw9IFAyQ19SR19VU0IyMF9ETV8x
-MDBLX0VOOw0KPiArCXdyaXRlbCh0bXAsIHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlBQ1I0KTsN
-Cj4gKw0KPiArCS8qIENsZWFyIFAyQ19SR19ETVBVTExET1dOLCBQMkNfUkdfRFBQVUxMRE9XTiAq
-Lw0KPiArCXRtcCA9IHJlYWRsKHUyX2JhbmtzLT5jb20gKyBVM1BfVTJQSFlEVE0wKTsNCj4gKwl0
-bXAgJj0gfihQMkNfUkdfRFBQVUxMRE9XTiB8IFAyQ19SR19ETVBVTExET1dOKTsNCj4gKwl3cml0
-ZWwodG1wLCB1Ml9iYW5rcy0+Y29tICsgVTNQX1UyUEhZRFRNMCk7DQo+ICt9DQo+ICsNCj4gK3N0
-YXRpYyBpbnQgdTJfcGh5X2luc3RhbmNlX2dldF9tb2RlX2V4dChzdHJ1Y3QgbXRrX3RwaHkgKnRw
-aHksIHN0cnVjdCBtdGtfcGh5X2luc3RhbmNlICppbnN0YW5jZSkNCj4gK3sNCj4gKwlzdHJ1Y3Qg
-dTJwaHlfYmFua3MgKnUyX2JhbmtzID0gJmluc3RhbmNlLT51Ml9iYW5rczsNCj4gKwl1MzIgdG1w
-Ow0KPiArDQo+ICsJdG1wID0gcmVhZGwodTJfYmFua3MtPmNvbSArIFUzUF9VMlBIWURUTTApOw0K
-PiArDQo+ICsJaWYgKCh0bXAgJiBQMkNfUkdfVUFSVF9NT0RFKSA+PiBQMkNfUkdfVUFSVF9NT0RF
-X09GRVQpDQo+ICsJCXJldHVybiBQSFlfTU9ERV9VQVJUOw0KPiArCWVsc2UNCj4gKwkJcmV0dXJu
-IFBIWV9NT0RFX1VTQl9PVEc7DQo+ICt9DQo+ICsNCj4gIHN0YXRpYyB2b2lkIHUyX3BoeV9pbnN0
-YW5jZV9zZXRfbW9kZShzdHJ1Y3QgbXRrX3RwaHkgKnRwaHksDQo+ICAJCQkJICAgICBzdHJ1Y3Qg
-bXRrX3BoeV9pbnN0YW5jZSAqaW5zdGFuY2UsDQo+ICAJCQkJICAgICBlbnVtIHBoeV9tb2RlIG1v
-ZGUpDQo+IEBAIC02MDksNiArNzAyLDkgQEAgc3RhdGljIHZvaWQgdTJfcGh5X2luc3RhbmNlX3Nl
-dF9tb2RlKHN0cnVjdCBtdGtfdHBoeSAqdHBoeSwNCj4gIA0KPiAgCXRtcCA9IHJlYWRsKHUyX2Jh
-bmtzLT5jb20gKyBVM1BfVTJQSFlEVE0xKTsNCj4gIAlzd2l0Y2ggKG1vZGUpIHsNCj4gKwljYXNl
-IFBIWV9NT0RFX1VBUlQ6DQo+ICsJCXUyX3BoeV9pbnN0YW5jZV9zZXRfbW9kZV8ydWFydCh1Ml9i
-YW5rcyk7DQpIb3cgZG8geW91IHVzZSB0aGlzIGhlbHBlcj8NCg0KQ2FuIHdlIHN3aXRjaCBiYWNr
-IHRvIHVzYiBwaHkgbW9kZSBpZiBzd2l0Y2hpbmcgdG8gdWFydD8NCldoZW4gc3dpdGNoIHRvIHVh
-cnQgbW9kZSwgaWYgdGhlIGhvc3Qgc3VwcG9ydHMgbXVsdGktcG9ydHMsIGl0IHdpbGwNCmNhdXNl
-IHRoZSBob3N0IGNhbid0IGVudGVyIHNsZWVwIG1vZGUgYW55bW9yZS4NCg0KPiArCQlyZXR1cm47
-DQo+ICAJY2FzZSBQSFlfTU9ERV9VU0JfREVWSUNFOg0KPiAgCQl0bXAgfD0gUDJDX0ZPUkNFX0lE
-RElHIHwgUDJDX1JHX0lERElHOw0KPiAgCQlicmVhazsNCj4gQEAgLTkzMyw2ICsxMDI5LDEwIEBA
-IHN0YXRpYyBpbnQgbXRrX3BoeV9pbml0KHN0cnVjdCBwaHkgKnBoeSkNCj4gIAkJcmV0dXJuIHJl
-dDsNCj4gIAl9DQo+ICANCj4gKwlyZXQgPSB1Ml9waHlfaW5zdGFuY2VfZ2V0X21vZGVfZXh0KHRw
-aHksIGluc3RhbmNlKTsNCj4gKwlpZiAocmV0ID09IFBIWV9NT0RFX1VBUlQpDQo+ICsJCXJldHVy
-biAwOw0KPiArDQo+ICAJc3dpdGNoIChpbnN0YW5jZS0+dHlwZSkgew0KPiAgCWNhc2UgUEhZX1RZ
-UEVfVVNCMjoNCj4gIAkJdTJfcGh5X2luc3RhbmNlX2luaXQodHBoeSwgaW5zdGFuY2UpOw0KPiBA
-QCAtOTk2LDYgKzEwOTYsMTkgQEAgc3RhdGljIGludCBtdGtfcGh5X2V4aXQoc3RydWN0IHBoeSAq
-cGh5KQ0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAgDQo+ICtzdGF0aWMgaW50IG10a19waHlfZ2V0
-X21vZGVfZXh0KHN0cnVjdCBwaHkgKnBoeSkNCj4gK3sNCj4gKwlzdHJ1Y3QgbXRrX3BoeV9pbnN0
-YW5jZSAqaW5zdGFuY2UgPSBwaHlfZ2V0X2RydmRhdGEocGh5KTsNCj4gKwlzdHJ1Y3QgbXRrX3Rw
-aHkgKnRwaHkgPSBkZXZfZ2V0X2RydmRhdGEocGh5LT5kZXYucGFyZW50KTsNCj4gKwlpbnQgcmV0
-Ow0KPiArDQo+ICsJcmV0ID0gMDsNCj4gKwlpZiAoaW5zdGFuY2UtPnR5cGUgPT0gUEhZX1RZUEVf
-VVNCMikNCj4gKwkJcmV0ID0gdTJfcGh5X2luc3RhbmNlX2dldF9tb2RlX2V4dCh0cGh5LCBpbnN0
-YW5jZSk7DQo+ICsNCj4gKwlyZXR1cm4gcmV0Ow0KPiArfQ0KPiArDQo+ICBzdGF0aWMgaW50IG10
-a19waHlfc2V0X21vZGUoc3RydWN0IHBoeSAqcGh5LCBlbnVtIHBoeV9tb2RlIG1vZGUsIGludCBz
-dWJtb2RlKQ0KPiAgew0KPiAgCXN0cnVjdCBtdGtfcGh5X2luc3RhbmNlICppbnN0YW5jZSA9IHBo
-eV9nZXRfZHJ2ZGF0YShwaHkpOw0KPiBAQCAtMTA2MCw2ICsxMTczLDcgQEAgc3RhdGljIHN0cnVj
-dCBwaHkgKm10a19waHlfeGxhdGUoc3RydWN0IGRldmljZSAqZGV2LA0KPiAgCS5wb3dlcl9vbgk9
-IG10a19waHlfcG93ZXJfb24sDQo+ICAJLnBvd2VyX29mZgk9IG10a19waHlfcG93ZXJfb2ZmLA0K
-PiAgCS5zZXRfbW9kZQk9IG10a19waHlfc2V0X21vZGUsDQo+ICsJLmdldF9tb2RlX2V4dAk9IG10
-a19waHlfZ2V0X21vZGVfZXh0LA0KPiAgCS5vd25lcgkJPSBUSElTX01PRFVMRSwNCj4gIH07DQo+
-ICANCg0K
+On Wed, Jul 28, 2021 at 6:46 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On 7/27/21 8:13 AM, Kyle Tso wrote:
+> > Even if the Type-C controller supports PD, it is doable to disable PD
+> > capabilities with the current state machine in TCPM. Without enabling RX
+> > in low-level drivers and with skipping the power negotiation, the port
+> > is eligible to be a non-PD Type-C port. Use new flags whose values are
+> > populated from the device tree to decide the port PD capability. Adding
+> > "pd-supported" property in device tree indicates that the port supports
+> > PD. If "pd-supported" is not found, "typec-power-opmode" shall be added
+> > to specify the advertised Rp value if the port supports SRC role.
+> >
+> > Signed-off-by: Kyle Tso <kyletso@google.com>
+> > ---
+> > changes since v1:
+> > - Revised the patch to use dt properties
+> > - Added back the checks of callbacks set_pd_rx and pd_transmit
+> > - Added src_rp to indicate which Rp value should be used in SRC. This
+> >    variable is derived from dt property "typec-power-opmode"
+> >
+> >   drivers/usb/typec/tcpm/tcpm.c | 108 +++++++++++++++++++++++++---------
+> >   1 file changed, 79 insertions(+), 29 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index 5b22a1c931a9..4cf77c787f54 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -316,6 +316,7 @@ struct tcpm_port {
+> >       struct typec_partner *partner;
+> >
+> >       enum typec_cc_status cc_req;
+> > +     enum typec_cc_status src_rp;    /* work only if pd_supported == false */
+> >
+> >       enum typec_cc_status cc1;
+> >       enum typec_cc_status cc2;
+> > @@ -323,6 +324,7 @@ struct tcpm_port {
+> >
+> >       bool attached;
+> >       bool connected;
+> > +     bool pd_supported;
+> >       enum typec_port_type port_type;
+> >
+> >       /*
+> > @@ -804,6 +806,7 @@ static void tcpm_apply_rc(struct tcpm_port *port)
+> >       }
+> >   }
+> >
+> > +
+> >   /*
+> >    * Determine RP value to set based on maximum current supported
+> >    * by a port if configured as source.
+> > @@ -815,6 +818,9 @@ static enum typec_cc_status tcpm_rp_cc(struct tcpm_port *port)
+> >       int nr_pdo = port->nr_src_pdo;
+> >       int i;
+> >
+> > +     if (!port->pd_supported)
+> > +             return port->src_rp;
+> > +
+> >       /*
+> >        * Search for first entry with matching voltage.
+> >        * It should report the maximum supported current.
+> > @@ -3568,9 +3574,11 @@ static int tcpm_src_attach(struct tcpm_port *port)
+> >       if (ret < 0)
+> >               return ret;
+> >
+> > -     ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> > -     if (ret < 0)
+> > -             goto out_disable_mux;
+> > +     if (port->pd_supported) {
+> > +             ret = port->tcpc->set_pd_rx(port->tcpc, true);
+> > +             if (ret < 0)
+> > +                     goto out_disable_mux;
+> > +     }
+> >
+> >       /*
+> >        * USB Type-C specification, version 1.2,
+> > @@ -3600,7 +3608,8 @@ static int tcpm_src_attach(struct tcpm_port *port)
+> >   out_disable_vconn:
+> >       tcpm_set_vconn(port, false);
+> >   out_disable_pd:
+> > -     port->tcpc->set_pd_rx(port->tcpc, false);
+> > +     if (port->pd_supported)
+> > +             port->tcpc->set_pd_rx(port->tcpc, false);
+> >   out_disable_mux:
+> >       tcpm_mux_set(port, TYPEC_STATE_SAFE, USB_ROLE_NONE,
+> >                    TYPEC_ORIENTATION_NONE);
+> > @@ -3804,6 +3813,20 @@ static enum typec_pwr_opmode tcpm_get_pwr_opmode(enum typec_cc_status cc)
+> >       }
+> >   }
+> >
+> > +static enum typec_cc_status tcpm_pwr_opmode_to_rp(enum typec_pwr_opmode opmode)
+> > +{
+> > +     switch (opmode) {
+> > +     case TYPEC_PWR_MODE_USB:
+> > +             return TYPEC_CC_RP_DEF;
+> > +     case TYPEC_PWR_MODE_1_5A:
+> > +             return TYPEC_CC_RP_1_5;
+> > +     case TYPEC_PWR_MODE_3_0A:
+> > +     case TYPEC_PWR_MODE_PD:
+> > +     default:
+> > +             return TYPEC_CC_RP_3_0;
+> > +     }
+> > +}
+> > +
+> >   static void run_state_machine(struct tcpm_port *port)
+> >   {
+> >       int ret;
+> > @@ -3914,6 +3937,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >               if (port->ams == POWER_ROLE_SWAP ||
+> >                   port->ams == FAST_ROLE_SWAP)
+> >                       tcpm_ams_finish(port);
+> > +             if (!port->pd_supported) {
+> > +                     tcpm_set_state(port, SRC_READY, 0);
+> > +                     break;
+> > +             }
+> >               port->upcoming_state = SRC_SEND_CAPABILITIES;
+> >               tcpm_ams_start(port, POWER_NEGOTIATION);
+> >               break;
+> > @@ -4161,7 +4188,10 @@ static void run_state_machine(struct tcpm_port *port)
+> >                               current_lim = PD_P_SNK_STDBY_MW / 5;
+> >                       tcpm_set_current_limit(port, current_lim, 5000);
+> >                       tcpm_set_charge(port, true);
+> > -                     tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+> > +                     if (!port->pd_supported)
+> > +                             tcpm_set_state(port, SNK_READY, 0);
+> > +                     else
+> > +                             tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
+> >                       break;
+> >               }
+> >               /*
+> > @@ -4389,7 +4419,8 @@ static void run_state_machine(struct tcpm_port *port)
+> >               tcpm_set_vbus(port, true);
+> >               if (port->ams == HARD_RESET)
+> >                       tcpm_ams_finish(port);
+> > -             port->tcpc->set_pd_rx(port->tcpc, true);
+> > +             if (port->pd_supported)
+> > +                     port->tcpc->set_pd_rx(port->tcpc, true);
+> >               tcpm_set_attached_state(port, true);
+> >               tcpm_set_state(port, SRC_UNATTACHED, PD_T_PS_SOURCE_ON);
+> >               break;
+> > @@ -5898,6 +5929,7 @@ EXPORT_SYMBOL_GPL(tcpm_tcpc_reset);
+> >   static int tcpm_fw_get_caps(struct tcpm_port *port,
+> >                           struct fwnode_handle *fwnode)
+> >   {
+> > +     const char *opmode_str;
+> >       const char *cap_str;
+> >       int ret;
+> >       u32 mw, frs_current;
+> > @@ -5932,22 +5964,36 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+> >               return ret;
+> >       port->typec_caps.type = ret;
+> >       port->port_type = port->typec_caps.type;
+> > +     port->pd_supported = fwnode_property_read_bool(fwnode, "pd-supported");
+> >
+>
+> As mentioned in the other patch, I think this needs to be negated.
+> Not the variable itself, but the meaning of the property.
+>
 
+Makes sense. I will send another patch.
+
+> >       port->slow_charger_loop = fwnode_property_read_bool(fwnode, "slow-charger-loop");
+>
+> It might make sense to move the properties needed with !pd_supported to here
+> and return immediately after they are read. This would reduce the number of
+> required changes and avoid trying to read irrelevant properties.
+> Something like
+>
+>         if (port->port_type != TYPEC_PORT_SRC)
+>                 port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+>
+>         if (!port->pd_supported)
+>                 return 0;
+>
+
+I will try to modify the flow control as well.
+
+thanks,
+Kyle
+
+> >       if (port->port_type == TYPEC_PORT_SNK)
+> >               goto sink;
+> >
+> >       /* Get source pdos */
+> > -     ret = fwnode_property_count_u32(fwnode, "source-pdos");
+> > -     if (ret <= 0)
+> > -             return -EINVAL;
+> > +     if (port->pd_supported) {
+> > +             ret = fwnode_property_count_u32(fwnode, "source-pdos");
+> > +             if (ret <= 0)
+> > +                     return -EINVAL;
+> >
+> > -     port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
+> > -     ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
+> > -                                          port->src_pdo, port->nr_src_pdo);
+> > -     if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
+> > -                                         port->nr_src_pdo))
+> > -             return -EINVAL;
+> > +             port->nr_src_pdo = min(ret, PDO_MAX_OBJECTS);
+> > +             ret = fwnode_property_read_u32_array(fwnode, "source-pdos",
+> > +                                                  port->src_pdo, port->nr_src_pdo);
+> > +             if ((ret < 0) || tcpm_validate_caps(port, port->src_pdo,
+> > +                                                 port->nr_src_pdo))
+> > +                     return -EINVAL;
+> > +     } else {
+> > +             port->nr_src_pdo = 0;
+> > +             ret = fwnode_property_read_string(fwnode, "typec-power-opmode", &opmode_str);
+> > +             if (ret == 0) {
+> > +                     ret = typec_find_pwr_opmode(opmode_str);
+> > +                     if (ret < 0)
+> > +                             return ret;
+> > +                     port->src_rp = tcpm_pwr_opmode_to_rp(ret);
+> > +             } else {
+> > +                     return ret;
+> > +             }
+> > +     }
+> >
+> >       if (port->port_type == TYPEC_PORT_SRC)
+> >               return 0;
+> > @@ -5962,25 +6008,29 @@ static int tcpm_fw_get_caps(struct tcpm_port *port,
+> >               return -EINVAL;
+> >   sink:
+> >       /* Get sink pdos */
+> > -     ret = fwnode_property_count_u32(fwnode, "sink-pdos");
+> > -     if (ret <= 0)
+> > -             return -EINVAL;
+> > +     if (port->pd_supported) {
+> > +             ret = fwnode_property_count_u32(fwnode, "sink-pdos");
+> > +             if (ret <= 0)
+> > +                     return -EINVAL;
+> >
+> > -     port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
+> > -     ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
+> > -                                          port->snk_pdo, port->nr_snk_pdo);
+> > -     if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
+> > -                                         port->nr_snk_pdo))
+> > -             return -EINVAL;
+> > +             port->nr_snk_pdo = min(ret, PDO_MAX_OBJECTS);
+> > +             ret = fwnode_property_read_u32_array(fwnode, "sink-pdos",
+> > +                                                  port->snk_pdo, port->nr_snk_pdo);
+> > +             if ((ret < 0) || tcpm_validate_caps(port, port->snk_pdo,
+> > +                                                 port->nr_snk_pdo))
+> > +                     return -EINVAL;
+> >
+> > -     if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
+> > -             return -EINVAL;
+> > -     port->operating_snk_mw = mw / 1000;
+> > +             if (fwnode_property_read_u32(fwnode, "op-sink-microwatt", &mw) < 0)
+> > +                     return -EINVAL;
+> > +             port->operating_snk_mw = mw / 1000;
+> > +     } else {
+> > +             port->nr_snk_pdo = 0;
+> > +     }
+> >
+> >       port->self_powered = fwnode_property_read_bool(fwnode, "self-powered");
+> >
+> > -     /* FRS can only be supported byb DRP ports */
+> > -     if (port->port_type == TYPEC_PORT_DRP) {
+> > +     /* FRS can only be supported by DRP ports */
+> > +     if (port->port_type == TYPEC_PORT_DRP && port->pd_supported) {
+> >               ret = fwnode_property_read_u32(fwnode, "new-source-frs-typec-current",
+> >                                              &frs_current);
+> >               if (ret >= 0 && frs_current <= FRS_5V_3A)
+> >
+>
