@@ -2,66 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBD13D8827
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 08:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9064A3D882D
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 08:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbhG1GrI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jul 2021 02:47:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37720 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234203AbhG1GrI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jul 2021 02:47:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id D8CEE60EB2;
-        Wed, 28 Jul 2021 06:47:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627454827;
-        bh=AXHiGCcRMS4bzbotazDVXXM7xHLYma/PA7wkXVhUd7k=;
-        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
-        b=e5GJTp5mNy5w3l7VAkHOcLpVvNmPfTvE+zZOzs/0zMAlqfOw3QB4MBaxbd93tMW5q
-         7p/DehQIRUMN8xunEnv4XvW7D4/S09Hsfpa4CI2n9lb8++ErHDLxcWSZvXfxknryTL
-         dbvsTtzXNwrObQNnnln4F6VUOAnDyuwJUMSX07tXFtU9wNLZGGnacwFZHzWUZxDHbP
-         dRZUhyDoilFpSYItFggLIcTs/+dAfP94wYoYuD5oLTFInhLDDSjqe+jiphInTv5XOn
-         hioTPCeXeDpUeKsAIN3E8BnsZ06o240uUPIVX7B3VALyzYm9hev++rq66kaAY5dVXh
-         kPCJpzdAp0Obg==
-References: <20210727185800.43796-1-mdevaev@gmail.com>
- <87mtq7t0ex.fsf@kernel.org> <YQD8MfEZxPHYhnrz@kroah.com>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
+        id S234237AbhG1Gsp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jul 2021 02:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234056AbhG1Gso (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jul 2021 02:48:44 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F9CC061757;
+        Tue, 27 Jul 2021 23:48:42 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id bp1so2028025lfb.3;
+        Tue, 27 Jul 2021 23:48:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Tk2tTN8Rpz9k1o5oub1EXWBJUCnYUwH8P+Hbkc33k0U=;
+        b=MyWLagTdhbR8upGWH3EKBCaj1MQ7/iqs60RQnUGjchZoQGy/h9i1Nw7LZWhyortEKQ
+         wqyX/B/MsPSaXyR/8lOuXpjkLyte6sRImIGnQ7N08/PPCtHBAxjmT60KqzU+ByaXPARS
+         PCR0Cx8zIjCer4iTJ7mlqevgxCW/NmEroiUiKy9jBZ2V/3xnDIS85fCj4BQrfBiZ9FXG
+         Sd56hIC+MQyqsRPEh9Hb2gyVMeO3MREcp1535JlE6pw6rb8FYseB66amSbYvAAAnknoJ
+         f6o5aBRwSR/Kl8oqNaREnpSQFXcnLXsxtokScK9NsarMnNLRKDzW0CNpkB3GKDhi4MPn
+         HqOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Tk2tTN8Rpz9k1o5oub1EXWBJUCnYUwH8P+Hbkc33k0U=;
+        b=NfPTkKY3VwZAgw6pORIWETxusaZXEQm6v9ztqyPlnvAqk7Khq0CV5C0eMjBjzkhYmP
+         40Mz8WHHqZlxbZV59ENAKgRrjU3/A07zaoczaeLe/SYKSrKj7sPbmMSdwGK9GLUYzNxU
+         nUFAqX1FYJLRqC+dWOskQqBCmYnlaINY7/4Pl2J5hHur/TlArnM9FHMC0suIT0jqe3/Z
+         rALC5EXlI2+aJxkZ7N9yScw46OXq0m7jm4MTVHjFSug+SKD+t93AL3rVNi2HhzjfQE5g
+         PyCYFOT0cfs5zbu6lRVfoLmg718ctue/quvZG7QPkFjSgHkF4Bt2vI+kCBL7CWqqif3f
+         uh7w==
+X-Gm-Message-State: AOAM533jCR1iHQ0CUN617U5RWOnlgDk/QlY5ipXPKxK+At1ogPI6KnAE
+        0TEWbz2ahaI6tq856FhALGvFWftcCgvMBw==
+X-Google-Smtp-Source: ABdhPJzQm88uLHdOXJWjoUCI8bEJhg7XAoaWTkaal91bUICKHHjAmE2TaTk/88ngrEKkxGpDnAFcqA==
+X-Received: by 2002:ac2:4888:: with SMTP id x8mr19121891lfc.19.1627454920832;
+        Tue, 27 Jul 2021 23:48:40 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id m4sm437739ljq.96.2021.07.27.23.48.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jul 2021 23:48:40 -0700 (PDT)
+Date:   Wed, 28 Jul 2021 09:48:39 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
 To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Maxim Devaev <mdevaev@gmail.com>, sandeen@redhat.com,
+Cc:     Felipe Balbi <balbi@kernel.org>, sandeen@redhat.com,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] usb: gadget: f_hid: idle uses the highest byte for
  duration
-In-reply-to: <YQD8MfEZxPHYhnrz@kroah.com>
-Date:   Wed, 28 Jul 2021 09:47:04 +0300
-Message-ID: <87k0lbszo7.fsf@kernel.org>
+Message-ID: <20210728094839.23a185d8@reki>
+In-Reply-To: <YQD8MfEZxPHYhnrz@kroah.com>
+References: <20210727185800.43796-1-mdevaev@gmail.com>
+        <87mtq7t0ex.fsf@kernel.org>
+        <YQD8MfEZxPHYhnrz@kroah.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-Greg KH <gregkh@linuxfoundation.org> writes:
-> On Wed, Jul 28, 2021 at 09:31:02AM +0300, Felipe Balbi wrote:
->> 
->> Hi,
->> 
->> Maxim Devaev <mdevaev@gmail.com> writes:
->> 
->> > SET_IDLE value must be shifted 8 bits to the right to get duration.
->> > This confirmed by USBCV test.
->> >
->> > Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
->> 
->> with Greg's Fixes addition:
->> 
->> Acked-by: Felipe Balbi <balbi@kernel.org>
->
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > Argh, just missed me committing this.  Thanks for the review, sorry it
 > missed getting added to the final commit :(
 
-not a problem, thanks for taking care of all these patches ;-)
+No, it's my fault, I messed up the process and everything went wrong.
+I will improve my interaction when working on the next patch.
 
--- 
-balbi
+Sorry again. Although I read the manual on working with kernel mailings,
+I forgot about some things. Github PRs and all such things stupefy me :)
