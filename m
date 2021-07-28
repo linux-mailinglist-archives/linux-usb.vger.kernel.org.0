@@ -2,96 +2,73 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97FE53D877E
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 07:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E40E3D87D6
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 08:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233519AbhG1Fxz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jul 2021 01:53:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51728 "EHLO mail.kernel.org"
+        id S234041AbhG1GZj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jul 2021 02:25:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59710 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229814AbhG1Fxy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jul 2021 01:53:54 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 28F2960F91;
-        Wed, 28 Jul 2021 05:53:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627451633;
-        bh=OLVO5xJIhwHiX7AgTyp2l1mNWBfyWHe5OjPiCsJ891k=;
-        h=References:From:To:Cc:Subject:In-reply-to:Date:From;
-        b=sSZ3Q+zosGSU3L8V950HNs4eIgUXdoiCEfbxfpuvRyspPyZ1jCdh/sljW36z3tT0m
-         pTNMGkpLOuT79IrXDEvQy6/dPShiNsJiIgKbUrvURm8YoQP7+ldi9xlNTXZn0XE35m
-         Ak/PFwJMn8GZVOiXyJmpwfVc8+aaV/tfg+wNyPv3kTBTdQBDe6bLqgvXLuD1CFmh7m
-         GV4+qFcs3uHdaBlq6HDIatibTa++J0A7CHDaqR7AXPYD+mwC9eyt6BCnZGTR9tBX5K
-         S/jgHFwDP10Jb6Mu/YLfT7qStpTO2Byaejv/51GD8L1IneifQjW8Esg7wBhZnATYlB
-         G0HUf0LUwRWMA==
-References: <1620716636-12422-1-git-send-email-wcheng@codeaurora.org>
- <87tun9g01v.fsf@kernel.org>
- <2675db9e-0cab-06b5-2986-0b4456a1f040@codeaurora.org>
- <5156238d-c1d8-a0d3-47af-8b52467fd071@codeaurora.org>
- <fc346f3c-6e3d-b96c-d64a-2ae4cf4218d4@codeaurora.org>
- <87v954xjoz.fsf@kernel.org>
- <3c55dd4f-5ebd-3730-7428-cb15235465a7@codeaurora.org>
-User-agent: mu4e 1.4.15; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Wesley Cheng <wcheng@codeaurora.org>
-Cc:     gregkh@linuxfoundation.org, peter.chen@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Replace
- list_for_each_entry_safe() if using giveback
-In-reply-to: <3c55dd4f-5ebd-3730-7428-cb15235465a7@codeaurora.org>
-Date:   Wed, 28 Jul 2021 08:53:49 +0300
-Message-ID: <87pmv3t24y.fsf@kernel.org>
+        id S231484AbhG1GZ0 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Jul 2021 02:25:26 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11DAF60F58;
+        Wed, 28 Jul 2021 06:25:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627453525;
+        bh=4hAIdzttwWWApX+xj/vZnnLd1lxQdez71wJ2QJgxjs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mqC5SZvEo9xsqURYjSdJ7DXZJwM9oEd8fBGgvGsv/AcS18s7xtdIwNQ67hTV4cAia
+         F0SOTdL6NeaAN6bNdyOaCM8JUts7cFQpsE8iSVCBw/QuAIpQoS0ngNfhOTeeFVJ/31
+         p3KW7Q4fWrB98Hw4uCkBL/UnWl+6bdLKqOKaZc+0=
+Date:   Wed, 28 Jul 2021 08:25:23 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     balbi@kernel.org, sandeen@redhat.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: idle uses the highest byte for
+ duration
+Message-ID: <YQD4U67wFqtXBGu1@kroah.com>
+References: <20210727185800.43796-1-mdevaev@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210727185800.43796-1-mdevaev@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Jul 27, 2021 at 09:58:00PM +0300, Maxim Devaev wrote:
+> SET_IDLE value must be shifted 8 bits to the right to get duration.
+> This confirmed by USBCV test.
+> 
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index 8d50c8b12..bb476e121 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -573,7 +573,7 @@ static int hidg_setup(struct usb_function *f,
+>  		  | HID_REQ_SET_IDLE):
+>  		VDBG(cdev, "set_idle\n");
+>  		length = 0;
+> -		hidg->idle = value;
+> +		hidg->idle = value >> 8;
+>  		goto respond;
+>  		break;
+>  
+> -- 
+> 2.32.0
+> 
 
-Hi Wesley,
+You forgot to mention what commit this fixes up:
 
-Wesley Cheng <wcheng@codeaurora.org> writes:
->>>>> Sorry for the late response.  So I tried with a list_replace_init() to
->>>>> within the list_for_each_entry_safe() loop to update tmp w/ the
->>>>> cancelled_list list head, but the issue was still observed.  This is
->>>>> because we can't replace the reference the loop already has stored in
->>>>> tmp, which is simply updated as the current item on the next iteration.
->>>>>
->>>>> I believe this is what you were trying to achieve?
->>>>>
->>>> Was wondering if you had any further inputs on this change?  As
->>>> mentioned, I tried a few things with list_replace_init(), which did not
->>>> work.
->>>>
->>>
->>> Sorry for the ping.  Is this change OK to add as is?  We've been running
->>> into this instance pretty frequently during our testing, so just wanted
->>> to close on the proper changes being merged upstream.
->> 
->> The idea is this:
->> 
->> 	struct list_head	local;
->> 
->>         spin_lock_irq(&lock);
->>         list_replace_init(&dwc->cancelled_list, &local);
->>         spin_unlock_irq(&lock);
->> 
->> 	list_for_each_entry_safe(req, tmp, &local, list) {
->>         	/* ... */
->> 	}
->> 
->> It looks to me this should work fine, no? You can also follow what
->> drivers/usb/core/hcd.c is doing in usb_giveback_urb_bh() and restarting
->> if dwc->cancelled_list is not empty after list_for_each_entry_safe().
->> 
->> Can you give that one a shot?
->> 
->
-> Great, thanks for this suggestion!  Now I understand what you were
-> referring to.  I gave this a try and it works well.  Will prepare a
-> change to replace both places with list_replace_init()
+Fixes: afcff6dc690e ("usb: gadget: f_hid: added GET_IDLE and SET_IDLE handlers")
 
-this is great news :-) Thanks for trying it out
+I've added it to the patch now, but try to remember it next time.
 
--- 
-balbi
+thanks,
+
+greg k-h
