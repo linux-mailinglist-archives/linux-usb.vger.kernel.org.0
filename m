@@ -2,151 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA1E03D898B
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 10:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A3C3D8A7B
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 11:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234432AbhG1IN6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jul 2021 04:13:58 -0400
-Received: from mga18.intel.com ([134.134.136.126]:62637 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233541AbhG1IN6 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jul 2021 04:13:58 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10058"; a="199830626"
-X-IronPort-AV: E=Sophos;i="5.84,275,1620716400"; 
-   d="scan'208";a="199830626"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2021 01:13:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,275,1620716400"; 
-   d="scan'208";a="580605845"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 28 Jul 2021 01:13:55 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1m8ehO-000826-Fq; Wed, 28 Jul 2021 08:13:54 +0000
-Date:   Wed, 28 Jul 2021 16:13:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- cbbdb3fe0d974d655c87c3e6ba2990d5496b9f82
-Message-ID: <610111b1.gJ2ZYZ/bl7XT5/JG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S231583AbhG1JVC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jul 2021 05:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231282AbhG1JVC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 28 Jul 2021 05:21:02 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2365C061757;
+        Wed, 28 Jul 2021 02:21:00 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id h11so2217750ljo.12;
+        Wed, 28 Jul 2021 02:21:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VzfY90gbi7X0sIuQn8XV9NivWhzVCd/PHvSPOyC76w8=;
+        b=jO2eSSAweM20bIIitDJ50YLexzO4JULRRkl93vjQZ1RD16i9/n0Gy20Jbspz6nj9WY
+         NwZz7ROCAVkV7szOR1jyX30Dk8xIV0/SUmX6qe0VgT1x/cy2nf2BFrrDJdywMH4qgm+M
+         aBlGDIAaP2aemq9swFyQjn6BxTvDetUqUObj39Q6o56kUAlXHZrOedeDf/JkH41lPO2S
+         k23IIE26hMSnd9jtRs1yPxxaCUgmt4cV0WScaWpT9m3ZWg0Bss0GFZZ26bg2HDOkNRDw
+         TvhLVOI2vX5El6JqnI/MGgMV5yahats5YH/EDHO7/ZCPUW3Qi/o1ggQbln3m0EdqqeWC
+         Arvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VzfY90gbi7X0sIuQn8XV9NivWhzVCd/PHvSPOyC76w8=;
+        b=AHCPG8x9nlL1V86zTtqZYW4So9H6RXELaahhztcNNfrREnewQborXYLycfgns8Xzhm
+         IoRBApVVYk9myCQ9uVYACQoXNcyahj49uiLucGlB2PqlFrdJTnIO4OjQXK7rJg1qFkMV
+         GzQ/W0soNMRTTCAsfHX8iGdM/GjWrJUqCL4GQailjPHdBsBUYqllDo+WWD0tBPHjwIcr
+         GKEnSooEgKFyr0l236xbGG795VcUXl043O0tcgWDL57x2AuOcApGsqM3fma51W+t8Gcm
+         zBo0qpqu0CRy01ggXNQ6IqpsUIVvwEWjtblvzmoGX8JjV/hfPEO0iYp+kTNr7l0ZUJx6
+         pb7A==
+X-Gm-Message-State: AOAM531Y3ghqZnPK76zt8cM/RTEHXAxVTutri3lGatJrwY0w2JE7RCwQ
+        xelzDdyG99VFmQXRbDDnrIUuJH9H41DTeg==
+X-Google-Smtp-Source: ABdhPJzHivL74mGrAiSLeIGrmLEg6kK3l2lpeTZhCxSiDgZwb5d51lcgl0jJnRRYvA9vmuArIsznOQ==
+X-Received: by 2002:a2e:7015:: with SMTP id l21mr18593503ljc.72.1627464059290;
+        Wed, 28 Jul 2021 02:20:59 -0700 (PDT)
+Received: from localhost.localdomain (h-98-128-228-193.NA.cust.bahnhof.se. [98.128.228.193])
+        by smtp.gmail.com with ESMTPSA id m12sm535039lfo.227.2021.07.28.02.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jul 2021 02:20:58 -0700 (PDT)
+From:   Rikard Falkeborn <rikard.falkeborn@gmail.com>
+To:     Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Subject: [PATCH] usb: gadget: pxa25x_udc: Constify static struct pxa25x_ep_ops
+Date:   Wed, 28 Jul 2021 11:20:52 +0200
+Message-Id: <20210728092052.4178-1-rikard.falkeborn@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: cbbdb3fe0d974d655c87c3e6ba2990d5496b9f82  usb: isp1760: rework cache initialization error handling
+The struct pxa25x_ep_ops is only assigned to the ops field in the
+usb_ep struct, which is a pointer to const struct usb_ep_ops.
+Make it const to allow the compiler to put it in read-only memory.
 
-elapsed time: 1038m
-
-configs tested: 93
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210727
-nios2                         3c120_defconfig
-arm                         lpc18xx_defconfig
-arm                         palmz72_defconfig
-mips                      pistachio_defconfig
-powerpc                        icon_defconfig
-sh                          polaris_defconfig
-arm                  colibri_pxa270_defconfig
-sh                          urquell_defconfig
-sh                           se7712_defconfig
-arm                      integrator_defconfig
-s390                       zfcpdump_defconfig
-powerpc                 mpc832x_rdb_defconfig
-mips                  maltasmvp_eva_defconfig
-powerpc                 canyonlands_defconfig
-microblaze                      mmu_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-i386                 randconfig-a005-20210727
-i386                 randconfig-a003-20210727
-i386                 randconfig-a004-20210727
-i386                 randconfig-a002-20210727
-i386                 randconfig-a001-20210727
-i386                 randconfig-a006-20210727
-x86_64               randconfig-a011-20210727
-x86_64               randconfig-a016-20210727
-x86_64               randconfig-a013-20210727
-x86_64               randconfig-a014-20210727
-x86_64               randconfig-a012-20210727
-x86_64               randconfig-a015-20210727
-i386                 randconfig-a016-20210727
-i386                 randconfig-a013-20210727
-i386                 randconfig-a012-20210727
-i386                 randconfig-a011-20210727
-i386                 randconfig-a014-20210727
-i386                 randconfig-a015-20210727
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c001-20210727
-x86_64               randconfig-a003-20210727
-x86_64               randconfig-a006-20210727
-x86_64               randconfig-a001-20210727
-x86_64               randconfig-a005-20210727
-x86_64               randconfig-a004-20210727
-x86_64               randconfig-a002-20210727
-
+Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/usb/gadget/udc/pxa25x_udc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/usb/gadget/udc/pxa25x_udc.c b/drivers/usb/gadget/udc/pxa25x_udc.c
+index 69ef1e669d0c..a09ec1d826b2 100644
+--- a/drivers/usb/gadget/udc/pxa25x_udc.c
++++ b/drivers/usb/gadget/udc/pxa25x_udc.c
+@@ -1093,7 +1093,7 @@ static void pxa25x_ep_fifo_flush(struct usb_ep *_ep)
+ }
+ 
+ 
+-static struct usb_ep_ops pxa25x_ep_ops = {
++static const struct usb_ep_ops pxa25x_ep_ops = {
+ 	.enable		= pxa25x_ep_enable,
+ 	.disable	= pxa25x_ep_disable,
+ 
+-- 
+2.32.0
+
