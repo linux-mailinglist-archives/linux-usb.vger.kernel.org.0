@@ -2,72 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9AD3D8AF7
-	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 11:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC1C3D8E39
+	for <lists+linux-usb@lfdr.de>; Wed, 28 Jul 2021 14:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235505AbhG1Jma (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 28 Jul 2021 05:42:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52826 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231408AbhG1Jma (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 28 Jul 2021 05:42:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC89060F9D;
-        Wed, 28 Jul 2021 09:42:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627465348;
-        bh=VZ4nuzu7jAy+8jU0B3ANq2x2GkmAKRJmZDAGE5IMJb8=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=HACUT0BYikOpdBcL487VulSuuDq/eOsQ9aDIDix3jUv0jHosw4sLOzRFNxR/6S+Tv
-         3t46kH3gak4PFyVpcjK0/GccovYK7W0eXS2I20LFHKFQ/2rOhNZJZf+ox7FxhgFaqr
-         tDuLdGj7XW7YDNGHGL2F8KzsKk5n3mjjZykJshkf7Njjj/loHZmpnNI/tKwQ1aaGIY
-         vdD997j/UZJr7saHQysWuoy6nWdn/SS5S/wA3QfQrLzISXC4dJ3sI02PzOBrs0eXOe
-         OAAbxhZR+bEsAwTQqP+vgfAVf2ekrU12JlkCH5sYlH8Sdpz7WTIip9U4/kGDGpXeY4
-         jAGMvuj5P5vMw==
-Date:   Wed, 28 Jul 2021 11:42:25 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Colin King <colin.king@canonical.com>
-cc:     linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] USB HID: Fix spelling mistake "Uninterruptable" ->
- "Uninterruptible"
-In-Reply-To: <20210719102731.15107-1-colin.king@canonical.com>
-Message-ID: <nycvar.YFH.7.76.2107281142210.8253@cbobk.fhfr.pm>
-References: <20210719102731.15107-1-colin.king@canonical.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S235226AbhG1Ms3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 28 Jul 2021 08:48:29 -0400
+Received: from mail.zeus.flokli.de ([88.198.15.28]:39060 "EHLO zeus.flokli.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233315AbhG1Ms2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 28 Jul 2021 08:48:28 -0400
+X-Greylist: delayed 624 seconds by postgrey-1.27 at vger.kernel.org; Wed, 28 Jul 2021 08:48:27 EDT
+Received: from localhost (80-62-116-241-mobile.dk.customer.tdc.net [80.62.116.241])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: flokli@flokli.de)
+        by zeus.flokli.de (Postfix) with ESMTPSA id 8B8B9115196B;
+        Wed, 28 Jul 2021 12:37:56 +0000 (UTC)
+Date:   Wed, 28 Jul 2021 14:37:55 +0200
+From:   Florian Klink <flokli@flokli.de>
+To:     Moritz Fischer <mdf@kernel.org>
+Cc:     Matthias Schiffer <mschiffer@universe-factory.net>,
+        linux-kernel@vger.kernel.org, gabriel.kh.huang@fii-na.com,
+        moritzf@google.com, stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Justin Forbes <jmforbes@linuxtx.org>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Revert "usb: renesas-xhci: Fix handling of unknown ROM
+ state"
+Message-ID: <20210728123755.md5zvbeeop3shmve@tp.flokli.de>
+References: <20210719070519.41114-1-mdf@kernel.org>
+ <c0f191cc-6400-7309-e8a4-eab0925a3d54@universe-factory.net>
+ <YPhRu/DWbs58hgvq@epycbox.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YPhRu/DWbs58hgvq@epycbox.lan>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, 19 Jul 2021, Colin King wrote:
+On 21-07-21 09:56:27, Moritz Fischer wrote:
+>On Wed, Jul 21, 2021 at 05:28:21PM +0200, Matthias Schiffer wrote:
+>> On 7/19/21 9:05 AM, Moritz Fischer wrote:
+>> > This reverts commit d143825baf15f204dac60acdf95e428182aa3374.
+>> >
+>> > Justin reports some of his systems now fail as result of this commit:
+>> >
+>> >   xhci_hcd 0000:04:00.0: Direct firmware load for renesas_usb_fw.mem failed with error -2
+>> >   xhci_hcd 0000:04:00.0: request_firmware failed: -2
+>> >   xhci_hcd: probe of 0000:04:00.0 failed with error -2
+>> >
+>> > The revert brings back the original issue the commit tried to solve but
+>> > at least unbreaks existing systems relying on previous behavior.
+>> >
+>> > Cc: stable@vger.kernel.org
+>> > Cc: Mathias Nyman <mathias.nyman@intel.com>
+>> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>> > Cc: Vinod Koul <vkoul@kernel.org>
+>> > Cc: Justin Forbes <jmforbes@linuxtx.org>
+>> > Reported-by: Justin Forbes <jmforbes@linuxtx.org>
+>> > Signed-off-by: Moritz Fischer <mdf@kernel.org>
+>> > ---
+>> >
+>> > Justin,
+>> >
+>> > would you be able to help out testing follow up patches to this?
+>> >
+>> > I don't have a machine to test your use-case and mine definitly requires
+>> > a firmware load on RENESAS_ROM_STATUS_NO_RESULT.
+>> >
+>> > Thanks
+>> > - Moritz
+>>
+>>
+>> Hi Moritz,
+>>
+>> as an additional data point, here's the behaviour of my system, a Thinkpad
+>> T14 AMD with:
+>
+>Thanks!
 
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There is a spelling mistake in the Kconfig text. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  drivers/hid/usbhid/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/usbhid/Kconfig b/drivers/hid/usbhid/Kconfig
-> index dcf3a235870f..7c2032f7f44d 100644
-> --- a/drivers/hid/usbhid/Kconfig
-> +++ b/drivers/hid/usbhid/Kconfig
-> @@ -38,7 +38,7 @@ config USB_HIDDEV
->  	help
->  	  Say Y here if you want to support HID devices (from the USB
->  	  specification standpoint) that aren't strictly user interface
-> -	  devices, like monitor controls and Uninterruptable Power Supplies.
-> +	  devices, like monitor controls and Uninterruptible Power Supplies.
->  
->  	  This module supports these devices separately using a separate
->  	  event interface on /dev/usb/hiddevX (char 180:96 to 180:111).
+Other Thinkpad (X13 AMD) user here.
 
-Applied, thanks.
+> 06:00.0 USB controller: Renesas Technology Corp. uPD720202 USB 3.0 Host Controller (rev 02)
 
--- 
-Jiri Kosina
-SUSE Labs
+When upgrading from 5.13 5.13.2, suddenly the internal webcam, connected
+via USB (and possibly other peripherals) was gone.
 
+It took me some digging until I came to this thread.
+
+I see the same firmware load failures:
+
+> xhci_hcd 0000:06:00.0: Direct firmware load for renesas_usb_fw.mem failed with error -2
+> xhci_hcd 0000:06:00.0: request_firmware failed: -2
+> xhci_hcd: probe of 0000:06:00.0 failed with error -2
+
+I can confirm a revert of d143825baf15f204dac60acdf95e428182aa3374 fixes
+it.
+
+>>
+>> 06:00.0 USB controller [0c03]: Renesas Technology Corp. uPD720202 USB 3.0
+>> Host Controller [1912:0015] (rev 02)
+>>
+>> - On Kernel 5.13.1, no firmware: USB controller resets in an endless loop
+>> when the system is running from battery
+>> - On Kernel 5.13.4, no firmware: USB controller probe fails with the
+>> mentioned firmware load error
+>> - On Kernel 5.13.4, with renesas_usb_fw.mem: everything is working fine, the
+>> reset issue is gone
+>>
+>> So it seems to me that requiring a firmware is generally the correct driver
+>> behaviour for this hardware. The firmware I found in the Arch User
+>> Repository [1] unfortunately has a very restrictive license...
+>
+>Yeah, the chip definitely needs the firmware. It can either initialize
+>from external ROM or runtime loaded firmware.
+>
+>I think the problem really lies in how the current (and reverted) code
+>detects the need for firmware loading.
+>
+>The current code looks at two indicators:
+>- Is there an external ROM and if so, did somebody try to program the
+>  external ROM and succeed? (renesas_check_rom_state)
+>- Did somebody try to runtime-load firmware, and if so did they succeed?
+>  (renesas_fw_check_running, after the early return)
+>
+>The first one (and resulting early return) does *not* tell you whether
+>the controller actually has firwmare. That's what breaks my systems.
+>
+>The second one is only really useful *if* we also check that FW_DOWNLOAD
+>was locked.
+>
+>Neither of the above captures the case where you actually have an
+>external ROM that is programmed with proper firmware and caused the chip
+>to be loaded with said firmware.
+>
+>Now before the patch that was reverted, since nobody tried to program
+>the ROM, it feel through to the "do nothing" in this case -- which
+>worked since it configured itself from external ROM.
+>
+>Now how do we properly determine we do or don't need firwmare?
+>
+>Looking at the datasheet I see two options.
+>- The version register? I need to investigate what that resets to with
+>  an unprogrammed/corrupted ROM. If that reliably gives a detectable value
+>  this could be used as an indicator.
+>
+>- The USBSTS register according to the datasheet will report an error
+>  through the HCE bit:
+>  "If both uDP720201 and uDP720202 detect no correct firmware in Serial
+>  ROM, this flag will be set"
+>
+>I'll put up an RFC in the next couple of days ...
+
+Is the RFC already out somewhere?
+
+Regardless of that, maybe we should push the trivial revert to
+linux-stable first, so users don't run into this unexpectedly.
+
+Regards,
+Florian
