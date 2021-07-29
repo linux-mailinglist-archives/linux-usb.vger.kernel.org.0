@@ -2,180 +2,197 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCB03D9FCD
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 10:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E3CA3DA014
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 11:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235277AbhG2IqC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jul 2021 04:46:02 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:50670 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234949AbhG2IqB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Jul 2021 04:46:01 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1627548359; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=lKuAAk8F0oxV9TYCasggJHyecJyxjeqW5tMXFtGCbEI=; b=K1ubPb5DZDh/6oYmLJO6ZdDFaVu37aA7EBiTpysKg74B3HXykJTnU4GE15vuo3kgrvT96f2U
- Igyiv3HCoAfPY2SZ+zQ9M6NVhcE7mHp2feY0vG7AwPdAuDVKndFGXzWQ9K6LHJc2K8ourO1o
- S9j53Dew6GXqQPzcYRx2jaZR/kA=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 61026abce81205dd0aed5124 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 29 Jul 2021 08:45:48
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E7800C4338A; Thu, 29 Jul 2021 08:45:47 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.0
-Received: from [10.110.37.24] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 790FBC4338A;
-        Thu, 29 Jul 2021 08:45:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 790FBC4338A
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Use list_replace_init() before
- traversing lists
-To:     Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jackp@codeaurora.org
-References: <1627543994-20327-1-git-send-email-wcheng@codeaurora.org>
- <87zgu5v8om.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <4e06452a-080f-a2be-ab88-9ac992740ee0@codeaurora.org>
-Date:   Thu, 29 Jul 2021 01:45:45 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+        id S235067AbhG2JIx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jul 2021 05:08:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36667 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235017AbhG2JIw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jul 2021 05:08:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627549729;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B72jT94zoaK8ld9T7Wc/L2JO+VbuQyD10IikltADwPM=;
+        b=Uv+g1sjIjEo1YiuycTYeyVrgEtcrSKm7mVQnC5noRpPmNoYbtE16pFHHhMYZcO40HrEVo/
+        4w6ErPnw19mkVRUCfG9diGJ1q6ZpvQhEgmcaez9WQG/Z7G3rYvAFMo4vfn1AvdO5kV9krW
+        7ISqctPzPO4GobhaXU18pVsuaYSVF5s=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-20-wVRIELrjOQO8fZt_n7RlhA-1; Thu, 29 Jul 2021 05:08:48 -0400
+X-MC-Unique: wVRIELrjOQO8fZt_n7RlhA-1
+Received: by mail-ed1-f72.google.com with SMTP id d6-20020a50f6860000b02903bc068b7717so2642666edn.11
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 02:08:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=B72jT94zoaK8ld9T7Wc/L2JO+VbuQyD10IikltADwPM=;
+        b=CI7ZjecSx4/GBJNQlSK0TsKAQgAhuIYbaoPoxAHIGRByR4XT+camo5a9cjIn6EgxhY
+         mDxyko14MiYrh9JEFdTeW9XJtwt/DtR8jLJT+FKMsxkY8lQKk6L+/FqgpijygPURfItW
+         XrmdEtzuzm3MPZM0HlaoYO+NwwMuTwvb/+KMI/B8kF24M/HCtPZzIylTDDyC5qadt2GH
+         36ccRPedP0dfVyOBSs350hTO0NPSVgf26DiNJSqixdL5S4uEZf3Xt4bUiAQ5RYpn6D54
+         acVTculvkiJp9J0x3kcP2ZBv5IDaEq75STZIc7LY+13GI/U7OUv7mxA2RpKh8O/N9s2+
+         2K/g==
+X-Gm-Message-State: AOAM5306pCLBUlNHWo+P65MOPyzF8fHyxydZk56KdXJBhNBqNzW5tUqT
+        GWARJRBJJsoImezFiJF0+umfcT93gcdOgfMlg3VjrvjajDrbZ9w9V0h+TpAdU+r0igd0bJlwpEk
+        oBvpS0mbqQYCEdHND7m+JXlpbUfqQ03bTzAJLH4fTA52+qtQ2WlKDarMlGzqAvzg8QTW7lZUc
+X-Received: by 2002:a50:af85:: with SMTP id h5mr4881682edd.27.1627549726285;
+        Thu, 29 Jul 2021 02:08:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzltitzoKi+zfTiYYJGs/kFIMVRgaz53yPZ98ZlEue0ImpcwClNiWLmXgW42O+TyKnvt6k1rQ==
+X-Received: by 2002:a50:af85:: with SMTP id h5mr4881665edd.27.1627549726081;
+        Thu, 29 Jul 2021 02:08:46 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id h19sm930131edt.87.2021.07.29.02.08.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jul 2021 02:08:45 -0700 (PDT)
+Subject: Re: Lacie Rugged USB3-FW does not work with UAS
+To:     Julian Sikorski <belegdol@gmail.com>
+Cc:     Oliver Neukum <oneukum@suse.com>,
+        Nathan Stratton Treadway <vgerlists@nathanst.com>,
+        USB list <linux-usb@vger.kernel.org>
+References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
+ <1566567572.8347.54.camel@suse.com>
+ <bedb5e9f-5332-4905-2237-347d7ea77447@gmail.com>
+ <0eaecb64-4c67-110d-8493-31dd7fd58759@gmail.com>
+ <1566595393.8347.56.camel@suse.com>
+ <5f8f8e05-a29b-d868-b354-75ac48d40133@gmail.com>
+ <a090c289-6b1a-8907-271a-069aea96ba2f@gmail.com>
+ <1567424535.2469.11.camel@suse.com>
+ <2a06a5dd-3fc9-0aac-a7e2-67be35e2d6bb@gmail.com>
+ <20190904155831.GE4337@nathanst.com>
+ <d11b22f3-3f09-2e3f-dc64-956193f2c5d3@gmail.com>
+ <1568033125.365.17.camel@suse.com>
+ <ed7f6cd6-b787-4876-2462-7977d69c8d4b@gmail.com>
+ <f4682d70-9623-c877-78a1-2cdf471014f6@gmail.com>
+ <4c2b1c8a-4126-ccfe-3431-323c4935566e@suse.com>
+ <56cebf15-cf9d-475f-b388-b2be723697f6@gmail.com>
+ <c4d769e6-b906-f5f4-255b-7faf27f8702f@redhat.com>
+ <CA+xVL_QEgzb1tu-tzqYPxJF-G_a8czCp=uyZ1JJ9+5xmCcNp2Q@mail.gmail.com>
+ <CA+xVL_QrJ9f8-BwVRq1oG_yo2Cd=yQH9=TCm5g=MUO9MmdvRVA@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <830f09f8-7e16-425e-d5dc-2c5102ee4c7a@redhat.com>
+Date:   Thu, 29 Jul 2021 11:08:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <87zgu5v8om.fsf@kernel.org>
+In-Reply-To: <CA+xVL_QrJ9f8-BwVRq1oG_yo2Cd=yQH9=TCm5g=MUO9MmdvRVA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+Hi,
 
-On 7/29/2021 1:09 AM, Felipe Balbi wrote:
+On 7/28/21 7:29 PM, Julian Sikorski wrote:
+> Hi all,
 > 
-> Hi,
-> 
-> Wesley Cheng <wcheng@codeaurora.org> writes:
-> 
->> The list_for_each_entry_safe() macro saves the current item (n) and
->> the item after (n+1), so that n can be safely removed without
->> corrupting the list.  However, when traversing the list and removing
->> items using gadget giveback, the DWC3 lock is briefly released,
->> allowing other routines to execute.  There is a situation where, while
->> items are being removed from the cancelled_list using
->> dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
->> routine is running in parallel (due to UDC unbind).  As the cleanup
->> routine removes n, and the pullup disable removes n+1, once the
->> cleanup retakes the DWC3 lock, it references a request who was already
->> removed/handled.  With list debug enabled, this leads to a panic.
->> Ensure all instances of the macro are replaced where gadget giveback
->> is used.
->>
->> Example call stack:
->>
->> Thread#1:
->> __dwc3_gadget_ep_set_halt() - CLEAR HALT
->>   -> dwc3_gadget_ep_cleanup_cancelled_requests()
->>     ->list_for_each_entry_safe()
->>     ->dwc3_gadget_giveback(n)
->>       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
->>       ->spin_unlock
->>       ->Thread#2 executes
->>       ...
->>     ->dwc3_gadget_giveback(n+1)
->>       ->Already removed!
->>
->> Thread#2:
->> dwc3_gadget_pullup()
->>   ->waiting for dwc3 spin_lock
->>   ...
->>   ->Thread#1 released lock
->>   ->dwc3_stop_active_transfers()
->>     ->dwc3_remove_requests()
->>       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
->>       ->dwc3_gadget_giveback()
->>         ->dwc3_gadget_del_and_unmap_request()- n+1
->> deleted[cancelled_list]
->>         ->spin_unlock
->>
->> Fix this condition by utilizing list_replace_init(), and traversing
->> through a local copy of the current elements in the endpoint lists.
->> This will also set the parent list as empty, so if another thread is
->> also looping through the list, it will be empty on the next iteration.
->>
->> Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>
->> ---
->> Previous patchset:
->> https://lore.kernel.org/linux-usb/1620716636-12422-1-git-send-email-wcheng@codeaurora.org/
->> ---
->>  drivers/usb/dwc3/gadget.c | 18 ++++++++++++++++--
->>  1 file changed, 16 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index a29a4ca..3ce6ed9 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -1926,9 +1926,13 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
->>  {
->>  	struct dwc3_request		*req;
->>  	struct dwc3_request		*tmp;
->> +	struct list_head		local;
->>  	struct dwc3			*dwc = dep->dwc;
->>  
->> -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
->> +restart:
->> +	list_replace_init(&dep->cancelled_list, &local);
-> 
-> hmm, if the lock is held and IRQs disabled when this runs, then no other
-> threads will be able to append requests to the list which makes the
-> "restart" label unnecessary, no?
+> f quirk alone seems to be sufficient.
 
-We do still call dwc3_gadget_giveback() which would release the lock
-briefly, so if there was another thread waiting on dwc->lock, it would
-be able to add additional items to that list.
+Thank you for testing, but I'm not sure using only the NO_REPORT_OPCODES
+quirk is wise here, the other similar La Cie drive also started out with
+just that quirk, only to have the NO_SAME quirk added later. See:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8010622c86ca5bb44bc98492f5968726fc7c7a21
+
+Actually triggering a WRITE_SAME SCSI command is likely tricky, so
+it likely requires a special workload to ensure that that flag is
+not necessary.
+
+As Oliver set with the quirk to disable UAS we at least have the
+drive working (albeit slower then it would work with UAS) so we
+can take our time to make sure that things work properly with
+the combination of the f+k flags (at least using both seems
+best to me) before re-enabling UAS.
+
+Regards,
+
+Hans
+
+
+
 
 > 
-> I wonder if we should release the lock and reenable interrupts after
-> replacing the head. The problem is that
-> dwc3_gadget_ep_cleanup_cancelled_requests() can run from the IRQ
-> handler.
+> Best regards,
+> Julian
 > 
-
-We would also need to consider that some of the APIs being called in
-these situations would also have the assumption that the dwc->lock is
-held, ie dwc3_gadget_giveback()
-
-Thanks
-Wesley Cheng
-
-> Alan, could you provide your insight here? Do you think we should defer
-> this to a low priority tasklet or something along those lines?
+> Julian Sikorski <belegdol@gmail.com <mailto:belegdol@gmail.com>> schrieb am Mi., 28. Juli 2021, 01:14:
 > 
->> +	list_for_each_entry_safe(req, tmp, &local, list) {
->>  		dwc3_gadget_ep_skip_trbs(dep, req);
->>  		switch (req->status) {
->>  		case DWC3_REQUEST_STATUS_DISCONNECTED:
+>     Hi Hans,
+> 
+>     apologies for top-posting and HTML but I only can send emails from my mobile currently.
+>     With fk quirk the drive indeed appears to be working with uas: I can decrypt and mount a veracrypt volume from it. Thanks!
+>     The patch disabling uas has already made it to Linus' tree and is about to be added to stable:
+>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f>
+>     As I have no working internet on any of my Linux machines and won't for the foreseeable future (thank you construction workers), would you mind taking care of amending the quirk accordingly? Thank you in advance.
+> 
+>     Best regards,
+>     Julian
 > 
 > 
+>     Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> schrieb am Di., 27. Juli 2021, 23:19:
+> 
+>         Hi,
+> 
+>         On 7/19/21 6:10 PM, Julian Sikorski wrote:
+>         > W dniu 19.07.2021 o 14:47, Oliver Neukum pisze:
+>         >>
+>         >>> Hi all,
+>         >>>
+>         >>> apologies for necro-ing this thread. I have just tried this drive with
+>         >>> my new laptop (Asus ZenBook UM425IA) and the same quirk was needed to
+>         >>> get the drive to work:
+>         >>> options usb-storage quirks=059f:1061:u
+>         >>>
+>         >>> Should we still try to get uas working with this drive or should I
+>         >>> send a patch hardcoding a quirk? I am on 5.13.2-300.fc34.x86_64 kernel
+>         >>> now. Thanks for the feedback in advance.
+>         >>>
+>         >>
+>         >> Hi,
+>         >>
+>         >>
+>         >> sometimes we must give up. This thing is too elusive. Please send a
+>         >> patch with a quirk.
+>         >>
+>         >>      Regards
+>         >>
+>         >>          Oliver
+>         >>
+>         >>
+>         >
+>         > Hi,
+>         >
+>         > thanks for confirming. Patch is attached, it appears to be working correctly when applied against 5.13.3. Please let me know if changes are required.
+> 
+>         I seem to have missed the earlier part of this thread somehow.
+> 
+>         Looking at the USB-ids, your model seems mightily close to this existing quirk:
+> 
+>         UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
+>                         "LaCie",
+>                         "2Big Quadra USB3",
+>                         USB_SC_DEVICE, USB_PR_DEVICE, NULL,
+>                         US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
+> 
+>         Before we go with the suggested patch, can you give the uas driver one last
+>         try with:
+> 
+>         options usb-storage quirks=059f:1061:fk
+> 
+>         ? The fk translates like this:
+> 
+>         f -> US_FL_NO_REPORT_OPCODES
+>         k -> US_FL_NO_SAME
+> 
+>         Regards,
+> 
+>         Hans
+> 
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
