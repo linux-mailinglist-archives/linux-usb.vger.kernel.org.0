@@ -2,78 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1149E3DA0C8
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 12:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7D23DA0DB
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 12:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235134AbhG2KDD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jul 2021 06:03:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53616 "EHLO mail.kernel.org"
+        id S235269AbhG2KL0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jul 2021 06:11:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55488 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232355AbhG2KDC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 29 Jul 2021 06:03:02 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 9746661054;
-        Thu, 29 Jul 2021 10:02:59 +0000 (UTC)
+        id S231488AbhG2KLZ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Jul 2021 06:11:25 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EBB7961040;
+        Thu, 29 Jul 2021 10:11:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627552979;
-        bh=WSLn4DLIB7t8P7FSKAcVrax3K+zKFa+2qJs++CY6SIg=;
+        s=k20201202; t=1627553483;
+        bh=Yhp3wol49d5RYKKEfTjVOP0LZ9awPGs1SEUvAJnqAXU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JTQJ2IDmZoTv053u/NGlp4XUeZqUpuUL5xC3X/O371OmhwQ1Fo4RT1n2L0oAwMHMT
-         QdmzxRhd2TFJr2qYGdWwZQRRjGrRjFxhvFC++dYIBe11C6U2dFHa9x8wvXmqutH43f
-         auQSs9QDcF/SalGfS6wIRs9rC2NbfddtW01nQS3k4d+17amkDFFSXQJoYPhenSMbhD
-         RteoE897ZnoVmO+pEJToPf4VXG1PGM0zBCmqdfUIW8MN/Z4ODEbKPywIvE45yGiTIt
-         agwFvNEWaDt8iabtuZKJgod8czcxKtLCJX7htTZcCiIpw1yqCnEiMR+93ADdh/BHQd
-         Olp2k3r2ll9MQ==
+        b=UUAC00L+tE6WuE7nDWlv0DTDwzPDWPpz2PQueeI5j/4sorY+95Xk+m+Cw4GFobnpL
+         1ml7uRB+vLa0kOdtv1eA2kd6iI51zINVw9LJzbeq5TW3ghX5VVkaG1mXgIWfOvCJsN
+         H/Tw9cj6Jal1vPKf+keR2gHbJBwBynIIlHOUtViQmkB0/29i5f28Pm7u10UjO8pMGf
+         H1eYKV9q19n19TRXKQu0CnX0WT8/IVm0+gVH172XFhNxYKa0P0JnzgRzTx4aIwa9jP
+         VEtlZTlzcVFvmZi4MHB7zA6m2HrW/QgielQgxODTGILbkWbX42BB3rGU+pirCV+rKr
+         nUDFoH2TP0u+Q==
 Received: from johan by xi with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1m92rs-0002M3-Ge; Thu, 29 Jul 2021 12:02:21 +0200
-Date:   Thu, 29 Jul 2021 12:02:20 +0200
+        id 1m9300-0002O2-Ld; Thu, 29 Jul 2021 12:10:44 +0200
+Date:   Thu, 29 Jul 2021 12:10:44 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
+To:     Chris <chris@cyber-anlage.de>
 Cc:     linux-usb@vger.kernel.org
-Subject: Re: Commit 8a7bf7510d1f ("USB: serial: pl2303: amend and tighten
- type detection") broke pl2303 driver for my adapter
-Message-ID: <YQJ8rNbYhSwmZvbb@hovoldconsulting.com>
-References: <CA+E=qVfWm=3iJ6UR3UzeM-Se5sBjT+xx8CAM2G4bP2NxqW6itg@mail.gmail.com>
+Subject: Re: pl2303 : unknown device type
+Message-ID: <YQJ+pLPIGc4Qwrf8@hovoldconsulting.com>
+References: <2560053.x2KRyp2eMa@cyber-bucket>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6lIz+6uUQ3bMUuXQ"
 Content-Disposition: inline
-In-Reply-To: <CA+E=qVfWm=3iJ6UR3UzeM-Se5sBjT+xx8CAM2G4bP2NxqW6itg@mail.gmail.com>
+In-Reply-To: <2560053.x2KRyp2eMa@cyber-bucket>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Jul 27, 2021 at 05:00:20PM -0700, Vasily Khoruzhick wrote:
-> Hey,
-> 
-> My PL2303 adapter isn't working after I upgraded to 5.13.
-> 
-> Looks like the culprit is commit 8a7bf7510d1f ("USB: serial: pl2303:
-> amend and tighten type detection").
-> 
-> It used to work fine in 5.12.x.
-> 
-> Now it fails like this:
-> 
-> [246872.298632] usb 1-1: new full-speed USB device number 14 using xhci_hcd
-> [246872.440065] usb 1-1: New USB device found, idVendor=067b,
-> idProduct=23c3, bcdDevice= 3.05
-> [246872.440079] usb 1-1: New USB device strings: Mfr=1, Product=2,
-> SerialNumber=3
-> [246872.440085] usb 1-1: Product: USB-Serial Controller
-> [246872.440089] usb 1-1: Manufacturer: Prolific Technology Inc.
-> [246872.440093] usb 1-1: SerialNumber: CMA>b103Y23
-> [246872.445098] pl2303 1-1:1.0: pl2303 converter detected
-> [246872.445114] pl2303 1-1:1.0: unknown device type, please report to
-> linux-usb@vger.kernel.org
 
-Thanks for the report. Can you please post the output of lsusb -v for
-this device?
+--6lIz+6uUQ3bMUuXQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Any ideas on how to fix it properly? Should I send a patch that
-> handles bcdDevice == 0x305 and returns TYPE_HX for it from
-> pl2303_detect_type()?
+On Tue, Jul 27, 2021 at 02:37:23PM +0200, Chris wrote:
+> This problem was introduced with 5.13 and still persists in 5.13.5
+> After downgrading to 5.12.x, everything works like expected. Tested on=20
+> archlinux. The device is an "ICP-DAS I-7561"
 
-The device id indicates that this is in fact a PL2303GT so we may need
-to amend the HXN type detection.
+Thanks for reporting this.
+
+> lsusb -v
+>=20
+> Bus 002 Device 002: ID 067b:2303 Prolific Technology, Inc. PL2303 Serial =
+Port / Mobile Action MA-8910P
+> Couldn't open device, some information will be missing
+>=20
+> Device Descriptor:
+>   bLength                18
+>   bDescriptorType         1
+>   bcdUSB               1.10
+>   bDeviceClass            0
+>   bDeviceSubClass         0
+>   bDeviceProtocol         0
+>   bMaxPacketSize0        64
+>   idVendor           0x067b Prolific Technology, Inc.
+>   idProduct          0x2303 PL2303 Serial Port / Mobile Action MA-8910P
+>   bcdDevice           5d.ca
+
+This is an unexpected device version (93.202) which may need to add a
+special case for. The descriptors look just fine otherwise and matches
+for example an HXD device I have here (with bcdDevice 4.00) but I guess
+it could also be an HX or earlier.
+
+Do you have any idea what kind of chip this is?=20
 
 Johan
+
+--6lIz+6uUQ3bMUuXQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCYQJ+oAAKCRALxc3C7H1l
+CHX+AQDhhWXMPnf22j53jdF6bjBh/K6m8GRx0WOzR9NES4rWNQD/QQE/Pt3K6REb
++id5rlAJtPbV0Bx1+LJOjcxTSRR0igY=
+=JYXz
+-----END PGP SIGNATURE-----
+
+--6lIz+6uUQ3bMUuXQ--
