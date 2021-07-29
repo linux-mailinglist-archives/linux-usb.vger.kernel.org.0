@@ -2,170 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7B03DAA64
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 19:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 770413DAB5D
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 20:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbhG2Rhc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jul 2021 13:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhG2Rhb (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jul 2021 13:37:31 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9AFC061765
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 10:37:27 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id 190so6724645qkk.12
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 10:37:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QPJuNsYtt4R6NnnDgkB7ul+8SVMdPdnAeDpm8QAWy0Q=;
-        b=tshkj1FxOEJ8Vb5cev5rtYS9Ycdp2XgoPudxo0/sQu78LmGHWE8JCEhoTRAv7l4eJP
-         KMr+HhODHWridZ6057zu4sBnmYHgrjWLEPuFSq6J+EqJVrjiZoQCF+UQbvyyBww/I8b4
-         6O08zk3Dzdb2s7PHpOsUZYrGcCl8Lq0LBG/AP3UCsfLzyydGg8Lql8BUMbgUOFfRZ1kh
-         dorMUBVjVCWOHvaiJp8wQw3M6+4lLrGIF0TFAzVDY9zR0qN2YliiU+vUWH1C/v89EzOC
-         DqmMBWNUy72mg3IJ6TATUT9Elm6EbGawdKh4Ty85My+J4mY/WqT5d6eje2ChPbJvv93D
-         vTQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QPJuNsYtt4R6NnnDgkB7ul+8SVMdPdnAeDpm8QAWy0Q=;
-        b=FbEAYT8lt10gYFEU+ufqbM8mopxniKbF7fBizeezGAqTUbKkF9LmrpESoiwX9IeWG7
-         a0YAw2yQCgR67qWXsse/cfpURkEnu4/0TAv6jc4ZfSVykt5Mg1ov438/yc93SbC+wsQl
-         4GibRwbMPZnAdpMhgTgTxo+Cl4tLjBiWcGBA2iDG1cM5JmXbnm2FauPRW2Nlal2mr9Sy
-         Jai7KGEsXEUvysiWdj0uiydHrxUHKacgWawCCI1IkGgT4OjkBUoS8EPPc2xrgAdwe9H3
-         JsM3xODYj2F1AQ7lHK2LLoefqPoHrjU0Sp+bFlKzn0VGh3yrPmar9bkdCWavbYwzWVqY
-         YlyQ==
-X-Gm-Message-State: AOAM530XjA2FVn+4Wr9jz5raXiCPxIc5rJ08nw2snqsRxbDJcPPNR5VT
-        fWMBbWewBHqLfCiTLmj0x58OYbfnPHUrJi31N9k=
-X-Google-Smtp-Source: ABdhPJywjzfxB2r5Mv8RZIja/kRKOnBm49spl+cmd7dy8eA/bz6rlPBmh1VS2rYSFfrYtA2VFSpAwPi2hsinQ07Dcpc=
-X-Received: by 2002:a05:620a:c9b:: with SMTP id q27mr6188537qki.131.1627580246911;
- Thu, 29 Jul 2021 10:37:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+E=qVfWm=3iJ6UR3UzeM-Se5sBjT+xx8CAM2G4bP2NxqW6itg@mail.gmail.com>
- <YQJ8rNbYhSwmZvbb@hovoldconsulting.com>
-In-Reply-To: <YQJ8rNbYhSwmZvbb@hovoldconsulting.com>
-From:   Vasily Khoruzhick <anarsoul@gmail.com>
-Date:   Thu, 29 Jul 2021 10:37:00 -0700
-Message-ID: <CA+E=qVdS+7AvRcQAioUu2BshP=ReOcrCLEHE3pmERsXJascbgA@mail.gmail.com>
-Subject: Re: Commit 8a7bf7510d1f ("USB: serial: pl2303: amend and tighten type
- detection") broke pl2303 driver for my adapter
-To:     Johan Hovold <johan@kernel.org>
+        id S229758AbhG2Sun (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jul 2021 14:50:43 -0400
+Received: from mga17.intel.com ([192.55.52.151]:18032 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229807AbhG2Sun (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 29 Jul 2021 14:50:43 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10060"; a="193231214"
+X-IronPort-AV: E=Sophos;i="5.84,279,1620716400"; 
+   d="scan'208";a="193231214"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2021 11:50:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,279,1620716400"; 
+   d="scan'208";a="438632381"
+Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 29 Jul 2021 11:50:37 -0700
+Received: from kbuild by d053b881505b with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1m9B76-0009Jq-W7; Thu, 29 Jul 2021 18:50:36 +0000
+Date:   Fri, 30 Jul 2021 02:49:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
 Cc:     linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: [usb:usb-linus] BUILD SUCCESS
+ a154c43b95e860a305d8c943fb3a16ece9a69715
+Message-ID: <6102f844.fpFepwEFXgtDlwna%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 3:02 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Tue, Jul 27, 2021 at 05:00:20PM -0700, Vasily Khoruzhick wrote:
-> > Hey,
-> >
-> > My PL2303 adapter isn't working after I upgraded to 5.13.
-> >
-> > Looks like the culprit is commit 8a7bf7510d1f ("USB: serial: pl2303:
-> > amend and tighten type detection").
-> >
-> > It used to work fine in 5.12.x.
-> >
-> > Now it fails like this:
-> >
-> > [246872.298632] usb 1-1: new full-speed USB device number 14 using xhci_hcd
-> > [246872.440065] usb 1-1: New USB device found, idVendor=067b,
-> > idProduct=23c3, bcdDevice= 3.05
-> > [246872.440079] usb 1-1: New USB device strings: Mfr=1, Product=2,
-> > SerialNumber=3
-> > [246872.440085] usb 1-1: Product: USB-Serial Controller
-> > [246872.440089] usb 1-1: Manufacturer: Prolific Technology Inc.
-> > [246872.440093] usb 1-1: SerialNumber: CMA>b103Y23
-> > [246872.445098] pl2303 1-1:1.0: pl2303 converter detected
-> > [246872.445114] pl2303 1-1:1.0: unknown device type, please report to
-> > linux-usb@vger.kernel.org
->
-> Thanks for the report. Can you please post the output of lsusb -v for
-> this device?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: a154c43b95e860a305d8c943fb3a16ece9a69715  Merge tag 'usb-v5.14-rc4' of git://git.kernel.org/pub/scm/linux/kernel/git/peter.chen/usb into usb-linus
 
-Here it is:
+elapsed time: 724m
 
-Bus 001 Device 024: ID 067b:23c3 Prolific Technology, Inc. USB-Serial
-Controller
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x067b Prolific Technology, Inc.
-  idProduct          0x23c3
-  bcdDevice            3.05
-  iManufacturer           1 Prolific Technology Inc.
-  iProduct                2 USB-Serial Controller
-  iSerial                 3 CMA>b103Y23
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0027
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0xa0
-      (Bus Powered)
-      Remote Wakeup
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               1
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
+configs tested: 119
+configs skipped: 3
 
-> > Any ideas on how to fix it properly? Should I send a patch that
-> > handles bcdDevice == 0x305 and returns TYPE_HX for it from
-> > pl2303_detect_type()?
->
-> The device id indicates that this is in fact a PL2303GT so we may need
-> to amend the HXN type detection.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-What's the difference between HX and HXN?
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210728
+arc                        vdk_hs38_defconfig
+ia64                          tiger_defconfig
+arc                           tb10x_defconfig
+sparc                       sparc32_defconfig
+h8300                            alldefconfig
+arm                        multi_v7_defconfig
+m68k                          atari_defconfig
+powerpc                       holly_defconfig
+parisc                generic-32bit_defconfig
+powerpc                      ppc40x_defconfig
+sh                           se7619_defconfig
+arm                       spear13xx_defconfig
+mips                           ip28_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                        icon_defconfig
+ia64                             allmodconfig
+powerpc                       ebony_defconfig
+mips                           mtx1_defconfig
+arm                          simpad_defconfig
+mips                         tb0287_defconfig
+arm                         hackkit_defconfig
+sh                   secureedge5410_defconfig
+arm                           viper_defconfig
+powerpc                       ppc64_defconfig
+xtensa                              defconfig
+sh                            hp6xx_defconfig
+mips                  cavium_octeon_defconfig
+sh                          rsk7269_defconfig
+m68k                       m5249evb_defconfig
+sh                           sh2007_defconfig
+sh                     sh7710voipgw_defconfig
+mips                     cu1830-neo_defconfig
+xtensa                    xip_kc705_defconfig
+m68k                       m5208evb_defconfig
+xtensa                          iss_defconfig
+arm                          pxa910_defconfig
+x86_64                            allnoconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20210728
+x86_64               randconfig-a003-20210728
+x86_64               randconfig-a001-20210728
+x86_64               randconfig-a004-20210728
+x86_64               randconfig-a005-20210728
+x86_64               randconfig-a002-20210728
+i386                 randconfig-a005-20210728
+i386                 randconfig-a003-20210728
+i386                 randconfig-a004-20210728
+i386                 randconfig-a002-20210728
+i386                 randconfig-a001-20210728
+i386                 randconfig-a006-20210728
+x86_64               randconfig-a016-20210729
+x86_64               randconfig-a011-20210729
+x86_64               randconfig-a014-20210729
+x86_64               randconfig-a013-20210729
+x86_64               randconfig-a012-20210729
+x86_64               randconfig-a015-20210729
+i386                 randconfig-a016-20210728
+i386                 randconfig-a012-20210728
+i386                 randconfig-a013-20210728
+i386                 randconfig-a014-20210728
+i386                 randconfig-a011-20210728
+i386                 randconfig-a015-20210728
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
 
-> Johan
+clang tested configs:
+x86_64               randconfig-c001-20210728
+x86_64               randconfig-a016-20210728
+x86_64               randconfig-a011-20210728
+x86_64               randconfig-a014-20210728
+x86_64               randconfig-a013-20210728
+x86_64               randconfig-a012-20210728
+x86_64               randconfig-a015-20210728
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
