@@ -2,83 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E22953DA4CA
-	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 15:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 079333DA62F
+	for <lists+linux-usb@lfdr.de>; Thu, 29 Jul 2021 16:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237656AbhG2Nz5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 29 Jul 2021 09:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbhG2Nz5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jul 2021 09:55:57 -0400
-Received: from mail.cyber-anlage.de (cyber-anlage.de [IPv6:2a03:4000:6:30d5::1337])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218C2C061765
-        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 06:55:54 -0700 (PDT)
-Received: from cyber-bucket.localnet (p4fec676d.dip0.t-ipconnect.de [79.236.103.109])
-        by mail.cyber-anlage.de (Postfix) with ESMTPSA id C780C51725;
-        Thu, 29 Jul 2021 15:55:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=cyber-anlage.de;
-        s=cyber; t=1627566948;
-        bh=xxc13I2Vs1dBV9l0Y6iZNfsYvBlEUbeg68IEoH5pOlw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=CBycRlcah5WPmyBl19Ck6SELBgz+dzGR4E/1XHiS81UuqiiBGrv5M3s30s7n7VFgo
-         Vt28dcZB1zQPl/wZX+1jfT2wSnQd49PhR7xnPWP8h89cv5R8GfwC7L9f9Ur9aRRspU
-         Mez1EWhjbKqyGomAWRiyQuvgs6sLTKM44dfWHcH+yMk5oCx2SPYWhMueCdZ9jxiumq
-         Bu+EX7ETfHKdrxPnVaMmrymyoRBj3CHfYybbdIM12QVuHCOUdGu51pxdxiFiG2LLgl
-         p4iR/rASmuma2LKxJZTZ91hpMbbu2NqPbaKbq/fK6lPHIytjqX8LvCMWZuwBtNoDQy
-         TMEkfrpBAIijA==
-From:   Chris <chris@cyber-anlage.de>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: pl2303 : unknown device type
-Date:   Thu, 29 Jul 2021 15:55:48 +0200
-Message-ID: <4913832.LPSoa04KD1@cyber-bucket>
-In-Reply-To: <YQJ+pLPIGc4Qwrf8@hovoldconsulting.com>
-References: <2560053.x2KRyp2eMa@cyber-bucket> <YQJ+pLPIGc4Qwrf8@hovoldconsulting.com>
+        id S236279AbhG2OUS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 29 Jul 2021 10:20:18 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:59659 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S234135AbhG2OUM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 29 Jul 2021 10:20:12 -0400
+Received: (qmail 220251 invoked by uid 1000); 29 Jul 2021 10:20:07 -0400
+Date:   Thu, 29 Jul 2021 10:20:07 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Use list_replace_init() before
+ traversing lists
+Message-ID: <20210729142007.GA219415@rowland.harvard.edu>
+References: <1627543994-20327-1-git-send-email-wcheng@codeaurora.org>
+ <87zgu5v8om.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart6591134.GnlnUSDxm1"; micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87zgu5v8om.fsf@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
---nextPart6591134.GnlnUSDxm1
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Chris <chris@cyber-anlage.de>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: pl2303 : unknown device type
-Date: Thu, 29 Jul 2021 15:55:48 +0200
-Message-ID: <4913832.LPSoa04KD1@cyber-bucket>
-In-Reply-To: <YQJ+pLPIGc4Qwrf8@hovoldconsulting.com>
-References: <2560053.x2KRyp2eMa@cyber-bucket> <YQJ+pLPIGc4Qwrf8@hovoldconsulting.com>
+On Thu, Jul 29, 2021 at 11:09:57AM +0300, Felipe Balbi wrote:
+> 
+> Hi,
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+> 
+> > The list_for_each_entry_safe() macro saves the current item (n) and
+> > the item after (n+1), so that n can be safely removed without
+> > corrupting the list.  However, when traversing the list and removing
+> > items using gadget giveback, the DWC3 lock is briefly released,
+> > allowing other routines to execute.  There is a situation where, while
+> > items are being removed from the cancelled_list using
+> > dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
+> > routine is running in parallel (due to UDC unbind).  As the cleanup
+> > routine removes n, and the pullup disable removes n+1, once the
+> > cleanup retakes the DWC3 lock, it references a request who was already
+> > removed/handled.  With list debug enabled, this leads to a panic.
+> > Ensure all instances of the macro are replaced where gadget giveback
+> > is used.
+> >
+> > Example call stack:
+> >
+> > Thread#1:
+> > __dwc3_gadget_ep_set_halt() - CLEAR HALT
+> >   -> dwc3_gadget_ep_cleanup_cancelled_requests()
+> >     ->list_for_each_entry_safe()
+> >     ->dwc3_gadget_giveback(n)
+> >       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
+> >       ->spin_unlock
+> >       ->Thread#2 executes
+> >       ...
+> >     ->dwc3_gadget_giveback(n+1)
+> >       ->Already removed!
+> >
+> > Thread#2:
+> > dwc3_gadget_pullup()
+> >   ->waiting for dwc3 spin_lock
+> >   ...
+> >   ->Thread#1 released lock
+> >   ->dwc3_stop_active_transfers()
+> >     ->dwc3_remove_requests()
+> >       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
+> >       ->dwc3_gadget_giveback()
+> >         ->dwc3_gadget_del_and_unmap_request()- n+1
+> > deleted[cancelled_list]
+> >         ->spin_unlock
+> >
+> > Fix this condition by utilizing list_replace_init(), and traversing
+> > through a local copy of the current elements in the endpoint lists.
+> > This will also set the parent list as empty, so if another thread is
+> > also looping through the list, it will be empty on the next iteration.
+> >
+> > Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
+> > Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+> >
+> > ---
+> > Previous patchset:
+> > https://lore.kernel.org/linux-usb/1620716636-12422-1-git-send-email-wcheng@codeaurora.org/
+> > ---
+> >  drivers/usb/dwc3/gadget.c | 18 ++++++++++++++++--
+> >  1 file changed, 16 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> > index a29a4ca..3ce6ed9 100644
+> > --- a/drivers/usb/dwc3/gadget.c
+> > +++ b/drivers/usb/dwc3/gadget.c
+> > @@ -1926,9 +1926,13 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
+> >  {
+> >  	struct dwc3_request		*req;
+> >  	struct dwc3_request		*tmp;
+> > +	struct list_head		local;
+> >  	struct dwc3			*dwc = dep->dwc;
+> >  
+> > -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
+> > +restart:
+> > +	list_replace_init(&dep->cancelled_list, &local);
+> 
+> hmm, if the lock is held and IRQs disabled when this runs, then no other
+> threads will be able to append requests to the list which makes the
+> "restart" label unnecessary, no?
 
-On Thursday, July 29, 2021 12:10:44 PM CEST Johan Hovold wrote:
-> Do you have any idea what kind of chip this is?
+As Wesley pointed out, the lock can be released during giveback and 
+requests can be added to the cancelled_list at that time.
 
-No, sorry, I don't. Do I have to open the device to check? (I'd rather not... 
-I'd have to crawl into the attic to get to it)
+On the other hand, if that happens, do you need to process those 
+requests in this function call?  Will another cleanup iteration take 
+care of them later?  (I don't know the driver well enough to answer 
+this.)  If it will, you may not need to restart anything.
 
-cheerio,
-chris
---nextPart6591134.GnlnUSDxm1
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+> I wonder if we should release the lock and reenable interrupts after
+> replacing the head. The problem is that
+> dwc3_gadget_ep_cleanup_cancelled_requests() can run from the IRQ
+> handler.
+> 
+> Alan, could you provide your insight here? Do you think we should defer
+> this to a low priority tasklet or something along those lines?
 
------BEGIN PGP SIGNATURE-----
+I don't see why anything like that would be necessary.  Giving back 
+cancelled requests isn't important enough to warrant special treatment.
 
-iQEzBAABCAAdFiEEn472JWEQLcP1NoSxpPnvy7Wy1NUFAmECs2QACgkQpPnvy7Wy
-1NUYAQf+IsHFksiTS7JJBTE9wfgBM/RLauCNWLTbE7fuLPSznHplNmCbIoijzFEI
-W+1DEpdPc6dHU6bxpO3qTgp48bmBvbI5PO60lr/Sl00OcW6+I/8X5rZQHPJB29Mi
-u5WH/02kUK2LaOvKohtrg1dgz6Xi0ACUsF0ngJW86NsOW/snkaUYqAbcLspGGfLK
-di7pG0j1Kf1V5ZfzGjZ6qE37oYEMXLagdOliapxSxUAZGPnEzuErHronzQ4FVzQS
-a++8tBL0mu7g0u4i1DrkD2Mgim17UMC033Gr1xlRtZY9EdHAmpQ1Pryu2XcvxIdS
-Ktx/jrLrvqggMEgazPmc5MOXKr3u9Q==
-=ozdU
------END PGP SIGNATURE-----
+An alternative approach, used by some other drivers, is to stick with 
+list_for_each_entry_safe as in the existing code, but go back to the 
+restart label immediately each time the lock is released and reacquired.
 
---nextPart6591134.GnlnUSDxm1--
+Also, if this loop always removes the entry it is processing from the 
+list (I don't know whether it does this), you don't have to use 
+list_for_each_entry_safe.  You can simply use list_first_entry.
 
+Alan Stern
 
-
+> > +	list_for_each_entry_safe(req, tmp, &local, list) {
+> >  		dwc3_gadget_ep_skip_trbs(dep, req);
+> >  		switch (req->status) {
+> >  		case DWC3_REQUEST_STATUS_DISCONNECTED:
+> 
+> 
+> -- 
+> balbi
