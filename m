@@ -2,160 +2,110 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D33073DB53B
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 10:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112A73DB600
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 11:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238154AbhG3Iu4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 04:50:56 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41564 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S238137AbhG3Iuy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 04:50:54 -0400
-X-UUID: 075053a04ba54ba5ab4a7f7a47d8b2ca-20210730
-X-UUID: 075053a04ba54ba5ab4a7f7a47d8b2ca-20210730
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1362136745; Fri, 30 Jul 2021 16:50:46 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 30 Jul 2021 16:50:45 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 30 Jul 2021 16:50:45 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>
-CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH 11/11] usb: xhci-mtk: modify the SOF/ITP interval for mt8195
-Date:   Fri, 30 Jul 2021 16:50:02 +0800
-Message-ID: <1627635002-24521-11-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1627635002-24521-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1627635002-24521-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S238304AbhG3Jdc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 05:33:32 -0400
+Received: from out28-51.mail.aliyun.com ([115.124.28.51]:60641 "EHLO
+        out28-51.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238156AbhG3Jdc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 05:33:32 -0400
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07529395|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.126289-0.000848962-0.872862;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047188;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=14;RT=14;SR=0;TI=SMTPD_---.Kt0Ea8-_1627637603;
+Received: from 192.168.88.131(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.Kt0Ea8-_1627637603)
+          by smtp.aliyun-inc.com(10.147.41.120);
+          Fri, 30 Jul 2021 17:33:25 +0800
+Subject: Re: [PATCH 1/2] dt-bindings: dwc2: Add bindings for new Ingenic SoCs.
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        hminas@synopsys.com, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sihui.liu@ingenic.com, jun.jiang@ingenic.com,
+        sernia.zhou@foxmail.com
+References: <1627116521-124612-1-git-send-email-zhouyanjie@wanyeetech.com>
+ <1627116521-124612-2-git-send-email-zhouyanjie@wanyeetech.com>
+ <CLWQWQ.DBCX3I00Y95T2@crapouillou.net>
+ <ad64396d-d7ab-b8dd-4086-f565e91edb00@wanyeetech.com>
+ <TKQSWQ.K11YHBO0B4FM2@crapouillou.net>
+From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
+Message-ID: <0bffb545-212c-2711-43ac-39efc1074c8b@wanyeetech.com>
+Date:   Fri, 30 Jul 2021 17:33:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+In-Reply-To: <TKQSWQ.K11YHBO0B4FM2@crapouillou.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-There are 4 USB controllers on MT8195, the controllers (IP1~IP3,
-exclude IP0) have a wrong default SOF/ITP interval which is
-calculated from the frame counter clock 24Mhz by default, but
-in fact, the frame counter clock is 48Mhz, so we should set
-the accurate interval according to 48Mhz for those controllers.
-Note: the first controller no need set it.
+Hi Paul,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/host/xhci-mtk.c | 65 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+On 2021/7/25 下午6:31, Paul Cercueil wrote:
+> Hi Zhou,
+>
+> Le sam., juil. 24 2021 at 20:52:30 +0800, Zhou Yanjie 
+> <zhouyanjie@wanyeetech.com> a écrit :
+>> Hi Paul,
+>>
+>> On 2021/7/24 下午6:46, Paul Cercueil wrote:
+>>> Hi Zhou,
+>>>
+>>> Le sam., juil. 24 2021 at 16:48:40 +0800, 周琰杰 (Zhou Yanjie) 
+>>> <zhouyanjie@wanyeetech.com> a écrit :
+>>>> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000 
+>>>> SoC,
+>>>> the X1600 SoC, the X1830 SoC, and the X2000 SoC from Ingenic.
+>>>>
+>>>> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+>>>> ---
+>>>>  Documentation/devicetree/bindings/usb/dwc2.yaml | 6 ++++++
+>>>>  1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml 
+>>>> b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> index 10c7d9b..e779d33 100644
+>>>> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+>>>> @@ -14,6 +14,12 @@ properties:
+>>>>      oneOf:
+>>>>        - const: brcm,bcm2835-usb
+>>>>        - const: hisilicon,hi6220-usb
+>>>> +      - const: ingenic,jz4775-otg
+>>>> +      - const: ingenic,jz4780-otg
+>>>> +      - const: ingenic,x1000-otg
+>>>> +      - const: ingenic,x1600-otg
+>>>> +      - const: ingenic,x1830-otg
+>>>> +      - const: ingenic,x2000-otg
+>>>
+>>> I don't know if all these IPs are the exact same, but if they are, 
+>>> they all should have "ingenic,jz4775-otg" as the fallback.
+>>
+>>
+>> I'm not too sure whether they are exactly the same, but comparing the 
+>> code in Ingenics SDK,
+>>
+>> the code of the USB part of jz4775, jz4780, and x1000 are the same, 
+>> the code of the USB part
+>>
+>> of x1600 and x1830 are the same, and the USB part code of X2000 are 
+>> different from all of them.
+>
+> In doubt - it's better to keep separate compatible strings, so this is 
+> OK.
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 12b691547438..7ff0cd707ba1 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -57,6 +57,27 @@
- /* u2_phy_pll register */
- #define CTRL_U2_FORCE_PLL_STB	BIT(28)
- 
-+/* xHCI CSR */
-+#define LS_EOF_CFG		0x930
-+#define LSEOF_OFFSET		0x89
-+
-+#define FS_EOF_CFG		0x934
-+#define FSEOF_OFFSET		0x2e
-+
-+#define SS_GEN1_EOF_CFG		0x93c
-+#define SSG1EOF_OFFSET		0x78
-+
-+#define HFCNTR_CFG		0x944
-+#define ITP_DELTA_CLK		(0xa << 1)
-+#define ITP_DELTA_CLK_MASK	GENMASK(5, 1)
-+#define FRMCNT_LEV1_RANG	(0x12b << 8)
-+#define FRMCNT_LEV1_RANG_MASK	GENMASK(19, 8)
-+
-+#define SS_GEN2_EOF_CFG		0x990
-+#define SSG2EOF_OFFSET		0x3c
-+
-+#define XSEOF_OFFSET_MASK	GENMASK(11, 0)
-+
- /* usb remote wakeup registers in syscon */
- 
- /* mt8173 etc */
-@@ -87,6 +108,46 @@ enum ssusb_uwk_vers {
- 	SSUSB_UWK_V1_2,		/* specific revision 1.2 */
- };
- 
-+/*
-+ * MT8195 has 4 controllers, the controller1~3's default SOF/ITP interval
-+ * is calculated from the frame counter clock 24M, but in fact, the clock
-+ * is 48M, add workaround for it.
-+ */
-+static void xhci_mtk_set_frame_interval(struct xhci_hcd_mtk *mtk)
-+{
-+	struct device *dev = mtk->dev;
-+	struct usb_hcd *hcd = mtk->hcd;
-+	u32 value;
-+
-+	if (!of_device_is_compatible(dev->of_node, "mediatek,mt8195-xhci"))
-+		return;
-+
-+	value = readl(hcd->regs + HFCNTR_CFG);
-+	value &= ~(ITP_DELTA_CLK_MASK | FRMCNT_LEV1_RANG_MASK);
-+	value |= (ITP_DELTA_CLK | FRMCNT_LEV1_RANG);
-+	writel(value, hcd->regs + HFCNTR_CFG);
-+
-+	value = readl(hcd->regs + LS_EOF_CFG);
-+	value &= ~XSEOF_OFFSET_MASK;
-+	value |= LSEOF_OFFSET;
-+	writel(value, hcd->regs + LS_EOF_CFG);
-+
-+	value = readl(hcd->regs + FS_EOF_CFG);
-+	value &= ~XSEOF_OFFSET_MASK;
-+	value |= FSEOF_OFFSET;
-+	writel(value, hcd->regs + FS_EOF_CFG);
-+
-+	value = readl(hcd->regs + SS_GEN1_EOF_CFG);
-+	value &= ~XSEOF_OFFSET_MASK;
-+	value |= SSG1EOF_OFFSET;
-+	writel(value, hcd->regs + SS_GEN1_EOF_CFG);
-+
-+	value = readl(hcd->regs + SS_GEN2_EOF_CFG);
-+	value &= ~XSEOF_OFFSET_MASK;
-+	value |= SSG2EOF_OFFSET;
-+	writel(value, hcd->regs + SS_GEN2_EOF_CFG);
-+}
-+
- static int xhci_mtk_host_enable(struct xhci_hcd_mtk *mtk)
- {
- 	struct mu3c_ippc_regs __iomem *ippc = mtk->ippc_regs;
-@@ -368,6 +429,9 @@ static int xhci_mtk_setup(struct usb_hcd *hcd)
- 		ret = xhci_mtk_ssusb_config(mtk);
- 		if (ret)
- 			return ret;
-+
-+		/* workaround only for mt8195 */
-+		xhci_mtk_set_frame_interval(mtk);
- 	}
- 
- 	ret = xhci_gen_setup(hcd, xhci_mtk_quirks);
-@@ -716,6 +780,7 @@ static const struct dev_pm_ops xhci_mtk_pm_ops = {
- 
- static const struct of_device_id mtk_xhci_of_match[] = {
- 	{ .compatible = "mediatek,mt8173-xhci"},
-+	{ .compatible = "mediatek,mt8195-xhci"},
- 	{ .compatible = "mediatek,mtk-xhci"},
- 	{ },
- };
--- 
-2.18.0
 
+Sure.
+
+
+Thanks and best regards!
+
+
+>
+> Cheers,
+> -Paul
+>
