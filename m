@@ -2,182 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B30753DB8CA
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 14:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 513D83DB8D0
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 14:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238808AbhG3MmJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 08:42:09 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55860 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238723AbhG3MmI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Jul 2021 08:42:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EC91760E97;
-        Fri, 30 Jul 2021 12:42:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627648924;
-        bh=JMI/Ue6RAsVh19eMB/EUqMUex6fpmAUMHTb0GH1UFX0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=W6lc5TP3uWTOVb5psdgow//r+w1pPzKB3a/msvySI7tHjev6MbcMEYU/24gWWSpBt
-         3oemH2878bn1+XKPh/JeXsr4iJHFCCV3LGgfC7EZByqvwdix+JHkhCRRNjgiyVKTzY
-         unCZZQZiiJ8AwpbYRa99x210pbl1beCwQ9YHMv/CpgGd/YVFpfNnNFMU42CamKGGog
-         4UqkEb73ZMG67Mo2L8jwvuVwJJNO+oDrX3Da2EDzdDW2R0ZyOls1l5MWeJdxBBJOYI
-         q6kCpFiUCOvpLnGi5qJf6CukV8boeGxUp1TMcXyA6ppPrXMEhGw2ISMsqIAne+V0yN
-         5lPbuWPqepqQg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1m9RpP-0002Nu-1e; Fri, 30 Jul 2021 14:41:27 +0200
-Date:   Fri, 30 Jul 2021 14:41:27 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Vasily Khoruzhick <anarsoul@gmail.com>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: Commit 8a7bf7510d1f ("USB: serial: pl2303: amend and tighten
- type detection") broke pl2303 driver for my adapter
-Message-ID: <YQPzdwYy8qxY39BW@hovoldconsulting.com>
-References: <CA+E=qVfWm=3iJ6UR3UzeM-Se5sBjT+xx8CAM2G4bP2NxqW6itg@mail.gmail.com>
- <YQJ8rNbYhSwmZvbb@hovoldconsulting.com>
- <CA+E=qVdS+7AvRcQAioUu2BshP=ReOcrCLEHE3pmERsXJascbgA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+E=qVdS+7AvRcQAioUu2BshP=ReOcrCLEHE3pmERsXJascbgA@mail.gmail.com>
+        id S238880AbhG3MpO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 08:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42172 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238877AbhG3Moq (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 08:44:46 -0400
+Received: from mail-qv1-xf49.google.com (mail-qv1-xf49.google.com [IPv6:2607:f8b0:4864:20::f49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA89C061796
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jul 2021 05:43:53 -0700 (PDT)
+Received: by mail-qv1-xf49.google.com with SMTP id m15-20020a0cbf0f0000b02902e60d75210eso5804210qvi.19
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jul 2021 05:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=BUiqVnmCC5LvHUiB8iYWIOWbO4jO0OfShvOq4rUC/U0=;
+        b=uot/DzFgmwjObSu3zktrMgJ2umnJ8lum8uAOrI27vCbViA92GIbqlHdxxDRPAtckTu
+         pERv9asVh4OIsUjb+BUVGdepbl1ymy3BdWTldI52oht4Djvx8c1uLSPY415R6wMYVqfP
+         gh2tWn1w+GJx/x5pJ64MIl5CVdTQ5d4MVpxZcq/C15WiF5kTACB9QcDW/Ru8dv3bKYO7
+         1XCRNDQ1GfUcykDekKhqhlqii7cp89YBceib99SKdTvjEb4dOjmjNd2B7LZRDb5dXKUx
+         a5PQTb0tC4XQwd4a3cymf2cMRcb8AR13tAzMA+varqD7Skn/iPnkXY10kLohLcJB0CWT
+         oSFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=BUiqVnmCC5LvHUiB8iYWIOWbO4jO0OfShvOq4rUC/U0=;
+        b=RLKA02ityjf8j8efBMl5Uzgkmc9l9Pv0tF+dNAcs1v8/pIDlS8w2UOJ0xErrQVsBbY
+         jt3mNypqYNoPiI3r6z3/Ig+vIwqzyyeX81eELOx4SlQAEVgWfBzXW3++xiyhqEIW62tP
+         Rj+YX2b5YGbFDGn0YJb97HXSTutbJrCrovXEfvb3qi7s5KPt2uNMU0tVZD0/780/hYBO
+         zixG7tSva6bKUh5buXJOB43LfBT1GPBUlA+VgZo/XXP5b75eAbwGGJdmvvOTHqDxtBxO
+         8bWE7B8BTV3d/6OCwN+7xUJ0++xi0erj26jZM+JLfht0Ow1Vys5zIXYBKK9Tpx7Sh5Qv
+         gYDg==
+X-Gm-Message-State: AOAM531pq8Qan+nT3/jGTrBwMT3S41DZfNSMMkyLnslWmupJ8KS4kyfi
+        X3VLILLsmIeDRp5P7VYgWts7p3mh+est
+X-Google-Smtp-Source: ABdhPJxzxMzASRvkFgqW+ytumwovki124B/n372u7N1TvgSmlRct/5OVggH9RDgimalWc+KEFLXb7Jn2Ascy
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:6892:a74:4970:a062])
+ (user=kyletso job=sendgmr) by 2002:ad4:522c:: with SMTP id
+ r12mr2460956qvq.17.1627649032859; Fri, 30 Jul 2021 05:43:52 -0700 (PDT)
+Date:   Fri, 30 Jul 2021 20:43:46 +0800
+Message-Id: <20210730124348.1986638-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
+Subject: [PATCH v5 0/2] TCPM non-PD mode
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 10:37:00AM -0700, Vasily Khoruzhick wrote:
-> On Thu, Jul 29, 2021 at 3:02 AM Johan Hovold <johan@kernel.org> wrote:
-> > On Tue, Jul 27, 2021 at 05:00:20PM -0700, Vasily Khoruzhick wrote:
+cover-letter is the same as that in v4
 
-> > > My PL2303 adapter isn't working after I upgraded to 5.13.
+The reason for this patch is to let the device/system policy decide
+whether PD is going to be supported using devicetree properties.
 
-> > Thanks for the report. Can you please post the output of lsusb -v for
-> > this device?
-> 
-> Here it is:
-> 
-> Bus 001 Device 024: ID 067b:23c3 Prolific Technology, Inc. USB-Serial
-> Controller
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               2.00
->   bDeviceClass            0
->   bDeviceSubClass         0
->   bDeviceProtocol         0
->   bMaxPacketSize0        64
->   idVendor           0x067b Prolific Technology, Inc.
->   idProduct          0x23c3
->   bcdDevice            3.05
+A new dt property "pd-unsupported" is introduced and TCPM uses this
+property as a flag to decide whether PD is supported. If the flag is
+false (the dt property is not present), the RX functionality of the
+low-level driver will not be enabled. The power negotiation related
+states will be skipped as well. If the flag is true, everything is a
+what it was before.
 
-Thanks. Based on the above it looks like either a TA using the default
-GT idProduct and new subminor release number (3.05), or it's a GT with
-an undocumented release number (the datasheet says it should be 1.00).
+If "pd-unsupported" is present, and the port is SRC or DRP, another
+existing dt property "typec-power-opmode" needs to be specified to
+indicate which Rp value should be used when the port is SRC.
 
->   iManufacturer           1 Prolific Technology Inc.
->   iProduct                2 USB-Serial Controller
->   iSerial                 3 CMA>b103Y23
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x0027
->     bNumInterfaces          1
->     bConfigurationValue     1
->     iConfiguration          0
->     bmAttributes         0xa0
->       (Bus Powered)
->       Remote Wakeup
->     MaxPower              100mA
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x000a  1x 10 bytes
->         bInterval               1
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0040  1x 64 bytes
->         bInterval               0
-> 
-> > > Any ideas on how to fix it properly? Should I send a patch that
-> > > handles bcdDevice == 0x305 and returns TYPE_HX for it from
-> > > pl2303_detect_type()?
-> >
-> > The device id indicates that this is in fact a PL2303GT so we may need
-> > to amend the HXN type detection.
-> 
-> What's the difference between HX and HXN?
+changes since v4:
+dt-bindings: connector: Add pd-unsupported property
+- Corrected the subject
 
-The HXN type, or rather G-series, uses a different protocol from the
-older types and would not work at all unless detected correctly.
+usb: typec: tcpm: Support non-PD mode
+- Added Reviewed-by
 
-Could you try applying the patch below and check the log for that
-pl2303_supports_hx_status() printk? If it is indeed a GT then this
-should also make the device work again.
+Kyle Tso (2):
+  dt-bindings: connector: Add pd-unsupported property
+  usb: typec: tcpm: Support non-PD mode
 
-Johan
+ .../bindings/connector/usb-connector.yaml     |  4 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 87 +++++++++++++++----
+ 2 files changed, 72 insertions(+), 19 deletions(-)
 
-
-From 4e964bc27a02bc37446caf7fcfb796aed6666830 Mon Sep 17 00:00:00 2001
-From: Johan Hovold <johan@kernel.org>
-Date: Fri, 30 Jul 2021 14:35:24 +0200
-Subject: [PATCH] USB: serial: pl2303: add type instrumentation
-
----
- drivers/usb/serial/pl2303.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 2f2f5047452b..8ef159473504 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -394,6 +394,8 @@ static bool pl2303_supports_hx_status(struct usb_serial *serial)
- 			VENDOR_READ_REQUEST_TYPE, PL2303_READ_TYPE_HX_STATUS,
- 			0, &buf, 1, 100, GFP_KERNEL);
- 
-+	dev_info(&serial->interface->dev, "%s - ret = %d\n", __func__, ret);
-+
- 	return ret == 0;
- }
- 
-@@ -420,6 +422,7 @@ static int pl2303_detect_type(struct usb_serial *serial)
- 
- 	switch (bcdDevice) {
- 	case 0x100:
-+	case 0x305:
- 		/*
- 		 * Assume it's an HXN-type if the device doesn't support the old read
- 		 * request value.
 -- 
-2.31.1
+2.32.0.554.ge1b32706d8-goog
 
