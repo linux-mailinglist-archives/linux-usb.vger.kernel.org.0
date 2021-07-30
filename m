@@ -2,125 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7B03DB2A8
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 07:15:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F6B3DB368
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 08:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237060AbhG3FPL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 01:15:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47414 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234928AbhG3FPH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Jul 2021 01:15:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 6AAA660F9B;
-        Fri, 30 Jul 2021 05:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1627622098;
-        bh=Rd0qV6oPrMRK9x5RQHEA0i4kdEU0U+RcVzNm4XOeux8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T6hObKQmOk4AFgIpQT4y2Zsi4Q75SgNjFNnS8pRLR4KFvnEyagvEfbTCdxstRLsYG
-         rjTcpLBlDG/oVJ8lnaqbcwXAZTVT9l8C6Cy6bhh3Fo+ilPrCNthbqlfZm24+7rNODV
-         PAMI7xMjSKfCoNPXlo3uccVRt1pE46rn5PvW/dE4=
-Date:   Fri, 30 Jul 2021 07:14:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        kernel@pengutronix.de, linux-pci@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vadym Kochan <vkochan@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Michael Buesch <m@bues.ch>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-crypto@vger.kernel.org, qat-linux@intel.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, oss-drivers@corigine.com,
-        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 0/5] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-Message-ID: <YQOKz0l6aaU8PGLV@kroah.com>
-References: <20210729203740.1377045-1-u.kleine-koenig@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210729203740.1377045-1-u.kleine-koenig@pengutronix.de>
+        id S237327AbhG3GSm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 02:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230203AbhG3GSm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 02:18:42 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B25C0613C1
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 23:18:38 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id f3-20020a25cf030000b029055a2303fc2dso9277106ybg.11
+        for <linux-usb@vger.kernel.org>; Thu, 29 Jul 2021 23:18:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=vthqjBQ/Q4udWXq8hxDLv4OMPT7q1106HFB0bgOZZVg=;
+        b=hfCLLYg9u/HJ0MTxdrOhdfbc67sC4AG4T9SVaLsYna6Zon0m/LOAbckakXn6IYtYZS
+         rPBFPG0Wc9XdhjWOun0Ga5Em2tuPzWT9lumyBIFLk7iCmThv/wdBF9HOlkRnToNiSHsn
+         NQg1gLOqzn4x+mMiOr0UC5f0lxnd9guWLR4RJ8VaLm0y1GeV801sr2Vxp2QJAYelEkDF
+         IYxOiwpsjrypgfXOf5+fGNsNXGxBwk7wZEiMJhah2bug+xrMXKH2AaaC5rfto9Qv7uPo
+         N7EDaerkIZPS1HiROxcnSHJkyHJSIwwI8VbNvN1c2vyuQfYcJwLCcJiNiG8DDdRhydVW
+         4HKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=vthqjBQ/Q4udWXq8hxDLv4OMPT7q1106HFB0bgOZZVg=;
+        b=o58BXTwa7rHfuesxtrL9JJ664EeQtLTnBoP35GwAzuh0Un9GHMSZAo8Rfyp9z1BmFf
+         G5jDJID9JkaRzKgoL5JzKoHf70RxB2MM0Nd6hTDJQmq/HjFD3zvheNhKZyhUXsYmu+kX
+         hjc0oeLMoAJ5UpwKkpENgmut7oa9ZpjIg9zD6oT/OcQqO/UNhVbrtgFL6HRKZtmHN86a
+         mbXkmdAZuP5SRd6Hr0+1wfd5v93N54gKtFOfVtacLGNcx52D6rug4fzfYGanI4PPQfv0
+         As/I1H9vwBn8i8ssCusqLU9J1AlFrqa2yBVg99pfEDL2poshGk7RqEqcqQ8F8IGrW5Wk
+         bJMQ==
+X-Gm-Message-State: AOAM53157rWWY7QwiwkMgxrqMhTzXVjJoe/BOtHCH6lWJ7crwJUPbl/n
+        QJay3sHQjw5jT4RZtgYJYv1b2DARU+wh
+X-Google-Smtp-Source: ABdhPJwR59fBTTX9DCJKCQAWYXxa1dLyE5ol9vId57clmeAeKgqe/apxSgl2aaxNmbB2TsygddRPdY6DyOeJ
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:6892:a74:4970:a062])
+ (user=kyletso job=sendgmr) by 2002:a25:54:: with SMTP id 81mr1165845yba.53.1627625917145;
+ Thu, 29 Jul 2021 23:18:37 -0700 (PDT)
+Date:   Fri, 30 Jul 2021 14:18:30 +0800
+Message-Id: <20210730061832.1927936-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
+Subject: [PATCH v4 0/2] TCPM non-PD mode
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 10:37:35PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> struct pci_dev tracks the bound pci driver twice. This series is about
-> removing this duplication.
-> 
-> The first two patches are just cleanups. The third patch introduces a
-> wrapper that abstracts access to struct pci_dev->driver. In the next
-> patch (hopefully) all users are converted to use the new wrapper and
-> finally the fifth patch removes the duplication.
-> 
-> Note this series is only build tested (allmodconfig on several
-> architectures).
-> 
-> I'm open to restructure this series if this simplifies things. E.g. the
-> use of the new wrapper in drivers/pci could be squashed into the patch
-> introducing the wrapper. Patch 4 could be split by maintainer tree or
-> squashed into patch 3 completely.
-> 
-> Best regards
-> Uwe
-> 
-> Uwe Kleine-König (5):
->   PCI: Simplify pci_device_remove()
->   PCI: Drop useless check from pci_device_probe()
->   PCI: Provide wrapper to access a pci_dev's bound driver
->   PCI: Adapt all code locations to not use struct pci_dev::driver
->     directly
->   PCI: Drop duplicated tracking of a pci_dev's bound driver
+cover-letter is the same as that in v3
 
-Other than my objection to patch 5/5 lack of changelog, looks sane to
-me:
+The reason for this patch is to let the device/system policy decide
+whether PD is going to be supported using devicetree properties.
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+A new dt property "pd-unsupported" is introduced and TCPM uses this
+property as a flag to decide whether PD is supported. If the flag is
+false (the dt property is not present), the RX functionality of the
+low-level driver will not be enabled. The power negotiation related
+states will be skipped as well. If the flag is true, everything is a
+what it was before.
+
+If "pd-unsupported" is present, and the port is SRC or DRP, another
+existing dt property "typec-power-opmode" needs to be specified to
+indicate which Rp value should be used when the port is SRC.
+
+changes since v3:
+
+usb: typec: tcpm: Support non-PD mode
+- commit msg updated
+- removed unnecessary empty lines
+- re-factored the code of reading device tree properties and the error
+  handling
+- removed unnecessay variable initialization
+- modified the comments
+
+Kyle Tso (2):
+  dt-bindings: connector: Add pd-supported property
+  usb: typec: tcpm: Support non-PD mode
+
+ .../bindings/connector/usb-connector.yaml     |  4 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 87 +++++++++++++++----
+ 2 files changed, 72 insertions(+), 19 deletions(-)
+
+-- 
+2.32.0.554.ge1b32706d8-goog
+
