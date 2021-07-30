@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 930593DBBCA
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 17:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D88B3DBC17
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 17:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239356AbhG3PMI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 11:12:08 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55046 "EHLO mail.kernel.org"
+        id S239413AbhG3PWU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 11:22:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59710 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238909AbhG3PMI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Jul 2021 11:12:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5242A60F5C;
-        Fri, 30 Jul 2021 15:12:03 +0000 (UTC)
+        id S239344AbhG3PWT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Jul 2021 11:22:19 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 8C08660F5E;
+        Fri, 30 Jul 2021 15:22:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627657923;
-        bh=kxUtOLEZStV/pG0MsyqmAQ170ubCws0dYqCyy6etDis=;
+        s=k20201202; t=1627658534;
+        bh=WYpmqCkY1DSUpD6EOZrei2Mhm7XPQP5Y6mLnEdzkXkA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mWDfR7V9oCVq0MkC9xUhJWbF/OyheNka88BQx4QMENMtQGXntWdEfeHnEPVR14s0k
-         1ZNkKyW2v62mCESdSd4UE3SijJM1uT4itJPP9RZSJZ7bpXMapz9njpvhbGA1T36jaO
-         AX5MhngJbrGQtK8SWvZevcJs4gc4UL3wSjTwS58xE9H6UHuFgAQCwD9u8CP/SmKEBO
-         wq24Cb4xBGYCmX4PPDh/7Ozjfqm+PCYK1AKWHUAjP0QXKcUWds9rNYQ3/RqWi/XUhY
-         eb+IwiRwsb2ATJvFvrzEUsDVH+gwf25Q9uclp681m9mWhYOoSqJfbTtj6xnOhpa9CW
-         W7lkp4xi3h3Pw==
+        b=XSpfepKRSPGsKuRuulaSEJnS38+KZqzOdDrhQZDmF0giEWEMRNHpUZdPshAVscLOd
+         E0nusG1h9rYQayFHmyEdVXW/0lYyXPUaZnU5ZQ3ZAusn/2fJ3peOehQJOcQuE0MPh6
+         tdqL1r9lCVImGV/R/3ydeFG4YY+A+d0oxaF6SGkT57pPwU0IrsPdO4n5HiEbspC9jq
+         MdqODnQ7kUICvpAmOPuf9Wnqn5rcUwCaExaGMp9LUMkoa1+9LG72L5gYA2rPqVu/wv
+         YaNVNtxLXy0CvkEdBxdlojW69DyR/zz9tgqoyEbSlSFj/O/XHeJLHbNc5licPA3Arc
+         UWDb9Sdc2tW7g==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1m9UAY-00046W-Tn; Fri, 30 Jul 2021 17:11:26 +0200
-Date:   Fri, 30 Jul 2021 17:11:26 +0200
+        id 1m9UKP-0001Ms-Il; Fri, 30 Jul 2021 17:21:38 +0200
+Date:   Fri, 30 Jul 2021 17:21:37 +0200
 From:   Johan Hovold <johan@kernel.org>
-To:     Greg KH <greg@kroah.com>
-Cc:     Charles Yeh <charlesyeh522@gmail.com>,
-        =?utf-8?B?WWVoLkNoYXJsZXMgW+iRieamrumRq10=?= 
-        <charles-yeh@prolific.com.tw>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Chris <chris@cyber-anlage.de>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: pl2303: fix HX type detection
-Message-ID: <YQQWnnhhumPq2IB8@hovoldconsulting.com>
-References: <YQPsgPey1V+7ccGq@hovoldconsulting.com>
- <20210730122156.718-1-johan@kernel.org>
- <YQPwwygDuJklttlP@kroah.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] USB: serial: cp210x: fixes and CP2105/CP2108 fw
+ version
+Message-ID: <YQQZAeK0NfS11sYO@hovoldconsulting.com>
+References: <20210705082015.18286-1-johan@kernel.org>
+ <YOLDjgUFoIbWjilh@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YQPwwygDuJklttlP@kroah.com>
+In-Reply-To: <YOLDjgUFoIbWjilh@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Jul 30, 2021 at 02:29:55PM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Jul 30, 2021 at 02:21:56PM +0200, Johan Hovold wrote:
-> > The device release number for HX-type devices is configurable in
-> > EEPROM/OTPROM and cannot be used reliably for type detection.
+On Mon, Jul 05, 2021 at 10:32:14AM +0200, Greg Kroah-Hartman wrote:
+> On Mon, Jul 05, 2021 at 10:20:09AM +0200, Johan Hovold wrote:
+> > Here are couple of minor fixes and some cleanups related to the recent
+> > regression which broke RTS control on some CP2102N devices with buggy
+> > firmware.
 > > 
-> > Assume all (non-H) devices with bcdUSB 1.1 and unknown bcdDevice to be
-> > of HX type while adding a bcdDevice check for HXD and TB (1.1 and 2.0,
-> > respectively).
+> > In case we run into another one of these, let's log the firmware
+> > version also for CP2105 and CP2108 for which it can be retrieved.
 > > 
-> > Reported-by: Chris <chris@cyber-anlage.de>
-> > Fixes: 8a7bf7510d1f ("USB: serial: pl2303: amend and tighten type detection")
-> > Cc: stable@vger.kernel.org	# 5.13
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >  drivers/usb/serial/pl2303.c | 41 ++++++++++++++++++++++---------------
-> >  1 file changed, 25 insertions(+), 16 deletions(-)
+> > Johan
 > > 
+> > 
+> > Changes in v2
+> >  - keep the special-chars error message to make it more obvious that
+> >    continuing on errors is intentional (1/6) (Greg)
+> 
+> Thanks for the change, looks good to me!
 > 
 > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thanks for reviewing. Now applied.
+Thanks also for reviewing these. Now applied for -next.
 
 Johan
