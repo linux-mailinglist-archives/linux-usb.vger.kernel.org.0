@@ -2,84 +2,178 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5E7D3DBDD2
-	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 19:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 023883DBDEE
+	for <lists+linux-usb@lfdr.de>; Fri, 30 Jul 2021 19:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbhG3Rha (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 13:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S230299AbhG3Rtw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 13:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbhG3Rh1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 13:37:27 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7376CC061765;
-        Fri, 30 Jul 2021 10:37:22 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g13so19322801lfj.12;
-        Fri, 30 Jul 2021 10:37:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YdD/cQbxE12roUQGUPlpfAtfifyzljBPvXuX8vTuNeQ=;
-        b=OHLEomAUDEdDieEdq+73CDWNR3GZ9sjoIWNZUB6G0iOgneOiKlsjmU2LKmepB4/7K4
-         K4LPYZOpdzackoANKPBCKPSia9gb8vn4s300ngs0LMWAIfTRrTDVJJhtJiOWg0nBfUPb
-         eKLSZuhYp9ZDHfBe3p6i88WWMPgoOuIJ0nMBpExQ3EdpgKYwqhFqIRaXm+fIkApaofk5
-         UzbdScesIb9d1IxiVfstMurv4iaCf4t2R3A/8tHkwUaUWhnfSdGRUu7RauPljNiFgCI5
-         5W2IGaPuJFZqxABEB8Yd0P8suhrCr+LhA5Hg6h+wlJ5AKv5ao5Dt7S/d0gSZUt95NG2P
-         mcrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YdD/cQbxE12roUQGUPlpfAtfifyzljBPvXuX8vTuNeQ=;
-        b=TqWcts8+gxe9LRLh0RZW55s+NhxHXh8x8KNw6cHnKiLIQxZVWekzB+oF1WppBXeK+J
-         j7I4tAOgm7pxG8DxP0Hz+b95Ps19yPaM8uSJgmocF1kdo3h4UjKpKHhAh/gUGXLyU32z
-         Rdu4huvU28YLVQ2wfYHZFkFmZyjdbJ5JE6o+Z5vQ/bnVdoQQDqXuYq8Rh1b5KnMuc2lf
-         Lunk9gwqUGoJhC8gmwU8fg5rAq+OakctwjqStFxJUtfjP7XxvjvuuCbhj92I3NVb9ab6
-         uC/t+HcIl0pa+GBiXMx/sLk29Mpz+0sO3SpOEcpS5RyVNGasNkHfVALrVHffFb7yuChb
-         B7Mg==
-X-Gm-Message-State: AOAM5316h3VV0WN1kVWRFhMFnuIk+fys0Eb8bkIAN3Xlm39jRsTp0vKa
-        8gpp50Sa+cRrgOSijMZQn9c=
-X-Google-Smtp-Source: ABdhPJwy8rI9+LJQTi6lVK2rpSiGY4hRkUnXqyk7UBMJ1mSAW7CPTJaIXxKYe3Umh7FA/tCTkTv6FA==
-X-Received: by 2002:a05:6512:3e0b:: with SMTP id i11mr2517488lfv.221.1627666640891;
-        Fri, 30 Jul 2021 10:37:20 -0700 (PDT)
-Received: from [192.168.2.145] (94-29-39-114.dynamic.spd-mgts.ru. [94.29.39.114])
-        by smtp.googlemail.com with ESMTPSA id h34sm201080lfv.231.2021.07.30.10.37.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Jul 2021 10:37:20 -0700 (PDT)
-Subject: Re: [PATCH v5 00/12] Add OTG mode support to Tegra USB PHY, SMB347
- and Nexus 7
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, Thierry Reding <treding@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S230264AbhG3Rtv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 13:49:51 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B73C06175F
+        for <linux-usb@vger.kernel.org>; Fri, 30 Jul 2021 10:49:46 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m9Wcc-00064T-I3; Fri, 30 Jul 2021 19:48:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m9WcO-0005qH-Ky; Fri, 30 Jul 2021 19:48:20 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1m9WcO-00079n-I5; Fri, 30 Jul 2021 19:48:20 +0200
+Date:   Fri, 30 Jul 2021 19:48:20 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        oss-drivers@corigine.com, Oliver O'Halloran <oohall@gmail.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        linux-perf-users@vger.kernel.org,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-scsi@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Ido Schimmel <idosch@nvidia.com>, x86@kernel.org,
+        qat-linux@intel.com,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-pci@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, Michael Buesch <m@bues.ch>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juergen Gross <jgross@suse.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        xen-devel@lists.xenproject.org, Vadym Kochan <vkochan@marvell.com>,
+        MPT-FusionLinux.pdl@broadcom.com,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>
-References: <20210717182134.30262-1-digetx@gmail.com>
-Message-ID: <ed3c2a5c-a916-2215-a767-5546fa8cd352@gmail.com>
-Date:   Fri, 30 Jul 2021 20:37:19 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        linux-usb@vger.kernel.org,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
+        netdev@vger.kernel.org, Frederic Barrat <fbarrat@linux.ibm.com>,
+        Paul Mackerras <paulus@samba.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v1 0/5] PCI: Drop duplicated tracking of a pci_dev's
+ bound driver
+Message-ID: <20210730174820.i6ycjyvyzxcxwxsc@pengutronix.de>
+References: <20210729203740.1377045-1-u.kleine-koenig@pengutronix.de>
+ <YQOy/OTvY66igEoe@smile.fi.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210717182134.30262-1-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="t5ueb7xyetl6m7j3"
+Content-Disposition: inline
+In-Reply-To: <YQOy/OTvY66igEoe@smile.fi.intel.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-17.07.2021 21:21, Dmitry Osipenko пишет:
-...
->   power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
->   power: supply: smb347-charger: Utilize generic regmap caching
->   power: supply: smb347-charger: Implement USB VBUS regulator
 
-I noticed that charging doesn't work properly now, will fix it in v6.
+--t5ueb7xyetl6m7j3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi Andy,
+
+On Fri, Jul 30, 2021 at 11:06:20AM +0300, Andy Shevchenko wrote:
+> On Thu, Jul 29, 2021 at 10:37:35PM +0200, Uwe Kleine-K=F6nig wrote:
+> > struct pci_dev tracks the bound pci driver twice. This series is about
+> > removing this duplication.
+> >=20
+> > The first two patches are just cleanups. The third patch introduces a
+> > wrapper that abstracts access to struct pci_dev->driver. In the next
+> > patch (hopefully) all users are converted to use the new wrapper and
+> > finally the fifth patch removes the duplication.
+> >=20
+> > Note this series is only build tested (allmodconfig on several
+> > architectures).
+> >=20
+> > I'm open to restructure this series if this simplifies things. E.g. the
+> > use of the new wrapper in drivers/pci could be squashed into the patch
+> > introducing the wrapper. Patch 4 could be split by maintainer tree or
+> > squashed into patch 3 completely.
+>=20
+> I see only patch 4 and this cover letter...
+
+The full series is available at
+
+	https://lore.kernel.org/linux-pci/20210729203740.1377045-1-u.kleine-koenig=
+@pengutronix.de/
+
+All patches but #4 only touch drivers/pci/ (and include/linux/pci.h) and
+it seemed excessive to me to send all patches to all people. It seems at
+least for you I balanced this wrongly. The short version is that patch
+#3 introduces
+
+	+#define pci_driver_of_dev(pdev) ((pdev)->driver)
+
+which allows to do the stuff done in patch #4 and then patch #5 does
+
+	-#define pci_driver_of_dev(pdev) ((pdev)->driver)
+	+#define pci_driver_of_dev(pdev) ((pdev)->dev.driver ? to_pci_driver((pdev=
+)->dev.driver) : NULL)
+
+plus some cleanups.
+
+If you want I can send you a bounce (or you try
+
+	b4 am 20210729203740.1377045-1-u.kleine-koenig@pengutronix.de
+
+).
+
+Best regards and thanks for caring,
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--t5ueb7xyetl6m7j3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEEO2EACgkQwfwUeK3K
+7AkOCgf/UKvRbSIrjjdKl0HWJofJEfaXlbATSgBausmxV/dcXsg1sLkhkpTN66bG
+WmAdhFN03Vtx3jHKeYtgo3x8g39nfYT4NmlYTNumgxTow6TESnJxbYewE3i0alrR
+Jv0JvBFhUaXj++XetOVHn9f5/t7o5NL/XSF5DTwQM8lZ5skmA2+XXea8lU0IFufZ
+uTi0XA3G5BNhyU6RiehvnN59J6QCN3CIVqajOrZbqf33jiiyCTDf2tEqCYRbv1vJ
+zqt7zYp05RtUaqNKe9oH4N4UFCdChrjZlFP7w7gyqM6Jh/wOSERlVdpocf0BGClR
+W6o7YIB7QFf+ByIxy6hIBeXnaPaDFQ==
+=oi24
+-----END PGP SIGNATURE-----
+
+--t5ueb7xyetl6m7j3--
