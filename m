@@ -2,112 +2,50 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6561E3DC1FB
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jul 2021 02:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCC53DC397
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jul 2021 07:42:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234518AbhGaA3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 20:29:48 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:48723 "EHLO m43-7.mailgun.net"
+        id S231627AbhGaFmX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 31 Jul 2021 01:42:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234211AbhGaA3r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 30 Jul 2021 20:29:47 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1627691382; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=fK+tZMR6pKL2c8jQjVZ5FRLeEtgsQl5vSZl1JOIRzjs=; b=Ri4l0OodhaLVPD4+rfoUgQtsSmdVk4x0Fq7QDQ06JoaJCfKb9v7jTDGSe2R3dmVuYznwzun0
- QX0kIKrkWf2guPkBtqJvVcpdDPYQU64sulFEgn2GnyIwVsmcZbDgHkY7kHZn1UK8m1SqXLNZ
- bNYHMx2wPjxDUWTYJZtz8BWGbco=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 6104997296a66e66b20cd003 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 31 Jul 2021 00:29:38
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id CC230C43460; Sat, 31 Jul 2021 00:29:38 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B513FC433D3;
-        Sat, 31 Jul 2021 00:29:37 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B513FC433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wesley Cheng <wcheng@codeaurora.org>
-Subject: [PATCH] usb: dwc3: gadget: Avoid runtime resume if disabling pullup
-Date:   Fri, 30 Jul 2021 17:29:34 -0700
-Message-Id: <1627691374-15711-1-git-send-email-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S229766AbhGaFmX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 31 Jul 2021 01:42:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EF80960F3A;
+        Sat, 31 Jul 2021 05:42:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1627710136;
+        bh=IwVdrcfrdnNBH5U7lEgDkwneMomT5Y6lXiudXizDKuY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BzcYZkZ9KWEMYbKI0VUjqijNPMC/yN42fx+ZhgISlXtsXSNdiqBonUmHfUl8K9qIL
+         2Cx8yX1/bAqaufXenEx9pIGiWQBjs8qBUNmSc1nzSXAW+1edz0XchourtvVux07Rqo
+         A5zbAKk8thJx7o6GX6RclrQrGMcKlSAWWIgbLtQk=
+Date:   Sat, 31 Jul 2021 07:42:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Subhashini Rao Beerisetty <subhashbeerisetty@gmail.com>
+Cc:     linux-usb@vger.kernel.org,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: Embedded USB Debug(EUD) driver
+Message-ID: <YQTitrc49G7RxYi2@kroah.com>
+References: <CAPY=qRS0F0iv15w34w13xutoUThbDqFtYniM=eLLmqaMdXya3g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPY=qRS0F0iv15w34w13xutoUThbDqFtYniM=eLLmqaMdXya3g@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the device is already in the runtime suspended state, any call to
-the pullup routine will issue a runtime resume on the DWC3 core
-device.  If the USB gadget is disabling the pullup, then avoid having
-to issue a runtime resume, as DWC3 gadget has already been
-halted/stopped.
+On Fri, Jul 30, 2021 at 11:33:09PM +0530, Subhashini Rao Beerisetty wrote:
+> Hi All,
+> 
+> I'm currently looking for the Embedded USB Debug (EUD) interface driver.
 
-This fixes an issue where the following condition occurs:
+For what specific hardware?  Do you have the needed "special" cable?  We
+have support in the kernel for some types of these cables, what kernel
+versions have you tried that did not work for this?
 
-usb_gadget_remove_driver()
--->usb_gadget_disconnect()
- -->dwc3_gadget_pullup(0)
-  -->pm_runtime_get_sync() -> ret = 0
-  -->pm_runtime_put() [async]
--->usb_gadget_udc_stop()
- -->dwc3_gadget_stop()
-  -->dwc->gadget_driver = NULL
-...
+thanks,
 
-dwc3_suspend_common()
--->dwc3_gadget_suspend()
- -->DWC3 halt/stop routine skipped, driver_data == NULL
-
-This leads to a situation where the DWC3 gadget is not properly
-stopped, as the runtime resume would have re-enabled EP0 and event
-interrupts, and since we avoided the DWC3 gadget suspend, these
-resources were never disabled.
-
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
----
- drivers/usb/dwc3/gadget.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index a29a4ca..5d08454 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2435,6 +2435,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 	}
- 
- 	/*
-+	 * Avoid issuing a runtime resume if the device is already in the
-+	 * suspended state during gadget disconnect.  DWC3 gadget was already
-+	 * halted/stopped during runtime suspend.
-+	 */
-+	if (!is_on) {
-+		pm_runtime_barrier(dwc->dev);
-+		if (pm_runtime_suspended(dwc->dev))
-+			return 0;
-+	}
-+
-+	/*
- 	 * Check the return value for successful resume, or error.  For a
- 	 * successful resume, the DWC3 runtime PM resume routine will handle
- 	 * the run stop sequence, so avoid duplicate operations here.
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+greg k-h
