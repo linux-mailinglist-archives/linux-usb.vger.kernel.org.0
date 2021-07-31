@@ -2,162 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6745B3DC1BB
-	for <lists+linux-usb@lfdr.de>; Sat, 31 Jul 2021 01:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6561E3DC1FB
+	for <lists+linux-usb@lfdr.de>; Sat, 31 Jul 2021 02:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234161AbhG3X4R (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 30 Jul 2021 19:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbhG3X4Q (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 30 Jul 2021 19:56:16 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F3AC06175F
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jul 2021 16:56:10 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id e21so12955319pla.5
-        for <linux-usb@vger.kernel.org>; Fri, 30 Jul 2021 16:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WGMvOffBdoYIXnuZaEXKMaI0bhDyF8TwJALtJqSNt0Q=;
-        b=T4BBwT2+qiPmLKFfCb3YI7lD6lYB54bCMYlevZQZ6ocsu0KU0jDt2CpIbntF2BA7Sm
-         UZlp+0RZznBwpP+4McVcWGhJbQuZZ/6BG+Ly/rZiSIr6xFJj44JAEcurDn+U+0hIsN6b
-         HIfR/GgEz0l4biKgaRG6SAvMV4EeJrO36SkOawZ50HyAvj2/TO+aLMi2dpi+tcS9J1dB
-         t372ZtgvezPXJpRzdDcD1sm8TbH7I/jJJwioJGWZOu2pXYLOMcVdGYWXvZrGoNsPb5Fc
-         6hkZswbBb9BxzcJ/KOFanotYnFm6tncBAxfI+dalcGhprWOO79EjcO4kIbk8PQlhUZtI
-         4f3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WGMvOffBdoYIXnuZaEXKMaI0bhDyF8TwJALtJqSNt0Q=;
-        b=B+x1/jgQSh673HE/sn4i1b3h4PWX6osJg+5jfyur6xOFROcz6hUhkOsSwh5xg4Cv9/
-         MOM0WIGluOjWPu0nuTf/J9ZTh0qTfQEA5MdtmJY/fL3FRqtSpEfPa8q6De1nm4sh1ysp
-         aR86gbvcbnRTL2hbCkAMfKLSv6GiZUptQXBcTb7lM+igOm57MpCQHewwynSIM9W6Ra+m
-         vLUzQp8gxZ7JWHIreVIT7ISIYs0p3KLMknlnX1o2Qetr8t1BUo5t/A/efc0Yv9AQ0VZu
-         PlYqU5swnQnoN6JuPp24NzR3SxcPK8/Q9UqGSfEnGmNF+dABzBG6SLvkHMLPwtrtTFrB
-         JORw==
-X-Gm-Message-State: AOAM531tHxmGHTKBpccaG2x76P7kPybT8M+DQQJdJejlX+o9o9BDkUfF
-        Qr8FFop3+RaCdkXGgAL9+xI/PlbIDWM/PCOS4KLzcw==
-X-Google-Smtp-Source: ABdhPJxtT8TjaY5rXky7eiem9DUDlsd2YZeuJtzpgGcHqfV7329Res4p7rsCUFte3NvEj+Wu4GFIx3tNv8W3OUDToiA=
-X-Received: by 2002:a65:50cb:: with SMTP id s11mr4512542pgp.236.1627689370053;
- Fri, 30 Jul 2021 16:56:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210724004043.2075819-1-rajatja@google.com> <CACK8Z6GsNi9FVUdqdfj0vUFj0mJtMQ_pm4aPH8d3ozsa5Zswhg@mail.gmail.com>
- <YP67VTcyFhro9wyX@lahna>
-In-Reply-To: <YP67VTcyFhro9wyX@lahna>
-From:   Rajat Jain <rajatja@google.com>
-Date:   Fri, 30 Jul 2021 16:55:34 -0700
-Message-ID: <CACK8Z6GAZrk1XLamVp1Rh2uLYjfmaprAj==D4KR190Jp4dn5wg@mail.gmail.com>
-Subject: Re: [PATCH v2] thunderbolt: For dev authorization changes, include
- the actual event in udev change notification
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Yehezkel Bernat <yehezkelshb@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajatxjain@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+        id S234518AbhGaA3s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 30 Jul 2021 20:29:48 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:48723 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234211AbhGaA3r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 30 Jul 2021 20:29:47 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1627691382; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=fK+tZMR6pKL2c8jQjVZ5FRLeEtgsQl5vSZl1JOIRzjs=; b=Ri4l0OodhaLVPD4+rfoUgQtsSmdVk4x0Fq7QDQ06JoaJCfKb9v7jTDGSe2R3dmVuYznwzun0
+ QX0kIKrkWf2guPkBtqJvVcpdDPYQU64sulFEgn2GnyIwVsmcZbDgHkY7kHZn1UK8m1SqXLNZ
+ bNYHMx2wPjxDUWTYJZtz8BWGbco=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
+ 6104997296a66e66b20cd003 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Sat, 31 Jul 2021 00:29:38
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id CC230C43460; Sat, 31 Jul 2021 00:29:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id B513FC433D3;
+        Sat, 31 Jul 2021 00:29:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B513FC433D3
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH] usb: dwc3: gadget: Avoid runtime resume if disabling pullup
+Date:   Fri, 30 Jul 2021 17:29:34 -0700
+Message-Id: <1627691374-15711-1-git-send-email-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Jul 26, 2021 at 6:40 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi Rajat,
->
-> On Fri, Jul 23, 2021 at 05:41:58PM -0700, Rajat Jain wrote:
-> > (fixing the typo in the email ID for Greg).
-> >
-> > On Fri, Jul 23, 2021 at 5:40 PM Rajat Jain <rajatja@google.com> wrote:
-> > >
-> > > For security, we would like to monitor and track when the thunderbolt
-> > > devices are authorized and deauthorized (i.e. when the thunderbolt sysfs
-> > > "authorized" attribute changes). Currently the userspace gets a udev
-> > > change notification when there is a change, but the state may have
-> > > changed (again) by the time we look at the authorized attribute in
-> > > sysfs. So an authorization event may go unnoticed. Thus make it easier
-> > > by informing the actual change (new value of authorized attribute) in
-> > > the udev change notification.
-> > >
-> > > The change is included as a key value "authorized=<val>" where <val>
-> > > is the new value of sysfs attribute "authorized", and is described at
-> > > Documentation/ABI/testing/sysfs-bus-thunderbolt under
-> > > /sys/bus/thunderbolt/devices/.../authorized
->
-> Looking good, a couple of minor nits below.
->
-> > >
-> > > Signed-off-by: Rajat Jain <rajatja@google.com>
-> > > ---
-> > >  drivers/thunderbolt/switch.c | 8 ++++++--
-> > >  1 file changed, 6 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> > > index 83b1ef3d5d03..382128dfbdee 100644
-> > > --- a/drivers/thunderbolt/switch.c
-> > > +++ b/drivers/thunderbolt/switch.c
-> > > @@ -1499,6 +1499,7 @@ static ssize_t authorized_show(struct device *dev,
-> > >  static int disapprove_switch(struct device *dev, void *not_used)
-> > >  {
-> > >         struct tb_switch *sw;
-> > > +       char *envp[] = { "AUTHORIZED=0", NULL };
->
-> Can you move arrange this to be before sw, like:
+If the device is already in the runtime suspended state, any call to
+the pullup routine will issue a runtime resume on the DWC3 core
+device.  If the USB gadget is disabling the pullup, then avoid having
+to issue a runtime resume, as DWC3 gadget has already been
+halted/stopped.
 
-Done.
+This fixes an issue where the following condition occurs:
 
->
->         char *envp[] = { "AUTHORIZED=0", NULL };
->         struct tb_switch *sw;
->
-> > >
-> > >         sw = tb_to_switch(dev);
-> > >         if (sw && sw->authorized) {
-> > > @@ -1514,7 +1515,7 @@ static int disapprove_switch(struct device *dev, void *not_used)
-> > >                         return ret;
-> > >
-> > >                 sw->authorized = 0;
-> > > -               kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> > > +               kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
-> > >         }
-> > >
-> > >         return 0;
-> > > @@ -1523,6 +1524,8 @@ static int disapprove_switch(struct device *dev, void *not_used)
-> > >  static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
-> > >  {
-> > >         int ret = -EINVAL;
-> > > +       char envp_string[13];
-> > > +       char *envp[] = { envp_string, NULL };
->
-> Ditto.
+usb_gadget_remove_driver()
+-->usb_gadget_disconnect()
+ -->dwc3_gadget_pullup(0)
+  -->pm_runtime_get_sync() -> ret = 0
+  -->pm_runtime_put() [async]
+-->usb_gadget_udc_stop()
+ -->dwc3_gadget_stop()
+  -->dwc->gadget_driver = NULL
+...
 
-Done. I still needed to define envp_string before envp (because it is
-used in initialization).
+dwc3_suspend_common()
+-->dwc3_gadget_suspend()
+ -->DWC3 halt/stop routine skipped, driver_data == NULL
 
-I sent out a v3 with these changes.
+This leads to a situation where the DWC3 gadget is not properly
+stopped, as the runtime resume would have re-enabled EP0 and event
+interrupts, and since we avoided the DWC3 gadget suspend, these
+resources were never disabled.
 
-Thanks,
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+ drivers/usb/dwc3/gadget.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Rajat
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index a29a4ca..5d08454 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2435,6 +2435,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 	}
+ 
+ 	/*
++	 * Avoid issuing a runtime resume if the device is already in the
++	 * suspended state during gadget disconnect.  DWC3 gadget was already
++	 * halted/stopped during runtime suspend.
++	 */
++	if (!is_on) {
++		pm_runtime_barrier(dwc->dev);
++		if (pm_runtime_suspended(dwc->dev))
++			return 0;
++	}
++
++	/*
+ 	 * Check the return value for successful resume, or error.  For a
+ 	 * successful resume, the DWC3 runtime PM resume routine will handle
+ 	 * the run stop sequence, so avoid duplicate operations here.
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
->
-> > >
-> > >         if (!mutex_trylock(&sw->tb->lock))
-> > >                 return restart_syscall();
-> > > @@ -1560,7 +1563,8 @@ static int tb_switch_set_authorized(struct tb_switch *sw, unsigned int val)
-> > >         if (!ret) {
-> > >                 sw->authorized = val;
-> > >                 /* Notify status change to the userspace */
-> > > -               kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-> > > +               sprintf(envp_string, "AUTHORIZED=%u", sw->authorized);
-> > > +               kobject_uevent_env(&sw->dev.kobj, KOBJ_CHANGE, envp);
-> > >         }
-> > >
-> > >  unlock:
-> > > --
-> > > 2.32.0.432.gabb21c7263-goog
-> > >
