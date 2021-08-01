@@ -2,151 +2,126 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 364113DCBAB
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 14:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5862B3DCCD9
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 19:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbhHAMgt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Aug 2021 08:36:49 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:38836 "EHLO
-        zzt.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231802AbhHAMgt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 08:36:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=qD0SaqUGLbpCXnxKQhYAIh55AI4eaqb7RBu5u1Fgycg=; b=IRidOk1XEwdiv7peuu2PYqd7f8
-        6fNmZ9dbqzc+lyEwenVQya068KgR4Rw9jAjKYr7OjzPJ799gouZIIxkWJ8AVvOC8eQOtoMCrntQ8/
-        FGsx/wilz0IbLxvQXmN9C6y15wMAoXHrsmhpF/HdG8lp0Z/qUXLdc4SGBTTKCRGLUaOg=;
-Received: from [94.26.108.4] (helo=carbon)
-        by zzt.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1mAAhg-0000OU-Df; Sun, 01 Aug 2021 15:36:29 +0300
-Date:   Sun, 1 Aug 2021 15:36:27 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: pegasus: fix uninit-value in get_interrupt_interval
-Message-ID: <YQaVS5UwG6RFsL4t@carbon>
-References: <20210730214411.1973-1-paskripkin@gmail.com>
+        id S229908AbhHARNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Aug 2021 13:13:01 -0400
+Received: from mout.gmx.net ([212.227.15.19]:50781 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229680AbhHARNA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 1 Aug 2021 13:13:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1627837961;
+        bh=xtUEr+ekAW0WAiuNsLNrEiRPpwS+f47iJkTrheQXOVM=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=Op97yEQA2weqmNoErqEAF+rCg9pYtKEDJdET5VzRiFxIJIbha5eZg9ag5/scZhldC
+         KZXlsJJa0iv4X+scnxsXTFpSSCPKONA3ggVgqaLU9jFQOgNLyxp871U8pmP00R7OAh
+         HTNtp5tSEOnmPU9jrBYc4hmSrE0rk1VzHKH/Q5gQ=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
+ (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
+ 1MOA3P-1mYdeq2whN-00ObJ5; Sun, 01 Aug 2021 19:12:41 +0200
+From:   Len Baker <len.baker@gmx.com>
+To:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Len Baker <len.baker@gmx.com>,
+        Yves-Alexis Perez <corsac@corsac.net>,
+        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/net/usb: Remove all strcpy() uses
+Date:   Sun,  1 Aug 2021 19:12:26 +0200
+Message-Id: <20210801171226.17917-1-len.baker@gmx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210730214411.1973-1-paskripkin@gmail.com>
-X-Spam_score: -1.0
-X-Spam_bar: -
-X-Spam_report: Spam detection software, running on the system "zzt.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- @@CONTACT_ADDRESS@@ for details.
- Content preview:  On 21-07-31 00:44:11, Pavel Skripkin wrote: > Syzbot reported
-    uninit value pegasus_probe(). The problem was in missing > error handling.
-    > > get_interrupt_interval() internally calls read_eprom_word() [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:aNEQxA0ncX6BkzImAoKubQRd2aRGPwbNk6UwMdO1UGBgXm4JR/q
+ s7jZaI5ya4z3C8KMGVy16qTHerJs8h5tJNbdqnKnVzsdX2Q3eRoB2y6/cOaOzfNvVO95JXF
+ zB/a+PcJZzOlBWbItmqkWolUWOkezhcHEbmJQcJHzei5qv6sh8khP0kaVBHpFampgts5mgH
+ Y89YuxNdWXU52hqJ3IBFA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:i2ZRFUa/4II=:xASLozsIXLy0ysItC9gDuV
+ cKYL8mwceJg1AnoTtgpb1W/cUsQq8g0bX9/6FYl8r1IxR52w/z4cRGRGVDgg74usvpw2SfM5I
+ 3k3p/pxohD00oMBmcKvkiBE794GfkaeeyDEGlX4mN6adZN4dgfyywn3KVPI3/rGl6nVrI77i8
+ PuSRQNN88tZTBQe9qTsayFAWwiZFtMj2bynfZu0n/CI5fNCRu9Bn9M7aViogfMIPs1xRW9ITv
+ FWPEdohjWB3s1uDxhzbBYSsHDIXFAfWjWozBxAah1qWMs34/5mhwQNOKNxBbfbsCS2esMFLTf
+ btcJpzVGoelMO5jUHTS4X2GpofBqkcEjqeXpDbBXK2UsyHyw1lupD4q83AV/Hzg4EgxmX96Sd
+ iJP/Fsbl4UTsKYCMjKZAWavVCEYUd8KgiifSCfONKkruTrdtuRHh8qt7Mi82j70Eye32+ZEgz
+ odHnvpO/zMXroHfiBVPcOe1WzJUBT3+vr/YqE87v2QGfteaczhDM665asqTC5ECyB+GsSqvek
+ OBIVfuCXgevT9ctdcAEMWzTON9Og/+o91HIlhkP8w0x1MEsOJjOLckBqAn5D2Xso3mEchVkXS
+ rgo/0elfuGnS8XJQy3QFJzErwMQxRInqlYsewNCJVLTS28DdCYkxyd4mD2pCOA46RZdfGtv4G
+ Sa2K4gxjBrsG3jQ0kgmugH5kDQtBr5hjmK9+XAh4zAgd8LhOF2VQVboyb+ylKbtzVN68bk1YZ
+ u1q0ao7lOpQJJnrWVinq7yuYyX8cZyJLdzges90bZTfCzBhClY5xOYyCPB3Wn1aEO8EtI0fmO
+ Cs930I4izqh1nW4doeol1jrgDHGe7Bf0HvvNRE2XD+QXhz7zod0a3xJJ1m+hE/p+oLTMdGxgd
+ p+wZue4iscbHXnAKMmWUF74NxPfpTnioUPs4+wfurBrHKlXzBAQgcRi6TlhDu3NHDH8tl1b5z
+ SGA7rdZuSxJdJXNeWRv4QXjFdWO5bG39CjXKiELZk9h44IqGAGG9RWkeWvbH57gHZi+aPolCZ
+ SoIp7zRFFbCQl10u9Rs9F/fQrAcYvgJVng/AYM5mLFHRQlpgEFKFu6/3Eho77zFKM7wL6yOTH
+ gA0YSu+C1slrvDNNIa8lwHG8dTRc0hqEb5N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-07-31 00:44:11, Pavel Skripkin wrote:
-> Syzbot reported uninit value pegasus_probe(). The problem was in missing
-> error handling.
-> 
-> get_interrupt_interval() internally calls read_eprom_word() which can
-> fail in some cases. For example: failed to receive usb control message.
-> These cases should be handled to prevent uninit value bug, since
-> read_eprom_word() will not initialize passed stack variable in case of
-> internal failure.
+strcpy() performs no bounds checking on the destination buffer. This
+could result in linear overflows beyond the end of the buffer, leading
+to all kinds of misbehaviors. The safe replacement is strscpy().
 
-Well, this is most definitelly a bug.
+Signed-off-by: Len Baker <len.baker@gmx.com>
+=2D--
+This is a task of the KSPP [1]
 
-ACK!
+[1] https://github.com/KSPP/linux/issues/88
 
+ drivers/net/usb/ipheth.c | 2 +-
+ drivers/net/usb/usbnet.c | 8 ++++----
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-		Petko
+diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+index 207e59e74935..06e2181e5810 100644
+=2D-- a/drivers/net/usb/ipheth.c
++++ b/drivers/net/usb/ipheth.c
+@@ -443,7 +443,7 @@ static int ipheth_probe(struct usb_interface *intf,
 
+ 	netdev->netdev_ops =3D &ipheth_netdev_ops;
+ 	netdev->watchdog_timeo =3D IPHETH_TX_TIMEOUT;
+-	strcpy(netdev->name, "eth%d");
++	strscpy(netdev->name, "eth%d", sizeof(netdev->name));
 
-> Fail log:
-> 
-> BUG: KMSAN: uninit-value in get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
-> BUG: KMSAN: uninit-value in pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-> CPU: 1 PID: 825 Comm: kworker/1:1 Not tainted 5.12.0-rc6-syzkaller #0
-> ...
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  __dump_stack lib/dump_stack.c:79 [inline]
->  dump_stack+0x24c/0x2e0 lib/dump_stack.c:120
->  kmsan_report+0xfb/0x1e0 mm/kmsan/kmsan_report.c:118
->  __msan_warning+0x5c/0xa0 mm/kmsan/kmsan_instr.c:197
->  get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
->  pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-> ....
-> 
-> Local variable ----data.i@pegasus_probe created at:
->  get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
->  pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
->  get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
->  pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
-> 
-> Reported-and-tested-by: syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> ---
->  drivers/net/usb/pegasus.c | 14 +++++++++++---
->  1 file changed, 11 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-> index 9a907182569c..bc2dbf86496b 100644
-> --- a/drivers/net/usb/pegasus.c
-> +++ b/drivers/net/usb/pegasus.c
-> @@ -735,12 +735,16 @@ static inline void disable_net_traffic(pegasus_t *pegasus)
->  	set_registers(pegasus, EthCtrl0, sizeof(tmp), &tmp);
->  }
->  
-> -static inline void get_interrupt_interval(pegasus_t *pegasus)
-> +static inline int get_interrupt_interval(pegasus_t *pegasus)
->  {
->  	u16 data;
->  	u8 interval;
-> +	int ret;
-> +
-> +	ret = read_eprom_word(pegasus, 4, &data);
-> +	if (ret < 0)
-> +		return ret;
->  
-> -	read_eprom_word(pegasus, 4, &data);
->  	interval = data >> 8;
->  	if (pegasus->usb->speed != USB_SPEED_HIGH) {
->  		if (interval < 0x80) {
-> @@ -755,6 +759,8 @@ static inline void get_interrupt_interval(pegasus_t *pegasus)
->  		}
->  	}
->  	pegasus->intr_interval = interval;
-> +
-> +	return 0;
->  }
->  
->  static void set_carrier(struct net_device *net)
-> @@ -1149,7 +1155,9 @@ static int pegasus_probe(struct usb_interface *intf,
->  				| NETIF_MSG_PROBE | NETIF_MSG_LINK);
->  
->  	pegasus->features = usb_dev_id[dev_index].private;
-> -	get_interrupt_interval(pegasus);
-> +	res = get_interrupt_interval(pegasus);
-> +	if (res)
-> +		goto out2;
->  	if (reset_mac(pegasus)) {
->  		dev_err(&intf->dev, "can't reset MAC\n");
->  		res = -EIO;
-> -- 
-> 2.32.0
-> 
-> 
+ 	dev =3D netdev_priv(netdev);
+ 	dev->udev =3D udev;
+diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
+index 470e1c1e6353..840c1c2ab16a 100644
+=2D-- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1725,7 +1725,7 @@ usbnet_probe (struct usb_interface *udev, const stru=
+ct usb_device_id *prod)
+ 	dev->interrupt_count =3D 0;
+
+ 	dev->net =3D net;
+-	strcpy (net->name, "usb%d");
++	strscpy(net->name, "usb%d", sizeof(net->name));
+ 	memcpy (net->dev_addr, node_id, sizeof node_id);
+
+ 	/* rx and tx sides can use different message sizes;
+@@ -1752,13 +1752,13 @@ usbnet_probe (struct usb_interface *udev, const st=
+ruct usb_device_id *prod)
+ 		if ((dev->driver_info->flags & FLAG_ETHER) !=3D 0 &&
+ 		    ((dev->driver_info->flags & FLAG_POINTTOPOINT) =3D=3D 0 ||
+ 		     (net->dev_addr [0] & 0x02) =3D=3D 0))
+-			strcpy (net->name, "eth%d");
++			strscpy(net->name, "eth%d", sizeof(net->name));
+ 		/* WLAN devices should always be named "wlan%d" */
+ 		if ((dev->driver_info->flags & FLAG_WLAN) !=3D 0)
+-			strcpy(net->name, "wlan%d");
++			strscpy(net->name, "wlan%d", sizeof(net->name));
+ 		/* WWAN devices should always be named "wwan%d" */
+ 		if ((dev->driver_info->flags & FLAG_WWAN) !=3D 0)
+-			strcpy(net->name, "wwan%d");
++			strscpy(net->name, "wwan%d", sizeof(net->name));
+
+ 		/* devices that cannot do ARP */
+ 		if ((dev->driver_info->flags & FLAG_NOARP) !=3D 0)
+=2D-
+2.25.1
+
