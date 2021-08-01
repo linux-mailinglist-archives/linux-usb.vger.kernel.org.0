@@ -2,55 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D0B3DCAA0
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 09:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7FCA3DCAC9
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 10:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbhHAHrw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Aug 2021 03:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbhHAHrw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 03:47:52 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F34AC06175F
-        for <linux-usb@vger.kernel.org>; Sun,  1 Aug 2021 00:47:43 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id d8so17492571wrm.4
-        for <linux-usb@vger.kernel.org>; Sun, 01 Aug 2021 00:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nYuEnC3Pf8FReOW2KAUy+LpNV12/ud56TBR6eiy5q5g=;
-        b=Riqio8T/S/eenFMCO07s4Rak0y9VxwCVqQ1H3Vwg6NZLmWI5QWCCBD/6mcQNEJgxX8
-         QlzE3MnPsCmSGFensEEZxu99K4HEDUGoh4dx4RunmigY82nmGeoOsF2rdUOX3fWaNLZW
-         kaEDHkv75ylJVDL8W0KRsCPYM4G5tEbxblb3r7oEwzOEUWjWxMK0kp9/qTy6sJiH7OSM
-         SatxbznqUrPOFoLDdppatO7tND7biQhc7VWIyp/0f7GVapJIEu+/GwaR3NzyKPxXNSH/
-         nBlRAQv2O6+YLs6/qtMq7W9xLXBBSNmzvgTxT/tQpk+lxWHj9N8+BqORD41vUXL75bcv
-         Kvtw==
+        id S231139AbhHAIqx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Aug 2021 04:46:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:60988 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229885AbhHAIqx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 04:46:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1627807605;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MAnozK3Jli8GyM6JSor6/ZmPmFWbcK8rbQiRFDAw6jk=;
+        b=IrfKiud+icQ6d1qXnq2NaEasKdlfgykN3xzfkODjqN/XUtog6HuDgVM0QOPvGh2zugusq3
+        CEUazoLRsc6CEoKyxtOx8XP6lHSjVBvDQeaTFc+a/ln+nvzbFunpOOsmetFP35X91Lcuvl
+        PGMxoFWCuWDICA9Xf/81ZqWgahSVcGI=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-5-IQOaqBb_NweSWQRd0eAmEQ-1; Sun, 01 Aug 2021 04:46:43 -0400
+X-MC-Unique: IQOaqBb_NweSWQRd0eAmEQ-1
+Received: by mail-ed1-f69.google.com with SMTP id c16-20020aa7d6100000b02903bc4c2a387bso6963106edr.21
+        for <linux-usb@vger.kernel.org>; Sun, 01 Aug 2021 01:46:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nYuEnC3Pf8FReOW2KAUy+LpNV12/ud56TBR6eiy5q5g=;
-        b=WGXYz2EimDLgE8V6GlYBx/ijwXNPxFv3qVdgCgA1TmOk3rWlb8wPl372+28H32S03e
-         glKvCuuiKgRyJ9279sPQpCcWskp5h3B6V5MRysp2sdWD0X9yQ2KL7h8L5lUGq8nZ1iZ/
-         sQjlR6z1Cd7+L2mbva4jzSsefy21QGCBVY/taJD7v8bsOnJTQWMKFwSmnk/4x9I4DkjQ
-         Hd0gBprucrUOIfZA/HfhcgDKuRAtNEGlRzRYye5ThSGpTHJyUN9jL98EtlrpVNBl5Of2
-         4N20RlgJnTt7rDlD5EzwfHVIcd2rmIWPnvpQYfgJ81EXO4GKNKa6dANr0LwC6qa9VYSO
-         oENA==
-X-Gm-Message-State: AOAM532+toNt/DwG0v+3K2bwwxZRlfKx10PthaYFuM2RI3LFc+pQeTpF
-        yDH0Y2AOvrHsl+6NAroZwL2Zhhh5RwaR2g==
-X-Google-Smtp-Source: ABdhPJzg1SJOa0X0Z71XA7gXvUqAHyki173jOLV/YfmzLfyEB4lvXk0h4HXUGc3JhjC7eDHyv1CmNQ==
-X-Received: by 2002:a5d:4fd0:: with SMTP id h16mr11860547wrw.268.1627804062076;
-        Sun, 01 Aug 2021 00:47:42 -0700 (PDT)
-Received: from [192.168.1.11] (x4db4b254.dyn.telefonica.de. [77.180.178.84])
-        by smtp.gmail.com with ESMTPSA id s2sm6535158wmh.46.2021.08.01.00.47.41
+        bh=MAnozK3Jli8GyM6JSor6/ZmPmFWbcK8rbQiRFDAw6jk=;
+        b=WzRtkYnEcMLK0+plopsRjIC4C8YdGeWX7YmJMm+HCMWRdE4PYvJlVLB8+BDFxsKysI
+         W9cLNaSVzEllX92f1pG9yDFRnpXvVi1URf3xjR7G46fUTDCOytYtakdT3FQmXlWVSEyb
+         /RS868PcuuM3SuV0y3Hxcjy5lveiVi5wIZ7+2G2ewmoETVyYF/ABjl14qmbpwTay1uhq
+         kfU71TQtnU9HNTOGYtXbf5yHvLSrczZhfj9AD1Lbpc9Cb9gGFAcA9gT9Na/bak0iFPhd
+         AkpD6Jxv3l3WX0hpQS4jsJT1iS15oWJZi3kLCSS1xqFv5/UYwaQNuk0GPPL0v5iPOWta
+         Zkug==
+X-Gm-Message-State: AOAM530igjFZasgFDYLoTIaibEk87ehFZ4RnubnbiNLgaTHf9ti8DZAH
+        ns0BnpOT7y/oL5ogrqsUNuA14mv06e5YvfE1P0WiBQOyJg1rYo12Q4t41LOVXwpIAOpRBvgmmBq
+        3yoqAtSTLJApkqawCJtsjb2CB30SZyJY3IDkAykVZRTrMEVwlwb2GckMm/oHSkZ/iVNtgqIrm
+X-Received: by 2002:a17:906:fb11:: with SMTP id lz17mr10506994ejb.336.1627807602180;
+        Sun, 01 Aug 2021 01:46:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzXZVMVSgoSNiLVIQ+D1hIwEzeA6PeTLC9C5e0qqth16zdspq/PJwNzvfMpSAIaNNqQU4ZvZg==
+X-Received: by 2002:a17:906:fb11:: with SMTP id lz17mr10506984ejb.336.1627807601984;
+        Sun, 01 Aug 2021 01:46:41 -0700 (PDT)
+Received: from x1.localdomain (2001-1c00-0c1e-bf00-1054-9d19-e0f0-8214.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:1054:9d19:e0f0:8214])
+        by smtp.gmail.com with ESMTPSA id i6sm2786737ejd.57.2021.08.01.01.46.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 01 Aug 2021 00:47:41 -0700 (PDT)
+        Sun, 01 Aug 2021 01:46:41 -0700 (PDT)
 Subject: Re: Lacie Rugged USB3-FW does not work with UAS
-From:   Julian Sikorski <belegdol@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
+To:     Julian Sikorski <belegdol@gmail.com>
 Cc:     Oliver Neukum <oneukum@suse.com>,
         Nathan Stratton Treadway <vgerlists@nathanst.com>,
         USB list <linux-usb@vger.kernel.org>
@@ -73,23 +75,24 @@ References: <ffe7a644-bd56-3f3e-4673-f69f21f4132b@gmail.com>
  <CA+xVL_QEgzb1tu-tzqYPxJF-G_a8czCp=uyZ1JJ9+5xmCcNp2Q@mail.gmail.com>
  <CA+xVL_QrJ9f8-BwVRq1oG_yo2Cd=yQH9=TCm5g=MUO9MmdvRVA@mail.gmail.com>
  <830f09f8-7e16-425e-d5dc-2c5102ee4c7a@redhat.com>
- <a645c513-794f-5171-d383-7b40fbb1ba18@gmail.com>
-Message-ID: <5b6ac50e-38d5-ad28-1e1c-08264d282353@gmail.com>
-Date:   Sun, 1 Aug 2021 09:47:40 +0200
+ <7c0a8a94-b6ac-c09e-31db-11fbb7bcd365@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+Message-ID: <daaf2c3e-6294-132e-2510-95eb9b6c39b4@redhat.com>
+Date:   Sun, 1 Aug 2021 10:46:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <a645c513-794f-5171-d383-7b40fbb1ba18@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <7c0a8a94-b6ac-c09e-31db-11fbb7bcd365@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-
-Am 01.08.21 um 09:35 schrieb Julian Sikorski:
+On 8/1/21 9:36 AM, Julian Sikorski wrote:
 > Am 29.07.21 um 11:08 schrieb Hans de Goede:
 >> Hi,
 >>
@@ -101,8 +104,7 @@ Am 01.08.21 um 09:35 schrieb Julian Sikorski:
 >> Thank you for testing, but I'm not sure using only the NO_REPORT_OPCODES
 >> quirk is wise here, the other similar La Cie drive also started out with
 >> just that quirk, only to have the NO_SAME quirk added later. See:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8010622c86ca5bb44bc98492f5968726fc7c7a21 
->>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8010622c86ca5bb44bc98492f5968726fc7c7a21
 >>
 >> Actually triggering a WRITE_SAME SCSI command is likely tricky, so
 >> it likely requires a special workload to ensure that that flag is
@@ -120,52 +122,36 @@ Am 01.08.21 um 09:35 schrieb Julian Sikorski:
 >>
 > Hi,
 > 
-> are there some tests which I could run in particular to test whether 
-> WRITE_SAME is working as intended? I use this drive for backups which 
-> means I don't connect it all that often.
-> 
-> Best regards,
-> Julian
+> are there some tests which I could run in particular to test whether WRITE_SAME is working as intended?
 
-Hi,
+I don't know, but perhaps someone else reading this knows ?
 
-one more question: is there a way to force-enable UAS for testing now 
-that the quirk has been upstreamed, other than reverting the patch and 
-rebuilding the kernel?
+> one more question: is there a way to force-enable UAS for testing now that the quirk has been upstreamed, other than reverting the patch and rebuilding the kernel?
 
-Best regards,
-Julian
-> 
->>>
->>> Best regards,
->>> Julian
->>>
->>> Julian Sikorski <belegdol@gmail.com <mailto:belegdol@gmail.com>> 
->>> schrieb am Mi., 28. Juli 2021, 01:14:
+The quirks on the commandline override any quirks from the quirk-table
+inside the kernel, including the no-uas quirk.
+
+Regards,
+
+Hans
+
+
+
+>>> Julian Sikorski <belegdol@gmail.com <mailto:belegdol@gmail.com>> schrieb am Mi., 28. Juli 2021, 01:14:
 >>>
 >>>      Hi Hans,
 >>>
->>>      apologies for top-posting and HTML but I only can send emails 
->>> from my mobile currently.
->>>      With fk quirk the drive indeed appears to be working with uas: I 
->>> can decrypt and mount a veracrypt volume from it. Thanks!
->>>      The patch disabling uas has already made it to Linus' tree and 
->>> is about to be added to stable:
->>>      
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f 
->>> <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f> 
->>>
->>>      As I have no working internet on any of my Linux machines and 
->>> won't for the foreseeable future (thank you construction workers), 
->>> would you mind taking care of amending the quirk accordingly? Thank 
->>> you in advance.
+>>>      apologies for top-posting and HTML but I only can send emails from my mobile currently.
+>>>      With fk quirk the drive indeed appears to be working with uas: I can decrypt and mount a veracrypt volume from it. Thanks!
+>>>      The patch disabling uas has already made it to Linus' tree and is about to be added to stable:
+>>>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f <https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf2fe6b4bf6e5256b80c5817908151d2d33e9f>
+>>>      As I have no working internet on any of my Linux machines and won't for the foreseeable future (thank you construction workers), would you mind taking care of amending the quirk accordingly? Thank you in advance.
 >>>
 >>>      Best regards,
 >>>      Julian
 >>>
 >>>
->>>      Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> 
->>> schrieb am Di., 27. Juli 2021, 23:19:
+>>>      Hans de Goede <hdegoede@redhat.com <mailto:hdegoede@redhat.com>> schrieb am Di., 27. Juli 2021, 23:19:
 >>>
 >>>          Hi,
 >>>
@@ -174,25 +160,20 @@ Julian
 >>>          >>
 >>>          >>> Hi all,
 >>>          >>>
->>>          >>> apologies for necro-ing this thread. I have just tried 
->>> this drive with
->>>          >>> my new laptop (Asus ZenBook UM425IA) and the same quirk 
->>> was needed to
+>>>          >>> apologies for necro-ing this thread. I have just tried this drive with
+>>>          >>> my new laptop (Asus ZenBook UM425IA) and the same quirk was needed to
 >>>          >>> get the drive to work:
 >>>          >>> options usb-storage quirks=059f:1061:u
 >>>          >>>
->>>          >>> Should we still try to get uas working with this drive 
->>> or should I
->>>          >>> send a patch hardcoding a quirk? I am on 
->>> 5.13.2-300.fc34.x86_64 kernel
+>>>          >>> Should we still try to get uas working with this drive or should I
+>>>          >>> send a patch hardcoding a quirk? I am on 5.13.2-300.fc34.x86_64 kernel
 >>>          >>> now. Thanks for the feedback in advance.
 >>>          >>>
 >>>          >>
 >>>          >> Hi,
 >>>          >>
 >>>          >>
->>>          >> sometimes we must give up. This thing is too elusive. 
->>> Please send a
+>>>          >> sometimes we must give up. This thing is too elusive. Please send a
 >>>          >> patch with a quirk.
 >>>          >>
 >>>          >>      Regards
@@ -203,14 +184,11 @@ Julian
 >>>          >
 >>>          > Hi,
 >>>          >
->>>          > thanks for confirming. Patch is attached, it appears to be 
->>> working correctly when applied against 5.13.3. Please let me know if 
->>> changes are required.
+>>>          > thanks for confirming. Patch is attached, it appears to be working correctly when applied against 5.13.3. Please let me know if changes are required.
 >>>
 >>>          I seem to have missed the earlier part of this thread somehow.
 >>>
->>>          Looking at the USB-ids, your model seems mightily close to 
->>> this existing quirk:
+>>>          Looking at the USB-ids, your model seems mightily close to this existing quirk:
 >>>
 >>>          UNUSUAL_DEV(0x059f, 0x105f, 0x0000, 0x9999,
 >>>                          "LaCie",
@@ -218,8 +196,7 @@ Julian
 >>>                          USB_SC_DEVICE, USB_PR_DEVICE, NULL,
 >>>                          US_FL_NO_REPORT_OPCODES | US_FL_NO_SAME),
 >>>
->>>          Before we go with the suggested patch, can you give the uas 
->>> driver one last
+>>>          Before we go with the suggested patch, can you give the uas driver one last
 >>>          try with:
 >>>
 >>>          options usb-storage quirks=059f:1061:fk
@@ -234,3 +211,5 @@ Julian
 >>>          Hans
 >>>
 >>
+> 
+
