@@ -2,103 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4DB3DCDAA
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 22:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF7E3DCDBC
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 22:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbhHAUYm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Aug 2021 16:24:42 -0400
-Received: from lan.nucleusys.com ([92.247.61.126]:38882 "EHLO
-        zzt.nucleusys.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S229955AbhHAUYl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 16:24:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=nucleusys.com; s=x; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6vjd0yjQG3cLOQPkVqx7MVzNhtwrgIO01TVQGBQE7jQ=; b=lJ8Qylio8uUdgrs8Pn4kHtGhxW
-        7marUVg9NQX/bYzKVnT5vhaC0JuIoYlObAgCj+b3OILLllpxqH5ZlUITZk0druvvYIBN/94NDvv5u
-        11FAu1V+LkoehwR8HPdJEHhQu3oOYBgdQc+pfXATie9KTzjCM4HMWRY/z013NcQrWUog=;
-Received: from [94.26.108.4] (helo=carbon)
-        by zzt.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <petkan@nucleusys.com>)
-        id 1mAI0U-000Bk6-CG; Sun, 01 Aug 2021 23:24:23 +0300
-Date:   Sun, 1 Aug 2021 23:24:21 +0300
-From:   Petko Manolov <petkan@nucleusys.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: pegasus: fix uninit-value in get_interrupt_interval
-Message-ID: <YQcC9eOf5+MXZRsG@carbon>
-Mail-Followup-To: Pavel Skripkin <paskripkin@gmail.com>,
-        davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-References: <20210730214411.1973-1-paskripkin@gmail.com>
- <YQaVS5UwG6RFsL4t@carbon>
- <20210801223513.06bede26@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210801223513.06bede26@gmail.com>
-X-Spam_score: -1.0
-X-Spam_bar: -
-X-Spam_report: Spam detection software, running on the system "zzt.nucleusys.com",
- has NOT identified this incoming email as spam.  The original
- message has been attached to this so you can view it or label
- similar future email.  If you have any questions, see
- @@CONTACT_ADDRESS@@ for details.
- Content preview:  On 21-08-01 22:35:13, Pavel Skripkin wrote: > On Sun, 1 Aug
-    2021 15:36:27 +0300 Petko Manolov <petkan@nucleusys.com> wrote: > > > On
-   21-07-31 00:44:11, Pavel Skripkin wrote: > > > Syzbot reported unin [...] 
- Content analysis details:   (-1.0 points, 5.0 required)
-  pts rule name              description
- ---- ---------------------- --------------------------------------------------
- -1.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+        id S230341AbhHAUck (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Aug 2021 16:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230104AbhHAUck (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 16:32:40 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437BBC06175F;
+        Sun,  1 Aug 2021 13:32:32 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id ds11-20020a17090b08cbb0290172f971883bso28596506pjb.1;
+        Sun, 01 Aug 2021 13:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=C5OkbFMiWM1ChXsrfF8KE2qY/XlniASsnVqp/vvztTk=;
+        b=iBnd47dT2pXk72rPqhSUxbhvnfQ+koDwfEvcfdyEwX0NUzNyCUFYUHWPUtKQzvzL5M
+         NKrMc26MTvTb9skvC3n6YBc+3QkUP6StousYh3+l+uB+2yjsXG9xdID3FWgERLOvSKM2
+         HR7toPlHoctcH+JOVIdyoeks/9UfF93LF65Ho9kkWqko6M171iXFWnNl7ZOXAt2s+xNd
+         inr1AgHzrceFNqK1R3BoxnThCS/Ejx7/xwJfWBgR230LeprLxQxAP8EzjoVuEz26l5IN
+         ExKZytAPxLwenhFZUF2ZGQ4BB4nXKRXSA/o1byxq9rC3jR2ZJDQJmqMmfOkm0mq1GCmu
+         Uv9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=C5OkbFMiWM1ChXsrfF8KE2qY/XlniASsnVqp/vvztTk=;
+        b=F3fDwMj53j9Py/ldqrv0UfdUrrWJpOhNOizGYYlouvC9zxqYu4+pukyo3dclQDwohk
+         mZQNkuijkFn2ECvgAfucp39B/rASZ3fWszkBpRkDlqsOSf0HuYX8BAnKVrM61Vemnt+K
+         hYLdnojBLoNLeMzz7mRXvDkGtY62Eku4wRGY83k7gLEpSZ6iVb9psKpEHMvuDwpzOqoz
+         mvd7vtjd2A2WnqCT9mErq784PFvpxuknybdgB5UtaJgJXDULmQSgfG335sCx8/GT6BIn
+         TSBYUdNPdfdEjDYfJHHwtJdRKlLI+c/hYyH9tHGW4F8ATs4PqMXo8Xzeo+ZKu0+FQSSV
+         inXg==
+X-Gm-Message-State: AOAM531UXf36b1UU1fSRujOkzWv7ifYxmufRkAOV8SgQLhvAPoMm21ao
+        JqQr1ipkd06QZI8ZstUAmcU6JmtITbY=
+X-Google-Smtp-Source: ABdhPJx8ZHL9ztCyHIPoKBWnn7WN4TdEfz5pSkJ56VqjBlPzPGwIB/MUPVUny+rVBqCqlTQ+Oyt+Yw==
+X-Received: by 2002:a63:b48:: with SMTP id a8mr4288384pgl.169.1627849951809;
+        Sun, 01 Aug 2021 13:32:31 -0700 (PDT)
+Received: from localhost.localdomain ([2402:3a80:15b3:589:f07d:5386:a3c2:3056])
+        by smtp.gmail.com with ESMTPSA id k10sm8897974pfc.169.2021.08.01.13.32.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Aug 2021 13:32:31 -0700 (PDT)
+From:   Himadri Pandya <himadrispandya@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Himadri Pandya <himadrispandya@gmail.com>
+Subject: [PATCH v2 0/6] USB: serial: use wrappers for usb_control_msg()
+Date:   Mon,  2 Aug 2021 02:01:16 +0530
+Message-Id: <20210801203122.3515-1-himadrispandya@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 21-08-01 22:35:13, Pavel Skripkin wrote:
-> On Sun, 1 Aug 2021 15:36:27 +0300 Petko Manolov <petkan@nucleusys.com> wrote:
-> 
-> > On 21-07-31 00:44:11, Pavel Skripkin wrote:
-> > > Syzbot reported uninit value pegasus_probe(). The problem was in missing
-> > > error handling.
-> > > 
-> > > get_interrupt_interval() internally calls read_eprom_word() which can fail
-> > > in some cases. For example: failed to receive usb control message. These
-> > > cases should be handled to prevent uninit value bug, since
-> > > read_eprom_word() will not initialize passed stack variable in case of
-> > > internal failure.
-> > 
-> > Well, this is most definitelly a bug.
-> > 
-> > ACK!
-> > 
-> > 
-> >		Petko
-> 
-> BTW: I found a lot uses of {get,set}_registers without error checking. I
-> think, some of them could be fixed easily (like in enable_eprom_write), but, I
-> guess, disable_eprom_write is not so easy. For example, if we cannot disable
-> eprom should we retry? If not, will device get in some unexpected state?
+There are many usages of usb_control_msg() that can use the new wrapper
+functions usb_contro_msg_send() & usb_control_msg_recv() for better
+error checks on short reads and writes. They can also be used to avoid
+allocating redundant dma buffers that are generally required to use
+usb_control_msg(). Hence use them whenever possible and avoid using
+usb_control_msg() directly.
 
-Everything bracketed by PEGASUS_WRITE_EEPROM is more or less dead code.  I've
-added this feature because the chip give us the ability to write to the flash,
-but i seriously doubt anybody ever used it.  Come to think about it, i should
-just remove this code.
+Changes in v2:
+ - Drop unnecessary use of wrappers
+ - Drop unrelated style changes
 
-> Im not familiar with this device, but I can prepare a patch to wrap all these
-> calls with proper error checking
+Additional Info:
+- This is a super late follow-up on v1 that was submitted a while
+ago(my sincere apologies). (All patches are rebased and
+compile tested.)
+- v1 patches: https://lkml.org/lkml/2020/11/4/40
+- Patches that introduced the wrapper functions:
+  https://lkml.org/lkml/2020/9/14/859
 
-Well, i've stared at the code a bit and i see some places where not checking the
-error returned by {get,set}_registers() could really be problematic.  I'll cook
-a patch with what i think needs doing and will submit it here for review.
+Himadri Pandya (6):
+  USB: serial: ch314: use usb_control_msg_recv() and
+    usb_control_msg_send()
+  USB: serial: cp210x: use usb_control_msg_recv() and
+    usb_control_msg_send()
+  USB: serial: f81232: use usb_control_msg_recv() and
+    usb_control_msg_send()
+  USB: serial: ftdi_sio: use usb_control_msg_recv()
+  USB: serial: keyspan_pda: use usb_control_msg_recv()
+  USB: serial: kl5kusb105: use usb_control_msg_recv() and
+    usb_control_msg_send()
 
+ drivers/usb/serial/ch341.c       |  97 +++++++++-------------------
+ drivers/usb/serial/cp210x.c      | 107 +++++++++----------------------
+ drivers/usb/serial/f81232.c      |  96 ++++++++++-----------------
+ drivers/usb/serial/ftdi_sio.c    |  53 +++++----------
+ drivers/usb/serial/keyspan_pda.c |  70 +++++++++-----------
+ drivers/usb/serial/kl5kusb105.c  |  79 ++++++++++-------------
+ 6 files changed, 173 insertions(+), 329 deletions(-)
 
-cheers,
-Petko
+-- 
+2.17.1
+
