@@ -2,126 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5862B3DCCD9
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 19:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F113DCD46
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Aug 2021 21:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbhHARNB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 1 Aug 2021 13:13:01 -0400
-Received: from mout.gmx.net ([212.227.15.19]:50781 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229680AbhHARNA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 1 Aug 2021 13:13:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1627837961;
-        bh=xtUEr+ekAW0WAiuNsLNrEiRPpwS+f47iJkTrheQXOVM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Op97yEQA2weqmNoErqEAF+rCg9pYtKEDJdET5VzRiFxIJIbha5eZg9ag5/scZhldC
-         KZXlsJJa0iv4X+scnxsXTFpSSCPKONA3ggVgqaLU9jFQOgNLyxp871U8pmP00R7OAh
-         HTNtp5tSEOnmPU9jrBYc4hmSrE0rk1VzHKH/Q5gQ=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from localhost.localdomain ([79.150.72.99]) by mail.gmx.net
- (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1MOA3P-1mYdeq2whN-00ObJ5; Sun, 01 Aug 2021 19:12:41 +0200
-From:   Len Baker <len.baker@gmx.com>
-To:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Oliver Neukum <oneukum@suse.com>
-Cc:     Len Baker <len.baker@gmx.com>,
-        Yves-Alexis Perez <corsac@corsac.net>,
-        linux-hardening@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drivers/net/usb: Remove all strcpy() uses
-Date:   Sun,  1 Aug 2021 19:12:26 +0200
-Message-Id: <20210801171226.17917-1-len.baker@gmx.com>
-X-Mailer: git-send-email 2.25.1
+        id S229915AbhHATf2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 1 Aug 2021 15:35:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229497AbhHATf1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 1 Aug 2021 15:35:27 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CBCC06175F;
+        Sun,  1 Aug 2021 12:35:18 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z2so29766557lft.1;
+        Sun, 01 Aug 2021 12:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=mAbYsU4RPaV/8B8ZdAc5/2u4OFxmje95un7poA9waH4=;
+        b=i/TdiNJZXQYNOJ2eze2Awe3TxtRG6IWfVMgkW0vwPXWLrXSJhgrtX9m4H5E/zs0z9b
+         ra97Fsa8aJU92b0fDjTi9t0GehvsyKdnxar7b+P40DD1lwpt0Jb+Rp1bFsDC0FAwcQoL
+         wtoIfumwjk6p1TTc+xZrNqhs5wmFCi9+iPU1e22724Me3kiedCVhGHSLSOCio4hVNkPv
+         WBnyc/sPuSoSPzLzsLYUSSvjZPMp4pv8ULos3W/o6fWxEi4nW70nUBKab5rMrtb362g/
+         JwyLCAnBN9sL1xe5a7I3W0WccfihW9yV+HF5fwsMtU3iB+BC1baI3j4t7ob2hsWJanzr
+         kB/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=mAbYsU4RPaV/8B8ZdAc5/2u4OFxmje95un7poA9waH4=;
+        b=EjfBbfoivYQhNLLmKrwoup8oaexve6JaZJcxKxau6pkblzcHK6h9btwmCV6qMe7eSX
+         CXv3iPtOKqI4vwcl3fXlFd/hBEz/VNAD4KPEyM8t/ntBXNQc89jSC9c83I4oMRKI/lNp
+         ZVZZA2ucfoZkUN9Zj+LOVNEu2F1U7E34f8yi+B/b+5uYgMj+K1dSmTyal3bnvzhYtXy/
+         PxWKBX2xejG8b4X8mmHi/gUunHFlnmEt73/GCjru08GeR+6EFPNRVgwiNywqLtSmregY
+         HPBuP7WFw3BASyQ9Uux3A5D29fwLTuXqWJhhA78LOKzbVwM46DXWbJHldsYFM6xnzHuG
+         vfHg==
+X-Gm-Message-State: AOAM531X4PRmFaSskRqRE8d0DDwrDfZL3TnGxTY3Oe0u48ilHaqAbg15
+        1EfmlfaJ30TQwc/oj9RgiY4=
+X-Google-Smtp-Source: ABdhPJz56fImZkjgw7zEFTCzmrviyChKKvYj94gbU5Htb5MvXsIVLYrherV22wNlonbWvgWtTUTeVw==
+X-Received: by 2002:a05:6512:314e:: with SMTP id s14mr9913562lfi.595.1627846516825;
+        Sun, 01 Aug 2021 12:35:16 -0700 (PDT)
+Received: from localhost.localdomain ([94.103.227.213])
+        by smtp.gmail.com with ESMTPSA id p22sm743442lfo.195.2021.08.01.12.35.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Aug 2021 12:35:16 -0700 (PDT)
+Date:   Sun, 1 Aug 2021 22:35:13 +0300
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     Petko Manolov <petkan@nucleusys.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
+Subject: Re: [PATCH] net: pegasus: fix uninit-value in
+ get_interrupt_interval
+Message-ID: <20210801223513.06bede26@gmail.com>
+In-Reply-To: <YQaVS5UwG6RFsL4t@carbon>
+References: <20210730214411.1973-1-paskripkin@gmail.com>
+        <YQaVS5UwG6RFsL4t@carbon>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:aNEQxA0ncX6BkzImAoKubQRd2aRGPwbNk6UwMdO1UGBgXm4JR/q
- s7jZaI5ya4z3C8KMGVy16qTHerJs8h5tJNbdqnKnVzsdX2Q3eRoB2y6/cOaOzfNvVO95JXF
- zB/a+PcJZzOlBWbItmqkWolUWOkezhcHEbmJQcJHzei5qv6sh8khP0kaVBHpFampgts5mgH
- Y89YuxNdWXU52hqJ3IBFA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:i2ZRFUa/4II=:xASLozsIXLy0ysItC9gDuV
- cKYL8mwceJg1AnoTtgpb1W/cUsQq8g0bX9/6FYl8r1IxR52w/z4cRGRGVDgg74usvpw2SfM5I
- 3k3p/pxohD00oMBmcKvkiBE794GfkaeeyDEGlX4mN6adZN4dgfyywn3KVPI3/rGl6nVrI77i8
- PuSRQNN88tZTBQe9qTsayFAWwiZFtMj2bynfZu0n/CI5fNCRu9Bn9M7aViogfMIPs1xRW9ITv
- FWPEdohjWB3s1uDxhzbBYSsHDIXFAfWjWozBxAah1qWMs34/5mhwQNOKNxBbfbsCS2esMFLTf
- btcJpzVGoelMO5jUHTS4X2GpofBqkcEjqeXpDbBXK2UsyHyw1lupD4q83AV/Hzg4EgxmX96Sd
- iJP/Fsbl4UTsKYCMjKZAWavVCEYUd8KgiifSCfONKkruTrdtuRHh8qt7Mi82j70Eye32+ZEgz
- odHnvpO/zMXroHfiBVPcOe1WzJUBT3+vr/YqE87v2QGfteaczhDM665asqTC5ECyB+GsSqvek
- OBIVfuCXgevT9ctdcAEMWzTON9Og/+o91HIlhkP8w0x1MEsOJjOLckBqAn5D2Xso3mEchVkXS
- rgo/0elfuGnS8XJQy3QFJzErwMQxRInqlYsewNCJVLTS28DdCYkxyd4mD2pCOA46RZdfGtv4G
- Sa2K4gxjBrsG3jQ0kgmugH5kDQtBr5hjmK9+XAh4zAgd8LhOF2VQVboyb+ylKbtzVN68bk1YZ
- u1q0ao7lOpQJJnrWVinq7yuYyX8cZyJLdzges90bZTfCzBhClY5xOYyCPB3Wn1aEO8EtI0fmO
- Cs930I4izqh1nW4doeol1jrgDHGe7Bf0HvvNRE2XD+QXhz7zod0a3xJJ1m+hE/p+oLTMdGxgd
- p+wZue4iscbHXnAKMmWUF74NxPfpTnioUPs4+wfurBrHKlXzBAQgcRi6TlhDu3NHDH8tl1b5z
- SGA7rdZuSxJdJXNeWRv4QXjFdWO5bG39CjXKiELZk9h44IqGAGG9RWkeWvbH57gHZi+aPolCZ
- SoIp7zRFFbCQl10u9Rs9F/fQrAcYvgJVng/AYM5mLFHRQlpgEFKFu6/3Eho77zFKM7wL6yOTH
- gA0YSu+C1slrvDNNIa8lwHG8dTRc0hqEb5N
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-strcpy() performs no bounds checking on the destination buffer. This
-could result in linear overflows beyond the end of the buffer, leading
-to all kinds of misbehaviors. The safe replacement is strscpy().
+On Sun, 1 Aug 2021 15:36:27 +0300
+Petko Manolov <petkan@nucleusys.com> wrote:
 
-Signed-off-by: Len Baker <len.baker@gmx.com>
-=2D--
-This is a task of the KSPP [1]
+> On 21-07-31 00:44:11, Pavel Skripkin wrote:
+> > Syzbot reported uninit value pegasus_probe(). The problem was in
+> > missing error handling.
+> > 
+> > get_interrupt_interval() internally calls read_eprom_word() which
+> > can fail in some cases. For example: failed to receive usb control
+> > message. These cases should be handled to prevent uninit value bug,
+> > since read_eprom_word() will not initialize passed stack variable
+> > in case of internal failure.
+> 
+> Well, this is most definitelly a bug.
+> 
+> ACK!
+> 
+> 
+> 		Petko
+> 
+> 
 
-[1] https://github.com/KSPP/linux/issues/88
+Thank you, Petko!
 
- drivers/net/usb/ipheth.c | 2 +-
- drivers/net/usb/usbnet.c | 8 ++++----
- 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 207e59e74935..06e2181e5810 100644
-=2D-- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -443,7 +443,7 @@ static int ipheth_probe(struct usb_interface *intf,
+BTW: I found a lot uses of {get,set}_registers without error
+checking. I think, some of them could be fixed easily (like in
+enable_eprom_write), but, I guess, disable_eprom_write is not so easy.
+For example, if we cannot disable eprom should we retry? If not, will
+device get in some unexpected state?
 
- 	netdev->netdev_ops =3D &ipheth_netdev_ops;
- 	netdev->watchdog_timeo =3D IPHETH_TX_TIMEOUT;
--	strcpy(netdev->name, "eth%d");
-+	strscpy(netdev->name, "eth%d", sizeof(netdev->name));
+Im not familiar with this device, but I can prepare a patch to wrap all
+these calls with proper error checking
 
- 	dev =3D netdev_priv(netdev);
- 	dev->udev =3D udev;
-diff --git a/drivers/net/usb/usbnet.c b/drivers/net/usb/usbnet.c
-index 470e1c1e6353..840c1c2ab16a 100644
-=2D-- a/drivers/net/usb/usbnet.c
-+++ b/drivers/net/usb/usbnet.c
-@@ -1725,7 +1725,7 @@ usbnet_probe (struct usb_interface *udev, const stru=
-ct usb_device_id *prod)
- 	dev->interrupt_count =3D 0;
 
- 	dev->net =3D net;
--	strcpy (net->name, "usb%d");
-+	strscpy(net->name, "usb%d", sizeof(net->name));
- 	memcpy (net->dev_addr, node_id, sizeof node_id);
 
- 	/* rx and tx sides can use different message sizes;
-@@ -1752,13 +1752,13 @@ usbnet_probe (struct usb_interface *udev, const st=
-ruct usb_device_id *prod)
- 		if ((dev->driver_info->flags & FLAG_ETHER) !=3D 0 &&
- 		    ((dev->driver_info->flags & FLAG_POINTTOPOINT) =3D=3D 0 ||
- 		     (net->dev_addr [0] & 0x02) =3D=3D 0))
--			strcpy (net->name, "eth%d");
-+			strscpy(net->name, "eth%d", sizeof(net->name));
- 		/* WLAN devices should always be named "wlan%d" */
- 		if ((dev->driver_info->flags & FLAG_WLAN) !=3D 0)
--			strcpy(net->name, "wlan%d");
-+			strscpy(net->name, "wlan%d", sizeof(net->name));
- 		/* WWAN devices should always be named "wwan%d" */
- 		if ((dev->driver_info->flags & FLAG_WWAN) !=3D 0)
--			strcpy(net->name, "wwan%d");
-+			strscpy(net->name, "wwan%d", sizeof(net->name));
+With regards,
+Pavel Skripkin
 
- 		/* devices that cannot do ARP */
- 		if ((dev->driver_info->flags & FLAG_NOARP) !=3D 0)
-=2D-
-2.25.1
 
