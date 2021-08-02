@@ -2,37 +2,45 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D103DD1DD
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Aug 2021 10:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93FC43DD1EE
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Aug 2021 10:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbhHBIYZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Aug 2021 04:24:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39238 "EHLO mail.kernel.org"
+        id S232709AbhHBI1e (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Aug 2021 04:27:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40602 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232562AbhHBIYY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 2 Aug 2021 04:24:24 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id A6BD260C3F;
-        Mon,  2 Aug 2021 08:24:14 +0000 (UTC)
+        id S232656AbhHBI1d (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 2 Aug 2021 04:27:33 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 659E261057;
+        Mon,  2 Aug 2021 08:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627892655;
-        bh=3sBZuGcqa5zZQrmYaUNrUR9Q6XMM3QzfBhTtZ4vnpN8=;
+        s=k20201202; t=1627892844;
+        bh=XGSf0Q2b9xJVK/A4yp1rTziqZAcP1MUIQ1F6Vv40gpc=;
         h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=Gt0kYirSlHEWaaFzsGCuJIGckzIP9Q6G351n3Gz9Fwzu5xVNXOX1xVGQBaoBm8rhg
-         et2sfe9MtPNIq5K6rmxKPIXyhK4nQLGkVojOp5JhF/6ziA4pjcarldLtag0ITsi+Wr
-         NZ4gQkSrLI3cCxu6Z6c+nHzVmH8K0kJSWNUtkgUPPez2gCa+UHaknnOtajxZzjt0Fj
-         +mggSQXzGNdID8Y6YcaxkOgpc5JWgfNTmLJB6C3wkUFHyx60hmj5BNmx43deJqaBlZ
-         6hlvMjXUuQUKJJDcjJSZkNRbtX9k59spxU8mWL382lTWiQ6zrPsWif87pstXDUxyuq
-         HmaOBwj0o6G9w==
-References: <20210801055454.53015-1-jj251510319013@gmail.com>
+        b=fpoyIdteEGyBEqTxCBoxuEO2MZaDU5G05LwVpUbAUPBECxHH3LCLyZChnUz36BYyu
+         cDoaHquy6XL5tqNFo9hALgObFAuUAPA+56+w0TFhPljDwcBvWVPJUzKehGSrlR8Z8W
+         yJAB95FlvVLTb8qpaVK/oxqaKtH7SXeIK+gQ2mY6sjb1xS0F43fuj63ovmFYbnr8G3
+         E1PD6mN27VCE1uMvLcWLdAhIcPZijx3cs2n7PdDg/J60+UFxtdBo3pfOYQUtQkdcjW
+         mzeufP19hbZU9JC22lp4pylwP1k0/17DA19Fii6rRKdJZzsW5OsLCJmxiUdwS1VfaV
+         wYUBF+oBUUpog==
+References: <20210731171838.GA912463@pc>
 User-agent: mu4e 1.6.0; emacs 27.2
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Wei Ming Chen <jj251510319013@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH] usb: gadget: Fix inconsistent indent
-Date:   Mon, 02 Aug 2021 11:24:01 +0300
-In-reply-to: <20210801055454.53015-1-jj251510319013@gmail.com>
-Message-ID: <87a6m0s18z.fsf@kernel.org>
+To:     Salah Triki <salah.triki@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@nxp.com>,
+        Jack Pham <jackp@codeaurora.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        kernel test robot <lkp@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Dean Anderson <dean@sensoray.com>,
+        Andrew Gabbasov <andrew_gabbasov@mentor.com>,
+        Vamsi Krishna Samavedam <vskrishn@codeaurora.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: remove useless cast
+Date:   Mon, 02 Aug 2021 11:26:54 +0300
+In-reply-to: <20210731171838.GA912463@pc>
+Message-ID: <877dh4s13r.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -40,11 +48,12 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Wei Ming Chen <jj251510319013@gmail.com> writes:
+Salah Triki <salah.triki@gmail.com> writes:
 
-> Remove whitespace and use tab as indent
+> Remove the cast done by ERR_PTR() and PTR_ERR() since data is of type char
+> * and fss_prepare_buffer() should returns a value of this type.
 >
-> Signed-off-by: Wei Ming Chen <jj251510319013@gmail.com>
+> Signed-off-by: Salah Triki <salah.triki@gmail.com>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
