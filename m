@@ -2,58 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF253DE269
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 00:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AC73DE2CF
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 01:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232130AbhHBWWU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Aug 2021 18:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
+        id S232469AbhHBXD3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Aug 2021 19:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbhHBWWU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 18:22:20 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD05BC06175F;
-        Mon,  2 Aug 2021 15:22:09 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id p5so23167319wro.7;
-        Mon, 02 Aug 2021 15:22:09 -0700 (PDT)
+        with ESMTP id S231126AbhHBXD3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 19:03:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A253C06175F;
+        Mon,  2 Aug 2021 16:03:18 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id j2so23162451wrx.9;
+        Mon, 02 Aug 2021 16:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=LFDQ2N8siz8MNk9BrQIvS1rfuibpMLRZ8cqYFTamWz8=;
-        b=E7c1pgBNvnaYLBmbkSVkTbXxrb/kMzbTcelvoP8qAoB0Sv3MbzwQCHmxEnKNBFZQdn
-         +ZnmAUF8r6lwTHqzooWmHFeLpCIJPnpGt/D0ZerpA/qOu82TD0DyotVaGAiXYF6b3vry
-         8CYfswb+IQ8z37U++pzmuKT5V5t+WGhm7MkRcqfO/N5vBox3ZWBmEQ7H69VjsD0gkCm5
-         Derkk0CAL7ASN15GBLaJnb3YQSz3iXRtdS8avCJSFNbM8euBTXeigHIbcaLHhXYsrcGj
-         eqrxY8eZcpClmAG7b5TunAfv+wRd36ZvXmr+Whu9A0zWDb66Br+PU9NMn9TFXNw9P9P5
-         kxAA==
+        bh=+/F6H1SVoDXbJfVxzoeNR/we1SvGGtstduI4cQWqmxg=;
+        b=BTIvf1s1WiMh1a1qIv0GtWEpsvS+jiefT2b3Iw/5TC1Wt2eoXn9F4sy+hP32n2mVkx
+         1wlf1H+Muh4pzTamgex3RgjWHf6hS4egDQER1ngarXUYMipckeE+Ys03J4sUKgM8EC+F
+         +oXbXHfF2TjoSVa/fsMcUedgT+A4ve96+L7PoCHQ0t7JVpBCQPmKMANqlsTHVCudfBAv
+         oVLN+pN1GGpCVxTd1cmUyiF8YnOMjxTj3xlLJeXqHY+s+Ey4el7hRuqcwf3qNwYBALy4
+         7nHRZ8VZ/uYtV7JnHyXzCIcQgUk4KkrajJveTpySkMRy9+ZQN5/oe6eCQ57XvL1K1xPS
+         eYpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=LFDQ2N8siz8MNk9BrQIvS1rfuibpMLRZ8cqYFTamWz8=;
-        b=aNuBDsSvJtTdYG3akOg+tOQWH2SxZZdKaMdWvGNwhAObhFQdUy8fta4FQd0s2Z05la
-         XMQWbqbQPlrkwJVxk66t+5nb7AIkz77FQtcXH26yHnxQQAiwo8+CkSjc4oWOIdpzGalg
-         VYTPGg5eyGrRJ5sFJgD/0J7xwWU96eYdvypOby+l++fMxyJW1OVl/pAnYtoweh3626OI
-         jNgIl89+S07Utu5phTvenBcfibxRJEcPIj9AKzdEenp39/bMo/762ik3dpSHrF0lHEiW
-         qdATcLdwdWzZIuPT8SZyYa/ORrLmbM6aYOWQgsdWZTvoipCuu/1nFXsakccfsROrkTd5
-         JfMQ==
-X-Gm-Message-State: AOAM531G4tF2ZIbz1Lo1ud9V7rRXa65fn4Rkv9qoE1ywe+24XX5WSQNQ
-        76IUt5Z7jwHtp9fjmhOi+l8=
-X-Google-Smtp-Source: ABdhPJzkhfRbi/ObDq0n/8x/v4sdOFj8l7b6p88n7HKeun2z17R8wyGruk5Tzq1W60hWEnGvP8W0Ag==
-X-Received: by 2002:a05:6000:124b:: with SMTP id j11mr19962803wrx.348.1627942928521;
-        Mon, 02 Aug 2021 15:22:08 -0700 (PDT)
+        bh=+/F6H1SVoDXbJfVxzoeNR/we1SvGGtstduI4cQWqmxg=;
+        b=o4pvZCYASRQ3//uDU/MEMff7uB4PwtmWJ4Z0lBi37LBfU3xMQE0QN3JlIZrjSxVciM
+         KYPDwaBROZ3W46NJ6HUjLCE96vg9/AqeM8DweIEqSk5r8WCFjz3zO5BIHlgvdFhS5r89
+         NOsiiZyKzqgZSnyd80sfv9Urz3oQPlFWoDF/AORsLKy1evWEQ3M0zXa1s3OTO10DzPZt
+         z4pK/01yWCJ+51ZWpLIVZOBDA0BBCoKj0yud3jhpHgZNXCBP5LkxeFpPDYfJvpt/ZkEn
+         0+Dvrw7C5biwouH7bDbYNkBQvZ2zD0k/KuSD2ZLJ+7DtSbwSoHyG864YYGiEoQLpwUA2
+         XCmg==
+X-Gm-Message-State: AOAM5309pWOdyXj/uCskY9MfsVnhnx/jbkKo8ZGGfKqM1FUYNQ91IyJ5
+        x/s3OGCtydVSVKK3irv/eA0=
+X-Google-Smtp-Source: ABdhPJw2B+MDC5zwh8B5yzC3dbZtEooKEKPqmx0xOugR31BxdsP10/37JZYjUN6YrvbYoDQwuOPw5g==
+X-Received: by 2002:adf:de06:: with SMTP id b6mr19688480wrm.316.1627945396369;
+        Mon, 02 Aug 2021 16:03:16 -0700 (PDT)
 Received: from pc ([196.235.140.151])
-        by smtp.gmail.com with ESMTPSA id j19sm1219979wmi.3.2021.08.02.15.22.07
+        by smtp.gmail.com with ESMTPSA id g138sm14146060wmg.32.2021.08.02.16.03.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Aug 2021 15:22:08 -0700 (PDT)
-Date:   Mon, 2 Aug 2021 23:22:05 +0100
+        Mon, 02 Aug 2021 16:03:15 -0700 (PDT)
+Date:   Tue, 3 Aug 2021 00:03:13 +0100
 From:   Salah Triki <salah.triki@gmail.com>
-To:     Keith Packard <keithp@keithp.com>,
+To:     Alan Stern <stern@rowland.harvard.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: misc: chaoskey: get lock before calling
- usb_[disable|enable]_autosuspend()
-Message-ID: <20210802222205.GA1389315@pc>
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: storage: realtek_cr: get lock before calling
+ usb_enable_autosuspend()
+Message-ID: <20210802230313.GA1480457@pc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -61,28 +62,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Based on the documentation of usb_[disable|enable]_autosuspend(), the
+Based on the documentation of usb_enable_autosuspend(), the
 caller must hold udev's device lock.
 
 Signed-off-by: Salah Triki <salah.triki@gmail.com>
 ---
- drivers/usb/misc/chaoskey.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/storage/realtek_cr.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
-index 87067c3d6109..8af00be7b9e8 100644
---- a/drivers/usb/misc/chaoskey.c
-+++ b/drivers/usb/misc/chaoskey.c
-@@ -206,7 +206,9 @@ static int chaoskey_probe(struct usb_interface *interface,
- 	if (!dev->hwrng_registered)
- 		usb_err(interface, "Unable to register with hwrng");
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index 3789698d9d3c..6948d6fdad39 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -918,9 +918,13 @@ static int realtek_cr_autosuspend_setup(struct us_data *us)
+ 	timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn, 0);
+ 	fw5895_init(us);
  
-+	usb_lock_device(udev);
- 	usb_enable_autosuspend(udev);
-+	usb_unlock_device(udev);
++	usb_lock_device(us->pusb_dev);
++
+ 	/* enable autosuspend function of the usb device */
+ 	usb_enable_autosuspend(us->pusb_dev);
  
- 	usb_dbg(interface, "chaoskey probe success, size %d", dev->size);
++	usb_unlock_device(us->pusb_dev);
++
  	return 0;
+ }
+ #endif
 -- 
 2.25.1
 
