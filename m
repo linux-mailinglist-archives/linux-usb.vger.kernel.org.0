@@ -2,90 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F88D3DF5C0
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 21:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382323DF5C4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 21:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239633AbhHCTdZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 15:33:25 -0400
-Received: from mail-io1-f54.google.com ([209.85.166.54]:40876 "EHLO
-        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239556AbhHCTdZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Aug 2021 15:33:25 -0400
-Received: by mail-io1-f54.google.com with SMTP id m13so25515255iol.7;
-        Tue, 03 Aug 2021 12:33:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=JmV/mK9Cmrzz8TecZ3mWSxFbghgcbYKa5Hb241xyq2c=;
-        b=dv/91VJESqOAx0lqAwiDssZy24tiTrcnjxY5kxr65MfoWyyFeRR2XD0Ihtl/HjEPva
-         WVpujpYKs14RzSomoTruIrYn0M81KahftnPDCFoFSQ6y/0q97D/dsw3oSxgfsv9ozJdX
-         XQU24oPkwHhRT+N/ST71j9FUsGyUsUh7SMC02UBCBHv2C+29rV3GfYMaIU5cvJMpoEwl
-         THocj6slAtnD6IFBPIxpd0KMXF07VuouUxBmgOm+8qFvT4UtFC4LkD5ktgayEo/5aGwA
-         UK186mT5as61OoQWMt2yXWHolfTScXO2ugWEES7fT8o9v2RtKvSkuXphI4adby64eGgG
-         s+hg==
-X-Gm-Message-State: AOAM530u/EV7qVBJMrKNgvSeHhvfd74fJj0WlmXTBuyydKnNRZxL8lRU
-        5lLrzzTBj+NPHLMrvWH9CbmmT5xBUg==
-X-Google-Smtp-Source: ABdhPJyTpyl7eMaj3K/g8xu0iNrwI8YFelKj4Ami65ADnflKN6mxc4iAA1xFopgpDRPulr8tyTnkrw==
-X-Received: by 2002:a02:90d0:: with SMTP id c16mr20451202jag.106.1628019193368;
-        Tue, 03 Aug 2021 12:33:13 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id i7sm7815602ilk.7.2021.08.03.12.33.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Aug 2021 12:33:12 -0700 (PDT)
-Received: (nullmailer pid 3607606 invoked by uid 1000);
-        Tue, 03 Aug 2021 19:33:11 -0000
-Date:   Tue, 3 Aug 2021 13:33:11 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org, badhri@google.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: connector: Add pd-supported property
-Message-ID: <YQmZ9/ytzOHoSaN3@robh.at.kernel.org>
-References: <20210730061832.1927936-1-kyletso@google.com>
- <20210730061832.1927936-2-kyletso@google.com>
- <68732310-d53a-a86b-f43c-2ceb22051338@roeck-us.net>
+        id S240038AbhHCTft (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Aug 2021 15:35:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41716 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239633AbhHCTft (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Aug 2021 15:35:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 99E05600CD;
+        Tue,  3 Aug 2021 19:35:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628019337;
+        bh=3LHJk7B2hsn4dZXIOBfzYt5UUIb9qKQW2R3arUJBZjc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=S6j2/bQKi7Fhh9Z/rwOmVr+D2plJM9YQsYAJw80zNoPpqrZ6IeL4X1eBEyIX4ESsv
+         ktcEdoErkI/w6G5BmKg2wLehcl9vKq08gPSXxaLMXAGp2jWQO8ytkdC9h/DsSI8J8Q
+         zxENNqIMa8nHM+Atjwxcr3fKZZ9glS7ns3wzXiWiDZQMZsk2/KpDdNuScGeWdGcfai
+         FZECOD/LaygvTmjkQrBKJ05Tg/XN1cRmsbwLERBdMc0NFQ1cHTZKyYPTkuRLKFCVAm
+         m46iPZ0os9JjWDVWO6WRWdylKXd2Q8XXkAtWqXEoAr68kiYCyzjRVuN5NkHMJ6iUSk
+         sYLF6LKfmWw/g==
+Received: by mail-ed1-f50.google.com with SMTP id k9so483458edr.10;
+        Tue, 03 Aug 2021 12:35:37 -0700 (PDT)
+X-Gm-Message-State: AOAM5319B5JbH5kAFh1lU9Qz9oPlCd63OtoM7uj6A3YG8kuH7PMbBVbj
+        hH0Opyg4sc0KMvOtECRZPZXvP0KuiA6wEnm09w==
+X-Google-Smtp-Source: ABdhPJxbon+wZW6OBJjn4JOOghwz+0MpFPYSpnbjTt0ZxOHvdCmbCuGVJbVzQLr3vOEhU7nEcp0bjVtIJr++VYfJeZE=
+X-Received: by 2002:a05:6402:254a:: with SMTP id l10mr28248255edb.258.1628019336226;
+ Tue, 03 Aug 2021 12:35:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <68732310-d53a-a86b-f43c-2ceb22051338@roeck-us.net>
+References: <20210730061832.1927936-1-kyletso@google.com> <20210730061832.1927936-2-kyletso@google.com>
+ <68732310-d53a-a86b-f43c-2ceb22051338@roeck-us.net> <YQmZ9/ytzOHoSaN3@robh.at.kernel.org>
+In-Reply-To: <YQmZ9/ytzOHoSaN3@robh.at.kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 3 Aug 2021 13:35:24 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKn3e7_8Wb_qoXjBcu-GavK=7wZW59Y-i1SF9ORmmA6wQ@mail.gmail.com>
+Message-ID: <CAL_JsqKn3e7_8Wb_qoXjBcu-GavK=7wZW59Y-i1SF9ORmmA6wQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: connector: Add pd-supported property
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Kyle Tso <kyletso@google.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Badhri Jagan Sridharan <badhri@google.com>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 29, 2021 at 11:29:06PM -0700, Guenter Roeck wrote:
-> On 7/29/21 11:18 PM, Kyle Tso wrote:
-> > Set "pd-unsupported" property if the Type-C connector has no power
-> > delivery support.
-> > 
-> 
-> subject is still wrong (it says pd-supported).
+On Tue, Aug 3, 2021 at 1:33 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Thu, Jul 29, 2021 at 11:29:06PM -0700, Guenter Roeck wrote:
+> > On 7/29/21 11:18 PM, Kyle Tso wrote:
+> > > Set "pd-unsupported" property if the Type-C connector has no power
+> > > delivery support.
+> > >
+> >
+> > subject is still wrong (it says pd-supported).
+>
+> And the commit msg too.
 
-And the commit msg too.
+Err, sorry, it's the cover letter that's wrong.
 
-> 
-> 
-> > Signed-off-by: Kyle Tso <kyletso@google.com>
-> > ---
-> >   .../devicetree/bindings/connector/usb-connector.yaml          | 4 ++++
-> >   1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > index 92b49bc37939..21ec470117a6 100644
-> > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> > @@ -111,6 +111,10 @@ properties:
-> >         - 1.5A
-> >         - 3.0A
-> > +  pd-unsupported:
-> > +    description: Set this property if the Type-C connector has no power delivery support.
-> > +    type: boolean
-> > +
-> >     # The following are optional properties for "usb-c-connector" with power
-> >     # delivery support.
-> >     source-pdos:
-> > 
-> 
-> 
+Rob
