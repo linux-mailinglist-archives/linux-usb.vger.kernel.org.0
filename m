@@ -2,184 +2,111 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D12973DEDDA
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 14:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E73173DEDEA
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 14:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235533AbhHCM3d (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 08:29:33 -0400
-Received: from mail-dm6nam12on2050.outbound.protection.outlook.com ([40.107.243.50]:57454
-        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        id S235877AbhHCMfX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Aug 2021 08:35:23 -0400
+Received: from mail-co1nam11on2045.outbound.protection.outlook.com ([40.107.220.45]:35424
+        "EHLO NAM11-CO1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235309AbhHCM3b (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Aug 2021 08:29:31 -0400
+        id S234524AbhHCMfW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Aug 2021 08:35:22 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JtPJ3jK76Bq8fZnyz1C/+ntxPmV/iPPwP/A4MtkvkeLWuHNS/TFtxVTleF1/1CruV+3LNpfzVv9kzbrHCDv+cpGJDqKYb7Iowi+zNiKYCTs+KIBOmB1uJHLo+ROtY4Oh7RjvO/Edwv6jFPrwXahb29prIiucI5cSD7djrYmvAaLsjzZZfontCc1RHT48tsPMOSYEdtwAfdYtpmqrtizjtqgsBd9F6P5FBENCLeN1cWGwV5BXKtI4KAbPAYMA7ixynkcjV+bD1v1lK9ru1XvkvhQEcDfa9LadhufqcHmLJ7a9i6QLoUYoX8bzz6Zo/VXKZ25MjF7PlYGmYNzPa5JxvA==
+ b=dHiSG8vN4Of75ebBx31/UBkbFGNa1FaeySETPQUu6KuFhLFPQXjqZwHIrFJ2AU0lVveYSTSB4pqKRvOepY352AmhA0fqhudmdDoDouAFvvWOpTdrJh5bYvPqMxWblJwpXFGjcqerM76h7kNwWbKVYy8x0ZSFA1N0ophMqAaA9fP2J1z///IpgucmrgE/uh7E6SAcIyT7KzI1cLEspOwOQ5Y/T7EPVzNstbcwXRINDnSCGjYLb8bVHwalYfy75CQHYtRZ3jV0GT7MODnmJq6/8zFXlKFXo2Cyy1Z7i5VT8gWq0PdVRVgWN43BRlKV8psyJ6TuU2lHmW7H++fQuA1HMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oOopGFOu1g6oI1jK39YohAMMyTh1sn/tuTKVUhI+O+w=;
- b=YyF+tSYYrpxT9E6Maq1d8rVQ9hdi7SnqMKHl1RH5QW9l/bDE6xoRt6mUjBGnYiCPktu9TN1dJwnffjHFAVA5CF+cTNpYX1qGTDYzyOiRmXPPyBacGfwvnRo24d3PdsuWo4R8NEPJ8oYZhK8bg8YL5Afnb+pI1ED8NZ8HM4M43i/aVsNzOrWIkK/+GzMd6Arc2wTK7xXKspjKnounbv40TzMkehX8pC/tVyoxiAX9+s5BdYhXfWZBWqppMGO/EEyOaK7bYWur0zJW52X2/TlpgJH4pXMiNs8i8zYvTID05N1W7nEOk1/4F3uXG6Ls8vMizURjleVUl6ejhi0vA5KuPw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+ bh=KRf/i9q9t9gGNkcqvWq14PZhYMKie6+u0e7pm2Oha90=;
+ b=FuLuUSvV+2GMkK1T1Gw6aR1ldu74OjrQVObT3esnNYCB5YKSRfJjjC32t5nrKhJDMoQ5aR6g9kfYJpY1QHBOvkjldXwgQNdTouc+q+CqrIIzZVEjsPks4wEQKftrD+N4loXP5TQSkjTEaaT4ZeUTbceRUhUFgJFONuKGPiB9TN6rdX9QC3NDcMa4zJqCc4IVp5ry/NwrWjAVthBrYOY68JeNAcWs8IA9ZdN7jlPWymyQbPsMKm6v5HYAg4qynpBiFwoE9D5ryDyk5DdcLVYAXy63zcHqDQ7mneDmhX2h23WMCJOj66t2ahCusM8PkYfkT8UwsfpAOwj9odTbzIXQSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oOopGFOu1g6oI1jK39YohAMMyTh1sn/tuTKVUhI+O+w=;
- b=1FnzkwEFfrBLN3HN11riApF5yaI6NYWS9JjwpLk6qYXsS8uPOk4Zbj3trx4MpkN/Styof1O6rVvrVfYQmgp4catDuOuvdA8wQ5TII5tO/LqRz00Q3XKWn387/tPySFY9uqwTu73i6/rLlRk5YdRI/PpitiI7WtZgSCvGMeOPxJE=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5103.namprd12.prod.outlook.com (2603:10b6:5:392::13)
- by DM4PR12MB5088.namprd12.prod.outlook.com (2603:10b6:5:38b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15; Tue, 3 Aug
- 2021 12:29:18 +0000
-Received: from DM4PR12MB5103.namprd12.prod.outlook.com
- ([fe80::18ea:5df5:f06e:f822]) by DM4PR12MB5103.namprd12.prod.outlook.com
- ([fe80::18ea:5df5:f06e:f822%3]) with mapi id 15.20.4373.026; Tue, 3 Aug 2021
- 12:29:18 +0000
-Subject: Re: [PATCH 3/4] thunderbolt: Fix adapter init handling during switch
- add
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, bhelgaas@google.com,
-        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
-        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org
-References: <1627909100-83338-1-git-send-email-Sanju.Mehta@amd.com>
- <1627909100-83338-4-git-send-email-Sanju.Mehta@amd.com>
- <YQgOj7elfCp7l4OO@lahna> <6da505a4-abad-ab8b-7706-17f83a35ff41@amd.com>
- <YQkG2oeZ4nRpzx4R@lahna>
-From:   Sanjay R Mehta <sanmehta@amd.com>
-Message-ID: <7f7c90cc-86db-3aec-a3ee-50af48732452@amd.com>
-Date:   Tue, 3 Aug 2021 17:59:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <YQkG2oeZ4nRpzx4R@lahna>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MAXPR0101CA0059.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:e::21) To DM4PR12MB5103.namprd12.prod.outlook.com
- (2603:10b6:5:392::13)
+ bh=KRf/i9q9t9gGNkcqvWq14PZhYMKie6+u0e7pm2Oha90=;
+ b=iKjlR/GtFkD7BuCi0FV+2DNv3wL4QB3ukUYkMZwzEgH9SIV+Z8riQpnMpBNo41T49ICTDNML22IchKLhPa4zCnmbvRqL+p9ZPubSgizbJ3e0SEsCF1SNRFyWNsTI7/BnAlQ5yTNl++RW2FCu45JcXBcbOFOP9APxti2YqMEqHxg=
+Received: from BN6PR1701CA0007.namprd17.prod.outlook.com
+ (2603:10b6:405:15::17) by CY4PR12MB1766.namprd12.prod.outlook.com
+ (2603:10b6:903:122::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Tue, 3 Aug
+ 2021 12:35:09 +0000
+Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:405:15:cafe::27) by BN6PR1701CA0007.outlook.office365.com
+ (2603:10b6:405:15::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18 via Frontend
+ Transport; Tue, 3 Aug 2021 12:35:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; linux.intel.com; dkim=none (message not signed)
+ header.d=none;linux.intel.com; dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.4373.18 via Frontend Transport; Tue, 3 Aug 2021 12:35:08 +0000
+Received: from sanjuamdntb2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Tue, 3 Aug
+ 2021 07:35:05 -0500
+From:   Sanjay R Mehta <Sanju.Mehta@amd.com>
+To:     <mika.westerberg@linux.intel.com>, <andreas.noever@gmail.com>,
+        <michael.jamet@intel.com>, <YehezkelShB@gmail.com>
+CC:     <Basavaraj.Natikar@amd.com>, <linux-usb@vger.kernel.org>,
+        Sanjay R Mehta <sanju.mehta@amd.com>
+Subject: [PATCH v2 0/4] Added some bug fixes for USB4
+Date:   Tue, 3 Aug 2021 07:34:52 -0500
+Message-ID: <1627994096-99972-1-git-send-email-Sanju.Mehta@amd.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.136.44.125] (165.204.157.251) by MAXPR0101CA0059.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:e::21) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18 via Frontend Transport; Tue, 3 Aug 2021 12:29:14 +0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bdb0edc3-c222-411b-5881-08d9567a501f
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5088:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM4PR12MB5088A182301C9246A536A1E0E5F09@DM4PR12MB5088.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
+X-MS-Office365-Filtering-Correlation-Id: 6a2aeaf3-8375-49c2-3058-08d9567b214a
+X-MS-TrafficTypeDiagnostic: CY4PR12MB1766:
+X-Microsoft-Antispam-PRVS: <CY4PR12MB176689B3585453AEC9FE6AD6E5F09@CY4PR12MB1766.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3044;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TsHriFna7c24kBzflvfbwZFEaJyh0N2Qlq3GVMMjQ2USfJq28iqiixyzE/PruM6jXUEPs1fLR0u37rqtwHx2rpjFKA6T7XRQTW3PP66F3imDXBpUJ7oUk3XqHjY6Hn+LMPRJCyY1tM2fTHFIX/KUYPR0u/EecZxwZzGV+XicMigd6yvrOByFOTkgoablPPxBSAqTFH0VbMg3aDjBfBqTwyiulCj+1MOmiqYXn0jNoYajgLrhNb0O0MOt49fmpZlDsNn8grZ20Z9exKz1r30m0leatk2nZTw79oq533QkRAXBDyBaq8r+pCYRvqC90WYfpp/A5VsUrwyfgQC2OT7p5EUQRqHdW5lmMq/hp+6CJo22NU7lwu2eHYB5qBZW4qClj5XT0tAKp29zHSdcQQfclACcWzJGUT6T2BBMxJ0a+gjQle30Zcd3/pao3YTaUIuaubyNXPgpLZNWvqPjwMEjsrzHOgmqtTQ36az9ROUV4xB2ght6OSmLC7XwB/+E05/g20ma6LbLvU2lm3bVLYyw81SlNFyNrDArD5IjiExVIXm7ujD882IedBDy3LqadTX8Y6WnGGTcQZwZG021oNAEojz4xLZbfi3zY7IywnJ8RUFBsM52QoVMp7BnLE6DoIrW1VfisdkGgZZvOXVEYxHAJGixxIHEh9vDOPR5zigFxUpJEc2hBXRWmz9cnxwm2J04EZahokldzG6LERixxp5UOKRHqf2/7G4rEPS/ak4QuPI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5103.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(16576012)(2906002)(316002)(38100700002)(66556008)(66476007)(66946007)(6916009)(53546011)(186003)(26005)(31696002)(31686004)(36756003)(8936002)(66574015)(6486002)(8676002)(6666004)(4326008)(2616005)(83380400001)(478600001)(956004)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?akpmN1pQQVJNMlZLUkpUZ2RTeUQ4ZEJkNFJ1UWM0S0F6dTdjSmw5SGl5eUcz?=
- =?utf-8?B?NzFJOHNwZXErcFZtMjMvWXNiOFhDWVJSMUxpVWdKQ3B6ZmZURHdYaWFyYkdT?=
- =?utf-8?B?VmNpVWlrRmdFaTJRVldvemRnZDFaZ3JRcUxYQXVzVWlmeGwvTmIvVHB3NmVY?=
- =?utf-8?B?WXdyZjlQTkM4Z0ltVCs4d2Z6ZGxSMTg0TS9JNWVWYWFYYXl3N201KytrWXRW?=
- =?utf-8?B?alBKUUN6SHVyeWVpSGdoWGV0dE9IZS9Wa3dKSG9YRnM5djIwM0pld3VhUHVV?=
- =?utf-8?B?dEdBWm43QlN5RXJPVVBDaTVBaUwzK0toQjJjOVRiU1M5eDNsbXN2WVNzSDFS?=
- =?utf-8?B?azBVbyt3ZkZGMUtsSjNDaW9oL2NMOFgzSEtHV0Noay8rNUZla0VQeEpsRXJO?=
- =?utf-8?B?KzlsTGZERFBBaC81Y0QvMzgwdnFvQzlnZ2Q4am51ejAyV25Kd0FLWkQ5dmQ1?=
- =?utf-8?B?Z00xV0JSU1MxYnRFcEtIMVZYbG1NT3ErVVhXWGl3d2pvZGR5ZlBnbytOM2tR?=
- =?utf-8?B?OFNTcDNxcVBSQTZsMXA2aDZzaTdRb2tCZWZhWWFjb1JNRkxkWm1ya2tVYkZu?=
- =?utf-8?B?QzRQMXdML25HUkJ6MXpsQU1CVUdTMUxVSFlLazM2MDQ2V0pxWGh0ZFRhV0M3?=
- =?utf-8?B?VnZ1aHpybkJ5NERONis5NkxuaEV5TDQrb1k3aUh5b28zamJrTE4zd25tWmc4?=
- =?utf-8?B?U2RZcUsxUXZLM2VvTVVQM295ZVpqb0tmbXRFSWMxSS80YzducUhSdll3SGNO?=
- =?utf-8?B?N25ISS95T0pHa1lxaWlxbFBsRDdGbzRMRDBReWxhNVJmRUFHbDZEdlBZYlRj?=
- =?utf-8?B?M1VaMFc5WFFNdGIzNk4zMVlodFZJWVBwdjJ0OWNFZ2J3TnlNQzF4ZmRhZzFW?=
- =?utf-8?B?SE9ISWpnZ1phNUFmTFM0YmU1eldiaVRxTjNYWDRoSU81UUFhWk1HN2ZxOHpn?=
- =?utf-8?B?eGVwOEFRTUIvdzdaMnlhT3NtaFdSaFNKWHNKTVJHVTMvNDVmWERFMnhqY1Uy?=
- =?utf-8?B?R0p5OHp5UTVSNk5jMUN5ZEp1VXJnQzA3UVVuNjhtTmg3NG9VV2VqRHpiWlVW?=
- =?utf-8?B?WXNRdGNJUzNDOFROVUtnbWtWMVFJRWlERFdVZExDbndUcmJyTGxONnd6NkFJ?=
- =?utf-8?B?Z2Z2TWhMbmhsVWZiTjE3WXNGU21uSFpYSVlVR1VaSS9PRkpGdVlsUWMydzNQ?=
- =?utf-8?B?SUp0anU1eFp1WCtyL05mVjdZeHppb1VBekdzck1PZEtwWFNUTFVzdVVLS09i?=
- =?utf-8?B?akhwVC9wMWFMeHpsYlVHRjd0Y3U4ZUpZVCtjVzIrMEZOWmc0SUZxVzlGZzhu?=
- =?utf-8?B?L3hIU0NBMlJNQ09WdlBvUXRCVzV5UHZubjdDd0VCOUdkRU5PSHhNMmNkMHdw?=
- =?utf-8?B?a3UvTkxSeFU1VkVVajBSeThxaGt1TUJKeWtvN1ZFTExaTGRpWmhyaUJleWNj?=
- =?utf-8?B?bDJORTJoWit3eDljT1l5alVJWThGLzI5WTlMRGFTM0RnZmhKYmI3T29ROGF4?=
- =?utf-8?B?UXpuUW5lNnIyZmtFZ3JCRmR2WUJoMlFCajRhRkw0ZmRmb2hxVmplU1htM3JX?=
- =?utf-8?B?dkM5MW9saHl6ZzhLb0JnVWkyM0Rmd1pYUjhWTVhsNlZ3aGFGY1VUQVJsZjlU?=
- =?utf-8?B?Sm9FdVUwTUVWUkhjZnhvVTRDcTh6Z3dER2FMazlIdHl3UCtWa2x3anVIMzlK?=
- =?utf-8?B?cFlxUGV2dUUvL3liSWF0YUNISkJHWXBhR1N5a0JwVTBFQTg2dStkSTdsRzg0?=
- =?utf-8?Q?/Hs5MbpVjBavcAFcv1lqjdhhUwjIfR1KfvQEV7l?=
+X-Microsoft-Antispam-Message-Info: jLAFF191arC2R8vvO2mprs/C07nEbKBeX8JS0t3ud8P28WynAIGbrtCpuWvxNGRrb4N8J3FpvM06ihcaEGrarOwdsuCDX969JfncwLQtDoVh7Fb77CU3Gn7nyIRFY5fHTqUSVByHsErHmf29EqaCZ5cBQpqUoHmQFt1C9C4e6i1e8TlVI0JBAu7wVnXLmbqQ8ashxJvl8iIIFpL3P5VgYcOOOcCisBUAHf2Gs4kk+B4etlme5bHSaotRZ1/kPvOptsiQAwQA34RB0hedRSkMAW3dCqmb3ZSGMKOkAziX68ZW+xPw9pIdoZD3X/JveCiGBFO8EHLxqGcVtvFEj3PbiebNs8r4stCtBC9Z6HhKAXVnO7RRoEiAT6LTGyWA8RwsWaX+Xi0zfivYVAX7nxbpkNIM1YGen8x2lrbQvDRAfoQialuYTog8tnOF2/ESOWdQ6eHqS5KCGr8dnUABXwBm81borba/v5gI4uw1nosm2pF/WVr4qH5SAKazBETRIv9cvBBwb+TL6AjT5hn6qr7kG8GZgGvuKLPwN9thP0cV2HdxjIz7zXH5G2eaG4poKslQxBgv7eGK1exmU6bMO5V+3kQCBX3+QdDtaI9zSnsrjGnkzR8Jals0mnaVfiefQN+IBrRORNSSAkxS1lBBKcNUJCbbgGFRkCaiiBsjvkFKpJkF8prEiDph69EXBHrklKYfuY/UMLXddygtnZRw2KilqbJdANmQy9rzPq0RS0YBjzE=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(136003)(376002)(396003)(39860400002)(346002)(36840700001)(46966006)(7696005)(2616005)(4744005)(2906002)(336012)(70586007)(47076005)(316002)(8936002)(86362001)(426003)(70206006)(110136005)(6666004)(81166007)(8676002)(54906003)(16526019)(186003)(36756003)(83380400001)(82310400003)(4326008)(36860700001)(82740400003)(5660300002)(26005)(478600001)(356005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdb0edc3-c222-411b-5881-08d9567a501f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5103.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2021 12:29:18.3490
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2021 12:35:08.8682
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a2aeaf3-8375-49c2-3058-08d9567b214a
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: TjovVagi3dA7FHCAX9acgXN0HlfA7EEWs7X73s1sTO7esJLOejRBWNaQbfqp5Grbox1UnFcrOdM3oaR/ska+/Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5088
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1766
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: Sanjay R Mehta <sanju.mehta@amd.com>
 
+This series adds some general USB4 bug fixes as per USB4 Spec.
 
-On 8/3/2021 2:35 PM, Mika Westerberg wrote:
-> [CAUTION: External Email]
-> 
-> Hi,
-> 
-> On Tue, Aug 03, 2021 at 12:23:44AM +0530, Sanjay R Mehta wrote:
->>
->>
->> On 8/2/2021 8:56 PM, Mika Westerberg wrote:
->>> [CAUTION: External Email]
->>>
->>> On Mon, Aug 02, 2021 at 07:58:19AM -0500, Sanjay R Mehta wrote:
->>>> From: Sanjay R Mehta <sanju.mehta@amd.com>
->>>>
->>>> Adapter0 (Port0) is the control adapter on the AMD USB4 host router.
->>>> As per USB4 spec in "Section 1.8", Control Adapters do not
->>>> have an Adapter Configuration Space".
->>>>
->>>> The read requests on Adapter0 time's out and driver initialization fails.
->>>>
->>>> Hence Disabling the Adapter in case of read-request timeout and continuing
->>>> the driver init.
->>>>
->>>> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
->>>> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
->>>> ---
->>>>  drivers/thunderbolt/switch.c | 3 ++-
->>>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
->>>> index 83b1ef3..effbfe4 100644
->>>> --- a/drivers/thunderbolt/switch.c
->>>> +++ b/drivers/thunderbolt/switch.c
->>>> @@ -2747,8 +2747,9 @@ int tb_switch_add(struct tb_switch *sw)
->>>>                       }
->>>>                       ret = tb_init_port(&sw->ports[i]);
->>>>                       if (ret) {
->>>> +                             sw->ports[i].disabled = true;
->>>>                               dev_err(&sw->dev, "failed to initialize port %d\n", i);
->>>> -                             return ret;
->>>> +                             continue;
->>>
->>> Instead of this, would it work if we start the loop at 1? In case of the
->>> control adapter (0) tb_port_init() does not do anything useful anyway
->>> and it actually would simplify that function too if we get rid of the
->>> special casing.
->>>
->> Hi Mika,
->>
->> If we start loop from 1, it will work for host router
->> but this will skip port (0) on device router which may be valid port.
-> 
-> For device router adapter 0 is also contror adapter so I think we can
-> just skip it here unconditionally.
+Sanjay R Mehta (4):
+  thunderbolt: Intel controller uses BIT(2) for intr auto
+  thunderbolt: Handle ring interrupt by reading intr status
+  thunderbolt: Skip port init for control adapter(0)
+  thunderbolt: Fix port linking by checking all adapters
 
-Sure Mika. Will send the updated changes.
+ drivers/thunderbolt/nhi.c    | 22 ++++++++++++++++------
+ drivers/thunderbolt/quirks.c | 14 ++++++++++++++
+ drivers/thunderbolt/switch.c |  4 ++--
+ drivers/thunderbolt/tb.h     |  1 +
+ 4 files changed, 33 insertions(+), 8 deletions(-)
 
-Thanks,
-Sanjay
+-- 
+2.7.4
 
-> 
