@@ -2,81 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1F23DE3AF
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 02:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5EA3DE3B6
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 02:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbhHCA4l (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Aug 2021 20:56:41 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:60897 "HELO
+        id S233176AbhHCA6q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Aug 2021 20:58:46 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:46723 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S232848AbhHCA4j (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 20:56:39 -0400
-Received: (qmail 350279 invoked by uid 1000); 2 Aug 2021 20:56:28 -0400
-Date:   Mon, 2 Aug 2021 20:56:28 -0400
+        with SMTP id S233050AbhHCA6p (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 20:58:45 -0400
+Received: (qmail 350320 invoked by uid 1000); 2 Aug 2021 20:58:34 -0400
+Date:   Mon, 2 Aug 2021 20:58:34 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
 To:     Salah Triki <salah.triki@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: storage: realtek_cr: get lock before calling
- usb_enable_autosuspend()
-Message-ID: <20210803005628.GA349864@rowland.harvard.edu>
-References: <20210802230313.GA1480457@pc>
+Cc:     Keith Packard <keithp@keithp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: misc: chaoskey: get lock before calling
+ usb_[disable|enable]_autosuspend()
+Message-ID: <20210803005834.GB349864@rowland.harvard.edu>
+References: <20210802222205.GA1389315@pc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210802230313.GA1480457@pc>
+In-Reply-To: <20210802222205.GA1389315@pc>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 12:03:13AM +0100, Salah Triki wrote:
-> Based on the documentation of usb_enable_autosuspend(), the
+On Mon, Aug 02, 2021 at 11:22:05PM +0100, Salah Triki wrote:
+> Based on the documentation of usb_[disable|enable]_autosuspend(), the
 > caller must hold udev's device lock.
 > 
 > Signed-off-by: Salah Triki <salah.triki@gmail.com>
 > ---
->  drivers/usb/storage/realtek_cr.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/misc/chaoskey.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
-> index 3789698d9d3c..6948d6fdad39 100644
-> --- a/drivers/usb/storage/realtek_cr.c
-> +++ b/drivers/usb/storage/realtek_cr.c
-> @@ -918,9 +918,13 @@ static int realtek_cr_autosuspend_setup(struct us_data *us)
->  	timer_setup(&chip->rts51x_suspend_timer, rts51x_suspend_timer_fn, 0);
->  	fw5895_init(us);
+> diff --git a/drivers/usb/misc/chaoskey.c b/drivers/usb/misc/chaoskey.c
+> index 87067c3d6109..8af00be7b9e8 100644
+> --- a/drivers/usb/misc/chaoskey.c
+> +++ b/drivers/usb/misc/chaoskey.c
+> @@ -206,7 +206,9 @@ static int chaoskey_probe(struct usb_interface *interface,
+>  	if (!dev->hwrng_registered)
+>  		usb_err(interface, "Unable to register with hwrng");
 >  
-> +	usb_lock_device(us->pusb_dev);
-> +
->  	/* enable autosuspend function of the usb device */
->  	usb_enable_autosuspend(us->pusb_dev);
->  
-> +	usb_unlock_device(us->pusb_dev);
-> +
->  	return 0;
->  }
->  #endif
+> +	usb_lock_device(udev);
+>  	usb_enable_autosuspend(udev);
+> +	usb_unlock_device(udev);
 
-I assume you didn't test this patch, because RTS51xx card readers aren't 
-very common.  If you had tested it, you would have found that it causes 
-the system to hang.
-
-This is because when realtek_cr_autosuspend_setup runs, the driver 
-already holds the device lock.  The route is a little circuitous:
-
-	realtek_cr_probe is called with the lock held, like all
-	probe routines.
-
-	It calls usb_store_probe2, which calls 
-	usb_stor_acquire_resources.  That routine calls 
-	us->unusual_dev->initFunction.  For the realtek_cr driver, the 
-	initFunction is set to init_realtek_cr (see unusual_realtek.h).
-
-	init_realtek_cr calls realtek_cr_autosuspend_setup.
-
-There is no other pathway to the usb_enable_autosuspend call.  So your 
-patch is not needed.
+Not needed (indeed, actively harmful).  When this code runs it already 
+holds the device lock, because it is part of a probe routine.
 
 Alan Stern
