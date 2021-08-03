@@ -2,110 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D05093DE7AC
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 09:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137E03DE933
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 11:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234344AbhHCH7C (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 03:59:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39302 "EHLO mail.kernel.org"
+        id S234913AbhHCJFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Aug 2021 05:05:48 -0400
+Received: from mga18.intel.com ([134.134.136.126]:52552 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234362AbhHCH7A (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Aug 2021 03:59:00 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DCB6860EC0;
-        Tue,  3 Aug 2021 07:58:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1627977530;
-        bh=dHqQvrHfB89vZZ6ULf4Ow80grXVuG6Vtb/OOiiZYaWI=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=Dn1UWWTZNkuf6+PFxSMzmgHNrz2jwoSuZMv0L7kD3I4O0a9fr9VDhv83uf1YxvsFf
-         w/yiZqSR68toU24IwNvPe1ZgXGPTmqg87bWnddq+iFGoBFRBIeY7C09OOjTpTSHMRL
-         0g7XbuVpPS0LWefiIwRY7SxtEj4bctfkNgLR19WLDgpg6ZqtcjpfSP5wGojKOgEloi
-         cuzmt6NJVausN3ONBWk//xTYwC7I1VspS+t+HRz4go2ZznExmBdMFeHrEjmjq7jWat
-         B5wXKBNFx1k0uEDi5BvLVn+wXdiZdunwx2GU7Kj69egE1txyU5UlB7Kx5cgrpe69/f
-         MAHOGUr9ZcbiA==
-References: <1627691374-15711-1-git-send-email-wcheng@codeaurora.org>
- <20210802213301.GG25299@jackp-linux.qualcomm.com>
-User-agent: mu4e 1.6.1; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Avoid runtime resume if disabling
- pullup
-Date:   Tue, 03 Aug 2021 10:58:37 +0300
-In-reply-to: <20210802213301.GG25299@jackp-linux.qualcomm.com>
-Message-ID: <87tuk7558p.fsf@kernel.org>
+        id S234554AbhHCJFs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 3 Aug 2021 05:05:48 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="200827029"
+X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
+   d="scan'208";a="200827029"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 02:05:36 -0700
+X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
+   d="scan'208";a="479400208"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 02:05:33 -0700
+Received: by lahna (sSMTP sendmail emulation); Tue, 03 Aug 2021 12:05:30 +0300
+Date:   Tue, 3 Aug 2021 12:05:30 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Sanjay R Mehta <sanmehta@amd.com>
+Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
+        michael.jamet@intel.com, bhelgaas@google.com,
+        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
+        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH 3/4] thunderbolt: Fix adapter init handling during switch
+ add
+Message-ID: <YQkG2oeZ4nRpzx4R@lahna>
+References: <1627909100-83338-1-git-send-email-Sanju.Mehta@amd.com>
+ <1627909100-83338-4-git-send-email-Sanju.Mehta@amd.com>
+ <YQgOj7elfCp7l4OO@lahna>
+ <6da505a4-abad-ab8b-7706-17f83a35ff41@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6da505a4-abad-ab8b-7706-17f83a35ff41@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi,
 
-Jack Pham <jackp@codeaurora.org> writes:
+On Tue, Aug 03, 2021 at 12:23:44AM +0530, Sanjay R Mehta wrote:
+> 
+> 
+> On 8/2/2021 8:56 PM, Mika Westerberg wrote:
+> > [CAUTION: External Email]
+> > 
+> > On Mon, Aug 02, 2021 at 07:58:19AM -0500, Sanjay R Mehta wrote:
+> >> From: Sanjay R Mehta <sanju.mehta@amd.com>
+> >>
+> >> Adapter0 (Port0) is the control adapter on the AMD USB4 host router.
+> >> As per USB4 spec in "Section 1.8", Control Adapters do not
+> >> have an Adapter Configuration Space".
+> >>
+> >> The read requests on Adapter0 time's out and driver initialization fails.
+> >>
+> >> Hence Disabling the Adapter in case of read-request timeout and continuing
+> >> the driver init.
+> >>
+> >> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
+> >> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
+> >> ---
+> >>  drivers/thunderbolt/switch.c | 3 ++-
+> >>  1 file changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> >> index 83b1ef3..effbfe4 100644
+> >> --- a/drivers/thunderbolt/switch.c
+> >> +++ b/drivers/thunderbolt/switch.c
+> >> @@ -2747,8 +2747,9 @@ int tb_switch_add(struct tb_switch *sw)
+> >>                       }
+> >>                       ret = tb_init_port(&sw->ports[i]);
+> >>                       if (ret) {
+> >> +                             sw->ports[i].disabled = true;
+> >>                               dev_err(&sw->dev, "failed to initialize port %d\n", i);
+> >> -                             return ret;
+> >> +                             continue;
+> > 
+> > Instead of this, would it work if we start the loop at 1? In case of the
+> > control adapter (0) tb_port_init() does not do anything useful anyway
+> > and it actually would simplify that function too if we get rid of the
+> > special casing.
+> > 
+> Hi Mika,
+> 
+> If we start loop from 1, it will work for host router
+> but this will skip port (0) on device router which may be valid port.
 
-> Hi Wesley,
->
-> On Fri, Jul 30, 2021 at 05:29:34PM -0700, Wesley Cheng wrote:
->> If the device is already in the runtime suspended state, any call to
->> the pullup routine will issue a runtime resume on the DWC3 core
->> device.  If the USB gadget is disabling the pullup, then avoid having
->> to issue a runtime resume, as DWC3 gadget has already been
->> halted/stopped.
->> 
->> This fixes an issue where the following condition occurs:
->> 
->> usb_gadget_remove_driver()
->> -->usb_gadget_disconnect()
->>  -->dwc3_gadget_pullup(0)
->>   -->pm_runtime_get_sync() -> ret = 0
->>   -->pm_runtime_put() [async]
->> -->usb_gadget_udc_stop()
->>  -->dwc3_gadget_stop()
->>   -->dwc->gadget_driver = NULL
->> ...
->> 
->> dwc3_suspend_common()
->> -->dwc3_gadget_suspend()
->>  -->DWC3 halt/stop routine skipped, driver_data == NULL
->> 
->> This leads to a situation where the DWC3 gadget is not properly
->> stopped, as the runtime resume would have re-enabled EP0 and event
->> interrupts, and since we avoided the DWC3 gadget suspend, these
->> resources were never disabled.
->> 
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->>  drivers/usb/dwc3/gadget.c | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->> 
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index a29a4ca..5d08454 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2435,6 +2435,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  	}
->>  
->>  	/*
->> +	 * Avoid issuing a runtime resume if the device is already in the
->> +	 * suspended state during gadget disconnect.  DWC3 gadget was already
->> +	 * halted/stopped during runtime suspend.
->> +	 */
->> +	if (!is_on) {
->> +		pm_runtime_barrier(dwc->dev);
->> +		if (pm_runtime_suspended(dwc->dev))
->> +			return 0;
->> +	}
->> +
->> +	/*
->>  	 * Check the return value for successful resume, or error.  For a
->>  	 * successful resume, the DWC3 runtime PM resume routine will handle
->>  	 * the run stop sequence, so avoid duplicate operations here.
->
-> Should this also go to stable with Fixes: 77adb8bdf422 ("usb: dwc3:
-> gadget: Allow runtime suspend if UDC unbinded") ?
-
-sounds like a good idea.
-
--- 
-balbi
+For device router adapter 0 is also contror adapter so I think we can
+just skip it here unconditionally.
