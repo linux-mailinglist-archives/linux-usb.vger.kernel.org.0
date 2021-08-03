@@ -2,105 +2,90 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 712CF3DF581
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 21:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F88D3DF5C0
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 21:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239647AbhHCTXK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 15:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238837AbhHCTXG (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Aug 2021 15:23:06 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C680C06175F
-        for <linux-usb@vger.kernel.org>; Tue,  3 Aug 2021 12:22:55 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id e4so11950051vsr.13
-        for <linux-usb@vger.kernel.org>; Tue, 03 Aug 2021 12:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bJgCHqhMD9Em6pMGw1fdW71SGx2aFTx82DIaIl2I9Ys=;
-        b=CCddak14A+GM99hSHiu7epE76CqnYUYPzTR8h1703l29SibcAt1oNz/tPnUdW1DmjF
-         pnT0myJvC3kJ+armd3cw4bpjqyeCx1kPWmtvBMag0p5kfaqMqfcI5aLe/JZyHvQMD/ua
-         bBXLn8scFNTU2y0g0w/rf0qbHQbFN+YN1LNyvJy11lMwBacFG7HJnSPUdDBCM+8QyuRJ
-         Qe3tHD0Dm+ExU/8lrN1RitNdJH4MsDtW5yB1F9Mc6Bqjlw7c3gI5wl6kpcTz5CpVLbQ8
-         4d6R1LTBWBMAfPQ9YP9mFbeSOAc8PxnCib1aRnb4uwiUOaSBPKqvWr2MiZFyQfwOTRkt
-         Y3dA==
+        id S239633AbhHCTdZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Aug 2021 15:33:25 -0400
+Received: from mail-io1-f54.google.com ([209.85.166.54]:40876 "EHLO
+        mail-io1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239556AbhHCTdZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Aug 2021 15:33:25 -0400
+Received: by mail-io1-f54.google.com with SMTP id m13so25515255iol.7;
+        Tue, 03 Aug 2021 12:33:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bJgCHqhMD9Em6pMGw1fdW71SGx2aFTx82DIaIl2I9Ys=;
-        b=XqgSx/RwHlvAZgPLgye6dpjCWADFDx2ALfG1ekyrN2DBWmtpVu9EIeDCkh20zppGiI
-         XqHYG5r7wiH5dL9kJH3Llga86aRTi9Ypzw6G3e+++RYcUWfL1rkKH9mUVpTAH3tpLfYl
-         i56dDGj6c9w1RTZw8U1aMg26WUX4apTRX2MKI832fwB5IjsLcBxOq11CSxYT5Jn6SzJg
-         0IAwgmHWZ11x06IQkOu0A0FgzAXeT827E/uhWD2a7hN1Z7UA6DUpUlWqcP1yTSk8umHq
-         VInwFXjzvicsj7dGYbv8xjy4W4zOe7t2QMXV3NUNDZz76n3P+P1Vowm3HZ4TVQeaNtbw
-         6LUg==
-X-Gm-Message-State: AOAM533gBpPMbKzDwBu69y4dobjJcY4PGHZIFjbfX6uOV8m2YLg+Oyi4
-        Ow8E5iXPWvyGMeZP+9jfVBOQMV7U1PuOuhmshbPRjQ==
-X-Google-Smtp-Source: ABdhPJx6WntRS1LwyAOVtG21buIXDaq5qKX689ipeUgnlSJIEfOSkf5j1LpCyFsVGCBiGtStKsd8QaYpng+Q1ojf1+8=
-X-Received: by 2002:a67:d393:: with SMTP id b19mr2327100vsj.49.1628018574319;
- Tue, 03 Aug 2021 12:22:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210803091314.3051302-1-kyletso@google.com> <8dd797be-8912-62e4-a8da-00b8edbfb65b@roeck-us.net>
-In-Reply-To: <8dd797be-8912-62e4-a8da-00b8edbfb65b@roeck-us.net>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Tue, 3 Aug 2021 12:22:18 -0700
-Message-ID: <CAPTae5KO2cAgCWVOPB+D+bMtDRaH=LhoASKYdAM2_J31Q6ehGA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: Keep other events when receiving FRS
- and Sourcing_vbus events
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JmV/mK9Cmrzz8TecZ3mWSxFbghgcbYKa5Hb241xyq2c=;
+        b=dv/91VJESqOAx0lqAwiDssZy24tiTrcnjxY5kxr65MfoWyyFeRR2XD0Ihtl/HjEPva
+         WVpujpYKs14RzSomoTruIrYn0M81KahftnPDCFoFSQ6y/0q97D/dsw3oSxgfsv9ozJdX
+         XQU24oPkwHhRT+N/ST71j9FUsGyUsUh7SMC02UBCBHv2C+29rV3GfYMaIU5cvJMpoEwl
+         THocj6slAtnD6IFBPIxpd0KMXF07VuouUxBmgOm+8qFvT4UtFC4LkD5ktgayEo/5aGwA
+         UK186mT5as61OoQWMt2yXWHolfTScXO2ugWEES7fT8o9v2RtKvSkuXphI4adby64eGgG
+         s+hg==
+X-Gm-Message-State: AOAM530u/EV7qVBJMrKNgvSeHhvfd74fJj0WlmXTBuyydKnNRZxL8lRU
+        5lLrzzTBj+NPHLMrvWH9CbmmT5xBUg==
+X-Google-Smtp-Source: ABdhPJyTpyl7eMaj3K/g8xu0iNrwI8YFelKj4Ami65ADnflKN6mxc4iAA1xFopgpDRPulr8tyTnkrw==
+X-Received: by 2002:a02:90d0:: with SMTP id c16mr20451202jag.106.1628019193368;
+        Tue, 03 Aug 2021 12:33:13 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id i7sm7815602ilk.7.2021.08.03.12.33.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Aug 2021 12:33:12 -0700 (PDT)
+Received: (nullmailer pid 3607606 invoked by uid 1000);
+        Tue, 03 Aug 2021 19:33:11 -0000
+Date:   Tue, 3 Aug 2021 13:33:11 -0600
+From:   Rob Herring <robh@kernel.org>
 To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Kyle Tso <kyletso@google.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        USB <linux-usb@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     Kyle Tso <kyletso@google.com>, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, badhri@google.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: connector: Add pd-supported property
+Message-ID: <YQmZ9/ytzOHoSaN3@robh.at.kernel.org>
+References: <20210730061832.1927936-1-kyletso@google.com>
+ <20210730061832.1927936-2-kyletso@google.com>
+ <68732310-d53a-a86b-f43c-2ceb22051338@roeck-us.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <68732310-d53a-a86b-f43c-2ceb22051338@roeck-us.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 3, 2021 at 6:48 AM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 8/3/21 2:13 AM, Kyle Tso wrote:
-> > When receiving FRS and Sourcing_Vbus events from low-level drivers, keep
-> > other events which come a bit earlier so that they will not be ignored
-> > in the event handler.
-> >
-> > Fixes: 8dc4bd073663 ("usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)")
-> > Cc: Badhri Jagan Sridharan <badhri@google.com>
+On Thu, Jul 29, 2021 at 11:29:06PM -0700, Guenter Roeck wrote:
+> On 7/29/21 11:18 PM, Kyle Tso wrote:
+> > Set "pd-unsupported" property if the Type-C connector has no power
+> > delivery support.
+> > 
+> 
+> subject is still wrong (it says pd-supported).
+
+And the commit msg too.
+
+> 
+> 
 > > Signed-off-by: Kyle Tso <kyletso@google.com>
->
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
->
 > > ---
-> >   drivers/usb/typec/tcpm/tcpm.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index 5b22a1c931a9..b9bb63d749ec 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -5369,7 +5369,7 @@ EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
-> >   void tcpm_sink_frs(struct tcpm_port *port)
-> >   {
-> >       spin_lock(&port->pd_event_lock);
-> > -     port->pd_events = TCPM_FRS_EVENT;
-> > +     port->pd_events |= TCPM_FRS_EVENT;
-> >       spin_unlock(&port->pd_event_lock);
-> >       kthread_queue_work(port->wq, &port->event_work);
-> >   }
-> > @@ -5378,7 +5378,7 @@ EXPORT_SYMBOL_GPL(tcpm_sink_frs);
-> >   void tcpm_sourcing_vbus(struct tcpm_port *port)
-> >   {
-> >       spin_lock(&port->pd_event_lock);
-> > -     port->pd_events = TCPM_SOURCING_VBUS;
-> > +     port->pd_events |= TCPM_SOURCING_VBUS;
-> >       spin_unlock(&port->pd_event_lock);
-> >       kthread_queue_work(port->wq, &port->event_work);
-> >   }
-> >
->
+> >   .../devicetree/bindings/connector/usb-connector.yaml          | 4 ++++
+> >   1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > index 92b49bc37939..21ec470117a6 100644
+> > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > @@ -111,6 +111,10 @@ properties:
+> >         - 1.5A
+> >         - 3.0A
+> > +  pd-unsupported:
+> > +    description: Set this property if the Type-C connector has no power delivery support.
+> > +    type: boolean
+> > +
+> >     # The following are optional properties for "usb-c-connector" with power
+> >     # delivery support.
+> >     source-pdos:
+> > 
+> 
+> 
