@@ -2,96 +2,95 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 137E03DE933
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 11:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 520D43DE98E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 11:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234913AbhHCJFs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 05:05:48 -0400
-Received: from mga18.intel.com ([134.134.136.126]:52552 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234554AbhHCJFs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 3 Aug 2021 05:05:48 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10064"; a="200827029"
-X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="200827029"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 02:05:36 -0700
-X-IronPort-AV: E=Sophos;i="5.84,291,1620716400"; 
-   d="scan'208";a="479400208"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2021 02:05:33 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 03 Aug 2021 12:05:30 +0300
-Date:   Tue, 3 Aug 2021 12:05:30 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Sanjay R Mehta <sanmehta@amd.com>
-Cc:     Sanjay R Mehta <Sanju.Mehta@amd.com>, andreas.noever@gmail.com,
-        michael.jamet@intel.com, bhelgaas@google.com,
-        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
-        linux-usb@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 3/4] thunderbolt: Fix adapter init handling during switch
- add
-Message-ID: <YQkG2oeZ4nRpzx4R@lahna>
-References: <1627909100-83338-1-git-send-email-Sanju.Mehta@amd.com>
- <1627909100-83338-4-git-send-email-Sanju.Mehta@amd.com>
- <YQgOj7elfCp7l4OO@lahna>
- <6da505a4-abad-ab8b-7706-17f83a35ff41@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6da505a4-abad-ab8b-7706-17f83a35ff41@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+        id S235018AbhHCJNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 3 Aug 2021 05:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234709AbhHCJNb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Aug 2021 05:13:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEA7C061764
+        for <linux-usb@vger.kernel.org>; Tue,  3 Aug 2021 02:13:21 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id g11-20020a25ae4b0000b02905792fb55b0bso22136613ybe.9
+        for <linux-usb@vger.kernel.org>; Tue, 03 Aug 2021 02:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=EyxbSnCrZkW0D1s78hoRTHvz/RIPrLxVkHp3d0qMYgk=;
+        b=Tip0r9HZ671jd/AbUl0qtLrYjIM8OpobmN6ubxWvSCfyGqfVj22QX+PlODtilbf1n0
+         tS9OXdzgxqqXTdXvYtJUMtktil0qOkeVid1+sQnY8w2rTdIR+PvU7xBi3l31o+xQ4Pu2
+         L3rJX0F4oPLugu8oRh6XDu7jc1w7261jW5FNlSdPxhS1sxsnGTSMFH4A5jywV3Wt7EUA
+         KIsOUF2xY+EGNsD/gEJxs63Vcrah1/pfwYa1KpkHVri9QMsI13spa60/drhxx+r54oEB
+         AEvLFKbn/NNAG1/mAwoCj0rmmeYXllnxNibL+wg3rPSh/bwzwGuF1f/y9gyrJ37VQ1Dk
+         SZsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=EyxbSnCrZkW0D1s78hoRTHvz/RIPrLxVkHp3d0qMYgk=;
+        b=nCUTM5oSRCXczoOIt5/HB5lGuMT8uDmKNIaMjpyvny40Bcf2nthT5WfepBiELS1JSX
+         /Zq2oFAt7UTceFyDcavSKrFhDc1duAINL4WdnNLKBfyU3mgU8Je+fkCA9fHJmI9HMFvc
+         +aNualYyQjJ5Vtzcf2Ja7fuoFVazH2rxcr+mDF2H2QcchOSM0VPIemd+Fa4w+yPCHR2E
+         +yM6tONEOv5PxPOhlGOhRqpY9ysrNfjZSVU3kbyddIjNMkKsnZsx1791GxyV1Iq72ENV
+         uiaJKgaaBUjBRWF61bHYpm598cAhFh/30kIz0S8iO0cnyaJVtdcbZ1MY5LwPO3omD4Hv
+         T+gA==
+X-Gm-Message-State: AOAM531rVWxRi/nuwRfDt18u8Z70K5hWsDeMV9ObJQxHIcO8HzP+D8si
+        njGFNx5Ub/OopU6mBG1f7g3FVTrIqgp0
+X-Google-Smtp-Source: ABdhPJyhMAsZAhTtNcT8YEFz6by+CTq1x8B6Q2rumYtSxq9s5GjGUf7228/L1NrdbR4kuIl4GvvZ8fQzSioz
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:2c1f:318f:d55f:e51b])
+ (user=kyletso job=sendgmr) by 2002:a5b:58e:: with SMTP id l14mr27198466ybp.143.1627982000390;
+ Tue, 03 Aug 2021 02:13:20 -0700 (PDT)
+Date:   Tue,  3 Aug 2021 17:13:14 +0800
+Message-Id: <20210803091314.3051302-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
+Subject: [PATCH] usb: typec: tcpm: Keep other events when receiving FRS and
+ Sourcing_vbus events
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+When receiving FRS and Sourcing_Vbus events from low-level drivers, keep
+other events which come a bit earlier so that they will not be ignored
+in the event handler.
 
-On Tue, Aug 03, 2021 at 12:23:44AM +0530, Sanjay R Mehta wrote:
-> 
-> 
-> On 8/2/2021 8:56 PM, Mika Westerberg wrote:
-> > [CAUTION: External Email]
-> > 
-> > On Mon, Aug 02, 2021 at 07:58:19AM -0500, Sanjay R Mehta wrote:
-> >> From: Sanjay R Mehta <sanju.mehta@amd.com>
-> >>
-> >> Adapter0 (Port0) is the control adapter on the AMD USB4 host router.
-> >> As per USB4 spec in "Section 1.8", Control Adapters do not
-> >> have an Adapter Configuration Space".
-> >>
-> >> The read requests on Adapter0 time's out and driver initialization fails.
-> >>
-> >> Hence Disabling the Adapter in case of read-request timeout and continuing
-> >> the driver init.
-> >>
-> >> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
-> >> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
-> >> ---
-> >>  drivers/thunderbolt/switch.c | 3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> >> index 83b1ef3..effbfe4 100644
-> >> --- a/drivers/thunderbolt/switch.c
-> >> +++ b/drivers/thunderbolt/switch.c
-> >> @@ -2747,8 +2747,9 @@ int tb_switch_add(struct tb_switch *sw)
-> >>                       }
-> >>                       ret = tb_init_port(&sw->ports[i]);
-> >>                       if (ret) {
-> >> +                             sw->ports[i].disabled = true;
-> >>                               dev_err(&sw->dev, "failed to initialize port %d\n", i);
-> >> -                             return ret;
-> >> +                             continue;
-> > 
-> > Instead of this, would it work if we start the loop at 1? In case of the
-> > control adapter (0) tb_port_init() does not do anything useful anyway
-> > and it actually would simplify that function too if we get rid of the
-> > special casing.
-> > 
-> Hi Mika,
-> 
-> If we start loop from 1, it will work for host router
-> but this will skip port (0) on device router which may be valid port.
+Fixes: 8dc4bd073663 ("usb: typec: tcpm: Add support for Sink Fast Role SWAP(FRS)")
+Cc: Badhri Jagan Sridharan <badhri@google.com>
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-For device router adapter 0 is also contror adapter so I think we can
-just skip it here unconditionally.
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 5b22a1c931a9..b9bb63d749ec 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -5369,7 +5369,7 @@ EXPORT_SYMBOL_GPL(tcpm_pd_hard_reset);
+ void tcpm_sink_frs(struct tcpm_port *port)
+ {
+ 	spin_lock(&port->pd_event_lock);
+-	port->pd_events = TCPM_FRS_EVENT;
++	port->pd_events |= TCPM_FRS_EVENT;
+ 	spin_unlock(&port->pd_event_lock);
+ 	kthread_queue_work(port->wq, &port->event_work);
+ }
+@@ -5378,7 +5378,7 @@ EXPORT_SYMBOL_GPL(tcpm_sink_frs);
+ void tcpm_sourcing_vbus(struct tcpm_port *port)
+ {
+ 	spin_lock(&port->pd_event_lock);
+-	port->pd_events = TCPM_SOURCING_VBUS;
++	port->pd_events |= TCPM_SOURCING_VBUS;
+ 	spin_unlock(&port->pd_event_lock);
+ 	kthread_queue_work(port->wq, &port->event_work);
+ }
+-- 
+2.32.0.554.ge1b32706d8-goog
+
