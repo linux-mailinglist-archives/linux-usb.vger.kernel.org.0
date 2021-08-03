@@ -2,99 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9613DE2EC
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 01:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DC93DE38E
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Aug 2021 02:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbhHBXPI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 2 Aug 2021 19:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38288 "EHLO
+        id S232798AbhHCA2U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 2 Aug 2021 20:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbhHBXPI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 19:15:08 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911D2C06175F
-        for <linux-usb@vger.kernel.org>; Mon,  2 Aug 2021 16:14:57 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id u25so26083549oiv.5
-        for <linux-usb@vger.kernel.org>; Mon, 02 Aug 2021 16:14:57 -0700 (PDT)
+        with ESMTP id S232311AbhHCA2U (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 2 Aug 2021 20:28:20 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24EF6C06175F;
+        Mon,  2 Aug 2021 17:28:10 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id l34-20020a05600c1d22b02902573c214807so566143wms.2;
+        Mon, 02 Aug 2021 17:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TjypnJIGsZivq+AJtxRV91gMpI4hjSbuEGhwWn6yEp0=;
-        b=N7eUayXyS8f/dXjID2CZc+xN2hUP0dvrCdcJPVCU0NXTH0GnKWNJgWV5L9MF5BPFCP
-         +eilS/z3KOT2ot6uKoSMmal3ammgg0Vpq43fUq8OUyHLz1cbioLTIWbmWTPDIEq4yxqC
-         OxAhQeGQ/IZGL6NOZHSMrTLKxEcnLr9FaX5GY=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=a6zMTnyhxtAg+is2Anr1ik8iwgNvzi3rO1H5TWqTrow=;
+        b=ms3MufsY0PL33FUD0/BqRTZXAw5KkvYccyQI0Zm3JxM6faJ4hI2TDbztO8P3KdB/eP
+         YZhL703hny09+LjmCtS4xoXL3vWDRgxGK88uUG1eAO0V+HSxY7VTEVjEFWQFjRkqvn5x
+         j6vHBV7fsAtT2BKPa7mn3XYyeH8dg17bfqH3pYspa2epPBaW42eLHa8iioS0gaqTRNFT
+         YewIsOQfGmIdYs9iz0RtmyqsMm3XdKszxurVJGrow551BcJHZ02RXGjVnCzuGv0QKHtH
+         Gu+ldbHqXpO6YigUSXkFidRQhUgenFuvPz9asjrAr4bN7VHjzeG/RVctULO8lTuJwRxX
+         0DiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TjypnJIGsZivq+AJtxRV91gMpI4hjSbuEGhwWn6yEp0=;
-        b=Uuc11c4JTNI2WXK63g65xw2EWQm2ozy3krjTsoGELCQ+rjgoBo2UqCEzmPtJ9vPOB7
-         ARQ62zqD/YsVDcVPZyq72V8qH80sHG0pge3QCCHY01pJS/Xs8KDqVoRbSKVQlpQFZI7g
-         frJ0hQdxJE6TpSWm3n5LYR+BVMHYWDYc8kpOKfVYp3Z597CVRhlAqcJSYg6ZA+RtQrOU
-         z01mZFThAaf+qADaWVy1zKrUbSYux8HIYJuJ3kJJ9dG2Ef7pdZwtgsJcJ7q4bv5zisfx
-         V6IyQofflis6m/zn1j43JFlEBckTdNSfoG11xLg8hcHhxLm5iKWK1G4l8vtMy6t0tM8G
-         P6EQ==
-X-Gm-Message-State: AOAM5321Op/4SExNKNHA+IsrfgDp7LaVcVvI04Lx1JLyU8q/U2bdpx8O
-        VePheUNitX9sf62hlHId8yYm/A==
-X-Google-Smtp-Source: ABdhPJwjZ4tzJMTSu6JLvMq3bBSNm8Pyye0xg9C4L6sH6U2CEIMZFfJAwsFhxvNkxF9zcbojC9+WFA==
-X-Received: by 2002:a05:6808:8e6:: with SMTP id d6mr12673956oic.45.1627946096985;
-        Mon, 02 Aug 2021 16:14:56 -0700 (PDT)
-Received: from [172.31.99.103] (c-73-14-2-216.hsd1.co.comcast.net. [73.14.2.216])
-        by smtp.gmail.com with ESMTPSA id t24sm21296otq.66.2021.08.02.16.14.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Aug 2021 16:14:56 -0700 (PDT)
-Subject: Re: [PATCH v2] vhci_hcd: USB port can get stuck in the disabled state
-To:     Michael <msbroadf@gmail.com>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210721235526.10588-1-msbroadf@gmail.com>
- <7b02cb66-d672-ae95-01ea-c6015725e1ac@linuxfoundation.org>
- <CALdjXpA4_eXen6RjhsEBYt8CQs-2gzwYs9h9q0Z2LKZ=rXVp+Q@mail.gmail.com>
- <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
- <CALdjXpBPRraC8xxORgE3SXw4xFnTW-Y6rLbcS+Cx0xYq3+aBeQ@mail.gmail.com>
- <976d34c0-d603-1f16-edbd-ad6c8881ad4e@linuxfoundation.org>
- <CALdjXpAzE3o7Bwdvj1TvsBRpDWDe1FZ8LsmL5q0suxYnRJCOaA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5165bd84-11af-35dd-8a9b-11c7f219fb88@linuxfoundation.org>
-Date:   Mon, 2 Aug 2021 17:14:54 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=a6zMTnyhxtAg+is2Anr1ik8iwgNvzi3rO1H5TWqTrow=;
+        b=SpIOdCS4CMC3sOHNUl2M6JeQKA3ERo7bOFVWdiukT68TK5tBkc1QRlhIFF1ox+z46c
+         d2dyULUDZj4NK3igNpiPO3Wvd4jb9TyhZeIM07squooA5ltf4vty++YvAcmP+spXu1Dn
+         vPzC1i+6Zwv2JsbO2M8EJrEBQYBb8Pqtq9ksYgpSOTsJPbZJDNulmT527M8rYvV7/ioz
+         7awYWldeVKsrgi7ml9d07lQbS+IKyS2Nyhsyu9MFIxmgYnCGwSYtS+KCv6uNpCDqwn3Y
+         bQTNiEhbh1yCg7Veu9Jm/TQnkInJM+AgkW+vPGJmrsEoKnkuE0/2KpcjI/028H/UzX+u
+         inpA==
+X-Gm-Message-State: AOAM530+mfNcbXHI3TCvahjkUZjtjfgJCYaOKsSeYQ0/rzHipCM3QxD7
+        5XgSnCqDfkYDqtOZ0S27crzMTpAvavJMQg==
+X-Google-Smtp-Source: ABdhPJxjXMWoX3k2SCMluZicxEDWkXd2ybcJDRCRobAWAQ1euGztEasOj3CA+RGWio6U3euXkv1giA==
+X-Received: by 2002:a7b:c402:: with SMTP id k2mr1428731wmi.136.1627950488804;
+        Mon, 02 Aug 2021 17:28:08 -0700 (PDT)
+Received: from pc ([196.235.140.151])
+        by smtp.gmail.com with ESMTPSA id l41sm12748562wmp.23.2021.08.02.17.28.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Aug 2021 17:28:08 -0700 (PDT)
+Date:   Tue, 3 Aug 2021 01:28:06 +0100
+From:   Salah Triki <salah.triki@gmail.com>
+To:     Pete Zaitcev <zaitcev@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: class: usblp: replace conditional statement with min()
+Message-ID: <20210803002806.GA1541734@pc>
 MIME-Version: 1.0
-In-Reply-To: <CALdjXpAzE3o7Bwdvj1TvsBRpDWDe1FZ8LsmL5q0suxYnRJCOaA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 7/30/21 5:52 PM, Michael wrote:
-> Yes i think just adding the VDEV_ST_USED check in addition to the
-> VDEV_ST_NOT_ASSIGNED state is fine and would fix the issue.
-> 
+Replace conditional statement with min() in order to make code cleaner. Issue
+found by coccinelle.
 
-Can you please confirm if this works?
+Signed-off-by: Salah Triki <salah.triki@gmail.com>
+---
+ drivers/usb/class/usblp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> After many years of writing virtualhere (a similar system to usb/ip
-> but cross-platform and different non-kernel way of doing it server
-> side) I've seen many drivers that issue reset at any time. Loading
-> firmware is usually the reason.  Also sometimes switching
-> configurations requires a reset also, for example some gaming wheels
-> do this. I don't think you should make this VDEV_ST_USED check
-> specific to Wifi devices, as a lot of devices don't follow too closely
-> to the USB protocol to begin with from my experience. They primarily
-> base their USB interactions assuming the windows platform and its
-> quirks.
-> 
-
-When sending responses to Linux kernel mailing lists, please use bottom post.
-This check will be used for all drivers. We don't add checks for specific cases
-in the code.
-
-thanks,
--- Shuah
+diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
+index f27b4aecff3d..fd779a989526 100644
+--- a/drivers/usb/class/usblp.c
++++ b/drivers/usb/class/usblp.c
+@@ -264,7 +264,7 @@ static int usblp_ctrl_msg(struct usblp *usblp, int request, int type, int dir, i
+ 	dev_dbg(&usblp->intf->dev,
+ 		"usblp_control_msg: rq: 0x%02x dir: %d recip: %d value: %d idx: %d len: %#x result: %d\n",
+ 		request, !!dir, recip, value, index, len, retval);
+-	return retval < 0 ? retval : 0;
++	return min(retval, 0);
+ }
+ 
+ #define usblp_read_status(usblp, status)\
+-- 
+2.25.1
 
