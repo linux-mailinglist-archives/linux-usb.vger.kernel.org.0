@@ -2,189 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E0A3DFDE7
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 11:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241FE3DFE03
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 11:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237004AbhHDJXU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 05:23:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59990 "EHLO mail.kernel.org"
+        id S236554AbhHDJau (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 05:30:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36522 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236381AbhHDJXT (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Aug 2021 05:23:19 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 5B6F660F10
-        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 09:23:06 +0000 (UTC)
+        id S230436AbhHDJat (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Aug 2021 05:30:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 7EDE360EB9;
+        Wed,  4 Aug 2021 09:30:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628068986;
-        bh=gUUKZmyGEaAXQb/bC+AsrjcwDJ3tCf/XxyuhDAPOwI4=;
-        h=From:To:Subject:Date:From;
-        b=fk/a+P3w8cqvSvGdAbbpsPpQeT1uFwCcUCQspYl0VHBd5NzOwHhBErxxrWNMXm2Hr
-         eNB7gXYx+vO+WnsJO0a6pHjWkM7ZKosfrS3yfjtCa8sUtOfOuqBwSvJSWB+ku5O/3v
-         SP1IP658uCzl360NeZCJPi91/h6b40MFjaieLk3NqFusV0agypsmLHrZZpVse3gS6s
-         YsHtp2Ok1o3XTlSKi8I7F2F5gJs0Rls9p6DCFm8G3QB0n4RuiRgBOwRyN2uIXYCII0
-         SEmFJMGDR2tGpTVP/BNgzcpOSf6U8U0+r6GePSVfqvdvHzfzCGBM7qfabI3eooNPKa
-         In3a56c0EVFGg==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 47929603BE; Wed,  4 Aug 2021 09:23:06 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 213967] New: Thinkpad T14 Chicony Webcam not recognized by
- kernel
-Date:   Wed, 04 Aug 2021 09:23:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dev@horatiuion.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-213967-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1628069437;
+        bh=6k/6qUZbxNL5sJJJ1nd6vDOplbQyZP1eJQPT++YeUz0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tv9CAKJ5eAo2kk+pC028P1JhNxWVgdWhA5i2nGPj03OWSnHEYe1+NdJgoeKwF5EIY
+         rw49tX/J4eELK7GaQCecN7QEMMvLrPIBzQMxsbIo5EnHe3RsuIjiQwWBXYcJyZsqOi
+         J8inRiUbnaQzLJ9xZs+hx300TIwMVTQqMlAjX9/S91OCID4Ix5VORSQijt3vDWDVjl
+         VpFRmA506myjzc+jEhfutDvf28eXw+oRljJfL339MEBhqr4DqVJiwnC3P5Yl83Zn+D
+         nidh548JFFK1OS9MDQoEyN2l+X6o1rK+ZgnHNJ/vgo2dL94fVVXj3oIx9q65xclNUx
+         goYsyExDhKxFQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mBDDn-0006Rh-70; Wed, 04 Aug 2021 11:29:55 +0200
+Date:   Wed, 4 Aug 2021 11:29:55 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: Commit 8a7bf7510d1f ("USB: serial: pl2303: amend and tighten
+ type detection") broke pl2303 driver for my adapter
+Message-ID: <YQpeE19WIeQO2b//@hovoldconsulting.com>
+References: <CA+E=qVfWm=3iJ6UR3UzeM-Se5sBjT+xx8CAM2G4bP2NxqW6itg@mail.gmail.com>
+ <YQJ8rNbYhSwmZvbb@hovoldconsulting.com>
+ <CA+E=qVdS+7AvRcQAioUu2BshP=ReOcrCLEHE3pmERsXJascbgA@mail.gmail.com>
+ <YQPzdwYy8qxY39BW@hovoldconsulting.com>
+ <CA+E=qVcLdZ=gdJa-nV42ey751Dd9gFHWya7v=-y3WejoDYkaHA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+E=qVcLdZ=gdJa-nV42ey751Dd9gFHWya7v=-y3WejoDYkaHA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D213967
+On Tue, Aug 03, 2021 at 11:41:33PM -0700, Vasily Khoruzhick wrote:
+> On Fri, Jul 30, 2021 at 5:42 AM Johan Hovold <johan@kernel.org> wrote:
+> > On Thu, Jul 29, 2021 at 10:37:00AM -0700, Vasily Khoruzhick wrote:
+> > > On Thu, Jul 29, 2021 at 3:02 AM Johan Hovold <johan@kernel.org> wrote:
 
-            Bug ID: 213967
-           Summary: Thinkpad T14 Chicony Webcam not recognized by kernel
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.13.6
-          Hardware: All
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: normal
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: dev@horatiuion.com
-        Regression: No
+> > > Bus 001 Device 024: ID 067b:23c3 Prolific Technology, Inc. USB-Serial
+> > > Controller
+> > > Device Descriptor:
+> > >   bLength                18
+> > >   bDescriptorType         1
+> > >   bcdUSB               2.00
+> > >   bDeviceClass            0
+> > >   bDeviceSubClass         0
+> > >   bDeviceProtocol         0
+> > >   bMaxPacketSize0        64
+> > >   idVendor           0x067b Prolific Technology, Inc.
+> > >   idProduct          0x23c3
+> > >   bcdDevice            3.05
+> >
+> > Thanks. Based on the above it looks like either a TA using the default
+> > GT idProduct and new subminor release number (3.05), or it's a GT with
+> > an undocumented release number (the datasheet says it should be 1.00).
 
-Distro: Arch Linux
+> > Could you try applying the patch below and check the log for that
+> > pl2303_supports_hx_status() printk? If it is indeed a GT then this
+> > should also make the device work again.
+> 
+> Thanks, with this patch it works:
+> 
+> [793566.912312] usb 1-1: new full-speed USB device number 43 using xhci_hcd
+> [793567.053688] usb 1-1: New USB device found, idVendor=067b,
+> idProduct=23c3, bcdDevice= 3.05
+> [793567.053702] usb 1-1: New USB device strings: Mfr=1, Product=2,
+> SerialNumber=3
+> [793567.053708] usb 1-1: Product: USB-Serial Controller
+> [793567.053712] usb 1-1: Manufacturer: Prolific Technology Inc.
+> [793567.053716] usb 1-1: SerialNumber: CMA>b103Y23
+> [793567.056684] pl2303 1-1:1.0: pl2303 converter detected
+> [793567.056956] pl2303 1-1:1.0: pl2303_supports_hx_status - ret = -32
+> [793567.057281] usb 1-1: pl2303 converter now attached to ttyUSB0
+> 
+> I tested it with picocom at 115200 baud.
+> 
+> You can have my:
+> 
+> Tested-by: Vasily Khoruzhick <anarsoul@gmail.com>
 
+Thanks for testing. I'll reply with a patch to get this fixed in 5.14-rc
+and backported to 5.13.
 
-Timeline:
-
-- after upgrading from 5.12.15 to 5.13.4, my webcam wasn't being recognized=
- by
-the kernel (nothing showing up in the kernel logs regarding uvcvideo and
-nothing showing up in lsusb)
-- a temporary fix (as determined by the distro community) was to install the
-firmware from this repository
-(https://github.com/denisandroid/uPD72020x-Firmware) while waiting for the
-official fix
-- the potential fix was issued (commit
-44cf53602f5a0db80d53c8fff6cdbcae59650a42) and merged in 5.13.6
-- after upgrading to 5.13.6 my webcam stopped working yet again. Suspecting
-that I no longer needed the uPD72020x-Firmware, I uninstalled it, with no
-success. My webcam is still not being recognized
-
-
-Right now I'm running 5.13.5 with uPD72020x-Firmware installed, which is the
-only working solution for now.
-
-
-Kernel logs:
-```
-kernel: usb 2-2: new high-speed USB device number 2 using xhci_hcd
-kernel: usb 2-2: New USB device found, idVendor=3D04f2, idProduct=3Db6d0,
-bcdDevice=3D58.18
-kernel: usb 2-2: New USB device strings: Mfr=3D3, Product=3D1, SerialNumber=
-=3D2
-kernel: usb 2-2: Product: Integrated Camera
-kernel: usb 2-2: Manufacturer: Chicony Electronics Co.,Ltd.
-kernel: usb 2-2: SerialNumber: 0001
-kernel: usb 2-2: Found UVC 1.10 device Integrated Camera (04f2:b6d0)
-kernel: input: Integrated Camera: Integrated C as
-/devices/pci0000:00/0000:00:02.7/0000:06:00.0/usb2/2-2/2-2:1.0/input/input30
-kernel: usbcore: registered new interface driver btusb
-kernel: usb 2-2: Found UVC 1.50 device Integrated Camera (04f2:b6d0)
-kernel: input: Integrated Camera: Integrated I as
-/devices/pci0000:00/0000:00:02.7/0000:06:00.0/usb2/2-2/2-2:1.2/input/input31
-kernel: usbcore: registered new interface driver uvcvideo
-```
-
-lsusb:
-```
-Bus 007 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 006 Device 003: ID 8087:0029 Intel Corp. AX200 Bluetooth
-Bus 006 Device 002: ID 06cb:00bd Synaptics, Inc. Prometheus MIS Touch
-Fingerprint Reader
-Bus 006 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 005 Device 004: ID 05e3:0749 Genesys Logic, Inc. SD Card Reader and Wri=
-ter
-Bus 005 Device 005: ID 2109:0812 VIA Labs, Inc. VL812 Hub
-Bus 005 Device 006: ID 0bda:8153 Realtek Semiconductor Corp. RTL8153 Gigabit
-Ethernet Adapter
-Bus 005 Device 003: ID 0bda:0411 Realtek Semiconductor Corp. Hub
-Bus 005 Device 002: ID 2109:0817 VIA Labs, Inc. USB3.0 Hub=20=20=20=20=20=
-=20=20=20=20=20=20=20=20
-Bus 005 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 004 Device 003: ID 058f:9540 Alcor Micro Corp. AU9540 Smartcard Reader
-Bus 004 Device 007: ID 046d:c52b Logitech, Inc. Unifying Receiver
-Bus 004 Device 008: ID 24f0:0140 Metadot Das Keyboard 4
-Bus 004 Device 006: ID 2109:2812 VIA Labs, Inc. VL812 Hub
-Bus 004 Device 005: ID 0bda:5411 Realtek Semiconductor Corp. RTS5411 Hub
-Bus 004 Device 004: ID 2109:0102 VIA Labs, Inc. USB 2.0 BILLBOARD=20=20=20=
-=20=20=20=20=20=20=20=20=20=20
-Bus 004 Device 002: ID 2109:2817 VIA Labs, Inc. USB2.0 Hub=20=20=20=20=20=
-=20=20=20=20=20=20=20=20
-Bus 004 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 003 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 002 Device 002: ID 04f2:b6d0 Chicony Electronics Co., Ltd Integrated Ca=
-mera
-Bus 002 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
-
-I have tried grepping the kernel logs for the pci bridge in the working and
-non-working versions
-
-Working:
-```
-kernel: pci 0000:00:02.7: [1022:1634] type 01 class 0x060400
-kernel: pci 0000:00:02.7: PME# supported from D0 D3hot D3cold
-kernel: pci 0000:00:02.7: PCI bridge to [bus 06]
-kernel: pci 0000:00:02.7:   bridge window [mem 0xfd400000-0xfd4fffff]
-kernel: pci 0000:00:02.7: PCI bridge to [bus 06]
-kernel: pci 0000:00:02.7:   bridge window [mem 0xfd400000-0xfd4fffff]
-kernel: pci 0000:00:02.7: Adding to iommu group 7
-kernel: pcieport 0000:00:02.7: PME: Signaling with IRQ 31
-kernel: input: Integrated Camera: Integrated C as
-/devices/pci0000:00/0000:00:02.7/0000:06:00.0/usb2/2-2/2-2:1.0/input/input30
-kernel: input: Integrated Camera: Integrated I as
-/devices/pci0000:00/0000:00:02.7/0000:06:00.0/usb2/2-2/2-2:1.2/input/input31
-```
-
-Not working:
-```
-kernel: pci 0000:00:02.7: [1022:1634] type 01 class 0x060400
-kernel: pci 0000:00:02.7: PME# supported from D0 D3hot D3cold
-kernel: pci 0000:00:02.7: PCI bridge to [bus 06]
-kernel: pci 0000:00:02.7:   bridge window [mem 0xfd400000-0xfd4fffff]
-kernel: pci 0000:00:02.7: PCI bridge to [bus 06]
-kernel: pci 0000:00:02.7:   bridge window [mem 0xfd400000-0xfd4fffff]
-kernel: pci 0000:00:02.7: Adding to iommu group 7
-kernel: pcieport 0000:00:02.7: PME: Signaling with IRQ 31
-```
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Johan
