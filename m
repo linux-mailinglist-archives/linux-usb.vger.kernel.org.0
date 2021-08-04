@@ -2,127 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 298213DFC8B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 10:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731D73DFCA5
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 10:19:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236162AbhHDIOP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 04:14:15 -0400
-Received: from smtp-out1.suse.de ([195.135.220.28]:54750 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236243AbhHDIOO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 04:14:14 -0400
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C0411221B5;
-        Wed,  4 Aug 2021 08:14:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1628064840; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8keho363Sl2gUx4aN/xeXttCB1j0pnXy2aa4KQk3nRM=;
-        b=wPyEEXFXSSLesVtRLQGtfXXzmJN2Z3mDLpd8xT2x6uaUOoUTzyck+ifeUjhyanzcbcHIOy
-        glsUMfwk9uOCmkNSw99WPGeYN6usUt0L+JuiQw09g6nTUiXYZcNqtcEfzsSt2OBe7yGnre
-        TEKxS/qfMLhOJlrLKFGWZDb/NH90y3Y=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1628064840;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8keho363Sl2gUx4aN/xeXttCB1j0pnXy2aa4KQk3nRM=;
-        b=JUgqddh4j6SPOHYkwbkbzhRr4EaqgolGBClh9M0980M5lk8xPI/nX1VgeTFp/zfNUHwd/1
-        w5L0R8WB1eXUpoBw==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id A2AAA13790;
-        Wed,  4 Aug 2021 08:14:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id ZdW2JkhMCmGgVQAAGKfGzw
-        (envelope-from <iivanov@suse.de>); Wed, 04 Aug 2021 08:14:00 +0000
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Woojung Huh <woojung.huh@microchip.com>
-Cc:     UNGLinuxDriver@microchip.com,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Ivan T. Ivanov" <iivanov@suse.de>
-Subject: [PATCH] net: usb: lan78xx: don't modify phy_device state concurrently
-Date:   Wed,  4 Aug 2021 11:13:39 +0300
-Message-Id: <20210804081339.19909-1-iivanov@suse.de>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S236213AbhHDITi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 04:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231783AbhHDITh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 04:19:37 -0400
+Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF301C0613D5
+        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 01:19:23 -0700 (PDT)
+Received: by mail-qk1-x74a.google.com with SMTP id 18-20020a05620a0792b02903b8e915ccceso1608373qka.18
+        for <linux-usb@vger.kernel.org>; Wed, 04 Aug 2021 01:19:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=JaeVOCD1xjiNZOo9WK4DguArWkRWfpfwXcJD2bxAZ2E=;
+        b=RUoMD6rTY3IJ5/5+6xzAN02NV3WPmsnxPG+M6fxPeTNjvM/X4YQhwIGP2Rup96mqcI
+         BhViJzXZSQHeOTbN/UGP3oFMatd7QM8PuTjGcMQb6P+BUarMrSAj517wqzBc6UXudTGK
+         k3bubRgnXNyS+LnPV+vAuaWqRXr4bELD8I4x98i4v27VZYNpbblHw6B61CBOQnVXwQ10
+         CDP/9NmBDASfZkv6UeCrimgSd1Zoji+aEytv2Cu6cxJf1s4k/kG/r/5p0vPrCqPP/BG8
+         iWS0q32Muevk+q1Z2hFn+AfPpvNH/D/XyaN/8Hh6JMPPkwdclpQaDQRl2Zg6SNW+dFwG
+         CouQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=JaeVOCD1xjiNZOo9WK4DguArWkRWfpfwXcJD2bxAZ2E=;
+        b=PBL/vvkPKdRLwE0BYwE37Px1qzH1mShLNxjWSa1Mmpq9bgddsGY0lmyRm1e6AMXksw
+         xq7VNrFHG2RHlcZxEWwRgujD7CAk1orsTALx/aJhsqQD2qevDHCT+9oIDd1z1+cVt16X
+         flels0BK5crHgjZAcAnM+Fh5WTIAJAQU4f0gYnbSUR1W85MnZ+vx2Sw7toMgRlNKsASs
+         uZEaWW75HNjQG8HP95Mq2/diAEuRCZsn1xdmXQGsQSAh1Jhwex4R6N5QysK+oKt2/czJ
+         Ipr4KlPctwJKLIlDOH+dE4zrPD9UgfFuBJ/hVCiE9kLLN4dtKU4a3+enBxPkyauFAiGA
+         5bIA==
+X-Gm-Message-State: AOAM533fqU2pGtZ1sM4P5gAp8HdOy2IfSdRRiTakLocTsLA+txxc5ndn
+        fFwdCMPNiTc3lVwsSty4nkKyIkZXyJ/w
+X-Google-Smtp-Source: ABdhPJz/Ubuo6nOoq/2uOV+UPUW4YrwJ1FpKt6WTzRBYNSlxeSoAHZr/LPGvs7Jk8Fk/VC6Wf5zixktUKiHw
+X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:7eb8:c2f5:2e08:d4bc])
+ (user=kyletso job=sendgmr) by 2002:a05:6214:1021:: with SMTP id
+ k1mr25874996qvr.4.1628065162885; Wed, 04 Aug 2021 01:19:22 -0700 (PDT)
+Date:   Wed,  4 Aug 2021 16:19:15 +0800
+Message-Id: <20210804081917.3390341-1-kyletso@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
+Subject: [PATCH v6 0/2] TCPM non-PD mode
+From:   Kyle Tso <kyletso@google.com>
+To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org
+Cc:     badhri@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently phy_device state could be left in inconsistent state shown
-by following alert message[1]. This is because phy_read_status could
-be called concurrently from lan78xx_delayedwork, phy_state_machine and
-__ethtool_get_link. Fix this by making sure that phy_device state is
-updated atomically.
+(changed the property name only)
 
-[1] lan78xx 1-1.1.1:1.0 eth0: No phy led trigger registered for speed(-1)
+The reason for this patch is to let the device/system policy decide
+whether PD is going to be supported using devicetree properties.
 
-Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
----
- drivers/net/usb/lan78xx.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+A new dt property "pd-disable" is introduced and TCPM uses this
+property as a flag to decide whether PD is supported. If the flag is
+false (the dt property is not present), the RX functionality of the
+low-level driver will not be enabled. The power negotiation related
+states will be skipped as well. If the flag is true, everything is a
+what it was before.
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index b27229d34425..0c964d0bd2d6 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -1154,7 +1154,7 @@ static int lan78xx_link_reset(struct lan78xx_net *dev)
- {
- 	struct phy_device *phydev = dev->net->phydev;
- 	struct ethtool_link_ksettings ecmd;
--	int ladv, radv, ret;
-+	int ladv, radv, ret, link;
- 	u32 buf;
- 
- 	/* clear LAN78xx interrupt status */
-@@ -1162,9 +1162,12 @@ static int lan78xx_link_reset(struct lan78xx_net *dev)
- 	if (unlikely(ret < 0))
- 		return -EIO;
- 
-+	mutex_lock(&phydev->lock);
- 	phy_read_status(phydev);
-+	link = phydev->link;
-+	mutex_unlock(&phydev->lock);
- 
--	if (!phydev->link && dev->link_on) {
-+	if (!link && dev->link_on) {
- 		dev->link_on = false;
- 
- 		/* reset MAC */
-@@ -1177,7 +1180,7 @@ static int lan78xx_link_reset(struct lan78xx_net *dev)
- 			return -EIO;
- 
- 		del_timer(&dev->stat_monitor);
--	} else if (phydev->link && !dev->link_on) {
-+	} else if (link && !dev->link_on) {
- 		dev->link_on = true;
- 
- 		phy_ethtool_ksettings_get(phydev, &ecmd);
-@@ -1464,9 +1467,14 @@ static int lan78xx_set_eee(struct net_device *net, struct ethtool_eee *edata)
- 
- static u32 lan78xx_get_link(struct net_device *net)
- {
-+	u32 link;
-+
-+	mutex_lock(&net->phydev->lock);
- 	phy_read_status(net->phydev);
-+	link = net->phydev->link;
-+	mutex_unlock(&net->phydev->lock);
- 
--	return net->phydev->link;
-+	return link;
- }
- 
- static void lan78xx_get_drvinfo(struct net_device *net,
+If "pd-disable" is present, and the port is SRC or DRP, another
+existing dt property "typec-power-opmode" needs to be specified to
+indicate which Rp value should be used when the port is SRC.
+
+changes since v5:
+dt-bindings: connector: Add pd-disable property
+- Changed the property name to "pd-disable"
+
+usb: typec: tcpm: Support non-PD mode
+- Changed the property name to "pd-disable"
+- Added Acked-by tag
+
+Kyle Tso (2):
+  dt-bindings: connector: Add pd-disable property
+  usb: typec: tcpm: Support non-PD mode
+
+ .../bindings/connector/usb-connector.yaml     |  4 +
+ drivers/usb/typec/tcpm/tcpm.c                 | 87 +++++++++++++++----
+ 2 files changed, 72 insertions(+), 19 deletions(-)
+
 -- 
-2.32.0
+2.32.0.554.ge1b32706d8-goog
 
