@@ -2,167 +2,118 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D61B83DF9EC
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 05:12:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4813DFB01
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 07:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234838AbhHDDMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 3 Aug 2021 23:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234796AbhHDDL6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 3 Aug 2021 23:11:58 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531D5C061764
-        for <linux-usb@vger.kernel.org>; Tue,  3 Aug 2021 20:11:45 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id c9so540350wri.8
-        for <linux-usb@vger.kernel.org>; Tue, 03 Aug 2021 20:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6r0ndsSf7Z+HdghLRcZVGA3/g6PSfdxZjW/WqYems54=;
-        b=fplA0V57aEr0uVScGZXeVKsovZcygWCVBvXuTg+TufRgQtBa3sShC5Rcs0hXT/lLTo
-         Ms+dza7+OfLDiUdA4dnzfwY4BjecbKZcOVR+/885/D8GZM99AzmyQ/hSdP0LiQtWrqVl
-         /qDs66f6onAQUpRVkGqdXsmWcUK/RHy0soIi+w8ODtvCAwGNbuwMUdXdKnHH4dY2ZeGX
-         4LZS3Ix65eVu8ChFWRddexu3GRBzKzJDNakNfoyDYRiDpYBer+F8GZgx+HBLmyliMPv0
-         fNfRI655jLJsq1MKmzGiy2LlxoEkOP9K6r+Gm+Q3xC0wsItxJPMOSBGaoPaZ2mCqLl3c
-         e9OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6r0ndsSf7Z+HdghLRcZVGA3/g6PSfdxZjW/WqYems54=;
-        b=Sjckqqbj85lF6m9/3uHo4+A2NVYZD3OvBa2jOs+p7/mOe1xLUwZT1kPB3G3xY9DK12
-         LRQXWBaWdZIa0/sSk5KJ+dxydraOycLnYH2k2Ahn3AwMhkttph6jAWy/EP6EDaEwV+QJ
-         AHvH9+Sz9d/sH1+DpQqDMZL6Yvudcthyf+7EWhpF5F0eVnWhLyW6aa4wsbs/e3OEuIUa
-         gAPPfAmqqKVGFBKvwqbN5VOQh0rhSapbH9NPgOGFONHe6dX11bRO/j/pFLVdNKKqJCiN
-         h3KsifsrFs7hmB49Tkd7gBfHqE7OHVFi4KQnpsY6n/41iZezueAxi4JYwjI6nkl+gsjM
-         JwIw==
-X-Gm-Message-State: AOAM531B4IJwt3jtLiMLPyF6FYnggiq7r/1NFZcckMnIdP0R3+CWRD3m
-        Ch3+jTK9ivkOgOpg1AgFkD8WS9W2qHslMW1OVPapvA==
-X-Google-Smtp-Source: ABdhPJwp4oTovOnscM2JrWzLjfcLdRTu4RU72BfaApzhA2wRldBnd4jxwC19bdWSBRtJvroUmpiokgYoTffL9P0Bt2I=
-X-Received: by 2002:adf:8169:: with SMTP id 96mr25646646wrm.424.1628046703827;
- Tue, 03 Aug 2021 20:11:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAJk_X9hBB_edByfEvueSyWgKjpYGZbS2rPLPCSpRrPr+icFz_Q@mail.gmail.com>
- <20210804013252.GA16420@nchen>
-In-Reply-To: <20210804013252.GA16420@nchen>
-From:   Jeaho Hwang <jhhwang@rtst.co.kr>
-Date:   Wed, 4 Aug 2021 12:11:31 +0900
-Message-ID: <CAJk_X9gZ_dmQKeYJjkPZAQqdg==X=7s=XHtCg5cuu06z8Hd-GQ@mail.gmail.com>
-Subject: Re: Chipidea USB device goes infinite loop due to interrupt while hw_ep_prime
-To:     Peter Chen <peter.chen@kernel.org>
-Cc:     linux-usb@vger.kernel.org,
-        =?UTF-8?B?67OA66y06rSRKEJ5ZW9uIE1vbyBLd2FuZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm0=?=
-         =?UTF-8?B?7Jew6rWs7YyA?= <mkbyeon@lselectric.co.kr>,
-        Linux team <team-linux@rtst.co.kr>
+        id S233998AbhHDFUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 01:20:04 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:42580 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231592AbhHDFUD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 01:20:03 -0400
+X-UUID: 0156c2db61064683851d0ba38aa8d377-20210804
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lTtejfzC/dI1hPB49Y0KNSixxnq5EFnA0JdBRkQ8O7g=;
+        b=I+4OB8kqeMMB9e2ENYDVTj9S35N6OUJiWGgcQB/wEeWOKhf2aAm/YQKzsVZwP3xhN/MSeQADFZ5TvsVQKnQaMIoc1QI6MSg1k9UpjIHdpgJNnV06T5L9gcz2Lc/1ndMufqPL1Cp78wnv8SGMpOBaIs5Zv/TM451lDUhtinrYVZg=;
+X-UUID: 0156c2db61064683851d0ba38aa8d377-20210804
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1879885696; Wed, 04 Aug 2021 13:19:47 +0800
+Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs02n1.mediatek.inc
+ (172.21.101.77) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 4 Aug
+ 2021 13:19:45 +0800
+Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
+ (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 4 Aug 2021 13:19:44 +0800
+Message-ID: <1628054384.14982.12.camel@mhfsdcap03>
+Subject: Re: [PATCH 08/11] usb: xhci-mtk: update fs bus bandwidth by
+ bw_budget_table
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Ikjoon Jang <ikjn@chromium.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-usb@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Date:   Wed, 4 Aug 2021 13:19:44 +0800
+In-Reply-To: <CAATdQgDWkohpzgr=z+uzro4m9Bd=v88DNnJ-M88-5-0annhH_w@mail.gmail.com>
+References: <1627635002-24521-1-git-send-email-chunfeng.yun@mediatek.com>
+         <1627635002-24521-8-git-send-email-chunfeng.yun@mediatek.com>
+         <CAATdQgDWkohpzgr=z+uzro4m9Bd=v88DNnJ-M88-5-0annhH_w@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Mailer: Evolution 3.10.4-0ubuntu2 
+MIME-Version: 1.0
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Thanks for the answer Peter. I still have two questions.
+T24gVHVlLCAyMDIxLTA4LTAzIGF0IDE0OjA1ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+SGkgQ2h1bmZlbmcsDQo+IA0KPiBPbiBGcmksIEp1bCAzMCwgMjAyMSBhdCA0OjUxIFBNIENodW5m
+ZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBVc2Ug
+QGJ3X2J1ZGdldF90YWJsZVtdIHRvIHVwZGF0ZSBmcyBidXMgYmFuZHdpZHRoIGR1ZSB0bw0KPiA+
+IG5vdCBhbGwgbWljcm9mcmFtZXMgY29uc3VtZSBAYndfY29zdF9wZXJfbWljcm9mcmFtZSwgc2Vl
+DQo+ID4gc2V0dXBfc2NoX2luZm8oKS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5n
+IFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy91
+c2IvaG9zdC94aGNpLW10ay1zY2guYyB8IDE3ICsrKysrKystLS0tLS0tLS0tDQo+ID4gIDEgZmls
+ZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9o
+b3N0L3hoY2ktbXRrLXNjaC5jDQo+ID4gaW5kZXggMGJiMWE2Mjk1ZDY0Li4xMGMwZjBmNjQ2MWYg
+MTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYw0KPiA+ICsr
+KyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMNCj4gPiBAQCAtNDU4LDggKzQ1OCw4
+IEBAIHN0YXRpYyBpbnQgY2hlY2tfZnNfYnVzX2J3KHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpz
+Y2hfZXAsIGludCBvZmZzZXQpDQo+ID4gICAgICAgICAgICAgICAgICAqIENvbXBhcmVkIHdpdGgg
+aHMgYnVzLCBubyBtYXR0ZXIgd2hhdCBlcCB0eXBlLA0KPiA+ICAgICAgICAgICAgICAgICAgKiB0
+aGUgaHViIHdpbGwgYWx3YXlzIGRlbGF5IG9uZSB1ZnJhbWUgdG8gc2VuZCBkYXRhDQo+ID4gICAg
+ICAgICAgICAgICAgICAqLw0KPiA+IC0gICAgICAgICAgICAgICBmb3IgKGogPSAwOyBqIDwgc2No
+X2VwLT5jc19jb3VudDsgaisrKSB7DQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgdG1wID0g
+dHQtPmZzX2J1c19id1tiYXNlICsgal0gKyBzY2hfZXAtPmJ3X2Nvc3RfcGVyX21pY3JvZnJhbWU7
+DQo+ID4gKyAgICAgICAgICAgICAgIGZvciAoaiA9IDA7IGogPCBzY2hfZXAtPm51bV9idWRnZXRf
+bWljcm9mcmFtZXM7IGorKykgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHRtcCA9IHR0
+LT5mc19idXNfYndbYmFzZSArIGpdICsgc2NoX2VwLT5id19idWRnZXRfdGFibGVbal07DQo+ID4g
+ICAgICAgICAgICAgICAgICAgICAgICAgaWYgKHRtcCA+IEZTX1BBWUxPQURfTUFYKQ0KPiA+ICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FU0NIX0JXX09WRVJGTE9XOw0K
+PiA+ICAgICAgICAgICAgICAgICB9DQo+ID4gQEAgLTUzNCwyMSArNTM0LDE4IEBAIHN0YXRpYyB2
+b2lkIHVwZGF0ZV9zY2hfdHQoc3RydWN0IG11M2hfc2NoX2VwX2luZm8gKnNjaF9lcCwgYm9vbCB1
+c2VkKQ0KPiA+ICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgbXUzaF9zY2hfdHQgKnR0ID0gc2NoX2Vw
+LT5zY2hfdHQ7DQo+ID4gICAgICAgICB1MzIgYmFzZSwgbnVtX2VzaXQ7DQo+ID4gLSAgICAgICBp
+bnQgYndfdXBkYXRlZDsNCj4gPiAgICAgICAgIGludCBpLCBqOw0KPiA+DQo+ID4gICAgICAgICBu
+dW1fZXNpdCA9IFhIQ0lfTVRLX01BWF9FU0lUIC8gc2NoX2VwLT5lc2l0Ow0KPiA+DQo+ID4gLSAg
+ICAgICBpZiAodXNlZCkNCj4gPiAtICAgICAgICAgICAgICAgYndfdXBkYXRlZCA9IHNjaF9lcC0+
+YndfY29zdF9wZXJfbWljcm9mcmFtZTsNCj4gPiAtICAgICAgIGVsc2UNCj4gPiAtICAgICAgICAg
+ICAgICAgYndfdXBkYXRlZCA9IC1zY2hfZXAtPmJ3X2Nvc3RfcGVyX21pY3JvZnJhbWU7DQo+ID4g
+LQ0KPiA+ICAgICAgICAgZm9yIChpID0gMDsgaSA8IG51bV9lc2l0OyBpKyspIHsNCj4gPiAgICAg
+ICAgICAgICAgICAgYmFzZSA9IHNjaF9lcC0+b2Zmc2V0ICsgaSAqIHNjaF9lcC0+ZXNpdDsNCj4g
+Pg0KPiA+IC0gICAgICAgICAgICAgICBmb3IgKGogPSAwOyBqIDwgc2NoX2VwLT5jc19jb3VudDsg
+aisrKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIHR0LT5mc19idXNfYndbYmFzZSArIGpd
+ICs9IGJ3X3VwZGF0ZWQ7DQo+ID4gKyAgICAgICAgICAgICAgIGZvciAoaiA9IDA7IGogPCBzY2hf
+ZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXM7IGorKykNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICBpZiAodXNlZCkNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHR0LT5m
+c19idXNfYndbYmFzZSArIGpdICs9IHNjaF9lcC0+YndfYnVkZ2V0X3RhYmxlW2pdOw0KPiA+ICsg
+ICAgICAgICAgICAgICAgICAgICAgIGVsc2UNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIHR0LT5mc19idXNfYndbYmFzZSArIGpdIC09IHNjaF9lcC0+YndfYnVkZ2V0X3RhYmxl
+W2pdOw0KPiANCj4gSSBhZ3JlZSB0aGF0IHhoY2ktbXRrLXNjaCBzdGlsbCBoYXMgbW9yZSByb29t
+cyBmb3IgdHQgcGVyaW9kaWMgYmFuZHdpZHRoDQo+IGJ1dCBJIHRoaW5rIHRoaXMgYXBwcm9hY2gg
+Y291bGQgdHJpZ2dlciBhIHByb2JsZW0uDQpTZWUgdXBkYXRfYnVzX2J3KCksIHdoZW4gYWRkIGZz
+IGVwJ3MgYmFuZHdpZHRoLCBpdCB1c2VzDQpid19idWRnZXRfdGFibGVbXSwgc28gcHJlZmVyIHRv
+IHVzZSB0aGUgc2FtZSB3YXkNCg0KPiANCj4gZm9yIGV4YW1wbGUsIGlmIHRoZXJlIGFyZSB0d28g
+ZW5kcG9pbnRzIHNjaGVkdWxlZCBpbiB0aGUgc2FtZSB1LWZyYW1lIGluZGV4LA0KPiAqIGVwMW91
+dCAgPSBpc28gMTkyYnl0ZXMgYndfYnVkZ2V0X3RhYmxlW10gPSB7IDE4OCwgMTg4LCAwLCAuLi59
+IC0tPiB5MA0KPiAqIGVwMmluID0gaW50IDY0Ynl0ZXMsIGJ3X2J1ZGdldF90YWJsZVtdID0geyAw
+LCAwLCA2NCwgLi4uIH0gIC0tPiB5MA0KPiANCj4gKElmIHRoaXMgaXMgcG9zc2libGUgYWxsb2Nh
+dGlvbiBmcm9tIHRoaXMgcGF0Y2gpLA0KPiBJIGd1ZXNzIHhoY2ktbXRrIGNvdWxkIGhhdmUgc29t
+ZSBwcm9ibGVtcyBvbiBpbnRlcm5hbCBzY2hlZHVsaW5nPw0KDQpUZXN0IGl0IG9uIGR2dCBlbnYu
+IGRvbid0IGVuY291bnRlciBpc3N1ZXM7DQoNClRoYW5rcw0KDQo+IA0KPiA+ICAgICAgICAgfQ0K
+PiA+DQo+ID4gICAgICAgICBpZiAodXNlZCkNCj4gDQo+ID4gLS0NCj4gPiAyLjE4LjANCj4gPg0K
+DQo=
 
-1) There's a busy loop in hw_ep_prime to wait for endpoint priming. Is
-it safe without timeout?
-
- 192 static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ct=
-rl)
- 193 {
- 194     int n =3D hw_ep_bit(num, dir);
- 195
- 196     /* Synchronize before ep prime */
- 197     wmb();
- 198
- 199     if (is_ctrl && dir =3D=3D RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT=
-(num)))
- 200         return -EAGAIN;
- 201
- 202     hw_write(ci, OP_ENDPTPRIME, ~0, BIT(n));
- 203
- 204     while (hw_read(ci, OP_ENDPTPRIME, BIT(n)))
- 205         cpu_relax();
- 206     if (is_ctrl && dir =3D=3D RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT=
-(num)))
- 207         return -EAGAIN;
- 208
- 209     /* status shoult be tested according with manual but it doesn't wo=
-rk */
- 210     return 0;
- 211 }
-
-2) We experienced an infinite loop in hw_ep_set_halt, which is called
-at isr_tr_complete_handler due to an error encountered that we
-reported in the previous mail. It seems that hw_write to set halt
-fails. Is it related to the interruption while hw_ep_prime is running?
-If we make a timeout for the loop and error return, are there any
-considerations for the caller functions?
-
- 223 static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int va=
-lue)
- 224 {
- 225     if (value !=3D 0 && value !=3D 1)
- 226         return -EINVAL;
- 227
- 228     do {
- 229         enum ci_hw_regs reg =3D OP_ENDPTCTRL + num;
- 230         u32 mask_xs =3D (dir =3D=3D TX) ? ENDPTCTRL_TXS : ENDPTCTRL_RX=
-S;
- 231         u32 mask_xr =3D (dir =3D=3D TX) ? ENDPTCTRL_TXR : ENDPTCTRL_RX=
-R;
- 232
- 233         /* data toggle - reserved for EP0 but it's in ESS */
- 234         hw_write(ci, reg, mask_xs|mask_xr,
- 235               value ? mask_xs : mask_xr);
- 236     } while (value !=3D hw_ep_get_halt(ci, num, dir));
- 237
- 238     return 0;
- 239 }
-
-Thanks.
-
->
-> On 21-08-02 17:35:01, Jeaho Hwang wrote:
-> > Hi.
-> >
-> > We found an infinite loop inside the function hw_ep_set_halt
-> > (drivers/usb/chipidea/udc.c) if a cablle is repeatedly
-> > connnected/disconnected while ping through RNDIS with chipidea USB devi=
-ce.
-> >
-> > Using ftrace tracing, we found that hw_ep_set_halt is called due to err=
-or
-> > return of hw_ep_prime(drivers/usb/chipidea/udc.c:202) which is called f=
-rom
-> > isr_tr_complete_handler -> isr_setup_status_phase -> _ep_queue.
-> >
-> > The comment of function hw_ep_prime says (execute without interruption)=
- but
-> > timer interrupt is occurred while hw_ep_prime is executing. We believe =
-that
-> > the interrupt causes an error return of hw_ep_prime. We tried to protec=
-t
-> > hw_ep_prime from irqs and then no case of the infinite loop is occurred=
-.
-> >
-> > I want ask if it is appropriate way that turning off irq inside (thread=
-ed)
-> > irq handlers. And should we explicitly turn off irqs before calling
-> > hw_ep_prime?
-> >
->
-> Jeaho, do you use RT-Linux or standard Linux? The function hw_ep_prime is
-> only called at udc_irq which is registered as top-half irq handlers.
-> Why the timer interrupt is occurred when hw_ep_prime is executing?
->
-> --
->
-> Thanks,
-> Peter Chen
->
-
-
---=20
-=ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
-010-7242-1593
