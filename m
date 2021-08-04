@@ -2,90 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9103E00A4
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 13:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D173E0183
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 14:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233664AbhHDL6x (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 07:58:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52866 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229934AbhHDL6w (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Aug 2021 07:58:52 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 29C0160F35;
-        Wed,  4 Aug 2021 11:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628078320;
-        bh=LJBJCrhl39KpTuoLDAyWbjwe4EwfyvbbF1TeIgxZ8bU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VbBKYcDCjjjboTl/NBxyofb9sEFrooBRAE9zAYX1fK4WD0+5L+umjnuzS2GVVCk/E
-         I9c6tjUZG1FHO3JVY2NpcUveb+W97wCPgZZFK+iludT1HBzx5orTWj1BUTt7JQUOG9
-         PTyfTIolo5c2XHjBizdhuMqD8Jr3ROyekyWqHLtMeLXhlr89Leh/UtXUpDRofVZAJH
-         IU4yvTZOhplwrcFKKehg+Di9HdlpGR7dsQkMmlv+zpIE0HX5rU583Po/X1unvcjPD1
-         xypHjRcNpR6YNxDQvQzblVhQYndPStR/cw2EKfeXbsYGx4LHFKXKveyRbgQs9KO4DF
-         Yt3XEUBXYIVqg==
-Date:   Wed, 4 Aug 2021 04:58:39 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     petkan@nucleusys.com, davem@davemloft.net,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-Subject: Re: [PATCH] net: pegasus: fix uninit-value in
- get_interrupt_interval
-Message-ID: <20210804045839.101fe0f0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <9576d0cc-1f3e-4acc-4009-79fb2dbeda34@gmail.com>
-References: <20210730214411.1973-1-paskripkin@gmail.com>
-        <9576d0cc-1f3e-4acc-4009-79fb2dbeda34@gmail.com>
+        id S236978AbhHDM72 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 08:59:28 -0400
+Received: from smtp-relay-canonical-1.canonical.com ([185.125.188.121]:49338
+        "EHLO smtp-relay-canonical-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236777AbhHDM7W (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 08:59:22 -0400
+Received: from localhost (1.general.cking.uk.vpn [10.172.193.212])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 99F253F0F9;
+        Wed,  4 Aug 2021 12:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1628081947;
+        bh=gRYiPHltXl1ab4ROKl548BWP/IqBGUAthHnSDS3smEw=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type;
+        b=rUEGUoWsIo5Q0hwJx0wDVffZe1p7bBrU/MjUaAXMADlSYYHWOF/nC32quaBeWo0ER
+         BZpPdoWtYm8WSZ1EQ0QhUDK2PzgHqICAHAhsTfrIqR/qeUqauea8+K/kUnsJ58uqUS
+         rWCAP/QjzKcHqz5owAcjxsA4IYlstfLOdKOejyH8tlfZOmiZbdOj5HZI4LG6IsP8fX
+         f/YekIg9NaH85GEIyIQLmK9/qUfbGo4RD7Wt0056wH2VCwX8cwDFACITiyIbdPY6ye
+         Dg9YOACgKB+QMCQs6PoIhlEmkirMnkbvaCAjZgmEqinza6mK2Ll8Acs3I6DcTKG8Vz
+         Vjr1rcDi2L07g==
+From:   Colin King <colin.king@canonical.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: gadget: f_uac2: remove redundant assignments to pointer i_feature
+Date:   Wed,  4 Aug 2021 13:59:07 +0100
+Message-Id: <20210804125907.111654-1-colin.king@canonical.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 4 Aug 2021 13:44:05 +0300 Pavel Skripkin wrote:
-> On 7/31/21 12:44 AM, Pavel Skripkin wrote:
-> > Syzbot reported uninit value pegasus_probe(). The problem was in missing
-> > error handling.
-> > 
-> > get_interrupt_interval() internally calls read_eprom_word() which can
-> > fail in some cases. For example: failed to receive usb control message.
-> > These cases should be handled to prevent uninit value bug, since
-> > read_eprom_word() will not initialize passed stack variable in case of
-> > internal failure.
-> > 
-> > Fail log:
-> > 
-> > BUG: KMSAN: uninit-value in get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
-> > BUG: KMSAN: uninit-value in pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-> > CPU: 1 PID: 825 Comm: kworker/1:1 Not tainted 5.12.0-rc6-syzkaller #0
-> > ...
-> > Workqueue: usb_hub_wq hub_event
-> > Call Trace:
-> >   __dump_stack lib/dump_stack.c:79 [inline]
-> >   dump_stack+0x24c/0x2e0 lib/dump_stack.c:120
-> >   kmsan_report+0xfb/0x1e0 mm/kmsan/kmsan_report.c:118
-> >   __msan_warning+0x5c/0xa0 mm/kmsan/kmsan_instr.c:197
-> >   get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
-> >   pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-> > ....
-> > 
-> > Local variable ----data.i@pegasus_probe created at:
-> >   get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
-> >   pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
-> >   get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
-> >   pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
-> > 
-> > Reported-and-tested-by: syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> > Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-> 
-> Hi, David and Jakub!
-> 
-> Should I rebase this patch on top of Petko's clean-up patches? :
-> 
-> 1. https://git.kernel.org/netdev/net/c/8a160e2e9aeb
-> 2. https://git.kernel.org/netdev/net/c/bc65bacf239d
+From: Colin Ian King <colin.king@canonical.com>
 
-Yes, rebase on top of net, the patches are there. Please mark the new
-submission as [PATCH net v2].
+Pointer i_feature is being initialized with a value and then immediately
+re-assigned a new value in the next statement. Fix this by replacing the
+the redundant initialization with the following assigned value.
+
+Addresses-Coverity: ("Unused value")
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+---
+ drivers/usb/gadget/function/f_uac2.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index b9edc6787f79..3c34995276e7 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -970,17 +970,13 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 	std_as_in_if1_desc.iInterface = us[STR_AS_IN_ALT1].id;
+ 
+ 	if (FUOUT_EN(uac2_opts)) {
+-		u8 *i_feature = (u8 *)out_feature_unit_desc;
+-
+-		i_feature = (u8 *)out_feature_unit_desc +
+-					out_feature_unit_desc->bLength - 1;
++		u8 *i_feature = (u8 *)out_feature_unit_desc +
++				out_feature_unit_desc->bLength - 1;
+ 		*i_feature = us[STR_FU_OUT].id;
+ 	}
+ 	if (FUIN_EN(uac2_opts)) {
+-		u8 *i_feature = (u8 *)in_feature_unit_desc;
+-
+-		i_feature = (u8 *)in_feature_unit_desc +
+-					in_feature_unit_desc->bLength - 1;
++		u8 *i_feature = (u8 *)in_feature_unit_desc +
++				in_feature_unit_desc->bLength - 1;
+ 		*i_feature = us[STR_FU_IN].id;
+ 	}
+ 
+-- 
+2.31.1
+
