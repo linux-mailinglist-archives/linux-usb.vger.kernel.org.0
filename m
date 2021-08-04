@@ -2,118 +2,146 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB4813DFB01
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 07:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2483DFB5C
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 08:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233998AbhHDFUE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 01:20:04 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:42580 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S231592AbhHDFUD (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 01:20:03 -0400
-X-UUID: 0156c2db61064683851d0ba38aa8d377-20210804
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lTtejfzC/dI1hPB49Y0KNSixxnq5EFnA0JdBRkQ8O7g=;
-        b=I+4OB8kqeMMB9e2ENYDVTj9S35N6OUJiWGgcQB/wEeWOKhf2aAm/YQKzsVZwP3xhN/MSeQADFZ5TvsVQKnQaMIoc1QI6MSg1k9UpjIHdpgJNnV06T5L9gcz2Lc/1ndMufqPL1Cp78wnv8SGMpOBaIs5Zv/TM451lDUhtinrYVZg=;
-X-UUID: 0156c2db61064683851d0ba38aa8d377-20210804
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1879885696; Wed, 04 Aug 2021 13:19:47 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by mtkmbs02n1.mediatek.inc
- (172.21.101.77) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 4 Aug
- 2021 13:19:45 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 4 Aug 2021 13:19:44 +0800
-Message-ID: <1628054384.14982.12.camel@mhfsdcap03>
-Subject: Re: [PATCH 08/11] usb: xhci-mtk: update fs bus bandwidth by
- bw_budget_table
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Ikjoon Jang <ikjn@chromium.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Wed, 4 Aug 2021 13:19:44 +0800
-In-Reply-To: <CAATdQgDWkohpzgr=z+uzro4m9Bd=v88DNnJ-M88-5-0annhH_w@mail.gmail.com>
-References: <1627635002-24521-1-git-send-email-chunfeng.yun@mediatek.com>
-         <1627635002-24521-8-git-send-email-chunfeng.yun@mediatek.com>
-         <CAATdQgDWkohpzgr=z+uzro4m9Bd=v88DNnJ-M88-5-0annhH_w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+        id S235142AbhHDGTm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 02:19:42 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:59113 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235104AbhHDGTm (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 02:19:42 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628057970; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=MvT690lgnJQyLYZVI6U25Gaz7oGo0Bzcm+74dXOx2iY=; b=WHMbG/5ofgFeOo1NH6/F1H+B4DtcRfoo8i1JhH5KxG4vgXBiZ0JZjRCjdahgGvwmI5kpANdy
+ +VNKuyw2JAEy95epmg2IQCU8xTuL3nTnc+bpsjsX6paNrwx3IqCSvVRL6kq1EmznyxH3GnNL
+ OqCpmDVyiTQkJHLIWq5tp+VDM8M=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 610a31703341038a23603d7f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 04 Aug 2021 06:19:28
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 06D47C4338A; Wed,  4 Aug 2021 06:19:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.0 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C3E02C433F1;
+        Wed,  4 Aug 2021 06:19:26 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org C3E02C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Avoid runtime resume if disabling
+ pullup
+To:     Felipe Balbi <balbi@kernel.org>, Jack Pham <jackp@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1627691374-15711-1-git-send-email-wcheng@codeaurora.org>
+ <20210802213301.GG25299@jackp-linux.qualcomm.com> <87tuk7558p.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <affc3877-43af-8816-247f-fe4631486f1c@codeaurora.org>
+Date:   Tue, 3 Aug 2021 23:19:25 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-X-MTK:  N
-Content-Transfer-Encoding: base64
+In-Reply-To: <87tuk7558p.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-T24gVHVlLCAyMDIxLTA4LTAzIGF0IDE0OjA1ICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
-SGkgQ2h1bmZlbmcsDQo+IA0KPiBPbiBGcmksIEp1bCAzMCwgMjAyMSBhdCA0OjUxIFBNIENodW5m
-ZW5nIFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBVc2Ug
-QGJ3X2J1ZGdldF90YWJsZVtdIHRvIHVwZGF0ZSBmcyBidXMgYmFuZHdpZHRoIGR1ZSB0bw0KPiA+
-IG5vdCBhbGwgbWljcm9mcmFtZXMgY29uc3VtZSBAYndfY29zdF9wZXJfbWljcm9mcmFtZSwgc2Vl
-DQo+ID4gc2V0dXBfc2NoX2luZm8oKS4NCj4gPg0KPiA+IFNpZ25lZC1vZmYtYnk6IENodW5mZW5n
-IFl1biA8Y2h1bmZlbmcueXVuQG1lZGlhdGVrLmNvbT4NCj4gPiAtLS0NCj4gPiAgZHJpdmVycy91
-c2IvaG9zdC94aGNpLW10ay1zY2guYyB8IDE3ICsrKysrKystLS0tLS0tLS0tDQo+ID4gIDEgZmls
-ZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMgYi9kcml2ZXJzL3VzYi9o
-b3N0L3hoY2ktbXRrLXNjaC5jDQo+ID4gaW5kZXggMGJiMWE2Mjk1ZDY0Li4xMGMwZjBmNjQ2MWYg
-MTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy91c2IvaG9zdC94aGNpLW10ay1zY2guYw0KPiA+ICsr
-KyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS1tdGstc2NoLmMNCj4gPiBAQCAtNDU4LDggKzQ1OCw4
-IEBAIHN0YXRpYyBpbnQgY2hlY2tfZnNfYnVzX2J3KHN0cnVjdCBtdTNoX3NjaF9lcF9pbmZvICpz
-Y2hfZXAsIGludCBvZmZzZXQpDQo+ID4gICAgICAgICAgICAgICAgICAqIENvbXBhcmVkIHdpdGgg
-aHMgYnVzLCBubyBtYXR0ZXIgd2hhdCBlcCB0eXBlLA0KPiA+ICAgICAgICAgICAgICAgICAgKiB0
-aGUgaHViIHdpbGwgYWx3YXlzIGRlbGF5IG9uZSB1ZnJhbWUgdG8gc2VuZCBkYXRhDQo+ID4gICAg
-ICAgICAgICAgICAgICAqLw0KPiA+IC0gICAgICAgICAgICAgICBmb3IgKGogPSAwOyBqIDwgc2No
-X2VwLT5jc19jb3VudDsgaisrKSB7DQo+ID4gLSAgICAgICAgICAgICAgICAgICAgICAgdG1wID0g
-dHQtPmZzX2J1c19id1tiYXNlICsgal0gKyBzY2hfZXAtPmJ3X2Nvc3RfcGVyX21pY3JvZnJhbWU7
-DQo+ID4gKyAgICAgICAgICAgICAgIGZvciAoaiA9IDA7IGogPCBzY2hfZXAtPm51bV9idWRnZXRf
-bWljcm9mcmFtZXM7IGorKykgew0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAgIHRtcCA9IHR0
-LT5mc19idXNfYndbYmFzZSArIGpdICsgc2NoX2VwLT5id19idWRnZXRfdGFibGVbal07DQo+ID4g
-ICAgICAgICAgICAgICAgICAgICAgICAgaWYgKHRtcCA+IEZTX1BBWUxPQURfTUFYKQ0KPiA+ICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FU0NIX0JXX09WRVJGTE9XOw0K
-PiA+ICAgICAgICAgICAgICAgICB9DQo+ID4gQEAgLTUzNCwyMSArNTM0LDE4IEBAIHN0YXRpYyB2
-b2lkIHVwZGF0ZV9zY2hfdHQoc3RydWN0IG11M2hfc2NoX2VwX2luZm8gKnNjaF9lcCwgYm9vbCB1
-c2VkKQ0KPiA+ICB7DQo+ID4gICAgICAgICBzdHJ1Y3QgbXUzaF9zY2hfdHQgKnR0ID0gc2NoX2Vw
-LT5zY2hfdHQ7DQo+ID4gICAgICAgICB1MzIgYmFzZSwgbnVtX2VzaXQ7DQo+ID4gLSAgICAgICBp
-bnQgYndfdXBkYXRlZDsNCj4gPiAgICAgICAgIGludCBpLCBqOw0KPiA+DQo+ID4gICAgICAgICBu
-dW1fZXNpdCA9IFhIQ0lfTVRLX01BWF9FU0lUIC8gc2NoX2VwLT5lc2l0Ow0KPiA+DQo+ID4gLSAg
-ICAgICBpZiAodXNlZCkNCj4gPiAtICAgICAgICAgICAgICAgYndfdXBkYXRlZCA9IHNjaF9lcC0+
-YndfY29zdF9wZXJfbWljcm9mcmFtZTsNCj4gPiAtICAgICAgIGVsc2UNCj4gPiAtICAgICAgICAg
-ICAgICAgYndfdXBkYXRlZCA9IC1zY2hfZXAtPmJ3X2Nvc3RfcGVyX21pY3JvZnJhbWU7DQo+ID4g
-LQ0KPiA+ICAgICAgICAgZm9yIChpID0gMDsgaSA8IG51bV9lc2l0OyBpKyspIHsNCj4gPiAgICAg
-ICAgICAgICAgICAgYmFzZSA9IHNjaF9lcC0+b2Zmc2V0ICsgaSAqIHNjaF9lcC0+ZXNpdDsNCj4g
-Pg0KPiA+IC0gICAgICAgICAgICAgICBmb3IgKGogPSAwOyBqIDwgc2NoX2VwLT5jc19jb3VudDsg
-aisrKQ0KPiA+IC0gICAgICAgICAgICAgICAgICAgICAgIHR0LT5mc19idXNfYndbYmFzZSArIGpd
-ICs9IGJ3X3VwZGF0ZWQ7DQo+ID4gKyAgICAgICAgICAgICAgIGZvciAoaiA9IDA7IGogPCBzY2hf
-ZXAtPm51bV9idWRnZXRfbWljcm9mcmFtZXM7IGorKykNCj4gPiArICAgICAgICAgICAgICAgICAg
-ICAgICBpZiAodXNlZCkNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHR0LT5m
-c19idXNfYndbYmFzZSArIGpdICs9IHNjaF9lcC0+YndfYnVkZ2V0X3RhYmxlW2pdOw0KPiA+ICsg
-ICAgICAgICAgICAgICAgICAgICAgIGVsc2UNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIHR0LT5mc19idXNfYndbYmFzZSArIGpdIC09IHNjaF9lcC0+YndfYnVkZ2V0X3RhYmxl
-W2pdOw0KPiANCj4gSSBhZ3JlZSB0aGF0IHhoY2ktbXRrLXNjaCBzdGlsbCBoYXMgbW9yZSByb29t
-cyBmb3IgdHQgcGVyaW9kaWMgYmFuZHdpZHRoDQo+IGJ1dCBJIHRoaW5rIHRoaXMgYXBwcm9hY2gg
-Y291bGQgdHJpZ2dlciBhIHByb2JsZW0uDQpTZWUgdXBkYXRfYnVzX2J3KCksIHdoZW4gYWRkIGZz
-IGVwJ3MgYmFuZHdpZHRoLCBpdCB1c2VzDQpid19idWRnZXRfdGFibGVbXSwgc28gcHJlZmVyIHRv
-IHVzZSB0aGUgc2FtZSB3YXkNCg0KPiANCj4gZm9yIGV4YW1wbGUsIGlmIHRoZXJlIGFyZSB0d28g
-ZW5kcG9pbnRzIHNjaGVkdWxlZCBpbiB0aGUgc2FtZSB1LWZyYW1lIGluZGV4LA0KPiAqIGVwMW91
-dCAgPSBpc28gMTkyYnl0ZXMgYndfYnVkZ2V0X3RhYmxlW10gPSB7IDE4OCwgMTg4LCAwLCAuLi59
-IC0tPiB5MA0KPiAqIGVwMmluID0gaW50IDY0Ynl0ZXMsIGJ3X2J1ZGdldF90YWJsZVtdID0geyAw
-LCAwLCA2NCwgLi4uIH0gIC0tPiB5MA0KPiANCj4gKElmIHRoaXMgaXMgcG9zc2libGUgYWxsb2Nh
-dGlvbiBmcm9tIHRoaXMgcGF0Y2gpLA0KPiBJIGd1ZXNzIHhoY2ktbXRrIGNvdWxkIGhhdmUgc29t
-ZSBwcm9ibGVtcyBvbiBpbnRlcm5hbCBzY2hlZHVsaW5nPw0KDQpUZXN0IGl0IG9uIGR2dCBlbnYu
-IGRvbid0IGVuY291bnRlciBpc3N1ZXM7DQoNClRoYW5rcw0KDQo+IA0KPiA+ICAgICAgICAgfQ0K
-PiA+DQo+ID4gICAgICAgICBpZiAodXNlZCkNCj4gDQo+ID4gLS0NCj4gPiAyLjE4LjANCj4gPg0K
-DQo=
 
+
+On 8/3/2021 12:58 AM, Felipe Balbi wrote:
+> 
+> Jack Pham <jackp@codeaurora.org> writes:
+> 
+>> Hi Wesley,
+>>
+>> On Fri, Jul 30, 2021 at 05:29:34PM -0700, Wesley Cheng wrote:
+>>> If the device is already in the runtime suspended state, any call to
+>>> the pullup routine will issue a runtime resume on the DWC3 core
+>>> device.  If the USB gadget is disabling the pullup, then avoid having
+>>> to issue a runtime resume, as DWC3 gadget has already been
+>>> halted/stopped.
+>>>
+>>> This fixes an issue where the following condition occurs:
+>>>
+>>> usb_gadget_remove_driver()
+>>> -->usb_gadget_disconnect()
+>>>  -->dwc3_gadget_pullup(0)
+>>>   -->pm_runtime_get_sync() -> ret = 0
+>>>   -->pm_runtime_put() [async]
+>>> -->usb_gadget_udc_stop()
+>>>  -->dwc3_gadget_stop()
+>>>   -->dwc->gadget_driver = NULL
+>>> ...
+>>>
+>>> dwc3_suspend_common()
+>>> -->dwc3_gadget_suspend()
+>>>  -->DWC3 halt/stop routine skipped, driver_data == NULL
+>>>
+>>> This leads to a situation where the DWC3 gadget is not properly
+>>> stopped, as the runtime resume would have re-enabled EP0 and event
+>>> interrupts, and since we avoided the DWC3 gadget suspend, these
+>>> resources were never disabled.
+>>>
+>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>> ---
+>>>  drivers/usb/dwc3/gadget.c | 11 +++++++++++
+>>>  1 file changed, 11 insertions(+)
+>>>
+>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>> index a29a4ca..5d08454 100644
+>>> --- a/drivers/usb/dwc3/gadget.c
+>>> +++ b/drivers/usb/dwc3/gadget.c
+>>> @@ -2435,6 +2435,17 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>  	}
+>>>  
+>>>  	/*
+>>> +	 * Avoid issuing a runtime resume if the device is already in the
+>>> +	 * suspended state during gadget disconnect.  DWC3 gadget was already
+>>> +	 * halted/stopped during runtime suspend.
+>>> +	 */
+>>> +	if (!is_on) {
+>>> +		pm_runtime_barrier(dwc->dev);
+>>> +		if (pm_runtime_suspended(dwc->dev))
+>>> +			return 0;
+>>> +	}
+>>> +
+>>> +	/*
+>>>  	 * Check the return value for successful resume, or error.  For a
+>>>  	 * successful resume, the DWC3 runtime PM resume routine will handle
+>>>  	 * the run stop sequence, so avoid duplicate operations here.
+
+Hi Jack/Felipe,
+
+>>
+>> Should this also go to stable with Fixes: 77adb8bdf422 ("usb: dwc3:
+>> gadget: Allow runtime suspend if UDC unbinded") ?
+> 
+> sounds like a good idea.
+> 
+
+Sure, will update the commit text with the fixes tag.  Thanks!
+
+Regards,
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
