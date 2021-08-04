@@ -2,85 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB7F43E034B
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 16:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 390DE3E03CA
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 17:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235223AbhHDOdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 10:33:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35706 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238955AbhHDOb5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Aug 2021 10:31:57 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id ACEB160F35;
-        Wed,  4 Aug 2021 14:31:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628087495;
-        bh=eYtxiCOL6Sv7h7R130RHKETBBse3R3y5RSeyOc221j0=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=NDSrdXRBJX76rRp606Dq1f5kJeIUWzJOtgMrOr0Sa9MVC1GjDzsA81KdBdHrdPwtU
-         ceF2MDSfIsTgzTBaig8VJlWyTpY6DYQqsWgmLLX5UTyGlMUjvOREsvim8cF00kWZTb
-         5HW7WPfZSuObcHtj2c2tzYSJAn81XhapM2pUaaRrYWx7kuNN/zi7g3gnv7Rsl4Rfwm
-         UjKuvaLKRBJkOYnZPBjAVgWXP2HXDsYRkSfR5oaowEQm8P9FsNQ9jIAHkp+buqI+01
-         z7sDxEbSgjC0IqmoGXcTIkewuOAco3ip5EYI7k2n0rQ556DmYwTNy4PT6KWo3mPFO6
-         1F1dWxB2pnbvA==
-References: <3d86f45004fe2fcbae0a2cd197df81a1fd076a1e.1628085910.git.baruch@tkos.co.il>
- <0e99e3d453547ad2a8f4541090a03f3c80b80332.1628085910.git.baruch@tkos.co.il>
- <87lf5h5mc2.fsf@kernel.org> <87v94lxpb0.fsf@tarshish>
-User-agent: mu4e 1.6.1; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        id S238900AbhHDPBZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238826AbhHDPBZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 11:01:25 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59E3C0613D5;
+        Wed,  4 Aug 2021 08:01:11 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m19so1422121wms.0;
+        Wed, 04 Aug 2021 08:01:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GQYlKIfQGDZD7FjoDWhvgGxvqgy3lDL6xTNjgH07BzY=;
+        b=VlQGEEEUxHdlEKHwFEl/LqPBI96Zk5RcZFcREolzaECkFymiY04eiDMv/K07o4c65e
+         6pbpHwdHaBE6zEuxsxWDKWULyKmE3ob2eLFRPCvNZT++1I9aCC7lVMannu61bxB2Re52
+         KB8B3XG10J5KqmK144Qeu2Sj2SCJQDhy093zRHwr95OBj3QTKjSXSMZ7SQo/5CdNq4Kg
+         3/e7lrDsX24eU+nc8LTYe715HLfWJLl58MbJZGDuviX0ocim4PI4Rt89CEpiEjMNarGS
+         5IJ5y2JbwKZO/3GkadcEKsogvYgmfEQETxmEkBHAgDsUQGdmasvUMZyWNWnqJo83llIo
+         W76A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GQYlKIfQGDZD7FjoDWhvgGxvqgy3lDL6xTNjgH07BzY=;
+        b=lBO/md5DhFen6x0Mr/2W+A/IqZCIb0HxJEAoGgrMTrTEnhzBc4sob9YQ/ybjI25glj
+         M/TrFjdtXTnJhwRDvT8SECCuUk9KJelgmsz0Lm/DhIsAXgJ6IULxXoixCfmIcngVtxSE
+         yRMKHew1o8ArrDlxKFQQyW+GvYJpkGFqr3uon9UYtZGQl/Ur4WbWy7+DzVxcS9OGEMPO
+         fUxNsP1UxvmBZ0Yvlq1OkhCo8QgC0qq8GhyzELCf08P8QEXwlIRNAd52Vkqc2R7/A1uh
+         TikcVzWXPYxiFa1GwcZOY7TY1LZhv3fLC3I4WjYA+diIfbSo5vbLC00wv/v+E2Em8N1R
+         qVAg==
+X-Gm-Message-State: AOAM531W5wC14kouAK6Dfg8ocov2RRDpO7neAwFeMmqfS+z9ptzLzcN/
+        Gr5kx8CoWfs8B/vi3S4rYQlmoLCYS8J+3w==
+X-Google-Smtp-Source: ABdhPJxzfcsOveuM0G0E1e5sbC3j6IImykpjnYq9eMdoePCdanTPzPJYXQcYKmILkERsf0um35DdlQ==
+X-Received: by 2002:a7b:c390:: with SMTP id s16mr50842wmj.148.1628089270421;
+        Wed, 04 Aug 2021 08:01:10 -0700 (PDT)
+Received: from ziggy.stardust (static-55-132-6-89.ipcom.comunitel.net. [89.6.132.55])
+        by smtp.gmail.com with ESMTPSA id q9sm6223449wmj.2.2021.08.04.08.01.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 04 Aug 2021 08:01:09 -0700 (PDT)
+Subject: Re: [PATCH 0/2] Add MUSB for MT7623
+To:     Sungbo Eo <mans0n@gorani.run>, linux-mediatek@lists.infradead.org
+Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Balaji Prakash J <bjagadee@codeaurora.org>,
-        Kathiravan T <kathirav@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] usb: dwc3: reference clock period configuration
-Date:   Wed, 04 Aug 2021 17:30:42 +0300
-In-reply-to: <87v94lxpb0.fsf@tarshish>
-Message-ID: <87im0l5lj1.fsf@kernel.org>
+        Min Guo <min.guo@mediatek.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20210803151320.71531-1-mans0n@gorani.run>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Message-ID: <638a4526-2688-e7c6-c71e-0ebaaeb773b5@gmail.com>
+Date:   Wed, 4 Aug 2021 17:01:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <20210803151320.71531-1-mans0n@gorani.run>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Sungbo,
 
-Hi,
+On 03/08/2021 17:13, Sungbo Eo wrote:
+> These patches add support for the MUSB controller on Mediatek MT7623.
+> Tested on Mercury RUSH-318AC Wi-Fi router.
+> 
 
-Baruch Siach <baruch@tkos.co.il> writes:
-> Hi Felipe,
->
-> On Wed, Aug 04 2021, Felipe Balbi wrote:
->> Baruch Siach <baruch@tkos.co.il> writes:
->>> @@ -1371,6 +1398,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->>>  				    &dwc->hsphy_interface);
->>>  	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
->>>  				 &dwc->fladj);
->>> +	device_property_read_u32(dev, "snps,ref-clock-period",
->>> +				 &dwc->ref_clk_per);
->>
->> I wonder if it would make more sense to pass an actual clock reference
->> here. If valid, then reconfigure the period to the value returned by
->> clk_get_rate(). It would avoid yet another DT binding. If we make the
->> clock optional, then we won't affect any other platforms. The clock
->> itself could be a regular fixed clock node.
->
-> Thinh Nguyen asked to add a dedicated DT property. He explained that
-> clk_get_rate() does not work for PCI hosted dwc3. This is the most
-> complete summary of the discussion:
+Nice to see you are working on Mediatek devices.
+Are you planning to add the device tree for the router to the kernel? I'd be
+happy to see them submitted.
 
-Hence the "optional" :-)
+Regards,
+Matthias
 
-Or, perhaps, Thinh wants to use this for internal FPGA-based validation?
-
-In that case, I'm okay with the property.
-
--- 
-balbi
+> I got to know this from a BPI-R2 forum post [1], and managed to make it work on OpenWrt snapshot.
+> I'd like to know if this also works on BPI-R2, I can happily share the details if needed.
+> And I've just copy & pasted nodes from mt2701, please let me know if I missed some big differences between SoCs...
+> 
+> [1] http://forum.banana-pi.org/t/bpi-r2-otg-port/10551
+> 
+> Sungbo Eo (2):
+>   dt-bindings: usb: mtk-musb: add MT7623 compatible
+>   arm: dts: mt7623: add musb device nodes
+> 
+>  .../bindings/usb/mediatek,musb.yaml           |  1 +
+>  arch/arm/boot/dts/mt7623.dtsi                 | 34 +++++++++++++++++++
+>  arch/arm/boot/dts/mt7623a.dtsi                |  4 +++
+>  3 files changed, 39 insertions(+)
+> 
