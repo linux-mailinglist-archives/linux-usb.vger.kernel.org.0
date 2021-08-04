@@ -2,71 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8CB3DFE0C
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 11:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CD63DFF77
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 12:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236649AbhHDJdA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 05:33:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38182 "EHLO mail.kernel.org"
+        id S236765AbhHDKmc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 06:42:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40456 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236599AbhHDJc7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 4 Aug 2021 05:32:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 8047360EB9;
-        Wed,  4 Aug 2021 09:32:47 +0000 (UTC)
+        id S237494AbhHDKlc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Aug 2021 06:41:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2B3B560231;
+        Wed,  4 Aug 2021 10:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628069567;
-        bh=lCyffb9PLH1HfSBsp6TDN9RZ6eNQihkh5qfjzkNc6Jo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WQ5cF1jNoOVb2h5Tm/m6MVCYxkBWsu64VNhQA39CL/0vukZFhTJLWNseIiT+azT5j
-         cDFfmwNugKgDLMIPmB/n2GVcI1LI3oiUcfZRW8ePl1ls7T9Q1gBa7wgX8tM28Ko5+A
-         b5f2f6p9z3gkeXk41plHcoHx4Uq88fGN+kAzIv9CAEf36P2xglBR3b08lLMhRQfUfb
-         HKPKUdTyY1is1RlGN6B9tccVizWDwup+dshJCv/vg1+XjwJp3ro3c59jlnV1ZH9V8G
-         6DLNLjHAkgh6Q/mFeDrIqcnime9Zv2XxEg4mCHqu04G+D92tZIPUYqmMVC5KXhfm3n
-         rB7NdLiBjWbnQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mBDFt-0006T8-MT; Wed, 04 Aug 2021 11:32:05 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vasily Khoruzhick <anarsoul@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH] USB: serial: pl2303: fix GT type detection
-Date:   Wed,  4 Aug 2021 11:31:00 +0200
-Message-Id: <20210804093100.24811-1-johan@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <YQpeE19WIeQO2b//@hovoldconsulting.com>
-References: <YQpeE19WIeQO2b//@hovoldconsulting.com>
+        s=k20201202; t=1628073680;
+        bh=KjB+PEpm30wFGKxTNZ21EeEU6m4LIBijCeE7w6Wsav4=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=fn6MBCP25I/nQaryiuNYIeHuL2jTFc4LxZ9cZ+jAp8s6WTD1tYcNZMuFsG0WGLvZR
+         7DnbhgiPul+u/zM2BNm7JkJNoE806uHe0RT1GQVikIjuX0BF8vGEvGHK/a4Yngyh5f
+         Y+bKll43GlYzDLlmnJgLdI20I0EzRYyJnX/xCeKs73aeuf9g+nXh/4iyVTUCKE3RRK
+         OyDRor2uKM9/ynrHQBFUPB/ZfNzKjMRHbLLVzJGiC7xca6B/Pk2CTIIqIPvkMBouFU
+         H5aKIjJ6fkYfd5YBKvia6iToNcBGeoVKfP1NJxsaK5LR5/iVQIxgo87x8I/jlSAkoZ
+         vBsCEH4qOwkNQ==
+References: <1628058245-30692-1-git-send-email-wcheng@codeaurora.org>
+User-agent: mu4e 1.6.1; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jackp@codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Avoid runtime resume if disabling
+ pullup
+Date:   Wed, 04 Aug 2021 13:41:02 +0300
+In-reply-to: <1628058245-30692-1-git-send-email-wcheng@codeaurora.org>
+Message-ID: <87r1f95w6q.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-At least some PL2303GT have a bcdDevice of 0x305 instead of 0x100 as the
-datasheet claims. Add it to the list of known release numbers for the
-HXN (G) type.
 
-Fixes: 894758d0571d ("USB: serial: pl2303: tighten type HXN (G) detection")
-Reported-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Tested-by: Vasily Khoruzhick <anarsoul@gmail.com>
-Cc: stable@vger.kernel.org	# 5.13
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/pl2303.c | 1 +
- 1 file changed, 1 insertion(+)
+Wesley Cheng <wcheng@codeaurora.org> writes:
 
-diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
-index 17601e32083e..930b3d50a330 100644
---- a/drivers/usb/serial/pl2303.c
-+++ b/drivers/usb/serial/pl2303.c
-@@ -432,6 +432,7 @@ static int pl2303_detect_type(struct usb_serial *serial)
- 	case 0x200:
- 		switch (bcdDevice) {
- 		case 0x100:
-+		case 0x305:
- 			/*
- 			 * Assume it's an HXN-type if the device doesn't
- 			 * support the old read request value.
+> If the device is already in the runtime suspended state, any call to
+> the pullup routine will issue a runtime resume on the DWC3 core
+> device.  If the USB gadget is disabling the pullup, then avoid having
+> to issue a runtime resume, as DWC3 gadget has already been
+> halted/stopped.
+>
+> This fixes an issue where the following condition occurs:
+>
+> usb_gadget_remove_driver()
+> -->usb_gadget_disconnect()
+>  -->dwc3_gadget_pullup(0)
+>   -->pm_runtime_get_sync() -> ret = 0
+>   -->pm_runtime_put() [async]
+> -->usb_gadget_udc_stop()
+>  -->dwc3_gadget_stop()
+>   -->dwc->gadget_driver = NULL
+> ...
+>
+> dwc3_suspend_common()
+> -->dwc3_gadget_suspend()
+>  -->DWC3 halt/stop routine skipped, driver_data == NULL
+>
+> This leads to a situation where the DWC3 gadget is not properly
+> stopped, as the runtime resume would have re-enabled EP0 and event
+> interrupts, and since we avoided the DWC3 gadget suspend, these
+> resources were never disabled.
+>
+> Fixes: 77adb8bdf422 ("usb: dwc3: gadget: Allow runtime suspend if UDC unbinded")
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
 -- 
-2.31.1
-
+balbi
