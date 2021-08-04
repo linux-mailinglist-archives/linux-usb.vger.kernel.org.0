@@ -2,155 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC323E0342
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 16:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7F43E034B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 16:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238891AbhHDObP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 10:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238822AbhHDOap (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 10:30:45 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6C2DC0613D5;
-        Wed,  4 Aug 2021 07:30:21 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id u3so4774497lff.9;
-        Wed, 04 Aug 2021 07:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mKJzb3ll4dn13iZlEAdIWf6tqFSFs0x9Rq1Rej/qSjg=;
-        b=ACv//ihaYWedxDc0yEk4YmwQ6HFrya4rg/t/C/kt9UkDksqBV/+bjUrlcx8dVAzfKm
-         f78ZZu2jXvr2xFw6OglQ3ATEWAry3E2MdRSnKvhcM92+HfY6nfL3PnLVjMDZfBQymOw3
-         JYi32nVMHitxOhbtGEMm/ezrNttJVOcCO5/ZwqBxQAXuy5HswrgEF+mFn9upqjHszBp6
-         xyTkC88Egu+hYxNx9RhT5Ha875IRamZMaQpDsf5lYkTdXxpvwqYyHRMfDJEjz9Xzkrql
-         2Q9OsmBjiQL/SQ8nnYx8eaiRbUsDmnxGhKQN/EQGvV7tMUByO5eqS7MptNm02Zvv6bYC
-         fp9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mKJzb3ll4dn13iZlEAdIWf6tqFSFs0x9Rq1Rej/qSjg=;
-        b=pgCJPCAu2o8TAVlYSHHX78SxGk2pVl9PGSaHYklz4LveLFeCLozTg9ctqDcDxUJnn3
-         jDF9v/pgrIzYK/CU/sjY8AR9tLYttQb4bIUphgUvAlAvnnuNLihcTroEKEBs22ERiJON
-         JbfPGDjty2Bb0YyPcR/1Fz4yD3Fq9Bp+5LnASKh18Q4xQGNEi3Kcb/i+yMtAI6hg5T2o
-         uT2SzBTyiWySzynkQzP/eVGjFW+8Fpo0ScDbKVJ/UUFwKYVAg5i389T6+teU09ZjRKOe
-         K05DopDbySJwSL1/uZ+Ofq0ZBH3GJU0X3Xbyc2RNHt9JqGlsYL+if4q93VOJCXa5e7bx
-         Y4gQ==
-X-Gm-Message-State: AOAM531UiLxQzKBCXXhvUmvinfBBHCnYp4XAV8tDaLZsQahAVll6DwDc
-        e8xpuMwCEpQipu1mfgiJi+4=
-X-Google-Smtp-Source: ABdhPJwkKsHNDLJ6c/JFRTey0AqGNnMx4xhUQKjGEIqRINMcv24UiA8COKYjLDaHf85zU2OcXMYAUA==
-X-Received: by 2002:a05:6512:1281:: with SMTP id u1mr3461472lfs.136.1628087420062;
-        Wed, 04 Aug 2021 07:30:20 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.226.235])
-        by smtp.gmail.com with ESMTPSA id b15sm213794lff.104.2021.08.04.07.30.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 07:30:19 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     petkan@nucleusys.com, davem@davemloft.net, kuba@kernel.org
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-Subject: [PATCH net v2] net: pegasus: fix uninit-value in get_interrupt_interval
-Date:   Wed,  4 Aug 2021 17:30:05 +0300
-Message-Id: <20210804143005.439-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20210804045839.101fe0f0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-References: <20210804045839.101fe0f0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        id S235223AbhHDOdE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 10:33:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35706 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238955AbhHDOb5 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 4 Aug 2021 10:31:57 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id ACEB160F35;
+        Wed,  4 Aug 2021 14:31:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628087495;
+        bh=eYtxiCOL6Sv7h7R130RHKETBBse3R3y5RSeyOc221j0=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=NDSrdXRBJX76rRp606Dq1f5kJeIUWzJOtgMrOr0Sa9MVC1GjDzsA81KdBdHrdPwtU
+         ceF2MDSfIsTgzTBaig8VJlWyTpY6DYQqsWgmLLX5UTyGlMUjvOREsvim8cF00kWZTb
+         5HW7WPfZSuObcHtj2c2tzYSJAn81XhapM2pUaaRrYWx7kuNN/zi7g3gnv7Rsl4Rfwm
+         UjKuvaLKRBJkOYnZPBjAVgWXP2HXDsYRkSfR5oaowEQm8P9FsNQ9jIAHkp+buqI+01
+         z7sDxEbSgjC0IqmoGXcTIkewuOAco3ip5EYI7k2n0rQ556DmYwTNy4PT6KWo3mPFO6
+         1F1dWxB2pnbvA==
+References: <3d86f45004fe2fcbae0a2cd197df81a1fd076a1e.1628085910.git.baruch@tkos.co.il>
+ <0e99e3d453547ad2a8f4541090a03f3c80b80332.1628085910.git.baruch@tkos.co.il>
+ <87lf5h5mc2.fsf@kernel.org> <87v94lxpb0.fsf@tarshish>
+User-agent: mu4e 1.6.1; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Baruch Siach <baruch@tkos.co.il>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] usb: dwc3: reference clock period configuration
+Date:   Wed, 04 Aug 2021 17:30:42 +0300
+In-reply-to: <87v94lxpb0.fsf@tarshish>
+Message-ID: <87im0l5lj1.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Syzbot reported uninit value pegasus_probe(). The problem was in missing
-error handling.
 
-get_interrupt_interval() internally calls read_eprom_word() which can
-fail in some cases. For example: failed to receive usb control message.
-These cases should be handled to prevent uninit value bug, since
-read_eprom_word() will not initialize passed stack variable in case of
-internal failure.
+Hi,
 
-Fail log:
+Baruch Siach <baruch@tkos.co.il> writes:
+> Hi Felipe,
+>
+> On Wed, Aug 04 2021, Felipe Balbi wrote:
+>> Baruch Siach <baruch@tkos.co.il> writes:
+>>> @@ -1371,6 +1398,8 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>>  				    &dwc->hsphy_interface);
+>>>  	device_property_read_u32(dev, "snps,quirk-frame-length-adjustment",
+>>>  				 &dwc->fladj);
+>>> +	device_property_read_u32(dev, "snps,ref-clock-period",
+>>> +				 &dwc->ref_clk_per);
+>>
+>> I wonder if it would make more sense to pass an actual clock reference
+>> here. If valid, then reconfigure the period to the value returned by
+>> clk_get_rate(). It would avoid yet another DT binding. If we make the
+>> clock optional, then we won't affect any other platforms. The clock
+>> itself could be a regular fixed clock node.
+>
+> Thinh Nguyen asked to add a dedicated DT property. He explained that
+> clk_get_rate() does not work for PCI hosted dwc3. This is the most
+> complete summary of the discussion:
 
-BUG: KMSAN: uninit-value in get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
-BUG: KMSAN: uninit-value in pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-CPU: 1 PID: 825 Comm: kworker/1:1 Not tainted 5.12.0-rc6-syzkaller #0
-...
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- __dump_stack lib/dump_stack.c:79 [inline]
- dump_stack+0x24c/0x2e0 lib/dump_stack.c:120
- kmsan_report+0xfb/0x1e0 mm/kmsan/kmsan_report.c:118
- __msan_warning+0x5c/0xa0 mm/kmsan/kmsan_instr.c:197
- get_interrupt_interval drivers/net/usb/pegasus.c:746 [inline]
- pegasus_probe+0x10e7/0x4080 drivers/net/usb/pegasus.c:1152
-....
+Hence the "optional" :-)
 
-Local variable ----data.i@pegasus_probe created at:
- get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
- pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
- get_interrupt_interval drivers/net/usb/pegasus.c:1151 [inline]
- pegasus_probe+0xe57/0x4080 drivers/net/usb/pegasus.c:1152
+Or, perhaps, Thinh wants to use this for internal FPGA-based validation?
 
-Reported-and-tested-by: syzbot+02c9f70f3afae308464a@syzkaller.appspotmail.com
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
+In that case, I'm okay with the property.
 
-Changes in v2:
-	Rebased on top of -net
-
----
- drivers/net/usb/pegasus.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/usb/pegasus.c b/drivers/net/usb/pegasus.c
-index f18b03be1..652e9fcf0 100644
---- a/drivers/net/usb/pegasus.c
-+++ b/drivers/net/usb/pegasus.c
-@@ -744,12 +744,16 @@ static inline void disable_net_traffic(pegasus_t *pegasus)
- 	set_registers(pegasus, EthCtrl0, sizeof(tmp), &tmp);
- }
- 
--static inline void get_interrupt_interval(pegasus_t *pegasus)
-+static inline int get_interrupt_interval(pegasus_t *pegasus)
- {
- 	u16 data;
- 	u8 interval;
-+	int ret;
-+
-+	ret = read_eprom_word(pegasus, 4, &data);
-+	if (ret < 0)
-+		return ret;
- 
--	read_eprom_word(pegasus, 4, &data);
- 	interval = data >> 8;
- 	if (pegasus->usb->speed != USB_SPEED_HIGH) {
- 		if (interval < 0x80) {
-@@ -764,6 +768,8 @@ static inline void get_interrupt_interval(pegasus_t *pegasus)
- 		}
- 	}
- 	pegasus->intr_interval = interval;
-+
-+	return 0;
- }
- 
- static void set_carrier(struct net_device *net)
-@@ -1165,7 +1171,9 @@ static int pegasus_probe(struct usb_interface *intf,
- 				| NETIF_MSG_PROBE | NETIF_MSG_LINK);
- 
- 	pegasus->features = usb_dev_id[dev_index].private;
--	get_interrupt_interval(pegasus);
-+	res = get_interrupt_interval(pegasus);
-+	if (res)
-+		goto out2;
- 	if (reset_mac(pegasus)) {
- 		dev_err(&intf->dev, "can't reset MAC\n");
- 		res = -EIO;
 -- 
-2.32.0
-
+balbi
