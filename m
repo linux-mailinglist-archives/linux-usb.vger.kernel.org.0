@@ -2,132 +2,68 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E69473E091F
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 22:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632DD3E0ADA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 01:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231391AbhHDUE6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 16:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbhHDUE5 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 16:04:57 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E39C061799
-        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 13:04:44 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z2so6542374lft.1
-        for <linux-usb@vger.kernel.org>; Wed, 04 Aug 2021 13:04:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sahklOmuEWNKGHdHX0TfbNlW0MEZnmzRkOffEEIf8Zg=;
-        b=RBNOcGPiP0Tn2LCxIxQy3MCJV4xnMx2Bve+Q5ATjwz8evRElxC7yfTfdMiL2NXb2Iv
-         Ffx4IWqpeE13/vv/zz8Vlc0A1isK2sj4QhG0E+5tSga50RWMCXvu5U5ABqhbaIQyTtuB
-         RFVNLsQvbKmyRfVvkpKzIEGVm48rk5eJ5LI2s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sahklOmuEWNKGHdHX0TfbNlW0MEZnmzRkOffEEIf8Zg=;
-        b=nACvLyf+SX2bzeTNfo/w7Bv7oQ4KuAMfHG77iYtYD0sCqbB1nLNJGVUsijEoQ0qo/s
-         /pj1gsd4bEfeipwKr+nm6uzZ6StJJWlZ2m7Y5FlwDT6TI5UGzrxAHU8HOho9qpdrSpjf
-         0XPwKljYq+OVMhh1gHg5vtNtgacK124VLqHQ9uV10iZDAOfnj9KXjZgCaGMLZHJgU/HT
-         wYc5+LamUdqQDD2EBYfUvyZ5eCgiNBeu38AIqBOaaho8DO00bOClFN11AIaImtbmD/Cq
-         ym0u51SJfacyIfRpOqUQa2HEhTVK8L14RfvOkMGrL1MhyJBC+uaBEBQahAEHlK36JHoF
-         xoYQ==
-X-Gm-Message-State: AOAM533pobg9k6NHs8NEFMQs7l2O/ZDtxqWLPVr735pHFiBgydwvyYar
-        MLiPlwq+qnU6xGLpkSow60I8HZp3N8cf5WKY
-X-Google-Smtp-Source: ABdhPJz+q/QsEt6hc51aXnwTQVNd0JKwA1MXZzEeqyjMoA2FqbkpTTeZzr06DfeRy8yz0w+p5KFSQg==
-X-Received: by 2002:a19:6449:: with SMTP id b9mr691760lfj.660.1628107482312;
-        Wed, 04 Aug 2021 13:04:42 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id x74sm286981lff.267.2021.08.04.13.04.40
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Aug 2021 13:04:41 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id h11so3894336ljo.12
-        for <linux-usb@vger.kernel.org>; Wed, 04 Aug 2021 13:04:40 -0700 (PDT)
-X-Received: by 2002:a2e:84c7:: with SMTP id q7mr670782ljh.61.1628107480111;
- Wed, 04 Aug 2021 13:04:40 -0700 (PDT)
+        id S235512AbhHDXcb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 19:32:31 -0400
+Received: from perseus.uberspace.de ([95.143.172.134]:35316 "EHLO
+        perseus.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230514AbhHDXca (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 19:32:30 -0400
+X-Greylist: delayed 401 seconds by postgrey-1.27 at vger.kernel.org; Wed, 04 Aug 2021 19:32:30 EDT
+Received: (qmail 21912 invoked from network); 4 Aug 2021 23:25:34 -0000
+Received: from localhost (HELO localhost) (127.0.0.1)
+  by perseus.uberspace.de with SMTP; 4 Aug 2021 23:25:34 -0000
+From:   David Bauer <mail@david-bauer.net>
+To:     johan@kernel.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: [PATCH] USB: serial: ftdi_sio: add device ID for Auto-M3 OP-COM v2
+Date:   Thu,  5 Aug 2021 01:25:22 +0200
+Message-Id: <20210804232522.43330-1-mail@david-bauer.net>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <1628086770.5rn8p04n6j.none.ref@localhost> <1628086770.5rn8p04n6j.none@localhost>
- <CAHk-=wiLr55zHUWNzmp3DeoO0DUaYp7vAzQB5KUCni5FpwC7Uw@mail.gmail.com> <1628105897.vb3ko0vb06.none@localhost>
-In-Reply-To: <1628105897.vb3ko0vb06.none@localhost>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Aug 2021 13:04:24 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wioi2+dfni1Sx2_Js_WmcgHKtzPUSDkhZ4uo0P6Qe0z+A@mail.gmail.com>
-Message-ID: <CAHk-=wioi2+dfni1Sx2_Js_WmcgHKtzPUSDkhZ4uo0P6Qe0z+A@mail.gmail.com>
-Subject: Re: [REGRESSION?] Simultaneous writes to a reader-less, non-full pipe
- can hang
-To:     "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
-Cc:     acrichton@mozilla.com, Christian Brauner <christian@brauner.io>,
-        David Howells <dhowells@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        keyrings@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        linux-usb@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ian Kent <raven@themaw.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 4, 2021 at 12:48 PM Alex Xu (Hello71) <alex_y_xu@yahoo.ca> wrote:
->
-> I agree that if this only affects programs which intentionally adjust
-> the pipe buffer size, then it is not a huge issue. The problem,
-> admittedly buried very close to the bottom of my email, is that the
-> kernel will silently provide one-page pipe buffers if the user has
-> exceeded 16384 (by default) pipe buffer pages allocated.
+The Auto-M§ OP-COM v2 is a OBD diagnostic device using a FTD232 for the
+USB connection.
 
-That's a good point.
+Signed-off-by: David Bauer <mail@david-bauer.net>
+---
+ drivers/usb/serial/ftdi_sio.c     | 1 +
+ drivers/usb/serial/ftdi_sio_ids.h | 3 +++
+ 2 files changed, 4 insertions(+)
 
-That "fall back to a single buffer" case is meant to make things
-hobble along if the user has exhausted the pipe buffers, but you're
-right that we might want to make that minimum be two buffers.
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index 4a1f3a95d017..33bbb3470ca3 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -219,6 +219,7 @@ static const struct usb_device_id id_table_combined[] = {
+ 	{ USB_DEVICE(FTDI_VID, FTDI_MTXORB_6_PID) },
+ 	{ USB_DEVICE(FTDI_VID, FTDI_R2000KU_TRUE_RNG) },
+ 	{ USB_DEVICE(FTDI_VID, FTDI_VARDAAN_PID) },
++	{ USB_DEVICE(FTDI_VID, FTDI_AUTO_M3_OP_COM_V2_PID) },
+ 	{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0100_PID) },
+ 	{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0101_PID) },
+ 	{ USB_DEVICE(MTXORB_VID, MTXORB_FTDI_RANGE_0102_PID) },
+diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
+index add602bebd82..755858ca20ba 100644
+--- a/drivers/usb/serial/ftdi_sio_ids.h
++++ b/drivers/usb/serial/ftdi_sio_ids.h
+@@ -159,6 +159,9 @@
+ /* Vardaan Enterprises Serial Interface VEUSB422R3 */
+ #define FTDI_VARDAAN_PID	0xF070
+ 
++/* Auto-M3 Ltd. - OP-COM USB V2 - OBD interface Adapter */
++#define FTDI_AUTO_M3_OP_COM_V2_PID	0x4f50
++
+ /*
+  * Xsens Technologies BV products (http://www.xsens.com).
+  */
+-- 
+2.32.0
 
-I didn't test this, but the obvious fix seems to be just increasing
-the '1' to '2'.
-
-  @@ -781,8 +784,8 @@ struct pipe_inode_info *alloc_pipe_info(void)
-          user_bufs = account_pipe_buffers(user, 0, pipe_bufs);
-
-          if (too_many_pipe_buffers_soft(user_bufs) &&
-pipe_is_unprivileged_user()) {
-  -               user_bufs = account_pipe_buffers(user, pipe_bufs, 1);
-  -               pipe_bufs = 1;
-  +               user_bufs = account_pipe_buffers(user, pipe_bufs, 2);
-  +               pipe_bufs = 2;
-          }
-
-          if (too_many_pipe_buffers_hard(user_bufs) &&
-pipe_is_unprivileged_user())
-
-although a real patch would need a comment about how a single buffer
-is problematic, and probably make the '2' be a #define to not just
-repeat the same magic constant silently.
-
-IOW, something like
-
-  /*
-   * The general pipe use case needs at least two buffers: one
-   * for data yet to be read, and one for new data
-   */
-  #define DEF_MIN_PIPE_BUFFERS 2
-
-to go with the existing PIPE_DEF_BUFFERS (although the
-DEF_MIN_PIPE_BUFFERS use would only be in fs/pipe.c, so I guess it
-doesn't actually need to be exposed to anybody else in the pipe.h
-header file).
-
-I'd take that patch with some proper testing and a commit message.
-
-Hint hint ;)
-
-                Linus
