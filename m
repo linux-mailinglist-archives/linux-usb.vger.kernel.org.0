@@ -2,108 +2,345 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865173E0054
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 13:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F70C3E006A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Aug 2021 13:44:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbhHDLhq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 4 Aug 2021 07:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236502AbhHDLhp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 07:37:45 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09DDC0613D5
-        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 04:37:32 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id m10-20020a17090a34cab0290176b52c60ddso3080825pjf.4
-        for <linux-usb@vger.kernel.org>; Wed, 04 Aug 2021 04:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=8z6k0nvfMeU4+kk1Rlj4CMcpU7JmVD+ziX5/+jJBhDQ=;
-        b=riowX95Hs2Ph56J/2jkLUbHYSNrG3H4azMA8HC4p3zk3C9SYu8fkQWP+7ty/Qrz3FB
-         0A9cr9/+Mvy7UgNuyN3x8XGfUhr9KxLFZleWhtij2Z0BUTM7cm8Ca4YC/878ahqoSfSx
-         UC+GSLk4vN68OMPcqIYskAVGvMhkc+KGDHEriTUrIBVLdGL7FF31xSxTNXbrfGdya4Rm
-         KpSrXsCcUHbPdP207h4PAKR4kAha0FUZMyvBdQTIodZMGWzfEfsp+Nj3V35winoRMdh2
-         2R7v4JPNB5OfkDS2wGGtXVvz0yswkaFiGxeizQdpfAkk+G5rNkZEFpctT1REdqkBMHcT
-         RKRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
-         :from:date:message-id:subject:to:content-transfer-encoding;
-        bh=8z6k0nvfMeU4+kk1Rlj4CMcpU7JmVD+ziX5/+jJBhDQ=;
-        b=DIdswbCPDWd7bDL1CGktnGvuwdHhfpfAHAk26GbYZJBEL1znncfIhtgklDqUk3iSLE
-         eVPtGi773oDYzxE46yDj8SUD0qaoZFqAq0VbwBx/h4tTOuFbAbO+7ORjk1KH0OX3J69a
-         KtC2tnIct2MXKlEPae5wZaPql0WkKyrP1hw7IRLVA1jfRkvfcTUxmIjEer7v1HPXx07M
-         9gyzO3IDnk8iah2lAVOJ6IQfitvzTg8OHCula7JQgzsPrySVul7r91l/ci4o3m74r6zr
-         5G1UqzGKE0TpNlZs2UNc7QpHZo5SlAZdJqRg+v/7PxSHq/2T5VY3SPStNOIaEVUC61l9
-         FIJQ==
-X-Gm-Message-State: AOAM533Gtg/y8YQxnpqIWdttry1sPYpolB448wBweN95190sP+G/hUuu
-        qDYd+1kWlIboUiPOjtjknr3W5uJQCDtB/1XYQA==
-X-Google-Smtp-Source: ABdhPJy8Xdy7HWiz+2dDNIPY01i3HjjR+vue4DeJr+P0fX8VhceWf9k2asYXAcaZ3o8LAb3uf0ggAilqluNqWGAZTFc=
-X-Received: by 2002:aa7:969a:0:b029:3bd:40c4:971f with SMTP id
- f26-20020aa7969a0000b02903bd40c4971fmr15609055pfk.39.1628077052226; Wed, 04
- Aug 2021 04:37:32 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a05:6a11:4418:0:0:0:0 with HTTP; Wed, 4 Aug 2021 04:37:31
- -0700 (PDT)
-Reply-To: moneygramdepromo@gmail.com
-In-Reply-To: <CAP2Ytbn75uExUqhHVbf-82xNsOgUDVpdecV_Mjrn6Lzt7-6LnQ@mail.gmail.com>
-References: <CAP2Ytbmo2_ekULBWsFkTgEKYMVRgzk2XtKfbASZoUy2cQ2eipA@mail.gmail.com>
- <CAP2Ytbns90=yYt50x3ASZ1h64zCK+o5Q1wq3Gnb8Nr4UJgo1Fw@mail.gmail.com>
- <CAP2YtbmeZSyckMVe8_eNDeLT7bVnw-JYPXiT=LB0anzJ7EffKw@mail.gmail.com>
- <CAP2Ytb=FxP+NWq4y8hksn1AQBt8jpBXk42ay8NSoA942Ssk0gA@mail.gmail.com>
- <CAP2Ytb=M6BqWtQerT4tLE2iEbEoToW-PhnFwMKMn1M_giXszHA@mail.gmail.com>
- <CAP2YtbkFu8A2+LLjSja8-Bg8h2-0h_RaYphB27XkFioZ0Be+HQ@mail.gmail.com>
- <CAP2Ytbnc+3t+=sFOqWEtahNtDgtSHXZN5Pehx4EfVLS2cBGhtw@mail.gmail.com>
- <CAP2Ytb=WVcAC=uxsoZPDbt8DcP_5j-e24yyOOURMbC4GZi1MtQ@mail.gmail.com>
- <CAP2Ytb=qa5ACS6ogm222nrabSBPxAO46w7h4Ai7sNWHpNrzPMA@mail.gmail.com>
- <CAP2Ytbke9bShR59+YUjECn8riSaZ63BG8jPdSo+_5xCHOjx+wQ@mail.gmail.com>
- <CAP2YtbnAy-vDK+1M=x-hCLEe_Z57R2mnkOcEtkXdnqXoVm0hYw@mail.gmail.com>
- <CAP2Ytbm-T58feqzihmu8tr=0Yf2ORZWWrMja33X7_ZD1UG5oqQ@mail.gmail.com>
- <CAP2YtbnttcPO30wABw0X4yf5eKO-ooQ2Mdsq7j=bVgBvY_kxbQ@mail.gmail.com> <CAP2Ytbn75uExUqhHVbf-82xNsOgUDVpdecV_Mjrn6Lzt7-6LnQ@mail.gmail.com>
-From:   Alexander Holmes <chineduomor6@gmail.com>
-Date:   Wed, 4 Aug 2021 11:37:31 +0000
-Message-ID: <CAP2YtbnwkgjLXpCYW7rdevY4iM69Ud-pVn8K6i-oW8D7SyTAjA@mail.gmail.com>
-Subject: How are you today?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S237822AbhHDLot (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 4 Aug 2021 07:44:49 -0400
+Received: from mailout2.w1.samsung.com ([210.118.77.12]:49707 "EHLO
+        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237779AbhHDLor (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 4 Aug 2021 07:44:47 -0400
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20210804114434euoutp023b4a86c1f4c89a4a44861a01ec9a7fb8~YF9ZGHy5w2438924389euoutp02a
+        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 11:44:34 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20210804114434euoutp023b4a86c1f4c89a4a44861a01ec9a7fb8~YF9ZGHy5w2438924389euoutp02a
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1628077474;
+        bh=06q/IuPyxi5M60SRMqpAEAHW+0zNfEVbC7soamUbDB4=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=loi700XtBrczLF7C8inb6iNVmrk5z9iHIzJfcC1bs+yoGhZYDn4GPzSjB3Nh8yit/
+         TPKC6kZoH8GxNBulSC2Vv5x5LaQPgT89uV5Mp8Zu0Sf9yw9zVPIfLpVuItrmUtgK9Y
+         QOHYTBbtTqsIYj4pmvs0NEXNlJsEdqf7nb6THD34=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20210804114433eucas1p25439a34c18ffa70be4e38cba9dcbef6e~YF9YqB3nD0057700577eucas1p2g;
+        Wed,  4 Aug 2021 11:44:33 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id C1.14.56448.1AD7A016; Wed,  4
+        Aug 2021 12:44:33 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20210804114433eucas1p134417b605abeb57728d358fc2f42162b~YF9YKVdnj2735127351eucas1p1y;
+        Wed,  4 Aug 2021 11:44:33 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20210804114433eusmtrp25e4cfdbc5de7a8ac2168cc0ab304421c~YF9YJfqMA1038410384eusmtrp2I;
+        Wed,  4 Aug 2021 11:44:33 +0000 (GMT)
+X-AuditID: cbfec7f5-d53ff7000002dc80-80-610a7da1fbe7
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 63.9D.31287.1AD7A016; Wed,  4
+        Aug 2021 12:44:33 +0100 (BST)
+Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20210804114432eusmtip2afd594f7cd3a91a23eff9cbd68a0224f~YF9Xqp_Ma0903309033eusmtip2S;
+        Wed,  4 Aug 2021 11:44:32 +0000 (GMT)
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+To:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [PATCH 1/2] usb: dwc2: rename DWC2_POWER_DOWN_PARAM_NONE state
+Date:   Wed,  4 Aug 2021 13:44:20 +0200
+Message-Id: <20210804114421.10282-1-m.szyprowski@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOIsWRmVeSWpSXmKPExsWy7djP87oLa7kSDWZ+07fovWNisXHGelaL
+        Y21P2C0af+1ltzh/fgO7xeVdc9gsZpzfx2SxaFkrs8XaI3fZHTg9Nq3qZPPo27KK0WPL/s+M
+        Hp83yQWwRHHZpKTmZJalFunbJXBl/OjeyFawyKti8dxLzA2MF2y7GDk5JARMJGYcv8DSxcjF
+        ISSwglHi5YFeVpCEkMAXRomPWyIgEp8ZJe7M2sQE03H78BRGiMRyRoljh1ug2oE69l5oB6ti
+        EzCU6HrbxQZiiwgkSBzZ/J4ZpIhZoJdJYvr6jcwgCWEBd4mOxQ/B9rEIqEqs+XYIrIFXwFZi
+        /fmZzBDr5CVWbzgA1iwh0MohcbutgxEi4SLR9bKfHcIWlnh1fAuULSPxf+d8JoiGZkaJh+fW
+        skM4PYwSl5tmQHVbS9w59wtoHQfQTZoS63fpQ4QdJc7uAnmBA8jmk7jxVhAkzAxkTto2nRki
+        zCvR0SYEUa0mMev4Ori1By9cgrrZQ2LxsoXQcIyVWH/vFOMERrlZCLsWMDKuYhRPLS3OTU8t
+        Ns5LLdcrTswtLs1L10vOz93ECEwLp/8d/7qDccWrj3qHGJk4GA8xSnAwK4nwht7gSBTiTUms
+        rEotyo8vKs1JLT7EKM3BoiTOu2vrmnghgfTEktTs1NSC1CKYLBMHp1QD01ybv4lGR66avsg5
+        Gmz1+yd/yaHjWdb/NyT89cvZYe2ztXzbDe5v7nzNi9fbd+62WaARp+bqpTS9WmPLss50z8eb
+        i7deEo9JXLN8qtm0hcEGi340Tb2l83ir0vWrl6f3aN60ir9xrfRbsFIwo5ft3RN/f6747flL
+        VWvC3yX1c/8nbtifHP76MuuSs4lCBRmLinQ+cAafOtAcPPPfxe8u33bc28M8v7znRrjmuboA
+        ifyjX/7OqG1cz9HDZcY1yUp0p47NA8viaPnzvZcuse5urzftPFh7caXagqevZCbt5vvdvFZK
+        PbwzU9YrzdK+WOeJFWe7nPX/PzzS7oHHTupUH1m78PxcJ/n5jyaxpEWy/FViKc5INNRiLipO
+        BACY8cutegMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLLMWRmVeSWpSXmKPExsVy+t/xe7oLa7kSDWav5LXovWNisXHGelaL
+        Y21P2C0af+1ltzh/fgO7xeVdc9gsZpzfx2SxaFkrs8XaI3fZHTg9Nq3qZPPo27KK0WPL/s+M
+        Hp83yQWwROnZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8daGZkq6dvZpKTmZJalFunb
+        Jehl/OjeyFawyKti8dxLzA2MF2y7GDk5JARMJG4fnsLYxcjFISSwlFFi0YnP7BAJGYmT0xpY
+        IWxhiT/Xutggij4xSizZu4gFJMEmYCjR9RYkwckhIpAkcf3JaRaQImaBiUwSk2b+B0sIC7hL
+        dCx+CDaJRUBVYs23Q2BxXgFbifXnZzJDbJCXWL3hAPMERp4FjAyrGEVSS4tz03OLDfWKE3OL
+        S/PS9ZLzczcxAsNx27Gfm3cwznv1Ue8QIxMH4yFGCQ5mJRHe0BsciUK8KYmVValF+fFFpTmp
+        xYcYTYH2TWSWEk3OB0ZEXkm8oZmBqaGJmaWBqaWZsZI479a5a+KFBNITS1KzU1MLUotg+pg4
+        OKUamHjb4u9m9nStOe8rdIVt4g3f8/ZiZzif3npi89z3eboT+9qKmYo8u569uKtk8EbuaoXN
+        M8XvFW8N7qkIMTFN1/Rsvjv/nOwDVuZXsW0ZHnzsUslz2NbVad6M+bOc+6XuwmdXOB+78Hxz
+        yDokm9bAZaN5IlVZMJB7Y8GLXJZ/6+1WcDqfLtTyP/IxYH/v9/4f58KW7bz6UkXlhFHH21Lb
+        rnJG46evn87gstngNjezxyPe+IHP0c9SjyJ3bYuNniH9o7YwaWM/d8KGEtNFMQeO39x8/qp5
+        tmX9rh3ruU9tOTXfmUH+hGqh5NmrXfNtZk6WYk4xPD7d8dOuj1Xpn/evk9ZY6XticopnotEb
+        H8Xv8UosxRmJhlrMRcWJAPwEIjvQAgAA
+X-CMS-MailID: 20210804114433eucas1p134417b605abeb57728d358fc2f42162b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20210804114433eucas1p134417b605abeb57728d358fc2f42162b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20210804114433eucas1p134417b605abeb57728d358fc2f42162b
+References: <CGME20210804114433eucas1p134417b605abeb57728d358fc2f42162b@eucas1p1.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-How are you today?
+DWC2_POWER_DOWN_PARAM_NONE really means that the driver still uses clock
+gating to save power when hardware is not used. Rename the state name to
+DWC2_POWER_DOWN_PARAM_CLOCK_GATING to match the driver behavior.
 
-This is MoneyGram International Inc. we are contacting you concerning
-your winning fund $1.500, 000.00 USD; your e-mail won $1.500, 000.00
-dollars through Internet contest, and lottery bonus under MoneyGram
-International Inc. Worldwide. The lottery bonus is contesting once in
-a year, and we are doing it to promote this company MoneyGram
-International Inc. The last contest was made through the internet by
-people=E2=80=99s email worldwide, for example. USA, CANADA, RUSSIA, EUROPE,
-ASIA, AFRICA, UNITED KINGDOM, GERMANY, TOGO, SOUTH AFRICA, UAE,
-ETC...........................
+Suggested-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+---
+This is a follow-up of this discussion:
+https://lore.kernel.org/linux-usb/26099de1-826f-42bf-0de7-759a47faf4a0@samsung.com/
 
-We are contacting you because you are among the winning people and
-your winning code is [XHMG02639]. We have programmed your daily
-transfer payment at the minimum of =E2=82=AC4,500 Euros daily. Therefore yo=
-u
-are advised to contact branch office Togo, with your complete info,
-such as below.
+This should be applied on top of v5.14-rc3.
+---
+ drivers/usb/dwc2/core.h      |  4 ++--
+ drivers/usb/dwc2/core_intr.c |  8 ++++----
+ drivers/usb/dwc2/hcd.c       | 10 +++++-----
+ drivers/usb/dwc2/params.c    | 22 +++++++++++-----------
+ drivers/usb/dwc2/platform.c  |  2 +-
+ 5 files changed, 23 insertions(+), 23 deletions(-)
 
-Your surname......................
-Your middle name..................
-Your name........................
-Your home address...............
-Your country........................
-Your phone number.................
-Your occupation/ your work...................
-Your passport or Identity Card copy.......................
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index cb9059a8444b..38b6733d26ec 100644
+--- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -382,7 +382,7 @@ enum dwc2_ep0_state {
+  *			If power_down is enabled, the controller will enter
+  *			power_down in both peripheral and host mode when
+  *			needed.
+- *			0 - No (default)
++ *			0 - Clock gating (default)
+  *			1 - Partial power down
+  *			2 - Hibernation
+  * @no_clock_gating:	Specifies whether to avoid clock gating feature.
+@@ -482,7 +482,7 @@ struct dwc2_core_params {
+ 	bool external_id_pin_ctl;
+ 
+ 	int power_down;
+-#define DWC2_POWER_DOWN_PARAM_NONE		0
++#define DWC2_POWER_DOWN_PARAM_CLOCK_GATING	0
+ #define DWC2_POWER_DOWN_PARAM_PARTIAL		1
+ #define DWC2_POWER_DOWN_PARAM_HIBERNATION	2
+ 	bool no_clock_gating;
+diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c
+index a5c52b237e72..660abff1d42b 100644
+--- a/drivers/usb/dwc2/core_intr.c
++++ b/drivers/usb/dwc2/core_intr.c
+@@ -327,7 +327,7 @@ static void dwc2_handle_session_req_intr(struct dwc2_hsotg *hsotg)
+ 
+ 			/* Exit gadget mode clock gating. */
+ 			if (hsotg->params.power_down ==
+-			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)
++			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)
+ 				dwc2_gadget_exit_clock_gating(hsotg, 0);
+ 		}
+ 
+@@ -438,7 +438,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 
+ 			/* Exit gadget mode clock gating. */
+ 			if (hsotg->params.power_down ==
+-			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)
++			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)
+ 				dwc2_gadget_exit_clock_gating(hsotg, 0);
+ 		} else {
+ 			/* Change to L0 state */
+@@ -455,7 +455,7 @@ static void dwc2_handle_wakeup_detected_intr(struct dwc2_hsotg *hsotg)
+ 			}
+ 
+ 			if (hsotg->params.power_down ==
+-			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)
++			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)
+ 				dwc2_host_exit_clock_gating(hsotg, 1);
+ 
+ 			/*
+@@ -551,7 +551,7 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_hsotg *hsotg)
+ 					dev_err(hsotg->dev,
+ 						"enter hibernation failed\n");
+ 				break;
+-			case DWC2_POWER_DOWN_PARAM_NONE:
++			case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:
+ 				/*
+ 				 * If neither hibernation nor partial power down are supported,
+ 				 * clock gating is used to save power.
+diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
+index 2a7828971d05..067f2770c2ef 100644
+--- a/drivers/usb/dwc2/hcd.c
++++ b/drivers/usb/dwc2/hcd.c
+@@ -3333,7 +3333,7 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16 windex)
+ 			dev_err(hsotg->dev, "enter hibernation failed.\n");
+ 		spin_lock_irqsave(&hsotg->lock, flags);
+ 		break;
+-	case DWC2_POWER_DOWN_PARAM_NONE:
++	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:
+ 		/*
+ 		 * If not hibernation nor partial power down are supported,
+ 		 * clock gating is used to save power.
+@@ -3701,7 +3701,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *hsotg, u16 typereq,
+ 			}
+ 
+ 			if (hsotg->params.power_down ==
+-			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)
++			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)
+ 				dwc2_host_exit_clock_gating(hsotg, 0);
+ 
+ 			pcgctl = dwc2_readl(hsotg, PCGCTL);
+@@ -4398,7 +4398,7 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)
+ 		/* After entering suspend, hardware is not accessible */
+ 		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+ 		break;
+-	case DWC2_POWER_DOWN_PARAM_NONE:
++	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:
+ 		/*
+ 		 * If not hibernation nor partial power down are supported,
+ 		 * clock gating is used to save power.
+@@ -4482,7 +4482,7 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)
+ 		 */
+ 		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
+ 		break;
+-	case DWC2_POWER_DOWN_PARAM_NONE:
++	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:
+ 		/*
+ 		 * If not hibernation nor partial power down are supported,
+ 		 * port resume is done using the clock gating programming flow.
+@@ -4680,7 +4680,7 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hcd, struct urb *urb,
+ 				"exit partial_power_down failed\n");
+ 	}
+ 
+-	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_CLOCK_GATING &&
+ 	    hsotg->bus_suspended) {
+ 		if (dwc2_is_device_mode(hsotg))
+ 			dwc2_gadget_exit_clock_gating(hsotg, 0);
+diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
+index 59e119345994..dac26410b575 100644
+--- a/drivers/usb/dwc2/params.c
++++ b/drivers/usb/dwc2/params.c
+@@ -68,14 +68,14 @@ static void dwc2_set_his_params(struct dwc2_hsotg *hsotg)
+ 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR16 <<
+ 		GAHBCFG_HBSTLEN_SHIFT;
+ 	p->change_speed_quirk = true;
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ }
+ 
+ static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)
+ {
+ 	struct dwc2_core_params *p = &hsotg->params;
+ 
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 	p->no_clock_gating = true;
+ 	p->phy_utmi_width = 8;
+ }
+@@ -90,7 +90,7 @@ static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg)
+ 	p->host_perio_tx_fifo_size = 256;
+ 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR16 <<
+ 		GAHBCFG_HBSTLEN_SHIFT;
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ }
+ 
+ static void dwc2_set_ltq_params(struct dwc2_hsotg *hsotg)
+@@ -120,7 +120,7 @@ static void dwc2_set_amlogic_params(struct dwc2_hsotg *hsotg)
+ 	p->phy_type = DWC2_PHY_TYPE_PARAM_UTMI;
+ 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR8 <<
+ 		GAHBCFG_HBSTLEN_SHIFT;
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ }
+ 
+ static void dwc2_set_amlogic_g12a_params(struct dwc2_hsotg *hsotg)
+@@ -179,7 +179,7 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dwc2_hsotg *hsotg)
+ 	p->activate_stm_fs_transceiver = true;
+ 	p->activate_stm_id_vb_detection = true;
+ 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR16 << GAHBCFG_HBSTLEN_SHIFT;
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 	p->host_support_fs_ls_low_power = true;
+ 	p->host_ls_low_power_phy_clk = true;
+ }
+@@ -194,7 +194,7 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dwc2_hsotg *hsotg)
+ 	p->host_nperio_tx_fifo_size = 256;
+ 	p->host_perio_tx_fifo_size = 256;
+ 	p->ahbcfg = GAHBCFG_HBSTLEN_INCR16 << GAHBCFG_HBSTLEN_SHIFT;
+-	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
++	p->power_down = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 	p->lpm = false;
+ 	p->lpm_clock_gating = false;
+ 	p->besl = false;
+@@ -339,7 +339,7 @@ static void dwc2_set_param_power_down(struct dwc2_hsotg *hsotg)
+ 	else if (hsotg->hw_params.power_optimized)
+ 		val = DWC2_POWER_DOWN_PARAM_PARTIAL;
+ 	else
+-		val = DWC2_POWER_DOWN_PARAM_NONE;
++		val = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 
+ 	hsotg->params.power_down = val;
+ }
+@@ -585,27 +585,27 @@ static void dwc2_check_param_power_down(struct dwc2_hsotg *hsotg)
+ 	int param = hsotg->params.power_down;
+ 
+ 	switch (param) {
+-	case DWC2_POWER_DOWN_PARAM_NONE:
++	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:
+ 		break;
+ 	case DWC2_POWER_DOWN_PARAM_PARTIAL:
+ 		if (hsotg->hw_params.power_optimized)
+ 			break;
+ 		dev_dbg(hsotg->dev,
+ 			"Partial power down isn't supported by HW\n");
+-		param = DWC2_POWER_DOWN_PARAM_NONE;
++		param = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 		break;
+ 	case DWC2_POWER_DOWN_PARAM_HIBERNATION:
+ 		if (hsotg->hw_params.hibernation)
+ 			break;
+ 		dev_dbg(hsotg->dev,
+ 			"Hibernation isn't supported by HW\n");
+-		param = DWC2_POWER_DOWN_PARAM_NONE;
++		param = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 		break;
+ 	default:
+ 		dev_err(hsotg->dev,
+ 			"%s: Invalid parameter power_down=%d\n",
+ 			__func__, param);
+-		param = DWC2_POWER_DOWN_PARAM_NONE;
++		param = DWC2_POWER_DOWN_PARAM_CLOCK_GATING;
+ 		break;
+ 	}
+ 
+diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c
+index c8f18f3ba9e3..7bd8fb6c1378 100644
+--- a/drivers/usb/dwc2/platform.c
++++ b/drivers/usb/dwc2/platform.c
+@@ -342,7 +342,7 @@ static int dwc2_driver_remove(struct platform_device *dev)
+ 	}
+ 
+ 	/* Exit clock gating when driver is removed. */
+-	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_NONE &&
++	if (hsotg->params.power_down == DWC2_POWER_DOWN_PARAM_CLOCK_GATING &&
+ 	    hsotg->bus_suspended) {
+ 		if (dwc2_is_device_mode(hsotg))
+ 			dwc2_gadget_exit_clock_gating(hsotg, 0);
+-- 
+2.17.1
 
-Kindly contact the MoneyGram Agent Mr. DENIS KODJO, Phone: +228
-79541985, via this email ( moneygramdepromo@gmail.com ) to release
-your first payment pick up information.
-
-Regards
-CEO: W. Alexander Holmes
