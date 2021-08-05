@@ -2,48 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB39A3E1097
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 10:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6658C3E10FA
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 11:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbhHEIyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 04:54:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57512 "EHLO mail.kernel.org"
+        id S239309AbhHEJQB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 05:16:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36242 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232591AbhHEIyU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 04:54:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 946756105A;
-        Thu,  5 Aug 2021 08:54:05 +0000 (UTC)
+        id S237827AbhHEJQA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Aug 2021 05:16:00 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2D9CE61029;
+        Thu,  5 Aug 2021 09:15:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628153646;
-        bh=e4/+u67PQLWbwRW/+Zo90jHnaAIdfNh2nVTTaCbQ3qE=;
+        s=korg; t=1628154945;
+        bh=jiWBfGfrHPmdXnTZb/UnDx9zSYN4p1QfYI/iS7p0/JQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xkXbelI7vGun57y5T2hN2gh55i0InDf6HEC85ue0T7rmTck/pmBIxplf6QHNVOW18
-         0r/TvwuEkMCNVrK4HI3ADtkCtNJPXPK/l+MD40mHf2KkkfXVc3bT+F6+u8p/pFk2f8
-         AcCyz+tM3YL7TEZfSpscqnKq+tEnDKyx94IIxyp8=
-Date:   Thu, 5 Aug 2021 10:54:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] USB-serial fixes for 5.14-rc5
-Message-ID: <YQunK2AvKEz/ysOz@kroah.com>
-References: <YQuj0Nqq3YRXVLKh@hovoldconsulting.com>
+        b=VpiHG/o7FT+/0Ng7c8yckStLvPH/WlTr+d7n7pl+2yUtyDS7JC5AplUVDm8snftvO
+         WIuIyYf9TIJZU6nyo6Dg8x/5falE78pzxvk+yIhjbMsw/EC2Qq/EB83DHPG2DA9Ohy
+         H8q2czVBP2Yqyq/roLaKPkg4VWrQTUQgIB2zMc3I=
+Date:   Thu, 5 Aug 2021 11:15:42 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Minas Harutyunyan <hminas@synopsys.com>,
+        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/2] usb: dwc2: rename DWC2_POWER_DOWN_PARAM_NONE state
+Message-ID: <YQusPurbybrNly+b@kroah.com>
+References: <CGME20210804114433eucas1p134417b605abeb57728d358fc2f42162b@eucas1p1.samsung.com>
+ <20210804114421.10282-1-m.szyprowski@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YQuj0Nqq3YRXVLKh@hovoldconsulting.com>
+In-Reply-To: <20210804114421.10282-1-m.szyprowski@samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 05, 2021 at 10:39:44AM +0200, Johan Hovold wrote:
-> The following changes since commit ff1176468d368232b684f75e82563369208bc371:
+On Wed, Aug 04, 2021 at 01:44:20PM +0200, Marek Szyprowski wrote:
+> DWC2_POWER_DOWN_PARAM_NONE really means that the driver still uses clock
+> gating to save power when hardware is not used. Rename the state name to
+> DWC2_POWER_DOWN_PARAM_CLOCK_GATING to match the driver behavior.
 > 
->   Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
+> Suggested-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> ---
+> This is a follow-up of this discussion:
+> https://lore.kernel.org/linux-usb/26099de1-826f-42bf-0de7-759a47faf4a0@samsung.com/
 > 
-> are available in the Git repository at:
-> 
->   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.14-rc5
+> This should be applied on top of v5.14-rc3.
 
-Pulled and pushed out, thanks.
+What else would I apply it on top of, we can't go back in time :)
+
+Where is this needed for 5.14-final, or for 5.15-rc1?
+
+thanks,
 
 greg k-h
