@@ -2,135 +2,147 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6BC3E176A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 16:56:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39F33E17A2
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 17:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241762AbhHEO4t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 10:56:49 -0400
-Received: from mga17.intel.com ([192.55.52.151]:30728 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233269AbhHEO4s (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 10:56:48 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10067"; a="194444390"
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="194444390"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2021 07:56:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,296,1620716400"; 
-   d="scan'208";a="467537626"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 05 Aug 2021 07:56:32 -0700
-Subject: Re: USB xhci crash under load on 5.14-rc3
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <YQpJLk42b+0g7WFB@kroah.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Autocrypt: addr=mathias.nyman@linux.intel.com; prefer-encrypt=mutual; keydata=
- mQINBFMB0ccBEADd+nZnZrFDsIjQtclVz6OsqFOQ6k0nQdveiDNeBuwyFYykkBpaGekoHZ6f
- lH4ogPZzQ+pzoJEMlRGXc881BIggKMCMH86fYJGfZKWdfpg9O6mqSxyEuvBHKe9eZCBKPvoC
- L2iwygtO8TcXXSCynvXSeZrOwqAlwnxWNRm4J2ikDck5S5R+Qie0ZLJIfaId1hELofWfuhy+
- tOK0plFR0HgVVp8O7zWYT2ewNcgAzQrRbzidA3LNRfkL7jrzyAxDapuejuK8TMrFQT/wW53e
- uegnXcRJaibJD84RUJt+mJrn5BvZ0MYfyDSc1yHVO+aZcpNr+71yZBQVgVEI/AuEQ0+p9wpt
- O9Wt4zO2KT/R5lq2lSz1MYMJrtfFRKkqC6PsDSB4lGSgl91XbibK5poxrIouVO2g9Jabg04T
- MIPpVUlPme3mkYHLZUsboemRQp5/pxV4HTFR0xNBCmsidBICHOYAepCzNmfLhfo1EW2Uf+t4
- L8IowAaoURKdgcR2ydUXjhACVEA/Ldtp3ftF4hTQ46Qhba/p4MUFtDAQ5yeA5vQVuspiwsqB
- BoL/298+V119JzM998d70Z1clqTc8fiGMXyVnFv92QKShDKyXpiisQn2rrJVWeXEIVoldh6+
- J8M3vTwzetnvIKpoQdSFJ2qxOdQ8iYRtz36WYl7hhT3/hwkHuQARAQABtCdNYXRoaWFzIE55
- bWFuIDxtYXRoaWFzLm55bWFuQGdtYWlsLmNvbT6JAjsEEwECACUCGwMGCwkIBwMCBhUIAgkK
- CwQWAgMBAh4BAheABQJTAeo1AhkBAAoJEFiDn/uYk8VJOdIP/jhA+RpIZ7rdUHFIYkHEKzHw
- tkwrJczGA5TyLgQaI8YTCTPSvdNHU9Rj19mkjhUO/9MKvwfoT2RFYqhkrtk0K92STDaBNXTL
- JIi4IHBqjXOyJ/dPADU0xiRVtCHWkBgjEgR7Wihr7McSdVpgupsaXhbZjXXgtR/N7PE0Wltz
- hAL2GAnMuIeJyXhIdIMLb+uyoydPCzKdH6znfu6Ox76XfGWBCqLBbvqPXvk4oH03jcdt+8UG
- 2nfSeti/To9ANRZIlSKGjddCGMa3xzjtTx9ryf1Xr0MnY5PeyNLexpgHp93sc1BKxKKtYaT0
- lR6p0QEKeaZ70623oB7Sa2Ts4IytqUVxkQKRkJVWeQiPJ/dZYTK5uo15GaVwufuF8VTwnMkC
- 4l5X+NUYNAH1U1bpRtlT40aoLEUhWKAyVdowxW4yGCP3nL5E69tZQQgsag+OnxBa6f88j63u
- wxmOJGNXcwCerkCb+wUPwJzChSifFYmuV5l89LKHgSbv0WHSN9OLkuhJO+I9fsCNvro1Y7dT
- U/yq4aSVzjaqPT3yrnQkzVDxrYT54FLWO1ssFKAOlcfeWzqrT9QNcHIzHMQYf5c03Kyq3yMI
- Xi91hkw2uc/GuA2CZ8dUD3BZhUT1dm0igE9NViE1M7F5lHQONEr7MOCg1hcrkngY62V6vh0f
- RcDeV0ISwlZWuQINBFMB0ccBEACXKmWvojkaG+kh/yipMmqZTrCozsLeGitxJzo5hq9ev31N
- 2XpPGx4AGhpccbco63SygpVN2bOd0W62fJJoxGohtf/g0uVtRSuK43OTstoBPqyY/35+VnAV
- oA5cnfvtdx5kQPIL6LRcxmYKgN4/3+A7ejIxbOrjWFmbWCC+SgX6mzHHBrV0OMki8R+NnrNa
- NkUmMmosi7jBSKdoi9VqDqgQTJF/GftvmaZHqgmVJDWNrCv7UiorhesfIWPt1O/AIk9luxlE
- dHwkx5zkWa9CGYvV6LfP9BznendEoO3qYZ9IcUlW727Le80Q1oh69QnHoI8pODDBBTJvEq1h
- bOWcPm/DsNmDD8Rwr/msRmRyIoxjasFi5WkM/K/pzujICKeUcNGNsDsEDJC5TCmRO/TlvCvm
- 0X+vdfEJRZV6Z+QFBflK1asUz9QHFre5csG8MyVZkwTR9yUiKi3KiqQdaEu+LuDD2CGF5t68
- xEl66Y6mwfyiISkkm3ETA4E8rVZP1rZQBBm83c5kJEDvs0A4zrhKIPTcI1smK+TWbyVyrZ/a
- mGYDrZzpF2N8DfuNSqOQkLHIOL3vuOyx3HPzS05lY3p+IIVmnPOEdZhMsNDIGmVorFyRWa4K
- uYjBP/W3E5p9e6TvDSDzqhLoY1RHfAIadM3I8kEx5wqco67VIgbIHHB9DbRcxQARAQABiQIf
- BBgBAgAJBQJTAdHHAhsMAAoJEFiDn/uYk8VJb7AQAK56tgX8V1Wa6RmZDmZ8dmBC7W8nsMRz
- PcKWiDSMIvTJT5bygMy1lf7gbHXm7fqezRtSfXAXr/OJqSA8LB2LWfThLyuuCvrdNsQNrI+3
- D+hjHJjhW/4185y3EdmwwHcelixPg0X9EF+lHCltV/w29Pv3PiGDkoKxJrnOpnU6jrwiBebz
- eAYBfpSEvrCm4CR4hf+T6MdCs64UzZnNt0nxL8mLCCAGmq1iks9M4bZk+LG36QjCKGh8PDXz
- 9OsnJmCggptClgjTa7pO6040OW76pcVrP2rZrkjo/Ld/gvSc7yMO/m9sIYxLIsR2NDxMNpmE
- q/H7WO+2bRG0vMmsndxpEYS4WnuhKutoTA/goBEhtHu1fg5KC+WYXp9wZyTfeNPrL0L8F3N1
- BCEYefp2JSZ/a355X6r2ROGSRgIIeYjAiSMgGAZMPEVsdvKsYw6BH17hDRzltNyIj5S0dIhb
- Gjynb3sXforM/GVbr4mnuxTdLXQYlj2EJ4O4f0tkLlADT7podzKSlSuZsLi2D+ohKxtP3U/r
- 42i8PBnX2oAV0UIkYk7Oel/3hr0+BP666SnTls9RJuoXc7R5XQVsomqXID6GmjwFQR5Wh/RE
- IJtkiDAsk37cfZ9d1kZ2gCQryTV9lmflSOB6AFZkOLuEVSC5qW8M/s6IGDfYXN12YJaZPptJ fiD/
-Message-ID: <9bb1d58b-5c68-86b7-13df-2faa749880c5@linux.intel.com>
-Date:   Thu, 5 Aug 2021 17:59:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S241848AbhHEPKI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 11:10:08 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:61096 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233201AbhHEPKH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Aug 2021 11:10:07 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.43/8.16.0.43) with SMTP id 175F4E62005940;
+        Thu, 5 Aug 2021 11:09:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=PYHeUHL0ZH8GoGa/stFMWsqDkOKMwYpeVYQU+PRHDys=;
+ b=kWCQrWA8FO5KjMsKJYhTjzMslbexR3lrUnigXsdYDtzPndt3N6OUvoEdkVx9002xs7lj
+ 0Agjq9pZ+7AHBWChrwjltOA5lzXp4B5IF3Ghn4zNbly1JArc+EARvIUVX8FL+8qEMZJ7
+ A8Db7/fGPv9ocXDf3uZwSmBFRyPaCA1UYaWMB5VML1ZmzhbOU9ZkeGYNFxm7hwmmrQdO
+ OjeQWLkTR1qVQzb3vbrghmADqt0LrDt+b3ardW94BLZUQODxLYQvY1hqylCDIzHc6qoD
+ UXsjpxAIhvrAtuRnuQwMMzpTl5+36Prhqr6y6VaWwVWHT3/2j4xQ1zzlsCjkbkNQpJdx 1w== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3a88599e7f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Aug 2021 11:09:50 -0400
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 175F7awO005818;
+        Thu, 5 Aug 2021 15:09:47 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3a4x58t824-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 05 Aug 2021 15:09:47 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 175F9i5Q52494834
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 5 Aug 2021 15:09:44 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5FF9AE086;
+        Thu,  5 Aug 2021 15:09:44 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6AFFCAE085;
+        Thu,  5 Aug 2021 15:09:44 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  5 Aug 2021 15:09:44 +0000 (GMT)
+Received: from [9.206.171.115] (unknown [9.206.171.115])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id D69DE600B2;
+        Fri,  6 Aug 2021 01:09:19 +1000 (AEST)
+Subject: Re: [PATCH v2 5/6] PCI: Adapt all code locations to not use struct
+ pci_dev::driver directly
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     kernel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pci@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Russell Currey <ruscur@russell.cc>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vadym Kochan <vkochan@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Michael Buesch <m@bues.ch>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-crypto@vger.kernel.org, qat-linux@intel.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, oss-drivers@corigine.com,
+        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
+References: <20210803100150.1543597-1-u.kleine-koenig@pengutronix.de>
+ <20210803100150.1543597-6-u.kleine-koenig@pengutronix.de>
+From:   Andrew Donnellan <ajd@linux.ibm.com>
+Message-ID: <4b8d26d5-443c-600f-78a9-de5214c80452@linux.ibm.com>
+Date:   Fri, 6 Aug 2021 01:09:08 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <YQpJLk42b+0g7WFB@kroah.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20210803100150.1543597-6-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 0KMfkEwjd362vKzVXydvfKA8x7XTgBGG
+X-Proofpoint-ORIG-GUID: 0KMfkEwjd362vKzVXydvfKA8x7XTgBGG
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.391,18.0.790
+ definitions=2021-08-05_05:2021-08-05,2021-08-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 malwarescore=0 mlxlogscore=615 mlxscore=0 bulkscore=0
+ adultscore=0 impostorscore=0 clxscore=1011 suspectscore=0
+ priorityscore=1501 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2107140000 definitions=main-2108050092
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 4.8.2021 11.00, Greg KH wrote:
-> Hi,
+On 3/8/21 8:01 pm, Uwe Kleine-König wrote:
+> This prepares removing the driver member of struct pci_dev which holds the
+> same information than struct pci_dev::dev->driver.
 > 
-> I was doing some filesystem backups from one USB device to another one
-> this weekend and kept running into the problem of the xhci controller
-> shutting down after an hour or so of high volume traffic.
-> 
-> I finally captured the problem in the kernel log as this would also take
-> out my keyboard, making it hard to recover from :)
-> 
-> The log is below for when the problem happens, and then the devices are
-> disconnected from the bus (ignore the filesystem errors, those are
-> expected when i/o is in flight and we disconnect a device.
-> 
-> Any hint as to what the IO_PAGE_FAULT error messages are?
-> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 
-No idea, unfortunately.
+cxl hunks look alright.
 
-> I'll go back to 5.13.y now and see if I can reproduce it there or not,
-> as my backups are not yet done...
-> 
-> thanks,
-> 
-> greg k-h
-> 
-> 
-> [Aug 4 09:48] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff00000 flags=0x0000]
-> [  +0.000012] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff00f80 flags=0x0000]
-> [  +0.000006] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff01000 flags=0x0000]
-> [  +0.000006] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff01f80 flags=0x0000]
-> [  +0.000005] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff02000 flags=0x0000]
-> [  +0.000006] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff02f80 flags=0x0000]
-> [  +0.000006] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff03000 flags=0x0000]
-> [  +0.000005] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff03f80 flags=0x0000]
-> [  +0.000006] xhci_hcd 0000:47:00.1: AMD-Vi: Event logged [IO_PAGE_FAULT domain=0x0032 address=0xfffffff04000 flags=0x0000]
-> [Aug 4 09:49] sd 3:0:0:0: [sdc] tag#21 uas_eh_abort_handler 0 uas-tag 1 inflight: CMD IN 
-> [  +0.000011] sd 3:0:0:0: [sdc] tag#21 CDB: Read(16) 88 00 00 00 00 01 8a 44 08 b0 00 00 00 08 00 00
-> [  +5.106493] xhci_hcd 0000:47:00.1: xHCI host not responding to stop endpoint command.
-> [  +0.000010] xhci_hcd 0000:47:00.1: USBSTS: HCHalted HSE
+Acked-by: Andrew Donnellan <ajd@linux.ibm.com> # cxl
 
-
-HSE "Host System Error" bit is set, meaning xHC hardware detected a serious error and stopped the host.
-HSE was probably set 5-10 seconds earlier, but only discovered here.
-
-Specs state:
-
-xHC sets this bit to ‘1’ when a serious error
-is detected, either internal to the xHC or during a host system access involving the xHC module.
-(In a PCI system, conditions that set this bit to ‘1’ include PCI Parity error, PCI Master Abort, and
-PCI Target Abort.)
-
--Mathias
+-- 
+Andrew Donnellan              OzLabs, ADL Canberra
+ajd@linux.ibm.com             IBM Australia Limited
