@@ -2,57 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C8D3E1D6B
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 22:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D180E3E1F71
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Aug 2021 01:42:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241038AbhHEUk4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 16:40:56 -0400
-Received: from perseus.uberspace.de ([95.143.172.134]:40922 "EHLO
-        perseus.uberspace.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233465AbhHEUkz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Aug 2021 16:40:55 -0400
-Received: (qmail 9548 invoked from network); 5 Aug 2021 20:40:39 -0000
-Received: from localhost (HELO localhost) (127.0.0.1)
-  by perseus.uberspace.de with SMTP; 5 Aug 2021 20:40:39 -0000
-Subject: Re: [PATCH] USB: serial: ftdi_sio: add device ID for Auto-M3 OP-COM
- v2
-To:     Johan Hovold <johan@kernel.org>,
-        Sergei Shtylyov <sergei.shtylyov@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-References: <20210804232522.43330-1-mail@david-bauer.net>
- <f96cd59f-f391-71d9-07a4-f5ee9d9d9afa@gmail.com>
- <YQwMERPkztnJkOS5@hovoldconsulting.com>
-From:   David Bauer <mail@david-bauer.net>
-Message-ID: <f4730026-604e-db14-8a33-173ebd44a8a7@david-bauer.net>
-Date:   Thu, 5 Aug 2021 22:40:38 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S242346AbhHEXmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 19:42:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36664 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238198AbhHEXmv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Aug 2021 19:42:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C4D0E610CD;
+        Thu,  5 Aug 2021 23:42:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628206956;
+        bh=Z/61WgkabawKvCqT33aQpch4UJfYpbpJ/lpjJTDKmJE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KuDKmWy8QxzyN9WG7Q1pVzQ6S5j62PkYn7/jQtSiQ405ZyO5HsJaxlGQ4ptwW9KWQ
+         8JzTD06NkExqlaqFClHSIgp3ZV4HCT08Q0ZvAqUHpT3JHz2y5xKJeL0G0pylHGRvn6
+         U5xMy5iYmp2VcbacJIAcWlgxiuyj7K4SXjueq2YyorPxHzpAkvrgrNXJfYWPF6dNbg
+         +rqlXTqZ1NVd0xWfnIPttHUHPunKRAjCa2hTqiMX3yjjCM3obbaCQHJI0obD1yIuBB
+         sBxx4HfHs+13rY1cXK0ifZwIzG7diuJ8rdtPvOtsYTWDljySsOW/3p75koSGgoeKnq
+         J3gIMCJ0Jo3qg==
+Date:   Thu, 5 Aug 2021 18:42:34 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pci@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vadym Kochan <vkochan@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Michael Buesch <m@bues.ch>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-crypto@vger.kernel.org, qat-linux@intel.com,
+        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        netdev@vger.kernel.org, oss-drivers@corigine.com,
+        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] PCI: Drop duplicated tracking of a pci_dev's
+ bound driver
+Message-ID: <20210805234234.GA1797883@bjorn-Precision-5520>
 MIME-Version: 1.0
-In-Reply-To: <YQwMERPkztnJkOS5@hovoldconsulting.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: de-DE
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210803100150.1543597-1-u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
-
-On 8/5/21 6:04 PM, Johan Hovold wrote:
-> On Thu, Aug 05, 2021 at 02:52:02PM +0300, Sergei Shtylyov wrote:
->> On 05.08.2021 2:25, David Bauer wrote:
->>
->>> The Auto-MÂ§ OP-COM v2 is a OBD diagnostic device using a FTD232 for the
->>
->>     M3?
+On Tue, Aug 03, 2021 at 12:01:44PM +0200, Uwe Kleine-König wrote:
+> Hello,
 > 
-> I assumed so too and fixed that up when applying. Thanks.
-
-Thanks for fixing this up.
-
-Best
-David
-
+> changes since v1 (https://lore.kernel.org/linux-pci/20210729203740.1377045-1-u.kleine-koenig@pengutronix.de):
 > 
-> Johan
+> - New patch to simplify drivers/pci/xen-pcifront.c, spotted and
+>   suggested by Boris Ostrovsky
+> - Fix a possible NULL pointer dereference I introduced in xen-pcifront.c
+> - A few whitespace improvements
+> - Add a commit log to patch #6 (formerly #5)
 > 
+> I also expanded the audience for patches #4 and #6 to allow affected
+> people to actually see the changes to their drivers.
+> 
+> Interdiff can be found below.
+> 
+> The idea is still the same: After a few cleanups (#1 - #3) a new macro
+> is introduced abstracting access to struct pci_dev->driver. All users
+> are then converted to use this and in the last patch the macro is
+> changed to make use of struct pci_dev::dev->driver to get rid of the
+> duplicated tracking.
+
+I love the idea of this series!
+
+I looked at all the bus_type.probe() methods, it looks like pci_dev is
+not the only offender here.  At least the following also have a driver
+pointer in the device struct:
+
+  parisc_device.driver
+  acpi_device.driver
+  dio_dev.driver
+  hid_device.driver
+  pci_dev.driver
+  pnp_dev.driver
+  rio_dev.driver
+  zorro_dev.driver
+
+Do you plan to do the same for all of them, or is there some reason
+why they need the pointer and PCI doesn't?
+
+In almost all cases, other buses define a "to_<bus>_driver()"
+interface.  In fact, PCI already has a to_pci_driver().
+
+This series adds pci_driver_of_dev(), which basically just means we
+can do this:
+
+  pdrv = pci_driver_of_dev(pdev);
+
+instead of this:
+
+  pdrv = to_pci_driver(pdev->dev.driver);
+
+I don't see any other "<bus>_driver_of_dev()" interfaces, so I assume
+other buses just live with the latter style?  I'd rather not be
+different and have two ways to get the "struct pci_driver *" unless
+there's a good reason.
+
+Looking through the places that care about pci_dev.driver (the ones
+updated by patch 5/6), many of them are ... a little dubious to begin
+with.  A few need the "struct pci_error_handlers *err_handler"
+pointer, so that's probably legitimate.  But many just need a name,
+and should probably be using dev_driver_string() instead.
+
+Bjorn
