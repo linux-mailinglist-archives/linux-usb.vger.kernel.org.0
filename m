@@ -2,200 +2,431 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B13833E154A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 15:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B063E1607
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 15:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240281AbhHENGs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 09:06:48 -0400
-Received: from mail-bn8nam11on2054.outbound.protection.outlook.com ([40.107.236.54]:37755
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232931AbhHENGr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 09:06:47 -0400
+        id S241753AbhHENtn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 09:49:43 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:53520 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238790AbhHENtn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Aug 2021 09:49:43 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id AEEE7C3D48;
+        Thu,  5 Aug 2021 13:49:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1628171368; bh=ocgOPHqxjrc9XQhZBu8EKbg9lDvcrt4seQ9KZ65Gpu4=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=gQZsjVUt89fJcj3sequ4k3jW+O1HprOygYsi1uSHMVk841ThAlt1ftgr0LR1TsLK7
+         frBfZEdyWi+eRwPs2mJopnzX1IsvRn0jcWIbkg1JZf5ALr346cPA13j9IJF6ZUbq7G
+         E06qoFMoZuTXPOqvkB9/erckaHUNkxfuTW9jIvaXFYLvEXbqwqk0mHfaHptkHoiBJh
+         hlfKJcPtHDfAnTlq+31d6ygGwuhxLw12iIwJ5m+lXxjzPAhMcBWYolVJzvhsuK4aIB
+         4K+e7N3BkXrRadjL/MHpGhJK2SyqgRn5n/i4Y34saZMHoxqoGL1x1O/pIz+b9xfK5v
+         UM/rHsI3t7E4g==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 41846A00D9;
+        Thu,  5 Aug 2021 13:49:27 +0000 (UTC)
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2172.outbound.protection.outlook.com [104.47.58.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 545004009D;
+        Thu,  5 Aug 2021 13:49:27 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=arturp@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="U6TOZdqb";
+        dkim-atps=neutral
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ew34EbPeZOEhpuT2yU4DudtQr4i9tzSRUFv5zCNM2Dx4vy27wk8JTyH6kC6VmxnVjuGysSmrDkaSAIVGRScGz4SolbhlcVWZMrP8w5uXpDX1vI/I0gfO4BI2PZHofgH1Aw3WVXEIPn0yo+SJStH2TbizNLpmJ1M/6vRgQ0XicoXCJn32994+rZ3PrKJC6pvRUUPcyioRE1PrtSa7gxBjNdeT1vkrHydjAX7a9N2gFO3yR5MM4wV9G3us+r54cOnYo6vqcPJQNPEvlXN69/7pVYNDB0FCd3qyq//o9VCwuD7BoQ2svBMxv3borUjY/9dPGnr3uVnNB5Lcl1K3xyrGOQ==
+ b=VWVOld+9bBLKTkcXpVL0/4yKBVRAN3rMGTtVULeAYGtmMRd4yvxAaGP3uQcrS0r6inQ9xjgTv7jnB6Op7kPmLDnTN9Z97NzmalupoDRKOu03JfpRFf7ipHufXqxANfKrxVxHy1Vql4cv5asnsrTP5igt6Z59vnKw31XiAxcDgEjj+JL4bdLtoic2oxw3hTwSqOGVJE1j09TAG4fxoplF7u7YstVJernNHc9gVHM8nLiDuo3/QesTGnnvJiSSwB8bzEdyFPzNpJ6tsmTHRAXP3kwe55eC4rMr5n6LUH+zoycwBf0XhJQHjTsYNSk11ToWFVod+rt3dXNkI9z9utrV3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SVcYGJPV8gA9KQkremonr30a1xVoDPDDPtAv+ZsT1iQ=;
- b=EHbIfoL8+MEp/h2x2eXc0+W3OjEwcc1OnrkaGofqdJdGiZK0Wgc0p4EpbA+X5OetHaMUmDcJkWmpdwihLJ52P5xzf7CLHVHPPbzCyD7gQNBgs26wvM6C1qwv0nxvFsFrUsWeF38p8IDo7gStVdMnvgif3KddE3bKClno3oJp4kYCyWRzfqnVeiGtvNbdUut4yhD8r+CfYcXOl2pIoPGU+0CnqP70FyLnEAdlSDnpiZ+eJSsuSCwdHd/aKZwBLMHlD+hlEikkQVooUMmTQjWToFwsvzZjaP7WdUquZo3XRnWYjROtqCMvZKH7Ug5uivCTvRBxJ+tXjNOcPJLFX3y1DA==
+ bh=H5qu5+17u/0VWKMIPhVIJQlbj/rq/0soB63Y+o61CTE=;
+ b=igvKz1cniIqDoMkhHimsosRONm+EOx4pIenjkxSwZ7r9bxwQ8kqDbObtwZhmQz+AdAIRpYaFABy9tZJLb2b/PUJC01O52dhf66kXQnSf1zvvdE9ZcZS+sIj9TNKuXU421Lq87WrNP+ubRDBEuoLeBgskKtQv1GXUBRv9XEP0hhYjdZolhcNf5h8doWOmPY/QF+a7eumJkIoxAEdYsBbH9rYU9p0kSXEQdnVnqkjG27yKBGWpngdJ2xVPCwzHBSWUs9kQyK6wqQlGQLiPC/+XQ5/jEPLId7vgOsYKtV8AsiF9a3lN/p6J8RYFX5EjP/GwzS+/H3s8SQ/taSaz/V/WMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SVcYGJPV8gA9KQkremonr30a1xVoDPDDPtAv+ZsT1iQ=;
- b=li86jQA6tZJ6fditXRs5cJb0vbjqjFeDyqnZR574VvyYnG5ptQixCv8lu21bECjFmoCtRy3at8A7DCW9evvSb++KieFI8u0xNIGJASixiq40DAhRg5u8IkZMThYDel+cyx2uX3TG2lu2udNVEv6RTqy+KegzKIV8qoTq2VCpW+0=
-Authentication-Results: vger.kernel.org; dkim=none (message not signed)
- header.d=none;vger.kernel.org; dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5103.namprd12.prod.outlook.com (2603:10b6:5:392::13)
- by DM4PR12MB5343.namprd12.prod.outlook.com (2603:10b6:5:39f::19) with
+ bh=H5qu5+17u/0VWKMIPhVIJQlbj/rq/0soB63Y+o61CTE=;
+ b=U6TOZdqbmphewaKcUEd1+/X7xYQjRdLbd3KuTO0VlDPexcVDLdveOeh+qA+UYFDQ/E/A/darv637AqIamkqUFRitv1ZDTjI+tzU2Qe63sYhR7EfTUZtbVnYqOOoDryNhCDNY/AWv7dWhjDMQO01ziutE5sQmA+sfo2kfP0Q/EIc=
+Received: from CH0PR12MB5265.namprd12.prod.outlook.com (2603:10b6:610:d0::22)
+ by CH2PR12MB5516.namprd12.prod.outlook.com (2603:10b6:610:6b::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.18; Thu, 5 Aug
- 2021 13:06:31 +0000
-Received: from DM4PR12MB5103.namprd12.prod.outlook.com
- ([fe80::d1b7:9fe6:834d:5984]) by DM4PR12MB5103.namprd12.prod.outlook.com
- ([fe80::d1b7:9fe6:834d:5984%3]) with mapi id 15.20.4394.017; Thu, 5 Aug 2021
- 13:06:30 +0000
-Subject: Re: [PATCH v2 2/4] thunderbolt: Handle ring interrupt by reading intr
- status
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Sanjay R Mehta <Sanju.Mehta@amd.com>
-Cc:     andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, Basavaraj.Natikar@amd.com,
-        linux-usb@vger.kernel.org
-References: <1627994096-99972-1-git-send-email-Sanju.Mehta@amd.com>
- <1627994096-99972-3-git-send-email-Sanju.Mehta@amd.com>
- <YQq21heIOiSeHqJ1@lahna> <YQvgD/4OA9enELwm@lahna>
-From:   Sanjay R Mehta <sanmehta@amd.com>
-Message-ID: <27bbe268-fd1f-8a72-7ba2-76eb82d3185e@amd.com>
-Date:   Thu, 5 Aug 2021 18:36:17 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
-In-Reply-To: <YQvgD/4OA9enELwm@lahna>
-Content-Type: text/plain; charset=utf-8
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4373.20; Thu, 5 Aug
+ 2021 13:49:25 +0000
+Received: from CH0PR12MB5265.namprd12.prod.outlook.com
+ ([fe80::fd7b:1e59:44fb:44fd]) by CH0PR12MB5265.namprd12.prod.outlook.com
+ ([fe80::fd7b:1e59:44fb:44fd%9]) with mapi id 15.20.4373.026; Thu, 5 Aug 2021
+ 13:49:24 +0000
+X-SNPS-Relay: synopsys.com
+From:   Artur Petrosyan <Arthur.Petrosyan@synopsys.com>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-samsung-soc@vger.kernel.org" 
+        <linux-samsung-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 1/2] usb: dwc2: rename DWC2_POWER_DOWN_PARAM_NONE state
+Thread-Topic: [PATCH 1/2] usb: dwc2: rename DWC2_POWER_DOWN_PARAM_NONE state
+Thread-Index: AQHXiSYbmD399Z0pn0uw+0FNmkO/Sg==
+Date:   Thu, 5 Aug 2021 13:49:24 +0000
+Message-ID: <CH0PR12MB5265A61756A08A29362D8F77A7F29@CH0PR12MB5265.namprd12.prod.outlook.com>
+References: <CGME20210804114433eucas1p134417b605abeb57728d358fc2f42162b@eucas1p1.samsung.com>
+ <20210804114421.10282-1-m.szyprowski@samsung.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA1PR01CA0102.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:1::18) To DM4PR12MB5103.namprd12.prod.outlook.com
- (2603:10b6:5:392::13)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: samsung.com; dkim=none (message not signed)
+ header.d=none;samsung.com; dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 16e9c81c-dcd0-4f6d-3afd-08d95817d621
+x-ms-traffictypediagnostic: CH2PR12MB5516:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <CH2PR12MB5516C14F4ABC191975DD308EA7F29@CH2PR12MB5516.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:6790;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fkABB3HVlsqcmDetH0TDBGtEuWmKshm9AV+LfvBQGZN3b1R7uOZkZDjcYwI4+wdb9iFlMaYMA7U4x8YbF+oovyMUGi10yQTtVg5EZfzMSjRlZHi7Cer8J/d+Jt7KW/NJAffU4Hyq+pe3g13RYwcnIJYRCib7ngcBXmp82V+o8O2jyrMD0+qwKe4FJJYBAmWEX3yFIPD7EXtan/dxWes70LOrM3NnRS76lmBsiFA2lVp1dsit4xVQgDkjYNM8XEPgQsXWnoUMlDIxVSWue7lVOEWrjrpULTmI/f6Zp0CJ4ZIg5CnnVKrUnqzrt56evhBes0cT9jydkiEAiHqiNJ9ZhTD4XxBXQIjyuZVMldLKYZnlbUv3Dqd6tPBiqXYy9urErOedu6F7WjsgDHh7prz/tB/5GpjaJDXN8znKCLDjKbTWFhyU9RfhDScwryfG3g4TQufLsxm/+K8C5qyDQcX3hygtNtLypgb73LlNWVZLkYg13msP0zcolIGs/eeIlgu52E913oy7sLFrNnxH/5vcK2BuT8sXmbhSAq6Zx0GoBAEpkPY+8T0s8GX+ZrFuTYK1zNbL2fA99S6RfXGfVDpyk8a9BievbEkGe+h0mfEHySitUl6OAVQh7UW6nuQ06lsHYgiIkDqH3v1hem210e/eVjbZS6ZW2QEbz6jTJWYxlhUGnAxGhWlytxSg4vKGD1BXne8Lw5lwaHxTpTlBC6Cigbnb1OaozZtG+r3yrrYZrFNYWh37WfQLfCmh4238LaZAIFmi/7aByakOPRHH2FnjVuFdFL4O8ktvuqICUXn9dsQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR12MB5265.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(136003)(366004)(346002)(39860400002)(396003)(376002)(55016002)(9686003)(4326008)(2906002)(7696005)(38100700002)(8936002)(52536014)(53546011)(6506007)(71200400001)(26005)(122000001)(33656002)(86362001)(83380400001)(5660300002)(478600001)(186003)(8676002)(91956017)(966005)(66556008)(66446008)(64756008)(66476007)(66946007)(316002)(76116006)(110136005)(54906003)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?s5nMrfu04ndN2JZsoMejBpzRWckMjyuXJFLMvOYm59WC6OZ1LM681/pSe4pB?=
+ =?us-ascii?Q?UJTCY5qjqsLibCLepHVxP4lJrLxlcrgpR97uBGf6/w7Kcsm5Nb4EwyEX/v9y?=
+ =?us-ascii?Q?26tEfs9vOBl5ZhTb4yWG+0zJZ0hArqe2CHX6dBMljUzRhcy/9BaU8u1Qj0LD?=
+ =?us-ascii?Q?MN9Cliax5ahUpWm9MCoaPovzkgM/+ak5mcJ24idzCPmfMCwg1Nsh8lCWYfct?=
+ =?us-ascii?Q?FUgihDDO49flmL1pKlyJLS7ZJwWeEqntO08xw2NJpV3vhR7sW1rDjBUikBLk?=
+ =?us-ascii?Q?clWNdN61wVtt0bBM1jcawhjZyy3MWBc8dJzEtfQ0ybS6TLih7FWyjfKGkVET?=
+ =?us-ascii?Q?C200vy/XALLvTox3VV76DnGgXTURIVY0MoneL3KTg5+4rrIxvg2wSJE+1DkT?=
+ =?us-ascii?Q?wmMa+e1RdIDP7hLuh36utn9uxm3yXLD4Y3XwvKs6Wud4OJNsAFOx6L6q4Why?=
+ =?us-ascii?Q?T5KOtl+LbnShF4KThWWxY3yny9SmCe8sV2VlU9dWAEioV5gF2jeXsnR4/upe?=
+ =?us-ascii?Q?DnVZLk7mOa3BCq9B1m6XzqCwBwSo4ukaLbNPkbptskoW9IgNBO7i3rtO/6zI?=
+ =?us-ascii?Q?nY4ANPy1y6XYY5DbkYAzUcl/bucK8N0VQbcI/v9IdBZAhrV23B59AgH/apz2?=
+ =?us-ascii?Q?3rrL5uiTzgzg8zb/GbnrQ8vTCIOhLTe/g+0Wn9oCaOG8CLEzA5tD3wnukoSQ?=
+ =?us-ascii?Q?G/Xu50grj5BhVG0WGaLVqANpWiaEuMDnyO/7Byz1Xsapvt6DYSadSvZrAXgT?=
+ =?us-ascii?Q?7zYbqiEAcbuBcNfhy1NIOosWrsAntqOfUBsEVXUYrwP6JL7orORKTTYcsB2a?=
+ =?us-ascii?Q?toBKoIMIvNy+lpnqpQfuWHdTyzxp8NYhgDKEM6JsRCwG274iud2YoMjI8CFA?=
+ =?us-ascii?Q?XokGijVzjfDjRuTC58otLPsk0i+urhi0Lnb/d8GQdqrB3LB/b6aZmAk3HObP?=
+ =?us-ascii?Q?RRTET4zZQRZjJSF1iVD4uk6pB/Ec8XS5lzwQpTRdcXiHUzt0XlbsGR2X6gBO?=
+ =?us-ascii?Q?EIjO/FyatzAf9xvuEFBfcdJZ5l4NDseqCsOOEiWvY4Q5TOHIslYqzGc9dyB7?=
+ =?us-ascii?Q?16eiNpuzjc6CVNovKkmYve12HdU0WzKU+Msirz+dO8Hy4WjGK+SUzWNG7R3O?=
+ =?us-ascii?Q?DpYBVT5Wwd5GkrPPURh4RqlXoOuiyAc1vP4SlO/uj/DyrXm+Z8QmG1znPBEg?=
+ =?us-ascii?Q?mbW/dvo3EM/CniGPBfTq9sFl4oE8ysOyTm570dejFg7wjPqizdQnKjuUVddl?=
+ =?us-ascii?Q?XlGrQzzYHgGX8AdB+QZ+TjITBdUV8xl1tuWEkYr9Ac6WYU8Ss1fdTEg2XDff?=
+ =?us-ascii?Q?294leVo+kZDabH0Cv6z69F/e?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from [10.136.44.125] (165.204.157.251) by MA1PR01CA0102.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a00:1::18) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4394.15 via Frontend Transport; Thu, 5 Aug 2021 13:06:27 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 56c8e88c-ea55-4e7f-2d01-08d95811d78d
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5343:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <DM4PR12MB53431D9BA781670EF074A353E5F29@DM4PR12MB5343.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wYQLROS01VkQEKLIliS6YI9yKWKcsekmx91sMOZd0cIvi0HOkxIe246dxlgP4Zu+aGdygg9cqJUYWy9GBBxyggqFdraJMYOnmPQf66S/IvYwGoQcP7CE+em2WIKRZjvEMSpZ3F4xO1MzmKgPohIAvRFT+mH55ylbUxX81hXVIps2NobVTJL1KWZSMBGWfX1fOnTbEEw3rKrPFL4TyvEITySj/6JeGB3D6iuZovcY0G+qn0fSFzbumssoblUcZwc4o6ppklXEYxBrgArfPJq+XJ7n8V3aiexSbW01g7EI6SSngfyaVsPF5qArb0eZtr3z3JDNIUFK9Fn4CJ1bnN6nHb82bU6PEMD4HC82cLFHsJ/0OzmeUUvC98WuWW+Ytp+cEYZeYgxpy4d1qqahSXmyHCSsYwfNLQXJXTy2AvpYLtd9mR3RVI3GfKV+/iWhqLpyNNAS2EmjVwxN2QAljiK/z0arNBsR4HhDlOM0tsMKL26yw4Wtubo/XejtRD0YB0jY2bbX8DTU47EFuNXlMwo2gcEYeTYSvPjkt2crEf9xTPYPWOv+62Hec3BAyoIZzzsZ0q9Wh1x9KjHpht3aE6wIFi88ovg6O7egzhJqX711skjOS3tcy0tt5ISgONYseOWpPkiWpMrn6Bu1nnHHze+i8kEefCm1njJdNVG6Kc/NXOM640/RpBv1N5EG+hfrlFb7vB9MOjEgzfaEpx7RCSsyIVn+EksFh9dgFfXxrj+Kep0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5103.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(39860400002)(346002)(376002)(366004)(136003)(396003)(53546011)(16576012)(110136005)(31686004)(6486002)(38100700002)(956004)(2616005)(66476007)(66946007)(5660300002)(36756003)(6666004)(66556008)(2906002)(478600001)(316002)(31696002)(4326008)(8676002)(8936002)(186003)(6636002)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MmxtMm5ZaFNVYlFZQlBYcWQvZUxLV3F0WDdiOHBSc2lDeFlvWnJIbFlteG85?=
- =?utf-8?B?akg0ajZwN3UvS2xwSzhOMjFVYUdYN2x0UTA5bHBxZ1ZreVhHdGZ0LzhMTTlk?=
- =?utf-8?B?WEx4UVpud3NmaFJTeHVCZjMyNmFSZVpoQXMxdFFPYkFiVFBtYzNpSmpjZXg0?=
- =?utf-8?B?Uy84UEJLU0pYVnZwUzdMNm5wR2NsNDNjWXV0OUtJZUs4VGZHanFPZUQ0eW9T?=
- =?utf-8?B?VzcvSU90Y0U1NEE2VXVIblRWY1JUdVRaN1lleWdHV1dZYVlKdWpYd2Zud3kr?=
- =?utf-8?B?TS8xRExwVzA5bnY0ZCtJa2dmcE9JZXV1d0hsek1ESjVKK1JvU2tVRDhBNFZV?=
- =?utf-8?B?bDByTnpVM09peDh5dEtLdlY5dWFyS29GWjF5MU5lcUJoRUZnZ0RqTzVhSU42?=
- =?utf-8?B?b2lucE1kR1dXY3VHQUNxdWRRQXNzckpEaHpqVU83ZkdBdElLa2o3RE9xR0xl?=
- =?utf-8?B?M3lYNERKSzkreVZCRnBzQmZCMjVRNWhwWEhrV3QzbldGYWlDWVZXR3kyT3lE?=
- =?utf-8?B?MkFuRWFCdEtvTCtXdmJpamJCMXhWUXQvd2Q4ellES29BVHlaekZaNWRnTFVK?=
- =?utf-8?B?ZWN3R0FHY2pkbjBvdzZ1TVZ0bWJ0VUo1WjJGNnZ1SkJPN21tbnpkQkFnUHRR?=
- =?utf-8?B?ODJheE1hMGVTdjhodDQwbytVckdKUzBabzIxeTRNamNxeTR1RjRlNTVyc1pp?=
- =?utf-8?B?NDl6MGxWVGhDbHJjTTljZ0RLdHNURXp5Z1hCTWxHV25peDNBMTlud0JDM0Rh?=
- =?utf-8?B?ajk5NTFUdlJDV0NBSTkzUGNIbURsV3hJQ2R3RjJkOFpFWmsvNytuYlVaenZU?=
- =?utf-8?B?MHcxaHdkUXBwaWJsSS9DZVZrSHRTUmNOYnovSHlsbGxkUXd3WVZra0toQnVP?=
- =?utf-8?B?b2syWnlLUnNFOE1FT2xMV1dUeXE1K1o1a1JCQzNZRVlKSGVnd0xjdFNFQTVn?=
- =?utf-8?B?cVhJS29Bcks5ZnlmMDdDakNTZFVKWnlLT1ZXU3lDSW5OSGd1bStUdFhUWWJ6?=
- =?utf-8?B?TUUzWWU5UVc1bXNieVpsZitDSkpNNDg2aTl0eTM1Vm9HZDNlWE9zaldZTFBG?=
- =?utf-8?B?QTVKN3dDOUJHKzBjZW5lQnA3Uk5pNVByRTRXQ09aejROdmw5cmZBQkNhUENX?=
- =?utf-8?B?UVNkd2xJdURiY1NTTDVuMU1LaVlLVUJwRHNGY0RSZ1JMS1ovWmZzaUVMdGdo?=
- =?utf-8?B?amhpS281MjZMS2RJZ3VjcmpQUFNwa01tNW15UktIaWFWSnBVWmdIV3RldjVv?=
- =?utf-8?B?YWRpM3pzUExNZFhoZW1JdE9ncGxiSGhwMHpuUnJNZ2JSWGFWWFhBd005S21Y?=
- =?utf-8?B?WmtkZFJ6VWpVMWN6aVYwaHA4RjV6aWJJS3g2a0JtMERSVFZ6ejA5SVpIZDVD?=
- =?utf-8?B?VlFJUmVJeFJQN0NPamxUNzg1MG5XNzRIS1BtU2UyWTJpMmRaR3crQUd2bmhs?=
- =?utf-8?B?RUpMSE1RSW5CTkp4NkFNOVU3UmIwN2xDQUhXQmhodkRpYXRVOExwNXpOZzZC?=
- =?utf-8?B?eXdXTHlaRVIyU0w0cUNwRXU5UGJ3OGFRYzdCMkphMTB1eDNlVnZjcVRBME5S?=
- =?utf-8?B?eHBwVEhsRFNCeVJUVjlxOHBOZ0Fvd3A2OTlzbmZYeDM2azhWVjZkS0xPQi9T?=
- =?utf-8?B?Mm1QSWdORnN3UFd0THduTUlPNndQZ044M05HOUpKL2hkQlQzMjU5T1N4blov?=
- =?utf-8?B?NWNzRVRaNVNZaTErandvRU81MDNva0p0QVFHNzNNMEQvS2NjYkJIVlp4djg1?=
- =?utf-8?Q?LfKbc1mJJqIg5TbMe8pdHeyBQFTVQNVSG7CG1yN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56c8e88c-ea55-4e7f-2d01-08d95811d78d
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5103.namprd12.prod.outlook.com
+X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2021 13:06:30.7242
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR12MB5265.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 16e9c81c-dcd0-4f6d-3afd-08d95817d621
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Aug 2021 13:49:24.8216
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vgpfX0rvdupAIbJ75GBrmJcQVDehQbfkore7nCI//Q21SjvavhiN0YlQsdhUGKY5gm5aHJwb2JqTcGwRnW3A7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5343
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MWOyCq/3tgSslIL10n/4obNkgxLL3Rju4BqdP45YAHkbP6tiCyvM6ZIxHz7ZRFsVINF9g58rQxVBJ/xVoyrWcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB5516
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-On 8/5/2021 6:26 PM, Mika Westerberg wrote:
-> [CAUTION: External Email]
-> 
-> On Wed, Aug 04, 2021 at 06:48:45PM +0300, Mika Westerberg wrote:
->> Hi,
->>
->> On Tue, Aug 03, 2021 at 07:34:54AM -0500, Sanjay R Mehta wrote:
->>> From: Sanjay R Mehta <sanju.mehta@amd.com>
->>>
->>> As per USB4 spec by default "Disable ISR Auto-Clear" bit is set to 0,
->>> and the Tx/Rx ring interrupt status is needs to be cleared.
->>>
->>> Hence handling it by reading the "Interrupt status" register in the ISR.
->>>
->>> Signed-off-by: Basavaraj Natikar <Basavaraj.Natikar@amd.com>
->>> Signed-off-by: Sanjay R Mehta <sanju.mehta@amd.com>
->>> ---
->>>  drivers/thunderbolt/nhi.c | 14 ++++++++++++++
->>>  1 file changed, 14 insertions(+)
->>>
->>> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
->>> index ef01aa6..7ad2202 100644
->>> --- a/drivers/thunderbolt/nhi.c
->>> +++ b/drivers/thunderbolt/nhi.c
->>> @@ -373,11 +373,25 @@ void tb_ring_poll_complete(struct tb_ring *ring)
->>>  }
->>>  EXPORT_SYMBOL_GPL(tb_ring_poll_complete);
->>>
->>> +static void check_and_clear_intr_status(struct tb_ring *ring)
->>> +{
->>> +   if (!(ring->nhi->pdev->vendor == PCI_VENDOR_ID_INTEL)) {
->>> +           if (ring->is_tx)
->>> +                   ioread32(ring->nhi->iobase
->>> +                            + REG_RING_NOTIFY_BASE);
->>> +           else
->>> +                   ioread32(ring->nhi->iobase
->>> +                            + REG_RING_NOTIFY_BASE
->>> +                            + 4 * (ring->nhi->hop_count / 32));
->>> +   }
->>> +}
->>
->> I'm now playing with this series on Intel hardware. I wanted to check
->> from you whether the AMD controller implements the Auto-Clear feature? I
->> mean if we always clear bit 17 of the Host Interface Control register do
->> you still need to call the above or it is cleared automatically?
->>
->> I'm hoping that we could make this work on all controllers without too
->> many special cases ;-)
-> 
-> I mean if you replace patches 1 and 2 in this series with the below,
-> does it work with the AMD controller too?
-> 
-Actually, it wont work on AMD controller because explicit read operation
-of interrupt status is required to clear it.
-
-> diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-> index fa44332845a1..8a5656fb956f 100644
-> --- a/drivers/thunderbolt/nhi.c
-> +++ b/drivers/thunderbolt/nhi.c
-> @@ -71,10 +71,14 @@ static void ring_interrupt_active(struct tb_ring *ring, bool active)
->                  * since we already know which interrupt was triggered.
->                  */
->                 misc = ioread32(ring->nhi->iobase + REG_DMA_MISC);
-> -               if (!(misc & REG_DMA_MISC_INT_AUTO_CLEAR)) {
-> +               /* Special bit for Intel */
-> +               if (ring->nhi->pdev->vendor == PCI_VENDOR_ID_INTEL &&
-> +                   !(misc & REG_DMA_MISC_INT_AUTO_CLEAR))
->                         misc |= REG_DMA_MISC_INT_AUTO_CLEAR;
-> -                       iowrite32(misc, ring->nhi->iobase + REG_DMA_MISC);
-> -               }
-> +               /* USB4 clear the disable auto-clear bit */
-> +               if (misc & BIT(17))
-> +                       misc &= ~BIT(17);
-> +               iowrite32(misc, ring->nhi->iobase + REG_DMA_MISC);
-> 
->                 ivr_base = ring->nhi->iobase + REG_INT_VEC_ALLOC_BASE;
->                 step = index / REG_INT_VEC_ALLOC_REGS * REG_INT_VEC_ALLOC_BITS;
-> 
+Hi Marek,=0A=
+=0A=
+On 8/4/2021 3:44 PM, Marek Szyprowski wrote:=0A=
+> DWC2_POWER_DOWN_PARAM_NONE really means that the driver still uses clock=
+=0A=
+> gating to save power when hardware is not used. Rename the state name to=
+=0A=
+> DWC2_POWER_DOWN_PARAM_CLOCK_GATING to match the driver behavior.=0A=
+> =0A=
+> Suggested-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>=0A=
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>=0A=
+> ---=0A=
+> This is a follow-up of this discussion:=0A=
+> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/26099de1-82=
+6f-42bf-0de7-759a47faf4a0@samsung.com/__;!!A4F2R9G_pg!MIGkDa9hfT_3k8EATqQs_=
+UYCb7yXMN18CC-gsrNOMI8NqZzAok3DZA6G04fgkS_4H52snpA$=0A=
+> =0A=
+> This should be applied on top of v5.14-rc3.=0A=
+> ---=0A=
+>   drivers/usb/dwc2/core.h      |  4 ++--=0A=
+>   drivers/usb/dwc2/core_intr.c |  8 ++++----=0A=
+>   drivers/usb/dwc2/hcd.c       | 10 +++++-----=0A=
+>   drivers/usb/dwc2/params.c    | 22 +++++++++++-----------=0A=
+>   drivers/usb/dwc2/platform.c  |  2 +-=0A=
+>   5 files changed, 23 insertions(+), 23 deletions(-)=0A=
+> =0A=
+> diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h=0A=
+> index cb9059a8444b..38b6733d26ec 100644=0A=
+> --- a/drivers/usb/dwc2/core.h=0A=
+> +++ b/drivers/usb/dwc2/core.h=0A=
+> @@ -382,7 +382,7 @@ enum dwc2_ep0_state {=0A=
+>    *			If power_down is enabled, the controller will enter=0A=
+>    *			power_down in both peripheral and host mode when=0A=
+>    *			needed.=0A=
+> - *			0 - No (default)=0A=
+> + *			0 - Clock gating (default)=0A=
+>    *			1 - Partial power down=0A=
+>    *			2 - Hibernation=0A=
+>    * @no_clock_gating:	Specifies whether to avoid clock gating feature.=
+=0A=
+> @@ -482,7 +482,7 @@ struct dwc2_core_params {=0A=
+>   	bool external_id_pin_ctl;=0A=
+>   =0A=
+>   	int power_down;=0A=
+> -#define DWC2_POWER_DOWN_PARAM_NONE		0=0A=
+> +#define DWC2_POWER_DOWN_PARAM_CLOCK_GATING	0=0A=
+>   #define DWC2_POWER_DOWN_PARAM_PARTIAL		1=0A=
+>   #define DWC2_POWER_DOWN_PARAM_HIBERNATION	2=0A=
+>   	bool no_clock_gating;=0A=
+> diff --git a/drivers/usb/dwc2/core_intr.c b/drivers/usb/dwc2/core_intr.c=
+=0A=
+> index a5c52b237e72..660abff1d42b 100644=0A=
+> --- a/drivers/usb/dwc2/core_intr.c=0A=
+> +++ b/drivers/usb/dwc2/core_intr.c=0A=
+> @@ -327,7 +327,7 @@ static void dwc2_handle_session_req_intr(struct dwc2_=
+hsotg *hsotg)=0A=
+>   =0A=
+>   			/* Exit gadget mode clock gating. */=0A=
+>   			if (hsotg->params.power_down =3D=3D=0A=
+> -			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)=0A=
+> +			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)=0A=
+>   				dwc2_gadget_exit_clock_gating(hsotg, 0);=0A=
+>   		}=0A=
+>   =0A=
+> @@ -438,7 +438,7 @@ static void dwc2_handle_wakeup_detected_intr(struct d=
+wc2_hsotg *hsotg)=0A=
+>   =0A=
+>   			/* Exit gadget mode clock gating. */=0A=
+>   			if (hsotg->params.power_down =3D=3D=0A=
+> -			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)=0A=
+> +			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)=0A=
+>   				dwc2_gadget_exit_clock_gating(hsotg, 0);=0A=
+>   		} else {=0A=
+>   			/* Change to L0 state */=0A=
+> @@ -455,7 +455,7 @@ static void dwc2_handle_wakeup_detected_intr(struct d=
+wc2_hsotg *hsotg)=0A=
+>   			}=0A=
+>   =0A=
+>   			if (hsotg->params.power_down =3D=3D=0A=
+> -			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)=0A=
+> +			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)=0A=
+>   				dwc2_host_exit_clock_gating(hsotg, 1);=0A=
+>   =0A=
+>   			/*=0A=
+> @@ -551,7 +551,7 @@ static void dwc2_handle_usb_suspend_intr(struct dwc2_=
+hsotg *hsotg)=0A=
+>   					dev_err(hsotg->dev,=0A=
+>   						"enter hibernation failed\n");=0A=
+>   				break;=0A=
+> -			case DWC2_POWER_DOWN_PARAM_NONE:=0A=
+> +			case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:=0A=
+>   				/*=0A=
+>   				 * If neither hibernation nor partial power down are supported,=0A=
+>   				 * clock gating is used to save power.=0A=
+> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c=0A=
+> index 2a7828971d05..067f2770c2ef 100644=0A=
+> --- a/drivers/usb/dwc2/hcd.c=0A=
+> +++ b/drivers/usb/dwc2/hcd.c=0A=
+> @@ -3333,7 +3333,7 @@ int dwc2_port_suspend(struct dwc2_hsotg *hsotg, u16=
+ windex)=0A=
+>   			dev_err(hsotg->dev, "enter hibernation failed.\n");=0A=
+>   		spin_lock_irqsave(&hsotg->lock, flags);=0A=
+>   		break;=0A=
+> -	case DWC2_POWER_DOWN_PARAM_NONE:=0A=
+> +	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:=0A=
+>   		/*=0A=
+>   		 * If not hibernation nor partial power down are supported,=0A=
+>   		 * clock gating is used to save power.=0A=
+> @@ -3701,7 +3701,7 @@ static int dwc2_hcd_hub_control(struct dwc2_hsotg *=
+hsotg, u16 typereq,=0A=
+>   			}=0A=
+>   =0A=
+>   			if (hsotg->params.power_down =3D=3D=0A=
+> -			    DWC2_POWER_DOWN_PARAM_NONE && hsotg->bus_suspended)=0A=
+> +			    DWC2_POWER_DOWN_PARAM_CLOCK_GATING && hsotg->bus_suspended)=0A=
+>   				dwc2_host_exit_clock_gating(hsotg, 0);=0A=
+>   =0A=
+>   			pcgctl =3D dwc2_readl(hsotg, PCGCTL);=0A=
+> @@ -4398,7 +4398,7 @@ static int _dwc2_hcd_suspend(struct usb_hcd *hcd)=
+=0A=
+>   		/* After entering suspend, hardware is not accessible */=0A=
+>   		clear_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);=0A=
+>   		break;=0A=
+> -	case DWC2_POWER_DOWN_PARAM_NONE:=0A=
+> +	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:=0A=
+>   		/*=0A=
+>   		 * If not hibernation nor partial power down are supported,=0A=
+>   		 * clock gating is used to save power.=0A=
+> @@ -4482,7 +4482,7 @@ static int _dwc2_hcd_resume(struct usb_hcd *hcd)=0A=
+>   		 */=0A=
+>   		set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);=0A=
+>   		break;=0A=
+> -	case DWC2_POWER_DOWN_PARAM_NONE:=0A=
+> +	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:=0A=
+>   		/*=0A=
+>   		 * If not hibernation nor partial power down are supported,=0A=
+>   		 * port resume is done using the clock gating programming flow.=0A=
+> @@ -4680,7 +4680,7 @@ static int _dwc2_hcd_urb_enqueue(struct usb_hcd *hc=
+d, struct urb *urb,=0A=
+>   				"exit partial_power_down failed\n");=0A=
+>   	}=0A=
+>   =0A=
+> -	if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_NONE &&=0A=
+> +	if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING =
+&&=0A=
+>   	    hsotg->bus_suspended) {=0A=
+>   		if (dwc2_is_device_mode(hsotg))=0A=
+>   			dwc2_gadget_exit_clock_gating(hsotg, 0);=0A=
+> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c=0A=
+> index 59e119345994..dac26410b575 100644=0A=
+> --- a/drivers/usb/dwc2/params.c=0A=
+> +++ b/drivers/usb/dwc2/params.c=0A=
+> @@ -68,14 +68,14 @@ static void dwc2_set_his_params(struct dwc2_hsotg *hs=
+otg)=0A=
+>   	p->ahbcfg =3D GAHBCFG_HBSTLEN_INCR16 <<=0A=
+>   		GAHBCFG_HBSTLEN_SHIFT;=0A=
+>   	p->change_speed_quirk =3D true;=0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   }=0A=
+>   =0A=
+>   static void dwc2_set_s3c6400_params(struct dwc2_hsotg *hsotg)=0A=
+>   {=0A=
+>   	struct dwc2_core_params *p =3D &hsotg->params;=0A=
+>   =0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   	p->no_clock_gating =3D true;=0A=
+>   	p->phy_utmi_width =3D 8;=0A=
+>   }=0A=
+> @@ -90,7 +90,7 @@ static void dwc2_set_rk_params(struct dwc2_hsotg *hsotg=
+)=0A=
+>   	p->host_perio_tx_fifo_size =3D 256;=0A=
+>   	p->ahbcfg =3D GAHBCFG_HBSTLEN_INCR16 <<=0A=
+>   		GAHBCFG_HBSTLEN_SHIFT;=0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   }=0A=
+>   =0A=
+>   static void dwc2_set_ltq_params(struct dwc2_hsotg *hsotg)=0A=
+> @@ -120,7 +120,7 @@ static void dwc2_set_amlogic_params(struct dwc2_hsotg=
+ *hsotg)=0A=
+>   	p->phy_type =3D DWC2_PHY_TYPE_PARAM_UTMI;=0A=
+>   	p->ahbcfg =3D GAHBCFG_HBSTLEN_INCR8 <<=0A=
+>   		GAHBCFG_HBSTLEN_SHIFT;=0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   }=0A=
+>   =0A=
+>   static void dwc2_set_amlogic_g12a_params(struct dwc2_hsotg *hsotg)=0A=
+> @@ -179,7 +179,7 @@ static void dwc2_set_stm32mp15_fsotg_params(struct dw=
+c2_hsotg *hsotg)=0A=
+>   	p->activate_stm_fs_transceiver =3D true;=0A=
+>   	p->activate_stm_id_vb_detection =3D true;=0A=
+>   	p->ahbcfg =3D GAHBCFG_HBSTLEN_INCR16 << GAHBCFG_HBSTLEN_SHIFT;=0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   	p->host_support_fs_ls_low_power =3D true;=0A=
+>   	p->host_ls_low_power_phy_clk =3D true;=0A=
+>   }=0A=
+> @@ -194,7 +194,7 @@ static void dwc2_set_stm32mp15_hsotg_params(struct dw=
+c2_hsotg *hsotg)=0A=
+>   	p->host_nperio_tx_fifo_size =3D 256;=0A=
+>   	p->host_perio_tx_fifo_size =3D 256;=0A=
+>   	p->ahbcfg =3D GAHBCFG_HBSTLEN_INCR16 << GAHBCFG_HBSTLEN_SHIFT;=0A=
+> -	p->power_down =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +	p->power_down =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   	p->lpm =3D false;=0A=
+>   	p->lpm_clock_gating =3D false;=0A=
+>   	p->besl =3D false;=0A=
+> @@ -339,7 +339,7 @@ static void dwc2_set_param_power_down(struct dwc2_hso=
+tg *hsotg)=0A=
+>   	else if (hsotg->hw_params.power_optimized)=0A=
+>   		val =3D DWC2_POWER_DOWN_PARAM_PARTIAL;=0A=
+>   	else=0A=
+> -		val =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +		val =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   =0A=
+>   	hsotg->params.power_down =3D val;=0A=
+>   }=0A=
+> @@ -585,27 +585,27 @@ static void dwc2_check_param_power_down(struct dwc2=
+_hsotg *hsotg)=0A=
+>   	int param =3D hsotg->params.power_down;=0A=
+>   =0A=
+>   	switch (param) {=0A=
+> -	case DWC2_POWER_DOWN_PARAM_NONE:=0A=
+> +	case DWC2_POWER_DOWN_PARAM_CLOCK_GATING:=0A=
+>   		break;=0A=
+>   	case DWC2_POWER_DOWN_PARAM_PARTIAL:=0A=
+>   		if (hsotg->hw_params.power_optimized)=0A=
+>   			break;=0A=
+>   		dev_dbg(hsotg->dev,=0A=
+>   			"Partial power down isn't supported by HW\n");=0A=
+> -		param =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +		param =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   		break;=0A=
+>   	case DWC2_POWER_DOWN_PARAM_HIBERNATION:=0A=
+>   		if (hsotg->hw_params.hibernation)=0A=
+>   			break;=0A=
+>   		dev_dbg(hsotg->dev,=0A=
+>   			"Hibernation isn't supported by HW\n");=0A=
+> -		param =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +		param =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   		break;=0A=
+>   	default:=0A=
+>   		dev_err(hsotg->dev,=0A=
+>   			"%s: Invalid parameter power_down=3D%d\n",=0A=
+>   			__func__, param);=0A=
+> -		param =3D DWC2_POWER_DOWN_PARAM_NONE;=0A=
+> +		param =3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING;=0A=
+>   		break;=0A=
+>   	}=0A=
+>   =0A=
+> diff --git a/drivers/usb/dwc2/platform.c b/drivers/usb/dwc2/platform.c=0A=
+> index c8f18f3ba9e3..7bd8fb6c1378 100644=0A=
+> --- a/drivers/usb/dwc2/platform.c=0A=
+> +++ b/drivers/usb/dwc2/platform.c=0A=
+> @@ -342,7 +342,7 @@ static int dwc2_driver_remove(struct platform_device =
+*dev)=0A=
+>   	}=0A=
+>   =0A=
+>   	/* Exit clock gating when driver is removed. */=0A=
+> -	if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_NONE &&=0A=
+> +	if (hsotg->params.power_down =3D=3D DWC2_POWER_DOWN_PARAM_CLOCK_GATING =
+&&=0A=
+>   	    hsotg->bus_suspended) {=0A=
+>   		if (dwc2_is_device_mode(hsotg))=0A=
+>   			dwc2_gadget_exit_clock_gating(hsotg, 0);=0A=
+> =0A=
+=0A=
+In function dwc2_port_resume() you didn't rename the =0A=
+"DWC2_POWER_DOWN_PARAM_NONE" to "DWC2_POWER_DOWN_PARAM_CLOCK_GATING" and =
+=0A=
+also didn't add a case for "DWC2_POWER_DOWN_PARAM_NONE".=0A=
+=0A=
+In any case when we tested the patchset we encountered a problem when =0A=
+using an external HUB connection to root HUB.=0A=
+=0A=
+If there is no device connected to the external HUB bus will be =0A=
+suspended by the autosuspend. If this situation by connecting any device =
+=0A=
+to the external hub ports we don't see dwc2_port_resume() function call =0A=
+and device remains not functional.=0A=
+=0A=
+Could you please perform the same test on your side and let us know the =0A=
+results?=0A=
+=0A=
+Regards,=0A=
+Artur=0A=
