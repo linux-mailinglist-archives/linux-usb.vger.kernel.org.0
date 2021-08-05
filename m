@@ -2,84 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2CB33E107A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 10:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB39A3E1097
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 10:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238659AbhHEIkk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 04:40:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41244 "EHLO mail.kernel.org"
+        id S239675AbhHEIyV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 04:54:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57512 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232749AbhHEIkj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 04:40:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0DF64610FB;
-        Thu,  5 Aug 2021 08:40:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628152826;
-        bh=RBha8mc8dqM4Ua20cyhF2bwe936Pq++roM5DsIEMLcg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UEKr9ttISJjeNRr+Gi+5pqpPtwbXxez4rAK/zJthQxqI60GiaVxYhm4l4EWtt3uV5
-         tz2NjQCNd9y7TQZOYjc/xlk6c7I1aHycemjNql5rTApQ8z95QdPrJs4pk/sqCNixZ1
-         F90KQNrBUh2X8EMp9i2M/rbm+5M9/UZ6yD0z8zpPrz6TCPQ9XiVIHVAzRCgzZmYu/C
-         ja3QrU1j1wP+VFGpOQNhGacR4wBNwJ4d7tOv9lQ0gearDpyY+tsYd73uKYn+YHlrBU
-         EOTihlsjm6ugae54fQ5/frmhSpj0nyX6MpFc0HFPg4j4ZrfubCHt0ZUd2ZE2cQcM2u
-         xnAGrJa6wVAHg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mBYum-0008Fe-UV; Thu, 05 Aug 2021 10:39:45 +0200
-Date:   Thu, 5 Aug 2021 10:39:44 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S232591AbhHEIyU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Aug 2021 04:54:20 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 946756105A;
+        Thu,  5 Aug 2021 08:54:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628153646;
+        bh=e4/+u67PQLWbwRW/+Zo90jHnaAIdfNh2nVTTaCbQ3qE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xkXbelI7vGun57y5T2hN2gh55i0InDf6HEC85ue0T7rmTck/pmBIxplf6QHNVOW18
+         0r/TvwuEkMCNVrK4HI3ADtkCtNJPXPK/l+MD40mHf2KkkfXVc3bT+F6+u8p/pFk2f8
+         AcCyz+tM3YL7TEZfSpscqnKq+tEnDKyx94IIxyp8=
+Date:   Thu, 5 Aug 2021 10:54:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial fixes for 5.14-rc5
-Message-ID: <YQuj0Nqq3YRXVLKh@hovoldconsulting.com>
+Subject: Re: [GIT PULL] USB-serial fixes for 5.14-rc5
+Message-ID: <YQunK2AvKEz/ysOz@kroah.com>
+References: <YQuj0Nqq3YRXVLKh@hovoldconsulting.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <YQuj0Nqq3YRXVLKh@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit ff1176468d368232b684f75e82563369208bc371:
+On Thu, Aug 05, 2021 at 10:39:44AM +0200, Johan Hovold wrote:
+> The following changes since commit ff1176468d368232b684f75e82563369208bc371:
+> 
+>   Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.14-rc5
 
-  Linux 5.14-rc3 (2021-07-25 15:35:14 -0700)
+Pulled and pushed out, thanks.
 
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-5.14-rc5
-
-for you to fetch changes up to 8da0e55c7988ef9f08a708c38e5c75ecd8862cf8:
-
-  USB: serial: ftdi_sio: add device ID for Auto-M3 OP-COM v2 (2021-08-05 09:47:25 +0200)
-
-----------------------------------------------------------------
-USB-serial fixes for 5.14-rc5
-
-Here are two type-detection regression fixes for pl2303 and a patch to
-increase the receive buffer size for for ch341 to avoid lost characters
-at high line speeds.
-
-Included are also some new device ids.
-
-All but the last three commits have been in linux-next and with no
-reported issues.
-
-----------------------------------------------------------------
-Daniele Palmas (1):
-      USB: serial: option: add Telit FD980 composition 0x1056
-
-David Bauer (1):
-      USB: serial: ftdi_sio: add device ID for Auto-M3 OP-COM v2
-
-Johan Hovold (2):
-      USB: serial: pl2303: fix HX type detection
-      USB: serial: pl2303: fix GT type detection
-
-Willy Tarreau (1):
-      USB: serial: ch341: fix character loss at high transfer rates
-
- drivers/usb/serial/ch341.c        |  1 +
- drivers/usb/serial/ftdi_sio.c     |  1 +
- drivers/usb/serial/ftdi_sio_ids.h |  3 +++
- drivers/usb/serial/option.c       |  2 ++
- drivers/usb/serial/pl2303.c       | 42 ++++++++++++++++++++++++---------------
- 5 files changed, 33 insertions(+), 16 deletions(-)
+greg k-h
