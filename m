@@ -2,144 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8CA23E0DD5
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 07:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BEE93E0F8E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 09:49:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235029AbhHEFkR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 01:40:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234832AbhHEFkQ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Aug 2021 01:40:16 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D668C0613C1
-        for <linux-usb@vger.kernel.org>; Wed,  4 Aug 2021 22:40:02 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id j1so6397536pjv.3
-        for <linux-usb@vger.kernel.org>; Wed, 04 Aug 2021 22:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=51DhxgLLj3oVTgO+Yt93dkTR66UP+XGV38AcifiutDo=;
-        b=aZ9gfJt7tWoRAh1e4EZ2vxtE8tdrM3/OkMxB6G+f/d+SsaXKfIKeC+lZJJ4KdaNqXv
-         YvRKy7WABqV9WttO1WUR0viz2JPHE/UNqxRlpRKKC6j2SZ381VLtRQ6XvWO/ucbFkAqV
-         P1Ghs69qgg4RNDU7X0SJHs/XaDPJe57Wkcecw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=51DhxgLLj3oVTgO+Yt93dkTR66UP+XGV38AcifiutDo=;
-        b=dUSGrL5Ify3SNgqjnurklqeidbtRZVjalqRV/SieRX0ahJnUd6fmOsSh/yGz06Ob9m
-         lEaCZwmvIEyJc+AM6NSUa/puWnfYBrUFp0Y1A9SCynmjhJs0z2kLhA/eDk88ydq7U3d4
-         7/OXPWXoB48RJAQQCDsrTxxyUIjYmNl/PhTON8rmAGXR6sCjLTzQoiY6vFREqd04N6aN
-         L9oULjifDDDgRb3Azgs9J13fZGogsWTA8hEHY+j5D305tR9+PwCtS3pWcKpDAZjMxoMs
-         Rx5mjZnWDKyvHpDXQRvgULw4gyr7/QfPeFjIZhAs5PSEdUxMNzlukNIESRX55wwD3IiM
-         +DEA==
-X-Gm-Message-State: AOAM53058BpSaoEgkmW+FRxJYPeeY/ol6JuL2Ex5mdKcKl4uzYM7pXQZ
-        bAVTyP9UBcy02YbmkgGRY83LQQ==
-X-Google-Smtp-Source: ABdhPJyHCuhOyC1Oy4T+eWgglbQq9jy/tHFCTFzoK9gzeT7ihh+02C9vYfXvv+9/aVeXVOSdzr30AA==
-X-Received: by 2002:a17:902:7804:b029:12c:de88:7d50 with SMTP id p4-20020a1709027804b029012cde887d50mr2329868pll.27.1628142001763;
-        Wed, 04 Aug 2021 22:40:01 -0700 (PDT)
-Received: from ikjn-p920.tpe.corp.google.com ([2401:fa00:1:10:7a1c:b216:fca0:2cc2])
-        by smtp.gmail.com with ESMTPSA id d22sm5448699pgi.73.2021.08.04.22.40.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Aug 2021 22:40:01 -0700 (PDT)
-From:   Ikjoon Jang <ikjn@chromium.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH] usb: xhci-mtk: relax TT periodic bandwidth allocation
-Date:   Thu,  5 Aug 2021 13:39:57 +0800
-Message-Id: <20210805133937.1.Ia8174b875bc926c12ce427a5a1415dea31cc35ae@changeid>
-X-Mailer: git-send-email 2.32.0.554.ge1b32706d8-goog
+        id S236102AbhHEHtu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 03:49:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232308AbhHEHtt (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Aug 2021 03:49:49 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 32B14610FD;
+        Thu,  5 Aug 2021 07:49:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628149776;
+        bh=uMY/yPIZhdKn84VyDd45WzssFi+YvcnO3wfh/yhpjLw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ck+x8v8TnwuWP9X93lUQXZSmaF4On/cPgNx1PNU2AJvVKZe7EglNX5+qzVn49uQ+D
+         oXWY+HRAy4QnUubsnXaipU2dOuRuRztrwAIabh4ULfpJywvr95IpTf1zDxh9fGoyPs
+         xQlSqvK66rMTu5CeyHyaBV2nfLZzeLlZMjLAlc+rmMcSfpUjJSZNSdcalHkqyQcCxm
+         3HnFhI+SVZfYNLauXW6LcVN3/bGT2gxwaw5fgQlcAU+7wR0yihwOx5z/pZa68OTUEO
+         Ea+Tz/fxygKg10yblNldp2MQV2FUpQZZVN4FK5HjnhhtyIVYgYqqBY0PyzKyauZvwz
+         kZBuc75Q4CLeg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mBY7a-0003Zy-D6; Thu, 05 Aug 2021 09:48:55 +0200
+Date:   Thu, 5 Aug 2021 09:48:54 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     David Bauer <mail@david-bauer.net>
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: ftdi_sio: add device ID for Auto-M3 OP-COM
+ v2
+Message-ID: <YQuX5n4Lr1ODO0V/@hovoldconsulting.com>
+References: <20210804232522.43330-1-mail@david-bauer.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210804232522.43330-1-mail@david-bauer.net>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently xhci-mtk needs software-managed bandwidth allocation for
-periodic endpoints, it allocates the microframe index for the first
-start-split packet for each endpoint. As this index allocation logic
-should avoid the conflicts with other full/low-speed periodic endpoints,
-it uses the worst case byte budgets on high-speed bus bandwidth
-For example, for an isochronos IN endpoint with 192 bytes budget,
-it will consume the whole 4 u-frames(188 * 4) while the actual
-full-speed bus budget should be just 192bytes.
+On Thu, Aug 05, 2021 at 01:25:22AM +0200, David Bauer wrote:
+> The Auto-M§ OP-COM v2 is a OBD diagnostic device using a FTD232 for the
+> USB connection.
+> 
+> Signed-off-by: David Bauer <mail@david-bauer.net>
 
-This patch changes the low/full-speed bandwidth allocation logic
-to use "approximate" best case budget for lower speed bandwidth
-management. For the same endpoint from the above example, the
-approximate best case budget is now reduced to (188 * 2) bytes.
+Applied, thanks.
 
-Without this patch, many usb audio headsets with 3 interfaces
-(audio input, audio output, and HID) cannot be configured
-on xhci-mtk.
-
-Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
----
-
- drivers/usb/host/xhci-mtk-sch.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-mtk-sch.c
-index f9b4d27ce449..46cbf5d54f4f 100644
---- a/drivers/usb/host/xhci-mtk-sch.c
-+++ b/drivers/usb/host/xhci-mtk-sch.c
-@@ -459,16 +459,17 @@ static int check_fs_bus_bw(struct mu3h_sch_ep_info *sch_ep, int offset)
- 	u32 num_esit, tmp;
- 	int base;
- 	int i, j;
-+	u8 uframes = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
- 
- 	num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
-+
-+	if (sch_ep->ep_type == INT_IN_EP || sch_ep->ep_type == ISOC_IN_EP)
-+		offset++;
-+
- 	for (i = 0; i < num_esit; i++) {
- 		base = offset + i * sch_ep->esit;
- 
--		/*
--		 * Compared with hs bus, no matter what ep type,
--		 * the hub will always delay one uframe to send data
--		 */
--		for (j = 0; j < sch_ep->cs_count; j++) {
-+		for (j = 0; j < uframes; j++) {
- 			tmp = tt->fs_bus_bw[base + j] + sch_ep->bw_cost_per_microframe;
- 			if (tmp > FS_PAYLOAD_MAX)
- 				return -ESCH_BW_OVERFLOW;
-@@ -546,6 +547,8 @@ static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
- 	u32 base, num_esit;
- 	int bw_updated;
- 	int i, j;
-+	int offset = sch_ep->offset;
-+	u8 uframes = DIV_ROUND_UP(sch_ep->maxpkt, FS_PAYLOAD_MAX);
- 
- 	num_esit = XHCI_MTK_MAX_ESIT / sch_ep->esit;
- 
-@@ -554,10 +557,13 @@ static void update_sch_tt(struct mu3h_sch_ep_info *sch_ep, bool used)
- 	else
- 		bw_updated = -sch_ep->bw_cost_per_microframe;
- 
-+	if (sch_ep->ep_type == INT_IN_EP || sch_ep->ep_type == ISOC_IN_EP)
-+		offset++;
-+
- 	for (i = 0; i < num_esit; i++) {
--		base = sch_ep->offset + i * sch_ep->esit;
-+		base = offset + i * sch_ep->esit;
- 
--		for (j = 0; j < sch_ep->cs_count; j++)
-+		for (j = 0; j < uframes; j++)
- 			tt->fs_bus_bw[base + j] += bw_updated;
- 	}
- 
--- 
-2.32.0.554.ge1b32706d8-goog
-
+Johan
