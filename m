@@ -2,81 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 004693E118A
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 11:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703D93E11A8
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Aug 2021 11:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239786AbhHEJlx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 05:41:53 -0400
-Received: from mail.kernel.org ([198.145.29.99]:48688 "EHLO mail.kernel.org"
+        id S239754AbhHEJx3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 05:53:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54578 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239650AbhHEJlx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 05:41:53 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EFD8E60F22;
-        Thu,  5 Aug 2021 09:41:38 +0000 (UTC)
+        id S232930AbhHEJx3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 5 Aug 2021 05:53:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A31566104F;
+        Thu,  5 Aug 2021 09:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628156499;
-        bh=NhFLwlHs4kG7ncNlAn7w5y4NU5vrgQsthU4UhEIvk/0=;
+        s=korg; t=1628157194;
+        bh=V1aHmeLRX6++4XDyNMvcfjO6Y76SBpqT5PWm6Es+pSQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eubwCFWz/jlA8ukedR5SHGlaNJBF7JMWYqySNZNndswo0I45H6Lt9o2k5scnS7OiF
-         S6vcQDnZ34Q/c2UNuaLTjXRn03r7bP95E1Lfs4hEUdWnAVb1HofCXTKsNZ8ETgIRGg
-         8/keiX2WE46ijvpNipyp+7dzF8wHYiwpimTT03Co=
-Date:   Thu, 5 Aug 2021 11:41:36 +0200
+        b=kRsUOYeD0MNRodBiiDiul52bTxM6iT43h7w/2/cXIl69MAMyDHCGLQ7LbTAFZG7lh
+         B7cl2DfTWwD+3OZm8WskYoZelkC7ZgnehZQruQ+jBIdmyXXBvbmiPwRl/Lal0GXTGz
+         N2pGvcfz1ZlIg09jeQvAsA7//TFLgBIWLg8clFPI=
+Date:   Thu, 5 Aug 2021 11:53:06 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: Re: [PATCH 1/2] usb: dwc2: rename DWC2_POWER_DOWN_PARAM_NONE state
-Message-ID: <YQuyUA4gq/6GZVps@kroah.com>
-References: <CGME20210804114433eucas1p134417b605abeb57728d358fc2f42162b@eucas1p1.samsung.com>
- <20210804114421.10282-1-m.szyprowski@samsung.com>
- <YQusPurbybrNly+b@kroah.com>
- <b7855705-892c-14e5-0290-ce7c49b87121@synopsys.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: USB xhci crash under load on 5.14-rc3
+Message-ID: <YQu1AgtuCWaW32U9@kroah.com>
+References: <YQpJLk42b+0g7WFB@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b7855705-892c-14e5-0290-ce7c49b87121@synopsys.com>
+In-Reply-To: <YQpJLk42b+0g7WFB@kroah.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 05, 2021 at 09:22:05AM +0000, Minas Harutyunyan wrote:
-> Hi Greg,
+On Wed, Aug 04, 2021 at 10:00:46AM +0200, Greg KH wrote:
+> Hi,
 > 
-> On 8/5/2021 1:15 PM, Greg KH wrote:
-> > On Wed, Aug 04, 2021 at 01:44:20PM +0200, Marek Szyprowski wrote:
-> >> DWC2_POWER_DOWN_PARAM_NONE really means that the driver still uses clock
-> >> gating to save power when hardware is not used. Rename the state name to
-> >> DWC2_POWER_DOWN_PARAM_CLOCK_GATING to match the driver behavior.
-> >>
-> >> Suggested-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-> >> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> >> ---
-> >> This is a follow-up of this discussion:
-> >> https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/26099de1-826f-42bf-0de7-759a47faf4a0@samsung.com/__;!!A4F2R9G_pg!LG012E4LzO4qVgWZHu_3eTbZ5zmdI4qENHbOuuLwm-IlhHF9KKIaYyJNaY2vXeg$
-> >>
-> >> This should be applied on top of v5.14-rc3.
-> > 
-> > What else would I apply it on top of, we can't go back in time :)
-> > 
-> > Where is this needed for 5.14-final, or for 5.15-rc1?
-> > 
+> I was doing some filesystem backups from one USB device to another one
+> this weekend and kept running into the problem of the xhci controller
+> shutting down after an hour or so of high volume traffic.
 > 
-> I would prefer to apply to 5.14-final. Just I need 1 more day to 
-> complete testing. Have I this additional day?
+> I finally captured the problem in the kernel log as this would also take
+> out my keyboard, making it hard to recover from :)
+> 
+> The log is below for when the problem happens, and then the devices are
+> disconnected from the bus (ignore the filesystem errors, those are
+> expected when i/o is in flight and we disconnect a device.
+> 
+> Any hint as to what the IO_PAGE_FAULT error messages are?
+> 
+> I'll go back to 5.13.y now and see if I can reproduce it there or not,
+> as my backups are not yet done...
 
-Sure, I'll drop this from my queue, please resubmit when you are ready
-to have them reviewed/accepted.
+5.13.7 seemed to work, but locked up overnight when running this same
+workload, so it is a bit worse.  Let me split the USB devices across PCI
+devices and see if that helps...
 
-Also, if these "fix" a previous patch, please put a "Fixes:" tag in the
-patch so we know that.
-
-thanks,
-
-greg k-h
