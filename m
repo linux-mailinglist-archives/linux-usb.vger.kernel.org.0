@@ -2,156 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D180E3E1F71
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Aug 2021 01:42:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D913E20EF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Aug 2021 03:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242346AbhHEXmw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 5 Aug 2021 19:42:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36664 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238198AbhHEXmv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 5 Aug 2021 19:42:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id C4D0E610CD;
-        Thu,  5 Aug 2021 23:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628206956;
-        bh=Z/61WgkabawKvCqT33aQpch4UJfYpbpJ/lpjJTDKmJE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KuDKmWy8QxzyN9WG7Q1pVzQ6S5j62PkYn7/jQtSiQ405ZyO5HsJaxlGQ4ptwW9KWQ
-         8JzTD06NkExqlaqFClHSIgp3ZV4HCT08Q0ZvAqUHpT3JHz2y5xKJeL0G0pylHGRvn6
-         U5xMy5iYmp2VcbacJIAcWlgxiuyj7K4SXjueq2YyorPxHzpAkvrgrNXJfYWPF6dNbg
-         +rqlXTqZ1NVd0xWfnIPttHUHPunKRAjCa2hTqiMX3yjjCM3obbaCQHJI0obD1yIuBB
-         sBxx4HfHs+13rY1cXK0ifZwIzG7diuJ8rdtPvOtsYTWDljySsOW/3p75koSGgoeKnq
-         J3gIMCJ0Jo3qg==
-Date:   Thu, 5 Aug 2021 18:42:34 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, kernel@pengutronix.de,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pci@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Russell Currey <ruscur@russell.cc>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Frederic Barrat <fbarrat@linux.ibm.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vadym Kochan <vkochan@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        Jiri Pirko <jiri@nvidia.com>, Ido Schimmel <idosch@nvidia.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Michael Buesch <m@bues.ch>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-crypto@vger.kernel.org, qat-linux@intel.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        netdev@vger.kernel.org, oss-drivers@corigine.com,
-        xen-devel@lists.xenproject.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-Message-ID: <20210805234234.GA1797883@bjorn-Precision-5520>
+        id S232716AbhHFBWz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 5 Aug 2021 21:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229578AbhHFBWy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 5 Aug 2021 21:22:54 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DC2C0613D5
+        for <linux-usb@vger.kernel.org>; Thu,  5 Aug 2021 18:22:39 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id cl16-20020a17090af690b02901782c35c4ccso10299664pjb.5
+        for <linux-usb@vger.kernel.org>; Thu, 05 Aug 2021 18:22:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=Mozi9talEt/mI/l6KvxWbDISyLan2Xy8GUlPURIr5DU=;
+        b=tJLNC1xi51AJQd6fSdYO5iCTmfoYc3oomcHvXwFuErdW93LXc7xqXDh2Tm6jXkGSNR
+         HxG2ac8jWzPBDDYJQWYMA2u3Xs2QLw16kwS8VUA4wM6V3/Vkvg5aDDv1HowCCa3+BYq3
+         jQnqkYGycbsRmAQJqVaWWRQj3IAE49KG3KX7HHRhFzOIvEfn5bZjahvHDK2KXdEeRyRr
+         QBLXT8ty+TUx0eyJ+QxYidS9BK+rmi6Pm4MDl1EVxFTi80a13SR/f8At6sP9wLPIgNMO
+         eZo8ZwFSeY8H33+sEc84vm7WUHirwCKwJsAdB8JqyWGiDgLgx6UiVq+oUBNLrnNCoUNY
+         pVmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=Mozi9talEt/mI/l6KvxWbDISyLan2Xy8GUlPURIr5DU=;
+        b=lIHyc45ysh6hT6b6GyMO1j56TKNACIA8KaOG9MdpdOS0pBMpzimp2CMK7kkvSWp/Fu
+         4jwCz8Oe8B5l83/n/Rp5ip2MeRpn8KmECmbR8WXJUEKsKl07X1/Y4IxwatplcvVH2z3q
+         LqXtVsjrfW6y8y76cxplAlMhnjAVX7gGGE2+Lp0J/JqkX4qVBNecul8OhqnhgtT7qwbL
+         GDQQ/dw09Q4+ZF4zn+B3E4MzpCCp5zDDPby7nNeHhlhxKF6nycdroZK53G/+yEIekRCl
+         s3Jzm2CbNW3afEfpbbi3b/EYcci9LAdX/mxZDWkKLA1M2MMuRrXM3yJcZqvUfaMd6GDp
+         IE/w==
+X-Gm-Message-State: AOAM5305C3ngdZm3qNflauxSINMYv8g+RY2CXNIutZ82PoQ6UMdkDw9/
+        tbzmTIpD7N22AIzh0Fsa1+2cyTrdT32WGNucYM0=
+X-Google-Smtp-Source: ABdhPJyaJENsGTbzulYBhWj13wPxzf1vP6wn+hN2zD5NIX7Odv3z0JiD4S2r+5K0Ab3LSaNEbKCSO/u1rEcL/aTTxGA=
+X-Received: by 2002:a17:902:d112:b029:12c:2004:981d with SMTP id
+ w18-20020a170902d112b029012c2004981dmr6362110plw.29.1628212958697; Thu, 05
+ Aug 2021 18:22:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210803100150.1543597-1-u.kleine-koenig@pengutronix.de>
+Received: by 2002:a17:90a:b307:0:0:0:0 with HTTP; Thu, 5 Aug 2021 18:22:38
+ -0700 (PDT)
+Reply-To: georgemike7031@gmail.com
+From:   george mike <joeakaba00@gmail.com>
+Date:   Fri, 6 Aug 2021 03:22:38 +0200
+Message-ID: <CAEoXQLyFhX=vAKiENgCK2SA2x5XT1usLZwU2C_kQL7z1Hx9OSw@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 03, 2021 at 12:01:44PM +0200, Uwe Kleine-König wrote:
-> Hello,
-> 
-> changes since v1 (https://lore.kernel.org/linux-pci/20210729203740.1377045-1-u.kleine-koenig@pengutronix.de):
-> 
-> - New patch to simplify drivers/pci/xen-pcifront.c, spotted and
->   suggested by Boris Ostrovsky
-> - Fix a possible NULL pointer dereference I introduced in xen-pcifront.c
-> - A few whitespace improvements
-> - Add a commit log to patch #6 (formerly #5)
-> 
-> I also expanded the audience for patches #4 and #6 to allow affected
-> people to actually see the changes to their drivers.
-> 
-> Interdiff can be found below.
-> 
-> The idea is still the same: After a few cleanups (#1 - #3) a new macro
-> is introduced abstracting access to struct pci_dev->driver. All users
-> are then converted to use this and in the last patch the macro is
-> changed to make use of struct pci_dev::dev->driver to get rid of the
-> duplicated tracking.
+Hallo
 
-I love the idea of this series!
+Mein Name ist George Mike, ich bin von Beruf Rechtsanwalt. Ich m=C3=B6chte
+dir anbieten
+der n=C3=A4chste Angeh=C3=B6rige meines Klienten. Sie erben die Summe von (=
+8,5
+Millionen US-Dollar)
+Dollar, die mein Mandant vor seinem Tod auf der Bank hinterlie=C3=9F.
 
-I looked at all the bus_type.probe() methods, it looks like pci_dev is
-not the only offender here.  At least the following also have a driver
-pointer in the device struct:
+Mein Mandant ist ein B=C3=BCrger Ihres Landes, der mit seiner Frau bei
+einem Autounfall gestorben ist
+und einziger Sohn. Ich habe Anspruch auf 50% des Gesamtfonds, w=C3=A4hrend
+50% dies tun werden
+sein f=C3=BCr dich.
+Bitte kontaktieren Sie meine private E-Mail hier f=C3=BCr weitere
+Details:georgemike7031@gmail.com
 
-  parisc_device.driver
-  acpi_device.driver
-  dio_dev.driver
-  hid_device.driver
-  pci_dev.driver
-  pnp_dev.driver
-  rio_dev.driver
-  zorro_dev.driver
-
-Do you plan to do the same for all of them, or is there some reason
-why they need the pointer and PCI doesn't?
-
-In almost all cases, other buses define a "to_<bus>_driver()"
-interface.  In fact, PCI already has a to_pci_driver().
-
-This series adds pci_driver_of_dev(), which basically just means we
-can do this:
-
-  pdrv = pci_driver_of_dev(pdev);
-
-instead of this:
-
-  pdrv = to_pci_driver(pdev->dev.driver);
-
-I don't see any other "<bus>_driver_of_dev()" interfaces, so I assume
-other buses just live with the latter style?  I'd rather not be
-different and have two ways to get the "struct pci_driver *" unless
-there's a good reason.
-
-Looking through the places that care about pci_dev.driver (the ones
-updated by patch 5/6), many of them are ... a little dubious to begin
-with.  A few need the "struct pci_error_handlers *err_handler"
-pointer, so that's probably legitimate.  But many just need a name,
-and should probably be using dev_driver_string() instead.
-
-Bjorn
+Vielen Dank im Voraus,
+Herr George Mike,
