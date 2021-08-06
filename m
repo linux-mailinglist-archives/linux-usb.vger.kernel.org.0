@@ -2,219 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 856093E2375
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Aug 2021 08:49:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E763E24C4
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Aug 2021 10:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236559AbhHFGt1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 6 Aug 2021 02:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243416AbhHFGtW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Aug 2021 02:49:22 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC84C061799
-        for <linux-usb@vger.kernel.org>; Thu,  5 Aug 2021 23:49:05 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtcu-0007Bd-Gw; Fri, 06 Aug 2021 08:46:40 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtce-0004p1-8f; Fri, 06 Aug 2021 08:46:24 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1mBtce-0003LN-5b; Fri, 06 Aug 2021 08:46:24 +0200
-Date:   Fri, 6 Aug 2021 08:46:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-pci@vger.kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
-        Russell Currey <ruscur@russell.cc>,
-        Sathya Prakash <sathya.prakash@broadcom.com>,
-        oss-drivers@corigine.com, Paul Mackerras <paulus@samba.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Jiri Olsa <jolsa@redhat.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        linux-perf-users@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        linux-scsi@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-        Ido Schimmel <idosch@nvidia.com>, x86@kernel.org,
-        qat-linux@intel.com,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-wireless@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Fiona Trahe <fiona.trahe@intel.com>,
-        Andrew Donnellan <ajd@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Suganath Prabu Subramani 
-        <suganath-prabu.subramani@broadcom.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, Michael Buesch <m@bues.ch>,
-        Jiri Pirko <jiri@nvidia.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        xen-devel@lists.xenproject.org, Vadym Kochan <vkochan@marvell.com>,
-        MPT-FusionLinux.pdl@broadcom.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org,
-        Wojciech Ziemba <wojciech.ziemba@intel.com>,
-        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto@vger.kernel.org, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Frederic Barrat <fbarrat@linux.ibm.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v2 0/6] PCI: Drop duplicated tracking of a pci_dev's
- bound driver
-Message-ID: <20210806064623.3lxl4clzbjpmchef@pengutronix.de>
-References: <20210803100150.1543597-1-u.kleine-koenig@pengutronix.de>
- <20210805234234.GA1797883@bjorn-Precision-5520>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nllglfksvmzlkdkm"
-Content-Disposition: inline
-In-Reply-To: <20210805234234.GA1797883@bjorn-Precision-5520>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+        id S243087AbhHFII6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 6 Aug 2021 04:08:58 -0400
+Received: from mailout4.samsung.com ([203.254.224.34]:22457 "EHLO
+        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242999AbhHFII4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 6 Aug 2021 04:08:56 -0400
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20210806080839epoutp04c06753a44cab1fa6c5b408b22ec0bc99~YqTcjQmMN2875728757epoutp04g
+        for <linux-usb@vger.kernel.org>; Fri,  6 Aug 2021 08:08:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20210806080839epoutp04c06753a44cab1fa6c5b408b22ec0bc99~YqTcjQmMN2875728757epoutp04g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1628237319;
+        bh=vrMGpYMvYhy3dlysk5G86kR4UIbbT+vbo9YUzDmvKFw=;
+        h=From:To:Cc:Subject:Date:References:From;
+        b=K/KBA4kSTv7VNuDAqlM8Uk4pPkFL1X8ESplY+GPn6oBRGcBtAxRBd8jIrErzom32j
+         MVq41VmTxJMtM0wyfI7xr2r0mN18Ecw6zLfXIU9bwyc9qckocnnvg2Iu9vkOogj/Hk
+         Dn/JIKZ9AUw/+zu9+pi79RN2wWcwC/QxKi82g2do=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+        20210806080838epcas2p14a85f5834b014be62f3050f3dc05aabe~YqTb_3UDJ3019530195epcas2p1o;
+        Fri,  6 Aug 2021 08:08:38 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.40.182]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4Ggym44kRyz4x9QP; Fri,  6 Aug
+        2021 08:08:36 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        59.2E.09541.30EEC016; Fri,  6 Aug 2021 17:08:35 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20210806080835epcas2p2134b8b635e27d129a9e2f2f400a814fc~YqTYcnuxS2470424704epcas2p25;
+        Fri,  6 Aug 2021 08:08:35 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20210806080835epsmtrp1f99415806879ef95d901b5d18054d8d0~YqTYbiXXZ1316913169epsmtrp1b;
+        Fri,  6 Aug 2021 08:08:35 +0000 (GMT)
+X-AuditID: b6c32a46-63f81a8000002545-d8-610cee036647
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        4D.7A.08394.30EEC016; Fri,  6 Aug 2021 17:08:35 +0900 (KST)
+Received: from ubuntu.dsn.sec.samsung.com (unknown [12.36.155.120]) by
+        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20210806080835epsmtip15e35a7c508d0f3007be7580bc42dbb38~YqTYTGfGO0972509725epsmtip1_;
+        Fri,  6 Aug 2021 08:08:35 +0000 (GMT)
+From:   Daehwan Jung <dh10.jung@samsung.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org (open list:USB GADGET/PERIPHERAL SUBSYSTEM),
+        linux-kernel@vger.kernel.org (open list),
+        taehyun cho <taehyun.cho@samsung.com>
+Subject: usb: gadget: u_serial: check Null pointer in EP callback
+Date:   Fri,  6 Aug 2021 16:53:26 +0900
+Message-Id: <1628236406-185160-1-git-send-email-dh10.jung@samsung.com>
+X-Mailer: git-send-email 2.7.4
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLKsWRmVeSWpSXmKPExsWy7bCmmS7zO55Eg10rTSyOtT1ht2hevJ7N
+        4vKuOWwWi5a1MltMOijqwOqxaVUnm8f+uWvYPfq2rGL0+LxJLoAlKscmIzUxJbVIITUvOT8l
+        My/dVsk7ON453tTMwFDX0NLCXEkhLzE31VbJxSdA1y0zB2itkkJZYk4pUCggsbhYSd/Opii/
+        tCRVISO/uMRWKbUgJafA0LBArzgxt7g0L10vOT/XytDAwMgUqDIhJ2PuL/WCHRIV91/aNDC+
+        Eeli5OSQEDCRWDSzmb2LkYtDSGAHo8Tl1+0sEM4nRoldP1ZBZb4xSkw5OocRpuXK0htQVXsZ
+        JZ5/ms0K4fxglDiyv4W5i5GDg01AS+L7QrAGEYEwiYnL9rGA2MwC8xgl1jU7gdjCAo4SJzb3
+        sYHYLAKqEv8/bWYGsXkF3CQ2vT/FCrFMTuLmuU5mkPkSAtPZJS7OOA6VcJG41bSQHcIWlnh1
+        fAuULSXxsr+NHeQGCYFyiUXz7SB6Oxgl1nw6C/WBscSsZ+2MIDXMApoS63fpQ5QrSxy5BXUm
+        n0TH4b9QU3glOtqEIBqVJaZfngB1gKTEwdfnmCFsD4lpG9rB4kICsRIT311jn8AoOwth/gJG
+        xlWMYqkFxbnpqcVGBUbIMbSJEZyOtNx2ME55+0HvECMTB+MhRgkOZiUR3uTFXIlCvCmJlVWp
+        RfnxRaU5qcWHGE2BwTWRWUo0OR+YEPNK4g1NjczMDCxNLUzNjCyUxHk14r4mCAmkJ5akZqem
+        FqQWwfQxcXBKNTCZ3DDc7jBhzlONrh93998TqfwrcOphc8fT41fq3kjP2rImcMvl3vWrrI3m
+        tj5oYb2sku53KMjgquBcuwqRinP8MZsV/16aWGvRr7XH3vv6bItf/Ar5ESFl1jrfJJY+KuwR
+        jXF6fj4pcVrZRVO9P9v2HyqM1z1e/HGu1LNAru6S1d43rFjyDBpeVB/one9kuO1N0sP3j36L
+        3nn8wFCZZ4Gv1TFGpU1LU9lyrX99Liy9/3Tl0eOLtW6fynfqW5BUt8Yi2K1ihVD79iKX2xkJ
+        zqY1V1SPTzzR0pUdL9ShsesHTyrPpYNpl+sWB39dmnHq/Hy9X6XMt2ateuP3ddPd6YLnjZ9Z
+        Nue+EKze9F76xFQ5JZbijERDLeai4kQAMH2qAdADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrLJMWRmVeSWpSXmKPExsWy7bCSnC7zO55Eg4OrWC2OtT1ht2hevJ7N
+        4vKuOWwWi5a1MltMOijqwOqxaVUnm8f+uWvYPfq2rGL0+LxJLoAlissmJTUnsyy1SN8ugStj
+        7i/1gh0SFfdf2jQwvhHpYuTkkBAwkbiy9AZLFyMXh5DAbkaJG1O72CESkhJL596AsoUl7rcc
+        YYUo+sYoMaF5FWMXIwcHm4CWxPeFjCA1IgJhEv8eXQQbxCwwj1Fi/vMtbCAJYQFHiROb+8Bs
+        FgFVif+fNjOD2LwCbhKb3p9ihVggJ3HzXCfzBEaeBYwMqxglUwuKc9Nziw0LDPNSy/WKE3OL
+        S/PS9ZLzczcxgkNES3MH4/ZVH/QOMTJxMB5ilOBgVhLhTV7MlSjEm5JYWZValB9fVJqTWnyI
+        UZqDRUmc90LXyXghgfTEktTs1NSC1CKYLBMHp1QDU8PEHUduG/+e16EoenzBzC1K5sp7mQ84
+        NU79GhfZ/otXUGDXorWCjWFXxXddyN70ikM17/nlnTu+udblFrw7eIY789aRiHfXjn+ZENQp
+        uHbH7zWf9rwNmfHyzO4Xn0/7/eKpv7XfZd2FZE9JGY3LC92OK9+Zm3xr7rMwvQjlWSc7enPO
+        61VY6Gb1eyz96r6590FX+qk1H/edaVSze/j13TeFx69L5UtDmurZPpp+fm9yd2PCyvnRSdt3
+        LWt4xST464Zt1y3GQ8uZNXu+pTyT75I1V2ObmBklbm+/df1hvk+nBP6+2/dKw/Y5q+Hjjd8v
+        u4uf1t979WFRR8zPva/Cph6atmxd76YZAnJPWYSEZhu+UGIpzkg01GIuKk4EAJPySyqAAgAA
+X-CMS-MailID: 20210806080835epcas2p2134b8b635e27d129a9e2f2f400a814fc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20210806080835epcas2p2134b8b635e27d129a9e2f2f400a814fc
+References: <CGME20210806080835epcas2p2134b8b635e27d129a9e2f2f400a814fc@epcas2p2.samsung.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+From: taehyun cho <taehyun.cho@samsung.com>
 
---nllglfksvmzlkdkm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Endpoint complete function in u_serial can be executed
+when 'gs_port' is Null. This situation happens when
+'dwc3_gadget_pullup' returns ETIMEDOUT. The reason why
+ETIMEDOUT is returned is that whole system is out of order
+including interrupt regardless of USB.
 
-Hello Bjorn,
+pc : __lock_acquire+0x54/0x5ec
+lr : lock_acquire+0xe8/0x198
+sp : ffffffc03914b9d0
+x29: ffffffc03914b9d0 x28: ffffff895f13b680
+x27: 0000000000000000 x26: 0000000000000000
+x25: 00000000000003c8 x24: 0000000000000080
+x23: ffffffc010a8f650 x22: 0000000000000000
+x21: 0000000000000000 x20: 0000000000000000
+x19: ffffffc010a8f650 x18: ffffffc02d70a0b0
+x17: 0000000000000000 x16: 00000000000229e0
+x15: 0000000000000004 x14: 00000000000004f2
+x13: ffffffc0120fe178 x12: 0000000000000003
+x11: 00000000ffffffff x10: 0000000100000001
+x9 : 0000000000000001 x8 : 00000000000003c8
+x7 : 0000000000000000 x6 : ffffffc010a8f650
+x5 : 0000000000000000 x4 : 0000000000000080
+x3 : 0000000000000000 x2 : 0000000000000000
+x1 : 0000000000000000 x0 : 00000000000003c8
+Call trace:
+ __lock_acquire+0x54/0x5ec
+ lock_acquire+0xe8/0x198
+ _raw_spin_lock+0x70/0x88
+ gs_read_complete+0x48/0xac
+ usb_gadget_giveback_request+0x48/0x80
+ dwc3_gadget_giveback+0xcc/0xe8
+ dwc3_remove_requests+0xa8/0x188
+ __dwc3_gadget_ep_disable+0x98/0x110
+ dwc3_gadget_ep_disable+0x50/0xbc
+ usb_ep_disable+0x44/0x94
+ gserial_disconnect+0xc0/0x250
+ acm_free_func+0x30/0x48
+ usb_put_function+0x34/0x68
+ config_usb_cfg_unlink+0xdc/0xf8
+ configfs_unlink+0x144/0x264
+ vfs_unlink+0x134/0x218
+ do_unlinkat+0x13c/0x2a0
+ __arm64_sys_unlinkat+0x48/0x60
+ el0_svc_common.llvm.10277270529376503802+0xb8/0x1b4
+ do_el0_svc+0x24/0x8c
+ el0_svc+0x10/0x1c
+ el0_sync_handler+0x68/0xac
+ el0_sync+0x18c/0x1c0
 
-On Thu, Aug 05, 2021 at 06:42:34PM -0500, Bjorn Helgaas wrote:
-> On Tue, Aug 03, 2021 at 12:01:44PM +0200, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > changes since v1 (https://lore.kernel.org/linux-pci/20210729203740.1377=
-045-1-u.kleine-koenig@pengutronix.de):
-> >=20
-> > - New patch to simplify drivers/pci/xen-pcifront.c, spotted and
-> >   suggested by Boris Ostrovsky
-> > - Fix a possible NULL pointer dereference I introduced in xen-pcifront.c
-> > - A few whitespace improvements
-> > - Add a commit log to patch #6 (formerly #5)
-> >=20
-> > I also expanded the audience for patches #4 and #6 to allow affected
-> > people to actually see the changes to their drivers.
-> >=20
-> > Interdiff can be found below.
-> >=20
-> > The idea is still the same: After a few cleanups (#1 - #3) a new macro
-> > is introduced abstracting access to struct pci_dev->driver. All users
-> > are then converted to use this and in the last patch the macro is
-> > changed to make use of struct pci_dev::dev->driver to get rid of the
-> > duplicated tracking.
->=20
-> I love the idea of this series!
+Signed-off-by: taehyun cho <taehyun.cho@samsung.com>
+---
+ drivers/usb/gadget/function/u_serial.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-\o/
+diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
+index 6f68cbe..af08a18 100644
+--- a/drivers/usb/gadget/function/u_serial.c
++++ b/drivers/usb/gadget/function/u_serial.c
+@@ -450,6 +450,15 @@ static void gs_read_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+ 	struct gs_port	*port = ep->driver_data;
+ 
++	/*
++	 * Port became NULL when 'dwc3_gadget_pullup' returns ETIMEDOUT.
++	 * Return here to avoid panic.
++	 */
++	if (!port) {
++		pr_err("%s, failed to get port\n", __func__);
++		return;
++	}
++
+ 	/* Queue all received data until the tty layer is ready for it. */
+ 	spin_lock(&port->port_lock);
+ 	list_add_tail(&req->list, &port->read_queue);
+@@ -461,6 +470,15 @@ static void gs_write_complete(struct usb_ep *ep, struct usb_request *req)
+ {
+ 	struct gs_port	*port = ep->driver_data;
+ 
++	/*
++	 * port became NULL when 'dwc3_gadget_pullup' returns ETIMEDOUT.
++	 * Return here to avoid panic.
++	 */
++	if (!port) {
++		pr_err("%s, failed to get port\n", __func__);
++		return;
++	}
++
+ 	spin_lock(&port->port_lock);
+ 	list_add(&req->list, &port->write_pool);
+ 	port->write_started--;
+-- 
+2.7.4
 
-> I looked at all the bus_type.probe() methods, it looks like pci_dev is
-> not the only offender here.  At least the following also have a driver
-> pointer in the device struct:
->=20
->   parisc_device.driver
->   acpi_device.driver
->   dio_dev.driver
->   hid_device.driver
->   pci_dev.driver
->   pnp_dev.driver
->   rio_dev.driver
->   zorro_dev.driver
-
-Right, when I converted zorro_dev it was pointed out that the code was
-copied from pci and the latter has the same construct. :-)
-See
-https://lore.kernel.org/r/20210730191035.1455248-5-u.kleine-koenig@pengutro=
-nix.de
-for the patch, I don't find where pci was pointed out, maybe it was on
-irc only.
-
-> Do you plan to do the same for all of them, or is there some reason
-> why they need the pointer and PCI doesn't?
-
-There is a list of cleanup stuff I intend to work on. Considering how
-working on that list only made it longer in the recent past, maybe it
-makes more sense to not work on it :-)
-
-> In almost all cases, other buses define a "to_<bus>_driver()"
-> interface.  In fact, PCI already has a to_pci_driver().
->=20
-> This series adds pci_driver_of_dev(), which basically just means we
-> can do this:
->=20
->   pdrv =3D pci_driver_of_dev(pdev);
->=20
-> instead of this:
->=20
->   pdrv =3D to_pci_driver(pdev->dev.driver);
->=20
-> I don't see any other "<bus>_driver_of_dev()" interfaces, so I assume
-> other buses just live with the latter style?  I'd rather not be
-> different and have two ways to get the "struct pci_driver *" unless
-> there's a good reason.
-
-Among few the busses I already fixed in this regard pci was the first
-that has a considerable amount of usage. So I considered it worth giving
-it a name.
-=20
-> Looking through the places that care about pci_dev.driver (the ones
-> updated by patch 5/6), many of them are ... a little dubious to begin
-> with.  A few need the "struct pci_error_handlers *err_handler"
-> pointer, so that's probably legitimate.  But many just need a name,
-> and should probably be using dev_driver_string() instead.
-
-Yeah, I considered adding a function to get the driver name from a
-pci_dev and a function to get the error handlers. Maybe it's an idea to
-introduce these two and then use to_pci_driver(pdev->dev.driver) for the
-few remaining users? Maybe doing that on top of my current series makes
-sense to have a clean switch from pdev->driver to pdev->dev.driver?!
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---nllglfksvmzlkdkm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmEM2rwACgkQwfwUeK3K
-7AlqBggAh2Z8+ZW+YMYlQQ8AzujRmGYo9gKX26eGdp2jNjZUeOc0CEZwm/GiW4aZ
-9+W1RS3i+O6ToHVYkt9fNEpdUGO3YdBKiMHGWsrkQuwNjm4Yv5Dlx/wRz0dU4vIX
-QQDa5tw6Mow1g0gjZqHvDuwbgKoJyHXzFD115kBaINYN/XqOLST9YvMqxxSsHHsD
-qRmpU59QTxEqHXKIsgABctdVnQBkbixppZH3/6nu+Xh7qkZvczBLpx/C5V1+XeAv
-47LOxaH3wiLQBS/sICKlAFeYcbAyNhwh+nbMxx5i3lG6O6LhaeX46FPMoTG6qiAj
-MaO1mAnwrEO35eTXFBgw4IYh37zS9A==
-=/ZHI
------END PGP SIGNATURE-----
-
---nllglfksvmzlkdkm--
