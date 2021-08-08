@@ -2,94 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A5333E3A79
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 15:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E0E3E3C21
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 20:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbhHHNle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Aug 2021 09:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbhHHNld (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 09:41:33 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3546C061760;
-        Sun,  8 Aug 2021 06:41:14 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id s22-20020a17090a1c16b0290177caeba067so30302546pjs.0;
-        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2fnPDPXB4C5Fls4CoYQWzLSj7vIe2Wd6gpTYWENlVIo=;
-        b=OBWIdhzxbLwAwUNfBiW1nJ0ZEjrD9vu4TVEsV1k8exMalhuRvLLXvP/d0wpzhJIpaW
-         tJmeIUimwTrcs5VEHNnIUE9dZ8m1JFwgTIwzbe/dUIoNCDIASgnxNXcWTrf08zmvErXj
-         wqLEnClt2LEaADCIBGP3OFFHIWLJqQqKq2nDRkOA64bdBhyGYtg6meLzS3B5ViKiLjkk
-         aRaW2+8OieOfKvMrNPaos+stl5/64PA4ADufC/htx7T9JdGiPy4agTlMHG/ZEg7j4jyU
-         N3sCH4SvqN0hskSZGvskeCcmeYI4C5NTz+C8K5R/cdEl0Aajjd69GwZv/pKYtnu5y0Ue
-         NSWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2fnPDPXB4C5Fls4CoYQWzLSj7vIe2Wd6gpTYWENlVIo=;
-        b=sYzfdVuS4I+HPm37fCexQZtdp5R9y8GXWhzMalt3Lyoqa0UdfTOBr+G70nfLG6kbEZ
-         egfJqoZ+d4zbTsDagiInivfIm+dWJLYTBAzUSWB5rWUb6YvRCjSe6CDb4dhFplsrVbUa
-         UX1w8GYt7wHZXSkQFtE3cNt34/8ORi0oPEcPaJQJpSdPURnCZJvZr3ygnRT12kbhIAD4
-         /pBWnT0kN6GyhMu5xTUEMyP2HhoYbhBqYisekrT9tDCWBF67RFpKWIcWRAl4oTSd/ihf
-         83DXeOIWbex2brXNGt/3jBh7J7NeuNXAkFhMHn3tv2AO7o2A9oSXEzrfJL/byQ2OQuNd
-         n1pA==
-X-Gm-Message-State: AOAM5339jAxCCBHE4BMa7XfpisM9QY7cCncbkGmh1SQYD8fbrHgXUio2
-        u8VbzhgJaX+Qr/7ztY007uA=
-X-Google-Smtp-Source: ABdhPJyNvlNH7SowjdQfuSJUuUsFjIduVZ588cXmIKrJRwKCOhFIRFGjJd8lsqeAivCPORqAWivtJw==
-X-Received: by 2002:a17:90b:3442:: with SMTP id lj2mr526181pjb.81.1628430074456;
-        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
-Received: from [192.168.1.5] ([159.192.228.166])
-        by smtp.googlemail.com with ESMTPSA id l14sm17545501pfd.58.2021.08.08.06.41.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
-Subject: Re: [PATCH] Add new VID/PID to support Fibocom FG150 5G module
-To:     Zhengjun Zhang <zhangzhengjun@aicrobo.com>, johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-References: <20210807151144.11227-1-zhangzhengjun@aicrobo.com>
-From:   Lars Melin <larsm17@gmail.com>
-Message-ID: <b3285ae0-8b1f-fc9c-3662-634264d704d5@gmail.com>
-Date:   Sun, 8 Aug 2021 20:41:10 +0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S232210AbhHHSBn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Aug 2021 14:01:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33768 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232209AbhHHSBg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 8 Aug 2021 14:01:36 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id C4C8B60E97
+        for <linux-usb@vger.kernel.org>; Sun,  8 Aug 2021 18:01:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628445677;
+        bh=2eE0ATOoIaRTiEvX9TOa4w0dJWT2qrGT7TC9rxKgQKY=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=ueHVLjnb5MqSVAS+Jwr2uYWB2FZ8fjM1jMSe73anjDFV9uIkII2jK98Fq9abouNKT
+         wBdhcAWO1/Dub0BIcVV5u+XGRJMGzy4NB/5uy8vFnQPN1jxT9o8Lhisugxqfqk1MXa
+         UlwjldJpXKAobJpNB7i3npDwzcHbNyU2zaT9GwJd/g//Z+lhxaXoFIPVdXLE9TjfTn
+         Xc7wvhH9V75IP5J79HhZthxkSZjaVMgdaJ0PtlhuIJwCoW/GtSfc99GrptVnvYT3+v
+         AoYBQksf7wBCcewKur4IISH4+sfyhJCIV/PvQfHEgHR/5yIbdLds2BcjA0xgmPWUC+
+         b7JrXHvUzGOyg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id B4DD260FD7; Sun,  8 Aug 2021 18:01:17 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 213967] Thinkpad T14 Chicony Webcam not recognized by kernel
+Date:   Sun, 08 Aug 2021 18:01:17 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dev@horatiuion.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-213967-208809-vg7ycQEtWm@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-213967-208809@https.bugzilla.kernel.org/>
+References: <bug-213967-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-In-Reply-To: <20210807151144.11227-1-zhangzhengjun@aicrobo.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/7/2021 22:11, Zhengjun Zhang wrote:
-> Fibocom FG150 is a 5G module based on Qualcomm SDX55 platform,
-> support Sub-6G band.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D213967
 
-> +/* Fibocom products */
-> +#define FIBOCOM_VENDOR_ID			0x2cb7
-> +#define FIBOCOM_PRODUCT_FG150			0x010b
->   
->   /* Device flags */
->   
-> @@ -2077,6 +2080,8 @@ static const struct usb_device_id option_ids[] = {
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
->   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(FIBOCOM_VENDOR_ID, FIBOCOM_PRODUCT_FG150, 0xff, 0xff, 0x30) },
-> +	{ USB_DEVICE_AND_INTERFACE_INFO(FIBOCOM_VENDOR_ID, FIBOCOM_PRODUCT_FG150, 0xff, 0, 0) },
->   	{ } /* Terminating entry */
->   };
->   MODULE_DEVICE_TABLE(usb, option_ids); >
+--- Comment #1 from Horatiu Ion (dev@horatiuion.com) ---
+I've managed to get some more info:
 
-Please don't do the defines for Fibocom VID and PID, just add them by 
-their numerical value after 2cb7:0105 in the
-MODULE_DEVICE_TABLE.
+On the non-working kernel versions, I get these messages during boot
 
-thanks
-Lars
+```
+[    7.292465] xhci_hcd 0000:06:00.0: xHCI Host Controller
+[    7.292476] xhci_hcd 0000:06:00.0: new USB bus registered, assigned bus
+number 2
+[    7.292499] xhci_hcd 0000:06:00.0: Zeroing 64bit base registers, expecti=
+ng
+fault
+[   17.324564] xhci_hcd 0000:06:00.0: can't setup: -110
+[   17.324573] xhci_hcd 0000:06:00.0: USB bus 2 deregistered
+[   17.324679] xhci_hcd 0000:06:00.0: init 0000:06:00.0 fail, -110
+[   17.324697] xhci_hcd: probe of 0000:06:00.0 failed with error -110
+```
+
+From what I could gather, it is timing out while trying to communicate with=
+ the
+USB device
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
