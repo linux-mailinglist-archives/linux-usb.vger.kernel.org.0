@@ -2,139 +2,94 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5A13E3A40
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 14:39:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A5333E3A79
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 15:41:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbhHHMkM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Aug 2021 08:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40240 "EHLO
+        id S230443AbhHHNle (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Aug 2021 09:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbhHHMkM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 08:40:12 -0400
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [IPv6:2001:67c:2050::465:103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078EEC0613CF;
-        Sun,  8 Aug 2021 05:39:52 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4GjJh65nz2zQk9y;
-        Sun,  8 Aug 2021 14:39:50 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gorani.run; s=MBO0001;
-        t=1628426389;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wTDEWTY6DFnkW7Rjxxj/CcZyJlPojb5t/pJtInOE9bs=;
-        b=njzXrk+pIxdCL4wWJkaLLZ7UkjSIqw58a948hlA7vJXsx1fXdyYfPuYfqA3A5fOwUMsudv
-        2/SXoW2Ao3FLxzoMnzk1+pHyO9NaGObsnmKMQ8r4RPK9LC75FLqu37MBBvem9cMeFQqq6c
-        P7P3miV9eFghBfBmQ/DefIfX7fHd0hNimdAogouTxbcrI4OYPXG865iOYhbQ1SCUaWGO/l
-        hbZA+LalU5vkTtPaLi8D7+QTQ7fp5zEcfZna0g3ABEEw3Hr8ZKWDWyrCelP/dl3+ZlM1sc
-        A+CJtlQlA73sYSJ8JZ/rtIQYoVgpNglmygYDmW2yDid5JFxivu7HLN4ncqahdw==
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id uGsJQJGVLIxf; Sun,  8 Aug 2021 14:39:47 +0200 (CEST)
-From:   Sungbo Eo <mans0n@gorani.run>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sungbo Eo <mans0n@gorani.run>
-Subject: [PATCH v2 2/2] arm: dts: mt7623: add musb device nodes
-Date:   Sun,  8 Aug 2021 21:38:40 +0900
-Message-Id: <20210808123840.176738-3-mans0n@gorani.run>
-In-Reply-To: <20210808123840.176738-1-mans0n@gorani.run>
-References: <20210803151320.71531-1-mans0n@gorani.run>
- <20210808123840.176738-1-mans0n@gorani.run>
+        with ESMTP id S229923AbhHHNld (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 09:41:33 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3546C061760;
+        Sun,  8 Aug 2021 06:41:14 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id s22-20020a17090a1c16b0290177caeba067so30302546pjs.0;
+        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=2fnPDPXB4C5Fls4CoYQWzLSj7vIe2Wd6gpTYWENlVIo=;
+        b=OBWIdhzxbLwAwUNfBiW1nJ0ZEjrD9vu4TVEsV1k8exMalhuRvLLXvP/d0wpzhJIpaW
+         tJmeIUimwTrcs5VEHNnIUE9dZ8m1JFwgTIwzbe/dUIoNCDIASgnxNXcWTrf08zmvErXj
+         wqLEnClt2LEaADCIBGP3OFFHIWLJqQqKq2nDRkOA64bdBhyGYtg6meLzS3B5ViKiLjkk
+         aRaW2+8OieOfKvMrNPaos+stl5/64PA4ADufC/htx7T9JdGiPy4agTlMHG/ZEg7j4jyU
+         N3sCH4SvqN0hskSZGvskeCcmeYI4C5NTz+C8K5R/cdEl0Aajjd69GwZv/pKYtnu5y0Ue
+         NSWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=2fnPDPXB4C5Fls4CoYQWzLSj7vIe2Wd6gpTYWENlVIo=;
+        b=sYzfdVuS4I+HPm37fCexQZtdp5R9y8GXWhzMalt3Lyoqa0UdfTOBr+G70nfLG6kbEZ
+         egfJqoZ+d4zbTsDagiInivfIm+dWJLYTBAzUSWB5rWUb6YvRCjSe6CDb4dhFplsrVbUa
+         UX1w8GYt7wHZXSkQFtE3cNt34/8ORi0oPEcPaJQJpSdPURnCZJvZr3ygnRT12kbhIAD4
+         /pBWnT0kN6GyhMu5xTUEMyP2HhoYbhBqYisekrT9tDCWBF67RFpKWIcWRAl4oTSd/ihf
+         83DXeOIWbex2brXNGt/3jBh7J7NeuNXAkFhMHn3tv2AO7o2A9oSXEzrfJL/byQ2OQuNd
+         n1pA==
+X-Gm-Message-State: AOAM5339jAxCCBHE4BMa7XfpisM9QY7cCncbkGmh1SQYD8fbrHgXUio2
+        u8VbzhgJaX+Qr/7ztY007uA=
+X-Google-Smtp-Source: ABdhPJyNvlNH7SowjdQfuSJUuUsFjIduVZ588cXmIKrJRwKCOhFIRFGjJd8lsqeAivCPORqAWivtJw==
+X-Received: by 2002:a17:90b:3442:: with SMTP id lj2mr526181pjb.81.1628430074456;
+        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
+Received: from [192.168.1.5] ([159.192.228.166])
+        by smtp.googlemail.com with ESMTPSA id l14sm17545501pfd.58.2021.08.08.06.41.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Aug 2021 06:41:14 -0700 (PDT)
+Subject: Re: [PATCH] Add new VID/PID to support Fibocom FG150 5G module
+To:     Zhengjun Zhang <zhangzhengjun@aicrobo.com>, johan@kernel.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gregkh@linuxfoundation.org
+References: <20210807151144.11227-1-zhangzhengjun@aicrobo.com>
+From:   Lars Melin <larsm17@gmail.com>
+Message-ID: <b3285ae0-8b1f-fc9c-3662-634264d704d5@gmail.com>
+Date:   Sun, 8 Aug 2021 20:41:10 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: ECECD189C
-X-Rspamd-UID: 492da4
+In-Reply-To: <20210807151144.11227-1-zhangzhengjun@aicrobo.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MT7623 has an musb controller that is compatible with the one from MT2701.
+On 8/7/2021 22:11, Zhengjun Zhang wrote:
+> Fibocom FG150 is a 5G module based on Qualcomm SDX55 platform,
+> support Sub-6G band.
 
-Signed-off-by: Sungbo Eo <mans0n@gorani.run>
----
-v2:
-* rename usb3 label to usb0
-* move usb0 & u2phy1 nodes to the right sorted place
-* disable u2phy1 by default
-* correct u2port2 node name to match its reg address
----
- arch/arm/boot/dts/mt7623.dtsi  | 34 ++++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/mt7623a.dtsi |  4 ++++
- 2 files changed, 38 insertions(+)
+> +/* Fibocom products */
+> +#define FIBOCOM_VENDOR_ID			0x2cb7
+> +#define FIBOCOM_PRODUCT_FG150			0x010b
+>   
+>   /* Device flags */
+>   
+> @@ -2077,6 +2080,8 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1406, 0xff) },			/* GosunCn GM500 ECM/NCM */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(FIBOCOM_VENDOR_ID, FIBOCOM_PRODUCT_FG150, 0xff, 0xff, 0x30) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(FIBOCOM_VENDOR_ID, FIBOCOM_PRODUCT_FG150, 0xff, 0, 0) },
+>   	{ } /* Terminating entry */
+>   };
+>   MODULE_DEVICE_TABLE(usb, option_ids); >
 
-diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-index 3c11f7cfcc40..790d74439cc6 100644
---- a/arch/arm/boot/dts/mt7623.dtsi
-+++ b/arch/arm/boot/dts/mt7623.dtsi
-@@ -585,6 +585,40 @@ spi2: spi@11017000 {
- 		status = "disabled";
- 	};
- 
-+	usb0: usb@11200000 {
-+		compatible = "mediatek,mt7623-musb",
-+			     "mediatek,mtk-musb";
-+		reg = <0 0x11200000 0 0x1000>;
-+		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "mc";
-+		phys = <&u2port2 PHY_TYPE_USB2>;
-+		dr_mode = "otg";
-+		clocks = <&pericfg CLK_PERI_USB0>,
-+			 <&pericfg CLK_PERI_USB0_MCU>,
-+			 <&pericfg CLK_PERI_USB_SLV>;
-+		clock-names = "main","mcu","univpll";
-+		power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
-+		status = "disabled";
-+	};
-+
-+	u2phy1: t-phy@11210000 {
-+		compatible = "mediatek,mt7623-tphy",
-+			     "mediatek,generic-tphy-v1";
-+		reg = <0 0x11210000 0 0x0800>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		status = "disabled";
-+
-+		u2port2: usb-phy@11210800 {
-+			reg = <0 0x11210800 0 0x0100>;
-+			clocks = <&topckgen CLK_TOP_USB_PHY48M>;
-+			clock-names = "ref";
-+			#phy-cells = <1>;
-+			status = "okay";
-+		};
-+	};
-+
- 	audsys: clock-controller@11220000 {
- 		compatible = "mediatek,mt7623-audsys",
- 			     "mediatek,mt2701-audsys",
-diff --git a/arch/arm/boot/dts/mt7623a.dtsi b/arch/arm/boot/dts/mt7623a.dtsi
-index 0735a1fb8ad9..d304b62d24b5 100644
---- a/arch/arm/boot/dts/mt7623a.dtsi
-+++ b/arch/arm/boot/dts/mt7623a.dtsi
-@@ -35,6 +35,10 @@ &scpsys {
- 	clock-names = "ethif";
- };
- 
-+&usb0 {
-+	power-domains = <&scpsys MT7623A_POWER_DOMAIN_IFR_MSC>;
-+};
-+
- &usb1 {
- 	power-domains = <&scpsys MT7623A_POWER_DOMAIN_HIF>;
- };
--- 
-2.32.0
+Please don't do the defines for Fibocom VID and PID, just add them by 
+their numerical value after 2cb7:0105 in the
+MODULE_DEVICE_TABLE.
 
+thanks
+Lars
