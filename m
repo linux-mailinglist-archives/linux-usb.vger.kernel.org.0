@@ -2,35 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA723E3CBF
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 22:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 022943E3CC4
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 22:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231559AbhHHUiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Aug 2021 16:38:01 -0400
-Received: from mxout04.lancloud.ru ([45.84.86.114]:34556 "EHLO
-        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbhHHUiB (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 16:38:01 -0400
+        id S232373AbhHHUmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Aug 2021 16:42:13 -0400
+Received: from mxout02.lancloud.ru ([45.84.86.82]:44230 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230201AbhHHUmM (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 16:42:12 -0400
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 3D11220C600C
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 61765229B7AD
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
-Subject: [PATCH 1/9] usb: dwc3: meson-g12a: add IRQ check
+Subject: [PATCH 2/9] usb: dwc3: qcom: add IRQ check
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
 References: <717ddd7c-22cd-d82c-e43d-80254718c801@omp.ru>
-CC:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>
 Organization: Open Mobile Platform
-Message-ID: <f8eae1ec-91c7-e26e-665d-777930b001a9@omp.ru>
-Date:   Sun, 8 Aug 2021 23:37:38 +0300
+Message-ID: <563b7c97-4668-3fd4-310b-0a067e805635@omp.ru>
+Date:   Sun, 8 Aug 2021 23:41:50 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
@@ -45,29 +42,32 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The driver neglects to check the result of platform_get_irq()'s call and
-blithely passes the negative error codes to devm_request_threaded_irq()
-(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
-an original error code. Stop calling devm_request_threaded_irq() with the
-invalid IRQ #s.
+In dwc3_qcom_acpi_register_core(), the driver neglects to check the result
+of platform_get_irq()'s call and blithely assigns the negative error codes
+to the allocated child device's IRQ resource and then passing this resource
+to platform_device_add_resources() and later causing dwc3_otg_get_irq() to
+fail anyway.  Stop calling platform_device_add_resources() with the invalid
+IRQ #s, so that there's less complexity in the IRQ error checking.
 
-Fixes: f90db10779ad ("usb: dwc3: meson-g12a: Add support for IRQ based OTG switching")
+Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
 ---
- drivers/usb/dwc3/dwc3-meson-g12a.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/usb/dwc3/dwc3-qcom.c |    4 ++++
+ 1 file changed, 4 insertions(+)
 
-Index: usb/drivers/usb/dwc3/dwc3-meson-g12a.c
+Index: usb/drivers/usb/dwc3/dwc3-qcom.c
 ===================================================================
---- usb.orig/drivers/usb/dwc3/dwc3-meson-g12a.c
-+++ usb/drivers/usb/dwc3/dwc3-meson-g12a.c
-@@ -598,6 +598,8 @@ static int dwc3_meson_g12a_otg_init(stru
- 				   USB_R5_ID_DIG_IRQ, 0);
+--- usb.orig/drivers/usb/dwc3/dwc3-qcom.c
++++ usb/drivers/usb/dwc3/dwc3-qcom.c
+@@ -614,6 +614,10 @@ static int dwc3_qcom_acpi_register_core(
+ 		qcom->acpi_pdata->dwc3_core_base_size;
  
- 		irq = platform_get_irq(pdev, 0);
-+		if (irq < 0)
-+			return irq;
- 		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
- 						dwc3_meson_g12a_irq_thread,
- 						IRQF_ONESHOT, pdev->name, priv);
+ 	irq = platform_get_irq(pdev_irq, 0);
++	if (irq < 0) {
++		ret = irq;
++		goto out;
++	}
+ 	child_res[1].flags = IORESOURCE_IRQ;
+ 	child_res[1].start = child_res[1].end = irq;
+ 
