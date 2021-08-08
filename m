@@ -2,32 +2,33 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 022943E3CC4
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 22:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F0D3E3CC5
+	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 22:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbhHHUmN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Aug 2021 16:42:13 -0400
-Received: from mxout02.lancloud.ru ([45.84.86.82]:44230 "EHLO
-        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbhHHUmM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 16:42:12 -0400
+        id S232387AbhHHUpY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Aug 2021 16:45:24 -0400
+Received: from mxout04.lancloud.ru ([45.84.86.114]:34684 "EHLO
+        mxout04.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230201AbhHHUpX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 16:45:23 -0400
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 61765229B7AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout04.lancloud.ru 26F2020C6345
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
-Subject: [PATCH 2/9] usb: dwc3: qcom: add IRQ check
+Subject: [PATCH 3/9] usb: gadget: udc: at91: add IRQ check
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
 References: <717ddd7c-22cd-d82c-e43d-80254718c801@omp.ru>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>
+CC:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>
 Organization: Open Mobile Platform
-Message-ID: <563b7c97-4668-3fd4-310b-0a067e805635@omp.ru>
-Date:   Sun, 8 Aug 2021 23:41:50 +0300
+Message-ID: <3ebcf6ee-4ca7-d7dc-6e04-62bc4f9e1ead@omp.ru>
+Date:   Sun, 8 Aug 2021 23:45:01 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
@@ -42,32 +43,30 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-In dwc3_qcom_acpi_register_core(), the driver neglects to check the result
-of platform_get_irq()'s call and blithely assigns the negative error codes
-to the allocated child device's IRQ resource and then passing this resource
-to platform_device_add_resources() and later causing dwc3_otg_get_irq() to
-fail anyway.  Stop calling platform_device_add_resources() with the invalid
-IRQ #s, so that there's less complexity in the IRQ error checking.
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_irq() (which takes
+*unsigned* IRQ #), causing it to fail with -EINVAL, overriding an original
+error code. Stop calling devm_request_irq() with the invalid IRQ #s.
 
-Fixes: 2bc02355f8ba ("usb: dwc3: qcom: Add support for booting with ACPI")
+Fixes: 8b2e76687b39 ("USB: AT91 UDC updates, mostly power management")
 Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
 ---
- drivers/usb/dwc3/dwc3-qcom.c |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/usb/gadget/udc/at91_udc.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Index: usb/drivers/usb/dwc3/dwc3-qcom.c
+Index: usb/drivers/usb/gadget/udc/at91_udc.c
 ===================================================================
---- usb.orig/drivers/usb/dwc3/dwc3-qcom.c
-+++ usb/drivers/usb/dwc3/dwc3-qcom.c
-@@ -614,6 +614,10 @@ static int dwc3_qcom_acpi_register_core(
- 		qcom->acpi_pdata->dwc3_core_base_size;
+--- usb.orig/drivers/usb/gadget/udc/at91_udc.c
++++ usb/drivers/usb/gadget/udc/at91_udc.c
+@@ -1876,7 +1876,9 @@ static int at91udc_probe(struct platform
+ 	clk_disable(udc->iclk);
  
- 	irq = platform_get_irq(pdev_irq, 0);
-+	if (irq < 0) {
-+		ret = irq;
-+		goto out;
-+	}
- 	child_res[1].flags = IORESOURCE_IRQ;
- 	child_res[1].start = child_res[1].end = irq;
- 
+ 	/* request UDC and maybe VBUS irqs */
+-	udc->udp_irq = platform_get_irq(pdev, 0);
++	udc->udp_irq = retval = platform_get_irq(pdev, 0);
++	if (retval < 0)
++		goto err_unprepare_iclk;
+ 	retval = devm_request_irq(dev, udc->udp_irq, at91_udc_irq, 0,
+ 				  driver_name, udc);
+ 	if (retval) {
