@@ -2,97 +2,220 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEF13E499E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 18:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B873E4A8F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 19:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232923AbhHIQVI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Aug 2021 12:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42162 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232865AbhHIQTn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 12:19:43 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A5AC061796;
-        Mon,  9 Aug 2021 09:19:20 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id c24so8365165lfi.11;
-        Mon, 09 Aug 2021 09:19:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=z9VdH7ns3h5j/pkoJcdwYLPrHEhcNZabrfGVRGH7EGA=;
-        b=aAsa1GsrKNIid2ukdTvB2onVx9ChYfIoWc+oMoD5C29aHmVYhbEtRDyNuZ/M2jmtYF
-         n0h0A7uQwwCdELxuSJM9wc9w4NCDqdCzdvLCsWvLMD9yjVLDGPzGe+QQhQ1LWIKOAzdg
-         jIuCoVhdXzs8kCIbVh85AYcJ5n0OKX5iLg0Rtj0Bh80gKYuBBkUxP3x6rziQOJtweF+c
-         /+NxmL8xS/yd4jj+JvifBTV/Wtl+ZpsesMbBh10g9VMIt8uG/jLUxxqiP/YgUfunvvwc
-         u6uMR67yhLB+mc2nL0mvjUmCuvrxzmQAWoHpkrCkmNAwzNASI5Xi3mUwtvDFf/eDdd/J
-         +eUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=z9VdH7ns3h5j/pkoJcdwYLPrHEhcNZabrfGVRGH7EGA=;
-        b=GtVfSNGcFLRAlsltEaQDWx/Cd5yqhsLCv0QsLLHo3GEArjpfBFG1ToeD/DxmJuR4A7
-         A9vh+1FD6zMNLhA5EQR1seTXZGoDzA4u/vAib2bgZgaxzHNKl6CdM+jrd5YJs6DZgEb4
-         gf5tcaBGWjff/WXonnB9bFMCb0ZS0RMc6Tz3LZ1l2/A7uW56PsMybjP6LcwbDBDk0Gjt
-         /S+4+Q7bpIVcM1lInZhk4MNDEDkrD2EqmvYCFDPgt4rbkd89YUoFFapJLRiztYIpAO0q
-         NCK0ZYj3gyrKbaixpQKEDEFPuRwQmbPY2JK6hDoTMr6NVfY5A0k1XEPWL6y5evpWHC74
-         Qflg==
-X-Gm-Message-State: AOAM5324QB50rEKj/Dz6WFscBYFEB2gBaMllO68CvrAloHHG33aOGgZA
-        3S/nKg2uzXsz6GEqQEWyFi9ABI2vpiB56Zo7e7s=
-X-Google-Smtp-Source: ABdhPJxCwqVyO3DLEGV8llT8YbwmG153gIXdgtT4ALWyc7DZWXzea0i1wx4SxIBin/adnb6Nch335/g50aswk5zEiN4=
-X-Received: by 2002:a05:6512:39c6:: with SMTP id k6mr18099640lfu.549.1628525959073;
- Mon, 09 Aug 2021 09:19:19 -0700 (PDT)
+        id S233847AbhHIRLm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Aug 2021 13:11:42 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:20210 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233644AbhHIRLl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Aug 2021 13:11:41 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628529081; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=ufhEvlBwKdzuG2NOijPUJXkxLFRmYjIhJWYy0BdVpTI=;
+ b=vR4lqcwpHw60jXEjqi1YlKxYosjCLTbUPTATj2rwvJyShdr4BnpGg1IVymhkJ203zQJGYGz+
+ FnVM9DEZqclNNGQ1I6TWwPibZGZGT8wIg9KAxC3LfcQ7ZTAhCNTpsRKKokrLjdykOzS+43SQ
+ T3wmaT/bh5OOzvlvKydewQa0EFg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 6111614f76c3a9a17234ed4d (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 09 Aug 2021 17:09:34
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E1A68C433D3; Mon,  9 Aug 2021 17:09:33 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7242DC433F1;
+        Mon,  9 Aug 2021 17:09:30 +0000 (UTC)
 MIME-Version: 1.0
-References: <CAHhAz+jKREfXERKj7XB7U3Wh1g4STO2Dt0qnMkcPV5nXB3_bwg@mail.gmail.com>
- <8923f2b8-0be0-ffbf-70a4-c03c9a02d58a@suse.com>
-In-Reply-To: <8923f2b8-0be0-ffbf-70a4-c03c9a02d58a@suse.com>
-From:   Muni Sekhar <munisekharrms@gmail.com>
-Date:   Mon, 9 Aug 2021 21:49:07 +0530
-Message-ID: <CAHhAz+hYy6najVa4gt2zkAiipWPCL6X+KH=RFrHZfY1RH13QAw@mail.gmail.com>
-Subject: Re: read() via USB bus
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     kernelnewbies <kernelnewbies@kernelnewbies.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 09 Aug 2021 22:39:30 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, agross@kernel.org,
+        bhelgaas@google.com, robh+dt@kernel.org, swboyd@chromium.org,
+        lorenzo.pieralisi@arm.com, svarbanov@mm-sol.com,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org
+Subject: Re: [PATCH v4 4/4] PCIe: qcom: Add support to control pipe clk src
+In-Reply-To: <YPHuWudai/FO6SMN@yoga>
+References: <1626443927-32028-5-git-send-email-pmaliset@codeaurora.org>
+ <20210716150646.GA2098485@bjorn-Precision-5520> <YPHuWudai/FO6SMN@yoga>
+Message-ID: <5b41b2898504e915fda4eb8aeafdcccb@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 9, 2021 at 1:45 PM Oliver Neukum <oneukum@suse.com> wrote:
->
->
-> On 09.08.21 09:58, Muni Sekhar wrote:
-> > Hi all,
-> >
-> > PCIe memory mapped registers can be read via readb(), readw(), readl()
-> > kernel API's. Similarly what are the kernel API to read the device
-> > registers via USB bus
-> >
->
-> Hi,
->
-> I am afraid this is based on a fundamental misunderstanding on how
-> USB works. It is based on passing messages, not reading and writing
-> registers.
->
-> USB devices are primarily based on endpoints, not registers. A literal
-> answer to your question would point you to the clear/set/get_feature
-> standard requests of chapter 9 of the specification, but that really
-> will not help you, as you are making assumption that fundamentally
-> do not apply.
->
-> I hope this list stays friendly to newcomers and we will answer
-> specific questions, but at this point I must advise you to first
-> read an introductory book.
-Thank you, I will check it out.
->
->     HTH
->         Oliver
->
->
+On 2021-07-17 02:08, Bjorn Andersson wrote:
+> On Fri 16 Jul 10:06 CDT 2021, Bjorn Helgaas wrote:
+> 
+>> Run this:
+>> 
+>>   $ git log --oneline drivers/pci/controller/dwc/pcie-qcom.c
+>> 
+>> and make your subject match the style and structure (in particular,
+>> s/PCIe/PCI/).  In this case, maybe something like this?
+>> 
+>>   PCI: qcom: Switch sc7280 gcc_pcie_1_pipe_clk_src after PHY init
+>> 
+>> On Fri, Jul 16, 2021 at 07:28:47PM +0530, Prasad Malisetty wrote:
+>> > This is a new requirement for sc7280 SoC.
+>> > To enable gdsc gcc_pcie_1_pipe_clk_src should be TCXO.
+>> > after PHY initialization gcc_pcie_1_pipe_clk_src needs
+>> > to switch from TCXO to gcc_pcie_1_pipe_clk.
+>> 
+>> This says what *needs* to happen, but it doesn't actually say what
+>> this patch *does*.  I think it's something like:
+>> 
+>>   On the sc7280 SoC, the clock source for pcie_1_pipe must be the TCXO
+>>   while gdsc is enabled.  But after the PHY is initialized, the clock
+>>   source must be switched to gcc_pcie_1_pipe_clk.
+>> 
+>>   On sc7280, switch gcc_pcie_1_pipe_clk_src from TCXO to
+>>   gcc_pcie_1_pipe_clk after the PHY has been initialized.
+>> 
+>> Nits: Rewrap to fill 75 columns or so.  Add blank lines between
+>> paragraphs.  Start sentences with capital letter.
+>> 
+>> > Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+>> > ---
+>> >  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
+>> >  1 file changed, 22 insertions(+)
+>> >
+>> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+>> > index 8a7a300..9e0e4ab 100644
+>> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
+>> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+>> > @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
+>> >  	struct regulator_bulk_data supplies[2];
+>> >  	struct reset_control *pci_reset;
+>> >  	struct clk *pipe_clk;
+>> > +	struct clk *gcc_pcie_1_pipe_clk_src;
+>> > +	struct clk *phy_pipe_clk;
+>> > +	struct clk *ref_clk_src;
+>> >  };
+>> >
+>> >  union qcom_pcie_resources {
+>> > @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
+>> >  	if (ret < 0)
+>> >  		return ret;
+>> >
+>> > +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
+>> > +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+>> > +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
+>> > +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
+>> > +
+>> > +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+>> > +		if (IS_ERR(res->phy_pipe_clk))
+>> > +			return PTR_ERR(res->phy_pipe_clk);
+>> > +
+>> > +		res->ref_clk_src = devm_clk_get(dev, "ref");
+>> > +		if (IS_ERR(res->ref_clk_src))
+>> > +			return PTR_ERR(res->ref_clk_src);
+>> 
+>> Not clear why ref_clk_src is here, since it's not used anywhere.  If
+>> it's not necessary here, drop it and add it in a future patch that
+>> uses it.
+>> 
+>> > +	}
+>> > +
+>> >  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>> >  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>> >  }
+>> > @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
+>> >  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>> >  {
+>> >  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+>> > +	struct dw_pcie *pci = pcie->pci;
+>> > +	struct device *dev = pci->dev;
+>> > +
+>> > +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
+>> 
+>> Using of_device_is_compatible() follows existing style in the driver,
+>> which is good.  But I'm not sure that's good style in general because
+>> it's a little repetitious and wasteful.
+>> 
+> 
+> Following the style is good, but up until the recent sm8250 addition it
+> was just a hack to deal with legacy platforms that we don't know the
+> exact details about.
+> 
+> But, all platforms I know of has the pipe_clk from the PHY fed into the
+> pipe_clk_src mux in the gcc block and then ends up in the PCIe
+> controller. As such, I suspect that the pipe_clk handling should be 
+> moved
+> to the common code path of the driver and there's definitely no harm in
+> making sure that the pipe_clk_src mux is explicitly configured on
+> existing platforms (at least all 2.7.0 based ones).
+> 
+>> qcom_pcie_probe() already calls of_device_get_match_data(), which does
+>> basically the same thing as of_device_is_compatible(), so I think we
+>> could take better advantage of that by augmenting struct qcom_pcie_ops
+>> with these device-specific details.
+>> 
+> 
+> I agree.
+> 
+> Regards,
+> Bjorn
+> 
+>> Some drivers that use this strategy:
+>> 
+>>   drivers/pci/controller/cadence/pci-j721e.c
+>>   drivers/pci/controller/dwc/pci-imx6.c
+>>   drivers/pci/controller/dwc/pci-layerscape.c
+>>   drivers/pci/controller/dwc/pci-layerscape-ep.c
+>>   drivers/pci/controller/dwc/pcie-tegra194.c
+>>   drivers/pci/controller/pci-ftpci100.c
+>>   drivers/pci/controller/pcie-brcmstb.c
+>>   drivers/pci/controller/pcie-mediatek.c
+>> 
+>> > +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
+>> >
+>> >  	return clk_prepare_enable(res->pipe_clk);
+>> >  }
+>> > --
 
+Hi Bjorn,
 
--- 
-Thanks,
-Sekhar
+Thanks for your review and inputs.
+
+I would like to add more details on this requirement. The hardware ver. 
+of SM8250 & SC7280 platforms is the same but
+where as only for SC7280, we need to switch gcc_pcie_1_pipe_clk source 
+between TXCO and gcc_pcie_1_pipe_clk hence this is SoC level
+specific requirement. all existing platforms doesn't need this pipe clk 
+handling.
+
+I will use boolean flag entry in SoC dtsi such as 
+"pipe-clk-source-switch" to differentiate between SM8250 and SC7280 
+instead of compatible
+method.
+
+Please provide any other better approach for the above case.
+
+Thanks
+-Prasad
+
+>> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+>> > a Linux Foundation Collaborative Project
+>> >
