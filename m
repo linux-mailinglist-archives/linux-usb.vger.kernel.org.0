@@ -2,220 +2,241 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B873E4A8F
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 19:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22AAF3E4BF2
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 20:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233847AbhHIRLm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Aug 2021 13:11:42 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:20210 "EHLO m43-7.mailgun.net"
+        id S235049AbhHISOm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Aug 2021 14:14:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53688 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233644AbhHIRLl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 9 Aug 2021 13:11:41 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628529081; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ufhEvlBwKdzuG2NOijPUJXkxLFRmYjIhJWYy0BdVpTI=;
- b=vR4lqcwpHw60jXEjqi1YlKxYosjCLTbUPTATj2rwvJyShdr4BnpGg1IVymhkJ203zQJGYGz+
- FnVM9DEZqclNNGQ1I6TWwPibZGZGT8wIg9KAxC3LfcQ7ZTAhCNTpsRKKokrLjdykOzS+43SQ
- T3wmaT/bh5OOzvlvKydewQa0EFg=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 6111614f76c3a9a17234ed4d (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 09 Aug 2021 17:09:34
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id E1A68C433D3; Mon,  9 Aug 2021 17:09:33 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7242DC433F1;
-        Mon,  9 Aug 2021 17:09:30 +0000 (UTC)
+        id S234847AbhHISOk (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 9 Aug 2021 14:14:40 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5978561002;
+        Mon,  9 Aug 2021 18:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628532859;
+        bh=qXeJ0P/U8JvDxO9kR9G0/0wx57hQ6JjYEoFVv0vPQv8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=WW6aFqzA3dvX3Ze6M+eftHp7JaBZzCklo9aY7tR1PQm8w/hnkzEnuCle4tCjoZiSe
+         nT6rKeORsoNdjHgHs9BqQjZRVKkrC6rxN1uu2Ygmc41jcEEm8UEVPbXxSnQ6K0Wfj8
+         qSINXH8XorzrEZOa15qbiDu7ItPII0bkSjch0lXkcnkoO4HSU1QbFOtyKkGI+wZYNN
+         0+0+St5OBLuFlSt+oW4UklxyjCkK/jpDv/4IACdl9gU6SOxr0i2z8LDiCotUp5Fcfn
+         PGIel408/Vk6fQxN4caUeDLV9ODEWUpMqiy48I+zaYWawQn9qjAcLm5+IUrHSYXRZm
+         w1DE8HFaMxc8g==
+Date:   Mon, 9 Aug 2021 13:14:18 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-pci@vger.kernel.org, Alexander Duyck <alexanderduyck@fb.com>,
+        Russell Currey <ruscur@russell.cc>, x86@kernel.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Jiri Olsa <jolsa@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        linux-scsi@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        qat-linux@intel.com,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yisen Zhuang <yisen.zhuang@huawei.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        Fiona Trahe <fiona.trahe@intel.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        Andrew Donnellan <ajd@linux.ibm.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Frederic Barrat <fbarrat@linux.ibm.com>,
+        Borislav Petkov <bp@alien8.de>, Michael Buesch <m@bues.ch>,
+        Jiri Pirko <jiri@nvidia.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        xen-devel@lists.xenproject.org, Vadym Kochan <vkochan@marvell.com>,
+        MPT-FusionLinux.pdl@broadcom.com, linux-usb@vger.kernel.org,
+        linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-crypto@vger.kernel.org,
+        kernel@pengutronix.de,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Wojciech Ziemba <wojciech.ziemba@intel.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v2 0/6] PCI: Drop duplicated tracking of a pci_dev's
+ bound driver
+Message-ID: <20210809181418.GA2168343@bjorn-Precision-5520>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 09 Aug 2021 22:39:30 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, agross@kernel.org,
-        bhelgaas@google.com, robh+dt@kernel.org, swboyd@chromium.org,
-        lorenzo.pieralisi@arm.com, svarbanov@mm-sol.com,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org
-Subject: Re: [PATCH v4 4/4] PCIe: qcom: Add support to control pipe clk src
-In-Reply-To: <YPHuWudai/FO6SMN@yoga>
-References: <1626443927-32028-5-git-send-email-pmaliset@codeaurora.org>
- <20210716150646.GA2098485@bjorn-Precision-5520> <YPHuWudai/FO6SMN@yoga>
-Message-ID: <5b41b2898504e915fda4eb8aeafdcccb@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210807092645.52kn4ustyjudztvl@pengutronix.de>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-07-17 02:08, Bjorn Andersson wrote:
-> On Fri 16 Jul 10:06 CDT 2021, Bjorn Helgaas wrote:
+On Sat, Aug 07, 2021 at 11:26:45AM +0200, Uwe Kleine-König wrote:
+> On Fri, Aug 06, 2021 at 04:24:52PM -0500, Bjorn Helgaas wrote:
+> > On Fri, Aug 06, 2021 at 08:46:23AM +0200, Uwe Kleine-König wrote:
+> > > On Thu, Aug 05, 2021 at 06:42:34PM -0500, Bjorn Helgaas wrote:
+> > 
+> > > > I looked at all the bus_type.probe() methods, it looks like pci_dev is
+> > > > not the only offender here.  At least the following also have a driver
+> > > > pointer in the device struct:
+> > > > 
+> > > >   parisc_device.driver
+> > > >   acpi_device.driver
+> > > >   dio_dev.driver
+> > > >   hid_device.driver
+> > > >   pci_dev.driver
+> > > >   pnp_dev.driver
+> > > >   rio_dev.driver
+> > > >   zorro_dev.driver
+> > > 
+> > > Right, when I converted zorro_dev it was pointed out that the code was
+> > > copied from pci and the latter has the same construct. :-)
+> > > See
+> > > https://lore.kernel.org/r/20210730191035.1455248-5-u.kleine-koenig@pengutronix.de
+> > > for the patch, I don't find where pci was pointed out, maybe it was on
+> > > irc only.
+> > 
+> > Oh, thanks!  I looked to see if you'd done something similar
+> > elsewhere, but I missed this one.
+> > 
+> > > > Looking through the places that care about pci_dev.driver (the ones
+> > > > updated by patch 5/6), many of them are ... a little dubious to begin
+> > > > with.  A few need the "struct pci_error_handlers *err_handler"
+> > > > pointer, so that's probably legitimate.  But many just need a name,
+> > > > and should probably be using dev_driver_string() instead.
+> > > 
+> > > Yeah, I considered adding a function to get the driver name from a
+> > > pci_dev and a function to get the error handlers. Maybe it's an idea to
+> > > introduce these two and then use to_pci_driver(pdev->dev.driver) for the
+> > > few remaining users? Maybe doing that on top of my current series makes
+> > > sense to have a clean switch from pdev->driver to pdev->dev.driver?!
+> > 
+> > I'd propose using dev_driver_string() for these places:
+> > 
+> >   eeh_driver_name() (could change callers to use dev_driver_string())
+> >   bcma_host_pci_probe()
+> >   qm_alloc_uacce()
+> >   hns3_get_drvinfo()
+> >   prestera_pci_probe()
+> >   mlxsw_pci_probe()
+> >   nfp_get_drvinfo()
+> >   ssb_pcihost_probe()
 > 
->> Run this:
->> 
->>   $ git log --oneline drivers/pci/controller/dwc/pcie-qcom.c
->> 
->> and make your subject match the style and structure (in particular,
->> s/PCIe/PCI/).  In this case, maybe something like this?
->> 
->>   PCI: qcom: Switch sc7280 gcc_pcie_1_pipe_clk_src after PHY init
->> 
->> On Fri, Jul 16, 2021 at 07:28:47PM +0530, Prasad Malisetty wrote:
->> > This is a new requirement for sc7280 SoC.
->> > To enable gdsc gcc_pcie_1_pipe_clk_src should be TCXO.
->> > after PHY initialization gcc_pcie_1_pipe_clk_src needs
->> > to switch from TCXO to gcc_pcie_1_pipe_clk.
->> 
->> This says what *needs* to happen, but it doesn't actually say what
->> this patch *does*.  I think it's something like:
->> 
->>   On the sc7280 SoC, the clock source for pcie_1_pipe must be the TCXO
->>   while gdsc is enabled.  But after the PHY is initialized, the clock
->>   source must be switched to gcc_pcie_1_pipe_clk.
->> 
->>   On sc7280, switch gcc_pcie_1_pipe_clk_src from TCXO to
->>   gcc_pcie_1_pipe_clk after the PHY has been initialized.
->> 
->> Nits: Rewrap to fill 75 columns or so.  Add blank lines between
->> paragraphs.  Start sentences with capital letter.
->> 
->> > Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> > ---
->> >  drivers/pci/controller/dwc/pcie-qcom.c | 22 ++++++++++++++++++++++
->> >  1 file changed, 22 insertions(+)
->> >
->> > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
->> > index 8a7a300..9e0e4ab 100644
->> > --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> > @@ -166,6 +166,9 @@ struct qcom_pcie_resources_2_7_0 {
->> >  	struct regulator_bulk_data supplies[2];
->> >  	struct reset_control *pci_reset;
->> >  	struct clk *pipe_clk;
->> > +	struct clk *gcc_pcie_1_pipe_clk_src;
->> > +	struct clk *phy_pipe_clk;
->> > +	struct clk *ref_clk_src;
->> >  };
->> >
->> >  union qcom_pcie_resources {
->> > @@ -1167,6 +1170,20 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
->> >  	if (ret < 0)
->> >  		return ret;
->> >
->> > +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
->> > +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
->> > +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
->> > +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
->> > +
->> > +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
->> > +		if (IS_ERR(res->phy_pipe_clk))
->> > +			return PTR_ERR(res->phy_pipe_clk);
->> > +
->> > +		res->ref_clk_src = devm_clk_get(dev, "ref");
->> > +		if (IS_ERR(res->ref_clk_src))
->> > +			return PTR_ERR(res->ref_clk_src);
->> 
->> Not clear why ref_clk_src is here, since it's not used anywhere.  If
->> it's not necessary here, drop it and add it in a future patch that
->> uses it.
->> 
->> > +	}
->> > +
->> >  	res->pipe_clk = devm_clk_get(dev, "pipe");
->> >  	return PTR_ERR_OR_ZERO(res->pipe_clk);
->> >  }
->> > @@ -1255,6 +1272,11 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
->> >  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->> >  {
->> >  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
->> > +	struct dw_pcie *pci = pcie->pci;
->> > +	struct device *dev = pci->dev;
->> > +
->> > +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280"))
->> 
->> Using of_device_is_compatible() follows existing style in the driver,
->> which is good.  But I'm not sure that's good style in general because
->> it's a little repetitious and wasteful.
->> 
+> So the idea is:
 > 
-> Following the style is good, but up until the recent sm8250 addition it
-> was just a hack to deal with legacy platforms that we don't know the
-> exact details about.
+> 	PCI: Simplify pci_device_remove()
+> 	PCI: Drop useless check from pci_device_probe()
+> 	xen/pci: Drop some checks that are always true
 > 
-> But, all platforms I know of has the pipe_clk from the PHY fed into the
-> pipe_clk_src mux in the gcc block and then ends up in the PCIe
-> controller. As such, I suspect that the pipe_clk handling should be 
-> moved
-> to the common code path of the driver and there's definitely no harm in
-> making sure that the pipe_clk_src mux is explicitly configured on
-> existing platforms (at least all 2.7.0 based ones).
+> are kept as is as preparation. (Do you want to take them from this v2,
+> or should I include them again in v3?)
+
+Easiest if you include them until we merge the series.
+
+> Then convert the list of functions above to use dev_driver_string() in a
+> 4th patch.
 > 
->> qcom_pcie_probe() already calls of_device_get_match_data(), which does
->> basically the same thing as of_device_is_compatible(), so I think we
->> could take better advantage of that by augmenting struct qcom_pcie_ops
->> with these device-specific details.
->> 
+> > The use in mpt_device_driver_register() looks unnecessary: it's only
+> > to get a struct pci_device_id *, which is passed to ->probe()
+> > functions that don't need it.
 > 
-> I agree.
+> This is patch #5.
 > 
-> Regards,
-> Bjorn
+> > The use in adf_enable_aer() looks wrong: it sets the err_handler
+> > pointer in one of the adf_driver structs.  I think those structs
+> > should be basically immutable, and the drivers that call
+> > adf_enable_aer() from their .probe() methods should set
+> > ".err_handler = &adf_err_handler" in their static adf_driver
+> > definitions instead.
 > 
->> Some drivers that use this strategy:
->> 
->>   drivers/pci/controller/cadence/pci-j721e.c
->>   drivers/pci/controller/dwc/pci-imx6.c
->>   drivers/pci/controller/dwc/pci-layerscape.c
->>   drivers/pci/controller/dwc/pci-layerscape-ep.c
->>   drivers/pci/controller/dwc/pcie-tegra194.c
->>   drivers/pci/controller/pci-ftpci100.c
->>   drivers/pci/controller/pcie-brcmstb.c
->>   drivers/pci/controller/pcie-mediatek.c
->> 
->> > +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
->> >
->> >  	return clk_prepare_enable(res->pipe_clk);
->> >  }
->> > --
+> I don't understand that one without some research, probably this yields
+> at least one patch.
 
-Hi Bjorn,
+Yeah, it's a little messy because you'd have to make adf_err_handler
+non-static and add an extern for it.  Sample below.
 
-Thanks for your review and inputs.
+> > I think that basically leaves these:
+> > 
+> >   uncore_pci_probe()     # .id_table, custom driver "registration"
+> >   match_id()             # .id_table, arch/x86/kernel/probe_roms.c
+> >   xhci_pci_quirks()      # .id_table
+> >   pci_error_handlers()   # roll-your-own AER handling, drivers/misc/cxl/guest.c
+> > 
+> > I think it would be fine to use to_pci_driver(pdev->dev.driver) for
+> > these few.
+> 
+> Converting these will be patch 7 then and patch 8 can then drop the
+> duplicated handling.
+> 
+> Sounds reasonable?
 
-I would like to add more details on this requirement. The hardware ver. 
-of SM8250 & SC7280 platforms is the same but
-where as only for SC7280, we need to switch gcc_pcie_1_pipe_clk source 
-between TXCO and gcc_pcie_1_pipe_clk hence this is SoC level
-specific requirement. all existing platforms doesn't need this pipe clk 
-handling.
+Sounds good to me.  Thanks for working on this!
 
-I will use boolean flag entry in SoC dtsi such as 
-"pipe-clk-source-switch" to differentiate between SM8250 and SC7280 
-instead of compatible
-method.
+Bjorn
 
-Please provide any other better approach for the above case.
 
-Thanks
--Prasad
-
->> > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
->> > a Linux Foundation Collaborative Project
->> >
+diff --git a/drivers/crypto/qat/qat_4xxx/adf_drv.c b/drivers/crypto/qat/qat_4xxx/adf_drv.c
+index a8805c815d16..75e6c5540523 100644
+--- a/drivers/crypto/qat/qat_4xxx/adf_drv.c
++++ b/drivers/crypto/qat/qat_4xxx/adf_drv.c
+@@ -310,6 +310,7 @@ static struct pci_driver adf_driver = {
+ 	.probe = adf_probe,
+ 	.remove = adf_remove,
+ 	.sriov_configure = adf_sriov_configure,
++	.err_handler = adf_err_handler,
+ };
+ 
+ module_pci_driver(adf_driver);
+diff --git a/drivers/crypto/qat/qat_common/adf_aer.c b/drivers/crypto/qat/qat_common/adf_aer.c
+index d2ae293d0df6..701c3c5f8b9b 100644
+--- a/drivers/crypto/qat/qat_common/adf_aer.c
++++ b/drivers/crypto/qat/qat_common/adf_aer.c
+@@ -166,7 +166,7 @@ static void adf_resume(struct pci_dev *pdev)
+ 	dev_info(&pdev->dev, "Device is up and running\n");
+ }
+ 
+-static const struct pci_error_handlers adf_err_handler = {
++const struct pci_error_handlers adf_err_handler = {
+ 	.error_detected = adf_error_detected,
+ 	.slot_reset = adf_slot_reset,
+ 	.resume = adf_resume,
+@@ -187,7 +187,6 @@ int adf_enable_aer(struct adf_accel_dev *accel_dev)
+ 	struct pci_dev *pdev = accel_to_pci_dev(accel_dev);
+ 	struct pci_driver *pdrv = pdev->driver;
+ 
+-	pdrv->err_handler = &adf_err_handler;
+ 	pci_enable_pcie_error_reporting(pdev);
+ 	return 0;
+ }
+diff --git a/drivers/crypto/qat/qat_common/adf_common_drv.h b/drivers/crypto/qat/qat_common/adf_common_drv.h
+index c61476553728..98a29e0b8769 100644
+--- a/drivers/crypto/qat/qat_common/adf_common_drv.h
++++ b/drivers/crypto/qat/qat_common/adf_common_drv.h
+@@ -95,6 +95,7 @@ void adf_ae_fw_release(struct adf_accel_dev *accel_dev);
+ int adf_ae_start(struct adf_accel_dev *accel_dev);
+ int adf_ae_stop(struct adf_accel_dev *accel_dev);
+ 
++extern const struct pci_error_handlers adf_err_handler;
+ int adf_enable_aer(struct adf_accel_dev *accel_dev);
+ void adf_disable_aer(struct adf_accel_dev *accel_dev);
+ void adf_reset_sbr(struct adf_accel_dev *accel_dev);
