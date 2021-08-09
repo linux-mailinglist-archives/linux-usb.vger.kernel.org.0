@@ -2,54 +2,77 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1603E4DB6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 22:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A0F13E4DBE
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 22:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235774AbhHIURD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Aug 2021 16:17:03 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:41274 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235585AbhHIURC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 16:17:02 -0400
+        id S233694AbhHIUVk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Aug 2021 16:21:40 -0400
+Received: from mxout02.lancloud.ru ([45.84.86.82]:49418 "EHLO
+        mxout02.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233061AbhHIUVj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 16:21:39 -0400
 Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 8E250208F1B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout02.lancloud.ru 1C688224368B
 Received: from LanCloud
 Received: from LanCloud
 Received: from LanCloud
+Subject: [PATCH v2 1/9] usb: dwc3: meson-g12a: add IRQ check
 From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: [PATCH v2 0/9] Stop calling request_irq(), etc. with invalid IRQs in
- the USB drivers
 To:     <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Felipe Balbi <balbi@kernel.org>
+References: <47bacc02-4e34-3208-779c-7072a6261782@omp.ru>
+CC:     Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        "Martin Blumenstingl" <martin.blumenstingl@googlemail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>
 Organization: Open Mobile Platform
-Message-ID: <47bacc02-4e34-3208-779c-7072a6261782@omp.ru>
-Date:   Mon, 9 Aug 2021 23:16:36 +0300
+Message-ID: <96106462-5538-0b2f-f2ab-ee56e4853912@omp.ru>
+Date:   Mon, 9 Aug 2021 23:21:14 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <47bacc02-4e34-3208-779c-7072a6261782@omp.ru>
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
  LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Here are 9 patches against the 'usb-linus' branch of GregKH's 'usb.git' repo.
-The affected drivers call platform_get_irq() but largely ignore its result --
-they blithely pass the negative error codes to request_irq() (and its ilk)
-which expects *unsinged* IRQ #s. Stop doing that by checking what exactly
-platform_get_irq() returns.
+The driver neglects to check the result of platform_get_irq()'s call and
+blithely passes the negative error codes to devm_request_threaded_irq()
+(which takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding
+an original error code. Stop calling devm_request_threaded_irq() with the
+invalid IRQ #s.
 
-[1/9] usb: dwc3: meson-g12a: add IRQ check
-[2/9] usb: dwc3: qcom: add IRQ check
-[3/6] usb: gadget: udc: at91: add IRQ check
-[4/9] usb: gadget: udc: s3c2410: add IRQ check
-[5/9] usb: host: ohci-tmio: add IRQ check
-[6/9] usb: misc: brcmstb-usb-pinmap: add IRQ check
-[7/9] usb: phy: fsl-usb: add IRQ check
-[8/9] usb: phy: tahvo: add IRQ check
-[9/9] usb: phy: twl6030: add IRQ checks
+Fixes: f90db10779ad ("usb: dwc3: meson-g12a: Add support for IRQ based OTG switching")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
+---
+Changes in version 2:
+- added Martin's and Felipe's tags.
+
+drivers/usb/dwc3/dwc3-meson-g12a.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+Index: usb/drivers/usb/dwc3/dwc3-meson-g12a.c
+===================================================================
+--- usb.orig/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ usb/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@ -598,6 +598,8 @@ static int dwc3_meson_g12a_otg_init(stru
+ 				   USB_R5_ID_DIG_IRQ, 0);
+ 
+ 		irq = platform_get_irq(pdev, 0);
++		if (irq < 0)
++			return irq;
+ 		ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
+ 						dwc3_meson_g12a_irq_thread,
+ 						IRQF_ONESHOT, pdev->name, priv);
