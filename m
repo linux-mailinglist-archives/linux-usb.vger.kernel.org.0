@@ -2,309 +2,210 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7843E46C1
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 15:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF973E4932
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 17:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233310AbhHINg3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Aug 2021 09:36:29 -0400
-Received: from out28-149.mail.aliyun.com ([115.124.28.149]:33335 "EHLO
-        out28-149.mail.aliyun.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229474AbhHINg3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 09:36:29 -0400
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.04440762|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0255528-0.000321112-0.974126;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047207;MF=zhangzhengjun@aicrobo.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.KxW4EHK_1628516166;
-Received: from localhost(mailfrom:zhangzhengjun@aicrobo.com fp:SMTPD_---.KxW4EHK_1628516166)
-          by smtp.aliyun-inc.com(10.147.40.200);
-          Mon, 09 Aug 2021 21:36:07 +0800
-From:   Zhengjun Zhang <zhangzhengjun@aicrobo.com>
-To:     larsm17@gmail.com, johan@kernel.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org,
-        Zhengjun Zhang <zhangzhengjun@aicrobo.com>
-Subject: [PATCH v2] USB: serial: option: add new VID/PID to support Fibocom FG150
-Date:   Mon,  9 Aug 2021 21:35:53 +0800
-Message-Id: <20210809133553.71158-1-zhangzhengjun@aicrobo.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <b3285ae0-8b1f-fc9c-3662-634264d704d5@gmail.com>
-References: <b3285ae0-8b1f-fc9c-3662-634264d704d5@gmail.com>
+        id S235839AbhHIPuV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 9 Aug 2021 11:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235845AbhHIPuP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 11:50:15 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9C4C06179E
+        for <linux-usb@vger.kernel.org>; Mon,  9 Aug 2021 08:49:54 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id fa24-20020a17090af0d8b0290178bfa69d97so640958pjb.0
+        for <linux-usb@vger.kernel.org>; Mon, 09 Aug 2021 08:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=iypo2g0ksb3hPluHjo2K3HuanpxIhf/GrkPA0tdbfM4=;
+        b=A/ObNU1jSuENPCBvXTFJQ0CAkMveWR7KjK0AqFrKxEkqDaQnvONeuIIl/kYK7m2Gyd
+         5DTnTjL2lqgzBnFT5RQkzx9NKgaLXbTBeez9RE+JwI4clf6czQvVVkQNERZH2mMFhl9G
+         pCu4p5LHWCUrATnTqb72m5WhE3hwVzPaALCkw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iypo2g0ksb3hPluHjo2K3HuanpxIhf/GrkPA0tdbfM4=;
+        b=Xa+l3en4rZIWMzWIBSXY3qaqS6+TM89vbzRvm+VAwGskHcEXbE6WPOPfC1jp6S8H3P
+         88yex3h8Pb7lFCnnRXyBns/rfIudsezGWlUhulFshIhih/hjk7pvsc+92LdVcCKY1cen
+         GuJz8UR58alrWnFFddiGm28V04T7ybFwUgxz47SjJfrcQ27y6t2zdM8a11bzIWxLaxHb
+         GwxOieN9jG+D+mc3KoZ0tQI++c3ftXNVhxCE8FklUXDCQquo6Dyy9BK4ghs7ZbejWzmZ
+         PWS83BFgyFz6YtL6+ExXLDXmXrDF/9NqQWdOj1/zsEm3P3gJqWGLTvGeCq8pvbeZOvDj
+         3VFA==
+X-Gm-Message-State: AOAM530NRfHh9C+Mfa5jOueMYt7eDZag6oRyUDxsYU40POrgQxK1wUO6
+        E1+qMig+tgf/UPhl4Xx2dM5THw==
+X-Google-Smtp-Source: ABdhPJzHGnienAihLc95zBhFzzpY3gXspxszzg17Vbsfm7mbo6WiEiHCqewBRh0uVCyFhqXtvcwHFg==
+X-Received: by 2002:a17:90a:6c45:: with SMTP id x63mr36125760pjj.0.1628524194146;
+        Mon, 09 Aug 2021 08:49:54 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6914:ad55:5b1:543c])
+        by smtp.gmail.com with UTF8SMTPSA id j13sm23205367pgp.29.2021.08.09.08.49.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Aug 2021 08:49:53 -0700 (PDT)
+Date:   Mon, 9 Aug 2021 08:49:50 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-kernel@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Andy Gross <agross@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Nishanth Menon <nm@ti.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YRFOnhJkB2vi/zwD@google.com>
+References: <20210727004118.2583774-1-mka@chromium.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210727004118.2583774-1-mka@chromium.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Fibocom FG150 is a 5G module based on Qualcomm SDX55 platform,
-support Sub-6G band.
+Hi Greg,
 
-Compared with the first patch, I removed the defines of Fibocom 
-VID and PID by following Lars' suggestion.
+Just wanted to check if this series is still on your radar. Is
+there anything that blocks it from landing (further ACKs, ...)?
 
-Here are the outputs of lsusb -v and usb-devices:
+Thanks
 
-> T:  Bus=02 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2cb7 ProdID=010b Rev=04.14
-> S:  Manufacturer=Fibocom
-> S:  Product=Fibocom Modem_SN:XXXXXXXX
-> S:  SerialNumber=XXXXXXXX
-> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#=0x0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
-> I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-> I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
-> I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
-> I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+Matthias
 
-> Bus 002 Device 002: ID 2cb7:010b Fibocom Fibocom Modem_SN:XXXXXXXX
-> Device Descriptor:
->   bLength                18
->   bDescriptorType         1
->   bcdUSB               3.20
->   bDeviceClass            0 
->   bDeviceSubClass         0 
->   bDeviceProtocol         0 
->   bMaxPacketSize0         9
->   idVendor           0x2cb7 Fibocom
->   idProduct          0x010b 
->   bcdDevice            4.14
->   iManufacturer           1 Fibocom
->   iProduct                2 Fibocom Modem_SN:XXXXXXXX
->   iSerial                 3 XXXXXXXX
->   bNumConfigurations      1
->   Configuration Descriptor:
->     bLength                 9
->     bDescriptorType         2
->     wTotalLength       0x00e6
->     bNumInterfaces          5
->     bConfigurationValue     1
->     iConfiguration          4 RNDIS_DUN_DIAG_ADB
->     bmAttributes         0xa0
->       (Bus Powered)
->       Remote Wakeup
->     MaxPower              896mA
->     Interface Association:
->       bLength                 8
->       bDescriptorType        11
->       bFirstInterface         0
->       bInterfaceCount         2
->       bFunctionClass        239 Miscellaneous Device
->       bFunctionSubClass       4
->       bFunctionProtocol       1
->       iFunction               7 RNDIS
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        0
->       bAlternateSetting       0
->       bNumEndpoints           1
->       bInterfaceClass       239 Miscellaneous Device
->       bInterfaceSubClass      4
->       bInterfaceProtocol      1
->       iInterface              0
->       ** UNRECOGNIZED:  05 24 00 10 01
->       ** UNRECOGNIZED:  05 24 01 00 01
->       ** UNRECOGNIZED:  04 24 02 00
->       ** UNRECOGNIZED:  05 24 06 00 01
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x81  EP 1 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0008  1x 8 bytes
->         bInterval               9
->         bMaxBurst               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        1
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass        10 CDC Data
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x8e  EP 14 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               6
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x0f  EP 15 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               6
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        2
->       bAlternateSetting       0
->       bNumEndpoints           3
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass      0
->       bInterfaceProtocol      0
->       iInterface              0
->       ** UNRECOGNIZED:  05 24 00 10 01
->       ** UNRECOGNIZED:  05 24 01 00 00
->       ** UNRECOGNIZED:  04 24 02 02
->       ** UNRECOGNIZED:  05 24 06 00 00
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x83  EP 3 IN
->         bmAttributes            3
->           Transfer Type            Interrupt
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x000a  1x 10 bytes
->         bInterval               9
->         bMaxBurst               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x82  EP 2 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x01  EP 1 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        3
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass    255 Vendor Specific Subclass
->       bInterfaceProtocol     48
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x84  EP 4 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x02  EP 2 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->     Interface Descriptor:
->       bLength                 9
->       bDescriptorType         4
->       bInterfaceNumber        4
->       bAlternateSetting       0
->       bNumEndpoints           2
->       bInterfaceClass       255 Vendor Specific Class
->       bInterfaceSubClass     66
->       bInterfaceProtocol      1
->       iInterface              0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x03  EP 3 OUT
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
->       Endpoint Descriptor:
->         bLength                 7
->         bDescriptorType         5
->         bEndpointAddress     0x85  EP 5 IN
->         bmAttributes            2
->           Transfer Type            Bulk
->           Synch Type               None
->           Usage Type               Data
->         wMaxPacketSize     0x0400  1x 1024 bytes
->         bInterval               0
->         bMaxBurst               0
-> Binary Object Store Descriptor:
->   bLength                 5
->   bDescriptorType        15
->   wTotalLength       0x0016
->   bNumDeviceCaps          2
->   USB 2.0 Extension Device Capability:
->     bLength                 7
->     bDescriptorType        16
->     bDevCapabilityType      2
->     bmAttributes   0x00000006
->       BESL Link Power Management (LPM) Supported
->   SuperSpeed USB Device Capability:
->     bLength                10
->     bDescriptorType        16
->     bDevCapabilityType      3
->     bmAttributes         0x00
->     wSpeedsSupported   0x000f
->       Device can operate at Low Speed (1Mbps)
->       Device can operate at Full Speed (12Mbps)
->       Device can operate at High Speed (480Mbps)
->       Device can operate at SuperSpeed (5Gbps)
->     bFunctionalitySupport   1
->       Lowest fully-functional device speed is Full Speed (12Mbps)
->     bU1DevExitLat           1 micro seconds
->     bU2DevExitLat         500 micro seconds
-> Device Status:     0x0000
->   (Bus Powered)
-
-Signed-off-by: Zhengjun Zhang <zhangzhengjun@aicrobo.com>
----
-V1 -> V2: Remove the defines of Fibocom VID and PID
-
- drivers/usb/serial/option.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 0fbe253dc..4fcf859e9 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2073,6 +2073,8 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
- 	  .driver_info = RSVD(6) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },	/* Fibocom FG150 AT */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
--- 
-2.32.0
-
+On Mon, Jul 26, 2021 at 05:41:12PM -0700, Matthias Kaehlcke wrote:
+> This series adds:
+> - the onboard_usb_hub_driver
+> - glue in the xhci-plat driver to create and destroy the
+>   onboard_usb_hub platform devices if needed
+> - a device tree binding for the Realtek RTS5411 USB hub controller
+> - device tree changes that add RTS5411 entries for the QCA SC7180
+>   based boards trogdor and lazor
+> - a couple of stubs for platform device functions to avoid
+>   unresolved symbols with certain kernel configs
+> 
+> The main issue the driver addresses is that a USB hub needs to be
+> powered before it can be discovered. For discrete onboard hubs (an
+> example for such a hub is the Realtek RTS5411) this is often solved
+> by supplying the hub with an 'always-on' regulator, which is kind
+> of a hack. Some onboard hubs may require further initialization
+> steps, like changing the state of a GPIO or enabling a clock, which
+> requires even more hacks. This driver creates a platform device
+> representing the hub which performs the necessary initialization.
+> Currently it only supports switching on a single regulator, support
+> for multiple regulators or other actions can be added as needed.
+> Different initialization sequences can be supported based on the
+> compatible string.
+> 
+> Besides performing the initialization the driver can be configured
+> to power the hub off during system suspend. This can help to extend
+> battery life on battery powered devices which have no requirements
+> to keep the hub powered during suspend. The driver can also be
+> configured to leave the hub powered when a wakeup capable USB device
+> is connected when suspending, and power it off otherwise.
+> 
+> Changes in v15:
+> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+>   or USB_DWC3_DUAL_ROLE is selectable
+> 
+> Changes in v14:
+> - rebased on top of v5.14-rc1
+> - dropped DT binding patch which landed in v5.13
+> 
+> Changes in v13:
+> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+>   'depends on'" to the series to avoid Kconfig conflicts
+> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+>   to the series to keep effective defconfig unchanged
+> 
+> Changes in v12:
+> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+>   in onboard_hub.h to also check for the driver built as module
+> - onboard_hub_driver: include onboard_hub.h again to make sure there
+>   are prototype declarations for the public functions
+> 
+> Changes in v11:
+> - support multiple onboard hubs connected to the same parent
+> - don't include ‘onboard_hub.h’ from the onboard hub driver
+> 
+> Changes in v10:
+> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+> - keep 'regulator-boot-on' property for pp3300_hub
+> 
+> Changes in v9:
+> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+>   USB_PLATFORM_XHCI
+> 
+> Changes in v7:
+> - updated DT binding
+> - series rebased on qcom/arm64-for-5.13
+> 
+> Changes in v6:
+> - updated summary
+> 
+> Changes in v5:
+> - cover letter added
+> 
+> Matthias Kaehlcke (6):
+>   usb: misc: Add onboard_usb_hub driver
+>   of/platform: Add stubs for of_platform_device_create/destroy()
+>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+>   usb: host: xhci-plat: Create platform device for onboard hubs in
+>     probe()
+>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+> 
+>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+>  MAINTAINERS                                   |   7 +
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
+>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+>  arch/arm64/configs/defconfig                  |   1 +
+>  drivers/usb/cdns3/Kconfig                     |   2 +-
+>  drivers/usb/dwc3/Kconfig                      |   5 +-
+>  drivers/usb/host/Kconfig                      |   5 +-
+>  drivers/usb/host/xhci-plat.c                  |   6 +
+>  drivers/usb/host/xhci.h                       |   2 +
+>  drivers/usb/misc/Kconfig                      |  17 +
+>  drivers/usb/misc/Makefile                     |   1 +
+>  drivers/usb/misc/onboard_usb_hub.c            | 497 ++++++++++++++++++
+>  include/linux/of_platform.h                   |  22 +-
+>  include/linux/usb/onboard_hub.h               |  18 +
+>  17 files changed, 621 insertions(+), 39 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-bus-platform-onboard-usb-hub
+>  create mode 100644 drivers/usb/misc/onboard_usb_hub.c
+>  create mode 100644 include/linux/usb/onboard_hub.h
+> 
+> -- 
+> 2.32.0.432.gabb21c7263-goog
+> 
