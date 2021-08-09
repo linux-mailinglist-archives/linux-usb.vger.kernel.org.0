@@ -2,45 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBB03E3CD7
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Aug 2021 23:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 394CF3E3D5F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Aug 2021 02:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232353AbhHHVBo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 8 Aug 2021 17:01:44 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:43440 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbhHHVBn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 8 Aug 2021 17:01:43 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru 1A0D220DE938
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-Subject: Re: [PATCH 4/9] usb: gadget: udc: s3c2410: add IRQ check
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     <linux-usb@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-samsung-soc@vger.kernel.org>
-References: <717ddd7c-22cd-d82c-e43d-80254718c801@omp.ru>
- <f704a632-a970-fe8d-35e7-f4d032c670c7@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <7ba95c65-416c-2b55-b004-bf87b91288d7@omp.ru>
-Date:   Mon, 9 Aug 2021 00:01:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S230175AbhHIAmi (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 8 Aug 2021 20:42:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48038 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229977AbhHIAmi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 8 Aug 2021 20:42:38 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id C1D3960ED6;
+        Mon,  9 Aug 2021 00:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628469738;
+        bh=q7I3mO1/OCobYI9TziAX5MrBdUvrhoHFEswsMsxBim4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=baHHykfqeRp/sj41HTaQGJhi0hC4mLLBYxC9HFW+SsXrz101YdDP0fD7kmLgPrgGo
+         Rb/awEsTVVDRnOyaicAiCq8K2qrrs73eTsFH+rch3gewPkD03RoU0OOZHavMyrsWce
+         CrGPteUrT3xXjjxQE4FEO9MKY3Tzip6duPRa9cJZntCXKQlkVeyJct6OiT3wEHux4Y
+         g7/f9hhAUnyufHnwTfz/D7SxhPsTe9SxZ+YrvWN5uYCWIQ2j2Zsh0eUVjywKiJVHDl
+         YKaJXeyLyUKQ8LUhZD/mcsyUUIIEOzDzf5FzawDGvZk3bSUvsZrs+xs0O5kXnXBpMO
+         0rdApqN058HPg==
+Date:   Mon, 9 Aug 2021 08:42:14 +0800
+From:   Peter Chen <peter.chen@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Salah Triki <salah.triki@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: chipidea: get lock before calling
+ usb_[disable|enable]_autosuspend()
+Message-ID: <20210809004214.GA6693@nchen>
+References: <20210802215212.GA1350820@pc>
+ <20210804013809.GA16676@nchen>
+ <YQu2Yys43Egstxmn@kroah.com>
 MIME-Version: 1.0
-In-Reply-To: <f704a632-a970-fe8d-35e7-f4d032c670c7@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT01.lancloud.ru (fd00:f066::141) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YQu2Yys43Egstxmn@kroah.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Oops, duplicate patch. Scratch the series, I'm going to restart posting tomorrow... :-)
+On 21-08-05 11:58:59, Greg Kroah-Hartman wrote:
+> On Wed, Aug 04, 2021 at 09:38:09AM +0800, Peter Chen wrote:
+> > On 21-08-02 22:52:12, Salah Triki wrote:
+> > > Based on the documentation of usb_[disable|enable]_autosuspend(), the
+> > > caller must hold udev's device lock.
+> > > 
+> > > Signed-off-by: Salah Triki <salah.triki@gmail.com>
+> > > ---
+> > >  drivers/usb/chipidea/otg_fsm.c | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/drivers/usb/chipidea/otg_fsm.c b/drivers/usb/chipidea/otg_fsm.c
+> > > index 6ed4b00dba96..2d4174250432 100644
+> > > --- a/drivers/usb/chipidea/otg_fsm.c
+> > > +++ b/drivers/usb/chipidea/otg_fsm.c
+> > > @@ -518,12 +518,14 @@ static void ci_otg_loc_sof(struct otg_fsm *fsm, int on)
+> > >  	if (!udev)
+> > >  		return;
+> > >  
+> > > +	usb_lock_device(udev);
+> > >  	if (on) {
+> > >  		usb_disable_autosuspend(udev);
+> > >  	} else {
+> > >  		pm_runtime_set_autosuspend_delay(&udev->dev, 0);
+> > >  		usb_enable_autosuspend(udev);
+> > >  	}
+> > > +	usb_unlock_device(udev);
+> > >  }
+> > >  
+> > 
+> > Acked-by: Peter Chen <peter.chen@kernel.org>
+> 
+> I think this is not ok, see the other threads...
+
+Thanks for checking it, I read Alan's comments for the similar patches.
+Yes, it doesn't need since all callers have already holds fsm->lock.
+
+-- 
+
+Thanks,
+Peter Chen
+
