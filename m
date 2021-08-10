@@ -2,126 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8533E5338
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 08:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7416B3E533D
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 08:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234302AbhHJGEF (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 02:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232947AbhHJGEF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 02:04:05 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243BEC0613D3
-        for <linux-usb@vger.kernel.org>; Mon,  9 Aug 2021 23:03:43 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j1so31563968pjv.3
-        for <linux-usb@vger.kernel.org>; Mon, 09 Aug 2021 23:03:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:subject:message-id:mime-version:content-disposition;
-        bh=gNSA/QqvaxKCqHSWnVz2swgpIR5+WkaDSkJI1ULT9rA=;
-        b=LgY/E8dsE++Nv72Q1nlDTOYah9pp2hBgV4azqDWovVC7KEw80sgREuXKkU0Ll4K2AR
-         iKBiu/UcLOK2AOtWWNQcd20P/OwJ77xjnhKT39aZIlYI5M9B18DcUNOnFAKOgX94wBpj
-         JsDmBoXsVg9B5cGemetypTwapHG3EvoEc9551wZp5ZgFoPhqXARg9sDxNpEWya2wmuZV
-         +2qSl1tTq40KrJwQc//JJLUmaZRhAVHLLQ/UXjwld7rxPdenXYK+3fxHlF94/YgNXmZ3
-         7z5wW72+oP4IOM95ayZ1sFtgxLzB8K9EMRSum7wZmnnqsfHyKZ9MsTR29W/J5bEwtdAc
-         UuYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition;
-        bh=gNSA/QqvaxKCqHSWnVz2swgpIR5+WkaDSkJI1ULT9rA=;
-        b=olRbb6gAXAgFNKVQnX+jS6BjqBnoWkLUP4Z4AsBcECXnsP7JkhZWiErupPFUwT6l/h
-         BIB2hQ58DprdvQ39zieirO7yXSq+XgkBFGNQ7kf+XeHLFt9kgEVGnceSsCNAJ0OBNVo4
-         2ZusFrvfn7MKwXcNgw4UCYHoCrfZgZ4NTkUTbljYeIyenChsnTSHxXfp9xc3IQG6C3MX
-         K/KEcoUQEuhmhZ+XVZY5wtHPTie+lfgI5ymWfFmD3Pk6V9JSZzc71AGa/a2l1j3Cnabf
-         XovmvYs5m1A7nCsqmFRvFnm5lGP+s0jxtXjuSO41jEfC1elHXS9GYaz3JZwtu5nn1XjA
-         rk9A==
-X-Gm-Message-State: AOAM5306b5BruCMxm/lZ6PHPDOx/1hh+ihbzpkbl9MhTmrdTVwHpM35i
-        HVw6UHpUmHw/PFVlSfL+xfJE66gZ/yezog==
-X-Google-Smtp-Source: ABdhPJxKliws3410q1HD7YF34N5EEBwQenuTxL1SGbdk2QoxAWDCsw1kWTRpj513cJUJy9qSGyOfyw==
-X-Received: by 2002:a17:90a:8809:: with SMTP id s9mr3152778pjn.44.1628575415238;
-        Mon, 09 Aug 2021 23:03:35 -0700 (PDT)
-Received: from ubuntu ([106.245.77.4])
-        by smtp.gmail.com with ESMTPSA id u3sm18983464pfn.76.2021.08.09.23.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Aug 2021 23:03:34 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 15:02:28 +0900
-From:   Jeaho Hwang <jhhwang@rtst.co.kr>
-To:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: [PATCH] usb: chipidea: fix RT issue for udc
-Message-ID: <20210810060228.GA3326442@ubuntu>
+        id S235353AbhHJGGO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 02:06:14 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37436 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230243AbhHJGGN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Aug 2021 02:06:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 6111360F55;
+        Tue, 10 Aug 2021 06:05:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628575552;
+        bh=XzOB96wPHfu9rYOv3j1ASEVIo26lUkIuCcFER+63L8Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YAq67zxxGf6IEcxsp+4K/IT2Ae6lwQvydXhnzZ384j5vu/+DyivXXWJB12bz9MTcO
+         dIMLKXbnLyvvFW3wyae0GLIxZEhBHeFRm3MTxEzAyWvb7/RCaS9u4QNUv4JqgEYOfl
+         Re46rweTC3OQbB4xfNVir8Aow9dRPk+IhT/Fp85c=
+Date:   Tue, 10 Aug 2021 08:05:49 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Petri Gynther <pgynther@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [RFC][PATCH] dwc3: gadget: Fix losing list items in
+ dwc3_gadget_ep_cleanup_completed_requests()
+Message-ID: <YRIXPflAPtCPHQde@kroah.com>
+References: <CANcMJZCEVxVLyFgLwK98hqBEdc0_n4P0x_K6Gih8zNH3ouzbJQ@mail.gmail.com>
+ <20210809223159.2342385-1-john.stultz@linaro.org>
+ <4e1bef57-8520-36b9-f5cb-bbc925626a19@synopsys.com>
+ <CALAqxLXPGt69ceiXkGT-nDjeP72mmCUgEzDdMpXr=rSNwpespw@mail.gmail.com>
+ <0dfa8cd6-99b6-55c7-8099-0f6f1187b7fd@synopsys.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0dfa8cd6-99b6-55c7-8099-0f6f1187b7fd@synopsys.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-hw_ep_prime sometimes fails if irq occurs while it rus on RT kernel.
-to prevent local_irq_save should keep the function from irqs.
+On Mon, Aug 09, 2021 at 10:57:27PM +0000, Thinh Nguyen wrote:
+> John Stultz wrote:
+> > On Mon, Aug 9, 2021 at 3:44 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+> >>
+> >> John Stultz wrote:
+> >>> In commit d25d85061bd8 ("usb: dwc3: gadget: Use
+> >>> list_replace_init() before traversing lists"), a local list_head
+> >>> was introduced to process the started_list items to avoid races.
+> >>>
+> >>> However, in dwc3_gadget_ep_cleanup_completed_requests() if
+> >>> dwc3_gadget_ep_cleanup_completed_request() fails, we break early,
+> >>> causing the items on the local list_head to be lost.
+> >>>
+> >>> This issue showed up as problems on the db845c/RB3 board, where
+> >>> adb connetions would fail, showing the device as "offline".
+> >>>
+> >>> This patch tries to fix the issue by if we are returning early
+> >>> we splice in the local list head back into the started_list
+> >>> and return (avoiding an infinite loop, as the started_list is
+> >>> now non-null).
+> >>>
+> >>> Not sure if this is fully correct, but seems to work for me so I
+> >>> wanted to share for feedback.
+> >>>
+> >>> Cc: Wesley Cheng <wcheng@codeaurora.org>
+> >>> Cc: Felipe Balbi <balbi@kernel.org>
+> >>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> >>> Cc: Alan Stern <stern@rowland.harvard.edu>
+> >>> Cc: Jack Pham <jackp@codeaurora.org>
+> >>> Cc: Thinh Nguyen <thinh.nguyen@synopsys.com>
+> >>> Cc: Todd Kjos <tkjos@google.com>
+> >>> Cc: Amit Pundir <amit.pundir@linaro.org>
+> >>> Cc: YongQin Liu <yongqin.liu@linaro.org>
+> >>> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+> >>> Cc: Petri Gynther <pgynther@google.com>
+> >>> Cc: linux-usb@vger.kernel.org
+> >>> Fixes: d25d85061bd8 ("usb: dwc3: gadget: Use list_replace_init() before traversing lists")
+> >>> Signed-off-by: John Stultz <john.stultz@linaro.org>
+> >>> ---
+> >>>  drivers/usb/dwc3/gadget.c | 6 ++++++
+> >>>  1 file changed, 6 insertions(+)
+> >>>
+> >>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> >>> index b8d4b2d327b23..a73ebe8e75024 100644
+> >>> --- a/drivers/usb/dwc3/gadget.c
+> >>> +++ b/drivers/usb/dwc3/gadget.c
+> >>> @@ -2990,6 +2990,12 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+> >>>                       break;
+> >>>       }
+> >>>
+> >>> +     if (!list_empty(&local)) {
+> >>> +             list_splice_tail(&local, &dep->started_list);
+> >>> +             /* Return so we don't hit the restart case and loop forever */
+> >>> +             return;
+> >>> +     }
+> >>> +
+> >>>       if (!list_empty(&dep->started_list))
+> >>>               goto restart;
+> >>>  }
+> >>>
+> >>
+> >> No, we should revert the change for
+> >> dwc3_gadget_ep_cleaup_completed_requests(). As I mentioned previously,
+> >> we don't cleanup the entire started_list. If the original problem is due
+> >> to disconnection in the middle of request completion, then we can just
+> >> check for pullup_connected and exit the loop and let the
+> >> dwc3_remove_requests() do the cleanup.
+> > 
+> > Ok, sorry, I didn't read your mail in depth until I had this patch
+> > sent out. If a revert of d25d85061bd8 is the better fix, I'm fine with
+> > that too.
+> > 
+> > thanks
+> > -john
+> > 
+> 
+> IMO, we should revert this patch for now since it will cause regression.
+> We can review and test a proper fix at a later time.
 
-I am not sure where is the best to submit this patch, between RT and USB
-community so sending to both. thanks.
+Ok, can someone send me a revert please?  That will go faster than me
+having to create it myself...
 
-Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
----
- drivers/usb/chipidea/udc.c | 31 +++++++++++++++++++++++++------
- 1 file changed, 25 insertions(+), 6 deletions(-)
+thanks,
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 5f35cdd2cf1d..a90498f17cc4 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -102,6 +102,9 @@ static int hw_ep_flush(struct ci_hdrc *ci, int num, int dir)
- {
- 	int n = hw_ep_bit(num, dir);
- 
-+    /* From zynq-7000 TRM, It can take a long time
-+     * so irq disable is not a good option for RT
-+     */
- 	do {
- 		/* flush any pending transfer */
- 		hw_write(ci, OP_ENDPTFLUSH, ~0, BIT(n));
-@@ -190,22 +193,32 @@ static int hw_ep_get_halt(struct ci_hdrc *ci, int num, int dir)
- static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
- {
- 	int n = hw_ep_bit(num, dir);
-+	unsigned long flags;
-+	int ret = 0;
- 
- 	/* Synchronize before ep prime */
- 	wmb();
- 
--	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num)))
--		return -EAGAIN;
-+	/* irq affects this routine so irq should be disabled on RT.
-+	 * on standard kernel, irq is already disabled by callers.
-+	 */
-+	local_irq_save(flags);
-+	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num))) {
-+		ret = -EAGAIN;
-+	goto out;
-+	}
- 
- 	hw_write(ci, OP_ENDPTPRIME, ~0, BIT(n));
- 
- 	while (hw_read(ci, OP_ENDPTPRIME, BIT(n)))
- 		cpu_relax();
- 	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num)))
--		return -EAGAIN;
-+		ret = -EAGAIN;
- 
-+out:
-+	local_irq_restore(flags);
- 	/* status shoult be tested according with manual but it doesn't work */
--	return 0;
-+	return ret;
- }
- 
- /**
--- 
-2.25.1
-
+greg k-h
