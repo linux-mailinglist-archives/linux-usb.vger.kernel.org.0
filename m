@@ -2,112 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8723E82B8
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 20:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECF53E82BB
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 20:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236737AbhHJSRa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 14:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59302 "EHLO
+        id S236973AbhHJSRd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 14:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238814AbhHJSPA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 14:15:00 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D9CC03E586
-        for <linux-usb@vger.kernel.org>; Tue, 10 Aug 2021 10:46:58 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id d10-20020a9d4f0a0000b02904f51c5004e3so9946otl.9
-        for <linux-usb@vger.kernel.org>; Tue, 10 Aug 2021 10:46:58 -0700 (PDT)
+        with ESMTP id S239693AbhHJSPY (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 14:15:24 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5357CC043CE4;
+        Tue, 10 Aug 2021 10:50:53 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id q11-20020a7bce8b0000b02902e6880d0accso2565843wmj.0;
+        Tue, 10 Aug 2021 10:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JNGqukZNLlv0aFWFy8HqZUMwbBzjAv62MTk5xyepWJw=;
-        b=JfO53THyZ/pY2Xgb1vnPJRiXpCwHfgtTuAcYvNL5SGoveEsmVu2JWOCg2g3iO1AZtX
-         YKuH+MlMF8XZayefBH1H5H4Eu2wbfzZhlXPFXA2PIRR4YWugzdysKg4p0EW5t6L8VENH
-         Qci8mcQbZLW9n3WVkF8zuYA02j6t97zQqxmdI=
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=cGrL/yj5Ha3iFA9BaCU5TgOPzCic5HMvCDtNMIgCB3UrLV0icXctcfZNfLbbr9XQxt
+         zcxK9Mewolb+c6gfTHj5P6yskECtki3dK4WSaTIz73mVHxSFxuQylUD4sUI4HxbhiGhx
+         S5KvCH9gOrFctcmmdMQPRYK5iIzdk0xWnQiIXHpOjGJ8xHXUdzCYdAJE9lUq0p7df2Nt
+         mV1OaaPE2gEsopcZNvmJ44c/AaoegH8cmlW1+FOkV/TScNaC0gZdKxaSDCNHQdl8UTzW
+         pp8+NXDcQlcK5Hzgz9y+WriRFXc8WzEt5acrgNrZB9njwfaI18RcAXpzIsjmmubVm3ws
+         4zwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JNGqukZNLlv0aFWFy8HqZUMwbBzjAv62MTk5xyepWJw=;
-        b=Ogst/LImsJtScX2pVqJGwPYi+ZI1/445izRM9fqPQBbToveeMtIu3F9yGsbjg0ylI4
-         Gqa6G8OTvPBtbbCBMu+HW5pp8a3RdjENAW6j3r4z5zH1gnPwmk1e0lFlOIa1XqwC9ip4
-         DVEE87746XZ1YG65ogzQh6cx5b4ZW4cG0Pk0dE0RQOOheQN8o+7PyyavZIB9l07v7yl1
-         uh4kPMXo1SAL23LXzADaDAWVH242AaNvIpyYSTNIybrJ9d9ywOoGkgrQCHchx1pjo5aN
-         B/bgrBiiIcSUcis8Vm202DbErA+Or+pI+TK4m2WAme0o5c0oJRcSo+Ofo9WEdX0lJww1
-         6V4w==
-X-Gm-Message-State: AOAM530MHa0IzHNhTydg+/qFZrelNXGectIQqaFhIl4XXEJSsAK66JL4
-        aaH64YAJZY1Epm5na2Vn4hXHuw==
-X-Google-Smtp-Source: ABdhPJy4obKBBysTjZZbvUO3M5drqw9Q+yzknQFK4vObi5m9f4ZVdhjK1X/c/sZE3MwQ+PxfPSrLCw==
-X-Received: by 2002:a05:6830:16cb:: with SMTP id l11mr21199314otr.209.1628617617843;
-        Tue, 10 Aug 2021 10:46:57 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id y5sm2778886ots.56.2021.08.10.10.46.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Aug 2021 10:46:57 -0700 (PDT)
-Subject: Re: [PATCH v2] vhci_hcd: USB port can get stuck in the disabled state
-To:     Michael <msbroadf@gmail.com>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210721235526.10588-1-msbroadf@gmail.com>
- <7b02cb66-d672-ae95-01ea-c6015725e1ac@linuxfoundation.org>
- <CALdjXpA4_eXen6RjhsEBYt8CQs-2gzwYs9h9q0Z2LKZ=rXVp+Q@mail.gmail.com>
- <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
- <CALdjXpBPRraC8xxORgE3SXw4xFnTW-Y6rLbcS+Cx0xYq3+aBeQ@mail.gmail.com>
- <976d34c0-d603-1f16-edbd-ad6c8881ad4e@linuxfoundation.org>
- <CALdjXpAzE3o7Bwdvj1TvsBRpDWDe1FZ8LsmL5q0suxYnRJCOaA@mail.gmail.com>
- <5165bd84-11af-35dd-8a9b-11c7f219fb88@linuxfoundation.org>
- <CALdjXpCmx_nfYEguv9UvOrBMYFxB4sqwmNiV99ggHRZnZjiM-A@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <4f345afe-61d5-66b3-3252-562988c8926f@linuxfoundation.org>
-Date:   Tue, 10 Aug 2021 11:46:56 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=kdOyat47GBCBfa1FL5coUjVnRLZum0/CwPBMKIGKOjnmP180kTlopXvdG12nxrhzOc
+         HrhzQXOyOtj1HILk10TgOt+s3q9siiHPP9rXdUsxEdWijs0vRL32wWgjIHZ76VR2IR8a
+         NSjyEQ08YhSo6wJN8SNP+2P7oGZoR3Udv6CRJ90V0jY7JrrDK2YBbUu8uNlmEANlZhcE
+         DJQR3hFw70EPqrF/ooWorgxdW+9kUJmX5HWMQCcw6Y49NdW9hZc9TQ+9QzO53HokrOPc
+         bFHFICupDaCWe1I0QSWKFaonLbHQ3LZSATVnq+zoiTppqyzBRECRb6mYgQBbPTZj0j06
+         jFUw==
+X-Gm-Message-State: AOAM533WxlefZGtJ5B8UNL/oqO6SdyCkM1cQSswmt7a30Z/BAWyM3dnd
+        Kk+V5M2zKOmHebU97TzEXYdE+TJnjFH93w==
+X-Google-Smtp-Source: ABdhPJxwyplDNw9ulG29Qioh5mK2odvtstuwTNe5IH1v9sXR15tyC9nUOS2oVNFSNpe4+wRxjtV+RA==
+X-Received: by 2002:a7b:cf12:: with SMTP id l18mr5994652wmg.130.1628617852034;
+        Tue, 10 Aug 2021 10:50:52 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.220.234])
+        by smtp.gmail.com with ESMTPSA id k17sm4419042wmj.0.2021.08.10.10.50.45
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Tue, 10 Aug 2021 10:50:51 -0700 (PDT)
+Message-ID: <6112bc7b.1c69fb81.b576d.9fe9@mx.google.com>
+From:   Vanina curth <curtisvani0031@gmail.com>
+X-Google-Original-From: Vanina  curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <CALdjXpCmx_nfYEguv9UvOrBMYFxB4sqwmNiV99ggHRZnZjiM-A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Dear
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Tue, 10 Aug 2021 17:50:39 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/2/21 7:00 PM, Michael wrote:
-> On Tue, 3 Aug 2021 at 09:14, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 7/30/21 5:52 PM, Michael wrote:
->>> Yes i think just adding the VDEV_ST_USED check in addition to the
->>> VDEV_ST_NOT_ASSIGNED state is fine and would fix the issue.
->>>
->>
->> Can you please confirm if this works?
->>
->>> After many years of writing virtualhere (a similar system to usb/ip
->>> but cross-platform and different non-kernel way of doing it server
->>> side) I've seen many drivers that issue reset at any time. Loading
->>> firmware is usually the reason.  Also sometimes switching
->>> configurations requires a reset also, for example some gaming wheels
->>> do this. I don't think you should make this VDEV_ST_USED check
->>> specific to Wifi devices, as a lot of devices don't follow too closely
->>> to the USB protocol to begin with from my experience. They primarily
->>> base their USB interactions assuming the windows platform and its
->>> quirks.
->>>
->>
->> When sending responses to Linux kernel mailing lists, please use bottom post.
->> This check will be used for all drivers. We don't add checks for specific cases
->> in the code.
->>
->> thanks,
->> -- Shuah
->>
-> 
-> Yes it works with that change.
-> 
-
-Would you like to send me a patch for this?
-
-thanks,
--- Shuah
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
