@@ -2,188 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4267D3E7DE5
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 19:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDE93E7E08
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 19:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbhHJRBC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 13:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbhHJRBA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 13:01:00 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9E1C0613C1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Aug 2021 10:00:37 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h13so27211644wrp.1
-        for <linux-usb@vger.kernel.org>; Tue, 10 Aug 2021 10:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:subject:to:cc:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=74SJXI5E5WWb2wjCblELI9UszaDCnz2lvHnGgWSoGB8=;
-        b=GdLVDkzSFVG1sMD8MgzOiOSLAD0wFEP4QCEGKQsvZYu9TTsp+wBA9B7rk2D7q37Ynt
-         WXnpoqoXj6nLXvrF8Z+fbUraivlMsv00YPy0cuysiMpkdejF0nRvhg8P+z4585gRz6+A
-         F9wMaFAClre9EqMoN4PArD/S/NQ8LHRYwWAiyWTpg8QNe9cZG1w013vS7hxZviMQrqmB
-         VZGShZWsxxSx1Iz+0mHXNq4wzeM79RFlYE52UUk5rABn4wuQR0KKnoQdBMLh/Yf3JIvl
-         ZnYh6Voxo+XdODkfpJizB/0ALg6eg+cV37V0YUWPYJVNcOtpJo6y+VzEusk8vZnB8Eak
-         atkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=74SJXI5E5WWb2wjCblELI9UszaDCnz2lvHnGgWSoGB8=;
-        b=jmP9MiOKlCOjOv7h42fkIzMVDrdrELI8lRVyPzLVUt3F8ILhpiHGTEGYUoz9cdxZsh
-         TqIOx69UxLog/uGUF+PhczCuRF/pbKiok8Sf0EdNnDQilLg7qHzDJjjwuYbZ7OWtZp/y
-         TDGqdDXrjZL1qdwK+e5x2I5bAE3Jvvcf8TbFjUScIDSkh2CbYkfNF+87j0AJKLIpYxlo
-         WbyfIXuT8W20ivcvgRfOSwTkK96iHQb+vpY8Fyj9aQh92u+/IjMQ4k/JcZUD8TZU7geg
-         NobeDm3kb0PtJW9el3WKA86LKZ9F21kzECn/95Mfqcj0OD50tK63CceGG2PFAmFJrUpQ
-         mDpQ==
-X-Gm-Message-State: AOAM531AvIJeCnBmho8Cv739GJoxDpSLfrW0u3QdeAJFg0qEYEAIRhjt
-        UC/OSNlz3G2YGeEbbfkGxs4=
-X-Google-Smtp-Source: ABdhPJzeC0JBbib1s5xquzGvkdHmhM8TSH6M788uOWyEjNw1sC9ooa5hyFsi2EZVqMmO1jjC2lIngQ==
-X-Received: by 2002:adf:9e01:: with SMTP id u1mr32121129wre.12.1628614836366;
-        Tue, 10 Aug 2021 10:00:36 -0700 (PDT)
-Received: from [192.168.86.232] (xo2wyvern.plus.com. [195.166.158.71])
-        by smtp.gmail.com with ESMTPSA id k1sm24345584wrz.61.2021.08.10.10.00.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Aug 2021 10:00:35 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 18:00:28 +0100
-From:   AMoonRabbit <razgriz.wilson6@gmail.com>
-Subject: RE: Fwd: Linux Kernel 5.12.10 Walkman USB DAC support issues
-To:     "Schmid, Carsten" <Carsten_Schmid@mentor.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
-Message-Id: <S8VMXQ.YRNXM3NIXCE01@gmail.com>
-In-Reply-To: <2c9ddbc65d1e4ce3a368c1d894281178@SVR-IES-MBX-03.mgc.mentorg.com>
-References: <QUKVWQ.1T8HV94AM5X6@gmail.com>
-        <CAJpVOidqd+tpNNkHGvC6fUQ7g3Z+FLpiDJrmPWtQmiL-AsYsLw@mail.gmail.com>
-        <YP+kqqimY1BYZAwL@kroah.com>
-        <a59c1173b77b4ace8db7181b1b0fc446@SVR-IES-MBX-03.mgc.mentorg.com>
-        <RBHWWQ.R54EUTRRR5DN@gmail.com>
-        <2c9ddbc65d1e4ce3a368c1d894281178@SVR-IES-MBX-03.mgc.mentorg.com>
-X-Mailer: geary/3.38.2
+        id S231678AbhHJRMf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 13:12:35 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:11828 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229663AbhHJRMe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Aug 2021 13:12:34 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628615532; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=plpxrD4kIxF9fIBxxFmf2PnbVDKTvqRX6FCReVS+x4o=; b=UcJhHod6sQNRpIknYR6Slupg1tlWA39EmShCxOK3678SLdIKTc+Pa/PBTEjbYH2wMB97uGhK
+ EujLyAOI7vOC6UToHDBbC1t0LFjH5favxpgiC4kZLyduVTzDj4zmZOLQrV1GeHIvCMTOxf8Y
+ MeLXtUwOes5gVXKbaF2RDZfx5kU=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
+ 6112b35991487ad520aa04e2 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Aug 2021 17:11:53
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 268D4C43217; Tue, 10 Aug 2021 17:11:53 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 2514BC433F1;
+        Tue, 10 Aug 2021 17:11:46 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 2514BC433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC][PATCH] dwc3: gadget: Fix losing list items in
+ dwc3_gadget_ep_cleanup_completed_requests()
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jack Pham <jackp@codeaurora.org>, Todd Kjos <tkjos@google.com>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        YongQin Liu <yongqin.liu@linaro.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Petri Gynther <pgynther@google.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <CANcMJZCEVxVLyFgLwK98hqBEdc0_n4P0x_K6Gih8zNH3ouzbJQ@mail.gmail.com>
+ <20210809223159.2342385-1-john.stultz@linaro.org>
+ <4e1bef57-8520-36b9-f5cb-bbc925626a19@synopsys.com>
+ <CALAqxLXPGt69ceiXkGT-nDjeP72mmCUgEzDdMpXr=rSNwpespw@mail.gmail.com>
+ <0dfa8cd6-99b6-55c7-8099-0f6f1187b7fd@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <b025412f-c27a-a59b-cd8f-aec0faa98928@codeaurora.org>
+Date:   Tue, 10 Aug 2021 10:11:51 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <0dfa8cd6-99b6-55c7-8099-0f6f1187b7fd@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Thinh,
 
-
-On Tue, 27 Jul, 2021 at 1:02 pm, "Schmid, Carsten"=20
-<Carsten_Schmid@mentor.com> wrote:
-> Hi Neil,
->=20
->>  -----Original Message-----
->>  From: AMoonRabbit <razgriz.wilson6@gmail.com>
->=20
-> No top posts please.
->=20
-> On Tue, 27 Jul, 2021 at 7:43 am, "Schmid, Carsten"
-> <Carsten_Schmid@mentor.com> wrote:
->>  Hi Greg,
->>=20
->>  On Tue, Jul 27, 2021 at 12:37:28AM +0100, Razgriz375 (Neil) wrote:
->>=20
->>>>   [  109.668465] usb 1-1: USB disconnect, device number 2
->>>>   [  110.084429] usb 1-1: new high-speed USB device number 5 using
->>>>  xhci_hcd
->>>>   [  110.237963] usb 1-1: New USB device found, idVendor=3D054c,
->>>>  idProduct=3D0b8c, bcdDevice=3D 1.00
->>>>   [  110.237989] usb 1-1: New USB device strings: Mfr=3D2, Product=3D3=
-,
->>>>  SerialNumber=3D4
->>>>   [  110.238002] usb 1-1: Product: WALKMAN
->>>>   [  110.238011] usb 1-1: Manufacturer: Sony
->>>>   [  110.238019] usb 1-1: SerialNumber: 10458B55477916
->>>>   [  110.342104] usb 1-1: 1:7 : unsupported format bits 0x100000000
->>>>   [  110.343953] usbcore: registered new interface driver
->>>>  snd-usb-audio
->>>>=20
->>>=20
->>>=20
->>>   Looks like you removed the device and then added it back?  And it
->>>  says
->>>   the device is supported by the kernel now, what does not work
->>>  properly?
->>=20
->>  But earlier in boot these messages are seen:
->>  [    1.908489] usb 1-1: New USB device found, idVendor=3D054c,
->>  idProduct=3D0ca1, bcdDevice=3D 1.00
->>  [    1.908503] usb 1-1: New USB device strings: Mfr=3D2, Product=3D3,
->>  SerialNumber=3D4
->>  [    1.908508] usb 1-1: Product: WALKMAN
->>  [    1.908513] usb 1-1: Manufacturer: Sony
->>  [    1.908516] usb 1-1: SerialNumber: 10458B55477916
->>  [    2.195821] usb-storage 1-1:1.0: USB Mass Storage device detected
->>  [    2.195988] scsi host0: usb-storage 1-1:1.0
->>=20
->>  ProductId is different, that's strange.
->>=20
->>  Neil, could you collect the dmesg from the working kernel 5.10=20
->> please?
->>  And: is the device expected to be a mass storage (aka USB disk) and
->>  sound card in one?
->>=20
-
-Responded to this already in the email on the 27th July.
-
->>=20
->>  So this is the Dmesg output from 5.10.17 with working output to USB=20
->> DAC
->>  (Walkman visually gets audio as the amp meter visualiser works=20
->> where as
->>  on newer kernels, whilst the system looks to be outputting sound,=20
->> the
->>  Walkman shows it's receiving nothing).
-> ...
->>  [   12.202312]usb 1-1: new high-speed USB device number 3 using=20
->> xhci_hcd
->>  [   12.351838]usb 1-1: New USB device found, idVendor=3D054c,
->>  idProduct=3D0b8c, bcdDevice=3D 1.00
->>  [   12.351844]usb 1-1: New USB device strings: Mfr=3D2, Product=3D3,
->>  SerialNumber=3D4
->>  [   12.351847]usb 1-1: Product: WALKMAN
->>  [   12.351850]usb 1-1: Manufacturer: Sony
->>  [   12.351852]usb 1-1: SerialNumber: 10458B55477916
->>  [   38.560172]usb 1-1: 1:7 : unsupported format bits 0x100000000
->>  [   38.562750]usbcore: registered new interface driver snd-usb-audio
->>  [   38.630995]snd_hda_intel 0000:00:1f.3: DSP detected with PCI
->>  class/subclass/prog-if info 0x040380
->=20
-> Looks like on the old kernel the Walkman is seen as the first sound=20
-> card.
-> On the new kernel, it was seen as a mass storage first and later=20
-> switched to snd-usb.
-> Please check if your Walkman appears as a sound card in the new kernel
-> and if it is muted due to not being the default output.
-
-So I have checked this, starting with the Walkman connected in DAC=20
-mode, so it is only seen in DAC mode. Pop OS updates the sound settings=20
-so that the Walkman is the selected output device. It does not show as=20
-muted. Within ALSA Mixer, I see that HDA Intel PCM is first, and then=20
-the WALKMAN device, however when selecting WALKMAN I get "This sound=20
-device does not have any controls".
-
->=20
+On 8/9/2021 3:57 PM, Thinh Nguyen wrote:
+> John Stultz wrote:
+>> On Mon, Aug 9, 2021 at 3:44 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>>>
+>>> John Stultz wrote:
+>>>> In commit d25d85061bd8 ("usb: dwc3: gadget: Use
+>>>> list_replace_init() before traversing lists"), a local list_head
+>>>> was introduced to process the started_list items to avoid races.
+>>>>
+>>>> However, in dwc3_gadget_ep_cleanup_completed_requests() if
+>>>> dwc3_gadget_ep_cleanup_completed_request() fails, we break early,
+>>>> causing the items on the local list_head to be lost.
+>>>>
+>>>> This issue showed up as problems on the db845c/RB3 board, where
+>>>> adb connetions would fail, showing the device as "offline".
+>>>>
+>>>> This patch tries to fix the issue by if we are returning early
+>>>> we splice in the local list head back into the started_list
+>>>> and return (avoiding an infinite loop, as the started_list is
+>>>> now non-null).
+>>>>
+>>>> Not sure if this is fully correct, but seems to work for me so I
+>>>> wanted to share for feedback.
+>>>>
+>>>> Cc: Wesley Cheng <wcheng@codeaurora.org>
+>>>> Cc: Felipe Balbi <balbi@kernel.org>
+>>>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>> Cc: Alan Stern <stern@rowland.harvard.edu>
+>>>> Cc: Jack Pham <jackp@codeaurora.org>
+>>>> Cc: Thinh Nguyen <thinh.nguyen@synopsys.com>
+>>>> Cc: Todd Kjos <tkjos@google.com>
+>>>> Cc: Amit Pundir <amit.pundir@linaro.org>
+>>>> Cc: YongQin Liu <yongqin.liu@linaro.org>
+>>>> Cc: Sumit Semwal <sumit.semwal@linaro.org>
+>>>> Cc: Petri Gynther <pgynther@google.com>
+>>>> Cc: linux-usb@vger.kernel.org
+>>>> Fixes: d25d85061bd8 ("usb: dwc3: gadget: Use list_replace_init() before traversing lists")
+>>>> Signed-off-by: John Stultz <john.stultz@linaro.org>
+>>>> ---
+>>>>  drivers/usb/dwc3/gadget.c | 6 ++++++
+>>>>  1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>> index b8d4b2d327b23..a73ebe8e75024 100644
+>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>> @@ -2990,6 +2990,12 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
+>>>>                       break;
+>>>>       }
+>>>>
+>>>> +     if (!list_empty(&local)) {
+>>>> +             list_splice_tail(&local, &dep->started_list);
+>>>> +             /* Return so we don't hit the restart case and loop forever */
+>>>> +             return;
+>>>> +     }
+>>>> +
+>>>>       if (!list_empty(&dep->started_list))
+>>>>               goto restart;
+>>>>  }
+>>>>
+>>>
+>>> No, we should revert the change for
+>>> dwc3_gadget_ep_cleaup_completed_requests(). As I mentioned previously,
+>>> we don't cleanup the entire started_list. If the original problem is due
+>>> to disconnection in the middle of request completion, then we can just
+>>> check for pullup_connected and exit the loop and let the
+>>> dwc3_remove_requests() do the cleanup.
+>>
+>> Ok, sorry, I didn't read your mail in depth until I had this patch
+>> sent out. If a revert of d25d85061bd8 is the better fix, I'm fine with
+>> that too.
+>>
+>> thanks
+>> -john
+>>
+> 
+> IMO, we should revert this patch for now since it will cause regression.
+> We can review and test a proper fix at a later time.
+> 
 > Thanks,
-> Carsten
-> -----------------
-> Siemens Electronic Design Automation GmbH; Anschrift: Arnulfstra=DFe=20
-> 201, 80634 M=FCnchen; Gesellschaft mit beschr=E4nkter Haftung;=20
-> Gesch=E4ftsf=FChrer: Thomas Heurung, Frank Th=FCrauf; Sitz der=20
-> Gesellschaft: M=FCnchen; Registergericht M=FCnchen, HRB 106955
->=20
+> Thinh
+> 
 
-Kind regards,
+Another suggestion would just be to replace the loop with a while() loop
+and using list_entry() instead.  That was what was discussed in the
+earlier patch series which also addresses the problem as well.  Issue
+here is the tmp variable still carries a stale request after the dwc3
+giveback is called.  We can avoid that by always fetching the
+list_entry() instead of relying on list_for_each_safe()
 
-Neil
+https://lore.kernel.org/linux-usb/1620716636-12422-1-git-send-email-wcheng@codeaurora.org/
 
+Thanks
+Wesley Cheng
 
-
-
-
-
-
-
-
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
