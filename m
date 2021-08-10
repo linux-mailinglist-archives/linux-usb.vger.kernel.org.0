@@ -2,194 +2,100 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5FB3E515C
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 05:12:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A5F3E51BD
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Aug 2021 06:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbhHJDMs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 9 Aug 2021 23:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234744AbhHJDMr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 9 Aug 2021 23:12:47 -0400
-Received: from mail-qk1-x74a.google.com (mail-qk1-x74a.google.com [IPv6:2607:f8b0:4864:20::74a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207CDC0613D3
-        for <linux-usb@vger.kernel.org>; Mon,  9 Aug 2021 20:12:26 -0700 (PDT)
-Received: by mail-qk1-x74a.google.com with SMTP id x2-20020a05620a0ec2b02903b8bd8b612eso7576044qkm.19
-        for <linux-usb@vger.kernel.org>; Mon, 09 Aug 2021 20:12:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=c7H/3mXxDgSULKRoQknWPbfYgsJ3ssxvDOUhKVgnTAI=;
-        b=XQ+qrLYHOPpmrlgq1I+3Qz70fRy13Axmk/pwCk3BMmOD/KFfLQ4geIoMSGxoP0rwV3
-         Sj7rikQUxQDHyX03DjLDgqJPTmTZ/Ej3z60ArlS46gVnPN2Y7VBNF924PccLaz8oYR8N
-         rQ9dG1IYgKnsLc+37TpvGVBII5W2lJ1TY11WWDL6ivBTvTgyBIDAB3iFv6HWZA+luwD2
-         KGTYrx0UQATyLO3DclFGfSapOF5Ce8Qf7bkBO5rWYauwldQIlvwkt+jfwQgl7Us9z2ag
-         yBEm456EmWHWo14yW+47Xqmix4majyeAikQOYecIxZAbjWxGraWDwYB+iwSCA3Mww3iZ
-         ibTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=c7H/3mXxDgSULKRoQknWPbfYgsJ3ssxvDOUhKVgnTAI=;
-        b=LH5aX4yg9p6K31VdNM7DTdBW1ygrQbCDGJHZvyxaHoGvV/E+qpOw1svhhvGRKAIEdb
-         WW5zeLCA92TNhxFhB/NK5Qfqn01nzMaPzXc8pkDl2ZUdvn/LKwWMfA9N7eURlMJ0nofd
-         MIDj28Iq6j/wnHd2eW4TDIGbMe0WwubEom5JtO6DTKWMf2rmdLFwq78VftDJgNUEpTcb
-         gZWXOIwcgVoCaRue+mPm+k7VUmzvR88soeJXCTxdU19vccUkCAkTQ92bvrzh786Chw5v
-         S7LBrZ53oGIQc/kf4jaqCJwNl8wiS/9kOiH65BSccFbDukvg7w7sruaF2SZ9bGuGEUsx
-         dIrw==
-X-Gm-Message-State: AOAM533IwbcdCL0R7o5KeAfW1gDULPnaA/ypZv91M37jRM5mSK+Q2onl
-        q16g0mmqC0ND5nOdSkIGFghQPnPnMO0=
-X-Google-Smtp-Source: ABdhPJyXDUO9P4XvNP4XJFNuuGIV854lHWDCj65T5UsVBZxnb6jBEgVxt7/jICXtc8luwOj5D0BfGQx2kH8=
-X-Received: from raychi.tao.corp.google.com ([2401:fa00:fc:202:30c0:e8c8:f8a1:8a43])
- (user=raychi job=sendgmr) by 2002:a0c:f703:: with SMTP id w3mr5707071qvn.53.1628565145292;
- Mon, 09 Aug 2021 20:12:25 -0700 (PDT)
-Date:   Tue, 10 Aug 2021 11:12:16 +0800
-In-Reply-To: <1627543994-20327-1-git-send-email-wcheng@codeaurora.org>
-Message-Id: <22969fbd-c16b-9443-7673-1e0ae72c873f@synopsys.com> (raw)
-Mime-Version: 1.0
-References: <22969fbd-c16b-9443-7673-1e0ae72c873f@synopsys.com>
-X-Mailer: git-send-email 2.32.0.605.g8dce9f2422-goog
-Subject: Re: [PATCH] usb: dwc3: gadget: Use list_replace_init() before
- traversing lists
-From:   Ray Chi <raychi@google.com>
-To:     thinh.nguyen@synopsys.com, Wesley Cheng <wcheng@codeaurora.org>,
-        "balbi@kernel.org" <balbi@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        John Stultz <john.stultz@linaro.org>
-Cc:     jackp@codeaurora.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, albertccwang@google.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S229459AbhHJEJf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 00:09:35 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:27704 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233291AbhHJEJd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Aug 2021 00:09:33 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628568552; h=Message-Id: Date: Subject: Cc: To: From:
+ Sender; bh=e8JKri0Okbv2vxM0zIH+hKFFTMww7MckSWYA3czW6uE=; b=GzhtSd7zZ1Dbf74G1RXpURPsoPNQTF873KoW9jIru/CkndEujvyL8wOKMKO04jj193vpP5KR
+ ZNLKN0Tol1KFzcM0wCHjWTlZzPvp2a7xtf/j/UMKoS5W7xq9wwj2HBh4bgNo1QNAQ4gLcor9
+ 9FUCZoaWFswzPMLhU5YFjz0RUOg=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
+ 6111fbdc454b7a558fe7ca69 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 10 Aug 2021 04:09:00
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1AF06C43144; Tue, 10 Aug 2021 04:09:00 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from pmaliset-linux.qualcomm.com (unknown [202.46.22.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 64708C433F1;
+        Tue, 10 Aug 2021 04:08:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 64708C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=pmaliset@codeaurora.org
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org,
+        Prasad Malisetty <pmaliset@codeaurora.org>
+Subject: [PATCH v5 0/4] Add DT bindings and DT nodes for PCIe and PHY in SC7280
+Date:   Tue, 10 Aug 2021 09:38:32 +0530
+Message-Id: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Changes in v5:
+    
+            * Re ordered PCIe, PHY nodes in Soc and board specific dtsi files.
+            * Removed ref_clk entry in current patch [PATCH v4 P4/4].
+            * I will add ref clk entry in suspend/ resume commits.
+            * Added boolean flag in Soc specific dtsi file to differentiate
+              SM8250 and SC7280 platforms. based on boolean flag, platforms will handle
+              the pipe clk handling.
 
-> + John Stultz
->
-> Wesley Cheng wrote:
-> > The list_for_each_entry_safe() macro saves the current item (n) and
-> > the item after (n+1), so that n can be safely removed without
-> > corrupting the list.  However, when traversing the list and removing
-> > items using gadget giveback, the DWC3 lock is briefly released,
-> > allowing other routines to execute.  There is a situation where, while
-> > items are being removed from the cancelled_list using
-> > dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
-> > routine is running in parallel (due to UDC unbind).  As the cleanup
-> > routine removes n, and the pullup disable removes n+1, once the
-> > cleanup retakes the DWC3 lock, it references a request who was already
-> > removed/handled.  With list debug enabled, this leads to a panic.
-> > Ensure all instances of the macro are replaced where gadget giveback
-> > is used.
-> > 
-> > Example call stack:
-> > 
-> > Thread#1:
-> > __dwc3_gadget_ep_set_halt() - CLEAR HALT
-> >   -> dwc3_gadget_ep_cleanup_cancelled_requests()
-> >     ->list_for_each_entry_safe()
-> >     ->dwc3_gadget_giveback(n)
-> >       ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
-> >       ->spin_unlock
-> >       ->Thread#2 executes
-> >       ...
-> >     ->dwc3_gadget_giveback(n+1)
-> >       ->Already removed!
-> > 
-> > Thread#2:
-> > dwc3_gadget_pullup()
-> >   ->waiting for dwc3 spin_lock
-> >   ...
-> >   ->Thread#1 released lock
-> >   ->dwc3_stop_active_transfers()
-> >     ->dwc3_remove_requests()
-> >       ->fetches n+1 item from cancelled_list (n removed by Thread#1)
-> >       ->dwc3_gadget_giveback()
-> >         ->dwc3_gadget_del_and_unmap_request()- n+1
-> > deleted[cancelled_list]
-> >         ->spin_unlock
-> > 
-> > Fix this condition by utilizing list_replace_init(), and traversing
-> > through a local copy of the current elements in the endpoint lists.
-> > This will also set the parent list as empty, so if another thread is
-> > also looping through the list, it will be empty on the next iteration.
-> > 
-> > Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
-> > Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
-> > 
-> > ---
-> > Previous patchset:
-> > https://urldefense.com/v3/__https://lore.kernel.org/linux-usb/1620716636-12422-1-git-send-email-wcheng@codeaurora.org/__;!!A4F2R9G_pg!Ngid3pREhM1FWiRmEnCGrN6FhBvSxDTkPbZ4RzAEO5Ubs0aGSxtikFT1APzTWhgw42As$ 
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 18 ++++++++++++++++--
-> >  1 file changed, 16 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index a29a4ca..3ce6ed9 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -1926,9 +1926,13 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
-> >  {
-> >  	struct dwc3_request		*req;
-> >  	struct dwc3_request		*tmp;
-> > +	struct list_head		local;
-> >  	struct dwc3			*dwc = dep->dwc;
-> >  
-> > -	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
-> > +restart:
-> > +	list_replace_init(&dep->cancelled_list, &local);
-> > +
-> > +	list_for_each_entry_safe(req, tmp, &local, list) {
-> >  		dwc3_gadget_ep_skip_trbs(dep, req);
-> >  		switch (req->status) {
-> >  		case DWC3_REQUEST_STATUS_DISCONNECTED:
-> > @@ -1946,6 +1950,9 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
-> >  			break;
-> >  		}
-> >  	}
-> > +
-> > +	if (!list_empty(&dep->cancelled_list))
-> > +		goto restart;
-> >  }
-> >  
-> >  static int dwc3_gadget_ep_dequeue(struct usb_ep *ep,
-> > @@ -3190,8 +3197,12 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
-> >  {
-> >  	struct dwc3_request	*req;
-> >  	struct dwc3_request	*tmp;
-> > +	struct list_head	local;
-> >  
-> > -	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-> > +restart:
-> > +	list_replace_init(&dep->started_list, &local);
-> > +
-> > +	list_for_each_entry_safe(req, tmp, &local, list) {
-> >  		int ret;
-> >  
-> >  		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
-> > @@ -3199,6 +3210,9 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
-> >  		if (ret)
-> >  			break;
+Changes in v4 as suggested by Bjorn:
 
-I also met the connection issue. The problem is related that dwc3 requests
-in local list are ignored due to loop break.
+	* Changed pipe clk mux name as gcc_pcie_1_pipe_clk_src.
+	* Changed pipe_ext_src as phy_pipe_clk.
+	* Updated commit message for [PATCH v4 4/4]. 
 
-> >  	}
-> > +
-> > +	if (!list_empty(&dep->started_list))
-> > +		goto restart;
->
-> This is not right. We don't cleanup the entire started list here.
-> Sometime we end early because some TRBs are completed but not all.
+Changes in v3:
+	* Changed pipe clock names in dt bindings as pipe_mux and phy_pipe.
+	* Moved reset and NVMe GPIO pin configs into board specific file.
+	* Updated pipe clk mux commit message.
+	
+Changes in v2:
+	* Moved pcie pin control settings into IDP file.
+	* Replaced pipe_clk_src with pipe_clk_mux in pcie driver 
+	* Included pipe clk mux setting change set in this series
 
-Yes, I also think it can be replaced with checking local list and
-restoring unhandled requests directly.
+Prasad Malisetty (4):
+  dt-bindings: pci: qcom: Document PCIe bindings for SC7280
+  arm64: dts: qcom: sc7280: Add PCIe and PHY related nodes
+  arm64: dts: qcom: sc7280: Add PCIe nodes for IDP board
+  PCI: qcom: Switch pcie_1_pipe_clk_src after PHY init in SC7280
 
-> BR,
-> Thinh
->
+ .../devicetree/bindings/pci/qcom,pcie.txt          |  17 +++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |  38 +++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 126 +++++++++++++++++++++
+ drivers/pci/controller/dwc/pcie-qcom.c             |  18 +++
+ 4 files changed, 199 insertions(+)
 
-Best regards,
-Ray
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+
