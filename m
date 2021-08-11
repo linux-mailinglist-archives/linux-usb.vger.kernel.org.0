@@ -2,247 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE993E9202
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 14:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA0A3E926A
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 15:18:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbhHKM4s (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 08:56:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51224 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229737AbhHKM4r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 08:56:47 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BC4A8600CD;
-        Wed, 11 Aug 2021 12:56:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628686583;
-        bh=/GWIy8bZjikjFh61+p2oRyqLKNbiIBVj4RvDyz8yXSM=;
-        h=Subject:From:To:Cc:References:Date:In-Reply-To:From;
-        b=MP755uTb6T3Odb+IQnnvTomyWmFH0USI4nWHdud3kKIHDNJs5EMb1p6Xd+SbrAL9b
-         peTVhCxrA9ajKrietkrtoNwaikyxiLznnarlLMEjP5+A/u2yfn3iUAPC8E9iFhiHfA
-         ijlzeBAD+e8aqpAsxtmitJDnRHKd5sFhoPBPl2JmeDttXFhx5L3RfEn9BHsvT0h77d
-         /E3iF3IBzVIPZbNEHZM+CozLxx7wb5m8IO8dg3sWM8sWWAxx7LqMYpr3T/WjEJx80i
-         EoZf0xFRO89g8vzlH3LXP2KGHotzL8xZrMbsHUnrU8NjnlTE05QD2Fub5bm7QGzx9W
-         QrfJiT5X6gr5A==
-Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
-From:   Roger Quadros <rogerq@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Nishanth Menon <nm@ti.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-References: <20210727004118.2583774-1-mka@chromium.org>
- <YRFOnhJkB2vi/zwD@google.com>
- <8a8cae28-6617-76d3-1742-3f151a149069@kernel.org>
-Message-ID: <ddd60682-c957-2897-768e-96c9d25c148a@kernel.org>
-Date:   Wed, 11 Aug 2021 15:56:15 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231575AbhHKNTH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 09:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231537AbhHKNTG (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Aug 2021 09:19:06 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0272EC061765;
+        Wed, 11 Aug 2021 06:18:43 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id d4so5613827lfk.9;
+        Wed, 11 Aug 2021 06:18:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6kHCOipcjZXWmpo3HZhEMRyqVY8BxVQo5dObADAmxsY=;
+        b=mlZycOyDjS0LQHewOGJq54kzmcwWqvlJVNq11HE5HgNAzxkBrMYxLhx+4ouRpKp8fX
+         dCBUxUPha/98WxKo2m/kZHIp0jFUo+b8T+HNc5N7gOlbpPyj779HMso9ZAb4ykmsLc+B
+         LF8ee8YH8QRD3wLC2E5gOr9txV/ixiMN4SwE4+3XIn5mHcA/Umw5LaK3UE1G6zOfNKO8
+         UAPKRyydUzFdxdtdN8ClwtCOFlwn7pR/axz9eLSTXTIBMUZbwLHwcwXnNq6+1LBVcNkP
+         71vzTwzM4rGYnJc5DA0cqZ1sw5XSxXFqd1OKzfk4hhswjQBur8iQLXwv9ArNoZppjHEZ
+         PRag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6kHCOipcjZXWmpo3HZhEMRyqVY8BxVQo5dObADAmxsY=;
+        b=PB+Afdm3xiCoBjuZvTQypqE/TWjP11RjOhv4LHo/q/eX104UMoQjSBu+mbx+zBL8C1
+         iJ/6K/Ut7MU0dh6GNBJCBUJPZQOmhygcvOeJK7DH8JOsjK15gw3kjdCr4FycgHtQC80q
+         MhkBMnJYBp86pSCbm9sS6BmdqcuOGv8gLfFTrxeQQh/oLDz9nxu4Fmo2yZ0xNEu9BcTG
+         x9UPnR0GPTADlySfZ4gQYfspz9p2TEXfVotHyYVo+gmOxttYnMzqq16Z7yWXVlxg1eNp
+         uRgEXs7GWFKYREYfPX/LGftLlkjuI8QctnfLrBMa7WQlSCbdCdB5mIx2E+j4kbHRgZ6N
+         5bdA==
+X-Gm-Message-State: AOAM532jbTxSnu4eV2ThkLB5UCGe3IEQt5Or5r27pWZVejMpFvpsnd6s
+        rLDwZrhVSylOgPuh8iSmHt829t9VycsdvIqWMKE=
+X-Google-Smtp-Source: ABdhPJziB6KFxpa67eSH3zBrs9TUw30rTGO3+bApDge1fl9VbSihlN0yFZCa8fXe2RjD+T3fyNYskaBLbsPaaX3JXw8=
+X-Received: by 2002:ac2:4205:: with SMTP id y5mr6953636lfh.512.1628687921400;
+ Wed, 11 Aug 2021 06:18:41 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <8a8cae28-6617-76d3-1742-3f151a149069@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CAHhAz+hQBnUVWBnoQO6y44C-G5CnZdFLJ7v738_Y5Rt6AZSkrA@mail.gmail.com>
+ <41bebccc-7940-8379-0108-047bd1cc92f9@perex.cz> <CACk2A5ZcrVTv4AVHdmRDh-xWkx=1BHi6SV8yYqX1Z2DzcDR8hA@mail.gmail.com>
+In-Reply-To: <CACk2A5ZcrVTv4AVHdmRDh-xWkx=1BHi6SV8yYqX1Z2DzcDR8hA@mail.gmail.com>
+From:   Muni Sekhar <munisekharrms@gmail.com>
+Date:   Wed, 11 Aug 2021 18:48:29 +0530
+Message-ID: <CAHhAz+gD-UtvXgsWnWx8yPwMbpY4R-ZJqPg9TNNF+iZrmKxQSA@mail.gmail.com>
+Subject: Re: USB-Audio: Device or resource busy (strace log)
+To:     vishnu <vardhanraj4143@gmail.com>
+Cc:     Jaroslav Kysela <perex@perex.cz>,
+        alsa-devel <alsa-devel@alsa-project.org>,
+        linux-usb@vger.kernel.org, linux-sound@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        kernelnewbies <kernelnewbies@kernelnewbies.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Aug 11, 2021 at 6:19 PM vishnu <vardhanraj4143@gmail.com> wrote:
+>
+> can you paste output of
+> arecord -l (list of capture devices).
+$ arecord -l
+**** List of CAPTURE Hardware Devices ****
+card 0: USB [Plantronics .Audio 628 USB], device 0: USB Audio [USB Audio]
+  Subdevices: 1/1
+  Subdevice #0: subdevice #0
 
 
-On 11/08/2021 15:38, Roger Quadros wrote:
-> Hi Matthias,
-> 
-> On 09/08/2021 18:49, Matthias Kaehlcke wrote:
->> Hi Greg,
+> Which device you are using and os.
+> Does this instance is already open by default? like any video playing or something like that?
+lsof does not catch it.
+
+>
+> Yes you can stop pulse audio and try..
+>
+> On Wed, Aug 11, 2021 at 6:17 PM Jaroslav Kysela <perex@perex.cz> wrote:
 >>
->> Just wanted to check if this series is still on your radar. Is
->> there anything that blocks it from landing (further ACKs, ...)?
+>> On 11. 08. 21 14:36, Muni Sekhar wrote:
+>> > Hi All,
+>> >
+>> > $ cat /proc/asound/cards
+>> >  0 [USB            ]: USB-Audio - Plantronics .Audio 628 USB
+>> >                       Plantronics Plantronics .Audio 628 USB at
+>> > usb-0000:00:14.0-2, full speed
+>> >
+>> > I am using a Plantronics USB Audio headset.
+>> >
+>> > $ arecord --device hw:0,0 --channels 2 --format S16_LE --rate 44100Hz x.wav
+>> > arecord: main:722: audio open error: Device or resource busy
+>> >
+>> >
+>> > 'arecord' command always fails the first time after system boot in my
+>> > system. But subsequent execution of the 'arecord' command runs fine.
+>> >
+>> >
+>> > I've attached the strace log for the "audio open error: Device or
+>> > resource busy" failure. Is there any fix available for this issue?
 >>
->> Thanks
+>> You may check which other task blocks the PCM device:
 >>
->> Matthias
+>>   lsof /dev/snd/pcmC0D0c
+It does not output any process.
+$ lsof /dev/snd/pcmC0D0c
+
+1st run:
+----------
+$ arecord --device hw:0,0 --channels 2 --format S16_LE --rate 44100Hz x.wav
+arecord: main:722: audio open error: Device or resource busy
+
+2nd run:
+----------
+$ arecord --device hw:0,0 --channels 2 --format S16_LE --rate 44100Hz x.wav
+Recording WAVE 'x.wav' : Signed 16 bit Little Endian, Rate 44100 Hz, Stereo
+^CAborted by signal Interrupt...
+
+
 >>
->> On Mon, Jul 26, 2021 at 05:41:12PM -0700, Matthias Kaehlcke wrote:
->>> This series adds:
->>> - the onboard_usb_hub_driver
->>> - glue in the xhci-plat driver to create and destroy the
->>>   onboard_usb_hub platform devices if needed
->>> - a device tree binding for the Realtek RTS5411 USB hub controller
->>> - device tree changes that add RTS5411 entries for the QCA SC7180
->>>   based boards trogdor and lazor
->>> - a couple of stubs for platform device functions to avoid
->>>   unresolved symbols with certain kernel configs
->>>
->>> The main issue the driver addresses is that a USB hub needs to be
->>> powered before it can be discovered. For discrete onboard hubs (an
->>> example for such a hub is the Realtek RTS5411) this is often solved
->>> by supplying the hub with an 'always-on' regulator, which is kind
->>> of a hack. Some onboard hubs may require further initialization
->>> steps, like changing the state of a GPIO or enabling a clock, which
->>> requires even more hacks. This driver creates a platform device
->>> representing the hub which performs the necessary initialization.
->>> Currently it only supports switching on a single regulator, support
->>> for multiple regulators or other actions can be added as needed.
->>> Different initialization sequences can be supported based on the
->>> compatible string.
->>>
->>> Besides performing the initialization the driver can be configured
->>> to power the hub off during system suspend. This can help to extend
->>> battery life on battery powered devices which have no requirements
->>> to keep the hub powered during suspend. The driver can also be
->>> configured to leave the hub powered when a wakeup capable USB device
->>> is connected when suspending, and power it off otherwise.
->>>
->>> Changes in v15:
->>> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
->>>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
->>>   or USB_DWC3_DUAL_ROLE is selectable
->>>
->>> Changes in v14:
->>> - rebased on top of v5.14-rc1
->>> - dropped DT binding patch which landed in v5.13
->>>
->>> Changes in v13:
->>> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
->>>   'depends on'" to the series to avoid Kconfig conflicts
->>> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
->>>   to the series to keep effective defconfig unchanged
->>>
->>> Changes in v12:
->>> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
->>>   in onboard_hub.h to also check for the driver built as module
->>> - onboard_hub_driver: include onboard_hub.h again to make sure there
->>>   are prototype declarations for the public functions
->>>
->>> Changes in v11:
->>> - support multiple onboard hubs connected to the same parent
->>> - don't include ‘onboard_hub.h’ from the onboard hub driver
->>>
->>> Changes in v10:
->>> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
->>> - keep 'regulator-boot-on' property for pp3300_hub
->>>
->>> Changes in v9:
->>> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
->>>   USB_PLATFORM_XHCI
->>>
->>> Changes in v7:
->>> - updated DT binding
->>> - series rebased on qcom/arm64-for-5.13
->>>
->>> Changes in v6:
->>> - updated summary
->>>
->>> Changes in v5:
->>> - cover letter added
->>>
->>> Matthias Kaehlcke (6):
->>>   usb: misc: Add onboard_usb_hub driver
->>>   of/platform: Add stubs for of_platform_device_create/destroy()
->>>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
->>>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
->>>   usb: host: xhci-plat: Create platform device for onboard hubs in
->>>     probe()
->>>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
->>>
->>>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
->>>  MAINTAINERS                                   |   7 +
->>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
->>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
->>>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
->>>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
->>>  arch/arm64/configs/defconfig                  |   1 +
->>>  drivers/usb/cdns3/Kconfig                     |   2 +-
->>>  drivers/usb/dwc3/Kconfig                      |   5 +-
->>>  drivers/usb/host/Kconfig                      |   5 +-
-> 
-> These Kconfig changes are causing the resulting .config to be different.
-> For example, if I start with omap2plus_defconfig, the resulting .config
-> before and after your series is different as shown below
-> 
-> :/work/linux$ diff /tmp/.config .config
-> 1902d1901
-> < # CONFIG_HISI_HIKEY_USB is not set
-> 4992c4991
-> < CONFIG_USB_XHCI_PLATFORM=m
-> ---
->> # CONFIG_USB_XHCI_PLATFORM is not set
-> 5073,5075c5072
-> < # CONFIG_USB_DWC3_HOST is not set
-> < # CONFIG_USB_DWC3_GADGET is not set
-> < CONFIG_USB_DWC3_DUAL_ROLE=y
-> ---
->> CONFIG_USB_DWC3_GADGET=y
-> 5173a5171
->> # CONFIG_USB_ONBOARD_HUB is not set
-> 5285c5283
-> < CONFIG_USB_ROLE_SWITCH=m
-> ---
->> # CONFIG_USB_ROLE_SWITCH is not set
-> 
-> I would expect the same issues for multi_v7_defconfig and multi_v8_defconfig as well.
+>> I guess that it will be pulseaudio (device enumeration).
+>>
+>>                                         Jaroslav
+>>
+>> --
+>> Jaroslav Kysela <perex@perex.cz>
+>> Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
 
-Sorry I meant defconfig for arm64, not multi_v8_defconfig.
 
-I checked that for arm64 defconfig it is ok.
 
-> I'm ok to update the relevant defconfigs files so that the resulting .config is identical to
-> before your series. Thanks!
-
-With the below patch you can fix it for omap2plus_defconfig and multi_v7_defconfig.
-
-diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-index d9abaae118dd..8c175ab37377 100644
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@ -787,6 +787,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
- CONFIG_USB=y
- CONFIG_USB_OTG=y
- CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
- CONFIG_USB_XHCI_MVEBU=y
- CONFIG_USB_XHCI_TEGRA=m
- CONFIG_USB_EHCI_HCD=y
-diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-index 2ac2418084ab..a015fb04fa25 100644
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@ -562,6 +562,7 @@ CONFIG_USB=m
- CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
- CONFIG_USB_MON=m
- CONFIG_USB_XHCI_HCD=m
-+CONFIG_USB_XHCI_PLATFORM=m
- CONFIG_USB_EHCI_HCD=m
- CONFIG_USB_OHCI_HCD=m
- CONFIG_USB_ACM=m
-
---
-cheers,
--roger
+-- 
+Thanks,
+Sekhar
