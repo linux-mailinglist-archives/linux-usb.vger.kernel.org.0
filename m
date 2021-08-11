@@ -2,205 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B63943E8FED
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 13:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE6B3E9000
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 14:02:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237191AbhHKL6z (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 07:58:55 -0400
-Received: from mga14.intel.com ([192.55.52.115]:34931 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229836AbhHKL6y (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 07:58:54 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="214841077"
-X-IronPort-AV: E=Sophos;i="5.84,311,1620716400"; 
-   d="scan'208";a="214841077"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 04:58:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,311,1620716400"; 
-   d="scan'208";a="506916985"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2021 04:58:30 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mDmsP-000LcO-BX; Wed, 11 Aug 2021 11:58:29 +0000
-Date:   Wed, 11 Aug 2021 19:57:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 664cc971fb259007e49cc8a3ac43b0787d89443f
-Message-ID: <6113bb32.G9oRtZG90k0rksDR%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236777AbhHKMCw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 08:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232160AbhHKMCw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Aug 2021 08:02:52 -0400
+Received: from canardo.mork.no (canardo.mork.no [IPv6:2001:4641::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C944C061765;
+        Wed, 11 Aug 2021 05:02:28 -0700 (PDT)
+Received: from miraculix.mork.no (miraculix.mork.no [IPv6:2001:4641:0:2:7627:374e:db74:e353])
+        (authenticated bits=0)
+        by canardo.mork.no (8.15.2/8.15.2) with ESMTPSA id 17BC1vRT024740
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Wed, 11 Aug 2021 14:01:58 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1628683318; bh=ZMAPDJRikzYs/k+y/xgS9A/z7vNWC6FiVDP1jJK1Frc=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=Drk0DmlQNrR6MVvx8eIXJOsvyZOG/WuthaMyQwpmbTXMs34DxAWc03v0zmQRq6StQ
+         EcjkN5AeMHYkzivMACMXI1vHXk+GV9Q7pYGhjC91Ja+cKQRGuVOmfXlFuG+2PU8Zt8
+         SfJVvry5wUzpKU6B1f5W55iCSAvZN4ktqX5UYeYo=
+Received: from bjorn by miraculix.mork.no with local (Exim 4.94.2)
+        (envelope-from <bjorn@mork.no>)
+        id 1mDmvl-000IMy-IV; Wed, 11 Aug 2021 14:01:57 +0200
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2,1/1] This aims to support Foxconn SDX55
+Organization: m
+References: <20210811085635.4699-1-slark_xiao@163.com>
+Date:   Wed, 11 Aug 2021 14:01:57 +0200
+In-Reply-To: <20210811085635.4699-1-slark_xiao@163.com> (Slark Xiao's message
+        of "Wed, 11 Aug 2021 16:56:35 +0800")
+Message-ID: <875ywcfave.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.2 at canardo
+X-Virus-Status: Clean
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 664cc971fb259007e49cc8a3ac43b0787d89443f  Revert "usb: dwc3: gadget: Use list_replace_init() before traversing lists"
+Slark Xiao <slark_xiao@163.com> writes:
 
-elapsed time: 1716m
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 83da8236e3c8..d8b58aea3c60 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -111,6 +111,7 @@ static const struct usb_device_id id_table[] =3D {
+>  	{USB_DEVICE(0x16d8, 0x8002)},	/* CMDTech Gobi 2000 Modem device (VU922)=
+ */
+>  	{USB_DEVICE(0x05c6, 0x9204)},	/* Gobi 2000 QDL device */
+>  	{USB_DEVICE(0x05c6, 0x9205)},	/* Gobi 2000 Modem device */
+> +	{USB_DEVICE(0x05c6, 0x901d)},	/* Foxconn SDX55 QDL */
 
-configs tested: 147
-configs skipped: 3
+I assume this device will expose other serial functions when booted in
+application USB mode?  But probably not with a Gobi 2k layout... Maybe
+add the application device ID to some USB serial driver too, and include
+the QDL device ID there as well to reduce confusion?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Could you provide a view of the default USB descriptors in both QDL and
+application mode?  E.g from lsusb -v or  /sys/kernel/debug/usb/devices?
 
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210810
-powerpc               mpc834x_itxgp_defconfig
-powerpc                      acadia_defconfig
-arm                  colibri_pxa270_defconfig
-powerpc                      makalu_defconfig
-arm                          imote2_defconfig
-powerpc64                           defconfig
-arm                        realview_defconfig
-arm                        mvebu_v7_defconfig
-arc                              alldefconfig
-mips                            gpr_defconfig
-powerpc                     powernv_defconfig
-ia64                                defconfig
-m68k                       m5249evb_defconfig
-powerpc                      ppc44x_defconfig
-mips                           ip28_defconfig
-powerpc                     tqm8541_defconfig
-i386                             alldefconfig
-powerpc                      bamboo_defconfig
-arm                          pxa910_defconfig
-m68k                          hp300_defconfig
-arm                       imx_v4_v5_defconfig
-mips                      bmips_stb_defconfig
-arm                        cerfcube_defconfig
-riscv                             allnoconfig
-mips                      pistachio_defconfig
-powerpc                     mpc83xx_defconfig
-mips                      loongson3_defconfig
-microblaze                      mmu_defconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-x86_64                            allnoconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210810
-x86_64               randconfig-a006-20210810
-x86_64               randconfig-a003-20210810
-x86_64               randconfig-a005-20210810
-x86_64               randconfig-a002-20210810
-x86_64               randconfig-a001-20210810
-i386                 randconfig-a004-20210809
-i386                 randconfig-a005-20210809
-i386                 randconfig-a006-20210809
-i386                 randconfig-a002-20210809
-i386                 randconfig-a001-20210809
-i386                 randconfig-a003-20210809
-i386                 randconfig-a004-20210810
-i386                 randconfig-a002-20210810
-i386                 randconfig-a001-20210810
-i386                 randconfig-a003-20210810
-i386                 randconfig-a006-20210810
-i386                 randconfig-a005-20210810
-i386                 randconfig-a004-20210811
-i386                 randconfig-a001-20210811
-i386                 randconfig-a002-20210811
-i386                 randconfig-a003-20210811
-i386                 randconfig-a006-20210811
-i386                 randconfig-a005-20210811
-x86_64               randconfig-a013-20210811
-x86_64               randconfig-a011-20210811
-x86_64               randconfig-a012-20210811
-x86_64               randconfig-a016-20210811
-x86_64               randconfig-a014-20210811
-x86_64               randconfig-a015-20210811
-x86_64               randconfig-a016-20210808
-x86_64               randconfig-a012-20210808
-x86_64               randconfig-a013-20210808
-x86_64               randconfig-a011-20210808
-x86_64               randconfig-a014-20210808
-x86_64               randconfig-a015-20210808
-i386                 randconfig-a012-20210809
-i386                 randconfig-a015-20210809
-i386                 randconfig-a011-20210809
-i386                 randconfig-a013-20210809
-i386                 randconfig-a014-20210809
-i386                 randconfig-a016-20210809
-i386                 randconfig-a011-20210810
-i386                 randconfig-a015-20210810
-i386                 randconfig-a013-20210810
-i386                 randconfig-a014-20210810
-i386                 randconfig-a016-20210810
-i386                 randconfig-a012-20210810
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                            allyesconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
 
-clang tested configs:
-x86_64               randconfig-c001-20210810
-x86_64               randconfig-c001-20210809
-x86_64               randconfig-a002-20210808
-x86_64               randconfig-a004-20210808
-x86_64               randconfig-a006-20210808
-x86_64               randconfig-a003-20210808
-x86_64               randconfig-a001-20210808
-x86_64               randconfig-a005-20210808
-x86_64               randconfig-a013-20210810
-x86_64               randconfig-a011-20210810
-x86_64               randconfig-a012-20210810
-x86_64               randconfig-a016-20210810
-x86_64               randconfig-a014-20210810
-x86_64               randconfig-a015-20210810
-x86_64               randconfig-a016-20210809
-x86_64               randconfig-a012-20210809
-x86_64               randconfig-a013-20210809
-x86_64               randconfig-a011-20210809
-x86_64               randconfig-a014-20210809
-x86_64               randconfig-a015-20210809
+Bj=C3=B8rn
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
