@@ -2,66 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9943E9279
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 15:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B6B3E92A9
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 15:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbhHKNYM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 09:24:12 -0400
-Received: from mga17.intel.com ([192.55.52.151]:1792 "EHLO mga17.intel.com"
+        id S230487AbhHKNaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 09:30:16 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:37734 "EHLO mail.ispras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230425AbhHKNYA (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 09:24:00 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="195388089"
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="195388089"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 06:23:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="590091824"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 11 Aug 2021 06:23:27 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 Aug 2021 16:23:26 +0300
-Date:   Wed, 11 Aug 2021 16:23:26 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     USB list <linux-usb@vger.kernel.org>
-Subject: Re: UCSI failing due to probe() getting version 0
-Message-ID: <YRPPTjaFLy5t5HsP@kuha.fi.intel.com>
-References: <db9e63df-80cc-6dae-89ae-23cb1cd09425@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db9e63df-80cc-6dae-89ae-23cb1cd09425@suse.com>
+        id S231477AbhHKNaO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Aug 2021 09:30:14 -0400
+Received: from kleverstation.intra.ispras.ru (unknown [10.10.2.220])
+        by mail.ispras.ru (Postfix) with ESMTPS id 058A540A2BCD;
+        Wed, 11 Aug 2021 13:29:41 +0000 (UTC)
+From:   Nadezda Lutovinova <lutovinova@ispras.ru>
+To:     Bin Liu <b-liu@ti.com>
+Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: 
+Date:   Wed, 11 Aug 2021 16:29:27 +0300
+Message-Id: <20210811132927.10194-1-lutovinova@ispras.ru>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 05, 2021 at 04:04:03PM +0200, Oliver Neukum wrote:
-> Hi,
-> 
-> I am trying this on a new laptop, but I am getting a result I do not
-> understand.
-> ucsi_acpi_probe() is called, but ucsi_register() fails with -ENODEV,
-> because ucsi->version is 0.
-> 
-> If I dump the ucsi_acpi buffer I get:
-> 
-> 00 00 00 00 02 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-> 
-> And, frankly I do not understand that. Why have the ACPI device
-> but show version number 0?
+Date: Fri, 30 Jul 2021 18:20:00 +0300
+Subject: [PATCH] usb: musb: musb_dsps: Change function call order in
+ dsps_probe()
 
-Because of BIOS bugs.
+If IRQ occurs between calling  dsps_setup_optional_vbus_irq()
+and  dsps_create_musb_pdev(), then null pointer dereference occurs
+since glue->musb wasn't initialized yet.
 
-Ideally we should be able to rely on the _STA method of the ACPI
-device, but unfortunately with UCSI we can't rely on that alone. On
-some systems the BIOS claims that the device is enabled (based on
-_STA) even when the platform doesn't actually support UCSI at all.
+The patch puts initializing of neccesery data before registration
+of the interrupt handler.
 
-If you remove the check, does the driver work?
+Found by Linux Driver Verification project (linuxtesting.org).
 
-Br,
+Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+---
+ drivers/usb/musb/musb_dsps.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
+diff --git a/drivers/usb/musb/musb_dsps.c b/drivers/usb/musb/musb_dsps.c
+index 5892f3ce0cdc..ce9fc46c9266 100644
+--- a/drivers/usb/musb/musb_dsps.c
++++ b/drivers/usb/musb/musb_dsps.c
+@@ -890,23 +890,22 @@ static int dsps_probe(struct platform_device *pdev)
+ 	if (!glue->usbss_base)
+ 		return -ENXIO;
+ 
+-	if (usb_get_dr_mode(&pdev->dev) == USB_DR_MODE_PERIPHERAL) {
+-		ret = dsps_setup_optional_vbus_irq(pdev, glue);
+-		if (ret)
+-			goto err_iounmap;
+-	}
+-
+ 	platform_set_drvdata(pdev, glue);
+ 	pm_runtime_enable(&pdev->dev);
+ 	ret = dsps_create_musb_pdev(glue, pdev);
+ 	if (ret)
+ 		goto err;
+ 
++	if (usb_get_dr_mode(&pdev->dev) == USB_DR_MODE_PERIPHERAL) {
++		ret = dsps_setup_optional_vbus_irq(pdev, glue);
++		if (ret)
++			goto err;
++	}
++
+ 	return 0;
+ 
+ err:
+ 	pm_runtime_disable(&pdev->dev);
+-err_iounmap:
+ 	iounmap(glue->usbss_base);
+ 	return ret;
+ }
 -- 
-heikki
+2.17.1
+
