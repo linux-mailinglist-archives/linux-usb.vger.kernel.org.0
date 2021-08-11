@@ -2,85 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A586A3E94B4
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 17:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507DE3E9525
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 17:54:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232847AbhHKPjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 11:39:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41742 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232120AbhHKPjW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 11:39:22 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id CB4FD60F46
-        for <linux-usb@vger.kernel.org>; Wed, 11 Aug 2021 15:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628696338;
-        bh=Csgp003FOCCmeRzJjvATp4JTaXO2kH0zZuL4lQYi4rQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=PpyC4Dm57tmI3Cd07leGdAOqy0Blv1Z7cm3ayOfDDicPWfMUsp6RMezQp/gGGQsNp
-         l7JgYGxidd2wlPxIZZO5Whl1CnQU9LNBObR3cF3tZPw4b4yzVMDOH6BBOxnDe9i78+
-         CBaih/QXjapt30Rs96lwoUEPUTHqWVmoog5Rz0kEH6Nsb9zDGeQzVFpwoh/ySxPZ0+
-         i7fxbwxlCP93tnIIXf2yhEY7JXooJvYKAyjRG56T0uUpPGj0g8siQcKoHZEE/08PVr
-         7CMHIZAOAuuVOzxOpuZhaye7B54eIYAmfNSl75+mYWMVCcF+ICrHTYp4vvcGkx2G9K
-         P6kwCrtM9oSzA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id BFD7560ED5; Wed, 11 Aug 2021 15:38:58 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214021] The USB devices fail to be detected during boot
-Date:   Wed, 11 Aug 2021 15:38:58 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214021-208809-iuF4LpsbpH@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
-References: <bug-214021-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S233385AbhHKPyz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 11:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233523AbhHKPx1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 11 Aug 2021 11:53:27 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1BC6C061798
+        for <linux-usb@vger.kernel.org>; Wed, 11 Aug 2021 08:53:03 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:438:1ff1:1071:f524])
+        by andre.telenet-ops.be with bizsmtp
+        id gFt12500A1gJxCh01Ft1Kg; Wed, 11 Aug 2021 17:53:01 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mDqXN-00251d-2N; Wed, 11 Aug 2021 17:53:01 +0200
+Received: from geert by rox.of.borg with local (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1mDqXM-005TLA-BR; Wed, 11 Aug 2021 17:53:00 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] usb: gadget: udc: renesas_usb3: Fix soc_device_match() abuse
+Date:   Wed, 11 Aug 2021 17:52:54 +0200
+Message-Id: <760981fb4cd110d7cbfc9dcffa365e7c8b25c6e5.1628696960.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
+soc_device_match() is intended as a last resort, to handle e.g. quirks
+that cannot be handled by matching based on a compatible value.
 
---- Comment #3 from Alan Stern (stern@rowland.harvard.edu) ---
-You can try changing the bPwrOn2PwrGood value in the kernel source to see if
-that will make any difference.  The line to change is in
-drivers/usb/host/xhci-hub.c in the function xhci_common_hub_descriptor().  =
-It's
-at the start of the function:
+As the device nodes for the Renesas USB 3.0 Peripheral Controller on
+R-Car E3 and RZ/G2E do have SoC-specific compatible values, the latter
+can and should be used to match against these devices.
 
-        desc->bPwrOn2PwrGood =3D 10;      /* xhci section 5.4.9 says 20ms m=
-ax */
+This also fixes support for the USB 3.0 Peripheral Controller on the
+R-Car E3e (R8A779M6) SoC, which is a different grading of the R-Car E3
+(R8A77990) SoC, using the same SoC-specific compatible value.
 
-The value gets multiplied by two, so if you change it to 50 then the delay =
-will
-become 100 ms.
+Fixes: 30025efa8b5e75f5 ("usb: gadget: udc: renesas_usb3: add support for r8a77990")
+Fixes: 546970fdab1da5fe ("usb: gadget: udc: renesas_usb3: add support for r8a774c0")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/usb/gadget/udc/renesas_usb3.c | 17 +++++++----------
+ 1 file changed, 7 insertions(+), 10 deletions(-)
 
-However I suspect that the length of this delay is not the cause of the pro=
-blem
-you see.  The actual error occurs in the usb_alloc_dev() function in
-drivers/usb/core/usb.c.  You can try adding some printk statements in there=
- to
-see which of the "return NULL" statements is the one you're getting.
+diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
+index f1b35a39d1ba8712..57d417a7c3e0a687 100644
+--- a/drivers/usb/gadget/udc/renesas_usb3.c
++++ b/drivers/usb/gadget/udc/renesas_usb3.c
+@@ -2707,10 +2707,15 @@ static const struct renesas_usb3_priv renesas_usb3_priv_r8a77990 = {
+ 
+ static const struct of_device_id usb3_of_match[] = {
+ 	{
++		.compatible = "renesas,r8a774c0-usb3-peri",
++		.data = &renesas_usb3_priv_r8a77990,
++	}, {
+ 		.compatible = "renesas,r8a7795-usb3-peri",
+ 		.data = &renesas_usb3_priv_gen3,
+-	},
+-	{
++	}, {
++		.compatible = "renesas,r8a77990-usb3-peri",
++		.data = &renesas_usb3_priv_r8a77990,
++	}, {
+ 		.compatible = "renesas,rcar-gen3-usb3-peri",
+ 		.data = &renesas_usb3_priv_gen3,
+ 	},
+@@ -2719,18 +2724,10 @@ static const struct of_device_id usb3_of_match[] = {
+ MODULE_DEVICE_TABLE(of, usb3_of_match);
+ 
+ static const struct soc_device_attribute renesas_usb3_quirks_match[] = {
+-	{
+-		.soc_id = "r8a774c0",
+-		.data = &renesas_usb3_priv_r8a77990,
+-	},
+ 	{
+ 		.soc_id = "r8a7795", .revision = "ES1.*",
+ 		.data = &renesas_usb3_priv_r8a7795_es1,
+ 	},
+-	{
+-		.soc_id = "r8a77990",
+-		.data = &renesas_usb3_priv_r8a77990,
+-	},
+ 	{ /* sentinel */ },
+ };
+ 
+-- 
+2.25.1
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
