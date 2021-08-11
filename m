@@ -2,69 +2,85 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 408703E940B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 16:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A586A3E94B4
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 17:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbhHKO4D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 10:56:03 -0400
-Received: from mga18.intel.com ([134.134.136.126]:48214 "EHLO mga18.intel.com"
+        id S232847AbhHKPjX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 11:39:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41742 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232440AbhHKO4C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 10:56:02 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10072"; a="202306173"
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="202306173"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2021 07:55:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,313,1620716400"; 
-   d="scan'208";a="672898682"
-Received: from mylly.fi.intel.com (HELO [10.237.72.75]) ([10.237.72.75])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Aug 2021 07:55:35 -0700
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-To:     Oleksij Rempel <linux@rempel-privat.de>
-Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Regression with commit e532a096be0e ("net: usb: asix: ax88772: add
- phylib support")
-Message-ID: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
-Date:   Wed, 11 Aug 2021 17:55:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.12.0
+        id S232120AbhHKPjW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Aug 2021 11:39:22 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id CB4FD60F46
+        for <linux-usb@vger.kernel.org>; Wed, 11 Aug 2021 15:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628696338;
+        bh=Csgp003FOCCmeRzJjvATp4JTaXO2kH0zZuL4lQYi4rQ=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=PpyC4Dm57tmI3Cd07leGdAOqy0Blv1Z7cm3ayOfDDicPWfMUsp6RMezQp/gGGQsNp
+         l7JgYGxidd2wlPxIZZO5Whl1CnQU9LNBObR3cF3tZPw4b4yzVMDOH6BBOxnDe9i78+
+         CBaih/QXjapt30Rs96lwoUEPUTHqWVmoog5Rz0kEH6Nsb9zDGeQzVFpwoh/ySxPZ0+
+         i7fxbwxlCP93tnIIXf2yhEY7JXooJvYKAyjRG56T0uUpPGj0g8siQcKoHZEE/08PVr
+         7CMHIZAOAuuVOzxOpuZhaye7B54eIYAmfNSl75+mYWMVCcF+ICrHTYp4vvcGkx2G9K
+         P6kwCrtM9oSzA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id BFD7560ED5; Wed, 11 Aug 2021 15:38:58 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Wed, 11 Aug 2021 15:38:58 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: stern@rowland.harvard.edu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-iuF4LpsbpH@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-Our ASIX USB ethernet adapter stopped working after v5.14-rc1. It 
-doesn't get an IP from DHCP.
+--- Comment #3 from Alan Stern (stern@rowland.harvard.edu) ---
+You can try changing the bPwrOn2PwrGood value in the kernel source to see if
+that will make any difference.  The line to change is in
+drivers/usb/host/xhci-hub.c in the function xhci_common_hub_descriptor().  =
+It's
+at the start of the function:
 
-v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag 
-'arc-5.14-rc6' of 
-git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the 
-regression.
+        desc->bPwrOn2PwrGood =3D 10;      /* xhci section 5.4.9 says 20ms m=
+ax */
 
-I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add 
-phylib support").
+The value gets multiplied by two, so if you change it to 50 then the delay =
+will
+become 100 ms.
 
-Here's the dmesg snippet from working and non-working cases:
+However I suspect that the length of this delay is not the cause of the pro=
+blem
+you see.  The actual error occurs in the usb_alloc_dev() function in
+drivers/usb/core/usb.c.  You can try adding some printk statements in there=
+ to
+see which of the "return NULL" statements is the one you're getting.
 
-OK:
-[    6.115773] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
-ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
-[    8.595202] asix 1-8:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
+--=20
+You may reply to this email to add a comment.
 
-NOK:
-[    6.511543] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
-ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
-[    8.518219] asix 1-8:1.0 eth0: Link is Down
-
-lsusb -d 0b95:7720
-Bus 001 Device 002: ID 0b95:7720 ASIX Electronics Corp. AX88772
-
-Jarkko
+You are receiving this mail because:
+You are watching the assignee of the bug.=
