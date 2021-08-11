@@ -2,132 +2,277 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A00B93E8804
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 04:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4F93E8892
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 05:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbhHKCb0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 22:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231233AbhHKCb0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 22:31:26 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28793C061765;
-        Tue, 10 Aug 2021 19:31:03 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id x10so1664419iop.13;
-        Tue, 10 Aug 2021 19:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/VW95x+7EdLKFOzbBR7pnvL0AfgEb+HfZES5j7zp3VY=;
-        b=nIEa34fChNzJ7VtY3gLOG6+C3YfhVgHjkpgksW/5AOF2jGV5vT+Xtb5PCo46w7zM3Z
-         w7pykX+sEG6UzH52fR+T7LnlG1bz+rsmClscu741HJlegA+sL8OXhUskJqUo3nWHtWnr
-         7mX1jhg8q4tmv1HenAUsdOCfrRZH/IFy77WiZGj25E8Z2XLtD7gEdv4NoPQvwyTqa3C4
-         QHggs0hQnXAG2Yk4hmaIP4KAkYsnaOZbY81Z07FPrMNWD1Dx9DvLusAtbTv0LCZoVtMw
-         KT4MwxyA4PD8BE/lfZ1ECAorezLfeZkxjFGa4T1XpUJ2nFeEmF5f8speeqseUvfIia19
-         m1Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/VW95x+7EdLKFOzbBR7pnvL0AfgEb+HfZES5j7zp3VY=;
-        b=XheNaV1IpLeBNgJb54T6PvhGDJ2G6namrlGOi2RWlvKcxRIf1VpefKY8VzqrG1pCoq
-         ipKhaS8H2DUdLO9zBBxicRRVBgtfoTDwy42RMo2zEZKLzwxite8IY2avyF7hf5ImkI8R
-         DbU/JZm1h6r/BWPaWQ4NxQUW4USHMPZg8rmc1F1sbmD3UdEVQMhmC1ILnF9xWyc5nwlu
-         478Ig3w+J9ZoSXLSw36XruS05Wq+5Z+3O5kHvoK9REPO75DqSNcMZIloN5g4Sx9eiHYl
-         usRoNABnUqiyEuBpPLSpGHwplImLlhMB/Q5Tq9/aMggb9Bm5Ni6USCj/dx1RWpSiLnhl
-         N01Q==
-X-Gm-Message-State: AOAM531F4xMDuvmSW9KKm6L+Z9PAmSLNBMGj5Y8dkWZ9N54jvsocDCcu
-        AwmAs1FbNjY3C1SM4zUfbZg24JzVgaEDBDypndwjg1bv6BPJGw==
-X-Google-Smtp-Source: ABdhPJx4MGWX6OfrMQ+W9oud+2SjTAU47kqdJ3YSlERK59yrJesyU+9eEyjzDChvlh0HkMZX8aqI6DuUOitBZWwzWos=
-X-Received: by 2002:a5e:d508:: with SMTP id e8mr80175iom.101.1628649062509;
- Tue, 10 Aug 2021 19:31:02 -0700 (PDT)
+        id S232683AbhHKDF3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 23:05:29 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:60338 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231967AbhHKDF2 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 23:05:28 -0400
+X-UUID: 0d016dae6ad249dba23ddd751162d18b-20210811
+X-UUID: 0d016dae6ad249dba23ddd751162d18b-20210811
+Received: from mtkcas07.mediatek.inc [(172.21.101.84)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1360970864; Wed, 11 Aug 2021 11:05:02 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Wed, 11 Aug 2021 11:05:01 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 11 Aug 2021 11:05:01 +0800
+Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 11 Aug 2021 11:05:00 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Ikjoon Jang <ikjn@chromium.org>
+Subject: [PATCH v3 1/2] PM / wakeirq: support enabling wake-up irq after runtime_suspend called
+Date:   Wed, 11 Aug 2021 11:04:28 +0800
+Message-ID: <1628651069-22162-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
 MIME-Version: 1.0
-References: <20210721235526.10588-1-msbroadf@gmail.com> <7b02cb66-d672-ae95-01ea-c6015725e1ac@linuxfoundation.org>
- <CALdjXpA4_eXen6RjhsEBYt8CQs-2gzwYs9h9q0Z2LKZ=rXVp+Q@mail.gmail.com>
- <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
- <CALdjXpBPRraC8xxORgE3SXw4xFnTW-Y6rLbcS+Cx0xYq3+aBeQ@mail.gmail.com>
- <976d34c0-d603-1f16-edbd-ad6c8881ad4e@linuxfoundation.org>
- <CALdjXpAzE3o7Bwdvj1TvsBRpDWDe1FZ8LsmL5q0suxYnRJCOaA@mail.gmail.com>
- <5165bd84-11af-35dd-8a9b-11c7f219fb88@linuxfoundation.org>
- <CALdjXpCmx_nfYEguv9UvOrBMYFxB4sqwmNiV99ggHRZnZjiM-A@mail.gmail.com> <4f345afe-61d5-66b3-3252-562988c8926f@linuxfoundation.org>
-In-Reply-To: <4f345afe-61d5-66b3-3252-562988c8926f@linuxfoundation.org>
-From:   Michael <msbroadf@gmail.com>
-Date:   Wed, 11 Aug 2021 12:30:51 +1000
-Message-ID: <CALdjXpB+-RHMrjt10f1ZksR9VZMuT3gj7HyvrXYtdJ_jq0J93g@mail.gmail.com>
-Subject: Re: [PATCH v2] vhci_hcd: USB port can get stuck in the disabled state
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Aug 2021 at 03:46, Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> On 8/2/21 7:00 PM, Michael wrote:
-> > On Tue, 3 Aug 2021 at 09:14, Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >>
-> >> On 7/30/21 5:52 PM, Michael wrote:
-> >>> Yes i think just adding the VDEV_ST_USED check in addition to the
-> >>> VDEV_ST_NOT_ASSIGNED state is fine and would fix the issue.
-> >>>
-> >>
-> >> Can you please confirm if this works?
-> >>
-> >>> After many years of writing virtualhere (a similar system to usb/ip
-> >>> but cross-platform and different non-kernel way of doing it server
-> >>> side) I've seen many drivers that issue reset at any time. Loading
-> >>> firmware is usually the reason.  Also sometimes switching
-> >>> configurations requires a reset also, for example some gaming wheels
-> >>> do this. I don't think you should make this VDEV_ST_USED check
-> >>> specific to Wifi devices, as a lot of devices don't follow too closely
-> >>> to the USB protocol to begin with from my experience. They primarily
-> >>> base their USB interactions assuming the windows platform and its
-> >>> quirks.
-> >>>
-> >>
-> >> When sending responses to Linux kernel mailing lists, please use bottom post.
-> >> This check will be used for all drivers. We don't add checks for specific cases
-> >> in the code.
-> >>
-> >> thanks,
-> >> -- Shuah
-> >>
-> >
-> > Yes it works with that change.
-> >
->
-> Would you like to send me a patch for this?
->
-> thanks,
-> -- Shuah
+When the dedicated wake-irq is level trigger, and it uses the
+consumer's sleep status as the wakeup source, that means if the
+consumer is not in sleep state, the wake-irq will be triggered
+when enable it; For this case, need enable the wake-irq after
+invoking the consumer's runtime_suspend() which make the consumer
+enter sleep state.
 
-usbip: Allow port reset to occur when the port is also in the ST_USED state
+e.g.
+Assume the wake-irq is a low level trigger type, and the wakeup
+signal comes from the sleep status of consumer.
+The wakeup signal is low level at running time (0), and becomes
+high level when the consumer enters sleep state (runtime_suspend
+(1) is called), a wakeup event at (2) make the consumer exit sleep
+state, then the wakeup signal also becomes low level.
 
- Signed-off-by: Michael <mail@virtualhere.com>
+                ------------------
+               |           ^     ^|
+----------------           |     | --------------
+ |<---(0)--->|<--(1)--|   (3)   (2)    (4)
+
+if enable the wake-irq before calling runtime_suspend during (0),
+an interrupt will arise, it causes resume immediately;
+it works if enable wake-irq ( e.g. at (3) or (4)) after calling
+runtime_suspend.
+
+This patch introduces a new status WAKE_IRQ_DEDICATED_LATE_ENABLED
+to optionally support enabling wake-irq after calling runtime_suspend().
+
+Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/usbip/vhci_hcd.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+v3: add new status suggested by Rafael
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 4ba6bcdaa8e9..300131ae5897 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -456,7 +456,9 @@ static int vhci_hub_control(struct usb_hcd *hcd,
-u16 typeReq, u16 wValue,
-                        vhci_hcd->re_timeout = 0;
+v2: add more commit message
 
-                        if (vhci_hcd->vdev[rhport].ud.status ==
--                           VDEV_ST_NOTASSIGNED) {
-+                           VDEV_ST_NOTASSIGNED ||
-+                               vhci_hcd->vdev[rhport].ud.status ==
-+                               VDEV_ST_USED) {
-                                usbip_dbg_vhci_rh(
-                                        " enable rhport %d (status %u)\n",
-                                        rhport,
---
-2.30.2
+  Use the falling edge trigger interrupt suggested by Ikjoon [1], it
+works well at firstly when only use this related wakeup source, but
+encounter issues if use other wakeup sources to wakeup platform as
+below steps:
+1. use another wakeup source to wake up the suspended system;
+2. the consumer's resume() will be called, and exits sleep state;
+3. the consumer's wakeup signal will fall into low level, due to
+   currently the wakeup irq is disabled, the wake-irq is pending;
+4. the consumer tries to enter runtime suspend, but there is a
+   pending wakeup irq, so will resume again, this will repeat
+   endlessly.
+
+  Send out the patch again for further discussion.
+
+[1]: https://patchwork.kernel.org/patch/12190407
+
+---
+ drivers/base/power/power.h   |  7 ++++--
+ drivers/base/power/runtime.c |  6 +++--
+ drivers/base/power/wakeirq.c | 49 +++++++++++++++++++++++++++++++++---
+ include/linux/pm_wakeirq.h   |  5 ++++
+ 4 files changed, 60 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
+index 54292cdd7808..2d5dfc886f0b 100644
+--- a/drivers/base/power/power.h
++++ b/drivers/base/power/power.h
+@@ -25,8 +25,10 @@ extern u64 pm_runtime_active_time(struct device *dev);
+ 
+ #define WAKE_IRQ_DEDICATED_ALLOCATED	BIT(0)
+ #define WAKE_IRQ_DEDICATED_MANAGED	BIT(1)
++#define WAKE_IRQ_DEDICATED_LATE_ENABLED	BIT(2)
+ #define WAKE_IRQ_DEDICATED_MASK		(WAKE_IRQ_DEDICATED_ALLOCATED | \
+-					 WAKE_IRQ_DEDICATED_MANAGED)
++					 WAKE_IRQ_DEDICATED_MANAGED | \
++					 WAKE_IRQ_DEDICATED_LATE_ENABLED)
+ 
+ struct wake_irq {
+ 	struct device *dev;
+@@ -39,7 +41,8 @@ extern void dev_pm_arm_wake_irq(struct wake_irq *wirq);
+ extern void dev_pm_disarm_wake_irq(struct wake_irq *wirq);
+ extern void dev_pm_enable_wake_irq_check(struct device *dev,
+ 					 bool can_change_status);
+-extern void dev_pm_disable_wake_irq_check(struct device *dev);
++extern void dev_pm_disable_wake_irq_check(struct device *dev, bool skip_enable_late);
++extern void dev_pm_enable_wake_irq_complete(struct device *dev);
+ 
+ #ifdef CONFIG_PM_SLEEP
+ 
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 8a66eaf731e4..97646aa11376 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -645,6 +645,8 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+ 	if (retval)
+ 		goto fail;
+ 
++	dev_pm_enable_wake_irq_complete(dev);
++
+  no_callback:
+ 	__update_runtime_status(dev, RPM_SUSPENDED);
+ 	pm_runtime_deactivate_timer(dev);
+@@ -690,7 +692,7 @@ static int rpm_suspend(struct device *dev, int rpmflags)
+ 	return retval;
+ 
+  fail:
+-	dev_pm_disable_wake_irq_check(dev);
++	dev_pm_disable_wake_irq_check(dev, false);
+ 	__update_runtime_status(dev, RPM_ACTIVE);
+ 	dev->power.deferred_resume = false;
+ 	wake_up_all(&dev->power.wait_queue);
+@@ -873,7 +875,7 @@ static int rpm_resume(struct device *dev, int rpmflags)
+ 
+ 	callback = RPM_GET_CALLBACK(dev, runtime_resume);
+ 
+-	dev_pm_disable_wake_irq_check(dev);
++	dev_pm_disable_wake_irq_check(dev, true);
+ 	retval = rpm_callback(callback, dev);
+ 	if (retval) {
+ 		__update_runtime_status(dev, RPM_SUSPENDED);
+diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+index 3bad3266a2ad..a612f5c26c6c 100644
+--- a/drivers/base/power/wakeirq.c
++++ b/drivers/base/power/wakeirq.c
+@@ -215,6 +215,24 @@ int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
+ }
+ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
+ 
++/**
++ * dev_pm_wake_irq_set_late_enabled_status - set status WAKE_IRQ_DEDICATED_LATE_ENABLED
++ * @dev: Device
++ *
++ * Set the status of WAKE_IRQ_DEDICATED_LATE_ENABLED to tell rpm_suspend()
++ * to enable dedicated wake-up interrupt after invoking the runtime_suspend(),
++ *
++ * Should be called after setting dedicated wake-up interrupt.
++ */
++void dev_pm_wake_irq_set_late_enabled_status(struct device *dev)
++{
++	struct wake_irq *wirq = dev->power.wakeirq;
++
++	if (wirq && (wirq->status & WAKE_IRQ_DEDICATED_ALLOCATED))
++		wirq->status |= WAKE_IRQ_DEDICATED_LATE_ENABLED;
++}
++EXPORT_SYMBOL_GPL(dev_pm_wake_irq_set_late_enabled_status);
++
+ /**
+  * dev_pm_enable_wake_irq - Enable device wake-up interrupt
+  * @dev: Device
+@@ -285,27 +303,52 @@ void dev_pm_enable_wake_irq_check(struct device *dev,
+ 	return;
+ 
+ enable:
+-	enable_irq(wirq->irq);
++	if (!can_change_status || !(wirq->status & WAKE_IRQ_DEDICATED_LATE_ENABLED))
++		enable_irq(wirq->irq);
+ }
+ 
+ /**
+  * dev_pm_disable_wake_irq_check - Checks and disables wake-up interrupt
+  * @dev: Device
++ * @skip_late_enabled_status: skip checking WAKE_IRQ_DEDICATED_LATE_ENABLED
+  *
+  * Disables wake-up interrupt conditionally based on status.
+  * Should be only called from rpm_suspend() and rpm_resume() path.
+  */
+-void dev_pm_disable_wake_irq_check(struct device *dev)
++void dev_pm_disable_wake_irq_check(struct device *dev, bool skip_late_enabled_status)
+ {
+ 	struct wake_irq *wirq = dev->power.wakeirq;
+ 
+ 	if (!wirq || !(wirq->status & WAKE_IRQ_DEDICATED_MASK))
+ 		return;
+ 
+-	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED)
++	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
++	    (skip_late_enabled_status ||
++	     !(wirq->status & WAKE_IRQ_DEDICATED_LATE_ENABLED)))
+ 		disable_irq_nosync(wirq->irq);
+ }
+ 
++/**
++ * dev_pm_enable_wake_irq_complete - enable wake irq based on status
++ * @dev: Device
++ *
++ * Enable wake-up interrupt conditionally based on status, mainly for
++ * enabling wake-up interrupt after runtime_suspend() is called.
++ *
++ * Should be only called from rpm_suspend() path.
++ */
++void dev_pm_enable_wake_irq_complete(struct device *dev)
++{
++	struct wake_irq *wirq = dev->power.wakeirq;
++
++	if (!wirq || !(wirq->status & WAKE_IRQ_DEDICATED_MASK))
++		return;
++
++	if (wirq->status & WAKE_IRQ_DEDICATED_MANAGED &&
++	    wirq->status & WAKE_IRQ_DEDICATED_LATE_ENABLED)
++		enable_irq(wirq->irq);
++}
++
+ /**
+  * dev_pm_arm_wake_irq - Arm device wake-up
+  * @wirq: Device wake-up interrupt
+diff --git a/include/linux/pm_wakeirq.h b/include/linux/pm_wakeirq.h
+index cd5b62db9084..92f814d583f8 100644
+--- a/include/linux/pm_wakeirq.h
++++ b/include/linux/pm_wakeirq.h
+@@ -22,6 +22,7 @@ extern int dev_pm_set_dedicated_wake_irq(struct device *dev,
+ extern void dev_pm_clear_wake_irq(struct device *dev);
+ extern void dev_pm_enable_wake_irq(struct device *dev);
+ extern void dev_pm_disable_wake_irq(struct device *dev);
++extern void dev_pm_wake_irq_set_late_enabled_status(struct device *dev);
+ 
+ #else	/* !CONFIG_PM */
+ 
+@@ -47,5 +48,9 @@ static inline void dev_pm_disable_wake_irq(struct device *dev)
+ {
+ }
+ 
++static inline void dev_pm_wake_irq_set_late_enabled_status(struct device *dev)
++{
++}
++
+ #endif	/* CONFIG_PM */
+ #endif	/* _LINUX_PM_WAKEIRQ_H */
+-- 
+2.25.1
+
