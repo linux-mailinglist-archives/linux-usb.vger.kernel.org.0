@@ -2,35 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B6B3E92A9
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 15:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 625013E9315
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 15:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbhHKNaQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 11 Aug 2021 09:30:16 -0400
-Received: from mail.ispras.ru ([83.149.199.84]:37734 "EHLO mail.ispras.ru"
+        id S231872AbhHKNyD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 09:54:03 -0400
+Received: from mail.ispras.ru ([83.149.199.84]:41814 "EHLO mail.ispras.ru"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231477AbhHKNaO (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 11 Aug 2021 09:30:14 -0400
+        id S231769AbhHKNyC (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Aug 2021 09:54:02 -0400
 Received: from kleverstation.intra.ispras.ru (unknown [10.10.2.220])
-        by mail.ispras.ru (Postfix) with ESMTPS id 058A540A2BCD;
-        Wed, 11 Aug 2021 13:29:41 +0000 (UTC)
+        by mail.ispras.ru (Postfix) with ESMTPS id 0096940755FE;
+        Wed, 11 Aug 2021 13:53:37 +0000 (UTC)
 From:   Nadezda Lutovinova <lutovinova@ispras.ru>
 To:     Bin Liu <b-liu@ti.com>
 Cc:     Nadezda Lutovinova <lutovinova@ispras.ru>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         ldv-project@linuxtesting.org
-Subject: 
-Date:   Wed, 11 Aug 2021 16:29:27 +0300
-Message-Id: <20210811132927.10194-1-lutovinova@ispras.ru>
+Subject: [PATCH v2] usb: musb: musb_dsps: Change function call order in dsps_probe()
+Date:   Wed, 11 Aug 2021 16:53:31 +0300
+Message-Id: <20210811135331.11808-1-lutovinova@ispras.ru>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20210811132927.10194-1-lutovinova@ispras.ru>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
-
-Date: Fri, 30 Jul 2021 18:20:00 +0300
-Subject: [PATCH] usb: musb: musb_dsps: Change function call order in
- dsps_probe()
 
 If IRQ occurs between calling  dsps_setup_optional_vbus_irq()
 and  dsps_create_musb_pdev(), then null pointer dereference occurs
@@ -42,6 +39,8 @@ of the interrupt handler.
 Found by Linux Driver Verification project (linuxtesting.org).
 
 Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+---
+v2: fix subject
 ---
  drivers/usb/musb/musb_dsps.c | 13 ++++++-------
  1 file changed, 6 insertions(+), 7 deletions(-)
