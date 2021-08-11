@@ -2,75 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFBC73E8894
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 05:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D46E3E8908
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 05:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232903AbhHKDFa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 23:05:30 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:33918 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232169AbhHKDF3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 10 Aug 2021 23:05:29 -0400
-X-UUID: 5fdea8a68a2c4537a2dfac1576dfd4d7-20210811
-X-UUID: 5fdea8a68a2c4537a2dfac1576dfd4d7-20210811
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 833135956; Wed, 11 Aug 2021 11:05:04 +0800
-Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
- mtkmbs01n1.mediatek.inc (172.21.101.68) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 11 Aug 2021 11:05:02 +0800
-Received: from localhost.localdomain (10.17.3.153) by MTKCAS06.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 11 Aug 2021 11:05:01 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>,
-        Ikjoon Jang <ikjn@chromium.org>
-Subject: [PATCH v3 2/2] usb: xhci-mtk: enable wake-up interrupt after runtime_suspend called
-Date:   Wed, 11 Aug 2021 11:04:29 +0800
-Message-ID: <1628651069-22162-2-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1628651069-22162-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1628651069-22162-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S233481AbhHKDzh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 10 Aug 2021 23:55:37 -0400
+Received: from m12-14.163.com ([220.181.12.14]:52287 "EHLO m12-14.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232905AbhHKDzg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 10 Aug 2021 23:55:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=GM9L+
+        HUk4X50o6mDdEuNj+fmqhM9FliDuUpR9ApSuTE=; b=cIX4VIAmUOEUSbSkqBhoj
+        AXQGmS+4J6/V0mmvalvro/VR3Pf3LQrNmBqVCwnK46V9IlxaW1ges/kgtkgmJMVP
+        nBHzGEsrmPauS9CQ4AvyE0wRGtA9765IKME27ojV/9Ut3QNi4u/3MlDORy086anW
+        LyFu0n2ftX4KqIMSDFMPIk=
+Received: from localhost.localdomain (unknown [223.104.68.7])
+        by smtp10 (Coremail) with SMTP id DsCowABXstbFSRNhUkp5BQ--.21168S2;
+        Wed, 11 Aug 2021 11:53:47 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        slark_xiao@163.com
+Subject: [PATCH] This change aims to support Foxconn SDX55. In some scenario, we need to use this port to capture memory dump.
+Date:   Wed, 11 Aug 2021 11:53:09 +0800
+Message-Id: <20210811035309.7942-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowABXstbFSRNhUkp5BQ--.21168S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Xw48tw43CFyUXw1xJw13urg_yoW3Xwc_Cr
+        yDWFZ7W3WYkF4aqr47JaySvw4Fk3y2vFZY9F1vgas5JFW7KaykA3W7tF1Dtr18Xw1xXF9x
+        ZwnrWwn7tr4qgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0Hv3UUUUUU==
+X-Originating-IP: [223.104.68.7]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQvrZFaEEuWiSwAAsF
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use new function dev_pm_wake_irq_set_late_enabled_status() to enable
-dedicated wake-up interrupt after xhci_mtk_runtime_suspend() is called.
-
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-v3: new patch
----
- drivers/usb/host/xhci-mtk.c | 1 +
+ drivers/usb/serial/qcserial.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 7ff0cd707ba1..6fb6f6853129 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -611,6 +611,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 			dev_err(dev, "set wakeup irq %d failed\n", wakeup_irq);
- 			goto dealloc_usb3_hcd;
- 		}
-+		dev_pm_wake_irq_set_late_enabled_status(dev);
- 		dev_info(dev, "wakeup irq %d\n", wakeup_irq);
- 	}
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index 83da8236e3c8..d8b58aea3c60 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -111,6 +111,7 @@ static const struct usb_device_id id_table[] = {
+ 	{USB_DEVICE(0x16d8, 0x8002)},	/* CMDTech Gobi 2000 Modem device (VU922) */
+ 	{USB_DEVICE(0x05c6, 0x9204)},	/* Gobi 2000 QDL device */
+ 	{USB_DEVICE(0x05c6, 0x9205)},	/* Gobi 2000 Modem device */
++	{USB_DEVICE(0x05c6, 0x901d)},	/* Foxconn SDX55 QDL */
  
+ 	/* Gobi 3000 devices */
+ 	{USB_DEVICE(0x03f0, 0x371d)},	/* HP un2430 Gobi 3000 QDL */
 -- 
 2.25.1
 
