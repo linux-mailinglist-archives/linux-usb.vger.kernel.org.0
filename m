@@ -2,62 +2,93 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D46E3E8908
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 05:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2DD3E8A49
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Aug 2021 08:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbhHKDzh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 10 Aug 2021 23:55:37 -0400
-Received: from m12-14.163.com ([220.181.12.14]:52287 "EHLO m12-14.163.com"
+        id S234961AbhHKGka (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 11 Aug 2021 02:40:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50948 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232905AbhHKDzg (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 10 Aug 2021 23:55:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=GM9L+
-        HUk4X50o6mDdEuNj+fmqhM9FliDuUpR9ApSuTE=; b=cIX4VIAmUOEUSbSkqBhoj
-        AXQGmS+4J6/V0mmvalvro/VR3Pf3LQrNmBqVCwnK46V9IlxaW1ges/kgtkgmJMVP
-        nBHzGEsrmPauS9CQ4AvyE0wRGtA9765IKME27ojV/9Ut3QNi4u/3MlDORy086anW
-        LyFu0n2ftX4KqIMSDFMPIk=
-Received: from localhost.localdomain (unknown [223.104.68.7])
-        by smtp10 (Coremail) with SMTP id DsCowABXstbFSRNhUkp5BQ--.21168S2;
-        Wed, 11 Aug 2021 11:53:47 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     johan@kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        slark_xiao@163.com
-Subject: [PATCH] This change aims to support Foxconn SDX55. In some scenario, we need to use this port to capture memory dump.
-Date:   Wed, 11 Aug 2021 11:53:09 +0800
-Message-Id: <20210811035309.7942-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.25.1
+        id S234935AbhHKGk3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 11 Aug 2021 02:40:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5AAEC60720;
+        Wed, 11 Aug 2021 06:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628664006;
+        bh=M/EQATTNka7Ynj3+YG4nHYABF/2U53riW3CKegP6pj8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o1LVOZI0etNtwl79m2Tttxsd1iT4M5sMeWejlqPEfU3Z0qU8/QRTAVWldjmfvb47W
+         3y+w+5bK1jB9YFc7+q62OoeWnk+IAd9NbA4sNA+6G0lskTIg4C4sedvTSGEwIqRgAi
+         XTsP9BwJ8aJYrn0Wq85G46Esg/PuG3z/jqwIrD1I=
+Date:   Wed, 11 Aug 2021 08:40:03 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] This change aims to support Foxconn SDX55. In some
+ scenario, we need to use this port to capture memory dump.
+Message-ID: <YRNww/CJuvsHkKcH@kroah.com>
+References: <20210811035309.7942-1-slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DsCowABXstbFSRNhUkp5BQ--.21168S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Xw48tw43CFyUXw1xJw13urg_yoW3Xwc_Cr
-        yDWFZ7W3WYkF4aqr47JaySvw4Fk3y2vFZY9F1vgas5JFW7KaykA3W7tF1Dtr18Xw1xXF9x
-        ZwnrWwn7tr4qgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU0Hv3UUUUUU==
-X-Originating-IP: [223.104.68.7]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbBDQvrZFaEEuWiSwAAsF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210811035309.7942-1-slark_xiao@163.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
- drivers/usb/serial/qcserial.c | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Aug 11, 2021 at 11:53:09AM +0800, Slark Xiao wrote:
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> ---
+>  drivers/usb/serial/qcserial.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> index 83da8236e3c8..d8b58aea3c60 100644
+> --- a/drivers/usb/serial/qcserial.c
+> +++ b/drivers/usb/serial/qcserial.c
+> @@ -111,6 +111,7 @@ static const struct usb_device_id id_table[] = {
+>  	{USB_DEVICE(0x16d8, 0x8002)},	/* CMDTech Gobi 2000 Modem device (VU922) */
+>  	{USB_DEVICE(0x05c6, 0x9204)},	/* Gobi 2000 QDL device */
+>  	{USB_DEVICE(0x05c6, 0x9205)},	/* Gobi 2000 Modem device */
+> +	{USB_DEVICE(0x05c6, 0x901d)},	/* Foxconn SDX55 QDL */
+>  
+>  	/* Gobi 3000 devices */
+>  	{USB_DEVICE(0x03f0, 0x371d)},	/* HP un2430 Gobi 3000 QDL */
+> -- 
+> 2.25.1
+> 
 
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index 83da8236e3c8..d8b58aea3c60 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -111,6 +111,7 @@ static const struct usb_device_id id_table[] = {
- 	{USB_DEVICE(0x16d8, 0x8002)},	/* CMDTech Gobi 2000 Modem device (VU922) */
- 	{USB_DEVICE(0x05c6, 0x9204)},	/* Gobi 2000 QDL device */
- 	{USB_DEVICE(0x05c6, 0x9205)},	/* Gobi 2000 Modem device */
-+	{USB_DEVICE(0x05c6, 0x901d)},	/* Foxconn SDX55 QDL */
- 
- 	/* Gobi 3000 devices */
- 	{USB_DEVICE(0x03f0, 0x371d)},	/* HP un2430 Gobi 3000 QDL */
--- 
-2.25.1
+Hi,
 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what a proper Subject: line should
+  look like.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
