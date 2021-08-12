@@ -2,167 +2,97 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AECE3EA5F7
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 15:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093443EA85B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 18:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbhHLNsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 09:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S232600AbhHLQQU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 12:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232873AbhHLNsC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 09:48:02 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118F0C061756
-        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 06:47:34 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id q2so7314794plr.11
-        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 06:47:34 -0700 (PDT)
+        with ESMTP id S232422AbhHLQPh (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 12:15:37 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1688CC0617AE;
+        Thu, 12 Aug 2021 09:15:06 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id n7so11429648ljq.0;
+        Thu, 12 Aug 2021 09:15:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=hyhelxpd7QUVPAkk5IYGM9KEnUOWxWDMxwO8ECoYdnU=;
-        b=Rs4dAv5o9o6YzH/Kos2vl/SACHZatk/nOkTogbL/1EBFQ9n8+ZFw91oSx+CeUKBQ3H
-         2m6mLxziThndH+V4UTq3JF0Qt/JuqFap8S5hupa6Ec5y4PXtz7ajadJH4M8D5rAQblUM
-         2su3i/xOb5hBn41lp62bfbt0FSGbf+Admw2lA=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=q1kP8IDfWs3KYwhhLGYrvublLDH8i7aJatyFRJI0aDQ=;
+        b=O2nG2V6paudkRTLvKKBvSW4Vzfdiqn7OBX0xqWqsk4KJFuZFlfV7qIIY0RnpjQspV6
+         JZxD+D1sXcF6B9cBMHcrG+rtbo1eaHJg5+u6FtbJAAMt1+EHhPEAfIrGS2baPavi2ULQ
+         gJFy+ugYFJ2KAZWQsUZk5Vrp3wH22DbiT0nIOETuFQQ7n5MZbVzwWTeqxx5RU+nBVD0m
+         6T3kMvrUIrGLrwvjCgwAY7o6OwaTJ/XgC960HZiZEU3RhGJmh3kN2/+9zYhSYhCncceh
+         o0ThDntonzjPShFU3ywxcfVh01s8IN4VKcGxR/T/ouSZRB6o5VEoNG1XqXjaklAZ0F1D
+         Tx7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=hyhelxpd7QUVPAkk5IYGM9KEnUOWxWDMxwO8ECoYdnU=;
-        b=Rnm5JcaWJBpER0OFzhGODICaWMgnm4FNoHjyV8Gl/M/mcrjXCuYbMX9m6MV7bX13AN
-         7EmF3MbOC33O8yVhG2rJA82+m/2175+fZ0q+N18WC/NCN6MyE2H1+eqNMhlOggRqsqZq
-         XPgomYlSfEaIL12STNkLPcmPFhT1HpKUaEBAEDrjTTgsjhDwmRz8ndWkrzX7uFVIu6mv
-         IWQ00pIIHMJmprznsra922zYgsDfJUdC1lHP69kay+DGQDl0Qg9HBoNjM1GZq0aBkuJw
-         h3AifkHfydvVYAQhWDvW1LwbVaxauQNJ9EQaOb4xVYLqj44xoFU/OCv8t+kzxV6qRPij
-         f7Ig==
-X-Gm-Message-State: AOAM530uimkx+kkykwF+oBSDkdkQRexnt2feN6WuMKQPiVHxzMsWhY4L
-        h46yyMNrXKHodSkhh5j42Pk/dgRkZtVK6m8e0ghbtg==
-X-Google-Smtp-Source: ABdhPJzinP+pujlw1HqtoYlTgrZfNU12HLzMgQ+D3ezfZIHtqfWhJuEgsvdCWLJhspWCTXhKmsXTVvomNXPsynDbZYk=
-X-Received: by 2002:aa7:8387:0:b029:395:a683:a0e6 with SMTP id
- u7-20020aa783870000b0290395a683a0e6mr4295749pfm.12.1628776053473; Thu, 12 Aug
- 2021 06:47:33 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q1kP8IDfWs3KYwhhLGYrvublLDH8i7aJatyFRJI0aDQ=;
+        b=QT6GiEIPhqLZsuNKTIk3BZSR2K3/Gst5CTc6FcomzTeQZBclnlPS1tt4kEphl7UN2e
+         awTOLTozsN0J89sMabuH1vbntzu4aKM2/Vwk/eQxmMT8xNptYMPawbF14HrmG3fc5M2/
+         Bkm6Zc6N/2F1Dm+eyN5I3/oPpWxft7w7dc1iDqDXKmx36hk/wikyxwQRABYwYoNj2o7+
+         ARKoy8oHZfEWNOY5RAdQ9DL36JWJpyftkInEB3+8VBqkF4DmfFE0bVoUGBAkHcrSC9Cw
+         tSqThsMtbp2fnHUh4z+cXBbh3Qr7sr+OKHVaT6taYYsXsvCuTjOCsGcbpdsB1k0iUmpH
+         Ocrg==
+X-Gm-Message-State: AOAM5311y6TQfNp/hNA600LjxWF9QQG7o/1TCdagiCYC2bzZ7qiw/wTB
+        WbphlwXvhWaQ7RztTgMf7xc=
+X-Google-Smtp-Source: ABdhPJw8Y+4oboFgVDcsxDZ5DafHZB6Fmy0rHyftgqwU1KidVKdYV7L6Oq0+j6F4JOqgaGTP6nwKjw==
+X-Received: by 2002:a2e:a70f:: with SMTP id s15mr3366180lje.343.1628784904468;
+        Thu, 12 Aug 2021 09:15:04 -0700 (PDT)
+Received: from [192.168.1.102] ([178.176.76.126])
+        by smtp.gmail.com with ESMTPSA id d17sm346650lji.102.2021.08.12.09.15.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Aug 2021 09:15:04 -0700 (PDT)
+Subject: Re: [PATCH v2 6/7] usb: gadget: bdc: remove unnecessary AND operation
+ when get ep maxp
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <1628774283-475-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1628774283-475-6-git-send-email-chunfeng.yun@mediatek.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <4e751ea2-7e42-3378-397f-7bf913752da2@gmail.com>
+Date:   Thu, 12 Aug 2021 19:15:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-References: <20210809165904.RFC.1.I5165a4a8da5cac23c9928b1ec3c3a1a7383b7c23@changeid>
- <YRDxTodNNqtnpPpn@kroah.com> <CAATdQgDSCzZtiDSQk94CYHfSb9Mq28OH7-RdaTZNv3oPrW3nkQ@mail.gmail.com>
- <7b48f4c132a8b4b3819282e961fbe8b3ed753069.camel@mediatek.com>
- <CAATdQgD1paUUmWhiLVq-+zq0V6=RTJw89ggk=R6cBUZO+5dB-Q@mail.gmail.com> <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
-In-Reply-To: <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Thu, 12 Aug 2021 21:47:22 +0800
-Message-ID: <CAATdQgATOhAcr7uMyxAvZCdngMaa-bbG3GDpun11LHOHeLqMjQ@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
-To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <1628774283-475-6-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-oops sorry I sent a prior mail in HTML.
-Resend this mail in plain text.
+On 8/12/21 4:18 PM, Chunfeng Yun wrote:
 
-On Thu, Aug 12, 2021 at 7:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
-<Chunfeng.Yun@mediatek.com> wrote:
->
-> On Thu, 2021-08-12 at 17:31 +0800, Ikjoon Jang wrote:
-> > HI,
-> >
-> > On Wed, Aug 11, 2021 at 5:02 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
-=B0)
-> > <Chunfeng.Yun@mediatek.com> wrote:
-> > >
-> > > On Mon, 2021-08-09 at 17:42 +0800, Ikjoon Jang wrote:
-> > > > On Mon, Aug 9, 2021 at 5:11 PM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Mon, Aug 09, 2021 at 04:59:29PM +0800, Ikjoon Jang wrote:
-> > > > > > xhci-mtk has 64 slots for periodic bandwidth calculations and
-> > > > > > each
-> > > > > > slot represents byte budgets on a microframe. When an
-> > > > > > endpoint's
-> > > > > > allocation sits on the boundary of the table, byte budgets'
-> > > > > > slot
-> > > > > > should be rolled over but the current implementation doesn't.
-> > > > > >
-> > > > > > This patch applies a 6 bits mask to the microframe index to
-> > > > > > handle
-> > > > > > its rollover 64 slots and prevent out-of-bounds array access.
-> > > > > >
-> > > > > > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> > > > > > ---
-> > > > > >
-> > > > > >  drivers/usb/host/xhci-mtk-sch.c | 79 +++++++++------------
-> > > > > > ----
-> > > > > > --------
-> > > > > >  drivers/usb/host/xhci-mtk.h     |  1 +
-> > > > > >  2 files changed, 23 insertions(+), 57 deletions(-)
-> > > > >
-> > > > > Why is this "RFC"?  What needs to be addressed in this change
-> > > > > before it
-> > > > > can be accepted?
-> > > >
-> > > > sorry, I had to mention why this is RFC:
-> > > >
-> > > > I simply don't know about the details of the xhci-mtk internals.
-> > > > It was okay from my tests with mt8173 and I think this will be
-> > > > harmless
-> > > > as this is "better than before".
-> > > >
-> > > > But when I removed get_esit_boundary(), I really have no idea why
-> > > > it was there. I'm wondering if there was another reason of that
-> > > > function
-> > > > other than just preventing out-of-bounds. Maybe chunfeng can
-> > > > answer
-> > > > this?
-> > >
-> > > We use @esit to prevent out-of-bounds array access. it's not a
-> > > ring,
-> > > can't insert out-of-bounds value into head slot.
-> >
-> > Thanks, so that function was only for out-of-bounds array access.
-> > then I think we just can remove that function and use it as a ring.
-> > Can you tell me _why_ it can't be used as a ring?
-> Treat it as a period, roll over slot equals to put it into the next
-> period.
->
-> >
-> > I think a transaction (e.g. esit_boundary =3D 7) can start its first
-> > SSPLIT
-> > from Y_7 (offset =3D 7). But will that allocation be matched with this?
-> >
-> > -               if ((offset + sch_ep->num_budget_microframes) >
-> > esit_boundary)
-> > -                       break;
-> >
-> > I mean I'm not sure why this is needed.
-> Prevent out-of-bounds.
->
-> >
-> > Until now, I couldn't find a way to accept the USB audio headset
-> > with a configuration of { INT-IN 64 + ISOC-OUT 384 + ISOC-IN 192 }
-> > without this patch.
-> what is the interval value of each endpoint?
+> usb_endpoint_maxp() already returns actual max packet size, no need
 
-interrupt ep is 2ms and others are 1ms
-Thanks.
+  "No ndeed to", perhaps?
 
->
-> >
-> > >
-> > > >
-> > > > Thanks!
-> > > >
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > greg k-h
+> AND 0x7ff.
+> 
+> Acked-by: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+[...]
+
+MBR, Sergei
