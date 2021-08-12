@@ -2,134 +2,84 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C1D3E9E4D
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 08:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4E93E9EC2
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 08:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbhHLGLq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 02:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46274 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234477AbhHLGLp (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 02:11:45 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4463C0613D5
-        for <linux-usb@vger.kernel.org>; Wed, 11 Aug 2021 23:11:20 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id gz13-20020a17090b0ecdb0290178c0e0ce8bso8053493pjb.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Aug 2021 23:11:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=AdSDRXkannLfQW9+0wIXjK1QxuAWsJpVgDG3Y9dksOM=;
-        b=MK0bUkHzlsqpZuBMSSMJyyUbqrQ3sIb7BgT/1F31Lb+2rQ7jyhtv8dB9eglRZM9plF
-         t7LeA4VvdOQeFNqLn5oEfwqn9WJviyjvbcL6NvYlXdIs1HMncjx9zUDaEz42Zh+VRLjG
-         G8G9B72uAblpN96sIUTKFn5o/gwieY2J3PCHpxXhBfvsmRHqn+/Njti+X4s0KqEmtVZg
-         nI36EupIAzhJlgubCjNpYUU7anx2j33fGFGCyTSlupqzTDAy2RZH2/UtBOm2LTHuiw+N
-         YB7Dhank+IkcoyerLoq8Hv40pTBaeGsZuWFOb/9dFB3TSXIac8spPxa1zLRrGyffioYo
-         dPYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=AdSDRXkannLfQW9+0wIXjK1QxuAWsJpVgDG3Y9dksOM=;
-        b=YM6wTCyfUTpUWoNHJHkPyRO0KLpq8iee70wg87Ah5cVPZGfHp5F1qvxvBl/OeSBgFt
-         AUW3HMSKl5RUklgl3jQ8ADMfa93zoaMCkYnj4tp8BckWqzbH5XnJOTQtP3zS56/NiOod
-         DcbdIuzaYZF81CdN/VwZnGgHnnwY/kjtr4duLBegHYtgRbbeG4xvfLPz1dozUMIe4Hze
-         5YV5BpCAmO8KM3iQ+sE+WYkuVUO21uK3/2Pg7+fCt0r1rLCwjlVWkFfFDM+9BSyIGysB
-         gZNIGn3nlUfHtdSE9JcVHItFB4y+qcoEdzJHWDxUKnpSV85akctqnEQnim4K663Yj/aa
-         tMGw==
-X-Gm-Message-State: AOAM530AI9R9ePFelx4hilN+yc8MA/jGRiUizwdtHoUfCO33Tljq1cg+
-        +NdVxBMoejqOfBn9XSru/RkX
-X-Google-Smtp-Source: ABdhPJy5JhJN83aBinU0qFRL1e2LUsjLDZAT+Hr46w4wWY1am3TdZlDfobGcs2BA1dWutkaTqiPUlA==
-X-Received: by 2002:a65:68d1:: with SMTP id k17mr2463057pgt.285.1628748680227;
-        Wed, 11 Aug 2021 23:11:20 -0700 (PDT)
-Received: from thinkpad ([2409:4072:99a:700c:52f1:f031:1fc2:c301])
-        by smtp.gmail.com with ESMTPSA id t1sm1941053pgr.65.2021.08.11.23.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Aug 2021 23:11:19 -0700 (PDT)
-Date:   Thu, 12 Aug 2021 11:41:10 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Prasad Malisetty <pmaliset@codeaurora.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org
-Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-Message-ID: <20210812061110.GB72145@thinkpad>
-References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
- <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
+        id S234245AbhHLGrW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 02:47:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53936 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231253AbhHLGrV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Aug 2021 02:47:21 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 87E2460EB9;
+        Thu, 12 Aug 2021 06:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1628750817;
+        bh=YsjAUE0JzYW/Ne5nsjhvS55vm6pDwGdT0PyX4b+w704=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GB7TGjcPQyWIxWGZvmqonkxPb9ZO52BjgHA1NPgr35nOb+YsYO5SUbhp8fSQSdSE5
+         HLAcOG/r/2lEMoiG3HAR3dbaxCzPjqoxH580p90ovRINFv2P87SpDUMGqk5YSywpLD
+         ZiWqO9BFY6wLW6sBJ0IQ0JQPEBPWqzktlt9pMToA=
+Date:   Thu, 12 Aug 2021 08:46:54 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     johan@kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: Re: [PATCH] [v2,1/1] This aims to support Foxconn SDX55
+Message-ID: <YRTD3szluseOmv8f@kroah.com>
+References: <20210811085635.4699-1-slark_xiao@163.com>
+ <YRO3nDjt52EF1uVz@kroah.com>
+ <20ff1e24.a43.17b380ffaf4.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20ff1e24.a43.17b380ffaf4.Coremail.slark_xiao@163.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 10, 2021 at 09:38:36AM +0530, Prasad Malisetty wrote:
-> On the SC7280, By default the clock source for pcie_1_pipe is
-> TCXO for gdsc enable. But after the PHY is initialized, the clock
-> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
+On Thu, Aug 12, 2021 at 09:52:56AM +0800, Slark Xiao wrote:
+> At 2021-08-11 19:42:20, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >On Wed, Aug 11, 2021 at 04:56:35PM +0800, Slark Xiao wrote:
+> >> Foxconn SDX55 T77W175 device is working in PCIe mode normally.
+> >> You can find it in drivers/bus/mhi/pci_geneirc.c file.
+> >> But in some scenario, we need to capture the memory dump once it crashed.
+> >> So a diag port driver is needed.
+> >> 
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >> ---
+> >>  drivers/usb/serial/qcserial.c | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >> 
+> >> diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+> >> index 83da8236e3c8..d8b58aea3c60 100644
+> >> --- a/drivers/usb/serial/qcserial.c
+> >> +++ b/drivers/usb/serial/qcserial.c
+> >> @@ -111,6 +111,7 @@ static const struct usb_device_id id_table[] = {
+> >>  	{USB_DEVICE(0x16d8, 0x8002)},	/* CMDTech Gobi 2000 Modem device (VU922) */
+> >>  	{USB_DEVICE(0x05c6, 0x9204)},	/* Gobi 2000 QDL device */
+> >>  	{USB_DEVICE(0x05c6, 0x9205)},	/* Gobi 2000 Modem device */
+> >> +	{USB_DEVICE(0x05c6, 0x901d)},	/* Foxconn SDX55 QDL */
+> >
+> >Why is this not sorted?
+> >
+> >And the subject needs some work still...
+> >
+> >thanks,
+> >
+> >greg k-h
 > 
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8a7a300..39e3b21 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
->  	struct regulator_bulk_data supplies[2];
->  	struct reset_control *pci_reset;
->  	struct clk *pipe_clk;
-> +	struct clk *gcc_pcie_1_pipe_clk_src;
-> +	struct clk *phy_pipe_clk;
->  };
->  
->  union qcom_pcie_resources {
-> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct qcom_pcie *pcie)
->  	if (ret < 0)
->  		return ret;
->  
-> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
-> +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-> +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
-> +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
-> +
-> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-> +		if (IS_ERR(res->phy_pipe_clk))
-> +			return PTR_ERR(res->phy_pipe_clk);
-> +	}
-> +
->  	res->pipe_clk = devm_clk_get(dev, "pipe");
->  	return PTR_ERR_OR_ZERO(res->pipe_clk);
->  }
-> @@ -1255,6 +1267,12 @@ static void qcom_pcie_deinit_2_7_0(struct qcom_pcie *pcie)
->  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->  {
->  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> +	struct dw_pcie *pci = pcie->pci;
-> +	struct device *dev = pci->dev;
-> +	struct device_node *node = dev->of_node;
-> +
-> +	if (of_property_read_bool(node, "pipe-clk-source-switch"))
+> Hi Greg,
+>   Sorry,  can you show me where should I put it at?
 
-Wondering why you didn't use the compatible here as well. This will break if the
-property exist but the clocks are not.
+If it belongs in this list, then it should be in sorted order, which you
+did not do here, so that would be a good idea, right?
 
-Thanks,
-Mani
+>   According to Bjørn comment, I think I need to create a new layout for Foxconn SDX55 device.
 
-> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
->  
->  	return clk_prepare_enable(res->pipe_clk);
->  }
-> -- 
-> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> a Linux Foundation Collaborative Project
-> 
+That is up to you and Bjørn to work out :)
+
+thanks,
+
+greg k-h
