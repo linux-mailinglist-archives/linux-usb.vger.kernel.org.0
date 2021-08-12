@@ -2,282 +2,192 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B57A93EA926
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 19:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EFBE3EA935
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 19:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234600AbhHLRJC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 13:09:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234657AbhHLRJA (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 13:09:00 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C394AC0617AD
-        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 10:08:34 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id f3so8123978plg.3
-        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 10:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=jDdIls0s5fGI9MVwDFqlnBbZBqc/nZFHSatF0n+nY7U=;
-        b=Bg72VbLR6hRMQEh1yVIWIL4gxLdS9uI61QFRBRGMUISLehiSwhZINXEuqNDY/yCxsY
-         b3kwi2EeW8Va6nJ2QiK2eapkOJvJo6JMxjJa+kZ3mrBoBLPuTqFeCO5YO/pQ5HADRmH5
-         t6p/Xlg5b3Q08aeGqpUbmKzJCBJ90jNC9m0eU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=jDdIls0s5fGI9MVwDFqlnBbZBqc/nZFHSatF0n+nY7U=;
-        b=iYu3z4jIV969g/GXxiI85floPImT2mJMz7ocCPD0O+A3swCxu4nBs7yYi+tBdBYIfb
-         7XxiepkccYiRZX0BO4Ykx1XFiR+FhvIs7GRf8vIGym/7GS/Qi2L/UxKN3o3I5xMuFPkf
-         4vXCCYB6syvOpXKAayJhOU3ajQIOt/UO9uqRYZkhto+qNlFBKDRkOkO/s08ow9WfOtQe
-         yo9u+e4hzTstKVl5yH16oV9Slbkm+5uBeEmKknFHwClT1JJm5SaCdcujLSYMeP7B1BJJ
-         h2KM0q4PpnxV2uh2RzuRnzoaYXDKkFkxQBdSO+BtaGoY0I2rP2yktFHKIKy8lrwWiOKp
-         QemA==
-X-Gm-Message-State: AOAM532rHXMrTgaOeb3aSwXTJITJrTUnMafRI2UtKAVhIDacgS8C7XxL
-        s//a4rPltRQ44Y4Xs9wg3b1DJA==
-X-Google-Smtp-Source: ABdhPJxw1ta+VAzWkZwmcPY7XJWFJsLSEVJXqz1nQBIEQaoXiTKpmlpDo6+aNFXGjT1vC/w8J6/AdA==
-X-Received: by 2002:a65:63d7:: with SMTP id n23mr4809377pgv.46.1628788114293;
-        Thu, 12 Aug 2021 10:08:34 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6683:43e5:ba4c:d76c])
-        by smtp.gmail.com with UTF8SMTPSA id e35sm11206858pjk.28.2021.08.12.10.08.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Aug 2021 10:08:33 -0700 (PDT)
-Date:   Thu, 12 Aug 2021 10:08:31 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Nishanth Menon <nm@ti.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YRVVjwNprk7l1jUk@google.com>
-References: <20210727004118.2583774-1-mka@chromium.org>
- <YRFOnhJkB2vi/zwD@google.com>
- <8a8cae28-6617-76d3-1742-3f151a149069@kernel.org>
- <ddd60682-c957-2897-768e-96c9d25c148a@kernel.org>
+        id S234853AbhHLRMt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 13:12:49 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:50482 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234825AbhHLRMt (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 13:12:49 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1628788344; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=uEmi5V6gGqQLIMtybEuP9G2G3UWbtuAyTLxZ9xJUlAo=; b=IlGH+Xt80Lvu1PQGYvQ6vgQfHq8YF/IqXeHnagBGuu94mYFB3GnUFvi4CtZT/rvrb0lR/1nr
+ CjG5cw5iAgrlX/9fTbIiI2JIecwFFCe9/emO14SORcz+Arsajl3ELVIWSvpYz4Ec1hZiTDUy
+ stzcGQqe107qFZ++cao5wmkXTDI=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 61155667f746c298d93fa7fa (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 17:12:07
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id A4451C43217; Thu, 12 Aug 2021 17:12:06 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.26] (075-140-094-099.biz.spectrum.com [75.140.94.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 24553C433F1;
+        Thu, 12 Aug 2021 17:12:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 24553C433F1
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wcheng@codeaurora.org
+Subject: Re: [RFC][PATCH] usb: dwc3: usb: dwc3: Force stop EP0 transfers
+ during pullup disable
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "balbi@kernel.org" <balbi@kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jackp@codeauora.org" <jackp@codeauora.org>
+References: <1628648608-15239-1-git-send-email-wcheng@codeaurora.org>
+ <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <3edf74ba-d167-0589-a7ab-827b57aa5d9c@codeaurora.org>
+Date:   Thu, 12 Aug 2021 10:12:04 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
+In-Reply-To: <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ddd60682-c957-2897-768e-96c9d25c148a@kernel.org>
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Roger,
+Hi Thinh,
 
-On Wed, Aug 11, 2021 at 03:56:15PM +0300, Roger Quadros wrote:
+On 8/11/2021 5:47 PM, Thinh Nguyen wrote:
+> Wesley Cheng wrote:
+>> During a USB cable disconnect, or soft disconnect scenario, a pending
+>> SETUP transaction may not be completed, leading to the following
+>> error:
+>>
+>>     dwc3 a600000.dwc3: timed out waiting for SETUP phase
 > 
-> 
-> On 11/08/2021 15:38, Roger Quadros wrote:
-> > Hi Matthias,
-> > 
-> > On 09/08/2021 18:49, Matthias Kaehlcke wrote:
-> >> Hi Greg,
-> >>
-> >> Just wanted to check if this series is still on your radar. Is
-> >> there anything that blocks it from landing (further ACKs, ...)?
-> >>
-> >> Thanks
-> >>
-> >> Matthias
-> >>
-> >> On Mon, Jul 26, 2021 at 05:41:12PM -0700, Matthias Kaehlcke wrote:
-> >>> This series adds:
-> >>> - the onboard_usb_hub_driver
-> >>> - glue in the xhci-plat driver to create and destroy the
-> >>>   onboard_usb_hub platform devices if needed
-> >>> - a device tree binding for the Realtek RTS5411 USB hub controller
-> >>> - device tree changes that add RTS5411 entries for the QCA SC7180
-> >>>   based boards trogdor and lazor
-> >>> - a couple of stubs for platform device functions to avoid
-> >>>   unresolved symbols with certain kernel configs
-> >>>
-> >>> The main issue the driver addresses is that a USB hub needs to be
-> >>> powered before it can be discovered. For discrete onboard hubs (an
-> >>> example for such a hub is the Realtek RTS5411) this is often solved
-> >>> by supplying the hub with an 'always-on' regulator, which is kind
-> >>> of a hack. Some onboard hubs may require further initialization
-> >>> steps, like changing the state of a GPIO or enabling a clock, which
-> >>> requires even more hacks. This driver creates a platform device
-> >>> representing the hub which performs the necessary initialization.
-> >>> Currently it only supports switching on a single regulator, support
-> >>> for multiple regulators or other actions can be added as needed.
-> >>> Different initialization sequences can be supported based on the
-> >>> compatible string.
-> >>>
-> >>> Besides performing the initialization the driver can be configured
-> >>> to power the hub off during system suspend. This can help to extend
-> >>> battery life on battery powered devices which have no requirements
-> >>> to keep the hub powered during suspend. The driver can also be
-> >>> configured to leave the hub powered when a wakeup capable USB device
-> >>> is connected when suspending, and power it off otherwise.
-> >>>
-> >>> Changes in v15:
-> >>> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
-> >>>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
-> >>>   or USB_DWC3_DUAL_ROLE is selectable
-> >>>
-> >>> Changes in v14:
-> >>> - rebased on top of v5.14-rc1
-> >>> - dropped DT binding patch which landed in v5.13
-> >>>
-> >>> Changes in v13:
-> >>> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
-> >>>   'depends on'" to the series to avoid Kconfig conflicts
-> >>> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
-> >>>   to the series to keep effective defconfig unchanged
-> >>>
-> >>> Changes in v12:
-> >>> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
-> >>>   in onboard_hub.h to also check for the driver built as module
-> >>> - onboard_hub_driver: include onboard_hub.h again to make sure there
-> >>>   are prototype declarations for the public functions
-> >>>
-> >>> Changes in v11:
-> >>> - support multiple onboard hubs connected to the same parent
-> >>> - don't include ‘onboard_hub.h’ from the onboard hub driver
-> >>>
-> >>> Changes in v10:
-> >>> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
-> >>> - keep 'regulator-boot-on' property for pp3300_hub
-> >>>
-> >>> Changes in v9:
-> >>> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
-> >>>   USB_PLATFORM_XHCI
-> >>>
-> >>> Changes in v7:
-> >>> - updated DT binding
-> >>> - series rebased on qcom/arm64-for-5.13
-> >>>
-> >>> Changes in v6:
-> >>> - updated summary
-> >>>
-> >>> Changes in v5:
-> >>> - cover letter added
-> >>>
-> >>> Matthias Kaehlcke (6):
-> >>>   usb: misc: Add onboard_usb_hub driver
-> >>>   of/platform: Add stubs for of_platform_device_create/destroy()
-> >>>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
-> >>>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
-> >>>   usb: host: xhci-plat: Create platform device for onboard hubs in
-> >>>     probe()
-> >>>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-> >>>
-> >>>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
-> >>>  MAINTAINERS                                   |   7 +
-> >>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
-> >>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
-> >>>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
-> >>>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
-> >>>  arch/arm64/configs/defconfig                  |   1 +
-> >>>  drivers/usb/cdns3/Kconfig                     |   2 +-
-> >>>  drivers/usb/dwc3/Kconfig                      |   5 +-
-> >>>  drivers/usb/host/Kconfig                      |   5 +-
-> > 
-> > These Kconfig changes are causing the resulting .config to be different.
-> > For example, if I start with omap2plus_defconfig, the resulting .config
-> > before and after your series is different as shown below
-> > 
-> > :/work/linux$ diff /tmp/.config .config
-> > 1902d1901
-> > < # CONFIG_HISI_HIKEY_USB is not set
-> > 4992c4991
-> > < CONFIG_USB_XHCI_PLATFORM=m
-> > ---
-> >> # CONFIG_USB_XHCI_PLATFORM is not set
-> > 5073,5075c5072
-> > < # CONFIG_USB_DWC3_HOST is not set
-> > < # CONFIG_USB_DWC3_GADGET is not set
-> > < CONFIG_USB_DWC3_DUAL_ROLE=y
-> > ---
-> >> CONFIG_USB_DWC3_GADGET=y
-> > 5173a5171
-> >> # CONFIG_USB_ONBOARD_HUB is not set
-> > 5285c5283
-> > < CONFIG_USB_ROLE_SWITCH=m
-> > ---
-> >> # CONFIG_USB_ROLE_SWITCH is not set
-> > 
-> > I would expect the same issues for multi_v7_defconfig and multi_v8_defconfig as well.
-> 
-> Sorry I meant defconfig for arm64, not multi_v8_defconfig.
-> 
-> I checked that for arm64 defconfig it is ok.
-> 
-> > I'm ok to update the relevant defconfigs files so that the resulting .config is identical to
-> > before your series. Thanks!
-> 
-> With the below patch you can fix it for omap2plus_defconfig and multi_v7_defconfig.
-> 
-> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> index d9abaae118dd..8c175ab37377 100644
-> --- a/arch/arm/configs/multi_v7_defconfig
-> +++ b/arch/arm/configs/multi_v7_defconfig
-> @@ -787,6 +787,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
->  CONFIG_USB=y
->  CONFIG_USB_OTG=y
->  CONFIG_USB_XHCI_HCD=y
-> +CONFIG_USB_XHCI_PLATFORM=y
->  CONFIG_USB_XHCI_MVEBU=y
->  CONFIG_USB_XHCI_TEGRA=m
->  CONFIG_USB_EHCI_HCD=y
-> diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-> index 2ac2418084ab..a015fb04fa25 100644
-> --- a/arch/arm/configs/omap2plus_defconfig
-> +++ b/arch/arm/configs/omap2plus_defconfig
-> @@ -562,6 +562,7 @@ CONFIG_USB=m
->  CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
->  CONFIG_USB_MON=m
->  CONFIG_USB_XHCI_HCD=m
-> +CONFIG_USB_XHCI_PLATFORM=m
->  CONFIG_USB_EHCI_HCD=m
->  CONFIG_USB_OHCI_HCD=m
->  CONFIG_USB_ACM=m
+> How could it be a case of cable disconnect? The pullup(0) only applies
+> for soft-disconnect scenario. If the device initiated a disconnect, then
 
-Thanks for testing!
+Thanks for the response.  I guess this is specific for some use cases,
+but some applications such as ADB will close the FFS EP files after it
+gets the disconnection event, leading to this pullup disable as well.
+So its specific to that particular use case.
 
-I completely forgot that arm32 has all these different defconfigs.
+> the driver should wait for the control request to complete. If it times
+> out, something is already wrong here. The programming guide only
+> mentions that we should wait for completion, but it doesn't say about
+> recovery in a case of hung transfer. I need to check internally but it
+> should be safe to issue End Transfer.
+> 
 
-While trying to adjust qcom_defconfig I came across something that confuses
-me. The original defconfig results in:
+Yes, what I did was modify a device running the Linux XHCI stack w/o
+reading/sending out the SETUP DATA phase, so that on the device end we'd
+always run into that situation where there's still a pending EP0 TRB queued.
 
-# CONFIG_USB_XHCI_HCD is not set
-CONFIG_USB_DWC3_DUAL_ROLE=y
+We're running multiple devices with this fix as well, and doing device
+initiated disconnect.
 
-My assumption was that xHCI support is need for dwc3 dual mode (which is
-made explicit by https://lore.kernel.org/patchwork/patch/1468240/), is
-that incorrect? Maybe without xHCI support the controller can still
-operate in USB 2.0 dual role mode?
+>>
+>> If this occurs, then the entire pullup disable routine is skipped and
+>> proper cleanup and halting of the controller does not complete.
+>> Instead of returning an error (which is ignored from the UDC
+>> perspective), do what is mentioned in the comments and force the
+>> transaction to complete and put the ep0state back to the SETUP phase.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>>  drivers/usb/dwc3/ep0.c    | 4 ++--
+>>  drivers/usb/dwc3/gadget.c | 6 +++++-
+>>  drivers/usb/dwc3/gadget.h | 3 +++
+>>  3 files changed, 10 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>> index 6587394..abfc42b 100644
+>> --- a/drivers/usb/dwc3/ep0.c
+>> +++ b/drivers/usb/dwc3/ep0.c
+>> @@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>>  	return ret;
+>>  }
+>>  
+>> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>>  {
+>>  	struct dwc3_ep		*dep;
+>>  
+>> @@ -1073,7 +1073,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+>>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
+>>  }
+>>  
+>> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>>  {
+>>  	struct dwc3_gadget_ep_cmd_params params;
+>>  	u32			cmd;
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 54c5a08..a0e2e4d 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2437,7 +2437,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+>>  		if (ret == 0) {
+>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+>> -			return -ETIMEDOUT;
+>> +			spin_lock_irqsave(&dwc->lock, flags);
+>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[0]);
+>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
+> 
+> End transfer command takes time, need to wait for it to complete before
+> issuing Start transfer again. Also, why restart again when it's about to
+> be disconnected.
+
+I can try without restarting it again, and see if that works.  Instead
+of waiting for the command complete event, can we set the ForceRM bit,
+similar to what we do for dwc3_remove_requests()?
+
+> 
+> We'd also need to watch out for soft-connect in quick succession before
+> the End Transfer command completes.
+> 
+>> +			dwc3_ep0_stall_and_restart(dwc);
+>> +			spin_unlock_irqrestore(&dwc->lock, flags);
+>>  		}
+>>  	}
+>>  
+>> diff --git a/drivers/usb/dwc3/gadget.h b/drivers/usb/dwc3/gadget.h
+>> index 77df4b6..632f7b7 100644
+>> --- a/drivers/usb/dwc3/gadget.h
+>> +++ b/drivers/usb/dwc3/gadget.h
+>> @@ -114,6 +114,9 @@ int __dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
+>>  int dwc3_gadget_ep0_set_halt(struct usb_ep *ep, int value);
+>>  int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>>  		gfp_t gfp_flags);
+>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc);
+>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep);
+>> +
+>>  int __dwc3_gadget_ep_set_halt(struct dwc3_ep *dep, int value, int protocol);
+>>  void dwc3_ep0_send_delayed_status(struct dwc3 *dwc);
+>>  
+>>
+> 
+> BR,
+> Thinh
+> 
+
+Thanks
+Wesley Cheng
+
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
