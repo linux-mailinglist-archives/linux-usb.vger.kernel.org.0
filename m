@@ -2,29 +2,29 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 914CE3E9EF3
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 08:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1413E9EF6
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 08:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbhHLGxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 02:53:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55912 "EHLO mail.kernel.org"
+        id S234745AbhHLGxm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 02:53:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56140 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234718AbhHLGxP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Aug 2021 02:53:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DBC6F6103A;
-        Thu, 12 Aug 2021 06:52:47 +0000 (UTC)
+        id S232921AbhHLGxm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Aug 2021 02:53:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C3E16103E;
+        Thu, 12 Aug 2021 06:53:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628751171;
+        s=k20201202; t=1628751197;
         bh=7mu4Ipsd06cm4QBrmrbucxTGVRGJN4PzWTMdE9wwbrU=;
         h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=JXDPas5I8yBxBrn2AxEiGDa3RwNLAXJO9hQlCzbFqbUkaZ0jcCDQowUEDDSqc6Mu8
-         pqRS+6vP4ds0XZaHNGwUhjDC0qgOpsgt9AUTTVM2TFjQogxrIP7jQzhb4o1GJWTavV
-         ywCgbZKghTaMmVpunD4t1w7ooZhrt+Yi8lhVjhe/YBWca/a3mMCL9KboAeQ6BvsHiH
-         l6hOqveJ3aIw3bUxC1xGOZN1nlak+8Zn/QEq8tu0FnXWVU6aLcOxUMYMqpxniHO+AY
-         x/LjYgM53vQGKFWHEd9JZj1xmojz1/e40WNthUUNCCJW/jUdDWyBZ+xL+cjm3tdwX1
-         mRYQGYTtUFzgg==
+        b=U8hfaaReRKr31YD8Y78F+DecLCcZCKu9GSkI//D7NDFOvKxtPeu2YlwqHTZE+j9i4
+         SJco5frFsk2UVhbLDzXU/Z7qX+gmd/zfUAAw/i7fb1Lk8dyMjukXj57ZmA0Q5pah7a
+         CBD7hUbe5yGaPkj2rigv9WhgwFrTB/i9tt5X+ZfpYPTkFklXFAFymftnGsCcLLyTbQ
+         S5DWtpeAc1zObQC9tGdGmaTOCAL/L7xFzp7RfOdFTiZsEopchH+oJHCR8UDqORD01n
+         1ctSSeRfyWZVxcdUVX8oQOElJj6VAeKN6tSsOgC0XG7CuaS5z5UJ6x2cl5q3rQoSFo
+         Lp8qqOrYp3rZw==
 References: <1628739182-30089-1-git-send-email-chunfeng.yun@mediatek.com>
- <1628739182-30089-5-git-send-email-chunfeng.yun@mediatek.com>
+ <1628739182-30089-6-git-send-email-chunfeng.yun@mediatek.com>
 User-agent: mu4e 1.6.2; emacs 27.2
 From:   Felipe Balbi <balbi@kernel.org>
 To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
@@ -42,11 +42,11 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org,
         Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH 5/6] usb: gadget: bdc: remove unnecessary AND operation
- when get ep maxp
-Date:   Thu, 12 Aug 2021 09:52:34 +0300
-In-reply-to: <1628739182-30089-5-git-send-email-chunfeng.yun@mediatek.com>
-Message-ID: <87h7fvyx1e.fsf@kernel.org>
+Subject: Re: [PATCH 6/6] usb: gadget: remove unnecessary AND operation when
+ get ep maxp
+Date:   Thu, 12 Aug 2021 09:52:58 +0300
+In-reply-to: <1628739182-30089-6-git-send-email-chunfeng.yun@mediatek.com>
+Message-ID: <87eeazyx0o.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
