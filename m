@@ -2,120 +2,81 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 653523EA08B
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 10:26:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF6A3EA198
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 11:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234529AbhHLI1S (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 04:27:18 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:49736 "EHLO m43-7.mailgun.net"
+        id S235668AbhHLJJg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 05:09:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36934 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233921AbhHLI1R (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Aug 2021 04:27:17 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628756812; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=7k/oDB0rNhUYP7m1bxHP/pw3xEKilTVympTxuOnZLmE=; b=d9zgLIL+Y5kgjluhsVThQAyZIgRWh1MgIEfbKAnvbdKl4w/mnm1fqgmCrYR9D8y+aDMiqhbk
- hnU0uNiC2rbTSell9aji4JnyE+b0ZJv7XvULXN8in5Um/cDPeDDvRJOcMsr7i/bKvOSzPtlp
- er0abLHs5AFeZL5Cw1Kh51MILp4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 6114db4c76c3a9a172f7cd7e (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 08:26:52
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 4AC0EC433F1; Thu, 12 Aug 2021 08:26:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0AA43C433D3;
-        Thu, 12 Aug 2021 08:26:49 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 0AA43C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=jackp@codeaurora.org
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Jack Pham <jackp@codeaurora.org>
-Subject: [PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
-Date:   Thu, 12 Aug 2021 01:26:35 -0700
-Message-Id: <20210812082635.12924-1-jackp@codeaurora.org>
-X-Mailer: git-send-email 2.24.0
+        id S236105AbhHLJJc (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Aug 2021 05:09:32 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 44D6260E97;
+        Thu, 12 Aug 2021 09:09:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628759347;
+        bh=4B2v1XdtK/Af8IXQV0QioCotL0DZazMwjviys8POlhY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=MwnlcLD4TKhl7N13do1qf+IYhJ9ceVMyokcuBMZ9VZ/2W3FSJ32BCjrHdmMjwBkBm
+         vt9xtOVMK+i+pnJZvgOo6rZBBrYevi+BEM1AJ/0OG8h1MQqx4FpXhLjB7oocaN04l6
+         svPXyfZTWKPkUixw5wfWuQKprW7SWzIef2iHsjXmJy6jurYSfnVPfBo0T0ndyqMlmH
+         DYNla9C3hMEUNE2ROdhAtbrzwFqMJYeWZoaVQuei4cn0npsjlty4eZu6/m/pplkZS9
+         /kSFX28vr/6AJrzU3jp08IJoUTaUmEMvWqOAZE5Y3ObnRnyWA7680XWSAq4KmIE94g
+         +vFCJx2cOrY4w==
+References: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
+User-agent: mu4e 1.6.2; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sandeep Maheswaram <sanm@codeaurora.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pratham Pratap <prathampratap@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: Re: Regarding usb dwc3 core shutdown callback
+Date:   Thu, 12 Aug 2021 12:07:08 +0300
+In-reply-to: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
+Message-ID: <87bl63yqq8.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
-DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
-field (bit 31) which when enabled allows the controller in device
-mode to treat USB 2.0 L1 LPM & L2 events separately.
 
-After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
-events") the controller will now receive events (and therefore
-interrupts) for every state change when entering/exiting either
-L1 or L2 states.  Since L1 is handled entirely by the hardware
-and requires no software intervention, there is no need to even
-enable these events and unnecessarily notify the gadget driver.
-Enable the aforementioned bit to help reduce the overall interrupt
-count for these L1 events that don't need to be handled while
-retaining the events for full L2 suspend/wakeup.
+Hi,
 
-Signed-off-by: Jack Pham <jackp@codeaurora.org>
----
- drivers/usb/dwc3/core.c | 9 +++++++++
- drivers/usb/dwc3/core.h | 5 +++--
- 2 files changed, 12 insertions(+), 2 deletions(-)
+(why isn't this email plain/text? Content Type was set to multipart
+alternative, please configure your email client correctly :-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index ba74ad7f6995..719dac228703 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1050,6 +1050,15 @@ static int dwc3_core_init(struct dwc3 *dwc)
- 		if (!DWC3_VER_IS_PRIOR(DWC3, 290A))
- 			reg |= DWC3_GUCTL1_DEV_L1_EXIT_BY_HW;
- 
-+		/*
-+		 * Decouple USB 2.0 L1 & L2 events which will allow for
-+		 * gadget driver to only receive U3/L2 suspend & wakeup
-+		 * events and prevent the more frequent L1 LPM transitions
-+		 * from interrupting the driver.
-+		 */
-+		if (!DWC3_VER_IS_PRIOR(DWC3, 300A))
-+			reg |= DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT;
-+
- 		if (dwc->dis_tx_ipgap_linecheck_quirk)
- 			reg |= DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS;
- 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index 5991766239ba..356b94a7ec70 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -256,9 +256,10 @@
- #define DWC3_GUCTL_HSTINAUTORETRY	BIT(14)
- 
- /* Global User Control 1 Register */
--#define DWC3_GUCTL1_PARKMODE_DISABLE_SS	BIT(17)
-+#define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT	BIT(31)
- #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS	BIT(28)
--#define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW	BIT(24)
-+#define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW		BIT(24)
-+#define DWC3_GUCTL1_PARKMODE_DISABLE_SS		BIT(17)
- 
- /* Global Status Register */
- #define DWC3_GSTS_OTG_IP	BIT(10)
+While at that, also make sure to break lines at 80-columns)
+
+Sandeep Maheswaram <sanm@codeaurora.org> writes:
+> Hi,
+>
+> Earlier I have posted the patch for usb dwc3 core shutdown callback
+>
+> https://lore.kernel.org/linux-arm-msm/1618380209-20114-1-git-send-email-sanm@codeaurora.org/
+>
+> and it was reverted due to issues.
+
+Right, as should be expected when we find regressions
+
+> https://lore.kernel.org/linux-usb/20210603151742.298243-1-alexandru.elisei@arm.com/
+>
+> As we already have shutdown callback in xhci plat driver where we halt
+> the controller, so there will be no transactions with usb devices.
+>
+> https://lore.kernel.org/linux-usb/20200306092328.41253-1-ran.wang_1@nxp.com/
+>
+> So I think dwc3 core shutdown may not be required at least when we are
+> using host mode. Let me know your opinion about this.
+
+If that's the case, then sure. Please validate the condition, though,
+and kindly report back on your findings
+
 -- 
-2.24.0
-
+balbi
