@@ -2,66 +2,62 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1413E9EF6
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 08:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF463EA04D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 10:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbhHLGxm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 02:53:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56140 "EHLO mail.kernel.org"
+        id S234860AbhHLIKx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 04:10:53 -0400
+Received: from mga06.intel.com ([134.134.136.31]:59242 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232921AbhHLGxm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Aug 2021 02:53:42 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0C3E16103E;
-        Thu, 12 Aug 2021 06:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1628751197;
-        bh=7mu4Ipsd06cm4QBrmrbucxTGVRGJN4PzWTMdE9wwbrU=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=U8hfaaReRKr31YD8Y78F+DecLCcZCKu9GSkI//D7NDFOvKxtPeu2YlwqHTZE+j9i4
-         SJco5frFsk2UVhbLDzXU/Z7qX+gmd/zfUAAw/i7fb1Lk8dyMjukXj57ZmA0Q5pah7a
-         CBD7hUbe5yGaPkj2rigv9WhgwFrTB/i9tt5X+ZfpYPTkFklXFAFymftnGsCcLLyTbQ
-         S5DWtpeAc1zObQC9tGdGmaTOCAL/L7xFzp7RfOdFTiZsEopchH+oJHCR8UDqORD01n
-         1ctSSeRfyWZVxcdUVX8oQOElJj6VAeKN6tSsOgC0XG7CuaS5z5UJ6x2cl5q3rQoSFo
-         Lp8qqOrYp3rZw==
-References: <1628739182-30089-1-git-send-email-chunfeng.yun@mediatek.com>
- <1628739182-30089-6-git-send-email-chunfeng.yun@mediatek.com>
-User-agent: mu4e 1.6.2; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: Re: [PATCH 6/6] usb: gadget: remove unnecessary AND operation when
- get ep maxp
-Date:   Thu, 12 Aug 2021 09:52:58 +0300
-In-reply-to: <1628739182-30089-6-git-send-email-chunfeng.yun@mediatek.com>
-Message-ID: <87eeazyx0o.fsf@kernel.org>
+        id S231520AbhHLIKw (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 12 Aug 2021 04:10:52 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10073"; a="276338267"
+X-IronPort-AV: E=Sophos;i="5.84,315,1620716400"; 
+   d="scan'208";a="276338267"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2021 01:10:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,315,1620716400"; 
+   d="scan'208";a="590552892"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 12 Aug 2021 01:10:25 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 12 Aug 2021 11:10:24 +0300
+Date:   Thu, 12 Aug 2021 11:10:24 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     USB list <linux-usb@vger.kernel.org>
+Subject: Re: UCSI failing due to probe() getting version 0
+Message-ID: <YRTXcNcaLTnXfCU/@kuha.fi.intel.com>
+References: <db9e63df-80cc-6dae-89ae-23cb1cd09425@suse.com>
+ <YRPPTjaFLy5t5HsP@kuha.fi.intel.com>
+ <3207f6c5-db56-d38e-66ab-42d6b6166cae@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3207f6c5-db56-d38e-66ab-42d6b6166cae@suse.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Aug 11, 2021 at 04:47:13PM +0200, Oliver Neukum wrote:
+> 
+> On 11.08.21 15:23, Heikki Krogerus wrote:
+> Hi,
+> > Because of BIOS bugs.
+> >
+> > Ideally we should be able to rely on the _STA method of the ACPI
+> > device, but unfortunately with UCSI we can't rely on that alone. On
+> > some systems the BIOS claims that the device is enabled (based on
+> > _STA) even when the platform doesn't actually support UCSI at all.
+> >
+> > If you remove the check, does the driver work?
+> 
+> Unfortunately, no it does not:
 
-Chunfeng Yun <chunfeng.yun@mediatek.com> writes:
+OK, so your laptop does not support UCSI even though the BIOS claims
+it does.
 
-> usb_endpoint_maxp() already returns actual max packet size, no need
-> AND 0x7ff.
->
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
+thanks,
 
 -- 
-balbi
+heikki
