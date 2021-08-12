@@ -2,116 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0CF93EA43C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 14:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFEB3EA53D
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 15:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbhHLMDf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 08:03:35 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:29623 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237216AbhHLMDf (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 12 Aug 2021 08:03:35 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628769790; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=6QsmkNZbQwVsN9LnELcdMHAkKo6gl/13f9/auIf990s=; b=o2SxTNGj9biSTwCrHYO3Pyx/H9vNLZNYmU6a4s9J3dPyzfnIJ1UxBflAmpNeRdx4SvPwQFGw
- 0ntwCMU2CVyuy5uMUg4TdoH//kfKvvlRPy70BoD/hHiis8vkE+bBBNpXKVpoAmmrksvkl6jR
- A5aJBt7ecYbafzMsCP7OiS7XXt8=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
- 61150dceb14e7e2ecbf32184 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 12 Aug 2021 12:02:22
- GMT
-Sender: wat=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id B6EC2C43217; Thu, 12 Aug 2021 12:02:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from cbsp-sh-gv.qualcomm.com (unknown [180.166.53.21])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wat)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 17E84C433D3;
-        Thu, 12 Aug 2021 12:02:18 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 17E84C433D3
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=wat@codeaurora.org
-From:   Tao Wang <wat@codeaurora.org>
-To:     quic_wat@quicinc.com, linyyuan@qti.qualcomm.com,
-        hongwus@qti.qualcomm.com, zhijunw@qti.qualcomm.com,
-        wat@codeaurora.org
-Cc:     Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org (open list:USB XHCI DRIVER),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] usb: xhci-ring: USB SSD may fail to unmount if disconnect during data transferring.
-Date:   Thu, 12 Aug 2021 20:02:07 +0800
-Message-Id: <1628769727-45046-1-git-send-email-wat@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
+        id S236717AbhHLNMv (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 09:12:51 -0400
+Received: from mailgw02.mediatek.com ([210.61.82.184]:32900 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233260AbhHLNMn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 09:12:43 -0400
+X-UUID: d5307b4361dd4878a60af9207804ea29-20210812
+X-UUID: d5307b4361dd4878a60af9207804ea29-20210812
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1367734633; Thu, 12 Aug 2021 21:12:13 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 12 Aug 2021 21:12:12 +0800
+Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 12 Aug 2021 21:12:11 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     Pawel Laszczak <pawell@cadence.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <bcm-kernel-feedback-list@broadcom.com>,
+        <linux-tegra@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        stable <stable@vger.kernel.org>
+Subject: [PATCH v2 1/7] usb: mtu3: restore HS function when set SS/SSP
+Date:   Thu, 12 Aug 2021 21:11:29 +0800
+Message-ID: <1628773895-304-1-git-send-email-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 1.8.1.1.dirty
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Tao Wang <quic_wat@quicinc.com>
+Due to HS function is disabled when set as FS, need restore
+it when set as SS/SSP.
 
-it stuck in usb_kill_urb() due to urb use_count will not become zero,
-this means urb giveback is not happen.
-in xhci_handle_cmd_set_deq() will giveback urb if td's cancel_status
-equal to TD_CLEARING_CACHE,
-but in xhci_invalidate_cancelled_tds(), only last canceled td's
-cancel_status change to TD_CLEARING_CACHE,
-thus giveback only happen to last urb.
-
-this change set all cancelled_td's cancel_status to TD_CLEARING_CACHE
-rather than the last one, so all urb can giveback.
-
-Signed-off-by: Tao Wang <quic_wat@quicinc.com>
+Fixes: dc4c1aa7eae9 ("usb: mtu3: add ->udc_set_speed()")
+Cc: stable <stable@vger.kernel.org>
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 ---
- drivers/usb/host/xhci-ring.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+v2: no changes
+---
+ drivers/usb/mtu3/mtu3_core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 8fea44b..c7dd7c0 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -960,19 +960,19 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 			td_to_noop(xhci, ring, td, false);
- 			td->cancel_status = TD_CLEARED;
- 		}
--	}
--	if (cached_td) {
--		cached_td->cancel_status = TD_CLEARING_CACHE;
--
--		err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
--						cached_td->urb->stream_id,
--						cached_td);
--		/* Failed to move past cached td, try just setting it noop */
--		if (err) {
--			td_to_noop(xhci, ring, cached_td, false);
--			cached_td->cancel_status = TD_CLEARED;
-+		if (cached_td) {
-+			cached_td->cancel_status = TD_CLEARING_CACHE;
-+
-+			err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
-+							cached_td->urb->stream_id,
-+							cached_td);
-+			/* Failed to move past cached td, try just setting it noop */
-+			if (err) {
-+				td_to_noop(xhci, ring, cached_td, false);
-+				cached_td->cancel_status = TD_CLEARED;
-+			}
-+			cached_td = NULL;
- 		}
--		cached_td = NULL;
- 	}
- 	return 0;
- }
+diff --git a/drivers/usb/mtu3/mtu3_core.c b/drivers/usb/mtu3/mtu3_core.c
+index 562f4357831e..6403f01947b2 100644
+--- a/drivers/usb/mtu3/mtu3_core.c
++++ b/drivers/usb/mtu3/mtu3_core.c
+@@ -227,11 +227,13 @@ static void mtu3_set_speed(struct mtu3 *mtu, enum usb_device_speed speed)
+ 		mtu3_setbits(mbase, U3D_POWER_MANAGEMENT, HS_ENABLE);
+ 		break;
+ 	case USB_SPEED_SUPER:
++		mtu3_setbits(mbase, U3D_POWER_MANAGEMENT, HS_ENABLE);
+ 		mtu3_clrbits(mtu->ippc_base, SSUSB_U3_CTRL(0),
+ 			     SSUSB_U3_PORT_SSP_SPEED);
+ 		break;
+ 	case USB_SPEED_SUPER_PLUS:
+-			mtu3_setbits(mtu->ippc_base, SSUSB_U3_CTRL(0),
++		mtu3_setbits(mbase, U3D_POWER_MANAGEMENT, HS_ENABLE);
++		mtu3_setbits(mtu->ippc_base, SSUSB_U3_CTRL(0),
+ 			     SSUSB_U3_PORT_SSP_SPEED);
+ 		break;
+ 	default:
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+2.18.0
 
