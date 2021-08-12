@@ -2,82 +2,167 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3BD3EA574
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 15:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AECE3EA5F7
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Aug 2021 15:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237771AbhHLNWm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 12 Aug 2021 09:22:42 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:49864 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S237519AbhHLNTM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 09:19:12 -0400
-X-UUID: 784ae4dc5f974741b6be19797cfd0f9e-20210812
-X-UUID: 784ae4dc5f974741b6be19797cfd0f9e-20210812
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1053439353; Thu, 12 Aug 2021 21:18:44 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs05n2.mediatek.inc (172.21.101.140) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 12 Aug 2021 21:18:43 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 12 Aug 2021 21:18:42 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>
-CC:     Pawel Laszczak <pawell@cadence.com>,
-        Al Cooper <alcooperx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-tegra@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Subject: [PATCH v2 7/7] usb: gadget: remove unnecessary AND operation when get ep maxp
-Date:   Thu, 12 Aug 2021 21:18:03 +0800
-Message-ID: <1628774283-475-7-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1628774283-475-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1628774283-475-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S233027AbhHLNsE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 12 Aug 2021 09:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232873AbhHLNsC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 12 Aug 2021 09:48:02 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 118F0C061756
+        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 06:47:34 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id q2so7314794plr.11
+        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 06:47:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=hyhelxpd7QUVPAkk5IYGM9KEnUOWxWDMxwO8ECoYdnU=;
+        b=Rs4dAv5o9o6YzH/Kos2vl/SACHZatk/nOkTogbL/1EBFQ9n8+ZFw91oSx+CeUKBQ3H
+         2m6mLxziThndH+V4UTq3JF0Qt/JuqFap8S5hupa6Ec5y4PXtz7ajadJH4M8D5rAQblUM
+         2su3i/xOb5hBn41lp62bfbt0FSGbf+Admw2lA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=hyhelxpd7QUVPAkk5IYGM9KEnUOWxWDMxwO8ECoYdnU=;
+        b=Rnm5JcaWJBpER0OFzhGODICaWMgnm4FNoHjyV8Gl/M/mcrjXCuYbMX9m6MV7bX13AN
+         7EmF3MbOC33O8yVhG2rJA82+m/2175+fZ0q+N18WC/NCN6MyE2H1+eqNMhlOggRqsqZq
+         XPgomYlSfEaIL12STNkLPcmPFhT1HpKUaEBAEDrjTTgsjhDwmRz8ndWkrzX7uFVIu6mv
+         IWQ00pIIHMJmprznsra922zYgsDfJUdC1lHP69kay+DGQDl0Qg9HBoNjM1GZq0aBkuJw
+         h3AifkHfydvVYAQhWDvW1LwbVaxauQNJ9EQaOb4xVYLqj44xoFU/OCv8t+kzxV6qRPij
+         f7Ig==
+X-Gm-Message-State: AOAM530uimkx+kkykwF+oBSDkdkQRexnt2feN6WuMKQPiVHxzMsWhY4L
+        h46yyMNrXKHodSkhh5j42Pk/dgRkZtVK6m8e0ghbtg==
+X-Google-Smtp-Source: ABdhPJzinP+pujlw1HqtoYlTgrZfNU12HLzMgQ+D3ezfZIHtqfWhJuEgsvdCWLJhspWCTXhKmsXTVvomNXPsynDbZYk=
+X-Received: by 2002:aa7:8387:0:b029:395:a683:a0e6 with SMTP id
+ u7-20020aa783870000b0290395a683a0e6mr4295749pfm.12.1628776053473; Thu, 12 Aug
+ 2021 06:47:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20210809165904.RFC.1.I5165a4a8da5cac23c9928b1ec3c3a1a7383b7c23@changeid>
+ <YRDxTodNNqtnpPpn@kroah.com> <CAATdQgDSCzZtiDSQk94CYHfSb9Mq28OH7-RdaTZNv3oPrW3nkQ@mail.gmail.com>
+ <7b48f4c132a8b4b3819282e961fbe8b3ed753069.camel@mediatek.com>
+ <CAATdQgD1paUUmWhiLVq-+zq0V6=RTJw89ggk=R6cBUZO+5dB-Q@mail.gmail.com> <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
+In-Reply-To: <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Thu, 12 Aug 2021 21:47:22 +0800
+Message-ID: <CAATdQgATOhAcr7uMyxAvZCdngMaa-bbG3GDpun11LHOHeLqMjQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-usb_endpoint_maxp() already returns actual max packet size, no need
-AND 0x7ff.
+oops sorry I sent a prior mail in HTML.
+Resend this mail in plain text.
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v2: add acked-by felipe
----
- include/linux/usb/gadget.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Thu, Aug 12, 2021 at 7:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
+<Chunfeng.Yun@mediatek.com> wrote:
+>
+> On Thu, 2021-08-12 at 17:31 +0800, Ikjoon Jang wrote:
+> > HI,
+> >
+> > On Wed, Aug 11, 2021 at 5:02 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
+=B0)
+> > <Chunfeng.Yun@mediatek.com> wrote:
+> > >
+> > > On Mon, 2021-08-09 at 17:42 +0800, Ikjoon Jang wrote:
+> > > > On Mon, Aug 9, 2021 at 5:11 PM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Mon, Aug 09, 2021 at 04:59:29PM +0800, Ikjoon Jang wrote:
+> > > > > > xhci-mtk has 64 slots for periodic bandwidth calculations and
+> > > > > > each
+> > > > > > slot represents byte budgets on a microframe. When an
+> > > > > > endpoint's
+> > > > > > allocation sits on the boundary of the table, byte budgets'
+> > > > > > slot
+> > > > > > should be rolled over but the current implementation doesn't.
+> > > > > >
+> > > > > > This patch applies a 6 bits mask to the microframe index to
+> > > > > > handle
+> > > > > > its rollover 64 slots and prevent out-of-bounds array access.
+> > > > > >
+> > > > > > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  drivers/usb/host/xhci-mtk-sch.c | 79 +++++++++------------
+> > > > > > ----
+> > > > > > --------
+> > > > > >  drivers/usb/host/xhci-mtk.h     |  1 +
+> > > > > >  2 files changed, 23 insertions(+), 57 deletions(-)
+> > > > >
+> > > > > Why is this "RFC"?  What needs to be addressed in this change
+> > > > > before it
+> > > > > can be accepted?
+> > > >
+> > > > sorry, I had to mention why this is RFC:
+> > > >
+> > > > I simply don't know about the details of the xhci-mtk internals.
+> > > > It was okay from my tests with mt8173 and I think this will be
+> > > > harmless
+> > > > as this is "better than before".
+> > > >
+> > > > But when I removed get_esit_boundary(), I really have no idea why
+> > > > it was there. I'm wondering if there was another reason of that
+> > > > function
+> > > > other than just preventing out-of-bounds. Maybe chunfeng can
+> > > > answer
+> > > > this?
+> > >
+> > > We use @esit to prevent out-of-bounds array access. it's not a
+> > > ring,
+> > > can't insert out-of-bounds value into head slot.
+> >
+> > Thanks, so that function was only for out-of-bounds array access.
+> > then I think we just can remove that function and use it as a ring.
+> > Can you tell me _why_ it can't be used as a ring?
+> Treat it as a period, roll over slot equals to put it into the next
+> period.
+>
+> >
+> > I think a transaction (e.g. esit_boundary =3D 7) can start its first
+> > SSPLIT
+> > from Y_7 (offset =3D 7). But will that allocation be matched with this?
+> >
+> > -               if ((offset + sch_ep->num_budget_microframes) >
+> > esit_boundary)
+> > -                       break;
+> >
+> > I mean I'm not sure why this is needed.
+> Prevent out-of-bounds.
+>
+> >
+> > Until now, I couldn't find a way to accept the USB audio headset
+> > with a configuration of { INT-IN 64 + ISOC-OUT 384 + ISOC-IN 192 }
+> > without this patch.
+> what is the interval value of each endpoint?
 
-diff --git a/include/linux/usb/gadget.h b/include/linux/usb/gadget.h
-index 75c7538e350a..f181c84310b6 100644
---- a/include/linux/usb/gadget.h
-+++ b/include/linux/usb/gadget.h
-@@ -491,7 +491,7 @@ extern char *usb_get_gadget_udc_name(void);
-  */
- static inline size_t usb_ep_align(struct usb_ep *ep, size_t len)
- {
--	int max_packet_size = (size_t)usb_endpoint_maxp(ep->desc) & 0x7ff;
-+	int max_packet_size = (size_t)usb_endpoint_maxp(ep->desc);
- 
- 	return round_up(len, max_packet_size);
- }
--- 
-2.18.0
+interrupt ep is 2ms and others are 1ms
+Thanks.
 
+>
+> >
+> > >
+> > > >
+> > > > Thanks!
+> > > >
+> > > > >
+> > > > > thanks,
+> > > > >
+> > > > > greg k-h
