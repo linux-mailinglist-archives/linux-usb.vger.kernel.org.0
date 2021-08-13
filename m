@@ -2,88 +2,127 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A752C3EB627
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 15:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C0B3EB635
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 15:46:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235786AbhHMNmp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 09:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231891AbhHMNml (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 09:42:41 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C09A9C0617AD;
-        Fri, 13 Aug 2021 06:42:14 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id x7so15674873ljn.10;
-        Fri, 13 Aug 2021 06:42:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=1viBBWczlkP+CWERm1XEX0a0CTiI/0fH6f0ytu3rz0A=;
-        b=Jk7CiyxDYkrXr5bbKit/p4MHUUka1PofWoSEPX1jc3vqzmVk0y8poFKZIbnkgf5nLp
-         tA6MkLjmivgUBesIOomSSFXs+kleh82GTyJ3DTTb7dkVAykCfIDNQ7fjqZju5QFIvMkR
-         I2cAKrjUFrxG0r4wM60hEPQpOU0X6tKwmTkxMScCtKuSO7dh7g7K604c47/WO571eWpH
-         3E7RmQ/jMfJ9pPLZFh49oh5yZm84B+F0oqV503szFEtG4JexKrXI5rzGnR+A5d1xQB9x
-         zp3iZIwDL8N6O8JXJQoKGMkSE9Epux/XsniOuPwJDnjSXP/e33CCWIZBl8VaVTUdeh+/
-         8cPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=1viBBWczlkP+CWERm1XEX0a0CTiI/0fH6f0ytu3rz0A=;
-        b=qxOEd3KKGqgFyjR6r0puHYt7ywoB4WiXL7IzAp8RSyfytKE0WgwJyunepftx80hh5w
-         hD8h8W8gHWZgRSDKSIrTco22aksx6BWw3/lvreTUKlIA4oIA2tL+KKppcQTq62zcycyn
-         bK1KEpauC2Ry0cw36k6aL3wI8Tj5WDQ5fXZ364lFmtfQdga2Cw6fuHpe4fjhpC9rApze
-         IikCZVBNdyFQcpu/n/aH/nMK4kzBiNWFtqKr2X0aUsKM1RykhuEkkKsEitWFni8rDGDw
-         dOqOl/6i5sxwegAZgIr7lRjv5PN1Hou+L6pT+0q4snG8u9oOKZLgY4YswoEippjAZ/kV
-         ezmA==
-X-Gm-Message-State: AOAM531OU9Oi03bo1hX6ZFt4T3Td9OT79oSKpAVlrN/q15k741B3NYZp
-        sIAPbwGMlMwR+TyVCw+Y6SNRylE/xRc=
-X-Google-Smtp-Source: ABdhPJywSoDJ82jiwrgfLUNe2QMY1zh+Wyyr2KJVU6xTQ0y7uT5/84WlYebcZAZiVcSCWvEapUbOIQ==
-X-Received: by 2002:a2e:f02:: with SMTP id 2mr1918749ljp.112.1628862133066;
-        Fri, 13 Aug 2021 06:42:13 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-117-53.dynamic.spd-mgts.ru. [46.138.117.53])
-        by smtp.googlemail.com with ESMTPSA id j16sm175418ljc.71.2021.08.13.06.42.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Aug 2021 06:42:12 -0700 (PDT)
-Subject: Re: [PATCH v6 04/12] usb: phy: tegra: Support OTG mode programming
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-References: <20210731173842.19643-1-digetx@gmail.com>
- <20210731173842.19643-5-digetx@gmail.com>
-Message-ID: <c61e0bb0-07e8-b9ce-35f2-b071fdb68ba3@gmail.com>
-Date:   Fri, 13 Aug 2021 16:42:11 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S240724AbhHMNqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 09:46:36 -0400
+Received: from mga14.intel.com ([192.55.52.115]:10688 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240714AbhHMNqe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Aug 2021 09:46:34 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10074"; a="215289058"
+X-IronPort-AV: E=Sophos;i="5.84,319,1620716400"; 
+   d="scan'208";a="215289058"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2021 06:45:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,319,1620716400"; 
+   d="scan'208";a="591138855"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Aug 2021 06:45:07 -0700
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+To:     wat@codeaurora.org, ikjn@chromium.org
+Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mathias.nyman@linux.intel.com
+Subject: [RFT PATCH] xhci: fix failure to give back some cached cancelled URBs.
+Date:   Fri, 13 Aug 2021 16:47:29 +0300
+Message-Id: <20210813134729.2402607-1-mathias.nyman@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <39525c12-e8f3-8587-5714-5a22ca1e8e4f@linux.intel.com>
+References: <39525c12-e8f3-8587-5714-5a22ca1e8e4f@linux.intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20210731173842.19643-5-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-31.07.2021 20:38, Dmitry Osipenko пишет:
-> Support programming USB PHY into OTG mode.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/usb/phy/phy-tegra-usb.c   | 197 +++++++++++++++++++++++++++++-
->  include/linux/usb/tegra_usb_phy.h |   5 +
->  2 files changed, 197 insertions(+), 5 deletions(-)
+Only TDs with status TD_CLEARING_CACHE will be given back after
+cache is cleared with a set TR deq command.
 
-Greg/Felipe, could you please ack this patch? This series should go via
-tegra tree since patches are interdependent.
+xhci_invalidate_cached_td() failed to set the TD_CLEARING_CACHE status
+for some cancelled TDs as it assumed an endpoint only needs to clear the
+TD it stopped on from cache. There are some cases this isn't true.
+
+For example with streams as an endpoint may have several
+stream rings, each stopping on different TDs.
+
+* FIXME *, explain that streams case isn't fully solved by this, but it's
+ x100 better than before as we give back the URBs and thread won't hang.
+ Some of the streams TRB cache still isn't cleared, and may point to data
+ in URBs we alrady gave back. xHC controller may touch this.
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
+ drivers/usb/host/xhci-ring.c | 40 ++++++++++++++++++++++--------------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index d0faa67a689d..9017986241f5 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -942,17 +942,21 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
+ 					 td->urb->stream_id);
+ 		hw_deq &= ~0xf;
+ 
+-		if (td->cancel_status == TD_HALTED) {
+-			cached_td = td;
+-		} else if (trb_in_td(xhci, td->start_seg, td->first_trb,
+-			      td->last_trb, hw_deq, false)) {
++		if (td->cancel_status == TD_HALTED ||
++		    trb_in_td(xhci, td->start_seg, td->first_trb, td->last_trb, hw_deq, false)) {
+ 			switch (td->cancel_status) {
+ 			case TD_CLEARED: /* TD is already no-op */
+ 			case TD_CLEARING_CACHE: /* set TR deq command already queued */
+ 				break;
+ 			case TD_DIRTY: /* TD is cached, clear it */
+ 			case TD_HALTED:
+-				/* FIXME  stream case, several stopped rings */
++				td->cancel_status = TD_CLEARING_CACHE;
++				if (cached_td)
++					/* FIXME  stream case, several stopped rings */
++					xhci_dbg(xhci,
++						 "Move dq past stream %u URB %p instead of stream %u URB %p\n",
++						 td->urb->stream_id, td->urb,
++						 cached_td->urb->stream_id, cached_td->urb);
+ 				cached_td = td;
+ 				break;
+ 			}
+@@ -961,18 +965,24 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
+ 			td->cancel_status = TD_CLEARED;
+ 		}
+ 	}
+-	if (cached_td) {
+-		cached_td->cancel_status = TD_CLEARING_CACHE;
+ 
+-		err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
+-						cached_td->urb->stream_id,
+-						cached_td);
+-		/* Failed to move past cached td, try just setting it noop */
+-		if (err) {
+-			td_to_noop(xhci, ring, cached_td, false);
+-			cached_td->cancel_status = TD_CLEARED;
++	/* If there's no need to move the dequeue pointer then we're done */
++	if (!cached_td)
++		return 0;
++
++	err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
++					cached_td->urb->stream_id,
++					cached_td);
++	if (err) {
++		/* Failed to move past cached td, just set cached TDs to no-op */
++		list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list, cancelled_td_list) {
++			if (td->cancel_status != TD_CLEARING_CACHE)
++				continue;
++			xhci_dbg(xhci, "Failed to clear cancelled cached URB %p, mark clear anyway\n",
++				 td->urb);
++			td_to_noop(xhci, ring, td, false);
++			td->cancel_status = TD_CLEARED;
+ 		}
+-		cached_td = NULL;
+ 	}
+ 	return 0;
+ }
+-- 
+2.25.1
+
