@@ -2,147 +2,309 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE493EBC08
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 20:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F17EC3EBC1E
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 20:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233041AbhHMS0y (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 14:26:54 -0400
-Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21395 "EHLO
-        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbhHMS0m (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 14:26:42 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1628879172; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=U6IBDmJ5WLEkTyWX8Cwz67YvkIgzhQkYtyObb9so/FhTiwe5a/JL28dvOYQlaO0a+Qrerpv+a7Qiy2Ygxu2xI2otwyQdpFvGr0ObBK1urn2RD88LeGEdMdgLaU6hgR+1yb2NwtFOEVmy7Qc1pP9r+E3c973L5/OiU6VY0DZdxVg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1628879172; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=VT9prQakObj76qkfJx3PmUtiBqU9r7m5dMmTl99Pvzk=; 
-        b=LXG6x8dq+6B2uktz0UEVXDAZoSfZpVT6LxyPLCvL8Nx9mD4vsMpNkGpWlDsBEVy1f5TwjJYmVx5zsxKa7dOwhEwvRzP3ypSsEzF5lTiL3HwoT7oUMG7nZ8m6R/PHw54vwwwSgaAvbiUb97HZf3MeJfi/RQxJylj6haqeNxa+AjA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=anirudhrb.com;
-        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
-        dmarc=pass header.from=<mail@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1628879172;
-        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-        bh=VT9prQakObj76qkfJx3PmUtiBqU9r7m5dMmTl99Pvzk=;
-        b=nvVhmZ+GdWG9ee6GBX51mJsdCYfDSgVdR/EiuwCqImJILqbbEE/pET3tQ3RjV/0m
-        C9EgdqMaPYr8gkp41Pbk26qVGsgLx5IeyYGEGA88r/IPgTpBb/RUYYpC2qDnYXztaAA
-        d2tNEZmI1nTx+WCD/JIAE+BOjqAg0s/r7JAzd//c=
-Received: from localhost.localdomain (49.207.58.140 [49.207.58.140]) by mx.zohomail.com
-        with SMTPS id 1628879170666216.37574659773452; Fri, 13 Aug 2021 11:26:10 -0700 (PDT)
-From:   Anirudh Rayabharam <mail@anirudhrb.com>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>, linux-usb@vger.kernel.org,
+        id S233222AbhHMSdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 14:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233289AbhHMSdl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 14:33:41 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68F7C0613A3
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id n12so12461501plf.4
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=Oavcp2pFnC2cFXkrrEs6NnAp/Yy/K6T50MosZsUzhis=;
+        b=lJIKxJoDB/aAZbLpirzQkMyJoRmThAikyFRpuGbLeId7fd0o23xD6tNmaVbl1Mz5Qd
+         lHHkiPFD9jKsp4maRXPRSmKyvuCEh1puT/H6kV1ULEkEZ0U5jRg4zwUcN6GDAhSAXUtd
+         64+iKz+xUOCtJW498wFyavo67TZpq9B2MHHiM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=Oavcp2pFnC2cFXkrrEs6NnAp/Yy/K6T50MosZsUzhis=;
+        b=HMF4itE9TgmWskKaHjhBLLcVWdX4tapmpiybwtsrBR4ilCKdVkOH6Up2O0ruwG4kP1
+         cUMN6qPSnw0uXhCUuTxyTLAza4K8T3f1TdUc+Wbxjb4CeWskExa5HD9wqjMISCQLFJbo
+         ePbLhidUL8iwk3BRFy5xBYOD0FivjE0CtcrkRLpW9udo7km0uavq9jkcX6u5xmp9jP0x
+         mv/0SS02y16CFFl1vGPVDsAu4UAkjvM9fHqP2Pirv35Ssm11Y9O2zVZ8eTBRiETIfqHE
+         Pn2tFkg8dAvfqdzfK4LyzKp4Rt3/nmbbIAD+gL9tkyQSNEdVAlITXchvaTlB9gb4aeLH
+         hgzg==
+X-Gm-Message-State: AOAM532zcjkQKcZ56XNoL7wOlWMTb44Fzljuqr9aVuRfkdntBRE/UEXB
+        WJW0jkDIJrRXlgWXnTOYWhyShA==
+X-Google-Smtp-Source: ABdhPJwKnXfOpKfshUbQlMBlW1T1VCUKLFgQrOPTtyIXCkBL296ZEMCcjLuDGiZ47Tg/4o7leekywg==
+X-Received: by 2002:a65:644e:: with SMTP id s14mr3479420pgv.410.1628879593367;
+        Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:450d:9788:a70e:42d6])
+        by smtp.gmail.com with UTF8SMTPSA id r11sm2464611pjd.26.2021.08.13.11.33.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Aug 2021 11:33:12 -0700 (PDT)
+Date:   Fri, 13 Aug 2021 11:33:09 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
+        Michal Simek <michal.simek@xilinx.com>,
         linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v3 2/2] usbip: eliminate duplicate code in vhci_device_unlink_cleanup
-Date:   Fri, 13 Aug 2021 23:55:08 +0530
-Message-Id: <20210813182508.28127-3-mail@anirudhrb.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210813182508.28127-1-mail@anirudhrb.com>
-References: <20210813182508.28127-1-mail@anirudhrb.com>
+        Douglas Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-usb@vger.kernel.org,
+        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Al Cooper <alcooperx@gmail.com>,
+        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
+        Andy Gross <agross@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Nishanth Menon <nm@ti.com>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
+Message-ID: <YRa65ZWzkB5OLpPm@google.com>
+References: <20210727004118.2583774-1-mka@chromium.org>
+ <YRFOnhJkB2vi/zwD@google.com>
+ <8a8cae28-6617-76d3-1742-3f151a149069@kernel.org>
+ <ddd60682-c957-2897-768e-96c9d25c148a@kernel.org>
+ <YRVVjwNprk7l1jUk@google.com>
+ <166449bc-4c33-b923-f53d-6df4f83dc267@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+In-Reply-To: <166449bc-4c33-b923-f53d-6df4f83dc267@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The cleanup code for unlink_tx and unlink_rx lists is almost the same.
-So, extract it into a new function and call it for both unlink_rx and
-unlink_tx.
+On Fri, Aug 13, 2021 at 09:35:53AM +0300, Roger Quadros wrote:
+> Hi Matthias,
+> 
+> On 12/08/2021 20:08, Matthias Kaehlcke wrote:
+> > Hi Roger,
+> > 
+> > On Wed, Aug 11, 2021 at 03:56:15PM +0300, Roger Quadros wrote:
+> >>
+> >>
+> >> On 11/08/2021 15:38, Roger Quadros wrote:
+> >>> Hi Matthias,
+> >>>
+> >>> On 09/08/2021 18:49, Matthias Kaehlcke wrote:
+> >>>> Hi Greg,
+> >>>>
+> >>>> Just wanted to check if this series is still on your radar. Is
+> >>>> there anything that blocks it from landing (further ACKs, ...)?
+> >>>>
+> >>>> Thanks
+> >>>>
+> >>>> Matthias
+> >>>>
+> >>>> On Mon, Jul 26, 2021 at 05:41:12PM -0700, Matthias Kaehlcke wrote:
+> >>>>> This series adds:
+> >>>>> - the onboard_usb_hub_driver
+> >>>>> - glue in the xhci-plat driver to create and destroy the
+> >>>>>   onboard_usb_hub platform devices if needed
+> >>>>> - a device tree binding for the Realtek RTS5411 USB hub controller
+> >>>>> - device tree changes that add RTS5411 entries for the QCA SC7180
+> >>>>>   based boards trogdor and lazor
+> >>>>> - a couple of stubs for platform device functions to avoid
+> >>>>>   unresolved symbols with certain kernel configs
+> >>>>>
+> >>>>> The main issue the driver addresses is that a USB hub needs to be
+> >>>>> powered before it can be discovered. For discrete onboard hubs (an
+> >>>>> example for such a hub is the Realtek RTS5411) this is often solved
+> >>>>> by supplying the hub with an 'always-on' regulator, which is kind
+> >>>>> of a hack. Some onboard hubs may require further initialization
+> >>>>> steps, like changing the state of a GPIO or enabling a clock, which
+> >>>>> requires even more hacks. This driver creates a platform device
+> >>>>> representing the hub which performs the necessary initialization.
+> >>>>> Currently it only supports switching on a single regulator, support
+> >>>>> for multiple regulators or other actions can be added as needed.
+> >>>>> Different initialization sequences can be supported based on the
+> >>>>> compatible string.
+> >>>>>
+> >>>>> Besides performing the initialization the driver can be configured
+> >>>>> to power the hub off during system suspend. This can help to extend
+> >>>>> battery life on battery powered devices which have no requirements
+> >>>>> to keep the hub powered during suspend. The driver can also be
+> >>>>> configured to leave the hub powered when a wakeup capable USB device
+> >>>>> is connected when suspending, and power it off otherwise.
+> >>>>>
+> >>>>> Changes in v15:
+> >>>>> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
+> >>>>>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
+> >>>>>   or USB_DWC3_DUAL_ROLE is selectable
+> >>>>>
+> >>>>> Changes in v14:
+> >>>>> - rebased on top of v5.14-rc1
+> >>>>> - dropped DT binding patch which landed in v5.13
+> >>>>>
+> >>>>> Changes in v13:
+> >>>>> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
+> >>>>>   'depends on'" to the series to avoid Kconfig conflicts
+> >>>>> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
+> >>>>>   to the series to keep effective defconfig unchanged
+> >>>>>
+> >>>>> Changes in v12:
+> >>>>> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
+> >>>>>   in onboard_hub.h to also check for the driver built as module
+> >>>>> - onboard_hub_driver: include onboard_hub.h again to make sure there
+> >>>>>   are prototype declarations for the public functions
+> >>>>>
+> >>>>> Changes in v11:
+> >>>>> - support multiple onboard hubs connected to the same parent
+> >>>>> - don't include ‘onboard_hub.h’ from the onboard hub driver
+> >>>>>
+> >>>>> Changes in v10:
+> >>>>> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
+> >>>>> - keep 'regulator-boot-on' property for pp3300_hub
+> >>>>>
+> >>>>> Changes in v9:
+> >>>>> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
+> >>>>>   USB_PLATFORM_XHCI
+> >>>>>
+> >>>>> Changes in v7:
+> >>>>> - updated DT binding
+> >>>>> - series rebased on qcom/arm64-for-5.13
+> >>>>>
+> >>>>> Changes in v6:
+> >>>>> - updated summary
+> >>>>>
+> >>>>> Changes in v5:
+> >>>>> - cover letter added
+> >>>>>
+> >>>>> Matthias Kaehlcke (6):
+> >>>>>   usb: misc: Add onboard_usb_hub driver
+> >>>>>   of/platform: Add stubs for of_platform_device_create/destroy()
+> >>>>>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
+> >>>>>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
+> >>>>>   usb: host: xhci-plat: Create platform device for onboard hubs in
+> >>>>>     probe()
+> >>>>>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
+> >>>>>
+> >>>>>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
+> >>>>>  MAINTAINERS                                   |   7 +
+> >>>>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
+> >>>>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
+> >>>>>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
+> >>>>>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
+> >>>>>  arch/arm64/configs/defconfig                  |   1 +
+> >>>>>  drivers/usb/cdns3/Kconfig                     |   2 +-
+> >>>>>  drivers/usb/dwc3/Kconfig                      |   5 +-
+> >>>>>  drivers/usb/host/Kconfig                      |   5 +-
+> >>>
+> >>> These Kconfig changes are causing the resulting .config to be different.
+> >>> For example, if I start with omap2plus_defconfig, the resulting .config
+> >>> before and after your series is different as shown below
+> >>>
+> >>> :/work/linux$ diff /tmp/.config .config
+> >>> 1902d1901
+> >>> < # CONFIG_HISI_HIKEY_USB is not set
+> >>> 4992c4991
+> >>> < CONFIG_USB_XHCI_PLATFORM=m
+> >>> ---
+> >>>> # CONFIG_USB_XHCI_PLATFORM is not set
+> >>> 5073,5075c5072
+> >>> < # CONFIG_USB_DWC3_HOST is not set
+> >>> < # CONFIG_USB_DWC3_GADGET is not set
+> >>> < CONFIG_USB_DWC3_DUAL_ROLE=y
+> >>> ---
+> >>>> CONFIG_USB_DWC3_GADGET=y
+> >>> 5173a5171
+> >>>> # CONFIG_USB_ONBOARD_HUB is not set
+> >>> 5285c5283
+> >>> < CONFIG_USB_ROLE_SWITCH=m
+> >>> ---
+> >>>> # CONFIG_USB_ROLE_SWITCH is not set
+> >>>
+> >>> I would expect the same issues for multi_v7_defconfig and multi_v8_defconfig as well.
+> >>
+> >> Sorry I meant defconfig for arm64, not multi_v8_defconfig.
+> >>
+> >> I checked that for arm64 defconfig it is ok.
+> >>
+> >>> I'm ok to update the relevant defconfigs files so that the resulting .config is identical to
+> >>> before your series. Thanks!
+> >>
+> >> With the below patch you can fix it for omap2plus_defconfig and multi_v7_defconfig.
+> >>
+> >> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+> >> index d9abaae118dd..8c175ab37377 100644
+> >> --- a/arch/arm/configs/multi_v7_defconfig
+> >> +++ b/arch/arm/configs/multi_v7_defconfig
+> >> @@ -787,6 +787,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
+> >>  CONFIG_USB=y
+> >>  CONFIG_USB_OTG=y
+> >>  CONFIG_USB_XHCI_HCD=y
+> >> +CONFIG_USB_XHCI_PLATFORM=y
+> >>  CONFIG_USB_XHCI_MVEBU=y
+> >>  CONFIG_USB_XHCI_TEGRA=m
+> >>  CONFIG_USB_EHCI_HCD=y
+> >> diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
+> >> index 2ac2418084ab..a015fb04fa25 100644
+> >> --- a/arch/arm/configs/omap2plus_defconfig
+> >> +++ b/arch/arm/configs/omap2plus_defconfig
+> >> @@ -562,6 +562,7 @@ CONFIG_USB=m
+> >>  CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+> >>  CONFIG_USB_MON=m
+> >>  CONFIG_USB_XHCI_HCD=m
+> >> +CONFIG_USB_XHCI_PLATFORM=m
+> >>  CONFIG_USB_EHCI_HCD=m
+> >>  CONFIG_USB_OHCI_HCD=m
+> >>  CONFIG_USB_ACM=m
+> > 
+> > Thanks for testing!
+> > 
+> > I completely forgot that arm32 has all these different defconfigs.
+> > 
+> > While trying to adjust qcom_defconfig I came across something that confuses
+> > me. The original defconfig results in:
+> > 
+> > # CONFIG_USB_XHCI_HCD is not set
+> > CONFIG_USB_DWC3_DUAL_ROLE=y
+> 
+> The original Kconfig was:
+> 
+> > config USB_DWC3_DUAL_ROLE
+> >         bool "Dual Role mode"
+> >         depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
+> >         depends on (EXTCON=y || EXTCON=USB_DWC3)
+> 
+> Which means USB_DWC3_DUAL_ROLE can be enabled even without CONFIG_USB_XHCI_HCD.
+> 
+> All the dual role code does is add/remove the host/gadget controller platform devices.
+> It doesn't care whether there is a driver for it or not.
+> i.e. there is no build dependency on CONFIG_USB_XHCI_HCD.
+> 
+> > 
+> > My assumption was that xHCI support is need for dwc3 dual mode (which is
+> > made explicit by https://lore.kernel.org/patchwork/patch/1468240/), is
+> > that incorrect? Maybe without xHCI support the controller can still
+> > operate in USB 2.0 dual role mode?
+> > 
+> 
+> Without xHCI support the host functionality will not work at all on dwc3 dual role.
+> So I think your Kconfig changes for USB_DWC3_DUAL_ROLE to depend on USB_XHCI_PLATFORM
+> are correct.
 
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
----
- drivers/usb/usbip/vhci_hcd.c | 57 ++++++++++++------------------------
- 1 file changed, 18 insertions(+), 39 deletions(-)
-
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 6f3f374d4bbc..b142508b46ce 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -945,7 +945,8 @@ static int vhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 	return 0;
- }
- 
--static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
-+static void vhci_cleanup_unlink_list(struct vhci_device *vdev,
-+		struct list_head *unlink_list)
- {
- 	struct vhci_hcd *vhci_hcd = vdev_to_vhci_hcd(vdev);
- 	struct usb_hcd *hcd = vhci_hcd_to_hcd(vhci_hcd);
-@@ -956,46 +957,15 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- 	spin_lock_irqsave(&vhci->lock, flags);
- 	spin_lock(&vdev->priv_lock);
- 
--	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
-+	list_for_each_entry_safe(unlink, tmp, unlink_list, list) {
- 		struct urb *urb;
- 
--		/* give back urb of unsent unlink request */
--		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
--
--		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
--		if (!urb) {
--			pr_info("the urb (seqnum %lu) was already given back\n",
--				unlink->unlink_seqnum);
--			list_del(&unlink->list);
--			kfree(unlink);
--			continue;
--		}
--
--		urb->status = -ENODEV;
--
--		usb_hcd_unlink_urb_from_ep(hcd, urb);
--
--		list_del(&unlink->list);
--
--		spin_unlock(&vdev->priv_lock);
--		spin_unlock_irqrestore(&vhci->lock, flags);
--
--		usb_hcd_giveback_urb(hcd, urb, urb->status);
--
--		spin_lock_irqsave(&vhci->lock, flags);
--		spin_lock(&vdev->priv_lock);
--
--		kfree(unlink);
--	}
--
--	while (!list_empty(&vdev->unlink_rx)) {
--		struct urb *urb;
--
--		unlink = list_first_entry(&vdev->unlink_rx, struct vhci_unlink,
--			list);
--
--		/* give back URB of unanswered unlink request */
--		pr_info("unlink cleanup rx %lu\n", unlink->unlink_seqnum);
-+		if (unlink_list == &vdev->unlink_tx)
-+			pr_info("unlink cleanup tx %lu\n",
-+					unlink->unlink_seqnum);
-+		else
-+			pr_info("unlink_cleanup rx %lu\n",
-+					unlink->unlink_seqnum);
- 
- 		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
- 		if (!urb) {
-@@ -1027,6 +997,15 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- 	spin_unlock_irqrestore(&vhci->lock, flags);
- }
- 
-+static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
-+{
-+	/* give back URB of unsent unlink request */
-+	vhci_cleanup_unlink_list(vdev, &vdev->unlink_tx);
-+
-+	/* give back URB of unanswered unlink request */
-+	vhci_cleanup_unlink_list(vdev, &vdev->unlink_rx);
-+}
-+
- /*
-  * The important thing is that only one context begins cleanup.
-  * This is why error handling and cleanup become simple.
--- 
-2.26.2
-
+Thanks for the clarification!
