@@ -2,77 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBC163EBE69
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 00:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F9633EBE8C
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 01:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235368AbhHMW6D (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 18:58:03 -0400
-Received: from vps0.lunn.ch ([185.16.172.187]:49386 "EHLO vps0.lunn.ch"
+        id S235570AbhHMXGR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 19:06:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60284 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235029AbhHMW6C (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Aug 2021 18:58:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=FYuUdJcFQOnbiiBadjNTfXqj9uF9g7KISuzsDGYuIvY=; b=C085qsX/52ve+v3DUlpobQXO/P
-        xQqpZwVxtMvm7cREVO5zkVU4jchLMtKkpNwVA1i1wYi2Sm4PW0/Jf/kNbMMbvmd42qQmONNay4cCu
-        ubMgBINKx5U6Yhpv8H94DHq+ccliTuHltIfKJI9v5l2i5Qt3fW4Siny1Gh1imVLJy2p4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mEg7D-00HZox-WF; Sat, 14 Aug 2021 00:57:28 +0200
-Date:   Sat, 14 Aug 2021 00:57:27 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
+        id S235531AbhHMXGR (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Aug 2021 19:06:17 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 87E0760FC4;
+        Fri, 13 Aug 2021 23:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628895949;
+        bh=Nvnqwbo2C0GwFP06RyXvSRJloiNuqcOeuW6rpl8E3xk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i3jlKOvAMBV1/lniA4l/cL70gWPMpCKsY8NJ4slDgPIe3fkPmwdk6GV5vDUQlNWYy
+         NuyDLjsU2DKFEFr86gpL7SWIbXHTUc2ENJtHZ82uV5r1+IhfEPLVxIqFWThFSUHX+Z
+         pQCpVRpFcRuImgjnSrBe+jFNG45QmKRi48qM461WPTbuoAFFWAAs0o7yuzSI0wqcKN
+         LBEaDAioQLZY8avmgcAMvKU0PUkGD6bKCLNj1BERhHny02elIRdRNX3F61gBgC0JUp
+         WxWawAxuZ33mtdEKThgQvXgNxvGKZBcNf/g4bZzOxxP77bvQ5kqcnvREK2as6rbVxg
+         vwgDuDuf0p8xw==
+Date:   Fri, 13 Aug 2021 16:05:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
 To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        himadrispandya@gmail.com, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2] net: asix: fix uninit value in asix_mdio_read
-Message-ID: <YRb419yLsAtDVShf@lunn.ch>
-References: <YRbw1psAc8jQu4ob@lunn.ch>
- <20210813224219.11359-1-paskripkin@gmail.com>
+Cc:     davem@davemloft.net, gregkh@linuxfoundation.org,
+        dan.carpenter@oracle.com, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: hso: drop unused function argument
+Message-ID: <20210813160548.739239a3@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210811171321.18317-1-paskripkin@gmail.com>
+References: <20210811171321.18317-1-paskripkin@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210813224219.11359-1-paskripkin@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-> diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-> index ac92bc52a85e..7019c25e591c 100644
-> --- a/drivers/net/usb/asix_common.c
-> +++ b/drivers/net/usb/asix_common.c
-> @@ -468,18 +468,25 @@ int asix_mdio_read(struct net_device *netdev, int phy_id, int loc)
->  	struct usbnet *dev = netdev_priv(netdev);
->  	__le16 res;
->  	u8 smsr;
-> -	int i = 0;
-> +	int i;
->  	int ret;
->  
->  	mutex_lock(&dev->phy_mutex);
-> -	do {
-> +	for (i = 0; i < 30; ++i) {
->  		ret = asix_set_sw_mii(dev, 0);
->  		if (ret == -ENODEV || ret == -ETIMEDOUT)
->  			break;
->  		usleep_range(1000, 1100);
->  		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
->  				    0, 0, 1, &smsr, 0);
-> -	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
-> +		if (ret == -ENODEV)
-> +			break;
-> +		else if (ret < 0)
-> +			continue;
-> +		else if (smsr & AX_HOST_EN)
-> +			break;
-> +	}
-> +
+On Wed, 11 Aug 2021 20:13:21 +0300 Pavel Skripkin wrote:
+> _hso_serial_set_termios() doesn't use it's second argument, so it can be
+> dropped.
+> 
+> Fixes: ac9720c37e87 ("tty: Fix the HSO termios handling a bit")
 
-Yes, this looks good. And Jakub is correct, there are 3 other bits of
-similar code you should look at.
-
-     Andrew
+This one is not a bug so no fixes tag needed :) applied, thanks
