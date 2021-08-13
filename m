@@ -2,309 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F17EC3EBC1E
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 20:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0248C3EBCB5
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 21:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbhHMSdx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 14:33:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbhHMSdl (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 14:33:41 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68F7C0613A3
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id n12so12461501plf.4
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=Oavcp2pFnC2cFXkrrEs6NnAp/Yy/K6T50MosZsUzhis=;
-        b=lJIKxJoDB/aAZbLpirzQkMyJoRmThAikyFRpuGbLeId7fd0o23xD6tNmaVbl1Mz5Qd
-         lHHkiPFD9jKsp4maRXPRSmKyvuCEh1puT/H6kV1ULEkEZ0U5jRg4zwUcN6GDAhSAXUtd
-         64+iKz+xUOCtJW498wFyavo67TZpq9B2MHHiM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Oavcp2pFnC2cFXkrrEs6NnAp/Yy/K6T50MosZsUzhis=;
-        b=HMF4itE9TgmWskKaHjhBLLcVWdX4tapmpiybwtsrBR4ilCKdVkOH6Up2O0ruwG4kP1
-         cUMN6qPSnw0uXhCUuTxyTLAza4K8T3f1TdUc+Wbxjb4CeWskExa5HD9wqjMISCQLFJbo
-         ePbLhidUL8iwk3BRFy5xBYOD0FivjE0CtcrkRLpW9udo7km0uavq9jkcX6u5xmp9jP0x
-         mv/0SS02y16CFFl1vGPVDsAu4UAkjvM9fHqP2Pirv35Ssm11Y9O2zVZ8eTBRiETIfqHE
-         Pn2tFkg8dAvfqdzfK4LyzKp4Rt3/nmbbIAD+gL9tkyQSNEdVAlITXchvaTlB9gb4aeLH
-         hgzg==
-X-Gm-Message-State: AOAM532zcjkQKcZ56XNoL7wOlWMTb44Fzljuqr9aVuRfkdntBRE/UEXB
-        WJW0jkDIJrRXlgWXnTOYWhyShA==
-X-Google-Smtp-Source: ABdhPJwKnXfOpKfshUbQlMBlW1T1VCUKLFgQrOPTtyIXCkBL296ZEMCcjLuDGiZ47Tg/4o7leekywg==
-X-Received: by 2002:a65:644e:: with SMTP id s14mr3479420pgv.410.1628879593367;
-        Fri, 13 Aug 2021 11:33:13 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:450d:9788:a70e:42d6])
-        by smtp.gmail.com with UTF8SMTPSA id r11sm2464611pjd.26.2021.08.13.11.33.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Aug 2021 11:33:12 -0700 (PDT)
-Date:   Fri, 13 Aug 2021 11:33:09 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Peter Chen <peter.chen@kernel.org>, devicetree@vger.kernel.org,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-usb@vger.kernel.org,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Andy Gross <agross@kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
+        id S233757AbhHMTwl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 15:52:41 -0400
+Received: from smtprelay-out1.synopsys.com ([149.117.87.133]:54610 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230440AbhHMTwk (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 15:52:40 -0400
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id DD459C08E2;
+        Fri, 13 Aug 2021 19:52:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1628884333; bh=KBcWWnPZpNM0AOKMbOXPgtoXjbBeekTvXETcZeu0K94=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Rld8al+Q/4iRnrX/ZtK+hmWgoktEKZBKOlIsZV6vL6Wt7/j6eqSVMdQS3LZTM8IEJ
+         mHjHjDyoDsnEZjzzcns/RI2iEobVs5WjonrRwqNXProOSX+DYsT3fL4nJDOk7y6szl
+         J6AO0F8kD5uJzSL1x5tvbIa+h8SkMdMj9yXxoefwXsgGbzimhARPCSlItZWmakKyQX
+         M0CnByxfqZh9Zizu2pvfH8r3uINqxN3I5WUZRVO74oZpuSbMDj9c6C2prpI2Rke2YP
+         BUltoDqnTPtWc0IFXOQpcUX8DHeJdY+KXgX79vvlNtfndPzo02knIiolatlZQe1Lm1
+         J/0YdNFYC8hXA==
+Received: from o365relay-in.synopsys.com (sv2-o365relay1.synopsys.com [10.202.1.137])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id C715DA00BD;
+        Fri, 13 Aug 2021 19:52:08 +0000 (UTC)
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2046.outbound.protection.outlook.com [104.47.57.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 4521B40097;
+        Fri, 13 Aug 2021 19:52:06 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=thinhn@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="VLZkFlze";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F+mJXKZu6FCXz0yudwI7nq8gipSGFX/Yor4MMAdA5vRTVeNckqU7KLS79FBpq1+XoUk0ywo86g4oWc/K3nNU0fq09Uo6y+8bCbUh9gJeTAWt39h9InHDu6Rcf3UU430GuSQekshMfzkPXUbkWUYs5/tEAVpgzDl53bxhIN7d9GWFOlEBPCH004H8ons7k3vIHuNxP7MBykIDVImMQHAldWYrb6lHC2tC6j0HH+DVcvsG1b61S1t0JfnkuGPP4dPuyThCfYFGJe3ccwmsgbFhC7j2ouuwTj13bF5fYjHFl1u7M0ZtRZxTRscLbbR145fueQYzLReQqPXvcyh7Pyp+AQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KBcWWnPZpNM0AOKMbOXPgtoXjbBeekTvXETcZeu0K94=;
+ b=K3hmfJ0TDGJVqB1/NDES4oqRUJKa+jQhwWXaEmxAqBgUGk7UEYW0/PtMDCCwGg/lsqgJdHsyj9lW+3kgCqZ6HTnBOq9Y+kZE3LpUI8SmALtYWOVpgBbe7+b1Kl9e4U53XMRb6XA9wSL+0BhfIp8V3yp9zB7Id2Olu4e+YiKkXY8Tk85aX7/yU3g861LjKblN8jDx3EqGmWW9trEXPlLU5SxQOVxIJkYkw3Oy7v723qq6NFIMJ53BK7bRaxetcVEF38jOnrSY2H8EvVrxCJKKs+ox2RRX+uEDo21A3mZHIogLi69QC1Eom41goMvBdpho501XuZwD14ODcYvoH3ZSdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KBcWWnPZpNM0AOKMbOXPgtoXjbBeekTvXETcZeu0K94=;
+ b=VLZkFlzeiewWSa+4JJHNlzrMJpTCwJ6PkXYJbYjmCEY6p319lxIDGyASoxSMv9eB6HcZtz5D3HUSYuf+KN3kLMtSIHlelzaYBFxGH+zMg/eerMbu6iSwTD3Ru/LFdUN1IIxXh4BgjZsnBOWyzqatC6Q5EHZA4Y0eK/XCpaO1Xq4=
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com (2603:10b6:a03:10a::12)
+ by BYAPR12MB2856.namprd12.prod.outlook.com (2603:10b6:a03:136::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4415.13; Fri, 13 Aug
+ 2021 19:52:03 +0000
+Received: from BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::163:f142:621e:3db9]) by BYAPR12MB4791.namprd12.prod.outlook.com
+ ([fe80::163:f142:621e:3db9%7]) with mapi id 15.20.4415.017; Fri, 13 Aug 2021
+ 19:52:03 +0000
+X-SNPS-Relay: synopsys.com
+From:   Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Rob Herring <robh@kernel.org>, Baruch Siach <baruch@tkos.co.il>
+CC:     Felipe Balbi <balbi@kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Guido =?utf-8?Q?G=C3=BCnther?= <agx@sigxcpu.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Nishanth Menon <nm@ti.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v15 0/6] usb: misc: Add onboard_usb_hub driver
-Message-ID: <YRa65ZWzkB5OLpPm@google.com>
-References: <20210727004118.2583774-1-mka@chromium.org>
- <YRFOnhJkB2vi/zwD@google.com>
- <8a8cae28-6617-76d3-1742-3f151a149069@kernel.org>
- <ddd60682-c957-2897-768e-96c9d25c148a@kernel.org>
- <YRVVjwNprk7l1jUk@google.com>
- <166449bc-4c33-b923-f53d-6df4f83dc267@kernel.org>
+        Balaji Prakash J <bjagadee@codeaurora.org>,
+        Kathiravan T <kathirav@codeaurora.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] usb: dwc3: reference clock period configuration
+Thread-Topic: [PATCH v2 4/6] usb: dwc3: reference clock period configuration
+Thread-Index: AQHXiTnt/GO+HkNUgkeAoESR7uPeE6tjYusAgAAC7oCADljMAIAAKEUA
+Date:   Fri, 13 Aug 2021 19:52:03 +0000
+Message-ID: <53784e58-6da4-ad61-6b9e-46697fb3d695@synopsys.com>
+References: <3d86f45004fe2fcbae0a2cd197df81a1fd076a1e.1628085910.git.baruch@tkos.co.il>
+ <0e99e3d453547ad2a8f4541090a03f3c80b80332.1628085910.git.baruch@tkos.co.il>
+ <87lf5h5mc2.fsf@kernel.org> <87v94lxpb0.fsf@tarshish>
+ <YRarmizUtzIunV1P@robh.at.kernel.org>
+In-Reply-To: <YRarmizUtzIunV1P@robh.at.kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+authentication-results: kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: fd02fe4a-0ea3-4768-a1e8-08d95e93d297
+x-ms-traffictypediagnostic: BYAPR12MB2856:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <BYAPR12MB2856BC88E6E834EE947AB25FAAFA9@BYAPR12MB2856.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: j60QYvHuGMR3UiQb7xTKOMDjKMwhCKu2kDTlrsU3DEaM4JayzJqAiZKM/bs3UcneIWHL80VX1tzHbmgPQoWaAoFvuQSzlCYFudYAHSatf2qNZjdmnYaGgEqS8Jv5ix/kce8pa57J0Q/QlmVwrfm+3H0nRufrFg8mH6YB7d84sQdGjiK8SPuPJNY9DpoYRH7z6QBRcZ6Eyi+yzJsQgGn75mP+cnmFc4XRxp3FaInAZ095KwptyyVyA+S/eeariDc7fXdut+dy/QzFUkvilPAnaAzBy6vqYuz7g0mCoE1PgCe5Rc+jCwwYskZ6Dp2WayTO1ny9H3qx/+5GohDrbJzjQ4r9kl/x/D271nUZPyzZ4KI6oDNdDU7x6sWRjfJlMCN5ntVQDj1G9ejnFAL20XS1AHzLIWyt1suxSl6Kua1w7MceWPfLVMTwYdD4rzFcRVoC+2snv7zU8+FaiSl3jddHy7IvDODOTkFHjAaaJphLsdl5i8Ok2bX1zJ1RwpRYziRv4GoRD/qH9YeZFESzztDxrMV4eo55zmXtraGcqK1JmbhmBVfYFknuy8hZF05yHc7h+IYfKtLdbz9+cuCzydcmnZADel/NBHodE7xJDVyIaGEKTai5BKHwpMav4LJTLn8bb37c+CFRgBGoyJ6th5F5gmDrrgW3ZoeDeafbtK2Zp1SRdj91t+l76NMm9tyCs+0pAdAwNU41KUmrQ2K0QT1BX/ml42I/SHbkL9aH4E0VTJ/YbWyyN/oyvhCuSm36A/MkkHdbNiaPH5j5KmWGuuqQOddpmCUK/YzEDWhwvV45kKjT3L3x3nTSgk0ZhvySCPVbR3wX07Qk4FtTvu3w5DGH3pXHSkLVZGogLB6x8Vfq5s4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4791.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(39840400004)(346002)(366004)(376002)(396003)(136003)(54906003)(186003)(26005)(31686004)(86362001)(966005)(36756003)(478600001)(6506007)(38070700005)(7416002)(122000001)(110136005)(2906002)(2616005)(4326008)(5660300002)(6512007)(316002)(6486002)(64756008)(38100700002)(66446008)(76116006)(8676002)(66946007)(66476007)(31696002)(83380400001)(66556008)(71200400001)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?K3JBTFYrZ1lzWnc0eWF5SnFISnQvT2UyOUpodFlaSmRLU05XVUZJZUtuZTVD?=
+ =?utf-8?B?VG1ELzhER1UwbVlVN2NpalFaZXVLRnppL1ljMWpnbzA3QXJwU05nUUdUazF2?=
+ =?utf-8?B?KzNHODhBckFQZHphMDF4RTY5ZnZNK3p4OG9xL3BKVlp4VldsaDJIZHZzdExa?=
+ =?utf-8?B?SS9rcEdnc2F5cnRRbGtTVWlhM2VpRDg4R1JsbHdzZGFDQ3Jvb3RrMnRoNzBH?=
+ =?utf-8?B?TlcvR3BpcVhkZEZ6ZUtxTFg0ZW43VzF0RWNCNkRjblFOdXF6dkV0U1c1eG5P?=
+ =?utf-8?B?SXhYYUlSVDQvK1dIV2VUZHRXNnEyMWlINUVscWZTRTVjSzJjRGplZXdnTStr?=
+ =?utf-8?B?cTZJbUluVlhqTFZaV2NnRC9kY2pqVXVnNjdZNVRUTWhWRU9JYjRaZlo1VVU1?=
+ =?utf-8?B?c0dIVjVYa1pOQk4xb29xRnlZRWVXY1kwcmY4RHBSYzlzR3VTcDNWM2FiTTUy?=
+ =?utf-8?B?Mkt5VWlQbmppa1dIVFFBOXpvZ1R2UFpaN1h6dnR5M2lOSDFCdVlEZHZpTWtQ?=
+ =?utf-8?B?eTdZYTMxK01FUU9mVmVmeGJyb256Y0IrRjI5MTVleTVUWXdZaFRJV0J0L3ht?=
+ =?utf-8?B?RjU0WFRrWi9LMXdGOWhzQlhCSjhlM0tOYlZXNEFMYUlvdnRyTE1QRlpZTHpP?=
+ =?utf-8?B?YTZ5NjBqTUtnV3M2VU9WMnNXTWd3cVBnNElLU2h3SENTSzJtUWQrV1VmMGRs?=
+ =?utf-8?B?YTZLaElJR3ZtWHZSQmZZQk5mZnp1MFhISXJzcGlSUWFWdnpJME56V2QxOEhS?=
+ =?utf-8?B?WUlwdExGK25nbEY1eGJuRTN4R1FvSDRnOHlCWGF5SWpzWjZIQzArdVhJY01x?=
+ =?utf-8?B?Y1pibTQ0bnQwUXdHc2xFZXkvd0E5SHdsRm1QUkNnQitHSjlTS0NZZ29KOFp4?=
+ =?utf-8?B?MlBFNG5ra3kzcUxJOWEzNWtlZVN5U0drQ2xLTUg0K1R1eU9acjhQS2J3cWxw?=
+ =?utf-8?B?ZEVVU0NPNHhWVEpBWW1XVlpZdHErRVdOYlN3dldlNWYvQVVtdm5SRHJGS3Ri?=
+ =?utf-8?B?YldDUjF0N0Q2UzBsMVVjaUV0MTA2ZlB2VHBTb3NFNzRTc1F0NmhqRXJMZU1z?=
+ =?utf-8?B?N0RwR3VpSDc0d1RtVE9NMklaUXNiOHp4MUpyaWNweE94Skl3Y3o1anU2ZE96?=
+ =?utf-8?B?QWM2TC8rREdGK0dVa2M1QU9ONnR5bUNPc3VyN052YWczR1Jxc0NBMWVjV3Vu?=
+ =?utf-8?B?czJMWFQ4aEl4cGdveHFpMmZXUWdid3FzLzgwbzQ2SCs3WVZER2NucGVKQ2xX?=
+ =?utf-8?B?aGduNWNVUGU3a3JHSXJDM0dRdmllTUJ6eEVpR2ZZTDhDbm1IVGFqbGx4VWhG?=
+ =?utf-8?B?aHNWN0dFbm5tVzJIdVhpeXR2TS9XZVVmRDc5ZGxNNk1VMEh4dmlWL25HaTFE?=
+ =?utf-8?B?VEY2VEZuMHFjT3ZNSkhXRlhFM3VrYWtWNlJYOEY2Tk9CL0VHMEt0Si9oaGpC?=
+ =?utf-8?B?Rmo1N1dlY0RmcHdnWTNuMFRtUk90am51V25ndzNRMm1CZWVPdjQ0ZFlqTzdw?=
+ =?utf-8?B?T3BOb3lUWjhadDBzOWpUaCt5T3Rpd21jeTJVSzZlaGhRaytGbS84YUZoeUhn?=
+ =?utf-8?B?RVFYNkpwY3BtdEZwc1BrdUE0Y0g1dnZ2STFkMWpQM1FTaU5kay81T1ZTbGty?=
+ =?utf-8?B?V29RSDE4MkNEWmorWGhBMk5HTXNDUEJkcXhQTlVKbjR3Y2F2YThBV0JoUXZG?=
+ =?utf-8?B?S3ZHVFhuYnFCQjRqeU1aVlJkWmYzZ0ZXck9WaWdFM21WSkU0NHMzVlJzbDFw?=
+ =?utf-8?Q?oLFRnDEiCYuyuuIJA0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C69E55C220B476418F1D141FEBFBC3A0@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <166449bc-4c33-b923-f53d-6df4f83dc267@kernel.org>
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4791.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fd02fe4a-0ea3-4768-a1e8-08d95e93d297
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2021 19:52:03.4532
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6uq/GMGI+/vLs4qiDVHeOApCJ6jkTlp73tBqzRESfOMyO/aZMo0bDfKDGdguu0KoX+mDlXgIZ/qWypQZc4Fhrg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB2856
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 09:35:53AM +0300, Roger Quadros wrote:
-> Hi Matthias,
-> 
-> On 12/08/2021 20:08, Matthias Kaehlcke wrote:
-> > Hi Roger,
-> > 
-> > On Wed, Aug 11, 2021 at 03:56:15PM +0300, Roger Quadros wrote:
-> >>
-> >>
-> >> On 11/08/2021 15:38, Roger Quadros wrote:
-> >>> Hi Matthias,
-> >>>
-> >>> On 09/08/2021 18:49, Matthias Kaehlcke wrote:
-> >>>> Hi Greg,
-> >>>>
-> >>>> Just wanted to check if this series is still on your radar. Is
-> >>>> there anything that blocks it from landing (further ACKs, ...)?
-> >>>>
-> >>>> Thanks
-> >>>>
-> >>>> Matthias
-> >>>>
-> >>>> On Mon, Jul 26, 2021 at 05:41:12PM -0700, Matthias Kaehlcke wrote:
-> >>>>> This series adds:
-> >>>>> - the onboard_usb_hub_driver
-> >>>>> - glue in the xhci-plat driver to create and destroy the
-> >>>>>   onboard_usb_hub platform devices if needed
-> >>>>> - a device tree binding for the Realtek RTS5411 USB hub controller
-> >>>>> - device tree changes that add RTS5411 entries for the QCA SC7180
-> >>>>>   based boards trogdor and lazor
-> >>>>> - a couple of stubs for platform device functions to avoid
-> >>>>>   unresolved symbols with certain kernel configs
-> >>>>>
-> >>>>> The main issue the driver addresses is that a USB hub needs to be
-> >>>>> powered before it can be discovered. For discrete onboard hubs (an
-> >>>>> example for such a hub is the Realtek RTS5411) this is often solved
-> >>>>> by supplying the hub with an 'always-on' regulator, which is kind
-> >>>>> of a hack. Some onboard hubs may require further initialization
-> >>>>> steps, like changing the state of a GPIO or enabling a clock, which
-> >>>>> requires even more hacks. This driver creates a platform device
-> >>>>> representing the hub which performs the necessary initialization.
-> >>>>> Currently it only supports switching on a single regulator, support
-> >>>>> for multiple regulators or other actions can be added as needed.
-> >>>>> Different initialization sequences can be supported based on the
-> >>>>> compatible string.
-> >>>>>
-> >>>>> Besides performing the initialization the driver can be configured
-> >>>>> to power the hub off during system suspend. This can help to extend
-> >>>>> battery life on battery powered devices which have no requirements
-> >>>>> to keep the hub powered during suspend. The driver can also be
-> >>>>> configured to leave the hub powered when a wakeup capable USB device
-> >>>>> is connected when suspending, and power it off otherwise.
-> >>>>>
-> >>>>> Changes in v15:
-> >>>>> - adjusted dependencies of USB_DWC3_CORE to make sure it can only
-> >>>>>   be enabled when at least one of USB_DWC3_HOST, USB_DWC3_GADGET
-> >>>>>   or USB_DWC3_DUAL_ROLE is selectable
-> >>>>>
-> >>>>> Changes in v14:
-> >>>>> - rebased on top of v5.14-rc1
-> >>>>> - dropped DT binding patch which landed in v5.13
-> >>>>>
-> >>>>> Changes in v13:
-> >>>>> - added patch "usb: Specify dependency on USB_XHCI_PLATFORM with
-> >>>>>   'depends on'" to the series to avoid Kconfig conflicts
-> >>>>> - added patch "arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM"
-> >>>>>   to the series to keep effective defconfig unchanged
-> >>>>>
-> >>>>> Changes in v12:
-> >>>>> - onboard_hub driver: use IS_ENABLED(CONFIG_USB_ONBOARD_HUB_MODULE)
-> >>>>>   in onboard_hub.h to also check for the driver built as module
-> >>>>> - onboard_hub_driver: include onboard_hub.h again to make sure there
-> >>>>>   are prototype declarations for the public functions
-> >>>>>
-> >>>>> Changes in v11:
-> >>>>> - support multiple onboard hubs connected to the same parent
-> >>>>> - don't include ‘onboard_hub.h’ from the onboard hub driver
-> >>>>>
-> >>>>> Changes in v10:
-> >>>>> - always use of_is_onboard_usb_hub() stub unless ONBOARD_USB_HUB=y/m
-> >>>>> - keep 'regulator-boot-on' property for pp3300_hub
-> >>>>>
-> >>>>> Changes in v9:
-> >>>>> - added dependency on ONBOARD_USB_HUB (or !!ONBOARD_USB_HUB) to
-> >>>>>   USB_PLATFORM_XHCI
-> >>>>>
-> >>>>> Changes in v7:
-> >>>>> - updated DT binding
-> >>>>> - series rebased on qcom/arm64-for-5.13
-> >>>>>
-> >>>>> Changes in v6:
-> >>>>> - updated summary
-> >>>>>
-> >>>>> Changes in v5:
-> >>>>> - cover letter added
-> >>>>>
-> >>>>> Matthias Kaehlcke (6):
-> >>>>>   usb: misc: Add onboard_usb_hub driver
-> >>>>>   of/platform: Add stubs for of_platform_device_create/destroy()
-> >>>>>   arm64: defconfig: Explicitly enable USB_XHCI_PLATFORM
-> >>>>>   usb: Specify dependencies on USB_XHCI_PLATFORM with 'depends on'
-> >>>>>   usb: host: xhci-plat: Create platform device for onboard hubs in
-> >>>>>     probe()
-> >>>>>   arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-> >>>>>
-> >>>>>  .../sysfs-bus-platform-onboard-usb-hub        |   8 +
-> >>>>>  MAINTAINERS                                   |   7 +
-> >>>>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts |  19 +-
-> >>>>>  .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts |  12 +-
-> >>>>>  .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts |  19 +-
-> >>>>>  arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  19 +-
-> >>>>>  arch/arm64/configs/defconfig                  |   1 +
-> >>>>>  drivers/usb/cdns3/Kconfig                     |   2 +-
-> >>>>>  drivers/usb/dwc3/Kconfig                      |   5 +-
-> >>>>>  drivers/usb/host/Kconfig                      |   5 +-
-> >>>
-> >>> These Kconfig changes are causing the resulting .config to be different.
-> >>> For example, if I start with omap2plus_defconfig, the resulting .config
-> >>> before and after your series is different as shown below
-> >>>
-> >>> :/work/linux$ diff /tmp/.config .config
-> >>> 1902d1901
-> >>> < # CONFIG_HISI_HIKEY_USB is not set
-> >>> 4992c4991
-> >>> < CONFIG_USB_XHCI_PLATFORM=m
-> >>> ---
-> >>>> # CONFIG_USB_XHCI_PLATFORM is not set
-> >>> 5073,5075c5072
-> >>> < # CONFIG_USB_DWC3_HOST is not set
-> >>> < # CONFIG_USB_DWC3_GADGET is not set
-> >>> < CONFIG_USB_DWC3_DUAL_ROLE=y
-> >>> ---
-> >>>> CONFIG_USB_DWC3_GADGET=y
-> >>> 5173a5171
-> >>>> # CONFIG_USB_ONBOARD_HUB is not set
-> >>> 5285c5283
-> >>> < CONFIG_USB_ROLE_SWITCH=m
-> >>> ---
-> >>>> # CONFIG_USB_ROLE_SWITCH is not set
-> >>>
-> >>> I would expect the same issues for multi_v7_defconfig and multi_v8_defconfig as well.
-> >>
-> >> Sorry I meant defconfig for arm64, not multi_v8_defconfig.
-> >>
-> >> I checked that for arm64 defconfig it is ok.
-> >>
-> >>> I'm ok to update the relevant defconfigs files so that the resulting .config is identical to
-> >>> before your series. Thanks!
-> >>
-> >> With the below patch you can fix it for omap2plus_defconfig and multi_v7_defconfig.
-> >>
-> >> diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
-> >> index d9abaae118dd..8c175ab37377 100644
-> >> --- a/arch/arm/configs/multi_v7_defconfig
-> >> +++ b/arch/arm/configs/multi_v7_defconfig
-> >> @@ -787,6 +787,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
-> >>  CONFIG_USB=y
-> >>  CONFIG_USB_OTG=y
-> >>  CONFIG_USB_XHCI_HCD=y
-> >> +CONFIG_USB_XHCI_PLATFORM=y
-> >>  CONFIG_USB_XHCI_MVEBU=y
-> >>  CONFIG_USB_XHCI_TEGRA=m
-> >>  CONFIG_USB_EHCI_HCD=y
-> >> diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
-> >> index 2ac2418084ab..a015fb04fa25 100644
-> >> --- a/arch/arm/configs/omap2plus_defconfig
-> >> +++ b/arch/arm/configs/omap2plus_defconfig
-> >> @@ -562,6 +562,7 @@ CONFIG_USB=m
-> >>  CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
-> >>  CONFIG_USB_MON=m
-> >>  CONFIG_USB_XHCI_HCD=m
-> >> +CONFIG_USB_XHCI_PLATFORM=m
-> >>  CONFIG_USB_EHCI_HCD=m
-> >>  CONFIG_USB_OHCI_HCD=m
-> >>  CONFIG_USB_ACM=m
-> > 
-> > Thanks for testing!
-> > 
-> > I completely forgot that arm32 has all these different defconfigs.
-> > 
-> > While trying to adjust qcom_defconfig I came across something that confuses
-> > me. The original defconfig results in:
-> > 
-> > # CONFIG_USB_XHCI_HCD is not set
-> > CONFIG_USB_DWC3_DUAL_ROLE=y
-> 
-> The original Kconfig was:
-> 
-> > config USB_DWC3_DUAL_ROLE
-> >         bool "Dual Role mode"
-> >         depends on ((USB=y || USB=USB_DWC3) && (USB_GADGET=y || USB_GADGET=USB_DWC3))
-> >         depends on (EXTCON=y || EXTCON=USB_DWC3)
-> 
-> Which means USB_DWC3_DUAL_ROLE can be enabled even without CONFIG_USB_XHCI_HCD.
-> 
-> All the dual role code does is add/remove the host/gadget controller platform devices.
-> It doesn't care whether there is a driver for it or not.
-> i.e. there is no build dependency on CONFIG_USB_XHCI_HCD.
-> 
-> > 
-> > My assumption was that xHCI support is need for dwc3 dual mode (which is
-> > made explicit by https://lore.kernel.org/patchwork/patch/1468240/), is
-> > that incorrect? Maybe without xHCI support the controller can still
-> > operate in USB 2.0 dual role mode?
-> > 
-> 
-> Without xHCI support the host functionality will not work at all on dwc3 dual role.
-> So I think your Kconfig changes for USB_DWC3_DUAL_ROLE to depend on USB_XHCI_PLATFORM
-> are correct.
-
-Thanks for the clarification!
+Um9iIEhlcnJpbmcgd3JvdGU6DQo+IE9uIFdlZCwgQXVnIDA0LCAyMDIxIGF0IDA1OjIyOjI3UE0g
+KzAzMDAsIEJhcnVjaCBTaWFjaCB3cm90ZToNCj4+IEhpIEZlbGlwZSwNCj4+DQo+PiBPbiBXZWQs
+IEF1ZyAwNCAyMDIxLCBGZWxpcGUgQmFsYmkgd3JvdGU6DQo+Pj4gQmFydWNoIFNpYWNoIDxiYXJ1
+Y2hAdGtvcy5jby5pbD4gd3JpdGVzOg0KPj4+PiBAQCAtMTM3MSw2ICsxMzk4LDggQEAgc3RhdGlj
+IHZvaWQgZHdjM19nZXRfcHJvcGVydGllcyhzdHJ1Y3QgZHdjMyAqZHdjKQ0KPj4+PiAgCQkJCSAg
+ICAmZHdjLT5oc3BoeV9pbnRlcmZhY2UpOw0KPj4+PiAgCWRldmljZV9wcm9wZXJ0eV9yZWFkX3Uz
+MihkZXYsICJzbnBzLHF1aXJrLWZyYW1lLWxlbmd0aC1hZGp1c3RtZW50IiwNCj4+Pj4gIAkJCQkg
+JmR3Yy0+ZmxhZGopOw0KPj4+PiArCWRldmljZV9wcm9wZXJ0eV9yZWFkX3UzMihkZXYsICJzbnBz
+LHJlZi1jbG9jay1wZXJpb2QiLA0KPj4+PiArCQkJCSAmZHdjLT5yZWZfY2xrX3Blcik7DQo+Pj4N
+Cj4+PiBJIHdvbmRlciBpZiBpdCB3b3VsZCBtYWtlIG1vcmUgc2Vuc2UgdG8gcGFzcyBhbiBhY3R1
+YWwgY2xvY2sgcmVmZXJlbmNlDQo+Pj4gaGVyZS4gSWYgdmFsaWQsIHRoZW4gcmVjb25maWd1cmUg
+dGhlIHBlcmlvZCB0byB0aGUgdmFsdWUgcmV0dXJuZWQgYnkNCj4+PiBjbGtfZ2V0X3JhdGUoKS4g
+SXQgd291bGQgYXZvaWQgeWV0IGFub3RoZXIgRFQgYmluZGluZy4gSWYgd2UgbWFrZSB0aGUNCj4+
+PiBjbG9jayBvcHRpb25hbCwgdGhlbiB3ZSB3b24ndCBhZmZlY3QgYW55IG90aGVyIHBsYXRmb3Jt
+cy4gVGhlIGNsb2NrDQo+Pj4gaXRzZWxmIGNvdWxkIGJlIGEgcmVndWxhciBmaXhlZCBjbG9jayBu
+b2RlLg0KPj4NCj4+IFRoaW5oIE5ndXllbiBhc2tlZCB0byBhZGQgYSBkZWRpY2F0ZWQgRFQgcHJv
+cGVydHkuIEhlIGV4cGxhaW5lZCB0aGF0DQo+PiBjbGtfZ2V0X3JhdGUoKSBkb2VzIG5vdCB3b3Jr
+IGZvciBQQ0kgaG9zdGVkIGR3YzMuIFRoaXMgaXMgdGhlIG1vc3QNCj4+IGNvbXBsZXRlIHN1bW1h
+cnkgb2YgdGhlIGRpc2N1c3Npb246DQo+Pg0KPj4gICBodHRwczovL3VybGRlZmVuc2UuY29tL3Yz
+L19faHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci9jNzk3ZTljYi1jYWU2LWMwYjYtNTcxNC0xNjlj
+MmFkNzlkMzJAc3lub3BzeXMuY29tX187ISFBNEYyUjlHX3BnIU5oNnJxcF9hT2Q4WEl2cUVMdkRS
+UWU1b29aZjEzVVpLd21uOWxXY1JnZGJ5TUtwVE16TDhIYXNyQjFYMk9qdnVtbzhnJCANCj4gDQo+
+IFBDSSBkZXZpY2VzIGNhbiBoYXZlIERUIG5vZGVzIHdpdGggY2xvY2sgcHJvcGVydGllcyB0b28u
+IE9yIHVzZSB0aGUgDQo+IFZJRC9QSUQgdG8gaW5mZXIgdGhlIGZyZXF1ZW5jeS4gT3IgdXNlICdj
+bG9jay1mcmVxdWVuY3knIHByb3BlcnR5Lg0KPiANCj4gSXQgYm9pbHMgZG93biB0byB3ZSBoYXZl
+IGxvdHMgb2Ygc3RhbmRhcmQgcHJvcGVydGllcyBmb3IgY2xvY2tzIGFuZCANCj4gY2xvY2sgY29u
+ZmlndXJhdGlvbiwgc28gY3VzdG9tIHByb3BlcnRpZXMgYXJlIGEgTkFLLg0KPiANCg0KRG8gd2Ug
+aGF2ZSBEVCBub2RlIGZvciB0aGUgUENJIGRldmljZSBiZWZvcmUgZGlzY292ZXJpbmcgdGhlIGRl
+dmljZSBmcm9tDQpQQ0kgYnVzIGVudW1lcmF0aW9uPyBJIGRvbid0IHRoaW5rIHdlIGNhbiBmaW5k
+IHRoZSBjbG9jayBwcm9wZXJ0aWVzIGZyb20NCml0cyBjb25maWd1cmF0aW9uIHNwYWNlLiBGb3Ig
+b3VyIEhBUFMgZGV2aWNlcywgd2UgY2FuJ3QgdXNlIFZJRC9QSUQgdG8NCmluZmVyIHRoZSBmcmVx
+dWVuY3kgc2luY2Ugb3VyIHBoeSBhbmQgcmVmIGNsb2NrIG1heSBjaGFuZ2UuDQoNCkRvZXMgImNs
+b2NrLWZyZXF1ZW5jeSIgbWVhbiByZWYgY2xvY2s/IElmIHNvLCBsZXQncyB1c2UgdGhhdD8NCg0K
+VGhhbmtzLA0KVGhpbmgNCg==
