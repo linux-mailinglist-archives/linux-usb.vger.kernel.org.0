@@ -2,104 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3102E3EB72C
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 16:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8543EB9AC
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 18:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240997AbhHMO6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 10:58:51 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:42513 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S240198AbhHMO6v (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 10:58:51 -0400
-Received: (qmail 39765 invoked by uid 1000); 13 Aug 2021 10:58:23 -0400
-Date:   Fri, 13 Aug 2021 10:58:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
-        maze@google.com, jj251510319013@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
-Message-ID: <20210813145823.GA38198@rowland.harvard.edu>
-References: <20210813114551.72898-1-mdevaev@gmail.com>
+        id S241411AbhHMQBn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 12:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241152AbhHMQBn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 12:01:43 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E200C061756;
+        Fri, 13 Aug 2021 09:01:16 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id t9so20717784lfc.6;
+        Fri, 13 Aug 2021 09:01:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kSDrdDBPEfymGaxqgpjg+gjYzyh9YbFBDk0EflsFaxk=;
+        b=szxgNzGL4CLPZmsplFwjXdvcTewQCWKnSbJuBqXT0kH5iofyoYqtohDvr7aG4d9PkV
+         quqdZt/4Fl3S0bovkolR0qtaBXLVREe9MmYPCy46q1uC1EGwX9Io+Ed7AUAYot1qmmMB
+         n8koog7GrmwudNfXKeU2ee//LGF5qDTXtbXqSW5zuTjS8EKOl7Jv8oKhbpdn+k7L4DTU
+         XkLEtQji79VJ5UNo/scDMIn6aAJMWZCJAYGro+vabiYaVKQiSA9PdjymAt8D+gMmiWrC
+         qt3g/dYQGVMnBqypsj+oCSrtigcAi0fWVFwKxSPvkkWunN9kEXsCY16uJ8KzNJxpKFQH
+         OFgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kSDrdDBPEfymGaxqgpjg+gjYzyh9YbFBDk0EflsFaxk=;
+        b=cCxud1pbmHxT4l2qKEKdcP7G4UQpX4/HpqA6KUdzgUGSUWm3CjA4l5nG756MWNNiM7
+         CD4dFaq6dfbKlNmSbZauY4p3Yylr6H/FlNRnxdxao7vQXbtUOD6eyfjXyKYyDI/5PJFx
+         m4X52pNpj6ivVPE0HJvNFNLXJWk++E5Lw5HiB3L14ZMEt5inybcJh8XUaR90YJo6np6f
+         q7zDn8JQKNn7ogGow9w7EiB7C8/Wnh04RvdTdzhOlUT7RUqMB9N551OdjqyBmkTNb6T+
+         KeMbRjS3S0SHbxhoTELnlL+2sodBL7L4r35n0t0GbfTl5FXBaw9C3vRc117e1iDXzoQY
+         ulLw==
+X-Gm-Message-State: AOAM533xwATu+4jtMB0FJuk/P4fe8QD6N7DtdTZiYgwg6ccgDdpl2QHZ
+        HV0YZuB0kjWyydkRJcF3vKI=
+X-Google-Smtp-Source: ABdhPJx6sAK4DfFqt63A5qYw0JPrdLLcHOqs50aLX0msPRmFYku9fblCnCzQ3ZTIv0U//xRl2L/74Q==
+X-Received: by 2002:a19:7510:: with SMTP id y16mr2122006lfe.191.1628870473605;
+        Fri, 13 Aug 2021 09:01:13 -0700 (PDT)
+Received: from localhost.localdomain ([46.235.67.232])
+        by smtp.gmail.com with ESMTPSA id c2sm207158lji.57.2021.08.13.09.01.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 09:01:13 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        himadrispandya@gmail.com, andrew@lunn.ch
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
+Subject: [PATCH] net: asix: fix uninit value in asix_mdio_read
+Date:   Fri, 13 Aug 2021 19:01:08 +0300
+Message-Id: <20210813160108.17534-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210813114551.72898-1-mdevaev@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 02:45:51PM +0300, Maxim Devaev wrote:
-> f_hid provides the OUT Endpoint for receiving reports from the host.
-> The USB HID standard describes the OUT Endpoint support as optional,
-> and hosts can ignore it if they don't support it.
+Syzbot reported uninit-value in asix_mdio_read(). The problem was in
+missing error handling. asix_read_cmd() should initialize passed stack
+variable smsr, but it can fail in some cases. Then while condidition
+checks possibly uninit smsr variable.
 
-No.  The HID standard (version 1.11 -- I may be out of date) actually 
-says this (section 4.4):
+Since smsr is uninitialized stack variable, driver can misbehave,
+because smsr will be random in case of asix_read_cmd() failure.
+Fix it by adding error cheking and just continue the loop instead of
+checking uninit value.
 
-	The Interrupt Out pipe is optional. If a device declares an 
-	Interrupt Out endpoint then Output reports are transmitted by 
-	the host to the device through the Interrupt Out endpoint. If 
-	no Interrupt Out endpoint is declared then Output reports are
-	transmitted to a device through the Control endpoint, using 
-	Set_Report(Output) requests.
+Fixes: 8a46f665833a ("net: asix: Avoid looping when the device is disconnected")
+Reported-and-tested-by: syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+ drivers/net/usb/asix_common.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-In other words, a device does not need to have an interrupt-OUT 
-endpoint, but if it does have one then the host must use it.
-
-> However, this raises several problems.
-> 
-> (1) Some host OS drivers without OUT Endpoint support can't receive
-
-Can't _transmit_ output reports.  This is understandable, since such 
-hosts aren't compliant with the standard.
-
->     reports at all. In the case of the keyboard, it becomes impossible
->     to get the status of the LEDs from the host OS.
-> 
-> (2) Some BIOSes and UEFIs not only don't support the OUT Endpoint,
->     they cannot work with HID with this configuration at all.
-
-What configuration, exactly?  Do you mean that they can't work with 
-HID interfaces that include an interrupt-OUT endpoint?
-
->     For example, absolutely all Apple UEFIs in all Macs can't handle
->     the OUT Endpoint in accordance with the HID standard so it makes
->     impossible to enter the Boot Menu using the hotkey at boot.
-
-These hosts simply give up when they see an HID interface with an 
-interrupt-OUT endpoint?  They don't just ignore it and continue on?
-
->     This problem also occurs on HP and DELL BIOSes and in some dumb
->     devices with primitive embedded firmware like KVM switches.
-> 
-> This patch adds option no_out_endpoint=1 to disable the OUT Endpoint
-> and allow f_hid to receive reports from the host via SETUP/SET_REPORT.
-
-Why not always allow f_hid to receive reports over ep0?  The HID 
-standard doesn't forbid this.
-
-> Previously, there was such a feature in f_hid, but it was replaced
-> by the OUT Endpoint ("usb: gadget: hidg: register OUT INT endpoint
-> for SET_REPORT").
-
-Missing the SHA value of the commit.
-
-Alan Stern
-
->  It seems that no one knew at the time that it would
-> cause problems with BIOS. So this patch actually returns the removed
-> functionality making it optional. For backward compatibility reasons,
-> the OUT Endpoint mode remains the default behaviour.
-> 
-> If the SETUP/SET_REPORT mode is used, there is no event processing queue,
-> so the user will only read the last report. For classic HID devices
-> like keyboard this is not a problem, since it is intended to transmit
-> the status of the LEDs and only the last report is important.
-> 
-> Both modes pass USBCV tests. Checking with the USB protocol analyzer
-> also confirms that everything is working as it should and the new mode
-> ensures operability in all of the described cases.
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index ac92bc52a85e..572ca3077f8f 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -479,7 +479,13 @@ int asix_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 		usleep_range(1000, 1100);
+ 		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
+ 				    0, 0, 1, &smsr, 0);
+-	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
++		if (ret == -ENODEV) {
++			break;
++		} else if (ret < 0) {
++			++i;
++			continue;
++		}
++	} while (!(smsr & AX_HOST_EN) && (i++ < 30));
+ 	if (ret == -ENODEV || ret == -ETIMEDOUT) {
+ 		mutex_unlock(&dev->phy_mutex);
+ 		return ret;
+-- 
+2.32.0
 
