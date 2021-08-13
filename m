@@ -2,48 +2,48 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 423E03EBCC2
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 21:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE123EBCC6
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 21:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234059AbhHMTxJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 15:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
+        id S234099AbhHMTxR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 15:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233956AbhHMTxH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 15:53:07 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C606C0617AD
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:40 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id bo18so16971871pjb.0
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:40 -0700 (PDT)
+        with ESMTP id S234114AbhHMTxL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 15:53:11 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1267DC0613A3
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:44 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id u21-20020a17090a8915b02901782c36f543so22198303pjn.4
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=FY1d5tWKi4Ygc4kp4ZVf2IkgYfRuuywzmBsdgr6ykdc=;
-        b=bSZvsfP45hkszKR1hgKlpnS1Y3johqmyhjVsmXSup3JI3vR7cTjxYoZve/HXDgWKSI
-         idlSavdyVqpQEUYiqcaxu63ePIecBZ5OWo9nXVDr83bPvUj3lpaBSJVySIQ351U85Z6E
-         4iwz9Vyr+OzjlALc1sUoR9yLZM1KOdJ903nbo=
+        bh=nRs1c8nsbGowmt26dDA7kvMPN34YAlfaDa2DRRmCJck=;
+        b=n2XCtZm14zGWLFZ7EzCLGPxwh9baOU4HPhgbWq/XlgP6FJolE0N8HP4SRgTt7MT0B2
+         THLQqkUZNM5w9UOhgMqj+1dYSXW3zpxHAiFTR3170vLB7klzUOKUCWCPyxKVW+1HVN5I
+         DjOtxgouMqYDj80pCvnxAFuQjjMCq3ACk7mbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=FY1d5tWKi4Ygc4kp4ZVf2IkgYfRuuywzmBsdgr6ykdc=;
-        b=lExdYCCLYZQkwNVVbHU0AXE69w80bA+XWZ9JlMTL7180F8AzqNRfZCDdvfD7eS99dK
-         ikl4jPKRWjx3VNViLXUT9LmAPCH0L7+iYsVnLmzHDw7O/mAezZaGpER2U0cbNJBoMNVB
-         G/Rfv2vcAZ3hQTezsdIX4WltxPARCcUfRJd2TdGYOa+7zhtxbIzx4IBgtnIwECnvWOej
-         rKnfk6puKki/V0xEbQ6EzZS++u5BbYZwInoTNARNflCm4s0NhpMrZ7K0k5VPT6BFKlS3
-         gPlXWaY3Ze0LuiKVO7LHGanBpnWRrcVEGvAsvcUKOr82rRiVBFgIc55r1TNz/e9uVmGq
-         o2Rw==
-X-Gm-Message-State: AOAM530ANno58XVUNw2C17GU5XcBbO96Sq6x1c/nD4rRWDrZ5P2VonvF
-        HlwkIxXciYcdnsKfHBsyxKCi6YpZ7UPmqg==
-X-Google-Smtp-Source: ABdhPJzRkRK8QdhhfWb/m6J84dvLux/6EEaDkr75hUWD13eIhLJzrr59s/+UYojVELedYrrAgAysnQ==
-X-Received: by 2002:a17:90b:4b12:: with SMTP id lx18mr4198512pjb.121.1628884359764;
-        Fri, 13 Aug 2021 12:52:39 -0700 (PDT)
+        bh=nRs1c8nsbGowmt26dDA7kvMPN34YAlfaDa2DRRmCJck=;
+        b=NkIFUyzTmvV7bMHmilVAWbqJrx0K8bUr9yYpKqCpzCGLRqgrcuOnKeuWy3nIUhbM/s
+         LkPYqbVhai0Zu1GCAcw7HbsFgj5j7sPq/PpmzmKphW8lfNnhEWB6ezXTbIcjGn0A0S4A
+         obruqZdaUFY9ZqDMKg0yoGo5TjRT9YoBWHQwNQIeBGMg/hWgWCMPmewA8Yqags3Yyfu8
+         az8TqmysMRgMaJpssT1so1hxvfRmPHCF9YKPSnk/3E3zK8PNV2lG5FxoyPlA5Zs3j08P
+         FGka60ryzjH2RTtxa8+uFo07KzhVlblqadqTkMtFPDIS5WrbwNIwewyUmOgGPiZcIO9l
+         He/g==
+X-Gm-Message-State: AOAM533TqdUjzz4KQjJeSe2YEbNYRY4Oxwo3kw4krJ1cS6PVlT5I8vlX
+        KUj94XkRntMvS52W1XAMMC5vIw==
+X-Google-Smtp-Source: ABdhPJw7ytB2/fNNEkTKwhQinas64E/CIaCx4qDXkzFolsl2Y72TshoGmK2Hrnqcy3S2A78fO1a/cw==
+X-Received: by 2002:a63:d94e:: with SMTP id e14mr3725724pgj.375.1628884363664;
+        Fri, 13 Aug 2021 12:52:43 -0700 (PDT)
 Received: from localhost ([2620:15c:202:201:450d:9788:a70e:42d6])
-        by smtp.gmail.com with UTF8SMTPSA id 6sm2615015pjk.1.2021.08.13.12.52.38
+        by smtp.gmail.com with UTF8SMTPSA id l126sm3757210pgl.14.2021.08.13.12.52.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Aug 2021 12:52:39 -0700 (PDT)
+        Fri, 13 Aug 2021 12:52:43 -0700 (PDT)
 From:   Matthias Kaehlcke <mka@chromium.org>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Alan Stern <stern@rowland.harvard.edu>,
@@ -61,10 +61,39 @@ Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Stephen Boyd <swboyd@chromium.org>,
         Matthias Kaehlcke <mka@chromium.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v16 2/7] of/platform: Add stubs for of_platform_device_create/destroy()
-Date:   Fri, 13 Aug 2021 12:52:23 -0700
-Message-Id: <20210813125146.v16.2.I08fd2e1c775af04f663730e9fb4d00e6bbb38541@changeid>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Jens Axboe <axboe@kernel.dk>, Johan Hovold <johan@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Lionel Debieve <lionel.debieve@st.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mark Brown <broonie@kernel.org>,
+        =?UTF-8?q?Martin=20J=C3=BCcker?= <martin.juecker@gmail.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Robert Richter <rric@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        William Cohen <wcohen@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org,
+        =?UTF-8?q?=C5=81ukasz=20Stelmach?= <l.stelmach@samsung.com>
+Subject: [PATCH v16 3/7] ARM: configs: Explicitly enable USB_XHCI_PLATFORM where needed
+Date:   Fri, 13 Aug 2021 12:52:24 -0700
+Message-Id: <20210813125146.v16.3.I010d5725652b981ebbafba0b260190fe4b995a40@changeid>
 X-Mailer: git-send-email 2.33.0.rc1.237.g0d66db33f3-goog
 In-Reply-To: <20210813195228.2003500-1-mka@chromium.org>
 References: <20210813195228.2003500-1-mka@chromium.org>
@@ -74,96 +103,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Code for platform_device_create() and of_platform_device_destroy() is
-only generated if CONFIG_OF_ADDRESS=y. Add stubs to avoid unresolved
-symbols when CONFIG_OF_ADDRESS is not set.
+The dependency of USB_DWC3 and USB_XHCI_MVEBU on USB_XHCI_PLATFORM
+is being changed from 'select' to 'depends on' by another patch.
+With that patch the defconfigs that enable one of these host
+controllers also need to select USB_XHCI_PLATFORM explicitly
+to keep the resulting config unchanged.
 
 Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
 
 Changes in v16:
-- none
-
-Changes in v15:
-- none
-
-Changes in v14:
-- none
-
-Changes in v13:
-- none
-
-Changes in v12:
-- none
-
-Changes in v11:
-- none
-
-Changes in v10:
-- none
-
-Changes in v9:
-- added Rob's 'Acked-by' tag
-
-Changes in v8:
-- fixed C&P error in commit message
-
-Changes in v7:
-- none
-
-Changes in v6:
 - patch added to the series
 
- include/linux/of_platform.h | 22 ++++++++++++++++++----
- 1 file changed, 18 insertions(+), 4 deletions(-)
+ arch/arm/configs/exynos_defconfig    | 1 +
+ arch/arm/configs/keystone_defconfig  | 1 +
+ arch/arm/configs/multi_v7_defconfig  | 1 +
+ arch/arm/configs/mvebu_v7_defconfig  | 1 +
+ arch/arm/configs/omap2plus_defconfig | 1 +
+ arch/arm/configs/pxa_defconfig       | 1 +
+ 6 files changed, 6 insertions(+)
 
-diff --git a/include/linux/of_platform.h b/include/linux/of_platform.h
-index 84a966623e78..d15b6cd5e1c3 100644
---- a/include/linux/of_platform.h
-+++ b/include/linux/of_platform.h
-@@ -61,16 +61,18 @@ static inline struct platform_device *of_find_device_by_node(struct device_node
- }
- #endif
- 
-+extern int of_platform_bus_probe(struct device_node *root,
-+				 const struct of_device_id *matches,
-+				 struct device *parent);
-+
-+#ifdef CONFIG_OF_ADDRESS
- /* Platform devices and busses creation */
- extern struct platform_device *of_platform_device_create(struct device_node *np,
- 						   const char *bus_id,
- 						   struct device *parent);
- 
- extern int of_platform_device_destroy(struct device *dev, void *data);
--extern int of_platform_bus_probe(struct device_node *root,
--				 const struct of_device_id *matches,
--				 struct device *parent);
--#ifdef CONFIG_OF_ADDRESS
-+
- extern int of_platform_populate(struct device_node *root,
- 				const struct of_device_id *matches,
- 				const struct of_dev_auxdata *lookup,
-@@ -84,6 +86,18 @@ extern int devm_of_platform_populate(struct device *dev);
- 
- extern void devm_of_platform_depopulate(struct device *dev);
- #else
-+/* Platform devices and busses creation */
-+static inline struct platform_device *of_platform_device_create(struct device_node *np,
-+								const char *bus_id,
-+								struct device *parent)
-+{
-+	return NULL;
-+}
-+static inline int of_platform_device_destroy(struct device *dev, void *data)
-+{
-+	return -ENODEV;
-+}
-+
- static inline int of_platform_populate(struct device_node *root,
- 					const struct of_device_id *matches,
- 					const struct of_dev_auxdata *lookup,
+diff --git a/arch/arm/configs/exynos_defconfig b/arch/arm/configs/exynos_defconfig
+index f4e1873912a3..660fccb40f34 100644
+--- a/arch/arm/configs/exynos_defconfig
++++ b/arch/arm/configs/exynos_defconfig
+@@ -255,6 +255,7 @@ CONFIG_SND_SIMPLE_CARD=y
+ CONFIG_USB=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_EXYNOS=y
+ CONFIG_USB_OHCI_HCD=y
+diff --git a/arch/arm/configs/keystone_defconfig b/arch/arm/configs/keystone_defconfig
+index 33c917df7b32..4f66c5a5d94d 100644
+--- a/arch/arm/configs/keystone_defconfig
++++ b/arch/arm/configs/keystone_defconfig
+@@ -164,6 +164,7 @@ CONFIG_USB=y
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_MON=y
+ CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
+ CONFIG_USB_STORAGE=y
+ CONFIG_USB_DWC3=y
+ CONFIG_NOP_USB_XCEIV=y
+diff --git a/arch/arm/configs/multi_v7_defconfig b/arch/arm/configs/multi_v7_defconfig
+index 52a0400fdd92..4619418e53f4 100644
+--- a/arch/arm/configs/multi_v7_defconfig
++++ b/arch/arm/configs/multi_v7_defconfig
+@@ -787,6 +787,7 @@ CONFIG_SND_AUDIO_GRAPH_CARD=m
+ CONFIG_USB=y
+ CONFIG_USB_OTG=y
+ CONFIG_USB_XHCI_HCD=y
++CONFIG_USB_XHCI_PLATFORM=y
+ CONFIG_USB_XHCI_MVEBU=y
+ CONFIG_USB_XHCI_TEGRA=m
+ CONFIG_USB_EHCI_HCD=y
+diff --git a/arch/arm/configs/mvebu_v7_defconfig b/arch/arm/configs/mvebu_v7_defconfig
+index cddce57fe4b9..6cb85ec4fe54 100644
+--- a/arch/arm/configs/mvebu_v7_defconfig
++++ b/arch/arm/configs/mvebu_v7_defconfig
+@@ -103,6 +103,7 @@ CONFIG_SND_SIMPLE_CARD=y
+ CONFIG_USB=y
+ CONFIG_USB_XHCI_HCD=y
+ CONFIG_USB_XHCI_MVEBU=y
++CONFIG_USB_XHCI_PLATFORM=y
+ CONFIG_USB_EHCI_HCD=y
+ CONFIG_USB_EHCI_ROOT_HUB_TT=y
+ CONFIG_USB_STORAGE=y
+diff --git a/arch/arm/configs/omap2plus_defconfig b/arch/arm/configs/omap2plus_defconfig
+index 2ac2418084ab..a015fb04fa25 100644
+--- a/arch/arm/configs/omap2plus_defconfig
++++ b/arch/arm/configs/omap2plus_defconfig
+@@ -562,6 +562,7 @@ CONFIG_USB=m
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_MON=m
+ CONFIG_USB_XHCI_HCD=m
++CONFIG_USB_XHCI_PLATFORM=m
+ CONFIG_USB_EHCI_HCD=m
+ CONFIG_USB_OHCI_HCD=m
+ CONFIG_USB_ACM=m
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index 363f1b1b08e3..e44763fe2b23 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -524,6 +524,7 @@ CONFIG_USB=m
+ CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
+ CONFIG_USB_MON=m
+ CONFIG_USB_XHCI_HCD=m
++CONFIG_USB_XHCI_PLATFORM=m
+ CONFIG_USB_EHCI_HCD=m
+ CONFIG_USB_EHCI_HCD_PLATFORM=m
+ CONFIG_USB_ISP116X_HCD=m
 -- 
 2.33.0.rc1.237.g0d66db33f3-goog
 
