@@ -2,262 +2,153 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F41B93EBCD1
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 21:53:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6822A3EBD3F
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 22:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234148AbhHMTx2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 15:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55390 "EHLO
+        id S234037AbhHMUWp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 16:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbhHMTxV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 15:53:21 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD35C061756
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:54 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id a8so16849254pjk.4
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 12:52:54 -0700 (PDT)
+        with ESMTP id S233875AbhHMUWn (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 16:22:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE327C061756;
+        Fri, 13 Aug 2021 13:22:15 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id d4so21950022lfk.9;
+        Fri, 13 Aug 2021 13:22:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=EXHp4wHrN3Cbd2a/Qy/XGjmtCrqYoSNIIIUSSS67Wf8=;
-        b=jLNBqghMX4+AWn8Bmf9X8MtR+6Emu3Lky8W5ux30lxbdktw6bP80tnNxhQyONBss8M
-         +EflcLuuDnjtvwzVK8iQwyBkBphy394H239tv/6sl5OMaOSJOCcZuBpeJCtPJaAZLvG6
-         cycAf1003orJFWXf9OCMJ1RuqREiDaeS2kqeo=
+        bh=7yfeT04tjUL7ni0Yt8y/2t/fuxpmrzJm7LGRe7fQGzE=;
+        b=edN0LhhIrqQ06BnpYKmePZuINDREBj4Vg4HmsJfZEJumcvXIgS+6Jn8pkssXze2FCP
+         dpRCv3rpvoQl5Q24npLm959uFpi3Z+34sfiJ8TNJ6SLwhqMGfF8fXr3PUnlVVjqgBbC5
+         AMlC2/9lRIZVE4+X3fJ7/Ha0auTa5rkYkdf6CatOk7ZPNGgM1whkHODI5gohanuT5o1g
+         r9Ipn2OweaqzyJbl0mlkvzrXfWAv5Ft4zxU8mHwqb+hHUm6FYioH23JdWglKQIpnXSc1
+         jyVUkDnX87yChzGLn+KMkkc6QlGh0ZQCvPz66gg4Rwr0ZwtiXuE2u76u0rf3cykjuhzh
+         hdxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=EXHp4wHrN3Cbd2a/Qy/XGjmtCrqYoSNIIIUSSS67Wf8=;
-        b=WryEJ3GKMo1sSAzHGTIK2icHIzb/cQaiStsKEucXc+/UPS8O1c4k6FFjR4bfwmsOLO
-         ZznpgP/6KnAtRTMPjzpM0rGlz4L9SbuCpCEIjI28duhAqlc2K/TGXPG8I4FzlPOrVmWp
-         PV8mgghbtjXUw12h1IQ16qcIre6aYoDrNAMsFOFM4sh/0+Gqz3+xsECFS6lkD8QI8HmT
-         PIBcC4VvQpgW0AiTBTsC4kQivv+ZuAvRAM56TqpLv4ZN8ub+ITEK1VH5GOWRIpBWXRU/
-         4ApPd/smF5PMflYfQC2qrFmpDw3ON8nvPe0MB1q84uGFIbWS0754rI2RCMqKL4+PQbq0
-         Me9Q==
-X-Gm-Message-State: AOAM530asWvoRaPKB9bDy+YcPGVbYHXEC/+xFZ7sg6sbZsWal5HPprtk
-        OL5XrAUa9igtYOo5Upme15juow==
-X-Google-Smtp-Source: ABdhPJzQjz9daydaFnlqUUBqHg0MkLb12aVp8DQ+1YrpkO62SUCdEeXFuhBgMQrVZC9VlxD/rfkOrw==
-X-Received: by 2002:a05:6a00:18a3:b029:3dd:8ade:9b8c with SMTP id x35-20020a056a0018a3b02903dd8ade9b8cmr4055099pfh.63.1628884374104;
-        Fri, 13 Aug 2021 12:52:54 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:450d:9788:a70e:42d6])
-        by smtp.gmail.com with UTF8SMTPSA id 23sm3762979pgk.89.2021.08.13.12.52.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Aug 2021 12:52:53 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     devicetree@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Bastien Nocera <hadess@hadess.net>,
-        Ravi Chandra Sadineni <ravisadineni@chromium.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v16 7/7] arm64: dts: qcom: sc7180-trogdor: Add nodes for onboard USB hub
-Date:   Fri, 13 Aug 2021 12:52:28 -0700
-Message-Id: <20210813125146.v16.7.Ie0d2c1214b767bb5551dd4cad38398bd40e4466f@changeid>
-X-Mailer: git-send-email 2.33.0.rc1.237.g0d66db33f3-goog
-In-Reply-To: <20210813195228.2003500-1-mka@chromium.org>
-References: <20210813195228.2003500-1-mka@chromium.org>
+        bh=7yfeT04tjUL7ni0Yt8y/2t/fuxpmrzJm7LGRe7fQGzE=;
+        b=Kw6iCOHfLmn6QfmyayF9gg9UvCsQOkUCIrUhhhImsvyBfrWp9aYKSKqrASTU3yHNjt
+         0XqF5RkL7irP3j5iOeUmuTawEZM1IwNSWYcx6ZKIaakKd/T1LjCe4zJcHATv75RW8cgk
+         jKCLXJrrceDVsCxIDCxCfR1D6O0OVNxZ8RYN2ktW1J3hB6XHYnpbUfFFZUDfk/nrzpGk
+         l+QdhcJYhCRZ0q2Dr4VQ5HYcUCmL1tld55I1219nTXHdWDPvPDBDcRdcYuflRLjnwsMm
+         T30msF/1U/jP3y9BdrlaWKLBlwycRpzAd9t7j8sh5m2GYg48NypepCjECHXUm1eW3YW8
+         gXRA==
+X-Gm-Message-State: AOAM532mIDo6egHpjtMLTHtNvfK4NmBTOrSdIiiW4pyWDjfU1ACal+cy
+        U1zZ6tYBBPxJVB27mzOT1WDhwwLtwLrPUw==
+X-Google-Smtp-Source: ABdhPJyAdbA8wN2UeAbOsI93HcBJOLw/Dv/Fzut774JJ7yspwylBcA0NOjnTcynazvYAPtzwmBJvMw==
+X-Received: by 2002:ac2:410e:: with SMTP id b14mr2853493lfi.114.1628886134157;
+        Fri, 13 Aug 2021 13:22:14 -0700 (PDT)
+Received: from reki (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
+        by smtp.gmail.com with ESMTPSA id n8sm239853lfl.103.2021.08.13.13.22.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Aug 2021 13:22:13 -0700 (PDT)
+Date:   Fri, 13 Aug 2021 23:22:12 +0300
+From:   Maxim Devaev <mdevaev@gmail.com>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
+        maze@google.com, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
+Message-ID: <20210813232212.5cba6d33@reki>
+In-Reply-To: <20210813145823.GA38198@rowland.harvard.edu>
+References: <20210813114551.72898-1-mdevaev@gmail.com>
+        <20210813145823.GA38198@rowland.harvard.edu>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add nodes for the onboard USB hub on trogdor devices. Remove the
-'always-on' property from the hub regulator, since the regulator
-is now managed by the onboard_usb_hub driver.
+Alan Stern <stern@rowland.harvard.edu> wrote:
+> In other words, a device does not need to have an interrupt-OUT 
+> endpoint, but if it does have one then the host must use it.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+You're right. Although the actual behavior of the hosts is not different
+from what I wrote - they really just ignore out endpoint.
+I will eventually fix this in the patch description.
 
-Changes in v16:
-- none
+> > However, this raises several problems.
+> > 
+> > (1) Some host OS drivers without OUT Endpoint support can't receive  
+> 
+> Can't _transmit_ output reports.  This is understandable, since such 
+> hosts aren't compliant with the standard.
 
-Changes in v15:
-- none
+Thank you, this is a typo. With the replacement of the word, the meaning
+is fixed. They really don't work. Hosts do not use OUT endpoint
+and transmit reports.
 
-Changes in v14:
-- none
+> >     reports at all. In the case of the keyboard, it becomes impossible
+> >     to get the status of the LEDs from the host OS.
+> > 
+> > (2) Some BIOSes and UEFIs not only don't support the OUT Endpoint,
+> >     they cannot work with HID with this configuration at all.  
+> 
+> What configuration, exactly?  Do you mean that they can't work with 
+> HID interfaces that include an interrupt-OUT endpoint?
 
-Changes in v13:
-- none
+Yep. They see OUT endpoint and refuse to use the device in various ways,
+for example, they don't continue the initialization process after receiving
+the descriptor. The failure behavior may differ, but it always leads to
+a refuse or to the fact that the device simply does not poll IN endpoint.
 
-Changes in v12:
-- none
+> >     For example, absolutely all Apple UEFIs in all Macs can't handle
+> >     the OUT Endpoint in accordance with the HID standard so it makes
+> >     impossible to enter the Boot Menu using the hotkey at boot.  
+> 
+> These hosts simply give up when they see an HID interface with an 
+> interrupt-OUT endpoint?  They don't just ignore it and continue on?
 
-Changes in v11:
-- rebased on qcom/arm64-for-5.14 (with the rest of the series)
+Exactly. Hosts will either stop the initialization process when they receive
+a handle with an OUT endpoint, or they will not be able to work in any other way.
 
-Changes in v10:
-- keep 'regulator-boot-on' property
-- updated commit message
+While investigating the problem with Apple, I realized that their UEFI
+is presumably iterated over endpoints and simply does not break the loop
+when an IN endpoint is detected. They reach OUT endpoint (which follows IN),
+see that it is not IN endpoint, repeat the last initialization ops three times
+(SET_IDLE, etc.) and refuse to work with our keyboard. If I change the order
+of the endpoints in the descriptor and do OUT first and then IN, then everything
+will work in the case of Apple, but this is obviously a violation of the standard,
+since it explicitly describes the order of IN and then the optional OUT.
 
-Changes in v9:
-- none
+And it only helps with Apple. So the correct solution was to make SETUP/SET_REPORT
+because this satisfies all devices. For the order of the endpoints, see 7.2 of HID 1.11:
 
-Changes in v8:
-- none
+> The HID class uses the standard request Get_Descriptor as described in the USB
+> Specification ... That is, the order shall be:
+> Configuration descriptor
+>   Interface descriptor (specifying HID Class)
+>     HID descriptor (associated with above Interface)
+>       Endpoint descriptor (for HID Interrupt In Endpoint)
+>       Optional Endpoint descriptor (for HID Interrupt Out Endpoint)
 
-Changes in v7:
-- rebased on qcom/arm64-for-5.13 (with the rest of the series)
+> Why not always allow f_hid to receive reports over ep0?  The HID 
+> standard doesn't forbid this.
 
-Changes in v6:
-- added 'companion-hub' entry to both USB devices
-- added 'vdd-supply' also to hub@2
+Previously, this was the case, but then this functionality was removed
+for two reasons: using OUT endpoint takes up a USB channel less than SETUP
+and allows you to transfer more data from HID gadget, and also allows you
+to organize a queue. The queue could have been organized without this change,
+but the first point is more significant. I found the correspondence
+so that you can read the history of the issue, link below.
 
-Changes in v5:
-- patch added to the series
+That change was not a problem as long as f_hid was mainly used for the keyboard
+at the OS level. Now I am making an open source KVM-over-IP based on this
+and the compatibility hell have risen to full height.
 
- .../boot/dts/qcom/sc7180-trogdor-lazor-r0.dts | 19 ++++++++-----------
- .../boot/dts/qcom/sc7180-trogdor-lazor-r1.dts | 12 +++++-------
- .../arm64/boot/dts/qcom/sc7180-trogdor-r1.dts | 19 ++++++++-----------
- arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 19 ++++++++++++++++++-
- 4 files changed, 39 insertions(+), 30 deletions(-)
+> Missing the SHA value of the commit.
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-index 30e3e769d2b4..5fb8e12af1a0 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r0.dts
-@@ -14,17 +14,6 @@ / {
- 	compatible = "google,lazor-rev0", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sn65dsi86_out {
- 	/*
- 	 * Lane 0 was incorrectly mapped on the cable, but we've now decided
-@@ -33,3 +22,11 @@ &sn65dsi86_out {
- 	 */
- 	lane-polarities = <1 0>;
- };
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-index c2ef06367baf..1dae714250f5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-r1.dts
-@@ -14,13 +14,11 @@ / {
- 	compatible = "google,lazor-rev1", "google,lazor-rev2", "qcom,sc7180";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
-+
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
- 
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
- };
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-index 2b522f9e0d8f..2f5263e3d1b9 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-r1.dts
-@@ -42,17 +42,6 @@ &panel {
- 	compatible = "auo,b116xa01";
- };
- 
--&pp3300_hub {
--	/* pp3300_l7c is used to power the USB hub */
--	/delete-property/regulator-always-on;
--	/delete-property/regulator-boot-on;
--};
--
--&pp3300_l7c {
--	regulator-always-on;
--	regulator-boot-on;
--};
--
- &sdhc_2 {
- 	status = "okay";
- };
-@@ -61,6 +50,14 @@ &trackpad {
- 	interrupts = <58 IRQ_TYPE_EDGE_FALLING>;
- };
- 
-+&usb_hub_2_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
-+&usb_hub_3_0 {
-+	 vdd-supply = <&pp3300_l7c>;
-+};
-+
- /* PINCTRL - modifications to sc7180-trogdor.dtsi */
- 
- &trackpad_int_1v8_odl {
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-index 77ae7561d436..f89c6a7045e5 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
-@@ -202,7 +202,6 @@ pp3300_hub: pp3300-hub {
- 		pinctrl-names = "default";
- 		pinctrl-0 = <&en_pp3300_hub>;
- 
--		regulator-always-on;
- 		regulator-boot-on;
- 
- 		vin-supply = <&pp3300_a>;
-@@ -898,6 +897,24 @@ &usb_1 {
- 
- &usb_1_dwc3 {
- 	dr_mode = "host";
-+	#address-cells = <1>;
-+	#size-cells = <0>;
-+
-+	/* 2.0 hub on port 1 */
-+	usb_hub_2_0: hub@1 {
-+		compatible = "usbbda,5411";
-+		reg = <1>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_3_0>;
-+	};
-+
-+	/* 3.0 hub on port 2 */
-+	usb_hub_3_0: hub@2 {
-+		compatible = "usbbda,411";
-+		reg = <2>;
-+		vdd-supply = <&pp3300_hub>;
-+		companion-hub = <&usb_hub_2_0>;
-+	};
- };
- 
- &usb_1_hsphy {
--- 
-2.33.0.rc1.237.g0d66db33f3-goog
+99c515005857ff7d6cd5c2ba272ccab5dc0ea648
 
+Also the descussion: https://www.spinics.net/lists/linux-usb/msg65494.html
+
+Sorry, I couldn't find this on lore.kernel.org. Maybe I didn't search well,
+or this correspondence is too old, 2012.
