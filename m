@@ -2,156 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BE03EB2CA
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 10:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA11C3EB32A
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 11:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239467AbhHMIpI (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 04:45:08 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:33835 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239249AbhHMIpH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 04:45:07 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1628844281; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=Hcc2FxmHIY2GdiFcXl5MMCZnhwtJVytw2Sr5LMIcmR8=;
- b=a1L5TC6yCP0xzXxYWBnMiPtMyPww1Wq83CW0XbnG6v/y8oIMa7QSsUlVN8CU2sT4FTSeOHQD
- kwiMXiHr/V99VpqGMrNV60U7m5BYVHuAJ0ozwvVaiZ6iDjBdnCQMLw545ntTNVfz43lQt61j
- 0zjNoQzhjL1lycCUqGd2Zb2S/wY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 611630f791487ad52072eaa2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 13 Aug 2021 08:44:39
- GMT
-Sender: wat=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id C7A48C43217; Fri, 13 Aug 2021 08:44:38 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: wat)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E49CC433D3;
-        Fri, 13 Aug 2021 08:44:37 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Fri, 13 Aug 2021 16:44:37 +0800
-From:   wat@codeaurora.org
-To:     Ikjoon Jang <ikjn@chromium.org>
+        id S239411AbhHMJH4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 05:07:56 -0400
+Received: from mga09.intel.com ([134.134.136.24]:11965 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239035AbhHMJHz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 13 Aug 2021 05:07:55 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10074"; a="215523443"
+X-IronPort-AV: E=Sophos;i="5.84,318,1620716400"; 
+   d="scan'208";a="215523443"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2021 02:07:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,318,1620716400"; 
+   d="scan'208";a="508072260"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Aug 2021 02:07:26 -0700
+Subject: Re: [PATCH] usb: xhci-ring: set all cancelled_td's cancel_status to
+ TD_CLEARING_CACHE
+To:     wat@codeaurora.org, Ikjoon Jang <ikjn@chromium.org>
 Cc:     Mathias Nyman <mathias.nyman@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
         open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb: xhci-ring: set all cancelled_td's cancel_status to
- TD_CLEARING_CACHE
-In-Reply-To: <CAATdQgDWPqoSyPxQpvdhupjWVKHDy6SqBy2kgitNLjaioPRviQ@mail.gmail.com>
 References: <1628822604-29239-1-git-send-email-wat@codeaurora.org>
  <CAATdQgDWPqoSyPxQpvdhupjWVKHDy6SqBy2kgitNLjaioPRviQ@mail.gmail.com>
-Message-ID: <a87c1d9563c03afb609543e7abe63708@codeaurora.org>
-X-Sender: wat@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+ <a87c1d9563c03afb609543e7abe63708@codeaurora.org>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <39525c12-e8f3-8587-5714-5a22ca1e8e4f@linux.intel.com>
+Date:   Fri, 13 Aug 2021 12:09:56 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <a87c1d9563c03afb609543e7abe63708@codeaurora.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-13 15:25, Ikjoon Jang wrote:
-> Hi,
+On 13.8.2021 11.44, wat@codeaurora.org wrote:
+> On 2021-08-13 15:25, Ikjoon Jang wrote:
+>> Hi,
+>>
+>> On Fri, Aug 13, 2021 at 10:44 AM Tao Wang <wat@codeaurora.org> wrote:
+>>>
+>>> USB SSD may fail to unmount if disconnect during data transferring.
+>>>
+>>> it stuck in usb_kill_urb() due to urb use_count will not become zero,
+>>> this means urb giveback is not happen.
+>>> in xhci_handle_cmd_set_deq() will giveback urb if td's cancel_status
+>>> equal to TD_CLEARING_CACHE,
+>>> but in xhci_invalidate_cancelled_tds(), only last canceled td's
+>>> cancel_status change to TD_CLEARING_CACHE,
+>>> thus giveback only happen to last urb.
+>>>
+>>> this change set all cancelled_td's cancel_status to TD_CLEARING_CACHE
+>>> rather than the last one, so all urb can giveback.
+>>>
+>>> Signed-off-by: Tao Wang <wat@codeaurora.org>
+>>> ---
+>>>  drivers/usb/host/xhci-ring.c | 24 ++++++++++++------------
+>>>  1 file changed, 12 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>>> index 8fea44b..c7dd7c0 100644
+>>> --- a/drivers/usb/host/xhci-ring.c
+>>> +++ b/drivers/usb/host/xhci-ring.c
+>>> @@ -960,19 +960,19 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
+>>>                         td_to_noop(xhci, ring, td, false);
+>>>                         td->cancel_status = TD_CLEARED;
+>>>                 }
+>>> -       }
+>>> -       if (cached_td) {
+>>> -               cached_td->cancel_status = TD_CLEARING_CACHE;
+>>> -
+>>> -               err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
+>>> -                                               cached_td->urb->stream_id,
+>>> -                                               cached_td);
+>>> -               /* Failed to move past cached td, try just setting it noop */
+>>> -               if (err) {
+>>> -                       td_to_noop(xhci, ring, cached_td, false);
+>>> -                       cached_td->cancel_status = TD_CLEARED;
+>>> +               if (cached_td) {
+>>> +                       cached_td->cancel_status = TD_CLEARING_CACHE;
+>>> +
+>>> +                       err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
+>>> +                                                       cached_td->urb->stream_id,
+>>> +                                                       cached_td);
+>>> +                       /* Failed to move past cached td, try just setting it noop */
+>>> +                       if (err) {
+>>> +                               td_to_noop(xhci, ring, cached_td, false);
+>>> +                               cached_td->cancel_status = TD_CLEARED;
+>>> +                       }
+>>> +                       cached_td = NULL;
+>>>                 }
+>>> -               cached_td = NULL;
+>>
+>> I think we can call xhci_move_dequeue_past_td() just once to
+>> the last halted && cancelled TD in a ring.
+>>
+>> But that might need to compare two TDs to see which one is
+>> the latter, I'm not sure how to do this well. :-/
+>>
+>> if (!cached_td || cached_td < td)
+>>   cached_td = td;
+>>
 > 
-> On Fri, Aug 13, 2021 at 10:44 AM Tao Wang <wat@codeaurora.org> wrote:
->> 
->> USB SSD may fail to unmount if disconnect during data transferring.
->> 
->> it stuck in usb_kill_urb() due to urb use_count will not become zero,
->> this means urb giveback is not happen.
->> in xhci_handle_cmd_set_deq() will giveback urb if td's cancel_status
->> equal to TD_CLEARING_CACHE,
->> but in xhci_invalidate_cancelled_tds(), only last canceled td's
->> cancel_status change to TD_CLEARING_CACHE,
->> thus giveback only happen to last urb.
->> 
->> this change set all cancelled_td's cancel_status to TD_CLEARING_CACHE
->> rather than the last one, so all urb can giveback.
->> 
->> Signed-off-by: Tao Wang <wat@codeaurora.org>
->> ---
->>  drivers/usb/host/xhci-ring.c | 24 ++++++++++++------------
->>  1 file changed, 12 insertions(+), 12 deletions(-)
->> 
->> diff --git a/drivers/usb/host/xhci-ring.c 
->> b/drivers/usb/host/xhci-ring.c
->> index 8fea44b..c7dd7c0 100644
->> --- a/drivers/usb/host/xhci-ring.c
->> +++ b/drivers/usb/host/xhci-ring.c
->> @@ -960,19 +960,19 @@ static int xhci_invalidate_cancelled_tds(struct 
->> xhci_virt_ep *ep)
->>                         td_to_noop(xhci, ring, td, false);
->>                         td->cancel_status = TD_CLEARED;
->>                 }
->> -       }
->> -       if (cached_td) {
->> -               cached_td->cancel_status = TD_CLEARING_CACHE;
->> -
->> -               err = xhci_move_dequeue_past_td(xhci, slot_id, 
->> ep->ep_index,
->> -                                               
->> cached_td->urb->stream_id,
->> -                                               cached_td);
->> -               /* Failed to move past cached td, try just setting it 
->> noop */
->> -               if (err) {
->> -                       td_to_noop(xhci, ring, cached_td, false);
->> -                       cached_td->cancel_status = TD_CLEARED;
->> +               if (cached_td) {
->> +                       cached_td->cancel_status = TD_CLEARING_CACHE;
->> +
->> +                       err = xhci_move_dequeue_past_td(xhci, slot_id, 
->> ep->ep_index,
->> +                                                       
->> cached_td->urb->stream_id,
->> +                                                       cached_td);
->> +                       /* Failed to move past cached td, try just 
->> setting it noop */
->> +                       if (err) {
->> +                               td_to_noop(xhci, ring, cached_td, 
->> false);
->> +                               cached_td->cancel_status = TD_CLEARED;
->> +                       }
->> +                       cached_td = NULL;
->>                 }
->> -               cached_td = NULL;
-> 
-> I think we can call xhci_move_dequeue_past_td() just once to
-> the last halted && cancelled TD in a ring.
-> 
-> But that might need to compare two TDs to see which one is
-> the latter, I'm not sure how to do this well. :-/
-> 
-> if (!cached_td || cached_td < td)
->   cached_td = td;
-> 
+> thanks, I think you are correct that we can call xhci_move_dequeue_past_td() just once to
+>  the last halted && cancelled TD in a ring,
+> but the set status "cached_td->cancel_status = TD_CLEARING_CACHE;" should be every cancelled TD.
+> I am not very good at td and ring, I have a question why we need to
+> compare two TDs to see which one is the latter.
 
-thanks, I think you are correct that we can call 
-xhci_move_dequeue_past_td() just once to
-  the last halted && cancelled TD in a ring,
-but the set status "cached_td->cancel_status = TD_CLEARING_CACHE;" 
-should be every cancelled TD.
-I am not very good at td and ring, I have a question why we need to
-compare two TDs to see which one is the latter.
+I'm debugging the exact same issue.
+For normal endpoints (no streams) it should be enough to set cancel_td->cancel_status = TD_CLEARING_CACHE
+in the TD_DIRTY and TD_HALTED case.
 
->>         }
->>         return 0;
->>  }
->> --
->> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora 
->> Forum,
->> a Linux Foundation Collaborative Project
->> 
+We don't need to move the dq past the last cancelled TD as other cancelled TDs are set to no-op, and
+the command to move the dq will flush the xHC controllers TD cache and read the no-ops.
+(just make sure we call xhci_move_dequeue_past_td() _after_ overwriting cancelled TDs with no-op)
+
+Streams get trickier as each endpoint has several rings, and we might need to move the dq pointer for
+many stream rings on that endpoint. This needs more work as we shouldn't start the endpoint before all
+the all move dq commands complete. i.e. the current  ep->ep_state &= ~SET_DEQ_PENDING isn't enough.
+
+-Mathias
