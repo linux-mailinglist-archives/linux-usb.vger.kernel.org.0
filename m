@@ -2,142 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1563EAF59
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 06:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698943EAF9D
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 07:26:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238635AbhHMEi1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 00:38:27 -0400
-Received: from relay-us1.mymailcheap.com ([51.81.35.219]:46286 "EHLO
-        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbhHMEi1 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 00:38:27 -0400
-X-Greylist: delayed 351 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Aug 2021 00:38:26 EDT
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id CBBE420332
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 04:32:08 +0000 (UTC)
-Received: from relay1.mymailcheap.com (relay1.mymailcheap.com [144.217.248.100])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 62E42260EB;
-        Fri, 13 Aug 2021 04:32:04 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay1.mymailcheap.com (Postfix) with ESMTPS id 474553F202;
-        Fri, 13 Aug 2021 04:32:01 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id 78C0F2A521;
-        Fri, 13 Aug 2021 06:32:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1628829120;
-        bh=wco2uYT/C/REw9JO3fVns6TaOKfMHujekS5qiK7d4KQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LDcz+hUbfqSPgfueG+kV6yOcJY3apEG/8r/+wCEsb1NSuNtzDAEoNVny+kX9nf0j+
-         lfDh0c5yvCAvjPf6EWpPBU9kwVA8BepZ3ZHSL+xYtpzItUWHEOxFyU+mV0rYKpnpHA
-         ZNxzZFS/0cgq1kgzn/aNnB7LAtPHKdsO5wYVnvYY=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vp-wt9x0uCly; Fri, 13 Aug 2021 06:31:56 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Fri, 13 Aug 2021 06:31:56 +0200 (CEST)
-Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id D5A4740BFC;
-        Fri, 13 Aug 2021 04:31:55 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="X/h9mPou";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from ice-e5v2.lan (unknown [59.41.162.220])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 2076740BFC;
-        Fri, 13 Aug 2021 04:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1628829107; bh=wco2uYT/C/REw9JO3fVns6TaOKfMHujekS5qiK7d4KQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=X/h9mPouIP6UtwvX8KJodIyT7vwhndKyQFDVXrApD/F2xTptTW7Mic7tMGmgmXlRZ
-         HN/bcmHO/r/nMkqWP+KrKoO/XjBRAtswu9XcyaxSZxmuROJsjDpjnyNrh6VHyIX6CM
-         7HeumCFOW/nCmstgyK9g+6H1WP0RHT7FsoHUbfgI=
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Icenowy Zheng <icenowy@aosc.io>
-Subject: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
-Date:   Fri, 13 Aug 2021 12:31:31 +0800
-Message-Id: <20210813043131.833006-1-icenowy@aosc.io>
-X-Mailer: git-send-email 2.30.2
+        id S238655AbhHMF1J (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 01:27:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238645AbhHMF1I (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 01:27:08 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C38C061756
+        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 22:26:42 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id e19so10377161pla.10
+        for <linux-usb@vger.kernel.org>; Thu, 12 Aug 2021 22:26:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1ocdM6c2cinlXX1kZNnF83LUMUxlQMibTtFjKC/p0qQ=;
+        b=R+AVgrUdAT0DO61zcf2nNP6YwLVeEH+xYBgVGH2ye7tbv2+LN/mtkD2DBac6fUdKyO
+         iE7rqZZACC/Za5jIIuAaiAFFHcx45bf0+VrfEc2nDoiZk8tLtpxx3g7J4erxBSNNzVzg
+         HSLpxfDNUdVNkHCqYG6NDmEH7faLalmesZdIM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1ocdM6c2cinlXX1kZNnF83LUMUxlQMibTtFjKC/p0qQ=;
+        b=olmqJ4DHI07L30fsIoLN035Leax/ByBJ6Pi6sRNM3LSqEs3OxHHZTE8dJ9kjD6Gylm
+         vpoi94IhKflZkl1+GDIvkYb+9gi7pzD4plO1zVjvIarme8vwpdOxxsX4L28jez7MWqnE
+         2OeLwuOA63A6/NpfcqLFvKYihzGrHkSe29OWOL0ygLrkzPfrO/zZw64SuAYZgcn5lCvC
+         0x68ZjKpD0QMGa1DcucW7zwY+LX0aZ7G0yiJ3Kt+L2AZSiHl2BA68G5gFoEqnd215g0+
+         +TrDrEcTcVkwOtw+O87NN3e4p8gwa8zHi23VhRz0ZASB836cQq5jxVP44Ug7SrMbGvLa
+         MDfQ==
+X-Gm-Message-State: AOAM531W0lz7L3j9k+0hDWZTrqz0P8wRvmejlnBLUMaeEkXQ2/9ALLqK
+        h9lVaHmN/g9AI+g8hX4JbFadTGZK+4WJoOLbgIWDjg==
+X-Google-Smtp-Source: ABdhPJyQaVIf1p9CcXmskDZyungHHN1Ox9/AmjAJTBtnxFY1rjsASN0ix1i9LxTbcmzwWe60qju7DBet2NbT00eBwMU=
+X-Received: by 2002:a63:682:: with SMTP id 124mr713904pgg.299.1628832402140;
+ Thu, 12 Aug 2021 22:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [4.90 / 20.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
-         RECEIVED_SPAMHAUS_PBL(0.00)[59.41.162.220:received];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         R_MISSING_CHARSET(2.50)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DMARC_NA(0.00)[aosc.io];
-         BROKEN_CONTENT_TYPE(1.50)[];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[6];
-         ML_SERVERS(-3.10)[148.251.23.173];
-         DKIM_TRACE(0.00)[aosc.io:+];
-         MID_CONTAINS_FROM(1.00)[];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
-X-Rspamd-Queue-Id: D5A4740BFC
-X-Rspamd-Server: mail20.mymailcheap.com
+References: <1627635002-24521-1-git-send-email-chunfeng.yun@mediatek.com> <1627635002-24521-4-git-send-email-chunfeng.yun@mediatek.com>
+In-Reply-To: <1627635002-24521-4-git-send-email-chunfeng.yun@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Fri, 13 Aug 2021 13:26:30 +0800
+Message-ID: <CAATdQgBeFHJV+=phaEBaXpKwMJygtGVzxJ0yC5hfvijpgwVMAg@mail.gmail.com>
+Subject: Re: [PATCH 04/11] usb: xhci-mtk: fix use-after-free of mtk->hcd
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-usb@vger.kernel.org,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eddie Hung <eddie.hung@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Currently, TCPM code omits discover when swapping to gadget, and assume
-that no altmodes are available when swapping from gadget. However, we do
-send discover when we get attached as gadget -- this leads to modes to be
-discovered twice when attached as gadget and then swap to host.
+On Fri, Jul 30, 2021 at 4:50 PM Chunfeng Yun <chunfeng.yun@mediatek.com> wrote:
+>
+>  BUG: KASAN: use-after-free in usb_hcd_is_primary_hcd+0x38/0x60
+>  Call trace:
+>   dump_backtrace+0x0/0x3dc
+>   show_stack+0x20/0x2c
+>   dump_stack+0x15c/0x1d4
+>   print_address_description+0x7c/0x510
+>   kasan_report+0x164/0x1ac
+>   __asan_report_load8_noabort+0x44/0x50
+>   usb_hcd_is_primary_hcd+0x38/0x60
+>   xhci_mtk_runtime_suspend+0x68/0x148
+>   pm_generic_runtime_suspend+0x90/0xac
+>   __rpm_callback+0xb8/0x1f4
+>   rpm_callback+0x54/0x1d0
+>   rpm_suspend+0x4e0/0xc84
+>   __pm_runtime_suspend+0xc4/0x114
+>   xhci_mtk_probe+0xa58/0xd00
+>
+> This may happen when probe fails, needn't suspend it synchronously,
+> fix it by using pm_runtime_put_noidle().
+>
+> Reported-by: Pi Hsun <pihsun@google.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Always re-send discover when swapping DR, regardless of what change is
-being made; and because of this, the assumption that no altmodes are
-registered with gadget role is broken, and altmodes de-registeration is
-always needed now.
+Reviewed-and-Tested-by: Ikjoon Jang <ikjn@chromium.org>
 
-Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
----
- drivers/usb/typec/tcpm/tcpm.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index b9bb63d749ec..ab6d0d51ee1c 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_port *port)
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case DR_SWAP_CHANGE_DR:
--		if (port->data_role == TYPEC_HOST) {
--			tcpm_unregister_altmodes(port);
-+		tcpm_unregister_altmodes(port);
-+		if (port->data_role == TYPEC_HOST)
- 			tcpm_set_roles(port, true, port->pwr_role,
- 				       TYPEC_DEVICE);
--		} else {
-+		else
- 			tcpm_set_roles(port, true, port->pwr_role,
- 				       TYPEC_HOST);
--			port->send_discover = true;
--		}
-+		port->send_discover = true;
- 		tcpm_ams_finish(port);
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
--- 
-2.30.2
+> ---
+>  drivers/usb/host/xhci-mtk.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
+> index 2548976bcf05..cb27569186a0 100644
+> --- a/drivers/usb/host/xhci-mtk.c
+> +++ b/drivers/usb/host/xhci-mtk.c
+> @@ -569,7 +569,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
+>         xhci_mtk_ldos_disable(mtk);
+>
+>  disable_pm:
+> -       pm_runtime_put_sync_autosuspend(dev);
+> +       pm_runtime_put_noidle(dev);
+>         pm_runtime_disable(dev);
+>         return ret;
+>  }
+> --
+> 2.18.0
+>
