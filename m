@@ -2,127 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C0B3EB635
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 15:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3102E3EB72C
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Aug 2021 16:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240724AbhHMNqg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 09:46:36 -0400
-Received: from mga14.intel.com ([192.55.52.115]:10688 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240714AbhHMNqe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 13 Aug 2021 09:46:34 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10074"; a="215289058"
-X-IronPort-AV: E=Sophos;i="5.84,319,1620716400"; 
-   d="scan'208";a="215289058"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2021 06:45:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,319,1620716400"; 
-   d="scan'208";a="591138855"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Aug 2021 06:45:07 -0700
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-To:     wat@codeaurora.org, ikjn@chromium.org
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mathias.nyman@linux.intel.com
-Subject: [RFT PATCH] xhci: fix failure to give back some cached cancelled URBs.
-Date:   Fri, 13 Aug 2021 16:47:29 +0300
-Message-Id: <20210813134729.2402607-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <39525c12-e8f3-8587-5714-5a22ca1e8e4f@linux.intel.com>
-References: <39525c12-e8f3-8587-5714-5a22ca1e8e4f@linux.intel.com>
+        id S240997AbhHMO6v (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 10:58:51 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:42513 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S240198AbhHMO6v (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 10:58:51 -0400
+Received: (qmail 39765 invoked by uid 1000); 13 Aug 2021 10:58:23 -0400
+Date:   Fri, 13 Aug 2021 10:58:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
+        maze@google.com, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
+Message-ID: <20210813145823.GA38198@rowland.harvard.edu>
+References: <20210813114551.72898-1-mdevaev@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210813114551.72898-1-mdevaev@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Only TDs with status TD_CLEARING_CACHE will be given back after
-cache is cleared with a set TR deq command.
+On Fri, Aug 13, 2021 at 02:45:51PM +0300, Maxim Devaev wrote:
+> f_hid provides the OUT Endpoint for receiving reports from the host.
+> The USB HID standard describes the OUT Endpoint support as optional,
+> and hosts can ignore it if they don't support it.
 
-xhci_invalidate_cached_td() failed to set the TD_CLEARING_CACHE status
-for some cancelled TDs as it assumed an endpoint only needs to clear the
-TD it stopped on from cache. There are some cases this isn't true.
+No.  The HID standard (version 1.11 -- I may be out of date) actually 
+says this (section 4.4):
 
-For example with streams as an endpoint may have several
-stream rings, each stopping on different TDs.
+	The Interrupt Out pipe is optional. If a device declares an 
+	Interrupt Out endpoint then Output reports are transmitted by 
+	the host to the device through the Interrupt Out endpoint. If 
+	no Interrupt Out endpoint is declared then Output reports are
+	transmitted to a device through the Control endpoint, using 
+	Set_Report(Output) requests.
 
-* FIXME *, explain that streams case isn't fully solved by this, but it's
- x100 better than before as we give back the URBs and thread won't hang.
- Some of the streams TRB cache still isn't cleared, and may point to data
- in URBs we alrady gave back. xHC controller may touch this.
+In other words, a device does not need to have an interrupt-OUT 
+endpoint, but if it does have one then the host must use it.
 
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 40 ++++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 15 deletions(-)
+> However, this raises several problems.
+> 
+> (1) Some host OS drivers without OUT Endpoint support can't receive
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index d0faa67a689d..9017986241f5 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -942,17 +942,21 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 					 td->urb->stream_id);
- 		hw_deq &= ~0xf;
- 
--		if (td->cancel_status == TD_HALTED) {
--			cached_td = td;
--		} else if (trb_in_td(xhci, td->start_seg, td->first_trb,
--			      td->last_trb, hw_deq, false)) {
-+		if (td->cancel_status == TD_HALTED ||
-+		    trb_in_td(xhci, td->start_seg, td->first_trb, td->last_trb, hw_deq, false)) {
- 			switch (td->cancel_status) {
- 			case TD_CLEARED: /* TD is already no-op */
- 			case TD_CLEARING_CACHE: /* set TR deq command already queued */
- 				break;
- 			case TD_DIRTY: /* TD is cached, clear it */
- 			case TD_HALTED:
--				/* FIXME  stream case, several stopped rings */
-+				td->cancel_status = TD_CLEARING_CACHE;
-+				if (cached_td)
-+					/* FIXME  stream case, several stopped rings */
-+					xhci_dbg(xhci,
-+						 "Move dq past stream %u URB %p instead of stream %u URB %p\n",
-+						 td->urb->stream_id, td->urb,
-+						 cached_td->urb->stream_id, cached_td->urb);
- 				cached_td = td;
- 				break;
- 			}
-@@ -961,18 +965,24 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 			td->cancel_status = TD_CLEARED;
- 		}
- 	}
--	if (cached_td) {
--		cached_td->cancel_status = TD_CLEARING_CACHE;
- 
--		err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
--						cached_td->urb->stream_id,
--						cached_td);
--		/* Failed to move past cached td, try just setting it noop */
--		if (err) {
--			td_to_noop(xhci, ring, cached_td, false);
--			cached_td->cancel_status = TD_CLEARED;
-+	/* If there's no need to move the dequeue pointer then we're done */
-+	if (!cached_td)
-+		return 0;
-+
-+	err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
-+					cached_td->urb->stream_id,
-+					cached_td);
-+	if (err) {
-+		/* Failed to move past cached td, just set cached TDs to no-op */
-+		list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list, cancelled_td_list) {
-+			if (td->cancel_status != TD_CLEARING_CACHE)
-+				continue;
-+			xhci_dbg(xhci, "Failed to clear cancelled cached URB %p, mark clear anyway\n",
-+				 td->urb);
-+			td_to_noop(xhci, ring, td, false);
-+			td->cancel_status = TD_CLEARED;
- 		}
--		cached_td = NULL;
- 	}
- 	return 0;
- }
--- 
-2.25.1
+Can't _transmit_ output reports.  This is understandable, since such 
+hosts aren't compliant with the standard.
+
+>     reports at all. In the case of the keyboard, it becomes impossible
+>     to get the status of the LEDs from the host OS.
+> 
+> (2) Some BIOSes and UEFIs not only don't support the OUT Endpoint,
+>     they cannot work with HID with this configuration at all.
+
+What configuration, exactly?  Do you mean that they can't work with 
+HID interfaces that include an interrupt-OUT endpoint?
+
+>     For example, absolutely all Apple UEFIs in all Macs can't handle
+>     the OUT Endpoint in accordance with the HID standard so it makes
+>     impossible to enter the Boot Menu using the hotkey at boot.
+
+These hosts simply give up when they see an HID interface with an 
+interrupt-OUT endpoint?  They don't just ignore it and continue on?
+
+>     This problem also occurs on HP and DELL BIOSes and in some dumb
+>     devices with primitive embedded firmware like KVM switches.
+> 
+> This patch adds option no_out_endpoint=1 to disable the OUT Endpoint
+> and allow f_hid to receive reports from the host via SETUP/SET_REPORT.
+
+Why not always allow f_hid to receive reports over ep0?  The HID 
+standard doesn't forbid this.
+
+> Previously, there was such a feature in f_hid, but it was replaced
+> by the OUT Endpoint ("usb: gadget: hidg: register OUT INT endpoint
+> for SET_REPORT").
+
+Missing the SHA value of the commit.
+
+Alan Stern
+
+>  It seems that no one knew at the time that it would
+> cause problems with BIOS. So this patch actually returns the removed
+> functionality making it optional. For backward compatibility reasons,
+> the OUT Endpoint mode remains the default behaviour.
+> 
+> If the SETUP/SET_REPORT mode is used, there is no event processing queue,
+> so the user will only read the last report. For classic HID devices
+> like keyboard this is not a problem, since it is intended to transmit
+> the status of the LEDs and only the last report is important.
+> 
+> Both modes pass USBCV tests. Checking with the USB protocol analyzer
+> also confirms that everything is working as it should and the new mode
+> ensures operability in all of the described cases.
 
