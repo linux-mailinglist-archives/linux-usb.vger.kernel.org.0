@@ -2,64 +2,79 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC063EC3EF
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 18:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4822C3EC469
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 20:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236895AbhHNQvr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Aug 2021 12:51:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34588 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233116AbhHNQvq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Aug 2021 12:51:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 998DE60C3F;
-        Sat, 14 Aug 2021 16:51:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1628959878;
-        bh=VGvyUX+8AuHJ3eE8+d6NOBplowHQI6uJJayRDqyGygs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=U+M6mqLoNEOJwIpPd8W1kfTC4wB1xKt6ZnGtTM7/ozIa6lHh5wINVdBVQCFwtsEg1
-         XqubzeXTm1Gbtyl+eaKyC7FYn+B7G0nLaffrNDUkTXneJv45XHM1MvO4KmVDnW4TbX
-         m9gTqQpYPHJxHc8LTEgJeQbXH+Zoe3bhW2Vk+PQU=
-Date:   Sat, 14 Aug 2021 18:51:15 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB fix for 5.14-rc6
-Message-ID: <YRf0g0jpHTNIhObs@kroah.com>
+        id S238931AbhHNSRk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Aug 2021 14:17:40 -0400
+Received: from mxout03.lancloud.ru ([45.84.86.113]:51434 "EHLO
+        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238937AbhHNSRj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Aug 2021 14:17:39 -0400
+Received: from LanCloud
+DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru CBC942061858
+Received: from LanCloud
+Received: from LanCloud
+Received: from LanCloud
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH v3 0/2] Stop calling request_irq(), etc. with invalid IRQs
+ in the USB drivers`
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>
+CC:     <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
+References: <fb92857f-3120-9a20-65ba-f21aeb4b9020@omp.ru>
+ <YRdlGFh71JmKrJIm@kroah.com> <e17abfd6-09ab-d701-49c2-e2a1891c72ba@omp.ru>
+ <YRfGTlkvpSccyM2g@kroah.com>
+Organization: Open Mobile Platform
+Message-ID: <fd165652-d7fd-9518-5598-87f08f6a6352@omp.ru>
+Date:   Sat, 14 Aug 2021 21:16:59 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <YRfGTlkvpSccyM2g@kroah.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [192.168.11.198]
+X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
+ LFEX1907.lancloud.ru (fd00:f066::207)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The following changes since commit 36a21d51725af2ce0700c6ebcb6b9594aac658a6:
+On 8/14/21 4:34 PM, Greg Kroah-Hartman wrote:
 
-  Linux 5.14-rc5 (2021-08-08 13:49:31 -0700)
+>>>> Here are 2 patches against the 'usb-linus' branch of GregKH's 'usb.git' repo.
+>>>
+>>> Wait, why that branch?
+>>
+>>    What branch I'd use for the fixes then?
+> 
+> Ah, you really want this in for 5.14-final?
 
-are available in the Git repository at:
+   Not necessarily, it's your call. But all the patches are fixes.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-5.14-rc6
+> People are hitting this issue now?
 
-for you to fetch changes up to 664cc971fb259007e49cc8a3ac43b0787d89443f:
+   No, the patches ware all the result of the code reviews...
 
-  Revert "usb: dwc3: gadget: Use list_replace_init() before traversing lists" (2021-08-10 09:12:32 +0200)
+>>>  Please make them against the branch you want
+>>> them applied to.  Hopefully they will apply to the usb-next branch...
+>>
+>>    I didn't intend them for usb-next but looks like they apply there too.
+> 
+> I think it belongs there as a "nice cleanup to have", right?
 
-----------------------------------------------------------------
-USB fix for 5.14-rc6
+   No, they're definitely not cleanups and all have the "Fixes:" tags, so going
+to end up in the stable trees (some already have).
+   There's going to be 10-patch series soon, all fixing the deferred probing due
+to platfrorm_get_irq()...
+   Luckily, the USB tree doesn't shave the 3rd kind of platfrorm_get_irq() bugs:
+treating 0 as error and returning it immediately along with the negative values,
+without doing the remaining part of probe...
 
-Here is a single revert of a commit that caused problems in 5.14-rc5 for
-5.14-rc6.  It has been in linux-next almost all week, and has resolved
-the issues that were reported on lots of different systems that were not
-the platform that the change was originally tested on (gotta love SoC
-cores used in multiple devices from multiple vendors...)
+> thanks,
+> 
+> greg k-h
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Greg Kroah-Hartman (1):
-      Revert "usb: dwc3: gadget: Use list_replace_init() before traversing lists"
-
- drivers/usb/dwc3/gadget.c | 18 ++----------------
- 1 file changed, 2 insertions(+), 16 deletions(-)
+MBR, Sergey
