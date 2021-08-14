@@ -2,554 +2,644 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740D23EC009
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 05:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCF73EC0B5
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 07:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbhHNDNe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 23:13:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41192 "EHLO
+        id S237314AbhHNF1M (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Aug 2021 01:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236466AbhHNDNd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 23:13:33 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994AAC061756;
-        Fri, 13 Aug 2021 20:13:05 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id y6so1758598lje.2;
-        Fri, 13 Aug 2021 20:13:05 -0700 (PDT)
+        with ESMTP id S237346AbhHNF1L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Aug 2021 01:27:11 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C34C06175F
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 22:26:43 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d1so14717429pll.1
+        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 22:26:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UFIZsxqHoA0MbHCSxQdhPAZe+pabJ6hNNfzUq6NZcs8=;
-        b=gxYlFNep0rineog9tKM6BJqa90D/btKfTMrGtEEsUT4WTs+dqxoDtJ0b5YrvyjmAXw
-         H41ll5zkKgJAsFi6Te6V+DhfvaWMc0cHCExcKa0IG7Xynlb0t1UY7Ct1cA2JOUKhfOig
-         /TLMeQ7jAI9c5Hlgiy9M99uvU5WYCLT7R2UHbKdH29dKZTwFz+ZBOaNAYi+fZ2m6wFRf
-         0A/OGyZMuhD0JL62pa6aKLO51GO1OJp9l6/IWFGifwWqX11kLCHWPRrvzH5WbIdWOORf
-         +uKEi4gFLwme44BgZE95e6s5TqT7IPD2tbKzuevO1Ax2nycOiqycu3LUxxcnGboHS8qj
-         JaJw==
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=szedVpv22gAAXNt+NxiXfQDJ2vg4L6FUHMmJ5d58F0A=;
+        b=JFAtjuVQ/3To/dvsxvNoSnxhzp8lSwiKTBCZFO8PNDLMPYOUV2F7MiuC1Q7/HTKjH0
+         EVnfMQf4jyLw6/e7pGnY50iNxicGGWLq132rLWNWTD0KKC8Szv91p7fmDZeSblrK2mh3
+         3Paiz3090DFv2mqZM19I+zfaF10jSGYNN9atjGbTZrs19lCE7TlfVakC/mEuzAw9BsX/
+         HeWOUW4B97o08f+LGOAZSc8vwH1GU6uG6A3dXblwwE6e4JsR8CHOwXHOCDD0nQjBWxpJ
+         AV+qgy+DFzret+0pzFGGen9vbIGiOqC9JAlpOevzbgW/EfweQgxbUXvuDouIi8m//55R
+         n3vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UFIZsxqHoA0MbHCSxQdhPAZe+pabJ6hNNfzUq6NZcs8=;
-        b=X0aPDhZsU01uIIljuja1J74K2Rof0c6iel9GB7hAVXWzOItv46cYG4+QWz8zRlMh6M
-         q2EqMdvr582t49kY90JNrcOsV1Cuy7j2YYuTzZ7EIOLaflXUl5dfiP7J7KeUtA3uXpGI
-         FI4ZjlwIET7OGFmqg/cuJVW+17F9gEGmnL2ALuCdmU8ViOsBLhGnYr1bWHCLblFH/vTz
-         feIvUl/IhigV3Q+5BP6+gbx5xuk8UTMvPfIwLEzTV1GMfJ/tphuMT/mmDuIdlZcm7B6Q
-         j4+vvXd4xfaUSi/R7FjM0bkI/NSrjZycShCO6SGw4XmLpzZSraYKW+v7EewAKNV77qKF
-         RszQ==
-X-Gm-Message-State: AOAM531drxrDljs6HB+lAcR6P8FV1+SfyqjS3ufuTeM7q1HspzyQ7dZZ
-        EWtROu/XtauiuOUgkZCg5lY=
-X-Google-Smtp-Source: ABdhPJwUCEi4Cb9svmU9rpFa2uQsGCGaJZ4lhmlR8MmKMfk0slQ04BSa8I0W9+umL1Qcah8SS7W9CQ==
-X-Received: by 2002:a05:651c:542:: with SMTP id q2mr3979916ljp.192.1628910783904;
-        Fri, 13 Aug 2021 20:13:03 -0700 (PDT)
-Received: from localhost.localdomain (broadband-95-84-198-152.ip.moscow.rt.ru. [95.84.198.152])
-        by smtp.gmail.com with ESMTPSA id v2sm309035lfg.112.2021.08.13.20.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Aug 2021 20:13:03 -0700 (PDT)
-From:   Maxim Devaev <mdevaev@gmail.com>
-To:     balbi@kernel.org
-Cc:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        mdevaev@gmail.com, ruslan.bilovol@gmail.com,
-        mika.westerberg@linux.intel.com, maze@google.com,
-        jj251510319013@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
-Date:   Sat, 14 Aug 2021 06:12:32 +0300
-Message-Id: <20210814031231.32125-1-mdevaev@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=szedVpv22gAAXNt+NxiXfQDJ2vg4L6FUHMmJ5d58F0A=;
+        b=TbxCYDmMZnW2dAd6VZRy9qrIy4GccrTgC2k7c7H+vnXbKQrG8H2bD6fTkLcxcUsKJB
+         HI7pILd7ISH8QP1hTgn7VyAbS4o1shoYrFdZTKHfctAYHxTFP7h+bCrCKbqjiMu1BCfB
+         cgqv6NeSipqo38Hu/nrmjKbBMbotjkbnuVx6gCJMgNEVXlpOR2Jq+dSOeXe33NNGB9Hu
+         PNg77jsKyR9YQ8k7HjTfP4ZBP7jGLEiOaR7Vtk6AYr8R6JJHvnVzd/N94UQ7Qlg5eILz
+         eFu0PflIjRn2MtMTJGuoWuHBrtwch2JiwHoSQw+8ESRzA8vmCbgSGLwsx2bkiIPfEZ6j
+         OLFw==
+X-Gm-Message-State: AOAM531kgrxMQTWMd67XMOkr69Z96gyfUapgWOVUF6vkVUGlMe9ki0Ws
+        b1cn/XhoVwxGSNM+/dWaWVU5P6C5evAb2I/sCNa0Ng==
+X-Google-Smtp-Source: ABdhPJyJBJ+Y3xwD/Z6i8OMcRWKE/tZwzqakp9LNcySryJ4gB3Hfwr1zAtrTZntoKrH1W04ouou8IG2aHAwTWYGr2sI=
+X-Received: by 2002:a17:90a:6888:: with SMTP id a8mr193629pjd.91.1628918802590;
+ Fri, 13 Aug 2021 22:26:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Rajat Jain <rajatja@google.com>
+Date:   Fri, 13 Aug 2021 22:26:06 -0700
+Message-ID: <CACK8Z6HLr4tk4UkrzBN7wydDmqk=cqN2a7bQfVdjp9cE_ov_Jw@mail.gmail.com>
+Subject: PCIe device (thunderbolt tunneled) runtime suspended while driver
+ wants to attach.
+To:     linux-pci <linux-pci@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, linux-usb@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@intel.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alex Levin <levinale@google.com>,
+        Madhusudanarao Amara 
+        <madhusudanarao.amara@intel.corp-partner.google.com>,
+        Prashant Malani <pmalani@google.com>,
+        "abhijeet.rao@intel.com" <abhijeet.rao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-f_hid provides the OUT Endpoint as only way for receiving reports
-from the host. SETUP/SET_REPORT method is not supported, and this causes
-a number of compatibility problems with various host drivers, especially
-in the case of keyboard emulation using f_hid.
+Hello,
 
-- Some hosts do not support the OUT Endpoint and ignore it,
-  so it becomes impossible for the gadget to receive a report
-  from the host. In the case of a keyboard, the gadget loses the ability
-  to get the status of the LEDs.
+I'm using Kernel 5.10 and am seeing a regression w.r.t. 5.4 kernel (I
+plan to try the latest kernel in some time). I have a thunderbolt SSD
+[1]. After the thunderbolt tunnels are created, it shows up as a PCIe
+NVME device (behind a PCIe switch internal to the SSD):
 
-- Some BIOSes/UEFIs can't work with HID with the OUT Endpoint at all.
-  This may be due to their bugs or incomplete implementation
-  of the HID standard.
-  For example, absolutely all Apple UEFIs can't handle the OUT Endpoint
-  if it goes after IN Endpoint in the descriptor and require the reverse
-  order (OUT, IN) which is a violation of the standard.
-  Other hosts either do not initialize gadgets with a descriptor
-  containing the OUT Endpoint completely (like some HP and DELL BIOSes
-  and embedded firmwares like on KVM switches), or initialize them,
-  but will not poll.
+localhost ~ # lspci -t
+-[0000:00]-+-00.0
+           +-02.0
+           +-04.0
+           +-05.0
+           +-07.0-[01-2b]--
+           +-07.1-[2c-56]--
+           +-07.2-[57-81]----00.0-[58-81]----01.0-[59-81]----00.0
+<------ NVME (0000:59:00.0)
+           +-08.0
+           +-0a.0
+           +-0d.0
+           +-0d.2
+           +-0d.3
+           +-14.0
+           +-14.2
+           +-14.3
+           +-15.0
+           +-15.1
+           +-15.2
+           +-15.3
+           +-16.0
+           +-19.0
+           +-19.1
+           +-1c.0-[82]----00.0
+           +-1c.7-[83]----00.0
+           +-1d.0-[84]----00.0
+           +-1e.0
+           +-1e.3
+           +-1f.0
+           +-1f.3
+           \-1f.5
+localhost ~ #
 
-This patch adds option no_out_endpoint=1 to disable the OUT Endpoint
-and allow f_hid to receive reports from the host via SETUP/SET_REPORT.
+The PCI bus enumeration goes through fine, and the PCIe resource
+assignment is done correctly as far as I can see:
 
-Previously, there was such a feature in f_hid, but it was replaced
-by the OUT Endpoint [1] in the commit 99c515005857 ("usb: gadget: hidg:
-register OUT INT endpoint for SET_REPORT"). So this patch actually returns
-the removed functionality making it optional. For backward compatibility
-reasons, the OUT Endpoint mode remains the default behaviour.
+1423.813513] pcieport 0000:00:07.2: pciehp: Slot(5): Card present
+1423.820263] pcieport 0000:00:07.2: pciehp: Slot(5): Link Up
+1423.953045] pci 0000:57:00.0: [8086:15da] type 01 class 0x060400
+1423.959875] pci 0000:57:00.0: enabling Extended Tags
+1423.965653] pci 0000:57:00.0: supports D1 D2
+1423.970433] pci 0000:57:00.0: PME# supported from D0 D1 D2 D3hot D3cold
+1423.977900] pci 0000:57:00.0: 8.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x4 link at 0000:00:07.2 (capable of 31.504
+Gb/s with 8.0 GT/s PCIe x4 link)
+1423.994843] pci 0000:57:00.0: Adding to iommu group 23
+1424.004806] pci 0000:57:00.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+1424.013929] pci 0000:58:01.0: [8086:15da] type 01 class 0x060400
+1424.020734] pci 0000:58:01.0: enabling Extended Tags
+1424.026428] pci 0000:58:01.0: supports D1 D2
+1424.031205] pci 0000:58:01.0: PME# supported from D0 D1 D2 D3hot D3cold
+1424.038689] pci 0000:58:01.0: Adding to iommu group 24
+1424.044651] pci 0000:57:00.0: PCI bridge to [bus 58-81]
+1424.050512] pci 0000:57:00.0:   bridge window [io  0x0000-0x0fff]
+1424.057344] pci 0000:57:00.0:   bridge window [mem 0x00000000-0x000fffff]
+1424.064948] pci 0000:57:00.0:   bridge window [mem
+0x00000000-0x000fffff 64bit pref]
+1424.073620] pci 0000:58:01.0: bridge configuration invalid ([bus
+00-00]), reconfiguring
+1424.082742] pci 0000:59:00.0: [144d:a808] type 00 class 0x010802
+1424.089506] pci 0000:59:00.0: reg 0x10: [mem 0x00000000-0x00003fff 64bit]
+1424.097437] pci 0000:59:00.0: 8.000 Gb/s available PCIe bandwidth,
+limited by 2.5 GT/s PCIe x4 link at 0000:00:07.2 (capable of 31.504
+Gb/s with 8.0 GT/s PCIe x4 link)
+1424.114209] pci 0000:59:00.0: Adding to iommu group 24
+1424.122145] udevd[10117]: Process '/sbin/restorecon ' failed with
+exit code 255.
+1424.124803] pci 0000:58:01.0: PCI bridge to [bus 59-81]
+1424.136333] pci 0000:58:01.0:   bridge window [io  0x0000-0x0fff]
+1424.143169] pci 0000:58:01.0:   bridge window [mem 0x00000000-0x000fffff]
+1424.150774] pci 0000:58:01.0:   bridge window [mem
+0x00000000-0x000fffff 64bit pref]
+1424.159446] pci_bus 0000:59: busn_res: [bus 59-81] end is updated to 81
+1424.166856] pci_bus 0000:58: busn_res: [bus 58-81] end is updated to 81
+1424.174272] pci 0000:58:01.0: bridge window [mem
+0x00100000-0x001fffff 64bit pref] to [bus 59-81] add_size 100000
+add_align 100000
+1424.187411] pci 0000:58:01.0: bridge window [mem
+0x00100000-0x001fffff] to [bus 59-81] add_size 100000 add_align 100000
+1424.199481] pci 0000:57:00.0: bridge window [mem
+0x00100000-0x001fffff 64bit pref] to [bus 58-81] add_size 100000
+add_align 100000
+1424.212609] pci 0000:57:00.0: bridge window [mem
+0x00100000-0x001fffff] to [bus 58-81] add_size 100000 add_align 100000
+1424.224678] pci 0000:57:00.0: BAR 8: assigned [mem 0xac200000-0xb83fffff]
+1424.232269] pci 0000:57:00.0: BAR 9: assigned [mem
+0x2b7c00000-0x2d3bfffff 64bit pref]
+1424.241127] pci 0000:57:00.0: BAR 7: assigned [io  0x6000-0x7fff]
+1424.247944] pci 0000:58:01.0: BAR 8: assigned [mem 0xac200000-0xb83fffff]
+1424.255539] pci 0000:58:01.0: BAR 9: assigned [mem
+0x2b7c00000-0x2d3bfffff 64bit pref]
+1424.264396] pci 0000:58:01.0: BAR 7: assigned [io  0x6000-0x7fff]
+1424.271209] pci 0000:59:00.0: BAR 0: assigned [mem
+0xac200000-0xac203fff 64bit] <----- assigned
+1424.279409] pci 0000:58:01.0: PCI bridge to [bus 59-81]
+1424.285263] pci 0000:58:01.0:   bridge window [io  0x6000-0x7fff]
+1424.292089] pci 0000:58:01.0:   bridge window [mem 0xac200000-0xb83fffff]
+1424.299690] pci 0000:58:01.0:   bridge window [mem
+0x2b7c00000-0x2d3bfffff 64bit pref]
+1424.308560] pci 0000:57:00.0: PCI bridge to [bus 58-81]
+1424.314418] pci 0000:57:00.0:   bridge window [io  0x6000-0x7fff]
+1424.321251] pci 0000:57:00.0:   bridge window [mem 0xac200000-0xb83fffff]
+1424.328851] pci 0000:57:00.0:   bridge window [mem
+0x2b7c00000-0x2d3bfffff 64bit pref]
+1424.337720] pcieport 0000:00:07.2: PCI bridge to [bus 57-81]
+1424.344062] pcieport 0000:00:07.2:   bridge window [io  0x6000-0x7fff]
+1424.351377] pcieport 0000:00:07.2:   bridge window [mem 0xac200000-0xb83fffff]
+1424.359455] pcieport 0000:00:07.2:   bridge window [mem
+0x2b7c00000-0x2d3bfffff 64bit pref]1424.377279] pcieport 0000:57:00.0:
+enabling device (0000 -> 0003)
+1424.393001] pcieport 0000:58:01.0: enabling device (0000 -> 0003)
+1424.408363] pcieport 0000:58:01.0: pciehp: Slot #1 AttnBtn- PwrCtrl-
+MRL- AttnInd- PwrInd- HotPlug+ Surprise+ Interlock- NoCompl+
+IbPresDis- LLActRep+
 
-- The OUT Endpoint mode provides the report queue and reduces USB overhead
-  (eliminating SETUP routine) on transmitting a report from the host.
+However, the PCIe NVME driver attaches fine only half the time, and
+refuses to attach the other 50% of the time:
 
-- If the SETUP/SET_REPORT mode is used, there is no report queue,
-  so the userspace will only read the last report. For classic HID
-  devices like keyboard this is not a problem, since it is intended
-  to transmit the status of the LEDs and only the last report
-  is important. This mode provides better compatibility with strange
-  and buggy host drivers.
+1424.464958] nvme nvme1: pci function 0000:59:00.0
+1424.470366] nvme 0000:59:00.0: enabling device (0000 -> 0002)
+1424.477196] nvme nvme1: Removing after probe failure status: -19
 
-Both modes passed USBCV tests. Checking with the USB protocol analyzer
-also confirmed that everything is working as it should and the new mode
-ensures operability in all of the described cases.
+Careful examination shows that the probe fails because the register
+accesses (in the memory space) made by the driver don't go through
+because the BAR register has been zeroed out somehow (lspci info at
+the end of the mail). On writing manually the BAR register again using
+setpci and re-attaching the driver, it works this time. So essentially
+the BAR register loses its value somehow.
 
-Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-Link: https://www.spinics.net/lists/linux-usb/msg65494.html [1]
----
- drivers/usb/gadget/function/f_hid.c | 217 +++++++++++++++++++++++-----
- drivers/usb/gadget/function/u_hid.h |   1 +
- 2 files changed, 185 insertions(+), 33 deletions(-)
+My theory is somehow the runtime PM is kicking in the wrong order, or
+when it is not supposed to, which is causing the BAR register to be
+wiped out. So I enabled the RPM traces via
+/sys/kernel/debug/tracing/events/rpm/enable. I noticed that in the
+failure scenarios, the PCIe NVME device was apparently runtime
+suspended at the time the driver was trying to attach to the device.
+In the successful scenarios, I don't see any of the PCIe device in
+that device hierarchy being suspended while the enumeration / driver
+attach is going on. My questions are:
 
-diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-index bb476e121eae..e3fb73ed696d 100644
---- a/drivers/usb/gadget/function/f_hid.c
-+++ b/drivers/usb/gadget/function/f_hid.c
-@@ -45,12 +45,17 @@ struct f_hidg {
- 	unsigned short			report_desc_length;
- 	char				*report_desc;
- 	unsigned short			report_length;
-+	bool				use_out_ep;
- 
- 	/* recv report */
--	struct list_head		completed_out_req;
- 	spinlock_t			read_spinlock;
- 	wait_queue_head_t		read_queue;
-+	/* recv report - interrupt out only (use_out_ep == 1) */
-+	struct list_head		completed_out_req;
- 	unsigned int			qlen;
-+	/* recv report - setup set_report only (use_out_ep == 0) */
-+	char				*set_report_buf;
-+	unsigned int			set_report_length;
- 
- 	/* send report */
- 	spinlock_t			write_spinlock;
-@@ -79,7 +84,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
- 	.bDescriptorType	= USB_DT_INTERFACE,
- 	/* .bInterfaceNumber	= DYNAMIC */
- 	.bAlternateSetting	= 0,
--	.bNumEndpoints		= 2,
-+	/* .bNumEndpoints	= DYNAMIC */
- 	.bInterfaceClass	= USB_CLASS_HID,
- 	/* .bInterfaceSubClass	= DYNAMIC */
- 	/* .bInterfaceProtocol	= DYNAMIC */
-@@ -140,7 +145,7 @@ static struct usb_ss_ep_comp_descriptor hidg_ss_out_comp_desc = {
- 	/* .wBytesPerInterval   = DYNAMIC */
- };
- 
--static struct usb_descriptor_header *hidg_ss_descriptors[] = {
-+static struct usb_descriptor_header *hidg_ss_descriptors_intout[] = {
- 	(struct usb_descriptor_header *)&hidg_interface_desc,
- 	(struct usb_descriptor_header *)&hidg_desc,
- 	(struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
-@@ -150,6 +155,14 @@ static struct usb_descriptor_header *hidg_ss_descriptors[] = {
- 	NULL,
- };
- 
-+static struct usb_descriptor_header *hidg_ss_descriptors_ssreport[] = {
-+	(struct usb_descriptor_header *)&hidg_interface_desc,
-+	(struct usb_descriptor_header *)&hidg_desc,
-+	(struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
-+	(struct usb_descriptor_header *)&hidg_ss_in_comp_desc,
-+	NULL,
-+};
-+
- /* High-Speed Support */
- 
- static struct usb_endpoint_descriptor hidg_hs_in_ep_desc = {
-@@ -176,7 +189,7 @@ static struct usb_endpoint_descriptor hidg_hs_out_ep_desc = {
- 				      */
- };
- 
--static struct usb_descriptor_header *hidg_hs_descriptors[] = {
-+static struct usb_descriptor_header *hidg_hs_descriptors_intout[] = {
- 	(struct usb_descriptor_header *)&hidg_interface_desc,
- 	(struct usb_descriptor_header *)&hidg_desc,
- 	(struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
-@@ -184,6 +197,13 @@ static struct usb_descriptor_header *hidg_hs_descriptors[] = {
- 	NULL,
- };
- 
-+static struct usb_descriptor_header *hidg_hs_descriptors_ssreport[] = {
-+	(struct usb_descriptor_header *)&hidg_interface_desc,
-+	(struct usb_descriptor_header *)&hidg_desc,
-+	(struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
-+	NULL,
-+};
-+
- /* Full-Speed Support */
- 
- static struct usb_endpoint_descriptor hidg_fs_in_ep_desc = {
-@@ -210,7 +230,7 @@ static struct usb_endpoint_descriptor hidg_fs_out_ep_desc = {
- 				       */
- };
- 
--static struct usb_descriptor_header *hidg_fs_descriptors[] = {
-+static struct usb_descriptor_header *hidg_fs_descriptors_intout[] = {
- 	(struct usb_descriptor_header *)&hidg_interface_desc,
- 	(struct usb_descriptor_header *)&hidg_desc,
- 	(struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
-@@ -218,6 +238,13 @@ static struct usb_descriptor_header *hidg_fs_descriptors[] = {
- 	NULL,
- };
- 
-+static struct usb_descriptor_header *hidg_fs_descriptors_ssreport[] = {
-+	(struct usb_descriptor_header *)&hidg_interface_desc,
-+	(struct usb_descriptor_header *)&hidg_desc,
-+	(struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
-+	NULL,
-+};
-+
- /*-------------------------------------------------------------------------*/
- /*                                 Strings                                 */
- 
-@@ -241,9 +268,11 @@ static struct usb_gadget_strings *ct_func_strings[] = {
- /*-------------------------------------------------------------------------*/
- /*                              Char Device                                */
- 
--static ssize_t f_hidg_read(struct file *file, char __user *buffer,
--			size_t count, loff_t *ptr)
-+static ssize_t f_hidg_intout_read(struct file *file, char __user *buffer,
-+				  size_t count, loff_t *ptr)
- {
-+	/* used only if the OUT endpoint is configured */
-+
- 	struct f_hidg *hidg = file->private_data;
- 	struct f_hidg_req_list *list;
- 	struct usb_request *req;
-@@ -255,15 +284,15 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
- 
- 	spin_lock_irqsave(&hidg->read_spinlock, flags);
- 
--#define READ_COND (!list_empty(&hidg->completed_out_req))
-+#define READ_COND_INTOUT (!list_empty(&hidg->completed_out_req))
- 
- 	/* wait for at least one buffer to complete */
--	while (!READ_COND) {
-+	while (!READ_COND_INTOUT) {
- 		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
- 		if (file->f_flags & O_NONBLOCK)
- 			return -EAGAIN;
- 
--		if (wait_event_interruptible(hidg->read_queue, READ_COND))
-+		if (wait_event_interruptible(hidg->read_queue, READ_COND_INTOUT))
- 			return -ERESTARTSYS;
- 
- 		spin_lock_irqsave(&hidg->read_spinlock, flags);
-@@ -313,6 +342,62 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
- 	return count;
- }
- 
-+#define READ_COND_SSREPORT (hidg->set_report_buf != NULL)
-+
-+static ssize_t f_hidg_ssreport_read(struct file *file, char __user *buffer,
-+				    size_t count, loff_t *ptr)
-+{
-+	/* used only if the OUT endpoint is NOT configured */
-+
-+	struct f_hidg *hidg = file->private_data;
-+	char *tmp_buf = NULL;
-+	unsigned long flags;
-+
-+	if (!count)
-+		return 0;
-+
-+	spin_lock_irqsave(&hidg->read_spinlock, flags);
-+
-+	while (!READ_COND_SSREPORT) {
-+		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-+		if (file->f_flags & O_NONBLOCK)
-+			return -EAGAIN;
-+
-+		if (wait_event_interruptible(hidg->read_queue, READ_COND_SSREPORT))
-+			return -ERESTARTSYS;
-+
-+		spin_lock_irqsave(&hidg->read_spinlock, flags);
-+	}
-+
-+	count = min_t(unsigned int, count, hidg->set_report_length);
-+	tmp_buf = hidg->set_report_buf;
-+	hidg->set_report_buf = NULL;
-+
-+	spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-+
-+	if (tmp_buf != NULL) {
-+		count -= copy_to_user(buffer, tmp_buf, count);
-+		kfree(tmp_buf);
-+	} else {
-+		count = -ENOMEM;
-+	}
-+
-+	wake_up(&hidg->read_queue);
-+
-+	return count;
-+}
-+
-+static ssize_t f_hidg_read(struct file *file, char __user *buffer,
-+			   size_t count, loff_t *ptr)
-+{
-+	struct f_hidg *hidg = file->private_data;
-+
-+	if (hidg->use_out_ep)
-+		return f_hidg_intout_read(file, buffer, count, ptr);
-+	else
-+		return f_hidg_ssreport_read(file, buffer, count, ptr);
-+}
-+
- static void f_hidg_req_complete(struct usb_ep *ep, struct usb_request *req)
- {
- 	struct f_hidg *hidg = (struct f_hidg *)ep->driver_data;
-@@ -433,14 +518,20 @@ static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
- 	if (WRITE_COND)
- 		ret |= EPOLLOUT | EPOLLWRNORM;
- 
--	if (READ_COND)
--		ret |= EPOLLIN | EPOLLRDNORM;
-+	if (hidg->use_out_ep) {
-+		if (READ_COND_INTOUT)
-+			ret |= EPOLLIN | EPOLLRDNORM;
-+	} else {
-+		if (READ_COND_SSREPORT)
-+			ret |= EPOLLIN | EPOLLRDNORM;
-+	}
- 
- 	return ret;
- }
- 
- #undef WRITE_COND
--#undef READ_COND
-+#undef READ_COND_SSREPORT
-+#undef READ_COND_INTOUT
- 
- static int f_hidg_release(struct inode *inode, struct file *fd)
- {
-@@ -467,8 +558,10 @@ static inline struct usb_request *hidg_alloc_ep_req(struct usb_ep *ep,
- 	return alloc_ep_req(ep, length);
- }
- 
--static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
-+static void hidg_intout_complete(struct usb_ep *ep, struct usb_request *req)
- {
-+	/* used only if the OUT endpoint is configured */
-+
- 	struct f_hidg *hidg = (struct f_hidg *) req->context;
- 	struct usb_composite_dev *cdev = hidg->func.config->cdev;
- 	struct f_hidg_req_list *req_list;
-@@ -502,6 +595,39 @@ static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
- 	}
- }
- 
-+static void hidg_ssreport_complete(struct usb_ep *ep, struct usb_request *req)
-+{
-+	/* used only if the OUT endpoint is NOT configured */
-+
-+	struct f_hidg *hidg = (struct f_hidg *)req->context;
-+	struct usb_composite_dev *cdev = hidg->func.config->cdev;
-+	char *new_buf = NULL;
-+	unsigned long flags;
-+
-+	if (req->status != 0 || req->buf == NULL || req->actual == 0) {
-+		ERROR(cdev,
-+		      "%s FAILED: status=%d, buf=%p, actual=%d\n",
-+		      __func__, req->status, req->buf, req->actual);
-+		return;
-+	}
-+
-+	spin_lock_irqsave(&hidg->read_spinlock, flags);
-+
-+	new_buf = krealloc(hidg->set_report_buf, req->actual, GFP_ATOMIC);
-+	if (new_buf == NULL) {
-+		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-+		return;
-+	}
-+	hidg->set_report_buf = new_buf;
-+
-+	hidg->set_report_length = req->actual;
-+	memcpy(hidg->set_report_buf, req->buf, req->actual);
-+
-+	spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-+
-+	wake_up(&hidg->read_queue);
-+}
-+
- static int hidg_setup(struct usb_function *f,
- 		const struct usb_ctrlrequest *ctrl)
- {
-@@ -549,7 +675,11 @@ static int hidg_setup(struct usb_function *f,
- 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
- 		  | HID_REQ_SET_REPORT):
- 		VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
--		goto stall;
-+		if (hidg->use_out_ep)
-+			goto stall;
-+		req->complete = hidg_ssreport_complete;
-+		req->context  = hidg;
-+		goto respond;
- 		break;
- 
- 	case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
-@@ -637,15 +767,18 @@ static void hidg_disable(struct usb_function *f)
- 	unsigned long flags;
- 
- 	usb_ep_disable(hidg->in_ep);
--	usb_ep_disable(hidg->out_ep);
- 
--	spin_lock_irqsave(&hidg->read_spinlock, flags);
--	list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
--		free_ep_req(hidg->out_ep, list->req);
--		list_del(&list->list);
--		kfree(list);
-+	if (hidg->out_ep) {
-+		usb_ep_disable(hidg->out_ep);
-+
-+		spin_lock_irqsave(&hidg->read_spinlock, flags);
-+		list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
-+			free_ep_req(hidg->out_ep, list->req);
-+			list_del(&list->list);
-+			kfree(list);
-+		}
-+		spin_unlock_irqrestore(&hidg->read_spinlock, flags);
- 	}
--	spin_unlock_irqrestore(&hidg->read_spinlock, flags);
- 
- 	spin_lock_irqsave(&hidg->write_spinlock, flags);
- 	if (!hidg->write_pending) {
-@@ -691,8 +824,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 		}
- 	}
- 
--
--	if (hidg->out_ep != NULL) {
-+	if (hidg->use_out_ep && hidg->out_ep != NULL) {
- 		/* restart endpoint */
- 		usb_ep_disable(hidg->out_ep);
- 
-@@ -717,7 +849,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 					hidg_alloc_ep_req(hidg->out_ep,
- 							  hidg->report_length);
- 			if (req) {
--				req->complete = hidg_set_report_complete;
-+				req->complete = hidg_intout_complete;
- 				req->context  = hidg;
- 				status = usb_ep_queue(hidg->out_ep, req,
- 						      GFP_ATOMIC);
-@@ -743,7 +875,8 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
- 	}
- 	return 0;
- disable_out_ep:
--	usb_ep_disable(hidg->out_ep);
-+	if (hidg->out_ep)
-+		usb_ep_disable(hidg->out_ep);
- free_req_in:
- 	if (req_in)
- 		free_ep_req(hidg->in_ep, req_in);
-@@ -795,14 +928,21 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 		goto fail;
- 	hidg->in_ep = ep;
- 
--	ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
--	if (!ep)
--		goto fail;
--	hidg->out_ep = ep;
-+	hidg->out_ep = NULL;
-+	if (hidg->use_out_ep) {
-+		ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
-+		if (!ep)
-+			goto fail;
-+		hidg->out_ep = ep;
-+	}
-+
-+	/* used only if use_out_ep == 1 */
-+	hidg->set_report_buf = NULL;
- 
- 	/* set descriptor dynamic values */
- 	hidg_interface_desc.bInterfaceSubClass = hidg->bInterfaceSubClass;
- 	hidg_interface_desc.bInterfaceProtocol = hidg->bInterfaceProtocol;
-+	hidg_interface_desc.bNumEndpoints = hidg->use_out_ep ? 2 : 1;
- 	hidg->protocol = HID_REPORT_PROTOCOL;
- 	hidg->idle = 1;
- 	hidg_ss_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
-@@ -833,12 +973,19 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
- 	hidg_ss_out_ep_desc.bEndpointAddress =
- 		hidg_fs_out_ep_desc.bEndpointAddress;
- 
--	status = usb_assign_descriptors(f, hidg_fs_descriptors,
--			hidg_hs_descriptors, hidg_ss_descriptors,
--			hidg_ss_descriptors);
-+#define CHOOSE_DESC(prefix)	\
-+	(hidg->use_out_ep ? prefix##_intout : prefix##_ssreport)
-+
-+	status = usb_assign_descriptors(f,
-+		CHOOSE_DESC(hidg_fs_descriptors),
-+		CHOOSE_DESC(hidg_hs_descriptors),
-+		CHOOSE_DESC(hidg_ss_descriptors),
-+		CHOOSE_DESC(hidg_ss_descriptors));
- 	if (status)
- 		goto fail;
- 
-+#undef CHOOSE_DESC
-+
- 	spin_lock_init(&hidg->write_spinlock);
- 	hidg->write_pending = 1;
- 	hidg->req = NULL;
-@@ -950,6 +1097,7 @@ CONFIGFS_ATTR(f_hid_opts_, name)
- 
- F_HID_OPT(subclass, 8, 255);
- F_HID_OPT(protocol, 8, 255);
-+F_HID_OPT(no_out_endpoint, 8, 1);
- F_HID_OPT(report_length, 16, 65535);
- 
- static ssize_t f_hid_opts_report_desc_show(struct config_item *item, char *page)
-@@ -1009,6 +1157,7 @@ CONFIGFS_ATTR_RO(f_hid_opts_, dev);
- static struct configfs_attribute *hid_attrs[] = {
- 	&f_hid_opts_attr_subclass,
- 	&f_hid_opts_attr_protocol,
-+	&f_hid_opts_attr_no_out_endpoint,
- 	&f_hid_opts_attr_report_length,
- 	&f_hid_opts_attr_report_desc,
- 	&f_hid_opts_attr_dev,
-@@ -1093,6 +1242,7 @@ static void hidg_free(struct usb_function *f)
- 	hidg = func_to_hidg(f);
- 	opts = container_of(f->fi, struct f_hid_opts, func_inst);
- 	kfree(hidg->report_desc);
-+	kfree(hidg->set_report_buf);
- 	kfree(hidg);
- 	mutex_lock(&opts->lock);
- 	--opts->refcnt;
-@@ -1139,6 +1289,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
- 			return ERR_PTR(-ENOMEM);
- 		}
- 	}
-+	hidg->use_out_ep = !opts->no_out_endpoint;
- 
- 	mutex_unlock(&opts->lock);
- 
-diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/function/u_hid.h
-index 98d6af558c03..84bb70292855 100644
---- a/drivers/usb/gadget/function/u_hid.h
-+++ b/drivers/usb/gadget/function/u_hid.h
-@@ -20,6 +20,7 @@ struct f_hid_opts {
- 	int				minor;
- 	unsigned char			subclass;
- 	unsigned char			protocol;
-+	unsigned char			no_out_endpoint;
- 	unsigned short			report_length;
- 	unsigned short			report_desc_length;
- 	unsigned char			*report_desc;
--- 
-2.32.0
+1) Do I understand it right that I can conclude that the device
+59:00.0 was runtime suspended between the following 2 prints in the
+tracelog?
 
+<...>-25917   [002] d..1  2612.612591: rpm_return_int:
+rpm_suspend+0x4cd/0x514:0000:59:00.0 ret=0
+....
+<was the device suspended here?>
+....
+kworker/0:1-15      [000] d..1  2632.059915: rpm_return_int:
+rpm_resume+0x392/0x570:0000:59:00.0 ret=0
+
+2) Is my understanding correct that any device should NOT be runtime
+suspended while a driver is trying to attach to the device? Where is
+this ensured (for e.g. for NVMEs)? Is this ensured by the driver core,
+or a device driver that is trying to probe a PCI device needs to
+ensure this?
+
+3) So all downstream devices of a PCI bridge need to be suspended
+before it can be suspended (and vice versa for resume)? In other
+words, is ita bug if I notice that a PCI bridge is runtime suspended
+while any of its downstream devices are not?
+
+4) Any suggestions for me to try? I have noticed that putting a lot of
+debug prints changes the  situation (converts failing case into pass
+case) but may be that hints something to do with timing / race
+condition?
+
+Thanks,
+Rajat
+
+More details:
+
+[1] Product: https://www.amazon.com/gp/product/B07GBTY82P/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1
+
+[2] Detailed lspci info for all devices in the PCI chain starting from
+root port and ending at end point (in successful case):
+
+00:07.2 PCI bridge: Intel Corporation Device 462f (rev 03) (prog-if 00
+[Normal decode])
+Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx+
+Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+Latency: 0, Cache Line Size: 64 bytes
+Interrupt: pin C routed to IRQ 157
+Bus: primary=00, secondary=57, subordinate=81, sec-latency=0
+I/O behind bridge: 00006000-00007fff [size=8K]
+Memory behind bridge: ac200000-b83fffff [size=194M]
+Prefetchable memory behind bridge: 00000002b7c00000-00000002d3bfffff [size=448M]
+Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort+ <SERR- <PERR-
+BridgeCtl: Parity+ SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
+Capabilities: [40] Express (v2) Root Port (Slot+), MSI 00
+DevCap: MaxPayload 128 bytes, PhantFunc 0
+ExtTag- RBE+
+DevCtl: Report errors: Correctable+ Non-Fatal+ Fatal+ Unsupported+
+RlxdOrd- ExtTag- PhantFunc- AuxPwr- NoSnoop-
+MaxPayload 128 bytes, MaxReadReq 128 bytes
+DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+ TransPend-
+LnkCap: Port #4, Speed 2.5GT/s, Width x4, ASPM L1, Exit Latency L1 <64us
+ClockPM- Surprise- LLActRep+ BwNot+ ASPMOptComp+
+LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
+ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+LnkSta: Speed 2.5GT/s, Width x4, TrErr- Train- SlotClk+ DLActive+
+BWMgmt+ ABWMgmt-
+SltCap: AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug+ Surprise+
+Slot #5, PowerLimit 0.000W; Interlock- NoCompl+
+SltCtl: Enable: AttnBtn- PwrFlt- MRL- PresDet+ CmdCplt- HPIrq+ LinkChg+
+Control: AttnInd Unknown, PwrInd Unknown, Power- Interlock-
+SltSta: Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet+ Interlock-
+Changed: MRL- PresDet- LinkState+
+RootCtl: ErrCorrectable- ErrNon-Fatal- ErrFatal- PMEIntEna+ CRSVisible-
+RootCap: CRSVisible-
+RootSta: PME ReqID 0000, PMEStatus- PMEPending-
+DevCap2: Completion Timeout: Range ABC, TimeoutDis+, LTR+, OBFF Via
+WAKE# ARIFwd+
+AtomicOpsCap: Routing- 32bit- 64bit- 128bitCAS-
+DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR+, OBFF
+Disabled ARIFwd-
+AtomicOpsCtl: ReqEn- EgressBlck-
+LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- SpeedDis-
+Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+Compliance De-emphasis: -6dB
+LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete-,
+EqualizationPhase1-
+EqualizationPhase2-, EqualizationPhase3-, LinkEqualizationRequest-
+Capabilities: [80] MSI: Enable+ Count=1/1 Maskable- 64bit+
+Address: 00000000fee00000  Data: 0000
+Capabilities: [90] Subsystem: Intel Corporation Device 7270
+Capabilities: [a0] Power Management version 3
+Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0+,D1-,D2-,D3hot+,D3cold+)
+Status: D0 NoSoftRst- PME-Enable- DSel=0 DScale=0 PME-
+Capabilities: [100 v1] Advanced Error Reporting
+UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UESvrt: DLP+ SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF+
+MalfTLP+ ECRC- UnsupReq- ACSViol-
+CESta: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr-
+CEMsk: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
+AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+HeaderLog: 00000000 00000000 00000000 00000000
+RootCmd: CERptEn+ NFERptEn+ FERptEn+
+RootSta: CERcvd- MultCERcvd- UERcvd- MultUERcvd-
+FirstFatal- NonFatalMsg- FatalMsg- IntMsg 0
+ErrorSrc: ERR_COR: 0000 ERR_FATAL/NONFATAL: 0000
+Capabilities: [220 v1] Access Control Services
+ACSCap: SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd+
+EgressCtrl- DirectTrans-
+ACSCtl: SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd+
+EgressCtrl- DirectTrans-
+Capabilities: [a00 v1] Downstream Port Containment
+DpcCap: INT Msg #0, RPExt+ PoisonedTLP- SwTrigger- RP PIO Log 0, DL_ActiveErr-
+DpcCtl: Trigger:0 Cmpl- INT- ErrCor- PoisonedTLP- SwTrigger- DL_ActiveErr-
+DpcSta: Trigger- Reason:00 INT- RPBusy- TriggerExt:00 RP PIO ErrPtr:1f
+Source: 0000
+Capabilities: [a30 v1] #19
+Capabilities: [a90 v1] #25
+Capabilities: [ba0 v0] #15
+Kernel driver in use: pcieport
+
+57:00.0 PCI bridge: Intel Corporation Device 15da (rev 02) (prog-if 00
+[Normal decode])
+Physical Slot: 5
+Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx+
+Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+Latency: 0
+Interrupt: pin A routed to IRQ 200
+Bus: primary=57, secondary=58, subordinate=81, sec-latency=0
+I/O behind bridge: 00006000-00007fff [size=8K]
+Memory behind bridge: ac200000-b83fffff [size=194M]
+Prefetchable memory behind bridge: 00000002b7c00000-00000002d3bfffff [size=448M]
+Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- <SERR- <PERR-
+BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
+Capabilities: [80] Power Management version 3
+Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+Capabilities: [88] MSI: Enable+ Count=1/1 Maskable- 64bit+
+Address: 00000000fee12000  Data: 4026
+Capabilities: [ac] Subsystem: Samsung Electronics Co Ltd Device a811
+Capabilities: [c0] Express (v2) Upstream Port, MSI 00
+DevCap: MaxPayload 128 bytes, PhantFunc 0
+ExtTag+ AttnBtn- AttnInd- PwrInd- RBE+ SlotPowerLimit 0.000W
+DevCtl: Report errors: Correctable- Non-Fatal- Fatal- Unsupported-
+RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
+MaxPayload 128 bytes, MaxReadReq 512 bytes
+DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr+ TransPend-
+LnkCap: Port #0, Speed 2.5GT/s, Width x4, ASPM L0s L1, Exit Latency
+L0s <2us, L1 <4us
+ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
+LnkCtl: ASPM Disabled; Disabled- CommClk+
+ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+LnkSta: Speed 2.5GT/s, Width x4, TrErr- Train- SlotClk+ DLActive-
+BWMgmt- ABWMgmt-
+DevCap2: Completion Timeout: Not Supported, TimeoutDis-, LTR+, OBFF
+Not Supported
+AtomicOpsCap: Routing-
+DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR+, OBFF Disabled
+AtomicOpsCtl: EgressBlck-
+LnkCtl2: Target Link Speed: 2.5GT/s, EnterCompliance- SpeedDis-
+Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+Compliance De-emphasis: -6dB
+LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete-,
+EqualizationPhase1-
+EqualizationPhase2-, EqualizationPhase3-, LinkEqualizationRequest-
+Capabilities: [100 v1] Device Serial Number 5b-66-34-11-98-c9-a0-00
+Capabilities: [200 v1] Advanced Error Reporting
+UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UESvrt: DLP+ SDES- TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+
+MalfTLP+ ECRC- UnsupReq- ACSViol-
+CESta: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr-
+CEMsk: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
+AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+HeaderLog: 00000000 00000000 00000000 00000000
+Capabilities: [300 v1] Virtual Channel
+Caps: LPEVC=0 RefClk=100ns PATEntryBits=1
+Arb: Fixed- WRR32- WRR64- WRR128-
+Ctrl: ArbSelect=Fixed
+Status: InProgress-
+VC0: Caps: PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
+Arb: Fixed+ WRR32- WRR64- WRR128- TWRR128- WRR256-
+Ctrl: Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
+Status: NegoPending- InProgress-
+Capabilities: [400 v1] Power Budgeting <?>
+Capabilities: [500 v1] Vendor Specific Information: ID=1234 Rev=1 Len=0d8 <?>
+Capabilities: [600 v1] Latency Tolerance Reporting
+Max snoop latency: 0ns
+Max no snoop latency: 0ns
+Capabilities: [700 v1] #19
+Kernel driver in use: pcieport
+
+
+58:01.0 PCI bridge: Intel Corporation Device 15da (rev 02) (prog-if 00
+[Normal decode])
+Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx+
+Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+Latency: 0
+Interrupt: pin A routed to IRQ 201
+Bus: primary=58, secondary=59, subordinate=81, sec-latency=0
+I/O behind bridge: 00006000-00007fff [size=8K]
+Memory behind bridge: ac200000-b83fffff [size=194M]
+Prefetchable memory behind bridge: 00000002b7c00000-00000002d3bfffff [size=448M]
+Secondary status: 66MHz- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- <SERR- <PERR-
+BridgeCtl: Parity- SERR+ NoISA- VGA- MAbort- >Reset- FastB2B-
+PriDiscTmr- SecDiscTmr- DiscTmrStat- DiscTmrSERREn-
+Capabilities: [80] Power Management version 3
+Flags: PMEClk- DSI- D1+ D2+ AuxCurrent=375mA PME(D0+,D1+,D2+,D3hot+,D3cold+)
+Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+Capabilities: [88] MSI: Enable+ Count=1/1 Maskable- 64bit+
+Address: 00000000fee14000  Data: 4025
+Capabilities: [ac] Subsystem: Samsung Electronics Co Ltd Device a811
+Capabilities: [c0] Express (v2) Downstream Port (Slot+), MSI 00
+DevCap: MaxPayload 128 bytes, PhantFunc 0
+ExtTag+ RBE+
+DevCtl: Report errors: Correctable- Non-Fatal- Fatal- Unsupported-
+RlxdOrd+ ExtTag+ PhantFunc- AuxPwr- NoSnoop+
+MaxPayload 128 bytes, MaxReadReq 512 bytes
+DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq- AuxPwr+ TransPend-
+LnkCap: Port #1, Speed 8GT/s, Width x4, ASPM L0s L1, Exit Latency L0s
+<2us, L1 <4us
+ClockPM- Surprise- LLActRep+ BwNot+ ASPMOptComp+
+LnkCtl: ASPM Disabled; Disabled- CommClk+
+ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+LnkSta: Speed 8GT/s, Width x4, TrErr- Train- SlotClk+ DLActive+ BWMgmt+ ABWMgmt-
+SltCap: AttnBtn- PwrCtrl- MRL- AttnInd- PwrInd- HotPlug+ Surprise+
+Slot #1, PowerLimit 0.000W; Interlock- NoCompl+
+SltCtl: Enable: AttnBtn- PwrFlt- MRL- PresDet+ CmdCplt- HPIrq+ LinkChg+
+Control: AttnInd Unknown, PwrInd Unknown, Power- Interlock-
+SltSta: Status: AttnBtn- PowerFlt- MRL- CmdCplt- PresDet+ Interlock-
+Changed: MRL- PresDet- LinkState-
+DevCap2: Completion Timeout: Not Supported, TimeoutDis-, LTR+, OBFF
+Not Supported ARIFwd-
+AtomicOpsCap: Routing-
+DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR+, OBFF
+Disabled ARIFwd-
+AtomicOpsCtl: EgressBlck-
+LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-,
+Selectable De-emphasis: -3.5dB
+Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+Compliance De-emphasis: -6dB
+LnkSta2: Current De-emphasis Level: -6dB, EqualizationComplete+,
+EqualizationPhase1+
+EqualizationPhase2+, EqualizationPhase3+, LinkEqualizationRequest-
+Capabilities: [100 v1] Device Serial Number 5b-66-34-11-98-c9-a0-00
+Capabilities: [200 v1] Advanced Error Reporting
+UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UESvrt: DLP+ SDES- TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+
+MalfTLP+ ECRC- UnsupReq- ACSViol-
+CESta: RxErr- BadTLP- BadDLLP+ Rollover- Timeout- NonFatalErr-
+CEMsk: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
+AERCap: First Error Pointer: 00, ECRCGenCap- ECRCGenEn- ECRCChkCap- ECRCChkEn-
+MultHdrRecCap- MultHdrRecEn- TLPPfxPres- HdrLogCap-
+HeaderLog: 00000000 00000000 00000000 00000000
+Capabilities: [300 v1] Virtual Channel
+Caps: LPEVC=0 RefClk=100ns PATEntryBits=1
+Arb: Fixed- WRR32- WRR64- WRR128-
+Ctrl: ArbSelect=Fixed
+Status: InProgress-
+VC0: Caps: PATOffset=00 MaxTimeSlots=1 RejSnoopTrans-
+Arb: Fixed+ WRR32- WRR64- WRR128- TWRR128- WRR256-
+Ctrl: Enable+ ID=0 ArbSelect=Fixed TC/VC=ff
+Status: NegoPending- InProgress-
+Capabilities: [400 v1] Power Budgeting <?>
+Capabilities: [500 v1] Vendor Specific Information: ID=1234 Rev=1 Len=0d8 <?>
+Capabilities: [700 v1] #19
+Kernel driver in use: pcieport
+
+59:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd
+Device a808 (prog-if 02 [NVM Express])
+Subsystem: Samsung Electronics Co Ltd Device a811
+Physical Slot: 1
+Control: I/O- Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop- ParErr-
+Stepping- SERR- FastB2B- DisINTx+
+Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+Latency: 0
+Interrupt: pin A routed to IRQ 20
+Region 0: Memory at ac200000 (64-bit, non-prefetchable) [size=16K]
+Capabilities: [40] Power Management version 3
+Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA PME(D0-,D1-,D2-,D3hot-,D3cold-)
+Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+Capabilities: [50] MSI: Enable- Count=1/1 Maskable- 64bit+
+Address: 0000000000000000  Data: 0000
+Capabilities: [70] Express (v2) Endpoint, MSI 00
+DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+ExtTag- AttnBtn- AttnInd- PwrInd- RBE+ FLReset+ SlotPowerLimit 0.000W
+DevCtl: Report errors: Correctable+ Non-Fatal+ Fatal+ Unsupported+
+RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+ FLReset-
+MaxPayload 128 bytes, MaxReadReq 512 bytes
+DevSta: CorrErr- UncorrErr- FatalErr- UnsuppReq- AuxPwr- TransPend-
+LnkCap: Port #0, Speed 8GT/s, Width x4, ASPM L1, Exit Latency L1 <64us
+ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
+LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
+ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+LnkSta: Speed 8GT/s, Width x4, TrErr- Train- SlotClk+ DLActive- BWMgmt- ABWMgmt-
+DevCap2: Completion Timeout: Range ABCD, TimeoutDis+, LTR+, OBFF Not Supported
+AtomicOpsCap: 32bit- 64bit- 128bitCAS-
+DevCtl2: Completion Timeout: 50us to 50ms, TimeoutDis-, LTR+, OBFF Disabled
+AtomicOpsCtl: ReqEn-
+LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
+Transmit Margin: Normal Operating Range, EnterModifiedCompliance- ComplianceSOS-
+Compliance De-emphasis: -6dB
+LnkSta2: Current De-emphasis Level: -3.5dB, EqualizationComplete+,
+EqualizationPhase1+
+EqualizationPhase2+, EqualizationPhase3+, LinkEqualizationRequest-
+Capabilities: [b0] MSI-X: Enable+ Count=33 Masked-
+Vector table: BAR=0 offset=00003000
+PBA: BAR=0 offset=00002000
+Capabilities: [100 v2] Advanced Error Reporting
+UESta: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UEMsk: DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF-
+MalfTLP- ECRC- UnsupReq- ACSViol-
+UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt- UnxCmplt- RxOF+
+MalfTLP+ ECRC- UnsupReq- ACSViol-
+CESta: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr-
+CEMsk: RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
+AERCap: First Error Pointer: 00, ECRCGenCap+ ECRCGenEn- ECRCChkCap+ ECRCChkEn-
+MultHdrRecCap+ MultHdrRecEn- TLPPfxPres- HdrLogCap-
+HeaderLog: 00000000 00000000 00000000 00000000
+Capabilities: [148 v1] Device Serial Number 00-00-00-00-00-00-00-00
+Capabilities: [158 v1] Power Budgeting <?>
+Capabilities: [168 v1] #19
+Capabilities: [188 v1] Latency Tolerance Reporting
+Max snoop latency: 0ns
+Max no snoop latency: 0ns
+Capabilities: [190 v1] L1 PM Substates
+L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+ ASPM_L1.1+ L1_PM_Substates+
+ PortCommonModeRestoreTime=10us PortTPowerOnTime=10us
+L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+  T_CommonMode=0us LTR1.2_Threshold=0ns
+L1SubCtl2: T_PwrOn=10us
+Kernel driver in use: nvme
+
+[3] lspci of the NVME PCI end point in the failure case:
+
+localhost ~ # lspci -bvvv -s 59:0.0
+59:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd
+Device a808 (prog-if 02 [NVM Express])
+        Subsystem: Samsung Electronics Co Ltd Device a811
+        Physical Slot: 1
+        Control: I/O- Mem+ BusMaster- SpecCycle- MemWINV- VGASnoop-
+ParErr- Stepping- SERR- FastB2B- DisINTx-
+        Status: Cap+ 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort-
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+        Interrupt: pin A routed to IRQ 255
+        Region 0: Memory at <unassigned> (64-bit, non-prefetchable)
+<------ BAR is cleared!
+        Capabilities: [40] Power Management version 3
+                Flags: PMEClk- DSI- D1- D2- AuxCurrent=0mA
+PME(D0-,D1-,D2-,D3hot-,D3cold-)
+                Status: D0 NoSoftRst+ PME-Enable- DSel=0 DScale=0 PME-
+        Capabilities: [50] MSI: Enable- Count=1/1 Maskable- 64bit+
+                Address: 0000000000000000  Data: 0000
+        Capabilities: [70] Express (v2) Endpoint, MSI 00
+                DevCap: MaxPayload 256 bytes, PhantFunc 0, Latency L0s
+unlimited, L1 unlimited
+                        ExtTag- AttnBtn- AttnInd- PwrInd- RBE+
+FLReset+ SlotPowerLimit 0.000W
+                DevCtl: Report errors: Correctable- Non-Fatal- Fatal-
+Unsupported-
+                        RlxdOrd+ ExtTag- PhantFunc- AuxPwr- NoSnoop+ FLReset-
+                        MaxPayload 128 bytes, MaxReadReq 512 bytes
+                DevSta: CorrErr+ UncorrErr- FatalErr- UnsuppReq+
+AuxPwr- TransPend-
+                LnkCap: Port #0, Speed 8GT/s, Width x4, ASPM L1, Exit
+Latency L1 <64us
+                        ClockPM+ Surprise- LLActRep- BwNot- ASPMOptComp+
+                LnkCtl: ASPM Disabled; RCB 64 bytes Disabled- CommClk+
+                        ExtSynch- ClockPM- AutWidDis- BWInt- AutBWInt-
+                LnkSta: Speed 8GT/s, Width x4, TrErr- Train- SlotClk+
+DLActive- BWMgmt- ABWMgmt-
+                DevCap2: Completion Timeout: Range ABCD, TimeoutDis+,
+LTR+, OBFF Not Supported
+                DevCtl2: Completion Timeout: 50us to 50ms,
+TimeoutDis-, LTR+, OBFF Disabled
+                         AtomicOpsCtl: ReqEn-
+                LnkCtl2: Target Link Speed: 8GT/s, EnterCompliance- SpeedDis-
+                         Transmit Margin: Normal Operating Range,
+EnterModifiedCompliance- ComplianceSOS-
+                         Compliance De-emphasis: -6dB
+                LnkSta2: Current De-emphasis Level: -3.5dB,
+EqualizationComplete+, EqualizationPhase1+
+                         EqualizationPhase2+, EqualizationPhase3+,
+LinkEqualizationRequest-
+        Capabilities: [b0] MSI-X: Enable- Count=33 Masked-
+                Vector table: BAR=0 offset=00003000
+                PBA: BAR=0 offset=00002000
+        Capabilities: [100 v2] Advanced Error Reporting
+                UESta:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
+UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UEMsk:  DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt-
+UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+                UESvrt: DLP+ SDES+ TLP- FCP+ CmpltTO- CmpltAbrt-
+UnxCmplt- RxOF+ MalfTLP+ ECRC- UnsupReq- ACSViol-
+                CESta:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr-
+                CEMsk:  RxErr- BadTLP- BadDLLP- Rollover- Timeout- NonFatalErr+
+                AERCap: First Error Pointer: 00, ECRCGenCap+
+ECRCGenEn- ECRCChkCap+ ECRCChkEn-
+                        MultHdrRecCap+ MultHdrRecEn- TLPPfxPres- HdrLogCap-
+                HeaderLog: 00000000 00000000 00000000 00000000
+        Capabilities: [148 v1] Device Serial Number 00-00-00-00-00-00-00-00
+        Capabilities: [158 v1] Power Budgeting <?>
+        Capabilities: [168 v1] #19
+        Capabilities: [188 v1] Latency Tolerance Reporting
+                Max snoop latency: 0ns
+                Max no snoop latency: 0ns
+        Capabilities: [190 v1] L1 PM Substates
+                L1SubCap: PCI-PM_L1.2+ PCI-PM_L1.1+ ASPM_L1.2+
+ASPM_L1.1+ L1_PM_Substates+
+                          PortCommonModeRestoreTime=10us PortTPowerOnTime=10us
+                L1SubCtl1: PCI-PM_L1.2- PCI-PM_L1.1- ASPM_L1.2- ASPM_L1.1-
+                           T_CommonMode=0us LTR1.2_Threshold=0ns
+                L1SubCtl2: T_PwrOn=10us
