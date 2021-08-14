@@ -2,241 +2,80 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 772C53EC3AB
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 17:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2FA63EC3B1
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 18:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbhHNPvo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Aug 2021 11:51:44 -0400
-Received: from mga04.intel.com ([192.55.52.120]:42457 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238181AbhHNPvo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Aug 2021 11:51:44 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10076"; a="213840018"
-X-IronPort-AV: E=Sophos;i="5.84,321,1620716400"; 
-   d="scan'208";a="213840018"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2021 08:51:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,321,1620716400"; 
-   d="scan'208";a="508708375"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Aug 2021 08:51:14 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mEvwH-000Ow5-Pv; Sat, 14 Aug 2021 15:51:13 +0000
-Date:   Sat, 14 Aug 2021 23:50:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS
- cea45a3bd2dd4d9c35581328f571afd32b3c9f48
-Message-ID: <6117e634.hZxthuhjeY4rnN2/%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S234577AbhHNQBR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Aug 2021 12:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40368 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232131AbhHNQBO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Aug 2021 12:01:14 -0400
+X-Greylist: delayed 486 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 14 Aug 2021 09:00:39 PDT
+Received: from mx2.freebsd.org (mx2.freebsd.org [IPv6:2610:1c1:1:606c::19:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D21C061764
+        for <linux-usb@vger.kernel.org>; Sat, 14 Aug 2021 09:00:39 -0700 (PDT)
+Received: from mx1.freebsd.org (mx1.freebsd.org [IPv6:2610:1c1:1:606c::19:1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits)
+         client-signature RSA-PSS (4096 bits))
+        (Client CN "mx1.freebsd.org", Issuer "R3" (verified OK))
+        by mx2.freebsd.org (Postfix) with ESMTPS id 0858F8331D;
+        Sat, 14 Aug 2021 15:52:30 +0000 (UTC)
+        (envelope-from uqs@FreeBSD.org)
+Received: from smtp.freebsd.org (smtp.freebsd.org [IPv6:2610:1c1:1:606c::24b:4])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "smtp.freebsd.org", Issuer "R3" (verified OK))
+        by mx1.freebsd.org (Postfix) with ESMTPS id 4Gn4gd6dwVz4SJM;
+        Sat, 14 Aug 2021 15:52:29 +0000 (UTC)
+        (envelope-from uqs@FreeBSD.org)
+Received: from localhost (roadrunner.spoerlein.net [IPv6:2a02:168:5230:0:9afa:9bff:fe63:d56])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: uqs/mail)
+        by smtp.freebsd.org (Postfix) with ESMTPSA id 84BCFC93F;
+        Sat, 14 Aug 2021 15:52:29 +0000 (UTC)
+        (envelope-from uqs@FreeBSD.org)
+From:   =?UTF-8?q?Ulrich=20Sp=C3=B6rlein?= <uqs@FreeBSD.org>
+To:     Jiri Kosina <jikos@kernel.org>
+Cc:     linux-usb@vger.kernel.org,
+        =?UTF-8?q?Ulrich=20Sp=C3=B6rlein?= <uqs@FreeBSD.org>
+Subject: [PATCH] HID: sony: Fix more ShanWan clone gamepads to not rumble when plugged in.
+Date:   Sat, 14 Aug 2021 17:52:14 +0200
+Message-Id: <20210814155214.83856-1-uqs@FreeBSD.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: cea45a3bd2dd4d9c35581328f571afd32b3c9f48  usb: gadget: udc: renesas_usb3: Fix soc_device_match() abuse
+The device string on these can differ, apparently, including typos. I've
+bought 2 of these in 2012 and googling shows many folks out there with
+that broken spelling in their dmesg.
 
-elapsed time: 1723m
-
-configs tested: 183
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210812
-i386                 randconfig-c001-20210814
-i386                 randconfig-c001-20210813
-powerpc                 mpc8540_ads_defconfig
-ia64                                defconfig
-arm                       imx_v6_v7_defconfig
-mips                           rs90_defconfig
-parisc                generic-32bit_defconfig
-arm                     am200epdkit_defconfig
-mips                        workpad_defconfig
-openrisc                  or1klitex_defconfig
-m68k                        m5407c3_defconfig
-powerpc                    klondike_defconfig
-mips                     loongson1c_defconfig
-arm                          ep93xx_defconfig
-arm                          iop32x_defconfig
-arm                            zeus_defconfig
-arm                        clps711x_defconfig
-nios2                            alldefconfig
-xtensa                    xip_kc705_defconfig
-powerpc                 mpc837x_mds_defconfig
-arm                     davinci_all_defconfig
-arm                       omap2plus_defconfig
-powerpc                     pq2fads_defconfig
-mips                  maltasmvp_eva_defconfig
-h8300                            alldefconfig
-xtensa                           allyesconfig
-arm                       imx_v4_v5_defconfig
-powerpc                      ep88xc_defconfig
-powerpc                     rainier_defconfig
-sh                            shmin_defconfig
-h8300                               defconfig
-sh                          rsk7269_defconfig
-ia64                          tiger_defconfig
-arm                             rpc_defconfig
-powerpc                      ppc40x_defconfig
-arm                          simpad_defconfig
-sh                           se7750_defconfig
-powerpc                    socrates_defconfig
-riscv                             allnoconfig
-powerpc                     ksi8560_defconfig
-powerpc                 mpc837x_rdb_defconfig
-powerpc                       maple_defconfig
-powerpc                         wii_defconfig
-h8300                            allyesconfig
-sh                           se7206_defconfig
-sh                                  defconfig
-arm                           corgi_defconfig
-xtensa                  audio_kc705_defconfig
-h8300                       h8s-sim_defconfig
-arm                       aspeed_g4_defconfig
-sh                  sh7785lcr_32bit_defconfig
-mips                       lemote2f_defconfig
-arc                              alldefconfig
-mips                           ip22_defconfig
-powerpc                 mpc85xx_cds_defconfig
-sh                          urquell_defconfig
-mips                     decstation_defconfig
-arm                          exynos_defconfig
-sh                 kfr2r09-romimage_defconfig
-sh                        edosk7760_defconfig
-mips                           xway_defconfig
-parisc                generic-64bit_defconfig
-arm                           h5000_defconfig
-powerpc                     mpc512x_defconfig
-arm                         axm55xx_defconfig
-powerpc                    amigaone_defconfig
-mips                  decstation_64_defconfig
-arm                          pxa3xx_defconfig
-mips                         cobalt_defconfig
-openrisc                    or1ksim_defconfig
-mips                        nlm_xlp_defconfig
-arm                         bcm2835_defconfig
-arm                            pleb_defconfig
-arc                        nsim_700_defconfig
-mips                 decstation_r4k_defconfig
-arm                            lart_defconfig
-mips                          rm200_defconfig
-mips                        nlm_xlr_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210814
-x86_64               randconfig-a006-20210814
-x86_64               randconfig-a003-20210814
-x86_64               randconfig-a001-20210814
-x86_64               randconfig-a005-20210814
-x86_64               randconfig-a002-20210814
-i386                 randconfig-a004-20210814
-i386                 randconfig-a002-20210814
-i386                 randconfig-a001-20210814
-i386                 randconfig-a003-20210814
-i386                 randconfig-a006-20210814
-i386                 randconfig-a005-20210814
-i386                 randconfig-a004-20210813
-i386                 randconfig-a003-20210813
-i386                 randconfig-a001-20210813
-i386                 randconfig-a002-20210813
-i386                 randconfig-a006-20210813
-i386                 randconfig-a005-20210813
-x86_64               randconfig-a011-20210813
-x86_64               randconfig-a013-20210813
-x86_64               randconfig-a012-20210813
-x86_64               randconfig-a016-20210813
-x86_64               randconfig-a015-20210813
-x86_64               randconfig-a014-20210813
-i386                 randconfig-a011-20210814
-i386                 randconfig-a015-20210814
-i386                 randconfig-a013-20210814
-i386                 randconfig-a014-20210814
-i386                 randconfig-a016-20210814
-i386                 randconfig-a012-20210814
-i386                 randconfig-a011-20210813
-i386                 randconfig-a015-20210813
-i386                 randconfig-a014-20210813
-i386                 randconfig-a013-20210813
-i386                 randconfig-a016-20210813
-i386                 randconfig-a012-20210813
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-c001-20210814
-x86_64               randconfig-c001-20210813
-x86_64               randconfig-a006-20210813
-x86_64               randconfig-a004-20210813
-x86_64               randconfig-a003-20210813
-x86_64               randconfig-a002-20210813
-x86_64               randconfig-a005-20210813
-x86_64               randconfig-a001-20210813
-x86_64               randconfig-a013-20210814
-x86_64               randconfig-a011-20210814
-x86_64               randconfig-a016-20210814
-x86_64               randconfig-a012-20210814
-x86_64               randconfig-a014-20210814
-x86_64               randconfig-a015-20210814
-x86_64               randconfig-a011-20210812
-x86_64               randconfig-a013-20210812
-x86_64               randconfig-a012-20210812
-x86_64               randconfig-a016-20210812
-x86_64               randconfig-a015-20210812
-x86_64               randconfig-a014-20210812
-
+Signed-off-by: Ulrich Spörlein <uqs@FreeBSD.org>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+ drivers/hid/hid-sony.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git drivers/hid/hid-sony.c drivers/hid/hid-sony.c
+index b3722c51ec78..a2fef59063a6 100644
+--- drivers/hid/hid-sony.c
++++ drivers/hid/hid-sony.c
+@@ -2974,7 +2974,8 @@ static int sony_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	if (!strcmp(hdev->name, "FutureMax Dance Mat"))
+ 		quirks |= FUTUREMAX_DANCE_MAT;
+ 
+-	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad"))
++	if (!strcmp(hdev->name, "SHANWAN PS3 GamePad") ||
++	    !strcmp(hdev->name, "ShanWan PS(R) Ga`epad"))
+ 		quirks |= SHANWAN_GAMEPAD;
+ 
+ 	sc = devm_kzalloc(&hdev->dev, sizeof(*sc), GFP_KERNEL);
+-- 
+2.32.0
+
