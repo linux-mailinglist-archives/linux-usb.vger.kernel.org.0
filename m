@@ -2,71 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4793EBF66
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 03:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027E73EBF68
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 03:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbhHNBpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 21:45:47 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:52259 "HELO
+        id S236284AbhHNBqQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 21:46:16 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49537 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S236289AbhHNBpr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 21:45:47 -0400
-Received: (qmail 56475 invoked by uid 1000); 13 Aug 2021 21:45:18 -0400
-Date:   Fri, 13 Aug 2021 21:45:18 -0400
+        with SMTP id S236200AbhHNBqP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 21:46:15 -0400
+Received: (qmail 56522 invoked by uid 1000); 13 Aug 2021 21:45:47 -0400
+Date:   Fri, 13 Aug 2021 21:45:47 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
-        maze@google.com, jj251510319013@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
-Message-ID: <20210814014518.GA56183@rowland.harvard.edu>
-References: <20210813114551.72898-1-mdevaev@gmail.com>
- <20210813145823.GA38198@rowland.harvard.edu>
- <20210813232212.5cba6d33@reki>
- <20210813234022.5d5644ae@reki>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH v3 1/2] usb: host: ohci-tmio: add IRQ check
+Message-ID: <20210814014547.GB56183@rowland.harvard.edu>
+References: <fb92857f-3120-9a20-65ba-f21aeb4b9020@omp.ru>
+ <402e1a45-a0a4-0e08-566a-7ca1331506b1@omp.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20210813234022.5d5644ae@reki>
+In-Reply-To: <402e1a45-a0a4-0e08-566a-7ca1331506b1@omp.ru>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 13, 2021 at 11:40:22PM +0300, Maxim Devaev wrote:
-> В Fri, 13 Aug 2021 23:22:12 +0300
-> Maxim Devaev <mdevaev@gmail.com> пишет:
+On Fri, Aug 13, 2021 at 11:30:18PM +0300, Sergey Shtylyov wrote:
+> The driver neglects to check the  result of platform_get_irq()'s call and
+> blithely passes the negative error codes to usb_add_hcd() (which takes
+> *unsigned* IRQ #), causing request_irq() that it calls to fail with
+> -EINVAL, overriding an original error code. Stop calling usb_add_hcd()
+> with the invalid IRQ #s.
 > 
-> > Alan Stern <stern@rowland.harvard.edu> wrote:
-> > > In other words, a device does not need to have an interrupt-OUT 
-> > > endpoint, but if it does have one then the host must use it.
-> > 
-> > You're right. Although the actual behavior of the hosts is not different
-> > from what I wrote - they really just ignore out endpoint.
-> > I will eventually fix this in the patch description.
+> Fixes: 78c73414f4f6 ("USB: ohci: add support for tmio-ohci cell")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 > 
-> It seems that I have confused everything even more, sorry. I will explain.
-> There are three possible host behaviors:
-> 
-> (1) The host works with the OUT endpoint as it describes the standard
->     and transmits reports through it.
-> 
-> (2) The host works with IN endpoint, but refuses to transmit reports
->     via OUT endpoint at all. In the case of the keyboard, it will work,
->     but it will not receive the status of the LEDs.
-> 
-> (3) The host sees OUT endpoint and either refuses to use such a device at all,
->     or goes crazy in various ways.
-> 
-> In both cases (2) and (3), using SETUP/SET_REPORT solves the problem.
-> Therefore, I offer this as an option to solve compatibility problems.
-> Yes, in fact, this is not our problem, but it is impossible to fix the drivers
-> of all these proprietary devices. Moreover, I have never met a keyboard
-> with OUT endpoint, absolutely all of them use SETUP/SET_REPORT.
+> ---
 
-Okay.  I appreciate the more detailed explanations; thanks.  Please 
-resubmit the patch with appropriate changes to the description.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Alan Stern
+> Changes in version 3:
+> - move the IRQ check higher in ohci_hcd_tmio_drv_probe(), to be closer to
+>   platfrom_get_irq()'s call.
+> 
+>  drivers/usb/host/ohci-tmio.c |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> Index: usb/drivers/usb/host/ohci-tmio.c
+> ===================================================================
+> --- usb.orig/drivers/usb/host/ohci-tmio.c
+> +++ usb/drivers/usb/host/ohci-tmio.c
+> @@ -202,6 +202,9 @@ static int ohci_hcd_tmio_drv_probe(struc
+>  	if (!cell)
+>  		return -EINVAL;
+>  
+> +	if (irq < 0)
+> +		return irq;
+> +
+>  	hcd = usb_create_hcd(&ohci_tmio_hc_driver, &dev->dev, dev_name(&dev->dev));
+>  	if (!hcd) {
+>  		ret = -ENOMEM;
