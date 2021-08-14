@@ -2,177 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2FE3EBF31
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 03:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4793EBF66
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 03:45:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236193AbhHNBHG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 13 Aug 2021 21:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236139AbhHNBHF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 21:07:05 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F87C061756
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 18:06:37 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id c24so23127278lfi.11
-        for <linux-usb@vger.kernel.org>; Fri, 13 Aug 2021 18:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=AzF6zd9JjX8F2cTA3zVGcFIEpz9eK1G/eiStB2DECqY=;
-        b=Uq3XLk6lrpFptnkzqvf21MBT0ct05kXZIy7vnGNZ4ojy8x26JVwiLYU0V03v8MZIHi
-         4fX6IB0zI4DIhX3wRjGxFFx8YAprU0uUcoFYDretIJV7d/gDwd9TGmAY2luBWFd1dqzr
-         NlZaWPD2mJ+HoSGvljAGrxaY0CTUaodrYkheMq/B5vPPUWRl0bkN5MVfqaVGwNu8A4Ku
-         Xj4/B0Z0Tf7JIAJg/3mQY95EegNhjOr7TBJaqyzcoEjw5D6mpEMs2MNy9rFVrBTzJIkq
-         F4haaMx/EBYDgMaXn+24h2Y+VbkA/mSiVitpJZaQ0V9VpnuWsvUowTeQL6RwpRjbveEa
-         YObQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AzF6zd9JjX8F2cTA3zVGcFIEpz9eK1G/eiStB2DECqY=;
-        b=H+3fM9BNBfbHIzH6ThcSfCgID7YHZqzjq8ILmKmctU9tV/WSvsQ4MugGZOhwKzFbmF
-         ufPMz86EofFRO40aKv15ODiGWUIIZCkwYApprAmXQfjj6byAyZ9loxE3OQVcWBPZ17Zo
-         4u7wq6s7nUL8e7QFSPPLhewgI1ClwwTIvFBboTrl9neUmobWcDK+A6Q1ZLz0+DtqlMkr
-         j/4rJefiilcqxEcfxpnA0GvOqEZ/lOECBzaBMHRNqu1W92flJUJDsvsimvNKltpETGZF
-         WKQUgHbvwEDVvgTRoRkMfdtkT/Pp2T9AYYXxBMnRzZiXNX6lplbo4c4jr18cmZCVXn32
-         9drQ==
-X-Gm-Message-State: AOAM531yx6o4fsfPqAXvDWvKGC56dk3Av+zEgu4Skvzp6aLXY6KuOM/H
-        COVdx70Vboqz3lraIAjAe8hvPY8/lxTJJoLmQYY9AQ==
-X-Google-Smtp-Source: ABdhPJzHnPFEzY1zOELKvkCEgi7MSs3DvC1sUZqfe5OG7rLv6iJWlv23/7I0qdSwbAy7OwqppQvUOsUfrn8k1hcCVDY=
-X-Received: by 2002:a19:4890:: with SMTP id v138mr3484589lfa.626.1628903196300;
- Fri, 13 Aug 2021 18:06:36 -0700 (PDT)
+        id S236394AbhHNBpr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 13 Aug 2021 21:45:47 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:52259 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S236289AbhHNBpr (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 13 Aug 2021 21:45:47 -0400
+Received: (qmail 56475 invoked by uid 1000); 13 Aug 2021 21:45:18 -0400
+Date:   Fri, 13 Aug 2021 21:45:18 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
+        maze@google.com, jj251510319013@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
+Message-ID: <20210814014518.GA56183@rowland.harvard.edu>
+References: <20210813114551.72898-1-mdevaev@gmail.com>
+ <20210813145823.GA38198@rowland.harvard.edu>
+ <20210813232212.5cba6d33@reki>
+ <20210813234022.5d5644ae@reki>
 MIME-Version: 1.0
-References: <20210721100220.ddfxwugivsndsedv@mobilestation>
- <YPf29+ewbrYgHxRP@kroah.com> <0064cb2c-5ca6-e693-2e89-8f045c8f7502@kernel.org>
- <YPf+shNM6cXb3mfe@kroah.com> <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
- <20210721112531.xvu6ni5ksaehsrjh@mobilestation> <CALAqxLViEqSO17P3JGRGYJh-wDoHaJiQQV48zeoRgnar4Xd5Bg@mail.gmail.com>
- <20210722181221.xh3r5kyu7zlcojjx@mobilestation> <YPnEO6NVFZDS1s//@yoga>
- <CALAqxLUT0e+mHMVo685oVTxR8y76733cN0yciQ7ePS6GRE+_dg@mail.gmail.com> <20210722220918.l7j6zw3aaa27qato@mobilestation>
-In-Reply-To: <20210722220918.l7j6zw3aaa27qato@mobilestation>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Fri, 13 Aug 2021 18:06:24 -0700
-Message-ID: <CALAqxLXrs0_Xs0JV5H-wS1q2CJ7XhW5Dj90eu=uazkRXXEMUxQ@mail.gmail.com>
-Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Amit Pundir <amit.pundir@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210813234022.5d5644ae@reki>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Jul 22, 2021 at 3:09 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> On Thu, Jul 22, 2021 at 01:09:05PM -0700, John Stultz wrote:
-> > On Thu, Jul 22, 2021 at 12:17 PM Bjorn Andersson
-> > <bjorn.andersson@linaro.org> wrote:
-> > > > On Jul 21, 2021, 1:45 PM +0200, Krzysztof Kozlowski wrote:
-> > > > > I had impression that kernel defines interfaces which should be used and
-> > > > > are stable (e.g. syscalls, sysfs and so on). This case is example of
-> > > > > user-space relying on something not being marked as part of ABI. Instead
-> > > > > they found something working for them and now it is being used in "we
-> > > > > cannot break existing systems". Basically, AOSP unilaterally created a
-> > > > > stable ABI and now kernel has to stick to it.
-> > > > >
-> > > > > Really, all normal systems depend on aliases or names and here we have
-> > > > > dependency on device address. I proposed way how AOSP should be fixed.
-> > > > > Anything happened? Nope.
-> > > >
-> > > > First time he sent a possible solution for the problem:
-> > > > https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
-> > > >
-> > > > To sum up you could have used one of the more portable approaches
-> > > > 1. add an udc alias to the controller and use it then to refer to the
-> > > > corresponding USB controller
-> > >
-> > > Is there such a thing as "UDC alias"? Or are you suggesting that we
-> > > should add such feature?
-> > >
-> > > I think it would be wonderful if we could identify the UDCs on our
-> > > boards as "USB1" and "USB2", or "the one and only USB-C connector". But
-> > > unless that will fall back to the existing naming it would break John's
-> > > _existing_ userspace.
-> >
->
-> > Well, I'd not hold up the existing userspace I'm using as sacrosanct
-> > (AOSP devices still usually don't have to work cross-kernel versions -
-> > devboards being the main exception). I'm fine if we can rework
-> > userland as proposed, so that the issues can be avoided, but I
-> > honestly don't have enough context to really understand what that
-> > looks like (no idea what udc aliases are).
-> >
-> > And whatever we do, the main constraint is that userland has to be
-> > able to work with existing LTS kernels and newer kernels.
->
-> As I said in my response to Bjorn even if it is added to the kernel it
-> won't get to the official LTSes as it would be a new kernel feature.
-> New features aren't normally backported to the older kernels.
->
-> >
-> > > > 2. search through DT-nodes looking for a specific compatible/reg
-> > > > DT-properties.
-> > > >
-> > >
-> > > We could define that this is the way, but again we didn't yesterday so
-> > > your proposal is not backwards compatible.
-> >
->
-> > It may be backwards compatible, but I'm still not clear exactly how it
-> > would work.
-> >
-> > I guess if we look through all
-> > sys/bus/platform/devices/*/of_node/compatbile strings for the desired
-> > "snps,dwc3", then find which of the directories have the desired
-> > address in the string? (The suggestion for looking at reg seems
-> > better, but I don't get a char value out of the dwc3 of_node/reg
-> > file).
->
-> The algorithm is simple:
-> 1) You know what USB controllers you have on your platform. They are
-> supposed to be compatible with snps,dwc3 string and have some pre-defined
-> base address.
-> 2) Find all the files in the directory /sys/class/udc/.
-> 3) Walk through all the directories in /sys/bus/platform/devices/ with
-> names found in 2) and stop on the device with matching compatible/base
-> address defined in 1).
->
-> In my case the strings could be retrieved like this:
-> USB_NAME_COMPAT=$(/sys/bus/platform/devices/1f100000.usb/of_node/compatible | tr '\0' '\t' | cut -f1)
-> USB_DEVICE_ADDR="$(head -c 4 /sys/bus/platform/devices/1f100000.usb/of_node/reg | hexdump -ve '/1 "%02x"' | sed -e 's/^0*//g')"
+On Fri, Aug 13, 2021 at 11:40:22PM +0300, Maxim Devaev wrote:
+> В Fri, 13 Aug 2021 23:22:12 +0300
+> Maxim Devaev <mdevaev@gmail.com> пишет:
+> 
+> > Alan Stern <stern@rowland.harvard.edu> wrote:
+> > > In other words, a device does not need to have an interrupt-OUT 
+> > > endpoint, but if it does have one then the host must use it.
+> > 
+> > You're right. Although the actual behavior of the hosts is not different
+> > from what I wrote - they really just ignore out endpoint.
+> > I will eventually fix this in the patch description.
+> 
+> It seems that I have confused everything even more, sorry. I will explain.
+> There are three possible host behaviors:
+> 
+> (1) The host works with the OUT endpoint as it describes the standard
+>     and transmits reports through it.
+> 
+> (2) The host works with IN endpoint, but refuses to transmit reports
+>     via OUT endpoint at all. In the case of the keyboard, it will work,
+>     but it will not receive the status of the LEDs.
+> 
+> (3) The host sees OUT endpoint and either refuses to use such a device at all,
+>     or goes crazy in various ways.
+> 
+> In both cases (2) and (3), using SETUP/SET_REPORT solves the problem.
+> Therefore, I offer this as an option to solve compatibility problems.
+> Yes, in fact, this is not our problem, but it is impossible to fix the drivers
+> of all these proprietary devices. Moreover, I have never met a keyboard
+> with OUT endpoint, absolutely all of them use SETUP/SET_REPORT.
 
+Okay.  I appreciate the more detailed explanations; thanks.  Please 
+resubmit the patch with appropriate changes to the description.
 
-Hey Serge,
-   I just wanted to follow up here.  Amit has reworked the db845c AOSP
-userland so that it no longer uses the fixed node name, but instead
-probes for it:
-  https://android-review.googlesource.com/c/device/linaro/dragonboard/+/1774872
-
-Admittedly, it does take a short-cut.  As your algorithm above,
-digging up the devices and finding the sys/bus path to read the reg
-value and pipe through hexdump (which android doesn't have) seemed
-overly obtuse when the address is in the node name itself (while the
-only way to be sure, one normally doesn't use spectroscopy to
-determine the value of a coin when you can read what's printed on it
-:).  But, should the node naming be further changed at least the
-infrastructure we have can be reworked fairly easily to adapt now.
-
-In any case, as we can handle the name change now, if you want to
-resubmit your patch, we would no longer object (but can't promise no
-one else might be bitten).  Sorry for the delay this caused, and we
-appreciate you working with us to find a solution.
-
-thanks
--john
+Alan Stern
