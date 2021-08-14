@@ -2,95 +2,57 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C72D73EC123
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 09:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1CF13EC25A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 13:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237332AbhHNHWx (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Aug 2021 03:22:53 -0400
-Received: from cable.insite.cz ([84.242.75.189]:50638 "EHLO cable.insite.cz"
+        id S238053AbhHNL3Q (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Aug 2021 07:29:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34412 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237248AbhHNHWu (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 14 Aug 2021 03:22:50 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id 27D90A1A3D402;
-        Sat, 14 Aug 2021 09:22:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1628925740; bh=DkcJHZNbIZZE4Jd2cA9F0v8ueW8ClGJm2XpwugboM8o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=WjvE6v8kCpxv1kNxPKaXRrZU3tUAf8KhyaZ2pgYMu9fK0+tJ1w0qN7Qef255Q8q9h
-         D+aCa2R95ZwTTPDhPqVTUFkimbWkJ82Mr+FJ3T5LZVtrihSa4xa6hDdMH+i08pHGWX
-         rWnLxBPAr/sEMJrWoB68oDOOr6RJCia2/OqOxht8=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id RJUE5jo2dDut; Sat, 14 Aug 2021 09:22:15 +0200 (CEST)
-Received: from precision.doma (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id BFDE3A1A3D400;
-        Sat, 14 Aug 2021 09:22:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1628925734; bh=DkcJHZNbIZZE4Jd2cA9F0v8ueW8ClGJm2XpwugboM8o=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Gs4o6Ti7Qu+NTAgzaDlb8dldQt9a8jqYLFepWmXXHWgVfxHs8qRNmZVaj570WZGBZ
-         HEK7iCuok/HPqVEmksTdme2jY0vtgGqlqgnS9VetbOX7vRbGQacDAaA8rx0vlVHS6s
-         iKfDJYPDZs81Rd1QepAFueH+DDT072dzKEBeub8I=
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-To:     linux-usb@vger.kernel.org
-Cc:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: [PATCH]  usb: gadget: f_uac1: fixing inconsistent indenting
-Date:   Sat, 14 Aug 2021 09:22:14 +0200
-Message-Id: <20210814072214.4893-1-pavel.hofman@ivitera.com>
-X-Mailer: git-send-email 2.25.1
+        id S237914AbhHNL3P (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sat, 14 Aug 2021 07:29:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id B54C760E93;
+        Sat, 14 Aug 2021 11:28:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1628940527;
+        bh=hdyfiyeO1QjKNM+FvHEQGphriAD3LZRcH9f9tz6v6fg=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=JnsTG7aC0k9taXiYG6SXnZA0CYfZmkZUzz1x58/hvrRehsdCXvRjJr8wSPMHvOgLa
+         RU+7a0hlFXsqO4z5GSi2s64jWvJZzaZSQGHOgYzWvLGg88sZj2v5DjGskTRzUPB8Z8
+         fDrKwDnl5SAX0tCWP9SjrNDxoihk70eVDWJx6l9sZNbTr/kboqP5K4VRRBgZr8wNdL
+         0NVL0nUHlPkA/hf426slH0EFJr7AQDybPCE0K4y3MEnO4StoTQ+H7LBDp8FPygvqw+
+         yJub0tE5eS3sD0aCDgZSC3MOmunKaXYsT6L74oN3Bt3U6Oq8HTO9U8SzO8D5Ud6KWb
+         1kRUXM1XLpSVA==
+References: <fb92857f-3120-9a20-65ba-f21aeb4b9020@omp.ru>
+ <8280d6a4-8e9a-7cfe-1aa9-db586dc9afdf@omp.ru>
+User-agent: mu4e 1.6.2; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc:     linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH v3 2/2] usb: phy: tahvo: add IRQ check
+Date:   Sat, 14 Aug 2021 14:28:27 +0300
+In-reply-to: <8280d6a4-8e9a-7cfe-1aa9-db586dc9afdf@omp.ru>
+Message-ID: <878s14jmdv.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
- Fixing inconsistent indenting identified by kernel test
- robot.
 
- Signed-off-by: Pavel Hofman<pavel.hofman@ivitera.com>
----
- drivers/usb/gadget/function/f_uac1.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Sergey Shtylyov <s.shtylyov@omp.ru> writes:
 
-diff --git a/drivers/usb/gadget/function/f_uac1.c b/drivers/usb/gadget/function/f_uac1.c
-index 3b3db1a8df75..5b3502df4e13 100644
---- a/drivers/usb/gadget/function/f_uac1.c
-+++ b/drivers/usb/gadget/function/f_uac1.c
-@@ -1084,24 +1084,24 @@ static int f_audio_validate_opts(struct g_audio *audio, struct device *dev)
- 
- 	if (opts->p_volume_max <= opts->p_volume_min) {
- 		dev_err(dev, "Error: incorrect playback volume max/min\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	} else if (opts->c_volume_max <= opts->c_volume_min) {
- 		dev_err(dev, "Error: incorrect capture volume max/min\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	} else if (opts->p_volume_res <= 0) {
- 		dev_err(dev, "Error: negative/zero playback volume resolution\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	} else if (opts->c_volume_res <= 0) {
- 		dev_err(dev, "Error: negative/zero capture volume resolution\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	}
- 
- 	if ((opts->p_volume_max - opts->p_volume_min) % opts->p_volume_res) {
- 		dev_err(dev, "Error: incorrect playback volume resolution\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	} else if ((opts->c_volume_max - opts->c_volume_min) % opts->c_volume_res) {
- 		dev_err(dev, "Error: incorrect capture volume resolution\n");
--			return -EINVAL;
-+		return -EINVAL;
- 	}
- 
- 	return 0;
+> The driver neglects to check the result of platform_get_irq()'s call and
+> blithely passes the negative error codes to request_threaded_irq() (which
+> takes *unsigned* IRQ #), causing it to fail with -EINVAL, overriding an
+> original error code.  Stop calling request_threaded_irq() with the invalid
+> IRQ #s.
+>
+> Fixes: 9ba96ae5074c ("usb: omap1: Tahvo USB transceiver driver")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
 -- 
-2.25.1
-
+balbi
