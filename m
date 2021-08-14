@@ -2,79 +2,67 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4822C3EC469
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 20:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F41C3EC515
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Aug 2021 22:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbhHNSRk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 14 Aug 2021 14:17:40 -0400
-Received: from mxout03.lancloud.ru ([45.84.86.113]:51434 "EHLO
-        mxout03.lancloud.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238937AbhHNSRj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Aug 2021 14:17:39 -0400
-Received: from LanCloud
-DKIM-Filter: OpenDKIM Filter v2.11.0 mxout03.lancloud.ru CBC942061858
-Received: from LanCloud
-Received: from LanCloud
-Received: from LanCloud
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Subject: Re: [PATCH v3 0/2] Stop calling request_irq(), etc. with invalid IRQs
- in the USB drivers`
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>
-CC:     <linux-usb@vger.kernel.org>, Felipe Balbi <balbi@kernel.org>
-References: <fb92857f-3120-9a20-65ba-f21aeb4b9020@omp.ru>
- <YRdlGFh71JmKrJIm@kroah.com> <e17abfd6-09ab-d701-49c2-e2a1891c72ba@omp.ru>
- <YRfGTlkvpSccyM2g@kroah.com>
-Organization: Open Mobile Platform
-Message-ID: <fd165652-d7fd-9518-5598-87f08f6a6352@omp.ru>
-Date:   Sat, 14 Aug 2021 21:16:59 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        id S232617AbhHNUej (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 14 Aug 2021 16:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44394 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229489AbhHNUeg (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 14 Aug 2021 16:34:36 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88850C061764;
+        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id h24-20020a1ccc180000b029022e0571d1a0so9067140wmb.5;
+        Sat, 14 Aug 2021 13:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=message-id:from:mime-version:content-transfer-encoding
+         :content-description:subject:to:date:reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=VbcC5ppI4dqErkDqigIZaMrHECxjRJCjXWpXlzE8gFEOdkf2IKRgLvyZd4kEphKm7E
+         D9rfkXREK7E8Co6xqM3wly15xR38v5oBkLn1gnYSalFfYm3ThuSe8O4MfWf+RkJu0czF
+         008s+R7BPqDjeV1oGrYDs116Ktt2o5Oj5JAnj/53kDfh6sIhJMnhvu6L7zHzwxKki4v1
+         1Xt7dd13OBCuWQ39h4zZp4oDJeTQSQZSadDj5s720rNHB8lU/p5jXNqqkkkdDlOPZDmV
+         5UMAfKJIughxRBQ/v66quzThQ9IvJMzKF+bvrH2EZC9sHORUOs+EujU3chNvVG4vXLvu
+         cQlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:from:mime-version
+         :content-transfer-encoding:content-description:subject:to:date
+         :reply-to;
+        bh=5NTJSky9UX3JbuB9riY3wCYfXDpCwy2c7hzO0kF4AHA=;
+        b=Whip/3h6/J5DaaZO0nDhVJxHy5nP1fVpewugw6/f2/xcshw3URIXkOp7qBhIoTWTNx
+         1tuX6PoFtpZRvXHMJExpj77YAlr0ieF2Plwo4d5EdFKFNqxuyJdBT1THEA4PiCKlrlim
+         Ns/T+VGc0BKqsgDsOQMDifvjHoF3hji7mDnErOsOSl8Xbk4dvQOyH3nFsbvr9EnDInZ6
+         EXqckkEFfO+5K6KSG7s7Y3fMw3/QKnByFWHdOsBzyI29OvAyqKUAMHZ9S3s3yeIqNG3k
+         yddFQxfCy+OhVtI/AhUZORwmY9tPl3ZAJcjC0vGxKzk3HaVgdHzTOqsw11EukBCIQNQw
+         AJvg==
+X-Gm-Message-State: AOAM5321SArZn0P2iLtJLE/oRZgVprswZPyh1qBqCLWfaBVTL9QskZr8
+        L2V1Co5x8OULmH4vF8X7SwQ=
+X-Google-Smtp-Source: ABdhPJyPKg3yjEdmPMFhoNWl7US801kfv6IIEs4sOrluuzwJjwOsMBxeT2cuJ/zdXVe/oNPbrJSnXg==
+X-Received: by 2002:a1c:2747:: with SMTP id n68mr8455383wmn.100.1628973246208;
+        Sat, 14 Aug 2021 13:34:06 -0700 (PDT)
+Received: from [192.168.1.70] ([102.64.221.122])
+        by smtp.gmail.com with ESMTPSA id e17sm5604100wrs.78.2021.08.14.13.34.00
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Sat, 14 Aug 2021 13:34:05 -0700 (PDT)
+Message-ID: <611828bd.1c69fb81.4ddf7.f260@mx.google.com>
+From:   Vanina curth <curtisvani0028@gmail.com>
+X-Google-Original-From: Vanina curth
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-In-Reply-To: <YRfGTlkvpSccyM2g@kroah.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.11.198]
-X-ClientProxiedBy: LFEXT02.lancloud.ru (fd00:f066::142) To
- LFEX1907.lancloud.ru (fd00:f066::207)
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: Sir,
+To:     Recipients <Vanina@vger.kernel.org>
+Date:   Sat, 14 Aug 2021 20:33:48 +0000
+Reply-To: curtisvani9008@gmail.com
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/14/21 4:34 PM, Greg Kroah-Hartman wrote:
-
->>>> Here are 2 patches against the 'usb-linus' branch of GregKH's 'usb.git' repo.
->>>
->>> Wait, why that branch?
->>
->>    What branch I'd use for the fixes then?
-> 
-> Ah, you really want this in for 5.14-final?
-
-   Not necessarily, it's your call. But all the patches are fixes.
-
-> People are hitting this issue now?
-
-   No, the patches ware all the result of the code reviews...
-
->>>  Please make them against the branch you want
->>> them applied to.  Hopefully they will apply to the usb-next branch...
->>
->>    I didn't intend them for usb-next but looks like they apply there too.
-> 
-> I think it belongs there as a "nice cleanup to have", right?
-
-   No, they're definitely not cleanups and all have the "Fixes:" tags, so going
-to end up in the stable trees (some already have).
-   There's going to be 10-patch series soon, all fixing the deferred probing due
-to platfrorm_get_irq()...
-   Luckily, the USB tree doesn't shave the 3rd kind of platfrorm_get_irq() bugs:
-treating 0 as error and returning it immediately along with the negative values,
-without doing the remaining part of probe...
-
-> thanks,
-> 
-> greg k-h
-
-MBR, Sergey
+How are you? I'm Vanina. I'm interested to know you and I would like to kno=
+w more about you and establish relationship with you. i will wait for your =
+response. thank you.
