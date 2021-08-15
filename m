@@ -2,82 +2,96 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A995E3EC7B2
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Aug 2021 08:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0133EC7F0
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Aug 2021 09:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbhHOG3U (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 15 Aug 2021 02:29:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43402 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231238AbhHOG3U (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sun, 15 Aug 2021 02:29:20 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 4D4F660240;
-        Sun, 15 Aug 2021 06:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629008930;
-        bh=4eLOsiU/fu2gZ8/ZvV6U9dnO9AR+LfRmF46STH+JBYE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=10Ai4I/tYqWV4G7H67lR5aG528RPqPOcBivmJjOcdmPWVnnuIiv15blJOIDqGM9lv
-         tXIIEVdvIgepifbWK3vlNec0dlt8EudrOGCZrxPMTEpG75Po6p121ifYdK93+ZcIGP
-         XqKmQTBKAX5LuLE6VZ2bgbFpC8uEbOMZx08MnkKw=
-Date:   Sun, 15 Aug 2021 08:28:48 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Eyal Lebedinsky <eyal@eyal.emu.id.au>
-Cc:     linux-usb@vger.kernel.org
-Subject: Re: USB hub problem
-Message-ID: <YRi0ICEZM+1eAyNu@kroah.com>
-References: <3481f401-1d52-d5a1-d983-4b5f7046704b@eyal.emu.id.au>
+        id S236098AbhHOHZO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 15 Aug 2021 03:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235808AbhHOHZN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sun, 15 Aug 2021 03:25:13 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB89C061764;
+        Sun, 15 Aug 2021 00:24:44 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id gz13-20020a17090b0ecdb0290178c0e0ce8bso16074835pjb.1;
+        Sun, 15 Aug 2021 00:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JJDOH+AsHu2AM+5trq9kiKo9CgyK57KxYI3IwWvbE3M=;
+        b=RKVBuxnf6xQR/pSKO2SpOS4Lo6yWbvzYlN2vrYeM3uoUInGkiTdUEcKTamCVloy6Iu
+         ZA9Exggoimx2UOW0KErLqGMmY0WkwWINOzzwidewuOoNoGSp8vQ+H965y14rWqUP1szV
+         YeHPCkKyFA1Cl9AfjlNiFM2Y66k+g0E5jwTXCdyfpfmn7AZfhiNX69hX4MzurMx1p7UB
+         jO1cDfd2BiMw06dGq0kLS6mxxwXvdMt8BI02AdSUlo/GRsgMQr01g81S7i605nNOB+B3
+         v4euFQpY/eX/sBO6CwpOVDqdKZaccw1UyGOi8jqbIzdgr94kaIeDcnVnsHAcUIs8sjBR
+         qOpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JJDOH+AsHu2AM+5trq9kiKo9CgyK57KxYI3IwWvbE3M=;
+        b=PIV9MZmkHIhmC3WEB0FWPiYgNwADZ6j47XWy1ccPHjuvQZfcDDtmeANCevBv5WM9iT
+         xbjVwkPNK4c65loZ48/dMJL7zga3aCPMHXw8QEMmnxYvc+KUNeBIHxQY5a3Sl/8LeYAx
+         8h6FBpEtrIVSgC+cpjM9uTrkC8p8tZhcI1garjshiwY6RHeFDdlpwJ61kFK1MvabfHrE
+         8NbApabNzjgiBqpNV/p4u/xKbwD/gg1dXEfWaJyMlJx1qdyxHIdvXa4myJJMw6K0Pv83
+         83ch/xikHg4mWomCbMEAtQ5KOuRQbRKJdbBPKySXh4P6Fk7r+oa8zJhAdkL6nIKfxbvn
+         wbzQ==
+X-Gm-Message-State: AOAM531KVS9U+5VpVxhjROVgtytaiYhzteY4D/R+z8bb3suxnUUpbrTZ
+        EAERY+kDmLZ6FpsBPS2/AUA=
+X-Google-Smtp-Source: ABdhPJzq7sSAhv3mhPPXmyKVf5x9azgnIMZToYUs9eoJVEO0q/kFfEa3Yd9UMtVPm1x4oAezGGF8aw==
+X-Received: by 2002:a17:90b:14b:: with SMTP id em11mr10845400pjb.125.1629012283879;
+        Sun, 15 Aug 2021 00:24:43 -0700 (PDT)
+Received: from [10.230.32.65] ([192.19.148.250])
+        by smtp.gmail.com with ESMTPSA id 16sm7337825pfu.109.2021.08.15.00.24.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Aug 2021 00:24:43 -0700 (PDT)
+Subject: Re: [PATCH v3 6/7] usb: gadget: bdc: remove unnecessary AND operation
+ when get ep maxp
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     Pawel Laszczak <pawell@cadence.com>,
+        Al Cooper <alcooperx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Eddie Hung <eddie.hung@mediatek.com>,
+        Sergei Shtylyov <sergei.shtylyov@gmail.com>
+References: <1628836253-7432-1-git-send-email-chunfeng.yun@mediatek.com>
+ <1628836253-7432-6-git-send-email-chunfeng.yun@mediatek.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <e191402f-69e1-2fb5-f5e1-6fd73e8b0699@gmail.com>
+Date:   Sun, 15 Aug 2021 09:24:24 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3481f401-1d52-d5a1-d983-4b5f7046704b@eyal.emu.id.au>
+In-Reply-To: <1628836253-7432-6-git-send-email-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sun, Aug 15, 2021 at 09:32:06AM +1000, Eyal Lebedinsky wrote:
-> I have an external 4-way USB3.0 hub (I actually have two of them) That do not behave as expected.
-> It is an XCD XCDESSUSBH4BK. It is unpowered. I am on fedora 34, kernel 5.13.8-200.fc34.x86_64
+
+
+On 8/13/2021 8:30 AM, Chunfeng Yun wrote:
+> usb_endpoint_maxp() already returns actual max packet size, no need
+> to AND 0x7ff.
 > 
-> For starters, I found that attaching a USB SSD does not allow booting from it.
+> Acked-by: Felipe Balbi <balbi@kernel.org>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-That is up to your BIOS, not Linux.
-
-> I then found that when attaching my phone it is not recognized.
-
-In what way?
-
-> I searched the hub model and IDs but did not find relevant information.
-> Is there an official list of supported hubs (or devices)?
-
-No, as any list would instantly be out of date.
-
-> Here is what it looks like.
-> 
-> When the hub is attached (no phone) I see
->         Bus 001 Device 048: ID 0bda:5411 Realtek Semiconductor Corp. RTS5411 Hub
-> and
->         /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
->             |__ Port 5: Dev 5, If 0, Class=Hub, Driver=hub/4p, 480M
->                 |__ Port 2: Dev 48, If 0, Class=Hub, Driver=hub/4p, 480M
-> Attaching the phone does not add a device.
-> 
-> Detaching/attaching the hub (with the phone already plugged in) I get
->         Bus 001 Device 052: ID 04e8:6860 Samsung Electronics Co., Ltd Galaxy A5 (MTP)
->         Bus 001 Device 051: ID 0bda:5411 Realtek Semiconductor Corp. RTS5411 Hub
-> and
->         /:  Bus 01.Port 1: Dev 1, Class=root_hub, Driver=xhci_hcd/16p, 480M
->             |__ Port 5: Dev 5, If 0, Class=Hub, Driver=hub/4p, 480M
->                 |__ Port 2: Dev 51, If 0, Class=Hub, Driver=hub/4p, 480M
->                     |__ Port 1: Dev 52, If 1, Class=Communications, Driver=cdc_acm, 480M
->                     |__ Port 1: Dev 52, If 2, Class=CDC Data, Driver=cdc_acm, 480M
->                     |__ Port 1: Dev 52, If 0, Class=Imaging, Driver=, 480M
->                     |__ Port 1: Dev 52, If 3, Class=Vendor Specific Class, Driver=, 480M
-> and the phone is recognized and accessible as MTP device.
-
-Great, so when does this not work?  This shows a successful device
-found.
-
-thanks,
-
-greg k-h
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
