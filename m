@@ -2,128 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F3E3ED0D3
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 11:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5930A3ED0E8
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 11:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235046AbhHPJGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 05:06:55 -0400
-Received: from smtpout2.vodafonemail.de ([145.253.239.133]:39778 "EHLO
-        smtpout2.vodafonemail.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235284AbhHPJG0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 05:06:26 -0400
-Received: from smtp.vodafone.de (smtpa08.fra-mediabeam.com [10.2.0.39])
-        by smtpout2.vodafonemail.de (Postfix) with ESMTP id 0876C125C9C;
-        Mon, 16 Aug 2021 11:04:12 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-smtpout-mb-15sep; t=1629104652;
-        bh=chbgSvyqMrs/RDUVSKxoE0r4FFnnKpAGJRedrJBuPsc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=S3c5pipw6JNaSo1hvzEImvC0BAwfwWtInpC7XKjHCLjPMuSXSbmpLzS/R8o8/Th3W
-         mX6IEUm/EEhgdQ/ttL7ug3kyf7wK1hL5yE/9WQiWRmy8hnEvMqWAPswqfgH6caZjjX
-         kXaTm3FajkG0YOja/irfCR2M8eEWXYns7W74xAsc=
-Received: from arcor.de (p5b28106c.dip0.t-ipconnect.de [91.40.16.108])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 67B1D1401B3;
-        Mon, 16 Aug 2021 09:04:11 +0000 (UTC)
-Date:   Mon, 16 Aug 2021 11:04:00 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Slark Xiao <slark_xiao@163.com>
+        id S235285AbhHPJSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 05:18:14 -0400
+Received: from m13101.mail.163.com ([220.181.13.101]:47439 "EHLO
+        m13101.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234976AbhHPJSN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 05:18:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=4lZp3
+        Ug0KBu/1SG/n8YjNvAQbUY+YBAi/7ZpLHfWaHI=; b=Aum22iE8h7e9WHFABmkZ8
+        +z29/EddlHSa0Uxrx4tiZqCyD75zL2zFkxXK58BqyybgCBoABklHlG3VTJrCwTur
+        RzycMwzQWIkCagr8pAm3oyesbuOWjXW/QCZC9180nL89DWUlFL1qCm4A/BP5M7T/
+        Gj7ooLR0CjAo106FupaxvE=
+Received: from slark_xiao$163.com ( [223.104.68.87] ) by
+ ajax-webmail-wmsvr101 (Coremail) ; Mon, 16 Aug 2021 17:17:00 +0800 (CST)
+X-Originating-IP: [223.104.68.87]
+Date:   Mon, 16 Aug 2021 17:17:00 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Reinhard Speyerer" <rspmn@arcor.de>
 Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
+Subject: Re:Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
  composition 0x901d
-Message-ID: <YRoqAJmGBpV/OuZL@arcor.de>
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2021 www.mailtech.cn 163com
+In-Reply-To: <YRoqAJmGBpV/OuZL@arcor.de>
 References: <20210816035404.4210-1-slark_xiao@163.com>
+ <YRoqAJmGBpV/OuZL@arcor.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210816035404.4210-1-slark_xiao@163.com>
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-purgate-size: 3612
-X-purgate-ID: 155817::1629104651-00007455-FE839557/0/0
+Message-ID: <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: ZcGowAAXgzUMLRphsAuFAQ--.10104W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwzwZFc7TfdOqAAAsv
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 11:54:04AM +0800, Slark Xiao wrote:
-> Foxconn SDX55 T77W175 device is working in PCIe mode normally.
-> You can find the PCIe support in drivers/bus/mhi/pci_generic.c file.
-> But in some scenario, we need to capture the memory dump once it crashed.
-> So a diag port under USB driver is needed.
-> 
-> Only interface 0 is used:
-> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb | grep 05c6
-> Bus 003 Device 010: ID 05c6:901d Qualcomm, Inc. Generic Mobile Broadband Adapter
-> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb -t | grep "Dev 10"
->     |__ Port 7: Dev 10, If 0, Class=Vendor Specific Class, Driver=option, 480M
-> 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
->  drivers/usb/serial/option.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> index 039450069ca4..c275f489c1cc 100644
-> --- a/drivers/usb/serial/option.c
-> +++ b/drivers/usb/serial/option.c
-> @@ -2068,6 +2068,7 @@ static const struct usb_device_id option_ids[] = {
->  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
->  	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
->  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x901d) },				/* Foxconn T77W175 PCIE+USB mode*/
->  	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
->  	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
->  	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
-> -- 
-> 2.25.1
-> 
-> 
-
-Hi Slark,
-
-since this entry uses the Qualcomm USB VID it would be a good idea to make
-the option driver only bind to the DIAG interface in case other UE vendors
-have the ADB interface provided by this composition enabled:
-
-$ sed 30q 901D
-#!/bin/sh
-#
-# Copyright (c) 2014,2017-2018, The Linux Foundation. All rights reserved.
-#
-# Redistribution and use in source and binary forms, with or without
-# modification, are permitted provided that the following conditions are met:
-#     * Redistributions of source code must retain the above copyright
-#       notice, this list of conditions and the following disclaimer.
-#     * Redistributions in binary form must reproduce the above copyright
-#       notice, this list of conditions and the following disclaimer in the
-#       documentation and/or other materials provided with the distribution.
-#     * Neither the name of The Linux Foundation nor the names of its
-#       contributors may be used to endorse or promote products derived from
-#       this software without specific prior written permission.
-#
-# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
-# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE DISCLAIMED.  IN NO
-# EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
-# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-# DESCRIPTION: DIAG + ADB
-
-echo "Switching to composition number 0x901D"  > /dev/kmsg
-
-
-[Ideally these compositions would also be available via kernel.org and/or
- codeaura.org but so far I have been unable to find them there.]
-
-Regards,
-Reinhard
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjEtMDgtMTYgMTc6MDQ6MDAsICJSZWluaGFyZCBTcGV5ZXJl
+ciIgPHJzcG1uQGFyY29yLmRlPiB3cm90ZToKPk9uIE1vbiwgQXVnIDE2LCAyMDIxIGF0IDExOjU0
+OjA0QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEZveGNvbm4gU0RYNTUgVDc3VzE3NSBk
+ZXZpY2UgaXMgd29ya2luZyBpbiBQQ0llIG1vZGUgbm9ybWFsbHkuCj4+IFlvdSBjYW4gZmluZCB0
+aGUgUENJZSBzdXBwb3J0IGluIGRyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jIGZpbGUuCj4+
+IEJ1dCBpbiBzb21lIHNjZW5hcmlvLCB3ZSBuZWVkIHRvIGNhcHR1cmUgdGhlIG1lbW9yeSBkdW1w
+IG9uY2UgaXQgY3Jhc2hlZC4KPj4gU28gYSBkaWFnIHBvcnQgdW5kZXIgVVNCIGRyaXZlciBpcyBu
+ZWVkZWQuCj4+IAo+PiBPbmx5IGludGVyZmFjZSAwIGlzIHVzZWQ6Cj4+IGpiZEBqYmQtVGhpbmtQ
+YWQtUDEtR2VuLTQ6fiQgbHN1c2IgfCBncmVwIDA1YzYKPj4gQnVzIDAwMyBEZXZpY2UgMDEwOiBJ
+RCAwNWM2OjkwMWQgUXVhbGNvbW0sIEluYy4gR2VuZXJpYyBNb2JpbGUgQnJvYWRiYW5kIEFkYXB0
+ZXIKPj4gamJkQGpiZC1UaGlua1BhZC1QMS1HZW4tNDp+JCBsc3VzYiAtdCB8IGdyZXAgIkRldiAx
+MCIKPj4gICAgIHxfXyBQb3J0IDc6IERldiAxMCwgSWYgMCwgQ2xhc3M9VmVuZG9yIFNwZWNpZmlj
+IENsYXNzLCBEcml2ZXI9b3B0aW9uLCA0ODBNCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBY
+aWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy91c2Ivc2VyaWFsL29w
+dGlvbi5jIHwgMSArCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4gCj4+IGRp
+ZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgYi9kcml2ZXJzL3VzYi9zZXJp
+YWwvb3B0aW9uLmMKPj4gaW5kZXggMDM5NDUwMDY5Y2E0Li5jMjc1ZjQ4OWMxY2MgMTAwNjQ0Cj4+
+IC0tLSBhL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYwo+PiArKysgYi9kcml2ZXJzL3VzYi9z
+ZXJpYWwvb3B0aW9uLmMKPj4gQEAgLTIwNjgsNiArMjA2OCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1
+Y3QgdXNiX2RldmljZV9pZCBvcHRpb25faWRzW10gPSB7Cj4+ICAJICAuZHJpdmVyX2luZm8gPSBS
+U1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gIAl7IFVTQl9ERVZJQ0UoMHgwNDg5LCAw
+eGUwYjUpLAkJCQkJCS8qIEZveGNvbm4gVDc3Vzk2OCBFU0lNICovCj4+ICAJICAuZHJpdmVyX2lu
+Zm8gPSBSU1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gKwl7IFVTQl9ERVZJQ0UoUVVB
+TENPTU1fVkVORE9SX0lELCAweDkwMWQpIH0sCQkJCS8qIEZveGNvbm4gVDc3VzE3NSBQQ0lFK1VT
+QiBtb2RlKi8KPj4gIAl7IFVTQl9ERVZJQ0UoMHgxNTA4LCAweDEwMDEpLAkJCQkJCS8qIEZpYm9j
+b20gTkw2NjggKElPVCB2ZXJzaW9uKSAqLwo+PiAgCSAgLmRyaXZlcl9pbmZvID0gUlNWRCg0KSB8
+IFJTVkQoNSkgfCBSU1ZEKDYpIH0sCj4+ICAJeyBVU0JfREVWSUNFKDB4MmNiNywgMHgwMTA0KSwJ
+CQkJCQkvKiBGaWJvY29tIE5MNjc4IHNlcmllcyAqLwo+PiAtLSAKPj4gMi4yNS4xCj4+IAo+PiAK
+Pgo+SGkgU2xhcmssCj4KPnNpbmNlIHRoaXMgZW50cnkgdXNlcyB0aGUgUXVhbGNvbW0gVVNCIFZJ
+RCBpdCB3b3VsZCBiZSBhIGdvb2QgaWRlYSB0byBtYWtlCj50aGUgb3B0aW9uIGRyaXZlciBvbmx5
+IGJpbmQgdG8gdGhlIERJQUcgaW50ZXJmYWNlIGluIGNhc2Ugb3RoZXIgVUUgdmVuZG9ycwo+aGF2
+ZSB0aGUgQURCIGludGVyZmFjZSBwcm92aWRlZCBieSB0aGlzIGNvbXBvc2l0aW9uIGVuYWJsZWQ6
+Cj4KPiQgc2VkIDMwcSA5MDFECj4jIS9iaW4vc2gKPiMKPiMgQ29weXJpZ2h0IChjKSAyMDE0LDIw
+MTctMjAxOCwgVGhlIExpbnV4IEZvdW5kYXRpb24uIEFsbCByaWdodHMgcmVzZXJ2ZWQuCj4jCj4j
+IFJlZGlzdHJpYnV0aW9uIGFuZCB1c2UgaW4gc291cmNlIGFuZCBiaW5hcnkgZm9ybXMsIHdpdGgg
+b3Igd2l0aG91dAo+IyBtb2RpZmljYXRpb24sIGFyZSBwZXJtaXR0ZWQgcHJvdmlkZWQgdGhhdCB0
+aGUgZm9sbG93aW5nIGNvbmRpdGlvbnMgYXJlIG1ldDoKPiMgICAgICogUmVkaXN0cmlidXRpb25z
+IG9mIHNvdXJjZSBjb2RlIG11c3QgcmV0YWluIHRoZSBhYm92ZSBjb3B5cmlnaHQKPiMgICAgICAg
+bm90aWNlLCB0aGlzIGxpc3Qgb2YgY29uZGl0aW9ucyBhbmQgdGhlIGZvbGxvd2luZyBkaXNjbGFp
+bWVyLgo+IyAgICAgKiBSZWRpc3RyaWJ1dGlvbnMgaW4gYmluYXJ5IGZvcm0gbXVzdCByZXByb2R1
+Y2UgdGhlIGFib3ZlIGNvcHlyaWdodAo+IyAgICAgICBub3RpY2UsIHRoaXMgbGlzdCBvZiBjb25k
+aXRpb25zIGFuZCB0aGUgZm9sbG93aW5nIGRpc2NsYWltZXIgaW4gdGhlCj4jICAgICAgIGRvY3Vt
+ZW50YXRpb24gYW5kL29yIG90aGVyIG1hdGVyaWFscyBwcm92aWRlZCB3aXRoIHRoZSBkaXN0cmli
+dXRpb24uCj4jICAgICAqIE5laXRoZXIgdGhlIG5hbWUgb2YgVGhlIExpbnV4IEZvdW5kYXRpb24g
+bm9yIHRoZSBuYW1lcyBvZiBpdHMKPiMgICAgICAgY29udHJpYnV0b3JzIG1heSBiZSB1c2VkIHRv
+IGVuZG9yc2Ugb3IgcHJvbW90ZSBwcm9kdWN0cyBkZXJpdmVkIGZyb20KPiMgICAgICAgdGhpcyBz
+b2Z0d2FyZSB3aXRob3V0IHNwZWNpZmljIHByaW9yIHdyaXR0ZW4gcGVybWlzc2lvbi4KPiMKPiMg
+VEhJUyBTT0ZUV0FSRSBJUyBQUk9WSURFRCAiQVMgSVMiIEFORCBBTlkgRVhQUkVTUyBPUiBJTVBM
+SUVEIFdBUlJBTlRJRVMsCj4jIElOQ0xVRElORywgQlVUIE5PVCBMSU1JVEVEIFRPLCBUSEUgSU1Q
+TElFRCBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwKPiMgRklUTkVTUyBGT1IgQSBQQVJU
+SUNVTEFSIFBVUlBPU0UgQU5EIE5PTi1JTkZSSU5HRU1FTlQgQVJFIERJU0NMQUlNRUQuICBJTiBO
+Two+IyBFVkVOVCBTSEFMTCBUSEUgQ09QWVJJR0hUIE9XTkVSIE9SIENPTlRSSUJVVE9SUyBCRSBM
+SUFCTEUgRk9SIEFOWSBESVJFQ1QsCj4jIElORElSRUNULCBJTkNJREVOVEFMLCBTUEVDSUFMLCBF
+WEVNUExBUlksIE9SIENPTlNFUVVFTlRJQUwgREFNQUdFUwo+IyAoSU5DTFVESU5HLCBCVVQgTk9U
+IExJTUlURUQgVE8sIFBST0NVUkVNRU5UIE9GIFNVQlNUSVRVVEUgR09PRFMgT1IgU0VSVklDRVM7
+Cj4jIExPU1MgT0YgVVNFLCBEQVRBLCBPUiBQUk9GSVRTOyBPUiBCVVNJTkVTUyBJTlRFUlJVUFRJ
+T04pIEhPV0VWRVIgQ0FVU0VEIEFORAo+IyBPTiBBTlkgVEhFT1JZIE9GIExJQUJJTElUWSwgV0hF
+VEhFUiBJTiBDT05UUkFDVCwgU1RSSUNUIExJQUJJTElUWSwgT1IgVE9SVAo+IyAoSU5DTFVESU5H
+IE5FR0xJR0VOQ0UgT1IgT1RIRVJXSVNFKSBBUklTSU5HIElOIEFOWSBXQVkgT1VUIE9GIFRIRSBV
+U0UgT0YgVEhJUwo+IyBTT0ZUV0FSRSwgRVZFTiBJRiBBRFZJU0VEIE9GIFRIRSBQT1NTSUJJTElU
+WSBPRiBTVUNIIERBTUFHRS4KPgo+IyBERVNDUklQVElPTjogRElBRyArIEFEQgo+Cj5lY2hvICJT
+d2l0Y2hpbmcgdG8gY29tcG9zaXRpb24gbnVtYmVyIDB4OTAxRCIgID4gL2Rldi9rbXNnCj4KPgo+
+W0lkZWFsbHkgdGhlc2UgY29tcG9zaXRpb25zIHdvdWxkIGFsc28gYmUgYXZhaWxhYmxlIHZpYSBr
+ZXJuZWwub3JnIGFuZC9vcgo+IGNvZGVhdXJhLm9yZyBidXQgc28gZmFyIEkgaGF2ZSBiZWVuIHVu
+YWJsZSB0byBmaW5kIHRoZW0gdGhlcmUuXQo+Cj5SZWdhcmRzLAo+UmVpbmhhcmQKCkhpIFJlaW5o
+YXJkLAogIFNvIHNob3VsZCBJIHVzZSBVU0JfREVWSUNFX0lOVEVSRkFDRV9OVU1CRVIoUVVBTENP
+TU1fVkVORE9SX0lELCAweDkwMWQsIDB4MDApIHRvIGJpbmQgRGlhZyBwb3J0IG9ubHk/CgpUaGFu
+a3M=
