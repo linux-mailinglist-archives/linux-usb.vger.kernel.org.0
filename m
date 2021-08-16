@@ -2,109 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E21DF3EDACF
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 18:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434C43EDBD6
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 18:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbhHPQWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 12:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34934 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbhHPQWm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 12:22:42 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364A9C061764;
-        Mon, 16 Aug 2021 09:22:11 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: sre)
-        with ESMTPSA id 86B9B1F412B4
-Received: by earth.universe (Postfix, from userid 1000)
-        id B35603C0C9B; Mon, 16 Aug 2021 18:22:07 +0200 (CEST)
-Date:   Mon, 16 Aug 2021 18:22:07 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v6 05/12] dt-bindings: power: supply: smb347-charger:
- Document USB VBUS regulator
-Message-ID: <20210816162207.v4ka4vtuajf5jpb6@earth.universe>
-References: <20210731173842.19643-1-digetx@gmail.com>
- <20210731173842.19643-6-digetx@gmail.com>
- <20210806211314.sfjl5jke27hz3jj7@earth.universe>
- <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+        id S231857AbhHPQ51 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 12:57:27 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:59659 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230351AbhHPQ51 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 12:57:27 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 739CA32004CE;
+        Mon, 16 Aug 2021 12:56:54 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Mon, 16 Aug 2021 12:56:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=w6Np71C9c2OqyYHZCtvBnfzBDrk
+        360rSB3/6RpTrD8E=; b=urdg0Wdvhfze19yGUUxl95ayNZz5LvVg6kwRaXJZcLK
+        FS18btqWQpZYj2byLFZ6spc8RAYDumGy4J+ZZAEGwt0uCC+WiokXUYBgx15lQP/w
+        JJUluaurOUjmqYrYKs6TDfJ4LqXx3sutGR3cNLyl4AffohVQe6oXMit4isTC7qaT
+        eA7HSlMMzETkoBiFdqTTsSkdiJcRhonp1IuWofhK3pFKWlqr/fW6PDauumQiW4ZF
+        zQJtgynYt7wc8cOHHZ8YuylGWpdUyvrN3aIuWPPuiAVHIqq9Hgc8TGHzQlgJXvhN
+        nB/mCxvZiohEcFxa2yBrgPKScBEtmTqwDOXIHYO7h6g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=w6Np71
+        C9c2OqyYHZCtvBnfzBDrk360rSB3/6RpTrD8E=; b=oYw3HYhiHguL9v4JTzdb+8
+        AUnG5BxnwO12B67ECHp0gN8JZTsUGXAshP0GglREYYHCJYyNaYsXtvpme8JJJveR
+        nA6y08L43SK0G7CGcUlAv8WRCTbhWpwZ1lkfKqMhVPMjS0jDMLuW4bySoAZy6tjg
+        3EsFvoqbpC42pN3wMSnjVljqlKZgYj9pYEd9eGxHCuw83z6wGXera+Q8AE+wlp3u
+        +3SsrFyHPVUT7K/FzvjEG2mEFRj9eeoI1pEHHB87fUtTH0fobgeZ+ECSCMe06ONJ
+        fu9L/ecbssRYucgb/Jrfi+N4TAObowQ1OWMCMMnd53vcfXCqgwXVDkWTr37VZjHQ
+        ==
+X-ME-Sender: <xms:1ZgaYQ3jPCEqM3oxqvkAu2uwRNEdm2Cd7BWfDOU_sj-MbhQStegHag>
+    <xme:1ZgaYbF23LjIKZor5NMEHLRIiEiTHl2-WfZcQ7BZ_NlUuw0nhDI-2QLmuyaRqtYZ5
+    kcF7JFFV2j-XA>
+X-ME-Received: <xmr:1ZgaYY7nDamSqMXBu3-2dvnU5s_4_UV_2_pX_0443qDx2SAq7g_Gg29FB4ZEBDjNx3xh5oX122pgNmhAbZ96w_DiHal0FC6q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrledugddutdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
+    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
+    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
+    drtghomh
+X-ME-Proxy: <xmx:1ZgaYZ2XwFhIHBtueAcyoqWp6QgkUbs71TBfFBMRFmJX0ZCpOl6MHQ>
+    <xmx:1ZgaYTFgN_nLMoVwfTsYq6TcJ8F-8YacdXBuI2Yl0sGt8zSWhRRVlw>
+    <xmx:1ZgaYS-XEomLc1VhbLsWGhNqzis0dMmd1SzB5EAflgIlNrCYAHmpVw>
+    <xmx:1pgaYY4ljVe3Gv_3WNpGrh2m3dJvQCcg6CylqKjoDMgyU-0Xa_12pA>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 16 Aug 2021 12:56:53 -0400 (EDT)
+Date:   Mon, 16 Aug 2021 18:56:50 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH]  usb: gadget: f_uac1: fixing inconsistent indenting
+Message-ID: <YRqY0iBYFozlveJz@kroah.com>
+References: <20210814072214.4893-1-pavel.hofman@ivitera.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="erjfwqt7yl2kd7cr"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+In-Reply-To: <20210814072214.4893-1-pavel.hofman@ivitera.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Sat, Aug 14, 2021 at 09:22:14AM +0200, Pavel Hofman wrote:
+>  Fixing inconsistent indenting identified by kernel test
+>  robot.
+> 
+>  Signed-off-by: Pavel Hofman<pavel.hofman@ivitera.com>
 
---erjfwqt7yl2kd7cr
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please do not indent your changelog and signed-off-by line by a space.
 
-Hi,
+Also, you need a space after your 'n' and before the '<'.
 
-On Mon, Aug 16, 2021 at 06:39:09PM +0300, Dmitry Osipenko wrote:
-> 07.08.2021 00:13, Sebastian Reichel =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > Hi,
-> >=20
-> > On Sat, Jul 31, 2021 at 08:38:35PM +0300, Dmitry Osipenko wrote:
-> >> SMB347 can supply power to USB VBUS, which is required by OTG-cable
-> >> devices that want to switch USB port into the host mode. Add USB VBUS
-> >> regulator properties.
-> >>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> >> ---
-> >=20
-> > Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
->=20
-> Sebastian, you can pick up these patches into the power tree:
->=20
-> dt-bindings: power: supply: smb347-charger: Document USB VBUS
-> regulator
-> power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
-> power: supply: smb347-charger: Utilize generic regmap caching
-> power: supply: smb347-charger: Add missing pin control activation
-> power: supply: smb347-charger: Implement USB VBUS regulator
->=20
-> The reset of the patches could go via the Tegra tree. It's probably a
-> bit too late for the Tegra patches since Thierry already made 5.15 PR,
-> but should be fine for the power. Thanks in advance!
+And drop the extra space in the subject line.
 
-Queued now.
+thanks,
 
--- Sebastian
-
---erjfwqt7yl2kd7cr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmEakJ8ACgkQ2O7X88g7
-+ppCOA//Uim7ycc5jXS9N7YcXL7DOj+86gG/dde8tv/tLAtvEWcyZvRNsJqO/P4q
-jF8rSsiOytZ6PZi7swIU+/lBUIs2sVAY55+GGFAxMAf8ZVWu4b0hUHiMdrCAL3BZ
-CCRP5NNT8HNQOetJ5Xt8zjpiBCZFy5OXim+F+JQF8w9H23co7DS1Fx2IjWJwulAF
-5uwxEB5Hy9FxosI97g7LFKR37Qe2NwNNSxW3q9wDRqNri5HP64frhOut/tT6Wnmn
-t1S1WD9m/JsP1QA9cofXKKF9enhXCdzLnDEWUqcZZol3cDm+LGsMdAnHCPmcsfJ+
-iQpIXtJec6je5pPQpd9nbS/UlriErZSfoGEKrnIVTYLV+qOI+gY1Y0bt33HgChBy
-LOnmVUTuBxGD2Za1pPray1bEeAV5hQI+H5BtWqar5Dk/xFsBMFMnxWymQn/bkD7j
-GzI0daxC2IAaSIexsfoPnv1gM6DMrlV1Zuv1rpmaT3r/XV3Pk+FgnGifwW9R3CEW
-KrDTTTKe48TxtNv92B+8WynRN1y2YBhAjuPtyvBOgVe7ohbphWAqjdYX+dBBi2mC
-kjWfXAMTunUjnIkO3ik06UsC+h8+WMKwIwNb3zLbsp0COv91+bZi/O/gaQokvqmU
-OTEYff6rwW/cuLzKptXhEwT61Q52jdbS44NSBcFv/kpLC9vgVwQ=
-=AMiA
------END PGP SIGNATURE-----
-
---erjfwqt7yl2kd7cr--
+greg k-h
