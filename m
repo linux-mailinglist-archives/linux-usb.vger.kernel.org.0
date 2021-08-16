@@ -2,66 +2,72 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 253423ED90A
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 16:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAC43ED99F
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 17:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbhHPOj3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 10:39:29 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:57937 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S229627AbhHPOj2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 10:39:28 -0400
-Received: (qmail 123046 invoked by uid 1000); 16 Aug 2021 10:38:56 -0400
-Date:   Mon, 16 Aug 2021 10:38:56 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Michal Kubecek <mkubecek@suse.cz>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [REGRESSION][BISECTED] flood of "hid-generic ... control queue
- full" since v5.14-rc1
-Message-ID: <20210816143856.GA121345@rowland.harvard.edu>
-References: <20210816130059.3yxtdvu2r7wo4uu3@lion.mk-sys.cz>
- <YRpnfJ719DwPu2B0@kroah.com>
- <20210816141347.zougsudwe5tqgkpt@lion.mk-sys.cz>
+        id S232574AbhHPPNr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 11:13:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58732 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232237AbhHPPNq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Aug 2021 11:13:46 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id BF60C606A5;
+        Mon, 16 Aug 2021 15:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629126795;
+        bh=muWpwxiPhJ0hjPwwuNj9+N7/JqofNLtCZB6kojrL6O4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OgBGiX9S+ojRVF6ymbchD+MaZLos9l+7IKvRZukSGyd3xxSB9MIpTac3kT3r7L8gA
+         43u5XNEiremTDBTRr859MBB4helMXhLltsEGpbk3Jht07K1qapQmIXnIMovG9oa+Fm
+         LNH5Afj2JUYKu9LRhtoah3z2QSJ3LJCBzRKN+FJgZs9AsRMKiCb4itw7y8rzjRU319
+         SdY2IyeB4otPtWKRT1j6L7XisG5ni38AoxeIzXDY+3A2UoQo2oOZmx1n9heoGH2UI5
+         3J6aNSu02cl+VR5VUDQVZxNHP8V8FYI7oLh77YGE36E6/12syBbHWwwnvWWidLeRP1
+         FdvscxNxT+5Gw==
+Date:   Mon, 16 Aug 2021 08:13:14 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <linux@rempel-privat.de>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
+ add phylib support")
+Message-ID: <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
+References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210816141347.zougsudwe5tqgkpt@lion.mk-sys.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 04:13:47PM +0200, Michal Kubecek wrote:
-> On Mon, Aug 16, 2021 at 03:26:20PM +0200, Greg Kroah-Hartman wrote:
-> > On Mon, Aug 16, 2021 at 03:00:59PM +0200, Michal Kubecek wrote:
-> > > Hello,
-> > > 
-> > > starting with v5.14-rc1, my kernel log gets flooded with messages
-> > > 
-> > >   hid-generic 0003:051D:0002.0002: control queue full
-> > > 
-> > > at rate of ~33 per second. Device 051d:0002 is an APC UPS (BR-650 VA).
-> > > I bisected the issue to commit
-> > > 
-> > >   7652dd2c5cb7 ("USB: core: Check buffer length matches wLength for control transfers")
-> > > 
-> > > Reverting this commit on top of v5.14-rc6 resolves the issue. I suspect
-> > > the problem is some missing cleanup when usb_submit_urb() bails out on
-> > > the newly added check but I'm not familiar enough with the code to see
-> > > what is missing or if the problem is on USB or HID side.
+On Wed, 11 Aug 2021 17:55:34 +0300 Jarkko Nikula wrote:
+> Hi
+> 
+> Our ASIX USB ethernet adapter stopped working after v5.14-rc1. It 
+> doesn't get an IP from DHCP.
+> 
+> v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag 
+> 'arc-5.14-rc6' of 
+> git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the 
+> regression.
+> 
+> I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add 
+> phylib support").
 
-...
+Oleksij, any comments?
 
-> Looking at the code, the primary problem seems to be that the "else"
-> branch in hid_submit_ctrl() recalculates transfer_buffer_length to
-> a rounded up value but assigns the original length to wLength.
-
-Looks like you found the bug.  Fixing it might be as simple as setting 
-len = padlen in that "else" branch.  You could then combine the 
-transfer_buffer_length assignment with the one in the "if" branch and 
-hoist them out after the entire "if" statement.
-
-Alan Stern
+> Here's the dmesg snippet from working and non-working cases:
+> 
+> OK:
+> [    6.115773] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
+> ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
+> [    8.595202] asix 1-8:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
+> 
+> NOK:
+> [    6.511543] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
+> ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
+> [    8.518219] asix 1-8:1.0 eth0: Link is Down
+> 
+> lsusb -d 0b95:7720
+> Bus 001 Device 002: ID 0b95:7720 ASIX Electronics Corp. AX88772
