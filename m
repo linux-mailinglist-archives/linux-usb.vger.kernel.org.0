@@ -2,72 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAC43ED99F
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 17:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12CC3EDA09
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 17:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232574AbhHPPNr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 11:13:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232237AbhHPPNq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Aug 2021 11:13:46 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id BF60C606A5;
-        Mon, 16 Aug 2021 15:13:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629126795;
-        bh=muWpwxiPhJ0hjPwwuNj9+N7/JqofNLtCZB6kojrL6O4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OgBGiX9S+ojRVF6ymbchD+MaZLos9l+7IKvRZukSGyd3xxSB9MIpTac3kT3r7L8gA
-         43u5XNEiremTDBTRr859MBB4helMXhLltsEGpbk3Jht07K1qapQmIXnIMovG9oa+Fm
-         LNH5Afj2JUYKu9LRhtoah3z2QSJ3LJCBzRKN+FJgZs9AsRMKiCb4itw7y8rzjRU319
-         SdY2IyeB4otPtWKRT1j6L7XisG5ni38AoxeIzXDY+3A2UoQo2oOZmx1n9heoGH2UI5
-         3J6aNSu02cl+VR5VUDQVZxNHP8V8FYI7oLh77YGE36E6/12syBbHWwwnvWWidLeRP1
-         FdvscxNxT+5Gw==
-Date:   Mon, 16 Aug 2021 08:13:14 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <linux@rempel-privat.de>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
- add phylib support")
-Message-ID: <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
-References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
+        id S236314AbhHPPjs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 11:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236748AbhHPPjo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 11:39:44 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384AAC061764;
+        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id t9so35324399lfc.6;
+        Mon, 16 Aug 2021 08:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
+        b=UMbCMbBAwfuhjpCWl3t3Ll9mbF30yfBmsWphmS8+Ta98tmTqcWfC3Kq3JLHDi27ooV
+         brfx16+Ulv155VrOnXNNdPkQfSgnF+OnEn1WTwP8OJmzDesZCWsHzL7piNnAFEEYZdf7
+         mHlSFzyrXAXkP2MShRWUTO5BJqbgO1MdXO8Fqmbu0wTQKIxUoc1np6yUAG3yXj1d26kh
+         OYXpfEPxi5kVfmL8CQEx8plzuW5ljp9shETvG6dBJIEKqp+4LkIk26E8f+njntx77sS4
+         kZpON449jbp76ErTRQcGQr8URpo71gITZmwKYhs+HShcDRSNO2m4jNimkU+uIiuqQLZQ
+         wQmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=gLw/kz93BHvFOsj+m2S5uBMIvOyyukhUjyEmSfNHvuQ=;
+        b=n3ndcUhWtqlVSAGEx6QIj4p1pgSQ9loJ7WmNmSFpw8N/pFnM+w0Rhy+SsVUnt4JuCH
+         1VBj6u+wyOCSKvnByD9ewUx/DeCqAYKESehv/lOk27aGbnJcqK/k/xCmhoAdnbAWctPi
+         y55t2sn58j5CH2Q6SiEk3qHRggIH7wDF3DEHqwErb4NLFX6Cf9hJB0ZCJI+MJ4VJZqAJ
+         rTtsgbNlkof1hUUIlbkCCuXjZeTCpRccv1+TeOhQraQ6fJKSw5GtecCogLLN4vcwjYmu
+         kfdfuPGAocOOaWyDI6HRv1FjcciRNWVf7qABAbgSS8OQ4NCKAqbsY7eOQziPh8yUlXqK
+         zpgQ==
+X-Gm-Message-State: AOAM530YA3FoxgInhPjFgNBNHWXZhj5KmI2O1sZW5Qhbs/hyUEZElveC
+        3vk0sUXd3RZXdXRWp67udQZbIjBIcuQ=
+X-Google-Smtp-Source: ABdhPJyrmXfhpLAU/KOQY7BsiWYzn8V0yz6Jvc7+AAr/u2dCgesHtuftJ2Z/t8Wf7npnSqjRxWOnSQ==
+X-Received: by 2002:a19:c7d4:: with SMTP id x203mr12095093lff.575.1629128350477;
+        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
+        by smtp.googlemail.com with ESMTPSA id k12sm641889ljm.65.2021.08.16.08.39.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Aug 2021 08:39:10 -0700 (PDT)
+Subject: Re: [PATCH v6 05/12] dt-bindings: power: supply: smb347-charger:
+ Document USB VBUS regulator
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Mark Brown <broonie@kernel.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        David Heidelberg <david@ixit.cz>, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <20210731173842.19643-1-digetx@gmail.com>
+ <20210731173842.19643-6-digetx@gmail.com>
+ <20210806211314.sfjl5jke27hz3jj7@earth.universe>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <dce19bb0-216e-bcd7-3db5-b2c074b4ca47@gmail.com>
+Date:   Mon, 16 Aug 2021 18:39:09 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20210806211314.sfjl5jke27hz3jj7@earth.universe>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 11 Aug 2021 17:55:34 +0300 Jarkko Nikula wrote:
-> Hi
+07.08.2021 00:13, Sebastian Reichel пишет:
+> Hi,
 > 
-> Our ASIX USB ethernet adapter stopped working after v5.14-rc1. It 
-> doesn't get an IP from DHCP.
+> On Sat, Jul 31, 2021 at 08:38:35PM +0300, Dmitry Osipenko wrote:
+>> SMB347 can supply power to USB VBUS, which is required by OTG-cable
+>> devices that want to switch USB port into the host mode. Add USB VBUS
+>> regulator properties.
+>>
+>> Reviewed-by: Rob Herring <robh@kernel.org>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
 > 
-> v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag 
-> 'arc-5.14-rc6' of 
-> git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the 
-> regression.
-> 
-> I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add 
-> phylib support").
+> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Oleksij, any comments?
+Sebastian, you can pick up these patches into the power tree:
 
-> Here's the dmesg snippet from working and non-working cases:
-> 
-> OK:
-> [    6.115773] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
-> ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
-> [    8.595202] asix 1-8:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
-> 
-> NOK:
-> [    6.511543] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
-> ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
-> [    8.518219] asix 1-8:1.0 eth0: Link is Down
-> 
-> lsusb -d 0b95:7720
-> Bus 001 Device 002: ID 0b95:7720 ASIX Electronics Corp. AX88772
+dt-bindings: power: supply: smb347-charger: Document USB VBUS
+regulator
+power: supply: smb347-charger: Make smb347_set_writable() IRQ-safe
+power: supply: smb347-charger: Utilize generic regmap caching
+power: supply: smb347-charger: Add missing pin control activation
+power: supply: smb347-charger: Implement USB VBUS regulator
+
+The reset of the patches could go via the Tegra tree. It's probably a
+bit too late for the Tegra patches since Thierry already made 5.15 PR,
+but should be fine for the power. Thanks in advance!
