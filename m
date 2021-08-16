@@ -2,141 +2,249 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 793D93EDDA9
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 21:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8A0A3EDDAE
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 21:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbhHPTNX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 15:13:23 -0400
-Received: from smtp-out2.suse.de ([195.135.220.29]:60996 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbhHPTNX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 15:13:23 -0400
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2036B1FFCD;
-        Mon, 16 Aug 2021 19:12:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1629141170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bLS7JbPsgoJbranNPm2czgSZVcMxJZOHABRNcu46Ask=;
-        b=iiIk1yfTICvxIUWMfkLRDkxANadOaEzCF1k3U5AH2DFOxWS3+RyjEeXmSTv4YSYs/3Ru30
-        OnA5s8gEmj3COvGl/SukJ7/uSX6dt+7Pn9fO3XXt3hakIxA8xfKIWN75aM5bu46oWtgTlz
-        RG0rUYdFKopPTtHeEfJauWBmZGhH05Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1629141170;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=bLS7JbPsgoJbranNPm2czgSZVcMxJZOHABRNcu46Ask=;
-        b=E6mboCSuqLSTpqnqzQfD2rw0/viszt8gLpcJKzxPBzsNW2hFu8O6poGJO8nHpU+U7lh+Rs
-        ZPiQ8iK4uLFgcoCw==
-Received: from lion.mk-sys.cz (unknown [10.100.200.14])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S229790AbhHPTO2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 15:14:28 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:59715 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229556AbhHPTO1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 15:14:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629141235; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=y3QxgLLMAHDGT/O91XFpBlSppDSzi2ZVZ41kaemQDLo=; b=j5yVMvrGytgorNP+/SHYK0spcbKroXbaeIzlp0aFNpXCukplZYjSiY+wCkB7sAtSELuF4Zc+
+ L/W3RREdvgGLx/7SRu/c2cK3Ozalv43Z+Xqjyqto2i/VSOGJ4dSCaPTWiAkUynqsVxf07885
+ MwdfjKtS6/eY57uvOW6AzE4Kg3A=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 611ab8e3b3873958f5f82c26 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 16 Aug 2021 19:13:39
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 54883C43618; Mon, 16 Aug 2021 19:13:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.6 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D39EBA3B88;
-        Mon, 16 Aug 2021 19:12:49 +0000 (UTC)
-Received: by lion.mk-sys.cz (Postfix, from userid 1000)
-        id B9ED36082B; Mon, 16 Aug 2021 21:12:49 +0200 (CEST)
-Date:   Mon, 16 Aug 2021 21:12:49 +0200
-From:   Michal Kubecek <mkubecek@suse.cz>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [REGRESSION][BISECTED] flood of "hid-generic ... control queue
- full" since v5.14-rc1
-Message-ID: <20210816191249.7g2mk5thwpio7cfc@lion.mk-sys.cz>
-References: <20210816130059.3yxtdvu2r7wo4uu3@lion.mk-sys.cz>
- <YRpnfJ719DwPu2B0@kroah.com>
- <20210816141347.zougsudwe5tqgkpt@lion.mk-sys.cz>
- <20210816143856.GA121345@rowland.harvard.edu>
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 53ABAC43460;
+        Mon, 16 Aug 2021 19:13:36 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 53ABAC43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [RFC][PATCH] usb: dwc3: usb: dwc3: Force stop EP0 transfers
+ during pullup disable
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Felipe Balbi <balbi@kernel.org>
+Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jackp@codeauora.org" <jackp@codeauora.org>
+References: <1628648608-15239-1-git-send-email-wcheng@codeaurora.org>
+ <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
+ <3edf74ba-d167-0589-a7ab-827b57aa5d9c@codeaurora.org>
+ <e07b7061-e9cf-3146-d115-56967298051e@synopsys.com>
+ <c82ee8f3-a364-f96f-76ac-2b78c1dc0517@codeaurora.org>
+ <f760fdcf-cd59-2c71-8c85-a4624620edeb@synopsys.com>
+ <5be881a9-c79d-3f21-9e2e-173307fef734@codeaurora.org>
+ <dc37617c-0fe4-47b3-cbd0-1d729ce6201a@synopsys.com>
+ <00952bdc-acc2-f373-9286-6a8380e0b7d1@synopsys.com>
+ <875yw7jkz6.fsf@kernel.org>
+ <89b4d57c-f44a-ceff-45f3-a308e1d8d135@synopsys.com>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <4c5ee1be-5cda-f56b-7f69-73124a16abba@codeaurora.org>
+Date:   Mon, 16 Aug 2021 12:13:35 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="3ww3jcnbtghg6slm"
-Content-Disposition: inline
-In-Reply-To: <20210816143856.GA121345@rowland.harvard.edu>
+In-Reply-To: <89b4d57c-f44a-ceff-45f3-a308e1d8d135@synopsys.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Thinh,
 
---3ww3jcnbtghg6slm
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 8/15/2021 5:33 PM, Thinh Nguyen wrote:
+> Felipe Balbi wrote:
+>>
+>> Hi,
+>>
+>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+>>>>>>>>>>> If this occurs, then the entire pullup disable routine is skipped and
+>>>>>>>>>>> proper cleanup and halting of the controller does not complete.
+>>>>>>>>>>> Instead of returning an error (which is ignored from the UDC
+>>>>>>>>>>> perspective), do what is mentioned in the comments and force the
+>>>>>>>>>>> transaction to complete and put the ep0state back to the SETUP phase.
+>>>>>>>>>>>
+>>>>>>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>>>>>>>>>>> ---
+>>>>>>>>>>>  drivers/usb/dwc3/ep0.c    | 4 ++--
+>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 6 +++++-
+>>>>>>>>>>>  drivers/usb/dwc3/gadget.h | 3 +++
+>>>>>>>>>>>  3 files changed, 10 insertions(+), 3 deletions(-)
+>>>>>>>>>>>
+>>>>>>>>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
+>>>>>>>>>>> index 6587394..abfc42b 100644
+>>>>>>>>>>> --- a/drivers/usb/dwc3/ep0.c
+>>>>>>>>>>> +++ b/drivers/usb/dwc3/ep0.c
+>>>>>>>>>>> @@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
+>>>>>>>>>>>  	return ret;
+>>>>>>>>>>>  }
+>>>>>>>>>>>  
+>>>>>>>>>>> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>>>>>>>>>>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
+>>>>>>>>>>>  {
+>>>>>>>>>>>  	struct dwc3_ep		*dep;
+>>>>>>>>>>>  
+>>>>>>>>>>> @@ -1073,7 +1073,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
+>>>>>>>>>>>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
+>>>>>>>>>>>  }
+>>>>>>>>>>>  
+>>>>>>>>>>> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>>>>>>>>>>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
+>>>>>>>>>>>  {
+>>>>>>>>>>>  	struct dwc3_gadget_ep_cmd_params params;
+>>>>>>>>>>>  	u32			cmd;
+>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>> index 54c5a08..a0e2e4d 100644
+>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
+>>>>>>>>>>> @@ -2437,7 +2437,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>>>>>>>>>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+>>>>>>>>>>>  		if (ret == 0) {
+>>>>>>>>>>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+>>>>>>>>>>> -			return -ETIMEDOUT;
+>>>>>>>>>>> +			spin_lock_irqsave(&dwc->lock, flags);
+>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[0]);
+>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
+>>>>>>>>>>
+>>>>>>>>>> End transfer command takes time, need to wait for it to complete before
+>>>>>>>>>> issuing Start transfer again. Also, why restart again when it's about to
+>>>>>>>>>> be disconnected.
+>>>>>>>>>
+>>>>>>>>> I can try without restarting it again, and see if that works.  Instead
+>>>>>>>>> of waiting for the command complete event, can we set the ForceRM bit,
+>>>>>>>>> similar to what we do for dwc3_remove_requests()?
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> ForceRM=1 means that the controller will ignore updating the TRBs
+>>>>>>>> (including not clearing the HWO and remain transfer size). The driver
+>>>>>>>> still needs to wait for the command to complete before issuing Start
+>>>>>>>> Transfer command. Otherwise Start Transfer won't go through. If we know
+>>>>>>>> that we're not going to issue Start Transfer any time soon, then we may
+>>>>>>>> be able to get away with ignoring End Transfer command completion.
+>>>>>>>>
+>>>>>>>
+>>>>>>> I see.  Currently, in the place that we do use
+>>>>>>> dwc3_ep0_end_control_data(), its followed by
+>>>>>>> dwc3_ep0_stall_and_restart() which would execute start transfer.  For
+>>>>>>
+>>>>>> That doesn't look right. You can try to see if it can recover from a
+>>>>>> control write request. Often time we do control read and not write.
+>>>>>> (i.e. try to End Transfer and immediately Start Transfer on the same
+>>>>>> direction control endpoint).
+>>>>>>
+>>>>> OK, I can try, but just to clarify, I was referring to how it was being
+>>>>> done in:
+>>>>>
+>>>>> static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
+>>>>> 		const struct dwc3_event_depevt *event)
+>>>>> {
+>>>>> ...
+>>>>> 		if (dwc->ep0_expect_in != event->endpoint_number) {
+>>>>> 			struct dwc3_ep	*dep = dwc->eps[dwc->ep0_expect_in];
+>>>>>
+>>>>> 			dev_err(dwc->dev, "unexpected direction for Data Phase\n");
+>>>>> 			dwc3_ep0_end_control_data(dwc, dep);
+>>>>> 			dwc3_ep0_stall_and_restart(dwc);
+>>>>> 			return;
+>>>>> 		}
+>>>>>
+>>>
+>>> Looking at this snippet again, it looks wrong. For control write
+>>> unexpected direction, if the driver hasn't setup and started the DATA
+>>> phase yet, then it's fine, but there is a problem if it did.
+>>>
+>>> Since dwc3_ep0_end_control_data() doesn't issue End Transfer command to
+>>> ep0 due to the resource_index check, it doesn't follow the control
+>>
+>> IIRC resource_index is always non-zero, so the command should be
+> 
+> No, resource_index for ep0out is 0, ep0in is 1. You can check from any
+> of the driver tracepoint log for the return value of Start Transfer
+> command for the resource index of ep0. There could be a mixed up with
+> the undocumented return value of Set Endpoint Transfer Resource command
+> before when this code was written, don't mix up with that.
+> 
+>> triggered. If you have access to a Lecroy USB Trainer, could you script
+>> this very scenario for verification?
+> 
+> For anyone who wants to work on this, we don't need a LeCroy USB
+> trainer. If you use xhci host, just modify the xhci-ring.c to queue a
+> wrong direction DATA phase TRB of a particular control write request
+> test, and continue with the next control requests.
+> 
+Let me give this a try since I already have a modified (broken :)) XHCI
+stack.
 
-On Mon, Aug 16, 2021 at 10:38:56AM -0400, Alan Stern wrote:
-> On Mon, Aug 16, 2021 at 04:13:47PM +0200, Michal Kubecek wrote:
-> > Looking at the code, the primary problem seems to be that the "else"
-> > branch in hid_submit_ctrl() recalculates transfer_buffer_length to
-> > a rounded up value but assigns the original length to wLength.
->=20
-> Looks like you found the bug.  Fixing it might be as simple as setting=20
-> len =3D padlen in that "else" branch.  You could then combine the=20
-> transfer_buffer_length assignment with the one in the "if" branch and=20
-> hoist them out after the entire "if" statement.
+Thanks
+Wesley Cheng
+>>
+>>> transfer flow model in the programming guide. This may cause
+>>> dwc3_ep0_stall_and_restart() to overwrite the TRBs for the DATA phase
+>>> with SETUP stage. Also, if the ep0 is already started, the driver won't
+>>> issue Start Transfer command again.
+>>
+>>> This issue is unlikely to occur unless we see a misbehave host for
+>>> control write request. Regardless, we need to fix this. I may need some
+>>
+>> right, it would be a misbehaving host, however databook called it out as
+>> something that _can_ happen. Moreover, I have vague memories of this
+>> being one of the test cases in Lecroy's USB Certification Suite.
+>>
+> 
+> Yes, it's something that can happen, and dwc3 should be able to handle
+> it. If you remember which test in particular that tests this, let me
+> know. I want to check how it was passed.
+> 
+>>> time before I can create a patch and test it. If you or anyone is up to
+>>> take this on, it'd be highly appreciated.
+>>
+>> Before we go ahead writing a patch for this, I'd really like to see
+>> traces showing this failure and a minimal reproducer. The reproducer
+>> would probably have to be a script for Lecroy's USB Trainer.
+>>
+>> Keep in mind this entire ep0 stack used to pass USBCV on every -rc and
+>> major release (before I lost access to all my USB gear heh).
+>>
+> 
+> Are you referring to Ch9 USBCV? I don't recall there's a particular test
+> for this.
+> 
+> There should be a red flag whenever we see End Transfer command
+> immediately follows by a Start Transfer command without any waiting for
+> End Transfer completion. Though, in this case, we don't go through with
+> the End Transfer for ep0 due to the resource_index check in
+> dwc3_ep0_end_control_data().
+> 
+> BR,
+> Thinh
+> 
 
-With the patch below, there are no errors and the UPS communication
-works correctly and so do other HID devices. But I would prefere someone
-familiar with HID code to confirm that this is what we want and what
-would be the right way to handle usb_submit_urb() errors.
-
-Michal
-
-diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-index 06130dc431a0..ef240ef63a66 100644
---- a/drivers/hid/usbhid/hid-core.c
-+++ b/drivers/hid/usbhid/hid-core.c
-@@ -377,27 +377,26 @@ static int hid_submit_ctrl(struct hid_device *hid)
- 	len =3D hid_report_len(report);
- 	if (dir =3D=3D USB_DIR_OUT) {
- 		usbhid->urbctrl->pipe =3D usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
--		usbhid->urbctrl->transfer_buffer_length =3D len;
- 		if (raw_report) {
- 			memcpy(usbhid->ctrlbuf, raw_report, len);
- 			kfree(raw_report);
- 			usbhid->ctrl[usbhid->ctrltail].raw_report =3D NULL;
- 		}
- 	} else {
--		int maxpacket, padlen;
-+		int maxpacket;
-=20
- 		usbhid->urbctrl->pipe =3D usb_rcvctrlpipe(hid_to_usb_dev(hid), 0);
- 		maxpacket =3D usb_maxpacket(hid_to_usb_dev(hid),
- 					  usbhid->urbctrl->pipe, 0);
- 		if (maxpacket > 0) {
--			padlen =3D DIV_ROUND_UP(len, maxpacket);
--			padlen *=3D maxpacket;
--			if (padlen > usbhid->bufsize)
--				padlen =3D usbhid->bufsize;
-+			len =3D DIV_ROUND_UP(len, maxpacket);
-+			len *=3D maxpacket;
-+			if (len > usbhid->bufsize)
-+				len =3D usbhid->bufsize;
- 		} else
--			padlen =3D 0;
--		usbhid->urbctrl->transfer_buffer_length =3D padlen;
-+			len =3D 0;
- 	}
-+	usbhid->urbctrl->transfer_buffer_length =3D len;
- 	usbhid->urbctrl->dev =3D hid_to_usb_dev(hid);
-=20
- 	usbhid->cr->bRequestType =3D USB_TYPE_CLASS | USB_RECIP_INTERFACE | dir;
-
---3ww3jcnbtghg6slm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmEauKkACgkQ538sG/LR
-dpU94AgAvbyi6DxI+0UkhSO6Ln39x8aE67gCKdMLjoAuiA0mWfVQCfFnLA/M22rd
-+MnTe/1jHEUphGXHTQOSiGJk/rPx6zYZTP3IRpXf2j2NBTBWtAXt2EJVJdWNUirO
-6knH8tZSnxXvMsKWBlGGMRptV4FD0XiNhSYmfzV1+QXWjZ312Y+V9icKW8ITVIUR
-U3WJ1xU+TN60Y6FduWK+gZOC6HpggSNkJQb+gh5okLl4Lp6bRUO1fDT2zAqvaA6f
-x2BtYVqWyE3DWr7rkE68aYYO2l9Ytc+5DMOCTeV35Uo+6q3VHC1z5uepDwVqV8ST
-g84Aa8aWYYBDV9pBZo1PcrxtZQA8rQ==
-=UjF7
------END PGP SIGNATURE-----
-
---3ww3jcnbtghg6slm--
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
