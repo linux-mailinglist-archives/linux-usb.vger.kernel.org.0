@@ -2,89 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347673ECEFA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 09:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B427F3ECEFF
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 09:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233687AbhHPHJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 03:09:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60902 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233349AbhHPHJh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Aug 2021 03:09:37 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 15C0561A86
-        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 07:09:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629097746;
-        bh=2+TMixNiAyhv5H6fAyJLJ0XfjiyCIBZSByVCz2oT47E=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=NN3v6Ruhw0J56iWCbN7/7cKbIHK+0NrSj8PzRO0Ui1gvt8Z9l+krWlTwc1hN2d+3x
-         ZT3+N1/qAA8HVjZ8mGUKnuW4M2Y5cN+YKPtSsYrBH7NUEdtkvxo+l1PRHUr1nnhu9r
-         uQjC/+zLd3BAX675f5PPsRXc5s491dVwb3Z/iLPaNH3mQMcJy2brcwVw/xwi3crMKo
-         2FZx/7IaZJS8PJinEwx9yfVqCzTozu27wrUsWc11OjRzQRljpXBzcJwRqay4YGKr9t
-         +X08OP0I3tJdUw5gStd/ZAT5RNC+qhcSxREIaaQlgRpb7QYyKi9adFs+qSqirwJAQR
-         JIu0VXnYhTuWQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 0539C60FEC; Mon, 16 Aug 2021 07:09:06 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214021] The USB devices fail to be detected during boot
-Date:   Mon, 16 Aug 2021 07:09:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: chris.chiu@canonical.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214021-208809-ACKLPrq2Zu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
-References: <bug-214021-208809@https.bugzilla.kernel.org/>
+        id S233715AbhHPHLb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 03:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233600AbhHPHLa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 03:11:30 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32728C061764
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 00:10:59 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id x10so15756075wrt.8
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 00:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=cbsbtRZejCc4mPnIMVCWz2hc+huf8vDsF/6Wv9wV/v0=;
+        b=NhnqEEjV2m+6v1JyhMCpWBc4c7UBfYDb6vxCaJ4aZwlQSoUetc+iB+Jq9Lj8VqbfGR
+         Fz+vKN/d6Bcio3yVrq/b4CWYLAHD6hqQhmg3B2xXL6ASA1VQDqlQmN+L5COXk7jdo9MX
+         Qii4RWnsVCULQ79UsTz8g5DzyRwpUgz9I996OoO0KKjS2CEWjX6FcpnPU+d7qQNWIFjt
+         JoLC6Qoq4PtPcbqoASKC/dleSevZ3nn3D2qyc1PcZp7kH1aOEbTOhJla6l9ecQAZXjYp
+         /qt8DEWzJKyoyl0XZGLqt8cl3KIgVQ1wYPjRY4XEbcFx6Mfcin3wTq4/UHiiXxYJGXHr
+         fqdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cbsbtRZejCc4mPnIMVCWz2hc+huf8vDsF/6Wv9wV/v0=;
+        b=OR9x2RvmU5hUb8UKF+JDnH3yo0sw2elBD0RNkGibakeFsGTvqNGGr2i7BTARDox6xJ
+         QjIJaVkiUjhbq+EsUHJ8ybsCBbYyWYcZFzKHzrZOqd7XZl5wmFrC5lUy2E5eX5o3timN
+         YNO1RFd3tElHpWUSB6TUGRn6Z9VAFMBPDnl7c7zVFSSDKVJeZyhzR6A0qG7bI8wWPZYk
+         yM3FOZUvUPAC9WRx9G1H7F3WhOBiAWESeYQcbWzLX3B5cCEqdCl0jUVPhGd8n4q5Ciol
+         IALB/tos3xvZmsr0z0588b4CGIet+3Yl1FIG6Ql/vtXL1tcbf5cZ7G+0XL6EN2izkisO
+         px+Q==
+X-Gm-Message-State: AOAM530SntEA2MYs6rb7t1nu9x4nT79cM16e36euBxmdHVJKeIA8ucwd
+        3Ahtu3zhZNUGK2/MQuKAD8gZ6Q6iZRb7HWPG0b2giw==
+X-Google-Smtp-Source: ABdhPJwfOoNxjlXg+kHZxykUgcTU9HMx4Imqgavf+bxZm7Zrbp7SRiI5qTRVlASkzaS0yBKAMoESdGFXMG1L06Jl4HQ=
+X-Received: by 2002:adf:9d92:: with SMTP id p18mr16745767wre.20.1629097857627;
+ Mon, 16 Aug 2021 00:10:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20210810060228.GA3326442@ubuntu> <20210816005205.GA3907@nchen> <YRn2GPsT8vB/NF/p@kroah.com>
+In-Reply-To: <YRn2GPsT8vB/NF/p@kroah.com>
+From:   Jeaho Hwang <jhhwang@rtst.co.kr>
+Date:   Mon, 16 Aug 2021 16:10:46 +0900
+Message-ID: <CAJk_X9iiqHJJK3weqRgLVmYGKEhLnfeUv9iATWCk8xfFpTVHPw@mail.gmail.com>
+Subject: Re: [PATCH] usb: chipidea: fix RT issue for udc
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Peter Chen <peter.chen@kernel.org>, linux-usb@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-rt-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
-MIME-Version: 1.0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
+2021=EB=85=84 8=EC=9B=94 16=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 2:22, G=
+reg Kroah-Hartman <gregkh@linuxfoundation.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=
+=EC=84=B1:
+>
+> On Mon, Aug 16, 2021 at 08:52:06AM +0800, Peter Chen wrote:
+> > On 21-08-10 15:02:28, Jeaho Hwang wrote:
+> > > hw_ep_prime sometimes fails if irq occurs while it rus on RT kernel.
+> > > to prevent local_irq_save should keep the function from irqs.
+> > >
+> > > I am not sure where is the best to submit this patch, between RT and =
+USB
+> > > community so sending to both. thanks.
+> >
+> > Greg, do you have any suggestions about it, the RT kernel schedules the=
+ interrupt
+> > handler (top-half) out which causes the USB hardware atomic sequences a=
+re broken,
+> > these hardware operations needs to be executed within limited time.
+>
+> Try working with the RT developers on this.
 
---- Comment #5 from Chris Chiu (chris.chiu@canonical.com) ---
-I add printks to trace where the error happens. The dmesg show as down below
-
-[   44.488980] xhci_hcd 0000:00:14.0: FIXME: allocate a command ring segment
-[   44.488981] usb_alloc_dev: hcd driver alloc dev exist but return 0
-[   44.488982] usb usb1-port4: couldn't allocate usb_device
-
-The first line show for the "xhci_dbg(xhci, "FIXME: allocate a command ring
-segment\n");" in xhci_alloc_dev()
-
-The second line shows the printk I add in usb_alloc_dev()
-
-       /* Root hubs aren't true devices, so don't allocate HCD resources */
-        if (usb_hcd->driver->alloc_dev && parent &&
-                !usb_hcd->driver->alloc_dev(usb_hcd, dev)) {
-+               printk("%s: hcd driver alloc dev exist but return 0",
-__func__);
-                usb_put_hcd(bus_to_hcd(bus));
-                kfree(dev);
-                return NULL;
-        }
-
-The usb_hcd->driver->alloc_dev is equal to xhci_alloc_dev and fails the
-xhci_queue_slot_control(). Does that mean anything regarding this?
+Then do you think those kinds of patches should be applied to linux-rt
+instead of mainline?
 
 --=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+=ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
+010-7242-1593
