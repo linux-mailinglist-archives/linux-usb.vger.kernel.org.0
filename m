@@ -2,352 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4559A3ECFC8
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 09:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4F3E3ED0D3
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 11:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234555AbhHPHzb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 03:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234060AbhHPHz2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 03:55:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CE8C0613C1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 00:54:57 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s205-20020a252cd6000000b0059449776539so5295549ybs.22
-        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 00:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=dKcam6Ga3SJWbiTZGs5fd12aDQ0HQybPZuSslYUEuGQ=;
-        b=pNrE2wBWB76/2dmyYjbIdq9KoD6bsFVwvrNLKLdHJqtnU6tuO6IDV6fak6YRXT4L4E
-         B9ETGV1iCYeAO/r6MtFnL27t6y3qRGDudXV0gCMOIVKK4pr74m1N7M99FdmmPjeyOEKi
-         30gXj5bvf0DylxNqNXgSSGp9/66ZK+zgi2QlsozXbbcUVVtQznWnxuwjBYekzNViZ2kO
-         oXvOaCak62T6D4f794V5iR2QH9HlrR8RaP4PUmCQbsOv8pFqeBpWEKdXzvcP+aP3Ccmq
-         QdmrVwirYXhsDPvzdDCiT7rOLTT1VcS8wqMGsJsmS8DDyEnTa9gYdTWH9abm4AQ7lj6F
-         tcRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=dKcam6Ga3SJWbiTZGs5fd12aDQ0HQybPZuSslYUEuGQ=;
-        b=sBhasnVhn1UPLrhSr2l4pjqMTKmF1UJCl4AN4d/y6jUHsuZgnQ+rYF0c7h0/cIVrkF
-         DOwrPN4r/bkRn0lQhVd4l8cF+DceDLoGbnzOaP0Csg5wcT/O/Ua0M4CbRWrA2wRLVq4e
-         fP7OTHUo8DLNRBnm6RWnIhWgz5K3WP5R4S9BMrgY77hqwb0DxTevmAlToVnJdChJD+Gj
-         Su06QK56oUIJgtZOga1Roc3Uy/w4J7FW7ADVmBRx83obpk3nlZTX8tST7xKQCXTy40Bt
-         Hldkyt4L8zt/NYFF0rB2G5mPIx3nZ9yxmcUh+uOit4QTfXQcNI3EaXRVSaZaDgMupDt9
-         pPWw==
-X-Gm-Message-State: AOAM533CprS+7xFcKDksQoy3mx8T9ezxNr2Je6px0bJL0+yQ92bcvaGi
-        8FlGRdzVAC9wU9Iv3+ZB4KwQTeZ+L1el
-X-Google-Smtp-Source: ABdhPJyq0QJAemFusQC0q/4zj0Vb7bL9euSjCVtdjrsQDcX3xMQppjf/IjihIc/YPmZix/QKMWqme2XAPhhn
-X-Received: from kyletso.ntc.corp.google.com ([2401:fa00:fc:202:71e4:80a2:2271:7fc7])
- (user=kyletso job=sendgmr) by 2002:a25:25c6:: with SMTP id
- l189mr8863683ybl.170.1629100496608; Mon, 16 Aug 2021 00:54:56 -0700 (PDT)
-Date:   Mon, 16 Aug 2021 15:54:49 +0800
-Message-Id: <20210816075449.2236547-1-kyletso@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.33.0.rc1.237.g0d66db33f3-goog
-Subject: [PATCH] usb: typec: tcpm: Raise vdm_sm_running flag only when VDM SM
- is running
-From:   Kyle Tso <kyletso@google.com>
-To:     linux@roeck-us.net, heikki.krogerus@linux.intel.com,
-        gregkh@linuxfoundation.org
-Cc:     badhri@google.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S235046AbhHPJGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 05:06:55 -0400
+Received: from smtpout2.vodafonemail.de ([145.253.239.133]:39778 "EHLO
+        smtpout2.vodafonemail.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235284AbhHPJG0 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 05:06:26 -0400
+Received: from smtp.vodafone.de (smtpa08.fra-mediabeam.com [10.2.0.39])
+        by smtpout2.vodafonemail.de (Postfix) with ESMTP id 0876C125C9C;
+        Mon, 16 Aug 2021 11:04:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
+        s=vfde-smtpout-mb-15sep; t=1629104652;
+        bh=chbgSvyqMrs/RDUVSKxoE0r4FFnnKpAGJRedrJBuPsc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=S3c5pipw6JNaSo1hvzEImvC0BAwfwWtInpC7XKjHCLjPMuSXSbmpLzS/R8o8/Th3W
+         mX6IEUm/EEhgdQ/ttL7ug3kyf7wK1hL5yE/9WQiWRmy8hnEvMqWAPswqfgH6caZjjX
+         kXaTm3FajkG0YOja/irfCR2M8eEWXYns7W74xAsc=
+Received: from arcor.de (p5b28106c.dip0.t-ipconnect.de [91.40.16.108])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp.vodafone.de (Postfix) with ESMTPSA id 67B1D1401B3;
+        Mon, 16 Aug 2021 09:04:11 +0000 (UTC)
+Date:   Mon, 16 Aug 2021 11:04:00 +0200
+From:   Reinhard Speyerer <rspmn@arcor.de>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
+ composition 0x901d
+Message-ID: <YRoqAJmGBpV/OuZL@arcor.de>
+References: <20210816035404.4210-1-slark_xiao@163.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210816035404.4210-1-slark_xiao@163.com>
+X-purgate-type: clean
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-purgate-size: 3612
+X-purgate-ID: 155817::1629104651-00007455-FE839557/0/0
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If the port is going to send Discover_Identity Message, vdm_sm_running
-flag was intentionally set before entering Ready States in order to
-avoid the conflict because the port and the port partner might start
-AMS at almost the same time after entering Ready States.
+On Mon, Aug 16, 2021 at 11:54:04AM +0800, Slark Xiao wrote:
+> Foxconn SDX55 T77W175 device is working in PCIe mode normally.
+> You can find the PCIe support in drivers/bus/mhi/pci_generic.c file.
+> But in some scenario, we need to capture the memory dump once it crashed.
+> So a diag port under USB driver is needed.
+> 
+> Only interface 0 is used:
+> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb | grep 05c6
+> Bus 003 Device 010: ID 05c6:901d Qualcomm, Inc. Generic Mobile Broadband Adapter
+> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb -t | grep "Dev 10"
+>     |__ Port 7: Dev 10, If 0, Class=Vendor Specific Class, Driver=option, 480M
+> 
+> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> ---
+>  drivers/usb/serial/option.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 039450069ca4..c275f489c1cc 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2068,6 +2068,7 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+>  	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
+>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
+> +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x901d) },				/* Foxconn T77W175 PCIE+USB mode*/
+>  	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
+>  	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
+>  	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
+> -- 
+> 2.25.1
+> 
+> 
 
-However, the original design has a problem. When the port is doing
-DR_SWAP from Device to Host, it raises the flag. Later in the
-tcpm_send_discover_work, the flag blocks the procedure of sending the
-Discover_Identity and it might never be cleared until disconnection.
+Hi Slark,
 
-Since there exists another flag send_discover representing that the port
-is going to send Discover_Identity or not, it is enough to use that flag
-to prevent the conflict. Also change the timing of the set/clear of
-vdm_sm_running to indicate whether the VDM SM is actually running or
-not.
+since this entry uses the Qualcomm USB VID it would be a good idea to make
+the option driver only bind to the DIAG interface in case other UE vendors
+have the ADB interface provided by this composition enabled:
 
-Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
-Cc: Badhri Jagan Sridharan <badhri@google.com>
-Signed-off-by: Kyle Tso <kyletso@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 81 ++++++++++++++++-------------------
- 1 file changed, 38 insertions(+), 43 deletions(-)
+$ sed 30q 901D
+#!/bin/sh
+#
+# Copyright (c) 2014,2017-2018, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of The Linux Foundation nor the names of its
+#       contributors may be used to endorse or promote products derived from
+#       this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+# INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE DISCLAIMED.  IN NO
+# EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+# INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+# (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+# ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 5b22a1c931a9..c05ddfbaff08 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -341,6 +341,7 @@ struct tcpm_port {
- 	bool vbus_source;
- 	bool vbus_charge;
- 
-+	/* Set to true when Discover_Identity Command is expected to be sent in Ready states. */
- 	bool send_discover;
- 	bool op_vsafe5v;
- 
-@@ -370,6 +371,7 @@ struct tcpm_port {
- 	struct hrtimer send_discover_timer;
- 	struct kthread_work send_discover_work;
- 	bool state_machine_running;
-+	/* Set to true when VDM State Machine has following actions. */
- 	bool vdm_sm_running;
- 
- 	struct completion tx_complete;
-@@ -1431,6 +1433,7 @@ static void tcpm_queue_vdm(struct tcpm_port *port, const u32 header,
- 	/* Set ready, vdm state machine will actually send */
- 	port->vdm_retries = 0;
- 	port->vdm_state = VDM_STATE_READY;
-+	port->vdm_sm_running = true;
- 
- 	mod_vdm_delayed_work(port, 0);
- }
-@@ -1673,7 +1676,6 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 				rlen = 1;
- 			} else {
- 				tcpm_register_partner_altmodes(port);
--				port->vdm_sm_running = false;
- 			}
- 			break;
- 		case CMD_ENTER_MODE:
-@@ -1721,14 +1723,12 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
- 				      (VDO_SVDM_VERS(svdm_version));
- 			break;
- 		}
--		port->vdm_sm_running = false;
- 		break;
- 	default:
- 		response[0] = p[0] | VDO_CMDT(CMDT_RSP_NAK);
- 		rlen = 1;
- 		response[0] = (response[0] & ~VDO_SVDM_VERS_MASK) |
- 			      (VDO_SVDM_VERS(svdm_version));
--		port->vdm_sm_running = false;
- 		break;
- 	}
- 
-@@ -1765,6 +1765,20 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 	}
- 
- 	if (PD_VDO_SVDM(p[0])) {
-+		/*
-+		 * Here a SVDM is received (INIT or RSP or unknown). Set the vdm_sm_running in
-+		 * advance because we are dropping the lock but may send VDMs soon.
-+		 * For the cases of INIT received:
-+		 *  - If no response to send, it will be cleared later in this function.
-+		 *  - If there are responses to send, it will be cleared in the state machine.
-+		 * For the cases of RSP received:
-+		 *  - If no further INIT to send, it will be cleared later in this function.
-+		 *  - Otherwise, it will be cleared in the state machine if timeout or it will go
-+		 *    back here until no further INIT to send.
-+		 * For the cases of unknown type received:
-+		 *  - We will send NAK and the flag will be cleared in the state machine.
-+		 */
-+		port->vdm_sm_running = true;
- 		rlen = tcpm_pd_svdm(port, adev, p, cnt, response, &adev_action);
- 	} else {
- 		if (port->negotiated_rev >= PD_REV30)
-@@ -1833,6 +1847,8 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
- 
- 	if (rlen > 0)
- 		tcpm_queue_vdm(port, response[0], &response[1], rlen - 1);
-+	else
-+		port->vdm_sm_running = false;
- }
- 
- static void tcpm_send_vdm(struct tcpm_port *port, u32 vid, int cmd,
-@@ -1898,8 +1914,10 @@ static void vdm_run_state_machine(struct tcpm_port *port)
- 		 * if there's traffic or we're not in PDO ready state don't send
- 		 * a VDM.
- 		 */
--		if (port->state != SRC_READY && port->state != SNK_READY)
-+		if (port->state != SRC_READY && port->state != SNK_READY) {
-+			port->vdm_sm_running = false;
- 			break;
-+		}
- 
- 		/* TODO: AMS operation for Unstructured VDM */
- 		if (PD_VDO_SVDM(vdo_hdr) && PD_VDO_CMDT(vdo_hdr) == CMDT_INIT) {
-@@ -2555,10 +2573,6 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 								       TYPEC_PWR_MODE_PD,
- 								       port->pps_data.active,
- 								       port->supply_voltage);
--				/* Set VDM running flag ASAP */
--				if (port->data_role == TYPEC_HOST &&
--				    port->send_discover)
--					port->vdm_sm_running = true;
- 				tcpm_set_state(port, SNK_READY, 0);
- 			} else {
- 				/*
-@@ -2596,14 +2610,10 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 		switch (port->state) {
- 		case SNK_NEGOTIATE_CAPABILITIES:
- 			/* USB PD specification, Figure 8-43 */
--			if (port->explicit_contract) {
-+			if (port->explicit_contract)
- 				next_state = SNK_READY;
--				if (port->data_role == TYPEC_HOST &&
--				    port->send_discover)
--					port->vdm_sm_running = true;
--			} else {
-+			else
- 				next_state = SNK_WAIT_CAPABILITIES;
--			}
- 
- 			/* Threshold was relaxed before sending Request. Restore it back. */
- 			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
-@@ -2618,10 +2628,6 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			port->pps_status = (type == PD_CTRL_WAIT ?
- 					    -EAGAIN : -EOPNOTSUPP);
- 
--			if (port->data_role == TYPEC_HOST &&
--			    port->send_discover)
--				port->vdm_sm_running = true;
--
- 			/* Threshold was relaxed before sending Request. Restore it back. */
- 			tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_PD,
- 							       port->pps_data.active,
-@@ -2697,10 +2703,6 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 			}
- 			break;
- 		case DR_SWAP_SEND:
--			if (port->data_role == TYPEC_DEVICE &&
--			    port->send_discover)
--				port->vdm_sm_running = true;
--
- 			tcpm_set_state(port, DR_SWAP_CHANGE_DR, 0);
- 			break;
- 		case PR_SWAP_SEND:
-@@ -2738,7 +2740,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 					   PD_MSG_CTRL_NOT_SUPP,
- 					   NONE_AMS);
- 		} else {
--			if (port->vdm_sm_running) {
-+			if (port->send_discover) {
- 				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
- 				break;
- 			}
-@@ -2754,7 +2756,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 					   PD_MSG_CTRL_NOT_SUPP,
- 					   NONE_AMS);
- 		} else {
--			if (port->vdm_sm_running) {
-+			if (port->send_discover) {
- 				tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
- 				break;
- 			}
-@@ -2763,7 +2765,7 @@ static void tcpm_pd_ctrl_request(struct tcpm_port *port,
- 		}
- 		break;
- 	case PD_CTRL_VCONN_SWAP:
--		if (port->vdm_sm_running) {
-+		if (port->send_discover) {
- 			tcpm_queue_message(port, PD_MSG_CTRL_WAIT);
- 			break;
- 		}
-@@ -4479,18 +4481,20 @@ static void run_state_machine(struct tcpm_port *port)
- 	/* DR_Swap states */
- 	case DR_SWAP_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_DR_SWAP);
-+		if (port->data_role == TYPEC_DEVICE || port->negotiated_rev > PD_REV20)
-+			port->send_discover = true;
- 		tcpm_set_state_cond(port, DR_SWAP_SEND_TIMEOUT,
- 				    PD_T_SENDER_RESPONSE);
- 		break;
- 	case DR_SWAP_ACCEPT:
- 		tcpm_pd_send_control(port, PD_CTRL_ACCEPT);
--		/* Set VDM state machine running flag ASAP */
--		if (port->data_role == TYPEC_DEVICE && port->send_discover)
--			port->vdm_sm_running = true;
-+		if (port->data_role == TYPEC_DEVICE || port->negotiated_rev > PD_REV20)
-+			port->send_discover = true;
- 		tcpm_set_state_cond(port, DR_SWAP_CHANGE_DR, 0);
- 		break;
- 	case DR_SWAP_SEND_TIMEOUT:
- 		tcpm_swap_complete(port, -ETIMEDOUT);
-+		port->send_discover = false;
- 		tcpm_ams_finish(port);
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
-@@ -4502,7 +4506,6 @@ static void run_state_machine(struct tcpm_port *port)
- 		} else {
- 			tcpm_set_roles(port, true, port->pwr_role,
- 				       TYPEC_HOST);
--			port->send_discover = true;
- 		}
- 		tcpm_ams_finish(port);
- 		tcpm_set_state(port, ready_state(port), 0);
-@@ -4645,8 +4648,6 @@ static void run_state_machine(struct tcpm_port *port)
- 		break;
- 	case VCONN_SWAP_SEND_TIMEOUT:
- 		tcpm_swap_complete(port, -ETIMEDOUT);
--		if (port->data_role == TYPEC_HOST && port->send_discover)
--			port->vdm_sm_running = true;
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case VCONN_SWAP_START:
-@@ -4662,14 +4663,10 @@ static void run_state_machine(struct tcpm_port *port)
- 	case VCONN_SWAP_TURN_ON_VCONN:
- 		tcpm_set_vconn(port, true);
- 		tcpm_pd_send_control(port, PD_CTRL_PS_RDY);
--		if (port->data_role == TYPEC_HOST && port->send_discover)
--			port->vdm_sm_running = true;
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case VCONN_SWAP_TURN_OFF_VCONN:
- 		tcpm_set_vconn(port, false);
--		if (port->data_role == TYPEC_HOST && port->send_discover)
--			port->vdm_sm_running = true;
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 
-@@ -4677,8 +4674,6 @@ static void run_state_machine(struct tcpm_port *port)
- 	case PR_SWAP_CANCEL:
- 	case VCONN_SWAP_CANCEL:
- 		tcpm_swap_complete(port, port->swap_status);
--		if (port->data_role == TYPEC_HOST && port->send_discover)
--			port->vdm_sm_running = true;
- 		if (port->pwr_role == TYPEC_SOURCE)
- 			tcpm_set_state(port, SRC_READY, 0);
- 		else
-@@ -5028,9 +5023,6 @@ static void _tcpm_pd_vbus_on(struct tcpm_port *port)
- 	switch (port->state) {
- 	case SNK_TRANSITION_SINK_VBUS:
- 		port->explicit_contract = true;
--		/* Set the VDM flag ASAP */
--		if (port->data_role == TYPEC_HOST && port->send_discover)
--			port->vdm_sm_running = true;
- 		tcpm_set_state(port, SNK_READY, 0);
- 		break;
- 	case SNK_DISCOVERY:
-@@ -5425,15 +5417,18 @@ static void tcpm_send_discover_work(struct kthread_work *work)
- 	if (!port->send_discover)
- 		goto unlock;
- 
-+	if (port->data_role == TYPEC_DEVICE && port->negotiated_rev < PD_REV30) {
-+		port->send_discover = false;
-+		goto unlock;
-+	}
-+
- 	/* Retry if the port is not idle */
- 	if ((port->state != SRC_READY && port->state != SNK_READY) || port->vdm_sm_running) {
- 		mod_send_discover_delayed_work(port, SEND_DISCOVER_RETRY_MS);
- 		goto unlock;
- 	}
- 
--	/* Only send the Message if the port is host for PD rev2.0 */
--	if (port->data_role == TYPEC_HOST || port->negotiated_rev > PD_REV20)
--		tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
-+	tcpm_send_vdm(port, USB_SID_PD, CMD_DISCOVER_IDENT, NULL, 0);
- 
- unlock:
- 	mutex_unlock(&port->lock);
--- 
-2.33.0.rc1.237.g0d66db33f3-goog
+# DESCRIPTION: DIAG + ADB
 
+echo "Switching to composition number 0x901D"  > /dev/kmsg
+
+
+[Ideally these compositions would also be available via kernel.org and/or
+ codeaura.org but so far I have been unable to find them there.]
+
+Regards,
+Reinhard
