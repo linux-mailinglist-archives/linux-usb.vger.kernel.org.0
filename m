@@ -2,111 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 952CE3EDA23
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 17:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC083EDAC7
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 18:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233258AbhHPPru (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 11:47:50 -0400
-Received: from smtpout2.vodafonemail.de ([145.253.239.133]:52054 "EHLO
-        smtpout2.vodafonemail.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232822AbhHPPrt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 11:47:49 -0400
-Received: from smtp.vodafone.de (smtpa03.fra-mediabeam.com [10.2.0.34])
-        by smtpout2.vodafonemail.de (Postfix) with ESMTP id 45035126B40;
-        Mon, 16 Aug 2021 17:47:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arcor.de;
-        s=vfde-smtpout-mb-15sep; t=1629128833;
-        bh=m1mi6bLDUEDrkJ7ZnqskJsntQYuUnUwLjU1TKGtFcDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=f29BxauoAD8TRfzHiuyQTxJConnlmP8o1bfDF0rWiRmHTAXoThx+RbCsN0pEK2iFn
-         +5LEwMfXauMxawcwbfosSG468GgsqTpZb9TXNJkGfGxr2xagc68OT1OHrg+EbsGSUA
-         pcEFxzI40yPgSnatadx9aWzSjeSROYzZotY1W/ek=
-Received: from arcor.de (p57a2393d.dip0.t-ipconnect.de [87.162.57.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp.vodafone.de (Postfix) with ESMTPSA id 89DE7140281;
-        Mon, 16 Aug 2021 15:47:10 +0000 (UTC)
-Date:   Mon, 16 Aug 2021 17:47:03 +0200
-From:   Reinhard Speyerer <rspmn@arcor.de>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
- composition 0x901d
-Message-ID: <YRqId0FDc+ByYdVY@arcor.de>
-References: <20210816035404.4210-1-slark_xiao@163.com>
- <YRoqAJmGBpV/OuZL@arcor.de>
- <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
+        id S230176AbhHPQTN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 12:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231239AbhHPQTC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 12:19:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F6FFC06179A
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 09:18:30 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFfJg-0002zI-Cx; Mon, 16 Aug 2021 18:18:24 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFfJe-0000OF-Ih; Mon, 16 Aug 2021 18:18:22 +0200
+Date:   Mon, 16 Aug 2021 18:18:22 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Oleksij Rempel <linux@rempel-privat.de>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
+ add phylib support")
+Message-ID: <20210816161822.td7jl4tv7zfbprty@pengutronix.de>
+References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
+ <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-purgate-size: 2320
-X-purgate-ID: 155817::1629128833-00000B26-D289C0D7/0/0
+In-Reply-To: <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 18:09:23 up 257 days,  6:15, 25 users,  load average: 0.01, 0.04,
+ 0.06
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 05:17:00PM +0800, Slark Xiao wrote:
-> 
-> At 2021-08-16 17:04:00, "Reinhard Speyerer" <rspmn@arcor.de> wrote:
-> >On Mon, Aug 16, 2021 at 11:54:04AM +0800, Slark Xiao wrote:
-> >> Foxconn SDX55 T77W175 device is working in PCIe mode normally.
-> >> You can find the PCIe support in drivers/bus/mhi/pci_generic.c file.
-> >> But in some scenario, we need to capture the memory dump once it crashed.
-> >> So a diag port under USB driver is needed.
-> >> 
-> >> Only interface 0 is used:
-> >> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb | grep 05c6
-> >> Bus 003 Device 010: ID 05c6:901d Qualcomm, Inc. Generic Mobile Broadband Adapter
-> >> jbd@jbd-ThinkPad-P1-Gen-4:~$ lsusb -t | grep "Dev 10"
-> >>     |__ Port 7: Dev 10, If 0, Class=Vendor Specific Class, Driver=option, 480M
-> >> 
-> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> >> ---
-> >>  drivers/usb/serial/option.c | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >> 
-> >> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-> >> index 039450069ca4..c275f489c1cc 100644
-> >> --- a/drivers/usb/serial/option.c
-> >> +++ b/drivers/usb/serial/option.c
-> >> @@ -2068,6 +2068,7 @@ static const struct usb_device_id option_ids[] = {
-> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> >>  	{ USB_DEVICE(0x0489, 0xe0b5),						/* Foxconn T77W968 ESIM */
-> >>  	  .driver_info = RSVD(0) | RSVD(1) | RSVD(6) },
-> >> +	{ USB_DEVICE(QUALCOMM_VENDOR_ID, 0x901d) },				/* Foxconn T77W175 PCIE+USB mode*/
-> >>  	{ USB_DEVICE(0x1508, 0x1001),						/* Fibocom NL668 (IOT version) */
-> >>  	  .driver_info = RSVD(4) | RSVD(5) | RSVD(6) },
-> >>  	{ USB_DEVICE(0x2cb7, 0x0104),						/* Fibocom NL678 series */
-> >> -- 
-> >> 2.25.1
-> >> 
-> >> 
-> >
-> >Hi Slark,
-> >
-> >since this entry uses the Qualcomm USB VID it would be a good idea to make
-> >the option driver only bind to the DIAG interface in case other UE vendors
-> >have the ADB interface provided by this composition enabled:
-> > [...]
-> 
-> Hi Reinhard,
->   So should I use USB_DEVICE_INTERFACE_NUMBER(QUALCOMM_VENDOR_ID, 0x901d, 0x00) to bind Diag port only?
-> 
-> Thanks
+Hi,
 
-Hi Slark,
+On Mon, Aug 16, 2021 at 08:13:14AM -0700, Jakub Kicinski wrote:
+> On Wed, 11 Aug 2021 17:55:34 +0300 Jarkko Nikula wrote:
+> > Hi
+> > 
+> > Our ASIX USB ethernet adapter stopped working after v5.14-rc1. It 
+> > doesn't get an IP from DHCP.
+> > 
+> > v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag 
+> > 'arc-5.14-rc6' of 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the 
+> > regression.
+> > 
+> > I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add 
+> > phylib support").
+> 
+> Oleksij, any comments?
 
-I think this would the preferred approach.
+sorry, I lost it from radar.
 
-I'll let Johan advise on the preferred position of the new entry in the
-device id table.
+> > Here's the dmesg snippet from working and non-working cases:
+> > 
+> > OK:
+> > [    6.115773] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
+> > ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
+> > [    8.595202] asix 1-8:1.0 eth0: link up, 100Mbps, full-duplex, lpa 0xC1E1
+> > 
+> > NOK:
+> > [    6.511543] asix 1-8:1.0 eth0: register 'asix' at usb-0000:00:14.0-8, 
+> > ASIX AX88772 USB 2.0 Ethernet, 00:10:60:31:d5:f8
+> > [    8.518219] asix 1-8:1.0 eth0: Link is Down
+> > 
+> > lsusb -d 0b95:7720
+> > Bus 001 Device 002: ID 0b95:7720 ASIX Electronics Corp. AX88772
+> 
+
+It sounds like issue which was fixed with the patch:
+"net: usb: asix: ax88772: suspend PHY on driver probe"
+
+This patch was taken in to v5.14-rc2. Can you please test it?
 
 Regards,
-Reinhard
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
