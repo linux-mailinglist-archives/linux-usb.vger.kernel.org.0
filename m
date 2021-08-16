@@ -2,114 +2,49 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5930A3ED0E8
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 11:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5253ED0F1
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 11:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235285AbhHPJSO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 05:18:14 -0400
-Received: from m13101.mail.163.com ([220.181.13.101]:47439 "EHLO
-        m13101.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234976AbhHPJSN (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 05:18:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=4lZp3
-        Ug0KBu/1SG/n8YjNvAQbUY+YBAi/7ZpLHfWaHI=; b=Aum22iE8h7e9WHFABmkZ8
-        +z29/EddlHSa0Uxrx4tiZqCyD75zL2zFkxXK58BqyybgCBoABklHlG3VTJrCwTur
-        RzycMwzQWIkCagr8pAm3oyesbuOWjXW/QCZC9180nL89DWUlFL1qCm4A/BP5M7T/
-        Gj7ooLR0CjAo106FupaxvE=
-Received: from slark_xiao$163.com ( [223.104.68.87] ) by
- ajax-webmail-wmsvr101 (Coremail) ; Mon, 16 Aug 2021 17:17:00 +0800 (CST)
-X-Originating-IP: [223.104.68.87]
-Date:   Mon, 16 Aug 2021 17:17:00 +0800 (CST)
-From:   "Slark Xiao" <slark_xiao@163.com>
-To:     "Reinhard Speyerer" <rspmn@arcor.de>
-Cc:     johan@kernel.org, gregkh@linuxfoundation.org,
+        id S235163AbhHPJVf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 05:21:35 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52474 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234976AbhHPJVe (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Aug 2021 05:21:34 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 12B2161A7E;
+        Mon, 16 Aug 2021 09:21:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629105663;
+        bh=Qb9gKvIdgRArWNfTgiNwDGTBi2NO7833/nKSzV9bwIA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fkAS+3ZmssKmHWEiNAQ6N+KcD1LkeUk9IrDWAXp8jYFUayLXlbTZVFTN1x+t6aDNC
+         jAHq1jGt8Wk95ZIY8Q0xfZ4wPa8HXT4yhzdHG89tf+MtHQ1DzfdZVJHzzf3CEhFrDf
+         mudL1kE3vzJ3c0OVrSexfstIzOsWLQCD5Ld3R5NY=
+Date:   Mon, 16 Aug 2021 11:20:59 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     Reinhard Speyerer <rspmn@arcor.de>, johan@kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
+Subject: Re: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
  composition 0x901d
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
- Copyright (c) 2002-2021 www.mailtech.cn 163com
-In-Reply-To: <YRoqAJmGBpV/OuZL@arcor.de>
+Message-ID: <YRot+wBa6v529Z7q@kroah.com>
 References: <20210816035404.4210-1-slark_xiao@163.com>
  <YRoqAJmGBpV/OuZL@arcor.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+ <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
-Message-ID: <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: ZcGowAAXgzUMLRphsAuFAQ--.10104W
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRwzwZFc7TfdOqAAAsv
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjEtMDgtMTYgMTc6MDQ6MDAsICJSZWluaGFyZCBTcGV5ZXJl
-ciIgPHJzcG1uQGFyY29yLmRlPiB3cm90ZToKPk9uIE1vbiwgQXVnIDE2LCAyMDIxIGF0IDExOjU0
-OjA0QU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEZveGNvbm4gU0RYNTUgVDc3VzE3NSBk
-ZXZpY2UgaXMgd29ya2luZyBpbiBQQ0llIG1vZGUgbm9ybWFsbHkuCj4+IFlvdSBjYW4gZmluZCB0
-aGUgUENJZSBzdXBwb3J0IGluIGRyaXZlcnMvYnVzL21oaS9wY2lfZ2VuZXJpYy5jIGZpbGUuCj4+
-IEJ1dCBpbiBzb21lIHNjZW5hcmlvLCB3ZSBuZWVkIHRvIGNhcHR1cmUgdGhlIG1lbW9yeSBkdW1w
-IG9uY2UgaXQgY3Jhc2hlZC4KPj4gU28gYSBkaWFnIHBvcnQgdW5kZXIgVVNCIGRyaXZlciBpcyBu
-ZWVkZWQuCj4+IAo+PiBPbmx5IGludGVyZmFjZSAwIGlzIHVzZWQ6Cj4+IGpiZEBqYmQtVGhpbmtQ
-YWQtUDEtR2VuLTQ6fiQgbHN1c2IgfCBncmVwIDA1YzYKPj4gQnVzIDAwMyBEZXZpY2UgMDEwOiBJ
-RCAwNWM2OjkwMWQgUXVhbGNvbW0sIEluYy4gR2VuZXJpYyBNb2JpbGUgQnJvYWRiYW5kIEFkYXB0
-ZXIKPj4gamJkQGpiZC1UaGlua1BhZC1QMS1HZW4tNDp+JCBsc3VzYiAtdCB8IGdyZXAgIkRldiAx
-MCIKPj4gICAgIHxfXyBQb3J0IDc6IERldiAxMCwgSWYgMCwgQ2xhc3M9VmVuZG9yIFNwZWNpZmlj
-IENsYXNzLCBEcml2ZXI9b3B0aW9uLCA0ODBNCj4+IAo+PiBTaWduZWQtb2ZmLWJ5OiBTbGFyayBY
-aWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4+IC0tLQo+PiAgZHJpdmVycy91c2Ivc2VyaWFsL29w
-dGlvbi5jIHwgMSArCj4+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKykKPj4gCj4+IGRp
-ZmYgLS1naXQgYS9kcml2ZXJzL3VzYi9zZXJpYWwvb3B0aW9uLmMgYi9kcml2ZXJzL3VzYi9zZXJp
-YWwvb3B0aW9uLmMKPj4gaW5kZXggMDM5NDUwMDY5Y2E0Li5jMjc1ZjQ4OWMxY2MgMTAwNjQ0Cj4+
-IC0tLSBhL2RyaXZlcnMvdXNiL3NlcmlhbC9vcHRpb24uYwo+PiArKysgYi9kcml2ZXJzL3VzYi9z
-ZXJpYWwvb3B0aW9uLmMKPj4gQEAgLTIwNjgsNiArMjA2OCw3IEBAIHN0YXRpYyBjb25zdCBzdHJ1
-Y3QgdXNiX2RldmljZV9pZCBvcHRpb25faWRzW10gPSB7Cj4+ICAJICAuZHJpdmVyX2luZm8gPSBS
-U1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gIAl7IFVTQl9ERVZJQ0UoMHgwNDg5LCAw
-eGUwYjUpLAkJCQkJCS8qIEZveGNvbm4gVDc3Vzk2OCBFU0lNICovCj4+ICAJICAuZHJpdmVyX2lu
-Zm8gPSBSU1ZEKDApIHwgUlNWRCgxKSB8IFJTVkQoNikgfSwKPj4gKwl7IFVTQl9ERVZJQ0UoUVVB
-TENPTU1fVkVORE9SX0lELCAweDkwMWQpIH0sCQkJCS8qIEZveGNvbm4gVDc3VzE3NSBQQ0lFK1VT
-QiBtb2RlKi8KPj4gIAl7IFVTQl9ERVZJQ0UoMHgxNTA4LCAweDEwMDEpLAkJCQkJCS8qIEZpYm9j
-b20gTkw2NjggKElPVCB2ZXJzaW9uKSAqLwo+PiAgCSAgLmRyaXZlcl9pbmZvID0gUlNWRCg0KSB8
-IFJTVkQoNSkgfCBSU1ZEKDYpIH0sCj4+ICAJeyBVU0JfREVWSUNFKDB4MmNiNywgMHgwMTA0KSwJ
-CQkJCQkvKiBGaWJvY29tIE5MNjc4IHNlcmllcyAqLwo+PiAtLSAKPj4gMi4yNS4xCj4+IAo+PiAK
-Pgo+SGkgU2xhcmssCj4KPnNpbmNlIHRoaXMgZW50cnkgdXNlcyB0aGUgUXVhbGNvbW0gVVNCIFZJ
-RCBpdCB3b3VsZCBiZSBhIGdvb2QgaWRlYSB0byBtYWtlCj50aGUgb3B0aW9uIGRyaXZlciBvbmx5
-IGJpbmQgdG8gdGhlIERJQUcgaW50ZXJmYWNlIGluIGNhc2Ugb3RoZXIgVUUgdmVuZG9ycwo+aGF2
-ZSB0aGUgQURCIGludGVyZmFjZSBwcm92aWRlZCBieSB0aGlzIGNvbXBvc2l0aW9uIGVuYWJsZWQ6
-Cj4KPiQgc2VkIDMwcSA5MDFECj4jIS9iaW4vc2gKPiMKPiMgQ29weXJpZ2h0IChjKSAyMDE0LDIw
-MTctMjAxOCwgVGhlIExpbnV4IEZvdW5kYXRpb24uIEFsbCByaWdodHMgcmVzZXJ2ZWQuCj4jCj4j
-IFJlZGlzdHJpYnV0aW9uIGFuZCB1c2UgaW4gc291cmNlIGFuZCBiaW5hcnkgZm9ybXMsIHdpdGgg
-b3Igd2l0aG91dAo+IyBtb2RpZmljYXRpb24sIGFyZSBwZXJtaXR0ZWQgcHJvdmlkZWQgdGhhdCB0
-aGUgZm9sbG93aW5nIGNvbmRpdGlvbnMgYXJlIG1ldDoKPiMgICAgICogUmVkaXN0cmlidXRpb25z
-IG9mIHNvdXJjZSBjb2RlIG11c3QgcmV0YWluIHRoZSBhYm92ZSBjb3B5cmlnaHQKPiMgICAgICAg
-bm90aWNlLCB0aGlzIGxpc3Qgb2YgY29uZGl0aW9ucyBhbmQgdGhlIGZvbGxvd2luZyBkaXNjbGFp
-bWVyLgo+IyAgICAgKiBSZWRpc3RyaWJ1dGlvbnMgaW4gYmluYXJ5IGZvcm0gbXVzdCByZXByb2R1
-Y2UgdGhlIGFib3ZlIGNvcHlyaWdodAo+IyAgICAgICBub3RpY2UsIHRoaXMgbGlzdCBvZiBjb25k
-aXRpb25zIGFuZCB0aGUgZm9sbG93aW5nIGRpc2NsYWltZXIgaW4gdGhlCj4jICAgICAgIGRvY3Vt
-ZW50YXRpb24gYW5kL29yIG90aGVyIG1hdGVyaWFscyBwcm92aWRlZCB3aXRoIHRoZSBkaXN0cmli
-dXRpb24uCj4jICAgICAqIE5laXRoZXIgdGhlIG5hbWUgb2YgVGhlIExpbnV4IEZvdW5kYXRpb24g
-bm9yIHRoZSBuYW1lcyBvZiBpdHMKPiMgICAgICAgY29udHJpYnV0b3JzIG1heSBiZSB1c2VkIHRv
-IGVuZG9yc2Ugb3IgcHJvbW90ZSBwcm9kdWN0cyBkZXJpdmVkIGZyb20KPiMgICAgICAgdGhpcyBz
-b2Z0d2FyZSB3aXRob3V0IHNwZWNpZmljIHByaW9yIHdyaXR0ZW4gcGVybWlzc2lvbi4KPiMKPiMg
-VEhJUyBTT0ZUV0FSRSBJUyBQUk9WSURFRCAiQVMgSVMiIEFORCBBTlkgRVhQUkVTUyBPUiBJTVBM
-SUVEIFdBUlJBTlRJRVMsCj4jIElOQ0xVRElORywgQlVUIE5PVCBMSU1JVEVEIFRPLCBUSEUgSU1Q
-TElFRCBXQVJSQU5USUVTIE9GIE1FUkNIQU5UQUJJTElUWSwKPiMgRklUTkVTUyBGT1IgQSBQQVJU
-SUNVTEFSIFBVUlBPU0UgQU5EIE5PTi1JTkZSSU5HRU1FTlQgQVJFIERJU0NMQUlNRUQuICBJTiBO
-Two+IyBFVkVOVCBTSEFMTCBUSEUgQ09QWVJJR0hUIE9XTkVSIE9SIENPTlRSSUJVVE9SUyBCRSBM
-SUFCTEUgRk9SIEFOWSBESVJFQ1QsCj4jIElORElSRUNULCBJTkNJREVOVEFMLCBTUEVDSUFMLCBF
-WEVNUExBUlksIE9SIENPTlNFUVVFTlRJQUwgREFNQUdFUwo+IyAoSU5DTFVESU5HLCBCVVQgTk9U
-IExJTUlURUQgVE8sIFBST0NVUkVNRU5UIE9GIFNVQlNUSVRVVEUgR09PRFMgT1IgU0VSVklDRVM7
-Cj4jIExPU1MgT0YgVVNFLCBEQVRBLCBPUiBQUk9GSVRTOyBPUiBCVVNJTkVTUyBJTlRFUlJVUFRJ
-T04pIEhPV0VWRVIgQ0FVU0VEIEFORAo+IyBPTiBBTlkgVEhFT1JZIE9GIExJQUJJTElUWSwgV0hF
-VEhFUiBJTiBDT05UUkFDVCwgU1RSSUNUIExJQUJJTElUWSwgT1IgVE9SVAo+IyAoSU5DTFVESU5H
-IE5FR0xJR0VOQ0UgT1IgT1RIRVJXSVNFKSBBUklTSU5HIElOIEFOWSBXQVkgT1VUIE9GIFRIRSBV
-U0UgT0YgVEhJUwo+IyBTT0ZUV0FSRSwgRVZFTiBJRiBBRFZJU0VEIE9GIFRIRSBQT1NTSUJJTElU
-WSBPRiBTVUNIIERBTUFHRS4KPgo+IyBERVNDUklQVElPTjogRElBRyArIEFEQgo+Cj5lY2hvICJT
-d2l0Y2hpbmcgdG8gY29tcG9zaXRpb24gbnVtYmVyIDB4OTAxRCIgID4gL2Rldi9rbXNnCj4KPgo+
-W0lkZWFsbHkgdGhlc2UgY29tcG9zaXRpb25zIHdvdWxkIGFsc28gYmUgYXZhaWxhYmxlIHZpYSBr
-ZXJuZWwub3JnIGFuZC9vcgo+IGNvZGVhdXJhLm9yZyBidXQgc28gZmFyIEkgaGF2ZSBiZWVuIHVu
-YWJsZSB0byBmaW5kIHRoZW0gdGhlcmUuXQo+Cj5SZWdhcmRzLAo+UmVpbmhhcmQKCkhpIFJlaW5o
-YXJkLAogIFNvIHNob3VsZCBJIHVzZSBVU0JfREVWSUNFX0lOVEVSRkFDRV9OVU1CRVIoUVVBTENP
-TU1fVkVORE9SX0lELCAweDkwMWQsIDB4MDApIHRvIGJpbmQgRGlhZyBwb3J0IG9ubHk/CgpUaGFu
-a3M=
+On Mon, Aug 16, 2021 at 05:17:00PM +0800, Slark Xiao wrote:
+>   So should I use USB_DEVICE_INTERFACE_NUMBER(QUALCOMM_VENDOR_ID, 0x901d, 0x00) to bind Diag port only?
+
+Why is this device using the QUALCOMM vendor id anyway?  Is this allowed
+by Qualcomm?
+
+thanks,
+
+greg k-h
