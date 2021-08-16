@@ -2,76 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F9C3ECEEF
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 09:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347673ECEFA
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 09:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233752AbhHPHDN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 03:03:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57940 "EHLO mail.kernel.org"
+        id S233687AbhHPHJh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 03:09:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60902 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233723AbhHPHDK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Aug 2021 03:03:10 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 83EC261A86;
-        Mon, 16 Aug 2021 07:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629097359;
-        bh=NEhOhNn51b6BaxHNGueUbfM3PA9uRwYmLljxdcnbVZ4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ISbwARMFpUlx050yLFm9ANJgbNAyDab8u1K2UH2/KbiYEKGLl4FnqqlRePYPzto52
-         bNFtIsGXt610MnH8LHCdwjC4IENw4gN46HiTdbU04PVIY+Cxtb9lQVQyKxyiR7Dj8C
-         ZYg8Ld/x5GW1zvWbaA2B6IH04yf2n26kvf2acObw=
-Date:   Mon, 16 Aug 2021 09:02:36 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     David Miller <davem@davemloft.net>, tuba@ece.ufl.edu,
-        netdev@vger.kernel.org, kuba@kernel.org, oneukum@suse.com,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2] net: hso: do not call unregister if not registered
-Message-ID: <YRoNjEERjPz0AYEQ@kroah.com>
-References: <20201002114323.GA3296553@kroah.com>
- <20201003.170042.489590204097552946.davem@davemloft.net>
- <20201004071433.GA212114@kroah.com>
- <YRoLSvowhZsyKbOk@eldamar.lan>
+        id S233349AbhHPHJh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 16 Aug 2021 03:09:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 15C0561A86
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 07:09:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629097746;
+        bh=2+TMixNiAyhv5H6fAyJLJ0XfjiyCIBZSByVCz2oT47E=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=NN3v6Ruhw0J56iWCbN7/7cKbIHK+0NrSj8PzRO0Ui1gvt8Z9l+krWlTwc1hN2d+3x
+         ZT3+N1/qAA8HVjZ8mGUKnuW4M2Y5cN+YKPtSsYrBH7NUEdtkvxo+l1PRHUr1nnhu9r
+         uQjC/+zLd3BAX675f5PPsRXc5s491dVwb3Z/iLPaNH3mQMcJy2brcwVw/xwi3crMKo
+         2FZx/7IaZJS8PJinEwx9yfVqCzTozu27wrUsWc11OjRzQRljpXBzcJwRqay4YGKr9t
+         +X08OP0I3tJdUw5gStd/ZAT5RNC+qhcSxREIaaQlgRpb7QYyKi9adFs+qSqirwJAQR
+         JIu0VXnYhTuWQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 0539C60FEC; Mon, 16 Aug 2021 07:09:06 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Mon, 16 Aug 2021 07:09:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: chris.chiu@canonical.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-ACKLPrq2Zu@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YRoLSvowhZsyKbOk@eldamar.lan>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 08:52:58AM +0200, Salvatore Bonaccorso wrote:
-> Hi Greg, Tuba,
-> 
-> On Sun, Oct 04, 2020 at 09:14:33AM +0200, Greg KH wrote:
-> > On Sat, Oct 03, 2020 at 05:00:42PM -0700, David Miller wrote:
-> > > From: Greg KH <gregkh@linuxfoundation.org>
-> > > Date: Fri, 2 Oct 2020 13:43:23 +0200
-> > > 
-> > > > @@ -2366,7 +2366,8 @@ static void hso_free_net_device(struct hso_device *hso_dev, bool bailout)
-> > > >  
-> > > >  	remove_net_device(hso_net->parent);
-> > > >  
-> > > > -	if (hso_net->net)
-> > > > +	if (hso_net->net &&
-> > > > +	    hso_net->net->reg_state == NETREG_REGISTERED)
-> > > >  		unregister_netdev(hso_net->net);
-> > > >  
-> > > >  	/* start freeing */
-> > > 
-> > > I really want to get out of the habit of drivers testing the internal
-> > > netdev registration state to make decisions.
-> > > 
-> > > Instead, please track this internally.  You know if you registered the
-> > > device or not, therefore use that to control whether you try to
-> > > unregister it or not.
-> > 
-> > Fair enough.  Tuba, do you want to fix this up in this way, or do you
-> > recommend that someone else do it?
-> 
-> Do I miss something, or did that possibly fall through the cracks?
-> 
-> I was checking some open issues on a downstream distro side and found
-> htat this thread did not got a follow-up.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-I did not see a follow-up patch :(
+--- Comment #5 from Chris Chiu (chris.chiu@canonical.com) ---
+I add printks to trace where the error happens. The dmesg show as down below
+
+[   44.488980] xhci_hcd 0000:00:14.0: FIXME: allocate a command ring segment
+[   44.488981] usb_alloc_dev: hcd driver alloc dev exist but return 0
+[   44.488982] usb usb1-port4: couldn't allocate usb_device
+
+The first line show for the "xhci_dbg(xhci, "FIXME: allocate a command ring
+segment\n");" in xhci_alloc_dev()
+
+The second line shows the printk I add in usb_alloc_dev()
+
+       /* Root hubs aren't true devices, so don't allocate HCD resources */
+        if (usb_hcd->driver->alloc_dev && parent &&
+                !usb_hcd->driver->alloc_dev(usb_hcd, dev)) {
++               printk("%s: hcd driver alloc dev exist but return 0",
+__func__);
+                usb_put_hcd(bus_to_hcd(bus));
+                kfree(dev);
+                return NULL;
+        }
+
+The usb_hcd->driver->alloc_dev is equal to xhci_alloc_dev and fails the
+xhci_queue_slot_control(). Does that mean anything regarding this?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
