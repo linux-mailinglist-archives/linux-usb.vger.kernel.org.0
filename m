@@ -2,66 +2,63 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEC13ED2FA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 13:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B86E3ED306
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Aug 2021 13:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235917AbhHPLRq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 16 Aug 2021 07:17:46 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60766 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231143AbhHPLRp (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 16 Aug 2021 07:17:45 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 0896C61B5D;
-        Mon, 16 Aug 2021 11:17:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629112633;
-        bh=VQHVWgx/Vnp6vrq90JYPhAK5Lk/clExK25/y4fl3xCk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RqHWfe7autrBSS9uvYSMOkt15g1cptInQs5EnCeKzesa5Ef8x4GsQT5ZijTDStdUF
-         s1t79tgDSoQfdpeb432fHgYHOmlcqddFDfVQ2D7P4CvIj8JpWN2X1X+MpY1ePuMHCC
-         7SJYggdjMyyGN9/yvE95njTDecBjbEa4Hh62BkTg=
-Date:   Mon, 16 Aug 2021 13:17:11 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     Reinhard Speyerer <rspmn@arcor.de>, johan@kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn T77W175
- composition 0x901d
-Message-ID: <YRpJN414JQyfyEGo@kroah.com>
-References: <20210816035404.4210-1-slark_xiao@163.com>
- <YRoqAJmGBpV/OuZL@arcor.de>
- <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
- <YRot+wBa6v529Z7q@kroah.com>
- <278bcd0d.7189.17b4e479a3a.Coremail.slark_xiao@163.com>
+        id S235945AbhHPLXd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 16 Aug 2021 07:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231652AbhHPLXc (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 16 Aug 2021 07:23:32 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B96C0613C1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 04:23:01 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id x1so442945qtw.5
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 04:23:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=kvyETQFCZXtBz7kqCRBs15bm8sELTR1yZLjxto0dTAuQpceAE0teE2J2mqncbYXYNJ
+         G//4W8f3GHb6PqVuLAZCgFHDaokb65zRdEYWDU9Dh+YFWxQkvILw/C0chVD8oB+tWKir
+         ZwtDHhm6kueXb0rZ95c4X0Q95icxg9LOgr0pHt872CPKf7lP0kxnkBBY64x4anb51o2b
+         /ikP7ogrJDoz5SJsQ+wXJcuIxHlobQGRcgL+m/mtWLGnW4D2Hkb9AoTcN8Ewg4vOoXn6
+         WKZHK7rbUNaiEqGg3QG5CrCJGlPQNVUwlIbxEHu5j4CmXonMdTUpPtOLHNFgUjlod3+S
+         FsJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=H3bGT1ZyGPu3PRQJlJHyQI9TvTjBPuNSyHjFOzNfiP0=;
+        b=NMPkS92tQSsfCr9km94P8Dr2InsFobf7Ta/VopMhUYYDRWvWRfNBpFPDnEA4FuAv6U
+         eCyQ7sKvr4ljz198S+Ni83koUxZCCSjGMBqUNP1tuX2vBRYZXTbFbDsPy3+kzH85E7nY
+         tkQ4jtF4XNMXc3JcYDwjvaY9Hx9GxVNWCMusUy6hfLw/ZRNhpSrv7nfOdk1whrG8Z0tq
+         frFnwLsMizZWs0PwslNTeCdNECgPq4gbPL2pvFQXpeNqJ/T8u2xNQlhf9qpsbdMCDyqd
+         Em0Dv3HBGm9R3sDLG3abOoenAq+7lpCNZ7K+/I8yBaVWl1mqrR0s5i4sdQTW4X363ORp
+         dsHA==
+X-Gm-Message-State: AOAM533sRawtQuhBeqs+H1QKZAvJdUHP4+LTKrtgVkfP2JwbmCXvlnwk
+        rtSqrN73yBlpPyp/lvk2KFRsbQE6CkGvO/7Avdo=
+X-Google-Smtp-Source: ABdhPJy7Z7Fm+GC1ls1Sjd8Vw7aDl35tF3tCV14nXyub0rg7PzOc23hZgbatZHt79yovWaQGfUJcku6H1tjTTm4Ri8g=
+X-Received: by 2002:a05:622a:652:: with SMTP id a18mr13197575qtb.112.1629112980415;
+ Mon, 16 Aug 2021 04:23:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <278bcd0d.7189.17b4e479a3a.Coremail.slark_xiao@163.com>
+Received: by 2002:a0c:f752:0:0:0:0:0 with HTTP; Mon, 16 Aug 2021 04:23:00
+ -0700 (PDT)
+Reply-To: abdwabbomaddahm@gmail.com
+From:   Abdwabbo Maddah <maddahabdwabbo52@gmail.com>
+Date:   Mon, 16 Aug 2021 12:23:00 +0100
+Message-ID: <CAGqN+qZyt4Ar9t147a+_rynrjzEJVhQS6teGLeVLYPw7Rq3bBQ@mail.gmail.com>
+Subject: DID YOU RECEIVE MY MAIL?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Mon, Aug 16, 2021 at 05:25:20PM +0800, Slark Xiao wrote:
-> At 2021-08-16 17:20:59, "Greg KH" <gregkh@linuxfoundation.org> wrote:
-> >On Mon, Aug 16, 2021 at 05:17:00PM +0800, Slark Xiao wrote:
-> >>   So should I use USB_DEVICE_INTERFACE_NUMBER(QUALCOMM_VENDOR_ID, 0x901d, 0x00) to bind Diag port only?
-> >
-> >Why is this device using the QUALCOMM vendor id anyway?  Is this allowed
-> >by Qualcomm?
-> >
-> >thanks,
-> >
-> >greg k-h
-> 
-> Hi Greg,
->   Our product are designed based on Qualcomm SDX55 platform. So it still support Qualcomm vendor ID.
->   I think there is no infringement about this ID combo.
-
-Do you have permission from Qualcomm to use their vendor id?  I know
-some vendors get very upset about this...
-
-Why not use your own vendor id?
-
-thanks,
-
-greg k-h
+-- 
+Dear,
+I had sent you a mail but i don't think you received it that's why am
+writing you again.It is important you get back to me as soon as you
+can.
+Abd-Wabbo Maddah
