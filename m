@@ -2,145 +2,106 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AEC3EE6AC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 08:40:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34EA53EE6D0
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 08:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238295AbhHQGk7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 02:40:59 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:45091 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237977AbhHQGky (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 02:40:54 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629182422; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=AeeA73ZpKawSWZg+PkAg6dDlWEGmMSg3bssyiF/542M=;
- b=KYKWp0UUu73u4dkl4Zst6C+VuFtWHEVHgxb4MXPwBkS8wUtyNK7xygWRXyQYaz9F34jRBxgM
- UhILUNvTR29/yKiIiqyu/eHdfcsLQn9Ur/SJ/SLVVuORR6yR4i9B3JT/dJExuMW3ibhHS/Ue
- V+Vm0reZQjEKvkP/Kbavq8IAhoY=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 611b59c6105c6568db2f5851 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 06:40:06
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 627AAC4360C; Tue, 17 Aug 2021 06:40:06 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7A5AAC4338F;
-        Tue, 17 Aug 2021 06:40:05 +0000 (UTC)
+        id S238270AbhHQGpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 02:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235915AbhHQGpa (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 02:45:30 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D4DC0613C1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 23:44:58 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id oa17so30568028pjb.1
+        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 23:44:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=rh78CCde9OfVGRpH7hH2HpmGlVIlBmH6EVTWdupki5c=;
+        b=e6p9RpI6VmQyi4oFKGYGWa7qxP1kCOsCl2egCzzl9+sp3WWNjOVvTOS1BotE5XqLlh
+         SJ1mjuxVi3++OOAAMUMYyZC52ydysfc7QK9ruXC3pBCotc8wtZSIQsaI1kI1UV9YdD3O
+         iATj3EyKOsdCSyjSJDf23JDx6G08aM4G6ruOYZpyvNqt1Jqvb/nErrOIcIhgalnWDq5V
+         91Or6kqKWeAI8bnRXMwb55diIzqW3HnZkeXWEf2GUhBzGKRhHfdhCYdVM2zmZYkjrlXU
+         3WuvV6Fz5TmdX2DlEOlUHn3Mjb8HR90JAon3p8bWWMeMaLT5TLlAteZtk3ECSlQsp7V3
+         aYWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=rh78CCde9OfVGRpH7hH2HpmGlVIlBmH6EVTWdupki5c=;
+        b=OeQP61HNsDvGsy3+Mhm1hPGxGIidx2QM8rXh1jV2Q0EB2eedNE0fYdAyyh92YmIpMp
+         MJ8mlbZuEJHeITHvS28evcbbuxmnkFgx6a5DlK6tj2i+vJav/cN3BVEQuVrJtgdK7U+D
+         BFmBjfMF1eeMqRfQpMgzXLIyBw/VOVh3PE3gnc/UEqoDfvZSwJvh4ErlYjtZLmsBdEJj
+         FOFCmq9G/Jwn0829e7fa7qL7wdVK8We1ciRPznsjOdjzcEeQqFPTIssPln5/nwEJxNSF
+         KxXqiPjr5mmcKzJiAAyfUzMVsOWaH0hZ+AKE5uemhD/YNkiFVCRt+CC/0rfGEBvCl2Hd
+         jgkQ==
+X-Gm-Message-State: AOAM532/7RlHJoty/p4NfbiN9ITn8H8Y4oOWxt6AcfsH1IImncrEbklN
+        caWOcy1LxbOBpVdC97w23FLciA==
+X-Google-Smtp-Source: ABdhPJw6ubxHbWrC0nsiaRj+XZYqTkR1c1fqchC2dyK5OJJJk50DvxwLDKEa/v2UUtjIxizD06wyEQ==
+X-Received: by 2002:a05:6a00:2142:b029:3b9:e5df:77ab with SMTP id o2-20020a056a002142b02903b9e5df77abmr2170557pfk.52.1629182697872;
+        Mon, 16 Aug 2021 23:44:57 -0700 (PDT)
+Received: from ubuntu ([106.245.77.4])
+        by smtp.gmail.com with ESMTPSA id z2sm1758614pgz.43.2021.08.16.23.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Aug 2021 23:44:57 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 15:43:53 +0900
+From:   Jeaho Hwang <jhhwang@rtst.co.kr>
+To:     Peter Chen <peter.chen@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     team-linux@rtst.co.kr, mkbyeon@lselectric.co.kr,
+        khchoib@lselectric.co.kr
+Subject: [PATCH v2] usb: chipidea: add loop timeout for hw_ep_set_halt()
+Message-ID: <20210817064353.GA669425@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 17 Aug 2021 12:10:05 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-In-Reply-To: <CAE-0n50nYEAhpBADVWutm-SvUMpe+4Qte69iucJvXax=d_59=w@mail.gmail.com>
-References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
- <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
- <CAE-0n50nYEAhpBADVWutm-SvUMpe+4Qte69iucJvXax=d_59=w@mail.gmail.com>
-Message-ID: <c742065c0469633fe4ea3a74dc42c2f9@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-11 01:07, Stephen Boyd wrote:
-> Quoting Prasad Malisetty (2021-08-09 21:08:36)
->> On the SC7280, By default the clock source for pcie_1_pipe is
->> TCXO for gdsc enable. But after the PHY is initialized, the clock
->> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
->> 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
->>  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
->> 
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c 
->> b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 8a7a300..39e3b21 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct 
->> qcom_pcie *pcie)
->>         if (ret < 0)
->>                 return ret;
->> 
->> +       if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) 
->> {
->> +               res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, 
->> "pipe_mux");
->> +               if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
->> +                       return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
->> +
->> +               res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
->> +               if (IS_ERR(res->phy_pipe_clk))
->> +                       return PTR_ERR(res->phy_pipe_clk);
->> +       }
->> +
->>         res->pipe_clk = devm_clk_get(dev, "pipe");
->>         return PTR_ERR_OR_ZERO(res->pipe_clk);
->>  }
->> @@ -1255,6 +1267,12 @@ static void qcom_pcie_deinit_2_7_0(struct 
->> qcom_pcie *pcie)
->>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->>  {
->>         struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
->> +       struct dw_pcie *pci = pcie->pci;
->> +       struct device *dev = pci->dev;
->> +       struct device_node *node = dev->of_node;
->> +
->> +       if (of_property_read_bool(node, "pipe-clk-source-switch"))
-> 
-> This can be straightline code. If gcc_pcie_1_pipe_clk_src is NULL,
-> calling clk_set_parent() on it is a nop, return 0, so drop the property
-> check and only assign the clk pointer if it needs to be done.
-> 
->> +               clk_set_parent(res->gcc_pcie_1_pipe_clk_src, 
->> res->phy_pipe_clk);
-> 
-> Please check the return value and fail if it fails to set the parent.
-> I'd also prefer a comment indicating that we have to set the parent
-> because the GDSC must be enabled with the clk at XO speed. The DT 
-> should
-> probably also have an assigned clock parent of XO so when the driver
-> probes it is set to XO parent for gdsc enable and then this driver code
-> can change the parent to the phy pipe clk.
-> 
->> 
->>         return clk_prepare_enable(res->pipe_clk);
->>  }
+If ctrl EP priming is failed (very rare case in standard linux),
+hw_ep_set_halt goes infinite loop. waiting 100 times was enough
+for zynq7000.
 
-Hi Stephen,
+Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
 
-Thanks for your review and inputs.
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 8834ca613721..d73fadb18f32 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -209,6 +209,9 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
+ 	return 0;
+ }
+ 
++/* enough for zynq7000 evaluation board */
++#define HW_EP_SET_HALT_COUNT_MAX 100
++
+ /**
+  * hw_ep_set_halt: configures ep halt & resets data toggle after clear (execute
+  *                 without interruption)
+@@ -221,6 +224,7 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
+  */
+ static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
+ {
++	int count = HW_EP_SET_HALT_COUNT_MAX;
+ 	if (value != 0 && value != 1)
+ 		return -EINVAL;
+ 
+@@ -232,9 +236,9 @@ static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
+ 		/* data toggle - reserved for EP0 but it's in ESS */
+ 		hw_write(ci, reg, mask_xs|mask_xr,
+ 			  value ? mask_xs : mask_xr);
+-	} while (value != hw_ep_get_halt(ci, num, dir));
++	} while (value != hw_ep_get_halt(ci, num, dir) && --count > 0);
+ 
+-	return 0;
++	return count ? 0 : -EAGAIN;
+ }
+ 
+ /**
+-- 
+2.25.1
 
-Yes, clk_set_parent function returning NULL if src pointer is NULL. we 
-can call clk_set_parent function without any check.
-
-I will validate and incorporate the changes in next version.
-
-Thanks
--Prasad
