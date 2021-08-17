@@ -2,113 +2,237 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4834D3EEFE0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 17:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1413EF045
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 18:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240972AbhHQP5t (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 11:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
+        id S230271AbhHQQiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 12:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241082AbhHQP4M (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 11:56:12 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180FDC061150;
-        Tue, 17 Aug 2021 08:53:14 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z2so42331377lft.1;
-        Tue, 17 Aug 2021 08:53:14 -0700 (PDT)
+        with ESMTP id S229477AbhHQQiC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 12:38:02 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F47AC061764;
+        Tue, 17 Aug 2021 09:37:29 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t9so42540325lfc.6;
+        Tue, 17 Aug 2021 09:37:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=i1x/HqtgkDsm/ejKQeETrdsQe6dZCILRZB7KrDkPDRw=;
-        b=An4PsjL/Vf5udfyNdAKTCYWd10EU58Kpxe8zKg/t9npZAavumDMU+X9iBgUDO5Z8Zq
-         qLi7UARHs5EBlnNEWrEBaiEyo4AvkdNde23Gx7Ech/+7twOysiNWaNZJNc4c1H9Unsq3
-         EZ9/NC8tZYzsvHiEyEjIq8t7XNVBW4+7jhFenO5mQmYIgRBk+TxgMXr2m4yePVU5ry+F
-         yIAUTR2f68Q14RQm9v+g3T6mw1go0mbvXB6UoQIJuFvpfbNq+pUgeWHg895WJQXEl29h
-         zNHJ3yrbMGXltFkn0e1Yqc4GHFXDR5UTFoNhdaUppdVMQxIsBTVP10kUU2MP/Em1dvWL
-         oObQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=YXS2wDrNmRySEhsIbVUMKvb+Ici86y1kGrWc6irGTdI=;
+        b=Y5hr7uJGS6odntPRfVaTWLcpzoeH263nrltEvmqFinf6ceo9aZlDCiHDsAr9GmrupU
+         IRNg6FoDEviyUm7NpnYSEV25dvz4apQiNUL7cwUeGZypnGtOAmo4cCb9OTV2d8dISB9B
+         KoDLzDWnsTuygAvGuViTxIx+gaP0sxUY8WBU2GJzb83RLT0jNdEwmZ6Sc074HPfdh3Qa
+         P5FLMkj130JSNqgYvgAMB1sJxe5c42BzcDLNCAztau3LgUblSgqPBTx7Tfpzyccg+n+8
+         lgevVSZ0ixMIVmeiLQ8Q1Pne1j8WM2LmBkbfx9QprZmHXptXfg737vYNKQHSkzE0B4Ex
+         BVqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=i1x/HqtgkDsm/ejKQeETrdsQe6dZCILRZB7KrDkPDRw=;
-        b=LMUv3nVDHLln3ypbO19SQ/SppKav30at9ZDJhP0teyzQmIJ+NF1hUGZ/calGUV116v
-         7cTrCqbMmt4nkZn4pzJFaeOmvPQxAXL+vqS8/f9mJNZEFQ4CU/htpUvXKgWH5a5Qh2s4
-         lizBX/CYNk16sxp/gyR2VCbxkZrTRCep94F8/5vuycT7iyIYpiJnj4Wa4WW/MVBzC0Ri
-         /UoKS7dQpLWiTWV1GIeLkjywmSsarj1BnMGO+N8yGMzDgKrzwiYncnpWyNXIrjrtY6lJ
-         wlS8rbUvn1zpL+14YDzf61DZJfzGuZ6IrzBV/QnkmkriIy0CW0ovFlz2xY/hxGTRAkdo
-         6mQg==
-X-Gm-Message-State: AOAM531m9enKkT+isJXgU8tQ1cqHR95ClWgqtVDLh5rPt/+Oj9TaNrao
-        lbFeEo8JIln9P4ppaOFs2NUDmnD3eJo=
-X-Google-Smtp-Source: ABdhPJzKDCfx8XTSv5rLHo+odlu5xNPqb9QF4cuJdpvDud3tFDUajnizSUcMOMnHR+YPCBFb3Bv9Ew==
-X-Received: by 2002:ac2:4f8f:: with SMTP id z15mr2811432lfs.361.1629215591955;
-        Tue, 17 Aug 2021 08:53:11 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.googlemail.com with ESMTPSA id r20sm223793lff.93.2021.08.17.08.53.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Aug 2021 08:53:11 -0700 (PDT)
-Subject: Re: [PATCH v8 22/34] spi: tegra20-slink: Add OPP support
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-23-digetx@gmail.com>
- <20210817122244.GA4290@sirena.org.uk>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <a0e49d91-e812-5b55-e90f-bfba8476faa3@gmail.com>
-Date:   Tue, 17 Aug 2021 18:53:09 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=YXS2wDrNmRySEhsIbVUMKvb+Ici86y1kGrWc6irGTdI=;
+        b=arCKEKrjwmAmWMoyiu8y/nej5sQBI+dYZHK29hwu8kH/pm4qt2wa/cJIecMKC46FM0
+         +BRgt4REncLZrIo1GAHtcjC6m9vzhTtfn/WQxAirKeeYPUTEwf+Qsw9PvSD9A2WHmtnm
+         Mu6K7svpr8cpa9QIeNg2GpmuVNnlKARM1/gAVWZg6GBS0hlw+2GlKJ50ycTwgD0gfjqK
+         jxIWVY4aJYOI4AC0QFbT1Tm3z6Ogx/iTX2EdC+M/GzPGb+3qzld0Ov3qZ/SMtONBE7Gu
+         C2n6yIRjT/TsEYVaMd0JjI4cH+NcIvSOffvJhbIIY3pkIMNVwh/bHjwqY/g41SgQyVh+
+         4plw==
+X-Gm-Message-State: AOAM532tsBJY1Ia9atkrcCQbetp7tHGpkDCiU9fHqtGuReV2qc3bS6BX
+        tQAyJoXh7NlJy4nwXnbpw6k=
+X-Google-Smtp-Source: ABdhPJzpbGmHrwh8UAjjsCRvYXj+APQyDZxQPQSAbma10H9Mf3UHV2kID3HT1nzwpSYt9itchv3pjw==
+X-Received: by 2002:a05:6512:3f16:: with SMTP id y22mr2966368lfa.356.1629218247319;
+        Tue, 17 Aug 2021 09:37:27 -0700 (PDT)
+Received: from localhost.localdomain ([46.235.67.232])
+        by smtp.gmail.com with ESMTPSA id u22sm255382lff.270.2021.08.17.09.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 09:37:26 -0700 (PDT)
+From:   Pavel Skripkin <paskripkin@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
+        andrew@lunn.ch, himadrispandya@gmail.com
+Cc:     robert.foss@collabora.com, freddy@asix.com.tw,
+        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
+Subject: [PATCH v4] net: asix: fix uninit value bugs
+Date:   Tue, 17 Aug 2021 19:37:23 +0300
+Message-Id: <20210817163723.19040-1-paskripkin@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <YRfjFr9GbcoJrycc@lunn.ch>
+References: <YRfjFr9GbcoJrycc@lunn.ch>
 MIME-Version: 1.0
-In-Reply-To: <20210817122244.GA4290@sirena.org.uk>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-17.08.2021 15:22, Mark Brown пишет:
-> On Tue, Aug 17, 2021 at 04:27:42AM +0300, Dmitry Osipenko wrote:
->> The SPI on Tegra belongs to the core power domain and we're going to
->> enable GENPD support for the core domain. Now SPI driver must use OPP
->> API for driving the controller's clock rate because OPP API takes care
->> of reconfiguring the domain's performance state in accordance to the
->> rate. Add OPP support to the driver.
-> 
-> Acked-by: Mark Brown <broonie@kernel.org>
-> 
-> Is there a concrete dependency here or can I merge this separately?
+Syzbot reported uninit-value in asix_mdio_read(). The problem was in
+missing error handling. asix_read_cmd() should initialize passed stack
+variable smsr, but it can fail in some cases. Then while condidition
+checks possibly uninit smsr variable.
 
-This patch depends on the new OPP helpers added earlier in this series.
-In particular it depends on these patches:
+Since smsr is uninitialized stack variable, driver can misbehave,
+because smsr will be random in case of asix_read_cmd() failure.
+Fix it by adding error handling and just continue the loop instead of
+checking uninit value.
 
-opp: Add dev_pm_opp_sync() helper
-soc/tegra: Add devm_tegra_core_dev_init_opp_table_simple()
+Added helper function for checking Host_En bit, since wrong loop was used
+in 4 functions and there is no need in copy-pasting code parts.
 
-Thank you for the ack!
+Cc: Robert Foss <robert.foss@collabora.com>
+Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
+Reported-by: syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+---
+
+Changes in v2:
+	1. Fixed previous wrong approach and changed while loop to for loop
+	2. Reported-and-tested-by: tag removed, since KMSAN tests can be
+	   false positive. Used Reported-by instead.
+
+Changes in v3:
+	1. Addressed uninit value bugs in asix_mdio_write(), asix_mdio_read_nopm()
+	and asix_mdio_write_nopm()
+	2. Moved i after ret to reverse xmas tree style
+	3. Fixed Fixes: tag
+
+Changes in v4:
+	1. Added helper for checking Host_En bit, since wrong loop was
+	   used in 4 functions. (Suggested by Andrew Lunn)
+
+---
+ drivers/net/usb/asix_common.c | 70 +++++++++++++++--------------------
+ 1 file changed, 30 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
+index ac92bc52a85e..38cda590895c 100644
+--- a/drivers/net/usb/asix_common.c
++++ b/drivers/net/usb/asix_common.c
+@@ -63,6 +63,29 @@ void asix_write_cmd_async(struct usbnet *dev, u8 cmd, u16 value, u16 index,
+ 			       value, index, data, size);
+ }
+ 
++static int asix_check_host_enable(struct usbnet *dev, int in_pm)
++{
++	int i, ret;
++	u8 smsr;
++
++	for (i = 0; i < 30; ++i) {
++		ret = asix_set_sw_mii(dev, in_pm);
++		if (ret == -ENODEV || ret == -ETIMEDOUT)
++			break;
++		usleep_range(1000, 1100);
++		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
++				    0, 0, 1, &smsr, in_pm);
++		if (ret == -ENODEV)
++			break;
++		else if (ret < 0)
++			continue;
++		else if (smsr & AX_HOST_EN)
++			break;
++	}
++
++	return ret;
++}
++
+ static void reset_asix_rx_fixup_info(struct asix_rx_fixup_info *rx)
+ {
+ 	/* Reset the variables that have a lifetime outside of
+@@ -467,19 +490,11 @@ int asix_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res;
+-	u8 smsr;
+-	int i = 0;
+ 	int ret;
+ 
+ 	mutex_lock(&dev->phy_mutex);
+-	do {
+-		ret = asix_set_sw_mii(dev, 0);
+-		if (ret == -ENODEV || ret == -ETIMEDOUT)
+-			break;
+-		usleep_range(1000, 1100);
+-		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
+-				    0, 0, 1, &smsr, 0);
+-	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
++
++	ret = asix_check_host_enable(dev, 0);
+ 	if (ret == -ENODEV || ret == -ETIMEDOUT) {
+ 		mutex_unlock(&dev->phy_mutex);
+ 		return ret;
+@@ -505,23 +520,14 @@ static int __asix_mdio_write(struct net_device *netdev, int phy_id, int loc,
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res = cpu_to_le16(val);
+-	u8 smsr;
+-	int i = 0;
+ 	int ret;
+ 
+ 	netdev_dbg(dev->net, "asix_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
+ 			phy_id, loc, val);
+ 
+ 	mutex_lock(&dev->phy_mutex);
+-	do {
+-		ret = asix_set_sw_mii(dev, 0);
+-		if (ret == -ENODEV)
+-			break;
+-		usleep_range(1000, 1100);
+-		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
+-				    0, 0, 1, &smsr, 0);
+-	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
+ 
++	ret = asix_check_host_enable(dev, 0);
+ 	if (ret == -ENODEV)
+ 		goto out;
+ 
+@@ -561,19 +567,11 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res;
+-	u8 smsr;
+-	int i = 0;
+ 	int ret;
+ 
+ 	mutex_lock(&dev->phy_mutex);
+-	do {
+-		ret = asix_set_sw_mii(dev, 1);
+-		if (ret == -ENODEV || ret == -ETIMEDOUT)
+-			break;
+-		usleep_range(1000, 1100);
+-		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
+-				    0, 0, 1, &smsr, 1);
+-	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
++
++	ret = asix_check_host_enable(dev, 1);
+ 	if (ret == -ENODEV || ret == -ETIMEDOUT) {
+ 		mutex_unlock(&dev->phy_mutex);
+ 		return ret;
+@@ -595,22 +593,14 @@ asix_mdio_write_nopm(struct net_device *netdev, int phy_id, int loc, int val)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	__le16 res = cpu_to_le16(val);
+-	u8 smsr;
+-	int i = 0;
+ 	int ret;
+ 
+ 	netdev_dbg(dev->net, "asix_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
+ 			phy_id, loc, val);
+ 
+ 	mutex_lock(&dev->phy_mutex);
+-	do {
+-		ret = asix_set_sw_mii(dev, 1);
+-		if (ret == -ENODEV)
+-			break;
+-		usleep_range(1000, 1100);
+-		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
+-				    0, 0, 1, &smsr, 1);
+-	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
++
++	ret = asix_check_host_enable(dev, 1);
+ 	if (ret == -ENODEV) {
+ 		mutex_unlock(&dev->phy_mutex);
+ 		return;
+-- 
+2.32.0
+
