@@ -2,159 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D2E73EEA26
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 11:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F21F3EEA52
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 11:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236145AbhHQJn3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 05:43:29 -0400
-Received: from relay-us1.mymailcheap.com ([51.81.35.219]:57064 "EHLO
-        relay-us1.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236031AbhHQJn2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 05:43:28 -0400
-Received: from relay5.mymailcheap.com (relay5.mymailcheap.com [159.100.248.207])
-        by relay-us1.mymailcheap.com (Postfix) with ESMTPS id 4D7A820466
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 09:42:55 +0000 (UTC)
-Received: from relay3.mymailcheap.com (relay3.mymailcheap.com [217.182.119.157])
-        by relay5.mymailcheap.com (Postfix) with ESMTPS id 7AD0D260EB;
-        Tue, 17 Aug 2021 09:42:52 +0000 (UTC)
-Received: from filter2.mymailcheap.com (filter2.mymailcheap.com [91.134.140.82])
-        by relay3.mymailcheap.com (Postfix) with ESMTPS id DD9D53F1CC;
-        Tue, 17 Aug 2021 11:42:49 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by filter2.mymailcheap.com (Postfix) with ESMTP id BA31C2A915;
-        Tue, 17 Aug 2021 11:42:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
-        s=default; t=1629193369;
-        bh=FkrJaXbezoWlUIzlLXe6PbAJUPxZx/ZrdnrQAm77CcY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=fYalB656gDqDvxzShA8MbsCYDorxNkzWFTuunu5/dTIzs3DFYgH2G01ZB2fZw5n7J
-         kzTVBSQ0UWb8JJhVlnDwO15/TLUylCEUlGidyu+s2b1tT9T7A5u8SmziOLOf1pMFK/
-         D62pimbqOyvEcL2s8DacxUuBQPvlpUCA7Qtgi+Vk=
-X-Virus-Scanned: Debian amavisd-new at filter2.mymailcheap.com
-Received: from filter2.mymailcheap.com ([127.0.0.1])
-        by localhost (filter2.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id EAh1KGjLN-C1; Tue, 17 Aug 2021 11:42:45 +0200 (CEST)
-Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by filter2.mymailcheap.com (Postfix) with ESMTPS;
-        Tue, 17 Aug 2021 11:42:45 +0200 (CEST)
-Received: from [213.133.102.83] (ml.mymailcheap.com [213.133.102.83])
-        by mail20.mymailcheap.com (Postfix) with ESMTP id 7166041737;
-        Tue, 17 Aug 2021 09:42:44 +0000 (UTC)
-Authentication-Results: mail20.mymailcheap.com;
-        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="jEImuBS/";
-        dkim-atps=neutral
-AI-Spam-Status: Not processed
-Received: from [127.0.0.1] (unknown [59.41.161.211])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail20.mymailcheap.com (Postfix) with ESMTPSA id DA0F240CCF;
-        Tue, 17 Aug 2021 09:42:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
-        t=1629193348; bh=FkrJaXbezoWlUIzlLXe6PbAJUPxZx/ZrdnrQAm77CcY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=jEImuBS/pbTiB0xTTqHAm22XRPP309CyeMEpkBfGDdYmK7b3MY//C2Up5gVDbcU3T
-         BxrfxQy5DJ3wlDwSk4gcKX44N2gb+FuaajjyJKAo0rJUGVeQlWPEnP9ffuyr2y0VUY
-         VfMeVA96KISIIFEGUa8W1FvLEhPKbC+dCNec+pYc=
-Date:   Tue, 17 Aug 2021 17:41:58 +0800
-From:   Icenowy Zheng <icenowy@aosc.io>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC:     Guenter Roeck <linux@roeck-us.net>,
+        id S235611AbhHQJyy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 05:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49558 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234593AbhHQJyv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 05:54:51 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AC8C061764
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 02:54:18 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id qe12-20020a17090b4f8c00b00179321cbae7so5481053pjb.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 02:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=2QLKXAPnoui9XVLyg743j9w1B3x7jwImrdDDd39xXc8=;
+        b=ZqazUvD7i/wG28iIpHw/9CBrEusC3AzwCC2puJV+SwH2paGIvL0U8fxM3QdYgkxFHm
+         zYuR23SY3nIuybWvujo0epoHumArxAhNJMffclndrvjuQTUMh17jQ8+cWWkuTlL6P7K5
+         OyFmz29uRC1IQObEN94TMdkgquUIWFMbrtS0SQROQVdxsNdS2E2GFulNP9P4/fvHGFTm
+         O863WUuj9lyN3n0UBb5dei+0DC16hiHQqt9BG/ClOW32TWUy/PjrY9icqTu9f9Klba+5
+         eyMeT/jx6ccyfrefA+D4H4YejscvgCQ84gKD2zRW2vsROK+MV6PermeJ4IAInjPVwty1
+         y8cQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=2QLKXAPnoui9XVLyg743j9w1B3x7jwImrdDDd39xXc8=;
+        b=EMEDDsRSoXx2+Msfbl6+rEcDh8kOFONWZhMfHm9GIijjiQsaBdoH+jJVtlxRGeiwAP
+         cq71xmZja02Zhs3GSR36siPe/CAfrpmtTnSoC/SmAub4vLr8HZxxicuaytgmwGuFOnjg
+         f4ldT0ng2hr85NZFxwNRUWJaHLq5gclksVh6dfdC7ANPAawVLlNif273fJNGXNwddu9v
+         1Yxg9gA+S9Gp5QaJppbDtkjUFrXEsSFE1CmtniipVmWsqkYb3vJULnDvofZZsRo6v3N+
+         68Y8Uxi+iVBi5KtYEeRjIp6MbtyZUPsdJZTV3Rc3A52ECv+Vm5sx44jAqoPw5ikiu9Yj
+         3nCQ==
+X-Gm-Message-State: AOAM530Oxa/tfx5eJadquSaSiYYFN2pvI6MKSLpRCH2+gLxWm3k2qsi5
+        SRDnaiHqnRHW1LmQDkugzeOK7Q==
+X-Google-Smtp-Source: ABdhPJyXBWko95TLSSpwPc0mE2S9v5czRRdqGBF122VhKKxRGGJm0ybDufF84X3GT5rMTqBdB75Gvg==
+X-Received: by 2002:a17:90b:350e:: with SMTP id ls14mr2797236pjb.28.1629194058233;
+        Tue, 17 Aug 2021 02:54:18 -0700 (PDT)
+Received: from ubuntu ([106.245.77.4])
+        by smtp.gmail.com with ESMTPSA id m18sm1791531pjq.32.2021.08.17.02.54.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 02:54:17 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 18:53:13 +0900
+From:   Jeaho Hwang <jhhwang@rtst.co.kr>
+To:     Peter Chen <peter.chen@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YRuDG78N2mB5w37p@kuha.fi.intel.com>
-References: <20210813043131.833006-1-icenowy@aosc.io> <YRuDG78N2mB5w37p@kuha.fi.intel.com>
-Message-ID: <E91C97D0-7DB9-4455-AED2-4C25B7D2D22D@aosc.io>
+Cc:     tglx@linutronix.de, linux-rt-users@vger.kernel.org,
+        team-linux@rtst.co.kr, mkbyeon@lselectric.co.kr,
+        khchoib@lselectric.co.kr
+Subject: [PATCH v2] usb: chipidea: local_irq_save/restore added for
+ hw_ep_prime
+Message-ID: <20210817095313.GA671484@ubuntu>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spamd-Result: default: False [-0.10 / 10.00];
-         RCVD_VIA_SMTP_AUTH(0.00)[];
-         ARC_NA(0.00)[];
-         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
-         RECEIVED_SPAMHAUS_PBL(0.00)[59.41.161.211:received];
-         FROM_HAS_DN(0.00)[];
-         TO_DN_SOME(0.00)[];
-         TO_MATCH_ENVRCPT_ALL(0.00)[];
-         MIME_GOOD(-0.10)[text/plain];
-         DMARC_NA(0.00)[aosc.io];
-         R_SPF_SOFTFAIL(0.00)[~all];
-         RCPT_COUNT_FIVE(0.00)[5];
-         ML_SERVERS(-3.10)[213.133.102.83];
-         DKIM_TRACE(0.00)[aosc.io:+];
-         RCVD_NO_TLS_LAST(0.10)[];
-         FROM_EQ_ENVFROM(0.00)[];
-         MIME_TRACE(0.00)[0:+];
-         ASN(0.00)[asn:24940, ipnet:213.133.96.0/19, country:DE];
-         RCVD_COUNT_TWO(0.00)[2];
-         MID_RHS_MATCH_FROM(0.00)[];
-         HFILTER_HELO_BAREIP(3.00)[213.133.102.83,1]
-X-Rspamd-Queue-Id: 7166041737
-X-Rspamd-Server: mail20.mymailcheap.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+hw_ep_prime sometimes fails if irq occurs while it rus on RT kernel.
+local_irq_save/restore is added inside the function to gurantee atomicity.
+only effective for preempt_rt since hw_ep_prime is called inside top half
+or spin_lock_irqsave. No effect is expected for standard linux.
 
+Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
 
-=E4=BA=8E 2021=E5=B9=B48=E6=9C=8817=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=885=
-:36:27, Heikki Krogerus <heikki=2Ekrogerus@linux=2Eintel=2Ecom> =E5=86=99=
-=E5=88=B0:
->On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
->> Currently, TCPM code omits discover when swapping to gadget, and assume
->> that no altmodes are available when swapping from gadget=2E However, we=
- do
->> send discover when we get attached as gadget -- this leads to modes to =
-be
->> discovered twice when attached as gadget and then swap to host=2E
->>=20
->> Always re-send discover when swapping DR, regardless of what change is
->> being made; and because of this, the assumption that no altmodes are
->> registered with gadget role is broken, and altmodes de-registeration is
->> always needed now=2E
->>=20
->> Signed-off-by: Icenowy Zheng <icenowy@aosc=2Eio>
->> ---
->>  drivers/usb/typec/tcpm/tcpm=2Ec | 9 ++++-----
->>  1 file changed, 4 insertions(+), 5 deletions(-)
->>=20
->> diff --git a/drivers/usb/typec/tcpm/tcpm=2Ec b/drivers/usb/typec/tcpm/t=
-cpm=2Ec
->> index b9bb63d749ec=2E=2Eab6d0d51ee1c 100644
->> --- a/drivers/usb/typec/tcpm/tcpm=2Ec
->> +++ b/drivers/usb/typec/tcpm/tcpm=2Ec
->> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_port =
-*port)
->>  		tcpm_set_state(port, ready_state(port), 0);
->>  		break;
->>  	case DR_SWAP_CHANGE_DR:
->> -		if (port->data_role =3D=3D TYPEC_HOST) {
->> -			tcpm_unregister_altmodes(port);
->> +		tcpm_unregister_altmodes(port);
->> +		if (port->data_role =3D=3D TYPEC_HOST)
->>  			tcpm_set_roles(port, true, port->pwr_role,
->>  				       TYPEC_DEVICE);
->> -		} else {
->> +		else
->>  			tcpm_set_roles(port, true, port->pwr_role,
->>  				       TYPEC_HOST);
->> -			port->send_discover =3D true;
->> -		}
->> +		port->send_discover =3D true;
->>  		tcpm_ams_finish(port);
->>  		tcpm_set_state(port, ready_state(port), 0);
->>  		break;
->
->Why is it necessary to do discovery with data role swap in general?
+diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
+index 8834ca613721..a624eddb3e22 100644
+--- a/drivers/usb/chipidea/udc.c
++++ b/drivers/usb/chipidea/udc.c
+@@ -191,22 +191,31 @@ static int hw_ep_get_halt(struct ci_hdrc *ci, int num, int dir)
+ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
+ {
+ 	int n = hw_ep_bit(num, dir);
++	unsigned long flags;
++	int ret = 0;
+ 
+ 	/* Synchronize before ep prime */
+ 	wmb();
+ 
+-	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num)))
++	/* irq affects this routine so irq should be disabled on RT.
++	 * on standard kernel, irq is already disabled by callers.
++	 */
++	local_irq_save(flags);
++	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num))) {
++		local_irq_restore(flags);
+ 		return -EAGAIN;
++	}
+ 
+ 	hw_write(ci, OP_ENDPTPRIME, ~0, BIT(n));
+ 
+ 	while (hw_read(ci, OP_ENDPTPRIME, BIT(n)))
+ 		cpu_relax();
+ 	if (is_ctrl && dir == RX && hw_read(ci, OP_ENDPTSETUPSTAT, BIT(num)))
+-		return -EAGAIN;
++		ret = -EAGAIN;
+ 
++	local_irq_restore(flags);
+ 	/* status shoult be tested according with manual but it doesn't work */
+-	return 0;
++	return ret;
+ }
+ 
+ /**
+-- 
+2.25.1
 
-I think it could be possible for devices to expose different altmode
-with different role=2E
-
->
->thanks,
->
