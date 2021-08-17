@@ -2,104 +2,53 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB0C3EEB45
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 12:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4333D3EEB4D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 13:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236199AbhHQKzs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 06:55:48 -0400
-Received: from mga03.intel.com ([134.134.136.65]:56076 "EHLO mga03.intel.com"
+        id S238994AbhHQLBM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 07:01:12 -0400
+Received: from mga18.intel.com ([134.134.136.126]:38352 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231515AbhHQKzr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Aug 2021 06:55:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="216073268"
+        id S231515AbhHQLBK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Aug 2021 07:01:10 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="203194050"
 X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="216073268"
+   d="scan'208";a="203194050"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 03:55:14 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 04:00:37 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
-   d="scan'208";a="593311540"
+   d="scan'208";a="593312813"
 Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 17 Aug 2021 03:55:11 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Aug 2021 13:55:10 +0300
-Date:   Tue, 17 Aug 2021 13:55:10 +0300
+  by fmsmga001.fm.intel.com with SMTP; 17 Aug 2021 04:00:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Aug 2021 14:00:33 +0300
+Date:   Tue, 17 Aug 2021 14:00:33 +0300
 From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Kyle Tso <kyletso@google.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, badhri@google.com,
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: Raise vdm_sm_running flag only when
- VDM SM is running
-Message-ID: <YRuVjkcbT5058ulV@kuha.fi.intel.com>
-References: <20210816075449.2236547-1-kyletso@google.com>
- <YRuD4HDNuWOx3Xrv@kuha.fi.intel.com>
- <CAGZ6i=0=shyW-Y7G+SrySi7Sum8qnjhpOwp=vC+SUmwHkbQMrw@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+Message-ID: <YRuW0fENBEcIVkZb@kuha.fi.intel.com>
+References: <20210813043131.833006-1-icenowy@aosc.io>
+ <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+ <E91C97D0-7DB9-4455-AED2-4C25B7D2D22D@aosc.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGZ6i=0=shyW-Y7G+SrySi7Sum8qnjhpOwp=vC+SUmwHkbQMrw@mail.gmail.com>
+In-Reply-To: <E91C97D0-7DB9-4455-AED2-4C25B7D2D22D@aosc.io>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 06:32:55PM +0800, Kyle Tso wrote:
-> On Tue, Aug 17, 2021 at 5:39 PM Heikki Krogerus
-> <heikki.krogerus@linux.intel.com> wrote:
-> >
-> > On Mon, Aug 16, 2021 at 03:54:49PM +0800, Kyle Tso wrote:
-> > > If the port is going to send Discover_Identity Message, vdm_sm_running
-> > > flag was intentionally set before entering Ready States in order to
-> > > avoid the conflict because the port and the port partner might start
-> > > AMS at almost the same time after entering Ready States.
-> > >
-> > > However, the original design has a problem. When the port is doing
-> > > DR_SWAP from Device to Host, it raises the flag. Later in the
-> > > tcpm_send_discover_work, the flag blocks the procedure of sending the
-> > > Discover_Identity and it might never be cleared until disconnection.
-> >
-> > This is a bit off-topic, but I just asked this in another thread: Why
-> > do we have to do discovery with data role swap?
-> >
-> > thanks,
-> >
+> >Why is it necessary to do discovery with data role swap in general?
 > 
-> This can be separated into two cases:
-> 
-> 1. in PD2: If the port is originally UFP, it cannot send
-> Discover_Identity Message according to the Spec. And then DR_SWAP
-> happens. The port becomes DFP, and now it can do that.
-> 
-> 2. in PD3: DFP and UFP are allowed to send Discover_Identity Message
-> and the responses may differ based on which roles they are active on.
-> 
-> Quote from the PD3 Spec:
-> ```
-> The Discover Identity Command Shall be used to determine the identity
-> and/or capabilities of the Port Partner. The following products Shall
-> return a Discover Identity Command ACK in response to a Discover
-> Identity Command request sent to SOP:
-> 
-> • A PD-Capable UFP that supports Modal Operation.
-> • A PD-Capable product that has multiple DFPs.
-> • A PD-Capable [USB4] product.
-> ```
+> I think it could be possible for devices to expose different altmode
+> with different role.
 
-Got it. Thanks for the explanation.
-
-> > > Since there exists another flag send_discover representing that the port
-> > > is going to send Discover_Identity or not, it is enough to use that flag
-> > > to prevent the conflict. Also change the timing of the set/clear of
-> > > vdm_sm_running to indicate whether the VDM SM is actually running or
-> > > not.
-> > >
-> > > Fixes: c34e85fa69b9 ("usb: typec: tcpm: Send DISCOVER_IDENTITY from dedicated work")
-> > > Cc: Badhri Jagan Sridharan <badhri@google.com>
-> > > Signed-off-by: Kyle Tso <kyletso@google.com>
-
-FWIW:
+OK. FWIW:
 
 Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 
 thanks,
 
