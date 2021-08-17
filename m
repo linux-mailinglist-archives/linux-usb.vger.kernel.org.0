@@ -2,151 +2,124 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE573EEE9C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 16:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEF53EEEFC
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 17:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbhHQOgg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 10:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S237871AbhHQPOG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 11:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237840AbhHQOgf (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 10:36:35 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F7FC061764
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 07:36:02 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id o123so17918206qkf.12
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 07:36:02 -0700 (PDT)
+        with ESMTP id S237052AbhHQPOF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 11:14:05 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 686C6C061764;
+        Tue, 17 Aug 2021 08:13:32 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id s21-20020a4ae5550000b02902667598672bso5989644oot.12;
+        Tue, 17 Aug 2021 08:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rHC4xu8XiV7hD6jE5NQdbjctl0xEJeg3rUvgF2jRB2Y=;
-        b=DWo+XjQosmPrQkjPqF+R48ffVp0kXQTSS1dM+VyIiZsZv/3vnZwLGRXruz8AVwM7gi
-         cbgRwWYf/fddkoVAIslYL/xDUOSV/XfmIar6acEd5uFGOpPepevsUDx88Ke8uDvXHw/H
-         /5EDsZSy+9pZhUK4wmjeBETXcUFW+VL5JFpYvPpD8m+RK2YkCo3yYzQmtdBoso3a95av
-         0BG3IHFmf1vQBOY9SfUcethbS4CdjGqUPLU0T85Cc4Fm0KYAKotYmXrrLEkAnJU2YBET
-         uSPGan7xsC9Z8NJJfHLdc5kq8gw7/OG3XuOOr3kh/y6TA0zFdUZEwn0F4Dg7LCeqDqYj
-         6qNQ==
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=jPbqByzTm8MXGyaQ1QC2qzWAEW9nZn7Ccx15UsL0t/A=;
+        b=ISa12CYRPeVW2UgDuHHF4aifAy3qP6wGWcw9iPYZTdAOQABarK6a3u4p2dsVxUQSb/
+         u6rPribtafsqULWLT2Hb8dwqMrQnuflU/uItdu4d8iLme4/ilwY+s2L5hxudXbJKWAHq
+         L1WxqVkU0+pfGxmffpHuCdT59zL48O2VkgJrYiaF5RONnz4/CndIrSzZG1eBNuT8IolS
+         xtARGtCTM7E/YM0QD4k4Gmt3uJh7OKr3lGxND3kQniwrHjnW3AI0m5uhnZd0v4cnvuoZ
+         aGInx0i1bw3askxl+XscNoqDhUSQvfhd+Gks9K56bZGUU6y5KKHJLBUfptOpViuucRUm
+         HFiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rHC4xu8XiV7hD6jE5NQdbjctl0xEJeg3rUvgF2jRB2Y=;
-        b=lAIGs3yK+LdMesObsgNBgSmCmFK9qIC7jcxhpSblzzxk73VLo61r0musxPgN/Y0i1w
-         od2lFUNBjZRCyOlWsTShvagpyHd2vPajzU4ttpwH8DrFTbl/GOcNtcDW/MU2iq9W8C+Q
-         URit1IuccdDqiyR3d+RV+Gy2Hx1qnDPBHmkAgugGeQCCZ/LvmGf53CLNye9CyJAWQMjH
-         WUm4UGrM+6eQdNeVMjsbLqSavZVGnlFocd7iHoP9zmLj3ozCZbiMO6Pdwyc8EqbmWo79
-         5cthXU8ObBLDHf7+olPjPzl2g/F+xLnA3E6pQf5MTrqZxxEd/1DEIkHqQyPAaY6GjN0l
-         16Tw==
-X-Gm-Message-State: AOAM530Ekuo4r7d7OtMPtYljqmyNjmxRX1SKRERCMEh1JN1mQ7J6XVGR
-        By5FMx3fLTs0C5e62/kA9PSBi71p5xx5uoMgeHUSxw==
-X-Google-Smtp-Source: ABdhPJy7cOnomMF+zuYD34BkSsjAbpxHxmAPWn8Ck31jhsQjDJFzEYUc94umzSpt5A22ee9aI267RZY4NKFJj4IZMNc=
-X-Received: by 2002:ae9:f44c:: with SMTP id z12mr4264822qkl.433.1629210961617;
- Tue, 17 Aug 2021 07:36:01 -0700 (PDT)
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=jPbqByzTm8MXGyaQ1QC2qzWAEW9nZn7Ccx15UsL0t/A=;
+        b=LDyMFiNWdWLgdD8GDm47TbFP4LKq+dYG+lNh4HBK+Cc84cGHP9DMtP3K75RyaDxPZp
+         D/aHe/q7ZoUmrik46VgQqZCM8OaitXuiItJQiJCdlheuNYn3hCj+SmrvoZIapEgxbs2j
+         oCn4YDl0ZXrKru31jsy2J+rFc/UGONOtwD473g84KCqXLp1RxuoAwxpX111oAkdo65Gr
+         bFGuQJcQ1+gOqU43NW93FVcilpLEnwvj5WMZ92M5kAZPpnlff4jD5DbV2LzfImqHjfTP
+         ZR1f4kpk8vM6jjRpaT+ru3AvF3Wkz1EJJwSvj20ZXFR4/MNfBsybq81kMAwIv9SzHiKB
+         KYCQ==
+X-Gm-Message-State: AOAM532ORiKe5BPhglYN07vheWjZZl3++b73mO4pTPGgz/K/xy4Vzj49
+        lMSgzViL9gygzYQ0k5ECFA77ivYBgPo=
+X-Google-Smtp-Source: ABdhPJzGDdwLP/l5iYVLft878ghWnuq/Xl8SyNd/vNJxmUzbJ6UYXEXPJ8dmL+HkeMWEqMJFhQMkWg==
+X-Received: by 2002:a4a:9bc1:: with SMTP id b1mr2971340ook.69.1629213211443;
+        Tue, 17 Aug 2021 08:13:31 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id q7sm429669otl.45.2021.08.17.08.13.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Aug 2021 08:13:30 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Icenowy Zheng <icenowy@aosc.io>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20210813043131.833006-1-icenowy@aosc.io>
+ <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <58034df4-f18c-ab3e-1fcc-dc85fc35320f@roeck-us.net>
+Date:   Tue, 17 Aug 2021 08:13:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210816154632.381968-1-hdegoede@redhat.com> <YRuKdmzggen2Vu0K@kuha.fi.intel.com>
-In-Reply-To: <YRuKdmzggen2Vu0K@kuha.fi.intel.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Tue, 17 Aug 2021 22:35:45 +0800
-Message-ID: <CAGZ6i=30AY8z5rdAjfwQ6z5_pp5BQE2xtdFh7XW9xd6VT_MyYw@mail.gmail.com>
-Subject: Re: [PATCH regression fix] usb: typec: tcpm: Fix VDMs sometimes not
- being forwarded to alt-mode drivers
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 6:07 PM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Mon, Aug 16, 2021 at 05:46:32PM +0200, Hans de Goede wrote:
-> > Commit a20dcf53ea98 ("usb: typec: tcpm: Respond Not_Supported if no
-> > snk_vdo"), stops tcpm_pd_data_request() calling tcpm_handle_vdm_request()
-> > when port->nr_snk_vdo is not set. But the VDM might be intended for an
-> > altmode-driver, in which case nr_snk_vdo does not matter.
-> >
-> > This change breaks the forwarding of connector hotplug (HPD) events
-> > for displayport altmode on devices which don't set nr_snk_vdo.
-> >
-> > tcpm_pd_data_request() is the only caller of tcpm_handle_vdm_request(),
-> > so we can move the nr_snk_vdo check to inside it, at which point we
-> > have already looked up the altmode device so we can check for this too.
-> >
-> > Doing this check here also ensures that vdm_state gets set to
-> > VDM_STATE_DONE if it was VDM_STATE_BUSY, even if we end up with
-> > responding with PD_MSG_CTRL_NOT_SUPP later.
-> >
-> > Note that tcpm_handle_vdm_request() was already sending
-> > PD_MSG_CTRL_NOT_SUPP in some circumstances, after moving the nr_snk_vdo
-> > check the same error-path is now taken when that check fails. So that
-> > we have only one error-path for this and not two. Replace the
-> > tcpm_queue_message(PD_MSG_CTRL_NOT_SUPP) used by the existing error-path
-> > with the more robust tcpm_pd_handle_msg() from the (now removed) second
-> > error-path.
+On 8/17/21 2:36 AM, Heikki Krogerus wrote:
+> On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
+>> Currently, TCPM code omits discover when swapping to gadget, and assume
+>> that no altmodes are available when swapping from gadget. However, we do
+>> send discover when we get attached as gadget -- this leads to modes to be
+>> discovered twice when attached as gadget and then swap to host.
+>>
+>> Always re-send discover when swapping DR, regardless of what change is
+>> being made; and because of this, the assumption that no altmodes are
+>> registered with gadget role is broken, and altmodes de-registeration is
+>> always needed now.
+>>
+>> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+>> ---
+>>   drivers/usb/typec/tcpm/tcpm.c | 9 ++++-----
+>>   1 file changed, 4 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+>> index b9bb63d749ec..ab6d0d51ee1c 100644
+>> --- a/drivers/usb/typec/tcpm/tcpm.c
+>> +++ b/drivers/usb/typec/tcpm/tcpm.c
+>> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_port *port)
+>>   		tcpm_set_state(port, ready_state(port), 0);
+>>   		break;
+>>   	case DR_SWAP_CHANGE_DR:
+>> -		if (port->data_role == TYPEC_HOST) {
+>> -			tcpm_unregister_altmodes(port);
+>> +		tcpm_unregister_altmodes(port);
+>> +		if (port->data_role == TYPEC_HOST)
+>>   			tcpm_set_roles(port, true, port->pwr_role,
+>>   				       TYPEC_DEVICE);
+>> -		} else {
+>> +		else
+>>   			tcpm_set_roles(port, true, port->pwr_role,
+>>   				       TYPEC_HOST);
+>> -			port->send_discover = true;
+>> -		}
+>> +		port->send_discover = true;
+>>   		tcpm_ams_finish(port);
+>>   		tcpm_set_state(port, ready_state(port), 0);
+>>   		break;
+> 
+> Why is it necessary to do discovery with data role swap in general?
+> 
+> thanks,
+> 
 
-Thanks for fixing this problem!
+Additional question: There are two patches pending related to DR_SWAP
+and discovery. Are they both needed, or do they both solve the same
+problem ?
 
-> >
-> > Cc: Kyle Tso <kyletso@google.com>
-> > Fixes: a20dcf53ea98 ("usb: typec: tcpm: Respond Not_Supported if no snk_vdo")
-> > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->
-> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->
-
-Acked-by: Kyle Tso <kyletso@google.com>
-
-> > ---
-> >  drivers/usb/typec/tcpm/tcpm.c | 13 +++++++------
-> >  1 file changed, 7 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index b9bb63d749ec..f4079b5cb26d 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -1737,6 +1737,10 @@ static int tcpm_pd_svdm(struct tcpm_port *port, struct typec_altmode *adev,
-> >       return rlen;
-> >  }
-> >
-> > +static void tcpm_pd_handle_msg(struct tcpm_port *port,
-> > +                            enum pd_msg_request message,
-> > +                            enum tcpm_ams ams);
-> > +
-> >  static void tcpm_handle_vdm_request(struct tcpm_port *port,
-> >                                   const __le32 *payload, int cnt)
-> >  {
-> > @@ -1764,11 +1768,11 @@ static void tcpm_handle_vdm_request(struct tcpm_port *port,
-> >               port->vdm_state = VDM_STATE_DONE;
-> >       }
-> >
-> > -     if (PD_VDO_SVDM(p[0])) {
-> > +     if (PD_VDO_SVDM(p[0]) && (adev || tcpm_vdm_ams(port) || port->nr_snk_vdo)) {
-> >               rlen = tcpm_pd_svdm(port, adev, p, cnt, response, &adev_action);
-> >       } else {
-> >               if (port->negotiated_rev >= PD_REV30)
-> > -                     tcpm_queue_message(port, PD_MSG_CTRL_NOT_SUPP);
-> > +                     tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
-> >       }
-> >
-> >       /*
-> > @@ -2471,10 +2475,7 @@ static void tcpm_pd_data_request(struct tcpm_port *port,
-> >                                          NONE_AMS);
-> >               break;
-> >       case PD_DATA_VENDOR_DEF:
-> > -             if (tcpm_vdm_ams(port) || port->nr_snk_vdo)
-> > -                     tcpm_handle_vdm_request(port, msg->payload, cnt);
-> > -             else if (port->negotiated_rev > PD_REV20)
-> > -                     tcpm_pd_handle_msg(port, PD_MSG_CTRL_NOT_SUPP, NONE_AMS);
-> > +             tcpm_handle_vdm_request(port, msg->payload, cnt);
-> >               break;
-> >       case PD_DATA_BIST:
-> >               port->bist_request = le32_to_cpu(msg->payload[0]);
-> > --
-> > 2.31.1
->
-> --
-> heikki
+Thanks,
+Guenter
