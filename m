@@ -2,174 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA8B3EE7DC
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 09:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D55A3EE7F4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 10:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238436AbhHQHzw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 03:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238439AbhHQHzw (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 03:55:52 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D2BC06179A
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 00:55:19 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id f3so23980786plg.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 00:55:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=6syxEk4ci6YIB/Nq5OYMmva/mb8yTCwuOVtI6kBv8o4=;
-        b=ACQXwBJ7OYjyZRVhhS/c9nneyhB/7GFHh3dEptJSMrZINFg36aQMQ7Gt7s7mEUBpCw
-         zQlnh/X4OgBYC+KUUJhyCLfP1qSGXkpJPWAGfJpM/INHjdAZ8/L1JkEYsFztN3Yjcf8Y
-         CLx5rb8MRnnLnlOw941FjpRCL/gP5pp6YSMCeI+89Jy/Rd1+N1g4DWNkDQt5p2lrVfbf
-         /2f4gxbIqWPYLcL72Mw6S4MUH55MP9SVIVTvv1bjke3ugxDHQALvD0J7WbGxZqFUjEZx
-         7P1AM3kpvDdhJRiWVIeigZKSst/k+rzUIj9Law8crvuO6T67AGjOgt6Tme7gr0jaocjL
-         3BQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=6syxEk4ci6YIB/Nq5OYMmva/mb8yTCwuOVtI6kBv8o4=;
-        b=d4iMduH0+9pD2cwKwKupknVNq1qN+H2NuTne3rGVlVI3D4Ow7SorRHQV+SLt06Wxd+
-         DtaHHIRjh5uyOWuGhrrYxor1Jqqm3CBo/T/1DMfCHDy9E9+WDV2qPjygUZ8KvFbdl+1e
-         M0YrTA+azOAcOuzvVSeNr+erERspPuphO1F0nOar04j58XJdd5ZrLcgrZUQK/XfUgA8d
-         XsyrCUXP4VkIu7GjwJ4Qxx865wl5VzszsAvSW5uXuPY0uxkYSEi1l3LRs1rdtF8PGnkm
-         UpqV5ac2BTAlZ1EGENQ1IcQBERG6f7D4mfNzxcM5BE9z7z8SeY5IQvU1mbjDpSxZOQRm
-         k7MQ==
-X-Gm-Message-State: AOAM531Uusis+0iZ8qwfUWc27KWH9/foR3LCU/EmVLzH5QmNHECFDM/Z
-        QZ6Fz2qYQMQ775UAxa0FKTaJRw==
-X-Google-Smtp-Source: ABdhPJy9z80wO3ZS4ZOBoRu271xrntCgw/Td4lOHD9BJvY7rOCcDAdlvae5dCy1DGcWdIK214rqywQ==
-X-Received: by 2002:a17:90b:4a09:: with SMTP id kk9mr2300035pjb.163.1629186918789;
-        Tue, 17 Aug 2021 00:55:18 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id c12sm1471425pfl.56.2021.08.17.00.55.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 00:55:18 -0700 (PDT)
-Date:   Tue, 17 Aug 2021 13:25:15 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-2-digetx@gmail.com>
+        id S238401AbhHQIEW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 04:04:22 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:17480 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234829AbhHQIEU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 04:04:20 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629187427; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=F80pIu2I+RXwy7ZJxBH4JbgLg7qSwor4Bd6AsHLTWNw=;
+ b=CCOeah8EBC9m3cKZ82oTUhnE7aYPCEAGSw3BYPO3k1ZDOIym7WkneyH6/yeigfS6ne9JMG8d
+ 57bFZXfapRCqp7XX6ckRen2qRkPSPQSf+dFd8FPGQnTEE2cpZbHfGOMBLYhBF5fw1ePmSl6f
+ UeK6XuJ8n7a2rSDtH+7VD5kdL08=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-west-2.postgun.com with SMTP id
+ 611b6d51454b7a558fa5e69f (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 08:03:29
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 8EDA2C4361B; Tue, 17 Aug 2021 08:03:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id D76A7C4338F;
+        Tue, 17 Aug 2021 08:03:28 +0000 (UTC)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210817012754.8710-2-digetx@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 17 Aug 2021 13:33:28 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     agross@kernel.org, bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v5 2/4] arm64: dts: qcom: sc7280: Add PCIe and PHY related
+ nodes
+In-Reply-To: <CAE-0n51uQJ4VDDbmpu18mJw4zcDhD-tvUDgi0LQ4-zAgBUKJ6A@mail.gmail.com>
+References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
+ <1628568516-24155-3-git-send-email-pmaliset@codeaurora.org>
+ <CAE-0n51uQJ4VDDbmpu18mJw4zcDhD-tvUDgi0LQ4-zAgBUKJ6A@mail.gmail.com>
+Message-ID: <c13f2cad016c3ed5b7d70abdc9c7f812@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 17-08-21, 04:27, Dmitry Osipenko wrote:
-> Add dev_pm_opp_sync() helper which syncs OPP table with hardware state
-> and vice versa.
+On 2021-08-11 01:01, Stephen Boyd wrote:
+> Quoting Prasad Malisetty (2021-08-09 21:08:34)
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi 
+>> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 53a21d0..4500d88 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1598,6 +1712,18 @@
+>>                                         bias-bus-hold;
+>>                                 };
+>>                         };
+>> +
+>> +                       pcie1_default_state: pcie1-default-state {
+>> +                               clkreq {
+>> +                                       pins = "gpio79";
+>> +                                       function = "pcie1_clkreqn";
+>> +                               };
+>> +
+>> +                               wake-n {
+>> +                                       pins = "gpio3";
+>> +                                       function = "gpio";
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/opp/core.c     | 42 +++++++++++++++++++++++++++++++++++++++---
->  include/linux/pm_opp.h |  6 ++++++
->  2 files changed, 45 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index 5543c54dacc5..18016e49605f 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -939,7 +939,8 @@ static int _set_required_opps(struct device *dev,
->  	return ret;
->  }
->  
-> -static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
-> +static struct dev_pm_opp *
-> +_find_current_opp(struct device *dev, struct opp_table *opp_table)
->  {
->  	struct dev_pm_opp *opp = ERR_PTR(-ENODEV);
->  	unsigned long freq;
-> @@ -961,7 +962,7 @@ static void _find_current_opp(struct device *dev, struct opp_table *opp_table)
->  		mutex_unlock(&opp_table->lock);
->  	}
->  
-> -	opp_table->current_opp = opp;
-> +	return opp;
->  }
->  
->  static int _disable_opp_table(struct device *dev, struct opp_table *opp_table)
-> @@ -1003,7 +1004,7 @@ static int _set_opp(struct device *dev, struct opp_table *opp_table,
->  
->  	/* Find the currently set OPP if we don't know already */
->  	if (unlikely(!opp_table->current_opp))
-> -		_find_current_opp(dev, opp_table);
-> +		opp_table->current_opp = _find_current_opp(dev, opp_table);
->  
->  	old_opp = opp_table->current_opp;
->  
-> @@ -2931,3 +2932,38 @@ int dev_pm_opp_sync_regulators(struct device *dev)
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_opp_sync_regulators);
-> +
-> +/**
-> + * dev_pm_opp_sync() - Sync OPP state
-> + * @dev:	device for which we do this operation
-> + *
-> + * Initialize OPP table accordingly to current clock rate or
-> + * first available OPP if clock not available for this device.
-> + *
-> + * Return: 0 on success or a negative error value.
-> + */
-> +int dev_pm_opp_sync(struct device *dev)
-> +{
-> +	struct opp_table *opp_table;
-> +	struct dev_pm_opp *opp;
-> +	int ret = 0;
-> +
-> +	/* Device may not have OPP table */
-> +	opp_table = _find_opp_table(dev);
-> +	if (IS_ERR(opp_table))
-> +		return 0;
-> +
-> +	if (!_get_opp_count(opp_table))
-> +		goto put_table;
-> +
-> +	opp = _find_current_opp(dev, opp_table);
-> +	ret = _set_opp(dev, opp_table, opp, opp->rate);
+> This is function gpio, so presumably board designers could decide to
+> change the wake gpio to something else, right? I'd prefer we move 
+> wake-n
+> to the board level (idp) as well. gpio79 looks fine as it is muxed to 
+> be
+> the pcie1_clkreqn function, not gpio, so it seems to be a dedicated pin
+> for this purpose.
 
-And I am not sure how this will end up working, since new OPP will be
-equal to old one. Since I see you call this from resume() at many
-places.
-
-what exactly are you trying to do here ? Those details would be good
-to have in commit log as well, I haven't really followed V7 of your
-series.
-
--- 
-viresh
+Sure, I will move it  IDP file in next version.
