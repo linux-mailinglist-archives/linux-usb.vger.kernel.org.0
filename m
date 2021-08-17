@@ -2,237 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A1413EF045
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 18:37:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9753EF0E5
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 19:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230271AbhHQQiG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 12:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbhHQQiC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 12:38:02 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F47AC061764;
-        Tue, 17 Aug 2021 09:37:29 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id t9so42540325lfc.6;
-        Tue, 17 Aug 2021 09:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YXS2wDrNmRySEhsIbVUMKvb+Ici86y1kGrWc6irGTdI=;
-        b=Y5hr7uJGS6odntPRfVaTWLcpzoeH263nrltEvmqFinf6ceo9aZlDCiHDsAr9GmrupU
-         IRNg6FoDEviyUm7NpnYSEV25dvz4apQiNUL7cwUeGZypnGtOAmo4cCb9OTV2d8dISB9B
-         KoDLzDWnsTuygAvGuViTxIx+gaP0sxUY8WBU2GJzb83RLT0jNdEwmZ6Sc074HPfdh3Qa
-         P5FLMkj130JSNqgYvgAMB1sJxe5c42BzcDLNCAztau3LgUblSgqPBTx7Tfpzyccg+n+8
-         lgevVSZ0ixMIVmeiLQ8Q1Pne1j8WM2LmBkbfx9QprZmHXptXfg737vYNKQHSkzE0B4Ex
-         BVqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YXS2wDrNmRySEhsIbVUMKvb+Ici86y1kGrWc6irGTdI=;
-        b=arCKEKrjwmAmWMoyiu8y/nej5sQBI+dYZHK29hwu8kH/pm4qt2wa/cJIecMKC46FM0
-         +BRgt4REncLZrIo1GAHtcjC6m9vzhTtfn/WQxAirKeeYPUTEwf+Qsw9PvSD9A2WHmtnm
-         Mu6K7svpr8cpa9QIeNg2GpmuVNnlKARM1/gAVWZg6GBS0hlw+2GlKJ50ycTwgD0gfjqK
-         jxIWVY4aJYOI4AC0QFbT1Tm3z6Ogx/iTX2EdC+M/GzPGb+3qzld0Ov3qZ/SMtONBE7Gu
-         C2n6yIRjT/TsEYVaMd0JjI4cH+NcIvSOffvJhbIIY3pkIMNVwh/bHjwqY/g41SgQyVh+
-         4plw==
-X-Gm-Message-State: AOAM532tsBJY1Ia9atkrcCQbetp7tHGpkDCiU9fHqtGuReV2qc3bS6BX
-        tQAyJoXh7NlJy4nwXnbpw6k=
-X-Google-Smtp-Source: ABdhPJzpbGmHrwh8UAjjsCRvYXj+APQyDZxQPQSAbma10H9Mf3UHV2kID3HT1nzwpSYt9itchv3pjw==
-X-Received: by 2002:a05:6512:3f16:: with SMTP id y22mr2966368lfa.356.1629218247319;
-        Tue, 17 Aug 2021 09:37:27 -0700 (PDT)
-Received: from localhost.localdomain ([46.235.67.232])
-        by smtp.gmail.com with ESMTPSA id u22sm255382lff.270.2021.08.17.09.37.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 09:37:26 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, linux@rempel-privat.de,
-        andrew@lunn.ch, himadrispandya@gmail.com
-Cc:     robert.foss@collabora.com, freddy@asix.com.tw,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
-Subject: [PATCH v4] net: asix: fix uninit value bugs
-Date:   Tue, 17 Aug 2021 19:37:23 +0300
-Message-Id: <20210817163723.19040-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <YRfjFr9GbcoJrycc@lunn.ch>
-References: <YRfjFr9GbcoJrycc@lunn.ch>
+        id S232228AbhHQR1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 13:27:39 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:59975 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229969AbhHQR1i (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 13:27:38 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629221225; h=Message-ID: References: In-Reply-To: Subject:
+ Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
+ MIME-Version: Sender; bh=EfWYM7e4IPw4UxvqdMIlRmzXZnOqCrtsKfmXiL94nUE=;
+ b=Hsh+QJttUSKSbJoAcAuS0/XgrpZVlT/+6fZWLA70ZV8BmlyiaWa5MyNQqOieQnv2jVdHjrXk
+ owExty0tGA1qES0aAjISEYReVmNs3evSZw2uq22JXqctP1lkvH8V7bpX5LPFZDuBNtp3e2+A
+ 6VrlN5Y1R3wA8MlqdLQ/mkvd37A=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
+ 611bf159105c6568db5ad79a (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 17:26:49
+ GMT
+Sender: pmaliset=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id F2DD9C4360D; Tue, 17 Aug 2021 17:26:48 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
+        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmaliset)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9C922C4338F;
+        Tue, 17 Aug 2021 17:26:47 +0000 (UTC)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Tue, 17 Aug 2021 22:56:47 +0530
+From:   Prasad Malisetty <pmaliset@codeaurora.org>
+To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
+        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
+        svarbanov@mm-sol.com
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
+        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
+Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
+ init in SC7280
+In-Reply-To: <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
+References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
+ <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
+Message-ID: <349b1178f071407dfad8ba3050482772@codeaurora.org>
+X-Sender: pmaliset@codeaurora.org
+User-Agent: Roundcube Webmail/1.3.9
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Syzbot reported uninit-value in asix_mdio_read(). The problem was in
-missing error handling. asix_read_cmd() should initialize passed stack
-variable smsr, but it can fail in some cases. Then while condidition
-checks possibly uninit smsr variable.
+On 2021-08-10 09:38, Prasad Malisetty wrote:
+> On the SC7280, By default the clock source for pcie_1_pipe is
+> TCXO for gdsc enable. But after the PHY is initialized, the clock
+> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
+> 
+> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
+> b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 8a7a300..39e3b21 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
+>  	struct regulator_bulk_data supplies[2];
+>  	struct reset_control *pci_reset;
+>  	struct clk *pipe_clk;
+> +	struct clk *gcc_pcie_1_pipe_clk_src;
+> +	struct clk *phy_pipe_clk;
+>  };
+> 
+>  union qcom_pcie_resources {
+> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct
+> qcom_pcie *pcie)
+>  	if (ret < 0)
+>  		return ret;
+> 
+> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
+> +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+> +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
+> +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
+> +
+> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+> +		if (IS_ERR(res->phy_pipe_clk))
+> +			return PTR_ERR(res->phy_pipe_clk);
+> +	}
+> +
 
-Since smsr is uninitialized stack variable, driver can misbehave,
-because smsr will be random in case of asix_read_cmd() failure.
-Fix it by adding error handling and just continue the loop instead of
-checking uninit value.
+Hi All,
 
-Added helper function for checking Host_En bit, since wrong loop was used
-in 4 functions and there is no need in copy-pasting code parts.
+Greetings!
 
-Cc: Robert Foss <robert.foss@collabora.com>
-Fixes: d9fe64e51114 ("net: asix: Add in_pm parameter")
-Reported-by: syzbot+a631ec9e717fb0423053@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
+I would like to check is there any other better approach instead of 
+compatible method here as well or is it fine to use compatible method.
 
-Changes in v2:
-	1. Fixed previous wrong approach and changed while loop to for loop
-	2. Reported-and-tested-by: tag removed, since KMSAN tests can be
-	   false positive. Used Reported-by instead.
+Thanks
+-Prasad
 
-Changes in v3:
-	1. Addressed uninit value bugs in asix_mdio_write(), asix_mdio_read_nopm()
-	and asix_mdio_write_nopm()
-	2. Moved i after ret to reverse xmas tree style
-	3. Fixed Fixes: tag
-
-Changes in v4:
-	1. Added helper for checking Host_En bit, since wrong loop was
-	   used in 4 functions. (Suggested by Andrew Lunn)
-
----
- drivers/net/usb/asix_common.c | 70 +++++++++++++++--------------------
- 1 file changed, 30 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/net/usb/asix_common.c b/drivers/net/usb/asix_common.c
-index ac92bc52a85e..38cda590895c 100644
---- a/drivers/net/usb/asix_common.c
-+++ b/drivers/net/usb/asix_common.c
-@@ -63,6 +63,29 @@ void asix_write_cmd_async(struct usbnet *dev, u8 cmd, u16 value, u16 index,
- 			       value, index, data, size);
- }
- 
-+static int asix_check_host_enable(struct usbnet *dev, int in_pm)
-+{
-+	int i, ret;
-+	u8 smsr;
-+
-+	for (i = 0; i < 30; ++i) {
-+		ret = asix_set_sw_mii(dev, in_pm);
-+		if (ret == -ENODEV || ret == -ETIMEDOUT)
-+			break;
-+		usleep_range(1000, 1100);
-+		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
-+				    0, 0, 1, &smsr, in_pm);
-+		if (ret == -ENODEV)
-+			break;
-+		else if (ret < 0)
-+			continue;
-+		else if (smsr & AX_HOST_EN)
-+			break;
-+	}
-+
-+	return ret;
-+}
-+
- static void reset_asix_rx_fixup_info(struct asix_rx_fixup_info *rx)
- {
- 	/* Reset the variables that have a lifetime outside of
-@@ -467,19 +490,11 @@ int asix_mdio_read(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res;
--	u8 smsr;
--	int i = 0;
- 	int ret;
- 
- 	mutex_lock(&dev->phy_mutex);
--	do {
--		ret = asix_set_sw_mii(dev, 0);
--		if (ret == -ENODEV || ret == -ETIMEDOUT)
--			break;
--		usleep_range(1000, 1100);
--		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
--				    0, 0, 1, &smsr, 0);
--	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
-+
-+	ret = asix_check_host_enable(dev, 0);
- 	if (ret == -ENODEV || ret == -ETIMEDOUT) {
- 		mutex_unlock(&dev->phy_mutex);
- 		return ret;
-@@ -505,23 +520,14 @@ static int __asix_mdio_write(struct net_device *netdev, int phy_id, int loc,
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res = cpu_to_le16(val);
--	u8 smsr;
--	int i = 0;
- 	int ret;
- 
- 	netdev_dbg(dev->net, "asix_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
- 			phy_id, loc, val);
- 
- 	mutex_lock(&dev->phy_mutex);
--	do {
--		ret = asix_set_sw_mii(dev, 0);
--		if (ret == -ENODEV)
--			break;
--		usleep_range(1000, 1100);
--		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
--				    0, 0, 1, &smsr, 0);
--	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
- 
-+	ret = asix_check_host_enable(dev, 0);
- 	if (ret == -ENODEV)
- 		goto out;
- 
-@@ -561,19 +567,11 @@ int asix_mdio_read_nopm(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res;
--	u8 smsr;
--	int i = 0;
- 	int ret;
- 
- 	mutex_lock(&dev->phy_mutex);
--	do {
--		ret = asix_set_sw_mii(dev, 1);
--		if (ret == -ENODEV || ret == -ETIMEDOUT)
--			break;
--		usleep_range(1000, 1100);
--		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
--				    0, 0, 1, &smsr, 1);
--	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
-+
-+	ret = asix_check_host_enable(dev, 1);
- 	if (ret == -ENODEV || ret == -ETIMEDOUT) {
- 		mutex_unlock(&dev->phy_mutex);
- 		return ret;
-@@ -595,22 +593,14 @@ asix_mdio_write_nopm(struct net_device *netdev, int phy_id, int loc, int val)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	__le16 res = cpu_to_le16(val);
--	u8 smsr;
--	int i = 0;
- 	int ret;
- 
- 	netdev_dbg(dev->net, "asix_mdio_write() phy_id=0x%02x, loc=0x%02x, val=0x%04x\n",
- 			phy_id, loc, val);
- 
- 	mutex_lock(&dev->phy_mutex);
--	do {
--		ret = asix_set_sw_mii(dev, 1);
--		if (ret == -ENODEV)
--			break;
--		usleep_range(1000, 1100);
--		ret = asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG,
--				    0, 0, 1, &smsr, 1);
--	} while (!(smsr & AX_HOST_EN) && (i++ < 30) && (ret != -ENODEV));
-+
-+	ret = asix_check_host_enable(dev, 1);
- 	if (ret == -ENODEV) {
- 		mutex_unlock(&dev->phy_mutex);
- 		return;
--- 
-2.32.0
-
+>  	res->pipe_clk = devm_clk_get(dev, "pipe");
+>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
+>  }
+> @@ -1255,6 +1267,12 @@ static void qcom_pcie_deinit_2_7_0(struct
+> qcom_pcie *pcie)
+>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
+>  {
+>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
+> +	struct dw_pcie *pci = pcie->pci;
+> +	struct device *dev = pci->dev;
+> +	struct device_node *node = dev->of_node;
+> +
+> +	if (of_property_read_bool(node, "pipe-clk-source-switch"))
+> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
+> 
+>  	return clk_prepare_enable(res->pipe_clk);
+>  }
