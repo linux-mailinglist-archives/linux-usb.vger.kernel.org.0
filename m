@@ -2,92 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C023EE931
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 11:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41CA93EE9FE
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 11:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235556AbhHQJKD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 05:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbhHQJKC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 05:10:02 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253BC061764
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 02:09:30 -0700 (PDT)
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFv62-0001lg-F9; Tue, 17 Aug 2021 11:09:22 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mFv60-0000Su-7Z; Tue, 17 Aug 2021 11:09:20 +0200
-Date:   Tue, 17 Aug 2021 11:09:20 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
- add phylib support")
-Message-ID: <20210817090920.7wviv7fsfzyhli5t@pengutronix.de>
-References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
- <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20210816161822.td7jl4tv7zfbprty@pengutronix.de>
- <e575a7a9-2645-9ebc-fdea-f0421ecaf0e2@linux.intel.com>
+        id S235191AbhHQJhE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 05:37:04 -0400
+Received: from mga09.intel.com ([134.134.136.24]:57488 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234593AbhHQJhD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Aug 2021 05:37:03 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10078"; a="216030318"
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="216030318"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 02:36:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,328,1620716400"; 
+   d="scan'208";a="593293551"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 17 Aug 2021 02:36:27 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 17 Aug 2021 12:36:27 +0300
+Date:   Tue, 17 Aug 2021 12:36:27 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+Message-ID: <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+References: <20210813043131.833006-1-icenowy@aosc.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e575a7a9-2645-9ebc-fdea-f0421ecaf0e2@linux.intel.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:33:59 up 257 days, 22:40, 27 users,  load average: 0.05, 0.12,
- 0.10
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+In-Reply-To: <20210813043131.833006-1-icenowy@aosc.io>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 11:23:40AM +0300, Jarkko Nikula wrote:
-> Hi
+On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
+> Currently, TCPM code omits discover when swapping to gadget, and assume
+> that no altmodes are available when swapping from gadget. However, we do
+> send discover when we get attached as gadget -- this leads to modes to be
+> discovered twice when attached as gadget and then swap to host.
 > 
-> On 8/16/21 7:18 PM, Oleksij Rempel wrote:
-> > > > v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag
-> > > > 'arc-5.14-rc6' of
-> > > > git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the
-> > > > regression.
-> > > > 
-> > > > I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add
-> > > > phylib support").
-> > > 
-> > It sounds like issue which was fixed with the patch:
-> > "net: usb: asix: ax88772: suspend PHY on driver probe"
-> > 
-> > This patch was taken in to v5.14-rc2. Can you please test it?
-> > 
-> Unfortunately it does not fix and was included in last week head
-> 761c6d7ec820. I tested now also linux-next tag next-20210816 and the issue
-> remains.
+> Always re-send discover when swapping DR, regardless of what change is
+> being made; and because of this, the assumption that no altmodes are
+> registered with gadget role is broken, and altmodes de-registeration is
+> always needed now.
+> 
+> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index b9bb63d749ec..ab6d0d51ee1c 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
+>  	case DR_SWAP_CHANGE_DR:
+> -		if (port->data_role == TYPEC_HOST) {
+> -			tcpm_unregister_altmodes(port);
+> +		tcpm_unregister_altmodes(port);
+> +		if (port->data_role == TYPEC_HOST)
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_DEVICE);
+> -		} else {
+> +		else
+>  			tcpm_set_roles(port, true, port->pwr_role,
+>  				       TYPEC_HOST);
+> -			port->send_discover = true;
+> -		}
+> +		port->send_discover = true;
+>  		tcpm_ams_finish(port);
+>  		tcpm_set_state(port, ready_state(port), 0);
+>  		break;
 
-OK thx, I'll need to your help to debug it:
-- please send me complete log, or at least parts related to the asix
-  (dmesg | grep -i Asix)
-- do the interface is not able to go up at all? For example, it works on
-  hot plug, but is not working on reboot.
-- Can you please test it with other link partners.
+Why is it necessary to do discovery with data role swap in general?
 
-Regards,
-Oleksij
+thanks,
+
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+heikki
