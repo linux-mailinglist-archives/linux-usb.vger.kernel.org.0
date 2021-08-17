@@ -2,106 +2,82 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EA53EE6D0
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 08:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAF03EE6E7
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 08:51:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238270AbhHQGpb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 02:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33862 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbhHQGpa (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 02:45:30 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66D4DC0613C1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 23:44:58 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id oa17so30568028pjb.1
-        for <linux-usb@vger.kernel.org>; Mon, 16 Aug 2021 23:44:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=rh78CCde9OfVGRpH7hH2HpmGlVIlBmH6EVTWdupki5c=;
-        b=e6p9RpI6VmQyi4oFKGYGWa7qxP1kCOsCl2egCzzl9+sp3WWNjOVvTOS1BotE5XqLlh
-         SJ1mjuxVi3++OOAAMUMYyZC52ydysfc7QK9ruXC3pBCotc8wtZSIQsaI1kI1UV9YdD3O
-         iATj3EyKOsdCSyjSJDf23JDx6G08aM4G6ruOYZpyvNqt1Jqvb/nErrOIcIhgalnWDq5V
-         91Or6kqKWeAI8bnRXMwb55diIzqW3HnZkeXWEf2GUhBzGKRhHfdhCYdVM2zmZYkjrlXU
-         3WuvV6Fz5TmdX2DlEOlUHn3Mjb8HR90JAon3p8bWWMeMaLT5TLlAteZtk3ECSlQsp7V3
-         aYWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=rh78CCde9OfVGRpH7hH2HpmGlVIlBmH6EVTWdupki5c=;
-        b=OeQP61HNsDvGsy3+Mhm1hPGxGIidx2QM8rXh1jV2Q0EB2eedNE0fYdAyyh92YmIpMp
-         MJ8mlbZuEJHeITHvS28evcbbuxmnkFgx6a5DlK6tj2i+vJav/cN3BVEQuVrJtgdK7U+D
-         BFmBjfMF1eeMqRfQpMgzXLIyBw/VOVh3PE3gnc/UEqoDfvZSwJvh4ErlYjtZLmsBdEJj
-         FOFCmq9G/Jwn0829e7fa7qL7wdVK8We1ciRPznsjOdjzcEeQqFPTIssPln5/nwEJxNSF
-         KxXqiPjr5mmcKzJiAAyfUzMVsOWaH0hZ+AKE5uemhD/YNkiFVCRt+CC/0rfGEBvCl2Hd
-         jgkQ==
-X-Gm-Message-State: AOAM532/7RlHJoty/p4NfbiN9ITn8H8Y4oOWxt6AcfsH1IImncrEbklN
-        caWOcy1LxbOBpVdC97w23FLciA==
-X-Google-Smtp-Source: ABdhPJw6ubxHbWrC0nsiaRj+XZYqTkR1c1fqchC2dyK5OJJJk50DvxwLDKEa/v2UUtjIxizD06wyEQ==
-X-Received: by 2002:a05:6a00:2142:b029:3b9:e5df:77ab with SMTP id o2-20020a056a002142b02903b9e5df77abmr2170557pfk.52.1629182697872;
-        Mon, 16 Aug 2021 23:44:57 -0700 (PDT)
-Received: from ubuntu ([106.245.77.4])
-        by smtp.gmail.com with ESMTPSA id z2sm1758614pgz.43.2021.08.16.23.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Aug 2021 23:44:57 -0700 (PDT)
-Date:   Tue, 17 Aug 2021 15:43:53 +0900
-From:   Jeaho Hwang <jhhwang@rtst.co.kr>
-To:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S234399AbhHQGwZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 02:52:25 -0400
+Received: from m1397.mail.163.com ([220.181.13.97]:9571 "EHLO
+        m1397.mail.163.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230094AbhHQGwZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 02:52:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=aYaIK
+        e4jFu+RIxgd6an7uD6w8EIvg+t2wANGRAcMbXE=; b=Gw4Z+qlvss3n2eL1ZQEvM
+        DBxAZPZsUNdwFW6mFruOEPX3XQOGhJ2hcqY1qSyKR+X6fw3XgB8q3ZbcgnVQMbIV
+        OkIEYM7uuSI4nCzHz9u0LkIOnkpPooNkepQbfVhdTtgcNcv2UUUaEitmV0IMcP61
+        UcnDQoQV/Ay7zEM9TjX9do=
+Received: from slark_xiao$163.com ( [223.104.68.81] ) by
+ ajax-webmail-wmsvr97 (Coremail) ; Tue, 17 Aug 2021 14:51:34 +0800 (CST)
+X-Originating-IP: [223.104.68.81]
+Date:   Tue, 17 Aug 2021 14:51:34 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Greg KH" <gregkh@linuxfoundation.org>
+Cc:     "Reinhard Speyerer" <rspmn@arcor.de>, johan@kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     team-linux@rtst.co.kr, mkbyeon@lselectric.co.kr,
-        khchoib@lselectric.co.kr
-Subject: [PATCH v2] usb: chipidea: add loop timeout for hw_ep_set_halt()
-Message-ID: <20210817064353.GA669425@ubuntu>
+Subject: Re:Re: Re: Re: Re: [PATCH] [V2,1/1]USB: serial: option: add Foxconn
+ T77W175 composition 0x901d
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210622(1d4788a8)
+ Copyright (c) 2002-2021 www.mailtech.cn 163com
+In-Reply-To: <YRtYTFFCNn/xp2Hr@kroah.com>
+References: <20210816035404.4210-1-slark_xiao@163.com>
+ <YRoqAJmGBpV/OuZL@arcor.de>
+ <d1d16fd.6f62.17b4e3ffa26.Coremail.slark_xiao@163.com>
+ <YRot+wBa6v529Z7q@kroah.com>
+ <278bcd0d.7189.17b4e479a3a.Coremail.slark_xiao@163.com>
+ <YRpJN414JQyfyEGo@kroah.com>
+ <ba9a424.f5f.17b51ef0b9d.Coremail.slark_xiao@163.com>
+ <YRtYTFFCNn/xp2Hr@kroah.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-ID: <31fcfd4a.2432.17b52e12d52.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: YcGowADHz+t2XBthR1bCAA--.2027W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiNRfxZFrPc-bklAACsV
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If ctrl EP priming is failed (very rare case in standard linux),
-hw_ep_set_halt goes infinite loop. waiting 100 times was enough
-for zynq7000.
-
-Signed-off-by: Jeaho Hwang <jhhwang@rtst.co.kr>
-
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 8834ca613721..d73fadb18f32 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -209,6 +209,9 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
- 	return 0;
- }
- 
-+/* enough for zynq7000 evaluation board */
-+#define HW_EP_SET_HALT_COUNT_MAX 100
-+
- /**
-  * hw_ep_set_halt: configures ep halt & resets data toggle after clear (execute
-  *                 without interruption)
-@@ -221,6 +224,7 @@ static int hw_ep_prime(struct ci_hdrc *ci, int num, int dir, int is_ctrl)
-  */
- static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
- {
-+	int count = HW_EP_SET_HALT_COUNT_MAX;
- 	if (value != 0 && value != 1)
- 		return -EINVAL;
- 
-@@ -232,9 +236,9 @@ static int hw_ep_set_halt(struct ci_hdrc *ci, int num, int dir, int value)
- 		/* data toggle - reserved for EP0 but it's in ESS */
- 		hw_write(ci, reg, mask_xs|mask_xr,
- 			  value ? mask_xs : mask_xr);
--	} while (value != hw_ep_get_halt(ci, num, dir));
-+	} while (value != hw_ep_get_halt(ci, num, dir) && --count > 0);
- 
--	return 0;
-+	return count ? 0 : -EAGAIN;
- }
- 
- /**
--- 
-2.25.1
-
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjEtMDgtMTcgMTQ6MzM6NDgsICJHcmVnIEtIIiA8Z3JlZ2to
+QGxpbnV4Zm91bmRhdGlvbi5vcmc+IHdyb3RlOgo+T24gVHVlLCBBdWcgMTcsIDIwMjEgYXQgMTA6
+Mjc6MDVBTSArMDgwMCwgU2xhcmsgWGlhbyB3cm90ZToKPj4gCj4+IAo+Cj48YmxhbmsgbGluZXMg
+c25pcHBlZCwgcGxlYXNlIGZpeCB5b3VyIGVtYWlsIGNsaWVudC4uLj4KPgo+Pj4gQXQgMjAyMS0w
+OC0xNiAxOToxNzoxMSwgIkdyZWcgS0giIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4gd3Jv
+dGU6Cj4+ID5PbiBNb24sIEF1ZyAxNiwgMjAyMSBhdCAwNToyNToyMFBNICswODAwLCBTbGFyayBY
+aWFvIHdyb3RlOgo+PiA+PiBBdCAyMDIxLTA4LTE2IDE3OjIwOjU5LCAiR3JlZyBLSCIgPGdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnPiB3cm90ZToKPj4gPj4gPk9uIE1vbiwgQXVnIDE2LCAyMDIx
+IGF0IDA1OjE3OjAwUE0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+ID4+ID4+ICAgU28gc2hv
+dWxkIEkgdXNlIFVTQl9ERVZJQ0VfSU5URVJGQUNFX05VTUJFUihRVUFMQ09NTV9WRU5ET1JfSUQs
+IDB4OTAxZCwgMHgwMCkgdG8gYmluZCBEaWFnIHBvcnQgb25seT8KPj4gPj4gPgo+PiA+PiA+V2h5
+IGlzIHRoaXMgZGV2aWNlIHVzaW5nIHRoZSBRVUFMQ09NTSB2ZW5kb3IgaWQgYW55d2F5PyAgSXMg
+dGhpcyBhbGxvd2VkCj4+ID4+ID5ieSBRdWFsY29tbT8KPj4gPj4gPgo+PiA+PiA+dGhhbmtzLAo+
+PiA+PiA+Cj4+ID4+ID5ncmVnIGstaAo+PiA+PiAKPj4gPj4gSGkgR3JlZywKPj4gPj4gICBPdXIg
+cHJvZHVjdCBhcmUgZGVzaWduZWQgYmFzZWQgb24gUXVhbGNvbW0gU0RYNTUgcGxhdGZvcm0uIFNv
+IGl0IHN0aWxsIHN1cHBvcnQgUXVhbGNvbW0gdmVuZG9yIElELgo+PiA+PiAgIEkgdGhpbmsgdGhl
+cmUgaXMgbm8gaW5mcmluZ2VtZW50IGFib3V0IHRoaXMgSUQgY29tYm8uCj4+ID4KPj4gPkRvIHlv
+dSBoYXZlIHBlcm1pc3Npb24gZnJvbSBRdWFsY29tbSB0byB1c2UgdGhlaXIgdmVuZG9yIGlkPyAg
+SSBrbm93Cj4+ID5zb21lIHZlbmRvcnMgZ2V0IHZlcnkgdXBzZXQgYWJvdXQgdGhpcy4uLgo+PiA+
+Cj4+ID5XaHkgbm90IHVzZSB5b3VyIG93biB2ZW5kb3IgaWQ/Cj4+ID4KPj4gPnRoYW5rcywKPj4g
+Pgo+PiA+Z3JlZyBrLWgKPj4gCj4+IEhpIEdyZWcsCj4+ICAgIEFzIFF1YWxjb21tIG1haW5seSBw
+cm92aWRlIHNlcnZpY2UgdG8gdGhlaXIgY3VzdG9tZXIsIGxpa2UgU2Ftc3VuZywgQXBwbGUsIEh1
+YXdlaSwgUXVlY3RlbCwgRm94Y29ubiwgU2llcnJhIGFuZCBzbyBvbiwgc28gSSBiZWxpZXZlIGFs
+bCBhdmFpbGFibGUgVklEL1BJRHMgYXJlIGFsbG93ZWQgdG8gdXNlLiAKPgo+VGhhdCBpcyBub3Qg
+aG93IFVTQiBWSURzIHdvcmssIHNvcnJ5LiAgUGxlYXNlIGdldCBhcHByb3ZhbCBmcm9tIHRoZQo+
+Y29tcGFueSB3aG9zZSBWSUQgeW91IHdpc2ggdG8gdXNlLCBvdGhlcndpc2UgdGhleSB3aWxsIGJl
+IHVzaW5nIGl0Cj50aGVtc2VsdmVzIGZvciB0aGVpciBvd24gZGV2aWNlcywgYW5kIHlvdSB3aWxs
+IGhhdmUgYSBjb2xsaXNpb24uCj4KPnRoYW5rcywKPgo+Z3JlZyBrLWgKCkhpIEdyZWcsCiAgIEkg
+YW0gY2hlY2tpbmcgdGhpcyB3aXRoIFF1YWxjb21tIHNpZGUgbm93LiBJIHdpbGwgdXBkYXRlIHRo
+ZSByZXN1bHQgb25jZSBJIGdldCBpdC4KICBUaGFuayB5b3UgZm9yIHlvdXIgYWR2aWNlLg==
