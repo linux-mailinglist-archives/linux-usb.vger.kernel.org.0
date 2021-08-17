@@ -2,133 +2,193 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E9753EF0E5
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 19:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5783EF2F8
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 21:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbhHQR1j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 13:27:39 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:59975 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbhHQR1i (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 13:27:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629221225; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=EfWYM7e4IPw4UxvqdMIlRmzXZnOqCrtsKfmXiL94nUE=;
- b=Hsh+QJttUSKSbJoAcAuS0/XgrpZVlT/+6fZWLA70ZV8BmlyiaWa5MyNQqOieQnv2jVdHjrXk
- owExty0tGA1qES0aAjISEYReVmNs3evSZw2uq22JXqctP1lkvH8V7bpX5LPFZDuBNtp3e2+A
- 6VrlN5Y1R3wA8MlqdLQ/mkvd37A=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-west-2.postgun.com with SMTP id
- 611bf159105c6568db5ad79a (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 17 Aug 2021 17:26:49
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id F2DD9C4360D; Tue, 17 Aug 2021 17:26:48 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9C922C4338F;
-        Tue, 17 Aug 2021 17:26:47 +0000 (UTC)
+        id S233808AbhHQT73 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 15:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233153AbhHQT72 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 15:59:28 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B37FC0613C1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 12:58:55 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id h7-20020a4ab4470000b0290263c143bcb2so6248589ooo.7
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 12:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=79bivVt5C0iretm2RQAebwVshGza8l6WOkdkf2Tm6mk=;
+        b=lPok6EhnosdIo1UrT0ck8CSjE0cGZvczyyWe/VT8d9qyyCiDSlpELBtSI9tXeNHlRy
+         6883bonW9Jgs+OlxPI8JwC6Gh6YR8OHQOrecbAcNYEJ2ZI1sgGysSaKGkyIZ2vWsDD0t
+         wwU0NYvrsvkx45/9BYSeqndn6tbuz4fjy6lCc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=79bivVt5C0iretm2RQAebwVshGza8l6WOkdkf2Tm6mk=;
+        b=Ac+NDF+HaF4+yrgkaCyOyO+vd6TUemRDKYPXyMMbilFiml8T1mr8hQj3fTcdZdHmGm
+         40WocfaQMeRMfn4ZPheHK5hL7VrE7gqzzWwQHjS0NoA/TBBQ/PnsruGzuXCvE04Dq7qG
+         T6U4ApcRTzDtImGM6/2rnFS/n0I91//1gCg/brbFiCEBa2GOjeMiDfwGw9Rox5JqyvbM
+         JTLy2N8Vir708AzJgiGvbHi4ZDGb53nDK0Jix11YzUprMZYJdTaa35PkytQUFAoDQmZw
+         laF6PzGD9dhnWnmADK9gKON1f+XQG2U3TEydQYrWMGjm9lR6dmRfD1w7R+RHwh37ESHS
+         qxFg==
+X-Gm-Message-State: AOAM531SSS8ch5EwAS1OwI8Xotm9LiXrCcKzCm0wUqvCVxR65padeOW7
+        MpsJ2bpr00s33waT/q1EciCr4sMAr0LhLFtkbdiPNyHe/88=
+X-Google-Smtp-Source: ABdhPJwt0EHKR2+b1AuRlsdVymYYGJh3wAbYghf4FpRsgsDEpEnaY/lC83xDjKek1m8USwAknSR098PzcIloPu3fBZ0=
+X-Received: by 2002:a4a:c60e:: with SMTP id l14mr3855016ooq.80.1629230334756;
+ Tue, 17 Aug 2021 12:58:54 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 17 Aug 2021 15:58:54 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 17 Aug 2021 22:56:47 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
+In-Reply-To: <1625576413-12324-3-git-send-email-sanm@codeaurora.org>
+References: <1625576413-12324-1-git-send-email-sanm@codeaurora.org> <1625576413-12324-3-git-send-email-sanm@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Tue, 17 Aug 2021 15:58:54 -0400
+Message-ID: <CAE-0n52d7UOWQ+hohoyV81+aB1RnNPUEnjPCtr5=nH+a=WK35Q@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add USB related nodes
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sandeep Maheswaram <sanm@codeaurora.org>
 Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-In-Reply-To: <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
-References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
- <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
-Message-ID: <349b1178f071407dfad8ba3050482772@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Pratham Pratap <prathampratap@codeaurora.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-10 09:38, Prasad Malisetty wrote:
-> On the SC7280, By default the clock source for pcie_1_pipe is
-> TCXO for gdsc enable. But after the PHY is initialized, the clock
-> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
-> 
-> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+Quoting Sandeep Maheswaram (2021-07-06 06:00:12)
+> Add nodes for DWC3 USB controller, QMP and HS USB PHYs in sc7280 SOC.
+>
+> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
-> b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8a7a300..39e3b21 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
->  	struct regulator_bulk_data supplies[2];
->  	struct reset_control *pci_reset;
->  	struct clk *pipe_clk;
-> +	struct clk *gcc_pcie_1_pipe_clk_src;
-> +	struct clk *phy_pipe_clk;
->  };
-> 
->  union qcom_pcie_resources {
-> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct
-> qcom_pcie *pcie)
->  	if (ret < 0)
->  		return ret;
-> 
-> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
-> +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
-> +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
-> +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
+> Changed qmp usb phy to usb dp phy combo node as per Stephen's comments.
+> Changed dwc to usb and added SC7280 compatible as per Bjorn's comments.
+>
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 164 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 164 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index a8c274a..cd6908f 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -1035,6 +1035,125 @@
+>                         };
+>                 };
+>
+[...]
 > +
-> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
-> +		if (IS_ERR(res->phy_pipe_clk))
-> +			return PTR_ERR(res->phy_pipe_clk);
-> +	}
+> +               usb_2: usb@8cf8800 {
+> +                       compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+> +                       reg = <0 0x08cf8800 0 0x400>;
+> +                       status = "disabled";
+> +                       #address-cells = <2>;
+> +                       #size-cells = <2>;
+> +                       ranges;
+> +                       dma-ranges;
 > +
-
-Hi All,
-
-Greetings!
-
-I would like to check is there any other better approach instead of 
-compatible method here as well or is it fine to use compatible method.
-
-Thanks
--Prasad
-
->  	res->pipe_clk = devm_clk_get(dev, "pipe");
->  	return PTR_ERR_OR_ZERO(res->pipe_clk);
->  }
-> @@ -1255,6 +1267,12 @@ static void qcom_pcie_deinit_2_7_0(struct
-> qcom_pcie *pcie)
->  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->  {
->  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
-> +	struct dw_pcie *pci = pcie->pci;
-> +	struct device *dev = pci->dev;
-> +	struct device_node *node = dev->of_node;
+> +                       clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
+> +                                <&gcc GCC_USB30_SEC_MASTER_CLK>,
+> +                                <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
+> +                                <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+> +                                <&gcc GCC_USB30_SEC_SLEEP_CLK>;
+> +                       clock-names = "cfg_noc", "core", "iface","mock_utmi",
+> +                                     "sleep";
 > +
-> +	if (of_property_read_bool(node, "pipe-clk-source-switch"))
-> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
-> 
->  	return clk_prepare_enable(res->pipe_clk);
->  }
+> +                       assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+> +                                         <&gcc GCC_USB30_SEC_MASTER_CLK>;
+> +                       assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +                       interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+> +                                    <&pdc 13 IRQ_TYPE_EDGE_RISING>,
+> +                                    <&pdc 12 IRQ_TYPE_EDGE_RISING>;
+
+I'm seeing this cause a warning at boot
+
+[    4.724756] irq: type mismatch, failed to map hwirq-12 for
+interrupt-controller@b220000!
+[    4.733401] irq: type mismatch, failed to map hwirq-13 for
+interrupt-controller@b220000!
+
+> +                       interrupt-names = "hs_phy_irq",
+> +                                         "dm_hs_phy_irq", "dp_hs_phy_irq";
+> +
+> +                       power-domains = <&gcc GCC_USB30_SEC_GDSC>;
+> +
+> +                       resets = <&gcc GCC_USB30_SEC_BCR>;
+> +
+> +                       usb_2_dwc3: usb@8c00000 {
+> +                               compatible = "snps,dwc3";
+> +                               reg = <0 0x08c00000 0 0xe000>;
+> +                               interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
+> +                               iommus = <&apps_smmu 0xa0 0x0>;
+> +                               snps,dis_u2_susphy_quirk;
+> +                               snps,dis_enblslpm_quirk;
+> +                               phys = <&usb_2_hsphy>;
+> +                               phy-names = "usb2-phy";
+> +                               maximum-speed = "high-speed";
+> +                       };
+> +               };
+> +
+>                 dc_noc: interconnect@90e0000 {
+>                         reg = <0 0x090e0000 0 0x5080>;
+>                         compatible = "qcom,sc7280-dc-noc";
+> @@ -1063,6 +1182,51 @@
+>                         qcom,bcm-voters = <&apps_bcm_voter>;
+>                 };
+>
+> +               usb_1: usb@a6f8800 {
+> +                       compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+> +                       reg = <0 0x0a6f8800 0 0x400>;
+> +                       status = "disabled";
+> +                       #address-cells = <2>;
+> +                       #size-cells = <2>;
+> +                       ranges;
+> +                       dma-ranges;
+> +
+> +                       clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+> +                                <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+> +                                <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+> +                                <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +                                <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
+> +                       clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+> +                                     "sleep";
+> +
+> +                       assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+> +                                         <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+> +                       assigned-clock-rates = <19200000>, <200000000>;
+> +
+> +                       interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> +                                             <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+> +                                             <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+
+And this one too.
+
+[    4.898667] irq: type mismatch, failed to map hwirq-14 for
+interrupt-controller@b220000!
+[    4.907241] irq: type mismatch, failed to map hwirq-15 for
+interrupt-controller@b220000!
+
+which looks like genirq code is complaining that the type is different
+than what it is configured for. Are these trigger flags correct? If so,
+then there' some sort of bug in the pdc driver.
+
+> +                                             <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
+> +                       interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+> +                                         "dm_hs_phy_irq", "ss_phy_irq";
+> +
+> +                       power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
+> +
+> +                       resets = <&gcc GCC_USB30_PRIM_BCR>;
+> +
+> +                       usb_1_dwc3: usb@a600000 {
