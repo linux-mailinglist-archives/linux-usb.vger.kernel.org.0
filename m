@@ -2,228 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F25613EEC1B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 14:05:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EB13EEC1D
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 14:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239891AbhHQMF4 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 08:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237004AbhHQMFv (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 08:05:51 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71DBC0617AD
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 05:05:16 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id a20so1761606vsh.4
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 05:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zp99VySxCP/C+XoDYPyxq/KzXedadDuj5suqohF5Fvg=;
-        b=nFsjYjBXuhreAiAOicko40FJ2Ek7yGZ95EL78+psS1PBgU/zV/hVvGucyeNGB/VHuA
-         CZvLcibDFKv0his4Xlc/kKpRR4KmuVlfNPdCOjLa9yqFMDSVDsx+N86gbova/TWvfOvh
-         UN5fcZIAF+gxZrptxSzZ1Ic8Wvj0+yF7hFtRm/gqHM41KJ03TLeAZhinYWrAoSrnataU
-         dyVF+WhuUoCZmS68K3nFSjCbBWA101ONrhbvx8clVKf/1q6HwW6DBCFaGKFGnYrUqvgr
-         aL45tUdh4eNundsr+ZCDy2CWtZ6BTR2SQU6gRUHinuEuOmjdznvPCL+5j+0D/G8oV6sT
-         gR9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zp99VySxCP/C+XoDYPyxq/KzXedadDuj5suqohF5Fvg=;
-        b=tBtBwLSbf97AqPMr610W8/Rp0mu5o1PWZsHv10/9ZTuJ71zyPJ823RCZukgE+iJAPu
-         wnt6iveRgzrgSahDAhaxVxpUhDOqpoXViYHRj3konst7Na3JCD/qNFpoxzesVOKtl6yM
-         WqHrHWaky5ZTDnFZ3fZk9QN0KDdLGOAZU5wauFmLeCt/ESW5D2haRzRf93RA6qtD+mbR
-         7hJdh7+/lvHylGm8VVmh/bvXT1nsaQACSduBL3yHcoPxudA1vS1J9FAy+a0ShZeBETFv
-         KhAi3ZBf6L0fER2B3BqGIh7ACYPZ/ba3U3J3EnrfqtP+AjHYG4Xd0UNIYedrIOGVouTF
-         osHg==
-X-Gm-Message-State: AOAM531Tz3WdnO7mSychqq1UJMQxDGEQnJRPtzHjbFowONyFNah0a4h0
-        c5HD6zYRuKemjuJ8u/yANBqHyg5L2pGXgTRhDIRySQ==
-X-Google-Smtp-Source: ABdhPJyAoDZB8D567sM7+DgXNNDfJZjhAOy3SVS/bltXL11iGgVxqJXFnX1rcCitBmOIa8V8M0KZWwa23CQNDRPlT28=
-X-Received: by 2002:a67:f6d8:: with SMTP id v24mr2357440vso.48.1629201915619;
- Tue, 17 Aug 2021 05:05:15 -0700 (PDT)
+        id S236340AbhHQMGo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 08:06:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:34606 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236113AbhHQMGm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 17 Aug 2021 08:06:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A2A2060F58;
+        Tue, 17 Aug 2021 12:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629201969;
+        bh=aZIC33VJ2x7GCGgdG+Rixf5ybEZ3/o8FbhlihxjMcnk=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=qQHYwTNfJnP1ItFAlI0gWyq5gt5DI6gDyw+8T1+rCbSFB0TpkL2eHXkrU5syPx/SM
+         4jtc/Wx3psxNPEk4iVVH53iFuL8RyVIl5d/sOXMhUMrMZxXUUm6O4ualRer0cFDZOE
+         cUplfa9bUGJkZ0PYXZIvMl/1iz/X/XO/6gA28VzPnoEiAx4OBNWWcnZL1PK/NzQNzR
+         Jrmhp+b/ozHJDluWU/qOG8aYB2ZMMyStXlDz522B1HCxOhFRTLqjdLsnkUznQ3BlrX
+         cRv6TWI1dKWo50EVXxo0H+J9cXZEfsI6awmui8Pfnwu2STYVUeAkB/kNPcUvmmP+cK
+         gQhjlTlShpDZg==
+References: <20210817100555.4437-1-pavel.hofman@ivitera.com>
+User-agent: mu4e 1.6.3; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     linux-usb@vger.kernel.org,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: f_uac1: fixing inconsistent indenting
+Date:   Tue, 17 Aug 2021 15:05:44 +0300
+In-reply-to: <20210817100555.4437-1-pavel.hofman@ivitera.com>
+Message-ID: <871r6sgtsh.fsf@kernel.org>
 MIME-Version: 1.0
-References: <20210817012754.8710-1-digetx@gmail.com> <20210817012754.8710-12-digetx@gmail.com>
-In-Reply-To: <20210817012754.8710-12-digetx@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 17 Aug 2021 14:04:38 +0200
-Message-ID: <CAPDyKFrax-EYtO03W5QWM2tcWLWeMM8hHZCRYFcsenuiP2zObQ@mail.gmail.com>
-Subject: Re: [PATCH v8 11/34] gpu: host1x: Add runtime PM and OPP support
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Aug 2021 at 03:30, Dmitry Osipenko <digetx@gmail.com> wrote:
+
+Pavel Hofman <pavel.hofman@ivitera.com> writes:
+
+> Fixing inconsistent indenting identified by kernel test
+> robot.
 >
-> Add runtime PM and OPP support to the Host1x driver. It's required for
-> enabling system-wide DVFS and supporting dynamic power management using
-> a generic power domain. For the starter we will keep host1x always-on
-> because dynamic power management require a major refactoring of the driver
-> code since lot's of code paths will need the RPM handling and we're going
-> to remove some of these paths in the future. Host1x doesn't consume much
-> power so it is good enough, we at least need to resume Host1x in order
-> to initialize the power state.
->
-> Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
+> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
 
-[...]
+Acked-By Felipe Balbi <balbi@kernel.org>
 
-> +
->  static int host1x_probe(struct platform_device *pdev)
->  {
->         struct host1x *host;
-> @@ -394,6 +423,10 @@ static int host1x_probe(struct platform_device *pdev)
->         /* set common host1x device data */
->         platform_set_drvdata(pdev, host);
->
-> +       err = devm_tegra_core_dev_init_opp_table_simple(&pdev->dev);
-> +       if (err)
-> +               return err;
-> +
->         host->regs = devm_ioremap_resource(&pdev->dev, regs);
->         if (IS_ERR(host->regs))
->                 return PTR_ERR(host->regs);
-> @@ -423,12 +456,9 @@ static int host1x_probe(struct platform_device *pdev)
->                 return err;
->         }
->
-> -       host->rst = devm_reset_control_get(&pdev->dev, "host1x");
-> -       if (IS_ERR(host->rst)) {
-> -               err = PTR_ERR(host->rst);
-> -               dev_err(&pdev->dev, "failed to get reset: %d\n", err);
-> +       err = host1x_get_resets(host);
-> +       if (err)
->                 return err;
-> -       }
->
->         err = host1x_iommu_init(host);
->         if (err < 0) {
-> @@ -443,22 +473,10 @@ static int host1x_probe(struct platform_device *pdev)
->                 goto iommu_exit;
->         }
->
-> -       err = clk_prepare_enable(host->clk);
-> -       if (err < 0) {
-> -               dev_err(&pdev->dev, "failed to enable clock\n");
-> -               goto free_channels;
-> -       }
-> -
-> -       err = reset_control_deassert(host->rst);
-> -       if (err < 0) {
-> -               dev_err(&pdev->dev, "failed to deassert reset: %d\n", err);
-> -               goto unprepare_disable;
-> -       }
-> -
-
-Removing the clk_prepare_enable() and reset_control_deassert() from
-host1x_probe(), might not be a good idea. See more about why, below.
-
->         err = host1x_syncpt_init(host);
->         if (err) {
->                 dev_err(&pdev->dev, "failed to initialize syncpts\n");
-> -               goto reset_assert;
-> +               goto free_channels;
->         }
->
->         err = host1x_intr_init(host, syncpt_irq);
-> @@ -467,10 +485,14 @@ static int host1x_probe(struct platform_device *pdev)
->                 goto deinit_syncpt;
->         }
->
-> -       host1x_debug_init(host);
-> +       pm_runtime_enable(&pdev->dev);
->
-> -       if (host->info->has_hypervisor)
-> -               host1x_setup_sid_table(host);
-> +       /* the driver's code isn't ready yet for the dynamic RPM */
-> +       err = pm_runtime_resume_and_get(&pdev->dev);
-
-If the driver is being built with the CONFIG_PM Kconfig option being
-unset, pm_runtime_resume_and_get() will return 0 to indicate success -
-and without calling the ->runtime_resume() callback.
-In other words, the clock will remain gated and the reset will not be
-deasserted, likely causing the driver to be malfunctioning.
-
-If the driver isn't ever being built with CONFIG_PM unset, feel free
-to ignore my above comments.
-
-Otherwise, if it needs to work both with and without CONFIG_PM being
-set, you may use the following pattern in host1x_probe() to deploy
-runtime PM support:
-
-"Enable the needed resources to probe the device"
-pm_runtime_get_noresume()
-pm_runtime_set_active()
-pm_runtime_enable()
-
-"Before successfully completing probe"
-pm_runtime_put()
-
-> +       if (err)
-> +               goto deinit_intr;
-> +
-> +       host1x_debug_init(host);
->
->         err = host1x_register(host);
->         if (err < 0)
-> @@ -486,13 +508,13 @@ static int host1x_probe(struct platform_device *pdev)
->         host1x_unregister(host);
->  deinit_debugfs:
->         host1x_debug_deinit(host);
-> +
-> +       pm_runtime_put(&pdev->dev);
-> +       pm_runtime_disable(&pdev->dev);
-> +deinit_intr:
->         host1x_intr_deinit(host);
->  deinit_syncpt:
->         host1x_syncpt_deinit(host);
-> -reset_assert:
-> -       reset_control_assert(host->rst);
-> -unprepare_disable:
-> -       clk_disable_unprepare(host->clk);
->  free_channels:
->         host1x_channel_list_free(&host->channel_list);
->  iommu_exit:
-
-[...]
-
-Kind regards
-Uffe
+-- 
+balbi
