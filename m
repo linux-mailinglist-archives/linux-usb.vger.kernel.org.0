@@ -2,79 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4499C3EE8BF
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 10:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C023EE931
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Aug 2021 11:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239287AbhHQImJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-usb@lfdr.de>); Tue, 17 Aug 2021 04:42:09 -0400
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:49169 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235100AbhHQImH (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 04:42:07 -0400
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id B00621C0014;
-        Tue, 17 Aug 2021 08:41:24 +0000 (UTC)
-Date:   Tue, 17 Aug 2021 10:41:23 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 21/34] mtd: rawnand: tegra: Add runtime PM and OPP
- support
-Message-ID: <20210817104123.1854cf17@xps13>
-In-Reply-To: <20210817012754.8710-22-digetx@gmail.com>
-References: <20210817012754.8710-1-digetx@gmail.com>
-        <20210817012754.8710-22-digetx@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S235556AbhHQJKD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 05:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234843AbhHQJKC (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 05:10:02 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3253BC061764
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 02:09:30 -0700 (PDT)
+Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
+        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFv62-0001lg-F9; Tue, 17 Aug 2021 11:09:22 +0200
+Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mFv60-0000Su-7Z; Tue, 17 Aug 2021 11:09:20 +0200
+Date:   Tue, 17 Aug 2021 11:09:20 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
+ add phylib support")
+Message-ID: <20210817090920.7wviv7fsfzyhli5t@pengutronix.de>
+References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
+ <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20210816161822.td7jl4tv7zfbprty@pengutronix.de>
+ <e575a7a9-2645-9ebc-fdea-f0421ecaf0e2@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e575a7a9-2645-9ebc-fdea-f0421ecaf0e2@linux.intel.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 10:33:59 up 257 days, 22:40, 27 users,  load average: 0.05, 0.12,
+ 0.10
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Dmitry,
-
-Dmitry Osipenko <digetx@gmail.com> wrote on Tue, 17 Aug 2021 04:27:41
-+0300:
-
-> The NAND on Tegra belongs to the core power domain and we're going to
-> enable GENPD support for the core domain. Now NAND must be resumed using
-> runtime PM API in order to initialize the NAND power state. Add runtime PM
-> and OPP support to the NAND driver.
+On Tue, Aug 17, 2021 at 11:23:40AM +0300, Jarkko Nikula wrote:
+> Hi
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  drivers/mtd/nand/raw/tegra_nand.c | 62 +++++++++++++++++++++++++++----
->  1 file changed, 54 insertions(+), 8 deletions(-)
-> 
+> On 8/16/21 7:18 PM, Oleksij Rempel wrote:
+> > > > v5.13 works ok. v5.14-rc1 and today's head 761c6d7ec820 ("Merge tag
+> > > > 'arc-5.14-rc6' of
+> > > > git://git.kernel.org/pub/scm/linux/kernel/git/vgupta/arc") show the
+> > > > regression.
+> > > > 
+> > > > I bisected regression into e532a096be0e ("net: usb: asix: ax88772: add
+> > > > phylib support").
+> > > 
+> > It sounds like issue which was fixed with the patch:
+> > "net: usb: asix: ax88772: suspend PHY on driver probe"
+> > 
+> > This patch was taken in to v5.14-rc2. Can you please test it?
+> > 
+> Unfortunately it does not fix and was included in last week head
+> 761c6d7ec820. I tested now also linux-next tag next-20210816 and the issue
+> remains.
 
-Acked-by: Miquel Raynal <miquel.raynal@bootlin.com>
+OK thx, I'll need to your help to debug it:
+- please send me complete log, or at least parts related to the asix
+  (dmesg | grep -i Asix)
+- do the interface is not able to go up at all? For example, it works on
+  hot plug, but is not working on reboot.
+- Can you please test it with other link partners.
 
-Thanks,
-Miquèl
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
