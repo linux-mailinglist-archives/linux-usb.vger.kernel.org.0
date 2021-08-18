@@ -2,139 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E34983F0153
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 12:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA8C3F01F8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 12:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233899AbhHRKKH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 06:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S234477AbhHRKsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 06:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233798AbhHRKKC (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 06:10:02 -0400
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71316C0617AD
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 03:09:26 -0700 (PDT)
-Received: by mail-vs1-xe2d.google.com with SMTP id v26so1462335vsa.0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 03:09:26 -0700 (PDT)
+        with ESMTP id S233798AbhHRKsQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 06:48:16 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B5CBC061764
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 03:47:42 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id n24so2104502ion.10
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 03:47:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oSMbBaxj5kYnNMOz3HCW8c2GlUKNZpl4G8kt8vaDvcU=;
-        b=NUh5EB/TshJuP06sY5queTXRGXqZEcl6UMqE3f6o4C7Yia1aQ7YYVwjSqato7REGKR
-         ytMlzGxdm1dXPtaK5whOZ0H7rSbvF5peR2wviaOGrorE6BcPYImZyUzulxDwUsFPuWLL
-         5meVhpkcaBkJDevWoxCSWZsvC5nJ7ZnpAY2bGN7+nkDxVClk3HURgKAukKwevldHPSBd
-         uKsOCzfFz4fP/YbEiE46NuL+3ooaMnSQgmklXAz6fLHlvgEGNgwEPm1JpSu0mHG8iX+S
-         G1rewHtqg4EDw2hrAD1fMBl1z5/lSpUx+/rIUDOZ+tcCTRi6DZjOeA44wsHIAFoqgBbV
-         KNmw==
+         :cc:content-transfer-encoding;
+        bh=ga1LKRsZo7FK/NouAlLZlaG+OrM/2OOXzxvNw7QH1pY=;
+        b=F2NorgIHAJhbf6tz6BnTD5Y/gRyF8xmpMTGWjYyvcD7Mmcp9o1gChPKOaAl4fKO2ql
+         H27NJBx0GwIStUxQL/xSf8yr7RQQ9M5PYvosoCFjFmlxJhClCBU2gyTE2BGLMHnnx2kn
+         ti2GyEFhOn/IzyYSqQp9aU6yzj4B9elG3FbY8G505EyirOtoGE4Rl0occszcViz/p5NK
+         RSsnU1vmc5O1ZlwzMxkKjnx2fihbWNBOMAVLVxxBb2NCLXX0v/XfJy7AA2VKnkt13/W6
+         lJqsE4/5nJAx3yUECdaR9G1cCbwYP7vjWD46WE5bUAyA/wmP5k7uKAGRWFyD3eL4vZZI
+         wsKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oSMbBaxj5kYnNMOz3HCW8c2GlUKNZpl4G8kt8vaDvcU=;
-        b=S23vX1BR2f7Bk6xMBNZGTcswSve/5wvt/pEcNAy/g28PwoxEHMWJstupWz3Hp/Qtgk
-         bEmTck7Ic2Z/Xx2FT/qeMyr0IZeDXwaR9iaWeL0utkk27sK4AWEB8fLtazYAbpRChwdr
-         mw3YpICeTCjERaJyXwkgw3iRT4dAR2yXqZTb8lbV2th7lUgmYmGmoEx65RNZVmkvyQim
-         VS0pXfXYK3wpKsFvFVzBx9MKmtxLDONHCZEdmrGGQK8uRoSokcc78Tzk+tzeZCicREJu
-         26id51+diYbdd5a6QNSu+uGb1DUWO3fZHEgahinji392nGlZjcX7ncyfkKa+i39HK82k
-         uL7g==
-X-Gm-Message-State: AOAM5339Pr7q0kmfILgG4qdhEMolXdp688+K5OyyhYVPu2MUn3FMYXIW
-        6CZ3fZRJoPx19mDpLOAfPYJueDdO7vxnODldafIfFQ==
-X-Google-Smtp-Source: ABdhPJxX5vUHiF4S9rKI8AwIyB37h/2agUjbKLWH1bKK7BdK0tRX0vp1siQiAlDeJWpHDBxGhS/HHDjvQsTJxQC3MTQ=
-X-Received: by 2002:a05:6102:5f4:: with SMTP id w20mr6416911vsf.34.1629281364036;
- Wed, 18 Aug 2021 03:09:24 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=ga1LKRsZo7FK/NouAlLZlaG+OrM/2OOXzxvNw7QH1pY=;
+        b=HB8r5RSEmzvmlsSe71BqeFbs4pt6RYbMxtn8O4KQAqSZ9T7MpcujQku9CgQNO4CEf3
+         QE6Dl9oRrXAH1hPs2hOlEQ5DXzZiknJDOdRCLnEr3gO8N5GeNTJ+yLYd4wfF5hjeWh+u
+         3g+ptRJDkU+U4mHkbWOD3YbHd3pcFcgE1WJnYq+xW4evSeVtJHSBvi9eoQm/9FViDGOn
+         kgup11d8+uGmKX8IyCjMCOAT3Q0aox/tXEx9pEAuwphxu73uNzSleabBmCk8qji2d0SH
+         yZT4vS+ZXPhTt9lI5YFA7qxqhVBeM9Q2joNaTmU2v1utgZHh4RGKhPq0AbKrxNlSKQ3k
+         hHog==
+X-Gm-Message-State: AOAM530BQqV7+zFM3WdpmhFHXcjTWh92ZEYKAwAvYuK+JXsculryM/wi
+        C0QR3J2X7tEZjklKfPBOGHGzTueBUZfCZHtqFNsYVg==
+X-Google-Smtp-Source: ABdhPJzuHyL/CVzMxRmpjdQbzLa4rT0Rz+GMpQ4XETcR0XMaCBK7DdFz0G1GK1bAG4b6C+3ukCNkhYf1RaSiVc/o8Bs=
+X-Received: by 2002:a05:6638:974:: with SMTP id o20mr7277374jaj.10.1629283661292;
+ Wed, 18 Aug 2021 03:47:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
-In-Reply-To: <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 18 Aug 2021 12:08:47 +0200
-Message-ID: <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+References: <20210813043131.833006-1-icenowy@aosc.io> <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+ <58034df4-f18c-ab3e-1fcc-dc85fc35320f@roeck-us.net> <CAGZ6i=1s9X58tOwoiGAxMkMVBTyGTjysOSe9bP8Q4WosmCtymw@mail.gmail.com>
+ <ADFCCA37-D216-407A-BDC6-01DB7F14548B@aosc.io>
+In-Reply-To: <ADFCCA37-D216-407A-BDC6-01DB7F14548B@aosc.io>
+From:   Kyle Tso <kyletso@google.com>
+Date:   Wed, 18 Aug 2021 18:47:25 +0800
+Message-ID: <CAGZ6i=0e7OoaR-K56ka8PzXsd=whgaqYZ3JsZW2uKE2PBQd+oQ@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 18 Aug 2021 at 11:50, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Wed, Aug 18, 2021 at 5:27 PM Icenowy Zheng <icenowy@aosc.io> wrote:
 >
-> On 18-08-21, 11:41, Ulf Hansson wrote:
-> > On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > What we need here is just configure. So something like this then:
-> > >
-> > > - genpd->get_performance_state()
-> > >   -> dev_pm_opp_get_current_opp() //New API
-> > >   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
-> > >
-> > > This can be done just once from probe() then.
+>
+>
+> =E4=BA=8E 2021=E5=B9=B48=E6=9C=8818=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=88=
+4:02:24, Kyle Tso <kyletso@google.com> =E5=86=99=E5=88=B0:
+> >On Tue, Aug 17, 2021 at 11:13 PM Guenter Roeck <linux@roeck-us.net> wrot=
+e:
+> >>
+> >> On 8/17/21 2:36 AM, Heikki Krogerus wrote:
+> >> > On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
+> >> >> Currently, TCPM code omits discover when swapping to gadget, and as=
+sume
+> >> >> that no altmodes are available when swapping from gadget. However, =
+we do
+> >> >> send discover when we get attached as gadget -- this leads to modes=
+ to be
+> >> >> discovered twice when attached as gadget and then swap to host.
+> >> >>
+> >> >> Always re-send discover when swapping DR, regardless of what change=
+ is
+> >> >> being made; and because of this, the assumption that no altmodes ar=
+e
+> >> >> registered with gadget role is broken, and altmodes de-registeratio=
+n is
+> >> >> always needed now.
+> >> >>
+> >> >> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
+> >> >> ---
+> >> >>   drivers/usb/typec/tcpm/tcpm.c | 9 ++++-----
+> >> >>   1 file changed, 4 insertions(+), 5 deletions(-)
+> >> >>
+> >> >> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm=
+/tcpm.c
+> >> >> index b9bb63d749ec..ab6d0d51ee1c 100644
+> >> >> --- a/drivers/usb/typec/tcpm/tcpm.c
+> >> >> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> >> >> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_p=
+ort *port)
+> >> >>              tcpm_set_state(port, ready_state(port), 0);
+> >> >>              break;
+> >> >>      case DR_SWAP_CHANGE_DR:
+> >> >> -            if (port->data_role =3D=3D TYPEC_HOST) {
+> >> >> -                    tcpm_unregister_altmodes(port);
+> >> >> +            tcpm_unregister_altmodes(port);
+> >> >> +            if (port->data_role =3D=3D TYPEC_HOST)
+> >> >>                      tcpm_set_roles(port, true, port->pwr_role,
+> >> >>                                     TYPEC_DEVICE);
+> >> >> -            } else {
+> >> >> +            else
+> >> >>                      tcpm_set_roles(port, true, port->pwr_role,
+> >> >>                                     TYPEC_HOST);
+> >> >> -                    port->send_discover =3D true;
+> >> >> -            }
+> >> >> +            port->send_discover =3D true;
+> >> >>              tcpm_ams_finish(port);
+> >> >>              tcpm_set_state(port, ready_state(port), 0);
+> >> >>              break;
+> >> >
+> >> > Why is it necessary to do discovery with data role swap in general?
+> >> >
+> >> > thanks,
+> >> >
+> >>
+> >> Additional question: There are two patches pending related to DR_SWAP
+> >> and discovery. Are they both needed, or do they both solve the same
+> >> problem ?
+> >>
+> >> Thanks,
+> >> Guenter
 > >
-> > How would dev_pm_opp_get_current_opp() work? Do you have a suggestion?
+> >Hi, I just noticed this patch.
+> >
+> >Part of this patch and part of my patch
+> >https://lore.kernel.org/r/20210816075449.2236547-1-kyletso@google.com
+> >are to solve the same problem that Discover_Identity is not sent in a
+> >case where the port becomes UFP after DR_SWAP while in PD3.
+> >
+> >The difference (for the DR_SWAP part) is that my patch does not set
+> >the flag "send_discover" if the port becomes UFP after PD2 DR_SWAP.
+> >That is because in PD2 Spec, UFP is not allowed to be the SVDM
+> >Initiator.
+> >
+> >This patch indeed solves another problem where
+> >tcpm_unregister_altmodes should be called during PD3 DR_SWAP because
+> >the port partner may return mode data in the latest Discover_Mode. For
+> >the PD2 case, I don't think it needs to be called because PD2 DFP will
+> >always return NAK for Discover_Mode. However it is fine because it is
 >
-> The opp core already has a way of finding current OPP, that's what
-> Dmitry is trying to use here. It finds it using clk_get_rate(), if
-> that is zero, it picks the lowest freq possible.
+> It sounds like my dock is doing something against the specification...
 >
-> > I am sure I understand the problem. When a device is getting probed,
-> > it needs to consume power, how else can the corresponding driver
-> > successfully probe it?
+> It sends altmodes rather than NAK when my board gets attached as
+> UFP and send bogus discovers (because of bugs of current TCPM
+> code). These altmodes are then registered in TCPM and never get
+> cleaned up within it, which leads to conflict when the dock is
+> removed and then re-inserted.
 >
-> Dmitry can answer that better, but a device doesn't necessarily need
-> to consume energy in probe. It can consume bus clock, like APB we
-> have, but the more energy consuming stuff can be left disabled until
-> the time a user comes up. Probe will just end up registering the
-> driver and initializing it.
 
-That's perfectly fine, as then it's likely that it won't vote for an
-OPP, but can postpone that as well.
+Could you provide more details?
+1. Is the connection in PD3 ?
+2. Could you provide the tcpm logs?
 
-Perhaps the problem is rather that the HW may already carry a non-zero
-vote made from a bootloader. If the consumer driver tries to clear
-that vote (calling dev_pm_opp_set_rate(dev, 0), for example), it would
-still not lead to any updates of the performance state in genpd,
-because genpd internally has initialized the performance-state to
-zero.
-
-Dmitry?
-
+> (BTW is it neceesary for data role and power role to be the same
+> when attaching? My board now gets attached as UFP to drain
+> power, and then do DR_SWAP to become USB host.)
 >
-> --
-> viresh
 
-Kind regards
-Uffe
+Either Sink/UFP or Source/DFP in the beginning. Then DR_SWAP is okay
+when both ports are in ready state. Your dock looks like a Sourcing
+Device.
+
+Type-C Spec:
+```
+4.8.4 Sourcing Device
+
+A Sourcing Device is a special sub-class of a DRP that is capable of
+supplying power, but is not capable of acting as a USB host. For
+example a hub=E2=80=99s UFP or a monitor=E2=80=99s UFP that operates as a d=
+evice but
+not as a host.
+
+The Sourcing Device shall follow the rules for a DRP (See Section
+4.5.1.4 and Figure 4-15). It shall also follow the requirements for
+the Source as Power Source (See Section 4.8.1). The Sourcing Device
+shall support USB PD and shall support the DR_Swap command in order to
+enable the Source to assume the UFP data role.
+```
+
+thanks,
+Kyle
+
+> >safe to call tcpm_unregister_altmodes even if there is no mode data.
+> >
+> >In fact, when I was tracing the code I found another bug. PD2 UFP is
+> >not allowed to send Discover_Identity and Discover_Mode. I can send
+> >another patch to address this problem.
+> >
+> >thanks,
+> >Kyle
