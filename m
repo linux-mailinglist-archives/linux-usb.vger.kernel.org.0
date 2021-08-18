@@ -2,118 +2,204 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FA13F0026
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D241B3F004F
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbhHRJPA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 05:15:00 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:36499 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229864AbhHRJO6 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 05:14:58 -0400
-Received: by mail-il1-f200.google.com with SMTP id c20-20020a9294140000b02902141528bc7cso879972ili.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:14:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=nVWhK4cQDXyby++FlrRCSICOsNIa8m6BHgR2s+fOqjk=;
-        b=RuYT+KdcwC2QhZnQJPMydbfGJzW/CmEk56BFmzm/tb0z6z3BvcdbbWRM6GsH7P1T9q
-         Z6Iws5/mv9QYZ+ln/0k2Yvft31FBiLoOeT2iLtxjDf4973X3GKvZ6h6ZUvT/kGB5MTIV
-         ujJaenuY0XaDAvXv6k1xMhs/oWErGHbvW1j+o8AvBuiAfuwqMUmKOVoiYEIIUkCISL2M
-         Ed/bKZ6ngHdO9YuaooKE11RMD3wIuEpThulLugS0LslnRphPIb1eG/Xtj7mw/sQkxP1H
-         hbESERCksplXXxV+uqecxLxKOEBqSzUrg1xmlyubl8fVFq9LMl1uvmj+GTaCMoyqtqoZ
-         Kf+w==
-X-Gm-Message-State: AOAM531SJ3m0OqOq8fKbLcH9H5Ay/XxJ0WFzvnTS+9eb9pIYWQjo4bIU
-        zYmzSa0pQCU2H+vpQpN6sW7fFyKAh5Xw48I+j18mHk3LlNao
-X-Google-Smtp-Source: ABdhPJwETxoSv9A/LHlkyJimAET8MJOM+95bPE4OlxYrGxsjgWP2LcMj/M+jNwC1+6HCFL1vN4vC+VQpv59Ch3E1bPGZFZw7T9m2
+        id S232574AbhHRJWn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 05:22:43 -0400
+Received: from relay5.mymailcheap.com ([159.100.248.207]:40673 "EHLO
+        relay5.mymailcheap.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231229AbhHRJVw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 05:21:52 -0400
+X-Greylist: delayed 85105 seconds by postgrey-1.27 at vger.kernel.org; Wed, 18 Aug 2021 05:21:51 EDT
+Received: from relay4.mymailcheap.com (relay4.mymailcheap.com [137.74.80.155])
+        by relay5.mymailcheap.com (Postfix) with ESMTPS id CF9A3260EB;
+        Wed, 18 Aug 2021 09:21:15 +0000 (UTC)
+Received: from filter1.mymailcheap.com (filter1.mymailcheap.com [149.56.130.247])
+        by relay4.mymailcheap.com (Postfix) with ESMTPS id 13EC32000C;
+        Wed, 18 Aug 2021 09:21:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by filter1.mymailcheap.com (Postfix) with ESMTP id 282222A0C8;
+        Wed, 18 Aug 2021 05:21:07 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mymailcheap.com;
+        s=default; t=1629278467;
+        bh=Ka+Dx9RH3tuXhALIBTAbuUwAQQjOY5opWBs8RplNu6Q=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=fRFzwqfKL/QnUD3HG75V2kWiP3Wou1s8qe0mPhroh9GDuLLzmm9qDpNbW60Yxmzfl
+         XgU2brB8KxTt3dVehuIdJd/UucmTYkfbjPyvf+5M5skYtIZ2BCdMzWnf9i5C91ULI4
+         xtyb+ID/Tn4+5HZuuo5MGv3LGRugZ/MmRknbjyO4=
+X-Virus-Scanned: Debian amavisd-new at filter1.mymailcheap.com
+Received: from filter1.mymailcheap.com ([127.0.0.1])
+        by localhost (filter1.mymailcheap.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id jANVpBvcB0h7; Wed, 18 Aug 2021 05:21:02 -0400 (EDT)
+Received: from mail20.mymailcheap.com (mail20.mymailcheap.com [51.83.111.147])
+        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by filter1.mymailcheap.com (Postfix) with ESMTPS;
+        Wed, 18 Aug 2021 05:21:02 -0400 (EDT)
+Received: from [148.251.23.173] (ml.mymailcheap.com [148.251.23.173])
+        by mail20.mymailcheap.com (Postfix) with ESMTP id 4FB5E40097;
+        Wed, 18 Aug 2021 09:21:01 +0000 (UTC)
+Authentication-Results: mail20.mymailcheap.com;
+        dkim=pass (1024-bit key; unprotected) header.d=aosc.io header.i=@aosc.io header.b="u1Fx14Fd";
+        dkim-atps=neutral
+AI-Spam-Status: Not processed
+Received: from [127.0.0.1] (unknown [112.96.109.179])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail20.mymailcheap.com (Postfix) with ESMTPSA id 3092B42546;
+        Wed, 18 Aug 2021 09:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=aosc.io; s=default;
+        t=1629278449; bh=Ka+Dx9RH3tuXhALIBTAbuUwAQQjOY5opWBs8RplNu6Q=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=u1Fx14FdhZgEpqL28ehYkFlf8onmFqDgZIh58GaRZ/ICHGz69S7pkPhz4l0Qo54BO
+         INL54PxSrz/aHKcIbboa1G9m/aImXjttO/i9smdEkKViwtM2UNF/u9sDglKoiHRwu6
+         boDpxFfr0xKsUIFLTfbAwuaqMK3ifNflP3af95jY=
+Date:   Wed, 18 Aug 2021 17:20:41 +0800
+From:   Icenowy Zheng <icenowy@aosc.io>
+To:     Kyle Tso <kyletso@google.com>, Guenter Roeck <linux@roeck-us.net>
+CC:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CAGZ6i=1s9X58tOwoiGAxMkMVBTyGTjysOSe9bP8Q4WosmCtymw@mail.gmail.com>
+References: <20210813043131.833006-1-icenowy@aosc.io> <YRuDG78N2mB5w37p@kuha.fi.intel.com> <58034df4-f18c-ab3e-1fcc-dc85fc35320f@roeck-us.net> <CAGZ6i=1s9X58tOwoiGAxMkMVBTyGTjysOSe9bP8Q4WosmCtymw@mail.gmail.com>
+Message-ID: <949C620F-CA75-4A14-96DD-E42A349FC6EF@aosc.io>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1294:: with SMTP id y20mr5242782ilq.42.1629278063605;
- Wed, 18 Aug 2021 02:14:23 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 02:14:23 -0700
-In-Reply-To: <000000000000d77b6505c767b8f8@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000038c55d05c9d1dc3b@google.com>
-Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
-From:   syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>
-To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 4FB5E40097
+X-Rspamd-Server: mail20.mymailcheap.com
+X-Spamd-Result: default: False [-0.10 / 10.00];
+         RCVD_VIA_SMTP_AUTH(0.00)[];
+         ARC_NA(0.00)[];
+         R_DKIM_ALLOW(0.00)[aosc.io:s=default];
+         RECEIVED_SPAMHAUS_PBL(0.00)[112.96.109.179:received];
+         FROM_HAS_DN(0.00)[];
+         TO_DN_SOME(0.00)[];
+         TO_MATCH_ENVRCPT_ALL(0.00)[];
+         MIME_GOOD(-0.10)[text/plain];
+         DMARC_NA(0.00)[aosc.io];
+         R_SPF_SOFTFAIL(0.00)[~all];
+         ML_SERVERS(-3.10)[148.251.23.173];
+         DKIM_TRACE(0.00)[aosc.io:+];
+         RCPT_COUNT_SEVEN(0.00)[7];
+         RCVD_NO_TLS_LAST(0.10)[];
+         FROM_EQ_ENVFROM(0.00)[];
+         MIME_TRACE(0.00)[0:+];
+         ASN(0.00)[asn:24940, ipnet:148.251.0.0/16, country:DE];
+         RCVD_COUNT_TWO(0.00)[2];
+         MID_RHS_MATCH_FROM(0.00)[];
+         HFILTER_HELO_BAREIP(3.00)[148.251.23.173,1]
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    794c7931a242 Merge branch 'linus' of git://git.kernel.org/..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13af2205300000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=96f0602203250753
-dashboard link: https://syzkaller.appspot.com/bug?extid=9b57a46bf1801ce2a2ca
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae58ce300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d71731300000
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com
+=E4=BA=8E 2021=E5=B9=B48=E6=9C=8818=E6=97=A5 GMT+08:00 =E4=B8=8B=E5=8D=884=
+:02:24, Kyle Tso <kyletso@google=2Ecom> =E5=86=99=E5=88=B0:
+>On Tue, Aug 17, 2021 at 11:13 PM Guenter Roeck <linux@roeck-us=2Enet> wro=
+te:
+>>
+>> On 8/17/21 2:36 AM, Heikki Krogerus wrote:
+>> > On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
+>> >> Currently, TCPM code omits discover when swapping to gadget, and ass=
+ume
+>> >> that no altmodes are available when swapping from gadget=2E However,=
+ we do
+>> >> send discover when we get attached as gadget -- this leads to modes =
+to be
+>> >> discovered twice when attached as gadget and then swap to host=2E
+>> >>
+>> >> Always re-send discover when swapping DR, regardless of what change =
+is
+>> >> being made; and because of this, the assumption that no altmodes are
+>> >> registered with gadget role is broken, and altmodes de-registeration=
+ is
+>> >> always needed now=2E
+>> >>
+>> >> Signed-off-by: Icenowy Zheng <icenowy@aosc=2Eio>
+>> >> ---
+>> >>   drivers/usb/typec/tcpm/tcpm=2Ec | 9 ++++-----
+>> >>   1 file changed, 4 insertions(+), 5 deletions(-)
+>> >>
+>> >> diff --git a/drivers/usb/typec/tcpm/tcpm=2Ec b/drivers/usb/typec/tcp=
+m/tcpm=2Ec
+>> >> index b9bb63d749ec=2E=2Eab6d0d51ee1c 100644
+>> >> --- a/drivers/usb/typec/tcpm/tcpm=2Ec
+>> >> +++ b/drivers/usb/typec/tcpm/tcpm=2Ec
+>> >> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_po=
+rt *port)
+>> >>              tcpm_set_state(port, ready_state(port), 0);
+>> >>              break;
+>> >>      case DR_SWAP_CHANGE_DR:
+>> >> -            if (port->data_role =3D=3D TYPEC_HOST) {
+>> >> -                    tcpm_unregister_altmodes(port);
+>> >> +            tcpm_unregister_altmodes(port);
+>> >> +            if (port->data_role =3D=3D TYPEC_HOST)
+>> >>                      tcpm_set_roles(port, true, port->pwr_role,
+>> >>                                     TYPEC_DEVICE);
+>> >> -            } else {
+>> >> +            else
+>> >>                      tcpm_set_roles(port, true, port->pwr_role,
+>> >>                                     TYPEC_HOST);
+>> >> -                    port->send_discover =3D true;
+>> >> -            }
+>> >> +            port->send_discover =3D true;
+>> >>              tcpm_ams_finish(port);
+>> >>              tcpm_set_state(port, ready_state(port), 0);
+>> >>              break;
+>> >
+>> > Why is it necessary to do discovery with data role swap in general?
+>> >
+>> > thanks,
+>> >
+>>
+>> Additional question: There are two patches pending related to DR_SWAP
+>> and discovery=2E Are they both needed, or do they both solve the same
+>> problem ?
+>>
+>> Thanks,
+>> Guenter
+>
+>Hi, I just noticed this patch=2E
+>
+>Part of this patch and part of my patch
+>https://lore=2Ekernel=2Eorg/r/20210816075449=2E2236547-1-kyletso@google=
+=2Ecom
+>are to solve the same problem that Discover_Identity is not sent in a
+>case where the port becomes UFP after DR_SWAP while in PD3=2E
+>
+>The difference (for the DR_SWAP part) is that my patch does not set
+>the flag "send_discover" if the port becomes UFP after PD2 DR_SWAP=2E
+>That is because in PD2 Spec, UFP is not allowed to be the SVDM
+>Initiator=2E
+>
+>This patch indeed solves another problem where
+>tcpm_unregister_altmodes should be called during PD3 DR_SWAP because
+>the port partner may return mode data in the latest Discover_Mode=2E For
+>the PD2 case, I don't think it needs to be called because PD2 DFP will
+>always return NAK for Discover_Mode=2E However it is fine because it is
+>safe to call tcpm_unregister_altmodes even if there is no mode data=2E
+>
+>In fact, when I was tracing the code I found another bug=2E PD2 UFP is
+>not allowed to send Discover_Identity and Discover_Mode=2E I can send
+>another patch to address this problem=2E
 
-------------[ cut here ]------------
-usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType a1
-WARNING: CPU: 0 PID: 8434 at drivers/usb/core/urb.c:410 usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
-Modules linked in:
-CPU: 0 PID: 8434 Comm: syz-executor752 Not tainted 5.14.0-rc6-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
-Code: 7c 24 40 e8 45 64 1f fc 48 8b 7c 24 40 e8 4b fc 0b ff 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b2 27 8a e8 01 fc 91 03 <0f> 0b e9 a5 ee ff ff e8 17 64 1f fc 0f b6 1d 19 ca 01 08 31 ff 41
-RSP: 0018:ffffc90000effbd0 EFLAGS: 00010082
-RAX: 0000000000000000 RBX: ffff888027944058 RCX: 0000000000000000
-RDX: ffff8880235db880 RSI: ffffffff815d85c5 RDI: fffff520001dff6c
-RBP: ffff888021618140 R08: 0000000000000000 R09: 0000000000000000
-R10: ffffffff815d23fe R11: 0000000000000000 R12: ffff888018aff118
-R13: 00000000000000a1 R14: 0000000080000280 R15: ffff888021900400
-FS:  000000000223d300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005614a6c2a160 CR3: 00000000222ca000 CR4: 0000000000350ef0
-Call Trace:
- hid_submit_ctrl+0x6ec/0xd80 drivers/hid/usbhid/hid-core.c:416
- usbhid_restart_ctrl_queue.isra.0+0x244/0x3a0 drivers/hid/usbhid/hid-core.c:258
- __usbhid_submit_report+0x6f0/0xd50 drivers/hid/usbhid/hid-core.c:603
- usbhid_submit_report drivers/hid/usbhid/hid-core.c:640 [inline]
- usbhid_init_reports+0xd7/0x3b0 drivers/hid/usbhid/hid-core.c:780
- hiddev_ioctl+0xb27/0x1630 drivers/hid/usbhid/hiddev.c:689
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:1069 [inline]
- __se_sys_ioctl fs/ioctl.c:1055 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:1055
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x444619
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 21 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe70eb96d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00000000004004a0 RCX: 0000000000444619
-RDX: 0000000000000000 RSI: 0000000000004805 RDI: 0000000000000004
-RBP: 0000000000403ea0 R08: 0000000000000001 R09: 00000000004004a0
-R10: 000000000000001f R11: 0000000000000246 R12: 0000000000403f30
-R13: 0000000000000000 R14: 00000000004b2018 R15: 00000000004004a0
-----------------
-Code disassembly (best guess):
-   0:	7c 24                	jl     0x26
-   2:	40 e8 45 64 1f fc    	rex callq 0xfc1f644d
-   8:	48 8b 7c 24 40       	mov    0x40(%rsp),%rdi
-   d:	e8 4b fc 0b ff       	callq  0xff0bfc5d
-  12:	45 89 e8             	mov    %r13d,%r8d
-  15:	44 89 f1             	mov    %r14d,%ecx
-  18:	4c 89 e2             	mov    %r12,%rdx
-  1b:	48 89 c6             	mov    %rax,%rsi
-  1e:	48 c7 c7 e0 b2 27 8a 	mov    $0xffffffff8a27b2e0,%rdi
-  25:	e8 01 fc 91 03       	callq  0x391fc2b
-  2a:	0f 0b                	ud2     <-- trapping instruction
-  2c:	e9 a5 ee ff ff       	jmpq   0xffffeed6
-  31:	e8 17 64 1f fc       	callq  0xfc1f644d
-  36:	0f b6 1d 19 ca 01 08 	movzbl 0x801ca19(%rip),%ebx        # 0x801ca56
-  3d:	31 ff                	xor    %edi,%edi
-  3f:	41                   	rex.B
+Well, to be honest, it's why I send this patch=2E
 
+I didn't read PD spec before, so I assumed UFP is okay to send
+discover, and this is what I got wrong=2E I should remove the
+discover sending flag when we attach as sink=2E
+
+Will it be okay for me to send this patch? It should help my device here=
+=2E
+
+>
+>thanks,
+>Kyle
