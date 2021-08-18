@@ -2,65 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBF23F06C8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 16:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7DE3F06DE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 16:40:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239279AbhHROeT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 10:34:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40406 "EHLO mail.kernel.org"
+        id S238662AbhHROkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 10:40:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:41720 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239431AbhHROeQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:34:16 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id B6319610A7;
-        Wed, 18 Aug 2021 14:33:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629297221;
-        bh=OF1J2wHd4VzDXAmG26skt+r/Iv8T+sRv9vvuG57iN6E=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=B6pwO5as/P1Nq+fBBC9DeW/1j44+QFTpGF3CkY5HVnb6ZxvhNwR4/cqBNeztwcEQN
-         Glkt3Bq5uvxZZYA4Y9MvJ0vL7KeR74sTwNzKSwhfOgVtcQgSm97EcJ7J7ths+LnyV1
-         TusydswoqB0/Dmv4zeieOHXwpRUY5kHQYKuwzMh4MlWGe3DNYZLA2ttZbv5RjK8aqV
-         9k8BeMyKoRe2OLaHNfTuZkcVe31+myaCKmcz2l4K4w0x+9SFFtBqfai0fLSojDRH8y
-         qaPZpqeJzqeQ6CH+Ba+XmS3+Qgvjv9HN8p11m7wH53JWKuXiVd7bP1Vo/qp7L/DYyw
-         fnZzILs80TIVQ==
-References: <87mtpegak8.fsf@kernel.org>
- <20210818141247.4794-1-lutovinova@ispras.ru>
-User-agent: mu4e 1.6.3; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Nadezda Lutovinova <lutovinova@ispras.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: gadget: mv_u3d: request_irq() after
- initializing UDC
-Date:   Wed, 18 Aug 2021 17:33:16 +0300
-In-reply-to: <20210818141247.4794-1-lutovinova@ispras.ru>
-Message-ID: <87k0kig6v2.fsf@kernel.org>
+        id S238113AbhHROkl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Aug 2021 10:40:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id CC59D610CF;
+        Wed, 18 Aug 2021 14:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629297606;
+        bh=GcDcn1p5bbIe0j3lDftYK1lLYju/eoi4yW4XncUjXv8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WV9iTYVHIy8ObTfgjZwgmSFVzNaBVwypYgC5gh6MKpUVJc1vnnvmU1A8K84BlIMdg
+         HLnE1fN48lexq+wubKlTbc6zwFq94eIzQBeCUxzP5gionxsaQylGI+7s9Ixs+8q3uT
+         JWrWnvA6Hy/GEXhJjMS79QJjndU1xfuK4LCSwVIY=
+Date:   Wed, 18 Aug 2021 16:40:03 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Icenowy Zheng <icenowy@aosc.io>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
+Message-ID: <YR0bw+k0S94cmeDS@kroah.com>
+References: <20210813043131.833006-1-icenowy@aosc.io>
+ <YRuDG78N2mB5w37p@kuha.fi.intel.com>
+ <E91C97D0-7DB9-4455-AED2-4C25B7D2D22D@aosc.io>
+ <YRuW0fENBEcIVkZb@kuha.fi.intel.com>
+ <YR0Rlj+jk9dnoG6N@kroah.com>
+ <E1804EE0-CBA1-4BE8-875B-57E82EDECDBE@aosc.io>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <E1804EE0-CBA1-4BE8-875B-57E82EDECDBE@aosc.io>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Wed, Aug 18, 2021 at 10:02:24PM +0800, Icenowy Zheng wrote:
+> 
+> 
+> 于 2021年8月18日 GMT+08:00 下午9:56:38, Greg Kroah-Hartman <gregkh@linuxfoundation.org> 写到:
+> >On Tue, Aug 17, 2021 at 02:00:33PM +0300, Heikki Krogerus wrote:
+> >> > >Why is it necessary to do discovery with data role swap in general?
+> >> > 
+> >> > I think it could be possible for devices to expose different altmode
+> >> > with different role.
+> >> 
+> >> OK. FWIW:
+> >> 
+> >> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> >
+> >Is this conflicting with https://lore.kernel.org/r/20210816075449.2236547-1-kyletso@google.com ?
+> >
+> >Which of these two should I take, both?  Neither?
+> 
+> Don't take this, it's against spec.
 
-Nadezda Lutovinova <lutovinova@ispras.ru> writes:
+Ok, now dropped.  What about the linked patch above?  Does that work for
+you instead?
 
-> If IRQ occurs between calling  request_irq() and  mv_u3d_eps_init(),
-> then null pointer dereference occurs since u3d->eps[] wasn't
-> initialized yet but used in mv_u3d_nuke().
->
-> The patch puts registration of the interrupt handler after
-> initializing of neccesery data.
->
-> Found by Linux Driver Verification project (linuxtesting.org).
->
-> Fixes: 90fccb529d24 ("usb: gadget: Gadget directory cleanup - group UDC drivers")
-> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+thanks,
 
-Thanks for updating so quickly:
-
-Acked-by: Felipe Balbi <balbi@kernel.org>
-
--- 
-balbi
+greg k-h
