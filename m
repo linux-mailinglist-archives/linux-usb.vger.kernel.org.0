@@ -2,225 +2,166 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 525F13EFF40
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 10:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A47603F0006
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239322AbhHRIgY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 04:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51564 "EHLO
+        id S230428AbhHRJK1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 05:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238748AbhHRIgW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 04:36:22 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7AEC06179A
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:35:48 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id d16so1262522vsf.12
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:35:48 -0700 (PDT)
+        with ESMTP id S231685AbhHRJKX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 05:10:23 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F757C061764
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:09:48 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id b7so1822364iob.4
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:09:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xSrv+O3TCSW7cnAdJHoCzYxKAHMXFEbzmyCWpuUlKoA=;
-        b=RvY/jkXxbAxhbejbhMhOx5m5pFICa1DjcAOGeLJ7Wj4+NnrlQTP43TzpsRFep1JuC0
-         jjsEdR5Sfv4a46pjC5HeyNwlkFXs5ZoGbAdEHP8nbsLbwgDfxMA0VLsZ4sAxMJRV4mLW
-         dSespNFG/uvXR/ZW39JUOK9BLxf8mk1WID8zgZpuFGqAaQDzTQz38k7uJeJxmgAVAmpm
-         Z+x9YgOHPVn/vTMzWLFUUkw+FlGiQOiB5nzyvSzqnlo/nOvWO5fH93uQPcSphn3gJxjO
-         Ww6B2AEhe5tNZTMbYBxAuxTYbw1ul/ILTwXNwMEmv6K/9UW9Wx7QIc3Fi/3JmvUSGIAc
-         FWog==
+        bh=9iBoqm9fBh4AJfs3dtcx4dh6uIthdPLBk+9KXpRrXs4=;
+        b=RcwCHI+b2em2ix/eN5zrKixd7er39kiR2useUYrMNYxkI83ZobAuX4Bg8A4NoKWYHC
+         GFns1VrvRBB0UXKx0h37YTXeDc9p54IalL8s0rGjd0mr+1E/Pd4ZHAySjkH5djbTdSFR
+         CMrV4gohyJqs140WDjMXRQ6jmQSRQLcyY8FRDsjtPfIq6PSeap0bVrVsldekOGWOofWa
+         wFvFPorNQ/eicTcL2OwwMCzD30i////6NJXK3uFi23TZxNn3T55hqCf0xdBQ1Dqprayj
+         cdKpiTfJlAEvZYs/ZprEk6pJ3cHR8ANmqv+EQDBd0odGBs+adpZZaa9Rjn32B2ZHGXSU
+         sP/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xSrv+O3TCSW7cnAdJHoCzYxKAHMXFEbzmyCWpuUlKoA=;
-        b=agfJRVb2cC9t4a1j8uupDm62OPOH0MsXPrseSaTz90HkurdJVY4WFqzYJUvlS11Kx6
-         q1Sqd4DWLKHc2+X1G4mMOgxDFPdUvgtIUD7bkq2v3OAV+4q68WoQwriQkGaMs3L44ZX8
-         xD1Bqv+7FuGc/n6THVIC/aIEyF0ZTAZxhRyZU4az6+qfD4jwBcJHOU3/AVbYzzYGXlb6
-         3NahcZ5BVekOMa+QcF3YxMBOG8Dnb9IS+3hp+/Xh48LyXqbM6v/n8+qdBh7Z7j8unjsv
-         7rwMFk4mdVMSHYowQsmunDIUsaahwpNCtDVXwWitnXEmIN7GAaTZPcTHLH/HOpktDebO
-         0oSw==
-X-Gm-Message-State: AOAM532tANu96Aa/QeuRCzMvHKVOeq2/uOgdXH5kMvGEy884VfrNdbN2
-        7qoU09nCUIsXqwkNpVawZ2ny3KMLbIJIM+mmac0IUQ==
-X-Google-Smtp-Source: ABdhPJxfVbNmo+y9lVXwMUpwV89/qvFiwVR66AUipk2ir89qZuIeawGetBYzPol3o/SxK7XiQzvipAWUl+UAJR794SQ=
-X-Received: by 2002:a67:f6d8:: with SMTP id v24mr6490718vso.48.1629275747436;
- Wed, 18 Aug 2021 01:35:47 -0700 (PDT)
+        bh=9iBoqm9fBh4AJfs3dtcx4dh6uIthdPLBk+9KXpRrXs4=;
+        b=lHVaNXzyGEYw/lI5Z3tl1zDNTLEiaAALbfdEdtNdOPDjD9HNlmx7KZ8vGx1DZ1D2jJ
+         LaOKY4fx77WF1+nA8aMwS+qf3MlWR+sn7AtPEAcUlfJY/02EptE/vQKfULda4LGTkdyi
+         SU5u05zNo+887i93i1ICJ4Ebvja06muzWa+2Rq0a3s5dNdOVPIBL2uDpJ/rTwCgHX4QX
+         DxDyb/bU3P0y3NA0r3ds6q87VMlTbZ0tmsjrtmSYTMVKMDL6XNhcwnv8tUQz7Uma/3YT
+         RdcNxht5vX821kaIojYFZlzmyD3wcQ1Gxu0bvkFzTC+dgTgX6GQutT8/LNzAelI/diGG
+         d/ew==
+X-Gm-Message-State: AOAM531KYVFjeYkOI10JZiyzhZKuwRZzlLaQW1u0PniuT/0H9dJstTCs
+        ELwn7RGX72RhHIbUaEMv7/s+Rl1TM0ee3Ysigaf/Qg==
+X-Google-Smtp-Source: ABdhPJzK3A6B9uJ+CwTiMZiJbCUxRz4+h73wx6aI8l0b1E7Sow7OqsoI5pI/DOymhnQb23JuQCPI70UD/b9Yz9yCxAw=
+X-Received: by 2002:a02:b697:: with SMTP id i23mr7111999jam.78.1629277787881;
+ Wed, 18 Aug 2021 02:09:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210817012754.8710-1-digetx@gmail.com> <20210817012754.8710-12-digetx@gmail.com>
- <CAPDyKFrax-EYtO03W5QWM2tcWLWeMM8hHZCRYFcsenuiP2zObQ@mail.gmail.com> <YRvBkyfFCqthBIBV@orome.fritz.box>
-In-Reply-To: <YRvBkyfFCqthBIBV@orome.fritz.box>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 18 Aug 2021 10:35:11 +0200
-Message-ID: <CAPDyKFp+9Bv3EVSnV683ixNXzukJtmG_QrS5C1ZQqLxv9QJ-bQ@mail.gmail.com>
-Subject: Re: [PATCH v8 11/34] gpu: host1x: Add runtime PM and OPP support
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
+References: <20210812082635.12924-1-jackp@codeaurora.org> <20210818012859.GB30805@jackp-linux.qualcomm.com>
+In-Reply-To: <20210818012859.GB30805@jackp-linux.qualcomm.com>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Wed, 18 Aug 2021 14:39:11 +0530
+Message-ID: <CAMi1Hd2PwtLmxXS8_bRjtq1QsEoN_PZzFC8E-R+LRV7=tv2U-w@mail.gmail.com>
+Subject: Re: [RFT][PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
+To:     Jack Pham <jackp@codeaurora.org>
+Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Ray Chi <raychi@google.com>, Ferry Toth <ftoth@exalondelft.nl>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, 17 Aug 2021 at 16:03, Thierry Reding <thierry.reding@gmail.com> wrote:
+On Wed, 18 Aug 2021 at 06:59, Jack Pham <jackp@codeaurora.org> wrote:
 >
-> On Tue, Aug 17, 2021 at 02:04:38PM +0200, Ulf Hansson wrote:
-> > On Tue, 17 Aug 2021 at 03:30, Dmitry Osipenko <digetx@gmail.com> wrote:
-> > >
-> > > Add runtime PM and OPP support to the Host1x driver. It's required for
-> > > enabling system-wide DVFS and supporting dynamic power management using
-> > > a generic power domain. For the starter we will keep host1x always-on
-> > > because dynamic power management require a major refactoring of the driver
-> > > code since lot's of code paths will need the RPM handling and we're going
-> > > to remove some of these paths in the future. Host1x doesn't consume much
-> > > power so it is good enough, we at least need to resume Host1x in order
-> > > to initialize the power state.
-> > >
-> > > Tested-by: Peter Geis <pgwipeout@gmail.com> # Ouya T30
-> > > Tested-by: Paul Fertser <fercerpav@gmail.com> # PAZ00 T20
-> > > Tested-by: Nicolas Chauvet <kwizart@gmail.com> # PAZ00 T20 and TK1 T124
-> > > Tested-by: Matt Merhar <mattmerhar@protonmail.com> # Ouya T30
-> > > Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> > > ---
+> On Thu, Aug 12, 2021 at 01:26:35AM -0700, Jack Pham wrote:
+> > On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
+> > DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
+> > field (bit 31) which when enabled allows the controller in device
+> > mode to treat USB 2.0 L1 LPM & L2 events separately.
 > >
-> > [...]
-> >
-> > > +
-> > >  static int host1x_probe(struct platform_device *pdev)
-> > >  {
-> > >         struct host1x *host;
-> > > @@ -394,6 +423,10 @@ static int host1x_probe(struct platform_device *pdev)
-> > >         /* set common host1x device data */
-> > >         platform_set_drvdata(pdev, host);
-> > >
-> > > +       err = devm_tegra_core_dev_init_opp_table_simple(&pdev->dev);
-> > > +       if (err)
-> > > +               return err;
-> > > +
-> > >         host->regs = devm_ioremap_resource(&pdev->dev, regs);
-> > >         if (IS_ERR(host->regs))
-> > >                 return PTR_ERR(host->regs);
-> > > @@ -423,12 +456,9 @@ static int host1x_probe(struct platform_device *pdev)
-> > >                 return err;
-> > >         }
-> > >
-> > > -       host->rst = devm_reset_control_get(&pdev->dev, "host1x");
-> > > -       if (IS_ERR(host->rst)) {
-> > > -               err = PTR_ERR(host->rst);
-> > > -               dev_err(&pdev->dev, "failed to get reset: %d\n", err);
-> > > +       err = host1x_get_resets(host);
-> > > +       if (err)
-> > >                 return err;
-> > > -       }
-> > >
-> > >         err = host1x_iommu_init(host);
-> > >         if (err < 0) {
-> > > @@ -443,22 +473,10 @@ static int host1x_probe(struct platform_device *pdev)
-> > >                 goto iommu_exit;
-> > >         }
-> > >
-> > > -       err = clk_prepare_enable(host->clk);
-> > > -       if (err < 0) {
-> > > -               dev_err(&pdev->dev, "failed to enable clock\n");
-> > > -               goto free_channels;
-> > > -       }
-> > > -
-> > > -       err = reset_control_deassert(host->rst);
-> > > -       if (err < 0) {
-> > > -               dev_err(&pdev->dev, "failed to deassert reset: %d\n", err);
-> > > -               goto unprepare_disable;
-> > > -       }
-> > > -
-> >
-> > Removing the clk_prepare_enable() and reset_control_deassert() from
-> > host1x_probe(), might not be a good idea. See more about why, below.
-> >
-> > >         err = host1x_syncpt_init(host);
-> > >         if (err) {
-> > >                 dev_err(&pdev->dev, "failed to initialize syncpts\n");
-> > > -               goto reset_assert;
-> > > +               goto free_channels;
-> > >         }
-> > >
-> > >         err = host1x_intr_init(host, syncpt_irq);
-> > > @@ -467,10 +485,14 @@ static int host1x_probe(struct platform_device *pdev)
-> > >                 goto deinit_syncpt;
-> > >         }
-> > >
-> > > -       host1x_debug_init(host);
-> > > +       pm_runtime_enable(&pdev->dev);
-> > >
-> > > -       if (host->info->has_hypervisor)
-> > > -               host1x_setup_sid_table(host);
-> > > +       /* the driver's code isn't ready yet for the dynamic RPM */
-> > > +       err = pm_runtime_resume_and_get(&pdev->dev);
-> >
-> > If the driver is being built with the CONFIG_PM Kconfig option being
-> > unset, pm_runtime_resume_and_get() will return 0 to indicate success -
-> > and without calling the ->runtime_resume() callback.
-> > In other words, the clock will remain gated and the reset will not be
-> > deasserted, likely causing the driver to be malfunctioning.
-> >
-> > If the driver isn't ever being built with CONFIG_PM unset, feel free
-> > to ignore my above comments.
-> >
-> > Otherwise, if it needs to work both with and without CONFIG_PM being
-> > set, you may use the following pattern in host1x_probe() to deploy
-> > runtime PM support:
-> >
-> > "Enable the needed resources to probe the device"
-> > pm_runtime_get_noresume()
-> > pm_runtime_set_active()
-> > pm_runtime_enable()
-> >
-> > "Before successfully completing probe"
-> > pm_runtime_put()
+> > After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
+> > events") the controller will now receive events (and therefore
+> > interrupts) for every state change when entering/exiting either
+> > L1 or L2 states.  Since L1 is handled entirely by the hardware
+> > and requires no software intervention, there is no need to even
+> > enable these events and unnecessarily notify the gadget driver.
+> > Enable the aforementioned bit to help reduce the overall interrupt
+> > count for these L1 events that don't need to be handled while
+> > retaining the events for full L2 suspend/wakeup.
 >
-> We made a conscious decision a few years ago to have ARCH_TEGRA select
-> PM on both 32-bit and 64-bit ARM, specifically to avoid the need to do
-> this dance (though there are still a few drivers left that do this, I
-> think).
+> Hi folks in To:
 >
-> So I think this should be unnecessary. Unless perhaps if the sysfs PM
-> controls have any influence on this. As far as I know, as long as the
-> PM kconfig option is enabled, the sysfs control only influence the
-> runtime behaviour (i.e. setting the sysfs PM control to "on" is going
-> to force runtime PM to be resumed) but there's no way to disable
-> runtime PM altogether via sysfs that would make the above necessary.
-
-Thanks for clarifying! As I said, feel free to ignore my comments then.
-
-For this and the other patches in the series, I assume you only need
-to care about whether the driver is a cross SoC driver and used on
-other platforms than Tegra then.
-
+> I'd like to request if any of you could help test this patch on your
+> boards to help make sure it doesn't cause any regressions since I know
+> some of the recent dwc3 patches from Qualcomm have been found to break
+> other devices :(. So I'm hoping to avoid that even for a patch as
+> small as this.
 >
-> Thierry
+> Hoping this could be tried out on boards/SoCs such as db845c, hikey960,
+> Exynos, the Intel "lakes", etc.  Ideally this needs validation with a
+> high-speed connection to a USB 3.x host, which increases the chances
+> that USB 2.0 Link Power Management is supported.
+>
+> The overall goal of this patch is to eliminate events generated for
+> L1 entry/exit, so we should see a slight reduction in interrupt counts
+> when checking `grep dwc3 /proc/interrupts` for comparable traffic.
+>
+> Appreciate any feedback and help in testing!
 
-Kind regards
-Uffe
+Smoke tested this patch on RB5, running android-mainline (v5.14-rc6)
+kernel, with a USB 3.x host.
+Pushed/Pulled couple of large files over ADB, hotplugged the cable a
+few times and found no obvious regressions.
+
+Tested-by: Amit Pundir <amit.pundir@linaro.org> # for RB5 (sm8250)
+
+Regards,
+Amit Pundir
+
+> Thanks,
+> Jack
+>
+> > Signed-off-by: Jack Pham <jackp@codeaurora.org>
+> > ---
+> >  drivers/usb/dwc3/core.c | 9 +++++++++
+> >  drivers/usb/dwc3/core.h | 5 +++--
+> >  2 files changed, 12 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index ba74ad7f6995..719dac228703 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -1050,6 +1050,15 @@ static int dwc3_core_init(struct dwc3 *dwc)
+> >               if (!DWC3_VER_IS_PRIOR(DWC3, 290A))
+> >                       reg |= DWC3_GUCTL1_DEV_L1_EXIT_BY_HW;
+> >
+> > +             /*
+> > +              * Decouple USB 2.0 L1 & L2 events which will allow for
+> > +              * gadget driver to only receive U3/L2 suspend & wakeup
+> > +              * events and prevent the more frequent L1 LPM transitions
+> > +              * from interrupting the driver.
+> > +              */
+> > +             if (!DWC3_VER_IS_PRIOR(DWC3, 300A))
+> > +                     reg |= DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT;
+> > +
+> >               if (dwc->dis_tx_ipgap_linecheck_quirk)
+> >                       reg |= DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS;
+> >
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 5991766239ba..356b94a7ec70 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -256,9 +256,10 @@
+> >  #define DWC3_GUCTL_HSTINAUTORETRY    BIT(14)
+> >
+> >  /* Global User Control 1 Register */
+> > -#define DWC3_GUCTL1_PARKMODE_DISABLE_SS      BIT(17)
+> > +#define DWC3_GUCTL1_DEV_DECOUPLE_L1L2_EVT    BIT(31)
+> >  #define DWC3_GUCTL1_TX_IPGAP_LINECHECK_DIS   BIT(28)
+> > -#define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW        BIT(24)
+> > +#define DWC3_GUCTL1_DEV_L1_EXIT_BY_HW                BIT(24)
+> > +#define DWC3_GUCTL1_PARKMODE_DISABLE_SS              BIT(17)
+> >
+> >  /* Global Status Register */
+> >  #define DWC3_GSTS_OTG_IP     BIT(10)
+> > --
+> > 2.24.0
+> >
+>
+> --
+> The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
+> a Linux Foundation Collaborative Project
