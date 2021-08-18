@@ -2,92 +2,145 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A633F0093
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 915523F00CD
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbhHRJfh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 05:35:37 -0400
-Received: from mga14.intel.com ([192.55.52.115]:31697 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233074AbhHRJe1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Aug 2021 05:34:27 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10079"; a="216016983"
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="216016983"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 02:33:32 -0700
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="510788468"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2021 02:33:29 -0700
-Received: from andy by smile with local (Exim 4.94.2)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mGHwp-00B43I-6B; Wed, 18 Aug 2021 12:33:23 +0300
-Date:   Wed, 18 Aug 2021 12:33:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Ray Chi <raychi@google.com>, Ferry Toth <ftoth@exalondelft.nl>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [RFT][PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
-Message-ID: <YRzT4y87Nt8ICFJ/@smile.fi.intel.com>
-References: <20210812082635.12924-1-jackp@codeaurora.org>
- <20210818012859.GB30805@jackp-linux.qualcomm.com>
+        id S232769AbhHRJml (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 05:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231229AbhHRJmj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 05:42:39 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB725C0617AD
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:42:03 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id b5so1389586vsq.2
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:42:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kbdSCU3Rw09uivyYf1YKzhrdNkwTtywFq3z2eNcAoHU=;
+        b=kqUWzgUl/yiaXMoS2k9dhVzmvWVdRfo7Fo2KXwGPP2K5ZKcbfq4mKKs9fLOs8fk96x
+         ptk/PW2l+MORjgDTGKf9YKJffdNc1pkzifnQ3yMMmSj3Id6or6s1mOH4RD5LiDbhWJRI
+         ol1Z3YbHIv6bhJb7wFU0bti68QvEuV9zCxn5x80BVxIEcknLkLqXu0njTtyUvhPQ0gSW
+         KzGkOvTBoLGzarTvJDvnT+M4FVW2tzG1L1lXroB9VMemhLKPlypoT4WgQlmDdyLEkHoL
+         avQ5B2EbRBekdWSQILEJHijb8G0nZOKWFmqrMWiR04qbuKkEn8DBAAYOVrTAxrrtgcGi
+         fUDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kbdSCU3Rw09uivyYf1YKzhrdNkwTtywFq3z2eNcAoHU=;
+        b=crM2s3WK+x6MPAFETDg9gR5K+erggXTplVXmU/oumHhYUwxa+I0Q1eMoz3WSjpBmSU
+         WMRq+/8ZsIcPtig2h9tngbYiv7fW92dsmCoRy2mGnnDXoyNz7JQFlz/xDhpnW1yB4Djf
+         WewNRf+ux1FczArnUp/eVNT6C6Anyqq/sYOYJhgdIjqLPfeSu1cvRla97GhdgKZWy8aP
+         z/UOctFb1unUk1C6lqkQXhcKe92PyghrMnk/erwonq/ETtI8hNYCRFMHgguyo0YxPNJd
+         IhnX8RJJSJEP7EM3pjId9zbgjjP0ENSzfzA7eD5cpVSFjqVNcPNr/48oMWTA7w1zOfAB
+         pHkQ==
+X-Gm-Message-State: AOAM530pyBHGUiHZYZWPe9ZV1Sas2/4B0PZ+cFdEU0Qkymie84u6XDjg
+        wcTkbpX/PItBwtVlgBaifd3QZ6lmYCDlUvKL+OIi4Q==
+X-Google-Smtp-Source: ABdhPJz8iEC0DtBNEl/b/C36HfmefejpZ6mYBF4J4rSAfO4RoK/etFf85MFbc+601w1EL4Uj4rk9xHbR9GbyCxpBsGg=
+X-Received: by 2002:a67:f6d8:: with SMTP id v24mr6581141vso.48.1629279723051;
+ Wed, 18 Aug 2021 02:42:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210818012859.GB30805@jackp-linux.qualcomm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20210818035533.ieqkexltfvvf2p4n@vireshk-i7> <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
+ <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+In-Reply-To: <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 18 Aug 2021 11:41:26 +0200
+Message-ID: <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 06:28:59PM -0700, Jack Pham wrote:
-> On Thu, Aug 12, 2021 at 01:26:35AM -0700, Jack Pham wrote:
-> > On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
-> > DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
-> > field (bit 31) which when enabled allows the controller in device
-> > mode to treat USB 2.0 L1 LPM & L2 events separately.
-> > 
-> > After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
-> > events") the controller will now receive events (and therefore
-> > interrupts) for every state change when entering/exiting either
-> > L1 or L2 states.  Since L1 is handled entirely by the hardware
-> > and requires no software intervention, there is no need to even
-> > enable these events and unnecessarily notify the gadget driver.
-> > Enable the aforementioned bit to help reduce the overall interrupt
-> > count for these L1 events that don't need to be handled while
-> > retaining the events for full L2 suspend/wakeup.
-> 
-> Hi folks in To:
-> 
-> I'd like to request if any of you could help test this patch on your
-> boards to help make sure it doesn't cause any regressions since I know
-> some of the recent dwc3 patches from Qualcomm have been found to break
-> other devices :(. So I'm hoping to avoid that even for a patch as
-> small as this.
-> 
-> Hoping this could be tried out on boards/SoCs such as db845c, hikey960,
-> Exynos, the Intel "lakes", etc.  Ideally this needs validation with a
-> high-speed connection to a USB 3.x host, which increases the chances
-> that USB 2.0 Link Power Management is supported.
-> 
-> The overall goal of this patch is to eliminate events generated for
-> L1 entry/exit, so we should see a slight reduction in interrupt counts
-> when checking `grep dwc3 /proc/interrupts` for comparable traffic.
+On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 18-08-21, 10:29, Ulf Hansson wrote:
+> > Me and Dmitry discussed adding a new genpd callback for this. I agreed
+> > that it seems like a reasonable thing to add, if he insists.
+> >
+> > The intent was to invoke the new callback from __genpd_dev_pm_attach()
+> > when the device has been attached to its genpd. This allows the
+> > callback, to invoke clk_get_rate() and then dev_pm_opp_set_rate(), to
+> > update the vote according to the current state of the HW.
+>
+> I wouldn't call dev_pm_opp_set_rate() from there, since it means
+> configure and enable (both) for different resources, clk, regulator,
+> genpd, etc..
 
-Unfortunately I'm quite busy lately with more important stuff and I dunno if I
-will be able to test this in reasonable time. So, if Ferry volunteers, then we
-can cover Intel Merrifield platform as well.
+Right, good point!
 
--- 
-With Best Regards,
-Andy Shevchenko
+dev_pm_opp_set_rate() is best called from consumer drivers, as they
+need to be in control.
 
+>
+> What we need here is just configure. So something like this then:
+>
+> - genpd->get_performance_state()
+>   -> dev_pm_opp_get_current_opp() //New API
+>   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
+>
+> This can be done just once from probe() then.
 
+How would dev_pm_opp_get_current_opp() work? Do you have a suggestion?
+
+>
+> > I am not sure if/why that approach seemed insufficient?
+> >
+> > Another option to solve the problem, I think, is simply to patch
+> > drivers to let them call dev_pm_opp_set_rate() during ->probe(), this
+> > should synchronize the HW state too.
+>
+> Dmitry already mentioned that this will make the device start
+> consuming power, and he doesn't want that, else we need an explicit
+> disble call as well.
+
+I am sure I understand the problem. When a device is getting probed,
+it needs to consume power, how else can the corresponding driver
+successfully probe it?
+
+>
+> --
+> viresh
+
+Kind regards
+Uffe
