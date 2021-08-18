@@ -2,131 +2,104 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 635553F00F3
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:50:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C8983F0107
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 11:54:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbhHRJvX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 05:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232797AbhHRJvW (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 05:51:22 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B957C0613CF
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:50:48 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id t1so1691172pgv.3
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 02:50:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=HyhZskvnkMHQUsBUgjlwBTJK659CA+CwU8djwVBZ2sM=;
-        b=WeXABN/OK1Wr8lx7yIzjEQc22keli5/mPbqOsII32BzwbNTl5ULMEk37J2dJ8WBIc8
-         ZnFr2sJXSoQcvyE/NTKrdgFlaJaQ5o8OxVWXD6PUNqbIuMj7u3RPYczNpQRUfi51aU4K
-         IMg9JXqfomBw0MGOEn5iaKId1Us1CN3Pm6n193v6mGKDxjCswxDgh1VAt9J14Z2xnhK9
-         TjVyhjtcpvAwdRJrWEVMHqX2US4YAz29pKFNe9gxQYZqLn/NPPMrB0GL1Cn9pdhRH215
-         rF0aZ83JvYygnG0uw5U83BQhbi3YsDjTjk/h7pS55RDpk7eJ2g4J4R4IDq7w+OQTfMd1
-         Zzzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=HyhZskvnkMHQUsBUgjlwBTJK659CA+CwU8djwVBZ2sM=;
-        b=Py8qIPaQ0MvZK8U2xIcOBFQoKOjltYOc7WrokrRAItXhEUlhs9wIMHfeq43pAEA6L9
-         0XafNAHj3TPTnUWuWr/TunrRM8mmDNrbppHPPhdTkyrSzkG3SXqkIzriLkRWp1BNwtIO
-         OxZKhmjUToS4da2Vs+yfDAUyLY4F+SAxmKI+pkZYsZQLJyXPNwVl+FXvMRvK6zdqzagS
-         9XuCMqSo1ChAgoxvsVvpqMzH/XGbAZUdS4OQVge/Cgy4if2pdbzrKWeySsW2P5zCtTP2
-         zJgeVlhL/lBdRwSZw2FIU48gcYGhsJU8Jwh0NXm5wrhw28xFRDUC+OqPhIbAQ++FdFx9
-         7nSg==
-X-Gm-Message-State: AOAM530DCIAGFEx/PzgDPFQS5dUNG0DG/k6dqc3ua15RjX28FlxfbdlH
-        V8UTj+GhtGmJitBukaDhQ4lgWw==
-X-Google-Smtp-Source: ABdhPJzNgodhRJ4P04IWzIYvulf9/hQQBrDCKLc4ZA4G1N3jYvdGFtkpsn+640r5oaGBQ5g20Y+t7Q==
-X-Received: by 2002:a63:3c5d:: with SMTP id i29mr8049824pgn.147.1629280247471;
-        Wed, 18 Aug 2021 02:50:47 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id i11sm6720260pgo.25.2021.08.18.02.50.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 02:50:47 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 15:20:44 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
-References: <20210818043131.7klajx6drvvkftoc@vireshk-i7>
- <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7>
- <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
- <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+        id S232030AbhHRJz2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 05:55:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37620 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232505AbhHRJz1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Aug 2021 05:55:27 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9775360C3E;
+        Wed, 18 Aug 2021 09:54:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629280492;
+        bh=PNb8GOIHkUMwROloLnGwRbBaZbhxZwaghS14In1ePiM=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=snIojCbQZci8uqXArXOuju5NMSYi2sfc4Nab4JmACYwDAv3G7x4lj2p2+UGUtp5nU
+         PdJ/NQGdinXNfynU2DGdgbe1rUGhkwXGITtosqy8eNbHKqyZwOIkhWsYXxemlOR5M1
+         OrSP42VdiIkytMk0ORfiipjXrRacj9xQ/QmEOP8HDlLZi1OYtxAgANI6qBPSuq2Zdz
+         +5FGD5GZH9xUVsU9EJMMbEdIO3mpy2dnZO3a+piDKbaRgN6nBNRspDs6MQWMoVDNNJ
+         kmIVIXmi1Roodo78z5Q7YWek8QtPp+NrPFjO/OJPE2GmNnLYebVAKaXC0E7HRMLIgv
+         Qv89YdQLO51Aw==
+References: <20210818094726.3295093-1-shubhrajyoti.datta@xilinx.com>
+User-agent: mu4e 1.6.3; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+Cc:     linux-usb@vger.kernel.org, gregkh@linuxfoundation.org,
+        michal.simek@xilinx.com, git@xilinx.com
+Subject: Re: [PATCH] usb: gadget: udc-xilinx: Add clock support
+Date:   Wed, 18 Aug 2021 12:54:00 +0300
+In-reply-to: <20210818094726.3295093-1-shubhrajyoti.datta@xilinx.com>
+Message-ID: <87v943f57a.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18-08-21, 11:41, Ulf Hansson wrote:
-> On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > What we need here is just configure. So something like this then:
-> >
-> > - genpd->get_performance_state()
-> >   -> dev_pm_opp_get_current_opp() //New API
-> >   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
-> >
-> > This can be done just once from probe() then.
-> 
-> How would dev_pm_opp_get_current_opp() work? Do you have a suggestion?
 
-The opp core already has a way of finding current OPP, that's what
-Dmitry is trying to use here. It finds it using clk_get_rate(), if
-that is zero, it picks the lowest freq possible.
+Hi,
 
-> I am sure I understand the problem. When a device is getting probed,
-> it needs to consume power, how else can the corresponding driver
-> successfully probe it?
+Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com> writes:
+> Currently the driver depends on the  bootloader to enable the clocks.
+> Add support for clocking. The patch enables the clock at  probe and
+> disables them at remove.
+>
+> Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@xilinx.com>
+> ---
+>  drivers/usb/gadget/udc/udc-xilinx.c | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/udc/udc-xilinx.c b/drivers/usb/gadget/udc/udc-xilinx.c
+> index fb4ffedd6f0d..30070a488c87 100644
+> --- a/drivers/usb/gadget/udc/udc-xilinx.c
+> +++ b/drivers/usb/gadget/udc/udc-xilinx.c
+> @@ -11,6 +11,7 @@
+>   * USB peripheral controller (at91_udc.c).
+>   */
+>  
+> +#include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
+>  #include <linux/dma-mapping.h>
+> @@ -171,6 +172,7 @@ struct xusb_ep {
+>   * @addr: the usb device base address
+>   * @lock: instance of spinlock
+>   * @dma_enabled: flag indicating whether the dma is included in the system
+> + * @clk: pointer to struct clk
+>   * @read_fn: function pointer to read device registers
+>   * @write_fn: function pointer to write to device registers
+>   */
+> @@ -188,6 +190,7 @@ struct xusb_udc {
+>  	void __iomem *addr;
+>  	spinlock_t lock;
+>  	bool dma_enabled;
+> +	struct clk *clk;
+>  
+>  	unsigned int (*read_fn)(void __iomem *);
+>  	void (*write_fn)(void __iomem *, u32, u32);
+> @@ -2092,6 +2095,26 @@ static int xudc_probe(struct platform_device *pdev)
+>  	udc->gadget.ep0 = &udc->ep[XUSB_EP_NUMBER_ZERO].ep_usb;
+>  	udc->gadget.name = driver_name;
+>  
+> +	udc->clk = devm_clk_get(&pdev->dev, "s_axi_aclk");
+> +	if (IS_ERR(udc->clk)) {
+> +		if (PTR_ERR(udc->clk) != -ENOENT) {
+> +			ret = PTR_ERR(udc->clk);
+> +			goto fail;
+> +		}
+> +
+> +		/*
+> +		 * Clock framework support is optional, continue on,
+> +		 * anyways if we don't find a matching clock
+> +		 */
+> +		udc->clk = NULL;
 
-Dmitry can answer that better, but a device doesn't necessarily need
-to consume energy in probe. It can consume bus clock, like APB we
-have, but the more energy consuming stuff can be left disabled until
-the time a user comes up. Probe will just end up registering the
-driver and initializing it.
+should it be, though? Might be a good idea to add fixed-clock instances
+to the boards still depending on clock framework. Maybe that can be done
+over time, but worth considering anyhow.
 
 -- 
-viresh
+balbi
