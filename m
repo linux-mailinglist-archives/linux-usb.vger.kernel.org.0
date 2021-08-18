@@ -2,70 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7DE3F06DE
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 16:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D84E43F06F2
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 16:44:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238662AbhHROkm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 10:40:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41720 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238113AbhHROkl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Aug 2021 10:40:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id CC59D610CF;
-        Wed, 18 Aug 2021 14:40:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629297606;
-        bh=GcDcn1p5bbIe0j3lDftYK1lLYju/eoi4yW4XncUjXv8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WV9iTYVHIy8ObTfgjZwgmSFVzNaBVwypYgC5gh6MKpUVJc1vnnvmU1A8K84BlIMdg
-         HLnE1fN48lexq+wubKlTbc6zwFq94eIzQBeCUxzP5gionxsaQylGI+7s9Ixs+8q3uT
-         JWrWnvA6Hy/GEXhJjMS79QJjndU1xfuK4LCSwVIY=
-Date:   Wed, 18 Aug 2021 16:40:03 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Icenowy Zheng <icenowy@aosc.io>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
-Message-ID: <YR0bw+k0S94cmeDS@kroah.com>
-References: <20210813043131.833006-1-icenowy@aosc.io>
- <YRuDG78N2mB5w37p@kuha.fi.intel.com>
- <E91C97D0-7DB9-4455-AED2-4C25B7D2D22D@aosc.io>
- <YRuW0fENBEcIVkZb@kuha.fi.intel.com>
- <YR0Rlj+jk9dnoG6N@kroah.com>
- <E1804EE0-CBA1-4BE8-875B-57E82EDECDBE@aosc.io>
+        id S239513AbhHROpT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 10:45:19 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:49477 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S239487AbhHROpR (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 10:45:17 -0400
+Received: (qmail 195955 invoked by uid 1000); 18 Aug 2021 10:44:42 -0400
+Date:   Wed, 18 Aug 2021 10:44:42 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Al Cooper <alcooperx@gmail.com>,
+        linux-usb@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 1/2] USB: EHCI: Add register array bounds to HCS ports
+Message-ID: <20210818144442.GC193695@rowland.harvard.edu>
+References: <20210818043035.1308062-1-keescook@chromium.org>
+ <20210818043035.1308062-2-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <E1804EE0-CBA1-4BE8-875B-57E82EDECDBE@aosc.io>
+In-Reply-To: <20210818043035.1308062-2-keescook@chromium.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 10:02:24PM +0800, Icenowy Zheng wrote:
+On Tue, Aug 17, 2021 at 09:30:33PM -0700, Kees Cook wrote:
+> The original EHCI register struct used a trailing 0-element array for
+> addressing the N_PORTS-many available registers. However, after
+> commit a46af4ebf9ff ("USB: EHCI: define extension registers like normal ones")
+> the 0-element array started to overlap the USBMODE extension register.
 > 
+> To avoid future compile-time warnings about accessing indexes within a
+> 0-element array, rearrange the struct to actually describe the expected
+> layout (max 15 registers) with a union. All offsets remain the same, and
+> bounds checking becomes possible on accesses to port_status and hostpc.
 > 
-> 于 2021年8月18日 GMT+08:00 下午9:56:38, Greg Kroah-Hartman <gregkh@linuxfoundation.org> 写到:
-> >On Tue, Aug 17, 2021 at 02:00:33PM +0300, Heikki Krogerus wrote:
-> >> > >Why is it necessary to do discovery with data role swap in general?
-> >> > 
-> >> > I think it could be possible for devices to expose different altmode
-> >> > with different role.
-> >> 
-> >> OK. FWIW:
-> >> 
-> >> Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> >
-> >Is this conflicting with https://lore.kernel.org/r/20210816075449.2236547-1-kyletso@google.com ?
-> >
-> >Which of these two should I take, both?  Neither?
+> There are no binary differences, and struct offsets continue to match.
+
+Two comments...
+
+> ---
+>  include/linux/usb/ehci_def.h | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
 > 
-> Don't take this, it's against spec.
+> diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+> index 78e006355557..5398f571113b 100644
+> --- a/include/linux/usb/ehci_def.h
+> +++ b/include/linux/usb/ehci_def.h
+> @@ -45,6 +45,7 @@ struct ehci_caps {
+>  #define HCS_PORTROUTED(p)	((p)&(1 << 7))	/* true: port routing */
+>  #define HCS_PPC(p)		((p)&(1 << 4))	/* true: port power control */
+>  #define HCS_N_PORTS(p)		(((p)>>0)&0xf)	/* bits 3:0, ports on HC */
+> +#define HCS_N_PORTS_MAX		0xf		/* N_PORTS valid 0x1-0xF */
 
-Ok, now dropped.  What about the linked patch above?  Does that work for
-you instead?
+I would prefer to see this value in decimal.  It seems very odd to say 
+something like "The maximum number of ports is 0xf".
 
-thanks,
+>  
+>  	u32		hcc_params;      /* HCCPARAMS - offset 0x8 */
+>  /* EHCI 1.1 addendum */
+> @@ -126,8 +127,9 @@ struct ehci_regs {
+>  	u32		configured_flag;
+>  #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+>  
+> -	/* PORTSC: offset 0x44 */
+> -	u32		port_status[0];	/* up to N_PORTS */
+> +	union {
+> +		/* PORTSC: offset 0x44 */
+> +		u32	port_status[HCS_N_PORTS_MAX];
 
-greg k-h
+Please don't lose the second comment.
+
+>  /* EHCI 1.1 addendum */
+>  #define PORTSC_SUSPEND_STS_ACK 0
+>  #define PORTSC_SUSPEND_STS_NYET 1
+> @@ -164,28 +166,28 @@ struct ehci_regs {
+>  #define PORT_CSC	(1<<1)		/* connect status change */
+>  #define PORT_CONNECT	(1<<0)		/* device connected */
+>  #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
+> -
+> -	u32		reserved3[9];
+> -
+> -	/* USBMODE: offset 0x68 */
+> -	u32		usbmode;	/* USB Device mode */
+> +		struct {
+> +			u32	reserved3[9];
+> +			/* USBMODE: offset 0x68 */
+> +			u32	usbmode;	/* USB Device mode */
+> +		};
+>  #define USBMODE_SDIS	(1<<3)		/* Stream disable */
+>  #define USBMODE_BE	(1<<2)		/* BE/LE endianness select */
+>  #define USBMODE_CM_HC	(3<<0)		/* host controller mode */
+>  #define USBMODE_CM_IDLE	(0<<0)		/* idle state */
+> -
+> -	u32		reserved4[6];
+> +	};
+> +	u32		reserved4;
+>  
+>  /* Moorestown has some non-standard registers, partially due to the fact that
+>   * its EHCI controller has both TT and LPM support. HOSTPCx are extensions to
+>   * PORTSCx
+>   */
+>  	/* HOSTPC: offset 0x84 */
+> -	u32		hostpc[0];	/* HOSTPC extension */
+> +	u32		hostpc[HCS_N_PORTS_MAX];
+>  #define HOSTPC_PHCD	(1<<22)		/* Phy clock disable */
+>  #define HOSTPC_PSPD	(3<<25)		/* Port speed detection */
+>  
+> -	u32		reserved5[17];
+> +	u32		reserved5[2];
+>  
+>  	/* USBMODE_EX: offset 0xc8 */
+>  	u32		usbmode_ex;	/* USB Device mode extension */
+
+Otherwise okay.
+
+Alan Stern
