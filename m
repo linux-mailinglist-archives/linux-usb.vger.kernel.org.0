@@ -2,125 +2,70 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 217563F0BD2
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 21:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 494693F0BE7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 21:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232676AbhHRTd1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 15:33:27 -0400
-Received: from smtp13.smtpout.orange.fr ([80.12.242.135]:20296 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S233285AbhHRTd0 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 15:33:26 -0400
-Received: from pop-os.home ([90.126.253.178])
-        by mwinf5d76 with ME
-        id j7Yq250033riaq2037YqsC; Wed, 18 Aug 2021 21:32:50 +0200
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 18 Aug 2021 21:32:50 +0200
-X-ME-IP: 90.126.253.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     alcooperx@gmail.com, balbi@kernel.org, gregkh@linuxfoundation.org,
-        f.fainelli@gmail.com
-Cc:     linux-usb@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 2/2] usb: bdc: Fix a resource leak in the error handling path of 'bdc_probe()'
-Date:   Wed, 18 Aug 2021 21:32:49 +0200
-Message-Id: <f8a4a6897deb0c8cb2e576580790303550f15fcd.1629314734.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <0c5910979f39225d5d8fe68c9ab1c147c68ddee1.1629314734.git.christophe.jaillet@wanadoo.fr>
-References: <0c5910979f39225d5d8fe68c9ab1c147c68ddee1.1629314734.git.christophe.jaillet@wanadoo.fr>
+        id S233111AbhHRTjn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 15:39:43 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:49719 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232701AbhHRTjl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 15:39:41 -0400
+Received: by mail-il1-f200.google.com with SMTP id a15-20020a92444f000000b0022473393120so1861959ilm.16
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 12:39:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=hi/nmEZIRsCU9682LSqAQCuI4L5ah/9l7ujImEmLeeI=;
+        b=PLwniZfhFqRZtzkn3xfdAwjblV8ikcAnmHaZPtUWsQybX7PSotuLUFek9SXlbx9/ch
+         11hMBMpyteWxMcHXqHCbdSsnMrQYbT99ievSuDD/IH3UaHXnWdm5La7fNw3P3KbLaCdq
+         m+StJzehcxKWGVtfoog/8vl1eNqhRKzbYaKt97YRk39LXBKnvAUQNTpRLp69I7NuUVuq
+         avFaYQKNFTAqvWBrIHsLmHZxRpbQwVAncBtAUqcPBV3gNw7WxvUxH4SIiz/eFB6BjZsH
+         3Mm8uIqOuHpDQg2qlP4I35neZnLFEqQRuPfscXHPejskgMD5Kr2I9naacPvqeKxGKXaG
+         znFw==
+X-Gm-Message-State: AOAM532R7kEQ3kO9G0kaou0IDoI+1jHtuCqNS22/bwxeHraH+LcisUpP
+        k4b/0fkdfmnqhO42fkZ7KUUemzKoRtIYQPnYa7N1tHXJfZdD
+X-Google-Smtp-Source: ABdhPJx+1qXNY2DPc9vzm8b2fF7TnTSG/qFJQOgpQNBixAmFmzc3OdBX05rj5B1j31EsG5oYRsk82a3qx1lW1+loaoGhr+7Ii+oA
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:da11:: with SMTP id z17mr7248141ilm.176.1629315546323;
+ Wed, 18 Aug 2021 12:39:06 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 12:39:06 -0700
+In-Reply-To: <000000000000d77b6505c767b8f8@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005da16905c9da9643@google.com>
+Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
+From:   syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, dvyukov@google.com,
+        gregkh@linuxfoundation.org, jikos@kernel.org, johan@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mkubecek@suse.cz,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-If an error occurs after a successful 'clk_prepare_enable()' call, it must
-be undone by a corresponding 'clk_disable_unprepare()' call.
-This call is already present in the remove function.
+syzbot has bisected this issue to:
 
-Add this call in the error handling path and reorder the code so that the
-'clk_prepare_enable()' call happens later in the function.
-The goal is to have as much managed resources functions as possible
-before the 'clk_prepare_enable()' call in order to keep the error handling
-path simple.
+commit 5cc59c418fde9d02859996707b9d5dfd2941c50b
+Author: Alan Stern <stern@rowland.harvard.edu>
+Date:   Sat May 22 02:16:23 2021 +0000
 
-While at it, remove the now unneeded 'clk' variable.
+    USB: core: WARN if pipe direction != setup packet direction
 
-Fixes: c87dca047849 ("usb: bdc: Add clock enable for new chips with a separate BDC clock")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-Review with care.
-I don't like shuffling code like that because of possible side effect.
-Moving the code related to this clk looks fine to me, but who knows...
----
- drivers/usb/gadget/udc/bdc/bdc_core.c | 27 +++++++++++++--------------
- 1 file changed, 13 insertions(+), 14 deletions(-)
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=126f1731300000
+start commit:   794c7931a242 Merge branch 'linus' of git://git.kernel.org/..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=116f1731300000
+console output: https://syzkaller.appspot.com/x/log.txt?x=166f1731300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=96f0602203250753
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b57a46bf1801ce2a2ca
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae58ce300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d71731300000
 
-diff --git a/drivers/usb/gadget/udc/bdc/bdc_core.c b/drivers/usb/gadget/udc/bdc/bdc_core.c
-index 251db57e51fa..fa1a3908ec3b 100644
---- a/drivers/usb/gadget/udc/bdc/bdc_core.c
-+++ b/drivers/usb/gadget/udc/bdc/bdc_core.c
-@@ -488,27 +488,14 @@ static int bdc_probe(struct platform_device *pdev)
- 	int irq;
- 	u32 temp;
- 	struct device *dev = &pdev->dev;
--	struct clk *clk;
- 	int phy_num;
- 
- 	dev_dbg(dev, "%s()\n", __func__);
- 
--	clk = devm_clk_get_optional(dev, "sw_usbd");
--	if (IS_ERR(clk))
--		return PTR_ERR(clk);
--
--	ret = clk_prepare_enable(clk);
--	if (ret) {
--		dev_err(dev, "could not enable clock\n");
--		return ret;
--	}
--
- 	bdc = devm_kzalloc(dev, sizeof(*bdc), GFP_KERNEL);
- 	if (!bdc)
- 		return -ENOMEM;
- 
--	bdc->clk = clk;
--
- 	bdc->regs = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(bdc->regs))
- 		return PTR_ERR(bdc->regs);
-@@ -545,10 +532,20 @@ static int bdc_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	bdc->clk = devm_clk_get_optional(dev, "sw_usbd");
-+	if (IS_ERR(bdc->clk))
-+		return PTR_ERR(bdc->clk);
-+
-+	ret = clk_prepare_enable(bdc->clk);
-+	if (ret) {
-+		dev_err(dev, "could not enable clock\n");
-+		return ret;
-+	}
-+
- 	ret = bdc_phy_init(bdc);
- 	if (ret) {
- 		dev_err(bdc->dev, "BDC phy init failure:%d\n", ret);
--		return ret;
-+		goto disable_clk;
- 	}
- 
- 	temp = bdc_readl(bdc->regs, BDC_BDCCAP1);
-@@ -581,6 +578,8 @@ static int bdc_probe(struct platform_device *pdev)
- 	bdc_hw_exit(bdc);
- phycleanup:
- 	bdc_phy_exit(bdc);
-+disable_clk:
-+	clk_disable_unprepare(bdc->clk);
- 	return ret;
- }
- 
--- 
-2.30.2
+Reported-by: syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com
+Fixes: 5cc59c418fde ("USB: core: WARN if pipe direction != setup packet direction")
 
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
