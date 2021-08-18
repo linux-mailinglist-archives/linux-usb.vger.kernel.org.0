@@ -2,154 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D6F3EFEF4
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 10:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA513EFF24
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 10:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239781AbhHRIQ5 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 04:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S238260AbhHRIaz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 04:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239761AbhHRIQ4 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 04:16:56 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DF3C061764
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:16:22 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id j18so1627783ioj.8
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:16:22 -0700 (PDT)
+        with ESMTP id S238671AbhHRIay (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 04:30:54 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59406C0617AD
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:30:18 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id e9so1269463vst.6
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 01:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f48NsyL/6lBTgOt6O/gcWmcOZcZD8/9FqEZ4in00SX0=;
-        b=JUy67IxFGnoaupRUG2Efz9os2KiHbI3Mx1V3htAXK3kE3CTfoWWiptq8Yl+J5kQPhD
-         ahZrJTBKbibelEXbzzIiDGWVZbJzavqojQgQRanNAa/NLBRkXBvSKICbKh+kimp0d5Dn
-         QqidOVoEz/mhh9G6T+wW615f+g2PXMHz3AKR4P4n0LeSopeGqXNJwXP6/Zz65mkdY8i1
-         JUKDyEIJAo0sw3xwK3u2DhdAZ+n3ejksC1uZSLtXJpUeMTRyAWG8oYm1uwPSpp28ztaf
-         Yaei1fGBH1n5teTcSy+tOYN4sVgfaD29a88MLDVEs8RibeRv29OeYL6KB20ynX/7EJnG
-         pj6w==
+         :cc:content-transfer-encoding;
+        bh=IKqcflYMaSUyzwd/eHbHpOkvH7hAYsOOplnEzRxLbhU=;
+        b=R/YglmSTFalwgblF0J7z+xo4QD/viWueOMjtEA3qajPeKluQA8KyZlPIazxZCmQcOV
+         ypXroUN/dz8G8KIy2PndGeFR9trr2TXk1MLEpZYZHSdEPDIvmCIDK5BOf+7ryOnDMlAz
+         KKZOIcOvNnsfQADPruS78lcAX/NT/qxMC6OewVDoFYGt5hY5K9huXDQ6tsxV07Sxs/Du
+         uf/zCLpMusk1iMjpoom1MA3j5kIRz40ZYONDbw9Bk+/YXVmdr5o2bmiJpfJC1CERXXmo
+         E0BgAf1avWcJ6cYGmW6zCxZHRihbaxeLgDmifTSo359uCk7uScIh0CC8oShYygGDo0u/
+         CxTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f48NsyL/6lBTgOt6O/gcWmcOZcZD8/9FqEZ4in00SX0=;
-        b=GYTKfyijIo58RuNwNj8vw+sxSlWFhkfbKdEdGLDyPN3ofvLbqDvG1KMvWIJRZisWt5
-         9JamFvoncYF6i/ZD1RXAmTYyczMSy/ksSXDquKYrsRyd99Av3hCjnlcDeUEyJMUw9AH7
-         z2IK2NVkeTaCC0doRQn7/pScH6zEIkwKDc5aUjp7vv1Rn2w/0N3vN+olhzNFDIFNuWqI
-         HVV53YIFDUG2XqkMMDD3sn+1CxQvsonNOCbWWPzLbVXK7Vzik8VA5HXjruUnU6M/9evi
-         NoY53I/2Ln/y+bLvXwlN3+LEVq6c9zu04sWdf5Re0ueacBsefzSskqcobywzRkEIDHFp
-         tiNA==
-X-Gm-Message-State: AOAM533c3sp3sgftEo3bsBLFgEqne3rK5D0g7hZHLDl35ZwgI5N/bSFL
-        Px9JRlhMuuf8BAHrAidxeY0po9TYxjTAlYKFCXEiEw==
-X-Google-Smtp-Source: ABdhPJyNjC3MX+dxkWyWoTUqfpgFxU5x6fxv2FBDOVf1GsOPr00KpoZuui8RzZx80Qm1K1xtIezOZC0P3PulKjUy9xE=
-X-Received: by 2002:a6b:6a14:: with SMTP id x20mr6466949iog.177.1629274581427;
- Wed, 18 Aug 2021 01:16:21 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IKqcflYMaSUyzwd/eHbHpOkvH7hAYsOOplnEzRxLbhU=;
+        b=o3s4WdZOboe4BtVlV01gq9Go4UOkTQyydXKZCTJ5f6bkiVtVe+kTZWf1ZJzip7sGe6
+         qp9ZNkfMLMn5plYxtatsV9EoPfguGlQO1kSrgox2uJv/TwULj2TMLFNT2Zut8N+JlqmB
+         CJyGsQfaWhIGgl0kUyynHVb/FZBw5lKJ7J2qr9w8v9rHn3xCajey2BuQiy/kCQpH4iqd
+         ePH2cO3AGeTioO+CqbtkatFBkXIakv0vTl6jRN+n6ohSktKLDcGmj0hAA8Dnt/VtPFkS
+         thVXUIFHRMrpWkZN94l6q3FKWsIMC7XrW0t1KnTf1sJ+g2EiCz6QzOZDI8i07dzglp7J
+         f5bQ==
+X-Gm-Message-State: AOAM532TQvtn7x9dh3eGsrQKaexQ/ToOK2mkmpTvoXb+Ae52vqkxIKPd
+        4vdWoobAn3RSHpIP/MRVfI3AcFy0O+L10fcSnZJekQ==
+X-Google-Smtp-Source: ABdhPJwKrtdwLrtqnGeoY6XyZUUGVixFdE7Mg0poY1hljrcpole6+hd3NjZWSpGJ4mjLJUHBolVYDumnC7t4U+ynnmc=
+X-Received: by 2002:a67:3212:: with SMTP id y18mr6323760vsy.19.1629275417181;
+ Wed, 18 Aug 2021 01:30:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210813043131.833006-1-icenowy@aosc.io> <YRuDG78N2mB5w37p@kuha.fi.intel.com>
- <58034df4-f18c-ab3e-1fcc-dc85fc35320f@roeck-us.net> <CAGZ6i=1s9X58tOwoiGAxMkMVBTyGTjysOSe9bP8Q4WosmCtymw@mail.gmail.com>
-In-Reply-To: <CAGZ6i=1s9X58tOwoiGAxMkMVBTyGTjysOSe9bP8Q4WosmCtymw@mail.gmail.com>
-From:   Kyle Tso <kyletso@google.com>
-Date:   Wed, 18 Aug 2021 16:16:05 +0800
-Message-ID: <CAGZ6i=0d8vHjvR9o+KCvaFGkiY4MBp7SySxHrzYEBb0LhHkC1A@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tcpm: always rediscover when swapping DR
-To:     Guenter Roeck <linux@roeck-us.net>, Icenowy Zheng <icenowy@aosc.io>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+References: <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7> <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
+ <20210818035533.ieqkexltfvvf2p4n@vireshk-i7> <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
+ <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+In-Reply-To: <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 18 Aug 2021 10:29:40 +0200
+Message-ID: <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 4:02 PM Kyle Tso <kyletso@google.com> wrote:
+On Wed, 18 Aug 2021 at 08:27, Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Tue, Aug 17, 2021 at 11:13 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> On 18-08-21, 09:22, Dmitry Osipenko wrote:
+> > 18.08.2021 08:58, Viresh Kumar =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > > What about calling dev_pm_opp_set_rate(dev, clk_get_rate(dev)) here
+> > > instead ? That will work, right ? The advantage is it works without
+> > > any special routine to do so.
 > >
-> > On 8/17/21 2:36 AM, Heikki Krogerus wrote:
-> > > On Fri, Aug 13, 2021 at 12:31:31PM +0800, Icenowy Zheng wrote:
-> > >> Currently, TCPM code omits discover when swapping to gadget, and assume
-> > >> that no altmodes are available when swapping from gadget. However, we do
-> > >> send discover when we get attached as gadget -- this leads to modes to be
-> > >> discovered twice when attached as gadget and then swap to host.
-> > >>
-> > >> Always re-send discover when swapping DR, regardless of what change is
-> > >> being made; and because of this, the assumption that no altmodes are
-> > >> registered with gadget role is broken, and altmodes de-registeration is
-> > >> always needed now.
-> > >>
-> > >> Signed-off-by: Icenowy Zheng <icenowy@aosc.io>
-> > >> ---
-> > >>   drivers/usb/typec/tcpm/tcpm.c | 9 ++++-----
-> > >>   1 file changed, 4 insertions(+), 5 deletions(-)
-> > >>
-> > >> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > >> index b9bb63d749ec..ab6d0d51ee1c 100644
-> > >> --- a/drivers/usb/typec/tcpm/tcpm.c
-> > >> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > >> @@ -4495,15 +4495,14 @@ static void run_state_machine(struct tcpm_port *port)
-> > >>              tcpm_set_state(port, ready_state(port), 0);
-> > >>              break;
-> > >>      case DR_SWAP_CHANGE_DR:
-> > >> -            if (port->data_role == TYPEC_HOST) {
-> > >> -                    tcpm_unregister_altmodes(port);
-> > >> +            tcpm_unregister_altmodes(port);
-> > >> +            if (port->data_role == TYPEC_HOST)
-> > >>                      tcpm_set_roles(port, true, port->pwr_role,
-> > >>                                     TYPEC_DEVICE);
-> > >> -            } else {
-> > >> +            else
-> > >>                      tcpm_set_roles(port, true, port->pwr_role,
-> > >>                                     TYPEC_HOST);
-> > >> -                    port->send_discover = true;
-> > >> -            }
-> > >> +            port->send_discover = true;
-> > >>              tcpm_ams_finish(port);
-> > >>              tcpm_set_state(port, ready_state(port), 0);
-> > >>              break;
-> > >
-> > > Why is it necessary to do discovery with data role swap in general?
-> > >
-> > > thanks,
-> > >
+> > It will work, but a dedicated helper is nicer.
 > >
-> > Additional question: There are two patches pending related to DR_SWAP
-> > and discovery. Are they both needed, or do they both solve the same
-> > problem ?
+> > > I also wonder looking at your gr3d.c changes, you set a set-opp
+> > > helper, but the driver doesn't call set_opp_rate at all. Who calls it
+> > > ?
 > >
-> > Thanks,
-> > Guenter
+> > dev_pm_opp_sync() calls it from _set_opp().
 >
-> Hi, I just noticed this patch.
+> Okay, please use dev_pm_opp_set_rate() instead then. New helper just
+> adds to the confusion and isn't doing anything special apart from
+> doing clk_get_rate() for you.
 >
-> Part of this patch and part of my patch
-> https://lore.kernel.org/r/20210816075449.2236547-1-kyletso@google.com
-> are to solve the same problem that Discover_Identity is not sent in a
-> case where the port becomes UFP after DR_SWAP while in PD3.
+> > > And if it is all about just syncing the genpd core, then can the genp=
+d
+> > > core do something like what clk framework does? i.e. allow a new
+> > > optional genpd callback, get_performance_state() (just like
+> > > set_performance_state()), which can be called initially by the core t=
+o
+> > > get the performance to something other than zero. opp-set-rate is
+> > > there to set the performance state and enable the stuff as well.
+> > > That's why it looks incorrect in your case, where the function was
+> > > only required to be called once, and you are ending up calling it on
+> > > each resume. Limiting that with another local variable is bad as well=
+.
+> >
+> > We discussed variant with get_performance_state() previously and Ulf
+> > didn't like it either since it still requires to touch 'internals' of G=
+ENPD.
 >
-> The difference (for the DR_SWAP part) is that my patch does not set
-> the flag "send_discover" if the port becomes UFP after PD2 DR_SWAP.
-> That is because in PD2 Spec, UFP is not allowed to be the SVDM
-> Initiator.
->
+> Hmm, I wonder if that would be a problem since only genpd core is
+> going to call that routine anyway.
 
-"in PD2 Spec, UFP is not allowed to be the SVDM Initiator."
-Sorry this is not correct. The exception is for the cable discovery.
-But it doesn't matter here because tcpm.c doesn't support cable
-discovery.
+Me and Dmitry discussed adding a new genpd callback for this. I agreed
+that it seems like a reasonable thing to add, if he insists.
 
-thanks,
-Kyle
+The intent was to invoke the new callback from __genpd_dev_pm_attach()
+when the device has been attached to its genpd. This allows the
+callback, to invoke clk_get_rate() and then dev_pm_opp_set_rate(), to
+update the vote according to the current state of the HW.
 
-> This patch indeed solves another problem where
-> tcpm_unregister_altmodes should be called during PD3 DR_SWAP because
-> the port partner may return mode data in the latest Discover_Mode. For
-> the PD2 case, I don't think it needs to be called because PD2 DFP will
-> always return NAK for Discover_Mode. However it is fine because it is
-> safe to call tcpm_unregister_altmodes even if there is no mode data.
->
-> In fact, when I was tracing the code I found another bug. PD2 UFP is
-> not allowed to send Discover_Identity and Discover_Mode. I can send
-> another patch to address this problem.
->
-> thanks,
-> Kyle
+I am not sure if/why that approach seemed insufficient?
+
+Another option to solve the problem, I think, is simply to patch
+drivers to let them call dev_pm_opp_set_rate() during ->probe(), this
+should synchronize the HW state too.
+
+Dmitry, can you please elaborate on this?
+
+Kind regards
+Uffe
