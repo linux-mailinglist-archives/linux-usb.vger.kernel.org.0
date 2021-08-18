@@ -2,92 +2,74 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BB33EFA3E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 07:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D566E3EFA58
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 07:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238013AbhHRFkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 01:40:22 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35172 "EHLO mail.kernel.org"
+        id S237788AbhHRFtb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 01:49:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36832 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238103AbhHRFkP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 18 Aug 2021 01:40:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 13E0161029;
-        Wed, 18 Aug 2021 05:39:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629265181;
-        bh=EtIBL4nck6yS3y+rq79pT9mCLC3bvjYO+hQnPLk5ThE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S60Z4BDzLUbMnBdGBVbSnwufET+iJ+kHOPHNmlS04Qy7kLoYhoYJETBuvVh454+rm
-         s59j4s8IFK7gcIoexdKrq8Qj0jtRu+T2ZB7nt1OH+Iy7JbU2h7ubByiYYFZ/krBbQs
-         djRx51fhdmXLeZ1/fYVa5PfoawGeuoIFEpaYB9N4=
-Date:   Wed, 18 Aug 2021 07:39:37 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] usbip: give back URBs for unsent unlink requests
- during cleanup
-Message-ID: <YRydGRdPmOaiMWaY@kroah.com>
-References: <20210813182508.28127-1-mail@anirudhrb.com>
- <20210813182508.28127-2-mail@anirudhrb.com>
- <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
+        id S237618AbhHRFta (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Aug 2021 01:49:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 5514A61076
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 05:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629265736;
+        bh=Uu4+2tbWMZjPCvQnd2LuTBiryxEDZT6MEWyJXo4NC+4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=CH2redIXt93jOUgrY2tTVfmSrnqQhuahQ3aktApFj1IUdarY3dxrWqzWR2wj4Oct8
+         HWkMVkIGQ/+sUK2Bf8i71aUPKBPEiB7KMH+VIwRrsSuM0bN4hMN0gAHY73JZU/XBsR
+         N2J69vjAdMwM48D4kLIpeMRGGRlRVnjHrNxk7Eeia0QmNpQIvjN6qKwMU9nE1A53QH
+         BvoM6Azyl4FTIr5qcAL+lzZ1SN5hyuAnlr4BDcte6ZLCh7bDXebMhF51sj3/+W+9KQ
+         s5dnV3UVGKvdiIkn3vkrFTkMUoUGBT2Es+u4tQL8J7BsJmz0OmPt6FvkCt6L12Cinz
+         nTi2cqpq1N4tw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 516F960395; Wed, 18 Aug 2021 05:48:56 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Wed, 18 Aug 2021 05:48:56 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: chris.chiu@canonical.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-4RrWeXvgUf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 05:16:51PM -0600, Shuah Khan wrote:
-> On 8/13/21 12:25 PM, Anirudh Rayabharam wrote:
-> > In vhci_device_unlink_cleanup(), the URBs for unsent unlink requests are
-> > not given back. This sometimes causes usb_kill_urb to wait indefinitely
-> > for that urb to be given back. syzbot has reported a hung task issue [1]
-> > for this.
-> > 
-> > To fix this, give back the urbs corresponding to unsent unlink requests
-> > (unlink_tx list) similar to how urbs corresponding to unanswered unlink
-> > requests (unlink_rx list) are given back.
-> > 
-> > [1]: https://syzkaller.appspot.com/bug?id=08f12df95ae7da69814e64eb5515d5a85ed06b76
-> > 
-> > Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
-> > Tested-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
-> > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
-> > ---
-> >   drivers/usb/usbip/vhci_hcd.c | 26 ++++++++++++++++++++++++++
-> >   1 file changed, 26 insertions(+)
-> > 
-> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> > index 4ba6bcdaa8e9..6f3f374d4bbc 100644
-> > --- a/drivers/usb/usbip/vhci_hcd.c
-> > +++ b/drivers/usb/usbip/vhci_hcd.c
-> > @@ -957,8 +957,34 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
-> >   	spin_lock(&vdev->priv_lock);
-> >   	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
-> > +		struct urb *urb;
-> > +
-> > +		/* give back URB of unsent unlink request */
-> >   		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
-> 
-> I know this is an exiting one.
-> Let's make this pr_debug or remove it all together.
-> 
-> > +
-> > +		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
-> > +		if (!urb) {
-> > +			pr_info("the urb (seqnum %lu) was already given back\n",
-> > +				unlink->unlink_seqnum);
-> 
-> Let's make this pr_debug or remove it all together.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-As you have a struct device for all of these, please use dev_dbg() and
-friends, not pr_*(), for all of these.
+--- Comment #8 from Chris Chiu (chris.chiu@canonical.com) ---
+After lots of experiments, I agree the commit is not the root cause. Since =
+the
+commit applied on 5.11 has no problem, but it happens when applying this co=
+mmit
+on 5.4 base.
+The confusing part is, I can't reproduce it by enabling the dynamic debug on
+xhci-hcd even with the kernel 5.4 base. I'm still trying to find out what
+exactly commit cause the difference.
 
-thanks,
+--=20
+You may reply to this email to add a comment.
 
-greg k-h
+You are receiving this mail because:
+You are watching the assignee of the bug.=
