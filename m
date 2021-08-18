@@ -2,145 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A70FE3EFA82
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 08:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0413EFA8C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 08:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238043AbhHRGB0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 02:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43068 "EHLO
+        id S237998AbhHRGCq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237994AbhHRGBY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 02:01:24 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64427C0612E7
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 23:00:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id u15so1087085plg.13
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 23:00:37 -0700 (PDT)
+        with ESMTP id S238014AbhHRGCp (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 02:02:45 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E61EC061796
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 23:02:11 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id cp15-20020a17090afb8fb029017891959dcbso8230489pjb.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 23:02:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jSLfXbs59mtRstzo4Hk2BNosvMcxHU6QjHDYVbvhF94=;
-        b=IZiDZuRS1dgbax2OIM0qBL1zjf9wYlmKLTEfzJy5RuUwQu4eQ6Cqmnd2ZfQ9EnnS5E
-         Jr1fAcgL/JdFgkFZ89xjBuBPSORKqFiw+3e1WhRfjnkRI6XhhARyc2h+l5KPSXucToC1
-         5NtBgghBSCisOGicrsb9AX3gqpRGgB9wryJPh6wD220SUglcmvJcuJFjUggtI/Et9Qhq
-         yJL8iRXbbCgl4lZdUfxZejEJadW6CurxesAMbeYQ33LbfTu1KA1dNxOq6HMfw0FLGwDr
-         OcBg18AVZFD7ZTL3PphKIXIDGtjeF3qBwk12Pxl3ByoW3VLzL+hvaHjyLcAcizZ3cE8S
-         xzgA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:sender:from:date:message-id:subject:to;
+        bh=l8/06Pt7vp+QnEaozw4jU2IiSWTeFeipDK9alaB1bSQ=;
+        b=UJWk6KPwfxnvcfNg/0rqbxLQH9PCm1HvtRxYRLoFIcYVMZA2YW/2S88lTYXk0TsqWn
+         DjcL9tCRAwbEpVK9cNx/2snvfUao+aPJHaY61h9WmHcoVleZUBMrzRrqUvPaMUTwh39S
+         x1ViUcWqmz3qRbNSTYwVBlbYShRHewv+GCSs2BLE27hQ3QpV40SUqZugpEYrZ3hp/Ckh
+         +sUlNQIBaZ/PwqvDb+OsbrmGs46c67QEPNgeJ7noO8R9UfcGe4hV3XLLWBG5kzGrC+ID
+         XqKxxVIqcUGm5gScaQFfMjJZEQESUT7m0TLGCg6E/RjBKientZtDrcDF+cLCjFgtNll2
+         ud8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jSLfXbs59mtRstzo4Hk2BNosvMcxHU6QjHDYVbvhF94=;
-        b=onesDm89zpcvMYhnq/9Kt8CpuzT8nedloB8DLg4Qt1+26+mQkBKxyRc8wCTXP77Zxg
-         RCCMhXPFO4zd8AFP3b0InJ7HGcSwHQlXepJRf73wYGzp/Ql7aEuvqzZzv280lg6Jyruh
-         HD7NRk54SWweYtq3zBvx1HjKXoCcRw1GDEYpMvvkaFWbISaWkK1VHYNqAszEJMQSqySZ
-         EA/meX1/yd8hg/c92onJfw9Dl+67SUSzsjXrF9ec04OcADrEOmgU1iXlJG4w8KX6X8nu
-         A+QoCBZ+cfhblo2DLajqKCg6SZy3m59lwpidjTr/wqq3Wai820VX1J5GhucTe+zjf4Mp
-         ghQw==
-X-Gm-Message-State: AOAM531hguUAi+DodNITpE2rfjSJs8amJ6xjysk166awXGFgMCYUDmYb
-        LmzXaYBpvRrx49h7/T+fXRaYMA==
-X-Google-Smtp-Source: ABdhPJz6nHvt8tLhRUxNLQv5z93Dx/TL1iQrf7p3Xot0rNlhIhtJA6nFhb5bwd/3tPACvE5mJ3aZJA==
-X-Received: by 2002:a17:902:edc8:b029:12d:4a06:1c25 with SMTP id q8-20020a170902edc8b029012d4a061c25mr5874222plk.61.1629266436958;
-        Tue, 17 Aug 2021 23:00:36 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id 136sm6020660pge.77.2021.08.17.23.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Aug 2021 23:00:36 -0700 (PDT)
-Date:   Wed, 18 Aug 2021 11:30:34 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210818060034.tdu3ocbqlnao336u@vireshk-i7>
-References: <20210817012754.8710-2-digetx@gmail.com>
- <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
- <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
- <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
- <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
- <20210818043131.7klajx6drvvkftoc@vireshk-i7>
- <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7>
- <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+        h=x-gm-message-state:mime-version:reply-to:sender:from:date
+         :message-id:subject:to;
+        bh=l8/06Pt7vp+QnEaozw4jU2IiSWTeFeipDK9alaB1bSQ=;
+        b=WHrCwfwVsLu6s8jFhQxGa0auY/oUZzLdV3eaIFWV3cA/Nahn0xm+s05cBCLrAp/wJf
+         slBUe/2LA1HTnfsvE3e++IsswZ5yH1iLQc7QFIAFnNtml+uafIID87WUgFfaa50RqLcp
+         7T5md2rsPCO0K13QewNULKG1KyjtSAiOgdYBGVKKp4j6F29yNv5N30BNFKU/rNxgmm9h
+         o0hJKShjpCj8THzMi422JrNca0zZKH0Sk+iVbrtMsnEp1v4A9trjrswDUPlR6xKyTc2B
+         vVyGRQssO6GWUXefnqHVBaxVpIFj7XD1vC73YPv5HfgGCBaHXzpeeVd5ELIsKLPdADjS
+         Cuhw==
+X-Gm-Message-State: AOAM532rBs+y44xF2AAeCBmEOm9R9FYQ+kYUAk5uF1sbh+wvj8/sS8hA
+        +kEpnNHPBCbvJHx5MtA8BN6AZ0wsvJ+rkyOSpJw=
+X-Google-Smtp-Source: ABdhPJzVb9Uwo0ZOH7RNxKMUu4C8UauNzAF6+VoiNlUbA0TvQq2t7Q+ChL5WO5GemDV+HCldsa/DUjjvMRS/NVN+1T4=
+X-Received: by 2002:a17:90a:c28d:: with SMTP id f13mr7553839pjt.73.1629266530513;
+ Tue, 17 Aug 2021 23:02:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
-User-Agent: NeoMutt/20180716-391-311a52
+Reply-To: godwinppter@gmail.com
+Sender: sler002chry@gmail.com
+Received: by 2002:a17:90a:d812:0:0:0:0 with HTTP; Tue, 17 Aug 2021 23:02:09
+ -0700 (PDT)
+From:   Godwin Pete <godwinnpeter@gmail.com>
+Date:   Wed, 18 Aug 2021 08:02:09 +0200
+X-Google-Sender-Auth: Ib2rEpF_N-2Azu1fYCYV4LLKkro
+Message-ID: <CAD9ryRQYVQ1SaNOueemEfoNW8PUPKsux8J=a70cOWnEpCwkxzw@mail.gmail.com>
+Subject: For your information
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18-08-21, 11:28, Viresh Kumar wrote:
-> On 18-08-21, 08:21, Dmitry Osipenko wrote:
-> > Yes, GENPD will cache the perf state across suspend/resume and initially
-> > cached value is out of sync with h/w.
-> > 
-> > Nothing else. But let me clarify it all again.
-> 
-> Thanks for your explanation.
-> 
-> > Initially the performance state of all GENPDs is 0 for all devices.
-> > 
-> > The clock rate is preinitialized for all devices to a some default rate
-> > by clk driver, or by bootloader or by assigned-clocks in DT.
-> > 
-> > When device is rpm-resumed, the resume callback of a device driver
-> > enables the clock.
-> > 
-> > Before clock is enabled, the voltage needs to be configured in
-> > accordance to the clk rate.
-> > 
-> > So now we have a GENPD with pstate=0 on a first rpm-resume, which
-> > doesn't match the h/w configuration. Calling dev_pm_opp_sync() sets the
-> > pstate in accordance to the h/w config.
-> 
-> What about calling dev_pm_opp_set_rate(dev, clk_get_rate(dev)) here
-> instead ? That will work, right ? The advantage is it works without
-> any special routine to do so.
-> 
-> I also wonder looking at your gr3d.c changes, you set a set-opp
-> helper, but the driver doesn't call set_opp_rate at all. Who calls it
-> ?
-> 
-> And if it is all about just syncing the genpd core, then can the genpd
-> core do something like what clk framework does? i.e. allow a new
-> optional genpd callback, get_performance_state() (just like
-> set_performance_state()), which can be called initially by the core to
-> get the performance to something other than zero. opp-set-rate is
-> there to set the performance state and enable the stuff as well.
-> That's why it looks incorrect in your case, where the function was
-> only required to be called once, and you are ending up calling it on
-> each resume. Limiting that with another local variable is bad as well.
+Hi,
 
-Ulf, this last part is for you :)
+I just want to use this little opportunity to inform you about my
+success towards the transfer. I'm currently in India for an investment
+with part of my share, after completing the transfer with an Indian
+business man. But i will visit your country, next year. After the
+completion of my project here in India. Please, contact my secretary
+to send you the (ATM) card which I've already credited with the sum of
+($500,000.00). Just contact her to help you in receiving the (ATM)
+card. I've explained everything to her before my trip to India. This
+is what I can do for you because, you couldn't help in the transfer,
+but for the fact that you're the person whom I've contacted initially,
+for the transfer. I decided to give this ($500,000.00) as a
+compensation for being contacted initially for the transfer. I always
+try to make the difference, in dealing with people any time I come in
+contact with them. I'm also trying to show that I'm quite a different
+person from others whose may have a different purpose within them. I
+believe that you will render some help to me when I, will visit your
+country, for another investment there. So contact my secretary for the
+card, Her contact are as follows,
 
--- 
-viresh
+Full name: Mrs, Jovita Dumuije,
+Country: Burkina Faso
+Email: jovitadumuije@gmail.com
+
+Thanks, and hope for a good corporation with you in future.
+
+Godwin Peter,
