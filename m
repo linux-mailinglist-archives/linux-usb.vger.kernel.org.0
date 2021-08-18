@@ -2,58 +2,58 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 893113F0D70
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 23:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E72173F0DD7
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 00:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbhHRVgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 17:36:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28490 "EHLO
+        id S234266AbhHRWEP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 18:04:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([216.205.24.124]:41886 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234009AbhHRVgL (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 17:36:11 -0400
+        by vger.kernel.org with ESMTP id S234106AbhHRWEP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 18:04:15 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1629322535;
+        s=mimecast20190719; t=1629324219;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bAbD/eVam4u1SYhNVAX23sMHxA0bG00/tb6Wr76aYKM=;
-        b=Ak3tClSjTlSNz2fPEJuV/uMMZ8eVv+TBh9XW6rrEm1nRfQqUoea0bzb0TAve6RRcn8xj1V
-        7AvfTBmEpbmV445a4tm//ycvKcEi19XoVLOUxHbSqRd9mTVCJVwXr+koAbNaejdrPRB/ea
-        GddY7HNd58WhPHK2yQ3Aa2ZpKNO3M6c=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-192-Qrpu7wVjMbG1I_iO6-eiqw-1; Wed, 18 Aug 2021 17:35:33 -0400
-X-MC-Unique: Qrpu7wVjMbG1I_iO6-eiqw-1
-Received: by mail-qk1-f200.google.com with SMTP id g73-20020a379d4c000000b003d3ed03ca28so2683892qke.23
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
+        bh=oK2hoz1pNxOtprsAxgLW7HzE+yMICN6HsSK04cEBylI=;
+        b=U1M12Ef79gIzWfAIQ3nKTA5kV9J77YweVmr2XZeQqYPDhkfg47XtnhBmbV+pFsI9aCK4qW
+        U2atCuQs/Zh0SOhFeUYi5WFzUK7cJ4ejWAY/7kGLTZi5Mk5nZXP+LPiSPTeQ5a4glYODvi
+        oxPVlQQ305AT9dYNocq1IcpdZfO4Zew=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-501-oOmeJpRzOwSdS1HYNsSRfw-1; Wed, 18 Aug 2021 18:03:38 -0400
+X-MC-Unique: oOmeJpRzOwSdS1HYNsSRfw-1
+Received: by mail-qv1-f72.google.com with SMTP id u11-20020a0562141c0b00b0036201580785so3169160qvc.11
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 15:03:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
          :references:organization:user-agent:mime-version
          :content-transfer-encoding;
-        bh=bAbD/eVam4u1SYhNVAX23sMHxA0bG00/tb6Wr76aYKM=;
-        b=QwJ1Bmdj6KJeX3TtKNA4v8f2pPf1rc+SaMtkKuRgrx23YNAvaaw1BN3Yy3V0OhZaad
-         HslBeoxBkW9n0ynha66vVBrRn3PNVhDBM+JKZrS/j1bhUMLxllOJG4jVswECy4BJSh2W
-         bKc/uun13kpbANzq2+KF4XfsOXhSpdxt1HYu6MrKyDvQcg7QfbcyfoHzWG6HHLwsRne+
-         LtnDPyWgT/Gs6lmRwSHn7xG8Qn1sqF7kpgXFxFZw/62TxU8a2gw/Qv9VGOeQy58mf9bJ
-         8Xmk3u94cD0xlkjlK3ypptFEeLg1jctcrttfr8HSNHL0QzS2TMX8dOaIwtxf5m9UEXDn
-         k9nw==
-X-Gm-Message-State: AOAM530XzoxDxNH/1hk2p3FC35jq+mPHYxWGxfeoMG/hE1VVe7r/EfE9
-        wsd9j8FFn4KMqvT8mEQqgxLhyIcRd7ylWDa9UHfMnp+sspRHv1GlQ7D5twFQNfWijGoar0XuOUj
-        16qrip1csF1Uv9TCAX97z
-X-Received: by 2002:a37:a20f:: with SMTP id l15mr407106qke.24.1629322533474;
-        Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyab94WdMZQNzhRfZljOGpr8kFn3ZnlXdrrtrXo2AH/UwoRuFvOGPN7L8HPmN/brDTP7nCFjw==
-X-Received: by 2002:a37:a20f:: with SMTP id l15mr407091qke.24.1629322533300;
-        Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
+        bh=oK2hoz1pNxOtprsAxgLW7HzE+yMICN6HsSK04cEBylI=;
+        b=X45LmcPrbgaoHynm79lHtpZLkpKwg3xnk2BWD2jnJgUvqbXZTCn8lYYl5TIKDDI/qj
+         sIQPlVhFSEV5cZmwLdPEmv/0MyyToENqN+ziG++T/UvAvdwFJ8Q+jTRKuIT4JunUYNY3
+         zAEWMzJx8KJz9BOz1/FhMF8LDU8lfNuv0rofkgBMtF+adB+qMhl7rpcGldPaOgHofYhU
+         97EhPN6QN5ojVrqSOdo1nLN4hNxnFBN6DpQ4ARPIMVAlM/ApYDD8trELCFWW4QzU1Xki
+         h0uAZ0GLQ1uZ0SNbyeL8WfaB++TBOdPIcgruoFy6krhVA7KiHVSaQpCjaPfAtKjiOybN
+         1XZw==
+X-Gm-Message-State: AOAM531Fq7I0mlBtSEaF+nEmHgOMkmjvN6rxRGgKOpWp2VEjgfr0kfGr
+        qchL5UaAF2qlaFeVmx83JKLRwHdwYlN7o7Bsh8ivm6L+kKd79YT1NF1QPGLwVlWYInamDdcktTL
+        uycr5FeNsMqdKmeaU+87s
+X-Received: by 2002:a37:8a44:: with SMTP id m65mr520049qkd.72.1629324218131;
+        Wed, 18 Aug 2021 15:03:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzc1VLlBPcs2iR13iycuCWuLv6rS+CUis7hvVYcDzugjfZJrLwBK518fpIWhBKDSKQE00KYsg==
+X-Received: by 2002:a37:8a44:: with SMTP id m65mr520023qkd.72.1629324217953;
+        Wed, 18 Aug 2021 15:03:37 -0700 (PDT)
 Received: from Ruby.lyude.net (pool-108-49-102-102.bstnma.fios.verizon.net. [108.49.102.102])
-        by smtp.gmail.com with ESMTPSA id f7sm543379qko.52.2021.08.18.14.35.31
+        by smtp.gmail.com with ESMTPSA id b19sm620360qkc.7.2021.08.18.15.03.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 14:35:32 -0700 (PDT)
-Message-ID: <5fe94acc12b0f845cd55436056368c3bf9e48544.camel@redhat.com>
-Subject: Re: [PATCH 1/8] drm/connector: Give connector sysfs devices there
- own device_type
+        Wed, 18 Aug 2021 15:03:37 -0700 (PDT)
+Message-ID: <1f5f00e0042e48bc3420c3f17457e82d83e68567.camel@redhat.com>
+Subject: Re: [PATCH 0/8] drm + usb-type-c: Add support for out-of-band
+ hotplug notification (v4 resend)
 From:   Lyude Paul <lyude@redhat.com>
 To:     Hans de Goede <hdegoede@redhat.com>,
         Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
@@ -69,10 +69,9 @@ To:     Hans de Goede <hdegoede@redhat.com>,
 Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
         intel-gfx <intel-gfx@lists.freedesktop.org>,
         dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
-Date:   Wed, 18 Aug 2021 17:35:31 -0400
-In-Reply-To: <20210817215201.795062-2-hdegoede@redhat.com>
+Date:   Wed, 18 Aug 2021 18:03:35 -0400
+In-Reply-To: <20210817215201.795062-1-hdegoede@redhat.com>
 References: <20210817215201.795062-1-hdegoede@redhat.com>
-         <20210817215201.795062-2-hdegoede@redhat.com>
 Organization: Red Hat
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
@@ -82,123 +81,98 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+This looks great to me! Wasn't much to comment on here as most of this looks
+fine to me. For the whole series:
+
+Reviewed-by: Lyude Paul <lyude@redhat.com>
+
+This will be quite interesting to try getting working for nouveau
+
 On Tue, 2021-08-17 at 23:51 +0200, Hans de Goede wrote:
-> Give connector sysfs devices there own device_type, this allows us to
-> check if a device passed to functions dealing with generic devices is
-> a drm_connector or not.
+> Hi all,
 > 
-> A check like this is necessary in the drm_connector_acpi_bus_match()
-> function added in the next patch in this series.
+> Here is a rebased-resend of v4 of my patchset making DP over Type-C work on
+> devices where the Type-C controller does not drive the HPD pin on the GPU,
+> but instead we need to forward HPD events from the Type-C controller to
+> the DRM driver.
 > 
-> Tested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
->  drivers/gpu/drm/drm_sysfs.c | 50 +++++++++++++++++++++++++++----------
->  1 file changed, 37 insertions(+), 13 deletions(-)
+> Changes in v4 resend:
+> - Rebase on top of latest drm-tip
 > 
-> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
-> index 968a9560b4aa..f9d92bbb1f98 100644
-> --- a/drivers/gpu/drm/drm_sysfs.c
-> +++ b/drivers/gpu/drm/drm_sysfs.c
-> @@ -50,6 +50,10 @@ static struct device_type drm_sysfs_device_minor = {
->         .name = "drm_minor"
->  };
->  
-> +static struct device_type drm_sysfs_device_connector = {
-> +       .name = "drm_connector",
-> +};
-> +
->  struct class *drm_class;
->  
->  static char *drm_devnode(struct device *dev, umode_t *mode)
-> @@ -102,6 +106,11 @@ void drm_sysfs_destroy(void)
->         drm_class = NULL;
->  }
->  
-> +static void drm_sysfs_release(struct device *dev)
-> +{
-> +       kfree(dev);
-> +}
-> +
->  /*
->   * Connector properties
->   */
-> @@ -273,27 +282,47 @@ static const struct attribute_group
-> *connector_dev_groups[] = {
->  int drm_sysfs_connector_add(struct drm_connector *connector)
->  {
->         struct drm_device *dev = connector->dev;
-> +       struct device *kdev;
-> +       int r;
->  
->         if (connector->kdev)
->                 return 0;
->  
-> -       connector->kdev =
-> -               device_create_with_groups(drm_class, dev->primary->kdev, 0,
-> -                                         connector, connector_dev_groups,
-> -                                         "card%d-%s", dev->primary->index,
-> -                                         connector->name);
-> +       kdev = kzalloc(sizeof(*kdev), GFP_KERNEL);
-> +       if (!kdev)
-> +               return -ENOMEM;
-> +
-> +       device_initialize(kdev);
-> +       kdev->class = drm_class;
-> +       kdev->type = &drm_sysfs_device_connector;
-> +       kdev->parent = dev->primary->kdev;
-> +       kdev->groups = connector_dev_groups;
-> +       kdev->release = drm_sysfs_release;
-> +       dev_set_drvdata(kdev, connector);
-> +
-> +       r = dev_set_name(kdev, "card%d-%s", dev->primary->index, connector-
-> >name);
-> +       if (r)
-> +               goto err_free;
-> +
->         DRM_DEBUG("adding \"%s\" to sysfs\n",
->                   connector->name);
->  
-> -       if (IS_ERR(connector->kdev)) {
-> -               DRM_ERROR("failed to register connector device: %ld\n",
-> PTR_ERR(connector->kdev));
-> -               return PTR_ERR(connector->kdev);
-> +       r = device_add(kdev);
-> +       if (r) {
-> +               DRM_ERROR("failed to register connector device: %d\n", r);
-> +               goto err_free;
-
-Should probably be using drm_err() here since we have access to struct
-drm_device *
-
->         }
->  
-> +       connector->kdev = kdev;
-> +
->         if (connector->ddc)
->                 return sysfs_create_link(&connector->kdev->kobj,
->                                  &connector->ddc->dev.kobj, "ddc");
->         return 0;
-> +
-> +err_free:
-> +       put_device(kdev);
-> +       return r;
->  }
->  
->  void drm_sysfs_connector_remove(struct drm_connector *connector)
-> @@ -374,11 +403,6 @@ void drm_sysfs_connector_status_event(struct
-> drm_connector *connector,
->  }
->  EXPORT_SYMBOL(drm_sysfs_connector_status_event);
->  
-> -static void drm_sysfs_release(struct device *dev)
-> -{
-> -       kfree(dev);
-> -}
-> -
->  struct device *drm_sysfs_minor_alloc(struct drm_minor *minor)
->  {
->         const char *minor_str;
+> Changes in v4:
+> - Rebase on top of latest drm-tip
+> - Add forward declaration for struct fwnode_handle to drm_crtc_internal.h
+>   (fixes warning reported by kernel test robot <lkp@intel.com>)
+> - Add Heikki's Reviewed-by to patch 7 & 8
+> - Add Heikki's Tested-by to the series
+> 
+> Changes in v3:
+> - Base on top of latest drm-tip, which should fix the CI being unable to
+>   apply (and thus to test) the patches
+> - Make intel_acpi_assign_connector_fwnodes() take a ref on the fwnode
+>   it stores in connector->fwnode and have drm_connector_cleanup() put
+>   this reference
+> - Drop data argument from drm_connector_oob_hotplug_event()
+> - Make the Type-C DP altmode code only call
+> drm_connector_oob_hotplug_event()
+>   when the HPD bit in the status vdo changes
+> - Drop the platform/x86/intel_cht_int33fe: Correct "displayport" fwnode
+>   reference patch, this will be merged independently through the pdx86 tree
+> 
+> Changes in v2:
+> - Replace the bogus "drm/connector: Make the drm_sysfs connector->kdev
+>   device hold a reference to the connector" patch with:
+>   "drm/connector: Give connector sysfs devices there own device_type"
+>   the new patch is a dep for patch 2/9 see the patches
+> 
+> - Stop using a class-dev-iter, instead at a global connector list
+>   to drm_connector.c and use that to find the connector by the fwnode,
+>   similar to how we already do this in drm_panel.c and drm_bridge.c
+> 
+> - Make drm_connector_oob_hotplug_event() take a fwnode pointer as
+>   argument, rather then a drm_connector pointer and let it do the
+>   lookup itself. This allows making drm_connector_find_by_fwnode() a
+>   drm-internal function and avoids code outside the drm subsystem
+>   potentially holding on the a drm_connector reference for a longer
+>   period.
+> 
+> This series not only touches drm subsys files but it also touches
+> drivers/usb/typec/altmodes/typec_displayport.c, that file usually
+> does not see a whole lot of changes. So I believe it would be best
+> to just merge the entire series through drm-misc, Assuming we can
+> get an ack from Greg for merging the typec_displayport.c changes
+> this way.
+> 
+> Regards,
+> 
+> Hans
+> 
+> Hans de Goede (7):
+>   drm/connector: Give connector sysfs devices there own device_type
+>   drm/connector: Add a fwnode pointer to drm_connector and register with
+>     ACPI (v2)
+>   drm/connector: Add drm_connector_find_by_fwnode() function (v3)
+>   drm/connector: Add support for out-of-band hotplug notification (v3)
+>   drm/i915/dp: Add support for out-of-bound hotplug events
+>   usb: typec: altmodes/displayport: Make dp_altmode_notify() more
+>     generic
+>   usb: typec: altmodes/displayport: Notify drm subsys of hotplug events
+> 
+> Heikki Krogerus (1):
+>   drm/i915: Associate ACPI connector nodes with connector entries (v2)
+> 
+>  drivers/gpu/drm/drm_connector.c              | 79 ++++++++++++++++++
+>  drivers/gpu/drm/drm_crtc_internal.h          |  2 +
+>  drivers/gpu/drm/drm_sysfs.c                  | 87 +++++++++++++++++---
+>  drivers/gpu/drm/i915/display/intel_acpi.c    | 46 +++++++++++
+>  drivers/gpu/drm/i915/display/intel_acpi.h    |  3 +
+>  drivers/gpu/drm/i915/display/intel_display.c |  1 +
+>  drivers/gpu/drm/i915/display/intel_dp.c      | 12 +++
+>  drivers/usb/typec/altmodes/Kconfig           |  1 +
+>  drivers/usb/typec/altmodes/displayport.c     | 58 ++++++++-----
+>  include/drm/drm_connector.h                  | 25 ++++++
+>  10 files changed, 279 insertions(+), 35 deletions(-)
+> 
 
 -- 
 Cheers,
