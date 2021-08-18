@@ -2,125 +2,182 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C050B3EF7ED
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 04:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFA23EF826
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 04:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236456AbhHRCIl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 22:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
+        id S236986AbhHRCoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 22:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233380AbhHRCId (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 22:08:33 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21E6C061764
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:07:59 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id x7so2100037ljn.10
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:07:59 -0700 (PDT)
+        with ESMTP id S235464AbhHRCoS (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 22:44:18 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B98C061764
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:43:37 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id j12-20020a17090aeb0c00b00179530520b3so8019792pjz.0
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:43:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=frsonC/Eett9csYV4NWcg000UCHWgHysbHKKbFRcAPM=;
-        b=r6QK5pDwDxCALDuBC5OmNKFOoQLgfM28pO4A9zLleI4HWI87x6TQlJVMwLwB81IZIk
-         wxghMeJMnHbQL2BiZU1+knJpeRMjYg25mBp08MBiZWtvinVZ4WpJZ+rPMRTsur1g/O5L
-         0BVdNrOLh0izDsukGVY3eIdzO2IBz8kzVEhmOxBKkp/pTzfgai0Du/dWerNVR6KrhhCX
-         xoPBMVXk3O2pgUtg9g00ox4QGBGhC5BnmsgLwVmxFfZFbO1XatJ1yuCjP0pPOb325RzE
-         5UDo6bDa5CeyRqTh7hpPPwEGZML2NUUyNqLdtbte5y2isrOTbytPAiN2uj2siVFjVuCm
-         MaBQ==
+         :cc:content-transfer-encoding;
+        bh=IdX62Qy1ac9xod4fIunCnDc2laglCBN/1fg/fcapW7I=;
+        b=G6tJIDNDlZydQbdTY2UVKCARnR0cLR1jeU/0tSmRwID/hjR9YhYy5LOmm5/F9bq1uW
+         qfPDBB3+IufGPZoTw7UhHEeYTi7OMB7dSK9c5x7RHgdS71Ij/33jgOe1S/lda7Z6O8pQ
+         L7LYM4eS0atmpRtU/sYu/tWSgx3FYDiNIA6X4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=frsonC/Eett9csYV4NWcg000UCHWgHysbHKKbFRcAPM=;
-        b=jVl7BD/WDKDQGJSKIv5Ls7GJrL+55ZVA1f1ujvmppt7WZIRsEeFRaLqrneJOKGhA4T
-         SMVnxEU13z/de6ZmFpHi2KRaU/9qlFdo/iy2m3CDNbTpYD6BXsGofrPaQ2Lv7g9oeC5r
-         T92XOwUoSkXOc7uX20leGeUF/ZWjhdCUh7soYINUA6WYGUOIzCMhKhLU6fSJZyXlP/1n
-         eidf8hXmt1FZSiUnG1tEqXO1tD91m0i58zBOlP4062a+2SoUpDg45cuP2nCqidfEm2zp
-         rl02QdVI+R6XjMISPyINkps+yR5HGRw4dsSFUfyzfXq51Ryk7nFwV2HBOZB5A9jSc9xX
-         TXKw==
-X-Gm-Message-State: AOAM533rmrDv8FgxXMTvhvuUYdTlCK5S3Cc2zHZo/atzn6YOyUeAfH/N
-        FfUl0Ot1FFLeZgzKZk127+2nwPInpPdHpR1oZOqKpQ==
-X-Google-Smtp-Source: ABdhPJwy0mkKD+Va1uUzL5UfbLvKL4cSsu4kTJB8GdDZeuIfSF4qBxC2K0FtRr1/AHPhK5v5wo+Aem1CJLtFD8RLs4w=
-X-Received: by 2002:a2e:b5ae:: with SMTP id f14mr5861806ljn.170.1629252477985;
- Tue, 17 Aug 2021 19:07:57 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=IdX62Qy1ac9xod4fIunCnDc2laglCBN/1fg/fcapW7I=;
+        b=R2lFNj4tn3+pgoOWb/pg8Crd1ZTHf7Wr5hECivbdLT4Zf3IUoUdTMFYgspz4PxO6RH
+         Pjb3jZ5+Y9Iw8Cyww0z4A9JMpRu6PxFjL1eJl1vYZzoUU0Av++0z30HYssY+hLK6aM4T
+         hpEWCrIs2rjMbf7kUChRFEMWSeF8MbMN4G3fkUgRbTm2WyaiWP68GOol0KyHBhwCYaw9
+         hhJ2/zZOjDbbCcdA0cXTNtFB69+CCtmo2zCqZutz+ozO5qBHubPi3MPXQ6l80ihLFX+8
+         JGQBbIEsb0MtPlnooCI9k0yxL7YARP4c0pFkYEth77Fs3yrkLmVhi0sgLBFAztrtE1Tv
+         TepA==
+X-Gm-Message-State: AOAM530fu53kShwwPI99oAUTQ54aJUtbgEYWKUOI71At0Y5r03VIiBGt
+        /YXhjKHZ7t9SUuPSvOhY0+VOJk3gi31MO3646RTVCw==
+X-Google-Smtp-Source: ABdhPJwgboGY7D2y/Zi68e8tvtNReZvQqvGbrT7qKSNk+cE6BASGnMkYk2/EYNENuEnG5CXBjupeV5V6s5a3ZKXxDgU=
+X-Received: by 2002:a17:90b:4905:: with SMTP id kr5mr6634228pjb.112.1629254616776;
+ Tue, 17 Aug 2021 19:43:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <20210812082635.12924-1-jackp@codeaurora.org> <20210818012859.GB30805@jackp-linux.qualcomm.com>
-In-Reply-To: <20210818012859.GB30805@jackp-linux.qualcomm.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 17 Aug 2021 19:07:46 -0700
-Message-ID: <CALAqxLUzyUzvT1x6K0w+Cdem5L00Mb90uvcvJT_CS+E8VxxV8A@mail.gmail.com>
-Subject: Re: [RFT][PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
-To:     Jack Pham <jackp@codeaurora.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Ray Chi <raychi@google.com>, Ferry Toth <ftoth@exalondelft.nl>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>
+References: <20210809165904.RFC.1.I5165a4a8da5cac23c9928b1ec3c3a1a7383b7c23@changeid>
+ <YRDxTodNNqtnpPpn@kroah.com> <CAATdQgDSCzZtiDSQk94CYHfSb9Mq28OH7-RdaTZNv3oPrW3nkQ@mail.gmail.com>
+ <7b48f4c132a8b4b3819282e961fbe8b3ed753069.camel@mediatek.com>
+ <CAATdQgD1paUUmWhiLVq-+zq0V6=RTJw89ggk=R6cBUZO+5dB-Q@mail.gmail.com> <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
+In-Reply-To: <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
+From:   Ikjoon Jang <ikjn@chromium.org>
+Date:   Wed, 18 Aug 2021 10:43:25 +0800
+Message-ID: <CAATdQgC_aukAA3-=cuiOAQGzu_Ztvo4BsMbRv2hCGZpUeOAJVg@mail.gmail.com>
+Subject: Re: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
+To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 17, 2021 at 6:29 PM Jack Pham <jackp@codeaurora.org> wrote:
+Hi Chunfeng,
+
+On Thu, Aug 12, 2021 at 7:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
+<Chunfeng.Yun@mediatek.com> wrote:
 >
-> On Thu, Aug 12, 2021 at 01:26:35AM -0700, Jack Pham wrote:
-> > On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
-> > DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
-> > field (bit 31) which when enabled allows the controller in device
-> > mode to treat USB 2.0 L1 LPM & L2 events separately.
+> On Thu, 2021-08-12 at 17:31 +0800, Ikjoon Jang wrote:
+> > HI,
 > >
-> > After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
-> > events") the controller will now receive events (and therefore
-> > interrupts) for every state change when entering/exiting either
-> > L1 or L2 states.  Since L1 is handled entirely by the hardware
-> > and requires no software intervention, there is no need to even
-> > enable these events and unnecessarily notify the gadget driver.
-> > Enable the aforementioned bit to help reduce the overall interrupt
-> > count for these L1 events that don't need to be handled while
-> > retaining the events for full L2 suspend/wakeup.
+> > On Wed, Aug 11, 2021 at 5:02 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
+=B0)
+> > <Chunfeng.Yun@mediatek.com> wrote:
+> > >
+> > > On Mon, 2021-08-09 at 17:42 +0800, Ikjoon Jang wrote:
+> > > > On Mon, Aug 9, 2021 at 5:11 PM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > On Mon, Aug 09, 2021 at 04:59:29PM +0800, Ikjoon Jang wrote:
+> > > > > > xhci-mtk has 64 slots for periodic bandwidth calculations and
+> > > > > > each
+> > > > > > slot represents byte budgets on a microframe. When an
+> > > > > > endpoint's
+> > > > > > allocation sits on the boundary of the table, byte budgets'
+> > > > > > slot
+> > > > > > should be rolled over but the current implementation doesn't.
+> > > > > >
+> > > > > > This patch applies a 6 bits mask to the microframe index to
+> > > > > > handle
+> > > > > > its rollover 64 slots and prevent out-of-bounds array access.
+> > > > > >
+> > > > > > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  drivers/usb/host/xhci-mtk-sch.c | 79 +++++++++------------
+> > > > > > ----
+> > > > > > --------
+> > > > > >  drivers/usb/host/xhci-mtk.h     |  1 +
+> > > > > >  2 files changed, 23 insertions(+), 57 deletions(-)
+> > > > >
+> > > > > Why is this "RFC"?  What needs to be addressed in this change
+> > > > > before it
+> > > > > can be accepted?
+> > > >
+> > > > sorry, I had to mention why this is RFC:
+> > > >
+> > > > I simply don't know about the details of the xhci-mtk internals.
+> > > > It was okay from my tests with mt8173 and I think this will be
+> > > > harmless
+> > > > as this is "better than before".
+> > > >
+> > > > But when I removed get_esit_boundary(), I really have no idea why
+> > > > it was there. I'm wondering if there was another reason of that
+> > > > function
+> > > > other than just preventing out-of-bounds. Maybe chunfeng can
+> > > > answer
+> > > > this?
+> > >
+> > > We use @esit to prevent out-of-bounds array access. it's not a
+> > > ring,
+> > > can't insert out-of-bounds value into head slot.
+> >
+> > Thanks, so that function was only for out-of-bounds array access.
+> > then I think we just can remove that function and use it as a ring.
+> > Can you tell me _why_ it can't be used as a ring?
+> Treat it as a period, roll over slot equals to put it into the next
+> period.
 >
-> Hi folks in To:
+> >
+> > I think a transaction (e.g. esit_boundary =3D 7) can start its first
+> > SSPLIT
+> > from Y_7 (offset =3D 7). But will that allocation be matched with this?
+> >
+> > -               if ((offset + sch_ep->num_budget_microframes) >
+> > esit_boundary)
+> > -                       break;
+> >
+> > I mean I'm not sure why this is needed.
+> Prevent out-of-bounds.
+
+If it was for preventing drivers from out-of-bound array access,
+I couldn't find any reasons why we cannot remove the above lines.
+So can I know if it was just for preventing xhci-mtk drivers from
+out-of-bounds array access?
+
+If xhci-mtk HC itself can continue the transaction from Y_7 to (Y+1)_n;
+including the case of Y=3D=3D63, I think it's just okay to rollover to (Y+1=
+).
+
+If it's prohibited by xhci-mtk hw, or if you think this patch is not
+allowed by any other reasons, can you please  tell me what
+kinds of problems can happen with this patch?
+
+Otherwise, please consider minimizing the bw constraints from
+xhci-mtk-sch on your side. Note that we're still having other usb
+audio headsets which cannot be configured with xhci-mtk
+even with this patch.
+
+Thanks.
+
 >
-> I'd like to request if any of you could help test this patch on your
-> boards to help make sure it doesn't cause any regressions since I know
-> some of the recent dwc3 patches from Qualcomm have been found to break
-> other devices :(. So I'm hoping to avoid that even for a patch as
-> small as this.
+> >
+> > Until now, I couldn't find a way to accept the USB audio headset
+> > with a configuration of { INT-IN 64 + ISOC-OUT 384 + ISOC-IN 192 }
+> > without this patch.
+> what is the interval value of each endpoint?
 >
-> Hoping this could be tried out on boards/SoCs such as db845c, hikey960,
-> Exynos, the Intel "lakes", etc.  Ideally this needs validation with a
-> high-speed connection to a USB 3.x host, which increases the chances
-> that USB 2.0 Link Power Management is supported.
->
-> The overall goal of this patch is to eliminate events generated for
-> L1 entry/exit, so we should see a slight reduction in interrupt counts
-> when checking `grep dwc3 /proc/interrupts` for comparable traffic.
->
-
-I don't have a ton of before/after interrupts data, but I applied this
-and booted on both db845c and HiKey960 and haven't seen any negative
-effects so far.
-
-HiKey960 only connects USB2 to the usb-c gadget port so I can't really
-test with a USB3 host.
-
-On db845c, I'm also only seeing high-speed connections but I'm not
-sure if that's because the usb3 labeled port on my build server isn't
-really usb3, or if its due to something else being off (I did double
-check I've got a proper usb3 A/C cable, as a number of my cables are
-usb2 A/C).
-
-But I've pushed and pulled a few files, run logcat for awhile and
-unplugged and re-pluggeded the cable a few times on both devices and
-it seems ok to me.
-
-So for what it's worth:
-Tested-by: John Stultz <john.stultz@linaro.org> # for HiKey960 & db845c
-
-thanks
--john
+> >
+> > >
+> > > >
+> > > > Thanks!
+> > > >
+> > > > >
+> > > > > thanks,
+> > > > >
+> > > > > greg k-h
