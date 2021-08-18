@@ -2,286 +2,206 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BABD3F0D4A
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 23:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 893113F0D70
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 23:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233957AbhHRVZ1 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 17:25:27 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:14862 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbhHRVZY (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 17:25:24 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629321889; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: References: Cc: To: From:
- Subject: Sender; bh=5ncaglnngGjMuYBcl1ufFKPP3oN2ATppVrex/6JVMAU=; b=NGW7O02BIhtbZxm/2oSJQJFaaaiRipCwrVrFMVoGgHOTl5HtEnx/a//HzK8SQmeYWZxn8w/J
- jXOekNElzAck1ePV4PNvtFzgucIl2E7ejIfaQPYmbzkqP7/2VSPhlUBwGlzto92RRelXrN5T
- GiPctvxtb7LJ1mGZEeTx4xI2Hb4=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 611d7a933f14248172a2a5ca (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 18 Aug 2021 21:24:35
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id F3C01C43460; Wed, 18 Aug 2021 21:24:34 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.71.113.177] (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id C7D2DC4338F;
-        Wed, 18 Aug 2021 21:24:29 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C7D2DC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [RFC][PATCH] usb: dwc3: usb: dwc3: Force stop EP0 transfers
- during pullup disable
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jackp@codeauora.org" <jackp@codeauora.org>
-References: <1628648608-15239-1-git-send-email-wcheng@codeaurora.org>
- <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
- <3edf74ba-d167-0589-a7ab-827b57aa5d9c@codeaurora.org>
- <e07b7061-e9cf-3146-d115-56967298051e@synopsys.com>
- <c82ee8f3-a364-f96f-76ac-2b78c1dc0517@codeaurora.org>
- <f760fdcf-cd59-2c71-8c85-a4624620edeb@synopsys.com>
- <5be881a9-c79d-3f21-9e2e-173307fef734@codeaurora.org>
- <dc37617c-0fe4-47b3-cbd0-1d729ce6201a@synopsys.com>
- <00952bdc-acc2-f373-9286-6a8380e0b7d1@synopsys.com>
- <875yw7jkz6.fsf@kernel.org>
- <89b4d57c-f44a-ceff-45f3-a308e1d8d135@synopsys.com>
- <4c5ee1be-5cda-f56b-7f69-73124a16abba@codeaurora.org>
-Message-ID: <278cc2b5-9f0d-840e-372a-7949b79e858d@codeaurora.org>
-Date:   Wed, 18 Aug 2021 14:24:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S234040AbhHRVgL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 17:36:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28490 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234009AbhHRVgL (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 17:36:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1629322535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bAbD/eVam4u1SYhNVAX23sMHxA0bG00/tb6Wr76aYKM=;
+        b=Ak3tClSjTlSNz2fPEJuV/uMMZ8eVv+TBh9XW6rrEm1nRfQqUoea0bzb0TAve6RRcn8xj1V
+        7AvfTBmEpbmV445a4tm//ycvKcEi19XoVLOUxHbSqRd9mTVCJVwXr+koAbNaejdrPRB/ea
+        GddY7HNd58WhPHK2yQ3Aa2ZpKNO3M6c=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-192-Qrpu7wVjMbG1I_iO6-eiqw-1; Wed, 18 Aug 2021 17:35:33 -0400
+X-MC-Unique: Qrpu7wVjMbG1I_iO6-eiqw-1
+Received: by mail-qk1-f200.google.com with SMTP id g73-20020a379d4c000000b003d3ed03ca28so2683892qke.23
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=bAbD/eVam4u1SYhNVAX23sMHxA0bG00/tb6Wr76aYKM=;
+        b=QwJ1Bmdj6KJeX3TtKNA4v8f2pPf1rc+SaMtkKuRgrx23YNAvaaw1BN3Yy3V0OhZaad
+         HslBeoxBkW9n0ynha66vVBrRn3PNVhDBM+JKZrS/j1bhUMLxllOJG4jVswECy4BJSh2W
+         bKc/uun13kpbANzq2+KF4XfsOXhSpdxt1HYu6MrKyDvQcg7QfbcyfoHzWG6HHLwsRne+
+         LtnDPyWgT/Gs6lmRwSHn7xG8Qn1sqF7kpgXFxFZw/62TxU8a2gw/Qv9VGOeQy58mf9bJ
+         8Xmk3u94cD0xlkjlK3ypptFEeLg1jctcrttfr8HSNHL0QzS2TMX8dOaIwtxf5m9UEXDn
+         k9nw==
+X-Gm-Message-State: AOAM530XzoxDxNH/1hk2p3FC35jq+mPHYxWGxfeoMG/hE1VVe7r/EfE9
+        wsd9j8FFn4KMqvT8mEQqgxLhyIcRd7ylWDa9UHfMnp+sspRHv1GlQ7D5twFQNfWijGoar0XuOUj
+        16qrip1csF1Uv9TCAX97z
+X-Received: by 2002:a37:a20f:: with SMTP id l15mr407106qke.24.1629322533474;
+        Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyab94WdMZQNzhRfZljOGpr8kFn3ZnlXdrrtrXo2AH/UwoRuFvOGPN7L8HPmN/brDTP7nCFjw==
+X-Received: by 2002:a37:a20f:: with SMTP id l15mr407091qke.24.1629322533300;
+        Wed, 18 Aug 2021 14:35:33 -0700 (PDT)
+Received: from Ruby.lyude.net (pool-108-49-102-102.bstnma.fios.verizon.net. [108.49.102.102])
+        by smtp.gmail.com with ESMTPSA id f7sm543379qko.52.2021.08.18.14.35.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Aug 2021 14:35:32 -0700 (PDT)
+Message-ID: <5fe94acc12b0f845cd55436056368c3bf9e48544.camel@redhat.com>
+Subject: Re: [PATCH 1/8] drm/connector: Give connector sysfs devices there
+ own device_type
+From:   Lyude Paul <lyude@redhat.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org
+Date:   Wed, 18 Aug 2021 17:35:31 -0400
+In-Reply-To: <20210817215201.795062-2-hdegoede@redhat.com>
+References: <20210817215201.795062-1-hdegoede@redhat.com>
+         <20210817215201.795062-2-hdegoede@redhat.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-In-Reply-To: <4c5ee1be-5cda-f56b-7f69-73124a16abba@codeaurora.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh/Felipe,
-
-On 8/16/2021 12:13 PM, Wesley Cheng wrote:
-> Hi Thinh,
+On Tue, 2021-08-17 at 23:51 +0200, Hans de Goede wrote:
+> Give connector sysfs devices there own device_type, this allows us to
+> check if a device passed to functions dealing with generic devices is
+> a drm_connector or not.
 > 
-> On 8/15/2021 5:33 PM, Thinh Nguyen wrote:
->> Felipe Balbi wrote:
->>>
->>> Hi,
->>>
->>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>>>>>>>>> If this occurs, then the entire pullup disable routine is skipped and
->>>>>>>>>>>> proper cleanup and halting of the controller does not complete.
->>>>>>>>>>>> Instead of returning an error (which is ignored from the UDC
->>>>>>>>>>>> perspective), do what is mentioned in the comments and force the
->>>>>>>>>>>> transaction to complete and put the ep0state back to the SETUP phase.
->>>>>>>>>>>>
->>>>>>>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>>>>>>>>>> ---
->>>>>>>>>>>>  drivers/usb/dwc3/ep0.c    | 4 ++--
->>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 6 +++++-
->>>>>>>>>>>>  drivers/usb/dwc3/gadget.h | 3 +++
->>>>>>>>>>>>  3 files changed, 10 insertions(+), 3 deletions(-)
->>>>>>>>>>>>
->>>>>>>>>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>> index 6587394..abfc42b 100644
->>>>>>>>>>>> --- a/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>> +++ b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>> @@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>>>>>>>>>>>  	return ret;
->>>>>>>>>>>>  }
->>>>>>>>>>>>  
->>>>>>>>>>>> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>>  {
->>>>>>>>>>>>  	struct dwc3_ep		*dep;
->>>>>>>>>>>>  
->>>>>>>>>>>> @@ -1073,7 +1073,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->>>>>>>>>>>>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
->>>>>>>>>>>>  }
->>>>>>>>>>>>  
->>>>>>>>>>>> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>>  {
->>>>>>>>>>>>  	struct dwc3_gadget_ep_cmd_params params;
->>>>>>>>>>>>  	u32			cmd;
->>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>> index 54c5a08..a0e2e4d 100644
->>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>> @@ -2437,7 +2437,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>>>>>>>>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
->>>>>>>>>>>>  		if (ret == 0) {
->>>>>>>>>>>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
->>>>>>>>>>>> -			return -ETIMEDOUT;
->>>>>>>>>>>> +			spin_lock_irqsave(&dwc->lock, flags);
->>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[0]);
->>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
->>>>>>>>>>>
->>>>>>>>>>> End transfer command takes time, need to wait for it to complete before
->>>>>>>>>>> issuing Start transfer again. Also, why restart again when it's about to
->>>>>>>>>>> be disconnected.
->>>>>>>>>>
->>>>>>>>>> I can try without restarting it again, and see if that works.  Instead
->>>>>>>>>> of waiting for the command complete event, can we set the ForceRM bit,
->>>>>>>>>> similar to what we do for dwc3_remove_requests()?
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> ForceRM=1 means that the controller will ignore updating the TRBs
->>>>>>>>> (including not clearing the HWO and remain transfer size). The driver
->>>>>>>>> still needs to wait for the command to complete before issuing Start
->>>>>>>>> Transfer command. Otherwise Start Transfer won't go through. If we know
->>>>>>>>> that we're not going to issue Start Transfer any time soon, then we may
->>>>>>>>> be able to get away with ignoring End Transfer command completion.
->>>>>>>>>
->>>>>>>>
->>>>>>>> I see.  Currently, in the place that we do use
->>>>>>>> dwc3_ep0_end_control_data(), its followed by
->>>>>>>> dwc3_ep0_stall_and_restart() which would execute start transfer.  For
->>>>>>>
->>>>>>> That doesn't look right. You can try to see if it can recover from a
->>>>>>> control write request. Often time we do control read and not write.
->>>>>>> (i.e. try to End Transfer and immediately Start Transfer on the same
->>>>>>> direction control endpoint).
->>>>>>>
->>>>>> OK, I can try, but just to clarify, I was referring to how it was being
->>>>>> done in:
->>>>>>
->>>>>> static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
->>>>>> 		const struct dwc3_event_depevt *event)
->>>>>> {
->>>>>> ...
->>>>>> 		if (dwc->ep0_expect_in != event->endpoint_number) {
->>>>>> 			struct dwc3_ep	*dep = dwc->eps[dwc->ep0_expect_in];
->>>>>>
->>>>>> 			dev_err(dwc->dev, "unexpected direction for Data Phase\n");
->>>>>> 			dwc3_ep0_end_control_data(dwc, dep);
->>>>>> 			dwc3_ep0_stall_and_restart(dwc);
->>>>>> 			return;
->>>>>> 		}
->>>>>>
->>>>
->>>> Looking at this snippet again, it looks wrong. For control write
->>>> unexpected direction, if the driver hasn't setup and started the DATA
->>>> phase yet, then it's fine, but there is a problem if it did.
->>>>
->>>> Since dwc3_ep0_end_control_data() doesn't issue End Transfer command to
->>>> ep0 due to the resource_index check, it doesn't follow the control
->>>
->>> IIRC resource_index is always non-zero, so the command should be
->>
->> No, resource_index for ep0out is 0, ep0in is 1. You can check from any
->> of the driver tracepoint log for the return value of Start Transfer
->> command for the resource index of ep0. There could be a mixed up with
->> the undocumented return value of Set Endpoint Transfer Resource command
->> before when this code was written, don't mix up with that.
->>
->>> triggered. If you have access to a Lecroy USB Trainer, could you script
->>> this very scenario for verification?
->>
->> For anyone who wants to work on this, we don't need a LeCroy USB
->> trainer. If you use xhci host, just modify the xhci-ring.c to queue a
->> wrong direction DATA phase TRB of a particular control write request
->> test, and continue with the next control requests.
->>
-> Let me give this a try since I already have a modified (broken :)) XHCI
-> stack.
+> A check like this is necessary in the drm_connector_acpi_bus_match()
+> function added in the next patch in this series.
 > 
-> Thanks
-> Wesley Cheng
+> Tested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/gpu/drm/drm_sysfs.c | 50 +++++++++++++++++++++++++++----------
+>  1 file changed, 37 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_sysfs.c b/drivers/gpu/drm/drm_sysfs.c
+> index 968a9560b4aa..f9d92bbb1f98 100644
+> --- a/drivers/gpu/drm/drm_sysfs.c
+> +++ b/drivers/gpu/drm/drm_sysfs.c
+> @@ -50,6 +50,10 @@ static struct device_type drm_sysfs_device_minor = {
+>         .name = "drm_minor"
+>  };
+>  
+> +static struct device_type drm_sysfs_device_connector = {
+> +       .name = "drm_connector",
+> +};
+> +
+>  struct class *drm_class;
+>  
+>  static char *drm_devnode(struct device *dev, umode_t *mode)
+> @@ -102,6 +106,11 @@ void drm_sysfs_destroy(void)
+>         drm_class = NULL;
+>  }
+>  
+> +static void drm_sysfs_release(struct device *dev)
+> +{
+> +       kfree(dev);
+> +}
+> +
+>  /*
+>   * Connector properties
+>   */
+> @@ -273,27 +282,47 @@ static const struct attribute_group
+> *connector_dev_groups[] = {
+>  int drm_sysfs_connector_add(struct drm_connector *connector)
+>  {
+>         struct drm_device *dev = connector->dev;
+> +       struct device *kdev;
+> +       int r;
+>  
+>         if (connector->kdev)
+>                 return 0;
+>  
+> -       connector->kdev =
+> -               device_create_with_groups(drm_class, dev->primary->kdev, 0,
+> -                                         connector, connector_dev_groups,
+> -                                         "card%d-%s", dev->primary->index,
+> -                                         connector->name);
+> +       kdev = kzalloc(sizeof(*kdev), GFP_KERNEL);
+> +       if (!kdev)
+> +               return -ENOMEM;
+> +
+> +       device_initialize(kdev);
+> +       kdev->class = drm_class;
+> +       kdev->type = &drm_sysfs_device_connector;
+> +       kdev->parent = dev->primary->kdev;
+> +       kdev->groups = connector_dev_groups;
+> +       kdev->release = drm_sysfs_release;
+> +       dev_set_drvdata(kdev, connector);
+> +
+> +       r = dev_set_name(kdev, "card%d-%s", dev->primary->index, connector-
+> >name);
+> +       if (r)
+> +               goto err_free;
+> +
+>         DRM_DEBUG("adding \"%s\" to sysfs\n",
+>                   connector->name);
+>  
+> -       if (IS_ERR(connector->kdev)) {
+> -               DRM_ERROR("failed to register connector device: %ld\n",
+> PTR_ERR(connector->kdev));
+> -               return PTR_ERR(connector->kdev);
+> +       r = device_add(kdev);
+> +       if (r) {
+> +               DRM_ERROR("failed to register connector device: %d\n", r);
+> +               goto err_free;
 
-Sorry for the late response.  I was trying to get a reliable change to
-get the issue to reproduce.  I think I was able to find a set up which
-will generate the unexpected direction issue.  I'll try my best to
-summarize the traces here:
+Should probably be using drm_err() here since we have access to struct
+drm_device *
 
-Set up:
-- Modified XHCI stack to queue an IN TRB for a three stage CONTROL OUT
-transaction (OUT data stage)
-- Device is using RNDIS, as that has interface specific commands (ie
-SEND_ENCAPSUALTED messages)
-
-Kernel Log:
-[ 1255.312870] msm-usb-hsphy 88e3000.hsphy: Avail curr from USB = 900
-[ 1255.315300] dwc3_ep0_xfernotready event status = 1
-[ 1255.315429] dwc3_ep0_xfernotready event status = 2
-[ 1255.316390] android_work: sent uevent USB_STATE=CONFIGURED
-[ 1255.317467] dwc3_ep0_xfernotready event status = 1
-[ 1255.317588] dwc3_ep0_xfernotready event status = 2
-[ 1255.334196] dwc3_ep0_xfernotready event status = 1
-[ 1255.334217] dwc3 a600000.dwc3: unexpected direction for Data Phase
-[ 1255.334311] rndis_msg_parser: unknown RNDIS message 0x0052033A len
-4456526
-[ 1255.334328] RNDIS command error -524, 0/24
-[ 1255.334369] ------------[ cut here ]------------
-[ 1255.334377] dwc3 a600000.dwc3: No resource for ep0out
-[ 1255.334440] WARNING: CPU: 0 PID: 8364 at
-drivers/usb/dwc3/gadget.c:360 dwc3_send_gadget_ep_cmd+0x3c4/0x96c
-...
- 1255.336163] WARNING: CPU: 0 PID: 8364 at drivers/usb/dwc3/ep0.c:281
-dwc3_ep0_out_start+0x108/0x144
-
-So the kernel log does indeed show the concern mentioned by Thinh, where
-after ending the transfer, we do see the dwc3_ep0_out_start() fail due
-to no xfer resource.
-
-ftrace:
-<...>-8364    [000] d..1  1255.333988: dwc3_ctrl_req: Get Interface
-Status(Intf = 0, Length = 24)
-<...>-8364    [000] d..1  1255.334115: dwc3_prepare_trb: ep0out: trb
-ffffffc01bffd000 (E1:D0) buf 00000000efb76000 size 24 ctrl 00000455
-(HlCs:Sc:data)
-<...>-8364    [000] d..1  1255.334128: dwc3_prepare_trb: ep0out: trb
-ffffffc01bffd010 (E1:D0) buf 00000000efff9000 size 488 ctrl 00000c53
-(HLcs:SC:data)
-<...>-8364    [000] d..1  1255.334166: dwc3_gadget_ep_cmd: ep0out: cmd
-'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
-Successful
-<...>-8364    [000] d..1  1255.334239: dwc3_gadget_ep_cmd: ep0out: cmd
-'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
-<...>-8364    [000] d..1  1255.334291: dwc3_gadget_giveback: ep0out: req
-ffffff8891724e00 length 0/24 zsI ==> -104
-<...>-8364    [000] d..1  1255.334339: dwc3_prepare_trb: ep0out: trb
-ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
-(HLcs:SC:setup)
-<...>-8364    [000] d..1  1255.336099: dwc3_gadget_ep_cmd: ep0out: cmd
-'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: No
-Resource
-<...>-8364    [000] d..1  1255.357594: dwc3_ctrl_req: 00 60 b7 ef 00 00
-00 00
-<...>-8364    [000] d..1  1255.357680: dwc3_gadget_ep_cmd: ep0out: cmd
-'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
-<...>-8364    [000] d..1  1255.357696: dwc3_prepare_trb: ep0out: trb
-ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
-(HLcs:SC:setup)
-<...>-8364    [000] d..1  1255.357722: dwc3_gadget_ep_cmd: ep0out: cmd
-'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
-Successful
-<...>-224     [005] d..1  1266.313014: dwc3_gadget_ep_cmd: ep2out: cmd
-'End Transfer' [40c08] params 00000000 00000000 00000000 --> status:
-Timed Out
-
-Thanks
-Wesley Cheng
+>         }
+>  
+> +       connector->kdev = kdev;
+> +
+>         if (connector->ddc)
+>                 return sysfs_create_link(&connector->kdev->kobj,
+>                                  &connector->ddc->dev.kobj, "ddc");
+>         return 0;
+> +
+> +err_free:
+> +       put_device(kdev);
+> +       return r;
+>  }
+>  
+>  void drm_sysfs_connector_remove(struct drm_connector *connector)
+> @@ -374,11 +403,6 @@ void drm_sysfs_connector_status_event(struct
+> drm_connector *connector,
+>  }
+>  EXPORT_SYMBOL(drm_sysfs_connector_status_event);
+>  
+> -static void drm_sysfs_release(struct device *dev)
+> -{
+> -       kfree(dev);
+> -}
+> -
+>  struct device *drm_sysfs_minor_alloc(struct drm_minor *minor)
+>  {
+>         const char *minor_str;
 
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
+
