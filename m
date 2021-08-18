@@ -2,127 +2,121 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B86F3F0C15
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 21:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61C683F0C7B
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 22:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232827AbhHRTuM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 15:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40218 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbhHRTsz (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 15:48:55 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91687C06179A
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 12:48:20 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id n12so4894631edx.8
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 12:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=YlQT9pMWLEF2BTP39gjto5NYaCtiAPqSe5c09vXRaXA=;
-        b=Cl+34KnbnGCLpTIstjVk9FdlKK/7DB34RPKlvr8r0Vk/UF26CBIT3hHzlpVbyN7lx7
-         GmTSz6RhbwyRWyAYxwFHu3SBTiQYj4m/LOhQ8J6wqshxbyEpxwztC0QtbvuzXP0gOsnF
-         Y6dV7eaE0CMLyT/g3pjbdCiY6v+zttyA4bKdVX8pOLsSMpkQ4/E8o45baFA4Bf5N7uec
-         14vddSy11f5566ZP3g8gmMcnb1VrHl+HK9aAjxldae2DYHhJWjn6+N2sdmslxn0YVDU9
-         hvxJ9rbiKZ+rJ7MnmOXK3AcrFFyvv8LNDerSoPoOFQ/CHG0ygnbf6jtaXMhFKh7VBFbs
-         kkGQ==
+        id S233367AbhHRUNm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 16:13:42 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:48000 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229965AbhHRUNl (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 16:13:41 -0400
+Received: by mail-il1-f197.google.com with SMTP id j17-20020a926e11000000b0022487646515so1918955ilc.14
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 13:13:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=YlQT9pMWLEF2BTP39gjto5NYaCtiAPqSe5c09vXRaXA=;
-        b=ak5VKtgnDrL7xzlKDEhy2DBzDso/XOGTNzBoRqirYD9m+9M3xft7CqtBbMu2aUcaom
-         9FXvV2WzPOr7jMOv95Lb0Xu+ZJktaw6wPrNmxcLvVWP6GqiMCJXfFLb8pVdSPOngwOp7
-         0dwUA8YXXlPPdXhC7/KF9c5YUbWOCjeFKzxFS4s/WPiNYj4mVQneF8I3VL7sjRLvO2wX
-         ecghdD2uHwaEIG54Wy5hdM89H2gLV2wlfWnmm1MU3oO0cS0IFl9GZIizGdaJEsM6kUua
-         qAmiQZMj3GDPW5b3tbS4ARf3oWxd2L0rYA0TVstiruF5B5pZu+/bHNwAE5eUAj5fSBsF
-         4XkQ==
-X-Gm-Message-State: AOAM530Y/QhzGBPwYoaX2LUZ86Tx7/oYKouENamXPw634LF+/osdzCCc
-        apxwSzVmZWxfHWebY3w9TWw=
-X-Google-Smtp-Source: ABdhPJyvaGNyCR8Yfrsy3bAGxKfxarMEkzIwc1K3ciGfuNpmixF7GYEr414I2bwMmOZ2GbbuybGwVg==
-X-Received: by 2002:a50:9b03:: with SMTP id o3mr11669870edi.203.1629316099198;
-        Wed, 18 Aug 2021 12:48:19 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:ee14:4fd1:fa5a:b7f6? ([2001:981:6fec:1:ee14:4fd1:fa5a:b7f6])
-        by smtp.gmail.com with ESMTPSA id u20sm298878ejz.87.2021.08.18.12.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Aug 2021 12:48:18 -0700 (PDT)
-Subject: Re: [RFT][PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Jack Pham <jackp@codeaurora.org>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Ray Chi <raychi@google.com>, Ferry Toth <ftoth@exalondelft.nl>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-References: <20210812082635.12924-1-jackp@codeaurora.org>
- <20210818012859.GB30805@jackp-linux.qualcomm.com>
- <YRzT4y87Nt8ICFJ/@smile.fi.intel.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <de4c1fd9-7d2d-1038-8b8f-856e9dfd88cd@gmail.com>
-Date:   Wed, 18 Aug 2021 21:48:18 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=5Yk/eiQ6KrFu/vHlR0f2hOKUDdwbHPflHULMacmR8bo=;
+        b=JjhcR26NJ9z40C5RJFCLJWf0zYAu2ybn7tehtPaLavYhHjCvbC2eErUUwR6Zi6l4tb
+         /tAjQ96+DThFd9Q2b7Yq6o4QCQl2TUOY6RBZ1xUUKgTlumAYKWSoBY1R7coIM0CyRTc1
+         rARqmXPdWrP06/LsgMtOMY1lb2x/Dt9hXS36rpXmW6zuRg19fp8JhnJe2qIfwXujA7Oq
+         gJCv9tzecr+DCMjpxnd9ltJilpRN6+t2IvR+IA7i3Ex0zFNHqklb+bPNAh6ZZSEBQDkg
+         giTtRXkB04ETHLttVlzkGIUgBKodd3+OA13tIxxFv2mU69XH4DL4JiRPr4lqBzSPboo0
+         /isA==
+X-Gm-Message-State: AOAM533gkMnlVcLklYYxeZblHoKwSvb+kQsfp+rY2msUjkTbhIcipbux
+        YhtfiTgbjEqVb+37Y6YAJDVPG2dBqo4L8HXRE3U9hdRLfpZ3
+X-Google-Smtp-Source: ABdhPJy0qr44PsK++dTzPpRCSLNNVfh6l63Dc89uxnPCmHyKkP0kc0S/LQswtNBUAU7+5vg6R5jwNA9YLcGjSCYoz0Y/+n5knkva
 MIME-Version: 1.0
-In-Reply-To: <YRzT4y87Nt8ICFJ/@smile.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6638:1905:: with SMTP id p5mr9581118jal.25.1629317586462;
+ Wed, 18 Aug 2021 13:13:06 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 13:13:06 -0700
+In-Reply-To: <20210818184927.GD197200@rowland.harvard.edu>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f7ab1005c9db0f8e@google.com>
+Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
+From:   syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, mkubecek@suse.cz,
+        stern@rowland.harvard.edu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Op 18-08-2021 om 11:33 schreef Andy Shevchenko:
-> On Tue, Aug 17, 2021 at 06:28:59PM -0700, Jack Pham wrote:
->> On Thu, Aug 12, 2021 at 01:26:35AM -0700, Jack Pham wrote:
->>> On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
->>> DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
->>> field (bit 31) which when enabled allows the controller in device
->>> mode to treat USB 2.0 L1 LPM & L2 events separately.
->>>
->>> After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
->>> events") the controller will now receive events (and therefore
->>> interrupts) for every state change when entering/exiting either
->>> L1 or L2 states.  Since L1 is handled entirely by the hardware
->>> and requires no software intervention, there is no need to even
->>> enable these events and unnecessarily notify the gadget driver.
->>> Enable the aforementioned bit to help reduce the overall interrupt
->>> count for these L1 events that don't need to be handled while
->>> retaining the events for full L2 suspend/wakeup.
->>
->> Hi folks in To:
->>
->> I'd like to request if any of you could help test this patch on your
->> boards to help make sure it doesn't cause any regressions since I know
->> some of the recent dwc3 patches from Qualcomm have been found to break
->> other devices :(. So I'm hoping to avoid that even for a patch as
->> small as this.
->>
->> Hoping this could be tried out on boards/SoCs such as db845c, hikey960,
->> Exynos, the Intel "lakes", etc.  Ideally this needs validation with a
->> high-speed connection to a USB 3.x host, which increases the chances
->> that USB 2.0 Link Power Management is supported.
+Hello,
 
-Merrifield: We currently have 
-PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable")
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in hid_submit_ctrl/usb_submit_urb
 
-Should I retest with this reverted?
+------------[ cut here ]------------
+usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType a1
+WARNING: CPU: 1 PID: 10180 at drivers/usb/core/urb.c:410 usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 1 PID: 10180 Comm: syz-executor.0 Not tainted 5.14.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+Code: 7c 24 40 e8 45 64 1f fc 48 8b 7c 24 40 e8 4b fc 0b ff 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b2 27 8a e8 01 fc 91 03 <0f> 0b e9 a5 ee ff ff e8 17 64 1f fc 0f b6 1d 19 ca 01 08 31 ff 41
+RSP: 0018:ffffc9000a68fbd0 EFLAGS: 00010082
+RAX: 0000000000000000 RBX: ffff88802e22d058 RCX: 0000000000000000
+RDX: ffff88801b2a1c40 RSI: ffffffff815d85c5 RDI: fffff520014d1f6c
+RBP: ffff888018fcd910 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff815d23fe R11: 0000000000000000 R12: ffff8880155fb9d8
+R13: 00000000000000a1 R14: 0000000080000280 R15: ffff88801c247600
+FS:  00007fdbff87b700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000000050eab0 CR3: 000000003d108000 CR4: 0000000000350ee0
+Call Trace:
+ hid_submit_ctrl+0x6ff/0xde0 drivers/hid/usbhid/hid-core.c:415
+ usbhid_restart_ctrl_queue.isra.0+0x244/0x3a0 drivers/hid/usbhid/hid-core.c:258
+ __usbhid_submit_report+0x6f0/0xd50 drivers/hid/usbhid/hid-core.c:602
+ usbhid_submit_report drivers/hid/usbhid/hid-core.c:639 [inline]
+ usbhid_init_reports+0xd7/0x3b0 drivers/hid/usbhid/hid-core.c:779
+ hiddev_ioctl+0xb27/0x1630 drivers/hid/usbhid/hiddev.c:689
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:1069 [inline]
+ __se_sys_ioctl fs/ioctl.c:1055 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:1055
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x4665e9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fdbff87b188 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 000000000056bf80 RCX: 00000000004665e9
+RDX: 0000000000000000 RSI: 0000000000004805 RDI: 0000000000000004
+RBP: 00000000004bfcc4 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000056bf80
+R13: 00007ffddbcdc2ff R14: 00007fdbff87b300 R15: 0000000000022000
+----------------
+Code disassembly (best guess):
+   0:	7c 24                	jl     0x26
+   2:	40 e8 45 64 1f fc    	rex callq 0xfc1f644d
+   8:	48 8b 7c 24 40       	mov    0x40(%rsp),%rdi
+   d:	e8 4b fc 0b ff       	callq  0xff0bfc5d
+  12:	45 89 e8             	mov    %r13d,%r8d
+  15:	44 89 f1             	mov    %r14d,%ecx
+  18:	4c 89 e2             	mov    %r12,%rdx
+  1b:	48 89 c6             	mov    %rax,%rsi
+  1e:	48 c7 c7 e0 b2 27 8a 	mov    $0xffffffff8a27b2e0,%rdi
+  25:	e8 01 fc 91 03       	callq  0x391fc2b
+  2a:	0f 0b                	ud2     <-- trapping instruction
+  2c:	e9 a5 ee ff ff       	jmpq   0xffffeed6
+  31:	e8 17 64 1f fc       	callq  0xfc1f644d
+  36:	0f b6 1d 19 ca 01 08 	movzbl 0x801ca19(%rip),%ebx        # 0x801ca56
+  3d:	31 ff                	xor    %edi,%edi
+  3f:	41                   	rex.B
 
->> The overall goal of this patch is to eliminate events generated for
->> L1 entry/exit, so we should see a slight reduction in interrupt counts
->> when checking `grep dwc3 /proc/interrupts` for comparable traffic.
 
-I didn't compare interrupts
+Tested on:
 
-> Unfortunately I'm quite busy lately with more important stuff and I dunno if I
-> will be able to test this in reasonable time. So, if Ferry volunteers, then we
-> can cover Intel Merrifield platform as well.
-> 
+commit:         794c7931 Merge branch 'linus' of git://git.kernel.org/..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=126c1765300000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=96f0602203250753
+dashboard link: https://syzkaller.appspot.com/bug?extid=9b57a46bf1801ce2a2ca
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=152c3561300000
 
-Performance unchanged, no regressions found.
-Tested-by: Ferry Toth <fntoth@gmail.com> # for Merrifield
