@@ -2,125 +2,116 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 405873F0B23
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 20:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4783F0B43
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 20:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbhHRSgz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 14:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbhHRSgt (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 14:36:49 -0400
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED35AC0613CF
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 11:36:13 -0700 (PDT)
-Received: by mail-oi1-x230.google.com with SMTP id r5so4684066oiw.7
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 11:36:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=B0HrW3j8Fnyw72AqWx3TFUtOK4uhUpvaY9gIMxzxuIU=;
-        b=hfBxFw/TnfJ8Q74TdotNtucJRO5iThq4zbBYJNQvrSt9UJbNIvSi7KPr3ZLBoVcvTf
-         Ja2MQggiRk+lmcrQjPrvC/gqgcGl2hziLZToc5mYMndIs0TWkfxteNRYponSEg3o/4Qj
-         U3x1CN3O0z+4mO/ehfurr3u2f17gcc6uAVMQE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=B0HrW3j8Fnyw72AqWx3TFUtOK4uhUpvaY9gIMxzxuIU=;
-        b=NXauAL3QNnMeg9EHLvqxxJJesNXZcYpmAJAcp5oEX/lNSf2l3FwNu/Fevj5JwF2M9y
-         5KHJcewdgUgqGu5E0GhATiO3L9UQBUH2LOx8otADfG3sSZPJxMYSkuvG+3kdmznGZdgp
-         iy5YLYI63Fpo/GzYYWmBzuQXgouRWwOnjbQDxFkKqoMuXmZQQhe9yyIV2q6PHApyMbXw
-         xawDijw7k0z0MqnXs13B579x9d/KDgSX1ptF8ghk9bD/1GzhjAHG9A3sWgyGyvSJDN/N
-         2beFMcpe/iU5JVUshwgkd/QZwmqzbWaZNlthBfKzU1+V/pQw1j1B9oUaYsZrkgOgGfJy
-         3imQ==
-X-Gm-Message-State: AOAM530iMJShVqZYfGvvA+1pFlAFHkhGN7r5T4xrz0WJrRtv7v9/w963
-        D7ZE6XK1iP2wgwIvrP/+npkghA==
-X-Google-Smtp-Source: ABdhPJzv/vbVL6GJH4+87n+W0NlAqUCmVyKVjAYZEem9rXkxFaZSyPC2dgpiXaHDSbcM9qFY7BsluQ==
-X-Received: by 2002:aca:1703:: with SMTP id j3mr8277516oii.116.1629311773372;
-        Wed, 18 Aug 2021 11:36:13 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id j6sm113586ooj.11.2021.08.18.11.36.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Aug 2021 11:36:12 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] usbip: give back URBs for unsent unlink requests
- during cleanup
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210813182508.28127-1-mail@anirudhrb.com>
- <20210813182508.28127-2-mail@anirudhrb.com>
- <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
- <YRydGRdPmOaiMWaY@kroah.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <cb36604b-37f1-c12e-3ebb-cdafd7798dc1@linuxfoundation.org>
-Date:   Wed, 18 Aug 2021 12:36:11 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        id S232584AbhHRSuE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 14:50:04 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:55841 "HELO
+        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with SMTP id S229952AbhHRSuD (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 14:50:03 -0400
+Received: (qmail 204834 invoked by uid 1000); 18 Aug 2021 14:49:27 -0400
+Date:   Wed, 18 Aug 2021 14:49:27 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>
+Cc:     Michal Kubecek <mkubecek@suse.cz>, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
+Message-ID: <20210818184927.GD197200@rowland.harvard.edu>
+References: <000000000000d77b6505c767b8f8@google.com>
+ <00000000000038c55d05c9d1dc3b@google.com>
 MIME-Version: 1.0
-In-Reply-To: <YRydGRdPmOaiMWaY@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000038c55d05c9d1dc3b@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/17/21 11:39 PM, Greg KH wrote:
-> On Tue, Aug 17, 2021 at 05:16:51PM -0600, Shuah Khan wrote:
->> On 8/13/21 12:25 PM, Anirudh Rayabharam wrote:
->>> In vhci_device_unlink_cleanup(), the URBs for unsent unlink requests are
->>> not given back. This sometimes causes usb_kill_urb to wait indefinitely
->>> for that urb to be given back. syzbot has reported a hung task issue [1]
->>> for this.
->>>
->>> To fix this, give back the urbs corresponding to unsent unlink requests
->>> (unlink_tx list) similar to how urbs corresponding to unanswered unlink
->>> requests (unlink_rx list) are given back.
->>>
->>> [1]: https://syzkaller.appspot.com/bug?id=08f12df95ae7da69814e64eb5515d5a85ed06b76
->>>
->>> Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
->>> Tested-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
->>> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
->>> ---
->>>    drivers/usb/usbip/vhci_hcd.c | 26 ++++++++++++++++++++++++++
->>>    1 file changed, 26 insertions(+)
->>>
->>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
->>> index 4ba6bcdaa8e9..6f3f374d4bbc 100644
->>> --- a/drivers/usb/usbip/vhci_hcd.c
->>> +++ b/drivers/usb/usbip/vhci_hcd.c
->>> @@ -957,8 +957,34 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
->>>    	spin_lock(&vdev->priv_lock);
->>>    	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
->>> +		struct urb *urb;
->>> +
->>> +		/* give back URB of unsent unlink request */
->>>    		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
->>
->> I know this is an exiting one.
->> Let's make this pr_debug or remove it all together.
->>
->>> +
->>> +		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
->>> +		if (!urb) {
->>> +			pr_info("the urb (seqnum %lu) was already given back\n",
->>> +				unlink->unlink_seqnum);
->>
->> Let's make this pr_debug or remove it all together.
+On Wed, Aug 18, 2021 at 02:14:23AM -0700, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
 > 
-> As you have a struct device for all of these, please use dev_dbg() and
-> friends, not pr_*(), for all of these.
+> HEAD commit:    794c7931a242 Merge branch 'linus' of git://git.kernel.org/..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13af2205300000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=96f0602203250753
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9b57a46bf1801ce2a2ca
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.1
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11ae58ce300000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d71731300000
 > 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> usb 1-1: BOGUS control dir, pipe 80000280 doesn't match bRequestType a1
+> WARNING: CPU: 0 PID: 8434 at drivers/usb/core/urb.c:410 usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+> Modules linked in:
+> CPU: 0 PID: 8434 Comm: syz-executor752 Not tainted 5.14.0-rc6-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:usb_submit_urb+0x149d/0x18a0 drivers/usb/core/urb.c:410
+> Code: 7c 24 40 e8 45 64 1f fc 48 8b 7c 24 40 e8 4b fc 0b ff 45 89 e8 44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 e0 b2 27 8a e8 01 fc 91 03 <0f> 0b e9 a5 ee ff ff e8 17 64 1f fc 0f b6 1d 19 ca 01 08 31 ff 41
+> RSP: 0018:ffffc90000effbd0 EFLAGS: 00010082
+> RAX: 0000000000000000 RBX: ffff888027944058 RCX: 0000000000000000
+> RDX: ffff8880235db880 RSI: ffffffff815d85c5 RDI: fffff520001dff6c
+> RBP: ffff888021618140 R08: 0000000000000000 R09: 0000000000000000
+> R10: ffffffff815d23fe R11: 0000000000000000 R12: ffff888018aff118
+> R13: 00000000000000a1 R14: 0000000080000280 R15: ffff888021900400
+> FS:  000000000223d300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00005614a6c2a160 CR3: 00000000222ca000 CR4: 0000000000350ef0
+> Call Trace:
+>  hid_submit_ctrl+0x6ec/0xd80 drivers/hid/usbhid/hid-core.c:416
+>  usbhid_restart_ctrl_queue.isra.0+0x244/0x3a0 drivers/hid/usbhid/hid-core.c:258
 
-Yes. Makes perfect sense.
+The problem is that syzbot has created a device with a report length of 
+zero.  If we use the padded length instead of the actual length, the 
+error should vanish.
 
-thanks,
--- Shuah
+I believe this is fixed by Michal's patch, below.
+
+Alan Stern
+
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 794c7931a242
+
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -377,27 +377,26 @@ static int hid_submit_ctrl(struct hid_device *hid)
+ 	len = hid_report_len(report);
+ 	if (dir == USB_DIR_OUT) {
+ 		usbhid->urbctrl->pipe = usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
+-		usbhid->urbctrl->transfer_buffer_length = len;
+ 		if (raw_report) {
+ 			memcpy(usbhid->ctrlbuf, raw_report, len);
+ 			kfree(raw_report);
+ 			usbhid->ctrl[usbhid->ctrltail].raw_report = NULL;
+ 		}
+ 	} else {
+-		int maxpacket, padlen;
++		int maxpacket;
+ 
+ 		usbhid->urbctrl->pipe = usb_rcvctrlpipe(hid_to_usb_dev(hid), 0);
+ 		maxpacket = usb_maxpacket(hid_to_usb_dev(hid),
+ 					  usbhid->urbctrl->pipe, 0);
+ 		if (maxpacket > 0) {
+-			padlen = DIV_ROUND_UP(len, maxpacket);
+-			padlen *= maxpacket;
+-			if (padlen > usbhid->bufsize)
+-				padlen = usbhid->bufsize;
++			len = DIV_ROUND_UP(len, maxpacket);
++			len *= maxpacket;
++			if (len > usbhid->bufsize)
++				len = usbhid->bufsize;
+ 		} else
+-			padlen = 0;
+-		usbhid->urbctrl->transfer_buffer_length = padlen;
++			len = 0;
+ 	}
++	usbhid->urbctrl->transfer_buffer_length = len;
+ 	usbhid->urbctrl->dev = hid_to_usb_dev(hid);
+ 
+ 	usbhid->cr->bRequestType = USB_TYPE_CLASS | USB_RECIP_INTERFACE | dir;
