@@ -2,46 +2,46 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 921473F0A46
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 19:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B893F0A45
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 19:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbhHRRa7 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 13:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
+        id S232545AbhHRRa6 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 13:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232152AbhHRRa5 (ORCPT
+        with ESMTP id S229528AbhHRRa5 (ORCPT
         <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 13:30:57 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F0CC061796
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F16C0613CF
         for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 10:30:22 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 28-20020a17090a031cb0290178dcd8a4d1so5629201pje.0
+Received: by mail-pl1-x629.google.com with SMTP id u1so2266665plr.1
         for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 10:30:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f0BrIgVGw/jCYpqJ3H+F4qUtbfNvuOB1X91iZBuDC9A=;
-        b=ad89yAgXBvfkM7spD8Sv7sX2M8JXooM0nNTjjnjpxEWjGLZ+/x8DRYVlawSP2AWynx
-         xa/ddOs+k/3LkmkcG9sIwm7LhTury8Re7Z9xDaoOGlQUQUj2N8Y+LAGzciS1No5rLekQ
-         yQ0ubA7IhdJSx6stObIDwrv/dHQMmUU6v+vLk=
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bRvwa8St6VVp4MXGffF/gdYO7O+TSG3ZpYU1kQOJMjw=;
+        b=k2dY52/k3VXeG6Y8nYBjaj5EcsLCuO/w6taiMeZUH7bSElcn01J/gAacOMavSooXl7
+         zywAnNeS7TAyWVZrgbxrqidk2GZf/sDWQeguegHfM3IMM8uBjiXXSKQoSn7pVQcATy1m
+         C+7rh8eV28Qry8wCLbjrTabvg/nCj3+dqtfmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=f0BrIgVGw/jCYpqJ3H+F4qUtbfNvuOB1X91iZBuDC9A=;
-        b=HKiDAr0Mg7eJjq11GjMCXPaRGRFx5RVaorkQltN/iN3rb7HMOqXVgkufOYUoXEyaGg
-         b4rYxNsm/bKI1XkvFQs6bjYZm+GE86Ilt8w3G/GMSJZBqt2Dm8qqllK7PH/HZWXcljPw
-         KqoFlL/FnHz6b5gU5WW1jt/eI8OHYH0+tBO9ed1MyZ52ryTTRp+VzTtnoNL31684E0NU
-         BfADATPjP4WOIWROFjlP/F3SDXQgEyI6UzHvM8HyXJNB2NmtxzlFZV7Ccx0IcoM4qRPf
-         Dw5ozWUQnJTdI8TzfqxSusyi8EnddvunzHKu9jNdKt2I2zgAGTyeTPjxESLpWVk9MBBX
-         QFZQ==
-X-Gm-Message-State: AOAM533W4WBn4q1TEZRFMFrglMogao5l/z8CHnbktSpHEClVQfTbxMH4
-        9TFzhJnT0aEgDIYxLSn8rlcq3w==
-X-Google-Smtp-Source: ABdhPJyXScRZGfEaKhr+9LvN0h45ICPwhBofxuzETltNHug2/+3Ps8ajNcaW7BhsAWvF5GeBwrOePg==
-X-Received: by 2002:a17:903:2446:b0:12d:b732:4656 with SMTP id l6-20020a170903244600b0012db7324656mr8294673pls.25.1629307822401;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bRvwa8St6VVp4MXGffF/gdYO7O+TSG3ZpYU1kQOJMjw=;
+        b=H3X+prXTtSI/rX7ro8CnezkScsrFEFx6d46nZKGBqmPo0R7/D2r9Dn0A2fbrRB9vXV
+         SID9Ey4AB1iA+ZbeO2KaS+MH8CKgggZBs1h31I+U9kfzjVhvqraUV1cHyd66tK6CZ4e3
+         9qGMRRA6RBHfdqcF8UmuQDk8fu0M+VNY9puMN6v69Np5wThOSIjuoGPi/GsTULbJfKx+
+         Sc4+mobTiCrH2dlCIUtg0U4ge6G6vUdCrrlgP3//at7jQNznSKKUXKePG0r1t7bfWhjJ
+         O3N5SejricKN1vvrX/L2KQzOxHWyco5/AaUEBjfq+Ly9LLsZiZHbclxL+3HyCvrKFJAh
+         rELA==
+X-Gm-Message-State: AOAM532h/hlbsc+PsaapTcTXW4iK1jUaHsWEXrXb+rpTnz12We8kQKiN
+        c8KdWIxcTmtuuQ3OvoEg5NxV2Q==
+X-Google-Smtp-Source: ABdhPJyyaIiXoFy7gFCvBRZD5kvE18SqLA5LOPaV2RIOVfSqmtPJEyMrI37ZZv8We69nX2rRT1/GJw==
+X-Received: by 2002:a17:902:b691:b029:12d:2b6:d116 with SMTP id c17-20020a170902b691b029012d02b6d116mr8289597pls.71.1629307822121;
         Wed, 18 Aug 2021 10:30:22 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id h20sm384041pfn.173.2021.08.18.10.30.21
+        by smtp.gmail.com with ESMTPSA id u11sm369896pfk.100.2021.08.18.10.30.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 18 Aug 2021 10:30:21 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
@@ -49,52 +49,185 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
         Al Cooper <alcooperx@gmail.com>,
         Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org,
         Andy Shevchenko <andy.shevchenko@gmail.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
         bcm-kernel-feedback-list@broadcom.com,
         linux-hardening@vger.kernel.org
-Subject: [PATCH v2 0/2] USB: EHCI: Add register array bounds to HCS ports
-Date:   Wed, 18 Aug 2021 10:30:16 -0700
-Message-Id: <20210818173018.2259231-1-keescook@chromium.org>
+Subject: [PATCH v2 1/2] USB: EHCI: Add register array bounds to HCS ports
+Date:   Wed, 18 Aug 2021 10:30:17 -0700
+Message-Id: <20210818173018.2259231-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20210818173018.2259231-1-keescook@chromium.org>
+References: <20210818173018.2259231-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=907; h=from:subject; bh=9B2VM9Lpb8IVZx7MEMfRI517cmacE2jksMMxurJKH7g=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUOpZQ9I4PVphZK8YzvgrpCcsAqL8NiVWEHUpjTW BCvM8SiJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1DqQAKCRCJcvTf3G3AJhfsEA CqZbMM71xrQTnirsBMBBDWAT7q9ChVvUxdhSuKtWqaWLyVrbKhwSSG7P+pQJCl1R42zdQdINXf+FLX S5WL/0vKEcTaaXAb658WmwA++UeYw8ka+PsyuLlOUS4hAeQPwQNMWseqy3rd5Y77IEQIYg9a1exUbU DjKhaTcUZWFLfWlPqb/YMrMdQFHcTo0ya61NXAROnWNcyOmvbH0ba+Gtfm3PsLd9tcVTV+AdjxGOs6 i7FWbAVifR9BYbCXPQWWUYlLy6QzaEiHBrj/ID8adu9hQI83t/PrUQy4t1uCt7fGe0TzZIFpjtyZ0r 6/CgfODGYatxkVKgag3A6wMkkaMhPMmhfGMq2sLIMqJRksUBpERGYYyH9P+jt6K+CVj+4M4dNyapT0 IZPnZ+R+O31jF6ubOXxdSveEzG7j0K4efjB6T22qjiptVgrVBhXKhFTDGxb/fPZpHMogpBG10Ystzw SDgCC9D9or6E9XJqgHhoLnUw+6KlYXCflgmBeRIzASlvIhHw+B4E4/177DxZEo2WCHT7EkqlW+6KfP Ih1tgAQ1V74j3tJBdFq3V7mi4sg8auW3mU3LqKlWKeA1htCuK1Tc2N+Yjxxep3e/H+j9r06IQGjyzF x8TYHBctspZt9seKEPTzza0t2N5Jn1eD2Sjf3UGAmWu2mbkfT5mA5eozi+og==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7220; h=from:subject; bh=PrqH4P4vgVZHKHE7nIvTnE+3btKaALDbLdB8dmZoNEI=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhHUOpcMWD7KZ+H+r80r7RC5G00877NCfhWVaDpd7f 8ZI1FeeJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYR1DqQAKCRCJcvTf3G3AJpPeD/ 0ViHu9opQky3KDanpgGOzZIL18aR0Bx/Bm6XDM3MmyR4df8yDPbU9I0zXUNIaSyrdchhie0sr5y+88 4ysGTiwq0f+MKfVB6iWODt4BPVqjqovMTZAJjyVR/NRGwDEEuDtwm37f0/jAuYNaf6ticufZMaqDcW KmukSyx4WI0va1FFZR271UPZnbS/VIIWh+vCH8jv87CkFCWlPY2gtBGGQn3OYGn4gqt5kWKUMFe36g Zu8kPVke1d7c8q9VoXtixZn8hve/ft0rHQGl2MYsliukfAawnZH2vumDBuhYtaRpNpTPDXfftL4kyZ oTKwk4G+kM3xl8MR91QWmFV0683p1mQkZ5J9rUW5n9IwpJQ9gEptk1mfZd1jBc8NSSMaISAaVQUPsQ 2NM/vkA9V5+vT+3NoOEHus+Glx4mTD0INYbZcX0/IqYQk+WqrXk+8sDIivdKU499jdtRCPlW3g0d55 ucCLL+kuGVXr5eiUkTvaJ8mLHtVKfDtoc3RlWo7tmVgArqpQNXU7saK1TsH4ok89kSWZa2vQwbpMAv 00W223CGoy8rnNsfjHuJXuKPoiDQVu92rahjq+6GwZE7voYekWASEmfhrYsRMgwFJHn7pZkfKGYXOM vp5h4XTEsHJALXSxk2udy+IdC2sXaMwx0wruae+uipEFiXLkHx4TCUpWFvxQ==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+The original EHCI register struct used a trailing 0-element array for
+addressing the N_PORTS-many available registers. However, after commit
+a46af4ebf9ff ("USB: EHCI: define extension registers like normal ones")
+the 0-element array started to overlap the USBMODE extension register.
 
-This is cleaning up some of the remaining things to be able to apply
--Warray-bounds and -Wzero-length-bounds globally. Only after doing my
-own version of the port_status patch did I find Arnd's earlier
-patches, including for the weird Broadcom stuff[1].
+To avoid future compile-time warnings about accessing indexes within a
+0-element array, rearrange the struct to actually describe the expected
+layout (max 15 registers) with a union. All offsets remain the same, and
+bounds checking becomes possible on accesses to port_status and hostpc.
 
-No binary differences.
+There are no binary differences, and struct offsets continue to match.
+"pahole --hex -C ehci_regs" before:
 
-v2:
-- use 0x80 as base for brcm registers (stern)
-- switch HCS_N_PORTS_MAX to decimal (stern)
-- update various comments (stern)
-v1: https://lore.kernel.org/lkml/20210818043035.1308062-1-keescook@chromium.org
+struct ehci_regs {
+	u32                        command;              /*     0   0x4 */
+	u32                        status;               /*   0x4   0x4 */
+	u32                        intr_enable;          /*   0x8   0x4 */
+	u32                        frame_index;          /*   0xc   0x4 */
+	u32                        segment;              /*  0x10   0x4 */
+	u32                        frame_list;           /*  0x14   0x4 */
+	u32                        async_next;           /*  0x18   0x4 */
+	u32                        reserved1[2];         /*  0x1c   0x8 */
+	u32                        txfill_tuning;        /*  0x24   0x4 */
+	u32                        reserved2[6];         /*  0x28  0x18 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	u32                        configured_flag;      /*  0x40   0x4 */
+	u32                        port_status[0];       /*  0x44     0 */
+	u32                        reserved3[9];         /*  0x44  0x24 */
+	u32                        usbmode;              /*  0x68   0x4 */
+	u32                        reserved4[6];         /*  0x6c  0x18 */
+	/* --- cacheline 2 boundary (128 bytes) was 4 bytes ago --- */
+	u32                        hostpc[0];            /*  0x84     0 */
+	u32                        reserved5[17];        /*  0x84  0x44 */
+	/* --- cacheline 3 boundary (192 bytes) was 8 bytes ago --- */
+	u32                        usbmode_ex;           /*  0xc8   0x4 */
 
-Thanks!
+	/* size: 204, cachelines: 4, members: 18 */
+	/* last cacheline: 12 bytes */
+};
 
--Kees
+after:
 
-[1] https://lore.kernel.org/lkml/20200527134320.869042-1-arnd@arndb.de/#t
+struct ehci_regs {
+	u32                        command;              /*     0   0x4 */
+	u32                        status;               /*   0x4   0x4 */
+	u32                        intr_enable;          /*   0x8   0x4 */
+	u32                        frame_index;          /*   0xc   0x4 */
+	u32                        segment;              /*  0x10   0x4 */
+	u32                        frame_list;           /*  0x14   0x4 */
+	u32                        async_next;           /*  0x18   0x4 */
+	u32                        reserved1[2];         /*  0x1c   0x8 */
+	u32                        txfill_tuning;        /*  0x24   0x4 */
+	u32                        reserved2[6];         /*  0x28  0x18 */
+	/* --- cacheline 1 boundary (64 bytes) --- */
+	u32                        configured_flag;      /*  0x40   0x4 */
+	union {
+		u32                port_status[15];      /*  0x44  0x3c */
+		struct {
+			u32        reserved3[9];         /*  0x44  0x24 */
+			u32        usbmode;              /*  0x68   0x4 */
+		};                                       /*  0x44  0x28 */
+	};                                               /*  0x44  0x3c */
+	/* --- cacheline 2 boundary (128 bytes) --- */
+	u32                        reserved4;            /*  0x80   0x4 */
+	u32                        hostpc[15];           /*  0x84  0x3c */
+	/* --- cacheline 3 boundary (192 bytes) --- */
+	u32                        reserved5[2];         /*  0xc0   0x8 */
+	u32                        usbmode_ex;           /*  0xc8   0x4 */
 
-Kees Cook (2):
-  USB: EHCI: Add register array bounds to HCS ports
-  USB: EHCI: Add alias for Broadcom INSNREG
+	/* size: 204, cachelines: 4, members: 16 */
+	/* last cacheline: 12 bytes */
+};
 
- drivers/usb/host/ehci-brcm.c | 11 ++++-------
- include/linux/usb/ehci_def.h | 33 +++++++++++++++++++++------------
- 2 files changed, 25 insertions(+), 19 deletions(-)
+With this fixed, adding -Wzero-length-bounds to the build no longer
+produces several warnings like this:
 
+In file included from drivers/usb/host/ehci-hcd.c:306:
+drivers/usb/host/ehci-hub.c: In function 'ehci_port_handed_over':
+drivers/usb/host/ehci-hub.c:1194:8: warning: array subscript '<unknown>' is outside the bounds of an interior zero-length array 'u32[0]' {aka 'unsigned int[]'} [-Wzero-length-bounds]
+ 1194 |  reg = &ehci->regs->port_status[portnum - 1];
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In file included from drivers/usb/host/ehci.h:274,
+                 from drivers/usb/host/ehci-hcd.c:97:
+./include/linux/usb/ehci_def.h:130:7: note: while referencing 'port_status'
+  130 |  u32  port_status[0]; /* up to N_PORTS */
+      |       ^~~~~~~~~~~
+
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Al Cooper <alcooperx@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/usb/ehci_def.h | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+index 78e006355557..dcbe2b068569 100644
+--- a/include/linux/usb/ehci_def.h
++++ b/include/linux/usb/ehci_def.h
+@@ -45,6 +45,7 @@ struct ehci_caps {
+ #define HCS_PORTROUTED(p)	((p)&(1 << 7))	/* true: port routing */
+ #define HCS_PPC(p)		((p)&(1 << 4))	/* true: port power control */
+ #define HCS_N_PORTS(p)		(((p)>>0)&0xf)	/* bits 3:0, ports on HC */
++#define HCS_N_PORTS_MAX		15		/* N_PORTS valid 0x1-0xF */
+ 
+ 	u32		hcc_params;      /* HCCPARAMS - offset 0x8 */
+ /* EHCI 1.1 addendum */
+@@ -126,8 +127,9 @@ struct ehci_regs {
+ 	u32		configured_flag;
+ #define FLAG_CF		(1<<0)		/* true: we'll support "high speed" */
+ 
+-	/* PORTSC: offset 0x44 */
+-	u32		port_status[0];	/* up to N_PORTS */
++	union {
++		/* PORTSC: offset 0x44 */
++		u32	port_status[HCS_N_PORTS_MAX];	/* up to N_PORTS */
+ /* EHCI 1.1 addendum */
+ #define PORTSC_SUSPEND_STS_ACK 0
+ #define PORTSC_SUSPEND_STS_NYET 1
+@@ -164,28 +166,28 @@ struct ehci_regs {
+ #define PORT_CSC	(1<<1)		/* connect status change */
+ #define PORT_CONNECT	(1<<0)		/* device connected */
+ #define PORT_RWC_BITS   (PORT_CSC | PORT_PEC | PORT_OCC)
+-
+-	u32		reserved3[9];
+-
+-	/* USBMODE: offset 0x68 */
+-	u32		usbmode;	/* USB Device mode */
++		struct {
++			u32	reserved3[9];
++			/* USBMODE: offset 0x68 */
++			u32	usbmode;	/* USB Device mode */
++		};
+ #define USBMODE_SDIS	(1<<3)		/* Stream disable */
+ #define USBMODE_BE	(1<<2)		/* BE/LE endianness select */
+ #define USBMODE_CM_HC	(3<<0)		/* host controller mode */
+ #define USBMODE_CM_IDLE	(0<<0)		/* idle state */
+-
+-	u32		reserved4[6];
++	};
++	u32		reserved4;
+ 
+ /* Moorestown has some non-standard registers, partially due to the fact that
+  * its EHCI controller has both TT and LPM support. HOSTPCx are extensions to
+  * PORTSCx
+  */
+ 	/* HOSTPC: offset 0x84 */
+-	u32		hostpc[0];	/* HOSTPC extension */
++	u32		hostpc[HCS_N_PORTS_MAX];
+ #define HOSTPC_PHCD	(1<<22)		/* Phy clock disable */
+ #define HOSTPC_PSPD	(3<<25)		/* Port speed detection */
+ 
+-	u32		reserved5[17];
++	u32		reserved5[2];
+ 
+ 	/* USBMODE_EX: offset 0xc8 */
+ 	u32		usbmode_ex;	/* USB Device mode extension */
 -- 
 2.30.2
 
