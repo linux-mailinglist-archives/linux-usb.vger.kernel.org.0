@@ -2,182 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBFA23EF826
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 04:43:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9659A3EF8D5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 05:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236986AbhHRCoV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 22:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S236639AbhHRDpB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 23:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbhHRCoS (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 22:44:18 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B98C061764
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:43:37 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id j12-20020a17090aeb0c00b00179530520b3so8019792pjz.0
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 19:43:37 -0700 (PDT)
+        with ESMTP id S236105AbhHRDpA (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 23:45:00 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87A77C061796
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 20:44:26 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id v33-20020a0568300921b0290517cd06302dso1070705ott.13
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 20:44:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=IdX62Qy1ac9xod4fIunCnDc2laglCBN/1fg/fcapW7I=;
-        b=G6tJIDNDlZydQbdTY2UVKCARnR0cLR1jeU/0tSmRwID/hjR9YhYy5LOmm5/F9bq1uW
-         qfPDBB3+IufGPZoTw7UhHEeYTi7OMB7dSK9c5x7RHgdS71Ij/33jgOe1S/lda7Z6O8pQ
-         L7LYM4eS0atmpRtU/sYu/tWSgx3FYDiNIA6X4=
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dOY/Y+m8CtGs2t22YoW318N2LcUpxV+MpuaJ5LhTgsc=;
+        b=aLy58NDwB5iWg0GHfBe12kmdCiuAYo9opAjTnoggWlFAx23pcpHyAXkeBjVJdVAcI+
+         y2hLvIe7bGl3c7IbxKwD2jADhSpX2mh7rFTGtMUwEp9fTkcRI17RG7mRzcOB5wZVNk3c
+         Hgy9R3VSP2qotmwK+iPSpLpRRmWWeHRIO/jHIvzIQ9B09uT4Yk+IW/qstqhpAEEc6jBD
+         0DCz4QZuGFNiPHeyaceIo4Ipn0WxaQ3XnAADSyHNe0ybSxadh2+foMXNVSdp136YJJ/R
+         9KbpdIMTejZMUN407CjyuCUKCeVJvuG0uA4Xr5l8Mp6VdbGXjqC5gZWFBn48D3EI4rXA
+         6ekQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=IdX62Qy1ac9xod4fIunCnDc2laglCBN/1fg/fcapW7I=;
-        b=R2lFNj4tn3+pgoOWb/pg8Crd1ZTHf7Wr5hECivbdLT4Zf3IUoUdTMFYgspz4PxO6RH
-         Pjb3jZ5+Y9Iw8Cyww0z4A9JMpRu6PxFjL1eJl1vYZzoUU0Av++0z30HYssY+hLK6aM4T
-         hpEWCrIs2rjMbf7kUChRFEMWSeF8MbMN4G3fkUgRbTm2WyaiWP68GOol0KyHBhwCYaw9
-         hhJ2/zZOjDbbCcdA0cXTNtFB69+CCtmo2zCqZutz+ozO5qBHubPi3MPXQ6l80ihLFX+8
-         JGQBbIEsb0MtPlnooCI9k0yxL7YARP4c0pFkYEth77Fs3yrkLmVhi0sgLBFAztrtE1Tv
-         TepA==
-X-Gm-Message-State: AOAM530fu53kShwwPI99oAUTQ54aJUtbgEYWKUOI71At0Y5r03VIiBGt
-        /YXhjKHZ7t9SUuPSvOhY0+VOJk3gi31MO3646RTVCw==
-X-Google-Smtp-Source: ABdhPJwgboGY7D2y/Zi68e8tvtNReZvQqvGbrT7qKSNk+cE6BASGnMkYk2/EYNENuEnG5CXBjupeV5V6s5a3ZKXxDgU=
-X-Received: by 2002:a17:90b:4905:: with SMTP id kr5mr6634228pjb.112.1629254616776;
- Tue, 17 Aug 2021 19:43:36 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dOY/Y+m8CtGs2t22YoW318N2LcUpxV+MpuaJ5LhTgsc=;
+        b=Fe1MqA2ZzV+NcBwVaXCopsbvghdzrpXjHOMfBpgVYcZgu1EqUiAsFQx2RCavEt8XXD
+         e8O+ISjsGj6IiQi6/WZ1QhJol79F9ygTGcXyBSivLUckUb3t92AioIyDi7MGQrvdoGJi
+         MrhPX5wgAX+d3P7CiPnSaSaTOhAOO8kpfXWSuppEtSf1YZQ6cC0iALmhBbiP3/H49TwA
+         tv22EQHs/nutfENr2dBUFGGCAb8foTa54RxmIOyewrkgzjCcGzGGbfPo2dVGDdVNprWH
+         hB29k7xXi3d7zkMNdWICY09ZKUZj6sW17JFxUniXmQidvBwmbsVTLUmz2bCv8/13NsC2
+         /oEA==
+X-Gm-Message-State: AOAM531oarp2SL1eOioVKGZT4QlVx+/g2aNRTUz5EJ2Vl2//NbiqSp7X
+        FG8vphu+h5qk/lwsbDpaR3UKDg==
+X-Google-Smtp-Source: ABdhPJwnVYK5fYr39j7qhmd0jRrOO7rMEezuFGQlLvSOJkLU4zHxBqJ5DgiwAELpKicRaga+Gs1gCg==
+X-Received: by 2002:a9d:649a:: with SMTP id g26mr5174265otl.92.1629258265750;
+        Tue, 17 Aug 2021 20:44:25 -0700 (PDT)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id u126sm835593ooa.23.2021.08.17.20.44.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 20:44:25 -0700 (PDT)
+Date:   Tue, 17 Aug 2021 22:44:23 -0500
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     John Stultz <john.stultz@linaro.org>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Amit Pundir <amit.pundir@linaro.org>
+Subject: Re: [PATCH 29/29] arm64: dts: qcom: Harmonize DWC USB3 DT nodes name
+Message-ID: <YRyCFx0ZOYTMhinf@builder.lan>
+References: <YPf+shNM6cXb3mfe@kroah.com>
+ <d853df77-8d36-30b0-dd26-da1bfcb068e0@kernel.org>
+ <20210721112531.xvu6ni5ksaehsrjh@mobilestation>
+ <CALAqxLViEqSO17P3JGRGYJh-wDoHaJiQQV48zeoRgnar4Xd5Bg@mail.gmail.com>
+ <20210722181221.xh3r5kyu7zlcojjx@mobilestation>
+ <YPnEO6NVFZDS1s//@yoga>
+ <CALAqxLUT0e+mHMVo685oVTxR8y76733cN0yciQ7ePS6GRE+_dg@mail.gmail.com>
+ <20210722220918.l7j6zw3aaa27qato@mobilestation>
+ <CALAqxLXrs0_Xs0JV5H-wS1q2CJ7XhW5Dj90eu=uazkRXXEMUxQ@mail.gmail.com>
+ <20210815194617.sbrkutxzldqbxfat@mobilestation>
 MIME-Version: 1.0
-References: <20210809165904.RFC.1.I5165a4a8da5cac23c9928b1ec3c3a1a7383b7c23@changeid>
- <YRDxTodNNqtnpPpn@kroah.com> <CAATdQgDSCzZtiDSQk94CYHfSb9Mq28OH7-RdaTZNv3oPrW3nkQ@mail.gmail.com>
- <7b48f4c132a8b4b3819282e961fbe8b3ed753069.camel@mediatek.com>
- <CAATdQgD1paUUmWhiLVq-+zq0V6=RTJw89ggk=R6cBUZO+5dB-Q@mail.gmail.com> <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
-In-Reply-To: <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
-From:   Ikjoon Jang <ikjn@chromium.org>
-Date:   Wed, 18 Aug 2021 10:43:25 +0800
-Message-ID: <CAATdQgC_aukAA3-=cuiOAQGzu_Ztvo4BsMbRv2hCGZpUeOAJVg@mail.gmail.com>
-Subject: Re: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
-To:     =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
-        <Chunfeng.Yun@mediatek.com>
-Cc:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210815194617.sbrkutxzldqbxfat@mobilestation>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Chunfeng,
+On Sun 15 Aug 14:46 CDT 2021, Serge Semin wrote:
 
-On Thu, Aug 12, 2021 at 7:49 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=B0)
-<Chunfeng.Yun@mediatek.com> wrote:
->
-> On Thu, 2021-08-12 at 17:31 +0800, Ikjoon Jang wrote:
-> > HI,
-> >
-> > On Wed, Aug 11, 2021 at 5:02 PM Chunfeng Yun (=E4=BA=91=E6=98=A5=E5=B3=
-=B0)
-> > <Chunfeng.Yun@mediatek.com> wrote:
-> > >
-> > > On Mon, 2021-08-09 at 17:42 +0800, Ikjoon Jang wrote:
-> > > > On Mon, Aug 9, 2021 at 5:11 PM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
+> Hello John
+> 
+> On Fri, Aug 13, 2021 at 06:06:24PM -0700, John Stultz wrote:
+> > On Thu, Jul 22, 2021 at 3:09 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> > > On Thu, Jul 22, 2021 at 01:09:05PM -0700, John Stultz wrote:
+> > > > On Thu, Jul 22, 2021 at 12:17 PM Bjorn Andersson
+> > > > <bjorn.andersson@linaro.org> wrote:
+> > > > > > On Jul 21, 2021, 1:45 PM +0200, Krzysztof Kozlowski wrote:
+> > > > > > > I had impression that kernel defines interfaces which should be used and
+> > > > > > > are stable (e.g. syscalls, sysfs and so on). This case is example of
+> > > > > > > user-space relying on something not being marked as part of ABI. Instead
+> > > > > > > they found something working for them and now it is being used in "we
+> > > > > > > cannot break existing systems". Basically, AOSP unilaterally created a
+> > > > > > > stable ABI and now kernel has to stick to it.
+> > > > > > >
+> > > > > > > Really, all normal systems depend on aliases or names and here we have
+> > > > > > > dependency on device address. I proposed way how AOSP should be fixed.
+> > > > > > > Anything happened? Nope.
+> > > > > >
+> > > > > > First time he sent a possible solution for the problem:
+> > > > > > https://lore.kernel.org/lkml/20201221210423.GA2504@kozik-lap/
+> > > > > >
+> > > > > > To sum up you could have used one of the more portable approaches
+> > > > > > 1. add an udc alias to the controller and use it then to refer to the
+> > > > > > corresponding USB controller
 > > > > >
-> > > > > On Mon, Aug 09, 2021 at 04:59:29PM +0800, Ikjoon Jang wrote:
-> > > > > > xhci-mtk has 64 slots for periodic bandwidth calculations and
-> > > > > > each
-> > > > > > slot represents byte budgets on a microframe. When an
-> > > > > > endpoint's
-> > > > > > allocation sits on the boundary of the table, byte budgets'
-> > > > > > slot
-> > > > > > should be rolled over but the current implementation doesn't.
-> > > > > >
-> > > > > > This patch applies a 6 bits mask to the microframe index to
-> > > > > > handle
-> > > > > > its rollover 64 slots and prevent out-of-bounds array access.
-> > > > > >
-> > > > > > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
-> > > > > > ---
-> > > > > >
-> > > > > >  drivers/usb/host/xhci-mtk-sch.c | 79 +++++++++------------
-> > > > > > ----
-> > > > > > --------
-> > > > > >  drivers/usb/host/xhci-mtk.h     |  1 +
-> > > > > >  2 files changed, 23 insertions(+), 57 deletions(-)
+> > > > > Is there such a thing as "UDC alias"? Or are you suggesting that we
+> > > > > should add such feature?
 > > > > >
-> > > > > Why is this "RFC"?  What needs to be addressed in this change
-> > > > > before it
-> > > > > can be accepted?
+> > > > > I think it would be wonderful if we could identify the UDCs on our
+> > > > > boards as "USB1" and "USB2", or "the one and only USB-C connector". But
+> > > > > unless that will fall back to the existing naming it would break John's
+> > > > > _existing_ userspace.
 > > > >
-> > > > sorry, I had to mention why this is RFC:
-> > > >
-> > > > I simply don't know about the details of the xhci-mtk internals.
-> > > > It was okay from my tests with mt8173 and I think this will be
-> > > > harmless
-> > > > as this is "better than before".
-> > > >
-> > > > But when I removed get_esit_boundary(), I really have no idea why
-> > > > it was there. I'm wondering if there was another reason of that
-> > > > function
-> > > > other than just preventing out-of-bounds. Maybe chunfeng can
-> > > > answer
-> > > > this?
 > > >
-> > > We use @esit to prevent out-of-bounds array access. it's not a
-> > > ring,
-> > > can't insert out-of-bounds value into head slot.
-> >
-> > Thanks, so that function was only for out-of-bounds array access.
-> > then I think we just can remove that function and use it as a ring.
-> > Can you tell me _why_ it can't be used as a ring?
-> Treat it as a period, roll over slot equals to put it into the next
-> period.
->
-> >
-> > I think a transaction (e.g. esit_boundary =3D 7) can start its first
-> > SSPLIT
-> > from Y_7 (offset =3D 7). But will that allocation be matched with this?
-> >
-> > -               if ((offset + sch_ep->num_budget_microframes) >
-> > esit_boundary)
-> > -                       break;
-> >
-> > I mean I'm not sure why this is needed.
-> Prevent out-of-bounds.
-
-If it was for preventing drivers from out-of-bound array access,
-I couldn't find any reasons why we cannot remove the above lines.
-So can I know if it was just for preventing xhci-mtk drivers from
-out-of-bounds array access?
-
-If xhci-mtk HC itself can continue the transaction from Y_7 to (Y+1)_n;
-including the case of Y=3D=3D63, I think it's just okay to rollover to (Y+1=
-).
-
-If it's prohibited by xhci-mtk hw, or if you think this patch is not
-allowed by any other reasons, can you please  tell me what
-kinds of problems can happen with this patch?
-
-Otherwise, please consider minimizing the bw constraints from
-xhci-mtk-sch on your side. Note that we're still having other usb
-audio headsets which cannot be configured with xhci-mtk
-even with this patch.
-
-Thanks.
-
->
-> >
-> > Until now, I couldn't find a way to accept the USB audio headset
-> > with a configuration of { INT-IN 64 + ISOC-OUT 384 + ISOC-IN 192 }
-> > without this patch.
-> what is the interval value of each endpoint?
->
-> >
+> > > > Well, I'd not hold up the existing userspace I'm using as sacrosanct
+> > > > (AOSP devices still usually don't have to work cross-kernel versions -
+> > > > devboards being the main exception). I'm fine if we can rework
+> > > > userland as proposed, so that the issues can be avoided, but I
+> > > > honestly don't have enough context to really understand what that
+> > > > looks like (no idea what udc aliases are).
+> > > >
+> > > > And whatever we do, the main constraint is that userland has to be
+> > > > able to work with existing LTS kernels and newer kernels.
+> > >
+> > > As I said in my response to Bjorn even if it is added to the kernel it
+> > > won't get to the official LTSes as it would be a new kernel feature.
+> > > New features aren't normally backported to the older kernels.
 > > >
 > > > >
-> > > > Thanks!
+> > > > > > 2. search through DT-nodes looking for a specific compatible/reg
+> > > > > > DT-properties.
+> > > > > >
+> > > > >
+> > > > > We could define that this is the way, but again we didn't yesterday so
+> > > > > your proposal is not backwards compatible.
 > > > >
-> > > > >
-> > > > > thanks,
-> > > > >
-> > > > > greg k-h
+> > >
+> > > > It may be backwards compatible, but I'm still not clear exactly how it
+> > > > would work.
+> > > >
+> > > > I guess if we look through all
+> > > > sys/bus/platform/devices/*/of_node/compatbile strings for the desired
+> > > > "snps,dwc3", then find which of the directories have the desired
+> > > > address in the string? (The suggestion for looking at reg seems
+> > > > better, but I don't get a char value out of the dwc3 of_node/reg
+> > > > file).
+> > >
+> > > The algorithm is simple:
+> > > 1) You know what USB controllers you have on your platform. They are
+> > > supposed to be compatible with snps,dwc3 string and have some pre-defined
+> > > base address.
+> > > 2) Find all the files in the directory /sys/class/udc/.
+> > > 3) Walk through all the directories in /sys/bus/platform/devices/ with
+> > > names found in 2) and stop on the device with matching compatible/base
+> > > address defined in 1).
+> > >
+> > > In my case the strings could be retrieved like this:
+> > > USB_NAME_COMPAT=$(/sys/bus/platform/devices/1f100000.usb/of_node/compatible | tr '\0' '\t' | cut -f1)
+> > > USB_DEVICE_ADDR="$(head -c 4 /sys/bus/platform/devices/1f100000.usb/of_node/reg | hexdump -ve '/1 "%02x"' | sed -e 's/^0*//g')"
+> > 
+> > 
+> 
+> > Hey Serge,
+> >    I just wanted to follow up here.  Amit has reworked the db845c AOSP
+> > userland so that it no longer uses the fixed node name, but instead
+> > probes for it:
+> >   https://android-review.googlesource.com/c/device/linaro/dragonboard/+/1774872
+> > 
+> > Admittedly, it does take a short-cut.  As your algorithm above,
+> > digging up the devices and finding the sys/bus path to read the reg
+> > value and pipe through hexdump (which android doesn't have) seemed
+> > overly obtuse when the address is in the node name itself (while the
+> > only way to be sure, one normally doesn't use spectroscopy to
+> > determine the value of a coin when you can read what's printed on it
+> > :).  But, should the node naming be further changed at least the
+> > infrastructure we have can be reworked fairly easily to adapt now.
+> > 
+> > In any case, as we can handle the name change now, if you want to
+> > resubmit your patch, we would no longer object (but can't promise no
+> > one else might be bitten).  Sorry for the delay this caused, and we
+> > appreciate you working with us to find a solution.
+> 
+> Great! Thanks for sending the notification. I'll resend the patch with a
+> reference to your report and to the update made to AOSP, as soon as I
+> am done with my current task.
+> 
+
+Amit's change makes future versions of AOSP able to cope with changes in
+the UDC name, unfortunately it doesn't change the fact that renaming the
+node breaks compatibility in non-Android user space (or any existing
+branches/tags of AOSP).
+
+Regards,
+Bjorn
