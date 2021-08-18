@@ -2,157 +2,209 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A347B3F09FF
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 19:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7C13F0A11
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 19:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbhHRRLu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 13:11:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60254 "EHLO
+        id S232110AbhHRRQa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 13:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbhHRRLm (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 13:11:42 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A168FC061764;
-        Wed, 18 Aug 2021 10:11:06 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id i28so6143423lfl.2;
-        Wed, 18 Aug 2021 10:11:06 -0700 (PDT)
+        with ESMTP id S231253AbhHRRQ3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 13:16:29 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C298AC061764
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 10:15:54 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mq2-20020a17090b3802b0290178911d298bso2804637pjb.1
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 10:15:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jqE9ClhGb0c32X3v7BncGGF0woKsX2XgQIGx9qgWIH0=;
-        b=pzxMEO2UMuT/mHPfPLSjCbX3ZOkDKV6nZIXJP5/zPjCNpAmYvVuFYDC5xhuzIXGAng
-         k06Q5T/VtECFuIzWKjrForzIl4lzYGT5926+k7EPC9XdDRz2131oKSvSnQpNDCIjUZeV
-         vAmDMRNzl3coOfWSZz4CU+fD10VCYBpA5I6tzFaCdMPL/E4hBdGPJ8T64iETHNj36g5/
-         4Zr7nRwBnt0A/FIqmj1kKX08k9xT8d+vmEYX1QK+8VovTTlsqt2R6xS22Go2zElhhlPR
-         euQHMQkRAQQ2VSVWBb0NpqmpPCycMssSiywU+Zr1oEUGDcugw9A5VFVSxFxuj21XbpAw
-         m+bg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=n9sygy20fI2oL0kJi8mBbhY37SIpWJz/q6mr+StXZZU=;
+        b=oU6cy+imYpRkxskembg3Gu5PucyPFy8HtFmsHk6V+BzEkQEnaov/yT4za7CTd2UtNM
+         3wvmzYvjEfcGGNOiagmh8QXb0dMD8pcRFChEC18sZuvBsqEStL4HLxqlX6hZAVCYOqQR
+         Rtwwo4IGSqLpiiVuKtRQ/WAzITNa3UY2o65o4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jqE9ClhGb0c32X3v7BncGGF0woKsX2XgQIGx9qgWIH0=;
-        b=dGzsMHHXKiSmbMVeU78bpMPsi6QTWsLew0z0frcF/rj/GTaJLcOrujiRz6f8/LnUck
-         GBMpgmcciF07Z9A/OXBDwEl1EhBR8dzZW+4ue2v7LrWhLbi5M7Yv0zx9ZCyqg9YAHIk4
-         tMt6sNVxAeBbJNmloJZW++hqVxHNsWAKNZQpnPiKRY1knj+8na7jbJfYSyXBvvh5Zr8B
-         3p67VoLf9a7To+/JnU4nVp0tdLfiHaTef/C1wsQ4AlLOW2q1sdH7zTQFuZJqXaaw5Bwx
-         D3/JXQbi5RpfhfdFUB+eH1SkbhXr+td1ULLNXq3ur/N6VTuuSUW7e1m9NuLvvYTjaO+n
-         tcjg==
-X-Gm-Message-State: AOAM532rB1TBMhMEh0k2nz8PmrZstJcq7N1Y1t4/P7DkYGhVhI7gjdAV
-        oD9LXBhkOFxQUVwtuS3Tt1IAVJjOVGA=
-X-Google-Smtp-Source: ABdhPJx8mXn6y5y5nU5HWp3Gqd9IJG4zaBOIqyrwTbYskADisL9LhAfipeaTsyrerunkulv/neb4gw==
-X-Received: by 2002:a05:6512:2149:: with SMTP id s9mr6957434lfr.365.1629306664851;
-        Wed, 18 Aug 2021 10:11:04 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.googlemail.com with ESMTPSA id x191sm25857lff.29.2021.08.18.10.11.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Aug 2021 10:11:04 -0700 (PDT)
-Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-8-digetx@gmail.com> <YR0UBi/ejy+oF4Hm@orome.fritz.box>
- <da7356cb-05ee-ba84-8a7c-6e69d853a805@gmail.com>
- <YR04YHGEluqLIZeo@orome.fritz.box>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <ad99db08-4696-1636-5829-5260f93dc681@gmail.com>
-Date:   Wed, 18 Aug 2021 20:11:03 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=n9sygy20fI2oL0kJi8mBbhY37SIpWJz/q6mr+StXZZU=;
+        b=SLI8qNwSTC4es9i/11SmcbdKInTNIdsL19Rqrlnd82eYMmtfzsLVO+aBMBtjnyvQ2r
+         aEaFaqg0ZXtjE5KxtEWZRCulUdu1Z/Wl1ML78WiyIlrmMEdUhI4RNWJ6KGR9DkH/NafL
+         IdNY1D3Dkvk+rOhHKmyy2vRx8rakRltCBme52wiyn06mQ0S+N3qoYyEeeMdYefTV6htR
+         6Pi8UddI+YbRtO/asdqBiQiiA9p2C4XIlizQJmIu4dku+D1emHMoKZKQZ9Lk+KHUuaL7
+         3KExNsTqtkhHZPvG7isUdBQCfiyASYSZMcrLJXRmQXShBoFkeRORqGgZnb+SGbYJPXtt
+         XwrA==
+X-Gm-Message-State: AOAM530dLA27+zAgBuayr6tQRljAS2lZyGlqZLCK+SZdcmvbFcofS0G4
+        G75pVKv1K0KCz24T5az0dqAUUg==
+X-Google-Smtp-Source: ABdhPJwKia/5GGKCbnPOR/TUjREIi907SNS2bEdU6Mh1+TQEFW75in9xrQoVv1Gl99ssQv/cFlCXvQ==
+X-Received: by 2002:a17:90b:88:: with SMTP id bb8mr10252475pjb.23.1629306954330;
+        Wed, 18 Aug 2021 10:15:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z131sm355644pfc.159.2021.08.18.10.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Aug 2021 10:15:53 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 10:15:52 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Cooper <alcooperx@gmail.com>, linux-usb@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] USB: EHCI: Add alias for Broadcom INSNREG
+Message-ID: <202108181013.63E7B4903B@keescook>
+References: <20210818043035.1308062-1-keescook@chromium.org>
+ <20210818043035.1308062-3-keescook@chromium.org>
+ <20210818145736.GD193695@rowland.harvard.edu>
 MIME-Version: 1.0
-In-Reply-To: <YR04YHGEluqLIZeo@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210818145736.GD193695@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-18.08.2021 19:42, Thierry Reding пишет:
-> On Wed, Aug 18, 2021 at 06:05:21PM +0300, Dmitry Osipenko wrote:
->> 18.08.2021 17:07, Thierry Reding пишет:
->>> On Tue, Aug 17, 2021 at 04:27:27AM +0300, Dmitry Osipenko wrote:
->>> [...]
->>>> +struct clk *tegra_clk_register(struct clk_hw *hw)
->>>> +{
->>>> +	struct platform_device *pdev;
->>>> +	struct device *dev = NULL;
->>>> +	struct device_node *np;
->>>> +	const char *dev_name;
->>>> +
->>>> +	np = tegra_clk_get_of_node(hw);
->>>> +
->>>> +	if (!of_device_is_available(np))
->>>> +		goto put_node;
->>>> +
->>>> +	dev_name = kasprintf(GFP_KERNEL, "tegra_clk_%s", hw->init->name);
->>>> +	if (!dev_name)
->>>> +		goto put_node;
->>>> +
->>>> +	pdev = of_platform_device_create(np, dev_name, NULL);
->>>> +	if (!pdev) {
->>>> +		pr_err("%s: failed to create device for %pOF\n", __func__, np);
->>>> +		kfree(dev_name);
->>>> +		goto put_node;
->>>> +	}
->>>> +
->>>> +	dev = &pdev->dev;
->>>> +	pm_runtime_enable(dev);
->>>> +put_node:
->>>> +	of_node_put(np);
->>>> +
->>>> +	return clk_register(dev, hw);
->>>> +}
->>>
->>> This looks wrong. Why do we need struct platform_device objects for each
->>> of these clocks? That's going to be a massive amount of platform devices
->>> and they will completely mess up sysfs.
->>
->> RPM works with a device. It's not a massive amount of devices, it's one
->> device for T20 and four devices for T30.
+On Wed, Aug 18, 2021 at 10:57:36AM -0400, Alan Stern wrote:
+> On Tue, Aug 17, 2021 at 09:30:34PM -0700, Kees Cook wrote:
+> > Refactor struct ehci_regs to avoid accessing beyond the end of
+> > port_status. This change results in no difference in the resulting
+> > object code.
+> > 
+> > Avoids several warnings when building with -Warray-bounds:
+> > 
+> > drivers/usb/host/ehci-brcm.c: In function 'ehci_brcm_reset':
+> > drivers/usb/host/ehci-brcm.c:113:32: warning: array subscript 16 is above array bounds of 'u32[15]' {aka 'unsigned int[15]'} [-Warray-bounds]
+> >   113 |  ehci_writel(ehci, 0x00800040, &ehci->regs->port_status[0x10]);
+> >       |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > In file included from drivers/usb/host/ehci.h:274,
+> >                  from drivers/usb/host/ehci-brcm.c:15:
+> > ./include/linux/usb/ehci_def.h:132:7: note: while referencing 'port_status'
+> >   132 |   u32 port_status[HCS_N_PORTS_MAX];
+> >       |       ^~~~~~~~~~~
+> > 
+> > Note that the documentation around this proprietary register is
+> > confusing. If "USB_EHCI_INSNREG00" is at port_status[0x0f], its offset
+> > would be 0x80 (not 0x90). The code uses port_status[0x10], so is that
+> > not using "USB_EHCI_INSNREG00"?
 > 
-> I'm still not sure I understand why we need to call RPM functions on a
-> clock. And even if they are few, it seems wrong to make these platform
-> devices.
+> I suspect the 0x90 value in the comment is a typo for 0x80.
 
-Before clock is enabled, we need to raise core voltage. After clock is
-disabled, the voltage should be dropped. CCF+RPM takes care of handling
-this for us.
+That'd be my conclusion too. I've updated this for v2.
 
-> Perhaps they can be simple struct device:s instead? Ideally they would
-> also be parented to the CAR so that they appear in the right place in
-> the sysfs hierarchy.
+> 
+> > Perhaps port_status[0x10] is USB_EHCI_INSNREG01 and port_status[0x12]
+> > is USB_EHCI_INSNREG03? If so, the union could be adjusted to better
+> > represent the layout.
+> > 
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Cc: Al Cooper <alcooperx@gmail.com>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: bcm-kernel-feedback-list@broadcom.com
+> > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > Fixes: 9df231511bd6 ("usb: ehci: Add new EHCI driver for Broadcom STB SoC's")
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  drivers/usb/host/ehci-brcm.c | 11 +++++------
+> >  include/linux/usb/ehci_def.h | 16 ++++++++++++++--
+> >  2 files changed, 19 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/ehci-brcm.c b/drivers/usb/host/ehci-brcm.c
+> > index 3e0ebe8cc649..5d232d3701f9 100644
+> > --- a/drivers/usb/host/ehci-brcm.c
+> > +++ b/drivers/usb/host/ehci-brcm.c
+> > @@ -110,8 +110,8 @@ static int ehci_brcm_reset(struct usb_hcd *hcd)
+> >  	 *   bus usage
+> >  	 * port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00 @ 0x90
+> 
+> This last comment line is no longer necessary, thanks to the revised 
+> port definitions.  And since it is actively misleading, with the 0x90 
+> instead of 0x80, I think it should be removed entirely.
 
-Could you please clarify what do you mean by 'simple struct device:s'?
-These clock devices should be OF devices with a of_node and etc,
-otherwise we can't use OPP framework.
+Done.
 
-We don't have driver for CAR to bind. I guess we could try to add a
-'dummy' CAR driver that will create sub-devices for the rpm-clocks, is
-this what you're wanting?
+> 
+> >  	 */
+> > -	ehci_writel(ehci, 0x00800040, &ehci->regs->port_status[0x10]);
+> > -	ehci_writel(ehci, 0x00000001, &ehci->regs->port_status[0x12]);
+> > +	ehci_writel(ehci, 0x00800040, &ehci->regs->brcm_insnreg[0]);
+> > +	ehci_writel(ehci, 0x00000001, &ehci->regs->brcm_insnreg[2]);
+> >  
+> >  	return ehci_setup(hcd);
+> >  }
+> > @@ -223,11 +223,10 @@ static int __maybe_unused ehci_brcm_resume(struct device *dev)
+> >  	/*
+> >  	 * SWLINUX-1705: Avoid OUT packet underflows during high memory
+> >  	 *   bus usage
+> > -	 * port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00
+> > -	 * @ 0x90
+> > +	 * port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00 @ 0x90
+> 
+> Same here.
+> 
+> >  	 */
+> > -	ehci_writel(ehci, 0x00800040, &ehci->regs->port_status[0x10]);
+> > -	ehci_writel(ehci, 0x00000001, &ehci->regs->port_status[0x12]);
+> > +	ehci_writel(ehci, 0x00800040, &ehci->regs->brcm_insnreg[0]);
+> > +	ehci_writel(ehci, 0x00000001, &ehci->regs->brcm_insnreg[2]);
+> >  
+> >  	ehci_resume(hcd, false);
+> >  
+> > diff --git a/include/linux/usb/ehci_def.h b/include/linux/usb/ehci_def.h
+> > index 5398f571113b..86f0909cab99 100644
+> > --- a/include/linux/usb/ehci_def.h
+> > +++ b/include/linux/usb/ehci_def.h
+> > @@ -182,11 +182,23 @@ struct ehci_regs {
+> >   * its EHCI controller has both TT and LPM support. HOSTPCx are extensions to
+> >   * PORTSCx
+> >   */
+> > -	/* HOSTPC: offset 0x84 */
+> > -	u32		hostpc[HCS_N_PORTS_MAX];
+> > +	union {
+> > +		/* HOSTPC: offset 0x84 */
+> > +		u32	hostpc[HCS_N_PORTS_MAX];
+> >  #define HOSTPC_PHCD	(1<<22)		/* Phy clock disable */
+> >  #define HOSTPC_PSPD	(3<<25)		/* Port speed detection */
+> >  
+> > +		/*
+> > +		 * This was originally documented as:
+> > +		 * "port_status[0x0f] = Broadcom-proprietary USB_EHCI_INSNREG00 @ 0x90"
+> > +		 * but this doesn't make sense: the code was using
+> > +		 * port_status[0x10]. port_status[0x0f] would be reserved4.
+> > +		 * Also, none of these are near 0x90. port_status[0x10] is
+> > +		 * offset 0x84, and port_status[0x0f] would be 0x80.
+> > +		 */
+> 
+> This comment is entirely inappropriate.  It's the sort of thing that 
+> belongs in the git history, not in the code.
+
+I wanted it to be easily discoverable, but since we've got a preferred
+result now, I'm dropping this and orienting against 0x80.
+
+> 
+> > +		u32	brcm_insnreg[3];
+> 
+> Given the notation in the original comments, perhaps it would be better 
+> to define this as:
+> 
+> 		struct {		/* Broadcom proprietary registers */
+> 			u32	brcm_insnreg01;		/* offset 0x84 */
+> 			u32	brcm_insnreg02;
+> 			u32	brcm_insnreg03;
+> 		};
+
+Following the other register arrays, I'm going to keep an array for
+this, but adjust the numbering to start at 0 @ 0x80 so the code will
+poke offset 1 and 3.
+
+> I don't know.  It would be nice to hear from somebody at Broadcom.
+
+Agreed. :)
+
+Thanks for the review!
+
+-- 
+Kees Cook
