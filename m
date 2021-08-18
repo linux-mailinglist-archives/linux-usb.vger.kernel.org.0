@@ -2,168 +2,131 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A663EF8DD
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 05:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02823EF8ED
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 05:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236664AbhHRDvA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 23:51:00 -0400
-Received: from mga01.intel.com ([192.55.52.88]:45254 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236105AbhHRDuz (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 17 Aug 2021 23:50:55 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10079"; a="238341637"
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="238341637"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2021 20:50:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,330,1620716400"; 
-   d="scan'208";a="510708971"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Aug 2021 20:50:19 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mGCao-000SWT-CY; Wed, 18 Aug 2021 03:50:18 +0000
-Date:   Wed, 18 Aug 2021 11:50:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- 0d45a1373e669880b8beaecc8765f44cb0241e47
-Message-ID: <611c8368.4eakRTJ/q1/CD3yP%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S237154AbhHRD4N (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 23:56:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237227AbhHRD4L (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 23:56:11 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742F4C0617AD
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 20:55:36 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id j187so804550pfg.4
+        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 20:55:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=VGIhwyovjc9cLTorbY5F7s7VUrCyo5ROsIE6mKdF2i8=;
+        b=rsLZ+5+cs34CeKm8FdeypOasGszO5Z+LGg/gURNdpo/BaltaeBSvKidQFxg+U/P7vq
+         S/zusxLUtdDoCDzHAq+gTq22WAB40n4Qkk0Ku4cXOc+uTEyaQRKWv/b52rLV4JZHB+rE
+         GpTGxz7vZkIm7Ms92t/jEfqzxajkgCcDGx/hfYVqqHH+Ja2QK6EJtgOjTFD7Mons7/7z
+         jRQRosrCR9tYeU2COXGJUOTnQsHGWC5eYAYHYZf+lDoWMOvzM0YqaRI8vzA1Q6qR94h5
+         JdL36SX2xj7RIzuN9CFefrR3429SFDWAFHYvDz+a1OiNH/4h5wRF/0Uqw9a4yTL9NaQb
+         DX8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=VGIhwyovjc9cLTorbY5F7s7VUrCyo5ROsIE6mKdF2i8=;
+        b=esqm16z/nOKLeLYJMRKAuOXHTSYe+6bycMdsxamlyDplj+WtzlmAhGAd38T2PAizBA
+         vFL5ywGSwr1SJTQg1xjyX6ptT7eQHhzRP2sE/FEz9hs5745GRxfGsHhfWMHUrmPsxrRg
+         uI2t0C22R85pgpwiJRkutDoJGe/ZBNsz5aFoqcHXVTdJEYFQaTPS0bA/MjGp5gPiWryg
+         BzLzl2tAVp5hT1UZsnCgrkX2hr2kM1mz1O2kfv6BYJw0pXhHVjxxJWCqvLn1zg9cSqAb
+         sfYpv5AX5Y5+WemlgOBKhTmgFqP7E8n6yRxteSiaVURb54NMlyinyTwFZB5/4P/zB+tZ
+         K1/w==
+X-Gm-Message-State: AOAM533psWVZY9PczIb11NpcO4lJToMASSLEz+UM5p1hv5GjzQnx67nb
+        NqBGw+wC4qWqts8TVzdPrDXsAw==
+X-Google-Smtp-Source: ABdhPJxZ0gvNmqzlYvzU9rK9OQ8NNCMq9wCIZZhKFhU5FN4x6UJRSgCEgSUhRZIdfilYavV9v+XkrA==
+X-Received: by 2002:a62:a20d:0:b029:35b:73da:dc8d with SMTP id m13-20020a62a20d0000b029035b73dadc8dmr7200457pff.54.1629258935761;
+        Tue, 17 Aug 2021 20:55:35 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id u21sm4880194pgk.57.2021.08.17.20.55.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 20:55:35 -0700 (PDT)
+Date:   Wed, 18 Aug 2021 09:25:33 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-2-digetx@gmail.com>
+ <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
+ <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: 0d45a1373e669880b8beaecc8765f44cb0241e47  usb: phy: tahvo: add IRQ check
+On 17-08-21, 18:49, Dmitry Osipenko wrote:
+> 17.08.2021 10:55, Viresh Kumar пишет:
+> ...
+> >> +int dev_pm_opp_sync(struct device *dev)
+> >> +{
+> >> +	struct opp_table *opp_table;
+> >> +	struct dev_pm_opp *opp;
+> >> +	int ret = 0;
+> >> +
+> >> +	/* Device may not have OPP table */
+> >> +	opp_table = _find_opp_table(dev);
+> >> +	if (IS_ERR(opp_table))
+> >> +		return 0;
+> >> +
+> >> +	if (!_get_opp_count(opp_table))
+> >> +		goto put_table;
+> >> +
+> >> +	opp = _find_current_opp(dev, opp_table);
+> >> +	ret = _set_opp(dev, opp_table, opp, opp->rate);
+> > 
+> > And I am not sure how this will end up working, since new OPP will be
+> > equal to old one. Since I see you call this from resume() at many
+> > places.
+> 
+> Initially OPP table is "uninitialized" and opp_table->enabled=false,
+> hence the first sync always works even if OPP is equal to old one. Once
+> OPP has been synced, all further syncs are NO-OPs, hence it doesn't
+> matter how many times syncing is called.
+> 
+> https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/opp/core.c#L1012
 
-Warning reports:
+Right, but how will this work from Resume ? Won't that be a no-op ?
 
-https://lore.kernel.org/linux-usb/202108171206.kZrE9r0u-lkp@intel.com
-
-Warning in current branch:
-
-drivers/usb/dwc3/gadget.c:687:2: warning: Value stored to 'dep' is never read [clang-analyzer-deadcode.DeadStores]
-
-Warning ids grouped by kconfigs:
-
-clang_recent_errors
-`-- x86_64-randconfig-c007-20210816
-    `-- drivers-usb-dwc3-gadget.c:warning:Value-stored-to-dep-is-never-read-clang-analyzer-deadcode.DeadStores
-
-elapsed time: 2041m
-
-configs tested: 98
-configs skipped: 3
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20210816
-powerpc                         ps3_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                         lpc18xx_defconfig
-arm                         lubbock_defconfig
-powerpc                   bluestone_defconfig
-powerpc                     ep8248e_defconfig
-parisc                generic-32bit_defconfig
-arm                        neponset_defconfig
-arm                          simpad_defconfig
-mips                        workpad_defconfig
-powerpc                    mvme5100_defconfig
-powerpc                     rainier_defconfig
-mips                        nlm_xlr_defconfig
-sh                             shx3_defconfig
-alpha                            alldefconfig
-arm                         s3c6400_defconfig
-m68k                        mvme16x_defconfig
-arm                      pxa255-idp_defconfig
-sh                           se7750_defconfig
-m68k                       m5208evb_defconfig
-arm                         s5pv210_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a006-20210816
-x86_64               randconfig-a004-20210816
-x86_64               randconfig-a003-20210816
-x86_64               randconfig-a001-20210816
-x86_64               randconfig-a005-20210816
-x86_64               randconfig-a002-20210816
-i386                 randconfig-a004-20210816
-i386                 randconfig-a003-20210816
-i386                 randconfig-a002-20210816
-i386                 randconfig-a001-20210816
-i386                 randconfig-a006-20210816
-i386                 randconfig-a005-20210816
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-i386                 randconfig-c001-20210816
-x86_64               randconfig-a011-20210816
-x86_64               randconfig-a013-20210816
-x86_64               randconfig-a016-20210816
-x86_64               randconfig-a012-20210816
-x86_64               randconfig-a015-20210816
-x86_64               randconfig-a014-20210816
-i386                 randconfig-a011-20210816
-i386                 randconfig-a015-20210816
-i386                 randconfig-a013-20210816
-i386                 randconfig-a014-20210816
-i386                 randconfig-a016-20210816
-i386                 randconfig-a012-20210816
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+viresh
