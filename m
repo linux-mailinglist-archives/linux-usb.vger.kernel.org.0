@@ -2,141 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CAA3EF9F6
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 07:21:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BB33EFA3E
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 07:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237704AbhHRFWK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 01:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236055AbhHRFWI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 01:22:08 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807E1C061764;
-        Tue, 17 Aug 2021 22:21:34 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h9so2789005ljq.8;
-        Tue, 17 Aug 2021 22:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=yOpS1WKSzyXtmkcc56y1iDICg2EoTDsJHsY4fPaSb5w=;
-        b=czCBETSSjNQa96HeR8S2cXF9WItzalDZ+Bims31/WwUHmduqBSoEIrz2EHd1Rplnvm
-         FFwAvQOnG91Y+0pNG7gcjM8fuOK7PmDvtjcps1eXeHj5mFDM7T8Il2gc/dhcMiEnsq3U
-         dYqtv8hjrv5XQwoHcnwTEBGrRK1459O7Zm+K8cjotiTE0HUOwS7EWfdq/k1AdFePe/7T
-         qIjtoVkBbmE3Zl1qSkUzqZv9CvHixrI856MdhPDyYrJSZk10aF2YpSr+G4t557R0fLe2
-         gENb/8qw1Cif5pMMEHqGyMJt9OlS6t5IEPg7dmTF9mJyzzfy4L6tBS3Gp6x5EtTq9Otk
-         Id/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yOpS1WKSzyXtmkcc56y1iDICg2EoTDsJHsY4fPaSb5w=;
-        b=KyTN+66JReUiZ1nBMEpIdN+P9S79uEbMiu3M16czSgFJ05YwvKLskilB2QqFZVk62J
-         prZHpbsfHzIx5e87MhH/gACK7omP8L9NIP7VpxCLK3S0yThlJNzngWHTDQb3DnCwnCBz
-         Q7O+mvHisqBaIz/jNC3sDZqf72kjslbVVJWwiSMBcsS0kRMTbgNLsxcb6A1nloJlzmix
-         5sg5M2+xYysgiBpIxaqfyEu5CONXY3xQlNOp+9ZlD+EaoyKZjnLp/1unMczoaLYZuccj
-         RBb7l3o7A2E7Yliyg4mnTMLSM6KsbrW6LKSWxEjO/NWj5egYPIKIb/UDHDLUB7taJg1K
-         R1+g==
-X-Gm-Message-State: AOAM532uIzrUOlr8c26HbMOuf5JWdSxIDRVwco2Tvnd2Af/8PdpZ5Ji+
-        yuoCMn8yi7o3CporXX1hvtPIyyVZkV4=
-X-Google-Smtp-Source: ABdhPJz2ztpis7OKP5puANjPipNjZh3C0caocgaMorHlmoNO+0jB7HIjn/fYUFG6yGBcOjPS91/Jnw==
-X-Received: by 2002:a2e:8553:: with SMTP id u19mr1498129ljj.158.1629264092744;
-        Tue, 17 Aug 2021 22:21:32 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-85-91.dynamic.spd-mgts.ru. [46.138.85.91])
-        by smtp.googlemail.com with ESMTPSA id d9sm487076ljq.54.2021.08.17.22.21.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Aug 2021 22:21:32 -0700 (PDT)
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-2-digetx@gmail.com>
- <20210817075515.vyyv7z37e6jcrhsl@vireshk-i7>
- <710261d9-7ae3-5155-c0a2-f8aed2408d0b@gmail.com>
- <20210818035533.ieqkexltfvvf2p4n@vireshk-i7>
- <5b2a80c1-9743-e633-6257-ede94c8a274c@gmail.com>
- <20210818043131.7klajx6drvvkftoc@vireshk-i7>
- <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
-Date:   Wed, 18 Aug 2021 08:21:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S238013AbhHRFkW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 18 Aug 2021 01:40:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35172 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238103AbhHRFkP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 18 Aug 2021 01:40:15 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 13E0161029;
+        Wed, 18 Aug 2021 05:39:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629265181;
+        bh=EtIBL4nck6yS3y+rq79pT9mCLC3bvjYO+hQnPLk5ThE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S60Z4BDzLUbMnBdGBVbSnwufET+iJ+kHOPHNmlS04Qy7kLoYhoYJETBuvVh454+rm
+         s59j4s8IFK7gcIoexdKrq8Qj0jtRu+T2ZB7nt1OH+Iy7JbU2h7ubByiYYFZ/krBbQs
+         djRx51fhdmXLeZ1/fYVa5PfoawGeuoIFEpaYB9N4=
+Date:   Wed, 18 Aug 2021 07:39:37 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
+        valentina.manea.m@gmail.com, shuah@kernel.org,
+        syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] usbip: give back URBs for unsent unlink requests
+ during cleanup
+Message-ID: <YRydGRdPmOaiMWaY@kroah.com>
+References: <20210813182508.28127-1-mail@anirudhrb.com>
+ <20210813182508.28127-2-mail@anirudhrb.com>
+ <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20210818045307.4brb6cafkh3adjth@vireshk-i7>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-18.08.2021 07:53, Viresh Kumar пишет:
-> On 18-08-21, 07:37, Dmitry Osipenko wrote:
->> This will set voltage level without having an actively used hardware.
->> Take a 3d driver for example, if you set the rate on probe and
->> rpm-resume will never be called, then the voltage will be set high,
->> while hardware is kept suspended if userspace will never wake it up by
->> executing a 3d job.
+On Tue, Aug 17, 2021 at 05:16:51PM -0600, Shuah Khan wrote:
+> On 8/13/21 12:25 PM, Anirudh Rayabharam wrote:
+> > In vhci_device_unlink_cleanup(), the URBs for unsent unlink requests are
+> > not given back. This sometimes causes usb_kill_urb to wait indefinitely
+> > for that urb to be given back. syzbot has reported a hung task issue [1]
+> > for this.
+> > 
+> > To fix this, give back the urbs corresponding to unsent unlink requests
+> > (unlink_tx list) similar to how urbs corresponding to unanswered unlink
+> > requests (unlink_rx list) are given back.
+> > 
+> > [1]: https://syzkaller.appspot.com/bug?id=08f12df95ae7da69814e64eb5515d5a85ed06b76
+> > 
+> > Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
+> > Tested-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
+> > Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> > ---
+> >   drivers/usb/usbip/vhci_hcd.c | 26 ++++++++++++++++++++++++++
+> >   1 file changed, 26 insertions(+)
+> > 
+> > diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> > index 4ba6bcdaa8e9..6f3f374d4bbc 100644
+> > --- a/drivers/usb/usbip/vhci_hcd.c
+> > +++ b/drivers/usb/usbip/vhci_hcd.c
+> > @@ -957,8 +957,34 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
+> >   	spin_lock(&vdev->priv_lock);
+> >   	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
+> > +		struct urb *urb;
+> > +
+> > +		/* give back URB of unsent unlink request */
+> >   		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
 > 
-> What exactly are we looking to achieve with this stuff ? Cache the
-> current performance state with genpd (based on the state bootloader's
-> has set) ?
+> I know this is an exiting one.
+> Let's make this pr_debug or remove it all together.
+> 
+> > +
+> > +		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
+> > +		if (!urb) {
+> > +			pr_info("the urb (seqnum %lu) was already given back\n",
+> > +				unlink->unlink_seqnum);
+> 
+> Let's make this pr_debug or remove it all together.
 
-Yes, GENPD will cache the perf state across suspend/resume and initially
-cached value is out of sync with h/w.
+As you have a struct device for all of these, please use dev_dbg() and
+friends, not pr_*(), for all of these.
 
-> Or anything else as well ?
+thanks,
 
-Nothing else. But let me clarify it all again.
-
-Initially the performance state of all GENPDs is 0 for all devices.
-
-The clock rate is preinitialized for all devices to a some default rate
-by clk driver, or by bootloader or by assigned-clocks in DT.
-
-When device is rpm-resumed, the resume callback of a device driver
-enables the clock.
-
-Before clock is enabled, the voltage needs to be configured in
-accordance to the clk rate.
-
-So now we have a GENPD with pstate=0 on a first rpm-resume, which
-doesn't match the h/w configuration. Calling dev_pm_opp_sync() sets the
-pstate in accordance to the h/w config.
-
-In a previous v7 I proposed to preset the rpm_pstate of GENPD (perf
-level that is restored before device is rpm-resumed) from PD's
-attach_dev callback, but Ulf didn't like that because it requires to use
-and modify GENPD 'private' variables from a PD driver. We decided that
-will be better to make device drivers to explicitly sync the perf state,
-which I implemented in this v8.
+greg k-h
