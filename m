@@ -2,140 +2,173 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD97F3EF605
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 01:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCF93EF73C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Aug 2021 03:15:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234866AbhHQXR2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 17 Aug 2021 19:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbhHQXR2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 19:17:28 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658DCC0613C1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 16:16:54 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id a21so262006ioq.6
-        for <linux-usb@vger.kernel.org>; Tue, 17 Aug 2021 16:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KPiGFxgVvYUbWABlVl43nzVqjuIo6MdwTPCZgQTNlrY=;
-        b=diWvOr0feVT+pBD+17kbknG8z4+nNaij0fI9QAcAJfayqyHUARSwxacULzfqTEmhyY
-         /3y/xTXMiX/1zCwAUBH8IgkY8HMQE+GGdlxSFTubMUKo+pFrvWssUolP5i7LCZVaSBLo
-         dhvpU8LgwVbyXgu7dmlPcUhubapa+1EloFapo=
+        id S237441AbhHRBPs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 17 Aug 2021 21:15:48 -0400
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:35374 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232294AbhHRBPo (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 17 Aug 2021 21:15:44 -0400
+Received: by mail-ot1-f45.google.com with SMTP id f16-20020a056830205000b00519b99d3dcbso807650otp.2;
+        Tue, 17 Aug 2021 18:15:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KPiGFxgVvYUbWABlVl43nzVqjuIo6MdwTPCZgQTNlrY=;
-        b=ocPUqAj0QhWCz3f7doZxvqb6AoqsAWTTATspUCHk98rDoWpyhlMULdF4yNtHxk05ch
-         I1oQIWuW10r5yqHGM5mfqi9tndVWvbRMf4zCbXamveHhuKvVhQ6xvNvOAcXNhbglH7un
-         tmEcyMJkxyHOLE3SHTLswMFM1BPlVt2VOyN+sMFdql6NB3Ottl5x6TS+NZfmCkF+50Y0
-         kX2rDA3Rwm9pjNBksF0dzHzLMa/jYj9zi+DSHdgJmmQqdHAj1CFqk++VMAfi3tKt9qEB
-         ys1lU3Df9s1UeFJBFrLcnP5jOIGdR8badngESpgvOBR6F+mIBzdT1UeY1GedF8/zFFo3
-         EfiA==
-X-Gm-Message-State: AOAM533JHOurZgDqZ4CwaMCAsIZKBUeiimE2P8Vt/X9H6wB558Xd0wPb
-        4reBsZynYHWL9O+HCREBvJC28g==
-X-Google-Smtp-Source: ABdhPJyUfXRVJnTRnqD4Y9708QJyzwk5eLnG8hTD687kbELpgq67QJZ7eQ21IosoiZshZ4q43y/QAg==
-X-Received: by 2002:a5d:928c:: with SMTP id s12mr4727597iom.151.1629242213221;
-        Tue, 17 Aug 2021 16:16:53 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k7sm1845089iok.22.2021.08.17.16.16.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Aug 2021 16:16:52 -0700 (PDT)
-Subject: Re: [PATCH v3 1/2] usbip: give back URBs for unsent unlink requests
- during cleanup
-To:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org
-Cc:     syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20210813182508.28127-1-mail@anirudhrb.com>
- <20210813182508.28127-2-mail@anirudhrb.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
-Date:   Tue, 17 Aug 2021 17:16:51 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RM2dmchpI6KmQKuD+RgubJedkIA6WkX9t/jyVLdUt3Q=;
+        b=M/yPllpnPj3TZCZVEA18tJCv0QVZrZggPomFdRAhNbq9gQbXUAUdvRZNHsSF36y72M
+         0l1ky8wIehQvPxVmUQRU9qtc15Emjy/xV5oExxJN66WqBw0GJHEApsYlg5dBzBXk3NDs
+         KFowaVVlsWeFxBGveWZxOTvUPIF+0zd9DRshAjtDwKgO8jjOLAVmpE5HYZbxh/GHDsci
+         uxBh9TDdsVuK2eDptDSYiQZZ5W1mHQbxUiCcE/oCOvl8DOpn5zBIr/cT3C6WO+wsYlbs
+         FUhROK8iZ8pRq5hIUrvs+0glR2sNsSqhERk9gMQ5GLqjPqZYPpO2OsdkKD7smxvOolln
+         435A==
+X-Gm-Message-State: AOAM531fxHcv2v3ead0V9UchaMijLKVLlDYc6XB9tIO2P4CvC7scT/mX
+        I1AzhmDBH5bmBm25+PiehQ==
+X-Google-Smtp-Source: ABdhPJydb95sxSyCE8JTQ37Yp3+d+zCUT2I4Mgdlk82Qz5QqNFm3xA06SoTPwD6X93TSb4zbZLUInw==
+X-Received: by 2002:a05:6830:1f54:: with SMTP id u20mr4796930oth.320.1629249309809;
+        Tue, 17 Aug 2021 18:15:09 -0700 (PDT)
+Received: from robh.at.kernel.org (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id o7sm662196oih.34.2021.08.17.18.15.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Aug 2021 18:15:08 -0700 (PDT)
+Received: (nullmailer pid 1174643 invoked by uid 1000);
+        Wed, 18 Aug 2021 01:15:06 -0000
+Date:   Tue, 17 Aug 2021 20:15:06 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 06/34] dt-bindings: clock: tegra-car: Document new
+ tegra-clocks sub-node
+Message-ID: <YRxfGtWPXeSQXuHo@robh.at.kernel.org>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-7-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20210813182508.28127-2-mail@anirudhrb.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210817012754.8710-7-digetx@gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 8/13/21 12:25 PM, Anirudh Rayabharam wrote:
-> In vhci_device_unlink_cleanup(), the URBs for unsent unlink requests are
-> not given back. This sometimes causes usb_kill_urb to wait indefinitely
-> for that urb to be given back. syzbot has reported a hung task issue [1]
-> for this.
+On Tue, Aug 17, 2021 at 04:27:26AM +0300, Dmitry Osipenko wrote:
+> Document tegra-clocks sub-node which describes Tegra SoC clocks that
+> require a higher voltage of the core power domain in order to operate
+> properly on a higher clock rates.  Each node contains a phandle to OPP
+> table and power domain.
 > 
-> To fix this, give back the urbs corresponding to unsent unlink requests
-> (unlink_tx list) similar to how urbs corresponding to unanswered unlink
-> requests (unlink_rx list) are given back.
+> The root PLLs and system clocks don't have any specific device dedicated
+> to them, clock controller is in charge of managing power for them.
 > 
-> [1]: https://syzkaller.appspot.com/bug?id=08f12df95ae7da69814e64eb5515d5a85ed06b76
-> 
-> Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
-> Tested-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
-> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
 > ---
->   drivers/usb/usbip/vhci_hcd.c | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
+>  .../bindings/clock/nvidia,tegra20-car.yaml    | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 > 
-> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-> index 4ba6bcdaa8e9..6f3f374d4bbc 100644
-> --- a/drivers/usb/usbip/vhci_hcd.c
-> +++ b/drivers/usb/usbip/vhci_hcd.c
-> @@ -957,8 +957,34 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
->   	spin_lock(&vdev->priv_lock);
->   
->   	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
-> +		struct urb *urb;
+> diff --git a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> index 459d2a525393..7f5cd27e4ce0 100644
+> --- a/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> +++ b/Documentation/devicetree/bindings/clock/nvidia,tegra20-car.yaml
+> @@ -42,6 +42,48 @@ properties:
+>    "#reset-cells":
+>      const: 1
+>  
+> +  tegra-clocks:
+> +    description: child nodes are the output clocks from the CAR
+> +    type: object
 > +
-> +		/* give back URB of unsent unlink request */
->   		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
+> +    patternProperties:
+> +      "^[a-z]+[0-9]+$":
+> +        type: object
+> +        properties:
+> +          compatible:
+> +            allOf:
+> +              - items:
+> +                  - enum:
+> +                      - nvidia,tegra20-sclk
+> +                      - nvidia,tegra30-sclk
+> +                      - nvidia,tegra30-pllc
+> +                      - nvidia,tegra30-plle
+> +                      - nvidia,tegra30-pllm
+> +              - const: nvidia,tegra-clock
 
-I know this is an exiting one.
-Let's make this pr_debug or remove it all together.
+You are saying the first string must be both one of the enums and 
+'nvidia,tegra-clock'. You don't get an error because your pattern 
+doesn't match 'sclk'.
 
 > +
-> +		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
-> +		if (!urb) {
-> +			pr_info("the urb (seqnum %lu) was already given back\n",
-> +				unlink->unlink_seqnum);
+> +          operating-points-v2:
+> +            $ref: /schemas/types.yaml#/definitions/phandle
+> +            description:
+> +              Phandle to OPP table that contains frequencies, voltages and
+> +              opp-supported-hw property, which is a bitfield indicating
+> +              SoC process or speedo ID mask.
 
-Let's make this pr_debug or remove it all together.
+Just 'operating-points-v2: true' is enough.
 
-> +			list_del(&unlink->list);
-> +			kfree(unlink);
-> +			continue;
-> +		}
 > +
-> +		urb->status = -ENODEV;
+> +          clocks:
+> +            items:
+> +              - description: node's clock
 > +
-> +		usb_hcd_unlink_urb_from_ep(hcd, urb);
+> +          power-domains:
+> +            maxItems: 1
+> +            description: phandle to the core SoC power domain
 > +
->   		list_del(&unlink->list);
+> +        required:
+> +          - compatible
+> +          - operating-points-v2
+> +          - clocks
+> +          - power-domains
 > +
-> +		spin_unlock(&vdev->priv_lock);
-> +		spin_unlock_irqrestore(&vhci->lock, flags);
+> +        additionalProperties: false
 > +
-> +		usb_hcd_giveback_urb(hcd, urb, urb->status);
+>  required:
+>    - compatible
+>    - reg
+> @@ -59,6 +101,15 @@ examples:
+>          reg = <0x60006000 0x1000>;
+>          #clock-cells = <1>;
+>          #reset-cells = <1>;
 > +
-> +		spin_lock_irqsave(&vhci->lock, flags);
-> +		spin_lock(&vdev->priv_lock);
-> +
->   		kfree(unlink);
->   	}
->   
+> +        tegra-clocks {
+> +            sclk {
+> +                compatible = "nvidia,tegra20-sclk", "nvidia,tegra-clock";
+> +                operating-points-v2 = <&opp_table>;
+> +                clocks = <&tegra_car TEGRA20_CLK_SCLK>;
+> +                power-domains = <&domain>;
+> +            };
+> +        };
+>      };
+>  
+>      usb-controller@c5004000 {
+> -- 
+> 2.32.0
 > 
-
-thanks,
--- Shuah
+> 
