@@ -2,158 +2,151 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEAB3F2348
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 00:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92463F2371
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 00:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbhHSWiB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 18:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44164 "EHLO
+        id S233061AbhHSW6V (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 18:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236420AbhHSWhx (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 18:37:53 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45A7C061575;
-        Thu, 19 Aug 2021 15:37:16 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id d4so16130573lfk.9;
-        Thu, 19 Aug 2021 15:37:16 -0700 (PDT)
+        with ESMTP id S229522AbhHSW6V (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 18:58:21 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E309C061756
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 15:57:44 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id s16so7575414ilo.9
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 15:57:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linuxfoundation.org; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nAS9qcnivKqgeAIIut8h1WFAVA13oxF52QRobcHq7Xc=;
-        b=a4XV4VjRWxo1kHnGEwcEOxFKRCM6deOw4lOM9Uon818SGJgn0YPFw4DdKti64wBV9H
-         ZocBdzpcFtuEYqk3Wa8+HUMj2ko6agOMxjv09whIIThddMbYROGGAAS4Plcpv1Z18cgY
-         5sKTsW0BmphWVrS/Tiinzv52JEwYHnlvjz/kC/ONQmk2H2QZrW0O70369IiptcK6UmEd
-         XneH4My93CRKDRkqsBmuCdSoAuWcBI3J8xEuCJKQTSLx7Jnn2Qku3bl3B0b4iwQ7W5+X
-         bMdlKDDR1RyjIOyTN2oZCz5u+iQg+iw/06K9i+IzAB7AjGsFZejlDhk+M4jSdmwerMgk
-         ecRA==
+        bh=dqyq+xLCC62WmtlbZNmPjxhJEJorkWCEaN0Bhw2AePY=;
+        b=cooKeToWpfZekERzCgF0kWR6bvPZBKI+V6Im5GxgZiTYFO0YF/kOpLxrerXm7nf7L0
+         qAyTMoV5DhF8fVFq+DvreRkoGtQg1mA1918Y8s+P5Fx9kpyYfQovpbKQTovjTxuTBgQA
+         pBht8ci2g8MBR2gtAS/xVkND32I1qDDjH4LwU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=nAS9qcnivKqgeAIIut8h1WFAVA13oxF52QRobcHq7Xc=;
-        b=DwiSUa9a4uiiaLqygFuoMgS+IfwNjh4DFWc/E9l+eJnH6ahXnqx2hPvZsxUUoqBRYy
-         MuEK0niGgUgmgC2jyzU1CZvSEW/zgJidGUDFrc67pGb2wt8X2wKRlUC4yVWoJR0eXgee
-         yaAdHbXydQTyywGt+9jP+64bosQlr0+ss61atdmEHjYjj5wxqBPSgCRc3G4juqiWa67j
-         cZEfDrthqICCJoWd25/S/EEH76hKFeE5Tr5/IaYoRfF/BZ/IOTqUYE6HRdT7Sk7L7mQQ
-         Wi6O71sgcip9ACyvC5hUtA2ojdR/dnSjPj3MfMSTUXW9rgzPHd78Yb0LUILIz8UWp5IC
-         ZMBg==
-X-Gm-Message-State: AOAM533j7150g+DhauoY2PMMStGz1biw+CuoZj02oBeERMRt5bOXc9e3
-        PoufT5sJiO7R6hCt1B1LOVOa8FFW1yU=
-X-Google-Smtp-Source: ABdhPJwuMIWgok5xoSqa52pUigQi/FuENEcCid7QFl2xNGsNEC360zffkjPyNHa+eJldf8U6/MOiRQ==
-X-Received: by 2002:a05:6512:b8e:: with SMTP id b14mr12930460lfv.449.1629412634809;
-        Thu, 19 Aug 2021 15:37:14 -0700 (PDT)
-Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
-        by smtp.googlemail.com with ESMTPSA id b19sm437171lff.121.2021.08.19.15.37.13
+        bh=dqyq+xLCC62WmtlbZNmPjxhJEJorkWCEaN0Bhw2AePY=;
+        b=ffvU/mofxHZOXGTTsMk5NbMwJyLp3lvtcG6pRk2VdSO0PS2nkraEihY8BjN71X2Haq
+         bQRrREmjTVWDZZ1nppxW8kxE8WKRVwkI3LaPqv/DoG7eZaDy/uOlGiZEWTufAwccuC4+
+         1kKhEWp6DxHvXCwdLYijwF/Xw7KBFkp0sQPPoZWm8w+x1CX4sIibA7XY0ohCUIvQ3faH
+         1H7g+TP5IfMnYHXtyE94/gIkVCHHd1M3dDGmg+T4TuokmqKwkOc1/u94HBHG/seb4cIn
+         h3cJ4uriI7s3BznpD2lSiKawutMTJ3Yh16ZNP1GKukx3EA+YOfK3bSV6/hZxy7VxYwWv
+         x+4w==
+X-Gm-Message-State: AOAM532ik9NoEPFyCCMVs93IV6VD9Fx1y9Z1p1UYah0TB93r3W5/t8qc
+        ekinbUnWWxCkp1Iwiq3uiEqGrA==
+X-Google-Smtp-Source: ABdhPJwQZ73vfotSnWwgMIvfGhwDa5AtWHmSypp0n37PAVBu8xmpd6r/tOmHTAfQmO3MuQpW2Ox8Gw==
+X-Received: by 2002:a92:360e:: with SMTP id d14mr11069647ila.171.1629413863755;
+        Thu, 19 Aug 2021 15:57:43 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g23sm2277471ioc.8.2021.08.19.15.57.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Aug 2021 15:37:14 -0700 (PDT)
-Subject: Re: [PATCH v8 20/34] mmc: sdhci-tegra: Add runtime PM and OPP support
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20210817012754.8710-1-digetx@gmail.com>
- <20210817012754.8710-21-digetx@gmail.com> <YR6O9Om+HzMMG8AR@orome.fritz.box>
-From:   Dmitry Osipenko <digetx@gmail.com>
-Message-ID: <05b7ff28-4c01-fb56-deeb-595a5797394b@gmail.com>
-Date:   Fri, 20 Aug 2021 01:37:13 +0300
+        Thu, 19 Aug 2021 15:57:42 -0700 (PDT)
+Subject: Re: [PATCH v2] vhci_hcd: USB port can get stuck in the disabled state
+To:     Michael <msbroadf@gmail.com>
+Cc:     valentina.manea.m@gmail.com, shuah@kernel.org,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210721235526.10588-1-msbroadf@gmail.com>
+ <7b02cb66-d672-ae95-01ea-c6015725e1ac@linuxfoundation.org>
+ <CALdjXpA4_eXen6RjhsEBYt8CQs-2gzwYs9h9q0Z2LKZ=rXVp+Q@mail.gmail.com>
+ <ad07410b-05d6-6a12-13df-14e31cbf50ff@linuxfoundation.org>
+ <CALdjXpBPRraC8xxORgE3SXw4xFnTW-Y6rLbcS+Cx0xYq3+aBeQ@mail.gmail.com>
+ <976d34c0-d603-1f16-edbd-ad6c8881ad4e@linuxfoundation.org>
+ <CALdjXpAzE3o7Bwdvj1TvsBRpDWDe1FZ8LsmL5q0suxYnRJCOaA@mail.gmail.com>
+ <5165bd84-11af-35dd-8a9b-11c7f219fb88@linuxfoundation.org>
+ <CALdjXpCmx_nfYEguv9UvOrBMYFxB4sqwmNiV99ggHRZnZjiM-A@mail.gmail.com>
+ <4f345afe-61d5-66b3-3252-562988c8926f@linuxfoundation.org>
+ <CALdjXpB+-RHMrjt10f1ZksR9VZMuT3gj7HyvrXYtdJ_jq0J93g@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <3349aa56-afa0-a919-5810-3dbbdbe8717b@linuxfoundation.org>
+Date:   Thu, 19 Aug 2021 16:57:42 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <YR6O9Om+HzMMG8AR@orome.fritz.box>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <CALdjXpB+-RHMrjt10f1ZksR9VZMuT3gj7HyvrXYtdJ_jq0J93g@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-19.08.2021 20:03, Thierry Reding пишет:
-> On Tue, Aug 17, 2021 at 04:27:40AM +0300, Dmitry Osipenko wrote:
->> The SDHCI on Tegra belongs to the core power domain and we're going to
->> enable GENPD support for the core domain. Now SDHCI must be resumed using
->> runtime PM API in order to initialize the SDHCI power state. The SDHCI
->> clock rate must be changed using OPP API that will reconfigure the power
->> domain performance state in accordance to the rate. Add runtime PM and OPP
->> support to the SDHCI driver.
+On 8/10/21 8:30 PM, Michael wrote:
+> On Wed, 11 Aug 2021 at 03:46, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >>
->> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
->> ---
->>  drivers/mmc/host/sdhci-tegra.c | 146 ++++++++++++++++++++++++---------
->>  1 file changed, 105 insertions(+), 41 deletions(-)
+>> On 8/2/21 7:00 PM, Michael wrote:
+>>> On Tue, 3 Aug 2021 at 09:14, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>>>
+>>>> On 7/30/21 5:52 PM, Michael wrote:
+>>>>> Yes i think just adding the VDEV_ST_USED check in addition to the
+>>>>> VDEV_ST_NOT_ASSIGNED state is fine and would fix the issue.
+>>>>>
+>>>>
+>>>> Can you please confirm if this works?
+>>>>
+>>>>> After many years of writing virtualhere (a similar system to usb/ip
+>>>>> but cross-platform and different non-kernel way of doing it server
+>>>>> side) I've seen many drivers that issue reset at any time. Loading
+>>>>> firmware is usually the reason.  Also sometimes switching
+>>>>> configurations requires a reset also, for example some gaming wheels
+>>>>> do this. I don't think you should make this VDEV_ST_USED check
+>>>>> specific to Wifi devices, as a lot of devices don't follow too closely
+>>>>> to the USB protocol to begin with from my experience. They primarily
+>>>>> base their USB interactions assuming the windows platform and its
+>>>>> quirks.
+>>>>>
+>>>>
+>>>> When sending responses to Linux kernel mailing lists, please use bottom post.
+>>>> This check will be used for all drivers. We don't add checks for specific cases
+>>>> in the code.
+>>>>
+>>>> thanks,
+>>>> -- Shuah
+>>>>
+>>>
+>>> Yes it works with that change.
+>>>
 >>
->> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
->> index 387ce9cdbd7c..a3583359c972 100644
->> --- a/drivers/mmc/host/sdhci-tegra.c
->> +++ b/drivers/mmc/host/sdhci-tegra.c
->> @@ -15,6 +15,8 @@
->>  #include <linux/of.h>
->>  #include <linux/of_device.h>
->>  #include <linux/pinctrl/consumer.h>
->> +#include <linux/pm_opp.h>
->> +#include <linux/pm_runtime.h>
->>  #include <linux/regulator/consumer.h>
->>  #include <linux/reset.h>
->>  #include <linux/mmc/card.h>
->> @@ -24,6 +26,8 @@
->>  #include <linux/gpio/consumer.h>
->>  #include <linux/ktime.h>
->>  
->> +#include <soc/tegra/common.h>
->> +
->>  #include "sdhci-pltfm.h"
->>  #include "cqhci.h"
->>  
->> @@ -123,6 +127,12 @@
->>  					 SDHCI_TRNS_BLK_CNT_EN | \
->>  					 SDHCI_TRNS_DMA)
->>  
->> +enum {
->> +	TEGRA_CLK_BULK_SDHCI,
->> +	TEGRA_CLK_BULK_TMCLK,
->> +	TEGRA_CLK_BULK_NUM,
->> +};
->> +
->>  struct sdhci_tegra_soc_data {
->>  	const struct sdhci_pltfm_data *pdata;
->>  	u64 dma_mask;
->> @@ -171,6 +181,8 @@ struct sdhci_tegra {
->>  	bool enable_hwcq;
->>  	unsigned long curr_clk_rate;
->>  	u8 tuned_tap_delay;
->> +
->> +	struct clk_bulk_data clocks[TEGRA_CLK_BULK_NUM];
+>> Would you like to send me a patch for this?
+>>
+>> thanks,
+>> -- Shuah
 > 
-> This doesn't seem worth it to me. There's a lot of churn in this driver
-> that's only needed to convert this to the clk_bulk API and it makes the
-> code a lot more difficult to read, in my opinion.
+> usbip: Allow port reset to occur when the port is also in the ST_USED state
 > 
-> It looks like the only benefit that this gives us is that runtime
-> suspend and resume become a few lines shorter.
+>   Signed-off-by: Michael <mail@virtualhere.com>
+> ---
+>   drivers/usb/usbip/vhci_hcd.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+> index 4ba6bcdaa8e9..300131ae5897 100644
+> --- a/drivers/usb/usbip/vhci_hcd.c
+> +++ b/drivers/usb/usbip/vhci_hcd.c
+> @@ -456,7 +456,9 @@ static int vhci_hub_control(struct usb_hcd *hcd,
+> u16 typeReq, u16 wValue,
+>                          vhci_hcd->re_timeout = 0;
+> 
+>                          if (vhci_hcd->vdev[rhport].ud.status ==
+> -                           VDEV_ST_NOTASSIGNED) {
+> +                           VDEV_ST_NOTASSIGNED ||
+> +                               vhci_hcd->vdev[rhport].ud.status ==
+> +                               VDEV_ST_USED) {
+>                                  usbip_dbg_vhci_rh(
+>                                          " enable rhport %d (status %u)\n",
+>                                          rhport,
+> --
+> 2.30.2
+> 
 
-The driver probe code looks cleaner with that. You should be looking at
-the final result and not at the patch to see it.
+Unfortunately we can't apply this diff. I turned this into a proper
+patch giving you credit for reporting the problem, suggesting the
+fix and testing it. Patch will be sent shortly.
+
+thanks,
+-- Shuah
