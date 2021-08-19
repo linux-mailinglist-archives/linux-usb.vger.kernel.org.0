@@ -2,185 +2,177 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0413F1B8D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 16:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 266253F1C08
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 16:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238607AbhHSOYY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 10:24:24 -0400
-Received: from mga02.intel.com ([134.134.136.20]:8489 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238536AbhHSOYX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 10:24:23 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="203763283"
-X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
-   d="scan'208";a="203763283"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 07:23:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
-   d="scan'208";a="512029566"
-Received: from lkp-server01.sh.intel.com (HELO d053b881505b) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 19 Aug 2021 07:23:31 -0700
-Received: from kbuild by d053b881505b with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mGix8-000U17-Tb; Thu, 19 Aug 2021 14:23:30 +0000
-Date:   Thu, 19 Aug 2021 22:23:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org
-Subject: [usb:usb-testing] BUILD SUCCESS WITH WARNING
- e4788edc730a0d2b26e1ae1f08fbb3f635b92dbb
-Message-ID: <611e6960./GspunifTGnl6urA%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S240666AbhHSO4c (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 10:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240651AbhHSO4b (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 10:56:31 -0400
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4775C061796
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 07:55:54 -0700 (PDT)
+Received: by mail-vs1-xe2f.google.com with SMTP id f13so4161451vsl.13
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 07:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mm8paTdT0zaztfhC5Y4WPaOBPl8kLHQHgl7pXYxX3h4=;
+        b=qeDfX1TvtXFpaue7XSJcQGoXvoEPk6keQ3SefhHQYD/RQYSwXL/h7/nJ1tE1n2ZgGf
+         hgNQdBuev8q9YdqAn31QqEn+hl0Fw8o/I7j+pKewMg7BSKDExUMcgAG5ffW6TnVBaweA
+         awPBlmbVNdD0YyJLl/fecYVhU7UH2GjQaH+G3BKTeEFH67xcFXuuVoODzKyHu4OljnuW
+         y3YyyagNQ7/VVdr8UoQMvH7lyjCnnH9zaDfJmZrMJYrsb5yu8bZTEWP6ZCkq4ndYtqKT
+         KiXhZrvSOf9kLkVqOyobXMYfdScN3zuV6Y2fafpateAUvd8nG8k5/FLAhRgrUffP4ZSX
+         UqPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mm8paTdT0zaztfhC5Y4WPaOBPl8kLHQHgl7pXYxX3h4=;
+        b=nTkqrdSevpaMVopLP8ePfwhlW4+E6Ic7eLfaCR8hUvvGczd91z9QCYsN0n1NQiqTWP
+         T9sN1bDe7w7Yut0HcKnlwO63C5Q/0kNJnmt90pmPVo9cWyKZT1UVwVds4J9gQ4CJ8Ej4
+         tgaY3kjral/aBFsT8oVuM5BbHL1VF9VJGFpQOyKDqiNHF5av7KvuQRXmV3uiLQhG7Eqy
+         SeZdfmzn+hbvsENQlztyDNQPiEMm1Gk9TgybJYzv1DJ2sIxSLbFT15NtV+XVBZtIdmzI
+         J6SaVF8ajis5vjTVKl+4PcNaHD1JZar7FTTwYslXe6kJ7g0m5ICrIJMqZg0QFxLVpiYi
+         XwYw==
+X-Gm-Message-State: AOAM530Z6gQreewbkxQGbwAe6MP7DppZeJPFUDIkpMCkIlajsifrobcl
+        K6ncjiNIMxXfpjRvUVPE5Lyna0mgf96g5XbfufYHFg==
+X-Google-Smtp-Source: ABdhPJy9lhlHe3ZkjkK69gRHTqfsYZUpyU/u1QO9GNutRCvh27kC0oDOl0UN2vIh0G0BbPGuh3RFsxVqGIQ9yFmBme8=
+X-Received: by 2002:a67:f6d8:: with SMTP id v24mr12929204vso.48.1629384953702;
+ Thu, 19 Aug 2021 07:55:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+References: <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com> <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+In-Reply-To: <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 19 Aug 2021 16:55:16 +0200
+Message-ID: <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-branch HEAD: e4788edc730a0d2b26e1ae1f08fbb3f635b92dbb  USB: EHCI: Add alias for Broadcom INSNREG
+On Thu, 19 Aug 2021 at 08:17, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 18-08-21, 18:55, Dmitry Osipenko wrote:
+> > 18.08.2021 12:41, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >
+> > Either way gives the equal result. The new callback allows to remove th=
+e
+> > boilerplate dev_pm_opp_set_rate(clk_get_rate() code from the rpm-resume
+> > of consumer devices, that's it.
+>
+> It may not be equal, as dev_pm_opp_set_rate() may do additional stuff,
+> now or in a later implementation. Currently it only does
+> regulator_enable() as a special case, but it can be clk_enable() as
+> well. Also, this tries to solve the problem in a tricky/hacky way,
+> while all you wanted was to make the genpd aware of what the
+> performance state should be.
+>
+> Your driver can break tomorrow if we started to do more stuff from
+> this API at another time.
+>
+> > > dev_pm_opp_set_rate() is best called from consumer drivers, as they
+> > > need to be in control.
+> > >> What we need here is just configure. So something like this then:
+> > The intent wasn't to use dev_pm_opp_set_rate() from
+> > __genpd_dev_pm_attach(), but to set genpd->rpm_pstate in accordance to
+> > the h/w configuration.
+>
+> Right.
+>
+> > On Tegra we have a chain of PDs and it's not trivial to convert the
+> > device's OPP into pstate because only the parent domain can translate
+> > the required OPP.
+>
+> The driver should just be required to make a call, and OPP/genpd core
+> should return it a value. This is already done today while setting the
+> pstate for a device. The same frameworks must be able to supply a
+> value to be used for the device.
 
-Warning reports:
+Right, that sounds reasonable.
 
-https://lore.kernel.org/linux-usb/202108190619.wLK5u4fO-lkp@intel.com
+We already have pm_genpd_opp_to_performance_state() which translates
+an OPP to a performance state. This function invokes the
+->opp_to_performance_state() for a genpd. Maybe we need to allow a
+genpd to not have ->opp_to_performance_state() callback assigned
+though, but continue up in the hierarchy to see if the parent has the
+callback assigned, to make this work for Tegra?
 
-Warning in current branch:
+Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
+allowing us to pass the device instead of the genpd. But that's a
+minor thing.
 
-drivers/usb/isp1760/isp1760-hcd.c:735:2: warning: Value stored to 'scratch' is never read [clang-analyzer-deadcode.DeadStores]
+Finally, the precondition to use the above, is to first get a handle
+to an OPP table. This is where I am struggling to find a generic
+solution, because I guess that would be platform or even consumer
+driver specific for how to do this. And at what point should we do
+this?
 
-Warning ids grouped by kconfigs:
+>
+> > Viresh, please take a look at what I did in [1]. Maybe it could be done
+> > in another way.
+>
+> I looked into this and looked like too much trouble. The
+> implementation needs to be simple. I am not sure I understand all the
+> problems you faced while doing that, would be better to start with a
+> simpler implementation of get_performance_state() kind of API for
+> genpd, after the domain is attached and its OPP table is initialized.
+>
+> Note, that the OPP table isn't required to be fully initialized for
+> the device at this point, we can parse the DT as well if needed be.
 
-clang_recent_errors
-`-- riscv-randconfig-c006-20210818
-    `-- drivers-usb-isp1760-isp1760-hcd.c:warning:Value-stored-to-scratch-is-never-read-clang-analyzer-deadcode.DeadStores
+Sure, but as I indicated above, you need some kind of input data to
+figure out what OPP table to pick, before you can translate that into
+a performance state. Is that always the clock rate, for example?
 
-elapsed time: 1055m
+Perhaps, we should start with adding a dev_pm_opp_get_from_rate() or
+what do you think? Do you have other suggestions?
 
-configs tested: 116
-configs skipped: 3
+>
+> --
+> viresh
 
-gcc tested configs:
-arm                                 defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-arm64                            allyesconfig
-arm64                               defconfig
-powerpc                      pcm030_defconfig
-arm                         socfpga_defconfig
-m68k                       m5275evb_defconfig
-sh                           se7619_defconfig
-powerpc                  iss476-smp_defconfig
-powerpc                 mpc834x_itx_defconfig
-powerpc                     ep8248e_defconfig
-arm                            pleb_defconfig
-arm                            xcep_defconfig
-powerpc                     skiroot_defconfig
-powerpc                        icon_defconfig
-powerpc                         ps3_defconfig
-arm                         hackkit_defconfig
-sh                           se7724_defconfig
-parisc                generic-32bit_defconfig
-powerpc                      pmac32_defconfig
-powerpc               mpc834x_itxgp_defconfig
-sh                             shx3_defconfig
-um                                  defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                       aspeed_g4_defconfig
-nios2                         10m50_defconfig
-m68k                       m5249evb_defconfig
-m68k                       bvme6000_defconfig
-microblaze                          defconfig
-mips                          rm200_defconfig
-sh                   sh7770_generic_defconfig
-arm                          iop32x_defconfig
-x86_64                            allnoconfig
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allyesconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-powerpc                           allnoconfig
-x86_64               randconfig-a004-20210818
-x86_64               randconfig-a006-20210818
-x86_64               randconfig-a003-20210818
-x86_64               randconfig-a005-20210818
-x86_64               randconfig-a002-20210818
-x86_64               randconfig-a001-20210818
-i386                 randconfig-a004-20210818
-i386                 randconfig-a006-20210818
-i386                 randconfig-a002-20210818
-i386                 randconfig-a001-20210818
-i386                 randconfig-a003-20210818
-i386                 randconfig-a005-20210818
-x86_64               randconfig-a013-20210819
-x86_64               randconfig-a011-20210819
-x86_64               randconfig-a012-20210819
-x86_64               randconfig-a016-20210819
-x86_64               randconfig-a014-20210819
-x86_64               randconfig-a015-20210819
-riscv                    nommu_k210_defconfig
-riscv                            allyesconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                                  kexec
-
-clang tested configs:
-x86_64               randconfig-a004-20210819
-x86_64               randconfig-a006-20210819
-x86_64               randconfig-a003-20210819
-x86_64               randconfig-a002-20210819
-x86_64               randconfig-a005-20210819
-x86_64               randconfig-a001-20210819
-i386                 randconfig-a004-20210819
-i386                 randconfig-a006-20210819
-i386                 randconfig-a001-20210819
-i386                 randconfig-a002-20210819
-i386                 randconfig-a003-20210819
-i386                 randconfig-a005-20210819
-i386                 randconfig-a015-20210818
-i386                 randconfig-a011-20210818
-i386                 randconfig-a013-20210818
-i386                 randconfig-a014-20210818
-i386                 randconfig-a016-20210818
-i386                 randconfig-a012-20210818
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Kind regards
+Uffe
