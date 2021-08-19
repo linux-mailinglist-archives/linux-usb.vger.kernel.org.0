@@ -2,106 +2,137 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 304353F1F98
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 20:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B9A3F2025
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 20:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234317AbhHSSKe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 14:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39166 "EHLO
+        id S232918AbhHSSuW (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 14:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbhHSSKe (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 14:10:34 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5C9C061756
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 11:09:57 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id k29so10367021wrd.7
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 11:09:57 -0700 (PDT)
+        with ESMTP id S229907AbhHSSuW (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 14:50:22 -0400
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7931DC061575
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 11:49:45 -0700 (PDT)
+Received: by mail-ot1-x336.google.com with SMTP id c19-20020a9d6153000000b0051829acbfc7so9911011otk.9
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 11:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=98TIgGcF5QpWM5jqnKUiMqwzL4ec7B61vjYW5N3VNTw=;
-        b=VLTXxX1brKA+iPAowPeK0fPIq0jgshzN2MD7g8aNen0SZOUnffRmOo5vPmn6+vpLQh
-         y955nkaufeHt8PRBafJHIZeIkVm6EXt6Kk+j691BkSgzQGWAqNPUnZpdHECgnClOlpyB
-         V4B/lYPatYf/ZFRZX+awPSO+yriIq9V09/BSZOg05BlOy2Q2ea/7p70OxRDqRCihUJoV
-         JwjRuN81oER0gtQROOLbMEq3QhwCMbQ3uqW8lRbsXb3fyCWonGXZ91tdB2Y1GF1e07zp
-         ibpSFHrEwA887GlCIMOA86+PICG/T7IesFzR31DdMresrstLeWHKzqIrEAuZp1UQAeDF
-         zLgg==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=wZO4IQUBhF+zViy7c/z72TEVhnsnazrJSkCDX3RnSfk=;
+        b=XpvoNNqO5fpuLndPvyQDsbEKlf2t6TEbmSz5IGx0TKWxhXZRUYokx4QLVTmy79isMR
+         AYkGMmjxwPxTX2I24mKJy+ji+7uZcQe7FKdIUFB/lAcu5YhQ6jlW0g04fIWxsWcnJuRd
+         EJcKLz+fiEeVZ3uzKkVTyhn3pBEy4EdTeoB7g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=98TIgGcF5QpWM5jqnKUiMqwzL4ec7B61vjYW5N3VNTw=;
-        b=Z32Tyleh5U1dJgPXln4uglIDCfAUR6wDH1XVs9SfuvFxVEwhenB3hXCc8F54PR8U9h
-         nFEp+L76TXSBSW4tdpCo8bozVvNbUimtK8rjBUU/SC1l7juRVF9Lpbq95rYr+Xgz0Y5D
-         sobnBOfu3OyBCgno/sobM+JJpv2aZPWyI2oQ8KrEaMQv7G+pGMh0puK47df4Ahc6Kjam
-         bbbYEkVy/iSQTgQu1CiLmAKGh+SR7Lx9hjT3gEZzTMvmi0QDS0aoXvJtmmXrfkPTXYmX
-         VhXnVWs1cRaKygpquxNjOx34bahdF/kEJqbYhQ6yO9fjrvd/PYefWoq+N82vTQK2ADfP
-         Dsgw==
-X-Gm-Message-State: AOAM533lGX0aZ6CnlBhPLT/1JyFdo9AiDn086ZQOwWdqmfthx4xWhdU0
-        ZQ0hY0KbXtTazW+M/JSwnMSgnw==
-X-Google-Smtp-Source: ABdhPJwf/hyB392NG3LR3D3QHOYmRT5sfFKJtFztXe2QzkrYJvtUCNClj91zOyUYttzBBIcfAjNf5g==
-X-Received: by 2002:adf:d4c7:: with SMTP id w7mr5511212wrk.301.1629396596272;
-        Thu, 19 Aug 2021 11:09:56 -0700 (PDT)
-Received: from arch-thunder.local (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
-        by smtp.gmail.com with ESMTPSA id h16sm3625668wre.52.2021.08.19.11.09.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 11:09:56 -0700 (PDT)
-From:   Rui Miguel Silva <rui.silva@linaro.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     linux-usb@vger.kernel.org, Rui Miguel Silva <rui.silva@linaro.org>
-Subject: [PATCH 5/5] usb: isp1760: clean never read udc_enabled warning
-Date:   Thu, 19 Aug 2021 19:09:29 +0100
-Message-Id: <20210819180929.1327349-6-rui.silva@linaro.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20210819180929.1327349-1-rui.silva@linaro.org>
-References: <20210819180929.1327349-1-rui.silva@linaro.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=wZO4IQUBhF+zViy7c/z72TEVhnsnazrJSkCDX3RnSfk=;
+        b=k1VzjarmgvvejLIrqNC1dygwHA0opdZ+Yys/GnTmHAzmYP0PY+r7p1CYqb9QGCDDoI
+         dREjNB26b8qPrUBCDkWvbdZzK12oYygUQ+Ccnkp/NGMwbtwVxqq0VJ/c3DGv0CfGGoZN
+         HQF7Ct6dQcBoUvepEs+HSVH6mhhsCde3a/O6KYdq9cxcJJ69qzf9hNCQxZ+80Rephc2j
+         wcAJBRc+9aiXir7BMjQXttoV6ExNTXwcOuoMtVSr9LlS4TyHNFuSQXw4Q/aRtT/dQIq6
+         w1qwqZqcV+w1EzTzNPY0V+qJFu7wTZpSd3NmkjvLeNQj57wjAo6pqtTembNw+fRRO+Fq
+         Bo0A==
+X-Gm-Message-State: AOAM533W3eQqGCWk0M/xosUdfmkaNhwU4vD62GdXz6lbfq8m8CaOYzV5
+        2LWB7jVO8zt0AFtquZxcEPVFrA==
+X-Google-Smtp-Source: ABdhPJwGWMs9CmtUV/fPZRUmX0o0GPrIgHbgo+fXSJ6pj+cipfWWEk/8/hpw0qy/D12H3XqGTR47pw==
+X-Received: by 2002:a05:6830:40b4:: with SMTP id x52mr13230648ott.163.1629398984755;
+        Thu, 19 Aug 2021 11:49:44 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h14sm888563otm.5.2021.08.19.11.49.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Aug 2021 11:49:44 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] usbip: give back URBs for unsent unlink requests
+ during cleanup
+To:     Anirudh Rayabharam <mail@anirudhrb.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, valentina.manea.m@gmail.com,
+        shuah@kernel.org,
+        syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20210813182508.28127-1-mail@anirudhrb.com>
+ <20210813182508.28127-2-mail@anirudhrb.com>
+ <13450a85-bbfe-09c5-d614-1a944c2600c2@linuxfoundation.org>
+ <YRydGRdPmOaiMWaY@kroah.com>
+ <cb36604b-37f1-c12e-3ebb-cdafd7798dc1@linuxfoundation.org>
+ <YR6eQUpoe9cORXGu@anirudhrb.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <78a30ac4-8e18-50cd-cd18-02d8f9868383@linuxfoundation.org>
+Date:   Thu, 19 Aug 2021 12:49:42 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <YR6eQUpoe9cORXGu@anirudhrb.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-When CONFIG_USB_ISP1761_UDC is not enabled the udc_enabled variable is
-never used since it is short circuited before in the logic operations.
+On 8/19/21 12:09 PM, Anirudh Rayabharam wrote:
+> On Wed, Aug 18, 2021 at 12:36:11PM -0600, Shuah Khan wrote:
+>> On 8/17/21 11:39 PM, Greg KH wrote:
+>>> On Tue, Aug 17, 2021 at 05:16:51PM -0600, Shuah Khan wrote:
+>>>> On 8/13/21 12:25 PM, Anirudh Rayabharam wrote:
+>>>>> In vhci_device_unlink_cleanup(), the URBs for unsent unlink requests are
+>>>>> not given back. This sometimes causes usb_kill_urb to wait indefinitely
+>>>>> for that urb to be given back. syzbot has reported a hung task issue [1]
+>>>>> for this.
+>>>>>
+>>>>> To fix this, give back the urbs corresponding to unsent unlink requests
+>>>>> (unlink_tx list) similar to how urbs corresponding to unanswered unlink
+>>>>> requests (unlink_rx list) are given back.
+>>>>>
+>>>>> [1]: https://syzkaller.appspot.com/bug?id=08f12df95ae7da69814e64eb5515d5a85ed06b76
+>>>>>
+>>>>> Reported-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
+>>>>> Tested-by: syzbot+74d6ef051d3d2eacf428@syzkaller.appspotmail.com
+>>>>> Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+>>>>> ---
+>>>>>     drivers/usb/usbip/vhci_hcd.c | 26 ++++++++++++++++++++++++++
+>>>>>     1 file changed, 26 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+>>>>> index 4ba6bcdaa8e9..6f3f374d4bbc 100644
+>>>>> --- a/drivers/usb/usbip/vhci_hcd.c
+>>>>> +++ b/drivers/usb/usbip/vhci_hcd.c
+>>>>> @@ -957,8 +957,34 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
+>>>>>     	spin_lock(&vdev->priv_lock);
+>>>>>     	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
+>>>>> +		struct urb *urb;
+>>>>> +
+>>>>> +		/* give back URB of unsent unlink request */
+>>>>>     		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
+>>>>
+>>>> I know this is an exiting one.
+>>>> Let's make this pr_debug or remove it all together.
+>>>>
+>>>>> +
+>>>>> +		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
+>>>>> +		if (!urb) {
+>>>>> +			pr_info("the urb (seqnum %lu) was already given back\n",
+>>>>> +				unlink->unlink_seqnum);
+>>>>
+>>>> Let's make this pr_debug or remove it all together.
+>>>
+>>> As you have a struct device for all of these, please use dev_dbg() and
+>>> friends, not pr_*(), for all of these.
+>>>
+>>
+>> Yes. Makes perfect sense.
+> 
+> Perhaps we should use usbip_dbg_vhci_hc() instead of dev_dbg()? It is
+> one of the custom macros defined by the usbip driver for printing debug
+> logs.
+> 
 
-This would trigger the following warning by clang analyzer:
+Yes that macro could be used. However, let's just get rid of the messages.
+I don't see much use for them.
 
-drivers/usb/isp1760/isp1760-core.c:490:2: warning: Value stored to 'udc_enabled' is never read [clang-analyzer-deadcode.DeadStores]
-        udc_enabled = ((devflags & ISP1760_FLAG_ISP1763) ||
-        ^
-drivers/usb/isp1760/isp1760-core.c:490:2: note: Value stored to 'udc_enabled' is never read
-
-Just swap the other of the operands in the logic operations.
-
-Signed-off-by: Rui Miguel Silva <rui.silva@linaro.org>
----
- drivers/usb/isp1760/isp1760-core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/isp1760/isp1760-core.c b/drivers/usb/isp1760/isp1760-core.c
-index ff07e2890692..cb70f9d63cdd 100644
---- a/drivers/usb/isp1760/isp1760-core.c
-+++ b/drivers/usb/isp1760/isp1760-core.c
-@@ -491,7 +491,7 @@ int isp1760_register(struct resource *mem, int irq, unsigned long irqflags,
- 		       (devflags & ISP1760_FLAG_ISP1761));
- 
- 	if ((!IS_ENABLED(CONFIG_USB_ISP1760_HCD) || usb_disabled()) &&
--	    (!IS_ENABLED(CONFIG_USB_ISP1761_UDC) || !udc_enabled))
-+	    (!udc_enabled || !IS_ENABLED(CONFIG_USB_ISP1761_UDC)))
- 		return -ENODEV;
- 
- 	isp = devm_kzalloc(dev, sizeof(*isp), GFP_KERNEL);
-@@ -571,7 +571,7 @@ int isp1760_register(struct resource *mem, int irq, unsigned long irqflags,
- 			return ret;
- 	}
- 
--	if (IS_ENABLED(CONFIG_USB_ISP1761_UDC) && udc_enabled) {
-+	if (udc_enabled && IS_ENABLED(CONFIG_USB_ISP1761_UDC)) {
- 		ret = isp1760_udc_register(isp, irq, irqflags);
- 		if (ret < 0) {
- 			isp1760_hcd_unregister(hcd);
--- 
-2.33.0
-
+thanks,
+-- Shuah
