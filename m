@@ -2,450 +2,625 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11D553F2212
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 23:05:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408743F2223
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 23:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232766AbhHSVFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 17:05:43 -0400
-Received: from cable.insite.cz ([84.242.75.189]:43845 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231134AbhHSVFm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 17:05:42 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id E06ECA1A3D403;
-        Thu, 19 Aug 2021 23:05:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1629407103; bh=MOi+JOuzaOcxUx82njAVB+nFXgmx5ofDM23e/tASFPw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=MomDlB0dRjarqqnRIvw2edOpSdPp4dtjTCbvTumSkTnhTdshzN0rDZWlGILDe9Xq9
-         tbFWk7N8ndPvbDo0b8eyDHz+0Er5rMCzfmHhlm/e8+7XXNEwBbKX3qzOf3RNA9nvPT
-         8dTgIHRomKgILaup01LcTUNgCxmaF59E9nIKcGEQ=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id s-XzAIOsr7aa; Thu, 19 Aug 2021 23:04:56 +0200 (CEST)
-Received: from [192.168.105.119] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 9447AA1A3D401;
-        Thu, 19 Aug 2021 23:04:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1629407096; bh=MOi+JOuzaOcxUx82njAVB+nFXgmx5ofDM23e/tASFPw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Zu0uSIdJShGT83W4kgS8NBPaokJ9GWNl3gY5ky0/ibctrXNS1alzS3Do7rzwsoz9W
-         aUE7yTWoE6xksJXRttbDX3Ps45bDZaryjUjbaeZmK4uJT2i9WVW9SU0vhIImSFm9OT
-         A3Dti+aG/1ksRWs+JZ0f6Tu2MKmdmBGIhAIUt64M=
-Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
- bursting
-To:     Ferry Toth <fntoth@gmail.com>, Felipe Balbi <balbi@kernel.org>
-Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
-        robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        frowand.list@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
-        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
- <ec8050c5-c013-4af6-b39e-69779c009a9c@codeaurora.org>
- <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
- <2e01c435-9ecc-4e3b-f55c-612a86667020@codeaurora.org>
- <2ae9fa6a-3bb1-3742-0dd3-59678bdd8643@gmail.com>
- <ebea75fe-5334-197b-f67a-cb6e1e30b39e@codeaurora.org>
- <bafa93bb-11e3-c8a5-e14a-b0a6d5695055@gmail.com> <87v951ldlt.fsf@kernel.org>
- <d9aef50c-4bd1-4957-13d8-0b6a14b9fcd0@gmail.com> <87pmv9l1dv.fsf@kernel.org>
- <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com> <87a6mbudvc.fsf@kernel.org>
- <6e8bb4ad-fe68-ad36-7416-2b8e10b6ae96@gmail.com> <877dhev68a.fsf@kernel.org>
- <cca69e90-b0ef-00b8-75d3-3bf959a93b45@gmail.com> <874kchvcq0.fsf@kernel.org>
- <e59f1201-2aa2-9075-1f94-a6ae7a046dc1@gmail.com> <8735raj766.fsf@kernel.org>
- <b3417c2c-613b-8ef6-2e2d-6e2cf9a5d5fd@gmail.com>
- <b3e820f0-9c94-7cba-a248-3b2ec5378ab0@gmail.com>
- <d298df65-417b-f318-9374-b463a15d8308@ivitera.com>
- <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <c4e29ac0-1df1-3c64-1218-3687f07e7f77@ivitera.com>
-Date:   Thu, 19 Aug 2021 23:04:50 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.2.1
+        id S233320AbhHSVOj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 17:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232544AbhHSVOi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 17:14:38 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5262CC061756
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 14:14:01 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id z128so14789375ybc.10
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 14:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cfFiTtfA1GXNy8kvrXCEuCJ8XL9NifAivDptCETkEFM=;
+        b=S7/csSf2HUESOOHxnCs4/0atILjl2hF4O0vkCu0V80013iWM93U7/ZPYmXrmBXWD+p
+         cB3xzkNBlGju1OrsJCCbkZcMZtFX4oGQzpYlm3+csByjgSiiedhzFi6lgAptGV+y6uQ0
+         ox9ue4sAQE4akXkdev7wR1BePo6TFa3eMRp3MTJugwu18VhQXLjJj2OeYm37aSk0awjI
+         ZdlioN2v+ExSlvHR6WlAcE2d0Tw76o7NiUH7CEi837gewfqra6A107X7w9+IoAuFI9Hc
+         MS880AOyURr4I2i7GcqBcCFk4tY20wXKXHMJvbCqjm5KjH4qjQekHrSDMNhdwkduEKaR
+         Ldpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cfFiTtfA1GXNy8kvrXCEuCJ8XL9NifAivDptCETkEFM=;
+        b=qX3/3rdjBmzLma90iMiJuNv4zLX3cTqF7JGfw04n9cD+DDKFFYhUhizGITN9BKnNEL
+         W61ory/TP5orlFfYcuksv5iK6HckIRP4JwnEKhPWqmDMbhhKKYa7O8QiQmVp8h/m3pUl
+         VCLnbDNw8lHAu79zZPBGDVN6z67Ui4W8nOHrvuFTr0vCgkXb1CGm+MP2lF+I7v+daYGf
+         BVdB8j2gE8Upe+9VO9OXPNXBPZ/jXFMRpjmws0M7hefkVIHPvEJ6kasU4CaXV/q6b1qG
+         AC1BTHaGsKlrGhE6izXSk+oNM/rQyoaIDs0eJoxiwbB64JvJUpB8LnkGc3tELxJBlx32
+         UdEw==
+X-Gm-Message-State: AOAM5320G/0u09CLcv5278m554TegQojjGaVruh0DOIFKu0suNSG5O2z
+        fYyBbb56Z613G02K+IeMZN5Ji3/jUiy/v0URcGdixw==
+X-Google-Smtp-Source: ABdhPJx4+QvLjcAfFX6/XTAw/6fS9aUnr1VT0IqCwqoUR3pFdRftDL7dhvIsdy+uQc4+qlCxNLvIJLBYsgpLTRi6GK8=
+X-Received: by 2002:a25:c9c6:: with SMTP id z189mr17154556ybf.497.1629407640246;
+ Thu, 19 Aug 2021 14:14:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20210814031231.32125-1-mdevaev@gmail.com>
+In-Reply-To: <20210814031231.32125-1-mdevaev@gmail.com>
+From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date:   Thu, 19 Aug 2021 23:13:48 +0200
+Message-ID: <CANP3RGejWk7Zj2XMGGPgrGMSjqRY+ZaVFha6jG720RCSF9HEkQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     balbi@kernel.org, stern@rowland.harvard.edu,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
+        jj251510319013@gmail.com, linux-usb@vger.kernel.org,
+        Kernel hackers <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+I'm a noob when it comes to usb, so some of my questions may well be stupid...
 
-Dne 19. 08. 21 v 22:10 Ferry Toth napsal(a):
-> Hi
-> 
-> Op 19-08-2021 om 09:51 schreef Pavel Hofman:
->> Hi,
->>
->> Dne 18. 08. 21 v 21:07 Ferry Toth napsal(a):
->>> Hi,
->>>
->>> Op 18-08-2021 om 00:00 schreef Ferry Toth:
->>>> Hi,
->>>>
->>>> Op 16-08-2021 om 07:18 schreef Felipe Balbi:
->>>>> Hi,
->>>>>
->>>>> Ferry Toth <fntoth@gmail.com> writes:
->>>>>>> Ferry Toth <fntoth@gmail.com> writes:
->>>>>>>>>>> Ferry Toth <fntoth@gmail.com> writes:
->>>>>>>>>>>>>>>> Hardware name: Intel Corporation Merrifield/BODEGA BAY, 
->>>>>>>>>>>>>>>> BIOS 542
->>>>>>>>>>>>>>>> 2015.01.21:18.19.48
->>>>>>>>>>>>>>>> RIP: 0010:0x500000000
->>>>>>>>>>>>>>>> Code: Unable to access opcode bytes at RIP 0x4ffffffd6.
->>>>>>>>>>>>>>>> RSP: 0018:ffffa4d00045fc28 EFLAGS: 00010046
->>>>>>>>>>>>>>>> RAX: 0000000500000000 RBX: ffff8cd546aed200 RCX: 
->>>>>>>>>>>>>>>> 0000000000000000
->>>>>>>>>>>>>>>> RDX: 0000000000000000 RSI: ffff8cd547bfcae0 RDI: 
->>>>>>>>>>>>>>>> ffff8cd546aed200
->>>>>>>>>>>>>>>> RBP: ffff8cd547bfcae0 R08: 0000000000000000 R09: 
->>>>>>>>>>>>>>>> 0000000000000001
->>>>>>>>>>>>>>>> R10: ffff8cd541fd28c0 R11: 0000000000000000 R12: 
->>>>>>>>>>>>>>>> ffff8cd547342828
->>>>>>>>>>>>>>>> R13: ffff8cd546aed248 R14: 0000000000000000 R15: 
->>>>>>>>>>>>>>>> ffff8cd548b1d000
->>>>>>>>>>>>>>>> FS:  0000000000000000(0000) GS:ffff8cd57e200000(0000) 
->>>>>>>>>>>>>>>> knlGS:0000000000000000
->>>>>>>>>>>>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>>>>>>>>>>>> CR2: 0000000500000000 CR3: 000000000311e000 CR4: 
->>>>>>>>>>>>>>>> 00000000001006f0
->>>>>>>>>>>>>>>> Call Trace:
->>>>>>>>>>>>>>>>         ? dwc3_remove_requests.constprop.0+0x14d/0x170
->>>>>>>>>>>>>>>>         ? __dwc3_gadget_ep_disable+0x7a/0x160
->>>>>>>>>>>>>>>>         ? dwc3_gadget_ep_disable+0x3d/0xd0
->>>>>>>>>>>>>>>>         ? usb_ep_disable+0x1c/0x
->>>>>>>>>>>>>>>>         ? u_audio_stop_capture+0x79/0x120 [u_audio]
->>>>>>>>>>>>>>>>         ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
->>>>>>>>> So this is triggered by a SetInterface request...
->>>>>>>>>
->>>>>>>>>>>>>>>>         ? composite_setup+0x224/0x1b90 [libcomposite]
->>>>>>>>>>>>>>>>         ? __dwc3_gadget_kick_transfer+0x160/0x400
->>>>>>>>>>>>>>>>         ? dwc3_gadget_ep_queue+0xf3/0x1a0
->>>>>>>>>>>>>>>>         ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->>>>>>>>>>>>>>>>         ? configfs_composite_setup+0x6b/0x90 [libcomposite]
->>>>>>>>>>>>>>>>         ? dwc3_ep0_interrupt+0x459/0xa40
->>>>>>>>>>>>>>>>         ? dwc3_thread_interrupt+0x8ee/0xf40
->>>>>>>>>>>>>>>>         ? __schedule+0x235/0x6c0
->>>>>>>>>>>>>>>>         ? disable_irq_nosync+0x10/0x10
->>>>>>>>>>>>>>>>         ? irq_thread_fn+0x1b/0x60
->>>>>>>>>>>>>>>>         ? irq_thread+0xc0/0x160
->>>>>>>>>>>>>>>>         ? irq_thread_check_affinity+0x70/0x70
->>>>>>>>>>>>>>>>         ? irq_forced_thread_fn+0x70/0x70
->>>>>>>>>>>>>>>>         ? kthread+0x122/0x140
->>>>>>>>>>>>>>>>         ? set_kthread_struct+0x40/0x40
->>>>>>>>>>>>>>>>         ? ret_from_fork+0x22/0x30
->>>>>>>>>>>>>>> Do you mind enabling dwc3 traces and collecting them? 
->>>>>>>>>>>>>>> Trying to figure
->>>>>>>>>>>>>>> out how we got here.
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>> I'll try if I can get the same error by booting with USB 
->>>>>>>>>>>>>> in host mode
->>>>>>>>>>>>>> and then switch to device mode. If so I can enable traces 
->>>>>>>>>>>>>> and collect as
->>>>>>>>>>>>>> you explained me before.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> I'll try before monday, as then I fly for a holiday and 
->>>>>>>>>>>>>> will not be
->>>>>>>>>>>>>> available before rc5.
->>>>>>>>>>>>> you can enable all of those with kernel cmdline :-)
->>>>>>>>>>>>>
->>>>>>>>>>>>> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html 
->>>>>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>> you need ftrace_dump_on_oops=1 and also need the correct 
->>>>>>>>>>>>> options on
->>>>>>>>>>>>> trace_buf_size and trace_event.
->>>>>>>>>>>>>
->>>>>>>>>>>> On Edison-Arduino I have a switch to go to device mode, 
->>>>>>>>>>>> after which
->>>>>>>>>>>> udev triggers a script configure gadgets through configfs.
->>>>>>>>>>>>
->>>>>>>>>>>> I tried to log following these instructions:
->>>>>>>>>>>>
->>>>>>>>>>>> https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs 
->>>>>>>>>>>> <https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs> 
->>>>>>>>>>>>
->>>>>>>>>>>>
->>>>>>>>>>>> Unfortunately the kernel crashes so badly I can not get to 
->>>>>>>>>>>> the ` cp
->>>>>>>>>>>> /t/trace /root/trace.txt` line (after a while the watchdog 
->>>>>>>>>>>> kicks).
->>>>>>>>>>>>
->>>>>>>>>>>> What to do next?
->>>>>>>>>>> Pass ftrace_dump_on_oops to kernel cmdline.
->>>>>>>>>>>
->>>>>>>>>> No sure if I did this right, on oops everything is pushed to 
->>>>>>>>>> console
->>>>>>>>>> (115k2 serial), I hope nothing essential is lost.
->>>>>>>>>>
->>>>>>>>>> I copied the screen buffer to file see attached.
->>>>>>>>> Thank you, I bet it took quite a some time :-) Anyway, looking at
->>>>>>>>> the logs around Set Interface requests, we can track every 
->>>>>>>>> endpoint
->>>>>>>>> that's disabled. I'll take a guess and assume we're failing at 
->>>>>>>>> the last
->>>>>>>>> Set Interface, that means we should have something odd with 
->>>>>>>>> ep6in, but
->>>>>>>>> everything looks fine in the trace output:
->>>>>>>>>
->>>>>>>>> [   75.823107] irq/14-d-596       0d... 42789194us : 
->>>>>>>>> dwc3_gadget_ep_enable: ep6in: mps 192/346 streams 16 burst 0 
->>>>>>>>> ring 0/0 flags E:swbp:<
->>>>>>>>> [   75.835472] irq/14-d-596       0d... 42789198us : 
->>>>>>>>> dwc3_alloc_request: ep6in: req 0000000002c71409 length 0/0 zsI 
->>>>>>>>> ==> 0
->>>>>>>>> [   75.846416] irq/14-d-596       0d... 42789202us : 
->>>>>>>>> dwc3_ep_queue: ep6in: req 0000000002c71409 length 0/192 zsI ==> 
->>>>>>>>> -115
->>>>>>>>> [   75.857360] irq/14-d-596       0d... 42789204us : 
->>>>>>>>> dwc3_alloc_request: ep6in: req 00000000a324f5d0 length 0/0 zsI 
->>>>>>>>> ==> 0
->>>>>>>>> [   75.868301] irq/14-d-596       0d... 42789206us : 
->>>>>>>>> dwc3_ep_queue: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> 
->>>>>>>>> -115
->>>>>>>>> [   75.879244] irq/14-d-596       0d... 42789209us : 
->>>>>>>>> dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] 
->>>>>>>>> (Not Active) [Status Phase]
->>>>>>>>> [   75.891880] irq/14-d-596       0d... 42789211us : 
->>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
->>>>>>>>> [   75.989131] irq/14-d-596       0d... 42789224us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>> [   76.096261] irq/14-d-596       0d... 42789272us : 
->>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
->>>>>>>>> [Status Phase]
->>>>>>>>> [   76.107834] irq/14-d-596       0d... 42789275us : 
->>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
->>>>>>>>> [   76.122944] irq/14-d-596       0d... 42789277us : 
->>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 
->>>>>>>>> zsI ==> 0
->>>>>>>>> [   76.134160] irq/14-d-596       0d... 42789280us : 
->>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
->>>>>>>>> [   76.231322] irq/14-d-596       0d... 42789292us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>> [   76.297418] kworker/-23        0d... 42789670us : 
->>>>>>>>> dwc3_ep_queue: ep3in: req 0000000029586135 length 0/96 ZsI ==> 
->>>>>>>>> -115
->>>>>>>>> [   76.308278] kworker/-23        0d... 42789695us : 
->>>>>>>>> dwc3_prepare_trb: ep3in: trb 00000000b81213d6 (E1:D0) buf 
->>>>>>>>> 0000000003b7a800 size 96 ctrl 00000811 (Hlcs:sC:normal)
->>>>>>>>> [   76.395294] kworker/-23        0d... 42789707us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params 
->>>>>>>>> 00000000 00000000 00000000 --> status: Successful
->>>>>>>>> [   76.471900] irq/14-d-596       0d... 42789842us : 
->>>>>>>>> dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) 
->>>>>>>>> [Setup Phase]
->>>>>>>>> [   76.489308] irq/14-d-596       0d... 42789845us : 
->>>>>>>>> dwc3_ctrl_req: Set Interface(Intf = 5, Alt.Setting = 0)
->>>>>>>>> [   76.505650] irq/14-d-596       0d... 42789851us : 
->>>>>>>>> dwc3_ep_dequeue: ep6in: req 0000000002c71409 length 0/192 zsI 
->>>>>>>>> ==> -115
->>>>>>>>> [   76.523315] irq/14-d-596       0d... 42789854us : 
->>>>>>>>> dwc3_gadget_giveback: ep6in: req 0000000002c71409 length 0/192 
->>>>>>>>> zsI ==> -104
->>>>>>>>> [   76.541427] irq/14-d-596       0d... 42789857us : 
->>>>>>>>> dwc3_free_request: ep6in: req 0000000002c71409 length 0/192 zsI 
->>>>>>>>> ==> -104
->>>>>>>>> [   76.559267] irq/14-d-596       0d... 42789859us : 
->>>>>>>>> dwc3_ep_dequeue: ep6in: req 00000000a324f5d0 length 0/192 zsI 
->>>>>>>>> ==> -115
->>>>>>>>> [   76.576937] irq/14-d-596       0d... 42789861us : 
->>>>>>>>> dwc3_gadget_giveback: ep6in: req 00000000a324f5d0 length 0/192 
->>>>>>>>> zsI ==> -104
->>>>>>>>> [   76.595046] irq/14-d-596       0d... 42789862us : 
->>>>>>>>> dwc3_free_request: ep6in: req 00000000a324f5d0 length 0/192 zsI 
->>>>>>>>> ==> -104
->>>>>>>>> [   76.612892] irq/14-d-596       0d... 42789865us : 
->>>>>>>>> dwc3_gadget_ep_disable: ep6in: mps 192/346 streams 16 burst 0 
->>>>>>>>> ring 0/0 flags E:swbp:<
->>>>>>>>> [   76.665535] irq/14-d-596       0d... 42789873us : 
->>>>>>>>> dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] 
->>>>>>>>> (Not Active) [Status Phase]
->>>>>>>>> [   76.684716] irq/14-d-596       0d... 42789875us : 
->>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
->>>>>>>>> [   76.819195] irq/14-d-596       0d... 42789886us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>> [   76.926324] irq/14-d-596       0d... 42789930us : 
->>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
->>>>>>>>> [Status Phase]
->>>>>>>>> [   76.937892] irq/14-d-596       0d... 42789933us : 
->>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
->>>>>>>>> [   76.953003] irq/14-d-596       0d... 42789935us : 
->>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 
->>>>>>>>> zsI ==> 0
->>>>>>>>> [   76.964217] irq/14-d-596       0d... 42789938us : 
->>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
->>>>>>>>> [   77.061379] irq/14-d-596       0d... 42789950us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>> [   77.168595] irq/14-d-596       0d... 42790509us : 
->>>>>>>>> dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) 
->>>>>>>>> [Setup Phase]
->>>>>>>>> [   77.180159] irq/14-d-596       0d... 42790512us : 
->>>>>>>>> dwc3_ctrl_req: Get String Descriptor(Index = 18, Length = 255)
->>>>>>>>> [   77.190578] irq/14-d-596       0d... 42790537us : 
->>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 0000000003b68000 size 36 ctrl 00000c53 (HLcs:SC:data)
->>>>>>>>> [   77.287648] irq/14-d-596       0d... 42790550us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>> [   77.333107] irq/14-d-596       0d... 42790557us : 
->>>>>>>>> dwc3_event: event (000010c2): ep0in: Transfer Not Ready [0] 
->>>>>>>>> (Not Active) [Data Phase]
->>>>>>>>> [   77.407223] irq/14-d-596       0d... 42790575us : 
->>>>>>>>> dwc3_event: event (000090c2): ep0in: Transfer Not Ready [0] 
->>>>>>>>> (Active) [Data Phase]
->>>>>>>>> [   77.480985] irq/14-d-596       0d... 42790588us : 
->>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
->>>>>>>>> [Data Phase]
->>>>>>>>> [   77.492376] irq/14-d-596       0d... 42790590us : 
->>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 0000000003b68000 size 0 ctrl 00000c52 (hLcs:SC:data)
->>>>>>>>> [   77.507221] irq/14-d-596       0d... 42790595us : 
->>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 36/36 
->>>>>>>>> ZsI ==> 0
->>>>>>>>> [   77.518609] irq/14-d-596       0d... 42790597us : 
->>>>>>>>> dwc3_event: event (000020c0): ep0out: Transfer Not Ready [0] 
->>>>>>>>> (Not Active) [Status Phase]
->>>>>>>>> [   77.531332] irq/14-d-596       0d... 42790598us : 
->>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
->>>>>>>>> 000000001bded000 size 0 ctrl 00000c43 (HLcs:SC:status3)
->>>>>>>>> [   77.628669] irq/14-d-596       0d... 42790609us : 
->>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
->>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
->>>>>>>>>
->>>>>>>>> Do you mind adding a few prints in dwc3_remove_requests to tell 
->>>>>>>>> us which
->>>>>>>>> endpoint is being processed? Then we'll know for sure which one 
->>>>>>>>> caused
->>>>>>>>> the crash.
->>>>>>>>>
->>>>>>>> I wouldn't mind but am leaving on a holiday, won't have time 
->>>>>>>> until 6 aug.
->>>>>>> not a problem, we'll still be here when you're back :-)
->>>>>> Well, let's go then :-)
->>>>>>
->>>>>> To get back in the mood I have retested 5.13.0, 5.14.0-rc1, 
->>>>>> 5.14.0-rc2
->>>>>> and 5.14.0-rc5.
->>>>>>
->>>>>> I find that 5.13.0 works fine, and the issue starts from 5.14.0-rc1.
->>>>> That's great finding. We have a bisection point. There are a total of
->>>>> 13764 commits between v5.13 and v5.14-rc1
->>>>>
->>>>>     $ git rev-list  --count v5.13..v5.14-rc1
->>>>>     13764
->>>>>
->>>>> git bisect should find the offending commit in at most 14 tries. 
->>>>> That's
->>>>> not too bad.
->>>> I correctly guesstimated that the problem got introduced by the usb 
->>>> merge 79160a60
->>>>
->>>> "Merge tag 'usb-5.14-rc1' of 
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb"
->>>>
->>>> 116 commits(7 bisects).
->>>>
->>>> 24f779dac8f3efb9629adc0e486914d93dc45517 is the first bad commit
->>>>
->>>> "usb: gadget: f_uac2/u_audio: add feedback endpoint support"
->>>>
->>>> Ruslan's 3 patches are related to each other so I reverted all three 
->>>> 24f779da...e89bb428 and applied the reverts to rc1.
->>>>
->>>> I can confirm this indeed resolves the problem in rc1.
->>>>
->>>> Is late now, tomorrow evening I will apply the reverts to rc6.
->>>
->>> With these reverts rc6 works fine as well.
->>>
->>> So, where do we go from here?
->>>
->>
->> I know the patches have been tested on dwc2 (by me and others).  I do 
->> not know if Ruslan or Jerome tested them on dwc3 but probably not. 
->> Ruslan has talked about RPi (my case too) and BeagleboneBlack, both 
->> with dwc2. Perhaps the dwc2 behaves a bit differently than dwc3?
->>
->> The patches add a new EP-IN for async feedback. I am sorry I have not 
->> followed your long thread (it started as unrelated to uac). Does the 
->> problem appear with f_uac1 or f_uac2? Please how have you reached the 
->> above problem?
-> 
-> I'm sorry too. I first believed the issue was related to the patch 
-> mentioned in the subject line.
-> 
-> The problem appaers with f_uac2. I bost Edison_Arduino board in host 
-> mode (there is a switch allowing to select host/device mode). When 
-> flipping the switch to device mode udev run a script:
-> But as I am using configfs (excerpt follows) and just disabling the last 
-> 2 line resolves the issue, I'm guessing uac2 is the issue. Or exceeding 
-> the available resources.
-> 
-> # Create directory structure
-> mkdir "${GADGET_BASE_DIR}"
-> cd "${GADGET_BASE_DIR}"
-> mkdir -p configs/c.1/strings/0x409
-> mkdir -p strings/0x409
-> 
-> # Serial device
-> mkdir functions/gser.usb0
-> ln -s functions/gser.usb0 configs/c.1/
-> ###
-> 
-> # Ethernet device
-> mkdir functions/eem.usb0
-> echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
-> echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
-> ln -s functions/eem.usb0 configs/c.1/
-> 
-> # Mass Storage device
-> mkdir functions/mass_storage.usb0
-> echo 1 > functions/mass_storage.usb0/stall
-> echo 0 > functions/mass_storage.usb0/lun.0/cdrom
-> echo 0 > functions/mass_storage.usb0/lun.0/ro
-> echo 0 > functions/mass_storage.usb0/lun.0/nofua
-> echo "${USBDISK}" > functions/mass_storage.usb0/lun.0/file
-> ln -s functions/mass_storage.usb0 configs/c.1/
-> 
-> # UAC2 device
-> mkdir functions/uac2.usb0
-> ln -s functions/uac2.usb0 configs/c.1
-> ....
-> 
+On Sat, Aug 14, 2021 at 5:13 AM Maxim Devaev <mdevaev@gmail.com> wrote:
+>
+> f_hid provides the OUT Endpoint as only way for receiving reports
+> from the host. SETUP/SET_REPORT method is not supported, and this causes
+> a number of compatibility problems with various host drivers, especially
+> in the case of keyboard emulation using f_hid.
+>
+> - Some hosts do not support the OUT Endpoint and ignore it,
+>   so it becomes impossible for the gadget to receive a report
+>   from the host. In the case of a keyboard, the gadget loses the ability
+>   to get the status of the LEDs.
 
-As you say, could perhaps the reason be that the extra EP-IN added in 
-those patches (previously 1, now 2 with the default config you use) 
-exceeds your EP-IN max count or available fifos somehow?  You have a 
-number of functions initialized. If you change the load order of the 
-functions, do you get the error later with a different function? Just 
-guessing...
+perhaps better to rephrase as 'the host ceases to change the status of
+the gadget/keyboard LEDs',
+unless this is actually driven by the keyboard as opposed to the other
+way round (which is what I'd expect from AT, PS/2 keyboards).
 
-You should be able to switch the default async EP-OUT (which configures 
-the new feedback EP-IN ) to adaptive EP-OUT (which requires no feedback 
-EP) with c_sync=8 parameter of f_uac2.
+> - Some BIOSes/UEFIs can't work with HID with the OUT Endpoint at all.
 
-https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L47
+HID devices with an OUT Endpoint
 
-https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L830
+>   This may be due to their bugs or incomplete implementation
+>   of the HID standard.
+>   For example, absolutely all Apple UEFIs can't handle the OUT Endpoint
+>   if it goes after IN Endpoint in the descriptor and require the reverse
+>   order (OUT, IN) which is a violation of the standard.
+>   Other hosts either do not initialize gadgets with a descriptor
+>   containing the OUT Endpoint completely (like some HP and DELL BIOSes
+>   and embedded firmwares like on KVM switches), or initialize them,
+>   but will not poll.
 
-https://elixir.bootlin.com/linux/v5.14-rc6/source/include/uapi/linux/usb/ch9.h#L453
+Not clear what 'not poll' means here.  Why would they (the host) need
+to poll an OUT endpoint?
 
-Does that fix the problem?
+Additionally it seems like any keyboard gadget would want to default
+to the older more compatible mode?
+Or are there compatibility problems with it as well?
 
-Thanks,
+> This patch adds option no_out_endpoint=1 to disable the OUT Endpoint
+> and allow f_hid to receive reports from the host via SETUP/SET_REPORT.
 
-Pavel.
+allows
+
+Is this a kcmdline option? module param? sysfs option?
+Can one dynamically change this as one reconfigures the gadget for a new mode?
+
+>
+> Previously, there was such a feature in f_hid, but it was replaced
+> by the OUT Endpoint [1] in the commit 99c515005857 ("usb: gadget: hidg:
+> register OUT INT endpoint for SET_REPORT"). So this patch actually returns
+> the removed functionality making it optional. For backward compatibility
+
+while making it optional
+
+> reasons, the OUT Endpoint mode remains the default behaviour.
+>
+> - The OUT Endpoint mode provides the report queue and reduces USB overhead
+>   (eliminating SETUP routine) on transmitting a report from the host.
+>
+> - If the SETUP/SET_REPORT mode is used, there is no report queue,
+>   so the userspace will only read the last report. For classic HID
+
+without 'the'
+
+>   devices like keyboard this is not a problem, since it is intended
+
+keyboards
+
+>   to transmit the status of the LEDs and only the last report
+>   is important. This mode provides better compatibility with strange
+>   and buggy host drivers.
+>
+> Both modes passed USBCV tests. Checking with the USB protocol analyzer
+> also confirmed that everything is working as it should and the new mode
+> ensures operability in all of the described cases.
+>
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://www.spinics.net/lists/linux-usb/msg65494.html [1]
+> ---
+>  drivers/usb/gadget/function/f_hid.c | 217 +++++++++++++++++++++++-----
+>  drivers/usb/gadget/function/u_hid.h |   1 +
+>  2 files changed, 185 insertions(+), 33 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+> index bb476e121eae..e3fb73ed696d 100644
+> --- a/drivers/usb/gadget/function/f_hid.c
+> +++ b/drivers/usb/gadget/function/f_hid.c
+> @@ -45,12 +45,17 @@ struct f_hidg {
+>         unsigned short                  report_desc_length;
+>         char                            *report_desc;
+>         unsigned short                  report_length;
+> +       bool                            use_out_ep;
+
+this could use a comment along the lines of /* as opposed to SETUP/SET_REPORT */
+
+>
+>         /* recv report */
+> -       struct list_head                completed_out_req;
+>         spinlock_t                      read_spinlock;
+>         wait_queue_head_t               read_queue;
+> +       /* recv report - interrupt out only (use_out_ep == 1) */
+> +       struct list_head                completed_out_req;
+>         unsigned int                    qlen;
+> +       /* recv report - setup set_report only (use_out_ep == 0) */
+> +       char                            *set_report_buf;
+> +       unsigned int                    set_report_length;
+>
+>         /* send report */
+>         spinlock_t                      write_spinlock;
+> @@ -79,7 +84,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+>         .bDescriptorType        = USB_DT_INTERFACE,
+>         /* .bInterfaceNumber    = DYNAMIC */
+>         .bAlternateSetting      = 0,
+> -       .bNumEndpoints          = 2,
+> +       /* .bNumEndpoints       = DYNAMIC */
+
+if you look down below, this isn't actually dynamic, should we just
+have hidg_interface_desc_{intout,ssreport} structs?
+
+>         .bInterfaceClass        = USB_CLASS_HID,
+>         /* .bInterfaceSubClass  = DYNAMIC */
+>         /* .bInterfaceProtocol  = DYNAMIC */
+> @@ -140,7 +145,7 @@ static struct usb_ss_ep_comp_descriptor hidg_ss_out_comp_desc = {
+>         /* .wBytesPerInterval   = DYNAMIC */
+>  };
+>
+> -static struct usb_descriptor_header *hidg_ss_descriptors[] = {
+> +static struct usb_descriptor_header *hidg_ss_descriptors_intout[] = {
+>         (struct usb_descriptor_header *)&hidg_interface_desc,
+>         (struct usb_descriptor_header *)&hidg_desc,
+>         (struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
+> @@ -150,6 +155,14 @@ static struct usb_descriptor_header *hidg_ss_descriptors[] = {
+>         NULL,
+>  };
+>
+> +static struct usb_descriptor_header *hidg_ss_descriptors_ssreport[] = {
+> +       (struct usb_descriptor_header *)&hidg_interface_desc,
+> +       (struct usb_descriptor_header *)&hidg_desc,
+> +       (struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
+> +       (struct usb_descriptor_header *)&hidg_ss_in_comp_desc,
+> +       NULL,
+> +};
+> +
+>  /* High-Speed Support */
+>
+>  static struct usb_endpoint_descriptor hidg_hs_in_ep_desc = {
+> @@ -176,7 +189,7 @@ static struct usb_endpoint_descriptor hidg_hs_out_ep_desc = {
+>                                       */
+>  };
+>
+> -static struct usb_descriptor_header *hidg_hs_descriptors[] = {
+> +static struct usb_descriptor_header *hidg_hs_descriptors_intout[] = {
+>         (struct usb_descriptor_header *)&hidg_interface_desc,
+>         (struct usb_descriptor_header *)&hidg_desc,
+>         (struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
+> @@ -184,6 +197,13 @@ static struct usb_descriptor_header *hidg_hs_descriptors[] = {
+>         NULL,
+>  };
+>
+> +static struct usb_descriptor_header *hidg_hs_descriptors_ssreport[] = {
+> +       (struct usb_descriptor_header *)&hidg_interface_desc,
+> +       (struct usb_descriptor_header *)&hidg_desc,
+> +       (struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
+> +       NULL,
+> +};
+> +
+>  /* Full-Speed Support */
+>
+>  static struct usb_endpoint_descriptor hidg_fs_in_ep_desc = {
+> @@ -210,7 +230,7 @@ static struct usb_endpoint_descriptor hidg_fs_out_ep_desc = {
+>                                        */
+>  };
+>
+> -static struct usb_descriptor_header *hidg_fs_descriptors[] = {
+> +static struct usb_descriptor_header *hidg_fs_descriptors_intout[] = {
+>         (struct usb_descriptor_header *)&hidg_interface_desc,
+>         (struct usb_descriptor_header *)&hidg_desc,
+>         (struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
+> @@ -218,6 +238,13 @@ static struct usb_descriptor_header *hidg_fs_descriptors[] = {
+>         NULL,
+>  };
+>
+> +static struct usb_descriptor_header *hidg_fs_descriptors_ssreport[] = {
+> +       (struct usb_descriptor_header *)&hidg_interface_desc,
+> +       (struct usb_descriptor_header *)&hidg_desc,
+> +       (struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
+> +       NULL,
+> +};
+> +
+>  /*-------------------------------------------------------------------------*/
+>  /*                                 Strings                                 */
+>
+> @@ -241,9 +268,11 @@ static struct usb_gadget_strings *ct_func_strings[] = {
+>  /*-------------------------------------------------------------------------*/
+>  /*                              Char Device                                */
+>
+> -static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+> -                       size_t count, loff_t *ptr)
+> +static ssize_t f_hidg_intout_read(struct file *file, char __user *buffer,
+> +                                 size_t count, loff_t *ptr)
+>  {
+> +       /* used only if the OUT endpoint is configured */
+> +
+
+comment probably belongs above the function instead of inside it
+
+>         struct f_hidg *hidg = file->private_data;
+>         struct f_hidg_req_list *list;
+>         struct usb_request *req;
+> @@ -255,15 +284,15 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+>
+>         spin_lock_irqsave(&hidg->read_spinlock, flags);
+>
+> -#define READ_COND (!list_empty(&hidg->completed_out_req))
+> +#define READ_COND_INTOUT (!list_empty(&hidg->completed_out_req))
+>
+>         /* wait for at least one buffer to complete */
+> -       while (!READ_COND) {
+> +       while (!READ_COND_INTOUT) {
+>                 spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+>                 if (file->f_flags & O_NONBLOCK)
+>                         return -EAGAIN;
+>
+> -               if (wait_event_interruptible(hidg->read_queue, READ_COND))
+> +               if (wait_event_interruptible(hidg->read_queue, READ_COND_INTOUT))
+>                         return -ERESTARTSYS;
+>
+>                 spin_lock_irqsave(&hidg->read_spinlock, flags);
+> @@ -313,6 +342,62 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+>         return count;
+>  }
+>
+> +#define READ_COND_SSREPORT (hidg->set_report_buf != NULL)
+> +
+> +static ssize_t f_hidg_ssreport_read(struct file *file, char __user *buffer,
+> +                                   size_t count, loff_t *ptr)
+> +{
+> +       /* used only if the OUT endpoint is NOT configured */
+> +
+> +       struct f_hidg *hidg = file->private_data;
+> +       char *tmp_buf = NULL;
+> +       unsigned long flags;
+> +
+> +       if (!count)
+> +               return 0;
+> +
+> +       spin_lock_irqsave(&hidg->read_spinlock, flags);
+> +
+> +       while (!READ_COND_SSREPORT) {
+> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+> +               if (file->f_flags & O_NONBLOCK)
+> +                       return -EAGAIN;
+> +
+> +               if (wait_event_interruptible(hidg->read_queue, READ_COND_SSREPORT))
+> +                       return -ERESTARTSYS;
+> +
+> +               spin_lock_irqsave(&hidg->read_spinlock, flags);
+> +       }
+> +
+> +       count = min_t(unsigned int, count, hidg->set_report_length);
+> +       tmp_buf = hidg->set_report_buf;
+> +       hidg->set_report_buf = NULL;
+> +
+> +       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+> +
+> +       if (tmp_buf != NULL) {
+> +               count -= copy_to_user(buffer, tmp_buf, count);
+> +               kfree(tmp_buf);
+> +       } else {
+> +               count = -ENOMEM;
+> +       }
+> +
+> +       wake_up(&hidg->read_queue);
+> +
+> +       return count;
+> +}
+> +
+> +static ssize_t f_hidg_read(struct file *file, char __user *buffer,
+> +                          size_t count, loff_t *ptr)
+> +{
+> +       struct f_hidg *hidg = file->private_data;
+> +
+> +       if (hidg->use_out_ep)
+> +               return f_hidg_intout_read(file, buffer, count, ptr);
+> +       else
+> +               return f_hidg_ssreport_read(file, buffer, count, ptr);
+> +}
+> +
+>  static void f_hidg_req_complete(struct usb_ep *ep, struct usb_request *req)
+>  {
+>         struct f_hidg *hidg = (struct f_hidg *)ep->driver_data;
+> @@ -433,14 +518,20 @@ static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
+>         if (WRITE_COND)
+>                 ret |= EPOLLOUT | EPOLLWRNORM;
+>
+> -       if (READ_COND)
+> -               ret |= EPOLLIN | EPOLLRDNORM;
+> +       if (hidg->use_out_ep) {
+> +               if (READ_COND_INTOUT)
+> +                       ret |= EPOLLIN | EPOLLRDNORM;
+> +       } else {
+> +               if (READ_COND_SSREPORT)
+> +                       ret |= EPOLLIN | EPOLLRDNORM;
+> +       }
+>
+>         return ret;
+>  }
+>
+>  #undef WRITE_COND
+> -#undef READ_COND
+> +#undef READ_COND_SSREPORT
+> +#undef READ_COND_INTOUT
+>
+>  static int f_hidg_release(struct inode *inode, struct file *fd)
+>  {
+> @@ -467,8 +558,10 @@ static inline struct usb_request *hidg_alloc_ep_req(struct usb_ep *ep,
+>         return alloc_ep_req(ep, length);
+>  }
+>
+> -static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
+> +static void hidg_intout_complete(struct usb_ep *ep, struct usb_request *req)
+>  {
+> +       /* used only if the OUT endpoint is configured */
+> +
+
+ditto
+
+>         struct f_hidg *hidg = (struct f_hidg *) req->context;
+>         struct usb_composite_dev *cdev = hidg->func.config->cdev;
+>         struct f_hidg_req_list *req_list;
+> @@ -502,6 +595,39 @@ static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
+>         }
+>  }
+>
+> +static void hidg_ssreport_complete(struct usb_ep *ep, struct usb_request *req)
+> +{
+> +       /* used only if the OUT endpoint is NOT configured */
+> +
+
+ditto
+
+> +       struct f_hidg *hidg = (struct f_hidg *)req->context;
+> +       struct usb_composite_dev *cdev = hidg->func.config->cdev;
+> +       char *new_buf = NULL;
+> +       unsigned long flags;
+> +
+> +       if (req->status != 0 || req->buf == NULL || req->actual == 0) {
+> +               ERROR(cdev,
+> +                     "%s FAILED: status=%d, buf=%p, actual=%d\n",
+> +                     __func__, req->status, req->buf, req->actual);
+> +               return;
+> +       }
+> +
+> +       spin_lock_irqsave(&hidg->read_spinlock, flags);
+> +
+> +       new_buf = krealloc(hidg->set_report_buf, req->actual, GFP_ATOMIC);
+> +       if (new_buf == NULL) {
+> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+> +               return;
+> +       }
+> +       hidg->set_report_buf = new_buf;
+> +
+> +       hidg->set_report_length = req->actual;
+> +       memcpy(hidg->set_report_buf, req->buf, req->actual);
+> +
+> +       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+> +
+> +       wake_up(&hidg->read_queue);
+> +}
+> +
+>  static int hidg_setup(struct usb_function *f,
+>                 const struct usb_ctrlrequest *ctrl)
+>  {
+> @@ -549,7 +675,11 @@ static int hidg_setup(struct usb_function *f,
+>         case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+>                   | HID_REQ_SET_REPORT):
+>                 VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
+> -               goto stall;
+> +               if (hidg->use_out_ep)
+> +                       goto stall;
+> +               req->complete = hidg_ssreport_complete;
+> +               req->context  = hidg;
+> +               goto respond;
+>                 break;
+>
+>         case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+> @@ -637,15 +767,18 @@ static void hidg_disable(struct usb_function *f)
+>         unsigned long flags;
+>
+>         usb_ep_disable(hidg->in_ep);
+> -       usb_ep_disable(hidg->out_ep);
+>
+> -       spin_lock_irqsave(&hidg->read_spinlock, flags);
+> -       list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
+> -               free_ep_req(hidg->out_ep, list->req);
+> -               list_del(&list->list);
+> -               kfree(list);
+> +       if (hidg->out_ep) {
+> +               usb_ep_disable(hidg->out_ep);
+> +
+> +               spin_lock_irqsave(&hidg->read_spinlock, flags);
+> +               list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
+> +                       free_ep_req(hidg->out_ep, list->req);
+> +                       list_del(&list->list);
+> +                       kfree(list);
+> +               }
+> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+>         }
+> -       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
+>
+>         spin_lock_irqsave(&hidg->write_spinlock, flags);
+>         if (!hidg->write_pending) {
+> @@ -691,8 +824,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+>                 }
+>         }
+>
+> -
+> -       if (hidg->out_ep != NULL) {
+> +       if (hidg->use_out_ep && hidg->out_ep != NULL) {
+>                 /* restart endpoint */
+>                 usb_ep_disable(hidg->out_ep);
+>
+> @@ -717,7 +849,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+>                                         hidg_alloc_ep_req(hidg->out_ep,
+>                                                           hidg->report_length);
+>                         if (req) {
+> -                               req->complete = hidg_set_report_complete;
+> +                               req->complete = hidg_intout_complete;
+>                                 req->context  = hidg;
+>                                 status = usb_ep_queue(hidg->out_ep, req,
+>                                                       GFP_ATOMIC);
+> @@ -743,7 +875,8 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
+>         }
+>         return 0;
+>  disable_out_ep:
+> -       usb_ep_disable(hidg->out_ep);
+> +       if (hidg->out_ep)
+> +               usb_ep_disable(hidg->out_ep);
+>  free_req_in:
+>         if (req_in)
+>                 free_ep_req(hidg->in_ep, req_in);
+> @@ -795,14 +928,21 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>                 goto fail;
+>         hidg->in_ep = ep;
+>
+> -       ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
+> -       if (!ep)
+> -               goto fail;
+> -       hidg->out_ep = ep;
+> +       hidg->out_ep = NULL;
+> +       if (hidg->use_out_ep) {
+> +               ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
+> +               if (!ep)
+> +                       goto fail;
+> +               hidg->out_ep = ep;
+> +       }
+> +
+> +       /* used only if use_out_ep == 1 */
+> +       hidg->set_report_buf = NULL;
+>
+>         /* set descriptor dynamic values */
+>         hidg_interface_desc.bInterfaceSubClass = hidg->bInterfaceSubClass;
+>         hidg_interface_desc.bInterfaceProtocol = hidg->bInterfaceProtocol;
+> +       hidg_interface_desc.bNumEndpoints = hidg->use_out_ep ? 2 : 1;
+>         hidg->protocol = HID_REPORT_PROTOCOL;
+>         hidg->idle = 1;
+>         hidg_ss_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
+> @@ -833,12 +973,19 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
+>         hidg_ss_out_ep_desc.bEndpointAddress =
+>                 hidg_fs_out_ep_desc.bEndpointAddress;
+>
+> -       status = usb_assign_descriptors(f, hidg_fs_descriptors,
+> -                       hidg_hs_descriptors, hidg_ss_descriptors,
+> -                       hidg_ss_descriptors);
+> +#define CHOOSE_DESC(prefix)    \
+> +       (hidg->use_out_ep ? prefix##_intout : prefix##_ssreport)
+> +
+> +       status = usb_assign_descriptors(f,
+> +               CHOOSE_DESC(hidg_fs_descriptors),
+> +               CHOOSE_DESC(hidg_hs_descriptors),
+> +               CHOOSE_DESC(hidg_ss_descriptors),
+> +               CHOOSE_DESC(hidg_ss_descriptors));
+
+may be better to just use an if (hidg->use_out_ep) status =
+usb_assign_descriptors(...) else status = usb_assign_descriptors(...)
+
+(or just status = hidg->use_out_ep ? usb_assign_descriptors(...) :
+usb_assign_descriptors(...)
+
+it's not really any longer (when you count up the extra lines adding
+and undefing the macro) and eliminates a macro making things easier to
+grep for...
+
+>         if (status)
+>                 goto fail;
+>
+> +#undef CHOOSE_DESC
+> +
+>         spin_lock_init(&hidg->write_spinlock);
+>         hidg->write_pending = 1;
+>         hidg->req = NULL;
+> @@ -950,6 +1097,7 @@ CONFIGFS_ATTR(f_hid_opts_, name)
+>
+>  F_HID_OPT(subclass, 8, 255);
+>  F_HID_OPT(protocol, 8, 255);
+> +F_HID_OPT(no_out_endpoint, 8, 1);
+>  F_HID_OPT(report_length, 16, 65535);
+>
+>  static ssize_t f_hid_opts_report_desc_show(struct config_item *item, char *page)
+> @@ -1009,6 +1157,7 @@ CONFIGFS_ATTR_RO(f_hid_opts_, dev);
+>  static struct configfs_attribute *hid_attrs[] = {
+>         &f_hid_opts_attr_subclass,
+>         &f_hid_opts_attr_protocol,
+> +       &f_hid_opts_attr_no_out_endpoint,
+>         &f_hid_opts_attr_report_length,
+>         &f_hid_opts_attr_report_desc,
+>         &f_hid_opts_attr_dev,
+> @@ -1093,6 +1242,7 @@ static void hidg_free(struct usb_function *f)
+>         hidg = func_to_hidg(f);
+>         opts = container_of(f->fi, struct f_hid_opts, func_inst);
+>         kfree(hidg->report_desc);
+> +       kfree(hidg->set_report_buf);
+>         kfree(hidg);
+>         mutex_lock(&opts->lock);
+>         --opts->refcnt;
+> @@ -1139,6 +1289,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
+>                         return ERR_PTR(-ENOMEM);
+>                 }
+>         }
+> +       hidg->use_out_ep = !opts->no_out_endpoint;
+
+maybe it would be better to use consistent naming...
+
+hidg->no_out_endpoint = opts->no_out_endpoint
+
+or call the option 'use_ssreport' instead of 'no_out_endpoint'
+(negatives are harder to think about)
+
+>
+>         mutex_unlock(&opts->lock);
+>
+> diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/function/u_hid.h
+> index 98d6af558c03..84bb70292855 100644
+> --- a/drivers/usb/gadget/function/u_hid.h
+> +++ b/drivers/usb/gadget/function/u_hid.h
+> @@ -20,6 +20,7 @@ struct f_hid_opts {
+>         int                             minor;
+>         unsigned char                   subclass;
+>         unsigned char                   protocol;
+> +       unsigned char                   no_out_endpoint;
+>         unsigned short                  report_length;
+>         unsigned short                  report_desc_length;
+>         unsigned char                   *report_desc;
+> --
+> 2.32.0
+>
+
+Anyway, nothing in here is particularly important, just loose thoughts.
+In general this seems pretty nice.
+
+- Maciej
