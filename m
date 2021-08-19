@@ -2,234 +2,144 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D77A3F1A05
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 15:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA3B3F1A24
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 15:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239249AbhHSNIY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 09:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238357AbhHSNIX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 09:08:23 -0400
-Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D764C0613D9
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 06:07:47 -0700 (PDT)
-Received: by mail-vs1-xe2f.google.com with SMTP id t4so1092724vsm.5
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 06:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1GCKu9c84zINYtTdflsWXKCWXkOZdKhJUWmHuvrkY+4=;
-        b=f+4CRpBzlKKi/DOaSNA/G+hiFrodgB7WwtvP6lDjHBbwMct5xJEnNRIBbwWd50HxVl
-         4zhiGfKdAN1zaQTNFhB6Vi8xqc4j40IY1vsyJhWmkAu9OGW99mwK9tXMUYa730kFsYI4
-         idKdGIien3FkWDSAe9a9bUwucupyJle2LRixnAHVpFbbr4u728pooiABojadky5czPhQ
-         T05rm31+E59u8E8W6WOHoHOIbfDCZtTsEcAVQYXP/NQkrFth/PCbSSe6c7z8JAzoaO1+
-         46BAA+NxWAouT+Gc5X4wCTy1dHtG/pP9SH4vbLZ8x03CSox6/vBN4JfPUqmpPE9U44nl
-         Iiow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1GCKu9c84zINYtTdflsWXKCWXkOZdKhJUWmHuvrkY+4=;
-        b=ptT4KLBBg/Zhx0K7k3CHMh+oGaZYejk4IckPqxJ/UCxuoUVEMHI1ugDhV9myZJYdcW
-         WXT1n32uVYs15ykOgVqBgGaHBPufwn880KhUcmU4Kn0awPDM45gjEncCnTYfV8cY2aYN
-         wisPNUYXBqfpVapOFDycaZTswXsS5L8p9Mv42ZjCZRUS5i+vIQEun5nfBUDXuIkHzMiQ
-         ghd3j4GUABpB3y7WXkSYif+zqSWggJpdYNIW73+uKr6UACQtNA4YYL7kasJ+gM3LojIv
-         TLa/80dDbqnFQi0G7hmlQhuNEFSg9IzAAAFTKR468Ya/lIk15C/qkINysSKRGTLee87V
-         IQJA==
-X-Gm-Message-State: AOAM532ivlgSc7SCKnpN+WSrPOd5/TdBaj5Hexjw5k3H/3nlpXqkhK0h
-        bWreZaCKQA4XWaTMBUkcVy6rM+A/VPuuUInK33PwwQ==
-X-Google-Smtp-Source: ABdhPJyJROokpzMBNet191tDOwD7eE8PakuStZsC4TgI99eWakoC4SNznlH+uH6MVn3jKPVb3Va23L7NrWpzQmbz4ck=
-X-Received: by 2002:a67:3212:: with SMTP id y18mr12074668vsy.19.1629378466059;
- Thu, 19 Aug 2021 06:07:46 -0700 (PDT)
+        id S239619AbhHSNQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 09:16:21 -0400
+Received: from mga09.intel.com ([134.134.136.24]:37034 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234695AbhHSNQU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Aug 2021 09:16:20 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="216545076"
+X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
+   d="scan'208";a="216545076"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 06:15:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
+   d="scan'208";a="471884141"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
+  by orsmga008.jf.intel.com with ESMTP; 19 Aug 2021 06:15:41 -0700
+To:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+References: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: [QUERY] Cold plugged USB device to Inateck PCIE USB card is not
+ detected
+Message-ID: <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
+Date:   Thu, 19 Aug 2021 16:18:12 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-References: <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <20210818095044.e2ntsm45h5cddk7s@vireshk-i7> <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
- <0354acbe-d856-4040-f453-8e8164102045@gmail.com>
-In-Reply-To: <0354acbe-d856-4040-f453-8e8164102045@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 19 Aug 2021 15:07:09 +0200
-Message-ID: <CAPDyKFoQdn1rm91iFNJwZwpSYcKJBjDLqtJB4KZAkhgY1Grm-Q@mail.gmail.com>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, 18 Aug 2021 at 17:43, Dmitry Osipenko <digetx@gmail.com> wrote:
->
-> 18.08.2021 13:08, Ulf Hansson =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > On Wed, 18 Aug 2021 at 11:50, Viresh Kumar <viresh.kumar@linaro.org> wr=
-ote:
-> >>
-> >> On 18-08-21, 11:41, Ulf Hansson wrote:
-> >>> On Wed, 18 Aug 2021 at 11:14, Viresh Kumar <viresh.kumar@linaro.org> =
-wrote:
-> >>>> What we need here is just configure. So something like this then:
-> >>>>
-> >>>> - genpd->get_performance_state()
-> >>>>   -> dev_pm_opp_get_current_opp() //New API
-> >>>>   -> dev_pm_genpd_set_performance_state(dev, current_opp->pstate);
-> >>>>
-> >>>> This can be done just once from probe() then.
-> >>>
-> >>> How would dev_pm_opp_get_current_opp() work? Do you have a suggestion=
-?
-> >>
-> >> The opp core already has a way of finding current OPP, that's what
-> >> Dmitry is trying to use here. It finds it using clk_get_rate(), if
-> >> that is zero, it picks the lowest freq possible.
-> >>
-> >>> I am sure I understand the problem. When a device is getting probed,
-> >>> it needs to consume power, how else can the corresponding driver
-> >>> successfully probe it?
-> >>
-> >> Dmitry can answer that better, but a device doesn't necessarily need
-> >> to consume energy in probe. It can consume bus clock, like APB we
-> >> have, but the more energy consuming stuff can be left disabled until
-> >> the time a user comes up. Probe will just end up registering the
-> >> driver and initializing it.
-> >
-> > That's perfectly fine, as then it's likely that it won't vote for an
-> > OPP, but can postpone that as well.
-> >
-> > Perhaps the problem is rather that the HW may already carry a non-zero
-> > vote made from a bootloader. If the consumer driver tries to clear
-> > that vote (calling dev_pm_opp_set_rate(dev, 0), for example), it would
-> > still not lead to any updates of the performance state in genpd,
-> > because genpd internally has initialized the performance-state to
-> > zero.
->
-> We don't need to discover internal SoC devices because we use
-> device-tree on ARM. For most devices power isn't required at a probe
-> time because probe function doesn't touch h/w at all, thus devices are
-> left in suspended state after probe.
->
-> We have three components comprising PM on Tegra:
->
-> 1. Power gate
-> 2. Clock state
-> 3. Voltage state
->
-> GENPD on/off represents the 'power gate'.
->
-> Clock and reset are controlled by device drivers using clk and rst APIs.
->
-> Voltage state is represented by GENPD's performance level.
->
-> GENPD core assumes that at a first rpm-resume of a consumer device, its
-> genpd_performance=3D0. Not true for Tegra because h/w of the device is
-> preconfigured to a non-zero perf level initially, h/w may not support
-> zero level at all.
+On 19.8.2021 10.54, Kishon Vijay Abraham I wrote:
+> Hi All,
+> 
+> I was trying to test PCIe USB card (Inateck) connected to AM64 EVM and
+> J7200 EVM. Inateck uses Renesas uPD720201 USB3 host controller.
+> 
+> So if I connect USB pendrive and then boot the board (cold plug), I
+> don't see the pendrive getting detected. But if I remove and plug it
+> again, it gets detected.
+> 
+> For the cold plug case, I see this message
+> 	"usb usb1-port3: couldn't allocate usb_device"
+> 
+> It actually fails in
+> xhci_alloc_dev()->xhci_queue_slot_control()->queue_command()->XHCI_STATE_HALTED
+> 
+> I'm not familiar with xhci but it looks like port event is invoked
+> before the controller is fully initialized (?).
 
-I think you may be misunderstanding genpd's behaviour around this, but
-let me elaborate.
+Maybe this controller is capable of generating interrupts before it's running?
+ 
+> 
+> I tried the following hack which kind of changes the sequence where
+> xhci_start() and xhci_run_finished() is invoked before port_event() and
+> with that I could see the pendrive enumerate successfully in cold plug case.
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 228e3d4e1a9f..d19f27c46c6f 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -1077,7 +1077,7 @@ static void hub_activate(struct usb_hub *hub, enum
+> hub_activation_type type)
+>                         INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
+>                         queue_delayed_work(system_power_efficient_wq,
+>                                         &hub->init_work,
+> -                                       msecs_to_jiffies(delay));
+> +                                       msecs_to_jiffies(150));
+> 
+>                         /* Suppress autosuspend until init is done */
+>                         usb_autopm_get_interface_no_resume(
+> 
+> Irrespective of the delay the port status looks correct and the modified
+> delay only helps to change the flow.
+> 
+> Adding other prints and delays also change the sequence and seems to
+> detect the connected pendrive.
+> 
+> Can someone provide hints on how to fix this properly?
 
-In genpd_runtime_resume(), we try to restore the performance state for
-the device that genpd_runtime_suspend() *may* have dropped earlier.
-That means, if genpd_runtime_resume() is called prior
-genpd_runtime_suspend() for the first time, it means that
-genpd_runtime_resume() will *not* restore a performance state, but
-instead just leave the performance state as is for the device (see
-genpd_restore_performance_state()).
+Either keep xHC interrupts disabled until second (usb3) hcd is added, and
+host is running. (haven't thought about side effects yet)
+Or make sure we don't start polling the usb2 roothub until host is running.
 
-In other words, a consumer driver may use the following sequence to
-set an initial performance state for the device during ->probe():
+Below code should return before port event handler starts roothub polling if 
+any xhci->xhc_state flag is set. 
+Untested, does it work for you?
 
-...
-rate =3D clk_get_rate()
-dev_pm_opp_set_rate(rate)
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index e676749f543b..9f4cc5c87b27 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2024,6 +2024,8 @@ static void handle_port_status(struct xhci_hcd *xhci,
+        if (bogus_port_status)
+                return;
+ 
++       if (xhci->xhc_state != 0)
++               return;
+        /*
+         * xHCI port-status-change events occur when the "or" of all the
+         * status-change bits in the portsc register changes from 0 to 1.
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index f3dabd02382c..b171558956dd 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -646,9 +646,15 @@ int xhci_run(struct usb_hcd *hcd)
+         */
+ 
+        hcd->uses_new_polling = 1;
+-       if (!usb_hcd_is_primary_hcd(hcd))
+-               return xhci_run_finished(xhci);
+-
++       if (!usb_hcd_is_primary_hcd(hcd)) {
++               ret = xhci_run_finished(xhci);
++               if (ret)
++                       return ret;
++               /* start polling usb2 roothub */
++               set_bit(HCD_FLAG_POLL_RH, &xhci->main_hcd->flags);
++               usb_hcd_poll_rh_status(xhci->main_hcd);
++               return ret;
++       }
+        xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xhci_run");
+ 
+        ret = xhci_try_enable_msi(hcd);
 
-pm_runtime_enable()
-pm_runtime_resume_and_get()
-...
+Thanks
+-Mathias
 
-Note that, it's the consumer driver's responsibility to manage device
-specific resources, in its ->runtime_suspend|resume() callbacks.
-Typically that means dealing with clock gating/ungating, for example.
 
-In the other scenario where a consumer driver prefers to *not* call
-pm_runtime_resume_and_get() in its ->probe(), because it doesn't need
-to power on the device to complete probing, then we don't want to vote
-for an OPP at all - and we also want the performance state for the
-device in genpd to be set to zero. Correct?
-
-Is this the main problem you are trying to solve, because I think this
-doesn't work out of the box as of today?
-
-There is another concern though, but perhaps it's not a problem after
-all. Viresh told us that dev_pm_opp_set_rate() may turn on resources
-like clock/regulators. That could certainly be problematic, in
-particular if the device and its genpd have OPP tables associated with
-it and the consumer driver wants to follow the above sequence in
-probe.
-
-Viresh, can you please chime in here and elaborate on some of the
-magic happening behind dev_pm_opp_set_rate() API - is there a problem
-here or not?
-
->
-> GENPD core assumes that consumer devices can work at any performance
-> level. Not true for Tegra because voltage needs to be set in accordance
-> to the clock rate before clock is enabled, otherwise h/w won't work
-> properly, perhaps clock may be unstable or h/w won't be latching.
-
-Correct. Genpd relies on the callers to use the OPP framework if there
-are constraints like you describe above.
-
-That said, it's not forbidden for a consumer driver to call
-dev_pm_genpd_set_performance_state() directly, but then it better
-knows exactly what it's doing.
-
->
-> Performance level should be set to 0 while device is suspended.
-
-Do you mean system suspend or runtime suspend? Or both?
-
-> Performance level needs to be bumped on rpm-resume of a device in
-> accordance to h/w state before hardware is enabled.
-
-Assuming there was a performance state set for the device when
-genpd_runtime_suspend() was called, genpd_runtime_resume() will
-restore that state according to the sequence you described.
-
-Kind regards
-Uffe
