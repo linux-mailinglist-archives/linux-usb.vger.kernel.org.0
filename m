@@ -2,145 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 389133F112D
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 05:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473703F12D0
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 07:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236247AbhHSDGu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 18 Aug 2021 23:06:50 -0400
-Received: from rtits2.realtek.com ([211.75.126.72]:45052 "EHLO
-        rtits2.realtek.com.tw" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236085AbhHSDGs (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 18 Aug 2021 23:06:48 -0400
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 17J3624t8007588, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36502.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 17J3624t8007588
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 19 Aug 2021 11:06:02 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXH36502.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2106.2; Thu, 19 Aug 2021 11:06:01 +0800
-Received: from fc34.localdomain (172.21.177.102) by RTEXMBS04.realtek.com.tw
- (172.21.6.97) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2106.2; Thu, 19 Aug
- 2021 11:06:00 +0800
-From:   Hayes Wang <hayeswang@realtek.com>
-To:     <kuba@kernel.org>, <davem@davemloft.net>
-CC:     <netdev@vger.kernel.org>, <nic_swsd@realtek.com>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: [PATCH net 2/2] r8152: fix the maximum number of PLA bp for RTL8153C
-Date:   Thu, 19 Aug 2021 11:05:37 +0800
-Message-ID: <20210819030537.3730-379-nic_swsd@realtek.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20210819030537.3730-377-nic_swsd@realtek.com>
-References: <20210819030537.3730-377-nic_swsd@realtek.com>
+        id S230193AbhHSFfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 01:35:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56444 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229782AbhHSFfj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Aug 2021 01:35:39 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id EAFF2610FA;
+        Thu, 19 Aug 2021 05:35:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629351304;
+        bh=sh0twSdxOBzTRY5SvlyMYM3NmRXE2gUIMnEnOYOGU6I=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=s009mNYPThiK2WkgsvYjnapaf7oxN21slWLui3eFh3uESp0AebFiMYEVqyQp/cKeU
+         CQJPV96HtJBlpqFpbLiV0W7aHnLBL2sXRKcYCNAjK2DhsQGcG8wUPfIKL81TChBIkR
+         1HoGALwdhXulmEL6hwpFJNM8ACEHJgTCWuuHVKZoiPZLnjbZ7fRf+rz6HCHKLNKzvA
+         AFiUROJ4LGoVwAqIewyjT4bx/gqUJHTv7ROr/0IxQB0E1LJ5NoSNOedpYuGTVLut5j
+         /kATGuiFxLjvvRkR27BFzZW/SRNXqNa9quICzY2X4og+syX3ms7orL+jncrBai3Xzz
+         QXeeIckg1O8dQ==
+References: <e91e975affb0d0d02770686afc3a5b9eb84409f6.1629335416.git.Thinh.Nguyen@synopsys.com>
+User-agent: mu4e 1.6.3; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: gadget: Fix dwc3_calc_trbs_left()
+Date:   Thu, 19 Aug 2021 08:32:33 +0300
+In-reply-to: <e91e975affb0d0d02770686afc3a5b9eb84409f6.1629335416.git.Thinh.Nguyen@synopsys.com>
+Message-ID: <87h7fmf14r.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [172.21.177.102]
-X-ClientProxiedBy: RTEXH36501.realtek.com.tw (172.21.6.27) To
- RTEXMBS04.realtek.com.tw (172.21.6.97)
-X-KSE-ServerInfo: RTEXMBS04.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 08/19/2021 02:52:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIxLzgvMTggpFWkyCAxMToyNTowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36502.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-AntiSpam-Outbound-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 08/19/2021 02:54:56
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 0
-X-KSE-AntiSpam-Info: Lua profiles 165646 [Aug 18 2021]
-X-KSE-AntiSpam-Info: Version: 5.9.20.0
-X-KSE-AntiSpam-Info: Envelope from: hayeswang@realtek.com
-X-KSE-AntiSpam-Info: LuaCore: 454 454 39c6e442fd417993330528e7f9d13ac1bf7fdf8c
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;realtek.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: Rate: 0
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 08/19/2021 02:57:00
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The maximum PLA bp number of RTL8153C is 16, not 8. That is, the
-bp 0 ~ 15 are at 0xfc28 ~ 0xfc46, and the bp_en is at 0xfc48.
 
-Fixes: 195aae321c82 ("r8152: support new chips")
-Signed-off-by: Hayes Wang <hayeswang@realtek.com>
----
- drivers/net/usb/r8152.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 3fd17b6dc61d..79832374f78d 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -3955,13 +3955,24 @@ static void rtl_clear_bp(struct r8152 *tp, u16 type)
- 	case RTL_VER_06:
- 		ocp_write_byte(tp, type, PLA_BP_EN, 0);
- 		break;
-+	case RTL_VER_14:
-+		ocp_write_word(tp, type, USB_BP2_EN, 0);
-+
-+		ocp_write_word(tp, type, USB_BP_8, 0);
-+		ocp_write_word(tp, type, USB_BP_9, 0);
-+		ocp_write_word(tp, type, USB_BP_10, 0);
-+		ocp_write_word(tp, type, USB_BP_11, 0);
-+		ocp_write_word(tp, type, USB_BP_12, 0);
-+		ocp_write_word(tp, type, USB_BP_13, 0);
-+		ocp_write_word(tp, type, USB_BP_14, 0);
-+		ocp_write_word(tp, type, USB_BP_15, 0);
-+		break;
- 	case RTL_VER_08:
- 	case RTL_VER_09:
- 	case RTL_VER_10:
- 	case RTL_VER_11:
- 	case RTL_VER_12:
- 	case RTL_VER_13:
--	case RTL_VER_14:
- 	case RTL_VER_15:
- 	default:
- 		if (type == MCU_TYPE_USB) {
-@@ -4331,7 +4342,6 @@ static bool rtl8152_is_fw_mac_ok(struct r8152 *tp, struct fw_mac *mac)
- 		case RTL_VER_11:
- 		case RTL_VER_12:
- 		case RTL_VER_13:
--		case RTL_VER_14:
- 		case RTL_VER_15:
- 			fw_reg = 0xf800;
- 			bp_ba_addr = PLA_BP_BA;
-@@ -4339,6 +4349,13 @@ static bool rtl8152_is_fw_mac_ok(struct r8152 *tp, struct fw_mac *mac)
- 			bp_start = PLA_BP_0;
- 			max_bp = 8;
- 			break;
-+		case RTL_VER_14:
-+			fw_reg = 0xf800;
-+			bp_ba_addr = PLA_BP_BA;
-+			bp_en_addr = USB_BP2_EN;
-+			bp_start = PLA_BP_0;
-+			max_bp = 16;
-+			break;
- 		default:
- 			goto out;
- 		}
+Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+> We can't depend on the TRB's HWO bit to determine if the TRB ring is
+> "full". A TRB is only available when the driver had processed it, not
+> when the controller consumed and relinquished the TRB's ownership to the
+> driver. Otherwise, the driver may overwrite unprocessed TRBs. This can
+> happen when many transfer events accumulate and the system is slow to
+> process them and/or when there are too many small requests.
+>
+> If a request is in the started_list, that means there is one or more
+> unprocessed TRBs remained. Check this instead of the TRB's HWO bit
+> whether the TRB ring is full.
+>
+> Cc: <stable@vger.kernel.org>
+> Fixes: c4233573f6ee ("usb: dwc3: gadget: prepare TRBs on update transfers too")
+> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+>  drivers/usb/dwc3/gadget.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 84fe57ef5a49..1e6ddbc986ba 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -940,19 +940,19 @@ static struct dwc3_trb *dwc3_ep_prev_trb(struct dwc3_ep *dep, u8 index)
+>  
+>  static u32 dwc3_calc_trbs_left(struct dwc3_ep *dep)
+>  {
+> -	struct dwc3_trb		*tmp;
+>  	u8			trbs_left;
+>  
+>  	/*
+> -	 * If enqueue & dequeue are equal than it is either full or empty.
+> -	 *
+> -	 * One way to know for sure is if the TRB right before us has HWO bit
+> -	 * set or not. If it has, then we're definitely full and can't fit any
+> -	 * more transfers in our ring.
+> +	 * If the enqueue & dequeue are equal then the TRB ring is either full
+> +	 * or empty. It's considered full when there are DWC3_TRB_NUM-1 of TRBs
+> +	 * pending to be processed by the driver.
+>  	 */
+>  	if (dep->trb_enqueue == dep->trb_dequeue) {
+> -		tmp = dwc3_ep_prev_trb(dep, dep->trb_enqueue);
+> -		if (tmp->ctrl & DWC3_TRB_CTRL_HWO)
+> +		/*
+> +		 * If there is any request remained in the started_list at
+> +		 * this point, that means there is no TRB available.
+> +		 */
+> +		if (!list_empty(&dep->started_list))
+>  			return 0;
+
+we could also do away with calc_trbs_left() completely if we just add an
+actual counter that gets incremented decremented together with the
+enqueue/dequeue pointers. Since we have 256 TRBs per endpoint and only
+255 are usable, this means we can do away with a single u8 per
+endpoint. Perhaps that could be done as a second step after this fix is
+merged?
+
 -- 
-2.31.1
-
+balbi
