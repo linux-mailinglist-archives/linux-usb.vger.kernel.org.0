@@ -2,103 +2,155 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 473703F12D0
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 07:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AB03F132E
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 08:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbhHSFfk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 01:35:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56444 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229782AbhHSFfj (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 01:35:39 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id EAFF2610FA;
-        Thu, 19 Aug 2021 05:35:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629351304;
-        bh=sh0twSdxOBzTRY5SvlyMYM3NmRXE2gUIMnEnOYOGU6I=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=s009mNYPThiK2WkgsvYjnapaf7oxN21slWLui3eFh3uESp0AebFiMYEVqyQp/cKeU
-         CQJPV96HtJBlpqFpbLiV0W7aHnLBL2sXRKcYCNAjK2DhsQGcG8wUPfIKL81TChBIkR
-         1HoGALwdhXulmEL6hwpFJNM8ACEHJgTCWuuHVKZoiPZLnjbZ7fRf+rz6HCHKLNKzvA
-         AFiUROJ4LGoVwAqIewyjT4bx/gqUJHTv7ROr/0IxQB0E1LJ5NoSNOedpYuGTVLut5j
-         /kATGuiFxLjvvRkR27BFzZW/SRNXqNa9quICzY2X4og+syX3ms7orL+jncrBai3Xzz
-         QXeeIckg1O8dQ==
-References: <e91e975affb0d0d02770686afc3a5b9eb84409f6.1629335416.git.Thinh.Nguyen@synopsys.com>
-User-agent: mu4e 1.6.3; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, John Youn <John.Youn@synopsys.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix dwc3_calc_trbs_left()
-Date:   Thu, 19 Aug 2021 08:32:33 +0300
-In-reply-to: <e91e975affb0d0d02770686afc3a5b9eb84409f6.1629335416.git.Thinh.Nguyen@synopsys.com>
-Message-ID: <87h7fmf14r.fsf@kernel.org>
+        id S231210AbhHSGSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 02:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230483AbhHSGSF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 02:18:05 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB652C0617A8
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id m24-20020a17090a7f98b0290178b1a81700so4017259pjl.4
+        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=Z7TQEkkTOfvT3y1VcK9cbeGmLxLBDuWce4oY9e31CIQ=;
+        b=n8Z7pceL3Q1hHrYhRGbE2Ft6ysYoV2T29GwsgsIk5zym7iZcje0CXVg1jI36aNnFP1
+         wEt31EiA2dUBQwlv5rK6Pb4jBRjUZnVnX9lq3yYWlZnsAiqoC84b2+sIg5qRcoOEikt2
+         Bl5OLXFHBLycojOK68FIhPW3b2fskqhF3vr/eyYOYKdL7QspG0UOJAgIVnJ/rUe4LZFr
+         9Mx+8O2v0d2rHrH3yazUPQGMQQQiYdzhDIVBgB1HMOdlKqueyQlS0Pa++oE7KDNseaKY
+         ZqQcskpZ4qIHBPun+Nz8BNcPrFRsCGUIgrdD9AWMNWaoX41LuxEow35zOBfD0rRFPHfn
+         o2nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=Z7TQEkkTOfvT3y1VcK9cbeGmLxLBDuWce4oY9e31CIQ=;
+        b=j4uHVKQQNwID9q880b/0I1GyaoKDgfUo8r7iXFPNXn6kZQ7sAoTmnqe1ADtHIY4uA4
+         lxfvr0dNRcOq1nRZGt1xOqWWTqfefmmzok5s7rDzx5iJafGuX471NkayEQQyT/gn2StA
+         8X5U9fTfpEDzWwnczbC5/CjZv2OqJbZ5IFkJdaRCKh/4RM0ehnm2boRJtds8efqyjGUc
+         ubiBjZ8YYZkNbRPpUrKXIiR3ErqoBMaCFZ9pGkOTPjf6H4O9M0oZqrB4lZi/eBxLUDBn
+         e0jRIWJ2xmPYLSy2/aC/WzsROYhImJIh9UD/dF9JAgvsIIgflVYmBRjFy0KbnJQGQ4A2
+         27TQ==
+X-Gm-Message-State: AOAM532kwEL5o5fK07uBQ8GRL/yB9GnozjtYV4jj9nT7TjZrkvp9eOyL
+        cO1T8+0W/kiWKotx+L1UCzvbBTjbkdqVTg==
+X-Google-Smtp-Source: ABdhPJwi8ECnFjz7ftlBUkQP1U01xvcbaFwYmCvSxRCVadF/ZCBCreA9Xq0KVJGpteNV1tSqbtF8Eg==
+X-Received: by 2002:a17:90a:ce88:: with SMTP id g8mr13456163pju.116.1629353849006;
+        Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id r18sm2222724pgk.54.2021.08.18.23.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Aug 2021 23:16:53 -0700 (PDT)
+Date:   Thu, 19 Aug 2021 11:46:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+References: <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7>
+ <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+ <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On 18-08-21, 18:55, Dmitry Osipenko wrote:
+> 18.08.2021 12:41, Ulf Hansson пишет:
+> 
+> Either way gives the equal result. The new callback allows to remove the
+> boilerplate dev_pm_opp_set_rate(clk_get_rate() code from the rpm-resume
+> of consumer devices, that's it.
 
-Hi,
+It may not be equal, as dev_pm_opp_set_rate() may do additional stuff,
+now or in a later implementation. Currently it only does
+regulator_enable() as a special case, but it can be clk_enable() as
+well. Also, this tries to solve the problem in a tricky/hacky way,
+while all you wanted was to make the genpd aware of what the
+performance state should be.
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
-> We can't depend on the TRB's HWO bit to determine if the TRB ring is
-> "full". A TRB is only available when the driver had processed it, not
-> when the controller consumed and relinquished the TRB's ownership to the
-> driver. Otherwise, the driver may overwrite unprocessed TRBs. This can
-> happen when many transfer events accumulate and the system is slow to
-> process them and/or when there are too many small requests.
->
-> If a request is in the started_list, that means there is one or more
-> unprocessed TRBs remained. Check this instead of the TRB's HWO bit
-> whether the TRB ring is full.
->
-> Cc: <stable@vger.kernel.org>
-> Fixes: c4233573f6ee ("usb: dwc3: gadget: prepare TRBs on update transfers too")
-> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> ---
->  drivers/usb/dwc3/gadget.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 84fe57ef5a49..1e6ddbc986ba 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -940,19 +940,19 @@ static struct dwc3_trb *dwc3_ep_prev_trb(struct dwc3_ep *dep, u8 index)
->  
->  static u32 dwc3_calc_trbs_left(struct dwc3_ep *dep)
->  {
-> -	struct dwc3_trb		*tmp;
->  	u8			trbs_left;
->  
->  	/*
-> -	 * If enqueue & dequeue are equal than it is either full or empty.
-> -	 *
-> -	 * One way to know for sure is if the TRB right before us has HWO bit
-> -	 * set or not. If it has, then we're definitely full and can't fit any
-> -	 * more transfers in our ring.
-> +	 * If the enqueue & dequeue are equal then the TRB ring is either full
-> +	 * or empty. It's considered full when there are DWC3_TRB_NUM-1 of TRBs
-> +	 * pending to be processed by the driver.
->  	 */
->  	if (dep->trb_enqueue == dep->trb_dequeue) {
-> -		tmp = dwc3_ep_prev_trb(dep, dep->trb_enqueue);
-> -		if (tmp->ctrl & DWC3_TRB_CTRL_HWO)
-> +		/*
-> +		 * If there is any request remained in the started_list at
-> +		 * this point, that means there is no TRB available.
-> +		 */
-> +		if (!list_empty(&dep->started_list))
->  			return 0;
+Your driver can break tomorrow if we started to do more stuff from
+this API at another time.
 
-we could also do away with calc_trbs_left() completely if we just add an
-actual counter that gets incremented decremented together with the
-enqueue/dequeue pointers. Since we have 256 TRBs per endpoint and only
-255 are usable, this means we can do away with a single u8 per
-endpoint. Perhaps that could be done as a second step after this fix is
-merged?
+> > dev_pm_opp_set_rate() is best called from consumer drivers, as they
+> > need to be in control.
+> >> What we need here is just configure. So something like this then:
+> The intent wasn't to use dev_pm_opp_set_rate() from
+> __genpd_dev_pm_attach(), but to set genpd->rpm_pstate in accordance to
+> the h/w configuration.
+
+Right.
+
+> On Tegra we have a chain of PDs and it's not trivial to convert the
+> device's OPP into pstate because only the parent domain can translate
+> the required OPP.
+
+The driver should just be required to make a call, and OPP/genpd core
+should return it a value. This is already done today while setting the
+pstate for a device. The same frameworks must be able to supply a
+value to be used for the device.
+
+> Viresh, please take a look at what I did in [1]. Maybe it could be done
+> in another way.
+
+I looked into this and looked like too much trouble. The
+implementation needs to be simple. I am not sure I understand all the
+problems you faced while doing that, would be better to start with a
+simpler implementation of get_performance_state() kind of API for
+genpd, after the domain is attached and its OPP table is initialized.
+
+Note, that the OPP table isn't required to be fully initialized for
+the device at this point, we can parse the DT as well if needed be.
 
 -- 
-balbi
+viresh
