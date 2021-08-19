@@ -2,382 +2,450 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AAC83F21EA
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 22:51:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D553F2212
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 23:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235718AbhHSUwb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 16:52:31 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:27647 "EHLO m43-7.mailgun.net"
+        id S232766AbhHSVFn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 17:05:43 -0400
+Received: from cable.insite.cz ([84.242.75.189]:43845 "EHLO cable.insite.cz"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235669AbhHSUwa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 16:52:30 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629406313; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=zT2UBiU/9jpfjmZukC9Q2pJVHcpMyZNp3jGxRYDUEQ0=; b=l31waPLFvduuVzAkJHzxVU49O9onLPShvBDgIAQ9S8tNJtOPgzKWTEflNT1x4oFONAZe+cDf
- 0nAn32voXT2YO/sV6kmWOWtbn7c/R/qQy+kOZMu0HqJdNRxOEnFylVHUOAie3qeysjOA5F04
- bNrufnR1knQe12I6Hac0IkhFK00=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-west-2.postgun.com with SMTP id
- 611ec4663f14248172016991 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 19 Aug 2021 20:51:50
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D2E9AC4360D; Thu, 19 Aug 2021 20:51:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id D4E36C4338F;
-        Thu, 19 Aug 2021 20:51:48 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org D4E36C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [RFC][PATCH] usb: dwc3: usb: dwc3: Force stop EP0 transfers
- during pullup disable
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jackp@codeauora.org" <jackp@codeauora.org>
-References: <1628648608-15239-1-git-send-email-wcheng@codeaurora.org>
- <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
- <3edf74ba-d167-0589-a7ab-827b57aa5d9c@codeaurora.org>
- <e07b7061-e9cf-3146-d115-56967298051e@synopsys.com>
- <c82ee8f3-a364-f96f-76ac-2b78c1dc0517@codeaurora.org>
- <f760fdcf-cd59-2c71-8c85-a4624620edeb@synopsys.com>
- <5be881a9-c79d-3f21-9e2e-173307fef734@codeaurora.org>
- <dc37617c-0fe4-47b3-cbd0-1d729ce6201a@synopsys.com>
- <00952bdc-acc2-f373-9286-6a8380e0b7d1@synopsys.com>
- <875yw7jkz6.fsf@kernel.org>
- <89b4d57c-f44a-ceff-45f3-a308e1d8d135@synopsys.com>
- <4c5ee1be-5cda-f56b-7f69-73124a16abba@codeaurora.org>
- <278cc2b5-9f0d-840e-372a-7949b79e858d@codeaurora.org>
- <096a03e0-a913-7188-2c2e-d801d9617160@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <cdd9d624-00c6-1be3-5aad-e6f923d1e8d8@codeaurora.org>
-Date:   Thu, 19 Aug 2021 13:51:47 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S231134AbhHSVFm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Aug 2021 17:05:42 -0400
+Received: from localhost (localhost [127.0.0.1])
+        by cable.insite.cz (Postfix) with ESMTP id E06ECA1A3D403;
+        Thu, 19 Aug 2021 23:05:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1629407103; bh=MOi+JOuzaOcxUx82njAVB+nFXgmx5ofDM23e/tASFPw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=MomDlB0dRjarqqnRIvw2edOpSdPp4dtjTCbvTumSkTnhTdshzN0rDZWlGILDe9Xq9
+         tbFWk7N8ndPvbDo0b8eyDHz+0Er5rMCzfmHhlm/e8+7XXNEwBbKX3qzOf3RNA9nvPT
+         8dTgIHRomKgILaup01LcTUNgCxmaF59E9nIKcGEQ=
+Received: from cable.insite.cz ([84.242.75.189])
+        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id s-XzAIOsr7aa; Thu, 19 Aug 2021 23:04:56 +0200 (CEST)
+Received: from [192.168.105.119] (ip28.insite.cz [81.0.237.28])
+        (Authenticated sender: pavel)
+        by cable.insite.cz (Postfix) with ESMTPSA id 9447AA1A3D401;
+        Thu, 19 Aug 2021 23:04:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
+        t=1629407096; bh=MOi+JOuzaOcxUx82njAVB+nFXgmx5ofDM23e/tASFPw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Zu0uSIdJShGT83W4kgS8NBPaokJ9GWNl3gY5ky0/ibctrXNS1alzS3Do7rzwsoz9W
+         aUE7yTWoE6xksJXRttbDX3Ps45bDZaryjUjbaeZmK4uJT2i9WVW9SU0vhIImSFm9OT
+         A3Dti+aG/1ksRWs+JZ0f6Tu2MKmdmBGIhAIUt64M=
+Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
+ bursting
+To:     Ferry Toth <fntoth@gmail.com>, Felipe Balbi <balbi@kernel.org>
+Cc:     Wesley Cheng <wcheng@codeaurora.org>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, jackp@codeaurora.org,
+        heikki.krogerus@linux.intel.com, andy.shevchenko@gmail.com,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>
+References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
+ <ec8050c5-c013-4af6-b39e-69779c009a9c@codeaurora.org>
+ <f5ed0ee7-e333-681f-0f1a-d0227562204b@gmail.com>
+ <2e01c435-9ecc-4e3b-f55c-612a86667020@codeaurora.org>
+ <2ae9fa6a-3bb1-3742-0dd3-59678bdd8643@gmail.com>
+ <ebea75fe-5334-197b-f67a-cb6e1e30b39e@codeaurora.org>
+ <bafa93bb-11e3-c8a5-e14a-b0a6d5695055@gmail.com> <87v951ldlt.fsf@kernel.org>
+ <d9aef50c-4bd1-4957-13d8-0b6a14b9fcd0@gmail.com> <87pmv9l1dv.fsf@kernel.org>
+ <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com> <87a6mbudvc.fsf@kernel.org>
+ <6e8bb4ad-fe68-ad36-7416-2b8e10b6ae96@gmail.com> <877dhev68a.fsf@kernel.org>
+ <cca69e90-b0ef-00b8-75d3-3bf959a93b45@gmail.com> <874kchvcq0.fsf@kernel.org>
+ <e59f1201-2aa2-9075-1f94-a6ae7a046dc1@gmail.com> <8735raj766.fsf@kernel.org>
+ <b3417c2c-613b-8ef6-2e2d-6e2cf9a5d5fd@gmail.com>
+ <b3e820f0-9c94-7cba-a248-3b2ec5378ab0@gmail.com>
+ <d298df65-417b-f318-9374-b463a15d8308@ivitera.com>
+ <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
+From:   Pavel Hofman <pavel.hofman@ivitera.com>
+Message-ID: <c4e29ac0-1df1-3c64-1218-3687f07e7f77@ivitera.com>
+Date:   Thu, 19 Aug 2021 23:04:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.2.1
 MIME-Version: 1.0
-In-Reply-To: <096a03e0-a913-7188-2c2e-d801d9617160@synopsys.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
 
-On 8/18/2021 5:40 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->> Hi Thinh/Felipe,
+Dne 19. 08. 21 v 22:10 Ferry Toth napsal(a):
+> Hi
+> 
+> Op 19-08-2021 om 09:51 schreef Pavel Hofman:
+>> Hi,
 >>
->> On 8/16/2021 12:13 PM, Wesley Cheng wrote:
->>> Hi Thinh,
+>> Dne 18. 08. 21 v 21:07 Ferry Toth napsal(a):
+>>> Hi,
 >>>
->>> On 8/15/2021 5:33 PM, Thinh Nguyen wrote:
->>>> Felipe Balbi wrote:
->>>>>
+>>> Op 18-08-2021 om 00:00 schreef Ferry Toth:
+>>>> Hi,
+>>>>
+>>>> Op 16-08-2021 om 07:18 schreef Felipe Balbi:
 >>>>> Hi,
 >>>>>
->>>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>>>>>>>>>>> If this occurs, then the entire pullup disable routine is skipped and
->>>>>>>>>>>>>> proper cleanup and halting of the controller does not complete.
->>>>>>>>>>>>>> Instead of returning an error (which is ignored from the UDC
->>>>>>>>>>>>>> perspective), do what is mentioned in the comments and force the
->>>>>>>>>>>>>> transaction to complete and put the ep0state back to the SETUP phase.
+>>>>> Ferry Toth <fntoth@gmail.com> writes:
+>>>>>>> Ferry Toth <fntoth@gmail.com> writes:
+>>>>>>>>>>> Ferry Toth <fntoth@gmail.com> writes:
+>>>>>>>>>>>>>>>> Hardware name: Intel Corporation Merrifield/BODEGA BAY, 
+>>>>>>>>>>>>>>>> BIOS 542
+>>>>>>>>>>>>>>>> 2015.01.21:18.19.48
+>>>>>>>>>>>>>>>> RIP: 0010:0x500000000
+>>>>>>>>>>>>>>>> Code: Unable to access opcode bytes at RIP 0x4ffffffd6.
+>>>>>>>>>>>>>>>> RSP: 0018:ffffa4d00045fc28 EFLAGS: 00010046
+>>>>>>>>>>>>>>>> RAX: 0000000500000000 RBX: ffff8cd546aed200 RCX: 
+>>>>>>>>>>>>>>>> 0000000000000000
+>>>>>>>>>>>>>>>> RDX: 0000000000000000 RSI: ffff8cd547bfcae0 RDI: 
+>>>>>>>>>>>>>>>> ffff8cd546aed200
+>>>>>>>>>>>>>>>> RBP: ffff8cd547bfcae0 R08: 0000000000000000 R09: 
+>>>>>>>>>>>>>>>> 0000000000000001
+>>>>>>>>>>>>>>>> R10: ffff8cd541fd28c0 R11: 0000000000000000 R12: 
+>>>>>>>>>>>>>>>> ffff8cd547342828
+>>>>>>>>>>>>>>>> R13: ffff8cd546aed248 R14: 0000000000000000 R15: 
+>>>>>>>>>>>>>>>> ffff8cd548b1d000
+>>>>>>>>>>>>>>>> FS:  0000000000000000(0000) GS:ffff8cd57e200000(0000) 
+>>>>>>>>>>>>>>>> knlGS:0000000000000000
+>>>>>>>>>>>>>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>>>>>>>>>>>>>>> CR2: 0000000500000000 CR3: 000000000311e000 CR4: 
+>>>>>>>>>>>>>>>> 00000000001006f0
+>>>>>>>>>>>>>>>> Call Trace:
+>>>>>>>>>>>>>>>>         ? dwc3_remove_requests.constprop.0+0x14d/0x170
+>>>>>>>>>>>>>>>>         ? __dwc3_gadget_ep_disable+0x7a/0x160
+>>>>>>>>>>>>>>>>         ? dwc3_gadget_ep_disable+0x3d/0xd0
+>>>>>>>>>>>>>>>>         ? usb_ep_disable+0x1c/0x
+>>>>>>>>>>>>>>>>         ? u_audio_stop_capture+0x79/0x120 [u_audio]
+>>>>>>>>>>>>>>>>         ? afunc_set_alt+0x73/0x80 [usb_f_uac2]
+>>>>>>>>> So this is triggered by a SetInterface request...
+>>>>>>>>>
+>>>>>>>>>>>>>>>>         ? composite_setup+0x224/0x1b90 [libcomposite]
+>>>>>>>>>>>>>>>>         ? __dwc3_gadget_kick_transfer+0x160/0x400
+>>>>>>>>>>>>>>>>         ? dwc3_gadget_ep_queue+0xf3/0x1a0
+>>>>>>>>>>>>>>>>         ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>>>>>>>>>>>>         ? configfs_composite_setup+0x6b/0x90 [libcomposite]
+>>>>>>>>>>>>>>>>         ? dwc3_ep0_interrupt+0x459/0xa40
+>>>>>>>>>>>>>>>>         ? dwc3_thread_interrupt+0x8ee/0xf40
+>>>>>>>>>>>>>>>>         ? __schedule+0x235/0x6c0
+>>>>>>>>>>>>>>>>         ? disable_irq_nosync+0x10/0x10
+>>>>>>>>>>>>>>>>         ? irq_thread_fn+0x1b/0x60
+>>>>>>>>>>>>>>>>         ? irq_thread+0xc0/0x160
+>>>>>>>>>>>>>>>>         ? irq_thread_check_affinity+0x70/0x70
+>>>>>>>>>>>>>>>>         ? irq_forced_thread_fn+0x70/0x70
+>>>>>>>>>>>>>>>>         ? kthread+0x122/0x140
+>>>>>>>>>>>>>>>>         ? set_kthread_struct+0x40/0x40
+>>>>>>>>>>>>>>>>         ? ret_from_fork+0x22/0x30
+>>>>>>>>>>>>>>> Do you mind enabling dwc3 traces and collecting them? 
+>>>>>>>>>>>>>>> Trying to figure
+>>>>>>>>>>>>>>> out how we got here.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>> I'll try if I can get the same error by booting with USB 
+>>>>>>>>>>>>>> in host mode
+>>>>>>>>>>>>>> and then switch to device mode. If so I can enable traces 
+>>>>>>>>>>>>>> and collect as
+>>>>>>>>>>>>>> you explained me before.
 >>>>>>>>>>>>>>
->>>>>>>>>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>>>>>>>>>>>> ---
->>>>>>>>>>>>>>  drivers/usb/dwc3/ep0.c    | 4 ++--
->>>>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 6 +++++-
->>>>>>>>>>>>>>  drivers/usb/dwc3/gadget.h | 3 +++
->>>>>>>>>>>>>>  3 files changed, 10 insertions(+), 3 deletions(-)
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>> index 6587394..abfc42b 100644
->>>>>>>>>>>>>> --- a/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>> @@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>>>>>>>>>>>>>  	return ret;
->>>>>>>>>>>>>>  }
->>>>>>>>>>>>>>  
->>>>>>>>>>>>>> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>>>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>  	struct dwc3_ep		*dep;
->>>>>>>>>>>>>>  
->>>>>>>>>>>>>> @@ -1073,7 +1073,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->>>>>>>>>>>>>>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
->>>>>>>>>>>>>>  }
->>>>>>>>>>>>>>  
->>>>>>>>>>>>>> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>>>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>  	struct dwc3_gadget_ep_cmd_params params;
->>>>>>>>>>>>>>  	u32			cmd;
->>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>> index 54c5a08..a0e2e4d 100644
->>>>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>> @@ -2437,7 +2437,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>>>>>>>>>>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
->>>>>>>>>>>>>>  		if (ret == 0) {
->>>>>>>>>>>>>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
->>>>>>>>>>>>>> -			return -ETIMEDOUT;
->>>>>>>>>>>>>> +			spin_lock_irqsave(&dwc->lock, flags);
->>>>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[0]);
->>>>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
+>>>>>>>>>>>>>> I'll try before monday, as then I fly for a holiday and 
+>>>>>>>>>>>>>> will not be
+>>>>>>>>>>>>>> available before rc5.
+>>>>>>>>>>>>> you can enable all of those with kernel cmdline :-)
 >>>>>>>>>>>>>
->>>>>>>>>>>>> End transfer command takes time, need to wait for it to complete before
->>>>>>>>>>>>> issuing Start transfer again. Also, why restart again when it's about to
->>>>>>>>>>>>> be disconnected.
+>>>>>>>>>>>>> https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html 
+>>>>>>>>>>>>>
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> you need ftrace_dump_on_oops=1 and also need the correct 
+>>>>>>>>>>>>> options on
+>>>>>>>>>>>>> trace_buf_size and trace_event.
+>>>>>>>>>>>>>
+>>>>>>>>>>>> On Edison-Arduino I have a switch to go to device mode, 
+>>>>>>>>>>>> after which
+>>>>>>>>>>>> udev triggers a script configure gadgets through configfs.
 >>>>>>>>>>>>
->>>>>>>>>>>> I can try without restarting it again, and see if that works.  Instead
->>>>>>>>>>>> of waiting for the command complete event, can we set the ForceRM bit,
->>>>>>>>>>>> similar to what we do for dwc3_remove_requests()?
+>>>>>>>>>>>> I tried to log following these instructions:
 >>>>>>>>>>>>
+>>>>>>>>>>>> https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs 
+>>>>>>>>>>>> <https://www.kernel.org/doc/html/latest/driver-api/usb/dwc3.html#reporting-bugs> 
+>>>>>>>>>>>>
+>>>>>>>>>>>>
+>>>>>>>>>>>> Unfortunately the kernel crashes so badly I can not get to 
+>>>>>>>>>>>> the ` cp
+>>>>>>>>>>>> /t/trace /root/trace.txt` line (after a while the watchdog 
+>>>>>>>>>>>> kicks).
+>>>>>>>>>>>>
+>>>>>>>>>>>> What to do next?
+>>>>>>>>>>> Pass ftrace_dump_on_oops to kernel cmdline.
 >>>>>>>>>>>
->>>>>>>>>>> ForceRM=1 means that the controller will ignore updating the TRBs
->>>>>>>>>>> (including not clearing the HWO and remain transfer size). The driver
->>>>>>>>>>> still needs to wait for the command to complete before issuing Start
->>>>>>>>>>> Transfer command. Otherwise Start Transfer won't go through. If we know
->>>>>>>>>>> that we're not going to issue Start Transfer any time soon, then we may
->>>>>>>>>>> be able to get away with ignoring End Transfer command completion.
->>>>>>>>>>>
+>>>>>>>>>> No sure if I did this right, on oops everything is pushed to 
+>>>>>>>>>> console
+>>>>>>>>>> (115k2 serial), I hope nothing essential is lost.
 >>>>>>>>>>
->>>>>>>>>> I see.  Currently, in the place that we do use
->>>>>>>>>> dwc3_ep0_end_control_data(), its followed by
->>>>>>>>>> dwc3_ep0_stall_and_restart() which would execute start transfer.  For
+>>>>>>>>>> I copied the screen buffer to file see attached.
+>>>>>>>>> Thank you, I bet it took quite a some time :-) Anyway, looking at
+>>>>>>>>> the logs around Set Interface requests, we can track every 
+>>>>>>>>> endpoint
+>>>>>>>>> that's disabled. I'll take a guess and assume we're failing at 
+>>>>>>>>> the last
+>>>>>>>>> Set Interface, that means we should have something odd with 
+>>>>>>>>> ep6in, but
+>>>>>>>>> everything looks fine in the trace output:
 >>>>>>>>>
->>>>>>>>> That doesn't look right. You can try to see if it can recover from a
->>>>>>>>> control write request. Often time we do control read and not write.
->>>>>>>>> (i.e. try to End Transfer and immediately Start Transfer on the same
->>>>>>>>> direction control endpoint).
+>>>>>>>>> [   75.823107] irq/14-d-596       0d... 42789194us : 
+>>>>>>>>> dwc3_gadget_ep_enable: ep6in: mps 192/346 streams 16 burst 0 
+>>>>>>>>> ring 0/0 flags E:swbp:<
+>>>>>>>>> [   75.835472] irq/14-d-596       0d... 42789198us : 
+>>>>>>>>> dwc3_alloc_request: ep6in: req 0000000002c71409 length 0/0 zsI 
+>>>>>>>>> ==> 0
+>>>>>>>>> [   75.846416] irq/14-d-596       0d... 42789202us : 
+>>>>>>>>> dwc3_ep_queue: ep6in: req 0000000002c71409 length 0/192 zsI ==> 
+>>>>>>>>> -115
+>>>>>>>>> [   75.857360] irq/14-d-596       0d... 42789204us : 
+>>>>>>>>> dwc3_alloc_request: ep6in: req 00000000a324f5d0 length 0/0 zsI 
+>>>>>>>>> ==> 0
+>>>>>>>>> [   75.868301] irq/14-d-596       0d... 42789206us : 
+>>>>>>>>> dwc3_ep_queue: ep6in: req 00000000a324f5d0 length 0/192 zsI ==> 
+>>>>>>>>> -115
+>>>>>>>>> [   75.879244] irq/14-d-596       0d... 42789209us : 
+>>>>>>>>> dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] 
+>>>>>>>>> (Not Active) [Status Phase]
+>>>>>>>>> [   75.891880] irq/14-d-596       0d... 42789211us : 
+>>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
+>>>>>>>>> [   75.989131] irq/14-d-596       0d... 42789224us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
+>>>>>>>>> [   76.096261] irq/14-d-596       0d... 42789272us : 
+>>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
+>>>>>>>>> [Status Phase]
+>>>>>>>>> [   76.107834] irq/14-d-596       0d... 42789275us : 
+>>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
+>>>>>>>>> [   76.122944] irq/14-d-596       0d... 42789277us : 
+>>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 
+>>>>>>>>> zsI ==> 0
+>>>>>>>>> [   76.134160] irq/14-d-596       0d... 42789280us : 
+>>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
+>>>>>>>>> [   76.231322] irq/14-d-596       0d... 42789292us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
+>>>>>>>>> [   76.297418] kworker/-23        0d... 42789670us : 
+>>>>>>>>> dwc3_ep_queue: ep3in: req 0000000029586135 length 0/96 ZsI ==> 
+>>>>>>>>> -115
+>>>>>>>>> [   76.308278] kworker/-23        0d... 42789695us : 
+>>>>>>>>> dwc3_prepare_trb: ep3in: trb 00000000b81213d6 (E1:D0) buf 
+>>>>>>>>> 0000000003b7a800 size 96 ctrl 00000811 (Hlcs:sC:normal)
+>>>>>>>>> [   76.395294] kworker/-23        0d... 42789707us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep3in: cmd 'Update Transfer' [60007] params 
+>>>>>>>>> 00000000 00000000 00000000 --> status: Successful
+>>>>>>>>> [   76.471900] irq/14-d-596       0d... 42789842us : 
+>>>>>>>>> dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) 
+>>>>>>>>> [Setup Phase]
+>>>>>>>>> [   76.489308] irq/14-d-596       0d... 42789845us : 
+>>>>>>>>> dwc3_ctrl_req: Set Interface(Intf = 5, Alt.Setting = 0)
+>>>>>>>>> [   76.505650] irq/14-d-596       0d... 42789851us : 
+>>>>>>>>> dwc3_ep_dequeue: ep6in: req 0000000002c71409 length 0/192 zsI 
+>>>>>>>>> ==> -115
+>>>>>>>>> [   76.523315] irq/14-d-596       0d... 42789854us : 
+>>>>>>>>> dwc3_gadget_giveback: ep6in: req 0000000002c71409 length 0/192 
+>>>>>>>>> zsI ==> -104
+>>>>>>>>> [   76.541427] irq/14-d-596       0d... 42789857us : 
+>>>>>>>>> dwc3_free_request: ep6in: req 0000000002c71409 length 0/192 zsI 
+>>>>>>>>> ==> -104
+>>>>>>>>> [   76.559267] irq/14-d-596       0d... 42789859us : 
+>>>>>>>>> dwc3_ep_dequeue: ep6in: req 00000000a324f5d0 length 0/192 zsI 
+>>>>>>>>> ==> -115
+>>>>>>>>> [   76.576937] irq/14-d-596       0d... 42789861us : 
+>>>>>>>>> dwc3_gadget_giveback: ep6in: req 00000000a324f5d0 length 0/192 
+>>>>>>>>> zsI ==> -104
+>>>>>>>>> [   76.595046] irq/14-d-596       0d... 42789862us : 
+>>>>>>>>> dwc3_free_request: ep6in: req 00000000a324f5d0 length 0/192 zsI 
+>>>>>>>>> ==> -104
+>>>>>>>>> [   76.612892] irq/14-d-596       0d... 42789865us : 
+>>>>>>>>> dwc3_gadget_ep_disable: ep6in: mps 192/346 streams 16 burst 0 
+>>>>>>>>> ring 0/0 flags E:swbp:<
+>>>>>>>>> [   76.665535] irq/14-d-596       0d... 42789873us : 
+>>>>>>>>> dwc3_event: event (000020c2): ep0in: Transfer Not Ready [0] 
+>>>>>>>>> (Not Active) [Status Phase]
+>>>>>>>>> [   76.684716] irq/14-d-596       0d... 42789875us : 
+>>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 0 ctrl 00000c33 (HLcs:SC:status2)
+>>>>>>>>> [   76.819195] irq/14-d-596       0d... 42789886us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
+>>>>>>>>> [   76.926324] irq/14-d-596       0d... 42789930us : 
+>>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
+>>>>>>>>> [Status Phase]
+>>>>>>>>> [   76.937892] irq/14-d-596       0d... 42789933us : 
+>>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 0 ctrl 00000c32 (hLcs:SC:status2)
+>>>>>>>>> [   76.953003] irq/14-d-596       0d... 42789935us : 
+>>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 0/0 
+>>>>>>>>> zsI ==> 0
+>>>>>>>>> [   76.964217] irq/14-d-596       0d... 42789938us : 
+>>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 8 ctrl 00000c23 (HLcs:SC:setup)
+>>>>>>>>> [   77.061379] irq/14-d-596       0d... 42789950us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
+>>>>>>>>> [   77.168595] irq/14-d-596       0d... 42790509us : 
+>>>>>>>>> dwc3_event: event (0000c040): ep0out: Transfer Complete (sIL) 
+>>>>>>>>> [Setup Phase]
+>>>>>>>>> [   77.180159] irq/14-d-596       0d... 42790512us : 
+>>>>>>>>> dwc3_ctrl_req: Get String Descriptor(Index = 18, Length = 255)
+>>>>>>>>> [   77.190578] irq/14-d-596       0d... 42790537us : 
+>>>>>>>>> dwc3_prepare_trb: ep0in: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 0000000003b68000 size 36 ctrl 00000c53 (HLcs:SC:data)
+>>>>>>>>> [   77.287648] irq/14-d-596       0d... 42790550us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0in: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
+>>>>>>>>> [   77.333107] irq/14-d-596       0d... 42790557us : 
+>>>>>>>>> dwc3_event: event (000010c2): ep0in: Transfer Not Ready [0] 
+>>>>>>>>> (Not Active) [Data Phase]
+>>>>>>>>> [   77.407223] irq/14-d-596       0d... 42790575us : 
+>>>>>>>>> dwc3_event: event (000090c2): ep0in: Transfer Not Ready [0] 
+>>>>>>>>> (Active) [Data Phase]
+>>>>>>>>> [   77.480985] irq/14-d-596       0d... 42790588us : 
+>>>>>>>>> dwc3_event: event (0000c042): ep0in: Transfer Complete (sIL) 
+>>>>>>>>> [Data Phase]
+>>>>>>>>> [   77.492376] irq/14-d-596       0d... 42790590us : 
+>>>>>>>>> dwc3_complete_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 0000000003b68000 size 0 ctrl 00000c52 (hLcs:SC:data)
+>>>>>>>>> [   77.507221] irq/14-d-596       0d... 42790595us : 
+>>>>>>>>> dwc3_gadget_giveback: ep0out: req 00000000cb1bd3cd length 36/36 
+>>>>>>>>> ZsI ==> 0
+>>>>>>>>> [   77.518609] irq/14-d-596       0d... 42790597us : 
+>>>>>>>>> dwc3_event: event (000020c0): ep0out: Transfer Not Ready [0] 
+>>>>>>>>> (Not Active) [Status Phase]
+>>>>>>>>> [   77.531332] irq/14-d-596       0d... 42790598us : 
+>>>>>>>>> dwc3_prepare_trb: ep0out: trb 000000004c0ae319 (E0:D0) buf 
+>>>>>>>>> 000000001bded000 size 0 ctrl 00000c43 (HLcs:SC:status3)
+>>>>>>>>> [   77.628669] irq/14-d-596       0d... 42790609us : 
+>>>>>>>>> dwc3_gadget_ep_cmd: ep0out: cmd 'Start Transfer' [406] params 
+>>>>>>>>> 00000000 1bded000 00000000 --> status: Successful
 >>>>>>>>>
->>>>>>>> OK, I can try, but just to clarify, I was referring to how it was being
->>>>>>>> done in:
->>>>>>>>
->>>>>>>> static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
->>>>>>>> 		const struct dwc3_event_depevt *event)
->>>>>>>> {
->>>>>>>> ...
->>>>>>>> 		if (dwc->ep0_expect_in != event->endpoint_number) {
->>>>>>>> 			struct dwc3_ep	*dep = dwc->eps[dwc->ep0_expect_in];
->>>>>>>>
->>>>>>>> 			dev_err(dwc->dev, "unexpected direction for Data Phase\n");
->>>>>>>> 			dwc3_ep0_end_control_data(dwc, dep);
->>>>>>>> 			dwc3_ep0_stall_and_restart(dwc);
->>>>>>>> 			return;
->>>>>>>> 		}
->>>>>>>>
+>>>>>>>>> Do you mind adding a few prints in dwc3_remove_requests to tell 
+>>>>>>>>> us which
+>>>>>>>>> endpoint is being processed? Then we'll know for sure which one 
+>>>>>>>>> caused
+>>>>>>>>> the crash.
+>>>>>>>>>
+>>>>>>>> I wouldn't mind but am leaving on a holiday, won't have time 
+>>>>>>>> until 6 aug.
+>>>>>>> not a problem, we'll still be here when you're back :-)
+>>>>>> Well, let's go then :-)
 >>>>>>
->>>>>> Looking at this snippet again, it looks wrong. For control write
->>>>>> unexpected direction, if the driver hasn't setup and started the DATA
->>>>>> phase yet, then it's fine, but there is a problem if it did.
+>>>>>> To get back in the mood I have retested 5.13.0, 5.14.0-rc1, 
+>>>>>> 5.14.0-rc2
+>>>>>> and 5.14.0-rc5.
 >>>>>>
->>>>>> Since dwc3_ep0_end_control_data() doesn't issue End Transfer command to
->>>>>> ep0 due to the resource_index check, it doesn't follow the control
+>>>>>> I find that 5.13.0 works fine, and the issue starts from 5.14.0-rc1.
+>>>>> That's great finding. We have a bisection point. There are a total of
+>>>>> 13764 commits between v5.13 and v5.14-rc1
 >>>>>
->>>>> IIRC resource_index is always non-zero, so the command should be
+>>>>>     $ git rev-list  --count v5.13..v5.14-rc1
+>>>>>     13764
+>>>>>
+>>>>> git bisect should find the offending commit in at most 14 tries. 
+>>>>> That's
+>>>>> not too bad.
+>>>> I correctly guesstimated that the problem got introduced by the usb 
+>>>> merge 79160a60
 >>>>
->>>> No, resource_index for ep0out is 0, ep0in is 1. You can check from any
->>>> of the driver tracepoint log for the return value of Start Transfer
->>>> command for the resource index of ep0. There could be a mixed up with
->>>> the undocumented return value of Set Endpoint Transfer Resource command
->>>> before when this code was written, don't mix up with that.
+>>>> "Merge tag 'usb-5.14-rc1' of 
+>>>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb"
 >>>>
->>>>> triggered. If you have access to a Lecroy USB Trainer, could you script
->>>>> this very scenario for verification?
+>>>> 116 commits(7 bisects).
 >>>>
->>>> For anyone who wants to work on this, we don't need a LeCroy USB
->>>> trainer. If you use xhci host, just modify the xhci-ring.c to queue a
->>>> wrong direction DATA phase TRB of a particular control write request
->>>> test, and continue with the next control requests.
+>>>> 24f779dac8f3efb9629adc0e486914d93dc45517 is the first bad commit
 >>>>
->>> Let me give this a try since I already have a modified (broken :)) XHCI
->>> stack.
+>>>> "usb: gadget: f_uac2/u_audio: add feedback endpoint support"
+>>>>
+>>>> Ruslan's 3 patches are related to each other so I reverted all three 
+>>>> 24f779da...e89bb428 and applied the reverts to rc1.
+>>>>
+>>>> I can confirm this indeed resolves the problem in rc1.
+>>>>
+>>>> Is late now, tomorrow evening I will apply the reverts to rc6.
 >>>
->>> Thanks
->>> Wesley Cheng
+>>> With these reverts rc6 works fine as well.
+>>>
+>>> So, where do we go from here?
+>>>
 >>
->> Sorry for the late response.  I was trying to get a reliable change to
->> get the issue to reproduce.  I think I was able to find a set up which
->> will generate the unexpected direction issue.  I'll try my best to
->> summarize the traces here:
+>> I know the patches have been tested on dwc2 (by me and others).  I do 
+>> not know if Ruslan or Jerome tested them on dwc3 but probably not. 
+>> Ruslan has talked about RPi (my case too) and BeagleboneBlack, both 
+>> with dwc2. Perhaps the dwc2 behaves a bit differently than dwc3?
 >>
->> Set up:
->> - Modified XHCI stack to queue an IN TRB for a three stage CONTROL OUT
->> transaction (OUT data stage)
->> - Device is using RNDIS, as that has interface specific commands (ie
->> SEND_ENCAPSUALTED messages)
->>
->> Kernel Log:
->> [ 1255.312870] msm-usb-hsphy 88e3000.hsphy: Avail curr from USB = 900
->> [ 1255.315300] dwc3_ep0_xfernotready event status = 1
->> [ 1255.315429] dwc3_ep0_xfernotready event status = 2
->> [ 1255.316390] android_work: sent uevent USB_STATE=CONFIGURED
->> [ 1255.317467] dwc3_ep0_xfernotready event status = 1
->> [ 1255.317588] dwc3_ep0_xfernotready event status = 2
->> [ 1255.334196] dwc3_ep0_xfernotready event status = 1
->> [ 1255.334217] dwc3 a600000.dwc3: unexpected direction for Data Phase
->> [ 1255.334311] rndis_msg_parser: unknown RNDIS message 0x0052033A len
->> 4456526
->> [ 1255.334328] RNDIS command error -524, 0/24
->> [ 1255.334369] ------------[ cut here ]------------
->> [ 1255.334377] dwc3 a600000.dwc3: No resource for ep0out
->> [ 1255.334440] WARNING: CPU: 0 PID: 8364 at
->> drivers/usb/dwc3/gadget.c:360 dwc3_send_gadget_ep_cmd+0x3c4/0x96c
->> ...
->>  1255.336163] WARNING: CPU: 0 PID: 8364 at drivers/usb/dwc3/ep0.c:281
->> dwc3_ep0_out_start+0x108/0x144
->>
->> So the kernel log does indeed show the concern mentioned by Thinh, where
->> after ending the transfer, we do see the dwc3_ep0_out_start() fail due
->> to no xfer resource.
->>
+>> The patches add a new EP-IN for async feedback. I am sorry I have not 
+>> followed your long thread (it started as unrelated to uac). Does the 
+>> problem appear with f_uac1 or f_uac2? Please how have you reached the 
+>> above problem?
 > 
-> No, there's no end transfer command seen, and it's expected from code
-> review.
+> I'm sorry too. I first believed the issue was related to the patch 
+> mentioned in the subject line.
 > 
-Sorry, yes that's correct.
->> ftrace:
->> <...>-8364    [000] d..1  1255.333988: dwc3_ctrl_req: Get Interface
->> Status(Intf = 0, Length = 24)
->> <...>-8364    [000] d..1  1255.334115: dwc3_prepare_trb: ep0out: trb
->> ffffffc01bffd000 (E1:D0) buf 00000000efb76000 size 24 ctrl 00000455
->> (HlCs:Sc:data)
->> <...>-8364    [000] d..1  1255.334128: dwc3_prepare_trb: ep0out: trb
->> ffffffc01bffd010 (E1:D0) buf 00000000efff9000 size 488 ctrl 00000c53
->> (HLcs:SC:data)
->> <...>-8364    [000] d..1  1255.334166: dwc3_gadget_ep_cmd: ep0out: cmd
->> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
->> Successful
->> <...>-8364    [000] d..1  1255.334239: dwc3_gadget_ep_cmd: ep0out: cmd
->> 'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
->> <...>-8364    [000] d..1  1255.334291: dwc3_gadget_giveback: ep0out: req
->> ffffff8891724e00 length 0/24 zsI ==> -104
+> The problem appaers with f_uac2. I bost Edison_Arduino board in host 
+> mode (there is a switch allowing to select host/device mode). When 
+> flipping the switch to device mode udev run a script:
+> But as I am using configfs (excerpt follows) and just disabling the last 
+> 2 line resolves the issue, I'm guessing uac2 is the issue. Or exceeding 
+> the available resources.
 > 
-> It detected wrong direction and sets STALL here, but no End Transfer
-> command.
+> # Create directory structure
+> mkdir "${GADGET_BASE_DIR}"
+> cd "${GADGET_BASE_DIR}"
+> mkdir -p configs/c.1/strings/0x409
+> mkdir -p strings/0x409
 > 
->> <...>-8364    [000] d..1  1255.334339: dwc3_prepare_trb: ep0out: trb
->> ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
->> (HLcs:SC:setup)
+> # Serial device
+> mkdir functions/gser.usb0
+> ln -s functions/gser.usb0 configs/c.1/
+> ###
 > 
-> The driver overwrote the active TRB with a new SETUP TRB.
+> # Ethernet device
+> mkdir functions/eem.usb0
+> echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
+> echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
+> ln -s functions/eem.usb0 configs/c.1/
 > 
->> <...>-8364    [000] d..1  1255.336099: dwc3_gadget_ep_cmd: ep0out: cmd
->> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: No
->> Resource
+> # Mass Storage device
+> mkdir functions/mass_storage.usb0
+> echo 1 > functions/mass_storage.usb0/stall
+> echo 0 > functions/mass_storage.usb0/lun.0/cdrom
+> echo 0 > functions/mass_storage.usb0/lun.0/ro
+> echo 0 > functions/mass_storage.usb0/lun.0/nofua
+> echo "${USBDISK}" > functions/mass_storage.usb0/lun.0/file
+> ln -s functions/mass_storage.usb0 configs/c.1/
 > 
-> The dep->flags DWC3_EP_TRANSFER_STARTED got cleared. When it tries to
-> issue a Start Transfer a SETUP transfer, the command will fail with no
-> resource because the endpoint never ended properly.
-> 
->> <...>-8364    [000] d..1  1255.357594: dwc3_ctrl_req: 00 60 b7 ef 00 00
->> 00 00
-> 
-> Here is iffy because the behavior is undefined. The driver overwrote the
-> previous TRB. The Start Transfer command didn't go through, so the
-> controller still has the old TRB setup in its cache. It gets the next
-> SETUP request completion anyway because the SETUP stage is a short
-> packet. The driver updated its state that it's expecting the SETUP
-> stage, and it doesn't check the TRB write back buffer size for more or
-> less than 8 bytes or whether this is valid data.
-> 
-> Wesley, is this SETUP packet the correct RNDIS control request?
-> 
-That doesn't look to be a RNDIS control packet.  I collected a bus
-analyzer log as well w/ this snippet, and nothing was transmitted from
-the host side during the data stage.  Subsequent SETUP transactions were
-standard USB descriptors (GET string descriptors).
->> <...>-8364    [000] d..1  1255.357680: dwc3_gadget_ep_cmd: ep0out: cmd
->> 'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
-> 
-> The device Set Stall on an unrecognized request, probably from the
-> application, which can be normal.
-> 
->> <...>-8364    [000] d..1  1255.357696: dwc3_prepare_trb: ep0out: trb
->> ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
->> (HLcs:SC:setup)
->> <...>-8364    [000] d..1  1255.357722: dwc3_gadget_ep_cmd: ep0out: cmd
->> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
->> Successful
->> <...>-224     [005] d..1  1266.313014: dwc3_gadget_ep_cmd: ep2out: cmd
->> 'End Transfer' [40c08] params 00000000 00000000 00000000 --> status:
->> Timed Out
->>
->> Thanks
->> Wesley Cheng
->>
-> 
-> Thanks for the test Wesley
-> 
-> BR,
-> Thinh
+> # UAC2 device
+> mkdir functions/uac2.usb0
+> ln -s functions/uac2.usb0 configs/c.1
+> ....
 > 
 
-So back to the original issue, which was the SETUP timeout during pullup
-disable, I went ahead and collected the ftrace w/ a change to just
-remove the return statement:
+As you say, could perhaps the reason be that the extra EP-IN added in 
+those patches (previously 1, now 2 with the default config you use) 
+exceeds your EP-IN max count or available fifos somehow?  You have a 
+number of functions initialized. If you change the load order of the 
+functions, do you get the error later with a different function? Just 
+guessing...
 
-ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
-				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
-if (ret == 0) {
-	dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
-	return -ETIMEDOUT;
-}
+You should be able to switch the default async EP-OUT (which configures 
+the new feedback EP-IN ) to adaptive EP-OUT (which requires no feedback 
+EP) with c_sync=8 parameter of f_uac2.
 
-This would allow the __dwc3_gadget_stop() to disable EP0/1, which would
-call dwc3_gadget_stop_active_transfer() to send the end xfer command:
+https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L47
 
-//Packet which will not queue a data stage (injected failure)
-<...>-7098    [003] d..1   346.560711: dwc3_ctrl_req: Get String
-Descriptor(Index = 3, Length = 2)
+https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L830
 
-//Prepare IN data stage TRB
-<...>-7098    [003] d..1   346.560865: dwc3_prepare_trb: ep0in: trb
-ffffffc011edd000 (E0:D0) buf 00000000effcc000 size 2 ctrl 00000c53
-(HLcs:SC:data)
-<...>-7098    [003] d..1   346.560915: dwc3_gadget_ep_cmd: ep0in: cmd
-'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
-Successful
+https://elixir.bootlin.com/linux/v5.14-rc6/source/include/uapi/linux/usb/ch9.h#L453
 
-//Pullup disable here kicks in - __dwc3_gadget_stop()
-<...>-224     [006] d..1   348.607367: dwc3_gadget_ep_disable: ep0out:
-mps 64/512 streams 0 burst 1 ring 0/0 flags E:swbp:>
-<...>-224     [006] d..1   348.607430: dwc3_gadget_giveback: ep0out: req
-ffffff884e5f5500 length 0/2 zsI ==> -108
-<...>-224     [006] d..1   348.607444: dwc3_gadget_ep_disable: ep0in:
-mps 64/512 streams 0 burst 1 ring 0/0 flags E:swBp:<
+Does that fix the problem?
 
-//End transfer on the pending EP0 in TRB queued previously
-<...>-224     [006] d..1   348.607484: dwc3_gadget_ep_cmd: ep0in: cmd
-'End Transfer' [10c08] params 00000000 00000000 00000000 --> status:
-Successful
-<...>-224     [006] dN.1   348.607788: usb_gadget_vbus_draw: speed 3/6
-state 6 0mA [sg:self-powered:activated:disconnected] --> 0
-<...>-224     [006] ....   348.616888: usb_gadget_disconnect: speed 3/6
-state 6 0mA [sg:self-powered:activated:disconnected] --> 0
+Thanks,
 
-Does this look ok, Thinh?
-
-Thanks
-Wesley Cheng
-
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+Pavel.
