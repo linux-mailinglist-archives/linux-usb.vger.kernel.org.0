@@ -2,625 +2,236 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 408743F2223
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 23:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8083F22BA
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 00:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbhHSVOj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 17:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53458 "EHLO
+        id S236042AbhHSWKd (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 18:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232544AbhHSVOi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 17:14:38 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5262CC061756
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 14:14:01 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id z128so14789375ybc.10
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 14:14:01 -0700 (PDT)
+        with ESMTP id S235761AbhHSWK1 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 18:10:27 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E10C061575;
+        Thu, 19 Aug 2021 15:09:50 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id x27so16058559lfu.5;
+        Thu, 19 Aug 2021 15:09:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cfFiTtfA1GXNy8kvrXCEuCJ8XL9NifAivDptCETkEFM=;
-        b=S7/csSf2HUESOOHxnCs4/0atILjl2hF4O0vkCu0V80013iWM93U7/ZPYmXrmBXWD+p
-         cB3xzkNBlGju1OrsJCCbkZcMZtFX4oGQzpYlm3+csByjgSiiedhzFi6lgAptGV+y6uQ0
-         ox9ue4sAQE4akXkdev7wR1BePo6TFa3eMRp3MTJugwu18VhQXLjJj2OeYm37aSk0awjI
-         ZdlioN2v+ExSlvHR6WlAcE2d0Tw76o7NiUH7CEi837gewfqra6A107X7w9+IoAuFI9Hc
-         MS880AOyURr4I2i7GcqBcCFk4tY20wXKXHMJvbCqjm5KjH4qjQekHrSDMNhdwkduEKaR
-         Ldpw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=Djc9fORZaX0jUQ208L1CXmP3iTRD6JSYsA+xYiTuRIM=;
+        b=dMU6STbYnm9OflIqSy2qQXqjsJYwl7YMlINi7PykXT2hk4hVpl87FK13Gf1ev8geC3
+         K9caemrLnRsk5kMdD8lgWsp4zIB+EXGhHL8lT9qVG+rY9hboNmGWhYzNYfapsyKLHMRr
+         BuVLkLyNXbyQV+L42XvasmlaKRmpbZ1esPdEDu7e07tVacSCCkZ69VwjPz7/bcAtO3HY
+         MBcCelEAlUxXVzjYivWfZRipGBGcBePWKJgp4sYTzoaLrh6F7gyCw70q5JZvPfAXVxmg
+         BBWjfPLtb9tscP8XQdZrCInxEKvKnskPHBdhH1dH2redmXEI+urWw82oLmmmFLtSnzpf
+         Bcdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cfFiTtfA1GXNy8kvrXCEuCJ8XL9NifAivDptCETkEFM=;
-        b=qX3/3rdjBmzLma90iMiJuNv4zLX3cTqF7JGfw04n9cD+DDKFFYhUhizGITN9BKnNEL
-         W61ory/TP5orlFfYcuksv5iK6HckIRP4JwnEKhPWqmDMbhhKKYa7O8QiQmVp8h/m3pUl
-         VCLnbDNw8lHAu79zZPBGDVN6z67Ui4W8nOHrvuFTr0vCgkXb1CGm+MP2lF+I7v+daYGf
-         BVdB8j2gE8Upe+9VO9OXPNXBPZ/jXFMRpjmws0M7hefkVIHPvEJ6kasU4CaXV/q6b1qG
-         AC1BTHaGsKlrGhE6izXSk+oNM/rQyoaIDs0eJoxiwbB64JvJUpB8LnkGc3tELxJBlx32
-         UdEw==
-X-Gm-Message-State: AOAM5320G/0u09CLcv5278m554TegQojjGaVruh0DOIFKu0suNSG5O2z
-        fYyBbb56Z613G02K+IeMZN5Ji3/jUiy/v0URcGdixw==
-X-Google-Smtp-Source: ABdhPJx4+QvLjcAfFX6/XTAw/6fS9aUnr1VT0IqCwqoUR3pFdRftDL7dhvIsdy+uQc4+qlCxNLvIJLBYsgpLTRi6GK8=
-X-Received: by 2002:a25:c9c6:: with SMTP id z189mr17154556ybf.497.1629407640246;
- Thu, 19 Aug 2021 14:14:00 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=Djc9fORZaX0jUQ208L1CXmP3iTRD6JSYsA+xYiTuRIM=;
+        b=GI5g613o9nOcGM5Zu/JKwChQ34Y0jE+8HU+o0sK73/nCiYnFm7n9NET2iDA5INaLhp
+         D+5W0DnM/bDwQdk66jCNE4sM7UqcLAirEMFhjRjgM1mihqZgRZEBXgoqfeV3uY3KZ70F
+         jmFz/1MycWaMQ8IkAWXcxbZi4BQ6mkb3X/pa7/3kH3RlAHl70/lBGP+aftg1ssuJKeE5
+         2iusKH3xxJdAuyzMMg4OGCmrwr4wuepcEQ97oXTq4Ea0R1Hka88GeEqGgMJSxqQHDjZj
+         w6R2IiFzcXy6CPZZ8YFc6R/bAkx8GLWvFRQEOl+2MYw1z5iXcG93pLH3ESFui+sd20eX
+         NQEg==
+X-Gm-Message-State: AOAM533ykqtFEYhkB93QeVfxAp/gtLQXIvoUvSjA+tT4vhy4AvbDxJ29
+        oukXegtmHndhl6g2NZwQr2fwJfAYc5w=
+X-Google-Smtp-Source: ABdhPJxvNxcxk5Wqttm8NgLj2sKnLsuL7sNLBaDY6UpJ6+A1Pob5mT38NwjMtPvD9CLOiEzV59Hqsg==
+X-Received: by 2002:a05:6512:3f08:: with SMTP id y8mr11381666lfa.221.1629410988761;
+        Thu, 19 Aug 2021 15:09:48 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
+        by smtp.googlemail.com with ESMTPSA id z5sm430889lfs.126.2021.08.19.15.09.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Aug 2021 15:09:48 -0700 (PDT)
+Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-8-digetx@gmail.com> <YR0UBi/ejy+oF4Hm@orome.fritz.box>
+ <da7356cb-05ee-ba84-8a7c-6e69d853a805@gmail.com>
+ <YR04YHGEluqLIZeo@orome.fritz.box>
+ <ad99db08-4696-1636-5829-5260f93dc681@gmail.com>
+ <YR6Mvips3HAntDy0@orome.fritz.box>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <e17bbe8d-7c0f-fc3d-03c7-d75c54c24a43@gmail.com>
+Date:   Fri, 20 Aug 2021 01:09:46 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210814031231.32125-1-mdevaev@gmail.com>
-In-Reply-To: <20210814031231.32125-1-mdevaev@gmail.com>
-From:   =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date:   Thu, 19 Aug 2021 23:13:48 +0200
-Message-ID: <CANP3RGejWk7Zj2XMGGPgrGMSjqRY+ZaVFha6jG720RCSF9HEkQ@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
-To:     Maxim Devaev <mdevaev@gmail.com>
-Cc:     balbi@kernel.org, stern@rowland.harvard.edu,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        ruslan.bilovol@gmail.com, mika.westerberg@linux.intel.com,
-        jj251510319013@gmail.com, linux-usb@vger.kernel.org,
-        Kernel hackers <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YR6Mvips3HAntDy0@orome.fritz.box>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-I'm a noob when it comes to usb, so some of my questions may well be stupid...
+19.08.2021 19:54, Thierry Reding пишет:
+> On Wed, Aug 18, 2021 at 08:11:03PM +0300, Dmitry Osipenko wrote:
+>> 18.08.2021 19:42, Thierry Reding пишет:
+>>> On Wed, Aug 18, 2021 at 06:05:21PM +0300, Dmitry Osipenko wrote:
+>>>> 18.08.2021 17:07, Thierry Reding пишет:
+>>>>> On Tue, Aug 17, 2021 at 04:27:27AM +0300, Dmitry Osipenko wrote:
+>>>>> [...]
+>>>>>> +struct clk *tegra_clk_register(struct clk_hw *hw)
+>>>>>> +{
+>>>>>> +	struct platform_device *pdev;
+>>>>>> +	struct device *dev = NULL;
+>>>>>> +	struct device_node *np;
+>>>>>> +	const char *dev_name;
+>>>>>> +
+>>>>>> +	np = tegra_clk_get_of_node(hw);
+>>>>>> +
+>>>>>> +	if (!of_device_is_available(np))
+>>>>>> +		goto put_node;
+>>>>>> +
+>>>>>> +	dev_name = kasprintf(GFP_KERNEL, "tegra_clk_%s", hw->init->name);
+>>>>>> +	if (!dev_name)
+>>>>>> +		goto put_node;
+>>>>>> +
+>>>>>> +	pdev = of_platform_device_create(np, dev_name, NULL);
+>>>>>> +	if (!pdev) {
+>>>>>> +		pr_err("%s: failed to create device for %pOF\n", __func__, np);
+>>>>>> +		kfree(dev_name);
+>>>>>> +		goto put_node;
+>>>>>> +	}
+>>>>>> +
+>>>>>> +	dev = &pdev->dev;
+>>>>>> +	pm_runtime_enable(dev);
+>>>>>> +put_node:
+>>>>>> +	of_node_put(np);
+>>>>>> +
+>>>>>> +	return clk_register(dev, hw);
+>>>>>> +}
+>>>>>
+>>>>> This looks wrong. Why do we need struct platform_device objects for each
+>>>>> of these clocks? That's going to be a massive amount of platform devices
+>>>>> and they will completely mess up sysfs.
+>>>>
+>>>> RPM works with a device. It's not a massive amount of devices, it's one
+>>>> device for T20 and four devices for T30.
+>>>
+>>> I'm still not sure I understand why we need to call RPM functions on a
+>>> clock. And even if they are few, it seems wrong to make these platform
+>>> devices.
+>>
+>> Before clock is enabled, we need to raise core voltage. After clock is
+>> disabled, the voltage should be dropped. CCF+RPM takes care of handling
+>> this for us.
+> 
+> That's the part that I do understand. What I don't understand is why a
+> clock needs to be runtime suspend/resumed. Typically we suspend/resume
+> devices, and doing so typically involves disabling/enabling clocks. So
+> I don't understand why the clocks themselves now need to be runtime
+> suspended/resumed.
 
-On Sat, Aug 14, 2021 at 5:13 AM Maxim Devaev <mdevaev@gmail.com> wrote:
->
-> f_hid provides the OUT Endpoint as only way for receiving reports
-> from the host. SETUP/SET_REPORT method is not supported, and this causes
-> a number of compatibility problems with various host drivers, especially
-> in the case of keyboard emulation using f_hid.
->
-> - Some hosts do not support the OUT Endpoint and ignore it,
->   so it becomes impossible for the gadget to receive a report
->   from the host. In the case of a keyboard, the gadget loses the ability
->   to get the status of the LEDs.
+CCF provides RPM management for a device that backs clock. When clock is enabled, it resumes the backing device.
 
-perhaps better to rephrase as 'the host ceases to change the status of
-the gadget/keyboard LEDs',
-unless this is actually driven by the keyboard as opposed to the other
-way round (which is what I'd expect from AT, PS/2 keyboards).
+RPM, GENPD and OPP frameworks work with a device. We use all these frameworks here. Since we don't have a dedicated device for a PLL clock, we need to create it in order to leverage the existing generic kernel APIs.
 
-> - Some BIOSes/UEFIs can't work with HID with the OUT Endpoint at all.
+In this case clocks are not runtime suspended/resumed, the device which backs clock is suspended/resumed.
 
-HID devices with an OUT Endpoint
+>>> Perhaps they can be simple struct device:s instead? Ideally they would
+>>> also be parented to the CAR so that they appear in the right place in
+>>> the sysfs hierarchy.
+>>
+>> Could you please clarify what do you mean by 'simple struct device:s'?
+>> These clock devices should be OF devices with a of_node and etc,
+>> otherwise we can't use OPP framework.
+> 
+> Perhaps I misunderstand the goal of the OPP framework. My understanding
+> was that this was to attach a table of operating points with a device so
+> that appropriate operating points could be selected and switched to when
+> the workload changes.
+> 
+> Typically these operating points would be roughly a clock rate and a
+> corresponding voltage for a regulator, so that when a certain clock rate
+> is requested, the regulator can be set to the matching voltage.
+> 
+> Hm... so is it that each of these clocks that you want to create a
+> platform device for has its own regulator? Because the patch series only
+> mentions the CORE domain, so I assumed that we would accumulate all the
+> clock rates for the clocks that are part of that CORE domain and then
+> derive a voltage to be supplied to that CORE domain.
+> 
+> But perhaps I just don't understand correctly how this is tied together.
 
->   This may be due to their bugs or incomplete implementation
->   of the HID standard.
->   For example, absolutely all Apple UEFIs can't handle the OUT Endpoint
->   if it goes after IN Endpoint in the descriptor and require the reverse
->   order (OUT, IN) which is a violation of the standard.
->   Other hosts either do not initialize gadgets with a descriptor
->   containing the OUT Endpoint completely (like some HP and DELL BIOSes
->   and embedded firmwares like on KVM switches), or initialize them,
->   but will not poll.
+We don't use regulators, we use power domain that controls regulator. GENPD takes care of accumulating performance requests on a per-device basis.
 
-Not clear what 'not poll' means here.  Why would they (the host) need
-to poll an OUT endpoint?
+I'm creating platform device for the clocks that require DVFS. These clocks don't use regulator, they are attached to the CORE domain. GENPD framework manages the performance state, aggregating perf votes from each device, i.e. from each clock individually.
 
-Additionally it seems like any keyboard gadget would want to default
-to the older more compatible mode?
-Or are there compatibility problems with it as well?
+You want to reinvent another layer of aggregation on top of GENPD. This doesn't worth the effort, we won't get anything from it, it should be a lot of extra complexity for nothing. We will also lose from it because pm_genpd_summary won't show you a per-device info.
 
-> This patch adds option no_out_endpoint=1 to disable the OUT Endpoint
-> and allow f_hid to receive reports from the host via SETUP/SET_REPORT.
+domain                          status          children                           performance
+    /device                                             runtime status
+----------------------------------------------------------------------------------------------
+heg                             on                                                 1000000
+    /devices/soc0/50000000.host1x                       active                     1000000
+    /devices/soc0/50000000.host1x/54140000.gr2d         suspended                  0
+mpe                             off-0                                              0
+vdec                            off-0                                              0
+    /devices/soc0/6001a000.vde                          suspended                  0
+venc                            off-0                                              0
+3d1                             off-0                                              0
+    /devices/genpd:1:54180000.gr3d                      suspended                  0
+3d0                             off-0                                              0
+    /devices/genpd:0:54180000.gr3d                      suspended                  0
+core-domain                     on                                                 1000000
+                                                3d0, 3d1, venc, vdec, mpe, heg
+    /devices/soc0/7d000000.usb                          active                     1000000
+    /devices/soc0/78000400.mmc                          active                     950000
+    /devices/soc0/7000f400.memory-controller            unsupported                1000000
+    /devices/soc0/7000a000.pwm                          active                     1000000
+    /devices/soc0/60006000.clock/tegra_clk_pll_c        active                     1000000
+    /devices/soc0/60006000.clock/tegra_clk_pll_e        suspended                  0
+    /devices/soc0/60006000.clock/tegra_clk_pll_m        active                     1000000
+    /devices/soc0/60006000.clock/tegra_clk_sclk         active                     1000000
 
-allows
 
-Is this a kcmdline option? module param? sysfs option?
-Can one dynamically change this as one reconfigures the gadget for a new mode?
+>> We don't have driver for CAR to bind. I guess we could try to add a
+>> 'dummy' CAR driver that will create sub-devices for the rpm-clocks, is
+>> this what you're wanting?
+> 
+> I got confused by the "tegra-clock" driver that this series was adding.
+> This is actually a driver that will bind to the virtual clocks rather
+> than the CAR device itself.
+> 
+> For some reason I had assumed that you wanted to create a CAR driver in
+> order to get at the struct device embedded in the CAR's platform device
+> and use that as the parent for all these clocks.
+> 
+> So even if we absolutely need some struct device for these clocks, maybe
+> adding that CAR driver and making the clock struct device:s children of
+> the CAR device will help keep a bit of a proper hierarchy in sysfs.
 
->
-> Previously, there was such a feature in f_hid, but it was replaced
-> by the OUT Endpoint [1] in the commit 99c515005857 ("usb: gadget: hidg:
-> register OUT INT endpoint for SET_REPORT"). So this patch actually returns
-> the removed functionality making it optional. For backward compatibility
-
-while making it optional
-
-> reasons, the OUT Endpoint mode remains the default behaviour.
->
-> - The OUT Endpoint mode provides the report queue and reduces USB overhead
->   (eliminating SETUP routine) on transmitting a report from the host.
->
-> - If the SETUP/SET_REPORT mode is used, there is no report queue,
->   so the userspace will only read the last report. For classic HID
-
-without 'the'
-
->   devices like keyboard this is not a problem, since it is intended
-
-keyboards
-
->   to transmit the status of the LEDs and only the last report
->   is important. This mode provides better compatibility with strange
->   and buggy host drivers.
->
-> Both modes passed USBCV tests. Checking with the USB protocol analyzer
-> also confirmed that everything is working as it should and the new mode
-> ensures operability in all of the described cases.
->
-> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
-> Link: https://www.spinics.net/lists/linux-usb/msg65494.html [1]
-> ---
->  drivers/usb/gadget/function/f_hid.c | 217 +++++++++++++++++++++++-----
->  drivers/usb/gadget/function/u_hid.h |   1 +
->  2 files changed, 185 insertions(+), 33 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> index bb476e121eae..e3fb73ed696d 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
-> @@ -45,12 +45,17 @@ struct f_hidg {
->         unsigned short                  report_desc_length;
->         char                            *report_desc;
->         unsigned short                  report_length;
-> +       bool                            use_out_ep;
-
-this could use a comment along the lines of /* as opposed to SETUP/SET_REPORT */
-
->
->         /* recv report */
-> -       struct list_head                completed_out_req;
->         spinlock_t                      read_spinlock;
->         wait_queue_head_t               read_queue;
-> +       /* recv report - interrupt out only (use_out_ep == 1) */
-> +       struct list_head                completed_out_req;
->         unsigned int                    qlen;
-> +       /* recv report - setup set_report only (use_out_ep == 0) */
-> +       char                            *set_report_buf;
-> +       unsigned int                    set_report_length;
->
->         /* send report */
->         spinlock_t                      write_spinlock;
-> @@ -79,7 +84,7 @@ static struct usb_interface_descriptor hidg_interface_desc = {
->         .bDescriptorType        = USB_DT_INTERFACE,
->         /* .bInterfaceNumber    = DYNAMIC */
->         .bAlternateSetting      = 0,
-> -       .bNumEndpoints          = 2,
-> +       /* .bNumEndpoints       = DYNAMIC */
-
-if you look down below, this isn't actually dynamic, should we just
-have hidg_interface_desc_{intout,ssreport} structs?
-
->         .bInterfaceClass        = USB_CLASS_HID,
->         /* .bInterfaceSubClass  = DYNAMIC */
->         /* .bInterfaceProtocol  = DYNAMIC */
-> @@ -140,7 +145,7 @@ static struct usb_ss_ep_comp_descriptor hidg_ss_out_comp_desc = {
->         /* .wBytesPerInterval   = DYNAMIC */
->  };
->
-> -static struct usb_descriptor_header *hidg_ss_descriptors[] = {
-> +static struct usb_descriptor_header *hidg_ss_descriptors_intout[] = {
->         (struct usb_descriptor_header *)&hidg_interface_desc,
->         (struct usb_descriptor_header *)&hidg_desc,
->         (struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
-> @@ -150,6 +155,14 @@ static struct usb_descriptor_header *hidg_ss_descriptors[] = {
->         NULL,
->  };
->
-> +static struct usb_descriptor_header *hidg_ss_descriptors_ssreport[] = {
-> +       (struct usb_descriptor_header *)&hidg_interface_desc,
-> +       (struct usb_descriptor_header *)&hidg_desc,
-> +       (struct usb_descriptor_header *)&hidg_ss_in_ep_desc,
-> +       (struct usb_descriptor_header *)&hidg_ss_in_comp_desc,
-> +       NULL,
-> +};
-> +
->  /* High-Speed Support */
->
->  static struct usb_endpoint_descriptor hidg_hs_in_ep_desc = {
-> @@ -176,7 +189,7 @@ static struct usb_endpoint_descriptor hidg_hs_out_ep_desc = {
->                                       */
->  };
->
-> -static struct usb_descriptor_header *hidg_hs_descriptors[] = {
-> +static struct usb_descriptor_header *hidg_hs_descriptors_intout[] = {
->         (struct usb_descriptor_header *)&hidg_interface_desc,
->         (struct usb_descriptor_header *)&hidg_desc,
->         (struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
-> @@ -184,6 +197,13 @@ static struct usb_descriptor_header *hidg_hs_descriptors[] = {
->         NULL,
->  };
->
-> +static struct usb_descriptor_header *hidg_hs_descriptors_ssreport[] = {
-> +       (struct usb_descriptor_header *)&hidg_interface_desc,
-> +       (struct usb_descriptor_header *)&hidg_desc,
-> +       (struct usb_descriptor_header *)&hidg_hs_in_ep_desc,
-> +       NULL,
-> +};
-> +
->  /* Full-Speed Support */
->
->  static struct usb_endpoint_descriptor hidg_fs_in_ep_desc = {
-> @@ -210,7 +230,7 @@ static struct usb_endpoint_descriptor hidg_fs_out_ep_desc = {
->                                        */
->  };
->
-> -static struct usb_descriptor_header *hidg_fs_descriptors[] = {
-> +static struct usb_descriptor_header *hidg_fs_descriptors_intout[] = {
->         (struct usb_descriptor_header *)&hidg_interface_desc,
->         (struct usb_descriptor_header *)&hidg_desc,
->         (struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
-> @@ -218,6 +238,13 @@ static struct usb_descriptor_header *hidg_fs_descriptors[] = {
->         NULL,
->  };
->
-> +static struct usb_descriptor_header *hidg_fs_descriptors_ssreport[] = {
-> +       (struct usb_descriptor_header *)&hidg_interface_desc,
-> +       (struct usb_descriptor_header *)&hidg_desc,
-> +       (struct usb_descriptor_header *)&hidg_fs_in_ep_desc,
-> +       NULL,
-> +};
-> +
->  /*-------------------------------------------------------------------------*/
->  /*                                 Strings                                 */
->
-> @@ -241,9 +268,11 @@ static struct usb_gadget_strings *ct_func_strings[] = {
->  /*-------------------------------------------------------------------------*/
->  /*                              Char Device                                */
->
-> -static ssize_t f_hidg_read(struct file *file, char __user *buffer,
-> -                       size_t count, loff_t *ptr)
-> +static ssize_t f_hidg_intout_read(struct file *file, char __user *buffer,
-> +                                 size_t count, loff_t *ptr)
->  {
-> +       /* used only if the OUT endpoint is configured */
-> +
-
-comment probably belongs above the function instead of inside it
-
->         struct f_hidg *hidg = file->private_data;
->         struct f_hidg_req_list *list;
->         struct usb_request *req;
-> @@ -255,15 +284,15 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
->
->         spin_lock_irqsave(&hidg->read_spinlock, flags);
->
-> -#define READ_COND (!list_empty(&hidg->completed_out_req))
-> +#define READ_COND_INTOUT (!list_empty(&hidg->completed_out_req))
->
->         /* wait for at least one buffer to complete */
-> -       while (!READ_COND) {
-> +       while (!READ_COND_INTOUT) {
->                 spin_unlock_irqrestore(&hidg->read_spinlock, flags);
->                 if (file->f_flags & O_NONBLOCK)
->                         return -EAGAIN;
->
-> -               if (wait_event_interruptible(hidg->read_queue, READ_COND))
-> +               if (wait_event_interruptible(hidg->read_queue, READ_COND_INTOUT))
->                         return -ERESTARTSYS;
->
->                 spin_lock_irqsave(&hidg->read_spinlock, flags);
-> @@ -313,6 +342,62 @@ static ssize_t f_hidg_read(struct file *file, char __user *buffer,
->         return count;
->  }
->
-> +#define READ_COND_SSREPORT (hidg->set_report_buf != NULL)
-> +
-> +static ssize_t f_hidg_ssreport_read(struct file *file, char __user *buffer,
-> +                                   size_t count, loff_t *ptr)
-> +{
-> +       /* used only if the OUT endpoint is NOT configured */
-> +
-> +       struct f_hidg *hidg = file->private_data;
-> +       char *tmp_buf = NULL;
-> +       unsigned long flags;
-> +
-> +       if (!count)
-> +               return 0;
-> +
-> +       spin_lock_irqsave(&hidg->read_spinlock, flags);
-> +
-> +       while (!READ_COND_SSREPORT) {
-> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-> +               if (file->f_flags & O_NONBLOCK)
-> +                       return -EAGAIN;
-> +
-> +               if (wait_event_interruptible(hidg->read_queue, READ_COND_SSREPORT))
-> +                       return -ERESTARTSYS;
-> +
-> +               spin_lock_irqsave(&hidg->read_spinlock, flags);
-> +       }
-> +
-> +       count = min_t(unsigned int, count, hidg->set_report_length);
-> +       tmp_buf = hidg->set_report_buf;
-> +       hidg->set_report_buf = NULL;
-> +
-> +       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-> +
-> +       if (tmp_buf != NULL) {
-> +               count -= copy_to_user(buffer, tmp_buf, count);
-> +               kfree(tmp_buf);
-> +       } else {
-> +               count = -ENOMEM;
-> +       }
-> +
-> +       wake_up(&hidg->read_queue);
-> +
-> +       return count;
-> +}
-> +
-> +static ssize_t f_hidg_read(struct file *file, char __user *buffer,
-> +                          size_t count, loff_t *ptr)
-> +{
-> +       struct f_hidg *hidg = file->private_data;
-> +
-> +       if (hidg->use_out_ep)
-> +               return f_hidg_intout_read(file, buffer, count, ptr);
-> +       else
-> +               return f_hidg_ssreport_read(file, buffer, count, ptr);
-> +}
-> +
->  static void f_hidg_req_complete(struct usb_ep *ep, struct usb_request *req)
->  {
->         struct f_hidg *hidg = (struct f_hidg *)ep->driver_data;
-> @@ -433,14 +518,20 @@ static __poll_t f_hidg_poll(struct file *file, poll_table *wait)
->         if (WRITE_COND)
->                 ret |= EPOLLOUT | EPOLLWRNORM;
->
-> -       if (READ_COND)
-> -               ret |= EPOLLIN | EPOLLRDNORM;
-> +       if (hidg->use_out_ep) {
-> +               if (READ_COND_INTOUT)
-> +                       ret |= EPOLLIN | EPOLLRDNORM;
-> +       } else {
-> +               if (READ_COND_SSREPORT)
-> +                       ret |= EPOLLIN | EPOLLRDNORM;
-> +       }
->
->         return ret;
->  }
->
->  #undef WRITE_COND
-> -#undef READ_COND
-> +#undef READ_COND_SSREPORT
-> +#undef READ_COND_INTOUT
->
->  static int f_hidg_release(struct inode *inode, struct file *fd)
->  {
-> @@ -467,8 +558,10 @@ static inline struct usb_request *hidg_alloc_ep_req(struct usb_ep *ep,
->         return alloc_ep_req(ep, length);
->  }
->
-> -static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
-> +static void hidg_intout_complete(struct usb_ep *ep, struct usb_request *req)
->  {
-> +       /* used only if the OUT endpoint is configured */
-> +
-
-ditto
-
->         struct f_hidg *hidg = (struct f_hidg *) req->context;
->         struct usb_composite_dev *cdev = hidg->func.config->cdev;
->         struct f_hidg_req_list *req_list;
-> @@ -502,6 +595,39 @@ static void hidg_set_report_complete(struct usb_ep *ep, struct usb_request *req)
->         }
->  }
->
-> +static void hidg_ssreport_complete(struct usb_ep *ep, struct usb_request *req)
-> +{
-> +       /* used only if the OUT endpoint is NOT configured */
-> +
-
-ditto
-
-> +       struct f_hidg *hidg = (struct f_hidg *)req->context;
-> +       struct usb_composite_dev *cdev = hidg->func.config->cdev;
-> +       char *new_buf = NULL;
-> +       unsigned long flags;
-> +
-> +       if (req->status != 0 || req->buf == NULL || req->actual == 0) {
-> +               ERROR(cdev,
-> +                     "%s FAILED: status=%d, buf=%p, actual=%d\n",
-> +                     __func__, req->status, req->buf, req->actual);
-> +               return;
-> +       }
-> +
-> +       spin_lock_irqsave(&hidg->read_spinlock, flags);
-> +
-> +       new_buf = krealloc(hidg->set_report_buf, req->actual, GFP_ATOMIC);
-> +       if (new_buf == NULL) {
-> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-> +               return;
-> +       }
-> +       hidg->set_report_buf = new_buf;
-> +
-> +       hidg->set_report_length = req->actual;
-> +       memcpy(hidg->set_report_buf, req->buf, req->actual);
-> +
-> +       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
-> +
-> +       wake_up(&hidg->read_queue);
-> +}
-> +
->  static int hidg_setup(struct usb_function *f,
->                 const struct usb_ctrlrequest *ctrl)
->  {
-> @@ -549,7 +675,11 @@ static int hidg_setup(struct usb_function *f,
->         case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
->                   | HID_REQ_SET_REPORT):
->                 VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
-> -               goto stall;
-> +               if (hidg->use_out_ep)
-> +                       goto stall;
-> +               req->complete = hidg_ssreport_complete;
-> +               req->context  = hidg;
-> +               goto respond;
->                 break;
->
->         case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
-> @@ -637,15 +767,18 @@ static void hidg_disable(struct usb_function *f)
->         unsigned long flags;
->
->         usb_ep_disable(hidg->in_ep);
-> -       usb_ep_disable(hidg->out_ep);
->
-> -       spin_lock_irqsave(&hidg->read_spinlock, flags);
-> -       list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
-> -               free_ep_req(hidg->out_ep, list->req);
-> -               list_del(&list->list);
-> -               kfree(list);
-> +       if (hidg->out_ep) {
-> +               usb_ep_disable(hidg->out_ep);
-> +
-> +               spin_lock_irqsave(&hidg->read_spinlock, flags);
-> +               list_for_each_entry_safe(list, next, &hidg->completed_out_req, list) {
-> +                       free_ep_req(hidg->out_ep, list->req);
-> +                       list_del(&list->list);
-> +                       kfree(list);
-> +               }
-> +               spin_unlock_irqrestore(&hidg->read_spinlock, flags);
->         }
-> -       spin_unlock_irqrestore(&hidg->read_spinlock, flags);
->
->         spin_lock_irqsave(&hidg->write_spinlock, flags);
->         if (!hidg->write_pending) {
-> @@ -691,8 +824,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
->                 }
->         }
->
-> -
-> -       if (hidg->out_ep != NULL) {
-> +       if (hidg->use_out_ep && hidg->out_ep != NULL) {
->                 /* restart endpoint */
->                 usb_ep_disable(hidg->out_ep);
->
-> @@ -717,7 +849,7 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
->                                         hidg_alloc_ep_req(hidg->out_ep,
->                                                           hidg->report_length);
->                         if (req) {
-> -                               req->complete = hidg_set_report_complete;
-> +                               req->complete = hidg_intout_complete;
->                                 req->context  = hidg;
->                                 status = usb_ep_queue(hidg->out_ep, req,
->                                                       GFP_ATOMIC);
-> @@ -743,7 +875,8 @@ static int hidg_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
->         }
->         return 0;
->  disable_out_ep:
-> -       usb_ep_disable(hidg->out_ep);
-> +       if (hidg->out_ep)
-> +               usb_ep_disable(hidg->out_ep);
->  free_req_in:
->         if (req_in)
->                 free_ep_req(hidg->in_ep, req_in);
-> @@ -795,14 +928,21 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
->                 goto fail;
->         hidg->in_ep = ep;
->
-> -       ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
-> -       if (!ep)
-> -               goto fail;
-> -       hidg->out_ep = ep;
-> +       hidg->out_ep = NULL;
-> +       if (hidg->use_out_ep) {
-> +               ep = usb_ep_autoconfig(c->cdev->gadget, &hidg_fs_out_ep_desc);
-> +               if (!ep)
-> +                       goto fail;
-> +               hidg->out_ep = ep;
-> +       }
-> +
-> +       /* used only if use_out_ep == 1 */
-> +       hidg->set_report_buf = NULL;
->
->         /* set descriptor dynamic values */
->         hidg_interface_desc.bInterfaceSubClass = hidg->bInterfaceSubClass;
->         hidg_interface_desc.bInterfaceProtocol = hidg->bInterfaceProtocol;
-> +       hidg_interface_desc.bNumEndpoints = hidg->use_out_ep ? 2 : 1;
->         hidg->protocol = HID_REPORT_PROTOCOL;
->         hidg->idle = 1;
->         hidg_ss_in_ep_desc.wMaxPacketSize = cpu_to_le16(hidg->report_length);
-> @@ -833,12 +973,19 @@ static int hidg_bind(struct usb_configuration *c, struct usb_function *f)
->         hidg_ss_out_ep_desc.bEndpointAddress =
->                 hidg_fs_out_ep_desc.bEndpointAddress;
->
-> -       status = usb_assign_descriptors(f, hidg_fs_descriptors,
-> -                       hidg_hs_descriptors, hidg_ss_descriptors,
-> -                       hidg_ss_descriptors);
-> +#define CHOOSE_DESC(prefix)    \
-> +       (hidg->use_out_ep ? prefix##_intout : prefix##_ssreport)
-> +
-> +       status = usb_assign_descriptors(f,
-> +               CHOOSE_DESC(hidg_fs_descriptors),
-> +               CHOOSE_DESC(hidg_hs_descriptors),
-> +               CHOOSE_DESC(hidg_ss_descriptors),
-> +               CHOOSE_DESC(hidg_ss_descriptors));
-
-may be better to just use an if (hidg->use_out_ep) status =
-usb_assign_descriptors(...) else status = usb_assign_descriptors(...)
-
-(or just status = hidg->use_out_ep ? usb_assign_descriptors(...) :
-usb_assign_descriptors(...)
-
-it's not really any longer (when you count up the extra lines adding
-and undefing the macro) and eliminates a macro making things easier to
-grep for...
-
->         if (status)
->                 goto fail;
->
-> +#undef CHOOSE_DESC
-> +
->         spin_lock_init(&hidg->write_spinlock);
->         hidg->write_pending = 1;
->         hidg->req = NULL;
-> @@ -950,6 +1097,7 @@ CONFIGFS_ATTR(f_hid_opts_, name)
->
->  F_HID_OPT(subclass, 8, 255);
->  F_HID_OPT(protocol, 8, 255);
-> +F_HID_OPT(no_out_endpoint, 8, 1);
->  F_HID_OPT(report_length, 16, 65535);
->
->  static ssize_t f_hid_opts_report_desc_show(struct config_item *item, char *page)
-> @@ -1009,6 +1157,7 @@ CONFIGFS_ATTR_RO(f_hid_opts_, dev);
->  static struct configfs_attribute *hid_attrs[] = {
->         &f_hid_opts_attr_subclass,
->         &f_hid_opts_attr_protocol,
-> +       &f_hid_opts_attr_no_out_endpoint,
->         &f_hid_opts_attr_report_length,
->         &f_hid_opts_attr_report_desc,
->         &f_hid_opts_attr_dev,
-> @@ -1093,6 +1242,7 @@ static void hidg_free(struct usb_function *f)
->         hidg = func_to_hidg(f);
->         opts = container_of(f->fi, struct f_hid_opts, func_inst);
->         kfree(hidg->report_desc);
-> +       kfree(hidg->set_report_buf);
->         kfree(hidg);
->         mutex_lock(&opts->lock);
->         --opts->refcnt;
-> @@ -1139,6 +1289,7 @@ static struct usb_function *hidg_alloc(struct usb_function_instance *fi)
->                         return ERR_PTR(-ENOMEM);
->                 }
->         }
-> +       hidg->use_out_ep = !opts->no_out_endpoint;
-
-maybe it would be better to use consistent naming...
-
-hidg->no_out_endpoint = opts->no_out_endpoint
-
-or call the option 'use_ssreport' instead of 'no_out_endpoint'
-(negatives are harder to think about)
-
->
->         mutex_unlock(&opts->lock);
->
-> diff --git a/drivers/usb/gadget/function/u_hid.h b/drivers/usb/gadget/function/u_hid.h
-> index 98d6af558c03..84bb70292855 100644
-> --- a/drivers/usb/gadget/function/u_hid.h
-> +++ b/drivers/usb/gadget/function/u_hid.h
-> @@ -20,6 +20,7 @@ struct f_hid_opts {
->         int                             minor;
->         unsigned char                   subclass;
->         unsigned char                   protocol;
-> +       unsigned char                   no_out_endpoint;
->         unsigned short                  report_length;
->         unsigned short                  report_desc_length;
->         unsigned char                   *report_desc;
-> --
-> 2.32.0
->
-
-Anyway, nothing in here is particularly important, just loose thoughts.
-In general this seems pretty nice.
-
-- Maciej
+Alright, that's easy to do. We will have to move out some clk data out of __init then. I already implemented it as you may see in the above PD summary.
