@@ -2,155 +2,257 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AB03F132E
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 08:17:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A9A3F1484
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 09:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231210AbhHSGSH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 02:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41450 "EHLO
+        id S235729AbhHSHsR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 03:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbhHSGSF (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 02:18:05 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB652C0617A8
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id m24-20020a17090a7f98b0290178b1a81700so4017259pjl.4
-        for <linux-usb@vger.kernel.org>; Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
+        with ESMTP id S229927AbhHSHsQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 03:48:16 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AA6C061575
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 00:47:40 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id q6so7576552wrv.6
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 00:47:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=Z7TQEkkTOfvT3y1VcK9cbeGmLxLBDuWce4oY9e31CIQ=;
-        b=n8Z7pceL3Q1hHrYhRGbE2Ft6ysYoV2T29GwsgsIk5zym7iZcje0CXVg1jI36aNnFP1
-         wEt31EiA2dUBQwlv5rK6Pb4jBRjUZnVnX9lq3yYWlZnsAiqoC84b2+sIg5qRcoOEikt2
-         Bl5OLXFHBLycojOK68FIhPW3b2fskqhF3vr/eyYOYKdL7QspG0UOJAgIVnJ/rUe4LZFr
-         9Mx+8O2v0d2rHrH3yazUPQGMQQQiYdzhDIVBgB1HMOdlKqueyQlS0Pa++oE7KDNseaKY
-         ZqQcskpZ4qIHBPun+Nz8BNcPrFRsCGUIgrdD9AWMNWaoX41LuxEow35zOBfD0rRFPHfn
-         o2nQ==
+        h=mime-version:content-transfer-encoding:date:message-id:cc:subject
+         :from:to:references:in-reply-to;
+        bh=FudC1LQQgorqgCvY4YmEWsg2a7D4yTzNn6OmCaRWFF8=;
+        b=Pw+AR7aFnCB/NxicuD/fwMeE4+N7gDJ9/3LTsu1r235fWnS9ep8cWZ4eITjwE1jE1E
+         /G7w+E9milSqPxgnhvuVcO0/u1yPGT+frOj2zrlsS17MN3EZNhQPVn++s9u1JSRVsf+o
+         JJK1zUUvVHkni/T2feOlwJTVf6WYpf7j2KO2atv1S2c+8ycl8wKRhDhqC9572w0SHiH7
+         udk4qOzw0se5w24vQgvUQhwZ7/JDF5ZV92B1Ge667cN4577mrAMOaF8X09HH+TgRwQ6i
+         asYgekL2HrG3ws2/xXYDKL3DCdyn4rBG/ixF653f1tcA8L8rdkW3U7ycNcNhXFphqKf8
+         qd7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=Z7TQEkkTOfvT3y1VcK9cbeGmLxLBDuWce4oY9e31CIQ=;
-        b=j4uHVKQQNwID9q880b/0I1GyaoKDgfUo8r7iXFPNXn6kZQ7sAoTmnqe1ADtHIY4uA4
-         lxfvr0dNRcOq1nRZGt1xOqWWTqfefmmzok5s7rDzx5iJafGuX471NkayEQQyT/gn2StA
-         8X5U9fTfpEDzWwnczbC5/CjZv2OqJbZ5IFkJdaRCKh/4RM0ehnm2boRJtds8efqyjGUc
-         ubiBjZ8YYZkNbRPpUrKXIiR3ErqoBMaCFZ9pGkOTPjf6H4O9M0oZqrB4lZi/eBxLUDBn
-         e0jRIWJ2xmPYLSy2/aC/WzsROYhImJIh9UD/dF9JAgvsIIgflVYmBRjFy0KbnJQGQ4A2
-         27TQ==
-X-Gm-Message-State: AOAM532kwEL5o5fK07uBQ8GRL/yB9GnozjtYV4jj9nT7TjZrkvp9eOyL
-        cO1T8+0W/kiWKotx+L1UCzvbBTjbkdqVTg==
-X-Google-Smtp-Source: ABdhPJwi8ECnFjz7ftlBUkQP1U01xvcbaFwYmCvSxRCVadF/ZCBCreA9Xq0KVJGpteNV1tSqbtF8Eg==
-X-Received: by 2002:a17:90a:ce88:: with SMTP id g8mr13456163pju.116.1629353849006;
-        Wed, 18 Aug 2021 23:17:29 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id r18sm2222724pgk.54.2021.08.18.23.16.21
+        h=x-gm-message-state:mime-version:content-transfer-encoding:date
+         :message-id:cc:subject:from:to:references:in-reply-to;
+        bh=FudC1LQQgorqgCvY4YmEWsg2a7D4yTzNn6OmCaRWFF8=;
+        b=bc2mzvRuSeAjWoEZy9PBLs5+qmwGhDTb1Ipzo191bBnWeKl40kdES0TZinkK0xEzb0
+         qrPDufXy9ZJDv2idNFxb5hYE25rp/VgeD9EzyH50Lwsx5fyP4g9vQ3UGwIP/nudmr1K2
+         VVh/54ZKTKFsBA3+ZIeYm2kWhd3mStpC9JD5SV3LOYYpm+CcHny5+kvY7wVBdoQ1wb9F
+         A4TkPmZQLuypGxmRUDdjJBLhI4dQ6HJhtpk4nde4Cqcf/EnR6uajTP/AVztdW6WW2sDi
+         sXw5vSQbpghcBAuFkPgjlMcId12vXfbBgEbs3O/AKrMoLpWq7A7YO/NT9xwPmSxSoywO
+         Kepw==
+X-Gm-Message-State: AOAM533uSU/Nm0KQuVhq6lx53STBfYPKZ1CmZM4bUyEYg+Lmf3gURUdX
+        eWwBcTNpFPzv0Lc0GNxB2nHtvA==
+X-Google-Smtp-Source: ABdhPJyHPw1JbRQaWS4yW670LGqA408UI20FnIvo6ERH2XLCsItkmMTozTqL5eKEc4IViyJ32T5CPw==
+X-Received: by 2002:adf:fb8d:: with SMTP id a13mr2150945wrr.164.1629359258835;
+        Thu, 19 Aug 2021 00:47:38 -0700 (PDT)
+Received: from localhost (a109-49-46-234.cpe.netcabo.pt. [109.49.46.234])
+        by smtp.gmail.com with ESMTPSA id 2sm1802717wmo.38.2021.08.19.00.47.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Aug 2021 23:16:53 -0700 (PDT)
-Date:   Thu, 19 Aug 2021 11:46:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
-References: <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7>
- <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
- <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+        Thu, 19 Aug 2021 00:47:38 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 19 Aug 2021 08:47:37 +0100
+Message-Id: <CDNBNHH65Z6Z.3P3H9W04XAHDB@arch-thunder>
+Cc:     <clang-built-linux@googlegroups.com>, <kbuild-all@lists.01.org>,
+        <linux-usb@vger.kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Subject: Re: [usb:usb-testing 54/97]
+ drivers/usb/isp1760/isp1760-hcd.c:735:2: warning: Value stored to 'scratch'
+ is never read [clang-analyzer-deadcode.DeadStores]
+From:   "Rui Miguel Silva" <rui.silva@linaro.org>
+To:     "kernel test robot" <lkp@intel.com>
+References: <202108190619.wLK5u4fO-lkp@intel.com>
+In-Reply-To: <202108190619.wLK5u4fO-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 18-08-21, 18:55, Dmitry Osipenko wrote:
-> 18.08.2021 12:41, Ulf Hansson пишет:
-> 
-> Either way gives the equal result. The new callback allows to remove the
-> boilerplate dev_pm_opp_set_rate(clk_get_rate() code from the rpm-resume
-> of consumer devices, that's it.
+Hi,
+On Wed Aug 18, 2021 at 11:09 PM WEST, kernel test robot wrote:
 
-It may not be equal, as dev_pm_opp_set_rate() may do additional stuff,
-now or in a later implementation. Currently it only does
-regulator_enable() as a special case, but it can be clk_enable() as
-well. Also, this tries to solve the problem in a tricky/hacky way,
-while all you wanted was to make the genpd aware of what the
-performance state should be.
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git us=
+b-testing
+> head:   e4788edc730a0d2b26e1ae1f08fbb3f635b92dbb
+> commit: 7de14c88272c05d86fce83a5cead36832ce3a424 [54/97] usb: isp1760: re=
+move debug message as error
+> config: riscv-randconfig-c006-20210818 (attached as .config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d2b5=
+74a4dea5b718e4386bf2e26af0126e5978ce)
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install riscv cross compiling tool for clang build
+>         # apt-get install binutils-riscv64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/=
+commit/?id=3D7de14c88272c05d86fce83a5cead36832ce3a424
+>         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/gi=
+t/gregkh/usb.git
+>         git fetch --no-tags usb usb-testing
+>         git checkout 7de14c88272c05d86fce83a5cead36832ce3a424
+>         # save the attached .config to linux build tree
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross AR=
+CH=3Driscv clang-analyzer=20
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+>
+> clang-analyzer warnings: (new ones prefixed by >>)
+>                    ^      ~
+>    drivers/target/target_core_configfs.c:2627:23: warning: Value stored t=
+o 'alua_lu_gp_cg' during its initialization is never read [clang-analyzer-d=
+eadcode.DeadStores]
+>            struct config_group *alua_lu_gp_cg =3D &lu_gp->lu_gp_group;
+>                                 ^~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:2627:23: note: Value stored to '=
+alua_lu_gp_cg' during its initialization is never read
+>            struct config_group *alua_lu_gp_cg =3D &lu_gp->lu_gp_group;
+>                                 ^~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:2731:2: warning: Value stored to=
+ 'alua_lu_gp_ci' is never read [clang-analyzer-deadcode.DeadStores]
+>            alua_lu_gp_ci =3D &alua_lu_gp_cg->cg_item;
+>            ^               ~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:2731:2: note: Value stored to 'a=
+lua_lu_gp_ci' is never read
+>            alua_lu_gp_ci =3D &alua_lu_gp_cg->cg_item;
+>            ^               ~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:2748:25: warning: Value stored t=
+o 'lu_gp' during its initialization is never read [clang-analyzer-deadcode.=
+DeadStores]
+>            struct t10_alua_lu_gp *lu_gp =3D container_of(to_config_group(=
+item),
+>                                   ^~~~~
+>    drivers/target/target_core_configfs.c:2748:25: note: Value stored to '=
+lu_gp' during its initialization is never read
+>            struct t10_alua_lu_gp *lu_gp =3D container_of(to_config_group(=
+item),
+>                                   ^~~~~
+>    drivers/target/target_core_configfs.c:3026:23: warning: Value stored t=
+o 'alua_tg_pt_gp_cg' during its initialization is never read [clang-analyze=
+r-deadcode.DeadStores]
+>            struct config_group *alua_tg_pt_gp_cg =3D &tg_pt_gp->tg_pt_gp_=
+group;
+>                                 ^~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+>    drivers/target/target_core_configfs.c:3026:23: note: Value stored to '=
+alua_tg_pt_gp_cg' during its initialization is never read
+>            struct config_group *alua_tg_pt_gp_cg =3D &tg_pt_gp->tg_pt_gp_=
+group;
+>                                 ^~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+>    drivers/target/target_core_configfs.c:3163:2: warning: Value stored to=
+ 'alua_tg_pt_gp_ci' is never read [clang-analyzer-deadcode.DeadStores]
+>            alua_tg_pt_gp_ci =3D &alua_tg_pt_gp_cg->cg_item;
+>            ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:3163:2: note: Value stored to 'a=
+lua_tg_pt_gp_ci' is never read
+>            alua_tg_pt_gp_ci =3D &alua_tg_pt_gp_cg->cg_item;
+>            ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/target/target_core_configfs.c:3179:28: warning: Value stored t=
+o 'tg_pt_gp' during its initialization is never read [clang-analyzer-deadco=
+de.DeadStores]
+>            struct t10_alua_tg_pt_gp *tg_pt_gp =3D container_of(to_config_=
+group(item),
+>                                      ^~~~~~~~
+>    drivers/target/target_core_configfs.c:3179:28: note: Value stored to '=
+tg_pt_gp' during its initialization is never read
+>            struct t10_alua_tg_pt_gp *tg_pt_gp =3D container_of(to_config_=
+group(item),
+>                                      ^~~~~~~~
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    6 warnings generated.
+>    drivers/misc/eeprom/at24.c:334:2: warning: Value stored to 'client' is=
+ never read [clang-analyzer-deadcode.DeadStores]
+>            client =3D at24_client->client;
+>            ^        ~~~~~~~~~~~~~~~~~~~
+>    drivers/misc/eeprom/at24.c:334:2: note: Value stored to 'client' is ne=
+ver read
+>            client =3D at24_client->client;
+>            ^        ~~~~~~~~~~~~~~~~~~~
+>    drivers/misc/eeprom/at24.c:397:2: warning: Value stored to 'client' is=
+ never read [clang-analyzer-deadcode.DeadStores]
+>            client =3D at24_client->client;
+>            ^        ~~~~~~~~~~~~~~~~~~~
+>    drivers/misc/eeprom/at24.c:397:2: note: Value stored to 'client' is ne=
+ver read
+>            client =3D at24_client->client;
+>            ^        ~~~~~~~~~~~~~~~~~~~
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    5 warnings generated.
+>    drivers/usb/isp1760/isp1760-core.c:490:2: warning: Value stored to 'ud=
+c_enabled' is never read [clang-analyzer-deadcode.DeadStores]
+>            udc_enabled =3D ((devflags & ISP1760_FLAG_ISP1763) ||
+>            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/usb/isp1760/isp1760-core.c:490:2: note: Value stored to 'udc_e=
+nabled' is never read
+>            udc_enabled =3D ((devflags & ISP1760_FLAG_ISP1763) ||
+>            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    4 warnings generated.
+>    Suppressed 4 warnings (4 in non-user code).
+>    Use -header-filter=3D.* to display errors from all non-system headers.=
+ Use -system-headers to display errors from system headers as well.
+>    9 warnings generated.
+> >> drivers/usb/isp1760/isp1760-hcd.c:735:2: warning: Value stored to 'scr=
+atch' is never read [clang-analyzer-deadcode.DeadStores]
+>            scratch =3D isp1760_hcd_read(hcd, HC_CHIP_ID_HIGH);
+>            ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Your driver can break tomorrow if we started to do more stuff from
-this API at another time.
+yeah, this is desired behaviour, this read is only to make sure  that
+we make something different than the pattern to test go over the bus.
+However I will take a look to this warning and other clang warnings
+that I am seeing in this report.
 
-> > dev_pm_opp_set_rate() is best called from consumer drivers, as they
-> > need to be in control.
-> >> What we need here is just configure. So something like this then:
-> The intent wasn't to use dev_pm_opp_set_rate() from
-> __genpd_dev_pm_attach(), but to set genpd->rpm_pstate in accordance to
-> the h/w configuration.
-
-Right.
-
-> On Tegra we have a chain of PDs and it's not trivial to convert the
-> device's OPP into pstate because only the parent domain can translate
-> the required OPP.
-
-The driver should just be required to make a call, and OPP/genpd core
-should return it a value. This is already done today while setting the
-pstate for a device. The same frameworks must be able to supply a
-value to be used for the device.
-
-> Viresh, please take a look at what I did in [1]. Maybe it could be done
-> in another way.
-
-I looked into this and looked like too much trouble. The
-implementation needs to be simple. I am not sure I understand all the
-problems you faced while doing that, would be better to start with a
-simpler implementation of get_performance_state() kind of API for
-genpd, after the domain is attached and its OPP table is initialized.
-
-Note, that the OPP table isn't required to be fully initialized for
-the device at this point, we can parse the DT as well if needed be.
-
--- 
-viresh
+------
+Cheers,
+     Rui
