@@ -2,181 +2,102 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 615FB3F1C16
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 16:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4508E3F1C2A
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 17:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240607AbhHSO7w (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 10:59:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46758 "EHLO mail.kernel.org"
+        id S238161AbhHSPGS (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 11:06:18 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49434 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240563AbhHSO7u (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 10:59:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 004DE61053;
-        Thu, 19 Aug 2021 14:59:10 +0000 (UTC)
+        id S229612AbhHSPGQ (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 19 Aug 2021 11:06:16 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 12A5A6113D;
+        Thu, 19 Aug 2021 15:05:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629385151;
-        bh=3u5fV5W+DYzPMuMHRFgpF14TyLFyxVUqKgXoccP/CHw=;
+        s=korg; t=1629385539;
+        bh=LGZKmQwPGywDOK76NamejmfBRkmI5bWYX8EQHyNOtYA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AXUYZCBiqfXDjWoIORzIKoOCVd/D7VcN0rEiCjMWmM81rxRtn9HULyW8YK1sE4oX4
-         jNyiI72aq7m1AYJmSqOrQrOTqSZY7riR8ePp7qm8g5K4cMbE8t18brxNMfCmPXr8ni
-         Ergjw2yuBOZ3SYdQFDxwBrcZq/YMY4n8qDZXwBoY=
-Date:   Thu, 19 Aug 2021 16:59:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rui Miguel Silva <rui.silva@linaro.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        clang-built-linux@googlegroups.com, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 54/97] drivers/usb/isp1760/isp1760-hcd.c:735:2:
- warning: Value stored to 'scratch' is never read
- [clang-analyzer-deadcode.DeadStores]
-Message-ID: <YR5xuManlukIAf3L@kroah.com>
-References: <202108190619.wLK5u4fO-lkp@intel.com>
- <CDNBNHH65Z6Z.3P3H9W04XAHDB@arch-thunder>
+        b=oFMkEnqsoWtwZiEbZiGpyS0Cg4duOAjVf+cB88adbS/SQPyw/B0t6tB4HsKmsV5T9
+         xfHrzvrYdKScH/pudb7r5Encmn61xEI0bjk83hVcUB0NF13czFCdXjkRBYo/bXuGR6
+         cveAfJS3wou7w5lghZrKJYZoecX+XIhnUfe9WvV4=
+Date:   Thu, 19 Aug 2021 17:05:36 +0200
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     Chunfeng Yun =?utf-8?B?KOS6keaYpeWzsCk=?= 
+        <Chunfeng.Yun@mediatek.com>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "ikjn@chromium.org" <ikjn@chromium.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+Subject: Re: [PATCH] usb: xhci-mtk: Do not use xhci's virt_dev in
+ drop_endpoint
+Message-ID: <YR5zQD8dFWsXu5Ns@kroah.com>
+References: <20210805133731.1.Icc0f080e75b1312692d4c7c7d25e7df9fe1a05c2@changeid>
+ <2593ac262cdf0088e937b9fbc907bb23a6736fb5.camel@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CDNBNHH65Z6Z.3P3H9W04XAHDB@arch-thunder>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2593ac262cdf0088e937b9fbc907bb23a6736fb5.camel@mediatek.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 19, 2021 at 08:47:37AM +0100, Rui Miguel Silva wrote:
-> Hi,
-> On Wed Aug 18, 2021 at 11:09 PM WEST, kernel test robot wrote:
+On Thu, Aug 19, 2021 at 11:56:59AM +0000, Chunfeng Yun (云春峰) wrote:
+> Hi Greg,
 > 
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-> > head:   e4788edc730a0d2b26e1ae1f08fbb3f635b92dbb
-> > commit: 7de14c88272c05d86fce83a5cead36832ce3a424 [54/97] usb: isp1760: remove debug message as error
-> > config: riscv-randconfig-c006-20210818 (attached as .config)
-> > compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project d2b574a4dea5b718e4386bf2e26af0126e5978ce)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install riscv cross compiling tool for clang build
-> >         # apt-get install binutils-riscv64-linux-gnu
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?id=7de14c88272c05d86fce83a5cead36832ce3a424
-> >         git remote add usb https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-> >         git fetch --no-tags usb usb-testing
-> >         git checkout 7de14c88272c05d86fce83a5cead36832ce3a424
-> >         # save the attached .config to linux build tree
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross ARCH=riscv clang-analyzer 
-> >
-> > If you fix the issue, kindly add following tag as appropriate
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> >
-> > clang-analyzer warnings: (new ones prefixed by >>)
-> >                    ^      ~
-> >    drivers/target/target_core_configfs.c:2627:23: warning: Value stored to 'alua_lu_gp_cg' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-> >            struct config_group *alua_lu_gp_cg = &lu_gp->lu_gp_group;
-> >                                 ^~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:2627:23: note: Value stored to 'alua_lu_gp_cg' during its initialization is never read
-> >            struct config_group *alua_lu_gp_cg = &lu_gp->lu_gp_group;
-> >                                 ^~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:2731:2: warning: Value stored to 'alua_lu_gp_ci' is never read [clang-analyzer-deadcode.DeadStores]
-> >            alua_lu_gp_ci = &alua_lu_gp_cg->cg_item;
-> >            ^               ~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:2731:2: note: Value stored to 'alua_lu_gp_ci' is never read
-> >            alua_lu_gp_ci = &alua_lu_gp_cg->cg_item;
-> >            ^               ~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:2748:25: warning: Value stored to 'lu_gp' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-> >            struct t10_alua_lu_gp *lu_gp = container_of(to_config_group(item),
-> >                                   ^~~~~
-> >    drivers/target/target_core_configfs.c:2748:25: note: Value stored to 'lu_gp' during its initialization is never read
-> >            struct t10_alua_lu_gp *lu_gp = container_of(to_config_group(item),
-> >                                   ^~~~~
-> >    drivers/target/target_core_configfs.c:3026:23: warning: Value stored to 'alua_tg_pt_gp_cg' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-> >            struct config_group *alua_tg_pt_gp_cg = &tg_pt_gp->tg_pt_gp_group;
-> >                                 ^~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:3026:23: note: Value stored to 'alua_tg_pt_gp_cg' during its initialization is never read
-> >            struct config_group *alua_tg_pt_gp_cg = &tg_pt_gp->tg_pt_gp_group;
-> >                                 ^~~~~~~~~~~~~~~~   ~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:3163:2: warning: Value stored to 'alua_tg_pt_gp_ci' is never read [clang-analyzer-deadcode.DeadStores]
-> >            alua_tg_pt_gp_ci = &alua_tg_pt_gp_cg->cg_item;
-> >            ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:3163:2: note: Value stored to 'alua_tg_pt_gp_ci' is never read
-> >            alua_tg_pt_gp_ci = &alua_tg_pt_gp_cg->cg_item;
-> >            ^                  ~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/target/target_core_configfs.c:3179:28: warning: Value stored to 'tg_pt_gp' during its initialization is never read [clang-analyzer-deadcode.DeadStores]
-> >            struct t10_alua_tg_pt_gp *tg_pt_gp = container_of(to_config_group(item),
-> >                                      ^~~~~~~~
-> >    drivers/target/target_core_configfs.c:3179:28: note: Value stored to 'tg_pt_gp' during its initialization is never read
-> >            struct t10_alua_tg_pt_gp *tg_pt_gp = container_of(to_config_group(item),
-> >                                      ^~~~~~~~
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    6 warnings generated.
-> >    drivers/misc/eeprom/at24.c:334:2: warning: Value stored to 'client' is never read [clang-analyzer-deadcode.DeadStores]
-> >            client = at24_client->client;
-> >            ^        ~~~~~~~~~~~~~~~~~~~
-> >    drivers/misc/eeprom/at24.c:334:2: note: Value stored to 'client' is never read
-> >            client = at24_client->client;
-> >            ^        ~~~~~~~~~~~~~~~~~~~
-> >    drivers/misc/eeprom/at24.c:397:2: warning: Value stored to 'client' is never read [clang-analyzer-deadcode.DeadStores]
-> >            client = at24_client->client;
-> >            ^        ~~~~~~~~~~~~~~~~~~~
-> >    drivers/misc/eeprom/at24.c:397:2: note: Value stored to 'client' is never read
-> >            client = at24_client->client;
-> >            ^        ~~~~~~~~~~~~~~~~~~~
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    5 warnings generated.
-> >    drivers/usb/isp1760/isp1760-core.c:490:2: warning: Value stored to 'udc_enabled' is never read [clang-analyzer-deadcode.DeadStores]
-> >            udc_enabled = ((devflags & ISP1760_FLAG_ISP1763) ||
-> >            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    drivers/usb/isp1760/isp1760-core.c:490:2: note: Value stored to 'udc_enabled' is never read
-> >            udc_enabled = ((devflags & ISP1760_FLAG_ISP1763) ||
-> >            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    4 warnings generated.
-> >    Suppressed 4 warnings (4 in non-user code).
-> >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> >    9 warnings generated.
-> > >> drivers/usb/isp1760/isp1760-hcd.c:735:2: warning: Value stored to 'scratch' is never read [clang-analyzer-deadcode.DeadStores]
-> >            scratch = isp1760_hcd_read(hcd, HC_CHIP_ID_HIGH);
-> >            ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> On Thu, 2021-08-05 at 13:37 +0800, Ikjoon Jang wrote:
+> > xhci-mtk depends on xhci's internal virt_dev when it retrieves its
+> > internal data from usb_host_endpoint both in add_endpoint and
+> > drop_endpoint callbacks. But when setup packet was retired by
+> > transaction errors in xhci_setup_device() path, a virt_dev for the
+> > slot
+> > is newly created with real_port 0. This leads to xhci-mtks's NULL
+> > pointer
+> > dereference from drop_endpoint callback as xhci-mtk assumes that
+> > virt_dev's
+> > real_port is always started from one. The similar problems were
+> > addressed
+> > by [1] but that can't cover the failure cases from setup_device.
+> > 
+> > This patch drops the usages of xhci's virt_dev in xhci-mtk's
+> > drop_endpoint
+> > callback by adopting rhashtable for searching mtk's schedule entity
+> > from a given usb_host_endpoint pointer instead of searching a linked
+> > list.
+> > So mtk's drop_endpoint callback doesn't have to rely on virt_dev at
+> > all.
+> > 
+> > [1] 
+> > https://lore.kernel.org/r/1617179142-2681-2-git-send-email-chunfeng.yun@mediatek.com
+> > 
+> > Signed-off-by: Ikjoon Jang <ikjn@chromium.org>
+> > ---
+> > 
+> >  drivers/usb/host/xhci-mtk-sch.c | 140 ++++++++++++++++++----------
+> > ----
+> >  drivers/usb/host/xhci-mtk.h     |  15 ++--
+> >  2 files changed, 86 insertions(+), 69 deletions(-)
+> > 
+> > diff --git a/drivers/usb/host/xhci-mtk-sch.c b/drivers/usb/host/xhci-
+> > mtk-sch.c
+> > index cffcaf4dfa9f..f9b4d27ce449 100644
+> > --- a/drivers/usb/host/xhci-mtk-sch.c
+> > +++ b/drivers/usb/host/xhci-mtk-sch.c
+> > 
 > 
-> yeah, this is desired behaviour, this read is only to make sure  that
-> we make something different than the pattern to test go over the bus.
-> However I will take a look to this warning and other clang warnings
-> that I am seeing in this report.
+> I see the patch is already in usb-next branch, but find some new bugs
+> introduced after I test it (one NULL point dereference oops, two memory
+> leakage due to no error handling). 
+> What do I need to do? revert this patch then send new version or just
+> send fix patches?
 
-This is why I hate this type of warning, doing a read like this is
-totally normal for drivers.  Compilers that think this is something they
-can ignore or warn about are just wrong.
+Which ever you want to do is fine with me.
+
+thanks,
 
 greg k-h
