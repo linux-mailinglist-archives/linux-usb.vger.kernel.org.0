@@ -2,144 +2,136 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA3B3F1A24
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 15:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85B83F1A3E
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 15:21:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbhHSNQV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 09:16:21 -0400
-Received: from mga09.intel.com ([134.134.136.24]:37034 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234695AbhHSNQU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 19 Aug 2021 09:16:20 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10080"; a="216545076"
-X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
-   d="scan'208";a="216545076"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 06:15:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,334,1620716400"; 
-   d="scan'208";a="471884141"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 19 Aug 2021 06:15:41 -0700
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Lokesh Vutla <lokeshvutla@ti.com>
-References: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [QUERY] Cold plugged USB device to Inateck PCIE USB card is not
- detected
-Message-ID: <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
-Date:   Thu, 19 Aug 2021 16:18:12 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S239996AbhHSNWB (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 09:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239300AbhHSNV4 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 09:21:56 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC434C061575;
+        Thu, 19 Aug 2021 06:21:19 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id q11so9100891wrr.9;
+        Thu, 19 Aug 2021 06:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xtcA0Q51Ab2gDUHvKWadMAS32FJIwcbf7uqdag4aFgw=;
+        b=lz3AxdkSOdaxsff8Al6AfTWQciSBbKeqxN29m/KMRbWKXw4/fgyKk+WmJ3QyUOixzN
+         4y+KG309qv8rkghhhHNRjVwzQahlcuEF8Doq0LiHQSzU/UrguSZVcFsLMmJayxgm0ij7
+         DqTbzqfCmAxDcIkhQyStvyWV+ku8uSeeX7dE8YJzyIVUpP80wgthC25SMYweNXtTQxd2
+         jUYpv3DiHYgCuk8SxMaErfJkgf/6GXvet2x/3DRJNApy/VuzLhZHOeod4kvyeZkQA9ku
+         C/I1gCo8fSlZRTkrqgpt1DYoLIzTdJHzUmyJQGy3YGKvzsZRU31V8uTvRHxX3uAQWw49
+         Yagw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xtcA0Q51Ab2gDUHvKWadMAS32FJIwcbf7uqdag4aFgw=;
+        b=ec2arA6UGQuuK+E19eRhCy1Gac+xrs2HZApSdTwzjhj5MUGqZGL1Ni6E11AcdmcfCJ
+         TYYkrsV1isYBUjtgV4OE14tqPCioNuFTfGa3KcZvHlQHEWI2JX9EqRpRSNKchsGUN8uX
+         RlUPmc5/Sb6A2GUa7GcYOWOuxU+XHFAegk/JHArWWatg9q1Nd9V7y1B4heLzBrjrlKgY
+         aH3RzaTmGhbRrvS57IvC3nZaUK9q1vZcQvMe3qSKnp6ArVS4pjUJO3tQuBi6yO8ZmJWo
+         Lpkj3H6xvmrE2cNJFVx53CWxroXdzLIsnwyavfM38jQ2eocqcRZbtypI6CGFfRMe8hrr
+         Ogjg==
+X-Gm-Message-State: AOAM533/8TZ0OcyLCuY4Xv+tYkmPZyqKlK3LH/phdjxpMYYbE4NRVvu/
+        s4E9pz+c1c4cPJ4W2/otOqE=
+X-Google-Smtp-Source: ABdhPJz39Bt2kVM50Mk8FByewEg3lcDVqz/jK/N/qbprIAZwm7opqauve4ARpLRYoIa5SH1Y+OoKXw==
+X-Received: by 2002:a5d:4c87:: with SMTP id z7mr3961844wrs.284.1629379278262;
+        Thu, 19 Aug 2021 06:21:18 -0700 (PDT)
+Received: from localhost ([217.111.27.204])
+        by smtp.gmail.com with ESMTPSA id l17sm7319377wmq.44.2021.08.19.06.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Aug 2021 06:21:16 -0700 (PDT)
+Date:   Thu, 19 Aug 2021 15:21:15 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Jonathan Hunter <jonathanh@nvidia.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v8 19/34] pwm: tegra: Add runtime PM and OPP support
+Message-ID: <YR5ay6+r0hJsUbhy@orome.fritz.box>
+References: <20210817012754.8710-1-digetx@gmail.com>
+ <20210817012754.8710-20-digetx@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vMbaQMXyoWqaG8Xh"
+Content-Disposition: inline
+In-Reply-To: <20210817012754.8710-20-digetx@gmail.com>
+User-Agent: Mutt/2.1.1 (e2a89abc) (2021-07-12)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19.8.2021 10.54, Kishon Vijay Abraham I wrote:
-> Hi All,
-> 
-> I was trying to test PCIe USB card (Inateck) connected to AM64 EVM and
-> J7200 EVM. Inateck uses Renesas uPD720201 USB3 host controller.
-> 
-> So if I connect USB pendrive and then boot the board (cold plug), I
-> don't see the pendrive getting detected. But if I remove and plug it
-> again, it gets detected.
-> 
-> For the cold plug case, I see this message
-> 	"usb usb1-port3: couldn't allocate usb_device"
-> 
-> It actually fails in
-> xhci_alloc_dev()->xhci_queue_slot_control()->queue_command()->XHCI_STATE_HALTED
-> 
-> I'm not familiar with xhci but it looks like port event is invoked
-> before the controller is fully initialized (?).
 
-Maybe this controller is capable of generating interrupts before it's running?
- 
-> 
-> I tried the following hack which kind of changes the sequence where
-> xhci_start() and xhci_run_finished() is invoked before port_event() and
-> with that I could see the pendrive enumerate successfully in cold plug case.
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 228e3d4e1a9f..d19f27c46c6f 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -1077,7 +1077,7 @@ static void hub_activate(struct usb_hub *hub, enum
-> hub_activation_type type)
->                         INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
->                         queue_delayed_work(system_power_efficient_wq,
->                                         &hub->init_work,
-> -                                       msecs_to_jiffies(delay));
-> +                                       msecs_to_jiffies(150));
-> 
->                         /* Suppress autosuspend until init is done */
->                         usb_autopm_get_interface_no_resume(
-> 
-> Irrespective of the delay the port status looks correct and the modified
-> delay only helps to change the flow.
-> 
-> Adding other prints and delays also change the sequence and seems to
-> detect the connected pendrive.
-> 
-> Can someone provide hints on how to fix this properly?
+--vMbaQMXyoWqaG8Xh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Either keep xHC interrupts disabled until second (usb3) hcd is added, and
-host is running. (haven't thought about side effects yet)
-Or make sure we don't start polling the usb2 roothub until host is running.
+On Tue, Aug 17, 2021 at 04:27:39AM +0300, Dmitry Osipenko wrote:
+> The PWM on Tegra belongs to the core power domain and we're going to
+> enable GENPD support for the core domain. Now PWM must be resumed using
+> runtime PM API in order to initialize the PWM power state. The PWM clock
+> rate must be changed using OPP API that will reconfigure the power domain
+> performance state in accordance to the rate. Add runtime PM and OPP
+> support to the PWM driver.
+>=20
+> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+> ---
+>  drivers/pwm/pwm-tegra.c | 104 ++++++++++++++++++++++++++++++++--------
+>  1 file changed, 85 insertions(+), 19 deletions(-)
 
-Below code should return before port event handler starts roothub polling if 
-any xhci->xhc_state flag is set. 
-Untested, does it work for you?
+Can this be safely applied independently of the rest of the series, or
+are there any dependencies on earlier patches?
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index e676749f543b..9f4cc5c87b27 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2024,6 +2024,8 @@ static void handle_port_status(struct xhci_hcd *xhci,
-        if (bogus_port_status)
-                return;
- 
-+       if (xhci->xhc_state != 0)
-+               return;
-        /*
-         * xHCI port-status-change events occur when the "or" of all the
-         * status-change bits in the portsc register changes from 0 to 1.
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index f3dabd02382c..b171558956dd 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -646,9 +646,15 @@ int xhci_run(struct usb_hcd *hcd)
-         */
- 
-        hcd->uses_new_polling = 1;
--       if (!usb_hcd_is_primary_hcd(hcd))
--               return xhci_run_finished(xhci);
--
-+       if (!usb_hcd_is_primary_hcd(hcd)) {
-+               ret = xhci_run_finished(xhci);
-+               if (ret)
-+                       return ret;
-+               /* start polling usb2 roothub */
-+               set_bit(HCD_FLAG_POLL_RH, &xhci->main_hcd->flags);
-+               usb_hcd_poll_rh_status(xhci->main_hcd);
-+               return ret;
-+       }
-        xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xhci_run");
- 
-        ret = xhci_try_enable_msi(hcd);
+Thierry
 
-Thanks
--Mathias
+--vMbaQMXyoWqaG8Xh
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmEeWskACgkQ3SOs138+
+s6GqkA//VEToPW4lCrJibs4kkno3t/HJrCc3QIgrT3KY7KgdOtg6fmvLz/8Bjja0
+ut1YS/ozbt7FAgaf8YTyKMFOo8dv21DBdpit0bIWZWYvwh6P2SKB3p+1cFVN9jHZ
+lXkRdCUVYqPSGJ2tEHZ6WZBA8KGc198UL3n5PzUQZhh4jRWgfXNLsI2Trp3uwr+T
+9/v/xWmil3wiFAgf8H6GLwZ/M3+O9Q32eq6QI0SZOiE/Lj9mwPdZQXixXgDDk2td
+dU/CQgmygPCYlcpVcwC1gmvzWcQp6Bffa/3xaRR2vIjSSZtjshQ08B01OOM3Wr/G
+qcghnLX0Q3QooNx6alRRv+P1SZXW8u7xcL0HysovbD8IDpOgLBJYXo8IaCHfSlyF
+EVVRXB8gMIQip8taMkL6jRVExNuNFDuIs6i2b/KaP2cd2p1mePZw1kS4vf8NJHX6
+mJFe0u8P5aik2tEnXP4/M9J9+ZtMLxnRTqB3aK+chmG/KUA66hyMjM3DeEnxfIBL
+6YcKjFjKUXVviacmnu+9PDPO4g43XS0M5um6eTtGYkV76kF/KlPYtLuLJG80QIgv
+njHN5UN2AgTwaeSZYbDjZ/ldsO9H0aedYvFSyXUQio9GvHSws9WeJD+FVdXKmODO
+mS+oMleXMvwiTrWNXKoEG5mTYd2GjUZ7mHsN36quci2pc+ZmYSE=
+=0tJv
+-----END PGP SIGNATURE-----
+
+--vMbaQMXyoWqaG8Xh--
