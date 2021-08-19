@@ -2,82 +2,65 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B33F1C30
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 17:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D053F1C3F
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Aug 2021 17:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239300AbhHSPHJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 11:07:09 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:48383 "HELO
+        id S238778AbhHSPKY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 11:10:24 -0400
+Received: from netrider.rowland.org ([192.131.102.5]:34649 "HELO
         netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S238292AbhHSPHI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 11:07:08 -0400
-Received: (qmail 229339 invoked by uid 1000); 19 Aug 2021 11:06:30 -0400
-Date:   Thu, 19 Aug 2021 11:06:30 -0400
+        with SMTP id S233416AbhHSPKX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 11:10:23 -0400
+Received: (qmail 229553 invoked by uid 1000); 19 Aug 2021 11:09:46 -0400
+Date:   Thu, 19 Aug 2021 11:09:46 -0400
 From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Rui Miguel Silva <rui.silva@linaro.org>,
-        kernel test robot <lkp@intel.com>,
-        clang-built-linux@googlegroups.com, kbuild-all@lists.01.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [usb:usb-testing 54/97] drivers/usb/isp1760/isp1760-hcd.c:735:2:
- warning: Value stored to 'scratch' is never read
- [clang-analyzer-deadcode.DeadStores]
-Message-ID: <20210819150630.GB228422@rowland.harvard.edu>
-References: <202108190619.wLK5u4fO-lkp@intel.com>
- <CDNBNHH65Z6Z.3P3H9W04XAHDB@arch-thunder>
- <YR5xuManlukIAf3L@kroah.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+Subject: Re: [QUERY] Cold plugged USB device to Inateck PCIE USB card is not
+ detected
+Message-ID: <20210819150946.GC228422@rowland.harvard.edu>
+References: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
+ <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YR5xuManlukIAf3L@kroah.com>
+In-Reply-To: <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Thu, Aug 19, 2021 at 04:59:04PM +0200, Greg Kroah-Hartman wrote:
-> On Thu, Aug 19, 2021 at 08:47:37AM +0100, Rui Miguel Silva wrote:
-> > Hi,
-> > On Wed Aug 18, 2021 at 11:09 PM WEST, kernel test robot wrote:
-
-> > >    drivers/usb/isp1760/isp1760-core.c:490:2: warning: Value stored to 'udc_enabled' is never read [clang-analyzer-deadcode.DeadStores]
-> > >            udc_enabled = ((devflags & ISP1760_FLAG_ISP1763) ||
-> > >            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    drivers/usb/isp1760/isp1760-core.c:490:2: note: Value stored to 'udc_enabled' is never read
-> > >            udc_enabled = ((devflags & ISP1760_FLAG_ISP1763) ||
-> > >            ^             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >    Suppressed 4 warnings (4 in non-user code).
-> > >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> > >    4 warnings generated.
-> > >    Suppressed 4 warnings (4 in non-user code).
-> > >    Use -header-filter=.* to display errors from all non-system headers. Use -system-headers to display errors from system headers as well.
-> > >    9 warnings generated.
-> > > >> drivers/usb/isp1760/isp1760-hcd.c:735:2: warning: Value stored to 'scratch' is never read [clang-analyzer-deadcode.DeadStores]
-> > >            scratch = isp1760_hcd_read(hcd, HC_CHIP_ID_HIGH);
-> > >            ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Thu, Aug 19, 2021 at 04:18:12PM +0300, Mathias Nyman wrote:
+> On 19.8.2021 10.54, Kishon Vijay Abraham I wrote:
+> > Hi All,
 > > 
-> > yeah, this is desired behaviour, this read is only to make sure  that
-> > we make something different than the pattern to test go over the bus.
-> > However I will take a look to this warning and other clang warnings
-> > that I am seeing in this report.
+> > I was trying to test PCIe USB card (Inateck) connected to AM64 EVM and
+> > J7200 EVM. Inateck uses Renesas uPD720201 USB3 host controller.
+> > 
+> > So if I connect USB pendrive and then boot the board (cold plug), I
+> > don't see the pendrive getting detected. But if I remove and plug it
+> > again, it gets detected.
+> > 
+> > For the cold plug case, I see this message
+> > 	"usb usb1-port3: couldn't allocate usb_device"
+> > 
+> > It actually fails in
+> > xhci_alloc_dev()->xhci_queue_slot_control()->queue_command()->XHCI_STATE_HALTED
+> > 
+> > I'm not familiar with xhci but it looks like port event is invoked
+> > before the controller is fully initialized (?).
 > 
-> This is why I hate this type of warning, doing a read like this is
-> totally normal for drivers.  Compilers that think this is something they
-> can ignore or warn about are just wrong.
+> Maybe this controller is capable of generating interrupts before it's running?
 
-No, no.  The compiler isn't complaining about the call to 
-isp1760_hcd_read(); it's complaining about the fact that scratch 
-stores the return value.  Since the value isn't used anywhere, there's 
-no point in storing it.
+Mathias and Kishon:
 
-You can get rid of the warning by changing the line to:
+Note that this issue has also been reported in Bugzilla:
 
-		(void) isp1760_hcd_read(hcd, HC_CHIP_ID_HIGH);
-
-(The (void) cast isn't really necessary; it's just there to point out 
-that the return value is being thrown away.  You can omit it if you 
-prefer.)
-
-Likewise for the store to udc_enabled.
+	https://bugzilla.kernel.org/show_bug.cgi?id=214021
 
 Alan Stern
