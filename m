@@ -2,41 +2,43 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7136E3F29DC
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 12:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 786F53F29E0
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 12:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238358AbhHTKFM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 06:05:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53224 "EHLO mail.kernel.org"
+        id S237085AbhHTKHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 06:07:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55966 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237855AbhHTKFI (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Aug 2021 06:05:08 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 04CCE610CB;
-        Fri, 20 Aug 2021 10:04:29 +0000 (UTC)
+        id S232244AbhHTKHl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Aug 2021 06:07:41 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DD9476024A;
+        Fri, 20 Aug 2021 10:07:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629453871;
-        bh=JDnp7UIPiqVNjPvMlnATziLdqexyPnGYwwb24ozdIxY=;
+        s=k20201202; t=1629454024;
+        bh=4wOWt2TLJnChpQZUoUnZ7pdN3g/0c/c11ETk2UqFr7w=;
         h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=sI0dYDkntHeODz5fJCMMNRNXWma7Qu1dapE1Uuj+36DvhmchUtAixomwoc19xT6a9
-         KQOyG044YP8ND39iir0lM4Q8EV+YPnEMvDVdZeo11igvPbehPnXQvgf0HxknhNfVJA
-         Bc7iwcnjlYbVcKDgckcz7yakwZNl5xBHAmlGZzih0UeM5FvUxgveZVQJ1Qn4YDKr8i
-         f1Cc/J2DfIg6RPNBMxgFFxlttXRGPxWOwLelTabN4xdrsPdMLJlcRtjczXxs1QooZY
-         qimw3FNDPfXrr3TJeNqsonjShJwm8045E/EbPY1g66/hd3N9j2mPVjyPj+0yxeoeOJ
-         xT5yNQyPU7UKQ==
-References: <e91e975affb0d0d02770686afc3a5b9eb84409f6.1629335416.git.Thinh.Nguyen@synopsys.com>
- <87h7fmf14r.fsf@kernel.org>
- <bba2b747-dc16-5ad8-b80b-c8fb6b11a3d3@synopsys.com>
+        b=Z9iuAsW3c17hodu6Hgq6226o2iKkjrnDSLYW/eEIFf5COL+zNpvEOaf49CqrpDiMp
+         2VtLuppafClyPPIzOHDdpOxerJxfrGOH0DncrlkR5dtR6Yd2Ki2g8+XklrDzt5snOt
+         sAABGBYzV6REPEMdCg9yNSZ2vq23ArlwH2s0atAN0G0J9Q/WLpOclelAGDEpPSyW7W
+         HUoSYTBIu6Zkw2IWj7XOqt7ZHe9+vRaILNXUDYrw7NW8VM1j38hegdj8zM3kHNy3aZ
+         ivfRB1sb46h9nrBsIdVGD1h99d4LI5ZTLXQ/A31qv1hDldEejZgPyVpusnr6ksjEU0
+         wGlW/8wThl4Cg==
+References: <20210819154818.18334-1-lutovinova@ispras.ru>
 User-agent: mu4e 1.6.3; emacs 27.2
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To:     Nadezda Lutovinova <lutovinova@ispras.ru>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        John Youn <John.Youn@synopsys.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: dwc3: gadget: Fix dwc3_calc_trbs_left()
-Date:   Fri, 20 Aug 2021 13:04:15 +0300
-In-reply-to: <bba2b747-dc16-5ad8-b80b-c8fb6b11a3d3@synopsys.com>
-Message-ID: <87bl5sfn4k.fsf@kernel.org>
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
+Subject: Re: [PATCH] usb: dwc3: imx8mp: request irq after initializing dwc3
+Date:   Fri, 20 Aug 2021 13:06:33 +0300
+In-reply-to: <20210819154818.18334-1-lutovinova@ispras.ru>
+Message-ID: <878s0wfn0c.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -44,73 +46,18 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
+Nadezda Lutovinova <lutovinova@ispras.ru> writes:
 
-> Felipe Balbi wrote:
->> 
->> Hi,
->> 
->> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>> We can't depend on the TRB's HWO bit to determine if the TRB ring is
->>> "full". A TRB is only available when the driver had processed it, not
->>> when the controller consumed and relinquished the TRB's ownership to the
->>> driver. Otherwise, the driver may overwrite unprocessed TRBs. This can
->>> happen when many transfer events accumulate and the system is slow to
->>> process them and/or when there are too many small requests.
->>>
->>> If a request is in the started_list, that means there is one or more
->>> unprocessed TRBs remained. Check this instead of the TRB's HWO bit
->>> whether the TRB ring is full.
->>>
->>> Cc: <stable@vger.kernel.org>
->>> Fixes: c4233573f6ee ("usb: dwc3: gadget: prepare TRBs on update transfers too")
->>> Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>> ---
->>>  drivers/usb/dwc3/gadget.c | 16 ++++++++--------
->>>  1 file changed, 8 insertions(+), 8 deletions(-)
->>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index 84fe57ef5a49..1e6ddbc986ba 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -940,19 +940,19 @@ static struct dwc3_trb *dwc3_ep_prev_trb(struct dwc3_ep *dep, u8 index)
->>>  
->>>  static u32 dwc3_calc_trbs_left(struct dwc3_ep *dep)
->>>  {
->>> -	struct dwc3_trb		*tmp;
->>>  	u8			trbs_left;
->>>  
->>>  	/*
->>> -	 * If enqueue & dequeue are equal than it is either full or empty.
->>> -	 *
->>> -	 * One way to know for sure is if the TRB right before us has HWO bit
->>> -	 * set or not. If it has, then we're definitely full and can't fit any
->>> -	 * more transfers in our ring.
->>> +	 * If the enqueue & dequeue are equal then the TRB ring is either full
->>> +	 * or empty. It's considered full when there are DWC3_TRB_NUM-1 of TRBs
->>> +	 * pending to be processed by the driver.
->>>  	 */
->>>  	if (dep->trb_enqueue == dep->trb_dequeue) {
->>> -		tmp = dwc3_ep_prev_trb(dep, dep->trb_enqueue);
->>> -		if (tmp->ctrl & DWC3_TRB_CTRL_HWO)
->>> +		/*
->>> +		 * If there is any request remained in the started_list at
->>> +		 * this point, that means there is no TRB available.
->>> +		 */
->>> +		if (!list_empty(&dep->started_list))
->>>  			return 0;
->> 
->> we could also do away with calc_trbs_left() completely if we just add an
->> actual counter that gets incremented decremented together with the
->> enqueue/dequeue pointers. Since we have 256 TRBs per endpoint and only
->> 255 are usable, this means we can do away with a single u8 per
->> endpoint. Perhaps that could be done as a second step after this fix is
->> merged?
->> 
+> If IRQ occurs between calling  devm_request_threaded_irq() and
+> initializing dwc3_imx->dwc3, then null pointer dereference occurs
+> since dwc3_imx->dwc3 is used in dwc3_imx8mp_interrupt().
 >
-> Yes, that would simplify the logic. We can do that after merging this fix.
-
-sounds good:
+> The patch puts registration of the interrupt handler after
+> initializing of neccesery data.
+>
+> Found by Linux Driver Verification project (linuxtesting.org).
+>
+> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
 
 Acked-by: Felipe Balbi <balbi@kernel.org>
 
