@@ -2,414 +2,226 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D643F251C
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 05:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09EF23F2566
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 05:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238007AbhHTDGp (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 19 Aug 2021 23:06:45 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:61247 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237998AbhHTDGo (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 23:06:44 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629428767; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=MjmFggYS7qH9PXrSVYM4MCwUzYBkkJt8nYIWY3Zm7Bw=; b=qcWzzBTxOrLTzlxRyZklnF59TIIrkXTZn97dFAznLBda+sP/urpoJcV/ULnFm91EZnDObN31
- 2vQwRRh9rwF1SygxUVcR+V7/sQbhWQYJxsOLXqDp1+0jofyqnsaqM8ilNel2VyQ0sxyeTmr9
- u8z5AxSLEuTJy/gNb2NO4pKz9EI=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 611f1c0d1a9008a23e1f73a2 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 20 Aug 2021 03:05:49
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 9E975C4360C; Fri, 20 Aug 2021 03:05:49 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.5 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0B708C4338F;
-        Fri, 20 Aug 2021 03:05:46 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0B708C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [RFC][PATCH] usb: dwc3: usb: dwc3: Force stop EP0 transfers
- during pullup disable
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Felipe Balbi <balbi@kernel.org>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        id S235156AbhHTDiu (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 19 Aug 2021 23:38:50 -0400
+Received: from mailgw01.mediatek.com ([60.244.123.138]:51118 "EHLO
+        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234832AbhHTDir (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 19 Aug 2021 23:38:47 -0400
+X-UUID: 6cd92cac53f949f5822bcf6e96125999-20210820
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=tcOiEStKRrox9Amq2VzhgvY9ppzOabv0hG2Da01URtA=;
+        b=fkMwHovSJFcwNvh0bokr89f6l5fYGcaSeHspkvZShNHwWsTNgMtgZ44GtEtJlfBkGHeXQ85DQ+kcB3Bqp0Yj+VsAuqqmz6qeZi/Cbi6ZF74WVYHaUQ4WyrHJgZz8nHgMIMorxkwVC3uCuxFuFp4DsTCH0U1kE6gubglmousFq1Q=;
+X-UUID: 6cd92cac53f949f5822bcf6e96125999-20210820
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1688833049; Fri, 20 Aug 2021 11:38:07 +0800
+Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
+ mtkmbs06n2.mediatek.inc (172.21.101.130) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 20 Aug 2021 11:38:06 +0800
+Received: from APC01-HK2-obe.outbound.protection.outlook.com (172.21.101.239)
+ by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 20 Aug 2021 11:38:06 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TO8ooZpKoD3ArmWG3SGBSyW2IDdbt3NLKt+qBOo3v0OCeF5XYLA7oFyxMXo5PlewqlBT7gg1PT8DK6116mXDbbNDXLDZXAf9A5rEzSqh+YNprkUTU7NrMV3DxSKLBdOYCc3ZCyn4G7k1e3/SIojFww1gVByLFxWTOt6/e4GOTKxECU8Ol5Q+Rk768xA8hdo0rQF1722B1AKV1cZkE/+LZXQ97TQO1vIRxbCEUElI0xkO4upnlSRQQX6HSVvS3PSjHVZUh8OowF1aJOL1w5zqsGYfT6bhBvXyJPoFy1c6G1np7Lt9ecYZh+/EWRD0byZBA4h83qHewx5/PMzt41mB7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tcOiEStKRrox9Amq2VzhgvY9ppzOabv0hG2Da01URtA=;
+ b=GVE3pSY1N0maGozRmJJF56zZ4t+TdpfWTrjKNgxs6LhJpHKkoXeoUHGjPj3W60ytrqa+NZFXpkGBkGZEySo49IcmS5L6/0BMN5InSI+ZHmngulscpENTDVrg4pjPP5HVOpWeHbddRNwSlvT4r5UTxV15qRuIc356pkpQFlSqAs5ZS3Wg7JdQbc2DYAp9H/1UfDxPsDEUefsYa2u5ohzLzvSj3yRl8xwrpGVzk/e8fmWf9ryRoGZBptHNKhCfhXwksjT6K5p1HPTHclfP7lG4raeY/J8zpz6d+jEwxD188LuLOIz8EDACApgFv3BUgEL3wZsJBDOyOrP3xFDYM7DRMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tcOiEStKRrox9Amq2VzhgvY9ppzOabv0hG2Da01URtA=;
+ b=I0+vN9phh0h2/pDn0EmSiu3sCFlS1HvPEjpCYiNHlikIG03yaUSmY4aBYwEoMh4qXjpu1WzyANCG2QgJpEee2sHbolsgPjpIdZ3+imJJPjlX5Y0iC9p/ZorIhShO2ePPeUAuN/a60qZOKJO8IhvSGEffKJoYuv/G9MZ4XLtvOwA=
+Received: from KL1PR03MB5062.apcprd03.prod.outlook.com (2603:1096:820:1a::22)
+ by KL1PR0302MB2551.apcprd03.prod.outlook.com (2603:1096:802:f::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.16; Fri, 20 Aug
+ 2021 03:37:55 +0000
+Received: from KL1PR03MB5062.apcprd03.prod.outlook.com
+ ([fe80::3ce4:e30e:bb67:c608]) by KL1PR03MB5062.apcprd03.prod.outlook.com
+ ([fe80::3ce4:e30e:bb67:c608%7]) with mapi id 15.20.4436.018; Fri, 20 Aug 2021
+ 03:37:54 +0000
+From:   =?utf-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= 
+        <Chunfeng.Yun@mediatek.com>
+To:     "ikjn@chromium.org" <ikjn@chromium.org>
+CC:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jackp@codeauora.org" <jackp@codeauora.org>
-References: <1628648608-15239-1-git-send-email-wcheng@codeaurora.org>
- <bcc8ff30-5c49-bddd-2f61-05da859b2647@synopsys.com>
- <3edf74ba-d167-0589-a7ab-827b57aa5d9c@codeaurora.org>
- <e07b7061-e9cf-3146-d115-56967298051e@synopsys.com>
- <c82ee8f3-a364-f96f-76ac-2b78c1dc0517@codeaurora.org>
- <f760fdcf-cd59-2c71-8c85-a4624620edeb@synopsys.com>
- <5be881a9-c79d-3f21-9e2e-173307fef734@codeaurora.org>
- <dc37617c-0fe4-47b3-cbd0-1d729ce6201a@synopsys.com>
- <00952bdc-acc2-f373-9286-6a8380e0b7d1@synopsys.com>
- <875yw7jkz6.fsf@kernel.org>
- <89b4d57c-f44a-ceff-45f3-a308e1d8d135@synopsys.com>
- <4c5ee1be-5cda-f56b-7f69-73124a16abba@codeaurora.org>
- <278cc2b5-9f0d-840e-372a-7949b79e858d@codeaurora.org>
- <096a03e0-a913-7188-2c2e-d801d9617160@synopsys.com>
- <cdd9d624-00c6-1be3-5aad-e6f923d1e8d8@codeaurora.org>
- <f2cdd897-dc8d-a506-9ce4-6d38ef355420@synopsys.com>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <1ca09ee0-d415-bbc5-98bf-458162e471d2@codeaurora.org>
-Date:   Thu, 19 Aug 2021 20:05:46 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
-MIME-Version: 1.0
-In-Reply-To: <f2cdd897-dc8d-a506-9ce4-6d38ef355420@synopsys.com>
-Content-Type: text/plain; charset=utf-8
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
+Thread-Topic: [RFC PATCH] usb: xhci-mtk: handle bandwidth table rollover
+Thread-Index: AQHXjPzqwpeGZOWapUiNHdL7bl5Aqatq4ykAgAAIfYCAAxloAIABmrOAgAAmhgCACNVhgIADM+IA
+Date:   Fri, 20 Aug 2021 03:37:54 +0000
+Message-ID: <71ae637d3b44938d6591bd9072a58299d3c17e57.camel@mediatek.com>
+References: <20210809165904.RFC.1.I5165a4a8da5cac23c9928b1ec3c3a1a7383b7c23@changeid>
+         <YRDxTodNNqtnpPpn@kroah.com>
+         <CAATdQgDSCzZtiDSQk94CYHfSb9Mq28OH7-RdaTZNv3oPrW3nkQ@mail.gmail.com>
+         <7b48f4c132a8b4b3819282e961fbe8b3ed753069.camel@mediatek.com>
+         <CAATdQgD1paUUmWhiLVq-+zq0V6=RTJw89ggk=R6cBUZO+5dB-Q@mail.gmail.com>
+         <efcd999aaf83cf73ed2f4f4b9efa1bb93efd2523.camel@mediatek.com>
+         <CAATdQgC_aukAA3-=cuiOAQGzu_Ztvo4BsMbRv2hCGZpUeOAJVg@mail.gmail.com>
+In-Reply-To: <CAATdQgC_aukAA3-=cuiOAQGzu_Ztvo4BsMbRv2hCGZpUeOAJVg@mail.gmail.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: chromium.org; dkim=none (message not signed)
+ header.d=none;chromium.org; dmarc=none action=none header.from=mediatek.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 377a6a7f-8810-4a2c-12d6-08d9638be559
+x-ms-traffictypediagnostic: KL1PR0302MB2551:
+x-microsoft-antispam-prvs: <KL1PR0302MB2551D240A5B681A15251AC89FDC19@KL1PR0302MB2551.apcprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HBWUTe7QGTIcJbQWDxFRT17JJcRK+zUVGBQ09GOr+iqtVnrjskxrc/YnWbULUuCQ1AIJsuXPjLP7+zGe+H+KesJYBVK3NazLDRwiKTv/wVMilQuBiwjuUsRHwfzCofzpIVB4dvVMjLCp80R4+BIlRfPYadt23sbtQemmNdltDwfOGLbTvFxKki5qjDyiUtViLDBizSmjBO7aHgDLV7Bg9+7/tvWBSu1XEtyp9oDlMmq3dlFoI/wyaJhPEpZFyC+0RXJthBOT0I/GiBgPY2wsxSmtWMD57v7UwqzQQ3R3bpEIL34FXMX1sN0bkqhUf8v1oEtsOtQV8eq6dqPZjmVOFJJZC5EZSyWHSuk2KXSUrm4xOmJJSqO3/Q+s1FMlP4SCXIrZy1vrniJd21pKjFbgAXgmnP5QIse8Mvn8Ym1DGXvkHqwqsN5J28fsqDPznS+93i7FUh14JPY9Ydb9HkZ6tq4WfZKa1rJv23n2pCkhPR5FTLh5ud08BFOyvp7MSoi/o9ktTB7wl0W75I5+03tMFOhxYM+AgoVJP3HwvR4F7+XHXuGNqmAJv0/55VTZphIouW0bBo+/dJ6x/x2Uih2yDi3jUkwN3s1czVhvfnPP+5ViV4MeAnf9IxpDds/G1xmoax+KgIBIkzFLeys14XPAIHdIRtU04GHoKyohDt1gCS5BkEU8TdKkyDRgLdQbFYCKq/OBsY8IK4Q/73+z0qC+UQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR03MB5062.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(6916009)(53546011)(26005)(66476007)(2906002)(186003)(8936002)(83380400001)(316002)(6506007)(86362001)(6512007)(85182001)(71200400001)(478600001)(6486002)(38100700002)(8676002)(38070700005)(5660300002)(66446008)(4326008)(76116006)(36756003)(122000001)(2616005)(66946007)(66556008)(64756008)(91956017)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aC9KQUMwb2FOeiszcERWUnhSRFI2Ymx1c0ptNnowTU8vSCtLcmdkY2hJOFVh?=
+ =?utf-8?B?ZmEzME1FNk05RURySTZpUUJZUFNGL2hmUFZjZjViQ1Zvb3F0MXd3M0VtbGZY?=
+ =?utf-8?B?Unp5QlQzcjh3bnAvOEFsTXVjUUtRcFowY0swbzNuRGQxT00wRGFFTG9TTVB2?=
+ =?utf-8?B?b2k2TVAvTGY3dU5Tb3U0WElhRnBuZUpMQ1JpTk5Zd0hkMjg5QTVGVklFaTBL?=
+ =?utf-8?B?Yk1yeXVxWTh6RG40cXhjNEVSdld5eHlhWFBNTTZuVEFRcElMcXFXNENKMUUz?=
+ =?utf-8?B?SXFPM2JPTE5ReDkyMVorQUdXU05rQTQxUDFvTFdja1RHMjBDUGZJWEJyOURD?=
+ =?utf-8?B?SVVQdzJnaC9MaWFMREpQZzVuYmlWdFo1WWlXT1huK1dxSnVmeThvQXYvRVJS?=
+ =?utf-8?B?RThMT1ZwV2RRL3dpV2J1Q01wV1JrbVk0VEx1UHc1V1A2VDZnZHpScmFINGlG?=
+ =?utf-8?B?WFNnV2hCN2oxYk9Lc1FqaFJJcnhLcldDVzJ2QjZXWkhKRHFpSU9heFRXc29R?=
+ =?utf-8?B?NTNXbk1tTzZTWkVzZFNnNVJIRnQxa1JJUnNRTTFhLzV0ZTdYSmlQb3lXRVp0?=
+ =?utf-8?B?VUM2cW5TK1NaNzdsRTI5T3BLcllWeDZiMStmSnNsNnFweHNNU2cxZmpJazhT?=
+ =?utf-8?B?RnYvUUpObkttSThDZzlSNTVMa2RVR3h0YUhBVUhaclp1RG91RWdsNWlWRTdY?=
+ =?utf-8?B?bjB3WjVvTWRjT3hVdDE5TGJ2aVdnRjlHZVYyWGYvczFYeHNCalFLbmZSMFhu?=
+ =?utf-8?B?QzRYNzRXK04vcUxGb0t2SnNla3dQYjFRM3o0R0V4MWVnWFZGQkQ3RC85Wmxh?=
+ =?utf-8?B?eURHeVpRM3EyN3lRazgvaExzZStsVzdQY1VsT0graXVpWlFxQThQTklQZ3B6?=
+ =?utf-8?B?VjVZUE5IL2FPRzA4cU5XRGxPcStJcFphbGk2Uml5Ti9nbnRTdWJPYzRDY2ph?=
+ =?utf-8?B?OE9SVVExcHF2djI2MjlDTnJiNDB5QkNScTdiWlZDNXZBeG5aL0tiSFlHRkhO?=
+ =?utf-8?B?SlFoTlltWUdIdEVXVTJobDJlUHZLUEY0bDdZWnkwTGZscFZySUtTMlFtb0NQ?=
+ =?utf-8?B?cXhPdjFIbmRHU2h1SmtlNmhZdUxuRDdNOHZWdnloaTVTZzVSa2ZyMFBaRmky?=
+ =?utf-8?B?VFhac3hQS0ZXa2VBNXJYYUlsVFJjVG9ybGMycEdVaktEdUxDeVRhcHlzOS9J?=
+ =?utf-8?B?ek9tRGNIQVNHZUFibXFadnIzZlltS3oyeHhudzd6V3FQcUhQUnk2S2FnQmlF?=
+ =?utf-8?B?eXZRcWw4K0NBMVZ1MkZLT3lwRTdmbk5rMUEwalJKMDVDTHcyWDFqc2VoTWVn?=
+ =?utf-8?B?QVVJeXZKcVBUZktEZXIxdTY0OVZqUkxSOVl5TXRvMUZQa01Zd0NkazcxVm93?=
+ =?utf-8?B?WkhvU2ZaSXM4N1hROFhKMWJaM2RMQVQ0cFVKNk5vajQ4WkE0SU9VckgvclFr?=
+ =?utf-8?B?MmhBcVpqMHNSTXJSbC8rbnRZUnQyQzZ1Z1R2MkNlRGhRZGlzNlZFMEFuclk5?=
+ =?utf-8?B?RkNGb1kzeHJYTUhwV0xJcGEvSVpQRGpIemswTjZVUlhZUjEwUnlISVNSYUJL?=
+ =?utf-8?B?czA3QkhPTkRXTmY4cGZURW1CZzRRVXY5dkMxV0ZJbVBWWkVpZC9aYU8xTGFE?=
+ =?utf-8?B?TlBhQkJmclVGZS9idVdQSjhsbkxTSjhQcnlGZUp3bEVHM3hVb0M4L3RBQ01v?=
+ =?utf-8?B?TVdXamYvMUNzbWU5NFlsd3ZraWxGeUVnN000OEZITzM2MkRJVVd5Y1ZvYjh2?=
+ =?utf-8?Q?Syo3FFyp25z8uFnt+uSO5vKpmxhvf4lq8pLGqPg?=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CA0586A285CDC445BBDB4A11234D8B42@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR03MB5062.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 377a6a7f-8810-4a2c-12d6-08d9638be559
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Aug 2021 03:37:54.7090
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Y3GksH32teJPCQSrgephbdJ2EyvFt+ovETeYWrpqosRso8FEu+YjNxxu8CysKD1YpMvnCsdLDU2uHODbCAk7w4dpzgDbPDRFTueXQ5JdOxg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0302MB2551
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Thinh,
-
-On 8/19/2021 6:52 PM, Thinh Nguyen wrote:
-> Wesley Cheng wrote:
->> Hi Thinh,
->>
->> On 8/18/2021 5:40 PM, Thinh Nguyen wrote:
->>> Wesley Cheng wrote:
->>>> Hi Thinh/Felipe,
->>>>
->>>> On 8/16/2021 12:13 PM, Wesley Cheng wrote:
->>>>> Hi Thinh,
->>>>>
->>>>> On 8/15/2021 5:33 PM, Thinh Nguyen wrote:
->>>>>> Felipe Balbi wrote:
->>>>>>>
->>>>>>> Hi,
->>>>>>>
->>>>>>> Thinh Nguyen <Thinh.Nguyen@synopsys.com> writes:
->>>>>>>>>>>>>>>> If this occurs, then the entire pullup disable routine is skipped and
->>>>>>>>>>>>>>>> proper cleanup and halting of the controller does not complete.
->>>>>>>>>>>>>>>> Instead of returning an error (which is ignored from the UDC
->>>>>>>>>>>>>>>> perspective), do what is mentioned in the comments and force the
->>>>>>>>>>>>>>>> transaction to complete and put the ep0state back to the SETUP phase.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->>>>>>>>>>>>>>>> ---
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/ep0.c    | 4 ++--
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/gadget.c | 6 +++++-
->>>>>>>>>>>>>>>>  drivers/usb/dwc3/gadget.h | 3 +++
->>>>>>>>>>>>>>>>  3 files changed, 10 insertions(+), 3 deletions(-)
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/ep0.c b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>>>> index 6587394..abfc42b 100644
->>>>>>>>>>>>>>>> --- a/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/ep0.c
->>>>>>>>>>>>>>>> @@ -218,7 +218,7 @@ int dwc3_gadget_ep0_queue(struct usb_ep *ep, struct usb_request *request,
->>>>>>>>>>>>>>>>  	return ret;
->>>>>>>>>>>>>>>>  }
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> -static void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>>>>>> +void dwc3_ep0_stall_and_restart(struct dwc3 *dwc)
->>>>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>>>  	struct dwc3_ep		*dep;
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> @@ -1073,7 +1073,7 @@ void dwc3_ep0_send_delayed_status(struct dwc3 *dwc)
->>>>>>>>>>>>>>>>  	__dwc3_ep0_do_control_status(dwc, dwc->eps[direction]);
->>>>>>>>>>>>>>>>  }
->>>>>>>>>>>>>>>>  
->>>>>>>>>>>>>>>> -static void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>>>>>> +void dwc3_ep0_end_control_data(struct dwc3 *dwc, struct dwc3_ep *dep)
->>>>>>>>>>>>>>>>  {
->>>>>>>>>>>>>>>>  	struct dwc3_gadget_ep_cmd_params params;
->>>>>>>>>>>>>>>>  	u32			cmd;
->>>>>>>>>>>>>>>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> index 54c5a08..a0e2e4d 100644
->>>>>>>>>>>>>>>> --- a/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> +++ b/drivers/usb/dwc3/gadget.c
->>>>>>>>>>>>>>>> @@ -2437,7 +2437,11 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>>>>>>>>>>>>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
->>>>>>>>>>>>>>>>  		if (ret == 0) {
->>>>>>>>>>>>>>>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
->>>>>>>>>>>>>>>> -			return -ETIMEDOUT;
->>>>>>>>>>>>>>>> +			spin_lock_irqsave(&dwc->lock, flags);
->>>>>>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[0]);
->>>>>>>>>>>>>>>> +			dwc3_ep0_end_control_data(dwc, dwc->eps[1]);
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> End transfer command takes time, need to wait for it to complete before
->>>>>>>>>>>>>>> issuing Start transfer again. Also, why restart again when it's about to
->>>>>>>>>>>>>>> be disconnected.
->>>>>>>>>>>>>>
->>>>>>>>>>>>>> I can try without restarting it again, and see if that works.  Instead
->>>>>>>>>>>>>> of waiting for the command complete event, can we set the ForceRM bit,
->>>>>>>>>>>>>> similar to what we do for dwc3_remove_requests()?
->>>>>>>>>>>>>>
->>>>>>>>>>>>>
->>>>>>>>>>>>> ForceRM=1 means that the controller will ignore updating the TRBs
->>>>>>>>>>>>> (including not clearing the HWO and remain transfer size). The driver
->>>>>>>>>>>>> still needs to wait for the command to complete before issuing Start
->>>>>>>>>>>>> Transfer command. Otherwise Start Transfer won't go through. If we know
->>>>>>>>>>>>> that we're not going to issue Start Transfer any time soon, then we may
->>>>>>>>>>>>> be able to get away with ignoring End Transfer command completion.
->>>>>>>>>>>>>
->>>>>>>>>>>>
->>>>>>>>>>>> I see.  Currently, in the place that we do use
->>>>>>>>>>>> dwc3_ep0_end_control_data(), its followed by
->>>>>>>>>>>> dwc3_ep0_stall_and_restart() which would execute start transfer.  For
->>>>>>>>>>>
->>>>>>>>>>> That doesn't look right. You can try to see if it can recover from a
->>>>>>>>>>> control write request. Often time we do control read and not write.
->>>>>>>>>>> (i.e. try to End Transfer and immediately Start Transfer on the same
->>>>>>>>>>> direction control endpoint).
->>>>>>>>>>>
->>>>>>>>>> OK, I can try, but just to clarify, I was referring to how it was being
->>>>>>>>>> done in:
->>>>>>>>>>
->>>>>>>>>> static void dwc3_ep0_xfernotready(struct dwc3 *dwc,
->>>>>>>>>> 		const struct dwc3_event_depevt *event)
->>>>>>>>>> {
->>>>>>>>>> ...
->>>>>>>>>> 		if (dwc->ep0_expect_in != event->endpoint_number) {
->>>>>>>>>> 			struct dwc3_ep	*dep = dwc->eps[dwc->ep0_expect_in];
->>>>>>>>>>
->>>>>>>>>> 			dev_err(dwc->dev, "unexpected direction for Data Phase\n");
->>>>>>>>>> 			dwc3_ep0_end_control_data(dwc, dep);
->>>>>>>>>> 			dwc3_ep0_stall_and_restart(dwc);
->>>>>>>>>> 			return;
->>>>>>>>>> 		}
->>>>>>>>>>
->>>>>>>>
->>>>>>>> Looking at this snippet again, it looks wrong. For control write
->>>>>>>> unexpected direction, if the driver hasn't setup and started the DATA
->>>>>>>> phase yet, then it's fine, but there is a problem if it did.
->>>>>>>>
->>>>>>>> Since dwc3_ep0_end_control_data() doesn't issue End Transfer command to
->>>>>>>> ep0 due to the resource_index check, it doesn't follow the control
->>>>>>>
->>>>>>> IIRC resource_index is always non-zero, so the command should be
->>>>>>
->>>>>> No, resource_index for ep0out is 0, ep0in is 1. You can check from any
->>>>>> of the driver tracepoint log for the return value of Start Transfer
->>>>>> command for the resource index of ep0. There could be a mixed up with
->>>>>> the undocumented return value of Set Endpoint Transfer Resource command
->>>>>> before when this code was written, don't mix up with that.
->>>>>>
->>>>>>> triggered. If you have access to a Lecroy USB Trainer, could you script
->>>>>>> this very scenario for verification?
->>>>>>
->>>>>> For anyone who wants to work on this, we don't need a LeCroy USB
->>>>>> trainer. If you use xhci host, just modify the xhci-ring.c to queue a
->>>>>> wrong direction DATA phase TRB of a particular control write request
->>>>>> test, and continue with the next control requests.
->>>>>>
->>>>> Let me give this a try since I already have a modified (broken :)) XHCI
->>>>> stack.
->>>>>
->>>>> Thanks
->>>>> Wesley Cheng
->>>>
->>>> Sorry for the late response.  I was trying to get a reliable change to
->>>> get the issue to reproduce.  I think I was able to find a set up which
->>>> will generate the unexpected direction issue.  I'll try my best to
->>>> summarize the traces here:
->>>>
->>>> Set up:
->>>> - Modified XHCI stack to queue an IN TRB for a three stage CONTROL OUT
->>>> transaction (OUT data stage)
->>>> - Device is using RNDIS, as that has interface specific commands (ie
->>>> SEND_ENCAPSUALTED messages)
->>>>
->>>> Kernel Log:
->>>> [ 1255.312870] msm-usb-hsphy 88e3000.hsphy: Avail curr from USB = 900
->>>> [ 1255.315300] dwc3_ep0_xfernotready event status = 1
->>>> [ 1255.315429] dwc3_ep0_xfernotready event status = 2
->>>> [ 1255.316390] android_work: sent uevent USB_STATE=CONFIGURED
->>>> [ 1255.317467] dwc3_ep0_xfernotready event status = 1
->>>> [ 1255.317588] dwc3_ep0_xfernotready event status = 2
->>>> [ 1255.334196] dwc3_ep0_xfernotready event status = 1
->>>> [ 1255.334217] dwc3 a600000.dwc3: unexpected direction for Data Phase
->>>> [ 1255.334311] rndis_msg_parser: unknown RNDIS message 0x0052033A len
->>>> 4456526
->>>> [ 1255.334328] RNDIS command error -524, 0/24
->>>> [ 1255.334369] ------------[ cut here ]------------
->>>> [ 1255.334377] dwc3 a600000.dwc3: No resource for ep0out
->>>> [ 1255.334440] WARNING: CPU: 0 PID: 8364 at
->>>> drivers/usb/dwc3/gadget.c:360 dwc3_send_gadget_ep_cmd+0x3c4/0x96c
->>>> ...
->>>>  1255.336163] WARNING: CPU: 0 PID: 8364 at drivers/usb/dwc3/ep0.c:281
->>>> dwc3_ep0_out_start+0x108/0x144
->>>>
->>>> So the kernel log does indeed show the concern mentioned by Thinh, where
->>>> after ending the transfer, we do see the dwc3_ep0_out_start() fail due
->>>> to no xfer resource.
->>>>
->>>
->>> No, there's no end transfer command seen, and it's expected from code
->>> review.
->>>
->> Sorry, yes that's correct.
->>>> ftrace:
->>>> <...>-8364    [000] d..1  1255.333988: dwc3_ctrl_req: Get Interface
->>>> Status(Intf = 0, Length = 24)
->>>> <...>-8364    [000] d..1  1255.334115: dwc3_prepare_trb: ep0out: trb
->>>> ffffffc01bffd000 (E1:D0) buf 00000000efb76000 size 24 ctrl 00000455
->>>> (HlCs:Sc:data)
->>>> <...>-8364    [000] d..1  1255.334128: dwc3_prepare_trb: ep0out: trb
->>>> ffffffc01bffd010 (E1:D0) buf 00000000efff9000 size 488 ctrl 00000c53
->>>> (HLcs:SC:data)
->>>> <...>-8364    [000] d..1  1255.334166: dwc3_gadget_ep_cmd: ep0out: cmd
->>>> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
->>>> Successful
->>>> <...>-8364    [000] d..1  1255.334239: dwc3_gadget_ep_cmd: ep0out: cmd
->>>> 'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
->>>> <...>-8364    [000] d..1  1255.334291: dwc3_gadget_giveback: ep0out: req
->>>> ffffff8891724e00 length 0/24 zsI ==> -104
->>>
->>> It detected wrong direction and sets STALL here, but no End Transfer
->>> command.
->>>
->>>> <...>-8364    [000] d..1  1255.334339: dwc3_prepare_trb: ep0out: trb
->>>> ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
->>>> (HLcs:SC:setup)
->>>
->>> The driver overwrote the active TRB with a new SETUP TRB.
->>>
->>>> <...>-8364    [000] d..1  1255.336099: dwc3_gadget_ep_cmd: ep0out: cmd
->>>> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status: No
->>>> Resource
->>>
->>> The dep->flags DWC3_EP_TRANSFER_STARTED got cleared. When it tries to
->>> issue a Start Transfer a SETUP transfer, the command will fail with no
->>> resource because the endpoint never ended properly.
->>>
->>>> <...>-8364    [000] d..1  1255.357594: dwc3_ctrl_req: 00 60 b7 ef 00 00
->>>> 00 00
->>>
->>> Here is iffy because the behavior is undefined. The driver overwrote the
->>> previous TRB. The Start Transfer command didn't go through, so the
->>> controller still has the old TRB setup in its cache. It gets the next
->>> SETUP request completion anyway because the SETUP stage is a short
->>> packet. The driver updated its state that it's expecting the SETUP
->>> stage, and it doesn't check the TRB write back buffer size for more or
->>> less than 8 bytes or whether this is valid data.
->>>
->>> Wesley, is this SETUP packet the correct RNDIS control request?
->>>
->> That doesn't look to be a RNDIS control packet.  I collected a bus
->> analyzer log as well w/ this snippet, and nothing was transmitted from
->> the host side during the data stage.  Subsequent SETUP transactions were
->> standard USB descriptors (GET string descriptors).
-> 
-> Ok.
-> 
->>>> <...>-8364    [000] d..1  1255.357680: dwc3_gadget_ep_cmd: ep0out: cmd
->>>> 'Set Stall' [404] params 00000000 00000000 00000000 --> status: Successful
->>>
->>> The device Set Stall on an unrecognized request, probably from the
->>> application, which can be normal.
->>>
->>>> <...>-8364    [000] d..1  1255.357696: dwc3_prepare_trb: ep0out: trb
->>>> ffffffc01bffd010 (E1:D0) buf 00000000efffa000 size 8 ctrl 00000c23
->>>> (HLcs:SC:setup)
->>>> <...>-8364    [000] d..1  1255.357722: dwc3_gadget_ep_cmd: ep0out: cmd
->>>> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
->>>> Successful
->>>> <...>-224     [005] d..1  1266.313014: dwc3_gadget_ep_cmd: ep2out: cmd
->>>> 'End Transfer' [40c08] params 00000000 00000000 00000000 --> status:
->>>> Timed Out
->>>>
->>>> Thanks
->>>> Wesley Cheng
->>>>
->>>
->>> Thanks for the test Wesley
->>>
->>> BR,
->>> Thinh
->>>
->>
->> So back to the original issue, which was the SETUP timeout during pullup
->> disable, I went ahead and collected the ftrace w/ a change to just
->> remove the return statement:
->>
->> ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
->> 				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
->> if (ret == 0) {
->> 	dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
->> 	return -ETIMEDOUT;
->> }
->>
->> This would allow the __dwc3_gadget_stop() to disable EP0/1, which would
->> call dwc3_gadget_stop_active_transfer() to send the end xfer command:
->>
->> //Packet which will not queue a data stage (injected failure)
->> <...>-7098    [003] d..1   346.560711: dwc3_ctrl_req: Get String
->> Descriptor(Index = 3, Length = 2)
->>
->> //Prepare IN data stage TRB
->> <...>-7098    [003] d..1   346.560865: dwc3_prepare_trb: ep0in: trb
->> ffffffc011edd000 (E0:D0) buf 00000000effcc000 size 2 ctrl 00000c53
->> (HLcs:SC:data)
->> <...>-7098    [003] d..1   346.560915: dwc3_gadget_ep_cmd: ep0in: cmd
->> 'Start Transfer' [406] params 00000000 efffa000 00000000 --> status:
->> Successful
->>
->> //Pullup disable here kicks in - __dwc3_gadget_stop()
->> <...>-224     [006] d..1   348.607367: dwc3_gadget_ep_disable: ep0out:
->> mps 64/512 streams 0 burst 1 ring 0/0 flags E:swbp:>
->> <...>-224     [006] d..1   348.607430: dwc3_gadget_giveback: ep0out: req
->> ffffff884e5f5500 length 0/2 zsI ==> -108
->> <...>-224     [006] d..1   348.607444: dwc3_gadget_ep_disable: ep0in:
->> mps 64/512 streams 0 burst 1 ring 0/0 flags E:swBp:<
->>
->> //End transfer on the pending EP0 in TRB queued previously
->> <...>-224     [006] d..1   348.607484: dwc3_gadget_ep_cmd: ep0in: cmd
->> 'End Transfer' [10c08] params 00000000 00000000 00000000 --> status:
->> Successful
->> <...>-224     [006] dN.1   348.607788: usb_gadget_vbus_draw: speed 3/6
->> state 6 0mA [sg:self-powered:activated:disconnected] --> 0
->> <...>-224     [006] ....   348.616888: usb_gadget_disconnect: speed 3/6
->> state 6 0mA [sg:self-powered:activated:disconnected] --> 0
->>
->> Does this look ok, Thinh?
->>
-> 
-> It should be fine.
-> 
-> The way we're handling soft-connect and soft-disconnect in dwc3 is
-> different than what the programming guide suggested. We're not doing
-> soft-reset on soft-connect. Our HW testing didn't show a problem in
-> quick soft-connect/disconnect succession before, but can you test doing
-> soft-connect immediately after this scenario?
-> 
-
-Thanks Thinh.
-
-I can try.  Currently, the Android USB framework will immediately rebind
-to the UDC if I run the below command from the console:
-echo "" > /config/usb_gadget/g1/UDC
-
-So that will be a quick pullup disable (due to the command) and then a
-subsequent pullup enable from the Android USB framework.  I'll run a
-script overnight to keep doing the echo command above.
-> Also, maybe we can change dev_err() print to dev_warn() on timeout instead?
-> 
-Sure, will do.
-
-Thanks
-Wesley Cheng
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+T24gV2VkLCAyMDIxLTA4LTE4IGF0IDEwOjQzICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4g
+SGkgQ2h1bmZlbmcsDQo+IA0KPiBPbiBUaHUsIEF1ZyAxMiwgMjAyMSBhdCA3OjQ5IFBNIENodW5m
+ZW5nIFl1biAo5LqR5pil5bOwKQ0KPiA8Q2h1bmZlbmcuWXVuQG1lZGlhdGVrLmNvbT4gd3JvdGU6
+DQo+ID4gDQo+ID4gT24gVGh1LCAyMDIxLTA4LTEyIGF0IDE3OjMxICswODAwLCBJa2pvb24gSmFu
+ZyB3cm90ZToNCj4gPiA+IEhJLA0KPiA+ID4gDQo+ID4gPiBPbiBXZWQsIEF1ZyAxMSwgMjAyMSBh
+dCA1OjAyIFBNIENodW5mZW5nIFl1biAo5LqR5pil5bOwKQ0KPiA+ID4gPENodW5mZW5nLll1bkBt
+ZWRpYXRlay5jb20+IHdyb3RlOg0KPiA+ID4gPiANCj4gPiA+ID4gT24gTW9uLCAyMDIxLTA4LTA5
+IGF0IDE3OjQyICswODAwLCBJa2pvb24gSmFuZyB3cm90ZToNCj4gPiA+ID4gPiBPbiBNb24sIEF1
+ZyA5LCAyMDIxIGF0IDU6MTEgUE0gR3JlZyBLcm9haC1IYXJ0bWFuDQo+ID4gPiA+ID4gPGdyZWdr
+aEBsaW51eGZvdW5kYXRpb24ub3JnPiB3cm90ZToNCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4g
+T24gTW9uLCBBdWcgMDksIDIwMjEgYXQgMDQ6NTk6MjlQTSArMDgwMCwgSWtqb29uIEphbmcNCj4g
+PiA+ID4gPiA+IHdyb3RlOg0KPiA+ID4gPiA+ID4gPiB4aGNpLW10ayBoYXMgNjQgc2xvdHMgZm9y
+IHBlcmlvZGljIGJhbmR3aWR0aCBjYWxjdWxhdGlvbnMNCj4gPiA+ID4gPiA+ID4gYW5kDQo+ID4g
+PiA+ID4gPiA+IGVhY2gNCj4gPiA+ID4gPiA+ID4gc2xvdCByZXByZXNlbnRzIGJ5dGUgYnVkZ2V0
+cyBvbiBhIG1pY3JvZnJhbWUuIFdoZW4gYW4NCj4gPiA+ID4gPiA+ID4gZW5kcG9pbnQncw0KPiA+
+ID4gPiA+ID4gPiBhbGxvY2F0aW9uIHNpdHMgb24gdGhlIGJvdW5kYXJ5IG9mIHRoZSB0YWJsZSwg
+Ynl0ZQ0KPiA+ID4gPiA+ID4gPiBidWRnZXRzJw0KPiA+ID4gPiA+ID4gPiBzbG90DQo+ID4gPiA+
+ID4gPiA+IHNob3VsZCBiZSByb2xsZWQgb3ZlciBidXQgdGhlIGN1cnJlbnQgaW1wbGVtZW50YXRp
+b24NCj4gPiA+ID4gPiA+ID4gZG9lc24ndC4NCj4gPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiA+
+IFRoaXMgcGF0Y2ggYXBwbGllcyBhIDYgYml0cyBtYXNrIHRvIHRoZSBtaWNyb2ZyYW1lIGluZGV4
+DQo+ID4gPiA+ID4gPiA+IHRvDQo+ID4gPiA+ID4gPiA+IGhhbmRsZQ0KPiA+ID4gPiA+ID4gPiBp
+dHMgcm9sbG92ZXIgNjQgc2xvdHMgYW5kIHByZXZlbnQgb3V0LW9mLWJvdW5kcyBhcnJheQ0KPiA+
+ID4gPiA+ID4gPiBhY2Nlc3MuDQo+ID4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gPiBTaWduZWQt
+b2ZmLWJ5OiBJa2pvb24gSmFuZyA8aWtqbkBjaHJvbWl1bS5vcmc+DQo+ID4gPiA+ID4gPiA+IC0t
+LQ0KPiA+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+ID4gIGRyaXZlcnMvdXNiL2hvc3QveGhjaS1t
+dGstc2NoLmMgfCA3OSArKysrKysrKystLS0tLS0tLQ0KPiA+ID4gPiA+ID4gPiAtLS0tDQo+ID4g
+PiA+ID4gPiA+IC0tLS0NCj4gPiA+ID4gPiA+ID4gLS0tLS0tLS0NCj4gPiA+ID4gPiA+ID4gIGRy
+aXZlcnMvdXNiL2hvc3QveGhjaS1tdGsuaCAgICAgfCAgMSArDQo+ID4gPiA+ID4gPiA+ICAyIGZp
+bGVzIGNoYW5nZWQsIDIzIGluc2VydGlvbnMoKyksIDU3IGRlbGV0aW9ucygtKQ0KPiA+ID4gPiA+
+ID4gDQo+ID4gPiA+ID4gPiBXaHkgaXMgdGhpcyAiUkZDIj8gIFdoYXQgbmVlZHMgdG8gYmUgYWRk
+cmVzc2VkIGluIHRoaXMNCj4gPiA+ID4gPiA+IGNoYW5nZQ0KPiA+ID4gPiA+ID4gYmVmb3JlIGl0
+DQo+ID4gPiA+ID4gPiBjYW4gYmUgYWNjZXB0ZWQ/DQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gc29y
+cnksIEkgaGFkIHRvIG1lbnRpb24gd2h5IHRoaXMgaXMgUkZDOg0KPiA+ID4gPiA+IA0KPiA+ID4g
+PiA+IEkgc2ltcGx5IGRvbid0IGtub3cgYWJvdXQgdGhlIGRldGFpbHMgb2YgdGhlIHhoY2ktbXRr
+DQo+ID4gPiA+ID4gaW50ZXJuYWxzLg0KPiA+ID4gPiA+IEl0IHdhcyBva2F5IGZyb20gbXkgdGVz
+dHMgd2l0aCBtdDgxNzMgYW5kIEkgdGhpbmsgdGhpcyB3aWxsDQo+ID4gPiA+ID4gYmUNCj4gPiA+
+ID4gPiBoYXJtbGVzcw0KPiA+ID4gPiA+IGFzIHRoaXMgaXMgImJldHRlciB0aGFuIGJlZm9yZSIu
+DQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gQnV0IHdoZW4gSSByZW1vdmVkIGdldF9lc2l0X2JvdW5k
+YXJ5KCksIEkgcmVhbGx5IGhhdmUgbm8gaWRlYQ0KPiA+ID4gPiA+IHdoeQ0KPiA+ID4gPiA+IGl0
+IHdhcyB0aGVyZS4gSSdtIHdvbmRlcmluZyBpZiB0aGVyZSB3YXMgYW5vdGhlciByZWFzb24gb2YN
+Cj4gPiA+ID4gPiB0aGF0DQo+ID4gPiA+ID4gZnVuY3Rpb24NCj4gPiA+ID4gPiBvdGhlciB0aGFu
+IGp1c3QgcHJldmVudGluZyBvdXQtb2YtYm91bmRzLiBNYXliZSBjaHVuZmVuZyBjYW4NCj4gPiA+
+ID4gPiBhbnN3ZXINCj4gPiA+ID4gPiB0aGlzPw0KPiA+ID4gPiANCj4gPiA+ID4gV2UgdXNlIEBl
+c2l0IHRvIHByZXZlbnQgb3V0LW9mLWJvdW5kcyBhcnJheSBhY2Nlc3MuIGl0J3Mgbm90IGENCj4g
+PiA+ID4gcmluZywNCj4gPiA+ID4gY2FuJ3QgaW5zZXJ0IG91dC1vZi1ib3VuZHMgdmFsdWUgaW50
+byBoZWFkIHNsb3QuDQo+ID4gPiANCj4gPiA+IFRoYW5rcywgc28gdGhhdCBmdW5jdGlvbiB3YXMg
+b25seSBmb3Igb3V0LW9mLWJvdW5kcyBhcnJheSBhY2Nlc3MuDQo+ID4gPiB0aGVuIEkgdGhpbmsg
+d2UganVzdCBjYW4gcmVtb3ZlIHRoYXQgZnVuY3Rpb24gYW5kIHVzZSBpdCBhcyBhDQo+ID4gPiBy
+aW5nLg0KPiA+ID4gQ2FuIHlvdSB0ZWxsIG1lIF93aHlfIGl0IGNhbid0IGJlIHVzZWQgYXMgYSBy
+aW5nPw0KPiA+IA0KPiA+IFRyZWF0IGl0IGFzIGEgcGVyaW9kLCByb2xsIG92ZXIgc2xvdCBlcXVh
+bHMgdG8gcHV0IGl0IGludG8gdGhlIG5leHQNCj4gPiBwZXJpb2QuDQo+ID4gDQo+ID4gPiANCj4g
+PiA+IEkgdGhpbmsgYSB0cmFuc2FjdGlvbiAoZS5nLiBlc2l0X2JvdW5kYXJ5ID0gNykgY2FuIHN0
+YXJ0IGl0cw0KPiA+ID4gZmlyc3QNCj4gPiA+IFNTUExJVA0KPiA+ID4gZnJvbSBZXzcgKG9mZnNl
+dCA9IDcpLiBCdXQgd2lsbCB0aGF0IGFsbG9jYXRpb24gYmUgbWF0Y2hlZCB3aXRoDQo+ID4gPiB0
+aGlzPw0KPiA+ID4gDQo+ID4gPiAtICAgICAgICAgICAgICAgaWYgKChvZmZzZXQgKyBzY2hfZXAt
+Pm51bV9idWRnZXRfbWljcm9mcmFtZXMpID4NCj4gPiA+IGVzaXRfYm91bmRhcnkpDQo+ID4gPiAt
+ICAgICAgICAgICAgICAgICAgICAgICBicmVhazsNCj4gPiA+IA0KPiA+ID4gSSBtZWFuIEknbSBu
+b3Qgc3VyZSB3aHkgdGhpcyBpcyBuZWVkZWQuDQo+ID4gDQo+ID4gUHJldmVudCBvdXQtb2YtYm91
+bmRzLg0KPiANCj4gSWYgaXQgd2FzIGZvciBwcmV2ZW50aW5nIGRyaXZlcnMgZnJvbSBvdXQtb2Yt
+Ym91bmQgYXJyYXkgYWNjZXNzLA0KPiBJIGNvdWxkbid0IGZpbmQgYW55IHJlYXNvbnMgd2h5IHdl
+IGNhbm5vdCByZW1vdmUgdGhlIGFib3ZlIGxpbmVzLg0KPiBTbyBjYW4gSSBrbm93IGlmIGl0IHdh
+cyBqdXN0IGZvciBwcmV2ZW50aW5nIHhoY2ktbXRrIGRyaXZlcnMgZnJvbQ0KPiBvdXQtb2YtYm91
+bmRzIGFycmF5IGFjY2Vzcz8NCkR1ZSB0byBpdCB1c2UgYW4gYXJyYXkgdG8gY2FsY3VsYXRlIGJh
+bmR3aWR0aCwgaWYgdXNlIHJpbmcsIGNhbiByZW1vdmUNCml0Lg0KDQo+IA0KPiBJZiB4aGNpLW10
+ayBIQyBpdHNlbGYgY2FuIGNvbnRpbnVlIHRoZSB0cmFuc2FjdGlvbiBmcm9tIFlfNyB0bw0KPiAo
+WSsxKV9uOw0KPiBpbmNsdWRpbmcgdGhlIGNhc2Ugb2YgWT09NjMsIEkgdGhpbmsgaXQncyBqdXN0
+IG9rYXkgdG8gcm9sbG92ZXIgdG8NCj4gKFkrMSkuDQo+IA0KPiBJZiBpdCdzIHByb2hpYml0ZWQg
+YnkgeGhjaS1tdGsgaHcsIG9yIGlmIHlvdSB0aGluayB0aGlzIHBhdGNoIGlzIG5vdA0KPiBhbGxv
+d2VkIGJ5IGFueSBvdGhlciByZWFzb25zLCBjYW4geW91IHBsZWFzZSAgdGVsbCBtZSB3aGF0DQo+
+IGtpbmRzIG9mIHByb2JsZW1zIGNhbiBoYXBwZW4gd2l0aCB0aGlzIHBhdGNoPw0KU2VlbXMgc3cg
+bGltaXRhdGlvbiwgb3IgYXZvaWQgcmVwZWF0ZWQgY2FsY3VsYXRpb247DQpJJ2xsIGNoYW5nZSBp
+dCBhcyBhIHJpbmcsIGFuZCBkbyBzb21lIHRlc3RzLg0KPiANCj4gT3RoZXJ3aXNlLCBwbGVhc2Ug
+Y29uc2lkZXIgbWluaW1pemluZyB0aGUgYncgY29uc3RyYWludHMgZnJvbQ0KPiB4aGNpLW10ay1z
+Y2ggb24geW91ciBzaWRlLiBOb3RlIHRoYXQgd2UncmUgc3RpbGwgaGF2aW5nIG90aGVyIHVzYg0K
+PiBhdWRpbyBoZWFkc2V0cyB3aGljaCBjYW5ub3QgYmUgY29uZmlndXJlZCB3aXRoIHhoY2ktbXRr
+DQo+IGV2ZW4gd2l0aCB0aGlzIHBhdGNoLg0KT2ssIHRyeSBteSBiZXN0IHRvIGRvIGl0LCB0aGFu
+a3MgYSBsb3QNCg0KPiANCj4gVGhhbmtzLg0KPiANCj4gPiANCj4gPiA+IA0KPiA+ID4gVW50aWwg
+bm93LCBJIGNvdWxkbid0IGZpbmQgYSB3YXkgdG8gYWNjZXB0IHRoZSBVU0IgYXVkaW8gaGVhZHNl
+dA0KPiA+ID4gd2l0aCBhIGNvbmZpZ3VyYXRpb24gb2YgeyBJTlQtSU4gNjQgKyBJU09DLU9VVCAz
+ODQgKyBJU09DLUlOIDE5Mg0KPiA+ID4gfQ0KPiA+ID4gd2l0aG91dCB0aGlzIHBhdGNoLg0KPiA+
+IA0KPiA+IHdoYXQgaXMgdGhlIGludGVydmFsIHZhbHVlIG9mIGVhY2ggZW5kcG9pbnQ/DQo+ID4g
+DQo+ID4gPiANCj4gPiA+ID4gDQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gVGhhbmtzIQ0KPiA+ID4g
+PiA+IA0KPiA+ID4gPiA+ID4gDQo+ID4gPiA+ID4gPiB0aGFua3MsDQo+ID4gPiA+ID4gPiANCj4g
+PiA+ID4gPiA+IGdyZWcgay1oDQo=
