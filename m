@@ -2,52 +2,52 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466A83F258E
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 06:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466293F25A0
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 06:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbhHTEJn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 00:09:43 -0400
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:31864 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229792AbhHTEJi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 00:09:38 -0400
+        id S229792AbhHTEQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 00:16:26 -0400
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:48492 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229457AbhHTEQZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 00:16:25 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1629432541; x=1660968541;
+  t=1629432948; x=1660968948;
   h=from:to:cc:subject:date:message-id:mime-version:
    content-transfer-encoding;
   bh=FNH7AK4EGYWfnuJ4BDn4ARCJxqO5ow6yPVyw0BJzilw=;
-  b=NwRuhMBs+LUr3i0zAnwPi9EbqnxqN2dvUFcE6S+zg4d9mGCgp30Alb8a
-   94p+6lZ5k1WHTkm4zcpaDagfuDqzGh7obV0KT4nQES5Wey1f79kH8+AUU
-   7AuCwkaCsJuPJKyPqwqEetmpSK0eVavgOhzJQR76GtKfpX8UV5RegwFla
-   Y=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Aug 2021 21:09:01 -0700
+  b=HgDERKrIZg7aDoRiYyRpoWCKKpVZZ0x0mHRLT3xD8tMLTllECtZd6wK1
+   LmwGEJGBaCMdXUu/VgxONKw8GW8qRsi4kykhQP6WrbfxSjfO1Y7YIPe3d
+   prHKZyvoWNQcHb2cSW01v0KN8PD/edJnOVA7mZymO0LfjQwe4vNDI4MBS
+   I=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 19 Aug 2021 21:15:48 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 21:09:00 -0700
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 21:15:47 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.858.15; Thu, 19 Aug 2021 21:09:00 -0700
+ 15.2.858.15; Thu, 19 Aug 2021 21:15:47 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.858.15; Thu, 19 Aug 2021 21:08:58 -0700
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.922.7;
+ Thu, 19 Aug 2021 21:15:45 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Felipe Balbi <balbi@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH] usb: gadget: configfs: add tree trace entries
-Date:   Fri, 20 Aug 2021 12:08:54 +0800
-Message-ID: <1629432534-21248-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH V2] usb: gadget: configfs: add three trace entries
+Date:   Fri, 20 Aug 2021 12:15:41 +0800
+Message-ID: <1629432941-23737-1-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03d.na.qualcomm.com (10.85.0.91) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+X-ClientProxiedBy: nasanexm03e.na.qualcomm.com (10.85.0.48) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
