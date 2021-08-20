@@ -2,146 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1B93F3433
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 21:01:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC2383F3436
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 21:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbhHTTCX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 15:02:23 -0400
-Received: from sender4-of-o53.zoho.com ([136.143.188.53]:21320 "EHLO
-        sender4-of-o53.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237182AbhHTTCV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 15:02:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; t=1629486095; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=FYC8OsfGdON7NA1wELVDR6mQwrzHTDVXeg0X6QPfhT7/DeDMA3L7uO6Ztcl9Hrmyxn16V8+rMfcfFsAyyCYVfBMWWD9zzJ9HTa9FkU5Px1BK6VHcrG17xJlDaVXdV45FZkx2WLFbHuVefvfcV1aZ4bxiFVbxViSMk3zAccuTzqc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1629486095; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=l54DrbdzOOm54TU8lbIEydM8EqA2Xe62mFtORV3rvJ4=; 
-        b=eqhm70cot17LWxWOSJORlj4bPprCboxzeCBllHPQXMlyPf2KwyqrzYINIDK8ne8z932AzXLarecGj+UO+E/+I9JAVapOMQYEK149OEIFictzbtQaSqWe1PRyHUasOkaSdNM12M80ryYwXtxSYqnRQVhiueoY00Khe5LMQdI5sq4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=anirudhrb.com;
-        spf=pass  smtp.mailfrom=mail@anirudhrb.com;
-        dmarc=pass header.from=<mail@anirudhrb.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1629486095;
-        s=zoho; d=anirudhrb.com; i=mail@anirudhrb.com;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
-        bh=l54DrbdzOOm54TU8lbIEydM8EqA2Xe62mFtORV3rvJ4=;
-        b=o8mZYVIZUfudBbmim9rWBcB5jSH0y/e0vM9T4ZN4b7UhNupsd6Zy2CCvRAMQ0kbB
-        UUBmY5VfzHHK5mjFsKpQkXM6lGBh5tvaDyny86Amiefvicky2dmGQnboooFzly0/G6l
-        L3rvhRWIfQYoyJ8X+tYn0ymZyyNKBWUzrLokuTXU=
-Received: from localhost.localdomain (106.51.111.164 [106.51.111.164]) by mx.zohomail.com
-        with SMTPS id 1629486094736528.1520859464648; Fri, 20 Aug 2021 12:01:34 -0700 (PDT)
-From:   Anirudh Rayabharam <mail@anirudhrb.com>
-To:     valentina.manea.m@gmail.com, shuah@kernel.org,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Anirudh Rayabharam <mail@anirudhrb.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v4 2/2] usbip: clean up code in vhci_device_unlink_cleanup
-Date:   Sat, 21 Aug 2021 00:31:22 +0530
-Message-Id: <20210820190122.16379-3-mail@anirudhrb.com>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20210820190122.16379-1-mail@anirudhrb.com>
-References: <20210820190122.16379-1-mail@anirudhrb.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+        id S236054AbhHTTEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 15:04:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235726AbhHTTD7 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 15:03:59 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D76C061575;
+        Fri, 20 Aug 2021 12:03:17 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id mq2-20020a17090b3802b0290178911d298bso7948327pjb.1;
+        Fri, 20 Aug 2021 12:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=r1Ub2zCNnF2jD+YCi379UyQNacsyCmoabwxSuvI+j+U=;
+        b=c5KqXjWfCyTrry1wW4RpaJG2UsqChpZxWbCw9ounHx++H9ebycNR+XxD3BAzfkpn/X
+         GS/LJxyJu71ZL4GFKFLdsSIex26vUGaxbOcSfBAEAE4yUTWP/9t14MXASfzWhLTXD/D2
+         75ZS6a+qlkQcMkPTbZENVQmLZkKg3Z1mYvTqaqpxp5BiuR4FRsO8X+D7MO1aAsY7/XX8
+         UFzWTtGzG912FABhZPqqPDWIb8XjFa009DK8FiCb9iJ97328iv1WIGRIOtlbr0XuJDLF
+         Lo07CIx4Zz6/fAEG5VxZ159+D8QU/aWQ8rwsBkPUaKv6AVxG9k85xN2qf45qvEPA2OBV
+         tPow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=r1Ub2zCNnF2jD+YCi379UyQNacsyCmoabwxSuvI+j+U=;
+        b=F9p2py7xNaaBDT5vC5KT9QRhQ6XEu36Q5T7PfN2O3ON1BFFRtPmjU91ov0K1CiN2f4
+         Z8bq8JxM9976Xc41+yxFFPZHGEPIH4WqrRXzU3PER452CqJ+4CdlxtwRrNd7mXFayjAT
+         poYv1yfuaKkazco1mZ+SUENwNhEHeqQB1hlPT1l/arjHia4jd9j+UVDJCfJ/z1LZN0Hk
+         IOe5NpGtzdkrqxCwSJgs6X1h77/W2JMCt4MCssF9+b+kIaWV3SxTA2u9JZMlMgvX/F7b
+         hWJSoC5Mqn98c4kGbyu0ioZh1MvFYuAxdY2oA39ySMu1VDHQE0tzE/fJCSoqgwsCWnjO
+         +n6Q==
+X-Gm-Message-State: AOAM5308jvX7IRr1kB6UAd81jj7z79Yd9RdUvS5lngYgzcwrYpIeDYdQ
+        y2f1R8WgDu+yA049jpE2yrXMHuO+Ihq0fQ==
+X-Google-Smtp-Source: ABdhPJye4QT9f6BVWVxgul8ktnATf9jvXt9k6tJbT2208r9l9Dcc6CWAHfh26RLKEppdROuyOErIbw==
+X-Received: by 2002:a17:90b:f17:: with SMTP id br23mr5844696pjb.60.1629486196916;
+        Fri, 20 Aug 2021 12:03:16 -0700 (PDT)
+Received: from localhost.localdomain ([49.36.209.159])
+        by smtp.googlemail.com with ESMTPSA id b10sm7821899pfi.122.2021.08.20.12.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Aug 2021 12:03:16 -0700 (PDT)
+From:   Utkarsh Verma <utkarshverma294@gmail.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Utkarsh Verma <utkarshverma294@gmail.com>
+Subject: [PATCH] USB: serial: iuu_phoenix: Replace symbolic permissions by octal permissions
+Date:   Sat, 21 Aug 2021 00:33:06 +0530
+Message-Id: <20210820190306.18149-1-utkarshverma294@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-The cleanup code for unlink_tx and unlink_rx lists is almost the same.
-So, extract it into a new function and call it for both unlink_rx and
-unlink_tx. Also, remove unnecessary log messages.
+This fixed the below checkpatch issue:
+WARNING: Symbolic permissions 'S_IRUGO | S_IWUSR' are not preferred.
+Consider using octal permissions '0644'.
 
-Signed-off-by: Anirudh Rayabharam <mail@anirudhrb.com>
+Signed-off-by: Utkarsh Verma <utkarshverma294@gmail.com>
+Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- drivers/usb/usbip/vhci_hcd.c | 52 +++++++++---------------------------
- 1 file changed, 12 insertions(+), 40 deletions(-)
+ drivers/usb/serial/iuu_phoenix.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 190bd3d1c1f0..b5b31a1d40b6 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -945,7 +945,8 @@ static int vhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 	return 0;
- }
+diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
+index 19753611e7b0..0be3b5e1eaf3 100644
+--- a/drivers/usb/serial/iuu_phoenix.c
++++ b/drivers/usb/serial/iuu_phoenix.c
+@@ -1188,20 +1188,20 @@ MODULE_AUTHOR("Alain Degreffe eczema@ecze.com");
+ MODULE_DESCRIPTION(DRIVER_DESC);
+ MODULE_LICENSE("GPL");
  
--static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
-+static void vhci_cleanup_unlink_list(struct vhci_device *vdev,
-+		struct list_head *unlink_list)
- {
- 	struct vhci_hcd *vhci_hcd = vdev_to_vhci_hcd(vdev);
- 	struct usb_hcd *hcd = vhci_hcd_to_hcd(vhci_hcd);
-@@ -956,12 +957,9 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- 	spin_lock_irqsave(&vhci->lock, flags);
- 	spin_lock(&vdev->priv_lock);
+-module_param(xmas, bool, S_IRUGO | S_IWUSR);
++module_param(xmas, bool, 0644);
+ MODULE_PARM_DESC(xmas, "Xmas colors enabled or not");
  
--	list_for_each_entry_safe(unlink, tmp, &vdev->unlink_tx, list) {
-+	list_for_each_entry_safe(unlink, tmp, unlink_list, list) {
- 		struct urb *urb;
+-module_param(boost, int, S_IRUGO | S_IWUSR);
++module_param(boost, int, 0644);
+ MODULE_PARM_DESC(boost, "Card overclock boost (in percent 100-500)");
  
--		/* give back urb of unsent unlink request */
--		pr_info("unlink cleanup tx %lu\n", unlink->unlink_seqnum);
--
- 		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
- 		if (!urb) {
- 			list_del(&unlink->list);
-@@ -986,45 +984,19 @@ static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
- 		kfree(unlink);
- 	}
+-module_param(clockmode, int, S_IRUGO | S_IWUSR);
++module_param(clockmode, int, 0644);
+ MODULE_PARM_DESC(clockmode, "Card clock mode (1=3.579 MHz, 2=3.680 MHz, "
+ 		"3=6 Mhz)");
  
--	while (!list_empty(&vdev->unlink_rx)) {
--		struct urb *urb;
--
--		unlink = list_first_entry(&vdev->unlink_rx, struct vhci_unlink,
--			list);
--
--		/* give back URB of unanswered unlink request */
--		pr_info("unlink cleanup rx %lu\n", unlink->unlink_seqnum);
--
--		urb = pickup_urb_and_free_priv(vdev, unlink->unlink_seqnum);
--		if (!urb) {
--			pr_info("the urb (seqnum %lu) was already given back\n",
--				unlink->unlink_seqnum);
--			list_del(&unlink->list);
--			kfree(unlink);
--			continue;
--		}
--
--		urb->status = -ENODEV;
--
--		usb_hcd_unlink_urb_from_ep(hcd, urb);
--
--		list_del(&unlink->list);
--
--		spin_unlock(&vdev->priv_lock);
--		spin_unlock_irqrestore(&vhci->lock, flags);
--
--		usb_hcd_giveback_urb(hcd, urb, urb->status);
--
--		spin_lock_irqsave(&vhci->lock, flags);
--		spin_lock(&vdev->priv_lock);
--
--		kfree(unlink);
--	}
--
- 	spin_unlock(&vdev->priv_lock);
- 	spin_unlock_irqrestore(&vhci->lock, flags);
- }
+-module_param(cdmode, int, S_IRUGO | S_IWUSR);
++module_param(cdmode, int, 0644);
+ MODULE_PARM_DESC(cdmode, "Card detect mode (0=none, 1=CD, 2=!CD, 3=DSR, "
+ 		 "4=!DSR, 5=CTS, 6=!CTS, 7=RING, 8=!RING)");
  
-+static void vhci_device_unlink_cleanup(struct vhci_device *vdev)
-+{
-+	/* give back URB of unsent unlink request */
-+	vhci_cleanup_unlink_list(vdev, &vdev->unlink_tx);
-+
-+	/* give back URB of unanswered unlink request */
-+	vhci_cleanup_unlink_list(vdev, &vdev->unlink_rx);
-+}
-+
- /*
-  * The important thing is that only one context begins cleanup.
-  * This is why error handling and cleanup become simple.
+-module_param(vcc_default, int, S_IRUGO | S_IWUSR);
++module_param(vcc_default, int, 0644);
+ MODULE_PARM_DESC(vcc_default, "Set default VCC (either 3 for 3.3V or 5 "
+ 		"for 5V). Default to 5.");
 -- 
-2.26.2
+2.17.1
 
