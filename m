@@ -2,64 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 786F53F29E0
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 12:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9743F2B46
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 13:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237085AbhHTKHm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 06:07:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55966 "EHLO mail.kernel.org"
+        id S240043AbhHTLeX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 07:34:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232244AbhHTKHl (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Aug 2021 06:07:41 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id DD9476024A;
-        Fri, 20 Aug 2021 10:07:01 +0000 (UTC)
+        id S240027AbhHTLeX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Aug 2021 07:34:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id ADEAD61053
+        for <linux-usb@vger.kernel.org>; Fri, 20 Aug 2021 11:33:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629454024;
-        bh=4wOWt2TLJnChpQZUoUnZ7pdN3g/0c/c11ETk2UqFr7w=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=Z9iuAsW3c17hodu6Hgq6226o2iKkjrnDSLYW/eEIFf5COL+zNpvEOaf49CqrpDiMp
-         2VtLuppafClyPPIzOHDdpOxerJxfrGOH0DncrlkR5dtR6Yd2Ki2g8+XklrDzt5snOt
-         sAABGBYzV6REPEMdCg9yNSZ2vq23ArlwH2s0atAN0G0J9Q/WLpOclelAGDEpPSyW7W
-         HUoSYTBIu6Zkw2IWj7XOqt7ZHe9+vRaILNXUDYrw7NW8VM1j38hegdj8zM3kHNy3aZ
-         ivfRB1sb46h9nrBsIdVGD1h99d4LI5ZTLXQ/A31qv1hDldEejZgPyVpusnr6ksjEU0
-         wGlW/8wThl4Cg==
-References: <20210819154818.18334-1-lutovinova@ispras.ru>
-User-agent: mu4e 1.6.3; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Nadezda Lutovinova <lutovinova@ispras.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-Subject: Re: [PATCH] usb: dwc3: imx8mp: request irq after initializing dwc3
-Date:   Fri, 20 Aug 2021 13:06:33 +0300
-In-reply-to: <20210819154818.18334-1-lutovinova@ispras.ru>
-Message-ID: <878s0wfn0c.fsf@kernel.org>
+        s=k20201202; t=1629459225;
+        bh=X9UsktDgzlyngjLS8C1dPuZR6gef5Pm4R34qvEmgIfg=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=PQsH7CTs5pxidGqUTCs/AWWlhCyRX0RFNZzH5zDkEkzDRygwMu4gKZa1aAqPFY+g8
+         cvrRj7qjK5Q//ooYCGAeIAqAmgfS3nUnyusZ7r+GSqJgOQqMLuCr2fNXPeUI5mySzI
+         Y6U7Wtn38bEecpAEyNxqLbP7Gf1cfn7TikUlxCSFIE2jHZ2/vR6x1X8yxVic/c1nED
+         R8aSR65u8UUvRvnzriU36vaQajOAv973/0f25SV/mqIU40ZCHS3/sJ1LxjVTT+fTPW
+         zc4K+C0py8KbQviREkmO8vS5Jvzpv4CVJTr0DahBbWyFudvbUYuHMMSTHzM5C0Xki9
+         celWeyKKSpgZQ==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id A944A60ED3; Fri, 20 Aug 2021 11:33:45 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Fri, 20 Aug 2021 11:33:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-214021-208809-DQJMqSnMpY@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-Nadezda Lutovinova <lutovinova@ispras.ru> writes:
+Mathias Nyman (mathias.nyman@linux.intel.com) changed:
 
-> If IRQ occurs between calling  devm_request_threaded_irq() and
-> initializing dwc3_imx->dwc3, then null pointer dereference occurs
-> since dwc3_imx->dwc3 is used in dwc3_imx8mp_interrupt().
->
-> The patch puts registration of the interrupt handler after
-> initializing of neccesery data.
->
-> Found by Linux Driver Verification project (linuxtesting.org).
->
-> Signed-off-by: Nadezda Lutovinova <lutovinova@ispras.ru>
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mathias.nyman@linux.intel.c
+                   |                            |om
 
-Acked-by: Felipe Balbi <balbi@kernel.org>
+--- Comment #9 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+Kishon reported this same issue.
+xhci_alloc_dev()->xhci_queue_slot_control()->queue_command() fails because
+xhci->xhc_state still had a  XHCI_STATE_HALTED bit set.
 
--- 
-balbi
+This is possible because the xhci driver will first add the high-speed
+hcd/roothub, then the super-speed hcd/roothub.
+xHC controller is started and xhci->xhc_state cleared only when the second,
+super-speed hcd is added.
+
+So if we are unlucky the first hs hcd will create the hs roothub device,=20
+hub driver binds to it, hub inits, and hub thread start enumerating devies
+before xHC is running.
+
+xHC port registers can be read when xHC is powered, before it's is running,=
+ so
+hub thread is able to see the connected devices early.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
