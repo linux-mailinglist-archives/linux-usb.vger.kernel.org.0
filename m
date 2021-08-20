@@ -2,214 +2,154 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 466293F25A0
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 06:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE663F2651
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 07:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbhHTEQ0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 00:16:26 -0400
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:48492 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbhHTEQZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 00:16:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1629432948; x=1660968948;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=FNH7AK4EGYWfnuJ4BDn4ARCJxqO5ow6yPVyw0BJzilw=;
-  b=HgDERKrIZg7aDoRiYyRpoWCKKpVZZ0x0mHRLT3xD8tMLTllECtZd6wK1
-   LmwGEJGBaCMdXUu/VgxONKw8GW8qRsi4kykhQP6WrbfxSjfO1Y7YIPe3d
-   prHKZyvoWNQcHb2cSW01v0KN8PD/edJnOVA7mZymO0LfjQwe4vNDI4MBS
-   I=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 19 Aug 2021 21:15:48 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 21:15:47 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.858.15; Thu, 19 Aug 2021 21:15:47 -0700
-Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.922.7;
- Thu, 19 Aug 2021 21:15:45 -0700
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH V2] usb: gadget: configfs: add three trace entries
-Date:   Fri, 20 Aug 2021 12:15:41 +0800
-Message-ID: <1629432941-23737-1-git-send-email-quic_linyyuan@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S232649AbhHTFIO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 01:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46704 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232686AbhHTFIN (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 01:08:13 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7C0C06175F
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:07:36 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id y23so8011165pgi.7
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:07:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=I11c1cKgPr/Sp26Jfws1CaBTqYhcyWk53u2DaXhbwr4=;
+        b=UpF+nH2OkwIlPICwJCGnmyjIr4B9zvEagcPYbt+FJYBnDajj0m1nO6tNVE8qbt0+Fb
+         dvuJgN/eTqaJJteqhCVn/rpcLUbjjgUdxm7UyfiENQfoJm1xoF4RsPXSRRmHR5JJ+BPY
+         PyeM7sN+r+QeMIx3F/9qJdfTHD7pTlzTgVcV3EQwfDc98f2L+ENvpCEJkt6OSiVH99HJ
+         DBrXa6YTNx2fJk97BqJPlKXpgux1dBNrNVjVGSJvKx8onkggk5QqicWc5AuujjenjwE8
+         18Ew9Inp2nlX4py5sLi42iaANQsw78fFTvRX/HOAZ1Q/cYx042ZZ2sxqM8pjRICPn4KS
+         FXng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=I11c1cKgPr/Sp26Jfws1CaBTqYhcyWk53u2DaXhbwr4=;
+        b=A6OboQySCJLMkG8fWeWDOfH7Rl/f1N0KiXl7ydNj4OCOoF4lBywRMleSop6QLeEcrw
+         2SS4QeUTqlriFQ2wcvu70+G+7qpbO4UA0UwqC5KzLiO19PeQiTenqWGyyL3dWo3HqDqi
+         utoSMv0yQEjXdei01c5xR0TtpAGha5s8yYHGalpYgTlXkXmhliaTGRCb4e/U/jIB9etr
+         leooQ1rJectdzA4nbrw4HOfOFLzE2TUAqcJXusLgqFDUDZxRZIL/zU3dRRZn6UxMn3uI
+         wHJqIQ/4v4gd5FsDmfczY05Hnu2XvWgBb3OmT5bn+/CihoXZyisShhVSd8UQptaAygkW
+         UQig==
+X-Gm-Message-State: AOAM532ApSghRrG39giHzG8JD5fg37E4etAi/U2rjPc4/Fnbn6F8jZeu
+        jKpDNXsmmRCIuc0EPoXNM3px/A==
+X-Google-Smtp-Source: ABdhPJy16/E+lvO8MOOTzYuxWhro60JOgxJRFDA2oDgCU53rDXdaeG2jdAFewa07ZsImLDOdZ74p+w==
+X-Received: by 2002:a05:6a00:791:b0:3e1:3316:2e8 with SMTP id g17-20020a056a00079100b003e1331602e8mr18151438pfu.10.1629436055638;
+        Thu, 19 Aug 2021 22:07:35 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id m5sm6747464pgn.70.2021.08.19.22.07.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Aug 2021 22:07:35 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 10:37:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Dmitry Osipenko <digetx@gmail.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210820050732.oy2qdtwha5zioasq@vireshk-i7>
+References: <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
+ <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
+ <0354acbe-d856-4040-f453-8e8164102045@gmail.com>
+ <CAPDyKFoQdn1rm91iFNJwZwpSYcKJBjDLqtJB4KZAkhgY1Grm-Q@mail.gmail.com>
+ <87073fc2-d7b3-98f4-0067-29430ea2adef@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanexm03e.na.qualcomm.com (10.85.0.48) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87073fc2-d7b3-98f4-0067-29430ea2adef@gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-add UDC/link/unlink trace entry to track important event.
+On 19-08-21, 22:35, Dmitry Osipenko wrote:
+> 19.08.2021 16:07, Ulf Hansson пишет:
+> > In the other scenario where a consumer driver prefers to *not* call
+> > pm_runtime_resume_and_get() in its ->probe(), because it doesn't need
+> > to power on the device to complete probing, then we don't want to vote
+> > for an OPP at all - and we also want the performance state for the
+> > device in genpd to be set to zero. Correct?
+> 
+> Yes
+> 
+> > Is this the main problem you are trying to solve, because I think this
+> > doesn't work out of the box as of today?
+> 
+> The main problem is that the restored performance state is zero for the
+> first genpd_runtime_resume(), while it's not zero from the h/w perspective.
 
-Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
----
- drivers/usb/gadget/Makefile         |  1 +
- drivers/usb/gadget/configfs.c       | 11 ++++++
- drivers/usb/gadget/configfs_trace.c |  7 ++++
- drivers/usb/gadget/configfs_trace.h | 73 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 92 insertions(+)
- create mode 100644 drivers/usb/gadget/configfs_trace.c
- create mode 100644 drivers/usb/gadget/configfs_trace.h
+This is exactly why I have been advocating that the genpd needs to
+sync up with the hardware before any calls are made to it from the
+consumer driver. Just what clock framework does to get the clock rate.
 
-diff --git a/drivers/usb/gadget/Makefile b/drivers/usb/gadget/Makefile
-index 130dad7..8e9c2b8 100644
---- a/drivers/usb/gadget/Makefile
-+++ b/drivers/usb/gadget/Makefile
-@@ -9,5 +9,6 @@ ccflags-y				+= -I$(srctree)/drivers/usb/gadget/udc
- obj-$(CONFIG_USB_LIBCOMPOSITE)	+= libcomposite.o
- libcomposite-y			:= usbstring.o config.o epautoconf.o
- libcomposite-y			+= composite.o functions.o configfs.o u_f.o
-+libcomposite-y			+= configfs_trace.o
- 
- obj-$(CONFIG_USB_GADGET)	+= udc/ function/ legacy/
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 477e72a..4024f9b 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -9,6 +9,7 @@
- #include "configfs.h"
- #include "u_f.h"
- #include "u_os_desc.h"
-+#include "configfs_trace.h"
- 
- int check_user_usb_string(const char *name,
- 		struct usb_gadget_strings *stringtab_dev)
-@@ -270,6 +271,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
- 	if (name[len - 1] == '\n')
- 		name[len - 1] = '\0';
- 
-+	trace_gadget_dev_desc_UDC_store(config_item_name(item), name);
-+
- 	mutex_lock(&gi->lock);
- 
- 	if (!strlen(name)) {
-@@ -423,6 +426,10 @@ static int config_usb_cfg_link(
- 	struct usb_function *f;
- 	int ret;
- 
-+	trace_config_usb_cfg_link(config_item_name(&gi->group.cg_item),
-+				config_item_name(usb_cfg_ci),
-+				config_item_name(usb_func_ci));
-+
- 	mutex_lock(&gi->lock);
- 	/*
- 	 * Make sure this function is from within our _this_ gadget and not
-@@ -472,6 +479,10 @@ static void config_usb_cfg_unlink(
- 			struct usb_function_instance, group);
- 	struct usb_function *f;
- 
-+	trace_config_usb_cfg_unlink(config_item_name(&gi->group.cg_item),
-+				config_item_name(usb_cfg_ci),
-+				config_item_name(usb_func_ci));
-+
- 	/*
- 	 * ideally I would like to forbid to unlink functions while a gadget is
- 	 * bound to an UDC. Since this isn't possible at the moment, we simply
-diff --git a/drivers/usb/gadget/configfs_trace.c b/drivers/usb/gadget/configfs_trace.c
-new file mode 100644
-index 0000000..b74ff21
---- /dev/null
-+++ b/drivers/usb/gadget/configfs_trace.c
-@@ -0,0 +1,7 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#define CREATE_TRACE_POINTS
-+#include "configfs_trace.h"
-diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
-new file mode 100644
-index 0000000..82e0121
---- /dev/null
-+++ b/drivers/usb/gadget/configfs_trace.h
-@@ -0,0 +1,73 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM configfs_gadget
-+
-+#if !defined(__GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define __GADGET_TRACE_H
-+
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(gadget_dev_desc_UDC_store,
-+	TP_PROTO(char *name, char *udc),
-+	TP_ARGS(name, udc),
-+	TP_STRUCT__entry(
-+		__string(group_name, name)
-+		__string(udc_name, udc)
-+	),
-+	TP_fast_assign(
-+		__assign_str(group_name, name);
-+		__assign_str(udc_name, udc);
-+	),
-+	TP_printk("gadget:%s UDC:%s", __get_str(group_name),
-+		__get_str(udc_name))
-+);
-+
-+TRACE_EVENT(config_usb_cfg_link,
-+	TP_PROTO(char *name, char *cfg, char *func),
-+	TP_ARGS(name, cfg, func),
-+	TP_STRUCT__entry(
-+		__string(group_name, name)
-+		__string(cfg_name, cfg)
-+		__string(func_name, func)
-+	),
-+	TP_fast_assign(
-+		__assign_str(group_name, name);
-+		__assign_str(cfg_name, cfg);
-+		__assign_str(func_name, func)
-+	),
-+	TP_printk("gadget:%s cfg:%s link func:%s", __get_str(group_name),
-+		__get_str(cfg_name), __get_str(func_name))
-+);
-+
-+TRACE_EVENT(config_usb_cfg_unlink,
-+	TP_PROTO(char *name, char *cfg, char *func),
-+	TP_ARGS(name, cfg, func),
-+	TP_STRUCT__entry(
-+		__string(group_name, name)
-+		__string(cfg_name, cfg)
-+		__string(func_name, func)
-+	),
-+	TP_fast_assign(
-+		__assign_str(group_name, name);
-+		__assign_str(cfg_name, cfg);
-+		__assign_str(func_name, func)
-+	),
-+	TP_printk("gadget:%s cfg:%s unlink func:%s", __get_str(group_name),
-+		__get_str(cfg_name), __get_str(func_name))
-+);
-+
-+#endif /* __GADGET_TRACE_H */
-+
-+/* this part has to be here */
-+
-+#undef TRACE_INCLUDE_PATH
-+#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
-+
-+#undef TRACE_INCLUDE_FILE
-+#define TRACE_INCLUDE_FILE configfs_trace
-+
-+#include <trace/define_trace.h>
+> > There is another concern though, but perhaps it's not a problem after
+> > all. Viresh told us that dev_pm_opp_set_rate() may turn on resources
+> > like clock/regulators. That could certainly be problematic, in
+> > particular if the device and its genpd have OPP tables associated with
+> > it and the consumer driver wants to follow the above sequence in
+> > probe.
+> 
+> dev_pm_opp_set_rate() won't enable clocks and regulators, but it may
+
+It does enable regulators right now, it may choose to enable clocks
+later on, no guarantees.
+
+> change the clock rate and voltage. This is also platform/driver specific
+> because it's up to OPP user how to configure OPP table. On Tegra we only
+> assign clock to OPP table, regulators are unused.
+
+Right, over that platforms can set their own version of set-opp
+callback, where all this is done from a platform specific callback.
+
+> > Viresh, can you please chime in here and elaborate on some of the
+> > magic happening behind dev_pm_opp_set_rate() API - is there a problem
+> > here or not?
+
+It configures clock, regulators, genpds, any required OPPs, + it
+enables regulators right now.
+
 -- 
-2.7.4
-
+viresh
