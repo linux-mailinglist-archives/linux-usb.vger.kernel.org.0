@@ -2,156 +2,152 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 027ED3F2CD7
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064513F2D1F
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240740AbhHTNJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 09:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
+        id S232209AbhHTNaK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 09:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240714AbhHTNJZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 09:09:25 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A1C061764
-        for <linux-usb@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id 67so4106816uaq.4
-        for <linux-usb@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
-        b=WC/dbJiZXZbYao7JhIntQY4TZ71VEiAo3x28NE7fEM5kyH3E5QMkrYaKxo+tOHuBq2
-         4fOoN/8kF20QYOvTlDeczofK7BcIqjasNY7CBq53XfqL9k8ztpMQHfVcSzVO71rO64Zq
-         McT44tin8yfog5Tj3F9uEcMm8s9RXuEY0am/zJIYxZIPBOSKQ0gPSUGTqV2fLnNdUMyA
-         Udra5icYrRXmu3Bub8tb1oL++vAVtV4op8H5c4RaKOsboeh/aX+gQt/xKF7m6+TffsNV
-         KpFsGCqib0Qpb9uD4iaINA3IeiJAs50v1pCyq6JF3tpma3/8Ou1apbdGh5FgySUdxEte
-         6zRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
-        b=azI9exIVRvRijAXiuSDfHJ5MaXhSKcznfR9utpm9JLZJwDdTyWw9ICngn8ZGjNFlDy
-         Qvkc4qcvcML0B+6tsgbB0TAPxNck1hBm+QGm1upRx/1gAqITuBOnJAsYJT0+RPsMzMqm
-         rXlE4Ykj3NvEzqK82Zk/9BCp04zi6kT+sfT4ywMz6Jgu6x2XjzdXT8CcG91AVHwRkZMP
-         9Q72Q24juGgLKlklYBFQDC21S1fVdUzmcGuBjBDE6reocegTTsW3l8fQSjwgVikhjopm
-         gXPTPDVn0D6hAn6+o1gxC6OCzWbA/xPZD0pn6T9P2Kgp6lf69TyPTgUzB7662pmC0T73
-         mT3Q==
-X-Gm-Message-State: AOAM531lEMfEuk7ZOPXwqHGZARlQ6vLRDCOzXhmiunI6iF1riMaJMbjR
-        yeGJSFTLgY7HYxyrK8hgXN0r+naet2gTJRe2IUmojA==
-X-Google-Smtp-Source: ABdhPJyudXWst0uOFOvLTh4dvpAObwIHCZFQbOR7Ax2SinJKzLNlpYWdAnSEO7YQ/BLnbTZWMq48nnebeaOpVOjUigE=
-X-Received: by 2002:ab0:60a9:: with SMTP id f9mr15039087uam.19.1629464926939;
- Fri, 20 Aug 2021 06:08:46 -0700 (PDT)
+        with ESMTP id S229707AbhHTNaI (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 09:30:08 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709CEC061575;
+        Fri, 20 Aug 2021 06:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Date:MIME-Version:Content-Type:References:
+        In-Reply-To:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:Sender:
+        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=AEd0XQ9RV977QFN7MmkxbrXSUtIMTPRefdXmVxcnKMA=;
+        t=1629466170; x=1630675770; b=cpn6ZX2Y/T66vti/wTpEEOtQG2Y6tm9xBPEnx+8A/d8PnOt
+        CDXk+XVLG82KZp+6Y4nH5pjA5mfMwxwsCLI2XTu4aTg+5LEmww9NCFjZImyvO+upLpvAmS6J2nsZc
+        cHs2DNUCBDvicA5phVFk18hnmz0hRX1B5mqTV88bhm2j/YhkCdPyD2GLSypBNQZdZl8Ter0UqWa0B
+        Uz77QVYzjbUxxTAOjsi/o/FONtADaSxxOAfEfy2JLmSgP7AtNBU0vz5Y8w4xjqG9/15xOJVgGnfWj
+        A/ra924l9WneBA1TKnjw5DgvlY3VBEoEwoaHTLZ1UibTcXJqQkwC8vKKR3V6H3zQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <benjamin@sipsolutions.net>)
+        id 1mH4aC-00Dbvs-48; Fri, 20 Aug 2021 15:29:16 +0200
+Message-ID: <077990d1e354777c4c6a33866a0916bed6a97ed5.camel@sipsolutions.net>
+Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
+From:   Benjamin Berg <benjamin@sipsolutions.net>
+To:     Salvatore Bonaccorso <carnil@debian.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Ian Turner <vectro@vectro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+In-Reply-To: <YR+nwZtz9CQuyTn+@lorien.valinor.li>
+References: <20201009144047.505957-1-benjamin@sipsolutions.net>
+         <20201028091043.GC1947336@kroah.com> <20201106104725.GC2785199@kroah.com>
+         <YR+nwZtz9CQuyTn+@lorien.valinor.li>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-oi0AClpVchYyY1jsi55/"
 MIME-Version: 1.0
-References: <20210817012754.8710-1-digetx@gmail.com> <20210817012754.8710-8-digetx@gmail.com>
- <YR0UBi/ejy+oF4Hm@orome.fritz.box> <da7356cb-05ee-ba84-8a7c-6e69d853a805@gmail.com>
- <YR04YHGEluqLIZeo@orome.fritz.box> <ad99db08-4696-1636-5829-5260f93dc681@gmail.com>
- <YR6Mvips3HAntDy0@orome.fritz.box> <e17bbe8d-7c0f-fc3d-03c7-d75c54c24a43@gmail.com>
- <YR+VDZzTihmpENp6@orome.fritz.box>
-In-Reply-To: <YR+VDZzTihmpENp6@orome.fritz.box>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 20 Aug 2021 15:08:10 +0200
-Message-ID: <CAPDyKFpJ+TK0w1GZEA7G=rtAjq5ipmVR4P0wy7uHiEGVWRk5yA@mail.gmail.com>
-Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Date:   Fri, 20 Aug 2021 15:29:11 +0200
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+X-malware-bazaar: not-scanned
+X-malware-bazaar-2: OK
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[...]
 
-> >
-> > I'm creating platform device for the clocks that require DVFS. These
-> > clocks don't use regulator, they are attached to the CORE domain.
-> > GENPD framework manages the performance state, aggregating perf votes
-> > from each device, i.e. from each clock individually.
-> >
-> > You want to reinvent another layer of aggregation on top of GENPD.
-> > This doesn't worth the effort, we won't get anything from it, it
-> > should be a lot of extra complexity for nothing. We will also lose
-> > from it because pm_genpd_summary won't show you a per-device info.
-> >
-> > domain                          status          children                           performance
-> >     /device                                             runtime status
-> > ----------------------------------------------------------------------------------------------
-> > heg                             on                                                 1000000
-> >     /devices/soc0/50000000.host1x                       active                     1000000
-> >     /devices/soc0/50000000.host1x/54140000.gr2d         suspended                  0
-> > mpe                             off-0                                              0
-> > vdec                            off-0                                              0
-> >     /devices/soc0/6001a000.vde                          suspended                  0
-> > venc                            off-0                                              0
-> > 3d1                             off-0                                              0
-> >     /devices/genpd:1:54180000.gr3d                      suspended                  0
-> > 3d0                             off-0                                              0
-> >     /devices/genpd:0:54180000.gr3d                      suspended                  0
-> > core-domain                     on                                                 1000000
-> >                                                 3d0, 3d1, venc, vdec, mpe, heg
-> >     /devices/soc0/7d000000.usb                          active                     1000000
-> >     /devices/soc0/78000400.mmc                          active                     950000
-> >     /devices/soc0/7000f400.memory-controller            unsupported                1000000
-> >     /devices/soc0/7000a000.pwm                          active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_c        active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_e        suspended                  0
-> >     /devices/soc0/60006000.clock/tegra_clk_pll_m        active                     1000000
-> >     /devices/soc0/60006000.clock/tegra_clk_sclk         active                     1000000
-> >
->
-> I suppose if there's really no good way of doing this other than
-> providing a struct device, then so be it. I think the cleaned up sysfs
-> shown in the summary above looks much better than what the original
-> would've looked like.
->
-> Perhaps an additional tweak to that would be to not create platform
-> devices. Instead, just create struct device. Those really have
-> everything you need (.of_node, and can be used with RPM and GENPD). As I
-> mentioned earlier, platform device implies a CPU-memory-mapped bus,
-> which this clearly isn't. It's kind of a separate "bus" if you want, so
-> just using struct device directly seems more appropriate.
+--=-oi0AClpVchYyY1jsi55/
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Just a heads up. If you don't use a platform device or have a driver
-associated with it for probing, you need to manage the attachment to
-genpd yourself. That means calling one of the dev_pm_domain_attach*()
-APIs, but that's perfectly fine, ofcourse.
+Hi,
 
->
-> We did something similar for XUSB pads, see drivers/phy/tegra/xusb.[ch]
-> for an example of how that was done. I think you can do something
-> similar here.
->
-> Thierry
+On Fri, 2021-08-20 at 15:01 +0200, Salvatore Bonaccorso wrote:
+> Hi Greg,
+>=20
+> On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
+> > On Wed, Oct 28, 2020 at 10:10:43AM +0100, Greg Kroah-Hartman wrote:
+> > > On Fri, Oct 09, 2020 at 04:40:45PM +0200, Benjamin Berg wrote:
+> > > > From: Benjamin Berg <bberg@redhat.com>
+> > > >=20
+> > > > Hi all,
+> > > >=20
+> > > > so, I kept running in an issue where the UCSI port information was =
+saying
+> > > > that power was being delivered (online: 1), while no cable was atta=
+ched.
+> > > >=20
+> > > > The core of the problem is that there are scenarios where UCSI chan=
+ge
+> > > > notifications are lost. This happens because querying the changes t=
+hat
+> > > > happened is done using the GET_CONNECTOR_STATUS command while clear=
+ing the
+> > > > bitfield happens from the separate ACK command. Any change in betwe=
+en will
+> > > > be lost.
+> > > >=20
+> > > > Note that the problem may be almost invisible in the UI as e.g. GNO=
+ME will
+> > > > still show the battery as discharging. But some policies like autom=
+atic
+> > > > suspend may be applied incorrectly.
+> > > >=20
+> > > > Cc: Hans de Goede <hdegoede@redhat.com>
+> > > > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > >=20
+> > > > Benjamin Berg (2):
+> > > >   usb: typec: ucsi: acpi: Always decode connector change informatio=
+n
+> > > >   usb: typec: ucsi: Work around PPM losing change information
+> > >=20
+> > > Do these need to be backported to stable kernel releases?  If so, how
+> > > far back?
+> >=20
+> > Due to the lack of response, I guess they don't need to go to any stabl=
+e
+> > kernel, so will queue them up for 5.11-rc1.
+>=20
+> At least one user in Debian (https://bugs.debian.org/992004) would be
+> happy to have those backported as well to the 5.10.y series (which we
+> will pick up).
+>=20
+> So if Benjamin ack's this, this would be great to have in 5.10.y.
 
-Kind regards
-Uffe
+Sure, it is reasonable to pull it into 5.10. At the time it just seemed
+to me that it was enough of a corner case to not bother.
+
+Note that there was a somewhat related fix later on (for Qualcomm UCSI
+firmware), which probably makes sense to pull in too then.
+
+Including Bjorn into the CC list for that.
+
+commit 8c9b3caab3ac26db1da00b8117901640c55a69dd
+Author: Bjorn Andersson <bjorn.andersson@linaro.org>
+Date:   Sat May 15 21:09:53 2021 -0700
+
+    usb: typec: ucsi: Clear pending after acking connector change
+=20
+Benjamin
+
+--=-oi0AClpVchYyY1jsi55/
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmEfrh4ACgkQq6ZWhpmF
+Y3BGgRAAuhBeIqTGGQZaM9yl5QUOWseVvsfkKblORliZd/E7yl/yJO8eIFDxoY1m
+xCPWqfqvEmKoBuTYoD6GJZkcyBO6hGaO12GUffE/x+iGekCWc6CaHsRupj1HQwPF
+YU7cgmLU15qbREdezFKsJvQ2alulq6XsmjDKIFpVxlgKdiFjeT9l3cllgnTmWCxV
+VeN1EA22cJmZFPA+PodkMyz/hnyF/RBSt4aB3a8TZ0vQvwronkapunndZwzBWVod
+MV64snUKU/TaLuw7vlLd4807yoCc1Qrr4zTE6JhJspMtZUT582Np0HDyeBsBe20A
+zxoDefym/uxNaAOr9nNz3CcbqbNA6Zw90FLoccPDk4hMpfPMjrep1EyU6S9OQp5M
+cs5VvFb4T74HyM/zOGMrdiylXVcxhxiCJk5xywxWb1GgVzQt7CDE+7sqDDKhwcCj
+SRgPo9Nd0COvIf9VoOvqx04jOTG6TPtEeh5AFJKlAW76K6jvOvoXq4CVrWtPxAWI
+HUmJH5aXg/N+6j+DsiepHMdMfmlo1ogsuJpYFd1i0hxp3ARq6PP36170tEt7fbeO
+6EoVzS2LUejraAcsgxM7nOmqfl2pbtPrCbR2gOThYx5tzw4UPrLVcHAGuMFVktWQ
+Pmu/y2FFydZhJZByP74f9k/ibTn4xDZlBaGrWg5/b28gAsJOXns=
+=i5Lb
+-----END PGP SIGNATURE-----
+
+--=-oi0AClpVchYyY1jsi55/--
+
