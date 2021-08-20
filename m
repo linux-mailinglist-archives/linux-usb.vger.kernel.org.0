@@ -2,153 +2,163 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8003F265F
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 07:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83BB03F266A
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 07:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235411AbhHTFQt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 01:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S236436AbhHTFTY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 01:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233925AbhHTFQr (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 01:16:47 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF27C061756
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:16:10 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id k29so12295222wrd.7
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:16:10 -0700 (PDT)
+        with ESMTP id S232500AbhHTFTX (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 01:19:23 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C889C061575
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id e7so8030565pgk.2
+        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=eVh1i+oDLelffdg2LPqkDO7S0K0T59aI3kSY34NsMtQ=;
-        b=aTr34ddIKsEZCutcib30lOaEQ3OK5yvRC6YW9VFutLoTt0q2BL0mxkgauMQa1AU8p9
-         xMEMypgywI2X4jDQ0o89c7lDWN3WdKu/gyO1oArODYf9rYoOyAssIt5GS+9eCeBqxiXW
-         GTdKYwjPYs0N3udZVs8SRtpf38u14SopC22lC2DSe892MwxMG8mt337tpWKKkmSskTZg
-         4VzRbWA28oSPME9XdvnyfIc7iCvx2dxr/42rYVqfhmhx1MB5NDpjgEyzEaDfjzE32T2m
-         XCNe4e1YB0vZUtc50ssj22SgKJsnM79sCVidkspUXPFDiYh8hSSo38+3J8o+pYD6oSUy
-         pBCA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
+        b=PAK0FwHpNruccQOMJcEETGgiuehcBfGqSXwbOalixpfWmC8iUPHKv0ZRFhT4USGW3L
+         s3ikZix1CXYk8w3jX5LaxfyZfb40GBiPWSjG9bWn3gJp9a9Md0FR48UGizRgXzY9ODgl
+         10gDNc8YxX4abwwur3/2Ib4tR0HK4fxAVz95jdn0g5Bjm1f+zlmZUdf0J4uOmNCA+73o
+         QmFwB0uLKerpVDInoO9o15o02ie64XpCaCSsIImcFb/KjT6Us0KvUWI0KV441DGxP1Gb
+         Qjx6eoerfkbM7U/RrGe2d3xgWfRJJ6PVyX/2MvEkhvBiHXfKbkbdOk6b4KB2LrxPQeQV
+         fLzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=eVh1i+oDLelffdg2LPqkDO7S0K0T59aI3kSY34NsMtQ=;
-        b=sgEyLSLUbJGYJIg+LlwOuFJOveCjdmm2qhPxvKaunZRTj7QFXctgC/+6EmgAL8yrAa
-         SwmLvRv6Me9/SWlICUTYMreYIUc7spmR0klXBCZk/VfQ4TPVnayQ8Uy4owf+FYYrXEBu
-         mtiZLRIiS+sub5Y7FkXdqwHJMHaXRbYdDpfRfX7B5UqzDuDxbWQXbI4uNt69Hc26ziMa
-         9XlkSalEGrSGPRSuMkf2WNQaCJsTskNk5EsVKpV8m+wmKrt9VVW8OFo2XNvNx9zqh2wv
-         Gw4cC/XSpHUn+dIooiz2Nj8JfMVNPuateEIGoBRUnHuLMmYsVwL5z9TmdYtMDQ1zHsvz
-         rWBw==
-X-Gm-Message-State: AOAM533/12jDzVEpOBLhQYdLLH1IaThm5ecEcRsMv0MTMI3jzddGuOgW
-        QDz6Sr6NJ1HSPkscjThy0bHCSLalIlc6RmEbEEXJGg==
-X-Google-Smtp-Source: ABdhPJwfQEsV75S1lBJjSVxorUj0NVdZ2nxEJ8iZou3pJhGCqSg7LrdP9gVv5hl8OYQTRZ6rfIF0re33jkA282nENVI=
-X-Received: by 2002:adf:e7d1:: with SMTP id e17mr7613520wrn.151.1629436568680;
- Thu, 19 Aug 2021 22:16:08 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
+        b=DVbTvYYrpix5LR4CBw/2ikB2xd2MH460eRgo1xxSMuhA8h76hE9KKJvJMdzLv3IeNg
+         dvFsBenzzV1PX1Gh6Ye5ix2hnf4safV9v0rC4gsFoLnP70yYGwUnoVqBie2FjoE5mpZJ
+         5dNk4ZImbp+obE1/xQqIPyvazLuYp+sQNnOYylPyABq0riDy/sHhXyXGjNKlVug4y3Nc
+         zeAP6AQMc6Hp2/d9LZ7X3eeTipu9c5HlFgMgDHyyzDDjg2fZOtsVBOICzm8oUWR7Szo1
+         fY4luAyLx4MbA1kGy8tfoHNs1tAELtmgtcfdMOfRnKRPAmLJMMs67VCtwUSeWfAg7XuS
+         mQrw==
+X-Gm-Message-State: AOAM5301pdY+5ruyaAsRNvZcqkVNZB43WTpQyUepncM2qGs7LUdDX8t3
+        2xAJNI2/xTsFcS/a/DZD2zneIQ==
+X-Google-Smtp-Source: ABdhPJwH30rFrNGt2fTNK9Na7wrgKwgjGw7543RwntMIs+dfy9PTWNVMu53RFGAQHLSof48YBaglZA==
+X-Received: by 2002:a62:8283:0:b0:3e0:f3f3:839d with SMTP id w125-20020a628283000000b003e0f3f3839dmr17811980pfd.37.1629436725848;
+        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
+Received: from localhost ([122.172.201.85])
+        by smtp.gmail.com with ESMTPSA id i26sm5582209pfu.6.2021.08.19.22.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
+Date:   Fri, 20 Aug 2021 10:48:43 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+Message-ID: <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
+References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+ <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
+ <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
+ <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20210817095313.GA671484@ubuntu> <20210818161752.vu6abfv3e6bfqz23@linutronix.de>
- <CAJk_X9h_GqUyir7oG33pFrLgknj7DZfd6esiKb07w7QWjZqX0g@mail.gmail.com> <20210819084759.stnmit32vs2be46m@linutronix.de>
-In-Reply-To: <20210819084759.stnmit32vs2be46m@linutronix.de>
-From:   Jeaho Hwang <jhhwang@rtst.co.kr>
-Date:   Fri, 20 Aug 2021 14:15:55 +0900
-Message-ID: <CAJk_X9gyWch6Z1=hbe2vvqGu61mdavAU62+6dSka0tZoMzxu5Q@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: chipidea: local_irq_save/restore added for hw_ep_prime
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-rt-users@vger.kernel.org, Linux team <team-linux@rtst.co.kr>,
-        =?UTF-8?B?67OA66y06rSRKEJ5ZW9uIE1vbyBLd2FuZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm0=?=
-         =?UTF-8?B?7Jew6rWs7YyA?= <mkbyeon@lselectric.co.kr>,
-        =?UTF-8?B?7LWc6riw7ZmNKENob2kgS2kgSG9uZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm3sl7A=?=
-         =?UTF-8?B?6rWs7YyA?= <khchoib@lselectric.co.kr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-2021=EB=85=84 8=EC=9B=94 19=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 5:48, S=
-ebastian Andrzej Siewior
-<bigeasy@linutronix.de>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
->
-> On 2021-08-19 08:50:27 [+0900], Jeaho Hwang wrote:
-> > Without RT, udc_irq runs as a forced threaded irq handler, so it runs
-> > without any interruption or preemption. NO similar case is found on
-> > non-RT.
->
-> I see only a devm_request_irq() so no force-threading here. Booting with
-> threadirqs would not lead to the problem since commit
->    81e2073c175b8 ("genirq: Disable interrupts for force threaded handlers=
-")
->
+On 19-08-21, 16:55, Ulf Hansson wrote:
+> Right, that sounds reasonable.
+> 
+> We already have pm_genpd_opp_to_performance_state() which translates
+> an OPP to a performance state. This function invokes the
+> ->opp_to_performance_state() for a genpd. Maybe we need to allow a
+> genpd to not have ->opp_to_performance_state() callback assigned
+> though, but continue up in the hierarchy to see if the parent has the
+> callback assigned, to make this work for Tegra?
+> 
+> Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
+> allowing us to pass the device instead of the genpd. But that's a
+> minor thing.
 
-I was wrong. udc threaded irq handler allows twd interrupt even on
-non-RT and with threaded irq.
-I believed Chen's comment "The function hw_ep_prime is only called at
-udc_irq which is registered as top-half irq handlers. Why the timer
-interrupt is occurred when hw_ep_prime is executing?".
-We have additional experiments and got the results like below. RNDIS
-host was Windows.
+I am not concerned a lot about how it gets implemented, and am not
+sure as well, as I haven't looked into these details since sometime.
+Any reasonable thing will be accepted, as simple as that.
 
-RT, 1ms delay between first ENDPTSETUPSTAT read and priming : error
-case occurred
-RT, 1ms delay + irq_save : no error case occurred.
-non-RT, threaded irq, 1ms delay : no error case occurred even twd
-fires inside the function execution.
+> Finally, the precondition to use the above, is to first get a handle
+> to an OPP table. This is where I am struggling to find a generic
+> solution, because I guess that would be platform or even consumer
+> driver specific for how to do this. And at what point should we do
+> this?
 
-It doesn't seem to be a timing issue. But irq definitely affects
-priming on the RT kernel. Do you RT experts have any idea about the
-causes?
-If isr_tr_complete_handler fails ep priming it calls _ep_set_halt and
-goes an infinite loop in hw_ep_set_halt. It was an actual problem we
-experienced.
-So we protect irqs inside hw_ep_priming not to make error cases and
-also add a timeout inside the hw_ep_set_halt loop for a walkaround.
-The timeout patch is submitted to linux-usb.
-( https://marc.info/?l=3Dlinux-usb&m=3D162918269024007&w=3D2 )
+Hmm, I am not very clear with the whole picture at this point of time.
 
-We withdrew this patch since we don't know if disabling irq is the
-best solution to solve the problem and udc would work fine with
-hw_ep_set_halt walkaround even though hw_ep_prime fails.
-But we are still trying to find out the cause of this symptom so We'd
-so appreciate it if RT or USB experts share some ideas or ways to
-report somewhere. Xilinx doesn't provide any support without their
-official kernel :(
+Dmitry, can you try to frame a sequence of events/calls/etc that will
+define what kind of devices we are looking at here, and how this can
+be made to work ?
 
-Thanks for the discussion Sebastian.
-
-Jeaho Hwang.
-
-> =E2=80=A6
-> > > If this function here is sensitive to timing (say the cpu_relax() loo=
-p
-> > > gets interrupt for 1ms) then it has to be documented as such.
+> > > Viresh, please take a look at what I did in [1]. Maybe it could be done
+> > > in another way.
 > >
-> > The controller sets ENDPTSETUPSTAT register if the host sent a setup pa=
-cket.
-> > yes it is a timing problem. I will document that and resubmit again if
-> > you agree that local_irq_save could help from the timing problem.
+> > I looked into this and looked like too much trouble. The
+> > implementation needs to be simple. I am not sure I understand all the
+> > problems you faced while doing that, would be better to start with a
+> > simpler implementation of get_performance_state() kind of API for
+> > genpd, after the domain is attached and its OPP table is initialized.
 > >
-> > Thanks for the advice.
->
-> If it is really a timing issue in the function as you describe below
-> then disabling interrupts would help and it is indeed an RT only issue.
->
-> So you read OP_ENDPTSETUPSTAT, it is 0, all good.
-> You write OP_ENDPTPRIME, wait for it to be cleared.
-> Then you read OP_ENDPTSETUPSTAT again and if it is 0, all good.
->
-> And the TWD interrupt could delay say the second read would read 1 and
-> it is invalidated. Which looks odd.
-> However, it is "okay" if the TWD interrupt happens after the second
-> read? Even if the host sends a setup packet, nothing breaks?
-> Do you have numbers on how long irq-off section is here? It seems to
-> depend on how long the HW needs to clear the OP_ENDPTPRIME bits.
->
-> Sebastian
+> > Note, that the OPP table isn't required to be fully initialized for
+> > the device at this point, we can parse the DT as well if needed be.
+> 
+> Sure, but as I indicated above, you need some kind of input data to
+> figure out what OPP table to pick, before you can translate that into
+> a performance state. Is that always the clock rate, for example?
 
+Eventually it can be clock, bandwidth, or pstate of anther genpd, not
+sure what all we are looking for now. It should be just clock right
+now as far as I can imagine :)
 
+> Perhaps, we should start with adding a dev_pm_opp_get_from_rate() or
+> what do you think? Do you have other suggestions?
 
---=20
-=ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
-010-7242-1593
+We already have similar APIs, so that won't be a problem. We also have
+a mechanism inside the OPP core, frequency based, which is used to
+guess the current OPP. Maybe we can enhance and use that directly
+here.
+
+-- 
+viresh
