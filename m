@@ -2,152 +2,130 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 064513F2D1F
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:29:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D55A3F2D23
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbhHTNaK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 09:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbhHTNaI (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 09:30:08 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709CEC061575;
-        Fri, 20 Aug 2021 06:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Date:MIME-Version:Content-Type:References:
-        In-Reply-To:Cc:To:From:Subject:Message-ID:Content-Transfer-Encoding:Sender:
-        Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=AEd0XQ9RV977QFN7MmkxbrXSUtIMTPRefdXmVxcnKMA=;
-        t=1629466170; x=1630675770; b=cpn6ZX2Y/T66vti/wTpEEOtQG2Y6tm9xBPEnx+8A/d8PnOt
-        CDXk+XVLG82KZp+6Y4nH5pjA5mfMwxwsCLI2XTu4aTg+5LEmww9NCFjZImyvO+upLpvAmS6J2nsZc
-        cHs2DNUCBDvicA5phVFk18hnmz0hRX1B5mqTV88bhm2j/YhkCdPyD2GLSypBNQZdZl8Ter0UqWa0B
-        Uz77QVYzjbUxxTAOjsi/o/FONtADaSxxOAfEfy2JLmSgP7AtNBU0vz5Y8w4xjqG9/15xOJVgGnfWj
-        A/ra924l9WneBA1TKnjw5DgvlY3VBEoEwoaHTLZ1UibTcXJqQkwC8vKKR3V6H3zQ==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.94.2)
-        (envelope-from <benjamin@sipsolutions.net>)
-        id 1mH4aC-00Dbvs-48; Fri, 20 Aug 2021 15:29:16 +0200
-Message-ID: <077990d1e354777c4c6a33866a0916bed6a97ed5.camel@sipsolutions.net>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-From:   Benjamin Berg <benjamin@sipsolutions.net>
-To:     Salvatore Bonaccorso <carnil@debian.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ian Turner <vectro@vectro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-In-Reply-To: <YR+nwZtz9CQuyTn+@lorien.valinor.li>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
-         <20201028091043.GC1947336@kroah.com> <20201106104725.GC2785199@kroah.com>
-         <YR+nwZtz9CQuyTn+@lorien.valinor.li>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-oi0AClpVchYyY1jsi55/"
+        id S234553AbhHTNbU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 09:31:20 -0400
+Received: from mout.gmx.net ([212.227.17.21]:56799 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229707AbhHTNbU (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Aug 2021 09:31:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1629466229;
+        bh=CzX7hi+vbXIJgCjKxc7ExDQbURD/bhsHAtQOZWHlHuE=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=ZdhM5JAm6Bgufr2p8xjVLPSBTrnLh4J7rhuCBBG5sF9cLqYtVZrucIMj0cXNJtRhs
+         oYs2IXtMyv/BgBzkYo9CTFv640a3tVHO/PzsR/dCniTsRmFSuEQ8BjLGG5D/3iLMJb
+         fflXtafxrIFgN8lkbsW3Ln0ipzS57LtmTE+/QRQA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.178.6] ([91.64.210.93]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQkK-1n3Q1d0Dho-00vPL9; Fri, 20
+ Aug 2021 15:30:29 +0200
+Subject: Re: [PATCH v4 2/9] usb: isp1760: move to regmap for register access
+To:     Rui Miguel Silva <rui.silva@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+References: <20210513084717.2487366-1-rui.silva@linaro.org>
+ <20210513084717.2487366-3-rui.silva@linaro.org>
+From:   Dietmar Eggemann <deggeman@gmx.de>
+Message-ID: <11ed5458-4b88-ad72-4497-89ff9346a40b@gmx.de>
+Date:   Fri, 20 Aug 2021 15:30:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Date:   Fri, 20 Aug 2021 15:29:11 +0200
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
-X-malware-bazaar: not-scanned
-X-malware-bazaar-2: OK
+In-Reply-To: <20210513084717.2487366-3-rui.silva@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:npqCNr8ExQrz5AI4K5EBJHi2PCFEMdp0Yz0plVD/QVUULpzWNKB
+ oipIcZUuEpZakWpIqs16b2PBzHa22772NaAFjDZdo8dwDyEs4MtMKH0yMzdD58kz+OC5Eud
+ eYdg48GYWZ0uotfu0kKUC7Q9sXuV3EXPJEQQr6RmCvE2uFy6H9/se8duVbLTBCcMiAUfM05
+ ovVf5dEajDjJYwwmeQNPg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dgjU/O3nP9s=:vMgUjk4Emx0OVOz8qOK7dB
+ +FzXabBsOIBF6BChOlM+SqMigTi5JbopuY90+jo/u+mGOpsh1YIBKW/aX07XX5Y1bWkq1RAYF
+ OUO0m+NZybMnHVr2Y7zey1ghXN2zp3yE7Hy3/JtkSW2E3rzk3cbXNluJrCN5lWHm20rlDwHgS
+ ACSqTLNzamQChu6kZZmkfcl+zR8SlGzRTMEP0ugxOUGGOnTfZZnzmIuRt1WOLkBAD9xEUZFXk
+ GP5WSVYAq07tM0ONKTNQRyOXwTwyOpp754Tc8jNZ4vbDLfmOQaU85A4HY4Z+TdTedYB50bQdR
+ HDO7gllupdhZV9f9OY+4USBhcCgvvrSHkszy1YbyTekKauTQnfNpTgy/+Muj9uPCo2c9y3xLf
+ a6OAMWMfyc6bCny+Zh1fVuvgIYy7kNAPmVpYnMaI3FfUzPcwgryNT5FG4iWhDY4XKYFgPIiZA
+ buYnR2tlYLW2iNTV7iVTtj1I74628yxVw0x1l/pd3Mjad8xpl5Ug2uafOVlVvvRC48umA4gAR
+ q/RaAn+sJzEgQiqY/9BtL/+8XS46xntr14wpc6ArfIPYe1AGmahXdz0MtU2F8v+ml0AlHzIxy
+ PHdqsONCJHNOQZyv+m3rhQOAnBENSRfytCio8rCgNMxyBxvcUm0GNKPeF24gP1/VDbodEs08r
+ 5ZbBKQpNVPL8ffrcBblS0TRN7ih1O0ULvRhaggJc7sRZNwlUAlIQjKzBdQpl9BaFrQkOIoKUb
+ Ty3ZZeJ0nfpk+iXS5kTyBGOYE7J5w+rQJj5NtuAnyGWnhkiFDT8Om8CaNUnB20hhrOvSTp6Zd
+ +nxjTb/YyFIMsXpESmxJgqZG37hRdE0FfaTyOP+D4YDYTE3rUYL19yo7oFkKlqXzR7DHLlwaI
+ iH/t381czPQJQDB+NSHqPLrYmKAHFxJ3a2lOynVBjc6P3iWPyF6o1fUl5jkDBnO0jiFv3KsLT
+ xGVGYLDk4SWVcCANod0nFy2q+qXE/M6Il5G1n2ECAZ6qoaJ99K5BOhNsEj5opWufkdWpYtUoQ
+ abMclu2oC/WPj4Z6rZURFWBIXMyuiTTU9COT+Vjlx5Hrva5tIJTtyW+bbuTkz7ova4YHzmeQv
+ 1JY+5M6cTzdDH1KNg43y1cLdGxHNVl/ZLDwe7YYJpb1/aLMt3KJwg0Kuw==
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+Hi Rui,
 
---=-oi0AClpVchYyY1jsi55/
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 13/05/2021 10:47, Rui Miguel Silva wrote:
+> Rework access to registers and memory to use regmap framework.
+> No change in current feature or way of work is intended with this
+> change.
+>
+> This will allow to reuse this driver with other IP of this family,
+> for example isp1763, with little changes and effort.
+>
 
-Hi,
+1da9e1c06873 - usb: isp1760: move to regmap for register access
 
-On Fri, 2021-08-20 at 15:01 +0200, Salvatore Bonaccorso wrote:
-> Hi Greg,
->=20
-> On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Oct 28, 2020 at 10:10:43AM +0100, Greg Kroah-Hartman wrote:
-> > > On Fri, Oct 09, 2020 at 04:40:45PM +0200, Benjamin Berg wrote:
-> > > > From: Benjamin Berg <bberg@redhat.com>
-> > > >=20
-> > > > Hi all,
-> > > >=20
-> > > > so, I kept running in an issue where the UCSI port information was =
-saying
-> > > > that power was being delivered (online: 1), while no cable was atta=
-ched.
-> > > >=20
-> > > > The core of the problem is that there are scenarios where UCSI chan=
-ge
-> > > > notifications are lost. This happens because querying the changes t=
-hat
-> > > > happened is done using the GET_CONNECTOR_STATUS command while clear=
-ing the
-> > > > bitfield happens from the separate ACK command. Any change in betwe=
-en will
-> > > > be lost.
-> > > >=20
-> > > > Note that the problem may be almost invisible in the UI as e.g. GNO=
-ME will
-> > > > still show the battery as discharging. But some policies like autom=
-atic
-> > > > suspend may be applied incorrectly.
-> > > >=20
-> > > > Cc: Hans de Goede <hdegoede@redhat.com>
-> > > > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > >=20
-> > > > Benjamin Berg (2):
-> > > >   usb: typec: ucsi: acpi: Always decode connector change informatio=
-n
-> > > >   usb: typec: ucsi: Work around PPM losing change information
-> > >=20
-> > > Do these need to be backported to stable kernel releases?  If so, how
-> > > far back?
-> >=20
-> > Due to the lack of response, I guess they don't need to go to any stabl=
-e
-> > kernel, so will queue them up for 5.11-rc1.
->=20
-> At least one user in Debian (https://bugs.debian.org/992004) would be
-> happy to have those backported as well to the 5.10.y series (which we
-> will pick up).
->=20
-> So if Benjamin ack's this, this would be great to have in 5.10.y.
+Starting from this patch, our Arm TC2 platform (multi_v7_defconfig,
+vexpress-v2p-ca15_a7.dts) doesn't boot anymore.
+We discovered this in our v5.14-rc1 based task scheduler test build.
 
-Sure, it is reasonable to pull it into 5.10. At the time it just seemed
-to me that it was enough of a corner case to not bother.
+With 1da9e1c06873^1 :
 
-Note that there was a somewhat related fix later on (for Qualcomm UCSI
-firmware), which probably makes sense to pull in too then.
+# lsusb
+Bus 001 Device 001: ID 1d6b:0002 <-- NXP ISP1760 USB Host Controller
+Bus 001 Device 002: ID 0471:3526
+Bus 001 Device 003: ID 0781:5591
 
-Including Bjorn into the CC list for that.
+# dmesg | grep -i isp
+[    4.014307] isp1760 1b000000.usb: bus width: 32, oc: digital
+[    4.014442] isp1760 1b000000.usb: NXP ISP1760 USB Host Controller
+[    4.014715] isp1760 1b000000.usb: new USB bus registered, assigned bus =
+number 1
+[    4.025076] isp1760 1b000000.usb: irq 32, io mem 0x1b000000
+[    4.025288] isp1760 1b000000.usb: USB ISP 1761 HW rev. 1 started
+[    4.055802] ISP1760 USB device initialised
+[    4.257911] isp1760 1b000000.usb: port 1 high speed
+[    4.325662] usb 1-1: new high-speed USB device number 2 using isp1760
+[    4.475670] isp1760 1b000000.usb: port 1 high speed
+[   14.320372] usb 1-1.2: new high-speed USB device number 3 using isp1760
 
-commit 8c9b3caab3ac26db1da00b8117901640c55a69dd
-Author: Bjorn Andersson <bjorn.andersson@linaro.org>
-Date:   Sat May 15 21:09:53 2021 -0700
+With v5.14-rc1 :
 
-    usb: typec: ucsi: Clear pending after acking connector change
-=20
-Benjamin
+there is no boot output at all, but I debugged it a little bit and the
+system seems to hang here:
 
---=-oi0AClpVchYyY1jsi55/
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+[    1.847494] [<c0cac46c>] (isp1760_udc_register) from [<c0ca668c>] (isp1=
+760_register+0x5d0/0x5f0)
+[    1.847527] [<c0ca668c>] (isp1760_register) from [<c0ca6b7c>] (isp1760_=
+plat_probe+0x150/0x1b0)
+[    1.847557] [<c0ca6b7c>] (isp1760_plat_probe) from [<c0a46ef0>] (platfo=
+rm_probe+0x5c/0xb8)
+[    1.847589] [<c0a46ef0>] (platform_probe) from [<c0a44924>] (really_pro=
+be.part.0+0x9c/0x32c)
+...
 
------BEGIN PGP SIGNATURE-----
+    isp1760_udc_register()->isp1760_udc_init()
 
-iQIzBAABCAAdFiEED2NO4vMS33W8E4AFq6ZWhpmFY3AFAmEfrh4ACgkQq6ZWhpmF
-Y3BGgRAAuhBeIqTGGQZaM9yl5QUOWseVvsfkKblORliZd/E7yl/yJO8eIFDxoY1m
-xCPWqfqvEmKoBuTYoD6GJZkcyBO6hGaO12GUffE/x+iGekCWc6CaHsRupj1HQwPF
-YU7cgmLU15qbREdezFKsJvQ2alulq6XsmjDKIFpVxlgKdiFjeT9l3cllgnTmWCxV
-VeN1EA22cJmZFPA+PodkMyz/hnyF/RBSt4aB3a8TZ0vQvwronkapunndZwzBWVod
-MV64snUKU/TaLuw7vlLd4807yoCc1Qrr4zTE6JhJspMtZUT582Np0HDyeBsBe20A
-zxoDefym/uxNaAOr9nNz3CcbqbNA6Zw90FLoccPDk4hMpfPMjrep1EyU6S9OQp5M
-cs5VvFb4T74HyM/zOGMrdiylXVcxhxiCJk5xywxWb1GgVzQt7CDE+7sqDDKhwcCj
-SRgPo9Nd0COvIf9VoOvqx04jOTG6TPtEeh5AFJKlAW76K6jvOvoXq4CVrWtPxAWI
-HUmJH5aXg/N+6j+DsiepHMdMfmlo1ogsuJpYFd1i0hxp3ARq6PP36170tEt7fbeO
-6EoVzS2LUejraAcsgxM7nOmqfl2pbtPrCbR2gOThYx5tzw4UPrLVcHAGuMFVktWQ
-Pmu/y2FFydZhJZByP74f9k/ibTn4xDZlBaGrWg5/b28gAsJOXns=
-=i5Lb
------END PGP SIGNATURE-----
+        ....
+        /* Reset the device controller. */
+        isp1760_udc_set(udc, DC_SFRESET); <-- hangs here !!!
+        usleep_range(10000, 11000);
+        isp1760_reg_write(udc->regs, ISP176x_DC_MODE, 0);
+        usleep_range(10000, 11000);
 
---=-oi0AClpVchYyY1jsi55/--
-
+[...]
