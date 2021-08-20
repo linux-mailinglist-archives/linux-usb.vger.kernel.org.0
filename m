@@ -2,131 +2,244 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A3DD3F2BD5
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 14:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5023F2BD8
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 14:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240189AbhHTMSj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 08:18:39 -0400
-Received: from so254-9.mailgun.net ([198.61.254.9]:55812 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239903AbhHTMSi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 08:18:38 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629461880; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Cc: To: From: Date: Sender;
- bh=jHbcx4kqocmAhiZAlzU0d5DWyvPm72GZtve4b2ov9Qc=; b=oId3mMg/aV/8VJ0Fbpv+dTSZqUfwMrkvs5fynY8vHDP3PKdNyFg5XOFVXyKkuq0nSEJVV8XG
- 0bY4WKLQ3dGfThFslqUlMNgvQ+ISdK5rIXwfa+eMF0qb7nsYC+FONAZ6Ha1W7m98l/pZihTy
- LedER6bDb5ZE7aZg1NEUrmqQ88g=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
- 611f9d601d4eeff4c393cf51 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 20 Aug 2021 12:17:36
- GMT
-Sender: jackp=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 5A5FBC43618; Fri, 20 Aug 2021 12:17:36 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from jackp-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: jackp)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 631E6C4338F;
-        Fri, 20 Aug 2021 12:17:34 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 631E6C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Date:   Fri, 20 Aug 2021 05:17:31 -0700
-From:   Jack Pham <jackp@codeaurora.org>
-To:     Ferry Toth <fntoth@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Ray Chi <raychi@google.com>, Ferry Toth <ftoth@exalondelft.nl>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Li Jun <jun.li@nxp.com>, Felipe Balbi <balbi@kernel.org>,
+        id S240401AbhHTMTT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 08:19:19 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:35690 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240341AbhHTMTP (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 08:19:15 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17KCIVU4058964;
+        Fri, 20 Aug 2021 07:18:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1629461911;
+        bh=a2WPjECC51j4JAWenHsU4+dfR+3Ly43nrbVn+HUqc94=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=NmyrPf3hsqlu4k7d95GoBCbHFx+zkxDOEs0yC1xG69/LiUsqDde2nzI9LF1bn2uGp
+         QDJvfu+9vMXiJEm35SieDLhVaX/9norQorFOHYRv2rEhoL3x39IGW65thDA42U9rbC
+         mV5mw/8OaU98XuPqhd13h/Sln0N2g2vryGxQHP+E=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17KCIVCJ061677
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 20 Aug 2021 07:18:31 -0500
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2; Fri, 20
+ Aug 2021 07:18:30 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
+ Frontend Transport; Fri, 20 Aug 2021 07:18:30 -0500
+Received: from [10.250.233.225] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17KCIS8l051288;
+        Fri, 20 Aug 2021 07:18:28 -0500
+Subject: Re: [QUERY] Cold plugged USB device to Inateck PCIE USB card is not
+ detected
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <linux-usb@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Wesley Cheng <wcheng@codeaurora.org>
-Subject: Re: [RFT][PATCH] usb: dwc3: Decouple USB 2.0 L1 & L2 events
-Message-ID: <20210820121731.GC30805@jackp-linux.qualcomm.com>
-References: <20210812082635.12924-1-jackp@codeaurora.org>
- <20210818012859.GB30805@jackp-linux.qualcomm.com>
- <YRzT4y87Nt8ICFJ/@smile.fi.intel.com>
- <de4c1fd9-7d2d-1038-8b8f-856e9dfd88cd@gmail.com>
+        Alan Stern <stern@rowland.harvard.edu>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lokesh Vutla <lokeshvutla@ti.com>
+References: <772e4001-178e-4918-032c-6e625bdded24@ti.com>
+ <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
+From:   Kishon Vijay Abraham I <kishon@ti.com>
+Message-ID: <33309da8-b567-55a9-64cf-2f431648960a@ti.com>
+Date:   Fri, 20 Aug 2021 17:48:27 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de4c1fd9-7d2d-1038-8b8f-856e9dfd88cd@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <970f741a-54ee-0fa7-46d9-51f77764c6bb@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 18, 2021 at 09:48:18PM +0200, Ferry Toth wrote:
-> Op 18-08-2021 om 11:33 schreef Andy Shevchenko:
-> > On Tue, Aug 17, 2021 at 06:28:59PM -0700, Jack Pham wrote:
-> > > On Thu, Aug 12, 2021 at 01:26:35AM -0700, Jack Pham wrote:
-> > > > On DWC_usb3 revisions 3.00a and newer (including DWC_usb31 and
-> > > > DWC_usb32) the GUCTL1 register gained the DEV_DECOUPLE_L1L2_EVT
-> > > > field (bit 31) which when enabled allows the controller in device
-> > > > mode to treat USB 2.0 L1 LPM & L2 events separately.
-> > > > 
-> > > > After commit d1d90dd27254 ("usb: dwc3: gadget: Enable suspend
-> > > > events") the controller will now receive events (and therefore
-> > > > interrupts) for every state change when entering/exiting either
-> > > > L1 or L2 states.  Since L1 is handled entirely by the hardware
-> > > > and requires no software intervention, there is no need to even
-> > > > enable these events and unnecessarily notify the gadget driver.
-> > > > Enable the aforementioned bit to help reduce the overall interrupt
-> > > > count for these L1 events that don't need to be handled while
-> > > > retaining the events for full L2 suspend/wakeup.
-> > > 
-> > > Hi folks in To:
-> > > 
-> > > I'd like to request if any of you could help test this patch on your
-> > > boards to help make sure it doesn't cause any regressions since I know
-> > > some of the recent dwc3 patches from Qualcomm have been found to break
-> > > other devices :(. So I'm hoping to avoid that even for a patch as
-> > > small as this.
-> > > 
-> > > Hoping this could be tried out on boards/SoCs such as db845c, hikey960,
-> > > Exynos, the Intel "lakes", etc.  Ideally this needs validation with a
-> > > high-speed connection to a USB 3.x host, which increases the chances
-> > > that USB 2.0 Link Power Management is supported.
-> 
-> Merrifield: We currently have
-> PROPERTY_ENTRY_BOOL("snps,usb2-gadget-lpm-disable")
-> 
-> Should I retest with this reverted?
+Hi Mathias,
 
-Maybe best to leave it, since it looks like you had added this quirk
-for other L1 LPM incompatibility issues you faced on this platform.
-
-> > > The overall goal of this patch is to eliminate events generated for
-> > > L1 entry/exit, so we should see a slight reduction in interrupt counts
-> > > when checking `grep dwc3 /proc/interrupts` for comparable traffic.
+On 19/08/21 6:48 pm, Mathias Nyman wrote:
+> On 19.8.2021 10.54, Kishon Vijay Abraham I wrote:
+>> Hi All,
+>>
+>> I was trying to test PCIe USB card (Inateck) connected to AM64 EVM and
+>> J7200 EVM. Inateck uses Renesas uPD720201 USB3 host controller.
+>>
+>> So if I connect USB pendrive and then boot the board (cold plug), I
+>> don't see the pendrive getting detected. But if I remove and plug it
+>> again, it gets detected.
+>>
+>> For the cold plug case, I see this message
+>> 	"usb usb1-port3: couldn't allocate usb_device"
+>>
+>> It actually fails in
+>> xhci_alloc_dev()->xhci_queue_slot_control()->queue_command()->XHCI_STATE_HALTED
+>>
+>> I'm not familiar with xhci but it looks like port event is invoked
+>> before the controller is fully initialized (?).
 > 
-> I didn't compare interrupts
-> 
-> > Unfortunately I'm quite busy lately with more important stuff and I dunno if I
-> > will be able to test this in reasonable time. So, if Ferry volunteers, then we
-> > can cover Intel Merrifield platform as well.
-> > 
-> 
-> Performance unchanged, no regressions found.
-> Tested-by: Ferry Toth <fntoth@gmail.com> # for Merrifield
+> Maybe this controller is capable of generating interrupts before it's running?
 
-At least it is a no-op for you. Thanks for verifying!
+I don't see any MSI interrupts being raised actually..
 
-Jack
--- 
-The Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project
+512:          0          0   ITS-MSI 524288 Edge      xhci_hcd
+513:          0          0   ITS-MSI 524289 Edge      xhci_hcd
+514:          0          0   ITS-MSI 524290 Edge      xhci_hcd
+>  
+>>
+>> I tried the following hack which kind of changes the sequence where
+>> xhci_start() and xhci_run_finished() is invoked before port_event() and
+>> with that I could see the pendrive enumerate successfully in cold plug case.
+>>
+>> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+>> index 228e3d4e1a9f..d19f27c46c6f 100644
+>> --- a/drivers/usb/core/hub.c
+>> +++ b/drivers/usb/core/hub.c
+>> @@ -1077,7 +1077,7 @@ static void hub_activate(struct usb_hub *hub, enum
+>> hub_activation_type type)
+>>                         INIT_DELAYED_WORK(&hub->init_work, hub_init_func2);
+>>                         queue_delayed_work(system_power_efficient_wq,
+>>                                         &hub->init_work,
+>> -                                       msecs_to_jiffies(delay));
+>> +                                       msecs_to_jiffies(150));
+>>
+>>                         /* Suppress autosuspend until init is done */
+>>                         usb_autopm_get_interface_no_resume(
+>>
+>> Irrespective of the delay the port status looks correct and the modified
+>> delay only helps to change the flow.
+>>
+>> Adding other prints and delays also change the sequence and seems to
+>> detect the connected pendrive.
+>>
+>> Can someone provide hints on how to fix this properly?
+> 
+> Either keep xHC interrupts disabled until second (usb3) hcd is added, and
+> host is running. (haven't thought about side effects yet)
+> Or make sure we don't start polling the usb2 roothub until host is running.
+> 
+> Below code should return before port event handler starts roothub polling if 
+> any xhci->xhc_state flag is set. 
+> Untested, does it work for you?
+
+I still see the issue. When root hub is polled again in your code
+snippet, PORT_CSC is not set and xhci_hub_status_data() returns 0.
+
+I've printed port status in xhci_hub_status_data() below
+
+[    7.422124] xhci_hcd 0000:01:00.0: xHCI Host Controller
+[    7.482282] xhci_hcd 0000:01:00.0: new USB bus registered, assigned
+bus number 1
+[    7.596587] xhci_hcd 0000:01:00.0: hcc params 0x014051cf hci version
+0x100 quirks 0x0000001100000410
+[    7.679626] usb usb1: New USB device found, idVendor=1d6b,
+idProduct=0002, bcdDevice= 5.14
+[    7.747969] usb usb1: New USB device strings: Mfr=3, Product=2,
+SerialNumber=1
+[    7.885643] usb usb1: Product: xHCI Host Controller
+[    7.974816] usb usb1: Manufacturer: Linux
+5.14.0-rc4-80127-gf061ccba1dcc-dirty xhci-hcd
+[    8.004951] usb usb1: SerialNumber: 0000:01:00.0
+[    8.016014] hub 1-0:1.0: USB hub found
+[    8.020047] hub 1-0:1.0: 4 ports detected
+[    8.068702] xhci_hcd 0000:01:00.0: xHCI Host Controller
+[    8.142741] xhci_hcd 0000:01:00.0: new USB bus registered, assigned
+bus number 2
+[    8.196053] usb usb1-port3: couldn't allocate usb_device
+[    8.201665] xhci_hub_status_data port=0 status=a0002a0
+[    8.206832] xhci_hub_status_data port=1 status=a0002a0
+[    8.211977] xhci_hub_status_data port=2 status=c0002e1
+[    8.217117] xhci_hub_status_data port=3 status=a0002a0
+[    8.259972] xhci_hcd 0000:01:00.0: Host supports USB 3.0 SuperSpeed
+[    8.344124] xhci_hub_status_data port=0 status=a0002a0
+[    8.349296] xhci_hub_status_data port=1 status=a0002a0
+[    8.354439] xhci_hub_status_data port=2 status=c0002e1
+[    8.359582] xhci_hub_status_data port=3 status=a0002a0
+[    8.458489] usb usb2: We don't know the algorithms for LPM for this
+host, disabling LPM.
+[    8.531363] usb usb2: New USB device found, idVendor=1d6b,
+idProduct=0003, bcdDevice= 5.14
+[    8.559934] usb usb2: New USB device strings: Mfr=3, Product=2,
+SerialNumber=1
+[    8.613931] usb usb2: Product: xHCI Host Controller
+[    8.695966] usb usb2: Manufacturer: Linux
+5.14.0-rc4-80127-gf061ccba1dcc-dirty xhci-hcd
+[    8.805694] usb usb2: SerialNumber: 0000:01:00.0
+[    8.848261] hub 2-0:1.0: USB hub found
+[    8.905741] hub 2-0:1.0: 4 ports detected
+[    8.986168] xhci_hub_status_data port=0 status=a0002a0
+[    8.991334] xhci_hub_status_data port=1 status=a0002a0
+[    8.996477] xhci_hub_status_data port=2 status=a0002a0
+[    9.001616] xhci_hub_status_data port=3 status=a0002a0
+
+
+I'm unable to get the initial port status in the same run, but on a
+different run, the initial port status value looks okay
+
+[    9.603444] xhci_hcd 0000:01:00.0: Get port status 1-1 read: 0x2a0,
+return 0x100
+[    9.611144] xhci_hcd 0000:01:00.0: Get port status 1-2 read: 0x2a0,
+return 0x100
+[    9.618832] xhci_hcd 0000:01:00.0: Get port status 1-3 read: 0x202e1,
+return 0x10101
+[    9.626851] xhci_hcd 0000:01:00.0: Get port status 1-4 read: 0x2a0,
+return 0x100
+
+Sometime later the port status changes to c0002e1 (not sure what leads
+to it).
+
+As an experiment I added PORT_CONNECT to "mask" in
+xhci_hub_status_data() and the device seem to get detected after
+multiple "usb usb1-port3: couldn't allocate usb_device". But haven't
+tested this extensively and also not sure if there are any side effects.
+
+Thanks
+Kishon
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index e676749f543b..9f4cc5c87b27 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2024,6 +2024,8 @@ static void handle_port_status(struct xhci_hcd *xhci,
+>         if (bogus_port_status)
+>                 return;
+>  
+> +       if (xhci->xhc_state != 0)
+> +               return;
+>         /*
+>          * xHCI port-status-change events occur when the "or" of all the
+>          * status-change bits in the portsc register changes from 0 to 1.
+> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> index f3dabd02382c..b171558956dd 100644
+> --- a/drivers/usb/host/xhci.c
+> +++ b/drivers/usb/host/xhci.c
+> @@ -646,9 +646,15 @@ int xhci_run(struct usb_hcd *hcd)
+>          */
+>  
+>         hcd->uses_new_polling = 1;
+> -       if (!usb_hcd_is_primary_hcd(hcd))
+> -               return xhci_run_finished(xhci);
+> -
+> +       if (!usb_hcd_is_primary_hcd(hcd)) {
+> +               ret = xhci_run_finished(xhci);
+> +               if (ret)
+> +                       return ret;
+> +               /* start polling usb2 roothub */
+> +               set_bit(HCD_FLAG_POLL_RH, &xhci->main_hcd->flags);
+> +               usb_hcd_poll_rh_status(xhci->main_hcd);
+> +               return ret;
+> +       }
+>         xhci_dbg_trace(xhci, trace_xhci_dbg_init, "xhci_run");
+>  
+>         ret = xhci_try_enable_msi(hcd);
+> 
+> Thanks
+> -Mathias
+> 
+> 
