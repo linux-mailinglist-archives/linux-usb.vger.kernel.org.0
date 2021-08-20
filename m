@@ -2,32 +2,32 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE113F2C20
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 14:32:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D9E33F2C21
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 14:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240260AbhHTMdX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 08:33:23 -0400
+        id S240394AbhHTMdY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 08:33:24 -0400
 Received: from mga03.intel.com ([134.134.136.65]:32166 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240405AbhHTMdW (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Fri, 20 Aug 2021 08:33:22 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10081"; a="216799529"
+        id S240416AbhHTMdX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Aug 2021 08:33:23 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10081"; a="216799531"
 X-IronPort-AV: E=Sophos;i="5.84,337,1620716400"; 
-   d="scan'208";a="216799529"
+   d="scan'208";a="216799531"
 Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2021 05:32:44 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2021 05:32:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.84,337,1620716400"; 
-   d="scan'208";a="680077975"
+   d="scan'208";a="680077977"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.170])
-  by fmsmga006.fm.intel.com with ESMTP; 20 Aug 2021 05:32:43 -0700
+  by fmsmga006.fm.intel.com with ESMTP; 20 Aug 2021 05:32:44 -0700
 From:   Mathias Nyman <mathias.nyman@linux.intel.com>
 To:     <gregkh@linuxfoundation.org>
 Cc:     <linux-usb@vger.kernel.org>,
         Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 5/6] xhci: Add additional dynamic debug to follow URBs in cancel and error cases.
-Date:   Fri, 20 Aug 2021 15:35:02 +0300
-Message-Id: <20210820123503.2605901-6-mathias.nyman@linux.intel.com>
+Subject: [PATCH 6/6] xhci: Add bus number to some debug messages
+Date:   Fri, 20 Aug 2021 15:35:03 +0300
+Message-Id: <20210820123503.2605901-7-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20210820123503.2605901-1-mathias.nyman@linux.intel.com>
 References: <20210820123503.2605901-1-mathias.nyman@linux.intel.com>
@@ -37,94 +37,79 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Add more debugging messages to follow what happends to a URB internally
-in special cases like URB cancel, halted endpoints and endpoint reset.
-
-Helps tracking issues like URB never given back by host.
+As we register two usb buses for each xHC, and systems with several
+hosts are more and more common it is getting hard to follow the
+flow of debug messages without knowing which bus they belong to
 
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-ring.c | 30 ++++++++++++++++++++++++------
- 1 file changed, 24 insertions(+), 6 deletions(-)
+ drivers/usb/host/xhci-hub.c  | 6 ++++--
+ drivers/usb/host/xhci-ring.c | 3 ++-
+ drivers/usb/host/xhci.c      | 6 ++++--
+ 3 files changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 9017986241f5..8be4ba3758b1 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -830,9 +830,14 @@ static void xhci_giveback_invalidated_tds(struct xhci_virt_ep *ep)
- 
- 		ring = xhci_urb_to_transfer_ring(ep->xhci, td->urb);
- 
--		if (td->cancel_status == TD_CLEARED)
-+		if (td->cancel_status == TD_CLEARED) {
-+			xhci_dbg(ep->xhci, "%s: Giveback cancelled URB %p TD\n",
-+				 __func__, td->urb);
- 			xhci_td_cleanup(ep->xhci, td, ring, td->status);
--
-+		} else {
-+			xhci_dbg(ep->xhci, "%s: Keep cancelled URB %p TD as cancel_status is %d\n",
-+				 __func__, td->urb, td->cancel_status);
-+		}
- 		if (ep->xhci->xhc_state & XHCI_STATE_DYING)
- 			return;
+diff --git a/drivers/usb/host/xhci-hub.c b/drivers/usb/host/xhci-hub.c
+index 151e93c4bd57..a3f875eea751 100644
+--- a/drivers/usb/host/xhci-hub.c
++++ b/drivers/usb/host/xhci-hub.c
+@@ -1667,7 +1667,8 @@ int xhci_hub_status_data(struct usb_hcd *hcd, char *buf)
+ 			status = 1;
  	}
-@@ -850,6 +855,10 @@ static int xhci_reset_halted_ep(struct xhci_hcd *xhci, unsigned int slot_id,
- 		goto done;
+ 	if (!status && !reset_change) {
+-		xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
++		xhci_dbg(xhci, "%s: stopping usb%d port polling\n",
++			 __func__, hcd->self.busnum);
+ 		clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
  	}
- 
-+	xhci_dbg(xhci, "%s-reset ep %u, slot %u\n",
-+		 (reset_type == EP_HARD_RESET) ? "Hard" : "Soft",
-+		 ep_index, slot_id);
-+
- 	ret = xhci_queue_reset_ep(xhci, command, slot_id, ep_index, reset_type);
- done:
- 	if (ret)
-@@ -883,7 +892,8 @@ static int xhci_handle_halted_endpoint(struct xhci_hcd *xhci,
- 	}
- 
- 	if (ep->ep_state & EP_HALTED) {
--		xhci_dbg(xhci, "Reset ep command already pending\n");
-+		xhci_dbg(xhci, "Reset ep command for ep_index %d already pending\n",
-+			 ep->ep_index);
- 		return 0;
- 	}
- 
-@@ -922,9 +932,10 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 
- 	list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list, cancelled_td_list) {
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_cancel_urb,
--				"Removing canceled TD starting at 0x%llx (dma).",
--				(unsigned long long)xhci_trb_virt_to_dma(
--					td->start_seg, td->first_trb));
-+			       "Removing canceled TD starting at 0x%llx (dma) in stream %u URB %p",
-+			       (unsigned long long)xhci_trb_virt_to_dma(
-+				       td->start_seg, td->first_trb),
-+			       td->urb->stream_id, td->urb);
- 		list_del_init(&td->td_list);
- 		ring = xhci_urb_to_transfer_ring(xhci, td->urb);
- 		if (!ring) {
-@@ -1079,6 +1090,8 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
- 			return;
- 		case EP_STATE_RUNNING:
- 			/* Race, HW handled stop ep cmd before ep was running */
-+			xhci_dbg(xhci, "Stop ep completion ctx error, ep is running\n");
-+
- 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
- 			if (!command)
- 				xhci_stop_watchdog_timer_in_irq(xhci, ep);
-@@ -1400,7 +1413,12 @@ static void xhci_handle_cmd_set_deq(struct xhci_hcd *xhci, int slot_id,
- 		ep_ring = xhci_urb_to_transfer_ring(ep->xhci, td->urb);
- 		if (td->cancel_status == TD_CLEARING_CACHE) {
- 			td->cancel_status = TD_CLEARED;
-+			xhci_dbg(ep->xhci, "%s: Giveback cancelled URB %p TD\n",
-+				 __func__, td->urb);
- 			xhci_td_cleanup(ep->xhci, td, ep_ring, td->status);
-+		} else {
-+			xhci_dbg(ep->xhci, "%s: Keep cancelled URB %p TD as cancel_status is %d\n",
-+				 __func__, td->urb, td->cancel_status);
+ 	spin_unlock_irqrestore(&xhci->lock, flags);
+@@ -1699,7 +1700,8 @@ int xhci_bus_suspend(struct usb_hcd *hcd)
+ 		if (bus_state->resuming_ports ||	/* USB2 */
+ 		    bus_state->port_remote_wakeup) {	/* USB3 */
+ 			spin_unlock_irqrestore(&xhci->lock, flags);
+-			xhci_dbg(xhci, "suspend failed because a port is resuming\n");
++			xhci_dbg(xhci, "usb%d bus suspend to fail because a port is resuming\n",
++				 hcd->self.busnum);
+ 			return -EBUSY;
  		}
  	}
- cleanup:
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 8be4ba3758b1..e676749f543b 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -2031,7 +2031,8 @@ static void handle_port_status(struct xhci_hcd *xhci,
+ 	 * bits are still set.  When an event occurs, switch over to
+ 	 * polling to avoid losing status changes.
+ 	 */
+-	xhci_dbg(xhci, "%s: starting port polling.\n", __func__);
++	xhci_dbg(xhci, "%s: starting usb%d port polling.\n",
++		 __func__, hcd->self.busnum);
+ 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+ 	spin_unlock(&xhci->lock);
+ 	/* Pass this up to the core */
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index 18a203c9011e..f3dabd02382c 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -993,7 +993,8 @@ int xhci_suspend(struct xhci_hcd *xhci, bool do_wakeup)
+ 	xhci_dbc_suspend(xhci);
+ 
+ 	/* Don't poll the roothubs on bus suspend. */
+-	xhci_dbg(xhci, "%s: stopping port polling.\n", __func__);
++	xhci_dbg(xhci, "%s: stopping usb%d port polling.\n",
++		 __func__, hcd->self.busnum);
+ 	clear_bit(HCD_FLAG_POLL_RH, &hcd->flags);
+ 	del_timer_sync(&hcd->rh_timer);
+ 	clear_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+@@ -1257,7 +1258,8 @@ int xhci_resume(struct xhci_hcd *xhci, bool hibernated)
+ 		usb_asmedia_modifyflowcontrol(to_pci_dev(hcd->self.controller));
+ 
+ 	/* Re-enable port polling. */
+-	xhci_dbg(xhci, "%s: starting port polling.\n", __func__);
++	xhci_dbg(xhci, "%s: starting usb%d port polling.\n",
++		 __func__, hcd->self.busnum);
+ 	set_bit(HCD_FLAG_POLL_RH, &xhci->shared_hcd->flags);
+ 	usb_hcd_poll_rh_status(xhci->shared_hcd);
+ 	set_bit(HCD_FLAG_POLL_RH, &hcd->flags);
 -- 
 2.25.1
 
