@@ -2,245 +2,214 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CE253F258A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 06:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 466A83F258E
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 06:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbhHTEHf (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 00:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33422 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbhHTEHV (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 00:07:21 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3840FC061756
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 21:06:44 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mGvnh-0006UH-U8; Fri, 20 Aug 2021 06:06:37 +0200
-Received: from ore by dude.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1mGvnf-0001WP-PY; Fri, 20 Aug 2021 06:06:35 +0200
-Date:   Fri, 20 Aug 2021 06:06:35 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: Regression with commit e532a096be0e ("net: usb: asix: ax88772:
- add phylib support")
-Message-ID: <20210820040635.GA3573@pengutronix.de>
-References: <3904c728-1ea2-9c2b-ec11-296396fd2f7e@linux.intel.com>
- <20210816081314.3b251d2e@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20210816161822.td7jl4tv7zfbprty@pengutronix.de>
- <e575a7a9-2645-9ebc-fdea-f0421ecaf0e2@linux.intel.com>
- <20210817090920.7wviv7fsfzyhli5t@pengutronix.de>
- <1e54ca43-6631-a76a-2e40-1355fe187538@linux.intel.com>
+        id S230508AbhHTEJn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 00:09:43 -0400
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:31864 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229792AbhHTEJi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 00:09:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1629432541; x=1660968541;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FNH7AK4EGYWfnuJ4BDn4ARCJxqO5ow6yPVyw0BJzilw=;
+  b=NwRuhMBs+LUr3i0zAnwPi9EbqnxqN2dvUFcE6S+zg4d9mGCgp30Alb8a
+   94p+6lZ5k1WHTkm4zcpaDagfuDqzGh7obV0KT4nQES5Wey1f79kH8+AUU
+   7AuCwkaCsJuPJKyPqwqEetmpSK0eVavgOhzJQR76GtKfpX8UV5RegwFla
+   Y=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Aug 2021 21:09:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2021 21:09:00 -0700
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.858.15; Thu, 19 Aug 2021 21:09:00 -0700
+Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.858.15; Thu, 19 Aug 2021 21:08:58 -0700
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+To:     Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Linyu Yuan <quic_linyyuan@quicinc.com>
+Subject: [PATCH] usb: gadget: configfs: add tree trace entries
+Date:   Fri, 20 Aug 2021 12:08:54 +0800
+Message-ID: <1629432534-21248-1-git-send-email-quic_linyyuan@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="bp/iNruPH9dso1Pn"
-Content-Disposition: inline
-In-Reply-To: <1e54ca43-6631-a76a-2e40-1355fe187538@linux.intel.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 06:02:09 up 172 days, 13:37, 84 users,  load average: 3.46, 2.80,
- 1.94
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanexm03d.na.qualcomm.com (10.85.0.91) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+add UDC/link/unlink trace entry to track important event.
 
---bp/iNruPH9dso1Pn
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-Hi Jarkko,
-
-On Tue, Aug 17, 2021 at 02:55:20PM +0300, Jarkko Nikula wrote:
-> On 8/17/21 12:09 PM, Oleksij Rempel wrote:
-> > OK thx, I'll need to your help to debug it:
-> > - please send me complete log, or at least parts related to the asix
-> >    (dmesg | grep -i Asix)
-> 
-> I added following dyndebug options if that helps:
-> asix.dyndbg=+p ax88179_178a.dyndbg=+p
-> 
-> Around ~8 s or so after bootup I run following:
-> ifconfig eth0 down; sleep 5; ifconfig eth0 up; sleep 5; ifconfig eth0 down
-> 
-> Attachments have grepped dmesg from v5.13 and linux-next next-20210816.
-
-thank you! It helps.
-
-> > - do the interface is not able to go up at all? For example, it works on
-> >    hot plug, but is not working on reboot.
-> > - Can you please test it with other link partners.
-> > 
-> I'm now testing this remotely but can test these later this week or next
-> week at the office.
-
-Can you please test attached patch.
-And may be add some prints to the ax88772_hw_reset() and ax88772a_hw_reset().
-It would be interesting to know, which variant is actually affected.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
---bp/iNruPH9dso1Pn
-Content-Type: text/x-diff; charset=utf-8
-Content-Disposition: attachment; filename="0001-net-usb-asix-ax88772-move-embedded-PHY-detection-as-.patch"
-
-From a96a1bcaba8afa9d716e88b241ac77d97be068f9 Mon Sep 17 00:00:00 2001
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-Date: Thu, 19 Aug 2021 06:58:52 +0200
-Subject: [PATCH] net: usb: asix: ax88772: move embedded PHY detection as early
- as possible
-
-Some HW revisions need additional MAC configuration before the embedded PHY
-can be enabled. If this is not done, we won't be able to get response
-from the PHY.
-
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 ---
- drivers/net/usb/asix.h         |  1 +
- drivers/net/usb/asix_devices.c | 41 +++++++++++++++++-----------------
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/usb/gadget/Makefile         |  1 +
+ drivers/usb/gadget/configfs.c       | 11 ++++++
+ drivers/usb/gadget/configfs_trace.c |  7 ++++
+ drivers/usb/gadget/configfs_trace.h | 73 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 92 insertions(+)
+ create mode 100644 drivers/usb/gadget/configfs_trace.c
+ create mode 100644 drivers/usb/gadget/configfs_trace.h
 
-diff --git a/drivers/net/usb/asix.h b/drivers/net/usb/asix.h
-index e1994a246122..2a1e31defe71 100644
---- a/drivers/net/usb/asix.h
-+++ b/drivers/net/usb/asix.h
-@@ -184,6 +184,7 @@ struct asix_common_private {
- 	struct phy_device *phydev;
- 	u16 phy_addr;
- 	char phy_name[20];
-+	bool embd_phy;
- };
+diff --git a/drivers/usb/gadget/Makefile b/drivers/usb/gadget/Makefile
+index 130dad7..8e9c2b8 100644
+--- a/drivers/usb/gadget/Makefile
++++ b/drivers/usb/gadget/Makefile
+@@ -9,5 +9,6 @@ ccflags-y				+= -I$(srctree)/drivers/usb/gadget/udc
+ obj-$(CONFIG_USB_LIBCOMPOSITE)	+= libcomposite.o
+ libcomposite-y			:= usbstring.o config.o epautoconf.o
+ libcomposite-y			+= composite.o functions.o configfs.o u_f.o
++libcomposite-y			+= configfs_trace.o
  
- extern const struct driver_info ax88172a_info;
-diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
-index cb01897c7a5d..a74e67a60436 100644
---- a/drivers/net/usb/asix_devices.c
-+++ b/drivers/net/usb/asix_devices.c
-@@ -354,24 +354,23 @@ static int ax88772_reset(struct usbnet *dev)
- static int ax88772_hw_reset(struct usbnet *dev, int in_pm)
- {
- 	struct asix_data *data = (struct asix_data *)&dev->data;
--	int ret, embd_phy;
-+	struct asix_common_private *priv = dev->driver_priv;
- 	u16 rx_ctl;
-+	int ret;
+ obj-$(CONFIG_USB_GADGET)	+= udc/ function/ legacy/
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 477e72a..4024f9b 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -9,6 +9,7 @@
+ #include "configfs.h"
+ #include "u_f.h"
+ #include "u_os_desc.h"
++#include "configfs_trace.h"
  
- 	ret = asix_write_gpio(dev, AX_GPIO_RSE | AX_GPIO_GPO_2 |
- 			      AX_GPIO_GPO2EN, 5, in_pm);
- 	if (ret < 0)
- 		goto out;
+ int check_user_usb_string(const char *name,
+ 		struct usb_gadget_strings *stringtab_dev)
+@@ -270,6 +271,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+ 	if (name[len - 1] == '\n')
+ 		name[len - 1] = '\0';
  
--	embd_phy = ((dev->mii.phy_id & 0x1f) == 0x10 ? 1 : 0);
--
--	ret = asix_write_cmd(dev, AX_CMD_SW_PHY_SELECT, embd_phy,
-+	ret = asix_write_cmd(dev, AX_CMD_SW_PHY_SELECT, priv->embd_phy,
- 			     0, 0, NULL, in_pm);
- 	if (ret < 0) {
- 		netdev_dbg(dev->net, "Select PHY #1 failed: %d\n", ret);
- 		goto out;
- 	}
++	trace_gadget_dev_desc_UDC_store(config_item_name(item), name);
++
+ 	mutex_lock(&gi->lock);
  
--	if (embd_phy) {
-+	if (priv->embd_phy) {
- 		ret = asix_sw_reset(dev, AX_SWRESET_IPPD, in_pm);
- 		if (ret < 0)
- 			goto out;
-@@ -449,17 +448,16 @@ static int ax88772_hw_reset(struct usbnet *dev, int in_pm)
- static int ax88772a_hw_reset(struct usbnet *dev, int in_pm)
- {
- 	struct asix_data *data = (struct asix_data *)&dev->data;
--	int ret, embd_phy;
-+	struct asix_common_private *priv = dev->driver_priv;
- 	u16 rx_ctl, phy14h, phy15h, phy16h;
- 	u8 chipcode = 0;
-+	int ret;
- 
- 	ret = asix_write_gpio(dev, AX_GPIO_RSE, 5, in_pm);
- 	if (ret < 0)
- 		goto out;
- 
--	embd_phy = ((dev->mii.phy_id & 0x1f) == 0x10 ? 1 : 0);
--
--	ret = asix_write_cmd(dev, AX_CMD_SW_PHY_SELECT, embd_phy |
-+	ret = asix_write_cmd(dev, AX_CMD_SW_PHY_SELECT, priv->embd_phy |
- 			     AX_PHYSEL_SSEN, 0, 0, NULL, in_pm);
- 	if (ret < 0) {
- 		netdev_dbg(dev->net, "Select PHY #1 failed: %d\n", ret);
-@@ -683,12 +681,6 @@ static int ax88772_init_phy(struct usbnet *dev)
- 	struct asix_common_private *priv = dev->driver_priv;
+ 	if (!strlen(name)) {
+@@ -423,6 +426,10 @@ static int config_usb_cfg_link(
+ 	struct usb_function *f;
  	int ret;
  
--	ret = asix_read_phy_addr(dev, true);
--	if (ret < 0)
--		return ret;
--
--	priv->phy_addr = ret;
--
- 	snprintf(priv->phy_name, sizeof(priv->phy_name), PHY_ID_FMT,
- 		 priv->mdio->id, priv->phy_addr);
- 
-@@ -715,6 +707,12 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
- 	struct asix_common_private *priv;
- 	int ret, i;
- 
-+	priv = devm_kzalloc(&dev->udev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
++	trace_config_usb_cfg_link(config_item_name(&gi->group.cg_item),
++				config_item_name(usb_cfg_ci),
++				config_item_name(usb_func_ci));
 +
-+	dev->driver_priv = priv;
+ 	mutex_lock(&gi->lock);
+ 	/*
+ 	 * Make sure this function is from within our _this_ gadget and not
+@@ -472,6 +479,10 @@ static void config_usb_cfg_unlink(
+ 			struct usb_function_instance, group);
+ 	struct usb_function *f;
+ 
++	trace_config_usb_cfg_unlink(config_item_name(&gi->group.cg_item),
++				config_item_name(usb_cfg_ci),
++				config_item_name(usb_func_ci));
 +
- 	usbnet_get_endpoints(dev, intf);
- 
- 	/* Maybe the boot loader passed the MAC address via device tree */
-@@ -750,6 +748,13 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
- 	dev->net->needed_headroom = 4; /* cf asix_tx_fixup() */
- 	dev->net->needed_tailroom = 4; /* cf asix_tx_fixup() */
- 
-+	ret = asix_read_phy_addr(dev, true);
-+	if (ret < 0)
-+		return ret;
+ 	/*
+ 	 * ideally I would like to forbid to unlink functions while a gadget is
+ 	 * bound to an UDC. Since this isn't possible at the moment, we simply
+diff --git a/drivers/usb/gadget/configfs_trace.c b/drivers/usb/gadget/configfs_trace.c
+new file mode 100644
+index 0000000..b74ff21
+--- /dev/null
++++ b/drivers/usb/gadget/configfs_trace.c
+@@ -0,0 +1,7 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
 +
-+	priv->phy_addr = ret;
-+	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10 ? true : false);
++#define CREATE_TRACE_POINTS
++#include "configfs_trace.h"
+diff --git a/drivers/usb/gadget/configfs_trace.h b/drivers/usb/gadget/configfs_trace.h
+new file mode 100644
+index 0000000..82e0121
+--- /dev/null
++++ b/drivers/usb/gadget/configfs_trace.h
+@@ -0,0 +1,73 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021 Qualcomm Innovation Center, Inc. All rights reserved.
++ */
 +
- 	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
- 	chipcode &= AX_CHIPCODE_MASK;
- 
-@@ -768,12 +773,6 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
- 		dev->rx_urb_size = 2048;
- 	}
- 
--	priv = devm_kzalloc(&dev->udev->dev, sizeof(*priv), GFP_KERNEL);
--	if (!priv)
--		return -ENOMEM;
--
--	dev->driver_priv = priv;
--
- 	priv->presvd_phy_bmcr = 0;
- 	priv->presvd_phy_advertise = 0;
- 	if (chipcode == AX_AX88772_CHIPCODE) {
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM configfs_gadget
++
++#if !defined(__GADGET_TRACE_H) || defined(TRACE_HEADER_MULTI_READ)
++#define __GADGET_TRACE_H
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(gadget_dev_desc_UDC_store,
++	TP_PROTO(char *name, char *udc),
++	TP_ARGS(name, udc),
++	TP_STRUCT__entry(
++		__string(group_name, name)
++		__string(udc_name, udc)
++	),
++	TP_fast_assign(
++		__assign_str(group_name, name);
++		__assign_str(udc_name, udc);
++	),
++	TP_printk("gadget:%s UDC:%s", __get_str(group_name),
++		__get_str(udc_name))
++);
++
++TRACE_EVENT(config_usb_cfg_link,
++	TP_PROTO(char *name, char *cfg, char *func),
++	TP_ARGS(name, cfg, func),
++	TP_STRUCT__entry(
++		__string(group_name, name)
++		__string(cfg_name, cfg)
++		__string(func_name, func)
++	),
++	TP_fast_assign(
++		__assign_str(group_name, name);
++		__assign_str(cfg_name, cfg);
++		__assign_str(func_name, func)
++	),
++	TP_printk("gadget:%s cfg:%s link func:%s", __get_str(group_name),
++		__get_str(cfg_name), __get_str(func_name))
++);
++
++TRACE_EVENT(config_usb_cfg_unlink,
++	TP_PROTO(char *name, char *cfg, char *func),
++	TP_ARGS(name, cfg, func),
++	TP_STRUCT__entry(
++		__string(group_name, name)
++		__string(cfg_name, cfg)
++		__string(func_name, func)
++	),
++	TP_fast_assign(
++		__assign_str(group_name, name);
++		__assign_str(cfg_name, cfg);
++		__assign_str(func_name, func)
++	),
++	TP_printk("gadget:%s cfg:%s unlink func:%s", __get_str(group_name),
++		__get_str(cfg_name), __get_str(func_name))
++);
++
++#endif /* __GADGET_TRACE_H */
++
++/* this part has to be here */
++
++#undef TRACE_INCLUDE_PATH
++#define TRACE_INCLUDE_PATH ../../drivers/usb/gadget
++
++#undef TRACE_INCLUDE_FILE
++#define TRACE_INCLUDE_FILE configfs_trace
++
++#include <trace/define_trace.h>
 -- 
-2.30.2
+2.7.4
 
-
---bp/iNruPH9dso1Pn--
