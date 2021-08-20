@@ -2,114 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48EBD3F2CAC
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 027ED3F2CD7
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 15:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240660AbhHTNCe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 09:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42686 "EHLO
+        id S240740AbhHTNJa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 09:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240643AbhHTNCd (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 09:02:33 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1CAC061575;
-        Fri, 20 Aug 2021 06:01:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l7-20020a1c2507000000b002e6be5d86b3so6066916wml.3;
-        Fri, 20 Aug 2021 06:01:56 -0700 (PDT)
+        with ESMTP id S240714AbhHTNJZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 09:09:25 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003A1C061764
+        for <linux-usb@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id 67so4106816uaq.4
+        for <linux-usb@vger.kernel.org>; Fri, 20 Aug 2021 06:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xzeaFa3UNgKzx3RirfcqUDpgF3zRTrOXaQu0yTtjAs8=;
-        b=fgw8GLAuc2MNfD/+BeMNlU9PO4RFELR0coeE9WvYMM6en3SUIt4B1BkiWfiFM+hWlz
-         NjcPpBeHyoKVUPi8WcBLhDdT13zAHdFfLIQttIfEu4fvlkTSykc0lCVAGkT5Ih9MZTBk
-         ZJWTQKJk2TKDSPUd6oy9iDE5AIKm7x5O5FUehQROqvFgyh8qCM7/i0q5f8SUOy62Q1Fa
-         fymQP10CnFPNK2mGRW5uz6BM5Awt1pi4DxXGNQsvKQ/ZmGdawliSOenIpoVp6tjvBn+K
-         81LG0R4QvI+mXLCH4fqCxBQo84renKkrEc6eO3F9n1zXXgHv5jyTuJT3gf8iy9OcxGo+
-         Stpg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
+        b=WC/dbJiZXZbYao7JhIntQY4TZ71VEiAo3x28NE7fEM5kyH3E5QMkrYaKxo+tOHuBq2
+         4fOoN/8kF20QYOvTlDeczofK7BcIqjasNY7CBq53XfqL9k8ztpMQHfVcSzVO71rO64Zq
+         McT44tin8yfog5Tj3F9uEcMm8s9RXuEY0am/zJIYxZIPBOSKQ0gPSUGTqV2fLnNdUMyA
+         Udra5icYrRXmu3Bub8tb1oL++vAVtV4op8H5c4RaKOsboeh/aX+gQt/xKF7m6+TffsNV
+         KpFsGCqib0Qpb9uD4iaINA3IeiJAs50v1pCyq6JF3tpma3/8Ou1apbdGh5FgySUdxEte
+         6zRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=xzeaFa3UNgKzx3RirfcqUDpgF3zRTrOXaQu0yTtjAs8=;
-        b=QdRPROlwSDKP7pKj2KpxQlUmFRrroCP/3e2BIAGKwYhk2I+LL8wAY/jVb+4yjunBmM
-         xWhYjUA4t5x6hEmW11Sdfr621lC3Df1aCbxinjMj4nmT7HVJIy/s8bu0cDazSCjn/Lcz
-         n134PlzX/toRsuv8lxwqL4J3oCGYh0XvNRMmVZHI1xZbHZ1gDq06jizs1+YcvUV+bGw+
-         PqbNP90pAuTFnHgiT+tC6PsFfuneq2DEijjvT18e1eJq0O6xPy57H5h3GfNGM7Mzbmy9
-         mqih5mtIPsUo8MARs0f4cyOQeOR2MiS87WQceCiZeaS+YMJlc32v0fDMLYZLmF9OBNjM
-         EraA==
-X-Gm-Message-State: AOAM530pJIknVGOoFS/Rxf47iF6b1RXiQk07kAzo0L/5RO03mSjOpDNb
-        cHbmSJRadh4HoV6xKm2Qf0A=
-X-Google-Smtp-Source: ABdhPJw/LR6bwOPyFSF2PYKaqncGa5GZ6mZ9HM+Ej42fjqEdm+pqppMxsGO9Km3nNKhVt5iHys1eow==
-X-Received: by 2002:a1c:7e8a:: with SMTP id z132mr3823139wmc.75.1629464514759;
-        Fri, 20 Aug 2021 06:01:54 -0700 (PDT)
-Received: from lorien (lorien.valinor.li. [2a01:4f8:192:61d5::2])
-        by smtp.gmail.com with ESMTPSA id k22sm5026185wmi.47.2021.08.20.06.01.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Aug 2021 06:01:54 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Fri, 20 Aug 2021 15:01:53 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ian Turner <vectro@vectro.org>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-Message-ID: <YR+nwZtz9CQuyTn+@lorien.valinor.li>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
- <20201028091043.GC1947336@kroah.com>
- <20201106104725.GC2785199@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1jeLsd0F5nu8VxBSxWPjs9ij/vCzMSfR5Tmv5iuwd6s=;
+        b=azI9exIVRvRijAXiuSDfHJ5MaXhSKcznfR9utpm9JLZJwDdTyWw9ICngn8ZGjNFlDy
+         Qvkc4qcvcML0B+6tsgbB0TAPxNck1hBm+QGm1upRx/1gAqITuBOnJAsYJT0+RPsMzMqm
+         rXlE4Ykj3NvEzqK82Zk/9BCp04zi6kT+sfT4ywMz6Jgu6x2XjzdXT8CcG91AVHwRkZMP
+         9Q72Q24juGgLKlklYBFQDC21S1fVdUzmcGuBjBDE6reocegTTsW3l8fQSjwgVikhjopm
+         gXPTPDVn0D6hAn6+o1gxC6OCzWbA/xPZD0pn6T9P2Kgp6lf69TyPTgUzB7662pmC0T73
+         mT3Q==
+X-Gm-Message-State: AOAM531lEMfEuk7ZOPXwqHGZARlQ6vLRDCOzXhmiunI6iF1riMaJMbjR
+        yeGJSFTLgY7HYxyrK8hgXN0r+naet2gTJRe2IUmojA==
+X-Google-Smtp-Source: ABdhPJyudXWst0uOFOvLTh4dvpAObwIHCZFQbOR7Ax2SinJKzLNlpYWdAnSEO7YQ/BLnbTZWMq48nnebeaOpVOjUigE=
+X-Received: by 2002:ab0:60a9:: with SMTP id f9mr15039087uam.19.1629464926939;
+ Fri, 20 Aug 2021 06:08:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20201106104725.GC2785199@kroah.com>
+References: <20210817012754.8710-1-digetx@gmail.com> <20210817012754.8710-8-digetx@gmail.com>
+ <YR0UBi/ejy+oF4Hm@orome.fritz.box> <da7356cb-05ee-ba84-8a7c-6e69d853a805@gmail.com>
+ <YR04YHGEluqLIZeo@orome.fritz.box> <ad99db08-4696-1636-5829-5260f93dc681@gmail.com>
+ <YR6Mvips3HAntDy0@orome.fritz.box> <e17bbe8d-7c0f-fc3d-03c7-d75c54c24a43@gmail.com>
+ <YR+VDZzTihmpENp6@orome.fritz.box>
+In-Reply-To: <YR+VDZzTihmpENp6@orome.fritz.box>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 20 Aug 2021 15:08:10 +0200
+Message-ID: <CAPDyKFpJ+TK0w1GZEA7G=rtAjq5ipmVR4P0wy7uHiEGVWRk5yA@mail.gmail.com>
+Subject: Re: [PATCH v8 07/34] clk: tegra: Support runtime PM and power domain
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Greg,
+[...]
 
-On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Oct 28, 2020 at 10:10:43AM +0100, Greg Kroah-Hartman wrote:
-> > On Fri, Oct 09, 2020 at 04:40:45PM +0200, Benjamin Berg wrote:
-> > > From: Benjamin Berg <bberg@redhat.com>
-> > > 
-> > > Hi all,
-> > > 
-> > > so, I kept running in an issue where the UCSI port information was saying
-> > > that power was being delivered (online: 1), while no cable was attached.
-> > > 
-> > > The core of the problem is that there are scenarios where UCSI change
-> > > notifications are lost. This happens because querying the changes that
-> > > happened is done using the GET_CONNECTOR_STATUS command while clearing the
-> > > bitfield happens from the separate ACK command. Any change in between will
-> > > be lost.
-> > > 
-> > > Note that the problem may be almost invisible in the UI as e.g. GNOME will
-> > > still show the battery as discharging. But some policies like automatic
-> > > suspend may be applied incorrectly.
-> > > 
-> > > Cc: Hans de Goede <hdegoede@redhat.com>
-> > > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > 
-> > > Benjamin Berg (2):
-> > >   usb: typec: ucsi: acpi: Always decode connector change information
-> > >   usb: typec: ucsi: Work around PPM losing change information
-> > 
-> > Do these need to be backported to stable kernel releases?  If so, how
-> > far back?
-> 
-> Due to the lack of response, I guess they don't need to go to any stable
-> kernel, so will queue them up for 5.11-rc1.
+> >
+> > I'm creating platform device for the clocks that require DVFS. These
+> > clocks don't use regulator, they are attached to the CORE domain.
+> > GENPD framework manages the performance state, aggregating perf votes
+> > from each device, i.e. from each clock individually.
+> >
+> > You want to reinvent another layer of aggregation on top of GENPD.
+> > This doesn't worth the effort, we won't get anything from it, it
+> > should be a lot of extra complexity for nothing. We will also lose
+> > from it because pm_genpd_summary won't show you a per-device info.
+> >
+> > domain                          status          children                           performance
+> >     /device                                             runtime status
+> > ----------------------------------------------------------------------------------------------
+> > heg                             on                                                 1000000
+> >     /devices/soc0/50000000.host1x                       active                     1000000
+> >     /devices/soc0/50000000.host1x/54140000.gr2d         suspended                  0
+> > mpe                             off-0                                              0
+> > vdec                            off-0                                              0
+> >     /devices/soc0/6001a000.vde                          suspended                  0
+> > venc                            off-0                                              0
+> > 3d1                             off-0                                              0
+> >     /devices/genpd:1:54180000.gr3d                      suspended                  0
+> > 3d0                             off-0                                              0
+> >     /devices/genpd:0:54180000.gr3d                      suspended                  0
+> > core-domain                     on                                                 1000000
+> >                                                 3d0, 3d1, venc, vdec, mpe, heg
+> >     /devices/soc0/7d000000.usb                          active                     1000000
+> >     /devices/soc0/78000400.mmc                          active                     950000
+> >     /devices/soc0/7000f400.memory-controller            unsupported                1000000
+> >     /devices/soc0/7000a000.pwm                          active                     1000000
+> >     /devices/soc0/60006000.clock/tegra_clk_pll_c        active                     1000000
+> >     /devices/soc0/60006000.clock/tegra_clk_pll_e        suspended                  0
+> >     /devices/soc0/60006000.clock/tegra_clk_pll_m        active                     1000000
+> >     /devices/soc0/60006000.clock/tegra_clk_sclk         active                     1000000
+> >
+>
+> I suppose if there's really no good way of doing this other than
+> providing a struct device, then so be it. I think the cleaned up sysfs
+> shown in the summary above looks much better than what the original
+> would've looked like.
+>
+> Perhaps an additional tweak to that would be to not create platform
+> devices. Instead, just create struct device. Those really have
+> everything you need (.of_node, and can be used with RPM and GENPD). As I
+> mentioned earlier, platform device implies a CPU-memory-mapped bus,
+> which this clearly isn't. It's kind of a separate "bus" if you want, so
+> just using struct device directly seems more appropriate.
 
-At least one user in Debian (https://bugs.debian.org/992004) would be
-happy to have those backported as well to the 5.10.y series (which we
-will pick up).
+Just a heads up. If you don't use a platform device or have a driver
+associated with it for probing, you need to manage the attachment to
+genpd yourself. That means calling one of the dev_pm_domain_attach*()
+APIs, but that's perfectly fine, ofcourse.
 
-So if Benjamin ack's this, this would be great to have in 5.10.y.
+>
+> We did something similar for XUSB pads, see drivers/phy/tegra/xusb.[ch]
+> for an example of how that was done. I think you can do something
+> similar here.
+>
+> Thierry
 
-Regards,
-Salvatore
+Kind regards
+Uffe
