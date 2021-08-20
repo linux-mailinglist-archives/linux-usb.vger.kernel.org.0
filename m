@@ -2,163 +2,203 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BB03F266A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 07:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6590D3F2681
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Aug 2021 07:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236436AbhHTFTY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Fri, 20 Aug 2021 01:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbhHTFTX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Fri, 20 Aug 2021 01:19:23 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C889C061575
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id e7so8030565pgk.2
-        for <linux-usb@vger.kernel.org>; Thu, 19 Aug 2021 22:18:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
-        b=PAK0FwHpNruccQOMJcEETGgiuehcBfGqSXwbOalixpfWmC8iUPHKv0ZRFhT4USGW3L
-         s3ikZix1CXYk8w3jX5LaxfyZfb40GBiPWSjG9bWn3gJp9a9Md0FR48UGizRgXzY9ODgl
-         10gDNc8YxX4abwwur3/2Ib4tR0HK4fxAVz95jdn0g5Bjm1f+zlmZUdf0J4uOmNCA+73o
-         QmFwB0uLKerpVDInoO9o15o02ie64XpCaCSsIImcFb/KjT6Us0KvUWI0KV441DGxP1Gb
-         Qjx6eoerfkbM7U/RrGe2d3xgWfRJJ6PVyX/2MvEkhvBiHXfKbkbdOk6b4KB2LrxPQeQV
-         fLzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=chAct3ipnxxeeUzw3hiYvmSC99rC9KHQnQdo3Qo5wI0=;
-        b=DVbTvYYrpix5LR4CBw/2ikB2xd2MH460eRgo1xxSMuhA8h76hE9KKJvJMdzLv3IeNg
-         dvFsBenzzV1PX1Gh6Ye5ix2hnf4safV9v0rC4gsFoLnP70yYGwUnoVqBie2FjoE5mpZJ
-         5dNk4ZImbp+obE1/xQqIPyvazLuYp+sQNnOYylPyABq0riDy/sHhXyXGjNKlVug4y3Nc
-         zeAP6AQMc6Hp2/d9LZ7X3eeTipu9c5HlFgMgDHyyzDDjg2fZOtsVBOICzm8oUWR7Szo1
-         fY4luAyLx4MbA1kGy8tfoHNs1tAELtmgtcfdMOfRnKRPAmLJMMs67VCtwUSeWfAg7XuS
-         mQrw==
-X-Gm-Message-State: AOAM5301pdY+5ruyaAsRNvZcqkVNZB43WTpQyUepncM2qGs7LUdDX8t3
-        2xAJNI2/xTsFcS/a/DZD2zneIQ==
-X-Google-Smtp-Source: ABdhPJwH30rFrNGt2fTNK9Na7wrgKwgjGw7543RwntMIs+dfy9PTWNVMu53RFGAQHLSof48YBaglZA==
-X-Received: by 2002:a62:8283:0:b0:3e0:f3f3:839d with SMTP id w125-20020a628283000000b003e0f3f3839dmr17811980pfd.37.1629436725848;
-        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
-Received: from localhost ([122.172.201.85])
-        by smtp.gmail.com with ESMTPSA id i26sm5582209pfu.6.2021.08.19.22.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Aug 2021 22:18:45 -0700 (PDT)
-Date:   Fri, 20 Aug 2021 10:48:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-Message-ID: <20210820051843.5mueqpnjbqt3zdzc@vireshk-i7>
-References: <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
- <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
- <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
- <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <f1314a47-9e8b-58e1-7c3f-0afb1ec8e70a@gmail.com>
- <20210819061617.r4kuqxafjstrv3kt@vireshk-i7>
- <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
+        id S235390AbhHTFfE (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Fri, 20 Aug 2021 01:35:04 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:21021 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231256AbhHTFfB (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Fri, 20 Aug 2021 01:35:01 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629437664; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=lXsbnDvim+x7SjDi+NgiA4nb25M0s3Avl7+C9WJxIls=; b=Tss3662pXxrhEWhn/f0Ncy+tpzuGxkSDXw+bonm8ar0pOaZ2adDlvg8ca37/o6ogR4Dmfh4r
+ CWslm+iXQcEZ7ZvYwcdGP8eYEKgjeT2kL7ZStJqKpkWBYHUKmIBmocgMY3z90HOMiPRV6A2L
+ m0Brgs+IVd6YSioeN1GpsNzfoiQ=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 611f3edf1a9008a23e6e933e (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 20 Aug 2021 05:34:23
+ GMT
+Sender: sanm=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 69587C4360D; Fri, 20 Aug 2021 05:34:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.4 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [192.168.0.104] (unknown [49.206.50.189])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sanm)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id A5B51C4338F;
+        Fri, 20 Aug 2021 05:34:17 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org A5B51C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v5 2/3] arm64: dts: qcom: sc7280: Add USB related nodes
+To:     Stephen Boyd <swboyd@chromium.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Pratham Pratap <prathampratap@codeaurora.org>
+References: <1625576413-12324-1-git-send-email-sanm@codeaurora.org>
+ <1625576413-12324-3-git-send-email-sanm@codeaurora.org>
+ <CAE-0n52d7UOWQ+hohoyV81+aB1RnNPUEnjPCtr5=nH+a=WK35Q@mail.gmail.com>
+From:   Sandeep Maheswaram <sanm@codeaurora.org>
+Message-ID: <ea2380bd-734d-a835-05f0-db9d3dbcfe38@codeaurora.org>
+Date:   Fri, 20 Aug 2021 11:04:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpg8ixT4AEjzVLTwQR7Nn9CctjnLCDS5GwkOrAERquyxw@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+In-Reply-To: <CAE-0n52d7UOWQ+hohoyV81+aB1RnNPUEnjPCtr5=nH+a=WK35Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 19-08-21, 16:55, Ulf Hansson wrote:
-> Right, that sounds reasonable.
-> 
-> We already have pm_genpd_opp_to_performance_state() which translates
-> an OPP to a performance state. This function invokes the
-> ->opp_to_performance_state() for a genpd. Maybe we need to allow a
-> genpd to not have ->opp_to_performance_state() callback assigned
-> though, but continue up in the hierarchy to see if the parent has the
-> callback assigned, to make this work for Tegra?
-> 
-> Perhaps we should add an API dev_pm_genpd_opp_to_performance_state(),
-> allowing us to pass the device instead of the genpd. But that's a
-> minor thing.
+Hi Stephen,
 
-I am not concerned a lot about how it gets implemented, and am not
-sure as well, as I haven't looked into these details since sometime.
-Any reasonable thing will be accepted, as simple as that.
+On 8/18/2021 1:28 AM, Stephen Boyd wrote:
+> Quoting Sandeep Maheswaram (2021-07-06 06:00:12)
+>> Add nodes for DWC3 USB controller, QMP and HS USB PHYs in sc7280 SOC.
+>>
+>> Signed-off-by: Sandeep Maheswaram <sanm@codeaurora.org>
+>> Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>> ---
+>> Changed qmp usb phy to usb dp phy combo node as per Stephen's comments.
+>> Changed dwc to usb and added SC7280 compatible as per Bjorn's comments.
+>>
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 164 +++++++++++++++++++++++++++++++++++
+>>   1 file changed, 164 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index a8c274a..cd6908f 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -1035,6 +1035,125 @@
+>>                          };
+>>                  };
+>>
+> [...]
+>> +
+>> +               usb_2: usb@8cf8800 {
+>> +                       compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+>> +                       reg = <0 0x08cf8800 0 0x400>;
+>> +                       status = "disabled";
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <2>;
+>> +                       ranges;
+>> +                       dma-ranges;
+>> +
+>> +                       clocks = <&gcc GCC_CFG_NOC_USB3_SEC_AXI_CLK>,
+>> +                                <&gcc GCC_USB30_SEC_MASTER_CLK>,
+>> +                                <&gcc GCC_AGGRE_USB3_SEC_AXI_CLK>,
+>> +                                <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+>> +                                <&gcc GCC_USB30_SEC_SLEEP_CLK>;
+>> +                       clock-names = "cfg_noc", "core", "iface","mock_utmi",
+>> +                                     "sleep";
+>> +
+>> +                       assigned-clocks = <&gcc GCC_USB30_SEC_MOCK_UTMI_CLK>,
+>> +                                         <&gcc GCC_USB30_SEC_MASTER_CLK>;
+>> +                       assigned-clock-rates = <19200000>, <200000000>;
+>> +
+>> +                       interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+>> +                                    <&pdc 13 IRQ_TYPE_EDGE_RISING>,
+>> +                                    <&pdc 12 IRQ_TYPE_EDGE_RISING>;
+> I'm seeing this cause a warning at boot
+>
+> [    4.724756] irq: type mismatch, failed to map hwirq-12 for
+> interrupt-controller@b220000!
+> [    4.733401] irq: type mismatch, failed to map hwirq-13 for
+> interrupt-controller@b220000!
+I should be using  IRQ_TYPE_LEVEL_HIGH. Will correct in next version.
+>> +                       interrupt-names = "hs_phy_irq",
+>> +                                         "dm_hs_phy_irq", "dp_hs_phy_irq";
+>> +
+>> +                       power-domains = <&gcc GCC_USB30_SEC_GDSC>;
+>> +
+>> +                       resets = <&gcc GCC_USB30_SEC_BCR>;
+>> +
+>> +                       usb_2_dwc3: usb@8c00000 {
+>> +                               compatible = "snps,dwc3";
+>> +                               reg = <0 0x08c00000 0 0xe000>;
+>> +                               interrupts = <GIC_SPI 242 IRQ_TYPE_LEVEL_HIGH>;
+>> +                               iommus = <&apps_smmu 0xa0 0x0>;
+>> +                               snps,dis_u2_susphy_quirk;
+>> +                               snps,dis_enblslpm_quirk;
+>> +                               phys = <&usb_2_hsphy>;
+>> +                               phy-names = "usb2-phy";
+>> +                               maximum-speed = "high-speed";
+>> +                       };
+>> +               };
+>> +
+>>                  dc_noc: interconnect@90e0000 {
+>>                          reg = <0 0x090e0000 0 0x5080>;
+>>                          compatible = "qcom,sc7280-dc-noc";
+>> @@ -1063,6 +1182,51 @@
+>>                          qcom,bcm-voters = <&apps_bcm_voter>;
+>>                  };
+>>
+>> +               usb_1: usb@a6f8800 {
+>> +                       compatible = "qcom,sc7280-dwc3", "qcom,dwc3";
+>> +                       reg = <0 0x0a6f8800 0 0x400>;
+>> +                       status = "disabled";
+>> +                       #address-cells = <2>;
+>> +                       #size-cells = <2>;
+>> +                       ranges;
+>> +                       dma-ranges;
+>> +
+>> +                       clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
+>> +                                <&gcc GCC_USB30_PRIM_MASTER_CLK>,
+>> +                                <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
+>> +                                <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>> +                                <&gcc GCC_USB30_PRIM_SLEEP_CLK>;
+>> +                       clock-names = "cfg_noc", "core", "iface", "mock_utmi",
+>> +                                     "sleep";
+>> +
+>> +                       assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
+>> +                                         <&gcc GCC_USB30_PRIM_MASTER_CLK>;
+>> +                       assigned-clock-rates = <19200000>, <200000000>;
+>> +
+>> +                       interrupts-extended = <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+>> +                                             <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
+>> +                                             <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+> And this one too.
+>
+> [    4.898667] irq: type mismatch, failed to map hwirq-14 for
+> interrupt-controller@b220000!
+> [    4.907241] irq: type mismatch, failed to map hwirq-15 for
+> interrupt-controller@b220000!
+>
+> which looks like genirq code is complaining that the type is different
+> than what it is configured for. Are these trigger flags correct? If so,
+> then there' some sort of bug in the pdc driver.
 
-> Finally, the precondition to use the above, is to first get a handle
-> to an OPP table. This is where I am struggling to find a generic
-> solution, because I guess that would be platform or even consumer
-> driver specific for how to do this. And at what point should we do
-> this?
+I should be using  IRQ_TYPE_LEVEL_HIGH. Will correct in next version.
 
-Hmm, I am not very clear with the whole picture at this point of time.
 
-Dmitry, can you try to frame a sequence of events/calls/etc that will
-define what kind of devices we are looking at here, and how this can
-be made to work ?
-
-> > > Viresh, please take a look at what I did in [1]. Maybe it could be done
-> > > in another way.
-> >
-> > I looked into this and looked like too much trouble. The
-> > implementation needs to be simple. I am not sure I understand all the
-> > problems you faced while doing that, would be better to start with a
-> > simpler implementation of get_performance_state() kind of API for
-> > genpd, after the domain is attached and its OPP table is initialized.
-> >
-> > Note, that the OPP table isn't required to be fully initialized for
-> > the device at this point, we can parse the DT as well if needed be.
-> 
-> Sure, but as I indicated above, you need some kind of input data to
-> figure out what OPP table to pick, before you can translate that into
-> a performance state. Is that always the clock rate, for example?
-
-Eventually it can be clock, bandwidth, or pstate of anther genpd, not
-sure what all we are looking for now. It should be just clock right
-now as far as I can imagine :)
-
-> Perhaps, we should start with adding a dev_pm_opp_get_from_rate() or
-> what do you think? Do you have other suggestions?
-
-We already have similar APIs, so that won't be a problem. We also have
-a mechanism inside the OPP core, frequency based, which is used to
-guess the current OPP. Maybe we can enhance and use that directly
-here.
-
--- 
-viresh
+>
+>> +                                             <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
+>> +                       interrupt-names = "hs_phy_irq", "dp_hs_phy_irq",
+>> +                                         "dm_hs_phy_irq", "ss_phy_irq";
+>> +
+>> +                       power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
+>> +
+>> +                       resets = <&gcc GCC_USB30_PRIM_BCR>;
+>> +
+>> +                       usb_1_dwc3: usb@a600000 {
