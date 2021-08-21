@@ -2,59 +2,59 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B383F3A89
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 14:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE823F3A91
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 14:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbhHUMNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Aug 2021 08:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        id S234448AbhHUMSg (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Aug 2021 08:18:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbhHUMN3 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Aug 2021 08:13:29 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8ECC061575;
-        Sat, 21 Aug 2021 05:12:49 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id w4so20395571ljh.13;
-        Sat, 21 Aug 2021 05:12:49 -0700 (PDT)
+        with ESMTP id S234293AbhHUMSf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Aug 2021 08:18:35 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C36C061575;
+        Sat, 21 Aug 2021 05:17:55 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id p38so26617449lfa.0;
+        Sat, 21 Aug 2021 05:17:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pWm+SXTgQ6Ye71KEJYrX8x4GdkySoQhJ1rIbykcEo+8=;
-        b=PdP+FH0V3HehypF44h9BTbNRXagbI8NQNesGa1I8ZVFYZPAcDWzTJE2xucd63ht4+k
-         L+Sm2L/Wlzx5wAE/Yy6TZtmGDMEGVfeOedQ1tTm0+fgRmo95U2nu94lusFnvvatXkk55
-         VMu5HEmvzp4BAYMshEri4nZi1dSjsdMfZpkthNEaJoQQ/L3w/nSqg9E2UVVq0YS5hcJz
-         QuTv/RDadePY6PlhoQ20lDtQ5M7+S5Rc3qVO9bG68hh+p7OyibiBFu702T6FdpvW4UQE
-         K1xF2fLZuDv1JY0dBhLl1MK5X5/jknYa3lleWtBovCuCnbRDvRV6T8pXwif4BtlhE6QM
-         7O6A==
+        bh=VTdzEtT4Wp458PIeJqhUe58FrWQCsObT9nOyzI0RjZM=;
+        b=b007ORUE+CPfOXGvGatMhrF3Yn32uXZQBPrWaQcQZthtwLXuXXYt5A90tvuEJhkCT0
+         f4MiXuVxlPi9tHyzDf3Uzzdt8qLRXBYh6u72goHEKDvLEFoCMYlsAVxOVp73zmuHVB3X
+         zDi9ZpiIR2Rua7heV5sRC1PR0vy2bsAQ1n8DIPSBo1+q8hIZZeWoaLZLy10//f0EsqRV
+         v5Mh/sXaeDM23SzAQLBERcxgXVFsoO5EdKXhUmbhBDvzBDfEHcziihyQDqs2dYrGRrN3
+         RK2xzYI5A6Pfmxx/kE/qSoYgZTNWa0USR5cJ5iFwPwg1I9mHXCEYTrr1PBcizpxOeqLb
+         KLCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=pWm+SXTgQ6Ye71KEJYrX8x4GdkySoQhJ1rIbykcEo+8=;
-        b=IFU/MBEdqOc+DbHmLQnLQIuqFn56CW4vXfZzKaySeRKXWCFo7PYcVtigaLIJjzNDVM
-         ghqfIWeQKXP4LBGc5p61KL5Nx0/OnT9M+kg//W3o9TJrqXX/Obc3BDHc4IXXnn9IftfL
-         RCj2jxWVroPWMPZJRWfAnejJ+nkiZUtJVPD9ebUr5L57pLXYzDgjwyX0GH4PL0Dqsgrw
-         b2YzuJwODUo58JupRGQz6UZqKzp7twuqxb1sX12hRwx6nmCLt2nEGcfP3vQVSTn06G3H
-         mlxi2GT0E1EGYlnc7w7bix54MM4aBpxXRAKtPFWnhhoBORBqUhRAHnyLv8CKDwCdh848
-         O4bw==
-X-Gm-Message-State: AOAM533ty7bYdOoT1VDIJYwygI0vPxCGOkZXbImyqJxZLMQZLs4VPLHS
-        d7J7WWT9NYRpk7L534bi6Bq4tqG9IIKnRLdn
-X-Google-Smtp-Source: ABdhPJxzpXGpfr6mM+l1iD9N4mn5klFS4XearVaT6UBA181MqbAgcDLRPpOff+u9pa0lw0HABapafQ==
-X-Received: by 2002:a2e:7c0a:: with SMTP id x10mr19613907ljc.340.1629547968108;
-        Sat, 21 Aug 2021 05:12:48 -0700 (PDT)
+        bh=VTdzEtT4Wp458PIeJqhUe58FrWQCsObT9nOyzI0RjZM=;
+        b=OLB4zHnn5zcwrRLH+GxbXNcvqByqYCseg+ygPqRou5WMkB06uMbR6MmZdhRc65E5gF
+         rJmk8TsN3jzpxhfKIhLTKJZhFYgIui7AvU1HipnrieQTWmGCME4ZZ2V55WtkOWcZQHEA
+         upyzud36B1sgndUxTLz+KwDhAbokhIvzQOoOHlj+uxXMVOXx9pKHQ+k3BNGbmjsGAXKk
+         XNJJHTvvZPzQMdovZcD4Gn/wxQPisyThi07/ULMKcjPziWKweY6YJRLYPXy3aWHScjXF
+         Y6ABHjxEP+4ulxFtVa2tj/iCm53o4jtz3HEdChrql+BcgmCxlaO+10xFxVL6DdwvKyq1
+         nveA==
+X-Gm-Message-State: AOAM531dC6sx+DxKL165wYdcacTRzIv6lzlOFqj5P/8ZxVnXrfGxXXbX
+        +tCurzW011Un0bP84iLYwyU=
+X-Google-Smtp-Source: ABdhPJwk7DQZu0pX/YD2e8am2o/8aTO/+/0pG1RECbAYH/YritKX7u+4a3EXMNslLCSYh4wxyjRHvA==
+X-Received: by 2002:a05:6512:110b:: with SMTP id l11mr18259203lfg.199.1629548273974;
+        Sat, 21 Aug 2021 05:17:53 -0700 (PDT)
 Received: from localhost.localdomain (h-62-63-208-27.A230.priv.bahnhof.se. [62.63.208.27])
-        by smtp.googlemail.com with ESMTPSA id bp18sm564914lfb.201.2021.08.21.05.12.46
+        by smtp.googlemail.com with ESMTPSA id z11sm791481ljn.114.2021.08.21.05.17.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Aug 2021 05:12:47 -0700 (PDT)
+        Sat, 21 Aug 2021 05:17:53 -0700 (PDT)
 From:   Niklas Lantau <niklaslantau@gmail.com>
 To:     stern@rowland.harvard.edu
 Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
         linux-kernel@vger.kernel.org,
         Niklas Lantau <niklaslantau@gmail.com>
-Subject: [PATCH] Usb: storage: usb: removed useless cast of void*
-Date:   Sat, 21 Aug 2021 14:11:34 +0200
-Message-Id: <20210821121134.23205-1-niklaslantau@gmail.com>
+Subject: [PATCH] Usb: Storage: usb: Fixed coding style issue
+Date:   Sat, 21 Aug 2021 14:16:30 +0200
+Message-Id: <20210821121630.29318-1-niklaslantau@gmail.com>
 X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,28 +62,27 @@ Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Removed useless cast of a void* and changed __us to data
+Fixed coding style issue. Removed not needed braces.
 
 Signed-off-by: Niklas Lantau <niklaslantau@gmail.com>
 ---
- drivers/usb/storage/usb.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/storage/usb.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
-index 90aa9c12ffac..e78e20fb1afa 100644
+index 90aa9c12ffac..5f562bac14d0 100644
 --- a/drivers/usb/storage/usb.c
 +++ b/drivers/usb/storage/usb.c
-@@ -295,9 +295,9 @@ void fill_inquiry_response(struct us_data *us, unsigned char *data,
- }
- EXPORT_SYMBOL_GPL(fill_inquiry_response);
- 
--static int usb_stor_control_thread(void * __us)
-+static int usb_stor_control_thread(void *data)
+@@ -926,9 +926,8 @@ static unsigned int usb_stor_sg_tablesize(struct usb_interface *intf)
  {
--	struct us_data *us = (struct us_data *)__us;
-+	struct us_data *us = data;
- 	struct Scsi_Host *host = us_to_host(us);
- 	struct scsi_cmnd *srb;
+ 	struct usb_device *usb_dev = interface_to_usbdev(intf);
+ 
+-	if (usb_dev->bus->sg_tablesize) {
++	if (usb_dev->bus->sg_tablesize)
+ 		return usb_dev->bus->sg_tablesize;
+-	}
+ 	return SG_ALL;
+ }
  
 -- 
 2.33.0
