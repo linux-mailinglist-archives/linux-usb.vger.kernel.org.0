@@ -2,110 +2,195 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFDA3F3901
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 08:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81C53F393B
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 09:04:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbhHUGc2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Aug 2021 02:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S232242AbhHUHEy (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Aug 2021 03:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbhHUGc2 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Aug 2021 02:32:28 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6868EC061575;
-        Fri, 20 Aug 2021 23:31:49 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id r7so17423586wrs.0;
-        Fri, 20 Aug 2021 23:31:49 -0700 (PDT)
+        with ESMTP id S231738AbhHUHEx (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Aug 2021 03:04:53 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108F4C061575
+        for <linux-usb@vger.kernel.org>; Sat, 21 Aug 2021 00:04:14 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id q10so17437279wro.2
+        for <linux-usb@vger.kernel.org>; Sat, 21 Aug 2021 00:04:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nJe+VaUQYca4KABO1XS982WELsgGiKMA/OFGfeoypuY=;
-        b=VkPrpg+PFX6FsOJ99Xxme6dUQFWOFu/uJgzinQVsjBJUxHfA/nstQYe3DhEYQ0rk59
-         S+PfxDR3WHwumZuXGI2hZTd4RezEpXuEwaIB0zPJgia/+B+I/+5D4ohIfJZVNmbkGHVd
-         KHr4RAXgENrthm3YFZ4JLLo8j29HpNSQNNPR4Y1DfnF0J3TqyOX0Y/iQExWdEm0Thz/5
-         raKonaMVisWkl23MTJ5c+nWiorxPJ4jDJb8jjwqEMyOIG/kMLIrMwtkiqh0IV+Odme3S
-         i5oZ+3vYMU7LlBQexIplRig1nzRuRAlaZEwR+U8h4HnVY6a/JmbZYkLHniHJOX+qOVLM
-         Rutw==
+        d=rtst-co-kr.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=WgM87f7rpLd/jbOLyf9WZP12/bowR6IrwwDEu2GtuV8=;
+        b=Pv336bT6BS8zVUAFL8pWU1CGoQdBEw/yAxLORZT8Cj/Ba0BPBttWUz+vdEQINtnec5
+         q2RFdHep9cG1R6MfS7RuAsBAUf71QOvvsylwQVXcszxZWZLGdJfao5uT5J80KXdOtlu9
+         SHtyBk5SWC/eZGBBjo+tV85udJiqv5I8QHTKOfnvsQMkqX7SlRtnfYau5O4uzOrkvo+l
+         rMFJR4MAD1C3+4bzI0SoUQ3gTZd6u6nch6F4B+kxdf2ImkNJD5dIfgb1PX9TFJTZz2vf
+         KbzOGeFnG9Mwqm9PfoEJXDhVxDOelhrZAmwoosSLEOPzfXQGSu5fxkL7R5sg5qkiGjhx
+         WiHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=nJe+VaUQYca4KABO1XS982WELsgGiKMA/OFGfeoypuY=;
-        b=C44zVjFqvs8zrHgZehnA2FDQ/fmM4WKCr8+SgoaO1c3R063UMseJcMqZko0cdMQkHO
-         nVmFCksegDM1sFA8KJXVFLxyp5b5NPeB+pIuDa1e+OZg1EV/waNXReWQeLwGHqO006t9
-         beT/gJ4GN8LiLfcKF30ds1Tw0YXh/WX3UNZ8tMrrLlqo2bUxYooz5N8CYVyangl01Ld2
-         rePau4qiEh5zSjOha1Be3ZpkUo8yo4jRQ2Gw8Q+6EeCyjFy0MMWHUWwMF3Oe0unw+2LD
-         AaF4wqy664JbVhlo8z5hsjV6qcQZ518hpAGlwzzmrtwhFTWOT0LKSe8TeljvO+KzvujD
-         /Gmw==
-X-Gm-Message-State: AOAM5310kBuAtJ3lmxHL8OexyOrJGOqWoDVVzcG7gn6RukcJq/ch2fyM
-        CUEdwVHI4HrXQZIEmjeuB0Q=
-X-Google-Smtp-Source: ABdhPJxlL7UgiNMPo1Z2ex6GQDB9brsG5Fx06AQ8ms5jxoBFHW3TQjd9lrqoN5OMj7jj0etQPxCTUw==
-X-Received: by 2002:a05:6000:12cf:: with SMTP id l15mr2306999wrx.381.1629527507953;
-        Fri, 20 Aug 2021 23:31:47 -0700 (PDT)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id o7sm6858616wmc.46.2021.08.20.23.31.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Aug 2021 23:31:46 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Sat, 21 Aug 2021 08:31:45 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Ian Turner <vectro@vectro.org>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-Message-ID: <YSCd0aBXNX4rj3Vb@eldamar.lan>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
- <20201028091043.GC1947336@kroah.com>
- <20201106104725.GC2785199@kroah.com>
- <YR+nwZtz9CQuyTn+@lorien.valinor.li>
- <077990d1e354777c4c6a33866a0916bed6a97ed5.camel@sipsolutions.net>
- <bd81136b-3b52-fbda-780a-9dc58bdeb268@vectro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WgM87f7rpLd/jbOLyf9WZP12/bowR6IrwwDEu2GtuV8=;
+        b=DWm6ZFnhYhfOxcV4ERemR0K91UolrIZyHVR8TH92QC5rCvPkRvObDpmlo+9PVlJ4SL
+         FySGAu7aPeBkwclP864kkNe21oEq0HOxNNfk3uOhxCxcFNxnCKJ1ZaZQ4Xzqkjv8/Wol
+         wGRNwap46qvDFCWCfPgEGGb677XF7UaJbYI/kX1GfQdYOAKC4Hjp5V401jsaTmFVj4Z1
+         1cdYPRs8HYFHOF9thncFrh6KLi1YjeH0nDdZNfRIAaj/A635ZkXBW2JRX5MF4rRyyToL
+         ybC9yGLT6gZI/tLPNm9FtLr2+vljLZgTgSvQEQeJX6aLo65kmCAQODuw7agjKNaTGDNT
+         sx/w==
+X-Gm-Message-State: AOAM532kd0i4Z0OBwmBMb9rSF9P9SuLNgUPhe3oxJL0ADTzsAaKZ/9kR
+        yNBu10s1MlqObEk1by248iYqe8xFqpilphb0yKGIxw==
+X-Google-Smtp-Source: ABdhPJxcQ/ExlMzakQLKVKtgk8fM+2HQQTzsMvU9f1V4BSUasYqP11DQmXznbj5+lLlT6kQekSR6zYmUaeHXoLJb/44=
+X-Received: by 2002:adf:e7d1:: with SMTP id e17mr2450792wrn.151.1629529452393;
+ Sat, 21 Aug 2021 00:04:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd81136b-3b52-fbda-780a-9dc58bdeb268@vectro.org>
+References: <20210817095313.GA671484@ubuntu> <20210818161752.vu6abfv3e6bfqz23@linutronix.de>
+ <CAJk_X9h_GqUyir7oG33pFrLgknj7DZfd6esiKb07w7QWjZqX0g@mail.gmail.com>
+ <20210819084759.stnmit32vs2be46m@linutronix.de> <CAJk_X9gyWch6Z1=hbe2vvqGu61mdavAU62+6dSka0tZoMzxu5Q@mail.gmail.com>
+ <20210821050511.GA14810@Peter>
+In-Reply-To: <20210821050511.GA14810@Peter>
+From:   Jeaho Hwang <jhhwang@rtst.co.kr>
+Date:   Sat, 21 Aug 2021 16:04:01 +0900
+Message-ID: <CAJk_X9gqBACA3O=4LdY3XJP5UzJe2p4bE72X_jNEHR1Cn=vDNQ@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: chipidea: local_irq_save/restore added for hw_ep_prime
+To:     Peter Chen <peter.chen@kernel.org>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-rt-users@vger.kernel.org, Linux team <team-linux@rtst.co.kr>,
+        =?UTF-8?B?67OA66y06rSRKEJ5ZW9uIE1vbyBLd2FuZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm0=?=
+         =?UTF-8?B?7Jew6rWs7YyA?= <mkbyeon@lselectric.co.kr>,
+        =?UTF-8?B?7LWc6riw7ZmNKENob2kgS2kgSG9uZykv7J6Q64+Z7ZmU7JewKUF1dG9tYXRpb24gUGxhdGZvcm3sl7A=?=
+         =?UTF-8?B?6rWs7YyA?= <khchoib@lselectric.co.kr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Ian,
+2021=EB=85=84 8=EC=9B=94 21=EC=9D=BC (=ED=86=A0) =EC=98=A4=ED=9B=84 2:05, P=
+eter Chen <peter.chen@kernel.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> On 21-08-20 14:15:55, Jeaho Hwang wrote:
+> > 2021=EB=85=84 8=EC=9B=94 19=EC=9D=BC (=EB=AA=A9) =EC=98=A4=ED=9B=84 5:4=
+8, Sebastian Andrzej Siewior
+> > <bigeasy@linutronix.de>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+> > >
+> > > On 2021-08-19 08:50:27 [+0900], Jeaho Hwang wrote:
+> > > > Without RT, udc_irq runs as a forced threaded irq handler, so it ru=
+ns
+> > > > without any interruption or preemption. NO similar case is found on
+> > > > non-RT.
+> > >
+> > > I see only a devm_request_irq() so no force-threading here. Booting w=
+ith
+> > > threadirqs would not lead to the problem since commit
+> > >    81e2073c175b8 ("genirq: Disable interrupts for force threaded hand=
+lers")
+> > >
+> >
+> > I was wrong. udc threaded irq handler allows twd interrupt even on
+> > non-RT and with threaded irq.
+> > I believed Chen's comment "The function hw_ep_prime is only called at
+> > udc_irq which is registered as top-half irq handlers. Why the timer
+> > interrupt is occurred when hw_ep_prime is executing?".
+>
+> Hi Jeaho,
+>
+> How could you let udc irq as threaded irq? The chipidea interrupt
+> is registered using devm_request_irq.
+>
 
-On Fri, Aug 20, 2021 at 07:08:57PM -0400, Ian Turner wrote:
-> On 8/20/21 9:29 AM, Benjamin Berg wrote:
-> > On Fri, 2021-08-20 at 15:01 +0200, Salvatore Bonaccorso wrote:
-> > > At least one user in Debian (https://bugs.debian.org/992004) would be
-> > > happy to have those backported as well to the 5.10.y series (which we
-> > > will pick up).
-> > > 
-> > > So if Benjamin ack's this, this would be great to have in 5.10.y.
-> > Sure, it is reasonable to pull it into 5.10. At the time it just seemed
-> > to me that it was enough of a corner case to not bother.
-> > 
-> > Note that there was a somewhat related fix later on (for Qualcomm UCSI
-> > firmware), which probably makes sense to pull in too then.
-> > 
-> > Including Bjorn into the CC list for that.
-> > 
-> > commit 8c9b3caab3ac26db1da00b8117901640c55a69dd
-> > Author: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Date:   Sat May 15 21:09:53 2021 -0700
-> > 
-> >      usb: typec: ucsi: Clear pending after acking connector change
-> > Benjamin
-> 
-> I feel that I should mention that I haven't actually tested this change, so
-> it's just conjecture on my part that it would fix my issue (though it does
-> seem to track pretty closely). I am happy to do that testing if it would
-> save others time.
+HI Peter.
 
-Ah apologies, I was under the impression that you confirmed that this
-was already the right fix. It is pretty close to what you describe, so
-if you can additionally confirm the fix, that would be great.
+We configured the kernel as "low latency desktop" and added
+"threadirqs" inside the cmdline parameter.
+Then udc irq handler runs as a thread and shows no suspicious working.
+I Hope It will help.
 
-Regards,
-Salvatore
+Thanks.
+
+> > We have additional experiments and got the results like below. RNDIS
+> > host was Windows.
+> >
+> > RT, 1ms delay between first ENDPTSETUPSTAT read and priming : error
+> > case occurred
+> > RT, 1ms delay + irq_save : no error case occurred.
+> > non-RT, threaded irq, 1ms delay : no error case occurred even twd
+> > fires inside the function execution.
+>
+> Again, how do you observe it?
+>
+> Peter
+>
+> >
+> > It doesn't seem to be a timing issue. But irq definitely affects
+> > priming on the RT kernel. Do you RT experts have any idea about the
+> > causes?
+> > If isr_tr_complete_handler fails ep priming it calls _ep_set_halt and
+> > goes an infinite loop in hw_ep_set_halt. It was an actual problem we
+> > experienced.
+> > So we protect irqs inside hw_ep_priming not to make error cases and
+> > also add a timeout inside the hw_ep_set_halt loop for a walkaround.
+> > The timeout patch is submitted to linux-usb.
+> > ( https://marc.info/?l=3Dlinux-usb&m=3D162918269024007&w=3D2 )
+> >
+> > We withdrew this patch since we don't know if disabling irq is the
+> > best solution to solve the problem and udc would work fine with
+> > hw_ep_set_halt walkaround even though hw_ep_prime fails.
+> > But we are still trying to find out the cause of this symptom so We'd
+> > so appreciate it if RT or USB experts share some ideas or ways to
+> > report somewhere. Xilinx doesn't provide any support without their
+> > official kernel :(
+> >
+> > Thanks for the discussion Sebastian.
+> >
+> > Jeaho Hwang.
+> >
+> > > =E2=80=A6
+> > > > > If this function here is sensitive to timing (say the cpu_relax()=
+ loop
+> > > > > gets interrupt for 1ms) then it has to be documented as such.
+> > > >
+> > > > The controller sets ENDPTSETUPSTAT register if the host sent a setu=
+p packet.
+> > > > yes it is a timing problem. I will document that and resubmit again=
+ if
+> > > > you agree that local_irq_save could help from the timing problem.
+> > > >
+> > > > Thanks for the advice.
+> > >
+> > > If it is really a timing issue in the function as you describe below
+> > > then disabling interrupts would help and it is indeed an RT only issu=
+e.
+> > >
+> > > So you read OP_ENDPTSETUPSTAT, it is 0, all good.
+> > > You write OP_ENDPTPRIME, wait for it to be cleared.
+> > > Then you read OP_ENDPTSETUPSTAT again and if it is 0, all good.
+> > >
+> > > And the TWD interrupt could delay say the second read would read 1 an=
+d
+> > > it is invalidated. Which looks odd.
+> > > However, it is "okay" if the TWD interrupt happens after the second
+> > > read? Even if the host sends a setup packet, nothing breaks?
+> > > Do you have numbers on how long irq-off section is here? It seems to
+> > > depend on how long the HW needs to clear the OP_ENDPTPRIME bits.
+> > >
+> > > Sebastian
+> >
+> >
+> >
+> > --
+> > =ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
+> > 010-7242-1593
+>
+> --
+>
+> Thanks,
+> Peter Chen
+>
+
+
+--=20
+=ED=99=A9=EC=9E=AC=ED=98=B8, Jay Hwang, linux team manager of RTst
