@@ -2,66 +2,89 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 743DE3F3A83
-	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 14:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B383F3A89
+	for <lists+linux-usb@lfdr.de>; Sat, 21 Aug 2021 14:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbhHUMK3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sat, 21 Aug 2021 08:10:29 -0400
-Received: from mail.kernel.org ([198.145.29.99]:46290 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229968AbhHUMK2 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Sat, 21 Aug 2021 08:10:28 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id AC5216120C;
-        Sat, 21 Aug 2021 12:09:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629547789;
-        bh=I5aDNaJ08T5XO2o5aYAHKwH94JnMv5efq84IlTwACnw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=POyQUS1cjHXA4BuQpzUAUU7IsJPBwctCL3L/A1OEVIWz/VaUr6/aG3oGbvz3sl1XI
-         zv3rIpUbTMFPVAg4tPUV5dMHuz1GkAqoZEskiIvbskerJzwSZ3+6STMW3fZGXmV+IR
-         Nsq/lLF7+0QE7PHUPr0tZKof14wsJhELbklGMmxY=
-Date:   Sat, 21 Aug 2021 14:09:45 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     Benjamin Berg <benjamin@sipsolutions.net>,
-        linux-usb@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
-        linux-kernel@vger.kernel.org, Benjamin Berg <bberg@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Ian Turner <vectro@vectro.org>
-Subject: Re: [PATCH 0/2] UCSI race condition resulting in wrong port state
-Message-ID: <YSDtCea3a9cuaEG3@kroah.com>
-References: <20201009144047.505957-1-benjamin@sipsolutions.net>
- <20201028091043.GC1947336@kroah.com>
- <20201106104725.GC2785199@kroah.com>
- <YR+nwZtz9CQuyTn+@lorien.valinor.li>
+        id S234419AbhHUMNb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sat, 21 Aug 2021 08:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229968AbhHUMN3 (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Sat, 21 Aug 2021 08:13:29 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8ECC061575;
+        Sat, 21 Aug 2021 05:12:49 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id w4so20395571ljh.13;
+        Sat, 21 Aug 2021 05:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pWm+SXTgQ6Ye71KEJYrX8x4GdkySoQhJ1rIbykcEo+8=;
+        b=PdP+FH0V3HehypF44h9BTbNRXagbI8NQNesGa1I8ZVFYZPAcDWzTJE2xucd63ht4+k
+         L+Sm2L/Wlzx5wAE/Yy6TZtmGDMEGVfeOedQ1tTm0+fgRmo95U2nu94lusFnvvatXkk55
+         VMu5HEmvzp4BAYMshEri4nZi1dSjsdMfZpkthNEaJoQQ/L3w/nSqg9E2UVVq0YS5hcJz
+         QuTv/RDadePY6PlhoQ20lDtQ5M7+S5Rc3qVO9bG68hh+p7OyibiBFu702T6FdpvW4UQE
+         K1xF2fLZuDv1JY0dBhLl1MK5X5/jknYa3lleWtBovCuCnbRDvRV6T8pXwif4BtlhE6QM
+         7O6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pWm+SXTgQ6Ye71KEJYrX8x4GdkySoQhJ1rIbykcEo+8=;
+        b=IFU/MBEdqOc+DbHmLQnLQIuqFn56CW4vXfZzKaySeRKXWCFo7PYcVtigaLIJjzNDVM
+         ghqfIWeQKXP4LBGc5p61KL5Nx0/OnT9M+kg//W3o9TJrqXX/Obc3BDHc4IXXnn9IftfL
+         RCj2jxWVroPWMPZJRWfAnejJ+nkiZUtJVPD9ebUr5L57pLXYzDgjwyX0GH4PL0Dqsgrw
+         b2YzuJwODUo58JupRGQz6UZqKzp7twuqxb1sX12hRwx6nmCLt2nEGcfP3vQVSTn06G3H
+         mlxi2GT0E1EGYlnc7w7bix54MM4aBpxXRAKtPFWnhhoBORBqUhRAHnyLv8CKDwCdh848
+         O4bw==
+X-Gm-Message-State: AOAM533ty7bYdOoT1VDIJYwygI0vPxCGOkZXbImyqJxZLMQZLs4VPLHS
+        d7J7WWT9NYRpk7L534bi6Bq4tqG9IIKnRLdn
+X-Google-Smtp-Source: ABdhPJxzpXGpfr6mM+l1iD9N4mn5klFS4XearVaT6UBA181MqbAgcDLRPpOff+u9pa0lw0HABapafQ==
+X-Received: by 2002:a2e:7c0a:: with SMTP id x10mr19613907ljc.340.1629547968108;
+        Sat, 21 Aug 2021 05:12:48 -0700 (PDT)
+Received: from localhost.localdomain (h-62-63-208-27.A230.priv.bahnhof.se. [62.63.208.27])
+        by smtp.googlemail.com with ESMTPSA id bp18sm564914lfb.201.2021.08.21.05.12.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Aug 2021 05:12:47 -0700 (PDT)
+From:   Niklas Lantau <niklaslantau@gmail.com>
+To:     stern@rowland.harvard.edu
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org,
+        Niklas Lantau <niklaslantau@gmail.com>
+Subject: [PATCH] Usb: storage: usb: removed useless cast of void*
+Date:   Sat, 21 Aug 2021 14:11:34 +0200
+Message-Id: <20210821121134.23205-1-niklaslantau@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YR+nwZtz9CQuyTn+@lorien.valinor.li>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Fri, Aug 20, 2021 at 03:01:53PM +0200, Salvatore Bonaccorso wrote:
-> Hi Greg,
-> 
-> On Fri, Nov 06, 2020 at 11:47:25AM +0100, Greg Kroah-Hartman wrote:
+Removed useless cast of a void* and changed __us to data
 
-Note, you are responding to an email from a very long time ago...
+Signed-off-by: Niklas Lantau <niklaslantau@gmail.com>
+---
+ drivers/usb/storage/usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> > Due to the lack of response, I guess they don't need to go to any stable
-> > kernel, so will queue them up for 5.11-rc1.
-> 
-> At least one user in Debian (https://bugs.debian.org/992004) would be
-> happy to have those backported as well to the 5.10.y series (which we
-> will pick up).
-> 
-> So if Benjamin ack's this, this would be great to have in 5.10.y.
+diff --git a/drivers/usb/storage/usb.c b/drivers/usb/storage/usb.c
+index 90aa9c12ffac..e78e20fb1afa 100644
+--- a/drivers/usb/storage/usb.c
++++ b/drivers/usb/storage/usb.c
+@@ -295,9 +295,9 @@ void fill_inquiry_response(struct us_data *us, unsigned char *data,
+ }
+ EXPORT_SYMBOL_GPL(fill_inquiry_response);
+ 
+-static int usb_stor_control_thread(void * __us)
++static int usb_stor_control_thread(void *data)
+ {
+-	struct us_data *us = (struct us_data *)__us;
++	struct us_data *us = data;
+ 	struct Scsi_Host *host = us_to_host(us);
+ 	struct scsi_cmnd *srb;
+ 
+-- 
+2.33.0
 
-What are the git commit ids?  Just ask for them to be applied to stable
-like normal...
-
-thanks,
-
-greg k-h
