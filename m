@@ -2,141 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34CC53F3D80
-	for <lists+linux-usb@lfdr.de>; Sun, 22 Aug 2021 06:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F103F3DBA
+	for <lists+linux-usb@lfdr.de>; Sun, 22 Aug 2021 06:30:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbhHVEPJ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Sun, 22 Aug 2021 00:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbhHVEPJ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Sun, 22 Aug 2021 00:15:09 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050::465:102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07229C061575;
-        Sat, 21 Aug 2021 21:14:29 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4GshpV61kKzQjym;
-        Sun, 22 Aug 2021 06:14:26 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gorani.run; s=MBO0001;
-        t=1629605661;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+31EPRPMGVEy2Xpxt+EjtmwliDHXxQYcaVfkvS007Qw=;
-        b=DxVAmhKTlqpkCYhwvRNC1T6FD3PfK/WNroEzQ8y17kyNsyLQGvW0kRBU2JuqDJCGO9Ym1l
-        CTVyFArt3SkbDYkqpT6kh1TL+ucYNezRyURc9Zjaukrc3mn6kT2LgcvFOk2kaE2iMm50tb
-        LsoJuIQmWKWcnWAESytJ8sWwFpP49eOMTyW3/EQ42NBIlrN7SGgnkgd7MvwxHI0XEOkY67
-        4rEK1OgKDDXRjtf13wCFHMknU0OBGSBbpidX6+2dWocaarKsKDjxXFboCmUlseM/FeybbR
-        hV/4bfnFlsmehk0qRFhjmnjYe01a+gxbDxziiSCeI6CfEBgLv0ksKEuH8Ojrew==
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id bGQP5vXKQSRq; Sun, 22 Aug 2021 06:14:19 +0200 (CEST)
-From:   Sungbo Eo <mans0n@gorani.run>
-To:     linux-mediatek@lists.infradead.org
-Cc:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Min Guo <min.guo@mediatek.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Sungbo Eo <mans0n@gorani.run>
-Subject: [PATCH v3 1/1] arm: dts: mt7623: add musb device nodes
-Date:   Sun, 22 Aug 2021 13:13:33 +0900
-Message-Id: <20210822041333.5264-2-mans0n@gorani.run>
-In-Reply-To: <20210822041333.5264-1-mans0n@gorani.run>
-References: <20210808123840.176738-1-mans0n@gorani.run>
- <20210822041333.5264-1-mans0n@gorani.run>
+        id S231147AbhHVEbH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Sun, 22 Aug 2021 00:31:07 -0400
+Received: from mx21.baidu.com ([220.181.3.85]:45464 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S230285AbhHVEbD (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Sun, 22 Aug 2021 00:31:03 -0400
+Received: from BJHW-Mail-Ex07.internal.baidu.com (unknown [10.127.64.17])
+        by Forcepoint Email with ESMTPS id BB840FDFF59E74DF4EB3;
+        Sun, 22 Aug 2021 12:30:20 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BJHW-Mail-Ex07.internal.baidu.com (10.127.64.17) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Sun, 22 Aug 2021 12:30:20 +0800
+Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.62.11) by
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.14; Sun, 22 Aug 2021 12:30:20 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, Cai Huoqing <caihuoqing@baidu.com>
+Subject: [PATCH] usb: gadget: mass_storage: Remove repeated verbose license text
+Date:   Sun, 22 Aug 2021 12:30:05 +0800
+Message-ID: <20210822043005.192-1-caihuoqing@baidu.com>
+X-Mailer: git-send-email 2.32.0.windows.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: E13A81887
-X-Rspamd-UID: 89d88d
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [172.31.62.11]
+X-ClientProxiedBy: BJHW-Mail-Ex08.internal.baidu.com (10.127.64.18) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
+X-Baidu-BdMsfe-DateCheck: 1_BJHW-Mail-Ex07_2021-08-22 12:30:20:643
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-MT7623 has an musb controller that is compatible with the one from MT2701.
+remove it because SPDX-License-Identifier is already used
 
-Signed-off-by: Sungbo Eo <mans0n@gorani.run>
+Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
 ---
-v3:
-* remove unnecessary status=okay from u2port2
+ drivers/usb/gadget/function/f_mass_storage.c | 30 --------------------
+ 1 file changed, 30 deletions(-)
 
-v2:
-* rename usb3 label to usb0
-* move usb0 & u2phy1 nodes to the right sorted place
-* disable u2phy1 by default
-* correct u2port2 node name to match its reg address
----
- arch/arm/boot/dts/mt7623.dtsi  | 33 +++++++++++++++++++++++++++++++++
- arch/arm/boot/dts/mt7623a.dtsi |  4 ++++
- 2 files changed, 37 insertions(+)
-
-diff --git a/arch/arm/boot/dts/mt7623.dtsi b/arch/arm/boot/dts/mt7623.dtsi
-index 3c11f7cfcc40..21c8a291b74e 100644
---- a/arch/arm/boot/dts/mt7623.dtsi
-+++ b/arch/arm/boot/dts/mt7623.dtsi
-@@ -585,6 +585,39 @@ spi2: spi@11017000 {
- 		status = "disabled";
- 	};
+diff --git a/drivers/usb/gadget/function/f_mass_storage.c b/drivers/usb/gadget/function/f_mass_storage.c
+index 4a4703634a2a..6ad669dde41c 100644
+--- a/drivers/usb/gadget/function/f_mass_storage.c
++++ b/drivers/usb/gadget/function/f_mass_storage.c
+@@ -6,36 +6,6 @@
+  * Copyright (C) 2009 Samsung Electronics
+  *                    Author: Michal Nazarewicz <mina86@mina86.com>
+  * All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions, and the following disclaimer,
+- *    without modification.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- * 3. The names of the above-listed copyright holders may not be used
+- *    to endorse or promote products derived from this software without
+- *    specific prior written permission.
+- *
+- * ALTERNATIVELY, this software may be distributed under the terms of the
+- * GNU General Public License ("GPL") as published by the Free Software
+- * Foundation, either version 2 of that License or (at your option) any
+- * later version.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  */
  
-+	usb0: usb@11200000 {
-+		compatible = "mediatek,mt7623-musb",
-+			     "mediatek,mtk-musb";
-+		reg = <0 0x11200000 0 0x1000>;
-+		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-+		interrupt-names = "mc";
-+		phys = <&u2port2 PHY_TYPE_USB2>;
-+		dr_mode = "otg";
-+		clocks = <&pericfg CLK_PERI_USB0>,
-+			 <&pericfg CLK_PERI_USB0_MCU>,
-+			 <&pericfg CLK_PERI_USB_SLV>;
-+		clock-names = "main","mcu","univpll";
-+		power-domains = <&scpsys MT2701_POWER_DOMAIN_IFR_MSC>;
-+		status = "disabled";
-+	};
-+
-+	u2phy1: t-phy@11210000 {
-+		compatible = "mediatek,mt7623-tphy",
-+			     "mediatek,generic-tphy-v1";
-+		reg = <0 0x11210000 0 0x0800>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+		status = "disabled";
-+
-+		u2port2: usb-phy@11210800 {
-+			reg = <0 0x11210800 0 0x0100>;
-+			clocks = <&topckgen CLK_TOP_USB_PHY48M>;
-+			clock-names = "ref";
-+			#phy-cells = <1>;
-+		};
-+	};
-+
- 	audsys: clock-controller@11220000 {
- 		compatible = "mediatek,mt7623-audsys",
- 			     "mediatek,mt2701-audsys",
-diff --git a/arch/arm/boot/dts/mt7623a.dtsi b/arch/arm/boot/dts/mt7623a.dtsi
-index 0735a1fb8ad9..d304b62d24b5 100644
---- a/arch/arm/boot/dts/mt7623a.dtsi
-+++ b/arch/arm/boot/dts/mt7623a.dtsi
-@@ -35,6 +35,10 @@ &scpsys {
- 	clock-names = "ethif";
- };
- 
-+&usb0 {
-+	power-domains = <&scpsys MT7623A_POWER_DOMAIN_IFR_MSC>;
-+};
-+
- &usb1 {
- 	power-domains = <&scpsys MT7623A_POWER_DOMAIN_HIF>;
- };
+ /*
 -- 
-2.33.0
+2.25.1
 
