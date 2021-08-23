@@ -2,188 +2,164 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8AC3F4D94
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 17:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5094C3F4DD4
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 17:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbhHWPfs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 11:35:48 -0400
-Received: from cable.insite.cz ([84.242.75.189]:35716 "EHLO cable.insite.cz"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229550AbhHWPfs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 11:35:48 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by cable.insite.cz (Postfix) with ESMTP id A1C22A1A3D401;
-        Mon, 23 Aug 2021 17:35:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1629732903; bh=SKl+1OU3I2/IxPmHfYtCxQ37Xk2PlE5N3RRXvJkEs9k=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=e3WtZkJ+KoyoYTb30+95n55y8UL7+1y0HPK9zxlhJM7HcdKIClUyzLEiYwklZubP7
-         DUaZpiL/tMEmrcExwKa5Q0Lc/9O4Snf9tuzMat5loXtEqsmPoAUhdCWAIgmu2wsjIJ
-         Bjmd0ZYZMwUPyKnX5yXmjmjZPhogp6dXMTsE2Skg=
-Received: from cable.insite.cz ([84.242.75.189])
-        by localhost (server.insite.cz [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 88qAUBiwhYwe; Mon, 23 Aug 2021 17:34:58 +0200 (CEST)
-Received: from [192.168.105.22] (ip28.insite.cz [81.0.237.28])
-        (Authenticated sender: pavel)
-        by cable.insite.cz (Postfix) with ESMTPSA id 7B179A1A3D400;
-        Mon, 23 Aug 2021 17:34:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=ivitera.com; s=mail;
-        t=1629732897; bh=SKl+1OU3I2/IxPmHfYtCxQ37Xk2PlE5N3RRXvJkEs9k=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=WB5t4XblPMA9XR7Q2ZoTTox43KYsDIS9qrv6cz8xE2TIqDHaHlrZ08q3D1yIFXfpA
-         dAFHvO1TZKy88Yin2Q1KqQh/gbOhEtJrRE0F7Y997NtIllgISvMfBN9mR3GTxQ2Lvu
-         u9cG0708dc2Z/eV3FTED6XbMaLM8Sj6tlJsXhYco=
-Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
- bursting
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Ferry Toth <fntoth@gmail.com>, Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, frowand.list@gmail.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        jackp@codeaurora.org, heikki.krogerus@linux.intel.com,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
- <bafa93bb-11e3-c8a5-e14a-b0a6d5695055@gmail.com> <87v951ldlt.fsf@kernel.org>
- <d9aef50c-4bd1-4957-13d8-0b6a14b9fcd0@gmail.com> <87pmv9l1dv.fsf@kernel.org>
- <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com> <87a6mbudvc.fsf@kernel.org>
- <6e8bb4ad-fe68-ad36-7416-2b8e10b6ae96@gmail.com> <877dhev68a.fsf@kernel.org>
- <cca69e90-b0ef-00b8-75d3-3bf959a93b45@gmail.com> <874kchvcq0.fsf@kernel.org>
- <e59f1201-2aa2-9075-1f94-a6ae7a046dc1@gmail.com> <8735raj766.fsf@kernel.org>
- <b3417c2c-613b-8ef6-2e2d-6e2cf9a5d5fd@gmail.com>
- <b3e820f0-9c94-7cba-a248-3b2ec5378ab0@gmail.com>
- <d298df65-417b-f318-9374-b463a15d8308@ivitera.com>
- <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
- <c4e29ac0-1df1-3c64-1218-3687f07e7f77@ivitera.com>
- <1fb52c92-9319-c035-722f-695ab34723dd@gmail.com>
- <702c72cd-40e4-e641-797a-764e7e611afb@ivitera.com>
- <CAHp75VeZBLgf8YhEjdOV1Hva_dJh_=VHRGyVb=r44yh-9n+F4A@mail.gmail.com>
-From:   Pavel Hofman <pavel.hofman@ivitera.com>
-Message-ID: <d1fb0ad5-e304-8864-a2e4-42d5f652a6a7@ivitera.com>
-Date:   Mon, 23 Aug 2021 17:34:57 +0200
+        id S230314AbhHWPzQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 11:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231734AbhHWPzO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Aug 2021 11:55:14 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3124DC061757;
+        Mon, 23 Aug 2021 08:54:31 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id i9so38834301lfg.10;
+        Mon, 23 Aug 2021 08:54:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7mncJ6pduW/52O6ekhmOFTY3dWeez/jgkRyR/0Vdsyw=;
+        b=GjDLwuw1u5t0huse+wcSUJvd9NlDsq9fLH5ifMhjoFLd/jX7arhT4V0b4pMg9fkZx0
+         SFoXhZrGpDe1zyz7PwMpqtrmGVNRg4uenD426vrzx09jDp5+gZwPaSOWi2CzEdhHZN72
+         biZ9w4cugGtwCB8oOkwmNR+z285tRdqilLSsiYBx3KMs+2gRQ2Qufwsaf9Kkn44cA20t
+         ytzwyZjnYP+KTq05NUlj+435IalTyox6/J6oSbEJjWcMz4NbsCi+r8m8O7scEsRH0iPC
+         mwCHAhLhpQqHYFd7f4axkEH/iwpXUU5wQP5pO5DMDqwE7H45GOLzvXAyvPw0J1h3bnVb
+         85LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7mncJ6pduW/52O6ekhmOFTY3dWeez/jgkRyR/0Vdsyw=;
+        b=IOpKGHvqrd6BLy/vZsEi4QxYtFeeOqNrn5QcSGeZ+5lN/MBYTkGTFqJBOV1k8ly3TM
+         Ojlwfw0HLUc6pT+M3WPK1klUJGn/nzf3dGrbJXhkkoSw8z2d9t1EXb/7S7VhLNsaYZQo
+         e+gfZ69TnaKu99jhOW+Yi8YO3PDNXWflArBxHkhLWHJJktQq/zo6CwEjbB6K/QeIdG46
+         UJMdkfNoGWuJ875iEGA/Twlwv0Ur9cMq2shAGdx4om9hlCR+4KAQLmLHWa7CClMpyoUE
+         BSpjbe32pK64XFoQ9qRh1Io9vewbflVYigrn+6J5eZx/SYiZd+8sUVveS9YHQXdwxCgg
+         EF2A==
+X-Gm-Message-State: AOAM531b3+f8AQBdQ/uobRHY/mYbnT6rZhH/BW/fwpuBAT8yUBQ6fi+k
+        w5w22/1vPJAThf4sjKZK+/fW7k7i+KU=
+X-Google-Smtp-Source: ABdhPJzNDGjnGQzIrcQXTM2iukhjwhqvC5wj3OdYqtfrrWEzlRV302pS9l5Dkjzi+NNxjkL6pb5dHg==
+X-Received: by 2002:a05:6512:3157:: with SMTP id s23mr24865578lfi.247.1629734069444;
+        Mon, 23 Aug 2021 08:54:29 -0700 (PDT)
+Received: from [192.168.2.145] (46-138-120-72.dynamic.spd-mgts.ru. [46.138.120.72])
+        by smtp.googlemail.com with ESMTPSA id u2sm1482543lfr.79.2021.08.23.08.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Aug 2021 08:54:28 -0700 (PDT)
+Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Peter De Schrijver <pdeschrijver@nvidia.com>,
+        Mikko Perttunen <mperttunen@nvidia.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-mmc <linux-mmc@vger.kernel.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        DTML <devicetree@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+References: <20210818043131.7klajx6drvvkftoc@vireshk-i7>
+ <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
+ <20210818045307.4brb6cafkh3adjth@vireshk-i7>
+ <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
+ <20210818055849.ybfajzu75ecpdrbn@vireshk-i7>
+ <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
+ <20210818062723.dqamssfkf7lf7cf7@vireshk-i7>
+ <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
+ <20210818091417.dvlnsxlgybdsn76x@vireshk-i7>
+ <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
+ <20210818095044.e2ntsm45h5cddk7s@vireshk-i7>
+ <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
+ <0354acbe-d856-4040-f453-8e8164102045@gmail.com>
+ <CAPDyKFoQdn1rm91iFNJwZwpSYcKJBjDLqtJB4KZAkhgY1Grm-Q@mail.gmail.com>
+ <87073fc2-d7b3-98f4-0067-29430ea2adef@gmail.com>
+ <CAPDyKFqSsAk8a5CTNpRT2z4Wvf8BehJKDbVhUKfHc2Jzj7aTNA@mail.gmail.com>
+ <9129a9f0-8c9b-d8e0-ddf5-c8820871fb7f@gmail.com>
+ <CAPDyKFrWeQVNgxzmiLBXJ2gQW=iFf4aG16xvZ+ag1MkhXs9-BQ@mail.gmail.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <9a783eb3-786b-a3b2-7854-2be6954527db@gmail.com>
+Date:   Mon, 23 Aug 2021 18:54:26 +0300
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.11.0
 MIME-Version: 1.0
-In-Reply-To: <CAHp75VeZBLgf8YhEjdOV1Hva_dJh_=VHRGyVb=r44yh-9n+F4A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <CAPDyKFrWeQVNgxzmiLBXJ2gQW=iFf4aG16xvZ+ag1MkhXs9-BQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-
-
-Dne 23. 08. 21 v 17:21 Andy Shevchenko napsal(a):
-> On Mon, Aug 23, 2021 at 5:59 PM Pavel Hofman <pavel.hofman@ivitera.com> wrote:
->> Dne 22. 08. 21 v 21:43 Ferry Toth napsal(a):
->>> Op 19-08-2021 om 23:04 schreef Pavel Hofman:
->>>> Dne 19. 08. 21 v 22:10 Ferry Toth napsal(a):
->>>>> Op 19-08-2021 om 09:51 schreef Pavel Hofman:
->>>>>> Dne 18. 08. 21 v 21:07 Ferry Toth napsal(a):
->>>>>>> Op 18-08-2021 om 00:00 schreef Ferry Toth:
-> 
-> ...
-> 
->>>>>>> So, where do we go from here?
->>>>>>
->>>>>> I know the patches have been tested on dwc2 (by me and others).  I
->>>>>> do not know if Ruslan or Jerome tested them on dwc3 but probably
->>>>>> not. Ruslan has talked about RPi (my case too) and BeagleboneBlack,
->>>>>> both with dwc2. Perhaps the dwc2 behaves a bit differently than dwc3?
->>>>>>
->>>>>> The patches add a new EP-IN for async feedback. I am sorry I have
->>>>>> not followed your long thread (it started as unrelated to uac). Does
->>>>>> the problem appear with f_uac1 or f_uac2? Please how have you
->>>>>> reached the above problem?
->>>>>
->>>>> I'm sorry too. I first believed the issue was related to the patch
->>>>> mentioned in the subject line.
->>>>>
->>>>> The problem appaers with f_uac2. I bost Edison_Arduino board in host
->>>>> mode (there is a switch allowing to select host/device mode). When
->>>>> flipping the switch to device mode udev run a script:
->>>>> But as I am using configfs (excerpt follows) and just disabling the
->>>>> last 2 line resolves the issue, I'm guessing uac2 is the issue. Or
->>>>> exceeding the available resources.
->>>>>
->>>>> # Create directory structure
->>>>> mkdir "${GADGET_BASE_DIR}"
->>>>> cd "${GADGET_BASE_DIR}"
->>>>> mkdir -p configs/c.1/strings/0x409
->>>>> mkdir -p strings/0x409
->>>>>
->>>>> # Serial device
->>>>> mkdir functions/gser.usb0
->>>>> ln -s functions/gser.usb0 configs/c.1/
->>>>> ###
->>>>>
->>>>> # Ethernet device
->>>>> mkdir functions/eem.usb0
->>>>> echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
->>>>> echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
->>>>> ln -s functions/eem.usb0 configs/c.1/
->>>>>
->>>>> # Mass Storage device
->>>>> mkdir functions/mass_storage.usb0
->>>>> echo 1 > functions/mass_storage.usb0/stall
->>>>> echo 0 > functions/mass_storage.usb0/lun.0/cdrom
->>>>> echo 0 > functions/mass_storage.usb0/lun.0/ro
->>>>> echo 0 > functions/mass_storage.usb0/lun.0/nofua
->>>>> echo "${USBDISK}" > functions/mass_storage.usb0/lun.0/file
->>>>> ln -s functions/mass_storage.usb0 configs/c.1/
->>>>>
->>>>> # UAC2 device
->>>>> mkdir functions/uac2.usb0
->>>>> ln -s functions/uac2.usb0 configs/c.1
->>>>> ....
->>>>
->>>> As you say, could perhaps the reason be that the extra EP-IN added in
->>>> those patches (previously 1, now 2 with the default config you use)
->>>> exceeds your EP-IN max count or available fifos somehow?  You have a
->>>> number of functions initialized. If you change the load order of the
->>>> functions, do you get the error later with a different function? Just
->>>> guessing...
->>>>
->>>> You should be able to switch the default async EP-OUT (which
->>>> configures the new feedback EP-IN ) to adaptive EP-OUT (which requires
->>>> no feedback EP) with c_sync=8 parameter of f_uac2.
->>>>
->>>> https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L47
->>>>
->>>> https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c#L830
->>>>
->>>> https://elixir.bootlin.com/linux/v5.14-rc6/source/include/uapi/linux/usb/ch9.h#L453
->>>>
->>>> Does that fix the problem?
+23.08.2021 13:46, Ulf Hansson пишет:
+>>> ...
+>>> dev_pm_opp_set_rate(rate)
+>>> pm_runtime_get_noresume()
+>>> pm_runtime_set_active()
+>>> pm_runtime_enable()
+>>> ...
+>>> pm_runtime_put()
+>>> ...
 >>>
->>> Not sure how to do that. Do you mean the module should have a parameter
->>> called c_sync? `modinfo` list no parameters for usb_f_uac2.
+>>> We need to call genpd_set_performance_state() independently of whether
+>>> the device is runtime suspended or not.
 >>
->> Those are configfs params, not available in modinfo.
+>> I don't see where is the problem in yours example.
 >>
->> I checked and the value is "adaptive"
->> https://elixir.bootlin.com/linux/v5.14-rc7/source/drivers/usb/gadget/function/f_uac2.c#L1312
+>> pm_runtime_suspended() = false while RPM is disabled. When device is
+>> resumed, the rpm_pstate=0, so it won't change the pstate on resume.
 > 
->> In your configfs script:
+> Yes, you are certainly correct, my bad! I mixed it up with
+> pm_runtime_status_suspended(), which only cares about the status.
 > 
-> Kernel shouldn't crash with any available set of configuration
-> parameters, right? So, even if the parameter would fix the crash the
-> series is buggy and has to be reverted in my opinion.
+> So, after a second thought, your suggestion sounds very much
+> reasonable to me! I have also tried to consider all different
+> scenarios, including the system suspend/resume path, but I think it
+> should be fine.
 
-Sure, no problem with reverting. I am just trying to start up some 
-troubleshooting. A resource exhaustion was mentioned here, that's why I 
-suggested a way to test the patch with the original number of endpoints 
-allocated. I do not get any crashes on my setup which uses fewer gadget 
-functions. That's why I asked what happens if the functions load order 
-is changed. I am afraid this thread is so complex that the actual 
-problem has been burried in the history.
+It could be improved slightly to cover more cases.
 
-Again, I am not the author of the patches, my USB knowledge is way 
-unsufficient for that. I am trying to make them work as they are 
-important and make the existing audio gadget actually usable.
+> I also think that a patch like the above should be considered as a
+> fix, because it actually fixes a problem, according to what I said in
+> my earlier reply, below.
+> 
+> Fixes : 5937c3ce2122 ("PM: domains: Drop/restore performance state
+> votes for devices at runtime PM").
+> 
+>>
+>>> Although, it actually seems like good idea to update
+>>> dev_gpd_data(dev)->rpm_pstate = state here, as to make sure
+>>> genpd_runtime_resume() doesn't restore an old/invalid value that was
+>>> saved while dropping the performance state vote for the device in
+>>> genpd_runtime_suspend() earlier.
+>>>
+>>> Let me send a patch for this shortly, to close this window of a possible error.
+>>
+>> It will also remove the need to resume device just to change the clock
+>> rate, like I needed to do it in the PWM patch of this series.
+> 
+> Do you want to send the patch formally? Or do you prefer it if I do it?
 
-Thanks,
-
-Pavel.
+I'll send the patch.
