@@ -2,73 +2,103 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2310E3F4A2E
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 14:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B6C3F4B19
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 14:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236635AbhHWMAt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 08:00:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41830 "EHLO mail.kernel.org"
+        id S236897AbhHWMuY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 08:50:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52192 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236440AbhHWMAs (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 08:00:48 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 1EAC561378;
-        Mon, 23 Aug 2021 12:00:06 +0000 (UTC)
+        id S236721AbhHWMuX (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Aug 2021 08:50:23 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 376E0613AC
+        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 12:49:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629720006;
-        bh=Me86FB2P8TqMfrSH9A0jCWGiH+pSOryxC/uaIpdWwFk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=F+Jul0elTL90fD0vytxGkPiut+4Q+g1mmikzX4ic1EYUkx2t8nEsiM5o86twJyYhK
-         rB2bsAIArfg8J1PAdWQbbpFdw3E6klzKLdGMlcFWTnSwk1AY3BYwTxaoMZXDoU6vqU
-         /V2yx3PoAVG40NKl9aOtp9C7zsUQcMQD6EAmu/sDJRrjzAj1B5BAV8XtFVHgHJqQLl
-         f8jJIrrw/ceVbQtZ5sOcqVhw0xltDsJqBUuIao8YPtkK+7k/dMGSmdcjk5ACXMspT7
-         Wa9YZOjQdYoYs6Vfl+KgWSAqLz1FugFNkJX/E7Ct9k21zV5vQV3tnE1keN8OAIF4Sg
-         vAsVl13fkuInw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 114EB609ED;
-        Mon, 23 Aug 2021 12:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1629722981;
+        bh=SXyEf3F65V0mgX1bBJQy4HNVf64d6OJzuQ/DufKUdG8=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=hIMXsOCoDsfZzNB6x/Hze6qih6pH+voRwyGHcJAFXJDzSKdZxJAwqV3qyFJ4M3srG
+         GBTVekdgYpPaHNs2ylyo2nq7VgCYelhgue02TZsrcGw/Cg3Z0Ewz2A7yXNvN1Mhfug
+         3B7jTAe5gV+JQSDRwmxGjsq92B3VsmrUBLaXFQZlYzdBhAu2FLvCUBy7zNk0zu+Lad
+         0AC8Yz8S+w+lW/y7NVcTZGfiJEFDVXqu2VgLgDg09/9MaR3aQIS0vD7kGl1ReUyprc
+         q7geX7tkAnk+l4ooMzfkMttpwDp3wiPDz/pdXMIFwGJSJc1SutLfPgV2BnZNyjgmk4
+         iGPYRIgKKgdhw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 2DD1060FE7; Mon, 23 Aug 2021 12:49:41 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Mon, 23 Aug 2021 12:49:40 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: mathias.nyman@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-wYL7KPMiHV@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 0/2] asix fixes 
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162972000606.531.11817848524482218971.git-patchwork-notify@kernel.org>
-Date:   Mon, 23 Aug 2021 12:00:06 +0000
-References: <20210823073748.22384-1-o.rempel@pengutronix.de>
-In-Reply-To: <20210823073748.22384-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     davem@davemloft.net, kuba@kernel.org, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-This series was applied to netdev/net.git (refs/heads/master):
+--- Comment #11 from Mathias Nyman (mathias.nyman@linux.intel.com) ---
+(In reply to Alan Stern from comment #10)
+>=20
+> Would something like the attached patch fix the problem?  It delays
+> registration of the secondary root hub until after the primary hcd is
+> started, just before the primary root hub is registered.
 
-On Mon, 23 Aug 2021 09:37:46 +0200 you wrote:
-> changes v2:
-> - rebase against current net
-> - add one more fix for the ax88178 variant
-> 
-> Oleksij Rempel (2):
->   net: usb: asix: ax88772: move embedded PHY detection as early as
->     possible
->   net: usb: asix: do not call phy_disconnect() for ax88178
-> 
-> [...]
+If I understood the problem correctly we would need to delay the registrati=
+on
+of the primary roothub until secondary hcd usb_hcd_add() reaches
+hcd->driver->start()
 
-Here is the summary with links:
-  - [net,v2,1/2] net: usb: asix: ax88772: move embedded PHY detection as early as possible
-    https://git.kernel.org/netdev/net/c/7a141e64cf14
-  - [net,v2,2/2] net: usb: asix: do not call phy_disconnect() for ax88178
-    https://git.kernel.org/netdev/net/c/1406e8cb4b05
+xhci pci driver will first create and add primary hcd, then create and add
+secondary hcd.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+xhci_pci_probe()
+  /* create AND add primary hcd in one go */
+  usb_hcd_pci_probe(dev, id, &hc_driver)
+  primary_hcd =3D dev_get_drvdata(&dev->dev)
+  /* create secondary hcd */
+  secondary_hcd =3D usb_create_shared_hcd(...,primary_hcd)
+  /* add secondary hcd */
+  usb_add_hcd(secondary_hcd)
 
 
+If we force xhci driver to always first create both hcds, and then add them=
+, we
+could maybe do somethinh like this:
+
+
+usb_hcd_add()
+    ...
+    if ((is_primary_hcd(hcd) && !hcd->shared_hcd) || !is_primary_hcd)
+        register_roothub(primary_hcd);
+    if(!is_primary_hcd(hcd))
+        register_roothub(hcd);
+
+If this makes any sense I'll turn this into real code.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
