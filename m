@@ -2,311 +2,125 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A23423F48DE
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 12:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFA33F492C
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 12:59:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbhHWKrm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 06:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233589AbhHWKrk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Aug 2021 06:47:40 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBDBC061575
-        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 03:46:56 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id f2so30713905ljn.1
-        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 03:46:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UmkfXGaYCdqSsvCrogHGEUgWw+TJ4SlfmjU5MN/PEBE=;
-        b=cjqU7CIQQYnl3N9VSH9OdTpbfhx84HH/grPgOc+tCGAo2Yn2hAV0cMn3z8HTaVOuhA
-         8Brg4z73NnaY2Z/CE8IaG11T82l0gL1ZP2mAHcCMwXtNviOz1cwQ7atSvkRP33js82FC
-         tL3OJS+qxvVYzF3TYhi7jJG99T8jOBJM8RSwrLmSS6vtDNlXueNOFv50Q4BmfSf/V2kW
-         jpK8t4qSsEu0v76ajcR4UzKY9YBd/hRYx4cCU6l6AsBCSBWNe3JTai52Wv7UVRmBdbxJ
-         Pg+Ik2kyI7qbtIeypuO3uLwLKp7JZuw0yQNYCSOl6O3FaQojbcATlzG1xxwJABfP9fIQ
-         rH8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UmkfXGaYCdqSsvCrogHGEUgWw+TJ4SlfmjU5MN/PEBE=;
-        b=KOHIP3gjaLI6aixbO61j8NBF0pZY6NzQAyTjFuJHYqLbWDoj3tNfK1W1K3owDItOe2
-         ATcuRSlZzQH67JOkKkHHI9PBj42YdRI62S4qSGJYfgiEFULEyYkNpJOE5aEom69QRdPa
-         CHBN/3AaHoPE6pa+CSev8dPHuTTqfPNsxrr4CArDQmP421AETCmVouJSNk6gC8Yg26fe
-         F477zCKIqQZS7/LwLcGDcvSCq14T/3iIdczR+2xjK7UJpq4vkZVhtkINM+Uq2F7B2sAY
-         qDcfubPQUWS/fh+WcykSD6E3MLtDeZehwc069AnSExHxvAoTAUR1friGn72lXIOMOwNH
-         sC7Q==
-X-Gm-Message-State: AOAM532X5gPTvKTak7FKYH3nFwutvSJ1slSfFqBzM+GVW1xFw5277KhT
-        xHRjtEXSUko1w3irFtC44s/Q+3OHrAVjCgiPBSEjxA==
-X-Google-Smtp-Source: ABdhPJwROTbhLIghdJiFv3Mpx4km5TKucbukHEV5v0NDix1jHpH6ITt9xOVwuMgiEW0EE35GC/hK1ms310RYHiQipIA=
-X-Received: by 2002:a2e:a410:: with SMTP id p16mr25247179ljn.364.1629715615237;
- Mon, 23 Aug 2021 03:46:55 -0700 (PDT)
+        id S236322AbhHWLAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 07:00:20 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:49326 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234997AbhHWLAS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Aug 2021 07:00:18 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629716376; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=MJCv4YecPSOTSMkjIN24O75yrgZxZR9C54D+qxlobsE=; b=CGJ/ZUTJXMq3Vd7UQnODB4xbbB4kKoFl+TGxpwM8YBXJskKPD4DHU5lkCpqaAkbVrKoN+zho
+ 1/gP123lktag4Luy6SQIhUdHQQp5j27iusrRBIPEFbhMISYIb5Fv+hNS0jn0sRpPPXLOyjVK
+ XeQiRSVEsRIg4C4Kuz0t8ALFrq0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 61237f9589fbdf3ffec135a1 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 23 Aug 2021 10:59:33
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 94210C4338F; Mon, 23 Aug 2021 10:59:32 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id BA675C43460;
+        Mon, 23 Aug 2021 10:59:30 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org BA675C43460
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v2] usb: dwc3: gadget: Stop EP0 transfers during pullup
+ disable
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+References: <20210823092324.1949-1-wcheng@codeaurora.org>
+ <87eeakld0d.fsf@kernel.org>
+From:   Wesley Cheng <wcheng@codeaurora.org>
+Message-ID: <9e11d0dc-c043-6b55-2c33-fb1a55b18156@codeaurora.org>
+Date:   Mon, 23 Aug 2021 03:59:29 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210818043131.7klajx6drvvkftoc@vireshk-i7> <a2a3c41f-c5e4-ee7e-7d48-03af8bac8863@gmail.com>
- <20210818045307.4brb6cafkh3adjth@vireshk-i7> <080469b3-612b-3a34-86e5-7037a64de2fe@gmail.com>
- <20210818055849.ybfajzu75ecpdrbn@vireshk-i7> <f1c76f23-086d-ef36-54ea-0511b0ebe0e1@gmail.com>
- <20210818062723.dqamssfkf7lf7cf7@vireshk-i7> <CAPDyKFrZqWtZOp4MwDN6fShoLLbw5NM039bpE3-shB+fCEZOog@mail.gmail.com>
- <20210818091417.dvlnsxlgybdsn76x@vireshk-i7> <CAPDyKFrVxhrWGr2pKduehshpLFd_db2NTPGuD7fSqvuHeyzT4w@mail.gmail.com>
- <20210818095044.e2ntsm45h5cddk7s@vireshk-i7> <CAPDyKFrFF00xGDWPCQnPwF0_QkG4TB2UqggpuBpp8LY_CMKP-A@mail.gmail.com>
- <0354acbe-d856-4040-f453-8e8164102045@gmail.com> <CAPDyKFoQdn1rm91iFNJwZwpSYcKJBjDLqtJB4KZAkhgY1Grm-Q@mail.gmail.com>
- <87073fc2-d7b3-98f4-0067-29430ea2adef@gmail.com> <CAPDyKFqSsAk8a5CTNpRT2z4Wvf8BehJKDbVhUKfHc2Jzj7aTNA@mail.gmail.com>
- <9129a9f0-8c9b-d8e0-ddf5-c8820871fb7f@gmail.com>
-In-Reply-To: <9129a9f0-8c9b-d8e0-ddf5-c8820871fb7f@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 23 Aug 2021 12:46:19 +0200
-Message-ID: <CAPDyKFrWeQVNgxzmiLBXJ2gQW=iFf4aG16xvZ+ag1MkhXs9-BQ@mail.gmail.com>
-Subject: Re: [PATCH v8 01/34] opp: Add dev_pm_opp_sync() helper
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Lucas Stach <dev@lynxeye.de>, Stefan Agner <stefan@agner.ch>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux USB List <linux-usb@vger.kernel.org>,
-        linux-staging@lists.linux.dev, linux-spi@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Linux Media Mailing List <linux-media@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        DTML <devicetree@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <87eeakld0d.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-[...]
+Hi Felipe,
 
-> >>>> We have three components comprising PM on Tegra:
-> >>>>
-> >>>> 1. Power gate
-> >>>> 2. Clock state
-> >>>> 3. Voltage state
-> >>>>
-> >>>> GENPD on/off represents the 'power gate'.
-> >>>>
-> >>>> Clock and reset are controlled by device drivers using clk and rst APIs.
-> >>>>
-> >>>> Voltage state is represented by GENPD's performance level.
-> >>>>
-> >>>> GENPD core assumes that at a first rpm-resume of a consumer device, its
-> >>>> genpd_performance=0. Not true for Tegra because h/w of the device is
-> >>>> preconfigured to a non-zero perf level initially, h/w may not support
-> >>>> zero level at all.
-> >>>
-> >>> I think you may be misunderstanding genpd's behaviour around this, but
-> >>> let me elaborate.
-> >>>
-> >>> In genpd_runtime_resume(), we try to restore the performance state for
-> >>> the device that genpd_runtime_suspend() *may* have dropped earlier.
-> >>> That means, if genpd_runtime_resume() is called prior
-> >>> genpd_runtime_suspend() for the first time, it means that
-> >>> genpd_runtime_resume() will *not* restore a performance state, but
-> >>> instead just leave the performance state as is for the device (see
-> >>> genpd_restore_performance_state()).
-> >>>
-> >>> In other words, a consumer driver may use the following sequence to
-> >>> set an initial performance state for the device during ->probe():
-> >>>
-> >>> ...
-> >>> rate = clk_get_rate()
-> >>> dev_pm_opp_set_rate(rate)
-> >>>
-> >>> pm_runtime_enable()
-> >>> pm_runtime_resume_and_get()
-> >>> ...
-> >>>
-> >>> Note that, it's the consumer driver's responsibility to manage device
-> >>> specific resources, in its ->runtime_suspend|resume() callbacks.
-> >>> Typically that means dealing with clock gating/ungating, for example.
-> >>>
-> >>> In the other scenario where a consumer driver prefers to *not* call
-> >>> pm_runtime_resume_and_get() in its ->probe(), because it doesn't need
-> >>> to power on the device to complete probing, then we don't want to vote
-> >>> for an OPP at all - and we also want the performance state for the
-> >>> device in genpd to be set to zero. Correct?
-> >>
-> >> Yes
-> >>
-> >>> Is this the main problem you are trying to solve, because I think this
-> >>> doesn't work out of the box as of today?
-> >>
-> >> The main problem is that the restored performance state is zero for the
-> >> first genpd_runtime_resume(), while it's not zero from the h/w perspective.
-> >
-> > This should not be a problem, but can be handled by the consumer driver.
-> >
-> > genpd_runtime_resume() calls genpd_restore_performance_state() to
-> > restore a performance state for the device. However, in the scenario
-> > you describe, "gpd_data->rpm_pstate" is zero, which makes
-> > genpd_restore_performance_state() to just leave the device's
-> > performance state as is - it will *not* restore the performance state
-> > to zero.
-> >
-> > To make the consumer driver deal with this, it would need to call
-> > dev_pm_opp_set_rate() from within its ->runtime_resume() callback.
-> >
-> >>
-> >>> There is another concern though, but perhaps it's not a problem after
-> >>> all. Viresh told us that dev_pm_opp_set_rate() may turn on resources
-> >>> like clock/regulators. That could certainly be problematic, in
-> >>> particular if the device and its genpd have OPP tables associated with
-> >>> it and the consumer driver wants to follow the above sequence in
-> >>> probe.
-> >>
-> >> dev_pm_opp_set_rate() won't enable clocks and regulators, but it may
-> >> change the clock rate and voltage. This is also platform/driver specific
-> >> because it's up to OPP user how to configure OPP table. On Tegra we only
-> >> assign clock to OPP table, regulators are unused.
-> >>
-> >>> Viresh, can you please chime in here and elaborate on some of the
-> >>> magic happening behind dev_pm_opp_set_rate() API - is there a problem
-> >>> here or not?
-> >>>
-> >>>>
-> >>>> GENPD core assumes that consumer devices can work at any performance
-> >>>> level. Not true for Tegra because voltage needs to be set in accordance
-> >>>> to the clock rate before clock is enabled, otherwise h/w won't work
-> >>>> properly, perhaps clock may be unstable or h/w won't be latching.
-> >>>
-> >>> Correct. Genpd relies on the callers to use the OPP framework if there
-> >>> are constraints like you describe above.
-> >>>
-> >>> That said, it's not forbidden for a consumer driver to call
-> >>> dev_pm_genpd_set_performance_state() directly, but then it better
-> >>> knows exactly what it's doing.
-> >>>
-> >>>>
-> >>>> Performance level should be set to 0 while device is suspended.
-> >>>
-> >>> Do you mean system suspend or runtime suspend? Or both?
-> >>
-> >> Runtime suspend.
-> >
-> > Alright. So that's already taken care of for us in genpd_runtime_suspend().
-> >
-> > Or perhaps you have discovered some problem with this?
-> >
-> >>
-> >>>> Performance level needs to be bumped on rpm-resume of a device in
-> >>>> accordance to h/w state before hardware is enabled.
-> >>>
-> >>> Assuming there was a performance state set for the device when
-> >>> genpd_runtime_suspend() was called, genpd_runtime_resume() will
-> >>> restore that state according to the sequence you described.
-> >>
-> >> What do you think about adding API that will allow drivers to explicitly
-> >> set the restored performance state of a power domain?
-> >>
-> >> Another option could be to change the GENPD core, making it to set the
-> >> rpm_pstate when dev_pm_genpd_set_performance_state(dev) is invoked and
-> >> device is rpm-suspended, instead of calling the
-> >> genpd->set_performance_state callback.
-> >>
-> >> Then drivers will be able to sync the perf state at a probe time.
-> >>
-> >> What do you think?
-> >
-> > I don't think it's needed, see my reply earlier above. However your
-> > change touches another problem though, see below.
-> >
-> >>
-> >> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> >> index a934c679e6ce..cc15ab9eacc9 100644
-> >> --- a/drivers/base/power/domain.c
-> >> +++ b/drivers/base/power/domain.c
-> >> @@ -435,7 +435,7 @@ static void genpd_restore_performance_state(struct
-> >> device *dev,
-> >>  int dev_pm_genpd_set_performance_state(struct device *dev, unsigned int
-> >> state)
-> >>  {
-> >>         struct generic_pm_domain *genpd;
-> >> -       int ret;
-> >> +       int ret = 0;
-> >>
-> >>         genpd = dev_to_genpd_safe(dev);
-> >>         if (!genpd)
-> >> @@ -446,7 +446,10 @@ int dev_pm_genpd_set_performance_state(struct
-> >> device *dev, unsigned int state)
-> >>                 return -EINVAL;
-> >>
-> >>         genpd_lock(genpd);
-> >> -       ret = genpd_set_performance_state(dev, state);
-> >> +       if (pm_runtime_suspended(dev))
-> >> +               dev_gpd_data(dev)->rpm_pstate = state;
-> >> +       else
-> >> +               ret = genpd_set_performance_state(dev, state);
-> >>         genpd_unlock(genpd);
-> >
-> > This doesn't work for all cases. For example, when a consumer driver
-> > deploys runtime PM support in its ->probe() according to the below
-> > sequence:
-> >
-> > ...
-> > dev_pm_opp_set_rate(rate)
-> > pm_runtime_get_noresume()
-> > pm_runtime_set_active()
-> > pm_runtime_enable()
-> > ...
-> > pm_runtime_put()
-> > ...
-> >
-> > We need to call genpd_set_performance_state() independently of whether
-> > the device is runtime suspended or not.
->
-> I don't see where is the problem in yours example.
->
-> pm_runtime_suspended() = false while RPM is disabled. When device is
-> resumed, the rpm_pstate=0, so it won't change the pstate on resume.
+On 8/23/2021 2:34 AM, Felipe Balbi wrote:
+> 
+> Wesley Cheng <wcheng@codeaurora.org> writes:
+> 
+>> During a USB cable disconnect, or soft disconnect scenario, a pending
+>> SETUP transaction may not be completed, leading to the following
+>> error:
+>>
+>>     dwc3 a600000.dwc3: timed out waiting for SETUP phase
+>>
+>> If this occurs, then the entire pullup disable routine is skipped and
+>> proper cleanup and halting of the controller does not complete.
+> 
+> nit: might want to add a blank line between paragraphs to aid
+> readability
+> 
+>> Instead of returning an error (which is ignored from the UDC
+>> perspective), allow the pullup disable to routine to continue, which
+>                                          ^^
+>                                          remove this?
+> 
+>> will also handle disabling of EP0/1.  This will end any active
+>> transfers as well.  Ensure to clear any delayed_status as well, as the
+>> timeout could happen within the STATUS stage.
+>>
+>> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+>> ---
+>> Changes in v2:
+>>  - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
+>>    on EP0 handle the proper ending of transfers.
+>>  - Ensure that delayed_status is cleared, as ran into enumeration issues if the
+>>    SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
+>>    next connect, which blocked further SETUP transactions to be handled.
+>>
+>>  drivers/usb/dwc3/gadget.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 5d084542718d..8b6a95c35741 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -2430,7 +2430,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+>>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+>>  		if (ret == 0) {
+>>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+>> -			return -ETIMEDOUT;
+>>  		}
+> 
+> Since the `if' now has a single statement, you should remove the curly braces.
+> 
+Thanks for the reviews!  Will fix them up and resend.
 
-Yes, you are certainly correct, my bad! I mixed it up with
-pm_runtime_status_suspended(), which only cares about the status.
+Thanks
+Wesley Cheng
 
-So, after a second thought, your suggestion sounds very much
-reasonable to me! I have also tried to consider all different
-scenarios, including the system suspend/resume path, but I think it
-should be fine.
-
-I also think that a patch like the above should be considered as a
-fix, because it actually fixes a problem, according to what I said in
-my earlier reply, below.
-
-Fixes : 5937c3ce2122 ("PM: domains: Drop/restore performance state
-votes for devices at runtime PM").
-
->
-> > Although, it actually seems like good idea to update
-> > dev_gpd_data(dev)->rpm_pstate = state here, as to make sure
-> > genpd_runtime_resume() doesn't restore an old/invalid value that was
-> > saved while dropping the performance state vote for the device in
-> > genpd_runtime_suspend() earlier.
-> >
-> > Let me send a patch for this shortly, to close this window of a possible error.
->
-> It will also remove the need to resume device just to change the clock
-> rate, like I needed to do it in the PWM patch of this series.
-
-Do you want to send the patch formally? Or do you prefer it if I do it?
-
-Kind regards
-Uffe
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
