@@ -2,125 +2,156 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFA33F492C
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 12:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84F53F49FF
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 13:46:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbhHWLAU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 07:00:20 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:49326 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234997AbhHWLAS (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 07:00:18 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629716376; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=MJCv4YecPSOTSMkjIN24O75yrgZxZR9C54D+qxlobsE=; b=CGJ/ZUTJXMq3Vd7UQnODB4xbbB4kKoFl+TGxpwM8YBXJskKPD4DHU5lkCpqaAkbVrKoN+zho
- 1/gP123lktag4Luy6SQIhUdHQQp5j27iusrRBIPEFbhMISYIb5Fv+hNS0jn0sRpPPXLOyjVK
- XeQiRSVEsRIg4C4Kuz0t8ALFrq0=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 61237f9589fbdf3ffec135a1 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 23 Aug 2021 10:59:33
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 94210C4338F; Mon, 23 Aug 2021 10:59:32 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from [192.168.1.9] (cpe-75-80-185-151.san.res.rr.com [75.80.185.151])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id BA675C43460;
-        Mon, 23 Aug 2021 10:59:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org BA675C43460
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Stop EP0 transfers during pullup
- disable
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org
-References: <20210823092324.1949-1-wcheng@codeaurora.org>
- <87eeakld0d.fsf@kernel.org>
-From:   Wesley Cheng <wcheng@codeaurora.org>
-Message-ID: <9e11d0dc-c043-6b55-2c33-fb1a55b18156@codeaurora.org>
-Date:   Mon, 23 Aug 2021 03:59:29 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S236494AbhHWLqk (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 07:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236269AbhHWLqi (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Aug 2021 07:46:38 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17997C061575
+        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 04:45:56 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id a15so21375392iot.2
+        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 04:45:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=KJu/I1cZp2hC204Cwit5TZ7RvFYdkED6XXclTII8e/U=;
+        b=KTrZFeSfxh0R65dwRhmBdQ1BiZ2NPD3+O4mbaJ2suoiZ9W0rRfHBNFSvQw0qeVNf51
+         vcdCtO+lSovjbhWy5/gz+KqunXmM8Rm454WnZ06iO8Bd2YRMJtI9NgntYpvc1y0GTvNX
+         sB84AwR03R8aLszKnKJAvFm+hZxzXAbVeepfx8oSAMYlmAzSOknOL6Si4TEcr7dGH+uZ
+         BH/otIzKIUb5pAj24bUG8nO8RuQE46SFnUvNpDYPpJih6RPBkqIEh1qDlWgxFEpPIzh7
+         W8gX+cfF5TjEKbRdfGMvx9EjVYH+qtT92c1lFJeZL8o5qX0qKN4Xm2JXaKdXE149Diig
+         sVjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=KJu/I1cZp2hC204Cwit5TZ7RvFYdkED6XXclTII8e/U=;
+        b=K02mlUqdvUnTjcKHS2v0FhrQP8vlNiy6ios3iAfESfc5Lcaegh1JziG5veFuA/CClv
+         UF3YZ59xT+BCB8oJ1s+PLpxMcZmQYgQrdsAI2URb+OjgN3yhGwliNPJYJRgnsX9EgSWk
+         Hpd9SCe1Eo7mZpB1YHS04LyEcEvh3vzrwD4xyV2Tm9oSkpSVHAGAhWsuIu/C6yd2sS4j
+         2b3dGUhIWHN5MOv1MtjtczvD570VwuUhEgMzk4qsNOlPoVhogb/3n8YnchIeYDpUdiZF
+         f4W2NL7gV1WxEKdFWm3dvCqzMteV5dma+AyvxnPRAyxZfcKa+9wYRnSNvtqhvixH/9iT
+         VKrQ==
+X-Gm-Message-State: AOAM5315fRhAcuBYakuHMu3GIsWbr/ZC4cKGJ6iY0ThH2dv6iKcACsG7
+        B8xaYjp/Oy+KpKGofQx59Z9Y2YQioPtEcvJ0NlUo5ZDsHQ==
+X-Google-Smtp-Source: ABdhPJyfkssTh+LGNbISLSiter4RV10Hzv3w2RBXrQPIfkkDystYweKw2B3R62rJ/HFM3MsH176+19T0IUnTi+ozsWo=
+X-Received: by 2002:a6b:e90c:: with SMTP id u12mr24547872iof.95.1629719153108;
+ Mon, 23 Aug 2021 04:45:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <87eeakld0d.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   "N. Chen" <takhv1@gmail.com>
+Date:   Mon, 23 Aug 2021 14:45:42 +0300
+Message-ID: <CADA1JhOe89Q7iQtb7vwK6utigpKfo+UfuW6o2GdMBMo5rAz7=A@mail.gmail.com>
+Subject: uac2/hid gadget issues on Win10 hosts
+To:     linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Felipe,
+I'm attempting to create a composite gadget device that uses uac2 and
+hid functions (speakerphone), using the latest kernel branch
+(rpi-5.14.y) on a rpi4 device.
+Windows10 host does not recognize the device as an audio usb device.
+In order to get it recognized, I had to use c_sync in adaptive mode,
+as well as make the following adjustments:
 
-On 8/23/2021 2:34 AM, Felipe Balbi wrote:
-> 
-> Wesley Cheng <wcheng@codeaurora.org> writes:
-> 
->> During a USB cable disconnect, or soft disconnect scenario, a pending
->> SETUP transaction may not be completed, leading to the following
->> error:
->>
->>     dwc3 a600000.dwc3: timed out waiting for SETUP phase
->>
->> If this occurs, then the entire pullup disable routine is skipped and
->> proper cleanup and halting of the controller does not complete.
-> 
-> nit: might want to add a blank line between paragraphs to aid
-> readability
-> 
->> Instead of returning an error (which is ignored from the UDC
->> perspective), allow the pullup disable to routine to continue, which
->                                          ^^
->                                          remove this?
-> 
->> will also handle disabling of EP0/1.  This will end any active
->> transfers as well.  Ensure to clear any delayed_status as well, as the
->> timeout could happen within the STATUS stage.
->>
->> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
->> ---
->> Changes in v2:
->>  - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
->>    on EP0 handle the proper ending of transfers.
->>  - Ensure that delayed_status is cleared, as ran into enumeration issues if the
->>    SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
->>    next connect, which blocked further SETUP transactions to be handled.
->>
->>  drivers/usb/dwc3/gadget.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->> index 5d084542718d..8b6a95c35741 100644
->> --- a/drivers/usb/dwc3/gadget.c
->> +++ b/drivers/usb/dwc3/gadget.c
->> @@ -2430,7 +2430,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
->>  		if (ret == 0) {
->>  			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
->> -			return -ETIMEDOUT;
->>  		}
-> 
-> Since the `if' now has a single statement, you should remove the curly braces.
-> 
-Thanks for the reviews!  Will fix them up and resend.
+diff --git a/drivers/usb/gadget/function/f_uac2.c
+b/drivers/usb/gadget/function/f_uac2.c
+index ae29ff2b2b68..74a221939ca0 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -177,7 +177,7 @@ static struct uac2_input_terminal_descriptor
+io_in_it_desc = {
 
-Thanks
-Wesley Cheng
+        .bDescriptorSubtype = UAC_INPUT_TERMINAL,
+        /* .bTerminalID = DYNAMIC */
+-       .wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_UNDEFINED),
++       .wTerminalType = cpu_to_le16(UAC_INPUT_TERMINAL_MICROPHONE),
+        .bAssocTerminal = 0,
+        /* .bCSourceID = DYNAMIC */
+        .iChannelNames = 0,
+@@ -205,7 +205,7 @@ static struct uac2_output_terminal_descriptor
+io_out_ot_desc = {
 
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
+        .bDescriptorSubtype = UAC_OUTPUT_TERMINAL,
+        /* .bTerminalID = DYNAMIC */
+-       .wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_UNDEFINED),
++       .wTerminalType = cpu_to_le16(UAC_OUTPUT_TERMINAL_SPEAKER),
+        .bAssocTerminal = 0,
+        /* .bSourceID = DYNAMIC */
+        /* .bCSourceID = DYNAMIC */
+@@ -216,7 +216,7 @@ static struct uac2_ac_header_descriptor ac_hdr_desc = {
+        .bLength = sizeof ac_hdr_desc,
+        .bDescriptorType = USB_DT_CS_INTERFACE,
+
+-       .bDescriptorSubtype = UAC_MS_HEADER,
++       .bDescriptorSubtype = UAC_HEADER,
+        .bcdADC = cpu_to_le16(0x200),
+        .bCategory = UAC2_FUNCTION_IO_BOX,
+        /* .wTotalLength = DYNAMIC */
+@@ -400,7 +400,7 @@ static struct usb_endpoint_descriptor fs_epin_desc = {
+        .bDescriptorType = USB_DT_ENDPOINT,
+
+        .bEndpointAddress = USB_DIR_IN,
+-       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
++       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_SYNC,
+        /* .wMaxPacketSize = DYNAMIC */
+        .bInterval = 1,
+ };
+@@ -409,7 +409,7 @@ static struct usb_endpoint_descriptor hs_epin_desc = {
+        .bLength = USB_DT_ENDPOINT_SIZE,
+        .bDescriptorType = USB_DT_ENDPOINT,
+
+-       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
++       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_SYNC,
+        /* .wMaxPacketSize = DYNAMIC */
+        .bInterval = 4,
+ };
+@@ -419,7 +419,7 @@ static struct usb_endpoint_descriptor ss_epin_desc = {
+        .bDescriptorType = USB_DT_ENDPOINT,
+
+        .bEndpointAddress = USB_DIR_IN,
+-       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_ASYNC,
++       .bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_SYNC_SYNC,
+        /* .wMaxPacketSize = DYNAMIC */
+        .bInterval = 4,
+ };
+--
+
+For the hid function report descriptor, I used the telephony led page
+with off-hook, mute and ring. I was not able to get any hid packets
+when tested using Teams. I made the following change, and it allowed
+me to get the ring hid alone, but not the led and the off-hook, so I
+guess this hack is incorrect:
+
+diff --git a/drivers/usb/gadget/function/f_hid.c
+b/drivers/usb/gadget/function/f_hid.c
+index bb476e121eae..10882e18cb88 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -549,7 +549,9 @@ static int hidg_setup(struct usb_function *f,
+        case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+                  | HID_REQ_SET_REPORT):
+                VDBG(cdev, "set_report | wLength=%d\n", ctrl->wLength);
+-               goto stall;
++               req->context  = hidg;
++               req->complete = hidg_set_report_complete;
++               goto respond;
+                break;
+
+        case ((USB_DIR_OUT | USB_TYPE_CLASS | USB_RECIP_INTERFACE) << 8
+--
+
+I'm aware that the aforementioned changes to uac2 function might be
+incorrect as well, but it allowed me to get through the first hurdle.
+I have no objections to making it more correct.
+I especially value an opinion on this matter from someone that has
+worked with Windows10 hosts before, as it is a specific issue with
+this OS (it works well for Ubuntu hosts, yet to be tested on Macs).
+
+Thanks,
+Tak
