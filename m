@@ -2,81 +2,108 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0571A3F4733
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 11:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D5E3F4753
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 11:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbhHWJPe (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 05:15:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55722 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235764AbhHWJPb (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 05:15:31 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 7C62461374
-        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 09:14:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629710089;
-        bh=ZSchOQ2J53iG06TgGb2xqyFQp+MmndY50OKitLWtYhA=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=nxsSSo2n092MhAP9BKISQuxB4uO6GZRdXMflJF1lZYqXGLdtQncVZHA3gl0mYs7LH
-         2EhM9K4bsj59IARjngLEoAPEuZahEbRzaMg+1qgMMwr8otUY5Ng2BgNYgjZQDFjZhg
-         OTXU5kAh+l43dkdUl1VsrcdtstSPUroBnKCrb7/LXh/PwR5koDUY+dxx2AHt8tnwzv
-         Dze+q5vKYmJU8NMqkddmnv8afVhikiStChqTfbLZHUYLqsdeMZ/63bidlqLMW1ihx0
-         Y6XNRU0s1n74YcPrOeCzF4k7MrKtWNNmVhU2bYRM02ef084AI8aW+HJ1ukUtnelAOk
-         Um33olkRdp+1g==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id 7996C60F94; Mon, 23 Aug 2021 09:14:49 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214131] ch341 communication problem
-Date:   Mon, 23 Aug 2021 09:14:49 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pb.g@gmx.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214131-208809-j9da9chxlu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214131-208809@https.bugzilla.kernel.org/>
-References: <bug-214131-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S235789AbhHWJYP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 05:24:15 -0400
+Received: from so254-9.mailgun.net ([198.61.254.9]:45588 "EHLO
+        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235834AbhHWJYO (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Mon, 23 Aug 2021 05:24:14 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629710612; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=MjYmf7oiJyLSzVo8N7rBJa6X/ztbSYljOWQSaoNgkVk=; b=AT2Akk9K0xtmfN573mzuFF8qZUdXB19jOiFj9bC1Rc0ke4iMbnIDfslYXedjFeeIFGOc4hs2
+ hUQi7DT3/IFyUFKEaMgJsh5mavgWXEsOXkgSl/RCltMeSiGD4eEFH5yRVy7NGSmjV6O5ahzi
+ YqvcHHbDIsFH6ZLeIckgMxRY/8M=
+X-Mailgun-Sending-Ip: 198.61.254.9
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 6123691189fbdf3ffe64ebd6 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 23 Aug 2021 09:23:29
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 1D318C43618; Mon, 23 Aug 2021 09:23:29 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id E9E89C4338F;
+        Mon, 23 Aug 2021 09:23:27 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org E9E89C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v2] usb: dwc3: gadget: Stop EP0 transfers during pullup disable
+Date:   Mon, 23 Aug 2021 02:23:24 -0700
+Message-Id: <20210823092324.1949-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214131
+During a USB cable disconnect, or soft disconnect scenario, a pending
+SETUP transaction may not be completed, leading to the following
+error:
 
---- Comment #5 from Paul Gr=C3=B6=C3=9Fel (pb.g@gmx.de) ---
-I agree, I couldn't find any enumerate related symptoms here:
+    dwc3 a600000.dwc3: timed out waiting for SETUP phase
 
-dmesg:
+If this occurs, then the entire pullup disable routine is skipped and
+proper cleanup and halting of the controller does not complete.
+Instead of returning an error (which is ignored from the UDC
+perspective), allow the pullup disable to routine to continue, which
+will also handle disabling of EP0/1.  This will end any active
+transfers as well.  Ensure to clear any delayed_status as well, as the
+timeout could happen within the STATUS stage.
 
-[ 7572.641499] usb 3-3.4: new full-speed USB device number 7 using xhci_hcd
-[ 7572.731906] usb 3-3.4: New USB device found, idVendor=3D1a86, idProduct=
-=3D7523,
-bcdDevice=3D 2.63
-[ 7572.731910] usb 3-3.4: New USB device strings: Mfr=3D0, Product=3D2,
-SerialNumber=3D0
-[ 7572.731912] usb 3-3.4: Product: USB2.0-Serial
-[ 7572.788929] ch341 3-3.4:1.0: ch341-uart converter detected
-[ 7572.802958] usb 3-3.4: ch341-uart converter now attached to ttyUSB0
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+Changes in v2:
+ - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
+   on EP0 handle the proper ending of transfers.
+ - Ensure that delayed_status is cleared, as ran into enumeration issues if the
+   SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
+   next connect, which blocked further SETUP transactions to be handled.
 
-lsusb -v see attachment above
+ drivers/usb/dwc3/gadget.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---=20
-You may reply to this email to add a comment.
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 5d084542718d..8b6a95c35741 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2430,7 +2430,6 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+ 		if (ret == 0) {
+ 			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+-			return -ETIMEDOUT;
+ 		}
+ 	}
+ 
+@@ -2643,6 +2642,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	/* begin to receive SETUP packets */
+ 	dwc->ep0state = EP0_SETUP_PHASE;
+ 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
++	dwc->delayed_status = false;
+ 	dwc3_ep0_out_start(dwc);
+ 
+ 	dwc3_gadget_enable_irq(dwc);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
