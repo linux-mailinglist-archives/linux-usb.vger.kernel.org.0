@@ -2,85 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B415D3F478B
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 11:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275D13F478F
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 11:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbhHWJaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 05:30:25 -0400
-Received: from mail.thorsis.com ([92.198.35.195]:49180 "EHLO mail.thorsis.com"
+        id S235803AbhHWJb3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 05:31:29 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:44648 "EHLO m43-7.mailgun.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231160AbhHWJaY (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 05:30:24 -0400
-X-Greylist: delayed 303 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Aug 2021 05:30:24 EDT
-Received: from localhost (localhost [127.0.0.1])
-        by mail.thorsis.com (Postfix) with ESMTP id EFC3C2985;
-        Mon, 23 Aug 2021 11:24:38 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at mail.thorsis.com
-Received: from mail.thorsis.com ([127.0.0.1])
-        by localhost (mail.thorsis.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id OJWpy4L88Gne; Mon, 23 Aug 2021 11:24:38 +0200 (CEST)
-Received: by mail.thorsis.com (Postfix, from userid 109)
-        id CE46B29CF; Mon, 23 Aug 2021 11:24:38 +0200 (CEST)
+        id S231679AbhHWJb1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Aug 2021 05:31:27 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1629711045; h=Content-Transfer-Encoding: MIME-Version:
+ Message-Id: Date: Subject: Cc: To: From: Sender;
+ bh=9QYebgGxzwFiZrMtvwx1Y+oOX9to3SvFJbs2P5yI4gM=; b=jCKoXfonU8y6hAe+W2xlROCMwmED4y482MbRx0U2KSeXuRa3IkJZGqJdDhq9ACcYOOPopwli
+ t2rIJy0z15cQeufAVz65DZHWPzEqmhY1azuMqLJdFZwYEVT18UNRy0WJDVEff2Zs3T0OpS1s
+ s0TVfkJlfCVEj3K1HtO6eLhsBZs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 61236aae89fbdf3ffe6a9bd9 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 23 Aug 2021 09:30:22
+ GMT
+Sender: wcheng=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 02E37C43618; Mon, 23 Aug 2021 09:30:22 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
 X-Spam-Level: 
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_RECEIVED,
-        NO_RELAYS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.2
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 URIBL_BLOCKED ADMINISTRATOR NOTICE: The query to URIBL was
-        *      blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [URIs: microchip.com]
-        * -0.0 NO_RELAYS Informational: message was not relayed via SMTP
-        * -0.0 NO_RECEIVED Informational: message has no Received headers
-From:   Alexander Dahl <ada@thorsis.com>
-To:     linux-usb@vger.kernel.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rca@thorsis.com
-Subject: Enable HSIC Host Port on Atmel/Microchip SAMA5D2
-Date:   Mon, 23 Aug 2021 11:24:35 +0200
-Message-ID: <2869763.XZdSvA6Ref@ada>
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
+        autolearn=no autolearn_force=no version=3.4.0
+Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: wcheng)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id C81A6C4338F;
+        Mon, 23 Aug 2021 09:30:20 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org C81A6C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+From:   Wesley Cheng <wcheng@codeaurora.org>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        Thinh.Nguyen@synopsys.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>
+Subject: [PATCH v3] usb: dwc3: gadget: Stop EP0 transfers during pullup disable
+Date:   Mon, 23 Aug 2021 02:30:17 -0700
+Message-Id: <20210823093017.27605-1-wcheng@codeaurora.org>
+X-Mailer: git-send-email 2.33.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello,
+During a USB cable disconnect, or soft disconnect scenario, a pending
+SETUP transaction may not be completed, leading to the following
+error:
 
-for a new embedded board featuring a Microchip SAMA5D2 SoC (64 MiB SiP variant 
-SAMA5D27C-D5M) we connected the third USB host port (HSIC only) with an 
-USB3503 hub chip. This doesn't work out of the box with the Linux kernel 
-currently, because neither the SoC nor the kernel does enable the HSIC 
-interface by default.
+    dwc3 a600000.dwc3: timed out waiting for SETUP phase
 
-That SoC has three USB host ports, from the SAMA5D2 Series Datasheet [1] I 
-learned there's a flag in an EHCI register, which has to be set to enable the 
-HSIC interface on port C, the third port. (Section "41.7.14 EHCI: REG08 - HSIC 
-Enable/Disable" of the datasheet.) I suppose that register is vendor specific. 
-The register definitions in '/include/linux/usb/ehci_def.h' do not contain 
-that register.
+If this occurs, then the entire pullup disable routine is skipped and
+proper cleanup and halting of the controller does not complete.
+Instead of returning an error (which is ignored from the UDC
+perspective), allow the pullup disable to routine to continue, which
+will also handle disabling of EP0/1.  This will end any active
+transfers as well.  Ensure to clear any delayed_status as well, as the
+timeout could happen within the STATUS stage.
 
-Where would I add that register definition and set that flag in the kernel 
-then?  I suppose in the vendor specific ehci driver?  
-That would be 'drivers/usb/host/ehci-atmel.c' right?
+Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+---
+Changes in v3:
+ - Added suggestion by Thinh to change dev_err to dev_warn
 
-Since that feature is optional (other boards don't need to turn on hsic on 
-that port), some driver specific new device tree binding would be necessary, 
-right?  I suppose that would have to be documented in 'Documentation/
-devicetree/bindings/usb/atmel-usb.txt' right? (Or that would have to be 
-converted to yaml first?)
+Changes in v2:
+ - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
+   on EP0 handle the proper ending of transfers.
+ - Ensure that delayed_status is cleared, as ran into enumeration issues if the
+   SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
+   next connect, which blocked further SETUP transactions to be handled.
 
-Is this the right track?  If yes, I'm going to develop patches for this. 
-Otherwise any hint into the right direction are highly appreciated.
+ drivers/usb/dwc3/gadget.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-FWIW, I'm not the first one struggling [2] with this problem. ;-)
-
-Greets
-Alex
-
-[1] https://www.microchip.com/en-us/product/ATSAMA5D27C-D5M#document-table
-[2] https://community.atmel.com/forum/sama5d2-using-hsic-under-linux
-
-
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 5d084542718d..ec756db938bb 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2429,8 +2429,7 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+ 		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+ 				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+ 		if (ret == 0) {
+-			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+-			return -ETIMEDOUT;
++			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
+ 		}
+ 	}
+ 
+@@ -2643,6 +2642,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
+ 	/* begin to receive SETUP packets */
+ 	dwc->ep0state = EP0_SETUP_PHASE;
+ 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
++	dwc->delayed_status = false;
+ 	dwc3_ep0_out_start(dwc);
+ 
+ 	dwc3_gadget_enable_irq(dwc);
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
