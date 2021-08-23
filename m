@@ -2,136 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7AF3F448A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 06:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81443F459E
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Aug 2021 09:09:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbhHWE67 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Mon, 23 Aug 2021 00:58:59 -0400
-Received: from mx20.baidu.com ([111.202.115.85]:45264 "EHLO baidu.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232501AbhHWE65 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Mon, 23 Aug 2021 00:58:57 -0400
-Received: from BC-Mail-Ex18.internal.baidu.com (unknown [172.31.51.12])
-        by Forcepoint Email with ESMTPS id DB02ED0727DB2C4EA62D;
-        Mon, 23 Aug 2021 12:58:13 +0800 (CST)
-Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
- BC-Mail-Ex18.internal.baidu.com (172.31.51.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2242.12; Mon, 23 Aug 2021 12:58:13 +0800
-Received: from LAPTOP-UKSR4ENP.internal.baidu.com (172.31.63.8) by
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2308.14; Mon, 23 Aug 2021 12:58:13 +0800
-From:   Cai Huoqing <caihuoqing@baidu.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>, <joel@jms.id.au>,
-        <andrew@aj.id.au>
-CC:     <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>, Cai Huoqing <caihuoqing@baidu.com>
-Subject: [PATCH] usb: gadget: aspeed: Remove repeated verbose license text
-Date:   Mon, 23 Aug 2021 12:58:07 +0800
-Message-ID: <20210823045807.49-1-caihuoqing@baidu.com>
-X-Mailer: git-send-email 2.17.1
+        id S234909AbhHWHKG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Mon, 23 Aug 2021 03:10:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60154 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234861AbhHWHKF (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Mon, 23 Aug 2021 03:10:05 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 12BD761220
+        for <linux-usb@vger.kernel.org>; Mon, 23 Aug 2021 07:09:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629702563;
+        bh=wPKwy6Mrpj3nLtNLgBUKbrVcRdRow2vKjJW6UbXYg/A=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=Mj/l8zavyIJok+MfZeHZI5pDMgWdrn520IjG11IdGqo1RyaMPQF3TN+T3iq3o72YW
+         KVjiIKOHQfQlbtsPqOdnYbcwm1BCv8NMDXkF2ORqEKdmAhzjmfI80EXDh6NgTwmkNt
+         J3BCwuGlHH6INeDmf2HbnWGktiruSulIJ0jAIxL4DlC0SVieVMOwq8M4SAubnosrfq
+         kU6J0TtjauFbJkUnlOFl2SeK54GxBBTn4s87mqeMcfNkQjYeYwwlZrJ1MXttUdZeUh
+         OWaqfZ38QcNqKMrZqvowaC4mkDCeemaPuKLXbwm0je/wdA3fihMqqybOSl5vHI58PX
+         1G1UEfBxBj95Q==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 030E760F94; Mon, 23 Aug 2021 07:09:23 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214131] ch341 communication problem
+Date:   Mon, 23 Aug 2021 07:09:22 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pb.g@gmx.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214131-208809-J45awxXefw@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214131-208809@https.bugzilla.kernel.org/>
+References: <bug-214131-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.31.63.8]
-X-ClientProxiedBy: BC-Mail-Ex19.internal.baidu.com (172.31.51.13) To
- BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-remove it because SPDX-License-Identifier is already used
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214131
 
-Signed-off-by: Cai Huoqing <caihuoqing@baidu.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/core.c | 5 -----
- drivers/usb/gadget/udc/aspeed-vhub/dev.c  | 5 -----
- drivers/usb/gadget/udc/aspeed-vhub/ep0.c  | 5 -----
- drivers/usb/gadget/udc/aspeed-vhub/epn.c  | 5 -----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 5 -----
- 5 files changed, 25 deletions(-)
+--- Comment #2 from Paul Gr=C3=B6=C3=9Fel (pb.g@gmx.de) ---
+Indeed, removing=20
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-index d11d3d14313f..7a635c499777 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-@@ -5,11 +5,6 @@
-  * core.c - Top level support
-  *
-  * Copyright 2017 IBM Corporation
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d268306a7bfe..d918e8b2af3c 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -5,11 +5,6 @@
-  * dev.c - Individual device/gadget management (ie, a port = a gadget)
-  *
-  * Copyright 2017 IBM Corporation
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-index 022b777b85f8..74ea36c19b1e 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
-@@ -5,11 +5,6 @@
-  * ep0.c - Endpoint 0 handling
-  *
-  * Copyright 2017 IBM Corporation
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/epn.c b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-index cb164c615e6f..917892ca8753 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/epn.c
-@@ -5,11 +5,6 @@
-  * epn.c - Generic endpoints management
-  *
-  * Copyright 2017 IBM Corporation
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 5c7dea5e0ff1..b9960fdd8a51 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -5,11 +5,6 @@
-  * hub.c - virtual hub handling
-  *
-  * Copyright 2017 IBM Corporation
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License as published by
-- * the Free Software Foundation; either version 2 of the License, or
-- * (at your option) any later version.
-  */
- 
- #include <linux/kernel.h>
--- 
-2.25.1
+.bulk_in_size      =3D 512,
 
+and recompiling my 5.13.10 kernel solved the issue.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
