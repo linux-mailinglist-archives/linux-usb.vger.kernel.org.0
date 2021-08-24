@@ -2,143 +2,98 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1E1A3F59AE
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 10:10:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3393F59BF
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 10:18:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235215AbhHXILj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 04:11:39 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:49256 "EHLO m43-7.mailgun.net"
+        id S235262AbhHXISb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 04:18:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54770 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235082AbhHXILh (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 04:11:37 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629792654; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=ZvmDGo5JvtaJAXLkf0eBgrFDnHbWT3Gwp4OipUJ/4z4=;
- b=nYysTbq51qFd+4BASvQhXphdyTNRf5TLucxCOa3cKI48yixZKL3ovy6Rmvzb+jGLmsSZSCaM
- 2AGir9e/OSc2VDlZGuqRIPMLmeofoaPg+Yejeik6VnCYc8rLiDheIEi1M7qX06WqBawA4Ld2
- f1qI+hSd9O+2efEWPpOSRwJjsVY=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 6124a98d1567234b8c77addc (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 24 Aug 2021 08:10:53
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D7813C43460; Tue, 24 Aug 2021 08:10:52 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 4D042C4338F;
-        Tue, 24 Aug 2021 08:10:48 +0000 (UTC)
+        id S235167AbhHXISa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 04:18:30 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 11DD061220;
+        Tue, 24 Aug 2021 08:17:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629793067;
+        bh=Uqh9V7RiyCOOsjNNGZXQDRCdogTxCQ6i/WZpirnIPUQ=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=ZIO4STnhpm5yWomrTKSgkienTK9APTPRnjHapfckD0oDZ0e3b4sfuGfmrDh4T+PgM
+         bAmozx7n1LHoUY4RXshwicbrlBCGcF1p4grgqh84hM+xdZmEnC+X25pP9tloKzuJ+a
+         kAQiJGqS/3F9bttcujQBEpjGHa5HlAVwE22tIYd+wbS9J+R6nlB6v+4skcHn+C5SId
+         q8H19mAsT8zh7R7BYnsT9bJwxpYvEkCJWYPKQQPrO2vI1kzmUErQRIJUFSo3Fm0BDO
+         ACjpfr65eBQ2hgaOEq8IZlEFC5toYyky5w7NH1IgzKTa2/AfCKx4QW7ADh97DR4ERU
+         t/CFfSSdW8oUQ==
+References: <1629777281-30188-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1629777281-30188-2-git-send-email-quic_linyyuan@quicinc.com>
+User-agent: mu4e 1.6.4; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Linyu Yuan <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH V4 1/3] usb: gadget: configfs: add UDC trace entry
+Date:   Tue, 24 Aug 2021 11:15:34 +0300
+In-reply-to: <1629777281-30188-2-git-send-email-quic_linyyuan@quicinc.com>
+Message-ID: <8735qz8deg.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Tue, 24 Aug 2021 13:40:48 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, bhelgaas@google.com,
-        robh+dt@kernel.org, swboyd@chromium.org, lorenzo.pieralisi@arm.com,
-        svarbanov@mm-sol.com
-Cc:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org, vbadigan@codeaurora.org,
-        sallenki@codeaurora.org, manivannan.sadhasivam@linaro.org
-Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-In-Reply-To: <349b1178f071407dfad8ba3050482772@codeaurora.org>
-References: <1628568516-24155-1-git-send-email-pmaliset@codeaurora.org>
- <1628568516-24155-5-git-send-email-pmaliset@codeaurora.org>
- <349b1178f071407dfad8ba3050482772@codeaurora.org>
-Message-ID: <e54b4f62dbcd670a0e0658598e045051@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-17 22:56, Prasad Malisetty wrote:
-> On 2021-08-10 09:38, Prasad Malisetty wrote:
->> On the SC7280, By default the clock source for pcie_1_pipe is
->> TCXO for gdsc enable. But after the PHY is initialized, the clock
->> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
->> 
->> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> ---
->>  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
->>  1 file changed, 18 insertions(+)
->> 
->> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
->> b/drivers/pci/controller/dwc/pcie-qcom.c
->> index 8a7a300..39e3b21 100644
->> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
->>  	struct regulator_bulk_data supplies[2];
->>  	struct reset_control *pci_reset;
->>  	struct clk *pipe_clk;
->> +	struct clk *gcc_pcie_1_pipe_clk_src;
->> +	struct clk *phy_pipe_clk;
->>  };
->> 
->>  union qcom_pcie_resources {
->> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct
->> qcom_pcie *pcie)
->>  	if (ret < 0)
->>  		return ret;
->> 
->> +	if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
->> +		res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
->> +		if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
->> +			return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
->> +
->> +		res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
->> +		if (IS_ERR(res->phy_pipe_clk))
->> +			return PTR_ERR(res->phy_pipe_clk);
->> +	}
->> +
-> 
-> Hi All,
-> 
-> Greetings!
-> 
-> I would like to check is there any other better approach instead of
-> compatible method here as well or is it fine to use compatible method.
-> 
-> Thanks
-> -Prasad
-> 
->>  	res->pipe_clk = devm_clk_get(dev, "pipe");
->>  	return PTR_ERR_OR_ZERO(res->pipe_clk);
->>  }
->> @@ -1255,6 +1267,12 @@ static void qcom_pcie_deinit_2_7_0(struct
->> qcom_pcie *pcie)
->>  static int qcom_pcie_post_init_2_7_0(struct qcom_pcie *pcie)
->>  {
->>  	struct qcom_pcie_resources_2_7_0 *res = &pcie->res.v2_7_0;
->> +	struct dw_pcie *pci = pcie->pci;
->> +	struct device *dev = pci->dev;
->> +	struct device_node *node = dev->of_node;
->> +
->> +	if (of_property_read_bool(node, "pipe-clk-source-switch"))
->> +		clk_set_parent(res->gcc_pcie_1_pipe_clk_src, res->phy_pipe_clk);
->> 
->>  	return clk_prepare_enable(res->pipe_clk);
->>  }
 
 Hi,
 
-Kindly provide your inputs and confirmation on latest queries, I will 
-share new patch version.
+Linyu Yuan <quic_linyyuan@quicinc.com> writes:
+> add trace in function gadget_dev_desc_UDC_store()
+> will show when user space enable/disable the gadget.
+>
+> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+> ---
+>  drivers/usb/gadget/Makefile         |  1 +
+>  drivers/usb/gadget/configfs.c       |  3 +++
+>  drivers/usb/gadget/configfs_trace.c |  7 +++++++
+>  drivers/usb/gadget/configfs_trace.h | 39 +++++++++++++++++++++++++++++++++++++
+>  4 files changed, 50 insertions(+)
+>  create mode 100644 drivers/usb/gadget/configfs_trace.c
+>  create mode 100644 drivers/usb/gadget/configfs_trace.h
+>
+> diff --git a/drivers/usb/gadget/Makefile b/drivers/usb/gadget/Makefile
+> index 130dad7..8e9c2b8 100644
+> --- a/drivers/usb/gadget/Makefile
+> +++ b/drivers/usb/gadget/Makefile
+> @@ -9,5 +9,6 @@ ccflags-y				+= -I$(srctree)/drivers/usb/gadget/udc
+>  obj-$(CONFIG_USB_LIBCOMPOSITE)	+= libcomposite.o
+>  libcomposite-y			:= usbstring.o config.o epautoconf.o
+>  libcomposite-y			+= composite.o functions.o configfs.o u_f.o
+> +libcomposite-y			+= configfs_trace.o
+>  
+>  obj-$(CONFIG_USB_GADGET)	+= udc/ function/ legacy/
+> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+> index 477e72a..f7f3af8 100644
+> --- a/drivers/usb/gadget/configfs.c
+> +++ b/drivers/usb/gadget/configfs.c
+> @@ -9,6 +9,7 @@
+>  #include "configfs.h"
+>  #include "u_f.h"
+>  #include "u_os_desc.h"
+> +#include "configfs_trace.h"
+>  
+>  int check_user_usb_string(const char *name,
+>  		struct usb_gadget_strings *stringtab_dev)
+> @@ -270,6 +271,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
+>  	if (name[len - 1] == '\n')
+>  		name[len - 1] = '\0';
+>  
+> +	trace_gadget_dev_desc_UDC_store(config_item_name(item), name);
 
-Thanks
--Prasad
+why tracing only the names? This gives us no insight into whatever bug
+may happen and we may want to use trace events to debug. Rather, try to
+think of trace events as tracking the lifetime of the UDC and
+gadget. Trace values that may change over time.
+
+I also think that all three patches could be combined into a single
+commit, but that's up to discussion.
+
+
+-- 
+balbi
