@@ -2,38 +2,39 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A3393F59BF
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 10:18:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6243F59C2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 10:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbhHXISb (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 04:18:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54770 "EHLO mail.kernel.org"
+        id S235347AbhHXITP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 04:19:15 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235167AbhHXISa (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 04:18:30 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 11DD061220;
-        Tue, 24 Aug 2021 08:17:45 +0000 (UTC)
+        id S233692AbhHXITL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 04:19:11 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 21F1461220;
+        Tue, 24 Aug 2021 08:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629793067;
-        bh=Uqh9V7RiyCOOsjNNGZXQDRCdogTxCQ6i/WZpirnIPUQ=;
+        s=k20201202; t=1629793107;
+        bh=nykxD81K9jux0Z9cYpoVeP6Sogs7zBWpCbzPYz9PWvo=;
         h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=ZIO4STnhpm5yWomrTKSgkienTK9APTPRnjHapfckD0oDZ0e3b4sfuGfmrDh4T+PgM
-         bAmozx7n1LHoUY4RXshwicbrlBCGcF1p4grgqh84hM+xdZmEnC+X25pP9tloKzuJ+a
-         kAQiJGqS/3F9bttcujQBEpjGHa5HlAVwE22tIYd+wbS9J+R6nlB6v+4skcHn+C5SId
-         q8H19mAsT8zh7R7BYnsT9bJwxpYvEkCJWYPKQQPrO2vI1kzmUErQRIJUFSo3Fm0BDO
-         ACjpfr65eBQ2hgaOEq8IZlEFC5toYyky5w7NH1IgzKTa2/AfCKx4QW7ADh97DR4ERU
-         t/CFfSSdW8oUQ==
-References: <1629777281-30188-1-git-send-email-quic_linyyuan@quicinc.com>
- <1629777281-30188-2-git-send-email-quic_linyyuan@quicinc.com>
+        b=DcUkzqlfF30qlcEzv0MWg1icXwzmG6RXblOkrmMUnY2rEbGruDFmV4TR4xnUWJIQj
+         6cqSjYVtIhd+XxZOTk6GQ3I8oQTjBYzF9HOro4u1MlCEQm8dYAw1d+0CmF23YjQYJA
+         6SBw/inxQ9nN5PUU2QzDIvT/PTY/Me5fO3eDwu5O09sw0GhO6BRRUDoZIJTWkDgOsb
+         GVVC7taJd76uqlY/mH43Em86D6aCs4xr9BlQ2qV1tSawheKp5t3yxFVWuaoHBFSHFm
+         SE5nGnujtPygw2A0laSYhpBeNspH1DgnIASkmrelOO0J4+ZxE337sR+BlRZyDFNi3A
+         9jF5IKearMCGw==
+References: <20210823222458.3760-1-wcheng@codeaurora.org>
 User-agent: mu4e 1.6.4; emacs 27.2
 From:   Felipe Balbi <balbi@kernel.org>
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH V4 1/3] usb: gadget: configfs: add UDC trace entry
-Date:   Tue, 24 Aug 2021 11:15:34 +0300
-In-reply-to: <1629777281-30188-2-git-send-email-quic_linyyuan@quicinc.com>
-Message-ID: <8735qz8deg.fsf@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org
+Subject: Re: [PATCH v4] usb: dwc3: gadget: Stop EP0 transfers during pullup
+ disable
+Date:   Tue, 24 Aug 2021 11:17:59 +0300
+In-reply-to: <20210823222458.3760-1-wcheng@codeaurora.org>
+Message-ID: <87y28r6ysv.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
@@ -41,59 +42,58 @@ List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 
-Hi,
+Wesley Cheng <wcheng@codeaurora.org> writes:
 
-Linyu Yuan <quic_linyyuan@quicinc.com> writes:
-> add trace in function gadget_dev_desc_UDC_store()
-> will show when user space enable/disable the gadget.
+> During a USB cable disconnect, or soft disconnect scenario, a pending
+> SETUP transaction may not be completed, leading to the following
+> error:
 >
-> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+>     dwc3 a600000.dwc3: timed out waiting for SETUP phase
+>
+> If this occurs, then the entire pullup disable routine is skipped and
+> proper cleanup and halting of the controller does not complete.
+>
+> Instead of returning an error (which is ignored from the UDC
+> perspective), allow the pullup disable routine to continue, which
+> will also handle disabling of EP0/1.  This will end any active
+> transfers as well.  Ensure to clear any delayed_status also, as the
+> timeout could happen within the STATUS stage.
+>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
 > ---
->  drivers/usb/gadget/Makefile         |  1 +
->  drivers/usb/gadget/configfs.c       |  3 +++
->  drivers/usb/gadget/configfs_trace.c |  7 +++++++
->  drivers/usb/gadget/configfs_trace.h | 39 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 50 insertions(+)
->  create mode 100644 drivers/usb/gadget/configfs_trace.c
->  create mode 100644 drivers/usb/gadget/configfs_trace.h
+> Changes in v4:
+>  - Fixed formatting and typos in commit text
+>  - Removed braces due to the removal of the return statement
 >
-> diff --git a/drivers/usb/gadget/Makefile b/drivers/usb/gadget/Makefile
-> index 130dad7..8e9c2b8 100644
-> --- a/drivers/usb/gadget/Makefile
-> +++ b/drivers/usb/gadget/Makefile
-> @@ -9,5 +9,6 @@ ccflags-y				+= -I$(srctree)/drivers/usb/gadget/udc
->  obj-$(CONFIG_USB_LIBCOMPOSITE)	+= libcomposite.o
->  libcomposite-y			:= usbstring.o config.o epautoconf.o
->  libcomposite-y			+= composite.o functions.o configfs.o u_f.o
-> +libcomposite-y			+= configfs_trace.o
+> Changes in v3:
+>  - Added suggestion by Thinh to change dev_err to dev_warn
+>
+> Changes in v2:
+>  - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
+>    on EP0 handle the proper ending of transfers.
+>  - Ensure that delayed_status is cleared, as ran into enumeration issues if the
+>    SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
+>    next connect, which blocked further SETUP transactions to be handled.
+>
+>  drivers/usb/dwc3/gadget.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 5d084542718d..63f6d9f2a692 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -2428,10 +2428,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
 >  
->  obj-$(CONFIG_USB_GADGET)	+= udc/ function/ legacy/
-> diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-> index 477e72a..f7f3af8 100644
-> --- a/drivers/usb/gadget/configfs.c
-> +++ b/drivers/usb/gadget/configfs.c
-> @@ -9,6 +9,7 @@
->  #include "configfs.h"
->  #include "u_f.h"
->  #include "u_os_desc.h"
-> +#include "configfs_trace.h"
->  
->  int check_user_usb_string(const char *name,
->  		struct usb_gadget_strings *stringtab_dev)
-> @@ -270,6 +271,8 @@ static ssize_t gadget_dev_desc_UDC_store(struct config_item *item,
->  	if (name[len - 1] == '\n')
->  		name[len - 1] = '\0';
->  
-> +	trace_gadget_dev_desc_UDC_store(config_item_name(item), name);
+>  		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
+>  				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
+> -		if (ret == 0) {
+> -			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
+> -			return -ETIMEDOUT;
+> -		}
+> +		if (ret == 0)
+> +			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
 
-why tracing only the names? This gives us no insight into whatever bug
-may happen and we may want to use trace events to debug. Rather, try to
-think of trace events as tracking the lifetime of the UDC and
-gadget. Trace values that may change over time.
-
-I also think that all three patches could be combined into a single
-commit, but that's up to discussion.
-
+looks like a bug fix. Do we need to Cc stable?
 
 -- 
 balbi
