@@ -2,84 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 501B43F5897
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 09:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931023F58AB
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 09:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbhHXHBD (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 03:01:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47134 "EHLO mail.kernel.org"
+        id S232245AbhHXHGz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 03:06:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48796 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233333AbhHXHAo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 03:00:44 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C135F61360
-        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 07:00:00 +0000 (UTC)
+        id S231332AbhHXHGy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 03:06:54 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 5DD6361165;
+        Tue, 24 Aug 2021 07:06:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629788400;
-        bh=UUARsU3j11W607683yTjhhWoJmEThIpLygK5Yek4YhU=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=ogS/5cSL7rr2PwVNEfkBp7QuXrbsjfk7gY8d1WpVecDrrWyxH5TjgLVIWMs+fJSB6
-         sMHim5qHQ/x/s16IkgYXTp/ZI93ePqhMKmDna3si7YXZSrsF1yg7jLC2SFxpibS4QD
-         AAUmLPZ54w+xIs+Za6a3FebNZaTJ01UxeCmEMBrjhqdLLCUQ4WIM9J8jXB2zx2TmGT
-         XWBfEm8Lcbg8YWeK8++TEbfJLaoSWHKKW0Npuzq7ebRKCN2ADQH7wTefCoa/0mTyyg
-         c/vH4p0/nid6IbByIo/Uc8q9uV20di8gAKejev3hICDpCwRgfoDMBWWfIQlsy8sXKL
-         w9Hk9ddslaKYA==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id B6C1860FF2; Tue, 24 Aug 2021 07:00:00 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: =?UTF-8?B?W0J1ZyAyMTQxNTVdIHJlZ3Jlc3Npb24gNS4xMC40OeKGkjUuMTAu?=
- =?UTF-8?B?NTI6IERpcmVjdCBmaXJtd2FyZSBsb2FkIGZvciByZW5lc2FzX3VzYl9mdy5t?=
- =?UTF-8?B?ZW0gZmFpbGVkIHdpdGggZXJyb3IgLTI=?=
-Date:   Tue, 24 Aug 2021 07:00:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: greg@kroah.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214155-208809-bhRs2uMet5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214155-208809@https.bugzilla.kernel.org/>
-References: <bug-214155-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1629788771;
+        bh=AUmPzVyVIdkBzP1TcX09gdv462g7bmFGWS7nBwof6EY=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=IGQJPw85gSh+CTYT8Iq/6WmQqE8as8nu9AgNDV442kPh9mlyisOw/vqetiGHFthbs
+         1BqgqC/svEvMBXLM/o+i0hvNssDGmHrbKyitSuiGPXJDVjjIv2cFiiJiYEy0vCh6EW
+         sRHuufcMwF+Zkio1l/wc7ywKj5/pBhUXi/TJPbK4CXymrROPhLA/ebFduhzsbnZ9XX
+         nE9REMyuvVLiWI6fIyAqkq68fFw2eAO1MOLLkrNE3YjUQnphmZ8xJSRL9NPj06qJLD
+         eBk2VxRzUU6ZMg4UOqCQYz6v1nCKCFr577uM9FPaDwoRDbnfQxRPWZiGcyduvjcwmD
+         udePIG6JXBm0g==
+References: <20210821134004.363217-1-mdevaev@gmail.com>
+User-agent: mu4e 1.6.4; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Maxim Devaev <mdevaev@gmail.com>
+Cc:     gregkh@linuxfoundation.org, ruslan.bilovol@gmail.com,
+        mika.westerberg@linux.intel.com, jj251510319013@gmail.com,
+        maze@google.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] usb: gadget: f_hid: optional SETUP/SET_REPORT mode
+Date:   Tue, 24 Aug 2021 10:05:52 +0300
+In-reply-to: <20210821134004.363217-1-mdevaev@gmail.com>
+Message-ID: <877dgb8gps.fsf@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214155
 
---- Comment #1 from Greg Kroah-Hartman (greg@kroah.com) ---
-On Tue, Aug 24, 2021 at 06:54:45AM +0000, bugzilla-daemon@bugzilla.kernel.o=
-rg
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D214155
->=20
->             Bug ID: 214155
->            Summary: regression 5.10.49=E2=86=925.10.52: Direct firmware l=
-oad for
->                     renesas_usb_fw.mem failed with error -2
+Maxim Devaev <mdevaev@gmail.com> writes:
 
-This should already be resolved on the latest 5.10.y kernel release.
-Please upgrade and let us know if that does not solve the issue.
+> f_hid provides the OUT Endpoint as only way for receiving reports
+> from the host. SETUP/SET_REPORT method is not supported, and this causes
+> a number of compatibility problems with various host drivers, especially
+> in the case of keyboard emulation using f_hid.
+>
+>   - Some hosts do not support the OUT Endpoint and ignore it,
+>     so it becomes impossible for the gadget to receive a report
+>     from the host. In the case of a keyboard, the gadget loses
+>     the ability to receive the status of the LEDs.
+>
+>   - Some BIOSes/UEFIs can't work with HID devices with the OUT Endpoint
+>     at all. This may be due to their bugs or incomplete implementation
+>     of the HID standard.
+>     For example, absolutely all Apple UEFIs can't handle the OUT Endpoint
+>     if it goes after IN Endpoint in the descriptor and require the reverse
+>     order (OUT, IN) which is a violation of the standard.
+>     Other hosts either do not initialize gadgets with a descriptor
+>     containing the OUT Endpoint completely (like some HP and DELL BIOSes
+>     and embedded firmwares like on KVM switches), or initialize them,
+>     but will not poll the IN Endpoint.
+>
+> This patch adds configfs option no_out_endpoint=1 to disable
+> the OUT Endpoint and allows f_hid to receive reports from the host
+> via SETUP/SET_REPORT.
+>
+> Previously, there was such a feature in f_hid, but it was replaced
+> by the OUT Endpoint [1] in the commit 99c515005857 ("usb: gadget: hidg:
+> register OUT INT endpoint for SET_REPORT"). So this patch actually
+> returns the removed functionality while making it optional.
+> For backward compatibility reasons, the OUT Endpoint mode remains
+> the default behaviour.
+>
+>   - The OUT Endpoint mode provides the report queue and reduces
+>     USB overhead (eliminating SETUP routine) on transmitting a report
+>     from the host.
+>
+>   - If the SETUP/SET_REPORT mode is used, there is no report queue,
+>     so the userspace will only read last report. For classic HID devices
+>     like keyboards this is not a problem, since it's intended to transmit
+>     the status of the LEDs and only the last report is important.
+>     This mode provides better compatibility with strange and buggy
+>     host drivers.
+>
+> Both modes passed USBCV tests. Checking with the USB protocol analyzer
+> also confirmed that everything is working as it should and the new mode
+> ensures operability in all of the described cases.
+>
+> Signed-off-by: Maxim Devaev <mdevaev@gmail.com>
+> Link: https://www.spinics.net/lists/linux-usb/msg65494.html [1]
 
-thanks,
+Acked-by: Felipe Balbi <balbi@kernel.org>
 
-greg k-h
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+-- 
+balbi
