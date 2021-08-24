@@ -2,83 +2,109 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6418E3F586D
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 08:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612723F5886
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 08:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232706AbhHXGqN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 02:46:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44312 "EHLO mail.kernel.org"
+        id S231792AbhHXGz3 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 02:55:29 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46130 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230497AbhHXGqM (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 02:46:12 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 5D87F61101;
-        Tue, 24 Aug 2021 06:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1629787529;
-        bh=Kubh2nvvp1Q6uolaYfDooSop8qoFrJBPwS451q3QqQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xGWMER6q+ZDV6Hm4DxrGKvKsHkFDy8BDt6PNPXTysOZDKEdnwernVRLzn7TS/3Evl
-         GUhFInVIHNNsVxBZSDZ0VmXBTNgiiT2TJiC2djbzXkYTqJoXGLDf2G57b6ZSyxLmK9
-         P+TCRogG1zFDExrBgJV1rbTjS3lR406ezv9jq510=
-Date:   Tue, 24 Aug 2021 08:45:25 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Alexander Dahl <ada@thorsis.com>
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] USB: host: ehci-atmel: Allow enabling HSIC on SAMA5D2
-Message-ID: <YSSVhblgt/45TvzF@kroah.com>
-References: <20210823140052.GA120849@rowland.harvard.edu>
- <20210824063702.24586-1-ada@thorsis.com>
+        id S231300AbhHXGz3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 02:55:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id 8826E6128A
+        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 06:54:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629788085;
+        bh=9a2gq2elsyxsYMA6eZPuMIg43MQQ2gB+l1uOxB/Rf8g=;
+        h=From:To:Subject:Date:From;
+        b=RRzv1CHxCndDRvyfYu7mu3nieexZBjRdfdrV5ss80OMBj67Vqkz3ZlSahbNr3wPJt
+         DCx/dPqu0PDpEFr9X/FCLCMxtp4vIzh1LqgEzVYcp52NsQwRBXeEoQsEmcraRpf0ix
+         6LJgD9+yIDzNKzZNhbrNJXsks8N3YfH9HqK5gF+5nZa3OQtLmIR2ESAroDJqOXlMZK
+         ghZr4soF58tpljuCTAHDKetvK6HEV2YUrsbBscjYuxaLN5/Z0C4ItCp7HpEa8pLi6F
+         khmoduXAaSYc+iR3b8vQxzI1sQEiMPgsJsZrEhy2X+VIxKV2FEZNwwqgoR0M2l9i5I
+         Z7AdQXdt2Iswg==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id 7AF0960FF1; Tue, 24 Aug 2021 06:54:45 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: =?UTF-8?B?W0J1ZyAyMTQxNTVdIE5ldzogcmVncmVzc2lvbiA1LjEwLjQ54oaS?=
+ =?UTF-8?B?NS4xMC41MjogRGlyZWN0IGZpcm13YXJlIGxvYWQgZm9yIHJlbmVzYXNfdXNi?=
+ =?UTF-8?B?X2Z3Lm1lbSBmYWlsZWQgd2l0aCBlcnJvciAtMg==?=
+Date:   Tue, 24 Aug 2021 06:54:45 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: bugzilla.kernel.org@e3q.eu
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-214155-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210824063702.24586-1-ada@thorsis.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Tue, Aug 24, 2021 at 08:37:02AM +0200, Alexander Dahl wrote:
-> Unlike other SoC series featuring the 'atmel,at91sam9g45-ehci' USB EHCI
-> controller, which have embedded USB high-speed transceivers for each
-> port, the third port on the SAMA5D2 series is HSIC only.  That HSIC
-> interface is not enabled after a power-on reset, but can be enabled by
-> setting a flag in a vendor specific EHCI register.
-> 
-> The register offsets added to the new header file were compared with
-> those for the SAM9G45, SAM9X25, SAMA5D3, SAMA5D4, and SAM9X60 series and
-> there are no differences in the offsets or contents of those registers.
-> Which of those additional vendor specific registers are supported,
-> differs by SoC family.  So while the HSIC enable feature is currently
-> only present for SAMA5D2, it probably does not hurt to set it on the
-> other families, hence no additional check for SoC family here.
-> 
-> Tested on a custom board featuring a SAMA5D27C-D5M SiP connected to an
-> USB3503 hub with an upstream HSIC interface.
-> 
-> Link: https://community.atmel.com/forum/sama5d2-using-hsic-under-linux
-> Signed-off-by: Alexander Dahl <ada@thorsis.com>
-> ---
-> 
-> Notes:
->     - for introducing new dt binding, would be nice to convert old one
->       first, probably needs split up and multiple iteration review?
->     - name of that new dt property?
->     - register definitions put to a separate file, like
->       'drivers/usb/host/ehci-fsl.h'
->     - unsure where exactly in the probe process that register write should
->       happen, datasheet gives no hint
->     - should suspend/resume be considered?
-> 
->  drivers/usb/host/ehci-atmel.c | 17 +++++++++++++++++
->  drivers/usb/host/ehci-atmel.h | 19 +++++++++++++++++++
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214155
 
-No need for a new .h file that is only used in a single .c file.  Just
-put those few lines in the .c file please.
+            Bug ID: 214155
+           Summary: regression 5.10.49=E2=86=925.10.52: Direct firmware loa=
+d for
+                    renesas_usb_fw.mem failed with error -2
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.10.52
+          Hardware: All
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: normal
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: bugzilla.kernel.org@e3q.eu
+        Regression: No
 
-thanks,
+My laptop's internal webcam stopped being detected at some point in the last
+weeks. I do not use that webcam often and various things happened in that
+period, such as minor kernel updates and a BIOS update, so it was not
+immediately clear where the cause lay. After some investigation, I found the
+following in my logs:
 
-greg k-h
+xhci_hcd 0000:06:00.0: Direct firmware load for renesas_usb_fw.mem failed w=
+ith
+error -2
+xhci_hcd 0000:06:00.0: request_firmware failed: -2
+xhci_hcd: probe of 0000:06:00.0 failed with error -2
+
+Reverting to an earlier kernel version (5.10.52=E2=86=925.10.49), this mess=
+age
+disappears and the webcam is detected again. This makes me suspect there is
+some kind of regression after 5.10.49.
+
+A related report can be found at
+
+https://forums.lenovo.com/t5/Other-Linux-Discussions/Possible-1-34-BIOS-bug=
+-on-P14s-AMD/m-p/5089865
+
+There, the assumption is that this is related to the BIOS update. Given my
+tests, there certainly is a kernel component to the issue.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
