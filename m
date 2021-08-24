@@ -2,100 +2,78 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 833B63F5D5E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 13:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1EC3F5DCE
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 14:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236907AbhHXLxs (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 07:53:48 -0400
-Received: from mga09.intel.com ([134.134.136.24]:14598 "EHLO mga09.intel.com"
+        id S237182AbhHXMUz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 08:20:55 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55152 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236903AbhHXLxr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 07:53:47 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10085"; a="217297640"
-X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="217297640"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 04:53:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,347,1620716400"; 
-   d="scan'208";a="473465551"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.170]) ([10.237.72.170])
-  by orsmga008.jf.intel.com with ESMTP; 24 Aug 2021 04:53:01 -0700
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>
+        id S236676AbhHXMUx (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 08:20:53 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 9B40361265;
+        Tue, 24 Aug 2021 12:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629807609;
+        bh=8oQhuq/DGjyESiByy7PbgYQ4KR5PoguBI5CPoD3IxB0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QQlKZSpGKshJiJAAPzp3Puebaq5BpAp4b7N57nJKY0RuiaOKb6I8p25CUH5dsmDsf
+         wdDgQySDQzQa3g8jGBf8o11CZoXdZkl3sRHrsvQ00Bs8YPczh++aD9hlO6mtuPdmqM
+         3mFIk/ipQVke/GjmIA0sqvbv9LP65svCAn9X0S1ez2X7HEv1ikLOi5NRGeS69vUcB8
+         Fgllq3G0leQ52guX1/LHZR8NxGPGp3rzz7N6jhuCs3oYgb72p9Yz265EAg/zpu8VGL
+         5BedoxckC0uOxn1Z5pU7MTWpXytQdzDQWnBtzf62wZ3zP8nUcUopudZu0ZgDp6DVFh
+         flvltNaJr0lsw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mIVPQ-00052G-Dp; Tue, 24 Aug 2021 14:20:05 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
 Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chris.chiu@canonical.com
-References: <20210824105302.25382-1-kishon@ti.com>
- <20210824105302.25382-4-kishon@ti.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [RFC PATCH 3/5] usb: core: hcd: Add support for registering
- secondary RH along with primary HCD
-Message-ID: <06693934-28f2-d59e-b004-62cabd3f9e8e@linux.intel.com>
-Date:   Tue, 24 Aug 2021 14:55:34 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        =?UTF-8?q?Paul=20Gr=C3=B6=C3=9Fel?= <pb.g@gmx.de>,
+        stable@vger.kernel.org, Willy Tarreau <w@1wt.eu>
+Subject: [PATCH] Revert "USB: serial: ch341: fix character loss at high transfer rates"
+Date:   Tue, 24 Aug 2021 14:19:26 +0200
+Message-Id: <20210824121926.19311-1-johan@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20210824105302.25382-4-kishon@ti.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 24.8.2021 13.53, Kishon Vijay Abraham I wrote:
-> Add support for registering secondary roothub (RH) along with primary HCD.
-> It has been observed with certain PCIe USB cards that as soon as the
-> primary HCD is registered, port status change is handled leading to cold
-> plug devices getting not detected. For such cases, registering both the
-> root hubs along with the second HCD is useful.
-> 
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-> Suggested-by: Alan Stern <stern@rowland.harvard.edu>
-> ---
->  drivers/usb/core/hcd.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 4d7a9f0e2caa..9c8df22a7d9a 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2799,6 +2799,7 @@ int __usb_add_hcd(struct usb_hcd *hcd, unsigned int irqnum, unsigned long irqfla
->  {
->  	int retval;
->  	struct usb_device *rhdev;
-> +	struct usb_hcd *shared_hcd = NULL;
->  
->  	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
->  		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
-> @@ -2961,6 +2962,15 @@ int __usb_add_hcd(struct usb_hcd *hcd, unsigned int irqnum, unsigned long irqfla
->  
->  	/* starting here, usbcore will pay attention to this root hub */
->  	if (register_hub) {
-> +		shared_hcd = hcd->shared_hcd;
-> +		if (shared_hcd) {
-> +			retval = register_root_hub(shared_hcd);
+This reverts commit 3c18e9baee0ef97510dcda78c82285f52626764b.
 
-There is a possibility we try yo register the shared roothub before it is properly set up here.
+These devices do not appear to send a zero-length packet when the
+transfer size is a multiple of the bulk-endpoint max-packet size. This
+means that incoming data may not be processed by the driver until a
+short packet is received or the receive buffer is full.
 
-For example the mediatek driver (xhci-mtk.c) creates both hcds before adding them,
-so hcd->shared_hcd exists when usb_add_hcd() is called for the primary hcd,
-causing this code to register the hcd->shared_hcd roothub which is not properly added yet.
+Revert back to using endpoint-sized receive buffers to avoid stalled
+reads.
 
-How about skipping the new __usb_hcd_pci_probe() and __usb_add_hcd() and instead add a new
-flag to hcd->flags, something like HCD_FLAG_DEFER_PRI_RH_REGISTER?
+Reported-by: Paul Größel <pb.g@gmx.de>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214131
+Fixes: 3c18e9baee0e ("USB: serial: ch341: fix character loss at high transfer rates")
+Cc: stable@vger.kernel.org
+Cc: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/usb/serial/ch341.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-The host controller driver can set this flag in the hcd->driver->start(hcd) callback called
-before roothub registration here from usb_add_hcd(). If flag is set we skip the roothub registration.
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index 8a521b5ea769..2db917eab799 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -851,7 +851,6 @@ static struct usb_serial_driver ch341_device = {
+ 		.owner	= THIS_MODULE,
+ 		.name	= "ch341-uart",
+ 	},
+-	.bulk_in_size      = 512,
+ 	.id_table          = id_table,
+ 	.num_ports         = 1,
+ 	.open              = ch341_open,
+-- 
+2.31.1
 
-So something like:
-shared_hcd = hcd->share_hcd;
-
-if (!usb_hcd_is_primary_hcd(hcd) && shared_hcd && shared_hcd->flags & HCD_FLAG_DEFER_PRI_RH_REGISTER)
-        register_root_hub(shared_hcd)
-if (!(hcd->flags & HCD_FLAG_DEFER_PRI_RH_REGISTER))
-        register_root_hub(hcd)
-
--Mathias 
