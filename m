@@ -2,103 +2,92 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F51B3F6953
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 20:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857EF3F69A3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 21:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234040AbhHXS6L (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 14:58:11 -0400
-Received: from bee.birch.relay.mailchannels.net ([23.83.209.14]:18657 "EHLO
-        bee.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233192AbhHXS6I (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 14:58:08 -0400
-X-Sender-Id: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 83506101751;
-        Tue, 24 Aug 2021 18:57:23 +0000 (UTC)
-Received: from ares.krystal.co.uk (100-96-16-112.trex-nlb.outbound.svc.cluster.local [100.96.16.112])
-        (Authenticated sender: 9wt3zsp42r)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 00306100865;
-        Tue, 24 Aug 2021 18:57:21 +0000 (UTC)
-X-Sender-Id: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
-Received: from ares.krystal.co.uk (ares.krystal.co.uk [77.72.0.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
-        by 100.96.16.112 (trex/6.4.3);
-        Tue, 24 Aug 2021 18:57:23 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
-X-MailChannels-Auth-Id: 9wt3zsp42r
-X-Oafish-Share: 4b7400846682ab39_1629831443214_1785834749
-X-MC-Loop-Signature: 1629831443214:3231507777
-X-MC-Ingress-Time: 1629831443214
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=pebblebay.com; s=default; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=dezi+B1VxHsWtBg/TBGqPOSRkDg62L1A8BXxTHF3L1M=; b=A6rEaypQdOAFE0TB8wzexOA+/a
-        AJBFGjSFZFiykyrAagjvoxnRmdRX0kLBmWxGorJLiObRp3yzOVYT8VevlkkmsfOKgoxlBU59H3bLK
-        Y8q25Rsbj8Ox1shpzDC98ilhhY/fSoTqxNFxhR+GpynGwijlOnB0ejU2i2rrxRi7iFMgBdYEgQoO8
-        J5LmZm0Y6IN08+ssBpYroE5EKk+18f/Z2bQCw1sQ5grmmuhysp0EdIrV3EkGDni488y20XraN9k+4
-        KvtiUn7qvfRt9gHCCZhkiipfW4xqVTN/eEcL2lt6gUcR++2GmIoX6aEZjjBLJ8iNKVSuxP0tczYN0
-        WQ0GF3cA==;
-Received: from cpc160185-warw19-2-0-cust743.3-2.cable.virginm.net ([82.21.62.232]:51816 helo=pbcl-dsk9.pebblebay.com)
-        by ares.krystal.co.uk with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <john.efstathiades@pebblebay.com>)
-        id 1mIbbt-00BQSi-4Y; Tue, 24 Aug 2021 19:57:20 +0100
-From:   John Efstathiades <john.efstathiades@pebblebay.com>
-Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
-        davem@davemloft.net, netdev@vger.kernel.org, kuba@kernel.org,
-        linux-usb@vger.kernel.org, john.efstathiades@pebblebay.com
-Subject: [PATCH net-next v2 10/10] lan78xx: Limit number of driver warning messages
-Date:   Tue, 24 Aug 2021 19:56:13 +0100
-Message-Id: <20210824185613.49545-11-john.efstathiades@pebblebay.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20210824185613.49545-1-john.efstathiades@pebblebay.com>
-References: <20210824185613.49545-1-john.efstathiades@pebblebay.com>
+        id S234567AbhHXTQw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 15:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234048AbhHXTQw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 15:16:52 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986A7C061757;
+        Tue, 24 Aug 2021 12:16:07 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r2so20720938pgl.10;
+        Tue, 24 Aug 2021 12:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YHLmpisvPPmsqfFKbNTM3t6hjYciHmUpxzHILT2Qr6M=;
+        b=gU7Q1xMS9bXpASw00SR/sNuxtUq3cxwtagSusbZwZ7w0pnTQbMyw9wez96UdAhSYRF
+         MxQHZUIiRniZIlUcgYG2OYqmi44v7sW7Ae9dUMfHQpIzmQenxnaJaC4zbj9oSHxmfZSw
+         6pwXPAYTeqflPdmH5qCkC89j2Fqbx2Tq7Ot1URjWEnSwO+1SncOypH/VG9RYRbxUkPTy
+         gF3sR6j9BQcc8SdP9E5OprwUE0nV+rzzX67Yc9mOtrJeX0m7hwWB4c6BslJk+sDmdSMp
+         q9xjsGDrPwx43GLj4RNvCHJlMcPg4IR6HQOLZ8xRlWAZ6V9vbs87GTpdbqWA9qTcEjrN
+         awoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YHLmpisvPPmsqfFKbNTM3t6hjYciHmUpxzHILT2Qr6M=;
+        b=Q6PmRtMqbrMevGyOtTrfFLiiOWyASU041zJw1lffJ0Zx+Q1xCqZ8NB2uHamOdbt5Za
+         J2RbGS3LEjgmUxbggux1i3sLJ59NwWagU/+tO1k4/EDMHJyzeieqeFB6AFX+3jZkUoSV
+         FqV4L1/LKXeciEbW30k70Lda7wgsXksDxpTrkV7eDuf9shDAJV6bh0Aq3/TqXdeIiNMd
+         i+xUXq+aq1THkM1qJSdH7B662O9f4oOflz1mA3HnSyTmoCq53cnysUe11oACU5GwZ8N2
+         YxKjlzCm1ziL3ks63Zm6kk284BlJtii4gAhR2oFnwX+/nLUV+1yzYhnrRPSJ5ef6ohDL
+         N/ug==
+X-Gm-Message-State: AOAM533KCCLPir/hYDJH4+wQt4dfpzCZ7CzqI34ReFWHyEkccbWWWp5/
+        U3Ig9iW2aTSgFNhr7o3CFX0=
+X-Google-Smtp-Source: ABdhPJw0fkPKuavJ0rp3BV4R0Ekn+rotepq9ObkbKQuExSuhqwnmPZxk2096J9EciWyi6XQg8+DEAA==
+X-Received: by 2002:a62:7c4a:0:b029:3dd:a141:c932 with SMTP id x71-20020a627c4a0000b02903dda141c932mr32208662pfc.68.1629832566863;
+        Tue, 24 Aug 2021 12:16:06 -0700 (PDT)
+Received: from uver-laptop ([2405:201:6006:a148:428:a9ec:7b61:f80f])
+        by smtp.gmail.com with ESMTPSA id u7sm3294327pju.13.2021.08.24.12.16.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Aug 2021 12:16:06 -0700 (PDT)
+Date:   Wed, 25 Aug 2021 00:45:37 +0530
+From:   Utkarsh Verma <utkarshverma294@gmail.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] USB: serial: iuu_phoenix: Replace symbolic permissions
+ by octal permissions
+Message-ID: <20210824191537.GA6181@uver-laptop>
+References: <20210820190306.18149-1-utkarshverma294@gmail.com>
+ <YST6XZ/XJkTDm6rV@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-AuthUser: john.efstathiades@pebblebay.com
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YST6XZ/XJkTDm6rV@hovoldconsulting.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Device removal can result in a large burst of driver warning messages
-(20 - 30) sent to the kernel log. Most of these are register read/write
-failures.
+On Tue, Aug 24, 2021 at 03:55:41PM +0200, Johan Hovold wrote:
+> On Sat, Aug 21, 2021 at 12:33:06AM +0530, Utkarsh Verma wrote:
+> > This fixed the below checkpatch issue:
+> > WARNING: Symbolic permissions 'S_IRUGO | S_IWUSR' are not preferred.
+> > Consider using octal permissions '0644'.
+> 
+> Please do not run checkpatch.pl on code that's already in the tree. Use
+> it for your own patches before submitting them and always use your own
+> judgement when considering its suggestions.
+> 
 
-This change limits the rate at which these messages are emitted.
+Okay, I will not run checkpatch on the code that's already in the tree.
 
-Signed-off-by: John Efstathiades <john.efstathiades@pebblebay.com>
----
- drivers/net/usb/lan78xx.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> This code does not need to be changed.
+> 
 
-diff --git a/drivers/net/usb/lan78xx.c b/drivers/net/usb/lan78xx.c
-index 4ec752d9751a..793f8fbe0069 100644
---- a/drivers/net/usb/lan78xx.c
-+++ b/drivers/net/usb/lan78xx.c
-@@ -462,7 +462,7 @@ static int lan78xx_read_reg(struct lan78xx_net *dev, u32 index, u32 *data)
- 	if (likely(ret >= 0)) {
- 		le32_to_cpus(buf);
- 		*data = *buf;
--	} else {
-+	} else if (net_ratelimit()) {
- 		netdev_warn(dev->net,
- 			    "Failed to read register index 0x%08x. ret = %d",
- 			    index, ret);
-@@ -492,7 +492,8 @@ static int lan78xx_write_reg(struct lan78xx_net *dev, u32 index, u32 data)
- 			      USB_VENDOR_REQUEST_WRITE_REGISTER,
- 			      USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
- 			      0, index, buf, 4, USB_CTRL_SET_TIMEOUT);
--	if (unlikely(ret < 0)) {
-+	if (unlikely(ret < 0) &&
-+	    net_ratelimit()) {
- 		netdev_warn(dev->net,
- 			    "Failed to write register index 0x%08x. ret = %d",
- 			    index, ret);
--- 
-2.25.1
+But using the octal permission bits makes the code more readable. So I
+made the change.
+But if you don't want such changes, I will refrain from doing it in the
+future.
+Anyway thanks for the review.
 
+
+Regards,
+Utkarsh Verma
