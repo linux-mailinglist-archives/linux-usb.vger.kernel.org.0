@@ -2,217 +2,99 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F16A3F5F63
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 15:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF79A3F5F69
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 15:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237606AbhHXNp2 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 09:45:28 -0400
-Received: from smtp.radex.nl ([178.250.146.7]:34079 "EHLO radex-web.radex.nl"
+        id S237674AbhHXNqn (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 09:46:43 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56722 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229517AbhHXNp1 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 09:45:27 -0400
-Received: from [192.168.1.35] (cust-178-250-146-69.breedbanddelft.nl [178.250.146.69])
-        by radex-web.radex.nl (Postfix) with ESMTPS id 650112406A;
-        Tue, 24 Aug 2021 15:44:41 +0200 (CEST)
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v10 0/6] Re-introduce TX FIFO resize for larger EP
- bursting
-To:     Pavel Hofman <pavel.hofman@ivitera.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Wesley Cheng <wcheng@codeaurora.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "jackp@codeaurora.org" <jackp@codeaurora.org>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>
-References: <1623923899-16759-1-git-send-email-wcheng@codeaurora.org>
- <87pmv9l1dv.fsf@kernel.org> <9dc6cd83-17b9-7075-0934-6b9d41b6875d@gmail.com>
- <87a6mbudvc.fsf@kernel.org> <6e8bb4ad-fe68-ad36-7416-2b8e10b6ae96@gmail.com>
- <877dhev68a.fsf@kernel.org> <cca69e90-b0ef-00b8-75d3-3bf959a93b45@gmail.com>
- <874kchvcq0.fsf@kernel.org> <e59f1201-2aa2-9075-1f94-a6ae7a046dc1@gmail.com>
- <8735raj766.fsf@kernel.org> <b3417c2c-613b-8ef6-2e2d-6e2cf9a5d5fd@gmail.com>
- <b3e820f0-9c94-7cba-a248-3b2ec5378ab0@gmail.com>
- <d298df65-417b-f318-9374-b463a15d8308@ivitera.com>
- <a7d7f0dd-dfbb-5eef-d1da-8cbdab5fc4a7@gmail.com>
- <c4e29ac0-1df1-3c64-1218-3687f07e7f77@ivitera.com>
- <1fb52c92-9319-c035-722f-695ab34723dd@gmail.com>
- <702c72cd-40e4-e641-797a-764e7e611afb@ivitera.com>
- <CAHp75VeZBLgf8YhEjdOV1Hva_dJh_=VHRGyVb=r44yh-9n+F4A@mail.gmail.com>
- <d1fb0ad5-e304-8864-a2e4-42d5f652a6a7@ivitera.com>
- <7ad8b755-1fa0-3be4-3f2e-a4d95858e450@synopsys.com>
- <c84135c3-c730-208b-dde8-916c7bde1d73@ivitera.com>
-Message-ID: <84236328-750e-700a-855b-19b362362d25@gmail.com>
-Date:   Tue, 24 Aug 2021 15:44:40 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        id S237403AbhHXNqm (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 09:46:42 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id DA1996103B;
+        Tue, 24 Aug 2021 13:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629812758;
+        bh=Jed18KPEaR+Zuz6QaoXkrJ1/iRgkKIy/q8FOpLXPpfo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=If+MJbyHhxgeinHlWa6kCcSoshW7bC+68r1YXAYgextZ8Ec4YFXDRHkqzikXFX333
+         37dU7UIExz2LEEi2fDhUusfQB1oNlPCtsTDn0QOc1r8dVCjcbmR1iioLx7K3OoQ/0s
+         qXbJsjXXOKlgzNj5tfQZpXveEX9L1nnvvwFXAePDvKMwWgg7h4D0VF17KzTwp8lsCq
+         cWJr7EkWQfcSsNlPdf0SsE0GtSfoCFafNV9J2BArfujl2SloLhFbOYArP92Fqri+M4
+         5rYei7At2rahLxe5mfdvbi5keddu9pt+7/rK5xgl6jfLSrxUXTeU8LjOoTwt7PzUku
+         8bAVfjF/sihQA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1mIWkU-0007M8-GL; Tue, 24 Aug 2021 15:45:54 +0200
+Date:   Tue, 24 Aug 2021 15:45:54 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Zhengjun Zhang <zhangzhengjun@aicrobo.com>
+Cc:     larsm17@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org
+Subject: Re: [PATCH v2] USB: serial: option: add new VID/PID to support
+ Fibocom FG150
+Message-ID: <YST4Eq2zS8+7B5TL@hovoldconsulting.com>
+References: <b3285ae0-8b1f-fc9c-3662-634264d704d5@gmail.com>
+ <20210809133553.71158-1-zhangzhengjun@aicrobo.com>
 MIME-Version: 1.0
-In-Reply-To: <c84135c3-c730-208b-dde8-916c7bde1d73@ivitera.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20210809133553.71158-1-zhangzhengjun@aicrobo.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi
+On Mon, Aug 09, 2021 at 09:35:53PM +0800, Zhengjun Zhang wrote:
+> Fibocom FG150 is a 5G module based on Qualcomm SDX55 platform,
+> support Sub-6G band.
+> 
+> Compared with the first patch, I removed the defines of Fibocom 
+> VID and PID by following Lars' suggestion.
 
-Op 24-08-2021 om 07:39 schreef Pavel Hofman:
->
->
-> Dne 24. 08. 21 v 0:50 Thinh Nguyen napsal(a):
->> Pavel Hofman wrote:
->>>
->>>
->>> Dne 23. 08. 21 v 17:21 Andy Shevchenko napsal(a):
->>>> On Mon, Aug 23, 2021 at 5:59 PM Pavel Hofman
->>>> <pavel.hofman@ivitera.com> wrote:
->>>>> Dne 22. 08. 21 v 21:43 Ferry Toth napsal(a):
->>>>>> Op 19-08-2021 om 23:04 schreef Pavel Hofman:
->>>>>>> Dne 19. 08. 21 v 22:10 Ferry Toth napsal(a):
->>>>>>>> Op 19-08-2021 om 09:51 schreef Pavel Hofman:
->>>>>>>>> Dne 18. 08. 21 v 21:07 Ferry Toth napsal(a):
->>>>>>>>>> Op 18-08-2021 om 00:00 schreef Ferry Toth:
->>>>
->>>> ...
->>>>
->>>>>>>>>> So, where do we go from here?
->>>>>>>>>
->>>>>>>>> I know the patches have been tested on dwc2 (by me and 
->>>>>>>>> others).  I
->>>>>>>>> do not know if Ruslan or Jerome tested them on dwc3 but probably
->>>>>>>>> not. Ruslan has talked about RPi (my case too) and 
->>>>>>>>> BeagleboneBlack,
->>>>>>>>> both with dwc2. Perhaps the dwc2 behaves a bit differently than
->>>>>>>>> dwc3?
->>>>>>>>>
->>>>>>>>> The patches add a new EP-IN for async feedback. I am sorry I have
->>>>>>>>> not followed your long thread (it started as unrelated to 
->>>>>>>>> uac). Does
->>>>>>>>> the problem appear with f_uac1 or f_uac2? Please how have you
->>>>>>>>> reached the above problem?
->>>>>>>>
->>>>>>>> I'm sorry too. I first believed the issue was related to the patch
->>>>>>>> mentioned in the subject line.
->>>>>>>>
->>>>>>>> The problem appaers with f_uac2. I bost Edison_Arduino board in 
->>>>>>>> host
->>>>>>>> mode (there is a switch allowing to select host/device mode). When
->>>>>>>> flipping the switch to device mode udev run a script:
->>>>>>>> But as I am using configfs (excerpt follows) and just disabling 
->>>>>>>> the
->>>>>>>> last 2 line resolves the issue, I'm guessing uac2 is the issue. Or
->>>>>>>> exceeding the available resources.
->>>>>>>>
->>>>>>>> # Create directory structure
->>>>>>>> mkdir "${GADGET_BASE_DIR}"
->>>>>>>> cd "${GADGET_BASE_DIR}"
->>>>>>>> mkdir -p configs/c.1/strings/0x409
->>>>>>>> mkdir -p strings/0x409
->>>>>>>>
->>>>>>>> # Serial device
->>>>>>>> mkdir functions/gser.usb0
->>>>>>>> ln -s functions/gser.usb0 configs/c.1/
->>>>>>>> ###
->>>>>>>>
->>>>>>>> # Ethernet device
->>>>>>>> mkdir functions/eem.usb0
->>>>>>>> echo "${DEV_ETH_ADDR}" > functions/eem.usb0/dev_addr
->>>>>>>> echo "${HOST_ETH_ADDR}" > functions/eem.usb0/host_addr
->>>>>>>> ln -s functions/eem.usb0 configs/c.1/
->>>>>>>>
->>>>>>>> # Mass Storage device
->>>>>>>> mkdir functions/mass_storage.usb0
->>>>>>>> echo 1 > functions/mass_storage.usb0/stall
->>>>>>>> echo 0 > functions/mass_storage.usb0/lun.0/cdrom
->>>>>>>> echo 0 > functions/mass_storage.usb0/lun.0/ro
->>>>>>>> echo 0 > functions/mass_storage.usb0/lun.0/nofua
->>>>>>>> echo "${USBDISK}" > functions/mass_storage.usb0/lun.0/file
->>>>>>>> ln -s functions/mass_storage.usb0 configs/c.1/
->>>>>>>>
->>>>>>>> # UAC2 device
->>>>>>>> mkdir functions/uac2.usb0
->>>>>>>> ln -s functions/uac2.usb0 configs/c.1
->>>>>>>> ....
->>>>>>>
->>>>>>> As you say, could perhaps the reason be that the extra EP-IN 
->>>>>>> added in
->>>>>>> those patches (previously 1, now 2 with the default config you use)
->>>>>>> exceeds your EP-IN max count or available fifos somehow?  You 
->>>>>>> have a
->>>>>>> number of functions initialized. If you change the load order of 
->>>>>>> the
->>>>>>> functions, do you get the error later with a different function? 
->>>>>>> Just
->>>>>>> guessing...
->>>>>>>
->>>>>>> You should be able to switch the default async EP-OUT (which
->>>>>>> configures the new feedback EP-IN ) to adaptive EP-OUT (which 
->>>>>>> requires
->>>>>>> no feedback EP) with c_sync=8 parameter of f_uac2.
->>>>>>>
->>>>>>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c*L47__;Iw!!A4F2R9G_pg!LBySrM_zgMGV0x-zZ7nSrs54yJw1GlnpUVUVxdQE8PeszSMZ6OkFX8lSoigwRbWQzLcU$ 
->>>>>>>
->>>>>>>
->>>>>>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.14-rc6/source/drivers/usb/gadget/function/f_uac2.c*L830__;Iw!!A4F2R9G_pg!LBySrM_zgMGV0x-zZ7nSrs54yJw1GlnpUVUVxdQE8PeszSMZ6OkFX8lSoigwRfP5TdZC$ 
->>>>>>>
->>>>>>>
->>>>>>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.14-rc6/source/include/uapi/linux/usb/ch9.h*L453__;Iw!!A4F2R9G_pg!LBySrM_zgMGV0x-zZ7nSrs54yJw1GlnpUVUVxdQE8PeszSMZ6OkFX8lSoigwRejzMbWO$ 
->>>>>>>
->>>>>>>
->>>>>>> Does that fix the problem?
->>>>>>
->>>>>> Not sure how to do that. Do you mean the module should have a 
->>>>>> parameter
->>>>>> called c_sync? `modinfo` list no parameters for usb_f_uac2.
->>>>>
->>>>> Those are configfs params, not available in modinfo.
->>>>>
->>>>> I checked and the value is "adaptive"
->>>>> https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v5.14-rc7/source/drivers/usb/gadget/function/f_uac2.c*L1312__;Iw!!A4F2R9G_pg!LBySrM_zgMGV0x-zZ7nSrs54yJw1GlnpUVUVxdQE8PeszSMZ6OkFX8lSoigwRTETcbsN$ 
->>>>>
->>>>
->>>>
->>>>> In your configfs script:
->>>>
->>>> Kernel shouldn't crash with any available set of configuration
->>>> parameters, right? So, even if the parameter would fix the crash the
->>>> series is buggy and has to be reverted in my opinion.
->>>
->>> Sure, no problem with reverting. I am just trying to start up some
->>> troubleshooting. A resource exhaustion was mentioned here, that's why I
->>> suggested a way to test the patch with the original number of endpoints
->>> allocated. I do not get any crashes on my setup which uses fewer gadget
->>> functions. That's why I asked what happens if the functions load order
->>> is changed. I am afraid this thread is so complex that the actual
->>> problem has been burried in the history.
->>>
->>
->> As I pointed out previously, the crash is probably because of f_uac2
->> prematurely freeing feedback request before its completion.
->> usb_ep_dequeue() is asynchronous. dwc2() may treat it as a synchronous
->> call so you didn't get a crash.
->
-> Thanks for your hint, it greatly helps.
->>>
->>
->> I'm not sure how easy it is for you to obtain/test a device with dwc3,
->> but it would be great to also have it as part of your testing suite. :)
->
-> Can you recommend a reasonably priced device with viable kernel 
-> updates for the testing? Optionally with SS which you mentioned last 
-> time? Thanks.
->
-Edison-Arduino kit 2nd hand with display on ebay ~$100 :-)
+When revising patches please put such comments below the '---' line so
+that it doesn't end up in the commit message.
 
-> Best regards,
->
-> Pavel.
+> Here are the outputs of lsusb -v and usb-devices:
+> 
+> > T:  Bus=02 Lev=01 Prnt=01 Port=01 Cnt=01 Dev#=  2 Spd=5000 MxCh= 0
+> > D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+> > P:  Vendor=2cb7 ProdID=010b Rev=04.14
+> > S:  Manufacturer=Fibocom
+> > S:  Product=Fibocom Modem_SN:XXXXXXXX
+> > S:  SerialNumber=XXXXXXXX
+> > C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
+> > I:  If#=0x0 Alt= 0 #EPs= 1 Cls=ef(misc ) Sub=04 Prot=01 Driver=rndis_host
+> > I:  If#=0x1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> > I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=(none)
+> > I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=(none)
+> > I:  If#=0x4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+> 
+> > Bus 002 Device 002: ID 2cb7:010b Fibocom Fibocom Modem_SN:XXXXXXXX
+
+> Signed-off-by: Zhengjun Zhang <zhangzhengjun@aicrobo.com>
+> ---
+> V1 -> V2: Remove the defines of Fibocom VID and PID
+> 
+>  drivers/usb/serial/option.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 0fbe253dc..4fcf859e9 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2073,6 +2073,8 @@ static const struct usb_device_id option_ids[] = {
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0105, 0xff),			/* Fibocom NL678 series */
+>  	  .driver_info = RSVD(6) },
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x01a0, 0xff) },			/* Fibocom NL668-AM/NL652-EU (laptop MBIM) */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0xff, 0x30) },	/* Fibocom FG150 Diag */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2cb7, 0x010b, 0xff, 0, 0) },	/* Fibocom FG150 AT */
+
+And try to keep the entries sorted by VID/PID where possible.
+
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+>  	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+
+I fixed up the above before applying. Thanks.
+
+Johan
