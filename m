@@ -2,132 +2,442 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FAC3F69C8
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 21:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4A83F6A76
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 22:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234106AbhHXT0O (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 15:26:14 -0400
-Received: from mail-bn1nam07on2078.outbound.protection.outlook.com ([40.107.212.78]:42819
-        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234424AbhHXTYr (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 15:24:47 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X5pPvuI/iYg+Ehec3QiXzZ10gCnpiZ7bQrLF3POVBPoCeWfv5y/pRb0wY6QPHzTYMbZMRdmoaFNd627IxQWOx1pyucsr/yPYsu4COSzO/EfVPSEZDpiep0HpUXoA5pZ4nXE6f1oV816UvH9iyD5HumzyHFiEtGRgJBHTDqbo4bLu1u3JK6p8KXs83oIbVfhnuBhuEOoieehAuDntYXgPunPQ1thefPHfxphYXbkNa/aBcDpWo94W9g6aOmu/sVfxES8zx8OovnwxBqH1b0mN/gA0ugGBhZrDR97Pm0NgbdoBmiMnDmqMIRZ16bVrer7o1Nzpj8MjT7xK5nrKpvxCpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HacWl7J+2xZt9WOxKhHB7yJsKR0t2hzWKVFC5VIt2NI=;
- b=AL6LmmIHL/6ObZqYuHvQh8RtUj/T2PQ7nRjfflINGrqfSIyfhXXdL7+o7hZ/uw2BIMvivdizBG/1vjPlnqLIlvNHIWo0aunTFVAQMBfdQh5JZdKuBeiqQm1ATeJBZz4z3uERCBEwQ+nquC3m6WdHGy74ngSP1ZPxsAKHNfEVmkKsu0eGvk/ReG/7hKActCZNhA63Fw76p5tGCXJ/d4JJlhgRKUnlh+u+Z+2GebPLzsx1icuw/34OhLpS7KC+t8iz/19sqYYLqFIfJn5fShawFhJoe556IFu7L/iWAJ+4rO6OHsKLJWwWc/Elwetl4839U5jKl1oWEa5Kvjag9WyzLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HacWl7J+2xZt9WOxKhHB7yJsKR0t2hzWKVFC5VIt2NI=;
- b=4ClUvITayzA3jR6vB9/W6aKFOe/iUaIqqQfEXy58cbDsJCccm/z25Tp83NbJQFU2EGfiWF4N8/qS48Zz9jDkq8CTLS9mlwhCaaVcIsKXB1hqB+7RVLJunXGZbmjOH3EttZlZ6kJT2M1fe59ZAF2+Ocq7heVxk0rvXGctG7vw2cQ=
-Received: from BN9PR03CA0590.namprd03.prod.outlook.com (2603:10b6:408:10d::25)
- by BYAPR12MB3622.namprd12.prod.outlook.com (2603:10b6:a03:d9::25) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4436.23; Tue, 24 Aug
- 2021 19:24:00 +0000
-Received: from BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:10d:cafe::ce) by BN9PR03CA0590.outlook.office365.com
- (2603:10b6:408:10d::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17 via Frontend
- Transport; Tue, 24 Aug 2021 19:24:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT028.mail.protection.outlook.com (10.13.176.225) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4436.19 via Frontend Transport; Tue, 24 Aug 2021 19:23:59 +0000
-Received: from jatayu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.12; Tue, 24 Aug
- 2021 14:23:57 -0500
-From:   Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kun.liu2@amd.com>, <alexander.deucher@amd.com>,
-        Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
-Subject: [RESEND PATCH 2/2] usb: dwc3: pci add property to allow user space role switch
-Date:   Wed, 25 Aug 2021 00:53:37 +0530
-Message-ID: <20210824192337.3100288-1-Nehal-Bakulchandra.shah@amd.com>
-X-Mailer: git-send-email 2.25.1
+        id S235035AbhHXUg0 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 16:36:26 -0400
+Received: from mailfilter02-out40.webhostingserver.nl ([195.211.72.22]:41797
+        "EHLO mailfilter02-out40.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234978AbhHXUgZ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 16:36:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=exalondelft.nl; s=whs1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=pO7TNRIb6JSKmZPlcGilxXCPGrDmrzQdllO644a0/fM=;
+        b=cf8qy+z/Ni3tbSqfe0s4P36ZjLmfZBO6lb9nvUmWBe6DxGrcWFVUMNK3eDsoeof2o3xQtcJMkIe42
+         urbNFk9WZtAl4JWr8HZNcomxn1i7aks9rg2/Hk80w4RZ+4wvYDDIYujej8tUJzQM14/FZW9BDafphQ
+         O95uTHNU1i3tCrkbsOYGA3/7pwigh2/RaQy6ApGPbXE9ii6n1AcqcdPKYUQLBKkKen2EMm3dyP9fma
+         2px02T2toUkFXH8gV6Co6mw80jhW27tQcaEWJ5EhRZ4XoGMITCH2gJ5j7BgEGC/rfENvr8byYgsulo
+         eQwcXHeq8/irRY0y3dmuZchxZJ9c0MQ==
+X-Halon-ID: 99b3193d-0518-11ec-a0ff-001a4a4cb922
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+        by mailfilter02.webhostingserver.nl (Halon) with ESMTPSA
+        id 99b3193d-0518-11ec-a0ff-001a4a4cb922;
+        Tue, 24 Aug 2021 22:19:35 +0200 (CEST)
+Received: from [2001:981:6fec:1:a2a7:9be0:8d3d:f950] (helo=localhost.localdomain)
+        by s198.webhostingserver.nl with esmtpa (Exim 4.94.2)
+        (envelope-from <ftoth@exalondelft.nl>)
+        id 1mIctV-007aM4-EG; Tue, 24 Aug 2021 22:19:35 +0200
+From:   Ferry Toth <ftoth@exalondelft.nl>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Ferry Toth <ftoth@exalondelft.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>,
+        Ferry Toth <fntoth@gmail.com>
+Subject: [PATCH v1 1/3] Revert "usb: gadget: u_audio: add real feedback implementation"
+Date:   Tue, 24 Aug 2021 22:14:32 +0200
+Message-Id: <20210824201433.11385-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f12a8a43-6dfb-4fe0-a163-08d96734b9a3
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3622:
-X-Microsoft-Antispam-PRVS: <BYAPR12MB36223A2BEA47ADA3A60CB73DA0C59@BYAPR12MB3622.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Vd8RQopm0RiPneJ/zHjLkllbNwqiyww/JsR5okrQbibRI9bmv5tVBBIICadVte5cXtMaW5pNIrTJT8GyFBXufjR3MR3uEDqpJ2rZ/reFmd3IcEkEaE+8DMPivhgaSojOeEeZ+MT0TtmNwTpn6mwemT6CL/hCcCuvi/Zyv5Xc1F3900l3OjcHkHQAGVv3LgrF7AcaOpPcEaWMZfx4NSI8NDvsRpkCqJTsxI2Bfuwks2J/5Jr57Xp3cyFN6HmMjdv8ZYf7buG6CauaVG14jWIULr2eociziuQXoVeQBez96dcLDRCE6gco9kDsrQTt5A5DZT8ltfdBPd2UMfMIVANw6QS/Jz3J3qvb4PrUbgucdGf1kXrGHqTn4yHtRgdolQJZS26r15SHRm4b2rYvGh7LBlmCXyYOGs8omkfz8ARm8buvY7WOvJtqXttS6w07KgJlPH2GMJvf5RZrK/mp3LfPv2cGhoTkFWXHDeZKlfCbH3Ik1utyikI717YZjcAw5xrBMx5t5dAzmKCeaHYId4IZ7NhRLoYLg9OeXS3VFxSjQgytUoF34sHCBQEZexIIqYUqgg7ZbUuDnazfGuXap5O7aXZuC7r9dnlEN1uqbVUvj30cGqooOG57dp+NS8rDGuHLa+U1JKDqf/dhlCGuflHHptxI/DYCBjsDuQSUapw7DFVdQxYBO8QYdXJuiMSt/hLco+DOQrJU6je+CMZvHBJ1X8wLUJB4dJ0VzUh4hvhu7H0=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(136003)(39860400002)(376002)(396003)(346002)(46966006)(36840700001)(36860700001)(82310400003)(70206006)(70586007)(426003)(82740400003)(2906002)(5660300002)(316002)(1076003)(6666004)(81166007)(86362001)(54906003)(356005)(4326008)(336012)(7696005)(8936002)(47076005)(26005)(478600001)(8676002)(16526019)(186003)(36756003)(110136005)(2616005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2021 19:23:59.9675
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f12a8a43-6dfb-4fe0-a163-08d96734b9a3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT028.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3622
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-For AMD platform there is a requirement to enable user space role
-switch from host to device and device to host as customer platform is not
-completely capable of OTG i.e. with type C controller it does not have PD
-to support role switching. Hence, based ACPI/EC interrupt role switch is
-triggered by the usemode script running in background.
+This reverts commit e89bb4288378b85c82212b60dc98ecda6b3d3a70.
 
-Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+The commit is part of a series with commit
+24f779dac8f3efb9629adc0e486914d93dc45517 causing a BUG on dwc3
+hardware, at least on Intel Merrifield platform when configured
+through configfs:
+BUG: kernel NULL pointer dereference, address: 0000000000000008
+...
+RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
+...
+Call Trace:
+ dwc3_remove_requests.constprop.0+0x12f/0x170
+ __dwc3_gadget_ep_disable+0x7a/0x160
+ dwc3_gadget_ep_disable+0x3d/0xd0
+ usb_ep_disable+0x1c/0x70
+ u_audio_stop_capture+0x79/0x120 [u_audio]
+ afunc_set_alt+0x73/0x80 [usb_f_uac2]
+ composite_setup+0x224/0x1b90 [libcomposite]
+
+Pavel's suggestion to add
+`echo "adaptive" > functions/uac2.usb0/c_sync` to the configfs script
+resolves the issue.
+Thinh suggests "the crash is probably because of f_uac2 prematurely
+freeing feedback request before its completion. usb_ep_dequeue() is
+asynchronous. dwc2() may treat it as a synchronous call so you didn't
+get a crash."
+
+Revert as this is a regression and the kernel shouldn't crash depending
+on configuration parameters.
+
+Reported-by: Ferry Toth <fntoth@gmail.com>
 ---
- drivers/usb/dwc3/drd.c      | 2 ++
- drivers/usb/dwc3/dwc3-pci.c | 1 +
- 2 files changed, 3 insertions(+)
+ .../ABI/testing/configfs-usb-gadget-uac2      |   1 -
+ Documentation/usb/gadget-testing.rst          |   1 -
+ drivers/usb/gadget/function/f_uac2.c          |   9 +-
+ drivers/usb/gadget/function/u_audio.c         | 124 ++----------------
+ drivers/usb/gadget/function/u_audio.h         |   9 --
+ drivers/usb/gadget/function/u_uac2.h          |   2 -
+ 6 files changed, 10 insertions(+), 136 deletions(-)
 
-diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
-index 8fcbac10510c..6d579780ffcc 100644
---- a/drivers/usb/dwc3/drd.c
-+++ b/drivers/usb/dwc3/drd.c
-@@ -555,6 +555,8 @@ static int dwc3_setup_role_switch(struct dwc3 *dwc)
- 		mode = DWC3_GCTL_PRTCAP_DEVICE;
+diff --git a/Documentation/ABI/testing/configfs-usb-gadget-uac2 b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+index 26fb8e9b4e61..e7e59d7fb12f 100644
+--- a/Documentation/ABI/testing/configfs-usb-gadget-uac2
++++ b/Documentation/ABI/testing/configfs-usb-gadget-uac2
+@@ -9,7 +9,6 @@ Description:
+ 		c_srate    capture sampling rate
+ 		c_ssize    capture sample size (bytes)
+ 		c_sync     capture synchronization type (async/adaptive)
+-		fb_max     maximum extra bandwidth in async mode
+ 		p_chmask   playback channel mask
+ 		p_srate    playback sampling rate
+ 		p_ssize    playback sample size (bytes)
+diff --git a/Documentation/usb/gadget-testing.rst b/Documentation/usb/gadget-testing.rst
+index 9d6276f82774..f5a12667bd41 100644
+--- a/Documentation/usb/gadget-testing.rst
++++ b/Documentation/usb/gadget-testing.rst
+@@ -729,7 +729,6 @@ The uac2 function provides these attributes in its function directory:
+ 	c_srate		capture sampling rate
+ 	c_ssize		capture sample size (bytes)
+ 	c_sync		capture synchronization type (async/adaptive)
+-	fb_max          maximum extra bandwidth in async mode
+ 	p_chmask	playback channel mask
+ 	p_srate		playback sampling rate
+ 	p_ssize		playback sample size (bytes)
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index ae29ff2b2b68..321e6c05ba93 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -584,11 +584,8 @@ static int set_ep_max_packet_size(const struct f_uac2_opts *uac2_opts,
+ 		ssize = uac2_opts->c_ssize;
  	}
  
-+	if (device_property_read_bool(dwc->dev, "allow-userspace-role-switch"))
-+		dwc3_role_switch.allow_userspace_control = true;
- 	dwc3_role_switch.fwnode = dev_fwnode(dwc->dev);
- 	dwc3_role_switch.set = dwc3_usb_role_switch_set;
- 	dwc3_role_switch.get = dwc3_usb_role_switch_get;
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 7ff8fc8f79a9..c1412a6e85b6 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -153,6 +153,7 @@ static const struct property_entry dwc3_pci_mr_properties[] = {
- 	PROPERTY_ENTRY_STRING("dr_mode", "otg"),
- 	PROPERTY_ENTRY_BOOL("usb-role-switch"),
- 	PROPERTY_ENTRY_STRING("role-switch-default-mode", "host"),
-+	PROPERTY_ENTRY_BOOL("allow-userspace-role-switch"),
- 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
- 	{}
+-	if (!is_playback && (uac2_opts->c_sync == USB_ENDPOINT_SYNC_ASYNC))
+-		srate = srate * (1000 + uac2_opts->fb_max) / 1000;
+-
+ 	max_size_bw = num_channels(chmask) * ssize *
+-		DIV_ROUND_UP(srate, factor / (1 << (ep_desc->bInterval - 1)));
++		((srate / (factor / (1 << (ep_desc->bInterval - 1)))) + 1);
+ 	ep_desc->wMaxPacketSize = cpu_to_le16(min_t(u16, max_size_bw,
+ 						    max_size_ep));
+ 
+@@ -960,7 +957,6 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 	agdev->params.c_srate = uac2_opts->c_srate;
+ 	agdev->params.c_ssize = uac2_opts->c_ssize;
+ 	agdev->params.req_number = uac2_opts->req_number;
+-	agdev->params.fb_max = uac2_opts->fb_max;
+ 	ret = g_audio_setup(agdev, "UAC2 PCM", "UAC2_Gadget");
+ 	if (ret)
+ 		goto err_free_descs;
+@@ -1333,7 +1329,6 @@ UAC2_ATTRIBUTE(c_srate);
+ UAC2_ATTRIBUTE_SYNC(c_sync);
+ UAC2_ATTRIBUTE(c_ssize);
+ UAC2_ATTRIBUTE(req_number);
+-UAC2_ATTRIBUTE(fb_max);
+ 
+ static struct configfs_attribute *f_uac2_attrs[] = {
+ 	&f_uac2_opts_attr_p_chmask,
+@@ -1344,7 +1339,6 @@ static struct configfs_attribute *f_uac2_attrs[] = {
+ 	&f_uac2_opts_attr_c_ssize,
+ 	&f_uac2_opts_attr_c_sync,
+ 	&f_uac2_opts_attr_req_number,
+-	&f_uac2_opts_attr_fb_max,
+ 	NULL,
  };
+ 
+@@ -1384,7 +1378,6 @@ static struct usb_function_instance *afunc_alloc_inst(void)
+ 	opts->c_ssize = UAC2_DEF_CSSIZE;
+ 	opts->c_sync = UAC2_DEF_CSYNC;
+ 	opts->req_number = UAC2_DEF_REQ_NUM;
+-	opts->fb_max = UAC2_DEF_FB_MAX;
+ 	return &opts->func_inst;
+ }
+ 
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 018dd0978995..f637ebec80b0 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -16,7 +16,6 @@
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+ #include <sound/pcm_params.h>
+-#include <sound/control.h>
+ 
+ #include "u_audio.h"
+ 
+@@ -36,12 +35,12 @@ struct uac_rtd_params {
+ 
+ 	void *rbuf;
+ 
+-	unsigned int pitch;	/* Stream pitch ratio to 1000000 */
+ 	unsigned int max_psize;	/* MaxPacketSize of endpoint */
+ 
+ 	struct usb_request **reqs;
+ 
+ 	struct usb_request *req_fback; /* Feedback endpoint request */
++	unsigned int ffback; /* Real frequency reported by feedback endpoint */
+ 	bool fb_ep_enabled; /* if the ep is enabled */
+ };
+ 
+@@ -76,29 +75,18 @@ static const struct snd_pcm_hardware uac_pcm_hardware = {
+ };
+ 
+ static void u_audio_set_fback_frequency(enum usb_device_speed speed,
+-					unsigned long long freq,
+-					unsigned int pitch,
+-					void *buf)
++					unsigned int freq, void *buf)
+ {
+ 	u32 ff = 0;
+ 
+-	/*
+-	 * Because the pitch base is 1000000, the final divider here
+-	 * will be 1000 * 1000000 = 1953125 << 9
+-	 *
+-	 * Instead of dealing with big numbers lets fold this 9 left shift
+-	 */
+-
+ 	if (speed == USB_SPEED_FULL) {
+ 		/*
+ 		 * Full-speed feedback endpoints report frequency
+-		 * in samples/frame
++		 * in samples/microframe
+ 		 * Format is encoded in Q10.10 left-justified in the 24 bits,
+ 		 * so that it has a Q10.14 format.
+-		 *
+-		 * ff = (freq << 14) / 1000
+ 		 */
+-		freq <<= 5;
++		ff = DIV_ROUND_UP((freq << 14), 1000);
+ 	} else {
+ 		/*
+ 		 * High-speed feedback endpoints report frequency
+@@ -106,14 +94,9 @@ static void u_audio_set_fback_frequency(enum usb_device_speed speed,
+ 		 * Format is encoded in Q12.13 fitted into four bytes so that
+ 		 * the binary point is located between the second and the third
+ 		 * byte fromat (that is Q16.16)
+-		 *
+-		 * ff = (freq << 16) / 8000
+ 		 */
+-		freq <<= 4;
++		ff = DIV_ROUND_UP((freq << 13), 1000);
+ 	}
+-
+-	ff = DIV_ROUND_CLOSEST_ULL((freq * pitch), 1953125);
+-
+ 	*(__le32 *)buf = cpu_to_le32(ff);
+ }
+ 
+@@ -226,8 +209,8 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
+ 	struct uac_rtd_params *prm = req->context;
+ 	struct snd_uac_chip *uac = prm->uac;
+ 	struct g_audio *audio_dev = uac->audio_dev;
+-	struct uac_params *params = &audio_dev->params;
+ 	int status = req->status;
++	unsigned long flags;
+ 
+ 	/* i/f shutting down */
+ 	if (!prm->fb_ep_enabled || req->status == -ESHUTDOWN)
+@@ -242,8 +225,7 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
+ 			__func__, status, req->actual, req->length);
+ 
+ 	u_audio_set_fback_frequency(audio_dev->gadget->speed,
+-				    params->c_srate, prm->pitch,
+-				    req->buf);
++				    prm->ffback, req->buf);
+ 
+ 	if (usb_ep_queue(ep, req, GFP_ATOMIC))
+ 		dev_err(uac->card->dev, "%d Error!\n", __LINE__);
+@@ -498,10 +480,9 @@ int u_audio_start_capture(struct g_audio *audio_dev)
+ 	 * Always start with original frequency since its deviation can't
+ 	 * be meauserd at start of playback
+ 	 */
+-	prm->pitch = 1000000;
++	prm->ffback = params->c_srate;
+ 	u_audio_set_fback_frequency(audio_dev->gadget->speed,
+-				    params->c_srate, prm->pitch,
+-				    req_fback->buf);
++				    prm->ffback, req_fback->buf);
+ 
+ 	if (usb_ep_queue(ep_fback, req_fback, GFP_ATOMIC))
+ 		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
+@@ -597,82 +578,12 @@ void u_audio_stop_playback(struct g_audio *audio_dev)
+ }
+ EXPORT_SYMBOL_GPL(u_audio_stop_playback);
+ 
+-static int u_audio_pitch_info(struct snd_kcontrol *kcontrol,
+-				   struct snd_ctl_elem_info *uinfo)
+-{
+-	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
+-	struct snd_uac_chip *uac = prm->uac;
+-	struct g_audio *audio_dev = uac->audio_dev;
+-	struct uac_params *params = &audio_dev->params;
+-	unsigned int pitch_min, pitch_max;
+-
+-	pitch_min = (1000 - FBACK_SLOW_MAX) * 1000;
+-	pitch_max = (1000 + params->fb_max) * 1000;
+-
+-	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+-	uinfo->count = 1;
+-	uinfo->value.integer.min = pitch_min;
+-	uinfo->value.integer.max = pitch_max;
+-	uinfo->value.integer.step = 1;
+-	return 0;
+-}
+-
+-static int u_audio_pitch_get(struct snd_kcontrol *kcontrol,
+-				   struct snd_ctl_elem_value *ucontrol)
+-{
+-	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
+-
+-	ucontrol->value.integer.value[0] = prm->pitch;
+-
+-	return 0;
+-}
+-
+-static int u_audio_pitch_put(struct snd_kcontrol *kcontrol,
+-				  struct snd_ctl_elem_value *ucontrol)
+-{
+-	struct uac_rtd_params *prm = snd_kcontrol_chip(kcontrol);
+-	struct snd_uac_chip *uac = prm->uac;
+-	struct g_audio *audio_dev = uac->audio_dev;
+-	struct uac_params *params = &audio_dev->params;
+-	unsigned int val;
+-	unsigned int pitch_min, pitch_max;
+-	int change = 0;
+-
+-	pitch_min = (1000 - FBACK_SLOW_MAX) * 1000;
+-	pitch_max = (1000 + params->fb_max) * 1000;
+-
+-	val = ucontrol->value.integer.value[0];
+-
+-	if (val < pitch_min)
+-		val = pitch_min;
+-	if (val > pitch_max)
+-		val = pitch_max;
+-
+-	if (prm->pitch != val) {
+-		prm->pitch = val;
+-		change = 1;
+-	}
+-
+-	return change;
+-}
+-
+-static const struct snd_kcontrol_new u_audio_controls[]  = {
+-{
+-	.iface =        SNDRV_CTL_ELEM_IFACE_PCM,
+-	.name =         "Capture Pitch 1000000",
+-	.info =         u_audio_pitch_info,
+-	.get =          u_audio_pitch_get,
+-	.put =          u_audio_pitch_put,
+-},
+-};
+-
+ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 					const char *card_name)
+ {
+ 	struct snd_uac_chip *uac;
+ 	struct snd_card *card;
+ 	struct snd_pcm *pcm;
+-	struct snd_kcontrol *kctl;
+ 	struct uac_params *params;
+ 	int p_chmask, c_chmask;
+ 	int err;
+@@ -760,23 +671,6 @@ int g_audio_setup(struct g_audio *g_audio, const char *pcm_name,
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_PLAYBACK, &uac_pcm_ops);
+ 	snd_pcm_set_ops(pcm, SNDRV_PCM_STREAM_CAPTURE, &uac_pcm_ops);
+ 
+-	if (c_chmask && g_audio->in_ep_fback) {
+-		strscpy(card->mixername, card_name, sizeof(card->driver));
+-
+-		kctl = snd_ctl_new1(&u_audio_controls[0], &uac->c_prm);
+-		if (!kctl) {
+-			err = -ENOMEM;
+-			goto snd_fail;
+-		}
+-
+-		kctl->id.device = pcm->device;
+-		kctl->id.subdevice = 0;
+-
+-		err = snd_ctl_add(card, kctl);
+-		if (err < 0)
+-			goto snd_fail;
+-	}
+-
+ 	strscpy(card->driver, card_name, sizeof(card->driver));
+ 	strscpy(card->shortname, card_name, sizeof(card->shortname));
+ 	sprintf(card->longname, "%s %i", card_name, card->dev->id);
+diff --git a/drivers/usb/gadget/function/u_audio.h b/drivers/usb/gadget/function/u_audio.h
+index a218cdf771fe..53e6baf55cbf 100644
+--- a/drivers/usb/gadget/function/u_audio.h
++++ b/drivers/usb/gadget/function/u_audio.h
+@@ -11,14 +11,6 @@
+ 
+ #include <linux/usb/composite.h>
+ 
+-/*
+- * Same maximum frequency deviation on the slower side as in
+- * sound/usb/endpoint.c. Value is expressed in per-mil deviation.
+- * The maximum deviation on the faster side will be provided as
+- * parameter, as it impacts the endpoint required bandwidth.
+- */
+-#define FBACK_SLOW_MAX	250
+-
+ struct uac_params {
+ 	/* playback */
+ 	int p_chmask;	/* channel mask */
+@@ -31,7 +23,6 @@ struct uac_params {
+ 	int c_ssize;	/* sample size */
+ 
+ 	int req_number; /* number of preallocated requests */
+-	int fb_max;	/* upper frequency drift feedback limit per-mil */
+ };
+ 
+ struct g_audio {
+diff --git a/drivers/usb/gadget/function/u_uac2.h b/drivers/usb/gadget/function/u_uac2.h
+index 179d3ef6a195..13589c3c805c 100644
+--- a/drivers/usb/gadget/function/u_uac2.h
++++ b/drivers/usb/gadget/function/u_uac2.h
+@@ -23,7 +23,6 @@
+ #define UAC2_DEF_CSSIZE 2
+ #define UAC2_DEF_CSYNC		USB_ENDPOINT_SYNC_ASYNC
+ #define UAC2_DEF_REQ_NUM 2
+-#define UAC2_DEF_FB_MAX 5
+ 
+ struct f_uac2_opts {
+ 	struct usb_function_instance	func_inst;
+@@ -35,7 +34,6 @@ struct f_uac2_opts {
+ 	int				c_ssize;
+ 	int				c_sync;
+ 	int				req_number;
+-	int				fb_max;
+ 	bool				bound;
+ 
+ 	struct mutex			lock;
 -- 
-2.25.1
+2.30.2
 
