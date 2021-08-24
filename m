@@ -2,151 +2,122 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 082B13F6611
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 19:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 376013F6977
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 21:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240147AbhHXRUT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 13:20:19 -0400
-Received: from mail-bn8nam11on2048.outbound.protection.outlook.com ([40.107.236.48]:38112
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S240011AbhHXRSd (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 13:18:33 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KJ2j9NIp5gboc5DVWQEW6ZZJAa178N3AmyN0NPpj8nkpU/gys9siYpGpNUjnsanlGOCuWpzJHO2WJv65w/uTqRwba2pXEPBqLnJWl5/ecHF67W0Nof0rJMfaA4iHj4fVk/DJJEPBfJD8JuGYC98UXjx/hJcI3vlvqnaYqekPPcnvyO4kdMBRpZkOeyuBf/53grb89nBMFZXSwQg8pwUKrJymfnAfSeT6ZEj+o6HNN6trP80qnXdkCBOR6oYGqxwHeds7s4DzDg7EAvaj5l1WNNugJ7LA4/uxpPh9tcNGeuXxMWPn3/dSOQBT5497O3Xuh7nAuE5Y/cEjOsNKXINW8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7knTfQSDfMufJP+ojSC1wtxOeUxx+4Rdvq6I68xMd0k=;
- b=VxD8pOlB7KW+vxBnom2vSmtAOziTmKIzBZtS4PS9KBSUtHY3r3teXBYVM76am8TUYxQyNAUXtWSt1I+NRs6cEnQUk9vW5Z/oq1zLFv58m59coZiy54z2Uzx0SH/YISXHWkRrPbLZ3ZMShj/g4UisKIbxi4/tSfR3CUFTRFFTQunG/D1ka9fvj/a5bd3+yCCpfx1TDWV+4LJspjiqUy80WvFdT0S1Q7onNUadyLPkO0uWXcg2NPRE3+pOqF9xvXtPsUS9kMWznm1zRhGiFUa6ONDH0t2dRoxQwjPnn6fGpAwOMjIYKV8kIJC+vLN339wmsNfOa9zfKgrcY2BiOWQzLA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7knTfQSDfMufJP+ojSC1wtxOeUxx+4Rdvq6I68xMd0k=;
- b=n5JAf4QbEWP1rYEbqClsyXiQJOA5hABZbCkFAJupM24QMBXKEr7e6aRtd4MZzGARS4uB/8CR3lX+eX//A3+iHAY9xyRgmRn9WosfSRmom8YPX7WxROIxvCOj36UzUZh6SukTK0T9BDroA78e/JTDgMhbbUHMXdsip376xpBs6Ys=
-Received: from DM5PR15CA0049.namprd15.prod.outlook.com (2603:10b6:3:ae::11) by
- BN6PR02MB3315.namprd02.prod.outlook.com (2603:10b6:405:68::34) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4436.23; Tue, 24 Aug 2021 17:17:47 +0000
-Received: from DM3NAM02FT043.eop-nam02.prod.protection.outlook.com
- (2603:10b6:3:ae:cafe::8b) by DM5PR15CA0049.outlook.office365.com
- (2603:10b6:3:ae::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4457.17 via Frontend
- Transport; Tue, 24 Aug 2021 17:17:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; kernel.org; dkim=none (message not signed)
- header.d=none;kernel.org; dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
-Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
- DM3NAM02FT043.mail.protection.outlook.com (10.13.4.237) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4436.19 via Frontend Transport; Tue, 24 Aug 2021 17:17:47 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 24 Aug 2021 10:17:45 -0700
-Received: from smtp.xilinx.com (172.19.127.95) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 24 Aug 2021 10:17:45 -0700
-Envelope-to: git@xilinx.com,
- peter.chen@kernel.org,
- gregkh@linuxfoundation.org,
- linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-Received: from [172.23.64.8] (port=48488 helo=xhdvnc108.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <manish.narani@xilinx.com>)
-        id 1mIa3U-0000Q5-Ik; Tue, 24 Aug 2021 10:17:44 -0700
-Received: by xhdvnc108.xilinx.com (Postfix, from userid 16987)
-        id 61AA660546; Tue, 24 Aug 2021 22:46:38 +0530 (IST)
-From:   Manish Narani <manish.narani@xilinx.com>
-To:     <peter.chen@kernel.org>, <gregkh@linuxfoundation.org>,
-        <michal.simek@xilinx.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <git@xilinx.com>, Piyush Mehta <piyush.mehta@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>
-Subject: [PATCH 6/6] usb: chipidea: udc: Add xilinx revision support
-Date:   Tue, 24 Aug 2021 22:46:18 +0530
-Message-ID: <1629825378-8089-7-git-send-email-manish.narani@xilinx.com>
-X-Mailer: git-send-email 2.1.1
-In-Reply-To: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com>
-References: <1629825378-8089-1-git-send-email-manish.narani@xilinx.com>
+        id S233998AbhHXTEG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 15:04:06 -0400
+Received: from fish.birch.relay.mailchannels.net ([23.83.209.251]:38515 "EHLO
+        fish.birch.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234012AbhHXTEF (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 15:04:05 -0400
+X-Greylist: delayed 358 seconds by postgrey-1.27 at vger.kernel.org; Tue, 24 Aug 2021 15:04:05 EDT
+X-Sender-Id: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 280C17C09E9;
+        Tue, 24 Aug 2021 18:57:21 +0000 (UTC)
+Received: from ares.krystal.co.uk (unknown [127.0.0.6])
+        (Authenticated sender: 9wt3zsp42r)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 9E9437C0860;
+        Tue, 24 Aug 2021 18:57:19 +0000 (UTC)
+X-Sender-Id: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
+Received: from ares.krystal.co.uk (ares.krystal.co.uk [77.72.0.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384)
+        by 100.112.83.53 (trex/6.4.3);
+        Tue, 24 Aug 2021 18:57:20 +0000
+X-MC-Relay: Bad
+X-MailChannels-SenderId: 9wt3zsp42r|x-authuser|john.efstathiades@pebblebay.com
+X-MailChannels-Auth-Id: 9wt3zsp42r
+X-Company-Daffy: 1069d79464779ed3_1629831440872_1085779323
+X-MC-Loop-Signature: 1629831440872:4092516305
+X-MC-Ingress-Time: 1629831440872
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=pebblebay.com; s=default; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=KDvDoXzzOJosPv5W8H6PR4Yko9ghIHPIc8LaF9mTefY=; b=fhDwi/A2L/BAm8X6bw7zp41Xsc
+        6P0qSt1mgo4pAaBa0mdg+6MsX0X3s9qqQ/QcQAkKg3ekZsM6b2EUIcBmuq5SDrxcNM9L1hcdVz5Px
+        um+VJDVguuxEDTL5lZOeSXBUqcVW5HuolCwOSKvPoo3Wav7k8fGmH5UvpyENORtOqIcHhcKfjDei9
+        HXZkvkQekI3P7xUN52JoyMZ25h4VaWRZn2uqpZkAKIC+5w0NZ9HNhq1W67KvI7FaDr07qsHvKEaFJ
+        1LVzEOgNMULwaBqrZW8IYF7q8ODKYfcSNdzntDADLslcKxU+xpHK3KMnDqJDOCriMz66xej27i0Gy
+        Rs9bJemQ==;
+Received: from cpc160185-warw19-2-0-cust743.3-2.cable.virginm.net ([82.21.62.232]:51816 helo=pbcl-dsk9.pebblebay.com)
+        by ares.krystal.co.uk with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <john.efstathiades@pebblebay.com>)
+        id 1mIbbq-00BQSi-MK; Tue, 24 Aug 2021 19:57:17 +0100
+From:   John Efstathiades <john.efstathiades@pebblebay.com>
+Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
+        davem@davemloft.net, netdev@vger.kernel.org, kuba@kernel.org,
+        linux-usb@vger.kernel.org, john.efstathiades@pebblebay.com
+Subject: [PATCH net-next v2 00/10] LAN7800 driver improvements
+Date:   Tue, 24 Aug 2021 19:56:03 +0100
+Message-Id: <20210824185613.49545-1-john.efstathiades@pebblebay.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5d05b435-1beb-4e01-912a-08d967231802
-X-MS-TrafficTypeDiagnostic: BN6PR02MB3315:
-X-Microsoft-Antispam-PRVS: <BN6PR02MB33157E0ACE542FA89E433AB0C1C59@BN6PR02MB3315.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:4303;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: txjzeAXG27GBNya055fTLhmGCJc9bhW9Cn/dc9R9MKyqCFpBD+S6x4C8lMzMl2pw1S40DbGtWQcVIygFbHBzcQD/afEpwlnheqyWw7dQp9cBTQaZ63Uzfa3rWqDrOYz2q9cu6XpPl/u8MaI/LN2QBP3fpbJI7OJjG3nl0zr3J55SWedMrYTfD/M+kCR51W1UaxF7sSw0GSgRuwWWbi2KidBsjlOr5vS7N5pm7ozoXcrqQxODB0t00OSbJlr5IC0KMEgvBCostg6s63Snf6ZTeF1EczVmmcs8nZNFWnu92PZ1UhQDGb5xDGxnsmfu2UAGp5N/i+qqoOrYF86N8cSnX7BC+d7xOa6h7WT+aE0+ATiwQtvoGnI1q/ecivU+8cyOSjymumwlqkTMuOxVDfJu18FnQ+58bh7zQYFswDLa4rMsLFh7fHbNaU5J4JKMwiq6oTKUirItUfKyaaVdn5eI6T+D7ouj96SlKKcTQDYODKGR7Ej92aHafbG2MtMGdOf09ySKFteZH7Qe6ybhRWWVuK9Q2NZonNkj2BbdU163hipHF82rmJaIK/xaDOpKVHtBqTtgAyj3Ups+KNFwrqZLYyJ69xI2BtSnGVqqMj1d0oSIZRXg8rdRvw2o41bS6OCxs1kKKofHLU0FL5l/eWCGg3dgodzuymISJ+tITs3ifPhF0EpV/69g9Zl/z5tGWi81rnU2AcvLFmUmyLttsupjnLBpQ5VoEJumK1LuZqhYo4w=
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(4326008)(336012)(5660300002)(186003)(36860700001)(426003)(44832011)(36756003)(8936002)(356005)(107886003)(110136005)(47076005)(2616005)(42186006)(70586007)(316002)(6266002)(6666004)(8676002)(70206006)(36906005)(54906003)(83380400001)(6636002)(82310400003)(7636003)(26005)(508600001)(2906002)(102446001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2021 17:17:47.3053
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d05b435-1beb-4e01-912a-08d967231802
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM3NAM02FT043.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR02MB3315
+Content-Transfer-Encoding: 8bit
+X-AuthUser: john.efstathiades@pebblebay.com
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-From: Piyush Mehta <piyush.mehta@xilinx.com>
+This patch set introduces a number of improvements and fixes for
+problems found during testing of a modification to add a NAPI-style
+approach to packet handling to improve performance.
 
-Issue: Adding a dTD to a Primed Endpoint May Not Get Recognized with
-revision 2.20a.
+NOTE: the NAPI changes are not part of this patch set and the issues
+      fixed by this patch set are not coupled to the NAPI changes.
 
-There is an issue with the add dTD tripwire semaphore (ATDTW bit in
-USBCMD register) that can cause the controller to ignore a dTD that is
-added to a primed endpoint. When this happens, the software can read
-the tripwire bit and the status bit at '1' even though the endpoint is
-unprimed.
-This issue observed with the Windows host machine.
+Patch 1 fixes white space and style issues
 
-Workaround:
-The software must implement a periodic cycle, and check for each dTD
-pending on execution (Active = 1), if the endpoint is primed. It can do
-this by reading the corresponding bits in the ENDPTPRIME and ENDPTSTAT
-registers. If these bits are read at 0, the software needs to re-prime
-the endpoint by writing 1 to the corresponding bit in the ENDPTPRIME
-register.
+Patch 2 removes an unused timer
 
-Added conditional revision check of 2.20[CI_REVISION_22] along with 2.40.
+Patch 3 introduces macros to set the internal packet FIFO flow
+control levels, which makes it easier to update the levels in future.
 
-Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-Signed-off-by: Manish Narani <manish.narani@xilinx.com>
----
- drivers/usb/chipidea/udc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Patch 4 removes an unused queue
 
-diff --git a/drivers/usb/chipidea/udc.c b/drivers/usb/chipidea/udc.c
-index 8834ca6..b440205 100644
---- a/drivers/usb/chipidea/udc.c
-+++ b/drivers/usb/chipidea/udc.c
-@@ -680,7 +680,8 @@ static int _hardware_dequeue(struct ci_hw_ep *hwep, struct ci_hw_req *hwreq)
- 		if ((TD_STATUS_ACTIVE & tmptoken) != 0) {
- 			int n = hw_ep_bit(hwep->num, hwep->dir);
- 
--			if (ci->rev == CI_REVISION_24)
-+			if (ci->rev == CI_REVISION_24 ||
-+			    ci->rev == CI_REVISION_22)
- 				if (!hw_read(ci, OP_ENDPTSTAT, BIT(n)))
- 					reprime_dtd(ci, hwep, node);
- 			hwreq->req.status = -EALREADY;
+Patch 5 (updated for v2) introduces function return value checks and
+error propagation to various parts of the driver where a return
+code was captured but then ignored.
+
+This patch is completely different to patch 5 in version 1 of this patch
+set. The changes in the v1 patch 5 are being set aside for the time
+being.
+
+Patch 6 updates the LAN7800 MAC reset code to ensure there is no
+PHY register access in progress when the MAC is reset. This change
+prevents a kernel exception that can otherwise occur.
+
+Patch 7 fixes problems with system suspend and resume handling while
+the device is transmitting and receiving data.
+
+Patch 8 fixes problems with auto-suspend and resume handling and
+depends on changes introduced by patch 7.
+
+Patch 9 fixes problems with device disconnect handling that can result
+in kernel exceptions and/or hang.
+
+Patch 10 limits the rate at which driver warning messages are emitted.
+
+John Efstathiades (10):
+  lan78xx: Fix white space and style issues
+  lan78xx: Remove unused timer
+  lan78xx: Set flow control threshold to prevent packet loss
+  lan78xx: Remove unused pause frame queue
+  lan78xx: Add missing return code checks
+  lan78xx: Fix exception on link speed change
+  lan78xx: Fix partial packet errors on suspend/resume
+  lan78xx: Fix race conditions in suspend/resume handling
+  lan78xx: Fix race condition in disconnect handling
+  lan78xx: Limit number of driver warning messages
+
+ drivers/net/usb/lan78xx.c | 1060 +++++++++++++++++++++++++++++--------
+ 1 file changed, 832 insertions(+), 228 deletions(-)
+
 -- 
-2.1.1
+2.25.1
 
