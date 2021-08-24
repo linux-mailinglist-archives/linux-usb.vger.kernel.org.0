@@ -2,85 +2,140 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2F33F5D47
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 13:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0353F5D51
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 13:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236550AbhHXLpN (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 07:45:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50344 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234787AbhHXLpH (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Tue, 24 Aug 2021 07:45:07 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id E6644613AD
-        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 11:44:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629805463;
-        bh=JG/bdXJFbsjCFuA1KvEGpAvJxBWZbHfe3cxS4XXAT0I=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=DUEzr7oEztuwWhIzH0RziWn4IX6yILf/bES2bJ8Qgh/WPR45gqwInKEdRDMeghxQk
-         D2/QRG18ILMtKhlRkRzxmVCFt7blsbhzQLFkdxQvYQcJUuUu1BSPHhaEcR7TgylKQg
-         ej9N9lDOSzA4+0RYuywHeAr5tS9X8wbqc8pulT53PYhihfU1S1H3DmyEkth9RvrjQQ
-         GSOX9uRXI4qCcNe/SuWLUfmqlAmj1kXXCOYWyixAdnZ/T6UVul7A3rEJMtVhKWeQoX
-         /Ky4nQL3RADz2H+WBdtb6i3AgeTOTBrarIu0Vb7SQXU5z+7cls/SDTXx2j+aCWm2O1
-         LUwBQi18u718A==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id DC05060FF2; Tue, 24 Aug 2021 11:44:23 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214131] ch341 communication problem
-Date:   Tue, 24 Aug 2021 11:44:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: johan@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214131-208809-JPVCKnWu6G@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214131-208809@https.bugzilla.kernel.org/>
-References: <bug-214131-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S236562AbhHXLuz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 07:50:55 -0400
+Received: from smtp-out1.suse.de ([195.135.220.28]:43328 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234787AbhHXLuw (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 07:50:52 -0400
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 43283220DF;
+        Tue, 24 Aug 2021 11:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1629805807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Z5/syttl+KkV+aV0OMJFiXZO0vkS3XEk32Pj0Kzkiw=;
+        b=YXuZ0FND55m5auKvX44dT/4kt0T4PU/M9pxcWkFvLWmftF8dV6OR5D683OVmsNxwmhvyhH
+        fVOJ6rmh9tMZdbw8GeqnK62pqunDWxhL8la14LMKVLBEa8IWESs6eo56z8s2jC6nKTkx+W
+        Q6E9bDLptj/sk47/HxT7e6nu5E38lNg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1629805807;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Z5/syttl+KkV+aV0OMJFiXZO0vkS3XEk32Pj0Kzkiw=;
+        b=3FfxMv2XRepAj5vHWfJoj8Wa+gEg0YGkMm8FySOWWiyTUmCoYcAvyZhFSylQmGh68/+m6G
+        gr1UMhvKEiZb9hDQ==
+Received: from lion.mk-sys.cz (unknown [10.100.200.14])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 05E07A3B87;
+        Tue, 24 Aug 2021 11:50:07 +0000 (UTC)
+Received: by lion.mk-sys.cz (Postfix, from userid 1000)
+        id DCAD1603F6; Tue, 24 Aug 2021 13:50:06 +0200 (CEST)
+Date:   Tue, 24 Aug 2021 13:50:06 +0200
+From:   Michal Kubecek <mkubecek@suse.cz>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+9b57a46bf1801ce2a2ca@syzkaller.appspotmail.com>,
+        benjamin.tissoires@redhat.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in hid_submit_ctrl/usb_submit_urb
+Message-ID: <20210824115006.a5zzgxjy6nwakdmg@lion.mk-sys.cz>
+References: <20210819152626.GD228422@rowland.harvard.edu>
+ <00000000000009e24705c9ecf9b3@google.com>
+ <20210819195300.GA8613@rowland.harvard.edu>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="l7x2dllvpqdjqmjw"
+Content-Disposition: inline
+In-Reply-To: <20210819195300.GA8613@rowland.harvard.edu>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214131
 
---- Comment #7 from Johan Hovold (johan@kernel.org) ---
-On Mon, Aug 23, 2021 at 09:14:49AM +0000, bugzilla-daemon@bugzilla.kernel.o=
-rg
-wrote:
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D214131
+--l7x2dllvpqdjqmjw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Thu, Aug 19, 2021 at 03:53:00PM -0400, Alan Stern wrote:
+> The following simplified variant of Michal's patch should fix the=20
+> problem.
 >=20
-> --- Comment #5 from Paul Gr=C3=B6=C3=9Fel (pb.g@gmx.de) ---
-> I agree, I couldn't find any enumerate related symptoms here:
+> Alan Stern
+>=20
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux=
+=2Egit 794c7931a242
+>=20
+> Index: usb-devel/drivers/hid/usbhid/hid-core.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/hid/usbhid/hid-core.c
+> +++ usb-devel/drivers/hid/usbhid/hid-core.c
+> @@ -377,27 +377,23 @@ static int hid_submit_ctrl(struct hid_de
+>  	len =3D hid_report_len(report);
+>  	if (dir =3D=3D USB_DIR_OUT) {
+>  		usbhid->urbctrl->pipe =3D usb_sndctrlpipe(hid_to_usb_dev(hid), 0);
+> -		usbhid->urbctrl->transfer_buffer_length =3D len;
+>  		if (raw_report) {
+>  			memcpy(usbhid->ctrlbuf, raw_report, len);
+>  			kfree(raw_report);
+>  			usbhid->ctrl[usbhid->ctrltail].raw_report =3D NULL;
+>  		}
+>  	} else {
+> -		int maxpacket, padlen;
+> +		int maxpacket;
+> =20
+>  		usbhid->urbctrl->pipe =3D usb_rcvctrlpipe(hid_to_usb_dev(hid), 0);
+>  		maxpacket =3D usb_maxpacket(hid_to_usb_dev(hid),
+>  					  usbhid->urbctrl->pipe, 0);
+> -		if (maxpacket > 0) {
+> -			padlen =3D DIV_ROUND_UP(len, maxpacket);
+> -			padlen *=3D maxpacket;
+> -			if (padlen > usbhid->bufsize)
+> -				padlen =3D usbhid->bufsize;
+> -		} else
+> -			padlen =3D 0;
+> -		usbhid->urbctrl->transfer_buffer_length =3D padlen;
+> +		len +=3D (len =3D=3D 0);	/* Don't allow 0-length reports */
+> +		len =3D round_up(len, maxpacket);
+> +		if (len > usbhid->bufsize)
+> +			len =3D usbhid->bufsize;
+>  	}
+> +	usbhid->urbctrl->transfer_buffer_length =3D len;
+>  	usbhid->urbctrl->dev =3D hid_to_usb_dev(hid);
+> =20
+>  	usbhid->cr->bRequestType =3D USB_TYPE_CLASS | USB_RECIP_INTERFACE | dir;
 
-I was able to reproduce the problem here. The device doesn't send a
-zero-length package in case the received data is a multiple of the
-endpoint size so that the bulk transfer doesn't complete (e.g. your
-flashing application may not receive replies).
+I have also tested this patch on top of 5.14-rc7 on my system and it
+does address the original issue (no error/warning messages in kernel log
+and communication with the UPS works correctly). So if you are going to
+submit the patch formally, feel free to use
 
-We need to revert the offending commit until we can figure out how to
-configure the device to send ZLPs.
+Tested-by: Michal Kubecek <mkubecek@suse.cz>
 
-Thanks again for reporting this, and sorry about the breakage.
+Michal
 
-Johan
+--l7x2dllvpqdjqmjw
+Content-Type: application/pgp-signature; name="signature.asc"
 
---=20
-You may reply to this email to add a comment.
+-----BEGIN PGP SIGNATURE-----
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+iQEzBAABCAAdFiEEWN3j3bieVmp26mKO538sG/LRdpUFAmEk3OgACgkQ538sG/LR
+dpXE4wf/VuEuJqtzh6gtYNTMaSfBfjsorpwI062dsvUF62U5npWQB1sSkQE34isz
+gdVuYh3jFrMQGzAN0O4OWq3+pKc5jNdlE+4zZ+BnSitRsCzlI+qUSqlcLUVItapW
+cFsaU0aVG8+hRWwqKabhYO2BpNsw9jdPsEi4/hvE/dF9Qvv/uJ9hr610+19wJhPx
+u8VkKCE3gkFoxDEc7YQprmPIbTKRISSSq7OUKi37XAUG3+iLKvxqa8RpaY3bd3+f
+I3mgCvFLd0FzCtGpZWxgkC+NsjB3q2CMWkRuFeiPnBtuRaK2iCjI0p9UXrDngUQp
+AZ0R9IT7ZMQqJYc1t39SvEG/BVCzdg==
+=/GWp
+-----END PGP SIGNATURE-----
+
+--l7x2dllvpqdjqmjw--
