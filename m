@@ -2,426 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFFE3F6A82
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Aug 2021 22:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D76E13F6BA5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 00:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235477AbhHXUhO (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 16:37:14 -0400
-Received: from mailfilter03-out40.webhostingserver.nl ([195.211.72.99]:41780
-        "EHLO mailfilter03-out40.webhostingserver.nl" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235097AbhHXUhO (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 16:37:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=exalondelft.nl; s=whs1;
-        h=content-transfer-encoding:mime-version:references:in-reply-to:message-id:date:
-         subject:cc:to:from:from;
-        bh=9UyO6eEUM1lBUK2N1pebN9AZrRxXRDgSRygyhZ5nPzo=;
-        b=FBF6n4W4eW3mKJIt0EuJG3EOid/NJFWDBecsbvFpEBxfQ3vJjxEfVuLwTfLYP9CR9Opx402wqr9yp
-         0EW478gayC/WzCnDjNsKt+1zrluUAbhxh16XkFfz6cudmJ59JyH3UhjzCIDk7ZW7TJ8XgstC9R69Eh
-         HDu9kU7YM6zzR65CeLHLkrMyp5jbAw/86Js8sbGopxW4M8lxQE2kKAPwmx/vencuzJZQHyva1vlTej
-         86S06FPYBQoT2Ip7O2zzoVVkTXbMgsWJC10JdVrWNctm7Ogl5YMawo+8l1iMePtVOci65/XuNbQbwd
-         /QhEZAYIjiVpSBavrMrmgVaTJ98aAvw==
-X-Halon-ID: b573dc90-0518-11ec-9803-001a4a4cb9a5
-Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
-        by mailfilter03.webhostingserver.nl (Halon) with ESMTPSA
-        id b573dc90-0518-11ec-9803-001a4a4cb9a5;
-        Tue, 24 Aug 2021 22:20:22 +0200 (CEST)
-Received: from [2001:981:6fec:1:a2a7:9be0:8d3d:f950] (helo=localhost.localdomain)
-        by s198.webhostingserver.nl with esmtpa (Exim 4.94.2)
-        (envelope-from <ftoth@exalondelft.nl>)
-        id 1mIcuG-007aM4-Tq; Tue, 24 Aug 2021 22:20:22 +0200
-From:   Ferry Toth <ftoth@exalondelft.nl>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Ferry Toth <ftoth@exalondelft.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Lorenzo Colitti <lorenzo@google.com>,
-        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Pavel Hofman <pavel.hofman@ivitera.com>,
-        Ferry Toth <fntoth@gmail.com>
-Subject: [PATCH v1 3/3] Revert "usb: gadget: f_uac2/u_audio: add feedback endpoint support"
-Date:   Tue, 24 Aug 2021 22:14:34 +0200
-Message-Id: <20210824201433.11385-3-ftoth@exalondelft.nl>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20210824201433.11385-1-ftoth@exalondelft.nl>
-References: <20210824201433.11385-1-ftoth@exalondelft.nl>
+        id S236143AbhHXWTG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Tue, 24 Aug 2021 18:19:06 -0400
+Received: from mga18.intel.com ([134.134.136.126]:55914 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229605AbhHXWTG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Tue, 24 Aug 2021 18:19:06 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="204543029"
+X-IronPort-AV: E=Sophos;i="5.84,348,1620716400"; 
+   d="scan'208";a="204543029"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 15:18:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,348,1620716400"; 
+   d="scan'208";a="493901200"
+Received: from lkp-server02.sh.intel.com (HELO 181e7be6f509) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 24 Aug 2021 15:18:18 -0700
+Received: from kbuild by 181e7be6f509 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mIekL-0000uB-Pb; Tue, 24 Aug 2021 22:18:17 +0000
+Date:   Wed, 25 Aug 2021 06:17:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Colin Ian King <colin.king@canonical.com>,
+        Grant Grundler <grundler@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: usb: asix: ax88772: fix boolconv.cocci warnings
+Message-ID: <20210824221716.GA23759@2b586af07b64>
+References: <202108250651.uuW5Q2Rg-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202108250651.uuW5Q2Rg-lkp@intel.com>
+X-Patchwork-Hint: ignore
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-This reverts commit 24f779dac8f3efb9629adc0e486914d93dc45517.
+From: kernel test robot <lkp@intel.com>
 
-The commit is part of a series with commit
-24f779dac8f3efb9629adc0e486914d93dc45517 causing a BUG on dwc3
-hardware, at least on Intel Merrifield platform when configured
-through configfs:
-BUG: kernel NULL pointer dereference, address: 0000000000000008
-...
-RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
-...
-Call Trace:
- dwc3_remove_requests.constprop.0+0x12f/0x170
- __dwc3_gadget_ep_disable+0x7a/0x160
- dwc3_gadget_ep_disable+0x3d/0xd0
- usb_ep_disable+0x1c/0x70
- u_audio_stop_capture+0x79/0x120 [u_audio]
- afunc_set_alt+0x73/0x80 [usb_f_uac2]
- composite_setup+0x224/0x1b90 [libcomposite]
+drivers/net/usb/asix_devices.c:757:60-65: WARNING: conversion to bool not needed here
 
-Pavel's suggestion to add
-`echo "adaptive" > functions/uac2.usb0/c_sync` to the configfs script
-resolves the issue.
-Thinh suggests "the crash is probably because of f_uac2 prematurely
-freeing feedback request before its completion. usb_ep_dequeue() is
-asynchronous. dwc2() may treat it as a synchronous call so you didn't
-get a crash."
+ Remove unneeded conversion to bool
 
-Revert as this is a regression and the kernel shouldn't crash depending
-on configuration parameters.
+Semantic patch information:
+ Relational and logical operators evaluate to bool,
+ explicit conversion is overly verbose and unneeded.
 
-Reported-by: Ferry Toth <fntoth@gmail.com>
+Generated by: scripts/coccinelle/misc/boolconv.cocci
+
+Fixes: 7a141e64cf14 ("net: usb: asix: ax88772: move embedded PHY detection as early as possible")
+CC: Oleksij Rempel <o.rempel@pengutronix.de>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
 ---
- drivers/usb/gadget/function/f_uac2.c  |  49 +----------
- drivers/usb/gadget/function/u_audio.c | 119 +-------------------------
- drivers/usb/gadget/function/u_audio.h |   3 -
- 3 files changed, 3 insertions(+), 168 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
-index 5d63244ba319..7aa4c8bc5a1a 100644
---- a/drivers/usb/gadget/function/f_uac2.c
-+++ b/drivers/usb/gadget/function/f_uac2.c
-@@ -240,7 +240,7 @@ static struct usb_interface_descriptor std_as_out_if1_desc = {
- 	.bDescriptorType = USB_DT_INTERFACE,
- 
- 	.bAlternateSetting = 1,
--	.bNumEndpoints = 2,
-+	.bNumEndpoints = 1,
- 	.bInterfaceClass = USB_CLASS_AUDIO,
- 	.bInterfaceSubClass = USB_SUBCLASS_AUDIOSTREAMING,
- 	.bInterfaceProtocol = UAC_VERSION_2,
-@@ -317,37 +317,6 @@ static struct uac2_iso_endpoint_descriptor as_iso_out_desc = {
- 	.wLockDelay = 0,
- };
- 
--/* STD AS ISO IN Feedback Endpoint */
--static struct usb_endpoint_descriptor fs_epin_fback_desc = {
--	.bLength = USB_DT_ENDPOINT_SIZE,
--	.bDescriptorType = USB_DT_ENDPOINT,
--
--	.bEndpointAddress = USB_DIR_IN,
--	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
--	.wMaxPacketSize = cpu_to_le16(3),
--	.bInterval = 1,
--};
--
--static struct usb_endpoint_descriptor hs_epin_fback_desc = {
--	.bLength = USB_DT_ENDPOINT_SIZE,
--	.bDescriptorType = USB_DT_ENDPOINT,
--
--	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
--	.wMaxPacketSize = cpu_to_le16(4),
--	.bInterval = 4,
--};
--
--static struct usb_endpoint_descriptor ss_epin_fback_desc = {
--	.bLength = USB_DT_ENDPOINT_SIZE,
--	.bDescriptorType = USB_DT_ENDPOINT,
--
--	.bEndpointAddress = USB_DIR_IN,
--	.bmAttributes = USB_ENDPOINT_XFER_ISOC | USB_ENDPOINT_USAGE_FEEDBACK,
--	.wMaxPacketSize = cpu_to_le16(4),
--	.bInterval = 4,
--};
--
--
- /* Audio Streaming IN Interface - Alt0 */
- static struct usb_interface_descriptor std_as_in_if0_desc = {
- 	.bLength = sizeof std_as_in_if0_desc,
-@@ -462,7 +431,6 @@ static struct usb_descriptor_header *fs_audio_desc[] = {
- 	(struct usb_descriptor_header *)&as_out_fmt1_desc,
- 	(struct usb_descriptor_header *)&fs_epout_desc,
- 	(struct usb_descriptor_header *)&as_iso_out_desc,
--	(struct usb_descriptor_header *)&fs_epin_fback_desc,
- 
- 	(struct usb_descriptor_header *)&std_as_in_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_in_if1_desc,
-@@ -493,7 +461,6 @@ static struct usb_descriptor_header *hs_audio_desc[] = {
- 	(struct usb_descriptor_header *)&as_out_fmt1_desc,
- 	(struct usb_descriptor_header *)&hs_epout_desc,
- 	(struct usb_descriptor_header *)&as_iso_out_desc,
--	(struct usb_descriptor_header *)&hs_epin_fback_desc,
- 
- 	(struct usb_descriptor_header *)&std_as_in_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_in_if1_desc,
-@@ -525,7 +492,6 @@ static struct usb_descriptor_header *ss_audio_desc[] = {
- 	(struct usb_descriptor_header *)&ss_epout_desc,
- 	(struct usb_descriptor_header *)&ss_epout_desc_comp,
- 	(struct usb_descriptor_header *)&as_iso_out_desc,
--	(struct usb_descriptor_header *)&ss_epin_fback_desc,
- 
- 	(struct usb_descriptor_header *)&std_as_in_if0_desc,
- 	(struct usb_descriptor_header *)&std_as_in_if1_desc,
-@@ -602,26 +568,22 @@ static void setup_headers(struct f_uac2_opts *opts,
- 	struct usb_ss_ep_comp_descriptor *epin_desc_comp = NULL;
- 	struct usb_endpoint_descriptor *epout_desc;
- 	struct usb_endpoint_descriptor *epin_desc;
--	struct usb_endpoint_descriptor *epin_fback_desc;
- 	int i;
- 
- 	switch (speed) {
- 	case USB_SPEED_FULL:
- 		epout_desc = &fs_epout_desc;
- 		epin_desc = &fs_epin_desc;
--		epin_fback_desc = &fs_epin_fback_desc;
- 		break;
- 	case USB_SPEED_HIGH:
- 		epout_desc = &hs_epout_desc;
- 		epin_desc = &hs_epin_desc;
--		epin_fback_desc = &hs_epin_fback_desc;
- 		break;
- 	default:
- 		epout_desc = &ss_epout_desc;
- 		epin_desc = &ss_epin_desc;
- 		epout_desc_comp = &ss_epout_desc_comp;
- 		epin_desc_comp = &ss_epin_desc_comp;
--		epin_fback_desc = &ss_epin_fback_desc;
- 	}
- 
- 	i = 0;
-@@ -649,7 +611,6 @@ static void setup_headers(struct f_uac2_opts *opts,
- 			headers[i++] = USBDHDR(epout_desc_comp);
- 
- 		headers[i++] = USBDHDR(&as_iso_out_desc);
--		headers[i++] = USBDHDR(epin_fback_desc);
- 	}
- 	if (EPIN_EN(opts)) {
- 		headers[i++] = USBDHDR(&std_as_in_if0_desc);
-@@ -883,12 +844,6 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 			dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 			return -ENODEV;
- 		}
--		agdev->in_ep_fback = usb_ep_autoconfig(gadget,
--						       &fs_epin_fback_desc);
--		if (!agdev->in_ep_fback) {
--			dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
--			return -ENODEV;
--		}
- 	}
- 
- 	if (EPIN_EN(uac2_opts)) {
-@@ -912,10 +867,8 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
- 				le16_to_cpu(ss_epout_desc.wMaxPacketSize));
- 
- 	hs_epout_desc.bEndpointAddress = fs_epout_desc.bEndpointAddress;
--	hs_epin_fback_desc.bEndpointAddress = fs_epin_fback_desc.bEndpointAddress;
- 	hs_epin_desc.bEndpointAddress = fs_epin_desc.bEndpointAddress;
- 	ss_epout_desc.bEndpointAddress = fs_epout_desc.bEndpointAddress;
--	ss_epin_fback_desc.bEndpointAddress = fs_epin_fback_desc.bEndpointAddress;
- 	ss_epin_desc.bEndpointAddress = fs_epin_desc.bEndpointAddress;
- 
- 	setup_descriptor(uac2_opts);
-diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-index f637ebec80b0..5fbceee897a3 100644
---- a/drivers/usb/gadget/function/u_audio.c
-+++ b/drivers/usb/gadget/function/u_audio.c
-@@ -38,10 +38,6 @@ struct uac_rtd_params {
- 	unsigned int max_psize;	/* MaxPacketSize of endpoint */
- 
- 	struct usb_request **reqs;
--
--	struct usb_request *req_fback; /* Feedback endpoint request */
--	unsigned int ffback; /* Real frequency reported by feedback endpoint */
--	bool fb_ep_enabled; /* if the ep is enabled */
- };
- 
- struct snd_uac_chip {
-@@ -74,32 +70,6 @@ static const struct snd_pcm_hardware uac_pcm_hardware = {
- 	.periods_min = MIN_PERIODS,
- };
- 
--static void u_audio_set_fback_frequency(enum usb_device_speed speed,
--					unsigned int freq, void *buf)
--{
--	u32 ff = 0;
--
--	if (speed == USB_SPEED_FULL) {
--		/*
--		 * Full-speed feedback endpoints report frequency
--		 * in samples/microframe
--		 * Format is encoded in Q10.10 left-justified in the 24 bits,
--		 * so that it has a Q10.14 format.
--		 */
--		ff = DIV_ROUND_UP((freq << 14), 1000);
--	} else {
--		/*
--		 * High-speed feedback endpoints report frequency
--		 * in samples/microframe.
--		 * Format is encoded in Q12.13 fitted into four bytes so that
--		 * the binary point is located between the second and the third
--		 * byte fromat (that is Q16.16)
--		 */
--		ff = DIV_ROUND_UP((freq << 13), 1000);
--	}
--	*(__le32 *)buf = cpu_to_le32(ff);
--}
--
- static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
- {
- 	unsigned int pending;
-@@ -203,34 +173,6 @@ static void u_audio_iso_complete(struct usb_ep *ep, struct usb_request *req)
- 		dev_err(uac->card->dev, "%d Error!\n", __LINE__);
- }
- 
--static void u_audio_iso_fback_complete(struct usb_ep *ep,
--				       struct usb_request *req)
--{
--	struct uac_rtd_params *prm = req->context;
--	struct snd_uac_chip *uac = prm->uac;
--	struct g_audio *audio_dev = uac->audio_dev;
--	int status = req->status;
--	unsigned long flags;
--
--	/* i/f shutting down */
--	if (!prm->fb_ep_enabled || req->status == -ESHUTDOWN)
--		return;
--
--	/*
--	 * We can't really do much about bad xfers.
--	 * Afterall, the ISOCH xfers could fail legitimately.
--	 */
--	if (status)
--		pr_debug("%s: iso_complete status(%d) %d/%d\n",
--			__func__, status, req->actual, req->length);
--
--	u_audio_set_fback_frequency(audio_dev->gadget->speed,
--				    prm->ffback, req->buf);
--
--	if (usb_ep_queue(ep, req, GFP_ATOMIC))
--		dev_err(uac->card->dev, "%d Error!\n", __LINE__);
--}
--
- static int uac_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
- {
- 	struct snd_uac_chip *uac = snd_pcm_substream_chip(substream);
-@@ -393,33 +335,14 @@ static inline void free_ep(struct uac_rtd_params *prm, struct usb_ep *ep)
- 		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);
- }
- 
--static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
--{
--	struct snd_uac_chip *uac = prm->uac;
--
--	if (!prm->fb_ep_enabled)
--		return;
--
--	prm->fb_ep_enabled = false;
--
--	if (prm->req_fback) {
--		usb_ep_dequeue(ep, prm->req_fback);
--		kfree(prm->req_fback->buf);
--		usb_ep_free_request(ep, prm->req_fback);
--		prm->req_fback = NULL;
--	}
--
--	if (usb_ep_disable(ep))
--		dev_err(uac->card->dev, "%s:%d Error!\n", __func__, __LINE__);
--}
- 
- int u_audio_start_capture(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
- 	struct usb_gadget *gadget = audio_dev->gadget;
- 	struct device *dev = &gadget->dev;
--	struct usb_request *req, *req_fback;
--	struct usb_ep *ep, *ep_fback;
-+	struct usb_request *req;
-+	struct usb_ep *ep;
- 	struct uac_rtd_params *prm;
- 	struct uac_params *params = &audio_dev->params;
- 	int req_len, i;
-@@ -451,42 +374,6 @@ int u_audio_start_capture(struct g_audio *audio_dev)
- 			dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
- 	}
- 
--	ep_fback = audio_dev->in_ep_fback;
--	if (!ep_fback)
--		return 0;
--
--	/* Setup feedback endpoint */
--	config_ep_by_speed(gadget, &audio_dev->func, ep_fback);
--	prm->fb_ep_enabled = true;
--	usb_ep_enable(ep_fback);
--	req_len = ep_fback->maxpacket;
--
--	req_fback = usb_ep_alloc_request(ep_fback, GFP_ATOMIC);
--	if (req_fback == NULL)
--		return -ENOMEM;
--
--	prm->req_fback = req_fback;
--	req_fback->zero = 0;
--	req_fback->context = prm;
--	req_fback->length = req_len;
--	req_fback->complete = u_audio_iso_fback_complete;
--
--	req_fback->buf = kzalloc(req_len, GFP_ATOMIC);
--	if (!req_fback->buf)
--		return -ENOMEM;
--
--	/*
--	 * Configure the feedback endpoint's reported frequency.
--	 * Always start with original frequency since its deviation can't
--	 * be meauserd at start of playback
--	 */
--	prm->ffback = params->c_srate;
--	u_audio_set_fback_frequency(audio_dev->gadget->speed,
--				    prm->ffback, req_fback->buf);
--
--	if (usb_ep_queue(ep_fback, req_fback, GFP_ATOMIC))
--		dev_err(dev, "%s:%d Error!\n", __func__, __LINE__);
--
- 	return 0;
- }
- EXPORT_SYMBOL_GPL(u_audio_start_capture);
-@@ -495,8 +382,6 @@ void u_audio_stop_capture(struct g_audio *audio_dev)
- {
- 	struct snd_uac_chip *uac = audio_dev->uac;
- 
--	if (audio_dev->in_ep_fback)
--		free_ep_fback(&uac->c_prm, audio_dev->in_ep_fback);
- 	free_ep(&uac->c_prm, audio_dev->out_ep);
- }
- EXPORT_SYMBOL_GPL(u_audio_stop_capture);
-diff --git a/drivers/usb/gadget/function/u_audio.h b/drivers/usb/gadget/function/u_audio.h
-index 53e6baf55cbf..5ea6b86f1fda 100644
---- a/drivers/usb/gadget/function/u_audio.h
-+++ b/drivers/usb/gadget/function/u_audio.h
-@@ -30,10 +30,7 @@ struct g_audio {
- 	struct usb_gadget *gadget;
- 
- 	struct usb_ep *in_ep;
--
- 	struct usb_ep *out_ep;
--	/* feedback IN endpoint corresponding to out_ep */
--	struct usb_ep *in_ep_fback;
- 
- 	/* Max packet size for all in_ep possible speeds */
- 	unsigned int in_ep_maxpsize;
--- 
-2.30.2
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   372b2891c15acbf7b90d948b08ac174bde77102c
+commit: 7a141e64cf14099d84e530db0e86fcb2c489e341 [9154/10077] net: usb: asix: ax88772: move embedded PHY detection as early as possible
+:::::: branch date: 12 hours ago
+:::::: commit date: 35 hours ago
 
+ asix_devices.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -754,7 +754,7 @@ static int ax88772_bind(struct usbnet *d
+ 		return ret;
+ 
+ 	priv->phy_addr = ret;
+-	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10 ? true : false);
++	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
+ 
+ 	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+ 	chipcode &= AX_CHIPCODE_MASK;
