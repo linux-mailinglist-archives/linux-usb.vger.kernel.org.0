@@ -2,140 +2,105 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B22823F77CC
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 16:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D79CA3F782C
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 17:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241863AbhHYOxj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 10:53:39 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:55317 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S241859AbhHYOxj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 10:53:39 -0400
-Received: (qmail 193484 invoked by uid 1000); 25 Aug 2021 10:52:52 -0400
-Date:   Wed, 25 Aug 2021 10:52:52 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chris.chiu@canonical.com, lokeshvutla@ti.com
-Subject: Re: [PATCH 2/3] usb: core: hcd: Add support for deferring roothub
- registration
-Message-ID: <20210825145252.GB192480@rowland.harvard.edu>
-References: <20210825105132.10420-1-kishon@ti.com>
- <20210825105132.10420-3-kishon@ti.com>
+        id S239829AbhHYPWG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 11:22:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60066 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237885AbhHYPWG (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 11:22:06 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 4580E61052;
+        Wed, 25 Aug 2021 15:21:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629904880;
+        bh=aYtJL+XzHAv8sp8iAQndV5fUFlEcZ2mZ2KvUpHxvOeI=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=MOx4s1lw78+n0Y8tAU1Voo21jwh8FsHWESfFP1mpajG+1EXXKTiwe3dtca74yPFC2
+         xlqRlhhVrSD3UeGUxHHbvpQ5d9fH03nHOPj2iELxMzbu3vZYCLlfALaNOsQJTmJFRh
+         eK5RHpUwtzRH5cBUfLnAP5YhhxaZNc/axd+DBd9meOrz4J9OsecXJRJqvrbjMwagT/
+         m+UvHOJbNAUWwe+u0Qp++BM1qViOnN7gH7MMR+jcd2tIYexs6vcyEvKd9WNE78MBZF
+         IwvGCvnsjjEGx3+0rR6H0oU2cxG0o38k2JqKV00yalDmQM39WN1bbHZTlctF1hoIU/
+         7/A61qwyyLJoA==
+References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+ <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga>
+ <20210708030631.GA22420@nchen> <YSWCnsZDdp57KBqB@ripper>
+ <87zgt65avm.fsf@kernel.org>
+ <CAL_JsqLxm6P0KyYtUFvB5otR3BUkJN7dN89QixeWh67WoDtunA@mail.gmail.com>
+User-agent: mu4e 1.6.4; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        "Gross, Andy" <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>,
+        Wesley Cheng <wcheng@codeaurora.org>,
+        Linux USB List <linux-usb@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd
+ to dwc3-qcom
+Date:   Wed, 25 Aug 2021 18:20:59 +0300
+In-reply-to: <CAL_JsqLxm6P0KyYtUFvB5otR3BUkJN7dN89QixeWh67WoDtunA@mail.gmail.com>
+Message-ID: <87r1eha6tv.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20210825105132.10420-3-kishon@ti.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 25, 2021 at 04:21:31PM +0530, Kishon Vijay Abraham I wrote:
-> It has been observed with certain PCIe USB cards (like Inateck connected
-> to AM64 EVM or J7200 EVM) that as soon as the primary roothub is
-> registered, port status change is handled even before xHC is running
-> leading to cold plug USB devices not detected. For such cases, registering
-> both the root hubs along with the second HCD is required. Add support for
-> deferring roothub registration in usb_add_hcd(), so that both primary and
-> secondary roothubs are registered along with the second HCD.
-> 
-> Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-> Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-> ---
->  drivers/usb/core/hcd.c  | 28 +++++++++++++++++++++++-----
->  include/linux/usb/hcd.h |  2 ++
->  2 files changed, 25 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 775f0456f0ad..ba0493d22d13 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -2795,6 +2795,7 @@ int usb_add_hcd(struct usb_hcd *hcd,
->  {
->  	int retval;
->  	struct usb_device *rhdev;
-> +	struct usb_hcd *shared_hcd;
->  
->  	if (!hcd->skip_phy_initialization && usb_hcd_is_primary_hcd(hcd)) {
->  		hcd->phy_roothub = usb_phy_roothub_alloc(hcd->self.sysdev);
-> @@ -2956,17 +2957,34 @@ int usb_add_hcd(struct usb_hcd *hcd,
->  	}
->  
->  	/* starting here, usbcore will pay attention to this root hub */
 
-That comment is now wrong.  This is the point in the code where 
-usbcore will start paying attention to the _shared_ (primary) hcd's 
-roothub (if its HCD_DEFER_PRI_RH_REGISTER flag is set).
+Hi,
 
-> -	retval = register_root_hub(hcd);
-> -	if (retval != 0)
-> -		goto err_register_root_hub;
-> +	shared_hcd = hcd->shared_hcd;
-> +	if (!usb_hcd_is_primary_hcd(hcd) && shared_hcd &&
-> +	    HCD_DEFER_RH_REGISTER(shared_hcd)) {
-> +		retval = register_root_hub(shared_hcd);
-> +		if (retval != 0)
-> +			goto err_register_shared_root_hub;
->  
-> -	if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
-> -		usb_hcd_poll_rh_status(hcd);
-> +		if (shared_hcd->uses_new_polling && HCD_POLL_RH(shared_hcd))
-> +			usb_hcd_poll_rh_status(shared_hcd);
-> +	}
-> +
+Rob Herring <robh+dt@kernel.org> writes:
+>> Bjorn Andersson <bjorn.andersson@linaro.org> writes:
+>> > On Wed 07 Jul 20:06 PDT 2021, Peter Chen wrote:
+>> >
+>> >> On 21-07-07 14:03:19, Bjorn Andersson wrote:
+>> >> > On Tue 06 Jul 20:57 CDT 2021, Peter Chen wrote:
+>> >> >
+>> >> > Allow me to reorder your two questions:
+>> >> >
+>> >> > > And why using a notifier need to concern core's deferral probe?
+>> >> >
+>> >> > The problem at hand calls for the core for somehow invoking
+>> >> > dwc3_qcom_vbus_overrride_enable() with a pointer to dwc3_qcom passed.
+>> >> >
+>> >> > This means that dwc3-qcom somehow needs to inform the dwc3-core about
+>> >> > this (and stash the pointer). And this can't be done until dwc3-core
+>> >> > actually exist, which it won't until dwc3_probe() has completed
+>> >> > successfully (or in particular allocated struct dwc).
+>> >>
+>> >> Maybe you misunderstood the notifier I meant previous, my pointer was
+>> >> calling glue layer API directly.
+>> >>
+>> >> Role switch is from dwc3-core, when it occurs, it means structure dwc3 has
+>> >> allocated successfully, you could call glue layer notifier at function
+>> >> dwc3_usb_role_switch_set directly.
+>> >> Some references of my idea [1] [2]
+>> >>
+>> >> [1] Function ci_hdrc_msm_notify_event at ci_hdrc_msm_notify_event
+>> >> [2] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/core.c?h=lf-5.10.y#n205
+>> >>
+>> >
+>> > Hi Peter, I took a proper look at this again, hoping to find a way to
+>> > pass a callback pointer from dwc3-qcom to the dwc3 core, that can be
+>> > called from __dwc3_set_mode() to inform the Qualcomm glue about mode
+>> > changes.
+>>
+>> I would rather keep the strict separation between glue and core.
+>
+> On the surface that seems nice, but obviously there are issues with
+> the approach. It's also not how pretty much every other instance of
+> licensed IP blocks are structured.
+>
+> The specific need here seems to be multiple entities needing role
+> switch notifications. Seems like that should be solved in a generic
+> way.
 
-_This_ is where usbcore will start paying attention to the hcd's own 
-root hub (if its HCD_DEFER_PRI_RH_REGISTER flag isn't set).
+right, solve it generically without breaking the module isolation ;-)
 
-> +	if (!HCD_DEFER_RH_REGISTER(hcd)) {
-> +		retval = register_root_hub(hcd);
-> +		if (retval != 0)
-> +			goto err_register_root_hub;
-> +
-> +		if (hcd->uses_new_polling && HCD_POLL_RH(hcd))
-> +			usb_hcd_poll_rh_status(hcd);
-> +	}
->  
->  	return retval;
->  
->  err_register_root_hub:
->  	usb_stop_hcd(hcd);
-> +err_register_shared_root_hub:
-> +	if (!usb_hcd_is_primary_hcd(hcd) && shared_hcd &&
-> +	    shared_hcd->flags & HCD_FLAG_DEFER_PRI_RH_REGISTER)
-> +		usb_stop_hcd(shared_hcd);
->  err_hcd_driver_start:
->  	if (usb_hcd_is_primary_hcd(hcd) && hcd->irq > 0)
->  		free_irq(irqnum, hcd);
-> diff --git a/include/linux/usb/hcd.h b/include/linux/usb/hcd.h
-> index 548a028f2dab..6a357ba72f5d 100644
-> --- a/include/linux/usb/hcd.h
-> +++ b/include/linux/usb/hcd.h
-> @@ -124,6 +124,7 @@ struct usb_hcd {
->  #define HCD_FLAG_RH_RUNNING		5	/* root hub is running? */
->  #define HCD_FLAG_DEAD			6	/* controller has died? */
->  #define HCD_FLAG_INTF_AUTHORIZED	7	/* authorize interfaces? */
-> +#define HCD_FLAG_DEFER_PRI_RH_REGISTER	8	/* Defer roothub registration */
->  
->  	/* The flags can be tested using these macros; they are likely to
->  	 * be slightly faster than test_bit().
-> @@ -134,6 +135,7 @@ struct usb_hcd {
->  #define HCD_WAKEUP_PENDING(hcd)	((hcd)->flags & (1U << HCD_FLAG_WAKEUP_PENDING))
->  #define HCD_RH_RUNNING(hcd)	((hcd)->flags & (1U << HCD_FLAG_RH_RUNNING))
->  #define HCD_DEAD(hcd)		((hcd)->flags & (1U << HCD_FLAG_DEAD))
-> +#define HCD_DEFER_RH_REGISTER(hcd) ((hcd)->flags & (1U << HCD_FLAG_DEFER_PRI_RH_REGISTER))
-
-It's awkward to have slightly different names for the flag and the 
-test.  How about getting rid of the "_PRI" part of the flag name?  It 
-isn't really needed, because we obviously won't defer registering the 
-secondary hcd's root hub -- there's no place to defer it to.
-
-Alan Stern
-
->  	 * Specifies if interfaces are authorized by default
-> -- 
-> 2.17.1
-> 
+-- 
+balbi
