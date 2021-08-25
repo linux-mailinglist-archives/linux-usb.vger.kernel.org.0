@@ -2,86 +2,188 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AED3F7275
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 12:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 313913F73C9
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 12:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239735AbhHYKBA (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 06:01:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58924 "EHLO mail.kernel.org"
+        id S239993AbhHYKzq (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 06:55:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50200 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239611AbhHYKA7 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 06:00:59 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id 80EA661178;
-        Wed, 25 Aug 2021 10:00:13 +0000 (UTC)
+        id S240057AbhHYKzo (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 06:55:44 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 377E7610F8;
+        Wed, 25 Aug 2021 10:54:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629885613;
-        bh=yp3IRO9FCB9oK1+XLLX639+q9a7keOG91VnqqQQXNBk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mvvAXOOjCMbGE2rLJUvufqrW2+2SsAkPzoZ8FoMc4HtXrui78wEou98+it7HIQQt1
-         Y0A0yzImCMv9iTDiaPqu3buf6mc5mBXD01635oEoFeOdDYwb52aVOG2bXsOnbpS5ET
-         gqkFZ3FcFWBHfVJYTrPqJe45XZ6c4Ov8ocaCjCDiydr1VnqeTNDLX+I+/j/vj+blI7
-         f0ePQ/pE24G1MQDIKDYnA9ScB/kQ8+IkRAJuLc43zNz34K1z60H+2r6GGGvgBd9zNQ
-         vLh+lYsI1HlHHjLwSJSTXE/TeX91lrPPWEhlO83CnRi7GrNV8Q4uh0wAmVagJPifj4
-         wr9CzYKzBS0aw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 751FB60A02;
-        Wed, 25 Aug 2021 10:00:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1629888899;
+        bh=9W1g4oeoMs3MQr+3JOfBVlNVPRw6ihDPRFq+csul4J0=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=E8mzSx9zg/BNeoAwAceZE/3rUolMt2kuERVMClL+kaWjKQHYKonKf12AP1ubb0fVC
+         8PQ1SQg3bpXhHbVfQOqC2bP4gEHhpCN+IbzBpUof25eqrqFX5JNXpk4ZV42wV0CArp
+         V/VUpFC8GRf4sUOxvMW3mYbsPgA1bkUWUY1xxDn9tMu/7IhCIm/OnWdNLJl0dN4+R3
+         +ziaFFH3aFeDwrcF/4gd3ZydmWsdj0IPJgXW+fmt6WAlso/y3G6TxBHEfmIU0p+Lo2
+         fGeTzZDFWJKrY76kFHcwUuYAmYkNxcmjNEKf57TmHKNkEh6MQPfboKfS+PyiOAYqgt
+         r8K7X6kg7MusQ==
+References: <1629777281-30188-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1629777281-30188-2-git-send-email-quic_linyyuan@quicinc.com>
+ <8735qz8deg.fsf@kernel.org> <87lf4r6y9s.fsf@kernel.org>
+ <DM8PR02MB8198A157E55EBBD710905781E3C59@DM8PR02MB8198.namprd02.prod.outlook.com>
+ <87h7ff6rb2.fsf@kernel.org>
+ <DM8PR02MB81987A1D7C679D73867482F3E3C69@DM8PR02MB8198.namprd02.prod.outlook.com>
+User-agent: mu4e 1.6.4; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     "Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH V4 1/3] usb: gadget: configfs: add UDC trace entry
+Date:   Wed, 25 Aug 2021 13:50:12 +0300
+In-reply-to: <DM8PR02MB81987A1D7C679D73867482F3E3C69@DM8PR02MB8198.namprd02.prod.outlook.com>
+Message-ID: <87v93taj5r.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 00/10] LAN7800 driver improvements
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <162988561347.31154.16868294892793404021.git-patchwork-notify@kernel.org>
-Date:   Wed, 25 Aug 2021 10:00:13 +0000
-References: <20210824185613.49545-1-john.efstathiades@pebblebay.com>
-In-Reply-To: <20210824185613.49545-1-john.efstathiades@pebblebay.com>
-To:     John Efstathiades <john.efstathiades@pebblebay.com>
-Cc:     UNGLinuxDriver@microchip.com, woojung.huh@microchip.com,
-        davem@davemloft.net, netdev@vger.kernel.org, kuba@kernel.org,
-        linux-usb@vger.kernel.org
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hello:
 
-This series was applied to netdev/net-next.git (refs/heads/master):
+Hi,
 
-On Tue, 24 Aug 2021 19:56:03 +0100 you wrote:
-> This patch set introduces a number of improvements and fixes for
-> problems found during testing of a modification to add a NAPI-style
-> approach to packet handling to improve performance.
-> 
-> NOTE: the NAPI changes are not part of this patch set and the issues
->       fixed by this patch set are not coupled to the NAPI changes.
-> 
-> [...]
+"Linyu Yuan (QUIC)" <quic_linyyuan@quicinc.com> writes:
+>> >> > why tracing only the names? This gives us no insight into whatever bug
+>> > This patch only trace user space operation when enable a composition
+>> > like below of android or similar thing in another way,
+>> >
+>> > on property:sys.usb.config=mtp && property:sys.usb.configfs=1
+>> >     write /config/usb_gadget/g1/configs/b.1/strings/0x409/configuration
+>> "mtp"
+>> >     symlink /config/usb_gadget/g1/functions/mtp.gs0
+>> /config/usb_gadget/g1/configs/b.1/f1
+>> >     write /config/usb_gadget/g1/UDC ${sys.usb.controller}
+>> 
+>> yeah, that's fine. I'm simply stating that you're missing an opportunity
+>> to get more data which may be relevant in the future. If you merely
+>> print the name of the UDC, you get zero information about the state of
+>> the UDC when the gadget started.
+>> 
+>> You see, from that UDC_store function, you have access to the
+>> gadget_info, which gives you access to the usb_composite_driver and
+>> usb_composite_dev. Both of which contain valuable information about the
+>> state of the UDC.
+>> 
+>> Instead of making a single trace that prints the name of the UDC when
+>> you call store, make a trace event class that takes a struct gadget_info
+>> pointer and extracts the information from it. Something like so:
+>> 
+>> DECLARE_EVENT_CLASS(log_gadget_info,
+>> 	TP_PROTO(struct gadget_info *gi),
+>>         TP_ARGS(gi),
+>>         TP_STRUCT__entry(
+>>                 __string(drv_name, gi->composite->name)
+>>                 __string(udc_name, gi->cdev->gadget->name)
+>> 
+>
+> Do we need following two ?
 
-Here is the summary with links:
-  - [net-next,v2,01/10] lan78xx: Fix white space and style issues
-    https://git.kernel.org/netdev/net-next/c/9ceec7d33adf
-  - [net-next,v2,02/10] lan78xx: Remove unused timer
-    https://git.kernel.org/netdev/net-next/c/3bef6b9e9888
-  - [net-next,v2,03/10] lan78xx: Set flow control threshold to prevent packet loss
-    https://git.kernel.org/netdev/net-next/c/dc35f8548e00
-  - [net-next,v2,04/10] lan78xx: Remove unused pause frame queue
-    https://git.kernel.org/netdev/net-next/c/40b8452fa8b4
-  - [net-next,v2,05/10] lan78xx: Add missing return code checks
-    https://git.kernel.org/netdev/net-next/c/3415f6baaddb
-  - [net-next,v2,06/10] lan78xx: Fix exception on link speed change
-    https://git.kernel.org/netdev/net-next/c/b1f6696daafe
-  - [net-next,v2,07/10] lan78xx: Fix partial packet errors on suspend/resume
-    https://git.kernel.org/netdev/net-next/c/e1210fe63bf8
-  - [net-next,v2,08/10] lan78xx: Fix race conditions in suspend/resume handling
-    https://git.kernel.org/netdev/net-next/c/5f4cc6e25148
-  - [net-next,v2,09/10] lan78xx: Fix race condition in disconnect handling
-    https://git.kernel.org/netdev/net-next/c/77dfff5bb7e2
-  - [net-next,v2,10/10] lan78xx: Limit number of driver warning messages
-    https://git.kernel.org/netdev/net-next/c/df0d6f7a342c
+say your QA team tells you that a particular situation is failing. You
+ask them to collect trace events. You'll be glad to see a lot of
+information available so you can understand how the device changed
+stated as you used it.
 
-You are awesome, thank you!
---
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>>         	__field(bool, use_os_desc)
+>>                 __field(char, b_vendor_code)
+>
+>>                 __field(bool, unbind)
+>
+> why do you suggest following 4 fields ? it is not exist in gadget_info.
 
+They are part of composite_dev, IIRC. They tell you important
+information about what is supported by the UDC.
 
+>>                 __field(bool, sg_supported)
+>>                 __field(bool, is_otg)
+>>                 __field(bool, is_a_peripheral)
+>>                 __field(bool, b_hnp_enable)
+>> 
+>> 		/*
+>>                  * and so on, anything that may come in handy should a
+>> 		 * bug happen here
+>>                  */
+>> 	),
+>> 	TP_fast_assign(
+>>         	__assign_str(drv_name, gi->composite->name)
+>>                 __assign_srt(udc_name, gi->cdev->gadget->name)
+>> 
+>> 		__entry->use_os_desc = gi->use_os_desc;
+>>                 /* and so on */
+>> 	),
+>>         TP_printk("%s [%s]: ....",
+>>         	__get_str(udc_name), __get_str(drv_name), ....)
+>> );
+>
+> the gadget_info have few info to trace, from my view only
+
+right...
+
+> struct gadget_info {
+> 	struct config_group group;
+> 	struct config_group functions_group;
+> 	struct config_group configs_group;
+> 	struct config_group strings_group;
+> 	struct config_group os_desc_group;
+>
+> 	struct mutex lock;
+> 	struct usb_gadget_strings *gstrings[MAX_USB_STRING_LANGS + 1];
+> 	struct list_head string_list;
+> 	struct list_head available_func;
+>
+> 	struct usb_composite_driver composite;
+> 	struct usb_composite_dev cdev;
+
+... Then you can access the composite driver and the composite dev to
+get more information which may be super useful when debugging some
+issues.
+
+Also keep in mind that changing trace events is not so easy since it
+sort of becomes an ABI to userspace. Once we expose it, it's a little
+harder to modify as there may be parsers depending on the format
+(although they shouldn't).
+
+> 	bool use_os_desc;
+> 	char b_vendor_code;
+> 	char qw_sign[OS_STRING_QW_SIGN_LEN];
+> 	spinlock_t spinlock;
+> 	bool unbind;
+> };
+>> 
+>> Then you can easily add traces to several functions that use a similar
+>> argument:
+>> 
+>> DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_store,
+>> 	TP_PROTO(struct gadget_info *gi),
+>>         TP_ARGS(gi)
+>> );
+>> 
+>
+> It is needed for show operation ?
+
+you want to track both show and store.
+
+>> DEFINE_EVENT(log_gadget_info, gadget_dev_desc_UDC_show,
+>> 	TP_PROTO(struct gadget_info *gi),
+>>         TP_ARGS(gi)
+>> );
+>> 
+>> DEFINE_EVENT(log_gadget_info, unregister_gadget,
+>> 	TP_PROTO(struct gadget_info *gi),
+>>         TP_ARGS(gi)
+>> );
+>> 
+>
+> Following operation also not needed, right ? according to my
+> experience, it is not change in project.
+
+What if something changes some internal state behind our backs? We'd
+like to see that. One way to notice is if some value changes even if
+you're just calling the different show methods.
+
+-- 
+balbi
