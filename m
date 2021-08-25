@@ -2,115 +2,133 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE95D3F7D0A
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 22:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 165273F7D45
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 22:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239046AbhHYUMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 16:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S242589AbhHYUnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 16:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238571AbhHYUMy (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 16:12:54 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C22C0613C1
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 13:12:08 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id ay33so746531qkb.10
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 13:12:08 -0700 (PDT)
+        with ESMTP id S231873AbhHYUnU (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 16:43:20 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF1EC061757;
+        Wed, 25 Aug 2021 13:42:33 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id u3so1034408ejz.1;
+        Wed, 25 Aug 2021 13:42:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vbP5UVTgmY2oS9CShjTY4KdaNELp9AGh568LVPRQ/jk=;
-        b=RAjtwnACTWPvH7V/FtK/3NF3L+p0VuaFA4ON2soGuZMa791gAQoMQi/9tJ96yDeLQt
-         yuZhqJRgsTnaZC+kFSyufkN3moBMPHP7mdVPJzbB4Wv9ATsAPcHkTuv3SmI3bHddewsz
-         Ova2gkSoXbWPnsjc3k3ImYwM9PfUIAA0MQSSb+qCJUuihJm/6ei3rSAjRgaz3qaca9mz
-         Ywge2QPkW5t14hwmBjUHqEugdmxGeaoZr5o66VXJ97iI/NxaODSOLJl+9dqrDGnbteEk
-         1GgJQQCU//QeWV0tpKfcau5T6MUwlCFnhFcge4OTpbwt60LQWydV8+XKXOplny8ngJ3k
-         zd+Q==
+        d=gmail.com; s=20161025;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-transfer-encoding:content-language;
+        bh=dabBHAyYMNJrMunVHxQpPmbHkWUexAisLjuitLVnyCU=;
+        b=drB8cHzFMpEkUIXSe30YWp8fzHrXOS5C6cuxuw6HmDy3VjLCNveuBDMaobh4xfXll5
+         pQVH1TOjT7NGCgZKTMvrZQ2koMkZCJabc5w1rLFDqqxU1dowo1OEl2Wv58hm6/6uqC0a
+         vAy3XIGQcJarzrRpY51YJkKURLSjMQ/JklrH8t6SNBlhXiPas3ZU/mtoIlVnPYCLK0PS
+         VtZi4ChACDboM8f2K77PFuWvjxRAMAU9pYCxB7kTr5N/XgAGzwF5dSmjzrG52rCi1Nro
+         A+R/muvVbIVWnEqD7dMjruetbuxHHSLwCzvbfiLpQQFhXsA9wqLFlc0+kdVt/0WpkWvY
+         LxBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vbP5UVTgmY2oS9CShjTY4KdaNELp9AGh568LVPRQ/jk=;
-        b=l0MfApgNXvVggf1rBBWkhFf9vF5Djt7saiIwUqyJkkZP14WG8ZGZdxtIE3gC7id43m
-         EMGCEdZgv4B7rL7upbUp4D9ljsjl9wT/HQ1N18MZfmmVsNOAMunumvGox3R8GLa2xRL6
-         8BhZaPs6BgdDgZezxyNbLgqZCCgMKLiTIC2OyxIyKKDOXDFPH8fmScCnqnneUrOr1Kfr
-         RjadkW+Z62PT/uaDzn6OexoV4WG4o8wlFZ2NQOMyeHcQyfFqAGt61aLwCeMEmmljB4oM
-         jhLTPZuw6LTZ2VevnSBR+LitDLXetnPeKPc6/BI5mT6ocPtOg7fIZxBeVM8j9TCIISwY
-         sCmw==
-X-Gm-Message-State: AOAM530WTKkLoCpdIGdXBksa5je55U/yj+NGd5hBsjM20IBD83NFmf+m
-        JkjvxfJ5+7Oa+brDLqXi4MXr5IvHr5nulYaab+Xlag==
-X-Google-Smtp-Source: ABdhPJw8T5T0B+womDxHAuRLjClmJiHJj/LY69irmQweQjoRskwL2b8WjDIO9jWvOSnVu8LVwn/Mx7z3OxWuiBhoTPI=
-X-Received: by 2002:a05:620a:1082:: with SMTP id g2mr341202qkk.138.1629922327665;
- Wed, 25 Aug 2021 13:12:07 -0700 (PDT)
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-transfer-encoding:content-language;
+        bh=dabBHAyYMNJrMunVHxQpPmbHkWUexAisLjuitLVnyCU=;
+        b=JTPy/qopbTXy1Zni6/T3ZkmC9IFbj46JzPmVGQNEjNLIoMCUtG5b2Fp2znv+q1sWmp
+         b0ivqzQPgQ20Hq3maUxHaueJlmmT1WhuR0iwARCvW8GZ9D0jJKeb2H+A/xp6FDl6ioIz
+         GZiU2ZjMRe/xq+Ifnvv9wkj2Z8psentXlBILVQvwhMJsOwwlvkA3LfabiIYO/OxNaZ4J
+         XH4wHc+eNgK6wFSHVSgeNzH8tjh4rWENqRyCMZIFsiJEbw2ecwwz5CvDV3PRWuInLscA
+         t/lkqUILYy/nJZIf0l9YiXcGwXJdF7PwVxAvdGgLriWJO5WfK5UeHzWR7jYOThnlXbkz
+         HACA==
+X-Gm-Message-State: AOAM532uqELOuhjpTYkVAB0mLs1oISoQf3OkvqnTg6PKR4ZcXkWcF2v6
+        JTIC4Dbha1AYKXwRm5kwwssIh64moDg=
+X-Google-Smtp-Source: ABdhPJw0s7s3hrC7CNamNGiQnz/WoJziS49ap6Sl0XBBpHQvfysiByi6MQVxm3zd6dIQjyS22swzlw==
+X-Received: by 2002:a17:907:384:: with SMTP id ss4mr528779ejb.478.1629924152236;
+        Wed, 25 Aug 2021 13:42:32 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:2090:c45b:fc0a:29b3? ([2001:981:6fec:1:2090:c45b:fc0a:29b3])
+        by smtp.gmail.com with ESMTPSA id f30sm312558ejl.78.2021.08.25.13.42.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Aug 2021 13:42:31 -0700 (PDT)
+To:     UNGLinuxDriver@microchip.com
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev@vger.kernel.org, linux-usb@vger.kernel.org
+From:   Ferry Toth <fntoth@gmail.com>
+Subject: Crash on unplug smsc95xx on 5.14.0-rc6
+Message-ID: <07628a9b-1370-98b7-c1f3-98b9bf8cc38f@gmail.com>
+Date:   Wed, 25 Aug 2021 22:42:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga> <20210708030631.GA22420@nchen>
- <YSWCnsZDdp57KBqB@ripper> <87zgt65avm.fsf@kernel.org> <ce5f12dd-ddc1-6a9c-3dfb-aa44ea166828@linaro.org>
- <YSZned9v1+ajzVx0@ripper> <90d17c95-1cf3-89aa-94ad-920e4781f866@linaro.org>
-In-Reply-To: <90d17c95-1cf3-89aa-94ad-920e4781f866@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 25 Aug 2021 23:11:54 +0300
-Message-ID: <CAA8EJpoEJtELwA6+NGRa_jsKPfEka62uvZJzNc0dQaVqbsSssw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to dwc3-qcom
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Peter Chen <peter.chen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <jackp@codeaurora.org>, wcheng@codeaurora.org,
-        linux-usb@vger.kernel.org,
-        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
-        <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi,
+With 5.14.0-rc6 smsc9504 attached to dwc3 host (Intel Merrifield) 
+unplugging leads to the following stack trace:
 
-On Wed, 25 Aug 2021 at 20:57, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> On 25/08/2021 16:53, Bjorn Andersson wrote:
-> > But in the case of Type-C altmode several of our boards have either an
-> > external gpio-based SBU-pin-swapper or some redriver on I2C with this
-> > functionality, so we need a way to tell both the PHY and this external
-> > contraption about the orientation.
->
-> Its a very similar problem to orientation switch
->
-> As an example
->
-> - redriver may need to fix up signal integrity for
->    lane switching
->
-> - PHY needs to toggle lanes from one IP block to another
->
-> I don't think off the top of my head a USB controller or DPU cares much
-> about the orientation switch but for argument sake you could add one to
-> that list.
->
-> I _think_ the type-c mux layer handles this though, as in what we did on
-> RB5 has PHY and redriver receiving and reacting to a type-c orientation
-> switch both with the existing type-c port driver and the new tcpm.
->
-> + Dmitry - he did the mux work on the PHY and the redriver
+kernel: kernfs: can not remove 'attached_dev', no directory
+kernel: WARNING: CPU: 0 PID: 23 at fs/kernfs/dir.c:1508 
+kernfs_remove_by_name_ns+0x7e/0x90
+kernel: Modules linked in: rfcomm iptable_nat bnep snd_sof_nocodec 
+spi_pxa2xx_platform dw_dmac smsc smsc95xx pwm_lpss_pci dw_dmac_pci 
+pwm_lpss dw_dmac_core snd_sof_pc>
+kernel: CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 
+5.14.0-rc6-edison-acpi-standard #1
+kernel: Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542 
+2015.01.21:18.19.48
+kernel: Workqueue: usb_hub_wq hub_event
+kernel: RIP: 0010:kernfs_remove_by_name_ns+0x7e/0x90
+kernel: Code: ff 9a 00 31 c0 5d 41 5c 41 5d c3 48 c7 c7 e0 48 f6 b2 e8 
+15 ff 9a 00 b8 fe ff ff ff eb e7 48 c7 c7 d0 fa a8 b2 e8 cb c6 94 00 
+<0f> 0b b8 fe ff ff ff eb >
+kernel: RSP: 0018:ffffa514000cfa10 EFLAGS: 00010282
+kernel: RAX: 0000000000000000 RBX: ffff9a9008a3d8c0 RCX: ffff9a903e217478
+kernel: RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9a903e217470
+kernel: RBP: ffff9a90023d3000 R08: ffffffffb2f341c8 R09: 0000000000009ffb
+kernel: R10: 00000000ffffe000 R11: 3fffffffffffffff R12: ffffffffb2af705d
+kernel: R13: ffff9a9008a3d8c0 R14: ffffa514000cfb10 R15: 0000000000000003
+kernel: FS:  0000000000000000(0000) GS:ffff9a903e200000(0000) 
+knlGS:0000000000000000
+kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+kernel: CR2: 00007fe6971fcca0 CR3: 0000000007b02000 CR4: 00000000001006f0
+kernel: Call Trace:
+kernel:  phy_detach+0x10b/0x170
+kernel:  smsc95xx_disconnect_phy+0x2a/0x30 [smsc95xx]
+kernel:  usbnet_stop+0x5d/0x130
+kernel:  __dev_close_many+0x99/0x110
+kernel:  dev_close_many+0x76/0x120
+kernel:  unregister_netdevice_many+0x13d/0x750
+kernel:  unregister_netdevice_queue+0x80/0xc0
+kernel:  unregister_netdev+0x13/0x20
+kernel:  usbnet_disconnect+0x54/0xb0
+kernel:  usb_unbind_interface+0x85/0x270
+kernel:  ? kernfs_find_ns+0x30/0xc0
+kernel:  __device_release_driver+0x175/0x230
+kernel:  device_release_driver+0x1f/0x30
+kernel:  bus_remove_device+0xd3/0x140
+kernel:  device_del+0x186/0x3e0
+kernel:  ? kobject_put+0x91/0x1d0
+kernel:  usb_disable_device+0xc1/0x1e0
+kernel:  usb_disconnect.cold+0x7a/0x1f7
+kernel:  usb_disconnect.cold+0x29/0x1f7
+kernel:  hub_event+0xbb9/0x1830
+kernel:  ? __switch_to_asm+0x42/0x70
+kernel:  ? __switch_to_asm+0x36/0x70
+kernel:  process_one_work+0x1cf/0x370
+kernel:  worker_thread+0x48/0x3d0
+kernel:  ? rescuer_thread+0x360/0x360
+kernel:  kthread+0x122/0x140
+kernel:  ? set_kthread_struct+0x40/0x40
+kernel:  ret_from_fork+0x22/0x30
 
-For the RB5 case I ended up with the redriver acting as a client for
-the type-c port orientation events, and then it would act as a source
-for the event being sent to the DP PHY. This chained approach is far
-from being ideal, but it allowed me to use the current framework
-without applying significant changes. I've had some ideas on how to
-improve the type-c framework, but I never had enough time to
-materialize them.
+The unplug event happen when switching dwc3 from host  to device mode.
 
-> Seems to me that the type-c mux way of diseminating to more than one
-> place might fight role-switching well too.
+I'm not sure when this behavior started exactly, but al least since 
+5.14.0-rc1.
 
--- 
-With best wishes
-Dmitry
+Maybe related: smsc95xx plugin seems to trigger:
+
+DMA-API: cacheline tracking EEXIST, overlapping mappings aren't supported
+
+
