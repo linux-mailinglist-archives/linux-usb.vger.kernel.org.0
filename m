@@ -2,133 +2,113 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 165273F7D45
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 22:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2186B3F7D74
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 23:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242589AbhHYUnU (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 16:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S232611AbhHYVEj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 17:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbhHYUnU (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 16:43:20 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF1EC061757;
-        Wed, 25 Aug 2021 13:42:33 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id u3so1034408ejz.1;
-        Wed, 25 Aug 2021 13:42:33 -0700 (PDT)
+        with ESMTP id S232123AbhHYVEj (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 17:04:39 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2E5C061757
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 14:03:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id z9-20020a7bc149000000b002e8861aff59so1108141wmi.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 14:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-transfer-encoding:content-language;
-        bh=dabBHAyYMNJrMunVHxQpPmbHkWUexAisLjuitLVnyCU=;
-        b=drB8cHzFMpEkUIXSe30YWp8fzHrXOS5C6cuxuw6HmDy3VjLCNveuBDMaobh4xfXll5
-         pQVH1TOjT7NGCgZKTMvrZQ2koMkZCJabc5w1rLFDqqxU1dowo1OEl2Wv58hm6/6uqC0a
-         vAy3XIGQcJarzrRpY51YJkKURLSjMQ/JklrH8t6SNBlhXiPas3ZU/mtoIlVnPYCLK0PS
-         VtZi4ChACDboM8f2K77PFuWvjxRAMAU9pYCxB7kTr5N/XgAGzwF5dSmjzrG52rCi1Nro
-         A+R/muvVbIVWnEqD7dMjruetbuxHHSLwCzvbfiLpQQFhXsA9wqLFlc0+kdVt/0WpkWvY
-         LxBw==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version;
+        bh=kwbt09fOlYpiOsoXRS9sjXbXW76WhT2QN/qa+eAvJW8=;
+        b=mc5emlzA9Qjkmej1jZHT0GwkjTwasyfE3pihjygoxX3JDxWBjUKoYB3ST+T2o9YGqV
+         Wj9hsaFtqDCnzD+e/AjzTX/Bqw+fh0ZCVL9unMj2/gt8fbr/unyd1Vj6y7TR+rFRE1wd
+         Jnetzhew2c4uj9xgof9c7UWYyhv/K/hl0E9RAb9wgjaxhbMdm/zQn1fSsLLvOdJqh6jE
+         Od06KuOpXRNqcni2JpzZ/7L6GcsmgwXut0HLhhFS6a1xbSzl0t4fPDwDOmAiPlo8xHQi
+         tSI++xsnMU/j1J4lVZHmJTdQRA6wWhDQT6LAjrOoA3E+9slGa/vc0fw+cJyWEf+b2nTr
+         5qdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-transfer-encoding:content-language;
-        bh=dabBHAyYMNJrMunVHxQpPmbHkWUexAisLjuitLVnyCU=;
-        b=JTPy/qopbTXy1Zni6/T3ZkmC9IFbj46JzPmVGQNEjNLIoMCUtG5b2Fp2znv+q1sWmp
-         b0ivqzQPgQ20Hq3maUxHaueJlmmT1WhuR0iwARCvW8GZ9D0jJKeb2H+A/xp6FDl6ioIz
-         GZiU2ZjMRe/xq+Ifnvv9wkj2Z8psentXlBILVQvwhMJsOwwlvkA3LfabiIYO/OxNaZ4J
-         XH4wHc+eNgK6wFSHVSgeNzH8tjh4rWENqRyCMZIFsiJEbw2ecwwz5CvDV3PRWuInLscA
-         t/lkqUILYy/nJZIf0l9YiXcGwXJdF7PwVxAvdGgLriWJO5WfK5UeHzWR7jYOThnlXbkz
-         HACA==
-X-Gm-Message-State: AOAM532uqELOuhjpTYkVAB0mLs1oISoQf3OkvqnTg6PKR4ZcXkWcF2v6
-        JTIC4Dbha1AYKXwRm5kwwssIh64moDg=
-X-Google-Smtp-Source: ABdhPJw0s7s3hrC7CNamNGiQnz/WoJziS49ap6Sl0XBBpHQvfysiByi6MQVxm3zd6dIQjyS22swzlw==
-X-Received: by 2002:a17:907:384:: with SMTP id ss4mr528779ejb.478.1629924152236;
-        Wed, 25 Aug 2021 13:42:32 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:2090:c45b:fc0a:29b3? ([2001:981:6fec:1:2090:c45b:fc0a:29b3])
-        by smtp.gmail.com with ESMTPSA id f30sm312558ejl.78.2021.08.25.13.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 13:42:31 -0700 (PDT)
-To:     UNGLinuxDriver@microchip.com
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org, linux-usb@vger.kernel.org
-From:   Ferry Toth <fntoth@gmail.com>
-Subject: Crash on unplug smsc95xx on 5.14.0-rc6
-Message-ID: <07628a9b-1370-98b7-c1f3-98b9bf8cc38f@gmail.com>
-Date:   Wed, 25 Aug 2021 22:42:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version;
+        bh=kwbt09fOlYpiOsoXRS9sjXbXW76WhT2QN/qa+eAvJW8=;
+        b=E5jiHjgPjQ6goowWZYp+EJOlsXe0WMV265iH541Ecy69Qm47F8m90EuPRWuRn70fxr
+         gVqhG9PwZisFkgHZi7OW2MQ9GnlxOW3Z/FTJf9VxIDPxWuFRMunxapAcz8OMbWNkEPDc
+         zppGOs2CeNLvmf+NaU0CqUf0BamsgeD/yZ/yLNRGZTLVUVNwaNkanXhtcEPd9e1CQZqn
+         Mt/LfaDB7cvl+6Rm9BuVhjfEB4kF6SJKtwVu6njeIVo/Y1XxT/nw/SyKRfWEHq6N11Aw
+         94nCjVfzA3FcDWan5UpxS1Ri+HDe+OP2kyWWV2tMxYkRw8N4PYW8qGjIIfTdq+SnObns
+         mGAw==
+X-Gm-Message-State: AOAM532SjZfk/fMjUbdb8XjowNrZhyY4ruLu7eHKJeYUFzqTgwaJX1ns
+        ecy/6inZ2DnYUF5STZzNSubKGespVh/DOQ==
+X-Google-Smtp-Source: ABdhPJwSNPocZ6/TXBAuSCb+GalqYZVnTJq96GRPofHlv5uiZkYVAPSomJLzu2mGGhPNvxgmiAv39A==
+X-Received: by 2002:a05:600c:428a:: with SMTP id v10mr10978650wmc.25.1629925431279;
+        Wed, 25 Aug 2021 14:03:51 -0700 (PDT)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id 19sm6421551wmo.39.2021.08.25.14.03.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 14:03:50 -0700 (PDT)
+References: <20210712125529.76070-1-pavel.hofman@ivitera.com>
+ <20210712125529.76070-3-pavel.hofman@ivitera.com>
+ <1jr1ehy79v.fsf@starbuckisacylon.baylibre.com>
+ <d03d8d29-f3f2-028f-efb1-a194955599d7@ivitera.com>
+User-agent: mu4e 1.6.4; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Pavel Hofman <pavel.hofman@ivitera.com>, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>
+Subject: Re: [PATCH v3 2/4] usb: gadget: u_audio: add bi-directional volume
+ and mute support
+Date:   Wed, 25 Aug 2021 22:57:54 +0200
+In-reply-to: <d03d8d29-f3f2-028f-efb1-a194955599d7@ivitera.com>
+Message-ID: <1jmtp5xmmg.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-With 5.14.0-rc6 smsc9504 attached to dwc3 host (Intel Merrifield) 
-unplugging leads to the following stack trace:
 
-kernel: kernfs: can not remove 'attached_dev', no directory
-kernel: WARNING: CPU: 0 PID: 23 at fs/kernfs/dir.c:1508 
-kernfs_remove_by_name_ns+0x7e/0x90
-kernel: Modules linked in: rfcomm iptable_nat bnep snd_sof_nocodec 
-spi_pxa2xx_platform dw_dmac smsc smsc95xx pwm_lpss_pci dw_dmac_pci 
-pwm_lpss dw_dmac_core snd_sof_pc>
-kernel: CPU: 0 PID: 23 Comm: kworker/0:1 Not tainted 
-5.14.0-rc6-edison-acpi-standard #1
-kernel: Hardware name: Intel Corporation Merrifield/BODEGA BAY, BIOS 542 
-2015.01.21:18.19.48
-kernel: Workqueue: usb_hub_wq hub_event
-kernel: RIP: 0010:kernfs_remove_by_name_ns+0x7e/0x90
-kernel: Code: ff 9a 00 31 c0 5d 41 5c 41 5d c3 48 c7 c7 e0 48 f6 b2 e8 
-15 ff 9a 00 b8 fe ff ff ff eb e7 48 c7 c7 d0 fa a8 b2 e8 cb c6 94 00 
-<0f> 0b b8 fe ff ff ff eb >
-kernel: RSP: 0018:ffffa514000cfa10 EFLAGS: 00010282
-kernel: RAX: 0000000000000000 RBX: ffff9a9008a3d8c0 RCX: ffff9a903e217478
-kernel: RDX: 00000000ffffffd8 RSI: 0000000000000027 RDI: ffff9a903e217470
-kernel: RBP: ffff9a90023d3000 R08: ffffffffb2f341c8 R09: 0000000000009ffb
-kernel: R10: 00000000ffffe000 R11: 3fffffffffffffff R12: ffffffffb2af705d
-kernel: R13: ffff9a9008a3d8c0 R14: ffffa514000cfb10 R15: 0000000000000003
-kernel: FS:  0000000000000000(0000) GS:ffff9a903e200000(0000) 
-knlGS:0000000000000000
-kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-kernel: CR2: 00007fe6971fcca0 CR3: 0000000007b02000 CR4: 00000000001006f0
-kernel: Call Trace:
-kernel:  phy_detach+0x10b/0x170
-kernel:  smsc95xx_disconnect_phy+0x2a/0x30 [smsc95xx]
-kernel:  usbnet_stop+0x5d/0x130
-kernel:  __dev_close_many+0x99/0x110
-kernel:  dev_close_many+0x76/0x120
-kernel:  unregister_netdevice_many+0x13d/0x750
-kernel:  unregister_netdevice_queue+0x80/0xc0
-kernel:  unregister_netdev+0x13/0x20
-kernel:  usbnet_disconnect+0x54/0xb0
-kernel:  usb_unbind_interface+0x85/0x270
-kernel:  ? kernfs_find_ns+0x30/0xc0
-kernel:  __device_release_driver+0x175/0x230
-kernel:  device_release_driver+0x1f/0x30
-kernel:  bus_remove_device+0xd3/0x140
-kernel:  device_del+0x186/0x3e0
-kernel:  ? kobject_put+0x91/0x1d0
-kernel:  usb_disable_device+0xc1/0x1e0
-kernel:  usb_disconnect.cold+0x7a/0x1f7
-kernel:  usb_disconnect.cold+0x29/0x1f7
-kernel:  hub_event+0xbb9/0x1830
-kernel:  ? __switch_to_asm+0x42/0x70
-kernel:  ? __switch_to_asm+0x36/0x70
-kernel:  process_one_work+0x1cf/0x370
-kernel:  worker_thread+0x48/0x3d0
-kernel:  ? rescuer_thread+0x360/0x360
-kernel:  kthread+0x122/0x140
-kernel:  ? set_kthread_struct+0x40/0x40
-kernel:  ret_from_fork+0x22/0x30
+On Wed 25 Aug 2021 at 19:59, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
 
-The unplug event happen when switching dwc3 from host  to device mode.
+> Dne 25. 08. 21 v 15:25 Jerome Brunet napsal(a):
+>> On Mon 12 Jul 2021 at 14:55, Pavel Hofman <pavel.hofman@ivitera.com>
+>> wrote:
+>> 
+>>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>>
+>>> USB Audio Class 1/2 have ability to change device's
+>>> volume and mute by USB Host through class-specific control
+>>> requests. Device also can notify Host about volume/mute
+>>> change on its side through optional interrupt endpoint.
+>>>
+>>> This patch adds Volume and Mute ALSA controls which can be
+>>> used by user to send and receive notifications to/from
+>>> the USB Host about Volume and Mute change.
+>>>
+>>> These params come from f_uac* so volume and mute controls
+>>> will be created only if the function support and enable
+>>> each explicitly
+>>>
+>>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+>>> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
+>> Hi Greg,
+>> This change made it to usb-testing and usb-next but there are several
+>> indentation errors in it. By itself, without the rest of the series, it
+>> does not make much sense. It adds a couple of alsa controls but those
+>> actually do nothing without the uac1 and uac2 part of the series.
+>> Maybe it would be better to drop this change until the rest of series is
+>> ready (if this is still possible) ?
+>> 
+>
+> The indentation errors were fixed by commit
+> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=1bc220835526ae076eecfb7ed513f80f22cf840d
 
-I'm not sure when this behavior started exactly, but al least since 
-5.14.0-rc1.
+Could you check again ? I believe you missed some in u_audio.c (at least).
 
-Maybe related: smsc95xx plugin seems to trigger:
-
-DMA-API: cacheline tracking EEXIST, overlapping mappings aren't supported
-
+> which is in usb-next now too. If possible this commit should be dropped too.
+>
+> Thanks,
+>
+> Pavel.
 
