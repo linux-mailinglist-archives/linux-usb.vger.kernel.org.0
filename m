@@ -2,101 +2,60 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4101D3F7B90
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 19:29:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D06A83F7B96
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 19:33:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242352AbhHYRaZ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 13:30:25 -0400
-Received: from netrider.rowland.org ([192.131.102.5]:33725 "HELO
-        netrider.rowland.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with SMTP id S242301AbhHYRaZ (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 13:30:25 -0400
-Received: (qmail 198861 invoked by uid 1000); 25 Aug 2021 13:29:37 -0400
-Date:   Wed, 25 Aug 2021 13:29:37 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
+        id S234684AbhHYReM (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 13:34:12 -0400
+Received: from vps0.lunn.ch ([185.16.172.187]:41766 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232053AbhHYReL (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 13:34:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=6Xzd/AZhGEUTldtwR/3mpDMdo0JtSuZfq2s/7VUNu5g=; b=Tp6vm8DQ3pXH/aMvAg7kgi7Qmb
+        up/tvBoKJB85IMwCXdOBveejocdSSuHagFm4n3pupB/D0l7sOl3BuMzVZ1FgZoYS/M93FP9fV2Cbw
+        5rfbZt/oNwZFzYpOAmFRQb1mFjrRppJXhU2KcoxD/kpdbxDXV1ytCN44dK62NVzN18Rk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1mIwlx-003pjW-O3; Wed, 25 Aug 2021 19:33:09 +0200
+Date:   Wed, 25 Aug 2021 19:33:09 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
 To:     Evgeny Novikov <novikov@ispras.ru>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>,
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mike Turquette <mturquette@linaro.org>,
         Kirill Shilimanov <kirill.shilimanov@huawei.com>,
         linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
         ldv-project@linuxtesting.org
 Subject: Re: [PATCH] usb: ehci-orion: Handle errors of clk_prepare_enable()
  in probe
-Message-ID: <20210825172937.GD192480@rowland.harvard.edu>
+Message-ID: <YSZ+1bFUEMsJlrcu@lunn.ch>
 References: <20210825170902.11234-1-novikov@ispras.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20210825170902.11234-1-novikov@ispras.ru>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 On Wed, Aug 25, 2021 at 08:09:02PM +0300, Evgeny Novikov wrote:
 > ehci_orion_drv_probe() did not account for possible errors of
-> clk_prepare_enable() that in particular could cause invocation of
-> clk_disable_unprepare() on clocks that were not prepared/enabled yet,
-> e.g. in remove or on handling errors of usb_add_hcd() in probe. Though,
-> there were several patches fixing different issues with clocks in this
-> driver, they did not solve this problem.
-> 
-> Add handling of errors of clk_prepare_enable() in ehci_orion_drv_probe()
-> to avoid calls of clk_disable_unprepare() without previous successful
-> invocation of clk_prepare_enable().
-> 
-> Found by Linux Driver Verification project (linuxtesting.org).
-> 
-> Fixes: 8c869edaee07 ("ARM: Orion: EHCI: Add support for enabling clocks")
-> Signed-off-by: Evgeny Novikov <novikov@ispras.ru>
-> Co-developed-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-> Signed-off-by: Kirill Shilimanov <kirill.shilimanov@huawei.com>
-> ---
+> clk_prepare_enable()
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Hi Evgeny
 
-Do you intend to submit patches for the other EHCI drivers that don't 
-check for errors in clk_prepare_enable()?  It looks like 
-ehci-atmel.c, ehci-mv.c, and ehci-spear.c all need some attention.
+Your patch looks good.
 
-The same is true for a bunch of the OHCI drivers: ohci-at91.c, 
-ohci-exynos.c, ohci-s3c2410.c, and ohci-spear.c.
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
-Didn't the Linux Driver Verification project identify this problem in 
-all of these drivers?
+At the time this was added, clk_prepare_enable() could not actually
+fail, the clocks are built in, there was no error path that could
+trigger. I've no idea if this is still true, so please do have this
+patch merged.
 
-Alan Stern
-
->  drivers/usb/host/ehci-orion.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-orion.c b/drivers/usb/host/ehci-orion.c
-> index a319b1df3011..3626758b3e2a 100644
-> --- a/drivers/usb/host/ehci-orion.c
-> +++ b/drivers/usb/host/ehci-orion.c
-> @@ -264,8 +264,11 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
->  	 * the clock does not exists.
->  	 */
->  	priv->clk = devm_clk_get(&pdev->dev, NULL);
-> -	if (!IS_ERR(priv->clk))
-> -		clk_prepare_enable(priv->clk);
-> +	if (!IS_ERR(priv->clk)) {
-> +		err = clk_prepare_enable(priv->clk);
-> +		if (err)
-> +			goto err_put_hcd;
-> +	}
->  
->  	priv->phy = devm_phy_optional_get(&pdev->dev, "usb");
->  	if (IS_ERR(priv->phy)) {
-> @@ -311,6 +314,7 @@ static int ehci_orion_drv_probe(struct platform_device *pdev)
->  err_dis_clk:
->  	if (!IS_ERR(priv->clk))
->  		clk_disable_unprepare(priv->clk);
-> +err_put_hcd:
->  	usb_put_hcd(hcd);
->  err:
->  	dev_err(&pdev->dev, "init %s fail, %d\n",
-> -- 
-> 2.26.2
-> 
+      Andrew
