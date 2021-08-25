@@ -2,79 +2,71 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC973F76A0
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 15:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881E33F7762
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 16:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241541AbhHYNyY (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 09:54:24 -0400
-Received: from mail.huberulrich.de ([81.169.200.209]:41747 "EHLO
-        mail.huberulrich.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240708AbhHYNyX (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 09:54:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; d=huberulrich.de; s=2017; c=relaxed/relaxed;
- q=dns/txt; h=from:date:to:cc:message-id:subject;
- bh=3dX6h3y3vym7YbhKZhUGCbj9mPX5l6cdO2tWOY2D4Wk=;
- b=D1g0okCEhZyJHKc4PlplEvyzyz8/APTXOJPinEtDoFZoQaxL8vP72VOlvCsVyogCLC0emFIUoRN7ADv+ujGdAGbjWas4b6XK2iojv1MzdV5vFu2FiRkHEcXlJ4zdUb72slsPISKmwOTxGlU5OCRlIk5f6kOa1o5DTXkDXFmrJbwON133yDZPss7lQz+Pl2ndcObkrCGjaxuGXMfHOtQcp5Q5Plf6t4Jeb82LmLjzmTl620R2I1JOnIMYYVB7ZrQQzJYv4lhQKXJ3HB7D1FMM9iCFpzXYmavJkDskq34X8JW+ZAGEmBo6k7oioP5irRmx1vZm6DfQSBeZSb/jI03pMw==;
-DomainKey-Signature: a=rsa-sha1;
- b=vjuuXdLoHcy4i2Mxe6ge6vAsoDJveRAGorIBE8ayfCLw8m1KSoV4NWUMWchFV/U90QihECmsV991iBmyJMy/P/j8uK+7KeZ2c5zJi1TVvr88mw9ECy70Jnsm6EvLG4ZNM7xMP1GaXqOTPDFSFA5fRt2QQslMlt245tZr9rY78kT3+qKO3+y2KVoQiFNSWok4pxnVujtm/bHI641hgPAbN4HzzMB7TATiUHgWNbJGXURP1kK8ocJGfF8hWLBkTTA4/0mQ9JNHA13sC336KeF0UMY7jbUkakrB88/Pk3sNqzksomUSgBarGF3pRqU0qEJW/atMEqzb74t3OqXwrWcOtw==;
- c=nofws; q=dns; d=huberulrich.de; s=2017;
- h=subject:to:cc:from:message-id:date;
-Received: from [IPv6:2001:16b8:383a:7a00:76f6:3f2d:1d03:ccef]
- (2001:16b8:383a:7a00:76f6:3f2d:1d03:ccef) by mail.huberulrich.de (Axigen)
- with (ECDHE-RSA-AES128-GCM-SHA256 encrypted) ESMTPSA id 2537F9;
- Wed, 25 Aug 2021 13:53:30 +0000
-Subject: Re: ucsi_acpi GET_CONNECTOR_STATUS failed (-5)
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-usb@vger.kernel.org
-References: <b36249c5-776a-9338-bb9f-ae6a5c446860@huberulrich.de>
- <YSX7hZnCoFSXTFJe@kuha.fi.intel.com>
-From:   Ulrich Huber <ulrich@huberulrich.de>
-Message-ID: <0e77017d-9358-a691-6293-234fcbab6a31@huberulrich.de>
-Date:   Wed, 25 Aug 2021 15:53:28 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0)
- Gecko/20100101 Thunderbird/78.13.0
+        id S241693AbhHYOaa (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 10:30:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50246 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240965AbhHYOa3 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 10:30:29 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 2754D61073;
+        Wed, 25 Aug 2021 14:29:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629901783;
+        bh=M/QfzRtodu9KXBAwfCQo4kX0VmxUKWjfKlzbgDW2W7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=h8Sb4zuuz8lNXMKCHGHvIe1vGxv5ayjQHEj9/2VtkUoF9uBOcFL9Z/rIazPHILKkP
+         OOJJz4IL2WRllHZkEJoBt8ofW1ZECIAGzNwEFBwyxG9m0SbZgpLU+klvivOl8dGatM
+         6PETFFGbfEJM8IaYzmu5XUQv69ruOjDslzmITQDqFxC5rWjsN+Uh6ioE/5mFVIm6Md
+         RWMgmQU1oprXTSgS8lw/17yW4AHfwiwWFUmYC7FAAJhj1qeS8IS0ppvhWdEi0Px9ZV
+         MHJmovUv7CSbAMclO4mEiPk69LCTw0bab+s8FoNYWdoVMtyKsyN4tqEnrcdZ/6Pcji
+         5oUEEoWLbzLZw==
+Date:   Wed, 25 Aug 2021 07:29:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Colin Ian King <colin.king@canonical.com>,
+        Grant Grundler <grundler@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: asix: ax88772: fix boolconv.cocci warnings
+Message-ID: <20210825072942.676fd0f2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20210825042207.GC14337@pengutronix.de>
+References: <202108250651.uuW5Q2Rg-lkp@intel.com>
+        <20210824221716.GA23759@2b586af07b64>
+        <20210825042207.GC14337@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <YSX7hZnCoFSXTFJe@kuha.fi.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-Received-SPF: 
-X-AXIGEN-SPF-Result: Ok
-X-AXIGEN-DK-Result: Ok
-DomainKey-Status: good
-X-AXIGEN-DKIM-Result: Ok
-DKIM-Status: good
-X-AxigenSpam-Level: 5
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Hi Heikki,
-Thanks for the quick answer.
-> Thanks for the report. Can you test this with kernel v5.10?
+On Wed, 25 Aug 2021 06:22:07 +0200 Oleksij Rempel wrote:
+> On Wed, Aug 25, 2021 at 06:17:16AM +0800, kernel test robot wrote:
+> > From: kernel test robot <lkp@intel.com>
+> > 
+> > drivers/net/usb/asix_devices.c:757:60-65: WARNING: conversion to bool not needed here
+> > 
+> >  Remove unneeded conversion to bool
+> > 
+> > Semantic patch information:
+> >  Relational and logical operators evaluate to bool,
+> >  explicit conversion is overly verbose and unneeded.
+> > 
+> > Generated by: scripts/coccinelle/misc/boolconv.cocci
+> > 
+> > Fixes: 7a141e64cf14 ("net: usb: asix: ax88772: move embedded PHY detection as early as possible")
+> > CC: Oleksij Rempel <o.rempel@pengutronix.de>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: kernel test robot <lkp@intel.com>  
+> 
+> Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-I tested kernel v5.10 and could not reproduce this specific error. 
-Instead I received the following warning on a single occasion:
-
-ucsi_acpi USBC000:00: UCSI_GET_PDOS returned 0 bytes
-
-Right before I received this warning, I plugged in and immediately 
-unplugged the charging cable again. So I might have disrupted the driver 
-during the retrieval of the new device state.
-
-> I'm wondering if commit 217504a05532 ("usb: typec: ucsi: Work around
-> PPM losing change information") causes that GET_CONNECTOR_STATUS
-> failure.
-
-Quite interesting, as I thought this as the most likely culprit as well 
-when I took a look at the driver.
-
-As I have to build the kernel v5.14-rc7 manually to include another 
-bugfix, I'll throw in a few more debug messages to find out which step 
-fails and if possible to get some more details on the cause. Could you 
-point me to things I should take a look at, to narrow down the issue?
-
-Thanks,
-
-Ulrich
-
+This patch never made it into patchwork, would you mind resending it,
+Oleksij?
