@@ -2,73 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 252253F6EF3
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 07:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4994D3F6F01
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 07:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238023AbhHYFtC (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 01:49:02 -0400
-Received: from mailgw01.mediatek.com ([60.244.123.138]:59434 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S232442AbhHYFs7 (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 01:48:59 -0400
-X-UUID: 261438489fb34f83acb8e8236649783b-20210825
-X-UUID: 261438489fb34f83acb8e8236649783b-20210825
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1981100701; Wed, 25 Aug 2021 13:48:05 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs05n1.mediatek.inc (172.21.101.15) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Wed, 25 Aug 2021 13:48:03 +0800
-Received: from localhost.localdomain (10.17.3.153) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 25 Aug 2021 13:48:03 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-CC:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-Subject: [PATCH RESEND v3 2/2] usb: xhci-mtk: enable wake-up interrupt after runtime_suspend called
-Date:   Wed, 25 Aug 2021 13:47:58 +0800
-Message-ID: <1629870478-11813-2-git-send-email-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 1.8.1.1.dirty
-In-Reply-To: <1629870478-11813-1-git-send-email-chunfeng.yun@mediatek.com>
-References: <1629870478-11813-1-git-send-email-chunfeng.yun@mediatek.com>
+        id S235816AbhHYFwT (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 01:52:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37448 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232420AbhHYFwN (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 01:52:13 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 049396120A;
+        Wed, 25 Aug 2021 05:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629870688;
+        bh=EkE46jl8gJG1dqg3qD9AbJi+AfleBAOlIUcWmS/5YLo=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=tD/CeEVXnGHCUDjGQJjhgBbYJFEiOqqI00YOi1gEFuReyH9Z42oWRm8i4DbQQ8CpK
+         nFn97Ljhz2IeWNJ1yTDndwjXnRLm0atAxN2r3u3np/rXh2IGYxhQ4DBD0DC9YKJxY6
+         NCcR/yhkNjDW6ggu+3cWIcNr0MqdyrjZMmag/79kE3IpiAQhrD5upiw2tOuG2uEVpm
+         Cr4dHxbV9q5Q4kyl/ukTCyujpvBtYY+C73VPnJnZfNuTvYm7eySgbjMNw+Y8Ibnqrg
+         12mfKAkqEogMS6s7zug3Q5SPW+m6AQ37ryyXrcNj1fDL/qZyb1F8fnwovuThW3ortb
+         6GVfVtIr3Rqtw==
+References: <20210825042855.7977-1-wcheng@codeaurora.org>
+User-agent: mu4e 1.6.4; emacs 27.2
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Wesley Cheng <wcheng@codeaurora.org>
+Cc:     gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jackp@codeaurora.org, stable@vger.kernel.org
+Subject: Re: [PATCH v5] usb: dwc3: gadget: Stop EP0 transfers during pullup
+ disable
+Date:   Wed, 25 Aug 2021 08:51:08 +0300
+In-reply-to: <20210825042855.7977-1-wcheng@codeaurora.org>
+Message-ID: <874kbe6pib.fsf@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-MTK:  N
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Use new function dev_pm_wake_irq_set_late_enabled_status() to enable
-dedicated wake-up interrupt after xhci_mtk_runtime_suspend() is called.
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v3: new patch
----
- drivers/usb/host/xhci-mtk.c | 1 +
- 1 file changed, 1 insertion(+)
+Wesley Cheng <wcheng@codeaurora.org> writes:
 
-diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-mtk.c
-index 7ff0cd707ba1..6fb6f6853129 100644
---- a/drivers/usb/host/xhci-mtk.c
-+++ b/drivers/usb/host/xhci-mtk.c
-@@ -611,6 +611,7 @@ static int xhci_mtk_probe(struct platform_device *pdev)
- 			dev_err(dev, "set wakeup irq %d failed\n", wakeup_irq);
- 			goto dealloc_usb3_hcd;
- 		}
-+		dev_pm_wake_irq_set_late_enabled_status(dev);
- 		dev_info(dev, "wakeup irq %d\n", wakeup_irq);
- 	}
- 
+> During a USB cable disconnect, or soft disconnect scenario, a pending
+> SETUP transaction may not be completed, leading to the following
+> error:
+>
+>     dwc3 a600000.dwc3: timed out waiting for SETUP phase
+>
+> If this occurs, then the entire pullup disable routine is skipped and
+> proper cleanup and halting of the controller does not complete.
+>
+> Instead of returning an error (which is ignored from the UDC
+> perspective), allow the pullup disable routine to continue, which
+> will also handle disabling of EP0/1.  This will end any active
+> transfers as well.  Ensure to clear any delayed_status also, as the
+> timeout could happen within the STATUS stage.
+>
+> Cc: <stable@vger.kernel.org>
+> Fixes: bb0147364850 ("usb: dwc3: gadget: don't clear RUN/STOP when it's invalid to do so")
+> Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+
+Acked-by: Felipe Balbi <balbi@kernel.org>
+
 -- 
-2.25.1
-
+balbi
