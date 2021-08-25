@@ -2,133 +2,141 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9793A3F70F5
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 10:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B393F719A
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 11:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbhHYIRl (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 04:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
+        id S239464AbhHYJWR (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 05:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238764AbhHYIRk (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 04:17:40 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0374C061757
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 01:16:54 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id j14-20020a1c230e000000b002e748b9a48bso3180729wmj.0
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 01:16:54 -0700 (PDT)
+        with ESMTP id S232774AbhHYJWQ (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 05:22:16 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD01DC061757
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 02:21:30 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id x12so35310350wrr.11
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 02:21:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e12+t8sUP7LevMeTNEkZzKQOYqd64h7xXjFtrcOntvY=;
-        b=DV2AY7Ymt5b1gF8wBzD5VEUPe9i9OuEGX5ZN+mfBS86ls8AUmfpPpMjafpdKHDqemm
-         8H2Zh+Dsx98Co3Q1PQMk5X+416lghbsoWQtdiKpAU1kcVHizpOGjRs7AWz06dMSrryz/
-         aQOHGVglZtckJ0AXjXu8pxNExIwmA3Q70TYeoBLmV1RRJhGBIVPdon4lMNTEglmuM3ir
-         W49XVSPpYIlZapVkfO8KxiXXqEFDN8fKDpXs6MhGMZ0nd3kZlKYcUHZ6KrHLLorQxyFn
-         VeBe8ZYpVwJ8NtVWLn8CCo8koUzMPUPtN5Sjaytxj4GPlU21HdJ1Oia6DTzKsTByQ5AG
-         HioQ==
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Nr5ldMTnZyEoaDP2MOUKRrLKy0i/6wxf41UTk8wHlwU=;
+        b=joKHoSBSh/xc5IsD6a7mRqzAoEeXrQ5PMN2mYlcQUUre8Xe8qCH8G1K+lW39vIQLws
+         b7+7jKxYQTzjK01V7KE/pqqBqKj2Q8jW+9xFoajRHZl0PZ6q3O8msw0Az7dwdiMwYjbn
+         pH9+fgQVpHDdLhgs3HhhcJHdB+uk5WgQHSwk8Rqm1AbGrItL6vq4QjR0D0fp8jVoHf7k
+         xMTmHGXZcO8Q+cA8a3LWOKm4M78/eVyHfvo/d6t0bCO8pNeyx+dAE6vyWqtoSB3g+2mV
+         M/Z/3dle+pqPVd6ULRROGlxVxqqAc68lONvVpS6Aw2WpT6ktfa53mXYFe2hmPmQD91X8
+         uERg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=e12+t8sUP7LevMeTNEkZzKQOYqd64h7xXjFtrcOntvY=;
-        b=jiR5p6CHWP5hbW4vj/7TOTu4sM3veJuVoBWm4KRKlzWBcUrk0ER8742ornM1qcBolp
-         X/hNKD4IFIE6VPr0sjYl2dcZ8pgztl+wpMblkhELOCcsftU/bGuO9sb/lBZDN0Yecjom
-         CXQ9wom0HFJun16mliRomCYCGLjFtO3iwRXYHzDxflj2a+wcFreOSnbdH/ST+qltv7T/
-         o2h5Ie8zX+ags3+9vSg44Ju11vTDS44omvq0FFWDrtyVwMDFJ6eyT8pgkRcSX8O/Pmvf
-         +MeM3yQbILPsoMXts5jOEr9jWYtKbKJaxZqeDurqgavqWS3r+3DNeUv+0xU0NXvWAns2
-         yv7w==
-X-Gm-Message-State: AOAM533T3csqkfLS4HUyUAKoKBFkGadiWlgmf3+tB6GarQAB2UvXYoP5
-        g+IrNnZ1b5KiuS6DSdEN0tw0GQ==
-X-Google-Smtp-Source: ABdhPJwfNS0SQxhtIoVZ/HEAALlui/RIy3MOVzPMV9eeCjmy3wBI9GKsW6Q3G+uIIeldoql0KG1u7Q==
-X-Received: by 2002:a05:600c:4f91:: with SMTP id n17mr7849023wmq.54.1629879413604;
-        Wed, 25 Aug 2021 01:16:53 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b4sm9739226wrp.33.2021.08.25.01.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 01:16:53 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
- dwc3-qcom
-To:     Felipe Balbi <balbi@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Peter Chen <peter.chen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, agross@kernel.org,
-        gregkh@linuxfoundation.org, jackp@codeaurora.org,
-        wcheng@codeaurora.org, linux-usb@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga>
- <20210708030631.GA22420@nchen> <YSWCnsZDdp57KBqB@ripper>
- <87zgt65avm.fsf@kernel.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <ce5f12dd-ddc1-6a9c-3dfb-aa44ea166828@linaro.org>
-Date:   Wed, 25 Aug 2021 09:18:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Nr5ldMTnZyEoaDP2MOUKRrLKy0i/6wxf41UTk8wHlwU=;
+        b=Nm8GL4bINP17WGAGndfQ1SQyqE4GtcLVPRPdLUz1uRhUCsdokj0BVrj4OHY1lcemIY
+         l3Vr3xmxJEK1IuD8uewacsUZg6bH2odKkH8yT8yiuHC6R+oj7gKing4+R4yAEBBtN/P2
+         ivRImVfFuVMXlQZzynB3Rf9JJgWKpDdAwlCU20j349lWefSeonsWQoLG5SmP7yw15qX1
+         4itQtz22ADuZjSsdXeCbmjTuCOVV2TAXWkr8sn1U0QjUO0gcO2bMjq6fjWUhpB/mQkTo
+         6Vvqu4KaSjF5Ql/YhMJ6v53IRjoSSDMKWoW8Ls2bjHd/isfcNNRxk6jbbOUCFZLFmonv
+         kS9Q==
+X-Gm-Message-State: AOAM533uR7psNc05WBlMT1lPdjlA/grwv3pyBCJhHAiYRltExz8AhylF
+        kS0FzaBwBjsA+KbYPDINBk/aOw==
+X-Google-Smtp-Source: ABdhPJxO/I02GTgVKK7gQ23noQNpufzJHSm1c8cbXqZTodnZMin+6sXCrqBpGNF86k+aadpFt343DA==
+X-Received: by 2002:a05:6000:1569:: with SMTP id 9mr15638215wrz.242.1629883289465;
+        Wed, 25 Aug 2021 02:21:29 -0700 (PDT)
+Received: from jackdaw.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.googlemail.com with ESMTPSA id 18sm5416918wmv.27.2021.08.25.02.21.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Aug 2021 02:21:29 -0700 (PDT)
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Ferry Toth <fntoth@gmail.com>, Ferry Toth <ftoth@exalondelft.nl>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_uac2: fixup feedback endpoint stop
+Date:   Wed, 25 Aug 2021 11:21:07 +0200
+Message-Id: <20210825092107.124419-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20210824201433.11385-1-ftoth@exalondelft.nl>
+References: <20210824201433.11385-1-ftoth@exalondelft.nl>
 MIME-Version: 1.0
-In-Reply-To: <87zgt65avm.fsf@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25/08/2021 06:51, Felipe Balbi wrote:
->> Hi Peter, I took a proper look at this again, hoping to find a way to
->> pass a callback pointer from dwc3-qcom to the dwc3 core, that can be
->> called from __dwc3_set_mode() to inform the Qualcomm glue about mode
->> changes.
-> I would rather keep the strict separation between glue and core.
+When the uac2 function is stopped, there seems to be an issue with some
+platforms (Intel Merrifield at least)
 
-# 1 __dwc3_set_mode
-Felipe wants to keep a strict separation between core and glue
+BUG: kernel NULL pointer dereference, address: 0000000000000008
+...
+RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
+...
+Call Trace:
+ dwc3_remove_requests.constprop.0+0x12f/0x170
+ __dwc3_gadget_ep_disable+0x7a/0x160
+ dwc3_gadget_ep_disable+0x3d/0xd0
+ usb_ep_disable+0x1c/0x70
+ u_audio_stop_capture+0x79/0x120 [u_audio]
+ afunc_set_alt+0x73/0x80 [usb_f_uac2]
+ composite_setup+0x224/0x1b90 [libcomposite]
 
-# notifier
-Requires the core probe() to complete before the glue probe to work 
-reliably. This then would lead us to remaking the dwc3-qcom::probe() to 
-facilitate probe deferral.
+The issue happens only when the gadget is using the sync type "async", not
+"adaptive". This indicates that problem is likely coming from the feedback
+endpoint, which is only used with async synchronization mode.
 
-We can be sure bugs would be introduced in this process.
+Update the feedback endpoint free function to release the endpoint the same
+way it is done for the data endpoint.
 
-AFAIK Felipe is not opposed to this, Bjorn likes it
-
-# 2 extcon
-Works but a) is deprecated and b) even if it weren't deprecated has no 
-way to layer the messages - that I know of.
-
-# 3 USB role switch
-Already in-place for the producer {phy, type-c port, usb-gpio typec, 
-google ecros} to consumer dwc-core. It already has a layering 1:1 of 
-that array of producers to the consumer.
-
-Unlike extcon though it cannot relay messages to more than one consumer.
-
-As I see it we can either
-
-A. Rewrite the dwc3-qcom probe to make it synchronous with dwc3-core 
-probe taking the hit of whatever bugs get thrown up as a result of that 
-over the next while, potentially years.
-
-B. Use USB role switch in some format.
-
-Either
-X. as I've submitted here based on a bit of code in dwc3-core or
-
-Y. maybe trying to hide the "relay" aspect in DTS and USB role-switch core
-
-It seems to me our choices are notifier + pain and churn - perhaps low, 
-perhaps high or USB role switch
-
-3.B.X works and is what has been submitted here but, if it is 
-objectionable is 3.B.Y viable ?
-
-As in make USB role switch propigate to multiple consumers via DTS and 
-whatever additional work is required in the role-switch layer ?
-
-+ Heikki on that one.
-
+Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
-bod
+
+ Hi Ferry,
+
+ Would you mind trying this before reverting the whole thing ?
+ The HW I have did not show the issue so far so I can't really check
+ if it helps. Hopefully, it does ...
+
+ drivers/usb/gadget/function/u_audio.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
+index 018dd0978995..63d9340f008e 100644
+--- a/drivers/usb/gadget/function/u_audio.c
++++ b/drivers/usb/gadget/function/u_audio.c
+@@ -230,7 +230,13 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
+ 	int status = req->status;
+ 
+ 	/* i/f shutting down */
+-	if (!prm->fb_ep_enabled || req->status == -ESHUTDOWN)
++	if (!prm->fb_ep_enabled) {
++		kfree(req->buf);
++		usb_ep_free_request(ep, req);
++		return;
++	}
++
++	if (req->status == -ESHUTDOWN)
+ 		return;
+ 
+ 	/*
+@@ -421,9 +427,10 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
+ 	prm->fb_ep_enabled = false;
+ 
+ 	if (prm->req_fback) {
+-		usb_ep_dequeue(ep, prm->req_fback);
+-		kfree(prm->req_fback->buf);
+-		usb_ep_free_request(ep, prm->req_fback);
++		if (usb_ep_dequeue(ep, prm->req_fback)) {
++			kfree(prm->req_fback->buf);
++			usb_ep_free_request(ep, prm->req_fback);
++		}
+ 		prm->req_fback = NULL;
+ 	}
+ 
+-- 
+2.33.0
+
