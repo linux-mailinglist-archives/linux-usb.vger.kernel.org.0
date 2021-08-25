@@ -2,196 +2,112 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C61C3F7DA4
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 23:23:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12123F7DB9
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 23:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232326AbhHYVXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 17:23:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60806 "EHLO mail.kernel.org"
+        id S232820AbhHYV0j (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 17:26:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232049AbhHYVXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 17:23:51 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id C405660F6F
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 21:23:05 +0000 (UTC)
+        id S229923AbhHYV0h (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 17:26:37 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id 79419610A1;
+        Wed, 25 Aug 2021 21:25:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629926585;
-        bh=C1HV5ro6GAox4Ga3q5sKC1+njI0+Qht/2BWsBSPpdLA=;
-        h=From:To:Subject:Date:From;
-        b=XM/5w+Kj70ayNegVUZIT4osMn03FJZwvwHVXq9XwQ78n4THqlKnVVQf9e7o6+rCTx
-         Ojl13GNI+ltvwxbZYmeSBu6VSOIynO6/pDy+v+NHOXC2+1h+CXKo062bTryLQOy7Ja
-         0ayJtNcrMhQwLoH3giaFYG3XtVssBkne07rwCyOv7NlUZaLKJ+7UYTj2WatqiIj9j6
-         Mm45vpx4QXmGURZTKhE4wcZpjOCOFsDLN4FKLD4aDnxqyBTcifhp1c5wZhrOBP2924
-         b+k1rLYDOxyrBKuXoKgSUTJdFeqQpOFWRG2Io5Z9M4v6QSYF5fg8e5qC4ptq2/Fpil
-         yHyWq3ssuyfpw==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id B4D1A61001; Wed, 25 Aug 2021 21:23:05 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214173] New: Built-in Renesas uPD720202 fails to initialize on
- Thinkpad T14 AMD
-Date:   Wed, 25 Aug 2021 21:23:05 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: milan.plzik@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
- priority component assigned_to reporter cf_regression
-Message-ID: <bug-214173-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        s=k20201202; t=1629926750;
+        bh=xQDrtgT6uthmEGov/Ldo+EaOEsSjtEqV6roEUR4U2co=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fASCj+Go18/tQH72Frrh86vQVUhFBKTCcQ9o3Ad3urEcD8hJY/IVjmN/1OlNCuXM4
+         7JHmj+5rcXAer/IJ5s5nNiWQN44+Wzp2sr83a87R1CCPRsMKBGBQIH+6UKRHirnyas
+         wPVtWIKNENPU02jJD6GFFXh1J0YuLxlengl+em2Gt5AdRTxcLXm3lq/u+SnHoFANyy
+         GAemNjEbynsA+w9EusA1aYNMqsnfKT/CgqIfBhQLMN3yeqoGmDtCXqtkzI8KNCv7iO
+         +a/vZ9eADe/hwGSLkGP6I/AoRwgMGYHBduxWGD42U57kaBGxpBic1W/I8SmgF28hOe
+         Vrciu66nkn5+g==
+Date:   Wed, 25 Aug 2021 16:25:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Prasad Malisetty <pmaliset@codeaurora.org>, agross@kernel.org,
+        bhelgaas@google.com, bjorn.andersson@linaro.org,
+        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
+        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dianders@chromium.org,
+        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
+        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
+ init in SC7280
+Message-ID: <20210825212549.GA3609092@bjorn-Precision-5520>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE-0n50cnWf_3LQ6P9KMaT4dnryWW9JemP95JDZt5WE1G4mZuQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214173
+[+cc linux-pci; patches to drivers/pci/ should always be cc'd there]
 
-            Bug ID: 214173
-           Summary: Built-in Renesas uPD720202 fails to initialize on
-                    Thinkpad T14 AMD
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 5.13.12
-          Hardware: x86-64
-                OS: Linux
-              Tree: Mainline
-            Status: NEW
-          Severity: high
-          Priority: P1
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: milan.plzik@gmail.com
-        Regression: No
+On Wed, Aug 25, 2021 at 07:30:09PM +0000, Stephen Boyd wrote:
+> Quoting Prasad Malisetty (2021-08-24 01:10:48)
+> > On 2021-08-17 22:56, Prasad Malisetty wrote:
+> > > On 2021-08-10 09:38, Prasad Malisetty wrote:
+> > >> On the SC7280, By default the clock source for pcie_1_pipe is
+> > >> TCXO for gdsc enable. But after the PHY is initialized, the clock
+> > >> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
+> > >>
+> > >> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
+> > >> ---
+> > >>  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
+> > >>  1 file changed, 18 insertions(+)
+> > >>
+> > >> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
+> > >> b/drivers/pci/controller/dwc/pcie-qcom.c
+> > >> index 8a7a300..39e3b21 100644
+> > >> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> > >> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> > >> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
+> > >>      struct regulator_bulk_data supplies[2];
+> > >>      struct reset_control *pci_reset;
+> > >>      struct clk *pipe_clk;
+> > >> +    struct clk *gcc_pcie_1_pipe_clk_src;
+> > >> +    struct clk *phy_pipe_clk;
+> > >>  };
+> > >>
+> > >>  union qcom_pcie_resources {
+> > >> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct
+> > >> qcom_pcie *pcie)
+> > >>      if (ret < 0)
+> > >>              return ret;
+> > >>
+> > >> +    if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
+> > >> +            res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
+> > >> +            if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
+> > >> +                    return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
+> > >> +
+> > >> +            res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
+> > >> +            if (IS_ERR(res->phy_pipe_clk))
+> > >> +                    return PTR_ERR(res->phy_pipe_clk);
+> > >> +    }
+> > >
+> > > I would like to check is there any other better approach instead of
+> > > compatible method here as well or is it fine to use compatible method.
+> 
+> I'd prefer the compatible method. If nobody is responding then it's best
+> to just resend the patches with the approach you prefer instead of
+> waiting for someone to respond to a review comment.
 
-After doing a series of upgrades on a dual-boot Thinkpad T14 AMD (comprised=
- of
-Windows driver/firmware upgrade and linux kernel upgrade), the Renesas USB =
-3.0
-doesn't seem to get initialized anymore, timing out on initialization.
+I'm missing some context here, so I'm not exactly sure what your
+question is, Prasad, but IMO drivers generally should not need to use
+of_device_is_compatible() if they've already called
+of_device_get_match_data() (as qcom_pcie_probe() has).
 
-```
-# journalctl -xb |grep -i 06:00
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: [1912:0015] type 00 cla=
-ss
-0x0c0330
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: reg 0x10: [mem
-0xfd400000-0xfd401fff 64bit]
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: PME# supported from D0
-D3hot
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: xHCI HW not ready after=
- 5
-sec (HC bug?) status =3D 0x1801
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0:
-quirk_usb_early_handoff+0x0/0x740 took 4882933 usecs
-Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: Adding to iommu group 16
-Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
-er
-Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
-registered, assigned bus number 2
-Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: Zeroing 64bit base
-registers, expecting fault
-Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: can't setup: -110
-Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: USB bus 2 deregist=
-ered
-Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: init 0000:06:00.0
-fail, -110
-Aug 24 17:05:57 archlinux kernel: xhci_hcd: probe of 0000:06:00.0 failed wi=
-th
-error -110
-```
+of_device_is_compatible() does basically the same work of looking for
+a match in qcom_pcie_match[] that of_device_get_match_data() does, so
+it seems pointless to repeat it.
 
-This is a notable regression to the previous laptop's state where this got
-correctly initialized:
+I am a little confused because while [1] adds "qcom,pcie-sc7280" to
+qcom,pcie.txt, I don't see a patch that adds it to qcom_pcie_match[].
 
-```
-# journalctl -xb -10 |grep 06:00
-Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: [1912:0015] type 00 cla=
-ss
-0x0c0330
-Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: reg 0x10: [mem
-0xfd400000-0xfd401fff 64bit]
-Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: PME# supported from D0
-D3hot D3cold
-Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: Adding to iommu group 16
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
-er
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
-registered, assigned bus number 2
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: Zeroing 64bit base
-registers, expecting fault
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: hcc params 0x01405=
-1cf
-hci version 0x100 quirks 0x0000001100000090
-Jun 26 11:06:21 archlinux kernel: usb usb2: SerialNumber: 0000:06:00.0
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
-er
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
-registered, assigned bus number 3
-Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: Host supports USB =
-3.0
-SuperSpeed
-Jun 26 11:06:21 archlinux kernel: usb usb3: SerialNumber: 0000:06:00.0
-```
+Bjorn
 
-Most notably, this renders the laptop's built-in webcam unusable (not showi=
-ng
-on the USB bus). There's anecdotal evidence that installing a package
-containing older firmware resolves this issue (i.e.
-https://forums.lenovo.com/t5/Other-Linux-Discussions/No-camera-on-thinkpad-=
-P14s-AMD/m-p/5090434),
-but since a lot of data indicates that the firmware is actually located in =
-ROM
-(and maybe RAM). Since this is a dual-boot system, I'm being a bit cautious
-with not using an older version if Windows might expect a newer version
-already.
-
-I'll be happy to do some testing if needed, assuming there's no chance of
-accidentally bricking the laptop.
-
-Additional info:
-
-Hardware: Thinpad T14 AMD Gen 1
-
-
-```
-$ lspci -vv
-...
-06:00.0 USB controller: Renesas Technology Corp. uPD720202 USB 3.0 Host
-Controller (rev 02) (prog-if 30 [XHCI])
-        Flags: fast devsel, IRQ 34, IOMMU group 16
-        Memory at fd400000 (64-bit, non-prefetchable) [size=3D8K]
-        Capabilities: [50] Power Management version 3
-        Capabilities: [70] MSI: Enable- Count=3D1/8 Maskable- 64bit+
-        Capabilities: [90] MSI-X: Enable- Count=3D8 Masked-
-        Capabilities: [a0] Express Endpoint, MSI 00
-        Capabilities: [100] Advanced Error Reporting
-        Capabilities: [150] Latency Tolerance Reporting
-        Kernel modules: xhci_pci
-...
-```
-
-```
-$ uname -a
-Linux thinkpad 5.13.12-arch1-1 #1 SMP PREEMPT Wed, 18 Aug 2021 20:49:03 +00=
-00
-x86_64 GNU/Linux
-```
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+[1] https://lore.kernel.org/linux-arm-msm/1628568516-24155-2-git-send-email-pmaliset@codeaurora.org/
