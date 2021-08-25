@@ -2,93 +2,69 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA0763F73B1
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 12:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B00CA3F74CD
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 14:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240018AbhHYKwm (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 06:52:42 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:35388 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240023AbhHYKwi (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 06:52:38 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 17PApm3q086839;
-        Wed, 25 Aug 2021 05:51:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1629888708;
-        bh=GaS42XPzy+IzWgDptEm7iQbdbNddfetdjBkNUeG0FgQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=jX0VIQNBQ7cvWmNB/3lxltuFoJ1VJ3cEEK4CXO4prHwLPhFmkevkh6wdQ13YASseY
-         VNHW1k6LIScoAwz9MPAI+5cDZMlvYBMYdqHEwbTqYrM/otXqWPv81FW0K2SaJn3Gzr
-         TF0LMgPGKv78qiqOZNXYUYYDrb7hxzzBka2o2aII=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 17PApmef010231
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 25 Aug 2021 05:51:48 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 25
- Aug 2021 05:51:48 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2176.2 via
- Frontend Transport; Wed, 25 Aug 2021 05:51:48 -0500
-Received: from a0393678-lt.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 17PApW88129194;
-        Wed, 25 Aug 2021 05:51:45 -0500
-From:   Kishon Vijay Abraham I <kishon@ti.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chris.chiu@canonical.com>, Kishon Vijay Abraham I <kishon@ti.com>,
-        <lokeshvutla@ti.com>
-Subject: [PATCH 3/3] xhci: Set HCD flag to defer primary roothub registration
-Date:   Wed, 25 Aug 2021 16:21:32 +0530
-Message-ID: <20210825105132.10420-4-kishon@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20210825105132.10420-1-kishon@ti.com>
-References: <20210825105132.10420-1-kishon@ti.com>
+        id S240593AbhHYMJK (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 08:09:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:54044 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232681AbhHYMJK (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 08:09:10 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id F3D8B610D0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 12:08:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629893305;
+        bh=iDUiVh1ACREwPD9ntgVJFjPKZL7GoLJEzyFYugGohNo=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=a6Y9wItABVix17NQZrJqWmG4v4xaD6g+gNBA8pgh8VSKwI6jlhkuRleuloWFpsc40
+         MH19tivD6cgYKKcOafzu/vlwyEilgz1rNXTud0TNfK4r29SQoEWlwmSFU0y6jh1S0i
+         86R5FC223dD/M60k7ZGaHYjj3G29eFqUIWjCxOaIrVeIdEUhCerMG13nKioNpW9r44
+         2JB6q6/wroHQjPS9rjD1Wde52NalD5+LP3xKfcKgUmh/9+sNTYynf93gRP+x/omx5+
+         6XxHswGOPmC4vHHAy9AkhKCmyu+M365RCq88T5ZKQIZef5AW91P99AUFEBTOcL3uRa
+         vQ1VLWGjqiqDA==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id E526561002; Wed, 25 Aug 2021 12:08:24 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214021] The USB devices fail to be detected during boot
+Date:   Wed, 25 Aug 2021 12:08:24 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: chris.chiu@canonical.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-214021-208809-giXqvDU66T@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-214021-208809@https.bugzilla.kernel.org/>
+References: <bug-214021-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Set "HCD_FLAG_DEFER_PRI_RH_REGISTER" to hcd->flags in xhci_run() to defer
-registering primary roothub in usb_add_hcd(). This will make sure both
-primary roothub and secondary roothub will be registered along with the
-second HCD. This is required for cold plugged USB devices to be detected
-in certain PCIe USB cards (like Inateck USB card connected to AM64 EVM
-or J7200 EVM).
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214021
 
-Signed-off-by: Kishon Vijay Abraham I <kishon@ti.com>
-Suggested-by: Mathias Nyman <mathias.nyman@linux.intel.com>
----
- drivers/usb/host/xhci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--- Comment #14 from Chris Chiu (chris.chiu@canonical.com) ---
+Thanks to the upstream patch from Kishon. I've tested and it works on my ke=
+rnel
+5.4 base which used to have problem.
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 3618070eba78..9b7d968022c8 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -644,7 +644,6 @@ int xhci_run(struct usb_hcd *hcd)
- 	/* Start the xHCI host controller running only after the USB 2.0 roothub
- 	 * is setup.
- 	 */
--
- 	hcd->uses_new_polling = 1;
- 	if (!usb_hcd_is_primary_hcd(hcd))
- 		return xhci_run_finished(xhci);
-@@ -692,6 +691,7 @@ int xhci_run(struct usb_hcd *hcd)
- 		if (ret)
- 			xhci_free_command(xhci, command);
- 	}
-+	set_bit(HCD_FLAG_DEFER_PRI_RH_REGISTER, &hcd->flags);
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Finished xhci_run for USB2 roothub");
- 
--- 
-2.17.1
+--=20
+You may reply to this email to add a comment.
 
+You are receiving this mail because:
+You are watching the assignee of the bug.=
