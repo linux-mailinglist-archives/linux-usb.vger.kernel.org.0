@@ -2,152 +2,115 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4209F3F7D01
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 22:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE95D3F7D0A
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 22:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242561AbhHYUIL (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 16:08:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S239046AbhHYUMz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 16:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbhHYUIK (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 16:08:10 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69150C061757;
-        Wed, 25 Aug 2021 13:07:24 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id i21so968391ejd.2;
-        Wed, 25 Aug 2021 13:07:24 -0700 (PDT)
+        with ESMTP id S238571AbhHYUMy (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 16:12:54 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C22C0613C1
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 13:12:08 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id ay33so746531qkb.10
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 13:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=MezRDNf2kH9JeRo+6fb87WqyF4nzbzthCut3DvYsYm4=;
-        b=i0dNRUorfc18/0esc9Pcc50YmwX20/EyrjDXyWaQXmQYGDa8kGYNJ0aDNwGS6V/AtH
-         TQ8U+HDC3OsLkNeqC98HbfrzAF2bKVqH2A6qfqllGyz5yHdfrtMtaXQ2q5ri8/t2Bji1
-         Io6ypsVMPYLCDzzk0Yh9WPQsA/Eqnkp3NRodLihCsWxIHkD1dcJ1LUlW/Am9B9yIcMeT
-         V0wvjzv7VY4pw7+CJkIGBzMWGWXvfIAUYW6uJtqbhRCrfL98bklu1GnovjprYEEe0ADp
-         z0H/YH4z8vHyYTvvhcx3im+2iArXYdjY8y5E0zUNsp4dU2kR5TJlYoQuwUuBeUD2wvjg
-         Grwg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vbP5UVTgmY2oS9CShjTY4KdaNELp9AGh568LVPRQ/jk=;
+        b=RAjtwnACTWPvH7V/FtK/3NF3L+p0VuaFA4ON2soGuZMa791gAQoMQi/9tJ96yDeLQt
+         yuZhqJRgsTnaZC+kFSyufkN3moBMPHP7mdVPJzbB4Wv9ATsAPcHkTuv3SmI3bHddewsz
+         Ova2gkSoXbWPnsjc3k3ImYwM9PfUIAA0MQSSb+qCJUuihJm/6ei3rSAjRgaz3qaca9mz
+         Ywge2QPkW5t14hwmBjUHqEugdmxGeaoZr5o66VXJ97iI/NxaODSOLJl+9dqrDGnbteEk
+         1GgJQQCU//QeWV0tpKfcau5T6MUwlCFnhFcge4OTpbwt60LQWydV8+XKXOplny8ngJ3k
+         zd+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=MezRDNf2kH9JeRo+6fb87WqyF4nzbzthCut3DvYsYm4=;
-        b=QT0kwEC6OALhRJE5PN9aN8FEJTvObiay4+CIC04ZWsc8uHcq42FAERPDcHj9aF0Z9m
-         IW/OaqKJTWb5O3cX9YgyenlLx3m5TCPvxMmsAb+54q3AnPOim15yTyfjSEuQLEVnWmRg
-         HsFp034t1JtgfGPp/D3HO05oXrYQySI/O9zylw1zAdLORCijg1/yXqYkB0SKjFO0sehG
-         hYvQePXYERWnl2VAjMdknOFhdjGa5ktqcl0ily3dgEiY9Dcx5ol3OmPKFkxaYo4jga1c
-         xWC+oxFBSqukCUj0B6LeWGBGrYghWDePs3sysom5My9wQ2mCaK8+2MpvsU+St+kimye8
-         zffA==
-X-Gm-Message-State: AOAM531BKHKBdHlWi4r9o5Od+lPY9QgqkWQ7Bn8gzqN6ozfylq6ijlca
-        Ti573p9axSqT1nt9Orwqvis=
-X-Google-Smtp-Source: ABdhPJxQIOXkfPEM+oUo0BuPMpswYtXSXSnPP7hSF3fGstrY1QYv/1X7wjH1aLZnoJYeyvCZZaoTnA==
-X-Received: by 2002:a17:906:a59:: with SMTP id x25mr385137ejf.33.1629922042824;
-        Wed, 25 Aug 2021 13:07:22 -0700 (PDT)
-Received: from ?IPv6:2001:981:6fec:1:2090:c45b:fc0a:29b3? ([2001:981:6fec:1:2090:c45b:fc0a:29b3])
-        by smtp.gmail.com with ESMTPSA id b15sm280006ejq.83.2021.08.25.13.07.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Aug 2021 13:07:22 -0700 (PDT)
-Subject: Re: [PATCH] usb: gadget: f_uac2: fixup feedback endpoint stop
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Ferry Toth <ftoth@exalondelft.nl>,
-        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Pavel Hofman <pavel.hofman@ivitera.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-References: <20210824201433.11385-1-ftoth@exalondelft.nl>
- <20210825092107.124419-1-jbrunet@baylibre.com>
-From:   Ferry Toth <fntoth@gmail.com>
-Message-ID: <79bd686d-5c1f-982c-344a-17c10b64a231@gmail.com>
-Date:   Wed, 25 Aug 2021 22:07:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vbP5UVTgmY2oS9CShjTY4KdaNELp9AGh568LVPRQ/jk=;
+        b=l0MfApgNXvVggf1rBBWkhFf9vF5Djt7saiIwUqyJkkZP14WG8ZGZdxtIE3gC7id43m
+         EMGCEdZgv4B7rL7upbUp4D9ljsjl9wT/HQ1N18MZfmmVsNOAMunumvGox3R8GLa2xRL6
+         8BhZaPs6BgdDgZezxyNbLgqZCCgMKLiTIC2OyxIyKKDOXDFPH8fmScCnqnneUrOr1Kfr
+         RjadkW+Z62PT/uaDzn6OexoV4WG4o8wlFZ2NQOMyeHcQyfFqAGt61aLwCeMEmmljB4oM
+         jhLTPZuw6LTZ2VevnSBR+LitDLXetnPeKPc6/BI5mT6ocPtOg7fIZxBeVM8j9TCIISwY
+         sCmw==
+X-Gm-Message-State: AOAM530WTKkLoCpdIGdXBksa5je55U/yj+NGd5hBsjM20IBD83NFmf+m
+        JkjvxfJ5+7Oa+brDLqXi4MXr5IvHr5nulYaab+Xlag==
+X-Google-Smtp-Source: ABdhPJw8T5T0B+womDxHAuRLjClmJiHJj/LY69irmQweQjoRskwL2b8WjDIO9jWvOSnVu8LVwn/Mx7z3OxWuiBhoTPI=
+X-Received: by 2002:a05:620a:1082:: with SMTP id g2mr341202qkk.138.1629922327665;
+ Wed, 25 Aug 2021 13:12:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20210825092107.124419-1-jbrunet@baylibre.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+ <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga> <20210708030631.GA22420@nchen>
+ <YSWCnsZDdp57KBqB@ripper> <87zgt65avm.fsf@kernel.org> <ce5f12dd-ddc1-6a9c-3dfb-aa44ea166828@linaro.org>
+ <YSZned9v1+ajzVx0@ripper> <90d17c95-1cf3-89aa-94ad-920e4781f866@linaro.org>
+In-Reply-To: <90d17c95-1cf3-89aa-94ad-920e4781f866@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 25 Aug 2021 23:11:54 +0300
+Message-ID: <CAA8EJpoEJtELwA6+NGRa_jsKPfEka62uvZJzNc0dQaVqbsSssw@mail.gmail.com>
+Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to dwc3-qcom
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Peter Chen <peter.chen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>, wcheng@codeaurora.org,
+        linux-usb@vger.kernel.org,
+        "open list:DRM DRIVER FOR MSM ADRENO GPU" 
+        <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
 Hi,
 
-Op 25-08-2021 om 11:21 schreef Jerome Brunet:
-> When the uac2 function is stopped, there seems to be an issue with some
-> platforms (Intel Merrifield at least)
+On Wed, 25 Aug 2021 at 20:57, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
 >
-> BUG: kernel NULL pointer dereference, address: 0000000000000008
-> ...
-> RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
-> ...
-> Call Trace:
->   dwc3_remove_requests.constprop.0+0x12f/0x170
->   __dwc3_gadget_ep_disable+0x7a/0x160
->   dwc3_gadget_ep_disable+0x3d/0xd0
->   usb_ep_disable+0x1c/0x70
->   u_audio_stop_capture+0x79/0x120 [u_audio]
->   afunc_set_alt+0x73/0x80 [usb_f_uac2]
->   composite_setup+0x224/0x1b90 [libcomposite]
+> On 25/08/2021 16:53, Bjorn Andersson wrote:
+> > But in the case of Type-C altmode several of our boards have either an
+> > external gpio-based SBU-pin-swapper or some redriver on I2C with this
+> > functionality, so we need a way to tell both the PHY and this external
+> > contraption about the orientation.
 >
-> The issue happens only when the gadget is using the sync type "async", not
-> "adaptive". This indicates that problem is likely coming from the feedback
-> endpoint, which is only used with async synchronization mode.
+> Its a very similar problem to orientation switch
 >
-> Update the feedback endpoint free function to release the endpoint the same
-> way it is done for the data endpoint.
+> As an example
 >
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> ---
+> - redriver may need to fix up signal integrity for
+>    lane switching
 >
->   Hi Ferry,
+> - PHY needs to toggle lanes from one IP block to another
 >
->   Would you mind trying this before reverting the whole thing ?
->   The HW I have did not show the issue so far so I can't really check
->   if it helps. Hopefully, it does ...
+> I don't think off the top of my head a USB controller or DPU cares much
+> about the orientation switch but for argument sake you could add one to
+> that list.
+>
+> I _think_ the type-c mux layer handles this though, as in what we did on
+> RB5 has PHY and redriver receiving and reacting to a type-c orientation
+> switch both with the existing type-c port driver and the new tcpm.
+>
+> + Dmitry - he did the mux work on the PHY and the redriver
 
-Tested this evening and confirming that this resolves my issue. I can't 
-say much about the code itself, maybe Thinh?
+For the RB5 case I ended up with the redriver acting as a client for
+the type-c port orientation events, and then it would act as a source
+for the event being sent to the DP PHY. This chained approach is far
+from being ideal, but it allowed me to use the current framework
+without applying significant changes. I've had some ideas on how to
+improve the type-c framework, but I never had enough time to
+materialize them.
 
-Would be great if we could get this in instead of reverting the series.
+> Seems to me that the type-c mux way of diseminating to more than one
+> place might fight role-switching well too.
 
-Tested-by:  Ferry Toth <ftoth@exalondelft.nl> (dwc3 / Intel Merrifield)
-
->   drivers/usb/gadget/function/u_audio.c | 15 +++++++++++----
->   1 file changed, 11 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/function/u_audio.c
-> index 018dd0978995..63d9340f008e 100644
-> --- a/drivers/usb/gadget/function/u_audio.c
-> +++ b/drivers/usb/gadget/function/u_audio.c
-> @@ -230,7 +230,13 @@ static void u_audio_iso_fback_complete(struct usb_ep *ep,
->   	int status = req->status;
->   
->   	/* i/f shutting down */
-> -	if (!prm->fb_ep_enabled || req->status == -ESHUTDOWN)
-> +	if (!prm->fb_ep_enabled) {
-> +		kfree(req->buf);
-> +		usb_ep_free_request(ep, req);
-> +		return;
-> +	}
-> +
-> +	if (req->status == -ESHUTDOWN)
->   		return;
->   
->   	/*
-> @@ -421,9 +427,10 @@ static inline void free_ep_fback(struct uac_rtd_params *prm, struct usb_ep *ep)
->   	prm->fb_ep_enabled = false;
->   
->   	if (prm->req_fback) {
-> -		usb_ep_dequeue(ep, prm->req_fback);
-> -		kfree(prm->req_fback->buf);
-> -		usb_ep_free_request(ep, prm->req_fback);
-> +		if (usb_ep_dequeue(ep, prm->req_fback)) {
-> +			kfree(prm->req_fback->buf);
-> +			usb_ep_free_request(ep, prm->req_fback);
-> +		}
->   		prm->req_fback = NULL;
->   	}
->   
+-- 
+With best wishes
+Dmitry
