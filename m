@@ -2,128 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D270C3F6E74
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 06:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ED03F6ED0
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 07:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbhHYEaG (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 00:30:06 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:16755 "EHLO m43-7.mailgun.net"
+        id S232313AbhHYFaP (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 01:30:15 -0400
+Received: from mga05.intel.com ([192.55.52.43]:30898 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229797AbhHYEaE (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 00:30:04 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629865749; h=Content-Transfer-Encoding: MIME-Version:
- Message-Id: Date: Subject: Cc: To: From: Sender;
- bh=0+985ZB1bZ2Xt57BgaCKAO5yH9ewmG5YTGZdFzukfIw=; b=SMrTgYZPIhxyC1TOh8WQe8olqCXIMGW/yoEBiOanD1pOB7gjDA+xu6Y+pVfvLCv6LPYCe9AN
- Th7A7e1K48brtsKWVALSVbI2slzhesGw4841mbrrjZvBAuQZBDPPC+xdEIeqzTYh3Uf+X0wr
- E8gsqVkI80gqDOQkmqOtR3faLbo=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-east-1.postgun.com with SMTP id
- 6125c70c1567234b8cb458a6 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 25 Aug 2021 04:29:00
- GMT
-Sender: wcheng=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id D0314C43616; Wed, 25 Aug 2021 04:28:59 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from wcheng-linux.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: wcheng)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5A39EC4338F;
-        Wed, 25 Aug 2021 04:28:58 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 5A39EC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Wesley Cheng <wcheng@codeaurora.org>
-To:     balbi@kernel.org, gregkh@linuxfoundation.org,
-        Thinh.Nguyen@synopsys.com
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jackp@codeaurora.org, Wesley Cheng <wcheng@codeaurora.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v5] usb: dwc3: gadget: Stop EP0 transfers during pullup disable
-Date:   Tue, 24 Aug 2021 21:28:55 -0700
-Message-Id: <20210825042855.7977-1-wcheng@codeaurora.org>
-X-Mailer: git-send-email 2.33.0
+        id S232303AbhHYFaP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 01:30:15 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="303033542"
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="303033542"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2021 22:29:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="515986139"
+Received: from lkp-server02.sh.intel.com (HELO 181e7be6f509) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 24 Aug 2021 22:29:26 -0700
+Received: from kbuild by 181e7be6f509 with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mIlTZ-0001D4-Cv; Wed, 25 Aug 2021 05:29:25 +0000
+Date:   Wed, 25 Aug 2021 13:28:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org
+Subject: [usb:usb-testing] BUILD SUCCESS
+ d7428bc26fc767942c38d74b80299bcd4f01e7cb
+Message-ID: <6125d4fe.K6wZNwG3+GUFEU84%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-During a USB cable disconnect, or soft disconnect scenario, a pending
-SETUP transaction may not be completed, leading to the following
-error:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+branch HEAD: d7428bc26fc767942c38d74b80299bcd4f01e7cb  usb: gadget: f_hid: optional SETUP/SET_REPORT mode
 
-    dwc3 a600000.dwc3: timed out waiting for SETUP phase
+elapsed time: 925m
 
-If this occurs, then the entire pullup disable routine is skipped and
-proper cleanup and halting of the controller does not complete.
+configs tested: 137
+configs skipped: 3
 
-Instead of returning an error (which is ignored from the UDC
-perspective), allow the pullup disable routine to continue, which
-will also handle disabling of EP0/1.  This will end any active
-transfers as well.  Ensure to clear any delayed_status also, as the
-timeout could happen within the STATUS stage.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Cc: <stable@vger.kernel.org>
-Fixes: bb0147364850 ("usb: dwc3: gadget: don't clear RUN/STOP when it's invalid to do so")
-Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Wesley Cheng <wcheng@codeaurora.org>
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20210824
+arm                          pxa3xx_defconfig
+powerpc                        fsp2_defconfig
+powerpc                      bamboo_defconfig
+xtensa                       common_defconfig
+mips                        vocore2_defconfig
+sh                           se7722_defconfig
+powerpc                    mvme5100_defconfig
+powerpc                     ep8248e_defconfig
+sh                          sdk7786_defconfig
+arm                           viper_defconfig
+xtensa                  nommu_kc705_defconfig
+powerpc                    adder875_defconfig
+powerpc                       ebony_defconfig
+arm                            xcep_defconfig
+riscv                          rv32_defconfig
+sh                          rsk7201_defconfig
+riscv                            alldefconfig
+sparc64                             defconfig
+arc                           tb10x_defconfig
+arm                          pxa910_defconfig
+ia64                                defconfig
+arm                             ezx_defconfig
+powerpc                      ppc40x_defconfig
+mips                       lemote2f_defconfig
+powerpc                  mpc866_ads_defconfig
+powerpc                 mpc834x_itx_defconfig
+powerpc                     pq2fads_defconfig
+powerpc                      arches_defconfig
+arm                             rpc_defconfig
+arm                         cm_x300_defconfig
+powerpc                       maple_defconfig
+sh                               j2_defconfig
+sh                        sh7763rdp_defconfig
+arm                          ixp4xx_defconfig
+i386                                defconfig
+arc                     haps_hs_smp_defconfig
+powerpc                 linkstation_defconfig
+powerpc64                           defconfig
+mips                          ath79_defconfig
+arm                          lpd270_defconfig
+arm                         hackkit_defconfig
+sh                           se7206_defconfig
+arm                      tct_hammer_defconfig
+sh                            titan_defconfig
+xtensa                  audio_kc705_defconfig
+arc                              allyesconfig
+riscv                    nommu_k210_defconfig
+m68k                         apollo_defconfig
+sh                           se7721_defconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+x86_64                            allnoconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a005-20210824
+x86_64               randconfig-a006-20210824
+x86_64               randconfig-a001-20210824
+x86_64               randconfig-a003-20210824
+x86_64               randconfig-a004-20210824
+x86_64               randconfig-a002-20210824
+i386                 randconfig-a006-20210824
+i386                 randconfig-a001-20210824
+i386                 randconfig-a002-20210824
+i386                 randconfig-a005-20210824
+i386                 randconfig-a003-20210824
+i386                 randconfig-a004-20210824
+x86_64               randconfig-a014-20210825
+x86_64               randconfig-a015-20210825
+x86_64               randconfig-a016-20210825
+x86_64               randconfig-a013-20210825
+x86_64               randconfig-a012-20210825
+x86_64               randconfig-a011-20210825
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+
+clang tested configs:
+i386                 randconfig-c001-20210824
+s390                 randconfig-c005-20210824
+arm                  randconfig-c002-20210824
+riscv                randconfig-c006-20210824
+powerpc              randconfig-c003-20210824
+x86_64               randconfig-c007-20210824
+mips                 randconfig-c004-20210824
+x86_64               randconfig-a014-20210824
+x86_64               randconfig-a015-20210824
+x86_64               randconfig-a016-20210824
+x86_64               randconfig-a013-20210824
+x86_64               randconfig-a012-20210824
+x86_64               randconfig-a011-20210824
+i386                 randconfig-a011-20210824
+i386                 randconfig-a016-20210824
+i386                 randconfig-a012-20210824
+i386                 randconfig-a014-20210824
+i386                 randconfig-a013-20210824
+i386                 randconfig-a015-20210824
+hexagon              randconfig-r041-20210824
+hexagon              randconfig-r045-20210824
+riscv                randconfig-r042-20210824
+s390                 randconfig-r044-20210824
+
 ---
-Changes in v5:
- - Added Cc stable and fixes tag
-
-Changes in v4:
- - Fixed formatting and typos in commit text
- - Removed braces due to the removal of the return statement
-
-Changes in v3:
- - Added suggestion by Thinh to change dev_err to dev_warn
-
-Changes in v2:
- - Removed calls to dwc3_ep0_end_control_data() and just allow the ep disables
-   on EP0 handle the proper ending of transfers.
- - Ensure that delayed_status is cleared, as ran into enumeration issues if the
-   SETUP transaction fails on a STATUS stage.  Saw delayed_status == TRUE on the
-   next connect, which blocked further SETUP transactions to be handled.
-
- drivers/usb/dwc3/gadget.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 5d084542718d..63f6d9f2a692 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2428,10 +2428,8 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
- 
- 		ret = wait_for_completion_timeout(&dwc->ep0_in_setup,
- 				msecs_to_jiffies(DWC3_PULL_UP_TIMEOUT));
--		if (ret == 0) {
--			dev_err(dwc->dev, "timed out waiting for SETUP phase\n");
--			return -ETIMEDOUT;
--		}
-+		if (ret == 0)
-+			dev_warn(dwc->dev, "timed out waiting for SETUP phase\n");
- 	}
- 
- 	/*
-@@ -2643,6 +2641,7 @@ static int __dwc3_gadget_start(struct dwc3 *dwc)
- 	/* begin to receive SETUP packets */
- 	dwc->ep0state = EP0_SETUP_PHASE;
- 	dwc->link_state = DWC3_LINK_STATE_SS_DIS;
-+	dwc->delayed_status = false;
- 	dwc3_ep0_out_start(dwc);
- 
- 	dwc3_gadget_enable_irq(dwc);
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
