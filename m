@@ -2,83 +2,114 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A203F7097
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 09:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F543F70D7
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 10:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238693AbhHYHov (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 03:44:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40960 "EHLO mail.kernel.org"
+        id S230426AbhHYIDt (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 04:03:49 -0400
+Received: from mga07.intel.com ([134.134.136.100]:10447 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235922AbhHYHou (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 03:44:50 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 146596127B;
-        Wed, 25 Aug 2021 07:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629877444;
-        bh=wVU9GLKhq2p6ukezJvevgnRgWmpzPM5Lh6hx13awvCo=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=NGpKUNQ6oSgrgb1v2TMRw9Ddobcwpjz7nUAx0YJwoBAdEZQqgINe8XsKIN6JPXeVB
-         ZdYqzG0qoTTpuBWB30J6+YfgPOwhhLXamWWF6HY96Oujq0UBhyBcNyRj2RyzAUOrnw
-         VlYL7CarRbFVY/spLXsR3e1LY7fHHGA7rwicDIPcelou1HQmj1zIz0dLtJ42pnEGu9
-         ua36zxbo3e6Npz4ggYU6LZ7Uikp5oI5mZxCzgd2v05X4eR+ZJw8OlNW+X5W02hT47W
-         1WKOJTPfSr0C+WIxGTA5bXjVJoX0r6Wms2rFbHXhljFKW3viStjbdgNUQBrv5o8zCx
-         cbafdrsD/jojA==
-References: <20210824192337.3100288-1-Nehal-Bakulchandra.shah@amd.com>
- <87ilzu5ap0.fsf@kernel.org> <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
-User-agent: mu4e 1.6.4; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kun.liu2@amd.com,
-        alexander.deucher@amd.com
-Subject: Re: [RESEND PATCH 2/2] usb: dwc3: pci add property to allow user
- space role switch
-Date:   Wed, 25 Aug 2021 10:43:38 +0300
-In-reply-to: <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
-Message-ID: <87zgt69dfj.fsf@kernel.org>
+        id S229503AbhHYIDi (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 04:03:38 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="281191185"
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="281191185"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 01:02:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="597970906"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 25 Aug 2021 01:02:34 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 25 Aug 2021 11:02:33 +0300
+Date:   Wed, 25 Aug 2021 11:02:33 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Samuel =?utf-8?B?xIxhdm9q?= <samuel@cavoj.net>
+Cc:     linux-usb@vger.kernel.org
+Subject: Re: How to proceed: usci_acpi: PPM init failed (-110)
+Message-ID: <YSX5Gewqat7zbEXY@kuha.fi.intel.com>
+References: <20210823180626.tb6m7h5tp6adhvt2@fastboi.localdomain>
+ <YSTI51ilGLJLYlQz@kuha.fi.intel.com>
+ <20210824164942.6pakfzf2crnxes7w@fastboi.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20210824164942.6pakfzf2crnxes7w@fastboi.localdomain>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+On Tue, Aug 24, 2021 at 06:49:42PM +0200, Samuel Čavoj wrote:
+> On 24.08.2021 13:24, Heikki Krogerus wrote:
+> > On Mon, Aug 23, 2021 at 08:06:26PM +0200, Samuel Čavoj wrote:
+> > > Hello,
+> > > 
+> > > The driver times out talking to the PPM (the message pops up 60 seconds
+> > > after loading the module, the timeout in ucsi_acpi_sync_write).
+> > > The command which times out is the first one after resetting the PPM in
+> > > ucsi_init, enabling basic notifications.
+> > > 
+> > > The laptop in question is an ASUS UM325U, with the AMD Ryzen 5700U SoC.
+> > > 
+> > > The ACPI description of the USBC000 device looks reasonable to my eyes,
+> > > but I am not an expert. The _DSM Method copies the UCSI OpRegion to (or
+> > > from) EC memory. I can provide a dump if needed.
+> > > 
+> > > I am looking for guidance on how to proceed, I am not too familiar with
+> > > the UCSI other than peeking at the spec for a short while.
+> > > 
+> > > Looking the error up online leads to various discussions usually ending
+> > > with installing an nvidia driver, however mine does not have any
+> > > dedicated GPU.
+> > 
+> > Can you send full dmesg output, and acpidump:
+> > 
+> >         % dmesg > dmesg.dump
+> >         % acpidump -o acpi.dump
+> > 
+> > If enabling the notifications fails, then I'm not sure the EC firmware
+> > on this board actually supports UCSI. That would not be unheard-of
+> > situation.
+> > 
+> > thanks,
+> > 
+> > -- 
+> > heikki
+> 
+> Hello,
+> 
+> I've attached the respective dumps, I hope they arrive in one piece.
+> 
+> I've tried poking at the firmware in Windows, using UcsiControl.exe.
+> 
+> Running
+> 
+>     UcsiControl.exe Send 0 1
+> 
+> times out after a couple seconds, I assume this is related. The command
+> is supposed to reset the controller, but maybe it then runs some commands
+> as well. Running
+> 
+>     UcsiControl.exe Send 0 6
+> 
+> responds with a result instantly, supposedly this is the GetCapability
+> command. I don't know how to interpret the results, but I can attach
+> them if needed. The program is documented at [1].
+> 
+> This leads me to think that the firmware does actually support it, but
+> has some kind of problem.
 
-Heikki Krogerus <heikki.krogerus@linux.intel.com> writes:
+The reset command does not generate command completion event in UCSI
+(that's why we poll the responce separately in the driver, just like
+the spec tells us to do). So that command timing out may be expected.
 
-> On Wed, Aug 25, 2021 at 08:55:41AM +0300, Felipe Balbi wrote:
->> 
->> Hi,
->> 
->> Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com> writes:
->> 
->> > For AMD platform there is a requirement to enable user space role
->> > switch from host to device and device to host as customer platform is not
->> > completely capable of OTG i.e. with type C controller it does not have PD
->> > to support role switching. Hence, based ACPI/EC interrupt role switch is
->> > triggered by the usemode script running in background.
->>                    usermode ?
->
-> Couldn't you capture that ACPI/EC interrupt in kernel?
->
->> > Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
->> 
->> I'm okay with this, just wondering if we need to Document the property
->> somewhere.
->> 
->> @Heikki, is there a place to document these private properties that's
->> not on DT binding document?
->
-> The build-in properties are not documented separately. I've always
-> tried to supply DT bindings for all new properties I've proposed.
->
-> In this case though, do we need the new property at all? Why not just
-> register a normal USB role switch on this platform? It can be either a
-> dummy role switch that only passes the user space input to dwc3, or,
-> perhaps ideally, it would also be a driver that captures that ACPI/EC
-> event/notification and then passes the information from it to dwc3.
+You said that enabling the notifications with Set Notifications Enable
+fails, so can you try this:
 
-I like the actual driver responding to EC IRQ idea.
+        UcsiControl.exe Send 0 00010005
+
+thanks,
 
 -- 
-balbi
+heikki
