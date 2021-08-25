@@ -2,72 +2,88 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0E03F7044
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 09:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE033F705B
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 09:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbhHYHWQ (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 03:22:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59842 "EHLO mail.kernel.org"
+        id S238790AbhHYH06 (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 03:26:58 -0400
+Received: from mga06.intel.com ([134.134.136.31]:59278 "EHLO mga06.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238606AbhHYHWP (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 03:22:15 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPS id EC5196113A
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 07:21:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629876084;
-        bh=lIW8Q94eUgnFG5hp3EpdaC/cX4GZmNEybqO5wAn0KWw=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=cbYM7x7zzYd16HNvV9Bw7ZD8OMvFuUG42vjCjmK1G2l+PTVOmhOYidjJWPQuerVot
-         cjLzgLzEqDrF8ThjR3Asr1tuhZS8VIu39GjUIHNM8z51o1c1tX4Qf7iOck9tG5SpFg
-         sFdIsp14FFPLcagMbOlErRs6qPrgPfQPBbVoWyMd+IkwKvARb7Mt8lmd9lCPSob1l2
-         0UeHVSIZR2vGSKqCAkQ1Wx5trEZJiE005IA0ILXr+h7X8LQCAU34w1ZkCB57055L4f
-         7IbgWLWaitsYLIWML6g1+nVLX1OFUpL+80h7KlPwH4DGtXDkbUdDt8mpJKkTrJOQwO
-         oqcVuZFEDF1qQ==
-Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
-        id E396561001; Wed, 25 Aug 2021 07:21:23 +0000 (UTC)
-From:   bugzilla-daemon@bugzilla.kernel.org
-To:     linux-usb@vger.kernel.org
-Subject: [Bug 214131] ch341 communication problem
-Date:   Wed, 25 Aug 2021 07:21:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: johan@kernel.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-214131-208809-x4hyaFPzLj@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-214131-208809@https.bugzilla.kernel.org/>
-References: <bug-214131-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        id S238654AbhHYH05 (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 03:26:57 -0400
+X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="278482192"
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="278482192"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 00:26:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
+   d="scan'208";a="597961325"
+Received: from kuha.fi.intel.com ([10.237.72.162])
+  by fmsmga001.fm.intel.com with SMTP; 25 Aug 2021 00:26:09 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 25 Aug 2021 10:26:08 +0300
+Date:   Wed, 25 Aug 2021 10:26:08 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
+        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kun.liu2@amd.com,
+        alexander.deucher@amd.com
+Subject: Re: [RESEND PATCH 2/2] usb: dwc3: pci add property to allow user
+ space role switch
+Message-ID: <YSXwkKJ53d/uwnhy@kuha.fi.intel.com>
+References: <20210824192337.3100288-1-Nehal-Bakulchandra.shah@amd.com>
+ <87ilzu5ap0.fsf@kernel.org>
+ <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D214131
+On Wed, Aug 25, 2021 at 10:01:05AM +0300, Heikki Krogerus wrote:
+> On Wed, Aug 25, 2021 at 08:55:41AM +0300, Felipe Balbi wrote:
+> > 
+> > Hi,
+> > 
+> > Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com> writes:
+> > 
+> > > For AMD platform there is a requirement to enable user space role
+> > > switch from host to device and device to host as customer platform is not
+> > > completely capable of OTG i.e. with type C controller it does not have PD
+> > > to support role switching. Hence, based ACPI/EC interrupt role switch is
+> > > triggered by the usemode script running in background.
+> >                    usermode ?
+> 
+> Couldn't you capture that ACPI/EC interrupt in kernel?
+> 
+> > > Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> > 
+> > I'm okay with this, just wondering if we need to Document the property
+> > somewhere.
+> > 
+> > @Heikki, is there a place to document these private properties that's
+> > not on DT binding document?
+> 
+> The build-in properties are not documented separately. I've always
+> tried to supply DT bindings for all new properties I've proposed.
+> 
+> In this case though, do we need the new property at all? Why not just
+> register a normal USB role switch on this platform? It can be either a
+> dummy role switch that only passes the user space input to dwc3, or,
+> perhaps ideally, it would also be a driver that captures that ACPI/EC
+> event/notification and then passes the information from it to dwc3.
 
---- Comment #8 from Johan Hovold (johan@kernel.org) ---
-For the record, I've applied the revert now and it should be backported
-to the stable trees shortly:
+Please ignore the above question. Sorry. Let me try again...
 
-=20=20=20=20=20=20=20
-https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git/commit=
-/?h=3Dusb-linus&id=3Ddf7b16d1c00ecb3da3a30c999cdb39f273c99a2f
+The question is: why not just capture that ACPI/EC "interrupt" in
+kernel and then just use that information to set the dwc3 role switch?
+No extra properties needed.
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+thanks,
+
+-- 
+heikki
