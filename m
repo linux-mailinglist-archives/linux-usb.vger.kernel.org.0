@@ -2,111 +2,107 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B7E493F6C78
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 02:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213293F6E3E
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 06:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235410AbhHYAQo (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Tue, 24 Aug 2021 20:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S229842AbhHYEXH (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 00:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233890AbhHYAQn (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Tue, 24 Aug 2021 20:16:43 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FCBC061757
-        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 17:15:58 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id z9so33667856wrh.10
-        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 17:15:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=o8cymvCqZ0PZbJYG/lVJBD2Mv5a6pBJos8SHinki2+E=;
-        b=kos0g5kgqe+aZrNOjFA5ZneD/IRFnSmzXw8lX6x2MXAHIpuyHksa8sggnZbdkkSPCd
-         83L/+yIRmQ0wTA6ERCowrxIg1d+YfZuokL2SevBuNuGyTOAY6khZQG4qBJPA8OhP1p3q
-         HyIXAW3nBXFziPf6oX24qyhBu2NIW+l0L86/mc/SvGgNIlz75B0TYSaPKmDaXawdEOFu
-         h8C0ig7d0N4K8jjmdtDmqwJM21u2LzE4oGdfMa8MSYnYzh/o8LnS4QQleY+e6OC4L4aY
-         sbh0vI3BqgsVZm9SImAhL9bhUMpf8vw0QCAU+MUeQHrBt1wwYzylim9DxJmCoyCK0qvF
-         TvSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=o8cymvCqZ0PZbJYG/lVJBD2Mv5a6pBJos8SHinki2+E=;
-        b=J37ZXcHn0WkIXnNdSUT0R6ur1nL8S28JJVAqBJ5yYmbYGx3GzLM3LgbZ5nVZWNW42S
-         nZWRdeR7RAKQi5xjaVocLLaQW1cS3/Eu62vG5wqpYnTt5jF8y7J3aSkErVUGsAtBV1px
-         zW18cyOlCOHpWKqeNS4g0gNEBUMl9qlHsOjPaHpyR6MY3Ttr9PNo6Upna9YSyT8wtsGQ
-         69+9BdClChJZzNXwNOa8MVwnA/PJubm20wcQcYWWHyLMtj2Thpe8gHK074/kSKOVhkU0
-         H4SO6ISmIn2bu4/aSTvXIJGneJOaFGbGqQBef3rCrcZ71FHJdzzY7QvsLaLeWWCDoayC
-         MRoA==
-X-Gm-Message-State: AOAM532vMQ4X7XDjWtJdXs6lTJXfhepD2DfcdhjP+ACwGMusQIoEqDLT
-        IXdqqLahUjAO1kwwHfGHisf8uw==
-X-Google-Smtp-Source: ABdhPJyySA23pWTurR24O5Q4+2E3OyOmW0oKr3HeBO0HR4wwqepjneLUl+znTG6xSd5PqVX2/MJ8+g==
-X-Received: by 2002:a5d:4ed0:: with SMTP id s16mr5544936wrv.71.1629850557169;
-        Tue, 24 Aug 2021 17:15:57 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id n4sm4933772wri.78.2021.08.24.17.15.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Aug 2021 17:15:56 -0700 (PDT)
-Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
- dwc3-qcom
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Peter Chen <peter.chen@kernel.org>, balbi@kernel.org,
-        agross@kernel.org, gregkh@linuxfoundation.org,
-        jackp@codeaurora.org, wcheng@codeaurora.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
- <20210707015704.GA28125@nchen> <YOX6d+sBEJMP4V3q@yoga>
- <20210708030631.GA22420@nchen> <YOZ3CBNTXFTa+fNx@yoga>
- <de86a2c5-92cf-da0a-8819-2de4c3c88b3f@linaro.org> <YSWGRcla0/dPLDpU@ripper>
- <593dc3f5-268d-580f-76fa-0be00505ac37@linaro.org> <YSWIZ/BNoAaHPByK@ripper>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Message-ID: <7724cf9b-39ec-51de-c469-4c70493ae636@linaro.org>
-Date:   Wed, 25 Aug 2021 01:17:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.7.1
+        with ESMTP id S229446AbhHYEXH (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 00:23:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4977AC061757
+        for <linux-usb@vger.kernel.org>; Tue, 24 Aug 2021 21:22:22 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mIkQU-00040Z-Cl; Wed, 25 Aug 2021 06:22:10 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1mIkQR-0000tw-UG; Wed, 25 Aug 2021 06:22:07 +0200
+Date:   Wed, 25 Aug 2021 06:22:07 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     kernel test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Colin Ian King <colin.king@canonical.com>,
+        Grant Grundler <grundler@chromium.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: asix: ax88772: fix boolconv.cocci warnings
+Message-ID: <20210825042207.GC14337@pengutronix.de>
+References: <202108250651.uuW5Q2Rg-lkp@intel.com>
+ <20210824221716.GA23759@2b586af07b64>
 MIME-Version: 1.0
-In-Reply-To: <YSWIZ/BNoAaHPByK@ripper>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20210824221716.GA23759@2b586af07b64>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-IRC:  #ptxdist @freenode
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-Uptime: 06:08:53 up 188 days,  7:32, 79 users,  load average: 0.06, 0.23,
+ 0.30
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 25/08/2021 01:01, Bjorn Andersson wrote:
-> On Tue 24 Aug 16:58 PDT 2021, Bryan O'Donoghue wrote:
+On Wed, Aug 25, 2021 at 06:17:16AM +0800, kernel test robot wrote:
+> From: kernel test robot <lkp@intel.com>
 > 
->> On 25/08/2021 00:52, Bjorn Andersson wrote:
->>> But isn't this role switching interaction (both B and C) already part of
->>> the core/drd, so if we can just get the drd to invoke
->>> dwc3_qcom_vbus_overrride_enable() we're done (and can remove all the
->>> extcon code from the qcom glue as well)?
->>
->> Provided we have an acceptable way of triggering when a role-switch happens
->> - then USB role switching itself is a NOP here, its really just a
->> convenience to invoke the callback.
->>
+> drivers/net/usb/asix_devices.c:757:60-65: WARNING: conversion to bool not needed here
 > 
-> Thanks for confirming. Then let's come up with an acceptable way, rather
-> than duplicating yet another feature already implemented in the core.
+>  Remove unneeded conversion to bool
 > 
-> Regards,
-> Bjorn
+> Semantic patch information:
+>  Relational and logical operators evaluate to bool,
+>  explicit conversion is overly verbose and unneeded.
+> 
+> Generated by: scripts/coccinelle/misc/boolconv.cocci
+> 
+> Fixes: 7a141e64cf14 ("net: usb: asix: ax88772: move embedded PHY detection as early as possible")
+> CC: Oleksij Rempel <o.rempel@pengutronix.de>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+
+Reviewed-by: Oleksij Rempel <o.rempel@pengutronix.de>
+
+> ---
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   372b2891c15acbf7b90d948b08ac174bde77102c
+> commit: 7a141e64cf14099d84e530db0e86fcb2c489e341 [9154/10077] net: usb: asix: ax88772: move embedded PHY detection as early as possible
+> :::::: branch date: 12 hours ago
+> :::::: commit date: 35 hours ago
+> 
+>  asix_devices.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/drivers/net/usb/asix_devices.c
+> +++ b/drivers/net/usb/asix_devices.c
+> @@ -754,7 +754,7 @@ static int ax88772_bind(struct usbnet *d
+>  		return ret;
+>  
+>  	priv->phy_addr = ret;
+> -	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10 ? true : false);
+> +	priv->embd_phy = ((priv->phy_addr & 0x1f) == 0x10);
+>  
+>  	asix_read_cmd(dev, AX_CMD_STATMNGSTS_REG, 0, 0, 1, &chipcode, 0);
+>  	chipcode &= AX_CHIPCODE_MASK;
 > 
 
-The only other thing to say about USB role-switching is it appears to be 
-very much 1:1.
-
-Extcon allows a virtually unlimited number of consumers of an even.
-
-Is it envisaged that a role-switch could or should be consumed by say 3 
-or even 4 separate pieces of logic and if not, why not ?
-
-What if we had a magic black box that needed to sit ontop of the QCOM 
-layer and further consume a role switch ?
-
-notifier/platform pointer + callback ?
-
----
-bod
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
