@@ -2,79 +2,128 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A8D23F6FF5
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 09:01:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47FFF3F7037
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 09:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238577AbhHYHBz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 03:01:55 -0400
-Received: from mga18.intel.com ([134.134.136.126]:58094 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238342AbhHYHBy (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Wed, 25 Aug 2021 03:01:54 -0400
-X-IronPort-AV: E=McAfee;i="6200,9189,10086"; a="204598664"
-X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
-   d="scan'208";a="204598664"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2021 00:01:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.84,349,1620716400"; 
-   d="scan'208";a="597924473"
-Received: from kuha.fi.intel.com ([10.237.72.162])
-  by fmsmga001.fm.intel.com with SMTP; 25 Aug 2021 00:01:05 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 25 Aug 2021 10:01:05 +0300
-Date:   Wed, 25 Aug 2021 10:01:05 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Felipe Balbi <balbi@kernel.org>
-Cc:     Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>,
-        gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kun.liu2@amd.com,
-        alexander.deucher@amd.com
-Subject: Re: [RESEND PATCH 2/2] usb: dwc3: pci add property to allow user
- space role switch
-Message-ID: <YSXqsXmuom2fFiKN@kuha.fi.intel.com>
-References: <20210824192337.3100288-1-Nehal-Bakulchandra.shah@amd.com>
- <87ilzu5ap0.fsf@kernel.org>
+        id S239204AbhHYHRh (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 03:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53270 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238606AbhHYHRf (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 03:17:35 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEFDC061757;
+        Wed, 25 Aug 2021 00:16:50 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id e21so33580851ejz.12;
+        Wed, 25 Aug 2021 00:16:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=lKMjc7E78IAkyfL3fZ1SzFFun5yiSkSzpm9G4CZp2i4=;
+        b=tsUYQ1MJ3OHa8GPKWJqG4csvl7OhVgn7JQgX7/AtcJYu/71+oNbXYKTqnFpnKvpnvT
+         KbXqnMecrQM95coLn77ICurJTAB9C5U9MF5lsJim2h8Cbx6OpIDRPF5W7e3CRrZlw3ed
+         2yDsfgNZCf/DIy+BrInImDouJBl/lFVLcF3xQKLRTSmoYgmsqJ2ZpJnpKmZATysZmutF
+         tAQ8bBQ4ig5c9mMQenVaajWYEAdlTCC1Gw8/uKLVPUTtxwN1lXDeolTJ4mhE1K2X7HXe
+         AbhcoHT2u0Oxq1ZW3OX4g4DArRzKZgMvoIjCtZAZmPnNJqi8ZzNBmmNFcf/GCiYICape
+         fOEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=lKMjc7E78IAkyfL3fZ1SzFFun5yiSkSzpm9G4CZp2i4=;
+        b=j4dsTglAUSN6+wl4c1hNyXvdcHWzRv1JI6vq/Wz9G1bHIgwHUlTR4EGupPJba6k3E9
+         GwzLOzwk2hYA1KbzTNFCee9YwqT3sNc918UnnnSVrGVHip7ONgF/h749aFKTYpcXlKM+
+         Sr3MiU8mVSv6Nf+pxr+YciFxsiiCzj1E7qGEG/JkERsYLj9vIyArBXFxXGNaqjUOhTwE
+         FsPjM1NlSVjkR4Cx+rDbIww9uKq82Da+OKNwYMMeLFfrKgoQi7QWPrZ/9CNahXzORWUF
+         HsLYMyTAYVaQQYQ0W8h6rNzl1ecokNcfU4RLkG1PsViLZRxzsG2lqmqy9I+zrHNOpUla
+         NEaQ==
+X-Gm-Message-State: AOAM531+j6anwkIJEIc3SLMW339RRoLRyCaQTlJVHlJxhfc0C5oDL1VY
+        +whgrt+Kgz7f+QQmceQ5P5U=
+X-Google-Smtp-Source: ABdhPJyYYegy/t9WzmeIlTQF2cHB70Xg1WUlnBzFZ5ciMJk8kzVXPXF7ARETWir+tHKpBRbRSOOOKQ==
+X-Received: by 2002:a17:906:3bc3:: with SMTP id v3mr44854819ejf.482.1629875808907;
+        Wed, 25 Aug 2021 00:16:48 -0700 (PDT)
+Received: from ?IPv6:2001:981:6fec:1:b36a:4b43:c293:3ba2? ([2001:981:6fec:1:b36a:4b43:c293:3ba2])
+        by smtp.gmail.com with ESMTPSA id q5sm13205341edt.50.2021.08.25.00.16.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Aug 2021 00:16:48 -0700 (PDT)
+Subject: Re: [PATCH v1 1/3] Revert "usb: gadget: u_audio: add real feedback
+ implementation"
+To:     Felipe Balbi <balbi@kernel.org>, Ferry Toth <ftoth@exalondelft.nl>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-doc@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Lorenzo Colitti <lorenzo@google.com>,
+        Wesley Cheng <wcheng@codeaurora.org>, robh+dt@kernel.org,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, heikki.krogerus@linux.intel.com,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+References: <20210824201433.11385-1-ftoth@exalondelft.nl>
+ <87v93u5au9.fsf@kernel.org>
+From:   Ferry Toth <fntoth@gmail.com>
+Message-ID: <51212e46-a7c0-7d32-a711-0a865e816d33@gmail.com>
+Date:   Wed, 25 Aug 2021 09:16:46 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87ilzu5ap0.fsf@kernel.org>
+In-Reply-To: <87v93u5au9.fsf@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Wed, Aug 25, 2021 at 08:55:41AM +0300, Felipe Balbi wrote:
+Hi,
+Op 25-08-2021 om 07:53 schreef Felipe Balbi:
 > 
-> Hi,
+> Ferry Toth <ftoth@exalondelft.nl> writes:
 > 
-> Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com> writes:
+>> This reverts commit e89bb4288378b85c82212b60dc98ecda6b3d3a70.
+>>
+>> The commit is part of a series with commit
+>> 24f779dac8f3efb9629adc0e486914d93dc45517 causing a BUG on dwc3
+>> hardware, at least on Intel Merrifield platform when configured
+>> through configfs:
+>> BUG: kernel NULL pointer dereference, address: 0000000000000008
+>> ...
+>> RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
+>> ...
+>> Call Trace:
+>>   dwc3_remove_requests.constprop.0+0x12f/0x170
+>>   __dwc3_gadget_ep_disable+0x7a/0x160
+>>   dwc3_gadget_ep_disable+0x3d/0xd0
+>>   usb_ep_disable+0x1c/0x70
+>>   u_audio_stop_capture+0x79/0x120 [u_audio]
+>>   afunc_set_alt+0x73/0x80 [usb_f_uac2]
+>>   composite_setup+0x224/0x1b90 [libcomposite]
+>>
+>> Pavel's suggestion to add
+>> `echo "adaptive" > functions/uac2.usb0/c_sync` to the configfs script
+>> resolves the issue.
+>> Thinh suggests "the crash is probably because of f_uac2 prematurely
+>> freeing feedback request before its completion. usb_ep_dequeue() is
+>> asynchronous. dwc2() may treat it as a synchronous call so you didn't
+>> get a crash."
+>>
+>> Revert as this is a regression and the kernel shouldn't crash depending
+>> on configuration parameters.
+>>
+>> Reported-by: Ferry Toth <fntoth@gmail.com>
 > 
-> > For AMD platform there is a requirement to enable user space role
-> > switch from host to device and device to host as customer platform is not
-> > completely capable of OTG i.e. with type C controller it does not have PD
-> > to support role switching. Hence, based ACPI/EC interrupt role switch is
-> > triggered by the usemode script running in background.
->                    usermode ?
-
-Couldn't you capture that ACPI/EC interrupt in kernel?
-
-> > Signed-off-by: Nehal Bakulchandra Shah <Nehal-Bakulchandra.shah@amd.com>
+> this should be Signed-off-by ;-)
 > 
-> I'm okay with this, just wondering if we need to Document the property
-> somewhere.
-> 
-> @Heikki, is there a place to document these private properties that's
-> not on DT binding document?
+Indeed. It probably was until I re-worded the commit text.
 
-The build-in properties are not documented separately. I've always
-tried to supply DT bindings for all new properties I've proposed.
-
-In this case though, do we need the new property at all? Why not just
-register a normal USB role switch on this platform? It can be either a
-dummy role switch that only passes the user space input to dwc3, or,
-perhaps ideally, it would also be a driver that captures that ACPI/EC
-event/notification and then passes the information from it to dwc3.
-
-thanks,
-
--- 
-heikki
+Will resend tonight v2.
