@@ -2,197 +2,181 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BC2123F7A6D
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 18:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96CD3F7A98
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 18:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236138AbhHYQYX (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 12:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39796 "EHLO
+        id S241399AbhHYQcz (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 12:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241442AbhHYQYM (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 12:24:12 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB9DC061757;
-        Wed, 25 Aug 2021 09:23:24 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id u15so14606540plg.13;
-        Wed, 25 Aug 2021 09:23:24 -0700 (PDT)
+        with ESMTP id S241387AbhHYQcv (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 12:32:51 -0400
+Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94647C0613CF
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 09:32:05 -0700 (PDT)
+Received: by mail-oi1-x230.google.com with SMTP id n27so525832oij.0
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 09:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=PKWtw3U+UAUIlk82lhY86yQppmBBebN7/0wf9fkM/TM=;
-        b=LcbJEgmfAcWBsIFGNxsT4YAFF/iY91iJ/cjmUVAft5d9auKBNuvawkczAJt3Wm/kxe
-         Tbl8fI4YIw2rispLnKgQ5triWpaHynfv4dUtaTs9Qe0HHulLpPcxCv9g2z/41Gdn1+OW
-         y2xzmMB7h1soJ/A9uQ/miCshHBVjdSJ4fQBFhdJSVEiP5LkeOLUw9arBmkaykX9ihEOD
-         Qrm+wT4DZ2K87ZHMInJCX3buTh9pcR2aAiJBFzmfAh33o4kJ0tP9wBYdWgPgDvy0wKMH
-         aQVBYKB88j0BfyVbqY1hXBsusWxBOUNKq13uoO9HaUJaNIIByEMoeZEOKBc+vb25T/3D
-         Z2mQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iyZ0YUaYjK9x5P/A83iXmFuX3wEI6dD5JCZ4X2lvVG4=;
+        b=LtR5LU6RWAY04ix4rtC9F31eamHa4Pw+I7AruZGH0DFu6xw9pKqQoUi8GQO9qtMx3d
+         9VBzOncleEj2EeKwJDEBuy1qzuI+RCLeqNnXXHzlH0MRvtKLQ/awJury+qHtLnmaK+Uo
+         Gjo3QzAX+As4RCFe4SD6WWPC7BEmFQdZt6Ts6Lbd9qB+Gvu5MZbCxItnO6CFioCPJ2yB
+         eZ5WNWD5ood6okslFoYRiZRvFRCFzqUOzb/Kilxb72h8EJw+/E8pmPj9PtMueiBpdRQo
+         Yrn0oQivtnFM/yMEhYgRsOOg6hUseWZuC7QK+QTi/KUpeSZp4J1jdGe3jaCk8sM5gdHH
+         TDWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=PKWtw3U+UAUIlk82lhY86yQppmBBebN7/0wf9fkM/TM=;
-        b=nE/Gu0QdLRfPINYCeai+ddbhUO5NPYraxzBMcZuTtyzkzMxeX1har2Tcg26ujWoz4+
-         J7aObcO/WQjoL7RLix6qtAzAvIDVsS6WTR6JcTXvG6cHvjHxXOdZyFeCsY8916USaIMn
-         kmaZzw7g11VREFPWPm4EZ4H95ukg46QDsJ8uUBJ++fjSA+Lxd6D/OkrXYqQ9Rg5FgBe2
-         6tj4tprs3jiwiigufB2NYbdc6IeR728luzK3MfQceEyYtdy2DJMvvQ6iLCh6ElEMVegr
-         su5fjeAs54sw1dbQMKAs6g+tbYpe4fvo9EYktB10oubiC6BvRlj/Ld0thlk+G3SGK46l
-         VhBw==
-X-Gm-Message-State: AOAM530AFvK4/6lDVPQOmH72UImUd6pfAGknTLjctaym+S/+0NjOFzjZ
-        tYJPcAmkPePD0HP4/F7pQqc=
-X-Google-Smtp-Source: ABdhPJz1Wfwuc9LqXitN++W5gC/AfmWmT/IX7qsiX5DUtd8mX67KCGiaHfM118JEqnKRl9hVDUOoYA==
-X-Received: by 2002:a17:902:c406:b0:12d:d0ff:4be with SMTP id k6-20020a170902c40600b0012dd0ff04bemr38703069plk.24.1629908604185;
-        Wed, 25 Aug 2021 09:23:24 -0700 (PDT)
-Received: from localhost.localdomain ([49.36.209.183])
-        by smtp.googlemail.com with ESMTPSA id t15sm489685pgk.13.2021.08.25.09.23.21
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iyZ0YUaYjK9x5P/A83iXmFuX3wEI6dD5JCZ4X2lvVG4=;
+        b=KDckWpGw8AmjfJpm1kNrzUPIOAEDdtLJchmiXTPVLKVD//J4WKTmrF1rt6LjrHY/Cz
+         vuR5g55bOmavtOksGBZ8oBgLRl0+GiwRThrWyQsX/RAYffojo8/kPbvuHnbB6nTShUV6
+         DBVKMkN2dwAUW55JCr+TDpVLtex6gThufHuz2B1u2HTrXPOZJhXXjOclSCei+TDUGM7N
+         0iuGCNhF+HyaMWswLAOrytUrzEfVB4x0txXxLmDFDvZC7D+Ll4tbmfvTFRY9PkldXH1s
+         e8WqmYPyNgz0pP1CaU9uGC6oEVjlrFXkCkoRNIexFJ9dI7BX1PTQDOiwZ0LYfNv40Gz0
+         +11A==
+X-Gm-Message-State: AOAM5309zIkLOJVfmp6WnJpUqdTv9aeSbVIpBcalzKVX/p2+znN9LFLU
+        5VuIjG9aqMuVwKrmOWvDzB6eBoCooxg3xQ==
+X-Google-Smtp-Source: ABdhPJw7MpYhscF4WTcEjQWcDliFD36W5hjVENt1CL0UQFlWUGR7yiYd6WzfvgjWZuKydN9nRyD9/A==
+X-Received: by 2002:aca:3857:: with SMTP id f84mr7432889oia.96.1629909124727;
+        Wed, 25 Aug 2021 09:32:04 -0700 (PDT)
+Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 67sm47099ota.70.2021.08.25.09.32.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 09:23:23 -0700 (PDT)
-From:   Utkarsh Verma <utkarshverma294@gmail.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Utkarsh Verma <utkarshverma294@gmail.com>
-Subject: [PATCH v2] USB: serial: Replace symbolic permissions by octal permissions
-Date:   Wed, 25 Aug 2021 21:53:02 +0530
-Message-Id: <20210825162302.16243-1-utkarshverma294@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <YSYMXNvfjk0HdYr3@hovoldconsulting.com>
-References: <YSYMXNvfjk0HdYr3@hovoldconsulting.com>
+        Wed, 25 Aug 2021 09:32:04 -0700 (PDT)
+Date:   Wed, 25 Aug 2021 09:33:20 -0700
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Felipe Balbi <balbi@kernel.org>
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        agross@kernel.org, gregkh@linuxfoundation.org,
+        jackp@codeaurora.org, wcheng@codeaurora.org,
+        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 0/3] Implement role-switch notifications from dwc3-drd to
+ dwc3-qcom
+Message-ID: <YSZw0LGNji8JvQUa@ripper>
+References: <20210704013314.200951-1-bryan.odonoghue@linaro.org>
+ <20210707015704.GA28125@nchen>
+ <YOX6d+sBEJMP4V3q@yoga>
+ <20210708030631.GA22420@nchen>
+ <YSWCnsZDdp57KBqB@ripper>
+ <87zgt65avm.fsf@kernel.org>
+ <YSZCmDEedJaJyI0u@ripper>
+ <87mtp5a6ix.fsf@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87mtp5a6ix.fsf@kernel.org>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-Replace symbolic permission macros with octal permission numbers
-because, octal permission numbers are easier to read and understand
-instead of their symbolic macro names.
+On Wed 25 Aug 08:22 PDT 2021, Felipe Balbi wrote:
 
-No functional change.
+> 
+> Hi,
+> 
+> Bjorn Andersson <bjorn.andersson@linaro.org> writes:
+> >> Bjorn Andersson <bjorn.andersson@linaro.org> writes:
+> >> > On Wed 07 Jul 20:06 PDT 2021, Peter Chen wrote:
+> >> >
+> >> >> On 21-07-07 14:03:19, Bjorn Andersson wrote:
+> >> >> > On Tue 06 Jul 20:57 CDT 2021, Peter Chen wrote:
+> >> >> > 
+> >> >> > Allow me to reorder your two questions:
+> >> >> > 
+> >> >> > > And why using a notifier need to concern core's deferral probe?
+> >> >> > 
+> >> >> > The problem at hand calls for the core for somehow invoking
+> >> >> > dwc3_qcom_vbus_overrride_enable() with a pointer to dwc3_qcom passed.
+> >> >> > 
+> >> >> > This means that dwc3-qcom somehow needs to inform the dwc3-core about
+> >> >> > this (and stash the pointer). And this can't be done until dwc3-core
+> >> >> > actually exist, which it won't until dwc3_probe() has completed
+> >> >> > successfully (or in particular allocated struct dwc).
+> >> >> 
+> >> >> Maybe you misunderstood the notifier I meant previous, my pointer was
+> >> >> calling glue layer API directly.
+> >> >> 
+> >> >> Role switch is from dwc3-core, when it occurs, it means structure dwc3 has
+> >> >> allocated successfully, you could call glue layer notifier at function
+> >> >> dwc3_usb_role_switch_set directly.
+> >> >> Some references of my idea [1] [2]
+> >> >> 
+> >> >> [1] Function ci_hdrc_msm_notify_event at ci_hdrc_msm_notify_event
+> >> >> [2] https://source.codeaurora.org/external/imx/linux-imx/tree/drivers/usb/dwc3/core.c?h=lf-5.10.y#n205
+> >> >> 
+> >> >
+> >> > Hi Peter, I took a proper look at this again, hoping to find a way to
+> >> > pass a callback pointer from dwc3-qcom to the dwc3 core, that can be
+> >> > called from __dwc3_set_mode() to inform the Qualcomm glue about mode
+> >> > changes.
+> >> 
+> >> I would rather keep the strict separation between glue and core.
+> >> 
+> >
+> > I'm okay with that goal, but the result is that both the OMAP and
+> > Qualcomm driver duplicates the extcon interface already present in the
+> > DRD, and the Meson driver duplicates the usb_role_switch. In addition to
+> > the code duplication this manifest itself in the need for us to link
+> > extcon to both the glue and core nodes in DeviceTree.
+> >
+> > In order to function in a USB-C based setup we now need to register a 
+> > usb_role_switch from the Qualcomm glue and we need to evolve the
+> > usb_role_switch implementation to allow for the Type-C controller to
+> > notify more than a single role-switcher.
+> >
+> > So we're facing the need to introduce another bunch of duplication and
+> > the DT will be quite ugly with both glue and core having to set up an
+> > of_graph with the Type-C controller.
+> >
+> >
+> > I really would like for us to come up with a way where the core can
+> > notify the glue that role switching is occurring, so that we instead of
+> > adding more duplication could aim to, over time, remove the extcon and
+> > usb_role_switch logic from the Qualcomm, OMAP and Meson drivers.
+> 
+> We can make a comparison between clk rate notifiers. Anyone can
+> subscribe to a clk rate notification and react to the notification. A
+> generic dual role notification system should allow for something
+> similar. I really don't get why folks want to treat a glue and core
+> driver differently in this case.
+> 
+> Why do we want to pass function pointers around instead of letting
+> whatever role notification mechanism to be able to notify more than one
+> user?
+> 
+> Also keep in mind that we have dwc3 implementations which are dual role
+> capable but don't ship the synopsys DRD block. Rather, there's a
+> peripheral-only dwc3 instance and a separate xhci with custom logic
+> handling role swap.
+> 
 
-Suggested-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Signed-off-by: Utkarsh Verma <utkarshverma294@gmail.com>
----
- drivers/usb/serial/cypress_m8.c  |  6 +++---
- drivers/usb/serial/ftdi_sio.c    |  2 +-
- drivers/usb/serial/garmin_gps.c  |  2 +-
- drivers/usb/serial/io_ti.c       |  4 ++--
- drivers/usb/serial/ipaq.c        |  4 ++--
- drivers/usb/serial/iuu_phoenix.c | 10 +++++-----
- drivers/usb/serial/sierra.c      |  2 +-
- 7 files changed, 15 insertions(+), 15 deletions(-)
+So you're suggesting that we invent a 3rd mechanism (in addition to the
+already existing duplication between extcon and usb_role_switch) for
+propagating role switching notifications through the kernel?
 
-diff --git a/drivers/usb/serial/cypress_m8.c b/drivers/usb/serial/cypress_m8.c
-index 6b18990258c3..6924fa95f6bd 100644
---- a/drivers/usb/serial/cypress_m8.c
-+++ b/drivers/usb/serial/cypress_m8.c
-@@ -1199,9 +1199,9 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- 
--module_param(stats, bool, S_IRUGO | S_IWUSR);
-+module_param(stats, bool, 0644);
- MODULE_PARM_DESC(stats, "Enable statistics or not");
--module_param(interval, int, S_IRUGO | S_IWUSR);
-+module_param(interval, int, 0644);
- MODULE_PARM_DESC(interval, "Overrides interrupt interval");
--module_param(unstable_bauds, bool, S_IRUGO | S_IWUSR);
-+module_param(unstable_bauds, bool, 0644);
- MODULE_PARM_DESC(unstable_bauds, "Allow unstable baud rates");
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index 33bbb3470ca3..99d19828dae6 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -2938,5 +2938,5 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- 
--module_param(ndi_latency_timer, int, S_IRUGO | S_IWUSR);
-+module_param(ndi_latency_timer, int, 0644);
- MODULE_PARM_DESC(ndi_latency_timer, "NDI device latency timer override");
-diff --git a/drivers/usb/serial/garmin_gps.c b/drivers/usb/serial/garmin_gps.c
-index 756d1ac7e96f..e5c75944ebb7 100644
---- a/drivers/usb/serial/garmin_gps.c
-+++ b/drivers/usb/serial/garmin_gps.c
-@@ -1444,5 +1444,5 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- 
--module_param(initial_mode, int, S_IRUGO);
-+module_param(initial_mode, int, 0444);
- MODULE_PARM_DESC(initial_mode, "Initial mode");
-diff --git a/drivers/usb/serial/io_ti.c b/drivers/usb/serial/io_ti.c
-index 84b848d2794e..a7b3c15957ba 100644
---- a/drivers/usb/serial/io_ti.c
-+++ b/drivers/usb/serial/io_ti.c
-@@ -2746,9 +2746,9 @@ MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- MODULE_FIRMWARE("edgeport/down3.bin");
- 
--module_param(ignore_cpu_rev, bool, S_IRUGO | S_IWUSR);
-+module_param(ignore_cpu_rev, bool, 0644);
- MODULE_PARM_DESC(ignore_cpu_rev,
- 			"Ignore the cpu revision when connecting to a device");
- 
--module_param(default_uart_mode, int, S_IRUGO | S_IWUSR);
-+module_param(default_uart_mode, int, 0644);
- MODULE_PARM_DESC(default_uart_mode, "Default uart_mode, 0=RS232, ...");
-diff --git a/drivers/usb/serial/ipaq.c b/drivers/usb/serial/ipaq.c
-index f81746c3c26c..e11441bac44f 100644
---- a/drivers/usb/serial/ipaq.c
-+++ b/drivers/usb/serial/ipaq.c
-@@ -599,10 +599,10 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- 
--module_param(connect_retries, int, S_IRUGO|S_IWUSR);
-+module_param(connect_retries, int, 0644);
- MODULE_PARM_DESC(connect_retries,
- 		"Maximum number of connect retries (one second each)");
- 
--module_param(initial_wait, int, S_IRUGO|S_IWUSR);
-+module_param(initial_wait, int, 0644);
- MODULE_PARM_DESC(initial_wait,
- 		"Time to wait before attempting a connection (in seconds)");
-diff --git a/drivers/usb/serial/iuu_phoenix.c b/drivers/usb/serial/iuu_phoenix.c
-index 19753611e7b0..0be3b5e1eaf3 100644
---- a/drivers/usb/serial/iuu_phoenix.c
-+++ b/drivers/usb/serial/iuu_phoenix.c
-@@ -1188,20 +1188,20 @@ MODULE_AUTHOR("Alain Degreffe eczema@ecze.com");
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL");
- 
--module_param(xmas, bool, S_IRUGO | S_IWUSR);
-+module_param(xmas, bool, 0644);
- MODULE_PARM_DESC(xmas, "Xmas colors enabled or not");
- 
--module_param(boost, int, S_IRUGO | S_IWUSR);
-+module_param(boost, int, 0644);
- MODULE_PARM_DESC(boost, "Card overclock boost (in percent 100-500)");
- 
--module_param(clockmode, int, S_IRUGO | S_IWUSR);
-+module_param(clockmode, int, 0644);
- MODULE_PARM_DESC(clockmode, "Card clock mode (1=3.579 MHz, 2=3.680 MHz, "
- 		"3=6 Mhz)");
- 
--module_param(cdmode, int, S_IRUGO | S_IWUSR);
-+module_param(cdmode, int, 0644);
- MODULE_PARM_DESC(cdmode, "Card detect mode (0=none, 1=CD, 2=!CD, 3=DSR, "
- 		 "4=!DSR, 5=CTS, 6=!CTS, 7=RING, 8=!RING)");
- 
--module_param(vcc_default, int, S_IRUGO | S_IWUSR);
-+module_param(vcc_default, int, 0644);
- MODULE_PARM_DESC(vcc_default, "Set default VCC (either 3 for 3.3V or 5 "
- 		"for 5V). Default to 5.");
-diff --git a/drivers/usb/serial/sierra.c b/drivers/usb/serial/sierra.c
-index 4b49b7c33364..9d56138133a9 100644
---- a/drivers/usb/serial/sierra.c
-+++ b/drivers/usb/serial/sierra.c
-@@ -1056,5 +1056,5 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
- MODULE_DESCRIPTION(DRIVER_DESC);
- MODULE_LICENSE("GPL v2");
- 
--module_param(nmea, bool, S_IRUGO | S_IWUSR);
-+module_param(nmea, bool, 0644);
- MODULE_PARM_DESC(nmea, "NMEA streaming");
--- 
-2.17.1
+> If we were to provide a dwc3-specific role swap function-pointer based
+> interface, we would just create yet another special case for this. A
+> better approach would be to start consolidating all of these different
+> role-swap mechanisms in a generic layer that "knows-it-all". If dwc3 is
+> generating the role notification or a separate type-c controller or even
+> some EC IRQ, that shouldn't matter for the listeners.
+> 
 
+I was under the impression that usb_role_switch is the attempt to
+replace extcon as the one solution. The problem in the dwc3 case is that
+the same piece of hardware (i.e. _the_ USB controller) needs to
+implement and wired up as two separate consumers of that message.
+
+I recognize the complexity caused by the flexibility in DWC3 based
+designs, but I would like to see whatever combination be seen as a
+single entity to the rest of the system - rather than building the
+notification plumbing between the two pieces using DeviceTree.
+
+Regards,
+Bjorn
