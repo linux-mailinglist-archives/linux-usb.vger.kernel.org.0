@@ -2,113 +2,196 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2186B3F7D74
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 23:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C61C3F7DA4
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Aug 2021 23:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbhHYVEj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Wed, 25 Aug 2021 17:04:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232123AbhHYVEj (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Wed, 25 Aug 2021 17:04:39 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2E5C061757
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 14:03:52 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id z9-20020a7bc149000000b002e8861aff59so1108141wmi.0
-        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 14:03:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=references:user-agent:from:to:cc:subject:date:in-reply-to
-         :message-id:mime-version;
-        bh=kwbt09fOlYpiOsoXRS9sjXbXW76WhT2QN/qa+eAvJW8=;
-        b=mc5emlzA9Qjkmej1jZHT0GwkjTwasyfE3pihjygoxX3JDxWBjUKoYB3ST+T2o9YGqV
-         Wj9hsaFtqDCnzD+e/AjzTX/Bqw+fh0ZCVL9unMj2/gt8fbr/unyd1Vj6y7TR+rFRE1wd
-         Jnetzhew2c4uj9xgof9c7UWYyhv/K/hl0E9RAb9wgjaxhbMdm/zQn1fSsLLvOdJqh6jE
-         Od06KuOpXRNqcni2JpzZ/7L6GcsmgwXut0HLhhFS6a1xbSzl0t4fPDwDOmAiPlo8xHQi
-         tSI++xsnMU/j1J4lVZHmJTdQRA6wWhDQT6LAjrOoA3E+9slGa/vc0fw+cJyWEf+b2nTr
-         5qdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
-         :in-reply-to:message-id:mime-version;
-        bh=kwbt09fOlYpiOsoXRS9sjXbXW76WhT2QN/qa+eAvJW8=;
-        b=E5jiHjgPjQ6goowWZYp+EJOlsXe0WMV265iH541Ecy69Qm47F8m90EuPRWuRn70fxr
-         gVqhG9PwZisFkgHZi7OW2MQ9GnlxOW3Z/FTJf9VxIDPxWuFRMunxapAcz8OMbWNkEPDc
-         zppGOs2CeNLvmf+NaU0CqUf0BamsgeD/yZ/yLNRGZTLVUVNwaNkanXhtcEPd9e1CQZqn
-         Mt/LfaDB7cvl+6Rm9BuVhjfEB4kF6SJKtwVu6njeIVo/Y1XxT/nw/SyKRfWEHq6N11Aw
-         94nCjVfzA3FcDWan5UpxS1Ri+HDe+OP2kyWWV2tMxYkRw8N4PYW8qGjIIfTdq+SnObns
-         mGAw==
-X-Gm-Message-State: AOAM532SjZfk/fMjUbdb8XjowNrZhyY4ruLu7eHKJeYUFzqTgwaJX1ns
-        ecy/6inZ2DnYUF5STZzNSubKGespVh/DOQ==
-X-Google-Smtp-Source: ABdhPJwSNPocZ6/TXBAuSCb+GalqYZVnTJq96GRPofHlv5uiZkYVAPSomJLzu2mGGhPNvxgmiAv39A==
-X-Received: by 2002:a05:600c:428a:: with SMTP id v10mr10978650wmc.25.1629925431279;
-        Wed, 25 Aug 2021 14:03:51 -0700 (PDT)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id 19sm6421551wmo.39.2021.08.25.14.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Aug 2021 14:03:50 -0700 (PDT)
-References: <20210712125529.76070-1-pavel.hofman@ivitera.com>
- <20210712125529.76070-3-pavel.hofman@ivitera.com>
- <1jr1ehy79v.fsf@starbuckisacylon.baylibre.com>
- <d03d8d29-f3f2-028f-efb1-a194955599d7@ivitera.com>
-User-agent: mu4e 1.6.4; emacs 27.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Pavel Hofman <pavel.hofman@ivitera.com>, linux-usb@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Ruslan Bilovol <ruslan.bilovol@gmail.com>,
-        Felipe Balbi <balbi@kernel.org>
-Subject: Re: [PATCH v3 2/4] usb: gadget: u_audio: add bi-directional volume
- and mute support
-Date:   Wed, 25 Aug 2021 22:57:54 +0200
-In-reply-to: <d03d8d29-f3f2-028f-efb1-a194955599d7@ivitera.com>
-Message-ID: <1jmtp5xmmg.fsf@starbuckisacylon.baylibre.com>
+        id S232326AbhHYVXw (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Wed, 25 Aug 2021 17:23:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60806 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232049AbhHYVXv (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Wed, 25 Aug 2021 17:23:51 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPS id C405660F6F
+        for <linux-usb@vger.kernel.org>; Wed, 25 Aug 2021 21:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1629926585;
+        bh=C1HV5ro6GAox4Ga3q5sKC1+njI0+Qht/2BWsBSPpdLA=;
+        h=From:To:Subject:Date:From;
+        b=XM/5w+Kj70ayNegVUZIT4osMn03FJZwvwHVXq9XwQ78n4THqlKnVVQf9e7o6+rCTx
+         Ojl13GNI+ltvwxbZYmeSBu6VSOIynO6/pDy+v+NHOXC2+1h+CXKo062bTryLQOy7Ja
+         0ayJtNcrMhQwLoH3giaFYG3XtVssBkne07rwCyOv7NlUZaLKJ+7UYTj2WatqiIj9j6
+         Mm45vpx4QXmGURZTKhE4wcZpjOCOFsDLN4FKLD4aDnxqyBTcifhp1c5wZhrOBP2924
+         b+k1rLYDOxyrBKuXoKgSUTJdFeqQpOFWRG2Io5Z9M4v6QSYF5fg8e5qC4ptq2/Fpil
+         yHyWq3ssuyfpw==
+Received: by pdx-korg-bugzilla-2.web.codeaurora.org (Postfix, from userid 48)
+        id B4D1A61001; Wed, 25 Aug 2021 21:23:05 +0000 (UTC)
+From:   bugzilla-daemon@bugzilla.kernel.org
+To:     linux-usb@vger.kernel.org
+Subject: [Bug 214173] New: Built-in Renesas uPD720202 fails to initialize on
+ Thinkpad T14 AMD
+Date:   Wed, 25 Aug 2021 21:23:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: milan.plzik@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version
+ cf_kernel_version rep_platform op_sys cf_tree bug_status bug_severity
+ priority component assigned_to reporter cf_regression
+Message-ID: <bug-214173-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 MIME-Version: 1.0
-Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D214173
 
-On Wed 25 Aug 2021 at 19:59, Pavel Hofman <pavel.hofman@ivitera.com> wrote:
+            Bug ID: 214173
+           Summary: Built-in Renesas uPD720202 fails to initialize on
+                    Thinkpad T14 AMD
+           Product: Drivers
+           Version: 2.5
+    Kernel Version: 5.13.12
+          Hardware: x86-64
+                OS: Linux
+              Tree: Mainline
+            Status: NEW
+          Severity: high
+          Priority: P1
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: milan.plzik@gmail.com
+        Regression: No
 
-> Dne 25. 08. 21 v 15:25 Jerome Brunet napsal(a):
->> On Mon 12 Jul 2021 at 14:55, Pavel Hofman <pavel.hofman@ivitera.com>
->> wrote:
->> 
->>> From: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>>
->>> USB Audio Class 1/2 have ability to change device's
->>> volume and mute by USB Host through class-specific control
->>> requests. Device also can notify Host about volume/mute
->>> change on its side through optional interrupt endpoint.
->>>
->>> This patch adds Volume and Mute ALSA controls which can be
->>> used by user to send and receive notifications to/from
->>> the USB Host about Volume and Mute change.
->>>
->>> These params come from f_uac* so volume and mute controls
->>> will be created only if the function support and enable
->>> each explicitly
->>>
->>> Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
->>> Signed-off-by: Pavel Hofman <pavel.hofman@ivitera.com>
->> Hi Greg,
->> This change made it to usb-testing and usb-next but there are several
->> indentation errors in it. By itself, without the rest of the series, it
->> does not make much sense. It adds a couple of alsa controls but those
->> actually do nothing without the uac1 and uac2 part of the series.
->> Maybe it would be better to drop this change until the rest of series is
->> ready (if this is still possible) ?
->> 
->
-> The indentation errors were fixed by commit
-> https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-next&id=1bc220835526ae076eecfb7ed513f80f22cf840d
+After doing a series of upgrades on a dual-boot Thinkpad T14 AMD (comprised=
+ of
+Windows driver/firmware upgrade and linux kernel upgrade), the Renesas USB =
+3.0
+doesn't seem to get initialized anymore, timing out on initialization.
 
-Could you check again ? I believe you missed some in u_audio.c (at least).
+```
+# journalctl -xb |grep -i 06:00
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: [1912:0015] type 00 cla=
+ss
+0x0c0330
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: reg 0x10: [mem
+0xfd400000-0xfd401fff 64bit]
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: PME# supported from D0
+D3hot
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: xHCI HW not ready after=
+ 5
+sec (HC bug?) status =3D 0x1801
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0:
+quirk_usb_early_handoff+0x0/0x740 took 4882933 usecs
+Aug 24 17:05:47 archlinux kernel: pci 0000:06:00.0: Adding to iommu group 16
+Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
+er
+Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
+registered, assigned bus number 2
+Aug 24 17:05:47 archlinux kernel: xhci_hcd 0000:06:00.0: Zeroing 64bit base
+registers, expecting fault
+Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: can't setup: -110
+Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: USB bus 2 deregist=
+ered
+Aug 24 17:05:57 archlinux kernel: xhci_hcd 0000:06:00.0: init 0000:06:00.0
+fail, -110
+Aug 24 17:05:57 archlinux kernel: xhci_hcd: probe of 0000:06:00.0 failed wi=
+th
+error -110
+```
 
-> which is in usb-next now too. If possible this commit should be dropped too.
->
-> Thanks,
->
-> Pavel.
+This is a notable regression to the previous laptop's state where this got
+correctly initialized:
 
+```
+# journalctl -xb -10 |grep 06:00
+Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: [1912:0015] type 00 cla=
+ss
+0x0c0330
+Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: reg 0x10: [mem
+0xfd400000-0xfd401fff 64bit]
+Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: PME# supported from D0
+D3hot D3cold
+Jun 26 11:06:21 archlinux kernel: pci 0000:06:00.0: Adding to iommu group 16
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
+er
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
+registered, assigned bus number 2
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: Zeroing 64bit base
+registers, expecting fault
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: hcc params 0x01405=
+1cf
+hci version 0x100 quirks 0x0000001100000090
+Jun 26 11:06:21 archlinux kernel: usb usb2: SerialNumber: 0000:06:00.0
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: xHCI Host Controll=
+er
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: new USB bus
+registered, assigned bus number 3
+Jun 26 11:06:21 archlinux kernel: xhci_hcd 0000:06:00.0: Host supports USB =
+3.0
+SuperSpeed
+Jun 26 11:06:21 archlinux kernel: usb usb3: SerialNumber: 0000:06:00.0
+```
+
+Most notably, this renders the laptop's built-in webcam unusable (not showi=
+ng
+on the USB bus). There's anecdotal evidence that installing a package
+containing older firmware resolves this issue (i.e.
+https://forums.lenovo.com/t5/Other-Linux-Discussions/No-camera-on-thinkpad-=
+P14s-AMD/m-p/5090434),
+but since a lot of data indicates that the firmware is actually located in =
+ROM
+(and maybe RAM). Since this is a dual-boot system, I'm being a bit cautious
+with not using an older version if Windows might expect a newer version
+already.
+
+I'll be happy to do some testing if needed, assuming there's no chance of
+accidentally bricking the laptop.
+
+Additional info:
+
+Hardware: Thinpad T14 AMD Gen 1
+
+
+```
+$ lspci -vv
+...
+06:00.0 USB controller: Renesas Technology Corp. uPD720202 USB 3.0 Host
+Controller (rev 02) (prog-if 30 [XHCI])
+        Flags: fast devsel, IRQ 34, IOMMU group 16
+        Memory at fd400000 (64-bit, non-prefetchable) [size=3D8K]
+        Capabilities: [50] Power Management version 3
+        Capabilities: [70] MSI: Enable- Count=3D1/8 Maskable- 64bit+
+        Capabilities: [90] MSI-X: Enable- Count=3D8 Masked-
+        Capabilities: [a0] Express Endpoint, MSI 00
+        Capabilities: [100] Advanced Error Reporting
+        Capabilities: [150] Latency Tolerance Reporting
+        Kernel modules: xhci_pci
+...
+```
+
+```
+$ uname -a
+Linux thinkpad 5.13.12-arch1-1 #1 SMP PREEMPT Wed, 18 Aug 2021 20:49:03 +00=
+00
+x86_64 GNU/Linux
+```
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
