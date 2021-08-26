@@ -2,146 +2,165 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BAF3F8307
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 09:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2575E3F8312
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 09:24:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238975AbhHZHWr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 03:22:47 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:19184 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239700AbhHZHWq (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Aug 2021 03:22:46 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1629962520; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=8J143XZo6LFlAmaWmXyTY2AHmtwZhvUtLUftnRuhvRU=;
- b=SV08k1x5OAzGwTMiRccDPebcaG2l5R1QeGBwirr0ohRZNx7E9D8z8UPW2XKH+p616dygJo9C
- McqdEuqpbQUFth3lMCfj4lBPbQTkpmjjd0TtvrLiRNywJYFBxuRL15jxpN5tuq9Qwr0CR4SK
- 1M63BSWsY2vvqtP88AflHfNO5co=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyIxZTE2YSIsICJsaW51eC11c2JAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 61274113825e13c54a286fb7 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 26 Aug 2021 07:21:55
- GMT
-Sender: pmaliset=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id A4877C43618; Thu, 26 Aug 2021 07:21:54 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmaliset)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9B42AC4338F;
-        Thu, 26 Aug 2021 07:21:53 +0000 (UTC)
+        id S239716AbhHZHZc (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 03:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234415AbhHZHZb (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 03:25:31 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BFAAC061757
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 00:24:43 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 79-20020a1c0452000000b002e6cf79e572so6150853wme.1
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 00:24:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=ioXiDDZsnZZqu0NvWprHFZFLx5epKvcnCTOolUIGP/Y=;
+        b=HhMWDaK4apn/MG6mOU3wkyqFYepcMUCbSiw7HbpgRFqdQbXmU5t6wDoEBdZa/7YMMb
+         epPfVYjIRAUSwIbfmUr5aCOrh01r6DDLlrpaG3ChC3gmi0YIVIEMdUfUXquG+S35V6n2
+         vNhCW3CIaYFulT8GcScx3zKTEI+JM71MaGC7v8QcmFzJQc+KsFQuoj5h1QtYp20mkC5I
+         GYER6+SlBbkLDjFkSjZQwMTsQpiupD+PX5lK9gj7YO7xO2GyMmDtSePZxcU7PFclcrJT
+         maY0ymngiGwlmL9jRnBu2mZccMi0fNcd4zI/JHl45mOqgg6QAASie0VTp14KhxWNfjjn
+         EzVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=ioXiDDZsnZZqu0NvWprHFZFLx5epKvcnCTOolUIGP/Y=;
+        b=G2XNduvk031NM0FGyAqP6hQuvTdqSyg27tfoEU9pJHxbloDzED/YJvQ+FlUPwnoywJ
+         1Y5TLf/EITqyaYwHCYGMRKtfWi68QC3LV+oODv5SNvHUuWAH/FMMDuqy2ef2JlXwp8NZ
+         lHGbh4J0c2P79xMaSeXdnpbwUUcK4EwhloKYum0NYMfY7+CAxk17oShcCaIkbyM+KlNe
+         3ziP0b5lu+amPMs1g7Kyt1WK41xpbiLz62vbzz+Yqj+wpB87W0XhwxDzp4jLoeR8m475
+         8aHTkrSL49QtgEmOHfOoO9DWqQwkEKSqWcUD9yIOOKkqU4kCyF79IQQnDNCkioScAGGG
+         akFg==
+X-Gm-Message-State: AOAM532lj1mzSXVrP859gf2ry5l9KqbisiiodRO+BDbmnqJvj+Jpq5e5
+        LHa6F6Hr984KszVzWUAHg75baA==
+X-Google-Smtp-Source: ABdhPJxWKR6n0tAKwDSQiFMjdsFk4t1J65Us9VNsqDZimykSngWSxv6DrmQA7PmXOGf5jK3wF4Cugg==
+X-Received: by 2002:a05:600c:3656:: with SMTP id y22mr12676179wmq.58.1629962682375;
+        Thu, 26 Aug 2021 00:24:42 -0700 (PDT)
+Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id d9sm2687180wrb.36.2021.08.26.00.24.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 00:24:41 -0700 (PDT)
+References: <20210824201433.11385-1-ftoth@exalondelft.nl>
+ <20210825092107.124419-1-jbrunet@baylibre.com>
+ <79bd686d-5c1f-982c-344a-17c10b64a231@gmail.com>
+User-agent: mu4e 1.6.4; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Ferry Toth <fntoth@gmail.com>, Ferry Toth <ftoth@exalondelft.nl>,
+        Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Pavel Hofman <pavel.hofman@ivitera.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <jackp@codeaurora.org>, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Subject: Re: [PATCH] usb: gadget: f_uac2: fixup feedback endpoint stop
+Date:   Thu, 26 Aug 2021 09:23:42 +0200
+In-reply-to: <79bd686d-5c1f-982c-344a-17c10b64a231@gmail.com>
+Message-ID: <1jilzsy8g7.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 26 Aug 2021 12:51:53 +0530
-From:   Prasad Malisetty <pmaliset@codeaurora.org>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Stephen Boyd <swboyd@chromium.org>, agross@kernel.org,
-        bhelgaas@google.com, bjorn.andersson@linaro.org,
-        lorenzo.pieralisi@arm.com, robh+dt@kernel.org,
-        svarbanov@mm-sol.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dianders@chromium.org,
-        mka@chromium.org, vbadigan@codeaurora.org, sallenki@codeaurora.org,
-        manivannan.sadhasivam@linaro.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v5 4/4] PCI: qcom: Switch pcie_1_pipe_clk_src after PHY
- init in SC7280
-In-Reply-To: <20210825212549.GA3609092@bjorn-Precision-5520>
-References: <20210825212549.GA3609092@bjorn-Precision-5520>
-Message-ID: <1795efc94a7b87fb4d9f769e03ce21c6@codeaurora.org>
-X-Sender: pmaliset@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On 2021-08-26 02:55, Bjorn Helgaas wrote:
-> [+cc linux-pci; patches to drivers/pci/ should always be cc'd there]
-> 
-> On Wed, Aug 25, 2021 at 07:30:09PM +0000, Stephen Boyd wrote:
->> Quoting Prasad Malisetty (2021-08-24 01:10:48)
->> > On 2021-08-17 22:56, Prasad Malisetty wrote:
->> > > On 2021-08-10 09:38, Prasad Malisetty wrote:
->> > >> On the SC7280, By default the clock source for pcie_1_pipe is
->> > >> TCXO for gdsc enable. But after the PHY is initialized, the clock
->> > >> source must be switched to gcc_pcie_1_pipe_clk from TCXO.
->> > >>
->> > >> Signed-off-by: Prasad Malisetty <pmaliset@codeaurora.org>
->> > >> ---
->> > >>  drivers/pci/controller/dwc/pcie-qcom.c | 18 ++++++++++++++++++
->> > >>  1 file changed, 18 insertions(+)
->> > >>
->> > >> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c
->> > >> b/drivers/pci/controller/dwc/pcie-qcom.c
->> > >> index 8a7a300..39e3b21 100644
->> > >> --- a/drivers/pci/controller/dwc/pcie-qcom.c
->> > >> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
->> > >> @@ -166,6 +166,8 @@ struct qcom_pcie_resources_2_7_0 {
->> > >>      struct regulator_bulk_data supplies[2];
->> > >>      struct reset_control *pci_reset;
->> > >>      struct clk *pipe_clk;
->> > >> +    struct clk *gcc_pcie_1_pipe_clk_src;
->> > >> +    struct clk *phy_pipe_clk;
->> > >>  };
->> > >>
->> > >>  union qcom_pcie_resources {
->> > >> @@ -1167,6 +1169,16 @@ static int qcom_pcie_get_resources_2_7_0(struct
->> > >> qcom_pcie *pcie)
->> > >>      if (ret < 0)
->> > >>              return ret;
->> > >>
->> > >> +    if (of_device_is_compatible(dev->of_node, "qcom,pcie-sc7280")) {
->> > >> +            res->gcc_pcie_1_pipe_clk_src = devm_clk_get(dev, "pipe_mux");
->> > >> +            if (IS_ERR(res->gcc_pcie_1_pipe_clk_src))
->> > >> +                    return PTR_ERR(res->gcc_pcie_1_pipe_clk_src);
->> > >> +
->> > >> +            res->phy_pipe_clk = devm_clk_get(dev, "phy_pipe");
->> > >> +            if (IS_ERR(res->phy_pipe_clk))
->> > >> +                    return PTR_ERR(res->phy_pipe_clk);
->> > >> +    }
->> > >
->> > > I would like to check is there any other better approach instead of
->> > > compatible method here as well or is it fine to use compatible method.
->> 
->> I'd prefer the compatible method. If nobody is responding then it's 
->> best
->> to just resend the patches with the approach you prefer instead of
->> waiting for someone to respond to a review comment.
-> 
-> I'm missing some context here, so I'm not exactly sure what your
-> question is, Prasad, but IMO drivers generally should not need to use
-> of_device_is_compatible() if they've already called
-> of_device_get_match_data() (as qcom_pcie_probe() has).
-> 
-> of_device_is_compatible() does basically the same work of looking for
-> a match in qcom_pcie_match[] that of_device_get_match_data() does, so
-> it seems pointless to repeat it.
-> 
-> I am a little confused because while [1] adds "qcom,pcie-sc7280" to
-> qcom,pcie.txt, I don't see a patch that adds it to qcom_pcie_match[].
-> 
-> Bjorn
-> 
-Hi Bjorn,
 
-I agree on your point, but the main reason is to use compatible in 
-get_resources_2_7_0 is same hardware version. For SM8250 & SC7280 
-platforms, the hw version is same. Since we can't have a separate ops 
-for SC7280, we are using compatible method in get_resources_2_7_0 to 
-differentiate SM8250 and SC7280.
+On Wed 25 Aug 2021 at 22:07, Ferry Toth <fntoth@gmail.com> wrote:
 
-Thanks
--Prasad
-> [1]
-> https://lore.kernel.org/linux-arm-msm/1628568516-24155-2-git-send-email-pmaliset@codeaurora.org/
+> Hi,
+>
+> Op 25-08-2021 om 11:21 schreef Jerome Brunet:
+>> When the uac2 function is stopped, there seems to be an issue with some
+>> platforms (Intel Merrifield at least)
+>>
+>> BUG: kernel NULL pointer dereference, address: 0000000000000008
+>> ...
+>> RIP: 0010:dwc3_gadget_del_and_unmap_request+0x19/0xe0
+>> ...
+>> Call Trace:
+>>   dwc3_remove_requests.constprop.0+0x12f/0x170
+>>   __dwc3_gadget_ep_disable+0x7a/0x160
+>>   dwc3_gadget_ep_disable+0x3d/0xd0
+>>   usb_ep_disable+0x1c/0x70
+>>   u_audio_stop_capture+0x79/0x120 [u_audio]
+>>   afunc_set_alt+0x73/0x80 [usb_f_uac2]
+>>   composite_setup+0x224/0x1b90 [libcomposite]
+>>
+>> The issue happens only when the gadget is using the sync type "async", n=
+ot
+>> "adaptive". This indicates that problem is likely coming from the feedba=
+ck
+>> endpoint, which is only used with async synchronization mode.
+>>
+>> Update the feedback endpoint free function to release the endpoint the s=
+ame
+>> way it is done for the data endpoint.
+>>
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>
+>>   Hi Ferry,
+>>
+>>   Would you mind trying this before reverting the whole thing ?
+>>   The HW I have did not show the issue so far so I can't really check
+>>   if it helps. Hopefully, it does ...
+>
+> Tested this evening and confirming that this resolves my issue. I can't s=
+ay
+> much about the code itself, maybe Thinh?
+>
+> Would be great if we could get this in instead of reverting the series.
+>
+> Tested-by:=C2=A0 Ferry Toth <ftoth@exalondelft.nl> (dwc3 / Intel Merrifie=
+ld)
+>
+
+Thanks for reporting and testing this.
+I guess we should also add
+
+Reported-by: Ferry Toth <ftoth@exalondelft.nl>
+
+
+>>   drivers/usb/gadget/function/u_audio.c | 15 +++++++++++----
+>>   1 file changed, 11 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/gadget/function/u_audio.c b/drivers/usb/gadget/=
+function/u_audio.c
+>> index 018dd0978995..63d9340f008e 100644
+>> --- a/drivers/usb/gadget/function/u_audio.c
+>> +++ b/drivers/usb/gadget/function/u_audio.c
+>> @@ -230,7 +230,13 @@ static void u_audio_iso_fback_complete(struct usb_e=
+p *ep,
+>>   	int status =3D req->status;
+>>     	/* i/f shutting down */
+>> -	if (!prm->fb_ep_enabled || req->status =3D=3D -ESHUTDOWN)
+>> +	if (!prm->fb_ep_enabled) {
+>> +		kfree(req->buf);
+>> +		usb_ep_free_request(ep, req);
+>> +		return;
+>> +	}
+>> +
+>> +	if (req->status =3D=3D -ESHUTDOWN)
+>>   		return;
+>>     	/*
+>> @@ -421,9 +427,10 @@ static inline void free_ep_fback(struct uac_rtd_par=
+ams *prm, struct usb_ep *ep)
+>>   	prm->fb_ep_enabled =3D false;
+>>     	if (prm->req_fback) {
+>> -		usb_ep_dequeue(ep, prm->req_fback);
+>> -		kfree(prm->req_fback->buf);
+>> -		usb_ep_free_request(ep, prm->req_fback);
+>> +		if (usb_ep_dequeue(ep, prm->req_fback)) {
+>> +			kfree(prm->req_fback->buf);
+>> +			usb_ep_free_request(ep, prm->req_fback);
+>> +		}
+>>   		prm->req_fback =3D NULL;
+>>   	}
+>>=20=20=20
+
