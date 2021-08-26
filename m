@@ -2,83 +2,86 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 718B03F8658
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338953F867A
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242059AbhHZLZr (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 07:25:47 -0400
-Received: from out2-smtp.messagingengine.com ([66.111.4.26]:36669 "EHLO
-        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241887AbhHZLZq (ORCPT
-        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 07:25:46 -0400
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.42])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3F0345C0118;
-        Thu, 26 Aug 2021 07:24:59 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 26 Aug 2021 07:24:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=TgIPuEW2Jsd3FPA7yUga5vaBulj
-        umW9gdzJg8zgI5LU=; b=WV6YYMlpRUkW7ZDheO9lnSCYjr3Qo8vachume3VsSQq
-        2UVPjlEp+FBxR2lqSdNedm41by8YQJAowxmv8G5GJBHrlfnn2WPpcyVRYcN8RxcK
-        Q+d3gkWtsIN8WEYiHRNM7JN+VC+irUpQireW9RzVSUrc2B9q4w6iZu+7iQuiNJ43
-        LBOQA5VE0AvXIgsyA18V27ICSriRstoYfaQJLw9ZtAmUYf4YPjt873Skf3FaaZH7
-        ExvyEtXGrk/F5IT3x/LDHa7+Wat6dt7DpdBKTonSmGLn6tt3nyoCvjZDzhB60Ozq
-        bAE5Jz2Lkpj7zWBUPE+OFAKATQetR7mJWJ2YzgsE5Yg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=TgIPuE
-        W2Jsd3FPA7yUga5vaBuljumW9gdzJg8zgI5LU=; b=cOpYs9V91FQg4Csg5MaU2R
-        q0kc/LfnVHO8mW9JKU+068dZmf0WINTPNniwnVLLN75robEAruWB2wKwMQVSE30I
-        lpj4/DWrAqEhfwB8OqUIEaTFKvT06ycV3+iVFFz8usJr7ccCo8LtKlyMZcz70vzn
-        gYSVYX/uMfLkj3ONIzwVwlmobQMFHi5SZMbHzfme8eeaQKtVe2wqcoMKu4KB7x+Z
-        9agXR7NpicL7M/M/Uhf2slsjMVL6syzTR1fO9pgHIFDhVsRz2fc2TelcC5Uwmrxf
-        eklB4DA+5fNwfIAb0Ls7kutgLfF3fjfGgQhnF38K6peewGQQLuFzNgrxp/dePIVw
-        ==
-X-ME-Sender: <xms:CnonYZ-MjtzRAw1ScG_orul7918q4JXOtNX8lGPqi2lyHY8gohc7gw>
-    <xme:CnonYdvVkseyfaeHysKbuINbF5cOMQt-n8f4rG5-UqWeAZOxTv3taqcwY3NYGUzfM
-    s81saxKkP29rQ>
-X-ME-Received: <xmr:CnonYXAo7OwK17AfPmSTnV4Nvw2OsjRljNPD61unjTWoGBUK8XubVjgz>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvtddrudduuddgfeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
-    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpeevueehje
-    fgfffgiedvudekvdektdelleelgefhleejieeugeegveeuuddukedvteenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhh
-    drtghomh
-X-ME-Proxy: <xmx:CnonYddDBbldGAkxmo2vcaGkq2V2GTrGAP93ut6oiBx679WLgWqP9Q>
-    <xmx:CnonYePQqLqiKmGXWs3XLY_O8cd-hcYfIW-zeGHkLA84RrB42gcfMw>
-    <xmx:CnonYfl-txFaS-9lpac45Tp4o29RaHdex-tbI5aSuI_QwdP8WrIqGw>
-    <xmx:C3onYfgMtooJNnNtLQ72g9WbPlM2GNhXD7_dcHdsRFCY8S22_hDBDw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 26 Aug 2021 07:24:57 -0400 (EDT)
-Date:   Thu, 26 Aug 2021 13:24:53 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Niklas Lantau <niklaslantau@gmail.com>
-Cc:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
-        usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Usb: storage: usb: fixed coding style issues
-Message-ID: <YSd6BQnE3BAuwF9a@kroah.com>
-References: <20210820223954.2945-1-niklaslantau@gmail.com>
+        id S242126AbhHZL2r (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 07:28:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60754 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241944AbhHZL2r (ORCPT <rfc822;linux-usb@vger.kernel.org>);
+        Thu, 26 Aug 2021 07:28:47 -0400
+Received: by mail.kernel.org (Postfix) with ESMTPSA id A1C26610A6;
+        Thu, 26 Aug 2021 11:27:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1629977280;
+        bh=NzfEzBZoIifRLjIxopMdWAJ/cAh1A0Wp6hdf3z53P0E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RhvASHOwlnO2gywOZwLB/TT9cKMJoNP/6QYhNm8PsO6gXJWtOHV3whOM/6X3W9wDh
+         9lOmthEyR8w7bJMhOsAsB/TxycS9Iev6R/KTmTUt0eszmK7mJ2yUNZ1Z1HwKsYoXBK
+         pVzLJzVOncTtDgQhaIZzBCZAfBoGybe+zCmrFbFA=
+Date:   Thu, 26 Aug 2021 13:27:53 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     neal_liu <neal_liu@aspeedtech.com>
+Cc:     Alan Stern <stern@rowland.harvard.edu>,
+        Tony Prisk <linux@prisktech.co.nz>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Tao Ren <rentao.bupt@gmail.com>, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH] usb: host: ehci: skip STS_HALT check for aspeed platform
+Message-ID: <YSd6uSfjlqmaN+us@kroah.com>
+References: <20210826071525.27651-1-neal_liu@aspeedtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210820223954.2945-1-niklaslantau@gmail.com>
+In-Reply-To: <20210826071525.27651-1-neal_liu@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
-On Sat, Aug 21, 2021 at 12:39:54AM +0200, Niklas Lantau wrote:
-> Fixed coding style issues that generated 1 error and 1 warning.
+On Thu, Aug 26, 2021 at 03:15:25PM +0800, neal_liu wrote:
+> STS_HALT also depends on ASS/PSS status for apseed.
+> Skip this check on startup.
+> 
+> Signed-off-by: neal_liu <neal_liu@aspeedtech.com>
+> ---
+>  drivers/usb/host/ehci-hcd.c      | 10 +++++++++-
+>  drivers/usb/host/ehci-platform.c |  6 ++++++
+>  drivers/usb/host/ehci.h          |  1 +
+>  3 files changed, 16 insertions(+), 1 deletion(-)
+> 
 
-What issues where they?
+Hi,
 
-Always be specific and descriptive, do not make anyone guess.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-And you did not use get_maintainer.pl to determine who to send this to?
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- Your patch contains warnings and/or errors noticed by the
+  scripts/checkpatch.pl tool.
+
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/SubmittingPatches for what is needed in order to
+  properly describe the change.
+
+- It looks like you did not use your "real" name for the patch on either
+  the Signed-off-by: line, or the From: line (both of which have to
+  match).  Please read the kernel file, Documentation/SubmittingPatches
+  for how to do this correctly.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
