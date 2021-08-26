@@ -2,91 +2,87 @@ Return-Path: <linux-usb-owner@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 090973F85D5
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 12:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCFDE3F8602
+	for <lists+linux-usb@lfdr.de>; Thu, 26 Aug 2021 13:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241698AbhHZKvV (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
-        Thu, 26 Aug 2021 06:51:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51640 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234327AbhHZKvV (ORCPT <rfc822;linux-usb@vger.kernel.org>);
-        Thu, 26 Aug 2021 06:51:21 -0400
-Received: by mail.kernel.org (Postfix) with ESMTPSA id E19E6606A5;
-        Thu, 26 Aug 2021 10:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1629975034;
-        bh=09c1tjsSoixex+O8jJiLxYsaqmIjwNXlEeH57q+wSKc=;
-        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
-        b=emO/LkNmsXwHX5hq2482q5F0m3lzEBYK0pcn/gIzx9OBMS85D6rNFOLCyuOUEtRjj
-         drl6KaTXQBWVwcJwZ1WErXWbJYazv/h4zATFt2q/7p1/Mf7vN9hVAhr4B2hIi4FnIh
-         P7K9b9e+XpsdxD9ci7LGQa/+v4wpIP4x4YRjnNgAlROUekKaAcNFruUa8adV3YLqzQ
-         d2r/WE9t9NhoHoqnTmGmJdsgps4K9k7jthRX5psJIP+2v/4sEw8wMUPvlVInQGPR2C
-         XZWTUh4KwJqzaC/yU+sKErvZ2Nm9hywqFi4GcCczEKMEZZNn0GxwAVXpMzJ9oQ7T4I
-         HrfSAEPm/Ud/g==
-References: <e34c8e16-6521-c6e4-f3ed-9d8520d4ece2@codeaurora.org>
- <87bl63yqq8.fsf@kernel.org>
- <eb975a76-1482-f502-4dc1-7993cc3f30d0@codeaurora.org>
-User-agent: mu4e 1.6.4; emacs 27.2
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Sandeep Maheswaram <sanm@codeaurora.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pratham Pratap <prathampratap@codeaurora.org>,
-        Jack Pham <jackp@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: Re: Regarding usb dwc3 core shutdown callback
-Date:   Thu, 26 Aug 2021 13:43:11 +0300
-In-reply-to: <eb975a76-1482-f502-4dc1-7993cc3f30d0@codeaurora.org>
-Message-ID: <87eeaga39m.fsf@kernel.org>
+        id S241855AbhHZLDj (ORCPT <rfc822;lists+linux-usb@lfdr.de>);
+        Thu, 26 Aug 2021 07:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241849AbhHZLDe (ORCPT
+        <rfc822;linux-usb@vger.kernel.org>); Thu, 26 Aug 2021 07:03:34 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4211C0613C1
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 04:02:45 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i21so5393830ejd.2
+        for <linux-usb@vger.kernel.org>; Thu, 26 Aug 2021 04:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura-hr.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sxJJcu/TfCUqsX/b1XreoR65hy3NGzjv/vIjvntQEyE=;
+        b=DYf33382M57vegZqvx0fJNrIxj6j4Q5Xold3ASMLndLsZDDnl870VM0F5TX6sal0s/
+         0VfjNRKoD4LDv1c8K0SR3DWdL1CXlYuObxBp+UrRCRceEzZqNyKNjEXP64E8nyU92dYv
+         Ehs/qCxyk+CXf5+/ObRhLrOyNiSYLw/toqUU+xgumIz3KUvSzS940yl57AlVBhseT9j4
+         b/7KoIoKBP1VYz9YukG/F2tgiPL6LS+olgxE8lZrbfx/mDD9adnaSyc7ZUMsiT35yNxl
+         m1ojhDs0uBmb8B6TSVoKzNMGC58xxw7k27ldTy9gZr3cDN65+hTNGXm960QgnDoFjnl6
+         gAfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=sxJJcu/TfCUqsX/b1XreoR65hy3NGzjv/vIjvntQEyE=;
+        b=ocQQS2iV0ZVQFAQMEpYsNVpWrAgQ3kSeWLi+iV6XvDJswcpoYUpo+/At1KXT/W2Vff
+         i7dFHM2WX54fk3FjHqGIAZv73QHH6SGUtF3pUZzsPA1MTdtJqiPgvhg10BRZHga4vUjT
+         X5vXs+SkShMdxCHYqEbFsiVFt9qrkKW9xcJLik4CQUUoc6I2Lj/deL8ZZ1copJJ4BfYf
+         DqYA2c0As22oBXew8fCKwZ8iScvq2WbM1UORz+H+bB+aSNGXs2tgXBU6YyqefHSiHSVF
+         ri8uUCaPuNJ/6aq1dzXpAyGRZDjGll+W+BjMMUN0sLTz3AYv9qduqkxglgUvZzkw/NGx
+         5RfQ==
+X-Gm-Message-State: AOAM531kaipaM0ER1zelOcyOUXVxzZNHI55w5QK8ZGVbyRScQAZLOHXg
+        VMNLR93vksLRSF55BQ3AVaW99A==
+X-Google-Smtp-Source: ABdhPJyNYr4tr91nWVSyfwfrRRLQYEqu7F3LC/OzBCJuksItbLeuNXWlAsVBT2cr6Orr14HdvIv8Ow==
+X-Received: by 2002:a17:906:7154:: with SMTP id z20mr3618448ejj.547.1629975764506;
+        Thu, 26 Aug 2021 04:02:44 -0700 (PDT)
+Received: from localhost.localdomain (dh207-98-67.xnet.hr. [88.207.98.67])
+        by smtp.googlemail.com with ESMTPSA id t24sm1198130ejf.48.2021.08.26.04.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Aug 2021 04:02:44 -0700 (PDT)
+From:   Robert Marko <robert.marko@sartura.hr>
+To:     johan@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Robert Marko <robert.marko@sartura.hr>
+Subject: [PATCH] USB: serial: pl2303: fix GL type detection
+Date:   Thu, 26 Aug 2021 13:02:39 +0200
+Message-Id: <20210826110239.5269-1-robert.marko@sartura.hr>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-usb.vger.kernel.org>
 X-Mailing-List: linux-usb@vger.kernel.org
 
+At least some PL2303GL have a bcdDevice of 0x405 instead of 0x100 as the
+datasheet claims. Add it to the list of known release numbers for the
+HXN (G) type.
 
-Hi,
+Fixes: 894758d0571d ("USB: serial: pl2303: tighten type HXN (G) detection")
+Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+---
+ drivers/usb/serial/pl2303.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sandeep Maheswaram <sanm@codeaurora.org> writes:
->> (why isn't this email plain/text? Content Type was set to multipart
->> alternative, please configure your email client correctly :-)
->>
->> While at that, also make sure to break lines at 80-columns)
->>
->> Sandeep Maheswaram <sanm@codeaurora.org> writes:
->>> Hi,
->>>
->>> Earlier I have posted the patch for usb dwc3 core shutdown callback
->>>
->>> https://lore.kernel.org/linux-arm-msm/1618380209-20114-1-git-send-email-sanm@codeaurora.org/
->>>
->>> and it was reverted due to issues.
->> Right, as should be expected when we find regressions
->>
->>> https://lore.kernel.org/linux-usb/20210603151742.298243-1-alexandru.elisei@arm.com/
->>>
->>> As we already have shutdown callback in xhci plat driver where we halt
->>> the controller, so there will be no transactions with usb devices.
->>>
->>> https://lore.kernel.org/linux-usb/20200306092328.41253-1-ran.wang_1@nxp.com/
->>>
->>> So I think dwc3 core shutdown may not be required at least when we are
->>> using host mode. Let me know your opinion about this.
->> If that's the case, then sure. Please validate the condition, though,
->> and kindly report back on your findings
->
-> I have enabled couple of logs in shutdown path and see no URBs
-> enqueued after xhci shut down.
->
-> Hope this is enough for validation . Please suggest if anything more I
-> could do.
-
-how about writing a little script to kexec into another kernel for a few
-hundred iterations and make sure things still work after all that?
-
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 2ce9cbf49e97..3b579966fe73 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -433,6 +433,7 @@ static int pl2303_detect_type(struct usb_serial *serial)
+ 		switch (bcdDevice) {
+ 		case 0x100:
+ 		case 0x305:
++		case 0x405:
+ 			/*
+ 			 * Assume it's an HXN-type if the device doesn't
+ 			 * support the old read request value.
 -- 
-balbi
+2.31.1
+
